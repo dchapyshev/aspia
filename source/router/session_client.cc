@@ -302,7 +302,7 @@ void SessionClient::readHostListRequest(const proto::router::HostListRequest& re
     }
 
     // Collect host_ids of currently connected hosts to mark them online.
-    QSet<qint64> online_host_ids;
+    QSet<HostId> online_host_ids;
     const QList<Session*>& sessions = Service::instance()->sessions();
     for (Session* session : std::as_const(sessions))
     {
@@ -312,7 +312,7 @@ void SessionClient::readHostListRequest(const proto::router::HostListRequest& re
         SessionHost* host_session = dynamic_cast<SessionHost*>(session);
         if (host_session)
         {
-            online_host_ids.insert(static_cast<qint64>(host_session->hostId()));
+            online_host_ids.insert(host_session->hostId());
             continue;
         }
 
@@ -320,13 +320,26 @@ void SessionClient::readHostListRequest(const proto::router::HostListRequest& re
         if (legacy_host_session)
         {
             for (HostId host_id : legacy_host_session->hostIdList())
-                online_host_ids.insert(static_cast<qint64>(host_id));
+                online_host_ids.insert(host_id);
         }
     }
 
-    const QVector<HostInfo> hosts = mode == proto::router::HostListRequest::MODE_ALL ?
-        database.hosts(start_item, end_item) : database.hosts(workspace_id, group_id, start_item, end_item);
+    QVector<HostInfo> hosts;
+    qint64 hosts_count = 0;
+
+    if (mode == proto::router::HostListRequest::MODE_ALL)
+    {
+        hosts_count = database.hostCount();
+        hosts = database.hosts(start_item, end_item);
+    }
+    else
+    {
+        hosts_count = database.hostCount(workspace_id, group_id);
+        hosts = database.hosts(workspace_id, group_id, start_item, end_item);
+    }
+
     result->set_error_code(proto::router::kErrorOk);
+    result->set_total_count(hosts_count);
 
     for (const HostInfo& info : std::as_const(hosts))
     {

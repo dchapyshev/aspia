@@ -328,7 +328,7 @@ bool Router::buildWorkspace(const Router::Workspace& workspace, proto::router::W
         dst->set_wrapped_gk(wrapped_gk.toStdString());
     }
 
-    for (qint64 host_id : std::as_const(workspace.host_ids))
+    for (HostId host_id : std::as_const(workspace.host_ids))
         out->add_host_id(host_id);
 
     return true;

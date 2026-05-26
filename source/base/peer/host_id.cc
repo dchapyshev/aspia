@@ -18,7 +18,10 @@
 
 #include "base/peer/host_id.h"
 
+#include <limits>
+
 const HostId kInvalidHostId = 0;
+const HostId kAllHostsId = std::numeric_limits<HostId>::max();
 
 static_assert(sizeof(HostId) == 8);
 
@@ -30,7 +33,7 @@ bool isHostId(const QString& str)
 
     bool result = true;
 
-    for (QString::size_type i = 0; i < str.size(); ++i)
+    for (qsizetype i = 0; i < str.size(); ++i)
     {
         if (!str.at(i).isDigit())
         {

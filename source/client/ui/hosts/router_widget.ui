@@ -174,6 +174,64 @@
          </column>
         </widget>
        </item>
+       <item>
+        <layout class="QHBoxLayout" name="layout_hosts_pagination">
+         <item>
+          <widget class="IconTextButton" name="button_hosts_prev">
+           <property name="toolTip">
+            <string>Previous page</string>
+           </property>
+           <property name="text">
+            <string>Previous</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../../../common/resources/common.qrc">
+             <normaloff>:/img/arrow-left.svg</normaloff>:/img/arrow-left.svg</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="combo_hosts_page"/>
+         </item>
+         <item>
+          <widget class="IconTextButton" name="button_hosts_next">
+           <property name="toolTip">
+            <string>Next page</string>
+           </property>
+           <property name="text">
+            <string>Next</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../../../common/resources/common.qrc">
+             <normaloff>:/img/arrow-right.svg</normaloff>:/img/arrow-right.svg</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_hosts_page_size">
+           <property name="text">
+            <string>Items per page:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="combo_hosts_page_size"/>
+         </item>
+         <item>
+          <spacer name="spacer_hosts_pagination">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tab_clients">
@@ -464,6 +522,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>IconTextButton</class>
+   <extends>QToolButton</extends>
+   <header>common/ui/icon_text_button.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../../../common/resources/common.qrc"/>
  </resources>

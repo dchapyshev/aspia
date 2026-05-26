@@ -49,7 +49,7 @@ message Workspace
     string name                     = 2;
     bytes comment                   = 3; // AEAD-encrypted with the workspace GK.
     repeated WorkspaceAccess access = 4;
-    repeated int64 host_id          = 5;
+    repeated uint64 host_id         = 5;
 }
 
 message WorkspaceListRequest
@@ -109,7 +109,7 @@ message HostStatus
 
 message Host
 {
-    int64 host_id        = 1;  // hosts.id - the dialable host identifier.
+    uint64 host_id       = 1;  // hosts.id - the dialable host identifier.
     int64 workspace_id   = 2;  // 0 means the host is not assigned to any workspace.
     int64 group_id       = 3;  // 0 means the host is at the workspace root.
     string display_name  = 4;  // Admin-editable display label (plain).
@@ -149,7 +149,8 @@ message HostList
     string error_code  = 2; // "ok" | "access_denied" | "internal_error"
     int64 workspace_id = 3; // Echo of the request, so the client can route the response.
     int64 group_id     = 4; // Echo of the request.
-    repeated Host host = 5;
+    int64 total_count  = 5; // Total hosts in scope.
+    repeated Host host = 6;
 }
 
 message RouterToClient

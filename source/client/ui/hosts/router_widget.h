@@ -180,10 +180,15 @@ private slots:
     void onPeerResultReceived(const proto::router::PeerResult& result);
     void onWorkspaceListReceived(const Router::WorkspaceList& list);
     void onWorkspaceResultReceived(const proto::router::WorkspaceResult& result);
+    void onHostsPageSizeChanged(int index);
+    void onHostsPageChanged(int index);
+    void onHostsPrevClicked();
+    void onHostsNextClicked();
 
 private:
     void updateStatusLabel();
     void updateRelayStatistics();
+    void updateHostsPagination();
     void saveHostsToFile();
     QString workspaceNameById(qint64 workspace_id) const;
     void refreshHostsWorkspaceColumn();
@@ -196,6 +201,10 @@ private:
     StatusDialog* status_dialog_ = nullptr;
 
     QLabel* status_label_ = nullptr;
+
+    qint64 hosts_page_size_ = 100;
+    qint64 hosts_current_page_ = 1;
+    qint64 hosts_total_count_ = 0;
 
     Q_DISABLE_COPY_MOVE(RouterWidget)
 };

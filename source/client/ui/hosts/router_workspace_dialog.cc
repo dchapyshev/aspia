@@ -163,7 +163,7 @@ void RouterWorkspaceDialog::onHostListReceived(const proto::router::HostList& li
         else
             continue;
 
-        const qint64 host_id = host.host_id();
+        const HostId host_id = host.host_id();
         const QString computer_name = QString::fromStdString(host.computer_name());
         const QString name = computer_name.isEmpty() ?
             QString::number(host_id) : QString("%1 (%2)").arg(host_id).arg(computer_name);
@@ -239,7 +239,7 @@ void RouterWorkspaceDialog::onButtonBoxClicked(QAbstractButton* button)
     for (int i = 0; i < ui->list_hosts_in_workspace->count(); ++i)
     {
         QListWidgetItem* item = ui->list_hosts_in_workspace->item(i);
-        workspace_.host_ids.append(item->data(Qt::UserRole).toLongLong());
+        workspace_.host_ids.append(item->data(Qt::UserRole).toULongLong());
     }
 
     Router* router = Router::instance(router_id_);

@@ -22,6 +22,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QCollator>
+#include <QComboBox>
 #include <QDateTime>
 #include <QEvent>
 #include <QFile>
@@ -33,7 +34,9 @@
 #include <QJsonObject>
 #include <QLabel>
 #include <QMenu>
+#include <QSignalBlocker>
 #include <QStatusBar>
+#include <QToolButton>
 
 #include "base/logging.h"
 #include "base/peer/router_user.h"
@@ -43,6 +46,7 @@
 #include "client/ui/hosts/router_user_dialog.h"
 #include "client/ui/hosts/router_workspace_dialog.h"
 #include "common/ui/formatter.h"
+#include "common/ui/icon_text_button.h"
 #include "common/ui/msg_box.h"
 #include "common/ui/status_dialog.h"
 #include "proto/router_admin.h"
@@ -403,30 +407,55 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     connect(ui->tree_relays, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentRelayChanged);
     connect(ui->tree_hosts, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentHostChanged);
     connect(ui->tree_clients, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentClientChanged);
-    connect(ui->tree_workspaces, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentWorkspaceChanged);
-    connect(ui->tree_workspaces, &QTreeWidget::itemDoubleClicked, this, [this](QTreeWidgetItem*, int) { onModifyWorkspace(); });
+
+    connect(ui->tree_workspaces, &QTreeWidget::itemSelectionChanged,
+            this, &RouterWidget::onCurrentWorkspaceChanged);
+    connect(ui->tree_workspaces, &QTreeWidget::itemDoubleClicked,
+            this, [this](QTreeWidgetItem*, int) { onModifyWorkspace(); });
 
     ui->tree_users->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->tree_users, &QTreeWidget::customContextMenuRequested, this, &RouterWidget::onUserContextMenuRequested);
+    connect(ui->tree_users, &QTreeWidget::customContextMenuRequested,
+            this, &RouterWidget::onUserContextMenuRequested);
 
     ui->tree_hosts->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->tree_hosts, &QTreeWidget::customContextMenuRequested, this, &RouterWidget::onHostContextMenuRequested);
+    connect(ui->tree_hosts, &QTreeWidget::customContextMenuRequested,
+            this, &RouterWidget::onHostContextMenuRequested);
 
     ui->tree_hosts->header()->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_hosts->header(), &QHeaderView::customContextMenuRequested,
             this, &RouterWidget::onHostsHeaderContextMenu);
 
     ui->tree_clients->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->tree_clients, &QTreeWidget::customContextMenuRequested, this, &RouterWidget::onClientContextMenuRequested);
+    connect(ui->tree_clients, &QTreeWidget::customContextMenuRequested,
+            this, &RouterWidget::onClientContextMenuRequested);
 
     ui->tree_relays->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->tree_relays, &QTreeWidget::customContextMenuRequested, this, &RouterWidget::onRelayContextMenuRequested);
+    connect(ui->tree_relays, &QTreeWidget::customContextMenuRequested,
+            this, &RouterWidget::onRelayContextMenuRequested);
 
     ui->tree_peers->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->tree_peers, &QTreeWidget::customContextMenuRequested, this, &RouterWidget::onPeerContextMenuRequested);
+    connect(ui->tree_peers, &QTreeWidget::customContextMenuRequested,
+            this, &RouterWidget::onPeerContextMenuRequested);
 
     ui->tree_workspaces->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->tree_workspaces, &QTreeWidget::customContextMenuRequested, this, &RouterWidget::onWorkspaceContextMenuRequested);
+    connect(ui->tree_workspaces, &QTreeWidget::customContextMenuRequested,
+            this, &RouterWidget::onWorkspaceContextMenuRequested);
+
+    ui->combo_hosts_page_size->addItem("50", QVariant::fromValue<qint64>(50));
+    ui->combo_hosts_page_size->addItem("100", QVariant::fromValue<qint64>(100));
+    ui->combo_hosts_page_size->addItem("200", QVariant::fromValue<qint64>(200));
+    ui->combo_hosts_page_size->setCurrentIndex(1);
+
+    ui->button_hosts_next->setIconOnRight(true);
+
+    connect(ui->combo_hosts_page_size, &QComboBox::currentIndexChanged,
+            this, &RouterWidget::onHostsPageSizeChanged);
+    connect(ui->combo_hosts_page, &QComboBox::currentIndexChanged,
+            this, &RouterWidget::onHostsPageChanged);
+    connect(ui->button_hosts_prev, &QToolButton::clicked, this, &RouterWidget::onHostsPrevClicked);
+    connect(ui->button_hosts_next, &QToolButton::clicked, this, &RouterWidget::onHostsNextClicked);
+
+    updateHostsPagination();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -476,7 +505,7 @@ bool RouterWidget::isSelectedHostOnline() const
 HostId RouterWidget::selectedHostId() const
 {
     HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_hosts->currentItem());
-    return item ? static_cast<HostId>(item->info.host_id()) : kInvalidHostId;
+    return item ? item->info.host_id() : kInvalidHostId;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -862,8 +891,12 @@ void RouterWidget::onUpdateRelayList()
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onUpdateHostList()
 {
+    const qint64 start = (hosts_current_page_ - 1) * hosts_page_size_;
+
     proto::router::HostListRequest request;
     request.set_mode(proto::router::HostListRequest::MODE_ALL);
+    request.set_start_item(start);
+    request.set_end_item(start + hosts_page_size_ - 1);
     router_->hostList(std::move(request), this, &RouterWidget::onHostListReceived);
 }
 
@@ -970,7 +1003,7 @@ void RouterWidget::onDisconnectAllHosts()
     }
 
     LOG(INFO) << "[ACTION] Disconnect all hosts accepted by user";
-    router_->hostDisconnect(-1, this, &RouterWidget::onHostResultReceived);
+    router_->hostDisconnect(kAllHostsId, this, &RouterWidget::onHostResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1461,7 +1494,7 @@ void RouterWidget::onHostListReceived(const proto::router::HostList& list)
     if (list.workspace_id() != 0 || list.group_id() != 0)
         return;
 
-    auto has_with_id = [](const proto::router::HostList& list, qint64 host_id)
+    auto has_with_id = [](const proto::router::HostList& list, HostId host_id)
     {
         for (int i = 0; i < list.host_size(); ++i)
         {
@@ -1506,6 +1539,9 @@ void RouterWidget::onHostListReceived(const proto::router::HostList& list)
 
         target->setWorkspaceName(workspaceNameById(info.workspace_id()));
     }
+
+    hosts_total_count_ = list.total_count();
+    updateHostsPagination();
 
     emit sig_currentHostChanged(routerId());
     updateStatusLabel();
@@ -1758,6 +1794,50 @@ void RouterWidget::onWorkspaceResultReceived(const proto::router::WorkspaceResul
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWidget::onHostsPageSizeChanged(int /* index */)
+{
+    hosts_page_size_ = ui->combo_hosts_page_size->currentData().toLongLong();
+    hosts_current_page_ = 1;
+    onUpdateHostList();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onHostsPageChanged(int index)
+{
+    if (index < 0)
+        return;
+
+    const qint64 page = index + 1;
+    if (page == hosts_current_page_)
+        return;
+
+    hosts_current_page_ = page;
+    onUpdateHostList();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onHostsPrevClicked()
+{
+    if (hosts_current_page_ <= 1)
+        return;
+
+    --hosts_current_page_;
+    onUpdateHostList();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onHostsNextClicked()
+{
+    const qint64 total_pages =
+        (hosts_total_count_ + hosts_page_size_ - 1) / hosts_page_size_;
+    if (hosts_current_page_ >= total_pages)
+        return;
+
+    ++hosts_current_page_;
+    onUpdateHostList();
+}
+
+//--------------------------------------------------------------------------------------------------
 QString RouterWidget::workspaceNameById(qint64 workspace_id) const
 {
     if (workspace_id <= 0)
@@ -1869,6 +1949,29 @@ void RouterWidget::updateRelayStatistics()
         if (!found)
             ui->tree_peers->addTopLevelItem(new PeerTreeItem(connection));
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::updateHostsPagination()
+{
+    qint64 total_pages = 1;
+    if (hosts_total_count_ > 0)
+        total_pages = (hosts_total_count_ + hosts_page_size_ - 1) / hosts_page_size_;
+
+    if (hosts_current_page_ > total_pages)
+        hosts_current_page_ = total_pages;
+    if (hosts_current_page_ < 1)
+        hosts_current_page_ = 1;
+
+    QSignalBlocker blocker(ui->combo_hosts_page);
+    ui->combo_hosts_page->clear();
+    for (qint64 i = 1; i <= total_pages; ++i)
+        ui->combo_hosts_page->addItem(QString::number(i));
+    ui->combo_hosts_page->setCurrentIndex(static_cast<int>(hosts_current_page_ - 1));
+
+    ui->combo_hosts_page->setEnabled(total_pages > 1);
+    ui->button_hosts_prev->setEnabled(hosts_current_page_ > 1);
+    ui->button_hosts_next->setEnabled(hosts_current_page_ < total_pages);
 }
 
 //--------------------------------------------------------------------------------------------------

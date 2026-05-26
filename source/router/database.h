@@ -31,7 +31,7 @@
 
 struct HostInfo
 {
-    qint64 host_id      = 0; // hosts.id - the dialable host identifier.
+    quint64 host_id     = 0; // hosts.id - the dialable host identifier.
     qint64 workspace_id = 0;
     qint64 group_id     = 0;
     QString display_name;
@@ -112,7 +112,7 @@ public:
     // hosts in the set with workspace_id 0 are claimed (workspace_id <- entry_id); hosts in
     // the set that already belong to another workspace are left alone (the operator cannot
     // hijack a host from another workspace through this call).
-    std::string_view setWorkspaceHosts(qint64 entry_id, const QSet<qint64>& desired_host_ids);
+    std::string_view setWorkspaceHosts(qint64 entry_id, const QSet<HostId>& desired_host_ids);
 
     QVector<Workspace::Access> workspaceAccessList(qint64 workspace_id) const;
     // Returns the set of workspace ids the given user has a workspace_access entry for.
@@ -126,6 +126,11 @@ public:
     // [start_item, end_item] gives an inclusive paging window; pass end_item <= 0 to disable.
     QVector<HostInfo> hosts(
         qint64 workspace_id, qint64 group_id, qint64 start_item, qint64 end_item) const;
+
+    // Total host count in the same scope as the matching hosts() overload. Used by the client
+    // to drive pagination UI without fetching the full list.
+    qint64 hostCount() const;
+    qint64 hostCount(qint64 workspace_id, qint64 group_id) const;
 
 private:
     explicit Database(const QString& connection_name);

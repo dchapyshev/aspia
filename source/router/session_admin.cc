@@ -27,7 +27,6 @@
 #include "proto/router_host.h"
 #include "router/service.h"
 #include "router/session_host.h"
-#include "router/session_legacy_host.h"
 #include "router/session_relay.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -60,45 +59,25 @@ void SessionAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
     }
 
     if (message.has_relay_list_request())
-    {
         doRelayListRequest(message.relay_list_request());
-    }
     else if (message.has_host_request())
-    {
         doHostRequest(message.host_request());
-    }
     else if (message.has_relay_request())
-    {
         doRelayRequest(message.relay_request());
-    }
     else if (message.has_client_list_request())
-    {
         doClientListRequest(message.client_list_request());
-    }
     else if (message.has_client_request())
-    {
         doClientRequest(message.client_request());
-    }
     else if (message.has_user_list_request())
-    {
         doUserListRequest(message.user_list_request());
-    }
     else if (message.has_user_request())
-    {
         doUserRequest(message.user_request());
-    }
     else if (message.has_peer_request())
-    {
         doPeerRequest(message.peer_request());
-    }
     else if (message.has_workspace_request())
-    {
         doWorkspaceRequest(message.workspace_request());
-    }
     else
-    {
         CLOG(ERROR) << "Unhandled message from manager";
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -256,9 +235,9 @@ void SessionAdmin::doHostRequest(const proto::router::HostRequest& request)
 
     if (request.command_name() == proto::router::kCommandHostDisconnect)
     {
-        const qint64 host_id = request.host_id();
+        const HostId host_id = request.host_id();
 
-        if (host_id == -1)
+        if (host_id == kAllHostsId)
         {
             const QList<Session*>& sessions = Service::instance()->sessions();
             QList<qint64> host_session_ids;
@@ -290,7 +269,7 @@ void SessionAdmin::doHostRequest(const proto::router::HostRequest& request)
         }
         else
         {
-            SessionHost* host_session = find_host_session(static_cast<HostId>(host_id));
+            SessionHost* host_session = find_host_session(host_id);
             if (!host_session)
             {
                 CLOG(ERROR) << "No live session for host_id:" << host_id;
@@ -310,7 +289,7 @@ void SessionAdmin::doHostRequest(const proto::router::HostRequest& request)
     }
     else if (request.command_name() == proto::router::kCommandHostRemove)
     {
-        const qint64 host_id = request.host_id();
+        const HostId host_id = request.host_id();
 
         Database database = Database::open();
         if (!database.isValid())
@@ -318,7 +297,7 @@ void SessionAdmin::doHostRequest(const proto::router::HostRequest& request)
             CLOG(ERROR) << "Failed to connect to database";
             host_result->set_error_code(proto::router::kErrorInternalError);
         }
-        else if (!database.scheduleHostRemoval(static_cast<HostId>(host_id)))
+        else if (!database.scheduleHostRemoval(host_id))
         {
             CLOG(ERROR) << "Failed to schedule host removal for host_id:" << host_id;
             host_result->set_error_code(proto::router::kErrorInternalError);
@@ -328,7 +307,7 @@ void SessionAdmin::doHostRequest(const proto::router::HostRequest& request)
             // The hosts row is now in hosts_remove; if the host is online send it the remove
             // command and let SessionHost finalize the hosts_remove row on disconnect. Otherwise
             // the command is issued on reconnect.
-            SessionHost* host_session = find_host_session(static_cast<HostId>(host_id));
+            SessionHost* host_session = find_host_session(host_id);
             if (host_session)
                 host_session->sendRemoveCommand();
 
@@ -527,7 +506,7 @@ void SessionAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& req
     const QByteArray comment = QByteArray::fromStdString(workspace.comment());
     const qint64 entry_id = workspace.entry_id();
 
-    QSet<qint64> desired_host_ids;
+    QSet<HostId> desired_host_ids;
     desired_host_ids.reserve(workspace.host_id_size());
     for (int i = 0; i < workspace.host_id_size(); ++i)
         desired_host_ids.insert(workspace.host_id(i));

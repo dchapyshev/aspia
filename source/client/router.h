@@ -31,6 +31,7 @@
 
 #include "base/crypto/secure_byte_array.h"
 #include "base/net/tcp_channel.h"
+#include "base/peer/host_id.h"
 #include "base/peer/router_user.h"
 #include "base/scoped_qpointer.h"
 #include "client/config.h"
@@ -75,7 +76,7 @@ public:
         QString name;
         QString comment;
         QList<Access> access;
-        QList<qint64> host_ids;
+        QList<HostId> host_ids;
     };
 
     struct WorkspaceList
@@ -125,13 +126,13 @@ public:
     void userDelete(qint64 entry_id, ReceiverT* receiver,
                     void (ReceiverT::*slot)(const proto::router::UserResult&));
 
-    // Admin: host operations. host_id == -1 means "all hosts".
+    // Admin: host operations. Pass kAllHostsId to target all hosts.
     template<typename ReceiverT>
-    void hostDisconnect(qint64 host_id, ReceiverT* receiver,
+    void hostDisconnect(HostId host_id, ReceiverT* receiver,
                         void (ReceiverT::*slot)(const proto::router::HostResult&));
 
     template<typename ReceiverT>
-    void hostRemove(qint64 host_id, ReceiverT* receiver,
+    void hostRemove(HostId host_id, ReceiverT* receiver,
                     void (ReceiverT::*slot)(const proto::router::HostResult&));
 
     // Admin: relay/client disconnect. session_id == -1 means "all".
@@ -174,14 +175,14 @@ public:
 
     // Client: ask the router whether a host is currently online.
     template<typename ReceiverT>
-    void checkHostStatus(qint64 host_id, ReceiverT* receiver,
+    void checkHostStatus(HostId host_id, ReceiverT* receiver,
                          void (ReceiverT::*slot)(const proto::router::HostStatus&));
 
     // Client: ask the router for a relay connection offer to the given host. |receiver| is used
     // only as a lifetime guard (QPointer) for |handler|; the handler is called when the offer
     // arrives, unless |receiver| has been destroyed in the meantime.
     template<typename ReceiverT, typename HandlerT>
-    void connectionRequest(qint64 host_id, ReceiverT* receiver, HandlerT handler);
+    void connectionRequest(HostId host_id, ReceiverT* receiver, HandlerT handler);
 
     // Client: rotate the password of the authenticated user.
     template<typename ReceiverT>
@@ -355,7 +356,7 @@ void Router::userDelete(qint64 entry_id, ReceiverT* receiver,
 
 //--------------------------------------------------------------------------------------------------
 template<typename ReceiverT>
-void Router::hostDisconnect(qint64 host_id, ReceiverT* receiver,
+void Router::hostDisconnect(HostId host_id, ReceiverT* receiver,
                             void (ReceiverT::*slot)(const proto::router::HostResult&))
 {
     proto::router::AdminToRouter message;
@@ -369,7 +370,7 @@ void Router::hostDisconnect(qint64 host_id, ReceiverT* receiver,
 
 //--------------------------------------------------------------------------------------------------
 template<typename ReceiverT>
-void Router::hostRemove(qint64 host_id, ReceiverT* receiver,
+void Router::hostRemove(HostId host_id, ReceiverT* receiver,
                         void (ReceiverT::*slot)(const proto::router::HostResult&))
 {
     proto::router::AdminToRouter message;
@@ -503,7 +504,7 @@ void Router::hostList(proto::router::HostListRequest request, ReceiverT* receive
 
 //--------------------------------------------------------------------------------------------------
 template<typename ReceiverT>
-void Router::checkHostStatus(qint64 host_id, ReceiverT* receiver,
+void Router::checkHostStatus(HostId host_id, ReceiverT* receiver,
                              void (ReceiverT::*slot)(const proto::router::HostStatus&))
 {
     proto::router::ClientToRouter message;
@@ -516,7 +517,7 @@ void Router::checkHostStatus(qint64 host_id, ReceiverT* receiver,
 
 //--------------------------------------------------------------------------------------------------
 template<typename ReceiverT, typename HandlerT>
-void Router::connectionRequest(qint64 host_id, ReceiverT* receiver, HandlerT handler)
+void Router::connectionRequest(HostId host_id, ReceiverT* receiver, HandlerT handler)
 {
     proto::router::ClientToRouter message;
     auto* request = message.mutable_connection_request();

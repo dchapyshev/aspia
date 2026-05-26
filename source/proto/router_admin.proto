@@ -64,9 +64,9 @@ message HostRequest
 {
     int64 request_id    = 1;
     string command_name = 2; // "disconnect" | "remove"
-    int64 host_id       = 3; // For "disconnect": -1 means all host sessions, otherwise the host
-                             // session is looked up by host_id (hosts.id).
-                             // For "remove": host_id of the host to uninstall.
+    uint64 host_id      = 3; // For "disconnect": kAllHostsId (UINT64_MAX) means all host
+                             // sessions, otherwise the host session is looked up by host_id
+                             // (hosts.id). For "remove": host_id of the host to uninstall.
     string params       = 4; // Additional parameters separated by ';'. Currently unused.
 }
 

@@ -25,6 +25,7 @@
 using HostId = unsigned long long;
 
 extern const HostId kInvalidHostId;
+extern const HostId kAllHostsId;
 
 // Checks if a string is a host ID.
 bool isHostId(const QString& str);

@@ -602,7 +602,7 @@ std::string_view Database::hostId(const QByteArray& key_hash, HostId* host_id) c
 
     if (query.next())
     {
-        *host_id = static_cast<HostId>(query.value(0).toLongLong());
+        *host_id = query.value(0).toULongLong();
         return proto::router::kErrorOk;
     }
 
@@ -622,7 +622,7 @@ std::string_view Database::hostId(const QByteArray& key_hash, HostId* host_id) c
     if (!pending.next())
         return proto::router::kErrorNotFound;
 
-    *host_id = static_cast<HostId>(pending.value(0).toLongLong());
+    *host_id = pending.value(0).toULongLong();
     return proto::router::kErrorOk;
 }
 
@@ -692,7 +692,7 @@ bool Database::updateHostInfo(HostId host_id,
     query.addBindValue(os_name);
     query.addBindValue(address);
     query.addBindValue(timestamp);
-    query.addBindValue(static_cast<qulonglong>(host_id));
+    query.addBindValue(host_id);
 
     if (!query.exec())
     {
@@ -727,7 +727,7 @@ bool Database::scheduleHostRemoval(HostId host_id)
 
     QSqlQuery select(sql_db);
     select.prepare(QStringLiteral("SELECT key FROM hosts WHERE id=?"));
-    select.addBindValue(static_cast<qulonglong>(host_id));
+    select.addBindValue(host_id);
 
     if (!select.exec())
     {
@@ -749,7 +749,7 @@ bool Database::scheduleHostRemoval(HostId host_id)
     QSqlQuery insert(sql_db);
     insert.prepare(QStringLiteral(
         "INSERT INTO hosts_remove (host_id, key, timestamp) VALUES (?, ?, ?)"));
-    insert.addBindValue(static_cast<qulonglong>(host_id));
+    insert.addBindValue(host_id);
     insert.addBindValue(key);
     insert.addBindValue(timestamp);
 
@@ -762,7 +762,7 @@ bool Database::scheduleHostRemoval(HostId host_id)
 
     QSqlQuery del(sql_db);
     del.prepare(QStringLiteral("DELETE FROM hosts WHERE id=?"));
-    del.addBindValue(static_cast<qulonglong>(host_id));
+    del.addBindValue(host_id);
 
     if (!del.exec())
     {
@@ -795,7 +795,7 @@ bool Database::hasPendingHostRemoval(HostId host_id) const
 
     QSqlQuery query(databaseByName(connection_name_));
     query.prepare(QStringLiteral("SELECT 1 FROM hosts_remove WHERE host_id=?"));
-    query.addBindValue(static_cast<qulonglong>(host_id));
+    query.addBindValue(host_id);
 
     if (!query.exec())
     {
@@ -823,7 +823,7 @@ bool Database::finalizeHostRemoval(HostId host_id)
 
     QSqlQuery query(databaseByName(connection_name_));
     query.prepare(QStringLiteral("DELETE FROM hosts_remove WHERE host_id=?"));
-    query.addBindValue(static_cast<qulonglong>(host_id));
+    query.addBindValue(host_id);
 
     if (!query.exec())
     {
@@ -1167,7 +1167,7 @@ std::string_view Database::modifyWorkspace(
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Database::setWorkspaceHosts(qint64 entry_id, const QSet<qint64>& desired_host_ids)
+std::string_view Database::setWorkspaceHosts(qint64 entry_id, const QSet<HostId>& desired_host_ids)
 {
     if (!isValid())
     {
@@ -1181,9 +1181,9 @@ std::string_view Database::setWorkspaceHosts(qint64 entry_id, const QSet<qint64>
         return proto::router::kErrorInvalidData;
     }
 
-    for (qint64 host_id : std::as_const(desired_host_ids))
+    for (HostId host_id : std::as_const(desired_host_ids))
     {
-        if (host_id <= 0)
+        if (host_id == kInvalidHostId)
         {
             LOG(ERROR) << "Invalid host_id in desired list:" << host_id;
             return proto::router::kErrorInvalidData;
@@ -1212,7 +1212,7 @@ std::string_view Database::setWorkspaceHosts(qint64 entry_id, const QSet<qint64>
     release.prepare(QStringLiteral("UPDATE hosts SET workspace_id=0, group_id=0 WHERE id=?"));
     while (select_current.next())
     {
-        const qint64 host_id = select_current.value(0).toLongLong();
+        const HostId host_id = select_current.value(0).toULongLong();
         if (desired_host_ids.contains(host_id))
             continue;
 
@@ -1230,7 +1230,7 @@ std::string_view Database::setWorkspaceHosts(qint64 entry_id, const QSet<qint64>
     QSqlQuery claim(sql_db);
     claim.prepare(QStringLiteral(
         "UPDATE hosts SET workspace_id=? WHERE id=? AND workspace_id IN (0, ?)"));
-    for (qint64 host_id : std::as_const(desired_host_ids))
+    for (HostId host_id : std::as_const(desired_host_ids))
     {
         claim.bindValue(0, entry_id);
         claim.bindValue(1, host_id);
@@ -1400,7 +1400,7 @@ QVector<HostInfo> Database::hosts(qint64 start_item, qint64 end_item) const
     while (query.next())
     {
         HostInfo info;
-        info.host_id       = query.value(0).toLongLong();
+        info.host_id       = query.value(0).toULongLong();
         info.workspace_id  = query.value(1).toLongLong();
         info.group_id      = query.value(2).toLongLong();
         info.display_name  = query.value(3).toString();
@@ -1460,7 +1460,7 @@ QVector<HostInfo> Database::hosts(
     while (query.next())
     {
         HostInfo info;
-        info.host_id       = query.value(0).toLongLong();
+        info.host_id       = query.value(0).toULongLong();
         info.workspace_id  = query.value(1).toLongLong();
         info.group_id      = query.value(2).toLongLong();
         info.display_name  = query.value(3).toString();
@@ -1478,6 +1478,55 @@ QVector<HostInfo> Database::hosts(
     }
 
     return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+qint64 Database::hostCount() const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return 0;
+    }
+
+    QSqlQuery query(databaseByName(connection_name_));
+    if (!query.exec(QStringLiteral("SELECT COUNT(*) FROM hosts")))
+    {
+        LOG(ERROR) << "Unable to count hosts:" << query.lastError();
+        return 0;
+    }
+
+    if (!query.next())
+        return 0;
+
+    return query.value(0).toLongLong();
+}
+
+//--------------------------------------------------------------------------------------------------
+qint64 Database::hostCount(qint64 workspace_id, qint64 group_id) const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return 0;
+    }
+
+    QSqlQuery query(databaseByName(connection_name_));
+    query.prepare(QStringLiteral(
+        "SELECT COUNT(*) FROM hosts WHERE workspace_id=? AND group_id=?"));
+    query.addBindValue(workspace_id);
+    query.addBindValue(group_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to count hosts:" << query.lastError();
+        return 0;
+    }
+
+    if (!query.next())
+        return 0;
+
+    return query.value(0).toLongLong();
 }
 
 //--------------------------------------------------------------------------------------------------
