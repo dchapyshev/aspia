@@ -32,7 +32,7 @@
         <number>64</number>
        </property>
        <property name="placeholderText">
-        <string>Computer name or IP address</string>
+        <string>Host name or IP address</string>
        </property>
       </widget>
      </item>
