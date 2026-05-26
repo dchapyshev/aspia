@@ -265,8 +265,7 @@ bool AabImporter::import(QWidget* parent, const QString& file_path)
     QFile file(file_path);
     if (!file.open(QIODevice::ReadOnly))
     {
-        MsgBox::warning(parent,
-            tr("Unable to open file \"%1\": %2").arg(file_path, file.errorString()));
+        MsgBox::warning(parent, tr("Unable to open file \"%1\": %2").arg(file_path, file.errorString()));
         return false;
     }
 
@@ -282,16 +281,16 @@ bool AabImporter::import(QWidget* parent, const QString& file_path)
     proto::address_book::File proto_file;
     if (!proto_file.ParseFromArray(buffer.constData(), buffer.size()))
     {
-        MsgBox::warning(parent,
-            tr("The address book file is corrupted or has an unknown format."));
+        MsgBox::warning(parent, tr("The address book file is corrupted or has an unknown format."));
         return false;
     }
 
-    SecureByteArray key;
+    QByteArray plain;
 
     switch (proto_file.encryption_type())
     {
         case proto::address_book::ENCRYPTION_TYPE_NONE:
+            plain = QByteArray::fromStdString(proto_file.data());
             break;
 
         case proto::address_book::ENCRYPTION_TYPE_CHACHA20_POLY1305:
@@ -300,39 +299,35 @@ bool AabImporter::import(QWidget* parent, const QString& file_path)
             if (dialog.exec() != QDialog::Accepted)
                 return false;
 
-            key = SecureByteArray(PasswordHash::hash(
+            SecureByteArray key = SecureByteArray(PasswordHash::hash(
                 PasswordHash::SCRYPT,
                 dialog.password(),
                 QByteArray::fromStdString(proto_file.hashing_salt())));
+
+            std::optional<QByteArray> decrypted = DataCryptor(key).decrypt(proto_file.data());
+            if (!decrypted.has_value())
+            {
+                MsgBox::warning(parent, tr("Unable to decrypt the address book with the specified password."));
+                return false;
+            }
+            plain = std::move(*decrypted);
             break;
         }
 
         default:
-            MsgBox::warning(parent,
-                tr("The address book file is encrypted with an unsupported encryption type."));
+            MsgBox::warning(parent, tr("The address book file is encrypted with an unsupported encryption type."));
             return false;
     }
 
-    DataCryptor cryptor(key);
-
-    std::optional<QByteArray> decrypted = cryptor.decrypt(proto_file.data());
-    if (!decrypted.has_value())
-    {
-        MsgBox::warning(parent,
-            tr("Unable to decrypt the address book with the specified password."));
-        return false;
-    }
-
     proto::address_book::Data proto_data;
-    if (!parse(*decrypted, &proto_data))
+    if (!parse(plain, &proto_data))
     {
-        memZero(&*decrypted);
-        MsgBox::warning(parent,
-            tr("The address book file is corrupted or has an unknown format."));
+        memZero(&plain);
+        MsgBox::warning(parent, tr("The address book file is corrupted or has an unknown format."));
         return false;
     }
 
-    memZero(&*decrypted);
+    memZero(&plain);
 
     ImportCounters counters;
 
