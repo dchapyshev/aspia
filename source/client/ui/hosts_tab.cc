@@ -929,10 +929,16 @@ void HostsTab::onRouterGroupContextMenu(const QPoint& pos)
         return;
 
     QMenu menu;
+    menu.addAction(ui->action_desktop_connect);
+    menu.addAction(ui->action_file_transfer_connect);
+    menu.addAction(ui->action_chat_connect);
+    menu.addAction(ui->action_system_info_connect);
     if (ui->action_edit_host->isVisible())
+    {
+        menu.addSeparator();
         menu.addAction(ui->action_edit_host);
-    if (!menu.isEmpty())
-        menu.exec(pos);
+    }
+    menu.exec(pos);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1352,8 +1358,8 @@ void HostsTab::updateActionsState()
         if (router)
             session_type = router->config().sessionType();
 
-        const bool can_edit = router_group_widget_->hasSelectedHost() &&
-            session_type != proto::router::SESSION_TYPE_CLIENT;
+        const bool has_selection = router_group_widget_->hasSelectedHost();
+        const bool can_edit = has_selection && session_type != proto::router::SESSION_TYPE_CLIENT;
         ui->action_edit_host->setVisible(can_edit);
     }
 
