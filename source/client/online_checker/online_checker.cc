@@ -23,6 +23,12 @@
 #include "base/peer/host_id.h"
 #include "client/config.h"
 
+namespace {
+
+constexpr qint64 kCacheSeconds = 3 * 60; // 3 minutes.
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 OnlineChecker::OnlineChecker(QObject* parent)
     : QObject(parent)
@@ -47,8 +53,32 @@ void OnlineChecker::start(const ComputerList& computers)
 {
     LOG(TRACE) << "Start online checker (total computers:" << computers.size() << ")";
 
+    // Cancel any in-flight check from a previous start() call. The old inner checkers are
+    // disconnected so their late-arriving signals are ignored, and scheduled for deletion via
+    // ScopedQPointer.
+    if (router_checker_)
+        router_checker_->disconnect(this);
+    if (direct_checker_)
+        direct_checker_->disconnect(this);
+    router_checker_.reset();
+    direct_checker_.reset();
+    router_computers_.clear();
+    direct_computers_.clear();
+    router_finished_ = true;
+    direct_finished_ = true;
+
+    QList<QPair<qint64, bool>> cached_hits;
+
     for (const ComputerConfig& computer : computers)
     {
+        const qint64 id = computer.id();
+        auto it = cache_.constFind(id);
+        if (it != cache_.constEnd() && isCacheFresh(*it))
+        {
+            cached_hits.append({id, it->online});
+            continue;
+        }
+
         if (isHostId(computer.address()))
             router_computers_.emplace_back(computer);
         else
@@ -57,6 +87,7 @@ void OnlineChecker::start(const ComputerList& computers)
 
     if (!router_computers_.isEmpty())
     {
+        router_finished_ = false;
         router_checker_ = new OnlineCheckerRouter(router_computers_, this);
 
         connect(router_checker_, &OnlineCheckerRouter::sig_checkerResult,
@@ -66,16 +97,10 @@ void OnlineChecker::start(const ComputerList& computers)
 
         router_checker_->start();
     }
-    else
-    {
-        LOG(TRACE) << "Computer list for ROUTER is empty";
-        router_finished_ = true;
-    }
 
     if (!direct_computers_.isEmpty())
     {
-        LOG(TRACE) << "Computers for DIRECT checking:" << direct_computers_.size();
-
+        direct_finished_ = false;
         direct_checker_ = new OnlineCheckerDirect(direct_computers_);
         direct_checker_->moveToThread(GuiApplication::ioThread());
 
@@ -88,16 +113,28 @@ void OnlineChecker::start(const ComputerList& computers)
 
         QMetaObject::invokeMethod(direct_checker_, &OnlineCheckerDirect::start, Qt::QueuedConnection);
     }
-    else
+
+    pending_cached_hits_ = std::move(cached_hits);
+    if (!pending_cached_hits_.isEmpty() || (router_finished_ && direct_finished_))
     {
-        LOG(TRACE) << "Computer list for DIRECT is empty";
-        direct_finished_ = true;
+        // Either we have cached hits to emit, or everything was empty - in both cases dispatch
+        // the cached-emit slot through the event loop so sig_checkerResult/sig_checkerFinished
+        // are delivered asynchronously, after the caller's start() invocation returns.
+        QMetaObject::invokeMethod(this, &OnlineChecker::emitPendingCached, Qt::QueuedConnection);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void OnlineChecker::invalidate(const QList<qint64>& computer_ids)
+{
+    for (qint64 id : computer_ids)
+        cache_.remove(id);
 }
 
 //--------------------------------------------------------------------------------------------------
 void OnlineChecker::onDirectCheckerResult(qint64 computer_id, bool online)
 {
+    cache_.insert(computer_id, CacheEntry{online, QDateTime::currentDateTime()});
     emit sig_checkerResult(computer_id, online);
 }
 
@@ -105,16 +142,14 @@ void OnlineChecker::onDirectCheckerResult(qint64 computer_id, bool online)
 void OnlineChecker::onDirectCheckerFinished()
 {
     direct_finished_ = true;
-
     LOG(TRACE) << "DIRECT checker finished (r:" << router_finished_ << ", d:" << direct_finished_ << ")";
-
-    if (direct_finished_ && router_finished_)
-        emit sig_checkerFinished();
+    finishIfDone();
 }
 
 //--------------------------------------------------------------------------------------------------
 void OnlineChecker::onRouterCheckerResult(qint64 computer_id, bool online)
 {
+    cache_.insert(computer_id, CacheEntry{online, QDateTime::currentDateTime()});
     emit sig_checkerResult(computer_id, online);
 }
 
@@ -122,9 +157,33 @@ void OnlineChecker::onRouterCheckerResult(qint64 computer_id, bool online)
 void OnlineChecker::onRouterCheckerFinished()
 {
     router_finished_ = true;
-
     LOG(TRACE) << "ROUTER checker finished (r:" << router_finished_ << ", d:" << direct_finished_ << ")";
+    finishIfDone();
+}
 
-    if (direct_finished_ && router_finished_)
+//--------------------------------------------------------------------------------------------------
+void OnlineChecker::emitPendingCached()
+{
+    QList<QPair<qint64, bool>> hits = std::move(pending_cached_hits_);
+    pending_cached_hits_.clear();
+
+    for (const auto& pair : hits)
+        emit sig_checkerResult(pair.first, pair.second);
+
+    finishIfDone();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool OnlineChecker::isCacheFresh(const CacheEntry& entry) const
+{
+    if (!entry.checked_at.isValid())
+        return false;
+    return entry.checked_at.secsTo(QDateTime::currentDateTime()) < kCacheSeconds;
+}
+
+//--------------------------------------------------------------------------------------------------
+void OnlineChecker::finishIfDone()
+{
+    if (router_finished_ && direct_finished_ && pending_cached_hits_.isEmpty())
         emit sig_checkerFinished();
 }

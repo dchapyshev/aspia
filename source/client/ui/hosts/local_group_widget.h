@@ -27,17 +27,16 @@
 
 #include <memory>
 
-#include "base/scoped_qpointer.h"
-#include "client/online_checker/online_checker.h"
+#include "client/config.h"
 #include "client/ui/hosts/content_widget.h"
 
 namespace Ui {
 class LocalGroupWidget;
 } // namespace Ui
 
+class OnlineChecker;
 class QLabel;
 class QStatusBar;
-class ComputerConfig;
 
 class LocalGroupWidget final : public ContentWidget
 {
@@ -144,7 +143,6 @@ private:
     void startDrag();
     void updateStatusLabels();
     void startOnlineChecker();
-    void stopOnlineChecker();
     void clearOnlineStatuses();
     Item* findItemByComputerId(qint64 computer_id) const;
 
@@ -158,7 +156,7 @@ private:
     QLabel* status_computers_label_ = nullptr;
     QLabel* status_check_label_ = nullptr;
 
-    ScopedQPointer<OnlineChecker> online_checker_;
+    OnlineChecker* online_checker_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(LocalGroupWidget)
 };

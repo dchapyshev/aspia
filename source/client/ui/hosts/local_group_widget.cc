@@ -33,6 +33,7 @@
 
 #include "base/logging.h"
 #include "client/database.h"
+#include "client/online_checker/online_checker.h"
 #include "ui_local_group_widget.h"
 
 namespace {
@@ -81,7 +82,8 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
       mime_type_(QString("application/%1").arg(QUuid::createUuid().toString())),
       status_groups_label_(new QLabel(this)),
       status_computers_label_(new QLabel(this)),
-      status_check_label_(new QLabel(tr("Status update..."), this))
+      status_check_label_(new QLabel(tr("Status update..."), this)),
+      online_checker_(new OnlineChecker(this))
 {
     LOG(INFO) << "Ctor";
 
@@ -132,13 +134,17 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
         }
         emit sig_contextMenu(computer_id, ui->tree_computer->viewport()->mapToGlobal(pos));
     });
+
+    connect(online_checker_, &OnlineChecker::sig_checkerResult,
+            this, &LocalGroupWidget::onOnlineCheckerResult);
+    connect(online_checker_, &OnlineChecker::sig_checkerFinished,
+            this, &LocalGroupWidget::onOnlineCheckerFinished);
 }
 
 //--------------------------------------------------------------------------------------------------
 LocalGroupWidget::~LocalGroupWidget()
 {
     LOG(INFO) << "Dtor";
-    stopOnlineChecker();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -266,6 +272,16 @@ void LocalGroupWidget::restoreState(const QByteArray& state)
 //--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::reload()
 {
+    QList<qint64> ids;
+    ids.reserve(ui->tree_computer->topLevelItemCount());
+    for (int i = 0; i < ui->tree_computer->topLevelItemCount(); ++i)
+    {
+        Item* item = static_cast<Item*>(ui->tree_computer->topLevelItem(i));
+        if (item)
+            ids.append(item->computerId());
+    }
+    online_checker_->invalidate(ids);
+
     startOnlineChecker();
 }
 
@@ -283,7 +299,7 @@ void LocalGroupWidget::activate(QStatusBar* statusbar)
 
     status_groups_label_->show();
     status_computers_label_->show();
-    status_check_label_->setVisible(online_checker_ != nullptr);
+    status_check_label_->setVisible(false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -377,9 +393,6 @@ void LocalGroupWidget::onOnlineCheckerResult(qint64 computer_id, bool online)
 void LocalGroupWidget::onOnlineCheckerFinished()
 {
     LOG(INFO) << "Online checker finished";
-
-    online_checker_.reset();
-
     status_check_label_->setVisible(false);
 }
 
@@ -415,7 +428,7 @@ void LocalGroupWidget::updateStatusLabels()
 //--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::startOnlineChecker()
 {
-    stopOnlineChecker();
+    clearOnlineStatuses();
 
     OnlineChecker::ComputerList computers;
 
@@ -429,35 +442,13 @@ void LocalGroupWidget::startOnlineChecker()
     if (computers.isEmpty())
     {
         LOG(INFO) << "No computers to check";
+        status_check_label_->setVisible(false);
         return;
     }
 
     LOG(INFO) << "Start online checker for" << computers.size() << "computer(s)";
-
-    online_checker_ = new OnlineChecker(this);
-
-    connect(online_checker_, &OnlineChecker::sig_checkerResult,
-            this, &LocalGroupWidget::onOnlineCheckerResult);
-    connect(online_checker_, &OnlineChecker::sig_checkerFinished,
-            this, &LocalGroupWidget::onOnlineCheckerFinished);
-
     online_checker_->start(computers);
-
     status_check_label_->setVisible(true);
-}
-
-//--------------------------------------------------------------------------------------------------
-void LocalGroupWidget::stopOnlineChecker()
-{
-    if (online_checker_)
-    {
-        LOG(INFO) << "Stop online checker";
-        online_checker_->disconnect(this);
-        online_checker_.reset();
-    }
-
-    clearOnlineStatuses();
-    status_check_label_->setVisible(false);
 }
 
 //--------------------------------------------------------------------------------------------------
