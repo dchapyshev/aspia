@@ -225,9 +225,9 @@ list(APPEND SOURCE_CLIENT_CORE_UI_CHAT
     ui/chat/chat_window.ui)
 
 list(APPEND SOURCE_CLIENT_CORE_UI_HOSTS_TAB
-    ui/hosts/local_computer_dialog.cc
-    ui/hosts/local_computer_dialog.h
-    ui/hosts/local_computer_dialog.ui
+    ui/hosts/local_host_dialog.cc
+    ui/hosts/local_host_dialog.h
+    ui/hosts/local_host_dialog.ui
     ui/hosts/local_group_dialog.cc
     ui/hosts/local_group_dialog.h
     ui/hosts/local_group_dialog.ui

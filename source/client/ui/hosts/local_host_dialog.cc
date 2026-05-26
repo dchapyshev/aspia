@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/hosts/local_computer_dialog.h"
+#include "client/ui/hosts/local_host_dialog.h"
 
 #include <QAbstractButton>
 #include <QPushButton>
@@ -30,7 +30,7 @@
 #include "client/database.h"
 #include "common/ui/msg_box.h"
 #include "common/ui/password_edit.h"
-#include "ui_local_computer_dialog.h"
+#include "ui_local_host_dialog.h"
 
 namespace {
 
@@ -41,10 +41,10 @@ constexpr int kMaxCommentLength = 2048;
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-LocalComputerDialog::LocalComputerDialog(qint64 computer_id, qint64 group_id, QWidget* parent)
+LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* parent)
     : QDialog(parent),
-      ui(std::make_unique<Ui::LocalComputerDialog>()),
-      computer_id_(computer_id)
+      ui(std::make_unique<Ui::LocalHostDialog>()),
+      entry_id_(entry_id)
 {
     LOG(INFO) << "Ctor";
 
@@ -60,11 +60,11 @@ LocalComputerDialog::LocalComputerDialog(qint64 computer_id, qint64 group_id, QW
 
     qint64 selected_router_id = 0;
 
-    if (computer_id_ != -1)
+    if (entry_id_ != -1)
     {
         setWindowTitle(tr("Edit Computer"));
 
-        std::optional<ComputerConfig> computer = Database::instance().findComputer(computer_id_);
+        std::optional<ComputerConfig> computer = Database::instance().findComputer(entry_id_);
         if (computer.has_value())
         {
             ui->edit_name->setText(computer->name());
@@ -77,7 +77,7 @@ LocalComputerDialog::LocalComputerDialog(qint64 computer_id, qint64 group_id, QW
         }
         else
         {
-            LOG(ERROR) << "Unable to find computer with id" << computer_id_;
+            LOG(ERROR) << "Unable to find computer with id" << entry_id_;
         }
     }
     else
@@ -107,26 +107,26 @@ LocalComputerDialog::LocalComputerDialog(qint64 computer_id, qint64 group_id, QW
     connect(ui->button_show_password, &QToolButton::toggled,
             ui->edit_password, &PasswordEdit::setShowPassword);
     connect(ui->combo_router, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, &LocalComputerDialog::onRouterChanged);
-    connect(ui->button_box, &QDialogButtonBox::clicked, this, &LocalComputerDialog::onButtonBoxClicked);
+            this, &LocalHostDialog::onRouterChanged);
+    connect(ui->button_box, &QDialogButtonBox::clicked, this, &LocalHostDialog::onButtonBoxClicked);
 
     ui->edit_name->setFocus();
 }
 
 //--------------------------------------------------------------------------------------------------
-LocalComputerDialog::~LocalComputerDialog()
+LocalHostDialog::~LocalHostDialog()
 {
     LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void LocalComputerDialog::onRouterChanged(int /* index */)
+void LocalHostDialog::onRouterChanged(int /* index */)
 {
     updateAddressLabel();
 }
 
 //--------------------------------------------------------------------------------------------------
-void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
+void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     if (ui->button_box->standardButton(button) != QDialogButtonBox::Ok)
     {
@@ -204,7 +204,7 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
     QList<ComputerConfig> computers = Database::instance().computerList(group_id);
     for (const ComputerConfig& existing : std::as_const(computers))
     {
-        if (existing.id() != computer_id_ && existing.name() == name)
+        if (existing.id() != entry_id_ && existing.name() == name)
         {
             MsgBox::warning(this,
                 tr("A computer with this name already exists in the selected group."));
@@ -214,7 +214,7 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
     }
 
     ComputerConfig computer;
-    computer.setId(computer_id_);
+    computer.setId(entry_id_);
     computer.setGroupId(group_id);
     computer.setRouterId(router_id);
     computer.setName(ui->edit_name->text());
@@ -225,7 +225,7 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
 
     Database& db = Database::instance();
 
-    if (computer_id_ == -1)
+    if (entry_id_ == -1)
     {
         if (!db.addComputer(computer))
         {
@@ -233,7 +233,7 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
             LOG(INFO) << "Unable to add computer to database";
             return;
         }
-        computer_id_ = computer.id();
+        entry_id_ = computer.id();
     }
     else
     {
@@ -249,7 +249,7 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
 }
 
 //--------------------------------------------------------------------------------------------------
-void LocalComputerDialog::updateAddressLabel()
+void LocalHostDialog::updateAddressLabel()
 {
     if (ui->combo_router->currentData().toLongLong() == 0)
     {

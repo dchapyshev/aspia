@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_HOSTS_LOCAL_COMPUTER_DIALOG_H
-#define CLIENT_UI_HOSTS_LOCAL_COMPUTER_DIALOG_H
+#ifndef CLIENT_UI_HOSTS_LOCAL_HOST_DIALOG_H
+#define CLIENT_UI_HOSTS_LOCAL_HOST_DIALOG_H
 
 #include <QDialog>
 
@@ -26,18 +26,18 @@
 class QAbstractButton;
 
 namespace Ui {
-class LocalComputerDialog;
+class LocalHostDialog;
 } // namespace Ui
 
-class LocalComputerDialog final : public QDialog
+class LocalHostDialog final : public QDialog
 {
     Q_OBJECT
 
 public:
-    LocalComputerDialog(qint64 computer_id, qint64 group_id, QWidget* parent = nullptr);
-    ~LocalComputerDialog() final;
+    LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* parent = nullptr);
+    ~LocalHostDialog() final;
 
-    qint64 computerId() const { return computer_id_; }
+    qint64 entryId() const { return entry_id_; }
 
 private slots:
     void onRouterChanged(int index);
@@ -46,11 +46,11 @@ private slots:
 private:
     void updateAddressLabel();
 
-    std::unique_ptr<Ui::LocalComputerDialog> ui;
-    qint64 computer_id_ = -1;
+    std::unique_ptr<Ui::LocalHostDialog> ui;
+    qint64 entry_id_ = -1;
     qint64 group_id_ = 0;
 
-    Q_DISABLE_COPY_MOVE(LocalComputerDialog)
+    Q_DISABLE_COPY_MOVE(LocalHostDialog)
 };
 
-#endif // CLIENT_UI_HOSTS_LOCAL_COMPUTER_DIALOG_H
+#endif // CLIENT_UI_HOSTS_LOCAL_HOST_DIALOG_H

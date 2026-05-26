@@ -38,7 +38,7 @@
 #include "client/json_backup.h"
 #include "client/settings.h"
 #include "client/ui/hosts/content_widget.h"
-#include "client/ui/hosts/local_computer_dialog.h"
+#include "client/ui/hosts/local_host_dialog.h"
 #include "client/ui/hosts/local_group_widget.h"
 #include "client/ui/hosts/router_widget.h"
 #include "client/ui/hosts/router_group_widget.h"
@@ -673,14 +673,14 @@ void HostsTab::onAddComputer()
         return;
     }
 
-    LocalComputerDialog dialog(-1, group_id, this);
-    if (dialog.exec() == LocalComputerDialog::Rejected)
+    LocalHostDialog dialog(-1, group_id, this);
+    if (dialog.exec() == LocalHostDialog::Rejected)
     {
         LOG(INFO) << "[ACTION] Rejected by user";
         return;
     }
 
-    qint64 new_id = dialog.computerId();
+    qint64 new_id = dialog.entryId();
     local_group_widget_->showGroup(group_id);
     local_group_widget_->setCurrentComputer(new_id);
 }
@@ -710,8 +710,8 @@ void HostsTab::onEditComputer()
         return;
     }
 
-    LocalComputerDialog dialog(computer_id, computer->groupId(), this);
-    if (dialog.exec() == LocalComputerDialog::Rejected)
+    LocalHostDialog dialog(computer_id, computer->groupId(), this);
+    if (dialog.exec() == LocalHostDialog::Rejected)
     {
         LOG(INFO) << "[ACTION] Rejected by user";
         return;
@@ -751,7 +751,7 @@ void HostsTab::onCopyComputer()
 
     qint64 new_id = computer->id();
 
-    LocalComputerDialog(new_id, computer->groupId(), this).exec();
+    LocalHostDialog(new_id, computer->groupId(), this).exec();
 
     if (current_content_ == search_widget_)
     {
