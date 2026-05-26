@@ -29,6 +29,8 @@ namespace Ui {
 class RouterGroupWidget;
 } // namespace Ui
 
+class QLabel;
+
 class RouterGroupWidget final : public ContentWidget
 {
     Q_OBJECT
@@ -49,6 +51,8 @@ public:
     void restoreState(const QByteArray& state) final;
     bool canReload() const final { return true; }
     void reload() final;
+    void activate(QStatusBar* statusbar) final;
+    void deactivate(QStatusBar* statusbar) final;
 
 public slots:
     void onEditHost();
@@ -69,10 +73,12 @@ private slots:
 
 private:
     void fetchHosts();
+    void updateStatusLabel();
 
     std::unique_ptr<Ui::RouterGroupWidget> ui;
     qint64 router_id_ = 0;
     qint64 workspace_id_ = 0;
+    QLabel* status_hosts_label_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(RouterGroupWidget)
 };

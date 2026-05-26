@@ -25,9 +25,10 @@
 #include <QEvent>
 #include <QHeaderView>
 #include <QIODevice>
+#include <QLabel>
 #include <QMenu>
+#include <QStatusBar>
 
-#include "base/crypto/secure_string.h"
 #include "base/logging.h"
 #include "client/router.h"
 #include "client/ui/hosts/router_host_dialog.h"
@@ -140,12 +141,15 @@ private:
 //--------------------------------------------------------------------------------------------------
 RouterGroupWidget::RouterGroupWidget(QWidget* parent)
     : ContentWidget(Type::ROUTER_GROUP, parent),
-      ui(std::make_unique<Ui::RouterGroupWidget>())
+      ui(std::make_unique<Ui::RouterGroupWidget>()),
+      status_hosts_label_(new QLabel(this))
 {
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
     ui->tree_host->header()->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->tree_host->header()->setSectionHidden(COLUMN_USER_NAME, true);
+    ui->tree_host->header()->setSectionHidden(COLUMN_ARCH, true);
     connect(ui->tree_host->header(), &QHeaderView::customContextMenuRequested,
             this, &RouterGroupWidget::onHeaderContextMenu);
 
@@ -185,6 +189,7 @@ void RouterGroupWidget::showGroup(qint64 router_id, qint64 workspace_id)
     // Clear the tree before showing a different workspace to avoid briefly displaying stale
     // entries from the previous one.
     ui->tree_host->clear();
+    updateStatusLabel();
     fetchHosts();
 }
 
@@ -261,6 +266,28 @@ void RouterGroupWidget::reload()
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterGroupWidget::activate(QStatusBar* statusbar)
+{
+    if (!statusbar)
+        return;
+
+    updateStatusLabel();
+
+    statusbar->addWidget(status_hosts_label_);
+    status_hosts_label_->show();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterGroupWidget::deactivate(QStatusBar* statusbar)
+{
+    if (!statusbar)
+        return;
+
+    statusbar->removeWidget(status_hosts_label_);
+    status_hosts_label_->setParent(this);
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterGroupWidget::onEditHost()
 {
     HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_host->currentItem());
@@ -324,6 +351,8 @@ void RouterGroupWidget::onHostListReceived(const Router::HostList& list)
         if (!found)
             ui->tree_host->addTopLevelItem(new HostTreeItem(host));
     }
+
+    updateStatusLabel();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -371,4 +400,10 @@ void RouterGroupWidget::fetchHosts()
     request.set_mode(proto::router::HostListRequest::MODE_FILTERED);
     request.set_workspace_id(workspace_id_);
     router->listHosts(std::move(request), this, &RouterGroupWidget::onHostListReceived);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterGroupWidget::updateStatusLabel()
+{
+    status_hosts_label_->setText(tr("%n host(s)", "", ui->tree_host->topLevelItemCount()));
 }
