@@ -27,6 +27,7 @@
 #include <QIODevice>
 #include <QMenu>
 
+#include "base/crypto/secure_string.h"
 #include "base/logging.h"
 #include "client/router.h"
 #include "client/ui/hosts/router_host_dialog.h"
@@ -154,6 +155,9 @@ RouterGroupWidget::RouterGroupWidget(QWidget* parent)
 
     connect(ui->tree_host, &QTreeWidget::itemSelectionChanged,
             this, &RouterGroupWidget::sig_currentChanged);
+
+    connect(ui->tree_host, &QTreeWidget::itemDoubleClicked,
+            this, [this](QTreeWidgetItem*, int) { emit sig_doubleClicked(); });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -195,6 +199,31 @@ Router::Host RouterGroupWidget::selectedHost() const
 {
     HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_host->currentItem());
     return item ? item->host : Router::Host();
+}
+
+//--------------------------------------------------------------------------------------------------
+HostConfig RouterGroupWidget::selectedHostConfig() const
+{
+    HostConfig config;
+
+    if (!hasSelectedHost())
+        return config;
+
+    const Router::Host selected = selectedHost();
+    if (selected.host_id == kInvalidHostId)
+        return config;
+
+    config.setRouterId(router_id_);
+    config.setAddress(hostIdToString(selected.host_id));
+
+    QString name = selected.display_name;
+    if (name.isEmpty())
+        name = selected.computer_name;
+    config.setName(name);
+
+    config.setUsername(selected.user_name);
+    config.setPassword(selected.password);
+    return config;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -21,6 +21,7 @@
 
 #include <memory>
 
+#include "client/config.h"
 #include "client/router.h"
 #include "client/ui/hosts/content_widget.h"
 
@@ -41,6 +42,7 @@ public:
     qint64 routerId() const { return router_id_; }
     bool hasSelectedHost() const;
     Router::Host selectedHost() const;
+    HostConfig selectedHostConfig() const;
 
     // ContentWidget implementation.
     QByteArray saveState() final;
@@ -54,6 +56,7 @@ public slots:
 signals:
     void sig_currentChanged();
     void sig_contextMenu(const QPoint& global_pos);
+    void sig_doubleClicked();
 
 protected:
     // QWidget implementation.

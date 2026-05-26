@@ -125,6 +125,7 @@ HostsTab::HostsTab(QWidget* parent)
     connect(local_group_widget_, &LocalGroupWidget::sig_contextMenu, this, &HostsTab::onLocalHostContextMenu);
     connect(router_group_widget_, &RouterGroupWidget::sig_currentChanged, this, &HostsTab::updateActionsState);
     connect(router_group_widget_, &RouterGroupWidget::sig_contextMenu, this, &HostsTab::onRouterGroupContextMenu);
+    connect(router_group_widget_, &RouterGroupWidget::sig_doubleClicked, this, &HostsTab::onRouterGroupConnect);
     connect(this, &HostsTab::sig_connectRequested, local_group_widget_,
             [this](const HostConfig& host, proto::peer::SessionType /* session_type */)
     {
@@ -575,23 +576,11 @@ void HostsTab::onConnectAction(QAction* action)
     }
     else if (current_content_ == router_group_widget_)
     {
-        Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
-        if (!sidebar_item)
+        if (!router_group_widget_->hasSelectedHost())
             return;
-
-        // Find the parent Router item for the current RouterGroup.
-        Sidebar::Item* router_item = sidebar_item;
-        while (router_item && router_item->itemType() != Sidebar::Item::ROUTER)
-            router_item = static_cast<Sidebar::Item*>(router_item->parent());
-
-        if (!router_item)
+        host = router_group_widget_->selectedHostConfig();
+        if (!validateHostForConnect(host))
             return;
-
-        Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(router_item);
-        std::optional<RouterConfig> router_data = Database::instance().findRouter(router->routerId());
-        if (router_data)
-            host.setRouterId(router_data->routerId());
-        // TODO
     }
     else
     {
@@ -635,6 +624,17 @@ void HostsTab::onLocalConnect(qint64 entry_id)
 
     Database::instance().setConnectTime(entry_id, QDateTime::currentSecsSinceEpoch());
     emit sig_connectRequested(*host, defaultSessionType());
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::onRouterGroupConnect()
+{
+    if (!router_group_widget_->hasSelectedHost())
+        return;
+    HostConfig host = router_group_widget_->selectedHostConfig();
+    if (!validateHostForConnect(host))
+        return;
+    emit sig_connectRequested(host, defaultSessionType());
 }
 
 //--------------------------------------------------------------------------------------------------

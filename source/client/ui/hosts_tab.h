@@ -73,6 +73,7 @@ private slots:
     void onCurrentHostChanged(qint64 entry_id);
     void onConnectAction(QAction* action);
     void onLocalConnect(qint64 entry_id);
+    void onRouterGroupConnect();
     void onLocalHostContextMenu(qint64 entry_id, const QPoint& pos);
     void onAddHost();
     void onEditHost();

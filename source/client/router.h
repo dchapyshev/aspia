@@ -104,7 +104,7 @@ public:
         QString address;
         QString comment;
         QString user_name;
-        QString password;
+        SecureString password;
         qint64 last_connect = 0;
         qint64 last_modify = 0;
         bool online = false;

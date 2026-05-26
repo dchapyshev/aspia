@@ -349,7 +349,7 @@ void Router::buildHost(const Router::Host& host, proto::router::HostEditRequest*
     const DataCryptor& cryptor = it->second;
     out->set_comment(encrypt(cryptor, host.comment).toStdString());
     out->set_user_name(encrypt(cryptor, host.user_name).toStdString());
-    out->set_password(encrypt(cryptor, host.password).toStdString());
+    out->set_password(encrypt(cryptor, host.password.toString()).toStdString());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -551,7 +551,7 @@ Router::HostList Router::decodeHostList(const proto::router::HostList& list)
         if (!src.user_name().empty())
             dst.user_name = decrypt(cryptor, src.user_name());
         if (!src.password().empty())
-            dst.password = decrypt(cryptor, src.password());
+            dst.password = SecureString(decrypt(cryptor, src.password()));
     }
 
     return decoded;

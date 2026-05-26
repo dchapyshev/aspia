@@ -43,7 +43,7 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const Router::Host& host, Q
 
     ui->edit_display_name->setText(host_.display_name);
     ui->edit_user_name->setText(host_.user_name);
-    ui->edit_password->setPassword(SecureString(host_.password));
+    ui->edit_password->setPassword(host_.password);
     ui->edit_comment->setPlainText(host_.comment);
 
     connect(ui->button_show_password, &QToolButton::toggled, ui->edit_password, &PasswordEdit::setShowPassword);
@@ -102,7 +102,7 @@ void RouterHostDialog::onButtonBoxClicked(QAbstractButton* button)
 
     host_.display_name = ui->edit_display_name->text();
     host_.user_name    = ui->edit_user_name->text();
-    host_.password     = ui->edit_password->password().toString();
+    host_.password     = ui->edit_password->password();
     host_.comment      = ui->edit_comment->toPlainText();
 
     LOG(INFO) << "[ACTION] Edit host accepted, sending request";
