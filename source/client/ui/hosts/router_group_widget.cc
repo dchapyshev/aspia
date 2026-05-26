@@ -151,6 +151,9 @@ RouterGroupWidget::RouterGroupWidget(QWidget* parent)
     ui->tree_computer->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_computer, &QTreeWidget::customContextMenuRequested,
             this, &RouterGroupWidget::onHostContextMenu);
+
+    connect(ui->tree_computer, &QTreeWidget::itemSelectionChanged,
+            this, &RouterGroupWidget::sig_currentChanged);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -179,6 +182,19 @@ void RouterGroupWidget::showGroup(qint64 router_id, qint64 workspace_id)
     // entries from the previous one.
     ui->tree_computer->clear();
     fetchHosts();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool RouterGroupWidget::hasSelectedHost() const
+{
+    return ui->tree_computer->currentItem() != nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+Router::Host RouterGroupWidget::selectedHost() const
+{
+    HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_computer->currentItem());
+    return item ? item->host : Router::Host();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -213,6 +229,17 @@ void RouterGroupWidget::restoreState(const QByteArray& state)
 void RouterGroupWidget::reload()
 {
     fetchHosts();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterGroupWidget::onEditHost()
+{
+    HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_computer->currentItem());
+    if (!item)
+        return;
+
+    RouterHostDialog dialog(router_id_, item->host, this);
+    dialog.exec();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -298,34 +325,7 @@ void RouterGroupWidget::onHostContextMenu(const QPoint& pos)
         return;
 
     ui->tree_computer->setCurrentItem(item);
-
-    Router* router = Router::instance(router_id_);
-    if (!router)
-        return;
-
-    // Editing is restricted to admin and manager session types; clients see no edit menu.
-    const proto::router::SessionType session_type = router->config().sessionType();
-    if (session_type != proto::router::SESSION_TYPE_ADMIN &&
-        session_type != proto::router::SESSION_TYPE_MANAGER)
-    {
-        return;
-    }
-
-    QMenu menu;
-    QAction* edit_action = menu.addAction(tr("Edit..."));
-    if (menu.exec(ui->tree_computer->viewport()->mapToGlobal(pos)) == edit_action)
-        onEditHost();
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterGroupWidget::onEditHost()
-{
-    HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_computer->currentItem());
-    if (!item)
-        return;
-
-    RouterHostDialog dialog(router_id_, item->host, this);
-    dialog.exec();
+    emit sig_contextMenu(ui->tree_computer->viewport()->mapToGlobal(pos));
 }
 
 //--------------------------------------------------------------------------------------------------

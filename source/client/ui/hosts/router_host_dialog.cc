@@ -21,9 +21,12 @@
 #include <QAbstractButton>
 #include <QDialogButtonBox>
 #include <QPushButton>
+#include <QToolButton>
 
+#include "base/crypto/secure_string.h"
 #include "base/logging.h"
 #include "common/ui/msg_box.h"
+#include "common/ui/password_edit.h"
 #include "proto/router_constants.h"
 #include "proto/router_manager.h"
 #include "ui_router_host_dialog.h"
@@ -40,9 +43,10 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const Router::Host& host, Q
 
     ui->edit_display_name->setText(host_.display_name);
     ui->edit_user_name->setText(host_.user_name);
-    ui->edit_password->setText(host_.password);
+    ui->edit_password->setPassword(SecureString(host_.password));
     ui->edit_comment->setPlainText(host_.comment);
 
+    connect(ui->button_show_password, &QToolButton::toggled, ui->edit_password, &PasswordEdit::setShowPassword);
     connect(ui->buttonbox, &QDialogButtonBox::clicked, this, &RouterHostDialog::onButtonBoxClicked);
 }
 
@@ -98,7 +102,7 @@ void RouterHostDialog::onButtonBoxClicked(QAbstractButton* button)
 
     host_.display_name = ui->edit_display_name->text();
     host_.user_name    = ui->edit_user_name->text();
-    host_.password     = ui->edit_password->text();
+    host_.password     = ui->edit_password->password().toString();
     host_.comment      = ui->edit_comment->toPlainText();
 
     LOG(INFO) << "[ACTION] Edit host accepted, sending request";

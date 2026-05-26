@@ -38,11 +38,22 @@ public:
 
     void showGroup(qint64 router_id, qint64 workspace_id);
 
+    qint64 routerId() const { return router_id_; }
+    bool hasSelectedHost() const;
+    Router::Host selectedHost() const;
+
     // ContentWidget implementation.
     QByteArray saveState() final;
     void restoreState(const QByteArray& state) final;
     bool canReload() const final { return true; }
     void reload() final;
+
+public slots:
+    void onEditHost();
+
+signals:
+    void sig_currentChanged();
+    void sig_contextMenu(const QPoint& global_pos);
 
 protected:
     // QWidget implementation.
@@ -52,7 +63,6 @@ private slots:
     void onHostListReceived(const Router::HostList& list);
     void onHeaderContextMenu(const QPoint& pos);
     void onHostContextMenu(const QPoint& pos);
-    void onEditHost();
 
 private:
     void fetchHosts();

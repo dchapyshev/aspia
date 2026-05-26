@@ -47,11 +47,28 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QLineEdit" name="edit_password">
-       <property name="echoMode">
-        <enum>QLineEdit::EchoMode::Password</enum>
-       </property>
-      </widget>
+      <layout class="QHBoxLayout" name="horizontalLayout_password">
+       <item>
+        <widget class="PasswordEdit" name="edit_password"/>
+       </item>
+       <item>
+        <widget class="QToolButton" name="button_show_password">
+         <property name="icon">
+          <iconset resource="../../../common/resources/common.qrc">
+           <normaloff>:/img/show-password.svg</normaloff>:/img/show-password.svg</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>24</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>
@@ -66,7 +83,7 @@
     <widget class="QPlainTextEdit" name="edit_comment"/>
    </item>
    <item>
-    <widget class="QDialogButtonBox" name="buttonbox">
+    <widget class="DialogButtonBox" name="buttonbox">
      <property name="standardButtons">
       <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
      </property>
@@ -74,6 +91,18 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>DialogButtonBox</class>
+   <extends>QDialogButtonBox</extends>
+   <header>common/ui/dialog_button_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>PasswordEdit</class>
+   <extends>QLineEdit</extends>
+   <header>common/ui/password_edit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

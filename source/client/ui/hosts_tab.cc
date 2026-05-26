@@ -123,6 +123,8 @@ HostsTab::HostsTab(QWidget* parent)
     connect(local_group_widget_, &LocalGroupWidget::sig_currentChanged, this, &HostsTab::onCurrentComputerChanged);
     connect(local_group_widget_, &LocalGroupWidget::sig_doubleClicked, this, &HostsTab::onLocalConnect);
     connect(local_group_widget_, &LocalGroupWidget::sig_contextMenu, this, &HostsTab::onLocalComputerContextMenu);
+    connect(router_group_widget_, &RouterGroupWidget::sig_currentChanged, this, &HostsTab::updateActionsState);
+    connect(router_group_widget_, &RouterGroupWidget::sig_contextMenu, this, &HostsTab::onRouterGroupContextMenu);
     connect(this, &HostsTab::sig_connectRequested, local_group_widget_,
             [this](const ComputerConfig& computer, proto::peer::SessionType /* session_type */)
     {
@@ -688,6 +690,12 @@ void HostsTab::onEditComputer()
 {
     LOG(INFO) << "[ACTION] Edit computer";
 
+    if (current_content_ == router_group_widget_)
+    {
+        router_group_widget_->onEditHost();
+        return;
+    }
+
     qint64 computer_id = currentComputerId();
     if (computer_id <= 0)
     {
@@ -912,6 +920,19 @@ void HostsTab::onWorkspaceContextMenu(qint64 router_id, const QPoint& pos)
         menu.addAction(ui->action_add_workspace);
     }
     menu.exec(pos);
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::onRouterGroupContextMenu(const QPoint& pos)
+{
+    if (!router_group_widget_->hasSelectedHost())
+        return;
+
+    QMenu menu;
+    if (ui->action_edit_computer->isVisible())
+        menu.addAction(ui->action_edit_computer);
+    if (!menu.isEmpty())
+        menu.exec(pos);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1319,6 +1340,21 @@ void HostsTab::updateActionsState()
         ui->action_file_transfer->setVisible(true);
         ui->action_chat->setVisible(true);
         ui->action_system_info->setVisible(true);
+    }
+
+    if (sidebar_item && sidebar_item->itemType() == Sidebar::Item::ROUTER_GROUP)
+    {
+        Sidebar::RouterGroupItem* router_group_item =
+            static_cast<Sidebar::RouterGroupItem*>(sidebar_item);
+
+        proto::router::SessionType session_type = proto::router::SESSION_TYPE_CLIENT;
+        Router* router = Router::instance(router_group_item->routerId());
+        if (router)
+            session_type = router->config().sessionType();
+
+        const bool can_edit = router_group_widget_->hasSelectedHost() &&
+            session_type != proto::router::SESSION_TYPE_CLIENT;
+        ui->action_edit_computer->setVisible(can_edit);
     }
 
     ui->action_reload->setVisible(current_content_ && current_content_->canReload());

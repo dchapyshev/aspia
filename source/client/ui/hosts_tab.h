@@ -83,6 +83,7 @@ private slots:
     void onClientContextMenu(qint64 router_id, const QPoint& pos, int column);
     void onRelayContextMenu(qint64 router_id, const QPoint& pos, int column);
     void onWorkspaceContextMenu(qint64 router_id, const QPoint& pos);
+    void onRouterGroupContextMenu(const QPoint& pos);
     void onAddUserAction();
     void onEditUserAction();
     void onDeleteUserAction();
