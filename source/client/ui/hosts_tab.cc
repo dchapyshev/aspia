@@ -928,11 +928,18 @@ void HostsTab::onRouterGroupContextMenu(const QPoint& pos)
     if (!router_group_widget_->hasSelectedHost())
         return;
 
+    // Proxy the global action via a fresh menu entry: the local copy is always visible (so the
+    // item shows up here) while the original ui->action_*_connect can stay hidden globally.
     QMenu menu;
-    menu.addAction(ui->action_desktop_connect);
-    menu.addAction(ui->action_file_transfer_connect);
-    menu.addAction(ui->action_chat_connect);
-    menu.addAction(ui->action_system_info_connect);
+    auto addProxy = [&menu](QAction* action)
+    {
+        menu.addAction(action->icon(), action->text(), action, &QAction::triggered);
+    };
+
+    addProxy(ui->action_desktop_connect);
+    addProxy(ui->action_file_transfer_connect);
+    addProxy(ui->action_chat_connect);
+    addProxy(ui->action_system_info_connect);
     if (ui->action_edit_host->isVisible())
     {
         menu.addSeparator();
