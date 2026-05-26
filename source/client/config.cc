@@ -18,6 +18,7 @@
 
 #include "client/config.h"
 
+#include "base/logging.h"
 #include "base/crypto/data_cryptor.h"
 #include "base/crypto/secure_byte_array.h"
 #include "proto/desktop_control.h"
@@ -29,14 +30,18 @@ QByteArray encryptBytes(const QByteArray& plain)
 {
     if (plain.isEmpty())
         return QByteArray();
-    return DataCryptor::instance().encrypt(plain).value_or(QByteArray());
+    DataCryptor& cryptor = DataCryptor::instance();
+    CHECK(cryptor.isValid());
+    return cryptor.encrypt(plain).value_or(QByteArray());
 }
 
 QByteArray decryptBytes(const QByteArray& blob)
 {
     if (blob.isEmpty())
         return QByteArray();
-    return DataCryptor::instance().decrypt(blob).value_or(QByteArray());
+    DataCryptor& cryptor = DataCryptor::instance();
+    CHECK(cryptor.isValid());
+    return cryptor.decrypt(blob).value_or(QByteArray());
 }
 
 QByteArray encryptString(const QString& value)
@@ -58,8 +63,7 @@ SecureString decryptSecureString(const QByteArray& blob)
 {
     if (blob.isEmpty())
         return SecureString();
-    return SecureString::fromUtf8(
-        SecureByteArray(DataCryptor::instance().decrypt(blob).value_or(QByteArray())));
+    return SecureString::fromUtf8(SecureByteArray(decryptBytes(blob)));
 }
 
 } // namespace

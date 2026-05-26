@@ -26,6 +26,7 @@
 #include <QVersionNumber>
 
 #include <functional>
+#include <unordered_map>
 
 #include <google/protobuf/message_lite.h>
 
@@ -39,6 +40,7 @@
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
 
+class DataCryptor;
 class QTimer;
 
 // Application-level RPC facade. Owns the TCP channel to the router (on the IO thread, driven
@@ -341,7 +343,7 @@ private:
     qint64 user_id_ = 0;
     QString user_name_;
     SecureByteArray user_private_key_;
-    QHash<qint64, SecureByteArray> workspace_group_keys_;
+    std::unordered_map<qint64, DataCryptor> workspace_cryptors_;
 
     Q_DISABLE_COPY_MOVE(Router)
 };

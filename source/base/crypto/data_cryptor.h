@@ -38,11 +38,14 @@ class DataCryptor
 public:
     DataCryptor();
     explicit DataCryptor(const SecureByteArray& key);
+    DataCryptor(DataCryptor&& other) noexcept;
+    DataCryptor& operator=(DataCryptor&& other) noexcept;
     ~DataCryptor();
 
     void setKey(const SecureByteArray& key);
     SecureByteArray key() const;
-    bool hasKey() const;
+
+    bool isValid() const;
 
     std::optional<QByteArray> encrypt(QByteArrayView in) const;
     std::optional<QByteArray> decrypt(QByteArrayView in) const;
@@ -55,7 +58,7 @@ private:
     EVP_CIPHER_CTX_ptr encrypt_ctx_;
     EVP_CIPHER_CTX_ptr decrypt_ctx_;
 
-    Q_DISABLE_COPY_MOVE(DataCryptor)
+    Q_DISABLE_COPY(DataCryptor)
 };
 
 #endif // BASE_CRYPTO_DATA_CRYPTOR_H

@@ -60,12 +60,11 @@ QHash<qint64, Router*>& instances()
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray encryptWithGroupKey(const QString& plaintext, const SecureByteArray& gk)
+QByteArray encrypt(const DataCryptor& cryptor, const QString& plaintext)
 {
-    if (plaintext.isEmpty() || gk.isEmpty())
+    if (plaintext.isEmpty())
         return QByteArray();
 
-    DataCryptor cryptor(gk);
     std::optional<QByteArray> encrypted = cryptor.encrypt(plaintext.toUtf8());
     if (!encrypted.has_value())
     {
@@ -77,12 +76,11 @@ QByteArray encryptWithGroupKey(const QString& plaintext, const SecureByteArray& 
 }
 
 //--------------------------------------------------------------------------------------------------
-QString decryptWithGroupKey(std::string_view ciphertext, const SecureByteArray& gk)
+QString decrypt(const DataCryptor& cryptor, std::string_view ciphertext)
 {
-    if (ciphertext.empty() || gk.isEmpty())
+    if (ciphertext.empty())
         return QString();
 
-    DataCryptor cryptor(gk);
     std::optional<QByteArray> decrypted = cryptor.decrypt(
         QByteArrayView(ciphertext.data(), static_cast<qsizetype>(ciphertext.size())));
     if (!decrypted.has_value())
@@ -277,43 +275,26 @@ bool Router::buildWorkspace(const Router::Workspace& workspace, proto::router::W
         out->set_entry_id(workspace.entry_id);
     out->set_name(workspace.name.toStdString());
 
-    bool has_added = false;
-    for (const auto& access : workspace.access)
+    if (user_private_key_.isEmpty())
     {
-        if (!access.public_key.isEmpty())
-        {
-            has_added = true;
-            break;
-        }
+        LOG(ERROR) << "User private key unavailable";
+        return false;
     }
 
     SecureByteArray group_key;
-    const bool needs_gk = has_added || !workspace.comment.isEmpty();
-    if (needs_gk)
-    {
-        if (user_private_key_.isEmpty())
-        {
-            LOG(ERROR) << "User private key unavailable";
-            return false;
-        }
 
-        auto it = workspace_group_keys_.constFind(workspace.entry_id);
-        if (it == workspace_group_keys_.constEnd())
-            group_key = SecureByteArray(Random::byteArray(kGroupKeySize));
-        else
-            group_key = *it;
+    auto it = workspace_cryptors_.find(workspace.entry_id);
+    if (it == workspace_cryptors_.end())
+    {
+        group_key = SecureByteArray(Random::byteArray(kGroupKeySize));
+        it = workspace_cryptors_.emplace(workspace.entry_id, DataCryptor(group_key)).first;
+    }
+    else
+    {
+        group_key = it->second.key();
     }
 
-    if (!workspace.comment.isEmpty())
-    {
-        QByteArray encrypted = encryptWithGroupKey(workspace.comment, group_key);
-        if (encrypted.isEmpty())
-        {
-            LOG(ERROR) << "Failed to encrypt comment";
-            return false;
-        }
-        out->set_comment(encrypted.toStdString());
-    }
+    out->set_comment(encrypt(it->second, workspace.comment).toStdString());
 
     for (const auto& access : workspace.access)
     {
@@ -387,7 +368,7 @@ void Router::destroyChannel()
 {
     user_id_ = 0;
     user_private_key_.clear();
-    workspace_group_keys_.clear();
+    workspace_cryptors_.clear();
     pending_.clear();
     version_ = QVersionNumber();
     tcp_channel_.reset();
@@ -456,8 +437,6 @@ void Router::emitNotificationSignals(const proto::router::Notification& notifica
 //--------------------------------------------------------------------------------------------------
 Router::WorkspaceList Router::decodeWorkspaceList(const proto::router::WorkspaceList& list)
 {
-    workspace_group_keys_.clear();
-
     Router::WorkspaceList decoded;
     decoded.error_code = QString::fromStdString(list.error_code());
     decoded.workspaces.reserve(list.workspace_size());
@@ -481,17 +460,18 @@ Router::WorkspaceList Router::decodeWorkspaceList(const proto::router::Workspace
                 self_wrapped_gk = QByteArray::fromStdString(access.wrapped_gk());
         }
 
-        if (!self_wrapped_gk.isEmpty())
-        {
-            SecureByteArray gk = unwrapGroupKey(self_wrapped_gk);
-            if (!gk.isEmpty())
-            {
-                if (!src.comment().empty())
-                    dst.comment = decryptWithGroupKey(src.comment(), gk);
+        if (self_wrapped_gk.isEmpty())
+            continue;
 
-                workspace_group_keys_.insert(src.entry_id(), std::move(gk));
-            }
-        }
+        SecureByteArray gk = unwrapGroupKey(self_wrapped_gk);
+        if (gk.isEmpty())
+            continue;
+
+        DataCryptor cryptor(gk);
+        if (!src.comment().empty())
+            dst.comment = decrypt(cryptor, src.comment());
+
+        workspace_cryptors_.insert_or_assign(src.entry_id(), std::move(cryptor));
     }
 
     return decoded;
@@ -528,17 +508,17 @@ Router::HostList Router::decodeHostList(const proto::router::HostList& list)
         if (src.workspace_id() == 0)
             continue;
 
-        auto it = workspace_group_keys_.constFind(src.workspace_id());
-        if (it == workspace_group_keys_.constEnd())
+        auto it = workspace_cryptors_.find(src.workspace_id());
+        if (it == workspace_cryptors_.end())
             continue;
 
-        const SecureByteArray& gk = *it;
+        const DataCryptor& cryptor = it->second;
         if (!src.comment().empty())
-            dst.comment = decryptWithGroupKey(src.comment(), gk);
+            dst.comment = decrypt(cryptor, src.comment());
         if (!src.user_name().empty())
-            dst.user_name = decryptWithGroupKey(src.user_name(), gk);
+            dst.user_name = decrypt(cryptor, src.user_name());
         if (!src.password().empty())
-            dst.password = decryptWithGroupKey(src.password(), gk);
+            dst.password = decrypt(cryptor, src.password());
     }
 
     return decoded;

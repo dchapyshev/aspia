@@ -59,18 +59,3 @@ TEST(DataCryptorTest, WrongKey)
     std::optional<QByteArray> decrypted_message = cryptor2.decrypt(*encrypted_message);
     ASSERT_FALSE(decrypted_message.has_value());
 }
-
-TEST(DataCryptorTest, Passthrough)
-{
-    DataCryptor cryptor;
-
-    const QByteArray message = QByteArray::fromHex("5ce26794165a808ec425684e9384c27c");
-
-    std::optional<QByteArray> encrypted = cryptor.encrypt(message);
-    ASSERT_TRUE(encrypted.has_value());
-    ASSERT_EQ(*encrypted, message);
-
-    std::optional<QByteArray> decrypted = cryptor.decrypt(*encrypted);
-    ASSERT_TRUE(decrypted.has_value());
-    ASSERT_EQ(*decrypted, message);
-}

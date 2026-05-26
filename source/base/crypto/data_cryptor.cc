@@ -42,6 +42,28 @@ DataCryptor::DataCryptor(const SecureByteArray& key)
 }
 
 //--------------------------------------------------------------------------------------------------
+DataCryptor::DataCryptor(DataCryptor&& other) noexcept
+{
+    std::scoped_lock lock(other.mutex_);
+    key_         = std::move(other.key_);
+    encrypt_ctx_ = std::move(other.encrypt_ctx_);
+    decrypt_ctx_ = std::move(other.decrypt_ctx_);
+}
+
+//--------------------------------------------------------------------------------------------------
+DataCryptor& DataCryptor::operator=(DataCryptor&& other) noexcept
+{
+    if (this == &other)
+        return *this;
+
+    std::scoped_lock lock(mutex_, other.mutex_);
+    key_         = std::move(other.key_);
+    encrypt_ctx_ = std::move(other.encrypt_ctx_);
+    decrypt_ctx_ = std::move(other.decrypt_ctx_);
+    return *this;
+}
+
+//--------------------------------------------------------------------------------------------------
 DataCryptor::~DataCryptor() = default;
 
 //--------------------------------------------------------------------------------------------------
@@ -80,19 +102,16 @@ SecureByteArray DataCryptor::key() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DataCryptor::hasKey() const
+bool DataCryptor::isValid() const
 {
     std::scoped_lock lock(mutex_);
-    return !key_.isEmpty();
+    return encrypt_ctx_ && decrypt_ctx_;
 }
 
 //--------------------------------------------------------------------------------------------------
 std::optional<QByteArray> DataCryptor::encrypt(QByteArrayView in) const
 {
     std::scoped_lock lock(mutex_);
-
-    if (key_.isEmpty())
-        return QByteArray(in);
 
     if (in.empty())
     {
@@ -158,9 +177,6 @@ std::optional<QByteArray> DataCryptor::encrypt(QByteArrayView in) const
 std::optional<QByteArray> DataCryptor::decrypt(QByteArrayView in) const
 {
     std::scoped_lock lock(mutex_);
-
-    if (key_.isEmpty())
-        return QByteArray(in);
 
     if (in.size() <= kHeaderSize)
     {
