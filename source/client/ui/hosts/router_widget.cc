@@ -163,30 +163,30 @@ class HostTreeItem final : public QTreeWidgetItem
     Q_DECLARE_TR_FUNCTIONS(HostTreeItem)
 
 public:
-    explicit HostTreeItem(const proto::router::Host& info)
+    explicit HostTreeItem(const Router::Host& host)
     {
-        updateItem(info);
+        updateItem(host);
     }
 
-    void updateItem(const proto::router::Host& updated_info)
+    void updateItem(const Router::Host& updated_host)
     {
-        info = updated_info;
+        info = updated_host;
 
-        const QString last_connect = info.last_connect() > 0
+        const QString last_connect = info.last_connect > 0
             ? QLocale::system().toString(
-                QDateTime::fromSecsSinceEpoch(info.last_connect()), QLocale::ShortFormat)
+                QDateTime::fromSecsSinceEpoch(info.last_connect), QLocale::ShortFormat)
             : QString();
 
-        setIcon(0, QIcon(info.online() ? ":/img/computer-online.svg"
-                                       : ":/img/computer-offline.svg"));
-        setText(0, QString::number(info.host_id()));
-        setText(1, QString::fromStdString(info.computer_name()));
-        setText(2, QString::fromStdString(info.address()));
+        setIcon(0, QIcon(info.online ? ":/img/computer-online.svg"
+                                     : ":/img/computer-offline.svg"));
+        setText(0, QString::number(info.host_id));
+        setText(1, info.computer_name);
+        setText(2, info.address);
         setText(3, last_connect);
-        setText(4, QString::fromStdString(info.version()));
-        setText(5, QString::fromStdString(info.cpu_arch()));
-        setText(6, QString::fromStdString(info.os_name()));
-        setText(8, info.online() ? tr("Online") : tr("Offline"));
+        setText(4, info.version);
+        setText(5, info.cpu_arch);
+        setText(6, info.os_name);
+        setText(8, info.online ? tr("Online") : tr("Offline"));
     }
 
     void setWorkspaceName(const QString& name)
@@ -201,7 +201,7 @@ public:
         if (column == 0)
         {
             const HostTreeItem* other_item = static_cast<const HostTreeItem*>(&other);
-            return info.host_id() < other_item->info.host_id();
+            return info.host_id < other_item->info.host_id;
         }
         else if (column == 1)
         {
@@ -214,13 +214,13 @@ public:
         else if (column == 3)
         {
             const HostTreeItem* other_item = static_cast<const HostTreeItem*>(&other);
-            return info.last_connect() < other_item->info.last_connect();
+            return info.last_connect < other_item->info.last_connect;
         }
 
         return QTreeWidgetItem::operator<(other);
     }
 
-    proto::router::Host info;
+    Router::Host info;
 
 private:
     Q_DISABLE_COPY_MOVE(HostTreeItem)
@@ -521,14 +521,14 @@ bool RouterWidget::hasSelectedHost() const
 bool RouterWidget::isSelectedHostOnline() const
 {
     HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_hosts->currentItem());
-    return item && item->info.online();
+    return item && item->info.online;
 }
 
 //--------------------------------------------------------------------------------------------------
 HostId RouterWidget::selectedHostId() const
 {
     HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_hosts->currentItem());
-    return item ? item->info.host_id() : kInvalidHostId;
+    return item ? item->info.host_id : kInvalidHostId;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -538,9 +538,9 @@ QString RouterWidget::selectedHostName() const
     if (!item)
         return QString();
 
-    QString name = QString::fromStdString(item->info.display_name());
+    QString name = item->info.display_name;
     if (name.isEmpty())
-        name = QString::fromStdString(item->info.computer_name());
+        name = item->info.computer_name;
     return name;
 }
 
@@ -999,14 +999,14 @@ void RouterWidget::onDisconnectHost()
     }
 
     if (MsgBox::question(this, tr("Are you sure you want to disconnect host \"%1\"?")
-        .arg(QString::fromStdString(tree_item->info.computer_name()))) != MsgBox::Yes)
+        .arg(tree_item->info.computer_name)) != MsgBox::Yes)
     {
         LOG(INFO) << "[ACTION] Disconnect host rejected by user";
         return;
     }
 
     LOG(INFO) << "[ACTION] Disconnect host accepted by user";
-    router_->disconnectHost(tree_item->info.host_id(), this, &RouterWidget::onHostResultReceived);
+    router_->disconnectHost(tree_item->info.host_id, this, &RouterWidget::onHostResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1055,7 +1055,7 @@ void RouterWidget::onRemoveHost()
     }
 
     LOG(INFO) << "[ACTION] Remove host accepted by user";
-    router_->removeHost(tree_item->info.host_id(), this, &RouterWidget::onHostResultReceived);
+    router_->removeHost(tree_item->info.host_id, this, &RouterWidget::onHostResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1217,11 +1217,13 @@ void RouterWidget::onStatusChanged(qint64 router_id, Router::Status status)
 
     if (status == Router::Status::ONLINE)
     {
+        // Workspaces must be fetched first so the GK cache is populated by the time the host
+        // list response arrives; otherwise the encrypted host fields stay empty.
+        onUpdateWorkspaceList();
         onUpdateRelayList();
         onUpdateHostList();
         onUpdateClientList();
         onUpdateUserList();
-        onUpdateWorkspaceList();
 
         ui->tree_relays->setEnabled(true);
         ui->tree_peers->setEnabled(true);
@@ -1510,18 +1512,18 @@ void RouterWidget::onRelayListReceived(const proto::router::RelayList& relays)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWidget::onHostListReceived(const proto::router::HostList& list)
+void RouterWidget::onHostListReceived(const Router::HostList& list)
 {
     // The Hosts tab subscribes to the "any workspace / any group" response only; per-workspace
-    // responses will be handled by future workspace widgets.
-    if (list.workspace_id() != 0 || list.group_id() != 0)
+    // responses are handled by RouterGroupWidget.
+    if (list.workspace_id != 0 || list.group_id != 0)
         return;
 
-    auto has_with_id = [](const proto::router::HostList& list, HostId host_id)
+    auto has_with_id = [](const Router::HostList& list, HostId host_id)
     {
-        for (int i = 0; i < list.host_size(); ++i)
+        for (const Router::Host& host : std::as_const(list.hosts))
         {
-            if (list.host(i).host_id() == host_id)
+            if (host.host_id == host_id)
                 return true;
         }
 
@@ -1533,22 +1535,21 @@ void RouterWidget::onHostListReceived(const proto::router::HostList& list)
     {
         HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_hosts->topLevelItem(i));
 
-        if (!has_with_id(list, item->info.host_id()))
+        if (!has_with_id(list, item->info.host_id))
             delete item;
     }
 
     // Adding and updating elements in the UI.
-    for (int i = 0; i < list.host_size(); ++i)
+    for (const Router::Host& host : std::as_const(list.hosts))
     {
-        const proto::router::Host& info = list.host(i);
         HostTreeItem* target = nullptr;
 
         for (int j = 0; j < ui->tree_hosts->topLevelItemCount(); ++j)
         {
             HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_hosts->topLevelItem(j));
-            if (item->info.host_id() == info.host_id())
+            if (item->info.host_id == host.host_id)
             {
-                item->updateItem(info);
+                item->updateItem(host);
                 target = item;
                 break;
             }
@@ -1556,14 +1557,14 @@ void RouterWidget::onHostListReceived(const proto::router::HostList& list)
 
         if (!target)
         {
-            target = new HostTreeItem(info);
+            target = new HostTreeItem(host);
             ui->tree_hosts->addTopLevelItem(target);
         }
 
-        target->setWorkspaceName(workspaceNameById(info.workspace_id()));
+        target->setWorkspaceName(workspaceNameById(host.workspace_id));
     }
 
-    hosts_total_count_ = list.total_count();
+    hosts_total_count_ = list.total_count;
     updateHostsPagination();
 
     emit sig_currentHostChanged(routerId());
@@ -1923,7 +1924,7 @@ void RouterWidget::refreshHostsWorkspaceColumn()
     for (int i = 0; i < ui->tree_hosts->topLevelItemCount(); ++i)
     {
         HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_hosts->topLevelItem(i));
-        item->setWorkspaceName(workspaceNameById(item->info.workspace_id()));
+        item->setWorkspaceName(workspaceNameById(item->info.workspace_id));
     }
 }
 
@@ -2063,25 +2064,25 @@ void RouterWidget::saveHostsToFile()
 
     for (int i = 0; i < ui->tree_hosts->topLevelItemCount(); ++i)
     {
-        const proto::router::Host& info =
+        const Router::Host& info =
             static_cast<HostTreeItem*>(ui->tree_hosts->topLevelItem(i))->info;
 
         QJsonObject host_object;
 
-        host_object.insert("computer_name", QString::fromStdString(info.computer_name()));
-        host_object.insert("operating_system", QString::fromStdString(info.os_name()));
-        host_object.insert("ip_address", QString::fromStdString(info.address()));
-        host_object.insert("architecture", QString::fromStdString(info.cpu_arch()));
-        host_object.insert("version", QString::fromStdString(info.version()));
+        host_object.insert("computer_name", info.computer_name);
+        host_object.insert("operating_system", info.os_name);
+        host_object.insert("ip_address", info.address);
+        host_object.insert("architecture", info.cpu_arch);
+        host_object.insert("version", info.version);
 
-        if (info.last_connect() > 0)
+        if (info.last_connect > 0)
         {
             QString time = QLocale::system().toString(QDateTime::fromSecsSinceEpoch(
-                info.last_connect()), QLocale::ShortFormat);
+                info.last_connect), QLocale::ShortFormat);
             host_object.insert("connect_time", time);
         }
 
-        host_object.insert("host_id", QString::number(info.host_id()));
+        host_object.insert("host_id", QString::number(info.host_id));
 
         root_array.append(host_object);
     }

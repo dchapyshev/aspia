@@ -34,7 +34,6 @@ class RouterWorkspaceDialog;
 } // namespace Ui
 
 namespace proto::router {
-class HostList;
 class UserList;
 class WorkspaceResult;
 } // namespace proto::router
@@ -51,7 +50,7 @@ public:
 private slots:
     void onWorkspaceListReceived(const Router::WorkspaceList& list);
     void onUserListReceived(const proto::router::UserList& list);
-    void onHostListReceived(const proto::router::HostList& list);
+    void onHostListReceived(const Router::HostList& list);
     void onWorkspaceResultReceived(const proto::router::WorkspaceResult& result);
 
 private:

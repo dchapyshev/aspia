@@ -143,33 +143,29 @@ void RouterWorkspaceDialog::onUserListReceived(const proto::router::UserList& li
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWorkspaceDialog::onHostListReceived(const proto::router::HostList& list)
+void RouterWorkspaceDialog::onHostListReceived(const Router::HostList& list)
 {
     ui->list_hosts_available->clear();
     ui->list_hosts_in_workspace->clear();
 
-    for (int i = 0; i < list.host_size(); ++i)
+    for (const Router::Host& host : std::as_const(list.hosts))
     {
-        const proto::router::Host& host = list.host(i);
-        const qint64 host_workspace_id = host.workspace_id();
-
         // Hosts of other workspaces are not visible in this dialog. Only the unassigned ones
         // (available to add) and the ones already in the workspace we are editing.
         QListWidget* target = nullptr;
-        if (host_workspace_id == 0)
+        if (host.workspace_id == 0)
             target = ui->list_hosts_available;
-        else if (entry_id_ > 0 && host_workspace_id == entry_id_)
+        else if (entry_id_ > 0 && host.workspace_id == entry_id_)
             target = ui->list_hosts_in_workspace;
         else
             continue;
 
-        const HostId host_id = host.host_id();
-        const QString computer_name = QString::fromStdString(host.computer_name());
-        const QString name = computer_name.isEmpty() ?
-            QString::number(host_id) : QString("%1 (%2)").arg(host_id).arg(computer_name);
+        const QString name = host.computer_name.isEmpty()
+            ? QString::number(host.host_id)
+            : QString("%1 (%2)").arg(host.host_id).arg(host.computer_name);
 
         QListWidgetItem* item = new QListWidgetItem(QIcon(":/img/computer.svg"), name);
-        item->setData(Qt::UserRole, host_id);
+        item->setData(Qt::UserRole, host.host_id);
         target->addItem(item);
     }
 

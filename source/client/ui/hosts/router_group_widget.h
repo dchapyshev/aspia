@@ -21,15 +21,12 @@
 
 #include <memory>
 
+#include "client/router.h"
 #include "client/ui/hosts/content_widget.h"
 
 namespace Ui {
 class RouterGroupWidget;
 } // namespace Ui
-
-namespace proto::router {
-class HostList;
-} // namespace proto::router
 
 class RouterGroupWidget final : public ContentWidget
 {
@@ -52,7 +49,7 @@ protected:
     void changeEvent(QEvent* event) final;
 
 private slots:
-    void onHostListReceived(const proto::router::HostList& list);
+    void onHostListReceived(const Router::HostList& list);
 
 private:
     void fetchHosts();

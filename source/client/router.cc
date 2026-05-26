@@ -45,6 +45,8 @@ struct Registrator
     {
         qRegisterMetaType<Router::Workspace>("Router::Workspace");
         qRegisterMetaType<Router::WorkspaceList>("Router::WorkspaceList");
+        qRegisterMetaType<Router::Host>("Router::Host");
+        qRegisterMetaType<Router::HostList>("Router::HostList");
     }
 };
 
@@ -490,6 +492,53 @@ Router::WorkspaceList Router::decodeWorkspaceList(const proto::router::Workspace
                 workspace_group_keys_.insert(src.entry_id(), std::move(gk));
             }
         }
+    }
+
+    return decoded;
+}
+
+//--------------------------------------------------------------------------------------------------
+Router::HostList Router::decodeHostList(const proto::router::HostList& list)
+{
+    Router::HostList decoded;
+    decoded.error_code   = QString::fromStdString(list.error_code());
+    decoded.workspace_id = list.workspace_id();
+    decoded.group_id     = list.group_id();
+    decoded.total_count  = list.total_count();
+    decoded.hosts.reserve(list.host_size());
+
+    for (int i = 0; i < list.host_size(); ++i)
+    {
+        const proto::router::Host& src = list.host(i);
+
+        Router::Host& dst = decoded.hosts.emplaceBack();
+        dst.host_id       = src.host_id();
+        dst.workspace_id  = src.workspace_id();
+        dst.group_id      = src.group_id();
+        dst.display_name  = QString::fromStdString(src.display_name());
+        dst.computer_name = QString::fromStdString(src.computer_name());
+        dst.cpu_arch      = QString::fromStdString(src.cpu_arch());
+        dst.version       = QString::fromStdString(src.version());
+        dst.os_name       = QString::fromStdString(src.os_name());
+        dst.address       = QString::fromStdString(src.address());
+        dst.last_connect  = src.last_connect();
+        dst.last_modify   = src.last_modify();
+        dst.online        = src.online();
+
+        if (src.workspace_id() == 0)
+            continue;
+
+        auto it = workspace_group_keys_.constFind(src.workspace_id());
+        if (it == workspace_group_keys_.constEnd())
+            continue;
+
+        const SecureByteArray& gk = *it;
+        if (!src.comment().empty())
+            dst.comment = decryptWithGroupKey(src.comment(), gk);
+        if (!src.user_name().empty())
+            dst.user_name = decryptWithGroupKey(src.user_name(), gk);
+        if (!src.password().empty())
+            dst.password = decryptWithGroupKey(src.password(), gk);
     }
 
     return decoded;

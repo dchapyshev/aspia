@@ -30,23 +30,23 @@ namespace {
 class WorkspaceHostTreeItem final : public QTreeWidgetItem
 {
 public:
-    explicit WorkspaceHostTreeItem(const proto::router::Host& host)
+    explicit WorkspaceHostTreeItem(const Router::Host& host)
     {
         setIcon(0, QIcon(":/img/computer.svg"));
         updateItem(host);
     }
 
-    void updateItem(const proto::router::Host& updated_host)
+    void updateItem(const Router::Host& updated_host)
     {
-        host_id = updated_host.host_id();
+        host_id = updated_host.host_id;
 
-        QString name = QString::fromStdString(updated_host.display_name());
+        QString name = updated_host.display_name;
         if (name.isEmpty())
-            name = QString::fromStdString(updated_host.computer_name());
+            name = updated_host.computer_name;
 
         setText(0, name);
         setText(1, QString::number(host_id));
-        // TODO: decrypt updated_host.comment() with the workspace group key.
+        setText(2, updated_host.comment);
     }
 
     HostId host_id = kInvalidHostId;
@@ -121,18 +121,18 @@ void RouterGroupWidget::changeEvent(QEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterGroupWidget::onHostListReceived(const proto::router::HostList& list)
+void RouterGroupWidget::onHostListReceived(const Router::HostList& list)
 {
     // The router echoes workspace_id/group_id; ignore responses for other workspaces (e.g. an
     // in-flight request issued before the user switched workspaces).
-    if (list.workspace_id() != workspace_id_)
+    if (list.workspace_id != workspace_id_)
         return;
 
-    auto has_with_id = [](const proto::router::HostList& list, HostId host_id)
+    auto has_with_id = [](const Router::HostList& list, HostId host_id)
     {
-        for (int i = 0; i < list.host_size(); ++i)
+        for (const Router::Host& host : std::as_const(list.hosts))
         {
-            if (list.host(i).host_id() == host_id)
+            if (host.host_id == host_id)
                 return true;
         }
         return false;
@@ -149,16 +149,15 @@ void RouterGroupWidget::onHostListReceived(const proto::router::HostList& list)
     }
 
     // Adding and updating elements in the UI.
-    for (int i = 0; i < list.host_size(); ++i)
+    for (const Router::Host& host : std::as_const(list.hosts))
     {
-        const proto::router::Host& host = list.host(i);
         bool found = false;
 
         for (int j = 0; j < ui->tree_computer->topLevelItemCount(); ++j)
         {
             WorkspaceHostTreeItem* item =
                 static_cast<WorkspaceHostTreeItem*>(ui->tree_computer->topLevelItem(j));
-            if (item->host_id == host.host_id())
+            if (item->host_id == host.host_id)
             {
                 item->updateItem(host);
                 found = true;

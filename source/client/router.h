@@ -85,6 +85,37 @@ public:
         QList<Workspace> workspaces;
     };
 
+    // Plain (decrypted) host record. comment/user_name/password are decrypted with the GK of
+    // the host's workspace; if the GK for workspace_id is not currently cached (e.g. the
+    // workspace list has not been fetched yet), they are left empty.
+    struct Host
+    {
+        HostId host_id = kInvalidHostId;
+        qint64 workspace_id = 0;
+        qint64 group_id = 0;
+        QString display_name;
+        QString computer_name;
+        QString cpu_arch;
+        QString version;
+        QString os_name;
+        QString address;
+        QString comment;
+        QString user_name;
+        QString password;
+        qint64 last_connect = 0;
+        qint64 last_modify = 0;
+        bool online = false;
+    };
+
+    struct HostList
+    {
+        QString error_code;
+        qint64 workspace_id = 0; // Echo of the request.
+        qint64 group_id = 0;     // Echo of the request.
+        qint64 total_count = 0;
+        QList<Host> hosts;
+    };
+
     explicit Router(const RouterConfig& config, QObject* parent = nullptr);
     ~Router() final;
 
@@ -295,6 +326,7 @@ private:
     void readUserKeys(const proto::router::UserKeys& user_keys);
     void emitNotificationSignals(const proto::router::Notification& notification);
     Router::WorkspaceList decodeWorkspaceList(const proto::router::WorkspaceList& list);
+    Router::HostList decodeHostList(const proto::router::HostList& list);
     SecureByteArray unwrapGroupKey(const QByteArray& wrapped_gk) const;
 
     RouterConfig config_;
@@ -316,6 +348,8 @@ private:
 
 Q_DECLARE_METATYPE(Router::Workspace)
 Q_DECLARE_METATYPE(Router::WorkspaceList)
+Q_DECLARE_METATYPE(Router::Host)
+Q_DECLARE_METATYPE(Router::HostList)
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
@@ -524,7 +558,11 @@ void Router::listHosts(proto::router::HostListRequest request, QObject* receiver
     proto::router::ClientToRouter message;
     message.mutable_host_list_request()->Swap(&request);
     registerPending<proto::router::HostList>(
-        &message.host_list_request(), receiver, std::move(handler));
+        &message.host_list_request(), receiver, std::move(handler),
+        [this](const proto::router::HostList& raw)
+    {
+        return decodeHostList(raw);
+    });
     emitSend(proto::router::CHANNEL_ID_CLIENT, message);
 }
 

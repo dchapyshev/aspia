@@ -40,7 +40,6 @@ class User;
 namespace proto::router {
 class ClientList;
 class ClientResult;
-class HostList;
 class HostResult;
 class PeerResult;
 class RelayList;
@@ -170,7 +169,7 @@ private slots:
     void onPeerContextMenuRequested(const QPoint& pos);
     void onWorkspaceContextMenuRequested(const QPoint& pos);
     void onRelayListReceived(const proto::router::RelayList& relays);
-    void onHostListReceived(const proto::router::HostList& list);
+    void onHostListReceived(const Router::HostList& list);
     void onClientListReceived(const proto::router::ClientList& clients);
     void onUserListReceived(const proto::router::UserList& list);
     void onUserResultReceived(const proto::router::UserResult& result);
