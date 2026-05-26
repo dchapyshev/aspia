@@ -216,6 +216,20 @@ void Router::onTcpMessageReceived(quint8 channel_id, const QByteArray& bytes)
         else
             LOG(WARNING) << "Unhandled admin message";
     }
+    else if (channel_id == proto::router::CHANNEL_ID_MANAGER)
+    {
+        proto::router::RouterToManager message;
+        if (!parse(bytes, &message))
+        {
+            LOG(ERROR) << "Unable to parse manager message";
+            return;
+        }
+
+        if (message.has_host_edit_result())
+            dispatch(message.host_edit_result().request_id(), message.host_edit_result());
+        else
+            LOG(WARNING) << "Unhandled manager message";
+    }
     else if (channel_id == proto::router::CHANNEL_ID_CLIENT)
     {
         proto::router::RouterToClient message;
@@ -317,6 +331,25 @@ bool Router::buildWorkspace(const Router::Workspace& workspace, proto::router::W
         out->add_host_id(host_id);
 
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::buildHost(const Router::Host& host, proto::router::HostEditRequest* out)
+{
+    CHECK(out);
+
+    auto it = workspace_cryptors_.find(host.workspace_id);
+    if (it == workspace_cryptors_.end())
+    {
+        LOG(ERROR) << "No cached cryptor for workspace" << host.workspace_id
+                   << "- encrypted fields will be omitted";
+        return;
+    }
+
+    const DataCryptor& cryptor = it->second;
+    out->set_comment(encrypt(cryptor, host.comment).toStdString());
+    out->set_user_name(encrypt(cryptor, host.user_name).toStdString());
+    out->set_password(encrypt(cryptor, host.password).toStdString());
 }
 
 //--------------------------------------------------------------------------------------------------

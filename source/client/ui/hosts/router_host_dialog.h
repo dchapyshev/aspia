@@ -16,31 +16,44 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER_SESSION_MANAGER_H
-#define ROUTER_SESSION_MANAGER_H
+#ifndef CLIENT_UI_HOSTS_ROUTER_HOST_DIALOG_H
+#define CLIENT_UI_HOSTS_ROUTER_HOST_DIALOG_H
 
-#include "router/session_client.h"
+#include <QDialog>
+
+#include <memory>
+
+#include "client/router.h"
+
+class QAbstractButton;
+
+namespace Ui {
+class RouterHostDialog;
+} // namespace Ui
 
 namespace proto::router {
-class HostEditRequest;
+class HostEditResult;
 } // namespace proto::router
 
-class SessionManager : public SessionClient
+class RouterHostDialog final : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit SessionManager(TcpChannel* channel, QObject* parent = nullptr);
-    ~SessionManager() override;
+    RouterHostDialog(qint64 router_id, const Router::Host& host, QWidget* parent);
+    ~RouterHostDialog() final;
 
-protected:
-    // Session implementation.
-    void onSessionMessage(quint8 channel_id, const QByteArray& buffer) override;
+private slots:
+    void onHostEditResultReceived(const proto::router::HostEditResult& result);
 
 private:
-    void doHostEditRequest(const proto::router::HostEditRequest& request);
+    void onButtonBoxClicked(QAbstractButton* button);
 
-    Q_DISABLE_COPY_MOVE(SessionManager)
+    std::unique_ptr<Ui::RouterHostDialog> ui;
+    qint64 router_id_ = 0;
+    Router::Host host_;
+
+    Q_DISABLE_COPY_MOVE(RouterHostDialog)
 };
 
-#endif // ROUTER_SESSION_MANAGER_H
+#endif // CLIENT_UI_HOSTS_ROUTER_HOST_DIALOG_H

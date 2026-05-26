@@ -655,12 +655,8 @@ bool Database::addHost(const QByteArray& key_hash)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::updateHostInfo(HostId host_id,
-                              const QString& computer_name,
-                              const QString& cpu_arch,
-                              const QString& version,
-                              const QString& os_name,
-                              const QString& address)
+bool Database::updateHostInfo(HostId host_id, const QString& computer_name, const QString& cpu_arch,
+    const QString& version, const QString& os_name, const QString& address)
 {
     if (!isValid())
     {
@@ -701,6 +697,68 @@ bool Database::updateHostInfo(HostId host_id,
     }
 
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+qint64 Database::hostWorkspaceId(HostId host_id) const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return -1;
+    }
+
+    QSqlQuery query(databaseByName(connection_name_));
+    query.prepare(QStringLiteral("SELECT workspace_id FROM hosts WHERE id=?"));
+    query.addBindValue(host_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        return -1;
+    }
+
+    if (!query.next())
+        return -1;
+    return query.value(0).toLongLong();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::modifyHost(HostId host_id, const QString& display_name, const QByteArray& comment,
+    const QByteArray& user_name, const QByteArray& password)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    if (host_id == kInvalidHostId)
+    {
+        LOG(ERROR) << "Invalid host id";
+        return false;
+    }
+
+    const qint64 timestamp = QDateTime::currentSecsSinceEpoch();
+
+    QSqlQuery query(databaseByName(connection_name_));
+    query.prepare(QStringLiteral(
+        "UPDATE hosts SET display_name=?, comment=?, user_name=?, password=?, last_modify=? "
+        "WHERE id=?"));
+    query.addBindValue(display_name);
+    query.addBindValue(comment);
+    query.addBindValue(user_name);
+    query.addBindValue(password);
+    query.addBindValue(timestamp);
+    query.addBindValue(host_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        return false;
+    }
+
+    return query.numRowsAffected() > 0;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -899,8 +957,7 @@ Workspace Database::findWorkspace(qint64 entry_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Database::addWorkspace(
-    const QString& name, const QByteArray& comment,
+std::string_view Database::addWorkspace(const QString& name, const QByteArray& comment,
     const QVector<Workspace::Access>& initial_access, qint64* entry_id)
 {
     CHECK(entry_id);
@@ -997,8 +1054,7 @@ std::string_view Database::addWorkspace(
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Database::modifyWorkspace(
-    qint64 entry_id, const QString& name, const QByteArray& comment,
+std::string_view Database::modifyWorkspace(qint64 entry_id, const QString& name, const QByteArray& comment,
     const QVector<Workspace::Access>& desired_access)
 {
     if (!isValid())
@@ -1512,8 +1568,7 @@ qint64 Database::hostCount(qint64 workspace_id, qint64 group_id) const
     }
 
     QSqlQuery query(databaseByName(connection_name_));
-    query.prepare(QStringLiteral(
-        "SELECT COUNT(*) FROM hosts WHERE workspace_id=? AND group_id=?"));
+    query.prepare(QStringLiteral("SELECT COUNT(*) FROM hosts WHERE workspace_id=? AND group_id=?"));
     query.addBindValue(workspace_id);
     query.addBindValue(group_id);
 

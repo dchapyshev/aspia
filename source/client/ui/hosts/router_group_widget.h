@@ -51,6 +51,8 @@ protected:
 private slots:
     void onHostListReceived(const Router::HostList& list);
     void onHeaderContextMenu(const QPoint& pos);
+    void onHostContextMenu(const QPoint& pos);
+    void onEditHost();
 
 private:
     void fetchHosts();

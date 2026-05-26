@@ -29,6 +29,7 @@
 
 #include "base/logging.h"
 #include "client/router.h"
+#include "client/ui/hosts/router_host_dialog.h"
 #include "proto/router_client.h"
 #include "ui_router_group_widget.h"
 
@@ -146,6 +147,10 @@ RouterGroupWidget::RouterGroupWidget(QWidget* parent)
     ui->tree_computer->header()->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_computer->header(), &QHeaderView::customContextMenuRequested,
             this, &RouterGroupWidget::onHeaderContextMenu);
+
+    ui->tree_computer->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tree_computer, &QTreeWidget::customContextMenuRequested,
+            this, &RouterGroupWidget::onHostContextMenu);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -283,6 +288,44 @@ void RouterGroupWidget::onHeaderContextMenu(const QPoint& pos)
         return;
 
     header->setSectionHidden(action->columnIndex(), !action->isChecked());
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterGroupWidget::onHostContextMenu(const QPoint& pos)
+{
+    HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_computer->itemAt(pos));
+    if (!item)
+        return;
+
+    ui->tree_computer->setCurrentItem(item);
+
+    Router* router = Router::instance(router_id_);
+    if (!router)
+        return;
+
+    // Editing is restricted to admin and manager session types; clients see no edit menu.
+    const proto::router::SessionType session_type = router->config().sessionType();
+    if (session_type != proto::router::SESSION_TYPE_ADMIN &&
+        session_type != proto::router::SESSION_TYPE_MANAGER)
+    {
+        return;
+    }
+
+    QMenu menu;
+    QAction* edit_action = menu.addAction(tr("Edit..."));
+    if (menu.exec(ui->tree_computer->viewport()->mapToGlobal(pos)) == edit_action)
+        onEditHost();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterGroupWidget::onEditHost()
+{
+    HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_computer->currentItem());
+    if (!item)
+        return;
+
+    RouterHostDialog dialog(router_id_, item->host, this);
+    dialog.exec();
 }
 
 //--------------------------------------------------------------------------------------------------

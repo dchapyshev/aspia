@@ -20,4 +20,33 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
+package proto.router;
 
+// Edit user-facing fields of a host record. Issued by admin/manager sessions only; clients
+// have no access to this command. display_name is stored as plain text; comment/user_name/
+// password are AEAD-encrypted by the caller using the host's workspace GK.
+message HostEditRequest
+{
+    int64 request_id    = 1;
+    uint64 host_id      = 2;
+    string display_name = 3;
+    bytes comment       = 4;
+    bytes user_name     = 5;
+    bytes password      = 6;
+}
+
+message HostEditResult
+{
+    int64 request_id  = 1;
+    string error_code = 2; // "ok" | "access_denied" | "not_found" | "internal_error"
+}
+
+message ManagerToRouter
+{
+    HostEditRequest host_edit_request = 1;
+}
+
+message RouterToManager
+{
+    HostEditResult host_edit_result = 1;
+}

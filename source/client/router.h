@@ -39,6 +39,7 @@
 #include "proto/router_admin.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
+#include "proto/router_manager.h"
 
 class DataCryptor;
 class QTimer;
@@ -162,6 +163,9 @@ public:
 
     template<typename HandlerT>
     void removeHost(HostId host_id, QObject* receiver, HandlerT handler);
+
+    template<typename HandlerT>
+    void editHost(const Router::Host& host, QObject* receiver, HandlerT handler);
 
     // Admin: relay/client disconnect. session_id == -1 means "all".
     template<typename HandlerT>
@@ -322,6 +326,7 @@ private:
     qint64 nextRequestId() { return ++next_request_id_; }
     void setStatus(Status status);
     bool buildWorkspace(const Router::Workspace& workspace, proto::router::Workspace* out);
+    void buildHost(const Router::Host& host, proto::router::HostEditRequest* out);
     void setupChannel();
     void destroyChannel();
     void emitSend(quint8 channel_id, const google::protobuf::MessageLite& message);
@@ -449,6 +454,20 @@ void Router::removeHost(HostId host_id, QObject* receiver, HandlerT handler)
     request->set_host_id(host_id);
     registerPending<proto::router::HostResult>(request, receiver, std::move(handler));
     emitSend(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+template<typename HandlerT>
+void Router::editHost(const Router::Host& host, QObject* receiver, HandlerT handler)
+{
+    proto::router::ManagerToRouter message;
+    auto* request = message.mutable_host_edit_request();
+    request->set_request_id(nextRequestId());
+    request->set_host_id(host.host_id);
+    request->set_display_name(host.display_name.toStdString());
+    buildHost(host, request);
+    registerPending<proto::router::HostEditResult>(request, receiver, std::move(handler));
+    emitSend(proto::router::CHANNEL_ID_MANAGER, message);
 }
 
 //--------------------------------------------------------------------------------------------------

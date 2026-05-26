@@ -243,6 +243,9 @@ list(APPEND SOURCE_CLIENT_CORE_UI_HOSTS_TAB
     ui/hosts/router_widget.cc
     ui/hosts/router_widget.h
     ui/hosts/router_widget.ui
+    ui/hosts/router_host_dialog.cc
+    ui/hosts/router_host_dialog.h
+    ui/hosts/router_host_dialog.ui
     ui/hosts/router_password_dialog.cc
     ui/hosts/router_password_dialog.h
     ui/hosts/router_password_dialog.ui

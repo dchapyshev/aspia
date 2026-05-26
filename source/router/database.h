@@ -73,12 +73,18 @@ public:
     // (computer_name, cpu_arch, version, os_name, address, last_connect). If display_name has
     // never been set by the admin it is seeded from computer_name so the host has a readable
     // label in the UI.
-    bool updateHostInfo(HostId host_id,
-                        const QString& computer_name,
-                        const QString& cpu_arch,
-                        const QString& version,
-                        const QString& os_name,
-                        const QString& address);
+    bool updateHostInfo(HostId host_id, const QString& computer_name, const QString& cpu_arch,
+        const QString& version, const QString& os_name, const QString& address);
+
+    // Returns the workspace_id of the given host, or 0 if the host is not assigned to a
+    // workspace. Returns -1 if the host_id is unknown. Used to validate user access before
+    // edits.
+    qint64 hostWorkspaceId(HostId host_id) const;
+
+    // Updates the admin/manager-editable fields of a host (display_name plain, the other three
+    // AEAD-encrypted with the workspace GK by the caller). Also bumps last_modify.
+    bool modifyHost(HostId host_id, const QString& display_name, const QByteArray& comment,
+        const QByteArray& user_name, const QByteArray& password);
 
     // Schedules a host removal: copies hosts.id/key into hosts_remove (together with the current
     // timestamp) and deletes the original hosts row. The host_id is kept intact so that a
@@ -94,16 +100,14 @@ public:
     // Initial access list may be empty - in that case the workspace has no GK yet; it will
     // be generated when the first access is granted via modifyWorkspace(). The comment is
     // stored as opaque bytes (AEAD-encrypted with the workspace GK on the client).
-    std::string_view addWorkspace(
-        const QString& name, const QByteArray& comment,
+    std::string_view addWorkspace(const QString& name, const QByteArray& comment,
         const QVector<Workspace::Access>& initial_access, qint64* entry_id);
     // Updates name/comment and synchronizes access in a single transaction. desired_access is
     // the complete final access list: user_ids missing from it are revoked, user_ids absent
     // from the current DB record are inserted with the supplied wrapped_gk, and user_ids
     // already present preserve their existing wrapped_gk (the value in desired_access is
     // ignored).
-    std::string_view modifyWorkspace(
-        qint64 entry_id, const QString& name, const QByteArray& comment,
+    std::string_view modifyWorkspace(qint64 entry_id, const QString& name, const QByteArray& comment,
         const QVector<Workspace::Access>& desired_access);
     std::string_view removeWorkspace(qint64 entry_id);
 
@@ -124,8 +128,7 @@ public:
     QVector<HostInfo> hosts(qint64 start_item, qint64 end_item) const;
     // Returns hosts in the given workspace and group with exact match on both columns.
     // [start_item, end_item] gives an inclusive paging window; pass end_item <= 0 to disable.
-    QVector<HostInfo> hosts(
-        qint64 workspace_id, qint64 group_id, qint64 start_item, qint64 end_item) const;
+    QVector<HostInfo> hosts(qint64 workspace_id, qint64 group_id, qint64 start_item, qint64 end_item) const;
 
     // Total host count in the same scope as the matching hosts() overload. Used by the client
     // to drive pagination UI without fetching the full list.
