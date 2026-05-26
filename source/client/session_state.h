@@ -34,14 +34,14 @@ enum SessionType : int;
 class SessionState
 {
 public:
-    SessionState(const ComputerConfig& computer,
+    SessionState(const HostConfig& host,
                  proto::peer::SessionType session_type,
                  const QString& display_name);
     ~SessionState() = default;
 
     bool isConnectionByHostId() const;
 
-    const ComputerConfig& computer() const { return computer_; }
+    const HostConfig& host() const { return computer_; }
     proto::peer::SessionType sessionType() const { return session_type_; }
     qint64 routerId() const { return computer_.routerId(); }
     QString computerName() const { return computer_.name(); }
@@ -68,7 +68,7 @@ public:
     bool isReconnecting() const;
 
 private:
-    const ComputerConfig computer_;
+    const HostConfig computer_;
     const proto::peer::SessionType session_type_;
     const QString display_name_;
 

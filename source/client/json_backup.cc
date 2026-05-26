@@ -56,8 +56,8 @@ struct ImportCounters
     int routers_skipped = 0;
     int groups = 0;
     int groups_skipped = 0;
-    int computers = 0;
-    int computers_skipped = 0;
+    int hosts = 0;
+    int hosts_skipped = 0;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -143,17 +143,17 @@ QJsonObject buildGroup(const GroupConfig& group, const DataCryptor& cryptor)
 }
 
 //--------------------------------------------------------------------------------------------------
-QJsonObject buildComputer(const ComputerConfig& computer, const DataCryptor& cryptor)
+QJsonObject buildComputer(const HostConfig& host, const DataCryptor& cryptor)
 {
     QJsonObject object;
-    object.insert("id", static_cast<qint64>(computer.id()));
-    object.insert("group_id", static_cast<qint64>(computer.groupId()));
-    object.insert("router_id", static_cast<qint64>(computer.routerId()));
-    object.insert("name", encryptToHex(cryptor, computer.name()));
-    object.insert("comment", encryptToHex(cryptor, computer.comment()));
-    object.insert("address", encryptToHex(cryptor, computer.address()));
-    object.insert("username", encryptToHex(cryptor, computer.username()));
-    object.insert("password", encryptToHex(cryptor, computer.password().toString()));
+    object.insert("id", static_cast<qint64>(host.id()));
+    object.insert("group_id", static_cast<qint64>(host.groupId()));
+    object.insert("router_id", static_cast<qint64>(host.routerId()));
+    object.insert("name", encryptToHex(cryptor, host.name()));
+    object.insert("comment", encryptToHex(cryptor, host.comment()));
+    object.insert("address", encryptToHex(cryptor, host.address()));
+    object.insert("username", encryptToHex(cryptor, host.username()));
+    object.insert("password", encryptToHex(cryptor, host.password().toString()));
     return object;
 }
 
@@ -320,27 +320,27 @@ void importComputers(const QJsonArray& computers_array,
         if (!name_decrypted.has_value() || !address.has_value() || !comment.has_value() ||
             !username.has_value() || !password.has_value())
         {
-            ++counters->computers_skipped;
+            ++counters->hosts_skipped;
             continue;
         }
 
         QString name = sanitizedName(*name_decrypted);
         if (name.isEmpty())
         {
-            ++counters->computers_skipped;
+            ++counters->hosts_skipped;
             continue;
         }
 
         if (address->isEmpty())
         {
-            ++counters->computers_skipped;
+            ++counters->hosts_skipped;
             continue;
         }
 
         qint64 old_group_id = object.value("group_id").toInteger(0);
         qint64 old_router_id = object.value("router_id").toInteger(0);
 
-        ComputerConfig config;
+        HostConfig config;
         config.setGroupId(group_id_map.value(old_group_id, 0));
         config.setRouterId(router_id_map.value(old_router_id, 0));
         config.setName(name);
@@ -349,14 +349,14 @@ void importComputers(const QJsonArray& computers_array,
         config.setUsername(*username);
         config.setPassword(SecureString(*password));
 
-        if (!db.addComputer(config))
+        if (!db.addHost(config))
         {
-            LOG(ERROR) << "Unable to add computer during import";
-            ++counters->computers_skipped;
+            LOG(ERROR) << "Unable to add host during import";
+            ++counters->hosts_skipped;
             continue;
         }
 
-        ++counters->computers;
+        ++counters->hosts;
     }
 }
 
@@ -406,10 +406,10 @@ bool JsonBackup::exportToFile(QWidget* parent, const QString& file_path)
     root.insert("groups", groups_array);
 
     QJsonArray computers_array;
-    const QList<ComputerConfig> computers = db.allComputers();
-    for (const ComputerConfig& computer : std::as_const(computers))
-        computers_array.append(buildComputer(computer, cryptor));
-    root.insert("computers", computers_array);
+    const QList<HostConfig> hosts = db.allHosts();
+    for (const HostConfig& host : std::as_const(hosts))
+        computers_array.append(buildComputer(host, cryptor));
+    root.insert("hosts", computers_array);
 
     QJsonDocument document(root);
     QByteArray payload = document.toJson(QJsonDocument::Indented);
@@ -432,10 +432,10 @@ bool JsonBackup::exportToFile(QWidget* parent, const QString& file_path)
         tr("Export completed successfully.\n"
            "Routers exported: %1\n"
            "Groups exported: %2\n"
-           "Computers exported: %3")
+           "Hosts exported: %3")
             .arg(routers.size())
             .arg(groups.size())
-            .arg(computers.size()));
+            .arg(hosts.size()));
 
     return true;
 }
@@ -526,12 +526,12 @@ bool JsonBackup::importFromFile(QWidget* parent, const QString& file_path)
     QJsonArray groups_array = root.value("groups").toArray();
     importGroups(groups_array, *cryptor, &group_id_map, &counters);
 
-    QJsonArray computers_array = root.value("computers").toArray();
+    QJsonArray computers_array = root.value("hosts").toArray();
     importComputers(computers_array, group_id_map, router_id_map, *cryptor, &counters);
 
     cryptor.reset();
 
-    if (counters.routers == 0 && counters.groups == 0 && counters.computers == 0)
+    if (counters.routers == 0 && counters.groups == 0 && counters.hosts == 0)
     {
         MsgBox::information(parent, tr("Nothing was imported."));
         return false;
@@ -543,14 +543,14 @@ bool JsonBackup::importFromFile(QWidget* parent, const QString& file_path)
            "Routers skipped: %2\n"
            "Groups added: %3\n"
            "Groups skipped: %4\n"
-           "Computers added: %5\n"
-           "Computers skipped: %6")
+           "Hosts added: %5\n"
+           "Hosts skipped: %6")
             .arg(counters.routers)
             .arg(counters.routers_skipped)
             .arg(counters.groups)
             .arg(counters.groups_skipped)
-            .arg(counters.computers)
-            .arg(counters.computers_skipped));
+            .arg(counters.hosts)
+            .arg(counters.hosts_skipped));
 
     return true;
 }

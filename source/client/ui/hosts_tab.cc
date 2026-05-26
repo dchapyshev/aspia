@@ -109,7 +109,7 @@ HostsTab::HostsTab(QWidget* parent)
     ui->content_stack->addWidget(router_group_widget_);
     ui->content_stack->addWidget(search_widget_);
 
-    // Setup drag-and-drop: pass the computer mime type from LocalGroupWidget to Sidebar.
+    // Setup drag-and-drop: pass the host mime type from LocalGroupWidget to Sidebar.
     ui->sidebar->setComputerMimeType(local_group_widget_->mimeType());
 
     // Connect signals.
@@ -126,10 +126,10 @@ HostsTab::HostsTab(QWidget* parent)
     connect(router_group_widget_, &RouterGroupWidget::sig_currentChanged, this, &HostsTab::updateActionsState);
     connect(router_group_widget_, &RouterGroupWidget::sig_contextMenu, this, &HostsTab::onRouterGroupContextMenu);
     connect(this, &HostsTab::sig_connectRequested, local_group_widget_,
-            [this](const ComputerConfig& computer, proto::peer::SessionType /* session_type */)
+            [this](const HostConfig& host, proto::peer::SessionType /* session_type */)
     {
-        if (computer.id() != -1)
-            local_group_widget_->setConnectTime(computer.id(), QDateTime::currentSecsSinceEpoch());
+        if (host.id() != -1)
+            local_group_widget_->setConnectTime(host.id(), QDateTime::currentSecsSinceEpoch());
     });
     connect(ui->action_add_computer, &QAction::triggered, this, &HostsTab::onAddComputer);
     connect(ui->action_edit_computer, &QAction::triggered, this, &HostsTab::onEditComputer);
@@ -517,7 +517,7 @@ void HostsTab::onSidebarContextMenu(Sidebar::Item::Type type, const QPoint& pos)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onCurrentComputerChanged(qint64 /* computer_id */)
+void HostsTab::onCurrentComputerChanged(qint64 /* entry_id */)
 {
     updateActionsState();
 }
@@ -538,40 +538,40 @@ void HostsTab::onConnectAction(QAction* action)
     else
         return;
 
-    ComputerConfig computer;
+    HostConfig host;
 
     if (current_content_ == local_group_widget_ || current_content_ == search_widget_)
     {
-        qint64 computer_id = -1;
+        qint64 entry_id = -1;
         if (current_content_ == local_group_widget_)
         {
             LocalGroupWidget::Item* item = local_group_widget_->currentItem();
             if (!item)
                 return;
-            computer_id = item->computerId();
+            entry_id = item->computerId();
         }
         else
         {
             SearchWidget::Item* item = search_widget_->currentItem();
             if (!item)
                 return;
-            computer_id = item->computerId();
+            entry_id = item->computerId();
         }
 
-        std::optional<ComputerConfig> found = Database::instance().findComputer(computer_id);
+        std::optional<HostConfig> found = Database::instance().findHost(entry_id);
         if (!found.has_value())
         {
             MsgBox::warning(this,
-                tr("Failed to retrieve computer information from the local database."));
+                tr("Failed to retrieve host information from the local database."));
             return;
         }
 
-        computer = *found;
+        host = *found;
 
-        if (!validateComputerForConnect(computer))
+        if (!validateComputerForConnect(host))
             return;
 
-        Database::instance().setConnectTime(computer.id(), QDateTime::currentSecsSinceEpoch());
+        Database::instance().setConnectTime(host.id(), QDateTime::currentSecsSinceEpoch());
     }
     else if (current_content_ == router_group_widget_)
     {
@@ -590,7 +590,7 @@ void HostsTab::onConnectAction(QAction* action)
         Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(router_item);
         std::optional<RouterConfig> router_data = Database::instance().findRouter(router->routerId());
         if (router_data)
-            computer.setRouterId(router_data->routerId());
+            host.setRouterId(router_data->routerId());
         // TODO
     }
     else
@@ -609,40 +609,40 @@ void HostsTab::onConnectAction(QAction* action)
             return;
         }
 
-        computer.setRouterId(router->routerId());
-        computer.setAddress(QString::number(widget->selectedHostId()));
-        computer.setName(widget->selectedHostName());
+        host.setRouterId(router->routerId());
+        host.setAddress(QString::number(widget->selectedHostId()));
+        host.setName(widget->selectedHostName());
 
-        if (!validateComputerForConnect(computer))
+        if (!validateComputerForConnect(host))
             return;
     }
 
-    emit sig_connectRequested(computer, session_type);
+    emit sig_connectRequested(host, session_type);
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onLocalConnect(qint64 computer_id)
+void HostsTab::onLocalConnect(qint64 entry_id)
 {
-    std::optional<ComputerConfig> computer = Database::instance().findComputer(computer_id);
-    if (!computer.has_value())
+    std::optional<HostConfig> host = Database::instance().findHost(entry_id);
+    if (!host.has_value())
     {
-        MsgBox::warning(this, tr("Failed to retrieve computer information from the local database."));
+        MsgBox::warning(this, tr("Failed to retrieve host information from the local database."));
         return;
     }
 
-    if (!validateComputerForConnect(*computer))
+    if (!validateComputerForConnect(*host))
         return;
 
-    Database::instance().setConnectTime(computer_id, QDateTime::currentSecsSinceEpoch());
-    emit sig_connectRequested(*computer, defaultSessionType());
+    Database::instance().setConnectTime(entry_id, QDateTime::currentSecsSinceEpoch());
+    emit sig_connectRequested(*host, defaultSessionType());
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onLocalComputerContextMenu(qint64 computer_id, const QPoint& pos)
+void HostsTab::onLocalComputerContextMenu(qint64 entry_id, const QPoint& pos)
 {
     QMenu menu;
 
-    if (computer_id)
+    if (entry_id)
     {
         menu.addAction(ui->action_desktop_connect);
         menu.addAction(ui->action_file_transfer_connect);
@@ -664,7 +664,7 @@ void HostsTab::onLocalComputerContextMenu(qint64 computer_id, const QPoint& pos)
 //--------------------------------------------------------------------------------------------------
 void HostsTab::onAddComputer()
 {
-    LOG(INFO) << "[ACTION] Add computer";
+    LOG(INFO) << "[ACTION] Add host";
 
     qint64 group_id = ui->sidebar->currentGroupId();
     if (group_id < 0)
@@ -688,7 +688,7 @@ void HostsTab::onAddComputer()
 //--------------------------------------------------------------------------------------------------
 void HostsTab::onEditComputer()
 {
-    LOG(INFO) << "[ACTION] Edit computer";
+    LOG(INFO) << "[ACTION] Edit host";
 
     if (current_content_ == router_group_widget_)
     {
@@ -696,62 +696,62 @@ void HostsTab::onEditComputer()
         return;
     }
 
-    qint64 computer_id = currentComputerId();
-    if (computer_id <= 0)
+    qint64 entry_id = currentComputerId();
+    if (entry_id <= 0)
     {
-        LOG(INFO) << "No current computer";
+        LOG(INFO) << "No current host";
         return;
     }
 
-    std::optional<ComputerConfig> computer = Database::instance().findComputer(computer_id);
-    if (!computer.has_value())
+    std::optional<HostConfig> host = Database::instance().findHost(entry_id);
+    if (!host.has_value())
     {
-        MsgBox::warning(this, tr("Failed to retrieve computer information from the local database."));
+        MsgBox::warning(this, tr("Failed to retrieve host information from the local database."));
         return;
     }
 
-    LocalHostDialog dialog(computer_id, computer->groupId(), this);
+    LocalHostDialog dialog(entry_id, host->groupId(), this);
     if (dialog.exec() == LocalHostDialog::Rejected)
     {
         LOG(INFO) << "[ACTION] Rejected by user";
         return;
     }
 
-    refreshItem(computer_id);
+    refreshItem(entry_id);
 }
 
 //--------------------------------------------------------------------------------------------------
 void HostsTab::onCopyComputer()
 {
-    LOG(INFO) << "[ACTION] Copy computer";
+    LOG(INFO) << "[ACTION] Copy host";
 
-    qint64 computer_id = currentComputerId();
-    if (computer_id <= 0)
+    qint64 entry_id = currentComputerId();
+    if (entry_id <= 0)
     {
-        LOG(INFO) << "No current computer";
+        LOG(INFO) << "No current host";
         return;
     }
 
     Database& db = Database::instance();
 
-    std::optional<ComputerConfig> computer = db.findComputer(computer_id);
-    if (!computer.has_value())
+    std::optional<HostConfig> host = db.findHost(entry_id);
+    if (!host.has_value())
     {
-        MsgBox::warning(this, tr("Failed to retrieve computer information from the local database."));
+        MsgBox::warning(this, tr("Failed to retrieve host information from the local database."));
         return;
     }
 
-    computer->setName(computer->name() + " " + tr("(copy)"));
+    host->setName(host->name() + " " + tr("(copy)"));
 
-    if (!db.addComputer(*computer))
+    if (!db.addHost(*host))
     {
-        MsgBox::warning(this, tr("Failed to add the computer to the local database."));
+        MsgBox::warning(this, tr("Failed to add the host to the local database."));
         return;
     }
 
-    qint64 new_id = computer->id();
+    qint64 new_id = host->id();
 
-    LocalHostDialog(new_id, computer->groupId(), this).exec();
+    LocalHostDialog(new_id, host->groupId(), this).exec();
 
     if (current_content_ == search_widget_)
     {
@@ -768,23 +768,23 @@ void HostsTab::onCopyComputer()
 //--------------------------------------------------------------------------------------------------
 void HostsTab::onRemoveComputer()
 {
-    LOG(INFO) << "[ACTION] Delete computer";
+    LOG(INFO) << "[ACTION] Delete host";
 
-    qint64 computer_id = currentComputerId();
-    if (computer_id <= 0)
+    qint64 entry_id = currentComputerId();
+    if (entry_id <= 0)
     {
-        LOG(INFO) << "No current computer";
+        LOG(INFO) << "No current host";
         return;
     }
 
-    std::optional<ComputerConfig> computer = Database::instance().findComputer(computer_id);
-    if (!computer.has_value())
+    std::optional<HostConfig> host = Database::instance().findHost(entry_id);
+    if (!host.has_value())
     {
-        MsgBox::warning(this, tr("Failed to retrieve computer information from the local database."));
+        MsgBox::warning(this, tr("Failed to retrieve host information from the local database."));
         return;
     }
 
-    QString message = tr("Are you sure you want to delete computer \"%1\"?").arg(computer->name());
+    QString message = tr("Are you sure you want to delete host \"%1\"?").arg(host->name());
 
     if (MsgBox::question(this, message) == MsgBox::No)
     {
@@ -792,14 +792,14 @@ void HostsTab::onRemoveComputer()
         return;
     }
 
-    if (!Database::instance().removeComputer(computer_id))
+    if (!Database::instance().removeHost(entry_id))
     {
-        MsgBox::warning(this, tr("Unable to remove computer"));
-        LOG(INFO) << "Unable to remove computer with id" << computer_id;
+        MsgBox::warning(this, tr("Unable to remove host"));
+        LOG(INFO) << "Unable to remove host with id" << entry_id;
         return;
     }
 
-    removeItem(computer_id);
+    removeItem(entry_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1435,30 +1435,30 @@ RouterWidget* HostsTab::createRouterWidget(const RouterConfig& config)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool HostsTab::validateComputerForConnect(const ComputerConfig& computer)
+bool HostsTab::validateComputerForConnect(const HostConfig& host)
 {
-    if (computer.routerId() != 0)
+    if (host.routerId() != 0)
     {
-        std::optional<RouterConfig> router = Database::instance().findRouter(computer.routerId());
+        std::optional<RouterConfig> router = Database::instance().findRouter(host.routerId());
         if (!router.has_value())
         {
-            MsgBox::warning(this, tr("The router associated with this computer has been deleted. "
-                "Edit the computer to select another router or switch to direct connection."));
+            MsgBox::warning(this, tr("The router associated with this host has been deleted. "
+                "Edit the host to select another router or switch to direct connection."));
             return false;
         }
 
-        if (!isHostId(computer.address()))
+        if (!isHostId(host.address()))
         {
-            MsgBox::warning(this, tr("The computer has an invalid host ID."));
+            MsgBox::warning(this, tr("The host has an invalid host ID."));
             return false;
         }
     }
     else
     {
-        Address address = Address::fromString(computer.address(), DEFAULT_HOST_TCP_PORT);
+        Address address = Address::fromString(host.address(), DEFAULT_HOST_TCP_PORT);
         if (!address.isValid())
         {
-            MsgBox::warning(this, tr("The computer has an incorrect address."));
+            MsgBox::warning(this, tr("The host has an incorrect address."));
             return false;
         }
     }
@@ -1485,19 +1485,19 @@ qint64 HostsTab::currentComputerId() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::refreshItem(qint64 computer_id)
+void HostsTab::refreshItem(qint64 entry_id)
 {
     if (current_content_ == local_group_widget_)
-        local_group_widget_->refreshItem(computer_id);
+        local_group_widget_->refreshItem(entry_id);
     else if (current_content_ == search_widget_)
-        search_widget_->refreshItem(computer_id);
+        search_widget_->refreshItem(entry_id);
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::removeItem(qint64 computer_id)
+void HostsTab::removeItem(qint64 entry_id)
 {
     if (current_content_ == local_group_widget_)
-        local_group_widget_->removeItem(computer_id);
+        local_group_widget_->removeItem(entry_id);
     else if (current_content_ == search_widget_)
-        search_widget_->removeItem(computer_id);
+        search_widget_->removeItem(entry_id);
 }

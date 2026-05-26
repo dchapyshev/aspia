@@ -30,11 +30,11 @@
 #include "client/online_checker/online_checker_router.h"
 
 // Persistent online-status oracle. Designed to live for the entire lifetime of the owning widget
-// and serve multiple start() calls. Each result is cached for ~1 minute keyed by computer_id; if
-// start() is called with a computer whose last check is still fresh, the cached value is emitted
+// and serve multiple start() calls. Each result is cached for ~1 minute keyed by entry_id; if
+// start() is called with a host whose last check is still fresh, the cached value is emitted
 // immediately (asynchronously) and no network probe is issued. Stale or absent entries trigger
 // a real check via OnlineCheckerDirect/OnlineCheckerRouter. The "Refresh" UI action passes the
-// visible computer ids through invalidate() to force a fresh probe.
+// visible host ids through invalidate() to force a fresh probe.
 class OnlineChecker final : public QObject
 {
     Q_OBJECT
@@ -43,25 +43,25 @@ public:
     explicit OnlineChecker(QObject* parent = nullptr);
     ~OnlineChecker() final;
 
-    using ComputerList = QList<ComputerConfig>;
+    using HostList = QList<HostConfig>;
 
-    // Begin (or restart) checking the given computers. Cached fresh entries are emitted via
+    // Begin (or restart) checking the given hosts. Cached fresh entries are emitted via
     // sig_checkerResult on the next event loop tick; stale ones go through a real probe. When all
     // results have been emitted, sig_checkerFinished is emitted exactly once. If start() is
     // called while a previous check is still running, the old in-flight work is discarded.
-    void start(const ComputerList& computers);
+    void start(const HostList& hosts);
 
-    // Drops cached results for the given computers so a subsequent start() rechecks them.
-    void invalidate(const QList<qint64>& computer_ids);
+    // Drops cached results for the given hosts so a subsequent start() rechecks them.
+    void invalidate(const QList<qint64>& entry_ids);
 
 signals:
-    void sig_checkerResult(qint64 computer_id, bool online);
+    void sig_checkerResult(qint64 entry_id, bool online);
     void sig_checkerFinished();
 
 private slots:
-    void onDirectCheckerResult(qint64 computer_id, bool online);
+    void onDirectCheckerResult(qint64 entry_id, bool online);
     void onDirectCheckerFinished();
-    void onRouterCheckerResult(qint64 computer_id, bool online);
+    void onRouterCheckerResult(qint64 entry_id, bool online);
     void onRouterCheckerFinished();
     void emitPendingCached();
 
@@ -81,8 +81,8 @@ private:
     ScopedQPointer<OnlineCheckerDirect> direct_checker_;
     ScopedQPointer<OnlineCheckerRouter> router_checker_;
 
-    OnlineCheckerRouter::ComputerList router_computers_;
-    OnlineCheckerDirect::ComputerList direct_computers_;
+    OnlineCheckerRouter::HostList router_hosts_;
+    OnlineCheckerDirect::HostList direct_hosts_;
 
     bool direct_finished_ = true;
     bool router_finished_ = true;

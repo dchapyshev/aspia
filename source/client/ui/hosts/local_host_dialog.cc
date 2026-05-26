@@ -62,27 +62,27 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
 
     if (entry_id_ != -1)
     {
-        setWindowTitle(tr("Edit Computer"));
+        setWindowTitle(tr("Edit Host"));
 
-        std::optional<ComputerConfig> computer = Database::instance().findComputer(entry_id_);
-        if (computer.has_value())
+        std::optional<HostConfig> host = Database::instance().findHost(entry_id_);
+        if (host.has_value())
         {
-            ui->edit_name->setText(computer->name());
-            ui->edit_address->setText(computer->address());
-            ui->edit_username->setText(computer->username());
-            ui->edit_password->setPassword(computer->password());
-            ui->edit_comment->setPlainText(computer->comment());
-            group_id_ = computer->groupId();
-            selected_router_id = computer->routerId();
+            ui->edit_name->setText(host->name());
+            ui->edit_address->setText(host->address());
+            ui->edit_username->setText(host->username());
+            ui->edit_password->setPassword(host->password());
+            ui->edit_comment->setPlainText(host->comment());
+            group_id_ = host->groupId();
+            selected_router_id = host->routerId();
         }
         else
         {
-            LOG(ERROR) << "Unable to find computer with id" << entry_id_;
+            LOG(ERROR) << "Unable to find host with id" << entry_id_;
         }
     }
     else
     {
-        setWindowTitle(tr("Add Computer"));
+        setWindowTitle(tr("Add Host"));
         group_id_ = group_id;
     }
 
@@ -91,7 +91,7 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
         int found_index = ui->combo_router->findData(QVariant::fromValue(selected_router_id));
         if (found_index < 0)
         {
-            LOG(WARNING) << "Computer references missing router id" << selected_router_id;
+            LOG(WARNING) << "Host references missing router id" << selected_router_id;
             ui->combo_router->addItem(QIcon(":/img/high-importance.svg"), tr("<deleted router>"),
                                      QVariant::fromValue(selected_router_id));
             found_index = ui->combo_router->count() - 1;
@@ -160,7 +160,7 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
             Address::fromString(ui->edit_address->text(), DEFAULT_HOST_TCP_PORT);
         if (!address.isValid())
         {
-            MsgBox::warning(this, tr("An invalid computer address was entered."));
+            MsgBox::warning(this, tr("An invalid host address was entered."));
             ui->edit_address->setFocus();
             ui->edit_address->selectAll();
             return;
@@ -201,46 +201,46 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
 
     qint64 group_id = ui->combo_group->currentGroupId();
 
-    QList<ComputerConfig> computers = Database::instance().computerList(group_id);
-    for (const ComputerConfig& existing : std::as_const(computers))
+    QList<HostConfig> hosts = Database::instance().hostList(group_id);
+    for (const HostConfig& existing : std::as_const(hosts))
     {
         if (existing.id() != entry_id_ && existing.name() == name)
         {
             MsgBox::warning(this,
-                tr("A computer with this name already exists in the selected group."));
+                tr("A host with this name already exists in the selected group."));
             ui->edit_name->setFocus();
             return;
         }
     }
 
-    ComputerConfig computer;
-    computer.setId(entry_id_);
-    computer.setGroupId(group_id);
-    computer.setRouterId(router_id);
-    computer.setName(ui->edit_name->text());
-    computer.setAddress(ui->edit_address->text());
-    computer.setUsername(ui->edit_username->text());
-    computer.setPassword(ui->edit_password->password());
-    computer.setComment(ui->edit_comment->toPlainText());
+    HostConfig host;
+    host.setId(entry_id_);
+    host.setGroupId(group_id);
+    host.setRouterId(router_id);
+    host.setName(ui->edit_name->text());
+    host.setAddress(ui->edit_address->text());
+    host.setUsername(ui->edit_username->text());
+    host.setPassword(ui->edit_password->password());
+    host.setComment(ui->edit_comment->toPlainText());
 
     Database& db = Database::instance();
 
     if (entry_id_ == -1)
     {
-        if (!db.addComputer(computer))
+        if (!db.addHost(host))
         {
-            MsgBox::warning(this, tr("Unable to add computer"));
-            LOG(INFO) << "Unable to add computer to database";
+            MsgBox::warning(this, tr("Unable to add host"));
+            LOG(INFO) << "Unable to add host to database";
             return;
         }
-        entry_id_ = computer.id();
+        entry_id_ = host.id();
     }
     else
     {
-        if (!db.modifyComputer(computer))
+        if (!db.modifyHost(host))
         {
-            MsgBox::warning(this, tr("Unable to modify computer"));
-            LOG(INFO) << "Unable to modify computer in database";
+            MsgBox::warning(this, tr("Unable to modify host"));
+            LOG(INFO) << "Unable to modify host in database";
             return;
         }
     }
@@ -254,7 +254,7 @@ void LocalHostDialog::updateAddressLabel()
     if (ui->combo_router->currentData().toLongLong() == 0)
     {
         ui->label_address->setText(tr("Address:"));
-        ui->edit_address->setPlaceholderText(tr("Computer name or IP address"));
+        ui->edit_address->setPlaceholderText(tr("Host name or IP address"));
     }
     else
     {

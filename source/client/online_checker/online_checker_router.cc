@@ -33,10 +33,10 @@ const std::chrono::seconds kTimeout { 30 };
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-OnlineCheckerRouter::OnlineCheckerRouter(const ComputerList& computers, QObject* parent)
+OnlineCheckerRouter::OnlineCheckerRouter(const HostList& hosts, QObject* parent)
     : QObject(parent),
       timer_(new QTimer(this)),
-      computers_(computers)
+      hosts_(hosts)
 {
     LOG(TRACE) << "Ctor";
 
@@ -55,9 +55,9 @@ void OnlineCheckerRouter::start()
 {
     timer_->start(kTimeout);
 
-    if (computers_.isEmpty())
+    if (hosts_.isEmpty())
     {
-        LOG(TRACE) << "No computers in list";
+        LOG(TRACE) << "No hosts in list";
         onFinished(FROM_HERE);
         return;
     }
@@ -68,36 +68,36 @@ void OnlineCheckerRouter::start()
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerRouter::onHostStatusReceived(const proto::router::HostStatus& host_status)
 {
-    if (computers_.isEmpty())
+    if (hosts_.isEmpty())
         return;
 
     const bool online = host_status.status() == proto::router::HostStatus::STATUS_ONLINE;
-    emit sig_checkerResult(computers_.front().id(), online);
-    computers_.pop_front();
+    emit sig_checkerResult(hosts_.front().id(), online);
+    hosts_.pop_front();
     checkNextComputer();
 }
 
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerRouter::checkNextComputer()
 {
-    if (computers_.isEmpty())
+    if (hosts_.isEmpty())
     {
-        LOG(TRACE) << "No more computers";
+        LOG(TRACE) << "No more hosts";
         onFinished(FROM_HERE);
         return;
     }
 
-    const ComputerConfig& computer = computers_.front();
-    const HostId host_id = stringToHostId(computer.address());
+    const HostConfig& host = hosts_.front();
+    const HostId host_id = stringToHostId(host.address());
 
     LOG(TRACE) << "Checking status for host id" << host_id
-               << "(router_id:" << computer.routerId() << "computer_id:" << computer.id() << ")";
+               << "(router_id:" << host.routerId() << "entry_id:" << host.id() << ")";
 
-    Router* router = Router::instance(computer.routerId());
+    Router* router = Router::instance(host.routerId());
     if (!router || router->status() != Router::Status::ONLINE)
     {
-        emit sig_checkerResult(computer.id(), false);
-        computers_.pop_front();
+        emit sig_checkerResult(host.id(), false);
+        hosts_.pop_front();
 
         QTimer::singleShot(0, this, &OnlineCheckerRouter::checkNextComputer);
         return;
@@ -111,8 +111,8 @@ void OnlineCheckerRouter::onFinished(const Location& location)
 {
     LOG(TRACE) << "Finished (" << location << ")";
 
-    for (const ComputerConfig& computer : std::as_const(computers_))
-        emit sig_checkerResult(computer.id(), false);
+    for (const HostConfig& host : std::as_const(hosts_))
+        emit sig_checkerResult(host.id(), false);
 
     emit sig_checkerFinished();
 }

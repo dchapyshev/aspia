@@ -115,27 +115,27 @@ QString buildGroupPath(qint64 group_id, const QHash<qint64, GroupConfig>& groups
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-SearchWidget::Item::Item(const ComputerConfig& computer, const QString& group_path, QTreeWidget* parent)
+SearchWidget::Item::Item(const HostConfig& host, const QString& group_path, QTreeWidget* parent)
     : QTreeWidgetItem(parent)
 {
     setIcon(kColumnName, QIcon(":/img/computer.svg"));
-    updateFrom(computer, group_path);
+    updateFrom(host, group_path);
 }
 
 //--------------------------------------------------------------------------------------------------
-void SearchWidget::Item::updateFrom(const ComputerConfig& computer, const QString& group_path)
+void SearchWidget::Item::updateFrom(const HostConfig& host, const QString& group_path)
 {
-    computer_ = computer;
+    computer_ = host;
 
-    QString single_line_comment = computer.comment();
+    QString single_line_comment = host.comment();
     single_line_comment.replace('\n', ' ').replace('\r', ' ');
 
-    setText(kColumnName, computer.name());
-    setText(kColumnAddress, computer.address());
+    setText(kColumnName, host.name());
+    setText(kColumnAddress, host.address());
     setText(kColumnGroup, group_path);
     setToolTip(kColumnGroup, group_path);
     setText(kColumnComment, single_line_comment);
-    setToolTip(kColumnComment, computer.comment());
+    setToolTip(kColumnComment, host.comment());
 }
 
 class SearchWidget::HighlightDelegate final : public QStyledItemDelegate
@@ -260,27 +260,27 @@ SearchWidget::SearchWidget(QWidget* parent)
     connect(tree_computer_, &QTreeWidget::currentItemChanged,
             this, [this](QTreeWidgetItem* current, QTreeWidgetItem* /* previous */)
     {
-        qint64 computer_id = -1;
+        qint64 entry_id = -1;
 
         if (current)
         {
             Item* computer_item = static_cast<Item*>(current);
-            computer_id = computer_item->computerId();
+            entry_id = computer_item->computerId();
         }
 
-        emit sig_currentChanged(computer_id);
+        emit sig_currentChanged(entry_id);
     });
 
     connect(tree_computer_, &QTreeWidget::customContextMenuRequested, this, [this](const QPoint& pos)
     {
-        qint64 computer_id = 0;
+        qint64 entry_id = 0;
         Item* item = static_cast<Item*>(tree_computer_->itemAt(pos));
         if (item)
         {
             tree_computer_->setCurrentItem(item);
-            computer_id = item->computerId();
+            entry_id = item->computerId();
         }
-        emit sig_contextMenu(computer_id, tree_computer_->viewport()->mapToGlobal(pos));
+        emit sig_contextMenu(entry_id, tree_computer_->viewport()->mapToGlobal(pos));
     });
 
     layout->addWidget(tree_computer_);
@@ -313,10 +313,10 @@ void SearchWidget::search(const QString& query)
     for (const GroupConfig& group : std::as_const(all_groups))
         groups.insert(group.id(), group);
 
-    const QList<ComputerConfig> results = db.searchComputers(query);
+    const QList<HostConfig> results = db.searchHosts(query);
 
-    for (const ComputerConfig& computer : std::as_const(results))
-        new Item(computer, buildGroupPath(computer.groupId(), groups), tree_computer_);
+    for (const HostConfig& host : std::as_const(results))
+        new Item(host, buildGroupPath(host.groupId(), groups), tree_computer_);
 
     updateStatusLabels();
 }
@@ -337,9 +337,9 @@ SearchWidget::Item* SearchWidget::currentItem()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SearchWidget::setCurrentComputer(qint64 computer_id)
+void SearchWidget::setCurrentComputer(qint64 entry_id)
 {
-    Item* item = findItemByComputerId(computer_id);
+    Item* item = findItemByComputerId(entry_id);
     if (!item)
         return;
 
@@ -348,16 +348,16 @@ void SearchWidget::setCurrentComputer(qint64 computer_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SearchWidget::refreshItem(qint64 computer_id)
+void SearchWidget::refreshItem(qint64 entry_id)
 {
-    Item* item = findItemByComputerId(computer_id);
+    Item* item = findItemByComputerId(entry_id);
     if (!item)
         return;
 
-    std::optional<ComputerConfig> updated = Database::instance().findComputer(computer_id);
+    std::optional<HostConfig> updated = Database::instance().findHost(entry_id);
     if (!updated.has_value())
     {
-        removeItem(computer_id);
+        removeItem(entry_id);
         return;
     }
 
@@ -371,9 +371,9 @@ void SearchWidget::refreshItem(qint64 computer_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SearchWidget::removeItem(qint64 computer_id)
+void SearchWidget::removeItem(qint64 entry_id)
 {
-    Item* item = findItemByComputerId(computer_id);
+    Item* item = findItemByComputerId(entry_id);
     if (!item)
         return;
 
@@ -474,13 +474,13 @@ void SearchWidget::onHeaderContextMenu(const QPoint& pos)
 }
 
 //--------------------------------------------------------------------------------------------------
-SearchWidget::Item* SearchWidget::findItemByComputerId(qint64 computer_id) const
+SearchWidget::Item* SearchWidget::findItemByComputerId(qint64 entry_id) const
 {
     const int count = tree_computer_->topLevelItemCount();
     for (int i = 0; i < count; ++i)
     {
         Item* item = static_cast<Item*>(tree_computer_->topLevelItem(i));
-        if (item->computerId() == computer_id)
+        if (item->computerId() == entry_id)
             return item;
     }
     return nullptr;

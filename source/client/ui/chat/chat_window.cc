@@ -71,7 +71,7 @@ ChatWindow::ChatWindow(QWidget* parent)
         QAction* action = new QAction(sessionIcon(type), sessionName(type), this);
         connect(action, &QAction::triggered, this, [this, type]()
         {
-            emit sig_connectRequested(sessionState()->computer(), type);
+            emit sig_connectRequested(sessionState()->host(), type);
         });
         return action;
     };

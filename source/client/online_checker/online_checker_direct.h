@@ -31,22 +31,22 @@ class OnlineCheckerDirect final : public QObject
     Q_OBJECT
 
 public:
-    using ComputerList = QQueue<ComputerConfig>;
+    using HostList = QQueue<HostConfig>;
 
-    explicit OnlineCheckerDirect(const ComputerList& computers, QObject* parent = nullptr);
+    explicit OnlineCheckerDirect(const HostList& hosts, QObject* parent = nullptr);
     ~OnlineCheckerDirect();
 
     void start();
 
 signals:
-    void sig_checkerResult(qint64 computer_id, bool online);
+    void sig_checkerResult(qint64 entry_id, bool online);
     void sig_checkerFinished();
 
 private:
-    void onChecked(qint64 computer_id, bool online);
+    void onChecked(qint64 entry_id, bool online);
     void onFinished(const Location& location);
 
-    ComputerList pending_queue_;
+    HostList pending_queue_;
 
     class Instance;
     QQueue<Instance*> work_queue_;

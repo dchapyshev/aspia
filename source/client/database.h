@@ -35,17 +35,17 @@ public:
     static QString filePath();
     bool isValid() const;
 
-    // Computers.
-    QList<ComputerConfig> computerList(qint64 group_id) const;
-    QList<ComputerConfig> allComputers() const;
-    bool addComputer(ComputerConfig& computer);
-    bool modifyComputer(ComputerConfig& computer);
-    bool removeComputer(qint64 computer_id);
-    bool setConnectTime(qint64 computer_id, qint64 connect_time);
-    std::optional<ComputerConfig> findComputer(qint64 computer_id) const;
+    // Hosts.
+    QList<HostConfig> hostList(qint64 group_id) const;
+    QList<HostConfig> allHosts() const;
+    bool addHost(HostConfig& host);
+    bool modifyHost(HostConfig& host);
+    bool removeHost(qint64 entry_id);
+    bool setConnectTime(qint64 entry_id, qint64 connect_time);
+    std::optional<HostConfig> findHost(qint64 entry_id) const;
 
     // Search.
-    QList<ComputerConfig> searchComputers(const QString& query) const;
+    QList<HostConfig> searchHosts(const QString& query) const;
 
     // Groups.
     QList<GroupConfig> groupList(qint64 parent_id) const;

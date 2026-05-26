@@ -42,22 +42,22 @@ constexpr auto kSettingVerifier     = "master_password_verifier";
 constexpr auto kSettingVersion      = "master_password_version";
 
 //--------------------------------------------------------------------------------------------------
-ComputerConfig readComputer(const QSqlQuery& query)
+HostConfig readHost(const QSqlQuery& query)
 {
-    ComputerConfig computer;
-    computer.setId(query.value(0).toLongLong());
-    computer.setGroupId(query.value(1).toLongLong());
-    computer.setRouterId(query.value(2).toLongLong());
-    computer.setEncryptedName(query.value(3).toByteArray());
-    computer.setEncryptedComment(query.value(4).toByteArray());
-    computer.setEncryptedAddress(query.value(5).toByteArray());
-    computer.setEncryptedUsername(query.value(6).toByteArray());
-    computer.setEncryptedPassword(query.value(7).toByteArray());
-    computer.setCreateTime(query.value(8).toLongLong());
-    computer.setModifyTime(query.value(9).toLongLong());
-    computer.setConnectTime(query.value(10).toLongLong());
-    computer.setEncryptedData(query.value(11).toByteArray());
-    return computer;
+    HostConfig host;
+    host.setId(query.value(0).toLongLong());
+    host.setGroupId(query.value(1).toLongLong());
+    host.setRouterId(query.value(2).toLongLong());
+    host.setEncryptedName(query.value(3).toByteArray());
+    host.setEncryptedComment(query.value(4).toByteArray());
+    host.setEncryptedAddress(query.value(5).toByteArray());
+    host.setEncryptedUsername(query.value(6).toByteArray());
+    host.setEncryptedPassword(query.value(7).toByteArray());
+    host.setCreateTime(query.value(8).toLongLong());
+    host.setModifyTime(query.value(9).toLongLong());
+    host.setConnectTime(query.value(10).toLongLong());
+    host.setEncryptedData(query.value(11).toByteArray());
+    return host;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -103,7 +103,7 @@ bool createTables(QSqlDatabase& db)
         return false;
     }
 
-    if (!query.exec("CREATE TABLE IF NOT EXISTS \"computers\" ("
+    if (!query.exec("CREATE TABLE IF NOT EXISTS \"hosts\" ("
                     "\"id\" INTEGER UNIQUE,"
                     "\"group_id\" INTEGER NOT NULL DEFAULT 0,"
                     "\"router_id\" INTEGER NOT NULL DEFAULT 0,"
@@ -118,7 +118,7 @@ bool createTables(QSqlDatabase& db)
                     "\"data\" BLOB DEFAULT X'',"
                     "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
-        LOG(ERROR) << "Unable to create computers table:" << query.lastError();
+        LOG(ERROR) << "Unable to create hosts table:" << query.lastError();
         return false;
     }
 
@@ -179,7 +179,7 @@ bool Database::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<ComputerConfig> Database::computerList(qint64 group_id) const
+QList<HostConfig> Database::hostList(qint64 group_id) const
 {
     if (!isValid())
     {
@@ -190,24 +190,24 @@ QList<ComputerConfig> Database::computerList(qint64 group_id) const
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("SELECT id, group_id, router_id, name, comment, address, username, password, "
                   "create_time, modify_time, connect_time, data "
-                  "FROM computers WHERE group_id=?");
+                  "FROM hosts WHERE group_id=?");
     query.addBindValue(group_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to get computer list:" << query.lastError();
+        LOG(ERROR) << "Unable to get host list:" << query.lastError();
         return {};
     }
 
-    QList<ComputerConfig> computers;
+    QList<HostConfig> hosts;
     while (query.next())
-        computers.append(readComputer(query));
+        hosts.append(readHost(query));
 
-    return computers;
+    return hosts;
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<ComputerConfig> Database::allComputers() const
+QList<HostConfig> Database::allHosts() const
 {
     if (!isValid())
     {
@@ -218,23 +218,23 @@ QList<ComputerConfig> Database::allComputers() const
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("SELECT id, group_id, router_id, name, comment, address, username, password, "
                   "create_time, modify_time, connect_time, data "
-                  "FROM computers");
+                  "FROM hosts");
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to get computer list:" << query.lastError();
+        LOG(ERROR) << "Unable to get host list:" << query.lastError();
         return {};
     }
 
-    QList<ComputerConfig> computers;
+    QList<HostConfig> hosts;
     while (query.next())
-        computers.append(readComputer(query));
+        hosts.append(readHost(query));
 
-    return computers;
+    return hosts;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::addComputer(ComputerConfig& computer)
+bool Database::addHost(HostConfig& host)
 {
     if (!isValid())
     {
@@ -242,32 +242,32 @@ bool Database::addComputer(ComputerConfig& computer)
         return false;
     }
 
-    if (computer.encryptedName().isEmpty() || computer.encryptedAddress().isEmpty() || computer.groupId() < 0)
+    if (host.encryptedName().isEmpty() || host.encryptedAddress().isEmpty() || host.groupId() < 0)
     {
         LOG(ERROR) << "Invalid parameters";
         return false;
     }
 
     const qint64 current_time = QDateTime::currentSecsSinceEpoch();
-    computer.setCreateTime(current_time);
-    computer.setModifyTime(current_time);
-    computer.setConnectTime(0);
+    host.setCreateTime(current_time);
+    host.setModifyTime(current_time);
+    host.setConnectTime(0);
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("INSERT INTO computers (id, group_id, router_id, name, comment, address, username, password, "
+    query.prepare("INSERT INTO hosts (id, group_id, router_id, name, comment, address, username, password, "
                   "create_time, modify_time, connect_time, data) "
                   "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    query.addBindValue(computer.groupId());
-    query.addBindValue(computer.routerId());
-    query.addBindValue(computer.encryptedName());
-    query.addBindValue(computer.encryptedComment());
-    query.addBindValue(computer.encryptedAddress());
-    query.addBindValue(computer.encryptedUsername());
-    query.addBindValue(computer.encryptedPassword());
-    query.addBindValue(computer.createTime());
-    query.addBindValue(computer.modifyTime());
-    query.addBindValue(computer.connectTime());
-    query.addBindValue(computer.encryptedData());
+    query.addBindValue(host.groupId());
+    query.addBindValue(host.routerId());
+    query.addBindValue(host.encryptedName());
+    query.addBindValue(host.encryptedComment());
+    query.addBindValue(host.encryptedAddress());
+    query.addBindValue(host.encryptedUsername());
+    query.addBindValue(host.encryptedPassword());
+    query.addBindValue(host.createTime());
+    query.addBindValue(host.modifyTime());
+    query.addBindValue(host.connectTime());
+    query.addBindValue(host.encryptedData());
 
     if (!query.exec())
     {
@@ -275,12 +275,12 @@ bool Database::addComputer(ComputerConfig& computer)
         return false;
     }
 
-    computer.setId(query.lastInsertId().toLongLong());
+    host.setId(query.lastInsertId().toLongLong());
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::modifyComputer(ComputerConfig& computer)
+bool Database::modifyHost(HostConfig& host)
 {
     if (!isValid())
     {
@@ -288,21 +288,21 @@ bool Database::modifyComputer(ComputerConfig& computer)
         return false;
     }
 
-    computer.setModifyTime(QDateTime::currentSecsSinceEpoch());
+    host.setModifyTime(QDateTime::currentSecsSinceEpoch());
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("UPDATE computers SET group_id=?, router_id=?, name=?, comment=?, address=?, username=?, "
+    query.prepare("UPDATE hosts SET group_id=?, router_id=?, name=?, comment=?, address=?, username=?, "
                   "password=?, modify_time=?, data=? WHERE id=?");
-    query.addBindValue(computer.groupId());
-    query.addBindValue(computer.routerId());
-    query.addBindValue(computer.encryptedName());
-    query.addBindValue(computer.encryptedComment());
-    query.addBindValue(computer.encryptedAddress());
-    query.addBindValue(computer.encryptedUsername());
-    query.addBindValue(computer.encryptedPassword());
-    query.addBindValue(computer.modifyTime());
-    query.addBindValue(computer.encryptedData());
-    query.addBindValue(computer.id());
+    query.addBindValue(host.groupId());
+    query.addBindValue(host.routerId());
+    query.addBindValue(host.encryptedName());
+    query.addBindValue(host.encryptedComment());
+    query.addBindValue(host.encryptedAddress());
+    query.addBindValue(host.encryptedUsername());
+    query.addBindValue(host.encryptedPassword());
+    query.addBindValue(host.modifyTime());
+    query.addBindValue(host.encryptedData());
+    query.addBindValue(host.id());
 
     if (!query.exec())
     {
@@ -314,7 +314,7 @@ bool Database::modifyComputer(ComputerConfig& computer)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::removeComputer(qint64 computer_id)
+bool Database::removeHost(qint64 entry_id)
 {
     if (!isValid())
     {
@@ -323,8 +323,8 @@ bool Database::removeComputer(qint64 computer_id)
     }
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("DELETE FROM computers WHERE id=?");
-    query.addBindValue(computer_id);
+    query.prepare("DELETE FROM hosts WHERE id=?");
+    query.addBindValue(entry_id);
 
     if (!query.exec())
     {
@@ -336,7 +336,7 @@ bool Database::removeComputer(qint64 computer_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::setConnectTime(qint64 computer_id, qint64 connect_time)
+bool Database::setConnectTime(qint64 entry_id, qint64 connect_time)
 {
     if (!isValid())
     {
@@ -345,9 +345,9 @@ bool Database::setConnectTime(qint64 computer_id, qint64 connect_time)
     }
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("UPDATE computers SET connect_time=? WHERE id=?");
+    query.prepare("UPDATE hosts SET connect_time=? WHERE id=?");
     query.addBindValue(connect_time);
-    query.addBindValue(computer_id);
+    query.addBindValue(entry_id);
 
     if (!query.exec())
     {
@@ -359,7 +359,7 @@ bool Database::setConnectTime(qint64 computer_id, qint64 connect_time)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<ComputerConfig> Database::findComputer(qint64 computer_id) const
+std::optional<HostConfig> Database::findHost(qint64 entry_id) const
 {
     if (!isValid())
     {
@@ -370,8 +370,8 @@ std::optional<ComputerConfig> Database::findComputer(qint64 computer_id) const
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("SELECT id, group_id, router_id, name, comment, address, username, password, "
                   "create_time, modify_time, connect_time, data "
-                  "FROM computers WHERE id=?");
-    query.addBindValue(computer_id);
+                  "FROM hosts WHERE id=?");
+    query.addBindValue(entry_id);
 
     if (!query.exec())
     {
@@ -382,11 +382,11 @@ std::optional<ComputerConfig> Database::findComputer(qint64 computer_id) const
     if (!query.next())
         return std::nullopt;
 
-    return readComputer(query);
+    return readHost(query);
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<ComputerConfig> Database::searchComputers(const QString& query_text) const
+QList<HostConfig> Database::searchHosts(const QString& query_text) const
 {
     if (!isValid())
     {
@@ -396,7 +396,7 @@ QList<ComputerConfig> Database::searchComputers(const QString& query_text) const
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("SELECT id, group_id, router_id, name, comment, address, username, password, "
-                  "create_time, modify_time, connect_time, data FROM computers");
+                  "create_time, modify_time, connect_time, data FROM hosts");
 
     if (!query.exec())
     {
@@ -404,19 +404,19 @@ QList<ComputerConfig> Database::searchComputers(const QString& query_text) const
         return {};
     }
 
-    QList<ComputerConfig> computers;
+    QList<HostConfig> hosts;
     while (query.next())
     {
-        ComputerConfig computer = readComputer(query);
-        if (computer.name().contains(query_text, Qt::CaseInsensitive) ||
-            computer.address().contains(query_text, Qt::CaseInsensitive) ||
-            computer.comment().contains(query_text, Qt::CaseInsensitive))
+        HostConfig host = readHost(query);
+        if (host.name().contains(query_text, Qt::CaseInsensitive) ||
+            host.address().contains(query_text, Qt::CaseInsensitive) ||
+            host.comment().contains(query_text, Qt::CaseInsensitive))
         {
-            computers.append(computer);
+            hosts.append(host);
         }
     }
 
-    return computers;
+    return hosts;
 }
 
 //--------------------------------------------------------------------------------------------------

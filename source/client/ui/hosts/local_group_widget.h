@@ -49,9 +49,9 @@ public:
     class Item : public QTreeWidgetItem
     {
     public:
-        Item(const ComputerConfig& computer, QTreeWidget* parent);
+        Item(const HostConfig& host, QTreeWidget* parent);
 
-        ComputerConfig& computer() { return computer_; }
+        HostConfig& host() { return computer_; }
         qint64 computerId() const { return computer_.id(); }
         qint64 groupId() const { return computer_.groupId(); }
         qint64 routerId() const { return computer_.routerId(); }
@@ -60,12 +60,12 @@ public:
         void setConnectTime(qint64 connect_time);
         void setOnlineStatus(bool online);
         void clearOnlineStatus();
-        void updateFrom(const ComputerConfig& computer);
+        void updateFrom(const HostConfig& host);
 
         bool operator<(const QTreeWidgetItem& other) const final;
 
     private:
-        ComputerConfig computer_;
+        HostConfig computer_;
     };
 
     class ComputerMimeData final : public QMimeData
@@ -106,11 +106,11 @@ public:
     Item* currentItem();
     qint64 currentGroupId() const { return current_group_id_; }
     void showGroup(qint64 group_id);
-    void setConnectTime(qint64 computer_id, qint64 connect_time);
+    void setConnectTime(qint64 entry_id, qint64 connect_time);
     void setOnlineCheckEnabled(bool enable);
-    void setCurrentComputer(qint64 computer_id);
-    void refreshItem(qint64 computer_id);
-    void removeItem(qint64 computer_id);
+    void setCurrentComputer(qint64 entry_id);
+    void refreshItem(qint64 entry_id);
+    void removeItem(qint64 entry_id);
 
     // ContentWidget implementation.
     QByteArray saveState() final;
@@ -130,13 +130,13 @@ protected:
     bool eventFilter(QObject* watched, QEvent* event) final;
 
 signals:
-    void sig_doubleClicked(qint64 computer_id);
-    void sig_currentChanged(qint64 computer_id);
-    void sig_contextMenu(qint64 computer_id, const QPoint& pos);
+    void sig_doubleClicked(qint64 entry_id);
+    void sig_currentChanged(qint64 entry_id);
+    void sig_contextMenu(qint64 entry_id, const QPoint& pos);
 
 private slots:
     void onHeaderContextMenu(const QPoint& pos);
-    void onOnlineCheckerResult(qint64 computer_id, bool online);
+    void onOnlineCheckerResult(qint64 entry_id, bool online);
     void onOnlineCheckerFinished();
 
 private:
@@ -144,7 +144,7 @@ private:
     void updateStatusLabels();
     void startOnlineChecker();
     void clearOnlineStatuses();
-    Item* findItemByComputerId(qint64 computer_id) const;
+    Item* findItemByComputerId(qint64 entry_id) const;
 
     std::unique_ptr<Ui::LocalGroupWidget> ui;
     QString mime_type_;

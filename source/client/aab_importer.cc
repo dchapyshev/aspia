@@ -53,8 +53,8 @@ struct InheritedCredentials
 struct ImportCounters
 {
     int groups = 0;
-    int computers = 0;
-    int computers_skipped = 0;
+    int hosts = 0;
+    int hosts_skipped = 0;
     int routers = 0;
 };
 
@@ -134,8 +134,8 @@ bool importComputer(const proto::address_book::Computer& proto_computer,
     QString name = sanitizedName(QString::fromStdString(proto_computer.name()));
     if (name.isEmpty())
     {
-        ++counters->computers_skipped;
-        LOG(INFO) << "Skip computer with empty name";
+        ++counters->hosts_skipped;
+        LOG(INFO) << "Skip host with empty name";
         return false;
     }
 
@@ -145,8 +145,8 @@ bool importComputer(const proto::address_book::Computer& proto_computer,
     QString address = combineHostAndPort(address_raw, proto_computer.port());
     if (address.isEmpty())
     {
-        ++counters->computers_skipped;
-        LOG(INFO) << "Skip computer with empty address:" << name;
+        ++counters->hosts_skipped;
+        LOG(INFO) << "Skip host with empty address:" << name;
         return false;
     }
 
@@ -166,7 +166,7 @@ bool importComputer(const proto::address_book::Computer& proto_computer,
 
     qint64 effective_router_id = isHostId(address) ? router_id : 0;
 
-    ComputerConfig config;
+    HostConfig config;
     config.setGroupId(group_id);
     config.setRouterId(effective_router_id);
     config.setName(name);
@@ -175,13 +175,13 @@ bool importComputer(const proto::address_book::Computer& proto_computer,
     config.setUsername(username);
     config.setPassword(SecureString(std::move(password)));
 
-    if (!Database::instance().addComputer(config))
+    if (!Database::instance().addHost(config))
     {
-        LOG(ERROR) << "Unable to add computer to local database";
+        LOG(ERROR) << "Unable to add host to local database";
         return false;
     }
 
-    ++counters->computers;
+    ++counters->hosts;
     return true;
 }
 
@@ -348,7 +348,7 @@ bool AabImporter::import(QWidget* parent, const QString& file_path)
                 /* depth */ 0,
                 &counters);
 
-    if (counters.groups == 0 && counters.computers == 0 && counters.routers == 0)
+    if (counters.groups == 0 && counters.hosts == 0 && counters.routers == 0)
     {
         MsgBox::information(parent, tr("Nothing was imported."));
         return false;
@@ -357,12 +357,12 @@ bool AabImporter::import(QWidget* parent, const QString& file_path)
     MsgBox::information(parent,
         tr("Import completed successfully.\n"
            "Groups added: %1\n"
-           "Computers added: %2\n"
-           "Computers skipped: %3\n"
+           "Hosts added: %2\n"
+           "Hosts skipped: %3\n"
            "Routers added: %4")
             .arg(counters.groups)
-            .arg(counters.computers)
-            .arg(counters.computers_skipped)
+            .arg(counters.hosts)
+            .arg(counters.hosts_skipped)
             .arg(counters.routers));
 
     return true;

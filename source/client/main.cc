@@ -46,7 +46,7 @@
 #include "proto/router.h"
 
 //--------------------------------------------------------------------------------------------------
-bool startSession(const ComputerConfig& computer,
+bool startSession(const HostConfig& host,
                   proto::peer::SessionType session_type,
                   const QString& display_name,
                   const proto::control::Config& desktop_config)
@@ -86,14 +86,14 @@ bool startSession(const ComputerConfig& computer,
 
     QObject::connect(client_window, &ClientWindow::sig_stop, qApp, &QApplication::quit);
 
-    if (!client_window->connectToHost(computer, display_name))
+    if (!client_window->connectToHost(host, display_name))
         LOG(ERROR) << "Unable to connect to host";
 
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-void startRouterSession(const ComputerConfig& computer,
+void startRouterSession(const HostConfig& host,
                         proto::peer::SessionType session_type,
                         const QString& display_name,
                         const RouterConfig& router_config,
@@ -105,7 +105,7 @@ void startRouterSession(const ComputerConfig& computer,
     QPointer<Router> router = new Router(router_config);
 
     QObject::connect(router, &Router::sig_statusChanged, qApp,
-        [status_dialog, router, computer, session_type, display_name, desktop_config](qint64, Router::Status status)
+        [status_dialog, router, host, session_type, display_name, desktop_config](qint64, Router::Status status)
     {
         if (!router || !status_dialog)
             return;
@@ -125,7 +125,7 @@ void startRouterSession(const ComputerConfig& computer,
                 router->disconnect(qApp);
                 status_dialog->hide();
                 status_dialog->deleteLater();
-                startSession(computer, session_type, display_name, desktop_config);
+                startSession(host, session_type, display_name, desktop_config);
                 break;
 
             case Router::Status::OFFLINE:
@@ -162,7 +162,7 @@ void startRouterSession(const ComputerConfig& computer,
 //          $config = @{
 //              session_type = "desktop"
 //              display_name = "Admin"
-//              computer = @{
+//              host = @{
 //                  name     = "Office PC"
 //                  address  = "192.168.1.10"
 //                  username = "user"
@@ -186,7 +186,7 @@ void startRouterSession(const ComputerConfig& computer,
 //         {
 //             "session_type": "desktop",
 //             "display_name": "Admin",
-//             "computer": {
+//             "host": {
 //                 "name": "Office PC",
 //                 "address": "192.168.1.10",
 //                 "username": "user",
@@ -210,7 +210,7 @@ void startRouterSession(const ComputerConfig& computer,
 //         config = {
 //             "session_type": "desktop",
 //             "display_name": "Admin",
-//             "computer": {
+//             "host": {
 //                 "name":     "Office PC",
 //                 "address":  "192.168.1.10",
 //                 "username": "user",
@@ -249,7 +249,7 @@ void startRouterSession(const ComputerConfig& computer,
 //             "{"
 //                 "\"session_type\":\"desktop\","
 //                 "\"display_name\":\"Admin\","
-//                 "\"computer\":{"
+//                 "\"host\":{"
 //                     "\"name\":\"Office PC\","
 //                     "\"address\":\"192.168.1.10\","
 //                     "\"username\":\"user\","
@@ -272,11 +272,11 @@ void startRouterSession(const ComputerConfig& computer,
 //         CloseHandle(pi.hProcess);
 //         CloseHandle(pi.hThread);
 //
-// Required: "computer.address".
+// Required: "host.address".
 // Optional: "session_type" (defaults to "desktop" if missing or unknown), "display_name",
-//           "computer.name", "computer.username", "computer.password",
+//           "host.name", "host.username", "host.password",
 //           "desktop" (used only for "session_type": "desktop").
-// The "router" object is required when "computer.address" is a host ID; in that case
+// The "router" object is required when "host.address" is a host ID; in that case
 // "router.address", "router.username" and "router.password" are all required.
 // Possible "session_type" values: "desktop", "file-transfer", "system-info", "chat".
 //--------------------------------------------------------------------------------------------------
@@ -326,28 +326,28 @@ bool handleConnect()
     else if (session_type_value == "chat")
         session_type = proto::peer::SESSION_TYPE_CHAT;
 
-    QJsonValue computer_value = root.value("computer");
+    QJsonValue computer_value = root.value("host");
     if (!computer_value.isObject())
     {
-        LOG(ERROR) << "Missing or invalid \"computer\" object in connection config";
+        LOG(ERROR) << "Missing or invalid \"host\" object in connection config";
         MsgBox::warning(nullptr, QApplication::translate("Client",
-            "Missing or invalid \"computer\" object in connection config."));
+            "Missing or invalid \"host\" object in connection config."));
         return false;
     }
 
     QJsonObject computer_object = computer_value.toObject();
 
-    ComputerConfig computer;
-    computer.setAddress(computer_object.value("address").toString());
-    computer.setUsername(computer_object.value("username").toString());
-    computer.setPassword(SecureString(computer_object.value("password").toString()));
-    computer.setName(computer_object.value("name").toString());
+    HostConfig host;
+    host.setAddress(computer_object.value("address").toString());
+    host.setUsername(computer_object.value("username").toString());
+    host.setPassword(SecureString(computer_object.value("password").toString()));
+    host.setName(computer_object.value("name").toString());
 
-    if (computer.address().isEmpty())
+    if (host.address().isEmpty())
     {
-        LOG(ERROR) << "Missing required computer field (address)";
+        LOG(ERROR) << "Missing required host field (address)";
         MsgBox::warning(nullptr, QApplication::translate("Client",
-            "Missing required computer field: address."));
+            "Missing required host field: address."));
         return false;
     }
 
@@ -405,7 +405,7 @@ bool handleConnect()
             return false;
     }
 
-    if (isHostId(computer.address()))
+    if (isHostId(host.address()))
     {
         LOG(INFO) << "Relay connection selected";
 
@@ -434,14 +434,14 @@ bool handleConnect()
             return false;
         }
 
-        computer.setRouterId(router_config.routerId());
-        startRouterSession(computer, session_type, display_name, router_config, desktop_config);
+        host.setRouterId(router_config.routerId());
+        startRouterSession(host, session_type, display_name, router_config, desktop_config);
     }
     else
     {
         LOG(INFO) << "Direct connection selected";
 
-        if (!startSession(computer, session_type, display_name, desktop_config))
+        if (!startSession(host, session_type, display_name, desktop_config))
             return false;
     }
 

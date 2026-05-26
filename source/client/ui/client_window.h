@@ -45,7 +45,7 @@ public:
     // Connects to a host.
     // If the username and/or password are not specified in the connection parameters, the
     // authorization dialog will be displayed.
-    bool connectToHost(ComputerConfig computer, const QString& display_name);
+    bool connectToHost(HostConfig host, const QString& display_name);
 
     std::shared_ptr<SessionState> sessionState() { return session_state_; }
     proto::peer::SessionType sessionType() const { return session_type_; }
@@ -101,7 +101,7 @@ signals:
 
     // Emitted when this client window asks to launch a secondary session (e.g. desktop launching
     // a file transfer or system info session).
-    void sig_connectRequested(const ComputerConfig& computer, proto::peer::SessionType session_type);
+    void sig_connectRequested(const HostConfig& host, proto::peer::SessionType session_type);
 
 protected:
     virtual Client* createClient() = 0;
@@ -119,7 +119,7 @@ private slots:
     void onDragPoll();
 
 private:
-    void setClientTitle(const ComputerConfig& computer, proto::peer::SessionType session_type);
+    void setClientTitle(const HostConfig& host, proto::peer::SessionType session_type);
     void onErrorOccurred(const QString& message);
     // For relay-path sessions: fetches a ConnectionOffer from the router (via Router) and
     // handles the response inline. Called both for the initial connect and for every reconnect

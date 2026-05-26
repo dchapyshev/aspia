@@ -35,15 +35,15 @@ class OnlineCheckerRouter final : public QObject
     Q_OBJECT
 
 public:
-    using ComputerList = QQueue<ComputerConfig>;
+    using HostList = QQueue<HostConfig>;
 
-    explicit OnlineCheckerRouter(const ComputerList& computers, QObject* parent = nullptr);
+    explicit OnlineCheckerRouter(const HostList& hosts, QObject* parent = nullptr);
     ~OnlineCheckerRouter() final;
 
     void start();
 
 signals:
-    void sig_checkerResult(qint64 computer_id, bool online);
+    void sig_checkerResult(qint64 entry_id, bool online);
     void sig_checkerFinished();
 
 private slots:
@@ -54,7 +54,7 @@ private:
     void onFinished(const Location& location);
 
     QTimer* timer_ = nullptr;
-    ComputerList computers_;
+    HostList hosts_;
 };
 
 #endif // CLIENT_ONLINE_CHECKER_ONLINE_CHECKER_ROUTER_H

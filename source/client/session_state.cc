@@ -24,10 +24,10 @@
 #include "proto/peer.h"
 
 //--------------------------------------------------------------------------------------------------
-SessionState::SessionState(const ComputerConfig& computer,
+SessionState::SessionState(const HostConfig& host,
                            proto::peer::SessionType session_type,
                            const QString& display_name)
-    : computer_(computer),
+    : computer_(host),
       session_type_(session_type),
       display_name_(display_name)
 {

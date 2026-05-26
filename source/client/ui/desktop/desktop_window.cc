@@ -157,7 +157,7 @@ DesktopWindow::DesktopWindow(const proto::control::Config& desktop_config, QWidg
 
     connect(toolbar_, &DesktopToolBar::sig_startSession, this, [this](proto::peer::SessionType session_type)
     {
-        emit sig_connectRequested(sessionState()->computer(), session_type);
+        emit sig_connectRequested(sessionState()->host(), session_type);
     });
 
     connect(toolbar_, &DesktopToolBar::sig_recordingStateChanged, this, [this](bool enable)

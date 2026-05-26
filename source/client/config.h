@@ -93,10 +93,10 @@ private:
     QByteArray encrypted_data_;
 };
 
-class ComputerConfig final
+class HostConfig final
 {
 public:
-    ComputerConfig() = default;
+    HostConfig() = default;
 
     qint64 id() const { return id_; }
     void setId(qint64 id) { id_ = id; }

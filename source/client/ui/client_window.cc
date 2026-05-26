@@ -77,22 +77,22 @@ ClientWindow::~ClientWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ClientWindow::connectToHost(ComputerConfig computer, const QString& display_name)
+bool ClientWindow::connectToHost(HostConfig host, const QString& display_name)
 {
     LOG(INFO) << "Connecting to host";
 
     // Set the window title.
-    setClientTitle(computer, session_type_);
+    setClientTitle(host, session_type_);
 
-    if (computer.username().isEmpty() || computer.password().isEmpty())
+    if (host.username().isEmpty() || host.password().isEmpty())
     {
         LOG(INFO) << "Empty user name or password";
 
         AuthorizationDialog auth_dialog(this);
 
-        auth_dialog.setOneTimePasswordEnabled(computer.routerId() > 0);
-        auth_dialog.setUserName(computer.username());
-        auth_dialog.setPassword(computer.password());
+        auth_dialog.setOneTimePasswordEnabled(host.routerId() > 0);
+        auth_dialog.setUserName(host.username());
+        auth_dialog.setPassword(host.password());
 
         if (auth_dialog.exec() == AuthorizationDialog::Rejected)
         {
@@ -100,19 +100,19 @@ bool ClientWindow::connectToHost(ComputerConfig computer, const QString& display
             return false;
         }
 
-        computer.setUsername(auth_dialog.userName());
-        computer.setPassword(auth_dialog.password());
+        host.setUsername(auth_dialog.userName());
+        host.setPassword(auth_dialog.password());
     }
 
     // When connecting with a one-time password, the username must be in the following format:
     // #host_id.
-    if (computer.username().isEmpty())
+    if (host.username().isEmpty())
     {
         LOG(INFO) << "User name is empty. Connection by ID";
-        computer.setUsername(u"#" + computer.address());
+        host.setUsername(u"#" + host.address());
     }
 
-    session_state_ = std::make_shared<SessionState>(computer, session_type_, display_name);
+    session_state_ = std::make_shared<SessionState>(host, session_type_, display_name);
 
     LOG(INFO) << "Start client";
     if (session_state_->isConnectionByHostId())
@@ -163,7 +163,7 @@ void ClientWindow::changeEvent(QEvent* event)
     QWidget::changeEvent(event);
 
     if (event->type() == QEvent::LanguageChange && session_state_)
-        setClientTitle(session_state_->computer(), session_type_);
+        setClientTitle(session_state_->host(), session_type_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -322,10 +322,10 @@ void ClientWindow::onDragPoll()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::setClientTitle(const ComputerConfig& computer, proto::peer::SessionType session_type)
+void ClientWindow::setClientTitle(const HostConfig& host, proto::peer::SessionType session_type)
 {
     QString session_name = sessionName(session_type);
-    QString computer_name = computer.name().isEmpty() ? computer.address() : computer.name();
+    QString computer_name = host.name().isEmpty() ? host.address() : host.name();
 
     setWindowTitle(QString("%1 - %2").arg(computer_name, session_name));
 }

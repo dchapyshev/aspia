@@ -39,11 +39,11 @@ const std::chrono::seconds kTimeout { 15 };
 class OnlineCheckerDirect::Instance final : public QObject
 {
 public:
-    Instance(const ComputerConfig& computer, QObject* parent);
+    Instance(const HostConfig& host, QObject* parent);
     ~Instance() final;
 
     void start();
-    qint64 computerId() const { return computer_.id(); }
+    qint64 entryId() const { return host_.id(); }
 
 private slots:
     void onTcpAuthenticated();
@@ -52,7 +52,7 @@ private slots:
 private:
     void onFinished(const Location& location, bool online);
 
-    const ComputerConfig computer_;
+    const HostConfig host_;
 
     TcpChannel* tcp_channel_ = nullptr;
     QTimer timer_;
@@ -60,15 +60,15 @@ private:
 };
 
 //--------------------------------------------------------------------------------------------------
-OnlineCheckerDirect::Instance::Instance(const ComputerConfig& computer, QObject* parent)
+OnlineCheckerDirect::Instance::Instance(const HostConfig& host, QObject* parent)
     : QObject(parent),
-      computer_(computer)
+      host_(host)
 {
     timer_.setSingleShot(true);
 
     connect(&timer_, &QTimer::timeout, this, [this]()
     {
-        LOG(TRACE) << "Timeout for computer:" << computer_.id();
+        LOG(TRACE) << "Timeout for host:" << host_.id();
         onFinished(FROM_HERE, false);
     });
 
@@ -85,15 +85,15 @@ OnlineCheckerDirect::Instance::~Instance()
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::Instance::start()
 {
-    Address address = Address::fromString(computer_.address(), DEFAULT_HOST_TCP_PORT);
+    Address address = Address::fromString(host_.address(), DEFAULT_HOST_TCP_PORT);
 
     LOG(TRACE) << "Starting connection to" << address.host() << ":" << address.port()
-               << "(computer:" << computer_.id() << ")";
+               << "(host:" << host_.id() << ")";
 
     ClientAuthenticator* authenticator = new ClientAuthenticator();
     authenticator->setIdentify(proto::key_exchange::IDENTIFY_SRP);
-    authenticator->setUserName(computer_.username());
-    authenticator->setPassword(SecureString(computer_.password()));
+    authenticator->setUserName(host_.username());
+    authenticator->setPassword(SecureString(host_.password()));
     authenticator->setSessionType(proto::peer::SESSION_TYPE_DESKTOP);
     authenticator->setProbe(true);
 
@@ -108,14 +108,14 @@ void OnlineCheckerDirect::Instance::start()
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::Instance::onTcpAuthenticated()
 {
-    LOG(TRACE) << "Authentication succeeded (computer:" << computer_.id() << ")";
+    LOG(TRACE) << "Authentication succeeded (host:" << host_.id() << ")";
     onFinished(FROM_HERE, true);
 }
 
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::Instance::onTcpErrorOccurred(TcpChannel::ErrorCode /* error_code */)
 {
-    LOG(TRACE) << "Connection aborted for computer:" << computer_.id();
+    LOG(TRACE) << "Connection aborted for host:" << host_.id();
     onFinished(FROM_HERE, false);
 }
 
@@ -131,13 +131,13 @@ void OnlineCheckerDirect::Instance::onFinished(const Location& location, bool on
     timer_.stop();
 
     OnlineCheckerDirect* checker = static_cast<OnlineCheckerDirect*>(parent());
-    checker->onChecked(computer_.id(), online);
+    checker->onChecked(host_.id(), online);
 }
 
 //--------------------------------------------------------------------------------------------------
-OnlineCheckerDirect::OnlineCheckerDirect(const ComputerList& computers, QObject* parent)
+OnlineCheckerDirect::OnlineCheckerDirect(const HostList& hosts, QObject* parent)
     : QObject(parent),
-      pending_queue_(computers)
+      pending_queue_(hosts)
 {
     LOG(TRACE) << "Ctor";
 }
@@ -156,7 +156,7 @@ void OnlineCheckerDirect::start()
 {
     if (pending_queue_.isEmpty())
     {
-        LOG(TRACE) << "No computers in list";
+        LOG(TRACE) << "No hosts in list";
         onFinished(FROM_HERE);
         return;
     }
@@ -164,10 +164,10 @@ void OnlineCheckerDirect::start()
     qsizetype count = std::min(pending_queue_.size(), kNumberOfParallelTasks);
     while (count != 0)
     {
-        const ComputerConfig& computer = pending_queue_.front();
-        Instance* instance = new Instance(computer, this);
+        const HostConfig& host = pending_queue_.front();
+        Instance* instance = new Instance(host, this);
 
-        LOG(TRACE) << "Instance for" << computer.id() << "is created (" << computer.address() << ")";
+        LOG(TRACE) << "Instance for" << host.id() << "is created (" << host.address() << ")";
         work_queue_.emplace_back(instance);
         pending_queue_.pop_front();
 
@@ -179,16 +179,16 @@ void OnlineCheckerDirect::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerDirect::onChecked(qint64 computer_id, bool online)
+void OnlineCheckerDirect::onChecked(qint64 entry_id, bool online)
 {
-    emit sig_checkerResult(computer_id, online);
+    emit sig_checkerResult(entry_id, online);
 
     if (!pending_queue_.isEmpty())
     {
-        const ComputerConfig& computer = pending_queue_.front();
-        Instance* instance = new Instance(computer, this);
+        const HostConfig& host = pending_queue_.front();
+        Instance* instance = new Instance(host, this);
 
-        LOG(TRACE) << "Instance for" << computer.id() << "is created (" << computer.address() << ")";
+        LOG(TRACE) << "Instance for" << host.id() << "is created (" << host.address() << ")";
 
         work_queue_.emplace_back(instance);
         instance->start();
@@ -200,7 +200,7 @@ void OnlineCheckerDirect::onChecked(qint64 computer_id, bool online)
         {
             Instance* instance = *it;
 
-            if (instance->computerId() == computer_id)
+            if (instance->entryId() == entry_id)
             {
                 instance->deleteLater();
                 work_queue_.erase(it);

@@ -111,28 +111,28 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
     connect(ui->tree_computer, &QTreeWidget::currentItemChanged,
             this, [this](QTreeWidgetItem* current, QTreeWidgetItem* /* previous */)
     {
-        qint64 computer_id = -1;
+        qint64 entry_id = -1;
 
         if (current)
         {
             Item* computer_item = static_cast<Item*>(current);
-            computer_id = computer_item->computerId();
+            entry_id = computer_item->computerId();
         }
 
-        emit sig_currentChanged(computer_id);
+        emit sig_currentChanged(entry_id);
     });
 
     connect(ui->tree_computer, &QTreeWidget::customContextMenuRequested,
             this, [this](const QPoint& pos)
     {
-        qint64 computer_id = 0;
+        qint64 entry_id = 0;
         Item* item = static_cast<Item*>(ui->tree_computer->itemAt(pos));
         if (item)
         {
             ui->tree_computer->setCurrentItem(item);
-            computer_id = item->computerId();
+            entry_id = item->computerId();
         }
-        emit sig_contextMenu(computer_id, ui->tree_computer->viewport()->mapToGlobal(pos));
+        emit sig_contextMenu(entry_id, ui->tree_computer->viewport()->mapToGlobal(pos));
     });
 
     connect(online_checker_, &OnlineChecker::sig_checkerResult,
@@ -160,10 +160,10 @@ void LocalGroupWidget::showGroup(qint64 group_id)
 
     ui->tree_computer->clear();
 
-    QList<ComputerConfig> computers = Database::instance().computerList(group_id);
+    QList<HostConfig> hosts = Database::instance().hostList(group_id);
 
-    for (const ComputerConfig& computer : std::as_const(computers))
-        new Item(computer, ui->tree_computer);
+    for (const HostConfig& host : std::as_const(hosts))
+        new Item(host, ui->tree_computer);
 
     updateStatusLabels();
 
@@ -172,13 +172,13 @@ void LocalGroupWidget::showGroup(qint64 group_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void LocalGroupWidget::setConnectTime(qint64 computer_id, qint64 connect_time)
+void LocalGroupWidget::setConnectTime(qint64 entry_id, qint64 connect_time)
 {
     const int count = ui->tree_computer->topLevelItemCount();
     for (int i = 0; i < count; ++i)
     {
         Item* item = static_cast<Item*>(ui->tree_computer->topLevelItem(i));
-        if (item->computerId() == computer_id)
+        if (item->computerId() == entry_id)
         {
             item->setConnectTime(connect_time);
             break;
@@ -193,9 +193,9 @@ void LocalGroupWidget::setOnlineCheckEnabled(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-void LocalGroupWidget::setCurrentComputer(qint64 computer_id)
+void LocalGroupWidget::setCurrentComputer(qint64 entry_id)
 {
-    Item* item = findItemByComputerId(computer_id);
+    Item* item = findItemByComputerId(entry_id);
     if (!item)
         return;
 
@@ -204,16 +204,16 @@ void LocalGroupWidget::setCurrentComputer(qint64 computer_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void LocalGroupWidget::refreshItem(qint64 computer_id)
+void LocalGroupWidget::refreshItem(qint64 entry_id)
 {
-    Item* item = findItemByComputerId(computer_id);
+    Item* item = findItemByComputerId(entry_id);
     if (!item)
         return;
 
-    std::optional<ComputerConfig> updated = Database::instance().findComputer(computer_id);
+    std::optional<HostConfig> updated = Database::instance().findHost(entry_id);
     if (!updated.has_value())
     {
-        removeItem(computer_id);
+        removeItem(entry_id);
         return;
     }
 
@@ -221,9 +221,9 @@ void LocalGroupWidget::refreshItem(qint64 computer_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void LocalGroupWidget::removeItem(qint64 computer_id)
+void LocalGroupWidget::removeItem(qint64 entry_id)
 {
-    Item* item = findItemByComputerId(computer_id);
+    Item* item = findItemByComputerId(entry_id);
     if (!item)
         return;
 
@@ -376,12 +376,12 @@ void LocalGroupWidget::onHeaderContextMenu(const QPoint &pos)
 }
 
 //--------------------------------------------------------------------------------------------------
-void LocalGroupWidget::onOnlineCheckerResult(qint64 computer_id, bool online)
+void LocalGroupWidget::onOnlineCheckerResult(qint64 entry_id, bool online)
 {
     for (int i = 0; i < ui->tree_computer->topLevelItemCount(); ++i)
     {
         Item* item = static_cast<Item*>(ui->tree_computer->topLevelItem(i));
-        if (item->computerId() == computer_id)
+        if (item->computerId() == entry_id)
         {
             item->setOnlineStatus(online);
             break;
@@ -422,7 +422,7 @@ void LocalGroupWidget::updateStatusLabels()
 
     status_groups_label_->setText(tr("%n child group(s)", "", child_groups_count));
     status_computers_label_->setText(
-        tr("%n child computer(s)", "", ui->tree_computer->topLevelItemCount()));
+        tr("%n child host(s)", "", ui->tree_computer->topLevelItemCount()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -430,24 +430,24 @@ void LocalGroupWidget::startOnlineChecker()
 {
     clearOnlineStatuses();
 
-    OnlineChecker::ComputerList computers;
+    OnlineChecker::HostList hosts;
 
     for (int i = 0; i < ui->tree_computer->topLevelItemCount(); ++i)
     {
         Item* item = static_cast<Item*>(ui->tree_computer->topLevelItem(i));
         if (item)
-            computers.emplace_back(item->computer());
+            hosts.emplace_back(item->host());
     }
 
-    if (computers.isEmpty())
+    if (hosts.isEmpty())
     {
-        LOG(INFO) << "No computers to check";
+        LOG(INFO) << "No hosts to check";
         status_check_label_->setVisible(false);
         return;
     }
 
-    LOG(INFO) << "Start online checker for" << computers.size() << "computer(s)";
-    online_checker_->start(computers);
+    LOG(INFO) << "Start online checker for" << hosts.size() << "host(s)";
+    online_checker_->start(hosts);
     status_check_label_->setVisible(true);
 }
 
@@ -463,23 +463,23 @@ void LocalGroupWidget::clearOnlineStatuses()
 }
 
 //--------------------------------------------------------------------------------------------------
-LocalGroupWidget::Item* LocalGroupWidget::findItemByComputerId(qint64 computer_id) const
+LocalGroupWidget::Item* LocalGroupWidget::findItemByComputerId(qint64 entry_id) const
 {
     const int count = ui->tree_computer->topLevelItemCount();
     for (int i = 0; i < count; ++i)
     {
         Item* item = static_cast<Item*>(ui->tree_computer->topLevelItem(i));
-        if (item->computerId() == computer_id)
+        if (item->computerId() == entry_id)
             return item;
     }
     return nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
-LocalGroupWidget::Item::Item(const ComputerConfig& computer, QTreeWidget* parent)
+LocalGroupWidget::Item::Item(const HostConfig& host, QTreeWidget* parent)
     : QTreeWidgetItem(parent)
 {
-    updateFrom(computer);
+    updateFrom(host);
     setIcon(kColumnName, QIcon(":/img/computer.svg"));
 }
 
@@ -505,20 +505,20 @@ void LocalGroupWidget::Item::clearOnlineStatus()
 }
 
 //--------------------------------------------------------------------------------------------------
-void LocalGroupWidget::Item::updateFrom(const ComputerConfig& computer)
+void LocalGroupWidget::Item::updateFrom(const HostConfig& host)
 {
-    computer_ = computer;
+    computer_ = host;
 
-    QString single_line_comment = computer.comment();
+    QString single_line_comment = host.comment();
     single_line_comment.replace('\n', ' ').replace('\r', ' ');
 
-    setText(kColumnName, computer.name());
-    setText(kColumnAddress, computer.address());
+    setText(kColumnName, host.name());
+    setText(kColumnAddress, host.address());
     setText(kColumnComment, single_line_comment);
-    setToolTip(kColumnComment, computer.comment());
-    setText(kColumnCreated, formatTimestamp(computer.createTime()));
-    setText(kColumnModified, formatTimestamp(computer.modifyTime()));
-    setText(kColumnConnect, formatTimestamp(computer.connectTime()));
+    setToolTip(kColumnComment, host.comment());
+    setText(kColumnCreated, formatTimestamp(host.createTime()));
+    setText(kColumnModified, formatTimestamp(host.modifyTime()));
+    setText(kColumnConnect, formatTimestamp(host.connectTime()));
 }
 
 //--------------------------------------------------------------------------------------------------

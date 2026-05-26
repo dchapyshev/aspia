@@ -40,25 +40,25 @@ public:
     class Item final : public QTreeWidgetItem
     {
     public:
-        Item(const ComputerConfig& computer, const QString& group_path, QTreeWidget* parent);
+        Item(const HostConfig& host, const QString& group_path, QTreeWidget* parent);
 
         qint64 computerId() const { return computer_.id(); }
         qint64 groupId() const { return computer_.groupId(); }
         QString computerName() const { return computer_.name(); }
 
-        void updateFrom(const ComputerConfig& computer, const QString& group_path);
+        void updateFrom(const HostConfig& host, const QString& group_path);
 
     private:
-        ComputerConfig computer_;
+        HostConfig computer_;
     };
 
     void search(const QString& query);
     void clear();
     Item* currentItem();
     QString currentQuery() const { return current_query_; }
-    void setCurrentComputer(qint64 computer_id);
-    void refreshItem(qint64 computer_id);
-    void removeItem(qint64 computer_id);
+    void setCurrentComputer(qint64 entry_id);
+    void refreshItem(qint64 entry_id);
+    void removeItem(qint64 entry_id);
 
     // ContentWidget implementation.
     QByteArray saveState() final;
@@ -67,9 +67,9 @@ public:
     void deactivate(QStatusBar* statusbar) final;
 
 signals:
-    void sig_doubleClicked(qint64 computer_id);
-    void sig_currentChanged(qint64 computer_id);
-    void sig_contextMenu(qint64 computer_id, const QPoint& pos);
+    void sig_doubleClicked(qint64 entry_id);
+    void sig_currentChanged(qint64 entry_id);
+    void sig_contextMenu(qint64 entry_id, const QPoint& pos);
 
 protected:
     // QWidget implementation.
@@ -81,7 +81,7 @@ private slots:
 private:
     class HighlightDelegate;
 
-    Item* findItemByComputerId(qint64 computer_id) const;
+    Item* findItemByComputerId(qint64 entry_id) const;
     void updateStatusLabels();
 
     QTreeWidget* tree_computer_ = nullptr;

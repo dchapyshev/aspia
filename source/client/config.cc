@@ -159,73 +159,73 @@ void RouterConfig::setData(const QByteArray& value)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString ComputerConfig::name() const
+QString HostConfig::name() const
 {
     return decryptString(encrypted_name_);
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputerConfig::setName(const QString& value)
+void HostConfig::setName(const QString& value)
 {
     encrypted_name_ = encryptString(value);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString ComputerConfig::comment() const
+QString HostConfig::comment() const
 {
     return decryptString(encrypted_comment_);
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputerConfig::setComment(const QString& value)
+void HostConfig::setComment(const QString& value)
 {
     encrypted_comment_ = encryptString(value);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString ComputerConfig::address() const
+QString HostConfig::address() const
 {
     return decryptString(encrypted_address_);
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputerConfig::setAddress(const QString& value)
+void HostConfig::setAddress(const QString& value)
 {
     encrypted_address_ = encryptString(value);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString ComputerConfig::username() const
+QString HostConfig::username() const
 {
     return decryptString(encrypted_username_);
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputerConfig::setUsername(const QString& value)
+void HostConfig::setUsername(const QString& value)
 {
     encrypted_username_ = encryptString(value);
 }
 
 //--------------------------------------------------------------------------------------------------
-SecureString ComputerConfig::password() const
+SecureString HostConfig::password() const
 {
     return decryptSecureString(encrypted_password_);
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputerConfig::setPassword(const SecureString& value)
+void HostConfig::setPassword(const SecureString& value)
 {
     encrypted_password_ = encryptSecureString(value);
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray ComputerConfig::data() const
+QByteArray HostConfig::data() const
 {
     return decryptBytes(encrypted_data_);
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputerConfig::setData(const QByteArray& value)
+void HostConfig::setData(const QByteArray& value)
 {
     encrypted_data_ = encryptBytes(value);
 }

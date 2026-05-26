@@ -669,35 +669,35 @@ bool Sidebar::onDrop(QDropEvent* event)
             return true;
         }
 
-        // Check if a computer with the same name already exists in the target group.
-        QList<ComputerConfig> target_computers =
-            Database::instance().computerList(target_item->groupId());
-        for (const ComputerConfig& existing : std::as_const(target_computers))
+        // Check if a host with the same name already exists in the target group.
+        QList<HostConfig> target_computers =
+            Database::instance().hostList(target_item->groupId());
+        for (const HostConfig& existing : std::as_const(target_computers))
         {
             if (existing.name() == computer_item->computerName())
             {
                 MsgBox::warning(tree_widget_,
-                    tr("A computer with this name already exists in the selected group."));
+                    tr("A host with this name already exists in the selected group."));
                 restoreSelection();
                 return true;
             }
         }
 
-        // Update the computer's group in the database.
-        std::optional<ComputerConfig> computer =
-            Database::instance().findComputer(computer_item->computerId());
-        if (!computer.has_value())
+        // Update the host's group in the database.
+        std::optional<HostConfig> host =
+            Database::instance().findHost(computer_item->computerId());
+        if (!host.has_value())
         {
             restoreSelection();
             return true;
         }
 
-        computer->setGroupId(target_item->groupId());
+        host->setGroupId(target_item->groupId());
 
-        if (!Database::instance().modifyComputer(*computer))
+        if (!Database::instance().modifyHost(*host))
         {
             MsgBox::warning(tree_widget_,
-                tr("Failed to move the computer to the selected group."));
+                tr("Failed to move the host to the selected group."));
             restoreSelection();
             return true;
         }

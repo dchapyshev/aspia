@@ -38,7 +38,7 @@ enum SessionType : int;
 class Tab;
 class QLineEdit;
 class UpdateChecker;
-class ComputerConfig;
+class HostConfig;
 
 class MainWindow final : public QMainWindow
 {
@@ -64,7 +64,7 @@ private slots:
     void onCurrentTabChanged(int index);
     void onCloseTab(int index);
     void onSearchTextChanged(const QString& text);
-    void onConnect(const ComputerConfig& computer, proto::peer::SessionType session_type);
+    void onConnect(const HostConfig& host, proto::peer::SessionType session_type);
     void onTabDetachRequested(int index, const QPoint& global_pos);
     void onTabDragMove(const QPoint& global_pos);
     void onTabDragFinished(const QPoint& global_pos);

@@ -338,12 +338,12 @@ void MainWindow::onSearchTextChanged(const QString& text)
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onConnect(const ComputerConfig& computer, proto::peer::SessionType session_type)
+void MainWindow::onConnect(const HostConfig& host, proto::peer::SessionType session_type)
 {
-    if (isHostId(computer.address()) && computer.routerId() <= 0)
+    if (isHostId(host.address()) && host.routerId() <= 0)
     {
         MsgBox::warning(this,
-            tr("Connection by ID is specified in the properties of the computer, "
+            tr("Connection by ID is specified in the properties of the host, "
                "but the router is not configured. Check the parameters of the "
                "router in the properties of the address book."));
         return;
@@ -385,7 +385,7 @@ void MainWindow::onConnect(const ComputerConfig& computer, proto::peer::SessionT
         return;
 
     QString display_name = Database::instance().displayName();
-    QString computer_name = computer.name().isEmpty() ? computer.address() : computer.name();
+    QString computer_name = host.name().isEmpty() ? host.address() : host.name();
     QIcon icon = sessionIcon(session_type);
 
     client_window->setWindowIcon(icon);
@@ -400,7 +400,7 @@ void MainWindow::onConnect(const ComputerConfig& computer, proto::peer::SessionT
         client_tab->detachToWindow();
     }
 
-    if (!client_window->connectToHost(computer, display_name))
+    if (!client_window->connectToHost(host, display_name))
     {
         int index = ui->tabs->indexOf(client_tab);
         if (index != -1)

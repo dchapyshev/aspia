@@ -70,10 +70,10 @@ private slots:
     void onRouterStatusChanged(qint64 router_id, Router::Status status);
     void onSwitchContent(Sidebar::Item::Type type);
     void onSidebarContextMenu(Sidebar::Item::Type type, const QPoint& pos);
-    void onCurrentComputerChanged(qint64 computer_id);
+    void onCurrentComputerChanged(qint64 entry_id);
     void onConnectAction(QAction* action);
-    void onLocalConnect(qint64 computer_id);
-    void onLocalComputerContextMenu(qint64 computer_id, const QPoint& pos);
+    void onLocalConnect(qint64 entry_id);
+    void onLocalComputerContextMenu(qint64 entry_id, const QPoint& pos);
     void onAddComputer();
     void onEditComputer();
     void onCopyComputer();
@@ -110,10 +110,10 @@ private:
     void destroyRouterWidget(qint64 router_id);
     RouterWidget* createRouterWidget(const RouterConfig& config);
 
-    bool validateComputerForConnect(const ComputerConfig& computer);
+    bool validateComputerForConnect(const HostConfig& host);
     qint64 currentComputerId() const;
-    void refreshItem(qint64 computer_id);
-    void removeItem(qint64 computer_id);
+    void refreshItem(qint64 entry_id);
+    void removeItem(qint64 entry_id);
 
     std::unique_ptr<Ui::HostsTab> ui;
     ContentWidget* current_content_ = nullptr;

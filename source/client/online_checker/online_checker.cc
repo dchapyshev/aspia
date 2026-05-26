@@ -49,9 +49,9 @@ OnlineChecker::~OnlineChecker()
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineChecker::start(const ComputerList& computers)
+void OnlineChecker::start(const HostList& hosts)
 {
-    LOG(TRACE) << "Start online checker (total computers:" << computers.size() << ")";
+    LOG(TRACE) << "Start online checker (total hosts:" << hosts.size() << ")";
 
     // Cancel any in-flight check from a previous start() call. The old inner checkers are
     // disconnected so their late-arriving signals are ignored, and scheduled for deletion via
@@ -62,16 +62,16 @@ void OnlineChecker::start(const ComputerList& computers)
         direct_checker_->disconnect(this);
     router_checker_.reset();
     direct_checker_.reset();
-    router_computers_.clear();
-    direct_computers_.clear();
+    router_hosts_.clear();
+    direct_hosts_.clear();
     router_finished_ = true;
     direct_finished_ = true;
 
     QList<QPair<qint64, bool>> cached_hits;
 
-    for (const ComputerConfig& computer : computers)
+    for (const HostConfig& host : hosts)
     {
-        const qint64 id = computer.id();
+        const qint64 id = host.id();
         auto it = cache_.constFind(id);
         if (it != cache_.constEnd() && isCacheFresh(*it))
         {
@@ -79,16 +79,16 @@ void OnlineChecker::start(const ComputerList& computers)
             continue;
         }
 
-        if (isHostId(computer.address()))
-            router_computers_.emplace_back(computer);
+        if (isHostId(host.address()))
+            router_hosts_.emplace_back(host);
         else
-            direct_computers_.emplace_back(computer);
+            direct_hosts_.emplace_back(host);
     }
 
-    if (!router_computers_.isEmpty())
+    if (!router_hosts_.isEmpty())
     {
         router_finished_ = false;
-        router_checker_ = new OnlineCheckerRouter(router_computers_, this);
+        router_checker_ = new OnlineCheckerRouter(router_hosts_, this);
 
         connect(router_checker_, &OnlineCheckerRouter::sig_checkerResult,
                 this, &OnlineChecker::onRouterCheckerResult);
@@ -98,10 +98,10 @@ void OnlineChecker::start(const ComputerList& computers)
         router_checker_->start();
     }
 
-    if (!direct_computers_.isEmpty())
+    if (!direct_hosts_.isEmpty())
     {
         direct_finished_ = false;
-        direct_checker_ = new OnlineCheckerDirect(direct_computers_);
+        direct_checker_ = new OnlineCheckerDirect(direct_hosts_);
         direct_checker_->moveToThread(GuiApplication::ioThread());
 
         connect(direct_checker_, &OnlineCheckerDirect::sig_checkerResult,
@@ -125,17 +125,17 @@ void OnlineChecker::start(const ComputerList& computers)
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineChecker::invalidate(const QList<qint64>& computer_ids)
+void OnlineChecker::invalidate(const QList<qint64>& entry_ids)
 {
-    for (qint64 id : computer_ids)
+    for (qint64 id : entry_ids)
         cache_.remove(id);
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineChecker::onDirectCheckerResult(qint64 computer_id, bool online)
+void OnlineChecker::onDirectCheckerResult(qint64 entry_id, bool online)
 {
-    cache_.insert(computer_id, CacheEntry{online, QDateTime::currentDateTime()});
-    emit sig_checkerResult(computer_id, online);
+    cache_.insert(entry_id, CacheEntry{online, QDateTime::currentDateTime()});
+    emit sig_checkerResult(entry_id, online);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -147,10 +147,10 @@ void OnlineChecker::onDirectCheckerFinished()
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineChecker::onRouterCheckerResult(qint64 computer_id, bool online)
+void OnlineChecker::onRouterCheckerResult(qint64 entry_id, bool online)
 {
-    cache_.insert(computer_id, CacheEntry{online, QDateTime::currentDateTime()});
-    emit sig_checkerResult(computer_id, online);
+    cache_.insert(entry_id, CacheEntry{online, QDateTime::currentDateTime()});
+    emit sig_checkerResult(entry_id, online);
 }
 
 //--------------------------------------------------------------------------------------------------
