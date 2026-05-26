@@ -38,7 +38,7 @@
       <bool>true</bool>
      </property>
      <property name="columnCount">
-      <number>3</number>
+      <number>10</number>
      </property>
      <column>
       <property name="text">
@@ -47,12 +47,47 @@
      </column>
      <column>
       <property name="text">
-       <string>Address / ID</string>
+       <string>Host ID</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Address</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>User Name</string>
       </property>
      </column>
      <column>
       <property name="text">
        <string>Comment</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Operating System</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Version</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Architecture</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Last Connect</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Status</string>
       </property>
      </column>
     </widget>

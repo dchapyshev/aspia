@@ -18,7 +18,14 @@
 
 #include "client/ui/hosts/router_group_widget.h"
 
+#include <QAction>
+#include <QCollator>
+#include <QDataStream>
+#include <QDateTime>
 #include <QEvent>
+#include <QHeaderView>
+#include <QIODevice>
+#include <QMenu>
 
 #include "base/logging.h"
 #include "client/router.h"
@@ -27,32 +34,95 @@
 
 namespace {
 
-class WorkspaceHostTreeItem final : public QTreeWidgetItem
+enum Column
 {
+    COLUMN_NAME = 0,
+    COLUMN_HOST_ID,
+    COLUMN_ADDRESS,
+    COLUMN_USER_NAME,
+    COLUMN_COMMENT,
+    COLUMN_OS,
+    COLUMN_VERSION,
+    COLUMN_ARCH,
+    COLUMN_LAST_CONNECT,
+    COLUMN_STATUS
+};
+
+class HostTreeItem final : public QTreeWidgetItem
+{
+    Q_DECLARE_TR_FUNCTIONS(HostTreeItem)
+
 public:
-    explicit WorkspaceHostTreeItem(const Router::Host& host)
+    explicit HostTreeItem(const Router::Host& updated_host)
     {
-        setIcon(0, QIcon(":/img/computer.svg"));
-        updateItem(host);
+        updateItem(updated_host);
     }
 
     void updateItem(const Router::Host& updated_host)
     {
-        host_id = updated_host.host_id;
+        host = updated_host;
 
-        QString name = updated_host.display_name;
+        QString name = host.display_name;
         if (name.isEmpty())
-            name = updated_host.computer_name;
+            name = host.computer_name;
 
-        setText(0, name);
-        setText(1, QString::number(host_id));
-        setText(2, updated_host.comment);
+        const QString last_connect = host.last_connect > 0 ? QLocale::system().toString(
+            QDateTime::fromSecsSinceEpoch(host.last_connect), QLocale::ShortFormat) : QString();
+
+        setIcon(COLUMN_NAME, QIcon(host.online ? ":/img/computer-online.svg" : ":/img/computer-offline.svg"));
+        setText(COLUMN_NAME, name);
+        setText(COLUMN_HOST_ID, QString::number(host.host_id));
+        setText(COLUMN_ADDRESS, host.address);
+        setText(COLUMN_USER_NAME, host.user_name);
+        setText(COLUMN_COMMENT, host.comment);
+        setText(COLUMN_OS, host.os_name);
+        setText(COLUMN_VERSION, host.version);
+        setText(COLUMN_ARCH, host.cpu_arch);
+        setText(COLUMN_LAST_CONNECT, last_connect);
+        setText(COLUMN_STATUS, host.online ? tr("Online") : tr("Offline"));
     }
 
-    HostId host_id = kInvalidHostId;
+    // QTreeWidgetItem implementation.
+    bool operator<(const QTreeWidgetItem& other) const final
+    {
+        const int column = treeWidget()->sortColumn();
+        const HostTreeItem* other_item = static_cast<const HostTreeItem*>(&other);
+
+        if (column == COLUMN_HOST_ID)
+            return host.host_id < other_item->host.host_id;
+        if (column == COLUMN_LAST_CONNECT)
+            return host.last_connect < other_item->host.last_connect;
+        if (column == COLUMN_NAME)
+        {
+            QCollator collator;
+            collator.setCaseSensitivity(Qt::CaseInsensitive);
+            collator.setNumericMode(true);
+            return collator.compare(text(COLUMN_NAME), other.text(COLUMN_NAME)) <= 0;
+        }
+        return QTreeWidgetItem::operator<(other);
+    }
+
+    Router::Host host;
 
 private:
-    Q_DISABLE_COPY_MOVE(WorkspaceHostTreeItem)
+    Q_DISABLE_COPY_MOVE(HostTreeItem)
+};
+
+class ColumnAction : public QAction
+{
+public:
+    ColumnAction(const QString& text, int index, QObject* parent)
+        : QAction(text, parent),
+          index_(index)
+    {
+        setCheckable(true);
+    }
+
+    int columnIndex() const { return index_; }
+
+private:
+    const int index_;
+    Q_DISABLE_COPY_MOVE(ColumnAction)
 };
 
 } // namespace
@@ -64,6 +134,10 @@ RouterGroupWidget::RouterGroupWidget(QWidget* parent)
 {
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
+
+    ui->tree_computer->header()->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tree_computer->header(), &QHeaderView::customContextMenuRequested,
+            this, &RouterGroupWidget::onHeaderContextMenu);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -97,13 +171,29 @@ void RouterGroupWidget::showGroup(qint64 router_id, qint64 workspace_id)
 //--------------------------------------------------------------------------------------------------
 QByteArray RouterGroupWidget::saveState()
 {
-    return QByteArray();
+    QByteArray buffer;
+
+    {
+        QDataStream stream(&buffer, QIODevice::WriteOnly);
+        stream.setVersion(QDataStream::Qt_6_10);
+
+        stream << ui->tree_computer->header()->saveState();
+    }
+
+    return buffer;
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterGroupWidget::restoreState(const QByteArray& /* state */)
+void RouterGroupWidget::restoreState(const QByteArray& state)
 {
-    // Nothing.
+    QDataStream stream(state);
+    stream.setVersion(QDataStream::Qt_6_10);
+
+    QByteArray columns_state;
+    stream >> columns_state;
+
+    if (!columns_state.isEmpty())
+        ui->tree_computer->header()->restoreState(columns_state);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -141,10 +231,8 @@ void RouterGroupWidget::onHostListReceived(const Router::HostList& list)
     // Remove from the UI all hosts that are not in the list.
     for (int i = ui->tree_computer->topLevelItemCount() - 1; i >= 0; --i)
     {
-        WorkspaceHostTreeItem* item =
-            static_cast<WorkspaceHostTreeItem*>(ui->tree_computer->topLevelItem(i));
-
-        if (!has_with_id(list, item->host_id))
+        HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_computer->topLevelItem(i));
+        if (!has_with_id(list, item->host.host_id))
             delete item;
     }
 
@@ -155,9 +243,8 @@ void RouterGroupWidget::onHostListReceived(const Router::HostList& list)
 
         for (int j = 0; j < ui->tree_computer->topLevelItemCount(); ++j)
         {
-            WorkspaceHostTreeItem* item =
-                static_cast<WorkspaceHostTreeItem*>(ui->tree_computer->topLevelItem(j));
-            if (item->host_id == host.host_id)
+            HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_computer->topLevelItem(j));
+            if (item->host.host_id == host.host_id)
             {
                 item->updateItem(host);
                 found = true;
@@ -166,8 +253,28 @@ void RouterGroupWidget::onHostListReceived(const Router::HostList& list)
         }
 
         if (!found)
-            ui->tree_computer->addTopLevelItem(new WorkspaceHostTreeItem(host));
+            ui->tree_computer->addTopLevelItem(new HostTreeItem(host));
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterGroupWidget::onHeaderContextMenu(const QPoint& pos)
+{
+    QHeaderView* header = ui->tree_computer->header();
+    QMenu menu;
+
+    for (int i = 1; i < header->count(); ++i)
+    {
+        ColumnAction* action = new ColumnAction(ui->tree_computer->headerItem()->text(i), i, &menu);
+        action->setChecked(!header->isSectionHidden(i));
+        menu.addAction(action);
+    }
+
+    ColumnAction* action = dynamic_cast<ColumnAction*>(menu.exec(header->viewport()->mapToGlobal(pos)));
+    if (!action)
+        return;
+
+    header->setSectionHidden(action->columnIndex(), !action->isChecked());
 }
 
 //--------------------------------------------------------------------------------------------------
