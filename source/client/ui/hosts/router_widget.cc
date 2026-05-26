@@ -230,12 +230,18 @@ class ClientTreeItem final : public QTreeWidgetItem
 {
 public:
     explicit ClientTreeItem(const proto::router::ClientInfo& info)
-        : info(info)
     {
+        setIcon(0, QIcon(":/img/computer.svg"));
+        updateItem(info);
+    }
+
+    void updateItem(const proto::router::ClientInfo& updated_info)
+    {
+        info = updated_info;
+
         QString time = QLocale::system().toString(
             QDateTime::fromSecsSinceEpoch(info.timepoint()), QLocale::ShortFormat);
 
-        setIcon(0, QIcon(":/img/computer.svg"));
         setText(0, QString::fromStdString(info.computer_name()));
         setText(1, QString::fromStdString(info.ip_address()));
         setText(2, time);
@@ -278,12 +284,18 @@ class WorkspaceTreeItem final : public QTreeWidgetItem
 {
 public:
     explicit WorkspaceTreeItem(const Router::Workspace& workspace)
-        : workspace(workspace)
     {
+        setIcon(0, QIcon(":/img/workspace.svg"));
+        updateItem(workspace);
+    }
+
+    void updateItem(const Router::Workspace& updated_workspace)
+    {
+        workspace = updated_workspace;
+
         QString single_line_comment = workspace.comment;
         single_line_comment.replace('\n', ' ').replace('\r', ' ');
 
-        setIcon(0, QIcon(":/img/workspace.svg"));
         setText(0, workspace.name);
         setText(1, single_line_comment);
         setToolTip(1, workspace.comment);
@@ -316,13 +328,19 @@ class UserTreeItem final : public QTreeWidgetItem
 
 public:
     explicit UserTreeItem(const proto::router::User& user)
-        : user(RouterUser::parseFrom(user))
     {
-        setText(0, QString::fromStdString(user.name()));
-        setText(1, user.flags() & User::ENABLED ? tr("Yes") : tr("No"));
-        setText(2, sessionsToString(user.sessions()));
+        updateItem(user);
+    }
 
-        if (user.flags() & User::ENABLED)
+    void updateItem(const proto::router::User& updated_user)
+    {
+        user = RouterUser::parseFrom(updated_user);
+
+        setText(0, QString::fromStdString(updated_user.name()));
+        setText(1, updated_user.flags() & User::ENABLED ? tr("Yes") : tr("No"));
+        setText(2, sessionsToString(updated_user.sessions()));
+
+        if (updated_user.flags() & User::ENABLED)
             setIcon(0, QIcon(":/img/user.svg"));
         else
             setIcon(0, QIcon(":/img/locked-user.svg"));
@@ -401,6 +419,11 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     connect(router_, &Router::sig_statusChanged, this, &RouterWidget::onStatusChanged);
     connect(router_, &Router::sig_errorOccurred, this, &RouterWidget::onConnectionErrorOccurred);
     connect(router_, &Router::sig_passwordChangeRequired, this, &RouterWidget::onPasswordChangeRequired);
+    connect(router_, &Router::sig_hostsChanged, this, &RouterWidget::onUpdateHostList);
+    connect(router_, &Router::sig_relaysChanged, this, &RouterWidget::onUpdateRelayList);
+    connect(router_, &Router::sig_clientsChanged, this, &RouterWidget::onUpdateClientList);
+    connect(router_, &Router::sig_usersChanged, this, &RouterWidget::onUpdateUserList);
+    connect(router_, &Router::sig_workspacesChanged, this, &RouterWidget::onUpdateWorkspaceList);
 
     connect(ui->tab, &QTabWidget::currentChanged, this, &RouterWidget::onTabChanged);
     connect(ui->tree_users, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentUserChanged);
@@ -1570,7 +1593,7 @@ void RouterWidget::onClientListReceived(const proto::router::ClientList& clients
             delete item;
     }
 
-    // Adding new elements in the UI.
+    // Adding and updating elements in the UI.
     for (int i = 0; i < clients.client_size(); ++i)
     {
         const proto::router::ClientInfo& info = clients.client(i);
@@ -1581,6 +1604,7 @@ void RouterWidget::onClientListReceived(const proto::router::ClientList& clients
             ClientTreeItem* item = static_cast<ClientTreeItem*>(ui->tree_clients->topLevelItem(j));
             if (item->info.entry_id() == info.entry_id())
             {
+                item->updateItem(info);
                 found = true;
                 break;
             }
@@ -1597,29 +1621,48 @@ void RouterWidget::onClientListReceived(const proto::router::ClientList& clients
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onUserListReceived(const proto::router::UserList& list)
 {
-    QTreeWidget* tree_users = ui->tree_users;
-
-    qint64 selected_entry_id = 0;
-    if (UserTreeItem* current = static_cast<UserTreeItem*>(tree_users->currentItem()))
-        selected_entry_id = current->user.entry_id;
-
-    tree_users->clear();
-
-    UserTreeItem* to_select = nullptr;
-    for (int i = 0; i < list.user_size(); ++i)
+    auto has_with_id = [](const proto::router::UserList& list, qint64 entry_id)
     {
-        UserTreeItem* item = new UserTreeItem(list.user(i));
-        tree_users->addTopLevelItem(item);
+        for (int i = 0; i < list.user_size(); ++i)
+        {
+            if (list.user(i).entry_id() == entry_id)
+                return true;
+        }
 
-        if (item->user.entry_id == selected_entry_id)
-            to_select = item;
+        return false;
+    };
+
+    // Remove from the UI all users that are not in the list.
+    for (int i = ui->tree_users->topLevelItemCount() - 1; i >= 0; --i)
+    {
+        UserTreeItem* item = static_cast<UserTreeItem*>(ui->tree_users->topLevelItem(i));
+
+        if (!has_with_id(list, item->user.entry_id))
+            delete item;
     }
 
-    if (to_select)
-        tree_users->setCurrentItem(to_select);
-    else
-        emit sig_currentUserChanged(routerId());
+    // Adding and updating elements in the UI.
+    for (int i = 0; i < list.user_size(); ++i)
+    {
+        const proto::router::User& info = list.user(i);
+        bool found = false;
 
+        for (int j = 0; j < ui->tree_users->topLevelItemCount(); ++j)
+        {
+            UserTreeItem* item = static_cast<UserTreeItem*>(ui->tree_users->topLevelItem(j));
+            if (item->user.entry_id == info.entry_id())
+            {
+                item->updateItem(info);
+                found = true;
+                break;
+            }
+        }
+
+        if (!found)
+            ui->tree_users->addTopLevelItem(new UserTreeItem(info));
+    }
+
+    emit sig_currentUserChanged(routerId());
     updateStatusLabel();
 }
 
@@ -1739,29 +1782,49 @@ void RouterWidget::onPeerResultReceived(const proto::router::PeerResult& result)
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onWorkspaceListReceived(const Router::WorkspaceList& list)
 {
-    QTreeWidget* tree_workspaces = ui->tree_workspaces;
-
-    qint64 selected_entry_id = 0;
-    if (WorkspaceTreeItem* current = static_cast<WorkspaceTreeItem*>(tree_workspaces->currentItem()))
-        selected_entry_id = current->workspace.entry_id;
-
-    tree_workspaces->clear();
-
-    WorkspaceTreeItem* to_select = nullptr;
-    for (const Router::Workspace& workspace : std::as_const(list.workspaces))
+    auto has_with_id = [](const Router::WorkspaceList& list, qint64 entry_id)
     {
-        WorkspaceTreeItem* item = new WorkspaceTreeItem(workspace);
-        tree_workspaces->addTopLevelItem(item);
+        for (const Router::Workspace& workspace : std::as_const(list.workspaces))
+        {
+            if (workspace.entry_id == entry_id)
+                return true;
+        }
 
-        if (item->workspace.entry_id == selected_entry_id)
-            to_select = item;
+        return false;
+    };
+
+    // Remove from the UI all workspaces that are not in the list.
+    for (int i = ui->tree_workspaces->topLevelItemCount() - 1; i >= 0; --i)
+    {
+        WorkspaceTreeItem* item =
+            static_cast<WorkspaceTreeItem*>(ui->tree_workspaces->topLevelItem(i));
+
+        if (!has_with_id(list, item->workspace.entry_id))
+            delete item;
     }
 
-    if (to_select)
-        tree_workspaces->setCurrentItem(to_select);
-    else
-        emit sig_currentWorkspaceChanged(routerId());
+    // Adding and updating elements in the UI.
+    for (const Router::Workspace& workspace : std::as_const(list.workspaces))
+    {
+        bool found = false;
 
+        for (int j = 0; j < ui->tree_workspaces->topLevelItemCount(); ++j)
+        {
+            WorkspaceTreeItem* item =
+                static_cast<WorkspaceTreeItem*>(ui->tree_workspaces->topLevelItem(j));
+            if (item->workspace.entry_id == workspace.entry_id)
+            {
+                item->updateItem(workspace);
+                found = true;
+                break;
+            }
+        }
+
+        if (!found)
+            ui->tree_workspaces->addTopLevelItem(new WorkspaceTreeItem(workspace));
+    }
+
+    emit sig_currentWorkspaceChanged(routerId());
     refreshHostsWorkspaceColumn();
     updateStatusLabel();
 }
