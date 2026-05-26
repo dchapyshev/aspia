@@ -144,15 +144,15 @@ RouterGroupWidget::RouterGroupWidget(QWidget* parent)
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
-    ui->tree_computer->header()->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->tree_computer->header(), &QHeaderView::customContextMenuRequested,
+    ui->tree_host->header()->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tree_host->header(), &QHeaderView::customContextMenuRequested,
             this, &RouterGroupWidget::onHeaderContextMenu);
 
-    ui->tree_computer->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->tree_computer, &QTreeWidget::customContextMenuRequested,
+    ui->tree_host->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tree_host, &QTreeWidget::customContextMenuRequested,
             this, &RouterGroupWidget::onHostContextMenu);
 
-    connect(ui->tree_computer, &QTreeWidget::itemSelectionChanged,
+    connect(ui->tree_host, &QTreeWidget::itemSelectionChanged,
             this, &RouterGroupWidget::sig_currentChanged);
 }
 
@@ -180,20 +180,20 @@ void RouterGroupWidget::showGroup(qint64 router_id, qint64 workspace_id)
 
     // Clear the tree before showing a different workspace to avoid briefly displaying stale
     // entries from the previous one.
-    ui->tree_computer->clear();
+    ui->tree_host->clear();
     fetchHosts();
 }
 
 //--------------------------------------------------------------------------------------------------
 bool RouterGroupWidget::hasSelectedHost() const
 {
-    return ui->tree_computer->currentItem() != nullptr;
+    return ui->tree_host->currentItem() != nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
 Router::Host RouterGroupWidget::selectedHost() const
 {
-    HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_computer->currentItem());
+    HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_host->currentItem());
     return item ? item->host : Router::Host();
 }
 
@@ -206,7 +206,7 @@ QByteArray RouterGroupWidget::saveState()
         QDataStream stream(&buffer, QIODevice::WriteOnly);
         stream.setVersion(QDataStream::Qt_6_10);
 
-        stream << ui->tree_computer->header()->saveState();
+        stream << ui->tree_host->header()->saveState();
     }
 
     return buffer;
@@ -222,7 +222,7 @@ void RouterGroupWidget::restoreState(const QByteArray& state)
     stream >> columns_state;
 
     if (!columns_state.isEmpty())
-        ui->tree_computer->header()->restoreState(columns_state);
+        ui->tree_host->header()->restoreState(columns_state);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -234,7 +234,7 @@ void RouterGroupWidget::reload()
 //--------------------------------------------------------------------------------------------------
 void RouterGroupWidget::onEditHost()
 {
-    HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_computer->currentItem());
+    HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_host->currentItem());
     if (!item)
         return;
 
@@ -269,9 +269,9 @@ void RouterGroupWidget::onHostListReceived(const Router::HostList& list)
     };
 
     // Remove from the UI all hosts that are not in the list.
-    for (int i = ui->tree_computer->topLevelItemCount() - 1; i >= 0; --i)
+    for (int i = ui->tree_host->topLevelItemCount() - 1; i >= 0; --i)
     {
-        HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_computer->topLevelItem(i));
+        HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_host->topLevelItem(i));
         if (!has_with_id(list, item->host.host_id))
             delete item;
     }
@@ -281,9 +281,9 @@ void RouterGroupWidget::onHostListReceived(const Router::HostList& list)
     {
         bool found = false;
 
-        for (int j = 0; j < ui->tree_computer->topLevelItemCount(); ++j)
+        for (int j = 0; j < ui->tree_host->topLevelItemCount(); ++j)
         {
-            HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_computer->topLevelItem(j));
+            HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_host->topLevelItem(j));
             if (item->host.host_id == host.host_id)
             {
                 item->updateItem(host);
@@ -293,19 +293,19 @@ void RouterGroupWidget::onHostListReceived(const Router::HostList& list)
         }
 
         if (!found)
-            ui->tree_computer->addTopLevelItem(new HostTreeItem(host));
+            ui->tree_host->addTopLevelItem(new HostTreeItem(host));
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterGroupWidget::onHeaderContextMenu(const QPoint& pos)
 {
-    QHeaderView* header = ui->tree_computer->header();
+    QHeaderView* header = ui->tree_host->header();
     QMenu menu;
 
     for (int i = 1; i < header->count(); ++i)
     {
-        ColumnAction* action = new ColumnAction(ui->tree_computer->headerItem()->text(i), i, &menu);
+        ColumnAction* action = new ColumnAction(ui->tree_host->headerItem()->text(i), i, &menu);
         action->setChecked(!header->isSectionHidden(i));
         menu.addAction(action);
     }
@@ -320,12 +320,12 @@ void RouterGroupWidget::onHeaderContextMenu(const QPoint& pos)
 //--------------------------------------------------------------------------------------------------
 void RouterGroupWidget::onHostContextMenu(const QPoint& pos)
 {
-    HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_computer->itemAt(pos));
+    HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_host->itemAt(pos));
     if (!item)
         return;
 
-    ui->tree_computer->setCurrentItem(item);
-    emit sig_contextMenu(ui->tree_computer->viewport()->mapToGlobal(pos));
+    ui->tree_host->setCurrentItem(item);
+    emit sig_contextMenu(ui->tree_host->viewport()->mapToGlobal(pos));
 }
 
 //--------------------------------------------------------------------------------------------------

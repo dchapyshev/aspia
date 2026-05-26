@@ -24,7 +24,7 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QTreeWidget" name="tree_computer">
+    <widget class="QTreeWidget" name="tree_host">
      <property name="contextMenuPolicy">
       <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
      </property>

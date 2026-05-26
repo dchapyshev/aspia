@@ -84,7 +84,7 @@ private:
     Item* findItemByEntryId(qint64 entry_id) const;
     void updateStatusLabels();
 
-    QTreeWidget* tree_computer_ = nullptr;
+    QTreeWidget* tree_host_ = nullptr;
     QLabel* status_results_label_ = nullptr;
     HighlightDelegate* highlight_delegate_ = nullptr;
     QString current_query_;

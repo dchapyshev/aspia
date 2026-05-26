@@ -221,33 +221,33 @@ SearchWidget::SearchWidget(QWidget* parent)
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
 
-    tree_computer_ = new QTreeWidget(this);
-    tree_computer_->setContextMenuPolicy(Qt::CustomContextMenu);
-    tree_computer_->setSelectionBehavior(QAbstractItemView::SelectRows);
-    tree_computer_->setIndentation(0);
-    tree_computer_->setSortingEnabled(true);
-    tree_computer_->setColumnCount(4);
+    tree_host_ = new QTreeWidget(this);
+    tree_host_->setContextMenuPolicy(Qt::CustomContextMenu);
+    tree_host_->setSelectionBehavior(QAbstractItemView::SelectRows);
+    tree_host_->setIndentation(0);
+    tree_host_->setSortingEnabled(true);
+    tree_host_->setColumnCount(4);
 
     QStringList headers;
     headers << tr("Name") << tr("Address / ID") << tr("Group") << tr("Comment");
-    tree_computer_->setHeaderLabels(headers);
+    tree_host_->setHeaderLabels(headers);
 
-    QHeaderView* header = tree_computer_->header();
+    QHeaderView* header = tree_host_->header();
     header->resizeSection(kColumnName, 200);
     header->resizeSection(kColumnAddress, 180);
     header->resizeSection(kColumnGroup, 150);
     header->resizeSection(kColumnComment, 250);
 
     highlight_delegate_ = new HighlightDelegate(this);
-    tree_computer_->setItemDelegateForColumn(kColumnName, highlight_delegate_);
-    tree_computer_->setItemDelegateForColumn(kColumnAddress, highlight_delegate_);
-    tree_computer_->setItemDelegateForColumn(kColumnGroup, highlight_delegate_);
-    tree_computer_->setItemDelegateForColumn(kColumnComment, highlight_delegate_);
+    tree_host_->setItemDelegateForColumn(kColumnName, highlight_delegate_);
+    tree_host_->setItemDelegateForColumn(kColumnAddress, highlight_delegate_);
+    tree_host_->setItemDelegateForColumn(kColumnGroup, highlight_delegate_);
+    tree_host_->setItemDelegateForColumn(kColumnComment, highlight_delegate_);
 
     header->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(header, &QHeaderView::customContextMenuRequested, this, &SearchWidget::onHeaderContextMenu);
 
-    connect(tree_computer_, &QTreeWidget::itemDoubleClicked,
+    connect(tree_host_, &QTreeWidget::itemDoubleClicked,
             this, [this](QTreeWidgetItem* item, int /* column */)
     {
         if (!item)
@@ -257,7 +257,7 @@ SearchWidget::SearchWidget(QWidget* parent)
         emit sig_doubleClicked(host_item->entryId());
     });
 
-    connect(tree_computer_, &QTreeWidget::currentItemChanged,
+    connect(tree_host_, &QTreeWidget::currentItemChanged,
             this, [this](QTreeWidgetItem* current, QTreeWidgetItem* /* previous */)
     {
         qint64 entry_id = -1;
@@ -271,19 +271,19 @@ SearchWidget::SearchWidget(QWidget* parent)
         emit sig_currentChanged(entry_id);
     });
 
-    connect(tree_computer_, &QTreeWidget::customContextMenuRequested, this, [this](const QPoint& pos)
+    connect(tree_host_, &QTreeWidget::customContextMenuRequested, this, [this](const QPoint& pos)
     {
         qint64 entry_id = 0;
-        Item* item = static_cast<Item*>(tree_computer_->itemAt(pos));
+        Item* item = static_cast<Item*>(tree_host_->itemAt(pos));
         if (item)
         {
-            tree_computer_->setCurrentItem(item);
+            tree_host_->setCurrentItem(item);
             entry_id = item->entryId();
         }
-        emit sig_contextMenu(entry_id, tree_computer_->viewport()->mapToGlobal(pos));
+        emit sig_contextMenu(entry_id, tree_host_->viewport()->mapToGlobal(pos));
     });
 
-    layout->addWidget(tree_computer_);
+    layout->addWidget(tree_host_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -297,7 +297,7 @@ void SearchWidget::search(const QString& query)
 {
     current_query_ = query;
     highlight_delegate_->setQuery(query);
-    tree_computer_->clear();
+    tree_host_->clear();
 
     if (query.isEmpty())
     {
@@ -316,7 +316,7 @@ void SearchWidget::search(const QString& query)
     const QList<HostConfig> results = db.searchHosts(query);
 
     for (const HostConfig& host : std::as_const(results))
-        new Item(host, buildGroupPath(host.groupId(), groups), tree_computer_);
+        new Item(host, buildGroupPath(host.groupId(), groups), tree_host_);
 
     updateStatusLabels();
 }
@@ -326,14 +326,14 @@ void SearchWidget::clear()
 {
     current_query_.clear();
     highlight_delegate_->setQuery(QString());
-    tree_computer_->clear();
+    tree_host_->clear();
     updateStatusLabels();
 }
 
 //--------------------------------------------------------------------------------------------------
 SearchWidget::Item* SearchWidget::currentItem()
 {
-    return static_cast<Item*>(tree_computer_->currentItem());
+    return static_cast<Item*>(tree_host_->currentItem());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -343,8 +343,8 @@ void SearchWidget::setCurrentHost(qint64 entry_id)
     if (!item)
         return;
 
-    tree_computer_->setCurrentItem(item);
-    tree_computer_->setFocus();
+    tree_host_->setCurrentItem(item);
+    tree_host_->setFocus();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -377,15 +377,15 @@ void SearchWidget::removeItem(qint64 entry_id)
     if (!item)
         return;
 
-    int row = tree_computer_->indexOfTopLevelItem(item);
-    delete tree_computer_->takeTopLevelItem(row);
+    int row = tree_host_->indexOfTopLevelItem(item);
+    delete tree_host_->takeTopLevelItem(row);
 
-    int count = tree_computer_->topLevelItemCount();
+    int count = tree_host_->topLevelItemCount();
     if (count > 0)
     {
         int next_row = qMin(row, count - 1);
-        tree_computer_->setCurrentItem(tree_computer_->topLevelItem(next_row));
-        tree_computer_->setFocus();
+        tree_host_->setCurrentItem(tree_host_->topLevelItem(next_row));
+        tree_host_->setFocus();
     }
 
     updateStatusLabels();
@@ -400,7 +400,7 @@ QByteArray SearchWidget::saveState()
         QDataStream stream(&buffer, QIODevice::WriteOnly);
         stream.setVersion(QDataStream::Qt_6_10);
 
-        stream << tree_computer_->header()->saveState();
+        stream << tree_host_->header()->saveState();
     }
 
     return buffer;
@@ -416,7 +416,7 @@ void SearchWidget::restoreState(const QByteArray& state)
     stream >> columns_state;
 
     if (!columns_state.isEmpty())
-        tree_computer_->header()->restoreState(columns_state);
+        tree_host_->header()->restoreState(columns_state);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -448,7 +448,7 @@ void SearchWidget::changeEvent(QEvent* event)
     {
         QStringList headers;
         headers << tr("Name") << tr("Address / ID") << tr("Group") << tr("Comment");
-        tree_computer_->setHeaderLabels(headers);
+        tree_host_->setHeaderLabels(headers);
     }
     ContentWidget::changeEvent(event);
 }
@@ -456,12 +456,12 @@ void SearchWidget::changeEvent(QEvent* event)
 //--------------------------------------------------------------------------------------------------
 void SearchWidget::onHeaderContextMenu(const QPoint& pos)
 {
-    QHeaderView* header = tree_computer_->header();
+    QHeaderView* header = tree_host_->header();
     QMenu menu;
 
     for (int i = 1; i < header->count(); ++i)
     {
-        ColumnAction* action = new ColumnAction(tree_computer_->headerItem()->text(i), i, &menu);
+        ColumnAction* action = new ColumnAction(tree_host_->headerItem()->text(i), i, &menu);
         action->setChecked(!header->isSectionHidden(i));
         menu.addAction(action);
     }
@@ -476,10 +476,10 @@ void SearchWidget::onHeaderContextMenu(const QPoint& pos)
 //--------------------------------------------------------------------------------------------------
 SearchWidget::Item* SearchWidget::findItemByEntryId(qint64 entry_id) const
 {
-    const int count = tree_computer_->topLevelItemCount();
+    const int count = tree_host_->topLevelItemCount();
     for (int i = 0; i < count; ++i)
     {
-        Item* item = static_cast<Item*>(tree_computer_->topLevelItem(i));
+        Item* item = static_cast<Item*>(tree_host_->topLevelItem(i));
         if (item->entryId() == entry_id)
             return item;
     }
@@ -489,5 +489,5 @@ SearchWidget::Item* SearchWidget::findItemByEntryId(qint64 entry_id) const
 //--------------------------------------------------------------------------------------------------
 void SearchWidget::updateStatusLabels()
 {
-    status_results_label_->setText(tr("%n result(s)", "", tree_computer_->topLevelItemCount()));
+    status_results_label_->setText(tr("%n result(s)", "", tree_host_->topLevelItemCount()));
 }
