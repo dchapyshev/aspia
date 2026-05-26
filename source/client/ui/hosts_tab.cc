@@ -131,10 +131,10 @@ HostsTab::HostsTab(QWidget* parent)
         if (host.id() != -1)
             local_group_widget_->setConnectTime(host.id(), QDateTime::currentSecsSinceEpoch());
     });
-    connect(ui->action_add_computer, &QAction::triggered, this, &HostsTab::onAddHost);
-    connect(ui->action_edit_computer, &QAction::triggered, this, &HostsTab::onEditHost);
-    connect(ui->action_copy_computer, &QAction::triggered, this, &HostsTab::onCopyHost);
-    connect(ui->action_delete_computer, &QAction::triggered, this, &HostsTab::onRemoveHost);
+    connect(ui->action_add_host, &QAction::triggered, this, &HostsTab::onAddHost);
+    connect(ui->action_edit_host, &QAction::triggered, this, &HostsTab::onEditHost);
+    connect(ui->action_copy_host, &QAction::triggered, this, &HostsTab::onCopyHost);
+    connect(ui->action_delete_host, &QAction::triggered, this, &HostsTab::onRemoveHost);
     connect(search_widget_, &SearchWidget::sig_currentChanged, this, &HostsTab::onCurrentHostChanged);
     connect(search_widget_, &SearchWidget::sig_doubleClicked, this, &HostsTab::onLocalConnect);
     connect(search_widget_, &SearchWidget::sig_contextMenu, this, &HostsTab::onLocalHostContextMenu);
@@ -169,7 +169,7 @@ HostsTab::HostsTab(QWidget* parent)
     addActions(ActionRole::EDIT, { ui->action_add_workspace, ui->action_edit_workspace, ui->action_delete_workspace });
     addActions(ActionRole::EDIT, { ui->action_add_router, ui->action_edit_router, ui->action_delete_router, ui->action_router_status });
     addActions(ActionRole::EDIT, { ui->action_add_group, ui->action_edit_group, ui->action_delete_group });
-    addActions(ActionRole::EDIT, { ui->action_add_computer, ui->action_edit_computer, ui->action_copy_computer, ui->action_delete_computer });
+    addActions(ActionRole::EDIT, { ui->action_add_host, ui->action_edit_host, ui->action_copy_host, ui->action_delete_host });
     addActions(ActionRole::EDIT, { ui->action_host_remove, ui->action_disconnect, ui->action_disconnect_all });
     addActions(ActionRole::ACTION, { ui->action_desktop_connect, ui->action_file_transfer_connect,
                                      ui->action_chat_connect, ui->action_system_info_connect });
@@ -489,7 +489,7 @@ void HostsTab::onSidebarContextMenu(Sidebar::Item::Type type, const QPoint& pos)
         menu.addAction(ui->action_edit_group);
         menu.addAction(ui->action_delete_group);
         menu.addSeparator();
-        menu.addAction(ui->action_add_computer);
+        menu.addAction(ui->action_add_host);
     }
     else if (type == Sidebar::Item::Type::ROUTER_GROUP)
     {
@@ -649,13 +649,13 @@ void HostsTab::onLocalHostContextMenu(qint64 entry_id, const QPoint& pos)
         menu.addAction(ui->action_chat_connect);
         menu.addAction(ui->action_system_info_connect);
         menu.addSeparator();
-        menu.addAction(ui->action_edit_computer);
-        menu.addAction(ui->action_copy_computer);
-        menu.addAction(ui->action_delete_computer);
+        menu.addAction(ui->action_edit_host);
+        menu.addAction(ui->action_copy_host);
+        menu.addAction(ui->action_delete_host);
     }
     else
     {
-        menu.addAction(ui->action_add_computer);
+        menu.addAction(ui->action_add_host);
     }
 
     menu.exec(pos);
@@ -929,8 +929,8 @@ void HostsTab::onRouterGroupContextMenu(const QPoint& pos)
         return;
 
     QMenu menu;
-    if (ui->action_edit_computer->isVisible())
-        menu.addAction(ui->action_edit_computer);
+    if (ui->action_edit_host->isVisible())
+        menu.addAction(ui->action_edit_host);
     if (!menu.isEmpty())
         menu.exec(pos);
 }
@@ -1229,10 +1229,10 @@ void HostsTab::updateActionsState()
     ui->action_delete_router->setVisible(false);
     ui->action_router_status->setVisible(false);
 
-    ui->action_add_computer->setVisible(false);
-    ui->action_delete_computer->setVisible(false);
-    ui->action_edit_computer->setVisible(false);
-    ui->action_copy_computer->setVisible(false);
+    ui->action_add_host->setVisible(false);
+    ui->action_delete_host->setVisible(false);
+    ui->action_edit_host->setVisible(false);
+    ui->action_copy_host->setVisible(false);
 
     ui->action_desktop->setVisible(false);
     ui->action_file_transfer->setVisible(false);
@@ -1267,9 +1267,9 @@ void HostsTab::updateActionsState()
     {
         SearchWidget::Item* host_item = search_widget_->currentItem();
 
-        ui->action_delete_computer->setVisible(host_item != nullptr);
-        ui->action_edit_computer->setVisible(host_item != nullptr);
-        ui->action_copy_computer->setVisible(host_item != nullptr);
+        ui->action_delete_host->setVisible(host_item != nullptr);
+        ui->action_edit_host->setVisible(host_item != nullptr);
+        ui->action_copy_host->setVisible(host_item != nullptr);
     }
     else if (sidebar_item && sidebar_item->itemType() == Sidebar::Item::Type::LOCAL_GROUP)
     {
@@ -1284,10 +1284,10 @@ void HostsTab::updateActionsState()
 
         LocalGroupWidget::Item* host_item = local_group_widget_->currentItem();
 
-        ui->action_add_computer->setVisible(true);
-        ui->action_delete_computer->setVisible(host_item != nullptr);
-        ui->action_edit_computer->setVisible(host_item != nullptr);
-        ui->action_copy_computer->setVisible(host_item != nullptr);
+        ui->action_add_host->setVisible(true);
+        ui->action_delete_host->setVisible(host_item != nullptr);
+        ui->action_edit_host->setVisible(host_item != nullptr);
+        ui->action_copy_host->setVisible(host_item != nullptr);
     }
 
     if (sidebar_item && sidebar_item->itemType() == Sidebar::Item::ROUTER)
@@ -1354,7 +1354,7 @@ void HostsTab::updateActionsState()
 
         const bool can_edit = router_group_widget_->hasSelectedHost() &&
             session_type != proto::router::SESSION_TYPE_CLIENT;
-        ui->action_edit_computer->setVisible(can_edit);
+        ui->action_edit_host->setVisible(can_edit);
     }
 
     ui->action_reload->setVisible(current_content_ && current_content_->canReload());

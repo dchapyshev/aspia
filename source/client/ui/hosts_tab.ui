@@ -110,40 +110,40 @@
     <string>Router Status</string>
    </property>
   </action>
-  <action name="action_add_computer">
+  <action name="action_add_host">
    <property name="icon">
     <iconset resource="../../common/resources/common.qrc">
      <normaloff>:/img/add-computer.svg</normaloff>:/img/add-computer.svg</iconset>
    </property>
    <property name="text">
-    <string>Add Computer</string>
+    <string>Add Host</string>
    </property>
   </action>
-  <action name="action_delete_computer">
+  <action name="action_delete_host">
    <property name="icon">
     <iconset resource="../../common/resources/common.qrc">
      <normaloff>:/img/remove-computer.svg</normaloff>:/img/remove-computer.svg</iconset>
    </property>
    <property name="text">
-    <string>Delete Computer</string>
+    <string>Delete Host</string>
    </property>
   </action>
-  <action name="action_edit_computer">
+  <action name="action_edit_host">
    <property name="icon">
     <iconset resource="../../common/resources/common.qrc">
      <normaloff>:/img/change-computer.svg</normaloff>:/img/change-computer.svg</iconset>
    </property>
    <property name="text">
-    <string>Edit Computer</string>
+    <string>Edit Host</string>
    </property>
   </action>
-  <action name="action_copy_computer">
+  <action name="action_copy_host">
    <property name="icon">
     <iconset resource="../../common/resources/common.qrc">
      <normaloff>:/img/copy-computer.svg</normaloff>:/img/copy-computer.svg</iconset>
    </property>
    <property name="text">
-    <string>Copy Computer</string>
+    <string>Copy Host</string>
    </property>
   </action>
   <action name="action_desktop">

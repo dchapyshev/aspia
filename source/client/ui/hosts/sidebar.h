@@ -191,7 +191,7 @@ private:
     LocalGroupItem* local_root_ = nullptr;
 
     qint64 current_group_id_ = 0;
-    QString computer_mime_type_;
+    QString host_mime_type_;
     QString group_mime_type_;
     bool dragging_ = false;
     QTreeWidgetItem* drag_source_item_ = nullptr;

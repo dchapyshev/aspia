@@ -273,7 +273,7 @@ QList<qint64> Sidebar::routerIds() const
 //--------------------------------------------------------------------------------------------------
 void Sidebar::setHostMimeType(const QString& mime_type)
 {
-    computer_mime_type_ = mime_type;
+    host_mime_type_ = mime_type;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -485,7 +485,7 @@ bool Sidebar::onDragEnter(QDragEnterEvent* event)
 {
     const QMimeData* mime_data = event->mimeData();
 
-    if (mime_data->hasFormat(computer_mime_type_) || mime_data->hasFormat(group_mime_type_))
+    if (mime_data->hasFormat(host_mime_type_) || mime_data->hasFormat(group_mime_type_))
     {
         event->acceptProposedAction();
         dragging_ = true;
@@ -517,7 +517,7 @@ bool Sidebar::onDragMove(QDragMoveEvent* event)
 
         return true;
     }
-    else if (mime_data->hasFormat(computer_mime_type_))
+    else if (mime_data->hasFormat(host_mime_type_))
     {
         QTreeWidgetItem* target_tree_item = tree_widget_->itemAt(event->position().toPoint());
         if (!target_tree_item || target_tree_item == tree_widget_->invisibleRootItem())
@@ -632,7 +632,7 @@ bool Sidebar::onDrop(QDropEvent* event)
         reloadGroups(source_group->groupId());
         return true;
     }
-    else if (mime_data->hasFormat(computer_mime_type_))
+    else if (mime_data->hasFormat(host_mime_type_))
     {
         const LocalGroupWidget::HostMimeData* host_mime_data =
             dynamic_cast<const LocalGroupWidget::HostMimeData*>(mime_data);
@@ -670,9 +670,9 @@ bool Sidebar::onDrop(QDropEvent* event)
         }
 
         // Check if a host with the same name already exists in the target group.
-        QList<HostConfig> target_computers =
+        QList<HostConfig> target_hosts =
             Database::instance().hostList(target_item->groupId());
-        for (const HostConfig& existing : std::as_const(target_computers))
+        for (const HostConfig& existing : std::as_const(target_hosts))
         {
             if (existing.name() == host_item->computerName())
             {
