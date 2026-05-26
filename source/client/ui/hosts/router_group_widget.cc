@@ -36,8 +36,9 @@ namespace {
 
 enum Column
 {
-    COLUMN_NAME = 0,
+    COLUMN_DISPLAY_NAME = 0,
     COLUMN_HOST_ID,
+    COLUMN_COMPUTER_NAME,
     COLUMN_ADDRESS,
     COLUMN_USER_NAME,
     COLUMN_COMMENT,
@@ -45,6 +46,7 @@ enum Column
     COLUMN_VERSION,
     COLUMN_ARCH,
     COLUMN_LAST_CONNECT,
+    COLUMN_LAST_MODIFY,
     COLUMN_STATUS
 };
 
@@ -68,10 +70,13 @@ public:
 
         const QString last_connect = host.last_connect > 0 ? QLocale::system().toString(
             QDateTime::fromSecsSinceEpoch(host.last_connect), QLocale::ShortFormat) : QString();
+        const QString last_modify = host.last_modify > 0 ? QLocale::system().toString(
+            QDateTime::fromSecsSinceEpoch(host.last_modify), QLocale::ShortFormat) : QString();
 
-        setIcon(COLUMN_NAME, QIcon(host.online ? ":/img/computer-online.svg" : ":/img/computer-offline.svg"));
-        setText(COLUMN_NAME, name);
+        setIcon(COLUMN_DISPLAY_NAME, QIcon(host.online ? ":/img/computer-online.svg" : ":/img/computer-offline.svg"));
+        setText(COLUMN_DISPLAY_NAME, name);
         setText(COLUMN_HOST_ID, QString::number(host.host_id));
+        setText(COLUMN_COMPUTER_NAME, host.computer_name);
         setText(COLUMN_ADDRESS, host.address);
         setText(COLUMN_USER_NAME, host.user_name);
         setText(COLUMN_COMMENT, host.comment);
@@ -79,6 +84,7 @@ public:
         setText(COLUMN_VERSION, host.version);
         setText(COLUMN_ARCH, host.cpu_arch);
         setText(COLUMN_LAST_CONNECT, last_connect);
+        setText(COLUMN_LAST_MODIFY, last_modify);
         setText(COLUMN_STATUS, host.online ? tr("Online") : tr("Offline"));
     }
 
@@ -92,12 +98,14 @@ public:
             return host.host_id < other_item->host.host_id;
         if (column == COLUMN_LAST_CONNECT)
             return host.last_connect < other_item->host.last_connect;
-        if (column == COLUMN_NAME)
+        if (column == COLUMN_LAST_MODIFY)
+            return host.last_modify < other_item->host.last_modify;
+        if (column == COLUMN_DISPLAY_NAME)
         {
             QCollator collator;
             collator.setCaseSensitivity(Qt::CaseInsensitive);
             collator.setNumericMode(true);
-            return collator.compare(text(COLUMN_NAME), other.text(COLUMN_NAME)) <= 0;
+            return collator.compare(text(COLUMN_DISPLAY_NAME), other.text(COLUMN_DISPLAY_NAME)) <= 0;
         }
         return QTreeWidgetItem::operator<(other);
     }

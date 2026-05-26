@@ -38,16 +38,21 @@
       <bool>true</bool>
      </property>
      <property name="columnCount">
-      <number>10</number>
+      <number>12</number>
      </property>
      <column>
       <property name="text">
-       <string>Name</string>
+       <string>Display Name</string>
       </property>
      </column>
      <column>
       <property name="text">
        <string>Host ID</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Computer Name</string>
       </property>
      </column>
      <column>
@@ -83,6 +88,11 @@
      <column>
       <property name="text">
        <string>Last Connect</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Last Modify</string>
       </property>
      </column>
      <column>
