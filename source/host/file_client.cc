@@ -24,7 +24,6 @@
 #include <QTimer>
 
 #if defined(Q_OS_WINDOWS)
-#include "base/process_util.h"
 #include "base/win/scoped_object.h"
 #include "base/win/security_helpers.h"
 #include "base/win/session_info.h"
@@ -40,6 +39,7 @@
 
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/process_util.h"
 #include "base/serialization.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"

@@ -26,6 +26,7 @@
 #include "base/core_application.h"
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/process_util.h"
 #include "base/serialization.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
@@ -33,7 +34,6 @@
 #include "proto/desktop_internal.h"
 
 #if defined(Q_OS_WINDOWS)
-#include "base/process_util.h"
 #include "base/win/scoped_impersonator.h"
 #include "base/win/scoped_object.h"
 #include "base/win/security_helpers.h"
