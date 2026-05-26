@@ -23,7 +23,6 @@
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/crypto/data_cryptor.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/private_key_cryptor.h"
 #include "base/crypto/random.h"

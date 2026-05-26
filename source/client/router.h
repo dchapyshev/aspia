@@ -30,6 +30,7 @@
 
 #include <google/protobuf/message_lite.h>
 
+#include "base/crypto/data_cryptor.h"
 #include "base/crypto/secure_byte_array.h"
 #include "base/net/tcp_channel.h"
 #include "base/peer/host_id.h"
@@ -41,7 +42,6 @@
 #include "proto/router_constants.h"
 #include "proto/router_manager.h"
 
-class DataCryptor;
 class QTimer;
 
 // Application-level RPC facade. Owns the TCP channel to the router (on the IO thread, driven
