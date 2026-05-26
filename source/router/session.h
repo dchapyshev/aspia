@@ -53,6 +53,8 @@ public:
     time_t startTime() const { return start_time_; }
     std::chrono::seconds duration() const;
 
+    void sendMessage(quint8 channel_id, const QByteArray& message);
+
 signals:
     void sig_started(qint64 session_id);
     void sig_finished(qint64 session_id);
@@ -60,7 +62,6 @@ signals:
 protected:
     LOG_DECLARE_CONTEXT(Session);
 
-    void sendMessage(quint8 channel_id, const QByteArray& message);
     virtual void onSessionMessage(quint8 channel_id, const QByteArray& buffer) = 0;
 
 private slots:

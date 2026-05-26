@@ -25,6 +25,7 @@
 #include "proto/router_constants.h"
 #include "proto/router_legacy_host.h"
 #include "router/database.h"
+#include "router/service.h"
 
 namespace {
 
@@ -130,6 +131,7 @@ void SessionLegacyHost::readHostIdRequest(const proto::router::legacy::HostIdReq
         {
             host_id_list_.emplace_back(host_id);
             emit sig_hostIdAssigned(host_id);
+            Service::instance()->notifyChanged(Service::NOTIFY_HOSTS);
         }
     }
     else if (error_code == proto::router::kErrorNotFound)

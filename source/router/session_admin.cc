@@ -314,6 +314,7 @@ void SessionAdmin::doHostRequest(const proto::router::HostRequest& request)
             CLOG(INFO) << "Host" << host_id << "removal scheduled by" << userName()
                        << "(online:" << (host_session != nullptr) << ")";
             host_result->set_error_code(proto::router::kErrorOk);
+            Service::instance()->notifyChanged(Service::NOTIFY_HOSTS);
         }
     }
     else
@@ -545,6 +546,7 @@ void SessionAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& req
             if (error_code == proto::router::kErrorOk)
             {
                 result->set_entry_id(new_id);
+                Service::instance()->notifyChanged(Service::NOTIFY_WORKSPACES);
                 if (!desired_host_ids.isEmpty())
                 {
                     error_code = database.setWorkspaceHosts(new_id, desired_host_ids);
@@ -552,6 +554,10 @@ void SessionAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& req
                     {
                         CLOG(ERROR) << "Workspace" << new_id
                                     << "created but host assignments failed:" << error_code;
+                    }
+                    else
+                    {
+                        Service::instance()->notifyChanged(Service::NOTIFY_HOSTS);
                     }
                 }
             }
@@ -590,11 +596,16 @@ void SessionAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& req
             result->set_error_code(error_code);
             if (error_code == proto::router::kErrorOk)
             {
+                Service::instance()->notifyChanged(Service::NOTIFY_WORKSPACES);
                 error_code = database.setWorkspaceHosts(entry_id, desired_host_ids);
                 if (error_code != proto::router::kErrorOk)
                 {
                     CLOG(ERROR) << "Workspace" << entry_id
                                 << "modified but host assignments failed:" << error_code;
+                }
+                else
+                {
+                    Service::instance()->notifyChanged(Service::NOTIFY_HOSTS);
                 }
             }
         }
@@ -602,7 +613,14 @@ void SessionAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& req
     else if (request.command_name() == proto::router::kCommandWorkspaceDelete)
     {
         CLOG(INFO) << "Workspace delete request:" << entry_id;
-        result->set_error_code(database.removeWorkspace(entry_id));
+        const std::string_view error_code = database.removeWorkspace(entry_id);
+        result->set_error_code(error_code);
+        if (error_code == proto::router::kErrorOk)
+        {
+            // Workspace deletion also releases its hosts to workspace_id=0; signal both so
+            // clients refetch both lists with updated workspace_id columns.
+            Service::instance()->notifyChanged(Service::NOTIFY_WORKSPACES | Service::NOTIFY_HOSTS);
+        }
     }
     else
     {
@@ -641,6 +659,7 @@ std::string SessionAdmin::addUser(const proto::router::User& user)
     if (!database.addUser(new_user))
         return proto::router::kErrorInternalError;
 
+    Service::instance()->notifyChanged(Service::NOTIFY_USERS);
     return proto::router::kErrorOk;
 }
 
@@ -681,6 +700,7 @@ std::string SessionAdmin::modifyUser(const proto::router::User& user)
         return proto::router::kErrorInternalError;
     }
 
+    Service::instance()->notifyChanged(Service::NOTIFY_USERS);
     return proto::router::kErrorOk;
 }
 
@@ -704,5 +724,6 @@ std::string SessionAdmin::deleteUser(const proto::router::User& user)
         return proto::router::kErrorInternalError;
     }
 
+    Service::instance()->notifyChanged(Service::NOTIFY_USERS);
     return proto::router::kErrorOk;
 }

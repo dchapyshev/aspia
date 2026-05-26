@@ -19,6 +19,7 @@
 #include "router/session.h"
 
 #include "base/net/tcp_channel.h"
+#include "router/service.h"
 #include "proto/router.h"
 
 namespace {
@@ -48,7 +49,25 @@ Session::Session(TcpChannel* channel, QObject* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-Session::~Session() = default;
+Session::~Session()
+{
+    switch (sessionType())
+    {
+        case proto::router::SESSION_TYPE_RELAY:
+            Service::instance()->notifyChanged(Service::NOTIFY_RELAYS);
+            break;
+        case proto::router::SESSION_TYPE_HOST:
+            Service::instance()->notifyChanged(Service::NOTIFY_HOSTS);
+            break;
+        case proto::router::SESSION_TYPE_ADMIN:
+        case proto::router::SESSION_TYPE_MANAGER:
+        case proto::router::SESSION_TYPE_CLIENT:
+            Service::instance()->notifyChanged(Service::NOTIFY_CLIENTS);
+            break;
+        default:
+            break;
+    }
+}
 
 //--------------------------------------------------------------------------------------------------
 void Session::start()
@@ -57,6 +76,23 @@ void Session::start()
     start_time_ = std::chrono::system_clock::to_time_t(time_point);
     tcp_channel_->setPaused(false);
     emit sig_started(session_id_);
+
+    switch (sessionType())
+    {
+        case proto::router::SESSION_TYPE_RELAY:
+            Service::instance()->notifyChanged(Service::NOTIFY_RELAYS);
+            break;
+        case proto::router::SESSION_TYPE_HOST:
+            Service::instance()->notifyChanged(Service::NOTIFY_HOSTS);
+            break;
+        case proto::router::SESSION_TYPE_ADMIN:
+        case proto::router::SESSION_TYPE_MANAGER:
+        case proto::router::SESSION_TYPE_CLIENT:
+            Service::instance()->notifyChanged(Service::NOTIFY_CLIENTS);
+            break;
+        default:
+            break;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -19,12 +19,15 @@
 #include "router/service.h"
 
 #include <QHostAddress>
+#include <QTimer>
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_byte_array.h"
 #include "base/net/tcp_channel.h"
 #include "base/peer/stun_server.h"
+#include "proto/router_client.h"
 #include "router/migration_utils.h"
 #include "router/session_admin.h"
 #include "router/session_client.h"
@@ -77,10 +80,15 @@ const char Service::kDescription[] =
 
 //--------------------------------------------------------------------------------------------------
 Service::Service(QObject* parent)
-    : CoreService(Service::kName, parent)
+    : CoreService(Service::kName, parent),
+      notification_timer_(new QTimer(this))
 {
     LOG(INFO) << "Ctor";
     instance_ = this;
+
+    notification_timer_->setSingleShot(true);
+    notification_timer_->setInterval(5000);
+    connect(notification_timer_, &QTimer::timeout, this, &Service::onNotificationFlush);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -137,6 +145,14 @@ bool Service::stopSession(qint64 session_id)
     }
 
     return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Service::notifyChanged(quint32 flags)
+{
+    dirty_mask_ |= flags;
+    if (!notification_timer_->isActive())
+        notification_timer_->start();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -352,6 +368,63 @@ void Service::onHostIdAssigned(HostId host_id)
     oldest_session->disconnect();
     oldest_session->deleteLater();
     sessions_.removeOne(oldest_session);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Service::onNotificationFlush()
+{
+    if (dirty_mask_ == 0)
+        return;
+
+    const bool hosts      = (dirty_mask_ & NOTIFY_HOSTS)      != 0;
+    const bool relays     = (dirty_mask_ & NOTIFY_RELAYS)     != 0;
+    const bool clients    = (dirty_mask_ & NOTIFY_CLIENTS)    != 0;
+    const bool users      = (dirty_mask_ & NOTIFY_USERS)      != 0;
+    const bool workspaces = (dirty_mask_ & NOTIFY_WORKSPACES) != 0;
+    dirty_mask_ = 0;
+
+    // Admin gets the full bitmask (relays/clients/users/hosts/workspaces).
+    QByteArray admin_payload;
+    {
+        proto::router::RouterToClient message;
+        proto::router::Notification* notification = message.mutable_notification();
+        notification->set_hosts_dirty(hosts);
+        notification->set_relays_dirty(relays);
+        notification->set_clients_dirty(clients);
+        notification->set_users_dirty(users);
+        notification->set_workspaces_dirty(workspaces);
+        admin_payload = serialize(message);
+    }
+
+    // Manager and regular client only care about hosts/workspaces (the others are admin-only).
+    QByteArray client_payload;
+    if (hosts || workspaces)
+    {
+        proto::router::RouterToClient message;
+        proto::router::Notification* notification = message.mutable_notification();
+        notification->set_hosts_dirty(hosts);
+        notification->set_workspaces_dirty(workspaces);
+        client_payload = serialize(message);
+    }
+
+    for (Session* session : std::as_const(sessions_))
+    {
+        switch (session->sessionType())
+        {
+            case proto::router::SESSION_TYPE_ADMIN:
+                session->sendMessage(proto::router::CHANNEL_ID_CLIENT, admin_payload);
+                break;
+
+            case proto::router::SESSION_TYPE_MANAGER:
+            case proto::router::SESSION_TYPE_CLIENT:
+                if (!client_payload.isEmpty())
+                    session->sendMessage(proto::router::CHANNEL_ID_CLIENT, client_payload);
+                break;
+
+            default:
+                break;
+        }
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

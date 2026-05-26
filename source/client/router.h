@@ -177,6 +177,15 @@ signals:
     void sig_errorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code);
     void sig_passwordChangeRequired(qint64 router_id);
 
+    // Push notifications: server signals that a particular list has changed and subscribers
+    // should refetch via the corresponding list* RPC. Fired at most once per ~5 seconds per
+    // resource. Regular client sessions only receive sig_hostsChanged / sig_workspacesChanged.
+    void sig_hostsChanged(qint64 router_id);
+    void sig_relaysChanged(qint64 router_id);
+    void sig_clientsChanged(qint64 router_id);
+    void sig_usersChanged(qint64 router_id);
+    void sig_workspacesChanged(qint64 router_id);
+
 private slots:
     void onTcpAuthenticated();
     void onTcpErrorOccurred(TcpChannel::ErrorCode error_code);
@@ -284,6 +293,7 @@ private:
     void destroyChannel();
     void emitSend(quint8 channel_id, const google::protobuf::MessageLite& message);
     void readUserKeys(const proto::router::UserKeys& user_keys);
+    void emitNotificationSignals(const proto::router::Notification& notification);
     Router::WorkspaceList decodeWorkspaceList(const proto::router::WorkspaceList& list);
     SecureByteArray unwrapGroupKey(const QByteArray& wrapped_gk) const;
 

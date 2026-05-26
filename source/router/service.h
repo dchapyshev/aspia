@@ -28,6 +28,7 @@
 #include "proto/router.h"
 #include "router/session.h"
 
+class QTimer;
 class StunServer;
 
 class Service final : public CoreService
@@ -57,6 +58,17 @@ public:
     Session* session(qint64 session_id);
     bool stopSession(qint64 session_id);
 
+    enum : quint32
+    {
+        NOTIFY_HOSTS      = 1u << 0,
+        NOTIFY_RELAYS     = 1u << 1,
+        NOTIFY_CLIENTS    = 1u << 2,
+        NOTIFY_USERS      = 1u << 3,
+        NOTIFY_WORKSPACES = 1u << 4,
+    };
+
+    void notifyChanged(quint32 flags);
+
     void addKey(qint64 session_id, const proto::router::RelayKey& key);
     std::optional<Credentials> takeCredentials();
     void removeKeysForRelay(qint64 session_id);
@@ -75,6 +87,7 @@ private slots:
     void onNewLegacyConnection();
     void onSessionFinished();
     void onHostIdAssigned(HostId host_id);
+    void onNotificationFlush();
 
 private:
     bool start();
@@ -83,6 +96,8 @@ private:
     TcpServer* tcp_server_ = nullptr;
     TcpServerLegacy* tcp_server_legacy_ = nullptr;
     StunServer* stun_server_ = nullptr;
+    QTimer* notification_timer_ = nullptr;
+    quint32 dirty_mask_ = 0;
 
     QMap<qint64, Keys> key_pool_;
     QList<Session*> sessions_;

@@ -153,14 +153,29 @@ message HostList
     repeated Host host = 6;
 }
 
+// Push notification from router to client/admin sessions: a coarse-grained signal that the
+// indicated resource lists have changed since the last notification (or session start). The
+// client refetches the affected lists via the existing list* RPCs. Notifications are batched
+// on the router side and emitted at most once per ~5 seconds, with dirty bits OR-merged across
+// events within the window.
+message Notification
+{
+    bool hosts_dirty      = 1;
+    bool relays_dirty     = 2;
+    bool clients_dirty    = 3;
+    bool users_dirty      = 4;
+    bool workspaces_dirty = 5;
+}
+
 message RouterToClient
 {
     UserKeys user_keys                          = 1;
-    ChangePasswordResult change_password_result = 2;
-    ConnectionOffer connection_offer            = 3;
-    HostStatus host_status                      = 4;
-    HostList host_list                          = 5;
-    WorkspaceList workspace_list                = 6;
+    Notification notification                   = 2;
+    ChangePasswordResult change_password_result = 3;
+    ConnectionOffer connection_offer            = 4;
+    HostStatus host_status                      = 5;
+    HostList host_list                          = 6;
+    WorkspaceList workspace_list                = 7;
 }
 
 message ClientToRouter

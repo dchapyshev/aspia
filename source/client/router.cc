@@ -237,6 +237,8 @@ void Router::onTcpMessageReceived(quint8 channel_id, const QByteArray& bytes)
             dispatch(message.workspace_list().request_id(), message.workspace_list());
         else if (message.has_change_password_result())
             dispatch(message.change_password_result().request_id(), message.change_password_result());
+        else if (message.has_notification())
+            emitNotificationSignals(message.notification());
         else
             LOG(WARNING) << "Unhandled client message";
     }
@@ -430,6 +432,23 @@ void Router::readUserKeys(const proto::router::UserKeys& user_keys)
     }
 
     setStatus(Status::ONLINE);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::emitNotificationSignals(const proto::router::Notification& notification)
+{
+    const qint64 router_id = config_.routerId();
+
+    if (notification.hosts_dirty())
+        emit sig_hostsChanged(router_id);
+    if (notification.relays_dirty())
+        emit sig_relaysChanged(router_id);
+    if (notification.clients_dirty())
+        emit sig_clientsChanged(router_id);
+    if (notification.users_dirty())
+        emit sig_usersChanged(router_id);
+    if (notification.workspaces_dirty())
+        emit sig_workspacesChanged(router_id);
 }
 
 //--------------------------------------------------------------------------------------------------
