@@ -458,7 +458,10 @@ void HostsTab::onSwitchContent(Sidebar::Item::Type type)
         case Sidebar::Item::Type::ROUTER_GROUP:
         {
             switchContent(router_group_widget_);
-            router_group_widget_->showGroup(ui->sidebar->currentGroupId());
+
+            Sidebar::RouterGroupItem* item =
+                static_cast<Sidebar::RouterGroupItem*>(ui->sidebar->currentItem());
+            router_group_widget_->showGroup(item->routerId(), item->groupId());
         }
         break;
 

@@ -88,7 +88,13 @@ public:
     class RouterGroupItem final : public Item
     {
     public:
-        RouterGroupItem(qint64 group_id, const QString& name, QTreeWidgetItem* parent);
+        RouterGroupItem(qint64 router_id, qint64 group_id, const QString& name,
+                        QTreeWidgetItem* parent);
+
+        qint64 routerId() const { return router_id_; }
+
+    private:
+        const qint64 router_id_;
     };
 
     class GroupMimeData final : public QMimeData

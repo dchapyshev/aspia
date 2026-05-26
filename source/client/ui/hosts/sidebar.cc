@@ -219,7 +219,7 @@ void Sidebar::setRouterWorkspaces(qint64 router_id, const QList<Router::Workspac
     }
 
     for (const Router::Workspace& workspace : workspaces)
-        new RouterGroupItem(workspace.entry_id, workspace.name, router);
+        new RouterGroupItem(router_id, workspace.entry_id, workspace.name, router);
 
     router->setExpanded(true);
 }
@@ -949,8 +949,10 @@ void Sidebar::RouterItem::setStatus(Status status)
 }
 
 //--------------------------------------------------------------------------------------------------
-Sidebar::RouterGroupItem::RouterGroupItem(qint64 group_id, const QString& name, QTreeWidgetItem* parent)
-    : Item(ROUTER_GROUP, group_id, parent)
+Sidebar::RouterGroupItem::RouterGroupItem(qint64 router_id, qint64 group_id, const QString& name,
+                                          QTreeWidgetItem* parent)
+    : Item(ROUTER_GROUP, group_id, parent),
+      router_id_(router_id)
 {
     setText(0, name);
     setIcon(0, QIcon(":/img/workspace.svg"));

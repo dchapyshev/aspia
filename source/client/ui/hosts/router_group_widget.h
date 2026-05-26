@@ -27,6 +27,10 @@ namespace Ui {
 class RouterGroupWidget;
 } // namespace Ui
 
+namespace proto::router {
+class HostList;
+} // namespace proto::router
+
 class RouterGroupWidget final : public ContentWidget
 {
     Q_OBJECT
@@ -35,18 +39,28 @@ public:
     explicit RouterGroupWidget(QWidget* parent = nullptr);
     ~RouterGroupWidget() final;
 
-    void showGroup(qint64 group_id);
+    void showGroup(qint64 router_id, qint64 workspace_id);
 
     // ContentWidget implementation.
     QByteArray saveState() final;
     void restoreState(const QByteArray& state) final;
+    bool canReload() const final { return true; }
+    void reload() final;
 
 protected:
     // QWidget implementation.
     void changeEvent(QEvent* event) final;
 
+private slots:
+    void onHostListReceived(const proto::router::HostList& list);
+
 private:
+    void fetchHosts();
+
     std::unique_ptr<Ui::RouterGroupWidget> ui;
+    qint64 router_id_ = 0;
+    qint64 workspace_id_ = 0;
+
     Q_DISABLE_COPY_MOVE(RouterGroupWidget)
 };
 
