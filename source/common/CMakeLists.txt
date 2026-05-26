@@ -100,6 +100,8 @@ list(APPEND SOURCE_COMMON_UI
     ui/download_dialog.ui
     ui/formatter.cc
     ui/formatter.h
+    ui/icon_text_button.cc
+    ui/icon_text_button.h
     ui/language_action.h
     ui/msg_box.cc
     ui/msg_box.h
