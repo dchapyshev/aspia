@@ -62,7 +62,7 @@ void OnlineCheckerRouter::start()
         return;
     }
 
-    checkNextComputer();
+    checkNextHost();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -74,11 +74,11 @@ void OnlineCheckerRouter::onHostStatusReceived(const proto::router::HostStatus& 
     const bool online = host_status.status() == proto::router::HostStatus::STATUS_ONLINE;
     emit sig_checkerResult(hosts_.front().id(), online);
     hosts_.pop_front();
-    checkNextComputer();
+    checkNextHost();
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerRouter::checkNextComputer()
+void OnlineCheckerRouter::checkNextHost()
 {
     if (hosts_.isEmpty())
     {
@@ -99,7 +99,7 @@ void OnlineCheckerRouter::checkNextComputer()
         emit sig_checkerResult(host.id(), false);
         hosts_.pop_front();
 
-        QTimer::singleShot(0, this, &OnlineCheckerRouter::checkNextComputer);
+        QTimer::singleShot(0, this, &OnlineCheckerRouter::checkNextHost);
         return;
     }
 

@@ -29,7 +29,7 @@ class JsonBackup
     Q_DECLARE_TR_FUNCTIONS(JsonBackup)
 
 public:
-    // Exports the local address book (groups, computers, routers) into a JSON file at |file_path|.
+    // Exports the local address book (groups, hosts, routers) into a JSON file at |file_path|.
     // Shows password dialog and error/success messages on |parent|. Returns true on success.
     static bool exportToFile(QWidget* parent, const QString& file_path);
 

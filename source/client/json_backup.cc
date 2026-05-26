@@ -143,7 +143,7 @@ QJsonObject buildGroup(const GroupConfig& group, const DataCryptor& cryptor)
 }
 
 //--------------------------------------------------------------------------------------------------
-QJsonObject buildComputer(const HostConfig& host, const DataCryptor& cryptor)
+QJsonObject buildHost(const HostConfig& host, const DataCryptor& cryptor)
 {
     QJsonObject object;
     object.insert("id", static_cast<qint64>(host.id()));
@@ -296,7 +296,7 @@ void importGroups(const QJsonArray& groups_array,
 }
 
 //--------------------------------------------------------------------------------------------------
-void importComputers(const QJsonArray& computers_array,
+void importHosts(const QJsonArray& hosts_array,
                      const QHash<qint64, qint64>& group_id_map,
                      const QHash<qint64, qint64>& router_id_map,
                      const DataCryptor& cryptor,
@@ -304,7 +304,7 @@ void importComputers(const QJsonArray& computers_array,
 {
     Database& db = Database::instance();
 
-    for (const QJsonValue& value : std::as_const(computers_array))
+    for (const QJsonValue& value : std::as_const(hosts_array))
     {
         if (!value.isObject())
             continue;
@@ -405,11 +405,11 @@ bool JsonBackup::exportToFile(QWidget* parent, const QString& file_path)
         groups_array.append(buildGroup(group, cryptor));
     root.insert("groups", groups_array);
 
-    QJsonArray computers_array;
+    QJsonArray hosts_array;
     const QList<HostConfig> hosts = db.allHosts();
     for (const HostConfig& host : std::as_const(hosts))
-        computers_array.append(buildComputer(host, cryptor));
-    root.insert("hosts", computers_array);
+        hosts_array.append(buildHost(host, cryptor));
+    root.insert("hosts", hosts_array);
 
     QJsonDocument document(root);
     QByteArray payload = document.toJson(QJsonDocument::Indented);
@@ -526,8 +526,8 @@ bool JsonBackup::importFromFile(QWidget* parent, const QString& file_path)
     QJsonArray groups_array = root.value("groups").toArray();
     importGroups(groups_array, *cryptor, &group_id_map, &counters);
 
-    QJsonArray computers_array = root.value("hosts").toArray();
-    importComputers(computers_array, group_id_map, router_id_map, *cryptor, &counters);
+    QJsonArray hosts_array = root.value("hosts").toArray();
+    importHosts(hosts_array, group_id_map, router_id_map, *cryptor, &counters);
 
     cryptor.reset();
 

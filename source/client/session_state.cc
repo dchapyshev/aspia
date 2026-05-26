@@ -27,7 +27,7 @@
 SessionState::SessionState(const HostConfig& host,
                            proto::peer::SessionType session_type,
                            const QString& display_name)
-    : computer_(host),
+    : host_(host),
       session_type_(session_type),
       display_name_(display_name)
 {
@@ -37,27 +37,27 @@ SessionState::SessionState(const HostConfig& host,
 //--------------------------------------------------------------------------------------------------
 bool SessionState::isConnectionByHostId() const
 {
-    return isHostId(computer_.address());
+    return isHostId(host_.address());
 }
 
 //--------------------------------------------------------------------------------------------------
 HostId SessionState::hostId() const
 {
-    if (!isHostId(computer_.address()))
+    if (!isHostId(host_.address()))
         return kInvalidHostId;
-    return stringToHostId(computer_.address());
+    return stringToHostId(host_.address());
 }
 
 //--------------------------------------------------------------------------------------------------
 QString SessionState::hostAddress() const
 {
-    return Address::fromString(computer_.address(), DEFAULT_HOST_TCP_PORT).host();
+    return Address::fromString(host_.address(), DEFAULT_HOST_TCP_PORT).host();
 }
 
 //--------------------------------------------------------------------------------------------------
 quint16 SessionState::hostPort() const
 {
-    return Address::fromString(computer_.address(), DEFAULT_HOST_TCP_PORT).port();
+    return Address::fromString(host_.address(), DEFAULT_HOST_TCP_PORT).port();
 }
 
 //--------------------------------------------------------------------------------------------------

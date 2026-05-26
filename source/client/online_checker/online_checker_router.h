@@ -50,7 +50,7 @@ private slots:
     void onHostStatusReceived(const proto::router::HostStatus& host_status);
 
 private:
-    void checkNextComputer();
+    void checkNextHost();
     void onFinished(const Location& location);
 
     QTimer* timer_ = nullptr;

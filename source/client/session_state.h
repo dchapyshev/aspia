@@ -41,16 +41,16 @@ public:
 
     bool isConnectionByHostId() const;
 
-    const HostConfig& host() const { return computer_; }
+    const HostConfig& host() const { return host_; }
     proto::peer::SessionType sessionType() const { return session_type_; }
-    qint64 routerId() const { return computer_.routerId(); }
-    QString computerName() const { return computer_.name(); }
+    qint64 routerId() const { return host_.routerId(); }
+    QString computerName() const { return host_.name(); }
     const QString& displayName() const { return display_name_; }
     HostId hostId() const;
     QString hostAddress() const;
     quint16 hostPort() const;
-    QString hostUserName() const { return computer_.username(); }
-    SecureString hostPassword() const { return computer_.password(); }
+    QString hostUserName() const { return host_.username(); }
+    SecureString hostPassword() const { return host_.password(); }
 
     void setRouterVersion(const QVersionNumber& router_version);
     QVersionNumber routerVersion() const;
@@ -68,7 +68,7 @@ public:
     bool isReconnecting() const;
 
 private:
-    const HostConfig computer_;
+    const HostConfig host_;
     const proto::peer::SessionType session_type_;
     const QString display_name_;
 
