@@ -42,14 +42,14 @@ public:
     public:
         Item(const HostConfig& host, const QString& group_path, QTreeWidget* parent);
 
-        qint64 entryId() const { return computer_.id(); }
-        qint64 groupId() const { return computer_.groupId(); }
-        QString computerName() const { return computer_.name(); }
+        qint64 entryId() const { return host_.id(); }
+        qint64 groupId() const { return host_.groupId(); }
+        QString computerName() const { return host_.name(); }
 
         void updateFrom(const HostConfig& host, const QString& group_path);
 
     private:
-        HostConfig computer_;
+        HostConfig host_;
     };
 
     void search(const QString& query);

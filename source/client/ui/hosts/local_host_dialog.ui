@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Computer</string>
+   <string>Host</string>
   </property>
   <property name="modal">
    <bool>true</bool>

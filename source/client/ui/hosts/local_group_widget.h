@@ -51,12 +51,12 @@ public:
     public:
         Item(const HostConfig& host, QTreeWidget* parent);
 
-        HostConfig& host() { return computer_; }
-        qint64 entryId() const { return computer_.id(); }
-        qint64 groupId() const { return computer_.groupId(); }
-        qint64 routerId() const { return computer_.routerId(); }
-        QString computerName() const { return computer_.name(); }
-        QString computerAddress() const { return computer_.address(); }
+        HostConfig& host() { return host_; }
+        qint64 entryId() const { return host_.id(); }
+        qint64 groupId() const { return host_.groupId(); }
+        qint64 routerId() const { return host_.routerId(); }
+        QString computerName() const { return host_.name(); }
+        QString hostAddress() const { return host_.address(); }
         void setConnectTime(qint64 connect_time);
         void setOnlineStatus(bool online);
         void clearOnlineStatus();
@@ -65,7 +65,7 @@ public:
         bool operator<(const QTreeWidgetItem& other) const final;
 
     private:
-        HostConfig computer_;
+        HostConfig host_;
     };
 
     class HostMimeData final : public QMimeData
@@ -74,31 +74,31 @@ public:
         HostMimeData() = default;
         virtual ~HostMimeData() final = default;
 
-        void setComputerItem(Item* host_item, const QString& mime_type)
+        void setHostItem(Item* host_item, const QString& mime_type)
         {
-            computer_item_ = host_item;
+            host_item_ = host_item;
             setData(mime_type, QByteArray());
         }
 
-        Item* computerItem() const { return computer_item_; }
+        Item* hostItem() const { return host_item_; }
 
     private:
-        Item* computer_item_ = nullptr;
+        Item* host_item_ = nullptr;
     };
 
-    class ComputerDrag final : public QDrag
+    class HostDrag final : public QDrag
     {
     public:
-        explicit ComputerDrag(QObject* drag_source = nullptr)
+        explicit HostDrag(QObject* drag_source = nullptr)
             : QDrag(drag_source)
         {
             // Nothing
         }
 
-        void setComputerItem(Item* host_item, const QString& mime_type)
+        void setHostItem(Item* host_item, const QString& mime_type)
         {
             HostMimeData* mime_data = new HostMimeData();
-            mime_data->setComputerItem(host_item, mime_type);
+            mime_data->setHostItem(host_item, mime_type);
             setMimeData(mime_data);
         }
     };

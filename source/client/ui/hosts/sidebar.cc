@@ -532,7 +532,7 @@ bool Sidebar::onDragMove(QDragMoveEvent* event)
         if (!host_mime_data)
             return true;
 
-        LocalGroupWidget::Item* host_item = host_mime_data->computerItem();
+        LocalGroupWidget::Item* host_item = host_mime_data->hostItem();
         if (!host_item)
             return true;
 
@@ -642,7 +642,7 @@ bool Sidebar::onDrop(QDropEvent* event)
             return true;
         }
 
-        LocalGroupWidget::Item* host_item = host_mime_data->computerItem();
+        LocalGroupWidget::Item* host_item = host_mime_data->hostItem();
         if (!host_item)
         {
             restoreSelection();

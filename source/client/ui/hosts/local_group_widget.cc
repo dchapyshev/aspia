@@ -402,9 +402,9 @@ void LocalGroupWidget::startDrag()
     Item* host_item = static_cast<Item*>(ui->tree_host->itemAt(start_pos_));
     if (host_item)
     {
-        ComputerDrag* drag = new ComputerDrag(this);
+        HostDrag* drag = new HostDrag(this);
 
-        drag->setComputerItem(host_item, mime_type_);
+        drag->setHostItem(host_item, mime_type_);
 
         QIcon icon = host_item->icon(0);
         drag->setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
@@ -486,7 +486,7 @@ LocalGroupWidget::Item::Item(const HostConfig& host, QTreeWidget* parent)
 //--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::Item::setConnectTime(qint64 connect_time)
 {
-    computer_.setConnectTime(connect_time);
+    host_.setConnectTime(connect_time);
     setText(kColumnConnect, formatTimestamp(connect_time));
 }
 
@@ -507,7 +507,7 @@ void LocalGroupWidget::Item::clearOnlineStatus()
 //--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::Item::updateFrom(const HostConfig& host)
 {
-    computer_ = host;
+    host_ = host;
 
     QString single_line_comment = host.comment();
     single_line_comment.replace('\n', ' ').replace('\r', ' ');
@@ -532,10 +532,10 @@ bool LocalGroupWidget::Item::operator<(const QTreeWidgetItem& other) const
         if (other_item)
         {
             if (column == kColumnCreated)
-                return computer_.createTime() < other_item->computer_.createTime();
+                return host_.createTime() < other_item->host_.createTime();
             if (column == kColumnModified)
-                return computer_.modifyTime() < other_item->computer_.modifyTime();
-            return computer_.connectTime() < other_item->computer_.connectTime();
+                return host_.modifyTime() < other_item->host_.modifyTime();
+            return host_.connectTime() < other_item->host_.connectTime();
         }
     }
 

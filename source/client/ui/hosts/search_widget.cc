@@ -125,7 +125,7 @@ SearchWidget::Item::Item(const HostConfig& host, const QString& group_path, QTre
 //--------------------------------------------------------------------------------------------------
 void SearchWidget::Item::updateFrom(const HostConfig& host, const QString& group_path)
 {
-    computer_ = host;
+    host_ = host;
 
     QString single_line_comment = host.comment();
     single_line_comment.replace('\n', ' ').replace('\r', ' ');
