@@ -132,7 +132,7 @@ public:
         }
     };
 
-    void setComputerMimeType(const QString& mime_type);
+    void setHostMimeType(const QString& mime_type);
     bool dragging() const;
 
     void loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item);

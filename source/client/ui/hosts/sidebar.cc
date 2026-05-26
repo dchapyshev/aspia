@@ -271,7 +271,7 @@ QList<qint64> Sidebar::routerIds() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::setComputerMimeType(const QString& mime_type)
+void Sidebar::setHostMimeType(const QString& mime_type)
 {
     computer_mime_type_ = mime_type;
 }
@@ -527,12 +527,12 @@ bool Sidebar::onDragMove(QDragMoveEvent* event)
         if (target_item->itemType() != Item::LOCAL_GROUP)
             return true;
 
-        const LocalGroupWidget::ComputerMimeData* computer_mime_data =
-            dynamic_cast<const LocalGroupWidget::ComputerMimeData*>(mime_data);
-        if (!computer_mime_data)
+        const LocalGroupWidget::HostMimeData* host_mime_data =
+            dynamic_cast<const LocalGroupWidget::HostMimeData*>(mime_data);
+        if (!host_mime_data)
             return true;
 
-        LocalGroupWidget::Item* computer_item = computer_mime_data->computerItem();
+        LocalGroupWidget::Item* computer_item = host_mime_data->computerItem();
         if (!computer_item)
             return true;
 
@@ -634,15 +634,15 @@ bool Sidebar::onDrop(QDropEvent* event)
     }
     else if (mime_data->hasFormat(computer_mime_type_))
     {
-        const LocalGroupWidget::ComputerMimeData* computer_mime_data =
-            dynamic_cast<const LocalGroupWidget::ComputerMimeData*>(mime_data);
-        if (!computer_mime_data)
+        const LocalGroupWidget::HostMimeData* host_mime_data =
+            dynamic_cast<const LocalGroupWidget::HostMimeData*>(mime_data);
+        if (!host_mime_data)
         {
             restoreSelection();
             return true;
         }
 
-        LocalGroupWidget::Item* computer_item = computer_mime_data->computerItem();
+        LocalGroupWidget::Item* computer_item = host_mime_data->computerItem();
         if (!computer_item)
         {
             restoreSelection();

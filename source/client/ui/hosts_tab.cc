@@ -110,7 +110,7 @@ HostsTab::HostsTab(QWidget* parent)
     ui->content_stack->addWidget(search_widget_);
 
     // Setup drag-and-drop: pass the host mime type from LocalGroupWidget to Sidebar.
-    ui->sidebar->setComputerMimeType(local_group_widget_->mimeType());
+    ui->sidebar->setHostMimeType(local_group_widget_->mimeType());
 
     // Connect signals.
     connect(ui->sidebar, &Sidebar::sig_switchContent, this, &HostsTab::onSwitchContent);
@@ -120,9 +120,9 @@ HostsTab::HostsTab(QWidget* parent)
         local_group_widget_->showGroup(ui->sidebar->currentGroupId());
         updateActionsState();
     });
-    connect(local_group_widget_, &LocalGroupWidget::sig_currentChanged, this, &HostsTab::onCurrentComputerChanged);
+    connect(local_group_widget_, &LocalGroupWidget::sig_currentChanged, this, &HostsTab::onCurrentHostChanged);
     connect(local_group_widget_, &LocalGroupWidget::sig_doubleClicked, this, &HostsTab::onLocalConnect);
-    connect(local_group_widget_, &LocalGroupWidget::sig_contextMenu, this, &HostsTab::onLocalComputerContextMenu);
+    connect(local_group_widget_, &LocalGroupWidget::sig_contextMenu, this, &HostsTab::onLocalHostContextMenu);
     connect(router_group_widget_, &RouterGroupWidget::sig_currentChanged, this, &HostsTab::updateActionsState);
     connect(router_group_widget_, &RouterGroupWidget::sig_contextMenu, this, &HostsTab::onRouterGroupContextMenu);
     connect(this, &HostsTab::sig_connectRequested, local_group_widget_,
@@ -131,13 +131,13 @@ HostsTab::HostsTab(QWidget* parent)
         if (host.id() != -1)
             local_group_widget_->setConnectTime(host.id(), QDateTime::currentSecsSinceEpoch());
     });
-    connect(ui->action_add_computer, &QAction::triggered, this, &HostsTab::onAddComputer);
-    connect(ui->action_edit_computer, &QAction::triggered, this, &HostsTab::onEditComputer);
-    connect(ui->action_copy_computer, &QAction::triggered, this, &HostsTab::onCopyComputer);
-    connect(ui->action_delete_computer, &QAction::triggered, this, &HostsTab::onRemoveComputer);
-    connect(search_widget_, &SearchWidget::sig_currentChanged, this, &HostsTab::onCurrentComputerChanged);
+    connect(ui->action_add_computer, &QAction::triggered, this, &HostsTab::onAddHost);
+    connect(ui->action_edit_computer, &QAction::triggered, this, &HostsTab::onEditHost);
+    connect(ui->action_copy_computer, &QAction::triggered, this, &HostsTab::onCopyHost);
+    connect(ui->action_delete_computer, &QAction::triggered, this, &HostsTab::onRemoveHost);
+    connect(search_widget_, &SearchWidget::sig_currentChanged, this, &HostsTab::onCurrentHostChanged);
     connect(search_widget_, &SearchWidget::sig_doubleClicked, this, &HostsTab::onLocalConnect);
-    connect(search_widget_, &SearchWidget::sig_contextMenu, this, &HostsTab::onLocalComputerContextMenu);
+    connect(search_widget_, &SearchWidget::sig_contextMenu, this, &HostsTab::onLocalHostContextMenu);
     connect(ui->action_add_group, &QAction::triggered, ui->sidebar, &Sidebar::onAddGroup);
     connect(ui->action_edit_group, &QAction::triggered, ui->sidebar, &Sidebar::onEditGroup);
     connect(ui->action_delete_group, &QAction::triggered, ui->sidebar, &Sidebar::onRemoveGroup);
@@ -517,7 +517,7 @@ void HostsTab::onSidebarContextMenu(Sidebar::Item::Type type, const QPoint& pos)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onCurrentComputerChanged(qint64 /* entry_id */)
+void HostsTab::onCurrentHostChanged(qint64 /* entry_id */)
 {
     updateActionsState();
 }
@@ -568,7 +568,7 @@ void HostsTab::onConnectAction(QAction* action)
 
         host = *found;
 
-        if (!validateComputerForConnect(host))
+        if (!validateHostForConnect(host))
             return;
 
         Database::instance().setConnectTime(host.id(), QDateTime::currentSecsSinceEpoch());
@@ -613,7 +613,7 @@ void HostsTab::onConnectAction(QAction* action)
         host.setAddress(QString::number(widget->selectedHostId()));
         host.setName(widget->selectedHostName());
 
-        if (!validateComputerForConnect(host))
+        if (!validateHostForConnect(host))
             return;
     }
 
@@ -630,7 +630,7 @@ void HostsTab::onLocalConnect(qint64 entry_id)
         return;
     }
 
-    if (!validateComputerForConnect(*host))
+    if (!validateHostForConnect(*host))
         return;
 
     Database::instance().setConnectTime(entry_id, QDateTime::currentSecsSinceEpoch());
@@ -638,7 +638,7 @@ void HostsTab::onLocalConnect(qint64 entry_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onLocalComputerContextMenu(qint64 entry_id, const QPoint& pos)
+void HostsTab::onLocalHostContextMenu(qint64 entry_id, const QPoint& pos)
 {
     QMenu menu;
 
@@ -662,7 +662,7 @@ void HostsTab::onLocalComputerContextMenu(qint64 entry_id, const QPoint& pos)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onAddComputer()
+void HostsTab::onAddHost()
 {
     LOG(INFO) << "[ACTION] Add host";
 
@@ -682,11 +682,11 @@ void HostsTab::onAddComputer()
 
     qint64 new_id = dialog.entryId();
     local_group_widget_->showGroup(group_id);
-    local_group_widget_->setCurrentComputer(new_id);
+    local_group_widget_->setCurrentHost(new_id);
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onEditComputer()
+void HostsTab::onEditHost()
 {
     LOG(INFO) << "[ACTION] Edit host";
 
@@ -696,7 +696,7 @@ void HostsTab::onEditComputer()
         return;
     }
 
-    qint64 entry_id = currentComputerId();
+    qint64 entry_id = currentHostEntryId();
     if (entry_id <= 0)
     {
         LOG(INFO) << "No current host";
@@ -721,11 +721,11 @@ void HostsTab::onEditComputer()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onCopyComputer()
+void HostsTab::onCopyHost()
 {
     LOG(INFO) << "[ACTION] Copy host";
 
-    qint64 entry_id = currentComputerId();
+    qint64 entry_id = currentHostEntryId();
     if (entry_id <= 0)
     {
         LOG(INFO) << "No current host";
@@ -756,21 +756,21 @@ void HostsTab::onCopyComputer()
     if (current_content_ == search_widget_)
     {
         search_widget_->search(search_widget_->currentQuery());
-        search_widget_->setCurrentComputer(new_id);
+        search_widget_->setCurrentHost(new_id);
     }
     else
     {
         local_group_widget_->showGroup(local_group_widget_->currentGroupId());
-        local_group_widget_->setCurrentComputer(new_id);
+        local_group_widget_->setCurrentHost(new_id);
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onRemoveComputer()
+void HostsTab::onRemoveHost()
 {
     LOG(INFO) << "[ACTION] Delete host";
 
-    qint64 entry_id = currentComputerId();
+    qint64 entry_id = currentHostEntryId();
     if (entry_id <= 0)
     {
         LOG(INFO) << "No current host";
@@ -1435,7 +1435,7 @@ RouterWidget* HostsTab::createRouterWidget(const RouterConfig& config)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool HostsTab::validateComputerForConnect(const HostConfig& host)
+bool HostsTab::validateHostForConnect(const HostConfig& host)
 {
     if (host.routerId() != 0)
     {
@@ -1467,7 +1467,7 @@ bool HostsTab::validateComputerForConnect(const HostConfig& host)
 }
 
 //--------------------------------------------------------------------------------------------------
-qint64 HostsTab::currentComputerId() const
+qint64 HostsTab::currentHostEntryId() const
 {
     if (current_content_ == local_group_widget_)
     {

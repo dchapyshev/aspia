@@ -68,11 +68,11 @@ public:
         HostConfig computer_;
     };
 
-    class ComputerMimeData final : public QMimeData
+    class HostMimeData final : public QMimeData
     {
     public:
-        ComputerMimeData() = default;
-        virtual ~ComputerMimeData() final = default;
+        HostMimeData() = default;
+        virtual ~HostMimeData() final = default;
 
         void setComputerItem(Item* computer_item, const QString& mime_type)
         {
@@ -97,7 +97,7 @@ public:
 
         void setComputerItem(Item* computer_item, const QString& mime_type)
         {
-            ComputerMimeData* mime_data = new ComputerMimeData();
+            HostMimeData* mime_data = new HostMimeData();
             mime_data->setComputerItem(computer_item, mime_type);
             setMimeData(mime_data);
         }
@@ -108,7 +108,7 @@ public:
     void showGroup(qint64 group_id);
     void setConnectTime(qint64 entry_id, qint64 connect_time);
     void setOnlineCheckEnabled(bool enable);
-    void setCurrentComputer(qint64 entry_id);
+    void setCurrentHost(qint64 entry_id);
     void refreshItem(qint64 entry_id);
     void removeItem(qint64 entry_id);
 

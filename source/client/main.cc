@@ -326,8 +326,8 @@ bool handleConnect()
     else if (session_type_value == "chat")
         session_type = proto::peer::SESSION_TYPE_CHAT;
 
-    QJsonValue computer_value = root.value("host");
-    if (!computer_value.isObject())
+    QJsonValue host_value = root.value("host");
+    if (!host_value.isObject())
     {
         LOG(ERROR) << "Missing or invalid \"host\" object in connection config";
         MsgBox::warning(nullptr, QApplication::translate("Client",
@@ -335,13 +335,13 @@ bool handleConnect()
         return false;
     }
 
-    QJsonObject computer_object = computer_value.toObject();
+    QJsonObject host_object = host_value.toObject();
 
     HostConfig host;
-    host.setAddress(computer_object.value("address").toString());
-    host.setUsername(computer_object.value("username").toString());
-    host.setPassword(SecureString(computer_object.value("password").toString()));
-    host.setName(computer_object.value("name").toString());
+    host.setAddress(host_object.value("address").toString());
+    host.setUsername(host_object.value("username").toString());
+    host.setPassword(SecureString(host_object.value("password").toString()));
+    host.setName(host_object.value("name").toString());
 
     if (host.address().isEmpty())
     {

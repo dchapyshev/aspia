@@ -337,7 +337,7 @@ SearchWidget::Item* SearchWidget::currentItem()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SearchWidget::setCurrentComputer(qint64 entry_id)
+void SearchWidget::setCurrentHost(qint64 entry_id)
 {
     Item* item = findItemByComputerId(entry_id);
     if (!item)

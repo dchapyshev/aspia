@@ -193,7 +193,7 @@ void LocalGroupWidget::setOnlineCheckEnabled(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-void LocalGroupWidget::setCurrentComputer(qint64 entry_id)
+void LocalGroupWidget::setCurrentHost(qint64 entry_id)
 {
     Item* item = findItemByComputerId(entry_id);
     if (!item)

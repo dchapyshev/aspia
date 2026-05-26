@@ -56,7 +56,7 @@ public:
     void clear();
     Item* currentItem();
     QString currentQuery() const { return current_query_; }
-    void setCurrentComputer(qint64 entry_id);
+    void setCurrentHost(qint64 entry_id);
     void refreshItem(qint64 entry_id);
     void removeItem(qint64 entry_id);
 
