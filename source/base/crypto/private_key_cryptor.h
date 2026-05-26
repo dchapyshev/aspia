@@ -32,7 +32,7 @@ class SecureString;
 class PrivateKeyCryptor
 {
 public:
-    static const int kSaltSize = 16;
+    static constexpr int kSaltSize = 16;
 
     static QByteArray generateSalt();
 

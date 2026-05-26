@@ -37,8 +37,8 @@ class KeyPair;
 class SealedBox
 {
 public:
-    static const int kPublicKeySize = 32;
-    static const int kMinSealedSize = kPublicKeySize + 12 + 16;
+    static constexpr int kPublicKeySize = 32;
+    static constexpr int kMinSealedSize = kPublicKeySize + 12 + 16;
 
     static QByteArray seal(QByteArrayView plaintext, const QByteArray& recipient_public_key);
     static std::optional<QByteArray> open(QByteArrayView sealed, const KeyPair& recipient_key_pair);
