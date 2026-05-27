@@ -79,6 +79,93 @@ bool hasColumn(QSqlDatabase& sql_db, const QString& table, const QString& column
 }
 
 //--------------------------------------------------------------------------------------------------
+QString groupsTableName(qint64 workspace_id)
+{
+    return QStringLiteral("groups_%1").arg(workspace_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString hostsTableName(qint64 workspace_id)
+{
+    return QStringLiteral("hosts_%1").arg(workspace_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Creates groups_<W> and hosts_<W> for the workspace plus their indexes. Idempotent: uses
+// IF NOT EXISTS, safe to call on a workspace whose tables already exist.
+bool createWorkspaceTables(QSqlDatabase& sql_db, qint64 workspace_id)
+{
+    const QString groups_table = groupsTableName(workspace_id);
+    const QString hosts_table = hostsTableName(workspace_id);
+
+    QSqlQuery query(sql_db);
+
+    if (!query.exec(QStringLiteral(
+            "CREATE TABLE IF NOT EXISTS \"%1\" ("
+            "\"id\" INTEGER PRIMARY KEY AUTOINCREMENT,"
+            "\"parent_id\" INTEGER REFERENCES \"%1\"(\"id\") ON DELETE CASCADE,"
+            "\"name\" TEXT NOT NULL,"
+            "\"comment\" BLOB NOT NULL DEFAULT X'')").arg(groups_table)))
+    {
+        LOG(ERROR) << "Unable to create groups table:" << query.lastError();
+        return false;
+    }
+
+    if (!query.exec(QStringLiteral(
+            "CREATE INDEX IF NOT EXISTS \"%1_parent_id\" ON \"%1\"(parent_id)")
+                .arg(groups_table)))
+    {
+        LOG(ERROR) << "Unable to create groups index:" << query.lastError();
+        return false;
+    }
+
+    if (!query.exec(QStringLiteral(
+            "CREATE TABLE IF NOT EXISTS \"%1\" ("
+            "\"host_id\" INTEGER PRIMARY KEY REFERENCES \"hosts\"(\"id\") ON DELETE CASCADE,"
+            "\"group_id\" INTEGER REFERENCES \"%2\"(\"id\") ON DELETE SET NULL,"
+            "\"display_name\" TEXT NOT NULL DEFAULT '',"
+            "\"comment\" BLOB NOT NULL DEFAULT X'',"
+            "\"user_name\" BLOB NOT NULL DEFAULT X'',"
+            "\"password\" BLOB NOT NULL DEFAULT X'',"
+            "\"last_modify\" INTEGER NOT NULL DEFAULT 0)").arg(hosts_table, groups_table)))
+    {
+        LOG(ERROR) << "Unable to create workspace hosts table:" << query.lastError();
+        return false;
+    }
+
+    if (!query.exec(QStringLiteral(
+            "CREATE INDEX IF NOT EXISTS \"%1_group_id\" ON \"%1\"(group_id)").arg(hosts_table)))
+    {
+        LOG(ERROR) << "Unable to create workspace hosts index:" << query.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Drops groups_<W> and hosts_<W> for the workspace. Order matters: hosts_<W> is dropped first
+// because it has a foreign key on groups_<W>.
+bool dropWorkspaceTables(QSqlDatabase& sql_db, qint64 workspace_id)
+{
+    QSqlQuery query(sql_db);
+
+    if (!query.exec(QStringLiteral("DROP TABLE IF EXISTS \"%1\"").arg(hostsTableName(workspace_id))))
+    {
+        LOG(ERROR) << "Unable to drop workspace hosts table:" << query.lastError();
+        return false;
+    }
+
+    if (!query.exec(QStringLiteral("DROP TABLE IF EXISTS \"%1\"").arg(groupsTableName(workspace_id))))
+    {
+        LOG(ERROR) << "Unable to drop groups table:" << query.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool ensureSchema(QSqlDatabase& sql_db)
 {
     if (!sql_db.transaction())
@@ -139,16 +226,6 @@ bool ensureSchema(QSqlDatabase& sql_db)
                     "PRIMARY KEY(\"workspace_id\", \"user_id\"),"
                     "FOREIGN KEY(\"workspace_id\") REFERENCES \"workspaces\"(\"id\") ON DELETE CASCADE,"
                     "FOREIGN KEY(\"user_id\") REFERENCES \"users\"(\"id\") ON DELETE CASCADE)") ||
-        // comment is AEAD-encrypted with the workspace GK; name is plain text.
-        !query.exec("CREATE TABLE IF NOT EXISTS \"host_groups\" ("
-                    "\"id\" INTEGER UNIQUE,"
-                    "\"workspace_id\" INTEGER NOT NULL,"
-                    "\"parent_id\" INTEGER,"
-                    "\"name\" TEXT NOT NULL,"
-                    "\"comment\" BLOB NOT NULL DEFAULT X'',"
-                    "PRIMARY KEY(\"id\" AUTOINCREMENT),"
-                    "FOREIGN KEY(\"workspace_id\") REFERENCES \"workspaces\"(\"id\") ON DELETE CASCADE,"
-                    "FOREIGN KEY(\"parent_id\") REFERENCES \"host_groups\"(\"id\") ON DELETE CASCADE)") ||
         // Pending host removals. When an admin requests host removal we move the row from hosts
         // into this table and wait for the host to acknowledge the remove command.
         !query.exec("CREATE TABLE IF NOT EXISTS \"hosts_remove\" ("
@@ -1042,6 +1119,12 @@ std::string_view Database::addWorkspace(const QString& name, const QByteArray& c
         }
     }
 
+    if (!createWorkspaceTables(sql_db, new_id))
+    {
+        sql_db.rollback();
+        return proto::router::kErrorInternalError;
+    }
+
     if (!sql_db.commit())
     {
         LOG(ERROR) << "Unable to commit transaction:" << sql_db.lastError();
@@ -1324,8 +1407,415 @@ std::string_view Database::removeWorkspace(qint64 entry_id)
         return proto::router::kErrorInvalidData;
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlDatabase sql_db = databaseByName(connection_name_);
+    if (!sql_db.transaction())
+    {
+        LOG(ERROR) << "Unable to start transaction:" << sql_db.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    if (!dropWorkspaceTables(sql_db, entry_id))
+    {
+        sql_db.rollback();
+        return proto::router::kErrorInternalError;
+    }
+
+    QSqlQuery query(sql_db);
     query.prepare(QStringLiteral("DELETE FROM workspaces WHERE id=?"));
+    query.addBindValue(entry_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        sql_db.rollback();
+        return proto::router::kErrorInternalError;
+    }
+
+    if (query.numRowsAffected() == 0)
+    {
+        sql_db.rollback();
+        return proto::router::kErrorNotFound;
+    }
+
+    if (!sql_db.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction:" << sql_db.lastError();
+        sql_db.rollback();
+        return proto::router::kErrorInternalError;
+    }
+
+    return proto::router::kErrorOk;
+}
+
+//--------------------------------------------------------------------------------------------------
+QVector<Group> Database::groupList(qint64 workspace_id) const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return {};
+    }
+
+    if (workspace_id <= 0)
+    {
+        LOG(ERROR) << "Invalid workspace id:" << workspace_id;
+        return {};
+    }
+
+    // Read every group of this workspace. parent_id is NULL for root groups in storage; we
+    // coalesce it to 0 to match the Group struct convention used everywhere in the API. Rows
+    // come back in whatever order SQLite produces them. Display ordering (alphabetic,
+    // locale-aware, and so on) is the client's job. Building a tree from this result does not
+    // require any particular order: index nodes by id, then link children to parents.
+    QSqlQuery query(databaseByName(connection_name_));
+    query.prepare(QStringLiteral(
+        "SELECT id, IFNULL(parent_id, 0), name, comment FROM \"%1\"")
+            .arg(groupsTableName(workspace_id)));
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to get group list:" << query.lastError();
+        return {};
+    }
+
+    QVector<Group> groups;
+    while (query.next())
+    {
+        Group group;
+        group.entry_id  = query.value(0).toLongLong();
+        group.parent_id = query.value(1).toLongLong();
+        group.name      = query.value(2).toString();
+        group.comment   = query.value(3).toByteArray();
+        groups.append(group);
+    }
+
+    return groups;
+}
+
+//--------------------------------------------------------------------------------------------------
+QVector<Group> Database::groupChildren(qint64 workspace_id, qint64 parent_id) const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return {};
+    }
+
+    if (workspace_id <= 0 || parent_id < 0)
+    {
+        LOG(ERROR) << "Invalid arguments: workspace_id=" << workspace_id << "parent_id=" << parent_id;
+        return {};
+    }
+
+    // Read direct children of the requested parent, alphabetically sorted. parent_id == 0 means
+    // "root groups" and maps to WHERE parent_id IS NULL (SQLite treats NULL via IS, not =).
+    // Otherwise filter on the parent id as a normal integer match. The SELECT shape mirrors
+    // groupList() so the column to struct mapping below stays identical.
+    QSqlQuery query(databaseByName(connection_name_));
+    if (parent_id == 0)
+    {
+        query.prepare(QStringLiteral(
+            "SELECT id, IFNULL(parent_id, 0), name, comment FROM \"%1\" "
+            "WHERE parent_id IS NULL ORDER BY name").arg(groupsTableName(workspace_id)));
+    }
+    else
+    {
+        query.prepare(QStringLiteral(
+            "SELECT id, IFNULL(parent_id, 0), name, comment FROM \"%1\" "
+            "WHERE parent_id=? ORDER BY name").arg(groupsTableName(workspace_id)));
+        query.addBindValue(parent_id);
+    }
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to get group children:" << query.lastError();
+        return {};
+    }
+
+    QVector<Group> groups;
+    while (query.next())
+    {
+        Group group;
+        group.entry_id  = query.value(0).toLongLong();
+        group.parent_id = query.value(1).toLongLong();
+        group.name      = query.value(2).toString();
+        group.comment   = query.value(3).toByteArray();
+        groups.append(group);
+    }
+
+    return groups;
+}
+
+//--------------------------------------------------------------------------------------------------
+Group Database::findGroup(qint64 workspace_id, qint64 entry_id) const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return Group();
+    }
+
+    if (workspace_id <= 0 || entry_id <= 0)
+    {
+        LOG(ERROR) << "Invalid arguments: workspace_id=" << workspace_id << "entry_id=" << entry_id;
+        return Group();
+    }
+
+    // Look up a single group by its id within this workspace. Same column projection as
+    // groupList(); IFNULL maps the storage NULL parent_id of a root node to 0.
+    QSqlQuery query(databaseByName(connection_name_));
+    query.prepare(QStringLiteral(
+        "SELECT id, IFNULL(parent_id, 0), name, comment FROM \"%1\" WHERE id=?")
+            .arg(groupsTableName(workspace_id)));
+    query.addBindValue(entry_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        return Group();
+    }
+
+    if (!query.next())
+        return Group();
+
+    Group group;
+    group.entry_id  = query.value(0).toLongLong();
+    group.parent_id = query.value(1).toLongLong();
+    group.name      = query.value(2).toString();
+    group.comment   = query.value(3).toByteArray();
+    return group;
+}
+
+//--------------------------------------------------------------------------------------------------
+std::string_view Database::addGroup(qint64 workspace_id, qint64 parent_id, const QString& name,
+    const QByteArray& comment, qint64* entry_id)
+{
+    CHECK(entry_id);
+
+    *entry_id = -1;
+
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return proto::router::kErrorInternalError;
+    }
+
+    if (workspace_id <= 0)
+    {
+        LOG(ERROR) << "Invalid workspace id:" << workspace_id;
+        return proto::router::kErrorInvalidData;
+    }
+
+    if (parent_id < 0)
+    {
+        LOG(ERROR) << "Invalid parent id:" << parent_id;
+        return proto::router::kErrorInvalidData;
+    }
+
+    if (name.trimmed().isEmpty())
+    {
+        LOG(ERROR) << "Invalid group name";
+        return proto::router::kErrorInvalidData;
+    }
+
+    QSqlDatabase sql_db = databaseByName(connection_name_);
+    if (!sql_db.transaction())
+    {
+        LOG(ERROR) << "Unable to start transaction:" << sql_db.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    const QString groups_table = groupsTableName(workspace_id);
+
+    // The parent (if any) must exist in this workspace.
+    if (parent_id != 0)
+    {
+        QSqlQuery parent_check(sql_db);
+        parent_check.prepare(QStringLiteral("SELECT 1 FROM \"%1\" WHERE id=?").arg(groups_table));
+        parent_check.addBindValue(parent_id);
+
+        if (!parent_check.exec())
+        {
+            LOG(ERROR) << "Unable to execute query:" << parent_check.lastError();
+            sql_db.rollback();
+            return proto::router::kErrorInternalError;
+        }
+
+        if (!parent_check.next())
+        {
+            sql_db.rollback();
+            return proto::router::kErrorInvalidData;
+        }
+    }
+
+    QSqlQuery insert(sql_db);
+    insert.prepare(QStringLiteral(
+        "INSERT INTO \"%1\" (parent_id, name, comment) VALUES (?, ?, ?)").arg(groups_table));
+    insert.addBindValue(parent_id == 0 ? QVariant() : QVariant(parent_id));
+    insert.addBindValue(name);
+    insert.addBindValue(comment);
+
+    if (!insert.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << insert.lastError();
+        sql_db.rollback();
+        return proto::router::kErrorInternalError;
+    }
+
+    const qint64 new_id = insert.lastInsertId().toLongLong();
+
+    if (!sql_db.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction:" << sql_db.lastError();
+        sql_db.rollback();
+        return proto::router::kErrorInternalError;
+    }
+
+    *entry_id = new_id;
+    return proto::router::kErrorOk;
+}
+
+//--------------------------------------------------------------------------------------------------
+std::string_view Database::modifyGroup(qint64 workspace_id, qint64 entry_id, qint64 new_parent_id,
+    const QString& name, const QByteArray& comment)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return proto::router::kErrorInternalError;
+    }
+
+    if (workspace_id <= 0 || entry_id <= 0 || new_parent_id < 0)
+    {
+        LOG(ERROR) << "Invalid arguments: workspace_id=" << workspace_id
+                   << "entry_id=" << entry_id << "new_parent_id=" << new_parent_id;
+        return proto::router::kErrorInvalidData;
+    }
+
+    if (name.trimmed().isEmpty())
+    {
+        LOG(ERROR) << "Invalid group name";
+        return proto::router::kErrorInvalidData;
+    }
+
+    QSqlDatabase sql_db = databaseByName(connection_name_);
+    if (!sql_db.transaction())
+    {
+        LOG(ERROR) << "Unable to start transaction:" << sql_db.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    const QString groups_table = groupsTableName(workspace_id);
+
+    // Verify the group being modified exists.
+    QSqlQuery select_self(sql_db);
+    select_self.prepare(QStringLiteral("SELECT 1 FROM \"%1\" WHERE id=?").arg(groups_table));
+    select_self.addBindValue(entry_id);
+
+    if (!select_self.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << select_self.lastError();
+        sql_db.rollback();
+        return proto::router::kErrorInternalError;
+    }
+
+    if (!select_self.next())
+    {
+        sql_db.rollback();
+        return proto::router::kErrorNotFound;
+    }
+
+    if (new_parent_id != 0)
+    {
+        // The new parent must exist in this workspace.
+        QSqlQuery parent_check(sql_db);
+        parent_check.prepare(QStringLiteral("SELECT 1 FROM \"%1\" WHERE id=?").arg(groups_table));
+        parent_check.addBindValue(new_parent_id);
+
+        if (!parent_check.exec())
+        {
+            LOG(ERROR) << "Unable to execute query:" << parent_check.lastError();
+            sql_db.rollback();
+            return proto::router::kErrorInternalError;
+        }
+
+        if (!parent_check.next())
+        {
+            sql_db.rollback();
+            return proto::router::kErrorInvalidData;
+        }
+
+        // Cycle protection. Walk parent links from new_parent_id upward; if entry_id appears
+        // anywhere on that chain, the move would put the group inside its own subtree. The
+        // recursive CTE bounds itself naturally on a well-formed tree (parent_id IS NULL marks
+        // the top) and SQLite caps runaway recursion at SQLITE_MAX_RECURSION_DEPTH.
+        QSqlQuery cycle_check(sql_db);
+        cycle_check.prepare(QStringLiteral(
+            "WITH RECURSIVE ancestors(id) AS ("
+            "    SELECT id FROM \"%1\" WHERE id=?"
+            "    UNION ALL"
+            "    SELECT g.parent_id FROM \"%1\" g JOIN ancestors a ON g.id = a.id "
+            "      WHERE g.parent_id IS NOT NULL"
+            ") SELECT 1 FROM ancestors WHERE id=? LIMIT 1").arg(groups_table));
+        cycle_check.addBindValue(new_parent_id);
+        cycle_check.addBindValue(entry_id);
+
+        if (!cycle_check.exec())
+        {
+            LOG(ERROR) << "Unable to execute query:" << cycle_check.lastError();
+            sql_db.rollback();
+            return proto::router::kErrorInternalError;
+        }
+
+        if (cycle_check.next())
+        {
+            sql_db.rollback();
+            return proto::router::kErrorInvalidData;
+        }
+    }
+
+    QSqlQuery update_self(sql_db);
+    update_self.prepare(QStringLiteral(
+        "UPDATE \"%1\" SET parent_id=?, name=?, comment=? WHERE id=?").arg(groups_table));
+    update_self.addBindValue(new_parent_id == 0 ? QVariant() : QVariant(new_parent_id));
+    update_self.addBindValue(name);
+    update_self.addBindValue(comment);
+    update_self.addBindValue(entry_id);
+
+    if (!update_self.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << update_self.lastError();
+        sql_db.rollback();
+        return proto::router::kErrorInternalError;
+    }
+
+    if (!sql_db.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction:" << sql_db.lastError();
+        sql_db.rollback();
+        return proto::router::kErrorInternalError;
+    }
+
+    return proto::router::kErrorOk;
+}
+
+//--------------------------------------------------------------------------------------------------
+std::string_view Database::removeGroup(qint64 workspace_id, qint64 entry_id)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return proto::router::kErrorInternalError;
+    }
+
+    if (workspace_id <= 0 || entry_id <= 0)
+    {
+        LOG(ERROR) << "Invalid arguments: workspace_id=" << workspace_id << "entry_id=" << entry_id;
+        return proto::router::kErrorInvalidData;
+    }
+
+    QSqlQuery query(databaseByName(connection_name_));
+    query.prepare(QStringLiteral("DELETE FROM \"%1\" WHERE id=?").arg(groupsTableName(workspace_id)));
     query.addBindValue(entry_id);
 
     if (!query.exec())

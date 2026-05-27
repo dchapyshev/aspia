@@ -47,6 +47,19 @@ struct HostInfo
     qint64 last_modify  = 0;
 };
 
+// A node in the per-workspace host group tree (groups_<workspace_id> row). Root nodes have
+// parent_id == 0. Names are not required to be unique within a parent: two siblings with the
+// same name are allowed and the client disambiguates by entry_id. The tree is a plain adjacency
+// list: cycle protection on move uses a recursive CTE that walks parent links from the proposed
+// new parent and refuses the move if it reaches the node being moved.
+struct Group
+{
+    qint64 entry_id  = 0;
+    qint64 parent_id = 0; // 0 means the group sits at the workspace root.
+    QString name;
+    QByteArray comment;   // AEAD-encrypted with the workspace GK.
+};
+
 class Database
 {
 public:
@@ -90,18 +103,22 @@ public:
     // timestamp) and deletes the original hosts row. The host_id is kept intact so that a
     // reconnecting offline host can be matched by key in hostId().
     bool scheduleHostRemoval(HostId host_id);
+
     // Returns true if host_id has a pending removal in hosts_remove.
     bool hasPendingHostRemoval(HostId host_id) const;
+
     // Removes the hosts_remove row once the host has acknowledged the removal command.
     bool finalizeHostRemoval(HostId host_id);
 
     QVector<Workspace> workspaceList() const;
     Workspace findWorkspace(qint64 entry_id) const;
+
     // Initial access list may be empty - in that case the workspace has no GK yet; it will
     // be generated when the first access is granted via modifyWorkspace(). The comment is
     // stored as opaque bytes (AEAD-encrypted with the workspace GK on the client).
     std::string_view addWorkspace(const QString& name, const QByteArray& comment,
         const QVector<Workspace::Access>& initial_access, qint64* entry_id);
+
     // Updates name/comment and synchronizes access in a single transaction. desired_access is
     // the complete final access list: user_ids missing from it are revoked, user_ids absent
     // from the current DB record are inserted with the supplied wrapped_gk, and user_ids
@@ -118,7 +135,38 @@ public:
     // hijack a host from another workspace through this call).
     std::string_view setWorkspaceHosts(qint64 entry_id, const QSet<HostId>& desired_host_ids);
 
+    // Returns the entire group tree of the given workspace, ordered by parent_id then name.
+    // The caller can build a tree by indexing on entry_id and linking via parent_id.
+    QVector<Group> groupList(qint64 workspace_id) const;
+
+    // Returns direct children of parent_id within workspace_id. parent_id == 0 returns root
+    // groups (parent_id IS NULL in the table).
+    QVector<Group> groupChildren(qint64 workspace_id, qint64 parent_id) const;
+
+    // Returns the group with the given entry_id from workspace_id. Returns an empty Group
+    // (entry_id == 0) if the row is missing or workspace_id has no groups_<W> table.
+    Group findGroup(qint64 workspace_id, qint64 entry_id) const;
+
+    // Inserts a new group. parent_id == 0 places it at the workspace root; otherwise parent_id
+    // must reference an existing row in groups_<workspace_id>. The path column is computed
+    // server-side from the parent's path. On success *entry_id is set to the new id.
+    std::string_view addGroup(qint64 workspace_id, qint64 parent_id, const QString& name,
+        const QByteArray& comment, qint64* entry_id);
+
+    // Renames and/or re-parents a group. new_parent_id must point to a group in the same
+    // workspace and must not be the group itself or one of its descendants. The cycle check
+    // runs a recursive CTE that walks parent links upward from new_parent_id; if entry_id
+    // appears anywhere in that chain the move is refused.
+    std::string_view modifyGroup(qint64 workspace_id, qint64 entry_id, qint64 new_parent_id,
+        const QString& name, const QByteArray& comment);
+
+    // Deletes the group and all its descendants. Descendants are removed by the foreign-key
+    // cascade on parent_id; hosts whose group_id pointed into the deleted subtree are detached
+    // to the workspace root by the foreign-key SET NULL on hosts_<W>.group_id.
+    std::string_view removeGroup(qint64 workspace_id, qint64 entry_id);
+
     QVector<Workspace::Access> workspaceAccessList(qint64 workspace_id) const;
+
     // Returns the set of workspace ids the given user has a workspace_access entry for.
     QSet<qint64> workspaceAccessListForUser(qint64 user_id) const;
     bool hasWorkspaceAccess(qint64 user_id, qint64 workspace_id) const;
@@ -126,6 +174,7 @@ public:
     // Returns every host in the database (admin-only call site). [start_item, end_item] gives an
     // inclusive paging window; pass end_item <= 0 to disable paging.
     QVector<HostInfo> hosts(qint64 start_item, qint64 end_item) const;
+
     // Returns hosts in the given workspace and group with exact match on both columns.
     // [start_item, end_item] gives an inclusive paging window; pass end_item <= 0 to disable.
     QVector<HostInfo> hosts(qint64 workspace_id, qint64 group_id, qint64 start_item, qint64 end_item) const;
