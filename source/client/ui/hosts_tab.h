@@ -111,6 +111,9 @@ private:
     void destroyRouterWidget(qint64 router_id);
     RouterWidget* createRouterWidget(const RouterConfig& config);
 
+    void refreshSidebarWorkspaces(qint64 router_id);
+    void refreshSidebarHostGroups(qint64 router_id);
+
     bool validateHostForConnect(const HostConfig& host);
     qint64 currentHostEntryId() const;
     void refreshItem(qint64 entry_id);

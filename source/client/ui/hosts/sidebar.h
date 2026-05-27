@@ -40,6 +40,8 @@ public:
     class Item : public QTreeWidgetItem
     {
     public:
+        // ROUTER_GROUP covers both workspaces under a router and host groups inside a
+        // workspace. The two are distinguished by RouterGroupItem::isWorkspace().
         enum Type { LOCAL_GROUP, ROUTER, ROUTER_GROUP };
 
         Type itemType() const { return type_; }
@@ -88,13 +90,21 @@ public:
     class RouterGroupItem final : public Item
     {
     public:
-        RouterGroupItem(qint64 router_id, qint64 group_id, const QString& name,
-                        QTreeWidgetItem* parent);
+        // is_workspace == true for a workspace under a router (the workspace_id equals
+        // group_id in that case). is_workspace == false for a host group inside a workspace;
+        // workspace_id is then the id of the enclosing workspace. The logical parent of a
+        // host group is mirrored by its QTreeWidgetItem parent and is not stored separately.
+        RouterGroupItem(qint64 router_id, qint64 workspace_id, qint64 group_id,
+                        bool is_workspace, const QString& name, QTreeWidgetItem* parent);
 
         qint64 routerId() const { return router_id_; }
+        qint64 workspaceId() const { return workspace_id_; }
+        bool isWorkspace() const { return is_workspace_; }
 
     private:
         const qint64 router_id_;
+        const qint64 workspace_id_;
+        const bool is_workspace_;
     };
 
     class GroupMimeData final : public QMimeData
@@ -141,10 +151,13 @@ public:
     void reloadRouters();
     void setRouterStatus(qint64 router_id, RouterItem::Status status);
     void setRouterWorkspaces(qint64 router_id, const QList<Router::Workspace>& workspaces);
+    void setRouterHostGroups(qint64 router_id, qint64 workspace_id,
+                             const QList<Router::Group>& groups);
     qint64 currentGroupId() const;
     Item* currentItem() const;
     RouterItem* routerById(qint64 router_id) const;
     QList<qint64> routerIds() const;
+    QList<qint64> routerWorkspaceIds(qint64 router_id) const;
 
 public slots:
     void onAddGroup();

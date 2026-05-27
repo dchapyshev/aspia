@@ -419,13 +419,7 @@ void HostsTab::onRouterStatusChanged(qint64 router_id, Router::Status status)
 
     if (status == Router::Status::ONLINE)
     {
-        if (Router* router = Router::instance(router_id))
-        {
-            router->listWorkspaces(0, this, [this, router_id](const Router::WorkspaceList& list)
-            {
-                ui->sidebar->setRouterWorkspaces(router_id, list.workspaces);
-            });
-        }
+        refreshSidebarWorkspaces(router_id);
     }
     else
     {
@@ -1443,8 +1437,73 @@ RouterWidget* HostsTab::createRouterWidget(const RouterConfig& config)
     connect(widget, &RouterWidget::sig_relayContextMenu, this, &HostsTab::onRelayContextMenu);
     connect(widget, &RouterWidget::sig_workspaceContextMenu, this, &HostsTab::onWorkspaceContextMenu);
 
+    // The router is constructed inside RouterWidget's ctor so router() is non-null here. We
+    // subscribe to data-change notifications to keep the sidebar tree in sync without having
+    // to wait for an OFFLINE/ONLINE flap.
+    if (Router* router = widget->router().data())
+    {
+        const qint64 router_id = config.routerId();
+        connect(router, &Router::sig_workspacesChanged, this, [this, router_id]
+        {
+            refreshSidebarWorkspaces(router_id);
+        });
+        connect(router, &Router::sig_groupsChanged, this, [this, router_id]
+        {
+            refreshSidebarHostGroups(router_id);
+        });
+    }
+
     widget->connectToRouter();
     return widget;
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::refreshSidebarWorkspaces(qint64 router_id)
+{
+    Router* router = Router::instance(router_id);
+    if (!router)
+        return;
+
+    router->listWorkspaces(0, this, [this, router_id](const Router::WorkspaceList& list)
+    {
+        ui->sidebar->setRouterWorkspaces(router_id, list.workspaces);
+
+        // Once the workspace items are in place, fan out a host-group fetch per workspace.
+        // Each response builds the subtree under its workspace via setRouterHostGroups().
+        Router* router = Router::instance(router_id);
+        if (!router)
+            return;
+
+        for (const Router::Workspace& workspace : list.workspaces)
+        {
+            const qint64 workspace_id = workspace.entry_id;
+            router->listGroups(workspace_id, this,
+                [this, router_id, workspace_id](const Router::GroupList& result)
+            {
+                ui->sidebar->setRouterHostGroups(router_id, workspace_id, result.groups);
+            });
+        }
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::refreshSidebarHostGroups(qint64 router_id)
+{
+    // The workspace items already exist in the sidebar; refetch the group tree for each one
+    // without disturbing the workspaces themselves.
+    Router* router = Router::instance(router_id);
+    if (!router)
+        return;
+
+    const QList<qint64> workspace_ids = ui->sidebar->routerWorkspaceIds(router_id);
+    for (qint64 workspace_id : workspace_ids)
+    {
+        router->listGroups(workspace_id, this,
+            [this, router_id, workspace_id](const Router::GroupList& result)
+        {
+            ui->sidebar->setRouterHostGroups(router_id, workspace_id, result.groups);
+        });
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

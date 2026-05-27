@@ -219,9 +219,110 @@ void Sidebar::setRouterWorkspaces(qint64 router_id, const QList<Router::Workspac
     }
 
     for (const Router::Workspace& workspace : workspaces)
-        new RouterGroupItem(router_id, workspace.entry_id, workspace.name, router);
+    {
+        // A workspace sits directly under the router; workspace_id and group_id coincide.
+        new RouterGroupItem(router_id, workspace.entry_id, workspace.entry_id,
+                            /*is_workspace=*/true, workspace.name, router);
+    }
 
     router->setExpanded(true);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::setRouterHostGroups(qint64 router_id, qint64 workspace_id, const QList<Router::Group>& groups)
+{
+    RouterItem* router = routerById(router_id);
+    if (!router)
+        return;
+
+    // Find the workspace item under the router: a ROUTER_GROUP that flags itself as a
+    // workspace and whose id matches.
+    RouterGroupItem* workspace_item = nullptr;
+    for (int i = 0; i < router->childCount(); ++i)
+    {
+        Item* child = static_cast<Item*>(router->child(i));
+        if (child->itemType() != Item::ROUTER_GROUP)
+            continue;
+        auto* group_item = static_cast<RouterGroupItem*>(child);
+        if (group_item->isWorkspace() && group_item->groupId() == workspace_id)
+        {
+            workspace_item = group_item;
+            break;
+        }
+    }
+
+    if (!workspace_item)
+        return;
+
+    // Incremental diff with the existing subtree under the workspace. Keeping items in place
+    // preserves selection and expansion state across refreshes, and avoids visible flicker.
+    //
+    // Three passes:
+    //   1. Index the incoming list: a flat set of entry_ids for the deletion check, and a
+    //      parent_id -> children index for the DFS in pass 3.
+    //   2. Walk the existing subtree once. Items whose id is missing from the incoming set are
+    //      dropped (their descendants go with them via Qt's child ownership); surviving items
+    //      land in `existing` and stay where they are.
+    //   3. DFS the incoming tree in parent-first order. For each node create it under its
+    //      target parent if missing; otherwise update name and re-parent if it moved.
+
+    QHash<qint64, QList<const Router::Group*>> children_of;
+    QSet<qint64> incoming_ids;
+    incoming_ids.reserve(groups.size());
+    for (const Router::Group& group : groups)
+    {
+        children_of[group.parent_id].append(&group);
+        incoming_ids.insert(group.entry_id);
+    }
+
+    QHash<qint64, RouterGroupItem*> existing;
+    std::function<void(QTreeWidgetItem*)> sweep = [&](QTreeWidgetItem* parent)
+    {
+        // Iterate in reverse so takeChild() index shifts do not skip siblings.
+        for (int i = parent->childCount() - 1; i >= 0; --i)
+        {
+            Item* child = static_cast<Item*>(parent->child(i));
+            if (child->itemType() != Item::ROUTER_GROUP)
+                continue;
+            auto* group_item = static_cast<RouterGroupItem*>(child);
+            if (!incoming_ids.contains(group_item->groupId()))
+            {
+                delete parent->takeChild(i);
+                continue;
+            }
+            existing.insert(group_item->groupId(), group_item);
+            sweep(group_item);
+        }
+    };
+    sweep(workspace_item);
+
+    std::function<void(qint64, QTreeWidgetItem*)> apply = [&](qint64 parent_id,
+                                                              QTreeWidgetItem* tree_parent)
+    {
+        for (const Router::Group* group : std::as_const(children_of[parent_id]))
+        {
+            RouterGroupItem* item = existing.value(group->entry_id);
+            if (!item)
+            {
+                item = new RouterGroupItem(router_id, workspace_id, group->entry_id,
+                                           /*is_workspace=*/false, group->name, tree_parent);
+                existing.insert(group->entry_id, item);
+            }
+            else
+            {
+                if (item->text(0) != group->name)
+                    item->setText(0, group->name);
+                if (item->parent() != tree_parent)
+                {
+                    QTreeWidgetItem* current_parent = item->parent();
+                    current_parent->takeChild(current_parent->indexOfChild(item));
+                    tree_parent->addChild(item);
+                }
+            }
+            apply(group->entry_id, item);
+        }
+    };
+    apply(0, workspace_item);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -265,6 +366,28 @@ QList<qint64> Sidebar::routerIds() const
             continue;
 
         ids.append(static_cast<RouterItem*>(item)->routerId());
+    }
+
+    return ids;
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<qint64> Sidebar::routerWorkspaceIds(qint64 router_id) const
+{
+    QList<qint64> ids;
+
+    RouterItem* router = routerById(router_id);
+    if (!router)
+        return ids;
+
+    for (int i = 0; i < router->childCount(); ++i)
+    {
+        Item* child = static_cast<Item*>(router->child(i));
+        if (child->itemType() != Item::ROUTER_GROUP)
+            continue;
+        auto* group_item = static_cast<RouterGroupItem*>(child);
+        if (group_item->isWorkspace())
+            ids.append(group_item->groupId());
     }
 
     return ids;
@@ -949,11 +1072,14 @@ void Sidebar::RouterItem::setStatus(Status status)
 }
 
 //--------------------------------------------------------------------------------------------------
-Sidebar::RouterGroupItem::RouterGroupItem(qint64 router_id, qint64 group_id, const QString& name,
+Sidebar::RouterGroupItem::RouterGroupItem(qint64 router_id, qint64 workspace_id, qint64 group_id,
+                                          bool is_workspace, const QString& name,
                                           QTreeWidgetItem* parent)
     : Item(ROUTER_GROUP, group_id, parent),
-      router_id_(router_id)
+      router_id_(router_id),
+      workspace_id_(workspace_id),
+      is_workspace_(is_workspace)
 {
     setText(0, name);
-    setIcon(0, QIcon(":/img/workspace.svg"));
+    setIcon(0, QIcon(is_workspace_ ? ":/img/workspace.svg" : ":/img/folder.svg"));
 }
