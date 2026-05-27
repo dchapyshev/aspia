@@ -41,6 +41,11 @@ extern const char* const kCommandWorkspaceAdd;
 extern const char* const kCommandWorkspaceModify;
 extern const char* const kCommandWorkspaceDelete;
 
+// Command names for GroupRequest.
+extern const char* const kCommandGroupAdd;
+extern const char* const kCommandGroupModify;
+extern const char* const kCommandGroupDelete;
+
 // Command names for PeerRequest.
 extern const char* const kCommandPeerDisconnect;
 

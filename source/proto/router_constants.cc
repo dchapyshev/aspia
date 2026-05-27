@@ -35,6 +35,10 @@ const char* const kCommandWorkspaceAdd    = "add";
 const char* const kCommandWorkspaceModify = "modify";
 const char* const kCommandWorkspaceDelete = "delete";
 
+const char* const kCommandGroupAdd    = "add";
+const char* const kCommandGroupModify = "modify";
+const char* const kCommandGroupDelete = "delete";
+
 const char* const kCommandPeerDisconnect = "disconnect";
 
 const char* const kErrorOk             = "ok";

@@ -65,6 +65,28 @@ message WorkspaceList
     repeated Workspace workspace = 3;
 }
 
+message Group
+{
+    int64 entry_id  = 1; // groups_<workspace_id>.id
+    int64 parent_id = 2; // 0 means the group sits at the workspace root.
+    string name     = 3; // Plain text.
+    bytes comment   = 4; // AEAD-encrypted with the workspace GK.
+}
+
+message GroupListRequest
+{
+    int64 request_id   = 1;
+    int64 workspace_id = 2;
+}
+
+message GroupList
+{
+    int64 request_id     = 1;
+    string error_code    = 2; // "ok" | "access_denied" | "internal_error"
+    int64 workspace_id   = 3; // Echo of the request, so the client can route the response.
+    repeated Group group = 4;
+}
+
 message ChangePasswordRequest
 {
     int64 request_id       = 1;
@@ -165,6 +187,7 @@ message Notification
     bool clients_dirty    = 3;
     bool users_dirty      = 4;
     bool workspaces_dirty = 5;
+    bool groups_dirty     = 6;
 }
 
 message RouterToClient
@@ -176,6 +199,7 @@ message RouterToClient
     HostStatus host_status                      = 5;
     HostList host_list                          = 6;
     WorkspaceList workspace_list                = 7;
+    GroupList group_list                        = 8;
 }
 
 message ClientToRouter
@@ -185,4 +209,5 @@ message ClientToRouter
     CheckHostStatus check_host_status             = 3;
     HostListRequest host_list_request             = 4;
     WorkspaceListRequest workspace_list_request   = 5;
+    GroupListRequest group_list_request           = 6;
 }
