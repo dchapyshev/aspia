@@ -119,6 +119,24 @@ public:
         QList<Host> hosts;
     };
 
+    // Plain (decrypted) host group record. workspace_id is not part of the struct because the
+    // workspace owns the underlying table; the workspace_id stays alongside Group at the RPC
+    // call sites (listGroups, addGroup, etc).
+    struct Group
+    {
+        qint64 entry_id = 0;
+        qint64 parent_id = 0;    // 0 means the group sits at the workspace root.
+        QString name;
+        QString comment;         // Decrypted with the workspace GK.
+    };
+
+    struct GroupList
+    {
+        QString error_code;
+        qint64 workspace_id = 0; // Echo of the request.
+        QList<Group> groups;
+    };
+
     explicit Router(const RouterConfig& config, QObject* parent = nullptr);
     ~Router() final;
 
@@ -184,6 +202,20 @@ public:
     template<typename HandlerT>
     void deleteWorkspace(qint64 entry_id, QObject* receiver, HandlerT handler);
 
+    // Admin: host-group operations. Add/modify encrypt the comment with the workspace GK.
+    // workspace_id selects which groups_<W> table to operate on.
+    template<typename HandlerT>
+    void addGroup(qint64 workspace_id, const Router::Group& group,
+                  QObject* receiver, HandlerT handler);
+
+    template<typename HandlerT>
+    void modifyGroup(qint64 workspace_id, const Router::Group& group,
+                     QObject* receiver, HandlerT handler);
+
+    template<typename HandlerT>
+    void deleteGroup(qint64 workspace_id, qint64 entry_id,
+                     QObject* receiver, HandlerT handler);
+
     // Admin: peer disconnect.
     template<typename HandlerT>
     void disconnectPeer(qint64 relay_id, qint64 peer_id, QObject* receiver, HandlerT handler);
@@ -192,6 +224,11 @@ public:
     // returns all visible workspaces; > 0 narrows to a single entry.
     template<typename HandlerT>
     void listWorkspaces(qint64 workspace_id, QObject* receiver, HandlerT handler);
+
+    // Client: host-group list of a workspace (response is the decoded plain struct with
+    // comments decrypted via the cached workspace cryptor).
+    template<typename HandlerT>
+    void listGroups(qint64 workspace_id, QObject* receiver, HandlerT handler);
 
     // Client: host list. Caller supplies a pre-filled request (mode, filters, etc).
     template<typename HandlerT>
@@ -216,12 +253,14 @@ signals:
 
     // Push notifications: server signals that a particular list has changed and subscribers
     // should refetch via the corresponding list* RPC. Fired at most once per ~5 seconds per
-    // resource. Regular client sessions only receive sig_hostsChanged / sig_workspacesChanged.
+    // resource. Regular client sessions only receive sig_hostsChanged / sig_workspacesChanged
+    // / sig_groupsChanged.
     void sig_hostsChanged(qint64 router_id);
     void sig_relaysChanged(qint64 router_id);
     void sig_clientsChanged(qint64 router_id);
     void sig_usersChanged(qint64 router_id);
     void sig_workspacesChanged(qint64 router_id);
+    void sig_groupsChanged(qint64 router_id);
 
 private slots:
     void onTcpAuthenticated();
@@ -327,6 +366,7 @@ private:
     void setStatus(Status status);
     bool buildWorkspace(const Router::Workspace& workspace, proto::router::Workspace* out);
     void buildHost(const Router::Host& host, proto::router::HostEditRequest* out);
+    bool buildGroup(qint64 workspace_id, const Router::Group& group, proto::router::Group* out);
     void setupChannel();
     void destroyChannel();
     void emitSend(quint8 channel_id, const google::protobuf::MessageLite& message);
@@ -334,6 +374,7 @@ private:
     void emitNotificationSignals(const proto::router::Notification& notification);
     Router::WorkspaceList decodeWorkspaceList(const proto::router::WorkspaceList& list);
     Router::HostList decodeHostList(const proto::router::HostList& list);
+    Router::GroupList decodeGroupList(const proto::router::GroupList& list);
     SecureByteArray unwrapGroupKey(const QByteArray& wrapped_gk) const;
 
     RouterConfig config_;
@@ -357,6 +398,8 @@ Q_DECLARE_METATYPE(Router::Workspace)
 Q_DECLARE_METATYPE(Router::WorkspaceList)
 Q_DECLARE_METATYPE(Router::Host)
 Q_DECLARE_METATYPE(Router::HostList)
+Q_DECLARE_METATYPE(Router::Group)
+Q_DECLARE_METATYPE(Router::GroupList)
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
@@ -543,6 +586,57 @@ void Router::deleteWorkspace(qint64 entry_id, QObject* receiver, HandlerT handle
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
+void Router::addGroup(qint64 workspace_id, const Router::Group& group,
+                      QObject* receiver, HandlerT handler)
+{
+    proto::router::Group serialized;
+    if (!buildGroup(workspace_id, group, &serialized))
+        return;
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_group_request();
+    request->set_request_id(nextRequestId());
+    request->set_command_name(proto::router::kCommandGroupAdd);
+    request->set_workspace_id(workspace_id);
+    request->mutable_group()->Swap(&serialized);
+    registerPending<proto::router::GroupResult>(request, receiver, std::move(handler));
+    emitSend(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+template<typename HandlerT>
+void Router::modifyGroup(qint64 workspace_id, const Router::Group& group,
+                         QObject* receiver, HandlerT handler)
+{
+    proto::router::Group serialized;
+    if (!buildGroup(workspace_id, group, &serialized))
+        return;
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_group_request();
+    request->set_request_id(nextRequestId());
+    request->set_command_name(proto::router::kCommandGroupModify);
+    request->set_workspace_id(workspace_id);
+    request->mutable_group()->Swap(&serialized);
+    registerPending<proto::router::GroupResult>(request, receiver, std::move(handler));
+    emitSend(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+template<typename HandlerT>
+void Router::deleteGroup(qint64 workspace_id, qint64 entry_id,
+                         QObject* receiver, HandlerT handler)
+{
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_group_request();
+    request->set_request_id(nextRequestId());
+    request->set_command_name(proto::router::kCommandGroupDelete);
+    request->set_workspace_id(workspace_id);
+    request->mutable_group()->set_entry_id(entry_id);
+    registerPending<proto::router::GroupResult>(request, receiver, std::move(handler));
+    emitSend(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+template<typename HandlerT>
 void Router::disconnectPeer(qint64 relay_id, qint64 peer_id, QObject* receiver, HandlerT handler)
 {
     proto::router::AdminToRouter message;
@@ -567,6 +661,22 @@ void Router::listWorkspaces(qint64 workspace_id, QObject* receiver, HandlerT han
         [this](const proto::router::WorkspaceList& raw)
     {
         return decodeWorkspaceList(raw);
+    });
+    emitSend(proto::router::CHANNEL_ID_CLIENT, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+template<typename HandlerT>
+void Router::listGroups(qint64 workspace_id, QObject* receiver, HandlerT handler)
+{
+    proto::router::ClientToRouter message;
+    auto* request = message.mutable_group_list_request();
+    request->set_request_id(nextRequestId());
+    request->set_workspace_id(workspace_id);
+    registerPending<proto::router::GroupList>(request, receiver, std::move(handler),
+        [this](const proto::router::GroupList& raw)
+    {
+        return decodeGroupList(raw);
     });
     emitSend(proto::router::CHANNEL_ID_CLIENT, message);
 }

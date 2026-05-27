@@ -381,9 +381,10 @@ void Service::onNotificationFlush()
     const bool clients    = (dirty_mask_ & NOTIFY_CLIENTS)    != 0;
     const bool users      = (dirty_mask_ & NOTIFY_USERS)      != 0;
     const bool workspaces = (dirty_mask_ & NOTIFY_WORKSPACES) != 0;
+    const bool groups     = (dirty_mask_ & NOTIFY_GROUPS)     != 0;
     dirty_mask_ = 0;
 
-    // Admin gets the full bitmask (relays/clients/users/hosts/workspaces).
+    // Admin gets the full bitmask (relays/clients/users/hosts/workspaces/groups).
     QByteArray admin_payload;
     {
         proto::router::RouterToClient message;
@@ -393,17 +394,20 @@ void Service::onNotificationFlush()
         notification->set_clients_dirty(clients);
         notification->set_users_dirty(users);
         notification->set_workspaces_dirty(workspaces);
+        notification->set_groups_dirty(groups);
         admin_payload = serialize(message);
     }
 
-    // Manager and regular client only care about hosts/workspaces (the others are admin-only).
+    // Manager and regular client only care about hosts/workspaces/groups (the others are
+    // admin-only).
     QByteArray client_payload;
-    if (hosts || workspaces)
+    if (hosts || workspaces || groups)
     {
         proto::router::RouterToClient message;
         proto::router::Notification* notification = message.mutable_notification();
         notification->set_hosts_dirty(hosts);
         notification->set_workspaces_dirty(workspaces);
+        notification->set_groups_dirty(groups);
         client_payload = serialize(message);
     }
 

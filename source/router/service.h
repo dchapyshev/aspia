@@ -65,6 +65,7 @@ public:
         NOTIFY_CLIENTS    = 1u << 2,
         NOTIFY_USERS      = 1u << 3,
         NOTIFY_WORKSPACES = 1u << 4,
+        NOTIFY_GROUPS     = 1u << 5,
     };
 
     void notifyChanged(quint32 flags);

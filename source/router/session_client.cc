@@ -83,6 +83,10 @@ void SessionClient::onSessionMessage(quint8 channel_id, const QByteArray& buffer
     {
         readWorkspaceListRequest(message.workspace_list_request());
     }
+    else if (message.has_group_list_request())
+    {
+        readGroupListRequest(message.group_list_request());
+    }
     else if (message.has_change_password_request())
     {
         readChangePasswordRequest(message.change_password_request());
@@ -414,6 +418,56 @@ void SessionClient::readWorkspaceListRequest(const proto::router::WorkspaceListR
             access_item->set_user_id(access.user_id);
             access_item->set_wrapped_gk(access.wrapped_gk.toStdString());
         }
+    }
+
+    sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionClient::readGroupListRequest(const proto::router::GroupListRequest& request)
+{
+    const qint64 workspace_id = request.workspace_id();
+
+    proto::router::RouterToClient message;
+    proto::router::GroupList* result = message.mutable_group_list();
+    result->set_request_id(request.request_id());
+    result->set_workspace_id(workspace_id);
+
+    if (workspace_id <= 0)
+    {
+        CLOG(ERROR) << "Invalid workspace id in group list request:" << workspace_id;
+        result->set_error_code(proto::router::kErrorInvalidRequest);
+        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+        return;
+    }
+
+    Database database = Database::open();
+    if (!database.isValid())
+    {
+        CLOG(ERROR) << "Failed to connect to database";
+        result->set_error_code(proto::router::kErrorInternalError);
+        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+        return;
+    }
+
+    if (!database.hasWorkspaceAccess(userId(), workspace_id))
+    {
+        CLOG(ERROR) << "User" << userId() << "has no access to workspace" << workspace_id;
+        result->set_error_code(proto::router::kErrorAccessDenied);
+        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+        return;
+    }
+
+    const QVector<Group> groups = database.groupList(workspace_id);
+
+    result->set_error_code(proto::router::kErrorOk);
+    for (const Group& group : std::as_const(groups))
+    {
+        proto::router::Group* item = result->add_group();
+        item->set_entry_id(group.entry_id);
+        item->set_parent_id(group.parent_id);
+        item->set_name(group.name.toStdString());
+        item->set_comment(group.comment.toStdString());
     }
 
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));

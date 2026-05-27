@@ -26,6 +26,7 @@ namespace proto::router {
 class ChangePasswordRequest;
 class CheckHostStatus;
 class ConnectionRequest;
+class GroupListRequest;
 class HostListRequest;
 class WorkspaceListRequest;
 } // namespace proto::router
@@ -52,6 +53,7 @@ private:
     void readCheckHostStatus(const proto::router::CheckHostStatus& check_host_status);
     void readHostListRequest(const proto::router::HostListRequest& request);
     void readWorkspaceListRequest(const proto::router::WorkspaceListRequest& request);
+    void readGroupListRequest(const proto::router::GroupListRequest& request);
     void readChangePasswordRequest(const proto::router::ChangePasswordRequest& request);
     void sendUserKeys();
     Session* sessionByHostId(HostId host_id);

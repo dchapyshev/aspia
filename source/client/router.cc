@@ -46,6 +46,8 @@ struct Registrator
         qRegisterMetaType<Router::WorkspaceList>("Router::WorkspaceList");
         qRegisterMetaType<Router::Host>("Router::Host");
         qRegisterMetaType<Router::HostList>("Router::HostList");
+        qRegisterMetaType<Router::Group>("Router::Group");
+        qRegisterMetaType<Router::GroupList>("Router::GroupList");
     }
 };
 
@@ -210,6 +212,8 @@ void Router::onTcpMessageReceived(quint8 channel_id, const QByteArray& bytes)
             dispatch(message.client_result().request_id(), message.client_result());
         else if (message.has_workspace_result())
             dispatch(message.workspace_result().request_id(), message.workspace_result());
+        else if (message.has_group_result())
+            dispatch(message.group_result().request_id(), message.group_result());
         else if (message.has_peer_result())
             dispatch(message.peer_result().request_id(), message.peer_result());
         else
@@ -248,6 +252,8 @@ void Router::onTcpMessageReceived(quint8 channel_id, const QByteArray& bytes)
             dispatch(message.host_list().request_id(), message.host_list());
         else if (message.has_workspace_list())
             dispatch(message.workspace_list().request_id(), message.workspace_list());
+        else if (message.has_group_list())
+            dispatch(message.group_list().request_id(), message.group_list());
         else if (message.has_change_password_result())
             dispatch(message.change_password_result().request_id(), message.change_password_result());
         else if (message.has_notification())
@@ -329,6 +335,27 @@ bool Router::buildWorkspace(const Router::Workspace& workspace, proto::router::W
     for (HostId host_id : std::as_const(workspace.host_ids))
         out->add_host_id(host_id);
 
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Router::buildGroup(qint64 workspace_id, const Router::Group& group, proto::router::Group* out)
+{
+    CHECK(out);
+
+    if (group.entry_id > 0)
+        out->set_entry_id(group.entry_id);
+    out->set_parent_id(group.parent_id);
+    out->set_name(group.name.toStdString());
+
+    auto it = workspace_cryptors_.find(workspace_id);
+    if (it == workspace_cryptors_.end())
+    {
+        LOG(ERROR) << "No cached cryptor for workspace" << workspace_id;
+        return false;
+    }
+
+    out->set_comment(encrypt(it->second, group.comment).toStdString());
     return true;
 }
 
@@ -464,6 +491,8 @@ void Router::emitNotificationSignals(const proto::router::Notification& notifica
         emit sig_usersChanged(router_id);
     if (notification.workspaces_dirty())
         emit sig_workspacesChanged(router_id);
+    if (notification.groups_dirty())
+        emit sig_groupsChanged(router_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -551,6 +580,38 @@ Router::HostList Router::decodeHostList(const proto::router::HostList& list)
             dst.user_name = decrypt(cryptor, src.user_name());
         if (!src.password().empty())
             dst.password = SecureString(decrypt(cryptor, src.password()));
+    }
+
+    return decoded;
+}
+
+//--------------------------------------------------------------------------------------------------
+Router::GroupList Router::decodeGroupList(const proto::router::GroupList& list)
+{
+    Router::GroupList decoded;
+    decoded.error_code   = QString::fromStdString(list.error_code());
+    decoded.workspace_id = list.workspace_id();
+    decoded.groups.reserve(list.group_size());
+
+    for (int i = 0; i < list.group_size(); ++i)
+    {
+        const proto::router::Group& src = list.group(i);
+
+        Router::Group& dst = decoded.groups.emplaceBack();
+        dst.entry_id  = src.entry_id();
+        dst.parent_id = src.parent_id();
+        dst.name      = QString::fromStdString(src.name());
+
+        if (list.workspace_id() == 0)
+            continue;
+
+        auto it = workspace_cryptors_.find(list.workspace_id());
+        if (it == workspace_cryptors_.end())
+            continue;
+
+        const DataCryptor& cryptor = it->second;
+        if (!src.comment().empty())
+            dst.comment = decrypt(cryptor, src.comment());
     }
 
     return decoded;
