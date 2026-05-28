@@ -150,6 +150,10 @@ bool ensureSchema(QSqlDatabase& sql_db)
                     "ON \"host_groups\"(\"workspace_id\")") ||
         !query.exec("CREATE INDEX IF NOT EXISTS \"host_groups_parent_id\" "
                     "ON \"host_groups\"(\"parent_id\")") ||
+        !query.exec("CREATE INDEX IF NOT EXISTS \"hosts_workspace_group\" "
+                    "ON \"hosts\"(\"workspace_id\", \"group_id\")") ||
+        !query.exec("CREATE INDEX IF NOT EXISTS \"workspace_access_user_id\" "
+                    "ON \"workspace_access\"(\"user_id\")") ||
         // Pending host removals. When an admin requests host removal we move the row from hosts
         // into this table and wait for the host to acknowledge the remove command.
         !query.exec("CREATE TABLE IF NOT EXISTS \"hosts_remove\" ("
@@ -325,6 +329,23 @@ bool Database::openDatabase()
     // declared on the schema actually fire.
     if (!pragma.exec("PRAGMA foreign_keys = ON"))
         LOG(WARNING) << "Unable to enable foreign keys:" << pragma.lastError();
+
+    // Write-Ahead Logging: concurrent readers do not block the writer, the writer does not
+    // rewrite a rollback journal on every commit. synchronous stays at default FULL so durable
+    // commits survive power loss.
+    if (!pragma.exec("PRAGMA journal_mode = WAL"))
+        LOG(WARNING) << "Unable to enable WAL journal mode:" << pragma.lastError();
+
+    // Keep temporary B-trees (recursive CTEs, sorts without a covering index, GROUP BY) in
+    // memory rather than on disk.
+    if (!pragma.exec("PRAGMA temp_store = MEMORY"))
+        LOG(WARNING) << "Unable to set temp_store:" << pragma.lastError();
+
+    // Larger page cache (8 MiB instead of the default 2 MiB). Negative value means size in
+    // kibibytes rather than page count. Keeps hot index pages and recently accessed rows
+    // resident as the database grows.
+    if (!pragma.exec("PRAGMA cache_size = -8000"))
+        LOG(WARNING) << "Unable to set cache_size:" << pragma.lastError();
 
     if (!ensureSchema(db))
     {
