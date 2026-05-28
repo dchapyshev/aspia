@@ -73,19 +73,28 @@ public:
     static QString filePath();
 
     bool isValid() const;
+
+    //----------------------------------------------------------------------------------------------
+    // Users
+    //----------------------------------------------------------------------------------------------
+
     QVector<RouterUser> userList() const;
     bool addUser(const RouterUser& user);
     bool modifyUser(const RouterUser& user);
     bool removeUser(qint64 entry_id);
     RouterUser findUser(const QString& username) const;
     RouterUser findUser(qint64 entry_id) const;
+
+    //----------------------------------------------------------------------------------------------
+    // Hosts
+    //----------------------------------------------------------------------------------------------
+
+    // Identity and telemetry. The hosts table is the durable identity table; rows are
+    // never deleted by cascade.
     std::string_view hostId(const QByteArray& key_hash, HostId* host_id) const;
     bool addHost(const QByteArray& key_hash);
 
-    // Called by the router on every host connection to refresh the host's last-seen metadata
-    // (computer_name, cpu_arch, version, os_name, address, last_connect). If display_name has
-    // never been set by the admin it is seeded from computer_name so the host has a readable
-    // label in the UI.
+    // Called on every host connection to refresh the host's last-seen metadata.
     bool updateHostInfo(HostId host_id, const QString& computer_name, const QString& cpu_arch,
         const QString& version, const QString& os_name, const QString& address);
 
@@ -99,16 +108,28 @@ public:
     bool modifyHost(HostId host_id, const QString& display_name, const QByteArray& comment,
         const QByteArray& user_name, const QByteArray& password);
 
-    // Schedules a host removal: copies hosts.id/key into hosts_remove (together with the current
-    // timestamp) and deletes the original hosts row. The host_id is kept intact so that a
-    // reconnecting offline host can be matched by key in hostId().
+    // Returns every host in the database (admin-only call site). [start_item, end_item] gives an
+    // inclusive paging window; pass end_item <= 0 to disable paging.
+    QVector<HostInfo> hosts(qint64 start_item, qint64 end_item) const;
+
+    // Returns hosts in the given workspace and group with exact match on both columns.
+    // [start_item, end_item] gives an inclusive paging window; pass end_item <= 0 to disable.
+    QVector<HostInfo> hosts(qint64 workspace_id, qint64 group_id, qint64 start_item, qint64 end_item) const;
+
+    // Total host count in the same scope as the matching hosts() overload. Used by the client
+    // to drive pagination UI without fetching the full list.
+    qint64 hostCount() const;
+    qint64 hostCount(qint64 workspace_id, qint64 group_id) const;
+
+    // Host removal: hosts_remove queue. Schedule moves the row from hosts to hosts_remove, the
+    // host_id is then kept until the host process acknowledges the removal command.
     bool scheduleHostRemoval(HostId host_id);
-
-    // Returns true if host_id has a pending removal in hosts_remove.
     bool hasPendingHostRemoval(HostId host_id) const;
-
-    // Removes the hosts_remove row once the host has acknowledged the removal command.
     bool finalizeHostRemoval(HostId host_id);
+
+    //----------------------------------------------------------------------------------------------
+    // Workspaces
+    //----------------------------------------------------------------------------------------------
 
     QVector<Workspace> workspaceList() const;
     Workspace findWorkspace(qint64 entry_id) const;
@@ -134,6 +155,17 @@ public:
     // the set that already belong to another workspace are left alone (the operator cannot
     // hijack a host from another workspace through this call).
     std::string_view setWorkspaceHosts(qint64 entry_id, const QSet<HostId>& desired_host_ids);
+
+    // Workspace access (per-user wrapped GK).
+    QVector<Workspace::Access> workspaceAccessList(qint64 workspace_id) const;
+
+    // Returns the set of workspace ids the given user has a workspace_access entry for.
+    QSet<qint64> workspaceAccessListForUser(qint64 user_id) const;
+    bool hasWorkspaceAccess(qint64 user_id, qint64 workspace_id) const;
+
+    //----------------------------------------------------------------------------------------------
+    // Hosts Groups
+    //----------------------------------------------------------------------------------------------
 
     // Returns the entire group tree of the given workspace, ordered by parent_id then name.
     // The caller can build a tree by indexing on entry_id and linking via parent_id.
@@ -164,25 +196,6 @@ public:
     // cascade on parent_id; hosts whose group_id pointed into the deleted subtree are detached
     // to the workspace root by the foreign-key SET NULL on hosts_<W>.group_id.
     std::string_view removeGroup(qint64 workspace_id, qint64 entry_id);
-
-    QVector<Workspace::Access> workspaceAccessList(qint64 workspace_id) const;
-
-    // Returns the set of workspace ids the given user has a workspace_access entry for.
-    QSet<qint64> workspaceAccessListForUser(qint64 user_id) const;
-    bool hasWorkspaceAccess(qint64 user_id, qint64 workspace_id) const;
-
-    // Returns every host in the database (admin-only call site). [start_item, end_item] gives an
-    // inclusive paging window; pass end_item <= 0 to disable paging.
-    QVector<HostInfo> hosts(qint64 start_item, qint64 end_item) const;
-
-    // Returns hosts in the given workspace and group with exact match on both columns.
-    // [start_item, end_item] gives an inclusive paging window; pass end_item <= 0 to disable.
-    QVector<HostInfo> hosts(qint64 workspace_id, qint64 group_id, qint64 start_item, qint64 end_item) const;
-
-    // Total host count in the same scope as the matching hosts() overload. Used by the client
-    // to drive pagination UI without fetching the full list.
-    qint64 hostCount() const;
-    qint64 hostCount(qint64 workspace_id, qint64 group_id) const;
 
 private:
     Database() = default;
