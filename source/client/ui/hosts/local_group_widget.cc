@@ -400,17 +400,16 @@ void LocalGroupWidget::onOnlineCheckerFinished()
 void LocalGroupWidget::startDrag()
 {
     Item* host_item = static_cast<Item*>(ui->tree_host->itemAt(start_pos_));
-    if (host_item)
-    {
-        HostDrag* drag = new HostDrag(this);
+    if (!host_item)
+        return;
 
-        drag->setHostItem(host_item, mime_type_);
+    HostDrag drag(this);
+    drag.setHostItem(host_item, mime_type_);
 
-        QIcon icon = host_item->icon(0);
-        drag->setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
+    const QIcon icon = host_item->icon(0);
+    drag.setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
 
-        drag->exec(Qt::MoveAction);
-    }
+    drag.exec(Qt::MoveAction);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -19,6 +19,7 @@
 #include "client/ui/hosts/router_group_widget.h"
 
 #include <QAction>
+#include <QApplication>
 #include <QCollator>
 #include <QDataStream>
 #include <QDateTime>
@@ -27,7 +28,9 @@
 #include <QIODevice>
 #include <QLabel>
 #include <QMenu>
+#include <QMouseEvent>
 #include <QStatusBar>
+#include <QUuid>
 
 #include "base/logging.h"
 #include "client/router.h"
@@ -142,6 +145,7 @@ private:
 RouterGroupWidget::RouterGroupWidget(QWidget* parent)
     : ContentWidget(Type::ROUTER_GROUP, parent),
       ui(std::make_unique<Ui::RouterGroupWidget>()),
+      mime_type_(QString("application/%1").arg(QUuid::createUuid().toString())),
       status_hosts_label_(new QLabel(this))
 {
     LOG(INFO) << "Ctor";
@@ -165,6 +169,8 @@ RouterGroupWidget::RouterGroupWidget(QWidget* parent)
 
     connect(ui->tree_host, &QTreeWidget::itemDoubleClicked,
             this, [this](QTreeWidgetItem*, int) { emit sig_doubleClicked(); });
+
+    ui->tree_host->viewport()->installEventFilter(this);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -311,6 +317,51 @@ void RouterGroupWidget::changeEvent(QEvent* event)
     if (event->type() == QEvent::LanguageChange)
         ui->retranslateUi(this);
     ContentWidget::changeEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool RouterGroupWidget::eventFilter(QObject* watched, QEvent* event)
+{
+    if (watched == ui->tree_host->viewport())
+    {
+        if (event->type() == QEvent::MouseButtonPress)
+        {
+            QMouseEvent* mouse_event = static_cast<QMouseEvent*>(event);
+            if (mouse_event->button() == Qt::LeftButton)
+                start_pos_ = mouse_event->pos();
+        }
+        else if (event->type() == QEvent::MouseMove)
+        {
+            QMouseEvent* mouse_event = static_cast<QMouseEvent*>(event);
+            if (mouse_event->buttons() & Qt::LeftButton)
+            {
+                const int distance = (mouse_event->pos() - start_pos_).manhattanLength();
+                if (distance > QApplication::startDragDistance())
+                {
+                    startDrag();
+                    return true;
+                }
+            }
+        }
+    }
+
+    return ContentWidget::eventFilter(watched, event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterGroupWidget::startDrag()
+{
+    HostTreeItem* host_item = static_cast<HostTreeItem*>(ui->tree_host->itemAt(start_pos_));
+    if (!host_item)
+        return;
+
+    HostDrag drag(this);
+    drag.setHost(router_id_, host_item->host, mime_type_);
+
+    const QIcon icon = host_item->icon(0);
+    drag.setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
+
+    drag.exec(Qt::MoveAction);
 }
 
 //--------------------------------------------------------------------------------------------------

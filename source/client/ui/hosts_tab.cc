@@ -112,8 +112,9 @@ HostsTab::HostsTab(QWidget* parent)
     ui->content_stack->addWidget(router_group_widget_);
     ui->content_stack->addWidget(search_widget_);
 
-    // Setup drag-and-drop: pass the host mime type from LocalGroupWidget to Sidebar.
-    ui->sidebar->setHostMimeType(local_group_widget_->mimeType());
+    // Setup drag-and-drop: pass the host mime types from the source widgets to Sidebar.
+    ui->sidebar->setLocalHostMimeType(local_group_widget_->mimeType());
+    ui->sidebar->setRouterHostMimeType(router_group_widget_->mimeType());
 
     // Connect signals.
     connect(ui->sidebar, &Sidebar::sig_switchContent, this, &HostsTab::onSwitchContent);

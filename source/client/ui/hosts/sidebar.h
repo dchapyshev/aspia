@@ -144,7 +144,8 @@ public:
         }
     };
 
-    void setHostMimeType(const QString& mime_type);
+    void setLocalHostMimeType(const QString& mime_type);
+    void setRouterHostMimeType(const QString& mime_type);
     bool dragging() const;
 
     void loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item);
@@ -206,8 +207,9 @@ private:
     LocalGroupItem* local_root_ = nullptr;
 
     qint64 current_group_id_ = 0;
-    QString host_mime_type_;
-    QString group_mime_type_;
+    QString local_host_mime_type_;
+    QString router_host_mime_type_;
+    QString local_group_mime_type_;
     bool dragging_ = false;
     QTreeWidgetItem* drag_source_item_ = nullptr;
     QPoint start_pos_;

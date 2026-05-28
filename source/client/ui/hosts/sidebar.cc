@@ -35,13 +35,16 @@
 #include "client/settings.h"
 #include "client/ui/hosts/local_group_dialog.h"
 #include "client/ui/hosts/local_group_widget.h"
+#include "client/ui/hosts/router_group_widget.h"
 #include "client/ui/router_dialog.h"
 #include "common/ui/msg_box.h"
+#include "proto/router_constants.h"
+#include "proto/router_manager.h"
 
 //--------------------------------------------------------------------------------------------------
 Sidebar::Sidebar(QWidget* parent)
     : QWidget(parent),
-      group_mime_type_(QString("application/%1").arg(QUuid::createUuid().toString()))
+      local_group_mime_type_(QString("application/%1").arg(QUuid::createUuid().toString()))
 {
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -399,9 +402,15 @@ QList<qint64> Sidebar::routerWorkspaceIds(qint64 router_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::setHostMimeType(const QString& mime_type)
+void Sidebar::setLocalHostMimeType(const QString& mime_type)
 {
-    host_mime_type_ = mime_type;
+    local_host_mime_type_ = mime_type;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::setRouterHostMimeType(const QString& mime_type)
+{
+    router_host_mime_type_ = mime_type;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -614,7 +623,9 @@ bool Sidebar::onDragEnter(QDragEnterEvent* event)
 {
     const QMimeData* mime_data = event->mimeData();
 
-    if (mime_data->hasFormat(host_mime_type_) || mime_data->hasFormat(group_mime_type_))
+    if (mime_data->hasFormat(local_host_mime_type_) ||
+        mime_data->hasFormat(router_host_mime_type_) ||
+        mime_data->hasFormat(local_group_mime_type_))
     {
         event->acceptProposedAction();
         dragging_ = true;
@@ -632,7 +643,7 @@ bool Sidebar::onDragMove(QDragMoveEvent* event)
 
     const QMimeData* mime_data = event->mimeData();
 
-    if (mime_data->hasFormat(group_mime_type_))
+    if (mime_data->hasFormat(local_group_mime_type_))
     {
         QTreeWidgetItem* source_item = tree_widget_->itemAt(start_pos_);
         QTreeWidgetItem* target_tree_item = tree_widget_->itemAt(event->position().toPoint());
@@ -646,7 +657,7 @@ bool Sidebar::onDragMove(QDragMoveEvent* event)
 
         return true;
     }
-    else if (mime_data->hasFormat(host_mime_type_))
+    else if (mime_data->hasFormat(local_host_mime_type_))
     {
         QTreeWidgetItem* target_tree_item = tree_widget_->itemAt(event->position().toPoint());
         if (!target_tree_item || target_tree_item == tree_widget_->invisibleRootItem())
@@ -667,6 +678,41 @@ bool Sidebar::onDragMove(QDragMoveEvent* event)
 
         // Don't allow drop to the same group.
         if (host_item->groupId() == target_item->groupId())
+            return true;
+
+        tree_widget_->clearSelection();
+        target_tree_item->setSelected(true);
+        event->acceptProposedAction();
+        return true;
+    }
+    else if (mime_data->hasFormat(router_host_mime_type_))
+    {
+        QTreeWidgetItem* target_tree_item = tree_widget_->itemAt(event->position().toPoint());
+        if (!target_tree_item || target_tree_item == tree_widget_->invisibleRootItem())
+            return true;
+
+        Item* target_item = static_cast<Item*>(target_tree_item);
+        if (target_item->itemType() != Item::ROUTER_GROUP)
+            return true;
+
+        const RouterGroupWidget::HostMimeData* host_mime_data =
+            dynamic_cast<const RouterGroupWidget::HostMimeData*>(mime_data);
+        if (!host_mime_data)
+            return true;
+
+        auto* group_item = static_cast<RouterGroupItem*>(target_item);
+        const Router::Host& host = host_mime_data->host();
+
+        // Cross-router or cross-workspace moves are forbidden by the server; reflect that in
+        // the UI by refusing the drop here.
+        if (group_item->routerId() != host_mime_data->routerId() ||
+            group_item->workspaceId() != host.workspace_id)
+        {
+            return true;
+        }
+
+        // Don't allow drop to the same group.
+        if (group_item->groupId() == host.group_id)
             return true;
 
         tree_widget_->clearSelection();
@@ -708,7 +754,7 @@ bool Sidebar::onDrop(QDropEvent* event)
     if (!mime_data)
         return false;
 
-    if (mime_data->hasFormat(group_mime_type_))
+    if (mime_data->hasFormat(local_group_mime_type_))
     {
         const GroupMimeData* group_mime_data = dynamic_cast<const GroupMimeData*>(mime_data);
         if (!group_mime_data)
@@ -761,7 +807,7 @@ bool Sidebar::onDrop(QDropEvent* event)
         reloadGroups(source_group->groupId());
         return true;
     }
-    else if (mime_data->hasFormat(host_mime_type_))
+    else if (mime_data->hasFormat(local_host_mime_type_))
     {
         const LocalGroupWidget::HostMimeData* host_mime_data =
             dynamic_cast<const LocalGroupWidget::HostMimeData*>(mime_data);
@@ -836,6 +882,66 @@ bool Sidebar::onDrop(QDropEvent* event)
         emit sig_itemDropped();
         return true;
     }
+    else if (mime_data->hasFormat(router_host_mime_type_))
+    {
+        const RouterGroupWidget::HostMimeData* host_mime_data =
+            dynamic_cast<const RouterGroupWidget::HostMimeData*>(mime_data);
+        if (!host_mime_data)
+        {
+            restoreSelection();
+            return true;
+        }
+
+        QTreeWidgetItem* target_tree_item = tree_widget_->itemAt(event->position().toPoint());
+        if (!target_tree_item || target_tree_item == tree_widget_->invisibleRootItem())
+        {
+            restoreSelection();
+            return true;
+        }
+
+        Item* target_item = static_cast<Item*>(target_tree_item);
+        if (target_item->itemType() != Item::ROUTER_GROUP)
+        {
+            restoreSelection();
+            return true;
+        }
+
+        auto* group_item = static_cast<RouterGroupItem*>(target_item);
+        Router::Host host = host_mime_data->host();
+        const qint64 router_id = host_mime_data->routerId();
+
+        // Repeat the eligibility checks from onDragMove in case the user releases over a
+        // target that wasn't validated (DragLeave without DragMove can happen).
+        if (group_item->routerId() != router_id ||
+            group_item->workspaceId() != host.workspace_id ||
+            group_item->groupId() == host.group_id)
+        {
+            restoreSelection();
+            return true;
+        }
+
+        Router* router = Router::instance(router_id);
+        if (!router)
+        {
+            restoreSelection();
+            return true;
+        }
+
+        host.group_id = group_item->groupId();
+        router->editHost(host, this, [this](const proto::router::HostResult& result)
+        {
+            if (result.error_code() != proto::router::kErrorOk)
+            {
+                LOG(ERROR) << "Move host failed:" << result.error_code();
+                MsgBox::warning(tree_widget_,
+                    tr("Failed to move the host to the selected group."));
+            }
+        });
+
+        event->acceptProposedAction();
+        restoreSelection();
+        return true;
+    }
 
     return false;
 }
@@ -882,13 +988,13 @@ void Sidebar::startDrag()
     if (group_item->groupId() == 0)
         return;
 
-    GroupDrag* drag = new GroupDrag(this);
-    drag->setGroupItem(group_item, group_mime_type_);
+    GroupDrag drag(this);
+    drag.setGroupItem(group_item, local_group_mime_type_);
 
-    QIcon icon = group_item->icon(0);
-    drag->setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
+    const QIcon icon = group_item->icon(0);
+    drag.setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
 
-    drag->exec(Qt::MoveAction);
+    drag.exec(Qt::MoveAction);
 }
 
 //--------------------------------------------------------------------------------------------------

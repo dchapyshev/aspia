@@ -21,6 +21,10 @@
 
 #include <memory>
 
+#include <QDrag>
+#include <QMimeData>
+#include <QPoint>
+
 #include "client/config.h"
 #include "client/router.h"
 #include "client/ui/hosts/content_widget.h"
@@ -39,6 +43,44 @@ public:
     explicit RouterGroupWidget(QWidget* parent = nullptr);
     ~RouterGroupWidget() final;
 
+    class HostMimeData final : public QMimeData
+    {
+    public:
+        HostMimeData() = default;
+        ~HostMimeData() final = default;
+
+        void setHost(qint64 router_id, const Router::Host& host, const QString& mime_type)
+        {
+            router_id_ = router_id;
+            host_ = host;
+            setData(mime_type, QByteArray());
+        }
+
+        qint64 routerId() const { return router_id_; }
+        const Router::Host& host() const { return host_; }
+
+    private:
+        qint64 router_id_ = 0;
+        Router::Host host_;
+    };
+
+    class HostDrag final : public QDrag
+    {
+    public:
+        explicit HostDrag(QObject* drag_source = nullptr)
+            : QDrag(drag_source)
+        {
+            // Nothing
+        }
+
+        void setHost(qint64 router_id, const Router::Host& host, const QString& mime_type)
+        {
+            HostMimeData* mime_data = new HostMimeData();
+            mime_data->setHost(router_id, host, mime_type);
+            setMimeData(mime_data);
+        }
+    };
+
     void showGroup(qint64 router_id, qint64 workspace_id, const QString& workspace_name, qint64 group_id);
 
     qint64 routerId() const { return router_id_; }
@@ -54,6 +96,8 @@ public:
     void activate(QStatusBar* statusbar) final;
     void deactivate(QStatusBar* statusbar) final;
 
+    QString mimeType() const { return mime_type_; }
+
 public slots:
     void onEditHost();
 
@@ -66,6 +110,9 @@ protected:
     // QWidget implementation.
     void changeEvent(QEvent* event) final;
 
+    // QObject implementation.
+    bool eventFilter(QObject* watched, QEvent* event) final;
+
 private slots:
     void onHostListReceived(const Router::HostList& list);
     void onHeaderContextMenu(const QPoint& pos);
@@ -74,12 +121,15 @@ private slots:
 private:
     void fetchHosts();
     void updateStatusLabel();
+    void startDrag();
 
     std::unique_ptr<Ui::RouterGroupWidget> ui;
     qint64 router_id_ = 0;
     qint64 workspace_id_ = 0;
     QString workspace_name_;
     qint64 group_id_ = 0;
+    QString mime_type_;
+    QPoint start_pos_;
     QLabel* status_hosts_label_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(RouterGroupWidget)
