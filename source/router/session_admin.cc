@@ -165,7 +165,7 @@ void SessionAdmin::doUserListRequest(const proto::router::UserListRequest& reque
     proto::router::UserList* list = message.mutable_user_list();
     list->set_request_id(request.request_id());
 
-    Database database = Database::open();
+    Database& database = Database::instance();
     if (!database.isValid())
     {
         CLOG(ERROR) << "Failed to connect to database";
@@ -293,7 +293,7 @@ void SessionAdmin::doHostRequest(const proto::router::HostRequest& request)
     {
         const HostId host_id = request.host_id();
 
-        Database database = Database::open();
+        Database& database = Database::instance();
         if (!database.isValid())
         {
             CLOG(ERROR) << "Failed to connect to database";
@@ -495,7 +495,7 @@ void SessionAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& req
     result->set_request_id(request.request_id());
     result->set_command_name(request.command_name());
 
-    Database database = Database::open();
+    Database& database = Database::instance();
     if (!database.isValid())
     {
         CLOG(ERROR) << "Failed to connect to database";
@@ -656,7 +656,7 @@ void SessionAdmin::doGroupRequest(const proto::router::GroupRequest& request)
         return;
     }
 
-    Database database = Database::open();
+    Database& database = Database::instance();
     if (!database.isValid())
     {
         CLOG(ERROR) << "Failed to connect to database";
@@ -744,7 +744,7 @@ std::string SessionAdmin::addUser(const proto::router::User& user)
         return proto::router::kErrorInvalidData;
     }
 
-    Database database = Database::open();
+    Database& database = Database::instance();
     if (!database.isValid())
     {
         CLOG(ERROR) << "Failed to connect to database";
@@ -782,7 +782,7 @@ std::string SessionAdmin::modifyUser(const proto::router::User& user)
         return proto::router::kErrorInvalidData;
     }
 
-    Database database = Database::open();
+    Database& database = Database::instance();
     if (!database.isValid())
     {
         CLOG(ERROR) << "Failed to connect to database";
@@ -802,7 +802,7 @@ std::string SessionAdmin::modifyUser(const proto::router::User& user)
 //--------------------------------------------------------------------------------------------------
 std::string SessionAdmin::deleteUser(const proto::router::User& user)
 {
-    Database database = Database::open();
+    Database& database = Database::instance();
     if (!database.isValid())
     {
         CLOG(ERROR) << "Failed to connect to database";

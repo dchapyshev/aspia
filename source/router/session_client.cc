@@ -106,7 +106,7 @@ void SessionClient::onStarted()
 //--------------------------------------------------------------------------------------------------
 void SessionClient::sendUserKeys()
 {
-    Database database = Database::open();
+    Database& database = Database::instance();
     if (!database.isValid())
     {
         CLOG(ERROR) << "Failed to connect to database";
@@ -287,7 +287,7 @@ void SessionClient::readHostListRequest(const proto::router::HostListRequest& re
         return;
     }
 
-    Database database = Database::open();
+    Database& database = Database::instance();
     if (!database.isValid())
     {
         CLOG(ERROR) << "Failed to connect to database";
@@ -375,7 +375,7 @@ void SessionClient::readWorkspaceListRequest(const proto::router::WorkspaceListR
     proto::router::WorkspaceList* list = message.mutable_workspace_list();
     list->set_request_id(request.request_id());
 
-    Database database = Database::open();
+    Database& database = Database::instance();
     if (!database.isValid())
     {
         CLOG(ERROR) << "Failed to connect to database";
@@ -441,7 +441,7 @@ void SessionClient::readGroupListRequest(const proto::router::GroupListRequest& 
         return;
     }
 
-    Database database = Database::open();
+    Database& database = Database::instance();
     if (!database.isValid())
     {
         CLOG(ERROR) << "Failed to connect to database";
@@ -480,7 +480,7 @@ void SessionClient::readChangePasswordRequest(const proto::router::ChangePasswor
     proto::router::ChangePasswordResult* result = message.mutable_change_password_result();
     result->set_request_id(request.request_id());
 
-    Database database = Database::open();
+    Database& database = Database::instance();
     if (!database.isValid())
     {
         CLOG(ERROR) << "Failed to connect to database";

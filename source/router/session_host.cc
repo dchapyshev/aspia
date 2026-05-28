@@ -51,7 +51,7 @@ SessionHost::~SessionHost()
     // resurface, so finalize the hosts_remove row here.
     if (remove_command_sent_ && host_id_ != kInvalidHostId)
     {
-        Database database = Database::open();
+        Database& database = Database::instance();
         if (database.isValid())
         {
             if (!database.finalizeHostRemoval(host_id_))
@@ -105,7 +105,7 @@ void SessionHost::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void SessionHost::readHostIdRequest(const proto::router::HostIdRequest& host_id_request)
 {
-    Database database = Database::open();
+    Database& database = Database::instance();
     if (!database.isValid())
     {
         CLOG(ERROR) << "Failed to connect to database";

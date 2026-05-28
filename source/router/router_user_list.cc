@@ -19,13 +19,7 @@
 #include "router/router_user_list.h"
 
 #include "base/logging.h"
-
-//--------------------------------------------------------------------------------------------------
-RouterUserList::RouterUserList(Database&& db)
-    : db_(std::move(db))
-{
-    // Nothing
-}
+#include "router/database.h"
 
 //--------------------------------------------------------------------------------------------------
 RouterUserList::~RouterUserList() = default;
@@ -34,20 +28,19 @@ RouterUserList::~RouterUserList() = default;
 // static
 SharedPointer<RouterUserList> RouterUserList::open()
 {
-    Database db = Database::open();
-    if (!db.isValid())
+    if (!Database::instance().isValid())
     {
         LOG(ERROR) << "Unable to open database";
         return nullptr;
     }
 
-    return SharedPointer<RouterUserList>(new RouterUserList(std::move(db)));
+    return SharedPointer<RouterUserList>(new RouterUserList());
 }
 
 //--------------------------------------------------------------------------------------------------
 User RouterUserList::find(const QString& username) const
 {
-    return db_.findUser(username);
+    return Database::instance().findUser(username);
 }
 
 //--------------------------------------------------------------------------------------------------

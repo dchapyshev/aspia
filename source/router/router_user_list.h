@@ -21,7 +21,6 @@
 
 #include "base/shared_pointer.h"
 #include "base/peer/user_list.h"
-#include "router/database.h"
 
 class RouterUserList final : public UserList
 {
@@ -36,9 +35,8 @@ public:
     void setSeedKey(const QByteArray& seed_key) final;
 
 private:
-    explicit RouterUserList(Database&& db);
+    RouterUserList() = default;
 
-    Database db_;
     QByteArray seed_key_;
 
     Q_DISABLE_COPY_MOVE(RouterUserList)

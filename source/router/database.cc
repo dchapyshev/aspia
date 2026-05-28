@@ -35,13 +35,12 @@
 
 namespace {
 
-//--------------------------------------------------------------------------------------------------
-QSqlDatabase databaseByName(const QString& connection_name)
-{
-    if (connection_name.isEmpty())
-        return QSqlDatabase();
+const char kConnectionName[] = "router_database";
 
-    return QSqlDatabase::database(connection_name, false);
+//--------------------------------------------------------------------------------------------------
+QSqlDatabase connection()
+{
+    return QSqlDatabase::database(kConnectionName, false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -226,153 +225,18 @@ bool ensureSchema(QSqlDatabase& sql_db)
     return true;
 }
 
-//--------------------------------------------------------------------------------------------------
-QSqlDatabase ensureOpenDatabase(const QString& file_path)
-{
-    const QString connection_name = QStringLiteral("database");
-
-    QSqlDatabase db = databaseByName(connection_name);
-    if (db.isValid())
-    {
-        if (!db.isOpen() && !db.open())
-        {
-            LOG(ERROR) << "QSqlDatabase::open failed:" << db.lastError().text();
-            return QSqlDatabase();
-        }
-
-        return db;
-    }
-
-    db = QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"), connection_name);
-    db.setDatabaseName(file_path);
-
-    if (!db.open())
-    {
-        LOG(ERROR) << "QSqlDatabase::open failed:" << db.lastError().text();
-        db = QSqlDatabase();
-        QSqlDatabase::removeDatabase(connection_name);
-        return QSqlDatabase();
-    }
-
-    QSqlQuery pragma(db);
-    if (pragma.exec("PRAGMA quick_check") && pragma.next())
-    {
-        const QString result = pragma.value(0).toString();
-        if (result != "ok")
-            LOG(ERROR) << "Database integrity check failed:" << result;
-    }
-    else
-    {
-        LOG(WARNING) << "Unable to run quick_check:" << pragma.lastError();
-    }
-
-    // Foreign keys are off by default in SQLite, enable per-connection so
-    // ON DELETE CASCADE on workspace_access actually triggers.
-    if (!pragma.exec("PRAGMA foreign_keys = ON"))
-        LOG(WARNING) << "Unable to enable foreign keys:" << pragma.lastError();
-
-    return db;
-}
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Database::Database() = default;
-
-//--------------------------------------------------------------------------------------------------
-Database::Database(const QString& connection_name)
-    : connection_name_(std::move(connection_name))
-{
-    DCHECK(!connection_name_.isEmpty());
-}
-
-//--------------------------------------------------------------------------------------------------
-Database::Database(Database&& other) noexcept
-    : connection_name_(std::move(other.connection_name_))
-{
-    other.connection_name_.clear();
-}
-
-//--------------------------------------------------------------------------------------------------
-Database& Database::operator=(Database&& other) noexcept
-{
-    if (this != &other)
-        connection_name_ = std::move(other.connection_name_);
-
-    other.connection_name_.clear();
-    return *this;
-}
-
-//--------------------------------------------------------------------------------------------------
-Database::~Database() = default;
-
-//--------------------------------------------------------------------------------------------------
 // static
-Database Database::create()
+Database& Database::instance()
 {
-    QString dir_path = databaseDirectory();
-    if (dir_path.isEmpty())
-    {
-        LOG(ERROR) << "Invalid directory path";
-        return Database();
-    }
+    static thread_local Database database;
 
-    QFileInfo dir_info(dir_path);
+    if (!database.valid_)
+        database.valid_ = database.openDatabase();
 
-    if (dir_info.exists())
-    {
-        if (!dir_info.isDir())
-        {
-            LOG(ERROR) << "Unable to create directory for database. Need to delete file" << dir_path;
-            return Database();
-        }
-    }
-    else
-    {
-        if (!QDir().mkpath(dir_path))
-        {
-            LOG(ERROR) << "Unable to create directory for database";
-            return Database();
-        }
-    }
-
-    QString file_path = filePath();
-    if (file_path.isEmpty())
-    {
-        LOG(ERROR) << "Invalid file path";
-        return Database();
-    }
-
-    if (QFileInfo::exists(file_path))
-    {
-        LOG(ERROR) << "Database file already exists";
-        return Database();
-    }
-
-    return open();
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-Database Database::open()
-{
-    QString file_path = filePath();
-    if (file_path.isEmpty())
-    {
-        LOG(ERROR) << "Invalid file path";
-        return Database();
-    }
-
-    LOG(INFO) << "Opening database:" << file_path;
-
-    QSqlDatabase db = ensureOpenDatabase(file_path);
-    if (!db.isValid() || !db.isOpen())
-        return Database();
-
-    if (!ensureSchema(db))
-        return Database();
-
-    return Database(db.connectionName());
+    return database;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -390,8 +254,86 @@ QString Database::filePath()
 //--------------------------------------------------------------------------------------------------
 bool Database::isValid() const
 {
-    const QSqlDatabase db = databaseByName(connection_name_);
-    return db.isValid() && db.isOpen();
+    return valid_;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::openDatabase()
+{
+    QString dir_path = databaseDirectory();
+    if (dir_path.isEmpty())
+    {
+        LOG(ERROR) << "Invalid directory path";
+        return false;
+    }
+
+    // Ensure the directory exists.
+    QFileInfo dir_info(dir_path);
+    if (dir_info.exists())
+    {
+        if (!dir_info.isDir())
+        {
+            LOG(ERROR) << "Unable to create directory for database. Need to delete file:" << dir_path;
+            return false;
+        }
+    }
+    else
+    {
+        if (!QDir().mkpath(dir_path))
+        {
+            LOG(ERROR) << "Unable to create directory for database";
+            return false;
+        }
+    }
+
+    QString file_path = filePath();
+    if (file_path.isEmpty())
+    {
+        LOG(ERROR) << "Invalid file path";
+        return false;
+    }
+
+    LOG(INFO) << (!QFileInfo::exists(file_path) ? "Creating" : "Opening") << "database:" << file_path;
+
+    QSqlDatabase db = connection();
+    if (!db.isValid())
+    {
+        db = QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"), kConnectionName);
+        db.setDatabaseName(file_path);
+    }
+
+    if (!db.isOpen() && !db.open())
+    {
+        LOG(ERROR) << "QSqlDatabase::open failed:" << db.lastError();
+        return false;
+    }
+
+    QSqlQuery pragma(db);
+
+    if (pragma.exec("PRAGMA quick_check") && pragma.next())
+    {
+        const QString result = pragma.value(0).toString();
+        if (result != "ok")
+            LOG(ERROR) << "Database integrity check failed:" << result;
+    }
+    else
+    {
+        LOG(WARNING) << "Unable to run quick_check:" << pragma.lastError();
+    }
+
+    // Foreign keys are off by default in SQLite, enable per-connection so the cascade rules
+    // declared on the schema actually fire.
+    if (!pragma.exec("PRAGMA foreign_keys = ON"))
+        LOG(WARNING) << "Unable to enable foreign keys:" << pragma.lastError();
+
+    if (!ensureSchema(db))
+    {
+        db.close();
+        QSqlDatabase::removeDatabase(kConnectionName);
+        return false;
+    }
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -403,7 +345,7 @@ QVector<RouterUser> Database::userList() const
         return {};
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(connection());
     if (!query.exec(QStringLiteral(
         "SELECT id, name, \"group\", salt, verifier, sessions, flags, "
         "public_key, wrap_private_key, wrap_salt FROM users")))
@@ -434,7 +376,7 @@ bool Database::addUser(const RouterUser& user)
         return false;
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(connection());
     query.prepare(QStringLiteral(
         "INSERT INTO users (id, name, \"group\", salt, verifier, sessions, flags, "
         "public_key, wrap_private_key, wrap_salt) "
@@ -473,7 +415,7 @@ bool Database::modifyUser(const RouterUser& user)
         return false;
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(connection());
     query.prepare(QStringLiteral(
         "UPDATE users SET name=?, \"group\"=?, salt=?, verifier=?, sessions=?, flags=?, "
         "public_key=?, wrap_private_key=?, wrap_salt=? WHERE id=?"));
@@ -506,7 +448,7 @@ bool Database::removeUser(qint64 entry_id)
         return false;
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(connection());
     query.prepare(QStringLiteral("DELETE FROM users WHERE id=?"));
     query.addBindValue(entry_id);
 
@@ -528,7 +470,7 @@ RouterUser Database::findUser(const QString& username) const
         return RouterUser();
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(connection());
     query.prepare(QStringLiteral(
         "SELECT id, name, \"group\", salt, verifier, sessions, flags, "
         "public_key, wrap_private_key, wrap_salt FROM users WHERE name=?"));
@@ -555,7 +497,7 @@ RouterUser Database::findUser(qint64 entry_id) const
         return RouterUser();
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(connection());
     query.prepare(QStringLiteral(
         "SELECT id, name, \"group\", salt, verifier, sessions, flags, "
         "public_key, wrap_private_key, wrap_salt FROM users WHERE id=?"));
@@ -592,7 +534,7 @@ std::string_view Database::hostId(const QByteArray& key_hash, HostId* host_id) c
         return proto::router::kErrorInvalidData;
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(connection());
     query.prepare(QStringLiteral("SELECT id FROM hosts WHERE key=?"));
     query.addBindValue(key_hash);
 
@@ -611,7 +553,7 @@ std::string_view Database::hostId(const QByteArray& key_hash, HostId* host_id) c
     // Not found in hosts - check hosts_remove. A reconnecting host whose removal was scheduled
     // while it was offline will be matched here; the caller is expected to send the remove
     // command using the returned host_id and wait for the ack before finalizing the deletion.
-    QSqlQuery pending(databaseByName(connection_name_));
+    QSqlQuery pending(connection());
     pending.prepare(QStringLiteral("SELECT host_id FROM hosts_remove WHERE key=?"));
     pending.addBindValue(key_hash);
 
@@ -643,7 +585,7 @@ bool Database::addHost(const QByteArray& key_hash)
         return false;
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(connection());
     query.prepare(QStringLiteral("INSERT INTO hosts (id, key) VALUES (NULL, ?)"));
     query.addBindValue(key_hash);
 
@@ -677,7 +619,7 @@ bool Database::updateHostInfo(HostId host_id, const QString& computer_name, cons
     // The hosts row is created by addHost() before this method runs, so a plain UPDATE is
     // enough. If display name has never been set by the admin we seed it from computer_name so
     // the host has a readable label in the UI.
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(connection());
     query.prepare(QStringLiteral(
         "UPDATE hosts SET "
         "display_name = CASE WHEN display_name='' THEN ? ELSE display_name END, "
@@ -710,7 +652,7 @@ qint64 Database::hostWorkspaceId(HostId host_id) const
         return -1;
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(connection());
     query.prepare(QStringLiteral("SELECT workspace_id FROM hosts WHERE id=?"));
     query.addBindValue(host_id);
 
@@ -743,7 +685,7 @@ bool Database::modifyHost(HostId host_id, const QString& display_name, const QBy
 
     const qint64 timestamp = QDateTime::currentSecsSinceEpoch();
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(connection());
     query.prepare(QStringLiteral(
         "UPDATE hosts SET display_name=?, comment=?, user_name=?, password=?, last_modify=? "
         "WHERE id=?"));
@@ -778,7 +720,7 @@ bool Database::scheduleHostRemoval(HostId host_id)
         return false;
     }
 
-    QSqlDatabase sql_db = databaseByName(connection_name_);
+    QSqlDatabase sql_db = connection();
     if (!sql_db.transaction())
     {
         LOG(ERROR) << "Unable to start transaction:" << sql_db.lastError();
@@ -853,7 +795,7 @@ bool Database::hasPendingHostRemoval(HostId host_id) const
     if (host_id == kInvalidHostId)
         return false;
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(connection());
     query.prepare(QStringLiteral("SELECT 1 FROM hosts_remove WHERE host_id=?"));
     query.addBindValue(host_id);
 
@@ -881,7 +823,7 @@ bool Database::finalizeHostRemoval(HostId host_id)
         return false;
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(connection());
     query.prepare(QStringLiteral("DELETE FROM hosts_remove WHERE host_id=?"));
     query.addBindValue(host_id);
 
@@ -903,7 +845,7 @@ QVector<Workspace> Database::workspaceList() const
         return {};
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(connection());
     if (!query.exec(QStringLiteral("SELECT id, name, comment FROM workspaces")))
     {
         LOG(ERROR) << "Unable to get workspace list:" << query.lastError();
@@ -938,7 +880,7 @@ Workspace Database::findWorkspace(qint64 entry_id) const
         return Workspace();
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(connection());
     query.prepare(QStringLiteral("SELECT id, name, comment FROM workspaces WHERE id=?"));
     query.addBindValue(entry_id);
 
@@ -987,7 +929,7 @@ std::string_view Database::addWorkspace(const QString& name, const QByteArray& c
         }
     }
 
-    QSqlDatabase sql_db = databaseByName(connection_name_);
+    QSqlDatabase sql_db = connection();
     if (!sql_db.transaction())
     {
         LOG(ERROR) << "Unable to start transaction:" << sql_db.lastError();
@@ -1096,7 +1038,7 @@ std::string_view Database::modifyWorkspace(qint64 entry_id, const QString& name,
         desired_ids.insert(access.user_id);
     }
 
-    QSqlDatabase sql_db = databaseByName(connection_name_);
+    QSqlDatabase sql_db = connection();
     if (!sql_db.transaction())
     {
         LOG(ERROR) << "Unable to start transaction:" << sql_db.lastError();
@@ -1248,7 +1190,7 @@ std::string_view Database::setWorkspaceHosts(qint64 entry_id, const QSet<HostId>
         }
     }
 
-    QSqlDatabase sql_db = databaseByName(connection_name_);
+    QSqlDatabase sql_db = connection();
     if (!sql_db.transaction())
     {
         LOG(ERROR) << "Unable to start transaction:" << sql_db.lastError();
@@ -1326,7 +1268,7 @@ std::string_view Database::removeWorkspace(qint64 entry_id)
         return proto::router::kErrorInvalidData;
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(connection());
     query.prepare(QStringLiteral("DELETE FROM workspaces WHERE id=?"));
     query.addBindValue(entry_id);
 
@@ -1362,7 +1304,7 @@ QVector<Group> Database::groupList(qint64 workspace_id) const
     // come back in whatever order SQLite produces them. Display ordering (alphabetic,
     // locale-aware, and so on) is the client's job. Building a tree from this result does not
     // require any particular order: index nodes by id, then link children to parents.
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(connection());
     query.prepare(QStringLiteral(
         "SELECT id, IFNULL(parent_id, 0), name, comment FROM host_groups WHERE workspace_id=?"));
     query.addBindValue(workspace_id);
@@ -1406,7 +1348,7 @@ QVector<Group> Database::groupChildren(qint64 workspace_id, qint64 parent_id) co
     // "root groups" and maps to WHERE parent_id IS NULL (SQLite treats NULL via IS, not =).
     // Otherwise filter on the parent id as a normal integer match. The SELECT shape mirrors
     // groupList() so the column to struct mapping below stays identical.
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(connection());
     if (parent_id == 0)
     {
         query.prepare(QStringLiteral(
@@ -1461,7 +1403,7 @@ Group Database::findGroup(qint64 workspace_id, qint64 entry_id) const
     // Look up a single group by its id within this workspace. Same column projection as
     // groupList(); IFNULL maps the storage NULL parent_id of a root node to 0. workspace_id is
     // part of the filter so a stale id from another workspace cannot leak through.
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(connection());
     query.prepare(QStringLiteral(
         "SELECT id, IFNULL(parent_id, 0), name, comment FROM host_groups "
         "WHERE id=? AND workspace_id=?"));
@@ -1517,7 +1459,7 @@ std::string_view Database::addGroup(qint64 workspace_id, qint64 parent_id, const
         return proto::router::kErrorInvalidData;
     }
 
-    QSqlDatabase sql_db = databaseByName(connection_name_);
+    QSqlDatabase sql_db = connection();
     if (!sql_db.transaction())
     {
         LOG(ERROR) << "Unable to start transaction:" << sql_db.lastError();
@@ -1600,7 +1542,7 @@ std::string_view Database::modifyGroup(qint64 workspace_id, qint64 entry_id, qin
         return proto::router::kErrorInvalidData;
     }
 
-    QSqlDatabase sql_db = databaseByName(connection_name_);
+    QSqlDatabase sql_db = connection();
     if (!sql_db.transaction())
     {
         LOG(ERROR) << "Unable to start transaction:" << sql_db.lastError();
@@ -1722,7 +1664,7 @@ std::string_view Database::removeGroup(qint64 workspace_id, qint64 entry_id)
         return proto::router::kErrorInvalidData;
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(connection());
     query.prepare(QStringLiteral("DELETE FROM host_groups WHERE id=? AND workspace_id=?"));
     query.addBindValue(entry_id);
     query.addBindValue(workspace_id);
@@ -1748,7 +1690,7 @@ QVector<Workspace::Access> Database::workspaceAccessList(qint64 workspace_id) co
         return {};
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(connection());
     query.prepare(QStringLiteral(
         "SELECT workspace_id, user_id, wrapped_gk FROM workspace_access WHERE workspace_id=?"));
     query.addBindValue(workspace_id);
@@ -1781,7 +1723,7 @@ QSet<qint64> Database::workspaceAccessListForUser(qint64 user_id) const
         return {};
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(connection());
     query.prepare(QStringLiteral("SELECT workspace_id FROM workspace_access WHERE user_id=?"));
     query.addBindValue(user_id);
 
@@ -1804,7 +1746,7 @@ bool Database::hasWorkspaceAccess(qint64 user_id, qint64 workspace_id) const
     if (!isValid() || user_id <= 0 || workspace_id <= 0)
         return false;
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(connection());
     query.prepare(QStringLiteral(
         "SELECT 1 FROM workspace_access WHERE workspace_id=? AND user_id=?"));
     query.addBindValue(workspace_id);
@@ -1837,7 +1779,7 @@ QVector<HostInfo> Database::hosts(qint64 start_item, qint64 end_item) const
     if (paginate)
         sql += QStringLiteral(" LIMIT ? OFFSET ?");
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(connection());
     query.prepare(sql);
     if (paginate)
     {
@@ -1895,7 +1837,7 @@ QVector<HostInfo> Database::hosts(
     if (paginate)
         sql += QStringLiteral(" LIMIT ? OFFSET ?");
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(connection());
     query.prepare(sql);
     query.addBindValue(workspace_id);
     query.addBindValue(group_id);
@@ -1944,7 +1886,7 @@ qint64 Database::hostCount() const
         return 0;
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(connection());
     if (!query.exec(QStringLiteral("SELECT COUNT(*) FROM hosts")))
     {
         LOG(ERROR) << "Unable to count hosts:" << query.lastError();
@@ -1966,7 +1908,7 @@ qint64 Database::hostCount(qint64 workspace_id, qint64 group_id) const
         return 0;
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(connection());
     query.prepare(QStringLiteral("SELECT COUNT(*) FROM hosts WHERE workspace_id=? AND group_id=?"));
     query.addBindValue(workspace_id);
     query.addBindValue(group_id);

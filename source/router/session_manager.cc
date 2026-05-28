@@ -77,7 +77,7 @@ void SessionManager::doHostEditRequest(const proto::router::HostEditRequest& req
         sendMessage(proto::router::CHANNEL_ID_MANAGER, serialize(response));
     };
 
-    Database database = Database::open();
+    Database& database = Database::instance();
     if (!database.isValid())
     {
         CLOG(ERROR) << "Failed to connect to database";

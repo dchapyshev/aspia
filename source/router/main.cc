@@ -214,14 +214,16 @@ int createConfig(QTextStream& out)
         out << "Public key does not exist yet." << Qt::endl;
     }
 
-    Database db = Database::create();
+    if (QFileInfo::exists(Database::filePath()))
+    {
+        out << "Database already exists. Continuation is impossible." << Qt::endl;
+        return 1;
+    }
+
+    Database& db = Database::instance();
     if (!db.isValid())
     {
-        db = Database::open();
-        if (db.isValid())
-            out << "Database already exists. Continuation is impossible." << Qt::endl;
-        else
-            out << "Failed to create new database." << Qt::endl;
+        out << "Failed to create new database." << Qt::endl;
         return 1;
     }
 

@@ -81,7 +81,7 @@ void SessionLegacyHost::onSessionMessage(quint8 /* channel_id */, const QByteArr
 //--------------------------------------------------------------------------------------------------
 void SessionLegacyHost::readHostIdRequest(const proto::router::legacy::HostIdRequest& host_id_request)
 {
-    Database database = Database::open();
+    Database& database = Database::instance();
     if (!database.isValid())
     {
         CLOG(ERROR) << "Failed to connect to database";

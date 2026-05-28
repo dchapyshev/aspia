@@ -63,13 +63,13 @@ struct Group
 class Database
 {
 public:
-    Database();
-    Database(Database&& other) noexcept;
-    Database& operator=(Database&& other) noexcept;
-    ~Database();
+    ~Database() = default;
 
-    static Database create();
-    static Database open();
+    // Returns the per-thread cached Database. First call on a given thread opens the
+    // connection and ensures the schema; subsequent calls are O(1). Connection lives until
+    // the thread exits.
+    static Database& instance();
+
     static QString filePath();
 
     bool isValid() const;
@@ -185,12 +185,14 @@ public:
     qint64 hostCount(qint64 workspace_id, qint64 group_id) const;
 
 private:
-    explicit Database(const QString& connection_name);
+    Database() = default;
+
+    bool openDatabase();
     static QString databaseDirectory();
 
-    QString connection_name_;
+    bool valid_ = false;
 
-    Q_DISABLE_COPY(Database)
+    Q_DISABLE_COPY_MOVE(Database)
 };
 
 #endif // ROUTER_DATABASE_H
