@@ -47,11 +47,10 @@ struct HostInfo
     qint64 last_modify  = 0;
 };
 
-// A node in the per-workspace host group tree (groups_<workspace_id> row). Root nodes have
-// parent_id == 0. Names are not required to be unique within a parent: two siblings with the
-// same name are allowed and the client disambiguates by entry_id. The tree is a plain adjacency
-// list: cycle protection on move uses a recursive CTE that walks parent links from the proposed
-// new parent and refuses the move if it reaches the node being moved.
+// A node in a workspace's host-group tree. Root nodes have parent_id == 0. Names are not
+// required to be unique within a parent: two siblings with the same name are allowed and the
+// client disambiguates by entry_id. Cycle protection on re-parent walks parent links upward
+// from the proposed new parent and refuses the move if it reaches the node being moved.
 struct Group
 {
     qint64 entry_id  = 0;
@@ -171,8 +170,8 @@ public:
     // Hosts Groups
     //----------------------------------------------------------------------------------------------
 
-    // Returns the entire group tree of the given workspace, ordered by parent_id then name.
-    // The caller can build a tree by indexing on entry_id and linking via parent_id.
+    // Returns every group in the given workspace in unspecified order. The caller builds a tree
+    // by indexing on entry_id and linking via parent_id; display ordering is the client's job.
     QList<Group> groupList(qint64 workspace_id) const;
 
     // Returns direct children of parent_id within workspace_id. parent_id == 0 returns root
@@ -180,12 +179,12 @@ public:
     QList<Group> groupChildren(qint64 workspace_id, qint64 parent_id) const;
 
     // Returns the group with the given entry_id from workspace_id. Returns an empty Group
-    // (entry_id == 0) if the row is missing or workspace_id has no groups_<W> table.
+    // (entry_id == 0) if no such row exists in this workspace.
     Group findGroup(qint64 workspace_id, qint64 entry_id) const;
 
     // Inserts a new group. parent_id == 0 places it at the workspace root; otherwise parent_id
-    // must reference an existing row in groups_<workspace_id>. The path column is computed
-    // server-side from the parent's path. On success *entry_id is set to the new id.
+    // must reference an existing group within the same workspace. On success *entry_id is set
+    // to the new id.
     std::string_view addGroup(qint64 workspace_id, qint64 parent_id, const QString& name,
         const QByteArray& comment, qint64* entry_id);
 
@@ -196,9 +195,7 @@ public:
     std::string_view modifyGroup(qint64 workspace_id, qint64 entry_id, qint64 new_parent_id,
         const QString& name, const QByteArray& comment);
 
-    // Deletes the group and all its descendants. Descendants are removed by the foreign-key
-    // cascade on parent_id; hosts whose group_id pointed into the deleted subtree are detached
-    // to the workspace root by the foreign-key SET NULL on hosts_<W>.group_id.
+    // Deletes the group and all its descendants.
     std::string_view removeGroup(qint64 workspace_id, qint64 entry_id);
 
 private:
