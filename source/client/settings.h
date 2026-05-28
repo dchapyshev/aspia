@@ -95,9 +95,17 @@ public:
     QByteArray tabState(const QString& name) const;
     void setTabState(const QString& name, const QByteArray& state);
 
-    bool isGroupExpanded(qint64 group_id) const;
-    void setGroupExpanded(qint64 group_id, bool expanded);
-    void removeGroupExpanded(qint64 group_id);
+    bool isLocalGroupExpanded(qint64 group_id) const;
+    void setLocalGroupExpanded(qint64 group_id, bool expanded);
+    void removeLocalGroupExpanded(qint64 group_id);
+
+    bool isWorkspaceExpanded(qint64 router_id, qint64 workspace_id) const;
+    void setWorkspaceExpanded(qint64 router_id, qint64 workspace_id, bool expanded);
+
+    bool isRouterGroupExpanded(qint64 router_id, qint64 group_id) const;
+    void setRouterGroupExpanded(qint64 router_id, qint64 group_id, bool expanded);
+
+    void removeRouterExpanded(qint64 router_id);
 
 private:
     QSettings settings_;

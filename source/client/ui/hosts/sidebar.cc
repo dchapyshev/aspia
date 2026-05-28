@@ -63,7 +63,7 @@ Sidebar::Sidebar(QWidget* parent)
 
     // Create local root after routers so it appears at the bottom.
     local_root_ = new LocalGroupItem(local_root_data, tree_widget_);
-    local_root_->setExpanded(Settings().isGroupExpanded(local_root_data.id()));
+    local_root_->setExpanded(Settings().isLocalGroupExpanded(local_root_data.id()));
 
     // Setup drag-and-drop.
     tree_widget_->setAcceptDrops(true);
@@ -95,7 +95,7 @@ void Sidebar::loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item)
     for (const GroupConfig& group : std::as_const(groups))
     {
         LocalGroupItem* item = new LocalGroupItem(group, parent_item);
-        item->setExpanded(settings.isGroupExpanded(group.id()));
+        item->setExpanded(settings.isLocalGroupExpanded(group.id()));
 
         // Load child groups recursively.
         loadGroups(group.id(), item);
@@ -111,7 +111,7 @@ void Sidebar::reloadGroups(qint64 selected_group_id)
 
     // Reload from database.
     loadGroups(0, local_root_);
-    local_root_->setExpanded(Settings().isGroupExpanded(0));
+    local_root_->setExpanded(Settings().isLocalGroupExpanded(0));
 
     // Find and select the requested group.
     QTreeWidgetItem* selected = nullptr;
@@ -218,12 +218,14 @@ void Sidebar::setRouterWorkspaces(qint64 router_id, const QList<Router::Workspac
             delete router->takeChild(i);
     }
 
+    Settings settings;
     for (const Router::Workspace& workspace : workspaces)
     {
         // A workspace sits directly under the router; group_id is 0 (the workspace root has no
         // host-group filter of its own).
-        new RouterGroupItem(router_id, workspace.entry_id, 0,
-                            /*is_workspace=*/true, workspace.name, router);
+        auto* item = new RouterGroupItem(router_id, workspace.entry_id, 0,
+                                         /*is_workspace=*/true, workspace.name, router);
+        item->setExpanded(settings.isWorkspaceExpanded(router_id, workspace.entry_id));
     }
 
     router->setExpanded(true);
@@ -297,6 +299,7 @@ void Sidebar::setRouterHostGroups(qint64 router_id, qint64 workspace_id, const Q
     };
     sweep(workspace_item);
 
+    Settings settings;
     std::function<void(qint64, QTreeWidgetItem*)> apply = [&](qint64 parent_id,
                                                               QTreeWidgetItem* tree_parent)
     {
@@ -307,6 +310,7 @@ void Sidebar::setRouterHostGroups(qint64 router_id, qint64 workspace_id, const Q
             {
                 item = new RouterGroupItem(router_id, workspace_id, group->entry_id,
                                            /*is_workspace=*/false, group->name, tree_parent);
+                item->setExpanded(settings.isRouterGroupExpanded(router_id, group->entry_id));
                 existing.insert(group->entry_id, item);
             }
             else
@@ -492,7 +496,7 @@ void Sidebar::onRemoveGroup()
         return;
     }
 
-    Settings().removeGroupExpanded(group_id);
+    Settings().removeLocalGroupExpanded(group_id);
 
     reloadGroups(parent_id);
 }
@@ -559,6 +563,7 @@ void Sidebar::onRemoveRouter()
     }
 
     db.removeRouter(router_id);
+    Settings().removeRouterExpanded(router_id);
     emit sig_routersChanged();
 }
 
@@ -964,10 +969,18 @@ void Sidebar::onItemExpanded(QTreeWidgetItem* item)
     CHECK(item);
 
     Item* sidebar_item = static_cast<Item*>(item);
-    if (sidebar_item->itemType() != Item::LOCAL_GROUP)
-        return;
-
-    Settings().setGroupExpanded(sidebar_item->groupId(), true);
+    if (sidebar_item->itemType() == Item::LOCAL_GROUP)
+    {
+        Settings().setLocalGroupExpanded(sidebar_item->groupId(), true);
+    }
+    else if (sidebar_item->itemType() == Item::ROUTER_GROUP)
+    {
+        auto* group_item = static_cast<RouterGroupItem*>(sidebar_item);
+        if (group_item->isWorkspace())
+            Settings().setWorkspaceExpanded(group_item->routerId(), group_item->workspaceId(), true);
+        else
+            Settings().setRouterGroupExpanded(group_item->routerId(), group_item->groupId(), true);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -976,10 +989,18 @@ void Sidebar::onItemCollapsed(QTreeWidgetItem* item)
     CHECK(item);
 
     Item* sidebar_item = static_cast<Item*>(item);
-    if (sidebar_item->itemType() != Item::LOCAL_GROUP)
-        return;
-
-    Settings().setGroupExpanded(sidebar_item->groupId(), false);
+    if (sidebar_item->itemType() == Item::LOCAL_GROUP)
+    {
+        Settings().setLocalGroupExpanded(sidebar_item->groupId(), false);
+    }
+    else if (sidebar_item->itemType() == Item::ROUTER_GROUP)
+    {
+        auto* group_item = static_cast<RouterGroupItem*>(sidebar_item);
+        if (group_item->isWorkspace())
+            Settings().setWorkspaceExpanded(group_item->routerId(), group_item->workspaceId(), false);
+        else
+            Settings().setRouterGroupExpanded(group_item->routerId(), group_item->groupId(), false);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

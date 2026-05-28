@@ -52,7 +52,25 @@ const QString kRecordSessionsParam = "record_sessions";
 const QString kSendKeyCombinationsParam = "send_key_combinations";
 const QString kUdpAllowedParam = "udp_allowed";
 const QString kTabStateParam = "tab_state";
-const QString kGroupExpandedParam = "group_expanded";
+const QString kLocalGroupExpandedParam = "local_group_expanded";
+const QString kWorkspaceExpandedParam = "workspace_expanded";
+const QString kRouterGroupExpandedParam = "router_group_expanded";
+
+//--------------------------------------------------------------------------------------------------
+QString scopedKey(const QString& prefix, qint64 router_id, qint64 entry_id)
+{
+    return prefix + "/" + QString::number(router_id) + "/" + QString::number(entry_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+void writeExpanded(QSettings& settings, const QString& key, bool expanded)
+{
+    // Default is true: store only the deviation from the default to keep the file small.
+    if (expanded)
+        settings.remove(key);
+    else
+        settings.setValue(key, false);
+}
 
 } // namespace
 
@@ -312,15 +330,15 @@ void Settings::setTabState(const QString& name, const QByteArray& state)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Settings::isGroupExpanded(qint64 group_id) const
+bool Settings::isLocalGroupExpanded(qint64 group_id) const
 {
-    return settings_.value(kGroupExpandedParam + "/" + QString::number(group_id), true).toBool();
+    return settings_.value(kLocalGroupExpandedParam + "/" + QString::number(group_id), true).toBool();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setGroupExpanded(qint64 group_id, bool expanded)
+void Settings::setLocalGroupExpanded(qint64 group_id, bool expanded)
 {
-    QString key = kGroupExpandedParam + "/" + QString::number(group_id);
+    QString key = kLocalGroupExpandedParam + "/" + QString::number(group_id);
 
     // Default is true: store only the deviation from the default to keep the settings file small.
     if (expanded)
@@ -330,7 +348,39 @@ void Settings::setGroupExpanded(qint64 group_id, bool expanded)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::removeGroupExpanded(qint64 group_id)
+void Settings::removeLocalGroupExpanded(qint64 group_id)
 {
-    settings_.remove(kGroupExpandedParam + "/" + QString::number(group_id));
+    settings_.remove(kLocalGroupExpandedParam + "/" + QString::number(group_id));
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Settings::isWorkspaceExpanded(qint64 router_id, qint64 workspace_id) const
+{
+    return settings_.value(scopedKey(kWorkspaceExpandedParam, router_id, workspace_id), true).toBool();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setWorkspaceExpanded(qint64 router_id, qint64 workspace_id, bool expanded)
+{
+    writeExpanded(settings_, scopedKey(kWorkspaceExpandedParam, router_id, workspace_id), expanded);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Settings::isRouterGroupExpanded(qint64 router_id, qint64 group_id) const
+{
+    return settings_.value(scopedKey(kRouterGroupExpandedParam, router_id, group_id), true).toBool();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setRouterGroupExpanded(qint64 router_id, qint64 group_id, bool expanded)
+{
+    writeExpanded(settings_, scopedKey(kRouterGroupExpandedParam, router_id, group_id), expanded);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::removeRouterExpanded(qint64 router_id)
+{
+    const QString router_suffix = "/" + QString::number(router_id);
+    settings_.remove(kWorkspaceExpandedParam + router_suffix);
+    settings_.remove(kRouterGroupExpandedParam + router_suffix);
 }
