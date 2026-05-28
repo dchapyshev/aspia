@@ -226,6 +226,8 @@ list(APPEND SOURCE_BASE_CODEC_TESTS
     codec/scale_reducer_unittest.cc)
 
 list(APPEND SOURCE_BASE_CRYPTO
+    crypto/base32.cc
+    crypto/base32.h
     crypto/big_num.cc
     crypto/big_num.h
     crypto/data_cryptor.cc
@@ -264,7 +266,9 @@ list(APPEND SOURCE_BASE_CRYPTO
     crypto/secure_string.cc
     crypto/secure_string.h
     crypto/srp_math.cc
-    crypto/srp_math.h)
+    crypto/srp_math.h
+    crypto/totp.cc
+    crypto/totp.h)
 
 if (WIN32)
     list(APPEND SOURCE_BASE_CRYPTO crypto/os_crypt_win.cc)
@@ -279,6 +283,7 @@ if (LINUX)
 endif()
 
 list(APPEND SOURCE_BASE_CRYPTO_TESTS
+    crypto/base32_unittest.cc
     crypto/big_num_unittest.cc
     crypto/stream_cryptor_unittest.cc
     crypto/data_cryptor_unittest.cc
@@ -290,7 +295,8 @@ list(APPEND SOURCE_BASE_CRYPTO_TESTS
     crypto/password_hash_unittest.cc
     crypto/private_key_cryptor_unittest.cc
     crypto/sealed_box_unittest.cc
-    crypto/srp_math_unittest.cc)
+    crypto/srp_math_unittest.cc
+    crypto/totp_unittest.cc)
 
 list(APPEND SOURCE_BASE_DESKTOP
     desktop/capture_scheduler.cc
