@@ -473,6 +473,19 @@ void Router::readUserKeys(const proto::router::UserKeys& user_keys)
         return;
     }
 
+    workspace_cryptors_.clear();
+    for (int i = 0; i < user_keys.workspace_key_size(); ++i)
+    {
+        const proto::router::UserKeys::WorkspaceKey& wk = user_keys.workspace_key(i);
+        SecureByteArray gk = unwrapGroupKey(QByteArray::fromStdString(wk.wrapped_gk()));
+        if (gk.isEmpty())
+        {
+            LOG(WARNING) << "Failed to unwrap GK for workspace" << wk.workspace_id();
+            continue;
+        }
+        workspace_cryptors_.emplace(wk.workspace_id(), DataCryptor(std::move(gk)));
+    }
+
     setStatus(Status::ONLINE);
 }
 

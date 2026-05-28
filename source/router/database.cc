@@ -199,7 +199,7 @@ bool ensureSchema(QSqlDatabase& sql_db)
     }
 
     // workspace_access's PRIMARY KEY is (workspace_id, user_id), which indexes only the leading
-    // column. workspaceAccessListForUser filters by user_id alone, so we need a dedicated index
+    // column. workspaceAccessIdsForUser filters by user_id alone, so we need a dedicated index
     // on the trailing column.
     if (!run("CREATE INDEX IF NOT EXISTS \"workspace_access_user_id\" "
              "ON \"workspace_access\"(\"user_id\")"))
@@ -1459,7 +1459,7 @@ QList<Workspace::Access> Database::workspaceAccessList(qint64 workspace_id) cons
 }
 
 //--------------------------------------------------------------------------------------------------
-QSet<qint64> Database::workspaceAccessListForUser(qint64 user_id) const
+QSet<qint64> Database::workspaceAccessIdsForUser(qint64 user_id) const
 {
     if (!isValid())
     {
@@ -1480,6 +1480,38 @@ QSet<qint64> Database::workspaceAccessListForUser(qint64 user_id) const
     QSet<qint64> result;
     while (query.next())
         result.insert(query.value(0).toLongLong());
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<Workspace::Access> Database::workspaceAccessListForUser(qint64 user_id) const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return {};
+    }
+
+    QSqlQuery query(connection());
+    query.prepare("SELECT workspace_id, wrapped_gk FROM workspace_access WHERE user_id=?");
+    query.addBindValue(user_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to get workspace keys for user:" << query.lastError();
+        return {};
+    }
+
+    QList<Workspace::Access> result;
+    while (query.next())
+    {
+        Workspace::Access access;
+        access.workspace_id = query.value(0).toLongLong();
+        access.user_id      = user_id;
+        access.wrapped_gk   = query.value(1).toByteArray();
+        result.append(access);
+    }
 
     return result;
 }

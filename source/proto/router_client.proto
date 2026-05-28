@@ -30,11 +30,18 @@ package proto.router;
 // workspace-scoped crypto operations without having to retrieve the admin user list.
 message UserKeys
 {
-    int64 user_id          = 1;
-    string name            = 2;
-    bytes public_key       = 3;
-    bytes wrap_private_key = 4;
-    bytes wrap_salt        = 5;
+    message WorkspaceKey
+    {
+        int64 workspace_id = 1;
+        bytes wrapped_gk   = 2;
+    }
+
+    int64 user_id                       = 1;
+    string name                         = 2;
+    bytes public_key                    = 3;
+    bytes wrap_private_key              = 4;
+    bytes wrap_salt                     = 5;
+    repeated WorkspaceKey workspace_key = 6;
 }
 
 message WorkspaceAccess

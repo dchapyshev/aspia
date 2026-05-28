@@ -160,7 +160,11 @@ public:
     QList<Workspace::Access> workspaceAccessList(qint64 workspace_id) const;
 
     // Returns the set of workspace ids the given user has a workspace_access entry for.
-    QSet<qint64> workspaceAccessListForUser(qint64 user_id) const;
+    QSet<qint64> workspaceAccessIdsForUser(qint64 user_id) const;
+
+    // Returns {workspace_id, wrapped_gk} for every workspace the user has access to.
+    QList<Workspace::Access> workspaceAccessListForUser(qint64 user_id) const;
+
     bool hasWorkspaceAccess(qint64 user_id, qint64 workspace_id) const;
 
     //----------------------------------------------------------------------------------------------

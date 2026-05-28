@@ -128,6 +128,14 @@ void SessionClient::sendUserKeys()
     user_keys->set_wrap_private_key(user.wrap_private_key.toStdString());
     user_keys->set_wrap_salt(user.wrap_salt.toStdString());
 
+    const QList<Workspace::Access> keys = database.workspaceAccessListForUser(user.entry_id);
+    for (const Workspace::Access& access : std::as_const(keys))
+    {
+        proto::router::UserKeys::WorkspaceKey* dst = user_keys->add_workspace_key();
+        dst->set_workspace_id(access.workspace_id);
+        dst->set_wrapped_gk(access.wrapped_gk.toStdString());
+    }
+
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 }
 
@@ -390,7 +398,7 @@ void SessionClient::readWorkspaceListRequest(const proto::router::WorkspaceListR
     // the full access list for each (needed to manage membership); other session types get
     // only their own entry (only their own wrapped_gk is needed to decrypt the workspace GK).
     const bool is_admin = sessionType() == proto::router::SESSION_TYPE_ADMIN;
-    const QSet<qint64> accessible_ids = database.workspaceAccessListForUser(userId());
+    const QSet<qint64> accessible_ids = database.workspaceAccessIdsForUser(userId());
     const QList<Workspace> workspaces = database.workspaceList();
 
     // workspace_id == 0 means "all visible workspaces"; > 0 narrows to a single entry.
