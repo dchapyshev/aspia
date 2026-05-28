@@ -983,7 +983,8 @@ bool Sidebar::onDrop(QDropEvent* event)
             return true;
         }
 
-        Router* router = Router::instance(source_group->routerId());
+        const qint64 router_id = source_group->routerId();
+        Router* router = Router::instance(router_id);
         if (!router)
         {
             restoreSelection();
@@ -997,14 +998,16 @@ bool Sidebar::onDrop(QDropEvent* event)
         group.parent_id = target_group->groupId();
 
         router->modifyGroup(source_group->workspaceId(), group, this,
-            [this](const proto::router::GroupResult& result)
+            [this, router_id](const proto::router::GroupResult& result)
         {
             if (result.error_code() != proto::router::kErrorOk)
             {
                 LOG(ERROR) << "Move group failed:" << result.error_code();
                 MsgBox::warning(tree_widget_,
                     tr("Failed to move the group."));
+                return;
             }
+            emit sig_routerGroupMoved(router_id);
         });
 
         event->acceptProposedAction();
@@ -1057,14 +1060,16 @@ bool Sidebar::onDrop(QDropEvent* event)
         }
 
         host.group_id = group_item->groupId();
-        router->editHost(host, this, [this](const proto::router::HostResult& result)
+        router->editHost(host, this, [this, router_id](const proto::router::HostResult& result)
         {
             if (result.error_code() != proto::router::kErrorOk)
             {
                 LOG(ERROR) << "Move host failed:" << result.error_code();
                 MsgBox::warning(tree_widget_,
                     tr("Failed to move the host to the selected group."));
+                return;
             }
+            emit sig_routerHostMoved(router_id);
         });
 
         event->acceptProposedAction();

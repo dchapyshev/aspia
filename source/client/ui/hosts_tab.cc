@@ -151,6 +151,12 @@ HostsTab::HostsTab(QWidget* parent)
     connect(ui->action_delete_router, &QAction::triggered, ui->sidebar, &Sidebar::onRemoveRouter);
     connect(ui->action_router_status, &QAction::triggered, this, &HostsTab::onRouterStatus);
     connect(ui->sidebar, &Sidebar::sig_routersChanged, this, &HostsTab::reloadRouters);
+    connect(ui->sidebar, &Sidebar::sig_routerHostMoved, this, [this](qint64 /* router_id */)
+    {
+        if (current_content_ == router_group_widget_)
+            router_group_widget_->reload();
+    });
+    connect(ui->sidebar, &Sidebar::sig_routerGroupMoved, this, &HostsTab::refreshSidebarHostGroups);
     connect(ui->action_add_user, &QAction::triggered, this, &HostsTab::onAddUserAction);
     connect(ui->action_edit_user, &QAction::triggered, this, &HostsTab::onEditUserAction);
     connect(ui->action_delete_user, &QAction::triggered, this, &HostsTab::onDeleteUserAction);

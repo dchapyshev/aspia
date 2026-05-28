@@ -228,6 +228,8 @@ signals:
     void sig_contextMenu(Sidebar::Item::Type type, const QPoint& pos);
     void sig_itemDropped();
     void sig_routersChanged();
+    void sig_routerHostMoved(qint64 router_id);
+    void sig_routerGroupMoved(qint64 router_id);
 
 private slots:
     void onCurrentItemChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
