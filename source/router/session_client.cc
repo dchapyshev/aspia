@@ -328,7 +328,7 @@ void SessionClient::readHostListRequest(const proto::router::HostListRequest& re
         }
     }
 
-    QVector<HostInfo> hosts;
+    QList<HostInfo> hosts;
     qint64 hosts_count = 0;
 
     if (mode == proto::router::HostListRequest::MODE_ALL)
@@ -391,7 +391,7 @@ void SessionClient::readWorkspaceListRequest(const proto::router::WorkspaceListR
     // only their own entry (only their own wrapped_gk is needed to decrypt the workspace GK).
     const bool is_admin = sessionType() == proto::router::SESSION_TYPE_ADMIN;
     const QSet<qint64> accessible_ids = database.workspaceAccessListForUser(userId());
-    const QVector<Workspace> workspaces = database.workspaceList();
+    const QList<Workspace> workspaces = database.workspaceList();
 
     // workspace_id == 0 means "all visible workspaces"; > 0 narrows to a single entry.
     const qint64 filter_id = request.workspace_id();
@@ -408,7 +408,7 @@ void SessionClient::readWorkspaceListRequest(const proto::router::WorkspaceListR
         item->set_name(workspace.name.toStdString());
         item->set_comment(workspace.comment.toStdString());
 
-        const QVector<Workspace::Access> accesses = database.workspaceAccessList(workspace.entry_id);
+        const QList<Workspace::Access> accesses = database.workspaceAccessList(workspace.entry_id);
         for (const Workspace::Access& access : std::as_const(accesses))
         {
             if (!is_admin && access.user_id != userId())
@@ -458,7 +458,7 @@ void SessionClient::readGroupListRequest(const proto::router::GroupListRequest& 
         return;
     }
 
-    const QVector<Group> groups = database.groupList(workspace_id);
+    const QList<Group> groups = database.groupList(workspace_id);
 
     result->set_error_code(proto::router::kErrorOk);
     for (const Group& group : std::as_const(groups))

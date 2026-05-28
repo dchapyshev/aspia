@@ -314,7 +314,7 @@ bool Database::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QVector<RouterUser> Database::userList() const
+QList<RouterUser> Database::userList() const
 {
     if (!isValid())
     {
@@ -331,7 +331,7 @@ QVector<RouterUser> Database::userList() const
         return {};
     }
 
-    QVector<RouterUser> users;
+    QList<RouterUser> users;
     while (query.next())
         users.append(readUser(query));
 
@@ -683,7 +683,7 @@ bool Database::modifyHost(HostId host_id, const QString& display_name, const QBy
 }
 
 //--------------------------------------------------------------------------------------------------
-QVector<HostInfo> Database::hosts(qint64 start_item, qint64 end_item) const
+QList<HostInfo> Database::hosts(qint64 start_item, qint64 end_item) const
 {
     if (!isValid())
     {
@@ -714,7 +714,7 @@ QVector<HostInfo> Database::hosts(qint64 start_item, qint64 end_item) const
         return {};
     }
 
-    QVector<HostInfo> result;
+    QList<HostInfo> result;
     while (query.next())
     {
         HostInfo info;
@@ -739,7 +739,7 @@ QVector<HostInfo> Database::hosts(qint64 start_item, qint64 end_item) const
 }
 
 //--------------------------------------------------------------------------------------------------
-QVector<HostInfo> Database::hosts(
+QList<HostInfo> Database::hosts(
     qint64 workspace_id, qint64 group_id, qint64 start_item, qint64 end_item) const
 {
     if (!isValid())
@@ -774,7 +774,7 @@ QVector<HostInfo> Database::hosts(
         return {};
     }
 
-    QVector<HostInfo> result;
+    QList<HostInfo> result;
     while (query.next())
     {
         HostInfo info;
@@ -978,7 +978,7 @@ bool Database::finalizeHostRemoval(HostId host_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-QVector<Workspace> Database::workspaceList() const
+QList<Workspace> Database::workspaceList() const
 {
     if (!isValid())
     {
@@ -993,7 +993,7 @@ QVector<Workspace> Database::workspaceList() const
         return {};
     }
 
-    QVector<Workspace> workspaces;
+    QList<Workspace> workspaces;
     while (query.next())
     {
         Workspace workspace;
@@ -1043,7 +1043,7 @@ Workspace Database::findWorkspace(qint64 entry_id) const
 
 //--------------------------------------------------------------------------------------------------
 std::string_view Database::addWorkspace(const QString& name, const QByteArray& comment,
-    const QVector<Workspace::Access>& initial_access, qint64* entry_id)
+    const QList<Workspace::Access>& initial_access, qint64* entry_id)
 {
     CHECK(entry_id);
 
@@ -1140,7 +1140,7 @@ std::string_view Database::addWorkspace(const QString& name, const QByteArray& c
 
 //--------------------------------------------------------------------------------------------------
 std::string_view Database::modifyWorkspace(qint64 entry_id, const QString& name, const QByteArray& comment,
-    const QVector<Workspace::Access>& desired_access)
+    const QList<Workspace::Access>& desired_access)
 {
     if (!isValid())
     {
@@ -1426,7 +1426,7 @@ std::string_view Database::setWorkspaceHosts(qint64 entry_id, const QSet<HostId>
 }
 
 //--------------------------------------------------------------------------------------------------
-QVector<Workspace::Access> Database::workspaceAccessList(qint64 workspace_id) const
+QList<Workspace::Access> Database::workspaceAccessList(qint64 workspace_id) const
 {
     if (!isValid())
     {
@@ -1445,7 +1445,7 @@ QVector<Workspace::Access> Database::workspaceAccessList(qint64 workspace_id) co
         return {};
     }
 
-    QVector<Workspace::Access> result;
+    QList<Workspace::Access> result;
     while (query.next())
     {
         Workspace::Access access;
@@ -1506,7 +1506,7 @@ bool Database::hasWorkspaceAccess(qint64 user_id, qint64 workspace_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-QVector<Group> Database::groupList(qint64 workspace_id) const
+QList<Group> Database::groupList(qint64 workspace_id) const
 {
     if (!isValid())
     {
@@ -1536,7 +1536,7 @@ QVector<Group> Database::groupList(qint64 workspace_id) const
         return {};
     }
 
-    QVector<Group> groups;
+    QList<Group> groups;
     while (query.next())
     {
         Group group;
@@ -1551,7 +1551,7 @@ QVector<Group> Database::groupList(qint64 workspace_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-QVector<Group> Database::groupChildren(qint64 workspace_id, qint64 parent_id) const
+QList<Group> Database::groupChildren(qint64 workspace_id, qint64 parent_id) const
 {
     if (!isValid())
     {
@@ -1592,7 +1592,7 @@ QVector<Group> Database::groupChildren(qint64 workspace_id, qint64 parent_id) co
         return {};
     }
 
-    QVector<Group> groups;
+    QList<Group> groups;
     while (query.next())
     {
         Group group;

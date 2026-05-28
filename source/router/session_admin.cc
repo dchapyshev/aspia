@@ -175,7 +175,7 @@ void SessionAdmin::doUserListRequest(const proto::router::UserListRequest& reque
     {
         list->set_error_code(proto::router::kErrorOk);
 
-        QVector<RouterUser> users = database.userList();
+        QList<RouterUser> users = database.userList();
         for (const auto& user : std::as_const(users))
             list->add_user()->CopyFrom(user.serialize());
     }
@@ -520,7 +520,7 @@ void SessionAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& req
                    << "access entries and" << desired_host_ids.size() << "hosts";
 
         bool self_present = false;
-        QVector<Workspace::Access> initial_access;
+        QList<Workspace::Access> initial_access;
         initial_access.reserve(workspace.access_size());
 
         for (int i = 0; i < workspace.access_size(); ++i)
@@ -572,7 +572,7 @@ void SessionAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& req
                    << desired_host_ids.size() << "hosts";
 
         bool self_present = false;
-        QVector<Workspace::Access> desired_access;
+        QList<Workspace::Access> desired_access;
         desired_access.reserve(workspace.access_size());
 
         for (int i = 0; i < workspace.access_size(); ++i)

@@ -78,7 +78,7 @@ public:
     // Users
     //----------------------------------------------------------------------------------------------
 
-    QVector<RouterUser> userList() const;
+    QList<RouterUser> userList() const;
     bool addUser(const RouterUser& user);
     bool modifyUser(const RouterUser& user);
     bool removeUser(qint64 entry_id);
@@ -110,11 +110,11 @@ public:
 
     // Returns every host in the database (admin-only call site). [start_item, end_item] gives an
     // inclusive paging window; pass end_item <= 0 to disable paging.
-    QVector<HostInfo> hosts(qint64 start_item, qint64 end_item) const;
+    QList<HostInfo> hosts(qint64 start_item, qint64 end_item) const;
 
     // Returns hosts in the given workspace and group with exact match on both columns.
     // [start_item, end_item] gives an inclusive paging window; pass end_item <= 0 to disable.
-    QVector<HostInfo> hosts(qint64 workspace_id, qint64 group_id, qint64 start_item, qint64 end_item) const;
+    QList<HostInfo> hosts(qint64 workspace_id, qint64 group_id, qint64 start_item, qint64 end_item) const;
 
     // Total host count in the same scope as the matching hosts() overload. Used by the client
     // to drive pagination UI without fetching the full list.
@@ -131,14 +131,14 @@ public:
     // Workspaces
     //----------------------------------------------------------------------------------------------
 
-    QVector<Workspace> workspaceList() const;
+    QList<Workspace> workspaceList() const;
     Workspace findWorkspace(qint64 entry_id) const;
 
     // Initial access list may be empty - in that case the workspace has no GK yet; it will
     // be generated when the first access is granted via modifyWorkspace(). The comment is
     // stored as opaque bytes (AEAD-encrypted with the workspace GK on the client).
     std::string_view addWorkspace(const QString& name, const QByteArray& comment,
-        const QVector<Workspace::Access>& initial_access, qint64* entry_id);
+        const QList<Workspace::Access>& initial_access, qint64* entry_id);
 
     // Updates name/comment and synchronizes access in a single transaction. desired_access is
     // the complete final access list: user_ids missing from it are revoked, user_ids absent
@@ -146,7 +146,7 @@ public:
     // already present preserve their existing wrapped_gk (the value in desired_access is
     // ignored).
     std::string_view modifyWorkspace(qint64 entry_id, const QString& name, const QByteArray& comment,
-        const QVector<Workspace::Access>& desired_access);
+        const QList<Workspace::Access>& desired_access);
     std::string_view removeWorkspace(qint64 entry_id);
 
     // Assigns hosts to the given workspace. desired_host_ids is the complete final set: hosts
@@ -157,7 +157,7 @@ public:
     std::string_view setWorkspaceHosts(qint64 entry_id, const QSet<HostId>& desired_host_ids);
 
     // Workspace access (per-user wrapped GK).
-    QVector<Workspace::Access> workspaceAccessList(qint64 workspace_id) const;
+    QList<Workspace::Access> workspaceAccessList(qint64 workspace_id) const;
 
     // Returns the set of workspace ids the given user has a workspace_access entry for.
     QSet<qint64> workspaceAccessListForUser(qint64 user_id) const;
@@ -169,11 +169,11 @@ public:
 
     // Returns the entire group tree of the given workspace, ordered by parent_id then name.
     // The caller can build a tree by indexing on entry_id and linking via parent_id.
-    QVector<Group> groupList(qint64 workspace_id) const;
+    QList<Group> groupList(qint64 workspace_id) const;
 
     // Returns direct children of parent_id within workspace_id. parent_id == 0 returns root
     // groups (parent_id IS NULL in the table).
-    QVector<Group> groupChildren(qint64 workspace_id, qint64 parent_id) const;
+    QList<Group> groupChildren(qint64 workspace_id, qint64 parent_id) const;
 
     // Returns the group with the given entry_id from workspace_id. Returns an empty Group
     // (entry_id == 0) if the row is missing or workspace_id has no groups_<W> table.
