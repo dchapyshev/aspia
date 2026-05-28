@@ -298,7 +298,8 @@ void RouterGroupWidget::onEditHost()
         return;
 
     RouterHostDialog dialog(router_id_, item->host, this);
-    dialog.exec();
+    if (dialog.exec() == QDialog::Accepted)
+        fetchHosts();
 }
 
 //--------------------------------------------------------------------------------------------------

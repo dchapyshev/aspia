@@ -1054,10 +1054,12 @@ void HostsTab::onAddGroupAction()
     // When invoked on the workspace itself the new group lives at the workspace root
     // (parent_id == 0). When invoked on an existing host group it becomes a subgroup of it.
     const qint64 default_parent_id = group_item->isWorkspace() ? 0 : group_item->groupId();
+    const qint64 router_id = group_item->routerId();
 
     RouterGroupDialog dialog(
-        group_item->routerId(), group_item->workspaceId(), 0, default_parent_id, this);
-    dialog.exec();
+        router_id, group_item->workspaceId(), 0, default_parent_id, this);
+    if (dialog.exec() == QDialog::Accepted)
+        refreshSidebarHostGroups(router_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1080,9 +1082,11 @@ void HostsTab::onEditGroupAction()
     if (group_item->isWorkspace())
         return;
 
+    const qint64 router_id = group_item->routerId();
     RouterGroupDialog dialog(
-        group_item->routerId(), group_item->workspaceId(), group_item->groupId(), 0, this);
-    dialog.exec();
+        router_id, group_item->workspaceId(), group_item->groupId(), 0, this);
+    if (dialog.exec() == QDialog::Accepted)
+        refreshSidebarHostGroups(router_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1111,15 +1115,20 @@ void HostsTab::onDeleteGroupAction()
     if (MsgBox::question(this, question) == MsgBox::No)
         return;
 
-    Router* router = Router::instance(group_item->routerId());
+    const qint64 router_id = group_item->routerId();
+    Router* router = Router::instance(router_id);
     if (!router)
         return;
 
     router->deleteGroup(group_item->workspaceId(), group_item->groupId(), this,
-        [](const proto::router::GroupResult& result)
+        [this, router_id](const proto::router::GroupResult& result)
     {
         if (result.error_code() != proto::router::kErrorOk)
+        {
             LOG(ERROR) << "Group delete failed:" << result.error_code();
+            return;
+        }
+        refreshSidebarHostGroups(router_id);
     });
 }
 
