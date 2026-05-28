@@ -119,12 +119,11 @@ public:
         QList<Host> hosts;
     };
 
-    // Plain (decrypted) host group record. workspace_id is not part of the struct because the
-    // workspace owns the underlying table; the workspace_id stays alongside Group at the RPC
-    // call sites (listGroups, addGroup, etc).
+    // Plain (decrypted) host group record.
     struct Group
     {
         qint64 entry_id = 0;
+        qint64 workspace_id = 0; // Workspace that owns the group.
         qint64 parent_id = 0;    // 0 means the group sits at the workspace root.
         QString name;
         QString comment;         // Decrypted with the workspace GK.

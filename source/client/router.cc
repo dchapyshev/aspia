@@ -615,9 +615,10 @@ Router::GroupList Router::decodeGroupList(const proto::router::GroupList& list)
         const proto::router::Group& src = list.group(i);
 
         Router::Group& dst = decoded.groups.emplaceBack();
-        dst.entry_id  = src.entry_id();
-        dst.parent_id = src.parent_id();
-        dst.name      = QString::fromStdString(src.name());
+        dst.entry_id     = src.entry_id();
+        dst.workspace_id = list.workspace_id();
+        dst.parent_id    = src.parent_id();
+        dst.name         = QString::fromStdString(src.name());
 
         if (list.workspace_id() == 0)
             continue;

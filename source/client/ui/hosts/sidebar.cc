@@ -44,7 +44,8 @@
 //--------------------------------------------------------------------------------------------------
 Sidebar::Sidebar(QWidget* parent)
     : QWidget(parent),
-      local_group_mime_type_(QString("application/%1").arg(QUuid::createUuid().toString()))
+      local_group_mime_type_(QString("application/%1").arg(QUuid::createUuid().toString())),
+      router_group_mime_type_(QString("application/%1").arg(QUuid::createUuid().toString()))
 {
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -224,10 +225,7 @@ void Sidebar::setRouterWorkspaces(qint64 router_id, const QList<Router::Workspac
     Settings settings;
     for (const Router::Workspace& workspace : workspaces)
     {
-        // A workspace sits directly under the router; group_id is 0 (the workspace root has no
-        // host-group filter of its own).
-        auto* item = new RouterGroupItem(router_id, workspace.entry_id, 0,
-                                         /*is_workspace=*/true, workspace.name, router);
+        auto* item = new RouterGroupItem(router_id, workspace, router);
         item->setExpanded(settings.isWorkspaceExpanded(router_id, workspace.entry_id));
     }
 
@@ -311,15 +309,13 @@ void Sidebar::setRouterHostGroups(qint64 router_id, qint64 workspace_id, const Q
             RouterGroupItem* item = existing.value(group->entry_id);
             if (!item)
             {
-                item = new RouterGroupItem(router_id, workspace_id, group->entry_id,
-                                           /*is_workspace=*/false, group->name, tree_parent);
+                item = new RouterGroupItem(router_id, *group, tree_parent);
                 item->setExpanded(settings.isRouterGroupExpanded(router_id, group->entry_id));
                 existing.insert(group->entry_id, item);
             }
             else
             {
-                if (item->text(0) != group->name)
-                    item->setText(0, group->name);
+                item->update(*group);
                 if (item->parent() != tree_parent)
                 {
                     QTreeWidgetItem* current_parent = item->parent();
@@ -625,7 +621,8 @@ bool Sidebar::onDragEnter(QDragEnterEvent* event)
 
     if (mime_data->hasFormat(local_host_mime_type_) ||
         mime_data->hasFormat(router_host_mime_type_) ||
-        mime_data->hasFormat(local_group_mime_type_))
+        mime_data->hasFormat(local_group_mime_type_) ||
+        mime_data->hasFormat(router_group_mime_type_))
     {
         event->acceptProposedAction();
         dragging_ = true;
@@ -655,6 +652,64 @@ bool Sidebar::onDragMove(QDragMoveEvent* event)
             event->acceptProposedAction();
         }
 
+        return true;
+    }
+    else if (mime_data->hasFormat(router_group_mime_type_))
+    {
+        const RouterGroupMimeData* group_mime_data =
+            dynamic_cast<const RouterGroupMimeData*>(mime_data);
+        if (!group_mime_data)
+            return true;
+
+        RouterGroupItem* source_group = group_mime_data->groupItem();
+        if (!source_group)
+            return true;
+
+        QTreeWidgetItem* target_tree_item = tree_widget_->itemAt(event->position().toPoint());
+        if (!target_tree_item || target_tree_item == tree_widget_->invisibleRootItem() ||
+            target_tree_item == source_group)
+        {
+            return true;
+        }
+
+        Item* target_item = static_cast<Item*>(target_tree_item);
+        if (target_item->itemType() != Item::ROUTER_GROUP)
+            return true;
+
+        auto* target_group = static_cast<RouterGroupItem*>(target_item);
+
+        // Cross-router/workspace moves are not supported by modifyGroup.
+        if (target_group->routerId() != source_group->routerId() ||
+            target_group->workspaceId() != source_group->workspaceId())
+        {
+            return true;
+        }
+
+        // No-op move: target is already the source's parent.
+        QTreeWidgetItem* current_parent = source_group->parent();
+        if (current_parent == target_tree_item)
+            return true;
+
+        // Prevent a cycle: target must not be source itself or any of its descendants.
+        std::function<bool(QTreeWidgetItem*, QTreeWidgetItem*)> isChild =
+            [&](QTreeWidgetItem* parent, QTreeWidgetItem* child) -> bool
+        {
+            for (int i = 0; i < parent->childCount(); ++i)
+            {
+                QTreeWidgetItem* current = parent->child(i);
+                if (current == child)
+                    return true;
+                if (isChild(current, child))
+                    return true;
+            }
+            return false;
+        };
+        if (isChild(source_group, target_tree_item))
+            return true;
+
+        tree_widget_->clearSelection();
+        target_tree_item->setSelected(true);
+        event->acceptProposedAction();
         return true;
     }
     else if (mime_data->hasFormat(local_host_mime_type_))
@@ -882,6 +937,80 @@ bool Sidebar::onDrop(QDropEvent* event)
         emit sig_itemDropped();
         return true;
     }
+    else if (mime_data->hasFormat(router_group_mime_type_))
+    {
+        const RouterGroupMimeData* group_mime_data =
+            dynamic_cast<const RouterGroupMimeData*>(mime_data);
+        if (!group_mime_data)
+        {
+            restoreSelection();
+            return true;
+        }
+
+        RouterGroupItem* source_group = group_mime_data->groupItem();
+        if (!source_group)
+        {
+            restoreSelection();
+            return true;
+        }
+
+        QTreeWidgetItem* target_tree_item = tree_widget_->itemAt(event->position().toPoint());
+        if (!target_tree_item || target_tree_item == tree_widget_->invisibleRootItem() ||
+            target_tree_item == source_group)
+        {
+            restoreSelection();
+            return true;
+        }
+
+        Item* target_item = static_cast<Item*>(target_tree_item);
+        if (target_item->itemType() != Item::ROUTER_GROUP)
+        {
+            restoreSelection();
+            return true;
+        }
+
+        auto* target_group = static_cast<RouterGroupItem*>(target_item);
+        if (target_group->routerId() != source_group->routerId() ||
+            target_group->workspaceId() != source_group->workspaceId())
+        {
+            restoreSelection();
+            return true;
+        }
+
+        if (source_group->parent() == target_tree_item)
+        {
+            restoreSelection();
+            return true;
+        }
+
+        Router* router = Router::instance(source_group->routerId());
+        if (!router)
+        {
+            restoreSelection();
+            return true;
+        }
+
+        // Copy the existing record and just rewrite parent_id. target_group->groupId() is 0
+        // for the workspace item (drop = move to workspace root) and the group's own entry_id
+        // for a host group (drop = nest under it).
+        Router::Group group = source_group->group();
+        group.parent_id = target_group->groupId();
+
+        router->modifyGroup(source_group->workspaceId(), group, this,
+            [this](const proto::router::GroupResult& result)
+        {
+            if (result.error_code() != proto::router::kErrorOk)
+            {
+                LOG(ERROR) << "Move group failed:" << result.error_code();
+                MsgBox::warning(tree_widget_,
+                    tr("Failed to move the group."));
+            }
+        });
+
+        event->acceptProposedAction();
+        restoreSelection();
+        return true;
+    }
     else if (mime_data->hasFormat(router_host_mime_type_))
     {
         const RouterGroupWidget::HostMimeData* host_mime_data =
@@ -979,22 +1108,39 @@ void Sidebar::startDrag()
         return;
 
     Item* item = static_cast<Item*>(tree_item);
-    if (item->itemType() != Item::LOCAL_GROUP)
-        return;
+    if (item->itemType() == Item::LOCAL_GROUP)
+    {
+        LocalGroupItem* group_item = static_cast<LocalGroupItem*>(item);
 
-    LocalGroupItem* group_item = static_cast<LocalGroupItem*>(item);
+        // Don't allow dragging the root "Local" group.
+        if (group_item->groupId() == 0)
+            return;
 
-    // Don't allow dragging the root "Local" group.
-    if (group_item->groupId() == 0)
-        return;
+        GroupDrag drag(this);
+        drag.setGroupItem(group_item, local_group_mime_type_);
 
-    GroupDrag drag(this);
-    drag.setGroupItem(group_item, local_group_mime_type_);
+        const QIcon icon = group_item->icon(0);
+        drag.setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
 
-    const QIcon icon = group_item->icon(0);
-    drag.setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
+        drag.exec(Qt::MoveAction);
+    }
+    else if (item->itemType() == Item::ROUTER_GROUP)
+    {
+        auto* group_item = static_cast<RouterGroupItem*>(item);
 
-    drag.exec(Qt::MoveAction);
+        // Workspaces themselves are not draggable - they are the top-level structure under a
+        // router, not a regular group.
+        if (group_item->isWorkspace())
+            return;
+
+        RouterGroupDrag drag(this);
+        drag.setGroupItem(group_item, router_group_mime_type_);
+
+        const QIcon icon = group_item->icon(0);
+        drag.setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
+
+        drag.exec(Qt::MoveAction);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1201,28 +1347,59 @@ void Sidebar::RouterItem::setStatus(Status status)
 
 //--------------------------------------------------------------------------------------------------
 Sidebar::RouterGroupItem::RouterGroupItem(
-    qint64 router_id, qint64 workspace_id, qint64 group_id, bool is_workspace,
-    const QString& name, QTreeWidgetItem* parent)
-    : Item(ROUTER_GROUP, group_id, parent),
+    qint64 router_id, const Router::Workspace& workspace, QTreeWidgetItem* parent)
+    : Item(ROUTER_GROUP, /*group_id=*/0, parent),
       router_id_(router_id),
-      workspace_id_(workspace_id),
-      is_workspace_(is_workspace)
+      data_(workspace)
 {
-    setText(0, name);
-    setIcon(0, QIcon(is_workspace_ ? ":/img/workspace.svg" : ":/img/folder.svg"));
+    setText(0, workspace.name);
+    setIcon(0, QIcon(":/img/workspace.svg"));
+}
+
+//--------------------------------------------------------------------------------------------------
+Sidebar::RouterGroupItem::RouterGroupItem(
+    qint64 router_id, const Router::Group& group, QTreeWidgetItem* parent)
+    : Item(ROUTER_GROUP, group.entry_id, parent),
+      router_id_(router_id),
+      data_(group)
+{
+    setText(0, group.name);
+    setIcon(0, QIcon(":/img/folder.svg"));
+}
+
+//--------------------------------------------------------------------------------------------------
+qint64 Sidebar::RouterGroupItem::workspaceId() const
+{
+    if (auto* w = std::get_if<Router::Workspace>(&data_))
+        return w->entry_id;
+    return std::get<Router::Group>(data_).workspace_id;
 }
 
 //--------------------------------------------------------------------------------------------------
 QString Sidebar::RouterGroupItem::workspaceName() const
 {
-    if (is_workspace_)
-        return text(0);
+    if (auto* w = std::get_if<Router::Workspace>(&data_))
+        return w->name;
 
     for (QTreeWidgetItem* p = parent(); p; p = p->parent())
     {
         auto* group_item = dynamic_cast<RouterGroupItem*>(p);
         if (group_item && group_item->isWorkspace())
-            return group_item->text(0);
+            return group_item->workspace().name;
     }
     return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::RouterGroupItem::update(const Router::Workspace& workspace)
+{
+    data_ = workspace;
+    setText(0, workspace.name);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::RouterGroupItem::update(const Router::Group& group)
+{
+    data_ = group;
+    setText(0, group.name);
 }

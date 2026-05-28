@@ -25,6 +25,8 @@
 #include <QTreeWidget>
 #include <QWidget>
 
+#include <variant>
+
 #include "client/router.h"
 
 class GroupConfig;
@@ -90,23 +92,32 @@ public:
     class RouterGroupItem final : public Item
     {
     public:
-        // is_workspace == true for a workspace under a router (the workspace_id equals
-        // group_id in that case). is_workspace == false for a host group inside a workspace;
-        // workspace_id is then the id of the enclosing workspace. The logical parent of a
-        // host group is mirrored by its QTreeWidgetItem parent and is not stored separately.
-        RouterGroupItem(
-            qint64 router_id, qint64 workspace_id, qint64 group_id, bool is_workspace,
-            const QString& name, QTreeWidgetItem* parent);
+        // Workspace under a router. group_id is 0 (no host-group filter); the workspace's
+        // own entry_id lives in workspaceId(). The QTreeWidgetItem parent is the RouterItem.
+        RouterGroupItem(qint64 router_id, const Router::Workspace& workspace, QTreeWidgetItem* parent);
+
+        // Host group inside a workspace. group.workspace_id identifies the enclosing
+        // workspace; the QTreeWidgetItem parent is either the workspace item or a parent
+        // group item (mirrors group.parent_id, so it is not stored separately).
+        RouterGroupItem(qint64 router_id, const Router::Group& group, QTreeWidgetItem* parent);
 
         qint64 routerId() const { return router_id_; }
-        qint64 workspaceId() const { return workspace_id_; }
+        qint64 workspaceId() const;
         QString workspaceName() const;
-        bool isWorkspace() const { return is_workspace_; }
+        bool isWorkspace() const { return std::holds_alternative<Router::Workspace>(data_); }
+
+        // The full backing record. Only valid in the corresponding kind (use isWorkspace()
+        // to discriminate); calling the wrong one throws std::bad_variant_access.
+        const Router::Workspace& workspace() const { return std::get<Router::Workspace>(data_); }
+        const Router::Group& group() const { return std::get<Router::Group>(data_); }
+
+        // Re-sync the cached record after a server-side change. The text/icon follow.
+        void update(const Router::Workspace& workspace);
+        void update(const Router::Group& group);
 
     private:
         const qint64 router_id_;
-        const qint64 workspace_id_;
-        const bool is_workspace_;
+        std::variant<Router::Workspace, Router::Group> data_;
     };
 
     class GroupMimeData final : public QMimeData
@@ -139,6 +150,41 @@ public:
         void setGroupItem(LocalGroupItem* group_item, const QString& mime_type)
         {
             GroupMimeData* mime_data = new GroupMimeData();
+            mime_data->setGroupItem(group_item, mime_type);
+            setMimeData(mime_data);
+        }
+    };
+
+    class RouterGroupMimeData final : public QMimeData
+    {
+    public:
+        RouterGroupMimeData() = default;
+        ~RouterGroupMimeData() final = default;
+
+        void setGroupItem(RouterGroupItem* group_item, const QString& mime_type)
+        {
+            group_item_ = group_item;
+            setData(mime_type, QByteArray());
+        }
+
+        RouterGroupItem* groupItem() const { return group_item_; }
+
+    private:
+        RouterGroupItem* group_item_ = nullptr;
+    };
+
+    class RouterGroupDrag final : public QDrag
+    {
+    public:
+        explicit RouterGroupDrag(QObject* drag_source = nullptr)
+            : QDrag(drag_source)
+        {
+            // Nothing
+        }
+
+        void setGroupItem(RouterGroupItem* group_item, const QString& mime_type)
+        {
+            RouterGroupMimeData* mime_data = new RouterGroupMimeData();
             mime_data->setGroupItem(group_item, mime_type);
             setMimeData(mime_data);
         }
@@ -210,6 +256,7 @@ private:
     QString local_host_mime_type_;
     QString router_host_mime_type_;
     QString local_group_mime_type_;
+    QString router_group_mime_type_;
     bool dragging_ = false;
     QTreeWidgetItem* drag_source_item_ = nullptr;
     QPoint start_pos_;
