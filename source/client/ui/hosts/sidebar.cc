@@ -220,8 +220,9 @@ void Sidebar::setRouterWorkspaces(qint64 router_id, const QList<Router::Workspac
 
     for (const Router::Workspace& workspace : workspaces)
     {
-        // A workspace sits directly under the router; workspace_id and group_id coincide.
-        new RouterGroupItem(router_id, workspace.entry_id, workspace.entry_id,
+        // A workspace sits directly under the router; group_id is 0 (the workspace root has no
+        // host-group filter of its own).
+        new RouterGroupItem(router_id, workspace.entry_id, 0,
                             /*is_workspace=*/true, workspace.name, router);
     }
 
@@ -244,7 +245,7 @@ void Sidebar::setRouterHostGroups(qint64 router_id, qint64 workspace_id, const Q
         if (child->itemType() != Item::ROUTER_GROUP)
             continue;
         auto* group_item = static_cast<RouterGroupItem*>(child);
-        if (group_item->isWorkspace() && group_item->groupId() == workspace_id)
+        if (group_item->isWorkspace() && group_item->workspaceId() == workspace_id)
         {
             workspace_item = group_item;
             break;
@@ -387,7 +388,7 @@ QList<qint64> Sidebar::routerWorkspaceIds(qint64 router_id) const
             continue;
         auto* group_item = static_cast<RouterGroupItem*>(child);
         if (group_item->isWorkspace())
-            ids.append(group_item->groupId());
+            ids.append(group_item->workspaceId());
     }
 
     return ids;

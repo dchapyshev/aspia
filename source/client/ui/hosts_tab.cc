@@ -461,7 +461,7 @@ void HostsTab::onSwitchContent(Sidebar::Item::Type type)
 
             Sidebar::RouterGroupItem* item =
                 static_cast<Sidebar::RouterGroupItem*>(ui->sidebar->currentItem());
-            router_group_widget_->showGroup(item->routerId(), item->groupId());
+            router_group_widget_->showGroup(item->routerId(), item->workspaceId(), item->groupId());
         }
         break;
 
@@ -1051,9 +1051,9 @@ void HostsTab::onAddGroupAction()
 
     auto* group_item = static_cast<Sidebar::RouterGroupItem*>(item);
 
-    // When invoked on the workspace itself the new group lives at the workspace root
-    // (parent_id == 0). When invoked on an existing host group it becomes a subgroup of it.
-    const qint64 default_parent_id = group_item->isWorkspace() ? 0 : group_item->groupId();
+    // For a workspace item groupId() is 0 (the new group goes to the workspace root); for a
+    // host group it is the group's own id (the new group becomes its subgroup).
+    const qint64 default_parent_id = group_item->groupId();
     const qint64 router_id = group_item->routerId();
 
     RouterGroupDialog dialog(

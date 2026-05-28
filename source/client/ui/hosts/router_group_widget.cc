@@ -174,7 +174,7 @@ RouterGroupWidget::~RouterGroupWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterGroupWidget::showGroup(qint64 router_id, qint64 workspace_id)
+void RouterGroupWidget::showGroup(qint64 router_id, qint64 workspace_id, qint64 group_id)
 {
     if (router_id_ != router_id)
     {
@@ -188,8 +188,9 @@ void RouterGroupWidget::showGroup(qint64 router_id, qint64 workspace_id)
 
     router_id_ = router_id;
     workspace_id_ = workspace_id;
+    group_id_ = group_id;
 
-    // Clear the tree before showing a different workspace to avoid briefly displaying stale
+    // Clear the tree before showing a different group to avoid briefly displaying stale
     // entries from the previous one.
     ui->tree_host->clear();
     updateStatusLabel();
@@ -313,9 +314,9 @@ void RouterGroupWidget::changeEvent(QEvent* event)
 //--------------------------------------------------------------------------------------------------
 void RouterGroupWidget::onHostListReceived(const Router::HostList& list)
 {
-    // The router echoes workspace_id/group_id; ignore responses for other workspaces (e.g. an
-    // in-flight request issued before the user switched workspaces).
-    if (list.workspace_id != workspace_id_)
+    // The router echoes workspace_id/group_id; ignore responses for other workspaces or
+    // groups (e.g. an in-flight request issued before the user switched selection).
+    if (list.workspace_id != workspace_id_ || list.group_id != group_id_)
         return;
 
     auto has_with_id = [](const Router::HostList& list, HostId host_id)
@@ -403,6 +404,7 @@ void RouterGroupWidget::fetchHosts()
     proto::router::HostListRequest request;
     request.set_mode(proto::router::HostListRequest::MODE_FILTERED);
     request.set_workspace_id(workspace_id_);
+    request.set_group_id(group_id_);
     router->listHosts(std::move(request), this, &RouterGroupWidget::onHostListReceived);
 }
 
