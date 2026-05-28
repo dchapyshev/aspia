@@ -188,7 +188,6 @@ private:
     Database() = default;
 
     bool openDatabase();
-    static QString databaseDirectory();
 
     bool valid_ = false;
 

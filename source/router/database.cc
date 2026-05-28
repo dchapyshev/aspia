@@ -38,6 +38,12 @@ namespace {
 const char kConnectionName[] = "router_database";
 
 //--------------------------------------------------------------------------------------------------
+QString databaseDirectory()
+{
+    return BasePaths::appDataDir();
+}
+
+//--------------------------------------------------------------------------------------------------
 QSqlDatabase connection()
 {
     return QSqlDatabase::database(kConnectionName, false);
@@ -88,81 +94,128 @@ bool ensureSchema(QSqlDatabase& sql_db)
 
     QSqlQuery query(sql_db);
 
-    if (!query.exec("CREATE TABLE IF NOT EXISTS \"users\" ("
-                    "\"id\" INTEGER UNIQUE,"
-                    "\"name\" TEXT NOT NULL UNIQUE,"
-                    "\"group\" TEXT NOT NULL,"
-                    "\"salt\" BLOB NOT NULL,"
-                    "\"verifier\" BLOB NOT NULL,"
-                    "\"sessions\" INTEGER DEFAULT 0,"
-                    "\"flags\" INTEGER DEFAULT 0,"
-                    "\"public_key\" BLOB NOT NULL DEFAULT X'',"
-                    "\"wrap_private_key\" BLOB NOT NULL DEFAULT X'',"
-                    "\"wrap_salt\" BLOB NOT NULL DEFAULT X'',"
-                    "PRIMARY KEY(\"id\" AUTOINCREMENT))") ||
-        // workspace_id == 0 means the host is not yet assigned to any workspace; group_id == 0
-        // means the host is shown at the workspace root. No FKs on these columns because 0 is a
-        // sentinel value; for any non-zero value the application enforces that it points to an
-        // existing row in workspaces/host_groups.
-        // comment, user_name and password are AEAD-encrypted with the workspace GK (only
-        // meaningful when workspace_id != 0). name, computer_name (real OS hostname), cpu_arch,
-        // version, os_name, address and last_connect are plain values; the latter five are
-        // updated by the router on every host connection and reflect the latest connect attempt.
-        !query.exec("CREATE TABLE IF NOT EXISTS \"hosts\" ("
-                    "\"id\" INTEGER UNIQUE,"
-                    "\"key\" BLOB NOT NULL UNIQUE,"
-                    "\"workspace_id\" INTEGER NOT NULL DEFAULT 0,"
-                    "\"group_id\" INTEGER NOT NULL DEFAULT 0,"
-                    "\"display_name\" TEXT NOT NULL DEFAULT '',"
-                    "\"computer_name\" TEXT NOT NULL DEFAULT '',"
-                    "\"cpu_arch\" TEXT NOT NULL DEFAULT '',"
-                    "\"version\" TEXT NOT NULL DEFAULT '',"
-                    "\"os_name\" TEXT NOT NULL DEFAULT '',"
-                    "\"address\" TEXT NOT NULL DEFAULT '',"
-                    "\"comment\" BLOB NOT NULL DEFAULT X'',"
-                    "\"user_name\" BLOB NOT NULL DEFAULT X'',"
-                    "\"password\" BLOB NOT NULL DEFAULT X'',"
-                    "\"last_connect\" INTEGER NOT NULL DEFAULT 0,"
-                    "\"last_modify\" INTEGER NOT NULL DEFAULT 0,"
-                    "PRIMARY KEY(\"id\" AUTOINCREMENT))") ||
-        // comment is AEAD-encrypted with the workspace GK; name is plain text.
-        !query.exec("CREATE TABLE IF NOT EXISTS \"workspaces\" ("
-                    "\"id\" INTEGER UNIQUE,"
-                    "\"name\" TEXT NOT NULL UNIQUE,"
-                    "\"comment\" BLOB NOT NULL DEFAULT X'',"
-                    "PRIMARY KEY(\"id\" AUTOINCREMENT))") ||
-        !query.exec("CREATE TABLE IF NOT EXISTS \"workspace_access\" ("
-                    "\"workspace_id\" INTEGER NOT NULL,"
-                    "\"user_id\" INTEGER NOT NULL,"
-                    "\"wrapped_gk\" BLOB NOT NULL,"
-                    "PRIMARY KEY(\"workspace_id\", \"user_id\"),"
-                    "FOREIGN KEY(\"workspace_id\") REFERENCES \"workspaces\"(\"id\") ON DELETE CASCADE,"
-                    "FOREIGN KEY(\"user_id\") REFERENCES \"users\"(\"id\") ON DELETE CASCADE)") ||
-        !query.exec("CREATE TABLE IF NOT EXISTS \"host_groups\" ("
-                    "\"id\" INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    "\"workspace_id\" INTEGER NOT NULL,"
-                    "\"parent_id\" INTEGER,"
-                    "\"name\" TEXT NOT NULL,"
-                    "\"comment\" BLOB NOT NULL DEFAULT X'',"
-                    "FOREIGN KEY(\"workspace_id\") REFERENCES \"workspaces\"(\"id\") ON DELETE CASCADE,"
-                    "FOREIGN KEY(\"parent_id\") REFERENCES \"host_groups\"(\"id\") ON DELETE CASCADE)") ||
-        !query.exec("CREATE INDEX IF NOT EXISTS \"host_groups_workspace_id\" "
-                    "ON \"host_groups\"(\"workspace_id\")") ||
-        !query.exec("CREATE INDEX IF NOT EXISTS \"host_groups_parent_id\" "
-                    "ON \"host_groups\"(\"parent_id\")") ||
-        !query.exec("CREATE INDEX IF NOT EXISTS \"hosts_workspace_group\" "
-                    "ON \"hosts\"(\"workspace_id\", \"group_id\")") ||
-        !query.exec("CREATE INDEX IF NOT EXISTS \"workspace_access_user_id\" "
-                    "ON \"workspace_access\"(\"user_id\")") ||
-        // Pending host removals. When an admin requests host removal we move the row from hosts
-        // into this table and wait for the host to acknowledge the remove command.
-        !query.exec("CREATE TABLE IF NOT EXISTS \"hosts_remove\" ("
-                    "\"host_id\" INTEGER PRIMARY KEY,"
-                    "\"key\" BLOB NOT NULL UNIQUE,"
-                    "\"timestamp\" INTEGER NOT NULL DEFAULT 0)"))
+    auto run = [&](const char* sql)
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        if (query.exec(sql))
+            return true;
+        LOG(ERROR) << "Unable to execute query:" << query.lastError() << "SQL:" << sql;
         sql_db.rollback();
+        return false;
+    };
+
+    if (!run("CREATE TABLE IF NOT EXISTS \"users\" ("
+             "\"id\" INTEGER UNIQUE,"
+             "\"name\" TEXT NOT NULL UNIQUE,"
+             "\"group\" TEXT NOT NULL,"
+             "\"salt\" BLOB NOT NULL,"
+             "\"verifier\" BLOB NOT NULL,"
+             "\"sessions\" INTEGER DEFAULT 0,"
+             "\"flags\" INTEGER DEFAULT 0,"
+             "\"public_key\" BLOB NOT NULL DEFAULT X'',"
+             "\"wrap_private_key\" BLOB NOT NULL DEFAULT X'',"
+             "\"wrap_salt\" BLOB NOT NULL DEFAULT X'',"
+             "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
+    {
+        return false;
+    }
+
+    // workspace_id == 0 means the host is not yet assigned to any workspace; group_id == 0
+    // means the host is shown at the workspace root. No FKs on these columns because 0 is a
+    // sentinel value; for any non-zero value the application enforces that it points to an
+    // existing row in workspaces/host_groups.
+    // comment, user_name and password are AEAD-encrypted with the workspace GK (only
+    // meaningful when workspace_id != 0). name, computer_name (real OS hostname), cpu_arch,
+    // version, os_name, address and last_connect are plain values; the latter five are
+    // updated by the router on every host connection and reflect the latest connect attempt.
+    if (!run("CREATE TABLE IF NOT EXISTS \"hosts\" ("
+             "\"id\" INTEGER UNIQUE,"
+             "\"key\" BLOB NOT NULL UNIQUE,"
+             "\"workspace_id\" INTEGER NOT NULL DEFAULT 0,"
+             "\"group_id\" INTEGER NOT NULL DEFAULT 0,"
+             "\"display_name\" TEXT NOT NULL DEFAULT '',"
+             "\"computer_name\" TEXT NOT NULL DEFAULT '',"
+             "\"cpu_arch\" TEXT NOT NULL DEFAULT '',"
+             "\"version\" TEXT NOT NULL DEFAULT '',"
+             "\"os_name\" TEXT NOT NULL DEFAULT '',"
+             "\"address\" TEXT NOT NULL DEFAULT '',"
+             "\"comment\" BLOB NOT NULL DEFAULT X'',"
+             "\"user_name\" BLOB NOT NULL DEFAULT X'',"
+             "\"password\" BLOB NOT NULL DEFAULT X'',"
+             "\"last_connect\" INTEGER NOT NULL DEFAULT 0,"
+             "\"last_modify\" INTEGER NOT NULL DEFAULT 0,"
+             "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
+    {
+        return false;
+    }
+
+    if (!run("CREATE TABLE IF NOT EXISTS \"workspaces\" ("
+             "\"id\" INTEGER UNIQUE,"
+             "\"name\" TEXT NOT NULL UNIQUE,"
+             "\"comment\" BLOB NOT NULL DEFAULT X'',"
+             "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
+    {
+        return false;
+    }
+
+    if (!run("CREATE TABLE IF NOT EXISTS \"workspace_access\" ("
+             "\"workspace_id\" INTEGER NOT NULL,"
+             "\"user_id\" INTEGER NOT NULL,"
+             "\"wrapped_gk\" BLOB NOT NULL,"
+             "PRIMARY KEY(\"workspace_id\", \"user_id\"),"
+             "FOREIGN KEY(\"workspace_id\") REFERENCES \"workspaces\"(\"id\") ON DELETE CASCADE,"
+             "FOREIGN KEY(\"user_id\") REFERENCES \"users\"(\"id\") ON DELETE CASCADE)"))
+    {
+        return false;
+    }
+
+    if (!run("CREATE TABLE IF NOT EXISTS \"host_groups\" ("
+             "\"id\" INTEGER PRIMARY KEY AUTOINCREMENT,"
+             "\"workspace_id\" INTEGER NOT NULL,"
+             "\"parent_id\" INTEGER,"
+             "\"name\" TEXT NOT NULL,"
+             "\"comment\" BLOB NOT NULL DEFAULT X'',"
+             "FOREIGN KEY(\"workspace_id\") REFERENCES \"workspaces\"(\"id\") ON DELETE CASCADE,"
+             "FOREIGN KEY(\"parent_id\") REFERENCES \"host_groups\"(\"id\") ON DELETE CASCADE)"))
+    {
+        return false;
+    }
+
+    // Pending host removals. When an admin requests host removal we move the row from hosts
+    // into this table and wait for the host to acknowledge the remove command.
+    if (!run("CREATE TABLE IF NOT EXISTS \"hosts_remove\" ("
+             "\"host_id\" INTEGER PRIMARY KEY,"
+             "\"key\" BLOB NOT NULL UNIQUE,"
+             "\"timestamp\" INTEGER NOT NULL DEFAULT 0)"))
+    {
+        return false;
+    }
+
+    // Composite index for the dominant host list/count query (hosts of a given workspace and
+    // group). Without it list-by-group does a full table scan once hosts grows.
+    if (!run("CREATE INDEX IF NOT EXISTS \"hosts_workspace_group\" "
+             "ON \"hosts\"(\"workspace_id\", \"group_id\")"))
+    {
+        return false;
+    }
+
+    // workspace_access's PRIMARY KEY is (workspace_id, user_id), which indexes only the leading
+    // column. workspaceAccessListForUser filters by user_id alone, so we need a dedicated index
+    // on the trailing column.
+    if (!run("CREATE INDEX IF NOT EXISTS \"workspace_access_user_id\" "
+             "ON \"workspace_access\"(\"user_id\")"))
+    {
+        return false;
+    }
+
+    if (!run("CREATE INDEX IF NOT EXISTS \"host_groups_workspace_id\" "
+             "ON \"host_groups\"(\"workspace_id\")"))
+    {
+        return false;
+    }
+
+    if (!run("CREATE INDEX IF NOT EXISTS \"host_groups_parent_id\" "
+             "ON \"host_groups\"(\"parent_id\")"))
+    {
         return false;
     }
 
@@ -174,11 +227,11 @@ bool ensureSchema(QSqlDatabase& sql_db)
 
     for (const auto& column : kUserColumns)
     {
-        if (hasColumn(sql_db, QStringLiteral("users"), QString::fromLatin1(column.name)))
+        if (hasColumn(sql_db, "users", column.name))
             continue;
 
-        if (!query.exec(QStringLiteral("ALTER TABLE \"users\" ADD COLUMN \"%1\" BLOB NOT NULL DEFAULT X''")
-                            .arg(QString::fromLatin1(column.name))))
+        if (!query.exec(QString(
+            "ALTER TABLE \"users\" ADD COLUMN \"%1\" BLOB NOT NULL DEFAULT X''").arg(column.name)))
         {
             LOG(ERROR) << "Unable to add column" << column.name << ":" << query.lastError();
             sql_db.rollback();
@@ -206,12 +259,11 @@ bool ensureSchema(QSqlDatabase& sql_db)
 
     for (const auto& column : kHostColumns)
     {
-        if (hasColumn(sql_db, QStringLiteral("hosts"), QString::fromLatin1(column.name)))
+        if (hasColumn(sql_db, "hosts", column.name))
             continue;
 
-        if (!query.exec(QStringLiteral("ALTER TABLE \"hosts\" ADD COLUMN \"%1\" %2")
-                            .arg(QString::fromLatin1(column.name))
-                            .arg(QString::fromLatin1(column.definition))))
+        if (!query.exec(QString("ALTER TABLE \"hosts\" ADD COLUMN \"%1\" %2")
+                            .arg(QString(column.name), QString(column.definition))))
         {
             LOG(ERROR) << "Unable to add column" << column.name << ":" << query.lastError();
             sql_db.rollback();
@@ -251,7 +303,7 @@ QString Database::filePath()
     if (file_path.isEmpty())
         return QString();
 
-    file_path.append(QStringLiteral("/router.db3"));
+    file_path.append("/router.db3");
     return file_path;
 }
 
@@ -302,7 +354,7 @@ bool Database::openDatabase()
     QSqlDatabase db = connection();
     if (!db.isValid())
     {
-        db = QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"), kConnectionName);
+        db = QSqlDatabase::addDatabase("QSQLITE", kConnectionName);
         db.setDatabaseName(file_path);
     }
 
@@ -1946,9 +1998,3 @@ qint64 Database::hostCount(qint64 workspace_id, qint64 group_id) const
     return query.value(0).toLongLong();
 }
 
-//--------------------------------------------------------------------------------------------------
-// static
-QString Database::databaseDirectory()
-{
-    return BasePaths::appDataDir();
-}
