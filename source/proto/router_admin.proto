@@ -23,8 +23,14 @@ option optimize_for = LITE_RUNTIME;
 import "peer.proto";
 import "router.proto";
 import "router_client.proto";
+import "router_manager.proto";
 
 package proto.router;
+
+// HostRequest/HostResult are defined in router_manager.proto (it's the more restricted
+// protocol surface; admin extends manager). Admin sessions accept all command variants
+// ("disconnect" | "remove" | "modify"); manager sessions only accept "modify". The channel
+// boundary enforces the privilege model.
 
 // Every request/response pair below carries request_id - the client allocates a unique value
 // per outbound request and the server echoes it back on the corresponding response. The
@@ -58,23 +64,6 @@ message ClientInfo
     string os_name       = 5;
     string computer_name = 6;
     string architecture  = 7;
-}
-
-message HostRequest
-{
-    int64 request_id    = 1;
-    string command_name = 2; // "disconnect" | "remove"
-    uint64 host_id      = 3; // For "disconnect": kAllHostsId (UINT64_MAX) means all host
-                             // sessions, otherwise the host session is looked up by host_id
-                             // (hosts.id). For "remove": host_id of the host to uninstall.
-    string params       = 4; // Additional parameters separated by ';'. Currently unused.
-}
-
-message HostResult
-{
-    int64 request_id    = 1;
-    string command_name = 2; // Same as request command_name.
-    string error_code   = 3; // "ok" | "invalid_request" | "internal_error" | "invalid_entry_id"
 }
 
 message RelayRequest

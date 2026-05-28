@@ -20,33 +20,45 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
+import "router_client.proto";
+
 package proto.router;
 
-// Edit user-facing fields of a host record. Issued by admin/manager sessions only; clients
-// have no access to this command. display_name is stored as plain text; comment/user_name/
-// password are AEAD-encrypted by the caller using the host's workspace GK.
-message HostEditRequest
+// HostRequest/HostResult live here because the manager channel is the more restricted
+// surface; router_admin.proto imports this file and the admin envelopes reuse the same
+// types. Manager sessions only accept "modify"; admin sessions additionally accept
+// "disconnect" and "remove".
+
+message HostRequest
 {
+    // "disconnect" - Disconnect a connected host session. Only host.host_id is read;
+    //                kAllHostsId disconnects all host sessions. Admin-only.
+    // "remove"     - Schedule host uninstall and DB cleanup. Only host.host_id is read.
+    //                Admin-only.
+    // "modify"     - Update mutable host fields. host.host_id selects the target; host.group_id
+    //                (== 0 keeps the host at the workspace root, otherwise must reference a
+    //                group within the host's current workspace); host.display_name plain;
+    //                host.comment/user_name/password AEAD-encrypted with the workspace GK by
+    //                the caller. Other Host fields are ignored. Allowed for admin and manager.
     int64 request_id    = 1;
-    uint64 host_id      = 2;
-    string display_name = 3;
-    bytes comment       = 4;
-    bytes user_name     = 5;
-    bytes password      = 6;
+    string command_name = 2;
+    Host host           = 3;
 }
 
-message HostEditResult
+message HostResult
 {
-    int64 request_id  = 1;
-    string error_code = 2; // "ok" | "access_denied" | "not_found" | "internal_error"
+    int64 request_id    = 1;
+    string command_name = 2; // Same as request command_name.
+    string error_code   = 3; // "ok" | "invalid_request" | "invalid_data" | "invalid_entry_id" |
+                             // "access_denied" | "not_found" | "internal_error"
 }
 
 message ManagerToRouter
 {
-    HostEditRequest host_edit_request = 1;
+    HostRequest host_request = 1;
 }
 
 message RouterToManager
 {
-    HostEditResult host_edit_result = 1;
+    HostResult host_result = 1;
 }

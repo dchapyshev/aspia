@@ -174,7 +174,8 @@ RouterGroupWidget::~RouterGroupWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterGroupWidget::showGroup(qint64 router_id, qint64 workspace_id, qint64 group_id)
+void RouterGroupWidget::showGroup(qint64 router_id, qint64 workspace_id,
+                                  const QString& workspace_name, qint64 group_id)
 {
     if (router_id_ != router_id)
     {
@@ -188,6 +189,7 @@ void RouterGroupWidget::showGroup(qint64 router_id, qint64 workspace_id, qint64 
 
     router_id_ = router_id;
     workspace_id_ = workspace_id;
+    workspace_name_ = workspace_name;
     group_id_ = group_id;
 
     // Clear the tree before showing a different group to avoid briefly displaying stale
@@ -298,7 +300,7 @@ void RouterGroupWidget::onEditHost()
     if (!item)
         return;
 
-    RouterHostDialog dialog(router_id_, item->host, this);
+    RouterHostDialog dialog(router_id_, workspace_name_, item->host, this);
     if (dialog.exec() == QDialog::Accepted)
         fetchHosts();
 }

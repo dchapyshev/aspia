@@ -22,6 +22,7 @@ namespace proto::router {
 
 const char* const kCommandHostDisconnect = "disconnect";
 const char* const kCommandHostRemove     = "remove";
+const char* const kCommandHostModify     = "modify";
 
 const char* const kCommandRelayDisconnect = "disconnect";
 

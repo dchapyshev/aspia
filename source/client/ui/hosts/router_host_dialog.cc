@@ -20,11 +20,13 @@
 
 #include <QAbstractButton>
 #include <QDialogButtonBox>
+#include <QIcon>
 #include <QPushButton>
 #include <QToolButton>
 
 #include "base/crypto/secure_string.h"
 #include "base/logging.h"
+#include "client/ui/hosts/group_combo_box.h"
 #include "common/ui/msg_box.h"
 #include "common/ui/password_edit.h"
 #include "proto/router_constants.h"
@@ -32,10 +34,12 @@
 #include "ui_router_host_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
-RouterHostDialog::RouterHostDialog(qint64 router_id, const Router::Host& host, QWidget* parent)
+RouterHostDialog::RouterHostDialog(qint64 router_id, const QString& workspace_name,
+                                   const Router::Host& host, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::RouterHostDialog>()),
       router_id_(router_id),
+      workspace_name_(workspace_name),
       host_(host)
 {
     LOG(INFO) << "Ctor";
@@ -46,8 +50,17 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const Router::Host& host, Q
     ui->edit_password->setPassword(host_.password);
     ui->edit_comment->setPlainText(host_.comment);
 
-    connect(ui->button_show_password, &QToolButton::toggled, ui->edit_password, &PasswordEdit::setShowPassword);
-    connect(ui->buttonbox, &QDialogButtonBox::clicked, this, &RouterHostDialog::onButtonBoxClicked);
+    connect(ui->button_show_password, &QToolButton::toggled,
+            ui->edit_password, &PasswordEdit::setShowPassword);
+    connect(ui->button_box, &QDialogButtonBox::clicked, this, &RouterHostDialog::onButtonBoxClicked);
+
+    // The group combo is populated asynchronously from listGroups(); disable Ok until the
+    // response arrives so the user cannot submit before knowing which group they have selected.
+    ui->button_box->button(QDialogButtonBox::Ok)->setEnabled(false);
+
+    Router* router = Router::instance(router_id_);
+    CHECK(router);
+    router->listGroups(host_.workspace_id, this, &RouterHostDialog::onGroupListReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -57,7 +70,26 @@ RouterHostDialog::~RouterHostDialog()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterHostDialog::onHostEditResultReceived(const proto::router::HostEditResult& result)
+void RouterHostDialog::onGroupListReceived(const Router::GroupList& list)
+{
+    QList<GroupComboBox::Entry> entries;
+    entries.reserve(list.groups.size());
+    for (const Router::Group& group : std::as_const(list.groups))
+    {
+        GroupComboBox::Entry& entry = entries.emplaceBack();
+        entry.id = group.entry_id;
+        entry.parent_id = group.parent_id;
+        entry.name = group.name;
+    }
+
+    ui->combo_group->loadGroups(workspace_name_, QIcon(":/img/workspace.svg"), entries);
+    ui->combo_group->selectGroup(host_.group_id);
+
+    ui->button_box->button(QDialogButtonBox::Ok)->setEnabled(true);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterHostDialog::onHostResultReceived(const proto::router::HostResult& result)
 {
     const std::string& error_code = result.error_code();
     if (error_code != proto::router::kErrorOk)
@@ -68,13 +100,15 @@ void RouterHostDialog::onHostEditResultReceived(const proto::router::HostEditRes
             message = QT_TR_NOOP("Access denied.");
         else if (error_code == proto::router::kErrorNotFound)
             message = QT_TR_NOOP("Host not found.");
+        else if (error_code == proto::router::kErrorInvalidData)
+            message = QT_TR_NOOP("Invalid data was passed.");
         else if (error_code == proto::router::kErrorInternalError)
             message = QT_TR_NOOP("Unknown internal error.");
         else
             message = QT_TR_NOOP("Unknown error type.");
 
         MsgBox::warning(this, tr(message));
-        ui->buttonbox->button(QDialogButtonBox::Ok)->setEnabled(true);
+        ui->button_box->button(QDialogButtonBox::Ok)->setEnabled(true);
         return;
     }
 
@@ -84,7 +118,7 @@ void RouterHostDialog::onHostEditResultReceived(const proto::router::HostEditRes
 //--------------------------------------------------------------------------------------------------
 void RouterHostDialog::onButtonBoxClicked(QAbstractButton* button)
 {
-    QDialogButtonBox::StandardButton standard_button = ui->buttonbox->standardButton(button);
+    QDialogButtonBox::StandardButton standard_button = ui->button_box->standardButton(button);
     if (standard_button != QDialogButtonBox::Ok)
     {
         LOG(INFO) << "[ACTION] Edit host rejected";
@@ -104,8 +138,9 @@ void RouterHostDialog::onButtonBoxClicked(QAbstractButton* button)
     host_.user_name    = ui->edit_user_name->text();
     host_.password     = ui->edit_password->password();
     host_.comment      = ui->edit_comment->toPlainText();
+    host_.group_id     = ui->combo_group->currentGroupId();
 
     LOG(INFO) << "[ACTION] Edit host accepted, sending request";
-    ui->buttonbox->button(QDialogButtonBox::Ok)->setEnabled(false);
-    router->editHost(host_, this, &RouterHostDialog::onHostEditResultReceived);
+    ui->button_box->button(QDialogButtonBox::Ok)->setEnabled(false);
+    router->editHost(host_, this, &RouterHostDialog::onHostResultReceived);
 }

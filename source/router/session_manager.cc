@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "proto/router.h"
+#include "proto/router_client.h"
 #include "proto/router_constants.h"
 #include "proto/router_manager.h"
 #include "router/database.h"
@@ -58,24 +59,32 @@ void SessionManager::onSessionMessage(quint8 channel_id, const QByteArray& buffe
         return;
     }
 
-    if (message.has_host_edit_request())
-        doHostEditRequest(message.host_edit_request());
+    if (message.has_host_request())
+        doHostRequest(message.host_request());
     else
         CLOG(ERROR) << "Unhandled message from manager";
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionManager::doHostEditRequest(const proto::router::HostEditRequest& request)
+void SessionManager::doHostRequest(const proto::router::HostRequest& request)
 {
     proto::router::RouterToManager response;
-    proto::router::HostEditResult* result = response.mutable_host_edit_result();
+    proto::router::HostResult* result = response.mutable_host_result();
     result->set_request_id(request.request_id());
+    result->set_command_name(request.command_name());
 
     auto reply = [&](const char* error_code)
     {
         result->set_error_code(error_code);
         sendMessage(proto::router::CHANNEL_ID_MANAGER, serialize(response));
     };
+
+    if (request.command_name() != proto::router::kCommandHostModify)
+    {
+        CLOG(ERROR) << "Unknown host edit command:" << request.command_name();
+        reply(proto::router::kErrorInvalidRequest);
+        return;
+    }
 
     Database& database = Database::instance();
     if (!database.isValid())
@@ -85,7 +94,8 @@ void SessionManager::doHostEditRequest(const proto::router::HostEditRequest& req
         return;
     }
 
-    const HostId host_id = request.host_id();
+    const proto::router::Host& host = request.host();
+    const HostId host_id = host.host_id();
     const qint64 workspace_id = database.hostWorkspaceId(host_id);
     if (workspace_id < 0)
     {
@@ -104,12 +114,23 @@ void SessionManager::doHostEditRequest(const proto::router::HostEditRequest& req
         return;
     }
 
+    // group_id == 0 keeps the host at the workspace root; > 0 must reference a group in the
+    // host's current workspace. Cross-workspace moves are not allowed.
+    const qint64 group_id = host.group_id();
+    if (group_id > 0 && database.findGroup(workspace_id, group_id).entry_id == 0)
+    {
+        CLOG(ERROR) << "Group" << group_id << "not found in workspace" << workspace_id;
+        reply(proto::router::kErrorInvalidData);
+        return;
+    }
+
     const bool ok = database.modifyHost(
         host_id,
-        QString::fromStdString(request.display_name()),
-        QByteArray::fromStdString(request.comment()),
-        QByteArray::fromStdString(request.user_name()),
-        QByteArray::fromStdString(request.password()));
+        group_id,
+        QString::fromStdString(host.display_name()),
+        QByteArray::fromStdString(host.comment()),
+        QByteArray::fromStdString(host.user_name()),
+        QByteArray::fromStdString(host.password()));
     if (!ok)
     {
         reply(proto::router::kErrorInternalError);

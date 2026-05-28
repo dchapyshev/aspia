@@ -237,7 +237,7 @@ void SessionAdmin::doHostRequest(const proto::router::HostRequest& request)
 
     if (request.command_name() == proto::router::kCommandHostDisconnect)
     {
-        const HostId host_id = request.host_id();
+        const HostId host_id = request.host().host_id();
 
         if (host_id == kAllHostsId)
         {
@@ -291,7 +291,7 @@ void SessionAdmin::doHostRequest(const proto::router::HostRequest& request)
     }
     else if (request.command_name() == proto::router::kCommandHostRemove)
     {
-        const HostId host_id = request.host_id();
+        const HostId host_id = request.host().host_id();
 
         Database& database = Database::instance();
         if (!database.isValid())

@@ -228,8 +228,8 @@ void Router::onTcpMessageReceived(quint8 channel_id, const QByteArray& bytes)
             return;
         }
 
-        if (message.has_host_edit_result())
-            dispatch(message.host_edit_result().request_id(), message.host_edit_result());
+        if (message.has_host_result())
+            dispatch(message.host_result().request_id(), message.host_result());
         else
             LOG(WARNING) << "Unhandled manager message";
     }
@@ -360,22 +360,26 @@ bool Router::buildGroup(qint64 workspace_id, const Router::Group& group, proto::
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::buildHost(const Router::Host& host, proto::router::HostEditRequest* out)
+bool Router::buildHost(const Router::Host& host, proto::router::Host* out)
 {
     CHECK(out);
 
     auto it = workspace_cryptors_.find(host.workspace_id);
     if (it == workspace_cryptors_.end())
     {
-        LOG(ERROR) << "No cached cryptor for workspace" << host.workspace_id
-                   << "- encrypted fields will be omitted";
-        return;
+        LOG(ERROR) << "No cached cryptor for workspace" << host.workspace_id;
+        return false;
     }
+
+    out->set_host_id(host.host_id);
+    out->set_group_id(host.group_id);
+    out->set_display_name(host.display_name.toStdString());
 
     const DataCryptor& cryptor = it->second;
     out->set_comment(encrypt(cryptor, host.comment).toStdString());
     out->set_user_name(encrypt(cryptor, host.user_name).toStdString());
     out->set_password(encrypt(cryptor, host.password.toString()).toStdString());
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -22,7 +22,7 @@
 #include "router/session_client.h"
 
 namespace proto::router {
-class HostEditRequest;
+class HostRequest;
 } // namespace proto::router
 
 class SessionManager : public SessionClient
@@ -38,7 +38,7 @@ protected:
     void onSessionMessage(quint8 channel_id, const QByteArray& buffer) override;
 
 private:
-    void doHostEditRequest(const proto::router::HostEditRequest& request);
+    void doHostRequest(const proto::router::HostRequest& request);
 
     Q_DISABLE_COPY_MOVE(SessionManager)
 };

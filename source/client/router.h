@@ -362,7 +362,7 @@ private:
     qint64 nextRequestId() { return ++next_request_id_; }
     void setStatus(Status status);
     bool buildWorkspace(const Router::Workspace& workspace, proto::router::Workspace* out);
-    void buildHost(const Router::Host& host, proto::router::HostEditRequest* out);
+    bool buildHost(const Router::Host& host, proto::router::Host* out);
     bool buildGroup(qint64 workspace_id, const Router::Group& group, proto::router::Group* out);
     void setupChannel();
     void destroyChannel();
@@ -478,7 +478,7 @@ void Router::disconnectHost(HostId host_id, QObject* receiver, HandlerT handler)
     auto* request = message.mutable_host_request();
     request->set_request_id(nextRequestId());
     request->set_command_name(proto::router::kCommandHostDisconnect);
-    request->set_host_id(host_id);
+    request->mutable_host()->set_host_id(host_id);
     registerPending<proto::router::HostResult>(request, receiver, std::move(handler));
     emitSend(proto::router::CHANNEL_ID_ADMIN, message);
 }
@@ -491,7 +491,7 @@ void Router::removeHost(HostId host_id, QObject* receiver, HandlerT handler)
     auto* request = message.mutable_host_request();
     request->set_request_id(nextRequestId());
     request->set_command_name(proto::router::kCommandHostRemove);
-    request->set_host_id(host_id);
+    request->mutable_host()->set_host_id(host_id);
     registerPending<proto::router::HostResult>(request, receiver, std::move(handler));
     emitSend(proto::router::CHANNEL_ID_ADMIN, message);
 }
@@ -500,13 +500,15 @@ void Router::removeHost(HostId host_id, QObject* receiver, HandlerT handler)
 template<typename HandlerT>
 void Router::editHost(const Router::Host& host, QObject* receiver, HandlerT handler)
 {
+    proto::router::Host serialized;
+    if (!buildHost(host, &serialized))
+        return;
     proto::router::ManagerToRouter message;
-    auto* request = message.mutable_host_edit_request();
+    auto* request = message.mutable_host_request();
     request->set_request_id(nextRequestId());
-    request->set_host_id(host.host_id);
-    request->set_display_name(host.display_name.toStdString());
-    buildHost(host, request);
-    registerPending<proto::router::HostEditResult>(request, receiver, std::move(handler));
+    request->set_command_name(proto::router::kCommandHostModify);
+    request->mutable_host()->Swap(&serialized);
+    registerPending<proto::router::HostResult>(request, receiver, std::move(handler));
     emitSend(proto::router::CHANNEL_ID_MANAGER, message);
 }
 

@@ -103,9 +103,11 @@ public:
     qint64 hostWorkspaceId(HostId host_id) const;
 
     // Updates the admin/manager-editable fields of a host (display_name plain, the other three
-    // AEAD-encrypted with the workspace GK by the caller). Also bumps last_modify.
-    bool modifyHost(HostId host_id, const QString& display_name, const QByteArray& comment,
-        const QByteArray& user_name, const QByteArray& password);
+    // AEAD-encrypted with the workspace GK by the caller). group_id == 0 places the host at the
+    // workspace root; > 0 moves it under the given group (caller must validate group ownership).
+    // Also bumps last_modify.
+    bool modifyHost(HostId host_id, qint64 group_id, const QString& display_name,
+        const QByteArray& comment, const QByteArray& user_name, const QByteArray& password);
 
     // Returns every host in the database (admin-only call site). [start_item, end_item] gives an
     // inclusive paging window; pass end_item <= 0 to disable paging.

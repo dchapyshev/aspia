@@ -461,7 +461,8 @@ void HostsTab::onSwitchContent(Sidebar::Item::Type type)
 
             Sidebar::RouterGroupItem* item =
                 static_cast<Sidebar::RouterGroupItem*>(ui->sidebar->currentItem());
-            router_group_widget_->showGroup(item->routerId(), item->workspaceId(), item->groupId());
+            router_group_widget_->showGroup(item->routerId(), item->workspaceId(),
+                                            item->workspaceName(), item->groupId());
         }
         break;
 

@@ -645,8 +645,8 @@ qint64 Database::hostWorkspaceId(HostId host_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::modifyHost(HostId host_id, const QString& display_name, const QByteArray& comment,
-    const QByteArray& user_name, const QByteArray& password)
+bool Database::modifyHost(HostId host_id, qint64 group_id, const QString& display_name,
+    const QByteArray& comment, const QByteArray& user_name, const QByteArray& password)
 {
     if (!isValid())
     {
@@ -664,9 +664,10 @@ bool Database::modifyHost(HostId host_id, const QString& display_name, const QBy
 
     QSqlQuery query(connection());
     query.prepare(QStringLiteral(
-        "UPDATE hosts SET display_name=?, comment=?, user_name=?, password=?, last_modify=? "
-        "WHERE id=?"));
+        "UPDATE hosts SET display_name=?, group_id=?, comment=?, user_name=?, password=?, "
+        "last_modify=? WHERE id=?"));
     query.addBindValue(display_name);
+    query.addBindValue(group_id);
     query.addBindValue(comment);
     query.addBindValue(user_name);
     query.addBindValue(password);

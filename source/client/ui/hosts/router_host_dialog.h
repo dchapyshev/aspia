@@ -32,7 +32,7 @@ class RouterHostDialog;
 } // namespace Ui
 
 namespace proto::router {
-class HostEditResult;
+class HostResult;
 } // namespace proto::router
 
 class RouterHostDialog final : public QDialog
@@ -40,17 +40,20 @@ class RouterHostDialog final : public QDialog
     Q_OBJECT
 
 public:
-    RouterHostDialog(qint64 router_id, const Router::Host& host, QWidget* parent);
+    RouterHostDialog(qint64 router_id, const QString& workspace_name, const Router::Host& host,
+                     QWidget* parent);
     ~RouterHostDialog() final;
 
 private slots:
-    void onHostEditResultReceived(const proto::router::HostEditResult& result);
+    void onGroupListReceived(const Router::GroupList& list);
+    void onHostResultReceived(const proto::router::HostResult& result);
 
 private:
     void onButtonBoxClicked(QAbstractButton* button);
 
     std::unique_ptr<Ui::RouterHostDialog> ui;
     qint64 router_id_ = 0;
+    QString workspace_name_;
     Router::Host host_;
 
     Q_DISABLE_COPY_MOVE(RouterHostDialog)
