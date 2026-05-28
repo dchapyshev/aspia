@@ -79,93 +79,6 @@ bool hasColumn(QSqlDatabase& sql_db, const QString& table, const QString& column
 }
 
 //--------------------------------------------------------------------------------------------------
-QString groupsTableName(qint64 workspace_id)
-{
-    return QStringLiteral("groups_%1").arg(workspace_id);
-}
-
-//--------------------------------------------------------------------------------------------------
-QString hostsTableName(qint64 workspace_id)
-{
-    return QStringLiteral("hosts_%1").arg(workspace_id);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Creates groups_<W> and hosts_<W> for the workspace plus their indexes. Idempotent: uses
-// IF NOT EXISTS, safe to call on a workspace whose tables already exist.
-bool createWorkspaceTables(QSqlDatabase& sql_db, qint64 workspace_id)
-{
-    const QString groups_table = groupsTableName(workspace_id);
-    const QString hosts_table = hostsTableName(workspace_id);
-
-    QSqlQuery query(sql_db);
-
-    if (!query.exec(QStringLiteral(
-            "CREATE TABLE IF NOT EXISTS \"%1\" ("
-            "\"id\" INTEGER PRIMARY KEY AUTOINCREMENT,"
-            "\"parent_id\" INTEGER REFERENCES \"%1\"(\"id\") ON DELETE CASCADE,"
-            "\"name\" TEXT NOT NULL,"
-            "\"comment\" BLOB NOT NULL DEFAULT X'')").arg(groups_table)))
-    {
-        LOG(ERROR) << "Unable to create groups table:" << query.lastError();
-        return false;
-    }
-
-    if (!query.exec(QStringLiteral(
-            "CREATE INDEX IF NOT EXISTS \"%1_parent_id\" ON \"%1\"(parent_id)")
-                .arg(groups_table)))
-    {
-        LOG(ERROR) << "Unable to create groups index:" << query.lastError();
-        return false;
-    }
-
-    if (!query.exec(QStringLiteral(
-            "CREATE TABLE IF NOT EXISTS \"%1\" ("
-            "\"host_id\" INTEGER PRIMARY KEY REFERENCES \"hosts\"(\"id\") ON DELETE CASCADE,"
-            "\"group_id\" INTEGER REFERENCES \"%2\"(\"id\") ON DELETE SET NULL,"
-            "\"display_name\" TEXT NOT NULL DEFAULT '',"
-            "\"comment\" BLOB NOT NULL DEFAULT X'',"
-            "\"user_name\" BLOB NOT NULL DEFAULT X'',"
-            "\"password\" BLOB NOT NULL DEFAULT X'',"
-            "\"last_modify\" INTEGER NOT NULL DEFAULT 0)").arg(hosts_table, groups_table)))
-    {
-        LOG(ERROR) << "Unable to create workspace hosts table:" << query.lastError();
-        return false;
-    }
-
-    if (!query.exec(QStringLiteral(
-            "CREATE INDEX IF NOT EXISTS \"%1_group_id\" ON \"%1\"(group_id)").arg(hosts_table)))
-    {
-        LOG(ERROR) << "Unable to create workspace hosts index:" << query.lastError();
-        return false;
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-// Drops groups_<W> and hosts_<W> for the workspace. Order matters: hosts_<W> is dropped first
-// because it has a foreign key on groups_<W>.
-bool dropWorkspaceTables(QSqlDatabase& sql_db, qint64 workspace_id)
-{
-    QSqlQuery query(sql_db);
-
-    if (!query.exec(QStringLiteral("DROP TABLE IF EXISTS \"%1\"").arg(hostsTableName(workspace_id))))
-    {
-        LOG(ERROR) << "Unable to drop workspace hosts table:" << query.lastError();
-        return false;
-    }
-
-    if (!query.exec(QStringLiteral("DROP TABLE IF EXISTS \"%1\"").arg(groupsTableName(workspace_id))))
-    {
-        LOG(ERROR) << "Unable to drop groups table:" << query.lastError();
-        return false;
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
 bool ensureSchema(QSqlDatabase& sql_db)
 {
     if (!sql_db.transaction())
@@ -226,6 +139,18 @@ bool ensureSchema(QSqlDatabase& sql_db)
                     "PRIMARY KEY(\"workspace_id\", \"user_id\"),"
                     "FOREIGN KEY(\"workspace_id\") REFERENCES \"workspaces\"(\"id\") ON DELETE CASCADE,"
                     "FOREIGN KEY(\"user_id\") REFERENCES \"users\"(\"id\") ON DELETE CASCADE)") ||
+        !query.exec("CREATE TABLE IF NOT EXISTS \"host_groups\" ("
+                    "\"id\" INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    "\"workspace_id\" INTEGER NOT NULL,"
+                    "\"parent_id\" INTEGER,"
+                    "\"name\" TEXT NOT NULL,"
+                    "\"comment\" BLOB NOT NULL DEFAULT X'',"
+                    "FOREIGN KEY(\"workspace_id\") REFERENCES \"workspaces\"(\"id\") ON DELETE CASCADE,"
+                    "FOREIGN KEY(\"parent_id\") REFERENCES \"host_groups\"(\"id\") ON DELETE CASCADE)") ||
+        !query.exec("CREATE INDEX IF NOT EXISTS \"host_groups_workspace_id\" "
+                    "ON \"host_groups\"(\"workspace_id\")") ||
+        !query.exec("CREATE INDEX IF NOT EXISTS \"host_groups_parent_id\" "
+                    "ON \"host_groups\"(\"parent_id\")") ||
         // Pending host removals. When an admin requests host removal we move the row from hosts
         // into this table and wait for the host to acknowledge the remove command.
         !query.exec("CREATE TABLE IF NOT EXISTS \"hosts_remove\" ("
@@ -1119,12 +1044,6 @@ std::string_view Database::addWorkspace(const QString& name, const QByteArray& c
         }
     }
 
-    if (!createWorkspaceTables(sql_db, new_id))
-    {
-        sql_db.rollback();
-        return proto::router::kErrorInternalError;
-    }
-
     if (!sql_db.commit())
     {
         LOG(ERROR) << "Unable to commit transaction:" << sql_db.lastError();
@@ -1407,42 +1326,18 @@ std::string_view Database::removeWorkspace(qint64 entry_id)
         return proto::router::kErrorInvalidData;
     }
 
-    QSqlDatabase sql_db = databaseByName(connection_name_);
-    if (!sql_db.transaction())
-    {
-        LOG(ERROR) << "Unable to start transaction:" << sql_db.lastError();
-        return proto::router::kErrorInternalError;
-    }
-
-    if (!dropWorkspaceTables(sql_db, entry_id))
-    {
-        sql_db.rollback();
-        return proto::router::kErrorInternalError;
-    }
-
-    QSqlQuery query(sql_db);
+    QSqlQuery query(databaseByName(connection_name_));
     query.prepare(QStringLiteral("DELETE FROM workspaces WHERE id=?"));
     query.addBindValue(entry_id);
 
     if (!query.exec())
     {
         LOG(ERROR) << "Unable to execute query:" << query.lastError();
-        sql_db.rollback();
         return proto::router::kErrorInternalError;
     }
 
     if (query.numRowsAffected() == 0)
-    {
-        sql_db.rollback();
         return proto::router::kErrorNotFound;
-    }
-
-    if (!sql_db.commit())
-    {
-        LOG(ERROR) << "Unable to commit transaction:" << sql_db.lastError();
-        sql_db.rollback();
-        return proto::router::kErrorInternalError;
-    }
 
     return proto::router::kErrorOk;
 }
@@ -1469,8 +1364,8 @@ QVector<Group> Database::groupList(qint64 workspace_id) const
     // require any particular order: index nodes by id, then link children to parents.
     QSqlQuery query(databaseByName(connection_name_));
     query.prepare(QStringLiteral(
-        "SELECT id, IFNULL(parent_id, 0), name, comment FROM \"%1\"")
-            .arg(groupsTableName(workspace_id)));
+        "SELECT id, IFNULL(parent_id, 0), name, comment FROM host_groups WHERE workspace_id=?"));
+    query.addBindValue(workspace_id);
 
     if (!query.exec())
     {
@@ -1515,14 +1410,16 @@ QVector<Group> Database::groupChildren(qint64 workspace_id, qint64 parent_id) co
     if (parent_id == 0)
     {
         query.prepare(QStringLiteral(
-            "SELECT id, IFNULL(parent_id, 0), name, comment FROM \"%1\" "
-            "WHERE parent_id IS NULL ORDER BY name").arg(groupsTableName(workspace_id)));
+            "SELECT id, IFNULL(parent_id, 0), name, comment FROM host_groups "
+            "WHERE workspace_id=? AND parent_id IS NULL ORDER BY name"));
+        query.addBindValue(workspace_id);
     }
     else
     {
         query.prepare(QStringLiteral(
-            "SELECT id, IFNULL(parent_id, 0), name, comment FROM \"%1\" "
-            "WHERE parent_id=? ORDER BY name").arg(groupsTableName(workspace_id)));
+            "SELECT id, IFNULL(parent_id, 0), name, comment FROM host_groups "
+            "WHERE workspace_id=? AND parent_id=? ORDER BY name"));
+        query.addBindValue(workspace_id);
         query.addBindValue(parent_id);
     }
 
@@ -1562,12 +1459,14 @@ Group Database::findGroup(qint64 workspace_id, qint64 entry_id) const
     }
 
     // Look up a single group by its id within this workspace. Same column projection as
-    // groupList(); IFNULL maps the storage NULL parent_id of a root node to 0.
+    // groupList(); IFNULL maps the storage NULL parent_id of a root node to 0. workspace_id is
+    // part of the filter so a stale id from another workspace cannot leak through.
     QSqlQuery query(databaseByName(connection_name_));
     query.prepare(QStringLiteral(
-        "SELECT id, IFNULL(parent_id, 0), name, comment FROM \"%1\" WHERE id=?")
-            .arg(groupsTableName(workspace_id)));
+        "SELECT id, IFNULL(parent_id, 0), name, comment FROM host_groups "
+        "WHERE id=? AND workspace_id=?"));
     query.addBindValue(entry_id);
+    query.addBindValue(workspace_id);
 
     if (!query.exec())
     {
@@ -1625,14 +1524,15 @@ std::string_view Database::addGroup(qint64 workspace_id, qint64 parent_id, const
         return proto::router::kErrorInternalError;
     }
 
-    const QString groups_table = groupsTableName(workspace_id);
-
-    // The parent (if any) must exist in this workspace.
+    // The parent (if any) must exist in this workspace. Filtering on workspace_id here is the
+    // only safeguard against the API silently linking groups across workspace boundaries.
     if (parent_id != 0)
     {
         QSqlQuery parent_check(sql_db);
-        parent_check.prepare(QStringLiteral("SELECT 1 FROM \"%1\" WHERE id=?").arg(groups_table));
+        parent_check.prepare(QStringLiteral(
+            "SELECT 1 FROM host_groups WHERE id=? AND workspace_id=?"));
         parent_check.addBindValue(parent_id);
+        parent_check.addBindValue(workspace_id);
 
         if (!parent_check.exec())
         {
@@ -1650,7 +1550,9 @@ std::string_view Database::addGroup(qint64 workspace_id, qint64 parent_id, const
 
     QSqlQuery insert(sql_db);
     insert.prepare(QStringLiteral(
-        "INSERT INTO \"%1\" (parent_id, name, comment) VALUES (?, ?, ?)").arg(groups_table));
+        "INSERT INTO host_groups (workspace_id, parent_id, name, comment) "
+        "VALUES (?, ?, ?, ?)"));
+    insert.addBindValue(workspace_id);
     insert.addBindValue(parent_id == 0 ? QVariant() : QVariant(parent_id));
     insert.addBindValue(name);
     insert.addBindValue(comment);
@@ -1705,12 +1607,12 @@ std::string_view Database::modifyGroup(qint64 workspace_id, qint64 entry_id, qin
         return proto::router::kErrorInternalError;
     }
 
-    const QString groups_table = groupsTableName(workspace_id);
-
-    // Verify the group being modified exists.
+    // Verify the group being modified exists in this workspace.
     QSqlQuery select_self(sql_db);
-    select_self.prepare(QStringLiteral("SELECT 1 FROM \"%1\" WHERE id=?").arg(groups_table));
+    select_self.prepare(QStringLiteral(
+        "SELECT 1 FROM host_groups WHERE id=? AND workspace_id=?"));
     select_self.addBindValue(entry_id);
+    select_self.addBindValue(workspace_id);
 
     if (!select_self.exec())
     {
@@ -1729,8 +1631,10 @@ std::string_view Database::modifyGroup(qint64 workspace_id, qint64 entry_id, qin
     {
         // The new parent must exist in this workspace.
         QSqlQuery parent_check(sql_db);
-        parent_check.prepare(QStringLiteral("SELECT 1 FROM \"%1\" WHERE id=?").arg(groups_table));
+        parent_check.prepare(QStringLiteral(
+            "SELECT 1 FROM host_groups WHERE id=? AND workspace_id=?"));
         parent_check.addBindValue(new_parent_id);
+        parent_check.addBindValue(workspace_id);
 
         if (!parent_check.exec())
         {
@@ -1748,15 +1652,17 @@ std::string_view Database::modifyGroup(qint64 workspace_id, qint64 entry_id, qin
         // Cycle protection. Walk parent links from new_parent_id upward; if entry_id appears
         // anywhere on that chain, the move would put the group inside its own subtree. The
         // recursive CTE bounds itself naturally on a well-formed tree (parent_id IS NULL marks
-        // the top) and SQLite caps runaway recursion at SQLITE_MAX_RECURSION_DEPTH.
+        // the top) and SQLite caps runaway recursion at SQLITE_MAX_RECURSION_DEPTH. parent_id
+        // links never cross workspace boundaries by construction (enforced at insert and
+        // modify), so no workspace_id filter is needed inside the recursion.
         QSqlQuery cycle_check(sql_db);
         cycle_check.prepare(QStringLiteral(
             "WITH RECURSIVE ancestors(id) AS ("
-            "    SELECT id FROM \"%1\" WHERE id=?"
+            "    SELECT id FROM host_groups WHERE id=?"
             "    UNION ALL"
-            "    SELECT g.parent_id FROM \"%1\" g JOIN ancestors a ON g.id = a.id "
+            "    SELECT g.parent_id FROM host_groups g JOIN ancestors a ON g.id = a.id "
             "      WHERE g.parent_id IS NOT NULL"
-            ") SELECT 1 FROM ancestors WHERE id=? LIMIT 1").arg(groups_table));
+            ") SELECT 1 FROM ancestors WHERE id=? LIMIT 1"));
         cycle_check.addBindValue(new_parent_id);
         cycle_check.addBindValue(entry_id);
 
@@ -1776,11 +1682,13 @@ std::string_view Database::modifyGroup(qint64 workspace_id, qint64 entry_id, qin
 
     QSqlQuery update_self(sql_db);
     update_self.prepare(QStringLiteral(
-        "UPDATE \"%1\" SET parent_id=?, name=?, comment=? WHERE id=?").arg(groups_table));
+        "UPDATE host_groups SET parent_id=?, name=?, comment=? "
+        "WHERE id=? AND workspace_id=?"));
     update_self.addBindValue(new_parent_id == 0 ? QVariant() : QVariant(new_parent_id));
     update_self.addBindValue(name);
     update_self.addBindValue(comment);
     update_self.addBindValue(entry_id);
+    update_self.addBindValue(workspace_id);
 
     if (!update_self.exec())
     {
@@ -1815,8 +1723,9 @@ std::string_view Database::removeGroup(qint64 workspace_id, qint64 entry_id)
     }
 
     QSqlQuery query(databaseByName(connection_name_));
-    query.prepare(QStringLiteral("DELETE FROM \"%1\" WHERE id=?").arg(groupsTableName(workspace_id)));
+    query.prepare(QStringLiteral("DELETE FROM host_groups WHERE id=? AND workspace_id=?"));
     query.addBindValue(entry_id);
+    query.addBindValue(workspace_id);
 
     if (!query.exec())
     {
