@@ -91,6 +91,9 @@ private slots:
     void onAddWorkspaceAction();
     void onEditWorkspaceAction();
     void onDeleteWorkspaceAction();
+    void onAddGroupAction();
+    void onEditGroupAction();
+    void onDeleteGroupAction();
     void onRouterStatus();
     void onImportOldBookAction();
     void onExportBookAction();

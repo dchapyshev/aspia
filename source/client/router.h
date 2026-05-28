@@ -205,16 +205,13 @@ public:
     // Admin: host-group operations. Add/modify encrypt the comment with the workspace GK.
     // workspace_id selects which groups_<W> table to operate on.
     template<typename HandlerT>
-    void addGroup(qint64 workspace_id, const Router::Group& group,
-                  QObject* receiver, HandlerT handler);
+    void addGroup(qint64 workspace_id, const Router::Group& group, QObject* receiver, HandlerT handler);
 
     template<typename HandlerT>
-    void modifyGroup(qint64 workspace_id, const Router::Group& group,
-                     QObject* receiver, HandlerT handler);
+    void modifyGroup(qint64 workspace_id, const Router::Group& group, QObject* receiver, HandlerT handler);
 
     template<typename HandlerT>
-    void deleteGroup(qint64 workspace_id, qint64 entry_id,
-                     QObject* receiver, HandlerT handler);
+    void deleteGroup(qint64 workspace_id, qint64 entry_id, QObject* receiver, HandlerT handler);
 
     // Admin: peer disconnect.
     template<typename HandlerT>
@@ -586,8 +583,7 @@ void Router::deleteWorkspace(qint64 entry_id, QObject* receiver, HandlerT handle
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
-void Router::addGroup(qint64 workspace_id, const Router::Group& group,
-                      QObject* receiver, HandlerT handler)
+void Router::addGroup(qint64 workspace_id, const Router::Group& group, QObject* receiver, HandlerT handler)
 {
     proto::router::Group serialized;
     if (!buildGroup(workspace_id, group, &serialized))
@@ -604,8 +600,7 @@ void Router::addGroup(qint64 workspace_id, const Router::Group& group,
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
-void Router::modifyGroup(qint64 workspace_id, const Router::Group& group,
-                         QObject* receiver, HandlerT handler)
+void Router::modifyGroup(qint64 workspace_id, const Router::Group& group, QObject* receiver, HandlerT handler)
 {
     proto::router::Group serialized;
     if (!buildGroup(workspace_id, group, &serialized))
@@ -622,8 +617,7 @@ void Router::modifyGroup(qint64 workspace_id, const Router::Group& group,
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
-void Router::deleteGroup(qint64 workspace_id, qint64 entry_id,
-                         QObject* receiver, HandlerT handler)
+void Router::deleteGroup(qint64 workspace_id, qint64 entry_id, QObject* receiver, HandlerT handler)
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_group_request();

@@ -1072,9 +1072,9 @@ void Sidebar::RouterItem::setStatus(Status status)
 }
 
 //--------------------------------------------------------------------------------------------------
-Sidebar::RouterGroupItem::RouterGroupItem(qint64 router_id, qint64 workspace_id, qint64 group_id,
-                                          bool is_workspace, const QString& name,
-                                          QTreeWidgetItem* parent)
+Sidebar::RouterGroupItem::RouterGroupItem(
+    qint64 router_id, qint64 workspace_id, qint64 group_id, bool is_workspace,
+    const QString& name, QTreeWidgetItem* parent)
     : Item(ROUTER_GROUP, group_id, parent),
       router_id_(router_id),
       workspace_id_(workspace_id),

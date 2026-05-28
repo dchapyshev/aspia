@@ -94,8 +94,9 @@ public:
         // group_id in that case). is_workspace == false for a host group inside a workspace;
         // workspace_id is then the id of the enclosing workspace. The logical parent of a
         // host group is mirrored by its QTreeWidgetItem parent and is not stored separately.
-        RouterGroupItem(qint64 router_id, qint64 workspace_id, qint64 group_id,
-                        bool is_workspace, const QString& name, QTreeWidgetItem* parent);
+        RouterGroupItem(
+            qint64 router_id, qint64 workspace_id, qint64 group_id, bool is_workspace,
+            const QString& name, QTreeWidgetItem* parent);
 
         qint64 routerId() const { return router_id_; }
         qint64 workspaceId() const { return workspace_id_; }

@@ -40,10 +40,13 @@
 #include "client/ui/hosts/content_widget.h"
 #include "client/ui/hosts/local_host_dialog.h"
 #include "client/ui/hosts/local_group_widget.h"
+#include "client/ui/hosts/router_group_dialog.h"
 #include "client/ui/hosts/router_widget.h"
 #include "client/ui/hosts/router_group_widget.h"
 #include "client/ui/hosts/search_widget.h"
 #include "proto/peer.h"
+#include "proto/router_admin.h"
+#include "proto/router_constants.h"
 #include "ui_hosts_tab.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -139,9 +142,9 @@ HostsTab::HostsTab(QWidget* parent)
     connect(search_widget_, &SearchWidget::sig_currentChanged, this, &HostsTab::onCurrentHostChanged);
     connect(search_widget_, &SearchWidget::sig_doubleClicked, this, &HostsTab::onLocalConnect);
     connect(search_widget_, &SearchWidget::sig_contextMenu, this, &HostsTab::onLocalHostContextMenu);
-    connect(ui->action_add_group, &QAction::triggered, ui->sidebar, &Sidebar::onAddGroup);
-    connect(ui->action_edit_group, &QAction::triggered, ui->sidebar, &Sidebar::onEditGroup);
-    connect(ui->action_delete_group, &QAction::triggered, ui->sidebar, &Sidebar::onRemoveGroup);
+    connect(ui->action_add_group, &QAction::triggered, this, &HostsTab::onAddGroupAction);
+    connect(ui->action_edit_group, &QAction::triggered, this, &HostsTab::onEditGroupAction);
+    connect(ui->action_delete_group, &QAction::triggered, this, &HostsTab::onDeleteGroupAction);
     connect(ui->action_add_router, &QAction::triggered, ui->sidebar, &Sidebar::onAddRouter);
     connect(ui->action_edit_router, &QAction::triggered, ui->sidebar, &Sidebar::onEditRouter);
     connect(ui->action_delete_router, &QAction::triggered, ui->sidebar, &Sidebar::onRemoveRouter);
@@ -488,8 +491,18 @@ void HostsTab::onSidebarContextMenu(Sidebar::Item::Type type, const QPoint& pos)
     }
     else if (type == Sidebar::Item::Type::ROUTER_GROUP)
     {
-        // TODO
-        return;
+        Sidebar::Item* item = ui->sidebar->currentItem();
+        if (!item || item->itemType() != Sidebar::Item::Type::ROUTER_GROUP)
+            return;
+
+        auto* group_item = static_cast<Sidebar::RouterGroupItem*>(item);
+
+        menu.addAction(ui->action_add_group);
+        if (!group_item->isWorkspace())
+        {
+            menu.addAction(ui->action_edit_group);
+            menu.addAction(ui->action_delete_group);
+        }
     }
     else if (type == Sidebar::Item::Type::ROUTER)
     {
@@ -1021,6 +1034,96 @@ void HostsTab::onDeleteWorkspaceAction()
 }
 
 //--------------------------------------------------------------------------------------------------
+void HostsTab::onAddGroupAction()
+{
+    Sidebar::Item* item = ui->sidebar->currentItem();
+    if (!item)
+        return;
+
+    if (item->itemType() == Sidebar::Item::LOCAL_GROUP)
+    {
+        ui->sidebar->onAddGroup();
+        return;
+    }
+
+    if (item->itemType() != Sidebar::Item::ROUTER_GROUP)
+        return;
+
+    auto* group_item = static_cast<Sidebar::RouterGroupItem*>(item);
+
+    // When invoked on the workspace itself the new group lives at the workspace root
+    // (parent_id == 0). When invoked on an existing host group it becomes a subgroup of it.
+    const qint64 default_parent_id = group_item->isWorkspace() ? 0 : group_item->groupId();
+
+    RouterGroupDialog dialog(
+        group_item->routerId(), group_item->workspaceId(), 0, default_parent_id, this);
+    dialog.exec();
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::onEditGroupAction()
+{
+    Sidebar::Item* item = ui->sidebar->currentItem();
+    if (!item)
+        return;
+
+    if (item->itemType() == Sidebar::Item::LOCAL_GROUP)
+    {
+        ui->sidebar->onEditGroup();
+        return;
+    }
+
+    if (item->itemType() != Sidebar::Item::ROUTER_GROUP)
+        return;
+
+    auto* group_item = static_cast<Sidebar::RouterGroupItem*>(item);
+    if (group_item->isWorkspace())
+        return;
+
+    RouterGroupDialog dialog(
+        group_item->routerId(), group_item->workspaceId(), group_item->groupId(), 0, this);
+    dialog.exec();
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::onDeleteGroupAction()
+{
+    Sidebar::Item* item = ui->sidebar->currentItem();
+    if (!item)
+        return;
+
+    if (item->itemType() == Sidebar::Item::LOCAL_GROUP)
+    {
+        ui->sidebar->onRemoveGroup();
+        return;
+    }
+
+    if (item->itemType() != Sidebar::Item::ROUTER_GROUP)
+        return;
+
+    auto* group_item = static_cast<Sidebar::RouterGroupItem*>(item);
+    if (group_item->isWorkspace())
+        return;
+
+    const QString question = tr("Are you sure you want to delete the group \"%1\"? "
+                                "Hosts assigned to this group or its subgroups will be moved "
+                                "to the workspace root.").arg(group_item->text(0));
+    if (MsgBox::question(this, question) == MsgBox::No)
+        return;
+
+    Router* router = Router::instance(group_item->routerId());
+    if (!router)
+        return;
+
+    router->deleteGroup(group_item->workspaceId(), group_item->groupId(), this,
+        [](const proto::router::GroupResult& result)
+    {
+        if (result.error_code() != proto::router::kErrorOk)
+            LOG(ERROR) << "Group delete failed:" << result.error_code();
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
 void HostsTab::onRouterStatus()
 {
     Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
@@ -1295,6 +1398,13 @@ void HostsTab::updateActionsState()
         ui->action_delete_host->setVisible(host_item != nullptr);
         ui->action_edit_host->setVisible(host_item != nullptr);
         ui->action_copy_host->setVisible(host_item != nullptr);
+    }
+    else if (sidebar_item && sidebar_item->itemType() == Sidebar::Item::Type::ROUTER_GROUP)
+    {
+        auto* group_item = static_cast<Sidebar::RouterGroupItem*>(sidebar_item);
+        ui->action_add_group->setVisible(true);
+        ui->action_edit_group->setVisible(!group_item->isWorkspace());
+        ui->action_delete_group->setVisible(!group_item->isWorkspace());
     }
 
     if (sidebar_item && sidebar_item->itemType() == Sidebar::Item::ROUTER)
