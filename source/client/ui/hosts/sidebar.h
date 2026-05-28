@@ -100,6 +100,7 @@ public:
 
         qint64 routerId() const { return router_id_; }
         qint64 workspaceId() const { return workspace_id_; }
+        QString workspaceName() const;
         bool isWorkspace() const { return is_workspace_; }
 
     private:

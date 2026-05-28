@@ -6,60 +6,61 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>280</height>
+    <width>350</width>
+    <height>250</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Group Properties</string>
+   <string>Group</string>
   </property>
   <property name="modal">
    <bool>true</bool>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_name">
-     <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_parent_group">
+       <property name="text">
+        <string>Parent Group:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="GroupComboBox" name="combo_parent"/>
+     </item>
+     <item row="1" column="0">
       <widget class="QLabel" name="label_name">
        <property name="text">
         <string>Name:</string>
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QLineEdit" name="edit_name"/>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="edit_name">
+       <property name="placeholderText">
+        <string>Display name</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_parent">
+    <layout class="QVBoxLayout" name="verticalLayout_comment">
      <item>
-      <widget class="QLabel" name="label_parent">
+      <widget class="QLabel" name="label_comment">
        <property name="text">
-        <string>Parent:</string>
+        <string>Comment:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="combo_parent"/>
+      <widget class="QPlainTextEdit" name="edit_comment"/>
      </item>
     </layout>
    </item>
    <item>
-    <widget class="QLabel" name="label_comment">
-     <property name="text">
-      <string>Comment:</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPlainTextEdit" name="edit_comment"/>
-   </item>
-   <item>
-    <widget class="QDialogButtonBox" name="buttonbox">
-     <property name="orientation">
-      <enum>Qt::Orientation::Horizontal</enum>
-     </property>
+    <widget class="DialogButtonBox" name="button_box">
      <property name="standardButtons">
       <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
      </property>
@@ -67,6 +68,18 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>DialogButtonBox</class>
+   <extends>QDialogButtonBox</extends>
+   <header>common/ui/dialog_button_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>GroupComboBox</class>
+   <extends>QComboBox</extends>
+   <header>client/ui/hosts/group_combo_box.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

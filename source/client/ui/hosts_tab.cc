@@ -1056,8 +1056,8 @@ void HostsTab::onAddGroupAction()
     const qint64 default_parent_id = group_item->groupId();
     const qint64 router_id = group_item->routerId();
 
-    RouterGroupDialog dialog(
-        router_id, group_item->workspaceId(), 0, default_parent_id, this);
+    RouterGroupDialog dialog(router_id, group_item->workspaceId(), group_item->workspaceName(),
+        0, default_parent_id, this);
     if (dialog.exec() == QDialog::Accepted)
         refreshSidebarHostGroups(router_id);
 }
@@ -1083,8 +1083,8 @@ void HostsTab::onEditGroupAction()
         return;
 
     const qint64 router_id = group_item->routerId();
-    RouterGroupDialog dialog(
-        router_id, group_item->workspaceId(), group_item->groupId(), 0, this);
+    RouterGroupDialog dialog(router_id, group_item->workspaceId(), group_item->workspaceName(),
+        group_item->groupId(), 0, this);
     if (dialog.exec() == QDialog::Accepted)
         refreshSidebarHostGroups(router_id);
 }

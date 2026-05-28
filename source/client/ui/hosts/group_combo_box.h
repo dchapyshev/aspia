@@ -20,9 +20,10 @@
 #define CLIENT_UI_HOSTS_GROUP_COMBO_BOX_H
 
 #include <QComboBox>
+#include <QIcon>
+#include <QList>
+#include <QString>
 #include <QTreeView>
-
-class QStandardItem;
 
 class GroupComboBox : public QComboBox
 {
@@ -31,17 +32,23 @@ class GroupComboBox : public QComboBox
 public:
     static const int kGroupIdRole = Qt::UserRole + 1;
 
+    struct Entry
+    {
+        qint64 id = 0;
+        qint64 parent_id = 0;
+        QString name;
+    };
+
     explicit GroupComboBox(QWidget* parent = nullptr);
 
-    void loadGroups(const QString& root_name, qint64 exclude_id = -1);
+    void loadGroups(const QString& root_name, const QIcon& root_icon,
+                    const QList<Entry>& entries, qint64 exclude_id = -1);
     void selectGroup(qint64 group_id);
     qint64 currentGroupId() const;
 
     void showPopup() override;
 
 private:
-    void addGroupItems(qint64 parent_id, QStandardItem* parent_item, qint64 exclude_id);
-
     Q_DISABLE_COPY_MOVE(GroupComboBox)
 };
 

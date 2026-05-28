@@ -18,8 +18,9 @@
 
 #include "client/ui/hosts/group_combo_box.h"
 
-#include "client/database.h"
+#include <functional>
 
+#include <QHash>
 #include <QStandardItemModel>
 
 //--------------------------------------------------------------------------------------------------
@@ -30,18 +31,44 @@ GroupComboBox::GroupComboBox(QWidget* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-void GroupComboBox::loadGroups(const QString& root_name, qint64 exclude_id)
+void GroupComboBox::loadGroups(
+    const QString& root_name, const QIcon& root_icon,
+    const QList<Entry>& entries, qint64 exclude_id)
 {
     QStandardItemModel* model = new QStandardItemModel(this);
 
-    QStandardItem* root = new QStandardItem(QIcon(":/img/folder.svg"), root_name);
+    QStandardItem* root = new QStandardItem(root_icon, root_name);
     root->setData(static_cast<qint64>(0), kGroupIdRole);
     model->appendRow(root);
 
-    addGroupItems(0, root, exclude_id);
+    QHash<qint64, QList<const Entry*>> children_of;
+    for (const Entry& entry : entries)
+        children_of[entry.parent_id].append(&entry);
+
+    const QIcon folder_icon(":/img/folder.svg");
+    std::function<void(qint64, QStandardItem*)> add =
+        [&](qint64 parent_id, QStandardItem* parent_item)
+    {
+        const QList<const Entry*>& children = children_of.value(parent_id);
+        for (const Entry* child : children)
+        {
+            if (child->id == exclude_id)
+                continue;
+
+            QStandardItem* item = new QStandardItem(folder_icon, child->name);
+            item->setData(child->id, kGroupIdRole);
+            parent_item->appendRow(item);
+
+            add(child->id, item);
+        }
+    };
+    add(0, root);
 
     QTreeView* tree_view = new QTreeView(this);
     tree_view->setHeaderHidden(true);
+    tree_view->setItemsExpandable(false);
+    tree_view->setRootIsDecorated(false);
+    tree_view->setExpandsOnDoubleClick(false);
 
     setModel(model);
     setView(tree_view);
@@ -80,23 +107,4 @@ void GroupComboBox::showPopup()
 
     if (QTreeView* tv = qobject_cast<QTreeView*>(view()))
         tv->expandAll();
-}
-
-//--------------------------------------------------------------------------------------------------
-void GroupComboBox::addGroupItems(qint64 parent_id, QStandardItem* parent_item, qint64 exclude_id)
-{
-    QIcon folder_icon(":/img/folder.svg");
-    QList<GroupConfig> groups = Database::instance().groupList(parent_id);
-
-    for (const GroupConfig& group : std::as_const(groups))
-    {
-        if (group.id() == exclude_id)
-            continue;
-
-        QStandardItem* item = new QStandardItem(folder_icon, group.name());
-        item->setData(group.id(), kGroupIdRole);
-        parent_item->appendRow(item);
-
-        addGroupItems(group.id(), item, exclude_id);
-    }
 }

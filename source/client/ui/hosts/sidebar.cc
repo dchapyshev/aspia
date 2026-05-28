@@ -1084,3 +1084,18 @@ Sidebar::RouterGroupItem::RouterGroupItem(
     setText(0, name);
     setIcon(0, QIcon(is_workspace_ ? ":/img/workspace.svg" : ":/img/folder.svg"));
 }
+
+//--------------------------------------------------------------------------------------------------
+QString Sidebar::RouterGroupItem::workspaceName() const
+{
+    if (is_workspace_)
+        return text(0);
+
+    for (QTreeWidgetItem* p = parent(); p; p = p->parent())
+    {
+        auto* group_item = dynamic_cast<RouterGroupItem*>(p);
+        if (group_item && group_item->isWorkspace())
+            return group_item->text(0);
+    }
+    return QString();
+}

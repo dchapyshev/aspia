@@ -19,6 +19,7 @@
 #include "client/ui/hosts/local_host_dialog.h"
 
 #include <QAbstractButton>
+#include <QIcon>
 #include <QPushButton>
 
 #include "base/logging.h"
@@ -28,6 +29,7 @@
 #include "build/build_config.h"
 #include "client/config.h"
 #include "client/database.h"
+#include "client/ui/hosts/group_combo_box.h"
 #include "common/ui/msg_box.h"
 #include "common/ui/password_edit.h"
 #include "ui_local_host_dialog.h"
@@ -101,7 +103,20 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
 
     updateAddressLabel();
 
-    ui->combo_group->loadGroups(tr("Local"));
+    const QList<GroupConfig> all_groups = Database::instance().allGroups();
+
+    QList<GroupComboBox::Entry> group_entries;
+    group_entries.reserve(all_groups.size());
+
+    for (const GroupConfig& group : std::as_const(all_groups))
+    {
+        GroupComboBox::Entry& entry = group_entries.emplaceBack();
+        entry.id = group.id();
+        entry.parent_id = group.parentId();
+        entry.name = group.name();
+    }
+
+    ui->combo_group->loadGroups(tr("Local"), QIcon(":/img/folder.svg"), group_entries);
     ui->combo_group->selectGroup(group_id_);
 
     connect(ui->button_show_password, &QToolButton::toggled,

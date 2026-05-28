@@ -19,7 +19,6 @@
 #include "client/ui/hosts/router_group_dialog.h"
 
 #include <QAbstractButton>
-#include <QHash>
 
 #include "base/logging.h"
 #include "common/ui/msg_box.h"
@@ -35,20 +34,24 @@ constexpr int kMaxNameLength = 64;
 
 //--------------------------------------------------------------------------------------------------
 RouterGroupDialog::RouterGroupDialog(
-    qint64 router_id, qint64 workspace_id, qint64 entry_id, qint64 default_parent_id, QWidget* parent)
+    qint64 router_id, qint64 workspace_id, const QString& workspace_name,
+    qint64 entry_id, qint64 default_parent_id, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::RouterGroupDialog>()),
       router_id_(router_id),
       workspace_id_(workspace_id),
+      workspace_name_(workspace_name),
       entry_id_(entry_id),
       default_parent_id_(default_parent_id)
 {
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
+    setWindowTitle(entry_id_ > 0 ? tr("Edit Group") : tr("Add Group"));
+
     ui->edit_name->setMaxLength(kMaxNameLength);
 
-    connect(ui->buttonbox, &QDialogButtonBox::clicked, this, &RouterGroupDialog::onButtonBoxClicked);
+    connect(ui->button_box, &QDialogButtonBox::clicked, this, &RouterGroupDialog::onButtonBoxClicked);
 
     // Disable input until the group list arrives. The combo and the existing group's data
     // (in modify mode) both depend on it.
@@ -68,55 +71,28 @@ RouterGroupDialog::~RouterGroupDialog()
 //--------------------------------------------------------------------------------------------------
 void RouterGroupDialog::onGroupListReceived(const Router::GroupList& list)
 {
-    // Index groups by id for O(1) parent-chain lookups below.
-    QHash<qint64, const Router::Group*> by_id;
-    for (const Router::Group& group : std::as_const(list.groups))
-        by_id.insert(group.entry_id, &group);
+    QList<GroupComboBox::Entry> entries;
+    entries.reserve(list.groups.size());
 
-    // In modify mode the group being edited and its descendants cannot be parents (would form
-    // a cycle). Test membership by walking the parent chain up from each candidate; depth is
-    // small in practice and the test runs once per combo item.
-    auto in_own_subtree = [&](qint64 id)
-    {
-        if (entry_id_ <= 0)
-            return false;
-        while (id != 0)
-        {
-            if (id == entry_id_)
-                return true;
-            const Router::Group* group = by_id.value(id);
-            if (!group)
-                return false;
-            id = group->parent_id;
-        }
-        return false;
-    };
-
-    ui->combo_parent->clear();
-    ui->combo_parent->addItem(tr("(Workspace root)"), QVariant::fromValue<qint64>(0));
-
-    for (const Router::Group& group : std::as_const(list.groups))
-    {
-        if (in_own_subtree(group.entry_id))
-            continue;
-        ui->combo_parent->addItem(group.name, QVariant::fromValue<qint64>(group.entry_id));
-    }
-
-    // Decide the initial parent selection. In modify mode also populate the form fields from
-    // the existing group's row.
     qint64 selected_parent = default_parent_id_;
-    if (entry_id_ > 0)
+
+    for (const Router::Group& group : std::as_const(list.groups))
     {
-        if (const Router::Group* self = by_id.value(entry_id_))
+        GroupComboBox::Entry& entry = entries.emplaceBack();
+        entry.id = group.entry_id;
+        entry.parent_id = group.parent_id;
+        entry.name = group.name;
+
+        if (entry_id_ > 0 && group.entry_id == entry_id_)
         {
-            ui->edit_name->setText(self->name);
-            ui->edit_comment->setPlainText(self->comment);
-            selected_parent = self->parent_id;
+            ui->edit_name->setText(group.name);
+            ui->edit_comment->setPlainText(group.comment);
+            selected_parent = group.parent_id;
         }
     }
 
-    const int parent_index = ui->combo_parent->findData(QVariant::fromValue<qint64>(selected_parent));
-    ui->combo_parent->setCurrentIndex(parent_index >= 0 ? parent_index : 0);
+    ui->combo_parent->loadGroups(workspace_name_, QIcon(":/img/workspace.svg"), entries, entry_id_);
+    ui->combo_parent->selectGroup(selected_parent);
 
     setEnabled(true);
     ui->edit_name->setFocus();
@@ -156,7 +132,7 @@ void RouterGroupDialog::onGroupResultReceived(const proto::router::GroupResult& 
 //--------------------------------------------------------------------------------------------------
 void RouterGroupDialog::onButtonBoxClicked(QAbstractButton* button)
 {
-    QDialogButtonBox::StandardButton standard_button = ui->buttonbox->standardButton(button);
+    QDialogButtonBox::StandardButton standard_button = ui->button_box->standardButton(button);
     if (standard_button != QDialogButtonBox::Ok)
     {
         LOG(INFO) << "[ACTION] Action rejected";
@@ -176,7 +152,7 @@ void RouterGroupDialog::onButtonBoxClicked(QAbstractButton* button)
 
     Router::Group group;
     group.entry_id  = entry_id_;
-    group.parent_id = ui->combo_parent->currentData().value<qint64>();
+    group.parent_id = ui->combo_parent->currentGroupId();
     group.name      = name;
     group.comment   = ui->edit_comment->toPlainText();
 

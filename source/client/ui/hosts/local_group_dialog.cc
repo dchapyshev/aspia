@@ -19,10 +19,12 @@
 #include "client/ui/hosts/local_group_dialog.h"
 
 #include <QAbstractButton>
+#include <QIcon>
 #include <QPushButton>
 
 #include "base/logging.h"
 #include "client/database.h"
+#include "client/ui/hosts/group_combo_box.h"
 #include "common/ui/msg_box.h"
 #include "ui_local_group_dialog.h"
 
@@ -66,7 +68,20 @@ LocalGroupDialog::LocalGroupDialog(qint64 group_id, qint64 parent_id, QWidget* p
         parent_id_ = parent_id;
     }
 
-    ui->combo_parent_group->loadGroups(tr("Local"), group_id_);
+    const QList<GroupConfig> all_groups = Database::instance().allGroups();
+
+    QList<GroupComboBox::Entry> entries;
+    entries.reserve(all_groups.size());
+
+    for (const GroupConfig& group : std::as_const(all_groups))
+    {
+        GroupComboBox::Entry& entry = entries.emplaceBack();
+        entry.id = group.id();
+        entry.parent_id = group.parentId();
+        entry.name = group.name();
+    }
+
+    ui->combo_parent_group->loadGroups(tr("Local"), QIcon(":/img/folder.svg"), entries, group_id_);
     ui->combo_parent_group->selectGroup(parent_id_);
 
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &LocalGroupDialog::onButtonBoxClicked);
