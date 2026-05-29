@@ -46,12 +46,6 @@ public:
     QByteArray public_key;
     QByteArray wrap_private_key;
     QByteArray wrap_salt;
-
-    // TOTP fields.
-    // |otp_secret| is stored encrypted (see PrivateKeyCryptor usage at higher layers).
-    // Empty until self-enrollment completes; non-empty means 2FA is active for this user.
-    // |otp_counter| holds the highest TOTP step that has already been consumed - any
-    // subsequent attempt with step <= otp_counter is rejected as a replay.
     QByteArray otp_secret;
     quint64 otp_counter = 0;
 };
