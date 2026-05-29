@@ -511,9 +511,6 @@ void Client::startDirectUdp(qintptr socket, const QString& address, quint16 port
         return;
     }
 
-    static const quint32 kSupportedEncryptios =
-        proto::key_exchange::ENCRYPTION_AES256_GCM | proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305;
-
     proto::peer::HostToClient message;
     proto::peer::DirectUdpRequest* request = message.mutable_direct_udp_request();
 
@@ -529,7 +526,7 @@ void Client::startDirectUdp(qintptr socket, const QString& address, quint16 port
     }
 
     request->set_port(port);
-    request->set_encryptions(kSupportedEncryptios);
+    request->set_encryptions(proto::key_exchange::ENCRYPTION_AES256_GCM);
     request->set_public_key(context.key_pair.publicKey().toStdString());
     request->set_iv(context.iv.toStdString());
 
@@ -579,11 +576,6 @@ void Client::readDirectUdpReply(const proto::peer::DirectUdpReply& reply)
     {
         encryptor = DatagramEncryptor::createForAes256Gcm(session_key, context.iv);
         decryptor = DatagramDecryptor::createForAes256Gcm(session_key, host_iv);
-    }
-    else if (encryption == proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305)
-    {
-        encryptor = DatagramEncryptor::createForChaCha20Poly1305(session_key, context.iv);
-        decryptor = DatagramDecryptor::createForChaCha20Poly1305(session_key, host_iv);
     }
     else
     {

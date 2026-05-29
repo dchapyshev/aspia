@@ -67,28 +67,6 @@ std::unique_ptr<DatagramDecryptor> DatagramDecryptor::createForAes256Gcm(
 }
 
 //--------------------------------------------------------------------------------------------------
-// static
-std::unique_ptr<DatagramDecryptor> DatagramDecryptor::createForChaCha20Poly1305(
-    const SecureByteArray& key, const QByteArray& iv)
-{
-    if (key.size() != kKeySize || iv.size() != kIVSize)
-    {
-        LOG(ERROR) << "Key size:" << key.size() << "IV size:" << iv.size();
-        return nullptr;
-    }
-
-    EVP_CIPHER_CTX_ptr ctx =
-        createCipher(CipherType::CHACHA20_POLY1305, CipherMode::DECRYPT, key, kIVSize);
-    if (!ctx)
-    {
-        LOG(ERROR) << "createCipher failed";
-        return nullptr;
-    }
-
-    return std::unique_ptr<DatagramDecryptor>(new DatagramDecryptor(std::move(ctx), iv));
-}
-
-//--------------------------------------------------------------------------------------------------
 qint64 DatagramDecryptor::decryptedDataSize(qint64 in_size)
 {
     return in_size - kTagSize;

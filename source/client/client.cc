@@ -642,8 +642,6 @@ void Client::connectToUdp(
     quint32 encryption = proto::key_exchange::ENCRYPTION_UNKNOWN;
     if (context.encryptions & proto::key_exchange::ENCRYPTION_AES256_GCM)
         encryption = proto::key_exchange::ENCRYPTION_AES256_GCM;
-    else if (context.encryptions & proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305)
-        encryption = proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305;
 
     if (encryption == proto::key_exchange::ENCRYPTION_UNKNOWN)
     {
@@ -651,20 +649,10 @@ void Client::connectToUdp(
         return;
     }
 
-    std::unique_ptr<DatagramEncryptor> encryptor;
-    std::unique_ptr<DatagramDecryptor> decryptor;
-
-    if (encryption == proto::key_exchange::ENCRYPTION_AES256_GCM)
-    {
-        encryptor = DatagramEncryptor::createForAes256Gcm(session_key, client_iv);
-        decryptor = DatagramDecryptor::createForAes256Gcm(session_key, context.iv);
-    }
-    else
-    {
-        encryptor = DatagramEncryptor::createForChaCha20Poly1305(session_key, client_iv);
-        decryptor = DatagramDecryptor::createForChaCha20Poly1305(session_key, context.iv);
-    }
-
+    std::unique_ptr<DatagramEncryptor> encryptor =
+        DatagramEncryptor::createForAes256Gcm(session_key, client_iv);
+    std::unique_ptr<DatagramDecryptor> decryptor =
+        DatagramDecryptor::createForAes256Gcm(session_key, context.iv);
     if (!encryptor || !decryptor)
     {
         CLOG(ERROR) << "Failed to create UDP encryptor/decryptor";
