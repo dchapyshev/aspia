@@ -379,7 +379,7 @@ bool JsonBackup::exportToFile(QWidget* parent, const QString& file_path)
 
     QByteArray salt = Random::byteArray(kSaltSize);
     SecureByteArray key(PasswordHash::hash(PasswordHash::ARGON2ID, dialog.password(), salt));
-    DataCryptor cryptor(key);
+    DataCryptor cryptor(CipherType::CHACHA20_POLY1305, key);
 
     std::optional<QByteArray> verifier = cryptor.encrypt(Random::byteArray(kVerifierPayloadSize));
     if (!verifier.has_value())
@@ -491,7 +491,7 @@ bool JsonBackup::importFromFile(QWidget* parent, const QString& file_path)
         return false;
 
     SecureByteArray key(PasswordHash::hash(PasswordHash::ARGON2ID, dialog.password(), salt));
-    auto cryptor = std::make_unique<DataCryptor>(key);
+    auto cryptor = std::make_unique<DataCryptor>(CipherType::CHACHA20_POLY1305, key);
 
     if (!cryptor->decrypt(verifier).has_value())
     {

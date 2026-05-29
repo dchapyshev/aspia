@@ -91,6 +91,7 @@ set(THIRD_PARTY_LIBS
     unofficial::libwebm::libwebm
     unofficial::libvpx::libvpx
     unofficial::enet::enet
+    unofficial::nayuki-qr-code-generator::nayuki-qr-code-generator
     yuv)
 
 include_directories(${PROJECT_SOURCE_DIR}/source ${PROJECT_BINARY_DIR}/source)

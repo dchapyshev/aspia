@@ -15,6 +15,7 @@
     "libwebm",
     "libjpeg-turbo",
     "libyuv",
+    "nayuki-qr-code-generator",
     "openh264",
     "openssl",
     "opus",
