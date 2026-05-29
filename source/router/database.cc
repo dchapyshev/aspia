@@ -19,7 +19,9 @@
 #include "router/database.h"
 
 #include "base/logging.h"
+#include "base/crypto/random.h"
 #include "base/files/base_paths.h"
+#include "base/peer/device_auth.h"
 #include "proto/router_constants.h"
 
 #include <utility>
@@ -50,6 +52,8 @@ QSqlDatabase connection()
 }
 
 //--------------------------------------------------------------------------------------------------
+// Reads a RouterUser row. Column order must match the SELECT projections used by userList()
+// and findUser().
 RouterUser readUser(const QSqlQuery& query)
 {
     RouterUser user;
@@ -63,6 +67,8 @@ RouterUser readUser(const QSqlQuery& query)
     user.public_key       = query.value(7).toByteArray();
     user.wrap_private_key = query.value(8).toByteArray();
     user.wrap_salt        = query.value(9).toByteArray();
+    user.otp_secret       = query.value(10).toByteArray();
+    user.otp_counter      = query.value(11).toULongLong();
     return user;
 }
 
@@ -219,10 +225,17 @@ bool ensureSchema(QSqlDatabase& sql_db)
         return false;
     }
 
-    static const struct { const char* name; } kUserColumns[] = {
-        { "public_key" },
-        { "wrap_private_key" },
-        { "wrap_salt" }
+    // |otp_secret| is the AEAD-encrypted shared secret (empty until self-enrollment completes;
+    // non-empty implies 2FA is active for the user).
+    // |otp_counter| is the highest TOTP step already consumed; the server refuses any
+    // subsequent code whose step is less-than-or-equal to it (replay protection, per RFC 6238
+    // section 5.2).
+    static const struct { const char* name; const char* definition; } kUserColumns[] = {
+        { "public_key",       "BLOB NOT NULL DEFAULT X''" },
+        { "wrap_private_key", "BLOB NOT NULL DEFAULT X''" },
+        { "wrap_salt",        "BLOB NOT NULL DEFAULT X''" },
+        { "otp_secret",       "BLOB NOT NULL DEFAULT X''" },
+        { "otp_counter",      "INTEGER NOT NULL DEFAULT 0" }
     };
 
     for (const auto& column : kUserColumns)
@@ -230,13 +243,35 @@ bool ensureSchema(QSqlDatabase& sql_db)
         if (hasColumn(sql_db, "users", column.name))
             continue;
 
-        if (!query.exec(QString(
-            "ALTER TABLE \"users\" ADD COLUMN \"%1\" BLOB NOT NULL DEFAULT X''").arg(column.name)))
+        if (!query.exec(QString("ALTER TABLE \"users\" ADD COLUMN \"%1\" %2")
+                            .arg(QString(column.name), QString(column.definition))))
         {
             LOG(ERROR) << "Unable to add column" << column.name << ":" << query.lastError();
             sql_db.rollback();
             return false;
         }
+    }
+
+    // Device-bound refresh credentials issued during client sessions (admin/host sessions do
+    // not use this flow). Each row pairs a randomly generated token_id with the Ed25519 public
+    // key the client proves possession of via challenge-response on every subsequent connection
+    // (see DeviceAuth in base/peer/). No expiration is enforced - tokens live until they are
+    // revoked explicitly (admin action) or implicitly (password change, user removal cascade).
+    if (!run("CREATE TABLE IF NOT EXISTS \"client_device_tokens\" ("
+             "\"token_id\" BLOB PRIMARY KEY,"
+             "\"user_id\" INTEGER NOT NULL,"
+             "\"device_public_key\" BLOB NOT NULL,"
+             "\"created_at\" INTEGER NOT NULL DEFAULT 0,"
+             "\"last_used_at\" INTEGER NOT NULL DEFAULT 0,"
+             "FOREIGN KEY(\"user_id\") REFERENCES \"users\"(\"id\") ON DELETE CASCADE)"))
+    {
+        return false;
+    }
+
+    if (!run("CREATE INDEX IF NOT EXISTS \"client_device_tokens_user_id\" "
+             "ON \"client_device_tokens\"(\"user_id\")"))
+    {
+        return false;
     }
 
     // hosts used to be a thin (id, key) table; everything below moved in from the now-gone
@@ -324,8 +359,8 @@ QList<RouterUser> Database::userList() const
 
     QSqlQuery query(connection());
     if (!query.exec(QStringLiteral(
-        "SELECT id, name, \"group\", salt, verifier, sessions, flags, "
-        "public_key, wrap_private_key, wrap_salt FROM users")))
+        "SELECT id, name, \"group\", salt, verifier, sessions, flags, public_key, wrap_private_key, "
+        "wrap_salt, otp_secret, otp_counter FROM users")))
     {
         LOG(ERROR) << "Unable to get user list:" << query.lastError();
         return {};
@@ -392,7 +427,37 @@ bool Database::modifyUser(const RouterUser& user)
         return false;
     }
 
-    QSqlQuery query(connection());
+    QSqlDatabase sql_db = connection();
+    if (!sql_db.transaction())
+    {
+        LOG(ERROR) << "Unable to start transaction:" << sql_db.lastError();
+        return false;
+    }
+
+    // Read the existing verifier first - a change to salt or verifier means a password rotation,
+    // which must invalidate every device token attached to this user.
+    QByteArray old_salt;
+    QByteArray old_verifier;
+    {
+        QSqlQuery select(sql_db);
+        select.prepare(QStringLiteral("SELECT salt, verifier FROM users WHERE id=?"));
+        select.addBindValue(user.entry_id);
+
+        if (!select.exec())
+        {
+            LOG(ERROR) << "Unable to execute query:" << select.lastError();
+            sql_db.rollback();
+            return false;
+        }
+
+        if (select.next())
+        {
+            old_salt = select.value(0).toByteArray();
+            old_verifier = select.value(1).toByteArray();
+        }
+    }
+
+    QSqlQuery query(sql_db);
     query.prepare(QStringLiteral(
         "UPDATE users SET name=?, \"group\"=?, salt=?, verifier=?, sessions=?, flags=?, "
         "public_key=?, wrap_private_key=?, wrap_salt=? WHERE id=?"));
@@ -410,6 +475,29 @@ bool Database::modifyUser(const RouterUser& user)
     if (!query.exec())
     {
         LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        sql_db.rollback();
+        return false;
+    }
+
+    const bool password_changed = old_salt != user.salt || old_verifier != user.verifier;
+    if (password_changed)
+    {
+        QSqlQuery revoke(sql_db);
+        revoke.prepare(QStringLiteral("DELETE FROM client_device_tokens WHERE user_id=?"));
+        revoke.addBindValue(user.entry_id);
+
+        if (!revoke.exec())
+        {
+            LOG(ERROR) << "Unable to revoke device tokens:" << revoke.lastError();
+            sql_db.rollback();
+            return false;
+        }
+    }
+
+    if (!sql_db.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction:" << sql_db.lastError();
+        sql_db.rollback();
         return false;
     }
 
@@ -449,8 +537,8 @@ RouterUser Database::findUser(const QString& username) const
 
     QSqlQuery query(connection());
     query.prepare(QStringLiteral(
-        "SELECT id, name, \"group\", salt, verifier, sessions, flags, "
-        "public_key, wrap_private_key, wrap_salt FROM users WHERE name=?"));
+        "SELECT id, name, \"group\", salt, verifier, sessions, flags, public_key, wrap_private_key, "
+        "wrap_salt, otp_secret, otp_counter FROM users WHERE name=?"));
     query.addBindValue(username);
 
     if (!query.exec())
@@ -476,8 +564,8 @@ RouterUser Database::findUser(qint64 entry_id) const
 
     QSqlQuery query(connection());
     query.prepare(QStringLiteral(
-        "SELECT id, name, \"group\", salt, verifier, sessions, flags, "
-        "public_key, wrap_private_key, wrap_salt FROM users WHERE id=?"));
+        "SELECT id, name, \"group\", salt, verifier, sessions, flags, public_key, wrap_private_key, "
+        "wrap_salt, otp_secret, otp_counter FROM users WHERE id=?"));
     query.addBindValue(entry_id);
 
     if (!query.exec())
@@ -490,6 +578,214 @@ RouterUser Database::findUser(qint64 entry_id) const
         return RouterUser();
 
     return readUser(query);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setUserOtp(qint64 user_id, const QByteArray& encrypted_secret, quint64 counter)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    QSqlQuery query(connection());
+    query.prepare(QStringLiteral("UPDATE users SET otp_secret=?, otp_counter=? WHERE id=?"));
+    query.addBindValue(encrypted_secret);
+    query.addBindValue(counter);
+    query.addBindValue(user_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to set user OTP:" << query.lastError();
+        return false;
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::clearUserOtp(qint64 user_id)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    QSqlQuery query(connection());
+    query.prepare(QStringLiteral("UPDATE users SET otp_secret=X'', otp_counter=0 WHERE id=?"));
+    query.addBindValue(user_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to clear user OTP:" << query.lastError();
+        return false;
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::updateUserOtpCounter(qint64 user_id, quint64 counter)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    QSqlQuery query(connection());
+    query.prepare(QStringLiteral("UPDATE users SET otp_counter=? WHERE id=?"));
+    query.addBindValue(counter);
+    query.addBindValue(user_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to update OTP counter:" << query.lastError();
+        return false;
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::issueClientDeviceToken(qint64 user_id, const QByteArray& device_public_key,
+    QByteArray* token_id)
+{
+    CHECK(token_id);
+    *token_id = QByteArray();
+
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    if (device_public_key.size() != DeviceAuth::kPublicKeySize)
+    {
+        LOG(ERROR) << "Invalid device public key size:" << device_public_key.size();
+        return false;
+    }
+
+    const QByteArray new_token_id = Random::byteArray(DeviceAuth::kTokenIdSize);
+    const qint64 now = QDateTime::currentSecsSinceEpoch();
+
+    QSqlQuery query(connection());
+    query.prepare(QStringLiteral(
+        "INSERT INTO client_device_tokens (token_id, user_id, device_public_key, created_at, last_used_at) "
+        "VALUES (?, ?, ?, ?, ?)"));
+    query.addBindValue(new_token_id);
+    query.addBindValue(user_id);
+    query.addBindValue(device_public_key);
+    query.addBindValue(now);
+    query.addBindValue(now);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to issue client device token:" << query.lastError();
+        return false;
+    }
+
+    *token_id = new_token_id;
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::findClientDeviceToken(const QByteArray& token_id, qint64* user_id,
+    QByteArray* device_public_key) const
+{
+    CHECK(user_id);
+    CHECK(device_public_key);
+    *user_id = 0;
+    *device_public_key = QByteArray();
+
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    if (token_id.size() != DeviceAuth::kTokenIdSize)
+        return false;
+
+    QSqlQuery query(connection());
+    query.prepare(QStringLiteral("SELECT user_id, device_public_key FROM client_device_tokens WHERE token_id=?"));
+    query.addBindValue(token_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to look up client device token:" << query.lastError();
+        return false;
+    }
+
+    if (!query.next())
+        return false;
+
+    *user_id = query.value(0).toLongLong();
+    *device_public_key = query.value(1).toByteArray();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::touchClientDeviceToken(const QByteArray& token_id)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    QSqlQuery query(connection());
+    query.prepare(QStringLiteral("UPDATE client_device_tokens SET last_used_at=? WHERE token_id=?"));
+    query.addBindValue(QDateTime::currentSecsSinceEpoch());
+    query.addBindValue(token_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to touch client device token:" << query.lastError();
+        return false;
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::revokeClientDeviceToken(const QByteArray& token_id)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    QSqlQuery query(connection());
+    query.prepare(QStringLiteral("DELETE FROM client_device_tokens WHERE token_id=?"));
+    query.addBindValue(token_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to revoke client device token:" << query.lastError();
+        return false;
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::revokeUserClientDeviceTokens(qint64 user_id)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    QSqlQuery query(connection());
+    query.prepare(QStringLiteral("DELETE FROM client_device_tokens WHERE user_id=?"));
+    query.addBindValue(user_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to revoke client device tokens:" << query.lastError();
+        return false;
+    }
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

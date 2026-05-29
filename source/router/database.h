@@ -85,6 +85,50 @@ public:
     RouterUser findUser(qint64 entry_id) const;
 
     //----------------------------------------------------------------------------------------------
+    // TOTP per-user state
+    //----------------------------------------------------------------------------------------------
+
+    // Commits the user's TOTP enrollment: writes the (already-encrypted) shared secret and
+    // seeds otp_counter with the step that produced the confirmation code. A non-empty secret
+    // column is what activates 2FA for the user. Replaces any pre-existing value (used by the
+    // admin "reset TOTP" action followed by a fresh self-enrollment).
+    bool setUserOtp(qint64 user_id, const QByteArray& encrypted_secret, quint64 counter);
+
+    // Resets the user's TOTP state - clears the secret and zeroes the replay counter. The
+    // next login triggers self-enrollment.
+    bool clearUserOtp(qint64 user_id);
+
+    // Stores the most recently consumed TOTP step. Must be called after every successful
+    // verification so subsequent submissions of the same code are rejected.
+    bool updateUserOtpCounter(qint64 user_id, quint64 counter);
+
+    //----------------------------------------------------------------------------------------------
+    // Client device tokens (refresh credentials issued during client sessions)
+    //----------------------------------------------------------------------------------------------
+
+    // Issues a new client device token for |user_id|, persisting the device's Ed25519 public
+    // key. On success writes the freshly generated token id into *token_id (kTokenIdSize bytes,
+    // see base/peer/device_auth.h). Returns false on database error.
+    bool issueClientDeviceToken(qint64 user_id, const QByteArray& device_public_key,
+        QByteArray* token_id);
+
+    // Looks up a token by id. On success writes the owner user_id and stored device public key
+    // into the out parameters. Returns false if the row is absent.
+    bool findClientDeviceToken(const QByteArray& token_id, qint64* user_id,
+        QByteArray* device_public_key) const;
+
+    // Updates the token's last_used_at timestamp. Called after a successful challenge-response
+    // verification.
+    bool touchClientDeviceToken(const QByteArray& token_id);
+
+    // Removes one specific client device token.
+    bool revokeClientDeviceToken(const QByteArray& token_id);
+
+    // Removes every client device token owned by |user_id|. Called from modifyUser() when the
+    // password changes and from admin-driven "revoke all devices" actions.
+    bool revokeUserClientDeviceTokens(qint64 user_id);
+
+    //----------------------------------------------------------------------------------------------
     // Hosts
     //----------------------------------------------------------------------------------------------
 
