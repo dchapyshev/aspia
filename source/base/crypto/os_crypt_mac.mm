@@ -37,3 +37,21 @@ bool OSCrypt::decryptString(const QByteArray& ciphertext, QString* plaintext)
     plaintext->assign(QString::fromUtf8(ciphertext));
     return true;
 }
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool OSCrypt::encryptBytes(const QByteArray& plaintext, QByteArray* ciphertext)
+{
+    NOTIMPLEMENTED();
+    *ciphertext = plaintext;
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool OSCrypt::decryptBytes(const QByteArray& ciphertext, QByteArray* plaintext)
+{
+    NOTIMPLEMENTED();
+    *plaintext = ciphertext;
+    return true;
+}

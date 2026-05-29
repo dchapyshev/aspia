@@ -70,3 +70,59 @@ bool OSCrypt::decryptString(const QByteArray& ciphertext, QString* plaintext)
     LocalFree(output.pbData);
     return true;
 }
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool OSCrypt::encryptBytes(const QByteArray& plaintext, QByteArray* ciphertext)
+{
+    if (plaintext.isEmpty())
+    {
+        *ciphertext = QByteArray();
+        return true;
+    }
+
+    DATA_BLOB input;
+    input.pbData = const_cast<BYTE*>(reinterpret_cast<const BYTE*>(plaintext.data()));
+    input.cbData = static_cast<DWORD>(plaintext.size());
+
+    DATA_BLOB output;
+    BOOL result = CryptProtectData(&input, L"", nullptr, nullptr, nullptr, 0, &output);
+    if (!result)
+    {
+        PLOG(ERROR) << "Failed to encrypt";
+        return false;
+    }
+
+    *ciphertext = QByteArray(reinterpret_cast<const char*>(output.pbData),
+                             static_cast<int>(output.cbData));
+    LocalFree(output.pbData);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool OSCrypt::decryptBytes(const QByteArray& ciphertext, QByteArray* plaintext)
+{
+    if (ciphertext.isEmpty())
+    {
+        *plaintext = QByteArray();
+        return true;
+    }
+
+    DATA_BLOB input;
+    input.pbData = const_cast<BYTE*>(reinterpret_cast<const BYTE*>(ciphertext.data()));
+    input.cbData = static_cast<DWORD>(ciphertext.size());
+
+    DATA_BLOB output;
+    BOOL result = CryptUnprotectData(&input, nullptr, nullptr, nullptr, nullptr, 0, &output);
+    if (!result)
+    {
+        PLOG(ERROR) << "Failed to decrypt";
+        return false;
+    }
+
+    *plaintext = QByteArray(reinterpret_cast<const char*>(output.pbData),
+                            static_cast<int>(output.cbData));
+    LocalFree(output.pbData);
+    return true;
+}

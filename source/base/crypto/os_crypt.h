@@ -30,6 +30,10 @@ public:
     // Decrypt an array of bytes obtained into a QString.
     static bool decryptString(const QByteArray& ciphertext, QString* plaintext);
 
+    // Binary equivalents of the String variants.
+    static bool encryptBytes(const QByteArray& plaintext, QByteArray* ciphertext);
+    static bool decryptBytes(const QByteArray& ciphertext, QByteArray* plaintext);
+
 private:
     Q_DISABLE_COPY_MOVE(OSCrypt)
 };
