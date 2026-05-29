@@ -44,6 +44,12 @@ void EVP_CIPHER_CTX_Deleter::operator()(evp_cipher_ctx_st* ctx)
 }
 
 //--------------------------------------------------------------------------------------------------
+void EVP_MD_CTX_Deleter::operator()(evp_md_ctx_st* ctx)
+{
+    EVP_MD_CTX_free(ctx);
+}
+
+//--------------------------------------------------------------------------------------------------
 void EVP_PKEY_CTX_Deleter::operator()(evp_pkey_ctx_st* ctx)
 {
     EVP_PKEY_CTX_free(ctx);

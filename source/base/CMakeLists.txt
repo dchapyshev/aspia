@@ -502,6 +502,8 @@ list(APPEND SOURCE_BASE_PEER
     peer/host_id.h
     peer/relay_peer.cc
     peer/relay_peer.h
+    peer/device_auth.cc
+    peer/device_auth.h
     peer/relay_peer_manager.cc
     peer/relay_peer_manager.h
     peer/router_user.cc
@@ -519,6 +521,7 @@ list(APPEND SOURCE_BASE_PEER
     peer/user_list.h)
 
 list(APPEND SOURCE_BASE_PEER_TESTS
+    peer/device_auth_unittest.cc
     peer/host_id_unittest.cc
     peer/router_user_unittest.cc
     peer/user_unittest.cc)

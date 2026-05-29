@@ -26,6 +26,7 @@ class SecureByteArray;
 struct bignum_ctx;
 struct bignum_st;
 struct evp_cipher_ctx_st;
+struct evp_md_ctx_st;
 struct evp_pkey_ctx_st;
 struct evp_pkey_st;
 
@@ -44,6 +45,11 @@ struct EVP_CIPHER_CTX_Deleter
     void operator()(evp_cipher_ctx_st* ctx);
 };
 
+struct EVP_MD_CTX_Deleter
+{
+    void operator()(evp_md_ctx_st* ctx);
+};
+
 struct EVP_PKEY_CTX_Deleter
 {
     void operator()(evp_pkey_ctx_st* ctx);
@@ -57,6 +63,7 @@ struct EVP_PKEY_Deleter
 using BIGNUM_CTX_ptr = std::unique_ptr<bignum_ctx, BIGNUM_CTX_Deleter>;
 using BIGNUM_ptr = std::unique_ptr<bignum_st, BIGNUM_Deleter>;
 using EVP_CIPHER_CTX_ptr = std::unique_ptr<evp_cipher_ctx_st, EVP_CIPHER_CTX_Deleter>;
+using EVP_MD_CTX_ptr = std::unique_ptr<evp_md_ctx_st, EVP_MD_CTX_Deleter>;
 using EVP_PKEY_CTX_ptr = std::unique_ptr<evp_pkey_ctx_st, EVP_PKEY_CTX_Deleter>;
 using EVP_PKEY_ptr = std::unique_ptr<evp_pkey_st, EVP_PKEY_Deleter>;
 
