@@ -306,7 +306,8 @@ bool Router::buildWorkspace(const Router::Workspace& workspace, proto::router::W
     if (it == workspace_cryptors_.end())
     {
         group_key = SecureByteArray(Random::byteArray(kGroupKeySize));
-        it = workspace_cryptors_.emplace(workspace.entry_id, DataCryptor(group_key)).first;
+        it = workspace_cryptors_.emplace(workspace.entry_id,
+            DataCryptor(CipherType::CHACHA20_POLY1305, group_key)).first;
     }
     else
     {
@@ -487,7 +488,8 @@ void Router::readUserKeys(const proto::router::UserKeys& user_keys)
             LOG(WARNING) << "Failed to unwrap GK for workspace" << wk.workspace_id();
             continue;
         }
-        workspace_cryptors_.emplace(wk.workspace_id(), DataCryptor(std::move(gk)));
+        workspace_cryptors_.emplace(wk.workspace_id(),
+            DataCryptor(CipherType::CHACHA20_POLY1305, std::move(gk)));
     }
 
     setStatus(Status::ONLINE);

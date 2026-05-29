@@ -304,7 +304,8 @@ bool AabImporter::import(QWidget* parent, const QString& file_path)
                 dialog.password(),
                 QByteArray::fromStdString(proto_file.hashing_salt())));
 
-            std::optional<QByteArray> decrypted = DataCryptor(key).decrypt(proto_file.data());
+            std::optional<QByteArray> decrypted =
+                DataCryptor(CipherType::CHACHA20_POLY1305, key).decrypt(proto_file.data());
             if (!decrypted.has_value())
             {
                 MsgBox::warning(parent, tr("Unable to decrypt the address book with the specified password."));

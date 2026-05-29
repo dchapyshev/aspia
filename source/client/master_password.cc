@@ -40,7 +40,8 @@ SecureByteArray deriveKey(const SecureString& password, const QByteArray& salt)
 //--------------------------------------------------------------------------------------------------
 std::optional<QByteArray> makeVerifier(const SecureByteArray& key)
 {
-    return DataCryptor(key).encrypt(Random::byteArray(kVerifierPayloadSize));
+    return DataCryptor(CipherType::CHACHA20_POLY1305, key)
+        .encrypt(Random::byteArray(kVerifierPayloadSize));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -48,7 +49,7 @@ bool checkVerifier(const SecureByteArray& key, const QByteArray& verifier)
 {
     // ChaCha20-Poly1305 is an AEAD cipher: successful decryption (i.e. valid auth tag)
     // is itself the proof that the key is correct. The plaintext content does not matter.
-    return DataCryptor(key).decrypt(verifier).has_value();
+    return DataCryptor(CipherType::CHACHA20_POLY1305, key).decrypt(verifier).has_value();
 }
 
 //--------------------------------------------------------------------------------------------------

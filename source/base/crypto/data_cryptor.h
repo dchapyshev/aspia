@@ -28,16 +28,14 @@
 #include <mutex>
 #include <optional>
 
-// Thread-safe AEAD wrapper around ChaCha20-Poly1305. The singleton accessed via instance()
-// holds a process-wide key shared between all threads. EVP_CIPHER_CTX is not thread-safe, so
-// the cipher state is guarded by a mutex - encrypt() and decrypt() are serialized across
-// threads. For our workload (single-digit calls per second) this is negligible. Per-instance
-// (non-singleton) cryptors are also serialized for consistency.
+// Thread-safe AEAD wrapper. The singleton accessed via instance() holds a process-wide key shared
+// between all threads. EVP_CIPHER_CTX is not thread-safe, so the cipher state is guarded by a mutex
+// - encrypt() and decrypt() are serialized across threads.
 class DataCryptor
 {
 public:
-    DataCryptor();
-    explicit DataCryptor(const SecureByteArray& key);
+    explicit DataCryptor(CipherType type);
+    DataCryptor(CipherType type, const SecureByteArray& key);
     DataCryptor(DataCryptor&& other) noexcept;
     DataCryptor& operator=(DataCryptor&& other) noexcept;
     ~DataCryptor();
@@ -54,6 +52,7 @@ public:
 
 private:
     mutable std::mutex mutex_;
+    CipherType type_;
     SecureByteArray key_;
     EVP_CIPHER_CTX_ptr encrypt_ctx_;
     EVP_CIPHER_CTX_ptr decrypt_ctx_;
