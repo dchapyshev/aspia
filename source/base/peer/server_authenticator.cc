@@ -21,7 +21,6 @@
 #include <QSysInfo>
 
 #include "base/bitset.h"
-#include "base/cpuid_util.h"
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/serialization.h"
@@ -218,17 +217,12 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
     const quint32 encryption = client_hello.encryption();
 
     CLOG(TRACE) << "Supported by client:";
-
     if (encryption & proto::key_exchange::ENCRYPTION_AES256_GCM)
         CLOG(TRACE) << "ENCRYPTION_AES256_GCM";
 
-    if (encryption & proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305)
-        CLOG(TRACE) << "ENCRYPTION_CHACHA20_POLY1305";
-
     CLOG(TRACE) << "Identify: " << client_hello.identify();
 
-    if (!(encryption & proto::key_exchange::ENCRYPTION_AES256_GCM) &&
-        !(encryption & proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305))
+    if (!(encryption & proto::key_exchange::ENCRYPTION_AES256_GCM))
     {
         // No encryption methods supported.
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
@@ -345,24 +339,14 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
         server_hello.set_iv(encrypt_iv_.toStdString());
     }
 
-    bool has_aes_ni = false;
-
-#if defined(Q_PROCESSOR_X86)
-    has_aes_ni = CpuidUtil::hasAesNi();
-#endif
-
-    if ((encryption & proto::key_exchange::ENCRYPTION_AES256_GCM) && has_aes_ni)
+    if (encryption & proto::key_exchange::ENCRYPTION_AES256_GCM)
     {
-        CLOG(TRACE) << "Both sides have hardware support AES. Using AES256 GCM";
-        // If both sides of the connection support AES, then method AES256 GCM is the fastest option.
         server_hello.set_encryption(proto::key_exchange::ENCRYPTION_AES256_GCM);
     }
     else
     {
-        CLOG(TRACE) << "Using ChaCha20+Poly1305";
-        // Otherwise, we use ChaCha20+Poly1305. This works faster in the absence of hardware
-        // support AES.
-        server_hello.set_encryption(proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305);
+        finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+        return;
     }
 
     encryption_ = server_hello.encryption();
@@ -581,11 +565,9 @@ void ServerAuthenticator::onClientKeyExchange(const QByteArray& buffer)
 
     switch (encryption_)
     {
-        // AES256-GCM and ChaCha20-Poly1305 require a 256 bit key. Mix the SRP key after CKE -
-        // transcript now covers full handshake plus SRP key - that is the master from which
-        // sessionKey() derives per-direction keys.
+        // AES256-GCM require a 256 bit key. Mix the SRP key after CKE - transcript now covers full
+        // handshake plus SRP key - that is the master from which sessionKey() derives per-direction keys.
         case proto::key_exchange::ENCRYPTION_AES256_GCM:
-        case proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305:
             appendTranscript(srp_key.toByteArray());
             break;
 

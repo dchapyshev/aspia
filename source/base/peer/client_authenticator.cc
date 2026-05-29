@@ -20,7 +20,6 @@
 
 #include <QSysInfo>
 
-#include "base/cpuid_util.h"
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/serialization.h"
@@ -216,15 +215,8 @@ void ClientAuthenticator::sendClientHello()
         return;
     }
 
-    quint32 encryption = proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305;
-
-#if defined(Q_PROCESSOR_X86)
-    if (CpuidUtil::hasAesNi())
-        encryption |= proto::key_exchange::ENCRYPTION_AES256_GCM;
-#endif
-
     proto::key_exchange::ClientHello client_hello;
-    client_hello.set_encryption(encryption);
+    client_hello.set_encryption(proto::key_exchange::ENCRYPTION_AES256_GCM);
     client_hello.set_identify(identify_);
 
     // Both paths use ephemeral X25519.
@@ -319,7 +311,6 @@ bool ClientAuthenticator::readServerHello(const QByteArray& buffer)
     switch (encryption_)
     {
         case proto::key_exchange::ENCRYPTION_AES256_GCM:
-        case proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305:
             break;
 
         default:
