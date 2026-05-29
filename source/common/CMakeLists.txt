@@ -112,6 +112,12 @@ list(APPEND SOURCE_COMMON_UI
     ui/status_dialog.cc
     ui/status_dialog.h
     ui/status_dialog.ui
+    ui/two_factor_code_dialog.cc
+    ui/two_factor_code_dialog.h
+    ui/two_factor_code_dialog.ui
+    ui/two_factor_enroll_dialog.cc
+    ui/two_factor_enroll_dialog.h
+    ui/two_factor_enroll_dialog.ui
     ui/update_dialog.cc
     ui/update_dialog.h
     ui/update_dialog.ui)

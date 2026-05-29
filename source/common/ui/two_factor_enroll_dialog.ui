@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TwoFactorEnrollDialog</class>
+ <widget class="QDialog" name="TwoFactorEnrollDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>420</width>
+    <height>460</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Enable Two-Factor Authentication</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="label_intro">
+     <property name="text">
+      <string>Open a TOTP authenticator app (Google Authenticator, Microsoft Authenticator or any compatible alternative) and add a new account by scanning the QR code below. If QR scanning is unavailable, type the setup key into the app instead.</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_qr">
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>220</width>
+       <height>220</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_secret_caption">
+     <property name="text">
+      <string>Setup key:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLineEdit" name="edit_secret">
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+     <property name="font">
+      <font>
+       <family>Courier New</family>
+      </font>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_code_caption">
+     <property name="text">
+      <string>Enter the 6-digit code shown by the app to confirm:</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLineEdit" name="edit_code">
+     <property name="maxLength">
+      <number>6</number>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="inputMask">
+      <string>999999</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="DialogButtonBox" name="buttonbox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>DialogButtonBox</class>
+   <extends>QDialogButtonBox</extends>
+   <header>common/ui/dialog_button_box.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
