@@ -221,6 +221,18 @@ quint16 Settings::stunPort() const
 }
 
 //--------------------------------------------------------------------------------------------------
+void Settings::setTwoFactorEnabled(bool enable)
+{
+    impl_.setValue("two_factor_enabled", enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Settings::isTwoFactorEnabled() const
+{
+    return impl_.value("two_factor_enabled", false).toBool();
+}
+
+//--------------------------------------------------------------------------------------------------
 void Settings::setWhiteList(const QString& key, const WhiteList& value)
 {
     QString result;
