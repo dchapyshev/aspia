@@ -132,6 +132,7 @@ message User
     bytes public_key       = 8;
     bytes wrap_private_key = 9;
     bytes wrap_salt        = 10;
+    bool otp_active        = 11; // Read-only.
 }
 
 message UserListRequest
@@ -148,8 +149,15 @@ message UserList
 
 message UserRequest
 {
+    // "reset_otp"     - Clear the user's TOTP secret so the next login triggers a fresh
+    //                   self-enrollment. Also revokes every device token of the user
+    //                   (re-enrollment implies a new device key pair anyway).
+    // "revoke_tokens" - Drop every device token owned by the user without touching the TOTP
+    //                   secret. The user must re-authenticate with a TOTP code on the next
+    //                   login on every device.
+    // For "reset_otp" and "revoke_tokens" only |user.entry_id| is consulted.
     int64 request_id    = 1;
-    string command_name = 2; // "add" | "modify" | "delete"
+    string command_name = 2; // "add" | "modify" | "delete" | "reset_otp" | "revoke_tokens"
     User user           = 3;
 }
 
@@ -157,7 +165,8 @@ message UserResult
 {
     int64 request_id    = 1;
     string command_name = 2; // Same as request command_name.
-    string error_code   = 3; // "ok" | "invalid_request" | "internal_error" | "invalid_data" | "already_exists"
+    string error_code   = 3; // "ok" | "invalid_request" | "internal_error" | "invalid_data" |
+                             // "already_exists" | "not_found"
 }
 
 message WorkspaceRequest
