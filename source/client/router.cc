@@ -30,6 +30,8 @@
 #include "base/net/address.h"
 #include "base/net/tcp_channel_ng.h"
 #include "base/peer/client_authenticator.h"
+#include "base/peer/device_auth.h"
+#include "client/database.h"
 #include "proto/key_exchange.h"
 
 namespace {
@@ -153,6 +155,29 @@ void Router::updateConfig(const RouterConfig& config)
 }
 
 //--------------------------------------------------------------------------------------------------
+void Router::submitTwoFactorCode(const QString& totp_code, bool request_new_device_token)
+{
+    proto::router::ClientToRouter message;
+    proto::router::TwoFactorResponse* response = message.mutable_two_factor_response();
+    response->set_totp_code(totp_code.toStdString());
+
+    if (request_new_device_token)
+    {
+        DeviceAuth::DeviceKey key = DeviceAuth::generateDeviceKey();
+        if (!key.isValid())
+        {
+            LOG(ERROR) << "Failed to generate device key pair";
+            disconnectFromRouter();
+            return;
+        }
+        pending_device_private_key_ = key.private_key;
+        response->set_device_public_key(key.public_key.toStdString());
+    }
+
+    emitSend(proto::router::CHANNEL_ID_CLIENT, message);
+}
+
+//--------------------------------------------------------------------------------------------------
 void Router::onTcpAuthenticated()
 {
     if (!tcp_channel_)
@@ -242,7 +267,11 @@ void Router::onTcpMessageReceived(quint8 channel_id, const QByteArray& bytes)
             return;
         }
 
-        if (message.has_user_keys())
+        if (message.has_two_factor_challenge())
+            readTwoFactorChallenge(message.two_factor_challenge());
+        else if (message.has_two_factor_result())
+            readTwoFactorResult(message.two_factor_result());
+        else if (message.has_user_keys())
             readUserKeys(message.user_keys());
         else if (message.has_connection_offer())
             dispatch(message.connection_offer().request_id(), message.connection_offer());
@@ -307,7 +336,7 @@ bool Router::buildWorkspace(const Router::Workspace& workspace, proto::router::W
     {
         group_key = SecureByteArray(Random::byteArray(kGroupKeySize));
         it = workspace_cryptors_.emplace(workspace.entry_id,
-            DataCryptor(CipherType::CHACHA20_POLY1305, group_key)).first;
+            DataCryptor(CipherType::AES256_GCM, group_key)).first;
     }
     else
     {
@@ -340,27 +369,6 @@ bool Router::buildWorkspace(const Router::Workspace& workspace, proto::router::W
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Router::buildGroup(qint64 workspace_id, const Router::Group& group, proto::router::Group* out)
-{
-    CHECK(out);
-
-    if (group.entry_id > 0)
-        out->set_entry_id(group.entry_id);
-    out->set_parent_id(group.parent_id);
-    out->set_name(group.name.toStdString());
-
-    auto it = workspace_cryptors_.find(workspace_id);
-    if (it == workspace_cryptors_.end())
-    {
-        LOG(ERROR) << "No cached cryptor for workspace" << workspace_id;
-        return false;
-    }
-
-    out->set_comment(encrypt(it->second, group.comment).toStdString());
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
 bool Router::buildHost(const Router::Host& host, proto::router::Host* out)
 {
     CHECK(out);
@@ -380,6 +388,27 @@ bool Router::buildHost(const Router::Host& host, proto::router::Host* out)
     out->set_comment(encrypt(cryptor, host.comment).toStdString());
     out->set_user_name(encrypt(cryptor, host.user_name).toStdString());
     out->set_password(encrypt(cryptor, host.password.toString()).toStdString());
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Router::buildGroup(qint64 workspace_id, const Router::Group& group, proto::router::Group* out)
+{
+    CHECK(out);
+
+    if (group.entry_id > 0)
+        out->set_entry_id(group.entry_id);
+    out->set_parent_id(group.parent_id);
+    out->set_name(group.name.toStdString());
+
+    auto it = workspace_cryptors_.find(workspace_id);
+    if (it == workspace_cryptors_.end())
+    {
+        LOG(ERROR) << "No cached cryptor for workspace" << workspace_id;
+        return false;
+    }
+
+    out->set_comment(encrypt(it->second, group.comment).toStdString());
     return true;
 }
 
@@ -436,6 +465,7 @@ void Router::destroyChannel()
     pending_.clear();
     version_ = QVersionNumber();
     tcp_channel_.reset();
+    pending_device_private_key_ = SecureByteArray();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -488,11 +518,105 @@ void Router::readUserKeys(const proto::router::UserKeys& user_keys)
             LOG(WARNING) << "Failed to unwrap GK for workspace" << wk.workspace_id();
             continue;
         }
-        workspace_cryptors_.emplace(wk.workspace_id(),
-            DataCryptor(CipherType::CHACHA20_POLY1305, std::move(gk)));
+        workspace_cryptors_.emplace(wk.workspace_id(), DataCryptor(CipherType::AES256_GCM, std::move(gk)));
     }
 
     setStatus(Status::ONLINE);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& challenge)
+{
+    switch (challenge.mode())
+    {
+        case proto::router::TWO_FACTOR_MODE_ACTIVE:
+        {
+            server_nonce_ = QByteArray::fromStdString(challenge.server_nonce());
+
+            // Signature path: if we have a previously issued device token, sign the nonce
+            // and skip the TOTP prompt entirely.
+            const QByteArray token_id = config_.deviceTokenId();
+            const SecureByteArray private_key = config_.devicePrivateKey();
+
+            if (!token_id.isEmpty() && !private_key.isEmpty() && !server_nonce_.isEmpty())
+            {
+                const QByteArray signature = DeviceAuth::signChallenge(private_key, token_id, server_nonce_);
+                if (signature.isEmpty())
+                {
+                    LOG(ERROR) << "Failed to sign device-token challenge";
+                    disconnectFromRouter();
+                    return;
+                }
+
+                proto::router::ClientToRouter message;
+                proto::router::TwoFactorResponse* response = message.mutable_two_factor_response();
+                response->set_token_id(token_id.toStdString());
+                response->set_token_signature(signature.toStdString());
+                emitSend(proto::router::CHANNEL_ID_CLIENT, message);
+                return;
+            }
+
+            LOG(INFO) << "Two-factor code required for router" << config_.routerId();
+            emit sig_twoFactorCodeRequired(config_.routerId());
+            return;
+        }
+
+        case proto::router::TWO_FACTOR_MODE_ENROLL:
+        {
+            const QString uri = QString::fromStdString(challenge.otpauth_uri());
+
+            // Drop any stale token from a previous account life. Enrollment implies a brand
+            // new TOTP secret, the old device binding is dead.
+            config_.clearDeviceCredentials();
+            if (!Database::instance().modifyRouter(config_))
+                LOG(WARNING) << "Failed to clear stale device token";
+
+            LOG(INFO) << "Two-factor enrollment required for router" << config_.routerId();
+            emit sig_twoFactorEnrollment(config_.routerId(), uri);
+            return;
+        }
+
+        default:
+            LOG(WARNING) << "Unknown TwoFactorMode:" << challenge.mode();
+            disconnectFromRouter();
+            return;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::readTwoFactorResult(const proto::router::TwoFactorResult& result)
+{
+    if (result.status() != proto::router::TWO_FACTOR_STATUS_OK)
+    {
+        LOG(INFO) << "2FA stage rejected by router:" << result.status();
+
+        if (result.status() == proto::router::TWO_FACTOR_STATUS_INVALID_TOKEN)
+        {
+            // The token we tried to authenticate with is gone (revoked, password changed,
+            // database wiped). Clear the local copy so the next attempt falls back to the
+            // TOTP path.
+            config_.clearDeviceCredentials();
+            if (!Database::instance().modifyRouter(config_))
+                LOG(WARNING) << "Failed to clear stale device token";
+        }
+
+        disconnectFromRouter();
+        return;
+    }
+
+    const QByteArray new_token_id = QByteArray::fromStdString(result.new_token_id());
+    if (!new_token_id.isEmpty() && !pending_device_private_key_.isEmpty())
+    {
+        LOG(INFO) << "Device token issued for router" << config_.routerId();
+
+        config_.setDeviceTokenId(new_token_id);
+        config_.setDevicePrivateKey(pending_device_private_key_);
+
+        if (!Database::instance().modifyRouter(config_))
+            LOG(WARNING) << "Failed to persist new device token for router" << config_.routerId();
+    }
+
+    pending_device_private_key_ = SecureByteArray();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -547,7 +671,7 @@ Router::WorkspaceList Router::decodeWorkspaceList(const proto::router::Workspace
         if (gk.isEmpty())
             continue;
 
-        DataCryptor cryptor(gk);
+        DataCryptor cryptor(CipherType::AES256_GCM, gk);
         if (!src.comment().empty())
             dst.comment = decrypt(cryptor, src.comment());
 

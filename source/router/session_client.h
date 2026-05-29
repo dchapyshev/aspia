@@ -28,7 +28,9 @@ class CheckHostStatus;
 class ConnectionRequest;
 class GroupListRequest;
 class HostListRequest;
+class TwoFactorResponse;
 class WorkspaceListRequest;
+enum TwoFactorStatus : int;
 } // namespace proto::router
 
 class SessionClient : public Session
@@ -55,10 +57,21 @@ private:
     void readWorkspaceListRequest(const proto::router::WorkspaceListRequest& request);
     void readGroupListRequest(const proto::router::GroupListRequest& request);
     void readChangePasswordRequest(const proto::router::ChangePasswordRequest& request);
+    void doTwoFactorChallenge();
+    void readTwoFactorResponse(const proto::router::TwoFactorResponse& response);
+    void sendTwoFactorResult(
+        proto::router::TwoFactorStatus status, const QByteArray& new_token_id = QByteArray());
     void sendUserKeys();
     Session* sessionByHostId(HostId host_id);
 
     quint16 stun_port_ = 0;
+
+    const bool two_factor_enabled_;
+    bool two_factor_completed_ = false;
+    QByteArray server_nonce_;
+    QByteArray tentative_otp_secret_;
+    QByteArray user_otp_secret_;
+    quint64 user_otp_counter_ = 0;
 
     Q_DISABLE_COPY_MOVE(SessionClient)
 };

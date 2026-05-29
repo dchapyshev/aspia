@@ -49,6 +49,8 @@
 #include "common/ui/icon_text_button.h"
 #include "common/ui/msg_box.h"
 #include "common/ui/status_dialog.h"
+#include "common/ui/two_factor_code_dialog.h"
+#include "common/ui/two_factor_enroll_dialog.h"
 #include "proto/router_admin.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
@@ -419,6 +421,8 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     connect(router_, &Router::sig_statusChanged, this, &RouterWidget::onStatusChanged);
     connect(router_, &Router::sig_errorOccurred, this, &RouterWidget::onConnectionErrorOccurred);
     connect(router_, &Router::sig_passwordChangeRequired, this, &RouterWidget::onPasswordChangeRequired);
+    connect(router_, &Router::sig_twoFactorCodeRequired, this, &RouterWidget::onTwoFactorCodeRequired);
+    connect(router_, &Router::sig_twoFactorEnrollment, this, &RouterWidget::onTwoFactorEnrollment);
     connect(router_, &Router::sig_hostsChanged, this, &RouterWidget::onUpdateHostList);
     connect(router_, &Router::sig_relaysChanged, this, &RouterWidget::onUpdateRelayList);
     connect(router_, &Router::sig_clientsChanged, this, &RouterWidget::onUpdateClientList);
@@ -1269,6 +1273,26 @@ void RouterWidget::onPasswordChangeRequired()
     RouterPasswordDialog dialog(router_->routerId(), this);
     if (dialog.exec() == QDialog::Accepted)
         status_dialog_->addMessage(tr("Password updated. Waiting for new encryption keys..."));
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onTwoFactorCodeRequired()
+{
+    TwoFactorCodeDialog dialog(this);
+    if (dialog.exec() == QDialog::Accepted)
+        router_->submitTwoFactorCode(dialog.code(), true);
+    else
+        router_->disconnectFromRouter();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onTwoFactorEnrollment(qint64 /* router_id */, const QString& otpauth_uri)
+{
+    TwoFactorEnrollDialog dialog(otpauth_uri, this);
+    if (dialog.exec() == QDialog::Accepted)
+        router_->submitTwoFactorCode(dialog.code(), true);
+    else
+        router_->disconnectFromRouter();
 }
 
 //--------------------------------------------------------------------------------------------------

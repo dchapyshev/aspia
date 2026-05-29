@@ -18,12 +18,15 @@
 
 #include "router/session_client.h"
 
+#include <QDateTime>
 #include <QSet>
 
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/version_constants.h"
 #include "base/crypto/random.h"
+#include "base/crypto/totp.h"
+#include "base/peer/device_auth.h"
 #include "proto/relay_peer.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
@@ -33,10 +36,18 @@
 #include "router/session_host.h"
 #include "router/session_legacy_host.h"
 #include "router/session_relay.h"
+#include "router/settings.h"
+
+namespace {
+
+const char kOtpIssuer[] = "Aspia Router";
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 SessionClient::SessionClient(TcpChannel* channel, QObject* parent)
-    : Session(channel, parent)
+    : Session(channel, parent),
+      two_factor_enabled_(Settings().isTwoFactorEnabled())
 {
     CLOG(INFO) << "Ctor";
     connect(this, &Session::sig_started, this, &SessionClient::onStarted);
@@ -64,6 +75,15 @@ void SessionClient::onSessionMessage(quint8 channel_id, const QByteArray& buffer
     if (!parse(buffer, &message))
     {
         CLOG(ERROR) << "Could not read message from client";
+        return;
+    }
+
+    if (!two_factor_completed_)
+    {
+        if (message.has_two_factor_response())
+            readTwoFactorResponse(message.two_factor_response());
+        else
+            CLOG(ERROR) << "Unexpected message before 2FA completion";
         return;
     }
 
@@ -100,7 +120,165 @@ void SessionClient::onSessionMessage(quint8 channel_id, const QByteArray& buffer
 //--------------------------------------------------------------------------------------------------
 void SessionClient::onStarted()
 {
-    sendUserKeys();
+    doTwoFactorChallenge();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionClient::doTwoFactorChallenge()
+{
+    if (!two_factor_enabled_)
+    {
+        // Global policy is off. Skip the 2FA stage entirely - the first UserKeys is the
+        // client's implicit "no 2FA" signal.
+        two_factor_completed_ = true;
+        sendUserKeys();
+        return;
+    }
+
+    proto::router::RouterToClient message;
+    proto::router::TwoFactorChallenge* challenge = message.mutable_two_factor_challenge();
+
+    RouterUser user = Database::instance().findUser(userId());
+    if (!user.isValid())
+    {
+        // SRP already validated the user; reaching this branch implies the row vanished
+        // between authentication and the 2FA stage.
+        CLOG(WARNING) << "Authenticated user disappeared from database (user_id:" << userId() << ")";
+        sendTwoFactorResult(proto::router::TWO_FACTOR_STATUS_INTERNAL_ERROR);
+        return;
+    }
+
+    user_otp_secret_ = user.otp_secret;
+    user_otp_counter_ = user.otp_counter;
+
+    if (user_otp_secret_.isEmpty())
+    {
+        // First login or after admin reset. Generate a tentative secret and hand it to the
+        // client; the secret only reaches the database once the user confirms it with a
+        // valid code, so an abandoned dialog leaves the user un-enrolled.
+        tentative_otp_secret_ = Totp::generateSecret();
+        const QString uri = Totp::buildUri(kOtpIssuer, userName(), tentative_otp_secret_);
+
+        challenge->set_mode(proto::router::TWO_FACTOR_MODE_ENROLL);
+        challenge->set_otpauth_uri(uri.toStdString());
+    }
+    else
+    {
+        server_nonce_ = DeviceAuth::generateServerNonce();
+        challenge->set_mode(proto::router::TWO_FACTOR_MODE_ACTIVE);
+        challenge->set_server_nonce(server_nonce_.toStdString());
+    }
+
+    sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionClient::readTwoFactorResponse(const proto::router::TwoFactorResponse& response)
+{
+    const qint64 now = QDateTime::currentSecsSinceEpoch();
+    const bool enroll = !tentative_otp_secret_.isEmpty();
+
+    if (!enroll && !response.token_signature().empty())
+    {
+        // Signature path: client claims it already owns a device token. Verify and let it
+        // through without prompting for TOTP.
+        const QByteArray token_id = QByteArray::fromStdString(response.token_id());
+        const QByteArray signature = QByteArray::fromStdString(response.token_signature());
+
+        qint64 stored_user_id = 0;
+        QByteArray stored_pubkey;
+        if (!Database::instance().findClientDeviceToken(token_id, &stored_user_id, &stored_pubkey) ||
+            stored_user_id != userId() ||
+            !DeviceAuth::verifyChallenge(stored_pubkey, token_id, server_nonce_, signature))
+        {
+            sendTwoFactorResult(proto::router::TWO_FACTOR_STATUS_INVALID_TOKEN);
+            return;
+        }
+
+        Database::instance().touchClientDeviceToken(token_id);
+        sendTwoFactorResult(proto::router::TWO_FACTOR_STATUS_OK);
+        return;
+    }
+
+    const QByteArray& secret = enroll ? tentative_otp_secret_ : user_otp_secret_;
+
+    if (secret.isEmpty() || response.totp_code().empty())
+    {
+        sendTwoFactorResult(proto::router::TWO_FACTOR_STATUS_INVALID_CODE);
+        return;
+    }
+
+    const QString code = QString::fromStdString(response.totp_code());
+    quint64 matched_counter = 0;
+    if (!Totp::verify(secret, code, now, Totp::kDefaultStepSec, Totp::kDefaultDigits,
+                      Totp::kDefaultWindowSteps, &matched_counter))
+    {
+        sendTwoFactorResult(proto::router::TWO_FACTOR_STATUS_INVALID_CODE);
+        return;
+    }
+
+    // Replay protection: refuse any code whose step has already been consumed. ENROLL starts
+    // from counter 0, so the first valid code (any positive step) is accepted.
+    if (!enroll && matched_counter <= user_otp_counter_)
+    {
+        sendTwoFactorResult(proto::router::TWO_FACTOR_STATUS_INVALID_CODE);
+        return;
+    }
+
+    if (enroll)
+    {
+        if (!Database::instance().setUserOtp(userId(), tentative_otp_secret_, matched_counter))
+        {
+            CLOG(ERROR) << "Failed to persist OTP secret for user" << userId();
+            sendTwoFactorResult(proto::router::TWO_FACTOR_STATUS_INTERNAL_ERROR);
+            return;
+        }
+        tentative_otp_secret_.clear();
+    }
+    else
+    {
+        if (!Database::instance().updateUserOtpCounter(userId(), matched_counter))
+        {
+            CLOG(ERROR) << "Failed to update OTP counter for user" << userId();
+            sendTwoFactorResult(proto::router::TWO_FACTOR_STATUS_INTERNAL_ERROR);
+            return;
+        }
+    }
+
+    QByteArray new_token_id;
+    const QByteArray device_pubkey = QByteArray::fromStdString(response.device_public_key());
+    if (!device_pubkey.isEmpty())
+    {
+        if (!Database::instance().issueClientDeviceToken(userId(), device_pubkey, &new_token_id))
+        {
+            CLOG(WARNING) << "Failed to issue device token for user" << userId();
+            new_token_id = QByteArray();
+        }
+    }
+
+    sendTwoFactorResult(proto::router::TWO_FACTOR_STATUS_OK, new_token_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionClient::sendTwoFactorResult(
+    proto::router::TwoFactorStatus status, const QByteArray& new_token_id)
+{
+    proto::router::RouterToClient envelope;
+    proto::router::TwoFactorResult* result = envelope.mutable_two_factor_result();
+    result->set_status(status);
+    if (!new_token_id.isEmpty())
+        result->set_new_token_id(new_token_id.toStdString());
+
+    sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(envelope));
+
+    if (status == proto::router::TWO_FACTOR_STATUS_OK)
+    {
+        two_factor_completed_ = true;
+        sendUserKeys();
+    }
+    // On failure the channel is dropped when the client disconnects in response; we
+    // intentionally do not call any disconnect API here because the result message must
+    // reach the client first.
 }
 
 //--------------------------------------------------------------------------------------------------

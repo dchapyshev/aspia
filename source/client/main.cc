@@ -32,6 +32,8 @@
 #include "client/master_password.h"
 #include "common/ui/msg_box.h"
 #include "common/ui/status_dialog.h"
+#include "common/ui/two_factor_code_dialog.h"
+#include "common/ui/two_factor_enroll_dialog.h"
 #include "client/router.h"
 #include "client/ui/application.h"
 #include "client/ui/main_window.h"
@@ -143,6 +145,29 @@ void startRouterSession(const HostConfig& host,
 
         status_dialog->addMessage(
             QApplication::translate("Client", "Network error: %1.").arg(TcpChannel::errorToString(error_code)));
+    });
+
+    QObject::connect(router, &Router::sig_twoFactorCodeRequired, qApp, [router](qint64)
+    {
+        if (!router)
+            return;
+        TwoFactorCodeDialog dialog;
+        if (dialog.exec() == QDialog::Accepted)
+            router->submitTwoFactorCode(dialog.code(), true);
+        else
+            router->disconnectFromRouter();
+    });
+
+    QObject::connect(router, &Router::sig_twoFactorEnrollment, qApp,
+        [router](qint64, const QString& uri)
+    {
+        if (!router)
+            return;
+        TwoFactorEnrollDialog dialog(uri);
+        if (dialog.exec() == QDialog::Accepted)
+            router->submitTwoFactorCode(dialog.code(), true);
+        else
+            router->disconnectFromRouter();
     });
 
     status_dialog->show();

@@ -64,8 +64,13 @@ public:
     SecureString password() const;
     void setPassword(const SecureString& value);
 
-    QByteArray data() const;
-    void setData(const QByteArray& value);
+    SecureByteArray devicePrivateKey() const;
+    void setDevicePrivateKey(const SecureByteArray& value);
+
+    QByteArray deviceTokenId() const;
+    void setDeviceTokenId(const QByteArray& value);
+
+    void clearDeviceCredentials();
 
     // Direct access to ciphertext for database I/O.
     const QByteArray& encryptedDisplayName() const { return encrypted_display_name_; }
@@ -80,8 +85,13 @@ public:
     const QByteArray& encryptedPassword() const { return encrypted_password_; }
     void setEncryptedPassword(const QByteArray& blob) { encrypted_password_ = blob; }
 
-    const QByteArray& encryptedData() const { return encrypted_data_; }
-    void setEncryptedData(const QByteArray& blob) { encrypted_data_ = blob; }
+    const QByteArray& encryptedDevicePrivateKey() const { return encrypted_device_private_key_; }
+    void setEncryptedDevicePrivateKey(const QByteArray& blob)
+        { encrypted_device_private_key_ = blob; }
+
+    const QByteArray& encryptedDeviceTokenId() const { return encrypted_device_token_id_; }
+    void setEncryptedDeviceTokenId(const QByteArray& blob)
+        { encrypted_device_token_id_ = blob; }
 
 private:
     qint64 router_id_ = -1;
@@ -90,7 +100,8 @@ private:
     QByteArray encrypted_address_;
     QByteArray encrypted_username_;
     QByteArray encrypted_password_;
-    QByteArray encrypted_data_;
+    QByteArray encrypted_device_private_key_;
+    QByteArray encrypted_device_token_id_;
 };
 
 class HostConfig final
@@ -131,9 +142,6 @@ public:
     SecureString password() const;
     void setPassword(const SecureString& value);
 
-    QByteArray data() const;
-    void setData(const QByteArray& value);
-
     // Direct access to ciphertext for database I/O.
     const QByteArray& encryptedName() const { return encrypted_name_; }
     void setEncryptedName(const QByteArray& blob) { encrypted_name_ = blob; }
@@ -150,9 +158,6 @@ public:
     const QByteArray& encryptedPassword() const { return encrypted_password_; }
     void setEncryptedPassword(const QByteArray& blob) { encrypted_password_ = blob; }
 
-    const QByteArray& encryptedData() const { return encrypted_data_; }
-    void setEncryptedData(const QByteArray& blob) { encrypted_data_ = blob; }
-
 private:
     qint64 id_ = -1;
     qint64 group_id_ = 0;
@@ -165,7 +170,6 @@ private:
     QByteArray encrypted_address_;
     QByteArray encrypted_username_;
     QByteArray encrypted_password_;
-    QByteArray encrypted_data_;
 };
 
 class GroupConfig final
@@ -185,9 +189,6 @@ public:
     QString comment() const;
     void setComment(const QString& value);
 
-    QByteArray data() const;
-    void setData(const QByteArray& value);
-
     // Direct access to ciphertext for database I/O.
     const QByteArray& encryptedName() const { return encrypted_name_; }
     void setEncryptedName(const QByteArray& blob) { encrypted_name_ = blob; }
@@ -195,15 +196,11 @@ public:
     const QByteArray& encryptedComment() const { return encrypted_comment_; }
     void setEncryptedComment(const QByteArray& blob) { encrypted_comment_ = blob; }
 
-    const QByteArray& encryptedData() const { return encrypted_data_; }
-    void setEncryptedData(const QByteArray& blob) { encrypted_data_ = blob; }
-
 private:
     qint64 id_ = -1;
     qint64 parent_id_ = 0;
     QByteArray encrypted_name_;
     QByteArray encrypted_comment_;
-    QByteArray encrypted_data_;
 };
 
 proto::control::Config defaultDesktopConfig();

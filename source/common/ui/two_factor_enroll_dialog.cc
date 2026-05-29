@@ -21,10 +21,11 @@
 #include <QImage>
 #include <QPainter>
 #include <QPixmap>
+#include <QUrl>
+#include <QUrlQuery>
 
 #include <qrcodegen.hpp>
 
-#include "base/crypto/base32.h"
 #include "ui_two_factor_enroll_dialog.h"
 
 namespace {
@@ -65,23 +66,23 @@ QPixmap renderQrPixmap(const qrcodegen::QrCode& qr, int max_size)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-TwoFactorEnrollDialog::TwoFactorEnrollDialog(
-    const QByteArray& secret, const QString& otpauth_uri, QWidget* parent)
+TwoFactorEnrollDialog::TwoFactorEnrollDialog(const QString& otpauth_uri, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::TwoFactorEnrollDialog>())
 {
     ui->setupUi(this);
 
-    // Insert a space every four characters to make the Base32 secret easier to type by hand
-    // when QR scanning is unavailable. The authenticator app strips whitespace.
-    const QByteArray base32 = Base32::encode(secret, false);
+    // Pull the Base32 secret out of the URI's query string and insert a space every four
+    // characters so the user can transcribe it by hand when QR scanning is unavailable. The
+    // authenticator app strips whitespace on input.
+    const QString base32 = QUrlQuery(QUrl(otpauth_uri)).queryItemValue("secret");
     QString grouped;
     grouped.reserve(base32.size() + base32.size() / 4);
     for (qsizetype i = 0; i < base32.size(); ++i)
     {
         if (i > 0 && (i % 4) == 0)
             grouped += QLatin1Char(' ');
-        grouped += QLatin1Char(base32[i]);
+        grouped += base32[i];
     }
 
     ui->edit_secret->setText(grouped);

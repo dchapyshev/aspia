@@ -32,9 +32,9 @@ class TwoFactorEnrollDialog final : public QDialog
     Q_OBJECT
 
 public:
-    // |secret| is the raw shared secret (will be Base32-encoded for display).
-    // |otpauth_uri| is the ready-made URI the authenticator app expects.
-    TwoFactorEnrollDialog(const QByteArray& secret, const QString& otpauth_uri, QWidget* parent = nullptr);
+    // |otpauth_uri| is the ready-made URI the authenticator app expects. The Base32 secret
+    // shown as a manual-entry fallback is extracted from its |secret| query parameter.
+    explicit TwoFactorEnrollDialog(const QString& otpauth_uri, QWidget* parent = nullptr);
     ~TwoFactorEnrollDialog() final;
 
     QString code() const;

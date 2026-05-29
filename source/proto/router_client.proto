@@ -197,24 +197,108 @@ message Notification
     bool groups_dirty     = 6;
 }
 
+// 2FA stage that runs between successful SRP authentication and the first UserKeys delivery.
+// The router opens it from SessionClient::onStarted() and gates UserKeys behind a successful
+// TwoFactorResult. Because the SRP handshake is already complete, identity is confirmed and
+// the stage cannot leak user existence: an attacker who failed SRP never reaches here. When
+// the global 2FA policy is off the router skips the stage entirely and delivers UserKeys
+// directly after SRP - clients treat the first UserKeys as the implicit "no 2FA" signal.
+//
+// Flow:
+//   1. Router picks |TwoFactorMode| based on the user's stored TOTP state and sends
+//      TwoFactorChallenge (with |server_nonce| for MODE_ACTIVE; with |otpauth_uri| for
+//      MODE_ENROLL).
+//   2. Client answers with TwoFactorResponse. In MODE_ACTIVE the client chooses by itself:
+//      either (a) sign |server_nonce| with the device private key and submit the stored
+//      |token_id| + |token_signature|, or (b) ask the user for a fresh |totp_code| (and
+//      optionally include a new |device_public_key| to receive a new device token).
+//   3. Router validates and sends TwoFactorResult.
+//   4. On success the router proceeds to send UserKeys; on failure it disconnects the client.
+
+enum TwoFactorMode
+{
+    TWO_FACTOR_MODE_UNKNOWN = 0;
+    // User has a TOTP secret. The client may authenticate either by signing |server_nonce|
+    // with a previously issued device key or by submitting a fresh TOTP code.
+    TWO_FACTOR_MODE_ACTIVE  = 1;
+    // User has no TOTP secret yet. The server includes |enrollment_secret| and |otpauth_uri|;
+    // the client confirms by sending the first valid code.
+    TWO_FACTOR_MODE_ENROLL  = 2;
+}
+
+enum TwoFactorStatus
+{
+    TWO_FACTOR_STATUS_UNKNOWN        = 0;
+    TWO_FACTOR_STATUS_OK             = 1;
+    TWO_FACTOR_STATUS_INVALID_CODE   = 2;
+    TWO_FACTOR_STATUS_INVALID_TOKEN  = 3;
+    TWO_FACTOR_STATUS_INTERNAL_ERROR = 4;
+}
+
+// Router to client.
+message TwoFactorChallenge
+{
+    TwoFactorMode mode = 1;
+
+    // MODE_ACTIVE: random nonce the client signs together with its token_id if it wants to
+    // skip the TOTP prompt.
+    bytes server_nonce = 2;
+
+    // MODE_ENROLL: ready-to-use otpauth://totp/... URI for QR rendering. The Base32 secret
+    // is embedded as the |secret| query parameter; the client extracts it from there for
+    // the manual-entry fallback.
+    string otpauth_uri = 3;
+}
+
+// Client to router.
+message TwoFactorResponse
+{
+    // MODE_ACTIVE, signature path: previously issued token id and Ed25519 signature over
+    // (token_id || server_nonce). When both are present the router ignores |totp_code|.
+    bytes token_id        = 1;
+    bytes token_signature = 2;
+
+    // MODE_ACTIVE, TOTP path and MODE_ENROLL: the 6-digit code the user typed in.
+    string totp_code = 3;
+
+    // Optional: client's Ed25519 public key. When present and the response authenticates
+    // successfully via TOTP/enrollment, the router persists it together with a freshly
+    // issued |new_token_id| (see TwoFactorResult). Ignored on the signature path - the
+    // existing token is reused.
+    bytes device_public_key = 4;
+}
+
+// Router to client.
+message TwoFactorResult
+{
+    TwoFactorStatus status = 1;
+
+    // Populated when the router issued a new device token in response to a successful TOTP
+    // submission accompanied by |device_public_key|. Empty otherwise.
+    bytes new_token_id = 2;
+}
+
 message RouterToClient
 {
-    UserKeys user_keys                          = 1;
-    Notification notification                   = 2;
-    ChangePasswordResult change_password_result = 3;
-    ConnectionOffer connection_offer            = 4;
-    HostStatus host_status                      = 5;
-    HostList host_list                          = 6;
-    WorkspaceList workspace_list                = 7;
-    GroupList group_list                        = 8;
+    TwoFactorChallenge two_factor_challenge       = 1;
+    TwoFactorResult two_factor_result             = 2;
+    UserKeys user_keys                            = 3;
+    Notification notification                     = 4;
+    ChangePasswordResult change_password_result   = 5;
+    ConnectionOffer connection_offer              = 6;
+    HostStatus host_status                        = 7;
+    HostList host_list                            = 8;
+    WorkspaceList workspace_list                  = 9;
+    GroupList group_list                          = 10;
 }
 
 message ClientToRouter
 {
-    ChangePasswordRequest change_password_request = 1;
-    ConnectionRequest connection_request          = 2;
-    CheckHostStatus check_host_status             = 3;
-    HostListRequest host_list_request             = 4;
-    WorkspaceListRequest workspace_list_request   = 5;
-    GroupListRequest group_list_request           = 6;
+    TwoFactorResponse two_factor_response         = 1;
+    ChangePasswordRequest change_password_request = 2;
+    ConnectionRequest connection_request          = 3;
+    CheckHostStatus check_host_status             = 4;
+    HostListRequest host_list_request             = 5;
+    WorkspaceListRequest workspace_list_request   = 6;
+    GroupListRequest group_list_request           = 7;
 }

@@ -56,7 +56,6 @@ HostConfig readHost(const QSqlQuery& query)
     host.setCreateTime(query.value(8).toLongLong());
     host.setModifyTime(query.value(9).toLongLong());
     host.setConnectTime(query.value(10).toLongLong());
-    host.setEncryptedData(query.value(11).toByteArray());
     return host;
 }
 
@@ -68,7 +67,6 @@ GroupConfig readGroup(const QSqlQuery& query)
     group.setParentId(query.value(1).toLongLong());
     group.setEncryptedName(query.value(2).toByteArray());
     group.setEncryptedComment(query.value(3).toByteArray());
-    group.setEncryptedData(query.value(4).toByteArray());
     return group;
 }
 
@@ -82,7 +80,8 @@ RouterConfig readRouter(const QSqlQuery& query)
     router.setSessionType(static_cast<proto::router::SessionType>(query.value(3).toUInt()));
     router.setEncryptedUsername(query.value(4).toByteArray());
     router.setEncryptedPassword(query.value(5).toByteArray());
-    router.setEncryptedData(query.value(6).toByteArray());
+    router.setEncryptedDevicePrivateKey(query.value(6).toByteArray());
+    router.setEncryptedDeviceTokenId(query.value(7).toByteArray());
     return router;
 }
 
@@ -96,7 +95,6 @@ bool createTables(QSqlDatabase& db)
                     "\"parent_id\" INTEGER NOT NULL DEFAULT 0,"
                     "\"name\" BLOB DEFAULT X'',"
                     "\"comment\" BLOB DEFAULT X'',"
-                    "\"data\" BLOB DEFAULT X'',"
                     "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         LOG(ERROR) << "Unable to create groups table:" << query.lastError();
@@ -115,7 +113,6 @@ bool createTables(QSqlDatabase& db)
                     "\"create_time\" INTEGER NOT NULL DEFAULT 0,"
                     "\"modify_time\" INTEGER NOT NULL DEFAULT 0,"
                     "\"connect_time\" INTEGER NOT NULL DEFAULT 0,"
-                    "\"data\" BLOB DEFAULT X'',"
                     "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         LOG(ERROR) << "Unable to create hosts table:" << query.lastError();
@@ -129,7 +126,8 @@ bool createTables(QSqlDatabase& db)
                     "\"session_type\" INTEGER NOT NULL DEFAULT 0,"
                     "\"username\" BLOB DEFAULT X'',"
                     "\"password\" BLOB DEFAULT X'',"
-                    "\"data\" BLOB DEFAULT X'',"
+                    "\"device_private_key\" BLOB DEFAULT X'',"
+                    "\"device_token_id\" BLOB DEFAULT X'',"
                     "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         LOG(ERROR) << "Unable to create routers table:" << query.lastError();
@@ -189,7 +187,7 @@ QList<HostConfig> Database::hostList(qint64 group_id) const
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("SELECT id, group_id, router_id, name, comment, address, username, password, "
-                  "create_time, modify_time, connect_time, data "
+                  "create_time, modify_time, connect_time "
                   "FROM hosts WHERE group_id=?");
     query.addBindValue(group_id);
 
@@ -217,7 +215,7 @@ QList<HostConfig> Database::allHosts() const
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("SELECT id, group_id, router_id, name, comment, address, username, password, "
-                  "create_time, modify_time, connect_time, data "
+                  "create_time, modify_time, connect_time "
                   "FROM hosts");
 
     if (!query.exec())
@@ -255,8 +253,8 @@ bool Database::addHost(HostConfig& host)
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("INSERT INTO hosts (id, group_id, router_id, name, comment, address, username, password, "
-                  "create_time, modify_time, connect_time, data) "
-                  "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                  "create_time, modify_time, connect_time) "
+                  "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     query.addBindValue(host.groupId());
     query.addBindValue(host.routerId());
     query.addBindValue(host.encryptedName());
@@ -267,7 +265,6 @@ bool Database::addHost(HostConfig& host)
     query.addBindValue(host.createTime());
     query.addBindValue(host.modifyTime());
     query.addBindValue(host.connectTime());
-    query.addBindValue(host.encryptedData());
 
     if (!query.exec())
     {
@@ -292,7 +289,7 @@ bool Database::modifyHost(HostConfig& host)
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("UPDATE hosts SET group_id=?, router_id=?, name=?, comment=?, address=?, username=?, "
-                  "password=?, modify_time=?, data=? WHERE id=?");
+                  "password=?, modify_time=? WHERE id=?");
     query.addBindValue(host.groupId());
     query.addBindValue(host.routerId());
     query.addBindValue(host.encryptedName());
@@ -301,7 +298,6 @@ bool Database::modifyHost(HostConfig& host)
     query.addBindValue(host.encryptedUsername());
     query.addBindValue(host.encryptedPassword());
     query.addBindValue(host.modifyTime());
-    query.addBindValue(host.encryptedData());
     query.addBindValue(host.id());
 
     if (!query.exec())
@@ -369,7 +365,7 @@ std::optional<HostConfig> Database::findHost(qint64 entry_id) const
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("SELECT id, group_id, router_id, name, comment, address, username, password, "
-                  "create_time, modify_time, connect_time, data "
+                  "create_time, modify_time, connect_time "
                   "FROM hosts WHERE id=?");
     query.addBindValue(entry_id);
 
@@ -396,7 +392,7 @@ QList<HostConfig> Database::searchHosts(const QString& query_text) const
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("SELECT id, group_id, router_id, name, comment, address, username, password, "
-                  "create_time, modify_time, connect_time, data FROM hosts");
+                  "create_time, modify_time, connect_time FROM hosts");
 
     if (!query.exec())
     {
@@ -429,7 +425,7 @@ QList<GroupConfig> Database::groupList(qint64 parent_id) const
     }
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("SELECT id, parent_id, name, comment, data FROM groups WHERE parent_id=?");
+    query.prepare("SELECT id, parent_id, name, comment FROM groups WHERE parent_id=?");
     query.addBindValue(parent_id);
 
     if (!query.exec())
@@ -455,7 +451,7 @@ QList<GroupConfig> Database::allGroups() const
     }
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    if (!query.exec("SELECT id, parent_id, name, comment, data FROM groups"))
+    if (!query.exec("SELECT id, parent_id, name, comment FROM groups"))
     {
         LOG(ERROR) << "Unable to get all groups:" << query.lastError();
         return {};
@@ -478,12 +474,11 @@ bool Database::addGroup(GroupConfig& group)
     }
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("INSERT INTO groups (id, parent_id, name, comment, data) "
-                  "VALUES (NULL, ?, ?, ?, ?)");
+    query.prepare("INSERT INTO groups (id, parent_id, name, comment) "
+                  "VALUES (NULL, ?, ?, ?)");
     query.addBindValue(group.parentId());
     query.addBindValue(group.encryptedName());
     query.addBindValue(group.encryptedComment());
-    query.addBindValue(group.encryptedData());
 
     if (!query.exec())
     {
@@ -505,11 +500,10 @@ bool Database::modifyGroup(const GroupConfig& group)
     }
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("UPDATE groups SET parent_id=?, name=?, comment=?, data=? WHERE id=?");
+    query.prepare("UPDATE groups SET parent_id=?, name=?, comment=? WHERE id=?");
     query.addBindValue(group.parentId());
     query.addBindValue(group.encryptedName());
     query.addBindValue(group.encryptedComment());
-    query.addBindValue(group.encryptedData());
     query.addBindValue(group.id());
 
     if (!query.exec())
@@ -576,7 +570,7 @@ std::optional<GroupConfig> Database::findGroup(qint64 group_id) const
     }
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("SELECT id, parent_id, name, comment, data FROM groups WHERE id=?");
+    query.prepare("SELECT id, parent_id, name, comment FROM groups WHERE id=?");
     query.addBindValue(group_id);
 
     if (!query.exec())
@@ -601,7 +595,8 @@ QList<RouterConfig> Database::routerList() const
     }
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    if (!query.exec("SELECT id, name, address, session_type, username, password, data FROM routers"))
+    if (!query.exec("SELECT id, name, address, session_type, username, password, "
+                    "device_private_key, device_token_id FROM routers"))
     {
         LOG(ERROR) << "Unable to get router list:" << query.lastError();
         return {};
@@ -630,14 +625,16 @@ bool Database::addRouter(RouterConfig& router)
     }
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("INSERT INTO routers (id, name, address, session_type, username, password, data) "
-                  "VALUES (NULL, ?, ?, ?, ?, ?, ?)");
+    query.prepare("INSERT INTO routers (id, name, address, session_type, username, password, "
+                  "device_private_key, device_token_id) "
+                  "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)");
     query.addBindValue(router.encryptedDisplayName());
     query.addBindValue(router.encryptedAddress());
     query.addBindValue(static_cast<quint32>(router.sessionType()));
     query.addBindValue(router.encryptedUsername());
     query.addBindValue(router.encryptedPassword());
-    query.addBindValue(router.encryptedData());
+    query.addBindValue(router.encryptedDevicePrivateKey());
+    query.addBindValue(router.encryptedDeviceTokenId());
 
     if (!query.exec())
     {
@@ -659,14 +656,16 @@ bool Database::modifyRouter(const RouterConfig& router)
     }
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("UPDATE routers SET name=?, address=?, session_type=?, username=?, password=?, data=? "
+    query.prepare("UPDATE routers SET name=?, address=?, session_type=?, username=?, password=?, "
+                  "device_private_key=?, device_token_id=? "
                   "WHERE id=?");
     query.addBindValue(router.encryptedDisplayName());
     query.addBindValue(router.encryptedAddress());
     query.addBindValue(static_cast<quint32>(router.sessionType()));
     query.addBindValue(router.encryptedUsername());
     query.addBindValue(router.encryptedPassword());
-    query.addBindValue(router.encryptedData());
+    query.addBindValue(router.encryptedDevicePrivateKey());
+    query.addBindValue(router.encryptedDeviceTokenId());
     query.addBindValue(router.routerId());
 
     if (!query.exec())
@@ -710,7 +709,8 @@ std::optional<RouterConfig> Database::findRouter(qint64 router_id) const
     }
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("SELECT id, name, address, session_type, username, password, data "
+    query.prepare("SELECT id, name, address, session_type, username, password, "
+                  "device_private_key, device_token_id "
                   "FROM routers WHERE id=?");
     query.addBindValue(router_id);
 

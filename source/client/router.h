@@ -148,6 +148,10 @@ public:
     void disconnectFromRouter();
     void updateConfig(const RouterConfig& config);
 
+    // Forwarded from the authenticator when the server demands a TOTP code. Callers respond by calling
+    // submitTwoFactorCode(); cancelling the dialog should trigger disconnectFromRouter() instead.
+    void submitTwoFactorCode(const QString& totp_code, bool request_new_device_token);
+
     // Accessors.
     Status status() const { return status_; }
     QVersionNumber version() const { return version_; }
@@ -246,6 +250,8 @@ signals:
     void sig_statusChanged(qint64 router_id, Router::Status status);
     void sig_errorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code);
     void sig_passwordChangeRequired(qint64 router_id);
+    void sig_twoFactorCodeRequired(qint64 router_id);
+    void sig_twoFactorEnrollment(qint64 router_id, const QString& otpauth_uri);
 
     // Push notifications: server signals that a particular list has changed and subscribers
     // should refetch via the corresponding list* RPC. Fired at most once per ~5 seconds per
@@ -367,6 +373,8 @@ private:
     void destroyChannel();
     void emitSend(quint8 channel_id, const google::protobuf::MessageLite& message);
     void readUserKeys(const proto::router::UserKeys& user_keys);
+    void readTwoFactorChallenge(const proto::router::TwoFactorChallenge& challenge);
+    void readTwoFactorResult(const proto::router::TwoFactorResult& result);
     void emitNotificationSignals(const proto::router::Notification& notification);
     Router::WorkspaceList decodeWorkspaceList(const proto::router::WorkspaceList& list);
     Router::HostList decodeHostList(const proto::router::HostList& list);
@@ -386,6 +394,10 @@ private:
     QString user_name_;
     SecureByteArray user_private_key_;
     std::unordered_map<qint64, DataCryptor> workspace_cryptors_;
+
+    // 2FA state. Only relevant between TwoFactorChallenge and UserKeys reception.
+    QByteArray server_nonce_;
+    SecureByteArray pending_device_private_key_;
 
     Q_DISABLE_COPY_MOVE(Router)
 };

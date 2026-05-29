@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/crypto/data_cryptor.h"
+#include "base/crypto/os_crypt.h"
 #include "base/crypto/secure_byte_array.h"
 #include "proto/desktop_control.h"
 #include "proto/router.h"
@@ -64,6 +65,57 @@ SecureString decryptSecureString(const QByteArray& blob)
     if (blob.isEmpty())
         return SecureString();
     return SecureString::fromUtf8(SecureByteArray(decryptBytes(blob)));
+}
+
+QByteArray encryptSecureBytes(const SecureByteArray& value)
+{
+    return encryptBytes(value.toByteArray());
+}
+
+SecureByteArray decryptSecureBytes(const QByteArray& blob)
+{
+    if (blob.isEmpty())
+        return SecureByteArray();
+    return SecureByteArray(decryptBytes(blob));
+}
+
+// Double-wrap helpers for the device private key: the bytes are first sealed by the OS
+// keystore (DPAPI on Windows; identity on platforms without a backing store) and only then
+// encrypted with the master-password-derived key like every other field. The OS layer binds
+// the secret to the user (and on Windows, optionally to the machine), so a copy of
+// |client.db3| moved to another user account cannot decrypt the private key even with the
+// master password - the attacker still needs an active session of the original user.
+QByteArray encryptDevicePrivateKey(const SecureByteArray& plaintext)
+{
+    if (plaintext.isEmpty())
+        return QByteArray();
+
+    QByteArray os_wrapped;
+    if (!OSCrypt::encryptBytes(plaintext.toByteArray(), &os_wrapped) || os_wrapped.isEmpty())
+    {
+        LOG(ERROR) << "OSCrypt::encryptBytes failed for device private key";
+        return QByteArray();
+    }
+
+    return encryptBytes(os_wrapped);
+}
+
+SecureByteArray decryptDevicePrivateKey(const QByteArray& blob)
+{
+    if (blob.isEmpty())
+        return SecureByteArray();
+
+    const QByteArray os_wrapped = decryptBytes(blob);
+    if (os_wrapped.isEmpty())
+        return SecureByteArray();
+
+    QByteArray plaintext;
+    if (!OSCrypt::decryptBytes(os_wrapped, &plaintext))
+    {
+        LOG(ERROR) << "OSCrypt::decryptBytes failed for device private key";
+        return SecureByteArray();
+    }
+    return SecureByteArray(plaintext);
 }
 
 } // namespace
@@ -147,15 +199,34 @@ void RouterConfig::setPassword(const SecureString& value)
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray RouterConfig::data() const
+SecureByteArray RouterConfig::devicePrivateKey() const
 {
-    return decryptBytes(encrypted_data_);
+    return decryptDevicePrivateKey(encrypted_device_private_key_);
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterConfig::setData(const QByteArray& value)
+void RouterConfig::setDevicePrivateKey(const SecureByteArray& value)
 {
-    encrypted_data_ = encryptBytes(value);
+    encrypted_device_private_key_ = encryptDevicePrivateKey(value);
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray RouterConfig::deviceTokenId() const
+{
+    return decryptBytes(encrypted_device_token_id_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterConfig::setDeviceTokenId(const QByteArray& value)
+{
+    encrypted_device_token_id_ = encryptBytes(value);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterConfig::clearDeviceCredentials()
+{
+    encrypted_device_private_key_.clear();
+    encrypted_device_token_id_.clear();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -219,18 +290,6 @@ void HostConfig::setPassword(const SecureString& value)
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray HostConfig::data() const
-{
-    return decryptBytes(encrypted_data_);
-}
-
-//--------------------------------------------------------------------------------------------------
-void HostConfig::setData(const QByteArray& value)
-{
-    encrypted_data_ = encryptBytes(value);
-}
-
-//--------------------------------------------------------------------------------------------------
 QString GroupConfig::name() const
 {
     return decryptString(encrypted_name_);
@@ -252,18 +311,6 @@ QString GroupConfig::comment() const
 void GroupConfig::setComment(const QString& value)
 {
     encrypted_comment_ = encryptString(value);
-}
-
-//--------------------------------------------------------------------------------------------------
-QByteArray GroupConfig::data() const
-{
-    return decryptBytes(encrypted_data_);
-}
-
-//--------------------------------------------------------------------------------------------------
-void GroupConfig::setData(const QByteArray& value)
-{
-    encrypted_data_ = encryptBytes(value);
 }
 
 //--------------------------------------------------------------------------------------------------
