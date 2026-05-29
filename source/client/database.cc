@@ -80,8 +80,7 @@ RouterConfig readRouter(const QSqlQuery& query)
     router.setSessionType(static_cast<proto::router::SessionType>(query.value(3).toUInt()));
     router.setEncryptedUsername(query.value(4).toByteArray());
     router.setEncryptedPassword(query.value(5).toByteArray());
-    router.setEncryptedDevicePrivateKey(query.value(6).toByteArray());
-    router.setEncryptedDeviceTokenId(query.value(7).toByteArray());
+    router.setEncryptedDeviceTokenId(query.value(6).toByteArray());
     return router;
 }
 
@@ -126,7 +125,6 @@ bool createTables(QSqlDatabase& db)
                     "\"session_type\" INTEGER NOT NULL DEFAULT 0,"
                     "\"username\" BLOB DEFAULT X'',"
                     "\"password\" BLOB DEFAULT X'',"
-                    "\"device_private_key\" BLOB DEFAULT X'',"
                     "\"device_token_id\" BLOB DEFAULT X'',"
                     "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
@@ -596,7 +594,7 @@ QList<RouterConfig> Database::routerList() const
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     if (!query.exec("SELECT id, name, address, session_type, username, password, "
-                    "device_private_key, device_token_id FROM routers"))
+                    "device_token_id FROM routers"))
     {
         LOG(ERROR) << "Unable to get router list:" << query.lastError();
         return {};
@@ -626,14 +624,13 @@ bool Database::addRouter(RouterConfig& router)
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("INSERT INTO routers (id, name, address, session_type, username, password, "
-                  "device_private_key, device_token_id) "
-                  "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)");
+                  "device_token_id) "
+                  "VALUES (NULL, ?, ?, ?, ?, ?, ?)");
     query.addBindValue(router.encryptedDisplayName());
     query.addBindValue(router.encryptedAddress());
     query.addBindValue(static_cast<quint32>(router.sessionType()));
     query.addBindValue(router.encryptedUsername());
     query.addBindValue(router.encryptedPassword());
-    query.addBindValue(router.encryptedDevicePrivateKey());
     query.addBindValue(router.encryptedDeviceTokenId());
 
     if (!query.exec())
@@ -657,14 +654,13 @@ bool Database::modifyRouter(const RouterConfig& router)
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("UPDATE routers SET name=?, address=?, session_type=?, username=?, password=?, "
-                  "device_private_key=?, device_token_id=? "
+                  "device_token_id=? "
                   "WHERE id=?");
     query.addBindValue(router.encryptedDisplayName());
     query.addBindValue(router.encryptedAddress());
     query.addBindValue(static_cast<quint32>(router.sessionType()));
     query.addBindValue(router.encryptedUsername());
     query.addBindValue(router.encryptedPassword());
-    query.addBindValue(router.encryptedDevicePrivateKey());
     query.addBindValue(router.encryptedDeviceTokenId());
     query.addBindValue(router.routerId());
 
@@ -709,8 +705,7 @@ std::optional<RouterConfig> Database::findRouter(qint64 router_id) const
     }
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("SELECT id, name, address, session_type, username, password, "
-                  "device_private_key, device_token_id "
+    query.prepare("SELECT id, name, address, session_type, username, password, device_token_id "
                   "FROM routers WHERE id=?");
     query.addBindValue(router_id);
 

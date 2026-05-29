@@ -68,7 +68,6 @@ private:
 
     const bool two_factor_enabled_;
     bool two_factor_completed_ = false;
-    QByteArray server_nonce_;
     QByteArray tentative_otp_secret_;
     QByteArray user_otp_secret_;
     quint64 user_otp_counter_ = 0;

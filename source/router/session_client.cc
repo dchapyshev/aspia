@@ -26,7 +26,6 @@
 #include "base/version_constants.h"
 #include "base/crypto/random.h"
 #include "base/crypto/totp.h"
-#include "base/peer/device_auth.h"
 #include "proto/relay_peer.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
@@ -164,9 +163,7 @@ void SessionClient::doTwoFactorChallenge()
     }
     else
     {
-        server_nonce_ = DeviceAuth::generateServerNonce();
         challenge->set_mode(proto::router::TWO_FACTOR_MODE_ACTIVE);
-        challenge->set_server_nonce(server_nonce_.toStdString());
     }
 
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
@@ -178,18 +175,15 @@ void SessionClient::readTwoFactorResponse(const proto::router::TwoFactorResponse
     const qint64 now = QDateTime::currentSecsSinceEpoch();
     const bool enroll = !tentative_otp_secret_.isEmpty();
 
-    if (!enroll && !response.token_signature().empty())
+    if (!enroll && !response.token_id().empty())
     {
-        // Signature path: client claims it already owns a device token. Verify and let it
-        // through without prompting for TOTP.
+        // Token path: client presented a previously issued bearer token. Validate by lookup
+        // and check that the token's owner matches the user that just passed SRP.
         const QByteArray token_id = QByteArray::fromStdString(response.token_id());
-        const QByteArray signature = QByteArray::fromStdString(response.token_signature());
 
         qint64 stored_user_id = 0;
-        QByteArray stored_pubkey;
-        if (!Database::instance().findClientDeviceToken(token_id, &stored_user_id, &stored_pubkey) ||
-            stored_user_id != userId() ||
-            !DeviceAuth::verifyChallenge(stored_pubkey, token_id, server_nonce_, signature))
+        if (!Database::instance().findClientDeviceToken(token_id, &stored_user_id) ||
+            stored_user_id != userId())
         {
             sendTwoFactorResult(proto::router::TWO_FACTOR_STATUS_INVALID_TOKEN);
             return;
@@ -245,15 +239,14 @@ void SessionClient::readTwoFactorResponse(const proto::router::TwoFactorResponse
         }
     }
 
+    // Any successful TOTP submission produces a fresh bearer token. Failure to persist the
+    // token is non-fatal: the user is still let in, they will be prompted for TOTP again
+    // next time.
     QByteArray new_token_id;
-    const QByteArray device_pubkey = QByteArray::fromStdString(response.device_public_key());
-    if (!device_pubkey.isEmpty())
+    if (!Database::instance().issueClientDeviceToken(userId(), &new_token_id))
     {
-        if (!Database::instance().issueClientDeviceToken(userId(), device_pubkey, &new_token_id))
-        {
-            CLOG(WARNING) << "Failed to issue device token for user" << userId();
-            new_token_id = QByteArray();
-        }
+        CLOG(WARNING) << "Failed to issue device token for user" << userId();
+        new_token_id = QByteArray();
     }
 
     sendTwoFactorResult(proto::router::TWO_FACTOR_STATUS_OK, new_token_id);

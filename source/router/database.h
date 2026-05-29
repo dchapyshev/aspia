@@ -103,22 +103,18 @@ public:
     bool updateUserOtpCounter(qint64 user_id, quint64 counter);
 
     //----------------------------------------------------------------------------------------------
-    // Client device tokens (refresh credentials issued during client sessions)
+    // Client device tokens (bearer "remember this device" credentials issued during client sessions)
     //----------------------------------------------------------------------------------------------
 
-    // Issues a new client device token for |user_id|, persisting the device's Ed25519 public
-    // key. On success writes the freshly generated token id into *token_id (kTokenIdSize bytes,
-    // see base/peer/device_auth.h). Returns false on database error.
-    bool issueClientDeviceToken(qint64 user_id, const QByteArray& device_public_key,
-        QByteArray* token_id);
+    // Issues a new client device token for |user_id|. On success writes the freshly generated
+    // opaque token id into *token_id. Returns false on database error.
+    bool issueClientDeviceToken(qint64 user_id, QByteArray* token_id);
 
-    // Looks up a token by id. On success writes the owner user_id and stored device public key
-    // into the out parameters. Returns false if the row is absent.
-    bool findClientDeviceToken(const QByteArray& token_id, qint64* user_id,
-        QByteArray* device_public_key) const;
+    // Looks up a token by id. On success writes the owner user_id into the out parameter.
+    // Returns false if the row is absent.
+    bool findClientDeviceToken(const QByteArray& token_id, qint64* user_id) const;
 
-    // Updates the token's last_used_at timestamp. Called after a successful challenge-response
-    // verification.
+    // Updates the token's last_used_at timestamp. Called after a successful token lookup.
     bool touchClientDeviceToken(const QByteArray& token_id);
 
     // Removes one specific client device token.

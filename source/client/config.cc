@@ -79,43 +79,44 @@ SecureByteArray decryptSecureBytes(const QByteArray& blob)
     return SecureByteArray(decryptBytes(blob));
 }
 
-// Double-wrap helpers for the device private key: the bytes are first sealed by the OS
+// Double-wrap helpers for the bearer device token: the bytes are first sealed by the OS
 // keystore (DPAPI on Windows; identity on platforms without a backing store) and only then
 // encrypted with the master-password-derived key like every other field. The OS layer binds
 // the secret to the user (and on Windows, optionally to the machine), so a copy of
-// |client.db3| moved to another user account cannot decrypt the private key even with the
-// master password - the attacker still needs an active session of the original user.
-QByteArray encryptDevicePrivateKey(const SecureByteArray& plaintext)
+// |client.db3| moved to another user account cannot present a usable token even when the
+// master password is known - the attacker still needs an active session of the original
+// user.
+QByteArray encryptDeviceToken(const QByteArray& plaintext)
 {
     if (plaintext.isEmpty())
         return QByteArray();
 
     QByteArray os_wrapped;
-    if (!OSCrypt::encryptBytes(plaintext.toByteArray(), &os_wrapped) || os_wrapped.isEmpty())
+    if (!OSCrypt::encryptBytes(plaintext, &os_wrapped) || os_wrapped.isEmpty())
     {
-        LOG(ERROR) << "OSCrypt::encryptBytes failed for device private key";
+        LOG(ERROR) << "OSCrypt::encryptBytes failed for device token";
         return QByteArray();
     }
 
     return encryptBytes(os_wrapped);
 }
 
-SecureByteArray decryptDevicePrivateKey(const QByteArray& blob)
+QByteArray decryptDeviceToken(const QByteArray& blob)
 {
     if (blob.isEmpty())
-        return SecureByteArray();
+        return QByteArray();
 
     const QByteArray os_wrapped = decryptBytes(blob);
     if (os_wrapped.isEmpty())
-        return SecureByteArray();
+        return QByteArray();
 
     QByteArray plaintext;
     if (!OSCrypt::decryptBytes(os_wrapped, &plaintext))
     {
-        LOG(ERROR) << "OSCrypt::decryptBytes failed for device private key";
-        return SecureByteArray();
+        LOG(ERROR) << "OSCrypt::decryptBytes failed for device token";
+        return QByteArray();
     }
-    return SecureByteArray(plaintext);
+    return plaintext;
 }
 
 } // namespace
@@ -199,33 +200,20 @@ void RouterConfig::setPassword(const SecureString& value)
 }
 
 //--------------------------------------------------------------------------------------------------
-SecureByteArray RouterConfig::devicePrivateKey() const
-{
-    return decryptDevicePrivateKey(encrypted_device_private_key_);
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterConfig::setDevicePrivateKey(const SecureByteArray& value)
-{
-    encrypted_device_private_key_ = encryptDevicePrivateKey(value);
-}
-
-//--------------------------------------------------------------------------------------------------
 QByteArray RouterConfig::deviceTokenId() const
 {
-    return decryptBytes(encrypted_device_token_id_);
+    return decryptDeviceToken(encrypted_device_token_id_);
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterConfig::setDeviceTokenId(const QByteArray& value)
 {
-    encrypted_device_token_id_ = encryptBytes(value);
+    encrypted_device_token_id_ = encryptDeviceToken(value);
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterConfig::clearDeviceCredentials()
+void RouterConfig::clearDeviceToken()
 {
-    encrypted_device_private_key_.clear();
     encrypted_device_token_id_.clear();
 }
 

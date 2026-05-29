@@ -148,9 +148,11 @@ public:
     void disconnectFromRouter();
     void updateConfig(const RouterConfig& config);
 
-    // Forwarded from the authenticator when the server demands a TOTP code. Callers respond by calling
-    // submitTwoFactorCode(); cancelling the dialog should trigger disconnectFromRouter() instead.
-    void submitTwoFactorCode(const QString& totp_code, bool request_new_device_token);
+    // Forwarded from the authenticator when the server demands a TOTP code. Callers respond by
+    // calling submitTwoFactorCode(); cancelling the dialog should trigger disconnectFromRouter()
+    // instead. Any successful TOTP submission causes the router to issue a fresh bearer token
+    // which Router persists locally - no client-side opt-in required.
+    void submitTwoFactorCode(const QString& totp_code);
 
     // Accessors.
     Status status() const { return status_; }
@@ -394,10 +396,6 @@ private:
     QString user_name_;
     SecureByteArray user_private_key_;
     std::unordered_map<qint64, DataCryptor> workspace_cryptors_;
-
-    // 2FA state. Only relevant between TwoFactorChallenge and UserKeys reception.
-    QByteArray server_nonce_;
-    SecureByteArray pending_device_private_key_;
 
     Q_DISABLE_COPY_MOVE(Router)
 };

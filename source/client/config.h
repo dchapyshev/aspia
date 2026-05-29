@@ -64,13 +64,17 @@ public:
     SecureString password() const;
     void setPassword(const SecureString& value);
 
-    SecureByteArray devicePrivateKey() const;
-    void setDevicePrivateKey(const SecureByteArray& value);
-
+    // Bearer "remember this device" token issued by the router after a successful TOTP
+    // submission. Empty until the user enrolls or enters a TOTP code at least once. The
+    // value is stored under a double wrap (OS keystore + master-password-derived key) so a
+    // copy of |client.db3| moved to another machine cannot present a usable token even if
+    // the master password is known.
     QByteArray deviceTokenId() const;
     void setDeviceTokenId(const QByteArray& value);
 
-    void clearDeviceCredentials();
+    // Clears the stored token. Called when the router rejects it (revoked remotely, password
+    // changed elsewhere) so the next login walks the TOTP path again.
+    void clearDeviceToken();
 
     // Direct access to ciphertext for database I/O.
     const QByteArray& encryptedDisplayName() const { return encrypted_display_name_; }
@@ -85,10 +89,6 @@ public:
     const QByteArray& encryptedPassword() const { return encrypted_password_; }
     void setEncryptedPassword(const QByteArray& blob) { encrypted_password_ = blob; }
 
-    const QByteArray& encryptedDevicePrivateKey() const { return encrypted_device_private_key_; }
-    void setEncryptedDevicePrivateKey(const QByteArray& blob)
-        { encrypted_device_private_key_ = blob; }
-
     const QByteArray& encryptedDeviceTokenId() const { return encrypted_device_token_id_; }
     void setEncryptedDeviceTokenId(const QByteArray& blob)
         { encrypted_device_token_id_ = blob; }
@@ -100,7 +100,6 @@ private:
     QByteArray encrypted_address_;
     QByteArray encrypted_username_;
     QByteArray encrypted_password_;
-    QByteArray encrypted_device_private_key_;
     QByteArray encrypted_device_token_id_;
 };
 

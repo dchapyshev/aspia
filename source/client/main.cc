@@ -153,7 +153,7 @@ void startRouterSession(const HostConfig& host,
             return;
         TwoFactorCodeDialog dialog;
         if (dialog.exec() == QDialog::Accepted)
-            router->submitTwoFactorCode(dialog.code(), true);
+            router->submitTwoFactorCode(dialog.code());
         else
             router->disconnectFromRouter();
     });
@@ -165,7 +165,7 @@ void startRouterSession(const HostConfig& host,
             return;
         TwoFactorEnrollDialog dialog(uri);
         if (dialog.exec() == QDialog::Accepted)
-            router->submitTwoFactorCode(dialog.code(), true);
+            router->submitTwoFactorCode(dialog.code());
         else
             router->disconnectFromRouter();
     });

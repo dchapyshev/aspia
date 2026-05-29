@@ -1280,7 +1280,7 @@ void RouterWidget::onTwoFactorCodeRequired()
 {
     TwoFactorCodeDialog dialog(this);
     if (dialog.exec() == QDialog::Accepted)
-        router_->submitTwoFactorCode(dialog.code(), true);
+        router_->submitTwoFactorCode(dialog.code());
     else
         router_->disconnectFromRouter();
 }
@@ -1290,7 +1290,7 @@ void RouterWidget::onTwoFactorEnrollment(qint64 /* router_id */, const QString& 
 {
     TwoFactorEnrollDialog dialog(otpauth_uri, this);
     if (dialog.exec() == QDialog::Accepted)
-        router_->submitTwoFactorCode(dialog.code(), true);
+        router_->submitTwoFactorCode(dialog.code());
     else
         router_->disconnectFromRouter();
 }

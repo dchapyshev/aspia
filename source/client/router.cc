@@ -30,7 +30,6 @@
 #include "base/net/address.h"
 #include "base/net/tcp_channel_ng.h"
 #include "base/peer/client_authenticator.h"
-#include "base/peer/device_auth.h"
 #include "client/database.h"
 #include "proto/key_exchange.h"
 
@@ -155,25 +154,11 @@ void Router::updateConfig(const RouterConfig& config)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::submitTwoFactorCode(const QString& totp_code, bool request_new_device_token)
+void Router::submitTwoFactorCode(const QString& totp_code)
 {
     proto::router::ClientToRouter message;
     proto::router::TwoFactorResponse* response = message.mutable_two_factor_response();
     response->set_totp_code(totp_code.toStdString());
-
-    if (request_new_device_token)
-    {
-        DeviceAuth::DeviceKey key = DeviceAuth::generateDeviceKey();
-        if (!key.isValid())
-        {
-            LOG(ERROR) << "Failed to generate device key pair";
-            disconnectFromRouter();
-            return;
-        }
-        pending_device_private_key_ = key.private_key;
-        response->set_device_public_key(key.public_key.toStdString());
-    }
-
     emitSend(proto::router::CHANNEL_ID_CLIENT, message);
 }
 
@@ -465,7 +450,6 @@ void Router::destroyChannel()
     pending_.clear();
     version_ = QVersionNumber();
     tcp_channel_.reset();
-    pending_device_private_key_ = SecureByteArray();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -531,27 +515,14 @@ void Router::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& cha
     {
         case proto::router::TWO_FACTOR_MODE_ACTIVE:
         {
-            server_nonce_ = QByteArray::fromStdString(challenge.server_nonce());
-
-            // Signature path: if we have a previously issued device token, sign the nonce
-            // and skip the TOTP prompt entirely.
+            // Token path: if we hold a token from a previous successful TOTP, present it and
+            // skip the prompt entirely. Otherwise ask the UI for a fresh TOTP code.
             const QByteArray token_id = config_.deviceTokenId();
-            const SecureByteArray private_key = config_.devicePrivateKey();
-
-            if (!token_id.isEmpty() && !private_key.isEmpty() && !server_nonce_.isEmpty())
+            if (!token_id.isEmpty())
             {
-                const QByteArray signature = DeviceAuth::signChallenge(private_key, token_id, server_nonce_);
-                if (signature.isEmpty())
-                {
-                    LOG(ERROR) << "Failed to sign device-token challenge";
-                    disconnectFromRouter();
-                    return;
-                }
-
                 proto::router::ClientToRouter message;
                 proto::router::TwoFactorResponse* response = message.mutable_two_factor_response();
                 response->set_token_id(token_id.toStdString());
-                response->set_token_signature(signature.toStdString());
                 emitSend(proto::router::CHANNEL_ID_CLIENT, message);
                 return;
             }
@@ -566,8 +537,8 @@ void Router::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& cha
             const QString uri = QString::fromStdString(challenge.otpauth_uri());
 
             // Drop any stale token from a previous account life. Enrollment implies a brand
-            // new TOTP secret, the old device binding is dead.
-            config_.clearDeviceCredentials();
+            // new TOTP secret, the old token is dead.
+            config_.clearDeviceToken();
             if (!Database::instance().modifyRouter(config_))
                 LOG(WARNING) << "Failed to clear stale device token";
 
@@ -595,7 +566,7 @@ void Router::readTwoFactorResult(const proto::router::TwoFactorResult& result)
             // The token we tried to authenticate with is gone (revoked, password changed,
             // database wiped). Clear the local copy so the next attempt falls back to the
             // TOTP path.
-            config_.clearDeviceCredentials();
+            config_.clearDeviceToken();
             if (!Database::instance().modifyRouter(config_))
                 LOG(WARNING) << "Failed to clear stale device token";
         }
@@ -605,18 +576,14 @@ void Router::readTwoFactorResult(const proto::router::TwoFactorResult& result)
     }
 
     const QByteArray new_token_id = QByteArray::fromStdString(result.new_token_id());
-    if (!new_token_id.isEmpty() && !pending_device_private_key_.isEmpty())
+    if (!new_token_id.isEmpty())
     {
         LOG(INFO) << "Device token issued for router" << config_.routerId();
 
         config_.setDeviceTokenId(new_token_id);
-        config_.setDevicePrivateKey(pending_device_private_key_);
-
         if (!Database::instance().modifyRouter(config_))
             LOG(WARNING) << "Failed to persist new device token for router" << config_.routerId();
     }
-
-    pending_device_private_key_ = SecureByteArray();
 }
 
 //--------------------------------------------------------------------------------------------------

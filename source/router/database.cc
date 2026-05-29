@@ -19,9 +19,9 @@
 #include "router/database.h"
 
 #include "base/logging.h"
+#include "base/crypto/generic_hash.h"
 #include "base/crypto/random.h"
 #include "base/files/base_paths.h"
-#include "base/peer/device_auth.h"
 #include "proto/router_constants.h"
 
 #include <utility>
@@ -38,6 +38,7 @@
 namespace {
 
 const char kConnectionName[] = "router_database";
+constexpr int kClientDeviceTokenSize = 32;
 
 //--------------------------------------------------------------------------------------------------
 QString databaseDirectory()
@@ -252,15 +253,15 @@ bool ensureSchema(QSqlDatabase& sql_db)
         }
     }
 
-    // Device-bound refresh credentials issued during client sessions (admin/host sessions do
-    // not use this flow). Each row pairs a randomly generated token_id with the Ed25519 public
-    // key the client proves possession of via challenge-response on every subsequent connection
-    // (see DeviceAuth in base/peer/). No expiration is enforced - tokens live until they are
-    // revoked explicitly (admin action) or implicitly (password change, user removal cascade).
+    // Bearer "remember this device" tokens issued during client sessions (admin/host sessions
+    // do not use this flow). The raw token never reaches the database - only its SHA-256
+    // hash is stored, so a leak of |router.db3| does not yield usable tokens. Device-binding
+    // is provided by the OS keystore wrap that protects the raw token on the client side.
+    // No expiration is enforced - rows live until they are revoked explicitly (admin action)
+    // or implicitly (password change, user removal cascade).
     if (!run("CREATE TABLE IF NOT EXISTS \"client_device_tokens\" ("
-             "\"token_id\" BLOB PRIMARY KEY,"
+             "\"token_hash\" BLOB PRIMARY KEY,"
              "\"user_id\" INTEGER NOT NULL,"
-             "\"device_public_key\" BLOB NOT NULL,"
              "\"created_at\" INTEGER NOT NULL DEFAULT 0,"
              "\"last_used_at\" INTEGER NOT NULL DEFAULT 0,"
              "FOREIGN KEY(\"user_id\") REFERENCES \"users\"(\"id\") ON DELETE CASCADE)"))
@@ -647,8 +648,7 @@ bool Database::updateUserOtpCounter(qint64 user_id, quint64 counter)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::issueClientDeviceToken(qint64 user_id, const QByteArray& device_public_key,
-    QByteArray* token_id)
+bool Database::issueClientDeviceToken(qint64 user_id, QByteArray* token_id)
 {
     CHECK(token_id);
     *token_id = QByteArray();
@@ -659,22 +659,20 @@ bool Database::issueClientDeviceToken(qint64 user_id, const QByteArray& device_p
         return false;
     }
 
-    if (device_public_key.size() != DeviceAuth::kPublicKeySize)
-    {
-        LOG(ERROR) << "Invalid device public key size:" << device_public_key.size();
-        return false;
-    }
-
-    const QByteArray new_token_id = Random::byteArray(DeviceAuth::kTokenIdSize);
+    // Generate the raw token, hand it back to the caller (it will leave the router to the
+    // client) and persist only its SHA-256 hash. Hashing without a salt is safe here because
+    // the input is uniformly random CSPRNG output - precomputation/rainbow tables make no
+    // sense against 2^256 of entropy.
+    const QByteArray new_token_id = Random::byteArray(kClientDeviceTokenSize);
+    const QByteArray token_hash = GenericHash::hash(GenericHash::SHA256, new_token_id);
     const qint64 now = QDateTime::currentSecsSinceEpoch();
 
     QSqlQuery query(connection());
     query.prepare(QStringLiteral(
-        "INSERT INTO client_device_tokens (token_id, user_id, device_public_key, created_at, last_used_at) "
-        "VALUES (?, ?, ?, ?, ?)"));
-    query.addBindValue(new_token_id);
+        "INSERT INTO client_device_tokens (token_hash, user_id, created_at, last_used_at) "
+        "VALUES (?, ?, ?, ?)"));
+    query.addBindValue(token_hash);
     query.addBindValue(user_id);
-    query.addBindValue(device_public_key);
     query.addBindValue(now);
     query.addBindValue(now);
 
@@ -689,13 +687,10 @@ bool Database::issueClientDeviceToken(qint64 user_id, const QByteArray& device_p
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::findClientDeviceToken(const QByteArray& token_id, qint64* user_id,
-    QByteArray* device_public_key) const
+bool Database::findClientDeviceToken(const QByteArray& token_id, qint64* user_id) const
 {
     CHECK(user_id);
-    CHECK(device_public_key);
     *user_id = 0;
-    *device_public_key = QByteArray();
 
     if (!isValid())
     {
@@ -703,12 +698,14 @@ bool Database::findClientDeviceToken(const QByteArray& token_id, qint64* user_id
         return false;
     }
 
-    if (token_id.size() != DeviceAuth::kTokenIdSize)
+    if (token_id.size() != kClientDeviceTokenSize)
         return false;
 
+    const QByteArray token_hash = GenericHash::hash(GenericHash::SHA256, token_id);
+
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral("SELECT user_id, device_public_key FROM client_device_tokens WHERE token_id=?"));
-    query.addBindValue(token_id);
+    query.prepare(QStringLiteral("SELECT user_id FROM client_device_tokens WHERE token_hash=?"));
+    query.addBindValue(token_hash);
 
     if (!query.exec())
     {
@@ -720,7 +717,6 @@ bool Database::findClientDeviceToken(const QByteArray& token_id, qint64* user_id
         return false;
 
     *user_id = query.value(0).toLongLong();
-    *device_public_key = query.value(1).toByteArray();
     return true;
 }
 
@@ -733,10 +729,12 @@ bool Database::touchClientDeviceToken(const QByteArray& token_id)
         return false;
     }
 
+    const QByteArray token_hash = GenericHash::hash(GenericHash::SHA256, token_id);
+
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral("UPDATE client_device_tokens SET last_used_at=? WHERE token_id=?"));
+    query.prepare(QStringLiteral("UPDATE client_device_tokens SET last_used_at=? WHERE token_hash=?"));
     query.addBindValue(QDateTime::currentSecsSinceEpoch());
-    query.addBindValue(token_id);
+    query.addBindValue(token_hash);
 
     if (!query.exec())
     {
@@ -755,9 +753,11 @@ bool Database::revokeClientDeviceToken(const QByteArray& token_id)
         return false;
     }
 
+    const QByteArray token_hash = GenericHash::hash(GenericHash::SHA256, token_id);
+
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral("DELETE FROM client_device_tokens WHERE token_id=?"));
-    query.addBindValue(token_id);
+    query.prepare(QStringLiteral("DELETE FROM client_device_tokens WHERE token_hash=?"));
+    query.addBindValue(token_hash);
 
     if (!query.exec())
     {

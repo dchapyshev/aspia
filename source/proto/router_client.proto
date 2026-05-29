@@ -206,13 +206,12 @@ message Notification
 //
 // Flow:
 //   1. Router picks |TwoFactorMode| based on the user's stored TOTP state and sends
-//      TwoFactorChallenge (with |server_nonce| for MODE_ACTIVE; with |otpauth_uri| for
-//      MODE_ENROLL).
+//      TwoFactorChallenge (empty for MODE_ACTIVE; carrying |otpauth_uri| for MODE_ENROLL).
 //   2. Client answers with TwoFactorResponse. In MODE_ACTIVE the client chooses by itself:
-//      either (a) sign |server_nonce| with the device private key and submit the stored
-//      |token_id| + |token_signature|, or (b) ask the user for a fresh |totp_code| (and
-//      optionally include a new |device_public_key| to receive a new device token).
-//   3. Router validates and sends TwoFactorResult.
+//      either (a) submit the |token_id| it stored after a previous TOTP success, or (b)
+//      ask the user for a fresh |totp_code|.
+//   3. Router validates and sends TwoFactorResult. Any TOTP success carries a fresh
+//      |new_token_id| that supersedes whatever token the client had.
 //   4. On success the router proceeds to send UserKeys; on failure it disconnects the client.
 
 enum TwoFactorMode
@@ -240,32 +239,24 @@ message TwoFactorChallenge
 {
     TwoFactorMode mode = 1;
 
-    // MODE_ACTIVE: random nonce the client signs together with its token_id if it wants to
-    // skip the TOTP prompt.
-    bytes server_nonce = 2;
-
     // MODE_ENROLL: ready-to-use otpauth://totp/... URI for QR rendering. The Base32 secret
     // is embedded as the |secret| query parameter; the client extracts it from there for
     // the manual-entry fallback.
-    string otpauth_uri = 3;
+    string otpauth_uri = 2;
 }
 
 // Client to router.
 message TwoFactorResponse
 {
-    // MODE_ACTIVE, signature path: previously issued token id and Ed25519 signature over
-    // (token_id || server_nonce). When both are present the router ignores |totp_code|.
-    bytes token_id        = 1;
-    bytes token_signature = 2;
+    // MODE_ACTIVE, token path: previously issued opaque token id. When present the router
+    // ignores |totp_code| and accepts the connection iff the token matches the
+    // authenticated user. The token is bound to the client device by the OS keystore wrap
+    // around its storage, so a copy of the client database moved to another machine cannot
+    // present a usable token.
+    bytes token_id = 1;
 
     // MODE_ACTIVE, TOTP path and MODE_ENROLL: the 6-digit code the user typed in.
-    string totp_code = 3;
-
-    // Optional: client's Ed25519 public key. When present and the response authenticates
-    // successfully via TOTP/enrollment, the router persists it together with a freshly
-    // issued |new_token_id| (see TwoFactorResult). Ignored on the signature path - the
-    // existing token is reused.
-    bytes device_public_key = 4;
+    string totp_code = 2;
 }
 
 // Router to client.
@@ -273,8 +264,10 @@ message TwoFactorResult
 {
     TwoFactorStatus status = 1;
 
-    // Populated when the router issued a new device token in response to a successful TOTP
-    // submission accompanied by |device_public_key|. Empty otherwise.
+    // Populated when the router issued a fresh device token in response to a successful
+    // TOTP submission (any successful TOTP, including enrollment, produces a new token).
+    // Empty when the result acknowledges a token-path response - the existing token stays
+    // valid in that case.
     bytes new_token_id = 2;
 }
 
