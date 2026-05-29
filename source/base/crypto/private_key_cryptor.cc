@@ -63,7 +63,7 @@ QByteArray PrivateKeyCryptor::encrypt(const SecureByteArray& private_key,
         return QByteArray();
     }
 
-    DataCryptor cryptor(CipherType::CHACHA20_POLY1305, derived_key);
+    DataCryptor cryptor(CipherType::AES256_GCM, derived_key);
     std::optional<QByteArray> encrypted = cryptor.encrypt(private_key.toByteArray());
     if (!encrypted.has_value())
     {
@@ -105,7 +105,7 @@ SecureByteArray PrivateKeyCryptor::decrypt(const QByteArray& encrypted_private_k
         return SecureByteArray();
     }
 
-    DataCryptor cryptor(CipherType::CHACHA20_POLY1305, derived_key);
+    DataCryptor cryptor(CipherType::AES256_GCM, derived_key);
     std::optional<QByteArray> decrypted = cryptor.decrypt(encrypted_private_key);
     if (!decrypted.has_value())
     {

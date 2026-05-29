@@ -379,7 +379,7 @@ bool JsonBackup::exportToFile(QWidget* parent, const QString& file_path)
 
     QByteArray salt = Random::byteArray(kSaltSize);
     SecureByteArray key(PasswordHash::hash(PasswordHash::ARGON2ID, dialog.password(), salt));
-    DataCryptor cryptor(CipherType::CHACHA20_POLY1305, key);
+    DataCryptor cryptor(CipherType::AES256_GCM, key);
 
     std::optional<QByteArray> verifier = cryptor.encrypt(Random::byteArray(kVerifierPayloadSize));
     if (!verifier.has_value())
@@ -486,12 +486,12 @@ bool JsonBackup::importFromFile(QWidget* parent, const QString& file_path)
         return false;
     }
 
-    UnlockDialog dialog(parent, file_path, tr("ChaCha20 + Poly1305 (256-bit key)"));
+    UnlockDialog dialog(parent, file_path, tr("AES GCM (256-bit key)"));
     if (dialog.exec() != QDialog::Accepted)
         return false;
 
     SecureByteArray key(PasswordHash::hash(PasswordHash::ARGON2ID, dialog.password(), salt));
-    auto cryptor = std::make_unique<DataCryptor>(CipherType::CHACHA20_POLY1305, key);
+    auto cryptor = std::make_unique<DataCryptor>(CipherType::AES256_GCM, key);
 
     if (!cryptor->decrypt(verifier).has_value())
     {

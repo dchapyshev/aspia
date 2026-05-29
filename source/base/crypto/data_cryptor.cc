@@ -245,8 +245,8 @@ std::optional<QByteArray> DataCryptor::decrypt(QByteArrayView in) const
 DataCryptor& DataCryptor::instance()
 {
     // Process-wide singleton so the master key is shared across all threads (GUI and IO).
-    // EVP_CIPHER_CTX state is guarded by the per-instance mutex. ChaCha20-Poly1305 is pinned
+    // EVP_CIPHER_CTX state is guarded by the per-instance mutex. AES256 GCM is pinned
     // here because the existing client database was written with that cipher.
-    static DataCryptor cryptor(CipherType::CHACHA20_POLY1305);
+    static DataCryptor cryptor(CipherType::AES256_GCM);
     return cryptor;
 }

@@ -47,7 +47,7 @@ QByteArray SealedBox::seal(QByteArrayView plaintext, const QByteArray& recipient
         return QByteArray();
     }
 
-    DataCryptor cryptor(CipherType::CHACHA20_POLY1305, shared_secret);
+    DataCryptor cryptor(CipherType::AES256_GCM, shared_secret);
     std::optional<QByteArray> encrypted = cryptor.encrypt(plaintext);
     if (!encrypted.has_value())
     {
@@ -84,6 +84,6 @@ std::optional<QByteArray> SealedBox::open(QByteArrayView sealed, const KeyPair& 
         return std::nullopt;
     }
 
-    DataCryptor cryptor(CipherType::CHACHA20_POLY1305, shared_secret);
+    DataCryptor cryptor(CipherType::AES256_GCM, shared_secret);
     return cryptor.decrypt(ciphertext);
 }

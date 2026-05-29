@@ -27,7 +27,7 @@ class SecureString;
 // Symmetric AEAD wrapper for a private key protected by a user password.
 //
 // The encryption key is derived from the password and a per-user salt via Argon2id, then used
-// to encrypt the private key bytes with ChaCha20-Poly1305. The salt must be persisted alongside
+// to encrypt the private key bytes with AES256 GCM. The salt must be persisted alongside
 // the ciphertext so the key can be re-derived on decrypt.
 class PrivateKeyCryptor
 {

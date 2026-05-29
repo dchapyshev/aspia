@@ -30,7 +30,7 @@ class KeyPair;
 //
 // Sender knows only the recipient's public key. For each call seal() generates a fresh
 // ephemeral X25519 keypair, derives a shared secret with recipient's public key and encrypts
-// the message via ChaCha20-Poly1305. The ephemeral public key is prepended to the ciphertext
+// the message via AES256 GCM. The ephemeral public key is prepended to the ciphertext
 // so the recipient can reconstruct the shared secret with their private key.
 //
 // Output layout: ephemeral_pk (32) || iv (12) || ciphertext || tag (16).
