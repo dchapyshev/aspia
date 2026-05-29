@@ -18,14 +18,6 @@
 
 #include "router/database.h"
 
-#include "base/logging.h"
-#include "base/crypto/generic_hash.h"
-#include "base/crypto/random.h"
-#include "base/files/base_paths.h"
-#include "proto/router_constants.h"
-
-#include <utility>
-
 #include <QDateTime>
 #include <QDir>
 #include <QFileInfo>
@@ -35,10 +27,19 @@
 #include <QSqlQuery>
 #include <QVariant>
 
+#include <utility>
+
+#include "base/logging.h"
+#include "base/crypto/generic_hash.h"
+#include "base/crypto/random.h"
+#include "base/files/base_paths.h"
+#include "proto/router_constants.h"
+
 namespace {
 
 const char kConnectionName[] = "router_database";
 constexpr int kClientDeviceTokenSize = 32;
+constexpr qint64 kClientDeviceTokenTtlSec = 7 * 24 * 3600; // 7 days, sliding window.
 
 //--------------------------------------------------------------------------------------------------
 QString databaseDirectory()
@@ -77,7 +78,7 @@ RouterUser readUser(const QSqlQuery& query)
 bool hasColumn(QSqlDatabase& sql_db, const QString& table, const QString& column)
 {
     QSqlQuery query(sql_db);
-    query.prepare(QStringLiteral("SELECT 1 FROM pragma_table_info(?) WHERE name=?"));
+    query.prepare("SELECT 1 FROM pragma_table_info(?) WHERE name=?");
     query.addBindValue(table);
     query.addBindValue(column);
 
@@ -257,8 +258,10 @@ bool ensureSchema(QSqlDatabase& sql_db)
     // do not use this flow). The raw token never reaches the database - only its SHA-256
     // hash is stored, so a leak of |router.db3| does not yield usable tokens. Device-binding
     // is provided by the OS keystore wrap that protects the raw token on the client side.
-    // No expiration is enforced - rows live until they are revoked explicitly (admin action)
-    // or implicitly (password change, user removal cascade).
+    // Tokens use a sliding |kClientDeviceTokenTtlSec| TTL: every successful presentation
+    // refreshes |last_used_at|, and rows whose last use predates the TTL are pruned lazily
+    // on the next lookup attempt. Explicit revocation (admin action, password change, user
+    // removal cascade) still wipes rows out-of-band.
     if (!run("CREATE TABLE IF NOT EXISTS \"client_device_tokens\" ("
              "\"token_hash\" BLOB PRIMARY KEY,"
              "\"user_id\" INTEGER NOT NULL,"
@@ -359,9 +362,9 @@ QList<RouterUser> Database::userList() const
     }
 
     QSqlQuery query(connection());
-    if (!query.exec(QStringLiteral(
-        "SELECT id, name, \"group\", salt, verifier, sessions, flags, public_key, wrap_private_key, "
-        "wrap_salt, otp_secret, otp_counter FROM users")))
+    if (!query.exec("SELECT id, name, \"group\", salt, verifier, sessions, flags, public_key, "
+                    "wrap_private_key, wrap_salt, otp_secret, otp_counter "
+                    "FROM users"))
     {
         LOG(ERROR) << "Unable to get user list:" << query.lastError();
         return {};
@@ -390,10 +393,9 @@ bool Database::addUser(const RouterUser& user)
     }
 
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral(
-        "INSERT INTO users (id, name, \"group\", salt, verifier, sessions, flags, "
+    query.prepare("INSERT INTO users (id, name, \"group\", salt, verifier, sessions, flags, "
         "public_key, wrap_private_key, wrap_salt) "
-        "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)"));
+        "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     query.addBindValue(user.name);
     query.addBindValue(user.group);
     query.addBindValue(user.salt);
@@ -441,7 +443,7 @@ bool Database::modifyUser(const RouterUser& user)
     QByteArray old_verifier;
     {
         QSqlQuery select(sql_db);
-        select.prepare(QStringLiteral("SELECT salt, verifier FROM users WHERE id=?"));
+        select.prepare("SELECT salt, verifier FROM users WHERE id=?");
         select.addBindValue(user.entry_id);
 
         if (!select.exec())
@@ -459,9 +461,8 @@ bool Database::modifyUser(const RouterUser& user)
     }
 
     QSqlQuery query(sql_db);
-    query.prepare(QStringLiteral(
-        "UPDATE users SET name=?, \"group\"=?, salt=?, verifier=?, sessions=?, flags=?, "
-        "public_key=?, wrap_private_key=?, wrap_salt=? WHERE id=?"));
+    query.prepare("UPDATE users SET name=?, \"group\"=?, salt=?, verifier=?, sessions=?, flags=?, "
+        "public_key=?, wrap_private_key=?, wrap_salt=? WHERE id=?");
     query.addBindValue(user.name);
     query.addBindValue(user.group);
     query.addBindValue(user.salt);
@@ -484,7 +485,7 @@ bool Database::modifyUser(const RouterUser& user)
     if (password_changed)
     {
         QSqlQuery revoke(sql_db);
-        revoke.prepare(QStringLiteral("DELETE FROM client_device_tokens WHERE user_id=?"));
+        revoke.prepare("DELETE FROM client_device_tokens WHERE user_id=?");
         revoke.addBindValue(user.entry_id);
 
         if (!revoke.exec())
@@ -515,7 +516,7 @@ bool Database::removeUser(qint64 entry_id)
     }
 
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral("DELETE FROM users WHERE id=?"));
+    query.prepare("DELETE FROM users WHERE id=?");
     query.addBindValue(entry_id);
 
     if (!query.exec())
@@ -537,9 +538,9 @@ RouterUser Database::findUser(const QString& username) const
     }
 
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral(
-        "SELECT id, name, \"group\", salt, verifier, sessions, flags, public_key, wrap_private_key, "
-        "wrap_salt, otp_secret, otp_counter FROM users WHERE name=?"));
+    query.prepare("SELECT id, name, \"group\", salt, verifier, sessions, flags, public_key, "
+                  "wrap_private_key, wrap_salt, otp_secret, otp_counter "
+                  "FROM users WHERE name=?");
     query.addBindValue(username);
 
     if (!query.exec())
@@ -564,9 +565,9 @@ RouterUser Database::findUser(qint64 entry_id) const
     }
 
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral(
-        "SELECT id, name, \"group\", salt, verifier, sessions, flags, public_key, wrap_private_key, "
-        "wrap_salt, otp_secret, otp_counter FROM users WHERE id=?"));
+    query.prepare("SELECT id, name, \"group\", salt, verifier, sessions, flags, public_key, "
+                  "wrap_private_key, wrap_salt, otp_secret, otp_counter "
+                  "FROM users WHERE id=?");
     query.addBindValue(entry_id);
 
     if (!query.exec())
@@ -591,7 +592,7 @@ bool Database::setUserOtp(qint64 user_id, const QByteArray& encrypted_secret, qu
     }
 
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral("UPDATE users SET otp_secret=?, otp_counter=? WHERE id=?"));
+    query.prepare("UPDATE users SET otp_secret=?, otp_counter=? WHERE id=?");
     query.addBindValue(encrypted_secret);
     query.addBindValue(counter);
     query.addBindValue(user_id);
@@ -614,7 +615,7 @@ bool Database::clearUserOtp(qint64 user_id)
     }
 
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral("UPDATE users SET otp_secret=X'', otp_counter=0 WHERE id=?"));
+    query.prepare("UPDATE users SET otp_secret=X'', otp_counter=0 WHERE id=?");
     query.addBindValue(user_id);
 
     if (!query.exec())
@@ -635,7 +636,7 @@ bool Database::updateUserOtpCounter(qint64 user_id, quint64 counter)
     }
 
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral("UPDATE users SET otp_counter=? WHERE id=?"));
+    query.prepare("UPDATE users SET otp_counter=? WHERE id=?");
     query.addBindValue(counter);
     query.addBindValue(user_id);
 
@@ -668,9 +669,8 @@ bool Database::issueClientDeviceToken(qint64 user_id, QByteArray* token_id)
     const qint64 now = QDateTime::currentSecsSinceEpoch();
 
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral(
-        "INSERT INTO client_device_tokens (token_hash, user_id, created_at, last_used_at) "
-        "VALUES (?, ?, ?, ?)"));
+    query.prepare("INSERT INTO client_device_tokens (token_hash, user_id, created_at, last_used_at) "
+                  "VALUES (?, ?, ?, ?)");
     query.addBindValue(token_hash);
     query.addBindValue(user_id);
     query.addBindValue(now);
@@ -704,7 +704,7 @@ bool Database::findClientDeviceToken(const QByteArray& token_id, qint64* user_id
     const QByteArray token_hash = GenericHash::hash(GenericHash::SHA256, token_id);
 
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral("SELECT user_id FROM client_device_tokens WHERE token_hash=?"));
+    query.prepare("SELECT user_id, last_used_at FROM client_device_tokens WHERE token_hash=?");
     query.addBindValue(token_hash);
 
     if (!query.exec())
@@ -715,6 +715,20 @@ bool Database::findClientDeviceToken(const QByteArray& token_id, qint64* user_id
 
     if (!query.next())
         return false;
+
+    const qint64 last_used_at = query.value(1).toLongLong();
+    const qint64 now = QDateTime::currentSecsSinceEpoch();
+    if (now - last_used_at > kClientDeviceTokenTtlSec)
+    {
+        // Lazy GC: drop the row so the table does not accumulate stale entries. The caller
+        // will treat the result as INVALID_TOKEN and walk the user back through TOTP.
+        QSqlQuery prune(connection());
+        prune.prepare("DELETE FROM client_device_tokens WHERE token_hash=?");
+        prune.addBindValue(token_hash);
+        if (!prune.exec())
+            LOG(WARNING) << "Unable to prune expired client device token:" << prune.lastError();
+        return false;
+    }
 
     *user_id = query.value(0).toLongLong();
     return true;
@@ -732,7 +746,7 @@ bool Database::touchClientDeviceToken(const QByteArray& token_id)
     const QByteArray token_hash = GenericHash::hash(GenericHash::SHA256, token_id);
 
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral("UPDATE client_device_tokens SET last_used_at=? WHERE token_hash=?"));
+    query.prepare("UPDATE client_device_tokens SET last_used_at=? WHERE token_hash=?");
     query.addBindValue(QDateTime::currentSecsSinceEpoch());
     query.addBindValue(token_hash);
 
@@ -756,7 +770,7 @@ bool Database::revokeClientDeviceToken(const QByteArray& token_id)
     const QByteArray token_hash = GenericHash::hash(GenericHash::SHA256, token_id);
 
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral("DELETE FROM client_device_tokens WHERE token_hash=?"));
+    query.prepare("DELETE FROM client_device_tokens WHERE token_hash=?");
     query.addBindValue(token_hash);
 
     if (!query.exec())
@@ -777,7 +791,7 @@ bool Database::revokeUserClientDeviceTokens(qint64 user_id)
     }
 
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral("DELETE FROM client_device_tokens WHERE user_id=?"));
+    query.prepare("DELETE FROM client_device_tokens WHERE user_id=?");
     query.addBindValue(user_id);
 
     if (!query.exec())
@@ -808,7 +822,7 @@ std::string_view Database::hostId(const QByteArray& key_hash, HostId* host_id) c
     }
 
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral("SELECT id FROM hosts WHERE key=?"));
+    query.prepare("SELECT id FROM hosts WHERE key=?");
     query.addBindValue(key_hash);
 
     if (!query.exec())
@@ -827,7 +841,7 @@ std::string_view Database::hostId(const QByteArray& key_hash, HostId* host_id) c
     // while it was offline will be matched here; the caller is expected to send the remove
     // command using the returned host_id and wait for the ack before finalizing the deletion.
     QSqlQuery pending(connection());
-    pending.prepare(QStringLiteral("SELECT host_id FROM hosts_remove WHERE key=?"));
+    pending.prepare("SELECT host_id FROM hosts_remove WHERE key=?");
     pending.addBindValue(key_hash);
 
     if (!pending.exec())
@@ -859,7 +873,7 @@ bool Database::addHost(const QByteArray& key_hash)
     }
 
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral("INSERT INTO hosts (id, key) VALUES (NULL, ?)"));
+    query.prepare("INSERT INTO hosts (id, key) VALUES (NULL, ?)");
     query.addBindValue(key_hash);
 
     if (!query.exec())
@@ -893,11 +907,10 @@ bool Database::updateHostInfo(HostId host_id, const QString& computer_name, cons
     // enough. If display name has never been set by the admin we seed it from computer_name so
     // the host has a readable label in the UI.
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral(
-        "UPDATE hosts SET "
+    query.prepare("UPDATE hosts SET "
         "display_name = CASE WHEN display_name='' THEN ? ELSE display_name END, "
         "computer_name=?, cpu_arch=?, version=?, os_name=?, address=?, last_connect=? "
-        "WHERE id=?"));
+        "WHERE id=?");
     query.addBindValue(computer_name);
     query.addBindValue(computer_name);
     query.addBindValue(cpu_arch);
@@ -926,7 +939,7 @@ qint64 Database::hostWorkspaceId(HostId host_id) const
     }
 
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral("SELECT workspace_id FROM hosts WHERE id=?"));
+    query.prepare("SELECT workspace_id FROM hosts WHERE id=?");
     query.addBindValue(host_id);
 
     if (!query.exec())
@@ -959,9 +972,8 @@ bool Database::modifyHost(HostId host_id, qint64 group_id, const QString& displa
     const qint64 timestamp = QDateTime::currentSecsSinceEpoch();
 
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral(
-        "UPDATE hosts SET display_name=?, group_id=?, comment=?, user_name=?, password=?, "
-        "last_modify=? WHERE id=?"));
+    query.prepare("UPDATE hosts SET display_name=?, group_id=?, comment=?, user_name=?, password=?, "
+        "last_modify=? WHERE id=?");
     query.addBindValue(display_name);
     query.addBindValue(group_id);
     query.addBindValue(comment);
@@ -988,14 +1000,13 @@ QList<HostInfo> Database::hosts(qint64 start_item, qint64 end_item) const
         return {};
     }
 
-    QString sql = QStringLiteral(
-        "SELECT id, workspace_id, group_id, display_name, computer_name, "
-        "cpu_arch, version, os_name, address, "
-        "comment, user_name, password, last_connect, last_modify FROM hosts");
+    QString sql = "SELECT id, workspace_id, group_id, display_name, computer_name, cpu_arch, "
+                  "version, os_name, address, comment, user_name, password, last_connect, last_modify "
+                  "FROM hosts";
 
     const bool paginate = end_item > 0 && end_item >= start_item;
     if (paginate)
-        sql += QStringLiteral(" LIMIT ? OFFSET ?");
+        sql += " LIMIT ? OFFSET ?";
 
     QSqlQuery query(connection());
     query.prepare(sql);
@@ -1045,15 +1056,13 @@ QList<HostInfo> Database::hosts(
         return {};
     }
 
-    QString sql = QStringLiteral(
-        "SELECT id, workspace_id, group_id, display_name, computer_name, "
-        "cpu_arch, version, os_name, address, "
-        "comment, user_name, password, last_connect, last_modify "
-        "FROM hosts WHERE workspace_id=? AND group_id=?");
+    QString sql = "SELECT id, workspace_id, group_id, display_name, computer_name, cpu_arch, "
+                  "version, os_name, address, comment, user_name, password, last_connect, last_modify "
+                  "FROM hosts WHERE workspace_id=? AND group_id=?";
 
     const bool paginate = end_item > 0 && end_item >= start_item;
     if (paginate)
-        sql += QStringLiteral(" LIMIT ? OFFSET ?");
+        sql += " LIMIT ? OFFSET ?";
 
     QSqlQuery query(connection());
     query.prepare(sql);
@@ -1105,7 +1114,7 @@ qint64 Database::hostCount() const
     }
 
     QSqlQuery query(connection());
-    if (!query.exec(QStringLiteral("SELECT COUNT(*) FROM hosts")))
+    if (!query.exec("SELECT COUNT(*) FROM hosts"))
     {
         LOG(ERROR) << "Unable to count hosts:" << query.lastError();
         return 0;
@@ -1127,7 +1136,7 @@ qint64 Database::hostCount(qint64 workspace_id, qint64 group_id) const
     }
 
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral("SELECT COUNT(*) FROM hosts WHERE workspace_id=? AND group_id=?"));
+    query.prepare("SELECT COUNT(*) FROM hosts WHERE workspace_id=? AND group_id=?");
     query.addBindValue(workspace_id);
     query.addBindValue(group_id);
 
@@ -1166,7 +1175,7 @@ bool Database::scheduleHostRemoval(HostId host_id)
     }
 
     QSqlQuery select(sql_db);
-    select.prepare(QStringLiteral("SELECT key FROM hosts WHERE id=?"));
+    select.prepare("SELECT key FROM hosts WHERE id=?");
     select.addBindValue(host_id);
 
     if (!select.exec())
@@ -1187,8 +1196,7 @@ bool Database::scheduleHostRemoval(HostId host_id)
     const qint64 timestamp = QDateTime::currentSecsSinceEpoch();
 
     QSqlQuery insert(sql_db);
-    insert.prepare(QStringLiteral(
-        "INSERT INTO hosts_remove (host_id, key, timestamp) VALUES (?, ?, ?)"));
+    insert.prepare("INSERT INTO hosts_remove (host_id, key, timestamp) VALUES (?, ?, ?)");
     insert.addBindValue(host_id);
     insert.addBindValue(key);
     insert.addBindValue(timestamp);
@@ -1201,7 +1209,7 @@ bool Database::scheduleHostRemoval(HostId host_id)
     }
 
     QSqlQuery del(sql_db);
-    del.prepare(QStringLiteral("DELETE FROM hosts WHERE id=?"));
+    del.prepare("DELETE FROM hosts WHERE id=?");
     del.addBindValue(host_id);
 
     if (!del.exec())
@@ -1234,7 +1242,7 @@ bool Database::hasPendingHostRemoval(HostId host_id) const
         return false;
 
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral("SELECT 1 FROM hosts_remove WHERE host_id=?"));
+    query.prepare("SELECT 1 FROM hosts_remove WHERE host_id=?");
     query.addBindValue(host_id);
 
     if (!query.exec())
@@ -1262,7 +1270,7 @@ bool Database::finalizeHostRemoval(HostId host_id)
     }
 
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral("DELETE FROM hosts_remove WHERE host_id=?"));
+    query.prepare("DELETE FROM hosts_remove WHERE host_id=?");
     query.addBindValue(host_id);
 
     if (!query.exec())
@@ -1284,7 +1292,7 @@ QList<Workspace> Database::workspaceList() const
     }
 
     QSqlQuery query(connection());
-    if (!query.exec(QStringLiteral("SELECT id, name, comment FROM workspaces")))
+    if (!query.exec("SELECT id, name, comment FROM workspaces"))
     {
         LOG(ERROR) << "Unable to get workspace list:" << query.lastError();
         return {};
@@ -1319,7 +1327,7 @@ Workspace Database::findWorkspace(qint64 entry_id) const
     }
 
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral("SELECT id, name, comment FROM workspaces WHERE id=?"));
+    query.prepare("SELECT id, name, comment FROM workspaces WHERE id=?");
     query.addBindValue(entry_id);
 
     if (!query.exec())
@@ -1375,7 +1383,7 @@ std::string_view Database::addWorkspace(const QString& name, const QByteArray& c
     }
 
     QSqlQuery check(sql_db);
-    check.prepare(QStringLiteral("SELECT 1 FROM workspaces WHERE name=?"));
+    check.prepare("SELECT 1 FROM workspaces WHERE name=?");
     check.addBindValue(name);
 
     if (!check.exec())
@@ -1392,8 +1400,7 @@ std::string_view Database::addWorkspace(const QString& name, const QByteArray& c
     }
 
     QSqlQuery insert_workspace(sql_db);
-    insert_workspace.prepare(QStringLiteral(
-        "INSERT INTO workspaces (id, name, comment) VALUES (NULL, ?, ?)"));
+    insert_workspace.prepare("INSERT INTO workspaces (id, name, comment) VALUES (NULL, ?, ?)");
     insert_workspace.addBindValue(name);
     insert_workspace.addBindValue(comment);
 
@@ -1407,8 +1414,7 @@ std::string_view Database::addWorkspace(const QString& name, const QByteArray& c
     const qint64 new_id = insert_workspace.lastInsertId().toLongLong();
 
     QSqlQuery insert_access(sql_db);
-    insert_access.prepare(QStringLiteral(
-        "INSERT INTO workspace_access (workspace_id, user_id, wrapped_gk) VALUES (?, ?, ?)"));
+    insert_access.prepare("INSERT INTO workspace_access (workspace_id, user_id, wrapped_gk) VALUES (?, ?, ?)");
 
     for (const Workspace::Access& access : initial_access)
     {
@@ -1484,7 +1490,7 @@ std::string_view Database::modifyWorkspace(qint64 entry_id, const QString& name,
     }
 
     QSqlQuery exists_check(sql_db);
-    exists_check.prepare(QStringLiteral("SELECT 1 FROM workspaces WHERE id=?"));
+    exists_check.prepare("SELECT 1 FROM workspaces WHERE id=?");
     exists_check.addBindValue(entry_id);
 
     if (!exists_check.exec())
@@ -1501,7 +1507,7 @@ std::string_view Database::modifyWorkspace(qint64 entry_id, const QString& name,
     }
 
     QSqlQuery name_check(sql_db);
-    name_check.prepare(QStringLiteral("SELECT id FROM workspaces WHERE name=?"));
+    name_check.prepare("SELECT id FROM workspaces WHERE name=?");
     name_check.addBindValue(name);
 
     if (!name_check.exec())
@@ -1518,7 +1524,7 @@ std::string_view Database::modifyWorkspace(qint64 entry_id, const QString& name,
     }
 
     QSqlQuery update_workspace(sql_db);
-    update_workspace.prepare(QStringLiteral("UPDATE workspaces SET name=?, comment=? WHERE id=?"));
+    update_workspace.prepare("UPDATE workspaces SET name=?, comment=? WHERE id=?");
     update_workspace.addBindValue(name);
     update_workspace.addBindValue(comment);
     update_workspace.addBindValue(entry_id);
@@ -1531,8 +1537,7 @@ std::string_view Database::modifyWorkspace(qint64 entry_id, const QString& name,
     }
 
     QSqlQuery select_current(sql_db);
-    select_current.prepare(QStringLiteral(
-        "SELECT user_id FROM workspace_access WHERE workspace_id=?"));
+    select_current.prepare("SELECT user_id FROM workspace_access WHERE workspace_id=?");
     select_current.addBindValue(entry_id);
 
     if (!select_current.exec())
@@ -1547,8 +1552,7 @@ std::string_view Database::modifyWorkspace(qint64 entry_id, const QString& name,
         current_ids.insert(select_current.value(0).toLongLong());
 
     QSqlQuery delete_access(sql_db);
-    delete_access.prepare(QStringLiteral(
-        "DELETE FROM workspace_access WHERE workspace_id=? AND user_id=?"));
+    delete_access.prepare("DELETE FROM workspace_access WHERE workspace_id=? AND user_id=?");
 
     for (qint64 user_id : std::as_const(current_ids))
     {
@@ -1567,8 +1571,7 @@ std::string_view Database::modifyWorkspace(qint64 entry_id, const QString& name,
     }
 
     QSqlQuery insert_access(sql_db);
-    insert_access.prepare(QStringLiteral(
-        "INSERT INTO workspace_access (workspace_id, user_id, wrapped_gk) VALUES (?, ?, ?)"));
+    insert_access.prepare("INSERT INTO workspace_access (workspace_id, user_id, wrapped_gk) VALUES (?, ?, ?)");
 
     for (const Workspace::Access& access : desired_access)
     {
@@ -1620,7 +1623,7 @@ std::string_view Database::removeWorkspace(qint64 entry_id)
     }
 
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral("DELETE FROM workspaces WHERE id=?"));
+    query.prepare("DELETE FROM workspaces WHERE id=?");
     query.addBindValue(entry_id);
 
     if (!query.exec())
@@ -1668,7 +1671,7 @@ std::string_view Database::setWorkspaceHosts(qint64 entry_id, const QSet<HostId>
 
     // Release: hosts currently in this workspace but no longer wanted.
     QSqlQuery select_current(sql_db);
-    select_current.prepare(QStringLiteral("SELECT id FROM hosts WHERE workspace_id=?"));
+    select_current.prepare("SELECT id FROM hosts WHERE workspace_id=?");
     select_current.addBindValue(entry_id);
     if (!select_current.exec())
     {
@@ -1678,7 +1681,7 @@ std::string_view Database::setWorkspaceHosts(qint64 entry_id, const QSet<HostId>
     }
 
     QSqlQuery release(sql_db);
-    release.prepare(QStringLiteral("UPDATE hosts SET workspace_id=0, group_id=0 WHERE id=?"));
+    release.prepare("UPDATE hosts SET workspace_id=0, group_id=0 WHERE id=?");
     while (select_current.next())
     {
         const HostId host_id = select_current.value(0).toULongLong();
@@ -1697,8 +1700,7 @@ std::string_view Database::setWorkspaceHosts(qint64 entry_id, const QSet<HostId>
     // Claim: hosts the operator wants in this workspace. Only hosts that are unassigned or
     // already in this workspace are touched; hosts in another workspace stay put.
     QSqlQuery claim(sql_db);
-    claim.prepare(QStringLiteral(
-        "UPDATE hosts SET workspace_id=? WHERE id=? AND workspace_id IN (0, ?)"));
+    claim.prepare("UPDATE hosts SET workspace_id=? WHERE id=? AND workspace_id IN (0, ?)");
     for (HostId host_id : std::as_const(desired_host_ids))
     {
         claim.bindValue(0, entry_id);
@@ -1732,8 +1734,7 @@ QList<Workspace::Access> Database::workspaceAccessList(qint64 workspace_id) cons
     }
 
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral(
-        "SELECT workspace_id, user_id, wrapped_gk FROM workspace_access WHERE workspace_id=?"));
+    query.prepare("SELECT workspace_id, user_id, wrapped_gk FROM workspace_access WHERE workspace_id=?");
     query.addBindValue(workspace_id);
 
     if (!query.exec())
@@ -1765,7 +1766,7 @@ QSet<qint64> Database::workspaceAccessIdsForUser(qint64 user_id) const
     }
 
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral("SELECT workspace_id FROM workspace_access WHERE user_id=?"));
+    query.prepare("SELECT workspace_id FROM workspace_access WHERE user_id=?");
     query.addBindValue(user_id);
 
     if (!query.exec())
@@ -1820,8 +1821,7 @@ bool Database::hasWorkspaceAccess(qint64 user_id, qint64 workspace_id) const
         return false;
 
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral(
-        "SELECT 1 FROM workspace_access WHERE workspace_id=? AND user_id=?"));
+    query.prepare("SELECT 1 FROM workspace_access WHERE workspace_id=? AND user_id=?");
     query.addBindValue(workspace_id);
     query.addBindValue(user_id);
 
@@ -1855,8 +1855,7 @@ QList<Group> Database::groupList(qint64 workspace_id) const
     // locale-aware, and so on) is the client's job. Building a tree from this result does not
     // require any particular order: index nodes by id, then link children to parents.
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral(
-        "SELECT id, IFNULL(parent_id, 0), name, comment FROM host_groups WHERE workspace_id=?"));
+    query.prepare("SELECT id, IFNULL(parent_id, 0), name, comment FROM host_groups WHERE workspace_id=?");
     query.addBindValue(workspace_id);
 
     if (!query.exec())
@@ -1901,16 +1900,14 @@ QList<Group> Database::groupChildren(qint64 workspace_id, qint64 parent_id) cons
     QSqlQuery query(connection());
     if (parent_id == 0)
     {
-        query.prepare(QStringLiteral(
-            "SELECT id, IFNULL(parent_id, 0), name, comment FROM host_groups "
-            "WHERE workspace_id=? AND parent_id IS NULL ORDER BY name"));
+        query.prepare("SELECT id, IFNULL(parent_id, 0), name, comment FROM host_groups "
+                      "WHERE workspace_id=? AND parent_id IS NULL ORDER BY name");
         query.addBindValue(workspace_id);
     }
     else
     {
-        query.prepare(QStringLiteral(
-            "SELECT id, IFNULL(parent_id, 0), name, comment FROM host_groups "
-            "WHERE workspace_id=? AND parent_id=? ORDER BY name"));
+        query.prepare("SELECT id, IFNULL(parent_id, 0), name, comment FROM host_groups "
+                      "WHERE workspace_id=? AND parent_id=? ORDER BY name");
         query.addBindValue(workspace_id);
         query.addBindValue(parent_id);
     }
@@ -1954,9 +1951,8 @@ Group Database::findGroup(qint64 workspace_id, qint64 entry_id) const
     // groupList(); IFNULL maps the storage NULL parent_id of a root node to 0. workspace_id is
     // part of the filter so a stale id from another workspace cannot leak through.
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral(
-        "SELECT id, IFNULL(parent_id, 0), name, comment FROM host_groups "
-        "WHERE id=? AND workspace_id=?"));
+    query.prepare("SELECT id, IFNULL(parent_id, 0), name, comment FROM host_groups "
+                  "WHERE id=? AND workspace_id=?");
     query.addBindValue(entry_id);
     query.addBindValue(workspace_id);
 
@@ -2021,8 +2017,7 @@ std::string_view Database::addGroup(qint64 workspace_id, qint64 parent_id, const
     if (parent_id != 0)
     {
         QSqlQuery parent_check(sql_db);
-        parent_check.prepare(QStringLiteral(
-            "SELECT 1 FROM host_groups WHERE id=? AND workspace_id=?"));
+        parent_check.prepare("SELECT 1 FROM host_groups WHERE id=? AND workspace_id=?");
         parent_check.addBindValue(parent_id);
         parent_check.addBindValue(workspace_id);
 
@@ -2041,9 +2036,8 @@ std::string_view Database::addGroup(qint64 workspace_id, qint64 parent_id, const
     }
 
     QSqlQuery insert(sql_db);
-    insert.prepare(QStringLiteral(
-        "INSERT INTO host_groups (workspace_id, parent_id, name, comment) "
-        "VALUES (?, ?, ?, ?)"));
+    insert.prepare("INSERT INTO host_groups (workspace_id, parent_id, name, comment) "
+                   "VALUES (?, ?, ?, ?)");
     insert.addBindValue(workspace_id);
     insert.addBindValue(parent_id == 0 ? QVariant() : QVariant(parent_id));
     insert.addBindValue(name);
@@ -2101,8 +2095,7 @@ std::string_view Database::modifyGroup(qint64 workspace_id, qint64 entry_id, qin
 
     // Verify the group being modified exists in this workspace.
     QSqlQuery select_self(sql_db);
-    select_self.prepare(QStringLiteral(
-        "SELECT 1 FROM host_groups WHERE id=? AND workspace_id=?"));
+    select_self.prepare("SELECT 1 FROM host_groups WHERE id=? AND workspace_id=?");
     select_self.addBindValue(entry_id);
     select_self.addBindValue(workspace_id);
 
@@ -2123,8 +2116,7 @@ std::string_view Database::modifyGroup(qint64 workspace_id, qint64 entry_id, qin
     {
         // The new parent must exist in this workspace.
         QSqlQuery parent_check(sql_db);
-        parent_check.prepare(QStringLiteral(
-            "SELECT 1 FROM host_groups WHERE id=? AND workspace_id=?"));
+        parent_check.prepare("SELECT 1 FROM host_groups WHERE id=? AND workspace_id=?");
         parent_check.addBindValue(new_parent_id);
         parent_check.addBindValue(workspace_id);
 
@@ -2148,13 +2140,12 @@ std::string_view Database::modifyGroup(qint64 workspace_id, qint64 entry_id, qin
         // links never cross workspace boundaries by construction (enforced at insert and
         // modify), so no workspace_id filter is needed inside the recursion.
         QSqlQuery cycle_check(sql_db);
-        cycle_check.prepare(QStringLiteral(
-            "WITH RECURSIVE ancestors(id) AS ("
+        cycle_check.prepare("WITH RECURSIVE ancestors(id) AS ("
             "    SELECT id FROM host_groups WHERE id=?"
             "    UNION ALL"
             "    SELECT g.parent_id FROM host_groups g JOIN ancestors a ON g.id = a.id "
             "      WHERE g.parent_id IS NOT NULL"
-            ") SELECT 1 FROM ancestors WHERE id=? LIMIT 1"));
+            ") SELECT 1 FROM ancestors WHERE id=? LIMIT 1");
         cycle_check.addBindValue(new_parent_id);
         cycle_check.addBindValue(entry_id);
 
@@ -2173,9 +2164,8 @@ std::string_view Database::modifyGroup(qint64 workspace_id, qint64 entry_id, qin
     }
 
     QSqlQuery update_self(sql_db);
-    update_self.prepare(QStringLiteral(
-        "UPDATE host_groups SET parent_id=?, name=?, comment=? "
-        "WHERE id=? AND workspace_id=?"));
+    update_self.prepare("UPDATE host_groups SET parent_id=?, name=?, comment=? "
+        "WHERE id=? AND workspace_id=?");
     update_self.addBindValue(new_parent_id == 0 ? QVariant() : QVariant(new_parent_id));
     update_self.addBindValue(name);
     update_self.addBindValue(comment);
@@ -2215,7 +2205,7 @@ std::string_view Database::removeGroup(qint64 workspace_id, qint64 entry_id)
     }
 
     QSqlQuery query(connection());
-    query.prepare(QStringLiteral("DELETE FROM host_groups WHERE id=? AND workspace_id=?"));
+    query.prepare("DELETE FROM host_groups WHERE id=? AND workspace_id=?");
     query.addBindValue(entry_id);
     query.addBindValue(workspace_id);
 
