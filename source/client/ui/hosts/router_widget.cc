@@ -38,16 +38,18 @@
 #include <QStatusBar>
 #include <QToolButton>
 
+#include "base/crypto/secure_string.h"
 #include "base/logging.h"
 #include "base/peer/router_user.h"
 #include "base/peer/user.h"
 #include "client/router.h"
-#include "client/ui/hosts/router_password_dialog.h"
 #include "client/ui/hosts/router_user_dialog.h"
 #include "client/ui/hosts/router_workspace_dialog.h"
+#include "common/ui/credentials_dialog.h"
 #include "common/ui/formatter.h"
 #include "common/ui/icon_text_button.h"
 #include "common/ui/msg_box.h"
+#include "proto/router_constants.h"
 #include "common/ui/status_dialog.h"
 #include "common/ui/two_factor_code_dialog.h"
 #include "common/ui/two_factor_enroll_dialog.h"
@@ -1270,7 +1272,67 @@ void RouterWidget::onPasswordChangeRequired()
     MsgBox::information(this,
         tr("To complete the migration from a previous version, you need to change your password."));
 
-    RouterPasswordDialog dialog(router_->routerId(), this);
+    qint64 router_id = router_->routerId();
+    CredentialsDialog dialog(CredentialsDialog::Type::SET_PASSWORD, this);
+    dialog.setWindowTitle(tr("Change Password"));
+    dialog.setValidator([router_id](CredentialsDialog* d) -> bool
+    {
+        SecureString password = d->password();
+
+        if (!User::isValidPassword(password))
+        {
+            MsgBox::warning(d, tr("Password can not be empty and should not exceed %n characters.",
+                "", User::kMaxPasswordLength));
+            return false;
+        }
+
+        if (!User::isSafePassword(password))
+        {
+            QString unsafe = tr("Password you entered does not meet the security requirements!");
+            QString safe = tr("The password must contain lowercase and uppercase characters, "
+                "numbers and should not be shorter than %n characters.",
+                "", User::kSafePasswordLength);
+            QString question = tr("Do you want to enter a different password?");
+
+            if (MsgBox::warning(d, QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
+                MsgBox::Yes | MsgBox::No) == MsgBox::Yes)
+                return false;
+        }
+
+        Router* router = Router::instance(router_id);
+        if (!router)
+        {
+            LOG(ERROR) << "Router instance is gone";
+            return false;
+        }
+
+        d->setEnabled(false);
+        router->changePassword(password, d, [d](const proto::router::ChangePasswordResult& result)
+        {
+            const std::string& error_code = result.error_code();
+            if (error_code == proto::router::kErrorOk)
+            {
+                d->accept();
+                return;
+            }
+
+            const char* message;
+            if (error_code == proto::router::kErrorInvalidRequest)
+                message = QT_TR_NOOP("Invalid password change request.");
+            else if (error_code == proto::router::kErrorInternalError)
+                message = QT_TR_NOOP("Unknown internal error.");
+            else if (error_code == proto::router::kErrorInvalidData)
+                message = QT_TR_NOOP("Invalid data was passed.");
+            else
+                message = QT_TR_NOOP("Unknown error type.");
+
+            d->setEnabled(true);
+            MsgBox::warning(d, RouterWidget::tr(message));
+        });
+
+        return false;
+    });
+
     if (dialog.exec() == QDialog::Accepted)
         status_dialog_->addMessage(tr("Password updated. Waiting for new encryption keys..."));
 }

@@ -31,7 +31,7 @@
 #include "base/peer/host_id.h"
 #include "build/build_config.h"
 #include "client/database.h"
-#include "client/ui/unlock_dialog.h"
+#include "common/ui/credentials_dialog.h"
 #include "common/ui/msg_box.h"
 #include "proto/address_book.h"
 #include "proto/router.h"
@@ -295,7 +295,12 @@ bool AabImporter::import(QWidget* parent, const QString& file_path)
 
         case proto::address_book::ENCRYPTION_TYPE_CHACHA20_POLY1305:
         {
-            UnlockDialog dialog(parent, file_path, tr("ChaCha20 + Poly1305 (256-bit key)"));
+            CredentialsDialog dialog(CredentialsDialog::Type::ENTER_PASSWORD, parent);
+            dialog.setWindowTitle(tr("Unlock"));
+            dialog.setHeaderIcon(":/img/lock.svg");
+            dialog.setHeaderText(tr("Address book is encrypted. To open, you must enter a password."));
+            dialog.setShowPasswordButtonVisible(true);
+
             if (dialog.exec() != QDialog::Accepted)
                 return false;
 

@@ -41,8 +41,7 @@ AuthorizationDialog::AuthorizationDialog(QWidget* parent)
     ui->checkbox_one_time_password->setChecked(is_one_time_password_checked);
     onOneTimePasswordToggled(is_one_time_password_checked);
 
-    connect(ui->button_show_password, &QPushButton::toggled,
-            this, &AuthorizationDialog::onShowPasswordButtonToggled);
+    ui->edit_password->setShowPasswordButtonVisible(true);
 
     connect(ui->buttonbox, &QDialogButtonBox::clicked,
             this, &AuthorizationDialog::onButtonBoxClicked);
@@ -118,15 +117,6 @@ void AuthorizationDialog::showEvent(QShowEvent* event)
         ui->edit_password->setFocus();
 
     QDialog::showEvent(event);
-}
-
-//--------------------------------------------------------------------------------------------------
-void AuthorizationDialog::onShowPasswordButtonToggled(bool checked)
-{
-    LOG(INFO) << "[ACTION] Show passowrd button toggled:" << checked;
-
-    ui->edit_password->setShowPassword(checked);
-    ui->edit_password->setFocus();
 }
 
 //--------------------------------------------------------------------------------------------------

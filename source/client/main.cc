@@ -32,13 +32,12 @@
 #include "client/master_password.h"
 #include "common/ui/msg_box.h"
 #include "common/ui/status_dialog.h"
+#include "common/ui/credentials_dialog.h"
 #include "common/ui/two_factor_code_dialog.h"
 #include "common/ui/two_factor_enroll_dialog.h"
 #include "client/router.h"
 #include "client/ui/application.h"
 #include "client/ui/main_window.h"
-#include "client/ui/master_password_dialog.h"
-#include "client/ui/unlock_dialog.h"
 #include "client/ui/chat/chat_window.h"
 #include "client/ui/desktop/desktop_window.h"
 #include "client/ui/file_transfer/file_transfer_window.h"
@@ -528,7 +527,13 @@ int main(int argc, char* argv[])
 
         while (true)
         {
-            UnlockDialog dialog(nullptr, QString(), QString());
+            CredentialsDialog dialog(CredentialsDialog::Type::ENTER_PASSWORD, nullptr);
+            dialog.setWindowTitle(QApplication::translate("Client", "Unlock"));
+            dialog.setHeaderIcon(":/img/lock.svg");
+            dialog.setHeaderText(QApplication::translate(
+                "Client", "Address book is encrypted. To open, you must enter a password."));
+            dialog.setShowPasswordButtonVisible(true);
+
             if (dialog.exec() != QDialog::Accepted)
             {
                 LOG(INFO) << "Master password unlock cancelled by user";
@@ -548,7 +553,40 @@ int main(int argc, char* argv[])
     {
         LOG(INFO) << "Master password is not set, prompting user to set one";
 
-        MasterPasswordDialog dialog(MasterPasswordDialog::Mode::SET);
+        CredentialsDialog dialog(CredentialsDialog::Type::SET_PASSWORD, nullptr);
+        dialog.setWindowTitle(QApplication::translate("Client", "Set Master Password"));
+        dialog.setHeaderIcon(":/img/lock.svg");
+        dialog.setHeaderText(QApplication::translate(
+            "Client", "Set the master password to encrypt the address book."));
+        dialog.setValidator([](CredentialsDialog* d) -> bool
+        {
+            SecureString new_password = d->password();
+
+            if (!MasterPassword::isSafePassword(new_password))
+            {
+                QString unsafe = QApplication::translate(
+                    "Client", "Password you entered does not meet the security requirements!");
+                QString safe = QApplication::translate("Client",
+                    "The password must contain lowercase and uppercase characters, "
+                    "numbers and should not be shorter than %n characters.",
+                    "", MasterPassword::kSafePasswordLength);
+                QString question = QApplication::translate(
+                    "Client", "Do you want to enter a different password?");
+
+                if (MsgBox::warning(d, QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
+                                    MsgBox::Yes | MsgBox::No) == MsgBox::Yes)
+                    return false;
+            }
+
+            if (!MasterPassword::setNew(new_password))
+            {
+                MsgBox::warning(d, QApplication::translate(
+                    "Client", "Unable to set master password."));
+                return false;
+            }
+            return true;
+        });
+
         if (dialog.exec() != QDialog::Accepted)
         {
             LOG(INFO) << "Master password set cancelled by user";

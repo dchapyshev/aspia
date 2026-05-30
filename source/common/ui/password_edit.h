@@ -20,7 +20,9 @@
 #define COMMON_UI_PASSWORD_EDIT_H
 
 #include <QLineEdit>
+#include <QPointer>
 
+class QToolButton;
 class SecureString;
 
 class PasswordEdit final : public QLineEdit
@@ -33,6 +35,10 @@ public:
 
     void setShowPassword(bool enable);
     bool isShowPassword() const;
+
+    // Embeds a trailing toggle action (eye icon) inside the line edit. Removes the need
+    // for an external QPushButton in dialogs.
+    void setShowPasswordButtonVisible(bool visible);
 
     void setPassword(const SecureString& password);
     SecureString password() const;
@@ -48,7 +54,13 @@ public slots:
     // reducing the window during which the password remains in the widget's text buffer.
     void clear();
 
+protected:
+    // QWidget implementation.
+    void resizeEvent(QResizeEvent* event) final;
+
 private:
+    QPointer<QToolButton> show_password_button_;
+
     Q_DISABLE_COPY_MOVE(PasswordEdit)
 };
 

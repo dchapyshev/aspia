@@ -18,7 +18,12 @@
 
 #include "common/ui/password_edit.h"
 
+#include <QResizeEvent>
+#include <QStyle>
+#include <QToolButton>
+
 #include "base/crypto/secure_string.h"
+#include "base/gui_application.h"
 
 //--------------------------------------------------------------------------------------------------
 PasswordEdit::PasswordEdit(QWidget* parent)
@@ -56,6 +61,41 @@ bool PasswordEdit::isShowPassword() const
 }
 
 //--------------------------------------------------------------------------------------------------
+void PasswordEdit::setShowPasswordButtonVisible(bool visible)
+{
+    if (visible == !show_password_button_.isNull())
+        return;
+
+    if (visible)
+    {
+        show_password_button_ = new QToolButton(this);
+        show_password_button_->setIcon(GuiApplication::svgIcon(":/img/show-password.svg"));
+        show_password_button_->setCheckable(true);
+        show_password_button_->setAutoRaise(true);
+        show_password_button_->setCursor(Qt::ArrowCursor);
+        show_password_button_->setFocusPolicy(Qt::NoFocus);
+        show_password_button_->setToolButtonStyle(Qt::ToolButtonIconOnly);
+
+        connect(show_password_button_, &QToolButton::toggled, this, &PasswordEdit::setShowPassword);
+
+        // Reserve space on the right edge so the text does not run under the button.
+        int frame_width = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
+        QSize button_size = show_password_button_->sizeHint();
+        setTextMargins(0, 0, button_size.width() + frame_width, 0);
+
+        show_password_button_->show();
+        // Trigger initial positioning.
+        QResizeEvent dummy(size(), size());
+        resizeEvent(&dummy);
+    }
+    else
+    {
+        delete show_password_button_;
+        setTextMargins(0, 0, 0, 0);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void PasswordEdit::setPassword(const SecureString& password)
 {
     QLineEdit::setText(password.toString());
@@ -80,4 +120,18 @@ void PasswordEdit::clear()
         QLineEdit::setText(QString(length, QChar(0)));
     }
     QLineEdit::clear();
+}
+
+//--------------------------------------------------------------------------------------------------
+void PasswordEdit::resizeEvent(QResizeEvent* event)
+{
+    QLineEdit::resizeEvent(event);
+
+    if (show_password_button_)
+    {
+        int frame_width = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
+        QSize button_size = show_password_button_->sizeHint();
+        show_password_button_->move(rect().right() - frame_width - button_size.width(),
+                                    (rect().bottom() - button_size.height() + 1) / 2);
+    }
 }

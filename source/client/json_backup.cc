@@ -36,8 +36,8 @@
 #include "base/crypto/secure_memory.h"
 #include "base/crypto/secure_string.h"
 #include "client/database.h"
-#include "client/ui/export_password_dialog.h"
-#include "client/ui/unlock_dialog.h"
+#include "client/master_password.h"
+#include "common/ui/credentials_dialog.h"
 #include "common/ui/msg_box.h"
 #include "proto/router.h"
 
@@ -373,7 +373,31 @@ bool JsonBackup::exportToFile(QWidget* parent, const QString& file_path)
         return false;
     }
 
-    ExportPasswordDialog dialog(parent);
+    CredentialsDialog dialog(CredentialsDialog::Type::SET_PASSWORD, parent);
+    dialog.setWindowTitle(tr("Export Address Book"));
+    dialog.setHeaderIcon(":/img/lock.svg");
+    dialog.setHeaderText(tr("Enter a password to encrypt the address book."));
+    dialog.setValidator([](CredentialsDialog* d) -> bool
+    {
+        SecureString new_password = d->password();
+
+        if (!MasterPassword::isSafePassword(new_password))
+        {
+            QString unsafe = JsonBackup::tr(
+                "Password you entered does not meet the security requirements!");
+            QString safe = JsonBackup::tr(
+                "The password must contain lowercase and uppercase characters, "
+                "numbers and should not be shorter than %n characters.",
+                "", MasterPassword::kSafePasswordLength);
+            QString question = JsonBackup::tr("Do you want to enter a different password?");
+
+            if (MsgBox::warning(d, QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
+                                MsgBox::Yes | MsgBox::No) == MsgBox::Yes)
+                return false;
+        }
+        return true;
+    });
+
     if (dialog.exec() != QDialog::Accepted)
         return false;
 
@@ -486,7 +510,12 @@ bool JsonBackup::importFromFile(QWidget* parent, const QString& file_path)
         return false;
     }
 
-    UnlockDialog dialog(parent, file_path, tr("AES GCM (256-bit key)"));
+    CredentialsDialog dialog(CredentialsDialog::Type::ENTER_PASSWORD, parent);
+    dialog.setWindowTitle(tr("Unlock"));
+    dialog.setHeaderIcon(":/img/lock.svg");
+    dialog.setHeaderText(tr("Address book is encrypted. To open, you must enter a password."));
+    dialog.setShowPasswordButtonVisible(true);
+
     if (dialog.exec() != QDialog::Accepted)
         return false;
 

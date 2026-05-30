@@ -73,18 +73,12 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/client_tab.h
     ui/client_window.cc
     ui/client_window.h
-    ui/export_password_dialog.cc
-    ui/export_password_dialog.h
-    ui/export_password_dialog.ui
     ui/hosts_tab.cc
     ui/hosts_tab.h
     ui/hosts_tab.ui
     ui/main_window.cc
     ui/main_window.h
     ui/main_window.ui
-    ui/master_password_dialog.cc
-    ui/master_password_dialog.h
-    ui/master_password_dialog.ui
     ui/tab.cc
     ui/tab.h
     ui/tab_bar.cc
@@ -97,9 +91,6 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/settings_tab.cc
     ui/settings_tab.h
     ui/settings_tab.ui
-    ui/unlock_dialog.cc
-    ui/unlock_dialog.h
-    ui/unlock_dialog.ui
 )
 
 list(APPEND SOURCE_CLIENT_CORE_UI_DESKTOP
@@ -246,9 +237,6 @@ list(APPEND SOURCE_CLIENT_CORE_UI_HOSTS_TAB
     ui/hosts/router_host_dialog.cc
     ui/hosts/router_host_dialog.h
     ui/hosts/router_host_dialog.ui
-    ui/hosts/router_password_dialog.cc
-    ui/hosts/router_password_dialog.h
-    ui/hosts/router_password_dialog.ui
     ui/hosts/router_group_dialog.cc
     ui/hosts/router_group_dialog.h
     ui/hosts/router_group_dialog.ui

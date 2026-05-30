@@ -28,13 +28,16 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 
+#include "base/crypto/secure_string.h"
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "build/build_config.h"
 #include "client/database.h"
+#include "client/master_password.h"
 #include "client/settings.h"
 #include "client/ui/application.h"
-#include "client/ui/master_password_dialog.h"
+#include "common/ui/credentials_dialog.h"
+#include "common/ui/msg_box.h"
 #include "common/ui/update_dialog.h"
 #include "proto/desktop_control.h"
 #include "ui_settings_tab.h"
@@ -355,7 +358,35 @@ void SettingsTab::onChangeMasterPassword()
 {
     LOG(INFO) << "[ACTION] Change master password";
 
-    MasterPasswordDialog dialog(MasterPasswordDialog::Mode::CHANGE, this);
+    CredentialsDialog dialog(CredentialsDialog::Type::CHANGE_PASSWORD, this);
+    dialog.setWindowTitle(tr("Change Master Password"));
+    dialog.setHeaderIcon(":/img/lock.svg");
+    dialog.setHeaderText(tr("Enter your current password and choose a new one."));
+    dialog.setValidator([this](CredentialsDialog* d) -> bool
+    {
+        SecureString current = d->currentPassword();
+        SecureString new_password = d->password();
+
+        if (!MasterPassword::isSafePassword(new_password))
+        {
+            QString unsafe = tr("Password you entered does not meet the security requirements!");
+            QString safe = tr("The password must contain lowercase and uppercase characters, "
+                              "numbers and should not be shorter than %n characters.",
+                              "", MasterPassword::kSafePasswordLength);
+            QString question = tr("Do you want to enter a different password?");
+
+            if (MsgBox::warning(d, QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
+                                MsgBox::Yes | MsgBox::No) == MsgBox::Yes)
+                return false;
+        }
+
+        if (!MasterPassword::change(current, new_password))
+        {
+            MsgBox::warning(d, tr("Invalid current password or unable to change it."));
+            return false;
+        }
+        return true;
+    });
     dialog.exec();
 }
 
