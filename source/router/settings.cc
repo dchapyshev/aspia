@@ -68,6 +68,7 @@ void Settings::reset()
     setAdminWhiteList(WhiteList());
     setManagerWhiteList(WhiteList());
     setRelayWhiteList(WhiteList());
+    setTwoFactorEnabled(true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -229,7 +230,7 @@ void Settings::setTwoFactorEnabled(bool enable)
 //--------------------------------------------------------------------------------------------------
 bool Settings::isTwoFactorEnabled() const
 {
-    return impl_.value("two_factor_enabled", false).toBool();
+    return impl_.value("two_factor_enabled", true).toBool();
 }
 
 //--------------------------------------------------------------------------------------------------
