@@ -74,9 +74,6 @@ public:
     void setStunPort(quint16 port);
     quint16 stunPort() const;
 
-    void setTwoFactorEnabled(bool enable);
-    bool isTwoFactorEnabled() const;
-
 private:
     void setWhiteList(const QString& key, const WhiteList& value);
     WhiteList whiteList(const QString& key) const;

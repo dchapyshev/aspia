@@ -35,7 +35,6 @@
 #include "router/session_host.h"
 #include "router/session_legacy_host.h"
 #include "router/session_relay.h"
-#include "router/settings.h"
 
 namespace {
 
@@ -45,8 +44,7 @@ const char kOtpIssuer[] = "Aspia Router";
 
 //--------------------------------------------------------------------------------------------------
 SessionClient::SessionClient(TcpChannel* channel, QObject* parent)
-    : Session(channel, parent),
-      two_factor_enabled_(Settings().isTwoFactorEnabled())
+    : Session(channel, parent)
 {
     CLOG(INFO) << "Ctor";
     connect(this, &Session::sig_started, this, &SessionClient::onStarted);
@@ -125,15 +123,6 @@ void SessionClient::onStarted()
 //--------------------------------------------------------------------------------------------------
 void SessionClient::doTwoFactorChallenge()
 {
-    if (!two_factor_enabled_)
-    {
-        // Global policy is off. Skip the 2FA stage entirely - the first UserKeys is the
-        // client's implicit "no 2FA" signal.
-        two_factor_completed_ = true;
-        sendUserKeys();
-        return;
-    }
-
     proto::router::RouterToClient message;
     proto::router::TwoFactorChallenge* challenge = message.mutable_two_factor_challenge();
 

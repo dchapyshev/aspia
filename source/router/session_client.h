@@ -66,7 +66,6 @@ private:
 
     quint16 stun_port_ = 0;
 
-    const bool two_factor_enabled_;
     bool two_factor_completed_ = false;
     QByteArray tentative_otp_secret_;
     QByteArray user_otp_secret_;

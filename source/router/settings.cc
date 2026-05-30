@@ -68,7 +68,6 @@ void Settings::reset()
     setAdminWhiteList(WhiteList());
     setManagerWhiteList(WhiteList());
     setRelayWhiteList(WhiteList());
-    setTwoFactorEnabled(true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -219,18 +218,6 @@ void Settings::setStunPort(quint16 port)
 quint16 Settings::stunPort() const
 {
     return impl_.value("stun_port", DEFAULT_STUN_PORT).toUInt();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Settings::setTwoFactorEnabled(bool enable)
-{
-    impl_.setValue("two_factor_enabled", enable);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Settings::isTwoFactorEnabled() const
-{
-    return impl_.value("two_factor_enabled", true).toBool();
 }
 
 //--------------------------------------------------------------------------------------------------
