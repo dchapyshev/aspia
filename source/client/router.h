@@ -180,6 +180,13 @@ public:
     template<typename HandlerT>
     void deleteUser(qint64 entry_id, QObject* receiver, HandlerT handler);
 
+    // Admin: revoke the listed device tokens of |user_id|. Passing all token ids the caller
+    // currently knows about is the way to perform "revoke all"; an empty list is rejected by
+    // the router as invalid_request.
+    template<typename HandlerT>
+    void revokeUserTokens(qint64 user_id, const QList<qint64>& token_ids,
+                          QObject* receiver, HandlerT handler);
+
     // Admin: host operations. Pass kAllHostsId to target all hosts.
     template<typename HandlerT>
     void disconnectHost(HostId host_id, QObject* receiver, HandlerT handler);
@@ -475,6 +482,23 @@ void Router::deleteUser(qint64 entry_id, QObject* receiver, HandlerT handler)
     request->set_request_id(nextRequestId());
     request->set_command_name(proto::router::kCommandUserDelete);
     request->mutable_user()->set_entry_id(entry_id);
+    registerPending<proto::router::UserResult>(request, receiver, std::move(handler));
+    emitSend(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+template<typename HandlerT>
+void Router::revokeUserTokens(qint64 user_id, const QList<qint64>& token_ids,
+                              QObject* receiver, HandlerT handler)
+{
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_user_request();
+    request->set_request_id(nextRequestId());
+    request->set_command_name(proto::router::kCommandUserRevokeTokens);
+    auto* user = request->mutable_user();
+    user->set_entry_id(user_id);
+    for (qint64 token_id : token_ids)
+        user->add_token()->set_token_id(token_id);
     registerPending<proto::router::UserResult>(request, receiver, std::move(handler));
     emitSend(proto::router::CHANNEL_ID_ADMIN, message);
 }

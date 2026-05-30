@@ -263,7 +263,8 @@ bool ensureSchema(QSqlDatabase& sql_db)
     // on the next lookup attempt. Explicit revocation (admin action, password change, user
     // removal cascade) still wipes rows out-of-band.
     if (!run("CREATE TABLE IF NOT EXISTS \"client_device_tokens\" ("
-             "\"token_hash\" BLOB PRIMARY KEY,"
+             "\"token_id\" INTEGER PRIMARY KEY AUTOINCREMENT,"
+             "\"token_hash\" BLOB NOT NULL UNIQUE,"
              "\"user_id\" INTEGER NOT NULL,"
              "\"created_at\" INTEGER NOT NULL DEFAULT 0,"
              "\"last_used_at\" INTEGER NOT NULL DEFAULT 0,"
@@ -759,7 +760,7 @@ bool Database::touchClientDeviceToken(const QByteArray& token_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::revokeClientDeviceToken(const QByteArray& token_id)
+bool Database::revokeClientDeviceToken(qint64 user_id, qint64 token_id)
 {
     if (!isValid())
     {
@@ -767,18 +768,17 @@ bool Database::revokeClientDeviceToken(const QByteArray& token_id)
         return false;
     }
 
-    const QByteArray token_hash = GenericHash::hash(GenericHash::SHA256, token_id);
-
     QSqlQuery query(connection());
-    query.prepare("DELETE FROM client_device_tokens WHERE token_hash=?");
-    query.addBindValue(token_hash);
+    query.prepare("DELETE FROM client_device_tokens WHERE token_id=? AND user_id=?");
+    query.addBindValue(token_id);
+    query.addBindValue(user_id);
 
     if (!query.exec())
     {
         LOG(ERROR) << "Unable to revoke client device token:" << query.lastError();
         return false;
     }
-    return true;
+    return query.numRowsAffected() > 0;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -800,6 +800,39 @@ bool Database::revokeUserClientDeviceTokens(qint64 user_id)
         return false;
     }
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<DeviceToken> Database::listClientDeviceTokens(qint64 user_id) const
+{
+    QList<DeviceToken> tokens;
+
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return tokens;
+    }
+
+    QSqlQuery query(connection());
+    query.prepare("SELECT token_id, created_at, last_used_at FROM client_device_tokens "
+                  "WHERE user_id=? ORDER BY created_at");
+    query.addBindValue(user_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to list client device tokens:" << query.lastError();
+        return tokens;
+    }
+
+    while (query.next())
+    {
+        DeviceToken token;
+        token.token_id     = query.value(0).toLongLong();
+        token.created_at   = query.value(1).toLongLong();
+        token.last_used_at = query.value(2).toLongLong();
+        tokens.append(token);
+    }
+    return tokens;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -59,6 +59,15 @@ struct Group
     QByteArray comment;   // AEAD-encrypted with the workspace GK.
 };
 
+// Metadata for a client device token returned to admin callers. Intentionally omits the token
+// hash and any other material that could identify the token outside the router.
+struct DeviceToken
+{
+    qint64 token_id     = 0; // client_device_tokens.token_id. Opaque to admins.
+    qint64 created_at   = 0; // Unix seconds.
+    qint64 last_used_at = 0; // Unix seconds.
+};
+
 class Database
 {
 public:
@@ -117,12 +126,20 @@ public:
     // Updates the token's last_used_at timestamp. Called after a successful token lookup.
     bool touchClientDeviceToken(const QByteArray& token_id);
 
-    // Removes one specific client device token.
-    bool revokeClientDeviceToken(const QByteArray& token_id);
+    // Removes a single token by its opaque router-side row id, but only if it belongs to
+    // |user_id|. The user_id check is defense in depth - the admin channel is already
+    // privileged, but the extra predicate prevents a malformed request from touching another
+    // user's row. Returns false on database error or when no row matched.
+    bool revokeClientDeviceToken(qint64 user_id, qint64 token_id);
 
-    // Removes every client device token owned by |user_id|. Called from modifyUser() when the
-    // password changes and from admin-driven "revoke all devices" actions.
+    // Removes every device token of |user_id| in a single statement. Returns false on database
+    // error.
     bool revokeUserClientDeviceTokens(qint64 user_id);
+
+    // Lists all device tokens owned by |user_id|. The router never exposes token material to
+    // admins - only the opaque numeric id and timestamp metadata. Returns an empty list on
+    // error or when the user has none.
+    QList<DeviceToken> listClientDeviceTokens(qint64 user_id) const;
 
     //----------------------------------------------------------------------------------------------
     // Hosts

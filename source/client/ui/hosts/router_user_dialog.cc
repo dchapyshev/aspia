@@ -19,6 +19,8 @@
 #include "client/ui/hosts/router_user_dialog.h"
 
 #include <QAbstractButton>
+#include <QDateTime>
+#include <QLocale>
 #include <QPushButton>
 
 #include "base/logging.h"
@@ -69,6 +71,19 @@ RouterUserDialog::RouterUserDialog(qint64 router_id, qint64 user_id, QWidget* pa
         setAccountChanged(true);
     });
 
+    connect(ui->button_revoke_token, &QPushButton::clicked,
+            this, &RouterUserDialog::onRevokeTokenClicked);
+    connect(ui->button_revoke_all_tokens, &QPushButton::clicked,
+            this, &RouterUserDialog::onRevokeAllTokensClicked);
+    connect(ui->tree_tokens, &QTreeWidget::itemSelectionChanged,
+            this, &RouterUserDialog::onTokenSelectionChanged);
+
+    // Tokens are device credentials owned by an existing user; in create mode there is nothing
+    // to show and nothing to revoke until the user is persisted.
+    if (entry_id_ == 0)
+        ui->tab_widget->setTabEnabled(ui->tab_widget->indexOf(ui->tab_sessions), false);
+
+    updateTokenTree();
     updateLoadingState();
 
     Router* router = Router::instance(router_id_);
@@ -103,6 +118,7 @@ bool RouterUserDialog::eventFilter(QObject* object, QEvent* event)
 void RouterUserDialog::onUserListReceived(const proto::router::UserList& list)
 {
     existing_names_.clear();
+    tokens_.clear();
 
     for (int i = 0; i < list.user_size(); ++i)
     {
@@ -125,6 +141,17 @@ void RouterUserDialog::onUserListReceived(const proto::router::UserList& list)
                     (user_.sessions & session_type) ? Qt::Checked : Qt::Unchecked);
             }
 
+            tokens_.reserve(user.token_size());
+            for (int j = 0; j < user.token_size(); ++j)
+            {
+                const proto::router::User::Token& src = user.token(j);
+                Token token;
+                token.token_id     = src.token_id();
+                token.created_at   = src.created_at();
+                token.last_used_at = src.last_used_at();
+                tokens_.append(token);
+            }
+
             setAccountChanged(false);
         }
         else
@@ -134,6 +161,7 @@ void RouterUserDialog::onUserListReceived(const proto::router::UserList& list)
     }
 
     users_loaded_ = true;
+    updateTokenTree();
     updateLoadingState();
 }
 
@@ -164,6 +192,114 @@ void RouterUserDialog::onUserResultReceived(const proto::router::UserResult& res
     LOG(ERROR) << "User save failed:" << error_code;
     setEnabled(true);
     MsgBox::warning(this, tr(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterUserDialog::onRevokeTokenClicked()
+{
+    QTreeWidgetItem* item = ui->tree_tokens->currentItem();
+    if (!item)
+        return;
+
+    const qint64 token_id = item->data(0, Qt::UserRole).toLongLong();
+    if (token_id <= 0)
+        return;
+
+    if (MsgBox::question(this, tr("Are you sure you want to revoke this device token?"))
+        != MsgBox::Yes)
+    {
+        return;
+    }
+
+    Router* router = Router::instance(router_id_);
+    if (!router)
+    {
+        LOG(ERROR) << "Router instance is gone";
+        return;
+    }
+
+    pending_revoke_token_ids_ = { token_id };
+    ui->tab_sessions->setEnabled(false);
+    LOG(INFO) << "[ACTION] Revoking device token" << token_id << "of user" << entry_id_;
+    router->revokeUserTokens(entry_id_, pending_revoke_token_ids_,
+                             this, &RouterUserDialog::onRevokeResultReceived);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterUserDialog::onRevokeAllTokensClicked()
+{
+    if (tokens_.isEmpty())
+        return;
+
+    if (MsgBox::question(this,
+                         tr("Are you sure you want to revoke all device tokens for this user?"))
+        != MsgBox::Yes)
+    {
+        return;
+    }
+
+    Router* router = Router::instance(router_id_);
+    if (!router)
+    {
+        LOG(ERROR) << "Router instance is gone";
+        return;
+    }
+
+    // Snapshot the current ids so we can drop them from |tokens_| once the router confirms; the
+    // wire request itself carries an empty list which the router interprets as "drop every token
+    // of this user" atomically.
+    pending_revoke_token_ids_.clear();
+    pending_revoke_token_ids_.reserve(tokens_.size());
+    for (const Token& token : std::as_const(tokens_))
+        pending_revoke_token_ids_.append(token.token_id);
+
+    ui->tab_sessions->setEnabled(false);
+    LOG(INFO) << "[ACTION] Revoking all device tokens of user" << entry_id_;
+    router->revokeUserTokens(entry_id_, /*token_ids=*/QList<qint64>(),
+                             this, &RouterUserDialog::onRevokeResultReceived);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterUserDialog::onRevokeResultReceived(const proto::router::UserResult& result)
+{
+    const QList<qint64> targets = std::move(pending_revoke_token_ids_);
+    pending_revoke_token_ids_.clear();
+    ui->tab_sessions->setEnabled(true);
+
+    const std::string& error_code = result.error_code();
+    if (error_code == proto::router::kErrorOk)
+    {
+        for (qint64 id : std::as_const(targets))
+        {
+            for (int i = 0; i < tokens_.size(); ++i)
+            {
+                if (tokens_.at(i).token_id == id)
+                {
+                    tokens_.removeAt(i);
+                    break;
+                }
+            }
+        }
+        updateTokenTree();
+        return;
+    }
+
+    const char* message;
+    if (error_code == proto::router::kErrorNotFound)
+        message = QT_TR_NOOP("Token not found. The list may be out of date.");
+    else if (error_code == proto::router::kErrorInvalidRequest)
+        message = QT_TR_NOOP("Invalid revoke request.");
+    else
+        message = QT_TR_NOOP("Unknown internal error.");
+
+    LOG(ERROR) << "Token revoke failed:" << error_code;
+    MsgBox::warning(this, tr(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterUserDialog::onTokenSelectionChanged()
+{
+    ui->button_revoke_token->setEnabled(ui->tree_tokens->currentItem() != nullptr);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -338,6 +474,24 @@ void RouterUserDialog::updateLoadingState()
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterUserDialog::updateTokenTree()
+{
+    ui->tree_tokens->clear();
+
+    for (const Token& token : std::as_const(tokens_))
+    {
+        QTreeWidgetItem* item = new QTreeWidgetItem();
+        item->setText(0, formatTimestamp(token.created_at));
+        item->setText(1, formatTimestamp(token.last_used_at));
+        item->setData(0, Qt::UserRole, QVariant::fromValue(token.token_id));
+        ui->tree_tokens->addTopLevelItem(item);
+    }
+
+    ui->button_revoke_token->setEnabled(false);
+    ui->button_revoke_all_tokens->setEnabled(!tokens_.isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
 // static
 QString RouterUserDialog::sessionTypeToString(proto::router::SessionType session_type)
 {
@@ -365,4 +519,14 @@ QString RouterUserDialog::sessionTypeToString(proto::router::SessionType session
         return QString();
 
     return tr(str);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QString RouterUserDialog::formatTimestamp(qint64 unix_seconds)
+{
+    if (unix_seconds <= 0)
+        return tr("Never");
+
+    return QLocale().toString(QDateTime::fromSecsSinceEpoch(unix_seconds), QLocale::ShortFormat);
 }

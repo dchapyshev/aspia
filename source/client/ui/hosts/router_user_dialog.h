@@ -53,20 +53,37 @@ protected:
 private slots:
     void onUserListReceived(const proto::router::UserList& list);
     void onUserResultReceived(const proto::router::UserResult& result);
+    void onRevokeTokenClicked();
+    void onRevokeAllTokensClicked();
+    void onRevokeResultReceived(const proto::router::UserResult& result);
+    void onTokenSelectionChanged();
 
 private:
+    struct Token
+    {
+        qint64 token_id     = 0;
+        qint64 created_at   = 0;
+        qint64 last_used_at = 0;
+    };
+
     void onButtonBoxClicked(QAbstractButton* button);
     void setAccountChanged(bool changed);
     void updateLoadingState();
+    void updateTokenTree();
     static QString sessionTypeToString(proto::router::SessionType session_type);
+    static QString formatTimestamp(qint64 unix_seconds);
 
     std::unique_ptr<Ui::RouterUserDialog> ui;
     qint64 router_id_ = 0;
     qint64 entry_id_ = 0;
     RouterUser user_;
     QStringList existing_names_;
+    QList<Token> tokens_;
     bool account_changed_ = true;
     bool users_loaded_ = false;
+    // Token ids of an in-flight revoke request. Empty when no revoke is pending; on success the
+    // listed ids are dropped from |tokens_| locally.
+    QList<qint64> pending_revoke_token_ids_;
 
     Q_DISABLE_COPY_MOVE(RouterUserDialog)
 };

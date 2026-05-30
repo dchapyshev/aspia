@@ -175,7 +175,22 @@ void SessionAdmin::doUserListRequest(const proto::router::UserListRequest& reque
 
         QList<RouterUser> users = database.userList();
         for (const auto& user : std::as_const(users))
-            list->add_user()->CopyFrom(user.serialize());
+        {
+            proto::router::User* item = list->add_user();
+            item->CopyFrom(user.serialize());
+
+            // Attach the user's active device tokens. The router only ever exposes the opaque
+            // numeric id and timestamp metadata - never the token hash or any other material
+            // that could identify the token outside of the router.
+            const QList<DeviceToken> tokens = database.listClientDeviceTokens(user.entry_id);
+            for (const DeviceToken& src : std::as_const(tokens))
+            {
+                proto::router::User::Token* token = item->add_token();
+                token->set_token_id(src.token_id);
+                token->set_created_at(src.created_at);
+                token->set_last_used_at(src.last_used_at);
+            }
+        }
     }
 
     sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
@@ -200,6 +215,63 @@ void SessionAdmin::doUserRequest(const proto::router::UserRequest& request)
     else if (request.command_name() == proto::router::kCommandUserDelete)
     {
         result->set_error_code(deleteUser(request.user()));
+    }
+    else if (request.command_name() == proto::router::kCommandUserRevokeTokens)
+    {
+        const qint64 user_id = request.user().entry_id();
+
+        if (user_id <= 0)
+        {
+            CLOG(ERROR) << "Invalid revoke_tokens request: user_id=" << user_id;
+            result->set_error_code(proto::router::kErrorInvalidRequest);
+        }
+        else
+        {
+            Database& database = Database::instance();
+            if (!database.isValid())
+            {
+                CLOG(ERROR) << "Failed to connect to database";
+                result->set_error_code(proto::router::kErrorInternalError);
+            }
+            else if (request.user().token_size() == 0)
+            {
+                // Empty list - drop every token of the user atomically.
+                if (!database.revokeUserClientDeviceTokens(user_id))
+                {
+                    result->set_error_code(proto::router::kErrorInternalError);
+                }
+                else
+                {
+                    CLOG(INFO) << "All device tokens of user" << user_id
+                               << "revoked by" << userName();
+                    result->set_error_code(proto::router::kErrorOk);
+                }
+            }
+            else
+            {
+                std::string_view code = proto::router::kErrorOk;
+                for (int i = 0; i < request.user().token_size(); ++i)
+                {
+                    const qint64 token_id = request.user().token(i).token_id();
+                    if (token_id <= 0)
+                    {
+                        CLOG(ERROR) << "Invalid token_id in revoke_tokens request";
+                        code = proto::router::kErrorInvalidRequest;
+                        break;
+                    }
+                    if (!database.revokeClientDeviceToken(user_id, token_id))
+                    {
+                        CLOG(WARNING) << "Device token not found: user_id=" << user_id
+                                      << "token_id=" << token_id;
+                        code = proto::router::kErrorNotFound;
+                        break;
+                    }
+                    CLOG(INFO) << "Device token" << token_id << "of user" << user_id
+                               << "revoked by" << userName();
+                }
+                result->set_error_code(code);
+            }
+        }
     }
     else
     {

@@ -113,6 +113,14 @@ message ClientList
 
 message User
 {
+    // Active client device token (bearer "remember this device" credential).
+    message Token
+    {
+        int64 token_id     = 1;
+        int64 created_at   = 2;
+        int64 last_used_at = 3;
+    }
+
     int64 entry_id         = 1;
     string name            = 2;
     string group           = 3;
@@ -124,6 +132,7 @@ message User
     bytes wrap_private_key = 9;
     bytes wrap_salt        = 10;
     bool otp_active        = 11; // Read-only.
+    repeated Token token   = 12;
 }
 
 message UserListRequest
@@ -143,10 +152,11 @@ message UserRequest
     // "reset_otp"     - Clear the user's TOTP secret so the next login triggers a fresh
     //                   self-enrollment. Also revokes every device token of the user
     //                   (re-enrollment implies a new device key pair anyway).
-    // "revoke_tokens" - Drop every device token owned by the user without touching the TOTP
-    //                   secret. The user must re-authenticate with a TOTP code on the next
-    //                   login on every device.
-    // For "reset_otp" and "revoke_tokens" only |user.entry_id| is consulted.
+    // "revoke_tokens" - Drop device tokens of |user.entry_id|. If |user.token| is non-empty,
+    //                   only the listed tokens (by |token_id|) are dropped and the router
+    //                   verifies each belongs to the user. If |user.token| is empty, every
+    //                   token owned by the user is dropped atomically server-side.
+    // For "reset_otp" only |user.entry_id| is consulted.
     int64 request_id    = 1;
     string command_name = 2; // "add" | "modify" | "delete" | "reset_otp" | "revoke_tokens"
     User user           = 3;
