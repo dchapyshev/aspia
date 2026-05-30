@@ -27,15 +27,6 @@ import "router_manager.proto";
 
 package proto.router;
 
-// HostRequest/HostResult are defined in router_manager.proto (it's the more restricted
-// protocol surface; admin extends manager). Admin sessions accept all command variants
-// ("disconnect" | "remove" | "modify"); manager sessions only accept "modify". The channel
-// boundary enforces the privilege model.
-
-// Every request/response pair below carries request_id - the client allocates a unique value
-// per outbound request and the server echoes it back on the corresponding response. The
-// dispatcher on the client uses it to route the response to the originating caller.
-
 message RelayInfo
 {
     message Statistics
@@ -194,34 +185,6 @@ message WorkspaceResult
     int64 entry_id      = 4; // Id of created workspace for "add".
 }
 
-message GroupRequest
-{
-    // "add"    - Group with workspace_id (in the wrapping field), parent_id, name and comment.
-    //            Server fills entry_id in the result. parent_id == 0 places the group at the
-    //            workspace root; otherwise parent_id must refer to an existing group of the
-    //            same workspace.
-    // "modify" - Group with entry_id, new parent_id (== 0 for the workspace root), name and
-    //            comment. The new parent must belong to the same workspace and must not be
-    //            the group itself or any of its descendants; otherwise the server returns
-    //            "invalid_data". Renaming and re-parenting can be combined in one call.
-    // "delete" - Group with entry_id. Descendants are removed by the foreign-key cascade;
-    //            hosts whose group_id pointed into the deleted subtree are detached to the
-    //            workspace root.
-    int64 request_id    = 1;
-    string command_name = 2;
-    int64 workspace_id  = 3;
-    Group group         = 4;
-}
-
-message GroupResult
-{
-    int64 request_id    = 1;
-    string command_name = 2; // Same as request command_name.
-    string error_code   = 3; // "ok" | "invalid_request" | "internal_error" | "invalid_data" |
-                             // "access_denied" | "not_found"
-    int64 entry_id      = 4; // Id of the created group for "add".
-}
-
 message RouterToAdmin
 {
     RelayList relay_list             = 1;
@@ -233,7 +196,6 @@ message RouterToAdmin
     UserResult user_result           = 7;
     PeerResult peer_result           = 8;
     WorkspaceResult workspace_result = 9;
-    GroupResult group_result         = 10;
 }
 
 message AdminToRouter
@@ -247,5 +209,4 @@ message AdminToRouter
     UserRequest user_request              = 7;
     PeerRequest peer_request              = 8;
     WorkspaceRequest workspace_request    = 9;
-    GroupRequest group_request            = 10;
 }

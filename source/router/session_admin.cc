@@ -76,8 +76,6 @@ void SessionAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
         doPeerRequest(message.peer_request());
     else if (message.has_workspace_request())
         doWorkspaceRequest(message.workspace_request());
-    else if (message.has_group_request())
-        doGroupRequest(message.group_request());
     else
         CLOG(ERROR) << "Unhandled message from manager";
 }
@@ -627,99 +625,6 @@ void SessionAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& req
     else
     {
         CLOG(ERROR) << "Unknown workspace request command:" << request.command_name();
-        result->set_error_code(proto::router::kErrorInvalidRequest);
-    }
-
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionAdmin::doGroupRequest(const proto::router::GroupRequest& request)
-{
-    proto::router::RouterToAdmin message;
-    proto::router::GroupResult* result = message.mutable_group_result();
-    result->set_request_id(request.request_id());
-    result->set_command_name(request.command_name());
-
-    const qint64 workspace_id = request.workspace_id();
-    const proto::router::Group& group = request.group();
-    const qint64 entry_id = group.entry_id();
-    const qint64 parent_id = group.parent_id();
-    const QString name = QString::fromStdString(group.name()).trimmed();
-    const QByteArray comment = QByteArray::fromStdString(group.comment());
-
-    if (workspace_id <= 0)
-    {
-        CLOG(ERROR) << "Invalid workspace id in group request:" << workspace_id;
-        result->set_error_code(proto::router::kErrorInvalidRequest);
-        sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
-        return;
-    }
-
-    Database& database = Database::instance();
-    if (!database.isValid())
-    {
-        CLOG(ERROR) << "Failed to connect to database";
-        result->set_error_code(proto::router::kErrorInternalError);
-        sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
-        return;
-    }
-
-    // Admin must be a member of the target workspace to manage its groups. This matches the
-    // workspace-access semantics used elsewhere; non-members do not see the workspace's
-    // wrapped_gk and cannot meaningfully add or edit AEAD-encrypted group fields anyway.
-    if (!database.hasWorkspaceAccess(userId(), workspace_id))
-    {
-        CLOG(ERROR) << "User" << userId() << "has no access to workspace" << workspace_id;
-        result->set_error_code(proto::router::kErrorAccessDenied);
-        sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
-        return;
-    }
-
-    if (request.command_name() == proto::router::kCommandGroupAdd)
-    {
-        CLOG(INFO) << "Group add request: workspace_id=" << workspace_id
-                   << "parent_id=" << parent_id << "name=" << name;
-
-        qint64 new_id = -1;
-        const std::string_view error_code =
-            database.addGroup(workspace_id, parent_id, name, comment, &new_id);
-        result->set_error_code(error_code);
-        if (error_code == proto::router::kErrorOk)
-        {
-            result->set_entry_id(new_id);
-            Service::instance()->notifyChanged(Service::NOTIFY_GROUPS);
-        }
-    }
-    else if (request.command_name() == proto::router::kCommandGroupModify)
-    {
-        CLOG(INFO) << "Group modify request: workspace_id=" << workspace_id
-                   << "entry_id=" << entry_id << "new_parent_id=" << parent_id
-                   << "name=" << name;
-
-        const std::string_view error_code =
-            database.modifyGroup(workspace_id, entry_id, parent_id, name, comment);
-        result->set_error_code(error_code);
-        if (error_code == proto::router::kErrorOk)
-            Service::instance()->notifyChanged(Service::NOTIFY_GROUPS);
-    }
-    else if (request.command_name() == proto::router::kCommandGroupDelete)
-    {
-        CLOG(INFO) << "Group delete request: workspace_id=" << workspace_id
-                   << "entry_id=" << entry_id;
-
-        const std::string_view error_code = database.removeGroup(workspace_id, entry_id);
-        result->set_error_code(error_code);
-        if (error_code == proto::router::kErrorOk)
-        {
-            // Deleting a group detaches hosts that pointed into its subtree to the workspace
-            // root, so signal both lists to refresh.
-            Service::instance()->notifyChanged(Service::NOTIFY_GROUPS | Service::NOTIFY_HOSTS);
-        }
-    }
-    else
-    {
-        CLOG(ERROR) << "Unknown group request command:" << request.command_name();
         result->set_error_code(proto::router::kErrorInvalidRequest);
     }
 

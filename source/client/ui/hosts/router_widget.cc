@@ -485,12 +485,21 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     connect(ui->button_hosts_next, &QToolButton::clicked, this, &RouterWidget::onHostsNextClicked);
 
     updateHostsPagination();
+    syncAdminVisibility();
 }
 
 //--------------------------------------------------------------------------------------------------
 RouterWidget::~RouterWidget()
 {
     LOG(INFO) << "Dtor";
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::syncAdminVisibility()
+{
+    const bool is_admin = router_->config().sessionType() == proto::router::SESSION_TYPE_ADMIN;
+    ui->tab->setVisible(is_admin);
+    ui->label_non_admin_hint->setVisible(!is_admin);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -508,6 +517,8 @@ Router::Status RouterWidget::status() const
 //--------------------------------------------------------------------------------------------------
 RouterWidget::TabType RouterWidget::currentTabType() const
 {
+    if (router_->config().sessionType() != proto::router::SESSION_TYPE_ADMIN)
+        return TabType::NONE;
     return static_cast<TabType>(ui->tab->currentIndex());
 }
 
@@ -712,6 +723,9 @@ void RouterWidget::copyCurrentRelayColumn(int column)
 //--------------------------------------------------------------------------------------------------
 QByteArray RouterWidget::saveState()
 {
+    if (router_->config().sessionType() != proto::router::SESSION_TYPE_ADMIN)
+        return QByteArray();
+
     QByteArray buffer;
 
     {
@@ -733,6 +747,9 @@ QByteArray RouterWidget::saveState()
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::restoreState(const QByteArray& state)
 {
+    if (router_->config().sessionType() != proto::router::SESSION_TYPE_ADMIN)
+        return;
+
     QDataStream stream(state);
     stream.setVersion(QDataStream::Qt_6_10);
 
@@ -807,6 +824,12 @@ void RouterWidget::restoreState(const QByteArray& state)
         ui->tree_workspaces->header()->setSectionsClickable(true);
         ui->tree_workspaces->header()->setSortIndicatorShown(true);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+bool RouterWidget::canReload() const
+{
+    return router_->config().sessionType() == proto::router::SESSION_TYPE_ADMIN;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -901,6 +924,7 @@ void RouterWidget::disconnectFromRouter()
 void RouterWidget::updateConfig(const RouterConfig& config)
 {
     router_->updateConfig(config);
+    syncAdminVisibility();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1221,40 +1245,43 @@ void RouterWidget::onStatusChanged(qint64 router_id, Router::Status status)
             break;
     }
 
-    if (status == Router::Status::ONLINE)
+    if (router_->config().sessionType() == proto::router::SESSION_TYPE_ADMIN)
     {
-        // Workspaces must be fetched first so the GK cache is populated by the time the host
-        // list response arrives; otherwise the encrypted host fields stay empty.
-        onUpdateWorkspaceList();
-        onUpdateRelayList();
-        onUpdateHostList();
-        onUpdateClientList();
-        onUpdateUserList();
+        if (status == Router::Status::ONLINE)
+        {
+            // Workspaces must be fetched first so the GK cache is populated by the time the
+            // host list response arrives; otherwise the encrypted host fields stay empty.
+            onUpdateWorkspaceList();
+            onUpdateRelayList();
+            onUpdateHostList();
+            onUpdateClientList();
+            onUpdateUserList();
 
-        ui->tree_relays->setEnabled(true);
-        ui->tree_peers->setEnabled(true);
-        ui->tree_hosts->setEnabled(true);
-        ui->tree_clients->setEnabled(true);
-        ui->tree_users->setEnabled(true);
-        ui->tree_workspaces->setEnabled(true);
-    }
-    else
-    {
-        ui->tree_relays->setEnabled(false);
-        ui->tree_peers->setEnabled(false);
-        ui->tree_hosts->setEnabled(false);
-        ui->tree_clients->setEnabled(false);
-        ui->tree_users->setEnabled(false);
-        ui->tree_workspaces->setEnabled(false);
+            ui->tree_relays->setEnabled(true);
+            ui->tree_peers->setEnabled(true);
+            ui->tree_hosts->setEnabled(true);
+            ui->tree_clients->setEnabled(true);
+            ui->tree_users->setEnabled(true);
+            ui->tree_workspaces->setEnabled(true);
+        }
+        else
+        {
+            ui->tree_relays->setEnabled(false);
+            ui->tree_peers->setEnabled(false);
+            ui->tree_hosts->setEnabled(false);
+            ui->tree_clients->setEnabled(false);
+            ui->tree_users->setEnabled(false);
+            ui->tree_workspaces->setEnabled(false);
 
-        ui->tree_relays->clear();
-        ui->tree_peers->clear();
-        ui->tree_hosts->clear();
-        ui->tree_clients->clear();
-        ui->tree_users->clear();
-        ui->tree_workspaces->clear();
+            ui->tree_relays->clear();
+            ui->tree_peers->clear();
+            ui->tree_hosts->clear();
+            ui->tree_clients->clear();
+            ui->tree_users->clear();
+            ui->tree_workspaces->clear();
 
-        updateStatusLabel();
+            updateStatusLabel();
+        }
     }
 
     emit sig_statusChanged(router_id, status);

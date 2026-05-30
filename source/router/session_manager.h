@@ -22,6 +22,7 @@
 #include "router/session_client.h"
 
 namespace proto::router {
+class GroupRequest;
 class HostRequest;
 } // namespace proto::router
 
@@ -39,6 +40,7 @@ protected:
 
 private:
     void doHostRequest(const proto::router::HostRequest& request);
+    void doGroupRequest(const proto::router::GroupRequest& request);
 
     Q_DISABLE_COPY_MOVE(SessionManager)
 };

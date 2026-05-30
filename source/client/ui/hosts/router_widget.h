@@ -56,8 +56,12 @@ class RouterWidget final : public ContentWidget
     Q_OBJECT
 
 public:
+    // NONE is returned by currentTabType() for non-admin sessions, where the tab widget is
+    // hidden and replaced with a minimal info panel. The other values follow the QTabWidget
+    // index order so they can be obtained via static_cast<TabType>(ui->tab->currentIndex()).
     enum class TabType
     {
+        NONE       = -1,
         WORKSPACES = 0,
         HOSTS      = 1,
         CLIENTS    = 2,
@@ -95,7 +99,7 @@ public:
     // ContentWidget implementation.
     QByteArray saveState() final;
     void restoreState(const QByteArray& state) final;
-    bool canReload() const final { return true; }
+    bool canReload() const final;
     void reload() final;
     bool canSave() const final;
     void save() final;
@@ -187,6 +191,7 @@ private slots:
     void onHostsNextClicked();
 
 private:
+    void syncAdminVisibility();
     void updateStatusLabel();
     void updateRelayStatistics();
     void updateHostsPagination();
@@ -200,7 +205,6 @@ private:
     Router* router_ = nullptr;
 
     StatusDialog* status_dialog_ = nullptr;
-
     QLabel* status_label_ = nullptr;
 
     qint64 hosts_page_size_ = 100;

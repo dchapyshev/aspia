@@ -222,8 +222,6 @@ void Router::onTcpMessageReceived(quint8 channel_id, const QByteArray& bytes)
             dispatch(message.client_result().request_id(), message.client_result());
         else if (message.has_workspace_result())
             dispatch(message.workspace_result().request_id(), message.workspace_result());
-        else if (message.has_group_result())
-            dispatch(message.group_result().request_id(), message.group_result());
         else if (message.has_peer_result())
             dispatch(message.peer_result().request_id(), message.peer_result());
         else
@@ -240,6 +238,8 @@ void Router::onTcpMessageReceived(quint8 channel_id, const QByteArray& bytes)
 
         if (message.has_host_result())
             dispatch(message.host_result().request_id(), message.host_result());
+        else if (message.has_group_result())
+            dispatch(message.group_result().request_id(), message.group_result());
         else
             LOG(WARNING) << "Unhandled manager message";
     }

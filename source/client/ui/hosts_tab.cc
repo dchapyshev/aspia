@@ -505,11 +505,19 @@ void HostsTab::onSidebarContextMenu(Sidebar::Item::Type type, const QPoint& pos)
 
         auto* group_item = static_cast<Sidebar::RouterGroupItem*>(item);
 
-        menu.addAction(ui->action_add_group);
-        if (!group_item->isWorkspace())
+        proto::router::SessionType session_type = proto::router::SESSION_TYPE_CLIENT;
+        if (Router* router = Router::instance(group_item->routerId()))
+            session_type = router->config().sessionType();
+
+        // Clients are read-only and cannot manage host groups.
+        if (session_type != proto::router::SESSION_TYPE_CLIENT)
         {
-            menu.addAction(ui->action_edit_group);
-            menu.addAction(ui->action_delete_group);
+            menu.addAction(ui->action_add_group);
+            if (!group_item->isWorkspace())
+            {
+                menu.addAction(ui->action_edit_group);
+                menu.addAction(ui->action_delete_group);
+            }
         }
     }
     else if (type == Sidebar::Item::Type::ROUTER)
@@ -528,6 +536,9 @@ void HostsTab::onSidebarContextMenu(Sidebar::Item::Type type, const QPoint& pos)
     {
         return;
     }
+
+    if (menu.isEmpty())
+        return;
 
     menu.exec(pos);
 }
@@ -1419,9 +1430,16 @@ void HostsTab::updateActionsState()
     else if (sidebar_item && sidebar_item->itemType() == Sidebar::Item::Type::ROUTER_GROUP)
     {
         auto* group_item = static_cast<Sidebar::RouterGroupItem*>(sidebar_item);
-        ui->action_add_group->setVisible(true);
-        ui->action_edit_group->setVisible(!group_item->isWorkspace());
-        ui->action_delete_group->setVisible(!group_item->isWorkspace());
+
+        proto::router::SessionType session_type = proto::router::SESSION_TYPE_CLIENT;
+        if (Router* router = Router::instance(group_item->routerId()))
+            session_type = router->config().sessionType();
+
+        // Clients are read-only and cannot manage host groups.
+        const bool can_manage_groups = session_type != proto::router::SESSION_TYPE_CLIENT;
+        ui->action_add_group->setVisible(can_manage_groups);
+        ui->action_edit_group->setVisible(can_manage_groups && !group_item->isWorkspace());
+        ui->action_delete_group->setVisible(can_manage_groups && !group_item->isWorkspace());
     }
 
     if (sidebar_item && sidebar_item->itemType() == Sidebar::Item::ROUTER)

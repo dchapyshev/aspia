@@ -599,14 +599,14 @@ void Router::addGroup(qint64 workspace_id, const Router::Group& group, QObject* 
     proto::router::Group serialized;
     if (!buildGroup(workspace_id, group, &serialized))
         return;
-    proto::router::AdminToRouter message;
+    proto::router::ManagerToRouter message;
     auto* request = message.mutable_group_request();
     request->set_request_id(nextRequestId());
     request->set_command_name(proto::router::kCommandGroupAdd);
     request->set_workspace_id(workspace_id);
     request->mutable_group()->Swap(&serialized);
     registerPending<proto::router::GroupResult>(request, receiver, std::move(handler));
-    emitSend(proto::router::CHANNEL_ID_ADMIN, message);
+    emitSend(proto::router::CHANNEL_ID_MANAGER, message);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -616,28 +616,28 @@ void Router::modifyGroup(qint64 workspace_id, const Router::Group& group, QObjec
     proto::router::Group serialized;
     if (!buildGroup(workspace_id, group, &serialized))
         return;
-    proto::router::AdminToRouter message;
+    proto::router::ManagerToRouter message;
     auto* request = message.mutable_group_request();
     request->set_request_id(nextRequestId());
     request->set_command_name(proto::router::kCommandGroupModify);
     request->set_workspace_id(workspace_id);
     request->mutable_group()->Swap(&serialized);
     registerPending<proto::router::GroupResult>(request, receiver, std::move(handler));
-    emitSend(proto::router::CHANNEL_ID_ADMIN, message);
+    emitSend(proto::router::CHANNEL_ID_MANAGER, message);
 }
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
 void Router::deleteGroup(qint64 workspace_id, qint64 entry_id, QObject* receiver, HandlerT handler)
 {
-    proto::router::AdminToRouter message;
+    proto::router::ManagerToRouter message;
     auto* request = message.mutable_group_request();
     request->set_request_id(nextRequestId());
     request->set_command_name(proto::router::kCommandGroupDelete);
     request->set_workspace_id(workspace_id);
     request->mutable_group()->set_entry_id(entry_id);
     registerPending<proto::router::GroupResult>(request, receiver, std::move(handler));
-    emitSend(proto::router::CHANNEL_ID_ADMIN, message);
+    emitSend(proto::router::CHANNEL_ID_MANAGER, message);
 }
 
 //--------------------------------------------------------------------------------------------------
