@@ -185,7 +185,18 @@ void SessionClient::readTwoFactorResponse(const proto::router::TwoFactorResponse
         if (!Database::instance().findClientDeviceToken(token_id, &stored_user_id) ||
             stored_user_id != userId())
         {
-            sendTwoFactorResult(proto::router::TWO_FACTOR_STATUS_INVALID_TOKEN);
+            // The presented token is gone or owned by someone else (revoked, password
+            // change, database wiped). The user still has a valid TOTP secret, so instead
+            // of tearing down the connection we re-open the 2FA stage and ask for a code.
+            // |token_rejected| tells the client to drop the stale local copy and not retry
+            // the token path on this challenge.
+            CLOG(INFO) << "Device token rejected for user" << userId() << "- asking for TOTP";
+
+            proto::router::RouterToClient message;
+            proto::router::TwoFactorChallenge* challenge = message.mutable_two_factor_challenge();
+            challenge->set_mode(proto::router::TWO_FACTOR_MODE_ACTIVE);
+            challenge->set_token_rejected(true);
+            sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
             return;
         }
 

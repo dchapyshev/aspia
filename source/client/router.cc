@@ -515,6 +515,22 @@ void Router::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& cha
     {
         case proto::router::TWO_FACTOR_MODE_ACTIVE:
         {
+            // The router can ask twice: once at the start of the 2FA stage, and a second
+            // time when our presented |token_id| was rejected (revoked, password change,
+            // database wiped). On the latter we must drop the stale local copy and skip
+            // straight to the TOTP prompt; otherwise we would loop, presenting the same
+            // dead token again.
+            if (challenge.token_rejected())
+            {
+                LOG(INFO) << "Router rejected device token - clearing local copy";
+                config_.clearDeviceToken();
+                if (!Database::instance().modifyRouter(config_))
+                    LOG(WARNING) << "Failed to clear stale device token";
+
+                emit sig_twoFactorCodeRequired(config_.routerId());
+                return;
+            }
+
             // Token path: if we hold a token from a previous successful TOTP, present it and
             // skip the prompt entirely. Otherwise ask the UI for a fresh TOTP code.
             const QByteArray token_id = config_.deviceTokenId();
@@ -560,17 +576,6 @@ void Router::readTwoFactorResult(const proto::router::TwoFactorResult& result)
     if (result.status() != proto::router::TWO_FACTOR_STATUS_OK)
     {
         LOG(INFO) << "2FA stage rejected by router:" << result.status();
-
-        if (result.status() == proto::router::TWO_FACTOR_STATUS_INVALID_TOKEN)
-        {
-            // The token we tried to authenticate with is gone (revoked, password changed,
-            // database wiped). Clear the local copy so the next attempt falls back to the
-            // TOTP path.
-            config_.clearDeviceToken();
-            if (!Database::instance().modifyRouter(config_))
-                LOG(WARNING) << "Failed to clear stale device token";
-        }
-
         disconnectFromRouter();
         return;
     }

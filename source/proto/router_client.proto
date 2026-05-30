@@ -230,8 +230,7 @@ enum TwoFactorStatus
     TWO_FACTOR_STATUS_UNKNOWN        = 0;
     TWO_FACTOR_STATUS_OK             = 1;
     TWO_FACTOR_STATUS_INVALID_CODE   = 2;
-    TWO_FACTOR_STATUS_INVALID_TOKEN  = 3;
-    TWO_FACTOR_STATUS_INTERNAL_ERROR = 4;
+    TWO_FACTOR_STATUS_INTERNAL_ERROR = 3;
 }
 
 // Router to client.
@@ -243,6 +242,12 @@ message TwoFactorChallenge
     // is embedded as the |secret| query parameter; the client extracts it from there for
     // the manual-entry fallback.
     string otpauth_uri = 2;
+
+    // MODE_ACTIVE: set when the router rejected the |token_id| the client just presented
+    // (revoked, password change, database wiped) and is asking for a TOTP code instead. The
+    // client must drop the stale local token and proceed straight to the TOTP prompt without
+    // re-trying the token path on this challenge.
+    bool token_rejected = 3;
 }
 
 // Client to router.
