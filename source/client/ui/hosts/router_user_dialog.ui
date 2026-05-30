@@ -106,13 +106,6 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_sessions">
        <item>
-        <widget class="QLabel" name="label_tokens">
-         <property name="text">
-          <string>Active device tokens:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QTreeWidget" name="tree_tokens">
          <property name="rootIsDecorated">
           <bool>false</bool>
@@ -125,12 +118,17 @@
          </property>
          <column>
           <property name="text">
-           <string>Created</string>
+           <string>Signed in</string>
           </property>
          </column>
          <column>
           <property name="text">
-           <string>Last Used</string>
+           <string>Last activity</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Address</string>
           </property>
          </column>
         </widget>
@@ -153,14 +151,14 @@
          <item>
           <widget class="QPushButton" name="button_revoke_token">
            <property name="text">
-            <string>Revoke</string>
+            <string>Sign out</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="button_revoke_all_tokens">
            <property name="text">
-            <string>Revoke All</string>
+            <string>Sign out all</string>
            </property>
           </widget>
          </item>

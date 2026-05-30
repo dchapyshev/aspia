@@ -66,6 +66,7 @@ struct DeviceToken
     qint64 token_id     = 0; // client_device_tokens.token_id. Opaque to admins.
     qint64 created_at   = 0; // Unix seconds.
     qint64 last_used_at = 0; // Unix seconds.
+    QString address;         // Address of the session at last use (or issue, if untouched).
 };
 
 class Database
@@ -115,16 +116,18 @@ public:
     // Client device tokens (bearer "remember this device" credentials issued during client sessions)
     //----------------------------------------------------------------------------------------------
 
-    // Issues a new client device token for |user_id|. On success writes the freshly generated
-    // opaque token id into *token_id. Returns false on database error.
-    bool issueClientDeviceToken(qint64 user_id, QByteArray* token_id);
+    // Issues a new client device token for |user_id|. |address| is stored as the address of
+    // the session that requested the issue (shown to admins). On success writes the freshly
+    // generated opaque token id into *token_id. Returns false on database error.
+    bool issueClientDeviceToken(qint64 user_id, const QString& address, QByteArray* token_id);
 
     // Looks up a token by id. On success writes the owner user_id into the out parameter.
     // Returns false if the row is absent.
     bool findClientDeviceToken(const QByteArray& token_id, qint64* user_id) const;
 
-    // Updates the token's last_used_at timestamp. Called after a successful token lookup.
-    bool touchClientDeviceToken(const QByteArray& token_id);
+    // Updates the token's last_used_at timestamp and last seen |address|. Called after a
+    // successful token lookup.
+    bool touchClientDeviceToken(const QByteArray& token_id, const QString& address);
 
     // Removes a single token by its opaque router-side row id, but only if it belongs to
     // |user_id|. The user_id check is defense in depth - the admin channel is already

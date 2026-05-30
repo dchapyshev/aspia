@@ -200,7 +200,7 @@ void SessionClient::readTwoFactorResponse(const proto::router::TwoFactorResponse
             return;
         }
 
-        Database::instance().touchClientDeviceToken(token_id);
+        Database::instance().touchClientDeviceToken(token_id, address().toString());
         sendTwoFactorResult(proto::router::TWO_FACTOR_STATUS_OK);
         return;
     }
@@ -254,7 +254,7 @@ void SessionClient::readTwoFactorResponse(const proto::router::TwoFactorResponse
     // token is non-fatal: the user is still let in, they will be prompted for TOTP again
     // next time.
     QByteArray new_token_id;
-    if (!Database::instance().issueClientDeviceToken(userId(), &new_token_id))
+    if (!Database::instance().issueClientDeviceToken(userId(), address().toString(), &new_token_id))
     {
         CLOG(WARNING) << "Failed to issue device token for user" << userId();
         new_token_id = QByteArray();

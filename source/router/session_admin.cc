@@ -189,6 +189,7 @@ void SessionAdmin::doUserListRequest(const proto::router::UserListRequest& reque
                 token->set_token_id(src.token_id);
                 token->set_created_at(src.created_at);
                 token->set_last_used_at(src.last_used_at);
+                token->set_address(src.address.toStdString());
             }
         }
     }

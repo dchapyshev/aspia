@@ -268,6 +268,7 @@ bool ensureSchema(QSqlDatabase& sql_db)
              "\"user_id\" INTEGER NOT NULL,"
              "\"created_at\" INTEGER NOT NULL DEFAULT 0,"
              "\"last_used_at\" INTEGER NOT NULL DEFAULT 0,"
+             "\"address\" TEXT NOT NULL DEFAULT '',"
              "FOREIGN KEY(\"user_id\") REFERENCES \"users\"(\"id\") ON DELETE CASCADE)"))
     {
         return false;
@@ -650,7 +651,7 @@ bool Database::updateUserOtpCounter(qint64 user_id, quint64 counter)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::issueClientDeviceToken(qint64 user_id, QByteArray* token_id)
+bool Database::issueClientDeviceToken(qint64 user_id, const QString& address, QByteArray* token_id)
 {
     CHECK(token_id);
     *token_id = QByteArray();
@@ -670,12 +671,14 @@ bool Database::issueClientDeviceToken(qint64 user_id, QByteArray* token_id)
     const qint64 now = QDateTime::currentSecsSinceEpoch();
 
     QSqlQuery query(connection());
-    query.prepare("INSERT INTO client_device_tokens (token_hash, user_id, created_at, last_used_at) "
-                  "VALUES (?, ?, ?, ?)");
+    query.prepare("INSERT INTO client_device_tokens "
+                  "(token_hash, user_id, created_at, last_used_at, address) "
+                  "VALUES (?, ?, ?, ?, ?)");
     query.addBindValue(token_hash);
     query.addBindValue(user_id);
     query.addBindValue(now);
     query.addBindValue(now);
+    query.addBindValue(address);
 
     if (!query.exec())
     {
@@ -736,7 +739,7 @@ bool Database::findClientDeviceToken(const QByteArray& token_id, qint64* user_id
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::touchClientDeviceToken(const QByteArray& token_id)
+bool Database::touchClientDeviceToken(const QByteArray& token_id, const QString& address)
 {
     if (!isValid())
     {
@@ -747,8 +750,9 @@ bool Database::touchClientDeviceToken(const QByteArray& token_id)
     const QByteArray token_hash = GenericHash::hash(GenericHash::SHA256, token_id);
 
     QSqlQuery query(connection());
-    query.prepare("UPDATE client_device_tokens SET last_used_at=? WHERE token_hash=?");
+    query.prepare("UPDATE client_device_tokens SET last_used_at=?, address=? WHERE token_hash=?");
     query.addBindValue(QDateTime::currentSecsSinceEpoch());
+    query.addBindValue(address);
     query.addBindValue(token_hash);
 
     if (!query.exec())
@@ -814,7 +818,7 @@ QList<DeviceToken> Database::listClientDeviceTokens(qint64 user_id) const
     }
 
     QSqlQuery query(connection());
-    query.prepare("SELECT token_id, created_at, last_used_at FROM client_device_tokens "
+    query.prepare("SELECT token_id, created_at, last_used_at, address FROM client_device_tokens "
                   "WHERE user_id=? ORDER BY created_at");
     query.addBindValue(user_id);
 
@@ -830,6 +834,7 @@ QList<DeviceToken> Database::listClientDeviceTokens(qint64 user_id) const
         token.token_id     = query.value(0).toLongLong();
         token.created_at   = query.value(1).toLongLong();
         token.last_used_at = query.value(2).toLongLong();
+        token.address      = query.value(3).toString();
         tokens.append(token);
     }
     return tokens;

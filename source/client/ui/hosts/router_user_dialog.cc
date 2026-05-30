@@ -149,6 +149,7 @@ void RouterUserDialog::onUserListReceived(const proto::router::UserList& list)
                 token.token_id     = src.token_id();
                 token.created_at   = src.created_at();
                 token.last_used_at = src.last_used_at();
+                token.address      = QString::fromStdString(src.address());
                 tokens_.append(token);
             }
 
@@ -205,7 +206,7 @@ void RouterUserDialog::onRevokeTokenClicked()
     if (token_id <= 0)
         return;
 
-    if (MsgBox::question(this, tr("Are you sure you want to revoke this device token?"))
+    if (MsgBox::question(this, tr("Are you sure you want to sign this user out of this session?"))
         != MsgBox::Yes)
     {
         return;
@@ -232,7 +233,7 @@ void RouterUserDialog::onRevokeAllTokensClicked()
         return;
 
     if (MsgBox::question(this,
-                         tr("Are you sure you want to revoke all device tokens for this user?"))
+                         tr("Are you sure you want to sign this user out of all sessions?"))
         != MsgBox::Yes)
     {
         return;
@@ -286,9 +287,9 @@ void RouterUserDialog::onRevokeResultReceived(const proto::router::UserResult& r
 
     const char* message;
     if (error_code == proto::router::kErrorNotFound)
-        message = QT_TR_NOOP("Token not found. The list may be out of date.");
+        message = QT_TR_NOOP("Session not found. The list may be out of date.");
     else if (error_code == proto::router::kErrorInvalidRequest)
-        message = QT_TR_NOOP("Invalid revoke request.");
+        message = QT_TR_NOOP("Invalid sign-out request.");
     else
         message = QT_TR_NOOP("Unknown internal error.");
 
@@ -483,6 +484,7 @@ void RouterUserDialog::updateTokenTree()
         QTreeWidgetItem* item = new QTreeWidgetItem();
         item->setText(0, formatTimestamp(token.created_at));
         item->setText(1, formatTimestamp(token.last_used_at));
+        item->setText(2, token.address);
         item->setData(0, Qt::UserRole, QVariant::fromValue(token.token_id));
         ui->tree_tokens->addTopLevelItem(item);
     }

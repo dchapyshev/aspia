@@ -119,6 +119,7 @@ message User
         int64 token_id     = 1;
         int64 created_at   = 2;
         int64 last_used_at = 3;
+        string address     = 4;
     }
 
     int64 entry_id         = 1;

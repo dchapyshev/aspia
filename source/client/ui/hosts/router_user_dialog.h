@@ -64,6 +64,7 @@ private:
         qint64 token_id     = 0;
         qint64 created_at   = 0;
         qint64 last_used_at = 0;
+        QString address;
     };
 
     void onButtonBoxClicked(QAbstractButton* button);
