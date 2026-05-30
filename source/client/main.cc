@@ -531,7 +531,7 @@ int main(int argc, char* argv[])
             dialog.setWindowTitle(QApplication::translate("Client", "Unlock"));
             dialog.setHeaderIcon(":/img/lock.svg");
             dialog.setHeaderText(QApplication::translate(
-                "Client", "Address book is encrypted. To open, you must enter a password."));
+                "Client", "Enter the master password to unlock the application."));
             dialog.setShowPasswordButtonVisible(true);
 
             if (dialog.exec() != QDialog::Accepted)
@@ -557,7 +557,7 @@ int main(int argc, char* argv[])
         dialog.setWindowTitle(QApplication::translate("Client", "Set Master Password"));
         dialog.setHeaderIcon(":/img/lock.svg");
         dialog.setHeaderText(QApplication::translate(
-            "Client", "Set the master password to encrypt the address book."));
+            "Client", "Set a master password required to unlock the application."));
         dialog.setValidator([](CredentialsDialog* d) -> bool
         {
             SecureString new_password = d->password();
