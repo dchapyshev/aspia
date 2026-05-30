@@ -20,22 +20,21 @@
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="284"/>
-        <location filename="../client/aab_importer.cc" line="326"/>
+        <location filename="../client/aab_importer.cc" line="332"/>
         <source>The address book file is corrupted or has an unknown format.</source>
         <translation>Файл адресной книги поврежден или имеет неизвестный формат.</translation>
     </message>
     <message>
-        <location filename="../client/aab_importer.cc" line="298"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation>ChaCha20 + Poly1305 (256-битный ключ)</translation>
+        <translation type="vanished">ChaCha20 + Poly1305 (256-битный ключ)</translation>
     </message>
     <message>
-        <location filename="../client/aab_importer.cc" line="318"/>
+        <location filename="../client/aab_importer.cc" line="324"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation>Файл адресной книги зашифрован неподдерживаемым методом шифрования.</translation>
     </message>
     <message>
-        <location filename="../client/aab_importer.cc" line="353"/>
+        <location filename="../client/aab_importer.cc" line="359"/>
         <source>Import completed successfully.
 Groups added: %1
 Hosts added: %2
@@ -48,12 +47,22 @@ Routers added: %4</source>
 Роутеров добавлено: %4</translation>
     </message>
     <message>
-        <location filename="../client/aab_importer.cc" line="310"/>
+        <location filename="../client/aab_importer.cc" line="316"/>
         <source>Unable to decrypt the address book with the specified password.</source>
         <translation>Не удалось расшифровать адресную книгу с указанным паролем.</translation>
     </message>
     <message>
-        <location filename="../client/aab_importer.cc" line="348"/>
+        <location filename="../client/aab_importer.cc" line="299"/>
+        <source>Unlock</source>
+        <translation>Разблокировка</translation>
+    </message>
+    <message>
+        <location filename="../client/aab_importer.cc" line="301"/>
+        <source>Address book is encrypted. To open, you must enter a password.</source>
+        <translation>Адресная книга зашифрована. Для открытия вы должны ввести пароль.</translation>
+    </message>
+    <message>
+        <location filename="../client/aab_importer.cc" line="354"/>
         <source>Nothing was imported.</source>
         <translation>Ничего не было импортировано.</translation>
     </message>
@@ -377,17 +386,17 @@ Routers added: %4</source>
         <translation>Пароль</translation>
     </message>
     <message>
-        <location filename="../client/ui/authorization_dialog.ui" line="90"/>
+        <location filename="../client/ui/authorization_dialog.ui" line="66"/>
         <source>One-time password connection</source>
         <translation>Подключение по одноразовому паролю</translation>
     </message>
     <message>
-        <location filename="../client/ui/authorization_dialog.cc" line="156"/>
+        <location filename="../client/ui/authorization_dialog.cc" line="146"/>
         <source>Username cannot be empty.</source>
         <translation>Имя пользователя не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../client/ui/authorization_dialog.cc" line="164"/>
+        <location filename="../client/ui/authorization_dialog.cc" line="154"/>
         <source>Password cannot be empty.</source>
         <translation>Пароль не может быть пустым.</translation>
     </message>
@@ -682,64 +691,108 @@ Routers added: %4</source>
         <translation type="vanished">Некорректное значение для &quot;%1&quot;. Возможные значения: %2.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="119"/>
+        <location filename="../client/main.cc" line="120"/>
         <source>Connecting to router %1...</source>
         <translation>Подключение к маршрутизатору %1...</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="124"/>
+        <location filename="../client/main.cc" line="125"/>
         <source>Connection to router %1 established.</source>
         <translation>Соединение с маршрутизатором %1 установлено.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="133"/>
+        <location filename="../client/main.cc" line="134"/>
         <source>Disconnected from router %1.</source>
         <translation>Отключено от маршрутизатора %1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="145"/>
+        <location filename="../client/main.cc" line="146"/>
         <source>Network error: %1.</source>
         <translation>Сетевая ошибка: %1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="289"/>
+        <location filename="../client/main.cc" line="313"/>
         <source>Unable to read connection config from stdin.</source>
         <translation>Не удалось прочитать конфигурацию подключения из stdin.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="300"/>
+        <location filename="../client/main.cc" line="324"/>
         <source>Empty connection config from stdin.</source>
         <translation>Пустая конфигурация подключения из stdin.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="310"/>
+        <location filename="../client/main.cc" line="334"/>
         <source>Invalid JSON in connection config: %1</source>
         <translation>Некорректный JSON в конфигурации подключения: %1</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="333"/>
+        <location filename="../client/main.cc" line="357"/>
         <source>Missing or invalid &quot;host&quot; object in connection config.</source>
         <translation>Отсутствует или недопустим объект &quot;host&quot; в конфигурации подключения.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="349"/>
+        <location filename="../client/main.cc" line="373"/>
         <source>Missing required host field: address.</source>
         <translation>Отсутствует обязательное поле хоста: address.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="364"/>
+        <location filename="../client/main.cc" line="388"/>
         <source>Field &quot;desktop&quot; must be an object.</source>
         <translation>Поле &quot;desktop&quot; должно быть объектом.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="381"/>
+        <location filename="../client/main.cc" line="405"/>
         <source>Field &quot;desktop.%1&quot; must be boolean.</source>
         <translation>Поле &quot;desktop.%1&quot; должно иметь логический тип.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="477"/>
+        <location filename="../client/main.cc" line="501"/>
         <source>Read JSON connection config from stdin until EOF and start a session.</source>
         <translation>Прочитать JSON-конфигурацию подключения из stdin до EOF и начать сеанс.</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="531"/>
+        <source>Unlock</source>
+        <translation>Разблокировка</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="533"/>
+        <source>Enter the master password to unlock the application.</source>
+        <translation>Введите мастер-пароль, чтобы разблокировать приложение.</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="557"/>
+        <source>Set Master Password</source>
+        <translation>Установка мастер-пароля</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="559"/>
+        <source>Set a master password required to unlock the application.</source>
+        <translation>Установите мастер-пароль, необходимый для разблокировки приложения.</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="567"/>
+        <source>Password you entered does not meet the security requirements!</source>
+        <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/main.cc" line="569"/>
+        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
+            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.</numerusform>
+            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="573"/>
+        <source>Do you want to enter a different password?</source>
+        <translation>Вы хотите ввести другой пароль?</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="583"/>
+        <source>Unable to set master password.</source>
+        <translation>Не удалось установить мастер-пароль.</translation>
     </message>
     <message>
         <source>Unable to open connection config file: %1</source>
@@ -778,12 +831,12 @@ Routers added: %4</source>
         <translation type="vanished">Адрес удаленного компьютера.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="416"/>
+        <location filename="../client/main.cc" line="440"/>
         <source>Connection parameters to the router are not specified.</source>
         <translation>Параметры подключения к маршрутизатору не указаны.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="432"/>
+        <location filename="../client/main.cc" line="456"/>
         <source>Incorrect data for connecting to the router.</source>
         <translation>Неверные данные для подключения к маршрутизатору.</translation>
     </message>
@@ -792,7 +845,7 @@ Routers added: %4</source>
         <translation type="vanished">Путь к одноразовому JSON-файлу конфигурации подключения.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="519"/>
+        <location filename="../client/main.cc" line="549"/>
         <source>Invalid master password.</source>
         <translation>Неверный мастер-пароль.</translation>
     </message>
@@ -861,7 +914,7 @@ Routers added: %4</source>
         <translation type="vanished">Пароль маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="480"/>
+        <location filename="../client/main.cc" line="504"/>
         <source>Aspia Client</source>
         <translation>Клиент Aspia</translation>
     </message>
@@ -1377,6 +1430,46 @@ Routers added: %4</source>
     </message>
 </context>
 <context>
+    <name>CredentialsDialog</name>
+    <message>
+        <location filename="../common/ui/credentials_dialog.ui" line="79"/>
+        <source>Current password:</source>
+        <translation>Текущий пароль:</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/credentials_dialog.ui" line="89"/>
+        <location filename="../common/ui/credentials_dialog.cc" line="51"/>
+        <source>Password:</source>
+        <translation>Пароль:</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/credentials_dialog.ui" line="99"/>
+        <source>Confirm password:</source>
+        <translation>Подтвердите пароль:</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/credentials_dialog.cc" line="57"/>
+        <location filename="../common/ui/credentials_dialog.cc" line="61"/>
+        <source>New password:</source>
+        <translation>Новый пароль:</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/credentials_dialog.cc" line="195"/>
+        <source>Enter the current password.</source>
+        <translation>Введите текущий пароль.</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/credentials_dialog.cc" line="202"/>
+        <source>Password cannot be empty.</source>
+        <translation>Пароль не может быть пустым.</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/credentials_dialog.cc" line="209"/>
+        <source>Passwords do not match.</source>
+        <translation>Пароли не совпадают.</translation>
+    </message>
+</context>
+<context>
     <name>DesktopAgentMain</name>
     <message>
         <source>IPC channel id.</source>
@@ -1859,33 +1952,24 @@ Routers added: %4</source>
 <context>
     <name>ExportPasswordDialog</name>
     <message>
-        <location filename="../client/ui/export_password_dialog.ui" line="23"/>
         <source>Export Address Book</source>
-        <translation>Экспорт адресной книги</translation>
+        <translation type="vanished">Экспорт адресной книги</translation>
     </message>
     <message>
         <source>Enter a password to encrypt user names and passwords. Press &quot;Skip&quot; to export without them.</source>
         <translation type="vanished">Введите пароль для шифрования имён пользователей и паролей. Нажмите &quot;Пропустить&quot;, чтобы выполнить экспорт без них.</translation>
     </message>
     <message>
-        <location filename="../client/ui/export_password_dialog.ui" line="53"/>
         <source>Enter a password to encrypt the address book.</source>
-        <translation>Введите пароль для шифрования адресной книги.</translation>
+        <translation type="vanished">Введите пароль для шифрования адресной книги.</translation>
     </message>
     <message>
-        <location filename="../client/ui/export_password_dialog.ui" line="67"/>
         <source>Password:</source>
-        <translation>Пароль:</translation>
+        <translation type="vanished">Пароль:</translation>
     </message>
     <message>
-        <location filename="../client/ui/export_password_dialog.ui" line="77"/>
         <source>Confirm password:</source>
-        <translation>Подтвердите пароль:</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/export_password_dialog.ui" line="107"/>
-        <source>OK</source>
-        <translation></translation>
+        <translation type="vanished">Подтвердите пароль:</translation>
     </message>
     <message>
         <source>Encrypt</source>
@@ -1896,43 +1980,36 @@ Routers added: %4</source>
         <translation type="vanished">Пропустить</translation>
     </message>
     <message>
-        <location filename="../client/ui/export_password_dialog.ui" line="117"/>
         <source>Cancel</source>
-        <translation>Отмена</translation>
+        <translation type="vanished">Отмена</translation>
     </message>
     <message>
-        <location filename="../client/ui/export_password_dialog.cc" line="66"/>
         <source>Password cannot be empty.</source>
-        <translation>Пароль не может быть пустым.</translation>
+        <translation type="vanished">Пароль не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../client/ui/export_password_dialog.cc" line="73"/>
         <source>Passwords do not match.</source>
-        <translation>Пароли не совпадают.</translation>
+        <translation type="vanished">Пароли не совпадают.</translation>
     </message>
     <message>
-        <location filename="../client/ui/export_password_dialog.cc" line="79"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
+        <translation type="vanished">Введенный пароль не отвечает требованиям безопасности!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/export_password_dialog.cc" line="80"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
             <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.</numerusform>
             <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/export_password_dialog.cc" line="83"/>
         <source>Do you want to enter a different password?</source>
-        <translation>Вы хотите ввести другой пароль?</translation>
+        <translation type="vanished">Вы хотите ввести другой пароль?</translation>
     </message>
     <message>
-        <location filename="../client/ui/export_password_dialog.cc" line="86"/>
         <source>Warning</source>
-        <translation>Предупреждение</translation>
+        <translation type="vanished">Предупреждение</translation>
     </message>
     <message>
         <source>Without a password, user names and passwords will not be exported. Continue?</source>
@@ -2784,14 +2861,14 @@ Routers added: %4</source>
 <context>
     <name>HostTreeItem</name>
     <message>
-        <location filename="../client/ui/hosts/router_group_widget.cc" line="90"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="189"/>
+        <location filename="../client/ui/hosts/router_group_widget.cc" line="94"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="193"/>
         <source>Online</source>
         <translation>В сети</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_group_widget.cc" line="90"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="189"/>
+        <location filename="../client/ui/hosts/router_group_widget.cc" line="94"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="193"/>
         <source>Offline</source>
         <translation>Не в сети</translation>
     </message>
@@ -3179,21 +3256,21 @@ Routers added: %4</source>
         <translation type="vanished">Вы уверены, что хотите удалить маршрутизатор &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="402"/>
+        <location filename="../client/ui/hosts_tab.cc" line="412"/>
         <source>Hosts</source>
         <translation>Хосты</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="566"/>
-        <location filename="../client/ui/hosts_tab.cc" line="618"/>
-        <location filename="../client/ui/hosts_tab.cc" line="709"/>
-        <location filename="../client/ui/hosts_tab.cc" line="740"/>
-        <location filename="../client/ui/hosts_tab.cc" line="783"/>
+        <location filename="../client/ui/hosts_tab.cc" line="592"/>
+        <location filename="../client/ui/hosts_tab.cc" line="644"/>
+        <location filename="../client/ui/hosts_tab.cc" line="735"/>
+        <location filename="../client/ui/hosts_tab.cc" line="766"/>
+        <location filename="../client/ui/hosts_tab.cc" line="809"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>Не удалось получить информацию о хосте из локальной базы данных.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="744"/>
+        <location filename="../client/ui/hosts_tab.cc" line="770"/>
         <source>(copy)</source>
         <translation>(копия)</translation>
     </message>
@@ -3210,72 +3287,77 @@ Routers added: %4</source>
         <translation type="vanished">Не удалось удалить компьютер</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="748"/>
+        <location filename="../client/ui/hosts_tab.cc" line="774"/>
         <source>Failed to add the host to the local database.</source>
         <translation>Не удалось добавить хост в локальную базу данных.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="787"/>
+        <location filename="../client/ui/hosts_tab.cc" line="813"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>Вы уверены, что хотите удалить хост &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="797"/>
+        <location filename="../client/ui/hosts_tab.cc" line="823"/>
         <source>Unable to remove host</source>
         <translation>Не удалось удалить хост</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="842"/>
-        <location filename="../client/ui/hosts_tab.cc" line="867"/>
-        <location filename="../client/ui/hosts_tab.cc" line="892"/>
+        <location filename="../client/ui/hosts_tab.cc" line="868"/>
+        <location filename="../client/ui/hosts_tab.cc" line="893"/>
+        <location filename="../client/ui/hosts_tab.cc" line="918"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="843"/>
-        <location filename="../client/ui/hosts_tab.cc" line="868"/>
-        <location filename="../client/ui/hosts_tab.cc" line="893"/>
+        <location filename="../client/ui/hosts_tab.cc" line="869"/>
+        <location filename="../client/ui/hosts_tab.cc" line="894"/>
+        <location filename="../client/ui/hosts_tab.cc" line="919"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1056"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1131"/>
+        <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
+        <translation>Вы уверены, что хотите удалить группу &quot;%1&quot;? Узлы, назначенные этой группе или её подгруппам, будут перемещены в корень рабочей области.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts_tab.cc" line="1181"/>
         <source>Import Old Address Book</source>
         <translation>Импорт старой адресной книги</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1058"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1183"/>
         <source>Address Book (*.aab);;All files (*)</source>
         <translation>Адресная книга (*.aab);;Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1081"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1206"/>
         <source>Export Address Book</source>
         <translation>Экспорт адресной книги</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1083"/>
-        <location filename="../client/ui/hosts_tab.cc" line="1110"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1208"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1235"/>
         <source>Address Book (*.json);;All files (*)</source>
         <translation>Адресная книга (*.json);;Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1108"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1233"/>
         <source>Import Address Book</source>
         <translation>Импорт адресной книги</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1458"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1662"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Роутер, связанный с этим хостом, был удален. Измените хост, чтобы выбрать другой роутер, или переключитесь на прямое подключение.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1465"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1669"/>
         <source>The host has an invalid host ID.</source>
         <translation>Хост имеет недопустимый ID.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1474"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1678"/>
         <source>The host has an incorrect address.</source>
         <translation>Хост имеет недопустимый адрес.</translation>
     </message>
@@ -3296,25 +3378,64 @@ Routers added: %4</source>
     <name>JsonBackup</name>
     <message>
         <location filename="../client/json_backup.cc" line="372"/>
-        <location filename="../client/json_backup.cc" line="505"/>
+        <location filename="../client/json_backup.cc" line="534"/>
         <source>Address book database is not available.</source>
         <translation>База данных адресной книги недоступна.</translation>
     </message>
     <message>
-        <location filename="../client/json_backup.cc" line="387"/>
+        <location filename="../client/json_backup.cc" line="377"/>
+        <source>Export Address Book</source>
+        <translation>Экспорт адресной книги</translation>
+    </message>
+    <message>
+        <location filename="../client/json_backup.cc" line="379"/>
+        <source>Enter a password to encrypt the address book.</source>
+        <translation>Введите пароль для шифрования адресной книги.</translation>
+    </message>
+    <message>
+        <location filename="../client/json_backup.cc" line="386"/>
+        <source>Password you entered does not meet the security requirements!</source>
+        <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/json_backup.cc" line="388"/>
+        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
+            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.</numerusform>
+            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/json_backup.cc" line="392"/>
+        <source>Do you want to enter a different password?</source>
+        <translation>Вы хотите ввести другой пароль?</translation>
+    </message>
+    <message>
+        <location filename="../client/json_backup.cc" line="411"/>
         <source>Failed to generate verifier.</source>
         <translation>Не удалось сгенерировать верификатор.</translation>
     </message>
     <message>
-        <location filename="../client/json_backup.cc" line="421"/>
-        <location filename="../client/json_backup.cc" line="450"/>
+        <location filename="../client/json_backup.cc" line="445"/>
+        <location filename="../client/json_backup.cc" line="474"/>
         <source>Unable to open file &quot;%1&quot;: %2</source>
         <translation>Не удалось открыть файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../client/json_backup.cc" line="427"/>
+        <location filename="../client/json_backup.cc" line="451"/>
         <source>Unable to write file &quot;%1&quot;: %2</source>
         <translation>Не удалось записать файл &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <location filename="../client/json_backup.cc" line="514"/>
+        <source>Unlock</source>
+        <translation>Разблокировка</translation>
+    </message>
+    <message>
+        <location filename="../client/json_backup.cc" line="516"/>
+        <source>Address book is encrypted. To open, you must enter a password.</source>
+        <translation>Адресная книга зашифрована. Для открытия вы должны ввести пароль.</translation>
     </message>
     <message>
         <source>Export completed successfully.
@@ -3327,7 +3448,7 @@ Computers exported: %3</source>
 Компьютеров экспортировано: %3</translation>
     </message>
     <message>
-        <location filename="../client/json_backup.cc" line="432"/>
+        <location filename="../client/json_backup.cc" line="456"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -3338,42 +3459,41 @@ Hosts exported: %3</source>
 Хостов экспортировано: %3</translation>
     </message>
     <message>
-        <location filename="../client/json_backup.cc" line="459"/>
+        <location filename="../client/json_backup.cc" line="483"/>
         <source>Selected file is empty.</source>
         <translation>Выбранный файл пуст.</translation>
     </message>
     <message>
-        <location filename="../client/json_backup.cc" line="467"/>
+        <location filename="../client/json_backup.cc" line="491"/>
         <source>The file is not a valid JSON document: %1</source>
         <translation>Файл не является допустимым документом в формате JSON: %1</translation>
     </message>
     <message>
-        <location filename="../client/json_backup.cc" line="476"/>
+        <location filename="../client/json_backup.cc" line="500"/>
         <source>Unsupported file format version: %1</source>
         <translation>Неподдерживаемая версия формата файла: %1</translation>
     </message>
     <message>
-        <location filename="../client/json_backup.cc" line="485"/>
+        <location filename="../client/json_backup.cc" line="509"/>
         <source>The file is corrupted or not encrypted.</source>
         <translation>Файл поврежден или не зашифрован.</translation>
     </message>
     <message>
-        <location filename="../client/json_backup.cc" line="489"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation>ChaCha20 + Poly1305 (256-битный ключ)</translation>
+        <translation type="vanished">ChaCha20 + Poly1305 (256-битный ключ)</translation>
     </message>
     <message>
-        <location filename="../client/json_backup.cc" line="498"/>
+        <location filename="../client/json_backup.cc" line="527"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>Не удается расшифровать файл с помощью указанного пароля.</translation>
     </message>
     <message>
-        <location filename="../client/json_backup.cc" line="536"/>
+        <location filename="../client/json_backup.cc" line="565"/>
         <source>Nothing was imported.</source>
         <translation>Ничего не было импортировано.</translation>
     </message>
     <message>
-        <location filename="../client/json_backup.cc" line="541"/>
+        <location filename="../client/json_backup.cc" line="570"/>
         <source>Import completed successfully.
 Routers added: %1
 Routers skipped: %2
@@ -3651,27 +3771,27 @@ Computers skipped: %5</source>
         <translation>Комментарий:</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="49"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="51"/>
         <source>Edit Group</source>
         <translation>Изменить группу</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="65"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="67"/>
         <source>Add Group</source>
         <translation>Добавить группу</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="69"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="84"/>
         <source>Local</source>
         <translation>Локальные</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="94"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="109"/>
         <source>Name cannot be empty.</source>
         <translation>Имя не может быть пустым.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="102"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="117"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
@@ -3680,7 +3800,7 @@ Computers skipped: %5</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="113"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="128"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
@@ -3689,17 +3809,17 @@ Computers skipped: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="128"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="143"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>Группа с таким именем уже существует в выбранной родительской группе.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="146"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="161"/>
         <source>Unable to add group</source>
         <translation>Не удалось добавить группу</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="155"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="170"/>
         <source>Unable to modify group</source>
         <translation>Не удалось изменить группу</translation>
     </message>
@@ -3767,7 +3887,7 @@ Computers skipped: %5</source>
         <translation type="vanished">Не удалось удалить компьютер</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/local_group_widget.cc" line="423"/>
+        <location filename="../client/ui/hosts/local_group_widget.cc" line="422"/>
         <source>%n child group(s)</source>
         <translation>
             <numerusform>%n дочерняя группа</numerusform>
@@ -3784,7 +3904,7 @@ Computers skipped: %5</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/local_group_widget.cc" line="425"/>
+        <location filename="../client/ui/hosts/local_group_widget.cc" line="424"/>
         <source>%n child host(s)</source>
         <translation>
             <numerusform>%n дочерний хост</numerusform>
@@ -3793,12 +3913,12 @@ Computers skipped: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_widget.cc" line="496"/>
+        <location filename="../client/ui/hosts/local_group_widget.cc" line="495"/>
         <source>Online</source>
         <translation>В сети</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_widget.cc" line="496"/>
+        <location filename="../client/ui/hosts/local_group_widget.cc" line="495"/>
         <source>Offline</source>
         <translation>Не в сети</translation>
     </message>
@@ -3832,7 +3952,7 @@ Computers skipped: %5</source>
     </message>
     <message>
         <location filename="../client/ui/hosts/local_host_dialog.ui" line="59"/>
-        <location filename="../client/ui/hosts/local_host_dialog.cc" line="256"/>
+        <location filename="../client/ui/hosts/local_host_dialog.cc" line="270"/>
         <source>Address:</source>
         <translation>Адрес:</translation>
     </message>
@@ -3847,42 +3967,42 @@ Computers skipped: %5</source>
         <translation>Пароль:</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_host_dialog.ui" line="114"/>
+        <location filename="../client/ui/hosts/local_host_dialog.ui" line="93"/>
         <source>Comment:</source>
         <translation>Комментарий:</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_host_dialog.cc" line="53"/>
+        <location filename="../client/ui/hosts/local_host_dialog.cc" line="55"/>
         <source>Without Router</source>
         <translation>Без маршрутизатора</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_host_dialog.cc" line="65"/>
+        <location filename="../client/ui/hosts/local_host_dialog.cc" line="67"/>
         <source>Edit Host</source>
         <translation>Изменить хост</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_host_dialog.cc" line="85"/>
+        <location filename="../client/ui/hosts/local_host_dialog.cc" line="87"/>
         <source>Add Host</source>
         <translation>Добавить хост</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_host_dialog.cc" line="95"/>
+        <location filename="../client/ui/hosts/local_host_dialog.cc" line="97"/>
         <source>&lt;deleted router&gt;</source>
         <translation>&lt;маршрутизатор удален&gt;</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_host_dialog.cc" line="104"/>
+        <location filename="../client/ui/hosts/local_host_dialog.cc" line="119"/>
         <source>Local</source>
         <translation>Локальные</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_host_dialog.cc" line="140"/>
+        <location filename="../client/ui/hosts/local_host_dialog.cc" line="154"/>
         <source>Name cannot be empty.</source>
         <translation>Имя не может быть пустым.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/local_host_dialog.cc" line="148"/>
+        <location filename="../client/ui/hosts/local_host_dialog.cc" line="162"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
@@ -3891,22 +4011,22 @@ Computers skipped: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_host_dialog.cc" line="163"/>
+        <location filename="../client/ui/hosts/local_host_dialog.cc" line="177"/>
         <source>An invalid host address was entered.</source>
         <translation>Был введен недопустимый адрес хоста.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_host_dialog.cc" line="173"/>
+        <location filename="../client/ui/hosts/local_host_dialog.cc" line="187"/>
         <source>An invalid host ID was entered.</source>
         <translation>Введен недопустимый ID хоста.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_host_dialog.cc" line="184"/>
+        <location filename="../client/ui/hosts/local_host_dialog.cc" line="198"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>Имя пользователя не может быть пустым и может содержать только буквы, цифры и символы &quot;_&quot;, &quot;-&quot;, &quot;.&quot; .</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/local_host_dialog.cc" line="195"/>
+        <location filename="../client/ui/hosts/local_host_dialog.cc" line="209"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
@@ -3915,32 +4035,32 @@ Computers skipped: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_host_dialog.cc" line="210"/>
+        <location filename="../client/ui/hosts/local_host_dialog.cc" line="224"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Хост с таким именем уже существует в выбранной группе.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_host_dialog.cc" line="232"/>
+        <location filename="../client/ui/hosts/local_host_dialog.cc" line="246"/>
         <source>Unable to add host</source>
         <translation>Не удалось добавить хост</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_host_dialog.cc" line="242"/>
+        <location filename="../client/ui/hosts/local_host_dialog.cc" line="256"/>
         <source>Unable to modify host</source>
         <translation>Не удалось изменить хост</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_host_dialog.cc" line="257"/>
+        <location filename="../client/ui/hosts/local_host_dialog.cc" line="271"/>
         <source>Host name or IP address</source>
         <translation>Имя хоста или IP-адрес</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_host_dialog.cc" line="261"/>
+        <location filename="../client/ui/hosts/local_host_dialog.cc" line="275"/>
         <source>ID:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_host_dialog.cc" line="262"/>
+        <location filename="../client/ui/hosts/local_host_dialog.cc" line="276"/>
         <source>Host ID</source>
         <translation>ID хоста</translation>
     </message>
@@ -4167,45 +4287,36 @@ Computers skipped: %5</source>
 <context>
     <name>MasterPasswordDialog</name>
     <message>
-        <location filename="../client/ui/master_password_dialog.ui" line="23"/>
         <source>Master Password</source>
-        <translation>Мастер-пароль</translation>
+        <translation type="vanished">Мастер-пароль</translation>
     </message>
     <message>
-        <location filename="../client/ui/master_password_dialog.ui" line="53"/>
-        <location filename="../client/ui/master_password_dialog.cc" line="45"/>
         <source>Set the master password to encrypt the address book.</source>
-        <translation>Установка мастер-пароля для шифрования адресной книги.</translation>
+        <translation type="vanished">Установка мастер-пароля для шифрования адресной книги.</translation>
     </message>
     <message>
-        <location filename="../client/ui/master_password_dialog.ui" line="67"/>
         <source>Current password:</source>
-        <translation>Текущий пароль:</translation>
+        <translation type="vanished">Текущий пароль:</translation>
     </message>
     <message>
-        <location filename="../client/ui/master_password_dialog.ui" line="77"/>
         <source>New password:</source>
-        <translation>Новый пароль:</translation>
+        <translation type="vanished">Новый пароль:</translation>
     </message>
     <message>
-        <location filename="../client/ui/master_password_dialog.ui" line="87"/>
         <source>Confirm password:</source>
-        <translation>Подтвердите пароль:</translation>
+        <translation type="vanished">Подтвердите пароль:</translation>
     </message>
     <message>
-        <location filename="../client/ui/master_password_dialog.cc" line="44"/>
         <source>Set Master Password</source>
-        <translation>Установка мастер-пароля</translation>
+        <translation type="vanished">Установка мастер-пароля</translation>
     </message>
     <message>
-        <location filename="../client/ui/master_password_dialog.cc" line="52"/>
         <source>Change Master Password</source>
-        <translation>Изменение мастер-пароля</translation>
+        <translation type="vanished">Изменение мастер-пароля</translation>
     </message>
     <message>
-        <location filename="../client/ui/master_password_dialog.cc" line="53"/>
         <source>Enter your current password and choose a new one.</source>
-        <translation>Введите свой текущий пароль и выберите новый.</translation>
+        <translation type="vanished">Введите свой текущий пароль и выберите новый.</translation>
     </message>
     <message>
         <source>Remove Master Password</source>
@@ -4216,57 +4327,44 @@ Computers skipped: %5</source>
         <translation type="vanished">Введите ваш текущий пароль для удаления шифрования адресной книги.</translation>
     </message>
     <message>
-        <location filename="../client/ui/master_password_dialog.cc" line="102"/>
-        <location filename="../client/ui/master_password_dialog.cc" line="147"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
+        <translation type="vanished">Введенный пароль не отвечает требованиям безопасности!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/master_password_dialog.cc" line="103"/>
-        <location filename="../client/ui/master_password_dialog.cc" line="148"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
             <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.</numerusform>
             <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/master_password_dialog.cc" line="106"/>
-        <location filename="../client/ui/master_password_dialog.cc" line="151"/>
         <source>Do you want to enter a different password?</source>
-        <translation>Вы хотите ввести другой пароль?</translation>
+        <translation type="vanished">Вы хотите ввести другой пароль?</translation>
     </message>
     <message>
-        <location filename="../client/ui/master_password_dialog.cc" line="109"/>
-        <location filename="../client/ui/master_password_dialog.cc" line="154"/>
         <source>Warning</source>
-        <translation>Предупреждение</translation>
+        <translation type="vanished">Предупреждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/master_password_dialog.cc" line="119"/>
         <source>Passwords do not match.</source>
-        <translation>Пароли не совпадают.</translation>
+        <translation type="vanished">Пароли не совпадают.</translation>
     </message>
     <message>
-        <location filename="../client/ui/master_password_dialog.cc" line="125"/>
         <source>Unable to set master password.</source>
-        <translation>Не удалось установить мастер-пароль.</translation>
+        <translation type="vanished">Не удалось установить мастер-пароль.</translation>
     </message>
     <message>
-        <location filename="../client/ui/master_password_dialog.cc" line="141"/>
         <source>Enter the current password.</source>
-        <translation>Введите текущий пароль.</translation>
+        <translation type="vanished">Введите текущий пароль.</translation>
     </message>
     <message>
-        <location filename="../client/ui/master_password_dialog.cc" line="164"/>
         <source>New passwords do not match.</source>
-        <translation>Новые пароли не совпадают.</translation>
+        <translation type="vanished">Новые пароли не совпадают.</translation>
     </message>
     <message>
-        <location filename="../client/ui/master_password_dialog.cc" line="170"/>
         <source>Invalid current password or unable to change it.</source>
-        <translation>Неверный текущий пароль или невозможно изменить его.</translation>
+        <translation type="vanished">Неверный текущий пароль или невозможно изменить его.</translation>
     </message>
     <message>
         <source>Invalid current password or unable to remove it.</source>
@@ -4515,40 +4613,114 @@ Computers skipped: %5</source>
         <translation>Пароль:</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_dialog.cc" line="46"/>
+        <location filename="../client/ui/router_dialog.cc" line="45"/>
         <source>Administrator</source>
         <translation>Администратор</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_dialog.cc" line="47"/>
+        <location filename="../client/ui/router_dialog.cc" line="46"/>
         <source>Manager</source>
         <translation>Менеджер</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_dialog.cc" line="48"/>
+        <location filename="../client/ui/router_dialog.cc" line="47"/>
         <source>Client</source>
         <translation>Клиент</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_dialog.cc" line="98"/>
+        <location filename="../client/ui/router_dialog.cc" line="96"/>
         <source>An invalid router address was entered.</source>
         <translation>Был введен неверный адрес маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_dialog.cc" line="108"/>
+        <location filename="../client/ui/router_dialog.cc" line="106"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Имя пользователя не может быть пустым и может содержать только буквы, цифры и символы _, -, .</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_dialog.cc" line="119"/>
+        <location filename="../client/ui/router_dialog.cc" line="117"/>
         <source>Password cannot be empty.</source>
         <translation>Пароль не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_dialog.cc" line="141"/>
-        <location filename="../client/ui/router_dialog.cc" line="150"/>
+        <location filename="../client/ui/router_dialog.cc" line="139"/>
+        <location filename="../client/ui/router_dialog.cc" line="148"/>
         <source>Failed to save the router.</source>
         <translation>Не удалось сохранить настройки маршрутизатора.</translation>
+    </message>
+</context>
+<context>
+    <name>RouterGroupDialog</name>
+    <message>
+        <location filename="../client/ui/hosts/router_group_dialog.ui" line="14"/>
+        <source>Group</source>
+        <translation>Группа</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_group_dialog.ui" line="25"/>
+        <source>Parent Group:</source>
+        <translation>Родительская группа:</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_group_dialog.ui" line="35"/>
+        <source>Name:</source>
+        <translation>Имя:</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_group_dialog.ui" line="42"/>
+        <source>Display name</source>
+        <translation>Отображаемое имя</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_group_dialog.ui" line="53"/>
+        <source>Comment:</source>
+        <translation>Комментарий:</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_group_dialog.cc" line="50"/>
+        <source>Edit Group</source>
+        <translation>Изменить группу</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_group_dialog.cc" line="50"/>
+        <source>Add Group</source>
+        <translation>Добавить группу</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_group_dialog.cc" line="115"/>
+        <source>Invalid group request.</source>
+        <translation>Недопустимый запрос группы.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_group_dialog.cc" line="117"/>
+        <location filename="../client/ui/hosts/router_group_dialog.cc" line="163"/>
+        <source>Unknown internal error.</source>
+        <translation>Неизвестная внутренняя ошибка.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_group_dialog.cc" line="119"/>
+        <source>Invalid data was passed.</source>
+        <translation>Переданы некорректные данные.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_group_dialog.cc" line="121"/>
+        <source>Access denied.</source>
+        <translation>Доступ запрещен.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_group_dialog.cc" line="123"/>
+        <source>Group not found.</source>
+        <translation>Группа не найдена.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_group_dialog.cc" line="125"/>
+        <source>Unknown error type.</source>
+        <translation>Неизвестный тип ошибки.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_group_dialog.cc" line="148"/>
+        <source>Group name cannot be empty.</source>
+        <translation>Имя группы не может быть пустым.</translation>
     </message>
 </context>
 <context>
@@ -4621,6 +4793,15 @@ Computers skipped: %5</source>
         <source>Status</source>
         <translation>Состояние</translation>
     </message>
+    <message numerus="yes">
+        <location filename="../client/ui/hosts/router_group_widget.cc" line="467"/>
+        <source>%n host(s)</source>
+        <translation>
+            <numerusform>%n хост</numerusform>
+            <numerusform>%n хоста</numerusform>
+            <numerusform>%n хостов</numerusform>
+        </translation>
+    </message>
 </context>
 <context>
     <name>RouterHostDialog</name>
@@ -4631,41 +4812,51 @@ Computers skipped: %5</source>
     </message>
     <message>
         <location filename="../client/ui/hosts/router_host_dialog.ui" line="25"/>
+        <source>Group:</source>
+        <translation>Группа:</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_host_dialog.ui" line="35"/>
         <source>Display Name:</source>
         <translation>Отображаемое имя:</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_host_dialog.ui" line="35"/>
+        <location filename="../client/ui/hosts/router_host_dialog.ui" line="45"/>
         <source>User Name:</source>
         <translation>Имя пользователя:</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_host_dialog.ui" line="45"/>
+        <location filename="../client/ui/hosts/router_host_dialog.ui" line="55"/>
         <source>Password:</source>
         <translation>Пароль:</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_host_dialog.ui" line="78"/>
+        <location filename="../client/ui/hosts/router_host_dialog.ui" line="67"/>
         <source>Comment:</source>
         <translation>Комментарий:</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_host_dialog.cc" line="68"/>
+        <location filename="../client/ui/hosts/router_host_dialog.cc" line="98"/>
         <source>Access denied.</source>
         <translation>Доступ запрещен.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_host_dialog.cc" line="70"/>
+        <location filename="../client/ui/hosts/router_host_dialog.cc" line="100"/>
         <source>Host not found.</source>
         <translation>Хост не найден.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_host_dialog.cc" line="72"/>
+        <location filename="../client/ui/hosts/router_host_dialog.cc" line="102"/>
+        <source>Invalid data was passed.</source>
+        <translation>Переданы некорректные данные.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_host_dialog.cc" line="104"/>
         <source>Unknown internal error.</source>
         <translation>Неизвестная внутренняя ошибка.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_host_dialog.cc" line="74"/>
+        <location filename="../client/ui/hosts/router_host_dialog.cc" line="106"/>
         <source>Unknown error type.</source>
         <translation>Неизвестный тип ошибки.</translation>
     </message>
@@ -4673,77 +4864,64 @@ Computers skipped: %5</source>
 <context>
     <name>RouterPasswordDialog</name>
     <message>
-        <location filename="../client/ui/hosts/router_password_dialog.ui" line="14"/>
         <source>Change Password</source>
-        <translation>Изменение пароля</translation>
+        <translation type="vanished">Изменение пароля</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_password_dialog.ui" line="27"/>
         <source>New password:</source>
-        <translation>Новый пароль:</translation>
+        <translation type="vanished">Новый пароль:</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_password_dialog.ui" line="34"/>
         <source>Confirm password:</source>
-        <translation>Подтвердите пароль:</translation>
+        <translation type="vanished">Подтвердите пароль:</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_password_dialog.cc" line="66"/>
         <source>Invalid password change request.</source>
-        <translation>Недопустимый запрос на изменение пароля.</translation>
+        <translation type="vanished">Недопустимый запрос на изменение пароля.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_password_dialog.cc" line="68"/>
         <source>Unknown internal error.</source>
-        <translation>Неизвестная внутренняя ошибка.</translation>
+        <translation type="vanished">Неизвестная внутренняя ошибка.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_password_dialog.cc" line="70"/>
         <source>Invalid data was passed.</source>
-        <translation>Переданы некорректные данные.</translation>
+        <translation type="vanished">Переданы некорректные данные.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_password_dialog.cc" line="72"/>
         <source>Unknown error type.</source>
-        <translation>Неизвестный тип ошибки.</translation>
+        <translation type="vanished">Неизвестный тип ошибки.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_password_dialog.cc" line="96"/>
         <source>The passwords you entered do not match.</source>
-        <translation>Введенные пароли не совпадают.</translation>
+        <translation type="vanished">Введенные пароли не совпадают.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_password_dialog.cc" line="105"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Пароль не может быть пустой и не должен превышать %n символ.</numerusform>
             <numerusform>Пароль не может быть пустой и не должен превышать %n символа.</numerusform>
             <numerusform>Пароль не может быть пустой и не должен превышать %n символов.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_password_dialog.cc" line="114"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
+        <translation type="vanished">Введенный пароль не отвечает требованиям безопасности!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_password_dialog.cc" line="115"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
             <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.</numerusform>
             <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_password_dialog.cc" line="118"/>
         <source>Do you want to enter a different password?</source>
-        <translation>Вы хотите ввести другой пароль?</translation>
+        <translation type="vanished">Вы хотите ввести другой пароль?</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_password_dialog.cc" line="120"/>
         <source>Warning</source>
-        <translation>Предупреждение</translation>
+        <translation type="vanished">Предупреждение</translation>
     </message>
 </context>
 <context>
@@ -4755,71 +4933,138 @@ Computers skipped: %5</source>
     </message>
     <message>
         <location filename="../client/ui/hosts/router_user_dialog.ui" line="27"/>
+        <source>General</source>
+        <translation>Основные</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_user_dialog.ui" line="37"/>
         <source>Name:</source>
         <translation>Имя:</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_user_dialog.ui" line="34"/>
+        <location filename="../client/ui/hosts/router_user_dialog.ui" line="44"/>
         <source>Password:</source>
         <translation>Пароль:</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_user_dialog.ui" line="41"/>
+        <location filename="../client/ui/hosts/router_user_dialog.ui" line="51"/>
         <source>Password (retry):</source>
         <translation>Пароль (повторить):</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_user_dialog.ui" line="65"/>
+        <location filename="../client/ui/hosts/router_user_dialog.ui" line="75"/>
         <source>Disable User Account</source>
         <translation>Отключить пользователя</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_user_dialog.ui" line="72"/>
+        <location filename="../client/ui/hosts/router_user_dialog.ui" line="82"/>
         <source>Allowed Session Types:</source>
         <translation>Разрешенные типы сессий:</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_user_dialog.cc" line="154"/>
+        <location filename="../client/ui/hosts/router_user_dialog.ui" line="107"/>
+        <source>Reset two-factor authentication</source>
+        <translation>Сбросить двухфакторную аутентификацию</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_user_dialog.ui" line="115"/>
+        <source>Sessions</source>
+        <translation>Сессии</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_user_dialog.ui" line="131"/>
+        <source>Signed in</source>
+        <translation>Выполнен вход</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_user_dialog.ui" line="136"/>
+        <source>Last activity</source>
+        <translation>Последняя активность</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_user_dialog.ui" line="141"/>
+        <source>Address</source>
+        <translation>Адрес</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_user_dialog.ui" line="164"/>
+        <source>Sign out</source>
+        <translation>Завершить сеанс</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_user_dialog.ui" line="171"/>
+        <source>Sign out all</source>
+        <translation>Завершить все сеансы</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_user_dialog.cc" line="187"/>
         <source>Invalid user request.</source>
         <translation>Неверный запрос пользователя.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_user_dialog.cc" line="156"/>
+        <location filename="../client/ui/hosts/router_user_dialog.cc" line="189"/>
+        <location filename="../client/ui/hosts/router_user_dialog.cc" line="243"/>
+        <location filename="../client/ui/hosts/router_user_dialog.cc" line="342"/>
         <source>Unknown internal error.</source>
         <translation>Неизвестная внутренняя ошибка.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_user_dialog.cc" line="158"/>
+        <location filename="../client/ui/hosts/router_user_dialog.cc" line="191"/>
         <source>Invalid data was passed.</source>
         <translation>Переданы некорректные данные.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_user_dialog.cc" line="160"/>
+        <location filename="../client/ui/hosts/router_user_dialog.cc" line="193"/>
         <source>A user with the specified name already exists.</source>
         <translation>Пользователь с указанным именем уже существует.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_user_dialog.cc" line="162"/>
+        <location filename="../client/ui/hosts/router_user_dialog.cc" line="195"/>
         <source>Unknown error type.</source>
         <translation>Неизвестный тип ошибки.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_user_dialog.cc" line="188"/>
+        <location filename="../client/ui/hosts/router_user_dialog.cc" line="208"/>
+        <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
+        <translation>Сброс двухфакторной аутентификации приведёт к выходу пользователя из всех сеансов и потребует повторной настройки при следующем входе. Продолжить?</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_user_dialog.cc" line="257"/>
+        <source>Are you sure you want to sign this user out of this session?</source>
+        <translation>Вы уверены, что хотите завершить этот сеанс пользователя?</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_user_dialog.cc" line="284"/>
+        <source>Are you sure you want to sign this user out of all sessions?</source>
+        <translation>Вы уверены, что хотите завершить все сеансы этого пользователя?</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_user_dialog.cc" line="338"/>
+        <source>Session not found. The list may be out of date.</source>
+        <translation>Сеанс не найден. Возможно, список устарел.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_user_dialog.cc" line="340"/>
+        <source>Invalid sign-out request.</source>
+        <translation>Недопустимый запрос на завершение сеанса.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_user_dialog.cc" line="373"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
         <translation>Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_user_dialog.cc" line="200"/>
+        <location filename="../client/ui/hosts/router_user_dialog.cc" line="385"/>
         <source>The username you entered already exists.</source>
         <translation>Введенное вами имя пользователя уже существует.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_user_dialog.cc" line="212"/>
+        <location filename="../client/ui/hosts/router_user_dialog.cc" line="397"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введенные пароли не совпадают.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_user_dialog.cc" line="221"/>
+        <location filename="../client/ui/hosts/router_user_dialog.cc" line="406"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Пароль не может быть пустой и не должен превышать %n символ.</numerusform>
@@ -4828,12 +5073,12 @@ Computers skipped: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_user_dialog.cc" line="231"/>
+        <location filename="../client/ui/hosts/router_user_dialog.cc" line="416"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_user_dialog.cc" line="232"/>
+        <location filename="../client/ui/hosts/router_user_dialog.cc" line="417"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
@@ -4842,39 +5087,44 @@ Computers skipped: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_user_dialog.cc" line="236"/>
+        <location filename="../client/ui/hosts/router_user_dialog.cc" line="421"/>
         <source>Do you want to enter a different password?</source>
         <translation>Вы хотите ввести другой пароль?</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_user_dialog.cc" line="239"/>
+        <location filename="../client/ui/hosts/router_user_dialog.cc" line="424"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_user_dialog.cc" line="259"/>
+        <location filename="../client/ui/hosts/router_user_dialog.cc" line="444"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Неизвестная внутренняя ошибка при создании или изменении пользователя.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_user_dialog.cc" line="316"/>
+        <location filename="../client/ui/hosts/router_user_dialog.cc" line="501"/>
         <source>Double-click to change</source>
         <translation>Двойной щелчок для изменения</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_user_dialog.cc" line="349"/>
+        <location filename="../client/ui/hosts/router_user_dialog.cc" line="553"/>
         <source>Administrator</source>
         <translation>Администратор</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_user_dialog.cc" line="353"/>
+        <location filename="../client/ui/hosts/router_user_dialog.cc" line="557"/>
         <source>Manager</source>
         <translation>Менеджер</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_user_dialog.cc" line="357"/>
+        <location filename="../client/ui/hosts/router_user_dialog.cc" line="561"/>
         <source>Client</source>
         <translation>Клиент</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_user_dialog.cc" line="579"/>
+        <source>Never</source>
+        <translation>Никогда</translation>
     </message>
 </context>
 <context>
@@ -5040,6 +5290,11 @@ Computers skipped: %5</source>
         <translation>Пользователи</translation>
     </message>
     <message>
+        <location filename="../client/ui/hosts/router_widget.ui" line="526"/>
+        <source>This content is only available with administrator rights.</source>
+        <translation>Это содержимое доступно только с правами администратора.</translation>
+    </message>
+    <message>
         <location filename="../client/ui/hosts/router_widget.ui" line="77"/>
         <location filename="../client/ui/hosts/router_widget.ui" line="504"/>
         <source>Name</source>
@@ -5056,7 +5311,7 @@ Computers skipped: %5</source>
         <translation>Типы сессий</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_widget.cc" line="1943"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2063"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n хост</numerusform>
@@ -5065,7 +5320,7 @@ Computers skipped: %5</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_widget.cc" line="1949"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2069"/>
         <source>%n relay(s)</source>
         <translation>
             <numerusform>%n ретранслятор</numerusform>
@@ -5074,7 +5329,7 @@ Computers skipped: %5</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_widget.cc" line="1952"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2072"/>
         <source>%n user(s)</source>
         <translation>
             <numerusform>%n пользователь</numerusform>
@@ -5135,27 +5390,27 @@ Computers skipped: %5</source>
         <translation type="vanished">Б</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="975"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1012"/>
         <source>You cannot delete a built-in user.</source>
         <translation>Вы не можете удалить встроенного пользователя.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="980"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1017"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Вы действительно хотите удалить пользователя &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1001"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1038"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>Вы уверены, что хотите отключить хост &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1022"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1059"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation>Вы действительно хотите отключить все хосты?</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1043"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1080"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
@@ -5168,12 +5423,12 @@ Computers skipped: %5</source>
         <translation type="vanished">Попытаться удалить приложение (результат не гарантирован)</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1071"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1108"/>
         <source>Are you sure you want to disconnect relay &quot;%1&quot;?</source>
         <translation>Вы уверены, что хотите отключить ретранслятор &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1092"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1129"/>
         <source>Are you sure you want to disconnect all relays?</source>
         <translation>Вы действительно хотите отключить все маршрутизаторы?</translation>
     </message>
@@ -5182,42 +5437,42 @@ Computers skipped: %5</source>
         <translation type="vanished">Для вашей учетной записи не настроены ключи шифрования. Пересоздайте пользователя или измените пароль, чтобы сгенерировать их перед созданием рабочего пространства.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1402"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1522"/>
         <source>Disconnect</source>
         <translation>Отключить</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1404"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1524"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1405"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1525"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1414"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1534"/>
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
         <translation>Вы уверены, что хотите отключить узел &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1208"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1245"/>
         <source>Connecting to router %1...</source>
         <translation>Подключение к маршрутизатору %1...</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1044"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1081"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>Удаление хоста приведёт к удалению всей его конфигурации для подключения к роутеру, а приложение на хосте будет удалено. Это действие необратимо. Вы уверены, что хотите продолжить?</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1112"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1149"/>
         <source>Are you sure you want to disconnect client &quot;%1&quot;?</source>
         <translation>Вы уверены, что хотите отключить клиента &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1133"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1170"/>
         <source>Are you sure you want to disconnect all clients?</source>
         <translation>Вы уверены, что хотите отключить всех клиентов?</translation>
     </message>
@@ -5226,110 +5481,151 @@ Computers skipped: %5</source>
         <translation type="vanished">Не удалось зашифровать ключ рабочего пространства для одного из пользователей.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1184"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1221"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation>Вы уверены, что хотите удалить рабочее пространство &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1211"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1248"/>
         <source>Connection to router %1 established.</source>
         <translation>Соединение с маршрутизатором %1 установлено.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1214"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1251"/>
         <source>Disconnected from router %1.</source>
         <translation>Отключено от маршрутизатора %1.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1260"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1300"/>
         <source>Network error: %1.</source>
         <translation>Сетевая ошибка: %1.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1267"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1307"/>
         <source>To complete the migration from a previous version, you need to change your password.</source>
         <translation>Для завершения миграции с предыдущей версии необходимо изменить ваш пароль.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1271"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1371"/>
         <source>Password updated. Waiting for new encryption keys...</source>
         <translation>Пароль обновлен. Ожидание новых ключей шифрования...</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1679"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1799"/>
         <source>Invalid user request.</source>
         <translation>Неверный запрос пользователя.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1681"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1706"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1729"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1752"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1775"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1844"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1357"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1801"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1826"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1849"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1872"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1895"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1964"/>
         <source>Unknown internal error.</source>
         <translation>Неизвестная внутренняя ошибка.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1683"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1846"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1359"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1803"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1966"/>
         <source>Invalid data was passed.</source>
         <translation>Переданы некорректные данные.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1685"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1805"/>
         <source>A user with the specified name already exists.</source>
         <translation>Пользователь с указанным именем уже существует.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1687"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1710"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1733"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1756"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1777"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1852"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1361"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1807"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1830"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1853"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1876"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1897"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1972"/>
         <source>Unknown error type.</source>
         <translation>Неизвестный тип ошибки.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1704"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1311"/>
+        <source>Change Password</source>
+        <translation>Изменение пароля</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/ui/hosts/router_widget.cc" line="1318"/>
+        <source>Password can not be empty and should not exceed %n characters.</source>
+        <translation>
+            <numerusform>Пароль не может быть пустой и не должен превышать %n символ.</numerusform>
+            <numerusform>Пароль не может быть пустой и не должен превышать %n символа.</numerusform>
+            <numerusform>Пароль не может быть пустой и не должен превышать %n символов.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1325"/>
+        <source>Password you entered does not meet the security requirements!</source>
+        <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/ui/hosts/router_widget.cc" line="1326"/>
+        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
+            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.</numerusform>
+            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1329"/>
+        <source>Do you want to enter a different password?</source>
+        <translation>Вы хотите ввести другой пароль?</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1355"/>
+        <source>Invalid password change request.</source>
+        <translation>Недопустимый запрос на изменение пароля.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1824"/>
         <source>Invalid host request.</source>
         <translation>Неверный запрос к хосту.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1708"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1731"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1754"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1828"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1851"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1874"/>
         <source>Invalid entry id.</source>
         <translation>Неверный идентификатор записи.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1727"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1847"/>
         <source>Invalid relay request.</source>
         <translation>Неверный запрос ретранслятора.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1750"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1870"/>
         <source>Invalid client request.</source>
         <translation>Некорректный запрос клиента.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1773"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1893"/>
         <source>Relay session not found.</source>
         <translation>Сеанс ретранслятора не найден.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1842"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1962"/>
         <source>Invalid workspace request.</source>
         <translation>Недопустимый запрос рабочего пространства.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1848"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1968"/>
         <source>A workspace with the specified name already exists.</source>
         <translation>Рабочее пространство с указанным именем уже существует.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1850"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1970"/>
         <source>Workspace not found.</source>
         <translation>Рабочее пространство не найдено.</translation>
     </message>
@@ -5362,7 +5658,7 @@ Computers skipped: %5</source>
         <translation type="vanished">Не удалось зашифровать ключ рабочего пространства для целевого пользователя.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_widget.cc" line="1940"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2060"/>
         <source>%n workspace(s)</source>
         <translation>
             <numerusform>%n рабочее пространство</numerusform>
@@ -5371,7 +5667,7 @@ Computers skipped: %5</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_widget.cc" line="1946"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2066"/>
         <source>%n client(s)</source>
         <translation>
             <numerusform>%n клиент</numerusform>
@@ -5380,30 +5676,30 @@ Computers skipped: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="2048"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="2109"/>
         <location filename="../client/ui/hosts/router_widget.cc" line="2168"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2229"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2288"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="2048"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="2109"/>
         <location filename="../client/ui/hosts/router_widget.cc" line="2168"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2229"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2288"/>
         <source>JSON files (*.json)</source>
         <translation>JSON-файлы (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="2059"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="2120"/>
         <location filename="../client/ui/hosts/router_widget.cc" line="2179"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2240"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2299"/>
         <source>Could not open file for writing.</source>
         <translation>Не удалось открыть файл для записи.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="2097"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="2156"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="2242"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2217"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2276"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2362"/>
         <source>Unable to write file.</source>
         <translation>Не удалось записать файл.</translation>
     </message>
@@ -6144,8 +6440,8 @@ Computers skipped: %5</source>
     </message>
     <message>
         <location filename="../client/ui/settings_tab.ui" line="388"/>
-        <location filename="../client/ui/settings_tab.cc" line="79"/>
-        <location filename="../client/ui/settings_tab.cc" line="246"/>
+        <location filename="../client/ui/settings_tab.cc" line="82"/>
+        <location filename="../client/ui/settings_tab.cc" line="249"/>
         <source>Update</source>
         <translation>Обновление</translation>
     </message>
@@ -6170,26 +6466,60 @@ Computers skipped: %5</source>
         <translation>Проверить обновления</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.cc" line="76"/>
-        <location filename="../client/ui/settings_tab.cc" line="241"/>
+        <location filename="../client/ui/settings_tab.cc" line="79"/>
+        <location filename="../client/ui/settings_tab.cc" line="244"/>
         <source>General</source>
         <translation>Основные</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.cc" line="77"/>
-        <location filename="../client/ui/settings_tab.cc" line="243"/>
+        <location filename="../client/ui/settings_tab.cc" line="80"/>
+        <location filename="../client/ui/settings_tab.cc" line="246"/>
         <source>Desktop</source>
         <translation>Рабочий стол</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.cc" line="256"/>
+        <location filename="../client/ui/settings_tab.cc" line="259"/>
         <source>Settings</source>
         <translation>Параметры</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.cc" line="339"/>
+        <location filename="../client/ui/settings_tab.cc" line="342"/>
         <source>Choose path</source>
         <translation>Выбор пути</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.cc" line="362"/>
+        <source>Change Master Password</source>
+        <translation>Изменение мастер-пароля</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.cc" line="364"/>
+        <source>Enter your current password and choose a new one.</source>
+        <translation>Введите свой текущий пароль и выберите новый.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.cc" line="372"/>
+        <source>Password you entered does not meet the security requirements!</source>
+        <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/ui/settings_tab.cc" line="373"/>
+        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
+            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.</numerusform>
+            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.cc" line="376"/>
+        <source>Do you want to enter a different password?</source>
+        <translation>Вы хотите ввести другой пароль?</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.cc" line="385"/>
+        <source>Invalid current password or unable to change it.</source>
+        <translation>Неверный текущий пароль или невозможно изменить его.</translation>
     </message>
 </context>
 <context>
@@ -6255,43 +6585,45 @@ Computers skipped: %5</source>
 <context>
     <name>Sidebar</name>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="62"/>
-        <location filename="../client/ui/hosts/sidebar.cc" line="447"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="66"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="581"/>
         <source>Local</source>
         <translation>Локальные</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="353"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="486"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation>Вы уверены, что хотите удалить группу &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="366"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="499"/>
         <source>Unable to remove group</source>
         <translation>Не удалось удалить группу</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="430"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="563"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>Вы уверены, что хотите удалить маршрутизатор &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="614"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="844"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>Группа с таким именем уже существует в выбранной родительской группе.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="624"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="854"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="1007"/>
         <source>Failed to move the group.</source>
         <translation>Не удалось переместить группу.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="680"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="910"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Хост с таким именем уже существует в выбранной группе.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="700"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="930"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="1069"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>Не удалось переместить хост в выбранную группу.</translation>
     </message>
@@ -8764,31 +9096,62 @@ Computers skipped: %5</source>
     </message>
 </context>
 <context>
+    <name>TwoFactorCodeDialog</name>
+    <message>
+        <location filename="../common/ui/two_factor_code_dialog.ui" line="14"/>
+        <source>Two-Factor Authentication</source>
+        <translation>Двухфакторная аутентификация</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/two_factor_code_dialog.ui" line="50"/>
+        <source>Enter the 6-digit code from your authenticator app.</source>
+        <translation>Введите 6-значный код из приложения-аутентификатора.</translation>
+    </message>
+</context>
+<context>
+    <name>TwoFactorEnrollDialog</name>
+    <message>
+        <location filename="../common/ui/two_factor_enroll_dialog.ui" line="14"/>
+        <source>Enable Two-Factor Authentication</source>
+        <translation>Включение двухфакторной аутентификации</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/two_factor_enroll_dialog.ui" line="20"/>
+        <source>Open a TOTP authenticator app (Google Authenticator, Microsoft Authenticator or any compatible alternative) and add a new account by scanning the QR code below. If QR scanning is unavailable, type the setup key into the app instead.</source>
+        <translation>Откройте приложение для TOTP-аутентификации (Google Authenticator, Microsoft Authenticator или любое совместимое приложение) и добавьте новую учётную запись, отсканировав QR-код ниже. Если сканирование QR-кода недоступно, введите в приложение ключ настройки вручную.</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/two_factor_enroll_dialog.ui" line="43"/>
+        <source>Setup key:</source>
+        <translation>Ключ настройки:</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/two_factor_enroll_dialog.ui" line="62"/>
+        <source>Enter the 6-digit code shown by the app to confirm:</source>
+        <translation>Введите 6-значный код, отображаемый в приложении, для подтверждения:</translation>
+    </message>
+</context>
+<context>
     <name>UnlockDialog</name>
     <message>
-        <location filename="../client/ui/unlock_dialog.ui" line="23"/>
         <source>Unlock Address Book</source>
-        <translation>Разблокировка адресной книги</translation>
+        <translation type="vanished">Разблокировка адресной книги</translation>
     </message>
     <message>
-        <location filename="../client/ui/unlock_dialog.ui" line="53"/>
         <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation>Адресная книга зашифрована. Для открытия вы должны ввести пароль.</translation>
+        <translation type="vanished">Адресная книга зашифрована. Для открытия вы должны ввести пароль.</translation>
     </message>
     <message>
-        <location filename="../client/ui/unlock_dialog.ui" line="66"/>
         <source>File:</source>
-        <translation>Файл:</translation>
+        <translation type="vanished">Файл:</translation>
     </message>
     <message>
-        <location filename="../client/ui/unlock_dialog.ui" line="73"/>
         <source>Encryption Type:</source>
-        <translation>Тип шифрования:</translation>
+        <translation type="vanished">Тип шифрования:</translation>
     </message>
     <message>
-        <location filename="../client/ui/unlock_dialog.ui" line="80"/>
         <source>Password:</source>
-        <translation>Пароль:</translation>
+        <translation type="vanished">Пароль:</translation>
     </message>
 </context>
 <context>
@@ -9054,27 +9417,27 @@ Computers skipped: %5</source>
 <context>
     <name>UserTreeItem</name>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="340"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="344"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="340"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="344"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="372"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="376"/>
         <source>Administrator</source>
         <translation>Администратор</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="376"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="380"/>
         <source>Client</source>
         <translation>Клиент</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="374"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="378"/>
         <source>Manager</source>
         <translation>Менеджер</translation>
     </message>
