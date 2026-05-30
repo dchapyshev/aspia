@@ -889,6 +889,10 @@ void RouterWidget::activate(QStatusBar* statusbar)
     if (!statusbar)
         return;
 
+    // Non-admin sessions have no tab with row counts to report, so leave the status bar empty.
+    if (router_->config().sessionType() != proto::router::SESSION_TYPE_ADMIN)
+        return;
+
     if (!status_label_)
         status_label_ = new QLabel(this);
 

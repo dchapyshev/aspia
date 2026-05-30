@@ -522,9 +522,6 @@
    </item>
    <item>
     <widget class="QLabel" name="label_non_admin_hint">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
      <property name="text">
       <string>This content is only available with administrator rights.</string>
      </property>
