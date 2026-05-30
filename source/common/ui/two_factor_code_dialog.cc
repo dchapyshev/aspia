@@ -21,7 +21,9 @@
 #include <QDialogButtonBox>
 #include <QRegularExpression>
 #include <QRegularExpressionValidator>
+#include <QTimer>
 
+#include "base/gui_application.h"
 #include "ui_two_factor_code_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -30,12 +32,17 @@ TwoFactorCodeDialog::TwoFactorCodeDialog(QWidget* parent)
       ui(std::make_unique<Ui::TwoFactorCodeDialog>())
 {
     ui->setupUi(this);
+    ui->label_icon->setPixmap(GuiApplication::svgPixmap(":/img/lock.svg", QSize(48, 48)));
     ui->edit_code->setValidator(
         new QRegularExpressionValidator(QRegularExpression("\\d*"), ui->edit_code));
     ui->edit_code->setFocus();
 
     connect(ui->buttonbox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(ui->buttonbox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+
+    // Pin the height to the layout's preferred size so the user cannot drag the dialog into
+    // an awkward tall shape. Defer to the next event loop tick so the layout has settled.
+    QTimer::singleShot(0, this, [this]() { setFixedHeight(sizeHint().height()); });
 }
 
 //--------------------------------------------------------------------------------------------------
