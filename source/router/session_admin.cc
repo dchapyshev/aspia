@@ -51,6 +51,12 @@ void SessionAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
         return;
     }
 
+    if (!isTwoFactorCompleted())
+    {
+        CLOG(ERROR) << "Admin message before 2FA completion";
+        return;
+    }
+
     proto::router::AdminToRouter message;
     if (!parse(buffer, &message))
     {

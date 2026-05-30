@@ -43,6 +43,8 @@ public:
 
     void setStunInfo(quint16 port);
 
+    bool isTwoFactorCompleted() const { return two_factor_completed_; }
+
 protected:
     // Session implementation.
     void onSessionMessage(quint8 channel_id, const QByteArray& buffer) override;
