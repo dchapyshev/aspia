@@ -98,6 +98,16 @@
          </column>
         </widget>
        </item>
+       <item>
+        <widget class="QPushButton" name="button_reset_otp">
+         <property name="visible">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Reset two-factor authentication</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tab_sessions">

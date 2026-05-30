@@ -71,6 +71,9 @@ RouterUserDialog::RouterUserDialog(qint64 router_id, qint64 user_id, QWidget* pa
         setAccountChanged(true);
     });
 
+    connect(ui->button_reset_otp, &QPushButton::clicked,
+            this, &RouterUserDialog::onResetOtpClicked);
+
     connect(ui->button_revoke_token, &QPushButton::clicked,
             this, &RouterUserDialog::onRevokeTokenClicked);
     connect(ui->button_revoke_all_tokens, &QPushButton::clicked,
@@ -132,6 +135,7 @@ void RouterUserDialog::onUserListReceived(const proto::router::UserList& list)
 
             ui->checkbox_disable->setChecked(!(user_.flags & User::ENABLED));
             ui->edit_username->setText(user_.name);
+            ui->button_reset_otp->setVisible(user.otp_active());
 
             for (int j = 0; j < ui->tree_sessions->topLevelItemCount(); ++j)
             {
@@ -193,6 +197,50 @@ void RouterUserDialog::onUserResultReceived(const proto::router::UserResult& res
     LOG(ERROR) << "User save failed:" << error_code;
     setEnabled(true);
     MsgBox::warning(this, tr(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterUserDialog::onResetOtpClicked()
+{
+    if (entry_id_ <= 0)
+        return;
+
+    if (MsgBox::question(this, tr("Resetting two-factor authentication will sign this user out "
+                                  "of all sessions and force them to enroll again on next login. "
+                                  "Continue?")) != MsgBox::Yes)
+    {
+        return;
+    }
+
+    Router* router = Router::instance(router_id_);
+    if (!router)
+    {
+        LOG(ERROR) << "Router instance is gone";
+        return;
+    }
+
+    ui->button_reset_otp->setEnabled(false);
+    LOG(INFO) << "[ACTION] Resetting OTP for user" << entry_id_;
+    router->resetUserOtp(entry_id_, this, &RouterUserDialog::onResetOtpResultReceived);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterUserDialog::onResetOtpResultReceived(const proto::router::UserResult& result)
+{
+    ui->button_reset_otp->setEnabled(true);
+
+    const std::string& error_code = result.error_code();
+    if (error_code == proto::router::kErrorOk)
+    {
+        // Side effect on the router side: every device token of the user was revoked too.
+        tokens_.clear();
+        updateTokenTree();
+        ui->button_reset_otp->setVisible(false);
+        return;
+    }
+
+    LOG(ERROR) << "OTP reset failed:" << error_code;
+    MsgBox::warning(this, tr("Unknown internal error."));
 }
 
 //--------------------------------------------------------------------------------------------------

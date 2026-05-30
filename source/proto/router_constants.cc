@@ -31,6 +31,7 @@ const char* const kCommandClientDisconnect = "disconnect";
 const char* const kCommandUserAdd          = "add";
 const char* const kCommandUserModify       = "modify";
 const char* const kCommandUserDelete       = "delete";
+const char* const kCommandUserResetOtp     = "reset_otp";
 const char* const kCommandUserRevokeTokens = "revoke_tokens";
 
 const char* const kCommandWorkspaceAdd    = "add";

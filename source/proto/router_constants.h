@@ -36,6 +36,7 @@ extern const char* const kCommandClientDisconnect;
 extern const char* const kCommandUserAdd;
 extern const char* const kCommandUserModify;
 extern const char* const kCommandUserDelete;
+extern const char* const kCommandUserResetOtp;
 extern const char* const kCommandUserRevokeTokens;
 
 // Command names for WorkspaceRequest.

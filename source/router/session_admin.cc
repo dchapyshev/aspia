@@ -179,6 +179,10 @@ void SessionAdmin::doUserListRequest(const proto::router::UserListRequest& reque
             proto::router::User* item = list->add_user();
             item->CopyFrom(user.serialize());
 
+            // |otp_active| is a presentation-only flag derived from whether the user has a
+            // confirmed TOTP secret on file.
+            item->set_otp_active(!user.otp_secret.isEmpty());
+
             // Attach the user's active device tokens. The router only ever exposes the opaque
             // numeric id and timestamp metadata - never the token hash or any other material
             // that could identify the token outside of the router.
@@ -216,6 +220,42 @@ void SessionAdmin::doUserRequest(const proto::router::UserRequest& request)
     else if (request.command_name() == proto::router::kCommandUserDelete)
     {
         result->set_error_code(deleteUser(request.user()));
+    }
+    else if (request.command_name() == proto::router::kCommandUserResetOtp)
+    {
+        const qint64 user_id = request.user().entry_id();
+
+        if (user_id <= 0)
+        {
+            CLOG(ERROR) << "Invalid reset_otp request: user_id=" << user_id;
+            result->set_error_code(proto::router::kErrorInvalidRequest);
+        }
+        else
+        {
+            Database& database = Database::instance();
+            if (!database.isValid())
+            {
+                CLOG(ERROR) << "Failed to connect to database";
+                result->set_error_code(proto::router::kErrorInternalError);
+            }
+            else if (!database.clearUserOtp(user_id))
+            {
+                result->set_error_code(proto::router::kErrorInternalError);
+            }
+            else
+            {
+                // Re-enrollment implies a new device key pair; existing device tokens must die
+                // with the secret they were issued against.
+                if (!database.revokeUserClientDeviceTokens(user_id))
+                {
+                    CLOG(WARNING) << "OTP cleared but failed to revoke device tokens for user"
+                                  << user_id;
+                }
+
+                CLOG(INFO) << "OTP cleared for user" << user_id << "by" << userName();
+                result->set_error_code(proto::router::kErrorOk);
+            }
+        }
     }
     else if (request.command_name() == proto::router::kCommandUserRevokeTokens)
     {

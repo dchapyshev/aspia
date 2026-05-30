@@ -180,9 +180,13 @@ public:
     template<typename HandlerT>
     void deleteUser(qint64 entry_id, QObject* receiver, HandlerT handler);
 
-    // Admin: revoke the listed device tokens of |user_id|. Passing all token ids the caller
-    // currently knows about is the way to perform "revoke all"; an empty list is rejected by
-    // the router as invalid_request.
+    // Admin: clear |user_id|'s TOTP secret so the next login triggers fresh enrollment. Also
+    // revokes every device token of the user (re-enrollment implies a new device key pair).
+    template<typename HandlerT>
+    void resetUserOtp(qint64 user_id, QObject* receiver, HandlerT handler);
+
+    // Admin: revoke the listed device tokens of |user_id|. An empty list means "revoke every
+    // token of this user" and is handled atomically server-side.
     template<typename HandlerT>
     void revokeUserTokens(qint64 user_id, const QList<qint64>& token_ids,
                           QObject* receiver, HandlerT handler);
@@ -482,6 +486,19 @@ void Router::deleteUser(qint64 entry_id, QObject* receiver, HandlerT handler)
     request->set_request_id(nextRequestId());
     request->set_command_name(proto::router::kCommandUserDelete);
     request->mutable_user()->set_entry_id(entry_id);
+    registerPending<proto::router::UserResult>(request, receiver, std::move(handler));
+    emitSend(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+template<typename HandlerT>
+void Router::resetUserOtp(qint64 user_id, QObject* receiver, HandlerT handler)
+{
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_user_request();
+    request->set_request_id(nextRequestId());
+    request->set_command_name(proto::router::kCommandUserResetOtp);
+    request->mutable_user()->set_entry_id(user_id);
     registerPending<proto::router::UserResult>(request, receiver, std::move(handler));
     emitSend(proto::router::CHANNEL_ID_ADMIN, message);
 }

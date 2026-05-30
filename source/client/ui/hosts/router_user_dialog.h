@@ -53,6 +53,8 @@ protected:
 private slots:
     void onUserListReceived(const proto::router::UserList& list);
     void onUserResultReceived(const proto::router::UserResult& result);
+    void onResetOtpClicked();
+    void onResetOtpResultReceived(const proto::router::UserResult& result);
     void onRevokeTokenClicked();
     void onRevokeAllTokensClicked();
     void onRevokeResultReceived(const proto::router::UserResult& result);
