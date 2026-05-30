@@ -18,9 +18,12 @@
 
 #include "common/ui/two_factor_enroll_dialog.h"
 
+#include <QDialogButtonBox>
 #include <QImage>
 #include <QPainter>
 #include <QPixmap>
+#include <QRegularExpression>
+#include <QRegularExpressionValidator>
 #include <QUrl>
 #include <QUrlQuery>
 
@@ -93,7 +96,12 @@ TwoFactorEnrollDialog::TwoFactorEnrollDialog(const QString& otpauth_uri, QWidget
         qrcodegen::QrCode::encodeText(otpauth_uri.toUtf8().constData(), qrcodegen::QrCode::Ecc::MEDIUM);
     ui->label_qr->setPixmap(renderQrPixmap(qr, 220));
 
+    ui->edit_code->setValidator(
+        new QRegularExpressionValidator(QRegularExpression("\\d*"), ui->edit_code));
     ui->edit_code->setFocus();
+
+    connect(ui->buttonbox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(ui->buttonbox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -74,9 +74,6 @@
      <property name="alignment">
       <set>Qt::AlignCenter</set>
      </property>
-     <property name="inputMask">
-      <string>999999</string>
-     </property>
     </widget>
    </item>
    <item>

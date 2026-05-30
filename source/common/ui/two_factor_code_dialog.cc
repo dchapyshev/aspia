@@ -18,6 +18,10 @@
 
 #include "common/ui/two_factor_code_dialog.h"
 
+#include <QDialogButtonBox>
+#include <QRegularExpression>
+#include <QRegularExpressionValidator>
+
 #include "ui_two_factor_code_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -26,7 +30,12 @@ TwoFactorCodeDialog::TwoFactorCodeDialog(QWidget* parent)
       ui(std::make_unique<Ui::TwoFactorCodeDialog>())
 {
     ui->setupUi(this);
+    ui->edit_code->setValidator(
+        new QRegularExpressionValidator(QRegularExpression("\\d*"), ui->edit_code));
     ui->edit_code->setFocus();
+
+    connect(ui->buttonbox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(ui->buttonbox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
 //--------------------------------------------------------------------------------------------------
