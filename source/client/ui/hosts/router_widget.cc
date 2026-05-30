@@ -938,7 +938,8 @@ void RouterWidget::showStatusDialog()
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onUpdateRelayList()
 {
-    router_->listRelays(this, &RouterWidget::onRelayListReceived);
+    if (router_->config().sessionType() == proto::router::SESSION_TYPE_ADMIN)
+        router_->listRelays(this, &RouterWidget::onRelayListReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -956,13 +957,15 @@ void RouterWidget::onUpdateHostList()
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onUpdateClientList()
 {
-    router_->listClients(this, &RouterWidget::onClientListReceived);
+    if (router_->config().sessionType() == proto::router::SESSION_TYPE_ADMIN)
+        router_->listClients(this, &RouterWidget::onClientListReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onUpdateUserList()
 {
-    router_->listUsers(this, &RouterWidget::onUserListReceived);
+    if (router_->config().sessionType() == proto::router::SESSION_TYPE_ADMIN)
+        router_->listUsers(this, &RouterWidget::onUserListReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
