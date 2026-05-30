@@ -20,7 +20,6 @@
 
 #include <QAbstractButton>
 #include <QComboBox>
-#include <QToolButton>
 
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
@@ -69,9 +68,8 @@ RouterDialog::RouterDialog(qint64 router_id, QWidget* parent)
         }
     }
 
+    ui->edit_password->setShowPasswordButtonVisible(true);
     connect(ui->buttonbox, &QDialogButtonBox::clicked, this, &RouterDialog::onButtonBoxClicked);
-    connect(ui->button_show_password, &QToolButton::toggled,
-            ui->edit_password, &PasswordEdit::setShowPassword);
 }
 
 //--------------------------------------------------------------------------------------------------

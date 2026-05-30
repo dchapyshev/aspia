@@ -119,8 +119,7 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
     ui->combo_group->loadGroups(tr("Local"), QIcon(":/img/folder.svg"), group_entries);
     ui->combo_group->selectGroup(group_id_);
 
-    connect(ui->button_show_password, &QToolButton::toggled,
-            ui->edit_password, &PasswordEdit::setShowPassword);
+    ui->edit_password->setShowPasswordButtonVisible(true);
     connect(ui->combo_router, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &LocalHostDialog::onRouterChanged);
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &LocalHostDialog::onButtonBoxClicked);

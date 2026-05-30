@@ -22,7 +22,6 @@
 #include <QDialogButtonBox>
 #include <QIcon>
 #include <QPushButton>
-#include <QToolButton>
 
 #include "base/crypto/secure_string.h"
 #include "base/logging.h"
@@ -50,8 +49,7 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const QString& workspace_na
     ui->edit_password->setPassword(host_.password);
     ui->edit_comment->setPlainText(host_.comment);
 
-    connect(ui->button_show_password, &QToolButton::toggled,
-            ui->edit_password, &PasswordEdit::setShowPassword);
+    ui->edit_password->setShowPasswordButtonVisible(true);
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &RouterHostDialog::onButtonBoxClicked);
 
     // The group combo is populated asynchronously from listGroups(); disable Ok until the
