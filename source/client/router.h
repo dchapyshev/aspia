@@ -139,11 +139,10 @@ public:
     explicit Router(const RouterConfig& config, QObject* parent = nullptr);
     ~Router() final;
 
-    // Lookup an existing instance by router id. Returns nullptr if no Router with that
-    // router_id exists in the current thread.
+    // Lookup an existing instance by router id. Returns nullptr if no Router with that router_id
+    // exists in the current thread.
     static Router* instance(qint64 router_id);
 
-    // Lifecycle.
     void connectToRouter();
     void disconnectFromRouter();
     void updateConfig(const RouterConfig& config);
@@ -154,13 +153,15 @@ public:
     // which Router persists locally - no client-side opt-in required.
     void submitTwoFactorCode(const QString& totp_code);
 
-    // Accessors.
     Status status() const { return status_; }
     QVersionNumber version() const { return version_; }
     qint64 routerId() const { return config_.routerId(); }
     const RouterConfig& config() const { return config_; }
 
+    //----------------------------------------------------------------------------------------------
     // Admin: list queries.
+    //----------------------------------------------------------------------------------------------
+
     template<typename HandlerT>
     void listRelays(QObject* receiver, HandlerT handler);
 
@@ -170,7 +171,10 @@ public:
     template<typename HandlerT>
     void listUsers(QObject* receiver, HandlerT handler);
 
+    //----------------------------------------------------------------------------------------------
     // Admin: user operations.
+    //----------------------------------------------------------------------------------------------
+
     template<typename HandlerT>
     void addUser(const proto::router::User& user, QObject* receiver, HandlerT handler);
 
@@ -180,18 +184,22 @@ public:
     template<typename HandlerT>
     void deleteUser(qint64 entry_id, QObject* receiver, HandlerT handler);
 
-    // Admin: clear |user_id|'s TOTP secret so the next login triggers fresh enrollment. Also
+    // Clear |user_id|'s TOTP secret so the next login triggers fresh enrollment. Also
     // revokes every device token of the user (re-enrollment implies a new device key pair).
     template<typename HandlerT>
     void resetUserOtp(qint64 user_id, QObject* receiver, HandlerT handler);
 
-    // Admin: revoke the listed device tokens of |user_id|. An empty list means "revoke every
-    // token of this user" and is handled atomically server-side.
+    // Revoke the listed device tokens of |user_id|. An empty list means "revoke every token of this
+    // user" and is handled atomically server-side.
     template<typename HandlerT>
     void revokeUserTokens(qint64 user_id, const QList<qint64>& token_ids,
                           QObject* receiver, HandlerT handler);
 
-    // Admin: host operations. Pass kAllHostsId to target all hosts.
+    //----------------------------------------------------------------------------------------------
+    // Admin: host operations.
+    //----------------------------------------------------------------------------------------------
+
+    // Pass kAllHostsId to target all hosts.
     template<typename HandlerT>
     void disconnectHost(HostId host_id, QObject* receiver, HandlerT handler);
 
@@ -201,14 +209,24 @@ public:
     template<typename HandlerT>
     void editHost(const Router::Host& host, QObject* receiver, HandlerT handler);
 
-    // Admin: relay/client disconnect. session_id == -1 means "all".
+    //----------------------------------------------------------------------------------------------
+    // Admin: relay/client/peer disconnect.
+    //----------------------------------------------------------------------------------------------
+
+    // session_id == -1 means "all".
     template<typename HandlerT>
     void disconnectRelay(qint64 session_id, QObject* receiver, HandlerT handler);
 
     template<typename HandlerT>
     void disconnectClient(qint64 session_id, QObject* receiver, HandlerT handler);
 
-    // Admin: workspace operations. Add/modify encrypt the workspace data with the user's key.
+    template<typename HandlerT>
+    void disconnectPeer(qint64 relay_id, qint64 peer_id, QObject* receiver, HandlerT handler);
+
+    //----------------------------------------------------------------------------------------------
+    // Admin: workspace operations.
+    //----------------------------------------------------------------------------------------------
+
     template<typename HandlerT>
     void addWorkspace(const Router::Workspace& workspace, QObject* receiver, HandlerT handler);
 
@@ -218,8 +236,10 @@ public:
     template<typename HandlerT>
     void deleteWorkspace(qint64 entry_id, QObject* receiver, HandlerT handler);
 
-    // Admin: host-group operations. Add/modify encrypt the comment with the workspace GK.
-    // workspace_id selects which groups_<W> table to operate on.
+    //----------------------------------------------------------------------------------------------
+    // Admin: host-group operations.
+    //----------------------------------------------------------------------------------------------
+
     template<typename HandlerT>
     void addGroup(qint64 workspace_id, const Router::Group& group, QObject* receiver, HandlerT handler);
 
@@ -229,33 +249,33 @@ public:
     template<typename HandlerT>
     void deleteGroup(qint64 workspace_id, qint64 entry_id, QObject* receiver, HandlerT handler);
 
-    // Admin: peer disconnect.
-    template<typename HandlerT>
-    void disconnectPeer(qint64 relay_id, qint64 peer_id, QObject* receiver, HandlerT handler);
+    //----------------------------------------------------------------------------------------------
+    // Client.
+    //----------------------------------------------------------------------------------------------
 
-    // Client: workspace list (response is the decoded plain struct). workspace_id == 0
-    // returns all visible workspaces; > 0 narrows to a single entry.
+    // Workspace list (response is the decoded plain struct). workspace_id == 0 returns all visible
+    // workspaces; > 0 narrows to a single entry.
     template<typename HandlerT>
     void listWorkspaces(qint64 workspace_id, QObject* receiver, HandlerT handler);
 
-    // Client: host-group list of a workspace (response is the decoded plain struct with
-    // comments decrypted via the cached workspace cryptor).
+    // Host-group list of a workspace (response is the decoded plain struct with comments decrypted
+    // via the cached workspace cryptor).
     template<typename HandlerT>
     void listGroups(qint64 workspace_id, QObject* receiver, HandlerT handler);
 
-    // Client: host list. Caller supplies a pre-filled request (mode, filters, etc).
+    // Host list. Caller supplies a pre-filled request (mode, filters, etc).
     template<typename HandlerT>
     void listHosts(proto::router::HostListRequest request, QObject* receiver, HandlerT handler);
 
-    // Client: ask the router whether a host is currently online.
+    // Ask the router whether a host is currently online.
     template<typename HandlerT>
     void checkHostStatus(HostId host_id, QObject* receiver, HandlerT handler);
 
-    // Client: ask the router for a relay connection offer to the given host.
+    // Ask the router for a relay connection offer to the given host.
     template<typename HandlerT>
     void requestConnection(HostId host_id, QObject* receiver, HandlerT handler);
 
-    // Client: rotate the password of the authenticated user.
+    // Rotate the password of the authenticated user.
     template<typename HandlerT>
     void changePassword(const SecureString& new_password, QObject* receiver, HandlerT handler);
 
@@ -590,6 +610,20 @@ void Router::disconnectClient(qint64 session_id, QObject* receiver, HandlerT han
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
+void Router::disconnectPeer(qint64 relay_id, qint64 peer_id, QObject* receiver, HandlerT handler)
+{
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_peer_request();
+    request->set_request_id(nextRequestId());
+    request->set_command_name(proto::router::kCommandPeerDisconnect);
+    request->set_relay_id(relay_id);
+    request->set_peer_id(peer_id);
+    registerPending<proto::router::PeerResult>(request, receiver, std::move(handler));
+    emitSend(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+template<typename HandlerT>
 void Router::addWorkspace(const Router::Workspace& workspace, QObject* receiver, HandlerT handler)
 {
     proto::router::Workspace ws;
@@ -679,20 +713,6 @@ void Router::deleteGroup(qint64 workspace_id, qint64 entry_id, QObject* receiver
     request->mutable_group()->set_entry_id(entry_id);
     registerPending<proto::router::GroupResult>(request, receiver, std::move(handler));
     emitSend(proto::router::CHANNEL_ID_MANAGER, message);
-}
-
-//--------------------------------------------------------------------------------------------------
-template<typename HandlerT>
-void Router::disconnectPeer(qint64 relay_id, qint64 peer_id, QObject* receiver, HandlerT handler)
-{
-    proto::router::AdminToRouter message;
-    auto* request = message.mutable_peer_request();
-    request->set_request_id(nextRequestId());
-    request->set_command_name(proto::router::kCommandPeerDisconnect);
-    request->set_relay_id(relay_id);
-    request->set_peer_id(peer_id);
-    registerPending<proto::router::PeerResult>(request, receiver, std::move(handler));
-    emitSend(proto::router::CHANNEL_ID_ADMIN, message);
 }
 
 //--------------------------------------------------------------------------------------------------
