@@ -21,11 +21,10 @@
 #include "base/logging.h"
 #include "base/crypto/data_cryptor.h"
 #include "base/crypto/key_pair.h"
-#include "base/crypto/secure_byte_array.h"
 
 //--------------------------------------------------------------------------------------------------
 // static
-QByteArray SealedBox::seal(QByteArrayView plaintext, const QByteArray& recipient_public_key)
+QByteArray SealedBox::seal(const SecureByteArray& plaintext, const QByteArray& recipient_public_key)
 {
     if (recipient_public_key.size() != kPublicKeySize)
     {
@@ -48,7 +47,7 @@ QByteArray SealedBox::seal(QByteArrayView plaintext, const QByteArray& recipient
     }
 
     DataCryptor cryptor(CipherType::AES256_GCM, shared_secret);
-    std::optional<QByteArray> encrypted = cryptor.encrypt(plaintext);
+    std::optional<QByteArray> encrypted = cryptor.encrypt(plaintext.toByteArray());
     if (!encrypted.has_value())
     {
         LOG(ERROR) << "Unable to encrypt plaintext";
@@ -60,7 +59,7 @@ QByteArray SealedBox::seal(QByteArrayView plaintext, const QByteArray& recipient
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::optional<QByteArray> SealedBox::open(QByteArrayView sealed, const KeyPair& recipient_key_pair)
+std::optional<SecureByteArray> SealedBox::open(QByteArrayView sealed, const KeyPair& recipient_key_pair)
 {
     if (!recipient_key_pair.isValid())
     {
@@ -85,5 +84,9 @@ std::optional<QByteArray> SealedBox::open(QByteArrayView sealed, const KeyPair& 
     }
 
     DataCryptor cryptor(CipherType::AES256_GCM, shared_secret);
-    return cryptor.decrypt(ciphertext);
+    std::optional<QByteArray> decrypted = cryptor.decrypt(ciphertext);
+    if (!decrypted.has_value())
+        return std::nullopt;
+
+    return SecureByteArray(std::move(*decrypted));
 }

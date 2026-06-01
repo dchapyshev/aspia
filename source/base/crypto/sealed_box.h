@@ -24,6 +24,8 @@
 
 #include <optional>
 
+#include "base/crypto/secure_byte_array.h"
+
 class KeyPair;
 
 // Anonymous public-key authenticated encryption.
@@ -40,8 +42,8 @@ public:
     static constexpr int kPublicKeySize = 32;
     static constexpr int kMinSealedSize = kPublicKeySize + 12 + 16;
 
-    static QByteArray seal(QByteArrayView plaintext, const QByteArray& recipient_public_key);
-    static std::optional<QByteArray> open(QByteArrayView sealed, const KeyPair& recipient_key_pair);
+    static QByteArray seal(const SecureByteArray& plaintext, const QByteArray& recipient_public_key);
+    static std::optional<SecureByteArray> open(QByteArrayView sealed, const KeyPair& recipient_key_pair);
 
 private:
     Q_DISABLE_COPY_MOVE(SealedBox)

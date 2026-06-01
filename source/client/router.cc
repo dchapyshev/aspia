@@ -338,7 +338,7 @@ bool Router::buildWorkspace(const Router::Workspace& workspace, proto::router::W
         if (access.public_key.isEmpty())
             continue; // Existing user - server preserves their wrapped_gk.
 
-        QByteArray wrapped_gk = SealedBox::seal(group_key.toByteArray(), access.public_key);
+        QByteArray wrapped_gk = SealedBox::seal(group_key, access.public_key);
         if (wrapped_gk.isEmpty())
         {
             LOG(ERROR) << "Failed to seal group key for user_id:" << access.user_id;
@@ -746,12 +746,32 @@ SecureByteArray Router::unwrapGroupKey(const QByteArray& wrapped_gk) const
         return SecureByteArray();
     }
 
-    std::optional<QByteArray> opened = SealedBox::open(wrapped_gk, key_pair);
+    std::optional<SecureByteArray> opened = SealedBox::open(wrapped_gk, key_pair);
     if (!opened.has_value() || opened->isEmpty())
     {
         LOG(ERROR) << "Failed to open sealed group key";
         return SecureByteArray();
     }
 
-    return SecureByteArray(std::move(*opened));
+    return std::move(*opened);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::resealGroupKeys(const QByteArray& new_public_key, proto::router::User* user)
+{
+    CHECK(user);
+
+    for (const auto& [workspace_id, cryptor] : workspace_cryptors_)
+    {
+        QByteArray wrapped_gk = SealedBox::seal(cryptor.key(), new_public_key);
+        if (wrapped_gk.isEmpty())
+        {
+            LOG(ERROR) << "Failed to reseal group key for workspace" << workspace_id;
+            continue;
+        }
+
+        proto::router::User::WorkspaceKey* dst = user->add_workspace_key();
+        dst->set_workspace_id(workspace_id);
+        dst->set_wrapped_gk(wrapped_gk.toStdString());
+    }
 }

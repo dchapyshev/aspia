@@ -20,6 +20,7 @@
 #define ROUTER_DATABASE_H
 
 #include <QByteArray>
+#include <QHash>
 #include <QSet>
 #include <QString>
 
@@ -231,6 +232,13 @@ public:
     QList<Workspace::Access> workspaceAccessListForUser(qint64 user_id) const;
 
     bool hasWorkspaceAccess(qint64 user_id, qint64 workspace_id) const;
+
+    // Reconciles the user's workspace_access rows after a key-pair rotation. Each existing
+    // membership is updated with the matching re-sealed wrapped_gk from |wrapped_keys| (keyed by
+    // workspace id); memberships without an entry are removed, since their stored wrapped_gk no
+    // longer opens with the new key pair. Does not grant access to workspaces the user was not
+    // already a member of.
+    bool setWorkspaceKeysForUser(qint64 user_id, const QHash<qint64, QByteArray>& wrapped_keys);
 
     //----------------------------------------------------------------------------------------------
     // Hosts Groups

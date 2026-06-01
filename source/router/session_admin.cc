@@ -831,10 +831,24 @@ std::string SessionAdmin::modifyUser(const proto::router::User& user)
         return proto::router::kErrorInternalError;
     }
 
-    // modifyUser already revoked the tokens; drop the live sessions so the new password applies
-    // immediately.
+    // modifyUser already revoked the tokens; reconcile the workspace keys to the rotated key pair
+    // and drop the live sessions so the new password applies immediately.
     if (password_changed)
+    {
+        QHash<qint64, QByteArray> wrapped_keys;
+        wrapped_keys.reserve(user.workspace_key_size());
+
+        for (int i = 0; i < user.workspace_key_size(); ++i)
+        {
+            const proto::router::User::WorkspaceKey& wk = user.workspace_key(i);
+            wrapped_keys.insert(wk.workspace_id(), QByteArray::fromStdString(wk.wrapped_gk()));
+        }
+
+        if (!database.setWorkspaceKeysForUser(new_user.entry_id, wrapped_keys))
+            CLOG(WARNING) << "Failed to rewrap workspace keys for user" << new_user.entry_id;
+
         Service::instance()->stopUserSessions(new_user.entry_id);
+    }
 
     Service::instance()->notifyChanged(Service::NOTIFY_USERS);
     return proto::router::kErrorOk;

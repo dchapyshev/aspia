@@ -1883,6 +1883,76 @@ bool Database::hasWorkspaceAccess(qint64 user_id, qint64 workspace_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
+bool Database::setWorkspaceKeysForUser(qint64 user_id, const QHash<qint64, QByteArray>& wrapped_keys)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    QSqlDatabase sql_db = connection();
+    if (!sql_db.transaction())
+    {
+        LOG(ERROR) << "Unable to start transaction:" << sql_db.lastError();
+        return false;
+    }
+
+    QList<qint64> workspace_ids;
+    {
+        QSqlQuery select(sql_db);
+        select.prepare("SELECT workspace_id FROM workspace_access WHERE user_id=?");
+        select.addBindValue(user_id);
+
+        if (!select.exec())
+        {
+            LOG(ERROR) << "Unable to read workspace access:" << select.lastError();
+            sql_db.rollback();
+            return false;
+        }
+
+        while (select.next())
+            workspace_ids.append(select.value(0).toLongLong());
+    }
+
+    for (qint64 workspace_id : std::as_const(workspace_ids))
+    {
+        const auto it = wrapped_keys.constFind(workspace_id);
+
+        QSqlQuery query(sql_db);
+        if (it != wrapped_keys.constEnd())
+        {
+            query.prepare("UPDATE workspace_access SET wrapped_gk=? WHERE workspace_id=? AND user_id=?");
+            query.addBindValue(it.value());
+            query.addBindValue(workspace_id);
+            query.addBindValue(user_id);
+        }
+        else
+        {
+            query.prepare("DELETE FROM workspace_access WHERE workspace_id=? AND user_id=?");
+            query.addBindValue(workspace_id);
+            query.addBindValue(user_id);
+        }
+
+        if (!query.exec())
+        {
+            LOG(ERROR) << "Unable to update workspace access:" << query.lastError();
+            sql_db.rollback();
+            return false;
+        }
+    }
+
+    if (!sql_db.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction:" << sql_db.lastError();
+        sql_db.rollback();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
 QList<Group> Database::groupList(qint64 workspace_id) const
 {
     if (!isValid())

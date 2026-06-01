@@ -413,6 +413,7 @@ private:
     Router::HostList decodeHostList(const proto::router::HostList& list);
     Router::GroupList decodeGroupList(const proto::router::GroupList& list);
     SecureByteArray unwrapGroupKey(const QByteArray& wrapped_gk) const;
+    void resealGroupKeys(const QByteArray& new_public_key, proto::router::User* user);
 
     RouterConfig config_;
     ScopedQPointer<TcpChannel> tcp_channel_;
@@ -493,6 +494,7 @@ void Router::modifyUser(const proto::router::User& user, QObject* receiver, Hand
     request->set_request_id(nextRequestId());
     request->set_command_name(proto::router::kCommandUserModify);
     request->mutable_user()->CopyFrom(user);
+    resealGroupKeys(QByteArray::fromStdString(user.public_key()), request->mutable_user());
     registerPending<proto::router::UserResult>(request, receiver, std::move(handler));
     emitSend(proto::router::CHANNEL_ID_ADMIN, message);
 }

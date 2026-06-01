@@ -122,18 +122,26 @@ message User
         string address     = 4;
     }
 
-    int64 entry_id         = 1;
-    string name            = 2;
-    string group           = 3;
-    bytes salt             = 4;
-    bytes verifier         = 5;
-    uint32 sessions        = 6;
-    uint32 flags           = 7;
-    bytes public_key       = 8;
-    bytes wrap_private_key = 9;
-    bytes wrap_salt        = 10;
-    bool otp_active        = 11; // Read-only.
-    repeated Token token   = 12;
+    // Workspace group key re-sealed under |public_key|.
+    message WorkspaceKey
+    {
+        int64 workspace_id = 1;
+        bytes wrapped_gk   = 2;
+    }
+
+    int64 entry_id                      = 1;
+    string name                         = 2;
+    string group                        = 3;
+    bytes salt                          = 4;
+    bytes verifier                      = 5;
+    uint32 sessions                     = 6;
+    uint32 flags                        = 7;
+    bytes public_key                    = 8;
+    bytes wrap_private_key              = 9;
+    bytes wrap_salt                     = 10;
+    bool otp_active                     = 11; // Read-only.
+    repeated Token token                = 12;
+    repeated WorkspaceKey workspace_key = 13;
 }
 
 message UserListRequest

@@ -19,6 +19,7 @@
 #include "base/crypto/sealed_box.h"
 
 #include "base/crypto/key_pair.h"
+#include "base/crypto/secure_byte_array.h"
 
 #include <gtest/gtest.h>
 
@@ -32,14 +33,14 @@ TEST(SealedBoxTest, RoundTrip)
     const QByteArray message = QByteArray::fromHex(
         "5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
 
-    QByteArray sealed = SealedBox::seal(message, recipient.publicKey());
+    QByteArray sealed = SealedBox::seal(SecureByteArray(message), recipient.publicKey());
     ASSERT_FALSE(sealed.isEmpty());
     ASSERT_GE(sealed.size(), SealedBox::kMinSealedSize);
     ASSERT_EQ(sealed.size(), SealedBox::kPublicKeySize + message.size() + 12 + 16);
 
-    std::optional<QByteArray> opened = SealedBox::open(sealed, recipient);
+    std::optional<SecureByteArray> opened = SealedBox::open(sealed, recipient);
     ASSERT_TRUE(opened.has_value());
-    ASSERT_EQ(*opened, message);
+    ASSERT_EQ(opened->toByteArray(), message);
 }
 
 TEST(SealedBoxTest, WrongRecipientKey)
@@ -51,10 +52,10 @@ TEST(SealedBoxTest, WrongRecipientKey)
 
     const QByteArray message = QByteArray::fromHex("deadbeefcafe");
 
-    QByteArray sealed = SealedBox::seal(message, recipient.publicKey());
+    QByteArray sealed = SealedBox::seal(SecureByteArray(message), recipient.publicKey());
     ASSERT_FALSE(sealed.isEmpty());
 
-    std::optional<QByteArray> opened = SealedBox::open(sealed, attacker);
+    std::optional<SecureByteArray> opened = SealedBox::open(sealed, attacker);
     ASSERT_FALSE(opened.has_value());
 }
 
@@ -65,13 +66,13 @@ TEST(SealedBoxTest, TamperedCiphertext)
 
     const QByteArray message = QByteArray::fromHex("0123456789abcdef0123456789abcdef");
 
-    QByteArray sealed = SealedBox::seal(message, recipient.publicKey());
+    QByteArray sealed = SealedBox::seal(SecureByteArray(message), recipient.publicKey());
     ASSERT_FALSE(sealed.isEmpty());
 
     // Flip a byte inside ciphertext (after ephemeral public key).
     sealed[SealedBox::kPublicKeySize + 12] ^= 0x01;
 
-    std::optional<QByteArray> opened = SealedBox::open(sealed, recipient);
+    std::optional<SecureByteArray> opened = SealedBox::open(sealed, recipient);
     ASSERT_FALSE(opened.has_value());
 }
 
@@ -82,13 +83,13 @@ TEST(SealedBoxTest, TamperedEphemeralKey)
 
     const QByteArray message = QByteArray::fromHex("0123456789abcdef0123456789abcdef");
 
-    QByteArray sealed = SealedBox::seal(message, recipient.publicKey());
+    QByteArray sealed = SealedBox::seal(SecureByteArray(message), recipient.publicKey());
     ASSERT_FALSE(sealed.isEmpty());
 
     // Flip a byte inside ephemeral public key.
     sealed[0] ^= 0x01;
 
-    std::optional<QByteArray> opened = SealedBox::open(sealed, recipient);
+    std::optional<SecureByteArray> opened = SealedBox::open(sealed, recipient);
     ASSERT_FALSE(opened.has_value());
 }
 
@@ -98,7 +99,7 @@ TEST(SealedBoxTest, TooSmall)
     ASSERT_TRUE(recipient.isValid());
 
     const QByteArray short_sealed(SealedBox::kMinSealedSize - 1, 0);
-    std::optional<QByteArray> opened = SealedBox::open(short_sealed, recipient);
+    std::optional<SecureByteArray> opened = SealedBox::open(short_sealed, recipient);
     ASSERT_FALSE(opened.has_value());
 }
 
@@ -107,7 +108,7 @@ TEST(SealedBoxTest, InvalidRecipientPublicKey)
     const QByteArray wrong_size_key(16, 0);
     const QByteArray message = QByteArray::fromHex("deadbeef");
 
-    QByteArray sealed = SealedBox::seal(message, wrong_size_key);
+    QByteArray sealed = SealedBox::seal(SecureByteArray(message), wrong_size_key);
     ASSERT_TRUE(sealed.isEmpty());
 }
 
@@ -118,18 +119,18 @@ TEST(SealedBoxTest, NonDeterministic)
 
     const QByteArray message = QByteArray::fromHex("deadbeefcafebabe");
 
-    QByteArray sealed1 = SealedBox::seal(message, recipient.publicKey());
-    QByteArray sealed2 = SealedBox::seal(message, recipient.publicKey());
+    QByteArray sealed1 = SealedBox::seal(SecureByteArray(message), recipient.publicKey());
+    QByteArray sealed2 = SealedBox::seal(SecureByteArray(message), recipient.publicKey());
     ASSERT_FALSE(sealed1.isEmpty());
     ASSERT_FALSE(sealed2.isEmpty());
     ASSERT_NE(sealed1, sealed2);
 
-    std::optional<QByteArray> opened1 = SealedBox::open(sealed1, recipient);
-    std::optional<QByteArray> opened2 = SealedBox::open(sealed2, recipient);
+    std::optional<SecureByteArray> opened1 = SealedBox::open(sealed1, recipient);
+    std::optional<SecureByteArray> opened2 = SealedBox::open(sealed2, recipient);
     ASSERT_TRUE(opened1.has_value());
     ASSERT_TRUE(opened2.has_value());
-    ASSERT_EQ(*opened1, message);
-    ASSERT_EQ(*opened2, message);
+    ASSERT_EQ(opened1->toByteArray(), message);
+    ASSERT_EQ(opened2->toByteArray(), message);
 }
 
 TEST(SealedBoxTest, EmptyPlaintext)
@@ -137,7 +138,7 @@ TEST(SealedBoxTest, EmptyPlaintext)
     KeyPair recipient = KeyPair::create(KeyPair::Type::X25519);
     ASSERT_TRUE(recipient.isValid());
 
-    QByteArray sealed = SealedBox::seal(QByteArray(), recipient.publicKey());
+    QByteArray sealed = SealedBox::seal(SecureByteArray(), recipient.publicKey());
     // Empty input is rejected by DataCryptor::encrypt.
     ASSERT_TRUE(sealed.isEmpty());
 }
