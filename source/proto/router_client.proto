@@ -198,7 +198,7 @@ message Notification
 }
 
 // 2FA stage that runs between successful SRP authentication and the first UserKeys delivery.
-// The router opens it from SessionClient::onStarted() and gates UserKeys behind a successful
+// The router opens it from Client::onStarted() and gates UserKeys behind a successful
 // TwoFactorResult. Because the SRP handshake is already complete, identity is confirmed and
 // the stage cannot leak user existence: an attacker who failed SRP never reaches here. 2FA
 // is mandatory: every user must either prove possession of an enrolled TOTP secret (or a

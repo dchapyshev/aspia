@@ -45,6 +45,9 @@ public:
     void setPort(quint16 port);
     quint16 port() const;
 
+    void setClientPort(quint16 port);
+    quint16 clientPort() const;
+
     void setPrivateKey(const SecureByteArray& private_key);
     SecureByteArray privateKey() const;
 

@@ -28,12 +28,12 @@
 #include "base/net/tcp_channel.h"
 #include "base/peer/stun_server.h"
 #include "proto/router_client.h"
+#include "router/client.h"
+#include "router/client_admin.h"
+#include "router/client_manager.h"
 #include "router/migration_utils.h"
-#include "router/session_admin.h"
-#include "router/session_client.h"
 #include "router/session_host.h"
 #include "router/session_legacy_host.h"
-#include "router/session_manager.h"
 #include "router/session_relay.h"
 #include "router/settings.h"
 #include "router/router_user_list.h"
@@ -100,6 +100,9 @@ Service::~Service()
     for (auto* session : std::as_const(sessions_))
         delete session;
 
+    for (auto* client : std::as_const(clients_))
+        delete client;
+
     instance_ = nullptr;
 }
 
@@ -148,26 +151,50 @@ bool Service::stopSession(qint64 session_id)
 }
 
 //--------------------------------------------------------------------------------------------------
+const QList<Client*>& Service::clients()
+{
+    return clients_;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Service::stopClient(qint64 client_id)
+{
+    for (auto it = clients_.begin(), it_end = clients_.end(); it != it_end; ++it)
+    {
+        Client* client = *it;
+
+        if (client->sessionId() == client_id)
+        {
+            client->disconnect();
+            client->deleteLater();
+            clients_.erase(it);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
 int Service::stopUserSessions(qint64 user_id, const QList<qint64>& token_ids, qint64 except_session_id)
 {
-    QList<qint64> session_ids;
-    for (Session* session : std::as_const(sessions_))
+    QList<qint64> client_ids;
+    for (Client* client : std::as_const(clients_))
     {
-        SessionClient* client_session = dynamic_cast<SessionClient*>(session);
-        if (!client_session || !client_session->isTwoFactorCompleted())
+        if (!client->isTwoFactorCompleted())
             continue;
-        if (client_session->userId() != user_id || client_session->sessionId() == except_session_id)
+        if (client->userId() != user_id || client->sessionId() == except_session_id)
             continue;
-        if (!token_ids.isEmpty() && !token_ids.contains(client_session->tokenId()))
+        if (!token_ids.isEmpty() && !token_ids.contains(client->tokenId()))
             continue;
 
-        session_ids.append(client_session->sessionId());
+        client_ids.append(client->sessionId());
     }
 
     int stopped = 0;
-    for (qint64 id : std::as_const(session_ids))
+    for (qint64 id : std::as_const(client_ids))
     {
-        if (stopSession(id))
+        if (stopClient(id))
         {
             ++stopped;
             LOG(INFO) << "Stopped session" << id << "of user" << user_id;
@@ -350,6 +377,18 @@ void Service::onNewLegacyConnection()
 }
 
 //--------------------------------------------------------------------------------------------------
+void Service::onNewClientConnection()
+{
+    CHECK(client_server_);
+    while (client_server_->hasReadyConnections())
+    {
+        TcpChannel* channel = client_server_->nextReadyConnection();
+        LOG(INFO) << "New client connection:" << channel->peerAddress();
+        addClientSession(channel);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void Service::onSessionFinished()
 {
     Session* session = dynamic_cast<Session*>(sender());
@@ -357,6 +396,16 @@ void Service::onSessionFinished()
     session->disconnect();
     session->deleteLater();
     sessions_.removeOne(session);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Service::onClientSessionFinished()
+{
+    Client* client = static_cast<Client*>(sender());
+    CHECK(client);
+    client->disconnect();
+    client->deleteLater();
+    clients_.removeOne(client);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -441,18 +490,18 @@ void Service::onNotificationFlush()
         client_payload = serialize(message);
     }
 
-    for (Session* session : std::as_const(sessions_))
+    for (Client* client : std::as_const(clients_))
     {
-        switch (session->sessionType())
+        switch (client->sessionType())
         {
             case proto::router::SESSION_TYPE_ADMIN:
-                session->sendMessage(proto::router::CHANNEL_ID_CLIENT, admin_payload);
+                client->sendMessage(proto::router::CHANNEL_ID_CLIENT, admin_payload);
                 break;
 
             case proto::router::SESSION_TYPE_MANAGER:
             case proto::router::SESSION_TYPE_CLIENT:
                 if (!client_payload.isEmpty())
-                    session->sendMessage(proto::router::CHANNEL_ID_CLIENT, client_payload);
+                    client->sendMessage(proto::router::CHANNEL_ID_CLIENT, client_payload);
                 break;
 
             default:
@@ -497,6 +546,13 @@ bool Service::start()
     if (!legacy_port)
     {
         LOG(ERROR) << "Invalid legacy port specified in configuration file";
+        return false;
+    }
+
+    quint16 client_port = settings.clientPort();
+    if (!client_port)
+    {
+        LOG(ERROR) << "Invalid client port specified in configuration file";
         return false;
     }
 
@@ -578,6 +634,16 @@ bool Service::start()
     tcp_server_legacy_->setMaxConnectionsPerMinute(kRouterMaxConnectionsPerMinute);
     tcp_server_legacy_->start(legacy_port, listen_interface);
 
+    // Client listener accepts admin/manager/client sessions only. These session types always
+    // authenticate, so anonymous access stays disabled here.
+    client_server_ = new TcpServer(this);
+    connect(client_server_, &TcpServer::sig_newConnection, this, &Service::onNewClientConnection);
+
+    client_server_->setUserList(user_list);
+    client_server_->setMaxPendingConnections(kRouterMaxPendingConnections);
+    client_server_->setMaxConnectionsPerMinute(kRouterMaxConnectionsPerMinute);
+    client_server_->start(client_port, listen_interface);
+
     if (settings.isStunEnabled())
     {
         stun_server_ = new StunServer(this);
@@ -608,18 +674,6 @@ void Service::addSession(TcpChannel* channel, bool is_legacy)
 
     switch (session_type)
     {
-        case proto::router::SESSION_TYPE_CLIENT:
-        {
-            if (!isAddressAllowed(client_white_list_, address))
-                break;
-
-            SessionClient* client_session = new SessionClient(channel, this);
-            if (stun_server_)
-                client_session->setStunInfo(stun_server_->port());
-            session = client_session;
-        }
-        break;
-
         case proto::router::SESSION_TYPE_HOST:
         {
             if (!isAddressAllowed(host_white_list_, address))
@@ -639,22 +693,6 @@ void Service::addSession(TcpChannel* channel, bool is_legacy)
                         this, &Service::onHostIdAssigned);
                 session = legacy_host_session;
             }
-        }
-        break;
-
-        case proto::router::SESSION_TYPE_ADMIN:
-        {
-            if (!isAddressAllowed(admin_white_list_, address))
-                break;
-            session = new SessionAdmin(channel, this);
-        }
-        break;
-
-        case proto::router::SESSION_TYPE_MANAGER:
-        {
-            if (!isAddressAllowed(manager_white_list_, address))
-                break;
-            session = new SessionManager(channel, this);
         }
         break;
 
@@ -681,6 +719,61 @@ void Service::addSession(TcpChannel* channel, bool is_legacy)
     sessions_.emplace_back(session);
     connect(session, &Session::sig_finished, this, &Service::onSessionFinished);
     session->start();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Service::addClientSession(TcpChannel* channel)
+{
+    QString address = channel->peerAddress();
+    proto::router::SessionType session_type =
+        static_cast<proto::router::SessionType>(channel->peerSessionType());
+
+    LOG(INFO) << "New client session:" << session_type << "(" << address << ")";
+
+    Client* client = nullptr;
+
+    switch (session_type)
+    {
+        case proto::router::SESSION_TYPE_CLIENT:
+        {
+            if (!isAddressAllowed(client_white_list_, address))
+                break;
+
+            client = new Client(channel, this);
+            if (stun_server_)
+                client->setStunInfo(stun_server_->port());
+        }
+        break;
+
+        case proto::router::SESSION_TYPE_MANAGER:
+        {
+            if (isAddressAllowed(manager_white_list_, address))
+                client = new ClientManager(channel, this);
+        }
+        break;
+
+        case proto::router::SESSION_TYPE_ADMIN:
+        {
+            if (isAddressAllowed(admin_white_list_, address))
+                client = new ClientAdmin(channel, this);
+        }
+        break;
+
+        default:
+            LOG(ERROR) << "Unsupported client session type:" << session_type;
+            break;
+    }
+
+    if (!client)
+    {
+        LOG(ERROR) << "Connection is rejected for" << address;
+        channel->deleteLater();
+        return;
+    }
+
+    clients_.emplace_back(client);
+    connect(client, &Client::sig_finished, this, &Service::onClientSessionFinished);
+    client->start();
 }
 
 //--------------------------------------------------------------------------------------------------

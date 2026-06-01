@@ -16,22 +16,23 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/session_client.h"
+#include "router/client.h"
 
 #include <QDateTime>
 #include <QSet>
 
-#include "base/logging.h"
 #include "base/serialization.h"
 #include "base/version_constants.h"
 #include "base/crypto/random.h"
 #include "base/crypto/totp.h"
 #include "proto/relay_peer.h"
+#include "proto/router.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
 #include "proto/router_legacy_host.h"
 #include "router/database.h"
 #include "router/service.h"
+#include "router/session.h"
 #include "router/session_host.h"
 #include "router/session_legacy_host.h"
 #include "router/session_relay.h"
@@ -40,30 +41,117 @@ namespace {
 
 const char kOtpIssuer[] = "Aspia Router";
 
+//--------------------------------------------------------------------------------------------------
+qint64 createClientId()
+{
+    static qint64 last_client_id = 0;
+    ++last_client_id;
+    return last_client_id;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-SessionClient::SessionClient(TcpChannel* channel, QObject* parent)
-    : Session(channel, parent)
+Client::Client(TcpChannel* channel, QObject* parent)
+    : QObject(parent),
+      session_id_(createClientId()),
+      tcp_channel_(channel)
 {
+    CDCHECK(tcp_channel_);
+    tcp_channel_->setParent(this);
+    address_.setAddress(tcp_channel_->peerAddress());
+
+    connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &Client::onTcpErrorOccurred);
+    connect(tcp_channel_, &TcpChannel::sig_messageReceived, this, &Client::onTcpMessageReceived);
+    connect(this, &Client::sig_started, this, &Client::onStarted);
+
     CLOG(INFO) << "Ctor";
-    connect(this, &Session::sig_started, this, &SessionClient::onStarted);
 }
 
 //--------------------------------------------------------------------------------------------------
-SessionClient::~SessionClient()
+Client::~Client()
 {
     CLOG(INFO) << "Dtor";
+    Service::instance()->notifyChanged(Service::NOTIFY_CLIENTS);
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionClient::setStunInfo(quint16 port)
+void Client::start()
+{
+    std::chrono::time_point<std::chrono::system_clock> time_point = std::chrono::system_clock::now();
+    start_time_ = std::chrono::system_clock::to_time_t(time_point);
+    tcp_channel_->setPaused(false);
+    emit sig_started(session_id_);
+
+    Service::instance()->notifyChanged(Service::NOTIFY_CLIENTS);
+}
+
+//--------------------------------------------------------------------------------------------------
+QVersionNumber Client::version() const
+{
+    return tcp_channel_->peerVersion();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString Client::osName() const
+{
+    return tcp_channel_->peerOsName();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString Client::computerName() const
+{
+    return tcp_channel_->peerComputerName();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString Client::architecture() const
+{
+    return tcp_channel_->peerArchitecture();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString Client::userName() const
+{
+    return tcp_channel_->peerUserName();
+}
+
+//--------------------------------------------------------------------------------------------------
+qint64 Client::userId() const
+{
+    return tcp_channel_->peerUserId();
+}
+
+//--------------------------------------------------------------------------------------------------
+proto::router::SessionType Client::sessionType() const
+{
+    return static_cast<proto::router::SessionType>(tcp_channel_->peerSessionType());
+}
+
+//--------------------------------------------------------------------------------------------------
+std::chrono::seconds Client::duration() const
+{
+    std::chrono::time_point<std::chrono::system_clock> time_point =
+        std::chrono::system_clock::from_time_t(start_time_);
+
+    return std::chrono::duration_cast<std::chrono::seconds>(
+        std::chrono::system_clock::now() - time_point);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::sendMessage(quint8 channel_id, const QByteArray& message)
+{
+    tcp_channel_->send(channel_id, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::setStunInfo(quint16 port)
 {
     stun_port_ = port;
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionClient::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
+void Client::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
 {
     if (channel_id != proto::router::CHANNEL_ID_CLIENT)
         return;
@@ -115,13 +203,26 @@ void SessionClient::onSessionMessage(quint8 channel_id, const QByteArray& buffer
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionClient::onStarted()
+void Client::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
+{
+    CLOG(INFO) << "Network error:" << error_code;
+    emit sig_finished(session_id_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
+{
+    onSessionMessage(channel_id, buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::onStarted()
 {
     doTwoFactorChallenge();
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionClient::doTwoFactorChallenge()
+void Client::doTwoFactorChallenge()
 {
     proto::router::RouterToClient message;
     proto::router::TwoFactorChallenge* challenge = message.mutable_two_factor_challenge();
@@ -159,7 +260,7 @@ void SessionClient::doTwoFactorChallenge()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionClient::readTwoFactorResponse(const proto::router::TwoFactorResponse& response)
+void Client::readTwoFactorResponse(const proto::router::TwoFactorResponse& response)
 {
     const qint64 now = QDateTime::currentSecsSinceEpoch();
     const bool enroll = !tentative_otp_secret_.isEmpty();
@@ -258,8 +359,7 @@ void SessionClient::readTwoFactorResponse(const proto::router::TwoFactorResponse
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionClient::sendTwoFactorResult(
-    proto::router::TwoFactorStatus status, const QByteArray& new_token)
+void Client::sendTwoFactorResult(proto::router::TwoFactorStatus status, const QByteArray& new_token)
 {
     proto::router::RouterToClient envelope;
     proto::router::TwoFactorResult* result = envelope.mutable_two_factor_result();
@@ -280,7 +380,7 @@ void SessionClient::sendTwoFactorResult(
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionClient::sendUserKeys()
+void Client::sendUserKeys()
 {
     Database& database = Database::instance();
     if (!database.isValid())
@@ -316,7 +416,7 @@ void SessionClient::sendUserKeys()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest& request)
+void Client::readConnectionRequest(const proto::router::ConnectionRequest& request)
 {
     CLOG(INFO) << "New connection request (host_id:" << request.host_id() << ")";
 
@@ -417,7 +517,7 @@ void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionClient::readCheckHostStatus(const proto::router::CheckHostStatus& check_host_status)
+void Client::readCheckHostStatus(const proto::router::CheckHostStatus& check_host_status)
 {
     proto::router::RouterToClient message;
     proto::router::HostStatus* host_status = message.mutable_host_status();
@@ -439,7 +539,7 @@ void SessionClient::readCheckHostStatus(const proto::router::CheckHostStatus& ch
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionClient::readHostListRequest(const proto::router::HostListRequest& request)
+void Client::readHostListRequest(const proto::router::HostListRequest& request)
 {
     const proto::router::HostListRequest::Mode mode = request.mode();
     const qint64 workspace_id = request.workspace_id();
@@ -553,7 +653,7 @@ void SessionClient::readHostListRequest(const proto::router::HostListRequest& re
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionClient::readWorkspaceListRequest(const proto::router::WorkspaceListRequest& request)
+void Client::readWorkspaceListRequest(const proto::router::WorkspaceListRequest& request)
 {
     proto::router::RouterToClient message;
     proto::router::WorkspaceList* list = message.mutable_workspace_list();
@@ -608,7 +708,7 @@ void SessionClient::readWorkspaceListRequest(const proto::router::WorkspaceListR
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionClient::readGroupListRequest(const proto::router::GroupListRequest& request)
+void Client::readGroupListRequest(const proto::router::GroupListRequest& request)
 {
     const qint64 workspace_id = request.workspace_id();
 
@@ -658,7 +758,7 @@ void SessionClient::readGroupListRequest(const proto::router::GroupListRequest& 
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionClient::readChangePasswordRequest(const proto::router::ChangePasswordRequest& request)
+void Client::readChangePasswordRequest(const proto::router::ChangePasswordRequest& request)
 {
     proto::router::RouterToClient message;
     proto::router::ChangePasswordResult* result = message.mutable_change_password_result();
@@ -719,7 +819,7 @@ void SessionClient::readChangePasswordRequest(const proto::router::ChangePasswor
 }
 
 //--------------------------------------------------------------------------------------------------
-Session* SessionClient::sessionByHostId(HostId host_id)
+Session* Client::sessionByHostId(HostId host_id)
 {
     QList<Session*> session_list = Service::instance()->sessions();
 

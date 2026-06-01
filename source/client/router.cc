@@ -405,7 +405,7 @@ void Router::setupChannel()
 
     LOG(INFO) << "Connecting to router" << config_.address();
 
-    Address address = Address::fromString(config_.address(), DEFAULT_ROUTER_TCP_PORT);
+    Address address = Address::fromString(config_.address(), DEFAULT_ROUTER_CLIENT_TCP_PORT);
 
     // TcpChannelNG (and its underlying socket) must be constructed in the thread where it
     // will live. Hop into the IO thread via a scratch QObject, build everything there, and

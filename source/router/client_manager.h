@@ -16,33 +16,33 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER_SESSION_MANAGER_H
-#define ROUTER_SESSION_MANAGER_H
+#ifndef ROUTER_CLIENT_MANAGER_H
+#define ROUTER_CLIENT_MANAGER_H
 
-#include "router/session_client.h"
+#include "router/client.h"
 
 namespace proto::router {
 class GroupRequest;
 class HostRequest;
 } // namespace proto::router
 
-class SessionManager : public SessionClient
+class ClientManager : public Client
 {
     Q_OBJECT
 
 public:
-    explicit SessionManager(TcpChannel* channel, QObject* parent = nullptr);
-    ~SessionManager() override;
+    explicit ClientManager(TcpChannel* channel, QObject* parent = nullptr);
+    ~ClientManager() override;
 
 protected:
-    // Session implementation.
+    // Client implementation.
     void onSessionMessage(quint8 channel_id, const QByteArray& buffer) override;
 
 private:
     void doHostRequest(const proto::router::HostRequest& request);
     void doGroupRequest(const proto::router::GroupRequest& request);
 
-    Q_DISABLE_COPY_MOVE(SessionManager)
+    Q_DISABLE_COPY_MOVE(ClientManager)
 };
 
-#endif // ROUTER_SESSION_MANAGER_H
+#endif // ROUTER_CLIENT_MANAGER_H

@@ -28,6 +28,7 @@
 #include "proto/router.h"
 #include "router/session.h"
 
+class Client;
 class QTimer;
 class StunServer;
 
@@ -57,6 +58,9 @@ public:
     const QList<Session*>& sessions();
     Session* session(qint64 session_id);
     bool stopSession(qint64 session_id);
+
+    const QList<Client*>& clients();
+    bool stopClient(qint64 client_id);
 
     // Stops live client sessions (CLIENT/MANAGER/ADMIN) of |user_id|. An empty |token_ids| stops
     // every such session; otherwise only those whose device token id is listed. |except_session_id|
@@ -92,15 +96,19 @@ protected:
 private slots:
     void onNewConnection();
     void onNewLegacyConnection();
+    void onNewClientConnection();
     void onSessionFinished();
+    void onClientSessionFinished();
     void onHostIdAssigned(HostId host_id);
     void onNotificationFlush();
 
 private:
     bool start();
     void addSession(TcpChannel* channel, bool is_legacy);
+    void addClientSession(TcpChannel* channel);
 
     TcpServer* tcp_server_ = nullptr;
+    TcpServer* client_server_ = nullptr;
     TcpServerLegacy* tcp_server_legacy_ = nullptr;
     StunServer* stun_server_ = nullptr;
     QTimer* notification_timer_ = nullptr;
@@ -108,6 +116,7 @@ private:
 
     QMap<qint64, Keys> key_pool_;
     QList<Session*> sessions_;
+    QList<Client*> clients_;
 
     QStringList client_white_list_;
     QStringList host_white_list_;

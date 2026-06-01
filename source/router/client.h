@@ -16,11 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER_SESSION_CLIENT_H
-#define ROUTER_SESSION_CLIENT_H
+#ifndef ROUTER_CLIENT_H
+#define ROUTER_CLIENT_H
 
+#include <QHostAddress>
+#include <QObject>
+#include <QVersionNumber>
+
+#include "base/logging.h"
+#include "base/net/tcp_channel.h"
 #include "base/peer/host_id.h"
-#include "router/session.h"
 
 namespace proto::router {
 class ChangePasswordRequest;
@@ -30,16 +35,36 @@ class GroupListRequest;
 class HostListRequest;
 class TwoFactorResponse;
 class WorkspaceListRequest;
+enum SessionType : int;
 enum TwoFactorStatus : int;
 } // namespace proto::router
 
-class SessionClient : public Session
+class Session;
+
+class Client : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit SessionClient(TcpChannel* channel, QObject* parent = nullptr);
-    ~SessionClient() override;
+    Client(TcpChannel* channel, QObject* parent);
+    virtual ~Client() override;
+
+    void start();
+
+    QVersionNumber version() const;
+    QString osName() const;
+    QString computerName() const;
+    QString architecture() const;
+    QString userName() const;
+    qint64 userId() const;
+    proto::router::SessionType sessionType() const;
+
+    qint64 sessionId() const { return session_id_; }
+    const QHostAddress& address() const { return address_; }
+    time_t startTime() const { return start_time_; }
+    std::chrono::seconds duration() const;
+
+    void sendMessage(quint8 channel_id, const QByteArray& message);
 
     void setStunInfo(quint16 port);
 
@@ -49,11 +74,18 @@ public:
     // completes). Lets the admin channel tear down the live connection when its token is revoked.
     qint64 tokenId() const { return token_id_; }
 
+signals:
+    void sig_started(qint64 session_id);
+    void sig_finished(qint64 session_id);
+
 protected:
-    // Session implementation.
-    void onSessionMessage(quint8 channel_id, const QByteArray& buffer) override;
+    LOG_DECLARE_CONTEXT(Client);
+
+    virtual void onSessionMessage(quint8 channel_id, const QByteArray& buffer);
 
 private slots:
+    void onTcpErrorOccurred(TcpChannel::ErrorCode error_code);
+    void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
     void onStarted();
 
 private:
@@ -70,6 +102,12 @@ private:
     void sendUserKeys();
     Session* sessionByHostId(HostId host_id);
 
+    const qint64 session_id_;
+    time_t start_time_ = 0;
+
+    TcpChannel* tcp_channel_ = nullptr;
+    QHostAddress address_;
+
     quint16 stun_port_ = 0;
 
     bool two_factor_completed_ = false;
@@ -78,7 +116,7 @@ private:
     QByteArray user_otp_secret_;
     quint64 user_otp_counter_ = 0;
 
-    Q_DISABLE_COPY_MOVE(SessionClient)
+    Q_DISABLE_COPY_MOVE(Client)
 };
 
-#endif // ROUTER_SESSION_CLIENT_H
+#endif // ROUTER_CLIENT_H

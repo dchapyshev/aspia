@@ -59,11 +59,6 @@ Session::~Session()
         case proto::router::SESSION_TYPE_HOST:
             Service::instance()->notifyChanged(Service::NOTIFY_HOSTS);
             break;
-        case proto::router::SESSION_TYPE_ADMIN:
-        case proto::router::SESSION_TYPE_MANAGER:
-        case proto::router::SESSION_TYPE_CLIENT:
-            Service::instance()->notifyChanged(Service::NOTIFY_CLIENTS);
-            break;
         default:
             break;
     }
@@ -84,11 +79,6 @@ void Session::start()
             break;
         case proto::router::SESSION_TYPE_HOST:
             Service::instance()->notifyChanged(Service::NOTIFY_HOSTS);
-            break;
-        case proto::router::SESSION_TYPE_ADMIN:
-        case proto::router::SESSION_TYPE_MANAGER:
-        case proto::router::SESSION_TYPE_CLIENT:
-            Service::instance()->notifyChanged(Service::NOTIFY_CLIENTS);
             break;
         default:
             break;

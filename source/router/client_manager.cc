@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/session_manager.h"
+#include "router/client_manager.h"
 
 #include "base/logging.h"
 #include "base/serialization.h"
@@ -28,24 +28,24 @@
 #include "router/service.h"
 
 //--------------------------------------------------------------------------------------------------
-SessionManager::SessionManager(TcpChannel* channel, QObject* parent)
-    : SessionClient(channel, parent)
+ClientManager::ClientManager(TcpChannel* channel, QObject* parent)
+    : Client(channel, parent)
 {
     CLOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-SessionManager::~SessionManager()
+ClientManager::~ClientManager()
 {
     CLOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionManager::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
+void ClientManager::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
 {
     if (channel_id == proto::router::CHANNEL_ID_CLIENT)
     {
-        SessionClient::onSessionMessage(channel_id, buffer);
+        Client::onSessionMessage(channel_id, buffer);
         return;
     }
 
@@ -74,7 +74,7 @@ void SessionManager::onSessionMessage(quint8 channel_id, const QByteArray& buffe
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionManager::doHostRequest(const proto::router::HostRequest& request)
+void ClientManager::doHostRequest(const proto::router::HostRequest& request)
 {
     proto::router::RouterToManager response;
     proto::router::HostResult* result = response.mutable_host_result();
@@ -150,7 +150,7 @@ void SessionManager::doHostRequest(const proto::router::HostRequest& request)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionManager::doGroupRequest(const proto::router::GroupRequest& request)
+void ClientManager::doGroupRequest(const proto::router::GroupRequest& request)
 {
     proto::router::RouterToManager message;
     proto::router::GroupResult* result = message.mutable_group_result();

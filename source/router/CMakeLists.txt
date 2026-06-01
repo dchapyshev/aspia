@@ -17,6 +17,12 @@
 #
 
 list(APPEND SOURCE_ROUTER
+    client.cc
+    client.h
+    client_admin.cc
+    client_admin.h
+    client_manager.cc
+    client_manager.h
     database.cc
     database.h
     main.cc
@@ -29,16 +35,10 @@ list(APPEND SOURCE_ROUTER
     service.h
     session.cc
     session.h
-    session_admin.cc
-    session_admin.h
-    session_client.cc
-    session_client.h
     session_host.cc
     session_host.h
     session_legacy_host.cc
     session_legacy_host.h
-    session_manager.cc
-    session_manager.h
     session_relay.cc
     session_relay.h
     settings.cc

@@ -16,10 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER_SESSION_ADMIN_H
-#define ROUTER_SESSION_ADMIN_H
+#ifndef ROUTER_CLIENT_ADMIN_H
+#define ROUTER_CLIENT_ADMIN_H
 
-#include "router/session_manager.h"
+#include "router/client_manager.h"
 
 namespace proto::router {
 class ClientListRequest;
@@ -34,16 +34,16 @@ class UserRequest;
 class WorkspaceRequest;
 } // namespace proto::router
 
-class SessionAdmin final : public SessionManager
+class ClientAdmin final : public ClientManager
 {
     Q_OBJECT
 
 public:
-    explicit SessionAdmin(TcpChannel* channel, QObject* parent = nullptr);
-    ~SessionAdmin() final;
+    explicit ClientAdmin(TcpChannel* channel, QObject* parent = nullptr);
+    ~ClientAdmin() final;
 
 protected:
-    // Session implementation.
+    // Client implementation.
     void onSessionMessage(quint8 channel_id, const QByteArray& buffer) final;
 
 private:
@@ -61,7 +61,7 @@ private:
     std::string modifyUser(const proto::router::User& user);
     std::string deleteUser(const proto::router::User& user);
 
-    Q_DISABLE_COPY_MOVE(SessionAdmin)
+    Q_DISABLE_COPY_MOVE(ClientAdmin)
 };
 
-#endif // ROUTER_SESSION_ADMIN_H
+#endif // ROUTER_CLIENT_ADMIN_H

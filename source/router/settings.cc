@@ -61,6 +61,7 @@ QString Settings::filePath()
 void Settings::reset()
 {
     setPort(DEFAULT_ROUTER_TCP_PORT);
+    setClientPort(DEFAULT_ROUTER_CLIENT_TCP_PORT);
     setLegacyPort(DEFAULT_ROUTER_LEGACY_TCP_PORT);
     setPrivateKey(SecureByteArray());
     setClientWhiteList(WhiteList());
@@ -110,6 +111,18 @@ void Settings::setPort(quint16 port)
 quint16 Settings::port() const
 {
     return impl_.value("tcp_port", DEFAULT_ROUTER_TCP_PORT).toUInt();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setClientPort(quint16 port)
+{
+    impl_.setValue("client_tcp_port", port);
+}
+
+//--------------------------------------------------------------------------------------------------
+quint16 Settings::clientPort() const
+{
+    return impl_.value("client_tcp_port", DEFAULT_ROUTER_CLIENT_TCP_PORT).toUInt();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/session_admin.h"
+#include "router/client_admin.h"
 
 #include "base/logging.h"
 #include "base/serialization.h"
@@ -25,30 +25,30 @@
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
 #include "proto/router_host.h"
+#include "router/client.h"
 #include "router/service.h"
-#include "router/session_client.h"
 #include "router/session_host.h"
 #include "router/session_relay.h"
 
 //--------------------------------------------------------------------------------------------------
-SessionAdmin::SessionAdmin(TcpChannel* channel, QObject* parent)
-    : SessionManager(channel, parent)
+ClientAdmin::ClientAdmin(TcpChannel* channel, QObject* parent)
+    : ClientManager(channel, parent)
 {
     CLOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-SessionAdmin::~SessionAdmin()
+ClientAdmin::~ClientAdmin()
 {
     CLOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
+void ClientAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
 {
     if (channel_id != proto::router::CHANNEL_ID_ADMIN)
     {
-        SessionManager::onSessionMessage(channel_id, buffer);
+        ClientManager::onSessionMessage(channel_id, buffer);
         return;
     }
 
@@ -88,7 +88,7 @@ void SessionAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionAdmin::doRelayListRequest(const proto::router::RelayListRequest& request)
+void ClientAdmin::doRelayListRequest(const proto::router::RelayListRequest& request)
 {
     const QList<Session*>& sessions = Service::instance()->sessions();
 
@@ -130,41 +130,33 @@ void SessionAdmin::doRelayListRequest(const proto::router::RelayListRequest& req
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionAdmin::doClientListRequest(const proto::router::ClientListRequest& request)
+void ClientAdmin::doClientListRequest(const proto::router::ClientListRequest& request)
 {
-    const QList<Session*>& sessions = Service::instance()->sessions();
+    const QList<Client*>& clients = Service::instance()->clients();
 
     proto::router::RouterToAdmin message;
     proto::router::ClientList* result = message.mutable_client_list();
     result->set_request_id(request.request_id());
     result->set_error_code(proto::router::kErrorOk);
 
-    for (const auto& session : sessions)
+    for (const auto& client : clients)
     {
-        proto::router::SessionType type = session->sessionType();
-        if (type != proto::router::SESSION_TYPE_CLIENT &&
-            type != proto::router::SESSION_TYPE_MANAGER &&
-            type != proto::router::SESSION_TYPE_ADMIN)
-        {
-            continue;
-        }
-
         proto::router::ClientInfo* item = result->add_client();
 
-        item->set_entry_id(session->sessionId());
-        item->set_timepoint(session->startTime());
-        item->set_ip_address(session->address().toString().toStdString());
-        item->mutable_version()->CopyFrom(serialize(session->version()));
-        item->set_os_name(session->osName().toStdString());
-        item->set_computer_name(session->computerName().toStdString());
-        item->set_architecture(session->architecture().toStdString());
+        item->set_entry_id(client->sessionId());
+        item->set_timepoint(client->startTime());
+        item->set_ip_address(client->address().toString().toStdString());
+        item->mutable_version()->CopyFrom(serialize(client->version()));
+        item->set_os_name(client->osName().toStdString());
+        item->set_computer_name(client->computerName().toStdString());
+        item->set_architecture(client->architecture().toStdString());
     }
 
     sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionAdmin::doUserListRequest(const proto::router::UserListRequest& request)
+void ClientAdmin::doUserListRequest(const proto::router::UserListRequest& request)
 {
     proto::router::RouterToAdmin message;
     proto::router::UserList* list = message.mutable_user_list();
@@ -209,7 +201,7 @@ void SessionAdmin::doUserListRequest(const proto::router::UserListRequest& reque
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionAdmin::doUserRequest(const proto::router::UserRequest& request)
+void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
 {
     proto::router::RouterToAdmin message;
     proto::router::UserResult* result = message.mutable_user_result();
@@ -338,7 +330,7 @@ void SessionAdmin::doUserRequest(const proto::router::UserRequest& request)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionAdmin::doHostRequest(const proto::router::HostRequest& request)
+void ClientAdmin::doHostRequest(const proto::router::HostRequest& request)
 {
     auto find_host_session = [](HostId host_id) -> SessionHost*
     {
@@ -454,7 +446,7 @@ void SessionAdmin::doHostRequest(const proto::router::HostRequest& request)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionAdmin::doRelayRequest(const proto::router::RelayRequest& request)
+void ClientAdmin::doRelayRequest(const proto::router::RelayRequest& request)
 {
     proto::router::RouterToAdmin message;
     proto::router::RelayResult* relay_result = message.mutable_relay_result();
@@ -519,7 +511,7 @@ void SessionAdmin::doRelayRequest(const proto::router::RelayRequest& request)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionAdmin::doClientRequest(const proto::router::ClientRequest& request)
+void ClientAdmin::doClientRequest(const proto::router::ClientRequest& request)
 {
     proto::router::RouterToAdmin message;
     proto::router::ClientResult* client_result = message.mutable_client_result();
@@ -532,23 +524,16 @@ void SessionAdmin::doClientRequest(const proto::router::ClientRequest& request)
 
         if (entry_id == -1)
         {
-            const QList<Session*>& sessions = Service::instance()->sessions();
-            QList<qint64> client_session_ids;
-            for (const auto& session : sessions)
-            {
-                proto::router::SessionType type = session->sessionType();
-                if (type == proto::router::SESSION_TYPE_CLIENT ||
-                    type == proto::router::SESSION_TYPE_MANAGER ||
-                    type == proto::router::SESSION_TYPE_ADMIN)
-                {
-                    client_session_ids.append(session->sessionId());
-                }
-            }
+            const QList<Client*>& clients = Service::instance()->clients();
+            QList<qint64> client_ids;
+
+            for (const auto& client : clients)
+                client_ids.append(client->sessionId());
 
             bool all_ok = true;
-            for (qint64 id : client_session_ids)
+            for (qint64 id : client_ids)
             {
-                if (!Service::instance()->stopSession(id))
+                if (!Service::instance()->stopClient(id))
                 {
                     CLOG(ERROR) << "Failed to stop client session:" << id;
                     all_ok = false;
@@ -567,7 +552,7 @@ void SessionAdmin::doClientRequest(const proto::router::ClientRequest& request)
         }
         else
         {
-            if (!Service::instance()->stopSession(entry_id))
+            if (!Service::instance()->stopClient(entry_id))
             {
                 CLOG(ERROR) << "Session not found:" << entry_id;
                 client_result->set_error_code(proto::router::kErrorInvalidEntryId);
@@ -589,7 +574,7 @@ void SessionAdmin::doClientRequest(const proto::router::ClientRequest& request)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionAdmin::doPeerRequest(const proto::router::PeerRequest& request)
+void ClientAdmin::doPeerRequest(const proto::router::PeerRequest& request)
 {
     proto::router::RouterToAdmin message;
     proto::router::PeerResult* result = message.mutable_peer_result();
@@ -613,7 +598,7 @@ void SessionAdmin::doPeerRequest(const proto::router::PeerRequest& request)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& request)
+void ClientAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& request)
 {
     proto::router::RouterToAdmin message;
     proto::router::WorkspaceResult* result = message.mutable_workspace_result();
@@ -759,7 +744,7 @@ void SessionAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& req
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string SessionAdmin::addUser(const proto::router::User& user)
+std::string ClientAdmin::addUser(const proto::router::User& user)
 {
     CLOG(INFO) << "User add request:" << user.name();
 
@@ -791,7 +776,7 @@ std::string SessionAdmin::addUser(const proto::router::User& user)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string SessionAdmin::modifyUser(const proto::router::User& user)
+std::string ClientAdmin::modifyUser(const proto::router::User& user)
 {
     CLOG(INFO) << "User modify request:" << user.name();
 
@@ -855,7 +840,7 @@ std::string SessionAdmin::modifyUser(const proto::router::User& user)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string SessionAdmin::deleteUser(const proto::router::User& user)
+std::string ClientAdmin::deleteUser(const proto::router::User& user)
 {
     Database& database = Database::instance();
     if (!database.isValid())
