@@ -33,6 +33,7 @@
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 // Renders |qr| into a square QPixmap sized to fit |max_size| pixels, with a four-module quiet
 // zone around the matrix (the QR spec calls for at least four modules of empty border).
 QPixmap renderQrPixmap(const qrcodegen::QrCode& qr, int max_size)
@@ -102,6 +103,8 @@ TwoFactorEnrollDialog::TwoFactorEnrollDialog(const QString& otpauth_uri, QWidget
 
     connect(ui->buttonbox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(ui->buttonbox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+
+    QTimer::singleShot(0, this, [this]() { setFixedSize(sizeHint()); });
 }
 
 //--------------------------------------------------------------------------------------------------
