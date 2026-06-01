@@ -31,11 +31,11 @@
 #include "proto/router_constants.h"
 #include "proto/router_legacy_host.h"
 #include "router/database.h"
+#include "router/relay.h"
 #include "router/service.h"
 #include "router/session.h"
 #include "router/session_host.h"
 #include "router/session_legacy_host.h"
-#include "router/session_relay.h"
 
 namespace {
 
@@ -444,7 +444,7 @@ void Client::readConnectionRequest(const proto::router::ConnectionRequest& reque
         return;
     }
 
-    SessionRelay* relay = static_cast<SessionRelay*>(Service::instance()->session(credentials->session_id));
+    Relay* relay = Service::instance()->relay(credentials->session_id);
     if (!relay)
     {
         CLOG(ERROR) << "No relay with session id" << credentials->session_id;
@@ -453,7 +453,7 @@ void Client::readConnectionRequest(const proto::router::ConnectionRequest& reque
         return;
     }
 
-    const std::optional<SessionRelay::PeerData>& peer_data = relay->peerData();
+    const std::optional<Relay::PeerData>& peer_data = relay->peerData();
     if (!peer_data.has_value())
     {
         CLOG(ERROR) << "No peer data for relay with session id" << credentials->session_id;
@@ -811,7 +811,7 @@ void Client::readChangePasswordRequest(const proto::router::ChangePasswordReques
 
     // This request always rotates the password (tokens are revoked in the transaction). Drop the
     // user's other live sessions but keep this one, which re-keys below.
-    Service::instance()->stopUserSessions(userId(), {}, sessionId());
+    Service::instance()->stopClients(userId(), {}, sessionId());
 
     // Push a fresh UserKeys so the client can decrypt with the new wrap key and transition
     // from CONNECTING to ONLINE.

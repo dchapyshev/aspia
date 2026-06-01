@@ -16,34 +16,66 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER_SESSION_RELAY_H
-#define ROUTER_SESSION_RELAY_H
+#ifndef ROUTER_RELAY_H
+#define ROUTER_RELAY_H
 
+#include <QHostAddress>
+#include <QObject>
+#include <QVersionNumber>
+
+#include "base/logging.h"
+#include "base/net/tcp_channel.h"
 #include "base/serialization.h"
 #include "proto/router_relay.h"
-#include "router/session.h"
 
-class SessionRelay final : public Session
+namespace proto::router {
+class PeerRequest;
+} // namespace proto::router
+
+class Relay final : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit SessionRelay(TcpChannel* channel, QObject* parent = nullptr);
-    ~SessionRelay() final;
+    Relay(TcpChannel* channel, QObject* parent);
+    ~Relay() final;
 
     using PeerData = std::pair<std::string, quint16>;
+
+    void start();
+
+    QVersionNumber version() const;
+    QString osName() const;
+    QString computerName() const;
+    QString architecture() const;
+
+    qint64 sessionId() const { return session_id_; }
+    const QHostAddress& address() const { return address_; }
+    time_t startTime() const { return start_time_; }
+
+    void sendMessage(quint8 channel_id, const QByteArray& message);
 
     const std::optional<PeerData>& peerData() const { return peer_data_; }
     const std::optional<proto::router::RelayStatistics>& statistics() const { return statistics_; }
     void sendKeyUsed(quint32 key_id);
     void disconnectPeerSession(const proto::router::PeerRequest& request);
 
-protected:
-    // Session implementation.
-    void onSessionMessage(quint8 channel_id, const QByteArray& buffer) final;
+signals:
+    void sig_started(qint64 session_id);
+    void sig_finished(qint64 session_id);
+
+private slots:
+    void onTcpErrorOccurred(TcpChannel::ErrorCode error_code);
+    void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
 
 private:
     void readKeyPool(const proto::router::RelayKeyPool& key_pool);
+
+    const qint64 session_id_;
+    time_t start_time_ = 0;
+
+    TcpChannel* tcp_channel_ = nullptr;
+    QHostAddress address_;
 
     std::optional<PeerData> peer_data_;
     std::optional<proto::router::RelayStatistics> statistics_;
@@ -51,7 +83,8 @@ private:
     Parser<proto::router::RelayToRouter> incoming_message_;
     Serializer<proto::router::RouterToRelay> outgoing_message_;
 
-    Q_DISABLE_COPY_MOVE(SessionRelay)
+    LOG_DECLARE_CONTEXT(Relay);
+    Q_DISABLE_COPY_MOVE(Relay)
 };
 
-#endif // ROUTER_SESSION_RELAY_H
+#endif // ROUTER_RELAY_H

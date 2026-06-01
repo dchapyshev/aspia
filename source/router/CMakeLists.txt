@@ -29,6 +29,8 @@ list(APPEND SOURCE_ROUTER
     migration_utils.cc
     migration_utils.h
     pch.h
+    relay.cc
+    relay.h
     router_user_list.cc
     router_user_list.h
     service.cc
@@ -39,8 +41,6 @@ list(APPEND SOURCE_ROUTER
     session_host.h
     session_legacy_host.cc
     session_legacy_host.h
-    session_relay.cc
-    session_relay.h
     settings.cc
     settings.h
     workspace.cc

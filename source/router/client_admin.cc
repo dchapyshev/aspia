@@ -26,9 +26,9 @@
 #include "proto/router_constants.h"
 #include "proto/router_host.h"
 #include "router/client.h"
+#include "router/relay.h"
 #include "router/service.h"
 #include "router/session_host.h"
-#include "router/session_relay.h"
 
 //--------------------------------------------------------------------------------------------------
 ClientAdmin::ClientAdmin(TcpChannel* channel, QObject* parent)
@@ -90,32 +90,28 @@ void ClientAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void ClientAdmin::doRelayListRequest(const proto::router::RelayListRequest& request)
 {
-    const QList<Session*>& sessions = Service::instance()->sessions();
+    const QList<Relay*>& relays = Service::instance()->relays();
 
     proto::router::RouterToAdmin message;
     proto::router::RelayList* result = message.mutable_relay_list();
     result->set_request_id(request.request_id());
     result->set_error_code(proto::router::kErrorOk);
 
-    for (const auto& session : sessions)
+    for (const auto& relay : relays)
     {
-        if (session->sessionType() != proto::router::SESSION_TYPE_RELAY)
-            continue;
-
         proto::router::RelayInfo* item = result->add_relay();
 
         // Generic session info.
-        item->set_entry_id(session->sessionId());
-        item->set_timepoint(session->startTime());
-        item->set_ip_address(session->address().toString().toStdString());
-        item->mutable_version()->CopyFrom(serialize(session->version()));
-        item->set_os_name(session->osName().toStdString());
-        item->set_computer_name(session->computerName().toStdString());
-        item->set_architecture(session->architecture().toStdString());
+        item->set_entry_id(relay->sessionId());
+        item->set_timepoint(relay->startTime());
+        item->set_ip_address(relay->address().toString().toStdString());
+        item->mutable_version()->CopyFrom(serialize(relay->version()));
+        item->set_os_name(relay->osName().toStdString());
+        item->set_computer_name(relay->computerName().toStdString());
+        item->set_architecture(relay->architecture().toStdString());
 
         // Statistics info.
-        const std::optional<proto::router::RelayStatistics>& statistics =
-            static_cast<SessionRelay*>(session)->statistics();
+        const std::optional<proto::router::RelayStatistics>& statistics = relay->statistics();
         if (statistics.has_value())
         {
             item->mutable_statistics()->mutable_peer()->CopyFrom(statistics->peer());
@@ -123,7 +119,7 @@ void ClientAdmin::doRelayListRequest(const proto::router::RelayListRequest& requ
         }
 
         // Other info.
-        item->set_pool_size(Service::instance()->keyCountForRelay(session->sessionId()));
+        item->set_pool_size(Service::instance()->keyCountForRelay(relay->sessionId()));
     }
 
     sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
@@ -282,7 +278,7 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
                 }
                 else
                 {
-                    Service::instance()->stopUserSessions(user_id);
+                    Service::instance()->stopClients(user_id);
                     CLOG(INFO) << "All device tokens of user" << user_id
                                << "revoked by" << userName();
                     result->set_error_code(proto::router::kErrorOk);
@@ -315,7 +311,7 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
                 }
 
                 if (!revoked_token_ids.isEmpty())
-                    Service::instance()->stopUserSessions(user_id, revoked_token_ids);
+                    Service::instance()->stopClients(user_id, revoked_token_ids);
                 result->set_error_code(code);
             }
         }
@@ -459,18 +455,16 @@ void ClientAdmin::doRelayRequest(const proto::router::RelayRequest& request)
 
         if (entry_id == -1)
         {
-            const QList<Session*>& sessions = Service::instance()->sessions();
-            QList<qint64> relay_session_ids;
-            for (const auto& session : sessions)
-            {
-                if (session->sessionType() == proto::router::SESSION_TYPE_RELAY)
-                    relay_session_ids.append(session->sessionId());
-            }
+            const QList<Relay*>& relays = Service::instance()->relays();
+            QList<qint64> relay_ids;
+
+            for (const auto& relay : relays)
+                relay_ids.append(relay->sessionId());
 
             bool all_ok = true;
-            for (qint64 id : relay_session_ids)
+            for (qint64 id : relay_ids)
             {
-                if (!Service::instance()->stopSession(id))
+                if (!Service::instance()->stopRelay(id))
                 {
                     CLOG(ERROR) << "Failed to stop relay session:" << id;
                     all_ok = false;
@@ -489,7 +483,7 @@ void ClientAdmin::doRelayRequest(const proto::router::RelayRequest& request)
         }
         else
         {
-            if (!Service::instance()->stopSession(entry_id))
+            if (!Service::instance()->stopRelay(entry_id))
             {
                 CLOG(ERROR) << "Session not found:" << entry_id;
                 relay_result->set_error_code(proto::router::kErrorInvalidEntryId);
@@ -581,8 +575,7 @@ void ClientAdmin::doPeerRequest(const proto::router::PeerRequest& request)
     result->set_request_id(request.request_id());
     result->set_command_name(request.command_name());
 
-    SessionRelay* relay_session =
-        dynamic_cast<SessionRelay*>(Service::instance()->session(request.relay_id()));
+    Relay* relay_session = Service::instance()->relay(request.relay_id());
     if (!relay_session)
     {
         CLOG(ERROR) << "Relay with id" << request.relay_id() << "is not found";
@@ -832,7 +825,7 @@ std::string ClientAdmin::modifyUser(const proto::router::User& user)
         if (!database.setWorkspaceKeysForUser(new_user.entry_id, wrapped_keys))
             CLOG(WARNING) << "Failed to rewrap workspace keys for user" << new_user.entry_id;
 
-        Service::instance()->stopUserSessions(new_user.entry_id);
+        Service::instance()->stopClients(new_user.entry_id);
     }
 
     Service::instance()->notifyChanged(Service::NOTIFY_USERS);

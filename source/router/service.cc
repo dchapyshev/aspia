@@ -32,9 +32,9 @@
 #include "router/client_admin.h"
 #include "router/client_manager.h"
 #include "router/migration_utils.h"
+#include "router/relay.h"
 #include "router/session_host.h"
 #include "router/session_legacy_host.h"
-#include "router/session_relay.h"
 #include "router/settings.h"
 #include "router/router_user_list.h"
 
@@ -103,6 +103,9 @@ Service::~Service()
     for (auto* client : std::as_const(clients_))
         delete client;
 
+    for (auto* relay : std::as_const(relays_))
+        delete relay;
+
     instance_ = nullptr;
 }
 
@@ -117,18 +120,6 @@ Service* Service::instance()
 const QList<Session*>& Service::sessions()
 {
     return sessions_;
-}
-
-//--------------------------------------------------------------------------------------------------
-Session* Service::session(qint64 session_id)
-{
-    for (auto* session : std::as_const(sessions_))
-    {
-        if (session->sessionId() == session_id)
-            return session;
-    }
-
-    return nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -176,14 +167,14 @@ bool Service::stopClient(qint64 client_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-int Service::stopUserSessions(qint64 user_id, const QList<qint64>& token_ids, qint64 except_session_id)
+int Service::stopClients(qint64 user_id, const QList<qint64>& token_ids, qint64 except_client_id)
 {
     QList<qint64> client_ids;
     for (Client* client : std::as_const(clients_))
     {
         if (!client->isTwoFactorCompleted())
             continue;
-        if (client->userId() != user_id || client->sessionId() == except_session_id)
+        if (client->userId() != user_id || client->sessionId() == except_client_id)
             continue;
         if (!token_ids.isEmpty() && !token_ids.contains(client->tokenId()))
             continue;
@@ -202,6 +193,43 @@ int Service::stopUserSessions(qint64 user_id, const QList<qint64>& token_ids, qi
     }
 
     return stopped;
+}
+
+//--------------------------------------------------------------------------------------------------
+const QList<Relay*>& Service::relays()
+{
+    return relays_;
+}
+
+//--------------------------------------------------------------------------------------------------
+Relay* Service::relay(qint64 relay_id)
+{
+    for (auto* relay : std::as_const(relays_))
+    {
+        if (relay->sessionId() == relay_id)
+            return relay;
+    }
+
+    return nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Service::stopRelay(qint64 relay_id)
+{
+    for (auto it = relays_.begin(), it_end = relays_.end(); it != it_end; ++it)
+    {
+        Relay* relay = *it;
+
+        if (relay->sessionId() == relay_id)
+        {
+            relay->disconnect();
+            relay->deleteLater();
+            relays_.erase(it);
+            return true;
+        }
+    }
+
+    return false;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -276,14 +304,9 @@ std::optional<Service::Credentials> Service::takeCredentials()
         key_pool_.remove(preffered_relay.key());
     }
 
-    for (auto* session : std::as_const(sessions_))
-    {
-        if (session->sessionId() == credentials.session_id)
-        {
-            SessionRelay* relay_session = static_cast<SessionRelay*>(session);
-            relay_session->sendKeyUsed(credentials.key.key_id());
-        }
-    }
+    Relay* relay_session = relay(credentials.session_id);
+    if (relay_session)
+        relay_session->sendKeyUsed(credentials.key.key_id());
 
     return std::move(credentials);
 }
@@ -384,7 +407,19 @@ void Service::onNewClientConnection()
     {
         TcpChannel* channel = client_server_->nextReadyConnection();
         LOG(INFO) << "New client connection:" << channel->peerAddress();
-        addClientSession(channel);
+        addClient(channel);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void Service::onNewRelayConnection()
+{
+    CHECK(relay_server_);
+    while (relay_server_->hasReadyConnections())
+    {
+        TcpChannel* channel = relay_server_->nextReadyConnection();
+        LOG(INFO) << "New relay connection:" << channel->peerAddress();
+        addRelay(channel);
     }
 }
 
@@ -406,6 +441,16 @@ void Service::onClientSessionFinished()
     client->disconnect();
     client->deleteLater();
     clients_.removeOne(client);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Service::onRelayFinished()
+{
+    Relay* relay = static_cast<Relay*>(sender());
+    CHECK(relay);
+    relay->disconnect();
+    relay->deleteLater();
+    relays_.removeOne(relay);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -556,6 +601,13 @@ bool Service::start()
         return false;
     }
 
+    quint16 relay_port = settings.relayPort();
+    if (!relay_port)
+    {
+        LOG(ERROR) << "Invalid relay port specified in configuration file";
+        return false;
+    }
+
     client_white_list_ = settings.clientWhiteList();
     if (client_white_list_.isEmpty())
         LOG(INFO) << "Connections from all clients will be allowed";
@@ -616,8 +668,7 @@ bool Service::start()
     tcp_server_->setPrivateKey(private_key);
     tcp_server_->setUserList(user_list);
     tcp_server_->setAnonymousAccess(
-        ServerAuthenticator::AnonymousAccess::ENABLE,
-        proto::router::SESSION_TYPE_HOST | proto::router::SESSION_TYPE_RELAY);
+        ServerAuthenticator::AnonymousAccess::ENABLE, proto::router::SESSION_TYPE_HOST);
     tcp_server_->setMaxPendingConnections(kRouterMaxPendingConnections);
     tcp_server_->setMaxConnectionsPerMinute(kRouterMaxConnectionsPerMinute);
     tcp_server_->start(port, listen_interface);
@@ -628,11 +679,22 @@ bool Service::start()
     tcp_server_legacy_->setPrivateKey(private_key);
     tcp_server_legacy_->setUserList(user_list);
     tcp_server_legacy_->setAnonymousAccess(
-        ServerAuthenticatorLegacy::AnonymousAccess::ENABLE,
-        proto::router::SESSION_TYPE_HOST | proto::router::SESSION_TYPE_RELAY);
+        ServerAuthenticatorLegacy::AnonymousAccess::ENABLE, proto::router::SESSION_TYPE_HOST);
     tcp_server_legacy_->setMaxPendingConnections(kRouterMaxPendingConnections);
     tcp_server_legacy_->setMaxConnectionsPerMinute(kRouterMaxConnectionsPerMinute);
     tcp_server_legacy_->start(legacy_port, listen_interface);
+
+    // Relay listener accepts relay sessions only (anonymous access).
+    relay_server_ = new TcpServer(this);
+    connect(relay_server_, &TcpServer::sig_newConnection, this, &Service::onNewRelayConnection);
+
+    relay_server_->setPrivateKey(private_key);
+    relay_server_->setUserList(user_list);
+    relay_server_->setAnonymousAccess(
+        ServerAuthenticator::AnonymousAccess::ENABLE, proto::router::SESSION_TYPE_RELAY);
+    relay_server_->setMaxPendingConnections(kRouterMaxPendingConnections);
+    relay_server_->setMaxConnectionsPerMinute(kRouterMaxConnectionsPerMinute);
+    relay_server_->start(relay_port, listen_interface);
 
     // Client listener accepts admin/manager/client sessions only. These session types always
     // authenticate, so anonymous access stays disabled here.
@@ -696,14 +758,6 @@ void Service::addSession(TcpChannel* channel, bool is_legacy)
         }
         break;
 
-        case proto::router::SESSION_TYPE_RELAY:
-        {
-            if (!isAddressAllowed(relay_white_list_, address))
-                break;
-            session = new SessionRelay(channel, this);
-        }
-        break;
-
         default:
             LOG(ERROR) << "Unsupported session type:" << session_type;
             break;
@@ -722,7 +776,7 @@ void Service::addSession(TcpChannel* channel, bool is_legacy)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::addClientSession(TcpChannel* channel)
+void Service::addClient(TcpChannel* channel)
 {
     QString address = channel->peerAddress();
     proto::router::SessionType session_type =
@@ -774,6 +828,28 @@ void Service::addClientSession(TcpChannel* channel)
     clients_.emplace_back(client);
     connect(client, &Client::sig_finished, this, &Service::onClientSessionFinished);
     client->start();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Service::addRelay(TcpChannel* channel)
+{
+    QString address = channel->peerAddress();
+    proto::router::SessionType session_type =
+        static_cast<proto::router::SessionType>(channel->peerSessionType());
+
+    LOG(INFO) << "New relay session:" << session_type << "(" << address << ")";
+
+    if (session_type != proto::router::SESSION_TYPE_RELAY || !isAddressAllowed(relay_white_list_, address))
+    {
+        LOG(ERROR) << "Connection is rejected for" << address;
+        channel->deleteLater();
+        return;
+    }
+
+    Relay* relay = new Relay(channel, this);
+    relays_.emplace_back(relay);
+    connect(relay, &Relay::sig_finished, this, &Service::onRelayFinished);
+    relay->start();
 }
 
 //--------------------------------------------------------------------------------------------------

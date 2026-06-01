@@ -47,7 +47,7 @@ bool Settings::isEmpty() const
 void Settings::reset()
 {
     setRouterAddress("127.0.0.1");
-    setRouterPort(DEFAULT_ROUTER_TCP_PORT);
+    setRouterPort(DEFAULT_ROUTER_RELAY_TCP_PORT);
     setRouterPublicKey(QByteArray());
     setPeerAddress(QString());
     setPeerPort(DEFAULT_RELAY_PEER_TCP_PORT);
@@ -84,7 +84,7 @@ void Settings::setRouterPort(quint16 port)
 //--------------------------------------------------------------------------------------------------
 quint16 Settings::routerPort() const
 {
-    return impl_.value("router_port", DEFAULT_ROUTER_TCP_PORT).toUInt();
+    return impl_.value("router_port", DEFAULT_ROUTER_RELAY_TCP_PORT).toUInt();
 }
 
 //--------------------------------------------------------------------------------------------------

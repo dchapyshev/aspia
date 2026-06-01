@@ -62,6 +62,7 @@ void Settings::reset()
 {
     setPort(DEFAULT_ROUTER_TCP_PORT);
     setClientPort(DEFAULT_ROUTER_CLIENT_TCP_PORT);
+    setRelayPort(DEFAULT_ROUTER_RELAY_TCP_PORT);
     setLegacyPort(DEFAULT_ROUTER_LEGACY_TCP_PORT);
     setPrivateKey(SecureByteArray());
     setClientWhiteList(WhiteList());
@@ -123,6 +124,18 @@ void Settings::setClientPort(quint16 port)
 quint16 Settings::clientPort() const
 {
     return impl_.value("client_tcp_port", DEFAULT_ROUTER_CLIENT_TCP_PORT).toUInt();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setRelayPort(quint16 port)
+{
+    impl_.setValue("relay_tcp_port", port);
+}
+
+//--------------------------------------------------------------------------------------------------
+quint16 Settings::relayPort() const
+{
+    return impl_.value("relay_tcp_port", DEFAULT_ROUTER_RELAY_TCP_PORT).toUInt();
 }
 
 //--------------------------------------------------------------------------------------------------

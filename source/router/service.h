@@ -30,6 +30,7 @@
 
 class Client;
 class QTimer;
+class Relay;
 class StunServer;
 
 class Service final : public CoreService
@@ -56,17 +57,19 @@ public:
     static Service* instance();
 
     const QList<Session*>& sessions();
-    Session* session(qint64 session_id);
     bool stopSession(qint64 session_id);
 
     const QList<Client*>& clients();
     bool stopClient(qint64 client_id);
 
     // Stops live client sessions (CLIENT/MANAGER/ADMIN) of |user_id|. An empty |token_ids| stops
-    // every such session; otherwise only those whose device token id is listed. |except_session_id|
+    // every such session; otherwise only those whose device token id is listed. |except_client_id|
     // is left running (0 keeps all). Returns the number of sessions stopped.
-    int stopUserSessions(
-        qint64 user_id, const QList<qint64>& token_ids = {}, qint64 except_session_id = 0);
+    int stopClients(qint64 user_id, const QList<qint64>& token_ids = {}, qint64 except_client_id = 0);
+
+    const QList<Relay*>& relays();
+    Relay* relay(qint64 relay_id);
+    bool stopRelay(qint64 relay_id);
 
     enum : quint32
     {
@@ -97,18 +100,22 @@ private slots:
     void onNewConnection();
     void onNewLegacyConnection();
     void onNewClientConnection();
+    void onNewRelayConnection();
     void onSessionFinished();
     void onClientSessionFinished();
+    void onRelayFinished();
     void onHostIdAssigned(HostId host_id);
     void onNotificationFlush();
 
 private:
     bool start();
     void addSession(TcpChannel* channel, bool is_legacy);
-    void addClientSession(TcpChannel* channel);
+    void addClient(TcpChannel* channel);
+    void addRelay(TcpChannel* channel);
 
     TcpServer* tcp_server_ = nullptr;
     TcpServer* client_server_ = nullptr;
+    TcpServer* relay_server_ = nullptr;
     TcpServerLegacy* tcp_server_legacy_ = nullptr;
     StunServer* stun_server_ = nullptr;
     QTimer* notification_timer_ = nullptr;
@@ -117,6 +124,7 @@ private:
     QMap<qint64, Keys> key_pool_;
     QList<Session*> sessions_;
     QList<Client*> clients_;
+    QList<Relay*> relays_;
 
     QStringList client_white_list_;
     QStringList host_white_list_;

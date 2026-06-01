@@ -16,122 +16,141 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/session.h"
+#include "router/relay.h"
 
-#include "base/net/tcp_channel.h"
 #include "router/service.h"
-#include "proto/router.h"
 
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-qint64 createSessionId()
+qint64 createRelayId()
 {
-    static qint64 last_session_id = 0;
-    ++last_session_id;
-    return last_session_id;
+    static qint64 last_relay_id = 0;
+    ++last_relay_id;
+    return last_relay_id;
 }
 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Session::Session(TcpChannel* channel, QObject* parent)
+Relay::Relay(TcpChannel* channel, QObject* parent)
     : QObject(parent),
-      session_id_(createSessionId()),
+      session_id_(createRelayId()),
       tcp_channel_(channel)
 {
     CDCHECK(tcp_channel_);
     tcp_channel_->setParent(this);
     address_.setAddress(tcp_channel_->peerAddress());
 
-    connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &Session::onTcpErrorOccurred);
-    connect(tcp_channel_, &TcpChannel::sig_messageReceived, this, &Session::onTcpMessageReceived);
+    connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &Relay::onTcpErrorOccurred);
+    connect(tcp_channel_, &TcpChannel::sig_messageReceived, this, &Relay::onTcpMessageReceived);
+
+    CLOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-Session::~Session()
+Relay::~Relay()
 {
-    Service::instance()->notifyChanged(Service::NOTIFY_HOSTS);
+    CLOG(INFO) << "Dtor";
+    Service::instance()->removeKeysForRelay(sessionId());
+    Service::instance()->notifyChanged(Service::NOTIFY_RELAYS);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Session::start()
+void Relay::start()
 {
     std::chrono::time_point<std::chrono::system_clock> time_point = std::chrono::system_clock::now();
     start_time_ = std::chrono::system_clock::to_time_t(time_point);
     tcp_channel_->setPaused(false);
     emit sig_started(session_id_);
 
-    Service::instance()->notifyChanged(Service::NOTIFY_HOSTS);
+    Service::instance()->notifyChanged(Service::NOTIFY_RELAYS);
 }
 
 //--------------------------------------------------------------------------------------------------
-QVersionNumber Session::version() const
+QVersionNumber Relay::version() const
 {
     return tcp_channel_->peerVersion();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Session::osName() const
+QString Relay::osName() const
 {
     return tcp_channel_->peerOsName();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Session::computerName() const
+QString Relay::computerName() const
 {
     return tcp_channel_->peerComputerName();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Session::architecture() const
+QString Relay::architecture() const
 {
     return tcp_channel_->peerArchitecture();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Session::userName() const
-{
-    return tcp_channel_->peerUserName();
-}
-
-//--------------------------------------------------------------------------------------------------
-qint64 Session::userId() const
-{
-    return tcp_channel_->peerUserId();
-}
-
-//--------------------------------------------------------------------------------------------------
-proto::router::SessionType Session::sessionType() const
-{
-    return static_cast<proto::router::SessionType>(tcp_channel_->peerSessionType());
-}
-
-//--------------------------------------------------------------------------------------------------
-std::chrono::seconds Session::duration() const
-{
-    std::chrono::time_point<std::chrono::system_clock> time_point =
-        std::chrono::system_clock::from_time_t(start_time_);
-
-    return std::chrono::duration_cast<std::chrono::seconds>(
-        std::chrono::system_clock::now() - time_point);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Session::sendMessage(quint8 channel_id, const QByteArray& message)
+void Relay::sendMessage(quint8 channel_id, const QByteArray& message)
 {
     tcp_channel_->send(channel_id, message);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Session::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
+void Relay::sendKeyUsed(quint32 key_id)
+{
+    outgoing_message_.newMessage().mutable_key_used()->set_key_id(key_id);
+    sendMessage(0, outgoing_message_.serialize());
+}
+
+//--------------------------------------------------------------------------------------------------
+void Relay::disconnectPeerSession(const proto::router::PeerRequest& request)
+{
+    outgoing_message_.newMessage().mutable_peer_request()->CopyFrom(request);
+    sendMessage(0, outgoing_message_.serialize());
+}
+
+//--------------------------------------------------------------------------------------------------
+void Relay::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
 {
     CLOG(INFO) << "Network error:" << error_code;
     emit sig_finished(session_id_);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Session::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
+void Relay::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
-    onSessionMessage(channel_id, buffer);
+    if (!incoming_message_.parse(buffer))
+    {
+        CLOG(ERROR) << "Could not read message from relay server";
+        return;
+    }
+
+    if (incoming_message_->has_key_pool())
+    {
+        readKeyPool(incoming_message_->key_pool());
+    }
+    else if (incoming_message_->has_statistics())
+    {
+        statistics_ = std::move(*incoming_message_->mutable_statistics());
+    }
+    else
+    {
+        CLOG(ERROR) << "Unhandled message from relay server";
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void Relay::readKeyPool(const proto::router::RelayKeyPool& key_pool)
+{
+    Service* service = Service::instance();
+
+    CLOG(INFO) << "Received key pool:" << key_pool.key_size() << "(" << address() << ")";
+
+    peer_data_.emplace(std::make_pair(
+        key_pool.peer_host(), static_cast<quint16>(key_pool.peer_port())));
+
+    for (int i = 0; i < key_pool.key_size(); ++i)
+        service->addKey(sessionId(), key_pool.key(i));
 }

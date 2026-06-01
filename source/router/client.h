@@ -89,17 +89,17 @@ private slots:
     void onStarted();
 
 private:
+    void doTwoFactorChallenge();
+    void readTwoFactorResponse(const proto::router::TwoFactorResponse& response);
+    void sendTwoFactorResult(
+        proto::router::TwoFactorStatus status, const QByteArray& new_token = QByteArray());
+    void sendUserKeys();
     void readConnectionRequest(const proto::router::ConnectionRequest& request);
     void readCheckHostStatus(const proto::router::CheckHostStatus& check_host_status);
     void readHostListRequest(const proto::router::HostListRequest& request);
     void readWorkspaceListRequest(const proto::router::WorkspaceListRequest& request);
     void readGroupListRequest(const proto::router::GroupListRequest& request);
     void readChangePasswordRequest(const proto::router::ChangePasswordRequest& request);
-    void doTwoFactorChallenge();
-    void readTwoFactorResponse(const proto::router::TwoFactorResponse& response);
-    void sendTwoFactorResult(
-        proto::router::TwoFactorStatus status, const QByteArray& new_token = QByteArray());
-    void sendUserKeys();
     Session* sessionByHostId(HostId host_id);
 
     const qint64 session_id_;
