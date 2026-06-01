@@ -45,7 +45,7 @@ QStringList endpointsToString(const asio::ip::tcp::resolver::results_type& endpo
         return QStringList();
 
     QStringList list;
-    list.resize(endpoints.size());
+    list.reserve(endpoints.size());
 
     for (auto it = endpoints.begin(), it_end = endpoints.end(); it != it_end; ++it)
         list.emplace_back(QString::fromLocal8Bit(it->endpoint().address().to_string()));

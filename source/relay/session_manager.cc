@@ -388,6 +388,7 @@ void SessionManager::doAccept(SessionManager* self)
         {
             if (!self->flood_guard_->check(socket, self->pending_sessions_.size()))
             {
+                LOG(TRACE) << "Connection rejected by flood guard:" << peerAddress(socket);
                 // |socket| goes out of scope here - asio's destructor closes the descriptor.
             }
             else

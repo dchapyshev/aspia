@@ -222,6 +222,7 @@ void TcpServer::doAccept()
 
             if (!flood_guard_->check(socket, pending_.size()))
             {
+                LOG(TRACE) << "Connection rejected by flood guard";
                 // socket goes out of scope here - asio's destructor closes the descriptor.
                 doAccept();
                 return;

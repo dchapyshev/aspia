@@ -44,7 +44,7 @@ QStringList endpointsToString(const asio::ip::tcp::resolver::results_type& endpo
         return QStringList();
 
     QStringList list;
-    list.resize(endpoints.size());
+    list.reserve(endpoints.size());
 
     for (auto it = endpoints.begin(), it_end = endpoints.end(); it != it_end; ++it)
         list.emplace_back(QString::fromLocal8Bit(it->endpoint().address().to_string()));
@@ -107,8 +107,7 @@ void RelayPeer::start(const proto::router::ConnectionOffer& offer)
             return;
         }
 
-        CLOG(INFO) << "Resolved endpoints:" << endpointsToString(endpoints);
-        CLOG(INFO) << "Start connecting...";
+        CLOG(INFO) << "Resolved endpoints:" << endpointsToString(endpoints) << ". Start connecting...";
 
         asio::async_connect(socket_, endpoints,
             [this, guard](const std::error_code& error_code, const asio::ip::tcp::endpoint& endpoint)
