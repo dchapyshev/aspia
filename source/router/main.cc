@@ -199,19 +199,22 @@ int createConfig(QTextStream& out)
         out << "Public key directory already exists." << Qt::endl;
     }
 
-    QString public_key_file = public_key_dir;
-    public_key_file.append("/router.pub");
+    QString host_public_key_file = public_key_dir + "/host.pub";
+    QString relay_public_key_file = public_key_dir + "/relay.pub";
 
-    out << "Public key file: " << public_key_file << Qt::endl;
+    out << "Host public key file: " << host_public_key_file << Qt::endl;
+    out << "Relay public key file: " << relay_public_key_file << Qt::endl;
 
-    if (QFileInfo::exists(public_key_file))
+    if (QFileInfo::exists(host_public_key_file))
     {
-        out << "Public key file already exists. Continuation is impossible." << Qt::endl;
+        out << "Host public key file already exists. Continuation is impossible." << Qt::endl;
         return 1;
     }
-    else
+
+    if (QFileInfo::exists(relay_public_key_file))
     {
-        out << "Public key does not exist yet." << Qt::endl;
+        out << "Relay public key file already exists. Continuation is impossible." << Qt::endl;
+        return 1;
     }
 
     if (QFileInfo::exists(Database::filePath()))
@@ -254,17 +257,28 @@ int createConfig(QTextStream& out)
     out << "User was successfully added to the database." << Qt::endl;
     out << "Generating encryption keys..." << Qt::endl;
 
-    SecureByteArray private_key;
-    QByteArray public_key;
-    if (!generateKeys(&private_key, &public_key))
+    SecureByteArray host_private_key;
+    QByteArray host_public_key;
+    if (!generateKeys(&host_private_key, &host_public_key))
+        return 1;
+
+    SecureByteArray relay_private_key;
+    QByteArray relay_public_key;
+    if (!generateKeys(&relay_private_key, &relay_public_key))
         return 1;
 
     out << "Private and public keys have been successfully generated." << Qt::endl;
-    out << "Writing a public key to a file..." << Qt::endl;
+    out << "Writing public keys to files..." << Qt::endl;
 
-    if (!writeFile(public_key_file, public_key.toHex()))
+    if (!writeFile(host_public_key_file, host_public_key.toHex()))
     {
-        out << "Failed to write public key to file: " << public_key_file << Qt::endl;
+        out << "Failed to write public key to file: " << host_public_key_file << Qt::endl;
+        return 1;
+    }
+
+    if (!writeFile(relay_public_key_file, relay_public_key.toHex()))
+    {
+        out << "Failed to write public key to file: " << relay_public_key_file << Qt::endl;
         return 1;
     }
 
@@ -277,14 +291,16 @@ int createConfig(QTextStream& out)
 
     // Save the configuration file.
     settings.reset();
-    settings.setPrivateKey(private_key);
+    settings.setHostPrivateKey(host_private_key);
+    settings.setRelayPrivateKey(relay_private_key);
     settings.setSeedKey(seed_key);
     settings.sync();
 
     out << "Configuration successfully created. Don't forget to change your password!" << Qt::endl;
     out << "User name: " << kUserName << Qt::endl;
     out << "Password: " << kPassword << Qt::endl;
-    out << "Public key file: " << public_key_file << Qt::endl;
+    out << "Host public key file: " << host_public_key_file << Qt::endl;
+    out << "Relay public key file: " << relay_public_key_file << Qt::endl;
 
     return 0;
 }

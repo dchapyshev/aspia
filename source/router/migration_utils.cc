@@ -99,7 +99,12 @@ void doConfigMigrate(const QJsonDocument& doc)
     {
         QString value = root_object["PrivateKey"].toString();
         LOG(INFO) << "PrivateKey:" << value;
-        settings.setPrivateKey(SecureByteArray(QByteArray::fromHex(value.toLatin1())));
+
+        // Hosts and relays are separate entities now, but the old config had a single key.
+        // Duplicate it into both so existing hosts and relays keep working after migration.
+        SecureByteArray private_key(QByteArray::fromHex(value.toLatin1()));
+        settings.setHostPrivateKey(private_key);
+        settings.setRelayPrivateKey(private_key);
     }
 
     if (root_object.contains("SeedKey"))

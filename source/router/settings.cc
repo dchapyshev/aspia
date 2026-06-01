@@ -64,7 +64,8 @@ void Settings::reset()
     setClientPort(DEFAULT_ROUTER_CLIENT_TCP_PORT);
     setRelayPort(DEFAULT_ROUTER_RELAY_TCP_PORT);
     setLegacyPort(DEFAULT_ROUTER_LEGACY_TCP_PORT);
-    setPrivateKey(SecureByteArray());
+    setHostPrivateKey(SecureByteArray());
+    setRelayPrivateKey(SecureByteArray());
     setClientWhiteList(WhiteList());
     setHostWhiteList(WhiteList());
     setAdminWhiteList(WhiteList());
@@ -139,15 +140,27 @@ quint16 Settings::relayPort() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setPrivateKey(const SecureByteArray& private_key)
+void Settings::setHostPrivateKey(const SecureByteArray& private_key)
 {
-    impl_.setValue("private_key", private_key.toByteArray());
+    impl_.setValue("host_private_key", private_key.toByteArray());
 }
 
 //--------------------------------------------------------------------------------------------------
-SecureByteArray Settings::privateKey() const
+SecureByteArray Settings::hostPrivateKey() const
 {
-    return SecureByteArray(impl_.value("private_key").toByteArray());
+    return SecureByteArray(impl_.value("host_private_key").toByteArray());
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setRelayPrivateKey(const SecureByteArray& private_key)
+{
+    impl_.setValue("relay_private_key", private_key.toByteArray());
+}
+
+//--------------------------------------------------------------------------------------------------
+SecureByteArray Settings::relayPrivateKey() const
+{
+    return SecureByteArray(impl_.value("relay_private_key").toByteArray());
 }
 
 //--------------------------------------------------------------------------------------------------

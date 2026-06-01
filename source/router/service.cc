@@ -566,10 +566,17 @@ bool Service::start()
 
     Settings settings;
 
-    SecureByteArray private_key(settings.privateKey());
-    if (private_key.isEmpty())
+    SecureByteArray host_private_key(settings.hostPrivateKey());
+    if (host_private_key.isEmpty())
     {
-        LOG(INFO) << "The private key is not specified in the configuration file";
+        LOG(INFO) << "The host private key is not specified in the configuration file";
+        return false;
+    }
+
+    SecureByteArray relay_private_key(settings.relayPrivateKey());
+    if (relay_private_key.isEmpty())
+    {
+        LOG(INFO) << "The relay private key is not specified in the configuration file";
         return false;
     }
 
@@ -665,7 +672,7 @@ bool Service::start()
     host_server_ = new TcpServer(this);
     connect(host_server_, &TcpServer::sig_newConnection, this, &Service::onNewHostConnection);
 
-    host_server_->setPrivateKey(private_key);
+    host_server_->setPrivateKey(host_private_key);
     host_server_->setUserList(user_list);
     host_server_->setAnonymousAccess(
         ServerAuthenticator::AnonymousAccess::ENABLE, proto::router::SESSION_TYPE_HOST);
@@ -676,7 +683,7 @@ bool Service::start()
     host_legacy_server_ = new TcpServerLegacy(this);
     connect(host_legacy_server_, &TcpServerLegacy::sig_newConnection, this, &Service::onNewLegacyHostConnection);
 
-    host_legacy_server_->setPrivateKey(private_key);
+    host_legacy_server_->setPrivateKey(host_private_key);
     host_legacy_server_->setUserList(user_list);
     host_legacy_server_->setAnonymousAccess(
         ServerAuthenticatorLegacy::AnonymousAccess::ENABLE, proto::router::SESSION_TYPE_HOST);
@@ -688,7 +695,7 @@ bool Service::start()
     relay_server_ = new TcpServer(this);
     connect(relay_server_, &TcpServer::sig_newConnection, this, &Service::onNewRelayConnection);
 
-    relay_server_->setPrivateKey(private_key);
+    relay_server_->setPrivateKey(relay_private_key);
     relay_server_->setUserList(user_list);
     relay_server_->setAnonymousAccess(
         ServerAuthenticator::AnonymousAccess::ENABLE, proto::router::SESSION_TYPE_RELAY);

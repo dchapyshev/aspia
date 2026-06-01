@@ -51,8 +51,11 @@ public:
     void setRelayPort(quint16 port);
     quint16 relayPort() const;
 
-    void setPrivateKey(const SecureByteArray& private_key);
-    SecureByteArray privateKey() const;
+    void setHostPrivateKey(const SecureByteArray& private_key);
+    SecureByteArray hostPrivateKey() const;
+
+    void setRelayPrivateKey(const SecureByteArray& private_key);
+    SecureByteArray relayPrivateKey() const;
 
     using WhiteList = QStringList;
 
