@@ -208,10 +208,10 @@ message Notification
 //   1. Router picks |TwoFactorMode| based on the user's stored TOTP state and sends
 //      TwoFactorChallenge (empty for MODE_ACTIVE; carrying |otpauth_uri| for MODE_ENROLL).
 //   2. Client answers with TwoFactorResponse. In MODE_ACTIVE the client chooses by itself:
-//      either (a) submit the |token_id| it stored after a previous TOTP success, or (b)
+//      either (a) submit the |token| it stored after a previous TOTP success, or (b)
 //      ask the user for a fresh |totp_code|.
 //   3. Router validates and sends TwoFactorResult. Any TOTP success carries a fresh
-//      |new_token_id| that supersedes whatever token the client had.
+//      |new_token| that supersedes whatever token the client had.
 //   4. On success the router proceeds to send UserKeys; on failure it disconnects the client.
 
 enum TwoFactorMode
@@ -243,7 +243,7 @@ message TwoFactorChallenge
     // the manual-entry fallback.
     string otpauth_uri = 2;
 
-    // MODE_ACTIVE: set when the router rejected the |token_id| the client just presented
+    // MODE_ACTIVE: set when the router rejected the |token| the client just presented
     // (revoked, password change, database wiped) and is asking for a TOTP code instead. The
     // client must drop the stale local token and proceed straight to the TOTP prompt without
     // re-trying the token path on this challenge.
@@ -253,12 +253,12 @@ message TwoFactorChallenge
 // Client to router.
 message TwoFactorResponse
 {
-    // MODE_ACTIVE, token path: previously issued opaque token id. When present the router
+    // MODE_ACTIVE, token path: previously issued opaque token. When present the router
     // ignores |totp_code| and accepts the connection iff the token matches the
     // authenticated user. The token is bound to the client device by the OS keystore wrap
     // around its storage, so a copy of the client database moved to another machine cannot
     // present a usable token.
-    bytes token_id = 1;
+    bytes token = 1;
 
     // MODE_ACTIVE, TOTP path and MODE_ENROLL: the 6-digit code the user typed in.
     string totp_code = 2;
@@ -273,7 +273,7 @@ message TwoFactorResult
     // TOTP submission (any successful TOTP, including enrollment, produces a new token).
     // Empty when the result acknowledges a token-path response - the existing token stays
     // valid in that case.
-    bytes new_token_id = 2;
+    bytes new_token = 2;
 }
 
 message RouterToClient

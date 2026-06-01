@@ -516,7 +516,7 @@ void Router::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& cha
         case proto::router::TWO_FACTOR_MODE_ACTIVE:
         {
             // The router can ask twice: once at the start of the 2FA stage, and a second
-            // time when our presented |token_id| was rejected (revoked, password change,
+            // time when our presented |token| was rejected (revoked, password change,
             // database wiped). On the latter we must drop the stale local copy and skip
             // straight to the TOTP prompt; otherwise we would loop, presenting the same
             // dead token again.
@@ -533,12 +533,12 @@ void Router::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& cha
 
             // Token path: if we hold a token from a previous successful TOTP, present it and
             // skip the prompt entirely. Otherwise ask the UI for a fresh TOTP code.
-            const QByteArray token_id = config_.deviceTokenId();
-            if (!token_id.isEmpty())
+            const QByteArray token = config_.deviceToken();
+            if (!token.isEmpty())
             {
                 proto::router::ClientToRouter message;
                 proto::router::TwoFactorResponse* response = message.mutable_two_factor_response();
-                response->set_token_id(token_id.toStdString());
+                response->set_token(token.toStdString());
                 emitSend(proto::router::CHANNEL_ID_CLIENT, message);
                 return;
             }
@@ -580,12 +580,12 @@ void Router::readTwoFactorResult(const proto::router::TwoFactorResult& result)
         return;
     }
 
-    const QByteArray new_token_id = QByteArray::fromStdString(result.new_token_id());
-    if (!new_token_id.isEmpty())
+    const QByteArray new_token = QByteArray::fromStdString(result.new_token());
+    if (!new_token.isEmpty())
     {
         LOG(INFO) << "Device token issued for router" << config_.routerId();
 
-        config_.setDeviceTokenId(new_token_id);
+        config_.setDeviceToken(new_token);
         if (!Database::instance().modifyRouter(config_))
             LOG(WARNING) << "Failed to persist new device token for router" << config_.routerId();
     }

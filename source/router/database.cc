@@ -651,10 +651,12 @@ bool Database::updateUserOtpCounter(qint64 user_id, quint64 counter)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::issueClientDeviceToken(qint64 user_id, const QString& address, QByteArray* token_id)
+bool Database::issueClientDeviceToken(qint64 user_id, const QString& address, QByteArray* token, qint64* token_id)
 {
-    CHECK(token_id);
-    *token_id = QByteArray();
+    CHECK(token);
+    *token = QByteArray();
+    if (token_id)
+        *token_id = 0;
 
     if (!isValid())
     {
@@ -666,8 +668,8 @@ bool Database::issueClientDeviceToken(qint64 user_id, const QString& address, QB
     // client) and persist only its SHA-256 hash. Hashing without a salt is safe here because
     // the input is uniformly random CSPRNG output - precomputation/rainbow tables make no
     // sense against 2^256 of entropy.
-    const QByteArray new_token_id = Random::byteArray(kClientDeviceTokenSize);
-    const QByteArray token_hash = GenericHash::hash(GenericHash::SHA256, new_token_id);
+    const QByteArray new_token = Random::byteArray(kClientDeviceTokenSize);
+    const QByteArray token_hash = GenericHash::hash(GenericHash::SHA256, new_token);
     const qint64 now = QDateTime::currentSecsSinceEpoch();
 
     QSqlQuery query(connection());
@@ -686,15 +688,20 @@ bool Database::issueClientDeviceToken(qint64 user_id, const QString& address, QB
         return false;
     }
 
-    *token_id = new_token_id;
+    if (token_id)
+        *token_id = query.lastInsertId().toLongLong();
+
+    *token = new_token;
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::findClientDeviceToken(const QByteArray& token_id, qint64* user_id) const
+bool Database::findClientDeviceToken(const QByteArray& token, qint64* user_id, qint64* token_id) const
 {
     CHECK(user_id);
     *user_id = 0;
+    if (token_id)
+        *token_id = 0;
 
     if (!isValid())
     {
@@ -702,13 +709,14 @@ bool Database::findClientDeviceToken(const QByteArray& token_id, qint64* user_id
         return false;
     }
 
-    if (token_id.size() != kClientDeviceTokenSize)
+    if (token.size() != kClientDeviceTokenSize)
         return false;
 
-    const QByteArray token_hash = GenericHash::hash(GenericHash::SHA256, token_id);
+    const QByteArray token_hash = GenericHash::hash(GenericHash::SHA256, token);
 
     QSqlQuery query(connection());
-    query.prepare("SELECT user_id, last_used_at FROM client_device_tokens WHERE token_hash=?");
+    query.prepare("SELECT user_id, last_used_at, token_id FROM client_device_tokens "
+                  "WHERE token_hash=?");
     query.addBindValue(token_hash);
 
     if (!query.exec())
@@ -735,11 +743,13 @@ bool Database::findClientDeviceToken(const QByteArray& token_id, qint64* user_id
     }
 
     *user_id = query.value(0).toLongLong();
+    if (token_id)
+        *token_id = query.value(2).toLongLong();
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::touchClientDeviceToken(const QByteArray& token_id, const QString& address)
+bool Database::touchClientDeviceToken(const QByteArray& token, const QString& address)
 {
     if (!isValid())
     {
@@ -747,7 +757,7 @@ bool Database::touchClientDeviceToken(const QByteArray& token_id, const QString&
         return false;
     }
 
-    const QByteArray token_hash = GenericHash::hash(GenericHash::SHA256, token_id);
+    const QByteArray token_hash = GenericHash::hash(GenericHash::SHA256, token);
 
     QSqlQuery query(connection());
     query.prepare("UPDATE client_device_tokens SET last_used_at=?, address=? WHERE token_hash=?");

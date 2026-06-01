@@ -26,6 +26,7 @@
 #include "proto/router_constants.h"
 #include "proto/router_host.h"
 #include "router/service.h"
+#include "router/session_client.h"
 #include "router/session_host.h"
 #include "router/session_relay.h"
 
@@ -289,6 +290,7 @@ void SessionAdmin::doUserRequest(const proto::router::UserRequest& request)
                 }
                 else
                 {
+                    disconnectRevokedSessions(user_id, {});
                     CLOG(INFO) << "All device tokens of user" << user_id
                                << "revoked by" << userName();
                     result->set_error_code(proto::router::kErrorOk);
@@ -297,6 +299,8 @@ void SessionAdmin::doUserRequest(const proto::router::UserRequest& request)
             else
             {
                 std::string_view code = proto::router::kErrorOk;
+                QList<qint64> revoked_token_ids;
+
                 for (int i = 0; i < request.user().token_size(); ++i)
                 {
                     const qint64 token_id = request.user().token(i).token_id();
@@ -313,9 +317,13 @@ void SessionAdmin::doUserRequest(const proto::router::UserRequest& request)
                         code = proto::router::kErrorNotFound;
                         break;
                     }
+                    revoked_token_ids.append(token_id);
                     CLOG(INFO) << "Device token" << token_id << "of user" << user_id
                                << "revoked by" << userName();
                 }
+
+                if (!revoked_token_ids.isEmpty())
+                    disconnectRevokedSessions(user_id, revoked_token_ids);
                 result->set_error_code(code);
             }
         }
@@ -845,4 +853,34 @@ std::string SessionAdmin::deleteUser(const proto::router::User& user)
 
     Service::instance()->notifyChanged(Service::NOTIFY_USERS);
     return proto::router::kErrorOk;
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionAdmin::disconnectRevokedSessions(qint64 user_id, const QList<qint64>& token_ids)
+{
+    Service* service = Service::instance();
+
+    const QList<Session*>& sessions = service->sessions();
+    QList<qint64> session_ids;
+    for (Session* session : std::as_const(sessions))
+    {
+        SessionClient* client_session = dynamic_cast<SessionClient*>(session);
+        if (!client_session || !client_session->isTwoFactorCompleted())
+            continue;
+        if (client_session->userId() != user_id)
+            continue;
+        if (!token_ids.isEmpty() && !token_ids.contains(client_session->tokenId()))
+            continue;
+
+        session_ids.append(client_session->sessionId());
+    }
+
+    for (qint64 id : std::as_const(session_ids))
+    {
+        if (service->stopSession(id))
+        {
+            CLOG(INFO) << "Live session" << id << "of user" << user_id
+                       << "disconnected after token revoke";
+        }
+    }
 }

@@ -118,18 +118,22 @@ public:
 
     // Issues a new client device token for |user_id|. |address| is stored as the address of
     // the session that requested the issue (shown to admins). On success writes the freshly
-    // generated opaque token id into *token_id. Returns false on database error.
-    bool issueClientDeviceToken(qint64 user_id, const QString& address, QByteArray* token_id);
+    // generated opaque token into |token| and, when not null, the router-side row id into
+    // |token_id|. Returns false on database error.
+    bool issueClientDeviceToken(
+        qint64 user_id, const QString& address, QByteArray* token, qint64* token_id = nullptr);
 
-    // Looks up a token by id. On success writes the owner user_id into the out parameter.
-    // Returns false if the row is absent.
-    bool findClientDeviceToken(const QByteArray& token_id, qint64* user_id) const;
+    // Looks up a token by its opaque value. On success writes the owner user_id into |user_id|
+    // and, when not null, the router-side row id into |token_id|. Returns false if the row is
+    // absent.
+    bool findClientDeviceToken(
+        const QByteArray& token, qint64* user_id, qint64* token_id = nullptr) const;
 
     // Updates the token's last_used_at timestamp and last seen |address|. Called after a
     // successful token lookup.
-    bool touchClientDeviceToken(const QByteArray& token_id, const QString& address);
+    bool touchClientDeviceToken(const QByteArray& token, const QString& address);
 
-    // Removes a single token by its opaque router-side row id, but only if it belongs to
+    // Removes a single token by its router-side row id, but only if it belongs to
     // |user_id|. The user_id check is defense in depth - the admin channel is already
     // privileged, but the extra predicate prevents a malformed request from touching another
     // user's row. Returns false on database error or when no row matched.

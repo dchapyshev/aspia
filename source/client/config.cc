@@ -200,21 +200,21 @@ void RouterConfig::setPassword(const SecureString& value)
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray RouterConfig::deviceTokenId() const
+QByteArray RouterConfig::deviceToken() const
 {
-    return decryptDeviceToken(encrypted_device_token_id_);
+    return decryptDeviceToken(encrypted_device_token_);
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterConfig::setDeviceTokenId(const QByteArray& value)
+void RouterConfig::setDeviceToken(const QByteArray& value)
 {
-    encrypted_device_token_id_ = encryptDeviceToken(value);
+    encrypted_device_token_ = encryptDeviceToken(value);
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterConfig::clearDeviceToken()
 {
-    encrypted_device_token_id_.clear();
+    encrypted_device_token_.clear();
 }
 
 //--------------------------------------------------------------------------------------------------

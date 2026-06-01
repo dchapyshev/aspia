@@ -45,6 +45,10 @@ public:
 
     bool isTwoFactorCompleted() const { return two_factor_completed_; }
 
+    // Router-side row id of the device token this session authenticated with (0 until 2FA
+    // completes). Lets the admin channel tear down the live connection when its token is revoked.
+    qint64 tokenId() const { return token_id_; }
+
 protected:
     // Session implementation.
     void onSessionMessage(quint8 channel_id, const QByteArray& buffer) override;
@@ -62,13 +66,14 @@ private:
     void doTwoFactorChallenge();
     void readTwoFactorResponse(const proto::router::TwoFactorResponse& response);
     void sendTwoFactorResult(
-        proto::router::TwoFactorStatus status, const QByteArray& new_token_id = QByteArray());
+        proto::router::TwoFactorStatus status, const QByteArray& new_token = QByteArray());
     void sendUserKeys();
     Session* sessionByHostId(HostId host_id);
 
     quint16 stun_port_ = 0;
 
     bool two_factor_completed_ = false;
+    qint64 token_id_ = 0;
     QByteArray tentative_otp_secret_;
     QByteArray user_otp_secret_;
     quint64 user_otp_counter_ = 0;

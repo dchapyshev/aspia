@@ -19,6 +19,8 @@
 #ifndef ROUTER_SESSION_ADMIN_H
 #define ROUTER_SESSION_ADMIN_H
 
+#include <QList>
+
 #include "router/session_manager.h"
 
 namespace proto::router {
@@ -60,6 +62,10 @@ private:
     std::string addUser(const proto::router::User& user);
     std::string modifyUser(const proto::router::User& user);
     std::string deleteUser(const proto::router::User& user);
+
+    // Tears down live sessions of |user_id| that authenticated with a revoked token. An empty
+    // |token_ids| drops every session of the user; otherwise only those matching a listed token.
+    void disconnectRevokedSessions(qint64 user_id, const QList<qint64>& token_ids);
 
     Q_DISABLE_COPY_MOVE(SessionAdmin)
 };

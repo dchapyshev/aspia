@@ -164,14 +164,15 @@ void SessionClient::readTwoFactorResponse(const proto::router::TwoFactorResponse
     const qint64 now = QDateTime::currentSecsSinceEpoch();
     const bool enroll = !tentative_otp_secret_.isEmpty();
 
-    if (!enroll && !response.token_id().empty())
+    if (!enroll && !response.token().empty())
     {
         // Token path: client presented a previously issued bearer token. Validate by lookup
         // and check that the token's owner matches the user that just passed SRP.
-        const QByteArray token_id = QByteArray::fromStdString(response.token_id());
+        const QByteArray token = QByteArray::fromStdString(response.token());
 
         qint64 stored_user_id = 0;
-        if (!Database::instance().findClientDeviceToken(token_id, &stored_user_id) ||
+        qint64 token_id = 0;
+        if (!Database::instance().findClientDeviceToken(token, &stored_user_id, &token_id) ||
             stored_user_id != userId())
         {
             // The presented token is gone or owned by someone else (revoked, password
@@ -189,7 +190,8 @@ void SessionClient::readTwoFactorResponse(const proto::router::TwoFactorResponse
             return;
         }
 
-        Database::instance().touchClientDeviceToken(token_id, address().toString());
+        Database::instance().touchClientDeviceToken(token, address().toString());
+        token_id_ = token_id;
         sendTwoFactorResult(proto::router::TWO_FACTOR_STATUS_OK);
         return;
     }
@@ -242,25 +244,28 @@ void SessionClient::readTwoFactorResponse(const proto::router::TwoFactorResponse
     // Any successful TOTP submission produces a fresh bearer token. Failure to persist the
     // token is non-fatal: the user is still let in, they will be prompted for TOTP again
     // next time.
-    QByteArray new_token_id;
-    if (!Database::instance().issueClientDeviceToken(userId(), address().toString(), &new_token_id))
+    QByteArray new_token;
+    qint64 new_token_id = 0;
+    if (!Database::instance().issueClientDeviceToken(
+            userId(), address().toString(), &new_token, &new_token_id))
     {
         CLOG(WARNING) << "Failed to issue device token for user" << userId();
-        new_token_id = QByteArray();
+        new_token = QByteArray();
     }
+    token_id_ = new_token_id;
 
-    sendTwoFactorResult(proto::router::TWO_FACTOR_STATUS_OK, new_token_id);
+    sendTwoFactorResult(proto::router::TWO_FACTOR_STATUS_OK, new_token);
 }
 
 //--------------------------------------------------------------------------------------------------
 void SessionClient::sendTwoFactorResult(
-    proto::router::TwoFactorStatus status, const QByteArray& new_token_id)
+    proto::router::TwoFactorStatus status, const QByteArray& new_token)
 {
     proto::router::RouterToClient envelope;
     proto::router::TwoFactorResult* result = envelope.mutable_two_factor_result();
     result->set_status(status);
-    if (!new_token_id.isEmpty())
-        result->set_new_token_id(new_token_id.toStdString());
+    if (!new_token.isEmpty())
+        result->set_new_token(new_token.toStdString());
 
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(envelope));
 

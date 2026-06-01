@@ -69,8 +69,8 @@ public:
     // value is stored under a double wrap (OS keystore + master-password-derived key) so a
     // copy of |client.db3| moved to another machine cannot present a usable token even if
     // the master password is known.
-    QByteArray deviceTokenId() const;
-    void setDeviceTokenId(const QByteArray& value);
+    QByteArray deviceToken() const;
+    void setDeviceToken(const QByteArray& value);
 
     // Clears the stored token. Called when the router rejects it (revoked remotely, password
     // changed elsewhere) so the next login walks the TOTP path again.
@@ -89,9 +89,9 @@ public:
     const QByteArray& encryptedPassword() const { return encrypted_password_; }
     void setEncryptedPassword(const QByteArray& blob) { encrypted_password_ = blob; }
 
-    const QByteArray& encryptedDeviceTokenId() const { return encrypted_device_token_id_; }
-    void setEncryptedDeviceTokenId(const QByteArray& blob)
-        { encrypted_device_token_id_ = blob; }
+    const QByteArray& encryptedDeviceToken() const { return encrypted_device_token_; }
+    void setEncryptedDeviceToken(const QByteArray& blob)
+        { encrypted_device_token_ = blob; }
 
 private:
     qint64 router_id_ = -1;
@@ -100,7 +100,7 @@ private:
     QByteArray encrypted_address_;
     QByteArray encrypted_username_;
     QByteArray encrypted_password_;
-    QByteArray encrypted_device_token_id_;
+    QByteArray encrypted_device_token_;
 };
 
 class HostConfig final
