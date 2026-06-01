@@ -360,11 +360,18 @@ void ClientWindow::fetchConnectionOffer()
     }
 
     session_state_->setRouterVersion(router->version());
+
+    if (!session_state_->isReconnecting())
+        status_dialog_->addMessageAndActivate(tr("Requesting connection to the host..."));
+
     router->requestConnection(session_state_->hostId(), this,
         [this](const proto::router::ConnectionOffer& offer)
     {
         if (offer.error_code() == proto::router::ConnectionOffer::SUCCESS)
         {
+            if (!session_state_->isReconnecting())
+                status_dialog_->addMessageAndActivate(tr("Connection offer received."));
+
             session_state_->setConnectionOffer(offer);
             startNewClient();
             return;
@@ -403,7 +410,6 @@ void ClientWindow::fetchConnectionOffer()
 //--------------------------------------------------------------------------------------------------
 void ClientWindow::startNewClient()
 {
-    // A Client is single-use - tear down the previous one (if any) before creating a fresh one.
     client_ = createClient();
     client_->moveToThread(GuiApplication::ioThread());
     client_->setSessionState(session_state_);
