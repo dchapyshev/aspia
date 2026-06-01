@@ -148,6 +148,36 @@ bool Service::stopSession(qint64 session_id)
 }
 
 //--------------------------------------------------------------------------------------------------
+int Service::stopUserSessions(qint64 user_id, const QList<qint64>& token_ids, qint64 except_session_id)
+{
+    QList<qint64> session_ids;
+    for (Session* session : std::as_const(sessions_))
+    {
+        SessionClient* client_session = dynamic_cast<SessionClient*>(session);
+        if (!client_session || !client_session->isTwoFactorCompleted())
+            continue;
+        if (client_session->userId() != user_id || client_session->sessionId() == except_session_id)
+            continue;
+        if (!token_ids.isEmpty() && !token_ids.contains(client_session->tokenId()))
+            continue;
+
+        session_ids.append(client_session->sessionId());
+    }
+
+    int stopped = 0;
+    for (qint64 id : std::as_const(session_ids))
+    {
+        if (stopSession(id))
+        {
+            ++stopped;
+            LOG(INFO) << "Stopped session" << id << "of user" << user_id;
+        }
+    }
+
+    return stopped;
+}
+
+//--------------------------------------------------------------------------------------------------
 void Service::notifyChanged(quint32 flags)
 {
     dirty_mask_ |= flags;

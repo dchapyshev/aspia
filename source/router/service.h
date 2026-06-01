@@ -58,6 +58,12 @@ public:
     Session* session(qint64 session_id);
     bool stopSession(qint64 session_id);
 
+    // Stops live client sessions (CLIENT/MANAGER/ADMIN) of |user_id|. An empty |token_ids| stops
+    // every such session; otherwise only those whose device token id is listed. |except_session_id|
+    // is left running (0 keeps all). Returns the number of sessions stopped.
+    int stopUserSessions(
+        qint64 user_id, const QList<qint64>& token_ids = {}, qint64 except_session_id = 0);
+
     enum : quint32
     {
         NOTIFY_HOSTS      = 1u << 0,

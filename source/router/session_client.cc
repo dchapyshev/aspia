@@ -709,6 +709,10 @@ void SessionClient::readChangePasswordRequest(const proto::router::ChangePasswor
     result->set_error_code(proto::router::kErrorOk);
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 
+    // This request always rotates the password (tokens are revoked in the transaction). Drop the
+    // user's other live sessions but keep this one, which re-keys below.
+    Service::instance()->stopUserSessions(userId(), {}, sessionId());
+
     // Push a fresh UserKeys so the client can decrypt with the new wrap key and transition
     // from CONNECTING to ONLINE.
     sendUserKeys();

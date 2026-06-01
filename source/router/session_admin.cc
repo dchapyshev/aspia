@@ -290,7 +290,7 @@ void SessionAdmin::doUserRequest(const proto::router::UserRequest& request)
                 }
                 else
                 {
-                    disconnectRevokedSessions(user_id, {});
+                    Service::instance()->stopUserSessions(user_id);
                     CLOG(INFO) << "All device tokens of user" << user_id
                                << "revoked by" << userName();
                     result->set_error_code(proto::router::kErrorOk);
@@ -323,7 +323,7 @@ void SessionAdmin::doUserRequest(const proto::router::UserRequest& request)
                 }
 
                 if (!revoked_token_ids.isEmpty())
-                    disconnectRevokedSessions(user_id, revoked_token_ids);
+                    Service::instance()->stopUserSessions(user_id, revoked_token_ids);
                 result->set_error_code(code);
             }
         }
@@ -821,11 +821,20 @@ std::string SessionAdmin::modifyUser(const proto::router::User& user)
         return proto::router::kErrorInternalError;
     }
 
+    const RouterUser old_user = database.findUser(new_user.entry_id);
+    const bool password_changed = old_user.isValid() &&
+        (old_user.salt != new_user.salt || old_user.verifier != new_user.verifier);
+
     if (!database.modifyUser(new_user))
     {
         CLOG(ERROR) << "modifyUser failed";
         return proto::router::kErrorInternalError;
     }
+
+    // modifyUser already revoked the tokens; drop the live sessions so the new password applies
+    // immediately.
+    if (password_changed)
+        Service::instance()->stopUserSessions(new_user.entry_id);
 
     Service::instance()->notifyChanged(Service::NOTIFY_USERS);
     return proto::router::kErrorOk;
@@ -853,34 +862,4 @@ std::string SessionAdmin::deleteUser(const proto::router::User& user)
 
     Service::instance()->notifyChanged(Service::NOTIFY_USERS);
     return proto::router::kErrorOk;
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionAdmin::disconnectRevokedSessions(qint64 user_id, const QList<qint64>& token_ids)
-{
-    Service* service = Service::instance();
-
-    const QList<Session*>& sessions = service->sessions();
-    QList<qint64> session_ids;
-    for (Session* session : std::as_const(sessions))
-    {
-        SessionClient* client_session = dynamic_cast<SessionClient*>(session);
-        if (!client_session || !client_session->isTwoFactorCompleted())
-            continue;
-        if (client_session->userId() != user_id)
-            continue;
-        if (!token_ids.isEmpty() && !token_ids.contains(client_session->tokenId()))
-            continue;
-
-        session_ids.append(client_session->sessionId());
-    }
-
-    for (qint64 id : std::as_const(session_ids))
-    {
-        if (service->stopSession(id))
-        {
-            CLOG(INFO) << "Live session" << id << "of user" << user_id
-                       << "disconnected after token revoke";
-        }
-    }
 }
