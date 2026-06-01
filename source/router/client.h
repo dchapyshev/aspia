@@ -39,7 +39,7 @@ enum SessionType : int;
 enum TwoFactorStatus : int;
 } // namespace proto::router
 
-class Session;
+class Host;
 
 class Client : public QObject
 {
@@ -100,7 +100,7 @@ private:
     void readWorkspaceListRequest(const proto::router::WorkspaceListRequest& request);
     void readGroupListRequest(const proto::router::GroupListRequest& request);
     void readChangePasswordRequest(const proto::router::ChangePasswordRequest& request);
-    Session* sessionByHostId(HostId host_id);
+    Host* hostByHostId(HostId host_id);
 
     const qint64 session_id_;
     time_t start_time_ = 0;

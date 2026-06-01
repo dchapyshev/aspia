@@ -16,45 +16,47 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER_SESSION_LEGACY_HOST_H
-#define ROUTER_SESSION_LEGACY_HOST_H
+#ifndef ROUTER_HOST_NG_H
+#define ROUTER_HOST_NG_H
 
 #include "base/peer/host_id.h"
-#include "router/session.h"
+#include "router/host.h"
 
-namespace proto::router::legacy {
+namespace proto::router {
 class ConnectionOffer;
 class HostIdRequest;
-class ResetHostId;
-} // namespace proto::router::legacy
+} // namespace proto::router
 
-class SessionLegacyHost final : public Session
+class HostNG final : public Host
 {
     Q_OBJECT
 
 public:
-    explicit SessionLegacyHost(TcpChannel* channel, QObject* parent = nullptr);
-    ~SessionLegacyHost() final;
+    explicit HostNG(TcpChannel* channel, QObject* parent = nullptr);
+    ~HostNG() final;
 
-    const QList<HostId>& hostIdList() const { return host_id_list_; }
-    bool hasHostId(HostId host_id) const;
+    HostId hostId() const { return host_id_; }
 
-    void sendConnectionOffer(const proto::router::legacy::ConnectionOffer& offer);
+    void sendConnectionOffer(const proto::router::ConnectionOffer& offer);
+    // Sends the "remove" host command and marks the session so that on disconnect the
+    // hosts_remove row for this host_id is finalized. TCP delivers the command reliably; the
+    // host's disconnect is treated as a proof of receipt.
+    void sendRemoveCommand();
 
 signals:
     void sig_hostIdAssigned(HostId host_id);
 
 protected:
-    // Session implementation.
+    // Host implementation.
     void onSessionMessage(quint8 channel_id, const QByteArray& buffer) final;
 
 private:
-    void readHostIdRequest(const proto::router::legacy::HostIdRequest& host_id_request);
-    void readResetHostId(const proto::router::legacy::ResetHostId& reset_host_id);
+    void readHostIdRequest(const proto::router::HostIdRequest& host_id_request);
 
-    QList<HostId> host_id_list_;
+    HostId host_id_ = kInvalidHostId;
+    bool remove_command_sent_ = false;
 
-    Q_DISABLE_COPY_MOVE(SessionLegacyHost)
+    Q_DISABLE_COPY_MOVE(HostNG)
 };
 
-#endif // ROUTER_SESSION_LEGACY_HOST_H
+#endif // ROUTER_HOST_NG_H

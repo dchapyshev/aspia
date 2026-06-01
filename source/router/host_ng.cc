@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/session_host.h"
+#include "router/host_ng.h"
 
 #include "base/logging.h"
 #include "base/serialization.h"
@@ -35,14 +35,14 @@ const size_t kHostKeySize = 512;
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-SessionHost::SessionHost(TcpChannel* channel, QObject* parent)
-    : Session(channel, parent)
+HostNG::HostNG(TcpChannel* channel, QObject* parent)
+    : Host(channel, parent)
 {
     CLOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-SessionHost::~SessionHost()
+HostNG::~HostNG()
 {
     CLOG(INFO) << "Dtor";
 
@@ -65,7 +65,7 @@ SessionHost::~SessionHost()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionHost::sendConnectionOffer(const proto::router::ConnectionOffer& offer)
+void HostNG::sendConnectionOffer(const proto::router::ConnectionOffer& offer)
 {
     proto::router::RouterToHost message;
     message.mutable_connection_offer()->CopyFrom(offer);
@@ -73,7 +73,7 @@ void SessionHost::sendConnectionOffer(const proto::router::ConnectionOffer& offe
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionHost::sendRemoveCommand()
+void HostNG::sendRemoveCommand()
 {
     proto::router::RouterToHost message;
     message.mutable_host_command()->set_command_name(proto::router::kCommandHostRemove);
@@ -83,7 +83,7 @@ void SessionHost::sendRemoveCommand()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionHost::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
+void HostNG::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
 {
     proto::router::HostToRouter message;
     if (!parse(buffer, &message))
@@ -103,7 +103,7 @@ void SessionHost::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionHost::readHostIdRequest(const proto::router::HostIdRequest& host_id_request)
+void HostNG::readHostIdRequest(const proto::router::HostIdRequest& host_id_request)
 {
     Database& database = Database::instance();
     if (!database.isValid())

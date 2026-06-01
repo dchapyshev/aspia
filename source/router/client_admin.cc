@@ -28,7 +28,7 @@
 #include "router/client.h"
 #include "router/relay.h"
 #include "router/service.h"
-#include "router/session_host.h"
+#include "router/host_ng.h"
 
 //--------------------------------------------------------------------------------------------------
 ClientAdmin::ClientAdmin(TcpChannel* channel, QObject* parent)
@@ -328,17 +328,14 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
 //--------------------------------------------------------------------------------------------------
 void ClientAdmin::doHostRequest(const proto::router::HostRequest& request)
 {
-    auto find_host_session = [](HostId host_id) -> SessionHost*
+    auto find_host = [](HostId host_id) -> HostNG*
     {
-        const QList<Session*>& sessions = Service::instance()->sessions();
-        for (Session* session : std::as_const(sessions))
+        const QList<Host*>& hosts = Service::instance()->hosts();
+        for (Host* host : std::as_const(hosts))
         {
-            if (session->sessionType() != proto::router::SESSION_TYPE_HOST)
-                continue;
-
-            SessionHost* host_session = dynamic_cast<SessionHost*>(session);
-            if (host_session && host_session->hostId() == host_id)
-                return host_session;
+            HostNG* host_ng = dynamic_cast<HostNG*>(host);
+            if (host_ng && host_ng->hostId() == host_id)
+                return host_ng;
         }
         return nullptr;
     };
@@ -354,18 +351,16 @@ void ClientAdmin::doHostRequest(const proto::router::HostRequest& request)
 
         if (host_id == kAllHostsId)
         {
-            const QList<Session*>& sessions = Service::instance()->sessions();
-            QList<qint64> host_session_ids;
-            for (const auto& session : sessions)
-            {
-                if (session->sessionType() == proto::router::SESSION_TYPE_HOST)
-                    host_session_ids.append(session->sessionId());
-            }
+            const QList<Host*>& hosts = Service::instance()->hosts();
+            QList<qint64> host_ids;
+
+            for (const auto& host : hosts)
+                host_ids.append(host->sessionId());
 
             bool all_ok = true;
-            for (qint64 id : host_session_ids)
+            for (qint64 id : host_ids)
             {
-                if (!Service::instance()->stopSession(id))
+                if (!Service::instance()->stopHost(id))
                 {
                     CLOG(ERROR) << "Failed to stop host session:" << id;
                     all_ok = false;
@@ -384,13 +379,13 @@ void ClientAdmin::doHostRequest(const proto::router::HostRequest& request)
         }
         else
         {
-            SessionHost* host_session = find_host_session(host_id);
-            if (!host_session)
+            HostNG* host = find_host(host_id);
+            if (!host)
             {
                 CLOG(ERROR) << "No live session for host_id:" << host_id;
                 host_result->set_error_code(proto::router::kErrorInvalidEntryId);
             }
-            else if (!Service::instance()->stopSession(host_session->sessionId()))
+            else if (!Service::instance()->stopHost(host->sessionId()))
             {
                 CLOG(ERROR) << "Failed to stop session for host_id:" << host_id;
                 host_result->set_error_code(proto::router::kErrorInternalError);
@@ -420,14 +415,14 @@ void ClientAdmin::doHostRequest(const proto::router::HostRequest& request)
         else
         {
             // The hosts row is now in hosts_remove; if the host is online send it the remove
-            // command and let SessionHost finalize the hosts_remove row on disconnect. Otherwise
+            // command and let HostNG finalize the hosts_remove row on disconnect. Otherwise
             // the command is issued on reconnect.
-            SessionHost* host_session = find_host_session(host_id);
-            if (host_session)
-                host_session->sendRemoveCommand();
+            HostNG* host = find_host(host_id);
+            if (host)
+                host->sendRemoveCommand();
 
             CLOG(INFO) << "Host" << host_id << "removal scheduled by" << userName()
-                       << "(online:" << (host_session != nullptr) << ")";
+                       << "(online:" << (host != nullptr) << ")";
             host_result->set_error_code(proto::router::kErrorOk);
             Service::instance()->notifyChanged(Service::NOTIFY_HOSTS);
         }

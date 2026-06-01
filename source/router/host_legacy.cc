@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/session_legacy_host.h"
+#include "router/host_legacy.h"
 
 #include "base/logging.h"
 #include "base/serialization.h"
@@ -34,26 +34,26 @@ const size_t kHostKeySize = 512;
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-SessionLegacyHost::SessionLegacyHost(TcpChannel* channel, QObject* parent)
-    : Session(channel, parent)
+HostLegacy::HostLegacy(TcpChannel* channel, QObject* parent)
+    : Host(channel, parent)
 {
     CLOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-SessionLegacyHost::~SessionLegacyHost()
+HostLegacy::~HostLegacy()
 {
     CLOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-bool SessionLegacyHost::hasHostId(HostId host_id) const
+bool HostLegacy::hasHostId(HostId host_id) const
 {
     return host_id_list_.contains(host_id);
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionLegacyHost::sendConnectionOffer(const proto::router::legacy::ConnectionOffer& offer)
+void HostLegacy::sendConnectionOffer(const proto::router::legacy::ConnectionOffer& offer)
 {
     proto::router::legacy::RouterToPeer message;
     message.mutable_connection_offer()->CopyFrom(offer);
@@ -61,7 +61,7 @@ void SessionLegacyHost::sendConnectionOffer(const proto::router::legacy::Connect
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionLegacyHost::onSessionMessage(quint8 /* channel_id */, const QByteArray& buffer)
+void HostLegacy::onSessionMessage(quint8 /* channel_id */, const QByteArray& buffer)
 {
     proto::router::legacy::PeerToRouter message;
     if (!parse(buffer, &message))
@@ -79,7 +79,7 @@ void SessionLegacyHost::onSessionMessage(quint8 /* channel_id */, const QByteArr
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionLegacyHost::readHostIdRequest(const proto::router::legacy::HostIdRequest& host_id_request)
+void HostLegacy::readHostIdRequest(const proto::router::legacy::HostIdRequest& host_id_request)
 {
     Database& database = Database::instance();
     if (!database.isValid())
@@ -147,7 +147,7 @@ void SessionLegacyHost::readHostIdRequest(const proto::router::legacy::HostIdReq
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionLegacyHost::readResetHostId(const proto::router::legacy::ResetHostId& reset_host_id)
+void HostLegacy::readResetHostId(const proto::router::legacy::ResetHostId& reset_host_id)
 {
     HostId host_id = reset_host_id.host_id();
     if (host_id == kInvalidHostId)

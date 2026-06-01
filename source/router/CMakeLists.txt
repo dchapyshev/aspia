@@ -25,6 +25,12 @@ list(APPEND SOURCE_ROUTER
     client_manager.h
     database.cc
     database.h
+    host.cc
+    host.h
+    host_legacy.cc
+    host_legacy.h
+    host_ng.cc
+    host_ng.h
     main.cc
     migration_utils.cc
     migration_utils.h
@@ -35,12 +41,6 @@ list(APPEND SOURCE_ROUTER
     router_user_list.h
     service.cc
     service.h
-    session.cc
-    session.h
-    session_host.cc
-    session_host.h
-    session_legacy_host.cc
-    session_legacy_host.h
     settings.cc
     settings.h
     workspace.cc

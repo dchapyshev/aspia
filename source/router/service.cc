@@ -33,8 +33,8 @@
 #include "router/client_manager.h"
 #include "router/migration_utils.h"
 #include "router/relay.h"
-#include "router/session_host.h"
-#include "router/session_legacy_host.h"
+#include "router/host_ng.h"
+#include "router/host_legacy.h"
 #include "router/settings.h"
 #include "router/router_user_list.h"
 
@@ -97,8 +97,8 @@ Service::~Service()
     LOG(INFO) << "Dtor";
 
     // Sessions can access the |instance_|, so we delete them all before zeroing the |instance_|.
-    for (auto* session : std::as_const(sessions_))
-        delete session;
+    for (auto* host : std::as_const(hosts_))
+        delete host;
 
     for (auto* client : std::as_const(clients_))
         delete client;
@@ -117,23 +117,23 @@ Service* Service::instance()
 }
 
 //--------------------------------------------------------------------------------------------------
-const QList<Session*>& Service::sessions()
+const QList<Host*>& Service::hosts()
 {
-    return sessions_;
+    return hosts_;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Service::stopSession(qint64 session_id)
+bool Service::stopHost(qint64 session_id)
 {
-    for (auto it = sessions_.begin(), it_end = sessions_.end(); it != it_end; ++it)
+    for (auto it = hosts_.begin(), it_end = hosts_.end(); it != it_end; ++it)
     {
-        Session* session = *it;
+        Host* session = *it;
 
         if (session->sessionId() == session_id)
         {
             session->disconnect();
             session->deleteLater();
-            sessions_.erase(it);
+            hosts_.erase(it);
             return true;
         }
     }
@@ -376,26 +376,26 @@ void Service::onStop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onNewConnection()
+void Service::onNewHostConnection()
 {
-    CHECK(tcp_server_);
-    while (tcp_server_->hasReadyConnections())
+    CHECK(host_server_);
+    while (host_server_->hasReadyConnections())
     {
-        TcpChannel* channel = tcp_server_->nextReadyConnection();
+        TcpChannel* channel = host_server_->nextReadyConnection();
         LOG(INFO) << "New connection:" << channel->peerAddress();
-        addSession(channel, false);
+        addHost(channel, false);
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onNewLegacyConnection()
+void Service::onNewLegacyHostConnection()
 {
-    CHECK(tcp_server_legacy_);
-    while (tcp_server_legacy_->hasReadyConnections())
+    CHECK(host_legacy_server_);
+    while (host_legacy_server_->hasReadyConnections())
     {
-        TcpChannel* channel = tcp_server_legacy_->nextReadyConnection();
+        TcpChannel* channel = host_legacy_server_->nextReadyConnection();
         LOG(INFO) << "New legacy connection:" << channel->peerAddress();
-        addSession(channel, true);
+        addHost(channel, true);
     }
 }
 
@@ -424,13 +424,13 @@ void Service::onNewRelayConnection()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onSessionFinished()
+void Service::onHostFinished()
 {
-    Session* session = dynamic_cast<Session*>(sender());
-    CHECK(session);
-    session->disconnect();
-    session->deleteLater();
-    sessions_.removeOne(session);
+    Host* host = dynamic_cast<Host*>(sender());
+    CHECK(host);
+    host->disconnect();
+    host->deleteLater();
+    hosts_.removeOne(host);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -456,42 +456,42 @@ void Service::onRelayFinished()
 //--------------------------------------------------------------------------------------------------
 void Service::onHostIdAssigned(HostId host_id)
 {
-    QList<Session*> matched_sessions;
+    QList<Host*> matched_hosts;
 
-    for (Session* session : std::as_const(sessions_))
+    for (Host* host : std::as_const(hosts_))
     {
-        SessionHost* host_session = dynamic_cast<SessionHost*>(session);
-        if (host_session)
+        HostNG* host_ng = dynamic_cast<HostNG*>(host);
+        if (host_ng)
         {
-            if (host_session->hostId() == host_id)
-                matched_sessions.append(session);
+            if (host_ng->hostId() == host_id)
+                matched_hosts.append(host);
             continue;
         }
 
-        SessionLegacyHost* legacy_host_session = dynamic_cast<SessionLegacyHost*>(session);
-        if (legacy_host_session)
+        HostLegacy* host_legacy = dynamic_cast<HostLegacy*>(host);
+        if (host_legacy)
         {
-            if (legacy_host_session->hasHostId(host_id))
-                matched_sessions.append(session);
+            if (host_legacy->hasHostId(host_id))
+                matched_hosts.append(host);
         }
     }
 
-    if (matched_sessions.size() <= 1)
+    if (matched_hosts.size() <= 1)
         return;
 
-    Session* oldest_session = matched_sessions.first();
-    for (int i = 1; i < matched_sessions.size(); ++i)
+    Host* oldest_host = matched_hosts.first();
+    for (int i = 1; i < matched_hosts.size(); ++i)
     {
-        if (matched_sessions[i]->startTime() < oldest_session->startTime())
-            oldest_session = matched_sessions[i];
+        if (matched_hosts[i]->startTime() < oldest_host->startTime())
+            oldest_host = matched_hosts[i];
     }
 
     LOG(INFO) << "Duplicate host ID" << host_id << "detected. Disconnecting older session (id"
-              << oldest_session->sessionId() << ")";
+              << oldest_host->sessionId() << ")";
 
-    oldest_session->disconnect();
-    oldest_session->deleteLater();
-    sessions_.removeOne(oldest_session);
+    oldest_host->disconnect();
+    oldest_host->deleteLater();
+    hosts_.removeOne(oldest_host);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -558,7 +558,7 @@ void Service::onNotificationFlush()
 //--------------------------------------------------------------------------------------------------
 bool Service::start()
 {
-    if (tcp_server_)
+    if (host_server_)
     {
         LOG(ERROR) << "Server already is started";
         return false;
@@ -662,27 +662,27 @@ bool Service::start()
     static constexpr int kRouterMaxPendingConnections = 100;
     static constexpr int kRouterMaxConnectionsPerMinute = 300;
 
-    tcp_server_ = new TcpServer(this);
-    connect(tcp_server_, &TcpServer::sig_newConnection, this, &Service::onNewConnection);
+    host_server_ = new TcpServer(this);
+    connect(host_server_, &TcpServer::sig_newConnection, this, &Service::onNewHostConnection);
 
-    tcp_server_->setPrivateKey(private_key);
-    tcp_server_->setUserList(user_list);
-    tcp_server_->setAnonymousAccess(
+    host_server_->setPrivateKey(private_key);
+    host_server_->setUserList(user_list);
+    host_server_->setAnonymousAccess(
         ServerAuthenticator::AnonymousAccess::ENABLE, proto::router::SESSION_TYPE_HOST);
-    tcp_server_->setMaxPendingConnections(kRouterMaxPendingConnections);
-    tcp_server_->setMaxConnectionsPerMinute(kRouterMaxConnectionsPerMinute);
-    tcp_server_->start(port, listen_interface);
+    host_server_->setMaxPendingConnections(kRouterMaxPendingConnections);
+    host_server_->setMaxConnectionsPerMinute(kRouterMaxConnectionsPerMinute);
+    host_server_->start(port, listen_interface);
 
-    tcp_server_legacy_ = new TcpServerLegacy(this);
-    connect(tcp_server_legacy_, &TcpServerLegacy::sig_newConnection, this, &Service::onNewLegacyConnection);
+    host_legacy_server_ = new TcpServerLegacy(this);
+    connect(host_legacy_server_, &TcpServerLegacy::sig_newConnection, this, &Service::onNewLegacyHostConnection);
 
-    tcp_server_legacy_->setPrivateKey(private_key);
-    tcp_server_legacy_->setUserList(user_list);
-    tcp_server_legacy_->setAnonymousAccess(
+    host_legacy_server_->setPrivateKey(private_key);
+    host_legacy_server_->setUserList(user_list);
+    host_legacy_server_->setAnonymousAccess(
         ServerAuthenticatorLegacy::AnonymousAccess::ENABLE, proto::router::SESSION_TYPE_HOST);
-    tcp_server_legacy_->setMaxPendingConnections(kRouterMaxPendingConnections);
-    tcp_server_legacy_->setMaxConnectionsPerMinute(kRouterMaxConnectionsPerMinute);
-    tcp_server_legacy_->start(legacy_port, listen_interface);
+    host_legacy_server_->setMaxPendingConnections(kRouterMaxPendingConnections);
+    host_legacy_server_->setMaxConnectionsPerMinute(kRouterMaxConnectionsPerMinute);
+    host_legacy_server_->start(legacy_port, listen_interface);
 
     // Relay listener accepts relay sessions only (anonymous access).
     relay_server_ = new TcpServer(this);
@@ -717,62 +717,40 @@ bool Service::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::addSession(TcpChannel* channel, bool is_legacy)
+void Service::addHost(TcpChannel* channel, bool is_legacy)
 {
     QString address = channel->peerAddress();
-    proto::router::SessionType session_type =
-        static_cast<proto::router::SessionType>(channel->peerSessionType());
 
-    if (is_legacy && session_type != proto::router::SESSION_TYPE_HOST)
+    LOG(INFO) << "New session:" << address;
+
+    Host* host = nullptr;
+
+    if (isAddressAllowed(host_white_list_, address))
     {
-        LOG(ERROR) << "Connection is rejected for" << address;
-        channel->deleteLater();
-        return;
-    }
-
-    LOG(INFO) << "New session:" << session_type << "(" << address << ")";
-
-    Session* session = nullptr;
-
-    switch (session_type)
-    {
-        case proto::router::SESSION_TYPE_HOST:
+        if (!is_legacy)
         {
-            if (!isAddressAllowed(host_white_list_, address))
-                break;
-
-            if (!is_legacy)
-            {
-                SessionHost* host_session = new SessionHost(channel, this);
-                connect(host_session, &SessionHost::sig_hostIdAssigned,
-                        this, &Service::onHostIdAssigned);
-                session = host_session;
-            }
-            else
-            {
-                SessionLegacyHost* legacy_host_session = new SessionLegacyHost(channel, this);
-                connect(legacy_host_session, &SessionLegacyHost::sig_hostIdAssigned,
-                        this, &Service::onHostIdAssigned);
-                session = legacy_host_session;
-            }
+            HostNG* host_ng = new HostNG(channel, this);
+            connect(host_ng, &HostNG::sig_hostIdAssigned, this, &Service::onHostIdAssigned);
+            host = host_ng;
         }
-        break;
-
-        default:
-            LOG(ERROR) << "Unsupported session type:" << session_type;
-            break;
+        else
+        {
+            HostLegacy* host_legacy = new HostLegacy(channel, this);
+            connect(host_legacy, &HostLegacy::sig_hostIdAssigned, this, &Service::onHostIdAssigned);
+            host = host_legacy;
+        }
     }
 
-    if (!session)
+    if (!host)
     {
         LOG(ERROR) << "Connection is rejected for" << address;
         channel->deleteLater();
         return;
     }
 
-    sessions_.emplace_back(session);
-    connect(session, &Session::sig_finished, this, &Service::onSessionFinished);
-    session->start();
+    hosts_.emplace_back(host);
+    connect(host, &Host::sig_finished, this, &Service::onHostFinished);
+    host->start();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -834,12 +812,10 @@ void Service::addClient(TcpChannel* channel)
 void Service::addRelay(TcpChannel* channel)
 {
     QString address = channel->peerAddress();
-    proto::router::SessionType session_type =
-        static_cast<proto::router::SessionType>(channel->peerSessionType());
 
-    LOG(INFO) << "New relay session:" << session_type << "(" << address << ")";
+    LOG(INFO) << "New relay session:" << address;
 
-    if (session_type != proto::router::SESSION_TYPE_RELAY || !isAddressAllowed(relay_white_list_, address))
+    if (!isAddressAllowed(relay_white_list_, address))
     {
         LOG(ERROR) << "Connection is rejected for" << address;
         channel->deleteLater();

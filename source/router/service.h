@@ -26,7 +26,7 @@
 #include "base/net/tcp_server.h"
 #include "base/net/tcp_server_legacy.h"
 #include "proto/router.h"
-#include "router/session.h"
+#include "router/host.h"
 
 class Client;
 class QTimer;
@@ -56,8 +56,8 @@ public:
 
     static Service* instance();
 
-    const QList<Session*>& sessions();
-    bool stopSession(qint64 session_id);
+    const QList<Host*>& hosts();
+    bool stopHost(qint64 session_id);
 
     const QList<Client*>& clients();
     bool stopClient(qint64 client_id);
@@ -97,11 +97,11 @@ protected:
     void onStop() final;
 
 private slots:
-    void onNewConnection();
-    void onNewLegacyConnection();
+    void onNewHostConnection();
+    void onNewLegacyHostConnection();
     void onNewClientConnection();
     void onNewRelayConnection();
-    void onSessionFinished();
+    void onHostFinished();
     void onClientSessionFinished();
     void onRelayFinished();
     void onHostIdAssigned(HostId host_id);
@@ -109,20 +109,20 @@ private slots:
 
 private:
     bool start();
-    void addSession(TcpChannel* channel, bool is_legacy);
+    void addHost(TcpChannel* channel, bool is_legacy);
     void addClient(TcpChannel* channel);
     void addRelay(TcpChannel* channel);
 
-    TcpServer* tcp_server_ = nullptr;
+    TcpServer* host_server_ = nullptr;
     TcpServer* client_server_ = nullptr;
     TcpServer* relay_server_ = nullptr;
-    TcpServerLegacy* tcp_server_legacy_ = nullptr;
+    TcpServerLegacy* host_legacy_server_ = nullptr;
     StunServer* stun_server_ = nullptr;
     QTimer* notification_timer_ = nullptr;
     quint32 dirty_mask_ = 0;
 
     QMap<qint64, Keys> key_pool_;
-    QList<Session*> sessions_;
+    QList<Host*> hosts_;
     QList<Client*> clients_;
     QList<Relay*> relays_;
 

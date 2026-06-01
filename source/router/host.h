@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER_SESSION_H
-#define ROUTER_SESSION_H
+#ifndef ROUTER_HOST_H
+#define ROUTER_HOST_H
 
 #include <QHostAddress>
 #include <QObject>
@@ -30,13 +30,13 @@ namespace proto::router {
 enum SessionType : int;
 } // namespace proto::router
 
-class Session : public QObject
+class Host : public QObject
 {
     Q_OBJECT
 
 public:
-    Session(TcpChannel* channel, QObject* parent);
-    virtual ~Session() override;
+    Host(TcpChannel* channel, QObject* parent);
+    virtual ~Host() override;
 
     void start();
 
@@ -60,7 +60,7 @@ signals:
     void sig_finished(qint64 session_id);
 
 protected:
-    LOG_DECLARE_CONTEXT(Session);
+    LOG_DECLARE_CONTEXT(Host);
 
     virtual void onSessionMessage(quint8 channel_id, const QByteArray& buffer) = 0;
 
@@ -76,4 +76,4 @@ private:
     QHostAddress address_;
 };
 
-#endif // ROUTER_SESSION_H
+#endif // ROUTER_HOST_H

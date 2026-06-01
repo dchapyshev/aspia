@@ -33,9 +33,9 @@
 #include "router/database.h"
 #include "router/relay.h"
 #include "router/service.h"
-#include "router/session.h"
-#include "router/session_host.h"
-#include "router/session_legacy_host.h"
+#include "router/host.h"
+#include "router/host_ng.h"
+#include "router/host_legacy.h"
 
 namespace {
 
@@ -424,8 +424,8 @@ void Client::readConnectionRequest(const proto::router::ConnectionRequest& reque
     proto::router::ConnectionOffer* offer = message.mutable_connection_offer();
     offer->set_request_id(request.request_id());
 
-    Session* session = sessionByHostId(request.host_id());
-    if (!session)
+    Host* host = hostByHostId(request.host_id());
+    if (!host)
     {
         CLOG(ERROR) << "Host with id" << request.host_id() << "NOT found!";
         offer->set_error_code(proto::router::ConnectionOffer::PEER_NOT_FOUND);
@@ -465,8 +465,8 @@ void Client::readConnectionRequest(const proto::router::ConnectionRequest& reque
     offer->set_error_code(proto::router::ConnectionOffer::SUCCESS);
 
     proto::router::PeerInfo* peer_info = offer->mutable_peer_info();
-    peer_info->set_is_legacy(session->version() < kVersion_3_0_0);
-    peer_info->set_is_address_equals(session->address() == address());
+    peer_info->set_is_legacy(host->version() < kVersion_3_0_0);
+    peer_info->set_is_address_equals(host->address() == address());
 
     if (stun_port_)
     {
@@ -488,20 +488,20 @@ void Client::readConnectionRequest(const proto::router::ConnectionRequest& reque
     secret.set_random_data(Random::string(16));
     secret.set_client_address(address().toString().toStdString());
     secret.set_client_user_name(userName().toStdString());
-    secret.set_host_address(session->address().toString().toStdString());
+    secret.set_host_address(host->address().toString().toStdString());
     secret.set_host_id(request.host_id());
 
     offer_credentials->set_secret(secret.SerializeAsString());
 
     CLOG(INFO) << "Sending connection offer to host";
-    SessionHost* host_session = dynamic_cast<SessionHost*>(session);
-    if (host_session)
+    HostNG* host_ng = dynamic_cast<HostNG*>(host);
+    if (host_ng)
     {
-        host_session->sendConnectionOffer(*offer);
+        host_ng->sendConnectionOffer(*offer);
     }
     else
     {
-        SessionLegacyHost* legacy_host_session = static_cast<SessionLegacyHost*>(session);
+        HostLegacy* host_legacy = static_cast<HostLegacy*>(host);
 
         proto::router::legacy::ConnectionOffer legacy_offer;
         legacy_offer.set_peer_role(proto::router::legacy::ConnectionOffer::HOST);
@@ -509,7 +509,7 @@ void Client::readConnectionRequest(const proto::router::ConnectionRequest& reque
         legacy_offer.mutable_relay()->CopyFrom(offer->relay());
         legacy_offer.mutable_host_data()->set_host_id(request.host_id());
 
-        legacy_host_session->sendConnectionOffer(legacy_offer);
+        host_legacy->sendConnectionOffer(legacy_offer);
     }
 
     CLOG(INFO) << "Sending connection offer to client";
@@ -523,11 +523,11 @@ void Client::readCheckHostStatus(const proto::router::CheckHostStatus& check_hos
     proto::router::HostStatus* host_status = message.mutable_host_status();
     host_status->set_request_id(check_host_status.request_id());
 
-    Session* session = sessionByHostId(check_host_status.host_id());
-    if (session)
+    Host* host = hostByHostId(check_host_status.host_id());
+    if (host)
     {
         host_status->set_status(proto::router::HostStatus::STATUS_ONLINE);
-        host_status->mutable_version()->CopyFrom(serialize(session->version()));
+        host_status->mutable_version()->CopyFrom(serialize(host->version()));
     }
     else
     {
@@ -591,23 +591,20 @@ void Client::readHostListRequest(const proto::router::HostListRequest& request)
 
     // Collect host_ids of currently connected hosts to mark them online.
     QSet<HostId> online_host_ids;
-    const QList<Session*>& sessions = Service::instance()->sessions();
-    for (Session* session : std::as_const(sessions))
+    const QList<Host*>& online_hosts = Service::instance()->hosts();
+    for (Host* host : std::as_const(online_hosts))
     {
-        if (session->sessionType() != proto::router::SESSION_TYPE_HOST)
-            continue;
-
-        SessionHost* host_session = dynamic_cast<SessionHost*>(session);
-        if (host_session)
+        HostNG* host_ng = dynamic_cast<HostNG*>(host);
+        if (host_ng)
         {
-            online_host_ids.insert(host_session->hostId());
+            online_host_ids.insert(host_ng->hostId());
             continue;
         }
 
-        SessionLegacyHost* legacy_host_session = dynamic_cast<SessionLegacyHost*>(session);
-        if (legacy_host_session)
+        HostLegacy* host_legacy = dynamic_cast<HostLegacy*>(host);
+        if (host_legacy)
         {
-            for (HostId host_id : legacy_host_session->hostIdList())
+            for (HostId host_id : host_legacy->hostIdList())
                 online_host_ids.insert(host_id);
         }
     }
@@ -819,22 +816,19 @@ void Client::readChangePasswordRequest(const proto::router::ChangePasswordReques
 }
 
 //--------------------------------------------------------------------------------------------------
-Session* Client::sessionByHostId(HostId host_id)
+Host* Client::hostByHostId(HostId host_id)
 {
-    QList<Session*> session_list = Service::instance()->sessions();
+    const QList<Host*>& hosts = Service::instance()->hosts();
 
-    for (const auto& session : std::as_const(session_list))
+    for (const auto& host : hosts)
     {
-        if (session->sessionType() == proto::router::SESSION_TYPE_HOST)
-        {
-            SessionHost* host_session = dynamic_cast<SessionHost*>(session);
-            if (host_session && host_session->hostId() == host_id)
-                return host_session;
+        HostNG* host_ng = dynamic_cast<HostNG*>(host);
+        if (host_ng && host_ng->hostId() == host_id)
+            return host_ng;
 
-            SessionLegacyHost* legacy_host_session = dynamic_cast<SessionLegacyHost*>(session);
-            if (legacy_host_session && legacy_host_session->hasHostId(host_id))
-                return legacy_host_session;
-        }
+        HostLegacy* host_legacy = dynamic_cast<HostLegacy*>(host);
+        if (host_legacy && host_legacy->hasHostId(host_id))
+            return host_legacy;
     }
 
     return nullptr;

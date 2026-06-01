@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/session.h"
+#include "router/host.h"
 
 #include "base/net/tcp_channel.h"
 #include "router/service.h"
@@ -25,7 +25,7 @@
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-qint64 createSessionId()
+qint64 createHostId()
 {
     static qint64 last_session_id = 0;
     ++last_session_id;
@@ -35,27 +35,27 @@ qint64 createSessionId()
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Session::Session(TcpChannel* channel, QObject* parent)
+Host::Host(TcpChannel* channel, QObject* parent)
     : QObject(parent),
-      session_id_(createSessionId()),
+      session_id_(createHostId()),
       tcp_channel_(channel)
 {
     CDCHECK(tcp_channel_);
     tcp_channel_->setParent(this);
     address_.setAddress(tcp_channel_->peerAddress());
 
-    connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &Session::onTcpErrorOccurred);
-    connect(tcp_channel_, &TcpChannel::sig_messageReceived, this, &Session::onTcpMessageReceived);
+    connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &Host::onTcpErrorOccurred);
+    connect(tcp_channel_, &TcpChannel::sig_messageReceived, this, &Host::onTcpMessageReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
-Session::~Session()
+Host::~Host()
 {
     Service::instance()->notifyChanged(Service::NOTIFY_HOSTS);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Session::start()
+void Host::start()
 {
     std::chrono::time_point<std::chrono::system_clock> time_point = std::chrono::system_clock::now();
     start_time_ = std::chrono::system_clock::to_time_t(time_point);
@@ -66,49 +66,49 @@ void Session::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-QVersionNumber Session::version() const
+QVersionNumber Host::version() const
 {
     return tcp_channel_->peerVersion();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Session::osName() const
+QString Host::osName() const
 {
     return tcp_channel_->peerOsName();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Session::computerName() const
+QString Host::computerName() const
 {
     return tcp_channel_->peerComputerName();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Session::architecture() const
+QString Host::architecture() const
 {
     return tcp_channel_->peerArchitecture();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Session::userName() const
+QString Host::userName() const
 {
     return tcp_channel_->peerUserName();
 }
 
 //--------------------------------------------------------------------------------------------------
-qint64 Session::userId() const
+qint64 Host::userId() const
 {
     return tcp_channel_->peerUserId();
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::router::SessionType Session::sessionType() const
+proto::router::SessionType Host::sessionType() const
 {
     return static_cast<proto::router::SessionType>(tcp_channel_->peerSessionType());
 }
 
 //--------------------------------------------------------------------------------------------------
-std::chrono::seconds Session::duration() const
+std::chrono::seconds Host::duration() const
 {
     std::chrono::time_point<std::chrono::system_clock> time_point =
         std::chrono::system_clock::from_time_t(start_time_);
@@ -118,20 +118,20 @@ std::chrono::seconds Session::duration() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Session::sendMessage(quint8 channel_id, const QByteArray& message)
+void Host::sendMessage(quint8 channel_id, const QByteArray& message)
 {
     tcp_channel_->send(channel_id, message);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Session::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
+void Host::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
 {
     CLOG(INFO) << "Network error:" << error_code;
     emit sig_finished(session_id_);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Session::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
+void Host::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
     onSessionMessage(channel_id, buffer);
 }
