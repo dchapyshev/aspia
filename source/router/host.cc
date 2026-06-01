@@ -20,7 +20,6 @@
 
 #include "base/net/tcp_channel.h"
 #include "router/service.h"
-#include "proto/router.h"
 
 namespace {
 
@@ -87,34 +86,6 @@ QString Host::computerName() const
 QString Host::architecture() const
 {
     return tcp_channel_->peerArchitecture();
-}
-
-//--------------------------------------------------------------------------------------------------
-QString Host::userName() const
-{
-    return tcp_channel_->peerUserName();
-}
-
-//--------------------------------------------------------------------------------------------------
-qint64 Host::userId() const
-{
-    return tcp_channel_->peerUserId();
-}
-
-//--------------------------------------------------------------------------------------------------
-proto::router::SessionType Host::sessionType() const
-{
-    return static_cast<proto::router::SessionType>(tcp_channel_->peerSessionType());
-}
-
-//--------------------------------------------------------------------------------------------------
-std::chrono::seconds Host::duration() const
-{
-    std::chrono::time_point<std::chrono::system_clock> time_point =
-        std::chrono::system_clock::from_time_t(start_time_);
-
-    return std::chrono::duration_cast<std::chrono::seconds>(
-        std::chrono::system_clock::now() - time_point);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -129,16 +129,6 @@ proto::router::SessionType Client::sessionType() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::chrono::seconds Client::duration() const
-{
-    std::chrono::time_point<std::chrono::system_clock> time_point =
-        std::chrono::system_clock::from_time_t(start_time_);
-
-    return std::chrono::duration_cast<std::chrono::seconds>(
-        std::chrono::system_clock::now() - time_point);
-}
-
-//--------------------------------------------------------------------------------------------------
 void Client::sendMessage(quint8 channel_id, const QByteArray& message)
 {
     tcp_channel_->send(channel_id, message);

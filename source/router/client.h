@@ -62,7 +62,6 @@ public:
     qint64 sessionId() const { return session_id_; }
     const QHostAddress& address() const { return address_; }
     time_t startTime() const { return start_time_; }
-    std::chrono::seconds duration() const;
 
     void sendMessage(quint8 channel_id, const QByteArray& message);
 
