@@ -662,33 +662,39 @@ bool Service::start()
 
     user_list->setSeedKey(seed_key);
 
-    // Caps for the router role. The pending cap is intentionally modest - latecomers retry in
-    // a moment, and the smaller cap prevents a flood from pinning router resources. The
-    // per-address rate is high enough to absorb a thundering herd from one corporate NAT
-    // (e.g. hundreds of hosts reconnecting after a network blip) without false positives.
-    static constexpr int kRouterMaxPendingConnections = 100;
-    static constexpr int kRouterMaxConnectionsPerMinute = 300;
+    // Hosts are the largest population and reconnect in storms after a network blip (e.g. hundreds
+    // of hosts behind one corporate NAT coming back at once), so they get the most generous caps.
+    //
+    // Relays are a small, stable set of infrastructure servers - a handful at most - so a few
+    // slots are plenty and tight caps make a misbehaving or spoofed relay obvious.
+    //
+    // Clients (admins/managers/clients) are interactive operators: bursty but human-bounded, and
+    // each connection runs the heavier SRP + 2FA handshake, so the caps sit in between.
+    static constexpr int kHostMaxPendingConnections = 100;
+    static constexpr int kHostMaxConnectionsPerMinute = 300;
+    static constexpr int kRelayMaxPendingConnections = 10;
+    static constexpr int kRelayMaxConnectionsPerMinute = 30;
+    static constexpr int kClientMaxPendingConnections = 30;
+    static constexpr int kClientMaxConnectionsPerMinute = 60;
 
     host_server_ = new TcpServer(this);
     connect(host_server_, &TcpServer::sig_newConnection, this, &Service::onNewHostConnection);
 
     host_server_->setPrivateKey(host_private_key);
-    host_server_->setUserList(user_list);
     host_server_->setAnonymousAccess(
         ServerAuthenticator::AnonymousAccess::ENABLE, proto::router::SESSION_TYPE_HOST);
-    host_server_->setMaxPendingConnections(kRouterMaxPendingConnections);
-    host_server_->setMaxConnectionsPerMinute(kRouterMaxConnectionsPerMinute);
+    host_server_->setMaxPendingConnections(kHostMaxPendingConnections);
+    host_server_->setMaxConnectionsPerMinute(kHostMaxConnectionsPerMinute);
     host_server_->start(port, listen_interface);
 
     host_legacy_server_ = new TcpServerLegacy(this);
     connect(host_legacy_server_, &TcpServerLegacy::sig_newConnection, this, &Service::onNewLegacyHostConnection);
 
     host_legacy_server_->setPrivateKey(host_private_key);
-    host_legacy_server_->setUserList(user_list);
     host_legacy_server_->setAnonymousAccess(
         ServerAuthenticatorLegacy::AnonymousAccess::ENABLE, proto::router::SESSION_TYPE_HOST);
-    host_legacy_server_->setMaxPendingConnections(kRouterMaxPendingConnections);
-    host_legacy_server_->setMaxConnectionsPerMinute(kRouterMaxConnectionsPerMinute);
+    host_legacy_server_->setMaxPendingConnections(kHostMaxPendingConnections);
+    host_legacy_server_->setMaxConnectionsPerMinute(kHostMaxConnectionsPerMinute);
     host_legacy_server_->start(legacy_port, listen_interface);
 
     // Relay listener accepts relay sessions only (anonymous access).
@@ -696,11 +702,10 @@ bool Service::start()
     connect(relay_server_, &TcpServer::sig_newConnection, this, &Service::onNewRelayConnection);
 
     relay_server_->setPrivateKey(relay_private_key);
-    relay_server_->setUserList(user_list);
     relay_server_->setAnonymousAccess(
         ServerAuthenticator::AnonymousAccess::ENABLE, proto::router::SESSION_TYPE_RELAY);
-    relay_server_->setMaxPendingConnections(kRouterMaxPendingConnections);
-    relay_server_->setMaxConnectionsPerMinute(kRouterMaxConnectionsPerMinute);
+    relay_server_->setMaxPendingConnections(kRelayMaxPendingConnections);
+    relay_server_->setMaxConnectionsPerMinute(kRelayMaxConnectionsPerMinute);
     relay_server_->start(relay_port, listen_interface);
 
     // Client listener accepts admin/manager/client sessions only. These session types always
@@ -709,8 +714,8 @@ bool Service::start()
     connect(client_server_, &TcpServer::sig_newConnection, this, &Service::onNewClientConnection);
 
     client_server_->setUserList(user_list);
-    client_server_->setMaxPendingConnections(kRouterMaxPendingConnections);
-    client_server_->setMaxConnectionsPerMinute(kRouterMaxConnectionsPerMinute);
+    client_server_->setMaxPendingConnections(kClientMaxPendingConnections);
+    client_server_->setMaxConnectionsPerMinute(kClientMaxConnectionsPerMinute);
     client_server_->start(client_port, listen_interface);
 
     if (settings.isStunEnabled())
