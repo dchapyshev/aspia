@@ -21,38 +21,33 @@
 
 #include <QRect>
 
+#include <iterator>
 #include <map>
-#include <utility>
 #include <vector>
+
+class RegionIterator;
 
 // Region represents an area of the screen as a set of rectangles. It is API-compatible with the
 // subset of QRegion used by the capture/codec pipeline, but is tuned for that workload. Internally
 // the area is kept in canonical banded form: a set of rows (horizontal bands), each holding one or
 // more non-overlapping horizontal spans. The rows are stored in a std::map keyed by their bottom
-// edge so they remain ordered and adjacent operations can find the affected rows in logarithmic
-// time. The flat list of rectangles used for iteration is built on demand and cached.
+// edge so they remain ordered and the rows affected by an operation can be found in logarithmic
+// time. Rectangles for iteration are produced on the fly, without materializing an intermediate
+// list.
 class Region
 {
 public:
-    using const_iterator = std::vector<QRect>::const_iterator;
-
     Region() = default;
     Region(const QRect& rect) { addRect(rect); } // implicit, like QRegion(QRect)
     Region(const Region& other) = default;
     Region(Region&& other) noexcept = default;
     Region& operator=(const Region& other) = default;
     Region& operator=(Region&& other) noexcept = default;
-
     Region& operator=(const QRect& rect);
 
     bool isEmpty() const { return rows_.empty(); }
 
-    void swap(Region& other) noexcept
-    {
-        rows_.swap(other.rows_);
-        cache_.swap(other.cache_);
-        std::swap(dirty_, other.dirty_);
-    }
+    void swap(Region& other) noexcept { rows_.swap(other.rows_); }
 
     Region& operator+=(const QRect& rect) { addRect(rect); return *this; }
     Region& operator+=(const Region& region) { addRegion(region); return *this; }
@@ -64,10 +59,12 @@ public:
 
     void translate(int dx, int dy);
 
-    const_iterator begin() const { materialize(); return cache_.begin(); }
-    const_iterator end() const { materialize(); return cache_.end(); }
+    RegionIterator begin() const;
+    RegionIterator end() const;
 
 private:
+    friend class RegionIterator;
+
     // RowSpan is a half-open horizontal span [left, right) within a single row.
     struct RowSpan
     {
@@ -84,7 +81,7 @@ private:
 
     using RowSpanSet = std::vector<RowSpan>;
 
-    // Row is a horizontal band [top, bottom) together with the set of spans it contains.
+    // Row is a horizontal band [top, bottom) together with the non-overlapping spans it contains.
     struct Row
     {
         int top;
@@ -100,15 +97,52 @@ private:
     void addRegion(const Region& region);
     void mergeWithPrecedingRow(Rows::iterator row);
     void intersect(const Region& region1, const Region& region2);
-    void materialize() const;
 
     static void intersectRows(const RowSpanSet& set1, const RowSpanSet& set2, RowSpanSet& output);
     static void addSpanToRow(Row& row, int left, int right);
     static bool spanInRow(const Row& row, const RowSpan& span);
 
     Rows rows_;
-    mutable std::vector<QRect> cache_; // flat rectangles for iteration, valid when |dirty_| is false
-    mutable bool dirty_ = false;
+};
+
+// Forward iterator over the canonical rectangles of a Region. The current rectangle is computed
+// while walking the rows: a span that continues unchanged into the contiguous rows below it is
+// merged into a single taller rectangle, so no intermediate list of rectangles is built.
+class RegionIterator
+{
+public:
+    using iterator_category = std::forward_iterator_tag;
+    using value_type = QRect;
+    using difference_type = std::ptrdiff_t;
+    using pointer = const QRect*;
+    using reference = const QRect&;
+
+    const QRect& operator*() const { return current_; }
+    const QRect* operator->() const { return &current_; }
+
+    RegionIterator& operator++() { advance(); return *this; }
+    RegionIterator operator++(int) { RegionIterator copy(*this); advance(); return copy; }
+
+    bool operator==(const RegionIterator& other) const;
+    bool operator!=(const RegionIterator& other) const { return !(*this == other); }
+
+private:
+    friend class Region;
+
+    enum AtEndTag { AT_END };
+
+    explicit RegionIterator(const Region* region);
+    RegionIterator(const Region* region, AtEndTag);
+
+    bool atEnd() const { return row_ == region_->rows_.end(); }
+    void updateCurrent();
+    void advance();
+
+    const Region* region_;
+    Region::Rows::const_iterator row_;
+    Region::Rows::const_iterator previous_row_;
+    Region::RowSpanSet::const_iterator span_;
+    QRect current_;
 };
 
 #endif // BASE_DESKTOP_REGION_H
