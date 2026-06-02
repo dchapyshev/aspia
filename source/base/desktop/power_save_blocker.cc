@@ -25,7 +25,7 @@ namespace {
 #if defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
-HANDLE createPowerRequest(POWER_REQUEST_TYPE type, const std::wstring_view& description)
+HANDLE createPowerRequest(const std::wstring_view& description)
 {
     REASON_CONTEXT context;
     memset(&context, 0, sizeof(context));
@@ -41,18 +41,18 @@ HANDLE createPowerRequest(POWER_REQUEST_TYPE type, const std::wstring_view& desc
         return INVALID_HANDLE_VALUE;
     }
 
-    if (!PowerSetRequest(handle, type))
-    {
-        PLOG(ERROR) << "PowerSetRequest failed";
-        return INVALID_HANDLE_VALUE;
-    }
+    if (!PowerSetRequest(handle, PowerRequestDisplayRequired))
+        PLOG(ERROR) << "PowerSetRequest(PowerRequestDisplayRequired) failed";
+
+    if (!PowerSetRequest(handle, PowerRequestSystemRequired))
+        PLOG(ERROR) << "PowerSetRequest(PowerRequestSystemRequired) failed";
 
     return handle.release();
 }
 
 //--------------------------------------------------------------------------------------------------
 // Takes ownership of the |handle|.
-void deletePowerRequest(POWER_REQUEST_TYPE type, HANDLE handle)
+void deletePowerRequest(HANDLE handle)
 {
     ScopedHandle request_handle(handle);
     if (!request_handle.isValid())
@@ -61,10 +61,11 @@ void deletePowerRequest(POWER_REQUEST_TYPE type, HANDLE handle)
         return;
     }
 
-    if (!PowerClearRequest(request_handle, type))
-    {
-        PLOG(ERROR) << "PowerClearRequest failed";
-    }
+    if (!PowerClearRequest(request_handle, PowerRequestSystemRequired))
+        PLOG(ERROR) << "PowerClearRequest(PowerRequestSystemRequired) failed";
+
+    if (!PowerClearRequest(request_handle, PowerRequestDisplayRequired))
+        PLOG(ERROR) << "PowerClearRequest(PowerRequestDisplayRequired) failed";
 }
 
 #endif // defined(Q_OS_WINDOWS)
@@ -79,8 +80,8 @@ PowerSaveBlocker::PowerSaveBlocker()
 #if defined(Q_OS_WINDOWS)
     static const wchar_t kDescription[] = L"Aspia session is active";
 
-    // The display will always be on as long as the class instance exists.
-    handle_.reset(createPowerRequest(PowerRequestDisplayRequired, kDescription));
+    // The display and the system will stay on as long as the class instance exists.
+    handle_.reset(createPowerRequest(kDescription));
 #else // defined(Q_OS_WINDOWS)
     NOTIMPLEMENTED();
 #endif // defined(Q_OS_*)
@@ -92,6 +93,6 @@ PowerSaveBlocker::~PowerSaveBlocker()
     LOG(INFO) << "Dtor";
 
 #if defined(Q_OS_WINDOWS)
-    deletePowerRequest(PowerRequestDisplayRequired, handle_.release());
+    deletePowerRequest(handle_.release());
 #endif // defined(Q_OS_WINDOWS)
 }

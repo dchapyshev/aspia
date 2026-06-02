@@ -190,6 +190,17 @@ InputInjectorWin::InputInjectorWin(QObject* parent)
     : InputInjector(parent)
 {
     LOG(INFO) << "Ctor";
+
+    QTimer* repeated_timer = new QTimer(this);
+
+    connect(repeated_timer, &QTimer::timeout, this, [this]()
+    {
+        BlockInput(!!block_input_);
+    });
+
+    repeated_timer->setInterval(std::chrono::seconds(5));
+    repeated_timer->setTimerType(Qt::CoarseTimer);
+    repeated_timer->start();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -253,8 +264,6 @@ void InputInjectorWin::injectKeyEvent(const proto::input::KeyEvent& event)
         return;
     }
 
-    beforeInput();
-
     bool prev_state = GetKeyState(VK_CAPITAL) != 0;
     bool curr_state = (event.flags() & proto::input::KeyEvent::CAPSLOCK) != 0;
 
@@ -288,8 +297,6 @@ void InputInjectorWin::injectTextEvent(const proto::input::TextEvent& event)
     if (text.isEmpty())
         return;
 
-    beforeInput();
-
     for (auto it = text.cbegin(), it_end = text.cend(); it != it_end; ++it)
     {
         if (*it == '\n')
@@ -308,8 +315,6 @@ void InputInjectorWin::injectTextEvent(const proto::input::TextEvent& event)
 //--------------------------------------------------------------------------------------------------
 void InputInjectorWin::injectMouseEvent(const proto::input::MouseEvent& event)
 {
-    beforeInput();
-
     if (screen_size_.width() <= 1 || screen_size_.height() <= 1)
         screen_size_ = QSize(GetSystemMetrics(SM_CXVIRTUALSCREEN), GetSystemMetrics(SM_CYVIRTUALSCREEN));
 
@@ -416,16 +421,6 @@ void InputInjectorWin::injectTouchEvent(const proto::input::TouchEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorWin::beforeInput()
-{
-    BlockInput(!!block_input_);
-
-    // We send a notification to the system that it is used to prevent
-    // the screen saver, going into hibernation mode, etc.
-    SetThreadExecutionState(ES_SYSTEM_REQUIRED);
-}
-
-//--------------------------------------------------------------------------------------------------
 bool InputInjectorWin::isCtrlAndAltPressed()
 {
     bool ctrl_pressed = false;
@@ -446,7 +441,6 @@ bool InputInjectorWin::isCtrlAndAltPressed()
 //--------------------------------------------------------------------------------------------------
 void InputInjectorWin::setBlockInputImpl(bool enable)
 {
-    beforeInput();
     block_input_ = enable;
     BlockInput(!!enable);
 }

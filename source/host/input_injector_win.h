@@ -42,7 +42,6 @@ public:
     void injectTouchEvent(const proto::input::TouchEvent& event) final;
 
 private:
-    void beforeInput();
     bool isCtrlAndAltPressed();
     void setBlockInputImpl(bool enable);
 
