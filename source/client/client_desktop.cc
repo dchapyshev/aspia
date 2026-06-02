@@ -342,8 +342,7 @@ void ClientDesktop::onRecordingChanged(bool enable, const QString& file_path)
 
         video_recording->set_action(proto::user::VideoRecording::ACTION_STARTED);
 
-        webm_file_writer_ =
-            std::make_unique<WebmFileWriter>(file_path, sessionState()->computerName());
+        webm_file_writer_ = std::make_unique<WebmFileWriter>(file_path, sessionState()->computerName());
         webm_video_encoder_ = std::make_unique<WebmVideoEncoder>();
 
         webm_video_encode_timer_ = new QTimer(this);
@@ -391,9 +390,10 @@ void ClientDesktop::onKeyEvent(const proto::input::KeyEvent& event)
     }
     else
     {
-        proto::input::ClientToHost message;
+        proto::input::ClientToHost& message = outgoing_message_.newMessage<proto::input::ClientToHost>();
         message.mutable_key()->CopyFrom(event);
-        sendMessage(proto::desktop::CHANNEL_ID_INPUT, serialize(message));
+        sendMessage(proto::desktop::CHANNEL_ID_INPUT,
+                    outgoing_message_.serialize<proto::input::ClientToHost>());
     }
 }
 
@@ -410,9 +410,10 @@ void ClientDesktop::onTextEvent(const proto::input::TextEvent& event)
     }
     else
     {
-        proto::input::ClientToHost message;
+        proto::input::ClientToHost& message = outgoing_message_.newMessage<proto::input::ClientToHost>();
         message.mutable_text()->CopyFrom(event);
-        sendMessage(proto::desktop::CHANNEL_ID_INPUT, serialize(message));
+        sendMessage(proto::desktop::CHANNEL_ID_INPUT,
+                    outgoing_message_.serialize<proto::input::ClientToHost>());
     }
 }
 
@@ -445,9 +446,10 @@ void ClientDesktop::onMouseEvent(const proto::input::MouseEvent& event)
     }
     else
     {
-        proto::input::ClientToHost message;
+        proto::input::ClientToHost& message = outgoing_message_.newMessage<proto::input::ClientToHost>();
         message.mutable_mouse()->CopyFrom(event);
-        sendMessage(proto::desktop::CHANNEL_ID_INPUT, serialize(message));
+        sendMessage(proto::desktop::CHANNEL_ID_INPUT,
+                    outgoing_message_.serialize<proto::input::ClientToHost>());
     }
 }
 
