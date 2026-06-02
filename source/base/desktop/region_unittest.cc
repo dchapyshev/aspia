@@ -402,6 +402,35 @@ TEST(RegionTest, IntersectInPlace)
 }
 
 //--------------------------------------------------------------------------------------------------
+// Exercises clear() + rebuild reuse, including multi-span rows (whose span buffers are pooled), to
+// make sure a recycled buffer is reset and never carries stale spans.
+TEST(RegionTest, ClearAndRebuild)
+{
+    Region region;
+    region += QRect(0, 0, 30, 20);   // band [0,20): two disjoint spans -> multi-span row (heap)
+    region += QRect(50, 0, 30, 20);
+    region += QRect(0, 40, 200, 20);
+
+    region.clear();
+    EXPECT_TRUE(region.isEmpty());
+
+    // Rebuild with a different shape; the pooled buffers must come back empty.
+    region += QRect(10, 5, 20, 10);
+    region += QRect(70, 5, 20, 10);
+    region += QRect(100, 100, 40, 40);
+
+    QRegion oracle(QRect(10, 5, 20, 10));
+    oracle += QRect(70, 5, 20, 10);
+    oracle += QRect(100, 100, 40, 40);
+
+    expectEquivalent(region, oracle);
+
+    region.clear();
+    EXPECT_TRUE(region.isEmpty());
+    EXPECT_TRUE(rectsOf(region).empty());
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST(RegionTest, UnionIntoEmpty)
 {
     Region a;

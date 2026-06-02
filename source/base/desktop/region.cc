@@ -90,7 +90,7 @@ RegionIterator Region::end() const
 //--------------------------------------------------------------------------------------------------
 Region& Region::operator=(const QRect& rect)
 {
-    rows_.clear();
+    clear();
     addRect(rect);
     return *this;
 }
