@@ -20,6 +20,7 @@
 #define HOST_INPUT_INJECTOR_X11_H
 
 #include <QSet>
+#include <QSize>
 
 #include <memory>
 
@@ -34,7 +35,7 @@ public:
     static InputInjectorX11* create(QObject* parent = nullptr);
 
     // InputInjector implementation.
-    void setScreenOffset(const QPoint& offset) final;
+    void setScreenInfo(const QSize& screen_size, const QPoint& offset) final;
     void setBlockInput(bool enable) final;
     void injectKeyEvent(const proto::input::KeyEvent& event) final;
     void injectTextEvent(const proto::input::TextEvent& event) final;

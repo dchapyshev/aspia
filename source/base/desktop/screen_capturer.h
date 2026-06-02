@@ -96,6 +96,9 @@ public:
     virtual const MouseCursor* captureCursor() = 0;
     virtual QPoint cursorPosition() = 0;
 
+    // Size of the entire virtual desktop (covering all monitors).
+    virtual QSize fullScreenSize() const = 0;
+
     Type type() const;
 
 signals:

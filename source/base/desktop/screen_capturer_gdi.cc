@@ -262,6 +262,12 @@ QPoint ScreenCapturerGdi::cursorPosition()
 }
 
 //--------------------------------------------------------------------------------------------------
+QSize ScreenCapturerGdi::fullScreenSize() const
+{
+    return desktop_dc_rect_.size();
+}
+
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerGdi::reset()
 {
     // Release GDI resources otherwise SetThreadDesktop will fail.

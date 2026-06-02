@@ -74,6 +74,12 @@ QPoint ScreenCapturerMac::cursorPosition()
 }
 
 //--------------------------------------------------------------------------------------------------
+QSize ScreenCapturerMac::fullScreenSize() const
+{
+    return QSize();
+}
+
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerMac::reset()
 {
     // Nothing

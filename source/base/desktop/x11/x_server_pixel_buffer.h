@@ -47,7 +47,7 @@ public:
     bool isInitialized() { return window_ != 0; }
 
     // Returns the size of the window the buffer was initialized for.
-    QSize windowSize() { return window_rect_.size(); }
+    QSize windowSize() const { return window_rect_.size(); }
 
     // Returns the rectangle of the window the buffer was initialized for.
     const QRect& windowRect() { return window_rect_; }

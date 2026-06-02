@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include <QPoint>
+#include <QSize>
 
 namespace proto::input {
 class KeyEvent;
@@ -41,7 +42,7 @@ public:
     }
     virtual ~InputInjector() = default;
 
-    virtual void setScreenOffset(const QPoint& offset) = 0;
+    virtual void setScreenInfo(const QSize& screen_size, const QPoint& offset) = 0;
     virtual void setBlockInput(bool enable) = 0;
     virtual void injectKeyEvent(const proto::input::KeyEvent& event) = 0;
     virtual void injectTextEvent(const proto::input::TextEvent& event) = 0;

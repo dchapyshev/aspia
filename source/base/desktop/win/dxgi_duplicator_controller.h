@@ -105,6 +105,9 @@ public:
     // this function returns false.
     bool deviceNames(QStringList* output);
 
+    // Returns a Size to cover the entire virtual desktop.
+    QSize desktopSize() const;
+
 private:
     // DxgiFrameContext calls private unregister(Context*) function in reset().
     friend void DxgiFrameContext::reset();
@@ -145,9 +148,6 @@ private:
 
     // The minimum numFramesCaptured() returned by |duplicators_|.
     qint64 numFramesCaptured() const;
-
-    // Returns a Size to cover entire |desktop_rect_|.
-    QSize desktopSize() const;
 
     // Returns the size of one screen. |id| should be >= 0. If system does not support DXGI based
     // capturer, or |id| is greater than the total screen count of all the Duplicators, this

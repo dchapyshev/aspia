@@ -20,6 +20,7 @@
 #define HOST_INPUT_INJECTOR_WIN_H
 
 #include <QSet>
+#include <QSize>
 
 #include "host/input_injector.h"
 #include "host/win/touch_injector.h"
@@ -33,7 +34,7 @@ public:
     ~InputInjectorWin() final;
 
     // InputInjector implementation.
-    void setScreenOffset(const QPoint& offset) final;
+    void setScreenInfo(const QSize& screen_size, const QPoint& offset) final;
     void setBlockInput(bool enable) final;
     void injectKeyEvent(const proto::input::KeyEvent& event) final;
     void injectTextEvent(const proto::input::TextEvent& event) final;
@@ -49,6 +50,7 @@ private:
     QSet<quint32> pressed_keys_;
 
     QPoint screen_offset_;
+    QSize screen_size_;
     QPoint last_mouse_pos_;
     quint32 last_mouse_mask_ = 0;
 

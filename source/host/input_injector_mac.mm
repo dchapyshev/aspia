@@ -27,7 +27,7 @@ InputInjectorMac::InputInjectorMac() = default;
 InputInjectorMac::~InputInjectorMac() = default;
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorMac::setScreenOffset(const QPoint& /* offset */)
+void InputInjectorMac::setScreenInfo(const QSize& /* screen_size */, const QPoint& /* offset */)
 {
     NOTIMPLEMENTED();
 }

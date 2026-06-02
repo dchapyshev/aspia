@@ -152,6 +152,12 @@ bool DxgiDuplicatorController::deviceNames(QStringList* output)
 }
 
 //--------------------------------------------------------------------------------------------------
+QSize DxgiDuplicatorController::desktopSize() const
+{
+    return desktop_rect_.size();
+}
+
+//--------------------------------------------------------------------------------------------------
 DxgiDuplicatorController::Result DxgiDuplicatorController::doDuplicate(
     DxgiFrame* frame, DxgiCursor* cursor, int monitor_id)
 {
@@ -409,12 +415,6 @@ qint64 DxgiDuplicatorController::numFramesCaptured() const
         min = std::min(min, duplicator.numFramesCaptured());
 
     return min;
-}
-
-//--------------------------------------------------------------------------------------------------
-QSize DxgiDuplicatorController::desktopSize() const
-{
-    return desktop_rect_.size();
 }
 
 //--------------------------------------------------------------------------------------------------

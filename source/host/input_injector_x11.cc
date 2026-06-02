@@ -90,8 +90,9 @@ InputInjectorX11* InputInjectorX11::create(QObject* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorX11::setScreenOffset(const QPoint& offset)
+void InputInjectorX11::setScreenInfo(const QSize& /* screen_size */, const QPoint& offset)
 {
+    // XTest injects in absolute pixel coordinates, so the virtual desktop size is not needed here.
     screen_offset_ = offset;
 }
 

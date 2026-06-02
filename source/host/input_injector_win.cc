@@ -209,8 +209,9 @@ InputInjectorWin::~InputInjectorWin()
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorWin::setScreenOffset(const QPoint& offset)
+void InputInjectorWin::setScreenInfo(const QSize& screen_size, const QPoint& offset)
 {
+    screen_size_ = screen_size;
     screen_offset_ = offset;
 }
 
@@ -309,16 +310,18 @@ void InputInjectorWin::injectMouseEvent(const proto::input::MouseEvent& event)
 {
     beforeInput();
 
-    QSize full_size(GetSystemMetrics(SM_CXVIRTUALSCREEN), GetSystemMetrics(SM_CYVIRTUALSCREEN));
-    if (full_size.width() <= 1 || full_size.height() <= 1)
+    if (screen_size_.width() <= 1 || screen_size_.height() <= 1)
+        screen_size_ = QSize(GetSystemMetrics(SM_CXVIRTUALSCREEN), GetSystemMetrics(SM_CYVIRTUALSCREEN));
+
+    if (screen_size_.width() <= 1 || screen_size_.height() <= 1)
     {
-        LOG(ERROR) << "Invalid screen size:" << full_size;
+        LOG(ERROR) << "Invalid screen size:" << screen_size_;
         return;
     }
 
     // Translate the coordinates of the cursor into the coordinates of the virtual screen.
-    QPoint pos(((event.x() + screen_offset_.x()) * 65535) / (full_size.width() - 1),
-               ((event.y() + screen_offset_.y()) * 65535) / (full_size.height() - 1));
+    QPoint pos(((event.x() + screen_offset_.x()) * 65535) / (screen_size_.width() - 1),
+               ((event.y() + screen_offset_.y()) * 65535) / (screen_size_.height() - 1));
 
     DWORD flags = MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_VIRTUALDESK;
     DWORD mouse_data = 0;
@@ -332,7 +335,7 @@ void InputInjectorWin::injectMouseEvent(const proto::input::MouseEvent& event)
     quint32 mask = event.mask();
 
     // If the host is configured to swap left & right buttons.
-    bool swap_buttons = !!GetSystemMetrics(SM_SWAPBUTTON);
+    static bool swap_buttons = !!GetSystemMetrics(SM_SWAPBUTTON);
 
     bool prev = (last_mouse_mask_ & proto::input::MouseEvent::LEFT_BUTTON) != 0;
     bool curr = (mask & proto::input::MouseEvent::LEFT_BUTTON) != 0;

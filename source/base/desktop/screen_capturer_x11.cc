@@ -270,6 +270,13 @@ QPoint ScreenCapturerX11::cursorPosition()
 }
 
 //--------------------------------------------------------------------------------------------------
+QSize ScreenCapturerX11::fullScreenSize() const
+{
+    // The root window spans the entire X screen (all monitors).
+    return x_server_pixel_buffer_.windowSize();
+}
+
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerX11::reset()
 {
     queue_.reset();

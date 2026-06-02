@@ -315,6 +315,12 @@ QPoint ScreenCapturerDxgi::cursorPosition()
 }
 
 //--------------------------------------------------------------------------------------------------
+QSize ScreenCapturerDxgi::fullScreenSize() const
+{
+    return controller_->desktopSize();
+}
+
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerDxgi::reset()
 {
     frame_.reset();
