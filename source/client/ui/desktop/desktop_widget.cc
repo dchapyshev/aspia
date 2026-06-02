@@ -28,6 +28,8 @@
 #include <QWheelEvent>
 #include <QSvgRenderer>
 
+#include <cmath>
+
 #if defined(Q_OS_LINUX)
 #include "base/x11/x11_headers.h"
 #endif // defined(Q_OS_LINUX)
@@ -197,17 +199,45 @@ void DesktopWidget::setDesktopFrameError(proto::video::ErrorCode error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWidget::drawDesktopFrame()
+void DesktopWidget::drawDesktopFrame(const QList<QRect>& dirty_rects)
 {
     error_timer_->stop();
 
+    bool full_update = false;
+
     if (current_error_code_ != proto::video::ERROR_CODE_OK)
+    {
         error_image_.reset();
+        full_update = true;
+    }
 
     last_error_code_ = proto::video::ERROR_CODE_OK;
     current_error_code_ = proto::video::ERROR_CODE_OK;
 
-    update();
+    if (full_update || !frame_ || dirty_rects.isEmpty())
+    {
+        update();
+        return;
+    }
+
+    const QSize& frame_size = frame_->size();
+    QSize widget_size = size();
+    QRect widget_rect = rect();
+
+    double scale_x = double(widget_size.width()) / double(frame_size.width());
+    double scale_y = double(widget_size.height()) / double(frame_size.height());
+
+    for (const QRect& frame_rect : std::as_const(dirty_rects))
+    {
+        int left = int(std::floor(double(frame_rect.left()) * scale_x)) - 1;
+        int top = int(std::floor(double(frame_rect.top()) * scale_y)) - 1;
+        int right = int(std::ceil(double(frame_rect.right() + 1) * scale_x));
+        int bottom = int(std::ceil(double(frame_rect.bottom() + 1) * scale_y));
+
+        QRect update_rect = QRect(QPoint(left, top), QPoint(right, bottom)) & widget_rect;
+        if (!update_rect.isEmpty())
+            update(update_rect);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

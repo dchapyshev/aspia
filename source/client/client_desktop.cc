@@ -848,7 +848,16 @@ void ClientDesktop::readVideoPacket(const proto::video::Packet& packet)
     min_video_packet_ = std::min(min_video_packet_, packet_size);
     max_video_packet_ = std::max(max_video_packet_, packet_size);
 
-    emit sig_drawFrame();
+    // Pass the list of changed regions to the rendering side so the widget can repaint only the
+    // updated parts of the desktop instead of the whole frame. The rectangles are passed as a
+    // signal argument (and thus copied across the thread boundary) rather than read back from the
+    // shared frame, which is concurrently written by the decoder thread.
+    QList<QRect> dirty_rects;
+    dirty_rects.reserve(packet.dirty_rect_size());
+    for (int i = 0; i < packet.dirty_rect_size(); ++i)
+        dirty_rects.append(parse(packet.dirty_rect(i)));
+
+    emit sig_drawFrame(dirty_rects);
 }
 
 //--------------------------------------------------------------------------------------------------

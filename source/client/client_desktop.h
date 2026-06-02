@@ -19,6 +19,9 @@
 #ifndef CLIENT_CLIENT_DESKTOP_H
 #define CLIENT_CLIENT_DESKTOP_H
 
+#include <QList>
+#include <QRect>
+
 #include "client/client.h"
 #include "common/clipboard_file_transfer.h"
 #include "common/clipboard_monitor.h"
@@ -132,7 +135,7 @@ signals:
     void sig_metrics(const ClientDesktop::Metrics& metrics);
     void sig_frameError(proto::video::ErrorCode error_code);
     void sig_frameChanged(const QSize& screen_size, std::shared_ptr<Frame> frame);
-    void sig_drawFrame();
+    void sig_drawFrame(const QList<QRect>& dirty_rects);
     void sig_mouseCursorChanged(std::shared_ptr<MouseCursor> mouse_cursor);
     void sig_sessionListChanged(const proto::control::SessionList& sessions);
 

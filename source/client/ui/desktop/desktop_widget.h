@@ -20,6 +20,7 @@
 #define CLIENT_UI_DESKTOP_DESKTOP_WIDGET_H
 
 #include <QEvent>
+#include <QList>
 #include <QPainter>
 #include <QSet>
 #include <QTimer>
@@ -57,7 +58,7 @@ public:
     const QImage& desktopImage();
     void setDesktopFrame(std::shared_ptr<Frame> frame);
     void setDesktopFrameError(proto::video::ErrorCode error_code);
-    void drawDesktopFrame();
+    void drawDesktopFrame(const QList<QRect>& dirty_rects);
     void setCursorShape(QPixmap&& cursor_shape, const QPoint& hotspot);
     void setCursorPosition(const QPoint& cursor_position);
 

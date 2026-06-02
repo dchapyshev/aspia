@@ -58,7 +58,7 @@ public slots:
     void onMetricsChanged(const ClientDesktop::Metrics& metrics);
     void onFrameError(proto::video::ErrorCode error_code);
     void onFrameChanged(const QSize& screen_size, std::shared_ptr<Frame> frame);
-    void onDrawFrame();
+    void onDrawFrame(const QList<QRect>& dirty_rects);
     void onMouseCursorChanged(std::shared_ptr<MouseCursor> mouse_cursor);
     void onSessionListChanged(const proto::control::SessionList& sessions);
 

@@ -400,9 +400,9 @@ void DesktopWindow::onFrameChanged(const QSize& screen_size, std::shared_ptr<Fra
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWindow::onDrawFrame()
+void DesktopWindow::onDrawFrame(const QList<QRect>& dirty_rects)
 {
-    desktop_->drawDesktopFrame();
+    desktop_->drawDesktopFrame(dirty_rects);
     toolbar_->update();
 }
 
