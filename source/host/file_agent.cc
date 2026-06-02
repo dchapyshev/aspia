@@ -78,12 +78,13 @@ void FileAgent::onIpcErrorOccurred()
 void FileAgent::onIpcMessageReceived(
     quint32 /* ipc_channel_id */, const QByteArray& buffer, bool /* reliable */)
 {
-    if (!request_.parse(buffer))
+    if (!request_.parse<proto::file_transfer::Request>(buffer))
     {
         LOG(ERROR) << "Unable to parse message";
         return;
     }
 
-    worker_->doRequest(request_.message(), &reply_.newMessage());
-    ipc_channel_->send(0, reply_.serialize());
+    worker_->doRequest(request_.message<proto::file_transfer::Request>(),
+                       &reply_.newMessage<proto::file_transfer::Reply>());
+    ipc_channel_->send(0, reply_.serialize<proto::file_transfer::Reply>());
 }

@@ -74,7 +74,7 @@ void UserSessionAgent::onUpdateCredentials(proto::user::CredentialsRequest_Type 
 {
     LOG(INFO) << "Update credentials request:" << type;
     proto::user::CredentialsRequest* request =
-        outgoing_message_.newMessage().mutable_credentials_request();
+        outgoing_message_.newMessage<proto::user::UserToService>().mutable_credentials_request();
     request->set_type(type);
     sendServiceMessage();
 }
@@ -84,7 +84,7 @@ void UserSessionAgent::onOneTimeSessions(quint32 sessions)
 {
     LOG(INFO) << "One-time sessions changed:" << sessions;
     proto::user::OneTimeSessions* one_time_sessions =
-        outgoing_message_.newMessage().mutable_one_time_sessions();
+        outgoing_message_.newMessage<proto::user::UserToService>().mutable_one_time_sessions();
     one_time_sessions->set_sessions(sessions);
     sendServiceMessage();
 }
@@ -93,7 +93,8 @@ void UserSessionAgent::onOneTimeSessions(quint32 sessions)
 void UserSessionAgent::onStopClient(quint32 client_id)
 {
     LOG(INFO) << "Stop client request:" << client_id;
-    proto::user::ServiceControl* control = outgoing_message_.newMessage().mutable_control();
+    proto::user::ServiceControl* control =
+        outgoing_message_.newMessage<proto::user::UserToService>().mutable_control();
     control->set_command_name("stop_client");
     control->set_unsigned_integer(client_id);
     sendServiceMessage();
@@ -104,7 +105,7 @@ void UserSessionAgent::onConnectConfirmation(quint32 id, bool accept)
 {
     LOG(INFO) << "Connect confirmation (id:" << id << "accept:" << accept << ")";
     proto::user::ConfirmationReply* confirmation =
-        outgoing_message_.newMessage().mutable_confirmation_reply();
+        outgoing_message_.newMessage<proto::user::UserToService>().mutable_confirmation_reply();
     confirmation->set_id(id);
     confirmation->set_accept(accept);
     sendServiceMessage();
@@ -114,7 +115,8 @@ void UserSessionAgent::onConnectConfirmation(quint32 id, bool accept)
 void UserSessionAgent::onMouseLock(bool enable)
 {
     LOG(INFO) << "Mouse lock:" << enable;
-    proto::user::ServiceControl* control = outgoing_message_.newMessage().mutable_control();
+    proto::user::ServiceControl* control =
+        outgoing_message_.newMessage<proto::user::UserToService>().mutable_control();
     control->set_command_name("lock_mouse");
     control->set_boolean(enable);
     sendServiceMessage();
@@ -124,7 +126,8 @@ void UserSessionAgent::onMouseLock(bool enable)
 void UserSessionAgent::onKeyboardLock(bool enable)
 {
     LOG(INFO) << "Keyboard lock:" << enable;
-    proto::user::ServiceControl* control = outgoing_message_.newMessage().mutable_control();
+    proto::user::ServiceControl* control =
+        outgoing_message_.newMessage<proto::user::UserToService>().mutable_control();
     control->set_command_name("lock_keyboard");
     control->set_boolean(enable);
     sendServiceMessage();
@@ -134,7 +137,8 @@ void UserSessionAgent::onKeyboardLock(bool enable)
 void UserSessionAgent::onPause(bool enable)
 {
     LOG(INFO) << "Pause:" << enable;
-    proto::user::ServiceControl* control = outgoing_message_.newMessage().mutable_control();
+    proto::user::ServiceControl* control =
+        outgoing_message_.newMessage<proto::user::UserToService>().mutable_control();
     control->set_command_name("pause");
     control->set_boolean(enable);
     sendServiceMessage();
@@ -144,7 +148,7 @@ void UserSessionAgent::onPause(bool enable)
 void UserSessionAgent::onChat(const proto::chat::Chat& chat)
 {
     LOG(INFO) << "Text chat message";
-    outgoing_message_.newMessage().mutable_chat()->CopyFrom(chat);
+    outgoing_message_.newMessage<proto::user::UserToService>().mutable_chat()->CopyFrom(chat);
     sendServiceMessage();
 }
 
@@ -229,44 +233,46 @@ void UserSessionAgent::onIpcMessageReceived(quint32 channel_id, const QByteArray
         return;
     }
 
-    if (!incoming_message_.parse(buffer))
+    proto::user::ServiceToUser* message =
+        incoming_message_.parse<proto::user::ServiceToUser>(buffer);
+    if (!message)
     {
         LOG(ERROR) << "Invalid message from service";
         return;
     }
 
-    if (incoming_message_->has_confirmation_request())
+    if (message->has_confirmation_request())
     {
-        const proto::user::ConfirmationRequest& request = incoming_message_->confirmation_request();
+        const proto::user::ConfirmationRequest& request = message->confirmation_request();
 
         LOG(INFO) << "Connect confirmation request received (id:" << request.id()
                   << "computer:" << request.computer_name() << "user:" << request.user_name() << ")";
 
         emit sig_confirmationRequest(request);
     }
-    else if (incoming_message_->has_connect_event())
+    else if (message->has_connect_event())
     {
-        onConnectEvent(incoming_message_->connect_event());
+        onConnectEvent(message->connect_event());
     }
-    else if (incoming_message_->has_disconnect_event())
+    else if (message->has_disconnect_event())
     {
-        onDisconnectEvent(incoming_message_->disconnect_event());
+        onDisconnectEvent(message->disconnect_event());
     }
-    else if (incoming_message_->has_credentials())
+    else if (message->has_credentials())
     {
-        const proto::user::Credentials& credentials = incoming_message_->credentials();
+        const proto::user::Credentials& credentials = message->credentials();
         LOG(INFO) << "Credentials received (host_id" << credentials.host_id() << ")";
         emit sig_credentialsChanged(credentials);
     }
-    else if (incoming_message_->has_router_state())
+    else if (message->has_router_state())
     {
-        const proto::user::RouterState router_state = incoming_message_->router_state();
+        const proto::user::RouterState router_state = message->router_state();
         LOG(INFO) << "Router state received (" << router_state << ")";
         emit sig_routerStateChanged(router_state);
     }
-    else if (incoming_message_->has_chat())
+    else if (message->has_chat())
     {
-        emit sig_chat(incoming_message_->chat());
+        emit sig_chat(message->chat());
     }
     else
     {
@@ -278,7 +284,7 @@ void UserSessionAgent::onIpcMessageReceived(quint32 channel_id, const QByteArray
 void UserSessionAgent::onConnectEvent(const proto::user::ConnectEvent& event)
 {
     LOG(INFO) << "Connect event received";
-    clients_.emplace_back(incoming_message_->connect_event());
+    clients_.emplace_back(event);
 
     if (!clipboard_)
     {
@@ -373,7 +379,7 @@ void UserSessionAgent::sendServiceMessage()
         return;
 
     quint32 channel_id = makeUint32(proto::user::CHANNEL_ID_SERVICE, 0);
-    ipc_channel_->send(channel_id, outgoing_message_.serialize());
+    ipc_channel_->send(channel_id, outgoing_message_.serialize<proto::user::UserToService>());
 }
 
 //--------------------------------------------------------------------------------------------------

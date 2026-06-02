@@ -153,7 +153,8 @@ UserSession::~UserSession()
 void UserSession::sendConnectEvent(quint32 client_id, proto::peer::SessionType session_type,
     const QString& computer_name, const QString& display_name)
 {
-    proto::user::ConnectEvent* event = outgoing_message_.newMessage().mutable_connect_event();
+    proto::user::ConnectEvent* event =
+        outgoing_message_.newMessage<proto::user::ServiceToUser>().mutable_connect_event();
     event->set_client_id(client_id);
     event->set_session_type(session_type);
     event->set_computer_name(computer_name.toStdString());
@@ -164,7 +165,8 @@ void UserSession::sendConnectEvent(quint32 client_id, proto::peer::SessionType s
 //--------------------------------------------------------------------------------------------------
 void UserSession::sendDisconnectEvent(quint32 client_id)
 {
-    outgoing_message_.newMessage().mutable_disconnect_event()->set_client_id(client_id);
+    outgoing_message_.newMessage<proto::user::ServiceToUser>()
+        .mutable_disconnect_event()->set_client_id(client_id);
     sendMessage();
 }
 
@@ -213,14 +215,15 @@ bool UserSession::start()
 //--------------------------------------------------------------------------------------------------
 void UserSession::onRouterStateChanged(const proto::user::RouterState& state)
 {
-    outgoing_message_.newMessage().mutable_router_state()->CopyFrom(state);
+    outgoing_message_.newMessage<proto::user::ServiceToUser>().mutable_router_state()->CopyFrom(state);
     sendMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSession::onUpdateCredentials(HostId host_id, const SecureString& password)
 {
-    proto::user::Credentials* credentials = outgoing_message_.newMessage().mutable_credentials();
+    proto::user::Credentials* credentials =
+        outgoing_message_.newMessage<proto::user::ServiceToUser>().mutable_credentials();
     credentials->set_host_id(host_id);
     credentials->set_password(password.toString().toStdString());
 
@@ -309,7 +312,8 @@ void UserSession::onClientConfirmation(const proto::user::ConfirmationRequest& r
     }
 
     // If the GUI process is available, then we ask it if the connection is allowed.
-    outgoing_message_.newMessage().mutable_confirmation_request()->CopyFrom(request);
+    outgoing_message_.newMessage<proto::user::ServiceToUser>()
+        .mutable_confirmation_request()->CopyFrom(request);
 
     // Send confirmation request to GUI.
     sendMessage();
@@ -384,7 +388,7 @@ void UserSession::onClientFinished()
 //--------------------------------------------------------------------------------------------------
 void UserSession::onClientChat(quint32 client_id, const proto::chat::Chat& chat)
 {
-    outgoing_message_.newMessage().mutable_chat()->CopyFrom(chat);
+    outgoing_message_.newMessage<proto::user::ServiceToUser>().mutable_chat()->CopyFrom(chat);
     sendMessage();
 }
 
@@ -552,15 +556,17 @@ void UserSession::onIpcMessageReceived(quint32 channel_id, const QByteArray& buf
         return;
     }
 
-    if (!incoming_message_.parse(buffer))
+    proto::user::UserToService* message =
+        incoming_message_.parse<proto::user::UserToService>(buffer);
+    if (!message)
     {
         LOG(ERROR) << "Invalid message from UI";
         return;
     }
 
-    if (incoming_message_->has_credentials_request())
+    if (message->has_credentials_request())
     {
-        const proto::user::CredentialsRequest& request = incoming_message_->credentials_request();
+        const proto::user::CredentialsRequest& request = message->credentials_request();
         proto::user::CredentialsRequest::Type type = request.type();
 
         if (type == proto::user::CredentialsRequest::NEW_PASSWORD)
@@ -574,21 +580,21 @@ void UserSession::onIpcMessageReceived(quint32 channel_id, const QByteArray& buf
             LOG(INFO) << "Credentials update requested";
         }
     }
-    else if (incoming_message_->has_one_time_sessions())
+    else if (message->has_one_time_sessions())
     {
-        quint32 sessions = incoming_message_->one_time_sessions().sessions();
+        quint32 sessions = message->one_time_sessions().sessions();
         emit sig_changeOneTimeSessions(sessions);
     }
-    else if (incoming_message_->has_confirmation_reply())
+    else if (message->has_confirmation_reply())
     {
-        proto::user::ConfirmationReply confirmation = incoming_message_->confirmation_reply();
+        proto::user::ConfirmationReply confirmation = message->confirmation_reply();
         LOG(INFO) << "Connect confirmation (request_id:" << confirmation.id() << "accept:"
                   << confirmation.accept();
         emit sig_confirmationReply(confirmation.id(), confirmation.accept());
     }
-    else if (incoming_message_->has_control())
+    else if (message->has_control())
     {
-        const proto::user::ServiceControl& control = incoming_message_->control();
+        const proto::user::ServiceControl& control = message->control();
         const std::string command_name = control.command_name();
 
         if (command_name == "stop_client")
@@ -620,10 +626,10 @@ void UserSession::onIpcMessageReceived(quint32 channel_id, const QByteArray& buf
             LOG(ERROR) << "Unhandled command:" << command_name;
         }
     }
-    else if (incoming_message_->has_chat())
+    else if (message->has_chat())
     {
         LOG(INFO) << "Text chat message";
-        emit sig_chatMessage(incoming_message_->chat());
+        emit sig_chatMessage(message->chat());
     }
     else
     {
@@ -826,5 +832,6 @@ void UserSession::sendMessage()
         return;
     }
 
-    ipc_channel_->send(proto::user::CHANNEL_ID_SERVICE, outgoing_message_.serialize());
+    ipc_channel_->send(
+        proto::user::CHANNEL_ID_SERVICE, outgoing_message_.serialize<proto::user::ServiceToUser>());
 }

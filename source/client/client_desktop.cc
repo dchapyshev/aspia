@@ -132,56 +132,60 @@ void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffe
 {
     if (channel_id == proto::desktop::CHANNEL_ID_VIDEO)
     {
-        proto::video::HostToClient message;
-        if (!parse(buffer, &message))
+        proto::video::HostToClient* message =
+            incoming_message_.parse<proto::video::HostToClient>(buffer);
+        if (!message)
         {
             CLOG(ERROR) << "Unable to parse video message";
             return;
         }
 
-        if (message.has_packet())
-            readVideoPacket(message.packet());
+        if (message->has_packet())
+            readVideoPacket(message->packet());
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_CURSOR)
     {
-        proto::cursor::HostToClient message;
-        if (!parse(buffer, &message))
+        proto::cursor::HostToClient* message =
+            incoming_message_.parse<proto::cursor::HostToClient>(buffer);
+        if (!message)
         {
             CLOG(ERROR) << "Unable to parse cursor message";
             return;
         }
 
-        if (message.has_shape())
-            readCursorShape(message.shape());
-        else if (message.has_position())
-            readCursorPosition(message.position());
+        if (message->has_shape())
+            readCursorShape(message->shape());
+        else if (message->has_position())
+            readCursorPosition(message->position());
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_SCREEN)
     {
-        proto::screen::HostToClient message;
-        if (!parse(buffer, &message))
+        proto::screen::HostToClient* message =
+            incoming_message_.parse<proto::screen::HostToClient>(buffer);
+        if (!message)
         {
             CLOG(ERROR) << "Unable to parse screen message";
             return;
         }
 
-        if (message.has_screen_list())
-            emit sig_screenListChanged(message.screen_list());
-        else if (message.has_screen_type())
-            emit sig_screenTypeChanged(message.screen_type());
+        if (message->has_screen_list())
+            emit sig_screenListChanged(message->screen_list());
+        else if (message->has_screen_type())
+            emit sig_screenTypeChanged(message->screen_type());
         else
             LOG(WARNING) << "Unhandled screen message";
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_AUDIO)
     {
-        proto::audio::HostToClient message;
-        if (!parse(buffer, &message))
+        proto::audio::HostToClient* message =
+            incoming_message_.parse<proto::audio::HostToClient>(buffer);
+        if (!message)
         {
             CLOG(ERROR) << "Unable to parse audio message";
             return;
         }
 
-        readAudioPacket(message.packet());
+        readAudioPacket(message->packet());
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_CONTROL)
     {

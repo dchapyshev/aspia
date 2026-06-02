@@ -233,14 +233,14 @@ TEST(serialization_test, serializer_basic)
 {
     Serializer<proto::file_transfer::Reply> serializer;
 
-    auto& msg = serializer.newMessage();
+    auto& msg = serializer.newMessage<proto::file_transfer::Reply>();
     msg.set_error_code(proto::file_transfer::ERROR_CODE_SUCCESS);
     auto* item = msg.mutable_file_list()->add_item();
     item->set_name("test.txt");
     item->set_size(12345);
     item->set_is_directory(false);
 
-    const QByteArray& data = serializer.serialize();
+    const QByteArray& data = serializer.serialize<proto::file_transfer::Reply>();
     ASSERT_FALSE(data.isEmpty());
 
     proto::file_transfer::Reply parsed;
@@ -256,13 +256,13 @@ TEST(serialization_test, serializer_new_message_clears)
     Serializer<proto::file_transfer::Request> serializer;
 
     // First message.
-    serializer.newMessage().mutable_file_list_request()->set_path("/old/path");
-    const QByteArray data1 = serializer.serialize();
+    serializer.newMessage<proto::file_transfer::Request>().mutable_file_list_request()->set_path("/old/path");
+    const QByteArray data1 = serializer.serialize<proto::file_transfer::Request>();
     ASSERT_FALSE(data1.isEmpty());
 
     // Second message — newMessage() should Clear().
-    serializer.newMessage().mutable_drive_list_request()->set_dummy(42);
-    const QByteArray data2 = serializer.serialize();
+    serializer.newMessage<proto::file_transfer::Request>().mutable_drive_list_request()->set_dummy(42);
+    const QByteArray data2 = serializer.serialize<proto::file_transfer::Request>();
 
     proto::file_transfer::Request parsed;
     ASSERT_TRUE(parsed.ParseFromArray(data2.data(), data2.size()));
@@ -274,9 +274,10 @@ TEST(serialization_test, serializer_new_message_clears)
 TEST(serialization_test, serializer_message_accessor)
 {
     Serializer<proto::file_transfer::Reply> serializer;
-    serializer.newMessage().set_error_code(proto::file_transfer::ERROR_CODE_DISK_FULL);
+    serializer.newMessage<proto::file_transfer::Reply>().set_error_code(
+        proto::file_transfer::ERROR_CODE_DISK_FULL);
 
-    const auto& msg = serializer.message();
+    const auto& msg = serializer.message<proto::file_transfer::Reply>();
     EXPECT_EQ(msg.error_code(), proto::file_transfer::ERROR_CODE_DISK_FULL);
 }
 
@@ -297,11 +298,12 @@ TEST(serialization_test, parser_basic)
     QByteArray buffer = serialize(original);
 
     Parser<proto::file_transfer::Reply> parser;
-    ASSERT_TRUE(parser.parse(buffer));
-    EXPECT_EQ(parser->error_code(), proto::file_transfer::ERROR_CODE_SUCCESS);
-    ASSERT_EQ(parser->file_list().item_size(), 1);
-    EXPECT_EQ(parser->file_list().item(0).name(), "document.pdf");
-    EXPECT_EQ(parser->file_list().item(0).size(), 999999u);
+    auto* message = parser.parse<proto::file_transfer::Reply>(buffer);
+    ASSERT_TRUE(message);
+    EXPECT_EQ(message->error_code(), proto::file_transfer::ERROR_CODE_SUCCESS);
+    ASSERT_EQ(message->file_list().item_size(), 1);
+    EXPECT_EQ(message->file_list().item(0).name(), "document.pdf");
+    EXPECT_EQ(message->file_list().item(0).size(), 999999u);
 }
 
 TEST(serialization_test, parser_reuse)
@@ -315,16 +317,18 @@ TEST(serialization_test, parser_reuse)
         msg1.mutable_file_list()->add_item()->set_name("file" + std::to_string(i));
 
     QByteArray buf1 = serialize(msg1);
-    ASSERT_TRUE(parser.parse(buf1));
-    EXPECT_EQ(parser->file_list().item_size(), 5);
+    auto* parsed1 = parser.parse<proto::file_transfer::Reply>(buf1);
+    ASSERT_TRUE(parsed1);
+    EXPECT_EQ(parsed1->file_list().item_size(), 5);
 
     // Second parse — must fully replace previous content.
     proto::file_transfer::Reply msg2;
     msg2.set_error_code(proto::file_transfer::ERROR_CODE_DISK_FULL);
     QByteArray buf2 = serialize(msg2);
-    ASSERT_TRUE(parser.parse(buf2));
-    EXPECT_EQ(parser->error_code(), proto::file_transfer::ERROR_CODE_DISK_FULL);
-    EXPECT_EQ(parser->file_list().item_size(), 0);
+    auto* parsed2 = parser.parse<proto::file_transfer::Reply>(buf2);
+    ASSERT_TRUE(parsed2);
+    EXPECT_EQ(parsed2->error_code(), proto::file_transfer::ERROR_CODE_DISK_FULL);
+    EXPECT_EQ(parsed2->file_list().item_size(), 0);
 }
 
 TEST(serialization_test, parser_message_accessor)
@@ -334,24 +338,25 @@ TEST(serialization_test, parser_message_accessor)
     QByteArray buffer = serialize(original);
 
     Parser<proto::file_transfer::Reply> parser;
-    ASSERT_TRUE(parser.parse(buffer));
+    ASSERT_TRUE(parser.parse<proto::file_transfer::Reply>(buffer));
 
-    const auto& msg = parser.message();
+    const auto& msg = parser.message<proto::file_transfer::Reply>();
     EXPECT_EQ(msg.error_code(), proto::file_transfer::ERROR_CODE_ACCESS_DENIED);
 }
 
-TEST(serialization_test, parser_arrow_operator_mutable)
+TEST(serialization_test, parser_returns_mutable_message)
 {
     proto::file_transfer::Reply original;
     original.set_error_code(proto::file_transfer::ERROR_CODE_SUCCESS);
     QByteArray buffer = serialize(original);
 
     Parser<proto::file_transfer::Reply> parser;
-    ASSERT_TRUE(parser.parse(buffer));
+    auto* message = parser.parse<proto::file_transfer::Reply>(buffer);
+    ASSERT_TRUE(message);
 
-    // Mutable arrow operator.
-    parser->set_error_code(proto::file_transfer::ERROR_CODE_ACCESS_DENIED);
-    EXPECT_EQ(parser->error_code(), proto::file_transfer::ERROR_CODE_ACCESS_DENIED);
+    // The returned message is mutable.
+    message->set_error_code(proto::file_transfer::ERROR_CODE_ACCESS_DENIED);
+    EXPECT_EQ(message->error_code(), proto::file_transfer::ERROR_CODE_ACCESS_DENIED);
 }
 
 TEST(serialization_test, parser_does_not_crash_on_garbage)
@@ -359,7 +364,7 @@ TEST(serialization_test, parser_does_not_crash_on_garbage)
     Parser<proto::file_transfer::Reply> parser;
     QByteArray garbage(100, '\xFF');
     // Should not crash. Result is implementation-defined for lite runtime.
-    parser.parse(garbage);
+    parser.parse<proto::file_transfer::Reply>(garbage);
 }
 
 // ============================================================================
@@ -371,18 +376,20 @@ TEST(serialization_test, serializer_parser_roundtrip)
     Serializer<proto::file_transfer::Request> serializer;
     Parser<proto::file_transfer::Request> parser;
 
-    auto& msg = serializer.newMessage();
+    auto& msg = serializer.newMessage<proto::file_transfer::Request>();
     msg.mutable_file_list_request()->set_path("/home/user");
     auto* packet = msg.mutable_packet();
     packet->set_flags(proto::file_transfer::Packet::FIRST_PACKET);
     packet->set_file_size(1048576);
     packet->set_data(std::string(256, '\xAB'));
 
-    ASSERT_TRUE(parser.parse(serializer.serialize()));
-    EXPECT_EQ(parser->file_list_request().path(), "/home/user");
-    EXPECT_EQ(parser->packet().flags(), proto::file_transfer::Packet::FIRST_PACKET);
-    EXPECT_EQ(parser->packet().file_size(), 1048576u);
-    EXPECT_EQ(parser->packet().data().size(), 256u);
+    auto* parsed = parser.parse<proto::file_transfer::Request>(
+        serializer.serialize<proto::file_transfer::Request>());
+    ASSERT_TRUE(parsed);
+    EXPECT_EQ(parsed->file_list_request().path(), "/home/user");
+    EXPECT_EQ(parsed->packet().flags(), proto::file_transfer::Packet::FIRST_PACKET);
+    EXPECT_EQ(parsed->packet().file_size(), 1048576u);
+    EXPECT_EQ(parsed->packet().data().size(), 256u);
 }
 
 TEST(serialization_test, serializer_parser_repeated_roundtrip)
@@ -392,7 +399,7 @@ TEST(serialization_test, serializer_parser_repeated_roundtrip)
 
     for (int round = 0; round < 10; ++round)
     {
-        auto& msg = serializer.newMessage();
+        auto& msg = serializer.newMessage<proto::file_transfer::Reply>();
         msg.set_error_code(proto::file_transfer::ERROR_CODE_SUCCESS);
         for (int i = 0; i < round + 1; ++i)
         {
@@ -401,9 +408,11 @@ TEST(serialization_test, serializer_parser_repeated_roundtrip)
             item->set_size(1024 * (i + 1));
         }
 
-        ASSERT_TRUE(parser.parse(serializer.serialize()));
-        EXPECT_EQ(parser->file_list().item_size(), round + 1);
-        EXPECT_EQ(parser->file_list().item(0).name(),
+        auto* parsed = parser.parse<proto::file_transfer::Reply>(
+            serializer.serialize<proto::file_transfer::Reply>());
+        ASSERT_TRUE(parsed);
+        EXPECT_EQ(parsed->file_list().item_size(), round + 1);
+        EXPECT_EQ(parsed->file_list().item(0).name(),
                   "file_" + std::to_string(round) + "_0");
     }
 }

@@ -472,7 +472,8 @@ void DesktopAgent::onSelectScreen(const proto::screen::Screen& screen)
 void DesktopAgent::onScreenListChanged(
     const ScreenCapturer::ScreenList& list, ScreenCapturer::ScreenId current)
 {
-    proto::screen::ScreenList* screen_list = screen_message_.newMessage().mutable_screen_list();
+    proto::screen::ScreenList* screen_list =
+        outgoing_message_.newMessage<proto::screen::HostToClient>().mutable_screen_list();
     screen_list->set_current_screen(current);
 
     for (const auto& resolition_item : list.resolutions)
@@ -504,7 +505,7 @@ void DesktopAgent::onScreenListChanged(
             screen_list->set_primary_screen(screen_item.id);
     }
 
-    const QByteArray& buffer = screen_message_.serialize();
+    const QByteArray& buffer = outgoing_message_.serialize<proto::screen::HostToClient>();
     for (auto* client : std::as_const(clients_))
         client->onScreenListData(buffer);
 }
@@ -512,7 +513,8 @@ void DesktopAgent::onScreenListChanged(
 //--------------------------------------------------------------------------------------------------
 void DesktopAgent::onScreenTypeChanged(ScreenCapturer::ScreenType type, const QString& name)
 {
-    proto::screen::ScreenType* screen_type = screen_message_.newMessage().mutable_screen_type();
+    proto::screen::ScreenType* screen_type =
+        outgoing_message_.newMessage<proto::screen::HostToClient>().mutable_screen_type();
     screen_type->set_name(name.toStdString());
 
     switch (type)
@@ -534,7 +536,7 @@ void DesktopAgent::onScreenTypeChanged(ScreenCapturer::ScreenType type, const QS
             break;
     }
 
-    const QByteArray& buffer = screen_message_.serialize();
+    const QByteArray& buffer = outgoing_message_.serialize<proto::screen::HostToClient>();
     for (auto* client : std::as_const(clients_))
         client->onScreenTypeData(buffer);
 }
@@ -581,10 +583,11 @@ void DesktopAgent::onCaptureScreen()
 
     if (is_paused_)
     {
-        proto::video::Packet* video_packet = video_message_.newMessage().mutable_packet();
+        proto::video::Packet* video_packet =
+            outgoing_message_.newMessage<proto::video::HostToClient>().mutable_packet();
         video_packet->set_error_code(proto::video::ERROR_CODE_PAUSED);
 
-        const QByteArray& buffer = video_message_.serialize();
+        const QByteArray& buffer = outgoing_message_.serialize<proto::video::HostToClient>();
         for (auto* client : std::as_const(clients_))
             client->onVideoData(buffer, false);
 
@@ -634,10 +637,11 @@ void DesktopAgent::onCaptureScreen()
                 return;
         }
 
-        proto::video::Packet* video_packet = video_message_.newMessage().mutable_packet();
+        proto::video::Packet* video_packet =
+            outgoing_message_.newMessage<proto::video::HostToClient>().mutable_packet();
         video_packet->set_error_code(error_code);
 
-        const QByteArray& buffer = video_message_.serialize();
+        const QByteArray& buffer = outgoing_message_.serialize<proto::video::HostToClient>();
         for (auto* client : std::as_const(clients_))
             client->onVideoData(buffer, false);
     }
@@ -663,11 +667,12 @@ void DesktopAgent::onCaptureScreen()
             int pos_x = int(double(cursor_pos.x()) * scale_reducer_->scaleFactorX() / 100.0);
             int pos_y = int(double(cursor_pos.y()) * scale_reducer_->scaleFactorY() / 100.0);
 
-            proto::cursor::Position* position = cursor_message_.newMessage().mutable_position();
+            proto::cursor::Position* position =
+                outgoing_message_.newMessage<proto::cursor::HostToClient>().mutable_position();
             position->set_x(pos_x);
             position->set_y(pos_y);
 
-            const QByteArray& buffer = cursor_message_.serialize();
+            const QByteArray& buffer = outgoing_message_.serialize<proto::cursor::HostToClient>();
             for (auto* client : std::as_const(clients_))
                 client->onCursorPositionData(buffer);
             last_cursor_pos_ = cursor_pos;
@@ -1030,7 +1035,7 @@ void DesktopAgent::encodeScreen(const Frame* frame)
         return;
     }
 
-    proto::video::HostToClient& message = video_message_.newMessage();
+    proto::video::HostToClient& message = outgoing_message_.newMessage<proto::video::HostToClient>();
     proto::video::Packet* packet = message.mutable_packet();
 
     // Encode the frame into a video packet.
@@ -1068,7 +1073,7 @@ void DesktopAgent::encodeScreen(const Frame* frame)
 
     bool is_key_frame = packet->flags() & proto::video::PACKET_FLAG_IS_KEY_FRAME;
 
-    const QByteArray& buffer = video_message_.serialize();
+    const QByteArray& buffer = outgoing_message_.serialize<proto::video::HostToClient>();
     for (auto* client : std::as_const(clients_))
         client->onVideoData(buffer, is_key_frame);
 
@@ -1081,11 +1086,11 @@ void DesktopAgent::encodeCursor(const MouseCursor* cursor)
     if (!cursor || !cursor_encoder_)
         return;
 
-    proto::cursor::HostToClient& message = cursor_message_.newMessage();
+    proto::cursor::HostToClient& message = outgoing_message_.newMessage<proto::cursor::HostToClient>();
     if (!cursor_encoder_->encode(*cursor, message.mutable_shape()))
         return;
 
-    const QByteArray& buffer = cursor_message_.serialize();
+    const QByteArray& buffer = outgoing_message_.serialize<proto::cursor::HostToClient>();
     for (auto* client : std::as_const(clients_))
         client->onCursorShapeData(buffer);
 }
@@ -1096,10 +1101,10 @@ void DesktopAgent::encodeAudio(const proto::audio::Packet& packet)
     if (!audio_encoder_)
         return;
 
-    if (!audio_encoder_->encode(packet, audio_message_.newMessage().mutable_packet()))
+    if (!audio_encoder_->encode(packet, outgoing_message_.newMessage<proto::audio::HostToClient>().mutable_packet()))
         return;
 
-    const QByteArray& buffer = audio_message_.serialize();
+    const QByteArray& buffer = outgoing_message_.serialize<proto::audio::HostToClient>();
     for (auto* client : std::as_const(clients_))
         client->onAudioData(buffer);
 }

@@ -100,15 +100,15 @@ void Relay::sendMessage(quint8 channel_id, const QByteArray& message)
 //--------------------------------------------------------------------------------------------------
 void Relay::sendKeyUsed(quint32 key_id)
 {
-    outgoing_message_.newMessage().mutable_key_used()->set_key_id(key_id);
-    sendMessage(0, outgoing_message_.serialize());
+    outgoing_message_.newMessage<proto::router::RouterToRelay>().mutable_key_used()->set_key_id(key_id);
+    sendMessage(0, outgoing_message_.serialize<proto::router::RouterToRelay>());
 }
 
 //--------------------------------------------------------------------------------------------------
 void Relay::disconnectPeerSession(const proto::router::PeerRequest& request)
 {
-    outgoing_message_.newMessage().mutable_peer_request()->CopyFrom(request);
-    sendMessage(0, outgoing_message_.serialize());
+    outgoing_message_.newMessage<proto::router::RouterToRelay>().mutable_peer_request()->CopyFrom(request);
+    sendMessage(0, outgoing_message_.serialize<proto::router::RouterToRelay>());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -121,19 +121,21 @@ void Relay::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
 //--------------------------------------------------------------------------------------------------
 void Relay::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
-    if (!incoming_message_.parse(buffer))
+    proto::router::RelayToRouter* message =
+        incoming_message_.parse<proto::router::RelayToRouter>(buffer);
+    if (!message)
     {
         CLOG(ERROR) << "Could not read message from relay server";
         return;
     }
 
-    if (incoming_message_->has_key_pool())
+    if (message->has_key_pool())
     {
-        readKeyPool(incoming_message_->key_pool());
+        readKeyPool(message->key_pool());
     }
-    else if (incoming_message_->has_statistics())
+    else if (message->has_statistics())
     {
-        statistics_ = std::move(*incoming_message_->mutable_statistics());
+        statistics_ = std::move(*message->mutable_statistics());
     }
     else
     {

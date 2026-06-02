@@ -45,13 +45,13 @@ void ClipboardFileTransfer::setLocalFileList(const QVector<LocalFileEntry>& file
 //--------------------------------------------------------------------------------------------------
 void ClipboardFileTransfer::onIncomingMessage(const QByteArray& buffer)
 {
-    if (!incoming_message_.parse(buffer))
+    if (!incoming_message_.parse<proto::file::Message>(buffer))
     {
         LOG(ERROR) << "Unable to parse file message";
         return;
     }
 
-    const proto::file::Message& message = incoming_message_.message();
+    const proto::file::Message& message = incoming_message_.message<proto::file::Message>();
 
     if (message.has_request())
         onFileDataRequest(message.request());
@@ -95,7 +95,7 @@ void ClipboardFileTransfer::onFileDataRequest(const proto::file::Request& reques
     {
         LOG(ERROR) << "Invalid file_index:" << file_index;
 
-        proto::file::Error* error = outgoing_message_.newMessage().mutable_error();
+        proto::file::Error* error = outgoing_message_.newMessage<proto::file::Message>().mutable_error();
         error->set_transfer_id(transfer_id);
         error->set_file_index(file_index);
         error->set_error_id("invalid_file_index");
@@ -108,7 +108,7 @@ void ClipboardFileTransfer::onFileDataRequest(const proto::file::Request& reques
     if (file_entry.is_dir)
     {
         // Directories have no content to send.
-        proto::file::Data* data = outgoing_message_.newMessage().mutable_data();
+        proto::file::Data* data = outgoing_message_.newMessage<proto::file::Message>().mutable_data();
         data->set_transfer_id(transfer_id);
         data->set_file_index(file_index);
         data->set_is_last(true);
@@ -123,7 +123,7 @@ void ClipboardFileTransfer::onFileDataRequest(const proto::file::Request& reques
     {
         LOG(ERROR) << "Failed to open file:" << path;
 
-        proto::file::Error* error = outgoing_message_.newMessage().mutable_error();
+        proto::file::Error* error = outgoing_message_.newMessage<proto::file::Message>().mutable_error();
         error->set_transfer_id(transfer_id);
         error->set_file_index(file_index);
         error->set_error_id("open_failed");
@@ -164,7 +164,7 @@ void ClipboardFileTransfer::onFileDataError(const proto::file::Error& error)
 //--------------------------------------------------------------------------------------------------
 void ClipboardFileTransfer::requestFileData(int file_index)
 {
-    proto::file::Request* request = outgoing_message_.newMessage().mutable_request();
+    proto::file::Request* request = outgoing_message_.newMessage<proto::file::Message>().mutable_request();
     request->set_transfer_id(nextTransferId());
     request->set_file_index(file_index);
     request->set_offset(0);
@@ -183,7 +183,7 @@ void ClipboardFileTransfer::onFileDataReceived(const proto::file::Data& data)
         // as confirmation that one chunk has been consumed, decrements in_flight, and sends the
         // next chunk from the file. No ack is sent for the last chunk because the sender already
         // knows the transfer is finishing and will clean up after all in-flight acks arrive.
-        proto::file::Request* ack = outgoing_message_.newMessage().mutable_request();
+        proto::file::Request* ack = outgoing_message_.newMessage<proto::file::Message>().mutable_request();
         ack->set_transfer_id(data.transfer_id());
         ack->set_file_index(data.file_index());
         sendMessage();
@@ -218,7 +218,7 @@ bool ClipboardFileTransfer::sendNextChunk(quint64 transfer_id)
     qint64 bytes_read = transfer.file->read(read_buffer_.data(), kChunkSize);
     bool at_end = (bytes_read <= 0) || transfer.file->atEnd();
 
-    proto::file::Data* data = outgoing_message_.newMessage().mutable_data();
+    proto::file::Data* data = outgoing_message_.newMessage<proto::file::Message>().mutable_data();
     data->set_transfer_id(transfer_id);
     data->set_file_index(transfer.file_index);
     if (bytes_read > 0)
@@ -241,7 +241,7 @@ bool ClipboardFileTransfer::sendNextChunk(quint64 transfer_id)
 //--------------------------------------------------------------------------------------------------
 void ClipboardFileTransfer::sendMessage()
 {
-    emit sig_sendMessage(outgoing_message_.serialize());
+    emit sig_sendMessage(outgoing_message_.serialize<proto::file::Message>());
 }
 
 //--------------------------------------------------------------------------------------------------

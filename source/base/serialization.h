@@ -25,6 +25,8 @@
 
 #include <google/protobuf/message_lite.h>
 
+#include <tuple>
+
 namespace proto::peer {
 class Version;
 } // namespace proto::peer
@@ -58,6 +60,7 @@ QPoint parse(const proto::screen::Point& point);
 proto::video::Rect serialize(const QRect& rect);
 QRect parse(const proto::video::Rect& rect);
 
+//--------------------------------------------------------------------------------------------------
 class SerializerImpl
 {
 public:
@@ -89,57 +92,59 @@ private:
     mutable int buffer_index_ = 0;
 };
 
-template <typename T>
+//--------------------------------------------------------------------------------------------------
+template <typename... Ts>
 class Serializer
 {
 public:
+    template <typename T>
     const T& message() const
     {
-        return message_;
+        return std::get<T>(messages_);
     }
 
+    template <typename T>
     T& newMessage()
     {
-        message_.Clear();
-        return message_;
+        T& message = std::get<T>(messages_);
+        message.Clear();
+        return message;
     }
 
+    template <typename T>
     const QByteArray& serialize() const
     {
-        return impl_.serialize(message_);
+        return impl_.serialize(std::get<T>(messages_));
     }
 
 private:
     SerializerImpl impl_;
-    T message_;
+    std::tuple<Ts...> messages_;
 };
 
-template <typename T>
+//--------------------------------------------------------------------------------------------------
+template <typename... Ts>
 class Parser
 {
 public:
-    bool parse(const QByteArray& buffer)
+    // Returns a pointer to the reused message on success, or nullptr if parsing failed.
+    template <typename T>
+    T* parse(const QByteArray& buffer)
     {
-        return message_.ParseFromArray(buffer.data(), buffer.size());
+        T& message = std::get<T>(messages_);
+        if (!message.ParseFromArray(buffer.data(), buffer.size()))
+            return nullptr;
+        return &message;
     }
 
+    template <typename T>
     const T& message() const
     {
-        return message_;
-    }
-
-    const T* operator->() const
-    {
-        return &message_;
-    }
-
-    T* operator->()
-    {
-        return &message_;
+        return std::get<T>(messages_);
     }
 
 private:
-    T message_;
+    std::tuple<Ts...> messages_;
 };
 
 #endif // BASE_SERIALIZATION_H

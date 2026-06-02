@@ -129,10 +129,10 @@ private:
     std::unique_ptr<CursorEncoder> cursor_encoder_;
     std::unique_ptr<AudioEncoder> audio_encoder_;
 
-    Serializer<proto::screen::HostToClient> screen_message_;
-    Serializer<proto::cursor::HostToClient> cursor_message_;
-    Serializer<proto::video::HostToClient> video_message_;
-    Serializer<proto::audio::HostToClient> audio_message_;
+    Serializer<proto::screen::HostToClient,
+               proto::cursor::HostToClient,
+               proto::video::HostToClient,
+               proto::audio::HostToClient> outgoing_message_;
 
     bool is_paused_ = false;
     bool is_mouse_locked_ = false;

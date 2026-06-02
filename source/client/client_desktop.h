@@ -22,12 +22,15 @@
 #include <QList>
 #include <QRect>
 
+#include "base/serialization.h"
 #include "client/client.h"
 #include "common/clipboard_file_transfer.h"
 #include "common/clipboard_monitor.h"
 #include "proto/desktop_audio.h"
 #include "proto/desktop_control.h"
+#include "proto/desktop_cursor.h"
 #include "proto/desktop_power.h"
+#include "proto/desktop_screen.h"
 #include "proto/desktop_video.h"
 
 namespace proto::clipboard {
@@ -170,6 +173,11 @@ private:
 
     std::shared_ptr<Frame> desktop_frame_;
     proto::control::Config desktop_config_;
+
+    Parser<proto::video::HostToClient,
+           proto::cursor::HostToClient,
+           proto::screen::HostToClient,
+           proto::audio::HostToClient> incoming_message_;
 
     proto::video::Encoding video_encoding_ = proto::video::ENCODING_UNKNOWN;
     proto::audio::Encoding audio_encoding_ = proto::audio::ENCODING_UNKNOWN;

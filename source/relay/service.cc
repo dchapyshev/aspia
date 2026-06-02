@@ -154,16 +154,18 @@ void Service::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
 //--------------------------------------------------------------------------------------------------
 void Service::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
-    if (!incoming_message_.parse(buffer))
+    proto::router::RouterToRelay* message =
+        incoming_message_.parse<proto::router::RouterToRelay>(buffer);
+    if (!message)
     {
         LOG(ERROR) << "Invalid message from router";
         return;
     }
 
-    if (incoming_message_->has_key_used())
+    if (message->has_key_used())
     {
         std::shared_ptr<KeyDeleter> key_deleter =
-            std::make_shared<KeyDeleter>(session_manager_, incoming_message_->key_used().key_id());
+            std::make_shared<KeyDeleter>(session_manager_, message->key_used().key_id());
 
         // The router gave the key to the peers. They are required to use it within 30 seconds.
         // If it is not used during this time, then it will be removed from the pool.
@@ -172,9 +174,9 @@ void Service::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& bu
             key_deleter->deleteKey();
         });
     }
-    else if (incoming_message_->has_peer_request())
+    else if (message->has_peer_request())
     {
-        const proto::router::PeerRequest& request = incoming_message_->peer_request();
+        const proto::router::PeerRequest& request = message->peer_request();
 
         if (request.command_name() == "disconnect")
         {
@@ -200,10 +202,10 @@ void Service::onSessionStarted()
 //--------------------------------------------------------------------------------------------------
 void Service::onSessionStatistics(const proto::router::RelayStatistics& statistics)
 {
-    outgoing_message_.newMessage().mutable_statistics()->CopyFrom(statistics);
+    outgoing_message_.newMessage<proto::router::RelayToRouter>().mutable_statistics()->CopyFrom(statistics);
 
     // Send a message to the router.
-    tcp_channel_->send(0, outgoing_message_.serialize());
+    tcp_channel_->send(0, outgoing_message_.serialize<proto::router::RelayToRouter>());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -318,7 +320,8 @@ void Service::delayedConnectToRouter()
 //--------------------------------------------------------------------------------------------------
 void Service::sendKeyPool(quint32 key_count)
 {
-    proto::router::RelayKeyPool* relay_key_pool = outgoing_message_.newMessage().mutable_key_pool();
+    proto::router::RelayKeyPool* relay_key_pool =
+        outgoing_message_.newMessage<proto::router::RelayToRouter>().mutable_key_pool();
 
     relay_key_pool->set_peer_host(peer_address_.toStdString());
     relay_key_pool->set_peer_port(peer_port_);
@@ -346,5 +349,5 @@ void Service::sendKeyPool(quint32 key_count)
     }
 
     // Send a message to the router.
-    tcp_channel_->send(0, outgoing_message_.serialize());
+    tcp_channel_->send(0, outgoing_message_.serialize<proto::router::RelayToRouter>());
 }
