@@ -24,19 +24,14 @@
 #include <optional>
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "proto/desktop_control.h"
+#include "proto/desktop_input.h"
 #include "proto/desktop_internal.h"
 
 namespace proto::audio {
 class Pause;
 } // namespace proto::audio
-
-namespace proto::input {
-class KeyEvent;
-class MouseEvent;
-class TextEvent;
-class TouchEvent;
-} // namespace proto::input
 
 namespace proto::power {
 class Control;
@@ -128,6 +123,8 @@ private:
 
     bool is_video_paused_ = false;
     bool is_audio_paused_ = false;
+
+    Parser<proto::input::ClientToHost> incoming_message_;
 
     LOG_DECLARE_CONTEXT(DesktopAgentClient);
     Q_DISABLE_COPY_MOVE(DesktopAgentClient)

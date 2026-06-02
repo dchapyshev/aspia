@@ -175,21 +175,22 @@ void DesktopAgentClient::readSessionMessage(quint8 channel_id, const QByteArray&
 {
     if (channel_id == proto::desktop::CHANNEL_ID_INPUT)
     {
-        proto::input::ClientToHost message;
-        if (!parse(buffer, &message))
+        proto::input::ClientToHost* message =
+            incoming_message_.parse<proto::input::ClientToHost>(buffer);
+        if (!message)
         {
             CLOG(ERROR) << "Unable to parse input message";
             return;
         }
 
-        if (message.has_mouse())
-            emit sig_injectMouseEvent(message.mouse());
-        else if (message.has_touch())
-            emit sig_injectTouchEvent(message.touch());
-        else if (message.has_key())
-            emit sig_injectKeyEvent(message.key());
-        else if (message.has_text())
-            emit sig_injectTextEvent(message.text());
+        if (message->has_mouse())
+            emit sig_injectMouseEvent(message->mouse());
+        else if (message->has_touch())
+            emit sig_injectTouchEvent(message->touch());
+        else if (message->has_key())
+            emit sig_injectKeyEvent(message->key());
+        else if (message->has_text())
+            emit sig_injectTextEvent(message->text());
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_VIDEO)
     {
