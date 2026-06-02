@@ -21,9 +21,10 @@
 
 #include <QRect>
 
+#include <absl/container/inlined_vector.h>
+
 #include <iterator>
 #include <map>
-#include <vector>
 
 class RegionIterator;
 
@@ -79,7 +80,9 @@ private:
         int right;
     };
 
-    using RowSpanSet = std::vector<RowSpan>;
+    // Inline storage for a single span: the vast majority of rows contain exactly one span, so this
+    // avoids a heap allocation per row while staying a drop-in for std::vector.
+    using RowSpanSet = absl::InlinedVector<RowSpan, 1>;
 
     // Row is a horizontal band [top, bottom) together with the non-overlapping spans it contains.
     struct Row
