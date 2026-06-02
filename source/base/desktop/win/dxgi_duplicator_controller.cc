@@ -197,7 +197,7 @@ DxgiDuplicatorController::Result DxgiDuplicatorController::doDuplicate(
 
     SharedPointer<Frame> shared_frame = frame->frame();
 
-    *shared_frame->updatedRegion() = Region();
+    shared_frame->updatedRegion()->clear();
 
     setup(frame->context());
 

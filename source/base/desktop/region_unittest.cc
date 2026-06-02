@@ -737,6 +737,20 @@ double benchBuildConsume(const std::vector<QRect>& rects)
     });
 }
 
+// Same build+consume, but the region object is reused across iterations and reset with clear() -
+// modelling a region member that lives across frames (the row buffer is not reallocated each time).
+double benchReuseConsume(const std::vector<QRect>& rects)
+{
+    Region region;
+    return timePerOpUs([&](int) -> qint64
+    {
+        region.clear();
+        for (const QRect& rect : rects)
+            region += rect;
+        return consume(region);
+    });
+}
+
 // In-place clip, matching how the pipeline actually clamps a region to bounds. QRegion exposes
 // operator&=(QRect); our Region exposes intersect(QRect).
 void intersectInPlace(QRegion& region, const QRect& clip) { region &= clip; }
@@ -833,5 +847,17 @@ TEST(RegionBenchmark, Operations)
                  benchBuildConsume<Region>(rects));
         printRow("build+clamp+consume", benchBuildIntersect<QRegion>(rects, clip),
                  benchBuildIntersect<Region>(rects, clip));
+    }
+
+    std::cout << "=== Region reuse: fresh object vs clear() across frames ===" << std::endl;
+    for (int n : sizes)
+    {
+        const std::vector<QRect> rects = scatteredRects(rng, n, 1920, 1080, 8, 200);
+        const double fresh = benchBuildConsume<Region>(rects);
+        const double reuse = benchReuseConsume(rects);
+        std::cout << "    n=" << std::setw(5) << n << "   fresh "
+                  << std::setw(9) << std::fixed << std::setprecision(3) << fresh
+                  << " us   clear-reuse " << std::setw(9) << reuse
+                  << " us   (" << std::setprecision(2) << (fresh / reuse) << "x)" << std::endl;
     }
 }

@@ -48,6 +48,10 @@ public:
 
     bool isEmpty() const { return rows_.empty(); }
 
+    // Empties the region but keeps the allocated capacity, so a region object reused across frames
+    // (reset then rebuilt) does not reallocate its row buffer every time.
+    void clear() { rows_.clear(); }
+
     void swap(Region& other) noexcept { rows_.swap(other.rows_); }
 
     Region& operator+=(const QRect& rect) { addRect(rect); return *this; }

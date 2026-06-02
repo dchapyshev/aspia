@@ -269,7 +269,7 @@ void Differ::mergeBlocks(Region* dirty_region)
 //--------------------------------------------------------------------------------------------------
 void Differ::calcDirtyRegion(const quint8* prev_image, const quint8* curr_image, Region* dirty_region)
 {
-    *dirty_region = Region();
+    dirty_region->clear();
 
     // Identify all the blocks that contain changed pixels.
     markDirtyBlocks(prev_image, curr_image);

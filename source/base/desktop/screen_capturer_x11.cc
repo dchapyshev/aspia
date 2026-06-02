@@ -590,7 +590,7 @@ Frame* ScreenCapturerX11::captureFrameImpl()
     Region* updated_region = frame->updatedRegion();
 
     // Clear updated region.
-    *updated_region = Region();
+    updated_region->clear();
 
     x_server_pixel_buffer_.synchronize();
     if (use_damage_ && queue_.previousFrame())

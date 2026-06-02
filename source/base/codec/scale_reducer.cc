@@ -103,7 +103,7 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const QSize& ta
     else
     {
         Region* updated_region = target_frame_->updatedRegion();
-        *updated_region = Region();
+        updated_region->clear();
 
         for (const auto& rect : source_frame->constUpdatedRegion())
         {

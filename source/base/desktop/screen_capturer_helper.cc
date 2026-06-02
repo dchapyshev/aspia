@@ -24,7 +24,7 @@
 void ScreenCapturerHelper::clearInvalidRegion()
 {
     std::scoped_lock scoped_invalid_region_lock(invalid_region_mutex_);
-    invalid_region_ = Region();
+    invalid_region_.clear();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -44,7 +44,7 @@ void ScreenCapturerHelper::invalidateScreen(const QSize& size)
 //--------------------------------------------------------------------------------------------------
 void ScreenCapturerHelper::takeInvalidRegion(Region* invalid_region)
 {
-    *invalid_region = Region();
+    invalid_region->clear();
 
     {
         std::scoped_lock scoped_invalid_region_lock(invalid_region_mutex_);
@@ -102,7 +102,7 @@ void ScreenCapturerHelper::expandToGrid(const Region& region, int log_grid_size,
     int grid_size = 1 << log_grid_size;
     int grid_size_mask = ~(grid_size - 1);
 
-    *result = Region();
+    result->clear();
     for (const auto& rect : region)
     {
         int left = downToMultiple(rect.left(), grid_size_mask);

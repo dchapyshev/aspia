@@ -376,7 +376,7 @@ bool DxgiOutputDuplicator::doDetectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& 
                                                  Region* updated_region)
 {
     DCHECK(updated_region);
-    *updated_region = Region();
+    updated_region->clear();
 
     if (frame_info.TotalMetadataBufferSize == 0)
     {
