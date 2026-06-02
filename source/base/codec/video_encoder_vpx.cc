@@ -528,7 +528,7 @@ void VideoEncoderVpx::prepareImageAndActiveMap(
         // Clip back to the screen dimensions, in case they're not macroblock aligned.
         // The conversion routines don't require even width & height, so this is safe even if the
         // source dimensions are not even.
-        updated_region = updated_region.intersected(image_rect);
+        updated_region.intersect(image_rect);
     }
     else
     {

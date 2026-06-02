@@ -57,7 +57,7 @@ void ScreenCapturerHelper::takeInvalidRegion(Region* invalid_region)
         expandToGrid(*invalid_region, log_grid_size_, &expanded_region);
         expanded_region.swap(*invalid_region);
 
-        *invalid_region = invalid_region->intersected(QRect(QPoint(0, 0), size_most_recent_));
+        invalid_region->intersect(QRect(QPoint(0, 0), size_most_recent_));
     }
 }
 

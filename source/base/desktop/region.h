@@ -51,7 +51,22 @@ public:
     void swap(Region& other) noexcept { rows_.swap(other.rows_); }
 
     Region& operator+=(const QRect& rect) { addRect(rect); return *this; }
-    Region& operator+=(const Region& region) { addRegion(region); return *this; }
+
+    Region& operator+=(const Region& region)
+    {
+        // When this region is empty the union is just a copy of the other one, which is much cheaper
+        // than re-adding every span through addRegion().
+        if (this != &region && rows_.empty())
+            *this = region;
+        else
+            addRegion(region);
+        return *this;
+    }
+
+    // Clips this region to |rect| in place. Cheaper than |region = region.intersected(rect)| because
+    // it prunes the existing rows instead of building and assigning a new region - in particular a
+    // clamp that changes nothing does almost no work.
+    void intersect(const QRect& rect);
 
     Region intersected(const QRect& rect) const;
     Region intersected(const Region& region) const;

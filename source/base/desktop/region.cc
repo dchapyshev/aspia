@@ -127,46 +127,76 @@ Region& Region::operator=(const QRect& rect)
 }
 
 //--------------------------------------------------------------------------------------------------
-Region Region::intersected(const QRect& rect) const
+void Region::intersect(const QRect& rect)
 {
-    Region result;
-
     const int left = rect.x();
     const int top = rect.y();
     const int right = rect.x() + rect.width();
     const int bottom = rect.y() + rect.height();
 
     if (right <= left || bottom <= top)
-        return result;
-
-    // Clip every row and span directly to the rectangle. The rows are already ordered and the spans
-    // within a row are already sorted and disjoint, so clipping preserves that and the result only
-    // needs the usual vertical coalescing of adjacent identical rows.
-    for (auto it = rows_.upper_bound(top); it != rows_.end() && it->second.top < bottom; ++it)
     {
-        const Row& row = it->second;
-        const int row_top = std::max(row.top, top);
-        const int row_bottom = std::min(row.bottom, bottom);
-        if (row_top >= row_bottom)
-            continue;
-
-        Row clipped{ row_top, row_bottom, {} };
-        for (const RowSpan& span : row.spans)
-        {
-            const int span_left = std::max(span.left, left);
-            const int span_right = std::min(span.right, right);
-            if (span_left < span_right)
-                clipped.spans.emplace_back(span_left, span_right);
-        }
-
-        if (!clipped.spans.empty())
-        {
-            Rows::iterator inserted =
-                result.rows_.emplace_hint(result.rows_.end(), row_bottom, std::move(clipped));
-            result.mergeWithPrecedingRow(inserted);
-        }
+        rows_.clear();
+        return;
     }
 
+    // Drop the rows entirely above the clip rectangle (their bottom edge - the map key - is at or
+    // above |top|).
+    rows_.erase(rows_.begin(), rows_.upper_bound(top));
+
+    for (Rows::iterator it = rows_.begin(); it != rows_.end(); )
+    {
+        Row& row = it->second;
+
+        if (row.top >= bottom)
+        {
+            // This row and every following one are entirely below the clip rectangle.
+            rows_.erase(it, rows_.end());
+            break;
+        }
+
+        // Clip the spans to the horizontal range in place (they stay sorted and disjoint).
+        RowSpanSet& spans = row.spans;
+        int kept = 0;
+        for (int i = 0; i < static_cast<int>(spans.size()); ++i)
+        {
+            const int span_left = std::max(spans[i].left, left);
+            const int span_right = std::min(spans[i].right, right);
+            if (span_left < span_right)
+                spans[kept++] = RowSpan(span_left, span_right);
+        }
+        spans.erase(spans.begin() + kept, spans.end());
+
+        if (spans.empty())
+        {
+            it = rows_.erase(it);
+            continue;
+        }
+
+        // Clip the vertical range. |top| only touches a field, but |bottom| is the map key, so the
+        // single row that straddles it is re-keyed via a node handle (no reallocation).
+        if (row.top < top)
+            row.top = top;
+
+        if (row.bottom > bottom)
+        {
+            Rows::node_type node = rows_.extract(it);
+            node.key() = bottom;
+            node.mapped().bottom = bottom;
+            it = rows_.insert(std::move(node)).position;
+        }
+
+        Rows::iterator next = std::next(it);
+        mergeWithPrecedingRow(it);
+        it = next;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+Region Region::intersected(const QRect& rect) const
+{
+    Region result(*this);
+    result.intersect(rect);
     return result;
 }
 

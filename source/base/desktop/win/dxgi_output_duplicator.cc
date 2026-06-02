@@ -363,7 +363,7 @@ void DxgiOutputDuplicator::detectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& fr
     {
         // Make sure even a region returned by Windows API is out of the scope of
         // desktop_rect_, we still won't export it to the target DesktopFrame.
-        *updated_region = updated_region->intersected(untranslatedDesktopRect());
+        updated_region->intersect(untranslatedDesktopRect());
     }
     else
     {

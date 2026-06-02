@@ -347,6 +347,49 @@ TEST(RegionTest, IntersectRectNoOverlap)
 }
 
 //--------------------------------------------------------------------------------------------------
+TEST(RegionTest, IntersectInPlace)
+{
+    Region region;
+    region += QRect(0, 0, 100, 100);
+    region += QRect(150, 150, 50, 50);
+    region.intersect(QRect(50, 50, 120, 120));
+
+    QRegion oracle(QRect(0, 0, 100, 100));
+    oracle += QRect(150, 150, 50, 50);
+
+    expectEquivalent(region, oracle.intersected(QRect(50, 50, 120, 120)));
+
+    // A clamp that does not cut anything must leave the region unchanged.
+    Region whole;
+    whole += QRect(10, 10, 30, 40);
+    const std::vector<QRect> before = rectsOf(whole);
+    whole.intersect(QRect(0, 0, 1000, 1000));
+    EXPECT_EQ(rectsOf(whole), before);
+
+    // A clamp that misses entirely empties the region.
+    Region gone;
+    gone += QRect(0, 0, 10, 10);
+    gone.intersect(QRect(100, 100, 5, 5));
+    EXPECT_TRUE(gone.isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(RegionTest, UnionIntoEmpty)
+{
+    Region a;
+    Region b;
+    b += QRect(0, 0, 30, 30);
+    b += QRect(40, 40, 10, 10);
+
+    a += b; // exercises the empty-LHS fast path
+
+    QRegion oracle(QRect(0, 0, 30, 30));
+    oracle += QRect(40, 40, 10, 10);
+
+    expectEquivalent(a, oracle);
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST(RegionTest, IntersectRegion)
 {
     Region a;
@@ -542,11 +585,11 @@ void runDifferential(unsigned seed)
                     break;
                 }
 
-                case 2: // intersect with a clip rectangle
+                case 2: // intersect with a clip rectangle (in place)
                 {
                     const QRect clip = randomRect();
                     oracle = oracle.intersected(clip);
-                    region = region.intersected(clip);
+                    region.intersect(clip);
                     break;
                 }
 
@@ -666,6 +709,11 @@ double benchBuildConsume(const std::vector<QRect>& rects)
     });
 }
 
+// In-place clip, matching how the pipeline actually clamps a region to bounds. QRegion exposes
+// operator&=(QRect); our Region exposes intersect(QRect).
+void intersectInPlace(QRegion& region, const QRect& clip) { region &= clip; }
+void intersectInPlace(Region& region, const QRect& clip) { region.intersect(clip); }
+
 template <typename RegionType>
 double benchBuildIntersect(const std::vector<QRect>& rects, const QRect& clip)
 {
@@ -674,7 +722,8 @@ double benchBuildIntersect(const std::vector<QRect>& rects, const QRect& clip)
         RegionType region;
         for (const QRect& rect : rects)
             region += rect;
-        return consume(region.intersected(clip));
+        intersectInPlace(region, clip);
+        return consume(region);
     });
 }
 
@@ -710,7 +759,9 @@ void printRow(const std::string& label, double qregion_us, double region_us)
 TEST(RegionBenchmark, Operations)
 {
     std::mt19937 rng(7);
-    const QRect clip(40, 40, 1840, 1000);
+    // Clamp to the full screen bounds: the region is already inside, so this is the no-op clamp that
+    // the encoder/duplicator/scaler hit every frame (clip to image/desktop rect).
+    const QRect clip(0, 0, 1920, 1080);
 
     const int sizes[] = { 16, 64, 256, 1024, 4096 };
 
@@ -726,7 +777,7 @@ TEST(RegionBenchmark, Operations)
                   << " canonical rects" << std::endl;
         printRow("build+consume", benchBuildConsume<QRegion>(rects),
                  benchBuildConsume<Region>(rects));
-        printRow("build+intersect+consume", benchBuildIntersect<QRegion>(rects, clip),
+        printRow("build+clamp+consume", benchBuildIntersect<QRegion>(rects, clip),
                  benchBuildIntersect<Region>(rects, clip));
         printRow("build+translate+consume", benchBuildTranslate<QRegion>(rects),
                  benchBuildTranslate<Region>(rects));
