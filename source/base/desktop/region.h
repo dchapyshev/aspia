@@ -24,17 +24,17 @@
 #include <absl/container/inlined_vector.h>
 
 #include <iterator>
-#include <map>
+#include <vector>
 
 class RegionIterator;
 
 // Region represents an area of the screen as a set of rectangles. It is API-compatible with the
 // subset of QRegion used by the capture/codec pipeline, but is tuned for that workload. Internally
-// the area is kept in canonical banded form: a set of rows (horizontal bands), each holding one or
-// more non-overlapping horizontal spans. The rows are stored in a std::map keyed by their bottom
-// edge so they remain ordered and the rows affected by an operation can be found in logarithmic
-// time. Rectangles for iteration are produced on the fly, without materializing an intermediate
-// list.
+// the area is kept in canonical banded form: a flat, position-sorted vector of rows (horizontal
+// bands), each holding one or more non-overlapping horizontal spans. The flat vector keeps the rows
+// in contiguous memory (cache-friendly iteration, one allocation that grows amortized and is reused
+// across operations), and the single span of the typical row is stored inline. Rectangles for
+// iteration are produced on the fly, without materializing an intermediate list.
 class Region
 {
 public:
@@ -54,10 +54,10 @@ public:
 
     Region& operator+=(const Region& region)
     {
-        // When this region is empty the union is just a copy of the other one, which is much cheaper
-        // than re-adding every span through addRegion().
-        if (this != &region && rows_.empty())
-            *this = region;
+        if (this == &region)
+            return *this; // union with self leaves a canonical region unchanged
+        if (rows_.empty())
+            *this = region; // copying is cheaper than re-adding every span
         else
             addRegion(region);
         return *this;
@@ -95,8 +95,7 @@ private:
         int right;
     };
 
-    // Inline storage for a single span: the vast majority of rows contain exactly one span, so this
-    // avoids a heap allocation per row while staying a drop-in for std::vector.
+    // The single span of the typical row is stored inline to avoid a per-row heap allocation.
     using RowSpanSet = absl::InlinedVector<RowSpan, 1>;
 
     // Row is a horizontal band [top, bottom) together with the non-overlapping spans it contains.
@@ -107,20 +106,21 @@ private:
         RowSpanSet spans;
     };
 
-    // Rows are keyed by their bottom edge so that std::map keeps them ordered by position.
-    using Rows = std::map<int, Row>;
+    // Rows are kept sorted by position (top/bottom ascending; the bands never overlap vertically).
+    using RowList = std::vector<Row>;
 
     void addRect(const QRect& rect);
     void addRect(int left, int top, int right, int bottom);
     void addRegion(const Region& region);
-    void mergeWithPrecedingRow(Rows::iterator row);
+    bool mergeWithPrecedingRow(size_t index);
     void intersect(const Region& region1, const Region& region2);
+    size_t firstRowBelow(int y) const;
 
     static void intersectRows(const RowSpanSet& set1, const RowSpanSet& set2, RowSpanSet& output);
     static void addSpanToRow(Row& row, int left, int right);
     static bool spanInRow(const Row& row, const RowSpan& span);
 
-    Rows rows_;
+    RowList rows_;
 };
 
 // Forward iterator over the canonical rectangles of a Region. The current rectangle is computed
@@ -147,19 +147,20 @@ public:
 private:
     friend class Region;
 
+    static constexpr size_t kNone = static_cast<size_t>(-1);
     enum AtEndTag { AT_END };
 
     explicit RegionIterator(const Region* region);
     RegionIterator(const Region* region, AtEndTag);
 
-    bool atEnd() const { return row_ == region_->rows_.end(); }
+    bool atEnd() const { return row_ >= region_->rows_.size(); }
     void updateCurrent();
     void advance();
 
     const Region* region_;
-    Region::Rows::const_iterator row_;
-    Region::Rows::const_iterator previous_row_;
-    Region::RowSpanSet::const_iterator span_;
+    size_t row_;
+    size_t previous_row_;
+    size_t span_;
     QRect current_;
 };
 

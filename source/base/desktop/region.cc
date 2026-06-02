@@ -24,23 +24,22 @@
 //--------------------------------------------------------------------------------------------------
 RegionIterator::RegionIterator(const Region* region)
     : region_(region),
-      row_(region->rows_.begin()),
-      previous_row_(region->rows_.end())
+      row_(0),
+      previous_row_(kNone),
+      span_(0)
 {
-    if (row_ != region_->rows_.end())
-    {
-        span_ = row_->second.spans.begin();
+    if (!atEnd())
         updateCurrent();
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
 RegionIterator::RegionIterator(const Region* region, AtEndTag)
     : region_(region),
-      row_(region->rows_.end()),
-      previous_row_(region->rows_.end())
+      row_(region->rows_.size()),
+      previous_row_(kNone),
+      span_(0)
 {
-    // Nothing else: |row_| at end marks the past-the-end iterator.
+    // |row_| at the end marks the past-the-end iterator.
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -58,44 +57,44 @@ bool RegionIterator::operator==(const RegionIterator& other) const
 //--------------------------------------------------------------------------------------------------
 void RegionIterator::updateCurrent()
 {
+    const Region::RowList& rows = region_->rows_;
+    const Region::RowSpan& span = rows[row_].spans[span_];
+
     // Extend the current span downward across the contiguous rows below that contain the same span,
     // so vertically adjacent identical spans are reported as a single rectangle.
-    int bottom = row_->second.bottom;
-    Region::Rows::const_iterator next = std::next(row_);
-
-    while (next != region_->rows_.end() && next->second.top == bottom &&
-           Region::spanInRow(next->second, *span_))
+    int bottom = rows[row_].bottom;
+    size_t k = row_ + 1;
+    while (k < rows.size() && rows[k].top == bottom && Region::spanInRow(rows[k], span))
     {
-        bottom = next->second.bottom;
-        ++next;
+        bottom = rows[k].bottom;
+        ++k;
     }
 
-    current_ = QRect(span_->left, row_->second.top,
-                     span_->right - span_->left, bottom - row_->second.top);
+    current_ = QRect(span.left, rows[row_].top, span.right - span.left, bottom - rows[row_].top);
 }
 
 //--------------------------------------------------------------------------------------------------
 void RegionIterator::advance()
 {
+    const Region::RowList& rows = region_->rows_;
+
     for (;;)
     {
         ++span_;
 
-        if (span_ == row_->second.spans.end())
+        if (span_ >= rows[row_].spans.size())
         {
             previous_row_ = row_;
             ++row_;
-            if (row_ == region_->rows_.end())
+            if (atEnd())
                 return;
-
-            span_ = row_->second.spans.begin();
+            span_ = 0;
         }
 
         // Skip the span if the contiguous row above contains it: it was already reported as part of
         // a rectangle that started there.
-        if (previous_row_ != region_->rows_.end() &&
-            previous_row_->second.bottom == row_->second.top &&
-            Region::spanInRow(previous_row_->second, *span_))
+        if (previous_row_ != kNone && rows[previous_row_].bottom == rows[row_].top &&
+            Region::spanInRow(rows[previous_row_], rows[row_].spans[span_]))
         {
             continue;
         }
@@ -140,56 +139,44 @@ void Region::intersect(const QRect& rect)
         return;
     }
 
-    // Drop the rows entirely above the clip rectangle (their bottom edge - the map key - is at or
-    // above |top|).
-    rows_.erase(rows_.begin(), rows_.upper_bound(top));
-
-    for (Rows::iterator it = rows_.begin(); it != rows_.end(); )
+    // Walk the rows in place: drop the ones outside the clip rectangle, clip the rest, and compact
+    // the survivors to the front, coalescing newly-identical adjacent rows as we go.
+    size_t write = 0;
+    for (size_t read = 0; read < rows_.size(); ++read)
     {
-        Row& row = it->second;
+        Row& row = rows_[read];
+        if (row.bottom <= top || row.top >= bottom)
+            continue;
 
-        if (row.top >= bottom)
-        {
-            // This row and every following one are entirely below the clip rectangle.
-            rows_.erase(it, rows_.end());
-            break;
-        }
-
-        // Clip the spans to the horizontal range in place (they stay sorted and disjoint).
         RowSpanSet& spans = row.spans;
         int kept = 0;
-        for (int i = 0; i < static_cast<int>(spans.size()); ++i)
+        for (int s = 0; s < static_cast<int>(spans.size()); ++s)
         {
-            const int span_left = std::max(spans[i].left, left);
-            const int span_right = std::min(spans[i].right, right);
+            const int span_left = std::max(spans[s].left, left);
+            const int span_right = std::min(spans[s].right, right);
             if (span_left < span_right)
                 spans[kept++] = RowSpan(span_left, span_right);
         }
         spans.erase(spans.begin() + kept, spans.end());
-
         if (spans.empty())
-        {
-            it = rows_.erase(it);
             continue;
-        }
 
-        // Clip the vertical range. |top| only touches a field, but |bottom| is the map key, so the
-        // single row that straddles it is re-keyed via a node handle (no reallocation).
-        if (row.top < top)
-            row.top = top;
+        row.top = std::max(row.top, top);
+        row.bottom = std::min(row.bottom, bottom);
 
-        if (row.bottom > bottom)
+        if (write > 0 && rows_[write - 1].bottom == row.top && rows_[write - 1].spans == row.spans)
         {
-            Rows::node_type node = rows_.extract(it);
-            node.key() = bottom;
-            node.mapped().bottom = bottom;
-            it = rows_.insert(std::move(node)).position;
+            rows_[write - 1].bottom = row.bottom; // coalesce with the previous kept row
         }
-
-        Rows::iterator next = std::next(it);
-        mergeWithPrecedingRow(it);
-        it = next;
+        else
+        {
+            if (write != read)
+                rows_[write] = std::move(row);
+            ++write;
+        }
     }
+
+    rows_.erase(rows_.begin() + write, rows_.end());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -221,9 +208,9 @@ bool Region::contains(const QRect& rect) const
     if (right <= left || bottom <= top)
         return false;
 
-    for (auto it = rows_.upper_bound(top); it != rows_.end() && it->second.top < bottom; ++it)
+    for (size_t i = firstRowBelow(top); i < rows_.size() && rows_[i].top < bottom; ++i)
     {
-        for (const RowSpan& span : it->second.spans)
+        for (const RowSpan& span : rows_[i].spans)
         {
             if (span.left < right && left < span.right)
                 return true;
@@ -239,41 +226,16 @@ void Region::translate(int dx, int dy)
     if (dx == 0 && dy == 0)
         return;
 
-    if (dy == 0)
+    for (Row& row : rows_)
     {
-        for (auto& entry : rows_)
-        {
-            for (RowSpan& span : entry.second.spans)
-            {
-                span.left += dx;
-                span.right += dx;
-            }
-        }
-        return;
-    }
-
-    // The row key is its bottom edge, which changes with |dy|, so the map has to be rebuilt.
-    Rows shifted;
-    for (auto& entry : rows_)
-    {
-        Row row = std::move(entry.second);
         row.top += dy;
         row.bottom += dy;
-
-        if (dx != 0)
+        for (RowSpan& span : row.spans)
         {
-            for (RowSpan& span : row.spans)
-            {
-                span.left += dx;
-                span.right += dx;
-            }
+            span.left += dx;
+            span.right += dx;
         }
-
-        const int key = row.bottom;
-        shifted.emplace(key, std::move(row));
     }
-
-    rows_.swap(shifted);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -288,74 +250,79 @@ void Region::addRect(int left, int top, int right, int bottom)
     if (right <= left || bottom <= top)
         return;
 
-    // Top of the part of the rectangle that has not been inserted yet. It is raised as we walk down
-    // through the rows until it reaches |bottom|.
+    // Top of the part of the rectangle that has not been inserted yet, raised as we walk down.
     int y = top;
-    Rows::iterator row = rows_.upper_bound(y);
+    size_t i = firstRowBelow(y);
 
     while (y < bottom)
     {
-        if (row == rows_.end() || y < row->second.top)
+        if (i >= rows_.size() || y < rows_[i].top)
         {
-            // |y| is above the current row: insert a new row above it.
+            // |y| is above the current row: insert a new row above it (or at the end).
             int row_bottom = bottom;
-            if (row != rows_.end() && row->second.top < row_bottom)
-                row_bottom = row->second.top;
+            if (i < rows_.size() && rows_[i].top < row_bottom)
+                row_bottom = rows_[i].top;
 
-            row = rows_.emplace_hint(row, row_bottom, Row{ y, row_bottom, {} });
+            rows_.insert(rows_.begin() + i, Row{ y, row_bottom, {} });
         }
-        else if (y > row->second.top)
+        else if (y > rows_[i].top)
         {
-            // |y| falls in the middle of the row: split it, leaving |row| as the lower half ready to
-            // receive the new span.
-            rows_.emplace_hint(row, y, Row{ row->second.top, y, row->second.spans });
-            row->second.top = y;
+            // |y| falls in the middle of the row: split off the upper part, leaving |i| as the lower
+            // half ready to receive the new span.
+            RowSpanSet upper_spans = rows_[i].spans;
+            const int upper_top = rows_[i].top;
+            rows_[i].top = y;
+            rows_.insert(rows_.begin() + i, Row{ upper_top, y, std::move(upper_spans) });
+            ++i;
         }
 
-        if (bottom < row->second.bottom)
+        if (bottom < rows_[i].bottom)
         {
             // The bottom of the rectangle falls in the middle of the row: split it and continue with
-            // the upper half.
-            Rows::iterator lower = rows_.emplace_hint(row, bottom, Row{ y, bottom, row->second.spans });
-            row->second.top = bottom;
-            row = lower;
+            // the lower half.
+            RowSpanSet lower_spans = rows_[i].spans;
+            const int lower_top = rows_[i].top;
+            rows_[i].top = bottom;
+            rows_.insert(rows_.begin() + i, Row{ lower_top, bottom, std::move(lower_spans) });
         }
 
-        addSpanToRow(row->second, left, right);
-        y = row->second.bottom;
+        addSpanToRow(rows_[i], left, right);
+        y = rows_[i].bottom;
 
-        mergeWithPrecedingRow(row);
-        ++row;
+        if (!mergeWithPrecedingRow(i))
+            ++i;
     }
 
-    if (row != rows_.end())
-        mergeWithPrecedingRow(row);
+    if (i < rows_.size())
+        mergeWithPrecedingRow(i);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Region::addRegion(const Region& region)
 {
-    for (auto it = region.rows_.begin(); it != region.rows_.end(); ++it)
+    for (const Row& row : region.rows_)
     {
-        for (const RowSpan& span : it->second.spans)
-            addRect(span.left, it->second.top, span.right, it->second.bottom);
+        for (const RowSpan& span : row.spans)
+            addRect(span.left, row.top, span.right, row.bottom);
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-void Region::mergeWithPrecedingRow(Rows::iterator row)
+bool Region::mergeWithPrecedingRow(size_t index)
 {
-    if (row == rows_.begin())
-        return;
+    if (index == 0 || index >= rows_.size())
+        return false;
 
     // If the row directly above is adjacent and contains exactly the same spans, the two rows can be
     // collapsed into a single taller row.
-    Rows::iterator previous = std::prev(row);
-    if (previous->second.bottom == row->second.top && previous->second.spans == row->second.spans)
+    if (rows_[index - 1].bottom == rows_[index].top && rows_[index - 1].spans == rows_[index].spans)
     {
-        row->second.top = previous->second.top;
-        rows_.erase(previous);
+        rows_[index].top = rows_[index - 1].top;
+        rows_.erase(rows_.begin() + (index - 1));
+        return true;
     }
+
+    return false;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -363,44 +330,53 @@ void Region::intersect(const Region& region1, const Region& region2)
 {
     rows_.clear();
 
-    Rows::const_iterator it1 = region1.rows_.begin();
-    Rows::const_iterator end1 = region1.rows_.end();
-    Rows::const_iterator it2 = region2.rows_.begin();
-    Rows::const_iterator end2 = region2.rows_.end();
+    RowList::const_iterator it1 = region1.rows_.begin();
+    RowList::const_iterator end1 = region1.rows_.end();
+    RowList::const_iterator it2 = region2.rows_.begin();
+    RowList::const_iterator end2 = region2.rows_.end();
 
     while (it1 != end1 && it2 != end2)
     {
         // Arrange for |it1| to always be the top-most of the two rows.
-        if (it2->second.top < it1->second.top)
+        if (it2->top < it1->top)
         {
             std::swap(it1, it2);
             std::swap(end1, end2);
         }
 
         // Skip |it1| if it does not intersect |it2| at all.
-        if (it1->second.bottom <= it2->second.top)
+        if (it1->bottom <= it2->top)
         {
             ++it1;
             continue;
         }
 
-        const int top = it2->second.top;
-        const int bottom = std::min(it1->second.bottom, it2->second.bottom);
+        const int top = it2->top;
+        const int bottom = std::min(it1->bottom, it2->bottom);
 
         Row row{ top, bottom, {} };
-        intersectRows(it1->second.spans, it2->second.spans, row.spans);
+        intersectRows(it1->spans, it2->spans, row.spans);
 
         if (!row.spans.empty())
         {
-            Rows::iterator inserted = rows_.emplace_hint(rows_.end(), bottom, std::move(row));
-            mergeWithPrecedingRow(inserted);
+            rows_.push_back(std::move(row));
+            mergeWithPrecedingRow(rows_.size() - 1);
         }
 
-        if (it1->second.bottom == bottom)
+        if (it1->bottom == bottom)
             ++it1;
-        if (it2->second.bottom == bottom)
+        if (it2->bottom == bottom)
             ++it2;
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+size_t Region::firstRowBelow(int y) const
+{
+    // First row whose bottom edge is below |y|, i.e. the first one that can contain or lie below it.
+    return static_cast<size_t>(std::upper_bound(
+        rows_.begin(), rows_.end(), y,
+        [](int value, const Row& row) { return value < row.bottom; }) - rows_.begin());
 }
 
 //--------------------------------------------------------------------------------------------------
