@@ -187,7 +187,7 @@ void Differ::markDirtyBlocks(const quint8* prev_image, const quint8* curr_image)
 //--------------------------------------------------------------------------------------------------
 // After the dirty blocks have been identified, this routine merges adjacent blocks into a region.
 // The goal is to minimize the region that covers the dirty blocks.
-void Differ::mergeBlocks(QRegion* dirty_region)
+void Differ::mergeBlocks(Region* dirty_region)
 {
     quint8* is_diff_row_start = diff_info_.get();
     const int diff_stride = diff_width_;
@@ -267,9 +267,9 @@ void Differ::mergeBlocks(QRegion* dirty_region)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Differ::calcDirtyRegion(const quint8* prev_image, const quint8* curr_image, QRegion* dirty_region)
+void Differ::calcDirtyRegion(const quint8* prev_image, const quint8* curr_image, Region* dirty_region)
 {
-    *dirty_region = QRegion();
+    *dirty_region = Region();
 
     // Identify all the blocks that contain changed pixels.
     markDirtyBlocks(prev_image, curr_image);

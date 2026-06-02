@@ -83,11 +83,11 @@ public:
 private:
     // Calls doDetectUpdatedRegion(). If it fails, this function sets the |updated_region| as
     // entire untranslatedDesktopRect().
-    void detectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& frame_info, QRegion* updated_region);
+    void detectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& frame_info, Region* updated_region);
 
     // Returns untranslated updated region, which are directly returned by Windows APIs. Returns
     // false in case of a failure.
-    bool doDetectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& frame_info, QRegion* updated_region);
+    bool doDetectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& frame_info, Region* updated_region);
 
     bool releaseFrame();
 

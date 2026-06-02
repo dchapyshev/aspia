@@ -19,7 +19,7 @@
 #ifndef BASE_DESKTOP_FRAME_H
 #define BASE_DESKTOP_FRAME_H
 
-#include <QRegion>
+#include "base/desktop/region.h"
 
 class Frame
 {
@@ -39,8 +39,8 @@ public:
     void copyPixelsFrom(const quint8* src_buffer, int src_stride, const QRect& dest_rect);
     void copyPixelsFrom(const Frame& src_frame, const QPoint& src_pos, const QRect& dest_rect);
 
-    const QRegion& constUpdatedRegion() const { return updated_region_; }
-    QRegion* updatedRegion() { return &updated_region_; }
+    const Region& constUpdatedRegion() const { return updated_region_; }
+    Region* updatedRegion() { return &updated_region_; }
 
     void setTopLeft(const QPoint& top_left) { top_left_ = top_left; }
     const QPoint& topLeft() const { return top_left_; }
@@ -69,7 +69,7 @@ protected:
     int stride_;
 
 private:
-    QRegion updated_region_;
+    Region updated_region_;
     QPoint top_left_;
     QPoint dpi_;
     quint32 capturer_type_ = 0;

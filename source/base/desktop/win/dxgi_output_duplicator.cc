@@ -281,7 +281,7 @@ bool DxgiOutputDuplicator::duplicate(
     // We need to merge updated region with the one from context, but only spread updated region
     // from current frame. So keeps a copy of updated region from context here. The |updated_region|
     // always starts from (0, 0).
-    QRegion updated_region;
+    Region updated_region;
     updated_region.swap(context->updated_region);
 
     if (error.Error() == S_OK && frame_info.AccumulatedFrames > 0 && resource)
@@ -357,7 +357,7 @@ QRect DxgiOutputDuplicator::untranslatedDesktopRect() const
 
 //--------------------------------------------------------------------------------------------------
 void DxgiOutputDuplicator::detectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& frame_info,
-                                               QRegion* updated_region)
+                                               Region* updated_region)
 {
     if (doDetectUpdatedRegion(frame_info, updated_region))
     {
@@ -373,10 +373,10 @@ void DxgiOutputDuplicator::detectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& fr
 
 //--------------------------------------------------------------------------------------------------
 bool DxgiOutputDuplicator::doDetectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& frame_info,
-                                                 QRegion* updated_region)
+                                                 Region* updated_region)
 {
     DCHECK(updated_region);
-    *updated_region = QRegion();
+    *updated_region = Region();
 
     if (frame_info.TotalMetadataBufferSize == 0)
     {

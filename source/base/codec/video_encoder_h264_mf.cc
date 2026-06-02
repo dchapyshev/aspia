@@ -225,7 +225,7 @@ VideoEncoder::Result VideoEncoderH264MF::encode(const Frame* frame, proto::video
     }
     else
     {
-        QRegion updated_region;
+        Region updated_region;
         for (const auto& rect : frame->constUpdatedRegion())
             updated_region += alignRect(rect);
         updated_region = updated_region.intersected(image_rect);

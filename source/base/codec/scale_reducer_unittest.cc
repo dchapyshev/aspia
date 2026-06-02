@@ -223,7 +223,7 @@ TEST(scale_reducer_test, partial_update)
     ASSERT_NE(result, nullptr);
 
     // Second call - partial update.
-    *frame->updatedRegion() = QRegion();
+    *frame->updatedRegion() = Region();
     QRect update_rect(100, 100, 200, 200);
     *frame->updatedRegion() += update_rect;
 
@@ -418,7 +418,7 @@ TEST(scale_reducer_test, benchmark_quality_comparison)
 
         for (int i = 0; i < kIterations; ++i)
         {
-            *frame->updatedRegion() = QRegion();
+            *frame->updatedRegion() = Region();
             *frame->updatedRegion() += QRect(QPoint(0, 0), source_size);
             reducer.scaleFrame(frame.get(), target_size);
         }
@@ -461,7 +461,7 @@ TEST(scale_reducer_test, benchmark_quality_comparison_4k)
 
         for (int i = 0; i < kIterations; ++i)
         {
-            *frame->updatedRegion() = QRegion();
+            *frame->updatedRegion() = Region();
             *frame->updatedRegion() += QRect(QPoint(0, 0), source_size);
             reducer.scaleFrame(frame.get(), target_size);
         }
@@ -504,7 +504,7 @@ TEST(scale_reducer_test, benchmark_quality_comparison_quarter)
 
         for (int i = 0; i < kIterations; ++i)
         {
-            *frame->updatedRegion() = QRegion();
+            *frame->updatedRegion() = Region();
             *frame->updatedRegion() += QRect(QPoint(0, 0), source_size);
             reducer.scaleFrame(frame.get(), target_size);
         }
@@ -549,7 +549,7 @@ TEST(scale_reducer_test, benchmark_partial_update_small)
         for (int i = 0; i < kIterations; ++i)
         {
             // Small dirty region (cursor area).
-            *frame->updatedRegion() = QRegion();
+            *frame->updatedRegion() = Region();
             *frame->updatedRegion() += QRect(100, 100, 64, 64);
             reducer.scaleFrame(frame.get(), target_size);
         }
@@ -593,7 +593,7 @@ TEST(scale_reducer_test, benchmark_partial_update_medium)
         for (int i = 0; i < kIterations; ++i)
         {
             // Medium dirty region (window move).
-            *frame->updatedRegion() = QRegion();
+            *frame->updatedRegion() = Region();
             *frame->updatedRegion() += QRect(200, 150, 640, 480);
             reducer.scaleFrame(frame.get(), target_size);
         }
@@ -637,7 +637,7 @@ TEST(scale_reducer_test, benchmark_partial_update_multi_rect)
         for (int i = 0; i < kIterations; ++i)
         {
             // Multiple scattered dirty regions.
-            *frame->updatedRegion() = QRegion();
+            *frame->updatedRegion() = Region();
             *frame->updatedRegion() += QRect(0, 0, 200, 100);
             *frame->updatedRegion() += QRect(500, 300, 300, 200);
             *frame->updatedRegion() += QRect(1400, 800, 400, 250);

@@ -102,8 +102,8 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const QSize& ta
     }
     else
     {
-        QRegion* updated_region = target_frame_->updatedRegion();
-        *updated_region = QRegion();
+        Region* updated_region = target_frame_->updatedRegion();
+        *updated_region = Region();
 
         for (const auto& rect : source_frame->constUpdatedRegion())
         {

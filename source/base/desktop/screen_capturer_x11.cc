@@ -188,7 +188,7 @@ const Frame* ScreenCapturerX11::captureFrame(Error* error)
         return nullptr;
     }
 
-    QRegion* updated_region = result->updatedRegion();
+    Region* updated_region = result->updatedRegion();
     last_invalid_region_ = *updated_region;
     updated_region->translate(-selected_monitor_rect_.left(), -selected_monitor_rect_.top());
 
@@ -587,10 +587,10 @@ Frame* ScreenCapturerX11::captureFrameImpl()
     if (use_damage_ && queue_.previousFrame())
         synchronizeFrame();
 
-    QRegion* updated_region = frame->updatedRegion();
+    Region* updated_region = frame->updatedRegion();
 
     // Clear updated region.
-    *updated_region = QRegion();
+    *updated_region = Region();
 
     x_server_pixel_buffer_.synchronize();
     if (use_damage_ && queue_.previousFrame())
@@ -626,7 +626,7 @@ Frame* ScreenCapturerX11::captureFrameImpl()
         if (!x_server_pixel_buffer_.captureRect(selected_monitor_rect_, frame))
             return nullptr;
 
-        *updated_region = QRegion(selected_monitor_rect_);
+        *updated_region = Region(selected_monitor_rect_);
     }
 
     return frame;

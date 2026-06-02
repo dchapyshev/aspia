@@ -125,7 +125,7 @@ private:
 
     // Invalid region from the previous capture. This is used to synchronize the
     // current with the last buffer used.
-    QRegion last_invalid_region_;
+    Region last_invalid_region_;
 
     std::unique_ptr<XAtomCache> atom_cache_;
     std::unique_ptr<MouseCursor> mouse_cursor_;

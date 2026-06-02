@@ -504,7 +504,7 @@ void VideoEncoderVpx::prepareImageAndActiveMap(
     bool is_key_frame, const Frame* frame, proto::video::Packet* packet)
 {
     QRect image_rect(QPoint(0, 0), QSize(static_cast<int>(image_->w), static_cast<int>(image_->h)));
-    QRegion updated_region;
+    Region updated_region;
 
     if (!is_key_frame)
     {

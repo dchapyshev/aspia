@@ -321,6 +321,8 @@ list(APPEND SOURCE_BASE_DESKTOP
     desktop/mouse_cursor.h
     desktop/power_save_blocker.cc
     desktop/power_save_blocker.h
+    desktop/region.cc
+    desktop/region.h
     desktop/screen_capturer.cc
     desktop/screen_capturer.h
     desktop/screen_capturer_helper.cc
@@ -363,7 +365,8 @@ endif()
 list(APPEND SOURCE_BASE_DESKTOP_TESTS
     desktop/diff_block_32bpp_c_unittest.cc
     desktop/diff_block_32bpp_sse2_unittest.cc
-    desktop/frame_unittest.cc)
+    desktop/frame_unittest.cc
+    desktop/region_unittest.cc)
 
 if (WIN32)
     list(APPEND SOURCE_BASE_DESKTOP_WIN
