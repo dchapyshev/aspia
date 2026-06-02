@@ -25,7 +25,6 @@
 RegionIterator::RegionIterator(const Region* region)
     : region_(region),
       row_(0),
-      previous_row_(kNone),
       span_(0)
 {
     if (!atEnd())
@@ -36,7 +35,6 @@ RegionIterator::RegionIterator(const Region* region)
 RegionIterator::RegionIterator(const Region* region, AtEndTag)
     : region_(region),
       row_(region->rows_.size()),
-      previous_row_(kNone),
       span_(0)
 {
     // |row_| at the end marks the past-the-end iterator.
@@ -57,49 +55,21 @@ bool RegionIterator::operator==(const RegionIterator& other) const
 //--------------------------------------------------------------------------------------------------
 void RegionIterator::updateCurrent()
 {
-    const Region::RowList& rows = region_->rows_;
-    const Region::RowSpan& span = rows[row_].spans[span_];
-
-    // Extend the current span downward across the contiguous rows below that contain the same span,
-    // so vertically adjacent identical spans are reported as a single rectangle.
-    int bottom = rows[row_].bottom;
-    size_t k = row_ + 1;
-    while (k < rows.size() && rows[k].top == bottom && Region::spanInRow(rows[k], span))
-    {
-        bottom = rows[k].bottom;
-        ++k;
-    }
-
-    current_ = QRect(span.left, rows[row_].top, span.right - span.left, bottom - rows[row_].top);
+    const Region::Row& row = region_->rows_[row_];
+    const Region::RowSpan& span = row.spans[span_];
+    current_ = QRect(span.left, row.top, span.right - span.left, row.bottom - row.top);
 }
 
 //--------------------------------------------------------------------------------------------------
 void RegionIterator::advance()
 {
-    const Region::RowList& rows = region_->rows_;
-
-    for (;;)
+    ++span_;
+    if (span_ >= region_->rows_[row_].spans.size())
     {
-        ++span_;
-
-        if (span_ >= rows[row_].spans.size())
-        {
-            previous_row_ = row_;
-            ++row_;
-            if (atEnd())
-                return;
-            span_ = 0;
-        }
-
-        // Skip the span if the contiguous row above contains it: it was already reported as part of
-        // a rectangle that started there.
-        if (previous_row_ != kNone && rows[previous_row_].bottom == rows[row_].top &&
-            Region::spanInRow(rows[previous_row_], rows[row_].spans[span_]))
-        {
-            continue;
-        }
-
-        break;
+        ++row_;
+        span_ = 0;
+        if (atEnd())
+            return;
     }
 
     updateCurrent();
@@ -252,7 +222,16 @@ void Region::addRect(int left, int top, int right, int bottom)
 
     // Top of the part of the rectangle that has not been inserted yet, raised as we walk down.
     int y = top;
-    size_t i = firstRowBelow(y);
+
+    // Fast path for the scanline/append pattern (differ, scaler): the rectangle starts in or below
+    // the last row, so the binary search can be skipped.
+    size_t i;
+    if (rows_.empty() || y >= rows_.back().bottom)
+        i = rows_.size();
+    else if (y >= rows_.back().top)
+        i = rows_.size() - 1;
+    else
+        i = firstRowBelow(y);
 
     while (y < bottom)
     {
@@ -461,13 +440,4 @@ void Region::addSpanToRow(Row& row, int left, int right)
     ++finish;
     if (start < finish)
         row.spans.erase(start, finish);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Region::spanInRow(const Row& row, const RowSpan& span)
-{
-    RowSpanSet::const_iterator it = std::lower_bound(
-        row.spans.begin(), row.spans.end(), span.left,
-        [](const RowSpan& s, int value) { return s.left < value; });
-    return it != row.spans.end() && *it == span;
 }

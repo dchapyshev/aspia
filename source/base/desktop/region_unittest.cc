@@ -176,6 +176,34 @@ std::vector<QRect> scatteredRects(std::mt19937& rng, int count, int screen_w, in
     return rects;
 }
 
+// Grid-aligned merged rectangles in scanline order - what Differ::mergeBlocks actually produces
+// (adjacent dirty 16px blocks already combined into larger rectangles), as opposed to thousands of
+// individual blocks.
+std::vector<QRect> mergedGridRects(std::mt19937& rng, int count, int cols, int rows, int block)
+{
+    std::uniform_int_distribution<int> width_blocks(1, 10);
+    std::uniform_int_distribution<int> height_blocks(1, 3);
+
+    std::vector<QRect> rects;
+    rects.reserve(count);
+
+    for (int i = 0; i < count; ++i)
+    {
+        const int w = width_blocks(rng);
+        const int h = height_blocks(rng);
+        std::uniform_int_distribution<int> px(0, std::max(0, cols - w));
+        std::uniform_int_distribution<int> py(0, std::max(0, rows - h));
+        rects.emplace_back(px(rng) * block, py(rng) * block, w * block, h * block);
+    }
+
+    std::sort(rects.begin(), rects.end(), [](const QRect& a, const QRect& b)
+    {
+        return a.y() != b.y() ? a.y() < b.y() : a.x() < b.x();
+    });
+
+    return rects;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -795,5 +823,15 @@ TEST(RegionBenchmark, Operations)
         std::cout << "  ~" << rects.size() << " input blocks" << std::endl;
         printRow("build+consume", benchBuildConsume<QRegion>(rects),
                  benchBuildConsume<Region>(rects));
+    }
+
+    std::cout << "=== grid-aligned merged rects (differ-like) ===" << std::endl;
+    for (int n : sizes)
+    {
+        const std::vector<QRect> rects = mergedGridRects(rng, n, 120, 68, 16);
+        printRow("build+consume", benchBuildConsume<QRegion>(rects),
+                 benchBuildConsume<Region>(rects));
+        printRow("build+clamp+consume", benchBuildIntersect<QRegion>(rects, clip),
+                 benchBuildIntersect<Region>(rects, clip));
     }
 }

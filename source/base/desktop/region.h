@@ -118,14 +118,13 @@ private:
 
     static void intersectRows(const RowSpanSet& set1, const RowSpanSet& set2, RowSpanSet& output);
     static void addSpanToRow(Row& row, int left, int right);
-    static bool spanInRow(const Row& row, const RowSpan& span);
 
     RowList rows_;
 };
 
-// Forward iterator over the canonical rectangles of a Region. The current rectangle is computed
-// while walking the rows: a span that continues unchanged into the contiguous rows below it is
-// merged into a single taller rectangle, so no intermediate list of rectangles is built.
+// Forward iterator over the canonical rectangles of a Region. It yields one rectangle per (row,
+// span): the bands are already merged at build time wherever whole rows share the same spans, so
+// this matches the banded decomposition QRegion produces.
 class RegionIterator
 {
 public:
@@ -147,7 +146,6 @@ public:
 private:
     friend class Region;
 
-    static constexpr size_t kNone = static_cast<size_t>(-1);
     enum AtEndTag { AT_END };
 
     explicit RegionIterator(const Region* region);
@@ -159,7 +157,6 @@ private:
 
     const Region* region_;
     size_t row_;
-    size_t previous_row_;
     size_t span_;
     QRect current_;
 };
