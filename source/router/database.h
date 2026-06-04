@@ -20,11 +20,11 @@
 #define ROUTER_DATABASE_H
 
 #include <QByteArray>
-#include <QHash>
-#include <QSet>
 #include <QString>
 
+#include <set>
 #include <string_view>
+#include <unordered_map>
 
 #include "base/peer/host_id.h"
 #include "base/peer/router_user.h"
@@ -186,7 +186,7 @@ public:
     // to the given workspaces. |workspace_ids| must already be the set the user is allowed to see;
     // an empty list yields no results. Matches are appended to |out| and its error_code is set;
     // Host.online is left unset.
-    void searchHosts(const QString& query, const QList<qint64>& workspace_ids,
+    void searchHosts(const QString& query, const std::set<qint64>& workspace_ids,
         proto::router::HostSearchResult* out) const;
 
     // Host removal: hosts_remove queue. Schedule moves the row from hosts to hosts_remove, the
@@ -233,10 +233,10 @@ public:
     // hosts in the set with workspace_id 0 are claimed (workspace_id <- entry_id); hosts in
     // the set that already belong to another workspace are left alone (the operator cannot
     // hijack a host from another workspace through this call).
-    std::string_view setWorkspaceHosts(qint64 entry_id, const QSet<HostId>& desired_host_ids);
+    std::string_view setWorkspaceHosts(qint64 entry_id, const std::set<HostId>& desired_host_ids);
 
     // Returns the set of workspace ids the given user has a workspace_access entry for.
-    QSet<qint64> workspaceAccessIdsForUser(qint64 user_id) const;
+    std::set<qint64> workspaceAccessIdsForUser(qint64 user_id) const;
 
     // Returns {workspace_id, wrapped_gk} for every workspace the user has access to.
     QList<Workspace::Access> workspaceAccessListForUser(qint64 user_id) const;
@@ -248,7 +248,7 @@ public:
     // workspace id); memberships without an entry are removed, since their stored wrapped_gk no
     // longer opens with the new key pair. Does not grant access to workspaces the user was not
     // already a member of.
-    bool setWorkspaceKeysForUser(qint64 user_id, const QHash<qint64, QByteArray>& wrapped_keys);
+    bool setWorkspaceKeysForUser(qint64 user_id, const std::unordered_map<qint64, QByteArray>& wrapped_keys);
 
     //----------------------------------------------------------------------------------------------
     // Hosts Groups

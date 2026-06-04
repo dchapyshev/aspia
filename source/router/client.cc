@@ -21,6 +21,8 @@
 #include <QDateTime>
 #include <QSet>
 
+#include <set>
+
 #include "base/serialization.h"
 #include "base/version_constants.h"
 #include "base/crypto/random.h"
@@ -645,7 +647,7 @@ void Client::readHostSearchRequest(const proto::router::HostSearchRequest& reque
 
     // Search is always scoped to every workspace the user can access, regardless of session type.
     // Only the ids are needed here, so avoid pulling each membership's wrapped_gk blob.
-    const QList<qint64> workspace_ids = database.workspaceAccessIdsForUser(userId()).values();
+    const std::set<qint64> workspace_ids = database.workspaceAccessIdsForUser(userId());
 
     database.searchHosts(QString::fromStdString(request.query()), workspace_ids, result);
 

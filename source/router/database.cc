@@ -21,8 +21,8 @@
 #include <QDateTime>
 #include <QDir>
 #include <QFileInfo>
-#include <QSet>
 
+#include <set>
 #include <string>
 #include <unordered_map>
 #include <utility>
@@ -1128,7 +1128,7 @@ qint64 Database::hostCount(qint64 workspace_id, qint64 group_id) const
 
 //--------------------------------------------------------------------------------------------------
 void Database::searchHosts(const QString& query_text,
-    const QList<qint64>& workspace_ids, proto::router::HostSearchResult* out) const
+    const std::set<qint64>& workspace_ids, proto::router::HostSearchResult* out) const
 {
     if (!isValid())
     {
@@ -1137,7 +1137,7 @@ void Database::searchHosts(const QString& query_text,
         return;
     }
 
-    if (workspace_ids.isEmpty() || query_text.isEmpty())
+    if (workspace_ids.empty() || query_text.isEmpty())
     {
         out->set_error_code(proto::router::kErrorOk);
         return;
@@ -1152,9 +1152,9 @@ void Database::searchHosts(const QString& query_text,
     const QString pattern = '%' + escaped + '%';
 
     QStringList placeholders;
-    placeholders.reserve(workspace_ids.size());
+    placeholders.reserve(static_cast<qsizetype>(workspace_ids.size()));
 
-    for (int i = 0; i < workspace_ids.size(); ++i)
+    for (size_t i = 0; i < workspace_ids.size(); ++i)
         placeholders.append("?");
 
     const QString sql =
@@ -1579,8 +1579,7 @@ std::string_view Database::modifyWorkspace(qint64 entry_id, const QString& name,
         return proto::router::kErrorInvalidData;
     }
 
-    QSet<qint64> desired_ids;
-    desired_ids.reserve(desired_access.size());
+    std::set<qint64> desired_ids;
     for (const Workspace::Access& access : desired_access)
     {
         if (access.user_id <= 0)
@@ -1649,13 +1648,13 @@ std::string_view Database::modifyWorkspace(qint64 entry_id, const QString& name,
         return proto::router::kErrorInternalError;
     }
 
-    QSet<qint64> current_ids;
+    std::set<qint64> current_ids;
     while (select_current.next())
         current_ids.insert(select_current.columnInt64(0));
 
     SqlQuery delete_access(db_, "DELETE FROM workspace_access WHERE workspace_id=? AND user_id=?");
 
-    for (qint64 user_id : std::as_const(current_ids))
+    for (qint64 user_id : current_ids)
     {
         if (desired_ids.contains(user_id))
             continue;
@@ -1738,7 +1737,7 @@ std::string_view Database::removeWorkspace(qint64 entry_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Database::setWorkspaceHosts(qint64 entry_id, const QSet<HostId>& desired_host_ids)
+std::string_view Database::setWorkspaceHosts(qint64 entry_id, const std::set<HostId>& desired_host_ids)
 {
     if (!isValid())
     {
@@ -1752,7 +1751,7 @@ std::string_view Database::setWorkspaceHosts(qint64 entry_id, const QSet<HostId>
         return proto::router::kErrorInvalidData;
     }
 
-    for (HostId host_id : std::as_const(desired_host_ids))
+    for (HostId host_id : desired_host_ids)
     {
         if (host_id == kInvalidHostId)
         {
@@ -1796,7 +1795,7 @@ std::string_view Database::setWorkspaceHosts(qint64 entry_id, const QSet<HostId>
     // Claim: hosts the operator wants in this workspace. Only hosts that are unassigned or
     // already in this workspace are touched; hosts in another workspace stay put.
     SqlQuery claim(db_, "UPDATE hosts SET workspace_id=? WHERE id=? AND workspace_id IN (0, ?)");
-    for (HostId host_id : std::as_const(desired_host_ids))
+    for (HostId host_id : desired_host_ids)
     {
         claim.reset();
         claim.addInt64(entry_id);
@@ -1819,7 +1818,7 @@ std::string_view Database::setWorkspaceHosts(qint64 entry_id, const QSet<HostId>
 }
 
 //--------------------------------------------------------------------------------------------------
-QSet<qint64> Database::workspaceAccessIdsForUser(qint64 user_id) const
+std::set<qint64> Database::workspaceAccessIdsForUser(qint64 user_id) const
 {
     if (!isValid())
     {
@@ -1830,7 +1829,7 @@ QSet<qint64> Database::workspaceAccessIdsForUser(qint64 user_id) const
     SqlQuery query(db_, "SELECT workspace_id FROM workspace_access WHERE user_id=?");
     query.addInt64(user_id);
 
-    QSet<qint64> result;
+    std::set<qint64> result;
     while (query.next())
         result.insert(query.columnInt64(0));
 
@@ -1876,7 +1875,8 @@ bool Database::hasWorkspaceAccess(qint64 user_id, qint64 workspace_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::setWorkspaceKeysForUser(qint64 user_id, const QHash<qint64, QByteArray>& wrapped_keys)
+bool Database::setWorkspaceKeysForUser(
+    qint64 user_id, const std::unordered_map<qint64, QByteArray>& wrapped_keys)
 {
     if (!isValid())
     {
@@ -1908,14 +1908,14 @@ bool Database::setWorkspaceKeysForUser(qint64 user_id, const QHash<qint64, QByte
 
     for (qint64 workspace_id : std::as_const(workspace_ids))
     {
-        const auto it = wrapped_keys.constFind(workspace_id);
+        const auto it = wrapped_keys.find(workspace_id);
 
-        if (it != wrapped_keys.constEnd())
+        if (it != wrapped_keys.end())
         {
             const char kSql[] =
                 "UPDATE workspace_access SET wrapped_gk=? WHERE workspace_id=? AND user_id=?";
             SqlQuery query(db_, kSql);
-            query.addBlob(it.value());
+            query.addBlob(it->second);
             query.addInt64(workspace_id);
             query.addInt64(user_id);
 

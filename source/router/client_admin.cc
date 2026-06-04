@@ -18,6 +18,9 @@
 
 #include "router/client_admin.h"
 
+#include <set>
+#include <unordered_map>
+
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/peer/router_user.h"
@@ -607,8 +610,7 @@ void ClientAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& requ
     const QByteArray comment = QByteArray::fromStdString(workspace.comment());
     const qint64 entry_id = workspace.entry_id();
 
-    QSet<HostId> desired_host_ids;
-    desired_host_ids.reserve(workspace.host_id_size());
+    std::set<HostId> desired_host_ids;
     for (int i = 0; i < workspace.host_id_size(); ++i)
         desired_host_ids.insert(workspace.host_id(i));
 
@@ -647,7 +649,7 @@ void ClientAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& requ
             {
                 result->set_entry_id(new_id);
                 Service::instance()->notifyChanged(Service::NOTIFY_WORKSPACES);
-                if (!desired_host_ids.isEmpty())
+                if (!desired_host_ids.empty())
                 {
                     error_code = database.setWorkspaceHosts(new_id, desired_host_ids);
                     if (error_code != proto::router::kErrorOk)
@@ -808,13 +810,13 @@ std::string ClientAdmin::modifyUser(const proto::router::User& user)
     // and drop the live sessions so the new password applies immediately.
     if (password_changed)
     {
-        QHash<qint64, QByteArray> wrapped_keys;
+        std::unordered_map<qint64, QByteArray> wrapped_keys;
         wrapped_keys.reserve(user.workspace_key_size());
 
         for (int i = 0; i < user.workspace_key_size(); ++i)
         {
             const proto::router::User::WorkspaceKey& wk = user.workspace_key(i);
-            wrapped_keys.insert(wk.workspace_id(), QByteArray::fromStdString(wk.wrapped_gk()));
+            wrapped_keys.emplace(wk.workspace_id(), QByteArray::fromStdString(wk.wrapped_gk()));
         }
 
         if (!database.setWorkspaceKeysForUser(new_user.entry_id, wrapped_keys))
