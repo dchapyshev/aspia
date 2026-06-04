@@ -187,6 +187,11 @@ public:
     qint64 hostCount() const;
     qint64 hostCount(qint64 workspace_id, qint64 group_id) const;
 
+    // Substring search over |display_name| and the decimal host_id, restricted to the given
+    // workspaces. |workspace_ids| must already be the set the user is allowed to see; an empty
+    // list yields no results.
+    QList<HostInfo> searchHosts(const QString& query, const QList<qint64>& workspace_ids) const;
+
     // Host removal: hosts_remove queue. Schedule moves the row from hosts to hosts_remove, the
     // host_id is then kept until the host process acknowledges the removal command.
     bool scheduleHostRemoval(HostId host_id);

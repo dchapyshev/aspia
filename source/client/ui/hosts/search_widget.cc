@@ -33,13 +33,16 @@
 #include <QStyledItemDelegate>
 #include <QTextDocument>
 #include <QTextOption>
+#include <QTimer>
 #include <QTreeWidget>
 #include <QVBoxLayout>
 
 #include <optional>
 
 #include "base/logging.h"
+#include "base/peer/host_id.h"
 #include "client/database.h"
+#include "client/router.h"
 
 namespace {
 
@@ -115,15 +118,16 @@ QString buildGroupPath(qint64 group_id, const QHash<qint64, GroupConfig>& groups
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-SearchWidget::Item::Item(const HostConfig& host, const QString& group_path, QTreeWidget* parent)
-    : QTreeWidgetItem(parent)
+SearchWidget::LocalItem::LocalItem(const HostConfig& host, const QString& group_path,
+                                   QTreeWidget* parent)
+    : Item(Type::LOCAL, parent)
 {
     setIcon(kColumnName, QIcon(":/img/computer.svg"));
     updateFrom(host, group_path);
 }
 
 //--------------------------------------------------------------------------------------------------
-void SearchWidget::Item::updateFrom(const HostConfig& host, const QString& group_path)
+void SearchWidget::LocalItem::updateFrom(const HostConfig& host, const QString& group_path)
 {
     host_ = host;
 
@@ -136,6 +140,35 @@ void SearchWidget::Item::updateFrom(const HostConfig& host, const QString& group
     setToolTip(kColumnGroup, group_path);
     setText(kColumnComment, single_line_comment);
     setToolTip(kColumnComment, host.comment());
+}
+
+//--------------------------------------------------------------------------------------------------
+SearchWidget::RouterItem::RouterItem(qint64 router_id, const Router::Host& host,
+                                     const QString& source_label, QTreeWidget* parent)
+    : Item(Type::ROUTER, parent)
+{
+    setIcon(kColumnName, QIcon(":/img/computer.svg"));
+
+    QString name = host.display_name;
+    if (name.isEmpty())
+        name = host.computer_name;
+
+    host_.setRouterId(router_id);
+    host_.setAddress(hostIdToString(host.host_id));
+    host_.setName(name);
+    host_.setUsername(host.user_name);
+    host_.setPassword(host.password);
+    host_.setComment(host.comment);
+
+    QString single_line_comment = host.comment;
+    single_line_comment.replace('\n', ' ').replace('\r', ' ');
+
+    setText(kColumnName, name);
+    setText(kColumnAddress, host_.address());
+    setText(kColumnGroup, source_label);
+    setToolTip(kColumnGroup, source_label);
+    setText(kColumnComment, single_line_comment);
+    setToolTip(kColumnComment, host.comment);
 }
 
 class SearchWidget::HighlightDelegate final : public QStyledItemDelegate
@@ -253,35 +286,26 @@ SearchWidget::SearchWidget(QWidget* parent)
         if (!item)
             return;
 
-        Item* host_item = static_cast<Item*>(item);
-        emit sig_doubleClicked(host_item->entryId());
+        tree_host_->setCurrentItem(item);
+        emit sig_doubleClicked();
     });
 
-    connect(tree_host_, &QTreeWidget::currentItemChanged,
-            this, [this](QTreeWidgetItem* current, QTreeWidgetItem* /* previous */)
-    {
-        qint64 entry_id = -1;
-
-        if (current)
-        {
-            Item* host_item = static_cast<Item*>(current);
-            entry_id = host_item->entryId();
-        }
-
-        emit sig_currentChanged(entry_id);
-    });
+    connect(tree_host_, &QTreeWidget::currentItemChanged, this, &SearchWidget::sig_currentChanged);
 
     connect(tree_host_, &QTreeWidget::customContextMenuRequested, this, [this](const QPoint& pos)
     {
-        qint64 entry_id = 0;
         Item* item = static_cast<Item*>(tree_host_->itemAt(pos));
         if (item)
-        {
             tree_host_->setCurrentItem(item);
-            entry_id = item->entryId();
-        }
-        emit sig_contextMenu(entry_id, tree_host_->viewport()->mapToGlobal(pos));
+        emit sig_contextMenu(tree_host_->viewport()->mapToGlobal(pos));
     });
+
+    // Router searches are issued only after the user stops typing, so a request is not sent on
+    // every keystroke. Local results are shown immediately by search().
+    router_search_timer_ = new QTimer(this);
+    router_search_timer_->setSingleShot(true);
+    router_search_timer_->setInterval(300);
+    connect(router_search_timer_, &QTimer::timeout, this, &SearchWidget::dispatchRouterSearch);
 
     layout->addWidget(tree_host_);
 }
@@ -301,6 +325,7 @@ void SearchWidget::search(const QString& query)
 
     if (query.isEmpty())
     {
+        router_search_timer_->stop();
         updateStatusLabels();
         return;
     }
@@ -316,7 +341,48 @@ void SearchWidget::search(const QString& query)
     const QList<HostConfig> results = db.searchHosts(query);
 
     for (const HostConfig& host : std::as_const(results))
-        new Item(host, buildGroupPath(host.groupId(), groups), tree_host_);
+        new LocalItem(host, buildGroupPath(host.groupId(), groups), tree_host_);
+
+    updateStatusLabels();
+
+    // Local results are shown right away; router workspaces are queried after a short debounce.
+    router_search_timer_->start();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SearchWidget::dispatchRouterSearch()
+{
+    const QString query = current_query_;
+    if (query.isEmpty())
+        return;
+
+    const QList<RouterConfig> routers = Database::instance().routerList();
+    for (const RouterConfig& config : std::as_const(routers))
+    {
+        Router* router = Router::instance(config.routerId());
+        if (!router || router->status() != Router::Status::ONLINE)
+            continue;
+
+        const qint64 router_id = config.routerId();
+        const QString source_label = config.displayLabel();
+        router->searchHosts(query, this, [this, query, router_id, source_label](
+            const Router::HostList& list)
+        {
+            addRouterHosts(query, router_id, source_label, list);
+        });
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void SearchWidget::addRouterHosts(const QString& query, qint64 router_id,
+                                  const QString& source_label, const Router::HostList& list)
+{
+    // Drop a late response whose query no longer matches what the user is searching for.
+    if (query != current_query_)
+        return;
+
+    for (const Router::Host& host : std::as_const(list.hosts))
+        new RouterItem(router_id, host, source_label, tree_host_);
 
     updateStatusLabels();
 }
@@ -324,6 +390,7 @@ void SearchWidget::search(const QString& query)
 //--------------------------------------------------------------------------------------------------
 void SearchWidget::clear()
 {
+    router_search_timer_->stop();
     current_query_.clear();
     highlight_delegate_->setQuery(QString());
     tree_host_->clear();
@@ -350,7 +417,7 @@ void SearchWidget::setCurrentHost(qint64 entry_id)
 //--------------------------------------------------------------------------------------------------
 void SearchWidget::refreshItem(qint64 entry_id)
 {
-    Item* item = findItemByEntryId(entry_id);
+    LocalItem* item = findItemByEntryId(entry_id);
     if (!item)
         return;
 
@@ -474,13 +541,13 @@ void SearchWidget::onHeaderContextMenu(const QPoint& pos)
 }
 
 //--------------------------------------------------------------------------------------------------
-SearchWidget::Item* SearchWidget::findItemByEntryId(qint64 entry_id) const
+SearchWidget::LocalItem* SearchWidget::findItemByEntryId(qint64 entry_id) const
 {
     const int count = tree_host_->topLevelItemCount();
     for (int i = 0; i < count; ++i)
     {
-        Item* item = static_cast<Item*>(tree_host_->topLevelItem(i));
-        if (item->entryId() == entry_id)
+        LocalItem* item = dynamic_cast<LocalItem*>(tree_host_->topLevelItem(i));
+        if (item && item->entryId() == entry_id)
             return item;
     }
     return nullptr;

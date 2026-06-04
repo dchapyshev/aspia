@@ -264,6 +264,8 @@ void Router::onTcpMessageReceived(quint8 channel_id, const QByteArray& bytes)
             dispatch(message.host_status().request_id(), message.host_status());
         else if (message.has_host_list())
             dispatch(message.host_list().request_id(), message.host_list());
+        else if (message.has_host_search_result())
+            dispatch(message.host_search_result().request_id(), message.host_search_result());
         else if (message.has_workspace_list())
             dispatch(message.workspace_list().request_id(), message.workspace_list());
         else if (message.has_group_list())
@@ -654,6 +656,41 @@ Router::WorkspaceList Router::decodeWorkspaceList(const proto::router::Workspace
 }
 
 //--------------------------------------------------------------------------------------------------
+Router::Host Router::decodeHost(const proto::router::Host& src)
+{
+    Router::Host dst;
+    dst.host_id       = src.host_id();
+    dst.workspace_id  = src.workspace_id();
+    dst.group_id      = src.group_id();
+    dst.display_name  = QString::fromStdString(src.display_name());
+    dst.computer_name = QString::fromStdString(src.computer_name());
+    dst.cpu_arch      = QString::fromStdString(src.cpu_arch());
+    dst.version       = QString::fromStdString(src.version());
+    dst.os_name       = QString::fromStdString(src.os_name());
+    dst.address       = QString::fromStdString(src.address());
+    dst.last_connect  = src.last_connect();
+    dst.last_modify   = src.last_modify();
+    dst.online        = src.online();
+
+    if (src.workspace_id() == 0)
+        return dst;
+
+    auto it = workspace_cryptors_.find(src.workspace_id());
+    if (it == workspace_cryptors_.end())
+        return dst;
+
+    const DataCryptor& cryptor = it->second;
+    if (!src.comment().empty())
+        dst.comment = decrypt(cryptor, src.comment());
+    if (!src.user_name().empty())
+        dst.user_name = decrypt(cryptor, src.user_name());
+    if (!src.password().empty())
+        dst.password = SecureString(decrypt(cryptor, src.password()));
+
+    return dst;
+}
+
+//--------------------------------------------------------------------------------------------------
 Router::HostList Router::decodeHostList(const proto::router::HostList& list)
 {
     Router::HostList decoded;
@@ -664,38 +701,20 @@ Router::HostList Router::decodeHostList(const proto::router::HostList& list)
     decoded.hosts.reserve(list.host_size());
 
     for (int i = 0; i < list.host_size(); ++i)
-    {
-        const proto::router::Host& src = list.host(i);
+        decoded.hosts.append(decodeHost(list.host(i)));
 
-        Router::Host& dst = decoded.hosts.emplaceBack();
-        dst.host_id       = src.host_id();
-        dst.workspace_id  = src.workspace_id();
-        dst.group_id      = src.group_id();
-        dst.display_name  = QString::fromStdString(src.display_name());
-        dst.computer_name = QString::fromStdString(src.computer_name());
-        dst.cpu_arch      = QString::fromStdString(src.cpu_arch());
-        dst.version       = QString::fromStdString(src.version());
-        dst.os_name       = QString::fromStdString(src.os_name());
-        dst.address       = QString::fromStdString(src.address());
-        dst.last_connect  = src.last_connect();
-        dst.last_modify   = src.last_modify();
-        dst.online        = src.online();
+    return decoded;
+}
 
-        if (src.workspace_id() == 0)
-            continue;
+//--------------------------------------------------------------------------------------------------
+Router::HostList Router::decodeHostSearchResult(const proto::router::HostSearchResult& result)
+{
+    Router::HostList decoded;
+    decoded.error_code = QString::fromStdString(result.error_code());
+    decoded.hosts.reserve(result.host_size());
 
-        auto it = workspace_cryptors_.find(src.workspace_id());
-        if (it == workspace_cryptors_.end())
-            continue;
-
-        const DataCryptor& cryptor = it->second;
-        if (!src.comment().empty())
-            dst.comment = decrypt(cryptor, src.comment());
-        if (!src.user_name().empty())
-            dst.user_name = decrypt(cryptor, src.user_name());
-        if (!src.password().empty())
-            dst.password = SecureString(decrypt(cryptor, src.password()));
-    }
+    for (int i = 0; i < result.host_size(); ++i)
+        decoded.hosts.append(decodeHost(result.host(i)));
 
     return decoded;
 }

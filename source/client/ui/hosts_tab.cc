@@ -140,9 +140,9 @@ HostsTab::HostsTab(QWidget* parent)
     connect(ui->action_edit_host, &QAction::triggered, this, &HostsTab::onEditHost);
     connect(ui->action_copy_host, &QAction::triggered, this, &HostsTab::onCopyHost);
     connect(ui->action_delete_host, &QAction::triggered, this, &HostsTab::onRemoveHost);
-    connect(search_widget_, &SearchWidget::sig_currentChanged, this, &HostsTab::onCurrentHostChanged);
-    connect(search_widget_, &SearchWidget::sig_doubleClicked, this, &HostsTab::onLocalConnect);
-    connect(search_widget_, &SearchWidget::sig_contextMenu, this, &HostsTab::onLocalHostContextMenu);
+    connect(search_widget_, &SearchWidget::sig_currentChanged, this, &HostsTab::updateActionsState);
+    connect(search_widget_, &SearchWidget::sig_doubleClicked, this, &HostsTab::onSearchConnect);
+    connect(search_widget_, &SearchWidget::sig_contextMenu, this, &HostsTab::onSearchContextMenu);
     connect(ui->action_add_group, &QAction::triggered, this, &HostsTab::onAddGroupAction);
     connect(ui->action_edit_group, &QAction::triggered, this, &HostsTab::onEditGroupAction);
     connect(ui->action_delete_group, &QAction::triggered, this, &HostsTab::onDeleteGroupAction);
@@ -567,25 +567,13 @@ void HostsTab::onConnectAction(QAction* action)
 
     HostConfig host;
 
-    if (current_content_ == local_group_widget_ || current_content_ == search_widget_)
+    if (current_content_ == local_group_widget_)
     {
-        qint64 entry_id = -1;
-        if (current_content_ == local_group_widget_)
-        {
-            LocalGroupWidget::Item* item = local_group_widget_->currentItem();
-            if (!item)
-                return;
-            entry_id = item->entryId();
-        }
-        else
-        {
-            SearchWidget::Item* item = search_widget_->currentItem();
-            if (!item)
-                return;
-            entry_id = item->entryId();
-        }
+        LocalGroupWidget::Item* item = local_group_widget_->currentItem();
+        if (!item)
+            return;
 
-        std::optional<HostConfig> found = Database::instance().findHost(entry_id);
+        std::optional<HostConfig> found = Database::instance().findHost(item->entryId());
         if (!found.has_value())
         {
             MsgBox::warning(this,
@@ -599,6 +587,36 @@ void HostsTab::onConnectAction(QAction* action)
             return;
 
         Database::instance().setConnectTime(host.id(), QDateTime::currentSecsSinceEpoch());
+    }
+    else if (current_content_ == search_widget_)
+    {
+        SearchWidget::Item* item = search_widget_->currentItem();
+        if (!item)
+            return;
+
+        if (item->type() == SearchWidget::Item::Type::ROUTER)
+        {
+            host = item->hostConfig();
+            if (!validateHostForConnect(host))
+                return;
+        }
+        else
+        {
+            std::optional<HostConfig> found = Database::instance().findHost(item->entryId());
+            if (!found.has_value())
+            {
+                MsgBox::warning(this,
+                    tr("Failed to retrieve host information from the local database."));
+                return;
+            }
+
+            host = *found;
+
+            if (!validateHostForConnect(host))
+                return;
+
+            Database::instance().setConnectTime(host.id(), QDateTime::currentSecsSinceEpoch());
+        }
     }
     else if (current_content_ == router_group_widget_)
     {
@@ -661,6 +679,51 @@ void HostsTab::onRouterGroupConnect()
     if (!validateHostForConnect(host))
         return;
     emit sig_connectRequested(host, defaultSessionType());
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::onSearchConnect()
+{
+    SearchWidget::Item* item = search_widget_->currentItem();
+    if (!item)
+        return;
+
+    if (item->type() == SearchWidget::Item::Type::ROUTER)
+    {
+        HostConfig host = item->hostConfig();
+        if (!validateHostForConnect(host))
+            return;
+        emit sig_connectRequested(host, defaultSessionType());
+    }
+    else
+    {
+        onLocalConnect(item->entryId());
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::onSearchContextMenu(const QPoint& pos)
+{
+    SearchWidget::Item* item = search_widget_->currentItem();
+    if (!item)
+        return;
+
+    QMenu menu;
+    menu.addAction(ui->action_desktop_connect);
+    menu.addAction(ui->action_file_transfer_connect);
+    menu.addAction(ui->action_chat_connect);
+    menu.addAction(ui->action_system_info_connect);
+
+    // Router hosts have no address-book record to edit, copy or delete.
+    if (item->type() == SearchWidget::Item::Type::LOCAL)
+    {
+        menu.addSeparator();
+        menu.addAction(ui->action_edit_host);
+        menu.addAction(ui->action_copy_host);
+        menu.addAction(ui->action_delete_host);
+    }
+
+    menu.exec(pos);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1404,10 +1467,18 @@ void HostsTab::updateActionsState()
     if (current_content_ == search_widget_)
     {
         SearchWidget::Item* host_item = search_widget_->currentItem();
+        const bool has_item = host_item != nullptr;
+        const bool is_local_host = has_item && host_item->type() == SearchWidget::Item::Type::LOCAL;
 
-        ui->action_delete_host->setVisible(host_item != nullptr);
-        ui->action_edit_host->setVisible(host_item != nullptr);
-        ui->action_copy_host->setVisible(host_item != nullptr);
+        // Address-book operations apply to local hosts only; router hosts can only be connected.
+        ui->action_delete_host->setVisible(is_local_host);
+        ui->action_edit_host->setVisible(is_local_host);
+        ui->action_copy_host->setVisible(is_local_host);
+
+        ui->action_desktop_connect->setVisible(has_item);
+        ui->action_file_transfer_connect->setVisible(has_item);
+        ui->action_chat_connect->setVisible(has_item);
+        ui->action_system_info_connect->setVisible(has_item);
     }
     else if (sidebar_item && sidebar_item->itemType() == Sidebar::Item::Type::LOCAL_GROUP)
     {
@@ -1494,7 +1565,8 @@ void HostsTab::updateActionsState()
         ui->action_system_info->setVisible(true);
     }
 
-    if (sidebar_item && sidebar_item->itemType() == Sidebar::Item::ROUTER_GROUP)
+    if (current_content_ != search_widget_ &&
+        sidebar_item && sidebar_item->itemType() == Sidebar::Item::ROUTER_GROUP)
     {
         Sidebar::RouterGroupItem* router_group_item =
             static_cast<Sidebar::RouterGroupItem*>(sidebar_item);

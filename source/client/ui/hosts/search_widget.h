@@ -23,10 +23,12 @@
 #include <QTreeWidgetItem>
 
 #include "client/config.h"
+#include "client/router.h"
 #include "client/ui/hosts/content_widget.h"
 
 class QLabel;
 class QStatusBar;
+class QTimer;
 class QTreeWidget;
 
 class SearchWidget final : public ContentWidget
@@ -37,19 +39,46 @@ public:
     explicit SearchWidget(QWidget* parent = nullptr);
     ~SearchWidget() final;
 
-    class Item final : public QTreeWidgetItem
+    class Item : public QTreeWidgetItem
     {
     public:
-        Item(const HostConfig& host, const QString& group_path, QTreeWidget* parent);
+        enum class Type { LOCAL, ROUTER };
 
+        Item(Type type, QTreeWidget* parent)
+            : QTreeWidgetItem(parent),
+              type_(type)
+        {
+            // Nothing
+        }
+
+        Type type() const { return type_; }
+
+        // Local entry id, or -1 for router hosts (host_.id() defaults to -1 and is never set).
         qint64 entryId() const { return host_.id(); }
-        qint64 groupId() const { return host_.groupId(); }
-        QString computerName() const { return host_.name(); }
+        HostConfig hostConfig() const { return host_; }
 
-        void updateFrom(const HostConfig& host, const QString& group_path);
+    protected:
+        HostConfig host_;
 
     private:
-        HostConfig host_;
+        const Type type_;
+    };
+
+    class LocalItem final : public Item
+    {
+    public:
+        LocalItem(const HostConfig& host, const QString& group_path, QTreeWidget* parent);
+
+        qint64 groupId() const { return host_.groupId(); }
+        QString computerName() const { return host_.name(); }
+        void updateFrom(const HostConfig& host, const QString& group_path);
+    };
+
+    class RouterItem final : public Item
+    {
+    public:
+        RouterItem(qint64 router_id, const Router::Host& host, const QString& source_label,
+                   QTreeWidget* parent);
     };
 
     void search(const QString& query);
@@ -67,9 +96,9 @@ public:
     void deactivate(QStatusBar* statusbar) final;
 
 signals:
-    void sig_doubleClicked(qint64 entry_id);
-    void sig_currentChanged(qint64 entry_id);
-    void sig_contextMenu(qint64 entry_id, const QPoint& pos);
+    void sig_doubleClicked();
+    void sig_currentChanged();
+    void sig_contextMenu(const QPoint& pos);
 
 protected:
     // QWidget implementation.
@@ -77,16 +106,20 @@ protected:
 
 private slots:
     void onHeaderContextMenu(const QPoint& pos);
+    void dispatchRouterSearch();
 
 private:
     class HighlightDelegate;
 
-    Item* findItemByEntryId(qint64 entry_id) const;
+    LocalItem* findItemByEntryId(qint64 entry_id) const;
+    void addRouterHosts(const QString& query, qint64 router_id, const QString& source_label,
+                        const Router::HostList& list);
     void updateStatusLabels();
 
     QTreeWidget* tree_host_ = nullptr;
     QLabel* status_results_label_ = nullptr;
     HighlightDelegate* highlight_delegate_ = nullptr;
+    QTimer* router_search_timer_ = nullptr;
     QString current_query_;
 
     Q_DISABLE_COPY_MOVE(SearchWidget)

@@ -267,6 +267,12 @@ public:
     template<typename HandlerT>
     void listHosts(proto::router::HostListRequest request, QObject* receiver, HandlerT handler);
 
+    // Substring search over hosts by display name and host_id across every workspace accessible
+    // to the user. The response is the decoded plain HostList struct (full match set, no
+    // pagination).
+    template<typename HandlerT>
+    void searchHosts(const QString& query, QObject* receiver, HandlerT handler);
+
     // Ask the router whether a host is currently online.
     template<typename HandlerT>
     void checkHostStatus(HostId host_id, QObject* receiver, HandlerT handler);
@@ -410,7 +416,9 @@ private:
     void readTwoFactorResult(const proto::router::TwoFactorResult& result);
     void emitNotificationSignals(const proto::router::Notification& notification);
     Router::WorkspaceList decodeWorkspaceList(const proto::router::WorkspaceList& list);
+    Router::Host decodeHost(const proto::router::Host& src);
     Router::HostList decodeHostList(const proto::router::HostList& list);
+    Router::HostList decodeHostSearchResult(const proto::router::HostSearchResult& result);
     Router::GroupList decodeGroupList(const proto::router::GroupList& list);
     SecureByteArray unwrapGroupKey(const QByteArray& wrapped_gk) const;
     void resealGroupKeys(const QByteArray& new_public_key, proto::router::User* user);
@@ -761,6 +769,22 @@ void Router::listHosts(proto::router::HostListRequest request, QObject* receiver
         [this](const proto::router::HostList& raw)
     {
         return decodeHostList(raw);
+    });
+    emitSend(proto::router::CHANNEL_ID_CLIENT, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+template<typename HandlerT>
+void Router::searchHosts(const QString& query, QObject* receiver, HandlerT handler)
+{
+    proto::router::ClientToRouter message;
+    auto* request = message.mutable_host_search_request();
+    request->set_request_id(nextRequestId());
+    request->set_query(query.toStdString());
+    registerPending<proto::router::HostSearchResult>(request, receiver, std::move(handler),
+        [this](const proto::router::HostSearchResult& raw)
+    {
+        return decodeHostSearchResult(raw);
     });
     emitSend(proto::router::CHANNEL_ID_CLIENT, message);
 }

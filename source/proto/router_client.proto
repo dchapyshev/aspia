@@ -182,6 +182,19 @@ message HostList
     repeated Host host = 6;
 }
 
+message HostSearchRequest
+{
+    int64 request_id = 1;
+    string query     = 2;
+}
+
+message HostSearchResult
+{
+    int64 request_id   = 1;
+    string error_code  = 2; // "ok" | "access_denied" | "internal_error"
+    repeated Host host = 3;
+}
+
 // Push notification from router to client/admin sessions: a coarse-grained signal that the
 // indicated resource lists have changed since the last notification (or session start). The
 // client refetches the affected lists via the existing list* RPCs. Notifications are batched
@@ -286,8 +299,9 @@ message RouterToClient
     ConnectionOffer connection_offer              = 6;
     HostStatus host_status                        = 7;
     HostList host_list                            = 8;
-    WorkspaceList workspace_list                  = 9;
-    GroupList group_list                          = 10;
+    HostSearchResult host_search_result           = 9;
+    WorkspaceList workspace_list                  = 10;
+    GroupList group_list                          = 11;
 }
 
 message ClientToRouter
@@ -297,6 +311,7 @@ message ClientToRouter
     ConnectionRequest connection_request          = 3;
     CheckHostStatus check_host_status             = 4;
     HostListRequest host_list_request             = 5;
-    WorkspaceListRequest workspace_list_request   = 6;
-    GroupListRequest group_list_request           = 7;
+    HostSearchRequest host_search_request         = 6;
+    WorkspaceListRequest workspace_list_request   = 7;
+    GroupListRequest group_list_request           = 8;
 }

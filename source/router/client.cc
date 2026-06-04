@@ -49,6 +49,51 @@ qint64 createClientId()
     return last_client_id;
 }
 
+//--------------------------------------------------------------------------------------------------
+QSet<HostId> onlineHostIds()
+{
+    QSet<HostId> online_host_ids;
+    const QList<Host*>& online_hosts = Service::instance()->hosts();
+    for (Host* host : std::as_const(online_hosts))
+    {
+        HostNG* host_ng = dynamic_cast<HostNG*>(host);
+        if (host_ng)
+        {
+            online_host_ids.insert(host_ng->hostId());
+            continue;
+        }
+
+        HostLegacy* host_legacy = dynamic_cast<HostLegacy*>(host);
+        if (host_legacy)
+        {
+            for (HostId host_id : host_legacy->hostIdList())
+                online_host_ids.insert(host_id);
+        }
+    }
+
+    return online_host_ids;
+}
+
+//--------------------------------------------------------------------------------------------------
+void fillHost(proto::router::Host* item, const HostInfo& info, const QSet<HostId>& online_host_ids)
+{
+    item->set_host_id(info.host_id);
+    item->set_workspace_id(info.workspace_id);
+    item->set_group_id(info.group_id);
+    item->set_display_name(info.display_name.toStdString());
+    item->set_computer_name(info.computer_name.toStdString());
+    item->set_cpu_arch(info.cpu_arch.toStdString());
+    item->set_version(info.version.toStdString());
+    item->set_os_name(info.os_name.toStdString());
+    item->set_address(info.address.toStdString());
+    item->set_comment(info.comment.toStdString());
+    item->set_user_name(info.user_name.toStdString());
+    item->set_password(info.password.toStdString());
+    item->set_last_connect(info.last_connect);
+    item->set_last_modify(info.last_modify);
+    item->set_online(online_host_ids.contains(info.host_id));
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -173,6 +218,10 @@ void Client::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
     else if (message.has_host_list_request())
     {
         readHostListRequest(message.host_list_request());
+    }
+    else if (message.has_host_search_request())
+    {
+        readHostSearchRequest(message.host_search_request());
     }
     else if (message.has_workspace_list_request())
     {
@@ -580,24 +629,7 @@ void Client::readHostListRequest(const proto::router::HostListRequest& request)
     }
 
     // Collect host_ids of currently connected hosts to mark them online.
-    QSet<HostId> online_host_ids;
-    const QList<Host*>& online_hosts = Service::instance()->hosts();
-    for (Host* host : std::as_const(online_hosts))
-    {
-        HostNG* host_ng = dynamic_cast<HostNG*>(host);
-        if (host_ng)
-        {
-            online_host_ids.insert(host_ng->hostId());
-            continue;
-        }
-
-        HostLegacy* host_legacy = dynamic_cast<HostLegacy*>(host);
-        if (host_legacy)
-        {
-            for (HostId host_id : host_legacy->hostIdList())
-                online_host_ids.insert(host_id);
-        }
-    }
+    const QSet<HostId> online_host_ids = onlineHostIds();
 
     QList<HostInfo> hosts;
     qint64 hosts_count = 0;
@@ -617,23 +649,44 @@ void Client::readHostListRequest(const proto::router::HostListRequest& request)
     result->set_total_count(hosts_count);
 
     for (const HostInfo& info : std::as_const(hosts))
+        fillHost(result->add_host(), info, online_host_ids);
+
+    sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::readHostSearchRequest(const proto::router::HostSearchRequest& request)
+{
+    proto::router::RouterToClient message;
+    proto::router::HostSearchResult* result = message.mutable_host_search_result();
+    result->set_request_id(request.request_id());
+
+    Database& database = Database::instance();
+    if (!database.isValid())
     {
-        proto::router::Host* item = result->add_host();
-        item->set_host_id(info.host_id);
-        item->set_workspace_id(info.workspace_id);
-        item->set_group_id(info.group_id);
-        item->set_display_name(info.display_name.toStdString());
-        item->set_computer_name(info.computer_name.toStdString());
-        item->set_cpu_arch(info.cpu_arch.toStdString());
-        item->set_version(info.version.toStdString());
-        item->set_os_name(info.os_name.toStdString());
-        item->set_address(info.address.toStdString());
-        item->set_comment(info.comment.toStdString());
-        item->set_user_name(info.user_name.toStdString());
-        item->set_password(info.password.toStdString());
-        item->set_last_connect(info.last_connect);
-        item->set_last_modify(info.last_modify);
-        item->set_online(online_host_ids.contains(info.host_id));
+        CLOG(ERROR) << "Failed to connect to database";
+        result->set_error_code(proto::router::kErrorInternalError);
+        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+        return;
+    }
+
+    // Search is always scoped to every workspace the user can access, regardless of session type.
+    QList<qint64> workspace_ids;
+    const QList<Workspace::Access> access_list = database.workspaceAccessListForUser(userId());
+    workspace_ids.reserve(access_list.size());
+    for (const Workspace::Access& access : std::as_const(access_list))
+        workspace_ids.append(access.workspace_id);
+
+    result->set_error_code(proto::router::kErrorOk);
+
+    if (!workspace_ids.isEmpty())
+    {
+        const QSet<HostId> online_host_ids = onlineHostIds();
+        const QList<HostInfo> hosts =
+            database.searchHosts(QString::fromStdString(request.query()), workspace_ids);
+
+        for (const HostInfo& info : std::as_const(hosts))
+            fillHost(result->add_host(), info, online_host_ids);
     }
 
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));

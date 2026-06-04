@@ -1201,6 +1201,76 @@ qint64 Database::hostCount(qint64 workspace_id, qint64 group_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
+QList<HostInfo> Database::searchHosts(const QString& query_text, const QList<qint64>& workspace_ids) const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return {};
+    }
+
+    if (workspace_ids.isEmpty() || query_text.isEmpty())
+        return {};
+
+    // Escape LIKE wildcards so user input is matched literally.
+    QString escaped = query_text;
+    escaped.replace('\\', "\\\\");
+    escaped.replace('%', "\\%");
+    escaped.replace('_', "\\_");
+
+    const QString pattern = '%' + escaped + '%';
+
+    QStringList placeholders;
+    placeholders.reserve(workspace_ids.size());
+
+    for (int i = 0; i < workspace_ids.size(); ++i)
+        placeholders.append("?");
+
+    const QString sql =
+        "SELECT id, workspace_id, group_id, display_name, computer_name, cpu_arch, "
+        "version, os_name, address, comment, user_name, password, last_connect, last_modify "
+        "FROM hosts WHERE workspace_id IN (" + placeholders.join(',') + ") "
+        "AND (display_name LIKE ? ESCAPE '\\' OR CAST(id AS TEXT) LIKE ? ESCAPE '\\') "
+        "ORDER BY display_name";
+
+    QSqlQuery query(connection());
+    query.prepare(sql);
+    for (qint64 workspace_id : workspace_ids)
+        query.addBindValue(workspace_id);
+    query.addBindValue(pattern);
+    query.addBindValue(pattern);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to search hosts:" << query.lastError();
+        return {};
+    }
+
+    QList<HostInfo> result;
+    while (query.next())
+    {
+        HostInfo info;
+        info.host_id       = query.value(0).toULongLong();
+        info.workspace_id  = query.value(1).toLongLong();
+        info.group_id      = query.value(2).toLongLong();
+        info.display_name  = query.value(3).toString();
+        info.computer_name = query.value(4).toString();
+        info.cpu_arch      = query.value(5).toString();
+        info.version       = query.value(6).toString();
+        info.os_name       = query.value(7).toString();
+        info.address       = query.value(8).toString();
+        info.comment       = query.value(9).toByteArray();
+        info.user_name     = query.value(10).toByteArray();
+        info.password      = query.value(11).toByteArray();
+        info.last_connect  = query.value(12).toLongLong();
+        info.last_modify   = query.value(13).toLongLong();
+        result.append(info);
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool Database::scheduleHostRemoval(HostId host_id)
 {
     if (!isValid())
