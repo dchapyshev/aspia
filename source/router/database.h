@@ -28,7 +28,7 @@
 
 #include "base/peer/host_id.h"
 #include "base/peer/router_user.h"
-#include "base/sql/sql.h"
+#include "base/sql/sql_database.h"
 #include "router/workspace.h"
 
 namespace proto::router {
@@ -288,7 +288,7 @@ private:
 
     bool openDatabase();
 
-    mutable Sql db_;
+    mutable SqlDatabase db_;
     bool valid_ = false;
 
     Q_DISABLE_COPY_MOVE(Database)

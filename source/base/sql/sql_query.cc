@@ -21,10 +21,10 @@
 #include <sqlite3.h>
 
 #include "base/logging.h"
-#include "base/sql/sql.h"
+#include "base/sql/sql_database.h"
 
 //--------------------------------------------------------------------------------------------------
-SqlQuery::SqlQuery(Sql& db, std::string_view sql)
+SqlQuery::SqlQuery(SqlDatabase& db, std::string_view sql)
     : db_(db)
 {
     if (!db_.isOpen())

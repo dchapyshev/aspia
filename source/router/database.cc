@@ -70,7 +70,7 @@ RouterUser readUser(const SqlQuery& query)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool hasColumn(Sql& db, const QString& table, const QString& column)
+bool hasColumn(SqlDatabase& db, const QString& table, const QString& column)
 {
     SqlQuery query(db, "SELECT 1 FROM pragma_table_info(?) WHERE name=?");
     query.addText(table);
@@ -86,7 +86,7 @@ bool hasColumn(Sql& db, const QString& table, const QString& column)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ensureSchema(Sql& db)
+bool ensureSchema(SqlDatabase& db)
 {
     SqlTransaction transaction(db);
     if (!transaction.begin())

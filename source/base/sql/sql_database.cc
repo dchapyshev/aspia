@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/sql/sql.h"
+#include "base/sql/sql_database.h"
 
 #include <sqlite3.h>
 
@@ -106,13 +106,13 @@ void caseFold(sqlite3_context* context, int argc, sqlite3_value** argv)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Sql::~Sql()
+SqlDatabase::~SqlDatabase()
 {
     close();
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Sql::open(const QString& file_path)
+bool SqlDatabase::open(const QString& file_path)
 {
     if (db_)
     {
@@ -143,7 +143,7 @@ bool Sql::open(const QString& file_path)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sql::close()
+void SqlDatabase::close()
 {
     if (!db_)
         return;
@@ -158,7 +158,7 @@ void Sql::close()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Sql::exec(const char* sql)
+bool SqlDatabase::exec(const char* sql)
 {
     if (!db_)
     {
@@ -180,25 +180,25 @@ bool Sql::exec(const char* sql)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Sql::beginTransaction()
+bool SqlDatabase::beginTransaction()
 {
     return exec("BEGIN");
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Sql::commitTransaction()
+bool SqlDatabase::commitTransaction()
 {
     return exec("COMMIT");
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Sql::rollbackTransaction()
+bool SqlDatabase::rollbackTransaction()
 {
     return exec("ROLLBACK");
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Sql::setBusyTimeout(int ms)
+bool SqlDatabase::setBusyTimeout(int ms)
 {
     if (!db_)
     {
@@ -217,7 +217,7 @@ bool Sql::setBusyTimeout(int ms)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Sql::createScalarFunction(const char* name, int arg_count, ScalarFunc func)
+bool SqlDatabase::createScalarFunction(const char* name, int arg_count, ScalarFunc func)
 {
     if (!db_)
     {
@@ -240,7 +240,7 @@ bool Sql::createScalarFunction(const char* name, int arg_count, ScalarFunc func)
 }
 
 //--------------------------------------------------------------------------------------------------
-qint64 Sql::lastInsertRowId() const
+qint64 SqlDatabase::lastInsertRowId() const
 {
     if (!db_)
         return 0;
@@ -248,7 +248,7 @@ qint64 Sql::lastInsertRowId() const
 }
 
 //--------------------------------------------------------------------------------------------------
-int Sql::changes() const
+int SqlDatabase::changes() const
 {
     if (!db_)
         return 0;
@@ -256,7 +256,7 @@ int Sql::changes() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Sql::lastError() const
+QString SqlDatabase::lastError() const
 {
     if (!db_)
         return QString();
@@ -264,7 +264,7 @@ QString Sql::lastError() const
 }
 
 //--------------------------------------------------------------------------------------------------
-int Sql::lastErrorCode() const
+int SqlDatabase::lastErrorCode() const
 {
     if (!db_)
         return SQLITE_ERROR;

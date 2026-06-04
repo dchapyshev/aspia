@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/sql/sql.h"
+#include "base/sql/sql_database.h"
 #include "base/sql/sql_query.h"
 #include "base/sql/sql_transaction.h"
 
@@ -28,7 +28,7 @@
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-bool createSchema(Sql& db)
+bool createSchema(SqlDatabase& db)
 {
     return db.exec("CREATE TABLE t ("
                       "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -42,7 +42,7 @@ bool createSchema(Sql& db)
 //--------------------------------------------------------------------------------------------------
 TEST(SqliteTest, OpenInMemory)
 {
-    Sql db;
+    SqlDatabase db;
     ASSERT_TRUE(db.open(":memory:"));
     EXPECT_TRUE(db.isOpen());
 }
@@ -50,7 +50,7 @@ TEST(SqliteTest, OpenInMemory)
 //--------------------------------------------------------------------------------------------------
 TEST(SqliteTest, InsertAndReadBack)
 {
-    Sql db;
+    SqlDatabase db;
     ASSERT_TRUE(db.open(":memory:"));
     ASSERT_TRUE(createSchema(db));
 
@@ -81,7 +81,7 @@ TEST(SqliteTest, InsertAndReadBack)
 //--------------------------------------------------------------------------------------------------
 TEST(SqliteTest, EmptyTextIsNotNull)
 {
-    Sql db;
+    SqlDatabase db;
     ASSERT_TRUE(db.open(":memory:"));
     ASSERT_TRUE(createSchema(db));
 
@@ -100,7 +100,7 @@ TEST(SqliteTest, EmptyTextIsNotNull)
 //--------------------------------------------------------------------------------------------------
 TEST(SqliteTest, ResetReusesStatement)
 {
-    Sql db;
+    SqlDatabase db;
     ASSERT_TRUE(db.open(":memory:"));
     ASSERT_TRUE(createSchema(db));
 
@@ -120,7 +120,7 @@ TEST(SqliteTest, ResetReusesStatement)
 //--------------------------------------------------------------------------------------------------
 TEST(SqliteTest, TransactionRollbackOnScopeExit)
 {
-    Sql db;
+    SqlDatabase db;
     ASSERT_TRUE(db.open(":memory:"));
     ASSERT_TRUE(createSchema(db));
 
@@ -142,7 +142,7 @@ TEST(SqliteTest, TransactionRollbackOnScopeExit)
 //--------------------------------------------------------------------------------------------------
 TEST(SqliteTest, TransactionCommitPersists)
 {
-    Sql db;
+    SqlDatabase db;
     ASSERT_TRUE(db.open(":memory:"));
     ASSERT_TRUE(createSchema(db));
 
@@ -165,7 +165,7 @@ TEST(SqliteTest, TransactionCommitPersists)
 //--------------------------------------------------------------------------------------------------
 TEST(SqliteTest, UInt64RoundTrip)
 {
-    Sql db;
+    SqlDatabase db;
     ASSERT_TRUE(db.open(":memory:"));
     ASSERT_TRUE(createSchema(db));
 
@@ -183,7 +183,7 @@ TEST(SqliteTest, UInt64RoundTrip)
 //--------------------------------------------------------------------------------------------------
 TEST(SqliteTest, CaseFoldSearchCyrillic)
 {
-    Sql db;
+    SqlDatabase db;
     ASSERT_TRUE(db.open(":memory:"));
     ASSERT_TRUE(createSchema(db));
 
@@ -203,7 +203,7 @@ TEST(SqliteTest, CaseFoldSearchCyrillic)
 //--------------------------------------------------------------------------------------------------
 TEST(SqliteTest, CaseFoldFunctionFoldsValue)
 {
-    Sql db;
+    SqlDatabase db;
     ASSERT_TRUE(db.open(":memory:"));
 
     SqlQuery select(db, "SELECT casefold(?)");

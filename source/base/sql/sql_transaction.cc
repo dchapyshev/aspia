@@ -18,10 +18,10 @@
 
 #include "base/sql/sql_transaction.h"
 
-#include "base/sql/sql.h"
+#include "base/sql/sql_database.h"
 
 //--------------------------------------------------------------------------------------------------
-SqlTransaction::SqlTransaction(Sql& db)
+SqlTransaction::SqlTransaction(SqlDatabase& db)
     : db_(db)
 {
     // Nothing is opened until begin() is called.

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_SQL_SQL_H
-#define BASE_SQL_SQL_H
+#ifndef BASE_SQL_SQL_DATABASE_H
+#define BASE_SQL_SQL_DATABASE_H
 
 #include <QString>
 
@@ -25,14 +25,14 @@ struct sqlite3;
 struct sqlite3_context;
 struct sqlite3_value;
 
-// Thin RAII wrapper over a single sqlite3 connection. An Sql must be used from a single thread at
-// a time, which matches the per-thread connection model used across the project. Errors are
-// reported through the return value and logged; no exceptions are thrown.
-class Sql final
+// Thin RAII wrapper over a single sqlite3 connection. An SqlDatabase must be used from a single
+// thread at a time, which matches the per-thread connection model used across the project. Errors
+// are reported through the return value and logged; no exceptions are thrown.
+class SqlDatabase final
 {
 public:
-    Sql() = default;
-    ~Sql();
+    SqlDatabase() = default;
+    ~SqlDatabase();
 
     // Opens (creating it if absent) the database at |file_path|. Returns false and leaves the
     // object closed on failure.
@@ -75,7 +75,7 @@ public:
 private:
     sqlite3* db_ = nullptr;
 
-    Q_DISABLE_COPY_MOVE(Sql)
+    Q_DISABLE_COPY_MOVE(SqlDatabase)
 };
 
-#endif // BASE_SQL_SQL_H
+#endif // BASE_SQL_SQL_DATABASE_H

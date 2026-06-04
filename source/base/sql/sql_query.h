@@ -26,7 +26,7 @@
 
 struct sqlite3_stmt;
 
-class Sql;
+class SqlDatabase;
 
 // RAII wrapper over a prepared sqlite3_stmt. Bind parameters are 1-based (native sqlite); result
 // columns are 0-based (matching the value(i) convention the project moved off of). Bound values
@@ -40,7 +40,7 @@ class SqlQuery final
 {
 public:
     // Prepares |sql| against |db|. Check isValid() before use; a prepare failure is logged.
-    SqlQuery(Sql& db, std::string_view sql);
+    SqlQuery(SqlDatabase& db, std::string_view sql);
     ~SqlQuery();
 
     bool isValid() const { return stmt_ != nullptr; }
@@ -107,7 +107,7 @@ public:
 private:
     void logError(const char* what) const;
 
-    Sql& db_;
+    SqlDatabase& db_;
     sqlite3_stmt* stmt_ = nullptr;
     int next_bind_index_ = 1;
 

@@ -18,7 +18,7 @@
 
 #include <QtGlobal>
 
-class Sql;
+class SqlDatabase;
 
 // Scopes a database transaction to a C++ block. begin() opens it; commit() finalizes it. If the
 // object is destroyed after a successful begin() without a commit() - an early return, a failed
@@ -27,7 +27,7 @@ class Sql;
 class SqlTransaction final
 {
 public:
-    explicit SqlTransaction(Sql& db);
+    explicit SqlTransaction(SqlDatabase& db);
     ~SqlTransaction();
 
     bool begin();
@@ -36,7 +36,7 @@ public:
     bool isActive() const { return active_; }
 
 private:
-    Sql& db_;
+    SqlDatabase& db_;
     bool active_ = false;
 
     Q_DISABLE_COPY_MOVE(SqlTransaction)

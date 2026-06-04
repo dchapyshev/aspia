@@ -446,8 +446,8 @@ list(APPEND SOURCE_BASE_IPC
     ipc/ipc_server.h)
 
 list(APPEND SOURCE_BASE_SQL
-    sql/sql.cc
-    sql/sql.h
+    sql/sql_database.cc
+    sql/sql_database.h
     sql/sql_query.cc
     sql/sql_query.h
     sql/sql_transaction.cc
