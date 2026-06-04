@@ -31,23 +31,13 @@
 #include "base/sql/sql.h"
 #include "router/workspace.h"
 
-struct HostInfo
-{
-    quint64 host_id     = 0; // hosts.id - the dialable host identifier.
-    qint64 workspace_id = 0;
-    qint64 group_id     = 0;
-    QString display_name;
-    QString computer_name;
-    QString cpu_arch;
-    QString version;
-    QString os_name;
-    QString address;
-    QByteArray comment;
-    QByteArray user_name;
-    QByteArray password;
-    qint64 last_connect = 0;
-    qint64 last_modify  = 0;
-};
+namespace proto::router {
+class GroupList;
+class Host;
+class HostList;
+class HostSearchResult;
+class WorkspaceList;
+} // namespace proto::router
 
 // A node in a workspace's host-group tree. Root nodes have parent_id == 0. Names are not
 // required to be unique within a parent: two siblings with the same name are allowed and the
@@ -175,23 +165,29 @@ public:
     bool modifyHost(HostId host_id, qint64 group_id, const QString& display_name,
         const QByteArray& comment, const QByteArray& user_name, const QByteArray& password);
 
-    // Returns every host in the database (admin-only call site). [start_item, end_item] gives an
-    // inclusive paging window; pass end_item <= 0 to disable paging.
-    QList<HostInfo> hosts(qint64 start_item, qint64 end_item) const;
+    // Appends every host in the database (admin-only call site) to |out| and sets its error_code,
+    // reading rows straight into the protobuf message. [start_item, end_item] gives an inclusive
+    // paging window; pass end_item <= 0 to disable paging. The Host.online field is left unset - it
+    // reflects runtime session state the database does not track and is filled by the caller.
+    void hosts(qint64 start_item, qint64 end_item, proto::router::HostList* out) const;
 
-    // Returns hosts in the given workspace and group with exact match on both columns.
-    // [start_item, end_item] gives an inclusive paging window; pass end_item <= 0 to disable.
-    QList<HostInfo> hosts(qint64 workspace_id, qint64 group_id, qint64 start_item, qint64 end_item) const;
+    // Appends hosts in the given workspace and group (exact match on both columns) to |out| and
+    // sets its error_code. [start_item, end_item] gives an inclusive paging window; pass
+    // end_item <= 0 to disable.
+    void hosts(qint64 workspace_id, qint64 group_id, qint64 start_item, qint64 end_item,
+        proto::router::HostList* out) const;
 
     // Total host count in the same scope as the matching hosts() overload. Used by the client
     // to drive pagination UI without fetching the full list.
     qint64 hostCount() const;
     qint64 hostCount(qint64 workspace_id, qint64 group_id) const;
 
-    // Substring search over |display_name| and the decimal host_id, restricted to the given
-    // workspaces. |workspace_ids| must already be the set the user is allowed to see; an empty
-    // list yields no results.
-    QList<HostInfo> searchHosts(const QString& query, const QList<qint64>& workspace_ids) const;
+    // Substring search over |display_name| (case-insensitive) and the decimal host_id, restricted
+    // to the given workspaces. |workspace_ids| must already be the set the user is allowed to see;
+    // an empty list yields no results. Matches are appended to |out| and its error_code is set;
+    // Host.online is left unset.
+    void searchHosts(const QString& query, const QList<qint64>& workspace_ids,
+        proto::router::HostSearchResult* out) const;
 
     // Host removal: hosts_remove queue. Schedule moves the row from hosts to hosts_remove, the
     // host_id is then kept until the host process acknowledges the removal command.
@@ -203,7 +199,18 @@ public:
     // Workspaces
     //----------------------------------------------------------------------------------------------
 
-    QList<Workspace> workspaceList() const;
+    // Appends the workspaces visible to |user_id| (those it has an access entry for) to |out|,
+    // reading rows straight into the protobuf message. workspace_id == 0 returns all visible
+    // workspaces; > 0 narrows to that single one. Both set |out|'s error_code.
+    //
+    // WithAllAccess attaches every member's access entry to each workspace (for admin sessions
+    // managing membership) and fetches them in a single query (no per-workspace round trip).
+    // WithOwnAccess attaches only |user_id|'s own access entry (the wrapped_gk it needs to open
+    // the workspace GK), which the visibility join already yields - so it runs a single query.
+    void workspaceListWithAllAccess(qint64 user_id, qint64 workspace_id,
+        proto::router::WorkspaceList* out) const;
+    void workspaceListWithOwnAccess(qint64 user_id, qint64 workspace_id,
+        proto::router::WorkspaceList* out) const;
     Workspace findWorkspace(qint64 entry_id) const;
 
     // Initial access list may be empty - in that case the workspace has no GK yet; it will
@@ -228,9 +235,6 @@ public:
     // hijack a host from another workspace through this call).
     std::string_view setWorkspaceHosts(qint64 entry_id, const QSet<HostId>& desired_host_ids);
 
-    // Workspace access (per-user wrapped GK).
-    QList<Workspace::Access> workspaceAccessList(qint64 workspace_id) const;
-
     // Returns the set of workspace ids the given user has a workspace_access entry for.
     QSet<qint64> workspaceAccessIdsForUser(qint64 user_id) const;
 
@@ -250,9 +254,10 @@ public:
     // Hosts Groups
     //----------------------------------------------------------------------------------------------
 
-    // Returns every group in the given workspace in unspecified order. The caller builds a tree
-    // by indexing on entry_id and linking via parent_id; display ordering is the client's job.
-    QList<Group> groupList(qint64 workspace_id) const;
+    // Appends every group in the given workspace (unspecified order) to |out| and sets its
+    // error_code, reading rows straight into the protobuf message. The client builds a tree by
+    // indexing on entry_id and linking via parent_id; display ordering is the client's job.
+    void groupList(qint64 workspace_id, proto::router::GroupList* out) const;
 
     // Returns direct children of parent_id within workspace_id. parent_id == 0 returns root
     // groups (parent_id IS NULL in the table).

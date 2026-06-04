@@ -33,6 +33,7 @@
 #include "base/files/base_paths.h"
 #include "base/sql/sql_query.h"
 #include "base/sql/sql_transaction.h"
+#include "proto/router_client.h"
 #include "proto/router_constants.h"
 
 namespace {
@@ -982,12 +983,13 @@ bool Database::modifyHost(HostId host_id, qint64 group_id, const QString& displa
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<HostInfo> Database::hosts(qint64 start_item, qint64 end_item) const
+void Database::hosts(qint64 start_item, qint64 end_item, proto::router::HostList* out) const
 {
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return {};
+        out->set_error_code(proto::router::kErrorInternalError);
+        return;
     }
 
     const bool paginate = end_item > 0 && end_item >= start_item;
@@ -997,44 +999,50 @@ QList<HostInfo> Database::hosts(qint64 start_item, qint64 end_item) const
         paginate ? " LIMIT ? OFFSET ?" : ""});
 
     SqlQuery query(db_, sql);
+    if (!query.isValid())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        out->set_error_code(proto::router::kErrorInternalError);
+        return;
+    }
+
     if (paginate)
     {
         query.addInt64(end_item - start_item + 1);
         query.addInt64(start_item);
     }
 
-    QList<HostInfo> result;
     while (query.next())
     {
-        HostInfo info;
-        info.host_id       = query.columnUInt64(0);
-        info.workspace_id  = query.columnInt64(1);
-        info.group_id      = query.columnInt64(2);
-        info.display_name  = query.columnText(3);
-        info.computer_name = query.columnText(4);
-        info.cpu_arch      = query.columnText(5);
-        info.version       = query.columnText(6);
-        info.os_name       = query.columnText(7);
-        info.address       = query.columnText(8);
-        info.comment       = query.columnBlob(9);
-        info.user_name     = query.columnBlob(10);
-        info.password      = query.columnBlob(11);
-        info.last_connect  = query.columnInt64(12);
-        info.last_modify   = query.columnInt64(13);
-        result.append(info);
+        proto::router::Host* host = out->add_host();
+        host->set_host_id(query.columnUInt64(0));
+        host->set_workspace_id(query.columnInt64(1));
+        host->set_group_id(query.columnInt64(2));
+        host->set_display_name(query.columnTextView(3));
+        host->set_computer_name(query.columnTextView(4));
+        host->set_cpu_arch(query.columnTextView(5));
+        host->set_version(query.columnTextView(6));
+        host->set_os_name(query.columnTextView(7));
+        host->set_address(query.columnTextView(8));
+        host->set_comment(query.columnBlobView(9));
+        host->set_user_name(query.columnBlobView(10));
+        host->set_password(query.columnBlobView(11));
+        host->set_last_connect(query.columnInt64(12));
+        host->set_last_modify(query.columnInt64(13));
     }
 
-    return result;
+    out->set_error_code(proto::router::kErrorOk);
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<HostInfo> Database::hosts(
-    qint64 workspace_id, qint64 group_id, qint64 start_item, qint64 end_item) const
+void Database::hosts(qint64 workspace_id, qint64 group_id, qint64 start_item,
+    qint64 end_item, proto::router::HostList* out) const
 {
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return {};
+        out->set_error_code(proto::router::kErrorInternalError);
+        return;
     }
 
     const bool paginate = end_item > 0 && end_item >= start_item;
@@ -1045,6 +1053,13 @@ QList<HostInfo> Database::hosts(
         paginate ? " LIMIT ? OFFSET ?" : ""});
 
     SqlQuery query(db_, sql);
+    if (!query.isValid())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        out->set_error_code(proto::router::kErrorInternalError);
+        return;
+    }
+
     query.addInt64(workspace_id);
     query.addInt64(group_id);
     if (paginate)
@@ -1053,28 +1068,26 @@ QList<HostInfo> Database::hosts(
         query.addInt64(start_item);
     }
 
-    QList<HostInfo> result;
     while (query.next())
     {
-        HostInfo info;
-        info.host_id       = query.columnUInt64(0);
-        info.workspace_id  = query.columnInt64(1);
-        info.group_id      = query.columnInt64(2);
-        info.display_name  = query.columnText(3);
-        info.computer_name = query.columnText(4);
-        info.cpu_arch      = query.columnText(5);
-        info.version       = query.columnText(6);
-        info.os_name       = query.columnText(7);
-        info.address       = query.columnText(8);
-        info.comment       = query.columnBlob(9);
-        info.user_name     = query.columnBlob(10);
-        info.password      = query.columnBlob(11);
-        info.last_connect  = query.columnInt64(12);
-        info.last_modify   = query.columnInt64(13);
-        result.append(info);
+        proto::router::Host* host = out->add_host();
+        host->set_host_id(query.columnUInt64(0));
+        host->set_workspace_id(query.columnInt64(1));
+        host->set_group_id(query.columnInt64(2));
+        host->set_display_name(query.columnTextView(3));
+        host->set_computer_name(query.columnTextView(4));
+        host->set_cpu_arch(query.columnTextView(5));
+        host->set_version(query.columnTextView(6));
+        host->set_os_name(query.columnTextView(7));
+        host->set_address(query.columnTextView(8));
+        host->set_comment(query.columnBlobView(9));
+        host->set_user_name(query.columnBlobView(10));
+        host->set_password(query.columnBlobView(11));
+        host->set_last_connect(query.columnInt64(12));
+        host->set_last_modify(query.columnInt64(13));
     }
 
-    return result;
+    out->set_error_code(proto::router::kErrorOk);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1113,16 +1126,21 @@ qint64 Database::hostCount(qint64 workspace_id, qint64 group_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<HostInfo> Database::searchHosts(const QString& query_text, const QList<qint64>& workspace_ids) const
+void Database::searchHosts(const QString& query_text,
+    const QList<qint64>& workspace_ids, proto::router::HostSearchResult* out) const
 {
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return {};
+        out->set_error_code(proto::router::kErrorInternalError);
+        return;
     }
 
     if (workspace_ids.isEmpty() || query_text.isEmpty())
-        return {};
+    {
+        out->set_error_code(proto::router::kErrorOk);
+        return;
+    }
 
     // Escape LIKE wildcards so user input is matched literally.
     QString escaped = query_text;
@@ -1142,37 +1160,43 @@ QList<HostInfo> Database::searchHosts(const QString& query_text, const QList<qin
         "SELECT id, workspace_id, group_id, display_name, computer_name, cpu_arch, "
         "version, os_name, address, comment, user_name, password, last_connect, last_modify "
         "FROM hosts WHERE workspace_id IN (" + placeholders.join(',') + ") "
-        "AND (display_name LIKE ? ESCAPE '\\' OR CAST(id AS TEXT) LIKE ? ESCAPE '\\') "
+        "AND (casefold(display_name) LIKE casefold(?) ESCAPE '\\' "
+        "OR CAST(id AS TEXT) LIKE ? ESCAPE '\\') "
         "ORDER BY display_name";
 
     SqlQuery query(db_, sql.toStdString());
+    if (!query.isValid())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        out->set_error_code(proto::router::kErrorInternalError);
+        return;
+    }
+
     for (qint64 workspace_id : workspace_ids)
         query.addInt64(workspace_id);
     query.addText(pattern);
     query.addText(pattern);
 
-    QList<HostInfo> result;
     while (query.next())
     {
-        HostInfo info;
-        info.host_id       = query.columnUInt64(0);
-        info.workspace_id  = query.columnInt64(1);
-        info.group_id      = query.columnInt64(2);
-        info.display_name  = query.columnText(3);
-        info.computer_name = query.columnText(4);
-        info.cpu_arch      = query.columnText(5);
-        info.version       = query.columnText(6);
-        info.os_name       = query.columnText(7);
-        info.address       = query.columnText(8);
-        info.comment       = query.columnBlob(9);
-        info.user_name     = query.columnBlob(10);
-        info.password      = query.columnBlob(11);
-        info.last_connect  = query.columnInt64(12);
-        info.last_modify   = query.columnInt64(13);
-        result.append(info);
+        proto::router::Host* host = out->add_host();
+        host->set_host_id(query.columnUInt64(0));
+        host->set_workspace_id(query.columnInt64(1));
+        host->set_group_id(query.columnInt64(2));
+        host->set_display_name(query.columnTextView(3));
+        host->set_computer_name(query.columnTextView(4));
+        host->set_cpu_arch(query.columnTextView(5));
+        host->set_version(query.columnTextView(6));
+        host->set_os_name(query.columnTextView(7));
+        host->set_address(query.columnTextView(8));
+        host->set_comment(query.columnBlobView(9));
+        host->set_user_name(query.columnBlobView(10));
+        host->set_password(query.columnBlobView(11));
+        host->set_last_connect(query.columnInt64(12));
+        host->set_last_modify(query.columnInt64(13));
     }
 
-    return result;
+    out->set_error_code(proto::router::kErrorOk);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1291,27 +1315,129 @@ bool Database::finalizeHostRemoval(HostId host_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<Workspace> Database::workspaceList() const
+void Database::workspaceListWithAllAccess(qint64 user_id, qint64 workspace_id,
+    proto::router::WorkspaceList* out) const
 {
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return {};
+        out->set_error_code(proto::router::kErrorInternalError);
+        return;
     }
 
-    SqlQuery query(db_, "SELECT id, name, comment FROM workspaces");
+    // Visible workspaces: those the admin has an access row for (optionally narrowed to workspace_id).
+    // Indexed by id so the access query below can attach every member's entry.
+    QHash<qint64, proto::router::Workspace*> by_id;
+    {
+        const std::string sql = strCat({
+            "SELECT workspaces.id, workspaces.name, workspaces.comment FROM workspaces "
+            "JOIN workspace_access ON workspace_access.workspace_id = workspaces.id "
+            "AND workspace_access.user_id = ?",
+            workspace_id > 0 ? " AND workspaces.id = ?" : ""});
 
-    QList<Workspace> workspaces;
+        SqlQuery query(db_, sql);
+        if (!query.isValid())
+        {
+            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+            out->set_error_code(proto::router::kErrorInternalError);
+            return;
+        }
+
+        query.addInt64(user_id);
+        if (workspace_id > 0)
+            query.addInt64(workspace_id);
+
+        while (query.next())
+        {
+            proto::router::Workspace* item = out->add_workspace();
+            item->set_entry_id(query.columnInt64(0));
+            item->set_name(query.columnTextView(1));
+            item->set_comment(query.columnBlobView(2));
+            by_id.insert(item->entry_id(), item);
+        }
+    }
+
+    if (by_id.isEmpty())
+    {
+        out->set_error_code(proto::router::kErrorOk);
+        return;
+    }
+
+    // Every member's access entry for the visible workspaces in a single query (no per-workspace
+    // round trip). The by_id lookup discards rows for workspaces the admin cannot see.
+    const std::string sql = strCat({
+        "SELECT workspace_id, user_id, wrapped_gk FROM workspace_access",
+        workspace_id > 0 ? " WHERE workspace_id = ?" : ""});
+
+    SqlQuery query(db_, sql);
+    if (!query.isValid())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        out->set_error_code(proto::router::kErrorInternalError);
+        return;
+    }
+
+    if (workspace_id > 0)
+        query.addInt64(workspace_id);
+
     while (query.next())
     {
-        Workspace workspace;
-        workspace.entry_id = query.columnInt64(0);
-        workspace.name     = query.columnText(1);
-        workspace.comment  = query.columnBlob(2);
-        workspaces.append(workspace);
+        const auto it = by_id.constFind(query.columnInt64(0));
+        if (it == by_id.constEnd())
+            continue;
+
+        proto::router::WorkspaceAccess* access = it.value()->add_access();
+        access->set_user_id(query.columnInt64(1));
+        access->set_wrapped_gk(query.columnBlobView(2));
     }
 
-    return workspaces;
+    out->set_error_code(proto::router::kErrorOk);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Database::workspaceListWithOwnAccess(qint64 user_id, qint64 workspace_id,
+    proto::router::WorkspaceList* out) const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        out->set_error_code(proto::router::kErrorInternalError);
+        return;
+    }
+
+    // The visibility join is on the user's own access row, so the same query already yields the
+    // wrapped_gk it needs - no second query and no per-workspace round trip.
+    const std::string sql = strCat({
+        "SELECT workspaces.id, workspaces.name, workspaces.comment, workspace_access.wrapped_gk "
+        "FROM workspaces JOIN workspace_access ON workspace_access.workspace_id = workspaces.id "
+        "AND workspace_access.user_id = ?",
+        workspace_id > 0 ? " AND workspaces.id = ?" : ""});
+
+    SqlQuery query(db_, sql);
+    if (!query.isValid())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        out->set_error_code(proto::router::kErrorInternalError);
+        return;
+    }
+
+    query.addInt64(user_id);
+    if (workspace_id > 0)
+        query.addInt64(workspace_id);
+
+    while (query.next())
+    {
+        proto::router::Workspace* item = out->add_workspace();
+        item->set_entry_id(query.columnInt64(0));
+        item->set_name(query.columnTextView(1));
+        item->set_comment(query.columnBlobView(2));
+
+        proto::router::WorkspaceAccess* access = item->add_access();
+        access->set_user_id(user_id);
+        access->set_wrapped_gk(query.columnBlobView(3));
+    }
+
+    out->set_error_code(proto::router::kErrorOk);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1692,33 +1818,6 @@ std::string_view Database::setWorkspaceHosts(qint64 entry_id, const QSet<HostId>
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<Workspace::Access> Database::workspaceAccessList(qint64 workspace_id) const
-{
-    if (!isValid())
-    {
-        LOG(ERROR) << "Database is not valid";
-        return {};
-    }
-
-    const char kSql[] =
-        "SELECT workspace_id, user_id, wrapped_gk FROM workspace_access WHERE workspace_id=?";
-    SqlQuery query(db_, kSql);
-    query.addInt64(workspace_id);
-
-    QList<Workspace::Access> result;
-    while (query.next())
-    {
-        Workspace::Access access;
-        access.workspace_id = query.columnInt64(0);
-        access.user_id      = query.columnInt64(1);
-        access.wrapped_gk   = query.columnBlob(2);
-        result.append(access);
-    }
-
-    return result;
-}
-
-//--------------------------------------------------------------------------------------------------
 QSet<qint64> Database::workspaceAccessIdsForUser(qint64 user_id) const
 {
     if (!isValid())
@@ -1849,42 +1948,49 @@ bool Database::setWorkspaceKeysForUser(qint64 user_id, const QHash<qint64, QByte
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<Group> Database::groupList(qint64 workspace_id) const
+void Database::groupList(qint64 workspace_id, proto::router::GroupList* out) const
 {
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return {};
+        out->set_error_code(proto::router::kErrorInternalError);
+        return;
     }
 
     if (workspace_id <= 0)
     {
         LOG(ERROR) << "Invalid workspace id:" << workspace_id;
-        return {};
+        out->set_error_code(proto::router::kErrorInvalidData);
+        return;
     }
 
     // Read every group of this workspace. parent_id is NULL for root groups in storage; we
-    // coalesce it to 0 to match the Group struct convention used everywhere in the API. Rows
-    // come back in whatever order SQLite produces them. Display ordering (alphabetic,
-    // locale-aware, and so on) is the client's job. Building a tree from this result does not
-    // require any particular order: index nodes by id, then link children to parents.
+    // coalesce it to 0 to match the convention used everywhere in the API. Rows come back in
+    // whatever order SQLite produces them. Display ordering (alphabetic, locale-aware, and so on)
+    // is the client's job. Building a tree from this result does not require any particular order:
+    // index nodes by id, then link children to parents.
     const char kSql[] =
         "SELECT id, IFNULL(parent_id, 0), name, comment FROM host_groups WHERE workspace_id=?";
     SqlQuery query(db_, kSql);
-    query.addInt64(workspace_id);
-
-    QList<Group> groups;
-    while (query.next())
+    if (!query.isValid())
     {
-        Group group;
-        group.entry_id  = query.columnInt64(0);
-        group.parent_id = query.columnInt64(1);
-        group.name      = query.columnText(2);
-        group.comment   = query.columnBlob(3);
-        groups.append(group);
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        out->set_error_code(proto::router::kErrorInternalError);
+        return;
     }
 
-    return groups;
+    query.addInt64(workspace_id);
+
+    while (query.next())
+    {
+        proto::router::Group* group = out->add_group();
+        group->set_entry_id(query.columnInt64(0));
+        group->set_parent_id(query.columnInt64(1));
+        group->set_name(query.columnTextView(2));
+        group->set_comment(query.columnBlobView(3));
+    }
+
+    out->set_error_code(proto::router::kErrorOk);
 }
 
 //--------------------------------------------------------------------------------------------------

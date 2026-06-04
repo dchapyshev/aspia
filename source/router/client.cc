@@ -74,26 +74,6 @@ QSet<HostId> onlineHostIds()
     return online_host_ids;
 }
 
-//--------------------------------------------------------------------------------------------------
-void fillHost(proto::router::Host* item, const HostInfo& info, const QSet<HostId>& online_host_ids)
-{
-    item->set_host_id(info.host_id);
-    item->set_workspace_id(info.workspace_id);
-    item->set_group_id(info.group_id);
-    item->set_display_name(info.display_name.toStdString());
-    item->set_computer_name(info.computer_name.toStdString());
-    item->set_cpu_arch(info.cpu_arch.toStdString());
-    item->set_version(info.version.toStdString());
-    item->set_os_name(info.os_name.toStdString());
-    item->set_address(info.address.toStdString());
-    item->set_comment(info.comment.toStdString());
-    item->set_user_name(info.user_name.toStdString());
-    item->set_password(info.password.toStdString());
-    item->set_last_connect(info.last_connect);
-    item->set_last_modify(info.last_modify);
-    item->set_online(online_host_ids.contains(info.host_id));
-}
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -628,28 +608,21 @@ void Client::readHostListRequest(const proto::router::HostListRequest& request)
         return;
     }
 
-    // Collect host_ids of currently connected hosts to mark them online.
-    const QSet<HostId> online_host_ids = onlineHostIds();
-
-    QList<HostInfo> hosts;
-    qint64 hosts_count = 0;
-
     if (mode == proto::router::HostListRequest::MODE_ALL)
     {
-        hosts_count = database.hostCount();
-        hosts = database.hosts(start_item, end_item);
+        result->set_total_count(database.hostCount());
+        database.hosts(start_item, end_item, result);
     }
     else
     {
-        hosts_count = database.hostCount(workspace_id, group_id);
-        hosts = database.hosts(workspace_id, group_id, start_item, end_item);
+        result->set_total_count(database.hostCount(workspace_id, group_id));
+        database.hosts(workspace_id, group_id, start_item, end_item, result);
     }
 
-    result->set_error_code(proto::router::kErrorOk);
-    result->set_total_count(hosts_count);
-
-    for (const HostInfo& info : std::as_const(hosts))
-        fillHost(result->add_host(), info, online_host_ids);
+    // Mark currently connected hosts as online.
+    const QSet<HostId> online_host_ids = onlineHostIds();
+    for (proto::router::Host& host : *result->mutable_host())
+        host.set_online(online_host_ids.contains(host.host_id()));
 
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 }
@@ -671,23 +644,15 @@ void Client::readHostSearchRequest(const proto::router::HostSearchRequest& reque
     }
 
     // Search is always scoped to every workspace the user can access, regardless of session type.
-    QList<qint64> workspace_ids;
-    const QList<Workspace::Access> access_list = database.workspaceAccessListForUser(userId());
-    workspace_ids.reserve(access_list.size());
-    for (const Workspace::Access& access : std::as_const(access_list))
-        workspace_ids.append(access.workspace_id);
+    // Only the ids are needed here, so avoid pulling each membership's wrapped_gk blob.
+    const QList<qint64> workspace_ids = database.workspaceAccessIdsForUser(userId()).values();
 
-    result->set_error_code(proto::router::kErrorOk);
+    database.searchHosts(QString::fromStdString(request.query()), workspace_ids, result);
 
-    if (!workspace_ids.isEmpty())
-    {
-        const QSet<HostId> online_host_ids = onlineHostIds();
-        const QList<HostInfo> hosts =
-            database.searchHosts(QString::fromStdString(request.query()), workspace_ids);
-
-        for (const HostInfo& info : std::as_const(hosts))
-            fillHost(result->add_host(), info, online_host_ids);
-    }
+    // Mark currently connected hosts as online.
+    const QSet<HostId> online_host_ids = onlineHostIds();
+    for (proto::router::Host& host : *result->mutable_host())
+        host.set_online(online_host_ids.contains(host.host_id()));
 
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 }
@@ -708,41 +673,13 @@ void Client::readWorkspaceListRequest(const proto::router::WorkspaceListRequest&
         return;
     }
 
-    list->set_error_code(proto::router::kErrorOk);
-
-    // Each session sees only the workspaces it has a workspace_access entry for. Admin gets
-    // the full access list for each (needed to manage membership); other session types get
-    // only their own entry (only their own wrapped_gk is needed to decrypt the workspace GK).
-    const bool is_admin = sessionType() == proto::router::SESSION_TYPE_ADMIN;
-    const QSet<qint64> accessible_ids = database.workspaceAccessIdsForUser(userId());
-    const QList<Workspace> workspaces = database.workspaceList();
-
-    // workspace_id == 0 means "all visible workspaces"; > 0 narrows to a single entry.
-    const qint64 filter_id = request.workspace_id();
-
-    for (const Workspace& workspace : std::as_const(workspaces))
-    {
-        if (filter_id > 0 && workspace.entry_id != filter_id)
-            continue;
-        if (!accessible_ids.contains(workspace.entry_id))
-            continue;
-
-        proto::router::Workspace* item = list->add_workspace();
-        item->set_entry_id(workspace.entry_id);
-        item->set_name(workspace.name.toStdString());
-        item->set_comment(workspace.comment.toStdString());
-
-        const QList<Workspace::Access> accesses = database.workspaceAccessList(workspace.entry_id);
-        for (const Workspace::Access& access : std::as_const(accesses))
-        {
-            if (!is_admin && access.user_id != userId())
-                continue;
-
-            proto::router::WorkspaceAccess* access_item = item->add_access();
-            access_item->set_user_id(access.user_id);
-            access_item->set_wrapped_gk(access.wrapped_gk.toStdString());
-        }
-    }
+    // Each session sees only the workspaces it has a workspace_access entry for. Admins get the
+    // full access list per workspace (needed to manage membership); other sessions get only their
+    // own entry. workspace_id == 0 means all visible workspaces; > 0 narrows to a single entry.
+    if (sessionType() == proto::router::SESSION_TYPE_ADMIN)
+        database.workspaceListWithAllAccess(userId(), request.workspace_id(), list);
+    else
+        database.workspaceListWithOwnAccess(userId(), request.workspace_id(), list);
 
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 }
@@ -782,17 +719,7 @@ void Client::readGroupListRequest(const proto::router::GroupListRequest& request
         return;
     }
 
-    const QList<Group> groups = database.groupList(workspace_id);
-
-    result->set_error_code(proto::router::kErrorOk);
-    for (const Group& group : std::as_const(groups))
-    {
-        proto::router::Group* item = result->add_group();
-        item->set_entry_id(group.entry_id);
-        item->set_parent_id(group.parent_id);
-        item->set_name(group.name.toStdString());
-        item->set_comment(group.comment.toStdString());
-    }
+    database.groupList(workspace_id, result);
 
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 }
