@@ -22,6 +22,8 @@
 #include <QString>
 
 struct sqlite3;
+struct sqlite3_context;
+struct sqlite3_value;
 
 namespace sqlite {
 
@@ -51,6 +53,14 @@ public:
 
     // Sets how long a blocked writer waits for a lock before giving up (WAL contention).
     bool setBusyTimeout(int ms);
+
+    // Signature of a custom scalar SQL function: reads its arguments from |argv| and reports the
+    // result through |context| using the sqlite3_result_* family.
+    using ScalarFunc = void (*)(sqlite3_context* context, int argc, sqlite3_value** argv);
+
+    // Registers a deterministic UTF-8 scalar function callable from SQL under |name|. |arg_count|
+    // is the number of arguments (-1 for variadic).
+    bool createScalarFunction(const char* name, int arg_count, ScalarFunc func);
 
     // rowid of the most recent successful INSERT on this connection.
     qint64 lastInsertRowId() const;

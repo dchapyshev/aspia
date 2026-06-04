@@ -179,3 +179,35 @@ TEST(SqliteTest, UInt64RoundTrip)
     ASSERT_TRUE(select.next());
     EXPECT_EQ(select.columnUInt64(0), big);
 }
+
+//--------------------------------------------------------------------------------------------------
+TEST(SqliteTest, CaseFoldSearchCyrillic)
+{
+    sqlite::Database db;
+    ASSERT_TRUE(db.open(":memory:"));
+    ASSERT_TRUE(createSchema(db));
+
+    sqlite::Statement insert(db, "INSERT INTO t (name, data, value) VALUES (?, ?, ?)");
+    insert.addText(QString::fromUtf8("Сервер Бухгалтерии")).addBlob(QByteArray()).addInt64(0);
+    ASSERT_TRUE(insert.execute());
+
+    // A lower-case Cyrillic substring must match the mixed-case stored name once both sides are
+    // folded - the stock ASCII-only LIKE would miss it.
+    sqlite::Statement select(db, "SELECT COUNT(*) FROM t "
+                                 "WHERE casefold(name) LIKE casefold(?) ESCAPE '\\'");
+    select.addText(QString::fromUtf8("%бухгалтерии%"));
+    ASSERT_TRUE(select.next());
+    EXPECT_EQ(select.columnInt64(0), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SqliteTest, CaseFoldFunctionFoldsValue)
+{
+    sqlite::Database db;
+    ASSERT_TRUE(db.open(":memory:"));
+
+    sqlite::Statement select(db, "SELECT casefold(?)");
+    select.addText(QString::fromUtf8("ПРИВЕТ World"));
+    ASSERT_TRUE(select.next());
+    EXPECT_EQ(select.columnText(0), QString::fromUtf8("привет world"));
+}

@@ -95,6 +95,10 @@ set(THIRD_PARTY_LIBS
     unofficial::sqlite3::sqlite3
     yuv)
 
+if (LINUX OR APPLE)
+    list(APPEND THIRD_PARTY_LIBS ICU::uc)
+endif()
+
 include_directories(${PROJECT_SOURCE_DIR}/source ${PROJECT_BINARY_DIR}/source)
 
 # C++ compliller flags.

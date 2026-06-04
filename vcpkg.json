@@ -83,6 +83,14 @@
       ]
     },
     "qtsvg",
-    "qttools"
+    "qttools",
+    "sqlite3",
+    {
+      "name": "sqlite3",
+      "features": [
+        "unicode"
+      ],
+      "platform": "linux | osx"
+    }
   ]
 }

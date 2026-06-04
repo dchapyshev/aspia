@@ -20,9 +20,92 @@
 
 #include <sqlite3.h>
 
+#if defined(Q_OS_WINDOWS)
+#include <qt_windows.h>
+#else
+#include <unicode/uchar.h>
+#include <unicode/ustring.h>
+#endif // defined(Q_OS_WINDOWS)
+
 #include "base/logging.h"
 
 namespace sqlite {
+
+namespace {
+
+//--------------------------------------------------------------------------------------------------
+void caseFold(sqlite3_context* context, int argc, sqlite3_value** argv)
+{
+    if (argc != 1)
+    {
+        sqlite3_result_null(context);
+        return;
+    }
+
+    const auto* source = static_cast<const char16_t*>(sqlite3_value_text16(argv[0]));
+    if (!source)
+    {
+        // NULL or non-text argument folds to NULL, matching sqlite's own string functions.
+        sqlite3_result_null(context);
+        return;
+    }
+
+    const int source_length = sqlite3_value_bytes16(argv[0]) / static_cast<int>(sizeof(char16_t));
+    if (source_length <= 0)
+    {
+        sqlite3_result_text16(context, u"", 0, SQLITE_TRANSIENT);
+        return;
+    }
+
+    std::u16string folded;
+    int folded_length = 0;
+
+#if defined(Q_OS_WINDOWS)
+    // LCMAP_LOWERCASE applies the Unicode lowercase mapping; the invariant locale keeps the result
+    // independent of the machine's locale.
+    const auto* win_source = reinterpret_cast<const wchar_t*>(source);
+    folded_length = LCMapStringEx(
+        LOCALE_NAME_INVARIANT, LCMAP_LOWERCASE, win_source, source_length, nullptr, 0, nullptr,
+        nullptr, 0);
+    if (folded_length <= 0)
+    {
+        // Folding failed - fall back to the original value rather than dropping the row.
+        sqlite3_result_value(context, argv[0]);
+        return;
+    }
+
+    folded.resize(static_cast<size_t>(folded_length));
+    LCMapStringEx(LOCALE_NAME_INVARIANT, LCMAP_LOWERCASE, win_source, source_length,
+                  reinterpret_cast<wchar_t*>(folded.data()), folded_length, nullptr, nullptr, 0);
+#else
+    // Preflight to learn the folded length (sets U_BUFFER_OVERFLOW_ERROR), then fold for real.
+    UErrorCode status = U_ZERO_ERROR;
+    folded_length = u_strFoldCase(nullptr, 0, reinterpret_cast<const UChar*>(source), source_length,
+                                  U_FOLD_CASE_DEFAULT, &status);
+    if (folded_length <= 0)
+    {
+        // Folding failed - fall back to the original value rather than dropping the row.
+        sqlite3_result_value(context, argv[0]);
+        return;
+    }
+
+    status = U_ZERO_ERROR;
+    folded.resize(static_cast<size_t>(folded_length));
+    u_strFoldCase(reinterpret_cast<UChar*>(folded.data()), folded_length,
+                  reinterpret_cast<const UChar*>(source), source_length, U_FOLD_CASE_DEFAULT,
+                  &status);
+    if (U_FAILURE(status))
+    {
+        sqlite3_result_value(context, argv[0]);
+        return;
+    }
+#endif
+
+    sqlite3_result_text16(context, folded.data(),
+                          folded_length * static_cast<int>(sizeof(char16_t)), SQLITE_TRANSIENT);
+}
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 Database::~Database()
@@ -52,6 +135,11 @@ bool Database::open(const QString& file_path)
         close();
         return false;
     }
+
+    // Register a Unicode-aware casefold() so case-insensitive search works for non-ASCII text.
+    // The stock sqlite LIKE folds ASCII only; casefold() folds via the platform Unicode API and
+    // the search query folds both operands: casefold(col) LIKE casefold(?). See caseFold above.
+    createScalarFunction("casefold", 1, &caseFold);
 
     return true;
 }
@@ -124,6 +212,29 @@ bool Database::setBusyTimeout(int ms)
     if (result != SQLITE_OK)
     {
         LOG(ERROR) << "Unable to set busy timeout:" << sqlite3_errstr(result);
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::createScalarFunction(const char* name, int arg_count, ScalarFunc func)
+{
+    if (!db_)
+    {
+        LOG(ERROR) << "Database is not open";
+        return false;
+    }
+
+    // DETERMINISTIC lets sqlite reuse results for identical inputs and use the function in more
+    // contexts (indexed expressions, the WHERE clause optimizer).
+    const int result = sqlite3_create_function_v2(
+        db_, name, arg_count, SQLITE_UTF8 | SQLITE_DETERMINISTIC, nullptr, func, nullptr, nullptr,
+        nullptr);
+    if (result != SQLITE_OK)
+    {
+        LOG(ERROR) << "Unable to create function" << name << ":" << sqlite3_errstr(result);
         return false;
     }
 
