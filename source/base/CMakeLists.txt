@@ -67,6 +67,8 @@ list(APPEND SOURCE_BASE
     smbios.h
     smbios_parser.cc
     smbios_parser.h
+    string_util.cc
+    string_util.h
     sys_info.cc
     sys_info.h
     system_error.cc
@@ -112,6 +114,7 @@ list(APPEND SOURCE_BASE_TESTS
     scoped_clear_last_error_unittest.cc
     serialization_unittest.cc
     shared_pointer_unittest.cc
+    string_util_unittest.cc
     xml_settings_unittest.cc
     tests_main.cc)
 

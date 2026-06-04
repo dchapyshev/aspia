@@ -27,6 +27,7 @@
 #include <utility>
 
 #include "base/logging.h"
+#include "base/string_util.h"
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/random.h"
 #include "base/files/base_paths.h"
@@ -234,8 +235,8 @@ bool ensureSchema(Sql& db)
         if (hasColumn(db, "users", column.name))
             continue;
 
-        const std::string sql = std::string("ALTER TABLE \"users\" ADD COLUMN \"") +
-            column.name + "\" " + column.definition;
+        const std::string sql = strCat({"ALTER TABLE \"users\" ADD COLUMN \"",
+                                         column.name, "\" ", column.definition});
         if (!db.exec(sql.c_str()))
         {
             LOG(ERROR) << "Unable to add column" << column.name << ":" << db.lastError();
@@ -292,8 +293,8 @@ bool ensureSchema(Sql& db)
         if (hasColumn(db, "hosts", column.name))
             continue;
 
-        const std::string sql = std::string("ALTER TABLE \"hosts\" ADD COLUMN \"") +
-            column.name + "\" " + column.definition;
+        const std::string sql = strCat({"ALTER TABLE \"hosts\" ADD COLUMN \"",
+                                         column.name, "\" ", column.definition});
         if (!db.exec(sql.c_str()))
         {
             LOG(ERROR) << "Unable to add column" << column.name << ":" << db.lastError();
@@ -989,13 +990,11 @@ QList<HostInfo> Database::hosts(qint64 start_item, qint64 end_item) const
         return {};
     }
 
-    std::string sql = "SELECT id, workspace_id, group_id, display_name, computer_name, cpu_arch, "
-                      "version, os_name, address, comment, user_name, password, last_connect, "
-                      "last_modify FROM hosts";
-
     const bool paginate = end_item > 0 && end_item >= start_item;
-    if (paginate)
-        sql += " LIMIT ? OFFSET ?";
+    const std::string sql = strCat({
+        "SELECT id, workspace_id, group_id, display_name, computer_name, cpu_arch, version, "
+        "os_name, address, comment, user_name, password, last_connect, last_modify FROM hosts",
+        paginate ? " LIMIT ? OFFSET ?" : ""});
 
     SqlQuery query(db_, sql);
     if (paginate)
@@ -1038,13 +1037,12 @@ QList<HostInfo> Database::hosts(
         return {};
     }
 
-    std::string sql = "SELECT id, workspace_id, group_id, display_name, computer_name, cpu_arch, "
-                      "version, os_name, address, comment, user_name, password, last_connect, "
-                      "last_modify FROM hosts WHERE workspace_id=? AND group_id=?";
-
     const bool paginate = end_item > 0 && end_item >= start_item;
-    if (paginate)
-        sql += " LIMIT ? OFFSET ?";
+    const std::string sql = strCat({
+        "SELECT id, workspace_id, group_id, display_name, computer_name, cpu_arch, version, "
+        "os_name, address, comment, user_name, password, last_connect, last_modify "
+        "FROM hosts WHERE workspace_id=? AND group_id=?",
+        paginate ? " LIMIT ? OFFSET ?" : ""});
 
     SqlQuery query(db_, sql);
     query.addInt64(workspace_id);
@@ -1908,10 +1906,10 @@ QList<Group> Database::groupChildren(qint64 workspace_id, qint64 parent_id) cons
     // "root groups" and maps to WHERE parent_id IS NULL (SQLite treats NULL via IS, not =).
     // Otherwise filter on the parent id as a normal integer match. The SELECT shape mirrors
     // groupList() so the column to struct mapping below stays identical.
-    std::string sql = "SELECT id, IFNULL(parent_id, 0), name, comment FROM host_groups "
-                      "WHERE workspace_id=? AND ";
-    sql += (parent_id == 0) ? "parent_id IS NULL" : "parent_id=?";
-    sql += " ORDER BY name";
+    const std::string sql = strCat({
+        "SELECT id, IFNULL(parent_id, 0), name, comment FROM host_groups WHERE workspace_id=? AND ",
+        parent_id == 0 ? "parent_id IS NULL" : "parent_id=?",
+        " ORDER BY name"});
 
     SqlQuery query(db_, sql);
     query.addInt64(workspace_id);
