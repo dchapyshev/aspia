@@ -22,22 +22,20 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QSet>
-#include <QSqlDatabase>
-#include <QSqlError>
-#include <QSqlQuery>
-#include <QVariant>
 
+#include <string>
 #include <utility>
 
 #include "base/logging.h"
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/random.h"
 #include "base/files/base_paths.h"
+#include "base/sql/sql_query.h"
+#include "base/sql/sql_transaction.h"
 #include "proto/router_constants.h"
 
 namespace {
 
-const char kConnectionName[] = "router_database";
 constexpr int kClientDeviceTokenSize = 32;
 constexpr qint64 kClientDeviceTokenTtlSec = 7 * 24 * 3600; // 7 days, sliding window.
 
@@ -48,43 +46,36 @@ QString databaseDirectory()
 }
 
 //--------------------------------------------------------------------------------------------------
-QSqlDatabase connection()
-{
-    return QSqlDatabase::database(kConnectionName, false);
-}
-
-//--------------------------------------------------------------------------------------------------
 // Reads a RouterUser row. Column order must match the SELECT projections used by userList()
 // and findUser().
-RouterUser readUser(const QSqlQuery& query)
+RouterUser readUser(const SqlQuery& query)
 {
     RouterUser user;
-    user.entry_id         = query.value(0).toLongLong();
-    user.name             = query.value(1).toString();
-    user.group            = query.value(2).toString();
-    user.salt             = query.value(3).toByteArray();
-    user.verifier         = query.value(4).toByteArray();
-    user.sessions         = query.value(5).toUInt();
-    user.flags            = query.value(6).toUInt();
-    user.public_key       = query.value(7).toByteArray();
-    user.wrap_private_key = query.value(8).toByteArray();
-    user.wrap_salt        = query.value(9).toByteArray();
-    user.otp_secret       = query.value(10).toByteArray();
-    user.otp_counter      = query.value(11).toULongLong();
+    user.entry_id         = query.columnInt64(0);
+    user.name             = query.columnText(1);
+    user.group            = query.columnText(2);
+    user.salt             = query.columnBlob(3);
+    user.verifier         = query.columnBlob(4);
+    user.sessions         = static_cast<quint32>(query.columnInt64(5));
+    user.flags            = static_cast<quint32>(query.columnInt64(6));
+    user.public_key       = query.columnBlob(7);
+    user.wrap_private_key = query.columnBlob(8);
+    user.wrap_salt        = query.columnBlob(9);
+    user.otp_secret       = query.columnBlob(10);
+    user.otp_counter      = query.columnUInt64(11);
     return user;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool hasColumn(QSqlDatabase& sql_db, const QString& table, const QString& column)
+bool hasColumn(Sql& db, const QString& table, const QString& column)
 {
-    QSqlQuery query(sql_db);
-    query.prepare("SELECT 1 FROM pragma_table_info(?) WHERE name=?");
-    query.addBindValue(table);
-    query.addBindValue(column);
+    SqlQuery query(db, "SELECT 1 FROM pragma_table_info(?) WHERE name=?");
+    query.addText(table);
+    query.addText(column);
 
-    if (!query.exec())
+    if (!query.isValid())
     {
-        LOG(ERROR) << "Unable to query table info:" << query.lastError();
+        LOG(ERROR) << "Unable to query table info:" << db.lastError();
         return true; // Pessimistic: pretend it exists, do not attempt ALTER.
     }
 
@@ -92,22 +83,20 @@ bool hasColumn(QSqlDatabase& sql_db, const QString& table, const QString& column
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ensureSchema(QSqlDatabase& sql_db)
+bool ensureSchema(Sql& db)
 {
-    if (!sql_db.transaction())
+    SqlTransaction transaction(db);
+    if (!transaction.begin())
     {
-        LOG(ERROR) << "Unable to execute transaction:" << sql_db.lastError();
+        LOG(ERROR) << "Unable to start transaction:" << db.lastError();
         return false;
     }
 
-    QSqlQuery query(sql_db);
-
     auto run = [&](const char* sql)
     {
-        if (query.exec(sql))
+        if (db.exec(sql))
             return true;
-        LOG(ERROR) << "Unable to execute query:" << query.lastError() << "SQL:" << sql;
-        sql_db.rollback();
+        LOG(ERROR) << "Unable to execute query:" << db.lastError() << "SQL:" << sql;
         return false;
     };
 
@@ -242,14 +231,14 @@ bool ensureSchema(QSqlDatabase& sql_db)
 
     for (const auto& column : kUserColumns)
     {
-        if (hasColumn(sql_db, "users", column.name))
+        if (hasColumn(db, "users", column.name))
             continue;
 
-        if (!query.exec(QString("ALTER TABLE \"users\" ADD COLUMN \"%1\" %2")
-                            .arg(QString(column.name), QString(column.definition))))
+        const std::string sql = std::string("ALTER TABLE \"users\" ADD COLUMN \"") +
+            column.name + "\" " + column.definition;
+        if (!db.exec(sql.c_str()))
         {
-            LOG(ERROR) << "Unable to add column" << column.name << ":" << query.lastError();
-            sql_db.rollback();
+            LOG(ERROR) << "Unable to add column" << column.name << ":" << db.lastError();
             return false;
         }
     }
@@ -300,22 +289,21 @@ bool ensureSchema(QSqlDatabase& sql_db)
 
     for (const auto& column : kHostColumns)
     {
-        if (hasColumn(sql_db, "hosts", column.name))
+        if (hasColumn(db, "hosts", column.name))
             continue;
 
-        if (!query.exec(QString("ALTER TABLE \"hosts\" ADD COLUMN \"%1\" %2")
-                            .arg(QString(column.name), QString(column.definition))))
+        const std::string sql = std::string("ALTER TABLE \"hosts\" ADD COLUMN \"") +
+            column.name + "\" " + column.definition;
+        if (!db.exec(sql.c_str()))
         {
-            LOG(ERROR) << "Unable to add column" << column.name << ":" << query.lastError();
-            sql_db.rollback();
+            LOG(ERROR) << "Unable to add column" << column.name << ":" << db.lastError();
             return false;
         }
     }
 
-    if (!sql_db.commit())
+    if (!transaction.commit())
     {
-        LOG(ERROR) << "Unable to commit transaction:" << sql_db.lastError();
-        sql_db.rollback();
+        LOG(ERROR) << "Unable to commit transaction:" << db.lastError();
         return false;
     }
 
@@ -363,14 +351,10 @@ QList<RouterUser> Database::userList() const
         return {};
     }
 
-    QSqlQuery query(connection());
-    if (!query.exec("SELECT id, name, \"group\", salt, verifier, sessions, flags, public_key, "
-                    "wrap_private_key, wrap_salt, otp_secret, otp_counter "
-                    "FROM users"))
-    {
-        LOG(ERROR) << "Unable to get user list:" << query.lastError();
-        return {};
-    }
+    const char kSql[] =
+        "SELECT id, name, \"group\", salt, verifier, sessions, flags, public_key, "
+        "wrap_private_key, wrap_salt, otp_secret, otp_counter FROM users";
+    SqlQuery query(db_, kSql);
 
     QList<RouterUser> users;
     while (query.next())
@@ -394,23 +378,23 @@ bool Database::addUser(const RouterUser& user)
         return false;
     }
 
-    QSqlQuery query(connection());
-    query.prepare("INSERT INTO users (id, name, \"group\", salt, verifier, sessions, flags, "
-        "public_key, wrap_private_key, wrap_salt) "
-        "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    query.addBindValue(user.name);
-    query.addBindValue(user.group);
-    query.addBindValue(user.salt);
-    query.addBindValue(user.verifier);
-    query.addBindValue(static_cast<qulonglong>(user.sessions));
-    query.addBindValue(static_cast<qulonglong>(user.flags));
-    query.addBindValue(user.public_key);
-    query.addBindValue(user.wrap_private_key);
-    query.addBindValue(user.wrap_salt);
+    const char kSql[] =
+        "INSERT INTO users (id, name, \"group\", salt, verifier, sessions, flags, public_key, "
+        "wrap_private_key, wrap_salt) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    SqlQuery query(db_, kSql);
+    query.addText(user.name);
+    query.addText(user.group);
+    query.addBlob(user.salt);
+    query.addBlob(user.verifier);
+    query.addInt64(user.sessions);
+    query.addInt64(user.flags);
+    query.addBlob(user.public_key);
+    query.addBlob(user.wrap_private_key);
+    query.addBlob(user.wrap_salt);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;
     }
 
@@ -432,10 +416,10 @@ bool Database::modifyUser(const RouterUser& user)
         return false;
     }
 
-    QSqlDatabase sql_db = connection();
-    if (!sql_db.transaction())
+    SqlTransaction transaction(db_);
+    if (!transaction.begin())
     {
-        LOG(ERROR) << "Unable to start transaction:" << sql_db.lastError();
+        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
         return false;
     }
 
@@ -444,64 +428,59 @@ bool Database::modifyUser(const RouterUser& user)
     QByteArray old_salt;
     QByteArray old_verifier;
     {
-        QSqlQuery select(sql_db);
-        select.prepare("SELECT salt, verifier FROM users WHERE id=?");
-        select.addBindValue(user.entry_id);
+        SqlQuery select(db_, "SELECT salt, verifier FROM users WHERE id=?");
+        select.addInt64(user.entry_id);
 
-        if (!select.exec())
+        if (!select.isValid())
         {
-            LOG(ERROR) << "Unable to execute query:" << select.lastError();
-            sql_db.rollback();
+            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
             return false;
         }
 
         if (select.next())
         {
-            old_salt = select.value(0).toByteArray();
-            old_verifier = select.value(1).toByteArray();
+            old_salt = select.columnBlob(0);
+            old_verifier = select.columnBlob(1);
         }
     }
 
-    QSqlQuery query(sql_db);
-    query.prepare("UPDATE users SET name=?, \"group\"=?, salt=?, verifier=?, sessions=?, flags=?, "
-        "public_key=?, wrap_private_key=?, wrap_salt=? WHERE id=?");
-    query.addBindValue(user.name);
-    query.addBindValue(user.group);
-    query.addBindValue(user.salt);
-    query.addBindValue(user.verifier);
-    query.addBindValue(static_cast<qulonglong>(user.sessions));
-    query.addBindValue(static_cast<qulonglong>(user.flags));
-    query.addBindValue(user.public_key);
-    query.addBindValue(user.wrap_private_key);
-    query.addBindValue(user.wrap_salt);
-    query.addBindValue(user.entry_id);
+    const char kSql[] =
+        "UPDATE users SET name=?, \"group\"=?, salt=?, verifier=?, sessions=?, flags=?, "
+        "public_key=?, wrap_private_key=?, wrap_salt=? WHERE id=?";
+    SqlQuery query(db_, kSql);
+    query.addText(user.name);
+    query.addText(user.group);
+    query.addBlob(user.salt);
+    query.addBlob(user.verifier);
+    query.addInt64(user.sessions);
+    query.addInt64(user.flags);
+    query.addBlob(user.public_key);
+    query.addBlob(user.wrap_private_key);
+    query.addBlob(user.wrap_salt);
+    query.addInt64(user.entry_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
-        sql_db.rollback();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;
     }
 
     const bool password_changed = old_salt != user.salt || old_verifier != user.verifier;
     if (password_changed)
     {
-        QSqlQuery revoke(sql_db);
-        revoke.prepare("DELETE FROM client_device_tokens WHERE user_id=?");
-        revoke.addBindValue(user.entry_id);
+        SqlQuery revoke(db_, "DELETE FROM client_device_tokens WHERE user_id=?");
+        revoke.addInt64(user.entry_id);
 
         if (!revoke.exec())
         {
-            LOG(ERROR) << "Unable to revoke device tokens:" << revoke.lastError();
-            sql_db.rollback();
+            LOG(ERROR) << "Unable to revoke device tokens:" << db_.lastError();
             return false;
         }
     }
 
-    if (!sql_db.commit())
+    if (!transaction.commit())
     {
-        LOG(ERROR) << "Unable to commit transaction:" << sql_db.lastError();
-        sql_db.rollback();
+        LOG(ERROR) << "Unable to commit transaction:" << db_.lastError();
         return false;
     }
 
@@ -517,13 +496,12 @@ bool Database::removeUser(qint64 entry_id)
         return false;
     }
 
-    QSqlQuery query(connection());
-    query.prepare("DELETE FROM users WHERE id=?");
-    query.addBindValue(entry_id);
+    SqlQuery query(db_, "DELETE FROM users WHERE id=?");
+    query.addInt64(entry_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;
     }
 
@@ -539,17 +517,11 @@ RouterUser Database::findUser(const QString& username) const
         return RouterUser();
     }
 
-    QSqlQuery query(connection());
-    query.prepare("SELECT id, name, \"group\", salt, verifier, sessions, flags, public_key, "
-                  "wrap_private_key, wrap_salt, otp_secret, otp_counter "
-                  "FROM users WHERE name=?");
-    query.addBindValue(username);
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
-        return RouterUser();
-    }
+    const char kSql[] =
+        "SELECT id, name, \"group\", salt, verifier, sessions, flags, public_key, "
+        "wrap_private_key, wrap_salt, otp_secret, otp_counter FROM users WHERE name=?";
+    SqlQuery query(db_, kSql);
+    query.addText(username);
 
     if (!query.next())
         return RouterUser();
@@ -566,17 +538,11 @@ RouterUser Database::findUser(qint64 entry_id) const
         return RouterUser();
     }
 
-    QSqlQuery query(connection());
-    query.prepare("SELECT id, name, \"group\", salt, verifier, sessions, flags, public_key, "
-                  "wrap_private_key, wrap_salt, otp_secret, otp_counter "
-                  "FROM users WHERE id=?");
-    query.addBindValue(entry_id);
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
-        return RouterUser();
-    }
+    const char kSql[] =
+        "SELECT id, name, \"group\", salt, verifier, sessions, flags, public_key, "
+        "wrap_private_key, wrap_salt, otp_secret, otp_counter FROM users WHERE id=?";
+    SqlQuery query(db_, kSql);
+    query.addInt64(entry_id);
 
     if (!query.next())
         return RouterUser();
@@ -593,15 +559,14 @@ bool Database::setUserOtp(qint64 user_id, const QByteArray& encrypted_secret, qu
         return false;
     }
 
-    QSqlQuery query(connection());
-    query.prepare("UPDATE users SET otp_secret=?, otp_counter=? WHERE id=?");
-    query.addBindValue(encrypted_secret);
-    query.addBindValue(counter);
-    query.addBindValue(user_id);
+    SqlQuery query(db_, "UPDATE users SET otp_secret=?, otp_counter=? WHERE id=?");
+    query.addBlob(encrypted_secret);
+    query.addUInt64(counter);
+    query.addInt64(user_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to set user OTP:" << query.lastError();
+        LOG(ERROR) << "Unable to set user OTP:" << db_.lastError();
         return false;
     }
     return true;
@@ -616,13 +581,12 @@ bool Database::clearUserOtp(qint64 user_id)
         return false;
     }
 
-    QSqlQuery query(connection());
-    query.prepare("UPDATE users SET otp_secret=X'', otp_counter=0 WHERE id=?");
-    query.addBindValue(user_id);
+    SqlQuery query(db_, "UPDATE users SET otp_secret=X'', otp_counter=0 WHERE id=?");
+    query.addInt64(user_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to clear user OTP:" << query.lastError();
+        LOG(ERROR) << "Unable to clear user OTP:" << db_.lastError();
         return false;
     }
     return true;
@@ -637,14 +601,13 @@ bool Database::updateUserOtpCounter(qint64 user_id, quint64 counter)
         return false;
     }
 
-    QSqlQuery query(connection());
-    query.prepare("UPDATE users SET otp_counter=? WHERE id=?");
-    query.addBindValue(counter);
-    query.addBindValue(user_id);
+    SqlQuery query(db_, "UPDATE users SET otp_counter=? WHERE id=?");
+    query.addUInt64(counter);
+    query.addInt64(user_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to update OTP counter:" << query.lastError();
+        LOG(ERROR) << "Unable to update OTP counter:" << db_.lastError();
         return false;
     }
     return true;
@@ -672,24 +635,24 @@ bool Database::issueClientDeviceToken(qint64 user_id, const QString& address, QB
     const QByteArray token_hash = GenericHash::hash(GenericHash::SHA256, new_token);
     const qint64 now = QDateTime::currentSecsSinceEpoch();
 
-    QSqlQuery query(connection());
-    query.prepare("INSERT INTO client_device_tokens "
-                  "(token_hash, user_id, created_at, last_used_at, address) "
-                  "VALUES (?, ?, ?, ?, ?)");
-    query.addBindValue(token_hash);
-    query.addBindValue(user_id);
-    query.addBindValue(now);
-    query.addBindValue(now);
-    query.addBindValue(address);
+    const char kSql[] =
+        "INSERT INTO client_device_tokens "
+        "(token_hash, user_id, created_at, last_used_at, address) VALUES (?, ?, ?, ?, ?)";
+    SqlQuery query(db_, kSql);
+    query.addBlob(token_hash);
+    query.addInt64(user_id);
+    query.addInt64(now);
+    query.addInt64(now);
+    query.addText(address);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to issue client device token:" << query.lastError();
+        LOG(ERROR) << "Unable to issue client device token:" << db_.lastError();
         return false;
     }
 
     if (token_id)
-        *token_id = query.lastInsertId().toLongLong();
+        *token_id = db_.lastInsertRowId();
 
     *token = new_token;
     return true;
@@ -714,37 +677,30 @@ bool Database::findClientDeviceToken(const QByteArray& token, qint64* user_id, q
 
     const QByteArray token_hash = GenericHash::hash(GenericHash::SHA256, token);
 
-    QSqlQuery query(connection());
-    query.prepare("SELECT user_id, last_used_at, token_id FROM client_device_tokens "
-                  "WHERE token_hash=?");
-    query.addBindValue(token_hash);
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to look up client device token:" << query.lastError();
-        return false;
-    }
+    const char kSql[] =
+        "SELECT user_id, last_used_at, token_id FROM client_device_tokens WHERE token_hash=?";
+    SqlQuery query(db_, kSql);
+    query.addBlob(token_hash);
 
     if (!query.next())
         return false;
 
-    const qint64 last_used_at = query.value(1).toLongLong();
+    const qint64 last_used_at = query.columnInt64(1);
     const qint64 now = QDateTime::currentSecsSinceEpoch();
     if (now - last_used_at > kClientDeviceTokenTtlSec)
     {
         // Lazy GC: drop the row so the table does not accumulate stale entries. The caller
         // will treat the result as INVALID_TOKEN and walk the user back through TOTP.
-        QSqlQuery prune(connection());
-        prune.prepare("DELETE FROM client_device_tokens WHERE token_hash=?");
-        prune.addBindValue(token_hash);
+        SqlQuery prune(db_, "DELETE FROM client_device_tokens WHERE token_hash=?");
+        prune.addBlob(token_hash);
         if (!prune.exec())
-            LOG(WARNING) << "Unable to prune expired client device token:" << prune.lastError();
+            LOG(WARNING) << "Unable to prune expired client device token:" << db_.lastError();
         return false;
     }
 
-    *user_id = query.value(0).toLongLong();
+    *user_id = query.columnInt64(0);
     if (token_id)
-        *token_id = query.value(2).toLongLong();
+        *token_id = query.columnInt64(2);
     return true;
 }
 
@@ -759,15 +715,16 @@ bool Database::touchClientDeviceToken(const QByteArray& token, const QString& ad
 
     const QByteArray token_hash = GenericHash::hash(GenericHash::SHA256, token);
 
-    QSqlQuery query(connection());
-    query.prepare("UPDATE client_device_tokens SET last_used_at=?, address=? WHERE token_hash=?");
-    query.addBindValue(QDateTime::currentSecsSinceEpoch());
-    query.addBindValue(address);
-    query.addBindValue(token_hash);
+    const char kSql[] =
+        "UPDATE client_device_tokens SET last_used_at=?, address=? WHERE token_hash=?";
+    SqlQuery query(db_, kSql);
+    query.addInt64(QDateTime::currentSecsSinceEpoch());
+    query.addText(address);
+    query.addBlob(token_hash);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to touch client device token:" << query.lastError();
+        LOG(ERROR) << "Unable to touch client device token:" << db_.lastError();
         return false;
     }
     return true;
@@ -782,17 +739,16 @@ bool Database::revokeClientDeviceToken(qint64 user_id, qint64 token_id)
         return false;
     }
 
-    QSqlQuery query(connection());
-    query.prepare("DELETE FROM client_device_tokens WHERE token_id=? AND user_id=?");
-    query.addBindValue(token_id);
-    query.addBindValue(user_id);
+    SqlQuery query(db_, "DELETE FROM client_device_tokens WHERE token_id=? AND user_id=?");
+    query.addInt64(token_id);
+    query.addInt64(user_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to revoke client device token:" << query.lastError();
+        LOG(ERROR) << "Unable to revoke client device token:" << db_.lastError();
         return false;
     }
-    return query.numRowsAffected() > 0;
+    return db_.changes() > 0;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -804,13 +760,12 @@ bool Database::revokeUserClientDeviceTokens(qint64 user_id)
         return false;
     }
 
-    QSqlQuery query(connection());
-    query.prepare("DELETE FROM client_device_tokens WHERE user_id=?");
-    query.addBindValue(user_id);
+    SqlQuery query(db_, "DELETE FROM client_device_tokens WHERE user_id=?");
+    query.addInt64(user_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to revoke client device tokens:" << query.lastError();
+        LOG(ERROR) << "Unable to revoke client device tokens:" << db_.lastError();
         return false;
     }
     return true;
@@ -827,24 +782,19 @@ QList<DeviceToken> Database::listClientDeviceTokens(qint64 user_id) const
         return tokens;
     }
 
-    QSqlQuery query(connection());
-    query.prepare("SELECT token_id, created_at, last_used_at, address FROM client_device_tokens "
-                  "WHERE user_id=? ORDER BY created_at");
-    query.addBindValue(user_id);
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to list client device tokens:" << query.lastError();
-        return tokens;
-    }
+    const char kSql[] =
+        "SELECT token_id, created_at, last_used_at, address "
+        "FROM client_device_tokens WHERE user_id=? ORDER BY created_at";
+    SqlQuery query(db_, kSql);
+    query.addInt64(user_id);
 
     while (query.next())
     {
         DeviceToken token;
-        token.token_id     = query.value(0).toLongLong();
-        token.created_at   = query.value(1).toLongLong();
-        token.last_used_at = query.value(2).toLongLong();
-        token.address      = query.value(3).toString();
+        token.token_id     = query.columnInt64(0);
+        token.created_at   = query.columnInt64(1);
+        token.last_used_at = query.columnInt64(2);
+        token.address      = query.columnText(3);
         tokens.append(token);
     }
     return tokens;
@@ -869,39 +819,37 @@ std::string_view Database::hostId(const QByteArray& key_hash, HostId* host_id) c
         return proto::router::kErrorInvalidData;
     }
 
-    QSqlQuery query(connection());
-    query.prepare("SELECT id FROM hosts WHERE key=?");
-    query.addBindValue(key_hash);
+    SqlQuery query(db_, "SELECT id FROM hosts WHERE key=?");
+    query.addBlob(key_hash);
 
-    if (!query.exec())
+    if (!query.isValid())
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
 
     if (query.next())
     {
-        *host_id = query.value(0).toULongLong();
+        *host_id = query.columnUInt64(0);
         return proto::router::kErrorOk;
     }
 
     // Not found in hosts - check hosts_remove. A reconnecting host whose removal was scheduled
     // while it was offline will be matched here; the caller is expected to send the remove
     // command using the returned host_id and wait for the ack before finalizing the deletion.
-    QSqlQuery pending(connection());
-    pending.prepare("SELECT host_id FROM hosts_remove WHERE key=?");
-    pending.addBindValue(key_hash);
+    SqlQuery pending(db_, "SELECT host_id FROM hosts_remove WHERE key=?");
+    pending.addBlob(key_hash);
 
-    if (!pending.exec())
+    if (!pending.isValid())
     {
-        LOG(ERROR) << "Unable to execute query:" << pending.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
 
     if (!pending.next())
         return proto::router::kErrorNotFound;
 
-    *host_id = pending.value(0).toULongLong();
+    *host_id = pending.columnUInt64(0);
     return proto::router::kErrorOk;
 }
 
@@ -920,13 +868,12 @@ bool Database::addHost(const QByteArray& key_hash)
         return false;
     }
 
-    QSqlQuery query(connection());
-    query.prepare("INSERT INTO hosts (id, key) VALUES (NULL, ?)");
-    query.addBindValue(key_hash);
+    SqlQuery query(db_, "INSERT INTO hosts (id, key) VALUES (NULL, ?)");
+    query.addBlob(key_hash);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;
     }
 
@@ -954,23 +901,23 @@ bool Database::updateHostInfo(HostId host_id, const QString& computer_name, cons
     // The hosts row is created by addHost() before this method runs, so a plain UPDATE is
     // enough. If display name has never been set by the admin we seed it from computer_name so
     // the host has a readable label in the UI.
-    QSqlQuery query(connection());
-    query.prepare("UPDATE hosts SET "
+    const char kSql[] =
+        "UPDATE hosts SET "
         "display_name = CASE WHEN display_name='' THEN ? ELSE display_name END, "
-        "computer_name=?, cpu_arch=?, version=?, os_name=?, address=?, last_connect=? "
-        "WHERE id=?");
-    query.addBindValue(computer_name);
-    query.addBindValue(computer_name);
-    query.addBindValue(cpu_arch);
-    query.addBindValue(version);
-    query.addBindValue(os_name);
-    query.addBindValue(address);
-    query.addBindValue(timestamp);
-    query.addBindValue(host_id);
+        "computer_name=?, cpu_arch=?, version=?, os_name=?, address=?, last_connect=? WHERE id=?";
+    SqlQuery query(db_, kSql);
+    query.addText(computer_name);
+    query.addText(computer_name);
+    query.addText(cpu_arch);
+    query.addText(version);
+    query.addText(os_name);
+    query.addText(address);
+    query.addInt64(timestamp);
+    query.addUInt64(host_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;
     }
 
@@ -986,19 +933,12 @@ qint64 Database::hostWorkspaceId(HostId host_id) const
         return -1;
     }
 
-    QSqlQuery query(connection());
-    query.prepare("SELECT workspace_id FROM hosts WHERE id=?");
-    query.addBindValue(host_id);
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
-        return -1;
-    }
+    SqlQuery query(db_, "SELECT workspace_id FROM hosts WHERE id=?");
+    query.addUInt64(host_id);
 
     if (!query.next())
         return -1;
-    return query.value(0).toLongLong();
+    return query.columnInt64(0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1019,24 +959,25 @@ bool Database::modifyHost(HostId host_id, qint64 group_id, const QString& displa
 
     const qint64 timestamp = QDateTime::currentSecsSinceEpoch();
 
-    QSqlQuery query(connection());
-    query.prepare("UPDATE hosts SET display_name=?, group_id=?, comment=?, user_name=?, password=?, "
-        "last_modify=? WHERE id=?");
-    query.addBindValue(display_name);
-    query.addBindValue(group_id);
-    query.addBindValue(comment);
-    query.addBindValue(user_name);
-    query.addBindValue(password);
-    query.addBindValue(timestamp);
-    query.addBindValue(host_id);
+    const char kSql[] =
+        "UPDATE hosts SET display_name=?, group_id=?, comment=?, user_name=?, password=?, "
+        "last_modify=? WHERE id=?";
+    SqlQuery query(db_, kSql);
+    query.addText(display_name);
+    query.addInt64(group_id);
+    query.addBlob(comment);
+    query.addBlob(user_name);
+    query.addBlob(password);
+    query.addInt64(timestamp);
+    query.addUInt64(host_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;
     }
 
-    return query.numRowsAffected() > 0;
+    return db_.changes() > 0;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1048,46 +989,39 @@ QList<HostInfo> Database::hosts(qint64 start_item, qint64 end_item) const
         return {};
     }
 
-    QString sql = "SELECT id, workspace_id, group_id, display_name, computer_name, cpu_arch, "
-                  "version, os_name, address, comment, user_name, password, last_connect, last_modify "
-                  "FROM hosts";
+    std::string sql = "SELECT id, workspace_id, group_id, display_name, computer_name, cpu_arch, "
+                      "version, os_name, address, comment, user_name, password, last_connect, "
+                      "last_modify FROM hosts";
 
     const bool paginate = end_item > 0 && end_item >= start_item;
     if (paginate)
         sql += " LIMIT ? OFFSET ?";
 
-    QSqlQuery query(connection());
-    query.prepare(sql);
+    SqlQuery query(db_, sql);
     if (paginate)
     {
-        query.addBindValue(end_item - start_item + 1);
-        query.addBindValue(start_item);
-    }
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to get hosts:" << query.lastError();
-        return {};
+        query.addInt64(end_item - start_item + 1);
+        query.addInt64(start_item);
     }
 
     QList<HostInfo> result;
     while (query.next())
     {
         HostInfo info;
-        info.host_id       = query.value(0).toULongLong();
-        info.workspace_id  = query.value(1).toLongLong();
-        info.group_id      = query.value(2).toLongLong();
-        info.display_name  = query.value(3).toString();
-        info.computer_name = query.value(4).toString();
-        info.cpu_arch      = query.value(5).toString();
-        info.version       = query.value(6).toString();
-        info.os_name       = query.value(7).toString();
-        info.address       = query.value(8).toString();
-        info.comment       = query.value(9).toByteArray();
-        info.user_name     = query.value(10).toByteArray();
-        info.password      = query.value(11).toByteArray();
-        info.last_connect  = query.value(12).toLongLong();
-        info.last_modify   = query.value(13).toLongLong();
+        info.host_id       = query.columnUInt64(0);
+        info.workspace_id  = query.columnInt64(1);
+        info.group_id      = query.columnInt64(2);
+        info.display_name  = query.columnText(3);
+        info.computer_name = query.columnText(4);
+        info.cpu_arch      = query.columnText(5);
+        info.version       = query.columnText(6);
+        info.os_name       = query.columnText(7);
+        info.address       = query.columnText(8);
+        info.comment       = query.columnBlob(9);
+        info.user_name     = query.columnBlob(10);
+        info.password      = query.columnBlob(11);
+        info.last_connect  = query.columnInt64(12);
+        info.last_modify   = query.columnInt64(13);
         result.append(info);
     }
 
@@ -1104,48 +1038,41 @@ QList<HostInfo> Database::hosts(
         return {};
     }
 
-    QString sql = "SELECT id, workspace_id, group_id, display_name, computer_name, cpu_arch, "
-                  "version, os_name, address, comment, user_name, password, last_connect, last_modify "
-                  "FROM hosts WHERE workspace_id=? AND group_id=?";
+    std::string sql = "SELECT id, workspace_id, group_id, display_name, computer_name, cpu_arch, "
+                      "version, os_name, address, comment, user_name, password, last_connect, "
+                      "last_modify FROM hosts WHERE workspace_id=? AND group_id=?";
 
     const bool paginate = end_item > 0 && end_item >= start_item;
     if (paginate)
         sql += " LIMIT ? OFFSET ?";
 
-    QSqlQuery query(connection());
-    query.prepare(sql);
-    query.addBindValue(workspace_id);
-    query.addBindValue(group_id);
+    SqlQuery query(db_, sql);
+    query.addInt64(workspace_id);
+    query.addInt64(group_id);
     if (paginate)
     {
-        query.addBindValue(end_item - start_item + 1);
-        query.addBindValue(start_item);
-    }
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to get hosts:" << query.lastError();
-        return {};
+        query.addInt64(end_item - start_item + 1);
+        query.addInt64(start_item);
     }
 
     QList<HostInfo> result;
     while (query.next())
     {
         HostInfo info;
-        info.host_id       = query.value(0).toULongLong();
-        info.workspace_id  = query.value(1).toLongLong();
-        info.group_id      = query.value(2).toLongLong();
-        info.display_name  = query.value(3).toString();
-        info.computer_name = query.value(4).toString();
-        info.cpu_arch      = query.value(5).toString();
-        info.version       = query.value(6).toString();
-        info.os_name       = query.value(7).toString();
-        info.address       = query.value(8).toString();
-        info.comment       = query.value(9).toByteArray();
-        info.user_name     = query.value(10).toByteArray();
-        info.password      = query.value(11).toByteArray();
-        info.last_connect  = query.value(12).toLongLong();
-        info.last_modify   = query.value(13).toLongLong();
+        info.host_id       = query.columnUInt64(0);
+        info.workspace_id  = query.columnInt64(1);
+        info.group_id      = query.columnInt64(2);
+        info.display_name  = query.columnText(3);
+        info.computer_name = query.columnText(4);
+        info.cpu_arch      = query.columnText(5);
+        info.version       = query.columnText(6);
+        info.os_name       = query.columnText(7);
+        info.address       = query.columnText(8);
+        info.comment       = query.columnBlob(9);
+        info.user_name     = query.columnBlob(10);
+        info.password      = query.columnBlob(11);
+        info.last_connect  = query.columnInt64(12);
+        info.last_modify   = query.columnInt64(13);
         result.append(info);
     }
 
@@ -1161,17 +1088,11 @@ qint64 Database::hostCount() const
         return 0;
     }
 
-    QSqlQuery query(connection());
-    if (!query.exec("SELECT COUNT(*) FROM hosts"))
-    {
-        LOG(ERROR) << "Unable to count hosts:" << query.lastError();
-        return 0;
-    }
-
+    SqlQuery query(db_, "SELECT COUNT(*) FROM hosts");
     if (!query.next())
         return 0;
 
-    return query.value(0).toLongLong();
+    return query.columnInt64(0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1183,21 +1104,14 @@ qint64 Database::hostCount(qint64 workspace_id, qint64 group_id) const
         return 0;
     }
 
-    QSqlQuery query(connection());
-    query.prepare("SELECT COUNT(*) FROM hosts WHERE workspace_id=? AND group_id=?");
-    query.addBindValue(workspace_id);
-    query.addBindValue(group_id);
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to count hosts:" << query.lastError();
-        return 0;
-    }
+    SqlQuery query(db_, "SELECT COUNT(*) FROM hosts WHERE workspace_id=? AND group_id=?");
+    query.addInt64(workspace_id);
+    query.addInt64(group_id);
 
     if (!query.next())
         return 0;
 
-    return query.value(0).toLongLong();
+    return query.columnInt64(0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1233,37 +1147,30 @@ QList<HostInfo> Database::searchHosts(const QString& query_text, const QList<qin
         "AND (display_name LIKE ? ESCAPE '\\' OR CAST(id AS TEXT) LIKE ? ESCAPE '\\') "
         "ORDER BY display_name";
 
-    QSqlQuery query(connection());
-    query.prepare(sql);
+    SqlQuery query(db_, sql.toStdString());
     for (qint64 workspace_id : workspace_ids)
-        query.addBindValue(workspace_id);
-    query.addBindValue(pattern);
-    query.addBindValue(pattern);
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to search hosts:" << query.lastError();
-        return {};
-    }
+        query.addInt64(workspace_id);
+    query.addText(pattern);
+    query.addText(pattern);
 
     QList<HostInfo> result;
     while (query.next())
     {
         HostInfo info;
-        info.host_id       = query.value(0).toULongLong();
-        info.workspace_id  = query.value(1).toLongLong();
-        info.group_id      = query.value(2).toLongLong();
-        info.display_name  = query.value(3).toString();
-        info.computer_name = query.value(4).toString();
-        info.cpu_arch      = query.value(5).toString();
-        info.version       = query.value(6).toString();
-        info.os_name       = query.value(7).toString();
-        info.address       = query.value(8).toString();
-        info.comment       = query.value(9).toByteArray();
-        info.user_name     = query.value(10).toByteArray();
-        info.password      = query.value(11).toByteArray();
-        info.last_connect  = query.value(12).toLongLong();
-        info.last_modify   = query.value(13).toLongLong();
+        info.host_id       = query.columnUInt64(0);
+        info.workspace_id  = query.columnInt64(1);
+        info.group_id      = query.columnInt64(2);
+        info.display_name  = query.columnText(3);
+        info.computer_name = query.columnText(4);
+        info.cpu_arch      = query.columnText(5);
+        info.version       = query.columnText(6);
+        info.os_name       = query.columnText(7);
+        info.address       = query.columnText(8);
+        info.comment       = query.columnBlob(9);
+        info.user_name     = query.columnBlob(10);
+        info.password      = query.columnBlob(11);
+        info.last_connect  = query.columnInt64(12);
+        info.last_modify   = query.columnInt64(13);
         result.append(info);
     }
 
@@ -1285,62 +1192,55 @@ bool Database::scheduleHostRemoval(HostId host_id)
         return false;
     }
 
-    QSqlDatabase sql_db = connection();
-    if (!sql_db.transaction())
+    SqlTransaction transaction(db_);
+    if (!transaction.begin())
     {
-        LOG(ERROR) << "Unable to start transaction:" << sql_db.lastError();
+        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
         return false;
     }
 
-    QSqlQuery select(sql_db);
-    select.prepare("SELECT key FROM hosts WHERE id=?");
-    select.addBindValue(host_id);
+    SqlQuery select(db_, "SELECT key FROM hosts WHERE id=?");
+    select.addUInt64(host_id);
 
-    if (!select.exec())
+    if (!select.isValid())
     {
-        LOG(ERROR) << "Unable to execute query:" << select.lastError();
-        sql_db.rollback();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;
     }
 
     if (!select.next())
     {
         LOG(ERROR) << "Host not found:" << host_id;
-        sql_db.rollback();
         return false;
     }
 
-    const QByteArray key = select.value(0).toByteArray();
+    const QByteArray key = select.columnBlob(0);
     const qint64 timestamp = QDateTime::currentSecsSinceEpoch();
 
-    QSqlQuery insert(sql_db);
-    insert.prepare("INSERT INTO hosts_remove (host_id, key, timestamp) VALUES (?, ?, ?)");
-    insert.addBindValue(host_id);
-    insert.addBindValue(key);
-    insert.addBindValue(timestamp);
+    const char kSql[] = "INSERT INTO hosts_remove (host_id, key, timestamp) VALUES (?, ?, ?)";
+    SqlQuery insert(db_, kSql);
+    insert.addUInt64(host_id);
+    insert.addBlob(key);
+    insert.addInt64(timestamp);
 
     if (!insert.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << insert.lastError();
-        sql_db.rollback();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;
     }
 
-    QSqlQuery del(sql_db);
-    del.prepare("DELETE FROM hosts WHERE id=?");
-    del.addBindValue(host_id);
+    SqlQuery del(db_, "DELETE FROM hosts WHERE id=?");
+    del.addUInt64(host_id);
 
     if (!del.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << del.lastError();
-        sql_db.rollback();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;
     }
 
-    if (!sql_db.commit())
+    if (!transaction.commit())
     {
-        LOG(ERROR) << "Unable to commit transaction:" << sql_db.lastError();
-        sql_db.rollback();
+        LOG(ERROR) << "Unable to commit transaction:" << db_.lastError();
         return false;
     }
 
@@ -1359,15 +1259,8 @@ bool Database::hasPendingHostRemoval(HostId host_id) const
     if (host_id == kInvalidHostId)
         return false;
 
-    QSqlQuery query(connection());
-    query.prepare("SELECT 1 FROM hosts_remove WHERE host_id=?");
-    query.addBindValue(host_id);
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
-        return false;
-    }
+    SqlQuery query(db_, "SELECT 1 FROM hosts_remove WHERE host_id=?");
+    query.addUInt64(host_id);
 
     return query.next();
 }
@@ -1387,17 +1280,16 @@ bool Database::finalizeHostRemoval(HostId host_id)
         return false;
     }
 
-    QSqlQuery query(connection());
-    query.prepare("DELETE FROM hosts_remove WHERE host_id=?");
-    query.addBindValue(host_id);
+    SqlQuery query(db_, "DELETE FROM hosts_remove WHERE host_id=?");
+    query.addUInt64(host_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;
     }
 
-    return query.numRowsAffected() > 0;
+    return db_.changes() > 0;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1409,20 +1301,15 @@ QList<Workspace> Database::workspaceList() const
         return {};
     }
 
-    QSqlQuery query(connection());
-    if (!query.exec("SELECT id, name, comment FROM workspaces"))
-    {
-        LOG(ERROR) << "Unable to get workspace list:" << query.lastError();
-        return {};
-    }
+    SqlQuery query(db_, "SELECT id, name, comment FROM workspaces");
 
     QList<Workspace> workspaces;
     while (query.next())
     {
         Workspace workspace;
-        workspace.entry_id = query.value(0).toLongLong();
-        workspace.name     = query.value(1).toString();
-        workspace.comment  = query.value(2).toByteArray();
+        workspace.entry_id = query.columnInt64(0);
+        workspace.name     = query.columnText(1);
+        workspace.comment  = query.columnBlob(2);
         workspaces.append(workspace);
     }
 
@@ -1444,23 +1331,16 @@ Workspace Database::findWorkspace(qint64 entry_id) const
         return Workspace();
     }
 
-    QSqlQuery query(connection());
-    query.prepare("SELECT id, name, comment FROM workspaces WHERE id=?");
-    query.addBindValue(entry_id);
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
-        return Workspace();
-    }
+    SqlQuery query(db_, "SELECT id, name, comment FROM workspaces WHERE id=?");
+    query.addInt64(entry_id);
 
     if (!query.next())
         return Workspace();
 
     Workspace workspace;
-    workspace.entry_id = query.value(0).toLongLong();
-    workspace.name     = query.value(1).toString();
-    workspace.comment  = query.value(2).toByteArray();
+    workspace.entry_id = query.columnInt64(0);
+    workspace.name     = query.columnText(1);
+    workspace.comment  = query.columnBlob(2);
     return workspace;
 }
 
@@ -1493,65 +1373,58 @@ std::string_view Database::addWorkspace(const QString& name, const QByteArray& c
         }
     }
 
-    QSqlDatabase sql_db = connection();
-    if (!sql_db.transaction())
+    SqlTransaction transaction(db_);
+    if (!transaction.begin())
     {
-        LOG(ERROR) << "Unable to start transaction:" << sql_db.lastError();
+        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
 
-    QSqlQuery check(sql_db);
-    check.prepare("SELECT 1 FROM workspaces WHERE name=?");
-    check.addBindValue(name);
+    SqlQuery check(db_, "SELECT 1 FROM workspaces WHERE name=?");
+    check.addText(name);
 
-    if (!check.exec())
+    if (!check.isValid())
     {
-        LOG(ERROR) << "Unable to execute query:" << check.lastError();
-        sql_db.rollback();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
 
     if (check.next())
-    {
-        sql_db.rollback();
         return proto::router::kErrorAlreadyExists;
-    }
 
-    QSqlQuery insert_workspace(sql_db);
-    insert_workspace.prepare("INSERT INTO workspaces (id, name, comment) VALUES (NULL, ?, ?)");
-    insert_workspace.addBindValue(name);
-    insert_workspace.addBindValue(comment);
+    SqlQuery insert_workspace(db_, "INSERT INTO workspaces (id, name, comment) VALUES (NULL, ?, ?)");
+    insert_workspace.addText(name);
+    insert_workspace.addBlob(comment);
 
     if (!insert_workspace.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << insert_workspace.lastError();
-        sql_db.rollback();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
 
-    const qint64 new_id = insert_workspace.lastInsertId().toLongLong();
+    const qint64 new_id = db_.lastInsertRowId();
 
-    QSqlQuery insert_access(sql_db);
-    insert_access.prepare("INSERT INTO workspace_access (workspace_id, user_id, wrapped_gk) VALUES (?, ?, ?)");
+    const char kInsertAccessSql[] =
+        "INSERT INTO workspace_access (workspace_id, user_id, wrapped_gk) VALUES (?, ?, ?)";
+    SqlQuery insert_access(db_, kInsertAccessSql);
 
     for (const Workspace::Access& access : initial_access)
     {
-        insert_access.bindValue(0, new_id);
-        insert_access.bindValue(1, access.user_id);
-        insert_access.bindValue(2, access.wrapped_gk);
+        insert_access.reset();
+        insert_access.addInt64(new_id);
+        insert_access.addInt64(access.user_id);
+        insert_access.addBlob(access.wrapped_gk);
 
         if (!insert_access.exec())
         {
-            LOG(ERROR) << "Unable to execute query:" << insert_access.lastError();
-            sql_db.rollback();
+            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
             return proto::router::kErrorInternalError;
         }
     }
 
-    if (!sql_db.commit())
+    if (!transaction.commit())
     {
-        LOG(ERROR) << "Unable to commit transaction:" << sql_db.lastError();
-        sql_db.rollback();
+        LOG(ERROR) << "Unable to commit transaction:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -1600,96 +1473,82 @@ std::string_view Database::modifyWorkspace(qint64 entry_id, const QString& name,
         desired_ids.insert(access.user_id);
     }
 
-    QSqlDatabase sql_db = connection();
-    if (!sql_db.transaction())
+    SqlTransaction transaction(db_);
+    if (!transaction.begin())
     {
-        LOG(ERROR) << "Unable to start transaction:" << sql_db.lastError();
+        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
 
-    QSqlQuery exists_check(sql_db);
-    exists_check.prepare("SELECT 1 FROM workspaces WHERE id=?");
-    exists_check.addBindValue(entry_id);
+    SqlQuery exists_check(db_, "SELECT 1 FROM workspaces WHERE id=?");
+    exists_check.addInt64(entry_id);
 
-    if (!exists_check.exec())
+    if (!exists_check.isValid())
     {
-        LOG(ERROR) << "Unable to execute query:" << exists_check.lastError();
-        sql_db.rollback();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
 
     if (!exists_check.next())
-    {
-        sql_db.rollback();
         return proto::router::kErrorNotFound;
-    }
 
-    QSqlQuery name_check(sql_db);
-    name_check.prepare("SELECT id FROM workspaces WHERE name=?");
-    name_check.addBindValue(name);
+    SqlQuery name_check(db_, "SELECT id FROM workspaces WHERE name=?");
+    name_check.addText(name);
 
-    if (!name_check.exec())
+    if (!name_check.isValid())
     {
-        LOG(ERROR) << "Unable to execute query:" << name_check.lastError();
-        sql_db.rollback();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
 
-    if (name_check.next() && name_check.value(0).toLongLong() != entry_id)
-    {
-        sql_db.rollback();
+    if (name_check.next() && name_check.columnInt64(0) != entry_id)
         return proto::router::kErrorAlreadyExists;
-    }
 
-    QSqlQuery update_workspace(sql_db);
-    update_workspace.prepare("UPDATE workspaces SET name=?, comment=? WHERE id=?");
-    update_workspace.addBindValue(name);
-    update_workspace.addBindValue(comment);
-    update_workspace.addBindValue(entry_id);
+    SqlQuery update_workspace(db_, "UPDATE workspaces SET name=?, comment=? WHERE id=?");
+    update_workspace.addText(name);
+    update_workspace.addBlob(comment);
+    update_workspace.addInt64(entry_id);
 
     if (!update_workspace.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << update_workspace.lastError();
-        sql_db.rollback();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
 
-    QSqlQuery select_current(sql_db);
-    select_current.prepare("SELECT user_id FROM workspace_access WHERE workspace_id=?");
-    select_current.addBindValue(entry_id);
+    SqlQuery select_current(db_, "SELECT user_id FROM workspace_access WHERE workspace_id=?");
+    select_current.addInt64(entry_id);
 
-    if (!select_current.exec())
+    if (!select_current.isValid())
     {
-        LOG(ERROR) << "Unable to execute query:" << select_current.lastError();
-        sql_db.rollback();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
 
     QSet<qint64> current_ids;
     while (select_current.next())
-        current_ids.insert(select_current.value(0).toLongLong());
+        current_ids.insert(select_current.columnInt64(0));
 
-    QSqlQuery delete_access(sql_db);
-    delete_access.prepare("DELETE FROM workspace_access WHERE workspace_id=? AND user_id=?");
+    SqlQuery delete_access(db_, "DELETE FROM workspace_access WHERE workspace_id=? AND user_id=?");
 
     for (qint64 user_id : std::as_const(current_ids))
     {
         if (desired_ids.contains(user_id))
             continue;
 
-        delete_access.bindValue(0, entry_id);
-        delete_access.bindValue(1, user_id);
+        delete_access.reset();
+        delete_access.addInt64(entry_id);
+        delete_access.addInt64(user_id);
 
         if (!delete_access.exec())
         {
-            LOG(ERROR) << "Unable to execute query:" << delete_access.lastError();
-            sql_db.rollback();
+            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
             return proto::router::kErrorInternalError;
         }
     }
 
-    QSqlQuery insert_access(sql_db);
-    insert_access.prepare("INSERT INTO workspace_access (workspace_id, user_id, wrapped_gk) VALUES (?, ?, ?)");
+    const char kInsertAccessSql[] =
+        "INSERT INTO workspace_access (workspace_id, user_id, wrapped_gk) VALUES (?, ?, ?)";
+    SqlQuery insert_access(db_, kInsertAccessSql);
 
     for (const Workspace::Access& access : desired_access)
     {
@@ -1699,26 +1558,24 @@ std::string_view Database::modifyWorkspace(qint64 entry_id, const QString& name,
         if (access.wrapped_gk.isEmpty())
         {
             LOG(ERROR) << "Missing wrapped_gk for new access entry, user_id:" << access.user_id;
-            sql_db.rollback();
             return proto::router::kErrorInvalidData;
         }
 
-        insert_access.bindValue(0, entry_id);
-        insert_access.bindValue(1, access.user_id);
-        insert_access.bindValue(2, access.wrapped_gk);
+        insert_access.reset();
+        insert_access.addInt64(entry_id);
+        insert_access.addInt64(access.user_id);
+        insert_access.addBlob(access.wrapped_gk);
 
         if (!insert_access.exec())
         {
-            LOG(ERROR) << "Unable to execute query:" << insert_access.lastError();
-            sql_db.rollback();
+            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
             return proto::router::kErrorInternalError;
         }
     }
 
-    if (!sql_db.commit())
+    if (!transaction.commit())
     {
-        LOG(ERROR) << "Unable to commit transaction:" << sql_db.lastError();
-        sql_db.rollback();
+        LOG(ERROR) << "Unable to commit transaction:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -1740,17 +1597,16 @@ std::string_view Database::removeWorkspace(qint64 entry_id)
         return proto::router::kErrorInvalidData;
     }
 
-    QSqlQuery query(connection());
-    query.prepare("DELETE FROM workspaces WHERE id=?");
-    query.addBindValue(entry_id);
+    SqlQuery query(db_, "DELETE FROM workspaces WHERE id=?");
+    query.addInt64(entry_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
 
-    if (query.numRowsAffected() == 0)
+    if (db_.changes() == 0)
         return proto::router::kErrorNotFound;
 
     return proto::router::kErrorOk;
@@ -1780,62 +1636,57 @@ std::string_view Database::setWorkspaceHosts(qint64 entry_id, const QSet<HostId>
         }
     }
 
-    QSqlDatabase sql_db = connection();
-    if (!sql_db.transaction())
+    SqlTransaction transaction(db_);
+    if (!transaction.begin())
     {
-        LOG(ERROR) << "Unable to start transaction:" << sql_db.lastError();
+        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
 
     // Release: hosts currently in this workspace but no longer wanted.
-    QSqlQuery select_current(sql_db);
-    select_current.prepare("SELECT id FROM hosts WHERE workspace_id=?");
-    select_current.addBindValue(entry_id);
-    if (!select_current.exec())
+    SqlQuery select_current(db_, "SELECT id FROM hosts WHERE workspace_id=?");
+    select_current.addInt64(entry_id);
+    if (!select_current.isValid())
     {
-        LOG(ERROR) << "Unable to execute query:" << select_current.lastError();
-        sql_db.rollback();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
 
-    QSqlQuery release(sql_db);
-    release.prepare("UPDATE hosts SET workspace_id=0, group_id=0 WHERE id=?");
+    SqlQuery release(db_, "UPDATE hosts SET workspace_id=0, group_id=0 WHERE id=?");
     while (select_current.next())
     {
-        const HostId host_id = select_current.value(0).toULongLong();
+        const HostId host_id = select_current.columnUInt64(0);
         if (desired_host_ids.contains(host_id))
             continue;
 
-        release.bindValue(0, host_id);
+        release.reset();
+        release.addUInt64(host_id);
         if (!release.exec())
         {
-            LOG(ERROR) << "Unable to execute query:" << release.lastError();
-            sql_db.rollback();
+            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
             return proto::router::kErrorInternalError;
         }
     }
 
     // Claim: hosts the operator wants in this workspace. Only hosts that are unassigned or
     // already in this workspace are touched; hosts in another workspace stay put.
-    QSqlQuery claim(sql_db);
-    claim.prepare("UPDATE hosts SET workspace_id=? WHERE id=? AND workspace_id IN (0, ?)");
+    SqlQuery claim(db_, "UPDATE hosts SET workspace_id=? WHERE id=? AND workspace_id IN (0, ?)");
     for (HostId host_id : std::as_const(desired_host_ids))
     {
-        claim.bindValue(0, entry_id);
-        claim.bindValue(1, host_id);
-        claim.bindValue(2, entry_id);
+        claim.reset();
+        claim.addInt64(entry_id);
+        claim.addUInt64(host_id);
+        claim.addInt64(entry_id);
         if (!claim.exec())
         {
-            LOG(ERROR) << "Unable to execute query:" << claim.lastError();
-            sql_db.rollback();
+            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
             return proto::router::kErrorInternalError;
         }
     }
 
-    if (!sql_db.commit())
+    if (!transaction.commit())
     {
-        LOG(ERROR) << "Unable to commit transaction:" << sql_db.lastError();
-        sql_db.rollback();
+        LOG(ERROR) << "Unable to commit transaction:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -1851,23 +1702,18 @@ QList<Workspace::Access> Database::workspaceAccessList(qint64 workspace_id) cons
         return {};
     }
 
-    QSqlQuery query(connection());
-    query.prepare("SELECT workspace_id, user_id, wrapped_gk FROM workspace_access WHERE workspace_id=?");
-    query.addBindValue(workspace_id);
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to get workspace access list:" << query.lastError();
-        return {};
-    }
+    const char kSql[] =
+        "SELECT workspace_id, user_id, wrapped_gk FROM workspace_access WHERE workspace_id=?";
+    SqlQuery query(db_, kSql);
+    query.addInt64(workspace_id);
 
     QList<Workspace::Access> result;
     while (query.next())
     {
         Workspace::Access access;
-        access.workspace_id = query.value(0).toLongLong();
-        access.user_id      = query.value(1).toLongLong();
-        access.wrapped_gk   = query.value(2).toByteArray();
+        access.workspace_id = query.columnInt64(0);
+        access.user_id      = query.columnInt64(1);
+        access.wrapped_gk   = query.columnBlob(2);
         result.append(access);
     }
 
@@ -1883,19 +1729,12 @@ QSet<qint64> Database::workspaceAccessIdsForUser(qint64 user_id) const
         return {};
     }
 
-    QSqlQuery query(connection());
-    query.prepare("SELECT workspace_id FROM workspace_access WHERE user_id=?");
-    query.addBindValue(user_id);
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to get workspace access list for user:" << query.lastError();
-        return {};
-    }
+    SqlQuery query(db_, "SELECT workspace_id FROM workspace_access WHERE user_id=?");
+    query.addInt64(user_id);
 
     QSet<qint64> result;
     while (query.next())
-        result.insert(query.value(0).toLongLong());
+        result.insert(query.columnInt64(0));
 
     return result;
 }
@@ -1909,23 +1748,16 @@ QList<Workspace::Access> Database::workspaceAccessListForUser(qint64 user_id) co
         return {};
     }
 
-    QSqlQuery query(connection());
-    query.prepare("SELECT workspace_id, wrapped_gk FROM workspace_access WHERE user_id=?");
-    query.addBindValue(user_id);
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to get workspace keys for user:" << query.lastError();
-        return {};
-    }
+    SqlQuery query(db_, "SELECT workspace_id, wrapped_gk FROM workspace_access WHERE user_id=?");
+    query.addInt64(user_id);
 
     QList<Workspace::Access> result;
     while (query.next())
     {
         Workspace::Access access;
-        access.workspace_id = query.value(0).toLongLong();
+        access.workspace_id = query.columnInt64(0);
         access.user_id      = user_id;
-        access.wrapped_gk   = query.value(1).toByteArray();
+        access.wrapped_gk   = query.columnBlob(1);
         result.append(access);
     }
 
@@ -1938,16 +1770,9 @@ bool Database::hasWorkspaceAccess(qint64 user_id, qint64 workspace_id) const
     if (!isValid() || user_id <= 0 || workspace_id <= 0)
         return false;
 
-    QSqlQuery query(connection());
-    query.prepare("SELECT 1 FROM workspace_access WHERE workspace_id=? AND user_id=?");
-    query.addBindValue(workspace_id);
-    query.addBindValue(user_id);
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
-        return false;
-    }
+    SqlQuery query(db_, "SELECT 1 FROM workspace_access WHERE workspace_id=? AND user_id=?");
+    query.addInt64(workspace_id);
+    query.addInt64(user_id);
 
     return query.next();
 }
@@ -1961,61 +1786,64 @@ bool Database::setWorkspaceKeysForUser(qint64 user_id, const QHash<qint64, QByte
         return false;
     }
 
-    QSqlDatabase sql_db = connection();
-    if (!sql_db.transaction())
+    SqlTransaction transaction(db_);
+    if (!transaction.begin())
     {
-        LOG(ERROR) << "Unable to start transaction:" << sql_db.lastError();
+        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
         return false;
     }
 
     QList<qint64> workspace_ids;
     {
-        QSqlQuery select(sql_db);
-        select.prepare("SELECT workspace_id FROM workspace_access WHERE user_id=?");
-        select.addBindValue(user_id);
+        SqlQuery select(db_, "SELECT workspace_id FROM workspace_access WHERE user_id=?");
+        select.addInt64(user_id);
 
-        if (!select.exec())
+        if (!select.isValid())
         {
-            LOG(ERROR) << "Unable to read workspace access:" << select.lastError();
-            sql_db.rollback();
+            LOG(ERROR) << "Unable to read workspace access:" << db_.lastError();
             return false;
         }
 
         while (select.next())
-            workspace_ids.append(select.value(0).toLongLong());
+            workspace_ids.append(select.columnInt64(0));
     }
 
     for (qint64 workspace_id : std::as_const(workspace_ids))
     {
         const auto it = wrapped_keys.constFind(workspace_id);
 
-        QSqlQuery query(sql_db);
         if (it != wrapped_keys.constEnd())
         {
-            query.prepare("UPDATE workspace_access SET wrapped_gk=? WHERE workspace_id=? AND user_id=?");
-            query.addBindValue(it.value());
-            query.addBindValue(workspace_id);
-            query.addBindValue(user_id);
+            const char kSql[] =
+                "UPDATE workspace_access SET wrapped_gk=? WHERE workspace_id=? AND user_id=?";
+            SqlQuery query(db_, kSql);
+            query.addBlob(it.value());
+            query.addInt64(workspace_id);
+            query.addInt64(user_id);
+
+            if (!query.exec())
+            {
+                LOG(ERROR) << "Unable to update workspace access:" << db_.lastError();
+                return false;
+            }
         }
         else
         {
-            query.prepare("DELETE FROM workspace_access WHERE workspace_id=? AND user_id=?");
-            query.addBindValue(workspace_id);
-            query.addBindValue(user_id);
-        }
+            SqlQuery query(db_, "DELETE FROM workspace_access WHERE workspace_id=? AND user_id=?");
+            query.addInt64(workspace_id);
+            query.addInt64(user_id);
 
-        if (!query.exec())
-        {
-            LOG(ERROR) << "Unable to update workspace access:" << query.lastError();
-            sql_db.rollback();
-            return false;
+            if (!query.exec())
+            {
+                LOG(ERROR) << "Unable to update workspace access:" << db_.lastError();
+                return false;
+            }
         }
     }
 
-    if (!sql_db.commit())
+    if (!transaction.commit())
     {
-        LOG(ERROR) << "Unable to commit transaction:" << sql_db.lastError();
-        sql_db.rollback();
+        LOG(ERROR) << "Unable to commit transaction:" << db_.lastError();
         return false;
     }
 
@@ -2042,24 +1870,19 @@ QList<Group> Database::groupList(qint64 workspace_id) const
     // come back in whatever order SQLite produces them. Display ordering (alphabetic,
     // locale-aware, and so on) is the client's job. Building a tree from this result does not
     // require any particular order: index nodes by id, then link children to parents.
-    QSqlQuery query(connection());
-    query.prepare("SELECT id, IFNULL(parent_id, 0), name, comment FROM host_groups WHERE workspace_id=?");
-    query.addBindValue(workspace_id);
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to get group list:" << query.lastError();
-        return {};
-    }
+    const char kSql[] =
+        "SELECT id, IFNULL(parent_id, 0), name, comment FROM host_groups WHERE workspace_id=?";
+    SqlQuery query(db_, kSql);
+    query.addInt64(workspace_id);
 
     QList<Group> groups;
     while (query.next())
     {
         Group group;
-        group.entry_id  = query.value(0).toLongLong();
-        group.parent_id = query.value(1).toLongLong();
-        group.name      = query.value(2).toString();
-        group.comment   = query.value(3).toByteArray();
+        group.entry_id  = query.columnInt64(0);
+        group.parent_id = query.columnInt64(1);
+        group.name      = query.columnText(2);
+        group.comment   = query.columnBlob(3);
         groups.append(group);
     }
 
@@ -2085,35 +1908,24 @@ QList<Group> Database::groupChildren(qint64 workspace_id, qint64 parent_id) cons
     // "root groups" and maps to WHERE parent_id IS NULL (SQLite treats NULL via IS, not =).
     // Otherwise filter on the parent id as a normal integer match. The SELECT shape mirrors
     // groupList() so the column to struct mapping below stays identical.
-    QSqlQuery query(connection());
-    if (parent_id == 0)
-    {
-        query.prepare("SELECT id, IFNULL(parent_id, 0), name, comment FROM host_groups "
-                      "WHERE workspace_id=? AND parent_id IS NULL ORDER BY name");
-        query.addBindValue(workspace_id);
-    }
-    else
-    {
-        query.prepare("SELECT id, IFNULL(parent_id, 0), name, comment FROM host_groups "
-                      "WHERE workspace_id=? AND parent_id=? ORDER BY name");
-        query.addBindValue(workspace_id);
-        query.addBindValue(parent_id);
-    }
+    std::string sql = "SELECT id, IFNULL(parent_id, 0), name, comment FROM host_groups "
+                      "WHERE workspace_id=? AND ";
+    sql += (parent_id == 0) ? "parent_id IS NULL" : "parent_id=?";
+    sql += " ORDER BY name";
 
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to get group children:" << query.lastError();
-        return {};
-    }
+    SqlQuery query(db_, sql);
+    query.addInt64(workspace_id);
+    if (parent_id != 0)
+        query.addInt64(parent_id);
 
     QList<Group> groups;
     while (query.next())
     {
         Group group;
-        group.entry_id  = query.value(0).toLongLong();
-        group.parent_id = query.value(1).toLongLong();
-        group.name      = query.value(2).toString();
-        group.comment   = query.value(3).toByteArray();
+        group.entry_id  = query.columnInt64(0);
+        group.parent_id = query.columnInt64(1);
+        group.name      = query.columnText(2);
+        group.comment   = query.columnBlob(3);
         groups.append(group);
     }
 
@@ -2138,26 +1950,21 @@ Group Database::findGroup(qint64 workspace_id, qint64 entry_id) const
     // Look up a single group by its id within this workspace. Same column projection as
     // groupList(); IFNULL maps the storage NULL parent_id of a root node to 0. workspace_id is
     // part of the filter so a stale id from another workspace cannot leak through.
-    QSqlQuery query(connection());
-    query.prepare("SELECT id, IFNULL(parent_id, 0), name, comment FROM host_groups "
-                  "WHERE id=? AND workspace_id=?");
-    query.addBindValue(entry_id);
-    query.addBindValue(workspace_id);
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
-        return Group();
-    }
+    const char kSql[] =
+        "SELECT id, IFNULL(parent_id, 0), name, comment FROM host_groups "
+        "WHERE id=? AND workspace_id=?";
+    SqlQuery query(db_, kSql);
+    query.addInt64(entry_id);
+    query.addInt64(workspace_id);
 
     if (!query.next())
         return Group();
 
     Group group;
-    group.entry_id  = query.value(0).toLongLong();
-    group.parent_id = query.value(1).toLongLong();
-    group.name      = query.value(2).toString();
-    group.comment   = query.value(3).toByteArray();
+    group.entry_id  = query.columnInt64(0);
+    group.parent_id = query.columnInt64(1);
+    group.name      = query.columnText(2);
+    group.comment   = query.columnBlob(3);
     return group;
 }
 
@@ -2193,10 +2000,10 @@ std::string_view Database::addGroup(qint64 workspace_id, qint64 parent_id, const
         return proto::router::kErrorInvalidData;
     }
 
-    QSqlDatabase sql_db = connection();
-    if (!sql_db.transaction())
+    SqlTransaction transaction(db_);
+    if (!transaction.begin())
     {
-        LOG(ERROR) << "Unable to start transaction:" << sql_db.lastError();
+        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -2204,46 +2011,42 @@ std::string_view Database::addGroup(qint64 workspace_id, qint64 parent_id, const
     // only safeguard against the API silently linking groups across workspace boundaries.
     if (parent_id != 0)
     {
-        QSqlQuery parent_check(sql_db);
-        parent_check.prepare("SELECT 1 FROM host_groups WHERE id=? AND workspace_id=?");
-        parent_check.addBindValue(parent_id);
-        parent_check.addBindValue(workspace_id);
+        SqlQuery parent_check(db_, "SELECT 1 FROM host_groups WHERE id=? AND workspace_id=?");
+        parent_check.addInt64(parent_id);
+        parent_check.addInt64(workspace_id);
 
-        if (!parent_check.exec())
+        if (!parent_check.isValid())
         {
-            LOG(ERROR) << "Unable to execute query:" << parent_check.lastError();
-            sql_db.rollback();
+            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
             return proto::router::kErrorInternalError;
         }
 
         if (!parent_check.next())
-        {
-            sql_db.rollback();
             return proto::router::kErrorInvalidData;
-        }
     }
 
-    QSqlQuery insert(sql_db);
-    insert.prepare("INSERT INTO host_groups (workspace_id, parent_id, name, comment) "
-                   "VALUES (?, ?, ?, ?)");
-    insert.addBindValue(workspace_id);
-    insert.addBindValue(parent_id == 0 ? QVariant() : QVariant(parent_id));
-    insert.addBindValue(name);
-    insert.addBindValue(comment);
+    const char kSql[] =
+        "INSERT INTO host_groups (workspace_id, parent_id, name, comment) VALUES (?, ?, ?, ?)";
+    SqlQuery insert(db_, kSql);
+    insert.addInt64(workspace_id);
+    if (parent_id == 0)
+        insert.addNull();
+    else
+        insert.addInt64(parent_id);
+    insert.addText(name);
+    insert.addBlob(comment);
 
     if (!insert.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << insert.lastError();
-        sql_db.rollback();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
 
-    const qint64 new_id = insert.lastInsertId().toLongLong();
+    const qint64 new_id = db_.lastInsertRowId();
 
-    if (!sql_db.commit())
+    if (!transaction.commit())
     {
-        LOG(ERROR) << "Unable to commit transaction:" << sql_db.lastError();
-        sql_db.rollback();
+        LOG(ERROR) << "Unable to commit transaction:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -2274,52 +2077,42 @@ std::string_view Database::modifyGroup(qint64 workspace_id, qint64 entry_id, qin
         return proto::router::kErrorInvalidData;
     }
 
-    QSqlDatabase sql_db = connection();
-    if (!sql_db.transaction())
+    SqlTransaction transaction(db_);
+    if (!transaction.begin())
     {
-        LOG(ERROR) << "Unable to start transaction:" << sql_db.lastError();
+        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
 
     // Verify the group being modified exists in this workspace.
-    QSqlQuery select_self(sql_db);
-    select_self.prepare("SELECT 1 FROM host_groups WHERE id=? AND workspace_id=?");
-    select_self.addBindValue(entry_id);
-    select_self.addBindValue(workspace_id);
+    SqlQuery select_self(db_, "SELECT 1 FROM host_groups WHERE id=? AND workspace_id=?");
+    select_self.addInt64(entry_id);
+    select_self.addInt64(workspace_id);
 
-    if (!select_self.exec())
+    if (!select_self.isValid())
     {
-        LOG(ERROR) << "Unable to execute query:" << select_self.lastError();
-        sql_db.rollback();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
 
     if (!select_self.next())
-    {
-        sql_db.rollback();
         return proto::router::kErrorNotFound;
-    }
 
     if (new_parent_id != 0)
     {
         // The new parent must exist in this workspace.
-        QSqlQuery parent_check(sql_db);
-        parent_check.prepare("SELECT 1 FROM host_groups WHERE id=? AND workspace_id=?");
-        parent_check.addBindValue(new_parent_id);
-        parent_check.addBindValue(workspace_id);
+        SqlQuery parent_check(db_, "SELECT 1 FROM host_groups WHERE id=? AND workspace_id=?");
+        parent_check.addInt64(new_parent_id);
+        parent_check.addInt64(workspace_id);
 
-        if (!parent_check.exec())
+        if (!parent_check.isValid())
         {
-            LOG(ERROR) << "Unable to execute query:" << parent_check.lastError();
-            sql_db.rollback();
+            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
             return proto::router::kErrorInternalError;
         }
 
         if (!parent_check.next())
-        {
-            sql_db.rollback();
             return proto::router::kErrorInvalidData;
-        }
 
         // Cycle protection. Walk parent links from new_parent_id upward; if entry_id appears
         // anywhere on that chain, the move would put the group inside its own subtree. The
@@ -2327,50 +2120,48 @@ std::string_view Database::modifyGroup(qint64 workspace_id, qint64 entry_id, qin
         // the top) and SQLite caps runaway recursion at SQLITE_MAX_RECURSION_DEPTH. parent_id
         // links never cross workspace boundaries by construction (enforced at insert and
         // modify), so no workspace_id filter is needed inside the recursion.
-        QSqlQuery cycle_check(sql_db);
-        cycle_check.prepare("WITH RECURSIVE ancestors(id) AS ("
+        const char kSql[] =
+            "WITH RECURSIVE ancestors(id) AS ("
             "    SELECT id FROM host_groups WHERE id=?"
             "    UNION ALL"
             "    SELECT g.parent_id FROM host_groups g JOIN ancestors a ON g.id = a.id "
             "      WHERE g.parent_id IS NOT NULL"
-            ") SELECT 1 FROM ancestors WHERE id=? LIMIT 1");
-        cycle_check.addBindValue(new_parent_id);
-        cycle_check.addBindValue(entry_id);
+            ") SELECT 1 FROM ancestors WHERE id=? LIMIT 1";
+        SqlQuery cycle_check(db_, kSql);
+        cycle_check.addInt64(new_parent_id);
+        cycle_check.addInt64(entry_id);
 
-        if (!cycle_check.exec())
+        if (!cycle_check.isValid())
         {
-            LOG(ERROR) << "Unable to execute query:" << cycle_check.lastError();
-            sql_db.rollback();
+            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
             return proto::router::kErrorInternalError;
         }
 
         if (cycle_check.next())
-        {
-            sql_db.rollback();
             return proto::router::kErrorInvalidData;
-        }
     }
 
-    QSqlQuery update_self(sql_db);
-    update_self.prepare("UPDATE host_groups SET parent_id=?, name=?, comment=? "
-        "WHERE id=? AND workspace_id=?");
-    update_self.addBindValue(new_parent_id == 0 ? QVariant() : QVariant(new_parent_id));
-    update_self.addBindValue(name);
-    update_self.addBindValue(comment);
-    update_self.addBindValue(entry_id);
-    update_self.addBindValue(workspace_id);
+    const char kSql[] =
+        "UPDATE host_groups SET parent_id=?, name=?, comment=? WHERE id=? AND workspace_id=?";
+    SqlQuery update_self(db_, kSql);
+    if (new_parent_id == 0)
+        update_self.addNull();
+    else
+        update_self.addInt64(new_parent_id);
+    update_self.addText(name);
+    update_self.addBlob(comment);
+    update_self.addInt64(entry_id);
+    update_self.addInt64(workspace_id);
 
     if (!update_self.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << update_self.lastError();
-        sql_db.rollback();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
 
-    if (!sql_db.commit())
+    if (!transaction.commit())
     {
-        LOG(ERROR) << "Unable to commit transaction:" << sql_db.lastError();
-        sql_db.rollback();
+        LOG(ERROR) << "Unable to commit transaction:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -2392,18 +2183,17 @@ std::string_view Database::removeGroup(qint64 workspace_id, qint64 entry_id)
         return proto::router::kErrorInvalidData;
     }
 
-    QSqlQuery query(connection());
-    query.prepare("DELETE FROM host_groups WHERE id=? AND workspace_id=?");
-    query.addBindValue(entry_id);
-    query.addBindValue(workspace_id);
+    SqlQuery query(db_, "DELETE FROM host_groups WHERE id=? AND workspace_id=?");
+    query.addInt64(entry_id);
+    query.addInt64(workspace_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
 
-    if (query.numRowsAffected() == 0)
+    if (db_.changes() == 0)
         return proto::router::kErrorNotFound;
 
     return proto::router::kErrorOk;
@@ -2447,58 +2237,48 @@ bool Database::openDatabase()
 
     LOG(INFO) << (!QFileInfo::exists(file_path) ? "Creating" : "Opening") << "database:" << file_path;
 
-    QSqlDatabase db = connection();
-    if (!db.isValid())
-    {
-        db = QSqlDatabase::addDatabase("QSQLITE", kConnectionName);
-        db.setDatabaseName(file_path);
-    }
-
-    if (!db.isOpen() && !db.open())
-    {
-        LOG(ERROR) << "QSqlDatabase::open failed:" << db.lastError();
+    if (!db_.open(file_path))
         return false;
-    }
 
-    QSqlQuery pragma(db);
-
-    if (pragma.exec("PRAGMA quick_check") && pragma.next())
     {
-        const QString result = pragma.value(0).toString();
-        if (result != "ok")
-            LOG(ERROR) << "Database integrity check failed:" << result;
-    }
-    else
-    {
-        LOG(WARNING) << "Unable to run quick_check:" << pragma.lastError();
+        SqlQuery pragma(db_, "PRAGMA quick_check");
+        if (pragma.next())
+        {
+            const QString result = pragma.columnText(0);
+            if (result != "ok")
+                LOG(ERROR) << "Database integrity check failed:" << result;
+        }
+        else
+        {
+            LOG(WARNING) << "Unable to run quick_check:" << db_.lastError();
+        }
     }
 
     // Foreign keys are off by default in SQLite, enable per-connection so the cascade rules
     // declared on the schema actually fire.
-    if (!pragma.exec("PRAGMA foreign_keys = ON"))
-        LOG(WARNING) << "Unable to enable foreign keys:" << pragma.lastError();
+    if (!db_.exec("PRAGMA foreign_keys = ON"))
+        LOG(WARNING) << "Unable to enable foreign keys:" << db_.lastError();
 
     // Write-Ahead Logging: concurrent readers do not block the writer, the writer does not
     // rewrite a rollback journal on every commit. synchronous stays at default FULL so durable
     // commits survive power loss.
-    if (!pragma.exec("PRAGMA journal_mode = WAL"))
-        LOG(WARNING) << "Unable to enable WAL journal mode:" << pragma.lastError();
+    if (!db_.exec("PRAGMA journal_mode = WAL"))
+        LOG(WARNING) << "Unable to enable WAL journal mode:" << db_.lastError();
 
     // Keep temporary B-trees (recursive CTEs, sorts without a covering index, GROUP BY) in
     // memory rather than on disk.
-    if (!pragma.exec("PRAGMA temp_store = MEMORY"))
-        LOG(WARNING) << "Unable to set temp_store:" << pragma.lastError();
+    if (!db_.exec("PRAGMA temp_store = MEMORY"))
+        LOG(WARNING) << "Unable to set temp_store:" << db_.lastError();
 
     // Larger page cache (8 MiB instead of the default 2 MiB). Negative value means size in
     // kibibytes rather than page count. Keeps hot index pages and recently accessed rows
     // resident as the database grows.
-    if (!pragma.exec("PRAGMA cache_size = -8000"))
-        LOG(WARNING) << "Unable to set cache_size:" << pragma.lastError();
+    if (!db_.exec("PRAGMA cache_size = -8000"))
+        LOG(WARNING) << "Unable to set cache_size:" << db_.lastError();
 
-    if (!ensureSchema(db))
+    if (!ensureSchema(db_))
     {
-        db.close();
-        QSqlDatabase::removeDatabase(kConnectionName);
+        db_.close();
         return false;
     }
 

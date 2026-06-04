@@ -442,16 +442,16 @@ list(APPEND SOURCE_BASE_IPC
     ipc/ipc_server.cc
     ipc/ipc_server.h)
 
-list(APPEND SOURCE_BASE_SQLITE
-    sqlite/database.cc
-    sqlite/database.h
-    sqlite/statement.cc
-    sqlite/statement.h
-    sqlite/transaction.cc
-    sqlite/transaction.h)
+list(APPEND SOURCE_BASE_SQL
+    sql/sql.cc
+    sql/sql.h
+    sql/sql_query.cc
+    sql/sql_query.h
+    sql/sql_transaction.cc
+    sql/sql_transaction.h)
 
-list(APPEND SOURCE_BASE_SQLITE_TESTS
-    sqlite/sqlite_unittest.cc)
+list(APPEND SOURCE_BASE_SQL_TESTS
+    sql/sql_unittest.cc)
 
 if (APPLE)
     list(APPEND SOURCE_BASE_MAC
@@ -624,7 +624,7 @@ source_group(files FILES ${SOURCE_BASE_FILES} ${SOURCE_BASE_FILES_TESTS})
 source_group(ipc FILES ${SOURCE_BASE_IPC})
 source_group(net FILES ${SOURCE_BASE_NET} ${SOURCE_BASE_NET_TESTS})
 source_group(peer FILES ${SOURCE_BASE_PEER} ${SOURCE_BASE_PEER_TESTS})
-source_group(sqlite FILES ${SOURCE_BASE_SQLITE} ${SOURCE_BASE_SQLITE_TESTS})
+source_group(sql FILES ${SOURCE_BASE_SQL} ${SOURCE_BASE_SQL_TESTS})
 
 if (WIN32)
     source_group(audio\\win FILES ${SOURCE_BASE_AUDIO_WIN})
@@ -662,7 +662,7 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_NET}
     ${SOURCE_BASE_PEER}
     ${SOURCE_BASE_POSIX}
-    ${SOURCE_BASE_SQLITE}
+    ${SOURCE_BASE_SQL}
     ${SOURCE_BASE_WIN}
     ${SOURCE_BASE_X11})
 
@@ -705,7 +705,7 @@ add_executable(aspia_base_tests
     ${SOURCE_BASE_FILES_TESTS}
     ${SOURCE_BASE_NET_TESTS}
     ${SOURCE_BASE_PEER_TESTS}
-    ${SOURCE_BASE_SQLITE_TESTS}
+    ${SOURCE_BASE_SQL_TESTS}
     ${SOURCE_BASE_WIN_TESTS})
 target_link_libraries(aspia_base_tests PRIVATE
     aspia_base

@@ -16,17 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/sqlite/statement.h"
+#include "base/sql/sql_query.h"
 
 #include <sqlite3.h>
 
 #include "base/logging.h"
-#include "base/sqlite/database.h"
-
-namespace sqlite {
+#include "base/sql/sql.h"
 
 //--------------------------------------------------------------------------------------------------
-Statement::Statement(Database& db, std::string_view sql)
+SqlQuery::SqlQuery(Sql& db, std::string_view sql)
     : db_(db)
 {
     if (!db_.isOpen())
@@ -45,14 +43,14 @@ Statement::Statement(Database& db, std::string_view sql)
 }
 
 //--------------------------------------------------------------------------------------------------
-Statement::~Statement()
+SqlQuery::~SqlQuery()
 {
     if (stmt_)
         sqlite3_finalize(stmt_);
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Statement::bindNull(int index)
+bool SqlQuery::bindNull(int index)
 {
     if (!stmt_)
         return false;
@@ -66,7 +64,7 @@ bool Statement::bindNull(int index)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Statement::bindInt64(int index, qint64 value)
+bool SqlQuery::bindInt64(int index, qint64 value)
 {
     if (!stmt_)
         return false;
@@ -80,13 +78,13 @@ bool Statement::bindInt64(int index, qint64 value)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Statement::bindUInt64(int index, quint64 value)
+bool SqlQuery::bindUInt64(int index, quint64 value)
 {
     return bindInt64(index, static_cast<qint64>(value));
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Statement::bindText(int index, std::string_view value)
+bool SqlQuery::bindText(int index, std::string_view value)
 {
     if (!stmt_)
         return false;
@@ -105,14 +103,14 @@ bool Statement::bindText(int index, std::string_view value)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Statement::bindText(int index, const QString& value)
+bool SqlQuery::bindText(int index, const QString& value)
 {
     const QByteArray utf8 = value.toUtf8();
     return bindText(index, std::string_view(utf8.constData(), utf8.size()));
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Statement::bindBlob(int index, const void* data, qsizetype size)
+bool SqlQuery::bindBlob(int index, const void* data, qsizetype size)
 {
     if (!stmt_)
         return false;
@@ -127,56 +125,56 @@ bool Statement::bindBlob(int index, const void* data, qsizetype size)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Statement::bindBlob(int index, const QByteArray& value)
+bool SqlQuery::bindBlob(int index, const QByteArray& value)
 {
     // constData() is never null, so a zero-length QByteArray binds an empty blob rather than NULL.
     return bindBlob(index, value.constData(), value.size());
 }
 
 //--------------------------------------------------------------------------------------------------
-Statement& Statement::addNull()
+SqlQuery& SqlQuery::addNull()
 {
     bindNull(next_bind_index_++);
     return *this;
 }
 
 //--------------------------------------------------------------------------------------------------
-Statement& Statement::addInt64(qint64 value)
+SqlQuery& SqlQuery::addInt64(qint64 value)
 {
     bindInt64(next_bind_index_++, value);
     return *this;
 }
 
 //--------------------------------------------------------------------------------------------------
-Statement& Statement::addUInt64(quint64 value)
+SqlQuery& SqlQuery::addUInt64(quint64 value)
 {
     bindUInt64(next_bind_index_++, value);
     return *this;
 }
 
 //--------------------------------------------------------------------------------------------------
-Statement& Statement::addText(std::string_view value)
+SqlQuery& SqlQuery::addText(std::string_view value)
 {
     bindText(next_bind_index_++, value);
     return *this;
 }
 
 //--------------------------------------------------------------------------------------------------
-Statement& Statement::addText(const QString& value)
+SqlQuery& SqlQuery::addText(const QString& value)
 {
     bindText(next_bind_index_++, value);
     return *this;
 }
 
 //--------------------------------------------------------------------------------------------------
-Statement& Statement::addBlob(const QByteArray& value)
+SqlQuery& SqlQuery::addBlob(const QByteArray& value)
 {
     bindBlob(next_bind_index_++, value);
     return *this;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Statement::next()
+bool SqlQuery::next()
 {
     if (!stmt_)
         return false;
@@ -191,7 +189,7 @@ bool Statement::next()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Statement::execute()
+bool SqlQuery::exec()
 {
     if (!stmt_)
         return false;
@@ -205,7 +203,7 @@ bool Statement::execute()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Statement::reset()
+bool SqlQuery::reset()
 {
     if (!stmt_)
         return false;
@@ -220,7 +218,7 @@ bool Statement::reset()
 }
 
 //--------------------------------------------------------------------------------------------------
-int Statement::columnCount() const
+int SqlQuery::columnCount() const
 {
     if (!stmt_)
         return 0;
@@ -228,7 +226,7 @@ int Statement::columnCount() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Statement::columnIsNull(int column) const
+bool SqlQuery::columnIsNull(int column) const
 {
     if (!stmt_)
         return true;
@@ -236,7 +234,7 @@ bool Statement::columnIsNull(int column) const
 }
 
 //--------------------------------------------------------------------------------------------------
-qint64 Statement::columnInt64(int column) const
+qint64 SqlQuery::columnInt64(int column) const
 {
     if (!stmt_)
         return 0;
@@ -244,13 +242,13 @@ qint64 Statement::columnInt64(int column) const
 }
 
 //--------------------------------------------------------------------------------------------------
-quint64 Statement::columnUInt64(int column) const
+quint64 SqlQuery::columnUInt64(int column) const
 {
     return static_cast<quint64>(columnInt64(column));
 }
 
 //--------------------------------------------------------------------------------------------------
-double Statement::columnDouble(int column) const
+double SqlQuery::columnDouble(int column) const
 {
     if (!stmt_)
         return 0.0;
@@ -258,7 +256,7 @@ double Statement::columnDouble(int column) const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Statement::columnTextView(int column) const
+std::string_view SqlQuery::columnTextView(int column) const
 {
     if (!stmt_)
         return {};
@@ -274,7 +272,7 @@ std::string_view Statement::columnTextView(int column) const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Statement::columnBlobView(int column) const
+std::string_view SqlQuery::columnBlobView(int column) const
 {
     if (!stmt_)
         return {};
@@ -288,23 +286,21 @@ std::string_view Statement::columnBlobView(int column) const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Statement::columnText(int column) const
+QString SqlQuery::columnText(int column) const
 {
     const std::string_view view = columnTextView(column);
     return QString::fromUtf8(view.data(), static_cast<qsizetype>(view.size()));
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray Statement::columnBlob(int column) const
+QByteArray SqlQuery::columnBlob(int column) const
 {
     const std::string_view view = columnBlobView(column);
     return QByteArray(view.data(), static_cast<qsizetype>(view.size()));
 }
 
 //--------------------------------------------------------------------------------------------------
-void Statement::logError(const char* what) const
+void SqlQuery::logError(const char* what) const
 {
     LOG(ERROR) << "Unable to" << what << ":" << db_.lastError();
 }
-
-} // namespace sqlite

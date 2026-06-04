@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_SQLITE_STATEMENT_H
-#define BASE_SQLITE_STATEMENT_H
+#ifndef BASE_SQL_SQL_QUERY_H
+#define BASE_SQL_SQL_QUERY_H
 
 #include <QByteArray>
 #include <QString>
@@ -26,9 +26,7 @@
 
 struct sqlite3_stmt;
 
-namespace sqlite {
-
-class Database;
+class Sql;
 
 // RAII wrapper over a prepared sqlite3_stmt. Bind parameters are 1-based (native sqlite); result
 // columns are 0-based (matching the value(i) convention the project moved off of). Bound values
@@ -36,14 +34,14 @@ class Database;
 //
 // The column*View() accessors return non-owning views straight into sqlite's own row buffer -
 // no transcoding, no allocation. Such a view is valid only until the next next()/reset() call or
-// until the Statement is destroyed; copy it (or use the copying accessors) if it must outlive the
+// until the SqlQuery is destroyed; copy it (or use the copying accessors) if it must outlive the
 // row.
-class Statement final
+class SqlQuery final
 {
 public:
     // Prepares |sql| against |db|. Check isValid() before use; a prepare failure is logged.
-    Statement(Database& db, std::string_view sql);
-    ~Statement();
+    SqlQuery(Sql& db, std::string_view sql);
+    ~SqlQuery();
 
     bool isValid() const { return stmt_ != nullptr; }
 
@@ -64,12 +62,12 @@ public:
     // starting at 1. reset() rewinds the cursor back to the first parameter.
     //----------------------------------------------------------------------------------------------
 
-    Statement& addNull();
-    Statement& addInt64(qint64 value);
-    Statement& addUInt64(quint64 value);
-    Statement& addText(std::string_view value);
-    Statement& addText(const QString& value);
-    Statement& addBlob(const QByteArray& value);
+    SqlQuery& addNull();
+    SqlQuery& addInt64(qint64 value);
+    SqlQuery& addUInt64(quint64 value);
+    SqlQuery& addText(std::string_view value);
+    SqlQuery& addText(const QString& value);
+    SqlQuery& addBlob(const QByteArray& value);
 
     //----------------------------------------------------------------------------------------------
     // Execution.
@@ -81,7 +79,7 @@ public:
 
     // Runs a statement that yields no rows (INSERT/UPDATE/DELETE/DDL) to completion. Returns
     // true on success.
-    bool execute();
+    bool exec();
 
     // Resets execution state and clears all bindings so the statement can be re-bound and
     // re-run. Returns false on error.
@@ -109,13 +107,11 @@ public:
 private:
     void logError(const char* what) const;
 
-    Database& db_;
+    Sql& db_;
     sqlite3_stmt* stmt_ = nullptr;
     int next_bind_index_ = 1;
 
-    Q_DISABLE_COPY_MOVE(Statement)
+    Q_DISABLE_COPY_MOVE(SqlQuery)
 };
 
-} // namespace sqlite
-
-#endif // BASE_SQLITE_STATEMENT_H
+#endif // BASE_SQL_SQL_QUERY_H

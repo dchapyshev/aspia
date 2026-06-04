@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_SQLITE_DATABASE_H
-#define BASE_SQLITE_DATABASE_H
+#ifndef BASE_SQL_SQL_H
+#define BASE_SQL_SQL_H
 
 #include <QString>
 
@@ -25,16 +25,14 @@ struct sqlite3;
 struct sqlite3_context;
 struct sqlite3_value;
 
-namespace sqlite {
-
-// Thin RAII wrapper over a single sqlite3 connection. A Database must be used from a single
-// thread at a time, which matches the per-thread connection model used across the project.
-// Errors are reported through the return value and logged; no exceptions are thrown.
-class Database final
+// Thin RAII wrapper over a single sqlite3 connection. An Sql must be used from a single thread at
+// a time, which matches the per-thread connection model used across the project. Errors are
+// reported through the return value and logged; no exceptions are thrown.
+class Sql final
 {
 public:
-    Database() = default;
-    ~Database();
+    Sql() = default;
+    ~Sql();
 
     // Opens (creating it if absent) the database at |file_path|. Returns false and leaves the
     // object closed on failure.
@@ -44,8 +42,8 @@ public:
     void close();
 
     // Runs one or more statements that return no rows (pragmas without a result, DDL). For
-    // statements that need binding or produce rows use a Statement.
-    bool execute(const char* sql);
+    // statements that need binding or produce rows use an SqlQuery.
+    bool exec(const char* sql);
 
     bool beginTransaction();
     bool commitTransaction();
@@ -77,9 +75,7 @@ public:
 private:
     sqlite3* db_ = nullptr;
 
-    Q_DISABLE_COPY_MOVE(Database)
+    Q_DISABLE_COPY_MOVE(Sql)
 };
 
-} // namespace sqlite
-
-#endif // BASE_SQLITE_DATABASE_H
+#endif // BASE_SQL_SQL_H

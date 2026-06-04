@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/sqlite/database.h"
+#include "base/sql/sql.h"
 
 #include <sqlite3.h>
 
@@ -28,8 +28,6 @@
 #endif // defined(Q_OS_WINDOWS)
 
 #include "base/logging.h"
-
-namespace sqlite {
 
 namespace {
 
@@ -108,13 +106,13 @@ void caseFold(sqlite3_context* context, int argc, sqlite3_value** argv)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Database::~Database()
+Sql::~Sql()
 {
     close();
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::open(const QString& file_path)
+bool Sql::open(const QString& file_path)
 {
     if (db_)
     {
@@ -145,7 +143,7 @@ bool Database::open(const QString& file_path)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Database::close()
+void Sql::close()
 {
     if (!db_)
         return;
@@ -160,7 +158,7 @@ void Database::close()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::execute(const char* sql)
+bool Sql::exec(const char* sql)
 {
     if (!db_)
     {
@@ -182,25 +180,25 @@ bool Database::execute(const char* sql)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::beginTransaction()
+bool Sql::beginTransaction()
 {
-    return execute("BEGIN");
+    return exec("BEGIN");
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::commitTransaction()
+bool Sql::commitTransaction()
 {
-    return execute("COMMIT");
+    return exec("COMMIT");
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::rollbackTransaction()
+bool Sql::rollbackTransaction()
 {
-    return execute("ROLLBACK");
+    return exec("ROLLBACK");
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::setBusyTimeout(int ms)
+bool Sql::setBusyTimeout(int ms)
 {
     if (!db_)
     {
@@ -219,7 +217,7 @@ bool Database::setBusyTimeout(int ms)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::createScalarFunction(const char* name, int arg_count, ScalarFunc func)
+bool Sql::createScalarFunction(const char* name, int arg_count, ScalarFunc func)
 {
     if (!db_)
     {
@@ -242,7 +240,7 @@ bool Database::createScalarFunction(const char* name, int arg_count, ScalarFunc 
 }
 
 //--------------------------------------------------------------------------------------------------
-qint64 Database::lastInsertRowId() const
+qint64 Sql::lastInsertRowId() const
 {
     if (!db_)
         return 0;
@@ -250,7 +248,7 @@ qint64 Database::lastInsertRowId() const
 }
 
 //--------------------------------------------------------------------------------------------------
-int Database::changes() const
+int Sql::changes() const
 {
     if (!db_)
         return 0;
@@ -258,7 +256,7 @@ int Database::changes() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Database::lastError() const
+QString Sql::lastError() const
 {
     if (!db_)
         return QString();
@@ -266,11 +264,9 @@ QString Database::lastError() const
 }
 
 //--------------------------------------------------------------------------------------------------
-int Database::lastErrorCode() const
+int Sql::lastErrorCode() const
 {
     if (!db_)
         return SQLITE_ERROR;
     return sqlite3_errcode(db_);
 }
-
-} // namespace sqlite

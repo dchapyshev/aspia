@@ -13,24 +13,22 @@
 // GNU General Public License for more details.
 //
 
-#ifndef BASE_SQLITE_TRANSACTION_H
-#define BASE_SQLITE_TRANSACTION_H
+#ifndef BASE_SQL_SQL_TRANSACTION_H
+#define BASE_SQL_SQL_TRANSACTION_H
 
 #include <QtGlobal>
 
-namespace sqlite {
-
-class Database;
+class Sql;
 
 // Scopes a database transaction to a C++ block. begin() opens it; commit() finalizes it. If the
 // object is destroyed after a successful begin() without a commit() - an early return, a failed
 // step, anything - the transaction is rolled back. This removes the per-error-path rollback
 // boilerplate that explicit BEGIN/COMMIT handling needs.
-class Transaction final
+class SqlTransaction final
 {
 public:
-    explicit Transaction(Database& db);
-    ~Transaction();
+    explicit SqlTransaction(Sql& db);
+    ~SqlTransaction();
 
     bool begin();
     bool commit();
@@ -38,12 +36,10 @@ public:
     bool isActive() const { return active_; }
 
 private:
-    Database& db_;
+    Sql& db_;
     bool active_ = false;
 
-    Q_DISABLE_COPY_MOVE(Transaction)
+    Q_DISABLE_COPY_MOVE(SqlTransaction)
 };
 
-} // namespace sqlite
-
-#endif // BASE_SQLITE_TRANSACTION_H
+#endif // BASE_SQL_SQL_TRANSACTION_H

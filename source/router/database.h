@@ -28,6 +28,7 @@
 
 #include "base/peer/host_id.h"
 #include "base/peer/router_user.h"
+#include "base/sql/sql.h"
 #include "router/workspace.h"
 
 struct HostInfo
@@ -282,6 +283,7 @@ private:
 
     bool openDatabase();
 
+    mutable Sql db_;
     bool valid_ = false;
 
     Q_DISABLE_COPY_MOVE(Database)

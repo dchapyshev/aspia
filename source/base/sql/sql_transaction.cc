@@ -16,28 +16,26 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/sqlite/transaction.h"
+#include "base/sql/sql_transaction.h"
 
-#include "base/sqlite/database.h"
-
-namespace sqlite {
+#include "base/sql/sql.h"
 
 //--------------------------------------------------------------------------------------------------
-Transaction::Transaction(Database& db)
+SqlTransaction::SqlTransaction(Sql& db)
     : db_(db)
 {
     // Nothing is opened until begin() is called.
 }
 
 //--------------------------------------------------------------------------------------------------
-Transaction::~Transaction()
+SqlTransaction::~SqlTransaction()
 {
     if (active_)
         db_.rollbackTransaction();
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Transaction::begin()
+bool SqlTransaction::begin()
 {
     if (active_)
         return false;
@@ -47,7 +45,7 @@ bool Transaction::begin()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Transaction::commit()
+bool SqlTransaction::commit()
 {
     if (!active_)
         return false;
@@ -55,5 +53,3 @@ bool Transaction::commit()
     active_ = false;
     return db_.commitTransaction();
 }
-
-} // namespace sqlite
