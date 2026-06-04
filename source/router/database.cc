@@ -24,6 +24,7 @@
 #include <QSet>
 
 #include <string>
+#include <unordered_map>
 #include <utility>
 
 #include "base/logging.h"
@@ -1327,7 +1328,7 @@ void Database::workspaceListWithAllAccess(qint64 user_id, qint64 workspace_id,
 
     // Visible workspaces: those the admin has an access row for (optionally narrowed to workspace_id).
     // Indexed by id so the access query below can attach every member's entry.
-    QHash<qint64, proto::router::Workspace*> by_id;
+    std::unordered_map<qint64, proto::router::Workspace*> by_id;
     {
         const std::string sql = strCat({
             "SELECT workspaces.id, workspaces.name, workspaces.comment FROM workspaces "
@@ -1353,11 +1354,11 @@ void Database::workspaceListWithAllAccess(qint64 user_id, qint64 workspace_id,
             item->set_entry_id(query.columnInt64(0));
             item->set_name(query.columnTextView(1));
             item->set_comment(query.columnBlobView(2));
-            by_id.insert(item->entry_id(), item);
+            by_id.emplace(item->entry_id(), item);
         }
     }
 
-    if (by_id.isEmpty())
+    if (by_id.empty())
     {
         out->set_error_code(proto::router::kErrorOk);
         return;
@@ -1382,11 +1383,11 @@ void Database::workspaceListWithAllAccess(qint64 user_id, qint64 workspace_id,
 
     while (query.next())
     {
-        const auto it = by_id.constFind(query.columnInt64(0));
-        if (it == by_id.constEnd())
+        const auto it = by_id.find(query.columnInt64(0));
+        if (it == by_id.end())
             continue;
 
-        proto::router::WorkspaceAccess* access = it.value()->add_access();
+        proto::router::WorkspaceAccess* access = it->second->add_access();
         access->set_user_id(query.columnInt64(1));
         access->set_wrapped_gk(query.columnBlobView(2));
     }
