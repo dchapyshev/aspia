@@ -31,6 +31,7 @@
 #include "base/peer/stun_peer.h"
 #include "base/net/net_utils.h"
 #include "base/net/udp_channel.h"
+#include "base/net/upnp_port_mapper.h"
 #include "proto/key_exchange.h"
 #include "proto/peer.h"
 
@@ -44,6 +45,7 @@ const int kHolePunchingRetryDelayMs = 2000; // 2 seconds between retry attempts.
 const int kInitialProbeTimeoutMs = 5000;    // 5 seconds to wait for initial probe ACK.
 const int kUdpConnectTimeoutMs = 5000;      // 5 seconds to wait for UDP connection after setPeerAddress.
 const int kUdpReconnectDelayMs = 5000;      // 5 seconds before attempting UDP reconnection.
+const int kHostUpnpTimeoutMs = 10000;       // 10 seconds to wait for the client to connect via host UPnP.
 const int kClientUpnpTimeoutMs = 10000;     // 10 seconds to wait for the client's UPnP listening endpoint.
 
 //--------------------------------------------------------------------------------------------------
@@ -302,6 +304,13 @@ void Client::onUdpErrorOccurred()
         CLOG(INFO) << "UDP was connected, switching to TCP and scheduling reconnect";
         udp_phase_ = UdpConnectPhase::NONE;
         hole_punching_attempt_ = 0;
+
+        if (host_upnp_mapper_)
+        {
+            host_upnp_mapper_->disconnect();
+            host_upnp_mapper_.reset();
+        }
+
         emit sig_channelChanged();
 
         QTimer::singleShot(kUdpReconnectDelayMs, this, &Client::connectToUdp);
@@ -335,10 +344,23 @@ void Client::onUdpErrorOccurred()
             }
             else
             {
-                CLOG(INFO) << "STUN hole punching failed, trying client-side UPnP";
-                udp_phase_ = UdpConnectPhase::CLIENT_UPNP;
-                startClientUpnp();
+                CLOG(INFO) << "STUN hole punching failed, trying host-side UPnP";
+                udp_phase_ = UdpConnectPhase::HOST_UPNP;
+                startHostUpnp();
             }
+        }
+        break;
+
+        case UdpConnectPhase::HOST_UPNP:
+        {
+            CLOG(INFO) << "Host-side UPnP failed, trying client-side UPnP";
+            if (host_upnp_mapper_)
+            {
+                host_upnp_mapper_->disconnect();
+                host_upnp_mapper_.reset();
+            }
+            udp_phase_ = UdpConnectPhase::CLIENT_UPNP;
+            startClientUpnp();
         }
         break;
 
@@ -482,9 +504,9 @@ void Client::startUdpHolePunching()
         }
         else
         {
-            CLOG(INFO) << "STUN hole punching failed, trying client-side UPnP";
-            udp_phase_ = UdpConnectPhase::CLIENT_UPNP;
-            startClientUpnp();
+            CLOG(INFO) << "STUN hole punching failed, trying host-side UPnP";
+            udp_phase_ = UdpConnectPhase::HOST_UPNP;
+            startHostUpnp();
         }
     });
 
@@ -560,6 +582,91 @@ void Client::startDirectUdp(qintptr socket, const QString& address, quint16 port
 
     CLOG(INFO) << "Sending UDP connection request";
     tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::startHostUpnp()
+{
+    CLOG(INFO) << "Trying host-side UPnP";
+
+    if (udp_channel_)
+    {
+        udp_channel_->disconnect();
+        udp_channel_.reset();
+    }
+
+    if (host_upnp_mapper_)
+    {
+        host_upnp_mapper_->disconnect();
+        host_upnp_mapper_.reset();
+    }
+
+    // Listen passively on an OS-assigned local port; the client connects to the mapped endpoint.
+    udp_channel_ = new UdpChannel(this);
+    connect(udp_channel_, &UdpChannel::sig_ready, this, &Client::onUdpReady);
+    connect(udp_channel_, &UdpChannel::sig_errorOccurred, this, &Client::onUdpErrorOccurred);
+    connect(udp_channel_, &UdpChannel::sig_messageReceived, this, &Client::onUdpMessageReceived);
+
+    quint16 local_port = 0;
+    udp_channel_->bind(&local_port);
+
+    host_upnp_mapper_ = new UpnpPortMapper(this);
+
+    connect(host_upnp_mapper_, &UpnpPortMapper::sig_ready, this,
+        [this](const QString& external_address, quint16 external_port)
+    {
+        CLOG(INFO) << "Host UPnP mapping ready:" << external_address << ":" << external_port;
+
+        PendingUdp context;
+
+        context.key_pair = KeyPair::create(KeyPair::Type::X25519);
+        if (!context.key_pair.isValid())
+        {
+            CLOG(ERROR) << "Failed to create UDP key pair";
+            onUdpErrorOccurred();
+            return;
+        }
+
+        context.iv = Random::byteArray(12);
+        if (context.iv.isEmpty())
+        {
+            CLOG(ERROR) << "Unable to create IV for UDP";
+            onUdpErrorOccurred();
+            return;
+        }
+
+        // Advertise the UPnP-mapped endpoint as a direct address; the client connects to it.
+        proto::peer::HostToClient message;
+        proto::peer::DirectUdpRequest* request = message.mutable_direct_udp_request();
+        request->add_address(external_address.toStdString());
+        request->set_port(external_port);
+        request->set_encryptions(proto::key_exchange::ENCRYPTION_AES256_GCM);
+        request->set_public_key(context.key_pair.publicKey().toStdString());
+        request->set_iv(context.iv.toStdString());
+
+        pending_udp_context_ = std::move(context);
+
+        CLOG(INFO) << "Sending host UPnP direct request";
+        tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(message));
+
+        // If the client does not connect to the mapped endpoint in time, fall back.
+        QTimer::singleShot(kHostUpnpTimeoutMs, this, [this]()
+        {
+            if (udp_phase_ != UdpConnectPhase::HOST_UPNP || udp_state_ != UdpState::DISCONNECTED)
+                return;
+
+            CLOG(WARNING) << "Host UPnP connection timed out";
+            onUdpErrorOccurred();
+        });
+    });
+
+    connect(host_upnp_mapper_, &UpnpPortMapper::sig_failed, this, [this]()
+    {
+        CLOG(WARNING) << "Host UPnP mapping failed";
+        onUdpErrorOccurred();
+    });
+
+    host_upnp_mapper_->addUdpMapping(local_port);
 }
 
 //--------------------------------------------------------------------------------------------------

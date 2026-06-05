@@ -39,6 +39,7 @@ class Location;
 class QTimer;
 class StunPeer;
 class UdpChannel;
+class UpnpPortMapper;
 
 class Client : public QObject
 {
@@ -76,7 +77,8 @@ public:
         NONE,
         DIRECT_LAN,    // Bind in LAN (peer_address_equals == true).
         HOLE_PUNCHING, // STUN-based hole punching (up to kMaxHolePunchingAttempts).
-        CLIENT_UPNP    // Client opens an UPnP port mapping and listens.
+        HOST_UPNP,     // Host opens an UPnP port mapping and listens, client connects to it.
+        CLIENT_UPNP    // Client opens an UPnP port mapping and listens, host connects to it.
     };
     Q_ENUM(UdpConnectPhase)
 
@@ -119,6 +121,7 @@ private:
     void connectToUdp();
     void startUdpHolePunching();
     void startDirectUdp(qintptr socket, const QString& address, quint16 port);
+    void startHostUpnp();
     void startClientUpnp();
     void readUdpReply(const proto::peer::UdpReply& reply);
     void startBandwidthProbing();
@@ -141,6 +144,7 @@ private:
     };
 
     ScopedQPointer<StunPeer> stun_peer_;
+    ScopedQPointer<UpnpPortMapper> host_upnp_mapper_;
     std::optional<PendingUdp> pending_udp_context_;
 
     UdpConnectPhase udp_phase_ = UdpConnectPhase::NONE;
