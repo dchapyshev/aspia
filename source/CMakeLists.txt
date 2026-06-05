@@ -58,7 +58,6 @@ set(QT_COMMON_LIBS
     Qt6::Network
     Qt6::PrintSupport Qt6::PrintSupport_resources_1 Qt6::PrintSupport_resources_2
     Qt6::Widgets Qt6::Widgets_resources_1 Qt6::Widgets_resources_2
-    Qt6::Sql Qt6::QSQLiteDriverPlugin
     Qt6::Svg
     Qt6::Xml)
 

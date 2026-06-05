@@ -65,7 +65,7 @@ endif()
 
 set(CMAKE_SKIP_BUILD_RPATH ON)
 
-find_package(Qt6 CONFIG REQUIRED Core Gui Network PrintSupport Sql Widgets Xml LinguistTools Svg)
+find_package(Qt6 CONFIG REQUIRED Core Gui Network PrintSupport Widgets Xml LinguistTools Svg)
 find_package(Qt6DeviceDiscoverySupportPrivate CONFIG REQUIRED)
 find_package(Qt6FbSupportPrivate CONFIG REQUIRED)
 
