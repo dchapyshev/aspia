@@ -24,6 +24,7 @@
 
 #include <optional>
 
+#include "base/sql/sql_database.h"
 #include "client/config.h"
 
 class Database
@@ -88,7 +89,7 @@ private:
     QString readSetting(const QString& name) const;
     bool writeSetting(const QString& name, const QString& value);
 
-    bool valid_ = false;
+    mutable SqlDatabase db_;
 };
 
 #endif // CLIENT_DATABASE_H

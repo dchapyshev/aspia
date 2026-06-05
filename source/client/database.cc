@@ -20,19 +20,14 @@
 
 #include "base/logging.h"
 #include "base/files/base_paths.h"
+#include "base/sql/sql_query.h"
 #include "build/build_config.h"
 
 #include <QDateTime>
 #include <QDir>
 #include <QFileInfo>
-#include <QSqlDatabase>
-#include <QSqlError>
-#include <QSqlQuery>
-#include <QVariant>
 
 namespace {
-
-const char kConnectionName[] = "client";
 
 constexpr auto kSettingDisplayName  = "display_name";
 constexpr auto kSettingCheckUpdates = "check_updates";
@@ -42,101 +37,99 @@ constexpr auto kSettingVerifier     = "master_password_verifier";
 constexpr auto kSettingVersion      = "master_password_version";
 
 //--------------------------------------------------------------------------------------------------
-HostConfig readHost(const QSqlQuery& query)
+HostConfig readHost(const SqlQuery& query)
 {
     HostConfig host;
-    host.setId(query.value(0).toLongLong());
-    host.setGroupId(query.value(1).toLongLong());
-    host.setRouterId(query.value(2).toLongLong());
-    host.setEncryptedName(query.value(3).toByteArray());
-    host.setEncryptedComment(query.value(4).toByteArray());
-    host.setEncryptedAddress(query.value(5).toByteArray());
-    host.setEncryptedUsername(query.value(6).toByteArray());
-    host.setEncryptedPassword(query.value(7).toByteArray());
-    host.setCreateTime(query.value(8).toLongLong());
-    host.setModifyTime(query.value(9).toLongLong());
-    host.setConnectTime(query.value(10).toLongLong());
+    host.setId(query.columnInt64(0));
+    host.setGroupId(query.columnInt64(1));
+    host.setRouterId(query.columnInt64(2));
+    host.setEncryptedName(query.columnBlob(3));
+    host.setEncryptedComment(query.columnBlob(4));
+    host.setEncryptedAddress(query.columnBlob(5));
+    host.setEncryptedUsername(query.columnBlob(6));
+    host.setEncryptedPassword(query.columnBlob(7));
+    host.setCreateTime(query.columnInt64(8));
+    host.setModifyTime(query.columnInt64(9));
+    host.setConnectTime(query.columnInt64(10));
     return host;
 }
 
 //--------------------------------------------------------------------------------------------------
-GroupConfig readGroup(const QSqlQuery& query)
+GroupConfig readGroup(const SqlQuery& query)
 {
     GroupConfig group;
-    group.setId(query.value(0).toLongLong());
-    group.setParentId(query.value(1).toLongLong());
-    group.setEncryptedName(query.value(2).toByteArray());
-    group.setEncryptedComment(query.value(3).toByteArray());
+    group.setId(query.columnInt64(0));
+    group.setParentId(query.columnInt64(1));
+    group.setEncryptedName(query.columnBlob(2));
+    group.setEncryptedComment(query.columnBlob(3));
     return group;
 }
 
 //--------------------------------------------------------------------------------------------------
-RouterConfig readRouter(const QSqlQuery& query)
+RouterConfig readRouter(const SqlQuery& query)
 {
     RouterConfig router;
-    router.setRouterId(query.value(0).toLongLong());
-    router.setEncryptedDisplayName(query.value(1).toByteArray());
-    router.setEncryptedAddress(query.value(2).toByteArray());
-    router.setSessionType(static_cast<proto::router::SessionType>(query.value(3).toUInt()));
-    router.setEncryptedUsername(query.value(4).toByteArray());
-    router.setEncryptedPassword(query.value(5).toByteArray());
-    router.setEncryptedDeviceToken(query.value(6).toByteArray());
+    router.setRouterId(query.columnInt64(0));
+    router.setEncryptedDisplayName(query.columnBlob(1));
+    router.setEncryptedAddress(query.columnBlob(2));
+    router.setSessionType(static_cast<proto::router::SessionType>(query.columnInt64(3)));
+    router.setEncryptedUsername(query.columnBlob(4));
+    router.setEncryptedPassword(query.columnBlob(5));
+    router.setEncryptedDeviceToken(query.columnBlob(6));
     return router;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool createTables(QSqlDatabase& db)
+bool createTables(SqlDatabase& db)
 {
-    QSqlQuery query(db);
-
-    if (!query.exec("CREATE TABLE IF NOT EXISTS \"groups\" ("
-                    "\"id\" INTEGER UNIQUE,"
-                    "\"parent_id\" INTEGER NOT NULL DEFAULT 0,"
-                    "\"name\" BLOB DEFAULT X'',"
-                    "\"comment\" BLOB DEFAULT X'',"
-                    "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
+    if (!db.exec("CREATE TABLE IF NOT EXISTS \"groups\" ("
+                 "\"id\" INTEGER UNIQUE,"
+                 "\"parent_id\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"name\" BLOB DEFAULT X'',"
+                 "\"comment\" BLOB DEFAULT X'',"
+                 "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
-        LOG(ERROR) << "Unable to create groups table:" << query.lastError();
+        LOG(ERROR) << "Unable to create groups table:" << db.lastError();
         return false;
     }
 
-    if (!query.exec("CREATE TABLE IF NOT EXISTS \"hosts\" ("
-                    "\"id\" INTEGER UNIQUE,"
-                    "\"group_id\" INTEGER NOT NULL DEFAULT 0,"
-                    "\"router_id\" INTEGER NOT NULL DEFAULT 0,"
-                    "\"name\" BLOB DEFAULT X'',"
-                    "\"comment\" BLOB DEFAULT X'',"
-                    "\"address\" BLOB DEFAULT X'',"
-                    "\"username\" BLOB DEFAULT X'',"
-                    "\"password\" BLOB DEFAULT X'',"
-                    "\"create_time\" INTEGER NOT NULL DEFAULT 0,"
-                    "\"modify_time\" INTEGER NOT NULL DEFAULT 0,"
-                    "\"connect_time\" INTEGER NOT NULL DEFAULT 0,"
-                    "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
+    if (!db.exec("CREATE TABLE IF NOT EXISTS \"hosts\" ("
+                 "\"id\" INTEGER UNIQUE,"
+                 "\"group_id\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"router_id\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"name\" BLOB DEFAULT X'',"
+                 "\"comment\" BLOB DEFAULT X'',"
+                 "\"address\" BLOB DEFAULT X'',"
+                 "\"username\" BLOB DEFAULT X'',"
+                 "\"password\" BLOB DEFAULT X'',"
+                 "\"create_time\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"modify_time\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"connect_time\" INTEGER NOT NULL DEFAULT 0,"
+                 "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
-        LOG(ERROR) << "Unable to create hosts table:" << query.lastError();
+        LOG(ERROR) << "Unable to create hosts table:" << db.lastError();
         return false;
     }
 
-    if (!query.exec("CREATE TABLE IF NOT EXISTS \"routers\" ("
-                    "\"id\" INTEGER UNIQUE,"
-                    "\"name\" BLOB DEFAULT X'',"
-                    "\"address\" BLOB DEFAULT X'',"
-                    "\"session_type\" INTEGER NOT NULL DEFAULT 0,"
-                    "\"username\" BLOB DEFAULT X'',"
-                    "\"password\" BLOB DEFAULT X'',"
-                    "\"device_token\" BLOB DEFAULT X'',"
-                    "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
+    if (!db.exec("CREATE TABLE IF NOT EXISTS \"routers\" ("
+                 "\"id\" INTEGER UNIQUE,"
+                 "\"name\" BLOB DEFAULT X'',"
+                 "\"address\" BLOB DEFAULT X'',"
+                 "\"session_type\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"username\" BLOB DEFAULT X'',"
+                 "\"password\" BLOB DEFAULT X'',"
+                 "\"device_token\" BLOB DEFAULT X'',"
+                 "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
-        LOG(ERROR) << "Unable to create routers table:" << query.lastError();
+        LOG(ERROR) << "Unable to create routers table:" << db.lastError();
         return false;
     }
 
-    if (!query.exec("CREATE TABLE IF NOT EXISTS \"settings\" ("
-                    "\"name\" TEXT PRIMARY KEY NOT NULL,"
-                    "\"value\" TEXT NOT NULL)"))
+    if (!db.exec("CREATE TABLE IF NOT EXISTS \"settings\" ("
+                 "\"name\" TEXT PRIMARY KEY NOT NULL,"
+                 "\"value\" TEXT NOT NULL)"))
     {
-        LOG(ERROR) << "Unable to create settings table:" << query.lastError();
+        LOG(ERROR) << "Unable to create settings table:" << db.lastError();
         return false;
     }
 
@@ -151,8 +144,8 @@ Database& Database::instance()
 {
     static thread_local Database database;
 
-    if (!database.valid_)
-        database.valid_ = database.openDatabase();
+    if (!database.db_.isOpen())
+        database.openDatabase();
 
     return database;
 }
@@ -171,7 +164,7 @@ QString Database::filePath()
 //--------------------------------------------------------------------------------------------------
 bool Database::isValid() const
 {
-    return valid_;
+    return db_.isOpen();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -183,17 +176,10 @@ QList<HostConfig> Database::hostList(qint64 group_id) const
         return {};
     }
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("SELECT id, group_id, router_id, name, comment, address, username, password, "
-                  "create_time, modify_time, connect_time "
-                  "FROM hosts WHERE group_id=?");
-    query.addBindValue(group_id);
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to get host list:" << query.lastError();
-        return {};
-    }
+    SqlQuery query(db_, "SELECT id, group_id, router_id, name, comment, address, username, password, "
+                        "create_time, modify_time, connect_time "
+                        "FROM hosts WHERE group_id=?");
+    query.addInt64(group_id);
 
     QList<HostConfig> hosts;
     while (query.next())
@@ -211,16 +197,9 @@ QList<HostConfig> Database::allHosts() const
         return {};
     }
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("SELECT id, group_id, router_id, name, comment, address, username, password, "
-                  "create_time, modify_time, connect_time "
-                  "FROM hosts");
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to get host list:" << query.lastError();
-        return {};
-    }
+    SqlQuery query(db_, "SELECT id, group_id, router_id, name, comment, address, username, password, "
+                        "create_time, modify_time, connect_time "
+                        "FROM hosts");
 
     QList<HostConfig> hosts;
     while (query.next())
@@ -249,28 +228,27 @@ bool Database::addHost(HostConfig& host)
     host.setModifyTime(current_time);
     host.setConnectTime(0);
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("INSERT INTO hosts (id, group_id, router_id, name, comment, address, username, password, "
-                  "create_time, modify_time, connect_time) "
-                  "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    query.addBindValue(host.groupId());
-    query.addBindValue(host.routerId());
-    query.addBindValue(host.encryptedName());
-    query.addBindValue(host.encryptedComment());
-    query.addBindValue(host.encryptedAddress());
-    query.addBindValue(host.encryptedUsername());
-    query.addBindValue(host.encryptedPassword());
-    query.addBindValue(host.createTime());
-    query.addBindValue(host.modifyTime());
-    query.addBindValue(host.connectTime());
+    SqlQuery query(db_, "INSERT INTO hosts (id, group_id, router_id, name, comment, address, "
+                        "username, password, create_time, modify_time, connect_time) "
+                        "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    query.addInt64(host.groupId());
+    query.addInt64(host.routerId());
+    query.addBlob(host.encryptedName());
+    query.addBlob(host.encryptedComment());
+    query.addBlob(host.encryptedAddress());
+    query.addBlob(host.encryptedUsername());
+    query.addBlob(host.encryptedPassword());
+    query.addInt64(host.createTime());
+    query.addInt64(host.modifyTime());
+    query.addInt64(host.connectTime());
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;
     }
 
-    host.setId(query.lastInsertId().toLongLong());
+    host.setId(db_.lastInsertRowId());
     return true;
 }
 
@@ -285,22 +263,21 @@ bool Database::modifyHost(HostConfig& host)
 
     host.setModifyTime(QDateTime::currentSecsSinceEpoch());
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("UPDATE hosts SET group_id=?, router_id=?, name=?, comment=?, address=?, username=?, "
-                  "password=?, modify_time=? WHERE id=?");
-    query.addBindValue(host.groupId());
-    query.addBindValue(host.routerId());
-    query.addBindValue(host.encryptedName());
-    query.addBindValue(host.encryptedComment());
-    query.addBindValue(host.encryptedAddress());
-    query.addBindValue(host.encryptedUsername());
-    query.addBindValue(host.encryptedPassword());
-    query.addBindValue(host.modifyTime());
-    query.addBindValue(host.id());
+    SqlQuery query(db_, "UPDATE hosts SET group_id=?, router_id=?, name=?, comment=?, address=?, "
+                        "username=?, password=?, modify_time=? WHERE id=?");
+    query.addInt64(host.groupId());
+    query.addInt64(host.routerId());
+    query.addBlob(host.encryptedName());
+    query.addBlob(host.encryptedComment());
+    query.addBlob(host.encryptedAddress());
+    query.addBlob(host.encryptedUsername());
+    query.addBlob(host.encryptedPassword());
+    query.addInt64(host.modifyTime());
+    query.addInt64(host.id());
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;
     }
 
@@ -316,13 +293,12 @@ bool Database::removeHost(qint64 entry_id)
         return false;
     }
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("DELETE FROM hosts WHERE id=?");
-    query.addBindValue(entry_id);
+    SqlQuery query(db_, "DELETE FROM hosts WHERE id=?");
+    query.addInt64(entry_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;
     }
 
@@ -338,14 +314,13 @@ bool Database::setConnectTime(qint64 entry_id, qint64 connect_time)
         return false;
     }
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("UPDATE hosts SET connect_time=? WHERE id=?");
-    query.addBindValue(connect_time);
-    query.addBindValue(entry_id);
+    SqlQuery query(db_, "UPDATE hosts SET connect_time=? WHERE id=?");
+    query.addInt64(connect_time);
+    query.addInt64(entry_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;
     }
 
@@ -361,17 +336,10 @@ std::optional<HostConfig> Database::findHost(qint64 entry_id) const
         return std::nullopt;
     }
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("SELECT id, group_id, router_id, name, comment, address, username, password, "
-                  "create_time, modify_time, connect_time "
-                  "FROM hosts WHERE id=?");
-    query.addBindValue(entry_id);
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
-        return std::nullopt;
-    }
+    SqlQuery query(db_, "SELECT id, group_id, router_id, name, comment, address, username, password, "
+                        "create_time, modify_time, connect_time "
+                        "FROM hosts WHERE id=?");
+    query.addInt64(entry_id);
 
     if (!query.next())
         return std::nullopt;
@@ -388,15 +356,8 @@ QList<HostConfig> Database::searchHosts(const QString& query_text) const
         return {};
     }
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("SELECT id, group_id, router_id, name, comment, address, username, password, "
-                  "create_time, modify_time, connect_time FROM hosts");
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to execute search query:" << query.lastError();
-        return {};
-    }
+    SqlQuery query(db_, "SELECT id, group_id, router_id, name, comment, address, username, password, "
+                        "create_time, modify_time, connect_time FROM hosts");
 
     QList<HostConfig> hosts;
     while (query.next())
@@ -422,15 +383,8 @@ QList<GroupConfig> Database::groupList(qint64 parent_id) const
         return {};
     }
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("SELECT id, parent_id, name, comment FROM groups WHERE parent_id=?");
-    query.addBindValue(parent_id);
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to get group list:" << query.lastError();
-        return {};
-    }
+    SqlQuery query(db_, "SELECT id, parent_id, name, comment FROM groups WHERE parent_id=?");
+    query.addInt64(parent_id);
 
     QList<GroupConfig> groups;
     while (query.next())
@@ -448,12 +402,7 @@ QList<GroupConfig> Database::allGroups() const
         return {};
     }
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    if (!query.exec("SELECT id, parent_id, name, comment FROM groups"))
-    {
-        LOG(ERROR) << "Unable to get all groups:" << query.lastError();
-        return {};
-    }
+    SqlQuery query(db_, "SELECT id, parent_id, name, comment FROM groups");
 
     QList<GroupConfig> groups;
     while (query.next())
@@ -471,20 +420,19 @@ bool Database::addGroup(GroupConfig& group)
         return false;
     }
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("INSERT INTO groups (id, parent_id, name, comment) "
-                  "VALUES (NULL, ?, ?, ?)");
-    query.addBindValue(group.parentId());
-    query.addBindValue(group.encryptedName());
-    query.addBindValue(group.encryptedComment());
+    SqlQuery query(db_, "INSERT INTO groups (id, parent_id, name, comment) "
+                        "VALUES (NULL, ?, ?, ?)");
+    query.addInt64(group.parentId());
+    query.addBlob(group.encryptedName());
+    query.addBlob(group.encryptedComment());
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;
     }
 
-    group.setId(query.lastInsertId().toLongLong());
+    group.setId(db_.lastInsertRowId());
     return true;
 }
 
@@ -497,16 +445,15 @@ bool Database::modifyGroup(const GroupConfig& group)
         return false;
     }
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("UPDATE groups SET parent_id=?, name=?, comment=? WHERE id=?");
-    query.addBindValue(group.parentId());
-    query.addBindValue(group.encryptedName());
-    query.addBindValue(group.encryptedComment());
-    query.addBindValue(group.id());
+    SqlQuery query(db_, "UPDATE groups SET parent_id=?, name=?, comment=? WHERE id=?");
+    query.addInt64(group.parentId());
+    query.addBlob(group.encryptedName());
+    query.addBlob(group.encryptedComment());
+    query.addInt64(group.id());
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;
     }
 
@@ -522,14 +469,13 @@ bool Database::moveGroup(qint64 group_id, qint64 new_parent_id)
         return false;
     }
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("UPDATE groups SET parent_id=? WHERE id=?");
-    query.addBindValue(new_parent_id);
-    query.addBindValue(group_id);
+    SqlQuery query(db_, "UPDATE groups SET parent_id=? WHERE id=?");
+    query.addInt64(new_parent_id);
+    query.addInt64(group_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;
     }
 
@@ -545,13 +491,12 @@ bool Database::removeGroup(qint64 group_id)
         return false;
     }
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("DELETE FROM groups WHERE id=?");
-    query.addBindValue(group_id);
+    SqlQuery query(db_, "DELETE FROM groups WHERE id=?");
+    query.addInt64(group_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;
     }
 
@@ -567,15 +512,8 @@ std::optional<GroupConfig> Database::findGroup(qint64 group_id) const
         return std::nullopt;
     }
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("SELECT id, parent_id, name, comment FROM groups WHERE id=?");
-    query.addBindValue(group_id);
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
-        return std::nullopt;
-    }
+    SqlQuery query(db_, "SELECT id, parent_id, name, comment FROM groups WHERE id=?");
+    query.addInt64(group_id);
 
     if (!query.next())
         return std::nullopt;
@@ -592,13 +530,8 @@ QList<RouterConfig> Database::routerList() const
         return {};
     }
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    if (!query.exec("SELECT id, name, address, session_type, username, password, "
-                    "device_token FROM routers"))
-    {
-        LOG(ERROR) << "Unable to get router list:" << query.lastError();
-        return {};
-    }
+    SqlQuery query(db_, "SELECT id, name, address, session_type, username, password, "
+                        "device_token FROM routers");
 
     QList<RouterConfig> routers;
     while (query.next())
@@ -622,24 +555,23 @@ bool Database::addRouter(RouterConfig& router)
         return false;
     }
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("INSERT INTO routers (id, name, address, session_type, username, password, "
-                  "device_token) "
-                  "VALUES (NULL, ?, ?, ?, ?, ?, ?)");
-    query.addBindValue(router.encryptedDisplayName());
-    query.addBindValue(router.encryptedAddress());
-    query.addBindValue(static_cast<quint32>(router.sessionType()));
-    query.addBindValue(router.encryptedUsername());
-    query.addBindValue(router.encryptedPassword());
-    query.addBindValue(router.encryptedDeviceToken());
+    SqlQuery query(db_, "INSERT INTO routers (id, name, address, session_type, username, password, "
+                        "device_token) "
+                        "VALUES (NULL, ?, ?, ?, ?, ?, ?)");
+    query.addBlob(router.encryptedDisplayName());
+    query.addBlob(router.encryptedAddress());
+    query.addInt64(static_cast<quint32>(router.sessionType()));
+    query.addBlob(router.encryptedUsername());
+    query.addBlob(router.encryptedPassword());
+    query.addBlob(router.encryptedDeviceToken());
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;
     }
 
-    router.setRouterId(query.lastInsertId().toLongLong());
+    router.setRouterId(db_.lastInsertRowId());
     return true;
 }
 
@@ -652,21 +584,19 @@ bool Database::modifyRouter(const RouterConfig& router)
         return false;
     }
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("UPDATE routers SET name=?, address=?, session_type=?, username=?, password=?, "
-                  "device_token=? "
-                  "WHERE id=?");
-    query.addBindValue(router.encryptedDisplayName());
-    query.addBindValue(router.encryptedAddress());
-    query.addBindValue(static_cast<quint32>(router.sessionType()));
-    query.addBindValue(router.encryptedUsername());
-    query.addBindValue(router.encryptedPassword());
-    query.addBindValue(router.encryptedDeviceToken());
-    query.addBindValue(router.routerId());
+    SqlQuery query(db_, "UPDATE routers SET name=?, address=?, session_type=?, username=?, "
+                        "password=?, device_token=? WHERE id=?");
+    query.addBlob(router.encryptedDisplayName());
+    query.addBlob(router.encryptedAddress());
+    query.addInt64(static_cast<quint32>(router.sessionType()));
+    query.addBlob(router.encryptedUsername());
+    query.addBlob(router.encryptedPassword());
+    query.addBlob(router.encryptedDeviceToken());
+    query.addInt64(router.routerId());
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;
     }
 
@@ -682,13 +612,12 @@ bool Database::removeRouter(qint64 router_id)
         return false;
     }
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("DELETE FROM routers WHERE id=?");
-    query.addBindValue(router_id);
+    SqlQuery query(db_, "DELETE FROM routers WHERE id=?");
+    query.addInt64(router_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;
     }
 
@@ -704,16 +633,9 @@ std::optional<RouterConfig> Database::findRouter(qint64 router_id) const
         return std::nullopt;
     }
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("SELECT id, name, address, session_type, username, password, device_token "
-                  "FROM routers WHERE id=?");
-    query.addBindValue(router_id);
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
-        return std::nullopt;
-    }
+    SqlQuery query(db_, "SELECT id, name, address, session_type, username, password, device_token "
+                        "FROM routers WHERE id=?");
+    query.addInt64(router_id);
 
     if (!query.next())
         return std::nullopt;
@@ -833,39 +755,29 @@ bool Database::openDatabase()
 
     LOG(INFO) << (!QFileInfo::exists(file_path) ? "Creating" : "Opening") << "database:" << file_path;
 
-    QSqlDatabase db = QSqlDatabase::database(kConnectionName, false);
-    if (!db.isValid())
-    {
-        db = QSqlDatabase::addDatabase("QSQLITE", kConnectionName);
-        db.setDatabaseName(file_path);
-    }
-
-    if (!db.isOpen() && !db.open())
-    {
-        LOG(ERROR) << "QSqlDatabase::open failed:" << db.lastError();
+    if (!db_.open(file_path))
         return false;
+
+    if (!db_.exec("PRAGMA secure_delete = ON"))
+        LOG(WARNING) << "Unable to enable secure_delete:" << db_.lastError();
+
+    {
+        SqlQuery pragma(db_, "PRAGMA quick_check");
+        if (pragma.next())
+        {
+            const QString result = pragma.columnText(0);
+            if (result != "ok")
+                LOG(ERROR) << "Database integrity check failed:" << result;
+        }
+        else
+        {
+            LOG(WARNING) << "Unable to run quick_check:" << db_.lastError();
+        }
     }
 
-    QSqlQuery pragma(db);
-
-    if (!pragma.exec("PRAGMA secure_delete = ON"))
-        LOG(WARNING) << "Unable to enable secure_delete:" << pragma.lastError();
-
-    if (pragma.exec("PRAGMA quick_check") && pragma.next())
+    if (!createTables(db_))
     {
-        const QString result = pragma.value(0).toString();
-        if (result != "ok")
-            LOG(ERROR) << "Database integrity check failed:" << result;
-    }
-    else
-    {
-        LOG(WARNING) << "Unable to run quick_check:" << pragma.lastError();
-    }
-
-    if (!createTables(db))
-    {
-        db.close();
-        QSqlDatabase::removeDatabase(kConnectionName);
+        db_.close();
         return false;
     }
 
@@ -881,20 +793,13 @@ QString Database::readSetting(const QString& name) const
         return QString();
     }
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("SELECT value FROM settings WHERE name=?");
-    query.addBindValue(name);
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
-        return QString();
-    }
+    SqlQuery query(db_, "SELECT value FROM settings WHERE name=?");
+    query.addText(name);
 
     if (!query.next())
         return QString();
 
-    return query.value(0).toString();
+    return query.columnText(0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -906,14 +811,13 @@ bool Database::writeSetting(const QString& name, const QString& value)
         return false;
     }
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("INSERT OR REPLACE INTO settings (name, value) VALUES (?, ?)");
-    query.addBindValue(name);
-    query.addBindValue(value);
+    SqlQuery query(db_, "INSERT OR REPLACE INTO settings (name, value) VALUES (?, ?)");
+    query.addText(name);
+    query.addText(value);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;
     }
 
