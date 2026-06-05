@@ -23,6 +23,7 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "base/string_util.h"
 #include "base/peer/router_user.h"
 #include "router/database.h"
 #include "proto/router_admin.h"
@@ -606,8 +607,8 @@ void ClientAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& requ
     }
 
     const proto::router::Workspace& workspace = request.workspace();
-    const QString name = QString::fromStdString(workspace.name()).trimmed();
-    const QByteArray comment = QByteArray::fromStdString(workspace.comment());
+    const std::string name(strTrimmed(workspace.name()));
+    const std::string_view comment = workspace.comment();
     const qint64 entry_id = workspace.entry_id();
 
     std::set<HostId> desired_host_ids;

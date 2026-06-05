@@ -18,16 +18,18 @@
 
 #include "router/workspace.h"
 
+#include "base/string_util.h"
+
 //--------------------------------------------------------------------------------------------------
 // static
-bool Workspace::isValidName(const QString& name)
+bool Workspace::isValidName(std::string_view name)
 {
-    const QString trimmed = name.trimmed();
-    return !trimmed.isEmpty() && trimmed.length() <= kMaxNameLength;
+    const std::string_view trimmed = strTrimmed(name);
+    return !trimmed.empty() && trimmed.size() <= static_cast<size_t>(kMaxNameLength);
 }
 
 //--------------------------------------------------------------------------------------------------
 bool Workspace::isValid() const
 {
-    return entry_id > 0 && isValidName(name);
+    return entry_id > 0 && isValidName(name.toStdString());
 }

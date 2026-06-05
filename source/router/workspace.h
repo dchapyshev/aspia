@@ -22,6 +22,8 @@
 #include <QByteArray>
 #include <QString>
 
+#include <string_view>
+
 class Workspace
 {
 public:
@@ -36,7 +38,8 @@ public:
 
     static const qsizetype kMaxNameLength = 64;
 
-    static bool isValidName(const QString& name);
+    // Validates a UTF-8 name: non-empty after trimming and at most kMaxNameLength bytes.
+    static bool isValidName(std::string_view name);
 
     bool isValid() const;
 

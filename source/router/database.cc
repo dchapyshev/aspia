@@ -1470,7 +1470,7 @@ Workspace Database::findWorkspace(qint64 entry_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Database::addWorkspace(const QString& name, const QByteArray& comment,
+std::string_view Database::addWorkspace(std::string_view name, std::string_view comment,
     const QList<Workspace::Access>& initial_access, qint64* entry_id)
 {
     CHECK(entry_id);
@@ -1558,7 +1558,7 @@ std::string_view Database::addWorkspace(const QString& name, const QByteArray& c
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Database::modifyWorkspace(qint64 entry_id, const QString& name, const QByteArray& comment,
+std::string_view Database::modifyWorkspace(qint64 entry_id, std::string_view name, std::string_view comment,
     const QList<Workspace::Access>& desired_access)
 {
     if (!isValid())
