@@ -52,7 +52,6 @@ public:
 
     quint32 requestId() const { return request_id_; }
     bool isValid() const;
-    bool isConnected() const { return connected_; }
 
     // Hands the established channel over to the session (called when this attempt wins). Any aux
     // resource that must outlive the attempt (e.g. the UPnP mapping) is parented to the channel and

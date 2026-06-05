@@ -416,17 +416,6 @@ void Client::onUdpErrorOccurred()
         QTimer::singleShot(kUdpReconnectDelayMs, this, &Client::connectToUdp);
         return;
     }
-
-    // The nominee failed before becoming usable: select the next already-connected attempt. Any
-    // remaining in-flight attempts may still win later; otherwise the session stays on TCP.
-    for (const auto& other : attempts_)
-    {
-        if (other && other->isConnected())
-        {
-            selectAttempt(other);
-            return;
-        }
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
