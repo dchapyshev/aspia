@@ -608,7 +608,8 @@ bool Client::isUdpConnectionAllowed()
 //--------------------------------------------------------------------------------------------------
 void Client::readDirectUdpRequest(const proto::peer::DirectUdpRequest& request)
 {
-    if (!isUdpConnectionAllowed())
+    // Ignore once a UDP channel is up (late requests from losing host attempts).
+    if (udp_channel_ || !isUdpConnectionAllowed())
         return;
 
     QByteArray public_key = QByteArray::fromStdString(request.public_key());
@@ -640,7 +641,8 @@ void Client::readDirectUdpRequest(const proto::peer::DirectUdpRequest& request)
 //--------------------------------------------------------------------------------------------------
 void Client::readStunUdpRequest(const proto::peer::StunUdpRequest& request)
 {
-    if (!isUdpConnectionAllowed())
+    // Ignore once a UDP channel is up (late requests from losing host attempts).
+    if (udp_channel_ || !isUdpConnectionAllowed())
         return;
 
     QByteArray public_key = QByteArray::fromStdString(request.public_key());
@@ -682,7 +684,8 @@ void Client::readStunUdpRequest(const proto::peer::StunUdpRequest& request)
 //--------------------------------------------------------------------------------------------------
 void Client::readUpnpUdpRequest(const proto::peer::UpnpUdpRequest& request)
 {
-    if (!isUdpConnectionAllowed())
+    // Ignore once a UDP channel is up (late requests from losing host attempts).
+    if (udp_channel_ || !isUdpConnectionAllowed())
         return;
 
     QByteArray public_key = QByteArray::fromStdString(request.public_key());
