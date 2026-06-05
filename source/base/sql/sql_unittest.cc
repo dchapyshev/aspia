@@ -98,6 +98,32 @@ TEST(SqliteTest, EmptyTextIsNotNull)
 }
 
 //--------------------------------------------------------------------------------------------------
+TEST(SqliteTest, BlobFromStringView)
+{
+    SqlDatabase db;
+    ASSERT_TRUE(db.open(":memory:"));
+    ASSERT_TRUE(createSchema(db));
+
+    const std::string_view payload("\x00\x10\x20\x00\x30", 5);
+
+    SqlQuery insert(db, "INSERT INTO t (name, data, value) VALUES (?, ?, ?)");
+    insert.addText(std::string_view()).addBlob(payload).addInt64(0);
+    ASSERT_TRUE(insert.exec());
+
+    // An empty view must still bind an empty blob, not NULL.
+    insert.reset();
+    insert.addText(std::string_view()).addBlob(std::string_view()).addInt64(1);
+    ASSERT_TRUE(insert.exec());
+
+    SqlQuery select(db, "SELECT data FROM t ORDER BY value");
+    ASSERT_TRUE(select.next());
+    EXPECT_EQ(select.columnBlobView(0), payload);
+    ASSERT_TRUE(select.next());
+    EXPECT_FALSE(select.columnIsNull(0));
+    EXPECT_TRUE(select.columnBlobView(0).empty());
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST(SqliteTest, ResetReusesStatement)
 {
     SqlDatabase db;

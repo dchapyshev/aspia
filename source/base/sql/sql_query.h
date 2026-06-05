@@ -55,10 +55,11 @@ public:
     bool bindText(int index, std::string_view value);
     bool bindText(int index, const QString& value);
     bool bindBlob(int index, const void* data, qsizetype size);
+    bool bindBlob(int index, std::string_view value);
     bool bindBlob(int index, const QByteArray& value);
 
     //----------------------------------------------------------------------------------------------
-    // Sequential binding (mirrors the old addBindValue): each call targets the next parameter,
+    // Sequential binding: each call targets the next parameter,
     // starting at 1. reset() rewinds the cursor back to the first parameter.
     //----------------------------------------------------------------------------------------------
 
@@ -67,6 +68,7 @@ public:
     SqlQuery& addUInt64(quint64 value);
     SqlQuery& addText(std::string_view value);
     SqlQuery& addText(const QString& value);
+    SqlQuery& addBlob(std::string_view value);
     SqlQuery& addBlob(const QByteArray& value);
 
     //----------------------------------------------------------------------------------------------

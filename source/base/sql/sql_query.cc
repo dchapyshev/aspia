@@ -125,6 +125,15 @@ bool SqlQuery::bindBlob(int index, const void* data, qsizetype size)
 }
 
 //--------------------------------------------------------------------------------------------------
+bool SqlQuery::bindBlob(int index, std::string_view value)
+{
+    // A null data pointer would bind SQL NULL; use a valid empty buffer so an empty view becomes
+    // an empty blob instead.
+    const char* data = value.data() ? value.data() : "";
+    return bindBlob(index, data, static_cast<qsizetype>(value.size()));
+}
+
+//--------------------------------------------------------------------------------------------------
 bool SqlQuery::bindBlob(int index, const QByteArray& value)
 {
     // constData() is never null, so a zero-length QByteArray binds an empty blob rather than NULL.
@@ -163,6 +172,13 @@ SqlQuery& SqlQuery::addText(std::string_view value)
 SqlQuery& SqlQuery::addText(const QString& value)
 {
     bindText(next_bind_index_++, value);
+    return *this;
+}
+
+//--------------------------------------------------------------------------------------------------
+SqlQuery& SqlQuery::addBlob(std::string_view value)
+{
+    bindBlob(next_bind_index_++, value);
     return *this;
 }
 
