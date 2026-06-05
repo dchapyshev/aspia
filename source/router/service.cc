@@ -784,8 +784,6 @@ void Service::addClient(TcpChannel* channel)
                 break;
 
             client = new Client(channel, this);
-            if (stun_server_)
-                client->setStunInfo(stun_server_->port());
         }
         break;
 
@@ -814,6 +812,9 @@ void Service::addClient(TcpChannel* channel)
         channel->deleteLater();
         return;
     }
+
+    if (stun_server_)
+        client->setStunInfo(stun_server_->port());
 
     clients_.emplace_back(client);
     connect(client, &Client::sig_finished, this, &Service::onClientSessionFinished);

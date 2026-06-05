@@ -382,7 +382,10 @@ void Client::connectToUdp()
     }
 
     if (stun_host_.isEmpty() || !stun_port_)
+    {
+        CLOG(WARNING) << "No STUN data in connection offer, staying on TCP (no UDP attempt)";
         return;
+    }
 
     udp_phase_ = UdpConnectPhase::HOLE_PUNCHING;
     startUdpHolePunching();
