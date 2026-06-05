@@ -54,7 +54,19 @@ message Version
     uint32 revision = 4;
 }
 
+// Direct connection: the client connects to one of the host's addresses (LAN / no NAT).
 message DirectUdpRequest
+{
+    repeated string address = 1;
+    uint32 port             = 2;
+    uint32 encryptions      = 3;
+    bytes public_key        = 4;
+    bytes iv                = 5;
+}
+
+// STUN hole punching: the client runs its own STUN against the given server, then connects to the
+// host's external endpoint.
+message StunUdpRequest
 {
     repeated string address = 1;
     uint32 port             = 2;
@@ -65,7 +77,18 @@ message DirectUdpRequest
     uint32 stun_port        = 7;
 }
 
-message DirectUdpReply
+// The client opens a UPnP port mapping on its gateway and listens; the host connects to the
+// reported endpoint. Fallback when the host is behind a symmetric NAT.
+message UpnpUdpRequest
+{
+    uint32 encryptions = 1;
+    bytes public_key   = 2;
+    bytes iv           = 3;
+}
+
+// The client's answer to any of the UDP requests above: session crypto plus, when the host needs
+// to reach the client (STUN/UPnP), the client's external endpoint.
+message UdpReply
 {
     uint32 encryption = 1;
     bytes public_key  = 2;
@@ -87,7 +110,7 @@ message BandwidthProbeAck
 // Use CHANNEL_ID_CONTROL to send.
 message ClientToHost
 {
-    DirectUdpReply direct_udp_reply       = 1;
+    UdpReply udp_reply                    = 1;
     BandwidthProbeAck bandwidth_probe_ack = 2;
 }
 
@@ -95,5 +118,7 @@ message ClientToHost
 message HostToClient
 {
     DirectUdpRequest direct_udp_request = 1;
-    BandwidthProbe bandwidth_probe      = 2;
+    StunUdpRequest stun_udp_request     = 2;
+    UpnpUdpRequest upnp_udp_request     = 3;
+    BandwidthProbe bandwidth_probe      = 4;
 }

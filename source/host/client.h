@@ -32,7 +32,7 @@
 
 namespace proto::peer {
 enum SessionType : int;
-class DirectUdpReply;
+class UdpReply;
 } // namespace proto::peer
 
 class Location;
@@ -74,8 +74,9 @@ public:
     enum class UdpConnectPhase
     {
         NONE,
-        DIRECT_LAN,   // Bind in LAN (peer_address_equals == true).
-        HOLE_PUNCHING // STUN-based hole punching (up to kMaxHolePunchingAttempts).
+        DIRECT_LAN,    // Bind in LAN (peer_address_equals == true).
+        HOLE_PUNCHING, // STUN-based hole punching (up to kMaxHolePunchingAttempts).
+        CLIENT_UPNP    // Client opens an UPnP port mapping and listens.
     };
     Q_ENUM(UdpConnectPhase)
 
@@ -118,7 +119,8 @@ private:
     void connectToUdp();
     void startUdpHolePunching();
     void startDirectUdp(qintptr socket, const QString& address, quint16 port);
-    void readDirectUdpReply(const proto::peer::DirectUdpReply& reply);
+    void startClientUpnp();
+    void readUdpReply(const proto::peer::UdpReply& reply);
     void startBandwidthProbing();
     void sendTcpBandwidthProbe(const TimePoint& time);
     void sendUdpBandwidthProbe(const TimePoint& time);
