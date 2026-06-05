@@ -58,6 +58,8 @@ list(APPEND SOURCE_HOST_CORE
     system_info_client.h
     system_settings.cc
     system_settings.h
+    udp_attempt.cc
+    udp_attempt.h
     user_session_agent.cc
     user_session_agent.h
     user_session.cc

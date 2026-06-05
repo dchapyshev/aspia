@@ -18,35 +18,21 @@
 
 #include "host/client.h"
 
-#include <QHostAddress>
 #include <QTimer>
 
 #include "base/location.h"
 #include "base/serialization.h"
-#include "base/crypto/key_pair.h"
-#include "base/crypto/datagram_decryptor.h"
-#include "base/crypto/datagram_encryptor.h"
-#include "base/crypto/random.h"
-#include "base/crypto/secure_byte_array.h"
-#include "base/peer/stun_peer.h"
-#include "base/net/net_utils.h"
 #include "base/net/udp_channel.h"
-#include "base/net/upnp_port_mapper.h"
-#include "proto/key_exchange.h"
+#include "host/udp_attempt.h"
 #include "proto/peer.h"
 
 namespace {
 
-const qint64 kProbeIntervalMs = 5000;       // Check every 5 seconds.
-const qint64 kIdleThresholdMs = 5000;       // Consider idle after 5 seconds of no sends.
-const qint64 kProbeDataSize = 32 * 1024;    // 32 KB probe payload.
-const int kMaxHolePunchingAttempts = 7;     // STUN hole punching tries before falling back to UPnP.
-const int kHolePunchingRetryDelayMs = 2000; // 2 seconds between retry attempts.
-const int kInitialProbeTimeoutMs = 5000;    // 5 seconds to wait for initial probe ACK.
-const int kUdpConnectTimeoutMs = 5000;      // 5 seconds to wait for UDP connection after setPeerAddress.
-const int kUdpReconnectDelayMs = 5000;      // 5 seconds before attempting UDP reconnection.
-const int kHostUpnpTimeoutMs = 10000;       // 10 seconds to wait for the client to connect via host UPnP.
-const int kClientUpnpTimeoutMs = 10000;     // 10 seconds to wait for the client's UPnP listening endpoint.
+const qint64 kProbeIntervalMs = 5000;    // Check every 5 seconds.
+const qint64 kIdleThresholdMs = 5000;    // Consider idle after 5 seconds of no sends.
+const qint64 kProbeDataSize = 32 * 1024; // 32 KB probe payload.
+const int kInitialProbeTimeoutMs = 5000; // 5 seconds to wait for initial probe ACK.
+const int kUdpReconnectDelayMs = 5000;   // 5 seconds before attempting UDP reconnection.
 
 //--------------------------------------------------------------------------------------------------
 quint32 nextRequestId()
@@ -221,7 +207,7 @@ void Client::send(quint8 channel_id, const QByteArray& buffer, bool reliable)
 {
     last_send_time_ = Clock::now();
 
-    if (udp_state_ == UdpState::READY)
+    if (udp_state_ == UdpState::READY && udp_channel_)
     {
         udp_channel_->send(channel_id, buffer, reliable);
         return;
@@ -264,132 +250,131 @@ void Client::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffe
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onUdpReady()
+void Client::addAndStart(UdpAttempt* attempt)
 {
-    CLOG(INFO) << "UDP channel is connected, sending bandwidth probe";
-    CCHECK(udp_channel_);
+    if (!attempt->isValid())
+    {
+        CLOG(ERROR) << "Failed to create UDP attempt";
+        attempt->deleteLater();
+        return;
+    }
 
-    // Do NOT set udp_ready_ yet. Send a bandwidth probe over UDP first. When the ACK arrives (see
-    // onUdpBandwidthProbeAck), we know the channel works and have an initial bandwidth measurement
-    // then we switch to UDP.
+    connect(attempt, &UdpAttempt::sig_connected, this, &Client::onAttemptConnected);
+    connect(attempt, &UdpAttempt::sig_failed, this, &Client::onAttemptError);
+    connect(attempt, &UdpAttempt::sig_message, this, [this](const QByteArray& buffer)
+    {
+        tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, buffer);
+    });
+
+    attempts_.emplace_back(attempt);
+    attempt->start();
+}
+
+//--------------------------------------------------------------------------------------------------
+UdpAttempt* Client::findAttempt(quint32 request_id)
+{
+    for (const auto& attempt : attempts_)
+    {
+        if (attempt && attempt->requestId() == request_id)
+            return attempt;
+    }
+    return nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::eraseAttempt(quint32 request_id)
+{
+    for (auto it = attempts_.begin(); it != attempts_.end(); ++it)
+    {
+        if (!*it || (*it)->requestId() != request_id)
+            continue;
+
+        (*it)->disconnect();
+        attempts_.erase(it);
+        return;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::clearAttempts()
+{
+    for (auto& attempt : attempts_)
+    {
+        if (attempt)
+            attempt->disconnect();
+    }
+    attempts_.clear();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::onAttemptConnected(quint32 request_id)
+{
+    if (udp_channel_)
+        return; // Already have a nominee being confirmed by the probe.
+
+    UdpAttempt* attempt = findAttempt(request_id);
+    if (attempt)
+        selectAttempt(attempt);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::selectAttempt(UdpAttempt* attempt)
+{
+    CCHECK(attempt);
+
+    CLOG(INFO) << "Nominating UDP attempt" << attempt->requestId();
+
+    // Take the channel from the attempt and drive the session through it directly. Any aux resource
+    // (UPnP mapping) is parented to the channel and travels with it; the attempt is then discarded.
+    const quint32 id = attempt->requestId();
+    udp_channel_ = attempt->takeChannel();
+    eraseAttempt(id);
+
+    if (!udp_channel_)
+    {
+        CLOG(ERROR) << "Selected attempt has no channel";
+        return;
+    }
+
+    udp_channel_->setParent(this);
+    connect(udp_channel_, &UdpChannel::sig_messageReceived, this, &Client::onUdpMessageReceived);
+    connect(udp_channel_, &UdpChannel::sig_errorOccurred, this, &Client::onUdpErrorOccurred);
+
     udp_channel_->setPaused(false);
     setUdpState(FROM_HERE, UdpState::CONNECTED);
 
+    udp_probe_.send_time = TimePoint();
+    udp_probe_.bandwidth = 0;
+    udp_probe_.pending = false;
+
+    // The channel is already confirmed by the attempt's probe round-trip (which also told the client
+    // it won); this probe just measures the initial UDP bandwidth before switching the session over.
     sendUdpBandwidthProbe(Clock::now());
 
-    // If the probe ACK does not arrive within the timeout, treat UDP as broken.
     QTimer::singleShot(kInitialProbeTimeoutMs, this, [this]()
     {
         if (udp_state_ != UdpState::CONNECTED)
             return;
 
-        CLOG(WARNING) << "UDP bandwidth probe timed out, channel is not usable";
-        udp_probe_.pending = false;
+        CLOG(WARNING) << "UDP probe timed out";
         onUdpErrorOccurred();
     });
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onUdpErrorOccurred()
+void Client::onAttemptError(quint32 request_id)
 {
-    CLOG(INFO) << "UDP channel error (" << udp_phase_ << ")";
-    CCHECK(udp_channel_);
-
-    bool was_connected = udp_state_ == UdpState::READY;
-
-    setUdpState(FROM_HERE, UdpState::DISCONNECTED);
-    udp_probe_.send_time = TimePoint();
-    udp_probe_.bandwidth = 0;
-    udp_probe_.pending = false;
-
-    udp_channel_->disconnect();
-    udp_channel_.reset();
-
-    // If the UDP was already working and then dropped, switch to TCP and try to reconnect.
-    if (was_connected)
-    {
-        CLOG(INFO) << "UDP was connected, switching to TCP and scheduling reconnect";
-        udp_phase_ = UdpConnectPhase::NONE;
-        hole_punching_attempt_ = 0;
-
-        if (host_upnp_mapper_)
-        {
-            host_upnp_mapper_->disconnect();
-            host_upnp_mapper_.reset();
-        }
-
-        emit sig_channelChanged();
-
-        QTimer::singleShot(kUdpReconnectDelayMs, this, &Client::connectToUdp);
-        return;
-    }
-
-    // Fallback chain depending on the current phase.
-    switch (udp_phase_)
-    {
-        case UdpConnectPhase::DIRECT_LAN:
-        {
-            if (direct_)
-            {
-                udp_phase_ = UdpConnectPhase::NONE;
-                return;
-            }
-
-            CLOG(INFO) << "Direct LAN UDP failed, trying hole punching";
-            udp_phase_ = UdpConnectPhase::HOLE_PUNCHING;
-            startUdpHolePunching();
-        }
-        break;
-
-        case UdpConnectPhase::HOLE_PUNCHING:
-        {
-            if (hole_punching_attempt_ < kMaxHolePunchingAttempts)
-            {
-                CLOG(INFO) << "UDP hole punching attempt" << hole_punching_attempt_
-                          << "failed, retrying in" << kHolePunchingRetryDelayMs << "ms";
-                QTimer::singleShot(kHolePunchingRetryDelayMs, this, &Client::startUdpHolePunching);
-            }
-            else
-            {
-                CLOG(INFO) << "STUN hole punching failed, trying host-side UPnP";
-                udp_phase_ = UdpConnectPhase::HOST_UPNP;
-                startHostUpnp();
-            }
-        }
-        break;
-
-        case UdpConnectPhase::HOST_UPNP:
-        {
-            CLOG(INFO) << "Host-side UPnP failed, trying client-side UPnP";
-            if (host_upnp_mapper_)
-            {
-                host_upnp_mapper_->disconnect();
-                host_upnp_mapper_.reset();
-            }
-            udp_phase_ = UdpConnectPhase::CLIENT_UPNP;
-            startClientUpnp();
-        }
-        break;
-
-        case UdpConnectPhase::CLIENT_UPNP:
-        {
-            CLOG(INFO) << "Client-side UPnP failed, staying on TCP";
-            udp_phase_ = UdpConnectPhase::NONE;
-        }
-        break;
-
-        default:
-            udp_phase_ = UdpConnectPhase::NONE;
-            break;
-    }
+    // A parallel attempt failed (the live session channel reports errors via onUdpErrorOccurred).
+    CLOG(INFO) << "UDP attempt" << request_id << "failed";
+    eraseAttempt(request_id);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onUdpMessageReceived(quint8 udp_channel_id, const QByteArray& buffer)
+void Client::onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
-    if (udp_channel_id != proto::peer::CHANNEL_ID_CONTROL)
+    if (channel_id != proto::peer::CHANNEL_ID_CONTROL)
     {
-        onMessage(udp_channel_id, buffer);
+        onMessage(channel_id, buffer);
         return;
     }
 
@@ -407,456 +392,87 @@ void Client::onUdpMessageReceived(quint8 udp_channel_id, const QByteArray& buffe
 }
 
 //--------------------------------------------------------------------------------------------------
+void Client::onUdpErrorOccurred()
+{
+    const bool was_ready = (udp_state_ == UdpState::READY);
+
+    if (udp_channel_)
+    {
+        udp_channel_->disconnect();
+        udp_channel_.reset();
+    }
+
+    setUdpState(FROM_HERE, UdpState::DISCONNECTED);
+    udp_probe_.send_time = TimePoint();
+    udp_probe_.bandwidth = 0;
+    udp_probe_.pending = false;
+
+    if (was_ready)
+    {
+        // A working UDP channel dropped: fall back to TCP and schedule a fresh attempt.
+        CLOG(INFO) << "UDP channel dropped, switching to TCP and scheduling reconnect";
+        clearAttempts();
+        emit sig_channelChanged();
+        QTimer::singleShot(kUdpReconnectDelayMs, this, &Client::connectToUdp);
+        return;
+    }
+
+    // The nominee failed before becoming usable: select the next already-connected attempt. Any
+    // remaining in-flight attempts may still win later; otherwise the session stays on TCP.
+    for (const auto& other : attempts_)
+    {
+        if (other && other->isConnected())
+        {
+            selectAttempt(other);
+            return;
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void Client::connectToUdp()
 {
-    if (udp_state_ != UdpState::DISCONNECTED || udp_channel_)
+    if (!attempts_.empty() || udp_channel_)
         return;
 
-    if (direct_ || peer_equals_)
+    // A direct (non-relayed) connection means the host is reachable directly, so nothing else is
+    // needed.
+    if (direct_)
     {
-        udp_phase_ = UdpConnectPhase::DIRECT_LAN;
-        startDirectUdp(-1, QString(), 0);
-        return;
-    }
-
-    if (stun_host_.isEmpty() || !stun_port_)
-    {
-        CLOG(WARNING) << "No STUN data in connection offer, staying on TCP (no UDP attempt)";
+        addAndStart(new DirectUdpAttempt(nextRequestId(), this));
         return;
     }
 
-    udp_phase_ = UdpConnectPhase::HOLE_PUNCHING;
-    startUdpHolePunching();
-}
+    // Otherwise try the available transports in parallel; the first whose channel passes the probe
+    // wins.
+    CLOG(INFO) << "Starting parallel UDP attempts";
 
-//--------------------------------------------------------------------------------------------------
-void Client::startUdpHolePunching()
-{
-    if (stun_host_.isEmpty() || !stun_port_)
-    {
-        CLOG(ERROR) << "No stun server data";
-        return;
-    }
+    // A direct LAN connection only has a chance when the peers appear to share a network. Since this
+    // is just a hint and may be wrong, it runs alongside the other transports rather than alone; when
+    // the hint is absent the host's local addresses are unreachable, so it is skipped entirely.
+    if (peer_equals_)
+        addAndStart(new DirectUdpAttempt(nextRequestId(), this));
 
-    ++hole_punching_attempt_;
-
-    CLOG(INFO) << "Stun server data:" << stun_host_ << ':' << stun_port_
-              << "(attempt" << hole_punching_attempt_ << ")";
-
-    stun_peer_ = new StunPeer(this);
-
-    connect(stun_peer_, &StunPeer::sig_channelReady, this,
-        [this](const QString& external_address, quint16 external_port)
-    {
-        CLOG(INFO) << "External UDP endpoint received:" << external_address << ':' << external_port
-                  << "(" << udp_phase_ << ")";
-        CCHECK(stun_peer_);
-
-        bool is_white_ip = false;
-
-        // On retry attempts we always use the ready socket (previous bind attempt
-        // already failed for white IP, or previous ready_socket attempt failed for NAT).
-        if (hole_punching_attempt_ <= 1)
-        {
-            QStringList local_ip_list = NetUtils::localIpList();
-            for (const auto& local_ip : std::as_const(local_ip_list))
-            {
-                if (!NetUtils::isAddressEqual(external_address, local_ip))
-                    continue;
-
-                // The peer has a white external address (without NAT).
-                is_white_ip = true;
-                break;
-            }
-        }
-
-        qintptr socket = -1;
-        QString address;
-        quint16 port = 0;
-
-        if (!is_white_ip)
-        {
-            // Use the STUN socket with the discovered external endpoint.
-            socket = stun_peer_->takeSocket();
-            address = external_address;
-            port = external_port;
-            CLOG(INFO) << "Using ready UDP socket (NAT or forced retry)";
-        }
-        else
-        {
-            address = external_address;
-            CLOG(INFO) << "White IP detected, using bind for UDP (address:" << address << ")";
-        }
-
-        stun_peer_->disconnect();
-        stun_peer_.reset();
-
-        startDirectUdp(socket, address, port);
-    });
-
-    connect(stun_peer_, &StunPeer::sig_errorOccurred, this, [this]()
-    {
-        CLOG(ERROR) << "STUN error (" << udp_phase_ << ")";
-        CCHECK(stun_peer_);
-
-        stun_peer_->disconnect();
-        stun_peer_.reset();
-
-        // STUN failed, retry if attempts remain.
-        if (hole_punching_attempt_ < kMaxHolePunchingAttempts)
-        {
-            CLOG(INFO) << "STUN failed (attempt" << hole_punching_attempt_
-                      << "), retrying in" << kHolePunchingRetryDelayMs << "ms";
-            QTimer::singleShot(kHolePunchingRetryDelayMs, this, &Client::startUdpHolePunching);
-        }
-        else
-        {
-            CLOG(INFO) << "STUN hole punching failed, trying host-side UPnP";
-            udp_phase_ = UdpConnectPhase::HOST_UPNP;
-            startHostUpnp();
-        }
-    });
-
-    stun_peer_->start(stun_host_, stun_port_);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Client::startDirectUdp(qintptr socket, const QString& address, quint16 port)
-{
-    CLOG(INFO) << "Starting direct UDP...";
-    CCHECK(!udp_channel_);
-
-    udp_channel_ = new UdpChannel(this);
-
-    connect(udp_channel_, &UdpChannel::sig_ready, this, &Client::onUdpReady);
-    connect(udp_channel_, &UdpChannel::sig_errorOccurred, this, &Client::onUdpErrorOccurred);
-    connect(udp_channel_, &UdpChannel::sig_messageReceived, this, &Client::onUdpMessageReceived);
-
-    if (socket != -1)
-        udp_channel_->bind(socket);
-    else
-        udp_channel_->bind(&port);
-
-    PendingUdp context;
-
-    context.key_pair = KeyPair::create(KeyPair::Type::X25519);
-    if (!context.key_pair.isValid())
-    {
-        CLOG(ERROR) << "Failed to create UDP key pair";
-        return;
-    }
-
-    context.iv = Random::byteArray(12);
-    if (context.iv.isEmpty())
-    {
-        CLOG(ERROR) << "Unable to create IV for UDP";
-        return;
-    }
-
-    QStringList addresses;
-    if (address.isEmpty())
-        addresses = NetUtils::localIpList();
-    else
-        addresses << address;
-
-    context.request_id = nextRequestId();
-
-    proto::peer::HostToClient message;
-
-    // STUN data present means a hole punching request; otherwise a plain direct connection.
     if (!stun_host_.isEmpty() && stun_port_)
-    {
-        proto::peer::StunUdpRequest* request = message.mutable_stun_udp_request();
-        for (const auto& host_address : std::as_const(addresses))
-            request->add_address(host_address.toStdString());
-        request->set_port(port);
-        request->set_encryptions(proto::key_exchange::ENCRYPTION_AES256_GCM);
-        request->set_public_key(context.key_pair.publicKey().toStdString());
-        request->set_iv(context.iv.toStdString());
-        request->set_stun_host(stun_host_.toStdString());
-        request->set_stun_port(stun_port_);
-        request->set_request_id(context.request_id);
-    }
-    else
-    {
-        proto::peer::DirectUdpRequest* request = message.mutable_direct_udp_request();
-        for (const auto& host_address : std::as_const(addresses))
-            request->add_address(host_address.toStdString());
-        request->set_port(port);
-        request->set_encryptions(proto::key_exchange::ENCRYPTION_AES256_GCM);
-        request->set_public_key(context.key_pair.publicKey().toStdString());
-        request->set_iv(context.iv.toStdString());
-        request->set_request_id(context.request_id);
-    }
+        addAndStart(new StunUdpAttempt(nextRequestId(), stun_host_, stun_port_, this));
 
-    pending_udp_context_ = std::move(context);
-
-    CLOG(INFO) << "Sending UDP connection request";
-    tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void Client::startHostUpnp()
-{
-    CLOG(INFO) << "Trying host-side UPnP";
-
-    if (udp_channel_)
-    {
-        udp_channel_->disconnect();
-        udp_channel_.reset();
-    }
-
-    if (host_upnp_mapper_)
-    {
-        host_upnp_mapper_->disconnect();
-        host_upnp_mapper_.reset();
-    }
-
-    // Listen passively on an OS-assigned local port; the client connects to the mapped endpoint.
-    udp_channel_ = new UdpChannel(this);
-    connect(udp_channel_, &UdpChannel::sig_ready, this, &Client::onUdpReady);
-    connect(udp_channel_, &UdpChannel::sig_errorOccurred, this, &Client::onUdpErrorOccurred);
-    connect(udp_channel_, &UdpChannel::sig_messageReceived, this, &Client::onUdpMessageReceived);
-
-    quint16 local_port = 0;
-    udp_channel_->bind(&local_port);
-
-    host_upnp_mapper_ = new UpnpPortMapper(this);
-
-    connect(host_upnp_mapper_, &UpnpPortMapper::sig_ready, this,
-        [this](const QString& external_address, quint16 external_port)
-    {
-        CLOG(INFO) << "Host UPnP mapping ready:" << external_address << ":" << external_port;
-
-        PendingUdp context;
-
-        context.key_pair = KeyPair::create(KeyPair::Type::X25519);
-        if (!context.key_pair.isValid())
-        {
-            CLOG(ERROR) << "Failed to create UDP key pair";
-            onUdpErrorOccurred();
-            return;
-        }
-
-        context.iv = Random::byteArray(12);
-        if (context.iv.isEmpty())
-        {
-            CLOG(ERROR) << "Unable to create IV for UDP";
-            onUdpErrorOccurred();
-            return;
-        }
-
-        context.request_id = nextRequestId();
-
-        // Advertise the UPnP-mapped endpoint as a direct address; the client connects to it.
-        proto::peer::HostToClient message;
-        proto::peer::DirectUdpRequest* request = message.mutable_direct_udp_request();
-        request->add_address(external_address.toStdString());
-        request->set_port(external_port);
-        request->set_encryptions(proto::key_exchange::ENCRYPTION_AES256_GCM);
-        request->set_public_key(context.key_pair.publicKey().toStdString());
-        request->set_iv(context.iv.toStdString());
-        request->set_request_id(context.request_id);
-
-        pending_udp_context_ = std::move(context);
-
-        CLOG(INFO) << "Sending host UPnP direct request";
-        tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(message));
-
-        // If the client does not connect to the mapped endpoint in time, fall back.
-        QTimer::singleShot(kHostUpnpTimeoutMs, this, [this]()
-        {
-            if (udp_phase_ != UdpConnectPhase::HOST_UPNP || udp_state_ != UdpState::DISCONNECTED)
-                return;
-
-            CLOG(WARNING) << "Host UPnP connection timed out";
-            onUdpErrorOccurred();
-        });
-    });
-
-    connect(host_upnp_mapper_, &UpnpPortMapper::sig_failed, this, [this]()
-    {
-        CLOG(WARNING) << "Host UPnP mapping failed";
-        onUdpErrorOccurred();
-    });
-
-    host_upnp_mapper_->addUdpMapping(local_port);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Client::startClientUpnp()
-{
-    CLOG(INFO) << "Requesting client-side UPnP listener";
-
-    // The channel is created later (in readUdpReply), once the client reports the endpoint
-    // it is listening on. Here the host is the connecting side, not the listener.
-    if (udp_channel_)
-    {
-        udp_channel_->disconnect();
-        udp_channel_.reset();
-    }
-
-    PendingUdp context;
-
-    context.key_pair = KeyPair::create(KeyPair::Type::X25519);
-    if (!context.key_pair.isValid())
-    {
-        CLOG(ERROR) << "Failed to create UDP key pair";
-        udp_phase_ = UdpConnectPhase::NONE;
-        return;
-    }
-
-    context.iv = Random::byteArray(12);
-    if (context.iv.isEmpty())
-    {
-        CLOG(ERROR) << "Unable to create IV for UDP";
-        udp_phase_ = UdpConnectPhase::NONE;
-        return;
-    }
-
-    context.request_id = nextRequestId();
-
-    proto::peer::HostToClient message;
-    proto::peer::UpnpUdpRequest* request = message.mutable_upnp_udp_request();
-    request->set_encryptions(proto::key_exchange::ENCRYPTION_AES256_GCM);
-    request->set_public_key(context.key_pair.publicKey().toStdString());
-    request->set_iv(context.iv.toStdString());
-    request->set_request_id(context.request_id);
-
-    pending_udp_context_ = std::move(context);
-
-    CLOG(INFO) << "Sending client UPnP listener request";
-    tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(message));
-
-    // If the client does not report a listening endpoint in time, give up and stay on TCP.
-    QTimer::singleShot(kClientUpnpTimeoutMs, this, [this]()
-    {
-        if (udp_phase_ != UdpConnectPhase::CLIENT_UPNP || udp_channel_)
-            return;
-
-        CLOG(WARNING) << "Client UPnP listener timed out, staying on TCP";
-        pending_udp_context_.reset();
-        udp_phase_ = UdpConnectPhase::NONE;
-    });
+    addAndStart(new HostUpnpUdpAttempt(nextRequestId(), this));
+    addAndStart(new ClientUpnpUdpAttempt(nextRequestId(), this));
 }
 
 //--------------------------------------------------------------------------------------------------
 void Client::readUdpReply(const proto::peer::UdpReply& reply)
 {
-    CLOG(INFO) << "UDP reply is received";
+    CLOG(INFO) << "UDP reply is received (attempt" << reply.request_id() << ")";
 
-    if (!pending_udp_context_.has_value())
+    UdpAttempt* attempt = findAttempt(reply.request_id());
+    if (!attempt)
     {
-        CLOG(ERROR) << "UDP reply received but no pending UDP data";
+        CLOG(WARNING) << "UDP reply for unknown attempt" << reply.request_id() << ", ignoring";
         return;
     }
 
-    // Ignore replies that do not match the request currently in flight (stale/late reply).
-    if (reply.request_id() != pending_udp_context_->request_id)
-    {
-        CLOG(WARNING) << "Stale UDP reply (request_id" << reply.request_id() << "expected"
-                      << pending_udp_context_->request_id << "), ignoring";
-        return;
-    }
-
-    // For the LAN/STUN path the channel was created and bound up front. For the client-UPnP path
-    // the host is the connecting side and the channel is created here from the reported endpoint.
-    const bool client_upnp = (udp_phase_ == UdpConnectPhase::CLIENT_UPNP);
-    if (!client_upnp && !udp_channel_)
-    {
-        CLOG(ERROR) << "UDP reply received but no UDP channel";
-        return;
-    }
-
-    PendingUdp context = std::move(*pending_udp_context_);
-    pending_udp_context_.reset();
-
-    QByteArray host_public_key = QByteArray::fromStdString(reply.public_key());
-    QByteArray host_iv = QByteArray::fromStdString(reply.iv());
-    quint32 encryption = reply.encryption();
-
-    SecureByteArray session_key(context.key_pair.sessionKey(host_public_key));
-    if (session_key.isEmpty())
-    {
-        CLOG(ERROR) << "Failed to derive UDP session key";
-        return;
-    }
-
-    std::unique_ptr<DatagramEncryptor> encryptor;
-    std::unique_ptr<DatagramDecryptor> decryptor;
-
-    if (encryption == proto::key_exchange::ENCRYPTION_AES256_GCM)
-    {
-        encryptor = DatagramEncryptor::createForAes256Gcm(session_key, context.iv);
-        decryptor = DatagramDecryptor::createForAes256Gcm(session_key, host_iv);
-    }
-    else
-    {
-        CLOG(ERROR) << "Unknown UDP encryption type:" << encryption;
-        return;
-    }
-
-    if (!encryptor || !decryptor)
-    {
-        CLOG(ERROR) << "Failed to create UDP encryptor/decryptor";
-        return;
-    }
-
-    // These values contain the CLIENT's external address and port (STUN external endpoint, or the
-    // UPnP-mapped endpoint when the client is listening).
-    QString client_address = QString::fromStdString(reply.address());
-    quint16 client_port = static_cast<quint16>(reply.port());
-
-    bool expect_connection = false;
-
-    if (client_upnp)
-    {
-        if (client_address.isEmpty() || !client_port)
-        {
-            CLOG(WARNING) << "Client UPnP listener is unavailable, staying on TCP";
-            udp_phase_ = UdpConnectPhase::NONE;
-            return;
-        }
-
-        CCHECK(!udp_channel_);
-        udp_channel_ = new UdpChannel(this);
-        connect(udp_channel_, &UdpChannel::sig_ready, this, &Client::onUdpReady);
-        connect(udp_channel_, &UdpChannel::sig_errorOccurred, this, &Client::onUdpErrorOccurred);
-        connect(udp_channel_, &UdpChannel::sig_messageReceived, this, &Client::onUdpMessageReceived);
-
-        udp_channel_->setEncryptor(std::move(encryptor));
-        udp_channel_->setDecryptor(std::move(decryptor));
-
-        CLOG(INFO) << "Connecting to client's UPnP endpoint:" << client_address << ':' << client_port;
-        udp_channel_->connectTo(client_address, client_port);
-        expect_connection = true;
-    }
-    else
-    {
-        udp_channel_->setEncryptor(std::move(encryptor));
-        udp_channel_->setDecryptor(std::move(decryptor));
-
-        // An empty address means a plain direct (LAN) attempt where the client connects to us.
-        if (!client_address.isEmpty() && client_port)
-        {
-            CLOG(INFO) << "Setting client's external address:" << client_address << ':' << client_port;
-            udp_channel_->setPeerAddress(client_address, client_port);
-            expect_connection = true;
-        }
-    }
-
-    if (expect_connection)
-    {
-        // If ENet connection is not established within the deadline, treat as failure.
-        QTimer::singleShot(kUdpConnectTimeoutMs, this, [this]()
-        {
-            if (!udp_channel_ || udp_state_ == UdpState::PROBED || udp_state_ == UdpState::READY)
-                return;
-
-            CLOG(WARNING) << "UDP connection timed out";
-            onUdpErrorOccurred();
-        });
-    }
+    attempt->onReply(reply);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -943,6 +559,7 @@ void Client::checkBandwidth()
     {
         CLOG(INFO) << "Switching traffic to UDP";
         setUdpState(FROM_HERE, UdpState::READY);
+        clearAttempts();
         emit sig_channelChanged();
     }
 

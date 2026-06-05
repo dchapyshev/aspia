@@ -23,7 +23,7 @@
 #include <QVersionNumber>
 
 #include <chrono>
-#include <optional>
+#include <list>
 
 #include "base/logging.h"
 #include "base/crypto/key_pair.h"
@@ -37,9 +37,8 @@ class UdpReply;
 
 class Location;
 class QTimer;
-class StunPeer;
+class UdpAttempt;
 class UdpChannel;
-class UpnpPortMapper;
 
 class Client : public QObject
 {
@@ -72,16 +71,6 @@ public:
     qint64 pendingBytes() const;
     qint64 bandwidth() const;
 
-    enum class UdpConnectPhase
-    {
-        NONE,
-        DIRECT_LAN,    // Bind in LAN (peer_address_equals == true).
-        HOLE_PUNCHING, // STUN-based hole punching (up to kMaxHolePunchingAttempts).
-        HOST_UPNP,     // Host opens an UPnP port mapping and listens, client connects to it.
-        CLIENT_UPNP    // Client opens an UPnP port mapping and listens, host connects to it.
-    };
-    Q_ENUM(UdpConnectPhase)
-
     enum class UdpState
     {
         DISCONNECTED,
@@ -109,21 +98,22 @@ private slots:
     void onTcpErrorOccurred(TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer);
 
-    void onUdpReady();
-    void onUdpErrorOccurred();
-    void onUdpMessageReceived(quint8 udp_channel_id, const QByteArray& buffer);
-
 private:
     using Clock = std::chrono::steady_clock;
     using TimePoint = std::chrono::time_point<Clock>;
     using Milliseconds = std::chrono::milliseconds;
 
     void connectToUdp();
-    void startUdpHolePunching();
-    void startDirectUdp(qintptr socket, const QString& address, quint16 port);
-    void startHostUpnp();
-    void startClientUpnp();
+    void addAndStart(UdpAttempt* attempt);
+    UdpAttempt* findAttempt(quint32 request_id);
+    void eraseAttempt(quint32 request_id);
     void readUdpReply(const proto::peer::UdpReply& reply);
+    void onAttemptConnected(quint32 request_id);
+    void onAttemptError(quint32 request_id);
+    void selectAttempt(UdpAttempt* attempt);
+    void clearAttempts();
+    void onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer);
+    void onUdpErrorOccurred();
     void startBandwidthProbing();
     void sendTcpBandwidthProbe(const TimePoint& time);
     void sendUdpBandwidthProbe(const TimePoint& time);
@@ -134,22 +124,11 @@ private:
 
     Features features_ = FEATURE_NONE;
     TcpChannel* tcp_channel_ = nullptr;
-    ScopedQPointer<UdpChannel> udp_channel_;
     UdpState udp_state_ = UdpState::DISCONNECTED;
+    ScopedQPointer<UdpChannel> udp_channel_;
 
-    struct PendingUdp
-    {
-        KeyPair key_pair;
-        QByteArray iv;
-        quint32 request_id = 0;
-    };
+    std::list<ScopedQPointer<UdpAttempt>> attempts_;
 
-    ScopedQPointer<StunPeer> stun_peer_;
-    ScopedQPointer<UpnpPortMapper> host_upnp_mapper_;
-    std::optional<PendingUdp> pending_udp_context_;
-
-    UdpConnectPhase udp_phase_ = UdpConnectPhase::NONE;
-    int hole_punching_attempt_ = 0;
     bool direct_ = false;
     bool peer_equals_ = false;
     QString stun_host_;

@@ -23,8 +23,8 @@
 #include <QStringList>
 #include <QVariant>
 
+#include <list>
 #include <memory>
-#include <optional>
 
 #include "base/logging.h"
 #include "base/net/tcp_channel.h"
@@ -32,9 +32,8 @@
 #include "client/session_state.h"
 
 class RelayPeer;
-class StunPeer;
+class UdpAttempt;
 class UdpChannel;
-class UpnpPortMapper;
 
 namespace proto::peer {
 class DirectUdpRequest;
@@ -105,51 +104,31 @@ private slots:
     void onTcpConnected();
     void onTcpErrorOccurred(TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
-    void onUdpReady();
-    void onUdpErrorOccurred();
     void onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer);
+    void onUdpErrorOccurred();
     void onRelayConnectionReady();
     void onRelayConnectionError();
 
 private:
-    struct PendingUdp
-    {
-        QString address;
-        quint16 port = 0;
-        quint32 encryptions = 0;
-        QByteArray public_key;
-        QByteArray iv;
-        quint32 request_id = 0;
-    };
-
-    struct UdpChannelKeys
-    {
-        QByteArray public_key; // Client's public key, sent back to the host in the reply.
-        QByteArray iv;         // Client's IV, sent back to the host in the reply.
-        quint32 encryption = 0;
-    };
-
     void tcpChannelReady();
     bool isUdpConnectionAllowed();
-    bool buildHostContext(const QStringList& addresses, quint32 port, quint32 encryptions,
-        const QByteArray& public_key, const QByteArray& iv, quint32 request_id, PendingUdp* context);
     void readDirectUdpRequest(const proto::peer::DirectUdpRequest& request);
     void readStunUdpRequest(const proto::peer::StunUdpRequest& request);
     void readUpnpUdpRequest(const proto::peer::UpnpUdpRequest& request);
-    bool setupUdpChannel(const PendingUdp& context, UdpChannelKeys* keys);
-    void connectToUdp(const PendingUdp& context, qintptr socket = -1,
-        const QString& external_address = QString(), quint16 external_port = 0);
-    void startUdpHolePunching(const PendingUdp& context, const QString& stun_host, quint16 stun_port);
-    void startUpnpListener(const PendingUdp& context);
+    void addAndStart(UdpAttempt* attempt);
+    UdpAttempt* findAttempt(quint32 request_id);
+    void eraseAttempt(quint32 request_id);
+    void clearAttempts();
+    void onAttemptConnected(quint32 request_id);
+    void onAttemptError(quint32 request_id);
+    void selectAttempt(UdpAttempt* attempt);
 
     bool is_legacy_mode_ = false;
     ScopedQPointer<TcpChannel> tcp_channel_;
     ScopedQPointer<UdpChannel> udp_channel_;
     ScopedQPointer<RelayPeer> relay_peer_;
-    ScopedQPointer<StunPeer> stun_peer_;
-    ScopedQPointer<UpnpPortMapper> upnp_port_mapper_;
 
-    std::optional<PendingUdp> pending_udp_context_;
+    std::list<ScopedQPointer<UdpAttempt>> attempts_;
     std::shared_ptr<SessionState> session_state_;
 
     enum class State { CREATED, STARTED, STOPPPED };

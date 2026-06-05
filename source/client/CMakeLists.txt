@@ -53,6 +53,8 @@ list(APPEND SOURCE_CLIENT_CORE
     session_state.h
     settings.cc
     settings.h
+    udp_attempt.cc
+    udp_attempt.h
     client.rc)
 
 list(APPEND SOURCE_CLIENT_CORE_ONLINE_CHECKER
