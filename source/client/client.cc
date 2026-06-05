@@ -526,7 +526,7 @@ bool Client::isUdpConnectionAllowed()
 
 //--------------------------------------------------------------------------------------------------
 bool Client::buildHostContext(const QStringList& addresses, quint32 port, quint32 encryptions,
-    const QByteArray& public_key, const QByteArray& iv, PendingUdp* context)
+    const QByteArray& public_key, const QByteArray& iv, quint32 request_id, PendingUdp* context)
 {
     CHECK(context);
 
@@ -594,6 +594,7 @@ bool Client::buildHostContext(const QStringList& addresses, quint32 port, quint3
     context->encryptions = encryptions;
     context->public_key = public_key;
     context->iv = iv;
+    context->request_id = request_id;
     return true;
 }
 
@@ -619,7 +620,7 @@ void Client::readDirectUdpRequest(const proto::peer::DirectUdpRequest& request)
 
     PendingUdp context;
     if (!buildHostContext(collectAddresses(request), request.port(), request.encryptions(),
-                          public_key, iv, &context))
+                          public_key, iv, request.request_id(), &context))
     {
         return;
     }
@@ -658,7 +659,7 @@ void Client::readStunUdpRequest(const proto::peer::StunUdpRequest& request)
 
     PendingUdp context;
     if (!buildHostContext(collectAddresses(request), request.port(), request.encryptions(),
-                          public_key, iv, &context))
+                          public_key, iv, request.request_id(), &context))
     {
         return;
     }
@@ -691,6 +692,7 @@ void Client::readUpnpUdpRequest(const proto::peer::UpnpUdpRequest& request)
     context.encryptions = request.encryptions();
     context.public_key = public_key;
     context.iv = iv;
+    context.request_id = request.request_id();
 
     CLOG(INFO) << "Host requested client-side UPnP listener";
     startUpnpListener(context);
@@ -782,6 +784,7 @@ void Client::connectToUdp(
     reply->set_encryption(keys.encryption);
     reply->set_public_key(keys.public_key.toStdString());
     reply->set_iv(keys.iv.toStdString());
+    reply->set_request_id(context.request_id);
 
     if (!external_address.isEmpty())
     {
@@ -858,7 +861,7 @@ void Client::startUpnpListener(const PendingUdp& context)
     upnp_port_mapper_ = new UpnpPortMapper(this);
 
     connect(upnp_port_mapper_, &UpnpPortMapper::sig_ready, this,
-        [this, keys](const QString& external_address, quint16 external_port)
+        [this, keys, request_id = context.request_id](const QString& external_address, quint16 external_port)
     {
         CLOG(INFO) << "UPnP listener ready:" << external_address << ":" << external_port;
 
@@ -870,6 +873,7 @@ void Client::startUpnpListener(const PendingUdp& context)
         reply->set_iv(keys.iv.toStdString());
         reply->set_address(external_address.toStdString());
         reply->set_port(external_port);
+        reply->set_request_id(request_id);
 
         tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(message));
     });

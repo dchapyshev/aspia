@@ -49,6 +49,13 @@ const int kHostUpnpTimeoutMs = 10000;       // 10 seconds to wait for the client
 const int kClientUpnpTimeoutMs = 10000;     // 10 seconds to wait for the client's UPnP listening endpoint.
 
 //--------------------------------------------------------------------------------------------------
+quint32 nextRequestId()
+{
+    static quint32 request_id = 0;
+    return ++request_id;
+}
+
+//--------------------------------------------------------------------------------------------------
 QByteArray makeBandwidthProbeData()
 {
     std::string payload;
@@ -552,6 +559,8 @@ void Client::startDirectUdp(qintptr socket, const QString& address, quint16 port
     else
         addresses << address;
 
+    context.request_id = nextRequestId();
+
     proto::peer::HostToClient message;
 
     // STUN data present means a hole punching request; otherwise a plain direct connection.
@@ -566,6 +575,7 @@ void Client::startDirectUdp(qintptr socket, const QString& address, quint16 port
         request->set_iv(context.iv.toStdString());
         request->set_stun_host(stun_host_.toStdString());
         request->set_stun_port(stun_port_);
+        request->set_request_id(context.request_id);
     }
     else
     {
@@ -576,6 +586,7 @@ void Client::startDirectUdp(qintptr socket, const QString& address, quint16 port
         request->set_encryptions(proto::key_exchange::ENCRYPTION_AES256_GCM);
         request->set_public_key(context.key_pair.publicKey().toStdString());
         request->set_iv(context.iv.toStdString());
+        request->set_request_id(context.request_id);
     }
 
     pending_udp_context_ = std::move(context);
@@ -635,6 +646,8 @@ void Client::startHostUpnp()
             return;
         }
 
+        context.request_id = nextRequestId();
+
         // Advertise the UPnP-mapped endpoint as a direct address; the client connects to it.
         proto::peer::HostToClient message;
         proto::peer::DirectUdpRequest* request = message.mutable_direct_udp_request();
@@ -643,6 +656,7 @@ void Client::startHostUpnp()
         request->set_encryptions(proto::key_exchange::ENCRYPTION_AES256_GCM);
         request->set_public_key(context.key_pair.publicKey().toStdString());
         request->set_iv(context.iv.toStdString());
+        request->set_request_id(context.request_id);
 
         pending_udp_context_ = std::move(context);
 
@@ -700,11 +714,14 @@ void Client::startClientUpnp()
         return;
     }
 
+    context.request_id = nextRequestId();
+
     proto::peer::HostToClient message;
     proto::peer::UpnpUdpRequest* request = message.mutable_upnp_udp_request();
     request->set_encryptions(proto::key_exchange::ENCRYPTION_AES256_GCM);
     request->set_public_key(context.key_pair.publicKey().toStdString());
     request->set_iv(context.iv.toStdString());
+    request->set_request_id(context.request_id);
 
     pending_udp_context_ = std::move(context);
 
@@ -726,11 +743,19 @@ void Client::startClientUpnp()
 //--------------------------------------------------------------------------------------------------
 void Client::readUdpReply(const proto::peer::UdpReply& reply)
 {
-    CLOG(INFO) << "Direct UDP reply is received";
+    CLOG(INFO) << "UDP reply is received";
 
     if (!pending_udp_context_.has_value())
     {
         CLOG(ERROR) << "UDP reply received but no pending UDP data";
+        return;
+    }
+
+    // Ignore replies that do not match the request currently in flight (stale/late reply).
+    if (reply.request_id() != pending_udp_context_->request_id)
+    {
+        CLOG(WARNING) << "Stale UDP reply (request_id" << reply.request_id() << "expected"
+                      << pending_udp_context_->request_id << "), ignoring";
         return;
     }
 

@@ -119,6 +119,7 @@ private:
         quint32 encryptions = 0;
         QByteArray public_key;
         QByteArray iv;
+        quint32 request_id = 0;
     };
 
     struct UdpChannelKeys
@@ -131,7 +132,7 @@ private:
     void tcpChannelReady();
     bool isUdpConnectionAllowed();
     bool buildHostContext(const QStringList& addresses, quint32 port, quint32 encryptions,
-        const QByteArray& public_key, const QByteArray& iv, PendingUdp* context);
+        const QByteArray& public_key, const QByteArray& iv, quint32 request_id, PendingUdp* context);
     void readDirectUdpRequest(const proto::peer::DirectUdpRequest& request);
     void readStunUdpRequest(const proto::peer::StunUdpRequest& request);
     void readUpnpUdpRequest(const proto::peer::UpnpUdpRequest& request);

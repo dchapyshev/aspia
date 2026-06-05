@@ -57,44 +57,48 @@ message Version
 // Direct connection: the client connects to one of the host's addresses (LAN / no NAT).
 message DirectUdpRequest
 {
-    repeated string address = 1;
-    uint32 port             = 2;
-    uint32 encryptions      = 3;
-    bytes public_key        = 4;
-    bytes iv                = 5;
+    uint32 request_id       = 1;
+    repeated string address = 2;
+    uint32 port             = 3;
+    uint32 encryptions      = 4;
+    bytes public_key        = 5;
+    bytes iv                = 6;
 }
 
 // STUN hole punching: the client runs its own STUN against the given server, then connects to the
 // host's external endpoint.
 message StunUdpRequest
 {
-    repeated string address = 1;
-    uint32 port             = 2;
-    uint32 encryptions      = 3;
-    bytes public_key        = 4;
-    bytes iv                = 5;
-    string stun_host        = 6;
-    uint32 stun_port        = 7;
+    uint32 request_id       = 1;
+    repeated string address = 2;
+    uint32 port             = 3;
+    uint32 encryptions      = 4;
+    bytes public_key        = 5;
+    bytes iv                = 6;
+    string stun_host        = 7;
+    uint32 stun_port        = 8;
 }
 
 // The client opens a UPnP port mapping on its gateway and listens; the host connects to the
 // reported endpoint. Fallback when the host is behind a symmetric NAT.
 message UpnpUdpRequest
 {
-    uint32 encryptions = 1;
-    bytes public_key   = 2;
-    bytes iv           = 3;
+    uint32 request_id  = 1;
+    uint32 encryptions = 2;
+    bytes public_key   = 3;
+    bytes iv           = 4;
 }
 
 // The client's answer to any of the UDP requests above: session crypto plus, when the host needs
 // to reach the client (STUN/UPnP), the client's external endpoint.
 message UdpReply
 {
-    uint32 encryption = 1;
-    bytes public_key  = 2;
-    bytes iv          = 3;
-    string address    = 4;
-    uint32 port       = 5;
+    uint32 request_id = 1; // Echoes the request_id of the request this reply answers.
+    uint32 encryption = 2;
+    bytes public_key  = 3;
+    bytes iv          = 4;
+    string address    = 5;
+    uint32 port       = 6;
 }
 
 message BandwidthProbe

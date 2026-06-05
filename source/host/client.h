@@ -141,6 +141,7 @@ private:
     {
         KeyPair key_pair;
         QByteArray iv;
+        quint32 request_id = 0;
     };
 
     ScopedQPointer<StunPeer> stun_peer_;
