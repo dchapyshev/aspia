@@ -2074,8 +2074,8 @@ Group Database::findGroup(qint64 workspace_id, qint64 entry_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Database::addGroup(qint64 workspace_id, qint64 parent_id, const QString& name,
-    const QByteArray& comment, qint64* entry_id)
+std::string_view Database::addGroup(qint64 workspace_id, qint64 parent_id, std::string_view name,
+    std::string_view comment, qint64* entry_id)
 {
     CHECK(entry_id);
 
@@ -2099,7 +2099,7 @@ std::string_view Database::addGroup(qint64 workspace_id, qint64 parent_id, const
         return proto::router::kErrorInvalidData;
     }
 
-    if (name.trimmed().isEmpty())
+    if (strTrimmed(name).empty())
     {
         LOG(ERROR) << "Invalid group name";
         return proto::router::kErrorInvalidData;
@@ -2161,7 +2161,7 @@ std::string_view Database::addGroup(qint64 workspace_id, qint64 parent_id, const
 
 //--------------------------------------------------------------------------------------------------
 std::string_view Database::modifyGroup(qint64 workspace_id, qint64 entry_id, qint64 new_parent_id,
-    const QString& name, const QByteArray& comment)
+    std::string_view name, std::string_view comment)
 {
     if (!isValid())
     {
@@ -2176,7 +2176,7 @@ std::string_view Database::modifyGroup(qint64 workspace_id, qint64 entry_id, qin
         return proto::router::kErrorInvalidData;
     }
 
-    if (name.trimmed().isEmpty())
+    if (strTrimmed(name).empty())
     {
         LOG(ERROR) << "Invalid group name";
         return proto::router::kErrorInvalidData;

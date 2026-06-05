@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "base/string_util.h"
 #include "proto/router.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
@@ -161,8 +162,8 @@ void ClientManager::doGroupRequest(const proto::router::GroupRequest& request)
     const proto::router::Group& group = request.group();
     const qint64 entry_id = group.entry_id();
     const qint64 parent_id = group.parent_id();
-    const QString name = QString::fromStdString(group.name()).trimmed();
-    const QByteArray comment = QByteArray::fromStdString(group.comment());
+    const std::string name(strTrimmed(group.name()));
+    const std::string_view comment = group.comment();
 
     if (workspace_id <= 0)
     {

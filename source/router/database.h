@@ -270,15 +270,15 @@ public:
     // Inserts a new group. parent_id == 0 places it at the workspace root; otherwise parent_id
     // must reference an existing group within the same workspace. On success *entry_id is set
     // to the new id.
-    std::string_view addGroup(qint64 workspace_id, qint64 parent_id, const QString& name,
-        const QByteArray& comment, qint64* entry_id);
+    std::string_view addGroup(qint64 workspace_id, qint64 parent_id, std::string_view name,
+        std::string_view comment, qint64* entry_id);
 
     // Renames and/or re-parents a group. new_parent_id must point to a group in the same
     // workspace and must not be the group itself or one of its descendants. The cycle check
     // runs a recursive CTE that walks parent links upward from new_parent_id; if entry_id
     // appears anywhere in that chain the move is refused.
     std::string_view modifyGroup(qint64 workspace_id, qint64 entry_id, qint64 new_parent_id,
-        const QString& name, const QByteArray& comment);
+        std::string_view name, std::string_view comment);
 
     // Deletes the group and all its descendants.
     std::string_view removeGroup(qint64 workspace_id, qint64 entry_id);
