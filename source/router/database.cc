@@ -884,8 +884,8 @@ bool Database::addHost(const QByteArray& key_hash)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::updateHostInfo(HostId host_id, const QString& computer_name, const QString& cpu_arch,
-    const QString& version, const QString& os_name, const QString& address)
+bool Database::updateHostInfo(HostId host_id, std::string_view computer_name, std::string_view cpu_arch,
+    const QString& version, std::string_view os_name, const QString& address)
 {
     if (!isValid())
     {

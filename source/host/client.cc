@@ -154,25 +154,25 @@ QString Client::address() const
 //--------------------------------------------------------------------------------------------------
 QString Client::osName() const
 {
-    return tcp_channel_->peerOsName();
+    return QString::fromStdString(tcp_channel_->peerOsName());
 }
 
 //--------------------------------------------------------------------------------------------------
 QString Client::computerName() const
 {
-    return tcp_channel_->peerComputerName();
+    return QString::fromStdString(tcp_channel_->peerComputerName());
 }
 
 //--------------------------------------------------------------------------------------------------
 QString Client::displayName() const
 {
-    return tcp_channel_->peerDisplayName();
+    return QString::fromStdString(tcp_channel_->peerDisplayName());
 }
 
 //--------------------------------------------------------------------------------------------------
 QString Client::architecture() const
 {
-    return tcp_channel_->peerArchitecture();
+    return QString::fromStdString(tcp_channel_->peerArchitecture());
 }
 
 //--------------------------------------------------------------------------------------------------

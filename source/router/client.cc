@@ -120,19 +120,19 @@ QVersionNumber Client::version() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Client::osName() const
+const std::string& Client::osName() const
 {
     return tcp_channel_->peerOsName();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Client::computerName() const
+const std::string& Client::computerName() const
 {
     return tcp_channel_->peerComputerName();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Client::architecture() const
+const std::string& Client::architecture() const
 {
     return tcp_channel_->peerArchitecture();
 }

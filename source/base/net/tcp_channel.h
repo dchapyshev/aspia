@@ -119,10 +119,10 @@ public:
 
     QString peerAddress() const { return address_; }
     QVersionNumber peerVersion() const { return version_; }
-    QString peerOsName() const { return os_name_; }
-    QString peerComputerName() const { return computer_name_; }
-    QString peerDisplayName() const { return display_name_; }
-    QString peerArchitecture() const { return architecture_; }
+    const std::string& peerOsName() const { return os_name_; }
+    const std::string& peerComputerName() const { return computer_name_; }
+    const std::string& peerDisplayName() const { return display_name_; }
+    const std::string& peerArchitecture() const { return architecture_; }
     QString peerUserName() const { return user_name_; }
     qint64 peerUserId() const { return user_id_; }
     quint32 peerSessionType() const { return session_type_; }
@@ -147,10 +147,10 @@ protected:
 
     QString address_;
     QVersionNumber version_;
-    QString os_name_;
-    QString computer_name_;
-    QString display_name_;
-    QString architecture_;
+    std::string os_name_;
+    std::string computer_name_;
+    std::string display_name_;
+    std::string architecture_;
     QString user_name_;
     qint64 user_id_ = 0;
     quint32 session_type_ = 0;

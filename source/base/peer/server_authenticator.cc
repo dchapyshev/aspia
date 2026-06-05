@@ -629,10 +629,10 @@ void ServerAuthenticator::onSessionResponse(const QByteArray& buffer)
         return;
     }
 
-    setPeerOsName(QString::fromStdString(response.os_name()));
-    setPeerComputerName(QString::fromStdString(response.computer_name()));
-    setPeerArch(QString::fromStdString(response.arch()));
-    setPeerDisplayName(QString::fromStdString(response.display_name()));
+    setPeerOsName(response.os_name());
+    setPeerComputerName(response.computer_name());
+    setPeerArch(response.arch());
+    setPeerDisplayName(response.display_name());
     setPeerVersion(response.version());
     is_probe_ = response.probe();
 

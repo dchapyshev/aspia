@@ -144,25 +144,25 @@ void Authenticator::setPeerVersion(const proto::peer::Version& version)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Authenticator::setPeerOsName(const QString& name)
+void Authenticator::setPeerOsName(std::string_view name)
 {
     peer_os_name_ = name;
 }
 
 //--------------------------------------------------------------------------------------------------
-void Authenticator::setPeerComputerName(const QString& name)
+void Authenticator::setPeerComputerName(std::string_view name)
 {
     peer_computer_name_ = name;
 }
 
 //--------------------------------------------------------------------------------------------------
-void Authenticator::setPeerArch(const QString& arch)
+void Authenticator::setPeerArch(std::string_view arch)
 {
     peer_arch_ = arch;
 }
 
 //--------------------------------------------------------------------------------------------------
-void Authenticator::setPeerDisplayName(const QString& display_name)
+void Authenticator::setPeerDisplayName(std::string_view display_name)
 {
     peer_display_name_ = display_name;
 }

@@ -424,10 +424,10 @@ bool ClientAuthenticatorLegacy::readSessionChallenge(const QByteArray& buffer)
         return false;
     }
 
-    setPeerOsName(QString::fromStdString(challenge.os_name()));
-    setPeerComputerName(QString::fromStdString(challenge.computer_name()));
-    setPeerArch(QString::fromStdString(challenge.arch()));
-    setPeerDisplayName(QString::fromStdString(challenge.display_name()));
+    setPeerOsName(challenge.os_name());
+    setPeerComputerName(challenge.computer_name());
+    setPeerArch(challenge.arch());
+    setPeerDisplayName(challenge.display_name());
     setPeerVersion(challenge.version());
 
     CLOG(TRACE) << "Server (version:" << peerVersion().toString() << "name:" << peerComputerName()

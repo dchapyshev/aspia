@@ -74,19 +74,19 @@ QVersionNumber Relay::version() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Relay::osName() const
+const std::string& Relay::osName() const
 {
     return tcp_channel_->peerOsName();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Relay::computerName() const
+const std::string& Relay::computerName() const
 {
     return tcp_channel_->peerComputerName();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Relay::architecture() const
+const std::string& Relay::architecture() const
 {
     return tcp_channel_->peerArchitecture();
 }

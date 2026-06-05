@@ -71,19 +71,19 @@ QVersionNumber Host::version() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Host::osName() const
+const std::string& Host::osName() const
 {
     return tcp_channel_->peerOsName();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Host::computerName() const
+const std::string& Host::computerName() const
 {
     return tcp_channel_->peerComputerName();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Host::architecture() const
+const std::string& Host::architecture() const
 {
     return tcp_channel_->peerArchitecture();
 }

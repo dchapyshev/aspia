@@ -110,9 +110,9 @@ void ClientAdmin::doRelayListRequest(const proto::router::RelayListRequest& requ
         item->set_timepoint(relay->startTime());
         item->set_ip_address(relay->address().toString().toStdString());
         item->mutable_version()->CopyFrom(serialize(relay->version()));
-        item->set_os_name(relay->osName().toStdString());
-        item->set_computer_name(relay->computerName().toStdString());
-        item->set_architecture(relay->architecture().toStdString());
+        item->set_os_name(relay->osName());
+        item->set_computer_name(relay->computerName());
+        item->set_architecture(relay->architecture());
 
         // Statistics info.
         const std::optional<proto::router::RelayStatistics>& statistics = relay->statistics();
@@ -147,9 +147,9 @@ void ClientAdmin::doClientListRequest(const proto::router::ClientListRequest& re
         item->set_timepoint(client->startTime());
         item->set_ip_address(client->address().toString().toStdString());
         item->mutable_version()->CopyFrom(serialize(client->version()));
-        item->set_os_name(client->osName().toStdString());
-        item->set_computer_name(client->computerName().toStdString());
-        item->set_architecture(client->architecture().toStdString());
+        item->set_os_name(client->osName());
+        item->set_computer_name(client->computerName());
+        item->set_architecture(client->architecture());
     }
 
     sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));

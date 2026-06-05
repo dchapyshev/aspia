@@ -53,9 +53,9 @@ public:
     void start();
 
     QVersionNumber version() const;
-    QString osName() const;
-    QString computerName() const;
-    QString architecture() const;
+    const std::string& osName() const;
+    const std::string& computerName() const;
+    const std::string& architecture() const;
     QString userName() const;
     qint64 userId() const;
     proto::router::SessionType sessionType() const;

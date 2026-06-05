@@ -72,10 +72,10 @@ public:
     [[nodiscard]] proto::key_exchange::Identify identify() const { return identify_; }
     [[nodiscard]] proto::key_exchange::Encryption encryption() const { return encryption_; }
     [[nodiscard]] const QVersionNumber& peerVersion() const { return peer_version_; }
-    [[nodiscard]] const QString& peerOsName() const { return peer_os_name_; }
-    [[nodiscard]] const QString& peerComputerName() const { return peer_computer_name_; }
-    [[nodiscard]] const QString& peerArch() const { return peer_arch_; }
-    [[nodiscard]] const QString& peerDisplayName() const { return peer_display_name_; }
+    [[nodiscard]] const std::string& peerOsName() const { return peer_os_name_; }
+    [[nodiscard]] const std::string& peerComputerName() const { return peer_computer_name_; }
+    [[nodiscard]] const std::string& peerArch() const { return peer_arch_; }
+    [[nodiscard]] const std::string& peerDisplayName() const { return peer_display_name_; }
     [[nodiscard]] quint32 sessionType() const { return session_type_; }
     [[nodiscard]] const QString& userName() const { return user_name_; }
     [[nodiscard]] qint64 userId() const { return user_id_; }
@@ -124,10 +124,10 @@ protected:
 
     void finish(const Location& location, ErrorCode error_code);
     void setPeerVersion(const proto::peer::Version& version);
-    void setPeerOsName(const QString& name);
-    void setPeerComputerName(const QString& name);
-    void setPeerArch(const QString& arch);
-    void setPeerDisplayName(const QString& display_name);
+    void setPeerOsName(std::string_view name);
+    void setPeerComputerName(std::string_view name);
+    void setPeerArch(std::string_view arch);
+    void setPeerDisplayName(std::string_view display_name);
 
     proto::key_exchange::Encryption encryption_;
     proto::key_exchange::Identify identify_;
@@ -145,10 +145,10 @@ private:
     QTimer* timer_ = nullptr;
     State state_ = State::STOPPED;
     QVersionNumber peer_version_; // Remote peer version.
-    QString peer_os_name_;
-    QString peer_computer_name_;
-    QString peer_arch_;
-    QString peer_display_name_;
+    std::string peer_os_name_;
+    std::string peer_computer_name_;
+    std::string peer_arch_;
+    std::string peer_display_name_;
 };
 
 Q_DECLARE_METATYPE(Authenticator::ErrorCode)

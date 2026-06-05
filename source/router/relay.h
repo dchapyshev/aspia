@@ -45,9 +45,9 @@ public:
     void start();
 
     QVersionNumber version() const;
-    QString osName() const;
-    QString computerName() const;
-    QString architecture() const;
+    const std::string& osName() const;
+    const std::string& computerName() const;
+    const std::string& architecture() const;
 
     qint64 sessionId() const { return session_id_; }
     const QHostAddress& address() const { return address_; }
