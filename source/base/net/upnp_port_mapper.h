@@ -1,0 +1,70 @@
+//
+// Aspia Project
+// Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+#ifndef BASE_NET_UPNP_PORT_MAPPER_H
+#define BASE_NET_UPNP_PORT_MAPPER_H
+
+#include <QObject>
+
+#include <string>
+#include <thread>
+
+class UpnpPortMapper final : public QObject
+{
+    Q_OBJECT
+
+public:
+    explicit UpnpPortMapper(QObject* parent = nullptr);
+    ~UpnpPortMapper() final;
+
+    // Asynchronously discovers an UPnP IGD and adds a UDP port mapping that forwards the gateway's
+    // external |internal_port| to this host's |internal_port|. On success sig_ready is emitted with
+    // the discovered external address and port; otherwise sig_failed is emitted. The mapping is
+    // removed automatically when the object is destroyed.
+    void addUdpMapping(quint16 internal_port);
+
+signals:
+    void sig_ready(const QString& external_address, quint16 external_port);
+    void sig_failed();
+
+private:
+    struct Result
+    {
+        bool success = false;
+        QString external_address;
+        quint16 external_port = 0;
+        std::string control_url;
+        std::string service_type;
+    };
+
+    static Result doMapping(quint16 internal_port);
+    static void doRemoveMapping(
+        const std::string& control_url, const std::string& service_type, quint16 external_port);
+    void onMappingFinished(const Result& result);
+
+    std::thread worker_;
+
+    bool mapped_ = false;
+    quint16 external_port_ = 0;
+    std::string control_url_;
+    std::string service_type_;
+
+    Q_DISABLE_COPY_MOVE(UpnpPortMapper)
+};
+
+#endif // BASE_NET_UPNP_PORT_MAPPER_H
