@@ -280,41 +280,6 @@ Routers added: %4</source>
         <source>Unknown Drive</source>
         <translation type="unfinished">Unbekanntes Laufwerk</translation>
     </message>
-    <message>
-        <source>TB</source>
-        <translation type="obsolete">TB</translation>
-    </message>
-    <message>
-        <source>GB</source>
-        <translation type="obsolete">GB</translation>
-    </message>
-    <message>
-        <source>MB</source>
-        <translation type="obsolete">MB</translation>
-    </message>
-    <message>
-        <source>kB</source>
-        <translation type="obsolete">kB</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">B</translation>
-    </message>
-</context>
-<context>
-    <name>AddressBookImporter</name>
-    <message>
-        <source>The address book file is corrupted or has an unknown format.</source>
-        <translation type="obsolete">Die Adressbuchdatei ist beschädigt oder hat ein unbekanntes Format.</translation>
-    </message>
-    <message>
-        <source>The address book file is encrypted with an unsupported encryption type.</source>
-        <translation type="obsolete">Die Adressbuchdatei ist mit einem nicht unterstützten Verschlüsselungstyp verschlüsselt.</translation>
-    </message>
-    <message>
-        <source>Unable to decrypt the address book with the specified password.</source>
-        <translation type="obsolete">Das Adressbuch kann nicht mit dem angegebenen Kennwort entschlüsselt werden.</translation>
-    </message>
 </context>
 <context>
     <name>AuthorizationDialog</name>
@@ -412,21 +377,6 @@ Routers added: %4</source>
         <location filename="../common/ui/chat_outgoing_message.ui" line="48"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ChatSessionWindow</name>
-    <message>
-        <source>Ctrl+S</source>
-        <translation type="obsolete">Strg+S</translation>
-    </message>
-    <message>
-        <source>Refresh (F5)</source>
-        <translation type="obsolete">Aktualisieren (F5)</translation>
-    </message>
-    <message>
-        <source>F5</source>
-        <translation type="obsolete">F5</translation>
     </message>
 </context>
 <context>
@@ -1194,35 +1144,12 @@ Routers added: %4</source>
     </message>
 </context>
 <context>
-    <name>DesktopConfigDialog</name>
-    <message>
-        <source>Session Configuration</source>
-        <translation type="vanished">Sitzungskonfiguration</translation>
-    </message>
-    <message>
-        <source>Enable clipboard</source>
-        <translation type="vanished">Zwischenablage erlauben</translation>
-    </message>
-    <message>
-        <source>Disable desktop effects</source>
-        <translation type="vanished">Desktop-Effekte deaktivieren</translation>
-    </message>
-    <message>
-        <source>Disable desktop wallpaper</source>
-        <translation type="vanished">Desktop-Hintergrundbild deaktivieren</translation>
-    </message>
-</context>
-<context>
     <name>DesktopToolBar</name>
     <message>
         <location filename="../client/ui/desktop/desktop_toolbar.ui" line="117"/>
         <location filename="../client/ui/desktop/desktop_toolbar.ui" line="120"/>
         <source>Lock toolbar</source>
         <translation type="unfinished">Symbolleiste sperren</translation>
-    </message>
-    <message>
-        <source>Session configuration</source>
-        <translation type="obsolete">Sitzungskonfiguration</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop/desktop_toolbar.ui" line="129"/>
@@ -1600,21 +1527,6 @@ Routers added: %4</source>
     </message>
 </context>
 <context>
-    <name>ExportPasswordDialog</name>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">Kennwort:</translation>
-    </message>
-    <message>
-        <source>Skip</source>
-        <translation type="obsolete">Überspringen</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Warnung</translation>
-    </message>
-</context>
-<context>
     <name>FileError</name>
     <message>
         <location filename="../client/ui/file_transfer/file_error_code.cc" line="33"/>
@@ -1719,26 +1631,6 @@ Routers added: %4</source>
         <location filename="../client/ui/file_transfer/file_list_model.cc" line="395"/>
         <source>Modified</source>
         <translation type="unfinished">Geändert</translation>
-    </message>
-    <message>
-        <source>TB</source>
-        <translation type="obsolete">TB</translation>
-    </message>
-    <message>
-        <source>GB</source>
-        <translation type="obsolete">GB</translation>
-    </message>
-    <message>
-        <source>MB</source>
-        <translation type="obsolete">MB</translation>
-    </message>
-    <message>
-        <source>kB</source>
-        <translation type="obsolete">kB</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">B</translation>
     </message>
 </context>
 <context>
@@ -1860,41 +1752,6 @@ Routers added: %4</source>
     </message>
 </context>
 <context>
-    <name>FileRemoveDialog</name>
-    <message>
-        <source>Deleting Items</source>
-        <translation type="vanished">Elemente löschen</translation>
-    </message>
-    <message>
-        <source>Creating a list of files to delete...</source>
-        <translation type="vanished">Liste der zu löschenden Dateien erstellen...</translation>
-    </message>
-    <message>
-        <source>Deleting: %1</source>
-        <translation type="obsolete">Löschen: %1</translation>
-    </message>
-    <message>
-        <source>An error occurred while retrieving the list of files: %1</source>
-        <translation type="obsolete">Beim Abrufen der Dateiliste ist ein Fehler aufgetreten: %1</translation>
-    </message>
-    <message>
-        <source>Failed to delete &quot;%1&quot;: %2.</source>
-        <translation type="obsolete">Fehler beim Löschen &quot;%1&quot;: %2.</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Warnung</translation>
-    </message>
-    <message>
-        <source>Skip</source>
-        <translation type="obsolete">Überspringen</translation>
-    </message>
-    <message>
-        <source>Abort</source>
-        <translation type="obsolete">Abbrechen</translation>
-    </message>
-</context>
-<context>
     <name>FileRemoveWidget</name>
     <message>
         <location filename="../client/ui/file_transfer/file_remove_widget.ui" line="35"/>
@@ -1966,100 +1823,6 @@ Routers added: %4</source>
         <location filename="../client/ui/file_transfer/file_remove_widget.cc" line="185"/>
         <source>Abort</source>
         <translation type="unfinished">Abbrechen</translation>
-    </message>
-</context>
-<context>
-    <name>FileTransferDialog</name>
-    <message>
-        <source>File Transfer</source>
-        <translation type="vanished">Dateiübertragung</translation>
-    </message>
-    <message>
-        <source>Current Task: Creating a list of files to copy...</source>
-        <translation type="vanished">Aktuelle Aufgabe: Liste der zu kopierenden Dateien erstellen...</translation>
-    </message>
-    <message>
-        <source>From: ...</source>
-        <translation type="vanished">Von: ...</translation>
-    </message>
-    <message>
-        <source>To: ...</source>
-        <translation type="vanished">Zu: ...</translation>
-    </message>
-    <message>
-        <source>Progress</source>
-        <translation type="vanished">Fortschritt</translation>
-    </message>
-    <message>
-        <source>Total:</source>
-        <translation type="vanished">Gesamt:</translation>
-    </message>
-    <message>
-        <source>Item:</source>
-        <translation type="vanished">Element:</translation>
-    </message>
-    <message>
-        <source>Current Task: Copying items.</source>
-        <translation type="obsolete">Aktuelle Aufgabe: Elemente kopieren.</translation>
-    </message>
-    <message>
-        <source>From: %1</source>
-        <translation type="obsolete">Von: %1</translation>
-    </message>
-    <message>
-        <source>To: %1</source>
-        <translation type="obsolete">Zu: %1</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Warnung</translation>
-    </message>
-    <message>
-        <source>Skip</source>
-        <translation type="obsolete">Überspringen</translation>
-    </message>
-    <message>
-        <source>Replace</source>
-        <translation type="obsolete">Ersetzen</translation>
-    </message>
-    <message>
-        <source>Replace All</source>
-        <translation type="obsolete">Alle ersetzen</translation>
-    </message>
-    <message>
-        <source>Abort</source>
-        <translation type="obsolete">Abbrechen</translation>
-    </message>
-    <message>
-        <source>Failed to create directory &quot;%1&quot;: %2</source>
-        <translation type="obsolete">Fehler beim Erstellen des Verzeichnisses &quot;%1&quot;: %2</translation>
-    </message>
-    <message>
-        <source>Failed to create file &quot;%1&quot;: %2</source>
-        <translation type="obsolete">Fehler beim Erstellen der Datei &quot;%1&quot;: %2</translation>
-    </message>
-    <message>
-        <source>Failed to open file &quot;%1&quot;: %2</source>
-        <translation type="obsolete">Fehler beim Öffnen der Datei &quot;%1&quot;: %2</translation>
-    </message>
-    <message>
-        <source>Failed to write file &quot;%1&quot;: %2</source>
-        <translation type="obsolete">Fehler beim Schreiben der Datei &quot;%1&quot;: %2</translation>
-    </message>
-    <message>
-        <source>Failed to read file &quot;%1&quot;: %2</source>
-        <translation type="obsolete">Fehler beim Lesen der Datei &quot;%1&quot;: %2</translation>
-    </message>
-</context>
-<context>
-    <name>FileTransferSessionWindow</name>
-    <message>
-        <source>Local Computer</source>
-        <translation type="obsolete">Lokaler Computer</translation>
-    </message>
-    <message>
-        <source>Remote Computer</source>
-        <translation type="obsolete">Remote Computer</translation>
     </message>
 </context>
 <context>
@@ -2636,14 +2399,6 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add Computer</source>
-        <translation type="obsolete">Computer hinzufügen</translation>
-    </message>
-    <message>
-        <source>Delete Computer</source>
-        <translation type="obsolete">Computer löschen</translation>
-    </message>
-    <message>
         <location filename="../client/ui/hosts_tab.ui" line="119"/>
         <source>Add Host</source>
         <translation type="unfinished"></translation>
@@ -2763,10 +2518,6 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Delete</source>
-        <translation type="obsolete">Löschen</translation>
-    </message>
-    <message>
         <location filename="../client/ui/hosts_tab.cc" line="412"/>
         <source>Hosts</source>
         <translation type="unfinished"></translation>
@@ -2775,10 +2526,6 @@ Routers added: %4</source>
         <location filename="../client/ui/hosts_tab.cc" line="833"/>
         <source>(copy)</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
-        <translation type="obsolete">Möchten Sie den Computer &quot;%1&quot; wirklich löschen?</translation>
     </message>
     <message>
         <location filename="../client/ui/hosts_tab.cc" line="580"/>
@@ -2979,47 +2726,6 @@ Hosts skipped: %6</source>
     </message>
 </context>
 <context>
-    <name>LocalComputerDialog</name>
-    <message>
-        <source>Computer</source>
-        <translation type="obsolete">Computer</translation>
-    </message>
-    <message>
-        <source>Name:</source>
-        <translation type="obsolete">Name:</translation>
-    </message>
-    <message>
-        <source>Address:</source>
-        <translation type="obsolete">Adresse:</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">Kennwort:</translation>
-    </message>
-    <message>
-        <source>Comment:</source>
-        <translation type="obsolete">Kommentar:</translation>
-    </message>
-    <message>
-        <source>Add Computer</source>
-        <translation type="obsolete">Computer hinzufügen</translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-</context>
-<context>
     <name>LocalGroupDialog</name>
     <message>
         <location filename="../client/ui/hosts/local_group_dialog.ui" line="14"/>
@@ -3140,22 +2846,11 @@ Hosts skipped: %6</source>
         <source>Status update...</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
-        <translation type="obsolete">Möchten Sie den Computer &quot;%1&quot; wirklich löschen?</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/ui/hosts/local_group_widget.cc" line="422"/>
         <source>%n child group(s)</source>
         <translation type="unfinished">
             <numerusform>%n Kindgruppe(n)</numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n child computer(s)</source>
-        <translation type="obsolete">
-            <numerusform>%n Kindcomputer</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -3342,14 +3037,6 @@ Hosts skipped: %6</source>
         <translation type="unfinished">Statusleiste</translation>
     </message>
     <message>
-        <source>Desktop View</source>
-        <translation type="obsolete">Desktopansicht</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="obsolete">Dateiübertragung</translation>
-    </message>
-    <message>
         <location filename="../client/ui/main_window.ui" line="70"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
@@ -3435,13 +3122,6 @@ Hosts skipped: %6</source>
         <location filename="../client/ui/main_window.cc" line="346"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>MasterPasswordDialog</name>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Warnung</translation>
     </message>
 </context>
 <context>
@@ -3772,10 +3452,6 @@ Hosts skipped: %6</source>
 <context>
     <name>RouterGroupWidget</name>
     <message>
-        <source>Name</source>
-        <translation type="obsolete">Name</translation>
-    </message>
-    <message>
         <location filename="../client/ui/hosts/router_group_widget.ui" line="45"/>
         <source>Display Name</source>
         <translation type="unfinished"></translation>
@@ -3900,17 +3576,6 @@ Hosts skipped: %6</source>
         <location filename="../client/ui/hosts/router_host_dialog.cc" line="106"/>
         <source>Unknown error type.</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>RouterPasswordDialog</name>
-    <message>
-        <source>The passwords you entered do not match.</source>
-        <translation type="obsolete">Die eingegebenen Kennwörter stimmen nicht überein.</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Warnung</translation>
     </message>
 </context>
 <context>
@@ -4316,26 +3981,6 @@ Hosts skipped: %6</source>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
-    </message>
-    <message>
-        <source>TB</source>
-        <translation type="obsolete">TB</translation>
-    </message>
-    <message>
-        <source>GB</source>
-        <translation type="obsolete">GB</translation>
-    </message>
-    <message>
-        <source>MB</source>
-        <translation type="obsolete">MB</translation>
-    </message>
-    <message>
-        <source>kB</source>
-        <translation type="obsolete">kB</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">B</translation>
     </message>
     <message>
         <location filename="../client/ui/hosts/router_widget.cc" line="1012"/>
@@ -4949,29 +4594,6 @@ Hosts skipped: %6</source>
         <location filename="../common/ui/session_type.cc" line="42"/>
         <source>Chat</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>SettingsDialog</name>
-    <message>
-        <source>Desktop</source>
-        <translation type="obsolete">Desktop</translation>
-    </message>
-    <message>
-        <source>Enable clipboard</source>
-        <translation type="obsolete">Zwischenablage erlauben</translation>
-    </message>
-    <message>
-        <source>Disable desktop effects</source>
-        <translation type="obsolete">Desktop-Effekte deaktivieren</translation>
-    </message>
-    <message>
-        <source>Disable desktop wallpaper</source>
-        <translation type="obsolete">Desktop-Hintergrundbild deaktivieren</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation type="obsolete">Löschen</translation>
     </message>
 </context>
 <context>
@@ -6008,29 +5630,6 @@ Hosts skipped: %6</source>
     </message>
 </context>
 <context>
-    <name>SysInfoWidget</name>
-    <message>
-        <source>TB</source>
-        <translation type="obsolete">TB</translation>
-    </message>
-    <message>
-        <source>GB</source>
-        <translation type="obsolete">GB</translation>
-    </message>
-    <message>
-        <source>MB</source>
-        <translation type="obsolete">MB</translation>
-    </message>
-    <message>
-        <source>kB</source>
-        <translation type="obsolete">kB</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">B</translation>
-    </message>
-</context>
-<context>
     <name>SysInfoWidgetDrivers</name>
     <message>
         <location filename="../client/ui/sys_info/sys_info_widget_drivers.cc" line="139"/>
@@ -7062,29 +6661,6 @@ Hosts skipped: %6</source>
     </message>
 </context>
 <context>
-    <name>SystemInfoSessionWindow</name>
-    <message>
-        <source>Ctrl+S</source>
-        <translation type="obsolete">Strg+S</translation>
-    </message>
-    <message>
-        <source>Refresh (F5)</source>
-        <translation type="obsolete">Aktualisieren (F5)</translation>
-    </message>
-    <message>
-        <source>F5</source>
-        <translation type="obsolete">F5</translation>
-    </message>
-    <message>
-        <source>Connections</source>
-        <translation type="obsolete">Verbindungen</translation>
-    </message>
-    <message>
-        <source>Users</source>
-        <translation type="obsolete">Benutzer</translation>
-    </message>
-</context>
-<context>
     <name>SystemInfoWindow</name>
     <message>
         <location filename="../client/ui/sys_info/system_info_window.ui" line="14"/>
@@ -7588,21 +7164,6 @@ Hosts skipped: %6</source>
         <location filename="../common/ui/two_factor_enroll_dialog.ui" line="62"/>
         <source>Enter the 6-digit code shown by the app to confirm:</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UnlockDialog</name>
-    <message>
-        <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation type="obsolete">Adressbuch ist verschlüsselt. Um zu öffnen, müssen Sie das Kennwort eingeben.</translation>
-    </message>
-    <message>
-        <source>Encryption Type:</source>
-        <translation type="obsolete">Verschlüsselungstyp:</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">Kennwort:</translation>
     </message>
 </context>
 <context>

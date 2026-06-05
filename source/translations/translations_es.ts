@@ -25,10 +25,6 @@
         <translation type="unfinished">El archivo del libro de direcciones está dañado o tiene un formato desconocido.</translation>
     </message>
     <message>
-        <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation type="obsolete">ChaCha20 + Poly1305 (256-bit key)</translation>
-    </message>
-    <message>
         <location filename="../client/aab_importer.cc" line="324"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation type="unfinished">El archivo del libro de direcciones está cifrado con un tipo de cifrado no admitido.</translation>
@@ -286,25 +282,6 @@ Routers added: %4</source>
     </message>
 </context>
 <context>
-    <name>AddressBookImporter</name>
-    <message>
-        <source>The address book file is corrupted or has an unknown format.</source>
-        <translation type="obsolete">El archivo del libro de direcciones está dañado o tiene un formato desconocido.</translation>
-    </message>
-    <message>
-        <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation type="obsolete">ChaCha20 + Poly1305 (256-bit key)</translation>
-    </message>
-    <message>
-        <source>The address book file is encrypted with an unsupported encryption type.</source>
-        <translation type="obsolete">El archivo del libro de direcciones está cifrado con un tipo de cifrado no admitido.</translation>
-    </message>
-    <message>
-        <source>Unable to decrypt the address book with the specified password.</source>
-        <translation type="obsolete">No se puede descifrar el libro de direcciones con la contraseña especificada.</translation>
-    </message>
-</context>
-<context>
     <name>AuthorizationDialog</name>
     <message>
         <location filename="../client/ui/authorization_dialog.ui" line="14"/>
@@ -400,17 +377,6 @@ Routers added: %4</source>
         <location filename="../common/ui/chat_outgoing_message.ui" line="48"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ChatSessionWindow</name>
-    <message>
-        <source>Ctrl+S</source>
-        <translation type="obsolete">Ctrl+S</translation>
-    </message>
-    <message>
-        <source>F5</source>
-        <translation type="obsolete">F5</translation>
     </message>
 </context>
 <context>
@@ -1178,45 +1144,6 @@ Routers added: %4</source>
     </message>
 </context>
 <context>
-    <name>DesktopConfigDialog</name>
-    <message>
-        <source>Appearance</source>
-        <translation type="obsolete">Apariencia</translation>
-    </message>
-    <message>
-        <source>Block remote input</source>
-        <translation type="obsolete">Bloquear entrada remota</translation>
-    </message>
-    <message>
-        <source>Features</source>
-        <translation type="obsolete">Características</translation>
-    </message>
-    <message>
-        <source>Enable audio</source>
-        <translation type="obsolete">Activar audio</translation>
-    </message>
-    <message>
-        <source>Enable clipboard</source>
-        <translation type="obsolete">Activar portapapeles</translation>
-    </message>
-    <message>
-        <source>Disable desktop effects</source>
-        <translation type="obsolete">Desactivar efectos de escritorio</translation>
-    </message>
-    <message>
-        <source>Disable desktop wallpaper</source>
-        <translation type="obsolete">Desactivar fondo de escritorio</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Otro</translation>
-    </message>
-    <message>
-        <source>Lock computer at disconnect</source>
-        <translation type="obsolete">Bloquear ordenador al desconectar</translation>
-    </message>
-</context>
-<context>
     <name>DesktopToolBar</name>
     <message>
         <location filename="../client/ui/desktop/desktop_toolbar.ui" line="117"/>
@@ -1600,32 +1527,6 @@ Routers added: %4</source>
     </message>
 </context>
 <context>
-    <name>ExportPasswordDialog</name>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">Contraseña:</translation>
-    </message>
-    <message>
-        <source>Password you entered does not meet the security requirements!</source>
-        <translation type="obsolete">¡La contraseña que ingresó no cumple con los requisitos de seguridad!</translation>
-    </message>
-    <message numerus="yes">
-        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>La contraseña debe contener caracteres en minúsculas, mayúsculas, números y no debe tener menos de %n caracter.</numerusform>
-            <numerusform>La contraseña debe contener caracteres en minúsculas, mayúsculas, números y no debe tener menos de %n caracteres.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Do you want to enter a different password?</source>
-        <translation type="obsolete">¿Quieres ingresar una contraseña diferente?</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Advertencia</translation>
-    </message>
-</context>
-<context>
     <name>FileError</name>
     <message>
         <location filename="../client/ui/file_transfer/file_error_code.cc" line="33"/>
@@ -1851,13 +1752,6 @@ Routers added: %4</source>
     </message>
 </context>
 <context>
-    <name>FileRemoveDialog</name>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Advertencia</translation>
-    </message>
-</context>
-<context>
     <name>FileRemoveWidget</name>
     <message>
         <location filename="../client/ui/file_transfer/file_remove_widget.ui" line="35"/>
@@ -1929,17 +1823,6 @@ Routers added: %4</source>
         <location filename="../client/ui/file_transfer/file_remove_widget.cc" line="185"/>
         <source>Abort</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>FileTransferDialog</name>
-    <message>
-        <source>File Transfer</source>
-        <translation type="obsolete">Transferir Archivos</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Advertencia</translation>
     </message>
 </context>
 <context>
@@ -2516,18 +2399,6 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add Computer</source>
-        <translation type="obsolete">Añadir Ordenador</translation>
-    </message>
-    <message>
-        <source>Delete Computer</source>
-        <translation type="obsolete">Eliminar Ordenador</translation>
-    </message>
-    <message>
-        <source>Copy Computer</source>
-        <translation type="obsolete">Copiar Ordenador</translation>
-    </message>
-    <message>
         <location filename="../client/ui/hosts_tab.ui" line="119"/>
         <source>Add Host</source>
         <translation type="unfinished"></translation>
@@ -2655,10 +2526,6 @@ Routers added: %4</source>
         <location filename="../client/ui/hosts_tab.cc" line="833"/>
         <source>(copy)</source>
         <translation type="unfinished">(copiar)</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
-        <translation type="obsolete">¿Está seguro de que desea eliminar el ordenador &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/ui/hosts_tab.cc" line="580"/>
@@ -2837,10 +2704,6 @@ Hosts exported: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation type="obsolete">ChaCha20 + Poly1305 (256-bit key)</translation>
-    </message>
-    <message>
         <location filename="../client/json_backup.cc" line="527"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation type="unfinished"></translation>
@@ -2860,50 +2723,6 @@ Groups skipped: %4
 Hosts added: %5
 Hosts skipped: %6</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>JsonImporter</name>
-    <message>
-        <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation type="obsolete">ChaCha20 + Poly1305 (256-bit key)</translation>
-    </message>
-</context>
-<context>
-    <name>LocalComputerDialog</name>
-    <message>
-        <source>Name:</source>
-        <translation type="obsolete">Nombre:</translation>
-    </message>
-    <message>
-        <source>Address:</source>
-        <translation type="obsolete">Dirección:</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">Contraseña:</translation>
-    </message>
-    <message>
-        <source>Add Computer</source>
-        <translation type="obsolete">Añadir Ordenador</translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>Nombre demasiado largo. La longitud máxima del nombre es %n caracter.</numerusform>
-            <numerusform>Nombre demasiado largo. La longitud máxima del nombre es %n caracteres.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>An invalid computer address was entered.</source>
-        <translation type="obsolete">Se ingresó una dirección de ordenador no válida.</translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>Comentario demasiado largo. La longitud máxima del comentario es de %n caracter.</numerusform>
-            <numerusform>Comentario demasiado largo. La longitud máxima del comentario es de %n caracteres.</numerusform>
-        </translation>
     </message>
 </context>
 <context>
@@ -3027,27 +2846,12 @@ Hosts skipped: %6</source>
         <source>Status update...</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>(copy)</source>
-        <translation type="obsolete">(copiar)</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
-        <translation type="obsolete">¿Está seguro de que desea eliminar el ordenador &quot;%1&quot;?</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/ui/hosts/local_group_widget.cc" line="422"/>
         <source>%n child group(s)</source>
         <translation type="unfinished">
             <numerusform>%n grupo secundario</numerusform>
             <numerusform>%n grupos secundarios</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n child computer(s)</source>
-        <translation type="obsolete">
-            <numerusform>%n ordenador secundario</numerusform>
-            <numerusform>%n ordenadores secundarios</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -3223,14 +3027,6 @@ Hosts skipped: %6</source>
         <translation type="unfinished">F1</translation>
     </message>
     <message>
-        <source>Desktop View</source>
-        <translation type="obsolete">Ver Escritorio</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="obsolete">Transferir Archivos</translation>
-    </message>
-    <message>
         <location filename="../client/ui/main_window.ui" line="70"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
@@ -3302,10 +3098,6 @@ Hosts skipped: %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Hide</source>
-        <translation type="obsolete">Ocultar</translation>
-    </message>
-    <message>
         <location filename="../client/ui/main_window.ui" line="82"/>
         <source>View</source>
         <translation type="unfinished">Ver</translation>
@@ -3330,36 +3122,6 @@ Hosts skipped: %6</source>
         <location filename="../client/ui/main_window.cc" line="346"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
-        <translation type="obsolete">La conexión por ID se especifica en las propiedades del ordenador, pero la ruta no está configurada. Verifique los parámetros de la ruta en las propiedades del libro de direcciones.</translation>
-    </message>
-    <message>
-        <source>Show</source>
-        <translation type="obsolete">Mostrar</translation>
-    </message>
-</context>
-<context>
-    <name>MasterPasswordDialog</name>
-    <message>
-        <source>Password you entered does not meet the security requirements!</source>
-        <translation type="obsolete">¡La contraseña que ingresó no cumple con los requisitos de seguridad!</translation>
-    </message>
-    <message numerus="yes">
-        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>La contraseña debe contener caracteres en minúsculas, mayúsculas, números y no debe tener menos de %n caracter.</numerusform>
-            <numerusform>La contraseña debe contener caracteres en minúsculas, mayúsculas, números y no debe tener menos de %n caracteres.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Do you want to enter a different password?</source>
-        <translation type="obsolete">¿Quieres ingresar una contraseña diferente?</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Advertencia</translation>
     </message>
 </context>
 <context>
@@ -3814,39 +3576,6 @@ Hosts skipped: %6</source>
         <location filename="../client/ui/hosts/router_host_dialog.cc" line="106"/>
         <source>Unknown error type.</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>RouterPasswordDialog</name>
-    <message>
-        <source>The passwords you entered do not match.</source>
-        <translation type="obsolete">Las contraseñas no coinciden.</translation>
-    </message>
-    <message numerus="yes">
-        <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>La contraseña no puede estar vacía y no debe exceder los %n caracter.</numerusform>
-            <numerusform>La contraseña no puede estar vacía y no debe exceder los %n caracteres.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Password you entered does not meet the security requirements!</source>
-        <translation type="obsolete">¡La contraseña que ingresó no cumple con los requisitos de seguridad!</translation>
-    </message>
-    <message numerus="yes">
-        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>La contraseña debe contener caracteres en minúsculas, mayúsculas, números y no debe tener menos de %n caracter.</numerusform>
-            <numerusform>La contraseña debe contener caracteres en minúsculas, mayúsculas, números y no debe tener menos de %n caracteres.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Do you want to enter a different password?</source>
-        <translation type="obsolete">¿Quieres ingresar una contraseña diferente?</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Advertencia</translation>
     </message>
 </context>
 <context>
@@ -4862,72 +4591,9 @@ Hosts skipped: %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Manage</source>
-        <translation type="obsolete">Administrar</translation>
-    </message>
-    <message>
         <location filename="../common/ui/session_type.cc" line="42"/>
         <source>Chat</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>SettingsDialog</name>
-    <message>
-        <source>Router</source>
-        <translation type="obsolete">Ruta</translation>
-    </message>
-    <message>
-        <source>Features</source>
-        <translation type="obsolete">Características</translation>
-    </message>
-    <message>
-        <source>Enable audio</source>
-        <translation type="obsolete">Activar audio</translation>
-    </message>
-    <message>
-        <source>Enable clipboard</source>
-        <translation type="obsolete">Activar portapapeles</translation>
-    </message>
-    <message>
-        <source>Appearance</source>
-        <translation type="obsolete">Apariencia</translation>
-    </message>
-    <message>
-        <source>Disable desktop effects</source>
-        <translation type="obsolete">Desactivar efectos de escritorio</translation>
-    </message>
-    <message>
-        <source>Disable desktop wallpaper</source>
-        <translation type="obsolete">Desactivar fondo de escritorio</translation>
-    </message>
-    <message>
-        <source>Lock computer at disconnect</source>
-        <translation type="obsolete">Bloquear ordenador al desconectar</translation>
-    </message>
-    <message>
-        <source>Block remote input</source>
-        <translation type="obsolete">Bloquear entrada remota</translation>
-    </message>
-    <message>
-        <source>Check for updates on startup</source>
-        <translation type="obsolete">Buscar actualizaciones al inicio del sistema</translation>
-    </message>
-    <message>
-        <source>Use custom update server</source>
-        <translation type="obsolete">Usar servidor de actualización personalizado</translation>
-    </message>
-    <message>
-        <source>Server:</source>
-        <translation type="obsolete">Server:</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Otro</translation>
-    </message>
-    <message>
-        <source>General</source>
-        <translation type="obsolete">General</translation>
     </message>
 </context>
 <context>
@@ -6995,17 +6661,6 @@ Hosts skipped: %6</source>
     </message>
 </context>
 <context>
-    <name>SystemInfoSessionWindow</name>
-    <message>
-        <source>Ctrl+S</source>
-        <translation type="obsolete">Ctrl+S</translation>
-    </message>
-    <message>
-        <source>F5</source>
-        <translation type="obsolete">F5</translation>
-    </message>
-</context>
-<context>
     <name>SystemInfoWindow</name>
     <message>
         <location filename="../client/ui/sys_info/system_info_window.ui" line="14"/>
@@ -7509,21 +7164,6 @@ Hosts skipped: %6</source>
         <location filename="../common/ui/two_factor_enroll_dialog.ui" line="62"/>
         <source>Enter the 6-digit code shown by the app to confirm:</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UnlockDialog</name>
-    <message>
-        <source>File:</source>
-        <translation type="obsolete">Archivo:</translation>
-    </message>
-    <message>
-        <source>Encryption Type:</source>
-        <translation type="obsolete">Tipo de cifrado:</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">Contraseña:</translation>
     </message>
 </context>
 <context>

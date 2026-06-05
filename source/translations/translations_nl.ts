@@ -25,10 +25,6 @@
         <translation type="unfinished">Het adresboek bestand is beschadigd of heeft een onbekende indeling.</translation>
     </message>
     <message>
-        <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation type="obsolete">ChaCha20 + Poly1305 (256-bit key)</translation>
-    </message>
-    <message>
         <location filename="../client/aab_importer.cc" line="324"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation type="unfinished">Het adresboek bestand is versleuteld met een encryptie type dat niet ondersteund wordt.</translation>
@@ -284,45 +280,6 @@ Routers added: %4</source>
         <source>Unknown Drive</source>
         <translation type="unfinished">Onbekende Schijf</translation>
     </message>
-    <message>
-        <source>TB</source>
-        <translation type="obsolete">TB</translation>
-    </message>
-    <message>
-        <source>GB</source>
-        <translation type="obsolete">GB</translation>
-    </message>
-    <message>
-        <source>MB</source>
-        <translation type="obsolete">MB</translation>
-    </message>
-    <message>
-        <source>kB</source>
-        <translation type="obsolete">kB</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">B</translation>
-    </message>
-</context>
-<context>
-    <name>AddressBookImporter</name>
-    <message>
-        <source>The address book file is corrupted or has an unknown format.</source>
-        <translation type="obsolete">Het adresboek bestand is beschadigd of heeft een onbekende indeling.</translation>
-    </message>
-    <message>
-        <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation type="obsolete">ChaCha20 + Poly1305 (256-bit key)</translation>
-    </message>
-    <message>
-        <source>The address book file is encrypted with an unsupported encryption type.</source>
-        <translation type="obsolete">Het adresboek bestand is versleuteld met een encryptie type dat niet ondersteund wordt.</translation>
-    </message>
-    <message>
-        <source>Unable to decrypt the address book with the specified password.</source>
-        <translation type="obsolete">Kan het adresboek niet ontsleutelen met het opgegeven wachtwoord.</translation>
-    </message>
 </context>
 <context>
     <name>AuthorizationDialog</name>
@@ -420,57 +377,6 @@ Routers added: %4</source>
         <location filename="../common/ui/chat_outgoing_message.ui" line="48"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ChatSessionWindow</name>
-    <message>
-        <source>System Information</source>
-        <translation type="obsolete">Systeem Informatie</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Opslaan</translation>
-    </message>
-    <message>
-        <source>Save (Ctrl+S)</source>
-        <translation type="obsolete">Opslaan (Ctrl+S)</translation>
-    </message>
-    <message>
-        <source>Ctrl+S</source>
-        <translation type="obsolete">Ctrl+P</translation>
-    </message>
-    <message>
-        <source>Print</source>
-        <translation type="obsolete">Printen</translation>
-    </message>
-    <message>
-        <source>Print (Ctrl+P)</source>
-        <translation type="obsolete">Printen(Ctrl+P)</translation>
-    </message>
-    <message>
-        <source>Copy Row</source>
-        <translation type="obsolete">Kopieer Rij</translation>
-    </message>
-    <message>
-        <source>Copy Name</source>
-        <translation type="obsolete">Kopieer Naam</translation>
-    </message>
-    <message>
-        <source>Copy Value</source>
-        <translation type="obsolete">Kopieer Waarde</translation>
-    </message>
-    <message>
-        <source>Refresh</source>
-        <translation type="obsolete">Vernieuwen</translation>
-    </message>
-    <message>
-        <source>Refresh (F5)</source>
-        <translation type="obsolete">Vernieuwen (F5)</translation>
-    </message>
-    <message>
-        <source>F5</source>
-        <translation type="obsolete">F5</translation>
     </message>
 </context>
 <context>
@@ -649,14 +555,6 @@ Routers added: %4</source>
 </context>
 <context>
     <name>Client</name>
-    <message>
-        <source>Remote computer address.</source>
-        <translation type="vanished">Adres van computer op afstand</translation>
-    </message>
-    <message>
-        <source>Name of user.</source>
-        <translation type="vanished">Naam van de gebruiker.</translation>
-    </message>
     <message>
         <location filename="../client/main.cc" line="103"/>
         <source>Set Master Password</source>
@@ -1246,78 +1144,12 @@ Routers added: %4</source>
     </message>
 </context>
 <context>
-    <name>DesktopConfigDialog</name>
-    <message>
-        <source>Session Configuration</source>
-        <translation type="vanished">Sessie Eigenschappen</translation>
-    </message>
-    <message>
-        <source>Block remote input</source>
-        <translation type="vanished">Blokkeer invoer op afstand</translation>
-    </message>
-    <message>
-        <source>Features</source>
-        <translation type="obsolete">Features</translation>
-    </message>
-    <message>
-        <source>Enable audio</source>
-        <translation type="obsolete">Geluid inschakelen</translation>
-    </message>
-    <message>
-        <source>Enable clipboard</source>
-        <translation type="vanished">Klembord inschakelen</translation>
-    </message>
-    <message>
-        <source>Appearance</source>
-        <translation type="obsolete">Uiterlijk</translation>
-    </message>
-    <message>
-        <source>Disable desktop effects</source>
-        <translation type="vanished">Schakel bureaublad effecten uit</translation>
-    </message>
-    <message>
-        <source>Disable desktop wallpaper</source>
-        <translation type="vanished">Geen bureaublad achtergrond</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Overige</translation>
-    </message>
-    <message>
-        <source>Lock computer at disconnect</source>
-        <translation type="obsolete">Computer vergrendelen bij verbroken verbinding</translation>
-    </message>
-    <message>
-        <source>Send key combinations</source>
-        <translation type="obsolete">Stuur toets combinaties</translation>
-    </message>
-</context>
-<context>
-    <name>DesktopSessionWindow</name>
-    <message>
-        <source>Save File</source>
-        <translation type="obsolete">Bestand Opslaan</translation>
-    </message>
-    <message>
-        <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
-        <translation type="obsolete">PNG Afbeelding (*.png);;BMP Afbeelding (*.bmp)</translation>
-    </message>
-    <message>
-        <source>Could not save image</source>
-        <translation type="obsolete">Kon het bestand niet opslaan</translation>
-    </message>
-</context>
-<context>
     <name>DesktopToolBar</name>
     <message>
         <location filename="../client/ui/desktop/desktop_toolbar.ui" line="117"/>
         <location filename="../client/ui/desktop/desktop_toolbar.ui" line="120"/>
         <source>Lock toolbar</source>
         <translation type="unfinished">Werkbalk vergrendelen</translation>
-    </message>
-    <message>
-        <source>Session configuration</source>
-        <translation type="obsolete">Sessie configuratie</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop/desktop_toolbar.ui" line="129"/>
@@ -1379,10 +1211,6 @@ Routers added: %4</source>
         <location filename="../client/ui/desktop/desktop_toolbar.cc" line="867"/>
         <source>Scale</source>
         <translation type="unfinished">Schaling</translation>
-    </message>
-    <message>
-        <source>Send key combinations</source>
-        <translation type="obsolete">Stuur toets combinaties</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop/desktop_toolbar.ui" line="228"/>
@@ -1699,40 +1527,6 @@ Routers added: %4</source>
     </message>
 </context>
 <context>
-    <name>ExportPasswordDialog</name>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">Wachtwoord:</translation>
-    </message>
-    <message>
-        <source>Skip</source>
-        <translation type="obsolete">Overslaan</translation>
-    </message>
-    <message>
-        <source>Password cannot be empty.</source>
-        <translation type="obsolete">Wachtwoord mag niet leeg zijn.</translation>
-    </message>
-    <message>
-        <source>Password you entered does not meet the security requirements!</source>
-        <translation type="obsolete">Het ingevoerde wachtwoord komt niet overeen met de beveiligings eisen!</translation>
-    </message>
-    <message numerus="yes">
-        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>Het wachtwoord moet kleine, hoofdletters en nummers bevatten, en mag niet korter zijn dan %n karakter.</numerusform>
-            <numerusform>Het wachtwoord moet kleine, hoofdletters en nummers bevatten, en mag niet korter zijn dan %n karakters.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Do you want to enter a different password?</source>
-        <translation type="obsolete">Wilt U een ander wachtwoord invoeren?</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Waarschuwing</translation>
-    </message>
-</context>
-<context>
     <name>FileError</name>
     <message>
         <location filename="../client/ui/file_transfer/file_error_code.cc" line="33"/>
@@ -1837,26 +1631,6 @@ Routers added: %4</source>
         <location filename="../client/ui/file_transfer/file_list_model.cc" line="395"/>
         <source>Modified</source>
         <translation type="unfinished">Aangepast</translation>
-    </message>
-    <message>
-        <source>TB</source>
-        <translation type="obsolete">TB</translation>
-    </message>
-    <message>
-        <source>GB</source>
-        <translation type="obsolete">GB</translation>
-    </message>
-    <message>
-        <source>MB</source>
-        <translation type="obsolete">MB</translation>
-    </message>
-    <message>
-        <source>kB</source>
-        <translation type="obsolete">kB</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">B</translation>
     </message>
 </context>
 <context>
@@ -1978,45 +1752,6 @@ Routers added: %4</source>
     </message>
 </context>
 <context>
-    <name>FileRemoveDialog</name>
-    <message>
-        <source>Deleting Items</source>
-        <translation type="vanished">Objecten Verwijderen</translation>
-    </message>
-    <message>
-        <source>Creating a list of files to delete...</source>
-        <translation type="vanished">Lijst genereren van objecten om te verwijderen...</translation>
-    </message>
-    <message>
-        <source>Deleting: %1</source>
-        <translation type="obsolete">Verwijderen: %1</translation>
-    </message>
-    <message>
-        <source>An error occurred while retrieving the list of files: %1</source>
-        <translation type="obsolete">Er is een fout opgetreden bij het ontvangen van de bestandslijst: %1</translation>
-    </message>
-    <message>
-        <source>Failed to delete &quot;%1&quot;: %2.</source>
-        <translation type="obsolete">Kon &quot;%1&quot; niet verwijderen: %2.</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Waarschuwing</translation>
-    </message>
-    <message>
-        <source>Skip</source>
-        <translation type="obsolete">Overslaan</translation>
-    </message>
-    <message>
-        <source>Skip All</source>
-        <translation type="obsolete">Alles overslaan</translation>
-    </message>
-    <message>
-        <source>Abort</source>
-        <translation type="obsolete">Afbreken</translation>
-    </message>
-</context>
-<context>
     <name>FileRemoveWidget</name>
     <message>
         <location filename="../client/ui/file_transfer/file_remove_widget.ui" line="35"/>
@@ -2091,121 +1826,11 @@ Routers added: %4</source>
     </message>
 </context>
 <context>
-    <name>FileTransferDialog</name>
-    <message>
-        <source>File Transfer</source>
-        <translation type="vanished">Bestands overdracht</translation>
-    </message>
-    <message>
-        <source>Current Task: Creating a list of files to copy...</source>
-        <translation type="vanished">Huidige taak: Bestandslijst maken...</translation>
-    </message>
-    <message>
-        <source>From: ...</source>
-        <translation type="vanished">Van: ...</translation>
-    </message>
-    <message>
-        <source>To: ...</source>
-        <translation type="vanished">Naar: ...</translation>
-    </message>
-    <message>
-        <source>Progress</source>
-        <translation type="vanished">Voortgang</translation>
-    </message>
-    <message>
-        <source>Total:</source>
-        <translation type="vanished">Totaal:</translation>
-    </message>
-    <message>
-        <source>Item:</source>
-        <translation type="vanished">Item:</translation>
-    </message>
-    <message>
-        <source>Current Task: Copying items.</source>
-        <translation type="obsolete">Huidige taak: Items kopieren.</translation>
-    </message>
-    <message>
-        <source>From: %1</source>
-        <translation type="obsolete">Van: %1</translation>
-    </message>
-    <message>
-        <source>To: %1</source>
-        <translation type="obsolete">Naar: %1</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Waarschuwing</translation>
-    </message>
-    <message>
-        <source>Skip</source>
-        <translation type="obsolete">Overslaan</translation>
-    </message>
-    <message>
-        <source>Skip All</source>
-        <translation type="obsolete">Alles overslaan</translation>
-    </message>
-    <message>
-        <source>Replace</source>
-        <translation type="obsolete">Vervangen</translation>
-    </message>
-    <message>
-        <source>Replace All</source>
-        <translation type="obsolete">Alles vervangen</translation>
-    </message>
-    <message>
-        <source>Abort</source>
-        <translation type="obsolete">Afbreken</translation>
-    </message>
-    <message>
-        <source>Current Task: Cancel transfer of files.</source>
-        <translation type="obsolete">Huidige taak: bestands overdracht afbreken.</translation>
-    </message>
-    <message>
-        <source>An error occurred while building the file queue for copying</source>
-        <translation type="obsolete">Er is een fout opgetreden bij het maken van de bestands lijst voor kopieren</translation>
-    </message>
-    <message>
-        <source>Failed to create directory &quot;%1&quot;: %2</source>
-        <translation type="obsolete">Kon de map &quot;%1&quot; niet maken: %2</translation>
-    </message>
-    <message>
-        <source>Failed to create file &quot;%1&quot;: %2</source>
-        <translation type="obsolete">Kon het bestand &quot;%1&quot; niet maken: %2</translation>
-    </message>
-    <message>
-        <source>Failed to open file &quot;%1&quot;: %2</source>
-        <translation type="obsolete">Kon het bestand &quot;%1&quot; niet openen: %2</translation>
-    </message>
-    <message>
-        <source>Failed to write file &quot;%1&quot;: %2</source>
-        <translation type="obsolete">Kon het bestand &quot;%1&quot; niet schrijven: %2</translation>
-    </message>
-    <message>
-        <source>Failed to read file &quot;%1&quot;: %2</source>
-        <translation type="obsolete">Kon het bestand &quot;%1&quot; niet lezen: %2</translation>
-    </message>
-    <message>
-        <source>Unknown error type while copying files</source>
-        <translation type="obsolete">Onbekend probleem bij het kopieren van bestanden</translation>
-    </message>
-</context>
-<context>
-    <name>FileTransferSessionWindow</name>
-    <message>
-        <source>Local Computer</source>
-        <translation type="obsolete">Lokale Computer</translation>
-    </message>
-    <message>
-        <source>Remote Computer</source>
-        <translation type="obsolete">Computer op afstand</translation>
-    </message>
-</context>
-<context>
     <name>FileTransferWidget</name>
     <message>
         <location filename="../client/ui/file_transfer/file_transfer_widget.ui" line="35"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bestands Overdracht</translation>
     </message>
     <message>
         <location filename="../client/ui/file_transfer/file_transfer_widget.ui" line="43"/>
@@ -2647,7 +2272,7 @@ Routers added: %4</source>
     <message>
         <location filename="../host/ui/host_window.ui" line="352"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bestands Overdracht</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="363"/>
@@ -2774,18 +2399,6 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add Computer</source>
-        <translation type="obsolete">Computer Toevoegen</translation>
-    </message>
-    <message>
-        <source>Delete Computer</source>
-        <translation type="obsolete">Computer Verwijderen</translation>
-    </message>
-    <message>
-        <source>Copy Computer</source>
-        <translation type="obsolete">Kopieer Computer</translation>
-    </message>
-    <message>
         <location filename="../client/ui/hosts_tab.ui" line="119"/>
         <source>Add Host</source>
         <translation type="unfinished"></translation>
@@ -2815,7 +2428,7 @@ Routers added: %4</source>
         <location filename="../client/ui/hosts_tab.ui" line="170"/>
         <location filename="../client/ui/hosts_tab.ui" line="212"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bestands Overdracht</translation>
     </message>
     <message>
         <location filename="../client/ui/hosts_tab.ui" line="182"/>
@@ -2905,14 +2518,6 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Status</source>
-        <translation type="obsolete">Status</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation type="obsolete">Verwijderen</translation>
-    </message>
-    <message>
         <location filename="../client/ui/hosts_tab.cc" line="412"/>
         <source>Hosts</source>
         <translation type="unfinished">Hosts</translation>
@@ -2921,10 +2526,6 @@ Routers added: %4</source>
         <location filename="../client/ui/hosts_tab.cc" line="833"/>
         <source>(copy)</source>
         <translation type="unfinished">(kopieer)</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
-        <translation type="obsolete">Weet U zeker dat U de computer &quot;%1&quot; wilt verwijderen?</translation>
     </message>
     <message>
         <location filename="../client/ui/hosts_tab.cc" line="580"/>
@@ -3103,10 +2704,6 @@ Hosts exported: %3</source>
         <translation type="unfinished">Het adresboek is versleuteld. Voer het wachtwoord in.</translation>
     </message>
     <message>
-        <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation type="obsolete">ChaCha20 + Poly1305 (256-bit key)</translation>
-    </message>
-    <message>
         <location filename="../client/json_backup.cc" line="527"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation type="unfinished"></translation>
@@ -3126,54 +2723,6 @@ Groups skipped: %4
 Hosts added: %5
 Hosts skipped: %6</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>JsonImporter</name>
-    <message>
-        <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation type="obsolete">ChaCha20 + Poly1305 (256-bit key)</translation>
-    </message>
-</context>
-<context>
-    <name>LocalComputerDialog</name>
-    <message>
-        <source>Computer</source>
-        <translation type="obsolete">Computer</translation>
-    </message>
-    <message>
-        <source>Name:</source>
-        <translation type="obsolete">Naam:</translation>
-    </message>
-    <message>
-        <source>Address:</source>
-        <translation type="obsolete">Adres:</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">Wachtwoord:</translation>
-    </message>
-    <message>
-        <source>Comment:</source>
-        <translation type="obsolete">Commentaar:</translation>
-    </message>
-    <message>
-        <source>Add Computer</source>
-        <translation type="obsolete">Computer Toevoegen</translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>Te lange naam. De maximum lengte is %n karakter.</numerusform>
-            <numerusform>Te lange naam. De maximum lengte is %n karakters.</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>Te lang commentaar. De maximale lengte is %n karakter.</numerusform>
-            <numerusform>Te lang commentaar. De maximale lengte is %n karakters.</numerusform>
-        </translation>
     </message>
 </context>
 <context>
@@ -3297,27 +2846,12 @@ Hosts skipped: %6</source>
         <source>Status update...</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>(copy)</source>
-        <translation type="obsolete">(kopieer)</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
-        <translation type="obsolete">Weet U zeker dat U de computer &quot;%1&quot; wilt verwijderen?</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/ui/hosts/local_group_widget.cc" line="422"/>
         <source>%n child group(s)</source>
         <translation type="unfinished">
             <numerusform>%n onderliggende groep</numerusform>
             <numerusform>%n onderliggende groepen</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n child computer(s)</source>
-        <translation type="obsolete">
-            <numerusform>%n onderliggende computer</numerusform>
-            <numerusform>%n onderliggende computers</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -3482,18 +3016,6 @@ Hosts skipped: %6</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <source>Aspia Host</source>
-        <translation type="vanished">Aspia Host</translation>
-    </message>
-    <message>
-        <source>Your ID</source>
-        <translation type="vanished">Uw ID</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation type="vanished">Wachtwoord</translation>
-    </message>
-    <message>
         <location filename="../client/ui/main_window.ui" line="110"/>
         <location filename="../client/ui/main_window.ui" line="172"/>
         <source>Tool Bar</source>
@@ -3505,14 +3027,6 @@ Hosts skipped: %6</source>
         <translation type="unfinished">F1</translation>
     </message>
     <message>
-        <source>System Information</source>
-        <translation type="obsolete">Systeem Informatie</translation>
-    </message>
-    <message>
-        <source>Router is disabled</source>
-        <translation type="vanished">Router is uitgeschakeld</translation>
-    </message>
-    <message>
         <location filename="../client/ui/main_window.ui" line="70"/>
         <source>Help</source>
         <translation>Help</translation>
@@ -3521,10 +3035,6 @@ Hosts skipped: %6</source>
         <location filename="../client/ui/main_window.ui" line="82"/>
         <source>View</source>
         <translation type="unfinished">Weergave</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation type="vanished">Taal</translation>
     </message>
     <message>
         <location filename="../client/ui/main_window.ui" line="164"/>
@@ -3593,10 +3103,6 @@ Hosts skipped: %6</source>
         <translation>Instellingen...</translation>
     </message>
     <message>
-        <source>Hide</source>
-        <translation type="vanished">Verbergen</translation>
-    </message>
-    <message>
         <location filename="../client/ui/main_window.cc" line="76"/>
         <location filename="../client/ui/main_window.cc" line="243"/>
         <source>Search...</source>
@@ -3616,52 +3122,6 @@ Hosts skipped: %6</source>
         <location filename="../client/ui/main_window.cc" line="346"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
-        <translation type="obsolete">Verbinding maken met ID is ingesteld in de eigenschappen van de computer,  maar de router is niet geconfigureerd. Controleer de parameters van de router in de eigenschappen van het adres boek.</translation>
-    </message>
-    <message>
-        <source>Show</source>
-        <translation type="obsolete">Weergeven</translation>
-    </message>
-    <message>
-        <source>Not available</source>
-        <translation type="obsolete">Niet beschikbaar</translation>
-    </message>
-    <message>
-        <source>Failed to connect to router %1</source>
-        <translation type="obsolete">Kon niet verbinden met een router %1</translation>
-    </message>
-    <message>
-        <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
-        <translation type="obsolete">Als u Aspia verlaat, is het niet meer mogelijk om te verbinden naar deze computer tot u de computer aanzet of Aspia handmatig start. Wilt u de applicatie verlaten?</translation>
-    </message>
-    <message>
-        <source>Connection error</source>
-        <translation type="obsolete">Verbindings error</translation>
-    </message>
-</context>
-<context>
-    <name>MasterPasswordDialog</name>
-    <message>
-        <source>Password you entered does not meet the security requirements!</source>
-        <translation type="obsolete">Het ingevoerde wachtwoord komt niet overeen met de beveiligings eisen!</translation>
-    </message>
-    <message numerus="yes">
-        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>Het wachtwoord moet kleine, hoofdletters en nummers bevatten, en mag niet korter zijn dan %n karakter.</numerusform>
-            <numerusform>Het wachtwoord moet kleine, hoofdletters en nummers bevatten, en mag niet korter zijn dan %n karakters.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Do you want to enter a different password?</source>
-        <translation type="obsolete">Wilt U een ander wachtwoord invoeren?</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Waarschuwing</translation>
     </message>
 </context>
 <context>
@@ -3992,14 +3452,6 @@ Hosts skipped: %6</source>
 <context>
     <name>RouterGroupWidget</name>
     <message>
-        <source>Name</source>
-        <translation type="obsolete">Naam</translation>
-    </message>
-    <message>
-        <source>Address / ID</source>
-        <translation type="obsolete">Adres / ID</translation>
-    </message>
-    <message>
         <location filename="../client/ui/hosts/router_group_widget.ui" line="45"/>
         <source>Display Name</source>
         <translation type="unfinished"></translation>
@@ -4124,39 +3576,6 @@ Hosts skipped: %6</source>
         <location filename="../client/ui/hosts/router_host_dialog.cc" line="106"/>
         <source>Unknown error type.</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>RouterPasswordDialog</name>
-    <message>
-        <source>The passwords you entered do not match.</source>
-        <translation type="obsolete">De ingevoerde wachtwoorden komen niet overeen.</translation>
-    </message>
-    <message numerus="yes">
-        <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>Wachtwoord mag niet leeg zijn en mag niet minder dan %n karakter zijn.</numerusform>
-            <numerusform>Wachtwoord mag niet leeg zijn en mag niet minder dan %n karakters zijn.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Password you entered does not meet the security requirements!</source>
-        <translation type="obsolete">Het ingevoerde wachtwoord komt niet overeen met de beveiligings eisen!</translation>
-    </message>
-    <message numerus="yes">
-        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>Het wachtwoord moet kleine, hoofdletters en nummers bevatten, en mag niet korter zijn dan %n karakter.</numerusform>
-            <numerusform>Het wachtwoord moet kleine, hoofdletters en nummers bevatten, en mag niet korter zijn dan %n karakters.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Do you want to enter a different password?</source>
-        <translation type="obsolete">Wilt U een ander wachtwoord invoeren?</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Waarschuwing</translation>
     </message>
 </context>
 <context>
@@ -4562,54 +3981,6 @@ Hosts skipped: %6</source>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n seconds</source>
-        <translation type="obsolete">
-            <numerusform>%n seconde</numerusform>
-            <numerusform>%n seconden</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n minutes</source>
-        <translation type="obsolete">
-            <numerusform>%n minuut</numerusform>
-            <numerusform>%n minuten</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n hours</source>
-        <translation type="obsolete">
-            <numerusform>%n uur</numerusform>
-            <numerusform>%n uren</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n days</source>
-        <translation type="obsolete">
-            <numerusform>%n dag</numerusform>
-            <numerusform>%n dagen</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>TB</source>
-        <translation type="obsolete">TB</translation>
-    </message>
-    <message>
-        <source>GB</source>
-        <translation type="obsolete">GB</translation>
-    </message>
-    <message>
-        <source>MB</source>
-        <translation type="obsolete">MB</translation>
-    </message>
-    <message>
-        <source>kB</source>
-        <translation type="obsolete">kB</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">B</translation>
     </message>
     <message>
         <location filename="../client/ui/hosts/router_widget.cc" line="1012"/>
@@ -5220,108 +4591,9 @@ Hosts skipped: %6</source>
         <translation type="unfinished">Systeem Informatie</translation>
     </message>
     <message>
-        <source>Manage</source>
-        <translation type="obsolete">Beheren</translation>
-    </message>
-    <message>
         <location filename="../common/ui/session_type.cc" line="42"/>
         <source>Chat</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>SettingsDialog</name>
-    <message>
-        <source>Settings</source>
-        <translation type="obsolete">Instellingen</translation>
-    </message>
-    <message>
-        <source>Router</source>
-        <translation type="obsolete">Router</translation>
-    </message>
-    <message>
-        <source>Desktop</source>
-        <translation type="obsolete">Bureablad</translation>
-    </message>
-    <message>
-        <source>Features</source>
-        <translation type="obsolete">Features</translation>
-    </message>
-    <message>
-        <source>Enable audio</source>
-        <translation type="obsolete">Geluid inschakelen</translation>
-    </message>
-    <message>
-        <source>Enable clipboard</source>
-        <translation type="obsolete">Klembord inschakelen</translation>
-    </message>
-    <message>
-        <source>Appearance</source>
-        <translation type="obsolete">Uiterlijk</translation>
-    </message>
-    <message>
-        <source>Disable desktop effects</source>
-        <translation type="obsolete">Schakel bureaublad effecten uit</translation>
-    </message>
-    <message>
-        <source>Disable desktop wallpaper</source>
-        <translation type="obsolete">Geen bureaublad achtergrond</translation>
-    </message>
-    <message>
-        <source>Lock computer at disconnect</source>
-        <translation type="obsolete">Computer vergrendelen bij verbroken verbinding</translation>
-    </message>
-    <message>
-        <source>Block remote input</source>
-        <translation type="obsolete">Blokkeer invoer op afstand</translation>
-    </message>
-    <message>
-        <source>Send key combinations</source>
-        <translation type="obsolete">Stuur toets combinaties</translation>
-    </message>
-    <message>
-        <source>Update</source>
-        <translation type="obsolete">Update</translation>
-    </message>
-    <message>
-        <source>Check for updates on startup</source>
-        <translation type="obsolete">Controleer op update bij opstarten</translation>
-    </message>
-    <message>
-        <source>Use custom update server</source>
-        <translation type="obsolete">Aangepaste update server gebruiken</translation>
-    </message>
-    <message>
-        <source>Server:</source>
-        <translation type="obsolete">Server:</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Overige</translation>
-    </message>
-    <message>
-        <source>General</source>
-        <translation type="obsolete">Basis</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="obsolete">Adres</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="obsolete">Gebruikers Naam</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation type="obsolete">Verwijderen</translation>
-    </message>
-    <message>
-        <source>Check for updates</source>
-        <translation type="obsolete">Controleer op updates</translation>
-    </message>
-    <message>
-        <source>Unknown</source>
-        <translation type="obsolete">Onbekend</translation>
     </message>
 </context>
 <context>
@@ -6358,73 +5630,6 @@ Hosts skipped: %6</source>
     </message>
 </context>
 <context>
-    <name>SysInfoWidget</name>
-    <message>
-        <source>TB</source>
-        <translation type="obsolete">TB</translation>
-    </message>
-    <message>
-        <source>GB</source>
-        <translation type="obsolete">GB</translation>
-    </message>
-    <message>
-        <source>MB</source>
-        <translation type="obsolete">MB</translation>
-    </message>
-    <message>
-        <source>kB</source>
-        <translation type="obsolete">kB</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">B</translation>
-    </message>
-    <message numerus="yes">
-        <source>%n seconds</source>
-        <translation type="obsolete">
-            <numerusform>%n seconde</numerusform>
-            <numerusform>%n seconden</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n minutes</source>
-        <translation type="obsolete">
-            <numerusform>%n minuut</numerusform>
-            <numerusform>%n minuten</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n hours</source>
-        <translation type="obsolete">
-            <numerusform>%n uur</numerusform>
-            <numerusform>%n uren</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n days</source>
-        <translation type="obsolete">
-            <numerusform>%n dag</numerusform>
-            <numerusform>%n dagen</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Gbps</source>
-        <translation type="obsolete">Gbps</translation>
-    </message>
-    <message>
-        <source>Mbps</source>
-        <translation type="obsolete">Mbps</translation>
-    </message>
-    <message>
-        <source>Kbps</source>
-        <translation type="obsolete">Kbps</translation>
-    </message>
-    <message>
-        <source>bps</source>
-        <translation type="obsolete">bps</translation>
-    </message>
-</context>
-<context>
     <name>SysInfoWidgetDrivers</name>
     <message>
         <location filename="../client/ui/sys_info/sys_info_widget_drivers.cc" line="139"/>
@@ -7456,85 +6661,6 @@ Hosts skipped: %6</source>
     </message>
 </context>
 <context>
-    <name>SystemInfoSessionWindow</name>
-    <message>
-        <source>System Information</source>
-        <translation type="obsolete">Systeem Informatie</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Opslaan</translation>
-    </message>
-    <message>
-        <source>Save (Ctrl+S)</source>
-        <translation type="obsolete">Opslaan (Ctrl+S)</translation>
-    </message>
-    <message>
-        <source>Ctrl+S</source>
-        <translation type="obsolete">Ctrl+P</translation>
-    </message>
-    <message>
-        <source>Print</source>
-        <translation type="obsolete">Printen</translation>
-    </message>
-    <message>
-        <source>Print (Ctrl+P)</source>
-        <translation type="obsolete">Printen(Ctrl+P)</translation>
-    </message>
-    <message>
-        <source>Copy Row</source>
-        <translation type="obsolete">Kopieer Rij</translation>
-    </message>
-    <message>
-        <source>Copy Name</source>
-        <translation type="obsolete">Kopieer Naam</translation>
-    </message>
-    <message>
-        <source>Copy Value</source>
-        <translation type="obsolete">Kopieer Waarde</translation>
-    </message>
-    <message>
-        <source>Refresh</source>
-        <translation type="obsolete">Vernieuwen</translation>
-    </message>
-    <message>
-        <source>Refresh (F5)</source>
-        <translation type="obsolete">Vernieuwen (F5)</translation>
-    </message>
-    <message>
-        <source>F5</source>
-        <translation type="obsolete">F5</translation>
-    </message>
-    <message>
-        <source>Printers</source>
-        <translation type="obsolete">Printers</translation>
-    </message>
-    <message>
-        <source>Connections</source>
-        <translation type="obsolete">Verbindingen</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="obsolete">Besturingssysteem</translation>
-    </message>
-    <message>
-        <source>Users</source>
-        <translation type="obsolete">Gebruikers</translation>
-    </message>
-    <message>
-        <source>HTML File</source>
-        <translation type="obsolete">HTML Bestand</translation>
-    </message>
-    <message>
-        <source>HTML File (*.html)</source>
-        <translation type="obsolete">HTML Bestand (*.html)</translation>
-    </message>
-    <message>
-        <source>Failed to save file: %1</source>
-        <translation type="obsolete">Kon het bestand %1 niet opslaan</translation>
-    </message>
-</context>
-<context>
     <name>SystemInfoWindow</name>
     <message>
         <location filename="../client/ui/sys_info/system_info_window.ui" line="14"/>
@@ -8038,25 +7164,6 @@ Hosts skipped: %6</source>
         <location filename="../common/ui/two_factor_enroll_dialog.ui" line="62"/>
         <source>Enter the 6-digit code shown by the app to confirm:</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UnlockDialog</name>
-    <message>
-        <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation type="obsolete">Het adresboek is versleuteld. Voer het wachtwoord in.</translation>
-    </message>
-    <message>
-        <source>File:</source>
-        <translation type="obsolete">Bestand:</translation>
-    </message>
-    <message>
-        <source>Encryption Type:</source>
-        <translation type="obsolete">Encryptie Type:</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">Wachtwoord:</translation>
     </message>
 </context>
 <context>

@@ -25,10 +25,6 @@
         <translation type="unfinished">Файл адресної книги пошкоджено або він має невірний формат.</translation>
     </message>
     <message>
-        <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation type="obsolete">ChaCha20 + Poly1305 (256-бітний ключ)</translation>
-    </message>
-    <message>
         <location filename="../client/aab_importer.cc" line="324"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation type="unfinished">Тип шифрування адресної книги не підтримується.</translation>
@@ -284,45 +280,6 @@ Routers added: %4</source>
         <source>Unknown Drive</source>
         <translation type="unfinished">Невідомий диск</translation>
     </message>
-    <message>
-        <source>TB</source>
-        <translation type="obsolete">ТБ</translation>
-    </message>
-    <message>
-        <source>GB</source>
-        <translation type="obsolete">ГБ</translation>
-    </message>
-    <message>
-        <source>MB</source>
-        <translation type="obsolete">МБ</translation>
-    </message>
-    <message>
-        <source>kB</source>
-        <translation type="obsolete">кБ</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">Б</translation>
-    </message>
-</context>
-<context>
-    <name>AddressBookImporter</name>
-    <message>
-        <source>The address book file is corrupted or has an unknown format.</source>
-        <translation type="obsolete">Файл адресної книги пошкоджено або він має невірний формат.</translation>
-    </message>
-    <message>
-        <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation type="obsolete">ChaCha20 + Poly1305 (256-бітний ключ)</translation>
-    </message>
-    <message>
-        <source>The address book file is encrypted with an unsupported encryption type.</source>
-        <translation type="obsolete">Тип шифрування адресної книги не підтримується.</translation>
-    </message>
-    <message>
-        <source>Unable to decrypt the address book with the specified password.</source>
-        <translation type="obsolete">Неможливо розшифрувати адресну книгу даним паролем.</translation>
-    </message>
 </context>
 <context>
     <name>AuthorizationDialog</name>
@@ -420,53 +377,6 @@ Routers added: %4</source>
         <location filename="../common/ui/chat_outgoing_message.ui" line="48"/>
         <source>Time</source>
         <translation type="unfinished">Час</translation>
-    </message>
-</context>
-<context>
-    <name>ChatSessionWindow</name>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Зберегти</translation>
-    </message>
-    <message>
-        <source>Save (Ctrl+S)</source>
-        <translation type="obsolete">Зберегти (Ctrl+S)</translation>
-    </message>
-    <message>
-        <source>Ctrl+S</source>
-        <translation type="obsolete">Ctrl+S</translation>
-    </message>
-    <message>
-        <source>Print</source>
-        <translation type="obsolete">Друкувати</translation>
-    </message>
-    <message>
-        <source>Print (Ctrl+P)</source>
-        <translation type="obsolete">Друкувати (Ctrl+P)</translation>
-    </message>
-    <message>
-        <source>Copy Row</source>
-        <translation type="obsolete">Копіювати рядок</translation>
-    </message>
-    <message>
-        <source>Copy Name</source>
-        <translation type="obsolete">Копіювати ім&apos;я</translation>
-    </message>
-    <message>
-        <source>Copy Value</source>
-        <translation type="obsolete">Копіювати значення</translation>
-    </message>
-    <message>
-        <source>Refresh</source>
-        <translation type="obsolete">Оновити</translation>
-    </message>
-    <message>
-        <source>Refresh (F5)</source>
-        <translation type="obsolete">Оновити (F5)</translation>
-    </message>
-    <message>
-        <source>F5</source>
-        <translation type="obsolete">F5</translation>
     </message>
 </context>
 <context>
@@ -647,10 +557,6 @@ Routers added: %4</source>
 <context>
     <name>Client</name>
     <message>
-        <source>Incorrect value for &quot;%1&quot;. Possible values: %2.</source>
-        <translation type="vanished">Невірне значення для &quot;%1&quot;. Можливі значення: %2.</translation>
-    </message>
-    <message>
         <location filename="../client/main.cc" line="103"/>
         <source>Set Master Password</source>
         <translation type="unfinished"></translation>
@@ -685,10 +591,6 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Remote computer address.</source>
-        <translation type="vanished">Адреса віддаленого комп&apos;ютера.</translation>
-    </message>
-    <message>
         <location filename="../client/main.cc" line="77"/>
         <source>Unlock</source>
         <translation type="unfinished"></translation>
@@ -702,46 +604,6 @@ Routers added: %4</source>
         <location filename="../client/main.cc" line="95"/>
         <source>Invalid master password.</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Name of user.</source>
-        <translation type="vanished">Ім&apos;я користувача.</translation>
-    </message>
-    <message>
-        <source>Password of user.</source>
-        <translation type="vanished">Пароль користувача.</translation>
-    </message>
-    <message>
-        <source>Enable or disable audio. Possible values: 0 or 1.</source>
-        <translation type="vanished">Увімкнути чи вимкнути звук. Можливі значення: 0 або 1.</translation>
-    </message>
-    <message>
-        <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
-        <translation type="vanished">Увімкнути або вимкнути розмір курсора. Можливі значення: 0 або 1.</translation>
-    </message>
-    <message>
-        <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
-        <translation type="vanished">Увімкнути або вимкнути позицію курсора. Можливі значення: 0 або 1.</translation>
-    </message>
-    <message>
-        <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
-        <translation type="vanished">Увімкнути або вимкнути буфер обміну. Можливі значення: 0 або 1.</translation>
-    </message>
-    <message>
-        <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
-        <translation type="vanished">Увімкнути або вимкнути ефекти робочого стола. Можливі значення: 0 або 1.</translation>
-    </message>
-    <message>
-        <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
-        <translation type="vanished">Увімкнути або вимкнути шпалери робочого стола. Можливі значення: 0 або 1.</translation>
-    </message>
-    <message>
-        <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
-        <translation type="vanished">Блокувати комп&apos;ютер при від&apos;єднанні. Можливі значення: 0 або 1.</translation>
-    </message>
-    <message>
-        <source>Block remote input. Possible values: 0 or 1.</source>
-        <translation type="vanished">Блокувати віддалене введення. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="58"/>
@@ -1286,86 +1148,12 @@ Routers added: %4</source>
     </message>
 </context>
 <context>
-    <name>DesktopConfigDialog</name>
-    <message>
-        <source>Session Configuration</source>
-        <translation type="vanished">Налаштування сесії</translation>
-    </message>
-    <message>
-        <source>Block remote input</source>
-        <translation type="vanished">Блокувати віддалений ввід</translation>
-    </message>
-    <message>
-        <source>Features</source>
-        <translation type="vanished">Додатково</translation>
-    </message>
-    <message>
-        <source>Enable audio</source>
-        <translation type="vanished">Увімкнути аудіо</translation>
-    </message>
-    <message>
-        <source>Enable clipboard</source>
-        <translation type="vanished">Буфер обміну</translation>
-    </message>
-    <message>
-        <source>Show shape of remote cursor</source>
-        <translation type="vanished">Показувати форму віддаленого курсора</translation>
-    </message>
-    <message>
-        <source>Show position of remote cursor</source>
-        <translation type="vanished">Показувати позицію віддаленого курсора</translation>
-    </message>
-    <message>
-        <source>Appearance</source>
-        <translation type="vanished">Вигляд</translation>
-    </message>
-    <message>
-        <source>Disable desktop effects</source>
-        <translation type="vanished">Відключити ефекти робочого стола</translation>
-    </message>
-    <message>
-        <source>Disable desktop wallpaper</source>
-        <translation type="vanished">Відключити шпалери робочого стола</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="vanished">Інше</translation>
-    </message>
-    <message>
-        <source>Lock computer at disconnect</source>
-        <translation type="vanished">Заблокувати комп&apos;ютер після від&apos;єдннання</translation>
-    </message>
-    <message>
-        <source>Send key combinations</source>
-        <translation type="obsolete">Комбінації клавіш відправки</translation>
-    </message>
-</context>
-<context>
-    <name>DesktopSessionWindow</name>
-    <message>
-        <source>Save File</source>
-        <translation type="obsolete">Зберегти файл</translation>
-    </message>
-    <message>
-        <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
-        <translation type="obsolete">Зображення PNG (*.png);;Зображення BMP (*.bmp)</translation>
-    </message>
-    <message>
-        <source>Could not save image</source>
-        <translation type="obsolete">Неможливо зберегти зображення</translation>
-    </message>
-</context>
-<context>
     <name>DesktopToolBar</name>
     <message>
         <location filename="../client/ui/desktop/desktop_toolbar.ui" line="117"/>
         <location filename="../client/ui/desktop/desktop_toolbar.ui" line="120"/>
         <source>Lock toolbar</source>
         <translation type="unfinished">Закріпити панель інструментів</translation>
-    </message>
-    <message>
-        <source>Session configuration</source>
-        <translation type="obsolete">Налаштування сесії</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop/desktop_toolbar.ui" line="129"/>
@@ -1427,10 +1215,6 @@ Routers added: %4</source>
         <location filename="../client/ui/desktop/desktop_toolbar.cc" line="867"/>
         <source>Scale</source>
         <translation type="unfinished">Масштаб</translation>
-    </message>
-    <message>
-        <source>Send key combinations</source>
-        <translation type="obsolete">Комбінації клавіш відправки</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop/desktop_toolbar.ui" line="228"/>
@@ -1514,10 +1298,6 @@ Routers added: %4</source>
         <location filename="../client/ui/desktop/desktop_toolbar.ui" line="386"/>
         <source>Text Chat</source>
         <translation type="unfinished">Текстовий чат</translation>
-    </message>
-    <message>
-        <source>Recording settings...</source>
-        <translation type="obsolete">Налаштування запису...</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop/desktop_toolbar.ui" line="398"/>
@@ -1751,41 +1531,6 @@ Routers added: %4</source>
     </message>
 </context>
 <context>
-    <name>ExportPasswordDialog</name>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">Пароль:</translation>
-    </message>
-    <message>
-        <source>Skip</source>
-        <translation type="obsolete">Пропустити</translation>
-    </message>
-    <message>
-        <source>Password cannot be empty.</source>
-        <translation type="obsolete">Пароль не може бути порожнім.</translation>
-    </message>
-    <message>
-        <source>Password you entered does not meet the security requirements!</source>
-        <translation type="obsolete">Введений пароль не задовільняє вимог безпеки!</translation>
-    </message>
-    <message numerus="yes">
-        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символ.</numerusform>
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символи.</numerusform>
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символів.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Do you want to enter a different password?</source>
-        <translation type="obsolete">Бажаєте ввести інший пароль?</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Попередження</translation>
-    </message>
-</context>
-<context>
     <name>FileError</name>
     <message>
         <location filename="../client/ui/file_transfer/file_error_code.cc" line="33"/>
@@ -1890,26 +1635,6 @@ Routers added: %4</source>
         <location filename="../client/ui/file_transfer/file_list_model.cc" line="395"/>
         <source>Modified</source>
         <translation type="unfinished">Змінено</translation>
-    </message>
-    <message>
-        <source>TB</source>
-        <translation type="obsolete">ТБ</translation>
-    </message>
-    <message>
-        <source>GB</source>
-        <translation type="obsolete">ГБ</translation>
-    </message>
-    <message>
-        <source>MB</source>
-        <translation type="obsolete">МБ</translation>
-    </message>
-    <message>
-        <source>kB</source>
-        <translation type="obsolete">кБ</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">Б</translation>
     </message>
 </context>
 <context>
@@ -2031,45 +1756,6 @@ Routers added: %4</source>
     </message>
 </context>
 <context>
-    <name>FileRemoveDialog</name>
-    <message>
-        <source>Deleting Items</source>
-        <translation type="vanished">Видалення об&apos;єктів</translation>
-    </message>
-    <message>
-        <source>Creating a list of files to delete...</source>
-        <translation type="vanished">Створення списку об&apos;єктів для видалення...</translation>
-    </message>
-    <message>
-        <source>Deleting: %1</source>
-        <translation type="obsolete">Видалення: %1</translation>
-    </message>
-    <message>
-        <source>An error occurred while retrieving the list of files: %1</source>
-        <translation type="obsolete">Трапилася помилка під час отримання списку файлів: %1</translation>
-    </message>
-    <message>
-        <source>Failed to delete &quot;%1&quot;: %2.</source>
-        <translation type="obsolete">Не вдалося видалити &quot;%1&quot;:%2.</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Попередження</translation>
-    </message>
-    <message>
-        <source>Skip</source>
-        <translation type="obsolete">Пропустити</translation>
-    </message>
-    <message>
-        <source>Skip All</source>
-        <translation type="obsolete">Пропустити всі</translation>
-    </message>
-    <message>
-        <source>Abort</source>
-        <translation type="obsolete">Відмінити</translation>
-    </message>
-</context>
-<context>
     <name>FileRemoveWidget</name>
     <message>
         <location filename="../client/ui/file_transfer/file_remove_widget.ui" line="35"/>
@@ -2141,120 +1827,6 @@ Routers added: %4</source>
         <location filename="../client/ui/file_transfer/file_remove_widget.cc" line="185"/>
         <source>Abort</source>
         <translation type="unfinished">Відмінити</translation>
-    </message>
-</context>
-<context>
-    <name>FileTransferDialog</name>
-    <message>
-        <source>File Transfer</source>
-        <translation type="vanished">Передача файлів</translation>
-    </message>
-    <message>
-        <source>Current Task: Creating a list of files to copy...</source>
-        <translation type="vanished">Поточне завдання: створення списку файлів для копіювання...</translation>
-    </message>
-    <message>
-        <source>From: ...</source>
-        <translation type="vanished">З: ...</translation>
-    </message>
-    <message>
-        <source>To: ...</source>
-        <translation type="vanished">До: ...</translation>
-    </message>
-    <message>
-        <source>Progress</source>
-        <translation type="vanished">Виконано</translation>
-    </message>
-    <message>
-        <source>Total:</source>
-        <translation type="vanished">Всього:</translation>
-    </message>
-    <message>
-        <source>Item:</source>
-        <translation type="vanished">Поточний об&apos;єкт:</translation>
-    </message>
-    <message>
-        <source>Current Task: Copying items.</source>
-        <translation type="obsolete">Поточне завдання: Копіювання файлів.</translation>
-    </message>
-    <message>
-        <source>From: %1</source>
-        <translation type="obsolete">З: %1</translation>
-    </message>
-    <message>
-        <source>To: %1</source>
-        <translation type="obsolete">До: %1</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Попередження</translation>
-    </message>
-    <message>
-        <source>Skip</source>
-        <translation type="obsolete">Пропустити</translation>
-    </message>
-    <message>
-        <source>Skip All</source>
-        <translation type="obsolete">Пропустити всі</translation>
-    </message>
-    <message>
-        <source>Replace</source>
-        <translation type="obsolete">Замінити</translation>
-    </message>
-    <message>
-        <source>Replace All</source>
-        <translation type="obsolete">Замінити всі</translation>
-    </message>
-    <message>
-        <source>Abort</source>
-        <translation type="obsolete">Відмінити</translation>
-    </message>
-    <message>
-        <source>Current Task: Cancel transfer of files.</source>
-        <translation type="obsolete">Поточне завдання: Відміна передачі файлів.</translation>
-    </message>
-    <message>
-        <source>An error occurred while building the file queue for copying</source>
-        <translation type="obsolete">Виникла помилка під час створення файлової черги для копіювання</translation>
-    </message>
-    <message>
-        <source>Failed to create directory &quot;%1&quot;: %2</source>
-        <translation type="obsolete">Не вдалося створити каталог &quot;%1&quot;:%2</translation>
-    </message>
-    <message>
-        <source>Failed to create file &quot;%1&quot;: %2</source>
-        <translation type="obsolete">Не вдалося створити файл &quot;%1&quot;:%2</translation>
-    </message>
-    <message>
-        <source>Failed to open file &quot;%1&quot;: %2</source>
-        <translation type="obsolete">Не вдалося відкрити файл &quot;%1&quot;:%2</translation>
-    </message>
-    <message>
-        <source>Failed to write file &quot;%1&quot;: %2</source>
-        <translation type="obsolete">Не вдалося записати файл &quot;%1&quot;:%2</translation>
-    </message>
-    <message>
-        <source>Failed to read file &quot;%1&quot;: %2</source>
-        <translation type="obsolete">Не вдалося прочитати файл &quot;%1&quot;:%2</translation>
-    </message>
-    <message>
-        <source>Unknown error type while copying files</source>
-        <translation type="obsolete">Невідомий тип помилки під час копіювання файлів</translation>
-    </message>
-</context>
-<context>
-    <name>FileTransferSessionWindow</name>
-    <message>
-        <source>Local Computer</source>
-        <translation type="obsolete">Локальний комп&apos;ютер</translation>
-    </message>
-    <message>
-        <source>Remote Computer</source>
-        <translation type="obsolete">Віддалений комп&apos;ютер</translation>
-    </message>
-    <message>
-        <source>Session error: %1</source>
-        <translation type="obsolete">Помилка сесії: %1</translation>
     </message>
 </context>
 <context>
@@ -2718,7 +2290,7 @@ Routers added: %4</source>
     <message>
         <location filename="../host/ui/host_window.ui" line="374"/>
         <source>Text Chat</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Текстовий чат</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="379"/>
@@ -2833,18 +2405,6 @@ Routers added: %4</source>
         <location filename="../client/ui/hosts_tab.ui" line="110"/>
         <source>Router Status</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add Computer</source>
-        <translation type="obsolete">Додати комп&apos;ютер</translation>
-    </message>
-    <message>
-        <source>Delete Computer</source>
-        <translation type="obsolete">Видалити комп&apos;ютер</translation>
-    </message>
-    <message>
-        <source>Copy Computer</source>
-        <translation type="obsolete">Скопіювати комп&apos;ютер</translation>
     </message>
     <message>
         <location filename="../client/ui/hosts_tab.ui" line="119"/>
@@ -2966,14 +2526,6 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Status</source>
-        <translation type="obsolete">Статус</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation type="obsolete">Видалити</translation>
-    </message>
-    <message>
         <location filename="../client/ui/hosts_tab.cc" line="412"/>
         <source>Hosts</source>
         <translation type="unfinished">Хости</translation>
@@ -2982,10 +2534,6 @@ Routers added: %4</source>
         <location filename="../client/ui/hosts_tab.cc" line="833"/>
         <source>(copy)</source>
         <translation type="unfinished">(копіювати)</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
-        <translation type="obsolete">Ви впевнені, що хочете видалити комп&apos;ютер\&quot;%1\&quot;?</translation>
     </message>
     <message>
         <location filename="../client/ui/hosts_tab.cc" line="580"/>
@@ -3165,10 +2713,6 @@ Hosts exported: %3</source>
         <translation type="unfinished">Адресну книгу зашифровано. Для перегляду введіть пароль.</translation>
     </message>
     <message>
-        <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation type="obsolete">ChaCha20 + Poly1305 (256-бітний ключ)</translation>
-    </message>
-    <message>
         <location filename="../client/json_backup.cc" line="527"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation type="unfinished"></translation>
@@ -3188,40 +2732,6 @@ Groups skipped: %4
 Hosts added: %5
 Hosts skipped: %6</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>JsonImporter</name>
-    <message>
-        <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation type="obsolete">ChaCha20 + Poly1305 (256-бітний ключ)</translation>
-    </message>
-</context>
-<context>
-    <name>LocalComputerDialog</name>
-    <message>
-        <source>Computer</source>
-        <translation type="obsolete">Комп&apos;ютер</translation>
-    </message>
-    <message>
-        <source>Name:</source>
-        <translation type="obsolete">Ім&apos;я:</translation>
-    </message>
-    <message>
-        <source>Address:</source>
-        <translation type="obsolete">Адреса:</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">Пароль:</translation>
-    </message>
-    <message>
-        <source>Comment:</source>
-        <translation type="obsolete">Коментар:</translation>
-    </message>
-    <message>
-        <source>Add Computer</source>
-        <translation type="obsolete">Додати комп&apos;ютер</translation>
     </message>
 </context>
 <context>
@@ -3347,14 +2857,6 @@ Hosts skipped: %6</source>
         <source>Status update...</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>(copy)</source>
-        <translation type="obsolete">(копіювати)</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
-        <translation type="obsolete">Ви впевнені, що хочете видалити комп&apos;ютер\&quot;%1\&quot;?</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/ui/hosts/local_group_widget.cc" line="422"/>
         <source>%n child group(s)</source>
@@ -3362,14 +2864,6 @@ Hosts skipped: %6</source>
             <numerusform>%n дочірня група</numerusform>
             <numerusform>%n дочірні групи</numerusform>
             <numerusform>%n дочірніх груп</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n child computer(s)</source>
-        <translation type="obsolete">
-            <numerusform>%n дочірній комп&apos;ютер</numerusform>
-            <numerusform>%n дочірні комп&apos;ютери</numerusform>
-            <numerusform>%n дочірніх комп&apos;ютерів</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -3537,18 +3031,6 @@ Hosts skipped: %6</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <source>Aspia Host</source>
-        <translation type="vanished">Хост Aspia</translation>
-    </message>
-    <message>
-        <source>Your ID</source>
-        <translation type="vanished">Ваш ID</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation type="vanished">Пароль</translation>
-    </message>
-    <message>
         <location filename="../client/ui/main_window.ui" line="110"/>
         <location filename="../client/ui/main_window.ui" line="172"/>
         <source>Tool Bar</source>
@@ -3560,18 +3042,6 @@ Hosts skipped: %6</source>
         <translation type="unfinished">F1</translation>
     </message>
     <message>
-        <source>Desktop View</source>
-        <translation type="obsolete">Перегляд робочого столу</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="obsolete">Передача файлів</translation>
-    </message>
-    <message>
-        <source>Router is disabled</source>
-        <translation type="vanished">Маршрутизатор відключено</translation>
-    </message>
-    <message>
         <location filename="../client/ui/main_window.ui" line="70"/>
         <source>Help</source>
         <translation>Допомога</translation>
@@ -3580,10 +3050,6 @@ Hosts skipped: %6</source>
         <location filename="../client/ui/main_window.ui" line="82"/>
         <source>View</source>
         <translation>Вигляд</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation type="vanished">Мова</translation>
     </message>
     <message>
         <location filename="../client/ui/main_window.ui" line="164"/>
@@ -3652,10 +3118,6 @@ Hosts skipped: %6</source>
         <translation>Налаштування...</translation>
     </message>
     <message>
-        <source>Hide</source>
-        <translation type="vanished">Сховати</translation>
-    </message>
-    <message>
         <location filename="../client/ui/main_window.cc" line="76"/>
         <location filename="../client/ui/main_window.cc" line="243"/>
         <source>Search...</source>
@@ -3675,57 +3137,6 @@ Hosts skipped: %6</source>
         <location filename="../client/ui/main_window.cc" line="346"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
-        <translation type="obsolete">В налаштуваннях комп&apos;ютера було обрано підключення за ID, але маршрутизатор не налаштовано. Перевірте параметри маршрутизатора в налаштуваннях адресної книги.</translation>
-    </message>
-    <message>
-        <source>Show</source>
-        <translation type="obsolete">Показати</translation>
-    </message>
-    <message>
-        <source>Not available</source>
-        <translation type="obsolete">Не доступно</translation>
-    </message>
-    <message>
-        <source>Failed to connect to router %1</source>
-        <translation type="obsolete">Не вдалося підключитися до маршрутизатора %1</translation>
-    </message>
-    <message>
-        <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
-        <translation type="obsolete">Якщо ви закриєте Aspia, підключитись до цього комп&apos;ютера буде неможливо поки ви не увімкнете комп&apos;ютер або Aspia вручну.Ви хочете закрити програму?</translation>
-    </message>
-    <message>
-        <source>Connection error</source>
-        <translation type="obsolete">Помилка підключення</translation>
-    </message>
-</context>
-<context>
-    <name>MasterPasswordDialog</name>
-    <message>
-        <source>New password:</source>
-        <translation type="obsolete">Новий пароль:</translation>
-    </message>
-    <message>
-        <source>Password you entered does not meet the security requirements!</source>
-        <translation type="obsolete">Введений пароль не задовільняє вимог безпеки!</translation>
-    </message>
-    <message numerus="yes">
-        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символ.</numerusform>
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символи.</numerusform>
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символів.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Do you want to enter a different password?</source>
-        <translation type="obsolete">Бажаєте ввести інший пароль?</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Попередження</translation>
     </message>
 </context>
 <context>
@@ -3902,25 +3313,6 @@ Hosts skipped: %6</source>
     </message>
 </context>
 <context>
-    <name>RecordSettingsDialog</name>
-    <message>
-        <source>Recording Settings</source>
-        <translation type="vanished">Налаштування запису</translation>
-    </message>
-    <message>
-        <source>Automatically start recording sessions on connection</source>
-        <translation type="vanished">Автоматично починати запис сесій при підключенні</translation>
-    </message>
-    <message>
-        <source>Write path:</source>
-        <translation type="vanished">Шлях для записів:</translation>
-    </message>
-    <message>
-        <source>Choose path</source>
-        <translation type="obsolete">Обрати шлях</translation>
-    </message>
-</context>
-<context>
     <name>RouterDialog</name>
     <message>
         <location filename="../client/ui/router_dialog.ui" line="14"/>
@@ -4076,10 +3468,6 @@ Hosts skipped: %6</source>
 <context>
     <name>RouterGroupWidget</name>
     <message>
-        <source>Address / ID</source>
-        <translation type="obsolete">Адреса / ID</translation>
-    </message>
-    <message>
         <location filename="../client/ui/hosts/router_group_widget.ui" line="45"/>
         <source>Display Name</source>
         <translation type="unfinished">Ім&apos;я на екрані</translation>
@@ -4205,61 +3593,6 @@ Hosts skipped: %6</source>
         <location filename="../client/ui/hosts/router_host_dialog.cc" line="106"/>
         <source>Unknown error type.</source>
         <translation type="unfinished">Невідомий тип помилки.</translation>
-    </message>
-</context>
-<context>
-    <name>RouterPasswordDialog</name>
-    <message>
-        <source>Change Password</source>
-        <translation type="obsolete">Змінити пароль</translation>
-    </message>
-    <message>
-        <source>New password:</source>
-        <translation type="obsolete">Новий пароль:</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="obsolete">Невідома внутрішня помилка.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="obsolete">Передано невірні дані.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="obsolete">Невідомий тип помилки.</translation>
-    </message>
-    <message>
-        <source>The passwords you entered do not match.</source>
-        <translation type="obsolete">Введені паролі не співпадають.</translation>
-    </message>
-    <message numerus="yes">
-        <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>Пароль не може бути порожнім або довшим за %n символ.</numerusform>
-            <numerusform>Пароль не може бути порожнім або довшим за %n символи.</numerusform>
-            <numerusform>Пароль не може бути порожнім або довшим за %n символів.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Password you entered does not meet the security requirements!</source>
-        <translation type="obsolete">Введений пароль не задовільняє вимог безпеки!</translation>
-    </message>
-    <message numerus="yes">
-        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символ.</numerusform>
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символи.</numerusform>
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символів.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Do you want to enter a different password?</source>
-        <translation type="obsolete">Бажаєте ввести інший пароль?</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Попередження</translation>
     </message>
 </context>
 <context>
@@ -4519,10 +3852,6 @@ Hosts skipped: %6</source>
         <translation type="unfinished">IP адреса</translation>
     </message>
     <message>
-        <source>ID</source>
-        <translation type="obsolete">ID</translation>
-    </message>
-    <message>
         <location filename="../client/ui/hosts/router_widget.ui" line="157"/>
         <location filename="../client/ui/hosts/router_widget.ui" line="300"/>
         <location filename="../client/ui/hosts/router_widget.ui" line="390"/>
@@ -4674,58 +4003,6 @@ Hosts skipped: %6</source>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n seconds</source>
-        <translation type="obsolete">
-            <numerusform>%n секунда</numerusform>
-            <numerusform>%n секунди</numerusform>
-            <numerusform>%n секунд</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n minutes</source>
-        <translation type="obsolete">
-            <numerusform>%n хвилина</numerusform>
-            <numerusform>%n хвилини</numerusform>
-            <numerusform>%n хвилин</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n hours</source>
-        <translation type="obsolete">
-            <numerusform>%n година</numerusform>
-            <numerusform>%n години</numerusform>
-            <numerusform>%n годин</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n days</source>
-        <translation type="obsolete">
-            <numerusform>%n день</numerusform>
-            <numerusform>%n дні</numerusform>
-            <numerusform>%n днів</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>TB</source>
-        <translation type="obsolete">ТБ</translation>
-    </message>
-    <message>
-        <source>GB</source>
-        <translation type="obsolete">ГБ</translation>
-    </message>
-    <message>
-        <source>MB</source>
-        <translation type="obsolete">МБ</translation>
-    </message>
-    <message>
-        <source>kB</source>
-        <translation type="obsolete">кБ</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">Б</translation>
     </message>
     <message>
         <location filename="../client/ui/hosts/router_widget.cc" line="1012"/>
@@ -5341,140 +4618,9 @@ Hosts skipped: %6</source>
         <translation>Інформація про систему</translation>
     </message>
     <message>
-        <source>Text Chat</source>
-        <translation type="vanished">Тесктовий чат</translation>
-    </message>
-    <message>
-        <source>Manage</source>
-        <translation type="obsolete">Керування</translation>
-    </message>
-    <message>
         <location filename="../common/ui/session_type.cc" line="42"/>
         <source>Chat</source>
         <translation type="unfinished">Чат</translation>
-    </message>
-</context>
-<context>
-    <name>SettingsDialog</name>
-    <message>
-        <source>Settings</source>
-        <translation type="obsolete">Налаштування</translation>
-    </message>
-    <message>
-        <source>Router</source>
-        <translation type="obsolete">Маршрутизатор</translation>
-    </message>
-    <message>
-        <source>Display Name</source>
-        <translation type="obsolete">Ім&apos;я на екрані</translation>
-    </message>
-    <message>
-        <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation type="obsolete">Потрібен маршрутизатор для підключення до комп&apos;ютера при відсутності прямого підключення (обхід NAT). Aspia не надає публічних маршрутизаторів, але ви можете налаштувати власний. Завантажити маршрутизатор можна на &lt;a href=&quot;https://aspia.org&quot;&gt;офіційному веб-сайті&lt;/a&gt;.</translation>
-    </message>
-    <message>
-        <source>Desktop</source>
-        <translation type="obsolete">Робочий стіл</translation>
-    </message>
-    <message>
-        <source>Features</source>
-        <translation type="obsolete">Додатково</translation>
-    </message>
-    <message>
-        <source>Enable audio</source>
-        <translation type="obsolete">Увімкнути аудіо</translation>
-    </message>
-    <message>
-        <source>Enable clipboard</source>
-        <translation type="obsolete">Буфер обміну</translation>
-    </message>
-    <message>
-        <source>Show shape of remote cursor</source>
-        <translation type="obsolete">Показувати форму віддаленого курсора</translation>
-    </message>
-    <message>
-        <source>Show position of remote cursor</source>
-        <translation type="obsolete">Показувати позицію віддаленого курсора</translation>
-    </message>
-    <message>
-        <source>Appearance</source>
-        <translation type="obsolete">Вигляд</translation>
-    </message>
-    <message>
-        <source>Disable desktop effects</source>
-        <translation type="obsolete">Відключити ефекти робочого стола</translation>
-    </message>
-    <message>
-        <source>Disable desktop wallpaper</source>
-        <translation type="obsolete">Відключити шпалери робочого стола</translation>
-    </message>
-    <message>
-        <source>Lock computer at disconnect</source>
-        <translation type="obsolete">Заблокувати комп&apos;ютер після від&apos;єдннання</translation>
-    </message>
-    <message>
-        <source>Block remote input</source>
-        <translation type="obsolete">Блокувати віддалений ввід</translation>
-    </message>
-    <message>
-        <source>Send key combinations</source>
-        <translation type="obsolete">Комбінації клавіш відправки</translation>
-    </message>
-    <message>
-        <source>Automatically start recording sessions on connection</source>
-        <translation type="obsolete">Автоматично починати запис сесій при підключенні</translation>
-    </message>
-    <message>
-        <source>Write path:</source>
-        <translation type="obsolete">Шлях для записів:</translation>
-    </message>
-    <message>
-        <source>Check for updates on startup</source>
-        <translation type="obsolete">Перевіряти оновлення при запуску</translation>
-    </message>
-    <message>
-        <source>Use custom update server</source>
-        <translation type="obsolete">Використовувати інший сервер оновлень</translation>
-    </message>
-    <message>
-        <source>Server:</source>
-        <translation type="obsolete">Сервер:</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Інше</translation>
-    </message>
-    <message>
-        <source>General</source>
-        <translation type="obsolete">Основні</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="obsolete">Адреса</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="obsolete">Ім&apos;я користувача</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation type="obsolete">Видалити</translation>
-    </message>
-    <message>
-        <source>Check for updates</source>
-        <translation type="obsolete">Перевірити наявність оновлень</translation>
-    </message>
-    <message>
-        <source>Administrator</source>
-        <translation type="obsolete">Адміністратор</translation>
-    </message>
-    <message>
-        <source>Client</source>
-        <translation type="obsolete">Клієнт</translation>
-    </message>
-    <message>
-        <source>Choose path</source>
-        <translation type="obsolete">Обрати шлях</translation>
     </message>
 </context>
 <context>
@@ -6512,77 +5658,6 @@ Hosts skipped: %6</source>
     </message>
 </context>
 <context>
-    <name>SysInfoWidget</name>
-    <message>
-        <source>TB</source>
-        <translation type="obsolete">ТБ</translation>
-    </message>
-    <message>
-        <source>GB</source>
-        <translation type="obsolete">ГБ</translation>
-    </message>
-    <message>
-        <source>MB</source>
-        <translation type="obsolete">МБ</translation>
-    </message>
-    <message>
-        <source>kB</source>
-        <translation type="obsolete">кБ</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">Б</translation>
-    </message>
-    <message numerus="yes">
-        <source>%n seconds</source>
-        <translation type="obsolete">
-            <numerusform>%n секунда</numerusform>
-            <numerusform>%n секунди</numerusform>
-            <numerusform>%n секунд</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n minutes</source>
-        <translation type="obsolete">
-            <numerusform>%n хвилина</numerusform>
-            <numerusform>%n хвилини</numerusform>
-            <numerusform>%n хвилин</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n hours</source>
-        <translation type="obsolete">
-            <numerusform>%n година</numerusform>
-            <numerusform>%n години</numerusform>
-            <numerusform>%n годин</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n days</source>
-        <translation type="obsolete">
-            <numerusform>%n день</numerusform>
-            <numerusform>%n дні</numerusform>
-            <numerusform>%n днів</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Gbps</source>
-        <translation type="obsolete">Гб/с</translation>
-    </message>
-    <message>
-        <source>Mbps</source>
-        <translation type="obsolete">Мб/с</translation>
-    </message>
-    <message>
-        <source>Kbps</source>
-        <translation type="obsolete">Кб/с</translation>
-    </message>
-    <message>
-        <source>bps</source>
-        <translation type="obsolete">б/с</translation>
-    </message>
-</context>
-<context>
     <name>SysInfoWidgetDrivers</name>
     <message>
         <location filename="../client/ui/sys_info/sys_info_widget_drivers.cc" line="139"/>
@@ -7614,161 +6689,6 @@ Hosts skipped: %6</source>
     </message>
 </context>
 <context>
-    <name>SystemInfoSessionWindow</name>
-    <message>
-        <source>System Information</source>
-        <translation type="obsolete">Системна інформація</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Зберегти</translation>
-    </message>
-    <message>
-        <source>Save (Ctrl+S)</source>
-        <translation type="obsolete">Зберегти (Ctrl+S)</translation>
-    </message>
-    <message>
-        <source>Ctrl+S</source>
-        <translation type="obsolete">Ctrl+S</translation>
-    </message>
-    <message>
-        <source>Print</source>
-        <translation type="obsolete">Друкувати</translation>
-    </message>
-    <message>
-        <source>Print (Ctrl+P)</source>
-        <translation type="obsolete">Друкувати (Ctrl+P)</translation>
-    </message>
-    <message>
-        <source>Copy Row</source>
-        <translation type="obsolete">Копіювати рядок</translation>
-    </message>
-    <message>
-        <source>Copy Name</source>
-        <translation type="obsolete">Копіювати ім&apos;я</translation>
-    </message>
-    <message>
-        <source>Copy Value</source>
-        <translation type="obsolete">Копіювати значення</translation>
-    </message>
-    <message>
-        <source>Refresh</source>
-        <translation type="obsolete">Оновити</translation>
-    </message>
-    <message>
-        <source>Refresh (F5)</source>
-        <translation type="obsolete">Оновити (F5)</translation>
-    </message>
-    <message>
-        <source>F5</source>
-        <translation type="obsolete">F5</translation>
-    </message>
-    <message>
-        <source>Summary</source>
-        <translation type="obsolete">Загальне</translation>
-    </message>
-    <message>
-        <source>Hardware</source>
-        <translation type="obsolete">Обладнання</translation>
-    </message>
-    <message>
-        <source>Devices</source>
-        <translation type="obsolete">Пристрої</translation>
-    </message>
-    <message>
-        <source>Video Adapters</source>
-        <translation type="obsolete">Відео адаптери</translation>
-    </message>
-    <message>
-        <source>Monitors</source>
-        <translation type="obsolete">Монітори</translation>
-    </message>
-    <message>
-        <source>Printers</source>
-        <translation type="obsolete">Принтери</translation>
-    </message>
-    <message>
-        <source>Power Options</source>
-        <translation type="obsolete">Параметри живлення</translation>
-    </message>
-    <message>
-        <source>Software</source>
-        <translation type="obsolete">Програмне забезпечення</translation>
-    </message>
-    <message>
-        <source>Applications</source>
-        <translation type="obsolete">Програми</translation>
-    </message>
-    <message>
-        <source>Drivers</source>
-        <translation type="obsolete">Драйвери</translation>
-    </message>
-    <message>
-        <source>Services</source>
-        <translation type="obsolete">Сервіси</translation>
-    </message>
-    <message>
-        <source>Processes</source>
-        <translation type="obsolete">Процеси</translation>
-    </message>
-    <message>
-        <source>Licenses</source>
-        <translation type="obsolete">Ліцензії</translation>
-    </message>
-    <message>
-        <source>Network</source>
-        <translation type="obsolete">Мережа</translation>
-    </message>
-    <message>
-        <source>Network Adapters</source>
-        <translation type="obsolete">Мережеві адаптери</translation>
-    </message>
-    <message>
-        <source>Routes</source>
-        <translation type="obsolete">Маршрути</translation>
-    </message>
-    <message>
-        <source>Connections</source>
-        <translation type="obsolete">Підключення</translation>
-    </message>
-    <message>
-        <source>Network Shares</source>
-        <translation type="obsolete">Мережеві ресурси</translation>
-    </message>
-    <message>
-        <source>Open Files</source>
-        <translation type="obsolete">Відкриті файли</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="obsolete">Операційна система</translation>
-    </message>
-    <message>
-        <source>Environment Variables</source>
-        <translation type="obsolete">Змінні середовища</translation>
-    </message>
-    <message>
-        <source>Event Logs</source>
-        <translation type="obsolete">Журнали подій</translation>
-    </message>
-    <message>
-        <source>Users</source>
-        <translation type="obsolete">Користувачі</translation>
-    </message>
-    <message>
-        <source>HTML File</source>
-        <translation type="obsolete">Файл HTML</translation>
-    </message>
-    <message>
-        <source>HTML File (*.html)</source>
-        <translation type="obsolete">Файл HTML (*.html)</translation>
-    </message>
-    <message>
-        <source>Failed to save file: %1</source>
-        <translation type="obsolete">Не вдалося зберегти файл: %1</translation>
-    </message>
-</context>
-<context>
     <name>SystemInfoWindow</name>
     <message>
         <location filename="../client/ui/sys_info/system_info_window.ui" line="14"/>
@@ -8273,25 +7193,6 @@ Hosts skipped: %6</source>
         <location filename="../common/ui/two_factor_enroll_dialog.ui" line="62"/>
         <source>Enter the 6-digit code shown by the app to confirm:</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UnlockDialog</name>
-    <message>
-        <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation type="obsolete">Адресну книгу зашифровано. Для перегляду введіть пароль.</translation>
-    </message>
-    <message>
-        <source>File:</source>
-        <translation type="obsolete">Файл:</translation>
-    </message>
-    <message>
-        <source>Encryption Type:</source>
-        <translation type="obsolete">Тип шифрування:</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">Пароль:</translation>
     </message>
 </context>
 <context>

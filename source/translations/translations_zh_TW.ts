@@ -25,10 +25,6 @@
         <translation type="unfinished">通訊錄檔案已損壞或使用未知格式。</translation>
     </message>
     <message>
-        <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation type="obsolete">ChaCha20 + Poly1305 (256-bit key)</translation>
-    </message>
-    <message>
         <location filename="../client/aab_importer.cc" line="324"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation type="unfinished">通訊錄檔案使用不支援的加密類型加密。</translation>
@@ -284,45 +280,6 @@ Routers added: %4</source>
         <source>Unknown Drive</source>
         <translation type="unfinished">未知磁碟機</translation>
     </message>
-    <message>
-        <source>TB</source>
-        <translation type="obsolete">TB</translation>
-    </message>
-    <message>
-        <source>GB</source>
-        <translation type="obsolete">GB</translation>
-    </message>
-    <message>
-        <source>MB</source>
-        <translation type="obsolete">MB</translation>
-    </message>
-    <message>
-        <source>kB</source>
-        <translation type="obsolete">kB</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">B</translation>
-    </message>
-</context>
-<context>
-    <name>AddressBookImporter</name>
-    <message>
-        <source>The address book file is corrupted or has an unknown format.</source>
-        <translation type="obsolete">通訊錄檔案已損壞或使用未知格式。</translation>
-    </message>
-    <message>
-        <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation type="obsolete">ChaCha20 + Poly1305 (256-bit key)</translation>
-    </message>
-    <message>
-        <source>The address book file is encrypted with an unsupported encryption type.</source>
-        <translation type="obsolete">通訊錄檔案使用不支援的加密類型加密。</translation>
-    </message>
-    <message>
-        <source>Unable to decrypt the address book with the specified password.</source>
-        <translation type="obsolete">無法使用指定密碼解密通訊錄。</translation>
-    </message>
 </context>
 <context>
     <name>AuthorizationDialog</name>
@@ -420,53 +377,6 @@ Routers added: %4</source>
         <location filename="../common/ui/chat_outgoing_message.ui" line="48"/>
         <source>Time</source>
         <translation type="unfinished">時間</translation>
-    </message>
-</context>
-<context>
-    <name>ChatSessionWindow</name>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">儲存</translation>
-    </message>
-    <message>
-        <source>Save (Ctrl+S)</source>
-        <translation type="obsolete">儲存 (Ctrl+S)</translation>
-    </message>
-    <message>
-        <source>Ctrl+S</source>
-        <translation type="obsolete">Ctrl+S</translation>
-    </message>
-    <message>
-        <source>Print</source>
-        <translation type="obsolete">列印</translation>
-    </message>
-    <message>
-        <source>Print (Ctrl+P)</source>
-        <translation type="obsolete">列印 (Ctrl+P)</translation>
-    </message>
-    <message>
-        <source>Copy Row</source>
-        <translation type="obsolete">複製列</translation>
-    </message>
-    <message>
-        <source>Copy Name</source>
-        <translation type="obsolete">複製名稱</translation>
-    </message>
-    <message>
-        <source>Copy Value</source>
-        <translation type="obsolete">複製值</translation>
-    </message>
-    <message>
-        <source>Refresh</source>
-        <translation type="obsolete">重新整理</translation>
-    </message>
-    <message>
-        <source>Refresh (F5)</source>
-        <translation type="obsolete">重新整理（F5）</translation>
-    </message>
-    <message>
-        <source>F5</source>
-        <translation type="obsolete">F5</translation>
     </message>
 </context>
 <context>
@@ -645,10 +555,6 @@ Routers added: %4</source>
 <context>
     <name>Client</name>
     <message>
-        <source>Incorrect value for &quot;%1&quot;. Possible values: %2.</source>
-        <translation type="vanished">&quot;%1&quot; 的值不正確。可能的值：%2。</translation>
-    </message>
-    <message>
         <location filename="../client/main.cc" line="103"/>
         <source>Set Master Password</source>
         <translation type="unfinished"></translation>
@@ -681,10 +587,6 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Remote computer address.</source>
-        <translation type="vanished">遠端電腦位址。</translation>
-    </message>
-    <message>
         <location filename="../client/main.cc" line="77"/>
         <source>Unlock</source>
         <translation type="unfinished"></translation>
@@ -698,42 +600,6 @@ Routers added: %4</source>
         <location filename="../client/main.cc" line="95"/>
         <source>Invalid master password.</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Name of user.</source>
-        <translation type="vanished">使用者名稱。</translation>
-    </message>
-    <message>
-        <source>Password of user.</source>
-        <translation type="vanished">使用者密碼。</translation>
-    </message>
-    <message>
-        <source>Enable or disable audio. Possible values: 0 or 1.</source>
-        <translation type="vanished">啟用或停用音訊。可能的值：0 或 1。</translation>
-    </message>
-    <message>
-        <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
-        <translation type="vanished">啟用或停用游標形狀。可能的值：0 或 1。</translation>
-    </message>
-    <message>
-        <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
-        <translation type="vanished">啟用或停用剪貼簿。可能的值：0 或 1。</translation>
-    </message>
-    <message>
-        <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
-        <translation type="vanished">啟用或停用桌面特效。可能的值：0 或 1。</translation>
-    </message>
-    <message>
-        <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
-        <translation type="vanished">啟用或停用桌布。可能的值：0 或 1。</translation>
-    </message>
-    <message>
-        <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
-        <translation type="vanished">在中斷連線時鎖定電腦。可能的值：0 或 1。</translation>
-    </message>
-    <message>
-        <source>Block remote input. Possible values: 0 or 1.</source>
-        <translation type="vanished">阻止遠端輸入。可能的值：0 或 1。</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="58"/>
@@ -1274,86 +1140,12 @@ Routers added: %4</source>
     </message>
 </context>
 <context>
-    <name>DesktopConfigDialog</name>
-    <message>
-        <source>Session Configuration</source>
-        <translation type="vanished">工作階段配置</translation>
-    </message>
-    <message>
-        <source>Features</source>
-        <translation type="vanished">功能</translation>
-    </message>
-    <message>
-        <source>Enable audio</source>
-        <translation type="vanished">啟用音訊</translation>
-    </message>
-    <message>
-        <source>Enable clipboard</source>
-        <translation type="vanished">啟用剪貼簿</translation>
-    </message>
-    <message>
-        <source>Show shape of remote cursor</source>
-        <translation type="vanished">顯示遠端游標形狀</translation>
-    </message>
-    <message>
-        <source>Show position of remote cursor</source>
-        <translation type="vanished">顯示遠端游標位置</translation>
-    </message>
-    <message>
-        <source>Appearance</source>
-        <translation type="vanished">視覺效果</translation>
-    </message>
-    <message>
-        <source>Disable desktop effects</source>
-        <translation type="vanished">停用桌面特效</translation>
-    </message>
-    <message>
-        <source>Disable desktop wallpaper</source>
-        <translation type="vanished">停用桌布</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="vanished">其他</translation>
-    </message>
-    <message>
-        <source>Lock computer at disconnect</source>
-        <translation type="vanished">在中斷連線時鎖定電腦</translation>
-    </message>
-    <message>
-        <source>Block remote input</source>
-        <translation type="vanished">阻止遠端輸入</translation>
-    </message>
-    <message>
-        <source>Send key combinations</source>
-        <translation type="obsolete">發送按鍵組合</translation>
-    </message>
-</context>
-<context>
-    <name>DesktopSessionWindow</name>
-    <message>
-        <source>Save File</source>
-        <translation type="obsolete">儲存檔案</translation>
-    </message>
-    <message>
-        <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
-        <translation type="obsolete">PNG 影像 (*.png);;BMP 影像 (*.bmp)</translation>
-    </message>
-    <message>
-        <source>Could not save image</source>
-        <translation type="obsolete">無法儲存影像</translation>
-    </message>
-</context>
-<context>
     <name>DesktopToolBar</name>
     <message>
         <location filename="../client/ui/desktop/desktop_toolbar.ui" line="117"/>
         <location filename="../client/ui/desktop/desktop_toolbar.ui" line="120"/>
         <source>Lock toolbar</source>
         <translation type="unfinished">鎖定工具列</translation>
-    </message>
-    <message>
-        <source>Session configuration</source>
-        <translation type="obsolete">工作階段配置</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop/desktop_toolbar.ui" line="129"/>
@@ -1415,10 +1207,6 @@ Routers added: %4</source>
         <location filename="../client/ui/desktop/desktop_toolbar.cc" line="867"/>
         <source>Scale</source>
         <translation type="unfinished">縮放</translation>
-    </message>
-    <message>
-        <source>Send key combinations</source>
-        <translation type="obsolete">發送按鍵組合</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop/desktop_toolbar.ui" line="228"/>
@@ -1735,39 +1523,6 @@ Routers added: %4</source>
     </message>
 </context>
 <context>
-    <name>ExportPasswordDialog</name>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">密碼：</translation>
-    </message>
-    <message>
-        <source>Skip</source>
-        <translation type="obsolete">略過</translation>
-    </message>
-    <message>
-        <source>Password cannot be empty.</source>
-        <translation type="obsolete">密碼不能為空。</translation>
-    </message>
-    <message>
-        <source>Password you entered does not meet the security requirements!</source>
-        <translation type="obsolete">您輸入的密碼不符合安全要求！</translation>
-    </message>
-    <message numerus="yes">
-        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>密碼必須包含小寫和大寫字符、數字，並且不得少於 %n 個字元。</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Do you want to enter a different password?</source>
-        <translation type="obsolete">您想輸入其他密碼嗎？</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">警告</translation>
-    </message>
-</context>
-<context>
     <name>FileError</name>
     <message>
         <location filename="../client/ui/file_transfer/file_error_code.cc" line="33"/>
@@ -1872,26 +1627,6 @@ Routers added: %4</source>
         <location filename="../client/ui/file_transfer/file_list_model.cc" line="395"/>
         <source>Modified</source>
         <translation type="unfinished">修改時間</translation>
-    </message>
-    <message>
-        <source>TB</source>
-        <translation type="obsolete">TB</translation>
-    </message>
-    <message>
-        <source>GB</source>
-        <translation type="obsolete">GB</translation>
-    </message>
-    <message>
-        <source>MB</source>
-        <translation type="obsolete">MB</translation>
-    </message>
-    <message>
-        <source>kB</source>
-        <translation type="obsolete">kB</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">B</translation>
     </message>
 </context>
 <context>
@@ -2013,45 +1748,6 @@ Routers added: %4</source>
     </message>
 </context>
 <context>
-    <name>FileRemoveDialog</name>
-    <message>
-        <source>Deleting Items</source>
-        <translation type="vanished">刪除項目</translation>
-    </message>
-    <message>
-        <source>Creating a list of files to delete...</source>
-        <translation type="vanished">建立要刪除的檔案清單...</translation>
-    </message>
-    <message>
-        <source>Deleting: %1</source>
-        <translation type="obsolete">正在刪除：%1</translation>
-    </message>
-    <message>
-        <source>An error occurred while retrieving the list of files: %1</source>
-        <translation type="obsolete">檢索檔案清單時發生錯誤：%1</translation>
-    </message>
-    <message>
-        <source>Failed to delete &quot;%1&quot;: %2.</source>
-        <translation type="obsolete">無法刪除 &quot;%1&quot;：%2.</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">警告</translation>
-    </message>
-    <message>
-        <source>Skip</source>
-        <translation type="obsolete">略過</translation>
-    </message>
-    <message>
-        <source>Skip All</source>
-        <translation type="obsolete">全部略過</translation>
-    </message>
-    <message>
-        <source>Abort</source>
-        <translation type="obsolete">中止</translation>
-    </message>
-</context>
-<context>
     <name>FileRemoveWidget</name>
     <message>
         <location filename="../client/ui/file_transfer/file_remove_widget.ui" line="35"/>
@@ -2123,120 +1819,6 @@ Routers added: %4</source>
         <location filename="../client/ui/file_transfer/file_remove_widget.cc" line="185"/>
         <source>Abort</source>
         <translation type="unfinished">中止</translation>
-    </message>
-</context>
-<context>
-    <name>FileTransferDialog</name>
-    <message>
-        <source>File Transfer</source>
-        <translation type="vanished">檔案傳輸</translation>
-    </message>
-    <message>
-        <source>Current Task: Creating a list of files to copy...</source>
-        <translation type="vanished">目前工作：建立要複製的檔案清單...</translation>
-    </message>
-    <message>
-        <source>From: ...</source>
-        <translation type="vanished">從：...</translation>
-    </message>
-    <message>
-        <source>To: ...</source>
-        <translation type="vanished">到：...</translation>
-    </message>
-    <message>
-        <source>Progress</source>
-        <translation type="vanished">進度</translation>
-    </message>
-    <message>
-        <source>Total:</source>
-        <translation type="vanished">總進度：</translation>
-    </message>
-    <message>
-        <source>Item:</source>
-        <translation type="vanished">項目：</translation>
-    </message>
-    <message>
-        <source>Current Task: Copying items.</source>
-        <translation type="obsolete">目前工作：正在複製項目。</translation>
-    </message>
-    <message>
-        <source>From: %1</source>
-        <translation type="obsolete">從：%1</translation>
-    </message>
-    <message>
-        <source>To: %1</source>
-        <translation type="obsolete">到：%1</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">警告</translation>
-    </message>
-    <message>
-        <source>Skip</source>
-        <translation type="obsolete">略過</translation>
-    </message>
-    <message>
-        <source>Skip All</source>
-        <translation type="obsolete">全部略過</translation>
-    </message>
-    <message>
-        <source>Replace</source>
-        <translation type="obsolete">取代</translation>
-    </message>
-    <message>
-        <source>Replace All</source>
-        <translation type="obsolete">全部取代</translation>
-    </message>
-    <message>
-        <source>Abort</source>
-        <translation type="obsolete">中止</translation>
-    </message>
-    <message>
-        <source>Current Task: Cancel transfer of files.</source>
-        <translation type="obsolete">目前工作：取消檔案傳輸。</translation>
-    </message>
-    <message>
-        <source>An error occurred while building the file queue for copying</source>
-        <translation type="obsolete">建立用於複製的檔案佇列時出錯</translation>
-    </message>
-    <message>
-        <source>Failed to create directory &quot;%1&quot;: %2</source>
-        <translation type="obsolete">無法建立資料夾 &quot;%1&quot;：%2</translation>
-    </message>
-    <message>
-        <source>Failed to create file &quot;%1&quot;: %2</source>
-        <translation type="obsolete">無法建立檔案 &quot;%1&quot;：%2</translation>
-    </message>
-    <message>
-        <source>Failed to open file &quot;%1&quot;: %2</source>
-        <translation type="obsolete">無法開啟檔案 &quot;%1&quot;：%2</translation>
-    </message>
-    <message>
-        <source>Failed to write file &quot;%1&quot;: %2</source>
-        <translation type="obsolete">無法寫入檔案 &quot;%1&quot;：%2</translation>
-    </message>
-    <message>
-        <source>Failed to read file &quot;%1&quot;: %2</source>
-        <translation type="obsolete">無法讀取檔案 &quot;%1&quot;：%2</translation>
-    </message>
-    <message>
-        <source>Unknown error type while copying files</source>
-        <translation type="obsolete">複製檔案時出現未知錯誤類型</translation>
-    </message>
-</context>
-<context>
-    <name>FileTransferSessionWindow</name>
-    <message>
-        <source>Local Computer</source>
-        <translation type="obsolete">本地電腦</translation>
-    </message>
-    <message>
-        <source>Remote Computer</source>
-        <translation type="obsolete">遠端電腦</translation>
-    </message>
-    <message>
-        <source>Session error: %1</source>
-        <translation type="obsolete">工作階段錯誤：%1</translation>
     </message>
 </context>
 <context>
@@ -2809,18 +2391,6 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add Computer</source>
-        <translation type="obsolete">新增電腦</translation>
-    </message>
-    <message>
-        <source>Delete Computer</source>
-        <translation type="obsolete">刪除電腦</translation>
-    </message>
-    <message>
-        <source>Copy Computer</source>
-        <translation type="obsolete">複製電腦</translation>
-    </message>
-    <message>
         <location filename="../client/ui/hosts_tab.ui" line="119"/>
         <source>Add Host</source>
         <translation type="unfinished"></translation>
@@ -2940,14 +2510,6 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Status</source>
-        <translation type="obsolete">狀態</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation type="obsolete">刪除</translation>
-    </message>
-    <message>
         <location filename="../client/ui/hosts_tab.cc" line="412"/>
         <source>Hosts</source>
         <translation type="unfinished">主機</translation>
@@ -2956,10 +2518,6 @@ Routers added: %4</source>
         <location filename="../client/ui/hosts_tab.cc" line="833"/>
         <source>(copy)</source>
         <translation type="unfinished">(複製)</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
-        <translation type="obsolete">您確定要刪除電腦「%1」嗎?</translation>
     </message>
     <message>
         <location filename="../client/ui/hosts_tab.cc" line="580"/>
@@ -3137,10 +2695,6 @@ Hosts exported: %3</source>
         <translation type="unfinished">通訊錄已加密。您必須輸入密碼才能開啟。</translation>
     </message>
     <message>
-        <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation type="obsolete">ChaCha20 + Poly1305 (256-bit key)</translation>
-    </message>
-    <message>
         <location filename="../client/json_backup.cc" line="527"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation type="unfinished"></translation>
@@ -3160,56 +2714,6 @@ Groups skipped: %4
 Hosts added: %5
 Hosts skipped: %6</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>JsonImporter</name>
-    <message>
-        <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation type="obsolete">ChaCha20 + Poly1305 (256-bit key)</translation>
-    </message>
-</context>
-<context>
-    <name>LocalComputerDialog</name>
-    <message>
-        <source>Computer</source>
-        <translation type="obsolete">電腦</translation>
-    </message>
-    <message>
-        <source>Name:</source>
-        <translation type="obsolete">名稱：</translation>
-    </message>
-    <message>
-        <source>Address:</source>
-        <translation type="obsolete">位址：</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">密碼：</translation>
-    </message>
-    <message>
-        <source>Comment:</source>
-        <translation type="obsolete">註解：</translation>
-    </message>
-    <message>
-        <source>Add Computer</source>
-        <translation type="obsolete">新增電腦</translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>名稱過長。名稱的最大長度為 %n 個字元。</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>An invalid computer address was entered.</source>
-        <translation type="obsolete">輸入的電腦位址無效。</translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>註解過長。註解的最大長度為 %n 個字元。</numerusform>
-        </translation>
     </message>
 </context>
 <context>
@@ -3331,25 +2835,11 @@ Hosts skipped: %6</source>
         <source>Status update...</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>(copy)</source>
-        <translation type="obsolete">(複製)</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
-        <translation type="obsolete">您確定要刪除電腦「%1」嗎?</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/ui/hosts/local_group_widget.cc" line="422"/>
         <source>%n child group(s)</source>
         <translation type="unfinished">
             <numerusform>%n 個子群組</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n child computer(s)</source>
-        <translation type="obsolete">
-            <numerusform>%n 個子電腦</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -3511,18 +3001,6 @@ Hosts skipped: %6</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <source>Aspia Host</source>
-        <translation type="vanished">Aspia Host</translation>
-    </message>
-    <message>
-        <source>Your ID</source>
-        <translation type="vanished">您的 ID</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation type="vanished">密碼</translation>
-    </message>
-    <message>
         <location filename="../client/ui/main_window.ui" line="110"/>
         <location filename="../client/ui/main_window.ui" line="172"/>
         <source>Tool Bar</source>
@@ -3534,22 +3012,6 @@ Hosts skipped: %6</source>
         <translation type="unfinished">F1</translation>
     </message>
     <message>
-        <source>Desktop View</source>
-        <translation type="obsolete">桌面檢視</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="obsolete">檔案傳輸</translation>
-    </message>
-    <message>
-        <source>Text Chat</source>
-        <translation type="obsolete">文字聊天</translation>
-    </message>
-    <message>
-        <source>Router is disabled</source>
-        <translation type="vanished">已停用路由器</translation>
-    </message>
-    <message>
         <location filename="../client/ui/main_window.ui" line="70"/>
         <source>Help</source>
         <translation>說明</translation>
@@ -3558,10 +3020,6 @@ Hosts skipped: %6</source>
         <location filename="../client/ui/main_window.ui" line="82"/>
         <source>View</source>
         <translation>檢視</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation type="vanished">語言</translation>
     </message>
     <message>
         <location filename="../client/ui/main_window.ui" line="164"/>
@@ -3630,10 +3088,6 @@ Hosts skipped: %6</source>
         <translation>設定...</translation>
     </message>
     <message>
-        <source>Hide</source>
-        <translation type="vanished">隱藏</translation>
-    </message>
-    <message>
         <location filename="../client/ui/main_window.cc" line="76"/>
         <location filename="../client/ui/main_window.cc" line="243"/>
         <source>Search...</source>
@@ -3653,51 +3107,6 @@ Hosts skipped: %6</source>
         <location filename="../client/ui/main_window.cc" line="346"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
-        <translation type="obsolete">指定使用 ID 連線，但未配置路由器。請在通訊錄的屬性中檢查路由器的參數。</translation>
-    </message>
-    <message>
-        <source>Show</source>
-        <translation type="obsolete">顯示</translation>
-    </message>
-    <message>
-        <source>Not available</source>
-        <translation type="obsolete">無法使用</translation>
-    </message>
-    <message>
-        <source>Failed to connect to router %1</source>
-        <translation type="obsolete">無法連線到路由器 %1</translation>
-    </message>
-    <message>
-        <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
-        <translation type="obsolete">如果您離開 Aspia，在您再次手動開啟電腦或 Aspia 之前，將無法連線到此電腦。您真的要離開應用程式嗎？</translation>
-    </message>
-</context>
-<context>
-    <name>MasterPasswordDialog</name>
-    <message>
-        <source>New password:</source>
-        <translation type="obsolete">新密碼：</translation>
-    </message>
-    <message>
-        <source>Password you entered does not meet the security requirements!</source>
-        <translation type="obsolete">您輸入的密碼不符合安全要求！</translation>
-    </message>
-    <message numerus="yes">
-        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>密碼必須包含小寫和大寫字符、數字，並且不得少於 %n 個字元。</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Do you want to enter a different password?</source>
-        <translation type="obsolete">您想輸入其他密碼嗎？</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">警告</translation>
     </message>
 </context>
 <context>
@@ -4028,14 +3437,6 @@ Hosts skipped: %6</source>
 <context>
     <name>RouterGroupWidget</name>
     <message>
-        <source>Name</source>
-        <translation type="obsolete">名稱</translation>
-    </message>
-    <message>
-        <source>Address / ID</source>
-        <translation type="obsolete">位址 / ID</translation>
-    </message>
-    <message>
         <location filename="../client/ui/hosts/router_group_widget.ui" line="45"/>
         <source>Display Name</source>
         <translation type="unfinished">顯示名稱</translation>
@@ -4159,57 +3560,6 @@ Hosts skipped: %6</source>
         <location filename="../client/ui/hosts/router_host_dialog.cc" line="106"/>
         <source>Unknown error type.</source>
         <translation type="unfinished">未知錯誤類型。</translation>
-    </message>
-</context>
-<context>
-    <name>RouterPasswordDialog</name>
-    <message>
-        <source>Change Password</source>
-        <translation type="obsolete">變更密碼</translation>
-    </message>
-    <message>
-        <source>New password:</source>
-        <translation type="obsolete">新密碼：</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="obsolete">未知的內部錯誤。</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="obsolete">傳入了無效資料。</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="obsolete">未知錯誤類型。</translation>
-    </message>
-    <message>
-        <source>The passwords you entered do not match.</source>
-        <translation type="obsolete">您輸入的密碼不符。</translation>
-    </message>
-    <message numerus="yes">
-        <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>密碼不能為空且不應超過 %n 個字元。</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Password you entered does not meet the security requirements!</source>
-        <translation type="obsolete">您輸入的密碼不符合安全要求！</translation>
-    </message>
-    <message numerus="yes">
-        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>密碼必須包含小寫和大寫字符、數字，並且不得少於 %n 個字元。</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Do you want to enter a different password?</source>
-        <translation type="obsolete">您想輸入其他密碼嗎？</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">警告</translation>
     </message>
 </context>
 <context>
@@ -4610,50 +3960,6 @@ Hosts skipped: %6</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n seconds</source>
-        <translation type="obsolete">
-            <numerusform>%n 秒</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n minutes</source>
-        <translation type="obsolete">
-            <numerusform>%n 分鐘</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n hours</source>
-        <translation type="obsolete">
-            <numerusform>%n 小時</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n days</source>
-        <translation type="obsolete">
-            <numerusform>%n 天</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>TB</source>
-        <translation type="obsolete">TB</translation>
-    </message>
-    <message>
-        <source>GB</source>
-        <translation type="obsolete">GB</translation>
-    </message>
-    <message>
-        <source>MB</source>
-        <translation type="obsolete">MB</translation>
-    </message>
-    <message>
-        <source>kB</source>
-        <translation type="obsolete">kB</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">B</translation>
     </message>
     <message>
         <location filename="../client/ui/hosts/router_widget.cc" line="1012"/>
@@ -5259,136 +4565,9 @@ Hosts skipped: %6</source>
         <translation>系統資訊</translation>
     </message>
     <message>
-        <source>Text Chat</source>
-        <translation type="vanished">文字聊天</translation>
-    </message>
-    <message>
-        <source>Manage</source>
-        <translation type="obsolete">管理</translation>
-    </message>
-    <message>
         <location filename="../common/ui/session_type.cc" line="42"/>
         <source>Chat</source>
         <translation type="unfinished">聊天</translation>
-    </message>
-</context>
-<context>
-    <name>SettingsDialog</name>
-    <message>
-        <source>Settings</source>
-        <translation type="obsolete">設定</translation>
-    </message>
-    <message>
-        <source>Router</source>
-        <translation type="obsolete">路由器</translation>
-    </message>
-    <message>
-        <source>Display Name</source>
-        <translation type="obsolete">顯示名稱</translation>
-    </message>
-    <message>
-        <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation type="obsolete">當無法直接連線（繞過 NAT）到電腦時，就需要透過路由器進行連接。Aspia 不提供公共路由，但您可以自行搭建。您可從&lt;a href=&quot;https://aspia.org&quot;&gt;官網&lt;/a&gt;下載路由器。</translation>
-    </message>
-    <message>
-        <source>Desktop</source>
-        <translation type="obsolete">桌面</translation>
-    </message>
-    <message>
-        <source>Features</source>
-        <translation type="obsolete">功能</translation>
-    </message>
-    <message>
-        <source>Enable audio</source>
-        <translation type="obsolete">啟用音訊</translation>
-    </message>
-    <message>
-        <source>Enable clipboard</source>
-        <translation type="obsolete">啟用剪貼簿</translation>
-    </message>
-    <message>
-        <source>Show shape of remote cursor</source>
-        <translation type="obsolete">顯示遠端游標形狀</translation>
-    </message>
-    <message>
-        <source>Show position of remote cursor</source>
-        <translation type="obsolete">顯示遠端游標位置</translation>
-    </message>
-    <message>
-        <source>Appearance</source>
-        <translation type="obsolete">視覺效果</translation>
-    </message>
-    <message>
-        <source>Disable desktop effects</source>
-        <translation type="obsolete">停用桌面特效</translation>
-    </message>
-    <message>
-        <source>Disable desktop wallpaper</source>
-        <translation type="obsolete">停用桌布</translation>
-    </message>
-    <message>
-        <source>Lock computer at disconnect</source>
-        <translation type="obsolete">在中斷連線時鎖定電腦</translation>
-    </message>
-    <message>
-        <source>Block remote input</source>
-        <translation type="obsolete">阻止遠端輸入</translation>
-    </message>
-    <message>
-        <source>Send key combinations</source>
-        <translation type="obsolete">發送按鍵組合</translation>
-    </message>
-    <message>
-        <source>Update</source>
-        <translation type="obsolete">更新</translation>
-    </message>
-    <message>
-        <source>Check for updates on startup</source>
-        <translation type="obsolete">啟動時檢查更新</translation>
-    </message>
-    <message>
-        <source>Use custom update server</source>
-        <translation type="obsolete">使用自訂更新伺服器</translation>
-    </message>
-    <message>
-        <source>Server:</source>
-        <translation type="obsolete">伺服器：</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">其他</translation>
-    </message>
-    <message>
-        <source>General</source>
-        <translation type="obsolete">一般</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="obsolete">位址</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="obsolete">使用者名稱</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation type="obsolete">移除</translation>
-    </message>
-    <message>
-        <source>Check for updates</source>
-        <translation type="obsolete">檢查更新</translation>
-    </message>
-    <message>
-        <source>Administrator</source>
-        <translation type="obsolete">管理員</translation>
-    </message>
-    <message>
-        <source>Client</source>
-        <translation type="obsolete">客戶端</translation>
-    </message>
-    <message>
-        <source>Unknown</source>
-        <translation type="obsolete">未知</translation>
     </message>
 </context>
 <context>
@@ -6424,69 +5603,6 @@ Hosts skipped: %6</source>
     </message>
 </context>
 <context>
-    <name>SysInfoWidget</name>
-    <message>
-        <source>TB</source>
-        <translation type="obsolete">TB</translation>
-    </message>
-    <message>
-        <source>GB</source>
-        <translation type="obsolete">GB</translation>
-    </message>
-    <message>
-        <source>MB</source>
-        <translation type="obsolete">MB</translation>
-    </message>
-    <message>
-        <source>kB</source>
-        <translation type="obsolete">kB</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">B</translation>
-    </message>
-    <message numerus="yes">
-        <source>%n seconds</source>
-        <translation type="obsolete">
-            <numerusform>%n 秒</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n minutes</source>
-        <translation type="obsolete">
-            <numerusform>%n 分鐘</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n hours</source>
-        <translation type="obsolete">
-            <numerusform>%n 小時</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n days</source>
-        <translation type="obsolete">
-            <numerusform>%n 天</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Gbps</source>
-        <translation type="obsolete">Gbps</translation>
-    </message>
-    <message>
-        <source>Mbps</source>
-        <translation type="obsolete">Mbps</translation>
-    </message>
-    <message>
-        <source>Kbps</source>
-        <translation type="obsolete">Kbps</translation>
-    </message>
-    <message>
-        <source>bps</source>
-        <translation type="obsolete">bps</translation>
-    </message>
-</context>
-<context>
     <name>SysInfoWidgetDrivers</name>
     <message>
         <location filename="../client/ui/sys_info/sys_info_widget_drivers.cc" line="139"/>
@@ -7518,145 +6634,6 @@ Hosts skipped: %6</source>
     </message>
 </context>
 <context>
-    <name>SystemInfoSessionWindow</name>
-    <message>
-        <source>System Information</source>
-        <translation type="obsolete">系統訊息</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">儲存</translation>
-    </message>
-    <message>
-        <source>Save (Ctrl+S)</source>
-        <translation type="obsolete">儲存 (Ctrl+S)</translation>
-    </message>
-    <message>
-        <source>Ctrl+S</source>
-        <translation type="obsolete">Ctrl+S</translation>
-    </message>
-    <message>
-        <source>Print</source>
-        <translation type="obsolete">列印</translation>
-    </message>
-    <message>
-        <source>Print (Ctrl+P)</source>
-        <translation type="obsolete">列印 (Ctrl+P)</translation>
-    </message>
-    <message>
-        <source>Copy Row</source>
-        <translation type="obsolete">複製列</translation>
-    </message>
-    <message>
-        <source>Copy Name</source>
-        <translation type="obsolete">複製名稱</translation>
-    </message>
-    <message>
-        <source>Copy Value</source>
-        <translation type="obsolete">複製值</translation>
-    </message>
-    <message>
-        <source>Refresh</source>
-        <translation type="obsolete">重新整理</translation>
-    </message>
-    <message>
-        <source>Refresh (F5)</source>
-        <translation type="obsolete">重新整理（F5）</translation>
-    </message>
-    <message>
-        <source>F5</source>
-        <translation type="obsolete">F5</translation>
-    </message>
-    <message>
-        <source>Summary</source>
-        <translation type="obsolete">概要</translation>
-    </message>
-    <message>
-        <source>Hardware</source>
-        <translation type="obsolete">硬體</translation>
-    </message>
-    <message>
-        <source>Devices</source>
-        <translation type="obsolete">裝置</translation>
-    </message>
-    <message>
-        <source>Video Adapters</source>
-        <translation type="obsolete">顯示卡</translation>
-    </message>
-    <message>
-        <source>Monitors</source>
-        <translation type="obsolete">顯示器</translation>
-    </message>
-    <message>
-        <source>Printers</source>
-        <translation type="obsolete">印表機</translation>
-    </message>
-    <message>
-        <source>Power Options</source>
-        <translation type="obsolete">電源選項</translation>
-    </message>
-    <message>
-        <source>Software</source>
-        <translation type="obsolete">軟體</translation>
-    </message>
-    <message>
-        <source>Drivers</source>
-        <translation type="obsolete">驅動程式</translation>
-    </message>
-    <message>
-        <source>Services</source>
-        <translation type="obsolete">服務</translation>
-    </message>
-    <message>
-        <source>Network</source>
-        <translation type="obsolete">網路</translation>
-    </message>
-    <message>
-        <source>Network Adapters</source>
-        <translation type="obsolete">網路卡</translation>
-    </message>
-    <message>
-        <source>Routes</source>
-        <translation type="obsolete">路由</translation>
-    </message>
-    <message>
-        <source>Connections</source>
-        <translation type="obsolete">連線</translation>
-    </message>
-    <message>
-        <source>Network Shares</source>
-        <translation type="obsolete">網路分享</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="obsolete">作業系統</translation>
-    </message>
-    <message>
-        <source>Environment Variables</source>
-        <translation type="obsolete">環境變數</translation>
-    </message>
-    <message>
-        <source>Event Logs</source>
-        <translation type="obsolete">事件紀錄</translation>
-    </message>
-    <message>
-        <source>Users</source>
-        <translation type="obsolete">使用者</translation>
-    </message>
-    <message>
-        <source>HTML File</source>
-        <translation type="obsolete">HTML 檔案</translation>
-    </message>
-    <message>
-        <source>HTML File (*.html)</source>
-        <translation type="obsolete">HTML 檔案 (*.html)</translation>
-    </message>
-    <message>
-        <source>Failed to save file: %1</source>
-        <translation type="obsolete">無法儲存檔案：%1</translation>
-    </message>
-</context>
-<context>
     <name>SystemInfoWindow</name>
     <message>
         <location filename="../client/ui/sys_info/system_info_window.ui" line="14"/>
@@ -8160,25 +7137,6 @@ Hosts skipped: %6</source>
         <location filename="../common/ui/two_factor_enroll_dialog.ui" line="62"/>
         <source>Enter the 6-digit code shown by the app to confirm:</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UnlockDialog</name>
-    <message>
-        <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation type="obsolete">通訊錄已加密。您必須輸入密碼才能開啟。</translation>
-    </message>
-    <message>
-        <source>File:</source>
-        <translation type="obsolete">檔案：</translation>
-    </message>
-    <message>
-        <source>Encryption Type:</source>
-        <translation type="obsolete">加密類型：</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">密碼：</translation>
     </message>
 </context>
 <context>
