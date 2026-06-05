@@ -691,92 +691,80 @@ Routers added: %4</source>
         <translation type="vanished">Некорректное значение для &quot;%1&quot;. Возможные значения: %2.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="120"/>
         <source>Connecting to router %1...</source>
-        <translation>Подключение к маршрутизатору %1...</translation>
+        <translation type="vanished">Подключение к маршрутизатору %1...</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="125"/>
         <source>Connection to router %1 established.</source>
-        <translation>Соединение с маршрутизатором %1 установлено.</translation>
+        <translation type="vanished">Соединение с маршрутизатором %1 установлено.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="134"/>
         <source>Disconnected from router %1.</source>
-        <translation>Отключено от маршрутизатора %1.</translation>
+        <translation type="vanished">Отключено от маршрутизатора %1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="146"/>
         <source>Network error: %1.</source>
-        <translation>Сетевая ошибка: %1.</translation>
+        <translation type="vanished">Сетевая ошибка: %1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="313"/>
         <source>Unable to read connection config from stdin.</source>
-        <translation>Не удалось прочитать конфигурацию подключения из stdin.</translation>
+        <translation type="vanished">Не удалось прочитать конфигурацию подключения из stdin.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="324"/>
         <source>Empty connection config from stdin.</source>
-        <translation>Пустая конфигурация подключения из stdin.</translation>
+        <translation type="vanished">Пустая конфигурация подключения из stdin.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="334"/>
         <source>Invalid JSON in connection config: %1</source>
-        <translation>Некорректный JSON в конфигурации подключения: %1</translation>
+        <translation type="vanished">Некорректный JSON в конфигурации подключения: %1</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="357"/>
         <source>Missing or invalid &quot;host&quot; object in connection config.</source>
-        <translation>Отсутствует или недопустим объект &quot;host&quot; в конфигурации подключения.</translation>
+        <translation type="vanished">Отсутствует или недопустим объект &quot;host&quot; в конфигурации подключения.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="373"/>
         <source>Missing required host field: address.</source>
-        <translation>Отсутствует обязательное поле хоста: address.</translation>
+        <translation type="vanished">Отсутствует обязательное поле хоста: address.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="388"/>
         <source>Field &quot;desktop&quot; must be an object.</source>
-        <translation>Поле &quot;desktop&quot; должно быть объектом.</translation>
+        <translation type="vanished">Поле &quot;desktop&quot; должно быть объектом.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="405"/>
         <source>Field &quot;desktop.%1&quot; must be boolean.</source>
-        <translation>Поле &quot;desktop.%1&quot; должно иметь логический тип.</translation>
+        <translation type="vanished">Поле &quot;desktop.%1&quot; должно иметь логический тип.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="501"/>
         <source>Read JSON connection config from stdin until EOF and start a session.</source>
-        <translation>Прочитать JSON-конфигурацию подключения из stdin до EOF и начать сеанс.</translation>
+        <translation type="vanished">Прочитать JSON-конфигурацию подключения из stdin до EOF и начать сеанс.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="531"/>
+        <location filename="../client/main.cc" line="77"/>
         <source>Unlock</source>
         <translation>Разблокировка</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="533"/>
+        <location filename="../client/main.cc" line="79"/>
         <source>Enter the master password to unlock the application.</source>
         <translation>Введите мастер-пароль, чтобы разблокировать приложение.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="557"/>
+        <location filename="../client/main.cc" line="103"/>
         <source>Set Master Password</source>
         <translation>Установка мастер-пароля</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="559"/>
+        <location filename="../client/main.cc" line="105"/>
         <source>Set a master password required to unlock the application.</source>
         <translation>Установите мастер-пароль, необходимый для разблокировки приложения.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="567"/>
+        <location filename="../client/main.cc" line="113"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="569"/>
+        <location filename="../client/main.cc" line="115"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
@@ -785,12 +773,12 @@ Routers added: %4</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="573"/>
+        <location filename="../client/main.cc" line="119"/>
         <source>Do you want to enter a different password?</source>
         <translation>Вы хотите ввести другой пароль?</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="583"/>
+        <location filename="../client/main.cc" line="129"/>
         <source>Unable to set master password.</source>
         <translation>Не удалось установить мастер-пароль.</translation>
     </message>
@@ -831,21 +819,19 @@ Routers added: %4</source>
         <translation type="vanished">Адрес удаленного компьютера.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="440"/>
         <source>Connection parameters to the router are not specified.</source>
-        <translation>Параметры подключения к маршрутизатору не указаны.</translation>
+        <translation type="vanished">Параметры подключения к маршрутизатору не указаны.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="456"/>
         <source>Incorrect data for connecting to the router.</source>
-        <translation>Неверные данные для подключения к маршрутизатору.</translation>
+        <translation type="vanished">Неверные данные для подключения к маршрутизатору.</translation>
     </message>
     <message>
         <source>Path to one-time JSON connection config file.</source>
         <translation type="vanished">Путь к одноразовому JSON-файлу конфигурации подключения.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="549"/>
+        <location filename="../client/main.cc" line="95"/>
         <source>Invalid master password.</source>
         <translation>Неверный мастер-пароль.</translation>
     </message>
@@ -914,7 +900,7 @@ Routers added: %4</source>
         <translation type="vanished">Пароль маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="504"/>
+        <location filename="../client/main.cc" line="58"/>
         <source>Aspia Client</source>
         <translation>Клиент Aspia</translation>
     </message>
@@ -1007,22 +993,32 @@ Routers added: %4</source>
         <translation>Попытка подключения в режиме совместимости...</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="387"/>
+        <location filename="../client/ui/client_window.cc" line="365"/>
+        <source>Requesting connection to the host...</source>
+        <translation>Запрашивается подключение к хосту...</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/client_window.cc" line="373"/>
+        <source>Connection offer received.</source>
+        <translation>Получено предложение на подключение.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/client_window.cc" line="394"/>
         <source>The host with the specified ID is not online</source>
         <translation>хост с указанным ID не в сети</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="390"/>
+        <location filename="../client/ui/client_window.cc" line="397"/>
         <source>Access is denied</source>
         <translation>доступ запрещен</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="393"/>
+        <location filename="../client/ui/client_window.cc" line="400"/>
         <source>There are no relays available or the key pool is empty</source>
         <translation>нет доступных ретрансляторов или пул ключей пуст</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="396"/>
+        <location filename="../client/ui/client_window.cc" line="403"/>
         <source>Unknown error</source>
         <translation>неизвестная ошибка</translation>
     </message>
@@ -1800,22 +1796,22 @@ Routers added: %4</source>
 <context>
     <name>DesktopWidget</name>
     <message>
-        <location filename="../client/ui/desktop/desktop_widget.cc" line="531"/>
+        <location filename="../client/ui/desktop/desktop_widget.cc" line="561"/>
         <source>The session was paused by a remote user</source>
         <translation>Сессия приостановлена удаленным пользователем</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_widget.cc" line="534"/>
+        <location filename="../client/ui/desktop/desktop_widget.cc" line="564"/>
         <source>The session is temporarily unavailable</source>
         <translation>Сессия временно недоступна</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_widget.cc" line="537"/>
+        <location filename="../client/ui/desktop/desktop_widget.cc" line="567"/>
         <source>The session is permanently unavailable</source>
         <translation>Сессия недоступна</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_widget.cc" line="540"/>
+        <location filename="../client/ui/desktop/desktop_widget.cc" line="570"/>
         <source>Error while receiving video stream: %1</source>
         <translation>Ошибка при получении видео-потока: %1</translation>
     </message>
@@ -3261,16 +3257,17 @@ Routers added: %4</source>
         <translation>Хосты</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="592"/>
-        <location filename="../client/ui/hosts_tab.cc" line="644"/>
-        <location filename="../client/ui/hosts_tab.cc" line="735"/>
-        <location filename="../client/ui/hosts_tab.cc" line="766"/>
-        <location filename="../client/ui/hosts_tab.cc" line="809"/>
+        <location filename="../client/ui/hosts_tab.cc" line="580"/>
+        <location filename="../client/ui/hosts_tab.cc" line="609"/>
+        <location filename="../client/ui/hosts_tab.cc" line="662"/>
+        <location filename="../client/ui/hosts_tab.cc" line="798"/>
+        <location filename="../client/ui/hosts_tab.cc" line="829"/>
+        <location filename="../client/ui/hosts_tab.cc" line="872"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>Не удалось получить информацию о хосте из локальной базы данных.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="770"/>
+        <location filename="../client/ui/hosts_tab.cc" line="833"/>
         <source>(copy)</source>
         <translation>(копия)</translation>
     </message>
@@ -3287,77 +3284,77 @@ Routers added: %4</source>
         <translation type="vanished">Не удалось удалить компьютер</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="774"/>
+        <location filename="../client/ui/hosts_tab.cc" line="837"/>
         <source>Failed to add the host to the local database.</source>
         <translation>Не удалось добавить хост в локальную базу данных.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="813"/>
+        <location filename="../client/ui/hosts_tab.cc" line="876"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>Вы уверены, что хотите удалить хост &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="823"/>
+        <location filename="../client/ui/hosts_tab.cc" line="886"/>
         <source>Unable to remove host</source>
         <translation>Не удалось удалить хост</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="868"/>
-        <location filename="../client/ui/hosts_tab.cc" line="893"/>
-        <location filename="../client/ui/hosts_tab.cc" line="918"/>
+        <location filename="../client/ui/hosts_tab.cc" line="931"/>
+        <location filename="../client/ui/hosts_tab.cc" line="956"/>
+        <location filename="../client/ui/hosts_tab.cc" line="981"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="869"/>
-        <location filename="../client/ui/hosts_tab.cc" line="894"/>
-        <location filename="../client/ui/hosts_tab.cc" line="919"/>
+        <location filename="../client/ui/hosts_tab.cc" line="932"/>
+        <location filename="../client/ui/hosts_tab.cc" line="957"/>
+        <location filename="../client/ui/hosts_tab.cc" line="982"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1131"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1194"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation>Вы уверены, что хотите удалить группу &quot;%1&quot;? Узлы, назначенные этой группе или её подгруппам, будут перемещены в корень рабочей области.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1181"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1244"/>
         <source>Import Old Address Book</source>
         <translation>Импорт старой адресной книги</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1183"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1246"/>
         <source>Address Book (*.aab);;All files (*)</source>
         <translation>Адресная книга (*.aab);;Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1206"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1269"/>
         <source>Export Address Book</source>
         <translation>Экспорт адресной книги</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1208"/>
-        <location filename="../client/ui/hosts_tab.cc" line="1235"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1271"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1298"/>
         <source>Address Book (*.json);;All files (*)</source>
         <translation>Адресная книга (*.json);;Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1233"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1296"/>
         <source>Import Address Book</source>
         <translation>Импорт адресной книги</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1662"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1734"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Роутер, связанный с этим хостом, был удален. Измените хост, чтобы выбрать другой роутер, или переключитесь на прямое подключение.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1669"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1741"/>
         <source>The host has an invalid host ID.</source>
         <translation>Хост имеет недопустимый ID.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1678"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1750"/>
         <source>The host has an incorrect address.</source>
         <translation>Хост имеет недопустимый адрес.</translation>
     </message>
@@ -5841,31 +5838,31 @@ Computers skipped: %5</source>
 <context>
     <name>SearchWidget</name>
     <message>
-        <location filename="../client/ui/hosts/search_widget.cc" line="232"/>
-        <location filename="../client/ui/hosts/search_widget.cc" line="450"/>
+        <location filename="../client/ui/hosts/search_widget.cc" line="265"/>
+        <location filename="../client/ui/hosts/search_widget.cc" line="517"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/search_widget.cc" line="232"/>
-        <location filename="../client/ui/hosts/search_widget.cc" line="450"/>
+        <location filename="../client/ui/hosts/search_widget.cc" line="265"/>
+        <location filename="../client/ui/hosts/search_widget.cc" line="517"/>
         <source>Address / ID</source>
         <translation>Адрес / ID</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/search_widget.cc" line="232"/>
-        <location filename="../client/ui/hosts/search_widget.cc" line="450"/>
+        <location filename="../client/ui/hosts/search_widget.cc" line="265"/>
+        <location filename="../client/ui/hosts/search_widget.cc" line="517"/>
         <source>Comment</source>
         <translation>Комментарий</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/search_widget.cc" line="232"/>
-        <location filename="../client/ui/hosts/search_widget.cc" line="450"/>
+        <location filename="../client/ui/hosts/search_widget.cc" line="265"/>
+        <location filename="../client/ui/hosts/search_widget.cc" line="517"/>
         <source>Group</source>
         <translation>Группа</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/search_widget.cc" line="492"/>
+        <location filename="../client/ui/hosts/search_widget.cc" line="559"/>
         <source>%n result(s)</source>
         <translation>
             <numerusform>%n результат</numerusform>

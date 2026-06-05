@@ -651,82 +651,22 @@ Routers added: %4</source>
         <translation type="vanished">Невірне значення для &quot;%1&quot;. Можливі значення: %2.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="120"/>
-        <source>Connecting to router %1...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="125"/>
-        <source>Connection to router %1 established.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="134"/>
-        <source>Disconnected from router %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="146"/>
-        <source>Network error: %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="313"/>
-        <source>Unable to read connection config from stdin.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="324"/>
-        <source>Empty connection config from stdin.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="334"/>
-        <source>Invalid JSON in connection config: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="357"/>
-        <source>Missing or invalid &quot;host&quot; object in connection config.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="373"/>
-        <source>Missing required host field: address.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="388"/>
-        <source>Field &quot;desktop&quot; must be an object.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="405"/>
-        <source>Field &quot;desktop.%1&quot; must be boolean.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="501"/>
-        <source>Read JSON connection config from stdin until EOF and start a session.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="557"/>
+        <location filename="../client/main.cc" line="103"/>
         <source>Set Master Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="559"/>
+        <location filename="../client/main.cc" line="105"/>
         <source>Set a master password required to unlock the application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="567"/>
+        <location filename="../client/main.cc" line="113"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation type="unfinished">Введений пароль не задовільняє вимог безпеки!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="569"/>
+        <location filename="../client/main.cc" line="115"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символ.</numerusform>
@@ -735,12 +675,12 @@ Routers added: %4</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="573"/>
+        <location filename="../client/main.cc" line="119"/>
         <source>Do you want to enter a different password?</source>
         <translation type="unfinished">Бажаєте ввести інший пароль?</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="583"/>
+        <location filename="../client/main.cc" line="129"/>
         <source>Unable to set master password.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -749,27 +689,17 @@ Routers added: %4</source>
         <translation type="vanished">Адреса віддаленого комп&apos;ютера.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="440"/>
-        <source>Connection parameters to the router are not specified.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="456"/>
-        <source>Incorrect data for connecting to the router.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="531"/>
+        <location filename="../client/main.cc" line="77"/>
         <source>Unlock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="533"/>
+        <location filename="../client/main.cc" line="79"/>
         <source>Enter the master password to unlock the application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="549"/>
+        <location filename="../client/main.cc" line="95"/>
         <source>Invalid master password.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -814,7 +744,7 @@ Routers added: %4</source>
         <translation type="vanished">Блокувати віддалене введення. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="504"/>
+        <location filename="../client/main.cc" line="58"/>
         <source>Aspia Client</source>
         <translation>Клієнт Aspia</translation>
     </message>
@@ -887,22 +817,32 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="387"/>
+        <location filename="../client/ui/client_window.cc" line="365"/>
+        <source>Requesting connection to the host...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/client_window.cc" line="373"/>
+        <source>Connection offer received.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/client_window.cc" line="394"/>
         <source>The host with the specified ID is not online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="390"/>
+        <location filename="../client/ui/client_window.cc" line="397"/>
         <source>Access is denied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="393"/>
+        <location filename="../client/ui/client_window.cc" line="400"/>
         <source>There are no relays available or the key pool is empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="396"/>
+        <location filename="../client/ui/client_window.cc" line="403"/>
         <source>Unknown error</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1661,22 +1601,22 @@ Routers added: %4</source>
 <context>
     <name>DesktopWidget</name>
     <message>
-        <location filename="../client/ui/desktop/desktop_widget.cc" line="531"/>
+        <location filename="../client/ui/desktop/desktop_widget.cc" line="561"/>
         <source>The session was paused by a remote user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_widget.cc" line="534"/>
+        <location filename="../client/ui/desktop/desktop_widget.cc" line="564"/>
         <source>The session is temporarily unavailable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_widget.cc" line="537"/>
+        <location filename="../client/ui/desktop/desktop_widget.cc" line="567"/>
         <source>The session is permanently unavailable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_widget.cc" line="540"/>
+        <location filename="../client/ui/desktop/desktop_widget.cc" line="570"/>
         <source>Error while receiving video stream: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3039,7 +2979,7 @@ Routers added: %4</source>
         <translation type="unfinished">Хости</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="770"/>
+        <location filename="../client/ui/hosts_tab.cc" line="833"/>
         <source>(copy)</source>
         <translation type="unfinished">(копіювати)</translation>
     </message>
@@ -3048,86 +2988,87 @@ Routers added: %4</source>
         <translation type="obsolete">Ви впевнені, що хочете видалити комп&apos;ютер\&quot;%1\&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="592"/>
-        <location filename="../client/ui/hosts_tab.cc" line="644"/>
-        <location filename="../client/ui/hosts_tab.cc" line="735"/>
-        <location filename="../client/ui/hosts_tab.cc" line="766"/>
-        <location filename="../client/ui/hosts_tab.cc" line="809"/>
+        <location filename="../client/ui/hosts_tab.cc" line="580"/>
+        <location filename="../client/ui/hosts_tab.cc" line="609"/>
+        <location filename="../client/ui/hosts_tab.cc" line="662"/>
+        <location filename="../client/ui/hosts_tab.cc" line="798"/>
+        <location filename="../client/ui/hosts_tab.cc" line="829"/>
+        <location filename="../client/ui/hosts_tab.cc" line="872"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="774"/>
+        <location filename="../client/ui/hosts_tab.cc" line="837"/>
         <source>Failed to add the host to the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="813"/>
+        <location filename="../client/ui/hosts_tab.cc" line="876"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="823"/>
+        <location filename="../client/ui/hosts_tab.cc" line="886"/>
         <source>Unable to remove host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="868"/>
-        <location filename="../client/ui/hosts_tab.cc" line="893"/>
-        <location filename="../client/ui/hosts_tab.cc" line="918"/>
+        <location filename="../client/ui/hosts_tab.cc" line="931"/>
+        <location filename="../client/ui/hosts_tab.cc" line="956"/>
+        <location filename="../client/ui/hosts_tab.cc" line="981"/>
         <source>Copy Row</source>
         <translation type="unfinished">Копіювати рядок</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="869"/>
-        <location filename="../client/ui/hosts_tab.cc" line="894"/>
-        <location filename="../client/ui/hosts_tab.cc" line="919"/>
+        <location filename="../client/ui/hosts_tab.cc" line="932"/>
+        <location filename="../client/ui/hosts_tab.cc" line="957"/>
+        <location filename="../client/ui/hosts_tab.cc" line="982"/>
         <source>Copy Value</source>
         <translation type="unfinished">Копіювати значення</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1131"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1194"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1181"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1244"/>
         <source>Import Old Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1183"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1246"/>
         <source>Address Book (*.aab);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1206"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1269"/>
         <source>Export Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1208"/>
-        <location filename="../client/ui/hosts_tab.cc" line="1235"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1271"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1298"/>
         <source>Address Book (*.json);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1233"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1296"/>
         <source>Import Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1662"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1734"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1669"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1741"/>
         <source>The host has an invalid host ID.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1678"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1750"/>
         <source>The host has an incorrect address.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5186,31 +5127,31 @@ Hosts skipped: %6</source>
 <context>
     <name>SearchWidget</name>
     <message>
-        <location filename="../client/ui/hosts/search_widget.cc" line="232"/>
-        <location filename="../client/ui/hosts/search_widget.cc" line="450"/>
+        <location filename="../client/ui/hosts/search_widget.cc" line="265"/>
+        <location filename="../client/ui/hosts/search_widget.cc" line="517"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/search_widget.cc" line="232"/>
-        <location filename="../client/ui/hosts/search_widget.cc" line="450"/>
+        <location filename="../client/ui/hosts/search_widget.cc" line="265"/>
+        <location filename="../client/ui/hosts/search_widget.cc" line="517"/>
         <source>Address / ID</source>
         <translation type="unfinished">Адреса / ID</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/search_widget.cc" line="232"/>
-        <location filename="../client/ui/hosts/search_widget.cc" line="450"/>
+        <location filename="../client/ui/hosts/search_widget.cc" line="265"/>
+        <location filename="../client/ui/hosts/search_widget.cc" line="517"/>
         <source>Comment</source>
         <translation type="unfinished">Порт</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/search_widget.cc" line="232"/>
-        <location filename="../client/ui/hosts/search_widget.cc" line="450"/>
+        <location filename="../client/ui/hosts/search_widget.cc" line="265"/>
+        <location filename="../client/ui/hosts/search_widget.cc" line="517"/>
         <source>Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/search_widget.cc" line="492"/>
+        <location filename="../client/ui/hosts/search_widget.cc" line="559"/>
         <source>%n result(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
