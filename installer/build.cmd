@@ -85,12 +85,12 @@ set PRODUCT_EN_US_MSI=%ASPIA_BIN_DIR%\aspia-%PRODUCT%-%EN_US_POSTFIX%.msi
 
 echo "##################################################"
 echo "Creating MSI packages for Aspia %PRODUCT%"
-"%WIX%\bin\candle" -out "%ASPIA_BIN_DIR%\\" -arch %CANDLE_ARCH% -ext WixUtilExtension -ext WixUIExtension %PRODUCT%.wxs
-"%WIX%\bin\light" -sval -out "%PRODUCT_EN_US_MSI%" -cultures:en-us -ext WixUtilExtension -ext WixUIExtension -loc translations\%PRODUCT%.en-us.wxl "%ASPIA_BIN_DIR%\%PRODUCT%.wixobj"
+"%WIX%\bin\candle" -out "%ASPIA_BIN_DIR%\\" -arch %CANDLE_ARCH% -ext WixUtilExtension -ext WixUIExtension -ext WixFirewallExtension %PRODUCT%.wxs
+"%WIX%\bin\light" -sval -out "%PRODUCT_EN_US_MSI%" -cultures:en-us -ext WixUtilExtension -ext WixUIExtension -ext WixFirewallExtension -loc translations\%PRODUCT%.en-us.wxl "%ASPIA_BIN_DIR%\%PRODUCT%.wixobj"
 
 for %%L in (%LOCALES%) do (
     for /f "tokens=1,2 delims=:" %%A in ("%%L") do (
-        "%WIX%\bin\light" -sval -out "%ASPIA_BIN_DIR%\aspia-%PRODUCT%-%%A.msi" -cultures:%%A -ext WixUtilExtension -ext WixUIExtension -loc translations\%PRODUCT%.%%A.wxl "%ASPIA_BIN_DIR%\%PRODUCT%.wixobj"
+        "%WIX%\bin\light" -sval -out "%ASPIA_BIN_DIR%\aspia-%PRODUCT%-%%A.msi" -cultures:%%A -ext WixUtilExtension -ext WixUIExtension -ext WixFirewallExtension -loc translations\%PRODUCT%.%%A.wxl "%ASPIA_BIN_DIR%\%PRODUCT%.wixobj"
     )
 )
 
