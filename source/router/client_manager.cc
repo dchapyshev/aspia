@@ -133,13 +133,8 @@ void ClientManager::doHostRequest(const proto::router::HostRequest& request)
         return;
     }
 
-    const bool ok = database.modifyHost(
-        host_id,
-        group_id,
-        QString::fromStdString(host.display_name()),
-        QByteArray::fromStdString(host.comment()),
-        QByteArray::fromStdString(host.user_name()),
-        QByteArray::fromStdString(host.password()));
+    const bool ok = database.modifyHost(host_id, group_id, host.display_name(), host.comment(),
+                                        host.user_name(), host.password());
     if (!ok)
     {
         reply(proto::router::kErrorInternalError);

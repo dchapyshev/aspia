@@ -804,7 +804,7 @@ QList<DeviceToken> Database::listClientDeviceTokens(qint64 user_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Database::hostId(const QByteArray& key_hash, HostId* host_id) const
+std::string_view Database::hostId(std::string_view key_hash, HostId* host_id) const
 {
     CHECK(host_id);
 
@@ -816,7 +816,7 @@ std::string_view Database::hostId(const QByteArray& key_hash, HostId* host_id) c
         return proto::router::kErrorInternalError;
     }
 
-    if (key_hash.isEmpty())
+    if (key_hash.empty())
     {
         LOG(ERROR) << "Invalid key hash";
         return proto::router::kErrorInvalidData;
@@ -857,7 +857,7 @@ std::string_view Database::hostId(const QByteArray& key_hash, HostId* host_id) c
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::addHost(const QByteArray& key_hash)
+bool Database::addHost(std::string_view key_hash)
 {
     if (!isValid())
     {
@@ -865,7 +865,7 @@ bool Database::addHost(const QByteArray& key_hash)
         return false;
     }
 
-    if (key_hash.isEmpty())
+    if (key_hash.empty())
     {
         LOG(ERROR) << "Invalid parameters";
         return false;
@@ -945,8 +945,8 @@ qint64 Database::hostWorkspaceId(HostId host_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::modifyHost(HostId host_id, qint64 group_id, const QString& display_name,
-    const QByteArray& comment, const QByteArray& user_name, const QByteArray& password)
+bool Database::modifyHost(HostId host_id, qint64 group_id, std::string_view display_name,
+    std::string_view comment, std::string_view user_name, std::string_view password)
 {
     if (!isValid())
     {

@@ -146,8 +146,8 @@ public:
 
     // Identity and telemetry. The hosts table is the durable identity table; rows are
     // never deleted by cascade.
-    std::string_view hostId(const QByteArray& key_hash, HostId* host_id) const;
-    bool addHost(const QByteArray& key_hash);
+    std::string_view hostId(std::string_view key_hash, HostId* host_id) const;
+    bool addHost(std::string_view key_hash);
 
     // Called on every host connection to refresh the host's last-seen metadata.
     bool updateHostInfo(HostId host_id, std::string_view computer_name, std::string_view cpu_arch,
@@ -162,8 +162,8 @@ public:
     // AEAD-encrypted with the workspace GK by the caller). group_id == 0 places the host at the
     // workspace root; > 0 moves it under the given group (caller must validate group ownership).
     // Also bumps last_modify.
-    bool modifyHost(HostId host_id, qint64 group_id, const QString& display_name,
-        const QByteArray& comment, const QByteArray& user_name, const QByteArray& password);
+    bool modifyHost(HostId host_id, qint64 group_id, std::string_view display_name,
+        std::string_view comment, std::string_view user_name, std::string_view password);
 
     // Appends every host in the database (admin-only call site) to |out| and sets its error_code,
     // reading rows straight into the protobuf message. [start_item, end_item] gives an inclusive
