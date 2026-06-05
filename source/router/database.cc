@@ -617,10 +617,11 @@ bool Database::updateUserOtpCounter(qint64 user_id, quint64 counter)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::issueClientDeviceToken(qint64 user_id, const QString& address, QByteArray* token, qint64* token_id)
+bool Database::issueClientDeviceToken(
+    qint64 user_id, std::string_view address, std::string* token, qint64* token_id)
 {
     CHECK(token);
-    *token = QByteArray();
+    *token = std::string();
     if (token_id)
         *token_id = 0;
 
@@ -634,7 +635,7 @@ bool Database::issueClientDeviceToken(qint64 user_id, const QString& address, QB
     // client) and persist only its SHA-256 hash. Hashing without a salt is safe here because
     // the input is uniformly random CSPRNG output - precomputation/rainbow tables make no
     // sense against 2^256 of entropy.
-    const QByteArray new_token = Random::byteArray(kClientDeviceTokenSize);
+    std::string new_token = Random::string(kClientDeviceTokenSize);
     const QByteArray token_hash = GenericHash::hash(GenericHash::SHA256, new_token);
     const qint64 now = QDateTime::currentSecsSinceEpoch();
 
@@ -657,12 +658,12 @@ bool Database::issueClientDeviceToken(qint64 user_id, const QString& address, QB
     if (token_id)
         *token_id = db_.lastInsertRowId();
 
-    *token = new_token;
+    *token = std::move(new_token);
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::findClientDeviceToken(const QByteArray& token, qint64* user_id, qint64* token_id) const
+bool Database::findClientDeviceToken(std::string_view token, qint64* user_id, qint64* token_id) const
 {
     CHECK(user_id);
     *user_id = 0;
@@ -708,7 +709,7 @@ bool Database::findClientDeviceToken(const QByteArray& token, qint64* user_id, q
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::touchClientDeviceToken(const QByteArray& token, const QString& address)
+bool Database::touchClientDeviceToken(std::string_view token, std::string_view address)
 {
     if (!isValid())
     {
@@ -885,7 +886,7 @@ bool Database::addHost(std::string_view key_hash)
 
 //--------------------------------------------------------------------------------------------------
 bool Database::updateHostInfo(HostId host_id, std::string_view computer_name, std::string_view cpu_arch,
-    const QString& version, std::string_view os_name, const QString& address)
+    const QString& version, std::string_view os_name, std::string_view address)
 {
     if (!isValid())
     {

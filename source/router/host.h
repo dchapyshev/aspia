@@ -19,7 +19,6 @@
 #ifndef ROUTER_HOST_H
 #define ROUTER_HOST_H
 
-#include <QHostAddress>
 #include <QObject>
 #include <QVersionNumber>
 
@@ -46,7 +45,7 @@ public:
     const std::string& architecture() const;
 
     qint64 sessionId() const { return session_id_; }
-    const QHostAddress& address() const { return address_; }
+    const std::string& address() const { return tcp_channel_->peerAddress(); }
     time_t startTime() const { return start_time_; }
 
     void sendMessage(quint8 channel_id, const QByteArray& message);
@@ -67,9 +66,7 @@ private slots:
 private:
     const qint64 session_id_;
     time_t start_time_ = 0;
-
     TcpChannel* tcp_channel_ = nullptr;
-    QHostAddress address_;
 };
 
 #endif // ROUTER_HOST_H

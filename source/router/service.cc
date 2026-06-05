@@ -731,7 +731,7 @@ bool Service::start()
 //--------------------------------------------------------------------------------------------------
 void Service::addHost(TcpChannel* channel, bool is_legacy)
 {
-    QString address = channel->peerAddress();
+    QString address = QString::fromStdString(channel->peerAddress());
 
     LOG(INFO) << "New session:" << address;
 
@@ -768,7 +768,7 @@ void Service::addHost(TcpChannel* channel, bool is_legacy)
 //--------------------------------------------------------------------------------------------------
 void Service::addClient(TcpChannel* channel)
 {
-    QString address = channel->peerAddress();
+    QString address = QString::fromStdString(channel->peerAddress());
     proto::router::SessionType session_type =
         static_cast<proto::router::SessionType>(channel->peerSessionType());
 
@@ -823,7 +823,7 @@ void Service::addClient(TcpChannel* channel)
 //--------------------------------------------------------------------------------------------------
 void Service::addRelay(TcpChannel* channel)
 {
-    QString address = channel->peerAddress();
+    QString address = QString::fromStdString(channel->peerAddress());
 
     LOG(INFO) << "New relay session:" << address;
 

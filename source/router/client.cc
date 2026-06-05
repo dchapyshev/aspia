@@ -27,6 +27,7 @@
 #include "base/version_constants.h"
 #include "base/crypto/random.h"
 #include "base/crypto/totp.h"
+#include "base/net/net_utils.h"
 #include "proto/relay_peer.h"
 #include "proto/router.h"
 #include "proto/router_client.h"
@@ -86,7 +87,6 @@ Client::Client(TcpChannel* channel, QObject* parent)
 {
     CDCHECK(tcp_channel_);
     tcp_channel_->setParent(this);
-    address_.setAddress(tcp_channel_->peerAddress());
 
     connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &Client::onTcpErrorOccurred);
     connect(tcp_channel_, &TcpChannel::sig_messageReceived, this, &Client::onTcpMessageReceived);
@@ -138,7 +138,7 @@ const std::string& Client::architecture() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Client::userName() const
+const std::string& Client::userName() const
 {
     return tcp_channel_->peerUserName();
 }
@@ -267,7 +267,8 @@ void Client::doTwoFactorChallenge()
         // client; the secret only reaches the database once the user confirms it with a
         // valid code, so an abandoned dialog leaves the user un-enrolled.
         tentative_otp_secret_ = Totp::generateSecret();
-        const QString uri = Totp::buildUri(kOtpIssuer, userName(), tentative_otp_secret_);
+        const QString uri = Totp::buildUri(
+            kOtpIssuer, QString::fromStdString(userName()), tentative_otp_secret_);
 
         challenge->set_mode(proto::router::TWO_FACTOR_MODE_ENROLL);
         challenge->set_otpauth_uri(uri.toStdString());
@@ -290,7 +291,7 @@ void Client::readTwoFactorResponse(const proto::router::TwoFactorResponse& respo
     {
         // Token path: client presented a previously issued bearer token. Validate by lookup
         // and check that the token's owner matches the user that just passed SRP.
-        const QByteArray token = QByteArray::fromStdString(response.token());
+        const std::string_view token = response.token();
 
         qint64 stored_user_id = 0;
         qint64 token_id = 0;
@@ -312,7 +313,7 @@ void Client::readTwoFactorResponse(const proto::router::TwoFactorResponse& respo
             return;
         }
 
-        Database::instance().touchClientDeviceToken(token, address().toString());
+        Database::instance().touchClientDeviceToken(token, address());
         token_id_ = token_id;
         sendTwoFactorResult(proto::router::TWO_FACTOR_STATUS_OK);
         return;
@@ -366,27 +367,24 @@ void Client::readTwoFactorResponse(const proto::router::TwoFactorResponse& respo
     // Any successful TOTP submission produces a fresh bearer token. Failure to persist the
     // token is non-fatal: the user is still let in, they will be prompted for TOTP again
     // next time.
-    QByteArray new_token;
+    std::string new_token;
     qint64 new_token_id = 0;
-    if (!Database::instance().issueClientDeviceToken(
-            userId(), address().toString(), &new_token, &new_token_id))
-    {
+    if (!Database::instance().issueClientDeviceToken(userId(), address(), &new_token, &new_token_id))
         CLOG(WARNING) << "Failed to issue device token for user" << userId();
-        new_token = QByteArray();
-    }
+
     token_id_ = new_token_id;
 
-    sendTwoFactorResult(proto::router::TWO_FACTOR_STATUS_OK, new_token);
+    sendTwoFactorResult(proto::router::TWO_FACTOR_STATUS_OK, std::move(new_token));
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::sendTwoFactorResult(proto::router::TwoFactorStatus status, const QByteArray& new_token)
+void Client::sendTwoFactorResult(proto::router::TwoFactorStatus status, std::string&& new_token)
 {
     proto::router::RouterToClient envelope;
     proto::router::TwoFactorResult* result = envelope.mutable_two_factor_result();
     result->set_status(status);
-    if (!new_token.isEmpty())
-        result->set_new_token(new_token.toStdString());
+    if (!new_token.empty())
+        result->set_new_token(std::move(new_token));
 
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(envelope));
 
@@ -487,7 +485,7 @@ void Client::readConnectionRequest(const proto::router::ConnectionRequest& reque
 
     proto::router::PeerInfo* peer_info = offer->mutable_peer_info();
     peer_info->set_is_legacy(host->version() < kVersion_3_0_0);
-    peer_info->set_is_address_equals(host->address() == address());
+    peer_info->set_is_address_equals(NetUtils::isAddressEqual(address(), host->address()));
 
     if (stun_port_)
     {
@@ -507,9 +505,9 @@ void Client::readConnectionRequest(const proto::router::ConnectionRequest& reque
 
     proto::relay::PeerToRelay::Secret secret;
     secret.set_random_data(Random::string(16));
-    secret.set_client_address(address().toString().toStdString());
-    secret.set_client_user_name(userName().toStdString());
-    secret.set_host_address(host->address().toString().toStdString());
+    secret.set_client_address(address());
+    secret.set_client_user_name(userName());
+    secret.set_host_address(host->address());
     secret.set_host_id(request.host_id());
 
     offer_credentials->set_secret(secret.SerializeAsString());

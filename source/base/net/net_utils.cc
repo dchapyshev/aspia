@@ -149,4 +149,11 @@ bool NetUtils::isAddressEqual(const QString& address1, const QString& address2)
     QHostAddress host_address1(address1);
     QHostAddress host_address2(address2);
     return host_address1 == host_address2;
-};
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool NetUtils::isAddressEqual(const std::string& address1, const std::string& address2)
+{
+    return isAddressEqual(QString::fromStdString(address1), QString::fromStdString(address2));
+}

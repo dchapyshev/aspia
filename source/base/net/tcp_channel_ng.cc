@@ -31,7 +31,6 @@
 #include "base/crypto/stream_decryptor.h"
 #include "base/crypto/stream_encryptor.h"
 #include "base/peer/authenticator.h"
-#include "proto/key_exchange.h"
 
 namespace {
 
@@ -423,7 +422,7 @@ void TcpChannelNG::setConnected(bool connected)
             if (address.is_v4())
             {
                 asio::ip::address_v4 ipv4_address = address.to_v4();
-                address_ = QString::fromLocal8Bit(ipv4_address.to_string().c_str());
+                address_ = ipv4_address.to_string();
             }
             else
             {
@@ -432,11 +431,11 @@ void TcpChannelNG::setConnected(bool connected)
                 {
                     asio::ip::address_v4 ipv4_address =
                         asio::ip::make_address_v4(asio::ip::v4_mapped, ipv6_address);
-                    address_ =  QString::fromLocal8Bit(ipv4_address.to_string().c_str());
+                    address_ =  ipv4_address.to_string();
                 }
                 else
                 {
-                    address_ = QString::fromLocal8Bit(ipv6_address.to_string().c_str());
+                    address_ = ipv6_address.to_string();
                 }
             }
         }

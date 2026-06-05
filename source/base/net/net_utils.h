@@ -31,6 +31,7 @@ public:
     static bool isValidPort(const QString& str);
     static bool isValidSubnet(const QString& subnet);
     static bool isAddressEqual(const QString& address1, const QString& address2);
+    static bool isAddressEqual(const std::string& address1, const std::string& address2);
 
 private:
     Q_DISABLE_COPY_MOVE(NetUtils)

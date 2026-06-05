@@ -168,7 +168,7 @@ void HostNG::readHostIdRequest(const proto::router::HostIdRequest& host_id_reque
     }
 
     if (!database.updateHostInfo(
-            host_id_, computerName(), architecture(), version().toString(), osName(), address().toString()))
+            host_id_, computerName(), architecture(), version().toString(), osName(), address()))
     {
         CLOG(WARNING) << "Failed to update host info for host_id:" << host_id_;
     }

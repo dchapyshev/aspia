@@ -113,17 +113,16 @@ public:
     // generated opaque token into |token| and, when not null, the router-side row id into
     // |token_id|. Returns false on database error.
     bool issueClientDeviceToken(
-        qint64 user_id, const QString& address, QByteArray* token, qint64* token_id = nullptr);
+        qint64 user_id, std::string_view address, std::string* token, qint64* token_id = nullptr);
 
     // Looks up a token by its opaque value. On success writes the owner user_id into |user_id|
     // and, when not null, the router-side row id into |token_id|. Returns false if the row is
     // absent.
-    bool findClientDeviceToken(
-        const QByteArray& token, qint64* user_id, qint64* token_id = nullptr) const;
+    bool findClientDeviceToken(std::string_view token, qint64* user_id, qint64* token_id = nullptr) const;
 
     // Updates the token's last_used_at timestamp and last seen |address|. Called after a
     // successful token lookup.
-    bool touchClientDeviceToken(const QByteArray& token, const QString& address);
+    bool touchClientDeviceToken(std::string_view token, std::string_view address);
 
     // Removes a single token by its router-side row id, but only if it belongs to
     // |user_id|. The user_id check is defense in depth - the admin channel is already
@@ -151,7 +150,7 @@ public:
 
     // Called on every host connection to refresh the host's last-seen metadata.
     bool updateHostInfo(HostId host_id, std::string_view computer_name, std::string_view cpu_arch,
-        const QString& version, std::string_view os_name, const QString& address);
+        const QString& version, std::string_view os_name, std::string_view address);
 
     // Returns the workspace_id of the given host, or 0 if the host is not assigned to a
     // workspace. Returns -1 if the host_id is unknown. Used to validate user access before

@@ -41,7 +41,6 @@ Host::Host(TcpChannel* channel, QObject* parent)
 {
     CDCHECK(tcp_channel_);
     tcp_channel_->setParent(this);
-    address_.setAddress(tcp_channel_->peerAddress());
 
     connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &Host::onTcpErrorOccurred);
     connect(tcp_channel_, &TcpChannel::sig_messageReceived, this, &Host::onTcpMessageReceived);

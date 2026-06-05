@@ -117,13 +117,13 @@ public:
     int speedRx();
     int speedTx();
 
-    QString peerAddress() const { return address_; }
+    const std::string& peerAddress() const { return address_; }
     QVersionNumber peerVersion() const { return version_; }
     const std::string& peerOsName() const { return os_name_; }
     const std::string& peerComputerName() const { return computer_name_; }
     const std::string& peerDisplayName() const { return display_name_; }
     const std::string& peerArchitecture() const { return architecture_; }
-    QString peerUserName() const { return user_name_; }
+    const std::string& peerUserName() const { return user_name_; }
     qint64 peerUserId() const { return user_id_; }
     quint32 peerSessionType() const { return session_type_; }
 
@@ -145,13 +145,13 @@ protected:
     void addTxBytes(size_t bytes_count);
     void addRxBytes(size_t bytes_count);
 
-    QString address_;
+    std::string address_;
     QVersionNumber version_;
     std::string os_name_;
     std::string computer_name_;
     std::string display_name_;
     std::string architecture_;
-    QString user_name_;
+    std::string user_name_;
     qint64 user_id_ = 0;
     quint32 session_type_ = 0;
 

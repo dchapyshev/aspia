@@ -148,7 +148,7 @@ QVersionNumber Client::version() const
 //--------------------------------------------------------------------------------------------------
 QString Client::address() const
 {
-    return tcp_channel_->peerAddress();
+    return QString::fromStdString(tcp_channel_->peerAddress());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -178,7 +178,7 @@ QString Client::architecture() const
 //--------------------------------------------------------------------------------------------------
 QString Client::userName() const
 {
-    return tcp_channel_->peerUserName();
+    return QString::fromStdString(tcp_channel_->peerUserName());
 }
 
 //--------------------------------------------------------------------------------------------------

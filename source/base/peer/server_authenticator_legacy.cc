@@ -354,21 +354,22 @@ void ServerAuthenticatorLegacy::onIdentify(const QByteArray& buffer)
         return;
     }
 
-    user_name_ = QString::fromStdString(identify.username());
-    if (user_name_.isEmpty())
+    user_name_ = identify.username();
+    if (user_name_.empty())
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return;
     }
 
-    CLOG(TRACE) << "Username:" << user_name_;
+    QString user_name = QString::fromStdString(user_name_);
+    CLOG(TRACE) << "Username:" << user_name;
 
     QByteArray seed_key;
     User user;
 
     if (user_list_)
     {
-        user = user_list_->find(user_name_);
+        user = user_list_->find(user_name);
         seed_key = user_list_->seedKey();
     }
     else
@@ -400,12 +401,12 @@ void ServerAuthenticatorLegacy::onIdentify(const QByteArray& buffer)
     // final calc_B step.
     GenericHash hash(GenericHash::BLAKE2b512);
     hash.addData(seed_key);
-    hash.addData(user_name_.toUtf8());
+    hash.addData(user_name_);
 
     N_ = BigNum::fromStdString(SrpMath::kNgPair_8192.first);
     g_ = BigNum::fromStdString(SrpMath::kNgPair_8192.second);
     s_ = BigNum::fromByteArray(hash.result());
-    v_ = SrpMath::calc_v(user_name_, SecureByteArray(seed_key), s_, N_, g_);
+    v_ = SrpMath::calc_v(user_name, SecureByteArray(seed_key), s_, N_, g_);
     session_types_ = 0;
 
     if (user.isValid() && (user.flags & User::ENABLED))

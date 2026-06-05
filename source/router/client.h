@@ -19,7 +19,6 @@
 #ifndef ROUTER_CLIENT_H
 #define ROUTER_CLIENT_H
 
-#include <QHostAddress>
 #include <QObject>
 #include <QVersionNumber>
 
@@ -56,12 +55,12 @@ public:
     const std::string& osName() const;
     const std::string& computerName() const;
     const std::string& architecture() const;
-    QString userName() const;
+    const std::string& userName() const;
     qint64 userId() const;
     proto::router::SessionType sessionType() const;
 
     qint64 sessionId() const { return session_id_; }
-    const QHostAddress& address() const { return address_; }
+    const std::string& address() const { return tcp_channel_->peerAddress(); }
     time_t startTime() const { return start_time_; }
 
     void sendMessage(quint8 channel_id, const QByteArray& message);
@@ -92,7 +91,7 @@ private:
     void doTwoFactorChallenge();
     void readTwoFactorResponse(const proto::router::TwoFactorResponse& response);
     void sendTwoFactorResult(
-        proto::router::TwoFactorStatus status, const QByteArray& new_token = QByteArray());
+        proto::router::TwoFactorStatus status, std::string&& new_token = std::string());
     void sendUserKeys();
     void readConnectionRequest(const proto::router::ConnectionRequest& request);
     void readCheckHostStatus(const proto::router::CheckHostStatus& check_host_status);
@@ -107,8 +106,6 @@ private:
     time_t start_time_ = 0;
 
     TcpChannel* tcp_channel_ = nullptr;
-    QHostAddress address_;
-
     quint16 stun_port_ = 0;
 
     bool two_factor_completed_ = false;

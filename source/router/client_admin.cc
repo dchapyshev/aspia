@@ -108,7 +108,7 @@ void ClientAdmin::doRelayListRequest(const proto::router::RelayListRequest& requ
         // Generic session info.
         item->set_entry_id(relay->sessionId());
         item->set_timepoint(relay->startTime());
-        item->set_ip_address(relay->address().toString().toStdString());
+        item->set_ip_address(relay->address());
         item->mutable_version()->CopyFrom(serialize(relay->version()));
         item->set_os_name(relay->osName());
         item->set_computer_name(relay->computerName());
@@ -145,7 +145,7 @@ void ClientAdmin::doClientListRequest(const proto::router::ClientListRequest& re
 
         item->set_entry_id(client->sessionId());
         item->set_timepoint(client->startTime());
-        item->set_ip_address(client->address().toString().toStdString());
+        item->set_ip_address(client->address());
         item->mutable_version()->CopyFrom(serialize(client->version()));
         item->set_os_name(client->osName());
         item->set_computer_name(client->computerName());
