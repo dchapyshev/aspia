@@ -289,7 +289,6 @@ private:
     bool openDatabase();
 
     mutable SqlDatabase db_;
-    bool valid_ = false;
 
     Q_DISABLE_COPY_MOVE(Database)
 };

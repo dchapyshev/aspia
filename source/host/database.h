@@ -21,6 +21,7 @@
 
 #include "base/net/address.h"
 #include "base/peer/user.h"
+#include "base/sql/sql_database.h"
 
 #include <QByteArray>
 #include <QString>
@@ -126,7 +127,7 @@ private:
     QByteArray passwordHash() const;
     QByteArray passwordHashSalt() const;
 
-    bool valid_ = false;
+    mutable SqlDatabase db_;
 
     Q_DISABLE_COPY(Database)
 };

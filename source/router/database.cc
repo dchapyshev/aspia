@@ -321,8 +321,8 @@ Database& Database::instance()
 {
     static thread_local Database database;
 
-    if (!database.valid_)
-        database.valid_ = database.openDatabase();
+    if (!database.db_.isOpen())
+        database.openDatabase();
 
     return database;
 }
@@ -342,7 +342,7 @@ QString Database::filePath()
 //--------------------------------------------------------------------------------------------------
 bool Database::isValid() const
 {
-    return valid_;
+    return db_.isOpen();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -20,10 +20,6 @@
 
 #include <QDir>
 #include <QFileInfo>
-#include <QSqlDatabase>
-#include <QSqlError>
-#include <QSqlQuery>
-#include <QVariant>
 
 #include "base/logging.h"
 #include "base/crypto/password_generator.h"
@@ -31,11 +27,11 @@
 #include "base/crypto/random.h"
 #include "base/crypto/secure_string.h"
 #include "base/files/base_paths.h"
+#include "base/sql/sql_query.h"
 #include "build/build_config.h"
 
 namespace {
 
-const char kConnectionName[] = "host";
 const char kSettingSeedKey[] = "seed_key";
 const char kSettingTcpPort[] = "tcp_port";
 const char kSettingRouterEnabled[] = "router_enabled";
@@ -54,43 +50,41 @@ const char kSettingPasswordHashSalt[] = "password_hash_salt";
 constexpr size_t kPasswordHashSaltSize = 256;
 
 //--------------------------------------------------------------------------------------------------
-User readUser(const QSqlQuery& query)
+User readUser(const SqlQuery& query)
 {
     User user;
-    user.entry_id = query.value(0).toLongLong();
-    user.name = query.value(1).toString();
-    user.group = query.value(2).toString();
-    user.salt = query.value(3).toByteArray();
-    user.verifier = query.value(4).toByteArray();
-    user.sessions = query.value(5).toUInt();
-    user.flags = query.value(6).toUInt();
+    user.entry_id = query.columnInt64(0);
+    user.name     = query.columnText(1);
+    user.group    = query.columnText(2);
+    user.salt     = query.columnBlob(3);
+    user.verifier = query.columnBlob(4);
+    user.sessions = static_cast<quint32>(query.columnInt64(5));
+    user.flags    = static_cast<quint32>(query.columnInt64(6));
     return user;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool createTables(QSqlDatabase& db)
+bool createTables(SqlDatabase& db)
 {
-    QSqlQuery query(db);
-
-    if (!query.exec("CREATE TABLE IF NOT EXISTS \"users\" ("
-                    "\"id\" INTEGER UNIQUE,"
-                    "\"name\" TEXT NOT NULL UNIQUE,"
-                    "\"group\" TEXT NOT NULL,"
-                    "\"salt\" BLOB NOT NULL,"
-                    "\"verifier\" BLOB NOT NULL,"
-                    "\"sessions\" INTEGER DEFAULT 0,"
-                    "\"flags\" INTEGER DEFAULT 0,"
-                    "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
+    if (!db.exec("CREATE TABLE IF NOT EXISTS \"users\" ("
+                 "\"id\" INTEGER UNIQUE,"
+                 "\"name\" TEXT NOT NULL UNIQUE,"
+                 "\"group\" TEXT NOT NULL,"
+                 "\"salt\" BLOB NOT NULL,"
+                 "\"verifier\" BLOB NOT NULL,"
+                 "\"sessions\" INTEGER DEFAULT 0,"
+                 "\"flags\" INTEGER DEFAULT 0,"
+                 "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
-        LOG(ERROR) << "Unable to create users table:" << query.lastError();
+        LOG(ERROR) << "Unable to create users table:" << db.lastError();
         return false;
     }
 
-    if (!query.exec("CREATE TABLE IF NOT EXISTS \"settings\" ("
-                    "\"name\" TEXT PRIMARY KEY NOT NULL,"
-                    "\"value\" TEXT NOT NULL)"))
+    if (!db.exec("CREATE TABLE IF NOT EXISTS \"settings\" ("
+                 "\"name\" TEXT PRIMARY KEY NOT NULL,"
+                 "\"value\" TEXT NOT NULL)"))
     {
-        LOG(ERROR) << "Unable to create settings table:" << query.lastError();
+        LOG(ERROR) << "Unable to create settings table:" << db.lastError();
         return false;
     }
 
@@ -105,8 +99,8 @@ Database& Database::instance()
 {
     static thread_local Database database;
 
-    if (!database.valid_)
-        database.valid_ = database.openDatabase();
+    if (!database.db_.isOpen())
+        database.openDatabase();
 
     return database;
 }
@@ -136,7 +130,7 @@ QString Database::filePath()
 //--------------------------------------------------------------------------------------------------
 bool Database::isValid() const
 {
-    return valid_;
+    return db_.isOpen();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -148,12 +142,7 @@ QVector<User> Database::userList() const
         return {};
     }
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    if (!query.exec("SELECT id, name, \"group\", salt, verifier, sessions, flags FROM users"))
-    {
-        LOG(ERROR) << "Unable to get user list:" << query.lastError();
-        return {};
-    }
+    SqlQuery query(db_, "SELECT id, name, \"group\", salt, verifier, sessions, flags FROM users");
 
     QVector<User> users;
     while (query.next())
@@ -171,16 +160,9 @@ User Database::findUser(const QString& username) const
         return User::kInvalidUser;
     }
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare(
+    SqlQuery query(db_,
         "SELECT id, name, \"group\", salt, verifier, sessions, flags FROM users WHERE name=?");
-    query.addBindValue(username);
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
-        return User::kInvalidUser;
-    }
+    query.addText(username);
 
     if (!query.next())
         return User::kInvalidUser;
@@ -197,16 +179,9 @@ User Database::findUser(qint64 entry_id) const
         return User::kInvalidUser;
     }
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare(
+    SqlQuery query(db_,
         "SELECT id, name, \"group\", salt, verifier, sessions, flags FROM users WHERE id=?");
-    query.addBindValue(entry_id);
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
-        return User::kInvalidUser;
-    }
+    query.addInt64(entry_id);
 
     if (!query.next())
         return User::kInvalidUser;
@@ -229,19 +204,18 @@ bool Database::addUser(const User& user)
         return false;
     }
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("INSERT INTO users (id, name, \"group\", salt, verifier, sessions, flags) "
-                  "VALUES (NULL, ?, ?, ?, ?, ?, ?)");
-    query.addBindValue(user.name);
-    query.addBindValue(user.group);
-    query.addBindValue(user.salt);
-    query.addBindValue(user.verifier);
-    query.addBindValue(static_cast<qulonglong>(user.sessions));
-    query.addBindValue(static_cast<qulonglong>(user.flags));
+    SqlQuery query(db_, "INSERT INTO users (id, name, \"group\", salt, verifier, sessions, flags) "
+                        "VALUES (NULL, ?, ?, ?, ?, ?, ?)");
+    query.addText(user.name);
+    query.addText(user.group);
+    query.addBlob(user.salt);
+    query.addBlob(user.verifier);
+    query.addUInt64(user.sessions);
+    query.addUInt64(user.flags);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;
     }
 
@@ -263,20 +237,19 @@ bool Database::modifyUser(const User& user)
         return false;
     }
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("UPDATE users SET name=?, \"group\"=?, salt=?, verifier=?, sessions=?, flags=? "
-                  "WHERE id=?");
-    query.addBindValue(user.name);
-    query.addBindValue(user.group);
-    query.addBindValue(user.salt);
-    query.addBindValue(user.verifier);
-    query.addBindValue(static_cast<qulonglong>(user.sessions));
-    query.addBindValue(static_cast<qulonglong>(user.flags));
-    query.addBindValue(user.entry_id);
+    SqlQuery query(db_, "UPDATE users SET name=?, \"group\"=?, salt=?, verifier=?, sessions=?, "
+                        "flags=? WHERE id=?");
+    query.addText(user.name);
+    query.addText(user.group);
+    query.addBlob(user.salt);
+    query.addBlob(user.verifier);
+    query.addUInt64(user.sessions);
+    query.addUInt64(user.flags);
+    query.addInt64(user.entry_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;
     }
 
@@ -292,13 +265,12 @@ bool Database::removeUser(qint64 entry_id)
         return false;
     }
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("DELETE FROM users WHERE id=?");
-    query.addBindValue(entry_id);
+    SqlQuery query(db_, "DELETE FROM users WHERE id=?");
+    query.addInt64(entry_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;
     }
 
@@ -614,39 +586,29 @@ bool Database::openDatabase()
     LOG(INFO) << (!QFileInfo::exists(file_path) ? "Creating" : "Opening") << "database:"
               << file_path;
 
-    QSqlDatabase db = QSqlDatabase::database(kConnectionName, false);
-    if (!db.isValid())
-    {
-        db = QSqlDatabase::addDatabase("QSQLITE", kConnectionName);
-        db.setDatabaseName(file_path);
-    }
-
-    if (!db.isOpen() && !db.open())
-    {
-        LOG(ERROR) << "QSqlDatabase::open failed:" << db.lastError();
+    if (!db_.open(file_path))
         return false;
+
+    if (!db_.exec("PRAGMA secure_delete = ON"))
+        LOG(WARNING) << "Unable to enable secure_delete:" << db_.lastError();
+
+    {
+        SqlQuery pragma(db_, "PRAGMA quick_check");
+        if (pragma.next())
+        {
+            const QString result = pragma.columnText(0);
+            if (result != "ok")
+                LOG(ERROR) << "Database integrity check failed:" << result;
+        }
+        else
+        {
+            LOG(WARNING) << "Unable to run quick_check:" << db_.lastError();
+        }
     }
 
-    QSqlQuery pragma(db);
-
-    if (!pragma.exec("PRAGMA secure_delete = ON"))
-        LOG(WARNING) << "Unable to enable secure_delete:" << pragma.lastError();
-
-    if (pragma.exec("PRAGMA quick_check") && pragma.next())
+    if (!createTables(db_))
     {
-        const QString result = pragma.value(0).toString();
-        if (result != "ok")
-            LOG(ERROR) << "Database integrity check failed:" << result;
-    }
-    else
-    {
-        LOG(WARNING) << "Unable to run quick_check:" << pragma.lastError();
-    }
-
-    if (!createTables(db))
-    {
-        db.close();
-        QSqlDatabase::removeDatabase(kConnectionName);
+        db_.close();
         return false;
     }
 
@@ -662,20 +624,13 @@ QString Database::readSetting(const QString& name) const
         return QString();
     }
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("SELECT value FROM settings WHERE name=?");
-    query.addBindValue(name);
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
-        return QString();
-    }
+    SqlQuery query(db_, "SELECT value FROM settings WHERE name=?");
+    query.addText(name);
 
     if (!query.next())
         return QString();
 
-    return query.value(0).toString();
+    return query.columnText(0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -687,14 +642,13 @@ bool Database::writeSetting(const QString& name, const QString& value)
         return false;
     }
 
-    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("INSERT OR REPLACE INTO settings (name, value) VALUES (?, ?)");
-    query.addBindValue(name);
-    query.addBindValue(value);
+    SqlQuery query(db_, "INSERT OR REPLACE INTO settings (name, value) VALUES (?, ?)");
+    query.addText(name);
+    query.addText(value);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;
     }
 
