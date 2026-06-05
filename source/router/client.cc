@@ -423,12 +423,12 @@ void Client::sendUserKeys()
     user_keys->set_wrap_private_key(user.wrap_private_key.toStdString());
     user_keys->set_wrap_salt(user.wrap_salt.toStdString());
 
-    const QList<Workspace::Access> keys = database.workspaceAccessListForUser(user.entry_id);
-    for (const Workspace::Access& access : std::as_const(keys))
+    std::vector<Workspace::Access> keys = database.workspaceAccessListForUser(user.entry_id);
+    for (Workspace::Access& access : keys)
     {
         proto::router::UserKeys::WorkspaceKey* dst = user_keys->add_workspace_key();
         dst->set_workspace_id(access.workspace_id);
-        dst->set_wrapped_gk(access.wrapped_gk.toStdString());
+        dst->set_wrapped_gk(std::move(access.wrapped_gk));
     }
 
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));

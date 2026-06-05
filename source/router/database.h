@@ -25,6 +25,7 @@
 #include <set>
 #include <string_view>
 #include <unordered_map>
+#include <vector>
 
 #include "base/peer/host_id.h"
 #include "base/peer/router_user.h"
@@ -47,8 +48,8 @@ struct Group
 {
     qint64 entry_id  = 0;
     qint64 parent_id = 0; // 0 means the group sits at the workspace root.
-    QString name;
-    QByteArray comment;   // AEAD-encrypted with the workspace GK.
+    std::string name;
+    std::string comment;  // AEAD-encrypted with the workspace GK.
 };
 
 // Metadata for a client device token returned to admin callers. Intentionally omits the token
@@ -58,7 +59,7 @@ struct DeviceToken
     qint64 token_id     = 0; // client_device_tokens.token_id. Opaque to admins.
     qint64 created_at   = 0; // Unix seconds.
     qint64 last_used_at = 0; // Unix seconds.
-    QString address;         // Address of the session at last use (or issue, if untouched).
+    std::string address;     // Address of the session at last use (or issue, if untouched).
 };
 
 class Database
@@ -137,7 +138,7 @@ public:
     // Lists all device tokens owned by |user_id|. The router never exposes token material to
     // admins - only the opaque numeric id and timestamp metadata. Returns an empty list on
     // error or when the user has none.
-    QList<DeviceToken> listClientDeviceTokens(qint64 user_id) const;
+    std::vector<DeviceToken> listClientDeviceTokens(qint64 user_id) const;
 
     //----------------------------------------------------------------------------------------------
     // Hosts
@@ -238,7 +239,7 @@ public:
     std::set<qint64> workspaceAccessIdsForUser(qint64 user_id) const;
 
     // Returns {workspace_id, wrapped_gk} for every workspace the user has access to.
-    QList<Workspace::Access> workspaceAccessListForUser(qint64 user_id) const;
+    std::vector<Workspace::Access> workspaceAccessListForUser(qint64 user_id) const;
 
     bool hasWorkspaceAccess(qint64 user_id, qint64 workspace_id) const;
 
@@ -260,7 +261,7 @@ public:
 
     // Returns direct children of parent_id within workspace_id. parent_id == 0 returns root
     // groups (parent_id IS NULL in the table).
-    QList<Group> groupChildren(qint64 workspace_id, qint64 parent_id) const;
+    std::vector<Group> groupChildren(qint64 workspace_id, qint64 parent_id) const;
 
     // Returns the group with the given entry_id from workspace_id. Returns an empty Group
     // (entry_id == 0) if no such row exists in this workspace.

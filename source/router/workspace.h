@@ -19,9 +19,7 @@
 #ifndef ROUTER_WORKSPACE_H
 #define ROUTER_WORKSPACE_H
 
-#include <QByteArray>
-#include <QString>
-
+#include <string>
 #include <string_view>
 
 class Workspace
@@ -36,7 +34,7 @@ public:
     Workspace(Workspace&& other) noexcept = default;
     Workspace& operator=(Workspace&& other) noexcept = default;
 
-    static const qsizetype kMaxNameLength = 64;
+    static const size_t kMaxNameLength = 64;
 
     // Validates a UTF-8 name: non-empty after trimming and at most kMaxNameLength bytes.
     static bool isValidName(std::string_view name);
@@ -47,12 +45,12 @@ public:
     {
         qint64 workspace_id = 0;
         qint64 user_id = 0;
-        QByteArray wrapped_gk;
+        std::string wrapped_gk;
     };
 
     qint64 entry_id = 0;
-    QString name;
-    QByteArray comment; // AEAD-encrypted with the workspace GK.
+    std::string name;
+    std::string comment; // AEAD-encrypted with the workspace GK.
 };
 
 #endif // ROUTER_WORKSPACE_H

@@ -25,11 +25,11 @@
 bool Workspace::isValidName(std::string_view name)
 {
     const std::string_view trimmed = strTrimmed(name);
-    return !trimmed.empty() && trimmed.size() <= static_cast<size_t>(kMaxNameLength);
+    return !trimmed.empty() && trimmed.size() <= kMaxNameLength;
 }
 
 //--------------------------------------------------------------------------------------------------
 bool Workspace::isValid() const
 {
-    return entry_id > 0 && isValidName(name.toStdString());
+    return entry_id > 0 && isValidName(name);
 }

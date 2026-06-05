@@ -776,9 +776,9 @@ bool Database::revokeUserClientDeviceTokens(qint64 user_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<DeviceToken> Database::listClientDeviceTokens(qint64 user_id) const
+std::vector<DeviceToken> Database::listClientDeviceTokens(qint64 user_id) const
 {
-    QList<DeviceToken> tokens;
+    std::vector<DeviceToken> tokens;
 
     if (!isValid())
     {
@@ -798,8 +798,8 @@ QList<DeviceToken> Database::listClientDeviceTokens(qint64 user_id) const
         token.token_id     = query.columnInt64(0);
         token.created_at   = query.columnInt64(1);
         token.last_used_at = query.columnInt64(2);
-        token.address      = query.columnText(3);
-        tokens.append(token);
+        token.address      = query.columnTextView(3);
+        tokens.emplace_back(std::move(token));
     }
     return tokens;
 }
@@ -1465,8 +1465,8 @@ Workspace Database::findWorkspace(qint64 entry_id) const
 
     Workspace workspace;
     workspace.entry_id = query.columnInt64(0);
-    workspace.name     = query.columnText(1);
-    workspace.comment  = query.columnBlob(2);
+    workspace.name     = query.columnTextView(1);
+    workspace.comment  = query.columnBlobView(2);
     return workspace;
 }
 
@@ -1492,7 +1492,7 @@ std::string_view Database::addWorkspace(std::string_view name, std::string_view 
 
     for (const Workspace::Access& access : initial_access)
     {
-        if (access.user_id <= 0 || access.wrapped_gk.isEmpty())
+        if (access.user_id <= 0 || access.wrapped_gk.empty())
         {
             LOG(ERROR) << "Invalid access record";
             return proto::router::kErrorInvalidData;
@@ -1680,7 +1680,7 @@ std::string_view Database::modifyWorkspace(qint64 entry_id, std::string_view nam
         if (current_ids.contains(access.user_id))
             continue;
 
-        if (access.wrapped_gk.isEmpty())
+        if (access.wrapped_gk.empty())
         {
             LOG(ERROR) << "Missing wrapped_gk for new access entry, user_id:" << access.user_id;
             return proto::router::kErrorInvalidData;
@@ -1838,7 +1838,7 @@ std::set<qint64> Database::workspaceAccessIdsForUser(qint64 user_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<Workspace::Access> Database::workspaceAccessListForUser(qint64 user_id) const
+std::vector<Workspace::Access> Database::workspaceAccessListForUser(qint64 user_id) const
 {
     if (!isValid())
     {
@@ -1849,14 +1849,14 @@ QList<Workspace::Access> Database::workspaceAccessListForUser(qint64 user_id) co
     SqlQuery query(db_, "SELECT workspace_id, wrapped_gk FROM workspace_access WHERE user_id=?");
     query.addInt64(user_id);
 
-    QList<Workspace::Access> result;
+    std::vector<Workspace::Access> result;
     while (query.next())
     {
         Workspace::Access access;
         access.workspace_id = query.columnInt64(0);
         access.user_id      = user_id;
-        access.wrapped_gk   = query.columnBlob(1);
-        result.append(access);
+        access.wrapped_gk   = query.columnBlobView(1);
+        result.emplace_back(std::move(access));
     }
 
     return result;
@@ -1996,7 +1996,7 @@ void Database::groupList(qint64 workspace_id, proto::router::GroupList* out) con
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<Group> Database::groupChildren(qint64 workspace_id, qint64 parent_id) const
+std::vector<Group> Database::groupChildren(qint64 workspace_id, qint64 parent_id) const
 {
     if (!isValid())
     {
@@ -2024,15 +2024,15 @@ QList<Group> Database::groupChildren(qint64 workspace_id, qint64 parent_id) cons
     if (parent_id != 0)
         query.addInt64(parent_id);
 
-    QList<Group> groups;
+    std::vector<Group> groups;
     while (query.next())
     {
         Group group;
         group.entry_id  = query.columnInt64(0);
         group.parent_id = query.columnInt64(1);
-        group.name      = query.columnText(2);
-        group.comment   = query.columnBlob(3);
-        groups.append(group);
+        group.name      = query.columnTextView(2);
+        group.comment   = query.columnBlobView(3);
+        groups.emplace_back(std::move(group));
     }
 
     return groups;
@@ -2069,8 +2069,8 @@ Group Database::findGroup(qint64 workspace_id, qint64 entry_id) const
     Group group;
     group.entry_id  = query.columnInt64(0);
     group.parent_id = query.columnInt64(1);
-    group.name      = query.columnText(2);
-    group.comment   = query.columnBlob(3);
+    group.name      = query.columnTextView(2);
+    group.comment   = query.columnBlobView(3);
     return group;
 }
 

@@ -185,14 +185,14 @@ void ClientAdmin::doUserListRequest(const proto::router::UserListRequest& reques
             // Attach the user's active device tokens. The router only ever exposes the opaque
             // numeric id and timestamp metadata - never the token hash or any other material
             // that could identify the token outside of the router.
-            const QList<DeviceToken> tokens = database.listClientDeviceTokens(user.entry_id);
-            for (const DeviceToken& src : std::as_const(tokens))
+            std::vector<DeviceToken> tokens = database.listClientDeviceTokens(user.entry_id);
+            for (DeviceToken& src : tokens)
             {
                 proto::router::User::Token* token = item->add_token();
                 token->set_token_id(src.token_id);
                 token->set_created_at(src.created_at);
                 token->set_last_used_at(src.last_used_at);
-                token->set_address(src.address.toStdString());
+                token->set_address(std::move(src.address));
             }
         }
     }
