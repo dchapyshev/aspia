@@ -54,3 +54,22 @@ TEST(StringUtilTest, CatHandlesEmbeddedNulls)
     EXPECT_EQ(result.size(), 4u);
     EXPECT_EQ(result, std::string("a\0bc", 4));
 }
+
+//--------------------------------------------------------------------------------------------------
+TEST(StringUtilTest, Trimmed)
+{
+    EXPECT_EQ(strTrimmed(""), std::string_view(""));
+    EXPECT_EQ(strTrimmed("   "), std::string_view(""));
+    EXPECT_EQ(strTrimmed("abc"), std::string_view("abc"));
+    EXPECT_EQ(strTrimmed("  abc"), std::string_view("abc"));
+    EXPECT_EQ(strTrimmed("abc  "), std::string_view("abc"));
+    EXPECT_EQ(strTrimmed(" \t\r\n abc def \v\f "), std::string_view("abc def"));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(StringUtilTest, TrimmedKeepsMultiByteUtf8)
+{
+    // Cyrillic bytes are all above 0x7F and must survive trimming untouched.
+    const std::string_view name = "  \xD0\x9F\xD1\x80\xD0\xB8\xD0\xB2\xD0\xB5\xD1\x82  ";
+    EXPECT_EQ(strTrimmed(name), std::string_view("\xD0\x9F\xD1\x80\xD0\xB8\xD0\xB2\xD0\xB5\xD1\x82"));
+}

@@ -32,4 +32,9 @@ std::string strCat(std::span<const std::string_view> parts);
 // Convenience overload for a braced list of parts: strCat({"a", b, "c"}).
 std::string strCat(std::initializer_list<std::string_view> parts);
 
+// Returns |str| with leading and trailing ASCII whitespace stripped. The result is a view into
+// |str| (no allocation) and stays valid only while |str|'s buffer lives. Bytes above 0x7F are
+// left untouched, so multi-byte UTF-8 sequences pass through unharmed.
+std::string_view strTrimmed(std::string_view str);
+
 #endif // BASE_STRING_UTIL_H

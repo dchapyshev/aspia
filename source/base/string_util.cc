@@ -18,6 +18,16 @@
 
 #include "base/string_util.h"
 
+namespace {
+
+//--------------------------------------------------------------------------------------------------
+bool isAsciiWhitespace(char ch)
+{
+    return ch == ' ' || ch == '\t' || ch == '\n' || ch == '\v' || ch == '\f' || ch == '\r';
+}
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 std::string strCat(std::span<const std::string_view> parts)
 {
@@ -38,4 +48,19 @@ std::string strCat(std::span<const std::string_view> parts)
 std::string strCat(std::initializer_list<std::string_view> parts)
 {
     return strCat(std::span<const std::string_view>(parts.begin(), parts.size()));
+}
+
+//--------------------------------------------------------------------------------------------------
+std::string_view strTrimmed(std::string_view str)
+{
+    size_t begin = 0;
+    size_t end = str.size();
+
+    while (begin < end && isAsciiWhitespace(str[begin]))
+        ++begin;
+
+    while (end > begin && isAsciiWhitespace(str[end - 1]))
+        --end;
+
+    return str.substr(begin, end - begin);
 }
