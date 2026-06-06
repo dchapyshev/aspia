@@ -31,6 +31,7 @@ namespace {
 const qint64 kProbeIntervalMs = 5000;    // Check every 5 seconds.
 const qint64 kIdleThresholdMs = 5000;    // Consider idle after 5 seconds of no sends.
 const qint64 kProbeDataSize = 32 * 1024; // 32 KB probe payload.
+const int kUdpInitialDelayMs = 5000;     // Delay before the first UDP negotiation (let key frames flush).
 const int kUdpReconnectDelayMs = 5000;   // 5 seconds before attempting UDP reconnection.
 
 //--------------------------------------------------------------------------------------------------
@@ -124,8 +125,9 @@ void Client::start(bool direct, const QString& stun_host, quint16 stun_port, boo
 
     onStart();
 
+    // Delay UDP negotiation so the initial burst of key frames flushes over TCP first.
     if (features_ & FEATURE_UDP)
-        connectToUdp();
+        QTimer::singleShot(kUdpInitialDelayMs, this, &Client::connectToUdp);
 }
 
 //--------------------------------------------------------------------------------------------------
