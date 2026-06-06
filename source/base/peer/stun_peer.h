@@ -51,6 +51,7 @@ private:
     void doStart();
     void doStop();
     void onHostResolved(const QHostInfo& host_info);
+    void sendStunRequest(const QHostAddress& address);
     void onReadyRead();
     void onErrorOccurred(const Location& location);
 

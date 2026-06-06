@@ -95,6 +95,17 @@ void StunPeer::doStart()
                << ", attempt" << number_of_attempts_ << ")";
 
     timer_->start(std::chrono::seconds(3));
+
+    // Fast path for IP addresses. If the STUN host is already a numeric IPv4 literal, skip the
+    // asynchronous DNS lookup and send the request right away.
+    QHostAddress literal;
+    if (literal.setAddress(stun_host_) && literal.protocol() == QAbstractSocket::IPv4Protocol)
+    {
+        CLOG(INFO) << "Address is an IP, skipping resolve for" << stun_host_;
+        sendStunRequest(literal);
+        return;
+    }
+
     lookup_id_ = QHostInfo::lookupHost(stun_host_, this, &StunPeer::onHostResolved);
 }
 
@@ -157,6 +168,12 @@ void StunPeer::onHostResolved(const QHostInfo& host_info)
 
     CLOG(INFO) << "Resolved" << stun_host_ << "to" << selected;
 
+    sendStunRequest(selected);
+}
+
+//--------------------------------------------------------------------------------------------------
+void StunPeer::sendStunRequest(const QHostAddress& address)
+{
     // Create raw UDP socket.
     socket_ = enet_socket_create(ENET_SOCKET_TYPE_DATAGRAM);
     if (socket_ == ENET_SOCKET_NULL)
@@ -174,20 +191,20 @@ void StunPeer::onHostResolved(const QHostInfo& host_info)
     // Bind to any available port. Do NOT connect() the socket - a connected UDP socket can only
     // send/receive to/from the connected peer, and enet needs the socket unconnected to communicate
     // with arbitrary addresses.
-    ENetAddress address;
-    address.host = ENET_HOST_ANY;
-    address.port = 0;
+    ENetAddress bind_address;
+    bind_address.host = ENET_HOST_ANY;
+    bind_address.port = 0;
 
-    if (enet_socket_bind(socket_, &address) != 0)
+    if (enet_socket_bind(socket_, &bind_address) != 0)
     {
         onErrorOccurred(FROM_HERE);
         return;
     }
 
     // Remember the resolved address for sendto().
-    stun_address_ = selected;
+    stun_address_ = address;
 
-    CLOG(INFO) << "Bound UDP socket, STUN server:" << selected << ":" << stun_port_;
+    CLOG(INFO) << "Bound UDP socket, STUN server:" << address << ":" << stun_port_;
 
     // Send the STUN request.
     transaction_id_ = Random::number32();
