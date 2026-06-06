@@ -24,7 +24,6 @@
 #include <miniupnpc/upnpcommands.h>
 #include <miniupnpc/upnperrors.h>
 
-#include <cstdlib>
 #include <memory>
 #include <string>
 
@@ -179,36 +178,17 @@ UpnpPortMapper::Result UpnpPortMapper::doMapping(quint16 internal_port)
 
     const std::string port_str = std::to_string(internal_port);
 
-    // Prefer AddAnyPortMapping: if the requested external port is busy, the IGD picks a free one and
-    // returns the port it actually reserved. Falls back to AddPortMapping on IGDv1 (no such action).
-    quint16 external_port = internal_port;
-    char reserved_port[6] = { 0 };
-
-    int code = UPNP_AddAnyPortMapping(urls.value.controlURL, data.first.servicetype, port_str.c_str(),
-        port_str.c_str(), lan_address, kMappingDescription, "UDP", nullptr, kLeaseDuration, reserved_port);
-    if (code == UPNPCOMMAND_SUCCESS)
+    int code = UPNP_AddPortMapping(urls.value.controlURL, data.first.servicetype, port_str.c_str(),
+        port_str.c_str(), lan_address, kMappingDescription, "UDP", nullptr, kLeaseDuration);
+    if (code != UPNPCOMMAND_SUCCESS)
     {
-        const unsigned long parsed = std::strtoul(reserved_port, nullptr, 10);
-        if (parsed > 0 && parsed <= 65535)
-            external_port = static_cast<quint16>(parsed);
-    }
-    else
-    {
-        LOG(INFO) << "AddAnyPortMapping unavailable (" << strupnperror(code)
-                  << "), falling back to AddPortMapping";
-
-        code = UPNP_AddPortMapping(urls.value.controlURL, data.first.servicetype, port_str.c_str(),
-            port_str.c_str(), lan_address, kMappingDescription, "UDP", nullptr, kLeaseDuration);
-        if (code != UPNPCOMMAND_SUCCESS)
-        {
-            LOG(WARNING) << "UPNP_AddPortMapping failed:" << strupnperror(code);
-            return result;
-        }
+        LOG(WARNING) << "UPNP_AddPortMapping failed:" << strupnperror(code);
+        return result;
     }
 
     result.success = true;
     result.external_address = external;
-    result.external_port = external_port;
+    result.external_port = internal_port;
     result.control_url = urls.value.controlURL;
     result.service_type = data.first.servicetype;
 
