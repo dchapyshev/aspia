@@ -409,49 +409,16 @@ void DesktopWindow::onDrawFrame(const QList<QRect>& dirty_rects)
 //--------------------------------------------------------------------------------------------------
 void DesktopWindow::onMouseCursorChanged(std::shared_ptr<MouseCursor> mouse_cursor)
 {
-    QPoint local_dpi(MouseCursor::kDefaultDpiX, MouseCursor::kDefaultDpiY);
-    QPoint remote_dpi = mouse_cursor->constDpi();
-
-    QWidget* current_window = window();
-    if (current_window)
-    {
-        QScreen* current_screen = current_window->screen();
-        if (current_screen)
-        {
-            local_dpi.setX(static_cast<qint32>(current_screen->logicalDotsPerInchX()));
-            local_dpi.setY(static_cast<qint32>(current_screen->logicalDotsPerInchY()));
-        }
-    }
-
     int width = mouse_cursor->width();
     int height = mouse_cursor->height();
-    int hotspot_x = mouse_cursor->hotSpotX();
-    int hotspot_y = mouse_cursor->hotSpotY();
 
     QImage image(reinterpret_cast<const uchar*>(mouse_cursor->constImage().data()), width, height,
                  mouse_cursor->stride(), QImage::Format::Format_ARGB32);
 
-    if (local_dpi != remote_dpi)
-    {
-        double scale_factor_x = double(local_dpi.x()) / double(remote_dpi.x());
-        double scale_factor_y = double(local_dpi.y()) / double(remote_dpi.y());
-
-        width = std::max(int(double(width) * scale_factor_x), 1);
-        height = std::max(int(double(height) * scale_factor_y), 1);
-        hotspot_x = int(double(hotspot_x) * scale_factor_x);
-        hotspot_y = int(double(hotspot_y) * scale_factor_y);
-
-        QImage scaled_image =
-            image.scaled(width, height, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-
-        desktop_->setCursorShape(QPixmap::fromImage(std::move(scaled_image)),
-                                 QPoint(hotspot_x, hotspot_y));
-    }
-    else
-    {
-        desktop_->setCursorShape(QPixmap::fromImage(std::move(image)),
-                                 QPoint(hotspot_x, hotspot_y));
-    }
+    // The cursor is scaled to the current desktop scale inside the widget. The device pixel ratio
+    // of the client screen is applied on top of that by Qt itself.
+    desktop_->setCursorShape(QPixmap::fromImage(image),
+                             QPoint(mouse_cursor->hotSpotX(), mouse_cursor->hotSpotY()));
 }
 
 //--------------------------------------------------------------------------------------------------
