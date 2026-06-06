@@ -707,8 +707,10 @@ void DesktopAgent::onOverflowCheck()
     if (bandwidth > 0)
     {
         // Calculate FPS limit based on measured bandwidth.
-        if (bandwidth < 150 * 1024)        // < 150 KB/s
+        if (bandwidth < 70 * 1024)         // < 70 KB/s
             bandwidth_fps_limit = min_fps_;
+        else if (bandwidth < 150 * 1024)   // < 150 KB/s
+            bandwidth_fps_limit = 12;
         else if (bandwidth < 300 * 1024)   // < 300 KB/s
             bandwidth_fps_limit = 16;
         else if (bandwidth < 500 * 1024)   // < 500 KB/s
