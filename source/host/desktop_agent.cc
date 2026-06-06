@@ -774,32 +774,6 @@ void DesktopAgent::onOverflowCheck()
     if (current_fps != next_fps)
         capture_scheduler_.setFps(next_fps);
 
-    auto scaled_size = [](const QSize& size, double factor) -> QSize
-    {
-        return QSize(double(size.width()) * factor, double(size.height()) * factor);
-    };
-
-    QSize forced_size = forced_size_;
-
-    if (bandwidth > 0 && bandwidth < 30 * 1024) // < 30 KB/s
-        forced_size = scaled_size(source_size_, 0.6);
-    else if (bandwidth > 0 && bandwidth < 150 * 1024) // < 150 KB/s
-        forced_size = scaled_size(source_size_, 0.7);
-    else if (pressure_score_ >= 90)
-        forced_size = scaled_size(source_size_, 0.7);
-    else if (pressure_score_ >= 80)
-        forced_size = scaled_size(source_size_, 0.8);
-    else if (pressure_score_ >= 70)
-        forced_size = scaled_size(source_size_, 0.9);
-    else
-        forced_size = QSize();
-
-    if (forced_size != forced_size_)
-    {
-        LOG(INFO) << "Forced size changed:" << forced_size_ << "->" << forced_size;
-        forced_size_ = forced_size;
-    }
-
     if (bandwidth <= 0) // Not measured yet.
         return;
 
@@ -1006,7 +980,6 @@ void DesktopAgent::encodeScreen(const Frame* frame)
         // Every time we change the resolution, we have to reset the preferred size.
         source_size_ = frame->size();
         preferred_size_ = QSize(0, 0);
-        forced_size_ = QSize(0, 0);
     }
 
     QSize current_size = preferred_size_;
@@ -1018,15 +991,6 @@ void DesktopAgent::encodeScreen(const Frame* frame)
     // If we don't have a preferred size, then we use the original frame size.
     if (current_size.isEmpty())
         current_size = source_size_;
-
-    if (!forced_size_.isEmpty())
-    {
-        int forced = forced_size_.width() * forced_size_.height();
-        int current = current_size.width() * current_size.height();
-
-        if (forced < current)
-            current_size = forced_size_;
-    }
 
     const Frame* scaled_frame = scale_reducer_->scaleFrame(frame, current_size);
     if (!scaled_frame)
