@@ -79,9 +79,9 @@ message StunUdpRequest
     uint32 stun_port        = 8;
 }
 
-// The client opens a UPnP port mapping on its gateway and listens; the host connects to the
-// reported endpoint. Fallback when the host is behind a symmetric NAT.
-message UpnpUdpRequest
+// The client opens a port mapping on its gateway (NAT-PMP or UPnP) and listens; the host connects
+// to the reported endpoint. Fallback when the host is behind a symmetric NAT.
+message GatewayUdpRequest
 {
     uint32 request_id  = 1;
     uint32 encryptions = 2;
@@ -90,7 +90,7 @@ message UpnpUdpRequest
 }
 
 // The client's answer to any of the UDP requests above: session crypto plus, when the host needs
-// to reach the client (STUN/UPnP), the client's external endpoint.
+// to reach the client (STUN or gateway mapping), the client's external endpoint.
 message UdpReply
 {
     uint32 request_id = 1; // Echoes the request_id of the request this reply answers.
@@ -121,8 +121,8 @@ message ClientToHost
 // Use CHANNEL_ID_CONTROL to send.
 message HostToClient
 {
-    DirectUdpRequest direct_udp_request = 1;
-    StunUdpRequest stun_udp_request     = 2;
-    UpnpUdpRequest upnp_udp_request     = 3;
-    BandwidthProbe bandwidth_probe      = 4;
+    DirectUdpRequest direct_udp_request   = 1;
+    StunUdpRequest stun_udp_request       = 2;
+    GatewayUdpRequest gateway_udp_request = 3;
+    BandwidthProbe bandwidth_probe        = 4;
 }

@@ -363,9 +363,9 @@ void Client::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
         {
             readStunUdpRequest(message.stun_udp_request());
         }
-        else if (message.has_upnp_udp_request())
+        else if (message.has_gateway_udp_request())
         {
-            readUpnpUdpRequest(message.upnp_udp_request());
+            readGatewayUdpRequest(message.gateway_udp_request());
         }
         else if (message.has_bandwidth_probe())
         {
@@ -682,7 +682,7 @@ void Client::readStunUdpRequest(const proto::peer::StunUdpRequest& request)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::readUpnpUdpRequest(const proto::peer::UpnpUdpRequest& request)
+void Client::readGatewayUdpRequest(const proto::peer::GatewayUdpRequest& request)
 {
     // Ignore once a UDP channel is up (late requests from losing host attempts).
     if (udp_channel_ || !isUdpConnectionAllowed())
@@ -696,6 +696,6 @@ void Client::readUpnpUdpRequest(const proto::peer::UpnpUdpRequest& request)
         return;
     }
 
-    CLOG(INFO) << "UPnP UDP request" << request.request_id();
-    addAndStart(new UpnpUdpAttempt(request.request_id(), public_key, iv, request.encryptions(), this));
+    CLOG(INFO) << "Gateway UDP request" << request.request_id();
+    addAndStart(new GatewayUdpAttempt(request.request_id(), public_key, iv, request.encryptions(), this));
 }

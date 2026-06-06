@@ -26,9 +26,9 @@
 #include "base/crypto/datagram_encryptor.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_byte_array.h"
+#include "base/net/gateway_port_mapper.h"
 #include "base/net/net_utils.h"
 #include "base/net/udp_channel.h"
-#include "base/net/upnp_port_mapper.h"
 #include "base/peer/stun_peer.h"
 #include "proto/peer.h"
 
@@ -355,16 +355,16 @@ void StunUdpAttempt::onReply(const proto::peer::UdpReply& reply)
 }
 
 //--------------------------------------------------------------------------------------------------
-HostUpnpUdpAttempt::HostUpnpUdpAttempt(quint32 request_id, QObject* parent)
+HostGatewayUdpAttempt::HostGatewayUdpAttempt(quint32 request_id, QObject* parent)
     : UdpAttempt(request_id, parent)
 {
     // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostUpnpUdpAttempt::start()
+void HostGatewayUdpAttempt::start()
 {
-    // Passive: bind a local port, map it via UPnP, advertise the mapped endpoint; client connects.
+    // Passive: bind a local port, map it on the gateway, advertise the mapped endpoint; client connects.
     createChannel();
 
     quint16 local_port = 0;
@@ -372,9 +372,9 @@ void HostUpnpUdpAttempt::start()
 
     // Parent the mapper to the channel so the mapping survives as long as the channel (it travels
     // with the channel if this attempt wins, and is removed with it otherwise).
-    UpnpPortMapper* mapper = new UpnpPortMapper(channel_);
+    GatewayPortMapper* mapper = new GatewayPortMapper(channel_);
 
-    connect(mapper, &UpnpPortMapper::sig_ready, this,
+    connect(mapper, &GatewayPortMapper::sig_ready, this,
         [this](const QString& external_address, quint16 external_port)
     {
         proto::peer::HostToClient message;
@@ -383,13 +383,13 @@ void HostUpnpUdpAttempt::start()
         request->add_address(external_address.toStdString());
         request->set_port(external_port);
 
-        CLOG(INFO) << "Host UPnP attempt" << request_id_ << "sending request (endpoint"
+        CLOG(INFO) << "Host gateway attempt" << request_id_ << "sending request (endpoint"
                    << external_address << ':' << external_port << ")";
         sendMessage(message);
     });
-    connect(mapper, &UpnpPortMapper::sig_failed, this, [this]()
+    connect(mapper, &GatewayPortMapper::sig_failed, this, [this]()
     {
-        CLOG(WARNING) << "Host UPnP mapping failed (attempt" << request_id_ << ")";
+        CLOG(WARNING) << "Host gateway mapping failed (attempt" << request_id_ << ")";
         emit sig_failed(request_id_);
     });
 
@@ -398,41 +398,41 @@ void HostUpnpUdpAttempt::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostUpnpUdpAttempt::onReply(const proto::peer::UdpReply& reply)
+void HostGatewayUdpAttempt::onReply(const proto::peer::UdpReply& reply)
 {
     if (!applyCrypto(reply))
         emit sig_failed(request_id_);
 }
 
 //--------------------------------------------------------------------------------------------------
-ClientUpnpUdpAttempt::ClientUpnpUdpAttempt(quint32 request_id, QObject* parent)
+ClientGatewayUdpAttempt::ClientGatewayUdpAttempt(quint32 request_id, QObject* parent)
     : UdpAttempt(request_id, parent)
 {
     // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientUpnpUdpAttempt::start()
+void ClientGatewayUdpAttempt::start()
 {
     // Active: ask the client to open a mapping and report its endpoint; the channel is created in
     // onReply once that endpoint arrives.
     proto::peer::HostToClient message;
-    proto::peer::UpnpUdpRequest* request = message.mutable_upnp_udp_request();
+    proto::peer::GatewayUdpRequest* request = message.mutable_gateway_udp_request();
     fillKeyExchange(request);
 
-    CLOG(INFO) << "Client UPnP attempt" << request_id_ << "sending request";
+    CLOG(INFO) << "Client gateway attempt" << request_id_ << "sending request";
     sendMessage(message);
     startTimeout();
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientUpnpUdpAttempt::onReply(const proto::peer::UdpReply& reply)
+void ClientGatewayUdpAttempt::onReply(const proto::peer::UdpReply& reply)
 {
     QString client_address = QString::fromStdString(reply.address());
     quint16 client_port = static_cast<quint16>(reply.port());
     if (client_address.isEmpty() || !client_port)
     {
-        CLOG(WARNING) << "Client UPnP endpoint unavailable (attempt" << request_id_ << ")";
+        CLOG(WARNING) << "Client gateway endpoint unavailable (attempt" << request_id_ << ")";
         emit sig_failed(request_id_);
         return;
     }
@@ -444,7 +444,7 @@ void ClientUpnpUdpAttempt::onReply(const proto::peer::UdpReply& reply)
         return;
     }
 
-    CLOG(INFO) << "Client UPnP attempt" << request_id_ << "connecting to" << client_address << ':'
+    CLOG(INFO) << "Client gateway attempt" << request_id_ << "connecting to" << client_address << ':'
                << client_port;
     channel_->connectTo(client_address, client_port);
 }

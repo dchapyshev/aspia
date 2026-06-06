@@ -31,9 +31,9 @@
 
 class DatagramDecryptor;
 class DatagramEncryptor;
+class GatewayPortMapper;
 class StunPeer;
 class UdpChannel;
-class UpnpPortMapper;
 
 namespace proto::peer {
 class HostToClient;
@@ -55,7 +55,7 @@ public:
     bool isValid() const;
 
     // Hands the established channel over to the session (called when this attempt wins). Any aux
-    // resource that must outlive the attempt (e.g. the UPnP mapping) is parented to the channel and
+    // resource that must outlive the attempt (e.g. the gateway mapping) is parented to the channel and
     // travels with it.
     ScopedQPointer<UdpChannel> takeChannel();
 
@@ -144,22 +144,24 @@ private:
     ScopedQPointer<StunPeer> stun_peer_;
 };
 
-// Host-side UPnP: opens a port mapping on the host's gateway and advertises it; client connects.
-// The mapper is parented to the channel so the mapping lives as long as the (possibly won) channel.
-class HostUpnpUdpAttempt final : public UdpAttempt
+// Host-side gateway mapping: opens a port mapping on the host's gateway (NAT-PMP or UPnP) and
+// advertises it; client connects. The mapper is parented to the channel so the mapping lives as
+// long as the (possibly won) channel.
+class HostGatewayUdpAttempt final : public UdpAttempt
 {
 public:
-    HostUpnpUdpAttempt(quint32 request_id, QObject* parent);
+    HostGatewayUdpAttempt(quint32 request_id, QObject* parent);
 
     void start() final;
     void onReply(const proto::peer::UdpReply& reply) final;
 };
 
-// Client-side UPnP: asks the client to open a mapping and connects to the endpoint it reports.
-class ClientUpnpUdpAttempt final : public UdpAttempt
+// Client-side gateway mapping: asks the client to open a mapping and connects to the endpoint it
+// reports.
+class ClientGatewayUdpAttempt final : public UdpAttempt
 {
 public:
-    ClientUpnpUdpAttempt(quint32 request_id, QObject* parent);
+    ClientGatewayUdpAttempt(quint32 request_id, QObject* parent);
 
     void start() final;
     void onReply(const proto::peer::UdpReply& reply) final;

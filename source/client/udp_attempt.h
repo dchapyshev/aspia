@@ -26,9 +26,9 @@
 #include "base/crypto/key_pair.h"
 #include "base/scoped_qpointer.h"
 
+class GatewayPortMapper;
 class StunPeer;
 class UdpChannel;
-class UpnpPortMapper;
 
 // One client-side UDP connection attempt answering a single host request. Several run concurrently;
 // the host probes the channel it picked, and the attempt that receives the probe wins. The base owns
@@ -85,7 +85,7 @@ private:
     Q_DISABLE_COPY_MOVE(UdpAttempt)
 };
 
-// Direct/host-UPnP: connects to one of the host's advertised addresses.
+// Direct/host-gateway: connects to one of the host's advertised addresses.
 class DirectUdpAttempt final : public UdpAttempt
 {
 public:
@@ -120,13 +120,13 @@ private:
     ScopedQPointer<StunPeer> stun_peer_;
 };
 
-// Client-side UPnP: opens a port mapping on this client's gateway, listens, and reports the mapped
-// endpoint so the host connects to it.
-class UpnpUdpAttempt final : public UdpAttempt
+// Client-side gateway mapping: opens a port mapping on this client's gateway (NAT-PMP or UPnP),
+// listens, and reports the mapped endpoint so the host connects to it.
+class GatewayUdpAttempt final : public UdpAttempt
 {
 public:
-    UpnpUdpAttempt(quint32 request_id, const QByteArray& host_public_key, const QByteArray& host_iv,
-                   quint32 encryptions, QObject* parent);
+    GatewayUdpAttempt(quint32 request_id, const QByteArray& host_public_key, const QByteArray& host_iv,
+                      quint32 encryptions, QObject* parent);
 
     void start() final;
 };

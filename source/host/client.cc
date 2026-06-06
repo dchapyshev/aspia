@@ -348,7 +348,7 @@ void Client::selectAttempt(UdpAttempt* attempt, qint64 bandwidth)
     CLOG(INFO) << "Nominating UDP attempt" << attempt->requestId();
 
     // Take the channel from the attempt and drive the session through it directly. Any aux resource
-    // (UPnP mapping) is parented to the channel and travels with it; the attempt is then discarded.
+    // (gateway mapping) is parented to the channel and travels with it; the attempt is then discarded.
     const quint32 id = attempt->requestId();
     udp_channel_ = attempt->takeChannel();
     eraseAttempt(id);
@@ -459,8 +459,8 @@ void Client::connectToUdp()
     if (!stun_host_.isEmpty() && stun_port_)
         addAndStart(new StunUdpAttempt(nextRequestId(), stun_host_, stun_port_, this));
 
-    addAndStart(new HostUpnpUdpAttempt(nextRequestId(), this));
-    addAndStart(new ClientUpnpUdpAttempt(nextRequestId(), this));
+    addAndStart(new HostGatewayUdpAttempt(nextRequestId(), this));
+    addAndStart(new ClientGatewayUdpAttempt(nextRequestId(), this));
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -38,7 +38,7 @@ class UdpChannel;
 namespace proto::peer {
 class DirectUdpRequest;
 class StunUdpRequest;
-class UpnpUdpRequest;
+class GatewayUdpRequest;
 } // namespace proto::peer
 
 class Client : public QObject
@@ -114,7 +114,7 @@ private:
     bool isUdpConnectionAllowed();
     void readDirectUdpRequest(const proto::peer::DirectUdpRequest& request);
     void readStunUdpRequest(const proto::peer::StunUdpRequest& request);
-    void readUpnpUdpRequest(const proto::peer::UpnpUdpRequest& request);
+    void readGatewayUdpRequest(const proto::peer::GatewayUdpRequest& request);
     void addAndStart(UdpAttempt* attempt);
     UdpAttempt* findAttempt(quint32 request_id);
     void eraseAttempt(quint32 request_id);

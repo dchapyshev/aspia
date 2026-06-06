@@ -26,9 +26,9 @@
 #include "base/crypto/datagram_encryptor.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_byte_array.h"
+#include "base/net/gateway_port_mapper.h"
 #include "base/net/net_utils.h"
 #include "base/net/udp_channel.h"
-#include "base/net/upnp_port_mapper.h"
 #include "base/peer/stun_peer.h"
 #include "proto/key_exchange.h"
 #include "proto/peer.h"
@@ -312,17 +312,17 @@ void StunUdpAttempt::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-UpnpUdpAttempt::UpnpUdpAttempt(quint32 request_id, const QByteArray& host_public_key,
-                               const QByteArray& host_iv, quint32 encryptions, QObject* parent)
+GatewayUdpAttempt::GatewayUdpAttempt(quint32 request_id, const QByteArray& host_public_key,
+                                     const QByteArray& host_iv, quint32 encryptions, QObject* parent)
     : UdpAttempt(request_id, host_public_key, host_iv, encryptions, parent)
 {
     // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
-void UpnpUdpAttempt::start()
+void GatewayUdpAttempt::start()
 {
-    // Passive: listen on an OS-assigned local port and map it via UPnP; the host connects to it.
+    // Passive: listen on an OS-assigned local port and map it on the gateway; the host connects to it.
     if (!createChannel())
     {
         emit sig_failed(request_id_);
@@ -333,12 +333,12 @@ void UpnpUdpAttempt::start()
     channel_->bind(&local_port);
 
     // The mapper is owned by the channel so the mapping lives as long as the channel.
-    UpnpPortMapper* mapper = new UpnpPortMapper(channel_);
+    GatewayPortMapper* mapper = new GatewayPortMapper(channel_);
 
-    connect(mapper, &UpnpPortMapper::sig_ready, this, &UpnpUdpAttempt::sendReply);
-    connect(mapper, &UpnpPortMapper::sig_failed, this, [this]()
+    connect(mapper, &GatewayPortMapper::sig_ready, this, &GatewayUdpAttempt::sendReply);
+    connect(mapper, &GatewayPortMapper::sig_failed, this, [this]()
     {
-        CLOG(WARNING) << "Client UPnP mapping failed (attempt" << request_id_ << ")";
+        CLOG(WARNING) << "Client gateway mapping failed (attempt" << request_id_ << ")";
         emit sig_failed(request_id_);
     });
 
