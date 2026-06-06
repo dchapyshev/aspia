@@ -21,6 +21,7 @@
 
 #include <QObject>
 
+#include <chrono>
 #include <memory>
 
 #include "base/logging.h"
@@ -65,7 +66,7 @@ public:
     virtual void onReply(const proto::peer::UdpReply& reply) = 0;
 
 signals:
-    void sig_connected(quint32 request_id);
+    void sig_connected(quint32 request_id, qint64 bandwidth);
     void sig_failed(quint32 request_id);
     void sig_message(const QByteArray& buffer);
 
@@ -111,6 +112,7 @@ private:
     bool enet_ready_ = false;
     bool crypto_ready_ = false;
     bool probe_sent_ = false;
+    std::chrono::steady_clock::time_point probe_send_time_;
 
     Q_DISABLE_COPY_MOVE(UdpAttempt)
 };

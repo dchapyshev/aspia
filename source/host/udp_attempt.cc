@@ -34,7 +34,21 @@
 
 namespace {
 
-const int kAttemptTimeoutMs = 15000; // Max time for one attempt to connect before it is dropped.
+const int kAttemptTimeoutMs = 15000;     // Max time for one attempt to connect before it is dropped.
+const qint64 kProbeDataSize = 32 * 1024; // 32 KB probe payload.
+
+//--------------------------------------------------------------------------------------------------
+QByteArray makeBandwidthProbeData()
+{
+    std::string payload;
+    payload.resize(kProbeDataSize);
+    for (size_t i = 0; i < payload.size(); ++i)
+        payload[i] = static_cast<char>(i & 0xFF);
+
+    proto::peer::HostToClient message;
+    message.mutable_bandwidth_probe()->set_payload(std::move(payload));
+    return serialize(message);
+}
 
 } // namespace
 
@@ -182,23 +196,28 @@ void UdpAttempt::onChannelMessage(quint8 channel_id, const QByteArray& buffer)
         return;
     }
 
-    // The peer acked our probe: the channel is confirmed working end-to-end.
+    // The peer acked our probe: the channel is confirmed and timed. Report the bandwidth implied by
+    // the round-trip of the known-size probe.
+    auto rtt = std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::steady_clock::now() - probe_send_time_);
+    qint64 rtt_ms = rtt.count() > 0 ? rtt.count() : 1;
+
     connected_ = true;
-    emit sig_connected(request_id_);
+    emit sig_connected(request_id_, (kProbeDataSize * 1000) / rtt_ms);
 }
 
 //--------------------------------------------------------------------------------------------------
 void UdpAttempt::sendProbeIfReady()
 {
-    // Confirm the channel once it can carry encrypted data both ways: send a probe and wait for the
-    // peer's ack (see onChannelMessage). Both conditions are required to send.
+    // Once the channel can carry encrypted data both ways, send a real bandwidth probe and wait for
+    // the peer's ack (see onChannelMessage). The round-trip both confirms the channel and yields its
+    // initial bandwidth. Both conditions are required to send.
     if (!enet_ready_ || !crypto_ready_ || probe_sent_)
         return;
     probe_sent_ = true;
 
-    proto::peer::HostToClient message;
-    message.mutable_bandwidth_probe();
-    channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(message), true);
+    probe_send_time_ = std::chrono::steady_clock::now();
+    channel_->send(proto::peer::CHANNEL_ID_CONTROL, makeBandwidthProbeData(), true);
 
     CLOG(INFO) << "UDP attempt" << request_id_ << "sent probe, waiting for ack";
 }

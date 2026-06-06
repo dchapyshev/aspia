@@ -31,7 +31,6 @@ namespace {
 const qint64 kProbeIntervalMs = 5000;    // Check every 5 seconds.
 const qint64 kIdleThresholdMs = 5000;    // Consider idle after 5 seconds of no sends.
 const qint64 kProbeDataSize = 32 * 1024; // 32 KB probe payload.
-const int kInitialProbeTimeoutMs = 5000; // 5 seconds to wait for initial probe ACK.
 const int kUdpReconnectDelayMs = 5000;   // 5 seconds before attempting UDP reconnection.
 
 //--------------------------------------------------------------------------------------------------
@@ -50,10 +49,16 @@ QByteArray makeBandwidthProbeData()
         payload[i] = static_cast<char>(i & 0xFF);
 
     proto::peer::HostToClient message;
-    proto::peer::BandwidthProbe* probe = message.mutable_bandwidth_probe();
-    probe->set_payload(std::move(payload));
-
+    message.mutable_bandwidth_probe()->set_payload(std::move(payload));
     return serialize(message);
+}
+
+//--------------------------------------------------------------------------------------------------
+qint64 bandwidthFromRttMs(qint64 rtt_ms)
+{
+    if (rtt_ms <= 0)
+        rtt_ms = 1;
+    return (kProbeDataSize * 1000) / rtt_ms;
 }
 
 } // namespace
@@ -307,18 +312,18 @@ void Client::clearAttempts()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onAttemptConnected(quint32 request_id)
+void Client::onAttemptConnected(quint32 request_id, qint64 bandwidth)
 {
     if (udp_channel_)
-        return; // Already have a nominee being confirmed by the probe.
+        return; // Already have a winner.
 
     UdpAttempt* attempt = findAttempt(request_id);
     if (attempt)
-        selectAttempt(attempt);
+        selectAttempt(attempt, bandwidth);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::selectAttempt(UdpAttempt* attempt)
+void Client::selectAttempt(UdpAttempt* attempt, qint64 bandwidth)
 {
     CCHECK(attempt);
 
@@ -341,24 +346,15 @@ void Client::selectAttempt(UdpAttempt* attempt)
     connect(udp_channel_, &UdpChannel::sig_errorOccurred, this, &Client::onUdpErrorOccurred);
 
     udp_channel_->setPaused(false);
-    setUdpState(FROM_HERE, UdpState::CONNECTED);
 
+    // The attempt's probe round-trip already confirmed the channel and measured its initial
+    // bandwidth, so no probe is sent here; further measurements come from the periodic probe timer.
     udp_probe_.send_time = TimePoint();
-    udp_probe_.bandwidth = 0;
     udp_probe_.pending = false;
+    udp_probe_.bandwidth = bandwidth;
 
-    // The channel is already confirmed by the attempt's probe round-trip (which also told the client
-    // it won); this probe just measures the initial UDP bandwidth before switching the session over.
-    sendUdpBandwidthProbe(Clock::now());
-
-    QTimer::singleShot(kInitialProbeTimeoutMs, this, [this]()
-    {
-        if (udp_state_ != UdpState::CONNECTED)
-            return;
-
-        CLOG(WARNING) << "UDP probe timed out";
-        onUdpErrorOccurred();
-    });
+    setUdpState(FROM_HERE, UdpState::CONNECTED);
+    checkBandwidth();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -502,10 +498,7 @@ void Client::onTcpBandwidthProbeAck()
         return;
 
     auto rtt = std::chrono::duration_cast<Milliseconds>(Clock::now() - tcp_probe_.send_time);
-    if (rtt.count() <= 0)
-        rtt = Milliseconds(1);
-
-    tcp_probe_.bandwidth = (kProbeDataSize * 1000) / rtt.count();
+    tcp_probe_.bandwidth = bandwidthFromRttMs(rtt.count());
     tcp_probe_.pending = false;
 
     CLOG(INFO) << "TCP RTT:" << rtt.count() << "ms bandwidth:" << (tcp_probe_.bandwidth / 1024) << "kB/s";
@@ -519,10 +512,7 @@ void Client::onUdpBandwidthProbeAck()
         return;
 
     auto rtt = std::chrono::duration_cast<Milliseconds>(Clock::now() - udp_probe_.send_time);
-    if (rtt.count() <= 0)
-        rtt = Milliseconds(1);
-
-    udp_probe_.bandwidth = (kProbeDataSize * 1000) / rtt.count();
+    udp_probe_.bandwidth = bandwidthFromRttMs(rtt.count());
     udp_probe_.pending = false;
 
     CLOG(INFO) << "UDP RTT:" << rtt.count() << "ms bandwidth:" << (udp_probe_.bandwidth / 1024) << "kB/s";

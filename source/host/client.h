@@ -108,9 +108,9 @@ private:
     UdpAttempt* findAttempt(quint32 request_id);
     void eraseAttempt(quint32 request_id);
     void readUdpReply(const proto::peer::UdpReply& reply);
-    void onAttemptConnected(quint32 request_id);
+    void onAttemptConnected(quint32 request_id, qint64 bandwidth);
     void onAttemptError(quint32 request_id);
-    void selectAttempt(UdpAttempt* attempt);
+    void selectAttempt(UdpAttempt* attempt, qint64 bandwidth);
     void clearAttempts();
     void onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer);
     void onUdpErrorOccurred();
