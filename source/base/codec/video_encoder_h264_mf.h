@@ -66,7 +66,7 @@ private:
     void destroyEncoder();
     bool selectHardwareMft();
     bool configureMediaTypes(const QSize& size);
-    bool configureCodecApi();
+    void configureCodecApi();
     bool beginStreaming();
     bool endStreaming();
 
@@ -91,6 +91,7 @@ private:
     // when initializing the encoder.
     quint32 min_quantizer_ = 16;
     quint32 max_quantizer_ = 28;
+    quint32 common_quality_ = 85;
     quint32 target_bitrate_bps_ = 5 * 1000 * 1000;
 
     std::unique_ptr<D3D11VideoContext> d3d_;

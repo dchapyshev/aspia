@@ -337,7 +337,7 @@ void DesktopAgent::onClientConfigured()
     else if (video_encoding_ == proto::video::ENCODING_H264)
         video_encoding_ = proto::video::ENCODING_VP8;
 
-    video_encoder_ = VideoEncoder::create(video_encoding_);
+    createVideoEncoder();
 
     if (merged_config.audio() && opus_supported)
     {
@@ -798,14 +798,12 @@ void DesktopAgent::onOverflowCheck()
     {
         LOG(INFO) << "Switching video encoding:" << video_encoding_ << "->" << desired_encoding;
         video_encoding_ = desired_encoding;
-        video_encoder_ = VideoEncoder::create(video_encoding_);
+        createVideoEncoder();
     }
 
-    static qint64 last_bandwidth = 0;
-
-    if (last_bandwidth != bandwidth && video_encoder_)
+    if (last_bandwidth_ != bandwidth && video_encoder_)
     {
-        last_bandwidth = bandwidth;
+        last_bandwidth_ = bandwidth;
         video_encoder_->setBandwidth(bandwidth);
     }
 }
@@ -1010,7 +1008,7 @@ void DesktopAgent::encodeScreen(const Frame* frame)
         LOG(ERROR) << "Permanent encoder failure for" << video_encoding_ << "- falling back to VP8";
         h264_enabled_ = false;
         video_encoding_ = proto::video::ENCODING_VP8;
-        video_encoder_ = VideoEncoder::create(video_encoding_);
+        createVideoEncoder();
         return;
     }
 
@@ -1071,4 +1069,17 @@ void DesktopAgent::encodeAudio(const proto::audio::Packet& packet)
     const QByteArray& buffer = outgoing_message_.serialize<proto::audio::HostToClient>();
     for (auto* client : std::as_const(clients_))
         client->onAudioData(buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::createVideoEncoder()
+{
+    video_encoder_ = VideoEncoder::create(video_encoding_);
+
+    // Seed the fresh encoder with the last measured bandwidth so it starts at the right quality
+    // tier immediately. Without this it would come up at its built-in defaults and only correct on
+    // the next bandwidth change - sending a high-bitrate burst over a narrow link right after a
+    // reconnect, when the encoder is recreated by onClientConfigured().
+    if (video_encoder_)
+        video_encoder_->setBandwidth(last_bandwidth_);
 }

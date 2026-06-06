@@ -282,11 +282,16 @@ VideoEncoder::Result VideoEncoderH264MF::encode(const Frame* frame, proto::video
 //--------------------------------------------------------------------------------------------------
 void VideoEncoderH264MF::setBandwidth(qint64 bandwidth)
 {
+    const quint32 prev_min_quantizer = min_quantizer_;
+    const quint32 prev_max_quantizer = max_quantizer_;
+    const quint32 prev_common_quality = common_quality_;
+
     if (bandwidth <= 0)
     {
         // Bandwidth is not measured yet - fall back to the defaults baked into the header.
         min_quantizer_ = 16;
         max_quantizer_ = 28;
+        common_quality_ = 85;
         target_bitrate_bps_ = 5 * 1000 * 1000;
     }
     else
@@ -299,29 +304,52 @@ void VideoEncoderH264MF::setBandwidth(qint64 bandwidth)
         // H264 is more efficient than VP at the same QP, so the bands are tighter. Loosen the
         // ceiling on low-bandwidth links so the encoder can compress aggressively without ever
         // dropping frames; tighten the floor on high-bandwidth links to spend bits on quality.
-        if (bandwidth < 500 * 1024) // < 500 KB/s
+        // |common_quality_| is the central target the quality rate mode aims for; the QP bounds
+        // only fence it in. Lower it on narrow links so the encoder leans toward smaller frames,
+        // raise it on fast links so it spends the available bits on a sharper picture.
+        if (bandwidth < 150 * 1024) // < 150 KB/s
+        {
+            min_quantizer_ = 24;
+            max_quantizer_ = 46;
+            common_quality_ = 40;
+        }
+        else if (bandwidth < 500 * 1024) // < 500 KB/s
         {
             min_quantizer_ = 20;
             max_quantizer_ = 38;
+            common_quality_ = 45;
         }
         else if (bandwidth < 2 * 1024 * 1024) // < 2 MB/s
         {
             min_quantizer_ = 18;
             max_quantizer_ = 32;
+            common_quality_ = 80;
         }
         else
         {
             min_quantizer_ = 14;
             max_quantizer_ = 26;
+            common_quality_ = 90;
         }
     }
 
+    // No live encoder yet - the new values will be picked up by configureCodecApi() when encode()
+    // lazily creates one.
     if (!codec_api_)
         return;
 
-    setUint32CodecAttr(codec_api_.Get(), CODECAPI_AVEncCommonMeanBitRate, target_bitrate_bps_);
-    setUint32CodecAttr(codec_api_.Get(), CODECAPI_AVEncVideoMinQP, min_quantizer_);
-    setUint32CodecAttr(codec_api_.Get(), CODECAPI_AVEncVideoMaxQP, max_quantizer_);
+    // This MFT only honors rate-control parameters at creation time; SetValue on a streaming
+    // encoder is silently dropped.
+    const bool params_changed = prev_min_quantizer != min_quantizer_ ||
+        prev_max_quantizer != max_quantizer_ || prev_common_quality != common_quality_;
+    if (!params_changed)
+        return;
+
+    LOG(INFO) << "Bandwidth tier changed - recreating H264 encoder (quality:" << common_quality_
+              << "min_qp:" << min_quantizer_ << "max_qp:" << max_quantizer_ << ")";
+
+    destroyEncoder();
+    last_size_ = QSize();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -389,8 +417,7 @@ bool VideoEncoderH264MF::createEncoder(const QSize& size)
         return false;
     }
 
-    if (!configureCodecApi())
-        return false;
+    configureCodecApi();
 
     if (!configureMediaTypes(size))
         return false;
@@ -549,29 +576,21 @@ bool VideoEncoderH264MF::configureMediaTypes(const QSize& size)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderH264MF::configureCodecApi()
+void VideoEncoderH264MF::configureCodecApi()
 {
     ICodecAPI* api = codec_api_.Get();
-
-    // Quality-controlled rate: encoder picks QP to keep visual quality steady and lets bitrate
-    // float to match content complexity. Desktop content is mostly static so the average bitrate
-    // stays low naturally, while frames with motion get the bandwidth they need. Reliable transport
-    // makes occasional bursts safe.
     setUint32CodecAttr(api, CODECAPI_AVEncCommonRateControlMode, eAVEncCommonRateControlMode_Quality);
-    setUint32CodecAttr(api, CODECAPI_AVEncCommonQuality, 85);
+    setUint32CodecAttr(api, CODECAPI_AVEncCommonQuality, common_quality_);
     setUint32CodecAttr(api, CODECAPI_AVEncCommonMeanBitRate, target_bitrate_bps_);
+    setUint32CodecAttr(api, CODECAPI_AVEncCommonQualityVsSpeed, 90);
     setUint32CodecAttr(api, CODECAPI_AVEncMPVDefaultBPictureCount, 0);
     setUint32CodecAttr(api, CODECAPI_AVEncVideoMaxNumRefFrame, kMaxRefFrames);
     setBoolCodecAttr(api, CODECAPI_AVEncCommonLowLatency, true);
     setBoolCodecAttr(api, CODECAPI_AVEncH264CABACEnable, true);
     setUint32CodecAttr(api, CODECAPI_AVScenarioInfo, eAVScenarioInfo_DisplayRemoting);
-    // Reliable transport makes periodic IDRs unnecessary for error recovery; a long GOP keeps the
-    // bitrate flat. Keyframes are emitted on demand via CODECAPI_AVEncVideoForceKeyFrame.
     setUint32CodecAttr(api, CODECAPI_AVEncMPVGOPSize, 60000);
     setUint32CodecAttr(api, CODECAPI_AVEncVideoMinQP, min_quantizer_);
     setUint32CodecAttr(api, CODECAPI_AVEncVideoMaxQP, max_quantizer_);
-
-    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

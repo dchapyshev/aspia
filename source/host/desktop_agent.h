@@ -91,6 +91,7 @@ private:
     void encodeScreen(const Frame* frame);
     void encodeCursor(const MouseCursor* cursor);
     void encodeAudio(const proto::audio::Packet& packet);
+    void createVideoEncoder();
 
     // Control channel between service and agent.
     IpcChannel* ipc_channel_ = nullptr;
@@ -113,6 +114,7 @@ private:
     bool h264_enabled_ = false;
 
     proto::video::Encoding video_encoding_ = proto::video::ENCODING_VP8;
+    qint64 last_bandwidth_ = 0;
 
     int screen_count_ = 0;
     QPoint last_cursor_pos_;
