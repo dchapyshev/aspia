@@ -139,6 +139,7 @@ private:
         TimePoint send_time;
         bool pending = false;
         qint64 bandwidth = 0;
+        qint64 size = 0; // Payload size of the in-flight probe (for the bandwidth calculation).
     };
 
     QTimer* probe_timer_ = nullptr;

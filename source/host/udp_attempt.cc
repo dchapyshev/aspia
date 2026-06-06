@@ -34,14 +34,14 @@
 
 namespace {
 
-const int kAttemptTimeoutMs = 15000;     // Max time for one attempt to connect before it is dropped.
-const qint64 kProbeDataSize = 32 * 1024; // 32 KB probe payload.
+const int kAttemptTimeoutMs = 15000;           // Max time for one attempt to connect before it is dropped.
+const qint64 kInitialProbeDataSize = 4 * 1024; // 4 KB - smallest probe, used for the initial measurement.
 
 //--------------------------------------------------------------------------------------------------
 QByteArray makeBandwidthProbeData()
 {
     std::string payload;
-    payload.resize(kProbeDataSize);
+    payload.resize(kInitialProbeDataSize);
     for (size_t i = 0; i < payload.size(); ++i)
         payload[i] = static_cast<char>(i & 0xFF);
 
@@ -203,7 +203,7 @@ void UdpAttempt::onChannelMessage(quint8 channel_id, const QByteArray& buffer)
     qint64 rtt_ms = rtt.count() > 0 ? rtt.count() : 1;
 
     connected_ = true;
-    emit sig_connected(request_id_, (kProbeDataSize * 1000) / rtt_ms);
+    emit sig_connected(request_id_, (kInitialProbeDataSize * 1000) / rtt_ms);
 }
 
 //--------------------------------------------------------------------------------------------------

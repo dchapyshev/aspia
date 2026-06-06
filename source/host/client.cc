@@ -28,11 +28,13 @@
 
 namespace {
 
-const qint64 kProbeIntervalMs = 5000;    // Check every 5 seconds.
-const qint64 kIdleThresholdMs = 5000;    // Consider idle after 5 seconds of no sends.
-const qint64 kProbeDataSize = 32 * 1024; // 32 KB probe payload.
-const int kUdpInitialDelayMs = 5000;     // Delay before the first UDP negotiation (let key frames flush).
-const int kUdpReconnectDelayMs = 5000;   // 5 seconds before attempting UDP reconnection.
+const qint64 kProbeIntervalMs = 5000;       // Check every 5 seconds.
+const qint64 kIdleThresholdMs = 5000;       // Consider idle after 5 seconds of no sends.
+const qint64 kMinProbeDataSize = 4 * 1024;  // 4 KB - first probe and floor for slow links.
+const qint64 kMaxProbeDataSize = 64 * 1024; // 64 KB - ceiling for fast links.
+const qint64 kProbeTargetMs = 100;          // Each probe is sized to take ~this long to transfer.
+const int kUdpInitialDelayMs = 5000;        // Delay before the first UDP negotiation (let key frames flush).
+const int kUdpReconnectDelayMs = 5000;      // 5 seconds before attempting UDP reconnection.
 
 //--------------------------------------------------------------------------------------------------
 quint32 nextRequestId()
@@ -42,10 +44,10 @@ quint32 nextRequestId()
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray makeBandwidthProbeData()
+QByteArray makeBandwidthProbeData(qint64 size)
 {
     std::string payload;
-    payload.resize(kProbeDataSize);
+    payload.resize(size);
     for (size_t i = 0; i < payload.size(); ++i)
         payload[i] = static_cast<char>(i & 0xFF);
 
@@ -55,11 +57,25 @@ QByteArray makeBandwidthProbeData()
 }
 
 //--------------------------------------------------------------------------------------------------
-qint64 bandwidthFromRttMs(qint64 rtt_ms)
+qint64 bandwidthFromRttMs(qint64 size, qint64 rtt_ms)
 {
     if (rtt_ms <= 0)
         rtt_ms = 1;
-    return (kProbeDataSize * 1000) / rtt_ms;
+    return (size * 1000) / rtt_ms;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Size of the next probe based on the last measured bandwidth: aim for ~kProbeTargetMs of transfer,
+// clamped to [kMinProbeDataSize, kMaxProbeDataSize]. With no prior measurement (0) this yields the
+// minimum. Small probes on slow links, large probes on fast links keep measurements accurate.
+qint64 nextProbeSize(qint64 last_bandwidth)
+{
+    qint64 size = (last_bandwidth * kProbeTargetMs) / 1000;
+    if (size < kMinProbeDataSize)
+        return kMinProbeDataSize;
+    if (size > kMaxProbeDataSize)
+        return kMaxProbeDataSize;
+    return size;
 }
 
 } // namespace
@@ -475,10 +491,11 @@ void Client::sendTcpBandwidthProbe(const TimePoint& time)
     if (tcp_probe_.pending)
         return;
 
+    tcp_probe_.size = nextProbeSize(tcp_probe_.bandwidth);
     tcp_probe_.send_time = time;
     tcp_probe_.pending = true;
 
-    tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, makeBandwidthProbeData());
+    tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, makeBandwidthProbeData(tcp_probe_.size));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -487,10 +504,11 @@ void Client::sendUdpBandwidthProbe(const TimePoint& time)
     if (!udp_channel_ || udp_state_ == UdpState::DISCONNECTED || udp_probe_.pending)
         return;
 
+    udp_probe_.size = nextProbeSize(udp_probe_.bandwidth);
     udp_probe_.send_time = time;
     udp_probe_.pending = true;
 
-    udp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, makeBandwidthProbeData(), true);
+    udp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, makeBandwidthProbeData(udp_probe_.size), true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -500,7 +518,7 @@ void Client::onTcpBandwidthProbeAck()
         return;
 
     auto rtt = std::chrono::duration_cast<Milliseconds>(Clock::now() - tcp_probe_.send_time);
-    tcp_probe_.bandwidth = bandwidthFromRttMs(rtt.count());
+    tcp_probe_.bandwidth = bandwidthFromRttMs(tcp_probe_.size, rtt.count());
     tcp_probe_.pending = false;
 
     CLOG(INFO) << "TCP RTT:" << rtt.count() << "ms bandwidth:" << (tcp_probe_.bandwidth / 1024) << "kB/s";
@@ -514,7 +532,7 @@ void Client::onUdpBandwidthProbeAck()
         return;
 
     auto rtt = std::chrono::duration_cast<Milliseconds>(Clock::now() - udp_probe_.send_time);
-    udp_probe_.bandwidth = bandwidthFromRttMs(rtt.count());
+    udp_probe_.bandwidth = bandwidthFromRttMs(udp_probe_.size, rtt.count());
     udp_probe_.pending = false;
 
     CLOG(INFO) << "UDP RTT:" << rtt.count() << "ms bandwidth:" << (udp_probe_.bandwidth / 1024) << "kB/s";
