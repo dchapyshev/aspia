@@ -18,7 +18,6 @@
 
 #include "client/online_checker/online_checker.h"
 
-#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/peer/host_id.h"
 #include "client/config.h"
@@ -31,7 +30,8 @@ constexpr qint64 kCacheSeconds = 3 * 60; // 3 minutes.
 
 //--------------------------------------------------------------------------------------------------
 OnlineChecker::OnlineChecker(QObject* parent)
-    : QObject(parent)
+    : QObject(parent),
+      direct_thread_(Thread::AsioDispatcher)
 {
     LOG(TRACE) << "Ctor";
 }
@@ -101,8 +101,12 @@ void OnlineChecker::start(const HostList& hosts)
     if (!direct_hosts_.isEmpty())
     {
         direct_finished_ = false;
+
+        if (!direct_thread_.isRunning())
+            direct_thread_.start();
+
         direct_checker_ = new OnlineCheckerDirect(direct_hosts_);
-        direct_checker_->moveToThread(GuiApplication::ioThread());
+        direct_checker_->moveToThread(&direct_thread_);
 
         connect(direct_checker_, &OnlineCheckerDirect::sig_checkerResult,
                 this, &OnlineChecker::onDirectCheckerResult,

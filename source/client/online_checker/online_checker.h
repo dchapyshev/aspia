@@ -25,6 +25,7 @@
 #include <QObject>
 
 #include "base/scoped_qpointer.h"
+#include "base/thread.h"
 #include "client/config.h"
 #include "client/online_checker/online_checker_direct.h"
 #include "client/online_checker/online_checker_router.h"
@@ -77,6 +78,8 @@ private:
 
     QHash<qint64, CacheEntry> cache_;
     QList<QPair<qint64, bool>> pending_cached_hits_;
+
+    Thread direct_thread_;
 
     ScopedQPointer<OnlineCheckerDirect> direct_checker_;
     ScopedQPointer<OnlineCheckerRouter> router_checker_;
