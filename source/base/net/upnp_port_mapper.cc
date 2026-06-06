@@ -18,6 +18,7 @@
 
 #include "base/net/upnp_port_mapper.h"
 
+#include <QCoreApplication>
 #include <QHostAddress>
 
 #include <miniupnpc/miniupnpc.h>
@@ -93,11 +94,11 @@ UpnpPortMapper::UpnpPortMapper(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 UpnpPortMapper::~UpnpPortMapper()
 {
-    // The worker touches |this| (via invokeMethod) right before it returns, so joining here is what
-    // keeps the object alive until that access is done. Any already-posted result event is dropped
-    // by ~QObject afterwards.
+    // Do not block the owning thread: the worker never touches |this| directly (it delivers via the
+    // application object guarded by |alive_|), so detaching is safe. |alive_| is released right after,
+    // so a late worker result is dropped.
     if (worker_.joinable())
-        worker_.join();
+        worker_.detach();
 
     if (mapped_)
     {
@@ -116,14 +117,20 @@ void UpnpPortMapper::addUdpMapping(quint16 internal_port)
         return;
     }
 
-    worker_ = std::thread([this, internal_port]()
+    alive_ = std::make_shared<bool>(true);
+    std::weak_ptr<bool> guard = alive_;
+
+    worker_ = std::thread([this, guard, internal_port]()
     {
         Result result = doMapping(internal_port);
 
-        // Deliver the result on the thread this object lives in. If the object is destroyed before
-        // delivery, Qt drops the queued call.
-        QMetaObject::invokeMethod(this, [this, result]()
+        // Deliver on the owning thread via the always-alive application object, so the worker never
+        // touches |this| directly. The guard, checked on that thread, drops the result if the mapper
+        // was destroyed meanwhile.
+        QMetaObject::invokeMethod(qApp, [this, guard, result]()
         {
+            if (guard.expired())
+                return;
             onMappingFinished(result);
         }, Qt::QueuedConnection);
     });

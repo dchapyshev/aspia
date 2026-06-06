@@ -21,6 +21,7 @@
 
 #include <QObject>
 
+#include <memory>
 #include <string>
 #include <thread>
 
@@ -58,6 +59,7 @@ private:
     void onMappingFinished(const Result& result);
 
     std::thread worker_;
+    std::shared_ptr<bool> alive_;
 
     bool mapped_ = false;
     quint16 external_port_ = 0;
