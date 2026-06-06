@@ -21,6 +21,7 @@
 #include <QThread>
 
 #include <asio/connect.hpp>
+#include <asio/ip/address.hpp>
 #include <asio/read.hpp>
 #include <asio/write.hpp>
 
@@ -125,9 +126,46 @@ void TcpChannelLegacy::connectTo(const QString& address, quint16 port, const Sec
     std::string host = address.toLocal8Bit().toStdString();
     std::string service = std::to_string(port);
 
+    auto guard = alive_guard_;
+
+    // Fast path for IP addresses. The ASIO resolver serializes all lookups for the io_context through
+    // a single background thread, so a literal address could otherwise wait behind slow or failing
+    // hostname lookups issued by other channels. Resolving is only needed for host names, so skip it
+    // entirely here.
+    std::error_code address_error;
+    asio::ip::address ip_address = asio::ip::make_address(host, address_error);
+    if (!address_error)
+    {
+        CLOG(INFO) << "Address is an IP, skipping resolve for" << host << ":" << service;
+
+        asio::ip::tcp::endpoint endpoint(ip_address, port);
+        socket_.async_connect(endpoint, [this, guard, endpoint](const std::error_code& error_code)
+        {
+            if (!*guard)
+                return;
+
+            if (error_code)
+            {
+                if (error_code == asio::error::operation_aborted)
+                    return;
+
+                onErrorOccurred(FROM_HERE, error_code);
+                return;
+            }
+
+            CLOG(INFO) << "Connected to endpoint:" << endpoint.address().to_string() << ":"
+                       << endpoint.port();
+
+            setConnected(true);
+            emit sig_connected();
+
+            doAuthentication();
+        });
+        return;
+    }
+
     CLOG(INFO) << "Start resolving for" << host << ":" << service;
 
-    auto guard = alive_guard_;
     resolver_->async_resolve(host, service,
         [this, guard](const std::error_code& error_code, const asio::ip::tcp::resolver::results_type& endpoints)
     {

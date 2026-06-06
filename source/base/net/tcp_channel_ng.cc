@@ -21,6 +21,7 @@
 #include <QThread>
 
 #include <asio/connect.hpp>
+#include <asio/ip/address.hpp>
 #include <asio/read.hpp>
 #include <asio/write.hpp>
 
@@ -126,8 +127,6 @@ void TcpChannelNG::connectTo(const QString& address, quint16 port, const Seconds
     std::string host = address.toLocal8Bit().toStdString();
     std::string service = std::to_string(port);
 
-    CLOG(TRACE) << "Start resolving for" << host << ":" << service;
-
     // Watchdog for the entire connect phase (resolve + TCP handshake). Without it the channel
     // would wait for the OS-level SYN-retransmit timeout (~2 minutes on Linux) before reporting
     // an unreachable peer.
@@ -140,6 +139,45 @@ void TcpChannelNG::connectTo(const QString& address, quint16 port, const Seconds
         if (*guard && !error_code)
             onErrorOccurred(FROM_HERE, ErrorCode::SOCKET_TIMEOUT);
     });
+
+    // Fast path for IP addresses. The ASIO resolver serializes all lookups for the io_context through
+    // a single background thread, so a literal address could otherwise wait behind slow or failing
+    // hostname lookups issued by other channels. Resolving is only needed for host names, so skip it
+    // entirely here.
+    std::error_code address_error;
+    asio::ip::address ip_address = asio::ip::make_address(host, address_error);
+    if (!address_error)
+    {
+        CLOG(TRACE) << "Address is an IP, skipping resolve for" << host << ":" << service;
+
+        asio::ip::tcp::endpoint endpoint(ip_address, port);
+        socket_.async_connect(endpoint, [this, guard, watchdog, endpoint](
+            const std::error_code& error_code)
+        {
+            if (!*guard)
+                return;
+
+            if (error_code)
+            {
+                if (error_code == asio::error::operation_aborted)
+                    return;
+                watchdog->cancel();
+                onErrorOccurred(FROM_HERE, error_code);
+                return;
+            }
+
+            CLOG(TRACE) << "Connected to:" << endpoint.address().to_string() << ":" << endpoint.port();
+            watchdog->cancel();
+
+            setConnected(true);
+            emit sig_connected();
+
+            doAuthentication();
+        });
+        return;
+    }
+
+    CLOG(TRACE) << "Start resolving for" << host << ":" << service;
 
     resolver_->async_resolve(host, service, [this, guard, watchdog](
         const std::error_code& error_code, const asio::ip::tcp::resolver::results_type& endpoints)
