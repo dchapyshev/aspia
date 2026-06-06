@@ -307,17 +307,23 @@ void VideoEncoderH264MF::setBandwidth(qint64 bandwidth)
         // |common_quality_| is the central target the quality rate mode aims for; the QP bounds
         // only fence it in. Lower it on narrow links so the encoder leans toward smaller frames,
         // raise it on fast links so it spends the available bits on a sharper picture.
-        if (bandwidth < 150 * 1024) // < 150 KB/s
+        if (bandwidth < 70 * 1024) // < 70 KB/s
         {
             min_quantizer_ = 24;
             max_quantizer_ = 46;
             common_quality_ = 40;
         }
+        else if (bandwidth < 150 * 1024) // < 150 KB/s
+        {
+            min_quantizer_ = 22;
+            max_quantizer_ = 42;
+            common_quality_ = 50;
+        }
         else if (bandwidth < 500 * 1024) // < 500 KB/s
         {
             min_quantizer_ = 20;
             max_quantizer_ = 38;
-            common_quality_ = 45;
+            common_quality_ = 60;
         }
         else if (bandwidth < 2 * 1024 * 1024) // < 2 MB/s
         {
@@ -345,7 +351,7 @@ void VideoEncoderH264MF::setBandwidth(qint64 bandwidth)
     if (!params_changed)
         return;
 
-    LOG(INFO) << "Bandwidth tier changed - recreating H264 encoder (quality:" << common_quality_
+    LOG(INFO) << "Bandwidth changed. Recreating H264 encoder (quality:" << common_quality_
               << "min_qp:" << min_quantizer_ << "max_qp:" << max_quantizer_ << ")";
 
     destroyEncoder();
