@@ -609,7 +609,7 @@ Routers added: %4</source>
         <translation>Aspia Client</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="451"/>
+        <location filename="../client/client.cc" line="547"/>
         <source>Failed to connect to the relay server</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1377,22 +1377,22 @@ Routers added: %4</source>
 <context>
     <name>DesktopWidget</name>
     <message>
-        <location filename="../client/ui/desktop/desktop_widget.cc" line="561"/>
+        <location filename="../client/ui/desktop/desktop_widget.cc" line="556"/>
         <source>The session was paused by a remote user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_widget.cc" line="564"/>
+        <location filename="../client/ui/desktop/desktop_widget.cc" line="559"/>
         <source>The session is temporarily unavailable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_widget.cc" line="567"/>
+        <location filename="../client/ui/desktop/desktop_widget.cc" line="562"/>
         <source>The session is permanently unavailable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_widget.cc" line="570"/>
+        <location filename="../client/ui/desktop/desktop_widget.cc" line="565"/>
         <source>Error while receiving video stream: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1400,17 +1400,17 @@ Routers added: %4</source>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/ui/desktop/desktop_window.cc" line="805"/>
+        <location filename="../client/ui/desktop/desktop_window.cc" line="772"/>
         <source>Save File</source>
         <translation type="unfinished">Bestand Opslaan</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_window.cc" line="807"/>
+        <location filename="../client/ui/desktop/desktop_window.cc" line="774"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished">PNG Afbeelding (*.png);;BMP Afbeelding (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_window.cc" line="838"/>
+        <location filename="../client/ui/desktop/desktop_window.cc" line="805"/>
         <source>Could not save image</source>
         <translation type="unfinished">Kon het bestand niet opslaan</translation>
     </message>
@@ -4599,181 +4599,205 @@ Hosts skipped: %6</source>
 <context>
     <name>SettingsTab</name>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="95"/>
+        <location filename="../client/ui/settings_tab.ui" line="119"/>
         <source>Interface</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="101"/>
+        <location filename="../client/ui/settings_tab.ui" line="125"/>
         <source>Language:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="111"/>
+        <location filename="../client/ui/settings_tab.ui" line="135"/>
         <source>Theme:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="121"/>
+        <location filename="../client/ui/settings_tab.ui" line="145"/>
         <source>Display name when connected:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="131"/>
+        <location filename="../client/ui/settings_tab.ui" line="155"/>
         <source>Enter a name or leave the field empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="141"/>
         <source>Connections</source>
-        <translation type="unfinished">Verbindingen</translation>
+        <translation type="obsolete">Verbindingen</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="147"/>
-        <source>Allow UDP connections</source>
+        <location filename="../client/ui/settings_tab.ui" line="165"/>
+        <source>UDP Connections</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="157"/>
+        <location filename="../client/ui/settings_tab.ui" line="171"/>
+        <source>Allow direct connections</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="178"/>
+        <source>Allow UDP Hole Punching</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="185"/>
+        <source>Allow PCP protocol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="192"/>
+        <source>Allow NAT-PMP protocol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="199"/>
+        <source>Allow UPnP protocol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="209"/>
         <source>Master Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="176"/>
+        <location filename="../client/ui/settings_tab.ui" line="228"/>
         <source>Change...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="223"/>
+        <location filename="../client/ui/settings_tab.ui" line="291"/>
         <source>Features</source>
         <translation type="unfinished">Features</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="229"/>
+        <location filename="../client/ui/settings_tab.ui" line="297"/>
         <source>Enable audio</source>
         <translation type="unfinished">Geluid inschakelen</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="236"/>
+        <location filename="../client/ui/settings_tab.ui" line="304"/>
         <source>Enable clipboard</source>
         <translation type="unfinished">Klembord inschakelen</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="243"/>
+        <location filename="../client/ui/settings_tab.ui" line="311"/>
         <source>Show shape of remote cursor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="250"/>
+        <location filename="../client/ui/settings_tab.ui" line="318"/>
         <source>Show position of remote cursor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="257"/>
+        <location filename="../client/ui/settings_tab.ui" line="325"/>
         <source>Disable desktop effects</source>
         <translation type="unfinished">Schakel bureaublad effecten uit</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="264"/>
+        <location filename="../client/ui/settings_tab.ui" line="332"/>
         <source>Disable desktop wallpaper</source>
         <translation type="unfinished">Geen bureaublad achtergrond</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="271"/>
+        <location filename="../client/ui/settings_tab.ui" line="339"/>
         <source>Lock computer at disconnect</source>
         <translation type="unfinished">Computer vergrendelen bij verbroken verbinding</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="278"/>
+        <location filename="../client/ui/settings_tab.ui" line="346"/>
         <source>Block remote input</source>
         <translation type="unfinished">Blokkeer invoer op afstand</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="285"/>
+        <location filename="../client/ui/settings_tab.ui" line="353"/>
         <source>Send key combinations</source>
         <translation type="unfinished">Stuur toets combinaties</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="301"/>
+        <location filename="../client/ui/settings_tab.ui" line="369"/>
         <source>Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="307"/>
+        <location filename="../client/ui/settings_tab.ui" line="375"/>
         <source>Automatically start recording sessions on connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="316"/>
+        <location filename="../client/ui/settings_tab.ui" line="384"/>
         <source>Write path:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="388"/>
-        <location filename="../client/ui/settings_tab.cc" line="82"/>
-        <location filename="../client/ui/settings_tab.cc" line="249"/>
+        <location filename="../client/ui/settings_tab.ui" line="472"/>
+        <location filename="../client/ui/settings_tab.cc" line="83"/>
+        <location filename="../client/ui/settings_tab.cc" line="260"/>
         <source>Update</source>
         <translation type="unfinished">Update</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="394"/>
+        <location filename="../client/ui/settings_tab.ui" line="478"/>
         <source>Check for updates on startup</source>
         <translation type="unfinished">Controleer op update bij opstarten</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="401"/>
+        <location filename="../client/ui/settings_tab.ui" line="485"/>
         <source>Use custom update server</source>
         <translation type="unfinished">Aangepaste update server gebruiken</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="410"/>
+        <location filename="../client/ui/settings_tab.ui" line="494"/>
         <source>Server:</source>
         <translation type="unfinished">Server:</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="437"/>
+        <location filename="../client/ui/settings_tab.ui" line="521"/>
         <source>Check for updates</source>
         <translation type="unfinished">Controleer op updates</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.cc" line="79"/>
-        <location filename="../client/ui/settings_tab.cc" line="244"/>
+        <location filename="../client/ui/settings_tab.cc" line="80"/>
+        <location filename="../client/ui/settings_tab.cc" line="255"/>
         <source>General</source>
         <translation type="unfinished">Basis</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.cc" line="80"/>
-        <location filename="../client/ui/settings_tab.cc" line="246"/>
+        <location filename="../client/ui/settings_tab.cc" line="81"/>
+        <location filename="../client/ui/settings_tab.cc" line="257"/>
         <source>Desktop</source>
         <translation type="unfinished">Bureablad</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.cc" line="259"/>
+        <location filename="../client/ui/settings_tab.cc" line="270"/>
         <source>Settings</source>
         <translation type="unfinished">Instellingen</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.cc" line="342"/>
+        <location filename="../client/ui/settings_tab.cc" line="366"/>
         <source>Choose path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.cc" line="362"/>
+        <location filename="../client/ui/settings_tab.cc" line="386"/>
         <source>Change Master Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.cc" line="364"/>
+        <location filename="../client/ui/settings_tab.cc" line="388"/>
         <source>Enter your current password and choose a new one.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.cc" line="372"/>
+        <location filename="../client/ui/settings_tab.cc" line="396"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation type="unfinished">Het ingevoerde wachtwoord komt niet overeen met de beveiligings eisen!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/settings_tab.cc" line="373"/>
+        <location filename="../client/ui/settings_tab.cc" line="397"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform>Het wachtwoord moet kleine, hoofdletters en nummers bevatten, en mag niet korter zijn dan %n karakter.</numerusform>
@@ -4781,12 +4805,12 @@ Hosts skipped: %6</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.cc" line="376"/>
+        <location filename="../client/ui/settings_tab.cc" line="400"/>
         <source>Do you want to enter a different password?</source>
         <translation type="unfinished">Wilt U een ander wachtwoord invoeren?</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.cc" line="385"/>
+        <location filename="../client/ui/settings_tab.cc" line="409"/>
         <source>Invalid current password or unable to change it.</source>
         <translation type="unfinished"></translation>
     </message>
