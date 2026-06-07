@@ -54,7 +54,7 @@
 namespace {
 
 constexpr int kDefaultScreenCaptureFps = 24;
-constexpr int kMinScreenCaptureFps = 8;
+constexpr int kMinScreenCaptureFps = 10;
 constexpr int kMaxScreenCaptureFpsHighEnd = 30;
 constexpr int kMaxScreenCaptureFpsLowEnd = 20;
 
