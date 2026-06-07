@@ -91,7 +91,6 @@ set(THIRD_PARTY_LIBS
     unofficial::libvpx::libvpx
     unofficial::enet::enet
     miniupnpc::miniupnpc
-    unofficial::libnatpmp::natpmp
     unofficial::nayuki-qr-code-generator::nayuki-qr-code-generator
     unofficial::sqlite3::sqlite3
     yuv)

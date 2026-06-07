@@ -478,6 +478,8 @@ list(APPEND SOURCE_BASE_NET
     net/flood_guard.h
     net/gateway_port_mapper.cc
     net/gateway_port_mapper.h
+    net/nat_pmp_port_mapper.cc
+    net/nat_pmp_port_mapper.h
     net/net_utils.cc
     net/net_utils.h
     net/tcp_channel.cc
@@ -491,7 +493,9 @@ list(APPEND SOURCE_BASE_NET
     net/tcp_server_legacy.cc
     net/tcp_server_legacy.h
     net/udp_channel.cc
-    net/udp_channel.h)
+    net/udp_channel.h
+    net/upnp_port_mapper.cc
+    net/upnp_port_mapper.h)
 
 if (WIN32)
     list(APPEND SOURCE_BASE_NET

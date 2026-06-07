@@ -21,10 +21,15 @@
 
 #include <QObject>
 
-#include <memory>
-#include <string>
-#include <thread>
+#include "base/scoped_qpointer.h"
 
+class NatPmpPortMapper;
+class UpnpPortMapper;
+
+// Orchestrates the gateway port-mapping mechanisms. NAT-PMP is tried first; on failure it falls back
+// to UPnP. The winning mechanism's mapper is kept as a child and removes its mapping on destruction.
+// On success sig_ready is emitted with the discovered external address and port; if both mechanisms
+// fail, sig_failed is emitted.
 class GatewayPortMapper final : public QObject
 {
     Q_OBJECT
@@ -33,10 +38,6 @@ public:
     explicit GatewayPortMapper(QObject* parent = nullptr);
     ~GatewayPortMapper() final;
 
-    // Asynchronously asks the home gateway to forward its external |internal_port| to this host's
-    // |internal_port|. NAT-PMP is tried first (fast, no discovery), then UPnP as a fallback. On
-    // success sig_ready is emitted with the discovered external address and port; otherwise
-    // sig_failed is emitted. The mapping is removed automatically when the object is destroyed.
     void addUdpMapping(quint16 internal_port);
 
 signals:
@@ -44,36 +45,9 @@ signals:
     void sig_failed();
 
 private:
-    enum class Type { NATPMP, UPNP };
-    Q_ENUM(Type)
-
-    struct Result
-    {
-        bool success = false;
-        Type type = Type::NATPMP;
-        QString external_address;
-        quint16 external_port = 0;
-        quint16 internal_port = 0; // NAT-PMP only: needed to drop the mapping.
-        std::string control_url;   // UPnP only.
-        std::string service_type;  // UPnP only.
-    };
-
-    static Result doNatPmpMapping(quint16 internal_port);
-    static Result doUpnpMapping(quint16 internal_port);
-    static void doRemoveNatPmpMapping(quint16 internal_port);
-    static void doRemoveUpnpMapping(
-        const std::string& control_url, const std::string& service_type, quint16 external_port);
-    void onMappingFinished(const Result& result);
-
-    std::thread worker_;
-    std::shared_ptr<bool> alive_;
-
-    bool mapped_ = false;
-    Type type_ = Type::NATPMP;
+    ScopedQPointer<NatPmpPortMapper> nat_pmp_mapper_;
+    ScopedQPointer<UpnpPortMapper> upnp_mapper_;
     quint16 internal_port_ = 0;
-    quint16 external_port_ = 0;
-    std::string control_url_;
-    std::string service_type_;
 
     Q_DISABLE_COPY_MOVE(GatewayPortMapper)
 };
