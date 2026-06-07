@@ -77,7 +77,6 @@ MainWindow::MainWindow(QWidget* parent)
     search_field_->setClearButtonEnabled(true);
     search_field_->setMaximumWidth(250);
     search_action_ = ui->toolbar->addWidget(search_field_);
-    search_action_->setVisible(false);
 
     restoreGeometry(settings.windowGeometry());
     restoreState(settings.windowState());
@@ -305,7 +304,7 @@ void MainWindow::onCurrentTabChanged(int index)
     active_tab_ = tab;
     installTabActions(active_tab_);
     active_tab_->activate(ui->statusbar);
-    updateSearchFieldVisibility();
+    syncSearchField();
     updateStatusBarVisibility();
 }
 
@@ -333,8 +332,20 @@ void MainWindow::onCloseTab(int index)
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onSearchTextChanged(const QString& text)
 {
-    if (active_tab_)
-        active_tab_->searchTextChanged(text);
+    HostsTab* hosts_tab = hostsTab();
+    if (!hosts_tab)
+        return;
+
+    // Always route the search to the hosts tab.
+    hosts_tab->searchTextChanged(text);
+
+    // Switch to the hosts tab when the user starts searching from another tab.
+    if (active_tab_ != hosts_tab && !text.isEmpty())
+    {
+        int index = ui->tabs->indexOf(hosts_tab);
+        if (index != -1)
+            ui->tabs->setCurrentIndex(index);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -656,24 +667,31 @@ Tab* MainWindow::tabAt(int index)
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::updateSearchFieldVisibility()
+HostsTab* MainWindow::hostsTab() const
 {
-    bool show_search = active_tab_ && active_tab_->hasSearchField();
-
-    if (!show_search && search_field_->isVisible())
-        search_field_->clear();
-
-    if (show_search)
+    for (int i = 0; i < ui->tabs->count(); ++i)
     {
-        QString text = active_tab_->searchText();
-        if (search_field_->text() != text)
-        {
-            QSignalBlocker blocker(search_field_);
-            search_field_->setText(text);
-        }
+        HostsTab* tab = dynamic_cast<HostsTab*>(ui->tabs->widget(i));
+        if (tab)
+            return tab;
     }
 
-    search_action_->setVisible(show_search);
+    return nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+void MainWindow::syncSearchField()
+{
+    HostsTab* hosts_tab = hostsTab();
+    if (!hosts_tab)
+        return;
+
+    QString text = hosts_tab->searchText();
+    if (search_field_->text() != text)
+    {
+        QSignalBlocker blocker(search_field_);
+        search_field_->setText(text);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

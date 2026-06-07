@@ -326,12 +326,6 @@ void HostsTab::deactivate(QStatusBar* /* statusbar */)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool HostsTab::hasSearchField() const
-{
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
 QString HostsTab::searchText() const
 {
     return search_widget_->currentQuery();

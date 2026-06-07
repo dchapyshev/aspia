@@ -56,7 +56,6 @@ public:
     void restoreState(const QByteArray& state) final;
     void activate(QStatusBar* statusbar) final;
     void deactivate(QStatusBar* statusbar) final;
-    bool hasSearchField() const final;
     QString searchText() const final;
     void searchTextChanged(const QString& text) final;
 
