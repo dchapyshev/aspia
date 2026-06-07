@@ -319,9 +319,6 @@ void RouterManager::onNewPeerConnected()
             }
         }
 
-        if (offer.has_peer_info())
-            connection.peer_equals = offer.peer_info().is_address_equals();
-
         channels_.emplace_back(std::move(connection));
     }
 

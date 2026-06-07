@@ -52,7 +52,6 @@ public:
         TcpChannel* tcp_channel = nullptr;
         QString stun_host;
         quint16 stun_port = 0;
-        bool peer_equals = false;
     };
 
     bool hasReadyConnections() const;

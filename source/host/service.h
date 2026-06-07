@@ -89,8 +89,6 @@ private:
         QTime start_time;
         QString stun_host;
         quint16 stun_port = 0;
-        bool peer_equals = false;
-        bool direct = false;
     };
 
     void startConfirmation(PendingConfirmation& pending);

@@ -276,6 +276,13 @@ StunUdpAttempt::~StunUdpAttempt() = default;
 //--------------------------------------------------------------------------------------------------
 void StunUdpAttempt::start()
 {
+    if (stun_host_.isEmpty() || !stun_port_)
+    {
+        CLOG(WARNING) << "Invalid STUN server data (attempt" << request_id_ << ")";
+        emit sig_failed(request_id_);
+        return;
+    }
+
     stun_peer_ = new StunPeer(this);
 
     connect(stun_peer_, &StunPeer::sig_channelReady, this,

@@ -35,9 +35,6 @@ message PeerInfo
 {
     // If the opposite peer is outdated (version less than 3), then it is set to true.
     bool is_legacy = 1;
-
-    // If the external address of the peers visible to the router matches, then it is set to true.
-    bool is_address_equals = 2;
 }
 
 message ConnectionOffer

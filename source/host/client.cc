@@ -123,15 +123,13 @@ Client::~Client()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::start(bool direct, const QString& stun_host, quint16 stun_port, bool peer_equals)
+void Client::start(const QString& stun_host, quint16 stun_port)
 {
-    direct_ = direct;
-    peer_equals_ = peer_equals;
     stun_host_ = stun_host;
     stun_port_ = stun_port;
 
-    CLOG(INFO) << "Starting (direct:" << direct << "equals:" << peer_equals
-               << "stun:" << stun_host << ":" << stun_port << "features:" << features_ << ")";
+    CLOG(INFO) << "Starting (type:" << tcp_channel_->type() << "stun:" << stun_host << ":"
+               << stun_port << "features:" << features_ << ")";
 
     if (features_ & FEATURE_BANDWIDTH)
     {
@@ -438,27 +436,16 @@ void Client::connectToUdp()
     if (!attempts_.empty() || udp_channel_)
         return;
 
-    // A direct (non-relayed) connection means the host is reachable directly, so nothing else is
-    // needed.
-    if (direct_)
+    if (tcp_channel_->type() == TcpChannel::Type::DIRECT)
     {
         addAndStart(new DirectUdpAttempt(nextRequestId(), this));
         return;
     }
 
-    // Otherwise try the available transports in parallel; the first whose channel passes the probe
-    // wins.
     CLOG(INFO) << "Starting parallel UDP attempts";
 
-    // A direct LAN connection only has a chance when the peers appear to share a network. Since this
-    // is just a hint and may be wrong, it runs alongside the other transports rather than alone; when
-    // the hint is absent the host's local addresses are unreachable, so it is skipped entirely.
-    if (peer_equals_)
-        addAndStart(new DirectUdpAttempt(nextRequestId(), this));
-
-    if (!stun_host_.isEmpty() && stun_port_)
-        addAndStart(new StunUdpAttempt(nextRequestId(), stun_host_, stun_port_, this));
-
+    addAndStart(new DirectUdpAttempt(nextRequestId(), this));
+    addAndStart(new StunUdpAttempt(nextRequestId(), stun_host_, stun_port_, this));
     addAndStart(new HostGatewayUdpAttempt(nextRequestId(), this));
     addAndStart(new ClientGatewayUdpAttempt(nextRequestId(), this));
 }

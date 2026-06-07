@@ -56,7 +56,7 @@ public:
     };
     Q_DECLARE_FLAGS(Features, Feature)
 
-    void start(bool direct, const QString& stun_host, quint16 stun_port, bool peer_equals);
+    void start(const QString& stun_host, quint16 stun_port);
     void setFeature(Feature feature, bool enable);
 
     quint32 clientId() const;
@@ -129,8 +129,6 @@ private:
 
     std::list<ScopedQPointer<UdpAttempt>> attempts_;
 
-    bool direct_ = false;
-    bool peer_equals_ = false;
     QString stun_host_;
     quint16 stun_port_ = 0;
 

@@ -27,7 +27,6 @@
 #include "base/version_constants.h"
 #include "base/crypto/random.h"
 #include "base/crypto/totp.h"
-#include "base/net/net_utils.h"
 #include "proto/relay_peer.h"
 #include "proto/router.h"
 #include "proto/router_client.h"
@@ -485,7 +484,6 @@ void Client::readConnectionRequest(const proto::router::ConnectionRequest& reque
 
     proto::router::PeerInfo* peer_info = offer->mutable_peer_info();
     peer_info->set_is_legacy(host->version() < kVersion_3_0_0);
-    peer_info->set_is_address_equals(NetUtils::isAddressEqual(address(), host->address()));
 
     if (stun_port_)
     {
