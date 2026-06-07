@@ -19,6 +19,11 @@
 #ifndef BASE_X11_X11_HEADERS_H
 #define BASE_X11_X11_HEADERS_H
 
+// X11 declares 'typedef struct _XRegion *Region;', which collides with our Region class from
+// base/desktop/region.h. The X11 region type is not used in the project, so rename it to X11Region
+// while the X11 headers are pulled in, then drop the macro so 'Region' keeps referring to our class.
+#define Region X11Region
+
 #include <X11/X.h>
 #include <X11/Xatom.h>
 #include <X11/XKBlib.h>
@@ -29,6 +34,8 @@
 #include <X11/extensions/Xrandr.h>
 #include <X11/extensions/XShm.h>
 #include <X11/extensions/XTest.h>
+
+#undef Region
 
 #if defined(CursorShape)
 #undef CursorShape
