@@ -26,6 +26,14 @@
 #include "base/crypto/key_pair.h"
 #include "base/scoped_qpointer.h"
 
+namespace proto::peer {
+class DirectUdpRequest;
+class GatewayUdpRequest;
+class StunUdpRequest;
+} // namespace proto::peer
+
+enum class UdpMethod;
+
 class GatewayPortMapper;
 class StunPeer;
 class UdpChannel;
@@ -44,6 +52,9 @@ public:
 
     quint32 requestId() const { return request_id_; }
     bool isValid() const;
+
+    // The transport this attempt represents, reported in the session statistics.
+    virtual UdpMethod method() const = 0;
 
     // Hands the established channel over to the session (called when this attempt wins).
     ScopedQPointer<UdpChannel> takeChannel();
@@ -85,19 +96,20 @@ private:
     Q_DISABLE_COPY_MOVE(UdpAttempt)
 };
 
-// Direct/host-gateway: connects to one of the host's advertised addresses.
+// Direct/host-gateway: connects to one of the host's advertised addresses. |gateway| marks an
+// endpoint the host mapped on its own gateway.
 class DirectUdpAttempt final : public UdpAttempt
 {
 public:
-    DirectUdpAttempt(quint32 request_id, const QByteArray& host_public_key, const QByteArray& host_iv,
-                     quint32 encryptions, const QStringList& addresses, quint16 port,
-                     QObject* parent);
+    DirectUdpAttempt(const proto::peer::DirectUdpRequest& request, QObject* parent);
 
     void start() final;
+    UdpMethod method() const final;
 
 private:
     QStringList addresses_;
     quint16 port_ = 0;
+    const bool gateway_;
 };
 
 // STUN hole punching: discovers this client's external endpoint, connects to the host's external
@@ -105,12 +117,11 @@ private:
 class StunUdpAttempt final : public UdpAttempt
 {
 public:
-    StunUdpAttempt(quint32 request_id, const QByteArray& host_public_key, const QByteArray& host_iv,
-                   quint32 encryptions, const QString& host_address, quint16 host_port,
-                   const QString& stun_host, quint16 stun_port, QObject* parent);
+    StunUdpAttempt(const proto::peer::StunUdpRequest& request, QObject* parent);
     ~StunUdpAttempt() final;
 
     void start() final;
+    UdpMethod method() const final;
 
 private:
     QString host_address_;
@@ -125,10 +136,10 @@ private:
 class GatewayUdpAttempt final : public UdpAttempt
 {
 public:
-    GatewayUdpAttempt(quint32 request_id, const QByteArray& host_public_key, const QByteArray& host_iv,
-                      quint32 encryptions, QObject* parent);
+    GatewayUdpAttempt(const proto::peer::GatewayUdpRequest& request, QObject* parent);
 
     void start() final;
+    UdpMethod method() const final;
 };
 
 #endif // CLIENT_UDP_ATTEMPT_H

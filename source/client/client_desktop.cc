@@ -524,6 +524,7 @@ void ClientDesktop::onMetricsRequest()
     metrics.total_udp_tx = totalUdpTx();
     metrics.speed_udp_rx = speedUdpRx();
     metrics.speed_udp_tx = speedUdpTx();
+    metrics.udp_method = udpMethod();
 
     if (min_video_packet_ != std::numeric_limits<size_t>::max())
         metrics.min_video_packet = min_video_packet_;

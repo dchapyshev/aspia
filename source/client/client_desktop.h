@@ -94,6 +94,7 @@ public:
         qint64 total_udp_tx = 0;
         int speed_udp_rx = 0;
         int speed_udp_tx = 0;
+        UdpMethod udp_method {};
         qint64 video_packet_count = 0;
         size_t min_video_packet = 0;
         size_t max_video_packet = 0;

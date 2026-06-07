@@ -37,6 +37,22 @@ namespace {
 
 const int kAttemptTimeoutMs = 15000; // Max time for one attempt to win before it is dropped.
 
+//--------------------------------------------------------------------------------------------------
+template <class Request>
+QStringList collectAddresses(const Request& request)
+{
+    QStringList result;
+
+    for (int i = 0; i < request.address_size(); ++i)
+    {
+        QString address = QString::fromStdString(request.address(i));
+        if (!address.isEmpty() && NetUtils::isValidIpAddress(address))
+            result.append(address);
+    }
+
+    return result;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -101,6 +117,7 @@ UdpChannel* UdpAttempt::createChannel()
     }
 
     channel_ = new UdpChannel(this);
+    channel_->setMethod(method());
     channel_->setEncryptor(std::move(encryptor));
     channel_->setDecryptor(std::move(decryptor));
 
@@ -182,12 +199,12 @@ void UdpAttempt::startTimeout()
 }
 
 //--------------------------------------------------------------------------------------------------
-DirectUdpAttempt::DirectUdpAttempt(quint32 request_id, const QByteArray& host_public_key,
-                                   const QByteArray& host_iv, quint32 encryptions,
-                                   const QStringList& addresses, quint16 port, QObject* parent)
-    : UdpAttempt(request_id, host_public_key, host_iv, encryptions, parent),
-      addresses_(addresses),
-      port_(port)
+DirectUdpAttempt::DirectUdpAttempt(const proto::peer::DirectUdpRequest& request, QObject* parent)
+    : UdpAttempt(request.request_id(), QByteArray::fromStdString(request.public_key()),
+                 QByteArray::fromStdString(request.iv()), request.encryptions(), parent),
+      addresses_(collectAddresses(request)),
+      port_(quint16(request.port())),
+      gateway_(request.gateway())
 {
     // Nothing
 }
@@ -235,9 +252,9 @@ void DirectUdpAttempt::start()
         address = addresses_.first();
     }
 
-    if (address.isEmpty())
+    if (address.isEmpty() || !NetUtils::isValidPort(port_))
     {
-        CLOG(WARNING) << "No suitable address for direct connection (attempt" << request_id_ << ")";
+        CLOG(WARNING) << "No suitable endpoint for direct connection (attempt" << request_id_ << ")";
         emit sig_failed(request_id_);
         return;
     }
@@ -255,17 +272,22 @@ void DirectUdpAttempt::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-StunUdpAttempt::StunUdpAttempt(quint32 request_id, const QByteArray& host_public_key,
-                               const QByteArray& host_iv, quint32 encryptions,
-                               const QString& host_address, quint16 host_port,
-                               const QString& stun_host, quint16 stun_port, QObject* parent)
-    : UdpAttempt(request_id, host_public_key, host_iv, encryptions, parent),
-      host_address_(host_address),
-      host_port_(host_port),
-      stun_host_(stun_host),
-      stun_port_(stun_port)
+UdpMethod DirectUdpAttempt::method() const
 {
-    // Nothing
+    return gateway_ ? UdpMethod::GATEWAY_HOST : UdpMethod::DIRECT;
+}
+
+//--------------------------------------------------------------------------------------------------
+StunUdpAttempt::StunUdpAttempt(const proto::peer::StunUdpRequest& request, QObject* parent)
+    : UdpAttempt(request.request_id(), QByteArray::fromStdString(request.public_key()),
+                 QByteArray::fromStdString(request.iv()), request.encryptions(), parent),
+      host_port_(quint16(request.port())),
+      stun_host_(QString::fromStdString(request.stun_host())),
+      stun_port_(quint16(request.stun_port()))
+{
+    const QStringList addresses = collectAddresses(request);
+    if (!addresses.isEmpty())
+        host_address_ = addresses.first();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -274,6 +296,14 @@ StunUdpAttempt::~StunUdpAttempt() = default;
 //--------------------------------------------------------------------------------------------------
 void StunUdpAttempt::start()
 {
+    if (host_address_.isEmpty() || !NetUtils::isValidPort(host_port_) ||
+        stun_host_.isEmpty() || !stun_port_)
+    {
+        CLOG(ERROR) << "Invalid STUN request data (attempt" << request_id_ << ")";
+        emit sig_failed(request_id_);
+        return;
+    }
+
     stun_peer_ = new StunPeer(this);
 
     connect(stun_peer_, &StunPeer::sig_channelReady, this,
@@ -312,9 +342,15 @@ void StunUdpAttempt::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-GatewayUdpAttempt::GatewayUdpAttempt(quint32 request_id, const QByteArray& host_public_key,
-                                     const QByteArray& host_iv, quint32 encryptions, QObject* parent)
-    : UdpAttempt(request_id, host_public_key, host_iv, encryptions, parent)
+UdpMethod StunUdpAttempt::method() const
+{
+    return UdpMethod::HOLE_PUNCHING;
+}
+
+//--------------------------------------------------------------------------------------------------
+GatewayUdpAttempt::GatewayUdpAttempt(const proto::peer::GatewayUdpRequest& request, QObject* parent)
+    : UdpAttempt(request.request_id(), QByteArray::fromStdString(request.public_key()),
+                 QByteArray::fromStdString(request.iv()), request.encryptions(), parent)
 {
     // Nothing
 }
@@ -344,4 +380,10 @@ void GatewayUdpAttempt::start()
 
     mapper->addUdpMapping(local_port);
     startTimeout();
+}
+
+//--------------------------------------------------------------------------------------------------
+UdpMethod GatewayUdpAttempt::method() const
+{
+    return UdpMethod::GATEWAY_CLIENT;
 }

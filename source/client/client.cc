@@ -20,7 +20,6 @@
 
 #include "base/version_constants.h"
 #include "base/serialization.h"
-#include "base/net/net_utils.h"
 #include "base/net/tcp_channel_ng.h"
 #include "base/net/tcp_channel_legacy.h"
 #include "base/net/udp_channel.h"
@@ -43,22 +42,6 @@ namespace {
 auto g_statusType = qRegisterMetaType<Client::Status>();
 static const int kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
 static const int kWriteBufferSize = 2 * 1024 * 1024; // 2 Mb.
-
-//--------------------------------------------------------------------------------------------------
-template <class Request>
-QStringList collectAddresses(const Request& request)
-{
-    QStringList result;
-
-    for (int i = 0; i < request.address_size(); ++i)
-    {
-        QString address = QString::fromStdString(request.address(i));
-        if (!address.isEmpty() && NetUtils::isValidIpAddress(address))
-            result.append(address);
-    }
-
-    return result;
-}
 
 } // namespace
 
@@ -284,6 +267,12 @@ int Client::speedUdpTx()
     if (!udp_channel_)
         return 0;
     return udp_channel_->speedTx();
+}
+
+//--------------------------------------------------------------------------------------------------
+UdpMethod Client::udpMethod() const
+{
+    return udp_channel_ ? udp_channel_->method() : UdpMethod::DISABLED;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -612,30 +601,8 @@ void Client::readDirectUdpRequest(const proto::peer::DirectUdpRequest& request)
     if (udp_channel_ || !isUdpConnectionAllowed())
         return;
 
-    QByteArray public_key = QByteArray::fromStdString(request.public_key());
-    QByteArray iv = QByteArray::fromStdString(request.iv());
-    if (public_key.isEmpty() || iv.isEmpty())
-    {
-        CLOG(ERROR) << "Empty public key or IV";
-        return;
-    }
-
-    QStringList addresses = collectAddresses(request);
-    if (addresses.isEmpty())
-    {
-        CLOG(ERROR) << "No valid addresses";
-        return;
-    }
-
-    if (!NetUtils::isValidPort(request.port()))
-    {
-        CLOG(ERROR) << "Invalid port:" << request.port();
-        return;
-    }
-
     CLOG(INFO) << "Direct UDP request" << request.request_id();
-    addAndStart(new DirectUdpAttempt(request.request_id(), public_key, iv, request.encryptions(),
-                                     addresses, static_cast<quint16>(request.port()), this));
+    addAndStart(new DirectUdpAttempt(request, this));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -645,40 +612,8 @@ void Client::readStunUdpRequest(const proto::peer::StunUdpRequest& request)
     if (udp_channel_ || !isUdpConnectionAllowed())
         return;
 
-    QByteArray public_key = QByteArray::fromStdString(request.public_key());
-    QByteArray iv = QByteArray::fromStdString(request.iv());
-    if (public_key.isEmpty() || iv.isEmpty())
-    {
-        CLOG(ERROR) << "Empty public key or IV";
-        return;
-    }
-
-    QStringList addresses = collectAddresses(request);
-    if (addresses.isEmpty())
-    {
-        CLOG(ERROR) << "No valid addresses";
-        return;
-    }
-
-    if (!NetUtils::isValidPort(request.port()))
-    {
-        CLOG(ERROR) << "Invalid port:" << request.port();
-        return;
-    }
-
-    QString stun_host = QString::fromStdString(request.stun_host());
-    quint16 stun_port = static_cast<quint16>(request.stun_port());
-    if (stun_host.isEmpty() || !stun_port)
-    {
-        CLOG(ERROR) << "Invalid STUN server data";
-        return;
-    }
-
-    CLOG(INFO) << "STUN UDP request" << request.request_id() << "(STUN" << stun_host << ':'
-               << stun_port << ")";
-    addAndStart(new StunUdpAttempt(request.request_id(), public_key, iv, request.encryptions(),
-                                   addresses.first(), static_cast<quint16>(request.port()),
-                                   stun_host, stun_port, this));
+    CLOG(INFO) << "STUN UDP request" << request.request_id();
+    addAndStart(new StunUdpAttempt(request, this));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -688,14 +623,6 @@ void Client::readGatewayUdpRequest(const proto::peer::GatewayUdpRequest& request
     if (udp_channel_ || !isUdpConnectionAllowed())
         return;
 
-    QByteArray public_key = QByteArray::fromStdString(request.public_key());
-    QByteArray iv = QByteArray::fromStdString(request.iv());
-    if (public_key.isEmpty() || iv.isEmpty())
-    {
-        CLOG(ERROR) << "Empty public key or IV";
-        return;
-    }
-
     CLOG(INFO) << "Gateway UDP request" << request.request_id();
-    addAndStart(new GatewayUdpAttempt(request.request_id(), public_key, iv, request.encryptions(), this));
+    addAndStart(new GatewayUdpAttempt(request, this));
 }

@@ -382,6 +382,7 @@ void HostGatewayUdpAttempt::start()
         fillKeyExchange(request);
         request->add_address(external_address.toStdString());
         request->set_port(external_port);
+        request->set_gateway(true);
 
         CLOG(INFO) << "Host gateway attempt" << request_id_ << "sending request (endpoint"
                    << external_address << ':' << external_port << ")";

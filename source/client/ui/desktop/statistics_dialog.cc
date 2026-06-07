@@ -22,6 +22,7 @@
 
 #include "base/logging.h"
 #include "base/desktop/screen_capturer.h"
+#include "base/net/udp_channel.h"
 #include "common/ui/formatter.h"
 #include "proto/desktop_video.h"
 #include "ui_statistics_dialog.h"
@@ -52,6 +53,19 @@ QString encoderToString(quint32 type)
         case proto::video::ENCODING_VP9: return "VP9";
         case proto::video::ENCODING_H264: return "H264";
         default: return "UNKNOWN";
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+QString udpMethodToString(UdpMethod method)
+{
+    switch (method)
+    {
+        case UdpMethod::DIRECT: return "Direct";
+        case UdpMethod::GATEWAY_HOST: return "Gateway (host)";
+        case UdpMethod::GATEWAY_CLIENT: return "Gateway (client)";
+        case UdpMethod::HOLE_PUNCHING: return "Hole punching";
+        default: return "Disabled";
     }
 }
 
@@ -105,27 +119,30 @@ void StatisticsDialog::setMetrics(const ClientDesktop::Metrics& metrics)
                 item->setText(1, Formatter::transferSpeedToString(metrics.speed_udp_rx) + " / " + Formatter::transferSpeedToString(metrics.speed_udp_tx));
                 break;
             case 5:
-                item->setText(1, QString::number(metrics.video_packet_count));
+                item->setText(1, udpMethodToString(metrics.udp_method));
                 break;
             case 6:
+                item->setText(1, QString::number(metrics.video_packet_count));
+                break;
+            case 7:
                 item->setText(1, Formatter::sizeToString(metrics.min_video_packet) + " / " +
                     Formatter::sizeToString(metrics.max_video_packet) + " / " + Formatter::sizeToString(metrics.avg_video_packet));
                 break;
-            case 7:
+            case 8:
                 item->setText(1, QString::number(metrics.audio_packet_count));
                 break;
-            case 8:
+            case 9:
                 item->setText(1, Formatter::sizeToString(metrics.min_audio_packet) + " / " +
                     Formatter::sizeToString(metrics.max_audio_packet) + " / " + Formatter::sizeToString(metrics.avg_audio_packet));
                 break;
-            case 9:
+            case 10:
                 item->setText(1, capturerToString(metrics.video_capturer_type) + " / " +
                     encoderToString(metrics.video_encoder_type));
                 break;
-            case 10:
+            case 11:
                 item->setText(1, QString::number(metrics.fps));
                 break;
-            case 11:
+            case 12:
             {
                 int total_mouse = metrics.send_mouse + metrics.drop_mouse;
                 int percentage = 0;
@@ -137,24 +154,24 @@ void StatisticsDialog::setMetrics(const ClientDesktop::Metrics& metrics)
                     QString("%1 (%2 %)").arg(metrics.drop_mouse).arg(percentage));
             }
             break;
-            case 12:
+            case 13:
                 item->setText(1, QString::number(metrics.send_key));
                 break;
-            case 13:
+            case 14:
                 item->setText(1, QString::number(metrics.send_text));
                 break;
-            case 14:
+            case 15:
                 item->setText(1, QString::number(metrics.read_clipboard) + " / " +
                     QString::number(metrics.send_clipboard));
                 break;
-            case 15:
+            case 16:
                 item->setText(1, QString::number(metrics.cursor_shape_count) + " / " +
                     QString::number(metrics.cursor_taken_from_cache));
                 break;
-            case 16:
+            case 17:
                 item->setText(1, QString::number(metrics.cursor_cached));
                 break;
-            case 17:
+            case 18:
                 item->setText(1, QString::number(metrics.cursor_pos_count));
                 break;
         }

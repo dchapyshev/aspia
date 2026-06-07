@@ -41,6 +41,8 @@ class StunUdpRequest;
 class GatewayUdpRequest;
 } // namespace proto::peer
 
+enum class UdpMethod;
+
 class Client : public QObject
 {
     Q_OBJECT
@@ -98,6 +100,10 @@ protected:
     qint64 totalUdpTx() const;
     int speedUdpRx();
     int speedUdpTx();
+
+    // The transport of the active UDP connection, or UdpMethod::DISABLED if UDP is not in use.
+    UdpMethod udpMethod() const;
+
     bool isLegacy() const;
 
 private slots:

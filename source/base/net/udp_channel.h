@@ -38,6 +38,15 @@ class DatagramDecryptor;
 class DatagramEncryptor;
 class Location;
 
+enum class UdpMethod
+{
+    DISABLED,       // UDP is not in use.
+    DIRECT,         // Connected to an address advertised by the peer (direct or LAN).
+    GATEWAY_HOST,   // Connected to an endpoint the host mapped on its gateway.
+    GATEWAY_CLIENT, // Mapped a port on this client's gateway and the host connected to it.
+    HOLE_PUNCHING,  // STUN hole punching.
+};
+
 class UdpChannel final : public QObject
 {
     Q_OBJECT
@@ -70,6 +79,8 @@ public:
     qint64 pendingBytes() const;
 
     Mode mode() const { return mode_; }
+    UdpMethod method() const { return method_; }
+    void setMethod(UdpMethod method) { method_ = method; }
     qint64 totalRx() const { return total_rx_; }
     qint64 totalTx() const { return total_tx_; }
     int speedRx();
@@ -142,6 +153,7 @@ private:
     bool paused_ = true;
 
     Mode mode_ = Mode::UNKNOWN;
+    UdpMethod method_ = UdpMethod::DISABLED;
 
     qint64 total_tx_ = 0;
     qint64 total_rx_ = 0;

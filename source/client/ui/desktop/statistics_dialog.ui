@@ -68,6 +68,11 @@
      </item>
      <item>
       <property name="text">
+       <string notr="true">UDP</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
        <string notr="true">Video Packet Count</string>
       </property>
      </item>

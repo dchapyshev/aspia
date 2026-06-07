@@ -54,7 +54,9 @@ message Version
     uint32 revision = 4;
 }
 
-// Direct connection: the client connects to one of the host's addresses (LAN / no NAT).
+// Direct connection: the client connects to one of the host's addresses (LAN / no NAT) or to an
+// endpoint the host mapped on its own gateway. |gateway| tells the two apart, since both reach
+// the client as a direct connection to an advertised endpoint.
 message DirectUdpRequest
 {
     uint32 request_id       = 1;
@@ -63,6 +65,7 @@ message DirectUdpRequest
     uint32 encryptions      = 4;
     bytes public_key        = 5;
     bytes iv                = 6;
+    bool gateway            = 7;
 }
 
 // STUN hole punching: the client runs its own STUN against the given server, then connects to the
