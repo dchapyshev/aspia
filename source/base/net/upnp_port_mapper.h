@@ -34,9 +34,8 @@ public:
     ~UpnpPortMapper() final;
 
     // Asynchronously discovers a UPnP IGD and forwards its external |internal_port| to this host's
-    // |internal_port|. Runs on a worker thread, since the library is blocking. On success sig_ready
-    // is emitted with the discovered external address and port; otherwise sig_failed is emitted. The
-    // mapping is removed when the object is destroyed.
+    // |internal_port|. On success sig_ready is emitted with the discovered external address and port;
+    // otherwise sig_failed is emitted. The mapping is removed when the object is destroyed.
     void addUdpMapping(quint16 internal_port);
 
 signals:
@@ -53,10 +52,10 @@ private:
         std::string service_type;
     };
 
-    void onMappingFinished(const Result& result);
     static Result doMapping(quint16 internal_port);
     static void doRemoveMapping(
         const std::string& control_url, const std::string& service_type, quint16 external_port);
+    void onMappingFinished(const Result& result);
 
     std::thread worker_;
     std::shared_ptr<bool> alive_;

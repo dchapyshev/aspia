@@ -32,7 +32,7 @@
 namespace {
 
 const char kMappingDescription[] = "Aspia Remote Desktop";
-const int kLeaseDurationSeconds = 3600; // Renewed on each connection attempt.
+const int kLeaseDurationSeconds = 3600;
 const int kDiscoverDelayMs = 2000;
 
 //--------------------------------------------------------------------------------------------------

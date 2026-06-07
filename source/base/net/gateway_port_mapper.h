@@ -23,13 +23,13 @@
 
 #include "base/scoped_qpointer.h"
 
-class NatPmpPortMapper;
+class PcpPortMapper;
 class UpnpPortMapper;
 
-// Orchestrates the gateway port-mapping mechanisms. NAT-PMP is tried first; on failure it falls back
-// to UPnP. The winning mechanism's mapper is kept as a child and removes its mapping on destruction.
-// On success sig_ready is emitted with the discovered external address and port; if both mechanisms
-// fail, sig_failed is emitted.
+// Orchestrates the gateway port-mapping mechanisms. PCP (with its NAT-PMP fallback) is tried first;
+// on failure it falls back to UPnP. The winning mechanism's mapper is kept as a child and removes
+// its mapping on destruction. On success sig_ready is emitted with the discovered external address
+// and port; if both mechanisms fail, sig_failed is emitted.
 class GatewayPortMapper final : public QObject
 {
     Q_OBJECT
@@ -45,7 +45,7 @@ signals:
     void sig_failed();
 
 private:
-    ScopedQPointer<NatPmpPortMapper> nat_pmp_mapper_;
+    ScopedQPointer<PcpPortMapper> pcp_mapper_;
     ScopedQPointer<UpnpPortMapper> upnp_mapper_;
     quint16 internal_port_ = 0;
 

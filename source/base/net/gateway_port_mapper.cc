@@ -19,7 +19,7 @@
 #include "base/net/gateway_port_mapper.h"
 
 #include "base/logging.h"
-#include "base/net/nat_pmp_port_mapper.h"
+#include "base/net/pcp_port_mapper.h"
 #include "base/net/upnp_port_mapper.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ GatewayPortMapper::~GatewayPortMapper() = default;
 //--------------------------------------------------------------------------------------------------
 void GatewayPortMapper::addUdpMapping(quint16 internal_port)
 {
-    if (nat_pmp_mapper_ || upnp_mapper_)
+    if (pcp_mapper_ || upnp_mapper_)
     {
         LOG(ERROR) << "Port mapping is already in progress";
         return;
@@ -43,17 +43,17 @@ void GatewayPortMapper::addUdpMapping(quint16 internal_port)
 
     internal_port_ = internal_port;
 
-    // Try NAT-PMP first: it is fast and runs on the ASIO loop. UPnP is the fallback on failure. The
-    // mapper that succeeds keeps the mapping alive and removes it on its own destruction, so its
-    // sig_ready is forwarded straight to ours.
-    nat_pmp_mapper_ = new NatPmpPortMapper(this);
+    // Try PCP (with NAT-PMP fallback) first: it is fast and runs on the ASIO loop. UPnP is the
+    // fallback on failure. The mapper that succeeds keeps the mapping alive and removes it on its
+    // own destruction, so its sig_ready is forwarded straight to ours.
+    pcp_mapper_ = new PcpPortMapper(this);
 
-    connect(nat_pmp_mapper_, &NatPmpPortMapper::sig_ready, this, &GatewayPortMapper::sig_ready);
-    connect(nat_pmp_mapper_, &NatPmpPortMapper::sig_failed, this, [this]()
+    connect(pcp_mapper_, &PcpPortMapper::sig_ready, this, &GatewayPortMapper::sig_ready);
+    connect(pcp_mapper_, &PcpPortMapper::sig_failed, this, [this]()
     {
-        // NAT-PMP failed; drop it and fall back to UPnP. Both UPnP outcomes are final, so forward
-        // them straight through.
-        nat_pmp_mapper_.reset();
+        // PCP/NAT-PMP failed; drop it and fall back to UPnP. Both UPnP outcomes are final, so
+        // forward them straight through.
+        pcp_mapper_.reset();
 
         upnp_mapper_ = new UpnpPortMapper(this);
         connect(upnp_mapper_, &UpnpPortMapper::sig_ready, this, &GatewayPortMapper::sig_ready);
@@ -61,5 +61,5 @@ void GatewayPortMapper::addUdpMapping(quint16 internal_port)
         upnp_mapper_->addUdpMapping(internal_port_);
     });
 
-    nat_pmp_mapper_->addUdpMapping(internal_port);
+    pcp_mapper_->addUdpMapping(internal_port);
 }

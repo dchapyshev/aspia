@@ -478,10 +478,10 @@ list(APPEND SOURCE_BASE_NET
     net/flood_guard.h
     net/gateway_port_mapper.cc
     net/gateway_port_mapper.h
-    net/nat_pmp_port_mapper.cc
-    net/nat_pmp_port_mapper.h
     net/net_utils.cc
     net/net_utils.h
+    net/pcp_port_mapper.cc
+    net/pcp_port_mapper.h
     net/tcp_channel.cc
     net/tcp_channel.h
     net/tcp_channel_legacy.cc
