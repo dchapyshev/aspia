@@ -351,6 +351,11 @@ bool RouterGroupWidget::eventFilter(QObject* watched, QEvent* event)
 //--------------------------------------------------------------------------------------------------
 void RouterGroupWidget::startDrag()
 {
+    // Clients are read-only and cannot move hosts between groups.
+    Router* router = Router::instance(router_id_);
+    if (!router || router->config().sessionType() == proto::router::SESSION_TYPE_CLIENT)
+        return;
+
     HostTreeItem* host_item = static_cast<HostTreeItem*>(ui->tree_host->itemAt(start_pos_));
     if (!host_item)
         return;

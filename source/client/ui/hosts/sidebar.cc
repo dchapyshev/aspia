@@ -1138,6 +1138,11 @@ void Sidebar::startDrag()
         if (group_item->isWorkspace())
             return;
 
+        // Clients are read-only and cannot move host groups.
+        Router* router = Router::instance(group_item->routerId());
+        if (!router || router->config().sessionType() == proto::router::SESSION_TYPE_CLIENT)
+            return;
+
         RouterGroupDrag drag(this);
         drag.setGroupItem(group_item, router_group_mime_type_);
 
