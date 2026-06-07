@@ -344,12 +344,12 @@ void Client::onAttemptConnected(quint32 request_id, qint64 bandwidth)
 void Client::selectAttempt(UdpAttempt* attempt, qint64 bandwidth)
 {
     CCHECK(attempt);
+    const quint32 id = attempt->requestId();
 
-    CLOG(INFO) << "Nominating UDP attempt" << attempt->requestId();
+    CLOG(INFO) << "Nominating UDP attempt" << id;
 
     // Take the channel from the attempt and drive the session through it directly. Any aux resource
     // (gateway mapping) is parented to the channel and travels with it; the attempt is then discarded.
-    const quint32 id = attempt->requestId();
     udp_channel_ = attempt->takeChannel();
     eraseAttempt(id);
 
