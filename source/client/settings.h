@@ -89,8 +89,8 @@ public:
     bool sendKeyCombinations() const;
     void setSendKeyCombinations(bool enable);
 
-    bool isUdpAllowed() const;
-    void setUdpAllowed(bool enable);
+    quint32 udpMethods() const;
+    void setUdpMethods(quint32 methods);
 
     QByteArray tabState(const QString& name) const;
     void setTabState(const QString& name, const QByteArray& state);

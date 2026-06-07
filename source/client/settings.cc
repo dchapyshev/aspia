@@ -26,6 +26,7 @@
 
 #include "base/logging.h"
 #include "base/xml_settings.h"
+#include "base/net/udp_channel.h"
 #include "build/version.h"
 #include "client/config.h"
 #include "proto/desktop_control.h"
@@ -50,7 +51,7 @@ const QString kOpenSessionsInTabsParam = "open_sessions_in_tabs";
 const QString kRecordingPathParam = "recording_path";
 const QString kRecordSessionsParam = "record_sessions";
 const QString kSendKeyCombinationsParam = "send_key_combinations";
-const QString kUdpAllowedParam = "udp_allowed";
+const QString kUdpMethodsParam = "udp_methods";
 const QString kTabStateParam = "tab_state";
 const QString kLocalGroupExpandedParam = "local_group_expanded";
 const QString kWorkspaceExpandedParam = "workspace_expanded";
@@ -306,15 +307,15 @@ void Settings::setSendKeyCombinations(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Settings::isUdpAllowed() const
+quint32 Settings::udpMethods() const
 {
-    return settings_.value(kUdpAllowedParam, true).toBool();
+    return settings_.value(kUdpMethodsParam, UDP_METHOD_ALL).toUInt();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setUdpAllowed(bool enable)
+void Settings::setUdpMethods(quint32 methods)
 {
-    settings_.setValue(kUdpAllowedParam, enable);
+    settings_.setValue(kUdpMethodsParam, methods);
 }
 
 //--------------------------------------------------------------------------------------------------

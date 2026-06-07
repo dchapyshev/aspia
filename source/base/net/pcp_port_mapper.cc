@@ -28,6 +28,7 @@
 #include "base/logging.h"
 #include "base/crypto/random.h"
 #include "base/net/net_utils.h"
+#include "base/net/udp_channel.h"
 
 namespace {
 
@@ -99,9 +100,19 @@ PcpPortMapper::~PcpPortMapper()
 }
 
 //--------------------------------------------------------------------------------------------------
-void PcpPortMapper::addUdpMapping(quint16 internal_port)
+void PcpPortMapper::addUdpMapping(quint16 internal_port, quint32 methods)
 {
     internal_port_ = internal_port;
+
+    const bool pcp = (methods & UDP_METHOD_PCP) != 0;
+    const bool natpmp = (methods & UDP_METHOD_NAT_PMP) != 0;
+
+    if (pcp && natpmp)
+        protocols_ = Protocols::PCP_THEN_NATPMP;
+    else if (pcp)
+        protocols_ = Protocols::PCP_ONLY;
+    else
+        protocols_ = Protocols::NATPMP_ONLY;
 
     const QString gateway = NetUtils::defaultGatewayAddress();
     if (gateway.isEmpty())
@@ -152,7 +163,9 @@ void PcpPortMapper::addUdpMapping(quint16 internal_port)
 
     Random::fillBuffer(nonce_.data(), nonce_.size());
 
-    startPhase(Phase::PCP);
+    // PCP is tried first unless only NAT-PMP is allowed. The orchestrator only creates this mapper
+    // when at least one of the two protocols is allowed.
+    startPhase(protocols_ == Protocols::NATPMP_ONLY ? Phase::NATPMP_PUBLIC_ADDRESS : Phase::PCP);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -382,6 +395,12 @@ void PcpPortMapper::onPcpResponse(size_t bytes)
 //--------------------------------------------------------------------------------------------------
 void PcpPortMapper::fallbackToNatPmp()
 {
+    if (protocols_ == Protocols::PCP_ONLY)
+    {
+        finishWithFailure(FROM_HERE);
+        return;
+    }
+
     std::error_code error_code;
     retransmit_timer_.cancel();
     socket_.cancel(error_code);

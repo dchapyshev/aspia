@@ -117,7 +117,6 @@ private slots:
 
 private:
     void tcpChannelReady();
-    bool isUdpConnectionAllowed();
     void readDirectUdpRequest(const proto::peer::DirectUdpRequest& request);
     void readStunUdpRequest(const proto::peer::StunUdpRequest& request);
     void readGatewayUdpRequest(const proto::peer::GatewayUdpRequest& request);
@@ -141,6 +140,7 @@ private:
     State state_ = State::CREATED;
 
     bool udp_ready_ = false;
+    const quint32 udp_methods_;
 };
 
 Q_DECLARE_METATYPE(Client::Status)

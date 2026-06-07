@@ -348,9 +348,11 @@ UdpMethod StunUdpAttempt::method() const
 }
 
 //--------------------------------------------------------------------------------------------------
-GatewayUdpAttempt::GatewayUdpAttempt(const proto::peer::GatewayUdpRequest& request, QObject* parent)
+GatewayUdpAttempt::GatewayUdpAttempt(const proto::peer::GatewayUdpRequest& request, quint32 methods,
+                                     QObject* parent)
     : UdpAttempt(request.request_id(), QByteArray::fromStdString(request.public_key()),
-                 QByteArray::fromStdString(request.iv()), request.encryptions(), parent)
+                 QByteArray::fromStdString(request.iv()), request.encryptions(), parent),
+      methods_(methods)
 {
     // Nothing
 }
@@ -378,7 +380,7 @@ void GatewayUdpAttempt::start()
         emit sig_failed(request_id_);
     });
 
-    mapper->addUdpMapping(local_port);
+    mapper->addUdpMapping(local_port, methods_);
     startTimeout();
 }
 

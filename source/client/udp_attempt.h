@@ -131,15 +131,19 @@ private:
     ScopedQPointer<StunPeer> stun_peer_;
 };
 
-// Client-side gateway mapping: opens a port mapping on this client's gateway (NAT-PMP or UPnP),
-// listens, and reports the mapped endpoint so the host connects to it.
+// Client-side gateway mapping: opens a port mapping on this client's gateway (PCP, NAT-PMP or UPnP),
+// listens, and reports the mapped endpoint so the host connects to it. |methods| selects which of
+// the gateway-mapping protocols are allowed.
 class GatewayUdpAttempt final : public UdpAttempt
 {
 public:
-    GatewayUdpAttempt(const proto::peer::GatewayUdpRequest& request, QObject* parent);
+    GatewayUdpAttempt(const proto::peer::GatewayUdpRequest& request, quint32 methods, QObject* parent);
 
     void start() final;
     UdpMethod method() const final;
+
+private:
+    const quint32 methods_;
 };
 
 #endif // CLIENT_UDP_ATTEMPT_H

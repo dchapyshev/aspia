@@ -44,7 +44,7 @@ public:
     explicit PcpPortMapper(QObject* parent = nullptr);
     ~PcpPortMapper() final;
 
-    void addUdpMapping(quint16 internal_port);
+    void addUdpMapping(quint16 internal_port, quint32 methods);
 
 signals:
     void sig_ready(const QString& external_address, quint16 external_port);
@@ -56,6 +56,9 @@ private:
 
     enum class Phase { PCP, NATPMP_PUBLIC_ADDRESS, NATPMP_MAPPING };
     Q_ENUM(Phase)
+
+    enum class Protocols { PCP_ONLY, NATPMP_ONLY, PCP_THEN_NATPMP };
+    Q_ENUM(Protocols)
 
     // NAT-PMP (RFC 6886) wire messages, version 0. Multi-byte fields are big-endian; quint*_be
     // convert on access. Fields are naturally aligned, so the in-memory layout matches the wire
@@ -197,6 +200,7 @@ private:
     Phase phase_ = Phase::PCP;
     int tries_ = 0;
     bool finished_ = false;
+    Protocols protocols_ = Protocols::PCP_THEN_NATPMP;
 
     quint16 internal_port_ = 0;
     quint16 external_port_ = 0;

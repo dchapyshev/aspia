@@ -47,7 +47,8 @@ static const int kWriteBufferSize = 2 * 1024 * 1024; // 2 Mb.
 
 //--------------------------------------------------------------------------------------------------
 Client::Client(QObject* parent)
-    : QObject(parent)
+    : QObject(parent),
+      udp_methods_(Settings().udpMethods())
 {
     CLOG(INFO) << "Ctor";
 
@@ -577,28 +578,17 @@ void Client::tcpChannelReady()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Client::isUdpConnectionAllowed()
-{
-    if (qEnvironmentVariableIsSet("ASPIA_DISABLE_UDP"))
-    {
-        CLOG(INFO) << "UDP is disabled by environment variable";
-        return false;
-    }
-
-    if (!Settings().isUdpAllowed())
-    {
-        CLOG(INFO) << "UDP is disabled by user settings";
-        return false;
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
 void Client::readDirectUdpRequest(const proto::peer::DirectUdpRequest& request)
 {
     // Ignore once a UDP channel is up (late requests from losing host attempts).
-    if (udp_channel_ || !isUdpConnectionAllowed())
+    if (udp_channel_)
+        return;
+
+    // A host-gateway endpoint (gateway=true) reaches us as a direct connection, but is allowed only
+    // when gateway mapping is enabled; a plain direct connection is gated by UDP_METHOD_DIRECT.
+    const quint32 required = request.gateway() ?
+        (UDP_METHOD_PCP | UDP_METHOD_NAT_PMP | UDP_METHOD_UPNP) : UDP_METHOD_DIRECT;
+    if (!(udp_methods_ & required))
         return;
 
     CLOG(INFO) << "Direct UDP request" << request.request_id();
@@ -609,7 +599,7 @@ void Client::readDirectUdpRequest(const proto::peer::DirectUdpRequest& request)
 void Client::readStunUdpRequest(const proto::peer::StunUdpRequest& request)
 {
     // Ignore once a UDP channel is up (late requests from losing host attempts).
-    if (udp_channel_ || !isUdpConnectionAllowed())
+    if (udp_channel_ || !(udp_methods_ & UDP_METHOD_HOLE_PUNCHING))
         return;
 
     CLOG(INFO) << "STUN UDP request" << request.request_id();
@@ -620,9 +610,14 @@ void Client::readStunUdpRequest(const proto::peer::StunUdpRequest& request)
 void Client::readGatewayUdpRequest(const proto::peer::GatewayUdpRequest& request)
 {
     // Ignore once a UDP channel is up (late requests from losing host attempts).
-    if (udp_channel_ || !isUdpConnectionAllowed())
+    if (udp_channel_)
+        return;
+
+    const quint32 gateway_methods =
+        udp_methods_ & (UDP_METHOD_PCP | UDP_METHOD_NAT_PMP | UDP_METHOD_UPNP);
+    if (!gateway_methods)
         return;
 
     CLOG(INFO) << "Gateway UDP request" << request.request_id();
-    addAndStart(new GatewayUdpAttempt(request, this));
+    addAndStart(new GatewayUdpAttempt(request, gateway_methods, this));
 }

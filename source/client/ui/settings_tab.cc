@@ -31,6 +31,7 @@
 #include "base/crypto/secure_string.h"
 #include "base/gui_application.h"
 #include "base/logging.h"
+#include "base/net/udp_channel.h"
 #include "build/build_config.h"
 #include "client/database.h"
 #include "client/master_password.h"
@@ -121,7 +122,13 @@ SettingsTab::SettingsTab(QWidget* parent)
     }
 
     ui->edit_display_name->setText(db.displayName());
-    ui->checkbox_allow_udp->setChecked(settings.isUdpAllowed());
+
+    const quint32 udp_methods = settings.udpMethods();
+    ui->checkbox_udp_direct->setChecked(udp_methods & UDP_METHOD_DIRECT);
+    ui->checkbox_udp_hole_punching->setChecked(udp_methods & UDP_METHOD_HOLE_PUNCHING);
+    ui->checkbox_udp_pcp->setChecked(udp_methods & UDP_METHOD_PCP);
+    ui->checkbox_udp_natpmp->setChecked(udp_methods & UDP_METHOD_NAT_PMP);
+    ui->checkbox_udp_upnp->setChecked(udp_methods & UDP_METHOD_UPNP);
 
     // Desktop page.
     proto::control::Config desktop_config = settings.desktopConfig();
@@ -166,7 +173,11 @@ SettingsTab::SettingsTab(QWidget* parent)
             this, &SettingsTab::onThemeChanged);
     connect(ui->edit_display_name, &QLineEdit::editingFinished,
             this, &SettingsTab::onDisplayNameChanged);
-    connect(ui->checkbox_allow_udp, &QCheckBox::toggled, this, &SettingsTab::onAllowUdpChanged);
+    connect(ui->checkbox_udp_direct, &QCheckBox::toggled, this, &SettingsTab::onUdpMethodsChanged);
+    connect(ui->checkbox_udp_hole_punching, &QCheckBox::toggled, this, &SettingsTab::onUdpMethodsChanged);
+    connect(ui->checkbox_udp_pcp, &QCheckBox::toggled, this, &SettingsTab::onUdpMethodsChanged);
+    connect(ui->checkbox_udp_natpmp, &QCheckBox::toggled, this, &SettingsTab::onUdpMethodsChanged);
+    connect(ui->checkbox_udp_upnp, &QCheckBox::toggled, this, &SettingsTab::onUdpMethodsChanged);
     connect(ui->button_change_master_password, &QPushButton::clicked,
             this, &SettingsTab::onChangeMasterPassword);
 
@@ -305,10 +316,23 @@ void SettingsTab::onDisplayNameChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SettingsTab::onAllowUdpChanged()
+void SettingsTab::onUdpMethodsChanged()
 {
-    LOG(INFO) << "[ACTION] Allow UDP changed";
-    Settings().setUdpAllowed(ui->checkbox_allow_udp->isChecked());
+    LOG(INFO) << "[ACTION] UDP methods changed";
+
+    quint32 methods = 0;
+    if (ui->checkbox_udp_direct->isChecked())
+        methods |= UDP_METHOD_DIRECT;
+    if (ui->checkbox_udp_hole_punching->isChecked())
+        methods |= UDP_METHOD_HOLE_PUNCHING;
+    if (ui->checkbox_udp_pcp->isChecked())
+        methods |= UDP_METHOD_PCP;
+    if (ui->checkbox_udp_natpmp->isChecked())
+        methods |= UDP_METHOD_NAT_PMP;
+    if (ui->checkbox_udp_upnp->isChecked())
+        methods |= UDP_METHOD_UPNP;
+
+    Settings().setUdpMethods(methods);
 }
 
 //--------------------------------------------------------------------------------------------------

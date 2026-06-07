@@ -47,6 +47,18 @@ enum class UdpMethod
     HOLE_PUNCHING,  // STUN hole punching.
 };
 
+enum UdpMethodFlag : quint32
+{
+    UDP_METHOD_DIRECT        = 1 << 0, // Direct / LAN connection to an advertised endpoint.
+    UDP_METHOD_HOLE_PUNCHING = 1 << 1, // STUN hole punching.
+    UDP_METHOD_PCP           = 1 << 2, // Gateway mapping via PCP.
+    UDP_METHOD_NAT_PMP       = 1 << 3, // Gateway mapping via NAT-PMP.
+    UDP_METHOD_UPNP          = 1 << 4, // Gateway mapping via UPnP.
+
+    UDP_METHOD_ALL = UDP_METHOD_DIRECT | UDP_METHOD_HOLE_PUNCHING | UDP_METHOD_PCP |
+                     UDP_METHOD_NAT_PMP | UDP_METHOD_UPNP,
+};
+
 class UdpChannel final : public QObject
 {
     Q_OBJECT

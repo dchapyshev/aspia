@@ -21,15 +21,17 @@
 
 #include <QObject>
 
+#include "base/net/udp_channel.h"
 #include "base/scoped_qpointer.h"
 
 class PcpPortMapper;
 class UpnpPortMapper;
 
 // Orchestrates the gateway port-mapping mechanisms. PCP (with its NAT-PMP fallback) is tried first;
-// on failure it falls back to UPnP. The winning mechanism's mapper is kept as a child and removes
-// its mapping on destruction. On success sig_ready is emitted with the discovered external address
-// and port; if both mechanisms fail, sig_failed is emitted.
+// on failure it falls back to UPnP. The |methods| mask passed to addUdpMapping selects which
+// mechanisms are allowed. The winning mechanism's mapper is kept as a child and removes its mapping
+// on destruction. On success sig_ready is emitted with the discovered external address and port; if
+// every allowed mechanism fails, sig_failed is emitted.
 class GatewayPortMapper final : public QObject
 {
     Q_OBJECT
@@ -38,16 +40,19 @@ public:
     explicit GatewayPortMapper(QObject* parent = nullptr);
     ~GatewayPortMapper() final;
 
-    void addUdpMapping(quint16 internal_port);
+    void addUdpMapping(quint16 internal_port, quint32 methods = UDP_METHOD_ALL);
 
 signals:
     void sig_ready(const QString& external_address, quint16 external_port);
     void sig_failed();
 
 private:
+    void tryUpnp();
+
     ScopedQPointer<PcpPortMapper> pcp_mapper_;
     ScopedQPointer<UpnpPortMapper> upnp_mapper_;
     quint16 internal_port_ = 0;
+    quint32 methods_ = UDP_METHOD_ALL;
 
     Q_DISABLE_COPY_MOVE(GatewayPortMapper)
 };
