@@ -33,7 +33,7 @@ const qint64 kIdleThresholdMs = 5000;       // Consider idle after 5 seconds of 
 const qint64 kMinProbeDataSize = 4 * 1024;  // 4 KB - first probe and floor for slow links.
 const qint64 kMaxProbeDataSize = 64 * 1024; // 64 KB - ceiling for fast links.
 const qint64 kProbeTargetMs = 100;          // Each probe is sized to take ~this long to transfer.
-const int kUdpInitialDelayMs = 5000;        // Delay before the first UDP negotiation (let key frames flush).
+const int kUdpInitialDelayMs = 7000;        // Delay before the first UDP negotiation (let key frames flush).
 const int kUdpReconnectDelayMs = 5000;      // 5 seconds before attempting UDP reconnection.
 
 //--------------------------------------------------------------------------------------------------
