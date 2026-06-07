@@ -30,7 +30,7 @@
 #include "base/sys_info.h"
 #include "base/net/adapter_enumerator.h"
 #include "base/net/connect_enumerator.h"
-#include "base/net/route_enumerator.h"
+#include "base/net/net_utils.h"
 #include "base/net/open_files_enumerator.h"
 #include "base/win/battery_enumerator.h"
 #include "base/win/device_enumerator.h"
@@ -522,14 +522,15 @@ void fillConnection(proto::system_info::SystemInfo* system_info)
 //--------------------------------------------------------------------------------------------------
 void fillRoutes(proto::system_info::SystemInfo* system_info)
 {
-    for (RouteEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    const QList<NetUtils::Route> route_table = NetUtils::routeTable();
+    for (const NetUtils::Route& entry : route_table)
     {
         proto::system_info::Routes::Route* route = system_info->mutable_routes()->add_route();
 
-        route->set_destonation(enumerator.destonation().toStdString());
-        route->set_mask(enumerator.mask().toStdString());
-        route->set_gateway(enumerator.gateway().toStdString());
-        route->set_metric(enumerator.metric());
+        route->set_destonation(entry.destination.toStdString());
+        route->set_mask(entry.mask.toStdString());
+        route->set_gateway(entry.gateway.toStdString());
+        route->set_metric(entry.metric);
     }
 }
 

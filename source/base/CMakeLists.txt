@@ -500,9 +500,7 @@ if (WIN32)
         net/firewall_manager.cc
         net/firewall_manager.h
         net/open_files_enumerator.cc
-        net/open_files_enumerator.h
-        net/route_enumerator.cc
-        net/route_enumerator.h)
+        net/open_files_enumerator.h)
 endif()
 
 list(APPEND SOURCE_BASE_NET_TESTS

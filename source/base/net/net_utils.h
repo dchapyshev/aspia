@@ -19,17 +19,49 @@
 #ifndef BASE_NET_NET_UTILS_H
 #define BASE_NET_NET_UTILS_H
 
+#include <QList>
 #include <QStringList>
 
 class NetUtils
 {
 public:
+    struct Route
+    {
+        QString destination;
+        QString mask;
+        QString gateway;
+        quint32 metric = 0;
+    };
+
+    // Returns the IP addresses of all active (up, non-loopback) interfaces that have a global address.
     static QStringList localIpList();
+
+    // Returns the host's IPv4 routing table. Uses platform routing APIs, since Qt exposes no routing
+    // information.
+    static QList<Route> routeTable();
+
+    // Returns the IPv4 address of the host's default gateway, or an empty string if it cannot be
+    // determined.
+    static QString defaultGatewayAddress();
+
+    // Returns true if |address| is a private/non-routable IPv4 address (RFC1918, CGNAT 100.64/10,
+    // link-local).
+    static bool isPrivateIpAddress(const QString& address);
+
+    // Returns true if |ip_address| is a valid IPv4 or IPv6 literal.
     static bool isValidIpAddress(const QString& ip_address);
+
+    // Returns true if |host| is a syntactically valid host name.
     static bool isValidHostName(const QString& host);
+
+    // Returns true if the value is a valid port number (1-65535).
     static bool isValidPort(quint32 port);
     static bool isValidPort(const QString& str);
+
+    // Returns true if |subnet| is a valid IPv4/IPv6 subnet in CIDR notation.
     static bool isValidSubnet(const QString& subnet);
+
+    // Returns true if both arguments parse to the same IP address.
     static bool isAddressEqual(const QString& address1, const QString& address2);
     static bool isAddressEqual(const std::string& address1, const std::string& address2);
 
