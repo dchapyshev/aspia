@@ -223,9 +223,11 @@ message Notification
 //   2. Client answers with TwoFactorResponse. In MODE_ACTIVE the client chooses by itself:
 //      either (a) submit the |token| it stored after a previous TOTP success, or (b)
 //      ask the user for a fresh |totp_code|.
-//   3. Router validates and sends TwoFactorResult. Any TOTP success carries a fresh
-//      |new_token| that supersedes whatever token the client had.
-//   4. On success the router proceeds to send UserKeys; on failure it disconnects the client.
+//   3. Router validates the response. Any failure - a rejected code or a server-side error -
+//      drops the connection with no reply; the client cannot retry on the same session, it
+//      reconnects and runs the whole stage again. On success the router sends a TwoFactorResult
+//      only when a TOTP submission produced a fresh |new_token|; the token-path success skips it.
+//   4. On success the router proceeds to send UserKeys, which is what marks the stage complete.
 
 enum TwoFactorMode
 {
@@ -236,14 +238,6 @@ enum TwoFactorMode
     // User has no TOTP secret yet. The server includes |enrollment_secret| and |otpauth_uri|;
     // the client confirms by sending the first valid code.
     TWO_FACTOR_MODE_ENROLL  = 2;
-}
-
-enum TwoFactorStatus
-{
-    TWO_FACTOR_STATUS_UNKNOWN        = 0;
-    TWO_FACTOR_STATUS_OK             = 1;
-    TWO_FACTOR_STATUS_INVALID_CODE   = 2;
-    TWO_FACTOR_STATUS_INTERNAL_ERROR = 3;
 }
 
 // Router to client.
@@ -277,16 +271,13 @@ message TwoFactorResponse
     string totp_code = 2;
 }
 
-// Router to client.
+// Router to client. Carries a freshly issued device token after a successful TOTP submission
+// (any successful TOTP, including enrollment, produces a new token). It is sent only when such
+// a token exists: the token-path success has nothing to deliver here, so it is acknowledged by
+// UserKeys alone. Failures never send this message - they drop the connection.
 message TwoFactorResult
 {
-    TwoFactorStatus status = 1;
-
-    // Populated when the router issued a fresh device token in response to a successful
-    // TOTP submission (any successful TOTP, including enrollment, produces a new token).
-    // Empty when the result acknowledges a token-path response - the existing token stays
-    // valid in that case.
-    bytes new_token = 2;
+    bytes new_token = 1;
 }
 
 message RouterToClient

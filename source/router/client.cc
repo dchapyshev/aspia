@@ -252,8 +252,9 @@ void Client::doTwoFactorChallenge()
     {
         // SRP already validated the user; reaching this branch implies the row vanished
         // between authentication and the 2FA stage.
-        CLOG(WARNING) << "Authenticated user disappeared from database (user_id:" << userId() << ")";
-        sendTwoFactorResult(proto::router::TWO_FACTOR_STATUS_INTERNAL_ERROR);
+        CLOG(WARNING) << "Authenticated user" << userName()
+                      << "disappeared from database. Closing connection";
+        emit sig_finished(session_id_);
         return;
     }
 
@@ -302,7 +303,7 @@ void Client::readTwoFactorResponse(const proto::router::TwoFactorResponse& respo
             // of tearing down the connection we re-open the 2FA stage and ask for a code.
             // |token_rejected| tells the client to drop the stale local copy and not retry
             // the token path on this challenge.
-            CLOG(INFO) << "Device token rejected for user" << userId() << "- asking for TOTP";
+            CLOG(INFO) << "Device token rejected for user" << userName() << "- asking for TOTP";
 
             proto::router::RouterToClient message;
             proto::router::TwoFactorChallenge* challenge = message.mutable_two_factor_challenge();
@@ -314,7 +315,7 @@ void Client::readTwoFactorResponse(const proto::router::TwoFactorResponse& respo
 
         Database::instance().touchClientDeviceToken(token, address());
         token_id_ = token_id;
-        sendTwoFactorResult(proto::router::TWO_FACTOR_STATUS_OK);
+        completeTwoFactor();
         return;
     }
 
@@ -322,7 +323,8 @@ void Client::readTwoFactorResponse(const proto::router::TwoFactorResponse& respo
 
     if (secret.isEmpty() || response.totp_code().empty())
     {
-        sendTwoFactorResult(proto::router::TWO_FACTOR_STATUS_INVALID_CODE);
+        CLOG(INFO) << "Empty TOTP code or no OTP secret for user" << userName() << ". Closing connection";
+        emit sig_finished(session_id_);
         return;
     }
 
@@ -331,7 +333,8 @@ void Client::readTwoFactorResponse(const proto::router::TwoFactorResponse& respo
     if (!Totp::verify(secret, code, now, Totp::kDefaultStepSec, Totp::kDefaultDigits,
                       Totp::kDefaultWindowSteps, &matched_counter))
     {
-        sendTwoFactorResult(proto::router::TWO_FACTOR_STATUS_INVALID_CODE);
+        CLOG(INFO) << "Invalid TOTP code for user" << userName() << ". Closing connection";
+        emit sig_finished(session_id_);
         return;
     }
 
@@ -339,7 +342,8 @@ void Client::readTwoFactorResponse(const proto::router::TwoFactorResponse& respo
     // from counter 0, so the first valid code (any positive step) is accepted.
     if (!enroll && matched_counter <= user_otp_counter_)
     {
-        sendTwoFactorResult(proto::router::TWO_FACTOR_STATUS_INVALID_CODE);
+        CLOG(INFO) << "Replayed TOTP code for user" << userName() << ". Closing connection";
+        emit sig_finished(session_id_);
         return;
     }
 
@@ -347,8 +351,9 @@ void Client::readTwoFactorResponse(const proto::router::TwoFactorResponse& respo
     {
         if (!Database::instance().setUserOtp(userId(), tentative_otp_secret_, matched_counter))
         {
-            CLOG(ERROR) << "Failed to persist OTP secret for user" << userId();
-            sendTwoFactorResult(proto::router::TWO_FACTOR_STATUS_INTERNAL_ERROR);
+            CLOG(ERROR) << "Failed to persist OTP secret for user" << userName()
+                        << ". Closing connection";
+            emit sig_finished(session_id_);
             return;
         }
         tentative_otp_secret_.clear();
@@ -357,8 +362,9 @@ void Client::readTwoFactorResponse(const proto::router::TwoFactorResponse& respo
     {
         if (!Database::instance().updateUserOtpCounter(userId(), matched_counter))
         {
-            CLOG(ERROR) << "Failed to update OTP counter for user" << userId();
-            sendTwoFactorResult(proto::router::TWO_FACTOR_STATUS_INTERNAL_ERROR);
+            CLOG(ERROR) << "Failed to update OTP counter for user" << userName()
+                        << ". Closing connection";
+            emit sig_finished(session_id_);
             return;
         }
     }
@@ -369,32 +375,28 @@ void Client::readTwoFactorResponse(const proto::router::TwoFactorResponse& respo
     std::string new_token;
     qint64 new_token_id = 0;
     if (!Database::instance().issueClientDeviceToken(userId(), address(), &new_token, &new_token_id))
-        CLOG(WARNING) << "Failed to issue device token for user" << userId();
+        CLOG(WARNING) << "Failed to issue device token for user" << userName();
 
     token_id_ = new_token_id;
 
-    sendTwoFactorResult(proto::router::TWO_FACTOR_STATUS_OK, std::move(new_token));
+    completeTwoFactor(std::move(new_token));
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::sendTwoFactorResult(proto::router::TwoFactorStatus status, std::string&& new_token)
+void Client::completeTwoFactor(std::string&& new_token)
 {
-    proto::router::RouterToClient envelope;
-    proto::router::TwoFactorResult* result = envelope.mutable_two_factor_result();
-    result->set_status(status);
+    // 2FA passed. A TwoFactorResult is sent only to hand over a freshly issued device token;
+    // the token-path success carries no token, and an empty message cannot be sent over the
+    // wire, so in that case success is signalled by UserKeys alone.
     if (!new_token.empty())
-        result->set_new_token(std::move(new_token));
-
-    sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(envelope));
-
-    if (status == proto::router::TWO_FACTOR_STATUS_OK)
     {
-        two_factor_completed_ = true;
-        sendUserKeys();
+        proto::router::RouterToClient envelope;
+        envelope.mutable_two_factor_result()->set_new_token(std::move(new_token));
+        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(envelope));
     }
-    // On failure the channel is dropped when the client disconnects in response; we
-    // intentionally do not call any disconnect API here because the result message must
-    // reach the client first.
+
+    two_factor_completed_ = true;
+    sendUserKeys();
 }
 
 //--------------------------------------------------------------------------------------------------

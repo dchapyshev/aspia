@@ -36,7 +36,7 @@
 namespace {
 
 constexpr int kGroupKeySize = 32;
-const std::chrono::seconds kReconnectTimeout { 5 };
+const std::chrono::milliseconds kReconnectTimeout { 2500 };
 
 //--------------------------------------------------------------------------------------------------
 struct Registrator
@@ -187,7 +187,7 @@ void Router::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
     if (status_ != Status::OFFLINE)
     {
         setStatus(Status::CONNECTING);
-        LOG(INFO) << "Reconnect scheduled in" << kReconnectTimeout.count() << "seconds";
+        LOG(INFO) << "Reconnect scheduled in" << kReconnectTimeout.count() << "ms";
         reconnect_timer_->start(kReconnectTimeout);
     }
 
@@ -575,13 +575,8 @@ void Router::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& cha
 //--------------------------------------------------------------------------------------------------
 void Router::readTwoFactorResult(const proto::router::TwoFactorResult& result)
 {
-    if (result.status() != proto::router::TWO_FACTOR_STATUS_OK)
-    {
-        LOG(INFO) << "2FA stage rejected by router:" << result.status();
-        disconnectFromRouter();
-        return;
-    }
-
+    // The router sends this only to deliver a freshly issued device token; failures drop the
+    // connection instead. Persist the token. Final success is marked separately by UserKeys.
     const QByteArray new_token = QByteArray::fromStdString(result.new_token());
     if (!new_token.isEmpty())
     {

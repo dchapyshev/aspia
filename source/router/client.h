@@ -36,7 +36,6 @@ class HostSearchRequest;
 class TwoFactorResponse;
 class WorkspaceListRequest;
 enum SessionType : int;
-enum TwoFactorStatus : int;
 } // namespace proto::router
 
 class Host;
@@ -90,8 +89,7 @@ private slots:
 private:
     void doTwoFactorChallenge();
     void readTwoFactorResponse(const proto::router::TwoFactorResponse& response);
-    void sendTwoFactorResult(
-        proto::router::TwoFactorStatus status, std::string&& new_token = std::string());
+    void completeTwoFactor(std::string&& new_token = std::string());
     void sendUserKeys();
     void readConnectionRequest(const proto::router::ConnectionRequest& request);
     void readCheckHostStatus(const proto::router::CheckHostStatus& check_host_status);
