@@ -346,11 +346,15 @@ void PcpPortMapper::onPcpResponse(size_t bytes)
         return;
     }
 
-    // A success response that is truncated or carries a foreign nonce is not our mapping; keep
-    // waiting (the retransmit timer drives further attempts). The short-circuit avoids reading the
-    // nonce field out of a truncated datagram.
+    // A success response must match the request we sent by protocol, internal port and nonce
+    // (RFC 6887 11.4); the internal IP is matched implicitly by the connected socket. A truncated or
+    // mismatched datagram is not our mapping, so keep waiting (the retransmit timer drives further
+    // attempts). The size check short-circuits to avoid reading fields out of a truncated datagram.
+    const PcpMapData& map = response_.pcp_map.data;
     if (bytes < sizeof(PcpMapResponse) ||
-        memcmp(response_.pcp_map.data.nonce, nonce_.data(), nonce_.size()) != 0)
+        map.protocol != kPcpProtocolUdp ||
+        map.internal_port != internal_port_ ||
+        memcmp(map.nonce, nonce_.data(), nonce_.size()) != 0)
     {
         startReceive();
         return;
@@ -358,8 +362,8 @@ void PcpPortMapper::onPcpResponse(size_t bytes)
 
     retransmit_timer_.cancel();
 
-    external_port_ = response_.pcp_map.data.external_port;
-    external_address_ = ipv4FromMapped(response_.pcp_map.data.external_ip);
+    external_port_ = map.external_port;
+    external_address_ = ipv4FromMapped(map.external_ip);
 
     if (NetUtils::isPrivateIpAddress(external_address_))
     {
