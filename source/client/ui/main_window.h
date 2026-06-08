@@ -37,6 +37,7 @@ enum SessionType : int;
 
 class Tab;
 class HostsTab;
+class SearchDialog;
 class QLineEdit;
 class UpdateChecker;
 class HostConfig;
@@ -65,6 +66,7 @@ private slots:
     void onCurrentTabChanged(int index);
     void onCloseTab(int index);
     void onSearchTextChanged(const QString& text);
+    void onFindAction();
     void onConnect(const HostConfig& host, proto::peer::SessionType session_type);
     void onTabDetachRequested(int index, const QPoint& global_pos);
     void onTabDragMove(const QPoint& global_pos);
@@ -80,6 +82,7 @@ private:
     void hideCloseButtonForTab(int index);
     Tab* tabAt(int index);
     HostsTab* hostsTab() const;
+    void showSearchDialog();
     void syncSearchField();
     void updateStatusBarVisibility();
     void installTabActions(Tab* tab);
@@ -92,6 +95,7 @@ private:
 
     QLineEdit* search_field_ = nullptr;
     QAction* search_action_ = nullptr;
+    SearchDialog* search_dialog_ = nullptr;
     Tab* active_tab_ = nullptr;
     QList<QPointer<QAction>> tab_toolbar_actions_;
     QList<QPair<QMenu*, QList<QPointer<QAction>>>> tab_menu_actions_;

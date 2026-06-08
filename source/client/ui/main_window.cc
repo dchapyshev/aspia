@@ -21,6 +21,7 @@
 #include <QDesktopServices>
 #include <QLineEdit>
 #include <QScreen>
+#include <QShortcut>
 #include <QSignalBlocker>
 #include <QStyle>
 #include <QTabBar>
@@ -39,6 +40,7 @@
 #include "client/ui/client_tab.h"
 #include "client/ui/client_window.h"
 #include "client/ui/hosts_tab.h"
+#include "client/ui/hosts/search_dialog.h"
 #include "client/ui/settings_tab.h"
 #include "client/ui/tab_bar.h"
 #include "client/ui/tab_widget.h"
@@ -116,6 +118,8 @@ MainWindow::MainWindow(QWidget* parent)
         // Clear any active query when hiding the field so we don't get stuck in search mode.
         if (!enable)
             search_field_->clear();
+        else if (search_dialog_)
+            search_dialog_->close();
         search_action_->setVisible(enable);
     });
 
@@ -125,6 +129,9 @@ MainWindow::MainWindow(QWidget* parent)
 
     // Search field.
     connect(search_field_, &QLineEdit::textChanged, this, &MainWindow::onSearchTextChanged);
+
+    QShortcut* find_shortcut = new QShortcut(QKeySequence::Find, this);
+    connect(find_shortcut, &QShortcut::activated, this, &MainWindow::onFindAction);
 
 #if defined(Q_OS_WINDOWS)
     Database& db = Database::instance();
@@ -357,6 +364,25 @@ void MainWindow::onSearchTextChanged(const QString& text)
         int index = ui->tabs->indexOf(hosts_tab);
         if (index != -1)
             ui->tabs->setCurrentIndex(index);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void MainWindow::onFindAction()
+{
+    if (!hostsTab())
+        return;
+
+    if (ui->action_search_field->isChecked())
+    {
+        // Toolbar search field is visible - just move the input focus to it.
+        search_field_->setFocus();
+        search_field_->selectAll();
+    }
+    else
+    {
+        // Toolbar search field is hidden - offer a dedicated search dialog instead.
+        showSearchDialog();
     }
 }
 
@@ -653,7 +679,11 @@ void MainWindow::addTab(Tab* tab, const QString& title, const QIcon& icon)
     connect(tab, &Tab::sig_clearSearch, this, [this, tab]()
     {
         if (active_tab_ == tab)
+        {
             search_field_->clear();
+            if (search_dialog_)
+                search_dialog_->setSearchText(QString());
+        }
     });
     connect(tab, &Tab::sig_actionsChanged, this, [this, tab]()
     {
@@ -707,6 +737,31 @@ HostsTab* MainWindow::hostsTab() const
     }
 
     return nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+void MainWindow::showSearchDialog()
+{
+    if (!search_dialog_)
+    {
+        search_dialog_ = new SearchDialog(this);
+        connect(search_dialog_, &SearchDialog::sig_searchTextChanged,
+                this, &MainWindow::onSearchTextChanged);
+        connect(search_dialog_, &QDialog::finished, this, [this](int /* result */)
+        {
+            // The toolbar field is hidden, so closing the dialog is the only way back to the
+            // normal view: reset the active query when it is dismissed.
+            onSearchTextChanged(QString());
+        });
+    }
+
+    HostsTab* hosts_tab = hostsTab();
+    if (hosts_tab)
+        search_dialog_->setSearchText(hosts_tab->searchText());
+
+    search_dialog_->show();
+    search_dialog_->raise();
+    search_dialog_->activateWindow();
 }
 
 //--------------------------------------------------------------------------------------------------

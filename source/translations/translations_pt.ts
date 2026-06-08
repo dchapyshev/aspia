@@ -2160,13 +2160,13 @@ Routers added: %4</source>
     <name>HostTreeItem</name>
     <message>
         <location filename="../client/ui/hosts/router_group_widget.cc" line="94"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="222"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="223"/>
         <source>Online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client/ui/hosts/router_group_widget.cc" line="94"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="222"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="223"/>
         <source>Offline</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2518,97 +2518,97 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="406"/>
+        <location filename="../client/ui/hosts_tab.cc" line="427"/>
         <source>Hosts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="827"/>
+        <location filename="../client/ui/hosts_tab.cc" line="856"/>
         <source>(copy)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="574"/>
-        <location filename="../client/ui/hosts_tab.cc" line="603"/>
-        <location filename="../client/ui/hosts_tab.cc" line="656"/>
-        <location filename="../client/ui/hosts_tab.cc" line="792"/>
-        <location filename="../client/ui/hosts_tab.cc" line="823"/>
-        <location filename="../client/ui/hosts_tab.cc" line="866"/>
+        <location filename="../client/ui/hosts_tab.cc" line="595"/>
+        <location filename="../client/ui/hosts_tab.cc" line="624"/>
+        <location filename="../client/ui/hosts_tab.cc" line="675"/>
+        <location filename="../client/ui/hosts_tab.cc" line="821"/>
+        <location filename="../client/ui/hosts_tab.cc" line="852"/>
+        <location filename="../client/ui/hosts_tab.cc" line="895"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="831"/>
+        <location filename="../client/ui/hosts_tab.cc" line="860"/>
         <source>Failed to add the host to the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="870"/>
+        <location filename="../client/ui/hosts_tab.cc" line="899"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="880"/>
+        <location filename="../client/ui/hosts_tab.cc" line="909"/>
         <source>Unable to remove host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="925"/>
-        <location filename="../client/ui/hosts_tab.cc" line="950"/>
-        <location filename="../client/ui/hosts_tab.cc" line="975"/>
+        <location filename="../client/ui/hosts_tab.cc" line="955"/>
+        <location filename="../client/ui/hosts_tab.cc" line="980"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1005"/>
         <source>Copy Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="926"/>
-        <location filename="../client/ui/hosts_tab.cc" line="951"/>
-        <location filename="../client/ui/hosts_tab.cc" line="976"/>
+        <location filename="../client/ui/hosts_tab.cc" line="956"/>
+        <location filename="../client/ui/hosts_tab.cc" line="981"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1006"/>
         <source>Copy Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1188"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1218"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1238"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1268"/>
         <source>Import Old Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1240"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1270"/>
         <source>Address Book (*.aab);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1263"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1293"/>
         <source>Export Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1265"/>
-        <location filename="../client/ui/hosts_tab.cc" line="1292"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1295"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1322"/>
         <source>Address Book (*.json);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1290"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1320"/>
         <source>Import Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1728"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1759"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1735"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1766"/>
         <source>The host has an invalid host ID.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1744"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1775"/>
         <source>The host has an incorrect address.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3021,18 +3021,18 @@ Hosts skipped: %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="110"/>
-        <location filename="../client/ui/main_window.ui" line="172"/>
+        <location filename="../client/ui/main_window.ui" line="111"/>
+        <location filename="../client/ui/main_window.ui" line="173"/>
         <source>Tool Bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="137"/>
+        <location filename="../client/ui/main_window.ui" line="138"/>
         <source>F1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="180"/>
+        <location filename="../client/ui/main_window.ui" line="181"/>
         <source>Status Bar</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3042,18 +3042,18 @@ Hosts skipped: %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="164"/>
+        <location filename="../client/ui/main_window.ui" line="165"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="134"/>
+        <location filename="../client/ui/main_window.ui" line="135"/>
         <source>Online Help...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client/ui/main_window.ui" line="14"/>
-        <location filename="../client/ui/main_window.cc" line="278"/>
+        <location filename="../client/ui/main_window.cc" line="297"/>
         <source>Aspia Client</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3068,58 +3068,63 @@ Hosts skipped: %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="93"/>
+        <location filename="../client/ui/main_window.ui" line="94"/>
         <source>Session Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="98"/>
+        <location filename="../client/ui/main_window.ui" line="99"/>
         <source>Actions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="146"/>
+        <location filename="../client/ui/main_window.ui" line="147"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="155"/>
+        <location filename="../client/ui/main_window.ui" line="156"/>
         <source>Settings...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="188"/>
+        <location filename="../client/ui/main_window.ui" line="189"/>
+        <source>Search Field</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/main_window.ui" line="197"/>
         <source>Large icons</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="196"/>
+        <location filename="../client/ui/main_window.ui" line="205"/>
         <source>Open Sessions in Tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="204"/>
+        <location filename="../client/ui/main_window.ui" line="213"/>
         <source>Always on Top</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="76"/>
-        <location filename="../client/ui/main_window.cc" line="242"/>
+        <location filename="../client/ui/main_window.cc" line="78"/>
+        <location filename="../client/ui/main_window.cc" line="261"/>
         <source>Search...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="143"/>
+        <location filename="../client/ui/main_window.cc" line="161"/>
         <source>Hosts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="264"/>
+        <location filename="../client/ui/main_window.cc" line="283"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="357"/>
+        <location filename="../client/ui/main_window.cc" line="395"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3971,7 +3976,7 @@ Hosts skipped: %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_widget.cc" line="2093"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2104"/>
         <source>%n host(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -3979,7 +3984,7 @@ Hosts skipped: %6</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_widget.cc" line="2099"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2110"/>
         <source>%n relay(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -3987,7 +3992,7 @@ Hosts skipped: %6</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_widget.cc" line="2102"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2113"/>
         <source>%n user(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -3995,156 +4000,156 @@ Hosts skipped: %6</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1042"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1056"/>
         <source>You cannot delete a built-in user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1047"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1061"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1068"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1098"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1089"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1119"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1110"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1140"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1138"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1168"/>
         <source>Are you sure you want to disconnect relay &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1159"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1189"/>
         <source>Are you sure you want to disconnect all relays?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1552"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1562"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1554"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1564"/>
         <source>Copy Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1555"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1565"/>
         <source>Copy Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1564"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1574"/>
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1275"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1305"/>
         <source>Connecting to router %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1111"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1141"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1179"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1209"/>
         <source>Are you sure you want to disconnect client &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1200"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1230"/>
         <source>Are you sure you want to disconnect all clients?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1251"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1281"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1278"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1308"/>
         <source>Connection to router %1 established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1281"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1311"/>
         <source>Disconnected from router %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1330"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1360"/>
         <source>Network error: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1337"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1367"/>
         <source>To complete the migration from a previous version, you need to change your password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1401"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1431"/>
         <source>Password updated. Waiting for new encryption keys...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1829"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1839"/>
         <source>Invalid user request.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1387"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1831"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1856"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1879"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1902"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1925"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1994"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1417"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1841"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1866"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1889"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1912"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1935"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2004"/>
         <source>Unknown internal error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1389"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1833"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1996"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1419"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1843"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2006"/>
         <source>Invalid data was passed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1835"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1845"/>
         <source>A user with the specified name already exists.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1391"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1837"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1860"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1883"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1906"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1927"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="2002"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1421"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1847"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1870"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1893"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1916"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1937"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2012"/>
         <source>Unknown error type.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1341"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1371"/>
         <source>Change Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_widget.cc" line="1348"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1378"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -4152,12 +4157,12 @@ Hosts skipped: %6</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1355"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1385"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_widget.cc" line="1356"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1386"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -4165,59 +4170,59 @@ Hosts skipped: %6</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1359"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1389"/>
         <source>Do you want to enter a different password?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1385"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1415"/>
         <source>Invalid password change request.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1854"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1864"/>
         <source>Invalid host request.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1858"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1881"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1904"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1868"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1891"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1914"/>
         <source>Invalid entry id.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1877"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1887"/>
         <source>Invalid relay request.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1900"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1910"/>
         <source>Invalid client request.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1923"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1933"/>
         <source>Relay session not found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1992"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2002"/>
         <source>Invalid workspace request.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1998"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2008"/>
         <source>A workspace with the specified name already exists.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="2000"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2010"/>
         <source>Workspace not found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_widget.cc" line="2090"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2101"/>
         <source>%n workspace(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -4225,7 +4230,7 @@ Hosts skipped: %6</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_widget.cc" line="2096"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2107"/>
         <source>%n client(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -4233,30 +4238,30 @@ Hosts skipped: %6</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="2198"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="2270"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="2329"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2209"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2308"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2367"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="2198"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="2270"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="2329"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2209"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2308"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2367"/>
         <source>JSON files (*.json)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="2209"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="2281"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="2340"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2220"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2319"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2378"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="2258"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="2317"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="2403"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2269"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2355"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="2441"/>
         <source>Unable to write file.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4384,6 +4389,19 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/ui/hosts/router_workspace_dialog.cc" line="314"/>
         <source>Administrators cannot be removed from the workspace access list.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SearchDialog</name>
+    <message>
+        <location filename="../client/ui/hosts/search_dialog.ui" line="14"/>
+        <source>Search</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/search_dialog.ui" line="20"/>
+        <source>Search...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7474,27 +7492,27 @@ Hosts skipped: %6</source>
 <context>
     <name>UserTreeItem</name>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="372"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="373"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="372"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="373"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="404"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="405"/>
         <source>Administrator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="408"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="409"/>
         <source>Client</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="406"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="407"/>
         <source>Manager</source>
         <translation type="unfinished"></translation>
     </message>

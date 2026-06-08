@@ -123,5 +123,6 @@
         <file>disconnect-all.svg</file>
         <file>disconnect-one.svg</file>
         <file>copy.svg</file>
+        <file>search.svg</file>
     </qresource>
 </RCC>
