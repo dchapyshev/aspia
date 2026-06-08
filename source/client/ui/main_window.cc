@@ -401,22 +401,40 @@ void MainWindow::onConnect(const HostConfig& host, proto::peer::SessionType sess
 
     client_window->setWindowIcon(icon);
 
-    ClientTab* client_tab = new ClientTab(client_window);
-    addTab(client_tab, computer_name, icon);
+    // Keep the session window owned by us during connection so that only the status dialog is
+    // shown. The session tab is created later, once the connection has been established.
+    client_window->setParent(this);
 
-    if (detached)
+    auto connected = std::make_shared<bool>(false);
+
+    connect(client_window, &ClientWindow::sig_connected, this,
+        [this, client_window, computer_name, icon, detached, connected]()
     {
-        int index = ui->tabs->indexOf(client_tab);
-        ui->tabs->tabBar()->setTabVisible(index, false);
-        client_tab->detachToWindow();
-    }
+        if (*connected)
+            return;
+        *connected = true;
+
+        ClientTab* client_tab = new ClientTab(client_window);
+        addTab(client_tab, computer_name, icon);
+
+        if (detached)
+        {
+            int index = ui->tabs->indexOf(client_tab);
+            ui->tabs->tabBar()->setTabVisible(index, false);
+            client_tab->detachToWindow();
+        }
+    });
+
+    // The session ended before it was ever connected (authorization cancelled or a connection
+    // error dismissed by the user). No tab was created, so just discard the window.
+    connect(client_window, &ClientWindow::sig_stop, this, [client_window, connected]()
+    {
+        if (!*connected)
+            client_window->deleteLater();
+    });
 
     if (!client_window->connectToHost(host, display_name))
-    {
-        int index = ui->tabs->indexOf(client_tab);
-        if (index != -1)
-            onCloseTab(index);
-    }
+        client_window->deleteLater();
 }
 
 //--------------------------------------------------------------------------------------------------

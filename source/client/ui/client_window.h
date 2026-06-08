@@ -73,6 +73,11 @@ public:
 signals:
     void sig_stop();
 
+    // Emitted when the connection to the host has been successfully established. The container
+    // uses this to create the session tab, so that during connection only the status dialog is
+    // shown and the tab appears only after a successful connect.
+    void sig_connected();
+
     // Emitted on each drag-poll tick while the user is dragging this widget as a top-level
     // window with the left mouse button held. The owner uses global_pos to update visual hints
     // (e.g. previewing the destination in the main tab bar).

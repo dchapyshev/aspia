@@ -252,6 +252,7 @@ void ClientWindow::onStatusChanged(Client::Status status, const QVariant& data)
 
             status_dialog_->setVisible(false);
             reconnect_timeout_timer_->stop();
+            emit sig_connected();
         }
         break;
 
