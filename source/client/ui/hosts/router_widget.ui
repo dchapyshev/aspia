@@ -134,6 +134,11 @@
          </column>
          <column>
           <property name="text">
+           <string>Display Name</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
            <string>Computer Name</string>
           </property>
          </column>
@@ -144,7 +149,22 @@
          </column>
          <column>
           <property name="text">
-           <string>Last Connect</string>
+           <string>User Name</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Comment</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Workspace</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Operating System</string>
           </property>
          </column>
          <column>
@@ -159,12 +179,12 @@
          </column>
          <column>
           <property name="text">
-           <string>Operating System</string>
+           <string>Last Connect</string>
           </property>
          </column>
          <column>
           <property name="text">
-           <string>Workspace</string>
+           <string>Last Modify</string>
           </property>
          </column>
          <column>

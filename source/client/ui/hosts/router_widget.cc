@@ -60,6 +60,23 @@
 
 namespace {
 
+enum HostColumn
+{
+    HOST_COLUMN_HOST_ID = 0,
+    HOST_COLUMN_DISPLAY_NAME,
+    HOST_COLUMN_COMPUTER_NAME,
+    HOST_COLUMN_ADDRESS,
+    HOST_COLUMN_USER_NAME,
+    HOST_COLUMN_COMMENT,
+    HOST_COLUMN_WORKSPACE,
+    HOST_COLUMN_OS,
+    HOST_COLUMN_VERSION,
+    HOST_COLUMN_ARCH,
+    HOST_COLUMN_LAST_CONNECT,
+    HOST_COLUMN_LAST_MODIFY,
+    HOST_COLUMN_STATUS
+};
+
 class RelayTreeItem final : public QTreeWidgetItem
 {
 public:
@@ -176,49 +193,60 @@ public:
     {
         info = updated_host;
 
+        QString name = info.display_name;
+        if (name.isEmpty())
+            name = info.computer_name;
+
         const QString last_connect = info.last_connect > 0
             ? QLocale::system().toString(
                 QDateTime::fromSecsSinceEpoch(info.last_connect), QLocale::ShortFormat)
             : QString();
+        const QString last_modify = info.last_modify > 0
+            ? QLocale::system().toString(
+                QDateTime::fromSecsSinceEpoch(info.last_modify), QLocale::ShortFormat)
+            : QString();
 
-        setIcon(0, QIcon(info.online ? ":/img/computer-online.svg"
-                                     : ":/img/computer-offline.svg"));
-        setText(0, QString::number(info.host_id));
-        setText(1, info.computer_name);
-        setText(2, info.address);
-        setText(3, last_connect);
-        setText(4, info.version);
-        setText(5, info.cpu_arch);
-        setText(6, info.os_name);
-        setText(8, info.online ? tr("Online") : tr("Offline"));
+        setIcon(HOST_COLUMN_HOST_ID, QIcon(info.online ? ":/img/computer-online.svg"
+                                                        : ":/img/computer-offline.svg"));
+        setText(HOST_COLUMN_HOST_ID, QString::number(info.host_id));
+        setText(HOST_COLUMN_DISPLAY_NAME, name);
+        setText(HOST_COLUMN_COMPUTER_NAME, info.computer_name);
+        setText(HOST_COLUMN_ADDRESS, info.address);
+        setText(HOST_COLUMN_USER_NAME, info.user_name);
+        setText(HOST_COLUMN_COMMENT, info.comment);
+        setText(HOST_COLUMN_OS, info.os_name);
+        setText(HOST_COLUMN_VERSION, info.version);
+        setText(HOST_COLUMN_ARCH, info.cpu_arch);
+        setText(HOST_COLUMN_LAST_CONNECT, last_connect);
+        setText(HOST_COLUMN_LAST_MODIFY, last_modify);
+        setText(HOST_COLUMN_STATUS, info.online ? tr("Online") : tr("Offline"));
     }
 
     void setWorkspaceName(const QString& name)
     {
-        setText(7, name);
+        setText(HOST_COLUMN_WORKSPACE, name);
     }
 
     // QTreeWidgetItem implementation.
     bool operator<(const QTreeWidgetItem& other) const final
     {
-        int column = treeWidget()->sortColumn();
-        if (column == 0)
-        {
-            const HostTreeItem* other_item = static_cast<const HostTreeItem*>(&other);
+        const int column = treeWidget()->sortColumn();
+        const HostTreeItem* other_item = static_cast<const HostTreeItem*>(&other);
+
+        if (column == HOST_COLUMN_HOST_ID)
             return info.host_id < other_item->info.host_id;
-        }
-        else if (column == 1)
+        if (column == HOST_COLUMN_LAST_CONNECT)
+            return info.last_connect < other_item->info.last_connect;
+        if (column == HOST_COLUMN_LAST_MODIFY)
+            return info.last_modify < other_item->info.last_modify;
+        if (column == HOST_COLUMN_DISPLAY_NAME)
         {
             QCollator collator;
             collator.setCaseSensitivity(Qt::CaseInsensitive);
             collator.setNumericMode(true);
 
-            return collator.compare(text(1), other.text(1)) <= 0;
-        }
-        else if (column == 3)
-        {
-            const HostTreeItem* other_item = static_cast<const HostTreeItem*>(&other);
-            return info.last_connect < other_item->info.last_connect;
+            return collator.compare(text(HOST_COLUMN_DISPLAY_NAME),
+                                    other.text(HOST_COLUMN_DISPLAY_NAME)) <= 0;
         }
 
         return QTreeWidgetItem::operator<(other);
@@ -451,6 +479,8 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
             this, &RouterWidget::onHostContextMenuRequested);
 
     ui->tree_hosts->header()->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->tree_hosts->header()->setSectionHidden(HOST_COLUMN_USER_NAME, true);
+    ui->tree_hosts->header()->setSectionHidden(HOST_COLUMN_COMMENT, true);
     connect(ui->tree_hosts->header(), &QHeaderView::customContextMenuRequested,
             this, &RouterWidget::onHostsHeaderContextMenu);
 
@@ -2189,9 +2219,13 @@ void RouterWidget::saveHostsToFile()
 
         QJsonObject host_object;
 
+        host_object.insert("display_name", info.display_name);
         host_object.insert("computer_name", info.computer_name);
         host_object.insert("operating_system", info.os_name);
         host_object.insert("ip_address", info.address);
+        host_object.insert("user_name", info.user_name);
+        host_object.insert("comment", info.comment);
+        host_object.insert("workspace", workspaceNameById(info.workspace_id));
         host_object.insert("architecture", info.cpu_arch);
         host_object.insert("version", info.version);
 
@@ -2200,6 +2234,13 @@ void RouterWidget::saveHostsToFile()
             QString time = QLocale::system().toString(QDateTime::fromSecsSinceEpoch(
                 info.last_connect), QLocale::ShortFormat);
             host_object.insert("connect_time", time);
+        }
+
+        if (info.last_modify > 0)
+        {
+            QString time = QLocale::system().toString(QDateTime::fromSecsSinceEpoch(
+                info.last_modify), QLocale::ShortFormat);
+            host_object.insert("modify_time", time);
         }
 
         host_object.insert("host_id", QString::number(info.host_id));
