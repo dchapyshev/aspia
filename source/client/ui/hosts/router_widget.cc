@@ -572,23 +572,26 @@ bool RouterWidget::isSelectedHostOnline() const
 }
 
 //--------------------------------------------------------------------------------------------------
-HostId RouterWidget::selectedHostId() const
+HostConfig RouterWidget::selectedHostConfig() const
 {
-    HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_hosts->currentItem());
-    return item ? item->info.host_id : kInvalidHostId;
-}
+    HostConfig config;
 
-//--------------------------------------------------------------------------------------------------
-QString RouterWidget::selectedHostName() const
-{
     HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_hosts->currentItem());
-    if (!item)
-        return QString();
+    if (!item || item->info.host_id == kInvalidHostId)
+        return config;
 
-    QString name = item->info.display_name;
+    const Router::Host& host = item->info;
+
+    QString name = host.display_name;
     if (name.isEmpty())
-        name = item->info.computer_name;
-    return name;
+        name = host.computer_name;
+
+    config.setRouterId(router_->routerId());
+    config.setAddress(hostIdToString(host.host_id));
+    config.setName(name);
+    config.setUsername(host.user_name);
+    config.setPassword(host.password);
+    return config;
 }
 
 //--------------------------------------------------------------------------------------------------

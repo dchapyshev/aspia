@@ -79,8 +79,7 @@ public:
     bool hasSelectedUser() const;
     bool hasSelectedHost() const;
     bool isSelectedHostOnline() const;
-    HostId selectedHostId() const;
-    QString selectedHostName() const;
+    HostConfig selectedHostConfig() const;
     int hostCount() const;
     bool hasSelectedClient() const;
     int clientCount() const;

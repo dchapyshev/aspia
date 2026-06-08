@@ -636,9 +636,7 @@ void HostsTab::onConnectAction(QAction* action)
             return;
         }
 
-        host.setRouterId(router->routerId());
-        host.setAddress(QString::number(widget->selectedHostId()));
-        host.setName(widget->selectedHostName());
+        host = widget->selectedHostConfig();
 
         if (!validateHostForConnect(host))
             return;
