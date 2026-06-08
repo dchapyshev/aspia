@@ -18,6 +18,8 @@
 
 #include "base/desktop/screen_capturer_mac.h"
 
+#include <QRect>
+
 //--------------------------------------------------------------------------------------------------
 ScreenCapturerMac::ScreenCapturerMac(QObject* parent)
     : ScreenCapturer(ScreenCapturer::Type::MACOSX, parent)
