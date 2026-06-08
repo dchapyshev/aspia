@@ -120,6 +120,7 @@ private:
     QPoint last_cursor_pos_;
     QSize source_size_;
     QSize preferred_size_;
+    QSize preferred_resolution_;
     quint64 frame_count_ = 0;
 
     QTimer* capture_timer_ = nullptr;

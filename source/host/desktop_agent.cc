@@ -310,6 +310,15 @@ void DesktopAgent::onClientConfigured()
         merged_config.set_lock_at_disconnect(merged_config.lock_at_disconnect() || config->lock_at_disconnect());
         merged_config.set_cursor_position(merged_config.cursor_position() || config->cursor_position());
         merged_config.set_cursor_shape(merged_config.cursor_shape() || config->cursor_shape());
+
+        // The first client that requested a preferred resolution wins. It is applied to the
+        // monitors in onCaptureScreen.
+        if (preferred_resolution_.isEmpty() && config->has_preferred_resolution() &&
+            config->preferred_resolution().width() > 0 && config->preferred_resolution().height() > 0)
+        {
+            preferred_resolution_.setWidth(config->preferred_resolution().width());
+            preferred_resolution_.setHeight(config->preferred_resolution().height());
+        }
     }
 
     if (!has_configured)
@@ -606,6 +615,25 @@ void DesktopAgent::onCaptureScreen()
         screen_resizer_ = DesktopResizer::create();
 
         screen_count_ = count;
+
+        ScreenCapturer::ScreenList screen_list;
+        if (!preferred_resolution_.isEmpty() && screen_resizer_ && screen_capturer_->screenList(&screen_list))
+        {
+            for (const auto& screen : std::as_const(screen_list.screens))
+            {
+                if (!screen_resizer_->supportedResolutions(screen.id).contains(preferred_resolution_))
+                {
+                    LOG(INFO) << "Preferred resolution" << preferred_resolution_
+                              << "is not supported for screen" << screen.id << ", keeping current";
+                    continue;
+                }
+
+                LOG(INFO) << "Applying preferred resolution" << preferred_resolution_
+                          << "for screen" << screen.id;
+                screen_resizer_->setResolution(screen.id, preferred_resolution_);
+            }
+        }
+
         selectScreen(defaultScreen(), QSize());
     }
 

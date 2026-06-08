@@ -20,13 +20,18 @@
 
 #include <QButtonGroup>
 #include <QColor>
+#include <QComboBox>
 #include <QEvent>
 #include <QFileDialog>
+#include <QGuiApplication>
 #include <QPalette>
 #include <QPushButton>
+#include <QScreen>
 #include <QSignalBlocker>
 #include <QToolButton>
 #include <QVBoxLayout>
+
+#include <algorithm>
 
 #include "base/crypto/secure_string.h"
 #include "base/gui_application.h"
@@ -42,6 +47,47 @@
 #include "common/ui/update_dialog.h"
 #include "proto/desktop_control.h"
 #include "ui_settings_tab.h"
+
+namespace {
+
+// Most common screen resolutions offered in addition to the client's own monitors.
+const QSize kPredefinedResolutions[] =
+{
+    { 3840, 2160 }, { 2560, 1440 }, { 1920, 1200 }, { 1920, 1080 }, { 1680, 1050 },
+    { 1600, 900 }, { 1440, 900 }, { 1366, 768 }, { 1280, 1024 }, { 1280, 800 },
+    { 1280, 720 }, { 1024, 768 }, { 800, 600 },
+};
+
+//--------------------------------------------------------------------------------------------------
+QList<QSize> availableResolutions()
+{
+    QList<QSize> result;
+
+    auto add = [&](const QSize& size)
+    {
+        if (size.width() > 0 && size.height() > 0 && !result.contains(size))
+            result.append(size);
+    };
+
+    const QList<QScreen*> screens = QGuiApplication::screens();
+    for (QScreen* screen : std::as_const(screens))
+    {
+        qreal dpr = screen->devicePixelRatio();
+        add(QSize(qRound(screen->size().width() * dpr), qRound(screen->size().height() * dpr)));
+    }
+
+    for (const QSize& resolution : kPredefinedResolutions)
+        add(resolution);
+
+    std::sort(result.begin(), result.end(), [](const QSize& a, const QSize& b)
+    {
+        return a.width() * a.height() > b.width() * b.height();
+    });
+
+    return result;
+}
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 SettingsTab::SettingsTab(QWidget* parent)
@@ -142,6 +188,25 @@ SettingsTab::SettingsTab(QWidget* parent)
     ui->checkbox_block_remote_input->setChecked(desktop_config.block_input());
     ui->checkbox_send_key_combinations->setChecked(settings.sendKeyCombinations());
 
+    ui->combo_resolution->addItem(tr("Auto"), QSize());
+    const QList<QSize> resolutions = availableResolutions();
+    for (const QSize& resolution : std::as_const(resolutions))
+        ui->combo_resolution->addItem(QString("%1x%2").arg(resolution.width()).arg(resolution.height()), resolution);
+
+    QSize preferred(desktop_config.preferred_resolution().width(),
+                    desktop_config.preferred_resolution().height());
+    if (!preferred.isEmpty())
+    {
+        int index = ui->combo_resolution->findData(preferred);
+        if (index < 0)
+        {
+            ui->combo_resolution->addItem(
+                QString("%1x%2").arg(preferred.width()).arg(preferred.height()), preferred);
+            index = ui->combo_resolution->count() - 1;
+        }
+        ui->combo_resolution->setCurrentIndex(index);
+    }
+
     ui->checkbox_record_autostart->setChecked(settings.recordSessions());
     ui->edit_record_dir->setText(settings.recordingPath());
 
@@ -190,6 +255,8 @@ SettingsTab::SettingsTab(QWidget* parent)
     connect(ui->checkbox_lock_at_disconnect, &QCheckBox::toggled, this, &SettingsTab::onDesktopFeatureChanged);
     connect(ui->checkbox_block_remote_input, &QCheckBox::toggled, this, &SettingsTab::onDesktopFeatureChanged);
     connect(ui->checkbox_send_key_combinations, &QCheckBox::toggled, this, &SettingsTab::onDesktopFeatureChanged);
+    connect(ui->combo_resolution, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &SettingsTab::onDesktopFeatureChanged);
 
     connect(ui->checkbox_record_autostart, &QCheckBox::toggled, this, &SettingsTab::onRecordAutostartChanged);
     connect(ui->edit_record_dir, &QLineEdit::editingFinished, this, &SettingsTab::onRecordingPathChanged);
@@ -493,6 +560,14 @@ void SettingsTab::saveDesktopConfig()
     desktop_config.set_wallpaper(!ui->checkbox_desktop_wallpaper->isChecked());
     desktop_config.set_lock_at_disconnect(ui->checkbox_lock_at_disconnect->isChecked());
     desktop_config.set_block_input(ui->checkbox_block_remote_input->isChecked());
+
+    QSize preferred = ui->combo_resolution->currentData().toSize();
+    if (preferred.isValid())
+    {
+        proto::control::Size* resolution = desktop_config.mutable_preferred_resolution();
+        resolution->set_width(preferred.width());
+        resolution->set_height(preferred.height());
+    }
 
     Settings settings;
     settings.setDesktopConfig(desktop_config);

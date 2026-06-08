@@ -82,7 +82,7 @@
    <item>
     <widget class="QStackedWidget" name="page_stack">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page_general">
       <layout class="QHBoxLayout" name="layout_general_outer">
@@ -353,6 +353,42 @@
                 <string>Send key combinations</string>
                </property>
               </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupbox_screen">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="title">
+             <string>Screen</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_screen">
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_resolution">
+               <item>
+                <widget class="QLabel" name="label_resolution">
+                 <property name="text">
+                  <string>Preferred resolution:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="combo_resolution">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </item>
             </layout>
            </widget>
