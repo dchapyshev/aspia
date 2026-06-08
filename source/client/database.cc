@@ -364,8 +364,7 @@ QList<HostConfig> Database::searchHosts(const QString& query_text) const
     {
         HostConfig host = readHost(query);
         if (host.name().contains(query_text, Qt::CaseInsensitive) ||
-            host.address().contains(query_text, Qt::CaseInsensitive) ||
-            host.comment().contains(query_text, Qt::CaseInsensitive))
+            host.address().contains(query_text, Qt::CaseInsensitive))
         {
             hosts.append(host);
         }
