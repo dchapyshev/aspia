@@ -45,6 +45,7 @@ const QString kWindowStateParam = "window_state";
 const QString kLargeIconsParam = "large_icons";
 const QString kToolbarParam = "toolbar";
 const QString kStatusbarParam = "statusbar";
+const QString kSearchFieldParam = "search_field";
 const QString kOnlineCheckParam = "online_check";
 const QString kAlwaysOnTopParam = "always_on_top";
 const QString kOpenSessionsInTabsParam = "open_sessions_in_tabs";
@@ -231,6 +232,18 @@ bool Settings::isStatusBarEnabled() const
 void Settings::setStatusBarEnabled(bool enable)
 {
     settings_.setValue(kStatusbarParam, enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Settings::isSearchFieldEnabled() const
+{
+    return settings_.value(kSearchFieldParam, true).toBool();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setSearchFieldEnabled(bool enable)
+{
+    settings_.setValue(kSearchFieldParam, enable);
 }
 
 //--------------------------------------------------------------------------------------------------

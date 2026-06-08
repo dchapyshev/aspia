@@ -71,6 +71,9 @@ public:
     bool isStatusBarEnabled() const;
     void setStatusBarEnabled(bool enable);
 
+    bool isSearchFieldEnabled() const;
+    void setSearchFieldEnabled(bool enable);
+
     bool isOnlineCheckEnabled() const;
     void setOnlineCheckEnabled(bool enable);
 

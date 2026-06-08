@@ -84,6 +84,7 @@
     <addaction name="action_always_on_top"/>
     <addaction name="action_toolbar"/>
     <addaction name="action_statusbar"/>
+    <addaction name="action_search_field"/>
     <addaction name="action_large_icons"/>
     <addaction name="separator"/>
     <addaction name="action_sessions_in_tabs"/>
@@ -178,6 +179,14 @@
    </property>
    <property name="text">
     <string>Status Bar</string>
+   </property>
+  </action>
+  <action name="action_search_field">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Search Field</string>
    </property>
   </action>
   <action name="action_large_icons">

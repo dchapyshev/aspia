@@ -78,6 +78,10 @@ MainWindow::MainWindow(QWidget* parent)
     search_field_->setMaximumWidth(250);
     search_action_ = ui->toolbar->addWidget(search_field_);
 
+    bool search_field_enabled = settings.isSearchFieldEnabled();
+    ui->action_search_field->setChecked(search_field_enabled);
+    search_action_->setVisible(search_field_enabled);
+
     restoreGeometry(settings.windowGeometry());
     restoreState(settings.windowState());
 
@@ -106,6 +110,13 @@ MainWindow::MainWindow(QWidget* parent)
     connect(ui->action_large_icons, &QAction::toggled, this, [this](bool enable)
     {
         ui->toolbar->setIconSize(enable ? QSize(32, 32) : QSize(24, 24));
+    });
+    connect(ui->action_search_field, &QAction::toggled, this, [this](bool enable)
+    {
+        // Clear any active query when hiding the field so we don't get stuck in search mode.
+        if (!enable)
+            search_field_->clear();
+        search_action_->setVisible(enable);
     });
 
     // Tab management.
@@ -170,6 +181,7 @@ void MainWindow::closeEvent(QCloseEvent* /* event */)
     settings.setWindowState(saveState());
     settings.setToolBarEnabled(ui->action_toolbar->isChecked());
     settings.setStatusBarEnabled(ui->action_statusbar->isChecked());
+    settings.setSearchFieldEnabled(ui->action_search_field->isChecked());
     settings.setLargeIcons(ui->action_large_icons->isChecked());
     settings.setOpenSessionsInTabs(ui->action_sessions_in_tabs->isChecked());
     settings.setAlwaysOnTop(ui->action_always_on_top->isChecked());
