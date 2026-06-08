@@ -657,52 +657,52 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="273"/>
+        <location filename="../client/ui/client_window.cc" line="274"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="289"/>
+        <location filename="../client/ui/client_window.cc" line="290"/>
         <source>Timeout waiting for reconnection to host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="297"/>
+        <location filename="../client/ui/client_window.cc" line="298"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="303"/>
+        <location filename="../client/ui/client_window.cc" line="304"/>
         <source>Attempting to connect in compatibility mode...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="365"/>
+        <location filename="../client/ui/client_window.cc" line="366"/>
         <source>Requesting connection to the host...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="373"/>
+        <location filename="../client/ui/client_window.cc" line="374"/>
         <source>Connection offer received.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="394"/>
+        <location filename="../client/ui/client_window.cc" line="395"/>
         <source>The host with the specified ID is not online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="397"/>
+        <location filename="../client/ui/client_window.cc" line="398"/>
         <source>Access is denied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="400"/>
+        <location filename="../client/ui/client_window.cc" line="401"/>
         <source>There are no relays available or the key pool is empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="403"/>
+        <location filename="../client/ui/client_window.cc" line="404"/>
         <source>Unknown error</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2518,97 +2518,97 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="412"/>
+        <location filename="../client/ui/hosts_tab.cc" line="406"/>
         <source>Hosts</source>
         <translation type="unfinished">Hosts</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="833"/>
+        <location filename="../client/ui/hosts_tab.cc" line="827"/>
         <source>(copy)</source>
         <translation type="unfinished">(kopieer)</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="580"/>
-        <location filename="../client/ui/hosts_tab.cc" line="609"/>
-        <location filename="../client/ui/hosts_tab.cc" line="662"/>
-        <location filename="../client/ui/hosts_tab.cc" line="798"/>
-        <location filename="../client/ui/hosts_tab.cc" line="829"/>
-        <location filename="../client/ui/hosts_tab.cc" line="872"/>
+        <location filename="../client/ui/hosts_tab.cc" line="574"/>
+        <location filename="../client/ui/hosts_tab.cc" line="603"/>
+        <location filename="../client/ui/hosts_tab.cc" line="656"/>
+        <location filename="../client/ui/hosts_tab.cc" line="792"/>
+        <location filename="../client/ui/hosts_tab.cc" line="823"/>
+        <location filename="../client/ui/hosts_tab.cc" line="866"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="837"/>
+        <location filename="../client/ui/hosts_tab.cc" line="831"/>
         <source>Failed to add the host to the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="876"/>
+        <location filename="../client/ui/hosts_tab.cc" line="870"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="886"/>
+        <location filename="../client/ui/hosts_tab.cc" line="880"/>
         <source>Unable to remove host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="931"/>
-        <location filename="../client/ui/hosts_tab.cc" line="956"/>
-        <location filename="../client/ui/hosts_tab.cc" line="981"/>
+        <location filename="../client/ui/hosts_tab.cc" line="925"/>
+        <location filename="../client/ui/hosts_tab.cc" line="950"/>
+        <location filename="../client/ui/hosts_tab.cc" line="975"/>
         <source>Copy Row</source>
         <translation type="unfinished">Kopieer Rij</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="932"/>
-        <location filename="../client/ui/hosts_tab.cc" line="957"/>
-        <location filename="../client/ui/hosts_tab.cc" line="982"/>
+        <location filename="../client/ui/hosts_tab.cc" line="926"/>
+        <location filename="../client/ui/hosts_tab.cc" line="951"/>
+        <location filename="../client/ui/hosts_tab.cc" line="976"/>
         <source>Copy Value</source>
         <translation type="unfinished">Kopieer Waarde</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1194"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1188"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1244"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1238"/>
         <source>Import Old Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1246"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1240"/>
         <source>Address Book (*.aab);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1269"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1263"/>
         <source>Export Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1271"/>
-        <location filename="../client/ui/hosts_tab.cc" line="1298"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1265"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1292"/>
         <source>Address Book (*.json);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1296"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1290"/>
         <source>Import Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1734"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1728"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1741"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1735"/>
         <source>The host has an invalid host ID.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1750"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1744"/>
         <source>The host has an incorrect address.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3048,7 +3048,7 @@ Hosts skipped: %6</source>
     </message>
     <message>
         <location filename="../client/ui/main_window.ui" line="14"/>
-        <location filename="../client/ui/main_window.cc" line="279"/>
+        <location filename="../client/ui/main_window.cc" line="278"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Aspia Client</translation>
     </message>
@@ -3104,22 +3104,22 @@ Hosts skipped: %6</source>
     </message>
     <message>
         <location filename="../client/ui/main_window.cc" line="76"/>
-        <location filename="../client/ui/main_window.cc" line="243"/>
+        <location filename="../client/ui/main_window.cc" line="242"/>
         <source>Search...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="144"/>
+        <location filename="../client/ui/main_window.cc" line="143"/>
         <source>Hosts</source>
         <translation type="unfinished">Hosts</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="265"/>
+        <location filename="../client/ui/main_window.cc" line="264"/>
         <source>Settings</source>
         <translation type="unfinished">Instellingen</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="346"/>
+        <location filename="../client/ui/main_window.cc" line="357"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3512,7 +3512,7 @@ Hosts skipped: %6</source>
         <translation type="unfinished">Status</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_group_widget.cc" line="467"/>
+        <location filename="../client/ui/hosts/router_group_widget.cc" line="472"/>
         <source>%n host(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -4719,85 +4719,100 @@ Hosts skipped: %6</source>
     </message>
     <message>
         <location filename="../client/ui/settings_tab.ui" line="369"/>
+        <source>Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="377"/>
+        <source>Preferred resolution:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="405"/>
         <source>Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="375"/>
+        <location filename="../client/ui/settings_tab.ui" line="411"/>
         <source>Automatically start recording sessions on connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="384"/>
+        <location filename="../client/ui/settings_tab.ui" line="420"/>
         <source>Write path:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="472"/>
-        <location filename="../client/ui/settings_tab.cc" line="83"/>
-        <location filename="../client/ui/settings_tab.cc" line="260"/>
+        <location filename="../client/ui/settings_tab.ui" line="508"/>
+        <location filename="../client/ui/settings_tab.cc" line="129"/>
+        <location filename="../client/ui/settings_tab.cc" line="327"/>
         <source>Update</source>
         <translation type="unfinished">Update</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="478"/>
+        <location filename="../client/ui/settings_tab.ui" line="514"/>
         <source>Check for updates on startup</source>
         <translation type="unfinished">Controleer op update bij opstarten</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="485"/>
+        <location filename="../client/ui/settings_tab.ui" line="521"/>
         <source>Use custom update server</source>
         <translation type="unfinished">Aangepaste update server gebruiken</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="494"/>
+        <location filename="../client/ui/settings_tab.ui" line="530"/>
         <source>Server:</source>
         <translation type="unfinished">Server:</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="521"/>
+        <location filename="../client/ui/settings_tab.ui" line="557"/>
         <source>Check for updates</source>
         <translation type="unfinished">Controleer op updates</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.cc" line="80"/>
-        <location filename="../client/ui/settings_tab.cc" line="255"/>
+        <location filename="../client/ui/settings_tab.cc" line="126"/>
+        <location filename="../client/ui/settings_tab.cc" line="322"/>
         <source>General</source>
         <translation type="unfinished">Basis</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.cc" line="81"/>
-        <location filename="../client/ui/settings_tab.cc" line="257"/>
+        <location filename="../client/ui/settings_tab.cc" line="127"/>
+        <location filename="../client/ui/settings_tab.cc" line="324"/>
         <source>Desktop</source>
         <translation type="unfinished">Bureablad</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.cc" line="270"/>
+        <location filename="../client/ui/settings_tab.cc" line="191"/>
+        <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.cc" line="337"/>
         <source>Settings</source>
         <translation type="unfinished">Instellingen</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.cc" line="366"/>
+        <location filename="../client/ui/settings_tab.cc" line="433"/>
         <source>Choose path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.cc" line="386"/>
+        <location filename="../client/ui/settings_tab.cc" line="453"/>
         <source>Change Master Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.cc" line="388"/>
+        <location filename="../client/ui/settings_tab.cc" line="455"/>
         <source>Enter your current password and choose a new one.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.cc" line="396"/>
+        <location filename="../client/ui/settings_tab.cc" line="463"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation type="unfinished">Het ingevoerde wachtwoord komt niet overeen met de beveiligings eisen!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/settings_tab.cc" line="397"/>
+        <location filename="../client/ui/settings_tab.cc" line="464"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform>Het wachtwoord moet kleine, hoofdletters en nummers bevatten, en mag niet korter zijn dan %n karakter.</numerusform>
@@ -4805,12 +4820,12 @@ Hosts skipped: %6</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.cc" line="400"/>
+        <location filename="../client/ui/settings_tab.cc" line="467"/>
         <source>Do you want to enter a different password?</source>
         <translation type="unfinished">Wilt U een ander wachtwoord invoeren?</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.cc" line="409"/>
+        <location filename="../client/ui/settings_tab.cc" line="476"/>
         <source>Invalid current password or unable to change it.</source>
         <translation type="unfinished"></translation>
     </message>

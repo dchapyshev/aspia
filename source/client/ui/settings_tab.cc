@@ -188,7 +188,7 @@ SettingsTab::SettingsTab(QWidget* parent)
     ui->checkbox_block_remote_input->setChecked(desktop_config.block_input());
     ui->checkbox_send_key_combinations->setChecked(settings.sendKeyCombinations());
 
-    ui->combo_resolution->addItem(tr("Auto"), QSize());
+    ui->combo_resolution->addItem(tr("None"), QSize());
     const QList<QSize> resolutions = availableResolutions();
     for (const QSize& resolution : std::as_const(resolutions))
         ui->combo_resolution->addItem(QString("%1x%2").arg(resolution.width()).arg(resolution.height()), resolution);
