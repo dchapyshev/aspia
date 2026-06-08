@@ -21,6 +21,8 @@
 
 #include <QPointer>
 
+#include <optional>
+
 #include "client/client_desktop.h"
 #include "client/ui/client_window.h"
 
@@ -88,6 +90,8 @@ protected:
 
 private slots:
     void onMouseEvent(const proto::input::MouseEvent& event);
+    void onMouseFlushTimer();
+    void onKeyEvent(const proto::input::KeyEvent& event);
     void onAutosizeWindow();
     void onTakeScreenshot();
     void onScaleDesktop();
@@ -97,6 +101,8 @@ private slots:
     void onShowHidePanel();
 
 private:
+    void sendMouseEvent(const proto::input::MouseEvent& event);
+
     proto::control::Config desktop_config_;
 
     QHBoxLayout* layout_ = nullptr;
@@ -111,6 +117,16 @@ private:
     QSize screen_size_;
     QTimer* scroll_timer_ = nullptr;
     QPoint scroll_delta_;
+
+    QTimer* mouse_timer_ = nullptr;
+    std::optional<proto::input::MouseEvent> pending_mouse_event_;
+    qint32 last_pos_x_ = 0;
+    qint32 last_pos_y_ = 0;
+    quint32 last_mask_ = 0;
+    int send_mouse_count_ = 0;
+    int drop_mouse_count_ = 0;
+    int send_key_count_ = 0;
+    int send_text_count_ = 0;
 
     bool is_minimized_from_full_screen_ = false;
 

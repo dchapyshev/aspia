@@ -44,13 +44,6 @@
 
 namespace {
 
-const quint32 kWheelMask =
-    proto::input::MouseEvent::WHEEL_DOWN | proto::input::MouseEvent::WHEEL_UP;
-
-// Mouse move events are coalesced and flushed at this fixed rate to cap the outgoing event stream
-// from high-polling-rate mice. Button and wheel events bypass coalescing and are sent immediately.
-const int kMouseFlushIntervalMs = 20; // 50Hz
-
 //--------------------------------------------------------------------------------------------------
 int calculateFps(int last_fps, const std::chrono::milliseconds& duration, qint64 count)
 {
@@ -75,19 +68,12 @@ size_t calculateAvgSize(size_t last_avg_size, size_t bytes)
 ClientDesktop::ClientDesktop(const proto::control::Config& desktop_config, QObject* parent)
     : Client(parent),
       repeated_timer_(new QTimer(this)),
-      mouse_timer_(new QTimer(this)),
       desktop_config_(desktop_config)
 {
     CLOG(INFO) << "Ctor";
 
     repeated_timer_->setInterval(1000);
     connect(repeated_timer_, &QTimer::timeout, this, &ClientDesktop::onRepeatedTimer);
-
-    // Keeps running while the mouse moves (no per-tick restart) and stops itself once there is
-    // nothing left to flush (see onMouseFlushTimer).
-    mouse_timer_->setInterval(kMouseFlushIntervalMs);
-    mouse_timer_->setTimerType(Qt::PreciseTimer);
-    connect(mouse_timer_, &QTimer::timeout, this, &ClientDesktop::onMouseFlushTimer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -394,8 +380,6 @@ void ClientDesktop::onRecordingChanged(bool enable, const QString& file_path)
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onKeyEvent(const proto::input::KeyEvent& event)
 {
-    ++send_key_count_;
-
     if (isLegacy())
     {
         proto::legacy::ClientToSession message;
@@ -414,8 +398,6 @@ void ClientDesktop::onKeyEvent(const proto::input::KeyEvent& event)
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onTextEvent(const proto::input::TextEvent& event)
 {
-    ++send_text_count_;
-
     if (isLegacy())
     {
         proto::legacy::ClientToSession message;
@@ -434,26 +416,19 @@ void ClientDesktop::onTextEvent(const proto::input::TextEvent& event)
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onMouseEvent(const proto::input::MouseEvent& event)
 {
-    // Button and wheel changes must reach the host immediately and in order, so they bypass
-    // coalescing. Such an event already carries the latest position, so any queued move is redundant.
-    if ((event.mask() & ~kWheelMask) != last_mask_ || (event.mask() & kWheelMask) != 0)
+    if (isLegacy())
     {
-        pending_mouse_event_.reset();
-        sendMouseEvent(event);
-        return;
+        proto::legacy::ClientToSession message;
+        message.mutable_mouse_event()->CopyFrom(event);
+        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, serialize(message));
     }
-
-    // Pure movement: coalesce to the most recent position and flush it on the timer. Every distinct
-    // position is kept so the final resting position always reaches the host. Dropping small moves
-    // here would let the remote cursor stick (e.g. a one-pixel move off a window resize border would
-    // never be delivered). A queued move superseded before the flush is counted as dropped.
-    if (pending_mouse_event_)
-        ++drop_mouse_count_;
-
-    pending_mouse_event_ = event;
-
-    if (!mouse_timer_->isActive())
-        mouse_timer_->start();
+    else
+    {
+        proto::input::ClientToHost& message = outgoing_message_.newMessage<proto::input::ClientToHost>();
+        message.mutable_mouse()->CopyFrom(event);
+        sendMessage(proto::desktop::CHANNEL_ID_INPUT,
+                    outgoing_message_.serialize<proto::input::ClientToHost>());
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -546,10 +521,6 @@ void ClientDesktop::onMetricsRequest()
     metrics.video_capturer_type = video_capturer_type_;
     metrics.video_encoder_type = video_encoding_;
     metrics.fps = fps_;
-    metrics.send_mouse = send_mouse_count_;
-    metrics.drop_mouse = drop_mouse_count_;
-    metrics.send_key   = send_key_count_;
-    metrics.send_text  = send_text_count_;
     metrics.read_clipboard = read_clipboard_count_;
     metrics.send_clipboard = send_clipboard_count_;
     metrics.cursor_shape_count = cursor_shape_count_;
@@ -618,29 +589,6 @@ void ClientDesktop::onRepeatedTimer()
             force_reliable_active_ = false;
         }
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientDesktop::onMouseFlushTimer()
-{
-    if (!pending_mouse_event_)
-    {
-        // Nothing moved since the last tick. Stop the repeating timer so it does not wake the system
-        // while idle. The next mouse move restarts it.
-        mouse_timer_->stop();
-        return;
-    }
-
-    const proto::input::MouseEvent& event = *pending_mouse_event_;
-
-    // Skip an exact duplicate of the last sent position (scaling can map several local pixels onto
-    // the same remote pixel), but never drop a real movement - even a single-pixel one.
-    if (event.x() != last_pos_x_ || event.y() != last_pos_y_)
-        sendMouseEvent(event);
-    else
-        ++drop_mouse_count_;
-
-    pending_mouse_event_.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1032,30 +980,6 @@ void ClientDesktop::readExtension(const proto::legacy::Extension& extension)
     else
     {
         CLOG(ERROR) << "Unknown extension:" << extension.name();
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientDesktop::sendMouseEvent(const proto::input::MouseEvent& event)
-{
-    last_pos_x_ = event.x();
-    last_pos_y_ = event.y();
-    last_mask_ = event.mask() & ~kWheelMask;
-
-    ++send_mouse_count_;
-
-    if (isLegacy())
-    {
-        proto::legacy::ClientToSession message;
-        message.mutable_mouse_event()->CopyFrom(event);
-        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, serialize(message));
-    }
-    else
-    {
-        proto::input::ClientToHost& message = outgoing_message_.newMessage<proto::input::ClientToHost>();
-        message.mutable_mouse()->CopyFrom(event);
-        sendMessage(proto::desktop::CHANNEL_ID_INPUT,
-                    outgoing_message_.serialize<proto::input::ClientToHost>());
     }
 }
 

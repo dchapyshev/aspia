@@ -142,24 +142,8 @@ void StatisticsDialog::setMetrics(const ClientDesktop::Metrics& metrics)
             case 11:
                 item->setText(1, QString::number(metrics.fps));
                 break;
-            case 12:
-            {
-                int total_mouse = metrics.send_mouse + metrics.drop_mouse;
-                int percentage = 0;
-
-                if (total_mouse != 0)
-                    percentage = (metrics.drop_mouse * 100) / total_mouse;
-
-                item->setText(1, QString::number(metrics.send_mouse) + " / " +
-                    QString("%1 (%2 %)").arg(metrics.drop_mouse).arg(percentage));
-            }
-            break;
-            case 13:
-                item->setText(1, QString::number(metrics.send_key));
-                break;
-            case 14:
-                item->setText(1, QString::number(metrics.send_text));
-                break;
+            // Rows 12-14 (mouse/key/text) are owned by DesktopWindow and updated via their own
+            // setters (setMouseMetrics/setKeyMetrics/setTextMetrics).
             case 15:
                 item->setText(1, QString::number(metrics.read_clipboard) + " / " +
                     QString::number(metrics.send_clipboard));
@@ -176,5 +160,42 @@ void StatisticsDialog::setMetrics(const ClientDesktop::Metrics& metrics)
                 break;
         }
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void StatisticsDialog::setMouseMetrics(int send_mouse, int drop_mouse)
+{
+    QTreeWidgetItem* item = ui->tree->topLevelItem(12);
+    if (!item)
+        return;
+
+    int total_mouse = send_mouse + drop_mouse;
+    int percentage = 0;
+
+    if (total_mouse != 0)
+        percentage = (drop_mouse * 100) / total_mouse;
+
+    item->setText(1, QString::number(send_mouse) + " / " +
+        QString("%1 (%2 %)").arg(drop_mouse).arg(percentage));
+}
+
+//--------------------------------------------------------------------------------------------------
+void StatisticsDialog::setKeyMetrics(int send_key)
+{
+    QTreeWidgetItem* item = ui->tree->topLevelItem(13);
+    if (!item)
+        return;
+
+    item->setText(1, QString::number(send_key));
+}
+
+//--------------------------------------------------------------------------------------------------
+void StatisticsDialog::setTextMetrics(int send_text)
+{
+    QTreeWidgetItem* item = ui->tree->topLevelItem(14);
+    if (!item)
+        return;
+
+    item->setText(1, QString::number(send_text));
 }
 

@@ -22,8 +22,6 @@
 #include <QList>
 #include <QRect>
 
-#include <optional>
-
 #include "base/serialization.h"
 #include "client/client.h"
 #include "common/clipboard_file_transfer.h"
@@ -108,10 +106,6 @@ public:
         quint32 video_capturer_type = 0;
         quint32 video_encoder_type = 0;
         int fps = 0;
-        int send_mouse = 0;
-        int drop_mouse = 0;
-        int send_key = 0;
-        int send_text = 0;
         int read_clipboard = 0;
         int send_clipboard = 0;
         int cursor_shape_count = 0;
@@ -154,7 +148,6 @@ protected:
 private slots:
     void onClipboardEvent(const proto::clipboard::Event& event);
     void onRepeatedTimer();
-    void onMouseFlushTimer();
 
 private:
     void readLegacyCapabilities(const proto::legacy::Capabilities& capabilities);
@@ -165,7 +158,6 @@ private:
     void readCursorPosition(const proto::cursor::Position& position);
     void readClipboardEvent(const proto::clipboard::Event& event);
     void readExtension(const proto::legacy::Extension& extension);
-    void sendMouseEvent(const proto::input::MouseEvent& event);
     void sendSessionListRequest();
     void sendConfig(const proto::control::Config& config);
     void sendKeyFrameRequest();
@@ -173,7 +165,6 @@ private:
     void setForceReliable(bool enable);
 
     QTimer* repeated_timer_ = nullptr;
-    QTimer* mouse_timer_ = nullptr;
 
     bool started_ = false;
     bool key_frame_received_ = false;
@@ -198,12 +189,6 @@ private:
     ClipboardMonitor* clipboard_monitor_ = nullptr;
     ClipboardFileTransfer* clipboard_file_transfer_ = nullptr;
 
-    qint32 last_pos_x_ = 0;
-    qint32 last_pos_y_ = 0;
-    quint32 last_mask_ = 0;
-
-    std::optional<proto::input::MouseEvent> pending_mouse_event_;
-
     ScopedQPointer<QTimer> webm_video_encode_timer_;
     std::unique_ptr<WebmVideoEncoder> webm_video_encoder_;
     std::unique_ptr<WebmFileWriter> webm_file_writer_;
@@ -213,10 +198,6 @@ private:
 
     qint64 video_packet_count_ = 0;
     qint64 audio_packet_count_ = 0;
-    int send_mouse_count_ = 0;
-    int drop_mouse_count_ = 0;
-    int send_key_count_ = 0;
-    int send_text_count_ = 0;
     int read_clipboard_count_ = 0;
     int send_clipboard_count_ = 0;
     quint32 video_capturer_type_ = 0;

@@ -39,6 +39,9 @@ public:
     ~StatisticsDialog() final;
 
     void setMetrics(const ClientDesktop::Metrics& metrics);
+    void setMouseMetrics(int send_mouse, int drop_mouse);
+    void setKeyMetrics(int send_key);
+    void setTextMetrics(int send_text);
 
 signals:
     void sig_metricsRequired();

@@ -53,6 +53,13 @@
 
 namespace {
 
+const quint32 kWheelMask =
+    proto::input::MouseEvent::WHEEL_DOWN | proto::input::MouseEvent::WHEEL_UP;
+
+// Mouse move events are coalesced and flushed at this fixed rate to cap the outgoing event stream
+// from high-polling-rate mice. Button and wheel events bypass coalescing and are sent immediately.
+const int kMouseFlushIntervalMs = 20; // 50Hz
+
 //--------------------------------------------------------------------------------------------------
 QSize scaledSize(const QSize& source_size, int scale)
 {
@@ -96,6 +103,13 @@ DesktopWindow::DesktopWindow(const proto::control::Config& desktop_config, QWidg
 
     scroll_timer_ = new QTimer(this);
     connect(scroll_timer_, &QTimer::timeout, this, &DesktopWindow::onScrollTimer);
+
+    // Keeps running while the mouse moves (no per-tick restart) and stops itself once there is
+    // nothing left to flush (see onMouseFlushTimer).
+    mouse_timer_ = new QTimer(this);
+    mouse_timer_->setInterval(kMouseFlushIntervalMs);
+    mouse_timer_->setTimerType(Qt::PreciseTimer);
+    connect(mouse_timer_, &QTimer::timeout, this, &DesktopWindow::onMouseFlushTimer);
 
     Settings settings;
     desktop_->enableKeyCombinations(settings.sendKeyCombinations());
@@ -174,7 +188,7 @@ DesktopWindow::DesktopWindow(const proto::control::Config& desktop_config, QWidg
     });
 
     connect(desktop_, &DesktopWidget::sig_mouseEvent, this, &DesktopWindow::onMouseEvent);
-    connect(desktop_, &DesktopWidget::sig_keyEvent, this, &DesktopWindow::sig_keyEvent);
+    connect(desktop_, &DesktopWidget::sig_keyEvent, this, &DesktopWindow::onKeyEvent);
 
     desktop_->setFocus();
 }
@@ -363,6 +377,9 @@ void DesktopWindow::onMetricsChanged(const ClientDesktop::Metrics& metrics)
     }
 
     statistics_dialog_->setMetrics(metrics);
+    statistics_dialog_->setMouseMetrics(send_mouse_count_, drop_mouse_count_);
+    statistics_dialog_->setKeyMetrics(send_key_count_);
+    statistics_dialog_->setTextMetrics(send_text_count_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -450,6 +467,17 @@ void DesktopWindow::onInternalReset()
     if (scroll_timer_)
         scroll_timer_->stop();
     scroll_delta_ = QPoint();
+
+    if (mouse_timer_)
+        mouse_timer_->stop();
+    pending_mouse_event_.reset();
+    last_pos_x_ = 0;
+    last_pos_y_ = 0;
+    last_mask_ = 0;
+    send_mouse_count_ = 0;
+    drop_mouse_count_ = 0;
+    send_key_count_ = 0;
+    send_text_count_ = 0;
 
     wheel_angle_ = QPoint();
 
@@ -712,7 +740,27 @@ void DesktopWindow::onMouseEvent(const proto::input::MouseEvent& event)
         out_event.set_x(static_cast<int>(static_cast<double>(pos.x() * 100) / scale));
         out_event.set_y(static_cast<int>(static_cast<double>(pos.y() * 100) / scale));
 
-        emit sig_mouseEvent(out_event);
+        // Button and wheel changes must reach the host immediately and in order, so they bypass
+        // coalescing. Such an event already carries the latest position, so any queued move is
+        // redundant.
+        if ((out_event.mask() & ~kWheelMask) != last_mask_ || (out_event.mask() & kWheelMask) != 0)
+        {
+            pending_mouse_event_.reset();
+            sendMouseEvent(out_event);
+        }
+        else
+        {
+            // Pure movement: coalesce to the most recent position and flush it on the timer. Every
+            // distinct position is kept so the final resting position always reaches the host.
+            // A queued move superseded before the flush is counted as dropped.
+            if (pending_mouse_event_)
+                ++drop_mouse_count_;
+
+            pending_mouse_event_ = out_event;
+
+            if (!mouse_timer_->isActive())
+                mouse_timer_->start();
+        }
     }
 
     // In MacOS event Leave does not always come to the widget when the mouse leaves its area.
@@ -721,6 +769,36 @@ void DesktopWindow::onMouseEvent(const proto::input::MouseEvent& event)
         if (!toolbar_->rect().contains(pos))
             QApplication::postEvent(toolbar_, new QEvent(QEvent::Leave));
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onMouseFlushTimer()
+{
+    if (!pending_mouse_event_)
+    {
+        // Nothing moved since the last tick. Stop the repeating timer so it does not wake the system
+        // while idle. The next mouse move restarts it.
+        mouse_timer_->stop();
+        return;
+    }
+
+    const proto::input::MouseEvent& event = *pending_mouse_event_;
+
+    // Skip an exact duplicate of the last sent position (scaling can map several local pixels onto
+    // the same remote pixel), but never drop a real movement - even a single-pixel one.
+    if (event.x() != last_pos_x_ || event.y() != last_pos_y_)
+        sendMouseEvent(event);
+    else
+        ++drop_mouse_count_;
+
+    pending_mouse_event_.reset();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onKeyEvent(const proto::input::KeyEvent& event)
+{
+    ++send_key_count_;
+    emit sig_keyEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -900,6 +978,8 @@ void DesktopWindow::onPasteKeystrokes()
 
         proto::input::TextEvent event;
         event.set_text(text.toStdString());
+
+        ++send_text_count_;
         emit sig_textEvent(event);
     }
     else
@@ -922,4 +1002,16 @@ void DesktopWindow::onShowHidePanel()
     animation->setEndValue(QRect(QPoint(end_x, 0), end_panel_size));
     animation->setDuration(150);
     animation->start(QPropertyAnimation::DeleteWhenStopped);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::sendMouseEvent(const proto::input::MouseEvent& event)
+{
+    last_pos_x_ = event.x();
+    last_pos_y_ = event.y();
+    last_mask_ = event.mask() & ~kWheelMask;
+
+    ++send_mouse_count_;
+
+    emit sig_mouseEvent(event);
 }
