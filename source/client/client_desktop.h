@@ -22,6 +22,8 @@
 #include <QList>
 #include <QRect>
 
+#include <optional>
+
 #include "base/serialization.h"
 #include "client/client.h"
 #include "common/clipboard_file_transfer.h"
@@ -152,6 +154,7 @@ protected:
 private slots:
     void onClipboardEvent(const proto::clipboard::Event& event);
     void onRepeatedTimer();
+    void onMouseFlushTimer();
 
 private:
     void readLegacyCapabilities(const proto::legacy::Capabilities& capabilities);
@@ -162,6 +165,7 @@ private:
     void readCursorPosition(const proto::cursor::Position& position);
     void readClipboardEvent(const proto::clipboard::Event& event);
     void readExtension(const proto::legacy::Extension& extension);
+    void sendMouseEvent(const proto::input::MouseEvent& event);
     void sendSessionListRequest();
     void sendConfig(const proto::control::Config& config);
     void sendKeyFrameRequest();
@@ -169,6 +173,7 @@ private:
     void setForceReliable(bool enable);
 
     QTimer* repeated_timer_ = nullptr;
+    QTimer* mouse_timer_ = nullptr;
 
     bool started_ = false;
     bool key_frame_received_ = false;
@@ -196,6 +201,8 @@ private:
     qint32 last_pos_x_ = 0;
     qint32 last_pos_y_ = 0;
     quint32 last_mask_ = 0;
+
+    std::optional<proto::input::MouseEvent> pending_mouse_event_;
 
     ScopedQPointer<QTimer> webm_video_encode_timer_;
     std::unique_ptr<WebmVideoEncoder> webm_video_encoder_;

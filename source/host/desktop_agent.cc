@@ -648,7 +648,7 @@ void DesktopAgent::onCaptureScreen()
     else
     {
         if (input_injector_)
-            input_injector_->setScreenInfo(screen_capturer_->fullScreenSize(), frame->topLeft());
+            input_injector_->setScreenInfo(screen_capturer_->desktopRect().size(), frame->topLeft());
 
         encodeScreen(frame);
     }
