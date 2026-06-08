@@ -46,7 +46,8 @@ public:
     const Frame* captureFrame(Error* error) final;
     const MouseCursor* captureCursor() final;
     QPoint cursorPosition() final;
-    QSize fullScreenSize() const final;
+    const QRect& desktopRect() const final;
+    const QRect& currentScreenRect() const final;
 
 protected:
     // ScreenCapturer implementation.
@@ -90,6 +91,7 @@ private:
     XRRMonitorInfo* monitors_ = nullptr;
     int num_monitors_ = 0;
     QRect selected_monitor_rect_;
+    QRect full_screen_rect_;
 
     // selected_monitor_name_ will be changed to kFullDesktopScreenId
     // by a call to SelectSource() at the end of Init() because

@@ -158,8 +158,7 @@ void DxgiAdapterDuplicator::unregister(const Context* const context)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DxgiAdapterDuplicator::duplicate(
-    Context* context, SharedPointer<Frame>& target, DxgiCursor* cursor)
+bool DxgiAdapterDuplicator::duplicate(Context* context, SharedPointer<Frame>& target)
 {
     DCHECK_EQ(context->contexts.size(), duplicators_.size());
 
@@ -167,8 +166,7 @@ bool DxgiAdapterDuplicator::duplicate(
     {
         if (!duplicators_[i].duplicate(&context->contexts[i],
                                        duplicators_[i].desktopRect().topLeft(),
-                                       target,
-                                       cursor))
+                                       target))
         {
             return false;
         }
@@ -178,19 +176,18 @@ bool DxgiAdapterDuplicator::duplicate(
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DxgiAdapterDuplicator::duplicateMonitor(
-    Context* context, int monitor_id, SharedPointer<Frame>& target, DxgiCursor* cursor)
+bool DxgiAdapterDuplicator::duplicateMonitor(Context* context, int monitor_id, SharedPointer<Frame>& target)
 {
     DCHECK_GE(monitor_id, 0);
     DCHECK_LT(monitor_id, static_cast<int>(duplicators_.size()));
     DCHECK_EQ(context->contexts.size(), duplicators_.size());
 
     return duplicators_[static_cast<size_t>(monitor_id)].duplicate(
-        &context->contexts[static_cast<size_t>(monitor_id)], QPoint(), target, cursor);
+        &context->contexts[static_cast<size_t>(monitor_id)], QPoint(), target);
 }
 
 //--------------------------------------------------------------------------------------------------
-QRect DxgiAdapterDuplicator::screenRect(int id) const
+const QRect& DxgiAdapterDuplicator::screenRect(int id) const
 {
     DCHECK_GE(id, 0);
     DCHECK_LT(id, static_cast<int>(duplicators_.size()));

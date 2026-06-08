@@ -270,10 +270,15 @@ QPoint ScreenCapturerX11::cursorPosition()
 }
 
 //--------------------------------------------------------------------------------------------------
-QSize ScreenCapturerX11::fullScreenSize() const
+const QRect& ScreenCapturerX11::desktopRect() const
 {
-    // The root window spans the entire X screen (all monitors).
-    return x_server_pixel_buffer_.windowSize();
+    return full_screen_rect_;
+}
+
+//--------------------------------------------------------------------------------------------------
+const QRect& ScreenCapturerX11::currentScreenRect() const
+{
+    return selected_monitor_rect_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -340,6 +345,9 @@ bool ScreenCapturerX11::init()
         LOG(ERROR) << "Failed to initialize pixel buffer";
         return false;
     }
+
+    // The root window spans the entire X screen (all monitors).
+    full_screen_rect_ = QRect(QPoint(0, 0), x_server_pixel_buffer_.windowSize());
 
     initXDamage();
     initXrandr();
@@ -516,8 +524,11 @@ void ScreenCapturerX11::screenConfigurationChanged()
         LOG(ERROR) << "Failed to initialize pixel buffer after screen configuration change";
     }
 
+    // The root window spans the entire X screen (all monitors).
+    full_screen_rect_ = QRect(QPoint(0, 0), x_server_pixel_buffer_.windowSize());
+
     if (!use_randr_)
-        selected_monitor_rect_ = QRect(QPoint(0, 0), x_server_pixel_buffer_.windowSize());
+        selected_monitor_rect_ = full_screen_rect_;
 }
 
 //--------------------------------------------------------------------------------------------------

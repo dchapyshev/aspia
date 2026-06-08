@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/desktop/frame.h"
-#include "base/desktop/mouse_cursor.h"
 #include "base/desktop/win/screen_capture_utils.h"
 
 namespace {
@@ -112,8 +111,7 @@ int indexFromScreenId(ScreenCapturer::ScreenId id, const QStringList& device_nam
 //--------------------------------------------------------------------------------------------------
 ScreenCapturerDxgi::ScreenCapturerDxgi(QObject* parent)
     : ScreenCapturerWin(Type::WIN_DXGI, parent),
-      controller_(new DxgiDuplicatorController()),
-      cursor_(std::make_unique<DxgiCursor>())
+      controller_(new DxgiDuplicatorController())
 {
     LOG(INFO) << "Ctor";
 }
@@ -155,16 +153,7 @@ bool ScreenCapturerDxgi::screenList(ScreenList* screens)
         return false;
     }
 
-    bool result = screenListFromDeviceNames(device_names, screens);
-
-    dpi_for_rect_.clear();
-
-    for (const auto& screen : std::as_const(screens->screens))
-    {
-        dpi_for_rect_.emplace_back(QRect(screen.position, screen.resolution), screen.dpi);
-    }
-
-    return result;
+    return screenListFromDeviceNames(device_names, screens);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -199,12 +188,6 @@ bool ScreenCapturerDxgi::selectScreen(ScreenId screen_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-ScreenCapturer::ScreenId ScreenCapturerDxgi::currentScreen() const
-{
-    return current_screen_id_;
-}
-
-//--------------------------------------------------------------------------------------------------
 const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
 {
     DCHECK(error);
@@ -216,11 +199,11 @@ const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
 
     if (current_screen_index_ == -1)
     {
-        result = controller_->duplicate(frame_.get(), cursor_.get());
+        result = controller_->duplicate(frame_.get());
     }
     else
     {
-        result = controller_->duplicateMonitor(frame_.get(), cursor_.get(), current_screen_index_);
+        result = controller_->duplicateMonitor(frame_.get(), current_screen_index_);
     }
 
     using DuplicateResult = DxgiDuplicatorController::Result;
@@ -286,42 +269,23 @@ const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
 }
 
 //--------------------------------------------------------------------------------------------------
-const MouseCursor* ScreenCapturerDxgi::captureCursor()
+const QRect& ScreenCapturerDxgi::desktopRect() const
 {
-    MouseCursor* mouse_cursor = cursor_->mouseCursor();
-    if (mouse_cursor)
-    {
-        QPoint position = cursor_->nativePosition();
-
-        for (const auto& item : std::as_const(dpi_for_rect_))
-        {
-            const QRect& rect = item.first;
-
-            if (rect.contains(position))
-            {
-                const QPoint& dpi = item.second;
-                mouse_cursor->dpi() = dpi;
-            }
-        }
-    }
-
-    return mouse_cursor;
+    return controller_->desktopRect();
 }
 
 //--------------------------------------------------------------------------------------------------
-QPoint ScreenCapturerDxgi::cursorPosition()
+const QRect& ScreenCapturerDxgi::currentScreenRect() const
 {
-    return cursor_->position();
-}
+    if (current_screen_index_ == -1)
+        return controller_->desktopRect();
 
-//--------------------------------------------------------------------------------------------------
-QSize ScreenCapturerDxgi::fullScreenSize() const
-{
-    return controller_->desktopSize();
+    return controller_->screenRect(current_screen_index_);
 }
 
 //--------------------------------------------------------------------------------------------------
 void ScreenCapturerDxgi::reset()
 {
+    ScreenCapturerWin::reset();
     frame_.reset();
 }

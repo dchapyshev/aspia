@@ -20,6 +20,7 @@
 #define BASE_DESKTOP_SCREEN_CAPTURER_WIN_H
 
 #include "base/desktop/screen_capturer.h"
+#include "base/win/scoped_hdc.h"
 #include "base/win/scoped_thread_desktop.h"
 
 class ScreenCapturerWin : public ScreenCapturer
@@ -34,12 +35,27 @@ public:
     static MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor);
 
     void switchToInputDesktop() final;
+    ScreenId currentScreen() const final;
+    const MouseCursor* captureCursor() final;
+    QPoint cursorPosition() final;
+
+protected:
+    // ScreenCapturer implementation.
+    void reset() override;
+
+    ScreenId current_screen_id_ = kFullDesktopScreenId;
 
 private:
     void checkScreenType(const wchar_t* desktop_name);
 
     ScopedThreadDesktop desktop_;
+    ScopedGetDC desktop_dc_;
+
     ScreenType last_screen_type_ = ScreenType::UNKNOWN;
+
+    std::unique_ptr<MouseCursor> mouse_cursor_;
+    CURSORINFO curr_cursor_info_;
+    CURSORINFO prev_cursor_info_;
 };
 
 #endif // BASE_DESKTOP_SCREEN_CAPTURER_WIN_H

@@ -379,8 +379,6 @@ if (WIN32)
         desktop/win/dxgi_adapter_duplicator.h
         desktop/win/dxgi_context.cc
         desktop/win/dxgi_context.h
-        desktop/win/dxgi_cursor.cc
-        desktop/win/dxgi_cursor.h
         desktop/win/dxgi_duplicator_controller.cc
         desktop/win/dxgi_duplicator_controller.h
         desktop/win/dxgi_frame.cc

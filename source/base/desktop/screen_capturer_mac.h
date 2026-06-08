@@ -35,7 +35,8 @@ public:
     const Frame* captureFrame(Error* error) final;
     const MouseCursor* captureCursor() final;
     QPoint cursorPosition() final;
-    QSize fullScreenSize() const final;
+    const QRect& desktopRect() const final;
+    const QRect& currentScreenRect() const final;
 
 protected:
     // ScreenCapturer implementation.

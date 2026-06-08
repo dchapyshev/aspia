@@ -89,11 +89,11 @@ public:
     // TODO(zijiehe): Windows cannot guarantee the frames returned by each IDXGIOutputDuplication
     // are synchronized. But we are using a totally different threading model than the way Windows
     // suggested, it's hard to synchronize them manually. We should find a way to do it.
-    Result duplicate(DxgiFrame* frame, DxgiCursor* cursor);
+    Result duplicate(DxgiFrame* frame);
 
     // Captures one monitor and writes into target. |monitor_id| should >= 0. If |monitor_id| is
     // greater than the total screen count of all the Duplicators, this function returns false.
-    Result duplicateMonitor(DxgiFrame* frame, DxgiCursor* cursor, int monitor_id);
+    Result duplicateMonitor(DxgiFrame* frame, int monitor_id);
 
     // Returns the count of screens on the system. These screens can be retrieved by an integer in
     // the range of [0, screenCount()). If system does not support DXGI based capturer, this
@@ -105,8 +105,13 @@ public:
     // this function returns false.
     bool deviceNames(QStringList* output);
 
-    // Returns a Size to cover the entire virtual desktop.
-    QSize desktopSize() const;
+    // Returns a QRect to cover the entire virtual desktop.
+    const QRect& desktopRect() const;
+
+    // Returns the rect of one screen. |monitor_id| should be >= 0. If the system does not support DXGI
+    // based capturer, or |monitor_id| is greater than the total screen count of all the Duplicators, this
+    // function returns an empty rect.
+    const QRect& screenRect(int monitor_id) const;
 
 private:
     // DxgiFrameContext calls private unregister(Context*) function in reset().
@@ -115,7 +120,7 @@ private:
     // Does the real duplication work. Setting |monitor_id| < 0 to capture entire screen. This
     // function calls initialize(). And if the duplication failed, this function calls
     // deinitialize() to ensure the Dxgi components can be reinitialized next time.
-    Result doDuplicate(DxgiFrame* frame, DxgiCursor* cursor, int monitor_id);
+    Result doDuplicate(DxgiFrame* frame, int monitor_id);
 
     // Unregisters Context from this instance and all DxgiAdapterDuplicator(s) it owns.
     void unregister(const Context* const context);
@@ -141,18 +146,13 @@ private:
     void setup(Context* context);
 
     // Captures all monitors.
-    bool doDuplicateAll(Context* context, SharedPointer<Frame>& target, DxgiCursor* cursor);
+    bool doDuplicateAll(Context* context, SharedPointer<Frame>& target);
 
     // Captures one monitor.
-    bool doDuplicateOne(Context* context, int monitor_id, SharedPointer<Frame>& target, DxgiCursor* cursor);
+    bool doDuplicateOne(Context* context, int monitor_id, SharedPointer<Frame>& target);
 
     // The minimum numFramesCaptured() returned by |duplicators_|.
     qint64 numFramesCaptured() const;
-
-    // Returns the size of one screen. |id| should be >= 0. If system does not support DXGI based
-    // capturer, or |id| is greater than the total screen count of all the Duplicators, this
-    // function returns an empty Rect.
-    QRect screenRect(int id) const;
 
     int doScreenCount() const;
 
@@ -165,7 +165,7 @@ private:
     // the requirement.
     // According to http://crbug.com/682112, dxgi capturer returns a black frame during first
     // several capture attempts.
-    bool ensureFrameCaptured(Context* context, SharedPointer<Frame>& target, DxgiCursor* cursor);
+    bool ensureFrameCaptured(Context* context, SharedPointer<Frame>& target);
 
     // Moves |desktop_rect_| and all underlying |duplicators_|, putting top left corner of the
     // desktop at (0, 0). This is necessary because DXGI_OUTPUT_DESC may return negative

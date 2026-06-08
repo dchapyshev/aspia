@@ -45,11 +45,9 @@ public:
     int screenCount() final;
     bool screenList(ScreenList* screens) final;
     bool selectScreen(ScreenId screen_id) final;
-    ScreenId currentScreen() const final;
     const Frame* captureFrame(Error* error) final;
-    const MouseCursor* captureCursor() final;
-    QPoint cursorPosition() final;
-    QSize fullScreenSize() const final;
+    const QRect& desktopRect() const final;
+    const QRect& currentScreenRect() const final;
 
 protected:
     // ScreenCapturer implementation.
@@ -59,10 +57,7 @@ private:
     std::shared_ptr<DxgiDuplicatorController> controller_;
 
     int current_screen_index_ = -1;
-    ScreenId current_screen_id_ = kFullDesktopScreenId;
     std::unique_ptr<DxgiFrame> frame_;
-    std::unique_ptr<DxgiCursor> cursor_;
-    QVector<std::pair<QRect, QPoint>> dpi_for_rect_;
     int temporary_error_count_ = 0;
 
     Q_DISABLE_COPY_MOVE(ScreenCapturerDxgi)

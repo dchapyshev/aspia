@@ -20,7 +20,6 @@
 #define BASE_DESKTOP_SCREEN_CAPTURER_GDI_H
 
 #include "base/desktop/screen_capturer_win.h"
-#include "base/win/scoped_hdc.h"
 
 class Differ;
 
@@ -36,11 +35,9 @@ public:
     int screenCount() final;
     bool screenList(ScreenList* screens) final;
     bool selectScreen(ScreenId screen_id) final;
-    ScreenId currentScreen() const final;
     const Frame* captureFrame(Error* error) final;
-    const MouseCursor* captureCursor() final;
-    QPoint cursorPosition() final;
-    QSize fullScreenSize() const final;
+    const QRect& desktopRect() const final;
+    const QRect& currentScreenRect() const final;
 
 protected:
     // ScreenCapturer implementation.
@@ -58,7 +55,6 @@ private:
 
     bool composition_changed_ = false;
 
-    ScreenId current_screen_id_ = kFullDesktopScreenId;
     std::wstring current_device_key_;
 
     QRect desktop_dc_rect_;
@@ -69,10 +65,6 @@ private:
     ScopedCreateDC memory_dc_;
 
     FrameQueue<Frame> queue_;
-
-    std::unique_ptr<MouseCursor> mouse_cursor_;
-    CURSORINFO curr_cursor_info_;
-    CURSORINFO prev_cursor_info_;
 
     Q_DISABLE_COPY_MOVE(ScreenCapturerGdi)
 };

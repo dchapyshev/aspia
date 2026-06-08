@@ -74,9 +74,17 @@ QPoint ScreenCapturerMac::cursorPosition()
 }
 
 //--------------------------------------------------------------------------------------------------
-QSize ScreenCapturerMac::fullScreenSize() const
+const QRect& ScreenCapturerMac::desktopRect() const
 {
-    return QSize();
+    static const QRect kRect;
+    return kRect;
+}
+
+//--------------------------------------------------------------------------------------------------
+const QRect& ScreenCapturerMac::currentScreenRect() const
+{
+    static const QRect kRect;
+    return kRect;
 }
 
 //--------------------------------------------------------------------------------------------------

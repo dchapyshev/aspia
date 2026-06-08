@@ -109,18 +109,16 @@ bool DxgiDuplicatorController::retrieveD3dInfo(D3dInfo* info)
 }
 
 //--------------------------------------------------------------------------------------------------
-DxgiDuplicatorController::Result DxgiDuplicatorController::duplicate(
-    DxgiFrame* frame, DxgiCursor* cursor)
+DxgiDuplicatorController::Result DxgiDuplicatorController::duplicate(DxgiFrame* frame)
 {
-    return doDuplicate(frame, cursor, -1);
+    return doDuplicate(frame, -1);
 }
 
 //--------------------------------------------------------------------------------------------------
-DxgiDuplicatorController::Result DxgiDuplicatorController::duplicateMonitor(
-    DxgiFrame* frame, DxgiCursor* cursor, int monitor_id)
+DxgiDuplicatorController::Result DxgiDuplicatorController::duplicateMonitor(DxgiFrame* frame, int monitor_id)
 {
     DCHECK_GE(monitor_id, 0);
-    return doDuplicate(frame, cursor, monitor_id);
+    return doDuplicate(frame, monitor_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -152,14 +150,30 @@ bool DxgiDuplicatorController::deviceNames(QStringList* output)
 }
 
 //--------------------------------------------------------------------------------------------------
-QSize DxgiDuplicatorController::desktopSize() const
+const QRect& DxgiDuplicatorController::desktopRect() const
 {
-    return desktop_rect_.size();
+    return desktop_rect_;
 }
 
 //--------------------------------------------------------------------------------------------------
-DxgiDuplicatorController::Result DxgiDuplicatorController::doDuplicate(
-    DxgiFrame* frame, DxgiCursor* cursor, int monitor_id)
+const QRect& DxgiDuplicatorController::screenRect(int monitor_id) const
+{
+    DCHECK_GE(monitor_id, 0);
+
+    for (size_t i = 0; i < duplicators_.size(); ++i)
+    {
+        if (monitor_id >= duplicators_[i].screenCount())
+            monitor_id -= duplicators_[i].screenCount();
+        else
+            return duplicators_[i].screenRect(monitor_id);
+    }
+
+    static const QRect kEmptyRect;
+    return kEmptyRect;
+}
+
+//--------------------------------------------------------------------------------------------------
+DxgiDuplicatorController::Result DxgiDuplicatorController::doDuplicate(DxgiFrame* frame, int monitor_id)
 {
     DCHECK(frame);
 
@@ -207,18 +221,18 @@ DxgiDuplicatorController::Result DxgiDuplicatorController::doDuplicate(
 
     setup(frame->context());
 
-    if (ensureFrameCaptured(frame->context(), shared_frame, cursor))
+    if (ensureFrameCaptured(frame->context(), shared_frame))
     {
         bool result;
 
         if (monitor_id < 0)
         {
             // Capture entire screen.
-            result = doDuplicateAll(frame->context(), shared_frame, cursor);
+            result = doDuplicateAll(frame->context(), shared_frame);
         }
         else
         {
-            result = doDuplicateOne(frame->context(), monitor_id, shared_frame, cursor);
+            result = doDuplicateOne(frame->context(), monitor_id, shared_frame);
         }
 
         if (result)
@@ -368,12 +382,11 @@ void DxgiDuplicatorController::setup(Context* context)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DxgiDuplicatorController::doDuplicateAll(
-    Context* context, SharedPointer<Frame>& target, DxgiCursor* cursor)
+bool DxgiDuplicatorController::doDuplicateAll(Context* context, SharedPointer<Frame>& target)
 {
     for (size_t i = 0; i < duplicators_.size(); ++i)
     {
-        if (!duplicators_[i].duplicate(&context->contexts[i], target, cursor))
+        if (!duplicators_[i].duplicate(&context->contexts[i], target))
             return false;
     }
 
@@ -381,8 +394,7 @@ bool DxgiDuplicatorController::doDuplicateAll(
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DxgiDuplicatorController::doDuplicateOne(
-    Context* context, int monitor_id, SharedPointer<Frame>& target, DxgiCursor* cursor)
+bool DxgiDuplicatorController::doDuplicateOne(Context* context, int monitor_id, SharedPointer<Frame>& target)
 {
     DCHECK(monitor_id >= 0);
 
@@ -394,7 +406,7 @@ bool DxgiDuplicatorController::doDuplicateOne(
         }
         else
         {
-            if (duplicators_[i].duplicateMonitor(&context->contexts[i], monitor_id, target, cursor))
+            if (duplicators_[i].duplicateMonitor(&context->contexts[i], monitor_id, target))
             {
                 target->setTopLeft(duplicators_[i].screenRect(monitor_id).topLeft());
                 return true;
@@ -418,22 +430,6 @@ qint64 DxgiDuplicatorController::numFramesCaptured() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QRect DxgiDuplicatorController::screenRect(int id) const
-{
-    DCHECK_GE(id, 0);
-
-    for (size_t i = 0; i < duplicators_.size(); ++i)
-    {
-        if (id >= duplicators_[i].screenCount())
-            id -= duplicators_[i].screenCount();
-        else
-            return duplicators_[i].screenRect(id);
-    }
-
-    return QRect();
-}
-
-//--------------------------------------------------------------------------------------------------
 int DxgiDuplicatorController::doScreenCount() const
 {
     int result = 0;
@@ -448,14 +444,13 @@ int DxgiDuplicatorController::doScreenCount() const
 QSize DxgiDuplicatorController::selectedDesktopSize(int monitor_id) const
 {
     if (monitor_id < 0)
-        return desktopSize();
+        return desktopRect().size();
 
     return screenRect(monitor_id).size();
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DxgiDuplicatorController::ensureFrameCaptured(
-    Context* context, SharedPointer<Frame>& target, DxgiCursor* cursor)
+bool DxgiDuplicatorController::ensureFrameCaptured(Context* context, SharedPointer<Frame>& target)
 {
     using Clock = std::chrono::steady_clock;
     using TimePoint = std::chrono::time_point<Clock>;
@@ -481,15 +476,15 @@ bool DxgiDuplicatorController::ensureFrameCaptured(
 
     SharedPointer<Frame> frame;
 
-    if (target->size().width() >= desktopSize().width() &&
-        target->size().height() >= desktopSize().height())
+    if (target->size().width() >= desktopRect().width() &&
+        target->size().height() >= desktopRect().height())
     {
         // |target| is large enough to cover entire screen, we do not need to use |fallback_frame|.
         frame = target;
     }
     else
     {
-        frame.reset(FrameAligned::create(desktopSize(), 32).release());
+        frame.reset(FrameAligned::create(desktopRect().size(), 32).release());
     }
 
     const TimePoint start_ms = Clock::now();
@@ -506,7 +501,7 @@ bool DxgiDuplicatorController::ensureFrameCaptured(
 
         last_frame_start_ms = Clock::now();
 
-        if (!doDuplicateAll(context, frame, cursor))
+        if (!doDuplicateAll(context, frame))
             return false;
 
         if (Clock::now() - start_ms > timeout_ms)

@@ -96,8 +96,11 @@ public:
     virtual const MouseCursor* captureCursor() = 0;
     virtual QPoint cursorPosition() = 0;
 
-    // Size of the entire virtual desktop (covering all monitors).
-    virtual QSize fullScreenSize() const = 0;
+    // Rect of the entire virtual desktop (covering all monitors).
+    virtual const QRect& desktopRect() const = 0;
+
+    // Rect of the screen currently being captured.
+    virtual const QRect& currentScreenRect() const = 0;
 
     Type type() const;
 

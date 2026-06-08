@@ -211,13 +211,11 @@ bool DxgiOutputDuplicator::releaseFrame()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DxgiOutputDuplicator::duplicate(
-    Context* context, const QPoint& offset, SharedPointer<Frame>& target, DxgiCursor* cursor)
+bool DxgiOutputDuplicator::duplicate(Context* context, const QPoint& offset, SharedPointer<Frame>& target)
 {
     DCHECK(duplication_);
     DCHECK(texture_);
     DCHECK(target);
-    DCHECK(cursor);
 
     if (!QRect(QPoint(0, 0), target->size()).contains(translatedDesktopRect(offset)))
     {
@@ -237,45 +235,6 @@ bool DxgiOutputDuplicator::duplicate(
     {
         LOG(ERROR) << "Failed to capture frame:" << error;
         return false;
-    }
-
-    if (frame_info.PointerShapeBufferSize != 0)
-    {
-        DXGI_OUTDUPL_POINTER_SHAPE_INFO* shape_info = cursor->pointerShapeInfo();
-        QByteArray* buffer = cursor->pointerShapeBuffer();
-
-        if (buffer->capacity() < static_cast<qsizetype>(frame_info.PointerShapeBufferSize))
-            buffer->reserve(static_cast<qsizetype>(frame_info.PointerShapeBufferSize));
-
-        buffer->resize(static_cast<qsizetype>(frame_info.PointerShapeBufferSize));
-
-        UINT buffer_required;
-        _com_error hr = duplication_->GetFramePointerShape(frame_info.PointerShapeBufferSize,
-                                                           buffer->data(),
-                                                           &buffer_required,
-                                                           shape_info);
-        if (FAILED(hr.Error()))
-        {
-            LOG(ERROR) << "Failed to capture cursor:" << error;
-            buffer->clear();
-        }
-    }
-
-    if (frame_info.LastMouseUpdateTime.QuadPart != 0)
-    {
-        cursor->setVisible(frame_info.PointerPosition.Visible != FALSE);
-
-        if (frame_info.PointerPosition.Visible)
-        {
-            DXGI_OUTDUPL_POINTER_SHAPE_INFO* shape_info = cursor->pointerShapeInfo();
-
-            int pos_x = frame_info.PointerPosition.Position.x + shape_info->HotSpot.x + offset.x();
-            int pos_y = frame_info.PointerPosition.Position.y + shape_info->HotSpot.y + offset.y();
-
-            cursor->setNativePosition(
-                QPoint(pos_x + initial_desktop_rect_.x(), pos_y + initial_desktop_rect_.y()));
-            cursor->setPosition(QPoint(pos_x, pos_y));
-        }
     }
 
     // We need to merge updated region with the one from context, but only spread updated region

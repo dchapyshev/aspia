@@ -53,17 +53,17 @@ public:
 
     // Sequentially calls Duplicate function of all the DxgiOutputDuplicator instances owned by
     // this instance, and writes into |target|.
-    bool duplicate(Context* context, SharedPointer<Frame>& target, DxgiCursor* cursor);
+    bool duplicate(Context* context, SharedPointer<Frame>& target);
 
     // Captures one monitor and writes into |target|. |monitor_id| should be between [0, screenCount()).
-    bool duplicateMonitor(Context* context, int monitor_id, SharedPointer<Frame>& target, DxgiCursor* cursor);
+    bool duplicateMonitor(Context* context, int monitor_id, SharedPointer<Frame>& target);
 
     // Returns desktop rect covered by this DxgiAdapterDuplicator.
     const QRect& desktopRect() const { return desktop_rect_; }
 
     // Returns the size of one screen owned by this DxgiAdapterDuplicator. |id| should be between
     // [0, screenCount()).
-    QRect screenRect(int id) const;
+    const QRect& screenRect(int id) const;
 
     // Returns the device name of one screen owned by this DxgiAdapterDuplicator. |id| should be
     // between [0, screenCount()).
