@@ -1777,7 +1777,11 @@ std::string_view Database::setWorkspaceHosts(qint64 entry_id, const std::set<Hos
         return proto::router::kErrorInternalError;
     }
 
-    SqlQuery release(db_, "UPDATE hosts SET workspace_id=0, group_id=0 WHERE id=?");
+    // The encrypted fields are sealed with the workspace group key, so a host outside any
+    // workspace cannot keep them. Clear them together with the workspace assignment.
+    SqlQuery release(db_,
+        "UPDATE hosts SET workspace_id=0, group_id=0, comment=X'', user_name=X'', password=X'' "
+        "WHERE id=?");
     while (select_current.next())
     {
         const HostId host_id = select_current.columnUInt64(0);

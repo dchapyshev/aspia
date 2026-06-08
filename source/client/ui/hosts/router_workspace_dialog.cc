@@ -147,6 +147,7 @@ void RouterWorkspaceDialog::onHostListReceived(const Router::HostList& list)
 {
     ui->list_hosts_available->clear();
     ui->list_hosts_in_workspace->clear();
+    initial_host_ids_.clear();
 
     for (const Router::Host& host : std::as_const(list.hosts))
     {
@@ -154,11 +155,20 @@ void RouterWorkspaceDialog::onHostListReceived(const Router::HostList& list)
         // (available to add) and the ones already in the workspace we are editing.
         QListWidget* target = nullptr;
         if (host.workspace_id == 0)
+        {
             target = ui->list_hosts_available;
+        }
         else if (entry_id_ > 0 && host.workspace_id == entry_id_)
+        {
+            // Remember hosts that are already in the workspace: only these carry encrypted
+            // fields that get wiped when removed, so only these need the warning.
             target = ui->list_hosts_in_workspace;
+            initial_host_ids_.insert(host.host_id);
+        }
         else
+        {
             continue;
+        }
 
         const QString name = host.computer_name.isEmpty()
             ? QString::number(host.host_id)
@@ -339,6 +349,22 @@ void RouterWorkspaceDialog::onHostRemoveClicked()
     QListWidgetItem* item = ui->list_hosts_in_workspace->currentItem();
     if (!item)
         return;
+
+    // Only hosts that were already in the workspace when the dialog opened carry encrypted
+    // fields. A host outside any workspace cannot keep them: they are sealed with the workspace
+    // group key and are wiped on the router when the host leaves. Warn that this is irreversible;
+    // hosts added during this session have nothing to clear, so they are removed silently.
+    if (initial_host_ids_.contains(item->data(Qt::UserRole).toULongLong()))
+    {
+        const QString message = tr("Removing the host from the workspace will permanently clear "
+                                   "its encrypted fields (comment, user name and password). This "
+                                   "action cannot be undone.\n\nAre you sure you want to continue?");
+        if (MsgBox::question(this, message) == MsgBox::No)
+        {
+            LOG(INFO) << "Action is rejected by user";
+            return;
+        }
+    }
 
     ui->list_hosts_in_workspace->takeItem(ui->list_hosts_in_workspace->row(item));
     ui->list_hosts_available->addItem(item);

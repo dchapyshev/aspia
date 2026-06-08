@@ -78,6 +78,7 @@ private:
     QHash<qint64, UserEntry> users_;
     QSet<qint64> initial_access_user_ids_;
     QSet<qint64> access_user_ids_;
+    QSet<quint64> initial_host_ids_;
     Router::Workspace workspace_;
     bool workspaces_loaded_ = false;
     bool users_loaded_ = false;
