@@ -34,6 +34,7 @@ class RouterWidget;
 
 class QLabel;
 class QStatusBar;
+class QTreeWidget;
 class StatusDialog;
 class User;
 
@@ -169,7 +170,6 @@ private slots:
     void onCurrentWorkspaceChanged();
     void onUserContextMenuRequested(const QPoint& pos);
     void onHostContextMenuRequested(const QPoint& pos);
-    void onHostsHeaderContextMenu(const QPoint& pos);
     void onClientContextMenuRequested(const QPoint& pos);
     void onRelayContextMenuRequested(const QPoint& pos);
     void onPeerContextMenuRequested(const QPoint& pos);
@@ -192,6 +192,7 @@ private slots:
 
 private:
     void syncAdminVisibility();
+    void showColumnsContextMenu(QTreeWidget* tree, const QPoint& pos);
     void updateStatusLabel();
     void updateRelayStatistics();
     void updateHostsPagination();

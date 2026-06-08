@@ -477,6 +477,10 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     connect(ui->tree_users, &QTreeWidget::customContextMenuRequested,
             this, &RouterWidget::onUserContextMenuRequested);
 
+    ui->tree_users->header()->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tree_users->header(), &QHeaderView::customContextMenuRequested,
+            this, [this](const QPoint& pos) { showColumnsContextMenu(ui->tree_users, pos); });
+
     ui->tree_hosts->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_hosts, &QTreeWidget::customContextMenuRequested,
             this, &RouterWidget::onHostContextMenuRequested);
@@ -485,15 +489,23 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     ui->tree_hosts->header()->setSectionHidden(HOST_COLUMN_USER_NAME, true);
     ui->tree_hosts->header()->setSectionHidden(HOST_COLUMN_COMMENT, true);
     connect(ui->tree_hosts->header(), &QHeaderView::customContextMenuRequested,
-            this, &RouterWidget::onHostsHeaderContextMenu);
+            this, [this](const QPoint& pos) { showColumnsContextMenu(ui->tree_hosts, pos); });
 
     ui->tree_clients->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_clients, &QTreeWidget::customContextMenuRequested,
             this, &RouterWidget::onClientContextMenuRequested);
 
+    ui->tree_clients->header()->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tree_clients->header(), &QHeaderView::customContextMenuRequested,
+            this, [this](const QPoint& pos) { showColumnsContextMenu(ui->tree_clients, pos); });
+
     ui->tree_relays->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_relays, &QTreeWidget::customContextMenuRequested,
             this, &RouterWidget::onRelayContextMenuRequested);
+
+    ui->tree_relays->header()->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tree_relays->header(), &QHeaderView::customContextMenuRequested,
+            this, [this](const QPoint& pos) { showColumnsContextMenu(ui->tree_relays, pos); });
 
     ui->tree_peers->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_peers, &QTreeWidget::customContextMenuRequested,
@@ -502,6 +514,10 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     ui->tree_workspaces->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_workspaces, &QTreeWidget::customContextMenuRequested,
             this, &RouterWidget::onWorkspaceContextMenuRequested);
+
+    ui->tree_workspaces->header()->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tree_workspaces->header(), &QHeaderView::customContextMenuRequested,
+            this, [this](const QPoint& pos) { showColumnsContextMenu(ui->tree_workspaces, pos); });
 
     ui->combo_hosts_page_size->addItem("50", QVariant::fromValue<qint64>(50));
     ui->combo_hosts_page_size->addItem("100", QVariant::fromValue<qint64>(100));
@@ -525,14 +541,6 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
 RouterWidget::~RouterWidget()
 {
     LOG(INFO) << "Dtor";
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterWidget::syncAdminVisibility()
-{
-    const bool is_admin = router_->config().sessionType() == proto::router::SESSION_TYPE_ADMIN;
-    ui->tab->setVisible(is_admin);
-    ui->label_non_admin_hint->setVisible(!is_admin);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1510,26 +1518,6 @@ void RouterWidget::onHostContextMenuRequested(const QPoint& pos)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWidget::onHostsHeaderContextMenu(const QPoint& pos)
-{
-    QHeaderView* header = ui->tree_hosts->header();
-    QMenu menu;
-
-    for (int i = 1; i < header->count(); ++i)
-    {
-        ColumnAction* action = new ColumnAction(ui->tree_hosts->headerItem()->text(i), i, &menu);
-        action->setChecked(!header->isSectionHidden(i));
-        menu.addAction(action);
-    }
-
-    ColumnAction* action = dynamic_cast<ColumnAction*>(menu.exec(header->viewport()->mapToGlobal(pos)));
-    if (!action)
-        return;
-
-    header->setSectionHidden(action->columnIndex(), !action->isChecked());
-}
-
-//--------------------------------------------------------------------------------------------------
 void RouterWidget::onClientContextMenuRequested(const QPoint& pos)
 {
     QTreeWidgetItem* item = ui->tree_clients->itemAt(pos);
@@ -2074,30 +2062,31 @@ void RouterWidget::onHostsNextClicked()
 }
 
 //--------------------------------------------------------------------------------------------------
-QString RouterWidget::workspaceNameById(qint64 workspace_id) const
+void RouterWidget::syncAdminVisibility()
 {
-    if (workspace_id <= 0)
-        return QString();
-
-    for (int i = 0; i < ui->tree_workspaces->topLevelItemCount(); ++i)
-    {
-        WorkspaceTreeItem* item =
-            static_cast<WorkspaceTreeItem*>(ui->tree_workspaces->topLevelItem(i));
-        if (item->workspace.entry_id == workspace_id)
-            return item->workspace.name;
-    }
-
-    return QString();
+    const bool is_admin = router_->config().sessionType() == proto::router::SESSION_TYPE_ADMIN;
+    ui->tab->setVisible(is_admin);
+    ui->label_non_admin_hint->setVisible(!is_admin);
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWidget::refreshHostsWorkspaceColumn()
+void RouterWidget::showColumnsContextMenu(QTreeWidget* tree, const QPoint& pos)
 {
-    for (int i = 0; i < ui->tree_hosts->topLevelItemCount(); ++i)
+    QHeaderView* header = tree->header();
+    QMenu menu;
+
+    for (int i = 1; i < header->count(); ++i)
     {
-        HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_hosts->topLevelItem(i));
-        item->setWorkspaceName(workspaceNameById(item->info.workspace_id));
+        ColumnAction* action = new ColumnAction(tree->headerItem()->text(i), i, &menu);
+        action->setChecked(!header->isSectionHidden(i));
+        menu.addAction(action);
     }
+
+    ColumnAction* action = dynamic_cast<ColumnAction*>(menu.exec(header->viewport()->mapToGlobal(pos)));
+    if (!action)
+        return;
+
+    header->setSectionHidden(action->columnIndex(), !action->isChecked());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2279,6 +2268,33 @@ void RouterWidget::saveHostsToFile()
         LOG(INFO) << "Unable to write file:" << file.errorString();
         MsgBox::warning(this, tr("Unable to write file."));
         return;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+QString RouterWidget::workspaceNameById(qint64 workspace_id) const
+{
+    if (workspace_id <= 0)
+        return QString();
+
+    for (int i = 0; i < ui->tree_workspaces->topLevelItemCount(); ++i)
+    {
+        WorkspaceTreeItem* item =
+            static_cast<WorkspaceTreeItem*>(ui->tree_workspaces->topLevelItem(i));
+        if (item->workspace.entry_id == workspace_id)
+            return item->workspace.name;
+    }
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::refreshHostsWorkspaceColumn()
+{
+    for (int i = 0; i < ui->tree_hosts->topLevelItemCount(); ++i)
+    {
+        HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_hosts->topLevelItem(i));
+        item->setWorkspaceName(workspaceNameById(item->info.workspace_id));
     }
 }
 
