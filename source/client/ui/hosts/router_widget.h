@@ -124,6 +124,7 @@ public slots:
     void onAddUser();
     void onModifyUser();
     void onDeleteUser();
+    void onModifyHost();
     void onDisconnectHost();
     void onDisconnectAllHosts();
     void onRemoveHost();

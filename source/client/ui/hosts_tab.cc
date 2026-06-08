@@ -175,17 +175,38 @@ HostsTab::HostsTab(QWidget* parent)
     connect(session_connect_group, &QActionGroup::triggered, this, &HostsTab::onConnectAction);
 
     // Register actions for toolbar and menus.
-    addActions(ActionRole::FILE, { ui->action_save, ui->action_import_old_book, ui->action_export_book, ui->action_import_book });
+    addActions(ActionRole::FILE,
+    {
+        ui->action_save, ui->action_import_old_book, ui->action_export_book, ui->action_import_book
+    });
     addActions(ActionRole::EDIT, { ui->action_add_user, ui->action_edit_user, ui->action_delete_user });
-    addActions(ActionRole::EDIT, { ui->action_add_workspace, ui->action_edit_workspace, ui->action_delete_workspace });
-    addActions(ActionRole::EDIT, { ui->action_add_router, ui->action_edit_router, ui->action_delete_router, ui->action_router_status });
-    addActions(ActionRole::EDIT, { ui->action_add_group, ui->action_edit_group, ui->action_delete_group });
-    addActions(ActionRole::EDIT, { ui->action_add_host, ui->action_edit_host, ui->action_copy_host, ui->action_delete_host });
-    addActions(ActionRole::EDIT, { ui->action_host_remove, ui->action_disconnect, ui->action_disconnect_all });
-    addActions(ActionRole::ACTION, { ui->action_desktop_connect, ui->action_file_transfer_connect,
-                                     ui->action_chat_connect, ui->action_system_info_connect });
+    addActions(ActionRole::EDIT,
+    {
+        ui->action_add_workspace, ui->action_edit_workspace, ui->action_delete_workspace
+    });
+    addActions(ActionRole::EDIT,
+    {
+        ui->action_add_router, ui->action_edit_router, ui->action_delete_router, ui->action_router_status
+    });
+    addActions(ActionRole::EDIT,
+    {
+        ui->action_add_group, ui->action_edit_group, ui->action_delete_group
+    });
+    addActions(ActionRole::EDIT,
+    {
+        ui->action_add_host, ui->action_edit_host, ui->action_copy_host, ui->action_delete_host,
+        ui->action_host_remove, ui->action_disconnect, ui->action_disconnect_all
+    });
+    addActions(ActionRole::ACTION,
+    {
+        ui->action_desktop_connect, ui->action_file_transfer_connect, ui->action_chat_connect,
+        ui->action_system_info_connect
+    });
     addActions(ActionRole::VIEW, { ui->action_reload, ui->action_online_check });
-    addActions(ActionRole::SESSION_TYPE, { ui->action_desktop, ui->action_file_transfer, ui->action_chat, ui->action_system_info });
+    addActions(ActionRole::SESSION_TYPE,
+    {
+        ui->action_desktop, ui->action_file_transfer, ui->action_chat, ui->action_system_info
+    });
 
     local_group_widget_->setOnlineCheckEnabled(ui->action_online_check->isChecked());
     local_group_widget_->showGroup(ui->sidebar->currentGroupId());
@@ -777,6 +798,16 @@ void HostsTab::onEditHost()
         return;
     }
 
+    Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
+    if (sidebar_item && sidebar_item->itemType() == Sidebar::Item::ROUTER)
+    {
+        Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
+        RouterWidget* widget = router_widgets_.value(router->routerId());
+        if (widget && widget->currentTabType() == RouterWidget::TabType::HOSTS)
+            widget->onModifyHost();
+        return;
+    }
+
     qint64 entry_id = currentHostEntryId();
     if (entry_id <= 0)
     {
@@ -907,6 +938,7 @@ void HostsTab::onHostContextMenu(qint64 router_id, const QPoint& pos, int column
         return;
 
     QMenu menu;
+    menu.addAction(ui->action_edit_host);
     menu.addAction(ui->action_disconnect);
     menu.addAction(ui->action_host_remove);
     if (widget->isSelectedHostOnline())
@@ -1542,6 +1574,7 @@ void HostsTab::updateActionsState()
         ui->action_disconnect->setVisible(has_target);
         ui->action_disconnect_all->setVisible(has_any);
         ui->action_host_remove->setVisible(on_hosts_tab && widget->hasSelectedHost());
+        ui->action_edit_host->setVisible(on_hosts_tab && widget->hasSelectedHost());
 
         const bool can_connect_to_host = on_hosts_tab && widget->isSelectedHostOnline();
         ui->action_desktop_connect->setVisible(can_connect_to_host);

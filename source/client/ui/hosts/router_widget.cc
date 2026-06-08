@@ -43,6 +43,7 @@
 #include "base/peer/router_user.h"
 #include "base/peer/user.h"
 #include "client/router.h"
+#include "client/ui/hosts/router_host_dialog.h"
 #include "client/ui/hosts/router_user_dialog.h"
 #include "client/ui/hosts/router_workspace_dialog.h"
 #include "common/ui/credentials_dialog.h"
@@ -463,6 +464,8 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     connect(ui->tree_users, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentUserChanged);
     connect(ui->tree_relays, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentRelayChanged);
     connect(ui->tree_hosts, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentHostChanged);
+    connect(ui->tree_hosts, &QTreeWidget::itemDoubleClicked,
+            this, [this](QTreeWidgetItem*, int) { onModifyHost(); });
     connect(ui->tree_clients, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentClientChanged);
 
     connect(ui->tree_workspaces, &QTreeWidget::itemSelectionChanged,
@@ -1056,6 +1059,22 @@ void RouterWidget::onDeleteUser()
 
     LOG(INFO) << "[ACTION] Delete user accepted by user";
     router_->deleteUser(entry_id, this, &RouterWidget::onUserResultReceived);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onModifyHost()
+{
+    HostTreeItem* tree_item = static_cast<HostTreeItem*>(ui->tree_hosts->currentItem());
+    if (!tree_item)
+    {
+        LOG(INFO) << "No selected host";
+        return;
+    }
+
+    RouterHostDialog dialog(router_->routerId(), workspaceNameById(tree_item->info.workspace_id),
+                            tree_item->info, this);
+    if (dialog.exec() == QDialog::Accepted)
+        onUpdateHostList();
 }
 
 //--------------------------------------------------------------------------------------------------
