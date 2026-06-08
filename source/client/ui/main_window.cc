@@ -410,8 +410,27 @@ void MainWindow::onConnect(const HostConfig& host, proto::peer::SessionType sess
     switch (session_type)
     {
         case proto::peer::SESSION_TYPE_DESKTOP:
-            client_window = new DesktopWindow(Settings().desktopConfig());
-            break;
+        {
+            proto::control::Config desktop_config = Settings().desktopConfig();
+
+            // When the session opens in a tab, its visible area is bounded by the main window from
+            // the very first frame. Pass the initial preferred size in the config so the host
+            // scales the desktop to fit the tab right away, instead of streaming the full
+            // resolution until the first resize event.
+            if (!detached)
+            {
+                if (QWidget* content = ui->tabs->currentWidget())
+                {
+                    qreal scale = devicePixelRatioF();
+                    proto::control::Size* preferred_size = desktop_config.mutable_preferred_size();
+                    preferred_size->set_width(static_cast<int>(content->width() * scale));
+                    preferred_size->set_height(static_cast<int>(content->height() * scale));
+                }
+            }
+
+            client_window = new DesktopWindow(desktop_config);
+        }
+        break;
 
         case proto::peer::SESSION_TYPE_FILE_TRANSFER:
             client_window = new FileTransferWindow();

@@ -336,6 +336,18 @@ void DesktopAgentClient::readConfig(const proto::control::Config& config)
 {
     config_ = config;
     CLOG(INFO) << "Config changed:" << config;
+
+    // The client sends the initial preferred size in the config only when the session opens in a
+    // tab. Apply it once, before the first resize event arrives. Later PreferredSize messages
+    // (window resize) take over, so an already known size must not be overwritten.
+    if (preferred_size_.isEmpty() && config.has_preferred_size() &&
+        config.preferred_size().width() > 0 && config.preferred_size().height() > 0)
+    {
+        preferred_size_.setWidth(config.preferred_size().width());
+        preferred_size_.setHeight(config.preferred_size().height());
+        emit sig_preferredSizeChanged(preferred_size_);
+    }
+
     emit sig_configured();
 }
 
