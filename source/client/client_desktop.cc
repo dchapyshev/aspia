@@ -49,7 +49,7 @@ const quint32 kWheelMask =
 
 // Mouse move events are coalesced and flushed at this fixed rate to cap the outgoing event stream
 // from high-polling-rate mice. Button and wheel events bypass coalescing and are sent immediately.
-const int kMouseFlushIntervalMs = 16;
+const int kMouseFlushIntervalMs = 20; // 50Hz
 
 //--------------------------------------------------------------------------------------------------
 int calculateFps(int last_fps, const std::chrono::milliseconds& duration, qint64 count)
