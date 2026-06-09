@@ -42,6 +42,8 @@ public:
     // hosts_remove row for this host_id is finalized. TCP delivers the command reliably; the
     // host's disconnect is treated as a proof of receipt.
     void sendRemoveCommand();
+    // Sends the "update" host command, asking the host to check for updates immediately.
+    void sendUpdateCommand();
 
 signals:
     void sig_hostIdAssigned(HostId host_id);

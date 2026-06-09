@@ -431,6 +431,24 @@ void ClientAdmin::doHostRequest(const proto::router::HostRequest& request)
             Service::instance()->notifyChanged(Service::NOTIFY_HOSTS);
         }
     }
+    else if (request.command_name() == proto::router::kCommandHostUpdate)
+    {
+        const HostId host_id = request.host().host_id();
+
+        HostNG* host = find_host(host_id);
+        if (!host)
+        {
+            CLOG(ERROR) << "No live session for host_id:" << host_id;
+            host_result->set_error_code(proto::router::kErrorInvalidEntryId);
+        }
+        else
+        {
+            host->sendUpdateCommand();
+
+            CLOG(INFO) << "Host" << host_id << "update check requested by" << userName();
+            host_result->set_error_code(proto::router::kErrorOk);
+        }
+    }
     else
     {
         CLOG(ERROR) << "Unknown host request command:" << request.command_name();

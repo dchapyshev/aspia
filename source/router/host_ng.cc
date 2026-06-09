@@ -83,6 +83,14 @@ void HostNG::sendRemoveCommand()
 }
 
 //--------------------------------------------------------------------------------------------------
+void HostNG::sendUpdateCommand()
+{
+    proto::router::RouterToHost message;
+    message.mutable_host_command()->set_command_name(proto::router::kCommandHostUpdate);
+    sendMessage(0, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
 void HostNG::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
 {
     proto::router::HostToRouter message;
