@@ -22,6 +22,7 @@
 #include <QDateTime>
 #include <QEvent>
 #include <QIODevice>
+#include <QKeyEvent>
 #include <QLabel>
 #include <QLocale>
 #include <QMenu>
@@ -92,6 +93,7 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
     status_check_label_->setVisible(false);
 
     ui->tree_host->viewport()->installEventFilter(this);
+    ui->tree_host->installEventFilter(this);
 
     ui->tree_host->header()->setContextMenuPolicy(Qt::CustomContextMenu);
 
@@ -329,7 +331,19 @@ void LocalGroupWidget::changeEvent(QEvent* event)
 //--------------------------------------------------------------------------------------------------
 bool LocalGroupWidget::eventFilter(QObject* watched, QEvent* event)
 {
-    if (watched == ui->tree_host->viewport())
+    if (watched == ui->tree_host)
+    {
+        if (event->type() == QEvent::KeyPress)
+        {
+            QKeyEvent* key_event = static_cast<QKeyEvent*>(event);
+            if (key_event->key() == Qt::Key_Insert)
+            {
+                emit sig_addHost();
+                return true;
+            }
+        }
+    }
+    else if (watched == ui->tree_host->viewport())
     {
         if (event->type() == QEvent::MouseButtonPress)
         {

@@ -127,6 +127,7 @@ HostsTab::HostsTab(QWidget* parent)
     connect(local_group_widget_, &LocalGroupWidget::sig_currentChanged, this, &HostsTab::onCurrentHostChanged);
     connect(local_group_widget_, &LocalGroupWidget::sig_activated, this, &HostsTab::onLocalConnect);
     connect(local_group_widget_, &LocalGroupWidget::sig_contextMenu, this, &HostsTab::onLocalHostContextMenu);
+    connect(local_group_widget_, &LocalGroupWidget::sig_addHost, this, &HostsTab::onAddHost);
     connect(router_group_widget_, &RouterGroupWidget::sig_currentChanged, this, &HostsTab::updateActionsState);
     connect(router_group_widget_, &RouterGroupWidget::sig_contextMenu, this, &HostsTab::onRouterGroupContextMenu);
     connect(router_group_widget_, &RouterGroupWidget::sig_activated, this, &HostsTab::onRouterGroupConnect);
@@ -1498,6 +1499,7 @@ void HostsTab::updateActionsState()
     ui->action_disconnect->setVisible(false);
     ui->action_disconnect_all->setVisible(false);
     ui->action_host_remove->setVisible(false);
+    ui->action_host_check_updates->setVisible(false);
     ui->action_online_check->setVisible(false);
     ui->action_desktop_connect->setVisible(false);
     ui->action_file_transfer_connect->setVisible(false);
