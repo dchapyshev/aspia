@@ -462,15 +462,17 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
 
     connect(ui->tab, &QTabWidget::currentChanged, this, &RouterWidget::onTabChanged);
     connect(ui->tree_users, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentUserChanged);
+    connect(ui->tree_users, &QTreeWidget::itemActivated,
+            this, [this](QTreeWidgetItem*, int) { onModifyUser(); });
     connect(ui->tree_relays, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentRelayChanged);
     connect(ui->tree_hosts, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentHostChanged);
-    connect(ui->tree_hosts, &QTreeWidget::itemDoubleClicked,
+    connect(ui->tree_hosts, &QTreeWidget::itemActivated,
             this, [this](QTreeWidgetItem*, int) { onModifyHost(); });
     connect(ui->tree_clients, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentClientChanged);
 
     connect(ui->tree_workspaces, &QTreeWidget::itemSelectionChanged,
             this, &RouterWidget::onCurrentWorkspaceChanged);
-    connect(ui->tree_workspaces, &QTreeWidget::itemDoubleClicked,
+    connect(ui->tree_workspaces, &QTreeWidget::itemActivated,
             this, [this](QTreeWidgetItem*, int) { onModifyWorkspace(); });
 
     ui->tree_users->setContextMenuPolicy(Qt::CustomContextMenu);
