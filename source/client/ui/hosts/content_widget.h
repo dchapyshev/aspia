@@ -19,6 +19,7 @@
 #ifndef CLIENT_UI_HOSTS_CONTENT_WIDGET_H
 #define CLIENT_UI_HOSTS_CONTENT_WIDGET_H
 
+#include <QAction>
 #include <QWidget>
 
 class QStatusBar;
@@ -28,7 +29,36 @@ class ContentWidget : public QWidget
     Q_OBJECT
 
 public:
-    enum class Type { LOCAL_GROUP, ROUTER, ROUTER_GROUP, SEARCH };
+    enum class Type
+    {
+        LOCAL_GROUP,
+        ROUTER,
+        ROUTER_GROUP,
+        SEARCH,
+        ROUTER_USERS,
+        ROUTER_CLIENTS,
+        ROUTER_RELAYS,
+        ROUTER_HOSTS
+    };
+
+    // Checkable action that carries a tree-view column index. Content widgets use it to build
+    // header context menus that toggle individual column visibility.
+    class ColumnAction final : public QAction
+    {
+    public:
+        ColumnAction(const QString& text, int index, QObject* parent)
+            : QAction(text, parent),
+              index_(index)
+        {
+            setCheckable(true);
+        }
+
+        int columnIndex() const { return index_; }
+
+    private:
+        const int index_;
+        Q_DISABLE_COPY_MOVE(ColumnAction)
+    };
 
     explicit ContentWidget(Type type, QWidget* parent = nullptr);
     ~ContentWidget() override;

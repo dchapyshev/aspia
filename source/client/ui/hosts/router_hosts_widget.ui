@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>RouterHostsWidget</class>
+ <widget class="QWidget" name="RouterHostsWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QTreeWidget" name="tree_hosts">
+     <property name="editTriggers">
+      <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+     </property>
+     <property name="showDropIndicator" stdset="0">
+      <bool>false</bool>
+     </property>
+     <property name="indentation">
+      <number>0</number>
+     </property>
+     <property name="itemsExpandable">
+      <bool>false</bool>
+     </property>
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
+     <property name="expandsOnDoubleClick">
+      <bool>false</bool>
+     </property>
+     <column>
+      <property name="text">
+       <string>Host ID</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Display Name</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Computer Name</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Address</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>User Name</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Comment</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Workspace</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Operating System</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Version</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Architecture</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Last Connect</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Last Modify</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Status</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="layout_hosts_pagination">
+     <item>
+      <widget class="IconTextButton" name="button_hosts_prev">
+       <property name="toolTip">
+        <string>Previous page</string>
+       </property>
+       <property name="text">
+        <string>Previous</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../../common/resources/common.qrc">
+         <normaloff>:/img/arrow-left.svg</normaloff>:/img/arrow-left.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="combo_hosts_page"/>
+     </item>
+     <item>
+      <widget class="IconTextButton" name="button_hosts_next">
+       <property name="toolTip">
+        <string>Next page</string>
+       </property>
+       <property name="text">
+        <string>Next</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../../common/resources/common.qrc">
+         <normaloff>:/img/arrow-right.svg</normaloff>:/img/arrow-right.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_hosts_page_size">
+       <property name="text">
+        <string>Items per page:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="combo_hosts_page_size"/>
+     </item>
+     <item>
+      <spacer name="spacer_hosts_pagination">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>IconTextButton</class>
+   <extends>QToolButton</extends>
+   <header>common/ui/icon_text_button.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../../../common/resources/common.qrc"/>
+ </resources>
+ <connections/>
+</ui>

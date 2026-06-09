@@ -101,15 +101,6 @@
     <string>Delete Router</string>
    </property>
   </action>
-  <action name="action_router_status">
-   <property name="icon">
-    <iconset resource="../../common/resources/common.qrc">
-     <normaloff>:/img/router-status.svg</normaloff>:/img/router-status.svg</iconset>
-   </property>
-   <property name="text">
-    <string>Router Status</string>
-   </property>
-  </action>
   <action name="action_change_router_password">
    <property name="icon">
     <iconset resource="../../common/resources/common.qrc">

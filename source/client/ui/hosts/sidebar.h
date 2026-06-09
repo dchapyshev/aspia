@@ -19,6 +19,7 @@
 #ifndef CLIENT_UI_HOSTS_SIDEBAR_H
 #define CLIENT_UI_HOSTS_SIDEBAR_H
 
+#include <QCoreApplication>
 #include <QDrag>
 #include <QHash>
 #include <QMimeData>
@@ -32,7 +33,6 @@
 
 class GroupConfig;
 class RouterConfig;
-class StatusDialog;
 
 class Sidebar final : public QWidget
 {
@@ -47,10 +47,25 @@ public:
     public:
         // ROUTER_GROUP covers both workspaces under a router and host groups inside a
         // workspace. The two are distinguished by RouterGroupItem::isWorkspace().
-        enum Type { LOCAL_GROUP, ROUTER, ROUTER_GROUP };
+        // ROUTER_HOSTS/ROUTER_USERS/ROUTER_CLIENTS/ROUTER_RELAYS are fixed administrative sections
+        // that belong to a router, alongside its ROUTER_GROUP subtree.
+        enum Type
+        {
+            LOCAL_GROUP,
+            ROUTER,
+            ROUTER_GROUP,
+            ROUTER_HOSTS,
+            ROUTER_USERS,
+            ROUTER_CLIENTS,
+            ROUTER_RELAYS
+        };
 
         Type itemType() const { return type_; }
         qint64 groupId() const { return group_id_; }
+
+        // Re-apply translated text after a language change. Data-named items (groups, routers)
+        // keep their names, so the default is a no-op; fixed-label items override it.
+        virtual void retranslate() {}
 
     protected:
         Item(Type type, qint64 group_id, QTreeWidget* parent);
@@ -121,6 +136,70 @@ public:
     private:
         const qint64 router_id_;
         std::variant<Router::Workspace, Router::Group> data_;
+    };
+
+    class RouterHostsItem final : public Item
+    {
+        Q_DECLARE_TR_FUNCTIONS(RouterHostsItem)
+
+    public:
+        RouterHostsItem(qint64 router_id, QTreeWidgetItem* parent);
+
+        qint64 routerId() const { return router_id_; }
+
+        // Item implementation.
+        void retranslate() final;
+
+    private:
+        const qint64 router_id_;
+    };
+
+    class RouterUsersItem final : public Item
+    {
+        Q_DECLARE_TR_FUNCTIONS(RouterUsersItem)
+
+    public:
+        RouterUsersItem(qint64 router_id, QTreeWidgetItem* parent);
+
+        qint64 routerId() const { return router_id_; }
+
+        // Item implementation.
+        void retranslate() final;
+
+    private:
+        const qint64 router_id_;
+    };
+
+    class RouterClientsItem final : public Item
+    {
+        Q_DECLARE_TR_FUNCTIONS(RouterClientsItem)
+
+    public:
+        RouterClientsItem(qint64 router_id, QTreeWidgetItem* parent);
+
+        qint64 routerId() const { return router_id_; }
+
+        // Item implementation.
+        void retranslate() final;
+
+    private:
+        const qint64 router_id_;
+    };
+
+    class RouterRelaysItem final : public Item
+    {
+        Q_DECLARE_TR_FUNCTIONS(RouterRelaysItem)
+
+    public:
+        RouterRelaysItem(qint64 router_id, QTreeWidgetItem* parent);
+
+        qint64 routerId() const { return router_id_; }
+
+        // Item implementation.
+        void retranslate() final;
+
+    private:
+        const qint64 router_id_;
     };
 
     class GroupMimeData final : public QMimeData
@@ -213,8 +292,8 @@ public:
 
     void refreshWorkspaces(qint64 router_id);
     void refreshHostGroups(qint64 router_id);
-    void showRouterStatus(qint64 router_id);
     void changeRouterPassword(qint64 router_id);
+    QStringList routerLog(qint64 router_id) const;
 
 public slots:
     void onAddGroup();
@@ -241,6 +320,7 @@ signals:
     void sig_addGroup();
     void sig_removeGroup();
     void sig_editGroup();
+    void sig_routerLogMessage(qint64 router_id, const QString& message);
 
 private slots:
     void onCurrentItemChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
@@ -257,6 +337,10 @@ private:
     void createRouterSession(const RouterConfig& config);
     void destroyRouterSession(qint64 router_id);
 
+    void buildRouterSections(qint64 router_id);
+    void removeRouterSections(qint64 router_id);
+    void appendRouterLog(qint64 router_id, const QString& message);
+
     bool onMousePress(QMouseEvent* event);
     bool onMouseMove(QMouseEvent* event);
     void startDrag();
@@ -272,7 +356,7 @@ private:
     QTreeWidget* tree_widget_ = nullptr;
 
     QHash<qint64, Router*> routers_;
-    QHash<qint64, StatusDialog*> status_dialogs_;
+    QHash<qint64, QStringList> router_logs_;
 
     LocalGroupItem* local_root_ = nullptr;
 

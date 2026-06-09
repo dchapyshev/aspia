@@ -38,8 +38,12 @@ enum SessionType : int;
 
 class ContentWidget;
 class LocalGroupWidget;
+class RouterClientsWidget;
 class RouterGroupWidget;
-class RouterWidget;
+class RouterHostsWidget;
+class RouterRelaysWidget;
+class RouterStatusWidget;
+class RouterUsersWidget;
 class SearchWidget;
 class User;
 
@@ -79,11 +83,10 @@ private slots:
     void onEditHost();
     void onCopyHost();
     void onRemoveHost();
-    void onUserContextMenu(qint64 router_id, const User& user, const QPoint& pos);
-    void onHostContextMenu(qint64 router_id, const QPoint& pos, int column);
-    void onClientContextMenu(qint64 router_id, const QPoint& pos, int column);
-    void onRelayContextMenu(qint64 router_id, const QPoint& pos, int column);
-    void onWorkspaceContextMenu(qint64 router_id, const QPoint& pos);
+    void onUserContextMenu(const User& user, const QPoint& pos);
+    void onHostContextMenu(const QPoint& pos, int column);
+    void onClientContextMenu(const QPoint& pos, int column);
+    void onRelayContextMenu(const QPoint& pos, int column);
     void onRouterGroupContextMenu(const QPoint& pos);
     void onAddUserAction();
     void onEditUserAction();
@@ -94,7 +97,6 @@ private slots:
     void onAddGroupAction();
     void onEditGroupAction();
     void onDeleteGroupAction();
-    void onRouterStatus();
     void onChangeRouterPassword();
     void onImportOldBookAction();
     void onExportBookAction();
@@ -112,10 +114,6 @@ private:
     void updateActionsState();
     proto::peer::SessionType defaultSessionType() const;
 
-    void destroyAllRouterWidgets();
-    void destroyRouterWidget(qint64 router_id);
-    RouterWidget* createRouterWidget(const RouterConfig& config);
-
     bool validateHostForConnect(const HostConfig& host);
     qint64 currentHostEntryId() const;
     void refreshItem(qint64 entry_id);
@@ -129,9 +127,12 @@ private:
 
     LocalGroupWidget* local_group_widget_ = nullptr;
     RouterGroupWidget* router_group_widget_ = nullptr;
+    RouterHostsWidget* router_hosts_widget_ = nullptr;
+    RouterUsersWidget* router_users_widget_ = nullptr;
+    RouterClientsWidget* router_clients_widget_ = nullptr;
+    RouterRelaysWidget* router_relays_widget_ = nullptr;
+    RouterStatusWidget* router_status_widget_ = nullptr;
     SearchWidget* search_widget_ = nullptr;
-
-    QHash<qint64, RouterWidget*> router_widgets_;
 
     Q_DISABLE_COPY_MOVE(HostsTab)
 };

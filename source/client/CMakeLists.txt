@@ -218,44 +218,56 @@ list(APPEND SOURCE_CLIENT_CORE_UI_CHAT
     ui/chat/chat_window.ui)
 
 list(APPEND SOURCE_CLIENT_CORE_UI_HOSTS_TAB
-    ui/hosts/local_host_dialog.cc
-    ui/hosts/local_host_dialog.h
-    ui/hosts/local_host_dialog.ui
+    ui/hosts/content_widget.cc
+    ui/hosts/content_widget.h
+    ui/hosts/group_combo_box.cc
+    ui/hosts/group_combo_box.h
     ui/hosts/local_group_dialog.cc
     ui/hosts/local_group_dialog.h
     ui/hosts/local_group_dialog.ui
-    ui/hosts/content_widget.cc
-    ui/hosts/content_widget.h
-    ui/hosts/sidebar.cc
-    ui/hosts/sidebar.h
-    ui/hosts/group_combo_box.cc
-    ui/hosts/group_combo_box.h
     ui/hosts/local_group_widget.cc
     ui/hosts/local_group_widget.h
     ui/hosts/local_group_widget.ui
-    ui/hosts/router_widget.cc
-    ui/hosts/router_widget.h
-    ui/hosts/router_widget.ui
-    ui/hosts/router_host_dialog.cc
-    ui/hosts/router_host_dialog.h
-    ui/hosts/router_host_dialog.ui
+    ui/hosts/local_host_dialog.cc
+    ui/hosts/local_host_dialog.h
+    ui/hosts/local_host_dialog.ui
+    ui/hosts/router_clients_widget.cc
+    ui/hosts/router_clients_widget.h
+    ui/hosts/router_clients_widget.ui
     ui/hosts/router_group_dialog.cc
     ui/hosts/router_group_dialog.h
     ui/hosts/router_group_dialog.ui
-    ui/hosts/router_user_dialog.cc
-    ui/hosts/router_user_dialog.h
-    ui/hosts/router_user_dialog.ui
-    ui/hosts/router_workspace_dialog.cc
-    ui/hosts/router_workspace_dialog.h
-    ui/hosts/router_workspace_dialog.ui
     ui/hosts/router_group_widget.cc
     ui/hosts/router_group_widget.h
     ui/hosts/router_group_widget.ui
+    ui/hosts/router_host_dialog.cc
+    ui/hosts/router_host_dialog.h
+    ui/hosts/router_host_dialog.ui
+    ui/hosts/router_hosts_widget.cc
+    ui/hosts/router_hosts_widget.h
+    ui/hosts/router_hosts_widget.ui
+    ui/hosts/router_relays_widget.cc
+    ui/hosts/router_relays_widget.h
+    ui/hosts/router_relays_widget.ui
+    ui/hosts/router_status_widget.cc
+    ui/hosts/router_status_widget.h
+    ui/hosts/router_status_widget.ui
+    ui/hosts/router_user_dialog.cc
+    ui/hosts/router_user_dialog.h
+    ui/hosts/router_user_dialog.ui
+    ui/hosts/router_users_widget.cc
+    ui/hosts/router_users_widget.h
+    ui/hosts/router_users_widget.ui
+    ui/hosts/router_workspace_dialog.cc
+    ui/hosts/router_workspace_dialog.h
+    ui/hosts/router_workspace_dialog.ui
     ui/hosts/search_dialog.cc
     ui/hosts/search_dialog.h
     ui/hosts/search_dialog.ui
     ui/hosts/search_widget.cc
-    ui/hosts/search_widget.h)
+    ui/hosts/search_widget.h
+    ui/hosts/sidebar.cc
+    ui/hosts/sidebar.h)
 
 source_group("" FILES ${SOURCE_CLIENT_CORE})
 source_group(online_checker FILES ${SOURCE_CLIENT_CORE_ONLINE_CHECKER})

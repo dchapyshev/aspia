@@ -41,8 +41,13 @@
 #include "client/ui/hosts/local_host_dialog.h"
 #include "client/ui/hosts/local_group_widget.h"
 #include "client/ui/hosts/router_group_dialog.h"
-#include "client/ui/hosts/router_widget.h"
+#include "client/ui/hosts/router_clients_widget.h"
 #include "client/ui/hosts/router_group_widget.h"
+#include "client/ui/hosts/router_hosts_widget.h"
+#include "client/ui/hosts/router_relays_widget.h"
+#include "client/ui/hosts/router_status_widget.h"
+#include "client/ui/hosts/router_users_widget.h"
+#include "client/ui/hosts/router_workspace_dialog.h"
 #include "client/ui/hosts/search_widget.h"
 #include "proto/peer.h"
 #include "proto/router_admin.h"
@@ -106,11 +111,44 @@ HostsTab::HostsTab(QWidget* parent)
     // Create content widgets.
     local_group_widget_ = new LocalGroupWidget(this);
     router_group_widget_ = new RouterGroupWidget(this);
+    router_hosts_widget_ = new RouterHostsWidget(this);
+    router_users_widget_ = new RouterUsersWidget(this);
+    router_clients_widget_ = new RouterClientsWidget(this);
+    router_relays_widget_ = new RouterRelaysWidget(this);
+    router_status_widget_ = new RouterStatusWidget(this);
     search_widget_ = new SearchWidget(this);
 
     ui->content_stack->addWidget(local_group_widget_);
     ui->content_stack->addWidget(router_group_widget_);
+    ui->content_stack->addWidget(router_hosts_widget_);
+    ui->content_stack->addWidget(router_users_widget_);
+    ui->content_stack->addWidget(router_clients_widget_);
+    ui->content_stack->addWidget(router_relays_widget_);
+    ui->content_stack->addWidget(router_status_widget_);
     ui->content_stack->addWidget(search_widget_);
+
+    connect(ui->sidebar, &Sidebar::sig_routerLogMessage,
+            router_status_widget_, &RouterStatusWidget::onLogMessage);
+
+    connect(router_hosts_widget_, &RouterHostsWidget::sig_currentChanged,
+            this, &HostsTab::updateActionsState);
+    connect(router_hosts_widget_, &RouterHostsWidget::sig_contextMenu,
+            this, &HostsTab::onHostContextMenu);
+
+    connect(router_users_widget_, &RouterUsersWidget::sig_currentChanged,
+            this, &HostsTab::updateActionsState);
+    connect(router_users_widget_, &RouterUsersWidget::sig_userContextMenu,
+            this, &HostsTab::onUserContextMenu);
+
+    connect(router_clients_widget_, &RouterClientsWidget::sig_currentChanged,
+            this, &HostsTab::updateActionsState);
+    connect(router_clients_widget_, &RouterClientsWidget::sig_contextMenu,
+            this, &HostsTab::onClientContextMenu);
+
+    connect(router_relays_widget_, &RouterRelaysWidget::sig_currentChanged,
+            this, &HostsTab::updateActionsState);
+    connect(router_relays_widget_, &RouterRelaysWidget::sig_contextMenu,
+            this, &HostsTab::onRelayContextMenu);
 
     // Setup drag-and-drop: pass the host mime types from the source widgets to Sidebar.
     ui->sidebar->setLocalHostMimeType(local_group_widget_->mimeType());
@@ -155,7 +193,6 @@ HostsTab::HostsTab(QWidget* parent)
     connect(ui->action_add_router, &QAction::triggered, ui->sidebar, &Sidebar::onAddRouter);
     connect(ui->action_edit_router, &QAction::triggered, ui->sidebar, &Sidebar::onEditRouter);
     connect(ui->action_delete_router, &QAction::triggered, ui->sidebar, &Sidebar::onRemoveRouter);
-    connect(ui->action_router_status, &QAction::triggered, this, &HostsTab::onRouterStatus);
     connect(ui->action_change_router_password, &QAction::triggered, this, &HostsTab::onChangeRouterPassword);
     connect(ui->sidebar, &Sidebar::sig_routersChanged, this, &HostsTab::reloadRouters);
     connect(ui->sidebar, &Sidebar::sig_routerHostMoved, this, [this](qint64 /* router_id */)
@@ -195,7 +232,7 @@ HostsTab::HostsTab(QWidget* parent)
     addActions(ActionRole::EDIT,
     {
         ui->action_add_router, ui->action_edit_router, ui->action_delete_router,
-        ui->action_router_status, ui->action_change_router_password
+        ui->action_change_router_password
     });
     addActions(ActionRole::EDIT,
     {
@@ -222,20 +259,12 @@ HostsTab::HostsTab(QWidget* parent)
     local_group_widget_->showGroup(ui->sidebar->currentGroupId());
     switchContent(local_group_widget_);
     updateActionsState();
-
-    const QList<RouterConfig> routers = Database::instance().routerList();
-    for (const RouterConfig& router : std::as_const(routers))
-    {
-        if (router.isValid())
-            createRouterWidget(router);
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
 HostsTab::~HostsTab()
 {
     LOG(INFO) << "Dtor";
-    destroyAllRouterWidgets();
     Settings settings;
     settings.setSessionType(defaultSessionType());
 }
@@ -251,22 +280,12 @@ QByteArray HostsTab::saveState()
 
         stream << local_group_widget_->saveState();
         stream << router_group_widget_->saveState();
+        stream << router_hosts_widget_->saveState();
+        stream << router_users_widget_->saveState();
+        stream << router_clients_widget_->saveState();
+        stream << router_relays_widget_->saveState();
         stream << search_widget_->saveState();
         stream << ui->splitter->saveState();
-
-        QByteArray routers_buffer;
-        {
-            QDataStream routers_stream(&routers_buffer, QIODevice::WriteOnly);
-            routers_stream.setVersion(QDataStream::Qt_6_10);
-
-            routers_stream << quint32(router_widgets_.size());
-            for (auto it = router_widgets_.begin(); it != router_widgets_.end(); ++it)
-            {
-                routers_stream << it.key();
-                routers_stream << it.value()->saveState();
-            }
-        }
-        stream << routers_buffer;
     }
 
     return buffer;
@@ -280,21 +299,39 @@ void HostsTab::restoreState(const QByteArray& state)
 
     QByteArray local_group_state;
     QByteArray router_group_state;
+    QByteArray router_hosts_state;
+    QByteArray router_users_state;
+    QByteArray router_clients_state;
+    QByteArray router_relays_state;
     QByteArray search_state;
     QByteArray splitter_state;
-    QByteArray routers_buffer;
 
     stream >> local_group_state;
     stream >> router_group_state;
+    stream >> router_hosts_state;
+    stream >> router_users_state;
+    stream >> router_clients_state;
+    stream >> router_relays_state;
     stream >> search_state;
     stream >> splitter_state;
-    stream >> routers_buffer;
 
     if (!local_group_state.isEmpty())
         local_group_widget_->restoreState(local_group_state);
 
     if (!router_group_state.isEmpty())
         router_group_widget_->restoreState(router_group_state);
+
+    if (!router_hosts_state.isEmpty())
+        router_hosts_widget_->restoreState(router_hosts_state);
+
+    if (!router_users_state.isEmpty())
+        router_users_widget_->restoreState(router_users_state);
+
+    if (!router_clients_state.isEmpty())
+        router_clients_widget_->restoreState(router_clients_state);
+
+    if (!router_relays_state.isEmpty())
+        router_relays_widget_->restoreState(router_relays_state);
 
     if (!search_state.isEmpty())
         search_widget_->restoreState(search_state);
@@ -309,34 +346,6 @@ void HostsTab::restoreState(const QByteArray& state)
         sizes.emplace_back(200);
         sizes.emplace_back(width() - 200);
         ui->splitter->setSizes(sizes);
-    }
-
-    if (!routers_buffer.isEmpty())
-    {
-        QDataStream routers_stream(routers_buffer);
-        routers_stream.setVersion(QDataStream::Qt_6_10);
-
-        quint32 count = 0;
-        routers_stream >> count;
-
-        for (quint32 i = 0; i < count; ++i)
-        {
-            qint64 router_id = -1;
-            QByteArray widget_state;
-
-            routers_stream >> router_id;
-            routers_stream >> widget_state;
-
-            if (routers_stream.status() != QDataStream::Ok)
-                break;
-
-            if (widget_state.isEmpty())
-                continue;
-
-            auto it = router_widgets_.find(router_id);
-            if (it != router_widgets_.end())
-                it.value()->restoreState(widget_state);
-        }
     }
 }
 
@@ -392,40 +401,7 @@ void HostsTab::searchTextChanged(const QString& text)
 //--------------------------------------------------------------------------------------------------
 void HostsTab::reloadRouters()
 {
-    const QList<qint64> old_ids = router_widgets_.keys();
-    const QList<RouterConfig> routers = Database::instance().routerList();
-
-    // Remove widgets for routers that no longer exist.
-    for (qint64 id : std::as_const(old_ids))
-    {
-        bool found = false;
-        for (const RouterConfig& router : std::as_const(routers))
-        {
-            if (router.routerId() == id)
-            {
-                found = true;
-                break;
-            }
-        }
-
-        if (!found)
-            destroyRouterWidget(id);
-    }
-
     ui->sidebar->reloadRouters();
-
-    // Create new or update existing widgets.
-    for (const RouterConfig& router : std::as_const(routers))
-    {
-        if (!router.isValid())
-            continue;
-
-        auto it = router_widgets_.find(router.routerId());
-        if (it != router_widgets_.end())
-            it.value()->updateConfig(router);
-        else
-            createRouterWidget(router);
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -457,10 +433,9 @@ void HostsTab::onSwitchContent(Sidebar::Item::Type type)
             if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
                 break;
 
-            Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
-            RouterWidget* widget = router_widgets_.value(router->routerId());
-            if (widget)
-                switchContent(widget);
+            const qint64 router_id = static_cast<Sidebar::RouterItem*>(sidebar_item)->routerId();
+            switchContent(router_status_widget_);
+            router_status_widget_->showRouter(router_id, ui->sidebar->routerLog(router_id));
         }
         break;
 
@@ -472,6 +447,54 @@ void HostsTab::onSwitchContent(Sidebar::Item::Type type)
                 static_cast<Sidebar::RouterGroupItem*>(ui->sidebar->currentItem());
             router_group_widget_->showGroup(item->routerId(), item->workspaceId(),
                                             item->workspaceName(), item->groupId());
+        }
+        break;
+
+        case Sidebar::Item::Type::ROUTER_USERS:
+        {
+            Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
+            if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER_USERS)
+                break;
+
+            auto* users_item = static_cast<Sidebar::RouterUsersItem*>(sidebar_item);
+            switchContent(router_users_widget_);
+            router_users_widget_->showRouter(users_item->routerId());
+        }
+        break;
+
+        case Sidebar::Item::Type::ROUTER_CLIENTS:
+        {
+            Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
+            if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER_CLIENTS)
+                break;
+
+            auto* clients_item = static_cast<Sidebar::RouterClientsItem*>(sidebar_item);
+            switchContent(router_clients_widget_);
+            router_clients_widget_->showRouter(clients_item->routerId());
+        }
+        break;
+
+        case Sidebar::Item::Type::ROUTER_RELAYS:
+        {
+            Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
+            if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER_RELAYS)
+                break;
+
+            auto* relays_item = static_cast<Sidebar::RouterRelaysItem*>(sidebar_item);
+            switchContent(router_relays_widget_);
+            router_relays_widget_->showRouter(relays_item->routerId());
+        }
+        break;
+
+        case Sidebar::Item::Type::ROUTER_HOSTS:
+        {
+            Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
+            if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER_HOSTS)
+                break;
+
+            auto* hosts_item = static_cast<Sidebar::RouterHostsItem*>(sidebar_item);
+            switchContent(router_hosts_widget_);
+            router_hosts_widget_->showRouter(hosts_item->routerId());
         }
         break;
 
@@ -511,11 +534,17 @@ void HostsTab::onSidebarContextMenu(Sidebar::Item::Type type, const QPoint& pos)
         if (Router* router = Router::instance(group_item->routerId()))
             session_type = router->config().sessionType();
 
-        // Clients are read-only and cannot manage host groups.
+        // Clients are read-only and cannot manage host groups or workspaces.
         if (session_type != proto::router::SESSION_TYPE_CLIENT)
         {
             menu.addAction(ui->action_add_group);
-            if (!group_item->isWorkspace())
+            if (group_item->isWorkspace())
+            {
+                menu.addSeparator();
+                menu.addAction(ui->action_edit_workspace);
+                menu.addAction(ui->action_delete_workspace);
+            }
+            else
             {
                 menu.addAction(ui->action_edit_group);
                 menu.addAction(ui->action_delete_group);
@@ -528,7 +557,6 @@ void HostsTab::onSidebarContextMenu(Sidebar::Item::Type type, const QPoint& pos)
         if (!item || item->itemType() != Sidebar::Item::Type::ROUTER)
             return;
 
-        menu.addAction(ui->action_router_status);
         menu.addAction(ui->action_edit_router);
         menu.addAction(ui->action_delete_router);
 
@@ -537,11 +565,17 @@ void HostsTab::onSidebarContextMenu(Sidebar::Item::Type type, const QPoint& pos)
         if (router && router->status() == Router::Status::ONLINE)
         {
             menu.addSeparator();
+            if (router->config().sessionType() == proto::router::SESSION_TYPE_ADMIN)
+                menu.addAction(ui->action_add_workspace);
             menu.addAction(ui->action_change_router_password);
         }
 
         menu.exec(pos);
         return;
+    }
+    else if (type == Sidebar::Item::Type::ROUTER_USERS)
+    {
+        menu.addAction(ui->action_add_user);
     }
     else
     {
@@ -637,26 +671,17 @@ void HostsTab::onConnectAction(QAction* action)
         if (!validateHostForConnect(host))
             return;
     }
-    else
+    else if (current_content_ == router_hosts_widget_)
     {
-        // Connect from the Hosts tab of a RouterWidget: pull selected host_id from the widget
-        // and dial it via the matching router.
-        Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
-        if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
+        if (!router_hosts_widget_->hasSelectedHost())
             return;
-
-        Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
-        RouterWidget* widget = router_widgets_.value(router->routerId());
-        if (!widget || widget->currentTabType() != RouterWidget::TabType::HOSTS ||
-            !widget->hasSelectedHost())
-        {
-            return;
-        }
-
-        host = widget->selectedHostConfig();
-
+        host = router_hosts_widget_->selectedHostConfig();
         if (!validateHostForConnect(host))
             return;
+    }
+    else
+    {
+        return;
     }
 
     emit sig_connectRequested(host, session_type);
@@ -794,13 +819,9 @@ void HostsTab::onEditHost()
         return;
     }
 
-    Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
-    if (sidebar_item && sidebar_item->itemType() == Sidebar::Item::ROUTER)
+    if (current_content_ == router_hosts_widget_)
     {
-        Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
-        RouterWidget* widget = router_widgets_.value(router->routerId());
-        if (widget && widget->currentTabType() == RouterWidget::TabType::HOSTS)
-            widget->onModifyHost();
+        router_hosts_widget_->onModifyHost();
         return;
     }
 
@@ -911,7 +932,7 @@ void HostsTab::onRemoveHost()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onUserContextMenu(qint64 /* router_id */, const User& user, const QPoint& pos)
+void HostsTab::onUserContextMenu(const User& user, const QPoint& pos)
 {
     QMenu menu;
     if (user.isValid())
@@ -927,13 +948,12 @@ void HostsTab::onUserContextMenu(qint64 /* router_id */, const User& user, const
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onHostContextMenu(qint64 router_id, const QPoint& pos, int column)
+void HostsTab::onHostContextMenu(const QPoint& pos, int column)
 {
-    RouterWidget* widget = router_widgets_.value(router_id);
-    if (!widget || !widget->hasSelectedHost())
+    if (!router_hosts_widget_->hasSelectedHost())
         return;
 
-    bool is_online = widget->isSelectedHostOnline();
+    bool is_online = router_hosts_widget_->isSelectedHostOnline();
 
     QMenu menu;
     menu.addAction(ui->action_edit_host);
@@ -965,16 +985,15 @@ void HostsTab::onHostContextMenu(qint64 router_id, const QPoint& pos, int column
         return;
 
     if (action == copy_row)
-        widget->copyCurrentHostRow();
+        router_hosts_widget_->copyCurrentHostRow();
     else if (action == copy_col)
-        widget->copyCurrentHostColumn(column);
+        router_hosts_widget_->copyCurrentHostColumn(column);
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onClientContextMenu(qint64 router_id, const QPoint& pos, int column)
+void HostsTab::onClientContextMenu(const QPoint& pos, int column)
 {
-    RouterWidget* widget = router_widgets_.value(router_id);
-    if (!widget || !widget->hasSelectedClient())
+    if (!router_clients_widget_->hasSelectedClient())
         return;
 
     QMenu menu;
@@ -991,16 +1010,15 @@ void HostsTab::onClientContextMenu(qint64 router_id, const QPoint& pos, int colu
         return;
 
     if (action == copy_row)
-        widget->copyCurrentClientRow();
+        router_clients_widget_->copyCurrentClientRow();
     else if (action == copy_col)
-        widget->copyCurrentClientColumn(column);
+        router_clients_widget_->copyCurrentClientColumn(column);
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onRelayContextMenu(qint64 router_id, const QPoint& pos, int column)
+void HostsTab::onRelayContextMenu(const QPoint& pos, int column)
 {
-    RouterWidget* widget = router_widgets_.value(router_id);
-    if (!widget || !widget->hasSelectedRelay())
+    if (!router_relays_widget_->hasSelectedRelay())
         return;
 
     QMenu menu;
@@ -1017,29 +1035,9 @@ void HostsTab::onRelayContextMenu(qint64 router_id, const QPoint& pos, int colum
         return;
 
     if (action == copy_row)
-        widget->copyCurrentRelayRow();
+        router_relays_widget_->copyCurrentRelayRow();
     else if (action == copy_col)
-        widget->copyCurrentRelayColumn(column);
-}
-
-//--------------------------------------------------------------------------------------------------
-void HostsTab::onWorkspaceContextMenu(qint64 router_id, const QPoint& pos)
-{
-    RouterWidget* widget = router_widgets_.value(router_id);
-    if (!widget)
-        return;
-
-    QMenu menu;
-    if (widget->hasSelectedWorkspace())
-    {
-        menu.addAction(ui->action_edit_workspace);
-        menu.addAction(ui->action_delete_workspace);
-    }
-    else
-    {
-        menu.addAction(ui->action_add_workspace);
-    }
-    menu.exec(pos);
+        router_relays_widget_->copyCurrentRelayColumn(column);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1071,40 +1069,22 @@ void HostsTab::onRouterGroupContextMenu(const QPoint& pos)
 //--------------------------------------------------------------------------------------------------
 void HostsTab::onAddUserAction()
 {
-    Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
-    if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
-        return;
-
-    Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
-    RouterWidget* widget = router_widgets_.value(router->routerId());
-    if (widget)
-        widget->onAddUser();
+    if (current_content_ == router_users_widget_)
+        router_users_widget_->onAddUser();
 }
 
 //--------------------------------------------------------------------------------------------------
 void HostsTab::onEditUserAction()
 {
-    Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
-    if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
-        return;
-
-    Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
-    RouterWidget* widget = router_widgets_.value(router->routerId());
-    if (widget)
-        widget->onModifyUser();
+    if (current_content_ == router_users_widget_)
+        router_users_widget_->onModifyUser();
 }
 
 //--------------------------------------------------------------------------------------------------
 void HostsTab::onDeleteUserAction()
 {
-    Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
-    if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
-        return;
-
-    Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
-    RouterWidget* widget = router_widgets_.value(router->routerId());
-    if (widget)
-        widget->onDeleteUser();
+    if (current_content_ == router_users_widget_)
+        router_users_widget_->onDeleteUser();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1114,36 +1094,64 @@ void HostsTab::onAddWorkspaceAction()
     if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
         return;
 
-    Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
-    RouterWidget* widget = router_widgets_.value(router->routerId());
-    if (widget)
-        widget->onAddWorkspace();
+    const qint64 router_id = static_cast<Sidebar::RouterItem*>(sidebar_item)->routerId();
+
+    RouterWorkspaceDialog dialog(router_id, 0, this);
+    if (dialog.exec() == QDialog::Accepted)
+        ui->sidebar->refreshWorkspaces(router_id);
 }
 
 //--------------------------------------------------------------------------------------------------
 void HostsTab::onEditWorkspaceAction()
 {
     Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
-    if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
+    if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER_GROUP)
         return;
 
-    Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
-    RouterWidget* widget = router_widgets_.value(router->routerId());
-    if (widget)
-        widget->onModifyWorkspace();
+    auto* workspace_item = static_cast<Sidebar::RouterGroupItem*>(sidebar_item);
+    if (!workspace_item->isWorkspace())
+        return;
+
+    const qint64 router_id = workspace_item->routerId();
+
+    RouterWorkspaceDialog dialog(router_id, workspace_item->workspaceId(), this);
+    if (dialog.exec() == QDialog::Accepted)
+        ui->sidebar->refreshWorkspaces(router_id);
 }
 
 //--------------------------------------------------------------------------------------------------
 void HostsTab::onDeleteWorkspaceAction()
 {
     Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
-    if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
+    if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER_GROUP)
         return;
 
-    Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
-    RouterWidget* widget = router_widgets_.value(router->routerId());
-    if (widget)
-        widget->onDeleteWorkspace();
+    auto* workspace_item = static_cast<Sidebar::RouterGroupItem*>(sidebar_item);
+    if (!workspace_item->isWorkspace())
+        return;
+
+    const qint64 router_id = workspace_item->routerId();
+    const qint64 workspace_id = workspace_item->workspaceId();
+
+    if (MsgBox::question(this, tr("Are you sure you want to delete workspace \"%1\"?")
+            .arg(workspace_item->workspaceName())) != MsgBox::Yes)
+    {
+        LOG(INFO) << "[ACTION] Delete workspace rejected by user";
+        return;
+    }
+
+    Router* router = Router::instance(router_id);
+    if (!router)
+        return;
+
+    LOG(INFO) << "[ACTION] Delete workspace accepted by user";
+    router->deleteWorkspace(workspace_id, this,
+        [this, router_id](const proto::router::WorkspaceResult& result)
+    {
+        if (result.error_code() != proto::router::kErrorOk)
+            LOG(ERROR) << "Workspace delete failed:" << result.error_code();
+        ui->sidebar->refreshWorkspaces(router_id);
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1243,17 +1251,6 @@ void HostsTab::onDeleteGroupAction()
         }
         ui->sidebar->refreshHostGroups(router_id);
     });
-}
-
-//--------------------------------------------------------------------------------------------------
-void HostsTab::onRouterStatus()
-{
-    Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
-    if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
-        return;
-
-    Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
-    ui->sidebar->showRouterStatus(router->routerId());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1370,83 +1367,53 @@ void HostsTab::onSaveAction()
 //--------------------------------------------------------------------------------------------------
 void HostsTab::onDisconnectAction()
 {
-    Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
-    if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
-        return;
-
-    Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
-    RouterWidget* widget = router_widgets_.value(router->routerId());
-    if (!widget)
-        return;
-
-    switch (widget->currentTabType())
+    if (current_content_ == router_clients_widget_)
     {
-        case RouterWidget::TabType::HOSTS:
-            widget->onDisconnectHost();
-            break;
-        case RouterWidget::TabType::CLIENTS:
-            widget->onDisconnectClient();
-            break;
-        case RouterWidget::TabType::RELAYS:
-            widget->onDisconnectRelay();
-            break;
-        default:
-            break;
+        router_clients_widget_->onDisconnectClient();
+        return;
     }
+
+    if (current_content_ == router_relays_widget_)
+    {
+        router_relays_widget_->onDisconnectRelay();
+        return;
+    }
+
+    if (current_content_ == router_hosts_widget_)
+        router_hosts_widget_->onDisconnectHost();
 }
 
 //--------------------------------------------------------------------------------------------------
 void HostsTab::onDisconnectAllAction()
 {
-    Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
-    if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
-        return;
-
-    Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
-    RouterWidget* widget = router_widgets_.value(router->routerId());
-    if (!widget)
-        return;
-
-    switch (widget->currentTabType())
+    if (current_content_ == router_clients_widget_)
     {
-        case RouterWidget::TabType::HOSTS:
-            widget->onDisconnectAllHosts();
-            break;
-        case RouterWidget::TabType::CLIENTS:
-            widget->onDisconnectAllClients();
-            break;
-        case RouterWidget::TabType::RELAYS:
-            widget->onDisconnectAllRelays();
-            break;
-        default:
-            break;
+        router_clients_widget_->onDisconnectAllClients();
+        return;
     }
+
+    if (current_content_ == router_relays_widget_)
+    {
+        router_relays_widget_->onDisconnectAllRelays();
+        return;
+    }
+
+    if (current_content_ == router_hosts_widget_)
+        router_hosts_widget_->onDisconnectAllHosts();
 }
 
 //--------------------------------------------------------------------------------------------------
 void HostsTab::onRemoveHostAction()
 {
-    Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
-    if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
-        return;
-
-    Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
-    RouterWidget* widget = router_widgets_.value(router->routerId());
-    if (widget)
-        widget->onRemoveHost();
+    if (current_content_ == router_hosts_widget_)
+        router_hosts_widget_->onRemoveHost();
 }
 
 //--------------------------------------------------------------------------------------------------
 void HostsTab::onCheckHostUpdatesAction()
 {
-    Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
-    if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
-        return;
-
-    Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
-    RouterWidget* widget = router_widgets_.value(router->routerId());
-    if (widget)
-        widget->onCheckHostUpdates();
+    if (current_content_ == router_hosts_widget_)
+        router_hosts_widget_->onCheckHostUpdates();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1483,7 +1450,6 @@ void HostsTab::updateActionsState()
     ui->action_add_router->setVisible(true);
     ui->action_edit_router->setVisible(false);
     ui->action_delete_router->setVisible(false);
-    ui->action_router_status->setVisible(false);
 
     ui->action_add_host->setVisible(false);
     ui->action_delete_host->setVisible(false);
@@ -1562,58 +1528,62 @@ void HostsTab::updateActionsState()
         if (Router* router = Router::instance(group_item->routerId()))
             session_type = router->config().sessionType();
 
-        // Clients are read-only and cannot manage host groups.
+        // Clients are read-only and cannot manage host groups or workspaces.
         const bool can_manage_groups = session_type != proto::router::SESSION_TYPE_CLIENT;
         ui->action_add_group->setVisible(can_manage_groups);
         ui->action_edit_group->setVisible(can_manage_groups && !group_item->isWorkspace());
         ui->action_delete_group->setVisible(can_manage_groups && !group_item->isWorkspace());
+
+        ui->action_edit_workspace->setVisible(can_manage_groups && group_item->isWorkspace());
+        ui->action_delete_workspace->setVisible(can_manage_groups && group_item->isWorkspace());
+    }
+    else if (sidebar_item && sidebar_item->itemType() == Sidebar::Item::Type::ROUTER_USERS)
+    {
+        const bool has_user = router_users_widget_->hasSelectedUser();
+        ui->action_add_user->setVisible(true);
+        ui->action_edit_user->setVisible(has_user);
+        ui->action_delete_user->setVisible(has_user);
+    }
+    else if (sidebar_item && sidebar_item->itemType() == Sidebar::Item::Type::ROUTER_CLIENTS)
+    {
+        ui->action_disconnect->setVisible(router_clients_widget_->hasSelectedClient());
+        ui->action_disconnect_all->setVisible(router_clients_widget_->clientCount() > 0);
+    }
+    else if (sidebar_item && sidebar_item->itemType() == Sidebar::Item::Type::ROUTER_RELAYS)
+    {
+        ui->action_disconnect->setVisible(router_relays_widget_->hasSelectedRelay());
+        ui->action_disconnect_all->setVisible(router_relays_widget_->relayCount() > 0);
+    }
+    else if (sidebar_item && sidebar_item->itemType() == Sidebar::Item::Type::ROUTER_HOSTS)
+    {
+        const bool has_host = router_hosts_widget_->hasSelectedHost();
+        const bool can_connect = router_hosts_widget_->isSelectedHostOnline();
+
+        ui->action_disconnect->setVisible(can_connect);
+        ui->action_disconnect_all->setVisible(router_hosts_widget_->hostCount() > 0);
+        ui->action_host_remove->setVisible(has_host);
+        ui->action_edit_host->setVisible(has_host);
+
+        ui->action_host_check_updates->setVisible(can_connect);
+        ui->action_desktop_connect->setVisible(can_connect);
+        ui->action_file_transfer_connect->setVisible(can_connect);
+        ui->action_chat_connect->setVisible(can_connect);
+        ui->action_system_info_connect->setVisible(can_connect);
     }
 
     if (sidebar_item && sidebar_item->itemType() == Sidebar::Item::ROUTER)
     {
         ui->action_edit_router->setVisible(true);
         ui->action_delete_router->setVisible(true);
-        ui->action_router_status->setVisible(true);
 
+        // Workspaces are managed from the sidebar tree. Adding one targets the whole router, so
+        // its action lives on the router node when connected as an administrator.
         Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
-        RouterWidget* widget = router_widgets_.value(router->routerId());
-
-        bool on_users_tab = widget && widget->currentTabType() == RouterWidget::TabType::USERS;
-        bool has_selection = on_users_tab && widget->hasSelectedUser();
-
-        ui->action_add_user->setVisible(on_users_tab);
-        ui->action_edit_user->setVisible(has_selection);
-        ui->action_delete_user->setVisible(has_selection);
-
-        bool on_workspaces_tab = widget && widget->currentTabType() == RouterWidget::TabType::WORKSPACES;
-        bool has_workspace_selection = on_workspaces_tab && widget->hasSelectedWorkspace();
-
-        ui->action_add_workspace->setVisible(on_workspaces_tab);
-        ui->action_edit_workspace->setVisible(has_workspace_selection);
-        ui->action_delete_workspace->setVisible(has_workspace_selection);
-
-        bool on_hosts_tab = widget && widget->currentTabType() == RouterWidget::TabType::HOSTS;
-        bool on_clients_tab = widget && widget->currentTabType() == RouterWidget::TabType::CLIENTS;
-        bool on_relays_tab = widget && widget->currentTabType() == RouterWidget::TabType::RELAYS;
-
-        bool has_target = (on_hosts_tab && widget->hasSelectedHost()) ||
-                          (on_clients_tab && widget->hasSelectedClient()) ||
-                          (on_relays_tab && widget->hasSelectedRelay());
-        bool has_any = (on_hosts_tab && widget->hostCount() > 0) ||
-                       (on_clients_tab && widget->clientCount() > 0) ||
-                       (on_relays_tab && widget->relayCount() > 0);
-
-        ui->action_disconnect->setVisible(has_target);
-        ui->action_disconnect_all->setVisible(has_any);
-        ui->action_host_remove->setVisible(on_hosts_tab && widget->hasSelectedHost());
-        ui->action_edit_host->setVisible(on_hosts_tab && widget->hasSelectedHost());
-
-        const bool can_connect_to_host = on_hosts_tab && widget->isSelectedHostOnline();
-        ui->action_host_check_updates->setVisible(can_connect_to_host);
-        ui->action_desktop_connect->setVisible(can_connect_to_host);
-        ui->action_file_transfer_connect->setVisible(can_connect_to_host);
-        ui->action_chat_connect->setVisible(can_connect_to_host);
-        ui->action_system_info_connect->setVisible(can_connect_to_host);
+        Router* instance = Router::instance(router->routerId());
+        const bool is_admin_online = instance &&
+            instance->status() == Router::Status::ONLINE &&
+            instance->config().sessionType() == proto::router::SESSION_TYPE_ADMIN;
+        ui->action_add_workspace->setVisible(is_admin_online);
     }
     else
     {
@@ -1656,62 +1626,6 @@ proto::peer::SessionType HostsTab::defaultSessionType() const
         return proto::peer::SESSION_TYPE_SYSTEM_INFO;
     else
         return proto::peer::SESSION_TYPE_UNKNOWN;
-}
-
-//--------------------------------------------------------------------------------------------------
-void HostsTab::destroyAllRouterWidgets()
-{
-    const QList<qint64> ids = router_widgets_.keys();
-    for (qint64 id : ids)
-        destroyRouterWidget(id);
-}
-
-//--------------------------------------------------------------------------------------------------
-void HostsTab::destroyRouterWidget(qint64 router_id)
-{
-    auto it = router_widgets_.find(router_id);
-    if (it == router_widgets_.end())
-        return;
-
-    RouterWidget* widget = it.value();
-    router_widgets_.erase(it);
-
-    if (current_content_ == widget)
-        current_content_ = nullptr;
-    if (previous_content_ == widget)
-        previous_content_ = nullptr;
-
-    ui->content_stack->removeWidget(widget);
-    widget->deleteLater();
-}
-
-//--------------------------------------------------------------------------------------------------
-RouterWidget* HostsTab::createRouterWidget(const RouterConfig& config)
-{
-    RouterWidget* widget = new RouterWidget(config, this);
-
-    router_widgets_.insert(config.routerId(), widget);
-    ui->content_stack->addWidget(widget);
-
-    connect(widget, &RouterWidget::sig_currentTabTypeChanged,
-            this, [this](qint64, RouterWidget::TabType) { updateActionsState(); });
-    connect(widget, &RouterWidget::sig_currentUserChanged,
-            this, [this](qint64) { updateActionsState(); });
-    connect(widget, &RouterWidget::sig_currentHostChanged,
-            this, [this](qint64) { updateActionsState(); });
-    connect(widget, &RouterWidget::sig_currentClientChanged,
-            this, [this](qint64) { updateActionsState(); });
-    connect(widget, &RouterWidget::sig_currentRelayChanged,
-            this, [this](qint64) { updateActionsState(); });
-    connect(widget, &RouterWidget::sig_currentWorkspaceChanged,
-            this, [this](qint64) { updateActionsState(); });
-    connect(widget, &RouterWidget::sig_userContextMenu, this, &HostsTab::onUserContextMenu);
-    connect(widget, &RouterWidget::sig_hostContextMenu, this, &HostsTab::onHostContextMenu);
-    connect(widget, &RouterWidget::sig_clientContextMenu, this, &HostsTab::onClientContextMenu);
-    connect(widget, &RouterWidget::sig_relayContextMenu, this, &HostsTab::onRelayContextMenu);
-    connect(widget, &RouterWidget::sig_workspaceContextMenu, this, &HostsTab::onWorkspaceContextMenu);
-
-    return widget;
 }
 
 //--------------------------------------------------------------------------------------------------

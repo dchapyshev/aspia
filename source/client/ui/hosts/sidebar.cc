@@ -27,6 +27,7 @@
 #include <QKeyEvent>
 #include <QMouseEvent>
 #include <QSet>
+#include <QTime>
 #include <QUuid>
 #include <QVBoxLayout>
 
@@ -43,7 +44,6 @@
 #include "client/ui/router_dialog.h"
 #include "common/ui/credentials_dialog.h"
 #include "common/ui/msg_box.h"
-#include "common/ui/status_dialog.h"
 #include "common/ui/two_factor_code_dialog.h"
 #include "common/ui/two_factor_enroll_dialog.h"
 #include "proto/router_client.h"
@@ -227,10 +227,7 @@ void Sidebar::createRouterSession(const RouterConfig& config)
     if (routers_.contains(router_id))
         return;
 
-    StatusDialog* status_dialog = new StatusDialog(this);
-    status_dialog->setWindowFlag(Qt::WindowStaysOnTopHint);
-    status_dialog->hide();
-    status_dialogs_.insert(router_id, status_dialog);
+    router_logs_.insert(router_id, QStringList());
 
     Router* router = new Router(config, this);
     routers_.insert(router_id, router);
@@ -261,29 +258,73 @@ void Sidebar::destroyRouterSession(qint64 router_id)
         delete router;
     }
 
-    if (StatusDialog* status_dialog = status_dialogs_.take(router_id))
-        delete status_dialog;
+    router_logs_.remove(router_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::buildRouterSections(qint64 router_id)
+{
+    RouterItem* router = routerById(router_id);
+    if (!router)
+        return;
+
+    // Administrative sections are only meaningful for an administrator session.
+    Router* instance = routers_.value(router_id);
+    if (!instance || instance->config().sessionType() != proto::router::SESSION_TYPE_ADMIN)
+        return;
+
+    removeRouterSections(router_id);
+
+    // Sections live above the workspace subtree. Insert each at the top in reverse display order
+    // so the final order stays Hosts -> Clients -> Relays -> Users.
+    auto move_to_top = [router](QTreeWidgetItem* item)
+    {
+        router->insertChild(0, router->takeChild(router->indexOfChild(item)));
+    };
+
+    move_to_top(new RouterUsersItem(router_id, router));
+    move_to_top(new RouterRelaysItem(router_id, router));
+    move_to_top(new RouterClientsItem(router_id, router));
+    move_to_top(new RouterHostsItem(router_id, router));
+
+    router->setExpanded(true);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::removeRouterSections(qint64 router_id)
+{
+    RouterItem* router = routerById(router_id);
+    if (!router)
+        return;
+
+    for (int i = router->childCount() - 1; i >= 0; --i)
+    {
+        Item* child = static_cast<Item*>(router->child(i));
+        const Item::Type type = child->itemType();
+        if (type == Item::ROUTER_HOSTS || type == Item::ROUTER_USERS ||
+            type == Item::ROUTER_CLIENTS || type == Item::ROUTER_RELAYS)
+        {
+            delete router->takeChild(i);
+        }
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
 void Sidebar::onRouterStatusChanged(qint64 router_id, Router::Status status)
 {
-    Router* router = routers_.value(router_id);
-    StatusDialog* status_dialog = status_dialogs_.value(router_id);
-
-    if (router && status_dialog)
+    if (Router* router = routers_.value(router_id))
     {
         const QString address = router->config().address();
         switch (status)
         {
             case Router::Status::CONNECTING:
-                status_dialog->addMessage(tr("Connecting to router %1...").arg(address));
+                appendRouterLog(router_id, tr("Connecting to router %1...").arg(address));
                 break;
             case Router::Status::ONLINE:
-                status_dialog->addMessage(tr("Connection to router %1 established.").arg(address));
+                appendRouterLog(router_id, tr("Connection to router %1 established.").arg(address));
                 break;
             case Router::Status::OFFLINE:
-                status_dialog->addMessage(tr("Disconnected from router %1.").arg(address));
+                appendRouterLog(router_id, tr("Disconnected from router %1.").arg(address));
                 break;
         }
     }
@@ -298,16 +339,21 @@ void Sidebar::onRouterStatusChanged(qint64 router_id, Router::Status status)
     setRouterStatus(router_id, sidebar_status);
 
     if (status == Router::Status::ONLINE)
+    {
+        buildRouterSections(router_id);
         refreshWorkspaces(router_id);
+    }
     else
+    {
+        removeRouterSections(router_id);
         setRouterWorkspaces(router_id, {});
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
 void Sidebar::onRouterErrorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code)
 {
-    if (StatusDialog* status_dialog = status_dialogs_.value(router_id))
-        status_dialog->addMessage(tr("Network error: %1.").arg(TcpChannel::errorToString(error_code)));
+    appendRouterLog(router_id, tr("Network error: %1.").arg(TcpChannel::errorToString(error_code)));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -347,15 +393,21 @@ void Sidebar::onRouterTwoFactorEnrollment(qint64 router_id, const QString& otpau
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::showRouterStatus(qint64 router_id)
+void Sidebar::appendRouterLog(qint64 router_id, const QString& message)
 {
-    StatusDialog* status_dialog = status_dialogs_.value(router_id);
-    if (!status_dialog)
-        return;
+    const QString line = QTime::currentTime().toString() + ' ' + message;
 
-    status_dialog->show();
-    status_dialog->activateWindow();
-    status_dialog->raise();
+    auto it = router_logs_.find(router_id);
+    if (it != router_logs_.end())
+        it->append(line);
+
+    emit sig_routerLogMessage(router_id, line);
+}
+
+//--------------------------------------------------------------------------------------------------
+QStringList Sidebar::routerLog(qint64 router_id) const
+{
+    return router_logs_.value(router_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -397,18 +449,15 @@ void Sidebar::changeRouterPassword(qint64 router_id)
     if (dialog.exec() != QDialog::Accepted)
         return;
 
-    StatusDialog* status_dialog = status_dialogs_.value(router_id);
-
     // On success the router revokes this session's token and re-runs the 2FA stage, so the user
     // will be asked for a code again right after (handled by the existing two-factor plumbing).
     router->changePassword(dialog.password(), this,
-        [this, status_dialog](const proto::router::ChangePasswordResult& result)
+        [this, router_id](const proto::router::ChangePasswordResult& result)
     {
         const std::string& error_code = result.error_code();
         if (error_code == proto::router::kErrorOk)
         {
-            if (status_dialog)
-                status_dialog->addMessage(tr("Password updated. Waiting for new encryption keys..."));
+            appendRouterLog(router_id, tr("Password updated. Waiting for new encryption keys..."));
             return;
         }
 
@@ -855,8 +904,21 @@ void Sidebar::changeEvent(QEvent* event)
 {
     QWidget::changeEvent(event);
 
-    if (event->type() == QEvent::LanguageChange && local_root_)
+    if (event->type() != QEvent::LanguageChange)
+        return;
+
+    if (local_root_)
         local_root_->setText(0, tr("Local"));
+
+    for (int i = 0; i < tree_widget_->topLevelItemCount(); ++i)
+    {
+        Item* top = static_cast<Item*>(tree_widget_->topLevelItem(i));
+        if (top->itemType() != Item::ROUTER)
+            continue;
+
+        for (int j = 0; j < top->childCount(); ++j)
+            static_cast<Item*>(top->child(j))->retranslate();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1515,6 +1577,10 @@ void Sidebar::onCurrentItemChanged(QTreeWidgetItem* current, QTreeWidgetItem* pr
             break;
 
         case Item::ROUTER:
+        case Item::ROUTER_HOSTS:
+        case Item::ROUTER_USERS:
+        case Item::ROUTER_CLIENTS:
+        case Item::ROUTER_RELAYS:
             // Nothing
             break;
 
@@ -1725,4 +1791,64 @@ void Sidebar::RouterGroupItem::update(const Router::Group& group)
 {
     data_ = group;
     setText(0, group.name);
+}
+
+//--------------------------------------------------------------------------------------------------
+Sidebar::RouterHostsItem::RouterHostsItem(qint64 router_id, QTreeWidgetItem* parent)
+    : Item(ROUTER_HOSTS, /*group_id=*/-1, parent),
+      router_id_(router_id)
+{
+    retranslate();
+    setIcon(0, QIcon(":/img/computer.svg"));
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::RouterHostsItem::retranslate()
+{
+    setText(0, tr("Hosts"));
+}
+
+//--------------------------------------------------------------------------------------------------
+Sidebar::RouterUsersItem::RouterUsersItem(qint64 router_id, QTreeWidgetItem* parent)
+    : Item(ROUTER_USERS, /*group_id=*/-1, parent),
+      router_id_(router_id)
+{
+    retranslate();
+    setIcon(0, QIcon(":/img/user-account.svg"));
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::RouterUsersItem::retranslate()
+{
+    setText(0, tr("Users"));
+}
+
+//--------------------------------------------------------------------------------------------------
+Sidebar::RouterClientsItem::RouterClientsItem(qint64 router_id, QTreeWidgetItem* parent)
+    : Item(ROUTER_CLIENTS, /*group_id=*/-1, parent),
+      router_id_(router_id)
+{
+    retranslate();
+    setIcon(0, QIcon(":/img/computer.svg"));
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::RouterClientsItem::retranslate()
+{
+    setText(0, tr("Clients"));
+}
+
+//--------------------------------------------------------------------------------------------------
+Sidebar::RouterRelaysItem::RouterRelaysItem(qint64 router_id, QTreeWidgetItem* parent)
+    : Item(ROUTER_RELAYS, /*group_id=*/-1, parent),
+      router_id_(router_id)
+{
+    retranslate();
+    setIcon(0, QIcon(":/img/stack.svg"));
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::RouterRelaysItem::retranslate()
+{
+    setText(0, tr("Relays"));
 }
