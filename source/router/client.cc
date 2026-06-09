@@ -777,12 +777,16 @@ void Client::readChangePasswordRequest(const proto::router::ChangePasswordReques
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 
     // This request always rotates the password (tokens are revoked in the transaction). Drop the
-    // user's other live sessions but keep this one, which re-keys below.
+    // user's other live sessions but keep this one.
     Service::instance()->stopClients(userId(), {}, sessionId());
 
-    // Push a fresh UserKeys so the client can decrypt with the new wrap key and transition
-    // from CONNECTING to ONLINE.
-    sendUserKeys();
+    // The rotation revoked every device token, including this session's. Re-run the 2FA stage
+    // exactly as on a fresh connection: clear the completion flag and re-challenge. The client
+    // must pass 2FA again before it gets the new UserKeys (sent by completeTwoFactor); a failed
+    // attempt tears the session down inside readTwoFactorResponse.
+    two_factor_completed_ = false;
+    token_id_ = 0;
+    doTwoFactorChallenge();
 }
 
 //--------------------------------------------------------------------------------------------------

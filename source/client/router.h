@@ -284,7 +284,8 @@ public:
     template<typename HandlerT>
     void requestConnection(HostId host_id, QObject* receiver, HandlerT handler);
 
-    // Rotate the password of the authenticated user.
+    // Rotate the password of the authenticated user. On success the router re-runs the 2FA
+    // stage (see the server), so the client will be prompted for a code again afterwards.
     template<typename HandlerT>
     void changePassword(const SecureString& new_password, QObject* receiver, HandlerT handler);
 

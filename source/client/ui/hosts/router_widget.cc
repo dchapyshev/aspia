@@ -51,7 +51,6 @@
 #include "common/ui/formatter.h"
 #include "common/ui/icon_text_button.h"
 #include "common/ui/msg_box.h"
-#include "proto/router_constants.h"
 #include "common/ui/status_dialog.h"
 #include "common/ui/two_factor_code_dialog.h"
 #include "common/ui/two_factor_enroll_dialog.h"
@@ -1027,6 +1026,8 @@ void RouterWidget::changePassword()
     if (dialog.exec() != QDialog::Accepted)
         return;
 
+    // On success the router revokes this session's token and re-runs the 2FA stage, so the user
+    // will be asked for a code again right after (handled by the existing two-factor plumbing).
     router_->changePassword(dialog.password(), this,
         [this](const proto::router::ChangePasswordResult& result)
     {
