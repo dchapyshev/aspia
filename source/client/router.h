@@ -207,6 +207,9 @@ public:
     void removeHost(HostId host_id, QObject* receiver, HandlerT handler);
 
     template<typename HandlerT>
+    void checkHostUpdates(HostId host_id, QObject* receiver, HandlerT handler);
+
+    template<typename HandlerT>
     void editHost(const Router::Host& host, QObject* receiver, HandlerT handler);
 
     //----------------------------------------------------------------------------------------------
@@ -571,6 +574,19 @@ void Router::removeHost(HostId host_id, QObject* receiver, HandlerT handler)
     auto* request = message.mutable_host_request();
     request->set_request_id(nextRequestId());
     request->set_command_name(proto::router::kCommandHostRemove);
+    request->mutable_host()->set_host_id(host_id);
+    registerPending<proto::router::HostResult>(request, receiver, std::move(handler));
+    emitSend(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+template<typename HandlerT>
+void Router::checkHostUpdates(HostId host_id, QObject* receiver, HandlerT handler)
+{
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_host_request();
+    request->set_request_id(nextRequestId());
+    request->set_command_name(proto::router::kCommandHostUpdate);
     request->mutable_host()->set_host_id(host_id);
     registerPending<proto::router::HostResult>(request, receiver, std::move(handler));
     emitSend(proto::router::CHANNEL_ID_ADMIN, message);

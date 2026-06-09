@@ -124,5 +124,6 @@
         <file>disconnect-one.svg</file>
         <file>copy.svg</file>
         <file>search.svg</file>
+        <file>computer-update.svg</file>
     </qresource>
 </RCC>

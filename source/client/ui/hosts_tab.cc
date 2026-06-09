@@ -171,6 +171,7 @@ HostsTab::HostsTab(QWidget* parent)
     connect(ui->action_disconnect, &QAction::triggered, this, &HostsTab::onDisconnectAction);
     connect(ui->action_disconnect_all, &QAction::triggered, this, &HostsTab::onDisconnectAllAction);
     connect(ui->action_host_remove, &QAction::triggered, this, &HostsTab::onRemoveHostAction);
+    connect(ui->action_host_check_updates, &QAction::triggered, this, &HostsTab::onCheckHostUpdatesAction);
     connect(ui->action_online_check, &QAction::toggled, this, &HostsTab::onOnlineCheckToggled);
     connect(session_connect_group, &QActionGroup::triggered, this, &HostsTab::onConnectAction);
 
@@ -195,7 +196,8 @@ HostsTab::HostsTab(QWidget* parent)
     addActions(ActionRole::EDIT,
     {
         ui->action_add_host, ui->action_edit_host, ui->action_copy_host, ui->action_delete_host,
-        ui->action_host_remove, ui->action_disconnect, ui->action_disconnect_all
+        ui->action_host_check_updates, ui->action_host_remove, ui->action_disconnect,
+        ui->action_disconnect_all
     });
     addActions(ActionRole::ACTION,
     {
@@ -943,6 +945,7 @@ void HostsTab::onHostContextMenu(qint64 router_id, const QPoint& pos, int column
     menu.addAction(ui->action_host_remove);
     if (widget->isSelectedHostOnline())
     {
+        menu.addAction(ui->action_host_check_updates);
         menu.addSeparator();
         menu.addAction(ui->action_desktop_connect);
         menu.addAction(ui->action_file_transfer_connect);
@@ -1419,6 +1422,19 @@ void HostsTab::onRemoveHostAction()
 }
 
 //--------------------------------------------------------------------------------------------------
+void HostsTab::onCheckHostUpdatesAction()
+{
+    Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
+    if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
+        return;
+
+    Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
+    RouterWidget* widget = router_widgets_.value(router->routerId());
+    if (widget)
+        widget->onCheckHostUpdates();
+}
+
+//--------------------------------------------------------------------------------------------------
 void HostsTab::onOnlineCheckToggled(bool checked)
 {
     Settings settings;
@@ -1577,6 +1593,7 @@ void HostsTab::updateActionsState()
         ui->action_edit_host->setVisible(on_hosts_tab && widget->hasSelectedHost());
 
         const bool can_connect_to_host = on_hosts_tab && widget->isSelectedHostOnline();
+        ui->action_host_check_updates->setVisible(can_connect_to_host);
         ui->action_desktop_connect->setVisible(can_connect_to_host);
         ui->action_file_transfer_connect->setVisible(can_connect_to_host);
         ui->action_chat_connect->setVisible(can_connect_to_host);

@@ -1156,6 +1156,20 @@ void RouterWidget::onRemoveHost()
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWidget::onCheckHostUpdates()
+{
+    HostTreeItem* tree_item = static_cast<HostTreeItem*>(ui->tree_hosts->currentItem());
+    if (!tree_item)
+    {
+        LOG(INFO) << "No selected host";
+        return;
+    }
+
+    LOG(INFO) << "[ACTION] Check host updates requested by user";
+    router_->checkHostUpdates(tree_item->info.host_id, this, &RouterWidget::onHostResultReceived);
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWidget::onDisconnectRelay()
 {
     RelayTreeItem* tree_item = static_cast<RelayTreeItem*>(ui->tree_relays->currentItem());

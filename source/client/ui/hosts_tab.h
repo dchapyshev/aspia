@@ -104,6 +104,7 @@ private slots:
     void onDisconnectAction();
     void onDisconnectAllAction();
     void onRemoveHostAction();
+    void onCheckHostUpdatesAction();
     void onOnlineCheckToggled(bool checked);
 
 private:

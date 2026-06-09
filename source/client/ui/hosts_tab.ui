@@ -28,7 +28,7 @@
      <property name="orientation">
       <enum>Qt::Orientation::Horizontal</enum>
      </property>
-     <widget class="Sidebar" name="sidebar">
+     <widget class="Sidebar" name="sidebar" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -309,6 +309,15 @@
    </property>
    <property name="text">
     <string>Remove</string>
+   </property>
+  </action>
+  <action name="action_host_check_updates">
+   <property name="icon">
+    <iconset resource="../../common/resources/common.qrc">
+     <normaloff>:/img/computer-update.svg</normaloff>:/img/computer-update.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Check for Updates</string>
    </property>
   </action>
   <action name="action_save">

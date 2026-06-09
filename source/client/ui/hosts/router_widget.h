@@ -129,6 +129,7 @@ public slots:
     void onDisconnectHost();
     void onDisconnectAllHosts();
     void onRemoveHost();
+    void onCheckHostUpdates();
     void onDisconnectRelay();
     void onDisconnectAllRelays();
     void onDisconnectClient();
