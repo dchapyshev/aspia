@@ -68,6 +68,7 @@ signals:
     void sig_credentialsChanged(HostId host_id, const SecureString& one_time_password);
     void sig_clientConnected();
     void sig_removeHost();
+    void sig_checkUpdates();
 
 private slots:
     void onTcpReady();

@@ -850,6 +850,13 @@ void Service::onRemoveHost()
 }
 
 //--------------------------------------------------------------------------------------------------
+void Service::onCheckUpdates()
+{
+    LOG(INFO) << "Received command to check for updates";
+    startUpdateCheck();
+}
+
+//--------------------------------------------------------------------------------------------------
 void Service::startConfirmation(PendingConfirmation& pending)
 {
     LOG(INFO) << "TCP channel is ready";
@@ -1031,6 +1038,7 @@ void Service::connectToRouter(const Location& location)
     connect(router_manager_, &RouterManager::sig_credentialsChanged, user_session_, &UserSession::onUpdateCredentials);
     connect(router_manager_, &RouterManager::sig_clientConnected, this, &Service::onNewRelayConnection);
     connect(router_manager_, &RouterManager::sig_removeHost, this, &Service::onRemoveHost);
+    connect(router_manager_, &RouterManager::sig_checkUpdates, this, &Service::onCheckUpdates);
 
     connect(user_session_, &UserSession::sig_changeOneTimeSessions, router_manager_, &RouterManager::onOneTimeSessionsChanged);
     connect(user_session_, &UserSession::sig_changeOneTimePassword, router_manager_, &RouterManager::onSettingsChanged);
@@ -1084,6 +1092,20 @@ void Service::checkForUpdates()
         return;
 
     storage.setLastUpdateCheck(current_timepoint);
+
+    startUpdateCheck();
+#endif // defined(Q_OS_WINDOWS)
+}
+
+//--------------------------------------------------------------------------------------------------
+void Service::startUpdateCheck()
+{
+#if defined(Q_OS_WINDOWS)
+    if (update_checker_)
+    {
+        LOG(INFO) << "Update check already in progress";
+        return;
+    }
 
     update_checker_ = new UpdateChecker(settings_.updateServer(), "host", this);
 

@@ -81,6 +81,7 @@ private slots:
     void onUserChatMessage(const proto::chat::Chat& chat);
     void onSettingsChanged(const QString& path);
     void onRemoveHost();
+    void onCheckUpdates();
 
 private:
     struct PendingConfirmation
@@ -98,6 +99,7 @@ private:
     void connectToRouter(const Location& location);
     void disconnectFromRouter(const Location& location);
     void checkForUpdates();
+    void startUpdateCheck();
 
     QTimer* repeated_timer_ = nullptr;
 

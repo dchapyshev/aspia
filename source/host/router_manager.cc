@@ -272,6 +272,11 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
             LOG(INFO) << "Remove command received";
             emit sig_removeHost();
         }
+        else if (command_name == "update")
+        {
+            LOG(INFO) << "Update check command received";
+            emit sig_checkUpdates();
+        }
         else
         {
             LOG(ERROR) << "Unknown host command:" << QString::fromStdString(command_name);
