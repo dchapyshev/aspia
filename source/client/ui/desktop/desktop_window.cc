@@ -369,6 +369,13 @@ void DesktopWindow::onMetricsChanged(const ClientDesktop::Metrics& metrics)
         statistics_dialog_ = new StatisticsDialog(this);
         statistics_dialog_->setAttribute(Qt::WA_DeleteOnClose);
 
+        QString computer_name = sessionState()->computerName();
+        if (computer_name.isEmpty())
+            computer_name = sessionState()->hostAddress();
+
+        statistics_dialog_->setWindowTitle(
+            statistics_dialog_->windowTitle() + " - " + computer_name);
+
         connect(statistics_dialog_, &StatisticsDialog::sig_metricsRequired,
                 this, &DesktopWindow::sig_metricsRequested);
 
