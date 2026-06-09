@@ -232,6 +232,7 @@ signals:
     void sig_routerGroupMoved(qint64 router_id);
     void sig_addGroup();
     void sig_removeGroup();
+    void sig_editGroup();
 
 private slots:
     void onCurrentItemChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);

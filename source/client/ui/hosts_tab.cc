@@ -121,6 +121,7 @@ HostsTab::HostsTab(QWidget* parent)
     connect(ui->sidebar, &Sidebar::sig_contextMenu, this, &HostsTab::onSidebarContextMenu);
     connect(ui->sidebar, &Sidebar::sig_addGroup, this, &HostsTab::onAddGroupAction);
     connect(ui->sidebar, &Sidebar::sig_removeGroup, this, &HostsTab::onDeleteGroupAction);
+    connect(ui->sidebar, &Sidebar::sig_editGroup, this, &HostsTab::onEditGroupAction);
     connect(ui->sidebar, &Sidebar::sig_itemDropped, this, [this]()
     {
         local_group_widget_->showGroup(ui->sidebar->currentGroupId());
@@ -131,6 +132,7 @@ HostsTab::HostsTab(QWidget* parent)
     connect(local_group_widget_, &LocalGroupWidget::sig_contextMenu, this, &HostsTab::onLocalHostContextMenu);
     connect(local_group_widget_, &LocalGroupWidget::sig_addHost, this, &HostsTab::onAddHost);
     connect(local_group_widget_, &LocalGroupWidget::sig_deleteHost, this, &HostsTab::onRemoveHost);
+    connect(local_group_widget_, &LocalGroupWidget::sig_editHost, this, &HostsTab::onEditHost);
     connect(router_group_widget_, &RouterGroupWidget::sig_currentChanged, this, &HostsTab::updateActionsState);
     connect(router_group_widget_, &RouterGroupWidget::sig_contextMenu, this, &HostsTab::onRouterGroupContextMenu);
     connect(router_group_widget_, &RouterGroupWidget::sig_activated, this, &HostsTab::onRouterGroupConnect);

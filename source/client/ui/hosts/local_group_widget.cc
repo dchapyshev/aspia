@@ -335,16 +335,22 @@ bool LocalGroupWidget::eventFilter(QObject* watched, QEvent* event)
     {
         if (event->type() == QEvent::KeyPress)
         {
-            QKeyEvent* key_event = static_cast<QKeyEvent*>(event);
-            if (key_event->key() == Qt::Key_Insert)
+            switch (static_cast<QKeyEvent*>(event)->key())
             {
-                emit sig_addHost();
-                return true;
-            }
-            if (key_event->key() == Qt::Key_Delete)
-            {
-                emit sig_deleteHost();
-                return true;
+                case Qt::Key_Insert:
+                    emit sig_addHost();
+                    return true;
+
+                case Qt::Key_Delete:
+                    emit sig_deleteHost();
+                    return true;
+
+                case Qt::Key_F2:
+                    emit sig_editHost();
+                    return true;
+
+                default:
+                    break;
             }
         }
     }

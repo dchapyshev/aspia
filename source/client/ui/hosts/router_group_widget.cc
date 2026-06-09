@@ -26,6 +26,7 @@
 #include <QEvent>
 #include <QHeaderView>
 #include <QIODevice>
+#include <QKeyEvent>
 #include <QLabel>
 #include <QMenu>
 #include <QMouseEvent>
@@ -171,6 +172,7 @@ RouterGroupWidget::RouterGroupWidget(QWidget* parent)
             this, [this](QTreeWidgetItem*, int) { emit sig_activated(); });
 
     ui->tree_host->viewport()->installEventFilter(this);
+    ui->tree_host->installEventFilter(this);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -322,7 +324,19 @@ void RouterGroupWidget::changeEvent(QEvent* event)
 //--------------------------------------------------------------------------------------------------
 bool RouterGroupWidget::eventFilter(QObject* watched, QEvent* event)
 {
-    if (watched == ui->tree_host->viewport())
+    if (watched == ui->tree_host)
+    {
+        if (event->type() == QEvent::KeyPress)
+        {
+            QKeyEvent* key_event = static_cast<QKeyEvent*>(event);
+            if (key_event->key() == Qt::Key_F2)
+            {
+                onEditHost();
+                return true;
+            }
+        }
+    }
+    else if (watched == ui->tree_host->viewport())
     {
         if (event->type() == QEvent::MouseButtonPress)
         {

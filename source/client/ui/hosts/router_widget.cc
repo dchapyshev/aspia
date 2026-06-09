@@ -496,6 +496,8 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     connect(ui->tree_hosts->header(), &QHeaderView::customContextMenuRequested,
             this, [this](const QPoint& pos) { showColumnsContextMenu(ui->tree_hosts, pos); });
 
+    ui->tree_hosts->installEventFilter(this);
+
     ui->tree_clients->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_clients, &QTreeWidget::customContextMenuRequested,
             this, &RouterWidget::onClientContextMenuRequested);
@@ -1322,31 +1324,53 @@ bool RouterWidget::eventFilter(QObject* watched, QEvent* event)
 {
     if (event->type() == QEvent::KeyPress)
     {
-        QKeyEvent* key_event = static_cast<QKeyEvent*>(event);
-        if (key_event->key() == Qt::Key_Insert)
+        const int key = static_cast<QKeyEvent*>(event)->key();
+        if (watched == ui->tree_workspaces)
         {
-            if (watched == ui->tree_workspaces)
+            switch (key)
             {
-                onAddWorkspace();
-                return true;
+                case Qt::Key_Insert:
+                    onAddWorkspace();
+                    return true;
+
+                case Qt::Key_Delete:
+                    onDeleteWorkspace();
+                    return true;
+
+                case Qt::Key_F2:
+                    onModifyWorkspace();
+                    return true;
+
+                default:
+                    break;
             }
-            if (watched == ui->tree_users)
+        }
+        else if (watched == ui->tree_hosts)
+        {
+            if (key == Qt::Key_F2)
             {
-                onAddUser();
+                onModifyHost();
                 return true;
             }
         }
-        else if (key_event->key() == Qt::Key_Delete)
+        else if (watched == ui->tree_users)
         {
-            if (watched == ui->tree_workspaces)
+            switch (key)
             {
-                onDeleteWorkspace();
-                return true;
-            }
-            if (watched == ui->tree_users)
-            {
-                onDeleteUser();
-                return true;
+                case Qt::Key_Insert:
+                    onAddUser();
+                    return true;
+
+                case Qt::Key_Delete:
+                    onDeleteUser();
+                    return true;
+
+                case Qt::Key_F2:
+                    onModifyUser();
+                    return true;
+
+                default:
+                    break;
             }
         }
     }
