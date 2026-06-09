@@ -35,6 +35,8 @@ message HostRequest
     //                group within the host's current workspace); host.display_name plain;
     //                host.comment/user_name/password AEAD-encrypted with the workspace GK by
     //                the caller. Other Host fields are ignored. Allowed for admin and manager.
+    // "update"     - Force the host to check for updates immediately. Only host.host_id is read;
+    //                the host must be online. Admin-only.
     int64 request_id    = 1;
     string command_name = 2;
     Host host           = 3;

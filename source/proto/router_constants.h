@@ -25,6 +25,7 @@ namespace proto::router {
 extern const char* const kCommandHostDisconnect;
 extern const char* const kCommandHostRemove;
 extern const char* const kCommandHostModify;
+extern const char* const kCommandHostUpdate;
 
 // Command names for RelayRequest.
 extern const char* const kCommandRelayDisconnect;
