@@ -82,7 +82,17 @@ public:
 
     QList<RouterUser> userList() const;
     bool addUser(const RouterUser& user);
-    bool modifyUser(const RouterUser& user);
+
+    // Updates a user record. If the change rotates the password (salt/verifier differ from the
+    // stored ones), every device token is revoked and the workspace keys are re-wrapped from
+    // |wrapped_keys| atomically; |wrapped_keys| must then cover every workspace the user can
+    // access or the change is rejected (kErrorInvalidData) without modifying anything. When the
+    // password is unchanged |wrapped_keys| is ignored. If |password_changed| is not null it is set
+    // to whether the password was rotated (the authoritative check against the stored record).
+    // Returns a proto::router error code.
+    std::string_view modifyUser(
+        const RouterUser& user, const std::unordered_map<qint64, QByteArray>& wrapped_keys = {},
+        bool* password_changed = nullptr);
     bool removeUser(qint64 entry_id);
     RouterUser findUser(const QString& username) const;
     RouterUser findUser(qint64 entry_id) const;
@@ -242,13 +252,6 @@ public:
     std::vector<Workspace::Access> workspaceAccessListForUser(qint64 user_id) const;
 
     bool hasWorkspaceAccess(qint64 user_id, qint64 workspace_id) const;
-
-    // Reconciles the user's workspace_access rows after a key-pair rotation. Each existing
-    // membership is updated with the matching re-sealed wrapped_gk from |wrapped_keys| (keyed by
-    // workspace id); memberships without an entry are removed, since their stored wrapped_gk no
-    // longer opens with the new key pair. Does not grant access to workspaces the user was not
-    // already a member of.
-    bool setWorkspaceKeysForUser(qint64 user_id, const std::unordered_map<qint64, QByteArray>& wrapped_keys);
 
     //----------------------------------------------------------------------------------------------
     // Hosts Groups

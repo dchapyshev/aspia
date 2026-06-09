@@ -765,15 +765,7 @@ void Client::readChangePasswordRequest(const proto::router::ChangePasswordReques
         return;
     }
 
-    if (!database.modifyUser(user))
-    {
-        CLOG(ERROR) << "Failed to persist rotated user credentials";
-        result->set_error_code(proto::router::kErrorInternalError);
-        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-        return;
-    }
-
-    // The rotation produced a new key pair, so the workspace keys the client re-sealed to the
+    // The rotation produced a new key pair, so the workspace keys re-sealed by the client to the
     // new public key must replace the stored ones (now sealed to the old, discarded key).
     std::unordered_map<qint64, QByteArray> wrapped_keys;
     wrapped_keys.reserve(request.workspace_key_size());
@@ -784,8 +776,18 @@ void Client::readChangePasswordRequest(const proto::router::ChangePasswordReques
         wrapped_keys.emplace(wk.workspace_id(), QByteArray::fromStdString(wk.wrapped_gk()));
     }
 
-    if (!database.setWorkspaceKeysForUser(userId(), wrapped_keys))
-        CLOG(WARNING) << "Failed to rewrap workspace keys for user" << userId();
+    // Credentials and re-wrapped keys are persisted atomically: the password is rotated only if a
+    // re-sealed key is present for every workspace the user can access, so a partial set can never
+    // leave the user without workspace access. Only the password-derived fields differ here (the
+    // rest were loaded from the database), so reusing modifyUser writes back identical values.
+    const std::string_view error_code = database.modifyUser(user, wrapped_keys);
+    if (error_code != proto::router::kErrorOk)
+    {
+        CLOG(ERROR) << "Failed to change password for user" << userName() << ":" << error_code;
+        result->set_error_code(error_code);
+        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+        return;
+    }
 
     CLOG(INFO) << "User" << userName() << "rotated own credentials";
     result->set_error_code(proto::router::kErrorOk);

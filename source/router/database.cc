@@ -405,29 +405,31 @@ bool Database::addUser(const RouterUser& user)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::modifyUser(const RouterUser& user)
+std::string_view Database::modifyUser(
+    const RouterUser& user, const std::unordered_map<qint64, QByteArray>& wrapped_keys,
+    bool* password_changed)
 {
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return false;
+        return proto::router::kErrorInternalError;
     }
 
     if (!user.isValid())
     {
         LOG(ERROR) << "Not valid user";
-        return false;
+        return proto::router::kErrorInvalidData;
     }
 
     SqlTransaction transaction(db_);
     if (!transaction.begin())
     {
         LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
-        return false;
+        return proto::router::kErrorInternalError;
     }
 
     // Read the existing verifier first - a change to salt or verifier means a password rotation,
-    // which must invalidate every device token attached to this user.
+    // which must invalidate every device token and re-wrap the workspace keys.
     QByteArray old_salt;
     QByteArray old_verifier;
     {
@@ -437,7 +439,7 @@ bool Database::modifyUser(const RouterUser& user)
         if (!select.isValid())
         {
             LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-            return false;
+            return proto::router::kErrorInternalError;
         }
 
         if (select.next())
@@ -465,11 +467,14 @@ bool Database::modifyUser(const RouterUser& user)
     if (!query.exec())
     {
         LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-        return false;
+        return proto::router::kErrorInternalError;
     }
 
-    const bool password_changed = old_salt != user.salt || old_verifier != user.verifier;
+    const bool rotated = old_salt != user.salt || old_verifier != user.verifier;
     if (password_changed)
+        *password_changed = rotated;
+
+    if (rotated)
     {
         SqlQuery revoke(db_, "DELETE FROM client_device_tokens WHERE user_id=?");
         revoke.addInt64(user.entry_id);
@@ -477,17 +482,61 @@ bool Database::modifyUser(const RouterUser& user)
         if (!revoke.exec())
         {
             LOG(ERROR) << "Unable to revoke device tokens:" << db_.lastError();
-            return false;
+            return proto::router::kErrorInternalError;
+        }
+
+        // The rotation invalidated the stored wrapped GKs, so a freshly re-sealed key must be
+        // present for every workspace the user can access. If any is missing, return without
+        // committing - the transaction rolls back and the user keeps access.
+        std::vector<qint64> workspace_ids;
+        {
+            SqlQuery select(db_, "SELECT workspace_id FROM workspace_access WHERE user_id=?");
+            select.addInt64(user.entry_id);
+
+            if (!select.isValid())
+            {
+                LOG(ERROR) << "Unable to read workspace access:" << db_.lastError();
+                return proto::router::kErrorInternalError;
+            }
+
+            while (select.next())
+                workspace_ids.emplace_back(select.columnInt64(0));
+        }
+
+        for (qint64 workspace_id : std::as_const(workspace_ids))
+        {
+            const auto it = wrapped_keys.find(workspace_id);
+            if (it == wrapped_keys.end() || it->second.isEmpty())
+            {
+                LOG(ERROR) << "Missing re-sealed key for workspace" << workspace_id
+                           << ". Rejecting to preserve access";
+                return proto::router::kErrorInvalidData;
+            }
+        }
+
+        const char kSql[] = "UPDATE workspace_access SET wrapped_gk=? WHERE workspace_id=? AND user_id=?";
+        for (qint64 workspace_id : std::as_const(workspace_ids))
+        {
+            SqlQuery query(db_, kSql);
+            query.addBlob(wrapped_keys.at(workspace_id));
+            query.addInt64(workspace_id);
+            query.addInt64(user.entry_id);
+
+            if (!query.exec())
+            {
+                LOG(ERROR) << "Unable to update workspace access:" << db_.lastError();
+                return proto::router::kErrorInternalError;
+            }
         }
     }
 
     if (!transaction.commit())
     {
         LOG(ERROR) << "Unable to commit transaction:" << db_.lastError();
-        return false;
+        return proto::router::kErrorInternalError;
     }
 
-    return true;
+    return proto::router::kErrorOk;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1877,80 +1926,6 @@ bool Database::hasWorkspaceAccess(qint64 user_id, qint64 workspace_id) const
     query.addInt64(user_id);
 
     return query.next();
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::setWorkspaceKeysForUser(
-    qint64 user_id, const std::unordered_map<qint64, QByteArray>& wrapped_keys)
-{
-    if (!isValid())
-    {
-        LOG(ERROR) << "Database is not valid";
-        return false;
-    }
-
-    SqlTransaction transaction(db_);
-    if (!transaction.begin())
-    {
-        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
-        return false;
-    }
-
-    QList<qint64> workspace_ids;
-    {
-        SqlQuery select(db_, "SELECT workspace_id FROM workspace_access WHERE user_id=?");
-        select.addInt64(user_id);
-
-        if (!select.isValid())
-        {
-            LOG(ERROR) << "Unable to read workspace access:" << db_.lastError();
-            return false;
-        }
-
-        while (select.next())
-            workspace_ids.append(select.columnInt64(0));
-    }
-
-    for (qint64 workspace_id : std::as_const(workspace_ids))
-    {
-        const auto it = wrapped_keys.find(workspace_id);
-
-        if (it != wrapped_keys.end())
-        {
-            const char kSql[] =
-                "UPDATE workspace_access SET wrapped_gk=? WHERE workspace_id=? AND user_id=?";
-            SqlQuery query(db_, kSql);
-            query.addBlob(it->second);
-            query.addInt64(workspace_id);
-            query.addInt64(user_id);
-
-            if (!query.exec())
-            {
-                LOG(ERROR) << "Unable to update workspace access:" << db_.lastError();
-                return false;
-            }
-        }
-        else
-        {
-            SqlQuery query(db_, "DELETE FROM workspace_access WHERE workspace_id=? AND user_id=?");
-            query.addInt64(workspace_id);
-            query.addInt64(user_id);
-
-            if (!query.exec())
-            {
-                LOG(ERROR) << "Unable to update workspace access:" << db_.lastError();
-                return false;
-            }
-        }
-    }
-
-    if (!transaction.commit())
-    {
-        LOG(ERROR) << "Unable to commit transaction:" << db_.lastError();
-        return false;
-    }
-
-    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

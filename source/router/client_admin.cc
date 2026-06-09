@@ -815,34 +815,31 @@ std::string ClientAdmin::modifyUser(const proto::router::User& user)
         return proto::router::kErrorInternalError;
     }
 
-    const RouterUser old_user = database.findUser(new_user.entry_id);
-    const bool password_changed = old_user.isValid() &&
-        (old_user.salt != new_user.salt || old_user.verifier != new_user.verifier);
-
-    if (!database.modifyUser(new_user))
+    // On a password rotation the stored wrapped GKs must be replaced with the keys re-sealed by
+    // the admin to the new key pair. The user update, token revocation and re-wrap happen in one
+    // transaction inside modifyUser; if the re-sealed set is incomplete the whole change is
+    // rejected, so the user never loses workspace access. The keys are only consumed when the
+    // password actually changes (decided authoritatively inside modifyUser).
+    std::unordered_map<qint64, QByteArray> wrapped_keys;
+    wrapped_keys.reserve(user.workspace_key_size());
+    for (int i = 0; i < user.workspace_key_size(); ++i)
     {
-        CLOG(ERROR) << "modifyUser failed";
-        return proto::router::kErrorInternalError;
+        const proto::router::User::WorkspaceKey& wk = user.workspace_key(i);
+        wrapped_keys.emplace(wk.workspace_id(), QByteArray::fromStdString(wk.wrapped_gk()));
     }
 
-    // modifyUser already revoked the tokens; reconcile the workspace keys to the rotated key pair
-    // and drop the live sessions so the new password applies immediately.
+    bool password_changed = false;
+    const std::string_view error_code = database.modifyUser(new_user, wrapped_keys, &password_changed);
+    if (error_code != proto::router::kErrorOk)
+    {
+        CLOG(ERROR) << "modifyUser failed:" << error_code;
+        return std::string(error_code);
+    }
+
+    // The rotation revoked every device token; drop the live sessions so the new password applies
+    // immediately.
     if (password_changed)
-    {
-        std::unordered_map<qint64, QByteArray> wrapped_keys;
-        wrapped_keys.reserve(user.workspace_key_size());
-
-        for (int i = 0; i < user.workspace_key_size(); ++i)
-        {
-            const proto::router::User::WorkspaceKey& wk = user.workspace_key(i);
-            wrapped_keys.emplace(wk.workspace_id(), QByteArray::fromStdString(wk.wrapped_gk()));
-        }
-
-        if (!database.setWorkspaceKeysForUser(new_user.entry_id, wrapped_keys))
-            CLOG(WARNING) << "Failed to rewrap workspace keys for user" << new_user.entry_id;
-
         Service::instance()->stopClients(new_user.entry_id);
-    }
 
     Service::instance()->notifyChanged(Service::NOTIFY_USERS);
     return proto::router::kErrorOk;
