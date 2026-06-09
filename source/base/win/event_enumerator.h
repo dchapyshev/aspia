@@ -48,15 +48,19 @@ public:
     QString description() const;
 
 private:
-    EVENTLOGRECORD* record() const;
+    bool fetchNext() const;
+    bool renderSystem() const;
+    QString eventDataString() const;
 
     QString log_name_;
-    ScopedEventLog event_log_;
+    ScopedEvtHandle query_;
+    ScopedEvtHandle render_context_;
     quint32 records_count_ = 0;
-    int end_record_ = 0;
 
-    mutable int current_pos_ = 0;
-    mutable QByteArray record_buffer_;
+    mutable int remaining_ = 0;
+    mutable bool event_ready_ = false;
+    mutable ScopedEvtHandle event_;
+    mutable QByteArray values_buffer_;
 
     Q_DISABLE_COPY_MOVE(EventEnumerator)
 };

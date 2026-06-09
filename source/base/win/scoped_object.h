@@ -21,6 +21,7 @@
 
 #include <QtClassHelperMacros>
 #include <qt_windows.h>
+#include <winevt.h>
 
 template<class T, class Traits>
 class ScopedObject
@@ -132,17 +133,17 @@ public:
     }
 };
 
-class EventLogObjectTraits
+class EvtObjectTraits
 {
 public:
     // Closes the handle.
-    static void close(HANDLE object)
+    static void close(EVT_HANDLE object)
     {
         if (isValid(object))
-            CloseEventLog(object);
+            EvtClose(object);
     }
 
-    static bool isValid(HANDLE object)
+    static bool isValid(EVT_HANDLE object)
     {
         return (object != nullptr);
     }
@@ -150,6 +151,6 @@ public:
 
 using ScopedHandle = ScopedObject<HANDLE, HandleObjectTraits>;
 using ScopedScHandle = ScopedObject<SC_HANDLE, ScHandleObjectTraits>;
-using ScopedEventLog = ScopedObject<HANDLE, EventLogObjectTraits>;
+using ScopedEvtHandle = ScopedObject<EVT_HANDLE, EvtObjectTraits>;
 
 #endif // BASE_WIN_SCOPED_HANDLE_H

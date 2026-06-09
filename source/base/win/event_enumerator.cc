@@ -18,10 +18,13 @@
 
 #include "base/win/event_enumerator.h"
 
-#include "base/logging.h"
-#include "base/win/registry.h"
+#include <QStringList>
 
-#include <strsafe.h>
+#include <winmeta.h>
+
+#include <string>
+
+#include "base/logging.h"
 
 namespace {
 
@@ -35,226 +38,66 @@ void resizeBuffer(QByteArray* buffer, size_t size)
 }
 
 //--------------------------------------------------------------------------------------------------
-HANDLE openEventLogHandle(const wchar_t* source, DWORD* records_count, DWORD* first_record)
+EVT_VARIANT* systemValues(const QByteArray& buffer)
 {
-    ScopedEventLog event_log(OpenEventLogW(nullptr, source));
-    if (!event_log.isValid())
-    {
-        PLOG(ERROR) << "OpenEventLogW failed";
-        return nullptr;
-    }
-
-    if (!GetNumberOfEventLogRecords(event_log.get(), records_count))
-    {
-        PLOG(ERROR) << "GetNumberOfEventLogRecords failed";
-        return nullptr;
-    }
-
-    if (!GetOldestEventLogRecord(event_log.get(), first_record))
-    {
-        PLOG(ERROR) << "GetOldestEventLogRecord failed";
-        return nullptr;
-    }
-
-    return event_log.release();
+    return reinterpret_cast<EVT_VARIANT*>(const_cast<char*>(buffer.constData()));
 }
 
 //--------------------------------------------------------------------------------------------------
-bool eventLogRecord(HANDLE event_log, DWORD record_offset, QByteArray* record_buffer)
+bool hasValue(const EVT_VARIANT& value)
 {
-    resizeBuffer(record_buffer, sizeof(EVENTLOGRECORD));
+    return (value.Type & EVT_VARIANT_TYPE_MASK) != EvtVarTypeNull;
+}
 
-    EVENTLOGRECORD* record = reinterpret_cast<EVENTLOGRECORD*>(record_buffer->data());
+//--------------------------------------------------------------------------------------------------
+quint32 logRecordCount(const QString& log_name)
+{
+    ScopedEvtHandle log(EvtOpenLog(nullptr, qUtf16Printable(log_name), EvtOpenChannelPath));
+    if (!log.isValid())
+    {
+        PLOG(ERROR) << "EvtOpenLog failed";
+        return 0;
+    }
 
-    DWORD bytes_read = 0;
-    DWORD bytes_needed = 0;
+    EVT_VARIANT value;
+    DWORD buffer_used = 0;
 
-    if (!ReadEventLogW(event_log,
-                       EVENTLOG_SEEK_READ | EVENTLOG_BACKWARDS_READ,
-                       record_offset,
-                       record,
-                       sizeof(EVENTLOGRECORD),
-                       &bytes_read,
-                       &bytes_needed))
+    if (!EvtGetLogInfo(log.get(), EvtLogNumberOfLogRecords, sizeof(value), &value, &buffer_used))
+    {
+        PLOG(ERROR) << "EvtGetLogInfo failed";
+        return 0;
+    }
+
+    return static_cast<quint32>(value.UInt64Val);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString formatEventMessage(EVT_HANDLE metadata, EVT_HANDLE event, EVT_FORMAT_MESSAGE_FLAGS flag)
+{
+    DWORD buffer_used = 0;
+
+    // First call to determine the required buffer size.
+    EvtFormatMessage(metadata, event, 0, 0, nullptr, flag, 0, nullptr, &buffer_used);
+    if (GetLastError() != ERROR_INSUFFICIENT_BUFFER || buffer_used == 0)
+        return QString();
+
+    std::wstring buffer;
+    buffer.resize(buffer_used);
+
+    if (!EvtFormatMessage(metadata, event, 0, 0, nullptr, flag, buffer_used, buffer.data(), &buffer_used))
     {
         DWORD error_code = GetLastError();
 
-        if (error_code != ERROR_INSUFFICIENT_BUFFER)
+        // The message text is still rendered even when some inserts can not be resolved.
+        if (error_code != ERROR_EVT_UNRESOLVED_VALUE_INSERT &&
+            error_code != ERROR_EVT_UNRESOLVED_PARAMETER_INSERT &&
+            error_code != ERROR_EVT_MAX_INSERTS_REACHED)
         {
-            LOG(ERROR) << "ReadEventLogW failed:" << SystemError(error_code).toString();
-            return false;
-        }
-
-        resizeBuffer(record_buffer, bytes_needed);
-        record = reinterpret_cast<EVENTLOGRECORD*>(record_buffer->data());
-
-        if (!ReadEventLogW(event_log,
-                           EVENTLOG_SEEK_READ | EVENTLOG_BACKWARDS_READ,
-                           record_offset,
-                           record,
-                           bytes_needed,
-                           &bytes_read,
-                           &bytes_needed))
-        {
-            PLOG(ERROR) << "ReadEventLogW failed";
-            return false;
+            return QString();
         }
     }
 
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool eventLogMessageFileDLL(
-    const QString& log_name, const QString& source, std::wstring* message_file)
-{
-    QString key_path = QString("SYSTEM\\CurrentControlSet\\Services\\EventLog\\%1\\%2")
-        .arg(log_name, source);
-
-    RegKey key;
-
-    LONG status = key.open(HKEY_LOCAL_MACHINE, key_path, KEY_READ);
-    if (status != ERROR_SUCCESS)
-    {
-        LOG(ERROR) << "key.open failed:" << SystemError(static_cast<DWORD>(status)).toString();
-        return false;
-    }
-
-    status = key.readValue("EventMessageFile", message_file);
-    if (status != ERROR_SUCCESS)
-    {
-        LOG(INFO) << "key.readValue failed:" << SystemError(static_cast<DWORD>(status)).toString();
-        return false;
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-wchar_t* loadMessageFromDLL(const wchar_t* module_name, DWORD event_id, wchar_t** arguments)
-{
-    HINSTANCE module = LoadLibraryExW(module_name,
-                                      nullptr,
-                                      DONT_RESOLVE_DLL_REFERENCES | LOAD_LIBRARY_AS_DATAFILE);
-    if (!module)
-        return nullptr;
-
-    DWORD flags = FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_HMODULE |
-                  FORMAT_MESSAGE_ARGUMENT_ARRAY | FORMAT_MESSAGE_MAX_WIDTH_MASK;
-
-    wchar_t* message_buffer = nullptr;
-    DWORD length = 0;
-
-    __try
-    {
-        // SEH to protect from invalid string parameters.
-        __try
-        {
-            length = FormatMessageW(flags,
-                                    module,
-                                    event_id,
-                                    MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL),
-                                    reinterpret_cast<LPWSTR>(&message_buffer),
-                                    0,
-                                    reinterpret_cast<va_list*>(arguments));
-        }
-        __except (EXCEPTION_EXECUTE_HANDLER)
-        {
-            flags &= ~FORMAT_MESSAGE_ARGUMENT_ARRAY;
-            flags |= FORMAT_MESSAGE_IGNORE_INSERTS;
-
-            length = FormatMessageW(flags,
-                                    module,
-                                    event_id,
-                                    MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL),
-                                    reinterpret_cast<LPWSTR>(&message_buffer),
-                                    0,
-                                    nullptr);
-        }
-    }
-    __finally
-    {
-        FreeLibrary(module);
-    }
-
-    if (!length)
-        return nullptr;
-
-    return message_buffer;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool eventLogMessage(const QString& log_name, EVENTLOGRECORD* record, QString* message)
-{
-    QString source = QString::fromWCharArray(reinterpret_cast<wchar_t*>(record + 1));
-
-    std::wstring message_file;
-
-    if (!eventLogMessageFileDLL(log_name, source, &message_file))
-        return false;
-
-    wchar_t* argument = reinterpret_cast<wchar_t*>(
-        reinterpret_cast<LPBYTE>(record) + record->StringOffset);
-
-    static const WORD kMaxInsertStrings = 100;
-
-    wchar_t* arguments[kMaxInsertStrings];
-    memset(arguments, 0, sizeof(arguments));
-
-    WORD num_strings = std::min(record->NumStrings, kMaxInsertStrings);
-    for (WORD i = 0; i < num_strings; ++i)
-    {
-        arguments[i] = argument;
-        argument += lstrlenW(argument) + 1;
-    }
-
-    wchar_t* file = &message_file[0];
-
-    while (file)
-    {
-        wchar_t* next_file = wcschr(file, L';');
-        if (next_file != nullptr)
-        {
-            *next_file = 0;
-            ++next_file;
-        }
-
-        wchar_t module_name[MAX_PATH];
-        if (ExpandEnvironmentStringsW(file, module_name, _countof(module_name)) != 0)
-        {
-            wchar_t* message_buffer =
-                loadMessageFromDLL(module_name, record->EventID, arguments);
-
-            if (message_buffer)
-            {
-                *message = QString::fromWCharArray(message_buffer);
-                LocalFree(message_buffer);
-                return true;
-            }
-        }
-
-        file = next_file;
-    }
-
-    if (num_strings > 0)
-    {
-        argument = reinterpret_cast<wchar_t*>(
-           reinterpret_cast<LPBYTE>(record) + record->StringOffset);
-
-        for (int i = 0; i < num_strings; ++i)
-        {
-            message->append(argument);
-
-            if (i != num_strings - 1)
-                message->append(L"; ");
-
-            argument += lstrlenW(argument) + 1;
-        }
-
-        return true;
-    }
-
-    return false;
+    return QString::fromWCharArray(buffer.c_str());
 }
 
 } // namespace
@@ -266,30 +109,36 @@ EventEnumerator::EventEnumerator(const QString& log_name, quint32 start, quint32
     if (!count)
         return;
 
-    DWORD first_record = 0;
-    DWORD records_count = 0;
+    records_count_ = logRecordCount(log_name_);
 
-    event_log_.reset(openEventLogHandle(qUtf16Printable(log_name_), &records_count, &first_record));
-    if (!records_count)
+    render_context_.reset(EvtCreateRenderContext(0, nullptr, EvtRenderContextSystem));
+    if (!render_context_.isValid())
+    {
+        PLOG(ERROR) << "EvtCreateRenderContext failed";
         return;
+    }
 
-    records_count_ = records_count;
+    // Reverse direction makes the newest records come first in the result set.
+    query_.reset(EvtQuery(nullptr, qUtf16Printable(log_name_), nullptr,
+                          EvtQueryChannelPath | EvtQueryReverseDirection));
+    if (!query_.isValid())
+    {
+        PLOG(ERROR) << "EvtQuery failed";
+        return;
+    }
 
-    int end = static_cast<int>(first_record + records_count);
+    if (start > 0)
+    {
+        if (!EvtSeek(query_.get(), static_cast<LONGLONG>(start), nullptr, 0, EvtSeekRelativeToFirst))
+        {
+            PLOG(ERROR) << "EvtSeek failed";
+        }
+    }
 
-    current_pos_ = end - static_cast<int>(start) - 1;
-    if (current_pos_ < static_cast<int>(first_record))
-        current_pos_ = static_cast<int>(first_record);
-    else if (current_pos_ > end - 1)
-        current_pos_ = end - 1;
+    remaining_ = static_cast<int>(count);
 
-    end_record_ = current_pos_ - static_cast<int>(count) + 1;
-    if (end_record_ < static_cast<int>(first_record))
-        end_record_ = static_cast<int>(first_record);
-
-    LOG(INFO) << "Log name:" << log_name_;
-    LOG(INFO) << "First:" << first_record << "count:" << records_count
-              << "pos:" << current_pos_ << "end:" << end_record_;
+    LOG(TRACE) << "Log name:" << log_name_;
+    LOG(TRACE) << "Total:" << records_count_ << "start:" << start << "count:" << count;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -304,93 +153,201 @@ quint32 EventEnumerator::count() const
 //--------------------------------------------------------------------------------------------------
 bool EventEnumerator::isAtEnd() const
 {
-    if (!event_log_.isValid())
+    if (!query_.isValid())
         return true;
 
-    for (;;)
-    {
-        if (current_pos_ < end_record_)
-            return true;
+    if (event_ready_)
+        return false;
 
-        if (eventLogRecord(event_log_.get(), static_cast<quint32>(current_pos_), &record_buffer_))
-            return false;
-
-        record_buffer_.clear();
-        --current_pos_;
-    }
+    return !fetchNext();
 }
 
 //--------------------------------------------------------------------------------------------------
 void EventEnumerator::advance()
 {
-    record_buffer_.clear();
-    --current_pos_;
+    event_.reset();
+    event_ready_ = false;
+    --remaining_;
 }
 
 //--------------------------------------------------------------------------------------------------
 EventEnumerator::Type EventEnumerator::type() const
 {
-    switch (record()->EventType)
+    EVT_VARIANT* values = systemValues(values_buffer_);
+
+    quint64 keywords = hasValue(values[EvtSystemKeywords]) ? values[EvtSystemKeywords].UInt64Val : 0;
+
+    if (keywords & 0x0020000000000000ULL) // WINEVENT_KEYWORD_AUDIT_SUCCESS.
+        return Type::AUDIT_SUCCESS;
+
+    if (keywords & 0x0010000000000000ULL) // WINEVENT_KEYWORD_AUDIT_FAILURE.
+        return Type::AUDIT_FAILURE;
+
+    quint8 level = hasValue(values[EvtSystemLevel]) ? values[EvtSystemLevel].ByteVal : 0;
+    switch (level)
     {
-        case EVENTLOG_ERROR_TYPE:
+        case WINEVENT_LEVEL_CRITICAL:
+        case WINEVENT_LEVEL_ERROR:
             return Type::ERR;
 
-        case EVENTLOG_WARNING_TYPE:
+        case WINEVENT_LEVEL_WARNING:
             return Type::WARN;
 
-        case EVENTLOG_INFORMATION_TYPE:
-            return Type::INFO;
-
-        case EVENTLOG_AUDIT_SUCCESS:
-            return Type::AUDIT_SUCCESS;
-
-        case EVENTLOG_AUDIT_FAILURE:
-            return Type::AUDIT_FAILURE;
-
-        case EVENTLOG_SUCCESS:
-            return Type::SUCCESS;
-
         default:
-            return Type::UNKNOWN;
+            return Type::INFO;
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 qint64 EventEnumerator::time() const
 {
-    return record()->TimeGenerated;
+    EVT_VARIANT* values = systemValues(values_buffer_);
+    if (!hasValue(values[EvtSystemTimeCreated]))
+        return 0;
+
+    // Convert the FILETIME value (100-ns intervals since 1601) to seconds since the Unix epoch.
+    static const quint64 kUnixEpochOffset = 116444736000000000ULL;
+    quint64 file_time = values[EvtSystemTimeCreated].FileTimeVal;
+    if (file_time < kUnixEpochOffset)
+        return 0;
+
+    return static_cast<qint64>((file_time - kUnixEpochOffset) / 10000000ULL);
 }
 
 //--------------------------------------------------------------------------------------------------
 QString EventEnumerator::category() const
 {
-    return QString::number(record()->EventCategory);
+    EVT_VARIANT* values = systemValues(values_buffer_);
+    quint16 task = hasValue(values[EvtSystemTask]) ? values[EvtSystemTask].UInt16Val : 0;
+    return QString::number(task);
 }
 
 //--------------------------------------------------------------------------------------------------
 quint32 EventEnumerator::eventId() const
 {
-    return record()->EventID & 0xFFFF;
+    EVT_VARIANT* values = systemValues(values_buffer_);
+    if (!hasValue(values[EvtSystemEventID]))
+        return 0;
+
+    return values[EvtSystemEventID].UInt16Val;
 }
 
 //--------------------------------------------------------------------------------------------------
 QString EventEnumerator::source() const
 {
-    return QString::fromWCharArray(reinterpret_cast<wchar_t*>(record() + 1));
+    EVT_VARIANT* values = systemValues(values_buffer_);
+    if (!hasValue(values[EvtSystemProviderName]) || !values[EvtSystemProviderName].StringVal)
+        return QString();
+
+    return QString::fromWCharArray(values[EvtSystemProviderName].StringVal);
 }
 
 //--------------------------------------------------------------------------------------------------
 QString EventEnumerator::description() const
 {
-    QString desc_wide;
-    if (!eventLogMessage(log_name_, record(), &desc_wide))
+    if (!event_ready_)
         return QString();
 
-    return desc_wide;
+    EVT_VARIANT* values = systemValues(values_buffer_);
+    const wchar_t* provider = hasValue(values[EvtSystemProviderName]) ?
+        values[EvtSystemProviderName].StringVal : nullptr;
+
+    ScopedEvtHandle metadata(EvtOpenPublisherMetadata(nullptr, provider, nullptr, 0, 0));
+
+    QString message = formatEventMessage(metadata.get(), event_.get(), EvtFormatMessageEvent);
+    if (!message.isEmpty())
+        return message;
+
+    // No message template available, fall back to the raw event data strings.
+    return eventDataString();
 }
 
 //--------------------------------------------------------------------------------------------------
-EVENTLOGRECORD* EventEnumerator::record() const
+bool EventEnumerator::fetchNext() const
 {
-    return reinterpret_cast<EVENTLOGRECORD*>(record_buffer_.data());
+    if (remaining_ <= 0)
+        return false;
+
+    for (;;)
+    {
+        EVT_HANDLE event = nullptr;
+        DWORD returned = 0;
+
+        if (!EvtNext(query_.get(), 1, &event, INFINITE, 0, &returned) || returned == 0)
+        {
+            remaining_ = 0;
+            return false;
+        }
+
+        event_.reset(event);
+
+        if (renderSystem())
+        {
+            event_ready_ = true;
+            return true;
+        }
+
+        // Unable to render the system properties, skip the record.
+        event_.reset();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+bool EventEnumerator::renderSystem() const
+{
+    DWORD buffer_used = 0;
+    DWORD property_count = 0;
+
+    EvtRender(render_context_.get(), event_.get(), EvtRenderEventValues, 0, nullptr, &buffer_used,
+              &property_count);
+    if (buffer_used == 0)
+        return false;
+
+    resizeBuffer(&values_buffer_, buffer_used);
+
+    if (!EvtRender(render_context_.get(), event_.get(), EvtRenderEventValues,
+                   static_cast<DWORD>(values_buffer_.size()), values_buffer_.data(),
+                   &buffer_used, &property_count))
+    {
+        PLOG(ERROR) << "EvtRender failed";
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString EventEnumerator::eventDataString() const
+{
+    ScopedEvtHandle context(EvtCreateRenderContext(0, nullptr, EvtRenderContextUser));
+    if (!context.isValid())
+        return QString();
+
+    DWORD buffer_used = 0;
+    DWORD property_count = 0;
+
+    EvtRender(context.get(), event_.get(), EvtRenderEventValues, 0, nullptr, &buffer_used, &property_count);
+    if (buffer_used == 0)
+        return QString();
+
+    QByteArray buffer;
+    resizeBuffer(&buffer, buffer_used);
+
+    if (!EvtRender(context.get(), event_.get(), EvtRenderEventValues,
+                   static_cast<DWORD>(buffer.size()), buffer.data(),
+                   &buffer_used, &property_count))
+    {
+        return QString();
+    }
+
+    EVT_VARIANT* values = systemValues(buffer);
+
+    QStringList strings;
+    for (DWORD i = 0; i < property_count; ++i)
+    {
+        if ((values[i].Type & EVT_VARIANT_TYPE_MASK) == EvtVarTypeString && values[i].StringVal)
+            strings.append(QString::fromWCharArray(values[i].StringVal));
+    }
+
+    return strings.join("; ");
 }

@@ -679,7 +679,7 @@ qt_import_plugins(aspia_base INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE "" EXCLUDE_BY
 target_precompile_headers(aspia_base PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:pch.h>")
 
 if (WIN32)
-    set(BASE_PLATFORM_LIBS mfuuid strmiids)
+    set(BASE_PLATFORM_LIBS mfuuid strmiids wevtapi)
 endif()
 
 if (LINUX)
