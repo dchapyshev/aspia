@@ -597,12 +597,24 @@ bool Sidebar::eventFilter(QObject* watched, QEvent* event)
                     return true;
 
                 case Qt::Key_Delete:
-                    emit sig_removeGroup();
+                {
+                    Item* item = currentItem();
+                    if (item && item->itemType() == Item::ROUTER)
+                        onRemoveRouter();
+                    else
+                        emit sig_removeGroup();
                     return true;
+                }
 
                 case Qt::Key_F2:
-                    emit sig_editGroup();
+                {
+                    Item* item = currentItem();
+                    if (item && item->itemType() == Item::ROUTER)
+                        onEditRouter();
+                    else
+                        emit sig_editGroup();
                     return true;
+                }
 
                 default:
                     break;
