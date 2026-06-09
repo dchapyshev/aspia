@@ -130,7 +130,7 @@ protected:
     bool eventFilter(QObject* watched, QEvent* event) final;
 
 signals:
-    void sig_doubleClicked(qint64 entry_id);
+    void sig_activated(qint64 entry_id);
     void sig_currentChanged(qint64 entry_id);
     void sig_contextMenu(qint64 entry_id, const QPoint& pos);
 

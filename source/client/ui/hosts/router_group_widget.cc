@@ -167,8 +167,8 @@ RouterGroupWidget::RouterGroupWidget(QWidget* parent)
     connect(ui->tree_host, &QTreeWidget::itemSelectionChanged,
             this, &RouterGroupWidget::sig_currentChanged);
 
-    connect(ui->tree_host, &QTreeWidget::itemDoubleClicked,
-            this, [this](QTreeWidgetItem*, int) { emit sig_doubleClicked(); });
+    connect(ui->tree_host, &QTreeWidget::itemActivated,
+            this, [this](QTreeWidgetItem*, int) { emit sig_activated(); });
 
     ui->tree_host->viewport()->installEventFilter(this);
 }

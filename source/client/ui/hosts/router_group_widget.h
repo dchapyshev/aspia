@@ -104,7 +104,7 @@ public slots:
 signals:
     void sig_currentChanged();
     void sig_contextMenu(const QPoint& global_pos);
-    void sig_doubleClicked();
+    void sig_activated();
 
 protected:
     // QWidget implementation.

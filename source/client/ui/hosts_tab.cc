@@ -125,11 +125,11 @@ HostsTab::HostsTab(QWidget* parent)
         updateActionsState();
     });
     connect(local_group_widget_, &LocalGroupWidget::sig_currentChanged, this, &HostsTab::onCurrentHostChanged);
-    connect(local_group_widget_, &LocalGroupWidget::sig_doubleClicked, this, &HostsTab::onLocalConnect);
+    connect(local_group_widget_, &LocalGroupWidget::sig_activated, this, &HostsTab::onLocalConnect);
     connect(local_group_widget_, &LocalGroupWidget::sig_contextMenu, this, &HostsTab::onLocalHostContextMenu);
     connect(router_group_widget_, &RouterGroupWidget::sig_currentChanged, this, &HostsTab::updateActionsState);
     connect(router_group_widget_, &RouterGroupWidget::sig_contextMenu, this, &HostsTab::onRouterGroupContextMenu);
-    connect(router_group_widget_, &RouterGroupWidget::sig_doubleClicked, this, &HostsTab::onRouterGroupConnect);
+    connect(router_group_widget_, &RouterGroupWidget::sig_activated, this, &HostsTab::onRouterGroupConnect);
     connect(this, &HostsTab::sig_connectRequested, local_group_widget_,
             [this](const HostConfig& host, proto::peer::SessionType /* session_type */)
     {
@@ -141,7 +141,7 @@ HostsTab::HostsTab(QWidget* parent)
     connect(ui->action_copy_host, &QAction::triggered, this, &HostsTab::onCopyHost);
     connect(ui->action_delete_host, &QAction::triggered, this, &HostsTab::onRemoveHost);
     connect(search_widget_, &SearchWidget::sig_currentChanged, this, &HostsTab::updateActionsState);
-    connect(search_widget_, &SearchWidget::sig_doubleClicked, this, &HostsTab::onSearchConnect);
+    connect(search_widget_, &SearchWidget::sig_activated, this, &HostsTab::onSearchConnect);
     connect(search_widget_, &SearchWidget::sig_contextMenu, this, &HostsTab::onSearchContextMenu);
     connect(ui->action_add_group, &QAction::triggered, this, &HostsTab::onAddGroupAction);
     connect(ui->action_edit_group, &QAction::triggered, this, &HostsTab::onEditGroupAction);

@@ -96,7 +96,7 @@ public:
     void deactivate(QStatusBar* statusbar) final;
 
 signals:
-    void sig_doubleClicked();
+    void sig_activated();
     void sig_currentChanged();
     void sig_contextMenu(const QPoint& pos);
 

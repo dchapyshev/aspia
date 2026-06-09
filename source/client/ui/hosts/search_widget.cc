@@ -280,14 +280,14 @@ SearchWidget::SearchWidget(QWidget* parent)
     header->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(header, &QHeaderView::customContextMenuRequested, this, &SearchWidget::onHeaderContextMenu);
 
-    connect(tree_host_, &QTreeWidget::itemDoubleClicked,
+    connect(tree_host_, &QTreeWidget::itemActivated,
             this, [this](QTreeWidgetItem* item, int /* column */)
     {
         if (!item)
             return;
 
         tree_host_->setCurrentItem(item);
-        emit sig_doubleClicked();
+        emit sig_activated();
     });
 
     connect(tree_host_, &QTreeWidget::currentItemChanged, this, &SearchWidget::sig_currentChanged);

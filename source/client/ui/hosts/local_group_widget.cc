@@ -98,14 +98,14 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
     connect(ui->tree_host->header(), &QHeaderView::customContextMenuRequested,
             this, &LocalGroupWidget::onHeaderContextMenu);
 
-    connect(ui->tree_host, &QTreeWidget::itemDoubleClicked,
+    connect(ui->tree_host, &QTreeWidget::itemActivated,
             this, [this](QTreeWidgetItem* item, int /* column */)
     {
         if (!item)
             return;
 
         Item* host_item = static_cast<Item*>(item);
-        emit sig_doubleClicked(host_item->entryId());
+        emit sig_activated(host_item->entryId());
     });
 
     connect(ui->tree_host, &QTreeWidget::currentItemChanged,
