@@ -39,7 +39,6 @@
 #include <QStatusBar>
 #include <QToolButton>
 
-#include "base/crypto/secure_string.h"
 #include "base/logging.h"
 #include "base/peer/router_user.h"
 #include "base/peer/user.h"
@@ -47,13 +46,9 @@
 #include "client/ui/hosts/router_host_dialog.h"
 #include "client/ui/hosts/router_user_dialog.h"
 #include "client/ui/hosts/router_workspace_dialog.h"
-#include "common/ui/credentials_dialog.h"
 #include "common/ui/formatter.h"
 #include "common/ui/icon_text_button.h"
 #include "common/ui/msg_box.h"
-#include "common/ui/status_dialog.h"
-#include "common/ui/two_factor_code_dialog.h"
-#include "common/ui/two_factor_enroll_dialog.h"
 #include "proto/router_admin.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
@@ -440,20 +435,17 @@ private:
 RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     : ContentWidget(Type::ROUTER, parent),
       ui(std::make_unique<Ui::RouterWidget>()),
-      router_(new Router(config, this))
+      router_(Router::instance(config.routerId()))
 {
     LOG(INFO) << "Ctor";
+
+    // The Router lifecycle (connection, status, 2FA, password change) is owned by the Sidebar,
+    // which creates the Router before this widget. We only observe it via the shared registry.
+    CHECK(router_);
+
     ui->setupUi(this);
 
-    status_dialog_ = new StatusDialog(this);
-    status_dialog_->setWindowFlag(Qt::WindowStaysOnTopHint);
-    status_dialog_->hide();
-
     connect(router_, &Router::sig_statusChanged, this, &RouterWidget::onStatusChanged);
-    connect(router_, &Router::sig_errorOccurred, this, &RouterWidget::onConnectionErrorOccurred);
-    connect(router_, &Router::sig_passwordChangeRequired, this, &RouterWidget::onPasswordChangeRequired);
-    connect(router_, &Router::sig_twoFactorCodeRequired, this, &RouterWidget::onTwoFactorCodeRequired);
-    connect(router_, &Router::sig_twoFactorEnrollment, this, &RouterWidget::onTwoFactorEnrollment);
     connect(router_, &Router::sig_hostsChanged, this, &RouterWidget::onUpdateHostList);
     connect(router_, &Router::sig_relaysChanged, this, &RouterWidget::onUpdateRelayList);
     connect(router_, &Router::sig_clientsChanged, this, &RouterWidget::onUpdateClientList);
@@ -965,91 +957,9 @@ void RouterWidget::deactivate(QStatusBar* statusbar)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWidget::connectToRouter()
+void RouterWidget::updateConfig(const RouterConfig& /* config */)
 {
-    router_->connectToRouter();
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterWidget::disconnectFromRouter()
-{
-    router_->disconnectFromRouter();
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterWidget::updateConfig(const RouterConfig& config)
-{
-    router_->updateConfig(config);
     syncAdminVisibility();
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterWidget::showStatusDialog()
-{
-    status_dialog_->show();
-    status_dialog_->activateWindow();
-    status_dialog_->raise();
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterWidget::changePassword()
-{
-    CredentialsDialog dialog(CredentialsDialog::Type::SET_PASSWORD, this);
-    dialog.setWindowTitle(tr("Change Password"));
-    dialog.setValidator([](CredentialsDialog* dialog) -> bool
-    {
-        SecureString password = dialog->password();
-
-        if (!User::isValidPassword(password))
-        {
-            MsgBox::warning(dialog, tr("Password can not be empty and should not exceed %n characters.",
-                "", User::kMaxPasswordLength));
-            return false;
-        }
-
-        if (!User::isSafePassword(password))
-        {
-            QString unsafe = tr("Password you entered does not meet the security requirements!");
-            QString safe = tr("The password must contain lowercase and uppercase characters, "
-                "numbers and should not be shorter than %n characters.",
-                "", User::kSafePasswordLength);
-            QString question = tr("Do you want to enter a different password?");
-
-            if (MsgBox::warning(dialog, QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
-                MsgBox::Yes | MsgBox::No) == MsgBox::Yes)
-                return false;
-        }
-
-        return true;
-    });
-
-    if (dialog.exec() != QDialog::Accepted)
-        return;
-
-    // On success the router revokes this session's token and re-runs the 2FA stage, so the user
-    // will be asked for a code again right after (handled by the existing two-factor plumbing).
-    router_->changePassword(dialog.password(), this,
-        [this](const proto::router::ChangePasswordResult& result)
-    {
-        const std::string& error_code = result.error_code();
-        if (error_code == proto::router::kErrorOk)
-        {
-            status_dialog_->addMessage(tr("Password updated. Waiting for new encryption keys..."));
-            return;
-        }
-
-        const char* message;
-        if (error_code == proto::router::kErrorInvalidRequest)
-            message = QT_TR_NOOP("Invalid password change request.");
-        else if (error_code == proto::router::kErrorInternalError)
-            message = QT_TR_NOOP("Unknown internal error.");
-        else if (error_code == proto::router::kErrorInvalidData)
-            message = QT_TR_NOOP("Invalid data was passed.");
-        else
-            message = QT_TR_NOOP("Unknown error type.");
-
-        MsgBox::warning(this, tr(message));
-    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1439,21 +1349,8 @@ bool RouterWidget::eventFilter(QObject* watched, QEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWidget::onStatusChanged(qint64 router_id, Router::Status status)
+void RouterWidget::onStatusChanged(qint64 /* router_id */, Router::Status status)
 {
-    switch (status)
-    {
-        case Router::Status::CONNECTING:
-            status_dialog_->addMessage(tr("Connecting to router %1...").arg(router_->config().address()));
-            break;
-        case Router::Status::ONLINE:
-            status_dialog_->addMessage(tr("Connection to router %1 established.").arg(router_->config().address()));
-            break;
-        case Router::Status::OFFLINE:
-            status_dialog_->addMessage(tr("Disconnected from router %1.").arg(router_->config().address()));
-            break;
-    }
-
     if (router_->config().sessionType() == proto::router::SESSION_TYPE_ADMIN)
     {
         if (status == Router::Status::ONLINE)
@@ -1493,41 +1390,6 @@ void RouterWidget::onStatusChanged(qint64 router_id, Router::Status status)
         }
     }
 
-    emit sig_statusChanged(router_id, status);
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterWidget::onConnectionErrorOccurred(qint64 /* router_id */, TcpChannel::ErrorCode error_code)
-{
-    status_dialog_->addMessage(tr("Network error: %1.").arg(TcpChannel::errorToString(error_code)));
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterWidget::onPasswordChangeRequired()
-{
-    MsgBox::information(this,
-        tr("To complete the migration from a previous version, you need to change your password."));
-    changePassword();
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterWidget::onTwoFactorCodeRequired()
-{
-    TwoFactorCodeDialog dialog(this);
-    if (dialog.exec() == QDialog::Accepted)
-        router_->submitTwoFactorCode(dialog.code());
-    else
-        router_->disconnectFromRouter();
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterWidget::onTwoFactorEnrollment(qint64 /* router_id */, const QString& otpauth_uri)
-{
-    TwoFactorEnrollDialog dialog(otpauth_uri, this);
-    if (dialog.exec() == QDialog::Accepted)
-        router_->submitTwoFactorCode(dialog.code());
-    else
-        router_->disconnectFromRouter();
 }
 
 //--------------------------------------------------------------------------------------------------

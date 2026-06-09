@@ -163,7 +163,7 @@ HostsTab::HostsTab(QWidget* parent)
         if (current_content_ == router_group_widget_)
             router_group_widget_->reload();
     });
-    connect(ui->sidebar, &Sidebar::sig_routerGroupMoved, this, &HostsTab::refreshSidebarHostGroups);
+    connect(ui->sidebar, &Sidebar::sig_routerGroupMoved, ui->sidebar, &Sidebar::refreshHostGroups);
     connect(ui->action_add_user, &QAction::triggered, this, &HostsTab::onAddUserAction);
     connect(ui->action_edit_user, &QAction::triggered, this, &HostsTab::onEditUserAction);
     connect(ui->action_delete_user, &QAction::triggered, this, &HostsTab::onDeleteUserAction);
@@ -440,29 +440,6 @@ void HostsTab::changeEvent(QEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onRouterStatusChanged(qint64 router_id, Router::Status status)
-{
-    Sidebar::RouterItem::Status sidebar_status = Sidebar::RouterItem::Status::OFFLINE;
-    switch (status)
-    {
-        case Router::Status::OFFLINE:    sidebar_status = Sidebar::RouterItem::Status::OFFLINE;    break;
-        case Router::Status::CONNECTING: sidebar_status = Sidebar::RouterItem::Status::CONNECTING; break;
-        case Router::Status::ONLINE:     sidebar_status = Sidebar::RouterItem::Status::ONLINE;     break;
-    }
-
-    ui->sidebar->setRouterStatus(router_id, sidebar_status);
-
-    if (status == Router::Status::ONLINE)
-    {
-        refreshSidebarWorkspaces(router_id);
-    }
-    else
-    {
-        ui->sidebar->setRouterWorkspaces(router_id, {});
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void HostsTab::onSwitchContent(Sidebar::Item::Type type)
 {
     switch (type)
@@ -556,8 +533,8 @@ void HostsTab::onSidebarContextMenu(Sidebar::Item::Type type, const QPoint& pos)
         menu.addAction(ui->action_delete_router);
 
         auto* router_item = static_cast<Sidebar::RouterItem*>(item);
-        RouterWidget* widget = router_widgets_.value(router_item->routerId());
-        if (widget && widget->status() == Router::Status::ONLINE)
+        Router* router = Router::instance(router_item->routerId());
+        if (router && router->status() == Router::Status::ONLINE)
         {
             menu.addSeparator();
             menu.addAction(ui->action_change_router_password);
@@ -1195,7 +1172,7 @@ void HostsTab::onAddGroupAction()
     RouterGroupDialog dialog(router_id, group_item->workspaceId(), group_item->workspaceName(),
         0, default_parent_id, this);
     if (dialog.exec() == QDialog::Accepted)
-        refreshSidebarHostGroups(router_id);
+        ui->sidebar->refreshHostGroups(router_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1222,7 +1199,7 @@ void HostsTab::onEditGroupAction()
     RouterGroupDialog dialog(router_id, group_item->workspaceId(), group_item->workspaceName(),
         group_item->groupId(), 0, this);
     if (dialog.exec() == QDialog::Accepted)
-        refreshSidebarHostGroups(router_id);
+        ui->sidebar->refreshHostGroups(router_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1264,7 +1241,7 @@ void HostsTab::onDeleteGroupAction()
             LOG(ERROR) << "Group delete failed:" << result.error_code();
             return;
         }
-        refreshSidebarHostGroups(router_id);
+        ui->sidebar->refreshHostGroups(router_id);
     });
 }
 
@@ -1276,9 +1253,7 @@ void HostsTab::onRouterStatus()
         return;
 
     Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
-    RouterWidget* widget = router_widgets_.value(router->routerId());
-    if (widget)
-        widget->showStatusDialog();
+    ui->sidebar->showRouterStatus(router->routerId());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1289,9 +1264,9 @@ void HostsTab::onChangeRouterPassword()
         return;
 
     Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
-    RouterWidget* widget = router_widgets_.value(router->routerId());
-    if (widget && widget->status() == Router::Status::ONLINE)
-        widget->changePassword();
+    Router* instance = Router::instance(router->routerId());
+    if (instance && instance->status() == Router::Status::ONLINE)
+        ui->sidebar->changeRouterPassword(router->routerId());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1718,7 +1693,6 @@ RouterWidget* HostsTab::createRouterWidget(const RouterConfig& config)
     router_widgets_.insert(config.routerId(), widget);
     ui->content_stack->addWidget(widget);
 
-    connect(widget, &RouterWidget::sig_statusChanged, this, &HostsTab::onRouterStatusChanged);
     connect(widget, &RouterWidget::sig_currentTabTypeChanged,
             this, [this](qint64, RouterWidget::TabType) { updateActionsState(); });
     connect(widget, &RouterWidget::sig_currentUserChanged,
@@ -1737,73 +1711,7 @@ RouterWidget* HostsTab::createRouterWidget(const RouterConfig& config)
     connect(widget, &RouterWidget::sig_relayContextMenu, this, &HostsTab::onRelayContextMenu);
     connect(widget, &RouterWidget::sig_workspaceContextMenu, this, &HostsTab::onWorkspaceContextMenu);
 
-    // The router is constructed inside RouterWidget's ctor so router() is non-null here. We
-    // subscribe to data-change notifications to keep the sidebar tree in sync without having
-    // to wait for an OFFLINE/ONLINE flap.
-    if (Router* router = widget->router().data())
-    {
-        const qint64 router_id = config.routerId();
-        connect(router, &Router::sig_workspacesChanged, this, [this, router_id]
-        {
-            refreshSidebarWorkspaces(router_id);
-        });
-        connect(router, &Router::sig_groupsChanged, this, [this, router_id]
-        {
-            refreshSidebarHostGroups(router_id);
-        });
-    }
-
-    widget->connectToRouter();
     return widget;
-}
-
-//--------------------------------------------------------------------------------------------------
-void HostsTab::refreshSidebarWorkspaces(qint64 router_id)
-{
-    Router* router = Router::instance(router_id);
-    if (!router)
-        return;
-
-    router->listWorkspaces(0, this, [this, router_id](const Router::WorkspaceList& list)
-    {
-        ui->sidebar->setRouterWorkspaces(router_id, list.workspaces);
-
-        // Once the workspace items are in place, fan out a host-group fetch per workspace.
-        // Each response builds the subtree under its workspace via setRouterHostGroups().
-        Router* router = Router::instance(router_id);
-        if (!router)
-            return;
-
-        for (const Router::Workspace& workspace : list.workspaces)
-        {
-            const qint64 workspace_id = workspace.entry_id;
-            router->listGroups(workspace_id, this,
-                [this, router_id, workspace_id](const Router::GroupList& result)
-            {
-                ui->sidebar->setRouterHostGroups(router_id, workspace_id, result.groups);
-            });
-        }
-    });
-}
-
-//--------------------------------------------------------------------------------------------------
-void HostsTab::refreshSidebarHostGroups(qint64 router_id)
-{
-    // The workspace items already exist in the sidebar; refetch the group tree for each one
-    // without disturbing the workspaces themselves.
-    Router* router = Router::instance(router_id);
-    if (!router)
-        return;
-
-    const QList<qint64> workspace_ids = ui->sidebar->routerWorkspaceIds(router_id);
-    for (qint64 workspace_id : workspace_ids)
-    {
-        router->listGroups(workspace_id, this,
-            [this, router_id, workspace_id](const Router::GroupList& result)
-        {
-            ui->sidebar->setRouterHostGroups(router_id, workspace_id, result.groups);
-        });
-    }
 }
 
 //--------------------------------------------------------------------------------------------------

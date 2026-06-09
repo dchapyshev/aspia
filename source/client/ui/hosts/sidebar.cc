@@ -30,7 +30,10 @@
 #include <QUuid>
 #include <QVBoxLayout>
 
+#include "base/crypto/secure_string.h"
 #include "base/logging.h"
+#include "base/net/tcp_channel.h"
+#include "base/peer/user.h"
 #include "client/config.h"
 #include "client/database.h"
 #include "client/settings.h"
@@ -38,7 +41,12 @@
 #include "client/ui/hosts/local_group_widget.h"
 #include "client/ui/hosts/router_group_widget.h"
 #include "client/ui/router_dialog.h"
+#include "common/ui/credentials_dialog.h"
 #include "common/ui/msg_box.h"
+#include "common/ui/status_dialog.h"
+#include "common/ui/two_factor_code_dialog.h"
+#include "common/ui/two_factor_enroll_dialog.h"
+#include "proto/router_client.h"
 #include "proto/router_constants.h"
 #include "proto/router_manager.h"
 
@@ -147,6 +155,9 @@ void Sidebar::loadRouters()
     {
         RouterItem* router = new RouterItem(router_config.routerId(), router_config.displayLabel(), tree_widget_);
         router->setExpanded(true);
+
+        if (router_config.isValid())
+            createRouterSession(router_config);
     }
 }
 
@@ -167,8 +178,12 @@ void Sidebar::reloadRouters()
         if (item->itemType() != Item::ROUTER)
             continue;
 
-        if (!new_ids.contains(static_cast<RouterItem*>(item)->routerId()))
+        const qint64 router_id = static_cast<RouterItem*>(item)->routerId();
+        if (!new_ids.contains(router_id))
+        {
+            destroyRouterSession(router_id);
             delete tree_widget_->takeTopLevelItem(i);
+        }
     }
 
     // Update existing routers, append new ones at the end. Child items (Unassigned, ...) are
@@ -181,11 +196,17 @@ void Sidebar::reloadRouters()
         if (router)
         {
             router->setName(name);
+
+            if (Router* session = routers_.value(router_config.routerId()))
+                session->updateConfig(router_config);
         }
         else
         {
             RouterItem* new_router = new RouterItem(router_config.routerId(), name, tree_widget_);
             new_router->setExpanded(true);
+
+            if (router_config.isValid())
+                createRouterSession(router_config);
 
             // Keep ordering: routers first, local root last.
             int local_idx = tree_widget_->indexOfTopLevelItem(local_root_);
@@ -196,6 +217,261 @@ void Sidebar::reloadRouters()
                 tree_widget_->insertTopLevelItem(local_idx, new_router);
             }
         }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::createRouterSession(const RouterConfig& config)
+{
+    const qint64 router_id = config.routerId();
+    if (routers_.contains(router_id))
+        return;
+
+    StatusDialog* status_dialog = new StatusDialog(this);
+    status_dialog->setWindowFlag(Qt::WindowStaysOnTopHint);
+    status_dialog->hide();
+    status_dialogs_.insert(router_id, status_dialog);
+
+    Router* router = new Router(config, this);
+    routers_.insert(router_id, router);
+
+    connect(router, &Router::sig_statusChanged, this, &Sidebar::onRouterStatusChanged);
+    connect(router, &Router::sig_errorOccurred, this, &Sidebar::onRouterErrorOccurred);
+    connect(router, &Router::sig_passwordChangeRequired, this, &Sidebar::onRouterPasswordChangeRequired);
+    connect(router, &Router::sig_twoFactorCodeRequired, this, &Sidebar::onRouterTwoFactorCodeRequired);
+    connect(router, &Router::sig_twoFactorEnrollment, this, &Sidebar::onRouterTwoFactorEnrollment);
+    connect(router, &Router::sig_workspacesChanged, this, [this, router_id]()
+    {
+        refreshWorkspaces(router_id);
+    });
+    connect(router, &Router::sig_groupsChanged, this, [this, router_id]()
+    {
+        refreshHostGroups(router_id);
+    });
+
+    router->connectToRouter();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::destroyRouterSession(qint64 router_id)
+{
+    if (Router* router = routers_.take(router_id))
+    {
+        router->disconnectFromRouter();
+        delete router;
+    }
+
+    if (StatusDialog* status_dialog = status_dialogs_.take(router_id))
+        delete status_dialog;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::onRouterStatusChanged(qint64 router_id, Router::Status status)
+{
+    Router* router = routers_.value(router_id);
+    StatusDialog* status_dialog = status_dialogs_.value(router_id);
+
+    if (router && status_dialog)
+    {
+        const QString address = router->config().address();
+        switch (status)
+        {
+            case Router::Status::CONNECTING:
+                status_dialog->addMessage(tr("Connecting to router %1...").arg(address));
+                break;
+            case Router::Status::ONLINE:
+                status_dialog->addMessage(tr("Connection to router %1 established.").arg(address));
+                break;
+            case Router::Status::OFFLINE:
+                status_dialog->addMessage(tr("Disconnected from router %1.").arg(address));
+                break;
+        }
+    }
+
+    RouterItem::Status sidebar_status = RouterItem::Status::OFFLINE;
+    switch (status)
+    {
+        case Router::Status::OFFLINE:    sidebar_status = RouterItem::Status::OFFLINE;    break;
+        case Router::Status::CONNECTING: sidebar_status = RouterItem::Status::CONNECTING; break;
+        case Router::Status::ONLINE:     sidebar_status = RouterItem::Status::ONLINE;     break;
+    }
+    setRouterStatus(router_id, sidebar_status);
+
+    if (status == Router::Status::ONLINE)
+        refreshWorkspaces(router_id);
+    else
+        setRouterWorkspaces(router_id, {});
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::onRouterErrorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code)
+{
+    if (StatusDialog* status_dialog = status_dialogs_.value(router_id))
+        status_dialog->addMessage(tr("Network error: %1.").arg(TcpChannel::errorToString(error_code)));
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::onRouterPasswordChangeRequired(qint64 router_id)
+{
+    MsgBox::information(this,
+        tr("To complete the migration from a previous version, you need to change your password."));
+    changeRouterPassword(router_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::onRouterTwoFactorCodeRequired(qint64 router_id)
+{
+    Router* router = routers_.value(router_id);
+    if (!router)
+        return;
+
+    TwoFactorCodeDialog dialog(this);
+    if (dialog.exec() == QDialog::Accepted)
+        router->submitTwoFactorCode(dialog.code());
+    else
+        router->disconnectFromRouter();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::onRouterTwoFactorEnrollment(qint64 router_id, const QString& otpauth_uri)
+{
+    Router* router = routers_.value(router_id);
+    if (!router)
+        return;
+
+    TwoFactorEnrollDialog dialog(otpauth_uri, this);
+    if (dialog.exec() == QDialog::Accepted)
+        router->submitTwoFactorCode(dialog.code());
+    else
+        router->disconnectFromRouter();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::showRouterStatus(qint64 router_id)
+{
+    StatusDialog* status_dialog = status_dialogs_.value(router_id);
+    if (!status_dialog)
+        return;
+
+    status_dialog->show();
+    status_dialog->activateWindow();
+    status_dialog->raise();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::changeRouterPassword(qint64 router_id)
+{
+    Router* router = routers_.value(router_id);
+    if (!router)
+        return;
+
+    CredentialsDialog dialog(CredentialsDialog::Type::SET_PASSWORD, this);
+    dialog.setWindowTitle(tr("Change Password"));
+    dialog.setValidator([](CredentialsDialog* dialog) -> bool
+    {
+        SecureString password = dialog->password();
+
+        if (!User::isValidPassword(password))
+        {
+            MsgBox::warning(dialog, tr("Password can not be empty and should not exceed %n characters.",
+                "", User::kMaxPasswordLength));
+            return false;
+        }
+
+        if (!User::isSafePassword(password))
+        {
+            QString unsafe = tr("Password you entered does not meet the security requirements!");
+            QString safe = tr("The password must contain lowercase and uppercase characters, "
+                "numbers and should not be shorter than %n characters.",
+                "", User::kSafePasswordLength);
+            QString question = tr("Do you want to enter a different password?");
+
+            if (MsgBox::warning(dialog, QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
+                MsgBox::Yes | MsgBox::No) == MsgBox::Yes)
+                return false;
+        }
+
+        return true;
+    });
+
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    StatusDialog* status_dialog = status_dialogs_.value(router_id);
+
+    // On success the router revokes this session's token and re-runs the 2FA stage, so the user
+    // will be asked for a code again right after (handled by the existing two-factor plumbing).
+    router->changePassword(dialog.password(), this,
+        [this, status_dialog](const proto::router::ChangePasswordResult& result)
+    {
+        const std::string& error_code = result.error_code();
+        if (error_code == proto::router::kErrorOk)
+        {
+            if (status_dialog)
+                status_dialog->addMessage(tr("Password updated. Waiting for new encryption keys..."));
+            return;
+        }
+
+        const char* message;
+        if (error_code == proto::router::kErrorInvalidRequest)
+            message = QT_TR_NOOP("Invalid password change request.");
+        else if (error_code == proto::router::kErrorInternalError)
+            message = QT_TR_NOOP("Unknown internal error.");
+        else if (error_code == proto::router::kErrorInvalidData)
+            message = QT_TR_NOOP("Invalid data was passed.");
+        else
+            message = QT_TR_NOOP("Unknown error type.");
+
+        MsgBox::warning(this, tr(message));
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::refreshWorkspaces(qint64 router_id)
+{
+    Router* router = routers_.value(router_id);
+    if (!router)
+        return;
+
+    router->listWorkspaces(0, this, [this, router_id](const Router::WorkspaceList& list)
+    {
+        setRouterWorkspaces(router_id, list.workspaces);
+
+        // Once the workspace items are in place, fan out a host-group fetch per workspace.
+        // Each response builds the subtree under its workspace via setRouterHostGroups().
+        Router* router = routers_.value(router_id);
+        if (!router)
+            return;
+
+        for (const Router::Workspace& workspace : list.workspaces)
+        {
+            const qint64 workspace_id = workspace.entry_id;
+            router->listGroups(workspace_id, this,
+                [this, router_id, workspace_id](const Router::GroupList& result)
+            {
+                setRouterHostGroups(router_id, workspace_id, result.groups);
+            });
+        }
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::refreshHostGroups(qint64 router_id)
+{
+    // The workspace items already exist in the sidebar; refetch the group tree for each one
+    // without disturbing the workspaces themselves.
+    Router* router = routers_.value(router_id);
+    if (!router)
+        return;
+
+    const QList<qint64> workspace_ids = routerWorkspaceIds(router_id);
+    for (qint64 workspace_id : std::as_const(workspace_ids))
+    {
+        router->listGroups(workspace_id, this,
+            [this, router_id, workspace_id](const Router::GroupList& result)
+        {
+            setRouterHostGroups(router_id, workspace_id, result.groups);
+        });
     }
 }
 

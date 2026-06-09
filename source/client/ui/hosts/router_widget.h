@@ -35,7 +35,6 @@ class RouterWidget;
 class QLabel;
 class QStatusBar;
 class QTreeWidget;
-class StatusDialog;
 class User;
 
 namespace proto::router {
@@ -106,12 +105,7 @@ public:
     void activate(QStatusBar* statusbar) final;
     void deactivate(QStatusBar* statusbar) final;
 
-    void connectToRouter();
-    void disconnectFromRouter();
     void updateConfig(const RouterConfig& config);
-
-    void showStatusDialog();
-    void changePassword();
 
     // Factory for issuing correlated router requests. Pass it to dialogs/other widgets that
     // need to talk to the router without going through RouterWidget. QPointer guards against
@@ -141,7 +135,6 @@ public slots:
     void onDeleteWorkspace();
 
 signals:
-    void sig_statusChanged(qint64 router_id, Router::Status status);
     void sig_currentTabTypeChanged(qint64 router_id, RouterWidget::TabType tab);
     void sig_currentUserChanged(qint64 router_id);
     void sig_currentHostChanged(qint64 router_id);
@@ -163,10 +156,6 @@ protected:
 
 private slots:
     void onStatusChanged(qint64 router_id, Router::Status status);
-    void onConnectionErrorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code);
-    void onPasswordChangeRequired();
-    void onTwoFactorCodeRequired();
-    void onTwoFactorEnrollment(qint64 router_id, const QString& otpauth_uri);
     void onTabChanged(int index);
     void onCurrentUserChanged();
     void onCurrentRelayChanged();
@@ -210,7 +199,6 @@ private:
     std::unique_ptr<Ui::RouterWidget> ui;
     Router* router_ = nullptr;
 
-    StatusDialog* status_dialog_ = nullptr;
     QLabel* status_label_ = nullptr;
 
     qint64 hosts_page_size_ = 100;

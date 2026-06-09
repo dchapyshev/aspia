@@ -66,7 +66,6 @@ protected:
     void changeEvent(QEvent* event) final;
 
 private slots:
-    void onRouterStatusChanged(qint64 router_id, Router::Status status);
     void onSwitchContent(Sidebar::Item::Type type);
     void onSidebarContextMenu(Sidebar::Item::Type type, const QPoint& pos);
     void onCurrentHostChanged(qint64 entry_id);
@@ -116,9 +115,6 @@ private:
     void destroyAllRouterWidgets();
     void destroyRouterWidget(qint64 router_id);
     RouterWidget* createRouterWidget(const RouterConfig& config);
-
-    void refreshSidebarWorkspaces(qint64 router_id);
-    void refreshSidebarHostGroups(qint64 router_id);
 
     bool validateHostForConnect(const HostConfig& host);
     qint64 currentHostEntryId() const;

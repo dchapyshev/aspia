@@ -20,6 +20,7 @@
 #define CLIENT_UI_HOSTS_SIDEBAR_H
 
 #include <QDrag>
+#include <QHash>
 #include <QMimeData>
 #include <QPoint>
 #include <QTreeWidget>
@@ -30,6 +31,8 @@
 #include "client/router.h"
 
 class GroupConfig;
+class RouterConfig;
+class StatusDialog;
 
 class Sidebar final : public QWidget
 {
@@ -208,6 +211,11 @@ public:
     QList<qint64> routerIds() const;
     QList<qint64> routerWorkspaceIds(qint64 router_id) const;
 
+    void refreshWorkspaces(qint64 router_id);
+    void refreshHostGroups(qint64 router_id);
+    void showRouterStatus(qint64 router_id);
+    void changeRouterPassword(qint64 router_id);
+
 public slots:
     void onAddGroup();
     void onEditGroup();
@@ -239,8 +247,16 @@ private slots:
     void onContextMenu(const QPoint& pos);
     void onItemExpanded(QTreeWidgetItem* item);
     void onItemCollapsed(QTreeWidgetItem* item);
+    void onRouterStatusChanged(qint64 router_id, Router::Status status);
+    void onRouterErrorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code);
+    void onRouterPasswordChangeRequired(qint64 router_id);
+    void onRouterTwoFactorCodeRequired(qint64 router_id);
+    void onRouterTwoFactorEnrollment(qint64 router_id, const QString& otpauth_uri);
 
 private:
+    void createRouterSession(const RouterConfig& config);
+    void destroyRouterSession(qint64 router_id);
+
     bool onMousePress(QMouseEvent* event);
     bool onMouseMove(QMouseEvent* event);
     void startDrag();
@@ -254,6 +270,9 @@ private:
     QTreeWidgetItem* findGroupItem(qint64 group_id, QTreeWidgetItem* parent) const;
 
     QTreeWidget* tree_widget_ = nullptr;
+
+    QHash<qint64, Router*> routers_;
+    QHash<qint64, StatusDialog*> status_dialogs_;
 
     LocalGroupItem* local_root_ = nullptr;
 
