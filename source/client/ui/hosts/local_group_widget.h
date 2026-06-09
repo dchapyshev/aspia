@@ -134,6 +134,7 @@ signals:
     void sig_currentChanged(qint64 entry_id);
     void sig_contextMenu(qint64 entry_id, const QPoint& pos);
     void sig_addHost();
+    void sig_deleteHost();
 
 private slots:
     void onHeaderContextMenu(const QPoint& pos);

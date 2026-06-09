@@ -341,6 +341,11 @@ bool LocalGroupWidget::eventFilter(QObject* watched, QEvent* event)
                 emit sig_addHost();
                 return true;
             }
+            if (key_event->key() == Qt::Key_Delete)
+            {
+                emit sig_deleteHost();
+                return true;
+            }
         }
     }
     else if (watched == ui->tree_host->viewport())

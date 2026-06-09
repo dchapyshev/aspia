@@ -596,6 +596,11 @@ bool Sidebar::eventFilter(QObject* watched, QEvent* event)
                 emit sig_addGroup();
                 return true;
             }
+            if (key_event->key() == Qt::Key_Delete)
+            {
+                emit sig_removeGroup();
+                return true;
+            }
         }
     }
     else if (watched == tree_widget_->viewport())

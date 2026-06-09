@@ -120,6 +120,7 @@ HostsTab::HostsTab(QWidget* parent)
     connect(ui->sidebar, &Sidebar::sig_switchContent, this, &HostsTab::onSwitchContent);
     connect(ui->sidebar, &Sidebar::sig_contextMenu, this, &HostsTab::onSidebarContextMenu);
     connect(ui->sidebar, &Sidebar::sig_addGroup, this, &HostsTab::onAddGroupAction);
+    connect(ui->sidebar, &Sidebar::sig_removeGroup, this, &HostsTab::onDeleteGroupAction);
     connect(ui->sidebar, &Sidebar::sig_itemDropped, this, [this]()
     {
         local_group_widget_->showGroup(ui->sidebar->currentGroupId());
@@ -129,6 +130,7 @@ HostsTab::HostsTab(QWidget* parent)
     connect(local_group_widget_, &LocalGroupWidget::sig_activated, this, &HostsTab::onLocalConnect);
     connect(local_group_widget_, &LocalGroupWidget::sig_contextMenu, this, &HostsTab::onLocalHostContextMenu);
     connect(local_group_widget_, &LocalGroupWidget::sig_addHost, this, &HostsTab::onAddHost);
+    connect(local_group_widget_, &LocalGroupWidget::sig_deleteHost, this, &HostsTab::onRemoveHost);
     connect(router_group_widget_, &RouterGroupWidget::sig_currentChanged, this, &HostsTab::updateActionsState);
     connect(router_group_widget_, &RouterGroupWidget::sig_contextMenu, this, &HostsTab::onRouterGroupContextMenu);
     connect(router_group_widget_, &RouterGroupWidget::sig_activated, this, &HostsTab::onRouterGroupConnect);
@@ -941,13 +943,21 @@ void HostsTab::onHostContextMenu(qint64 router_id, const QPoint& pos, int column
     if (!widget || !widget->hasSelectedHost())
         return;
 
+    bool is_online = widget->isSelectedHostOnline();
+
     QMenu menu;
     menu.addAction(ui->action_edit_host);
-    menu.addAction(ui->action_disconnect);
-    menu.addAction(ui->action_host_remove);
-    if (widget->isSelectedHostOnline())
+
+    if (is_online)
     {
         menu.addAction(ui->action_host_check_updates);
+        menu.addAction(ui->action_disconnect);
+    }
+
+    menu.addAction(ui->action_host_remove);
+
+    if (is_online)
+    {
         menu.addSeparator();
         menu.addAction(ui->action_desktop_connect);
         menu.addAction(ui->action_file_transfer_connect);

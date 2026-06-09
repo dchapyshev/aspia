@@ -1336,6 +1336,19 @@ bool RouterWidget::eventFilter(QObject* watched, QEvent* event)
                 return true;
             }
         }
+        else if (key_event->key() == Qt::Key_Delete)
+        {
+            if (watched == ui->tree_workspaces)
+            {
+                onDeleteWorkspace();
+                return true;
+            }
+            if (watched == ui->tree_users)
+            {
+                onDeleteUser();
+                return true;
+            }
+        }
     }
 
     return ContentWidget::eventFilter(watched, event);

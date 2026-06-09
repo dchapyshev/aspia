@@ -2586,7 +2586,7 @@ Routers added: %4</source>
     <message>
         <location filename="../client/ui/hosts_tab.cc" line="1221"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
-        <translation>Вы уверены, что хотите удалить группу &quot;%1&quot;? Узлы, назначенные этой группе или её подгруппам, будут перемещены в корень рабочей области.</translation>
+        <translation>Вы уверены, что хотите удалить группу &quot;%1&quot;? Хосты, назначенные этой группе или её подгруппам, будут перемещены в корень рабочего пространства.</translation>
     </message>
     <message>
         <location filename="../client/ui/hosts_tab.cc" line="1271"/>
