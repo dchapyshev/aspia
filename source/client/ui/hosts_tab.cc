@@ -551,14 +551,18 @@ void HostsTab::onSidebarContextMenu(Sidebar::Item::Type type, const QPoint& pos)
         if (!item || item->itemType() != Sidebar::Item::Type::ROUTER)
             return;
 
-        auto* router_item = static_cast<Sidebar::RouterItem*>(item);
-        RouterWidget* widget = router_widgets_.value(router_item->routerId());
-        if (widget && widget->status() == Router::Status::ONLINE)
-            menu.addAction(ui->action_change_router_password);
-
         menu.addAction(ui->action_router_status);
         menu.addAction(ui->action_edit_router);
         menu.addAction(ui->action_delete_router);
+
+        auto* router_item = static_cast<Sidebar::RouterItem*>(item);
+        RouterWidget* widget = router_widgets_.value(router_item->routerId());
+        if (widget && widget->status() == Router::Status::ONLINE)
+        {
+            menu.addSeparator();
+            menu.addAction(ui->action_change_router_password);
+        }
+
         menu.exec(pos);
         return;
     }
