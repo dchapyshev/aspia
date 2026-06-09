@@ -427,6 +427,7 @@ private:
     Router::GroupList decodeGroupList(const proto::router::GroupList& list);
     SecureByteArray unwrapGroupKey(const QByteArray& wrapped_gk) const;
     void resealGroupKeys(const QByteArray& new_public_key, proto::router::User* user);
+    void resealGroupKeys(const QByteArray& new_public_key, proto::router::ChangePasswordRequest* request);
 
     RouterConfig config_;
     ScopedQPointer<TcpChannel> tcp_channel_;
@@ -845,6 +846,8 @@ void Router::changePassword(const SecureString& new_password, QObject* receiver,
     request->set_public_key(new_user.public_key.toStdString());
     request->set_wrap_private_key(new_user.wrap_private_key.toStdString());
     request->set_wrap_salt(new_user.wrap_salt.toStdString());
+
+    resealGroupKeys(new_user.public_key, request);
 
     registerPending<proto::router::ChangePasswordResult>(request, receiver,
         [this, new_password, handler = std::move(handler)](const proto::router::ChangePasswordResult& result)

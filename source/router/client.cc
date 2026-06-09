@@ -22,6 +22,7 @@
 #include <QSet>
 
 #include <set>
+#include <unordered_map>
 
 #include "base/serialization.h"
 #include "base/version_constants.h"
@@ -771,6 +772,20 @@ void Client::readChangePasswordRequest(const proto::router::ChangePasswordReques
         sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
         return;
     }
+
+    // The rotation produced a new key pair, so the workspace keys the client re-sealed to the
+    // new public key must replace the stored ones (now sealed to the old, discarded key).
+    std::unordered_map<qint64, QByteArray> wrapped_keys;
+    wrapped_keys.reserve(request.workspace_key_size());
+
+    for (int i = 0; i < request.workspace_key_size(); ++i)
+    {
+        const proto::router::ChangePasswordRequest::WorkspaceKey& wk = request.workspace_key(i);
+        wrapped_keys.emplace(wk.workspace_id(), QByteArray::fromStdString(wk.wrapped_gk()));
+    }
+
+    if (!database.setWorkspaceKeysForUser(userId(), wrapped_keys))
+        CLOG(WARNING) << "Failed to rewrap workspace keys for user" << userId();
 
     CLOG(INFO) << "User" << userName() << "rotated own credentials";
     result->set_error_code(proto::router::kErrorOk);

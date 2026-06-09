@@ -94,6 +94,28 @@ QString decrypt(const DataCryptor& cryptor, std::string_view ciphertext)
     return QString::fromUtf8(*decrypted);
 }
 
+//--------------------------------------------------------------------------------------------------
+// Re-seal every workspace key in |cryptors| to |new_public_key| and append the results to
+// |message| (any proto with a repeated WorkspaceKey workspace_key field).
+template<typename MessageT>
+void resealWorkspaceKeys(const std::unordered_map<qint64, DataCryptor>& cryptors,
+                         const QByteArray& new_public_key, MessageT* message)
+{
+    for (const auto& [workspace_id, cryptor] : cryptors)
+    {
+        QByteArray wrapped_gk = SealedBox::seal(cryptor.key(), new_public_key);
+        if (wrapped_gk.isEmpty())
+        {
+            LOG(ERROR) << "Failed to reseal group key for workspace" << workspace_id;
+            continue;
+        }
+
+        auto* dst = message->add_workspace_key();
+        dst->set_workspace_id(workspace_id);
+        dst->set_wrapped_gk(wrapped_gk.toStdString());
+    }
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -784,18 +806,13 @@ SecureByteArray Router::unwrapGroupKey(const QByteArray& wrapped_gk) const
 void Router::resealGroupKeys(const QByteArray& new_public_key, proto::router::User* user)
 {
     CHECK(user);
+    resealWorkspaceKeys(workspace_cryptors_, new_public_key, user);
+}
 
-    for (const auto& [workspace_id, cryptor] : workspace_cryptors_)
-    {
-        QByteArray wrapped_gk = SealedBox::seal(cryptor.key(), new_public_key);
-        if (wrapped_gk.isEmpty())
-        {
-            LOG(ERROR) << "Failed to reseal group key for workspace" << workspace_id;
-            continue;
-        }
-
-        proto::router::User::WorkspaceKey* dst = user->add_workspace_key();
-        dst->set_workspace_id(workspace_id);
-        dst->set_wrapped_gk(wrapped_gk.toStdString());
-    }
+//--------------------------------------------------------------------------------------------------
+void Router::resealGroupKeys(const QByteArray& new_public_key,
+                             proto::router::ChangePasswordRequest* request)
+{
+    CHECK(request);
+    resealWorkspaceKeys(workspace_cryptors_, new_public_key, request);
 }
