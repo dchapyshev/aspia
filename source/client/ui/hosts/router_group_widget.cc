@@ -18,7 +18,6 @@
 
 #include "client/ui/hosts/router_group_widget.h"
 
-#include <QAction>
 #include <QApplication>
 #include <QCollator>
 #include <QDataStream>
@@ -123,23 +122,6 @@ private:
     Q_DISABLE_COPY_MOVE(HostTreeItem)
 };
 
-class ColumnAction : public QAction
-{
-public:
-    ColumnAction(const QString& text, int index, QObject* parent)
-        : QAction(text, parent),
-          index_(index)
-    {
-        setCheckable(true);
-    }
-
-    int columnIndex() const { return index_; }
-
-private:
-    const int index_;
-    Q_DISABLE_COPY_MOVE(ColumnAction)
-};
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -200,8 +182,6 @@ void RouterGroupWidget::showGroup(qint64 router_id, qint64 workspace_id,
     workspace_name_ = workspace_name;
     group_id_ = group_id;
 
-    // Clear the tree before showing a different group to avoid briefly displaying stale
-    // entries from the previous one.
     ui->tree_host->clear();
     updateStatusLabel();
     fetchHosts();

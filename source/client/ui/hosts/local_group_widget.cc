@@ -57,23 +57,6 @@ QString formatTimestamp(qint64 unix_seconds)
         QDateTime::fromSecsSinceEpoch(unix_seconds), QLocale::ShortFormat);
 }
 
-class ColumnAction : public QAction
-{
-public:
-    ColumnAction(const QString& text, int index, QObject* parent)
-        : QAction(text, parent),
-        index_(index)
-    {
-        setCheckable(true);
-    }
-
-    int columnIndex() const { return index_; }
-
-private:
-    const int index_;
-    Q_DISABLE_COPY_MOVE(ColumnAction)
-};
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------

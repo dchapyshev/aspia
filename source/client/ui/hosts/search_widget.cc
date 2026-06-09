@@ -51,23 +51,6 @@ const int kColumnAddress = 1;
 const int kColumnGroup   = 2;
 const int kColumnComment = 3;
 
-class ColumnAction : public QAction
-{
-public:
-    ColumnAction(const QString& text, int index, QObject* parent)
-        : QAction(text, parent),
-          index_(index)
-    {
-        setCheckable(true);
-    }
-
-    int columnIndex() const { return index_; }
-
-private:
-    const int index_;
-    Q_DISABLE_COPY_MOVE(ColumnAction)
-};
-
 //--------------------------------------------------------------------------------------------------
 QString buildHighlightedHtml(const QString& text, const QString& query)
 {
