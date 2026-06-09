@@ -21,6 +21,19 @@
 #include "base/logging.h"
 #include "common/file_task_factory.h"
 
+namespace {
+
+//--------------------------------------------------------------------------------------------------
+QString joinPath(const QString& dir, const QString& name)
+{
+    if (dir.endsWith('/'))
+        return dir + name;
+
+    return dir + '/' + name;
+}
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 FileTransferQueueBuilder::FileTransferQueueBuilder(FileTask::Target target, QObject* parent)
     : QObject(parent),
@@ -110,8 +123,8 @@ void FileTransferQueueBuilder::addPendingTask(const QString& source_dir,
 {
     total_size_ += size;
 
-    QString source_path = source_dir + '/' + item_name;
-    QString target_path = target_dir + '/' + item_name;
+    QString source_path = joinPath(source_dir, item_name);
+    QString target_path = joinPath(target_dir, item_name);
 
     pending_tasks_.emplace_back(std::move(source_path), std::move(target_path), is_directory, size);
 }
