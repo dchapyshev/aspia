@@ -119,6 +119,7 @@ HostsTab::HostsTab(QWidget* parent)
     // Connect signals.
     connect(ui->sidebar, &Sidebar::sig_switchContent, this, &HostsTab::onSwitchContent);
     connect(ui->sidebar, &Sidebar::sig_contextMenu, this, &HostsTab::onSidebarContextMenu);
+    connect(ui->sidebar, &Sidebar::sig_addGroup, this, &HostsTab::onAddGroupAction);
     connect(ui->sidebar, &Sidebar::sig_itemDropped, this, [this]()
     {
         local_group_widget_->showGroup(ui->sidebar->currentGroupId());

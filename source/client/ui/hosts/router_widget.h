@@ -157,6 +157,9 @@ protected:
     // QWidget implementation.
     void changeEvent(QEvent* event) final;
 
+    // QObject implementation.
+    bool eventFilter(QObject* watched, QEvent* event) final;
+
 private slots:
     void onStatusChanged(qint64 router_id, Router::Status status);
     void onConnectionErrorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code);

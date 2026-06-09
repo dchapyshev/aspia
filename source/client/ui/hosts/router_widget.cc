@@ -32,6 +32,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QKeyEvent>
 #include <QLabel>
 #include <QMenu>
 #include <QSignalBlocker>
@@ -483,6 +484,8 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     connect(ui->tree_users->header(), &QHeaderView::customContextMenuRequested,
             this, [this](const QPoint& pos) { showColumnsContextMenu(ui->tree_users, pos); });
 
+    ui->tree_users->installEventFilter(this);
+
     ui->tree_hosts->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_hosts, &QTreeWidget::customContextMenuRequested,
             this, &RouterWidget::onHostContextMenuRequested);
@@ -520,6 +523,8 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     ui->tree_workspaces->header()->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_workspaces->header(), &QHeaderView::customContextMenuRequested,
             this, [this](const QPoint& pos) { showColumnsContextMenu(ui->tree_workspaces, pos); });
+
+    ui->tree_workspaces->installEventFilter(this);
 
     ui->combo_hosts_page_size->addItem("50", QVariant::fromValue<qint64>(50));
     ui->combo_hosts_page_size->addItem("100", QVariant::fromValue<qint64>(100));
@@ -1310,6 +1315,30 @@ void RouterWidget::changeEvent(QEvent* event)
     if (event->type() == QEvent::LanguageChange)
         ui->retranslateUi(this);
     ContentWidget::changeEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool RouterWidget::eventFilter(QObject* watched, QEvent* event)
+{
+    if (event->type() == QEvent::KeyPress)
+    {
+        QKeyEvent* key_event = static_cast<QKeyEvent*>(event);
+        if (key_event->key() == Qt::Key_Insert)
+        {
+            if (watched == ui->tree_workspaces)
+            {
+                onAddWorkspace();
+                return true;
+            }
+            if (watched == ui->tree_users)
+            {
+                onAddUser();
+                return true;
+            }
+        }
+    }
+
+    return ContentWidget::eventFilter(watched, event);
 }
 
 //--------------------------------------------------------------------------------------------------

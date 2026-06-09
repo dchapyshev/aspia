@@ -24,6 +24,7 @@
 #include <QDragMoveEvent>
 #include <QDropEvent>
 #include <QHeaderView>
+#include <QKeyEvent>
 #include <QMouseEvent>
 #include <QSet>
 #include <QUuid>
@@ -72,6 +73,7 @@ Sidebar::Sidebar(QWidget* parent)
     // Setup drag-and-drop.
     tree_widget_->setAcceptDrops(true);
     tree_widget_->viewport()->installEventFilter(this);
+    tree_widget_->installEventFilter(this);
 
     QTreeWidgetItem* invisible_root = tree_widget_->invisibleRootItem();
     invisible_root->setFlags(invisible_root->flags() ^ Qt::ItemIsDropEnabled);
@@ -584,7 +586,19 @@ void Sidebar::changeEvent(QEvent* event)
 //--------------------------------------------------------------------------------------------------
 bool Sidebar::eventFilter(QObject* watched, QEvent* event)
 {
-    if (watched == tree_widget_->viewport())
+    if (watched == tree_widget_)
+    {
+        if (event->type() == QEvent::KeyPress)
+        {
+            QKeyEvent* key_event = static_cast<QKeyEvent*>(event);
+            if (key_event->key() == Qt::Key_Insert)
+            {
+                emit sig_addGroup();
+                return true;
+            }
+        }
+    }
+    else if (watched == tree_widget_->viewport())
     {
         switch (event->type())
         {
