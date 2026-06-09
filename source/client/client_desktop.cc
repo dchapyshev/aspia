@@ -48,9 +48,10 @@ namespace {
 int calculateFps(int last_fps, const std::chrono::milliseconds& duration, qint64 count)
 {
     static const double kAlpha = 0.1;
-    return static_cast<int>(
-        (kAlpha * ((1000.0 / static_cast<double>(duration.count())) * static_cast<double>(count))) +
-        ((1.0 - kAlpha) * static_cast<double>(last_fps)));
+    const qint64 ms = duration.count();
+    if (ms <= 0)
+        return last_fps;
+    return int((kAlpha * ((1000.0 / double(ms)) * double(count))) + ((1.0 - kAlpha) * double(last_fps)));
 }
 
 //--------------------------------------------------------------------------------------------------

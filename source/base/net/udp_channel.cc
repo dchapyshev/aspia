@@ -80,8 +80,10 @@ thread_local ENetPool tls_enet_pool(kENetBuckets);
 int calculateSpeed(int last_speed, const std::chrono::milliseconds& duration, qint64 bytes)
 {
     static const double kAlpha = 0.1;
-    return int((kAlpha * ((1000.0 / double(duration.count())) * double(bytes))) +
-        ((1.0 - kAlpha) * double(last_speed)));
+    const qint64 ms = duration.count();
+    if (ms <= 0)
+        return last_speed;
+    return int((kAlpha * ((1000.0 / double(ms)) * double(bytes))) + ((1.0 - kAlpha) * double(last_speed)));
 }
 
 //--------------------------------------------------------------------------------------------------

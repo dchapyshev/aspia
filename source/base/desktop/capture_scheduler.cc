@@ -18,6 +18,8 @@
 
 #include "base/desktop/capture_scheduler.h"
 
+#include <algorithm>
+
 #include "base/logging.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -31,7 +33,7 @@ void CaptureScheduler::setFps(int value)
 {
     CHECK_GT(value, 0);
     LOG(INFO) << "FPS changed from" << fps() << "to" << value;
-    update_interval_ = std::chrono::milliseconds(1000 / value);
+    update_interval_ = std::chrono::milliseconds(std::max(1, 1000 / value));
 }
 
 //--------------------------------------------------------------------------------------------------

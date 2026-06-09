@@ -82,9 +82,10 @@ struct ActionsMap
 qint64 calculateSpeed(qint64 last_speed, const FileTransfer::Milliseconds& duration, qint64 bytes)
 {
     static const double kAlpha = 0.9;
-    return static_cast<qint64>(
-        (kAlpha * ((1000.0 / static_cast<double>(duration.count())) * static_cast<double>(bytes))) +
-        ((1.0 - kAlpha) * static_cast<double>(last_speed)));
+    const qint64 ms = duration.count();
+    if (ms <= 0)
+        return last_speed;
+    return qint64((kAlpha * ((1000.0 / double(ms)) * double(bytes))) + ((1.0 - kAlpha) * double(last_speed)));
 }
 
 } // namespace
