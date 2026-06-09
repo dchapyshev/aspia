@@ -156,6 +156,7 @@ HostsTab::HostsTab(QWidget* parent)
     connect(ui->action_edit_router, &QAction::triggered, ui->sidebar, &Sidebar::onEditRouter);
     connect(ui->action_delete_router, &QAction::triggered, ui->sidebar, &Sidebar::onRemoveRouter);
     connect(ui->action_router_status, &QAction::triggered, this, &HostsTab::onRouterStatus);
+    connect(ui->action_change_router_password, &QAction::triggered, this, &HostsTab::onChangeRouterPassword);
     connect(ui->sidebar, &Sidebar::sig_routersChanged, this, &HostsTab::reloadRouters);
     connect(ui->sidebar, &Sidebar::sig_routerHostMoved, this, [this](qint64 /* router_id */)
     {
@@ -193,7 +194,8 @@ HostsTab::HostsTab(QWidget* parent)
     });
     addActions(ActionRole::EDIT,
     {
-        ui->action_add_router, ui->action_edit_router, ui->action_delete_router, ui->action_router_status
+        ui->action_add_router, ui->action_edit_router, ui->action_delete_router,
+        ui->action_router_status, ui->action_change_router_password
     });
     addActions(ActionRole::EDIT,
     {
@@ -548,6 +550,11 @@ void HostsTab::onSidebarContextMenu(Sidebar::Item::Type type, const QPoint& pos)
         Sidebar::Item* item = ui->sidebar->currentItem();
         if (!item || item->itemType() != Sidebar::Item::Type::ROUTER)
             return;
+
+        auto* router_item = static_cast<Sidebar::RouterItem*>(item);
+        RouterWidget* widget = router_widgets_.value(router_item->routerId());
+        if (widget && widget->status() == Router::Status::ONLINE)
+            menu.addAction(ui->action_change_router_password);
 
         menu.addAction(ui->action_router_status);
         menu.addAction(ui->action_edit_router);
@@ -1268,6 +1275,19 @@ void HostsTab::onRouterStatus()
     RouterWidget* widget = router_widgets_.value(router->routerId());
     if (widget)
         widget->showStatusDialog();
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::onChangeRouterPassword()
+{
+    Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
+    if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
+        return;
+
+    Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
+    RouterWidget* widget = router_widgets_.value(router->routerId());
+    if (widget && widget->status() == Router::Status::ONLINE)
+        widget->changePassword();
 }
 
 //--------------------------------------------------------------------------------------------------

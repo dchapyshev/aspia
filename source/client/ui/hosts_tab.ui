@@ -110,6 +110,15 @@
     <string>Router Status</string>
    </property>
   </action>
+  <action name="action_change_router_password">
+   <property name="icon">
+    <iconset resource="../../common/resources/common.qrc">
+     <normaloff>:/img/user.svg</normaloff>:/img/user.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Change Password</string>
+   </property>
+  </action>
   <action name="action_add_host">
    <property name="icon">
     <iconset resource="../../common/resources/common.qrc">

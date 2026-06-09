@@ -589,6 +589,16 @@ void Router::readTwoFactorResult(const proto::router::TwoFactorResult& result)
 }
 
 //--------------------------------------------------------------------------------------------------
+void Router::persistChangedPassword(const SecureString& new_password)
+{
+    LOG(INFO) << "Password changed for router" << config_.routerId();
+
+    config_.setPassword(new_password);
+    if (!Database::instance().modifyRouter(config_))
+        LOG(WARNING) << "Failed to persist new password for router" << config_.routerId();
+}
+
+//--------------------------------------------------------------------------------------------------
 void Router::emitNotificationSignals(const proto::router::Notification& notification)
 {
     const qint64 router_id = config_.routerId();

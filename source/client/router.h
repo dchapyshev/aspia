@@ -417,6 +417,7 @@ private:
     void readUserKeys(const proto::router::UserKeys& user_keys);
     void readTwoFactorChallenge(const proto::router::TwoFactorChallenge& challenge);
     void readTwoFactorResult(const proto::router::TwoFactorResult& result);
+    void persistChangedPassword(const SecureString& new_password);
     void emitNotificationSignals(const proto::router::Notification& notification);
     Router::WorkspaceList decodeWorkspaceList(const proto::router::WorkspaceList& list);
     Router::Host decodeHost(const proto::router::Host& src);
@@ -843,7 +844,14 @@ void Router::changePassword(const SecureString& new_password, QObject* receiver,
     request->set_public_key(new_user.public_key.toStdString());
     request->set_wrap_private_key(new_user.wrap_private_key.toStdString());
     request->set_wrap_salt(new_user.wrap_salt.toStdString());
-    registerPending<proto::router::ChangePasswordResult>(request, receiver, std::move(handler));
+
+    registerPending<proto::router::ChangePasswordResult>(request, receiver,
+        [this, new_password, handler = std::move(handler)](const proto::router::ChangePasswordResult& result)
+    {
+        if (result.error_code() == proto::router::kErrorOk)
+            persistChangedPassword(new_password);
+        handler(result);
+    });
     emitSend(proto::router::CHANNEL_ID_CLIENT, message);
 }
 

@@ -111,6 +111,7 @@ public:
     void updateConfig(const RouterConfig& config);
 
     void showStatusDialog();
+    void changePassword();
 
     // Factory for issuing correlated router requests. Pass it to dialogs/other widgets that
     // need to talk to the router without going through RouterWidget. QPointer guards against
