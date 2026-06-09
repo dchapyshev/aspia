@@ -61,7 +61,7 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const QString& workspace_na
 
     connect(router, &Router::sig_statusChanged, this, [this](qint64 /* router_id */, Router::Status status)
     {
-        if (status == Router::Status::OFFLINE)
+        if (status != Router::Status::ONLINE)
             reject();
     });
 

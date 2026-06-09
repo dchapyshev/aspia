@@ -70,7 +70,7 @@ RouterWorkspaceDialog::RouterWorkspaceDialog(
 
     connect(router, &Router::sig_statusChanged, this, [this](qint64 /* router_id */, Router::Status status)
     {
-        if (status == Router::Status::OFFLINE)
+        if (status != Router::Status::ONLINE)
             reject();
     });
 
