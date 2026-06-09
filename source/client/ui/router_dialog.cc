@@ -61,6 +61,8 @@ RouterDialog::RouterDialog(qint64 router_id, QWidget* parent)
 
             ui->edit_username->setText(router->username());
             ui->edit_password->setPassword(router->password());
+
+            encrypted_device_token_ = router->encryptedDeviceToken();
         }
         else
         {
@@ -128,6 +130,7 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
         static_cast<proto::router::SessionType>(ui->combo_session_type->currentData().toUInt()));
     data.setUsername(username);
     data.setPassword(password);
+    data.setEncryptedDeviceToken(encrypted_device_token_);
 
     Database& db = Database::instance();
 

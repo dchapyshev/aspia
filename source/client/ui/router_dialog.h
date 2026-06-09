@@ -19,6 +19,7 @@
 #ifndef CLIENT_UI_ROUTER_DIALOG_H
 #define CLIENT_UI_ROUTER_DIALOG_H
 
+#include <QByteArray>
 #include <QDialog>
 
 #include <memory>
@@ -45,6 +46,7 @@ private:
 
     std::unique_ptr<Ui::RouterDialog> ui;
     qint64 router_id_ = -1;
+    QByteArray encrypted_device_token_;
 };
 
 #endif // CLIENT_UI_ROUTER_DIALOG_H
