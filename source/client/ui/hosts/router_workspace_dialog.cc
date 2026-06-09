@@ -68,6 +68,12 @@ RouterWorkspaceDialog::RouterWorkspaceDialog(
     Router* router = Router::instance(router_id_);
     CHECK(router);
 
+    connect(router, &Router::sig_statusChanged, this, [this](qint64 /* router_id */, Router::Status status)
+    {
+        if (status == Router::Status::OFFLINE)
+            reject();
+    });
+
     // Always fetch the full list so we have all the other names available for uniqueness
     // validation; in modify mode the entry matching entry_id_ also populates the form.
     router->listWorkspaces(0, this, &RouterWorkspaceDialog::onWorkspaceListReceived);

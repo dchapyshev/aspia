@@ -91,6 +91,13 @@ RouterUserDialog::RouterUserDialog(qint64 router_id, qint64 user_id, QWidget* pa
 
     Router* router = Router::instance(router_id_);
     CHECK(router);
+
+    connect(router, &Router::sig_statusChanged, this, [this](qint64 /* router_id */, Router::Status status)
+    {
+        if (status == Router::Status::OFFLINE)
+            reject();
+    });
+
     router->listUsers(this, &RouterUserDialog::onUserListReceived);
 }
 

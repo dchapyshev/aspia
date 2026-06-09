@@ -58,6 +58,13 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const QString& workspace_na
 
     Router* router = Router::instance(router_id_);
     CHECK(router);
+
+    connect(router, &Router::sig_statusChanged, this, [this](qint64 /* router_id */, Router::Status status)
+    {
+        if (status == Router::Status::OFFLINE)
+            reject();
+    });
+
     router->listGroups(host_.workspace_id, this, &RouterHostDialog::onGroupListReceived);
 }
 
