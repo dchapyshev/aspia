@@ -48,7 +48,9 @@ add_definitions(-DASPIA_VERSION_MAJOR=${ASPIA_VERSION_MAJOR}
                 -DASPIA_VERSION_MINOR=${ASPIA_VERSION_MINOR}
                 -DASPIA_VERSION_PATCH=${ASPIA_VERSION_PATCH})
 
-if (UNIX AND NOT APPLE)
+if (ANDROID)
+    message(STATUS "Android detected")
+elseif (UNIX AND NOT APPLE)
     message(STATUS "Linux detected")
     set(LINUX TRUE)
 endif()
