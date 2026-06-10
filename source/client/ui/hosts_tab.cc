@@ -1456,6 +1456,7 @@ void HostsTab::updateActionsState()
     ui->action_add_router->setVisible(true);
     ui->action_edit_router->setVisible(false);
     ui->action_delete_router->setVisible(false);
+    ui->action_change_router_password->setVisible(false);
 
     ui->action_add_host->setVisible(false);
     ui->action_delete_host->setVisible(false);
@@ -1586,10 +1587,11 @@ void HostsTab::updateActionsState()
         // its action lives on the router node when connected as an administrator.
         Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
         Router* instance = Router::instance(router->routerId());
-        const bool is_admin_online = instance &&
-            instance->status() == Router::Status::ONLINE &&
+        const bool is_online = instance && instance->status() == Router::Status::ONLINE;
+        const bool is_admin_online = is_online &&
             instance->config().sessionType() == proto::router::SESSION_TYPE_ADMIN;
         ui->action_add_workspace->setVisible(is_admin_online);
+        ui->action_change_router_password->setVisible(is_online);
     }
     else
     {
