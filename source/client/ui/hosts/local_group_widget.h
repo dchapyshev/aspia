@@ -19,8 +19,6 @@
 #ifndef CLIENT_UI_HOSTS_LOCAL_GROUP_WIDGET_H
 #define CLIENT_UI_HOSTS_LOCAL_GROUP_WIDGET_H
 
-#include <QDrag>
-#include <QMimeData>
 #include <QPoint>
 #include <QPointer>
 #include <QTreeWidget>
@@ -66,41 +64,6 @@ public:
 
     private:
         HostConfig host_;
-    };
-
-    class HostMimeData final : public QMimeData
-    {
-    public:
-        HostMimeData() = default;
-        virtual ~HostMimeData() final = default;
-
-        void setHostItem(Item* host_item, const QString& mime_type)
-        {
-            host_item_ = host_item;
-            setData(mime_type, QByteArray());
-        }
-
-        Item* hostItem() const { return host_item_; }
-
-    private:
-        Item* host_item_ = nullptr;
-    };
-
-    class HostDrag final : public QDrag
-    {
-    public:
-        explicit HostDrag(QObject* drag_source = nullptr)
-            : QDrag(drag_source)
-        {
-            // Nothing
-        }
-
-        void setHostItem(Item* host_item, const QString& mime_type)
-        {
-            HostMimeData* mime_data = new HostMimeData();
-            mime_data->setHostItem(host_item, mime_type);
-            setMimeData(mime_data);
-        }
     };
 
     Item* currentItem();

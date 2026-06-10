@@ -21,8 +21,6 @@
 
 #include <memory>
 
-#include <QDrag>
-#include <QMimeData>
 #include <QPoint>
 
 #include "client/config.h"
@@ -42,44 +40,6 @@ class RouterGroupWidget final : public ContentWidget
 public:
     explicit RouterGroupWidget(QWidget* parent = nullptr);
     ~RouterGroupWidget() final;
-
-    class HostMimeData final : public QMimeData
-    {
-    public:
-        HostMimeData() = default;
-        ~HostMimeData() final = default;
-
-        void setHost(qint64 router_id, const Router::Host& host, const QString& mime_type)
-        {
-            router_id_ = router_id;
-            host_ = host;
-            setData(mime_type, QByteArray());
-        }
-
-        qint64 routerId() const { return router_id_; }
-        const Router::Host& host() const { return host_; }
-
-    private:
-        qint64 router_id_ = 0;
-        Router::Host host_;
-    };
-
-    class HostDrag final : public QDrag
-    {
-    public:
-        explicit HostDrag(QObject* drag_source = nullptr)
-            : QDrag(drag_source)
-        {
-            // Nothing
-        }
-
-        void setHost(qint64 router_id, const Router::Host& host, const QString& mime_type)
-        {
-            HostMimeData* mime_data = new HostMimeData();
-            mime_data->setHost(router_id, host, mime_type);
-            setMimeData(mime_data);
-        }
-    };
 
     void showGroup(qint64 router_id, qint64 workspace_id, const QString& workspace_name, qint64 group_id);
 

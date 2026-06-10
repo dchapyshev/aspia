@@ -40,7 +40,6 @@
 #include "client/settings.h"
 #include "client/ui/hosts/local_group_dialog.h"
 #include "client/ui/hosts/local_group_widget.h"
-#include "client/ui/hosts/router_group_widget.h"
 #include "client/ui/router_dialog.h"
 #include "common/ui/credentials_dialog.h"
 #include "common/ui/msg_box.h"
@@ -98,6 +97,24 @@ Sidebar::Sidebar(QWidget* parent)
 
 //--------------------------------------------------------------------------------------------------
 Sidebar::~Sidebar() = default;
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::setLocalHostMimeType(const QString& mime_type)
+{
+    local_host_mime_type_ = mime_type;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::setRouterHostMimeType(const QString& mime_type)
+{
+    router_host_mime_type_ = mime_type;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Sidebar::dragging() const
+{
+    return dragging_;
+}
 
 //--------------------------------------------------------------------------------------------------
 void Sidebar::loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item)
@@ -217,322 +234,6 @@ void Sidebar::reloadRouters()
                 tree_widget_->insertTopLevelItem(local_idx, new_router);
             }
         }
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void Sidebar::createRouterSession(const RouterConfig& config)
-{
-    const qint64 router_id = config.routerId();
-    if (routers_.contains(router_id))
-        return;
-
-    router_events_.insert(router_id, {});
-
-    Router* router = new Router(config, this);
-    routers_.insert(router_id, router);
-
-    connect(router, &Router::sig_statusChanged, this, &Sidebar::onRouterStatusChanged);
-    connect(router, &Router::sig_errorOccurred, this, &Sidebar::onRouterErrorOccurred);
-    connect(router, &Router::sig_passwordChangeRequired, this, &Sidebar::onRouterPasswordChangeRequired);
-    connect(router, &Router::sig_twoFactorCodeRequired, this, &Sidebar::onRouterTwoFactorCodeRequired);
-    connect(router, &Router::sig_twoFactorEnrollment, this, &Sidebar::onRouterTwoFactorEnrollment);
-    connect(router, &Router::sig_workspacesChanged, this, [this, router_id]()
-    {
-        refreshWorkspaces(router_id);
-    });
-    connect(router, &Router::sig_groupsChanged, this, [this, router_id]()
-    {
-        refreshHostGroups(router_id);
-    });
-
-    router->connectToRouter();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Sidebar::destroyRouterSession(qint64 router_id)
-{
-    if (Router* router = routers_.take(router_id))
-    {
-        router->disconnectFromRouter();
-        delete router;
-    }
-
-    router_events_.remove(router_id);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Sidebar::buildRouterSections(qint64 router_id)
-{
-    SidebarRouter* router = routerById(router_id);
-    if (!router)
-        return;
-
-    // Administrative sections are only meaningful for an administrator session.
-    Router* instance = routers_.value(router_id);
-    if (!instance || instance->config().sessionType() != proto::router::SESSION_TYPE_ADMIN)
-        return;
-
-    removeRouterSections(router_id);
-
-    // Sections live above the workspace subtree. Insert each at the top in reverse display order
-    // so the final order stays Hosts -> Clients -> Relays -> Users.
-    auto move_to_top = [router](QTreeWidgetItem* item)
-    {
-        router->insertChild(0, router->takeChild(router->indexOfChild(item)));
-    };
-
-    move_to_top(new SidebarRouterUsers(router_id, router));
-    move_to_top(new SidebarRouterRelays(router_id, router));
-    move_to_top(new SidebarRouterClients(router_id, router));
-    move_to_top(new SidebarRouterHosts(router_id, router));
-
-    router->setExpanded(true);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Sidebar::removeRouterSections(qint64 router_id)
-{
-    SidebarRouter* router = routerById(router_id);
-    if (!router)
-        return;
-
-    for (int i = router->childCount() - 1; i >= 0; --i)
-    {
-        SidebarItem* child = static_cast<SidebarItem*>(router->child(i));
-        const SidebarItem::Type type = child->itemType();
-        if (type == SidebarItem::ROUTER_HOSTS || type == SidebarItem::ROUTER_USERS ||
-            type == SidebarItem::ROUTER_CLIENTS || type == SidebarItem::ROUTER_RELAYS)
-        {
-            delete router->takeChild(i);
-        }
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void Sidebar::onRouterStatusChanged(qint64 router_id, Router::Status status)
-{
-    if (Router* router = routers_.value(router_id))
-    {
-        const QString address = router->config().address();
-        switch (status)
-        {
-            case Router::Status::CONNECTING:
-                addRouterEvent(Severity::INFO, router_id,
-                               tr("Connecting to router %1...").arg(address));
-                break;
-            case Router::Status::ONLINE:
-                addRouterEvent(Severity::INFO, router_id,
-                               tr("Connection to router %1 established.").arg(address));
-                break;
-            case Router::Status::OFFLINE:
-                addRouterEvent(Severity::WARNING, router_id,
-                               tr("Disconnected from router %1.").arg(address));
-                break;
-        }
-    }
-
-    SidebarRouter::Status sidebar_status = SidebarRouter::Status::OFFLINE;
-    switch (status)
-    {
-        case Router::Status::OFFLINE:    sidebar_status = SidebarRouter::Status::OFFLINE;    break;
-        case Router::Status::CONNECTING: sidebar_status = SidebarRouter::Status::CONNECTING; break;
-        case Router::Status::ONLINE:     sidebar_status = SidebarRouter::Status::ONLINE;     break;
-    }
-    setRouterStatus(router_id, sidebar_status);
-
-    if (status == Router::Status::ONLINE)
-    {
-        buildRouterSections(router_id);
-        refreshWorkspaces(router_id);
-    }
-    else
-    {
-        removeRouterSections(router_id);
-        setRouterWorkspaces(router_id, {});
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void Sidebar::onRouterErrorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code)
-{
-    Severity severity = Severity::WARNING;
-    if (error_code == TcpChannel::ErrorCode::CRYPTO_ERROR ||
-        error_code == TcpChannel::ErrorCode::ACCESS_DENIED)
-    {
-        severity = Severity::CRITICAL;
-    }
-
-    const QString message = tr("Network error: %1.").arg(TcpChannel::errorToString(error_code));
-    addRouterEvent(severity, router_id, message);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Sidebar::onRouterPasswordChangeRequired(qint64 router_id)
-{
-    MsgBox::information(this,
-        tr("To complete the migration from a previous version, you need to change your password."));
-    changeRouterPassword(router_id);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Sidebar::onRouterTwoFactorCodeRequired(qint64 router_id)
-{
-    Router* router = routers_.value(router_id);
-    if (!router)
-        return;
-
-    TwoFactorCodeDialog dialog(this);
-    if (dialog.exec() == QDialog::Accepted)
-        router->submitTwoFactorCode(dialog.code());
-    else
-        router->disconnectFromRouter();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Sidebar::onRouterTwoFactorEnrollment(qint64 router_id, const QString& otpauth_uri)
-{
-    Router* router = routers_.value(router_id);
-    if (!router)
-        return;
-
-    TwoFactorEnrollDialog dialog(otpauth_uri, this);
-    if (dialog.exec() == QDialog::Accepted)
-        router->submitTwoFactorCode(dialog.code());
-    else
-        router->disconnectFromRouter();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Sidebar::addRouterEvent(Severity severity, qint64 router_id, const QString& message)
-{
-    const RouterStatusWidget::Event entry{ QDateTime::currentDateTime(), severity, message };
-
-    auto it = router_events_.find(router_id);
-    if (it != router_events_.end())
-        it->append(entry);
-
-    emit sig_routerEvent(router_id, entry);
-}
-
-//--------------------------------------------------------------------------------------------------
-QList<RouterStatusWidget::Event> Sidebar::routerEvents(qint64 router_id) const
-{
-    return router_events_.value(router_id);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Sidebar::changeRouterPassword(qint64 router_id)
-{
-    Router* router = routers_.value(router_id);
-    if (!router)
-        return;
-
-    CredentialsDialog dialog(CredentialsDialog::Type::SET_PASSWORD, this);
-    dialog.setWindowTitle(tr("Change Password"));
-    dialog.setValidator([](CredentialsDialog* dialog) -> bool
-    {
-        SecureString password = dialog->password();
-
-        if (!User::isValidPassword(password))
-        {
-            MsgBox::warning(dialog, tr("Password can not be empty and should not exceed %n characters.",
-                "", User::kMaxPasswordLength));
-            return false;
-        }
-
-        if (!User::isSafePassword(password))
-        {
-            QString unsafe = tr("Password you entered does not meet the security requirements!");
-            QString safe = tr("The password must contain lowercase and uppercase characters, "
-                "numbers and should not be shorter than %n characters.",
-                "", User::kSafePasswordLength);
-            QString question = tr("Do you want to enter a different password?");
-
-            if (MsgBox::warning(dialog, QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
-                MsgBox::Yes | MsgBox::No) == MsgBox::Yes)
-                return false;
-        }
-
-        return true;
-    });
-
-    if (dialog.exec() != QDialog::Accepted)
-        return;
-
-    // On success the router revokes this session's token and re-runs the 2FA stage, so the user
-    // will be asked for a code again right after (handled by the existing two-factor plumbing).
-    router->changePassword(dialog.password(), this,
-        [this, router_id](const proto::router::ChangePasswordResult& result)
-    {
-        const std::string& error_code = result.error_code();
-        if (error_code == proto::router::kErrorOk)
-        {
-            addRouterEvent(Severity::INFO, router_id,
-                           tr("Password updated. Waiting for new encryption keys..."));
-            return;
-        }
-
-        const char* message;
-        if (error_code == proto::router::kErrorInvalidRequest)
-            message = QT_TR_NOOP("Invalid password change request.");
-        else if (error_code == proto::router::kErrorInternalError)
-            message = QT_TR_NOOP("Unknown internal error.");
-        else if (error_code == proto::router::kErrorInvalidData)
-            message = QT_TR_NOOP("Invalid data was passed.");
-        else
-            message = QT_TR_NOOP("Unknown error type.");
-
-        MsgBox::warning(this, tr(message));
-    });
-}
-
-//--------------------------------------------------------------------------------------------------
-void Sidebar::refreshWorkspaces(qint64 router_id)
-{
-    Router* router = routers_.value(router_id);
-    if (!router)
-        return;
-
-    router->listWorkspaces(0, this, [this, router_id](const Router::WorkspaceList& list)
-    {
-        setRouterWorkspaces(router_id, list.workspaces);
-
-        // Once the workspace items are in place, fan out a host-group fetch per workspace.
-        // Each response builds the subtree under its workspace via setRouterHostGroups().
-        Router* router = routers_.value(router_id);
-        if (!router)
-            return;
-
-        for (const Router::Workspace& workspace : list.workspaces)
-        {
-            const qint64 workspace_id = workspace.entry_id;
-            router->listGroups(workspace_id, this,
-                [this, router_id, workspace_id](const Router::GroupList& result)
-            {
-                setRouterHostGroups(router_id, workspace_id, result.groups);
-            });
-        }
-    });
-}
-
-//--------------------------------------------------------------------------------------------------
-void Sidebar::refreshHostGroups(qint64 router_id)
-{
-    // The workspace items already exist in the sidebar; refetch the group tree for each one
-    // without disturbing the workspaces themselves.
-    Router* router = routers_.value(router_id);
-    if (!router)
-        return;
-
-    const QList<qint64> workspace_ids = routerWorkspaceIds(router_id);
-    for (qint64 workspace_id : std::as_const(workspace_ids))
-    {
-        router->listGroups(workspace_id, this,
-            [this, router_id, workspace_id](const Router::GroupList& result)
-        {
-            setRouterHostGroups(router_id, workspace_id, result.groups);
-        });
     }
 }
 
@@ -737,21 +438,124 @@ QList<qint64> Sidebar::routerWorkspaceIds(qint64 router_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::setLocalHostMimeType(const QString& mime_type)
+void Sidebar::changeRouterPassword(qint64 router_id)
 {
-    local_host_mime_type_ = mime_type;
+    Router* router = routers_.value(router_id);
+    if (!router)
+        return;
+
+    CredentialsDialog dialog(CredentialsDialog::Type::SET_PASSWORD, this);
+    dialog.setWindowTitle(tr("Change Password"));
+    dialog.setValidator([](CredentialsDialog* dialog) -> bool
+    {
+        SecureString password = dialog->password();
+
+        if (!User::isValidPassword(password))
+        {
+            MsgBox::warning(dialog, tr("Password can not be empty and should not exceed %n characters.",
+                "", User::kMaxPasswordLength));
+            return false;
+        }
+
+        if (!User::isSafePassword(password))
+        {
+            QString unsafe = tr("Password you entered does not meet the security requirements!");
+            QString safe = tr("The password must contain lowercase and uppercase characters, "
+                "numbers and should not be shorter than %n characters.",
+                "", User::kSafePasswordLength);
+            QString question = tr("Do you want to enter a different password?");
+
+            if (MsgBox::warning(dialog, QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
+                MsgBox::Yes | MsgBox::No) == MsgBox::Yes)
+                return false;
+        }
+
+        return true;
+    });
+
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    // On success the router revokes this session's token and re-runs the 2FA stage, so the user
+    // will be asked for a code again right after (handled by the existing two-factor plumbing).
+    router->changePassword(dialog.password(), this,
+        [this, router_id](const proto::router::ChangePasswordResult& result)
+    {
+        const std::string& error_code = result.error_code();
+        if (error_code == proto::router::kErrorOk)
+        {
+            addRouterEvent(Severity::INFO, router_id,
+                           tr("Password updated. Waiting for new encryption keys..."));
+            return;
+        }
+
+        const char* message;
+        if (error_code == proto::router::kErrorInvalidRequest)
+            message = QT_TR_NOOP("Invalid password change request.");
+        else if (error_code == proto::router::kErrorInternalError)
+            message = QT_TR_NOOP("Unknown internal error.");
+        else if (error_code == proto::router::kErrorInvalidData)
+            message = QT_TR_NOOP("Invalid data was passed.");
+        else
+            message = QT_TR_NOOP("Unknown error type.");
+
+        MsgBox::warning(this, tr(message));
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::setRouterHostMimeType(const QString& mime_type)
+QList<RouterStatusWidget::Event> Sidebar::routerEvents(qint64 router_id) const
 {
-    router_host_mime_type_ = mime_type;
+    return router_events_.value(router_id);
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Sidebar::dragging() const
+void Sidebar::onRefreshWorkspaces(qint64 router_id)
 {
-    return dragging_;
+    Router* router = routers_.value(router_id);
+    if (!router)
+        return;
+
+    router->listWorkspaces(0, this, [this, router_id](const Router::WorkspaceList& list)
+    {
+        setRouterWorkspaces(router_id, list.workspaces);
+
+        // Once the workspace items are in place, fan out a host-group fetch per workspace.
+        // Each response builds the subtree under its workspace via setRouterHostGroups().
+        Router* router = routers_.value(router_id);
+        if (!router)
+            return;
+
+        for (const Router::Workspace& workspace : list.workspaces)
+        {
+            const qint64 workspace_id = workspace.entry_id;
+            router->listGroups(workspace_id, this,
+                [this, router_id, workspace_id](const Router::GroupList& result)
+            {
+                setRouterHostGroups(router_id, workspace_id, result.groups);
+            });
+        }
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::onRefreshHostGroups(qint64 router_id)
+{
+    // The workspace items already exist in the sidebar; refetch the group tree for each one
+    // without disturbing the workspaces themselves.
+    Router* router = routers_.value(router_id);
+    if (!router)
+        return;
+
+    const QList<qint64> workspace_ids = routerWorkspaceIds(router_id);
+    for (qint64 workspace_id : std::as_const(workspace_ids))
+    {
+        router->listGroups(workspace_id, this,
+            [this, router_id, workspace_id](const Router::GroupList& result)
+        {
+            setRouterHostGroups(router_id, workspace_id, result.groups);
+        });
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -826,7 +630,7 @@ void Sidebar::onRemoveGroup()
 
     if (MsgBox::question(this, message) == MsgBox::No)
     {
-        LOG(INFO) << "Action is rejected by user";
+        LOG(INFO) << "[ACTION] Rejected by user";
         return;
     }
 
@@ -1002,576 +806,6 @@ bool Sidebar::eventFilter(QObject* watched, QEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Sidebar::onDragEnter(QDragEnterEvent* event)
-{
-    const QMimeData* mime_data = event->mimeData();
-
-    if (mime_data->hasFormat(local_host_mime_type_) ||
-        mime_data->hasFormat(router_host_mime_type_) ||
-        mime_data->hasFormat(local_group_mime_type_) ||
-        mime_data->hasFormat(router_group_mime_type_))
-    {
-        event->acceptProposedAction();
-        dragging_ = true;
-        drag_source_item_ = tree_widget_->currentItem();
-        return true;
-    }
-
-    return false;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Sidebar::onDragMove(QDragMoveEvent* event)
-{
-    event->ignore();
-
-    const QMimeData* mime_data = event->mimeData();
-
-    if (mime_data->hasFormat(local_group_mime_type_))
-    {
-        QTreeWidgetItem* source_item = tree_widget_->itemAt(start_pos_);
-        QTreeWidgetItem* target_tree_item = tree_widget_->itemAt(event->position().toPoint());
-
-        if (isAllowedDropTarget(target_tree_item, source_item))
-        {
-            tree_widget_->clearSelection();
-            target_tree_item->setSelected(true);
-            event->acceptProposedAction();
-        }
-
-        return true;
-    }
-    else if (mime_data->hasFormat(router_group_mime_type_))
-    {
-        const RouterGroupMimeData* group_mime_data =
-            dynamic_cast<const RouterGroupMimeData*>(mime_data);
-        if (!group_mime_data)
-            return true;
-
-        SidebarRouterGroup* source_group = group_mime_data->groupItem();
-        if (!source_group)
-            return true;
-
-        QTreeWidgetItem* target_tree_item = tree_widget_->itemAt(event->position().toPoint());
-        if (!target_tree_item || target_tree_item == tree_widget_->invisibleRootItem() ||
-            target_tree_item == source_group)
-        {
-            return true;
-        }
-
-        SidebarItem* target_item = static_cast<SidebarItem*>(target_tree_item);
-        if (target_item->itemType() != SidebarItem::ROUTER_GROUP)
-            return true;
-
-        auto* target_group = static_cast<SidebarRouterGroup*>(target_item);
-
-        // Cross-router/workspace moves are not supported by modifyGroup.
-        if (target_group->routerId() != source_group->routerId() ||
-            target_group->workspaceId() != source_group->workspaceId())
-        {
-            return true;
-        }
-
-        // No-op move: target is already the source's parent.
-        QTreeWidgetItem* current_parent = source_group->parent();
-        if (current_parent == target_tree_item)
-            return true;
-
-        // Prevent a cycle: target must not be source itself or any of its descendants.
-        std::function<bool(QTreeWidgetItem*, QTreeWidgetItem*)> isChild =
-            [&](QTreeWidgetItem* parent, QTreeWidgetItem* child) -> bool
-        {
-            for (int i = 0; i < parent->childCount(); ++i)
-            {
-                QTreeWidgetItem* current = parent->child(i);
-                if (current == child)
-                    return true;
-                if (isChild(current, child))
-                    return true;
-            }
-            return false;
-        };
-        if (isChild(source_group, target_tree_item))
-            return true;
-
-        tree_widget_->clearSelection();
-        target_tree_item->setSelected(true);
-        event->acceptProposedAction();
-        return true;
-    }
-    else if (mime_data->hasFormat(local_host_mime_type_))
-    {
-        QTreeWidgetItem* target_tree_item = tree_widget_->itemAt(event->position().toPoint());
-        if (!target_tree_item || target_tree_item == tree_widget_->invisibleRootItem())
-            return true;
-
-        SidebarItem* target_item = static_cast<SidebarItem*>(target_tree_item);
-        if (target_item->itemType() != SidebarItem::LOCAL_GROUP)
-            return true;
-
-        const LocalGroupWidget::HostMimeData* host_mime_data =
-            dynamic_cast<const LocalGroupWidget::HostMimeData*>(mime_data);
-        if (!host_mime_data)
-            return true;
-
-        LocalGroupWidget::Item* host_item = host_mime_data->hostItem();
-        if (!host_item)
-            return true;
-
-        // Don't allow drop to the same group.
-        if (host_item->groupId() == target_item->groupId())
-            return true;
-
-        tree_widget_->clearSelection();
-        target_tree_item->setSelected(true);
-        event->acceptProposedAction();
-        return true;
-    }
-    else if (mime_data->hasFormat(router_host_mime_type_))
-    {
-        QTreeWidgetItem* target_tree_item = tree_widget_->itemAt(event->position().toPoint());
-        if (!target_tree_item || target_tree_item == tree_widget_->invisibleRootItem())
-            return true;
-
-        SidebarItem* target_item = static_cast<SidebarItem*>(target_tree_item);
-        if (target_item->itemType() != SidebarItem::ROUTER_GROUP)
-            return true;
-
-        const RouterGroupWidget::HostMimeData* host_mime_data =
-            dynamic_cast<const RouterGroupWidget::HostMimeData*>(mime_data);
-        if (!host_mime_data)
-            return true;
-
-        auto* group_item = static_cast<SidebarRouterGroup*>(target_item);
-        const Router::Host& host = host_mime_data->host();
-
-        // Cross-router or cross-workspace moves are forbidden by the server; reflect that in
-        // the UI by refusing the drop here.
-        if (group_item->routerId() != host_mime_data->routerId() ||
-            group_item->workspaceId() != host.workspace_id)
-        {
-            return true;
-        }
-
-        // Don't allow drop to the same group.
-        if (group_item->groupId() == host.group_id)
-            return true;
-
-        tree_widget_->clearSelection();
-        target_tree_item->setSelected(true);
-        event->acceptProposedAction();
-        return true;
-    }
-
-    return false;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Sidebar::onDragLeave(QDragLeaveEvent* /* event */)
-{
-    dragging_ = false;
-    if (drag_source_item_)
-    {
-        tree_widget_->setCurrentItem(drag_source_item_);
-        drag_source_item_ = nullptr;
-    }
-    return false;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Sidebar::onDrop(QDropEvent* event)
-{
-    dragging_ = false;
-
-    QTreeWidgetItem* saved_item = drag_source_item_;
-    drag_source_item_ = nullptr;
-
-    auto restoreSelection = [&]()
-    {
-        if (saved_item)
-            tree_widget_->setCurrentItem(saved_item);
-    };
-
-    const QMimeData* mime_data = event->mimeData();
-    if (!mime_data)
-        return false;
-
-    if (mime_data->hasFormat(local_group_mime_type_))
-    {
-        const GroupMimeData* group_mime_data = dynamic_cast<const GroupMimeData*>(mime_data);
-        if (!group_mime_data)
-        {
-            restoreSelection();
-            return true;
-        }
-
-        SidebarLocalGroup* source_group = group_mime_data->groupItem();
-        if (!source_group)
-        {
-            restoreSelection();
-            return true;
-        }
-
-        QTreeWidgetItem* target_tree_item = tree_widget_->itemAt(event->position().toPoint());
-        if (!isAllowedDropTarget(target_tree_item, source_group))
-        {
-            restoreSelection();
-            return true;
-        }
-
-        SidebarItem* target_item = static_cast<SidebarItem*>(target_tree_item);
-
-        // Check if a group with the same name already exists in the target group.
-        QList<GroupConfig> target_groups = Database::instance().groupList(target_item->groupId());
-        for (const GroupConfig& existing : std::as_const(target_groups))
-        {
-            if (existing.id() != source_group->groupId() && existing.name() == source_group->groupName())
-            {
-                MsgBox::warning(tree_widget_,
-                    tr("A group with this name already exists in the selected parent group."));
-                restoreSelection();
-                return true;
-            }
-        }
-
-        // Update the group's parent in the database.
-        if (!Database::instance().moveGroup(source_group->groupId(), target_item->groupId()))
-        {
-            MsgBox::warning(tree_widget_,
-                tr("Failed to move the group."));
-            restoreSelection();
-            return true;
-        }
-
-        event->acceptProposedAction();
-
-        // Reload groups and select the moved group.
-        reloadGroups(source_group->groupId());
-        return true;
-    }
-    else if (mime_data->hasFormat(local_host_mime_type_))
-    {
-        const LocalGroupWidget::HostMimeData* host_mime_data =
-            dynamic_cast<const LocalGroupWidget::HostMimeData*>(mime_data);
-        if (!host_mime_data)
-        {
-            restoreSelection();
-            return true;
-        }
-
-        LocalGroupWidget::Item* host_item = host_mime_data->hostItem();
-        if (!host_item)
-        {
-            restoreSelection();
-            return true;
-        }
-
-        QTreeWidgetItem* target_tree_item = tree_widget_->itemAt(event->position().toPoint());
-        if (!target_tree_item || target_tree_item == tree_widget_->invisibleRootItem())
-        {
-            restoreSelection();
-            return true;
-        }
-
-        SidebarItem* target_item = static_cast<SidebarItem*>(target_tree_item);
-        if (target_item->itemType() != SidebarItem::LOCAL_GROUP)
-        {
-            restoreSelection();
-            return true;
-        }
-
-        if (host_item->groupId() == target_item->groupId())
-        {
-            restoreSelection();
-            return true;
-        }
-
-        // Check if a host with the same name already exists in the target group.
-        QList<HostConfig> target_hosts =
-            Database::instance().hostList(target_item->groupId());
-        for (const HostConfig& existing : std::as_const(target_hosts))
-        {
-            if (existing.name() == host_item->computerName())
-            {
-                MsgBox::warning(tree_widget_,
-                    tr("A host with this name already exists in the selected group."));
-                restoreSelection();
-                return true;
-            }
-        }
-
-        // Update the host's group in the database.
-        std::optional<HostConfig> host =
-            Database::instance().findHost(host_item->entryId());
-        if (!host.has_value())
-        {
-            restoreSelection();
-            return true;
-        }
-
-        host->setGroupId(target_item->groupId());
-
-        if (!Database::instance().modifyHost(*host))
-        {
-            MsgBox::warning(tree_widget_,
-                tr("Failed to move the host to the selected group."));
-            restoreSelection();
-            return true;
-        }
-
-        event->acceptProposedAction();
-        restoreSelection();
-        emit sig_itemDropped();
-        return true;
-    }
-    else if (mime_data->hasFormat(router_group_mime_type_))
-    {
-        const RouterGroupMimeData* group_mime_data =
-            dynamic_cast<const RouterGroupMimeData*>(mime_data);
-        if (!group_mime_data)
-        {
-            restoreSelection();
-            return true;
-        }
-
-        SidebarRouterGroup* source_group = group_mime_data->groupItem();
-        if (!source_group)
-        {
-            restoreSelection();
-            return true;
-        }
-
-        QTreeWidgetItem* target_tree_item = tree_widget_->itemAt(event->position().toPoint());
-        if (!target_tree_item || target_tree_item == tree_widget_->invisibleRootItem() ||
-            target_tree_item == source_group)
-        {
-            restoreSelection();
-            return true;
-        }
-
-        SidebarItem* target_item = static_cast<SidebarItem*>(target_tree_item);
-        if (target_item->itemType() != SidebarItem::ROUTER_GROUP)
-        {
-            restoreSelection();
-            return true;
-        }
-
-        auto* target_group = static_cast<SidebarRouterGroup*>(target_item);
-        if (target_group->routerId() != source_group->routerId() ||
-            target_group->workspaceId() != source_group->workspaceId())
-        {
-            restoreSelection();
-            return true;
-        }
-
-        if (source_group->parent() == target_tree_item)
-        {
-            restoreSelection();
-            return true;
-        }
-
-        const qint64 router_id = source_group->routerId();
-        Router* router = Router::instance(router_id);
-        if (!router)
-        {
-            restoreSelection();
-            return true;
-        }
-
-        // Copy the existing record and just rewrite parent_id. target_group->groupId() is 0
-        // for the workspace item (drop = move to workspace root) and the group's own entry_id
-        // for a host group (drop = nest under it).
-        Router::Group group = source_group->group();
-        group.parent_id = target_group->groupId();
-
-        router->modifyGroup(source_group->workspaceId(), group, this,
-            [this, router_id](const proto::router::GroupResult& result)
-        {
-            if (result.error_code() != proto::router::kErrorOk)
-            {
-                LOG(ERROR) << "Move group failed:" << result.error_code();
-                MsgBox::warning(tree_widget_,
-                    tr("Failed to move the group."));
-                return;
-            }
-            emit sig_routerGroupMoved(router_id);
-        });
-
-        event->acceptProposedAction();
-        restoreSelection();
-        return true;
-    }
-    else if (mime_data->hasFormat(router_host_mime_type_))
-    {
-        const RouterGroupWidget::HostMimeData* host_mime_data =
-            dynamic_cast<const RouterGroupWidget::HostMimeData*>(mime_data);
-        if (!host_mime_data)
-        {
-            restoreSelection();
-            return true;
-        }
-
-        QTreeWidgetItem* target_tree_item = tree_widget_->itemAt(event->position().toPoint());
-        if (!target_tree_item || target_tree_item == tree_widget_->invisibleRootItem())
-        {
-            restoreSelection();
-            return true;
-        }
-
-        SidebarItem* target_item = static_cast<SidebarItem*>(target_tree_item);
-        if (target_item->itemType() != SidebarItem::ROUTER_GROUP)
-        {
-            restoreSelection();
-            return true;
-        }
-
-        auto* group_item = static_cast<SidebarRouterGroup*>(target_item);
-        Router::Host host = host_mime_data->host();
-        const qint64 router_id = host_mime_data->routerId();
-
-        // Repeat the eligibility checks from onDragMove in case the user releases over a
-        // target that wasn't validated (DragLeave without DragMove can happen).
-        if (group_item->routerId() != router_id ||
-            group_item->workspaceId() != host.workspace_id ||
-            group_item->groupId() == host.group_id)
-        {
-            restoreSelection();
-            return true;
-        }
-
-        Router* router = Router::instance(router_id);
-        if (!router)
-        {
-            restoreSelection();
-            return true;
-        }
-
-        host.group_id = group_item->groupId();
-        router->editHost(host, this, [this, router_id](const proto::router::HostResult& result)
-        {
-            if (result.error_code() != proto::router::kErrorOk)
-            {
-                LOG(ERROR) << "Move host failed:" << result.error_code();
-                MsgBox::warning(tree_widget_,
-                    tr("Failed to move the host to the selected group."));
-                return;
-            }
-            emit sig_routerHostMoved(router_id);
-        });
-
-        event->acceptProposedAction();
-        restoreSelection();
-        return true;
-    }
-
-    return false;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Sidebar::onMousePress(QMouseEvent* event)
-{
-    if (event->button() == Qt::LeftButton)
-        start_pos_ = event->pos();
-
-    return false;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Sidebar::onMouseMove(QMouseEvent* event)
-{
-    if (event->buttons() & Qt::LeftButton)
-    {
-        int distance = (event->pos() - start_pos_).manhattanLength();
-        if (distance > QApplication::startDragDistance())
-        {
-            startDrag();
-            return true;
-        }
-    }
-
-    return false;
-}
-
-//--------------------------------------------------------------------------------------------------
-void Sidebar::startDrag()
-{
-    QTreeWidgetItem* tree_item = tree_widget_->itemAt(start_pos_);
-    if (!tree_item)
-        return;
-
-    SidebarItem* item = static_cast<SidebarItem*>(tree_item);
-    if (item->itemType() == SidebarItem::LOCAL_GROUP)
-    {
-        SidebarLocalGroup* group_item = static_cast<SidebarLocalGroup*>(item);
-
-        // Don't allow dragging the root "Local" group.
-        if (group_item->groupId() == 0)
-            return;
-
-        GroupDrag drag(this);
-        drag.setGroupItem(group_item, local_group_mime_type_);
-
-        const QIcon icon = group_item->icon(0);
-        drag.setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
-
-        drag.exec(Qt::MoveAction);
-    }
-    else if (item->itemType() == SidebarItem::ROUTER_GROUP)
-    {
-        auto* group_item = static_cast<SidebarRouterGroup*>(item);
-
-        // Workspaces themselves are not draggable - they are the top-level structure under a
-        // router, not a regular group.
-        if (group_item->isWorkspace())
-            return;
-
-        // Clients are read-only and cannot move host groups.
-        Router* router = Router::instance(group_item->routerId());
-        if (!router || router->config().sessionType() == proto::router::SESSION_TYPE_CLIENT)
-            return;
-
-        RouterGroupDrag drag(this);
-        drag.setGroupItem(group_item, router_group_mime_type_);
-
-        const QIcon icon = group_item->icon(0);
-        drag.setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
-
-        drag.exec(Qt::MoveAction);
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Sidebar::isAllowedDropTarget(QTreeWidgetItem* target, QTreeWidgetItem* source) const
-{
-    if (!target || !source)
-        return false;
-
-    if (target == tree_widget_->invisibleRootItem() || target == source)
-        return false;
-
-    SidebarItem* target_item = static_cast<SidebarItem*>(target);
-    if (target_item->itemType() != SidebarItem::LOCAL_GROUP)
-        return false;
-
-    // Prevent dropping a group onto its own descendant.
-    std::function<bool(QTreeWidgetItem*, QTreeWidgetItem*)> isChild =
-        [&](QTreeWidgetItem* parent, QTreeWidgetItem* child) -> bool
-    {
-        for (int i = 0; i < parent->childCount(); ++i)
-        {
-            QTreeWidgetItem* current = parent->child(i);
-            if (current == child)
-                return true;
-            if (isChild(current, child))
-                return true;
-        }
-        return false;
-    };
-
-    return !isChild(source, target);
-}
-
-//--------------------------------------------------------------------------------------------------
 void Sidebar::onCurrentItemChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous)
 {
     if (!current)
@@ -1654,6 +888,750 @@ void Sidebar::onItemCollapsed(QTreeWidgetItem* item)
         else
             Settings().setRouterGroupExpanded(group_item->routerId(), group_item->groupId(), false);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::onRouterStatusChanged(qint64 router_id, Router::Status status)
+{
+    if (Router* router = routers_.value(router_id))
+    {
+        const QString address = router->config().address();
+        switch (status)
+        {
+            case Router::Status::CONNECTING:
+                addRouterEvent(Severity::INFO, router_id,
+                               tr("Connecting to router %1...").arg(address));
+                break;
+            case Router::Status::ONLINE:
+                addRouterEvent(Severity::INFO, router_id,
+                               tr("Connection to router %1 established.").arg(address));
+                break;
+            case Router::Status::OFFLINE:
+                addRouterEvent(Severity::WARNING, router_id,
+                               tr("Disconnected from router %1.").arg(address));
+                break;
+        }
+    }
+
+    SidebarRouter::Status sidebar_status = SidebarRouter::Status::OFFLINE;
+    switch (status)
+    {
+        case Router::Status::OFFLINE:    sidebar_status = SidebarRouter::Status::OFFLINE;    break;
+        case Router::Status::CONNECTING: sidebar_status = SidebarRouter::Status::CONNECTING; break;
+        case Router::Status::ONLINE:     sidebar_status = SidebarRouter::Status::ONLINE;     break;
+    }
+    setRouterStatus(router_id, sidebar_status);
+
+    if (status == Router::Status::ONLINE)
+    {
+        buildRouterSections(router_id);
+        onRefreshWorkspaces(router_id);
+    }
+    else
+    {
+        removeRouterSections(router_id);
+        setRouterWorkspaces(router_id, {});
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::onRouterErrorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code)
+{
+    Severity severity = Severity::WARNING;
+    if (error_code == TcpChannel::ErrorCode::CRYPTO_ERROR ||
+        error_code == TcpChannel::ErrorCode::ACCESS_DENIED)
+    {
+        severity = Severity::CRITICAL;
+    }
+
+    const QString message = tr("Network error: %1.").arg(TcpChannel::errorToString(error_code));
+    addRouterEvent(severity, router_id, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::onRouterPasswordChangeRequired(qint64 router_id)
+{
+    MsgBox::information(this,
+        tr("To complete the migration from a previous version, you need to change your password."));
+    changeRouterPassword(router_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::onRouterTwoFactorCodeRequired(qint64 router_id)
+{
+    Router* router = routers_.value(router_id);
+    if (!router)
+        return;
+
+    TwoFactorCodeDialog dialog(this);
+    if (dialog.exec() == QDialog::Accepted)
+        router->submitTwoFactorCode(dialog.code());
+    else
+        router->disconnectFromRouter();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::onRouterTwoFactorEnrollment(qint64 router_id, const QString& otpauth_uri)
+{
+    Router* router = routers_.value(router_id);
+    if (!router)
+        return;
+
+    TwoFactorEnrollDialog dialog(otpauth_uri, this);
+    if (dialog.exec() == QDialog::Accepted)
+        router->submitTwoFactorCode(dialog.code());
+    else
+        router->disconnectFromRouter();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::createRouterSession(const RouterConfig& config)
+{
+    const qint64 router_id = config.routerId();
+    if (routers_.contains(router_id))
+        return;
+
+    router_events_.insert(router_id, {});
+
+    Router* router = new Router(config, this);
+    routers_.insert(router_id, router);
+
+    connect(router, &Router::sig_statusChanged, this, &Sidebar::onRouterStatusChanged);
+    connect(router, &Router::sig_errorOccurred, this, &Sidebar::onRouterErrorOccurred);
+    connect(router, &Router::sig_passwordChangeRequired, this, &Sidebar::onRouterPasswordChangeRequired);
+    connect(router, &Router::sig_twoFactorCodeRequired, this, &Sidebar::onRouterTwoFactorCodeRequired);
+    connect(router, &Router::sig_twoFactorEnrollment, this, &Sidebar::onRouterTwoFactorEnrollment);
+    connect(router, &Router::sig_workspacesChanged, this, &Sidebar::onRefreshWorkspaces);
+    connect(router, &Router::sig_groupsChanged, this, &Sidebar::onRefreshHostGroups);
+
+    router->connectToRouter();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::destroyRouterSession(qint64 router_id)
+{
+    if (Router* router = routers_.take(router_id))
+    {
+        router->disconnectFromRouter();
+        delete router;
+    }
+
+    router_events_.remove(router_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::buildRouterSections(qint64 router_id)
+{
+    SidebarRouter* router = routerById(router_id);
+    if (!router)
+        return;
+
+    // Administrative sections are only meaningful for an administrator session.
+    Router* instance = routers_.value(router_id);
+    if (!instance || instance->config().sessionType() != proto::router::SESSION_TYPE_ADMIN)
+        return;
+
+    removeRouterSections(router_id);
+
+    // Sections live above the workspace subtree. Insert each at the top in reverse display order
+    // so the final order stays Hosts -> Clients -> Relays -> Users.
+    auto move_to_top = [router](QTreeWidgetItem* item)
+    {
+        router->insertChild(0, router->takeChild(router->indexOfChild(item)));
+    };
+
+    move_to_top(new SidebarRouterUsers(router_id, router));
+    move_to_top(new SidebarRouterRelays(router_id, router));
+    move_to_top(new SidebarRouterClients(router_id, router));
+    move_to_top(new SidebarRouterHosts(router_id, router));
+
+    router->setExpanded(true);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::removeRouterSections(qint64 router_id)
+{
+    SidebarRouter* router = routerById(router_id);
+    if (!router)
+        return;
+
+    for (int i = router->childCount() - 1; i >= 0; --i)
+    {
+        SidebarItem* child = static_cast<SidebarItem*>(router->child(i));
+        const SidebarItem::Type type = child->itemType();
+        if (type == SidebarItem::ROUTER_HOSTS || type == SidebarItem::ROUTER_USERS ||
+            type == SidebarItem::ROUTER_CLIENTS || type == SidebarItem::ROUTER_RELAYS)
+        {
+            delete router->takeChild(i);
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::addRouterEvent(Severity severity, qint64 router_id, const QString& message)
+{
+    const RouterStatusWidget::Event entry{ QDateTime::currentDateTime(), severity, message };
+
+    auto it = router_events_.find(router_id);
+    if (it != router_events_.end())
+        it->append(entry);
+
+    emit sig_routerEvent(router_id, entry);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Sidebar::onMousePress(QMouseEvent* event)
+{
+    if (event->button() == Qt::LeftButton)
+        start_pos_ = event->pos();
+
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Sidebar::onMouseMove(QMouseEvent* event)
+{
+    if (event->buttons() & Qt::LeftButton)
+    {
+        int distance = (event->pos() - start_pos_).manhattanLength();
+        if (distance > QApplication::startDragDistance())
+        {
+            startDrag();
+            return true;
+        }
+    }
+
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::startDrag()
+{
+    QTreeWidgetItem* tree_item = tree_widget_->itemAt(start_pos_);
+    if (!tree_item)
+        return;
+
+    SidebarItem* item = static_cast<SidebarItem*>(tree_item);
+    if (item->itemType() == SidebarItem::LOCAL_GROUP)
+    {
+        SidebarLocalGroup* group_item = static_cast<SidebarLocalGroup*>(item);
+
+        // Don't allow dragging the root "Local" group.
+        if (group_item->groupId() == 0)
+            return;
+
+        LocalGroupDrag drag(this);
+        drag.setGroupItem(group_item, local_group_mime_type_);
+
+        const QIcon icon = group_item->icon(0);
+        drag.setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
+
+        drag.exec(Qt::MoveAction);
+    }
+    else if (item->itemType() == SidebarItem::ROUTER_GROUP)
+    {
+        auto* group_item = static_cast<SidebarRouterGroup*>(item);
+
+        // Workspaces themselves are not draggable - they are the top-level structure under a
+        // router, not a regular group.
+        if (group_item->isWorkspace())
+            return;
+
+        // Clients are read-only and cannot move host groups.
+        Router* router = Router::instance(group_item->routerId());
+        if (!router || router->config().sessionType() == proto::router::SESSION_TYPE_CLIENT)
+            return;
+
+        RouterGroupDrag drag(this);
+        drag.setGroupItem(group_item, router_group_mime_type_);
+
+        const QIcon icon = group_item->icon(0);
+        drag.setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
+
+        drag.exec(Qt::MoveAction);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Sidebar::onDragEnter(QDragEnterEvent* event)
+{
+    const QMimeData* mime_data = event->mimeData();
+
+    if (mime_data->hasFormat(local_host_mime_type_) || mime_data->hasFormat(router_host_mime_type_) ||
+        mime_data->hasFormat(local_group_mime_type_) || mime_data->hasFormat(router_group_mime_type_))
+    {
+        event->acceptProposedAction();
+        dragging_ = true;
+        drag_source_item_ = tree_widget_->currentItem();
+        return true;
+    }
+
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Sidebar::onDragMove(QDragMoveEvent* event)
+{
+    event->ignore();
+
+    const QMimeData* mime_data = event->mimeData();
+
+    if (mime_data->hasFormat(local_group_mime_type_))
+    {
+        QTreeWidgetItem* source_item = tree_widget_->itemAt(start_pos_);
+        QTreeWidgetItem* target_tree_item = tree_widget_->itemAt(event->position().toPoint());
+
+        if (isAllowedDropTarget(target_tree_item, source_item))
+        {
+            tree_widget_->clearSelection();
+            target_tree_item->setSelected(true);
+            event->acceptProposedAction();
+        }
+
+        return true;
+    }
+    else if (mime_data->hasFormat(router_group_mime_type_))
+    {
+        const RouterGroupMimeData* group_mime_data = dynamic_cast<const RouterGroupMimeData*>(mime_data);
+        if (!group_mime_data)
+            return true;
+
+        SidebarRouterGroup* source_group = group_mime_data->groupItem();
+        if (!source_group)
+            return true;
+
+        QTreeWidgetItem* target_tree_item = tree_widget_->itemAt(event->position().toPoint());
+        if (!target_tree_item || target_tree_item == tree_widget_->invisibleRootItem() ||
+            target_tree_item == source_group)
+        {
+            return true;
+        }
+
+        SidebarItem* target_item = static_cast<SidebarItem*>(target_tree_item);
+        if (target_item->itemType() != SidebarItem::ROUTER_GROUP)
+            return true;
+
+        auto* target_group = static_cast<SidebarRouterGroup*>(target_item);
+
+        // Cross-router/workspace moves are not supported by modifyGroup.
+        if (target_group->routerId() != source_group->routerId() ||
+            target_group->workspaceId() != source_group->workspaceId())
+        {
+            return true;
+        }
+
+        // No-op move: target is already the source's parent.
+        QTreeWidgetItem* current_parent = source_group->parent();
+        if (current_parent == target_tree_item)
+            return true;
+
+        // Prevent a cycle: target must not be source itself or any of its descendants.
+        std::function<bool(QTreeWidgetItem*, QTreeWidgetItem*)> isChild =
+            [&](QTreeWidgetItem* parent, QTreeWidgetItem* child) -> bool
+        {
+            for (int i = 0; i < parent->childCount(); ++i)
+            {
+                QTreeWidgetItem* current = parent->child(i);
+                if (current == child)
+                    return true;
+                if (isChild(current, child))
+                    return true;
+            }
+            return false;
+        };
+        if (isChild(source_group, target_tree_item))
+            return true;
+
+        tree_widget_->clearSelection();
+        target_tree_item->setSelected(true);
+        event->acceptProposedAction();
+        return true;
+    }
+    else if (mime_data->hasFormat(local_host_mime_type_))
+    {
+        QTreeWidgetItem* target_tree_item = tree_widget_->itemAt(event->position().toPoint());
+        if (!target_tree_item || target_tree_item == tree_widget_->invisibleRootItem())
+            return true;
+
+        SidebarItem* target_item = static_cast<SidebarItem*>(target_tree_item);
+        if (target_item->itemType() != SidebarItem::LOCAL_GROUP)
+            return true;
+
+        const LocalHostMimeData* host_mime_data = dynamic_cast<const LocalHostMimeData*>(mime_data);
+        if (!host_mime_data)
+            return true;
+
+        LocalGroupWidget::Item* host_item = host_mime_data->hostItem();
+        if (!host_item)
+            return true;
+
+        // Don't allow drop to the same group.
+        if (host_item->groupId() == target_item->groupId())
+            return true;
+
+        tree_widget_->clearSelection();
+        target_tree_item->setSelected(true);
+        event->acceptProposedAction();
+        return true;
+    }
+    else if (mime_data->hasFormat(router_host_mime_type_))
+    {
+        QTreeWidgetItem* target_tree_item = tree_widget_->itemAt(event->position().toPoint());
+        if (!target_tree_item || target_tree_item == tree_widget_->invisibleRootItem())
+            return true;
+
+        SidebarItem* target_item = static_cast<SidebarItem*>(target_tree_item);
+        if (target_item->itemType() != SidebarItem::ROUTER_GROUP)
+            return true;
+
+        const RouterHostMimeData* host_mime_data = dynamic_cast<const RouterHostMimeData*>(mime_data);
+        if (!host_mime_data)
+            return true;
+
+        auto* group_item = static_cast<SidebarRouterGroup*>(target_item);
+        const Router::Host& host = host_mime_data->host();
+
+        // Cross-router or cross-workspace moves are forbidden by the server; reflect that in
+        // the UI by refusing the drop here.
+        if (group_item->routerId() != host_mime_data->routerId() ||
+            group_item->workspaceId() != host.workspace_id)
+        {
+            return true;
+        }
+
+        // Don't allow drop to the same group.
+        if (group_item->groupId() == host.group_id)
+            return true;
+
+        tree_widget_->clearSelection();
+        target_tree_item->setSelected(true);
+        event->acceptProposedAction();
+        return true;
+    }
+
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Sidebar::onDragLeave(QDragLeaveEvent* /* event */)
+{
+    dragging_ = false;
+    if (drag_source_item_)
+    {
+        tree_widget_->setCurrentItem(drag_source_item_);
+        drag_source_item_ = nullptr;
+    }
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Sidebar::onDrop(QDropEvent* event)
+{
+    dragging_ = false;
+
+    QTreeWidgetItem* saved_item = drag_source_item_;
+    drag_source_item_ = nullptr;
+
+    auto restoreSelection = [&]()
+    {
+        if (saved_item)
+            tree_widget_->setCurrentItem(saved_item);
+    };
+
+    const QMimeData* mime_data = event->mimeData();
+    if (!mime_data)
+        return false;
+
+    if (mime_data->hasFormat(local_group_mime_type_))
+    {
+        const LocalGroupMimeData* group_mime_data = dynamic_cast<const LocalGroupMimeData*>(mime_data);
+        if (!group_mime_data)
+        {
+            restoreSelection();
+            return true;
+        }
+
+        SidebarLocalGroup* source_group = group_mime_data->groupItem();
+        if (!source_group)
+        {
+            restoreSelection();
+            return true;
+        }
+
+        QTreeWidgetItem* target_tree_item = tree_widget_->itemAt(event->position().toPoint());
+        if (!isAllowedDropTarget(target_tree_item, source_group))
+        {
+            restoreSelection();
+            return true;
+        }
+
+        SidebarItem* target_item = static_cast<SidebarItem*>(target_tree_item);
+
+        // Check if a group with the same name already exists in the target group.
+        QList<GroupConfig> target_groups = Database::instance().groupList(target_item->groupId());
+        for (const GroupConfig& existing : std::as_const(target_groups))
+        {
+            if (existing.id() != source_group->groupId() && existing.name() == source_group->groupName())
+            {
+                MsgBox::warning(tree_widget_,
+                    tr("A group with this name already exists in the selected parent group."));
+                restoreSelection();
+                return true;
+            }
+        }
+
+        // Update the group's parent in the database.
+        if (!Database::instance().moveGroup(source_group->groupId(), target_item->groupId()))
+        {
+            MsgBox::warning(tree_widget_, tr("Failed to move the group."));
+            restoreSelection();
+            return true;
+        }
+
+        event->acceptProposedAction();
+
+        // Reload groups and select the moved group.
+        reloadGroups(source_group->groupId());
+        return true;
+    }
+    else if (mime_data->hasFormat(local_host_mime_type_))
+    {
+        const LocalHostMimeData* host_mime_data = dynamic_cast<const LocalHostMimeData*>(mime_data);
+        if (!host_mime_data)
+        {
+            restoreSelection();
+            return true;
+        }
+
+        LocalGroupWidget::Item* host_item = host_mime_data->hostItem();
+        if (!host_item)
+        {
+            restoreSelection();
+            return true;
+        }
+
+        QTreeWidgetItem* target_tree_item = tree_widget_->itemAt(event->position().toPoint());
+        if (!target_tree_item || target_tree_item == tree_widget_->invisibleRootItem())
+        {
+            restoreSelection();
+            return true;
+        }
+
+        SidebarItem* target_item = static_cast<SidebarItem*>(target_tree_item);
+        if (target_item->itemType() != SidebarItem::LOCAL_GROUP)
+        {
+            restoreSelection();
+            return true;
+        }
+
+        if (host_item->groupId() == target_item->groupId())
+        {
+            restoreSelection();
+            return true;
+        }
+
+        // Check if a host with the same name already exists in the target group.
+        QList<HostConfig> target_hosts = Database::instance().hostList(target_item->groupId());
+        for (const HostConfig& existing : std::as_const(target_hosts))
+        {
+            if (existing.name() == host_item->computerName())
+            {
+                MsgBox::warning(tree_widget_, tr("A host with this name already exists in the selected group."));
+                restoreSelection();
+                return true;
+            }
+        }
+
+        // Update the host's group in the database.
+        std::optional<HostConfig> host = Database::instance().findHost(host_item->entryId());
+        if (!host.has_value())
+        {
+            restoreSelection();
+            return true;
+        }
+
+        host->setGroupId(target_item->groupId());
+
+        if (!Database::instance().modifyHost(*host))
+        {
+            MsgBox::warning(tree_widget_, tr("Failed to move the host to the selected group."));
+            restoreSelection();
+            return true;
+        }
+
+        event->acceptProposedAction();
+        restoreSelection();
+        emit sig_itemDropped();
+        return true;
+    }
+    else if (mime_data->hasFormat(router_group_mime_type_))
+    {
+        const RouterGroupMimeData* group_mime_data = dynamic_cast<const RouterGroupMimeData*>(mime_data);
+        if (!group_mime_data)
+        {
+            restoreSelection();
+            return true;
+        }
+
+        SidebarRouterGroup* source_group = group_mime_data->groupItem();
+        if (!source_group)
+        {
+            restoreSelection();
+            return true;
+        }
+
+        QTreeWidgetItem* target_tree_item = tree_widget_->itemAt(event->position().toPoint());
+        if (!target_tree_item || target_tree_item == tree_widget_->invisibleRootItem() ||
+            target_tree_item == source_group)
+        {
+            restoreSelection();
+            return true;
+        }
+
+        SidebarItem* target_item = static_cast<SidebarItem*>(target_tree_item);
+        if (target_item->itemType() != SidebarItem::ROUTER_GROUP)
+        {
+            restoreSelection();
+            return true;
+        }
+
+        auto* target_group = static_cast<SidebarRouterGroup*>(target_item);
+        if (target_group->routerId() != source_group->routerId() ||
+            target_group->workspaceId() != source_group->workspaceId())
+        {
+            restoreSelection();
+            return true;
+        }
+
+        if (source_group->parent() == target_tree_item)
+        {
+            restoreSelection();
+            return true;
+        }
+
+        const qint64 router_id = source_group->routerId();
+        Router* router = Router::instance(router_id);
+        if (!router)
+        {
+            restoreSelection();
+            return true;
+        }
+
+        // Copy the existing record and just rewrite parent_id. target_group->groupId() is 0
+        // for the workspace item (drop = move to workspace root) and the group's own entry_id
+        // for a host group (drop = nest under it).
+        Router::Group group = source_group->group();
+        group.parent_id = target_group->groupId();
+
+        router->modifyGroup(source_group->workspaceId(), group, this,
+            [this, router_id](const proto::router::GroupResult& result)
+        {
+            if (result.error_code() != proto::router::kErrorOk)
+            {
+                LOG(ERROR) << "Move group failed:" << result.error_code();
+                MsgBox::warning(tree_widget_, tr("Failed to move the group."));
+                return;
+            }
+            emit sig_routerGroupMoved(router_id);
+        });
+
+        event->acceptProposedAction();
+        restoreSelection();
+        return true;
+    }
+    else if (mime_data->hasFormat(router_host_mime_type_))
+    {
+        const RouterHostMimeData* host_mime_data = dynamic_cast<const RouterHostMimeData*>(mime_data);
+        if (!host_mime_data)
+        {
+            restoreSelection();
+            return true;
+        }
+
+        QTreeWidgetItem* target_tree_item = tree_widget_->itemAt(event->position().toPoint());
+        if (!target_tree_item || target_tree_item == tree_widget_->invisibleRootItem())
+        {
+            restoreSelection();
+            return true;
+        }
+
+        SidebarItem* target_item = static_cast<SidebarItem*>(target_tree_item);
+        if (target_item->itemType() != SidebarItem::ROUTER_GROUP)
+        {
+            restoreSelection();
+            return true;
+        }
+
+        auto* group_item = static_cast<SidebarRouterGroup*>(target_item);
+        Router::Host host = host_mime_data->host();
+        const qint64 router_id = host_mime_data->routerId();
+
+        // Repeat the eligibility checks from onDragMove in case the user releases over a
+        // target that wasn't validated (DragLeave without DragMove can happen).
+        if (group_item->routerId() != router_id ||
+            group_item->workspaceId() != host.workspace_id ||
+            group_item->groupId() == host.group_id)
+        {
+            restoreSelection();
+            return true;
+        }
+
+        Router* router = Router::instance(router_id);
+        if (!router)
+        {
+            restoreSelection();
+            return true;
+        }
+
+        host.group_id = group_item->groupId();
+        router->editHost(host, this, [this, router_id](const proto::router::HostResult& result)
+        {
+            if (result.error_code() != proto::router::kErrorOk)
+            {
+                LOG(ERROR) << "Move host failed:" << result.error_code();
+                MsgBox::warning(tree_widget_, tr("Failed to move the host to the selected group."));
+                return;
+            }
+            emit sig_routerHostMoved(router_id);
+        });
+
+        event->acceptProposedAction();
+        restoreSelection();
+        return true;
+    }
+
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Sidebar::isAllowedDropTarget(QTreeWidgetItem* target, QTreeWidgetItem* source) const
+{
+    if (!target || !source)
+        return false;
+
+    if (target == tree_widget_->invisibleRootItem() || target == source)
+        return false;
+
+    SidebarItem* target_item = static_cast<SidebarItem*>(target);
+    if (target_item->itemType() != SidebarItem::LOCAL_GROUP)
+        return false;
+
+    // Prevent dropping a group onto its own descendant.
+    std::function<bool(QTreeWidgetItem*, QTreeWidgetItem*)> isChild =
+        [&](QTreeWidgetItem* parent, QTreeWidgetItem* child) -> bool
+    {
+        for (int i = 0; i < parent->childCount(); ++i)
+        {
+            QTreeWidgetItem* current = parent->child(i);
+            if (current == child)
+                return true;
+            if (isChild(current, child))
+                return true;
+        }
+        return false;
+    };
+
+    return !isChild(source, target);
 }
 
 //--------------------------------------------------------------------------------------------------

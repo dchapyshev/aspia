@@ -34,6 +34,7 @@
 
 #include "base/logging.h"
 #include "client/router.h"
+#include "client/ui/hosts/drag_and_drop.h"
 #include "client/ui/hosts/router_host_dialog.h"
 #include "proto/router_client.h"
 #include "ui_router_group_widget.h"
@@ -343,27 +344,6 @@ bool RouterGroupWidget::eventFilter(QObject* watched, QEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterGroupWidget::startDrag()
-{
-    // Clients are read-only and cannot move hosts between groups.
-    Router* router = Router::instance(router_id_);
-    if (!router || router->config().sessionType() == proto::router::SESSION_TYPE_CLIENT)
-        return;
-
-    HostTreeItem* host_item = static_cast<HostTreeItem*>(ui->tree_host->itemAt(start_pos_));
-    if (!host_item)
-        return;
-
-    HostDrag drag(this);
-    drag.setHost(router_id_, host_item->host, mime_type_);
-
-    const QIcon icon = host_item->icon(0);
-    drag.setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
-
-    drag.exec(Qt::MoveAction);
-}
-
-//--------------------------------------------------------------------------------------------------
 void RouterGroupWidget::onHostListReceived(const Router::HostList& list)
 {
     // The router echoes workspace_id/group_id; ignore responses for other workspaces or
@@ -464,4 +444,25 @@ void RouterGroupWidget::fetchHosts()
 void RouterGroupWidget::updateStatusLabel()
 {
     status_hosts_label_->setText(tr("%n host(s)", "", ui->tree_host->topLevelItemCount()));
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterGroupWidget::startDrag()
+{
+    // Clients are read-only and cannot move hosts between groups.
+    Router* router = Router::instance(router_id_);
+    if (!router || router->config().sessionType() == proto::router::SESSION_TYPE_CLIENT)
+        return;
+
+    HostTreeItem* host_item = static_cast<HostTreeItem*>(ui->tree_host->itemAt(start_pos_));
+    if (!host_item)
+        return;
+
+    RouterHostDrag drag(this);
+    drag.setHost(router_id_, host_item->host, mime_type_);
+
+    const QIcon icon = host_item->icon(0);
+    drag.setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
+
+    drag.exec(Qt::MoveAction);
 }

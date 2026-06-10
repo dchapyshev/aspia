@@ -200,7 +200,7 @@ HostsTab::HostsTab(QWidget* parent)
         if (current_content_ == router_group_widget_)
             router_group_widget_->reload();
     });
-    connect(ui->sidebar, &Sidebar::sig_routerGroupMoved, ui->sidebar, &Sidebar::refreshHostGroups);
+    connect(ui->sidebar, &Sidebar::sig_routerGroupMoved, ui->sidebar, &Sidebar::onRefreshHostGroups);
     connect(ui->action_add_user, &QAction::triggered, this, &HostsTab::onAddUserAction);
     connect(ui->action_edit_user, &QAction::triggered, this, &HostsTab::onEditUserAction);
     connect(ui->action_delete_user, &QAction::triggered, this, &HostsTab::onDeleteUserAction);
@@ -741,6 +741,30 @@ void HostsTab::onSearchConnect()
 }
 
 //--------------------------------------------------------------------------------------------------
+void HostsTab::onLocalHostContextMenu(qint64 entry_id, const QPoint& pos)
+{
+    QMenu menu;
+
+    if (entry_id)
+    {
+        menu.addAction(ui->action_desktop_connect);
+        menu.addAction(ui->action_file_transfer_connect);
+        menu.addAction(ui->action_chat_connect);
+        menu.addAction(ui->action_system_info_connect);
+        menu.addSeparator();
+        menu.addAction(ui->action_edit_host);
+        menu.addAction(ui->action_copy_host);
+        menu.addAction(ui->action_delete_host);
+    }
+    else
+    {
+        menu.addAction(ui->action_add_host);
+    }
+
+    menu.exec(pos);
+}
+
+//--------------------------------------------------------------------------------------------------
 void HostsTab::onSearchContextMenu(const QPoint& pos)
 {
     SearchWidget::Item* item = search_widget_->currentItem();
@@ -760,30 +784,6 @@ void HostsTab::onSearchContextMenu(const QPoint& pos)
         menu.addAction(ui->action_edit_host);
         menu.addAction(ui->action_copy_host);
         menu.addAction(ui->action_delete_host);
-    }
-
-    menu.exec(pos);
-}
-
-//--------------------------------------------------------------------------------------------------
-void HostsTab::onLocalHostContextMenu(qint64 entry_id, const QPoint& pos)
-{
-    QMenu menu;
-
-    if (entry_id)
-    {
-        menu.addAction(ui->action_desktop_connect);
-        menu.addAction(ui->action_file_transfer_connect);
-        menu.addAction(ui->action_chat_connect);
-        menu.addAction(ui->action_system_info_connect);
-        menu.addSeparator();
-        menu.addAction(ui->action_edit_host);
-        menu.addAction(ui->action_copy_host);
-        menu.addAction(ui->action_delete_host);
-    }
-    else
-    {
-        menu.addAction(ui->action_add_host);
     }
 
     menu.exec(pos);
@@ -1103,7 +1103,7 @@ void HostsTab::onAddWorkspaceAction()
 
     RouterWorkspaceDialog dialog(router_id, 0, this);
     if (dialog.exec() == QDialog::Accepted)
-        ui->sidebar->refreshWorkspaces(router_id);
+        ui->sidebar->onRefreshWorkspaces(router_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1121,7 +1121,7 @@ void HostsTab::onEditWorkspaceAction()
 
     RouterWorkspaceDialog dialog(router_id, workspace_item->workspaceId(), this);
     if (dialog.exec() == QDialog::Accepted)
-        ui->sidebar->refreshWorkspaces(router_id);
+        ui->sidebar->onRefreshWorkspaces(router_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1155,7 +1155,7 @@ void HostsTab::onDeleteWorkspaceAction()
     {
         if (result.error_code() != proto::router::kErrorOk)
             LOG(ERROR) << "Workspace delete failed:" << result.error_code();
-        ui->sidebar->refreshWorkspaces(router_id);
+        ui->sidebar->onRefreshWorkspaces(router_id);
     });
 }
 
@@ -1185,7 +1185,7 @@ void HostsTab::onAddGroupAction()
     RouterGroupDialog dialog(router_id, group_item->workspaceId(), group_item->workspaceName(),
         0, default_parent_id, this);
     if (dialog.exec() == QDialog::Accepted)
-        ui->sidebar->refreshHostGroups(router_id);
+        ui->sidebar->onRefreshHostGroups(router_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1212,7 +1212,7 @@ void HostsTab::onEditGroupAction()
     RouterGroupDialog dialog(router_id, group_item->workspaceId(), group_item->workspaceName(),
         group_item->groupId(), 0, this);
     if (dialog.exec() == QDialog::Accepted)
-        ui->sidebar->refreshHostGroups(router_id);
+        ui->sidebar->onRefreshHostGroups(router_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1254,7 +1254,7 @@ void HostsTab::onDeleteGroupAction()
             LOG(ERROR) << "Group delete failed:" << result.error_code();
             return;
         }
-        ui->sidebar->refreshHostGroups(router_id);
+        ui->sidebar->onRefreshHostGroups(router_id);
     });
 }
 

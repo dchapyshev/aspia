@@ -19,14 +19,13 @@
 #ifndef CLIENT_UI_HOSTS_SIDEBAR_H
 #define CLIENT_UI_HOSTS_SIDEBAR_H
 
-#include <QDrag>
 #include <QHash>
-#include <QMimeData>
 #include <QPoint>
 #include <QTreeWidget>
 #include <QWidget>
 
 #include "client/router.h"
+#include "client/ui/hosts/drag_and_drop.h"
 #include "client/ui/hosts/router_status_widget.h"
 #include "client/ui/hosts/sidebar_items.h"
 
@@ -39,76 +38,6 @@ class Sidebar final : public QWidget
 public:
     explicit Sidebar(QWidget* parent = nullptr);
     ~Sidebar() final;
-
-    class GroupMimeData final : public QMimeData
-    {
-    public:
-        GroupMimeData() = default;
-        ~GroupMimeData() final = default;
-
-        void setGroupItem(SidebarLocalGroup* group_item, const QString& mime_type)
-        {
-            group_item_ = group_item;
-            setData(mime_type, QByteArray());
-        }
-
-        SidebarLocalGroup* groupItem() const { return group_item_; }
-
-    private:
-        SidebarLocalGroup* group_item_ = nullptr;
-    };
-
-    class GroupDrag final : public QDrag
-    {
-    public:
-        explicit GroupDrag(QObject* drag_source = nullptr)
-            : QDrag(drag_source)
-        {
-            // Nothing
-        }
-
-        void setGroupItem(SidebarLocalGroup* group_item, const QString& mime_type)
-        {
-            GroupMimeData* mime_data = new GroupMimeData();
-            mime_data->setGroupItem(group_item, mime_type);
-            setMimeData(mime_data);
-        }
-    };
-
-    class RouterGroupMimeData final : public QMimeData
-    {
-    public:
-        RouterGroupMimeData() = default;
-        ~RouterGroupMimeData() final = default;
-
-        void setGroupItem(SidebarRouterGroup* group_item, const QString& mime_type)
-        {
-            group_item_ = group_item;
-            setData(mime_type, QByteArray());
-        }
-
-        SidebarRouterGroup* groupItem() const { return group_item_; }
-
-    private:
-        SidebarRouterGroup* group_item_ = nullptr;
-    };
-
-    class RouterGroupDrag final : public QDrag
-    {
-    public:
-        explicit RouterGroupDrag(QObject* drag_source = nullptr)
-            : QDrag(drag_source)
-        {
-            // Nothing
-        }
-
-        void setGroupItem(SidebarRouterGroup* group_item, const QString& mime_type)
-        {
-            RouterGroupMimeData* mime_data = new RouterGroupMimeData();
-            mime_data->setGroupItem(group_item, mime_type);
-            setMimeData(mime_data);
-        }
-    };
 
     void setLocalHostMimeType(const QString& mime_type);
     void setRouterHostMimeType(const QString& mime_type);
@@ -128,12 +57,12 @@ public:
     QList<qint64> routerIds() const;
     QList<qint64> routerWorkspaceIds(qint64 router_id) const;
 
-    void refreshWorkspaces(qint64 router_id);
-    void refreshHostGroups(qint64 router_id);
     void changeRouterPassword(qint64 router_id);
     QList<RouterStatusWidget::Event> routerEvents(qint64 router_id) const;
 
 public slots:
+    void onRefreshWorkspaces(qint64 router_id);
+    void onRefreshHostGroups(qint64 router_id);
     void onAddGroup();
     void onEditGroup();
     void onRemoveGroup();

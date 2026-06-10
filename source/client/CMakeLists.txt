@@ -220,6 +220,8 @@ list(APPEND SOURCE_CLIENT_CORE_UI_CHAT
 list(APPEND SOURCE_CLIENT_CORE_UI_HOSTS_TAB
     ui/hosts/content_widget.cc
     ui/hosts/content_widget.h
+    ui/hosts/drag_and_drop.cc
+    ui/hosts/drag_and_drop.h
     ui/hosts/group_combo_box.cc
     ui/hosts/group_combo_box.h
     ui/hosts/local_group_dialog.cc

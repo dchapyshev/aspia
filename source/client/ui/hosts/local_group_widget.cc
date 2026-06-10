@@ -35,6 +35,7 @@
 #include "base/logging.h"
 #include "client/database.h"
 #include "client/online_checker/online_checker.h"
+#include "client/ui/hosts/drag_and_drop.h"
 #include "ui_local_group_widget.h"
 
 namespace {
@@ -411,7 +412,7 @@ void LocalGroupWidget::startDrag()
     if (!host_item)
         return;
 
-    HostDrag drag(this);
+    LocalHostDrag drag(this);
     drag.setHostItem(host_item, mime_type_);
 
     const QIcon icon = host_item->icon(0);
