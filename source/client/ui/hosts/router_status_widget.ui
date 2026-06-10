@@ -24,10 +24,29 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QPlainTextEdit" name="edit_status">
-     <property name="readOnly">
+    <widget class="QTreeWidget" name="tree_events">
+     <property name="rootIsDecorated">
+      <bool>false</bool>
+     </property>
+     <property name="uniformRowHeights">
       <bool>true</bool>
      </property>
+     <property name="itemsExpandable">
+      <bool>false</bool>
+     </property>
+     <attribute name="headerDefaultSectionSize">
+      <number>160</number>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>Date and time</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Event</string>
+      </property>
+     </column>
     </widget>
    </item>
   </layout>

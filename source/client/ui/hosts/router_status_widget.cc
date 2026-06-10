@@ -19,10 +19,21 @@
 #include "client/ui/hosts/router_status_widget.h"
 
 #include <QEvent>
-#include <QPlainTextEdit>
+#include <QIcon>
+#include <QTreeWidget>
 
 #include "base/logging.h"
 #include "ui_router_status_widget.h"
+
+namespace {
+
+enum Column
+{
+    COLUMN_TIME = 0,
+    COLUMN_EVENT
+};
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 RouterStatusWidget::RouterStatusWidget(QWidget* parent)
@@ -40,13 +51,15 @@ RouterStatusWidget::~RouterStatusWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterStatusWidget::showRouter(qint64 router_id, const QStringList& history)
+void RouterStatusWidget::showRouter(qint64 router_id, const QList<Event>& events)
 {
     router_id_ = router_id;
 
-    ui->edit_status->clear();
-    for (const QString& line : history)
-        ui->edit_status->appendPlainText(line);
+    ui->tree_events->clear();
+    for (const Event& event : events)
+        addEvent(event);
+
+    ui->tree_events->scrollToBottom();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -62,12 +75,30 @@ void RouterStatusWidget::restoreState(const QByteArray& /* state */)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterStatusWidget::onLogMessage(qint64 router_id, const QString& message)
+void RouterStatusWidget::onEvent(qint64 router_id, const Event& event)
 {
     if (router_id != router_id_)
         return;
 
-    ui->edit_status->appendPlainText(message);
+    addEvent(event);
+    ui->tree_events->scrollToBottom();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterStatusWidget::addEvent(const Event& event)
+{
+    QString icon_path;
+    switch (event.severity)
+    {
+        case Event::Severity::WARNING:  icon_path = ":/img/box-important.svg";   break;
+        case Event::Severity::CRITICAL: icon_path = ":/img/high-importance.svg"; break;
+        case Event::Severity::INFO:     icon_path = ":/img/info.svg";            break;
+    }
+
+    QTreeWidgetItem* item = new QTreeWidgetItem(ui->tree_events);
+    item->setText(COLUMN_TIME, event.time.toString("yyyy-MM-dd HH:mm:ss"));
+    item->setText(COLUMN_EVENT, event.text);
+    item->setIcon(COLUMN_TIME, QIcon(icon_path));
 }
 
 //--------------------------------------------------------------------------------------------------

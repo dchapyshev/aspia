@@ -19,6 +19,8 @@
 #ifndef CLIENT_UI_HOSTS_ROUTER_STATUS_WIDGET_H
 #define CLIENT_UI_HOSTS_ROUTER_STATUS_WIDGET_H
 
+#include <QDateTime>
+
 #include <memory>
 
 #include "client/ui/hosts/content_widget.h"
@@ -35,7 +37,16 @@ public:
     explicit RouterStatusWidget(QWidget* parent = nullptr);
     ~RouterStatusWidget() final;
 
-    void showRouter(qint64 router_id, const QStringList& history);
+    struct Event
+    {
+        enum class Severity { INFO, WARNING, CRITICAL };
+
+        QDateTime time;
+        Severity severity = Severity::INFO;
+        QString text;
+    };
+
+    void showRouter(qint64 router_id, const QList<Event>& events);
     qint64 routerId() const { return router_id_; }
 
     // ContentWidget implementation.
@@ -43,13 +54,15 @@ public:
     void restoreState(const QByteArray& state) final;
 
 public slots:
-    void onLogMessage(qint64 router_id, const QString& message);
+    void onEvent(qint64 router_id, const RouterStatusWidget::Event& event);
 
 protected:
     // QWidget implementation.
     void changeEvent(QEvent* event) final;
 
 private:
+    void addEvent(const Event& event);
+
     std::unique_ptr<Ui::RouterStatusWidget> ui;
     qint64 router_id_ = 0;
 

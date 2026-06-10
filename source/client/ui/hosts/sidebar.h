@@ -30,6 +30,7 @@
 #include <variant>
 
 #include "client/router.h"
+#include "client/ui/hosts/router_status_widget.h"
 
 class GroupConfig;
 class RouterConfig;
@@ -293,7 +294,7 @@ public:
     void refreshWorkspaces(qint64 router_id);
     void refreshHostGroups(qint64 router_id);
     void changeRouterPassword(qint64 router_id);
-    QStringList routerLog(qint64 router_id) const;
+    QList<RouterStatusWidget::Event> routerEvents(qint64 router_id) const;
 
 public slots:
     void onAddGroup();
@@ -320,7 +321,7 @@ signals:
     void sig_addGroup();
     void sig_removeGroup();
     void sig_editGroup();
-    void sig_routerLogMessage(qint64 router_id, const QString& message);
+    void sig_routerEvent(qint64 router_id, const RouterStatusWidget::Event& event);
 
 private slots:
     void onCurrentItemChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
@@ -334,12 +335,14 @@ private slots:
     void onRouterTwoFactorEnrollment(qint64 router_id, const QString& otpauth_uri);
 
 private:
+    using Severity = RouterStatusWidget::Event::Severity;
+
     void createRouterSession(const RouterConfig& config);
     void destroyRouterSession(qint64 router_id);
 
     void buildRouterSections(qint64 router_id);
     void removeRouterSections(qint64 router_id);
-    void appendRouterLog(qint64 router_id, const QString& message);
+    void addRouterEvent(Severity severity, qint64 router_id, const QString& message);
 
     bool onMousePress(QMouseEvent* event);
     bool onMouseMove(QMouseEvent* event);
@@ -356,7 +359,7 @@ private:
     QTreeWidget* tree_widget_ = nullptr;
 
     QHash<qint64, Router*> routers_;
-    QHash<qint64, QStringList> router_logs_;
+    QHash<qint64, QList<RouterStatusWidget::Event>> router_events_;
 
     LocalGroupItem* local_root_ = nullptr;
 

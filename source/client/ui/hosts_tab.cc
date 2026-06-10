@@ -127,8 +127,8 @@ HostsTab::HostsTab(QWidget* parent)
     ui->content_stack->addWidget(router_status_widget_);
     ui->content_stack->addWidget(search_widget_);
 
-    connect(ui->sidebar, &Sidebar::sig_routerLogMessage,
-            router_status_widget_, &RouterStatusWidget::onLogMessage);
+    connect(ui->sidebar, &Sidebar::sig_routerEvent,
+            router_status_widget_, &RouterStatusWidget::onEvent);
 
     connect(router_hosts_widget_, &RouterHostsWidget::sig_currentChanged,
             this, &HostsTab::updateActionsState);
@@ -435,7 +435,7 @@ void HostsTab::onSwitchContent(Sidebar::Item::Type type)
 
             const qint64 router_id = static_cast<Sidebar::RouterItem*>(sidebar_item)->routerId();
             switchContent(router_status_widget_);
-            router_status_widget_->showRouter(router_id, ui->sidebar->routerLog(router_id));
+            router_status_widget_->showRouter(router_id, ui->sidebar->routerEvents(router_id));
         }
         break;
 

@@ -27,7 +27,7 @@
 #include <QKeyEvent>
 #include <QMouseEvent>
 #include <QSet>
-#include <QTime>
+#include <QDateTime>
 #include <QUuid>
 #include <QVBoxLayout>
 
@@ -227,7 +227,7 @@ void Sidebar::createRouterSession(const RouterConfig& config)
     if (routers_.contains(router_id))
         return;
 
-    router_logs_.insert(router_id, QStringList());
+    router_events_.insert(router_id, {});
 
     Router* router = new Router(config, this);
     routers_.insert(router_id, router);
@@ -258,7 +258,7 @@ void Sidebar::destroyRouterSession(qint64 router_id)
         delete router;
     }
 
-    router_logs_.remove(router_id);
+    router_events_.remove(router_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -318,13 +318,16 @@ void Sidebar::onRouterStatusChanged(qint64 router_id, Router::Status status)
         switch (status)
         {
             case Router::Status::CONNECTING:
-                appendRouterLog(router_id, tr("Connecting to router %1...").arg(address));
+                addRouterEvent(Severity::INFO, router_id,
+                               tr("Connecting to router %1...").arg(address));
                 break;
             case Router::Status::ONLINE:
-                appendRouterLog(router_id, tr("Connection to router %1 established.").arg(address));
+                addRouterEvent(Severity::INFO, router_id,
+                               tr("Connection to router %1 established.").arg(address));
                 break;
             case Router::Status::OFFLINE:
-                appendRouterLog(router_id, tr("Disconnected from router %1.").arg(address));
+                addRouterEvent(Severity::WARNING, router_id,
+                               tr("Disconnected from router %1.").arg(address));
                 break;
         }
     }
@@ -353,7 +356,15 @@ void Sidebar::onRouterStatusChanged(qint64 router_id, Router::Status status)
 //--------------------------------------------------------------------------------------------------
 void Sidebar::onRouterErrorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code)
 {
-    appendRouterLog(router_id, tr("Network error: %1.").arg(TcpChannel::errorToString(error_code)));
+    Severity severity = Severity::WARNING;
+    if (error_code == TcpChannel::ErrorCode::CRYPTO_ERROR ||
+        error_code == TcpChannel::ErrorCode::ACCESS_DENIED)
+    {
+        severity = Severity::CRITICAL;
+    }
+
+    const QString message = tr("Network error: %1.").arg(TcpChannel::errorToString(error_code));
+    addRouterEvent(severity, router_id, message);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -393,21 +404,21 @@ void Sidebar::onRouterTwoFactorEnrollment(qint64 router_id, const QString& otpau
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::appendRouterLog(qint64 router_id, const QString& message)
+void Sidebar::addRouterEvent(Severity severity, qint64 router_id, const QString& message)
 {
-    const QString line = QTime::currentTime().toString() + ' ' + message;
+    const RouterStatusWidget::Event entry{ QDateTime::currentDateTime(), severity, message };
 
-    auto it = router_logs_.find(router_id);
-    if (it != router_logs_.end())
-        it->append(line);
+    auto it = router_events_.find(router_id);
+    if (it != router_events_.end())
+        it->append(entry);
 
-    emit sig_routerLogMessage(router_id, line);
+    emit sig_routerEvent(router_id, entry);
 }
 
 //--------------------------------------------------------------------------------------------------
-QStringList Sidebar::routerLog(qint64 router_id) const
+QList<RouterStatusWidget::Event> Sidebar::routerEvents(qint64 router_id) const
 {
-    return router_logs_.value(router_id);
+    return router_events_.value(router_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -457,7 +468,8 @@ void Sidebar::changeRouterPassword(qint64 router_id)
         const std::string& error_code = result.error_code();
         if (error_code == proto::router::kErrorOk)
         {
-            appendRouterLog(router_id, tr("Password updated. Waiting for new encryption keys..."));
+            addRouterEvent(Severity::INFO, router_id,
+                           tr("Password updated. Waiting for new encryption keys..."));
             return;
         }
 
