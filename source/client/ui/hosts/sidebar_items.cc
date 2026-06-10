@@ -166,7 +166,7 @@ SidebarRouterHosts::SidebarRouterHosts(qint64 router_id, QTreeWidgetItem* parent
 //--------------------------------------------------------------------------------------------------
 void SidebarRouterHosts::retranslate()
 {
-    setText(0, tr("Hosts"));
+    setText(0, tr("All Hosts"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -196,7 +196,7 @@ SidebarRouterClients::SidebarRouterClients(qint64 router_id, QTreeWidgetItem* pa
 //--------------------------------------------------------------------------------------------------
 void SidebarRouterClients::retranslate()
 {
-    setText(0, tr("Clients"));
+    setText(0, tr("Active Clients"));
 }
 
 //--------------------------------------------------------------------------------------------------

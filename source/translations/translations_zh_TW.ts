@@ -2151,13 +2151,13 @@ Routers added: %4</source>
 <context>
     <name>HostTreeItem</name>
     <message>
-        <location filename="../client/ui/hosts/router_group_widget.cc" line="94"/>
+        <location filename="../client/ui/hosts/router_group_widget.cc" line="95"/>
         <location filename="../client/ui/hosts/router_hosts_widget.cc" line="111"/>
         <source>Online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_group_widget.cc" line="94"/>
+        <location filename="../client/ui/hosts/router_group_widget.cc" line="95"/>
         <location filename="../client/ui/hosts/router_hosts_widget.cc" line="111"/>
         <source>Offline</source>
         <translation type="unfinished"></translation>
@@ -2525,82 +2525,82 @@ Routers added: %4</source>
         <translation type="unfinished">主機</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="879"/>
+        <location filename="../client/ui/hosts_tab.cc" line="878"/>
         <source>(copy)</source>
         <translation type="unfinished">(複製)</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="631"/>
-        <location filename="../client/ui/hosts_tab.cc" line="660"/>
-        <location filename="../client/ui/hosts_tab.cc" line="702"/>
-        <location filename="../client/ui/hosts_tab.cc" line="844"/>
-        <location filename="../client/ui/hosts_tab.cc" line="875"/>
-        <location filename="../client/ui/hosts_tab.cc" line="918"/>
+        <location filename="../client/ui/hosts_tab.cc" line="630"/>
+        <location filename="../client/ui/hosts_tab.cc" line="659"/>
+        <location filename="../client/ui/hosts_tab.cc" line="701"/>
+        <location filename="../client/ui/hosts_tab.cc" line="843"/>
+        <location filename="../client/ui/hosts_tab.cc" line="874"/>
+        <location filename="../client/ui/hosts_tab.cc" line="917"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="883"/>
+        <location filename="../client/ui/hosts_tab.cc" line="882"/>
         <source>Failed to add the host to the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="922"/>
+        <location filename="../client/ui/hosts_tab.cc" line="921"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="932"/>
+        <location filename="../client/ui/hosts_tab.cc" line="931"/>
         <source>Unable to remove host</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts_tab.cc" line="985"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1010"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1035"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">複製列</translation>
     </message>
     <message>
         <location filename="../client/ui/hosts_tab.cc" line="986"/>
         <location filename="../client/ui/hosts_tab.cc" line="1011"/>
         <location filename="../client/ui/hosts_tab.cc" line="1036"/>
-        <source>Copy Row</source>
-        <translation type="unfinished">複製列</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/hosts_tab.cc" line="987"/>
-        <location filename="../client/ui/hosts_tab.cc" line="1012"/>
-        <location filename="../client/ui/hosts_tab.cc" line="1037"/>
         <source>Copy Value</source>
         <translation type="unfinished">複製值</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1142"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1141"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1239"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1238"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1289"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1288"/>
         <source>Import Old Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1291"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1290"/>
         <source>Address Book (*.aab);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1314"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1313"/>
         <source>Export Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1316"/>
-        <location filename="../client/ui/hosts_tab.cc" line="1343"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1315"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1342"/>
         <source>Address Book (*.json);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1341"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1340"/>
         <source>Import Address Book</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2846,31 +2846,31 @@ Hosts skipped: %6</source>
         <translation type="unfinished">註解</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_widget.cc" line="69"/>
+        <location filename="../client/ui/hosts/local_group_widget.cc" line="70"/>
         <source>Status update...</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/local_group_widget.cc" line="430"/>
+        <location filename="../client/ui/hosts/local_group_widget.cc" line="431"/>
         <source>%n child group(s)</source>
         <translation type="unfinished">
             <numerusform>%n 個子群組</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/local_group_widget.cc" line="432"/>
+        <location filename="../client/ui/hosts/local_group_widget.cc" line="433"/>
         <source>%n child host(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_widget.cc" line="503"/>
+        <location filename="../client/ui/hosts/local_group_widget.cc" line="504"/>
         <source>Online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_widget.cc" line="503"/>
+        <location filename="../client/ui/hosts/local_group_widget.cc" line="504"/>
         <source>Offline</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3302,14 +3302,6 @@ Hosts skipped: %6</source>
     </message>
 </context>
 <context>
-    <name>RouterClientsItem</name>
-    <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="1850"/>
-        <source>Clients</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>RouterClientsWidget</name>
     <message>
         <location filename="../client/ui/hosts/router_clients_widget.ui" line="48"/>
@@ -3615,7 +3607,7 @@ Hosts skipped: %6</source>
         <translation type="unfinished">狀態</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_group_widget.cc" line="466"/>
+        <location filename="../client/ui/hosts/router_group_widget.cc" line="446"/>
         <source>%n host(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -3683,9 +3675,8 @@ Hosts skipped: %6</source>
 <context>
     <name>RouterHostsItem</name>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="1820"/>
         <source>Hosts</source>
-        <translation type="unfinished">主機</translation>
+        <translation type="obsolete">主機</translation>
     </message>
 </context>
 <context>
@@ -3845,14 +3836,6 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/ui/hosts/router_hosts_widget.cc" line="838"/>
         <source>Unable to write file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>RouterRelaysItem</name>
-    <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="1865"/>
-        <source>Relays</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4235,9 +4218,8 @@ Hosts skipped: %6</source>
 <context>
     <name>RouterUsersItem</name>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="1835"/>
         <source>Users</source>
-        <translation type="unfinished">使用者</translation>
+        <translation type="obsolete">使用者</translation>
     </message>
 </context>
 <context>
@@ -5109,126 +5091,158 @@ Are you sure you want to continue?</source>
 <context>
     <name>Sidebar</name>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="75"/>
-        <location filename="../client/ui/hosts/sidebar.cc" line="923"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="74"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="727"/>
         <source>Local</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="322"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="903"/>
         <source>Connecting to router %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="326"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="907"/>
         <source>Connection to router %1 established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="330"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="911"/>
         <source>Disconnected from router %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="366"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="947"/>
         <source>Network error: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="374"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="955"/>
         <source>To complete the migration from a previous version, you need to change your password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="432"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="448"/>
         <source>Change Password</source>
         <translation type="unfinished">變更密碼</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/sidebar.cc" line="439"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="455"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation type="unfinished">
             <numerusform>密碼不能為空且不應超過 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="446"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="462"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation type="unfinished">您輸入的密碼不符合安全要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/sidebar.cc" line="447"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="463"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform>密碼必須包含小寫和大寫字符、數字，並且不得少於 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="450"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="466"/>
         <source>Do you want to enter a different password?</source>
         <translation type="unfinished">您想輸入其他密碼嗎？</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="472"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="488"/>
         <source>Password updated. Waiting for new encryption keys...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="478"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="494"/>
         <source>Invalid password change request.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="480"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="496"/>
         <source>Unknown internal error.</source>
         <translation type="unfinished">未知的內部錯誤。</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="482"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="498"/>
         <source>Invalid data was passed.</source>
         <translation type="unfinished">傳入了無效資料。</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="484"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="500"/>
         <source>Unknown error type.</source>
         <translation type="unfinished">未知錯誤類型。</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="825"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="629"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="838"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="642"/>
         <source>Unable to remove group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="902"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="706"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="1231"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="1377"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="1241"/>
-        <location filename="../client/ui/hosts/sidebar.cc" line="1394"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="1386"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="1532"/>
         <source>Failed to move the group.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="1297"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="1439"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="1317"/>
-        <location filename="../client/ui/hosts/sidebar.cc" line="1456"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="1457"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="1592"/>
         <source>Failed to move the host to the selected group.</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SidebarRouterClients</name>
+    <message>
+        <location filename="../client/ui/hosts/sidebar_items.cc" line="199"/>
+        <source>Active Clients</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SidebarRouterHosts</name>
+    <message>
+        <location filename="../client/ui/hosts/sidebar_items.cc" line="169"/>
+        <source>All Hosts</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SidebarRouterRelays</name>
+    <message>
+        <location filename="../client/ui/hosts/sidebar_items.cc" line="214"/>
+        <source>Relays</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SidebarRouterUsers</name>
+    <message>
+        <location filename="../client/ui/hosts/sidebar_items.cc" line="184"/>
+        <source>Users</source>
+        <translation type="unfinished">使用者</translation>
     </message>
 </context>
 <context>
