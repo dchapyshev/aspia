@@ -27,7 +27,6 @@
 
 #include <optional>
 
-#include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "base/net/address.h"
 #include "base/peer/host_id.h"
@@ -38,10 +37,10 @@
 #include "client/json_backup.h"
 #include "client/settings.h"
 #include "client/desktop/hosts/content_widget.h"
-#include "client/desktop/hosts/local_host_dialog.h"
 #include "client/desktop/hosts/local_group_widget.h"
-#include "client/desktop/hosts/router_group_dialog.h"
+#include "client/desktop/hosts/local_host_dialog.h"
 #include "client/desktop/hosts/router_clients_widget.h"
+#include "client/desktop/hosts/router_group_dialog.h"
 #include "client/desktop/hosts/router_group_widget.h"
 #include "client/desktop/hosts/router_hosts_widget.h"
 #include "client/desktop/hosts/router_relays_widget.h"
@@ -49,6 +48,7 @@
 #include "client/desktop/hosts/router_users_widget.h"
 #include "client/desktop/hosts/router_workspace_dialog.h"
 #include "client/desktop/hosts/search_widget.h"
+#include "common/desktop/msg_box.h"
 #include "proto/peer.h"
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"

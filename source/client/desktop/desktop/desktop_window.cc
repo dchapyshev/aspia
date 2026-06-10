@@ -34,7 +34,6 @@
 
 #include "base/logging.h"
 #include "base/desktop/frame.h"
-#include "common/ui/msg_box.h"
 #include "base/desktop/mouse_cursor.h"
 #include "client/settings.h"
 #include "client/desktop/desktop/desktop_toolbar.h"
@@ -42,6 +41,7 @@
 #include "client/desktop/desktop/statistics_dialog.h"
 #include "client/desktop/desktop/task_manager_window.h"
 #include "common/desktop_session_constants.h"
+#include "common/desktop/msg_box.h"
 #include "proto/desktop_control.h"
 #include "proto/desktop_cursor.h"
 #include "proto/desktop_input.h"

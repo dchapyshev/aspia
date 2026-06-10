@@ -76,61 +76,61 @@ if (APPLE)
         mac/file_promise_writer.h)
 endif()
 
-list(APPEND SOURCE_COMMON_UI
-    ui/about_dialog.cc
-    ui/about_dialog.h
-    ui/about_dialog.ui
-    ui/chat_status_message.cc
-    ui/chat_status_message.h
-    ui/chat_status_message.ui
-    ui/chat_incoming_message.cc
-    ui/chat_incoming_message.h
-    ui/chat_incoming_message.ui
-    ui/chat_message.h
-    ui/chat_outgoing_message.cc
-    ui/chat_outgoing_message.h
-    ui/chat_outgoing_message.ui
-    ui/chat_widget.cc
-    ui/chat_widget.h
-    ui/chat_widget.ui
-    ui/credentials_dialog.cc
-    ui/credentials_dialog.h
-    ui/credentials_dialog.ui
-    ui/dialog_button_box.cc
-    ui/dialog_button_box.h
-    ui/download_dialog.cc
-    ui/download_dialog.h
-    ui/download_dialog.ui
-    ui/formatter.cc
-    ui/formatter.h
-    ui/icon_text_button.cc
-    ui/icon_text_button.h
-    ui/language_action.h
-    ui/msg_box.cc
-    ui/msg_box.h
-    ui/password_edit.cc
-    ui/password_edit.h
-    ui/session_type.cc
-    ui/session_type.h
-    ui/status_dialog.cc
-    ui/status_dialog.h
-    ui/status_dialog.ui
-    ui/two_factor_code_dialog.cc
-    ui/two_factor_code_dialog.h
-    ui/two_factor_code_dialog.ui
-    ui/two_factor_enroll_dialog.cc
-    ui/two_factor_enroll_dialog.h
-    ui/two_factor_enroll_dialog.ui
-    ui/update_dialog.cc
-    ui/update_dialog.h
-    ui/update_dialog.ui)
+list(APPEND SOURCE_COMMON_DESKTOP
+    desktop/about_dialog.cc
+    desktop/about_dialog.h
+    desktop/about_dialog.ui
+    desktop/chat_status_message.cc
+    desktop/chat_status_message.h
+    desktop/chat_status_message.ui
+    desktop/chat_incoming_message.cc
+    desktop/chat_incoming_message.h
+    desktop/chat_incoming_message.ui
+    desktop/chat_message.h
+    desktop/chat_outgoing_message.cc
+    desktop/chat_outgoing_message.h
+    desktop/chat_outgoing_message.ui
+    desktop/chat_widget.cc
+    desktop/chat_widget.h
+    desktop/chat_widget.ui
+    desktop/credentials_dialog.cc
+    desktop/credentials_dialog.h
+    desktop/credentials_dialog.ui
+    desktop/dialog_button_box.cc
+    desktop/dialog_button_box.h
+    desktop/download_dialog.cc
+    desktop/download_dialog.h
+    desktop/download_dialog.ui
+    desktop/formatter.cc
+    desktop/formatter.h
+    desktop/icon_text_button.cc
+    desktop/icon_text_button.h
+    desktop/language_action.h
+    desktop/msg_box.cc
+    desktop/msg_box.h
+    desktop/password_edit.cc
+    desktop/password_edit.h
+    desktop/session_type.cc
+    desktop/session_type.h
+    desktop/status_dialog.cc
+    desktop/status_dialog.h
+    desktop/status_dialog.ui
+    desktop/two_factor_code_dialog.cc
+    desktop/two_factor_code_dialog.h
+    desktop/two_factor_code_dialog.ui
+    desktop/two_factor_enroll_dialog.cc
+    desktop/two_factor_enroll_dialog.h
+    desktop/two_factor_enroll_dialog.ui
+    desktop/update_dialog.cc
+    desktop/update_dialog.h
+    desktop/update_dialog.ui)
 
 if (WIN32)
-    list(APPEND SOURCE_COMMON_UI
-        ui/taskbar_button.cc
-        ui/taskbar_button.h
-        ui/taskbar_progress.cc
-        ui/taskbar_progress.h)
+    list(APPEND SOURCE_COMMON_DESKTOP
+        desktop/taskbar_button.cc
+        desktop/taskbar_button.h
+        desktop/taskbar_progress.cc
+        desktop/taskbar_progress.h)
 
     list(APPEND SOURCE_COMMON_WIN
         win/file_object.cc
@@ -144,7 +144,7 @@ endif()
 list(APPEND SOURCE_COMMON_RESOURCES resources/common.qrc)
 
 source_group("" FILES ${SOURCE_COMMON})
-source_group(ui FILES ${SOURCE_COMMON_UI})
+source_group(desktop FILES ${SOURCE_COMMON_DESKTOP})
 source_group(resources FILES ${SOURCE_COMMON_RESOURCES})
 
 if (WIN32)
@@ -157,7 +157,7 @@ endif()
 
 add_library(aspia_common STATIC
     ${SOURCE_COMMON}
-    ${SOURCE_COMMON_UI}
+    ${SOURCE_COMMON_DESKTOP}
     ${SOURCE_COMMON_WIN}
     ${SOURCE_COMMON_MAC}
     ${SOURCE_COMMON_RESOURCES})

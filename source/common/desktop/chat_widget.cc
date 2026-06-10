@@ -1,0 +1,732 @@
+//
+// Aspia Project
+// Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+#include "common/desktop/chat_widget.h"
+
+#include <QAction>
+#include <QDateTime>
+#include <QDir>
+#include <QFile>
+#include <QFileDialog>
+#include <QFileInfo>
+#include <QHostInfo>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QKeyEvent>
+#include <QMenu>
+#include <QSaveFile>
+#include <QScrollBar>
+#include <QTextEdit>
+#include <QTextStream>
+#include <QTimer>
+
+#include "base/logging.h"
+#include "base/files/base_paths.h"
+#include "common/desktop/chat_incoming_message.h"
+#include "common/desktop/chat_outgoing_message.h"
+#include "common/desktop/chat_status_message.h"
+#include "common/desktop/msg_box.h"
+#include "ui_chat_widget.h"
+
+namespace {
+
+const int kMaxMessageLength = 2048;
+const int kMaxStoredMessages = 30;
+const int kEditMessageMinHeight = 32;
+const int kEditMessageMaxHeight = 120;
+const QString kHistoryDirName = "chat";
+
+//--------------------------------------------------------------------------------------------------
+QString currentTime()
+{
+    return QLocale::system().toString(QTime::currentTime(), "HH:mm:ss");
+}
+
+//--------------------------------------------------------------------------------------------------
+QString historyDirectoryPath(const QString& history_id)
+{
+    QString base_path = BasePaths::appUserDataDir();
+    if (base_path.isEmpty())
+    {
+        LOG(ERROR) << "Unable to get app data directory";
+        return QString();
+    }
+
+    if (history_id.isEmpty())
+        return base_path;
+
+    QDir dir(base_path);
+    if (!dir.mkpath(kHistoryDirName))
+    {
+        LOG(ERROR) << "Unable to create directory";
+        return QString();
+    }
+
+    return dir.filePath(kHistoryDirName);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString historyFilePath(const QString& history_id)
+{
+    QString dir_path = historyDirectoryPath(history_id);
+    if (dir_path.isEmpty())
+        return QString();
+
+    if (history_id.isEmpty())
+        return QDir(dir_path).filePath("chat.json");
+
+    return QDir(dir_path).filePath(history_id + ".json");
+}
+
+//--------------------------------------------------------------------------------------------------
+void removeHistoryFilesOlderThan(int days)
+{
+    if (days <= 0)
+    {
+        LOG(ERROR) << "Invalid history retention days:" << days;
+        return;
+    }
+
+    QString dir_path = historyDirectoryPath(QString());
+    if (dir_path.isEmpty())
+        return;
+
+    QDir dir(dir_path);
+    if (!dir.exists())
+        return;
+
+    QDateTime expiration = QDateTime::currentDateTimeUtc().addDays(-days);
+    QFileInfoList files = dir.entryInfoList(QStringList() << "*.json", QDir::Files);
+
+    for (const QFileInfo& file_info : std::as_const(files))
+    {
+        if (file_info.lastModified().toUTC() >= expiration)
+            continue;
+
+        if (!dir.remove(file_info.fileName()))
+            LOG(ERROR) << "Unable to remove old chat history file:" << file_info.filePath();
+    }
+}
+
+} // namespace
+
+//--------------------------------------------------------------------------------------------------
+ChatWidget::ChatWidget(QWidget* parent)
+    : QWidget(parent),
+      ui(std::make_unique<Ui::ChatWidget>()),
+      action_save_chat_(new QAction(QIcon(":/img/save.svg"), tr("Save chat..."), this)),
+      action_clear_chat_(new QAction(QIcon(":/img/clean.svg"), tr("Clear chat"), this)),
+      display_name_(QHostInfo::localHostName()),
+      status_clear_timer_(new QTimer(this))
+{
+    LOG(INFO) << "Ctor";
+
+    ui->setupUi(this);
+    ui->edit_message->document()->setDocumentMargin(2);
+    ui->edit_message->setFixedHeight(kEditMessageMinHeight);
+    ui->edit_message->installEventFilter(this);
+    ui->list_messages->horizontalScrollBar()->installEventFilter(this);
+    ui->list_messages->verticalScrollBar()->installEventFilter(this);
+
+    refreshStyles();
+
+    connect(action_save_chat_, &QAction::triggered, this, &ChatWidget::onSaveChat);
+    connect(action_clear_chat_, &QAction::triggered, this, &ChatWidget::onClearHistory);
+    connect(status_clear_timer_, &QTimer::timeout, ui->label_status, &QLabel::clear);
+    connect(ui->edit_message, &QTextEdit::textChanged, this, &ChatWidget::onMessageTextChanged);
+    connect(ui->button_send, &QToolButton::clicked, this, &ChatWidget::onSendMessage);
+    connect(ui->button_tools, &QToolButton::clicked, this, [this]()
+    {
+        LOG(INFO) << "[ACTION] Show tool menu";
+
+        QMenu menu;
+        menu.addAction(action_save_chat_);
+        menu.addAction(action_clear_chat_);
+
+        menu.show();
+
+        QPoint pos = ui->button_tools->mapToGlobal(ui->button_tools->rect().topRight());
+        pos.setX(pos.x() - menu.rect().width());
+        pos.setY(pos.y() - menu.rect().height());
+
+        menu.exec(pos);
+    });
+
+    ui->edit_message->setFocus();
+}
+
+//--------------------------------------------------------------------------------------------------
+ChatWidget::~ChatWidget()
+{
+    LOG(INFO) << "Dtor";
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::readMessage(const proto::chat::Message& message)
+{
+    QString source = QString::fromStdString(message.source());
+    QString text = QString::fromStdString(message.text());
+
+    addIncomingMessage(message.timestamp(), source, text);
+    appendHistoryMessage(message.timestamp(), source, text, false);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::readStatus(const proto::chat::Status& status)
+{
+    status_clear_timer_->stop();
+
+    QString user_name = QString::fromStdString(status.source());
+    QString message;
+
+    switch (status.code())
+    {
+        case proto::chat::Status::CODE_TYPING:
+            ui->label_status->setText(tr("%1 is typing...").arg(user_name));
+            break;
+        case proto::chat::Status::CODE_STARTED:
+            message = tr("User %1 has joined the chat (%2)").arg(user_name, currentTime());
+            break;
+        case proto::chat::Status::CODE_STOPPED:
+            message = tr("User %1 has left the chat (%2)").arg(user_name, currentTime());
+            break;
+        case proto::chat::Status::CODE_USER_CONNECTED:
+            message = tr("User %1 is logged in (%2)").arg(user_name, currentTime());
+            break;
+        case proto::chat::Status::CODE_USER_DISCONNECTED:
+            message = tr("User %1 is not logged in (%2)").arg(user_name, currentTime());
+            break;
+        case proto::chat::Status::CODE_NO_USERS:
+            message = tr("There are no connected users (%1)").arg(currentTime());
+            break;
+        default:
+            LOG(ERROR) << "Unhandled status code:" << status.code();
+            return;
+    }
+
+    if (!message.isEmpty())
+    {
+        addStatusMessage(message);
+        appendHistoryStatus(message);
+    }
+
+    status_clear_timer_->start(std::chrono::seconds(1));
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::setDisplayName(const QString& display_name)
+{
+    display_name_ = display_name;
+
+    if (display_name_.isEmpty())
+        display_name_ = QHostInfo::localHostName();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::setHistoryId(const QString& history_id)
+{
+    history_id_ = history_id;
+    loadHistory();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::setChatEnabled(bool enable)
+{
+    ui->edit_message->setEnabled(enable);
+    ui->button_send->setEnabled(enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::setToolsButtonVisible(bool visible)
+{
+    ui->button_tools->setVisible(visible);
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<QAction*> ChatWidget::tabActions() const
+{
+    return { action_save_chat_, action_clear_chat_ };
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ChatWidget::eventFilter(QObject* object, QEvent* event)
+{
+    if (object == ui->edit_message && event->type() == QEvent::KeyPress)
+    {
+        QKeyEvent* key_event = static_cast<QKeyEvent*>(event);
+        bool is_return = key_event->key() == Qt::Key_Return || key_event->key() == Qt::Key_Enter;
+        if (is_return && !(key_event->modifiers() & Qt::ShiftModifier))
+        {
+            onSendMessage();
+            return true;
+        }
+
+        sendStatus(proto::chat::Status::CODE_TYPING);
+    }
+    else if (object == ui->list_messages->horizontalScrollBar() ||
+             object == ui->list_messages->verticalScrollBar())
+    {
+        if (event->type() == QEvent::Show || event->type() == QEvent::Hide)
+            onUpdateSize();
+    }
+
+    return QWidget::eventFilter(object, event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::PaletteChange || event->type() == QEvent::StyleChange ||
+        event->type() == QEvent::ApplicationPaletteChange)
+    {
+        refreshStyles();
+    }
+    else if (event->type() == QEvent::LanguageChange)
+    {
+        ui->retranslateUi(this);
+        action_save_chat_->setText(tr("Save chat..."));
+        action_clear_chat_->setText(tr("Clear chat"));
+    }
+    QWidget::changeEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::closeEvent(QCloseEvent* event)
+{
+    LOG(INFO) << "Close event detected";
+
+    emit sig_textChatClosed();
+    QWidget::closeEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::resizeEvent(QResizeEvent* /* event */)
+{
+    onUpdateSize();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::showEvent(QShowEvent* event)
+{
+    QWidget::showEvent(event);
+    QTimer::singleShot(0, this, &ChatWidget::onUpdateSize);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::onMessageTextChanged()
+{
+    QTextEdit* edit = ui->edit_message;
+    int doc_h = static_cast<int>(edit->document()->size().height());
+    QMargins cm = edit->contentsMargins();
+    int desired = doc_h + cm.top() + cm.bottom();
+
+    QScrollBar* vscroll = ui->list_messages->verticalScrollBar();
+    bool was_at_bottom = vscroll->value() == vscroll->maximum();
+
+    edit->setFixedHeight(std::clamp(desired, kEditMessageMinHeight, kEditMessageMaxHeight));
+
+    if (was_at_bottom)
+        QTimer::singleShot(0, ui->list_messages, &QListWidget::scrollToBottom);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::onClearHistory()
+{
+    LOG(INFO) << "[ACTION] Clear history";
+    clearMessages();
+    history_messages_.clear();
+    saveHistory();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::onSaveChat()
+{
+    LOG(INFO) << "[ACTION] Save chat";
+
+    QString selected_filter;
+    QString file_path = QFileDialog::getSaveFileName(
+        this, tr("Save File"), QString(), tr("TXT files (*.txt)"), &selected_filter);
+    if (file_path.isEmpty() || selected_filter.isEmpty())
+    {
+        LOG(INFO) << "File path not selected";
+        return;
+    }
+
+    LOG(INFO) << "Selected file path:" << file_path;
+
+    QFile file(file_path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        LOG(ERROR) << "Unable to open file:" << file.errorString();
+        MsgBox::warning(this, tr("Could not open file for writing."));
+        return;
+    }
+
+    QListWidget* list_messages = ui->list_messages;
+    QTextStream stream(&file);
+
+    for (int i = 0; i < list_messages->count(); ++i)
+    {
+        QListWidgetItem* item = list_messages->item(i);
+        ChatMessage* message_widget =
+            static_cast<ChatMessage*>(list_messages->itemWidget(item));
+
+        if (message_widget->direction() == ChatMessage::Direction::INCOMING)
+        {
+            ChatIncomingMessage* incoming_message_widget =
+                static_cast<ChatIncomingMessage*>(message_widget);
+
+            stream << "[" << incoming_message_widget->messageTime() << "] "
+                   << incoming_message_widget->source() << Qt::endl;
+            stream << incoming_message_widget->messageText() << Qt::endl;
+            stream << Qt::endl;
+        }
+        else if (message_widget->direction() == ChatMessage::Direction::OUTGOING)
+        {
+            ChatOutgoingMessage* outgoing_message_widget =
+                static_cast<ChatOutgoingMessage*>(message_widget);
+
+            stream << "[" << outgoing_message_widget->messageTime() << "] " << Qt::endl;
+            stream << outgoing_message_widget->messageText() << Qt::endl;
+            stream << Qt::endl;
+        }
+        else
+        {
+            DCHECK_EQ(message_widget->direction(), ChatMessage::Direction::STATUS);
+
+            ChatStatusMessage* status_message_widget =
+                static_cast<ChatStatusMessage*>(message_widget);
+
+            stream << status_message_widget->messageText() << Qt::endl;
+            stream << Qt::endl;
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::onSendMessage()
+{
+    QTextEdit* edit_message = ui->edit_message;
+    QString message = edit_message->toPlainText();
+    if (message.isEmpty())
+        return;
+
+    if (message.length() > kMaxMessageLength)
+    {
+        LOG(ERROR) << "Too long message:" << message.length();
+        MsgBox::warning(this,
+                        tr("The message is too long. The maximum message length is %n "
+                           "characters.", "", kMaxMessageLength));
+        return;
+    }
+
+    qint64 timestamp = QDateTime::currentSecsSinceEpoch();
+
+    addOutgoingMessage(timestamp, message);
+    appendHistoryMessage(timestamp, display_name_, message, true);
+    edit_message->clear();
+    edit_message->setFocus();
+
+    proto::chat::Message chat_message;
+    chat_message.set_timestamp(timestamp);
+    chat_message.set_source(display_name_.toStdString());
+    chat_message.set_text(message.toStdString());
+
+    emit sig_sendMessage(chat_message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::onUpdateSize()
+{
+    QListWidget* list_messages = ui->list_messages;
+    int viewport_width = list_messages->viewport()->width();
+    if (viewport_width <= 0)
+        return;
+
+    int count = list_messages->count();
+
+    for (int i = 0; i < count; ++i)
+    {
+        QListWidgetItem* item = list_messages->item(i);
+
+        ChatMessage* message_widget =
+            static_cast<ChatMessage*>(list_messages->itemWidget(item));
+        if (!message_widget)
+            continue;
+
+        message_widget->setFixedWidth(viewport_width);
+        message_widget->setFixedHeight(message_widget->heightForWidth(viewport_width));
+
+        item->setSizeHint(message_widget->size());
+    }
+
+    list_messages->scrollToBottom();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::addIncomingMessage(time_t timestamp, const QString& source, const QString& message)
+{
+    QListWidget* list_messages = ui->list_messages;
+    ChatIncomingMessage* message_widget = new ChatIncomingMessage(list_messages);
+
+    message_widget->setTimestamp(timestamp);
+    message_widget->setSource(source);
+    message_widget->setMessageText(message);
+
+    QListWidgetItem* item = new QListWidgetItem(list_messages);
+    list_messages->setItemWidget(item, message_widget);
+
+    onUpdateSize();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::addOutgoingMessage(time_t timestamp, const QString& message)
+{
+    QListWidget* list_messages = ui->list_messages;
+    ChatOutgoingMessage* message_widget = new ChatOutgoingMessage(list_messages);
+
+    message_widget->setTimestamp(timestamp);
+    message_widget->setMessageText(message);
+
+    QListWidgetItem* item = new QListWidgetItem(list_messages);
+    list_messages->setItemWidget(item, message_widget);
+
+    onUpdateSize();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::addStatusMessage(const QString& message)
+{
+    QListWidget* list_messages = ui->list_messages;
+    ChatStatusMessage* message_widget = new ChatStatusMessage(list_messages);
+
+    message_widget->setMessageText(message);
+
+    QListWidgetItem* item = new QListWidgetItem(list_messages);
+    list_messages->setItemWidget(item, message_widget);
+
+    onUpdateSize();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::appendHistoryMessage(
+    qint64 timestamp, const QString& source, const QString& text, bool outgoing)
+{
+    history_messages_.push_back(HistoryMessage{ timestamp, source, text, outgoing, false });
+
+    while (history_messages_.size() > kMaxStoredMessages)
+        history_messages_.pop_front();
+
+    saveHistory();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::appendHistoryStatus(const QString& text)
+{
+    history_messages_.push_back(HistoryMessage{ 0, QString(), text, false, true });
+
+    while (history_messages_.size() > kMaxStoredMessages)
+        history_messages_.pop_front();
+
+    saveHistory();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::loadHistory()
+{
+    clearMessages();
+    history_messages_.clear();
+
+    removeHistoryFilesOlderThan(30);
+
+    QString file_path = historyFilePath(history_id_);
+    if (file_path.isEmpty())
+    {
+        LOG(ERROR) << "Unable to get history file path";
+        return;
+    }
+
+    LOG(INFO) << "Load chat history from" << file_path;
+
+    QFile file(file_path);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        LOG(ERROR) << "Unable to open history file";
+        return;
+    }
+
+    QByteArray buffer = file.readAll();
+    if (buffer.isEmpty())
+    {
+        LOG(INFO) << "Empty history file";
+        return;
+    }
+
+    QJsonDocument document = QJsonDocument::fromJson(buffer);
+    if (!document.isArray())
+    {
+        LOG(ERROR) << "Invalid chat history format";
+        return;
+    }
+
+    QVector<HistoryMessage> loaded_messages;
+
+    const QJsonArray items = document.array();
+    loaded_messages.reserve(items.size());
+
+    for (const QJsonValue& value : items)
+    {
+        if (!value.isObject())
+            continue;
+
+        const QJsonObject item = value.toObject();
+        HistoryMessage message;
+        message.timestamp = static_cast<qint64>(item.value("timestamp").toDouble());
+        message.source = item.value("source").toString();
+        message.text = item.value("text").toString();
+        message.outgoing = item.value("outgoing").toBool();
+        message.status = item.value("status").toBool();
+
+        if (!message.text.isEmpty())
+            loaded_messages.push_back(message);
+    }
+
+    while (loaded_messages.size() > kMaxStoredMessages)
+        loaded_messages.pop_front();
+
+    history_messages_ = loaded_messages;
+
+    for (const HistoryMessage& message : std::as_const(history_messages_))
+    {
+        if (message.status)
+            addStatusMessage(message.text);
+        else if (message.outgoing)
+            addOutgoingMessage(message.timestamp, message.text);
+        else
+            addIncomingMessage(message.timestamp, message.source, message.text);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::saveHistory() const
+{
+    QString file_path = historyFilePath(history_id_);
+    if (file_path.isEmpty())
+    {
+        LOG(ERROR) << "Unable to get history file path";
+        return;
+    }
+
+    if (history_messages_.isEmpty())
+    {
+        LOG(INFO) << "Remove history file";
+        QFile::remove(file_path);
+        return;
+    }
+
+    QJsonArray items;
+    for (const HistoryMessage& message : std::as_const(history_messages_))
+    {
+        QJsonObject item;
+        item["timestamp"] = static_cast<qint64>(message.timestamp);
+        item["source"] = message.source;
+        item["text"] = message.text;
+        item["outgoing"] = message.outgoing;
+        item["status"] = message.status;
+        items.push_back(item);
+    }
+
+    QSaveFile file(file_path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        LOG(ERROR) << "Unable to open chat history file for writing:" << file_path;
+        return;
+    }
+
+    file.write(QJsonDocument(items).toJson(QJsonDocument::Compact));
+    if (!file.commit())
+    {
+        LOG(ERROR) << "Unable to write chat history";
+        return;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::clearMessages()
+{
+    QListWidget* list_messages = ui->list_messages;
+    for (int i = list_messages->count() - 1; i >= 0; --i)
+        delete list_messages->item(i);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::sendStatus(proto::chat::Status::Code code)
+{
+    proto::chat::Status chat_status;
+    chat_status.set_timestamp(QDateTime::currentSecsSinceEpoch());
+    chat_status.set_source(display_name_.toStdString());
+    chat_status.set_code(code);
+    emit sig_sendStatus(chat_status);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::refreshStyles()
+{
+    const QPalette& plt = palette();
+    const QString text = plt.color(QPalette::Text).name(QColor::HexArgb);
+    const QString placeholder = plt.color(QPalette::PlaceholderText).name(QColor::HexArgb);
+    const QString midlight = plt.color(QPalette::Midlight).name(QColor::HexArgb);
+    const QString mid = plt.color(QPalette::Mid).name(QColor::HexArgb);
+    const QString button = plt.color(QPalette::Button).name(QColor::HexArgb);
+    const QString button_text = plt.color(QPalette::ButtonText).name(QColor::HexArgb);
+    const QString dark = plt.color(QPalette::Dark).name(QColor::HexArgb);
+    const QString shadow = plt.color(QPalette::Shadow).name(QColor::HexArgb);
+
+    ui->edit_message->setStyleSheet(QString(
+        "#edit_message { border: 1px solid %1; border-radius: 3px; background: %2; "
+        "color: %3; padding: 4px; }")
+        .arg(mid, midlight, text));
+
+    ui->label_status->setStyleSheet(QString(
+        "#label_status { color: %1; font-style: italic; font-size: 10px; padding: 2px; }")
+        .arg(placeholder));
+
+    QString button_style = QString(
+        "QToolButton { color: %1; font: bold 11px; background-color: %2; "
+        "border: 1px solid %3; border-radius: 3px; padding: 2px 2px 2px 2px; } "
+        "QToolButton:hover { background: %4; border: 1px solid %5; border-radius: 2px; } "
+        "QToolButton:pressed { background: %5; border: 1px solid %6; border-radius: 2px; }")
+        .arg(button_text, button, mid, midlight, dark, shadow);
+
+    ui->button_send->setStyleSheet(button_style);
+    ui->button_tools->setStyleSheet(button_style);
+
+    // Item widgets in QListWidget live under the viewport and may not receive PaletteChange
+    // when the application palette changes - update them explicitly with our palette so
+    // they do not pick up a stale value from their own (not-yet-propagated) palette.
+    QListWidget* list = ui->list_messages;
+    for (int i = 0; i < list->count(); ++i)
+    {
+        QWidget* item_widget = list->itemWidget(list->item(i));
+        if (auto* incoming = qobject_cast<ChatIncomingMessage*>(item_widget))
+            incoming->applyStyles(plt);
+        else if (auto* outgoing = qobject_cast<ChatOutgoingMessage*>(item_widget))
+            outgoing->applyStyles(plt);
+    }
+}

@@ -20,13 +20,13 @@
 
 #include "base/logging.h"
 #include "client/desktop/file_transfer/file_error_code.h"
-#include "common/ui/formatter.h"
-#include "common/ui/msg_box.h"
+#include "common/desktop/formatter.h"
+#include "common/desktop/msg_box.h"
 #include "ui_file_transfer_widget.h"
 
 #if defined(Q_OS_WINDOWS)
-#include "common/ui/taskbar_button.h"
-#include "common/ui/taskbar_progress.h"
+#include "common/desktop/taskbar_button.h"
+#include "common/desktop/taskbar_progress.h"
 #endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------

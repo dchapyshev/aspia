@@ -31,8 +31,8 @@
 #include "base/peer/host_id.h"
 #include "build/build_config.h"
 #include "client/database.h"
-#include "common/ui/credentials_dialog.h"
-#include "common/ui/msg_box.h"
+#include "common/desktop/credentials_dialog.h"
+#include "common/desktop/msg_box.h"
 #include "proto/address_book.h"
 #include "proto/router.h"
 

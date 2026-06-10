@@ -20,7 +20,7 @@
 
 #include "client/desktop/file_transfer/file_mime_data.h"
 #include "common/file_platform_util.h"
-#include "common/ui/formatter.h"
+#include "common/desktop/formatter.h"
 
 namespace {
 

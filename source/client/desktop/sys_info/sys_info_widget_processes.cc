@@ -21,7 +21,7 @@
 #include <QMenu>
 
 #include "common/system_info_constants.h"
-#include "common/ui/formatter.h"
+#include "common/desktop/formatter.h"
 #include "proto/system_info.h"
 #include "ui_sys_info_widget_processes.h"
 

@@ -29,8 +29,8 @@
 #include "base/version_constants.h"
 #include "client/router.h"
 #include "client/desktop/authorization_dialog.h"
-#include "common/ui/session_type.h"
-#include "common/ui/status_dialog.h"
+#include "common/desktop/session_type.h"
+#include "common/desktop/status_dialog.h"
 #include "proto/peer.h"
 #include "proto/router_client.h"
 

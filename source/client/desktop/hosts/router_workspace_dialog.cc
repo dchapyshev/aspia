@@ -24,7 +24,7 @@
 #include <QPushButton>
 
 #include "base/logging.h"
-#include "common/ui/msg_box.h"
+#include "common/desktop/msg_box.h"
 #include "proto/router_admin.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"

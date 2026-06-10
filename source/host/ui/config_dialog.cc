@@ -24,7 +24,6 @@
 #include <QTimer>
 #include <QTranslator>
 
-#include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "base/crypto/password_generator.h"
 #include "base/crypto/secure_string.h"
@@ -32,14 +31,15 @@
 #include "base/net/address.h"
 #include "base/peer/user.h"
 #include "build/build_config.h"
+#include "common/desktop/msg_box.h"
+#include "common/desktop/update_dialog.h"
 #include "host/database.h"
-#include "host/ui/change_password_dialog.h"
-#include "host/ui/check_password_dialog.h"
-#include "host/ui/user_dialog.h"
-#include "host/ui/settings_util.h"
 #include "host/service.h"
 #include "host/system_settings.h"
-#include "common/ui/update_dialog.h"
+#include "host/ui/change_password_dialog.h"
+#include "host/ui/check_password_dialog.h"
+#include "host/ui/settings_util.h"
+#include "host/ui/user_dialog.h"
 #include "ui_config_dialog.h"
 
 namespace {

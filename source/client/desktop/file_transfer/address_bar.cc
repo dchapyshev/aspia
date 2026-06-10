@@ -19,7 +19,7 @@
 #include "client/desktop/file_transfer/address_bar.h"
 
 #include "client/desktop/file_transfer/address_bar_model.h"
-#include "common/ui/msg_box.h"
+#include "common/desktop/msg_box.h"
 #include "proto/file_transfer.h"
 
 #include <QLineEdit>

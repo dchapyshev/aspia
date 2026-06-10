@@ -24,7 +24,7 @@
 #include <QTimer>
 
 #include "base/logging.h"
-#include "common/ui/session_type.h"
+#include "common/desktop/session_type.h"
 #include "proto/user.h"
 #include "ui_connect_confirm_dialog.h"
 

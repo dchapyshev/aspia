@@ -25,7 +25,7 @@
 #include "base/logging.h"
 #include "client/database.h"
 #include "client/desktop/hosts/group_combo_box.h"
-#include "common/ui/msg_box.h"
+#include "common/desktop/msg_box.h"
 #include "ui_local_group_dialog.h"
 
 namespace {

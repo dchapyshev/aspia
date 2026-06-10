@@ -37,8 +37,8 @@
 #include "base/crypto/secure_string.h"
 #include "client/database.h"
 #include "client/master_password.h"
-#include "common/ui/credentials_dialog.h"
-#include "common/ui/msg_box.h"
+#include "common/desktop/credentials_dialog.h"
+#include "common/desktop/msg_box.h"
 #include "proto/router.h"
 
 namespace {

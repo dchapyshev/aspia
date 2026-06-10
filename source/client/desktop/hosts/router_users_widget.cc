@@ -33,7 +33,7 @@
 #include "base/peer/user.h"
 #include "client/router.h"
 #include "client/desktop/hosts/router_user_dialog.h"
-#include "common/ui/msg_box.h"
+#include "common/desktop/msg_box.h"
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
 #include "ui_router_users_widget.h"

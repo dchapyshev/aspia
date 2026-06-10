@@ -98,7 +98,7 @@
   <customwidget>
    <class>ChatWidget</class>
    <extends>QWidget</extends>
-   <header>common/ui/chat_widget.h</header>
+   <header>common/desktop/chat_widget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

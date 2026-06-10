@@ -30,9 +30,9 @@
 
 #include "base/crypto/secure_string.h"
 #include "client/master_password.h"
-#include "common/ui/msg_box.h"
-#include "common/ui/credentials_dialog.h"
 #include "client/desktop/main_window.h"
+#include "common/desktop/credentials_dialog.h"
+#include "common/desktop/msg_box.h"
 #endif // defined(Q_OS_ANDROID)
 
 //--------------------------------------------------------------------------------------------------

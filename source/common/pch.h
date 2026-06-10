@@ -28,6 +28,6 @@
 #include <QWidget>
 
 #include "base/pch.h"
-#include "common/ui/msg_box.h"
+#include "common/desktop/msg_box.h"
 
 #endif // COMMON_PCH_H

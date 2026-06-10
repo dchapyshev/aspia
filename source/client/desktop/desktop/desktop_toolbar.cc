@@ -26,9 +26,9 @@
 #include <QTimer>
 #include <QToolButton>
 
-#include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "client/desktop/desktop/select_screen_action.h"
+#include "common/desktop/msg_box.h"
 #include "proto/desktop_control.h"
 #include "proto/desktop_power.h"
 #include "proto/desktop_screen.h"

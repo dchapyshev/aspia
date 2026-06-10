@@ -24,9 +24,9 @@
 #include <QMenu>
 #include <QTimer>
 
-#include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "client/desktop/desktop/task_manager_settings.h"
+#include "common/desktop/msg_box.h"
 #include "ui_task_manager_window.h"
 
 namespace {

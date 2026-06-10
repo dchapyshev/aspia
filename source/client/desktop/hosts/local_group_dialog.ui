@@ -72,7 +72,7 @@
   <customwidget>
    <class>DialogButtonBox</class>
    <extends>QDialogButtonBox</extends>
-   <header>common/ui/dialog_button_box.h</header>
+   <header>common/desktop/dialog_button_box.h</header>
   </customwidget>
   <customwidget>
    <class>GroupComboBox</class>

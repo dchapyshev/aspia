@@ -22,18 +22,18 @@
 #include <QSysInfo>
 
 #include "base/logging.h"
-#include "common/ui/msg_box.h"
 #include "build/version.h"
-#include "host/host_utils.h"
+#include "common/desktop/msg_box.h"
+#include "common/desktop/update_dialog.h"
 #include "host/database.h"
+#include "host/host_utils.h"
 #include "host/system_settings.h"
 #include "host/ui/application.h"
 #include "host/ui/check_password_dialog.h"
 #include "host/ui/config_dialog.h"
-#include "host/ui/security_log_dialog.h"
 #include "host/ui/host_window.h"
+#include "host/ui/security_log_dialog.h"
 #include "host/ui/settings_util.h"
-#include "common/ui/update_dialog.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/process_util.h"

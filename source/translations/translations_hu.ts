@@ -62,142 +62,142 @@ Routers added: %4</source>
 <context>
     <name>AboutDialog</name>
     <message>
-        <location filename="../common/ui/about_dialog.ui" line="14"/>
+        <location filename="../common/desktop/about_dialog.ui" line="14"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.ui" line="60"/>
+        <location filename="../common/desktop/about_dialog.ui" line="60"/>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.ui" line="90"/>
+        <location filename="../common/desktop/about_dialog.ui" line="90"/>
         <source>Service Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.ui" line="112"/>
+        <location filename="../common/desktop/about_dialog.ui" line="112"/>
         <source>Donate!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.ui" line="136"/>
+        <location filename="../common/desktop/about_dialog.ui" line="136"/>
         <source>Close</source>
         <translation type="unfinished">Fechar</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="104"/>
+        <location filename="../common/desktop/about_dialog.cc" line="104"/>
         <source>Version: %1 (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="109"/>
+        <location filename="../common/desktop/about_dialog.cc" line="109"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="110"/>
+        <location filename="../common/desktop/about_dialog.cc" line="110"/>
         <source>You can get a copy of license here:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="115"/>
+        <location filename="../common/desktop/about_dialog.cc" line="115"/>
         <source>You can also get a translation of GNU GPL license here:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="119"/>
+        <location filename="../common/desktop/about_dialog.cc" line="119"/>
         <source>Links</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="120"/>
+        <location filename="../common/desktop/about_dialog.cc" line="120"/>
         <source>Home page:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="121"/>
+        <location filename="../common/desktop/about_dialog.cc" line="121"/>
         <source>GitHub page:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="124"/>
+        <location filename="../common/desktop/about_dialog.cc" line="124"/>
         <source>Developers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="126"/>
+        <location filename="../common/desktop/about_dialog.cc" line="126"/>
         <source>Translators</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="128"/>
+        <location filename="../common/desktop/about_dialog.cc" line="128"/>
         <source>Third-party components</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="130"/>
+        <location filename="../common/desktop/about_dialog.cc" line="130"/>
         <source>Graphics and images</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="131"/>
+        <location filename="../common/desktop/about_dialog.cc" line="131"/>
         <source>Icons by %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="158"/>
+        <location filename="../common/desktop/about_dialog.cc" line="158"/>
         <source>Application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="159"/>
+        <location filename="../common/desktop/about_dialog.cc" line="159"/>
         <source>Path: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="160"/>
+        <location filename="../common/desktop/about_dialog.cc" line="160"/>
         <source>Logging directory: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="162"/>
+        <location filename="../common/desktop/about_dialog.cc" line="162"/>
         <source>Logging file: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="167"/>
+        <location filename="../common/desktop/about_dialog.cc" line="167"/>
         <source>Build Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="168"/>
+        <location filename="../common/desktop/about_dialog.cc" line="168"/>
         <source>Git branch: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="170"/>
+        <location filename="../common/desktop/about_dialog.cc" line="170"/>
         <source>Git commit: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="175"/>
+        <location filename="../common/desktop/about_dialog.cc" line="175"/>
         <source>Compilation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="176"/>
+        <location filename="../common/desktop/about_dialog.cc" line="176"/>
         <source>Compilation date: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="177"/>
+        <location filename="../common/desktop/about_dialog.cc" line="177"/>
         <source>Compilation time: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="206"/>
+        <location filename="../common/desktop/about_dialog.cc" line="206"/>
         <source>Version Information</source>
         <translation type="unfinished"></translation>
     </message>
@@ -366,7 +366,7 @@ Routers added: %4</source>
 <context>
     <name>ChatIncomingMessage</name>
     <message>
-        <location filename="../common/ui/chat_incoming_message.ui" line="187"/>
+        <location filename="../common/desktop/chat_incoming_message.ui" line="187"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
     </message>
@@ -374,7 +374,7 @@ Routers added: %4</source>
 <context>
     <name>ChatOutgoingMessage</name>
     <message>
-        <location filename="../common/ui/chat_outgoing_message.ui" line="48"/>
+        <location filename="../common/desktop/chat_outgoing_message.ui" line="48"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
     </message>
@@ -382,86 +382,86 @@ Routers added: %4</source>
 <context>
     <name>ChatWidget</name>
     <message>
-        <location filename="../common/ui/chat_widget.ui" line="20"/>
+        <location filename="../common/desktop/chat_widget.ui" line="20"/>
         <source>Aspia Chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.ui" line="175"/>
+        <location filename="../common/desktop/chat_widget.ui" line="175"/>
         <source>Send message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.ui" line="204"/>
+        <location filename="../common/desktop/chat_widget.ui" line="204"/>
         <source>Tools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.ui" line="210"/>
+        <location filename="../common/desktop/chat_widget.ui" line="210"/>
         <source>···</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="133"/>
-        <location filename="../common/ui/chat_widget.cc" line="303"/>
+        <location filename="../common/desktop/chat_widget.cc" line="133"/>
+        <location filename="../common/desktop/chat_widget.cc" line="303"/>
         <source>Save chat...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="134"/>
-        <location filename="../common/ui/chat_widget.cc" line="304"/>
+        <location filename="../common/desktop/chat_widget.cc" line="134"/>
+        <location filename="../common/desktop/chat_widget.cc" line="304"/>
         <source>Clear chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="201"/>
+        <location filename="../common/desktop/chat_widget.cc" line="201"/>
         <source>%1 is typing...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="204"/>
+        <location filename="../common/desktop/chat_widget.cc" line="204"/>
         <source>User %1 has joined the chat (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="207"/>
+        <location filename="../common/desktop/chat_widget.cc" line="207"/>
         <source>User %1 has left the chat (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="210"/>
+        <location filename="../common/desktop/chat_widget.cc" line="210"/>
         <source>User %1 is logged in (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="213"/>
+        <location filename="../common/desktop/chat_widget.cc" line="213"/>
         <source>User %1 is not logged in (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="216"/>
+        <location filename="../common/desktop/chat_widget.cc" line="216"/>
         <source>There are no connected users (%1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../common/ui/chat_widget.cc" line="434"/>
+        <location filename="../common/desktop/chat_widget.cc" line="434"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="364"/>
+        <location filename="../common/desktop/chat_widget.cc" line="364"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="364"/>
+        <location filename="../common/desktop/chat_widget.cc" line="364"/>
         <source>TXT files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="377"/>
+        <location filename="../common/desktop/chat_widget.cc" line="377"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1102,39 +1102,39 @@ Routers added: %4</source>
 <context>
     <name>CredentialsDialog</name>
     <message>
-        <location filename="../common/ui/credentials_dialog.ui" line="79"/>
+        <location filename="../common/desktop/credentials_dialog.ui" line="79"/>
         <source>Current password:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/credentials_dialog.ui" line="89"/>
-        <location filename="../common/ui/credentials_dialog.cc" line="51"/>
+        <location filename="../common/desktop/credentials_dialog.ui" line="89"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="51"/>
         <source>Password:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/credentials_dialog.ui" line="99"/>
+        <location filename="../common/desktop/credentials_dialog.ui" line="99"/>
         <source>Confirm password:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/credentials_dialog.cc" line="57"/>
-        <location filename="../common/ui/credentials_dialog.cc" line="61"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="57"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="61"/>
         <source>New password:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/credentials_dialog.cc" line="195"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="195"/>
         <source>Enter the current password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/credentials_dialog.cc" line="202"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="202"/>
         <source>Password cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/credentials_dialog.cc" line="209"/>
+        <location filename="../common/desktop/credentials_dialog.cc" line="209"/>
         <source>Passwords do not match.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1414,92 +1414,92 @@ Routers added: %4</source>
 <context>
     <name>DialogButtonBox</name>
     <message>
-        <location filename="../common/ui/dialog_button_box.cc" line="80"/>
+        <location filename="../common/desktop/dialog_button_box.cc" line="80"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/dialog_button_box.cc" line="81"/>
+        <location filename="../common/desktop/dialog_button_box.cc" line="81"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/dialog_button_box.cc" line="82"/>
+        <location filename="../common/desktop/dialog_button_box.cc" line="82"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/dialog_button_box.cc" line="83"/>
+        <location filename="../common/desktop/dialog_button_box.cc" line="83"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/dialog_button_box.cc" line="84"/>
+        <location filename="../common/desktop/dialog_button_box.cc" line="84"/>
         <source>Apply</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/dialog_button_box.cc" line="85"/>
+        <location filename="../common/desktop/dialog_button_box.cc" line="85"/>
         <source>Close</source>
         <translation type="unfinished">Fechar</translation>
     </message>
     <message>
-        <location filename="../common/ui/dialog_button_box.cc" line="86"/>
+        <location filename="../common/desktop/dialog_button_box.cc" line="86"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/dialog_button_box.cc" line="87"/>
+        <location filename="../common/desktop/dialog_button_box.cc" line="87"/>
         <source>Discard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/dialog_button_box.cc" line="88"/>
+        <location filename="../common/desktop/dialog_button_box.cc" line="88"/>
         <source>Reset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/dialog_button_box.cc" line="89"/>
+        <location filename="../common/desktop/dialog_button_box.cc" line="89"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/dialog_button_box.cc" line="90"/>
+        <location filename="../common/desktop/dialog_button_box.cc" line="90"/>
         <source>Abort</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/dialog_button_box.cc" line="91"/>
+        <location filename="../common/desktop/dialog_button_box.cc" line="91"/>
         <source>Retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/dialog_button_box.cc" line="92"/>
+        <location filename="../common/desktop/dialog_button_box.cc" line="92"/>
         <source>Ignore</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/dialog_button_box.cc" line="93"/>
+        <location filename="../common/desktop/dialog_button_box.cc" line="93"/>
         <source>Restore Defaults</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/dialog_button_box.cc" line="94"/>
+        <location filename="../common/desktop/dialog_button_box.cc" line="94"/>
         <source>Save All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/dialog_button_box.cc" line="95"/>
+        <location filename="../common/desktop/dialog_button_box.cc" line="95"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/dialog_button_box.cc" line="96"/>
+        <location filename="../common/desktop/dialog_button_box.cc" line="96"/>
         <source>Yes to All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/dialog_button_box.cc" line="97"/>
+        <location filename="../common/desktop/dialog_button_box.cc" line="97"/>
         <source>No to All</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1507,17 +1507,17 @@ Routers added: %4</source>
 <context>
     <name>DownloadDialog</name>
     <message>
-        <location filename="../common/ui/download_dialog.ui" line="14"/>
+        <location filename="../common/desktop/download_dialog.ui" line="14"/>
         <source>Downloading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/download_dialog.ui" line="26"/>
+        <location filename="../common/desktop/download_dialog.ui" line="26"/>
         <source>Downloading update in progress...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/download_dialog.cc" line="65"/>
+        <location filename="../common/desktop/download_dialog.cc" line="65"/>
         <source>An error occurred while downloading the update: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1975,100 +1975,100 @@ Routers added: %4</source>
 <context>
     <name>Formatter</name>
     <message>
-        <location filename="../common/ui/formatter.cc" line="49"/>
+        <location filename="../common/desktop/formatter.cc" line="49"/>
         <source>TB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/formatter.cc" line="51"/>
+        <location filename="../common/desktop/formatter.cc" line="51"/>
         <source>GB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/formatter.cc" line="53"/>
+        <location filename="../common/desktop/formatter.cc" line="53"/>
         <source>MB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/formatter.cc" line="55"/>
+        <location filename="../common/desktop/formatter.cc" line="55"/>
         <source>kB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/formatter.cc" line="57"/>
+        <location filename="../common/desktop/formatter.cc" line="57"/>
         <source>B</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../common/ui/formatter.cc" line="73"/>
+        <location filename="../common/desktop/formatter.cc" line="73"/>
         <source>%n seconds</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../common/ui/formatter.cc" line="74"/>
+        <location filename="../common/desktop/formatter.cc" line="74"/>
         <source>%n minutes</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../common/ui/formatter.cc" line="75"/>
+        <location filename="../common/desktop/formatter.cc" line="75"/>
         <source>%n hours</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../common/ui/formatter.cc" line="79"/>
+        <location filename="../common/desktop/formatter.cc" line="79"/>
         <source>%n days</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../common/ui/formatter.cc" line="100"/>
+        <location filename="../common/desktop/formatter.cc" line="100"/>
         <source>TB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/formatter.cc" line="102"/>
+        <location filename="../common/desktop/formatter.cc" line="102"/>
         <source>GB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/formatter.cc" line="104"/>
+        <location filename="../common/desktop/formatter.cc" line="104"/>
         <source>MB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/formatter.cc" line="106"/>
+        <location filename="../common/desktop/formatter.cc" line="106"/>
         <source>kB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/formatter.cc" line="108"/>
+        <location filename="../common/desktop/formatter.cc" line="108"/>
         <source>B/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/formatter.cc" line="123"/>
+        <location filename="../common/desktop/formatter.cc" line="123"/>
         <source>Gbps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/formatter.cc" line="125"/>
+        <location filename="../common/desktop/formatter.cc" line="125"/>
         <source>Mbps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/formatter.cc" line="127"/>
+        <location filename="../common/desktop/formatter.cc" line="127"/>
         <source>Kbps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/formatter.cc" line="129"/>
+        <location filename="../common/desktop/formatter.cc" line="129"/>
         <source>bps</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3137,107 +3137,107 @@ Hosts skipped: %6</source>
 <context>
     <name>MsgBox</name>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="49"/>
+        <location filename="../common/desktop/msg_box.cc" line="49"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="50"/>
+        <location filename="../common/desktop/msg_box.cc" line="50"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="51"/>
+        <location filename="../common/desktop/msg_box.cc" line="51"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="52"/>
+        <location filename="../common/desktop/msg_box.cc" line="52"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="53"/>
+        <location filename="../common/desktop/msg_box.cc" line="53"/>
         <source>Apply</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="54"/>
+        <location filename="../common/desktop/msg_box.cc" line="54"/>
         <source>Close</source>
         <translation type="unfinished">Fechar</translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="55"/>
+        <location filename="../common/desktop/msg_box.cc" line="55"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="56"/>
+        <location filename="../common/desktop/msg_box.cc" line="56"/>
         <source>Discard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="57"/>
+        <location filename="../common/desktop/msg_box.cc" line="57"/>
         <source>Reset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="58"/>
+        <location filename="../common/desktop/msg_box.cc" line="58"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="59"/>
+        <location filename="../common/desktop/msg_box.cc" line="59"/>
         <source>Abort</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="60"/>
+        <location filename="../common/desktop/msg_box.cc" line="60"/>
         <source>Retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="61"/>
+        <location filename="../common/desktop/msg_box.cc" line="61"/>
         <source>Ignore</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="62"/>
+        <location filename="../common/desktop/msg_box.cc" line="62"/>
         <source>Restore Defaults</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="63"/>
+        <location filename="../common/desktop/msg_box.cc" line="63"/>
         <source>Save All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="64"/>
+        <location filename="../common/desktop/msg_box.cc" line="64"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="65"/>
+        <location filename="../common/desktop/msg_box.cc" line="65"/>
         <source>Yes to All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="66"/>
+        <location filename="../common/desktop/msg_box.cc" line="66"/>
         <source>No to All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="83"/>
+        <location filename="../common/desktop/msg_box.cc" line="83"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="91"/>
+        <location filename="../common/desktop/msg_box.cc" line="91"/>
         <source>Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="99"/>
+        <location filename="../common/desktop/msg_box.cc" line="99"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4619,22 +4619,22 @@ Are you sure you want to continue?</source>
 <context>
     <name>SessionType</name>
     <message>
-        <location filename="../common/ui/session_type.cc" line="33"/>
+        <location filename="../common/desktop/session_type.cc" line="33"/>
         <source>Desktop Management</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/session_type.cc" line="36"/>
+        <location filename="../common/desktop/session_type.cc" line="36"/>
         <source>File Transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/session_type.cc" line="39"/>
+        <location filename="../common/desktop/session_type.cc" line="39"/>
         <source>System Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/session_type.cc" line="42"/>
+        <location filename="../common/desktop/session_type.cc" line="42"/>
         <source>Chat</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5106,7 +5106,7 @@ Are you sure you want to continue?</source>
 <context>
     <name>StatusDialog</name>
     <message>
-        <location filename="../common/ui/status_dialog.ui" line="14"/>
+        <location filename="../common/desktop/status_dialog.ui" line="14"/>
         <source>Connection Status</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7321,12 +7321,12 @@ Are you sure you want to continue?</source>
 <context>
     <name>TwoFactorCodeDialog</name>
     <message>
-        <location filename="../common/ui/two_factor_code_dialog.ui" line="14"/>
+        <location filename="../common/desktop/two_factor_code_dialog.ui" line="14"/>
         <source>Two-Factor Authentication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/two_factor_code_dialog.ui" line="50"/>
+        <location filename="../common/desktop/two_factor_code_dialog.ui" line="50"/>
         <source>Enter the 6-digit code from your authenticator app.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7334,22 +7334,22 @@ Are you sure you want to continue?</source>
 <context>
     <name>TwoFactorEnrollDialog</name>
     <message>
-        <location filename="../common/ui/two_factor_enroll_dialog.ui" line="14"/>
+        <location filename="../common/desktop/two_factor_enroll_dialog.ui" line="14"/>
         <source>Enable Two-Factor Authentication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/two_factor_enroll_dialog.ui" line="20"/>
+        <location filename="../common/desktop/two_factor_enroll_dialog.ui" line="20"/>
         <source>Open a TOTP authenticator app (Google Authenticator, Microsoft Authenticator or any compatible alternative) and add a new account by scanning the QR code below. If QR scanning is unavailable, type the setup key into the app instead.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/two_factor_enroll_dialog.ui" line="43"/>
+        <location filename="../common/desktop/two_factor_enroll_dialog.ui" line="43"/>
         <source>Setup key:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/two_factor_enroll_dialog.ui" line="62"/>
+        <location filename="../common/desktop/two_factor_enroll_dialog.ui" line="62"/>
         <source>Enter the 6-digit code shown by the app to confirm:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7357,93 +7357,93 @@ Are you sure you want to continue?</source>
 <context>
     <name>UpdateDialog</name>
     <message>
-        <location filename="../common/ui/update_dialog.ui" line="14"/>
+        <location filename="../common/desktop/update_dialog.ui" line="14"/>
         <source>Update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.ui" line="44"/>
+        <location filename="../common/desktop/update_dialog.ui" line="44"/>
         <source>Checking for updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.ui" line="59"/>
+        <location filename="../common/desktop/update_dialog.ui" line="59"/>
         <source>Current version:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.ui" line="66"/>
+        <location filename="../common/desktop/update_dialog.ui" line="66"/>
         <source>Available version:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.ui" line="75"/>
+        <location filename="../common/desktop/update_dialog.ui" line="75"/>
         <source>URL:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.ui" line="136"/>
+        <location filename="../common/desktop/update_dialog.ui" line="136"/>
         <source>Update description:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.ui" line="181"/>
+        <location filename="../common/desktop/update_dialog.ui" line="181"/>
         <source>Update now!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.ui" line="188"/>
+        <location filename="../common/desktop/update_dialog.ui" line="188"/>
         <source>Close</source>
         <translation type="unfinished">Fechar</translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="56"/>
+        <location filename="../common/desktop/update_dialog.cc" line="56"/>
         <source>Receiving information...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="108"/>
+        <location filename="../common/desktop/update_dialog.cc" line="108"/>
         <source>Cancel checking for updates. Please wait.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="122"/>
+        <location filename="../common/desktop/update_dialog.cc" line="122"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="124"/>
+        <location filename="../common/desktop/update_dialog.cc" line="124"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="126"/>
+        <location filename="../common/desktop/update_dialog.cc" line="126"/>
         <source>All unsaved data will be lost.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="127"/>
+        <location filename="../common/desktop/update_dialog.cc" line="127"/>
         <source>Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="140"/>
+        <location filename="../common/desktop/update_dialog.cc" line="140"/>
         <source>An error occurred while installing the update: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="197"/>
+        <location filename="../common/desktop/update_dialog.cc" line="197"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="198"/>
+        <location filename="../common/desktop/update_dialog.cc" line="198"/>
         <source>Error retrieving update information.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="208"/>
-        <location filename="../common/ui/update_dialog.cc" line="231"/>
+        <location filename="../common/desktop/update_dialog.cc" line="208"/>
+        <location filename="../common/desktop/update_dialog.cc" line="231"/>
         <source>No updates available.</source>
         <translation type="unfinished"></translation>
     </message>

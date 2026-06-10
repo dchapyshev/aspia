@@ -84,7 +84,7 @@
   <customwidget>
    <class>DialogButtonBox</class>
    <extends>QDialogButtonBox</extends>
-   <header>common/ui/dialog_button_box.h</header>
+   <header>common/desktop/dialog_button_box.h</header>
   </customwidget>
   <customwidget>
    <class>GroupComboBox</class>
@@ -94,7 +94,7 @@
   <customwidget>
    <class>PasswordEdit</class>
    <extends>QLineEdit</extends>
-   <header>common/ui/password_edit.h</header>
+   <header>common/desktop/password_edit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

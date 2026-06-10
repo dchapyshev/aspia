@@ -31,7 +31,7 @@
 
 #include "base/gui_application.h"
 #include "base/logging.h"
-#include "common/ui/session_type.h"
+#include "common/desktop/session_type.h"
 #include "proto/peer.h"
 #include "ui_notifier_window.h"
 

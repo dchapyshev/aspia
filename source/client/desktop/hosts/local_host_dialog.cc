@@ -30,8 +30,8 @@
 #include "client/config.h"
 #include "client/database.h"
 #include "client/desktop/hosts/group_combo_box.h"
-#include "common/ui/msg_box.h"
-#include "common/ui/password_edit.h"
+#include "common/desktop/msg_box.h"
+#include "common/desktop/password_edit.h"
 #include "ui_local_host_dialog.h"
 
 namespace {

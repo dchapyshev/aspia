@@ -174,7 +174,7 @@
   <customwidget>
    <class>IconTextButton</class>
    <extends>QToolButton</extends>
-   <header>common/ui/icon_text_button.h</header>
+   <header>common/desktop/icon_text_button.h</header>
   </customwidget>
  </customwidgets>
  <resources>

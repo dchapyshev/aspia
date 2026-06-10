@@ -27,8 +27,8 @@
 #include "client/desktop/file_transfer/file_remove_widget.h"
 #include "client/desktop/file_transfer/file_transfer_widget.h"
 
-#include "common/ui/msg_box.h"
-#include "common/ui/session_type.h"
+#include "common/desktop/msg_box.h"
+#include "common/desktop/session_type.h"
 #include "proto/peer.h"
 #include "ui_file_transfer_window.h"
 

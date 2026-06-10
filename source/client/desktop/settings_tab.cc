@@ -33,18 +33,18 @@
 
 #include <algorithm>
 
-#include "base/crypto/secure_string.h"
 #include "base/gui_application.h"
 #include "base/logging.h"
+#include "base/crypto/secure_string.h"
 #include "base/net/udp_channel.h"
 #include "build/build_config.h"
 #include "client/application.h"
 #include "client/database.h"
 #include "client/master_password.h"
 #include "client/settings.h"
-#include "common/ui/credentials_dialog.h"
-#include "common/ui/msg_box.h"
-#include "common/ui/update_dialog.h"
+#include "common/desktop/credentials_dialog.h"
+#include "common/desktop/msg_box.h"
+#include "common/desktop/update_dialog.h"
 #include "proto/desktop_control.h"
 #include "ui_settings_tab.h"
 

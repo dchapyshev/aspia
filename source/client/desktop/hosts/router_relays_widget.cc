@@ -38,8 +38,8 @@
 
 #include "base/logging.h"
 #include "client/router.h"
-#include "common/ui/formatter.h"
-#include "common/ui/msg_box.h"
+#include "common/desktop/formatter.h"
+#include "common/desktop/msg_box.h"
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
 #include "ui_router_relays_widget.h"

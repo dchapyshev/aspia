@@ -23,7 +23,7 @@
 #include "base/logging.h"
 #include "base/desktop/screen_capturer.h"
 #include "base/net/udp_channel.h"
-#include "common/ui/formatter.h"
+#include "common/desktop/formatter.h"
 #include "proto/desktop_video.h"
 #include "ui_statistics_dialog.h"
 
