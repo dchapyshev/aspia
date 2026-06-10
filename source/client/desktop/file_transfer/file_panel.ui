@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FilePanel</class>
+ <widget class="QWidget" name="FilePanel">
+  <property name="enabled">
+   <bool>false</bool>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>492</width>
+    <height>553</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string/>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>1</number>
+   </property>
+   <property name="leftMargin">
+    <number>2</number>
+   </property>
+   <property name="topMargin">
+    <number>2</number>
+   </property>
+   <property name="rightMargin">
+    <number>2</number>
+   </property>
+   <property name="bottomMargin">
+    <number>2</number>
+   </property>
+   <item>
+    <widget class="QLabel" name="label_name">
+     <property name="styleSheet">
+      <string notr="true">QLabel { padding: 4px; }</string>
+     </property>
+     <property name="text">
+      <string notr="true">Panel Name</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="AddressBar" name="address_bar"/>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QToolBar" name="toolbar">
+       <property name="iconSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonStyle::ToolButtonTextBesideIcon</enum>
+       </property>
+       <addaction name="action_up"/>
+       <addaction name="action_refresh"/>
+       <addaction name="action_add_folder"/>
+       <addaction name="action_delete"/>
+      </widget>
+     </item>
+     <item>
+      <widget class="QWidget" name="spacer_widget" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="FileList" name="list">
+     <property name="focusPolicy">
+      <enum>Qt::FocusPolicy::StrongFocus</enum>
+     </property>
+     <property name="contextMenuPolicy">
+      <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
+     </property>
+     <property name="acceptDrops">
+      <bool>true</bool>
+     </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::EditTrigger::EditKeyPressed|QAbstractItemView::EditTrigger::SelectedClicked</set>
+     </property>
+     <property name="dragEnabled">
+      <bool>true</bool>
+     </property>
+     <property name="dragDropMode">
+      <enum>QAbstractItemView::DragDropMode::DragDrop</enum>
+     </property>
+     <property name="defaultDropAction">
+      <enum>Qt::DropAction::CopyAction</enum>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>false</bool>
+     </property>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::SelectionMode::ExtendedSelection</enum>
+     </property>
+     <property name="indentation">
+      <number>0</number>
+     </property>
+     <property name="itemsExpandable">
+      <bool>false</bool>
+     </property>
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
+     <property name="allColumnsShowFocus">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_status">
+     <property name="text">
+      <string notr="true"/>
+     </property>
+     <property name="margin">
+      <number>2</number>
+     </property>
+    </widget>
+   </item>
+  </layout>
+  <action name="action_up">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../../common/resources/common.qrc">
+     <normaloff>:/img/arrow-up.svg</normaloff>:/img/arrow-up.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Up</string>
+   </property>
+   <property name="toolTip">
+    <string>Browse to parent folder (Backspace)</string>
+   </property>
+  </action>
+  <action name="action_refresh">
+   <property name="icon">
+    <iconset resource="../../../common/resources/common.qrc">
+     <normaloff>:/img/replay.svg</normaloff>:/img/replay.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Refresh</string>
+   </property>
+   <property name="toolTip">
+    <string>Refresh (F5)</string>
+   </property>
+  </action>
+  <action name="action_add_folder">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../../common/resources/common.qrc">
+     <normaloff>:/img/add-folder.svg</normaloff>:/img/add-folder.svg</iconset>
+   </property>
+   <property name="text">
+    <string>New Folder</string>
+   </property>
+   <property name="toolTip">
+    <string>Create a new folder</string>
+   </property>
+  </action>
+  <action name="action_delete">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../../common/resources/common.qrc">
+     <normaloff>:/img/close.svg</normaloff>:/img/close.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Delete</string>
+   </property>
+   <property name="toolTip">
+    <string>Delete selected object(s) (Delete)</string>
+   </property>
+  </action>
+  <action name="action_send">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../../common/resources/common.qrc">
+     <normaloff>:/img/send.svg</normaloff>:/img/send.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Send</string>
+   </property>
+   <property name="toolTip">
+    <string>Send selected object(s) (F11)</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>AddressBar</class>
+   <extends>QComboBox</extends>
+   <header>client/desktop/file_transfer/address_bar.h</header>
+  </customwidget>
+  <customwidget>
+   <class>FileList</class>
+   <extends>QTreeView</extends>
+   <header>client/desktop/file_transfer/file_list.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../../../common/resources/common.qrc"/>
+ </resources>
+ <connections/>
+</ui>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FileTransferWindow</class>
+ <widget class="QWidget" name="FileTransferWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1009</width>
+    <height>709</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string/>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_7">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+     <property name="handleWidth">
+      <number>3</number>
+     </property>
+     <widget class="FilePanel" name="local_panel" native="true"/>
+     <widget class="FilePanel" name="remote_panel" native="true"/>
+    </widget>
+   </item>
+   <item>
+    <widget class="FileTransferWidget" name="transfer_widget" native="true">
+     <property name="visible">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="FileRemoveWidget" name="remove_widget" native="true">
+     <property name="visible">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>FilePanel</class>
+   <extends>QWidget</extends>
+   <header>client/desktop/file_transfer/file_panel.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>FileTransferWidget</class>
+   <extends>QWidget</extends>
+   <header>client/desktop/file_transfer/file_transfer_widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>FileRemoveWidget</class>
+   <extends>QWidget</extends>
+   <header>client/desktop/file_transfer/file_remove_widget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,130 @@
+//
+// Aspia Project
+// Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+#ifndef CLIENT_DESKTOP_HOSTS_LOCAL_GROUP_WIDGET_H
+#define CLIENT_DESKTOP_HOSTS_LOCAL_GROUP_WIDGET_H
+
+#include <QPoint>
+#include <QPointer>
+#include <QTreeWidget>
+
+#include <memory>
+
+#include "client/config.h"
+#include "client/desktop/hosts/content_widget.h"
+
+namespace Ui {
+class LocalGroupWidget;
+} // namespace Ui
+
+class OnlineChecker;
+class QLabel;
+class QStatusBar;
+
+class LocalGroupWidget final : public ContentWidget
+{
+    Q_OBJECT
+
+public:
+    explicit LocalGroupWidget(QWidget* parent = nullptr);
+    ~LocalGroupWidget() final;
+
+    class Item : public QTreeWidgetItem
+    {
+    public:
+        Item(const HostConfig& host, QTreeWidget* parent);
+
+        HostConfig& host() { return host_; }
+        qint64 entryId() const { return host_.id(); }
+        qint64 groupId() const { return host_.groupId(); }
+        qint64 routerId() const { return host_.routerId(); }
+        QString computerName() const { return host_.name(); }
+        QString hostAddress() const { return host_.address(); }
+        void setConnectTime(qint64 connect_time);
+        void setOnlineStatus(bool online);
+        void clearOnlineStatus();
+        void updateFrom(const HostConfig& host);
+
+        bool operator<(const QTreeWidgetItem& other) const final;
+
+    private:
+        HostConfig host_;
+    };
+
+    Item* currentItem();
+    qint64 currentGroupId() const { return current_group_id_; }
+    void showGroup(qint64 group_id);
+    void setConnectTime(qint64 entry_id, qint64 connect_time);
+    void setOnlineCheckEnabled(bool enable);
+    void setCurrentHost(qint64 entry_id);
+    void refreshItem(qint64 entry_id);
+    void removeItem(qint64 entry_id);
+
+    // ContentWidget implementation.
+    QByteArray saveState() final;
+    void restoreState(const QByteArray& state) final;
+    bool canReload() const final { return true; }
+    void reload() final;
+    void activate(QStatusBar* statusbar) final;
+    void deactivate(QStatusBar* statusbar) final;
+
+    QString mimeType() const { return mime_type_; }
+
+protected:
+    // QWidget implementation.
+    void changeEvent(QEvent* event) final;
+
+    // QObject implementation.
+    bool eventFilter(QObject* watched, QEvent* event) final;
+
+signals:
+    void sig_activated(qint64 entry_id);
+    void sig_currentChanged(qint64 entry_id);
+    void sig_contextMenu(qint64 entry_id, const QPoint& pos);
+    void sig_addHost();
+    void sig_deleteHost();
+    void sig_editHost();
+
+private slots:
+    void onHeaderContextMenu(const QPoint& pos);
+    void onOnlineCheckerResult(qint64 entry_id, bool online);
+    void onOnlineCheckerFinished();
+
+private:
+    void startDrag();
+    void updateStatusLabels();
+    void startOnlineChecker();
+    void clearOnlineStatuses();
+    Item* findItemByEntryId(qint64 entry_id) const;
+
+    std::unique_ptr<Ui::LocalGroupWidget> ui;
+    QString mime_type_;
+    QPoint start_pos_;
+
+    qint64 current_group_id_ = -1;
+    bool online_check_enabled_ = true;
+    QLabel* status_groups_label_ = nullptr;
+    QLabel* status_hosts_label_ = nullptr;
+    QLabel* status_check_label_ = nullptr;
+
+    OnlineChecker* online_checker_ = nullptr;
+
+    Q_DISABLE_COPY_MOVE(LocalGroupWidget)
+};
+
+#endif // CLIENT_DESKTOP_HOSTS_LOCAL_GROUP_WIDGET_H

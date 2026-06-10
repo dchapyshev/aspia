@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>RouterHostDialog</class>
+ <widget class="QDialog" name="RouterHostDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>500</width>
+    <height>360</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Host Properties</string>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_group">
+       <property name="text">
+        <string>Group:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="GroupComboBox" name="combo_group"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_display_name">
+       <property name="text">
+        <string>Display Name:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="edit_display_name"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_user_name">
+       <property name="text">
+        <string>User Name:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="edit_user_name"/>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_password">
+       <property name="text">
+        <string>Password:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="PasswordEdit" name="edit_password"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_comment">
+     <property name="text">
+      <string>Comment:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPlainTextEdit" name="edit_comment"/>
+   </item>
+   <item>
+    <widget class="DialogButtonBox" name="button_box">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>DialogButtonBox</class>
+   <extends>QDialogButtonBox</extends>
+   <header>common/ui/dialog_button_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>GroupComboBox</class>
+   <extends>QComboBox</extends>
+   <header>client/desktop/hosts/group_combo_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>PasswordEdit</class>
+   <extends>QLineEdit</extends>
+   <header>common/ui/password_edit.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

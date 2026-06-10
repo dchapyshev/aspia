@@ -26,8 +26,8 @@
 #include "client/master_password.h"
 #include "common/ui/msg_box.h"
 #include "common/ui/credentials_dialog.h"
-#include "client/ui/application.h"
-#include "client/ui/main_window.h"
+#include "client/desktop/application.h"
+#include "client/desktop/main_window.h"
 
 //--------------------------------------------------------------------------------------------------
 int main(int argc, char* argv[])

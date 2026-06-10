@@ -1,0 +1,64 @@
+//
+// Aspia Project
+// Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+#ifndef CLIENT_DESKTOP_SYS_INFO_SYS_INFO_SUMMARY_H
+#define CLIENT_DESKTOP_SYS_INFO_SYS_INFO_SUMMARY_H
+
+#include "client/desktop/sys_info/sys_info_widget.h"
+
+namespace Ui {
+class SysInfoSummary;
+} // namespace Ui
+
+#include <QVersionNumber>
+
+#include <memory>
+
+class SysInfoWidgetSummary final : public SysInfoWidget
+{
+    Q_OBJECT
+
+public:
+    explicit SysInfoWidgetSummary(QWidget* parent = nullptr);
+    ~SysInfoWidgetSummary() final;
+
+    // SysInfo implementation.
+    std::string category() const final;
+    void setSystemInfo(const proto::system_info::SystemInfo& system_info) final;
+    QTreeWidget* treeWidget() final;
+
+    void setRouterVersion(const QVersionNumber& router_version);
+    void setHostVersion(const QVersionNumber& host_version);
+    void setClientVersion(const QVersionNumber& client_version);
+
+protected:
+    // SysInfoWidget implementation.
+    void retranslate() final;
+
+private slots:
+    void onContextMenu(const QPoint& point);
+
+private:
+    std::unique_ptr<Ui::SysInfoSummary> ui;
+
+    QString router_version_;
+    QString host_version_;
+    QString client_version_;
+};
+
+#endif // CLIENT_DESKTOP_SYS_INFO_SYS_INFO_SUMMARY_H
