@@ -22,6 +22,8 @@
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
+#elif defined(Q_OS_ANDROID)
+#include <QString>
 #else
 #include <unicode/uchar.h>
 #include <unicode/ustring.h>
@@ -75,6 +77,14 @@ void caseFold(sqlite3_context* context, int argc, sqlite3_value** argv)
     folded.resize(static_cast<size_t>(folded_length));
     LCMapStringEx(LOCALE_NAME_INVARIANT, LCMAP_LOWERCASE, win_source, source_length,
                   reinterpret_cast<wchar_t*>(folded.data()), folded_length, nullptr, nullptr, 0);
+#elif defined(Q_OS_ANDROID)
+    // The NDK exposes u_strFoldCase only since API 31, so Qt's own Unicode case folding is used.
+    const QString folded_string = QString::fromRawData(
+        reinterpret_cast<const QChar*>(source), source_length).toCaseFolded();
+
+    folded_length = static_cast<int>(folded_string.length());
+    folded.assign(reinterpret_cast<const char16_t*>(folded_string.constData()),
+                  static_cast<size_t>(folded_length));
 #else
     // Preflight to learn the folded length (sets U_BUFFER_OVERFLOW_ERROR), then fold for real.
     UErrorCode status = U_ZERO_ERROR;

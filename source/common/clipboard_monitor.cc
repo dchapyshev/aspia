@@ -23,10 +23,12 @@
 
 #if defined(Q_OS_WINDOWS)
 #include "common/clipboard_win.h"
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 #include "common/clipboard_x11.h"
 #elif defined(Q_OS_MACOS)
 #include "common/clipboard_mac.h"
+#elif defined(Q_OS_ANDROID)
+// There is no clipboard implementation for Android yet.
 #else
 #error Not implemented
 #endif
@@ -71,6 +73,9 @@ void ClipboardMonitor::start()
 //--------------------------------------------------------------------------------------------------
 void ClipboardMonitor::injectClipboardEvent(const proto::clipboard::Event& event)
 {
+    if (!clipboard_)
+        return;
+
     QMetaObject::invokeMethod(
         clipboard_.get(), &Clipboard::injectClipboardEvent, Qt::QueuedConnection, event);
 }
@@ -78,12 +83,18 @@ void ClipboardMonitor::injectClipboardEvent(const proto::clipboard::Event& event
 //--------------------------------------------------------------------------------------------------
 void ClipboardMonitor::clearClipboard()
 {
+    if (!clipboard_)
+        return;
+
     QMetaObject::invokeMethod(clipboard_.get(), &Clipboard::clearClipboard, Qt::QueuedConnection);
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClipboardMonitor::addFileData(int file_index, const QByteArray& data, bool is_last)
 {
+    if (!clipboard_)
+        return;
+
     QMetaObject::invokeMethod(
         clipboard_.get(), &Clipboard::addFileData, Qt::QueuedConnection, file_index, data, is_last);
 }
@@ -95,13 +106,21 @@ void ClipboardMonitor::onBeforeThreadRunning()
 
 #if defined(Q_OS_WINDOWS)
     clipboard_ = std::make_unique<ClipboardWin>();
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     clipboard_ = std::make_unique<ClipboardX11>();
 #elif defined(Q_OS_MAC)
     clipboard_ = std::make_unique<ClipboardMac>();
+#elif defined(Q_OS_ANDROID)
+    // There is no clipboard implementation for Android yet.
 #else
 #error Not implemented
 #endif
+
+    if (!clipboard_)
+    {
+        LOG(INFO) << "No clipboard implementation for this platform";
+        return;
+    }
 
     connect(clipboard_.get(), &Clipboard::sig_clipboardEvent, this, &ClipboardMonitor::sig_clipboardEvent,
             Qt::QueuedConnection);
@@ -117,6 +136,10 @@ void ClipboardMonitor::onBeforeThreadRunning()
 void ClipboardMonitor::onAfterThreadRunning()
 {
     LOG(INFO) << "Thread stopping";
-    clipboard_->clearClipboard();
-    clipboard_.reset();
+
+    if (clipboard_)
+    {
+        clipboard_->clearClipboard();
+        clipboard_.reset();
+    }
 }

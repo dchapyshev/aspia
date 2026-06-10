@@ -24,7 +24,7 @@ namespace {
 
 #if defined(Q_OS_WINDOWS)
 #define USB_KEYMAP(usb, evdev, xkb, win, mac, qt) {usb, win, qt}
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 #define USB_KEYMAP(usb, evdev, xkb, win, mac, qt) {usb, xkb, qt}
 #elif defined(Q_OS_MACOS)
 #define USB_KEYMAP(usb, evdev, xkb, win, mac, qt) {usb, mac, qt}

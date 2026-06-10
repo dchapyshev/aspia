@@ -84,6 +84,8 @@ void UpdateChecker::run()
     QString os;
 #if defined(Q_OS_WINDOWS)
     os = "windows";
+#elif defined(Q_OS_ANDROID)
+    os = "android";
 #elif defined(Q_OS_LINUX)
     os = "linux";
 #elif defined(Q_OS_MACOS)

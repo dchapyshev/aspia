@@ -24,10 +24,10 @@
 #include "base/audio/audio_capturer_win.h"
 #endif // defined(Q_OS_WINDOWS)
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 #include "base/logging.h"
 #include "base/audio/audio_capturer_linux.h"
-#endif // defined(Q_OS_LINUX)
+#endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 
 #if defined(Q_OS_MACOS)
 #include "base/logging.h"
@@ -55,7 +55,7 @@ std::unique_ptr<AudioCapturer> AudioCapturer::create()
 {
 #if defined(Q_OS_WINDOWS)
     return std::unique_ptr<AudioCapturer>(new AudioCapturerWin());
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     return std::unique_ptr<AudioCapturer>(new AudioCapturerLinux());
 #else
     NOTIMPLEMENTED();

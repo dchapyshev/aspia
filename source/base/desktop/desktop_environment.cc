@@ -24,7 +24,7 @@
 #include "base/desktop/desktop_environment_win.h"
 #elif defined(Q_OS_MACOS)
 #include "base/desktop/desktop_environment_mac.h"
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 #include "base/desktop/desktop_environment_linux.h"
 #else
 #warning Not supported platform
@@ -51,7 +51,7 @@ DesktopEnvironment* DesktopEnvironment::create(QObject* parent)
     return new DesktopEnvironmentWin(parent);
 #elif defined(Q_OS_MACOS)
     return new DesktopEnvironmentMac(parent);
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     return new DesktopEnvironmentLinux(parent);
 #else
 #warning Not supported platform

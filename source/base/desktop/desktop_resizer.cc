@@ -24,9 +24,9 @@
 #include "base/desktop/desktop_resizer_win.h"
 #endif // defined(Q_OS_WINDOWS)
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 #include "base/desktop/desktop_resizer_x11.h"
-#endif // defined(Q_OS_LINUX)
+#endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 
 //--------------------------------------------------------------------------------------------------
 // static
@@ -34,7 +34,7 @@ std::unique_ptr<DesktopResizer> DesktopResizer::create()
 {
 #if defined(Q_OS_WINDOWS)
     return std::make_unique<DesktopResizerWin>();
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     return std::make_unique<DesktopResizerX11>();
 #else
     NOTIMPLEMENTED();

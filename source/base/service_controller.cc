@@ -24,9 +24,9 @@
 #include "base/service_controller_win.h"
 #endif // defined(Q_OS_WINDOWS)
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 #include "base/service_controller_systemd.h"
-#endif // defined(Q_OS_LINUX)
+#endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 
 //--------------------------------------------------------------------------------------------------
 // static
@@ -34,7 +34,7 @@ std::unique_ptr<ServiceController> ServiceController::open(const QString& name)
 {
 #if defined(Q_OS_WINDOWS)
     return ServiceControllerWin::open(name);
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     return ServiceControllerSystemd::open(name);
 #else
     NOTIMPLEMENTED();
@@ -49,7 +49,7 @@ std::unique_ptr<ServiceController> ServiceController::install(
 {
 #if defined(Q_OS_WINDOWS)
     return ServiceControllerWin::install(name, display_name, file_path);
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     return ServiceControllerSystemd::install(name, display_name, file_path);
 #else
     NOTIMPLEMENTED();
@@ -63,7 +63,7 @@ bool ServiceController::remove(const QString& name)
 {
 #if defined(Q_OS_WINDOWS)
     return ServiceControllerWin::remove(name);
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     return ServiceControllerSystemd::remove(name);
 #else
     NOTIMPLEMENTED();
@@ -77,7 +77,7 @@ bool ServiceController::isInstalled(const QString& name)
 {
 #if defined(Q_OS_WINDOWS)
     return ServiceControllerWin::isInstalled(name);
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     return ServiceControllerSystemd::isInstalled(name);
 #else
     NOTIMPLEMENTED();
@@ -91,7 +91,7 @@ bool ServiceController::isRunning(const QString& name)
 {
 #if defined(Q_OS_WINDOWS)
     return ServiceControllerWin::isRunning(name);
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     return ServiceControllerSystemd::isRunning(name);
 #else
     NOTIMPLEMENTED();
