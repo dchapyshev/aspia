@@ -27,7 +27,6 @@ list(APPEND SOURCE_BASE
     bucket_pool.h
     core_application.cc
     core_application.h
-    core_service.h
     cpuid_util.cc
     cpuid_util.h
     crash_handler.cc
@@ -84,6 +83,7 @@ list(APPEND SOURCE_BASE
 
 if (WIN32)
     list(APPEND SOURCE_BASE
+        core_service.h
         core_service_win.cc
         service_controller_win.cc
         service_controller_win.h
@@ -92,6 +92,7 @@ endif()
 
 if (LINUX)
     list(APPEND SOURCE_BASE
+        core_service.h
         core_service_posix.cc
         service_controller_systemd.cc
         service_controller_systemd.h
@@ -100,8 +101,14 @@ endif()
 
 if (APPLE)
     list(APPEND SOURCE_BASE
+        core_service.h
         core_service_posix.cc
         sys_info_mac.mm)
+endif()
+
+if (ANDROID)
+    list(APPEND SOURCE_BASE
+        sys_info_android.cc)
 endif()
 
 list(APPEND SOURCE_BASE_TESTS
@@ -281,7 +288,7 @@ if (APPLE)
     list(APPEND SOURCE_BASE_CRYPTO crypto/os_crypt_mac.mm)
 endif()
 
-if (LINUX)
+if (LINUX OR ANDROID)
     list(APPEND SOURCE_BASE_CRYPTO crypto/os_crypt_linux.cc)
 endif()
 
