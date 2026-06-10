@@ -254,18 +254,18 @@ void Sidebar::setRouterWorkspaces(qint64 router_id, const QList<Router::Workspac
     if (!router)
         return;
 
-    // Drop existing ROUTER_GROUP children, keep anything else untouched.
+    // Drop existing ROUTER_WORKSPACE children, keep anything else untouched.
     for (int i = router->childCount() - 1; i >= 0; --i)
     {
         SidebarItem* child = static_cast<SidebarItem*>(router->child(i));
-        if (child->itemType() == SidebarItem::ROUTER_GROUP)
+        if (child->itemType() == SidebarItem::ROUTER_WORKSPACE)
             delete router->takeChild(i);
     }
 
     Settings settings;
     for (const Router::Workspace& workspace : workspaces)
     {
-        auto* item = new SidebarRouterGroup(router_id, workspace, router);
+        auto* item = new SidebarRouterWorkspace(router_id, workspace, router);
         item->setExpanded(settings.isWorkspaceExpanded(router_id, workspace.entry_id));
     }
 
@@ -279,18 +279,17 @@ void Sidebar::setRouterHostGroups(qint64 router_id, qint64 workspace_id, const Q
     if (!router)
         return;
 
-    // Find the workspace item under the router: a ROUTER_GROUP that flags itself as a
-    // workspace and whose id matches.
-    SidebarRouterGroup* workspace_item = nullptr;
+    // Find the workspace item under the router by its id.
+    SidebarRouterWorkspace* workspace_item = nullptr;
     for (int i = 0; i < router->childCount(); ++i)
     {
         SidebarItem* child = static_cast<SidebarItem*>(router->child(i));
-        if (child->itemType() != SidebarItem::ROUTER_GROUP)
+        if (child->itemType() != SidebarItem::ROUTER_WORKSPACE)
             continue;
-        auto* group_item = static_cast<SidebarRouterGroup*>(child);
-        if (group_item->isWorkspace() && group_item->workspaceId() == workspace_id)
+        auto* candidate = static_cast<SidebarRouterWorkspace*>(child);
+        if (candidate->workspaceId() == workspace_id)
         {
-            workspace_item = group_item;
+            workspace_item = candidate;
             break;
         }
     }
@@ -427,11 +426,8 @@ QList<qint64> Sidebar::routerWorkspaceIds(qint64 router_id) const
     for (int i = 0; i < router->childCount(); ++i)
     {
         SidebarItem* child = static_cast<SidebarItem*>(router->child(i));
-        if (child->itemType() != SidebarItem::ROUTER_GROUP)
-            continue;
-        auto* group_item = static_cast<SidebarRouterGroup*>(child);
-        if (group_item->isWorkspace())
-            ids.append(group_item->workspaceId());
+        if (child->itemType() == SidebarItem::ROUTER_WORKSPACE)
+            ids.append(static_cast<SidebarRouterWorkspace*>(child)->workspaceId());
     }
 
     return ids;
@@ -830,6 +826,7 @@ void Sidebar::onCurrentItemChanged(QTreeWidgetItem* current, QTreeWidgetItem* pr
             // Nothing
             break;
 
+        case SidebarItem::ROUTER_WORKSPACE:
         case SidebarItem::ROUTER_GROUP:
             current_group_id_ = item->groupId();
             break;
@@ -860,13 +857,15 @@ void Sidebar::onItemExpanded(QTreeWidgetItem* item)
     {
         Settings().setLocalGroupExpanded(sidebar_item->groupId(), true);
     }
+    else if (sidebar_item->itemType() == SidebarItem::ROUTER_WORKSPACE)
+    {
+        auto* workspace_item = static_cast<SidebarRouterWorkspace*>(sidebar_item);
+        Settings().setWorkspaceExpanded(workspace_item->routerId(), workspace_item->workspaceId(), true);
+    }
     else if (sidebar_item->itemType() == SidebarItem::ROUTER_GROUP)
     {
         auto* group_item = static_cast<SidebarRouterGroup*>(sidebar_item);
-        if (group_item->isWorkspace())
-            Settings().setWorkspaceExpanded(group_item->routerId(), group_item->workspaceId(), true);
-        else
-            Settings().setRouterGroupExpanded(group_item->routerId(), group_item->groupId(), true);
+        Settings().setRouterGroupExpanded(group_item->routerId(), group_item->groupId(), true);
     }
 }
 
@@ -880,13 +879,15 @@ void Sidebar::onItemCollapsed(QTreeWidgetItem* item)
     {
         Settings().setLocalGroupExpanded(sidebar_item->groupId(), false);
     }
+    else if (sidebar_item->itemType() == SidebarItem::ROUTER_WORKSPACE)
+    {
+        auto* workspace_item = static_cast<SidebarRouterWorkspace*>(sidebar_item);
+        Settings().setWorkspaceExpanded(workspace_item->routerId(), workspace_item->workspaceId(), false);
+    }
     else if (sidebar_item->itemType() == SidebarItem::ROUTER_GROUP)
     {
         auto* group_item = static_cast<SidebarRouterGroup*>(sidebar_item);
-        if (group_item->isWorkspace())
-            Settings().setWorkspaceExpanded(group_item->routerId(), group_item->workspaceId(), false);
-        else
-            Settings().setRouterGroupExpanded(group_item->routerId(), group_item->groupId(), false);
+        Settings().setRouterGroupExpanded(group_item->routerId(), group_item->groupId(), false);
     }
 }
 
@@ -1132,11 +1133,6 @@ void Sidebar::startDrag()
     {
         auto* group_item = static_cast<SidebarRouterGroup*>(item);
 
-        // Workspaces themselves are not draggable - they are the top-level structure under a
-        // router, not a regular group.
-        if (group_item->isWorkspace())
-            return;
-
         // Clients are read-only and cannot move host groups.
         Router* router = Router::instance(group_item->routerId());
         if (!router || router->config().sessionType() == proto::router::SESSION_TYPE_CLIENT)
@@ -1207,15 +1203,28 @@ bool Sidebar::onDragMove(QDragMoveEvent* event)
             return true;
         }
 
+        // The target is either a host group (nest under it) or the workspace item (move to
+        // the workspace root). Cross-router/workspace moves are not supported by modifyGroup.
         SidebarItem* target_item = static_cast<SidebarItem*>(target_tree_item);
-        if (target_item->itemType() != SidebarItem::ROUTER_GROUP)
-            return true;
-
-        auto* target_group = static_cast<SidebarRouterGroup*>(target_item);
-
-        // Cross-router/workspace moves are not supported by modifyGroup.
-        if (target_group->routerId() != source_group->routerId() ||
-            target_group->workspaceId() != source_group->workspaceId())
+        if (target_item->itemType() == SidebarItem::ROUTER_GROUP)
+        {
+            auto* target_group = static_cast<SidebarRouterGroup*>(target_item);
+            if (target_group->routerId() != source_group->routerId() ||
+                target_group->workspaceId() != source_group->workspaceId())
+            {
+                return true;
+            }
+        }
+        else if (target_item->itemType() == SidebarItem::ROUTER_WORKSPACE)
+        {
+            auto* target_workspace = static_cast<SidebarRouterWorkspace*>(target_item);
+            if (target_workspace->routerId() != source_group->routerId() ||
+                target_workspace->workspaceId() != source_group->workspaceId())
+            {
+                return true;
+            }
+        }
+        else
         {
             return true;
         }
@@ -1280,27 +1289,43 @@ bool Sidebar::onDragMove(QDragMoveEvent* event)
         if (!target_tree_item || target_tree_item == tree_widget_->invisibleRootItem())
             return true;
 
-        SidebarItem* target_item = static_cast<SidebarItem*>(target_tree_item);
-        if (target_item->itemType() != SidebarItem::ROUTER_GROUP)
-            return true;
-
         const RouterHostMimeData* host_mime_data = dynamic_cast<const RouterHostMimeData*>(mime_data);
         if (!host_mime_data)
             return true;
 
-        auto* group_item = static_cast<SidebarRouterGroup*>(target_item);
         const Router::Host& host = host_mime_data->host();
 
-        // Cross-router or cross-workspace moves are forbidden by the server; reflect that in
-        // the UI by refusing the drop here.
-        if (group_item->routerId() != host_mime_data->routerId() ||
-            group_item->workspaceId() != host.workspace_id)
+        // The target is either a host group or the workspace item (move to the workspace root,
+        // group id 0). Cross-router or cross-workspace moves are forbidden by the server;
+        // reflect that in the UI by refusing the drop here.
+        SidebarItem* target_item = static_cast<SidebarItem*>(target_tree_item);
+        qint64 target_router_id = 0;
+        qint64 target_workspace_id = 0;
+        qint64 target_group_id = 0;
+
+        if (target_item->itemType() == SidebarItem::ROUTER_GROUP)
+        {
+            auto* group_item = static_cast<SidebarRouterGroup*>(target_item);
+            target_router_id = group_item->routerId();
+            target_workspace_id = group_item->workspaceId();
+            target_group_id = group_item->groupId();
+        }
+        else if (target_item->itemType() == SidebarItem::ROUTER_WORKSPACE)
+        {
+            auto* workspace_item = static_cast<SidebarRouterWorkspace*>(target_item);
+            target_router_id = workspace_item->routerId();
+            target_workspace_id = workspace_item->workspaceId();
+        }
+        else
         {
             return true;
         }
 
+        if (target_router_id != host_mime_data->routerId() || target_workspace_id != host.workspace_id)
+            return true;
+
         // Don't allow drop to the same group.
-        if (group_item->groupId() == host.group_id)
+        if (target_group_id == host.group_id)
             return true;
 
         tree_widget_->clearSelection();
@@ -1488,16 +1513,34 @@ bool Sidebar::onDrop(QDropEvent* event)
             return true;
         }
 
+        // The target is either a host group (drop = nest under it, parent_id is its entry_id)
+        // or the workspace item (drop = move to the workspace root, parent_id 0).
         SidebarItem* target_item = static_cast<SidebarItem*>(target_tree_item);
-        if (target_item->itemType() != SidebarItem::ROUTER_GROUP)
+        qint64 target_router_id = 0;
+        qint64 target_workspace_id = 0;
+        qint64 target_group_id = 0;
+
+        if (target_item->itemType() == SidebarItem::ROUTER_GROUP)
+        {
+            auto* target_group = static_cast<SidebarRouterGroup*>(target_item);
+            target_router_id = target_group->routerId();
+            target_workspace_id = target_group->workspaceId();
+            target_group_id = target_group->groupId();
+        }
+        else if (target_item->itemType() == SidebarItem::ROUTER_WORKSPACE)
+        {
+            auto* target_workspace = static_cast<SidebarRouterWorkspace*>(target_item);
+            target_router_id = target_workspace->routerId();
+            target_workspace_id = target_workspace->workspaceId();
+        }
+        else
         {
             restoreSelection();
             return true;
         }
 
-        auto* target_group = static_cast<SidebarRouterGroup*>(target_item);
-        if (target_group->routerId() != source_group->routerId() ||
-            target_group->workspaceId() != source_group->workspaceId())
+        if (target_router_id != source_group->routerId() ||
+            target_workspace_id != source_group->workspaceId())
         {
             restoreSelection();
             return true;
@@ -1517,11 +1560,9 @@ bool Sidebar::onDrop(QDropEvent* event)
             return true;
         }
 
-        // Copy the existing record and just rewrite parent_id. target_group->groupId() is 0
-        // for the workspace item (drop = move to workspace root) and the group's own entry_id
-        // for a host group (drop = nest under it).
+        // Copy the existing record and just rewrite parent_id.
         Router::Group group = source_group->group();
-        group.parent_id = target_group->groupId();
+        group.parent_id = target_group_id;
 
         router->modifyGroup(source_group->workspaceId(), group, this,
             [this, router_id](const proto::router::GroupResult& result)
@@ -1555,22 +1596,39 @@ bool Sidebar::onDrop(QDropEvent* event)
             return true;
         }
 
+        // The target is either a host group or the workspace item (move to the workspace root).
         SidebarItem* target_item = static_cast<SidebarItem*>(target_tree_item);
-        if (target_item->itemType() != SidebarItem::ROUTER_GROUP)
+        qint64 target_router_id = 0;
+        qint64 target_workspace_id = 0;
+        qint64 target_group_id = 0;
+
+        if (target_item->itemType() == SidebarItem::ROUTER_GROUP)
+        {
+            auto* group_item = static_cast<SidebarRouterGroup*>(target_item);
+            target_router_id = group_item->routerId();
+            target_workspace_id = group_item->workspaceId();
+            target_group_id = group_item->groupId();
+        }
+        else if (target_item->itemType() == SidebarItem::ROUTER_WORKSPACE)
+        {
+            auto* workspace_item = static_cast<SidebarRouterWorkspace*>(target_item);
+            target_router_id = workspace_item->routerId();
+            target_workspace_id = workspace_item->workspaceId();
+        }
+        else
         {
             restoreSelection();
             return true;
         }
 
-        auto* group_item = static_cast<SidebarRouterGroup*>(target_item);
         Router::Host host = host_mime_data->host();
         const qint64 router_id = host_mime_data->routerId();
 
         // Repeat the eligibility checks from onDragMove in case the user releases over a
         // target that wasn't validated (DragLeave without DragMove can happen).
-        if (group_item->routerId() != router_id ||
-            group_item->workspaceId() != host.workspace_id ||
-            group_item->groupId() == host.group_id)
+        if (target_router_id != router_id ||
+            target_workspace_id != host.workspace_id ||
+            target_group_id == host.group_id)
         {
             restoreSelection();
             return true;
@@ -1583,7 +1641,7 @@ bool Sidebar::onDrop(QDropEvent* event)
             return true;
         }
 
-        host.group_id = group_item->groupId();
+        host.group_id = target_group_id;
         router->editHost(host, this, [this, router_id](const proto::router::HostResult& result)
         {
             if (result.error_code() != proto::router::kErrorOk)

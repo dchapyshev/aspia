@@ -18,14 +18,14 @@
 
 #include "client/ui/hosts_tab.h"
 
-#include <optional>
-
 #include <QActionGroup>
 #include <QDateTime>
 #include <QEvent>
 #include <QFileDialog>
 #include <QMenu>
 #include <QStatusBar>
+
+#include <optional>
 
 #include "common/ui/msg_box.h"
 #include "base/logging.h"
@@ -445,6 +445,16 @@ void HostsTab::onSwitchContent(SidebarItem::Type type)
         }
         break;
 
+        case SidebarItem::ROUTER_WORKSPACE:
+        {
+            switchContent(router_group_widget_);
+
+            auto* item = static_cast<SidebarRouterWorkspace*>(ui->sidebar->currentItem());
+            router_group_widget_->showGroup(item->routerId(), item->workspaceId(),
+                                            item->workspaceName(), /*group_id=*/0);
+        }
+        break;
+
         case SidebarItem::ROUTER_GROUP:
         {
             switchContent(router_group_widget_);
@@ -527,6 +537,27 @@ void HostsTab::onSidebarContextMenu(SidebarItem::Type type, const QPoint& pos)
         menu.addSeparator();
         menu.addAction(ui->action_add_host);
     }
+    else if (type == SidebarItem::ROUTER_WORKSPACE)
+    {
+        SidebarItem* item = ui->sidebar->currentItem();
+        if (!item || item->itemType() != SidebarItem::ROUTER_WORKSPACE)
+            return;
+
+        auto* workspace_item = static_cast<SidebarRouterWorkspace*>(item);
+
+        proto::router::SessionType session_type = proto::router::SESSION_TYPE_CLIENT;
+        if (Router* router = Router::instance(workspace_item->routerId()))
+            session_type = router->config().sessionType();
+
+        // Clients are read-only and cannot manage host groups or workspaces.
+        if (session_type != proto::router::SESSION_TYPE_CLIENT)
+        {
+            menu.addAction(ui->action_add_group);
+            menu.addSeparator();
+            menu.addAction(ui->action_edit_workspace);
+            menu.addAction(ui->action_delete_workspace);
+        }
+    }
     else if (type == SidebarItem::ROUTER_GROUP)
     {
         SidebarItem* item = ui->sidebar->currentItem();
@@ -539,21 +570,12 @@ void HostsTab::onSidebarContextMenu(SidebarItem::Type type, const QPoint& pos)
         if (Router* router = Router::instance(group_item->routerId()))
             session_type = router->config().sessionType();
 
-        // Clients are read-only and cannot manage host groups or workspaces.
+        // Clients are read-only and cannot manage host groups.
         if (session_type != proto::router::SESSION_TYPE_CLIENT)
         {
             menu.addAction(ui->action_add_group);
-            if (group_item->isWorkspace())
-            {
-                menu.addSeparator();
-                menu.addAction(ui->action_edit_workspace);
-                menu.addAction(ui->action_delete_workspace);
-            }
-            else
-            {
-                menu.addAction(ui->action_edit_group);
-                menu.addAction(ui->action_delete_group);
-            }
+            menu.addAction(ui->action_edit_group);
+            menu.addAction(ui->action_delete_group);
         }
     }
     else if (type == SidebarItem::ROUTER)
@@ -1110,13 +1132,10 @@ void HostsTab::onAddWorkspaceAction()
 void HostsTab::onEditWorkspaceAction()
 {
     SidebarItem* sidebar_item = ui->sidebar->currentItem();
-    if (!sidebar_item || sidebar_item->itemType() != SidebarItem::ROUTER_GROUP)
+    if (!sidebar_item || sidebar_item->itemType() != SidebarItem::ROUTER_WORKSPACE)
         return;
 
-    auto* workspace_item = static_cast<SidebarRouterGroup*>(sidebar_item);
-    if (!workspace_item->isWorkspace())
-        return;
-
+    auto* workspace_item = static_cast<SidebarRouterWorkspace*>(sidebar_item);
     const qint64 router_id = workspace_item->routerId();
 
     RouterWorkspaceDialog dialog(router_id, workspace_item->workspaceId(), this);
@@ -1128,13 +1147,10 @@ void HostsTab::onEditWorkspaceAction()
 void HostsTab::onDeleteWorkspaceAction()
 {
     SidebarItem* sidebar_item = ui->sidebar->currentItem();
-    if (!sidebar_item || sidebar_item->itemType() != SidebarItem::ROUTER_GROUP)
+    if (!sidebar_item || sidebar_item->itemType() != SidebarItem::ROUTER_WORKSPACE)
         return;
 
-    auto* workspace_item = static_cast<SidebarRouterGroup*>(sidebar_item);
-    if (!workspace_item->isWorkspace())
-        return;
-
+    auto* workspace_item = static_cast<SidebarRouterWorkspace*>(sidebar_item);
     const qint64 router_id = workspace_item->routerId();
     const qint64 workspace_id = workspace_item->workspaceId();
 
@@ -1172,18 +1188,35 @@ void HostsTab::onAddGroupAction()
         return;
     }
 
-    if (item->itemType() != SidebarItem::ROUTER_GROUP)
+    // For a workspace item the new group goes to the workspace root (parent 0); for a host
+    // group it becomes its subgroup.
+    qint64 router_id = 0;
+    qint64 workspace_id = 0;
+    qint64 default_parent_id = 0;
+    QString workspace_name;
+
+    if (item->itemType() == SidebarItem::ROUTER_WORKSPACE)
+    {
+        auto* workspace_item = static_cast<SidebarRouterWorkspace*>(item);
+        router_id = workspace_item->routerId();
+        workspace_id = workspace_item->workspaceId();
+        workspace_name = workspace_item->workspaceName();
+        default_parent_id = 0;
+    }
+    else if (item->itemType() == SidebarItem::ROUTER_GROUP)
+    {
+        auto* group_item = static_cast<SidebarRouterGroup*>(item);
+        router_id = group_item->routerId();
+        workspace_id = group_item->workspaceId();
+        workspace_name = group_item->workspaceName();
+        default_parent_id = group_item->groupId();
+    }
+    else
+    {
         return;
+    }
 
-    auto* group_item = static_cast<SidebarRouterGroup*>(item);
-
-    // For a workspace item groupId() is 0 (the new group goes to the workspace root); for a
-    // host group it is the group's own id (the new group becomes its subgroup).
-    const qint64 default_parent_id = group_item->groupId();
-    const qint64 router_id = group_item->routerId();
-
-    RouterGroupDialog dialog(router_id, group_item->workspaceId(), group_item->workspaceName(),
-        0, default_parent_id, this);
+    RouterGroupDialog dialog(router_id, workspace_id, workspace_name, 0, default_parent_id, this);
     if (dialog.exec() == QDialog::Accepted)
         ui->sidebar->onRefreshHostGroups(router_id);
 }
@@ -1205,8 +1238,6 @@ void HostsTab::onEditGroupAction()
         return;
 
     auto* group_item = static_cast<SidebarRouterGroup*>(item);
-    if (group_item->isWorkspace())
-        return;
 
     const qint64 router_id = group_item->routerId();
     RouterGroupDialog dialog(router_id, group_item->workspaceId(), group_item->workspaceName(),
@@ -1232,8 +1263,6 @@ void HostsTab::onDeleteGroupAction()
         return;
 
     auto* group_item = static_cast<SidebarRouterGroup*>(item);
-    if (group_item->isWorkspace())
-        return;
 
     const QString question = tr("Are you sure you want to delete the group \"%1\"? "
                                 "Hosts assigned to this group or its subgroups will be moved "
@@ -1526,6 +1555,20 @@ void HostsTab::updateActionsState()
         ui->action_edit_host->setVisible(host_item != nullptr);
         ui->action_copy_host->setVisible(host_item != nullptr);
     }
+    else if (sidebar_item && sidebar_item->itemType() == SidebarItem::ROUTER_WORKSPACE)
+    {
+        auto* workspace_item = static_cast<SidebarRouterWorkspace*>(sidebar_item);
+
+        proto::router::SessionType session_type = proto::router::SESSION_TYPE_CLIENT;
+        if (Router* router = Router::instance(workspace_item->routerId()))
+            session_type = router->config().sessionType();
+
+        // Clients are read-only and cannot manage host groups or workspaces.
+        const bool can_manage = session_type != proto::router::SESSION_TYPE_CLIENT;
+        ui->action_add_group->setVisible(can_manage);
+        ui->action_edit_workspace->setVisible(can_manage);
+        ui->action_delete_workspace->setVisible(can_manage);
+    }
     else if (sidebar_item && sidebar_item->itemType() == SidebarItem::ROUTER_GROUP)
     {
         auto* group_item = static_cast<SidebarRouterGroup*>(sidebar_item);
@@ -1534,14 +1577,11 @@ void HostsTab::updateActionsState()
         if (Router* router = Router::instance(group_item->routerId()))
             session_type = router->config().sessionType();
 
-        // Clients are read-only and cannot manage host groups or workspaces.
+        // Clients are read-only and cannot manage host groups.
         const bool can_manage_groups = session_type != proto::router::SESSION_TYPE_CLIENT;
         ui->action_add_group->setVisible(can_manage_groups);
-        ui->action_edit_group->setVisible(can_manage_groups && !group_item->isWorkspace());
-        ui->action_delete_group->setVisible(can_manage_groups && !group_item->isWorkspace());
-
-        ui->action_edit_workspace->setVisible(can_manage_groups && group_item->isWorkspace());
-        ui->action_delete_workspace->setVisible(can_manage_groups && group_item->isWorkspace());
+        ui->action_edit_group->setVisible(can_manage_groups);
+        ui->action_delete_group->setVisible(can_manage_groups);
     }
     else if (sidebar_item && sidebar_item->itemType() == SidebarItem::ROUTER_USERS)
     {
@@ -1600,13 +1640,12 @@ void HostsTab::updateActionsState()
         ui->action_system_info->setVisible(true);
     }
 
-    if (current_content_ != search_widget_ &&
-        sidebar_item && sidebar_item->itemType() == SidebarItem::ROUTER_GROUP)
+    if (current_content_ != search_widget_ && sidebar_item &&
+        (sidebar_item->itemType() == SidebarItem::ROUTER_GROUP ||
+         sidebar_item->itemType() == SidebarItem::ROUTER_WORKSPACE))
     {
-        SidebarRouterGroup* router_group_item = static_cast<SidebarRouterGroup*>(sidebar_item);
-
         proto::router::SessionType session_type = proto::router::SESSION_TYPE_CLIENT;
-        Router* router = Router::instance(router_group_item->routerId());
+        Router* router = Router::instance(router_group_widget_->routerId());
         if (router)
             session_type = router->config().sessionType();
 

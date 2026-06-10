@@ -22,8 +22,6 @@
 #include <QCoreApplication>
 #include <QTreeWidget>
 
-#include <variant>
-
 #include "client/router.h"
 
 class GroupConfig;
@@ -32,14 +30,11 @@ class GroupConfig;
 class SidebarItem : public QTreeWidgetItem
 {
 public:
-    // ROUTER_GROUP covers both workspaces under a router and host groups inside a
-    // workspace. The two are distinguished by SidebarRouterGroup::isWorkspace().
-    // ROUTER_HOSTS/ROUTER_USERS/ROUTER_CLIENTS/ROUTER_RELAYS are fixed administrative sections
-    // that belong to a router, alongside its ROUTER_GROUP subtree.
     enum Type
     {
         LOCAL_GROUP,
         ROUTER,
+        ROUTER_WORKSPACE,
         ROUTER_GROUP,
         ROUTER_HOSTS,
         ROUTER_USERS,
@@ -97,36 +92,47 @@ private:
 };
 
 //--------------------------------------------------------------------------------------------------
+class SidebarRouterWorkspace final : public SidebarItem
+{
+public:
+    // group_id is 0 (no host-group filter); the workspace's own entry_id lives in
+    // workspaceId(). The QTreeWidgetItem parent is the SidebarRouter.
+    SidebarRouterWorkspace(qint64 router_id, const Router::Workspace& workspace,
+                           QTreeWidgetItem* parent);
+
+    qint64 routerId() const { return router_id_; }
+    qint64 workspaceId() const { return workspace_.entry_id; }
+    QString workspaceName() const { return workspace_.name; }
+    const Router::Workspace& workspace() const { return workspace_; }
+
+    // Re-sync the cached record after a server-side change. The text follows.
+    void update(const Router::Workspace& workspace);
+
+private:
+    const qint64 router_id_;
+    Router::Workspace workspace_;
+};
+
+//--------------------------------------------------------------------------------------------------
 class SidebarRouterGroup final : public SidebarItem
 {
 public:
-    // Workspace under a router. group_id is 0 (no host-group filter); the workspace's
-    // own entry_id lives in workspaceId(). The QTreeWidgetItem parent is the SidebarRouter.
-    SidebarRouterGroup(qint64 router_id, const Router::Workspace& workspace,
-                       QTreeWidgetItem* parent);
-
-    // Host group inside a workspace. group.workspace_id identifies the enclosing
-    // workspace; the QTreeWidgetItem parent is either the workspace item or a parent
-    // group item (mirrors group.parent_id, so it is not stored separately).
+    // group.workspace_id identifies the enclosing workspace; the QTreeWidgetItem parent is
+    // either the workspace item or a parent group item (mirrors group.parent_id, so it is
+    // not stored separately).
     SidebarRouterGroup(qint64 router_id, const Router::Group& group, QTreeWidgetItem* parent);
 
     qint64 routerId() const { return router_id_; }
-    qint64 workspaceId() const;
+    qint64 workspaceId() const { return group_.workspace_id; }
     QString workspaceName() const;
-    bool isWorkspace() const { return std::holds_alternative<Router::Workspace>(data_); }
+    const Router::Group& group() const { return group_; }
 
-    // The full backing record. Only valid in the corresponding kind (use isWorkspace()
-    // to discriminate); calling the wrong one throws std::bad_variant_access.
-    const Router::Workspace& workspace() const { return std::get<Router::Workspace>(data_); }
-    const Router::Group& group() const { return std::get<Router::Group>(data_); }
-
-    // Re-sync the cached record after a server-side change. The text/icon follow.
-    void update(const Router::Workspace& workspace);
+    // Re-sync the cached record after a server-side change. The text follows.
     void update(const Router::Group& group);
 
 private:
     const qint64 router_id_;
-    std::variant<Router::Workspace, Router::Group> data_;
+    Router::Group group_;
 };
 
 //--------------------------------------------------------------------------------------------------

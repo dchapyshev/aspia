@@ -96,14 +96,21 @@ void SidebarRouter::setStatus(Status status)
 }
 
 //--------------------------------------------------------------------------------------------------
-SidebarRouterGroup::SidebarRouterGroup(
+SidebarRouterWorkspace::SidebarRouterWorkspace(
     qint64 router_id, const Router::Workspace& workspace, QTreeWidgetItem* parent)
-    : SidebarItem(ROUTER_GROUP, /*group_id=*/0, parent),
+    : SidebarItem(ROUTER_WORKSPACE, /*group_id=*/0, parent),
       router_id_(router_id),
-      data_(workspace)
+      workspace_(workspace)
 {
     setText(0, workspace.name);
     setIcon(0, QIcon(":/img/workspace.svg"));
+}
+
+//--------------------------------------------------------------------------------------------------
+void SidebarRouterWorkspace::update(const Router::Workspace& workspace)
+{
+    workspace_ = workspace;
+    setText(0, workspace.name);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -111,46 +118,27 @@ SidebarRouterGroup::SidebarRouterGroup(
     qint64 router_id, const Router::Group& group, QTreeWidgetItem* parent)
     : SidebarItem(ROUTER_GROUP, group.entry_id, parent),
       router_id_(router_id),
-      data_(group)
+      group_(group)
 {
     setText(0, group.name);
     setIcon(0, QIcon(":/img/folder.svg"));
 }
 
 //--------------------------------------------------------------------------------------------------
-qint64 SidebarRouterGroup::workspaceId() const
-{
-    if (auto* w = std::get_if<Router::Workspace>(&data_))
-        return w->entry_id;
-    return std::get<Router::Group>(data_).workspace_id;
-}
-
-//--------------------------------------------------------------------------------------------------
 QString SidebarRouterGroup::workspaceName() const
 {
-    if (auto* w = std::get_if<Router::Workspace>(&data_))
-        return w->name;
-
     for (QTreeWidgetItem* p = parent(); p; p = p->parent())
     {
-        auto* group_item = dynamic_cast<SidebarRouterGroup*>(p);
-        if (group_item && group_item->isWorkspace())
-            return group_item->workspace().name;
+        if (auto* workspace_item = dynamic_cast<SidebarRouterWorkspace*>(p))
+            return workspace_item->workspaceName();
     }
     return QString();
 }
 
 //--------------------------------------------------------------------------------------------------
-void SidebarRouterGroup::update(const Router::Workspace& workspace)
-{
-    data_ = workspace;
-    setText(0, workspace.name);
-}
-
-//--------------------------------------------------------------------------------------------------
 void SidebarRouterGroup::update(const Router::Group& group)
 {
-    data_ = group;
+    group_ = group;
     setText(0, group.name);
 }
 
