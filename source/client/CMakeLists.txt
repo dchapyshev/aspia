@@ -16,30 +16,6 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-if (ANDROID)
-    qt_add_executable(aspia_client
-        application.cc
-        application.h
-        config.cc
-        config.h
-        main.cc
-        settings.cc
-        settings.h)
-    target_link_libraries(aspia_client PRIVATE
-        aspia_base
-        aspia_common
-        aspia_proto
-        ${QT_COMMON_LIBS}
-        ${THIRD_PARTY_LIBS})
-    set_property(TARGET aspia_client PROPERTY AUTOMOC ON)
-    set_target_properties(aspia_client PROPERTIES
-        QT_ANDROID_PACKAGE_NAME "org.aspia.client"
-        QT_ANDROID_APP_NAME "Aspia Client"
-        QT_ANDROID_APP_ICON "@mipmap/ic_launcher"
-        QT_ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android/packaging")
-    return()
-endif()
-
 list(APPEND SOURCE_CLIENT_CORE
     aab_importer.cc
     aab_importer.h
@@ -80,8 +56,11 @@ list(APPEND SOURCE_CLIENT_CORE
     settings.cc
     settings.h
     udp_attempt.cc
-    udp_attempt.h
-    client.rc)
+    udp_attempt.h)
+
+if (WIN32)
+    list(APPEND SOURCE_CLIENT_CORE client.rc)
+endif()
 
 list(APPEND SOURCE_CLIENT_CORE_ONLINE_CHECKER
     online_checker/online_checker.cc
@@ -325,17 +304,24 @@ if (APPLE)
     set_source_files_properties(${aspia_client_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 endif()
 
-add_executable(aspia_client MACOSX_BUNDLE
-    ${aspia_client_ICON}
-    ${SOURCE_CLIENT_CORE}
-    ${SOURCE_CLIENT_CORE_ONLINE_CHECKER}
-    ${SOURCE_CLIENT_CORE_DESKTOP}
-    ${SOURCE_CLIENT_CORE_DESKTOP_DESKTOP}
-    ${SOURCE_CLIENT_CORE_DESKTOP_FILE_TRANSFER}
-    ${SOURCE_CLIENT_CORE_DESKTOP_ROUTER_MANAGER}
-    ${SOURCE_CLIENT_CORE_DESKTOP_SYS_INFO}
-    ${SOURCE_CLIENT_CORE_DESKTOP_CHAT}
-    ${SOURCE_CLIENT_CORE_DESKTOP_HOSTS_TAB})
+if (ANDROID)
+    qt_add_executable(aspia_client
+        ${SOURCE_CLIENT_CORE}
+        ${SOURCE_CLIENT_CORE_ONLINE_CHECKER})
+else()
+    add_executable(aspia_client MACOSX_BUNDLE
+        ${aspia_client_ICON}
+        ${SOURCE_CLIENT_CORE}
+        ${SOURCE_CLIENT_CORE_ONLINE_CHECKER}
+        ${SOURCE_CLIENT_CORE_DESKTOP}
+        ${SOURCE_CLIENT_CORE_DESKTOP_DESKTOP}
+        ${SOURCE_CLIENT_CORE_DESKTOP_FILE_TRANSFER}
+        ${SOURCE_CLIENT_CORE_DESKTOP_ROUTER_MANAGER}
+        ${SOURCE_CLIENT_CORE_DESKTOP_SYS_INFO}
+        ${SOURCE_CLIENT_CORE_DESKTOP_CHAT}
+        ${SOURCE_CLIENT_CORE_DESKTOP_HOSTS_TAB})
+endif()
+
 target_link_libraries(aspia_client PRIVATE
     aspia_base
     aspia_common
@@ -350,6 +336,14 @@ set_property(TARGET aspia_client PROPERTY AUTORCC ON)
 qt_import_plugins(aspia_client INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE imageformats iconengines EXCLUDE_BY_TYPE "")
 
 target_precompile_headers(aspia_client PRIVATE pch.h)
+
+if (ANDROID)
+    set_target_properties(aspia_client PROPERTIES
+        QT_ANDROID_PACKAGE_NAME "org.aspia.client"
+        QT_ANDROID_APP_NAME "Aspia Client"
+        QT_ANDROID_APP_ICON "@mipmap/ic_launcher"
+        QT_ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android/packaging")
+endif()
 
 if (WIN32)
     set_target_properties(aspia_client PROPERTIES WIN32_EXECUTABLE TRUE)
