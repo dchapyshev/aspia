@@ -1041,9 +1041,9 @@ void Sidebar::buildRouterSections(qint64 router_id)
     };
 
     move_to_top(new SidebarRouterUsers(router_id, router));
-    move_to_top(new SidebarRouterRelays(router_id, router));
-    move_to_top(new SidebarRouterClients(router_id, router));
     move_to_top(new SidebarRouterHosts(router_id, router));
+    move_to_top(new SidebarRouterClients(router_id, router));
+    move_to_top(new SidebarRouterRelays(router_id, router));
 
     router->setExpanded(true);
 }

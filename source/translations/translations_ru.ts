@@ -5547,9 +5547,13 @@ Are you sure you want to continue?</source>
 <context>
     <name>SidebarRouterRelays</name>
     <message>
-        <location filename="../client/ui/hosts/sidebar_items.cc" line="214"/>
         <source>Relays</source>
-        <translation>Ретрансляторы</translation>
+        <translation type="vanished">Ретрансляторы</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/sidebar_items.cc" line="214"/>
+        <source>Active Relays</source>
+        <translation>Активные ретрансляторы</translation>
     </message>
 </context>
 <context>

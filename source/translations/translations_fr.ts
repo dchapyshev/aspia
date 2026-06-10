@@ -5282,7 +5282,7 @@ Are you sure you want to continue?</source>
     <name>SidebarRouterRelays</name>
     <message>
         <location filename="../client/ui/hosts/sidebar_items.cc" line="214"/>
-        <source>Relays</source>
+        <source>Active Relays</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

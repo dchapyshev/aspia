@@ -211,5 +211,5 @@ SidebarRouterRelays::SidebarRouterRelays(qint64 router_id, QTreeWidgetItem* pare
 //--------------------------------------------------------------------------------------------------
 void SidebarRouterRelays::retranslate()
 {
-    setText(0, tr("Relays"));
+    setText(0, tr("Active Relays"));
 }
