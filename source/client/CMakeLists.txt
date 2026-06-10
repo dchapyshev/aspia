@@ -16,9 +16,35 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
+if (ANDROID)
+    qt_add_executable(aspia_client
+        application.cc
+        application.h
+        config.cc
+        config.h
+        main.cc
+        settings.cc
+        settings.h)
+    target_link_libraries(aspia_client PRIVATE
+        aspia_base
+        aspia_common
+        aspia_proto
+        ${QT_COMMON_LIBS}
+        ${THIRD_PARTY_LIBS})
+    set_property(TARGET aspia_client PROPERTY AUTOMOC ON)
+    set_target_properties(aspia_client PROPERTIES
+        QT_ANDROID_PACKAGE_NAME "org.aspia.client"
+        QT_ANDROID_APP_NAME "Aspia Client"
+        QT_ANDROID_APP_ICON "@mipmap/ic_launcher"
+        QT_ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android/packaging")
+    return()
+endif()
+
 list(APPEND SOURCE_CLIENT_CORE
     aab_importer.cc
     aab_importer.h
+    application.cc
+    application.h
     database.cc
     database.h
     client.cc
@@ -66,8 +92,6 @@ list(APPEND SOURCE_CLIENT_CORE_ONLINE_CHECKER
     online_checker/online_checker_router.h)
 
 list(APPEND SOURCE_CLIENT_CORE_DESKTOP
-    desktop/application.cc
-    desktop/application.h
     desktop/authorization_dialog.cc
     desktop/authorization_dialog.h
     desktop/authorization_dialog.ui

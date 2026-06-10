@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_DESKTOP_APPLICATION_H
-#define CLIENT_DESKTOP_APPLICATION_H
+#ifndef CLIENT_APPLICATION_H
+#define CLIENT_APPLICATION_H
 
 #include "base/gui_application.h"
 
@@ -41,4 +41,4 @@ private:
     Q_DISABLE_COPY_MOVE(Application)
 };
 
-#endif // CLIENT_DESKTOP_APPLICATION_H
+#endif // CLIENT_APPLICATION_H

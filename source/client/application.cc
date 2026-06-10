@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/desktop/application.h"
+#include "client/application.h"
 
 #include "base/logging.h"
 #include "build/build_config.h"

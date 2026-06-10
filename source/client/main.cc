@@ -16,18 +16,24 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include <QCommandLineParser>
 #include <QSysInfo>
 
 #include "base/logging.h"
 #include "base/sys_info.h"
-#include "base/crypto/secure_string.h"
 #include "build/version.h"
+#include "client/application.h"
+
+#if defined(Q_OS_ANDROID)
+#include <QLabel>
+#else
+#include <QCommandLineParser>
+
+#include "base/crypto/secure_string.h"
 #include "client/master_password.h"
 #include "common/ui/msg_box.h"
 #include "common/ui/credentials_dialog.h"
-#include "client/desktop/application.h"
 #include "client/desktop/main_window.h"
+#endif // defined(Q_OS_ANDROID)
 
 //--------------------------------------------------------------------------------------------------
 int main(int argc, char* argv[])
@@ -54,6 +60,13 @@ int main(int argc, char* argv[])
     LOG(INFO) << "Qt version:" << QT_VERSION_STR;
     LOG(INFO) << "Command line:" << application.arguments();
 
+#if defined(Q_OS_ANDROID)
+    QLabel label("Hello World");
+    label.setAlignment(Qt::AlignCenter);
+    label.show();
+
+    return application.exec();
+#else
     QCommandLineParser parser;
     parser.setApplicationDescription(QApplication::translate("Client", "Aspia Client"));
     parser.addHelpOption();
@@ -151,4 +164,5 @@ int main(int argc, char* argv[])
     main_window->activateWindow();
 
     return application.exec();
+#endif // defined(Q_OS_ANDROID)
 }
