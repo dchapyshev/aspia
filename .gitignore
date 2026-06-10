@@ -19,3 +19,6 @@
 # SW build dir and generated files
 .sw
 /*.lnk
+
+# CMake user presets (machine-local, may contain signing credentials)
+CMakeUserPresets.json

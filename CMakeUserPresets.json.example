@@ -1,0 +1,56 @@
+{
+  "version": 10,
+  "configurePresets": [
+    {
+      "name": "local-android-arm64",
+      "inherits": [
+        "android-base"
+      ],
+      "cacheVariables": {
+        "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": {
+          "type": "FILEPATH",
+          "value": "C:/Qt/6.11.0/android_arm64_v8a/lib/cmake/Qt6/qt.toolchain.cmake"
+        },
+        "QT_HOST_PATH": "C:/Qt/6.11.0/mingw_64",
+        "ANDROID_SDK_ROOT": "C:/Android/sdk",
+        "ANDROID_NDK_ROOT": "C:/Android/sdk/ndk/27.2.12479018"
+      },
+      "environment": {
+        "ANDROID_NDK_HOME": "C:/Android/sdk/ndk/27.2.12479018",
+        "JAVA_HOME": "C:/Program Files/Eclipse Adoptium/jdk-21.0.11.10-hotspot"
+      }
+    },
+    {
+      "name": "local-android-arm64-signed",
+      "$comment": "Generate the keystore with: keytool -genkeypair -keystore C:/Android/my.keystore -alias alias -keyalg RSA -keysize 2048 -validity 10000 (keytool is located in <JAVA_HOME>/bin)",
+      "inherits": [
+        "local-android-arm64"
+      ],
+      "cacheVariables": {
+        "QT_ANDROID_SIGN_APK": "ON"
+      },
+      "environment": {
+        "QT_ANDROID_KEYSTORE_PATH": "C:/Android/my.keystore",
+        "QT_ANDROID_KEYSTORE_ALIAS": "alias",
+        "QT_ANDROID_KEYSTORE_STORE_PASS": "password",
+        "QT_ANDROID_KEYSTORE_KEY_PASS": "password"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "local-android-arm64-apk",
+      "configurePreset": "local-android-arm64",
+      "targets": [
+        "apk"
+      ]
+    },
+    {
+      "name": "local-android-arm64-signed-apk",
+      "configurePreset": "local-android-arm64-signed",
+      "targets": [
+        "apk"
+      ]
+    }
+  ]
+}

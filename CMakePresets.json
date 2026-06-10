@@ -175,6 +175,38 @@
         "VCPKG_TRIPLET": "x64-windows-static",
         "VCPKG_DEFAULT_HOST_TRIPLET": "x64-windows-static"
       }
+    },
+    {
+      "name": "android-base",
+      "hidden": true,
+      "inherits": [
+        "base"
+      ],
+      "generator": "Ninja",
+      "cacheVariables": {
+        "VCPKG_TARGET_TRIPLET": "arm64-android",
+        "VCPKG_HOST_TRIPLET": "x64-windows-static",
+        "QT_USE_VCPKG": "OFF"
+      },
+      "environment": {
+        "VCPKG_TRIPLET": "arm64-android",
+        "VCPKG_DEFAULT_HOST_TRIPLET": "x64-windows-static"
+      }
+    },
+    {
+      "name": "ci-android",
+      "inherits": [
+        "android-base"
+      ],
+      "cacheVariables": {
+        "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": {
+          "type": "FILEPATH",
+          "value": "$penv{QT_ANDROID_PATH}/lib/cmake/Qt6/qt.toolchain.cmake"
+        },
+        "QT_HOST_PATH": "$penv{QT_HOST_PATH}",
+        "ANDROID_SDK_ROOT": "$penv{ANDROID_SDK_ROOT}",
+        "ANDROID_NDK_ROOT": "$penv{ANDROID_NDK_ROOT}"
+      }
     }
   ],
   "buildPresets": [
@@ -187,6 +219,13 @@
       "name": "ci-debug",
       "configurePreset": "ci",
       "configuration": "Debug"
+    },
+    {
+      "name": "ci-android-apk",
+      "configurePreset": "ci-android",
+      "targets": [
+        "apk"
+      ]
     }
   ],
   "testPresets": [
