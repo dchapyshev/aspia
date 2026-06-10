@@ -29,6 +29,9 @@ namespace Ui {
 class RouterStatusWidget;
 } // namespace Ui
 
+class QLabel;
+class QStatusBar;
+
 class RouterStatusWidget final : public ContentWidget
 {
     Q_OBJECT
@@ -52,6 +55,8 @@ public:
     // ContentWidget implementation.
     QByteArray saveState() final;
     void restoreState(const QByteArray& state) final;
+    void activate(QStatusBar* statusbar) final;
+    void deactivate(QStatusBar* statusbar) final;
 
 public slots:
     void onEvent(qint64 router_id, const RouterStatusWidget::Event& event);
@@ -62,9 +67,11 @@ protected:
 
 private:
     void addEvent(const Event& event);
+    void updateStatusLabel();
 
     std::unique_ptr<Ui::RouterStatusWidget> ui;
     qint64 router_id_ = 0;
+    QLabel* status_events_label_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(RouterStatusWidget)
 };

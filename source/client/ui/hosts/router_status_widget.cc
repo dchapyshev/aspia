@@ -21,6 +21,8 @@
 #include <QDataStream>
 #include <QEvent>
 #include <QIcon>
+#include <QLabel>
+#include <QStatusBar>
 #include <QTreeWidget>
 
 #include "base/logging.h"
@@ -39,7 +41,8 @@ enum Column
 //--------------------------------------------------------------------------------------------------
 RouterStatusWidget::RouterStatusWidget(QWidget* parent)
     : ContentWidget(Type::ROUTER, parent),
-      ui(std::make_unique<Ui::RouterStatusWidget>())
+      ui(std::make_unique<Ui::RouterStatusWidget>()),
+      status_events_label_(new QLabel(this))
 {
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
@@ -61,6 +64,7 @@ void RouterStatusWidget::showRouter(qint64 router_id, const QList<Event>& events
         addEvent(event);
 
     ui->tree_events->scrollToBottom();
+    updateStatusLabel();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -96,6 +100,28 @@ void RouterStatusWidget::restoreState(const QByteArray& state)
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterStatusWidget::activate(QStatusBar* statusbar)
+{
+    if (!statusbar)
+        return;
+
+    updateStatusLabel();
+
+    statusbar->addWidget(status_events_label_);
+    status_events_label_->show();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterStatusWidget::deactivate(QStatusBar* statusbar)
+{
+    if (!statusbar)
+        return;
+
+    statusbar->removeWidget(status_events_label_);
+    status_events_label_->setParent(this);
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterStatusWidget::onEvent(qint64 router_id, const Event& event)
 {
     if (router_id != router_id_)
@@ -103,6 +129,15 @@ void RouterStatusWidget::onEvent(qint64 router_id, const Event& event)
 
     addEvent(event);
     ui->tree_events->scrollToBottom();
+    updateStatusLabel();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterStatusWidget::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+    ContentWidget::changeEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -123,9 +158,7 @@ void RouterStatusWidget::addEvent(const Event& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterStatusWidget::changeEvent(QEvent* event)
+void RouterStatusWidget::updateStatusLabel()
 {
-    if (event->type() == QEvent::LanguageChange)
-        ui->retranslateUi(this);
-    ContentWidget::changeEvent(event);
+    status_events_label_->setText(tr("%n event(s)", "", ui->tree_events->topLevelItemCount()));
 }
