@@ -18,6 +18,7 @@
 
 #include "client/ui/hosts/router_status_widget.h"
 
+#include <QDataStream>
 #include <QEvent>
 #include <QIcon>
 #include <QTreeWidget>
@@ -65,13 +66,33 @@ void RouterStatusWidget::showRouter(qint64 router_id, const QList<Event>& events
 //--------------------------------------------------------------------------------------------------
 QByteArray RouterStatusWidget::saveState()
 {
-    return QByteArray();
+    QByteArray buffer;
+
+    {
+        QDataStream stream(&buffer, QIODevice::WriteOnly);
+        stream.setVersion(QDataStream::Qt_6_10);
+
+        stream << ui->tree_events->header()->saveState();
+    }
+
+    return buffer;
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterStatusWidget::restoreState(const QByteArray& /* state */)
+void RouterStatusWidget::restoreState(const QByteArray& state)
 {
-    // Nothing to restore.
+    QDataStream stream(state);
+    stream.setVersion(QDataStream::Qt_6_10);
+
+    QByteArray columns_state;
+    stream >> columns_state;
+
+    if (!columns_state.isEmpty())
+    {
+        ui->tree_events->header()->restoreState(columns_state);
+        ui->tree_events->header()->setSectionsClickable(true);
+        ui->tree_events->header()->setSortIndicatorShown(true);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -284,6 +284,7 @@ QByteArray HostsTab::saveState()
         stream << router_users_widget_->saveState();
         stream << router_clients_widget_->saveState();
         stream << router_relays_widget_->saveState();
+        stream << router_status_widget_->saveState();
         stream << search_widget_->saveState();
         stream << ui->splitter->saveState();
     }
@@ -303,6 +304,7 @@ void HostsTab::restoreState(const QByteArray& state)
     QByteArray router_users_state;
     QByteArray router_clients_state;
     QByteArray router_relays_state;
+    QByteArray router_status_state;
     QByteArray search_state;
     QByteArray splitter_state;
 
@@ -312,6 +314,7 @@ void HostsTab::restoreState(const QByteArray& state)
     stream >> router_users_state;
     stream >> router_clients_state;
     stream >> router_relays_state;
+    stream >> router_status_state;
     stream >> search_state;
     stream >> splitter_state;
 
@@ -332,6 +335,9 @@ void HostsTab::restoreState(const QByteArray& state)
 
     if (!router_relays_state.isEmpty())
         router_relays_widget_->restoreState(router_relays_state);
+
+    if (!router_status_state.isEmpty())
+        router_status_widget_->restoreState(router_status_state);
 
     if (!search_state.isEmpty())
         search_widget_->restoreState(search_state);

@@ -34,8 +34,14 @@
      <property name="itemsExpandable">
       <bool>false</bool>
      </property>
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
      <attribute name="headerDefaultSectionSize">
       <number>160</number>
+     </attribute>
+     <attribute name="headerShowSortIndicator" stdset="0">
+      <bool>true</bool>
      </attribute>
      <column>
       <property name="text">
