@@ -21,8 +21,10 @@
     "openssl",
     "opus",
     "protobuf",
+    "zstd",
     {
       "name": "qtbase",
+      "platform": "!android",
       "default-features": false,
       "features": [
         "zstd",
@@ -83,8 +85,14 @@
         }
       ]
     },
-    "qtsvg",
-    "qttools",
+    {
+      "name": "qtsvg",
+      "platform": "!android"
+    },
+    {
+      "name": "qttools",
+      "platform": "!android"
+    },
     "sqlite3",
     {
       "name": "sqlite3",
