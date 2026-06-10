@@ -52,14 +52,20 @@ add_definitions(#-DQT_NO_CAST_FROM_ASCII
 
 set(QT_COMMON_LIBS
     Qt6::Core
-    Qt6::DeviceDiscoverySupportPrivate
-    Qt6::FbSupportPrivate
-    Qt6::Gui Qt6::QICOPlugin
+    Qt6::Gui
     Qt6::Network
-    Qt6::PrintSupport Qt6::PrintSupport_resources_1 Qt6::PrintSupport_resources_2
-    Qt6::Widgets Qt6::Widgets_resources_1 Qt6::Widgets_resources_2
+    Qt6::Widgets
     Qt6::Svg
     Qt6::Xml)
+
+if (NOT ANDROID)
+    list(APPEND QT_COMMON_LIBS
+        Qt6::DeviceDiscoverySupportPrivate
+        Qt6::FbSupportPrivate
+        Qt6::QICOPlugin
+        Qt6::PrintSupport Qt6::PrintSupport_resources_1 Qt6::PrintSupport_resources_2
+        Qt6::Widgets_resources_1 Qt6::Widgets_resources_2)
+endif()
 
 if (WIN32)
     set(QT_PLATFORM_LIBS Qt6::QWindowsIntegrationPlugin)
@@ -202,18 +208,21 @@ message(STATUS "Git branch: ${GIT_CURRENT_BRANCH}")
 message(STATUS "Git commit: ${GIT_COMMIT_HASH}")
 message(STATUS "Git commit count: ${GIT_COMMIT_COUNT}")
 
+add_subdirectory(tools)
 add_subdirectory(base)
 add_subdirectory(client)
 add_subdirectory(common)
-add_subdirectory(drivers)
 add_subdirectory(proto)
-add_subdirectory(relay)
-add_subdirectory(router)
-add_subdirectory(third_party)
-add_subdirectory(tools)
 
-if (WIN32 OR LINUX)
-    add_subdirectory(host)
+if (NOT ANDROID)
+    add_subdirectory(drivers)
+    add_subdirectory(relay)
+    add_subdirectory(router)
+    add_subdirectory(third_party)
+
+    if (WIN32 OR LINUX)
+        add_subdirectory(host)
+    endif()
 endif()
 
 ###################################################################################################
@@ -281,9 +290,11 @@ endif()
 # Client
 #--------------------------------------------------------------------------------------------------
 
-install(TARGETS aspia_client
-    BUNDLE DESTINATION . COMPONENT client
-    RUNTIME DESTINATION bin COMPONENT client)
+if (NOT ANDROID)
+    install(TARGETS aspia_client
+        BUNDLE DESTINATION . COMPONENT client
+        RUNTIME DESTINATION bin COMPONENT client)
+endif()
 set(CPACK_COMPONENT_CLIENT_NAME "aspia-client")
 set(CPACK_COMPONENT_CLIENT_DISPLAY_NAME "Aspia Client")
 set(CPACK_COMPONENT_CLIENT_DESCRIPTION "Client for managing hosts.")
