@@ -70,8 +70,8 @@ protected:
     void changeEvent(QEvent* event) final;
 
 private slots:
-    void onSwitchContent(Sidebar::Item::Type type);
-    void onSidebarContextMenu(Sidebar::Item::Type type, const QPoint& pos);
+    void onSwitchContent(SidebarItem::Type type);
+    void onSidebarContextMenu(SidebarItem::Type type, const QPoint& pos);
     void onCurrentHostChanged(qint64 entry_id);
     void onConnectAction(QAction* action);
     void onLocalConnect(qint64 entry_id);

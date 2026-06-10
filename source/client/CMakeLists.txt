@@ -267,7 +267,9 @@ list(APPEND SOURCE_CLIENT_CORE_UI_HOSTS_TAB
     ui/hosts/search_widget.cc
     ui/hosts/search_widget.h
     ui/hosts/sidebar.cc
-    ui/hosts/sidebar.h)
+    ui/hosts/sidebar.h
+    ui/hosts/sidebar_items.cc
+    ui/hosts/sidebar_items.h)
 
 source_group("" FILES ${SOURCE_CLIENT_CORE})
 source_group(online_checker FILES ${SOURCE_CLIENT_CORE_ONLINE_CHECKER})

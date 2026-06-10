@@ -19,7 +19,6 @@
 #ifndef CLIENT_UI_HOSTS_SIDEBAR_H
 #define CLIENT_UI_HOSTS_SIDEBAR_H
 
-#include <QCoreApplication>
 #include <QDrag>
 #include <QHash>
 #include <QMimeData>
@@ -27,12 +26,10 @@
 #include <QTreeWidget>
 #include <QWidget>
 
-#include <variant>
-
 #include "client/router.h"
 #include "client/ui/hosts/router_status_widget.h"
+#include "client/ui/hosts/sidebar_items.h"
 
-class GroupConfig;
 class RouterConfig;
 
 class Sidebar final : public QWidget
@@ -43,182 +40,22 @@ public:
     explicit Sidebar(QWidget* parent = nullptr);
     ~Sidebar() final;
 
-    class Item : public QTreeWidgetItem
-    {
-    public:
-        // ROUTER_GROUP covers both workspaces under a router and host groups inside a
-        // workspace. The two are distinguished by RouterGroupItem::isWorkspace().
-        // ROUTER_HOSTS/ROUTER_USERS/ROUTER_CLIENTS/ROUTER_RELAYS are fixed administrative sections
-        // that belong to a router, alongside its ROUTER_GROUP subtree.
-        enum Type
-        {
-            LOCAL_GROUP,
-            ROUTER,
-            ROUTER_GROUP,
-            ROUTER_HOSTS,
-            ROUTER_USERS,
-            ROUTER_CLIENTS,
-            ROUTER_RELAYS
-        };
-
-        Type itemType() const { return type_; }
-        qint64 groupId() const { return group_id_; }
-
-        // Re-apply translated text after a language change. Data-named items (groups, routers)
-        // keep their names, so the default is a no-op; fixed-label items override it.
-        virtual void retranslate() {}
-
-    protected:
-        Item(Type type, qint64 group_id, QTreeWidget* parent);
-        Item(Type type, qint64 group_id, QTreeWidgetItem* parent);
-
-    private:
-        Type type_;
-        qint64 group_id_;
-    };
-
-    class LocalGroupItem final : public Item
-    {
-    public:
-        LocalGroupItem(const GroupConfig& group, QTreeWidget* parent);
-        LocalGroupItem(const GroupConfig& group, QTreeWidgetItem* parent);
-
-        qint64 parentId() const { return parent_id_; }
-        QString groupName() const { return group_name_; }
-
-    private:
-        qint64 parent_id_;
-        QString group_name_;
-    };
-
-    class RouterItem final : public Item
-    {
-    public:
-        RouterItem(qint64 router_id, const QString& name, QTreeWidget* parent);
-
-        enum class Status { OFFLINE, CONNECTING, ONLINE };
-
-        qint64 routerId() const;
-        const QString& name() const { return name_; }
-        void setName(const QString& name);
-        void setStatus(Status status);
-
-    private:
-        qint64 router_id_;
-        QString name_;
-    };
-
-    class RouterGroupItem final : public Item
-    {
-    public:
-        // Workspace under a router. group_id is 0 (no host-group filter); the workspace's
-        // own entry_id lives in workspaceId(). The QTreeWidgetItem parent is the RouterItem.
-        RouterGroupItem(qint64 router_id, const Router::Workspace& workspace, QTreeWidgetItem* parent);
-
-        // Host group inside a workspace. group.workspace_id identifies the enclosing
-        // workspace; the QTreeWidgetItem parent is either the workspace item or a parent
-        // group item (mirrors group.parent_id, so it is not stored separately).
-        RouterGroupItem(qint64 router_id, const Router::Group& group, QTreeWidgetItem* parent);
-
-        qint64 routerId() const { return router_id_; }
-        qint64 workspaceId() const;
-        QString workspaceName() const;
-        bool isWorkspace() const { return std::holds_alternative<Router::Workspace>(data_); }
-
-        // The full backing record. Only valid in the corresponding kind (use isWorkspace()
-        // to discriminate); calling the wrong one throws std::bad_variant_access.
-        const Router::Workspace& workspace() const { return std::get<Router::Workspace>(data_); }
-        const Router::Group& group() const { return std::get<Router::Group>(data_); }
-
-        // Re-sync the cached record after a server-side change. The text/icon follow.
-        void update(const Router::Workspace& workspace);
-        void update(const Router::Group& group);
-
-    private:
-        const qint64 router_id_;
-        std::variant<Router::Workspace, Router::Group> data_;
-    };
-
-    class RouterHostsItem final : public Item
-    {
-        Q_DECLARE_TR_FUNCTIONS(RouterHostsItem)
-
-    public:
-        RouterHostsItem(qint64 router_id, QTreeWidgetItem* parent);
-
-        qint64 routerId() const { return router_id_; }
-
-        // Item implementation.
-        void retranslate() final;
-
-    private:
-        const qint64 router_id_;
-    };
-
-    class RouterUsersItem final : public Item
-    {
-        Q_DECLARE_TR_FUNCTIONS(RouterUsersItem)
-
-    public:
-        RouterUsersItem(qint64 router_id, QTreeWidgetItem* parent);
-
-        qint64 routerId() const { return router_id_; }
-
-        // Item implementation.
-        void retranslate() final;
-
-    private:
-        const qint64 router_id_;
-    };
-
-    class RouterClientsItem final : public Item
-    {
-        Q_DECLARE_TR_FUNCTIONS(RouterClientsItem)
-
-    public:
-        RouterClientsItem(qint64 router_id, QTreeWidgetItem* parent);
-
-        qint64 routerId() const { return router_id_; }
-
-        // Item implementation.
-        void retranslate() final;
-
-    private:
-        const qint64 router_id_;
-    };
-
-    class RouterRelaysItem final : public Item
-    {
-        Q_DECLARE_TR_FUNCTIONS(RouterRelaysItem)
-
-    public:
-        RouterRelaysItem(qint64 router_id, QTreeWidgetItem* parent);
-
-        qint64 routerId() const { return router_id_; }
-
-        // Item implementation.
-        void retranslate() final;
-
-    private:
-        const qint64 router_id_;
-    };
-
     class GroupMimeData final : public QMimeData
     {
     public:
         GroupMimeData() = default;
         ~GroupMimeData() final = default;
 
-        void setGroupItem(LocalGroupItem* group_item, const QString& mime_type)
+        void setGroupItem(SidebarLocalGroup* group_item, const QString& mime_type)
         {
             group_item_ = group_item;
             setData(mime_type, QByteArray());
         }
 
-        LocalGroupItem* groupItem() const { return group_item_; }
+        SidebarLocalGroup* groupItem() const { return group_item_; }
 
     private:
-        LocalGroupItem* group_item_ = nullptr;
+        SidebarLocalGroup* group_item_ = nullptr;
     };
 
     class GroupDrag final : public QDrag
@@ -230,7 +67,7 @@ public:
             // Nothing
         }
 
-        void setGroupItem(LocalGroupItem* group_item, const QString& mime_type)
+        void setGroupItem(SidebarLocalGroup* group_item, const QString& mime_type)
         {
             GroupMimeData* mime_data = new GroupMimeData();
             mime_data->setGroupItem(group_item, mime_type);
@@ -244,16 +81,16 @@ public:
         RouterGroupMimeData() = default;
         ~RouterGroupMimeData() final = default;
 
-        void setGroupItem(RouterGroupItem* group_item, const QString& mime_type)
+        void setGroupItem(SidebarRouterGroup* group_item, const QString& mime_type)
         {
             group_item_ = group_item;
             setData(mime_type, QByteArray());
         }
 
-        RouterGroupItem* groupItem() const { return group_item_; }
+        SidebarRouterGroup* groupItem() const { return group_item_; }
 
     private:
-        RouterGroupItem* group_item_ = nullptr;
+        SidebarRouterGroup* group_item_ = nullptr;
     };
 
     class RouterGroupDrag final : public QDrag
@@ -265,7 +102,7 @@ public:
             // Nothing
         }
 
-        void setGroupItem(RouterGroupItem* group_item, const QString& mime_type)
+        void setGroupItem(SidebarRouterGroup* group_item, const QString& mime_type)
         {
             RouterGroupMimeData* mime_data = new RouterGroupMimeData();
             mime_data->setGroupItem(group_item, mime_type);
@@ -281,13 +118,13 @@ public:
     void reloadGroups(qint64 selected_group_id = 0);
     void loadRouters();
     void reloadRouters();
-    void setRouterStatus(qint64 router_id, RouterItem::Status status);
+    void setRouterStatus(qint64 router_id, SidebarRouter::Status status);
     void setRouterWorkspaces(qint64 router_id, const QList<Router::Workspace>& workspaces);
     void setRouterHostGroups(qint64 router_id, qint64 workspace_id,
                              const QList<Router::Group>& groups);
     qint64 currentGroupId() const;
-    Item* currentItem() const;
-    RouterItem* routerById(qint64 router_id) const;
+    SidebarItem* currentItem() const;
+    SidebarRouter* routerById(qint64 router_id) const;
     QList<qint64> routerIds() const;
     QList<qint64> routerWorkspaceIds(qint64 router_id) const;
 
@@ -312,8 +149,8 @@ protected:
     bool eventFilter(QObject* watched, QEvent* event) final;
 
 signals:
-    void sig_switchContent(Sidebar::Item::Type type);
-    void sig_contextMenu(Sidebar::Item::Type type, const QPoint& pos);
+    void sig_switchContent(SidebarItem::Type type);
+    void sig_contextMenu(SidebarItem::Type type, const QPoint& pos);
     void sig_itemDropped();
     void sig_routersChanged();
     void sig_routerHostMoved(qint64 router_id);
@@ -361,7 +198,7 @@ private:
     QHash<qint64, Router*> routers_;
     QHash<qint64, QList<RouterStatusWidget::Event>> router_events_;
 
-    LocalGroupItem* local_root_ = nullptr;
+    SidebarLocalGroup* local_root_ = nullptr;
 
     qint64 current_group_id_ = 0;
     QString local_host_mime_type_;
