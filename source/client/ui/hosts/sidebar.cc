@@ -254,19 +254,43 @@ void Sidebar::setRouterWorkspaces(qint64 router_id, const QList<Router::Workspac
     if (!router)
         return;
 
-    // Drop existing ROUTER_WORKSPACE children, keep anything else untouched.
+    // Incremental diff with the existing workspace items. Keeping items in place preserves
+    // selection, expansion state and the host-group subtrees across refreshes.
+    QSet<qint64> incoming_ids;
+    incoming_ids.reserve(workspaces.size());
+    for (const Router::Workspace& workspace : workspaces)
+        incoming_ids.insert(workspace.entry_id);
+
+    // Iterate in reverse so takeChild() index shifts do not skip siblings.
+    QHash<qint64, SidebarRouterWorkspace*> existing;
     for (int i = router->childCount() - 1; i >= 0; --i)
     {
         SidebarItem* child = static_cast<SidebarItem*>(router->child(i));
-        if (child->itemType() == SidebarItem::ROUTER_WORKSPACE)
+        if (child->itemType() != SidebarItem::ROUTER_WORKSPACE)
+            continue;
+
+        auto* workspace_item = static_cast<SidebarRouterWorkspace*>(child);
+        if (!incoming_ids.contains(workspace_item->workspaceId()))
+        {
             delete router->takeChild(i);
+            continue;
+        }
+        existing.insert(workspace_item->workspaceId(), workspace_item);
     }
 
     Settings settings;
     for (const Router::Workspace& workspace : workspaces)
     {
-        auto* item = new SidebarRouterWorkspace(router_id, workspace, router);
-        item->setExpanded(settings.isWorkspaceExpanded(router_id, workspace.entry_id));
+        SidebarRouterWorkspace* item = existing.value(workspace.entry_id);
+        if (!item)
+        {
+            item = new SidebarRouterWorkspace(router_id, workspace, router);
+            item->setExpanded(settings.isWorkspaceExpanded(router_id, workspace.entry_id));
+        }
+        else
+        {
+            item->update(workspace);
+        }
     }
 
     router->setExpanded(true);
