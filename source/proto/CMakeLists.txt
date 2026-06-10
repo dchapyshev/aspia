@@ -55,7 +55,17 @@ list(APPEND SOURCE_PROTO
 source_group("" FILES ${SOURCE_PROTO} ${PROTO_CC_FILES} ${PROTO_H_FILES})
 
 add_library(aspia_proto STATIC ${SOURCE_PROTO})
-add_dependencies(aspia_proto qtprotoc)
+
+# For cross builds the plugin is compiled as a separate host project (see tools/CMakeLists.txt).
+if (CMAKE_CROSSCOMPILING)
+    set(QTPROTOC_TARGET qtprotoc_host)
+    set(QTPROTOC_PLUGIN "protoc-gen-qt=${QTPROTOC_EXECUTABLE}")
+else()
+    set(QTPROTOC_TARGET qtprotoc)
+    set(QTPROTOC_PLUGIN "protoc-gen-qt=$<TARGET_FILE:qtprotoc>")
+endif()
+
+add_dependencies(aspia_proto ${QTPROTOC_TARGET})
 
 set(PROTO_FILES ${SOURCE_PROTO})
 list(FILTER PROTO_FILES INCLUDE REGEX "\\.proto$")
@@ -66,8 +76,8 @@ protobuf_generate(LANGUAGE cpp TARGET aspia_proto ${PROTO_FILES})
 # Generate files with Qt meta types.
 protobuf_generate(LANGUAGE qt
                   TARGET aspia_proto
-                  PLUGIN "protoc-gen-qt=$<TARGET_FILE:qtprotoc>"
-                  DEPENDENCIES qtprotoc
+                  PLUGIN "${QTPROTOC_PLUGIN}"
+                  DEPENDENCIES ${QTPROTOC_TARGET}
                   GENERATE_EXTENSIONS .h .cc
                   ${PROTO_FILES})
 

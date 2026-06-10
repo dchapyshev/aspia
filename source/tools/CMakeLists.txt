@@ -16,7 +16,32 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-add_subdirectory(qtprotoc)
+if (CMAKE_CROSSCOMPILING)
+    # |qtprotoc| is a protoc plugin and runs on the build host, so for cross builds it is compiled
+    # as a separate host project against the host protobuf installed by vcpkg.
+    include(ExternalProject)
+
+    if (CMAKE_HOST_WIN32)
+        set(QTPROTOC_HOST_SUFFIX ".exe")
+    else()
+        set(QTPROTOC_HOST_SUFFIX "")
+    endif()
+
+    set(QTPROTOC_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/qtprotoc_host)
+    set(QTPROTOC_EXECUTABLE ${QTPROTOC_BINARY_DIR}/qtprotoc${QTPROTOC_HOST_SUFFIX}
+        CACHE INTERNAL "Path to the host qtprotoc executable")
+
+    ExternalProject_Add(qtprotoc_host
+        SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/qtprotoc
+        BINARY_DIR ${QTPROTOC_BINARY_DIR}
+        CMAKE_ARGS
+            -DCMAKE_BUILD_TYPE=Release
+            -DCMAKE_PREFIX_PATH=${VCPKG_INSTALLED_DIR}/${VCPKG_HOST_TRIPLET}
+        INSTALL_COMMAND ""
+        BUILD_BYPRODUCTS ${QTPROTOC_EXECUTABLE})
+else()
+    add_subdirectory(qtprotoc)
+endif()
 
 if (WIN32)
     add_subdirectory(sha256)

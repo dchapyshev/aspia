@@ -16,5 +16,21 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
+# The plugin runs on the build host, so when cross-compiling it is built as a separate standalone
+# host project (see tools/CMakeLists.txt).
+if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+    cmake_minimum_required(VERSION 3.21)
+
+    project(qtprotoc LANGUAGES CXX)
+
+    set(CMAKE_CXX_STANDARD 20)
+
+    if (MSVC)
+        set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    endif()
+
+    find_package(protobuf CONFIG REQUIRED)
+endif()
+
 add_executable(qtprotoc main.cc)
 target_link_libraries(qtprotoc PRIVATE protobuf::libprotoc)
