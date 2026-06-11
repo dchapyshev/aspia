@@ -18,17 +18,23 @@
 
 #include "client/android/routers_widget.h"
 
+#include <QDateTime>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QHeaderView>
 #include <QPainter>
+#include <QSet>
 #include <QTreeWidgetItem>
 
 #include "base/crypto/data_cryptor.h"
 #include "base/gui_application.h"
+#include "base/net/tcp_channel.h"
 #include "client/android/router_edit_dialog.h"
+#include "client/android/router_status_dialog.h"
+#include "client/android/two_factor_dialog.h"
 #include "client/config.h"
 #include "client/database.h"
+#include "client/router.h"
 #include "common/android/controls.h"
 #include "common/android/icon_button.h"
 #include "common/android/tree_widget.h"
@@ -37,6 +43,23 @@ namespace {
 
 constexpr int kRowActionsWidth = 96;
 constexpr double kPlaceholderTextOpacity = 0.6;
+
+//--------------------------------------------------------------------------------------------------
+QString statusIconPath(Router::Status status)
+{
+    switch (status)
+    {
+        case Router::Status::CONNECTING:
+            return ":/img/router-connecting.svg";
+
+        case Router::Status::ONLINE:
+            return ":/img/router-online.svg";
+
+        case Router::Status::OFFLINE:
+        default:
+            return ":/img/router-offline.svg";
+    }
+}
 
 } // namespace
 
@@ -109,6 +132,7 @@ RoutersWidget::RoutersWidget(QWidget* parent)
 
     connect(add_button_, &IconButton::clicked, this, &RoutersWidget::onAddRouter);
     connect(edit_button_, &IconButton::clicked, this, &RoutersWidget::onToggleEditMode);
+    connect(list_, &QTreeWidget::itemClicked, this, &RoutersWidget::onRouterActivated);
 
     retranslate();
     reload();
@@ -137,13 +161,17 @@ void RoutersWidget::reload()
     if (!DataCryptor::instance().isValid())
         return;
 
-    const QIcon icon = GuiApplication::svgIcon(":/img/stack.svg");
+    syncSessions();
 
     for (const RouterConfig& router : Database::instance().routerList())
     {
+        const qint64 router_id = router.routerId();
+        const Router* session = sessions_.value(router_id);
+        const Router::Status status = session ? session->status() : Router::Status::OFFLINE;
+
         QTreeWidgetItem* item = new QTreeWidgetItem(list_, {router.displayLabel()});
-        item->setIcon(0, icon);
-        item->setData(0, Qt::UserRole, router.routerId());
+        item->setIcon(0, GuiApplication::svgIcon(statusIconPath(status)));
+        item->setData(0, Qt::UserRole, router_id);
     }
 
     placeholder_->setVisible(list_->topLevelItemCount() == 0);
@@ -184,6 +212,26 @@ void RoutersWidget::onToggleEditMode()
     edit_mode_ = edit_button_->isChecked();
     list_->setColumnHidden(1, !edit_mode_);
     updateRowActions();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RoutersWidget::onRouterActivated(QTreeWidgetItem* item, int /* column */)
+{
+    // In edit mode the row hosts the edit and delete buttons; tapping the row itself does nothing.
+    if (edit_mode_ || !item)
+        return;
+
+    const qint64 router_id = item->data(0, Qt::UserRole).toLongLong();
+
+    RouterStatusDialog dialog(item->text(0), router_id, events_.value(router_id), this);
+    connect(this, &RoutersWidget::sig_routerEvent, &dialog, &RouterStatusDialog::onRouterEvent);
+    connect(&dialog, &RouterStatusDialog::sig_clearEvents, this, [this](qint64 id)
+    {
+        auto it = events_.find(id);
+        if (it != events_.end())
+            it->clear();
+    });
+    dialog.exec();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -241,4 +289,150 @@ void RoutersWidget::removeRouter(qint64 router_id)
 {
     if (Database::instance().removeRouter(router_id))
         reload();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RoutersWidget::syncSessions()
+{
+    const QList<RouterConfig> configs = Database::instance().routerList();
+
+    QSet<qint64> present;
+    for (const RouterConfig& config : std::as_const(configs))
+        present.insert(config.routerId());
+
+    // Drop sessions whose router was removed.
+    const QList<qint64> existing = sessions_.keys();
+    for (qint64 router_id : existing)
+    {
+        if (!present.contains(router_id))
+        {
+            Router* session = sessions_.take(router_id);
+            session->disconnectFromRouter();
+            session->deleteLater();
+            events_.remove(router_id);
+        }
+    }
+
+    // Connect new routers, refresh the configuration of the ones already connected.
+    for (const RouterConfig& config : std::as_const(configs))
+    {
+        if (!config.isValid())
+            continue;
+
+        if (Router* session = sessions_.value(config.routerId()))
+            session->updateConfig(config);
+        else
+            createRouterSession(config);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void RoutersWidget::createRouterSession(const RouterConfig& config)
+{
+    Router* router = new Router(config, this);
+    sessions_.insert(config.routerId(), router);
+    events_.insert(config.routerId(), {});
+
+    connect(router, &Router::sig_statusChanged, this, [this](qint64 id, Router::Status status)
+    {
+        if (QTreeWidgetItem* item = itemForRouter(id))
+            item->setIcon(0, GuiApplication::svgIcon(statusIconPath(status)));
+
+        const Router* session = sessions_.value(id);
+        const QString address = session ? session->config().address() : QString();
+
+        switch (status)
+        {
+            case Router::Status::CONNECTING:
+                addRouterEvent(id, RouterEvent::Severity::INFO,
+                               tr("Connecting to router %1...").arg(address));
+                break;
+
+            case Router::Status::ONLINE:
+                addRouterEvent(id, RouterEvent::Severity::INFO,
+                               tr("Connection to router %1 established.").arg(address));
+                break;
+
+            case Router::Status::OFFLINE:
+                addRouterEvent(id, RouterEvent::Severity::WARNING,
+                               tr("Disconnected from router %1.").arg(address));
+                break;
+        }
+    });
+
+    connect(router, &Router::sig_errorOccurred, this,
+            [this](qint64 id, TcpChannel::ErrorCode error_code)
+    {
+        RouterEvent::Severity severity = RouterEvent::Severity::WARNING;
+        if (error_code == TcpChannel::ErrorCode::CRYPTO_ERROR ||
+            error_code == TcpChannel::ErrorCode::ACCESS_DENIED)
+        {
+            severity = RouterEvent::Severity::CRITICAL;
+        }
+
+        addRouterEvent(id, severity,
+                       tr("Network error: %1.").arg(TcpChannel::errorToString(error_code)));
+    });
+
+    connect(router, &Router::sig_twoFactorCodeRequired, this, [this](qint64 id)
+    {
+        requestTwoFactorCode(id, QString());
+    });
+
+    connect(router, &Router::sig_twoFactorEnrollment, this,
+            [this](qint64 id, const QString& otpauth_uri)
+    {
+        requestTwoFactorCode(id, otpauth_uri);
+    });
+
+    connect(router, &Router::sig_passwordChangeRequired, this, [this](qint64 id)
+    {
+        addRouterEvent(id, RouterEvent::Severity::CRITICAL,
+                       tr("The router requires a password change, which is not supported here yet."));
+    });
+
+    router->connectToRouter();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RoutersWidget::requestTwoFactorCode(qint64 router_id, const QString& otpauth_uri)
+{
+    Router* session = sessions_.value(router_id);
+    if (!session)
+        return;
+
+    TwoFactorDialog dialog(otpauth_uri, this);
+    if (dialog.exec() == QDialog::Accepted)
+        session->submitTwoFactorCode(dialog.code());
+    else
+        session->disconnectFromRouter();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RoutersWidget::addRouterEvent(qint64 router_id, RouterEvent::Severity severity,
+                                   const QString& text)
+{
+    RouterEvent event;
+    event.time = QDateTime::currentDateTime();
+    event.severity = severity;
+    event.text = text;
+
+    auto it = events_.find(router_id);
+    if (it != events_.end())
+        it->append(event);
+
+    emit sig_routerEvent(router_id, event);
+}
+
+//--------------------------------------------------------------------------------------------------
+QTreeWidgetItem* RoutersWidget::itemForRouter(qint64 router_id) const
+{
+    for (int i = 0; i < list_->topLevelItemCount(); ++i)
+    {
+        QTreeWidgetItem* item = list_->topLevelItem(i);
+        if (item->data(0, Qt::UserRole).toLongLong() == router_id)
+            return item;
+    }
+
+    return nullptr;
 }

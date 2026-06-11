@@ -69,10 +69,14 @@ list(APPEND SOURCE_CLIENT_ANDROID
     android/master_password_dialog.h
     android/router_edit_dialog.cc
     android/router_edit_dialog.h
+    android/router_status_dialog.cc
+    android/router_status_dialog.h
     android/routers_widget.cc
     android/routers_widget.h
     android/settings_widget.cc
-    android/settings_widget.h)
+    android/settings_widget.h
+    android/two_factor_dialog.cc
+    android/two_factor_dialog.h)
 
 list(APPEND SOURCE_CLIENT_CORE_ONLINE_CHECKER
     online_checker/online_checker.cc

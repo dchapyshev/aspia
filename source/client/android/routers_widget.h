@@ -19,12 +19,18 @@
 #ifndef CLIENT_ANDROID_ROUTERS_WIDGET_H
 #define CLIENT_ANDROID_ROUTERS_WIDGET_H
 
+#include <QHash>
 #include <QList>
 #include <QWidget>
 
+#include "client/android/router_status_dialog.h"
+
 class IconButton;
+class Router;
+class RouterConfig;
 class RoutersEmptyView;
 class TreeWidget;
+class QTreeWidgetItem;
 
 // Routers screen for the Android client: the list of configured routers. The add and edit actions
 // are exposed via appBarActions() to be hosted in the top app bar.
@@ -47,9 +53,13 @@ signals:
     // list is empty).
     void appBarActionsChanged();
 
+    // Emitted when a new connection event is recorded, so an open status dialog can append it.
+    void sig_routerEvent(qint64 router_id, const RouterEvent& event);
+
 private slots:
     void onAddRouter();
     void onToggleEditMode();
+    void onRouterActivated(QTreeWidgetItem* item, int column);
 
 private:
     void updateRowActions();
@@ -57,11 +67,21 @@ private:
     void editRouter(qint64 router_id);
     void removeRouter(qint64 router_id);
 
+    // Connects to the configured routers, reusing existing sessions and dropping removed ones.
+    void syncSessions();
+    void createRouterSession(const RouterConfig& config);
+    void requestTwoFactorCode(qint64 router_id, const QString& otpauth_uri);
+    void addRouterEvent(qint64 router_id, RouterEvent::Severity severity, const QString& text);
+    QTreeWidgetItem* itemForRouter(qint64 router_id) const;
+
     TreeWidget* list_ = nullptr;
     RoutersEmptyView* placeholder_ = nullptr;
     IconButton* add_button_ = nullptr;
     IconButton* edit_button_ = nullptr;
     bool edit_mode_ = false;
+
+    QHash<qint64, Router*> sessions_;
+    QHash<qint64, QList<RouterEvent>> events_;
 
     Q_DISABLE_COPY_MOVE(RoutersWidget)
 };
