@@ -284,36 +284,34 @@ Routers added: %4</source>
 <context>
     <name>AndroidMainWindow</name>
     <message>
-        <location filename="../client/android/main_window.cc" line="49"/>
-        <location filename="../client/android/main_window.cc" line="54"/>
-        <location filename="../client/android/main_window.cc" line="94"/>
-        <location filename="../client/android/main_window.cc" line="117"/>
+        <location filename="../client/android/main_window.cc" line="65"/>
+        <location filename="../client/android/main_window.cc" line="73"/>
         <location filename="../client/android/main_window.cc" line="123"/>
+        <location filename="../client/android/main_window.cc" line="178"/>
+        <location filename="../client/android/main_window.cc" line="184"/>
         <source>Local</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="50"/>
-        <location filename="../client/android/main_window.cc" line="55"/>
-        <location filename="../client/android/main_window.cc" line="98"/>
-        <location filename="../client/android/main_window.cc" line="118"/>
-        <location filename="../client/android/main_window.cc" line="125"/>
+        <location filename="../client/android/main_window.cc" line="66"/>
+        <location filename="../client/android/main_window.cc" line="74"/>
+        <location filename="../client/android/main_window.cc" line="127"/>
+        <location filename="../client/android/main_window.cc" line="179"/>
+        <location filename="../client/android/main_window.cc" line="186"/>
         <source>Remote</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="51"/>
-        <location filename="../client/android/main_window.cc" line="56"/>
-        <location filename="../client/android/main_window.cc" line="102"/>
-        <location filename="../client/android/main_window.cc" line="119"/>
-        <location filename="../client/android/main_window.cc" line="127"/>
+        <location filename="../client/android/main_window.cc" line="75"/>
+        <location filename="../client/android/main_window.cc" line="131"/>
+        <location filename="../client/android/main_window.cc" line="180"/>
         <source>Routers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="57"/>
-        <location filename="../client/android/main_window.cc" line="106"/>
-        <location filename="../client/android/main_window.cc" line="120"/>
+        <location filename="../client/android/main_window.cc" line="76"/>
+        <location filename="../client/android/main_window.cc" line="135"/>
+        <location filename="../client/android/main_window.cc" line="181"/>
         <source>Settings</source>
         <translation type="unfinished">設定</translation>
     </message>
@@ -3172,6 +3170,100 @@ Hosts skipped: %6</source>
     </message>
 </context>
 <context>
+    <name>MasterPasswordDialog</name>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="50"/>
+        <source>Set Master Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="51"/>
+        <source>Set a master password required to unlock the application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="55"/>
+        <location filename="../client/android/master_password_dialog.cc" line="96"/>
+        <source>Unlock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="56"/>
+        <source>Enter the master password to unlock the application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="60"/>
+        <source>Change Master Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="61"/>
+        <source>Enter your current password and choose a new one.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="65"/>
+        <source>New Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="65"/>
+        <source>Password</source>
+        <translation type="unfinished">密碼</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="80"/>
+        <source>Current Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="90"/>
+        <source>Confirm Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="95"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="96"/>
+        <source>Change</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="96"/>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="112"/>
+        <source>Invalid master password.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="125"/>
+        <source>Password cannot be empty.</source>
+        <translation type="unfinished">密碼不能為空。</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="132"/>
+        <source>The entered passwords do not match.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="142"/>
+        <source>Unable to set master password.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="151"/>
+        <source>Invalid current password or unable to change it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MsgBox</name>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="49"/>
@@ -3508,6 +3600,69 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="142"/>
         <location filename="../client/desktop/router_dialog.cc" line="151"/>
+        <source>Failed to save the router.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RouterEditDialog</name>
+    <message>
+        <location filename="../client/android/router_edit_dialog.cc" line="50"/>
+        <source>Add Router</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_edit_dialog.cc" line="50"/>
+        <source>Edit Router</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_edit_dialog.cc" line="52"/>
+        <source>Name</source>
+        <translation type="unfinished">名稱</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_edit_dialog.cc" line="53"/>
+        <source>Address</source>
+        <translation type="unfinished">位址</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_edit_dialog.cc" line="54"/>
+        <source>User Name</source>
+        <translation type="unfinished">使用者名稱</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_edit_dialog.cc" line="55"/>
+        <source>Password</source>
+        <translation type="unfinished">密碼</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_edit_dialog.cc" line="84"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_edit_dialog.cc" line="85"/>
+        <source>Save</source>
+        <translation type="unfinished">儲存</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_edit_dialog.cc" line="101"/>
+        <source>An invalid router address was entered.</source>
+        <translation type="unfinished">輸入的路由器位址無效。</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_edit_dialog.cc" line="110"/>
+        <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_edit_dialog.cc" line="120"/>
+        <source>Password cannot be empty.</source>
+        <translation type="unfinished">密碼不能為空。</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_edit_dialog.cc" line="139"/>
         <source>Failed to save the router.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4036,6 +4191,19 @@ Hosts skipped: %6</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
+    </message>
+</context>
+<context>
+    <name>RouterStatusDialog</name>
+    <message>
+        <location filename="../client/android/router_status_dialog.cc" line="86"/>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_status_dialog.cc" line="89"/>
+        <source>Close</source>
+        <translation type="unfinished">關閉</translation>
     </message>
 </context>
 <context>
@@ -4605,6 +4773,39 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>RoutersWidget</name>
+    <message>
+        <location filename="../client/android/routers_widget.cc" line="198"/>
+        <source>No routers added</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/routers_widget.cc" line="348"/>
+        <source>Connecting to router %1...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/routers_widget.cc" line="353"/>
+        <source>Connection to router %1 established.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/routers_widget.cc" line="358"/>
+        <source>Disconnected from router %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/routers_widget.cc" line="374"/>
+        <source>Network error: %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/routers_widget.cc" line="391"/>
+        <source>The router requires a password change, which is not supported here yet.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SearchDialog</name>
     <message>
         <location filename="../client/desktop/hosts/search_dialog.ui" line="14"/>
@@ -5133,107 +5334,117 @@ Are you sure you want to continue?</source>
 <context>
     <name>SettingsWidget</name>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="107"/>
+        <location filename="../client/android/settings_widget.cc" line="110"/>
         <source>Interface</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="110"/>
+        <location filename="../client/android/settings_widget.cc" line="113"/>
         <source>Language</source>
         <translation type="unfinished">語言</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="123"/>
+        <location filename="../client/android/settings_widget.cc" line="126"/>
         <source>Theme</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="139"/>
-        <source>UDP Connections</source>
-        <translation type="unfinished"></translation>
+        <location filename="../client/android/settings_widget.cc" line="142"/>
+        <source>Security</source>
+        <translation type="unfinished">安全性</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="153"/>
-        <source>Allow direct connections</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/android/settings_widget.cc" line="154"/>
-        <source>Allow UDP Hole Punching</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/android/settings_widget.cc" line="155"/>
-        <source>Allow PCP protocol</source>
+        <location filename="../client/android/settings_widget.cc" line="144"/>
+        <source>Change Master Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="156"/>
+        <source>UDP Connections</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="170"/>
+        <source>Allow direct connections</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="171"/>
+        <source>Allow UDP Hole Punching</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="172"/>
+        <source>Allow PCP protocol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="173"/>
         <source>Allow NAT-PMP protocol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="157"/>
+        <location filename="../client/android/settings_widget.cc" line="174"/>
         <source>Allow UPnP protocol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="163"/>
+        <location filename="../client/android/settings_widget.cc" line="180"/>
         <source>Remote Desktop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="165"/>
+        <location filename="../client/android/settings_widget.cc" line="182"/>
         <source>Enable audio</source>
         <translation type="unfinished">啟用音訊</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="170"/>
+        <location filename="../client/android/settings_widget.cc" line="187"/>
         <source>Enable clipboard</source>
         <translation type="unfinished">啟用剪貼簿</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="175"/>
+        <location filename="../client/android/settings_widget.cc" line="192"/>
         <source>Show shape of remote cursor</source>
         <translation type="unfinished">顯示遠端游標形狀</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="181"/>
+        <location filename="../client/android/settings_widget.cc" line="198"/>
         <source>Show position of remote cursor</source>
         <translation type="unfinished">顯示遠端游標位置</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="187"/>
+        <location filename="../client/android/settings_widget.cc" line="204"/>
         <source>Disable desktop effects</source>
         <translation type="unfinished">停用桌面特效</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="193"/>
+        <location filename="../client/android/settings_widget.cc" line="210"/>
         <source>Disable desktop wallpaper</source>
         <translation type="unfinished">停用桌布</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="199"/>
+        <location filename="../client/android/settings_widget.cc" line="216"/>
         <source>Lock computer at disconnect</source>
         <translation type="unfinished">在中斷連線時鎖定電腦</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="205"/>
+        <location filename="../client/android/settings_widget.cc" line="222"/>
         <source>Block remote input</source>
         <translation type="unfinished">阻止遠端輸入</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="211"/>
+        <location filename="../client/android/settings_widget.cc" line="228"/>
         <source>Send key combinations</source>
         <translation type="unfinished">發送按鍵組合</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="218"/>
+        <location filename="../client/android/settings_widget.cc" line="235"/>
         <source>Preferred resolution</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="219"/>
+        <location filename="../client/android/settings_widget.cc" line="236"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7638,6 +7849,44 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/two_factor_code_dialog.ui" line="50"/>
         <source>Enter the 6-digit code from your authenticator app.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TwoFactorDialog</name>
+    <message>
+        <location filename="../client/android/two_factor_dialog.cc" line="64"/>
+        <source>Two-Factor Authentication</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/two_factor_dialog.cc" line="65"/>
+        <source>Add the setup key below to an authenticator app, then enter the 6-digit code it shows to confirm.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/two_factor_dialog.cc" line="67"/>
+        <source>Enter the 6-digit code from your authenticator app.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/two_factor_dialog.cc" line="74"/>
+        <source>Setup Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/two_factor_dialog.cc" line="80"/>
+        <source>Code</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/two_factor_dialog.cc" line="86"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/two_factor_dialog.cc" line="87"/>
+        <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
