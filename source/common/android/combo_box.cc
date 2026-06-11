@@ -18,14 +18,19 @@
 
 #include "common/android/combo_box.h"
 
+#include <QApplication>
 #include <QFrame>
 #include <QListView>
 #include <QPainter>
 #include <QPainterPath>
+#include <QProxyStyle>
+#include <QScroller>
+#include <QScrollerProperties>
 #include <QStyledItemDelegate>
 #include <QVariantAnimation>
 
 #include "common/android/controls.h"
+#include "common/android/scroll_indicator.h"
 
 namespace {
 
@@ -37,6 +42,7 @@ constexpr int kArrowWidth = 12;
 constexpr int kArrowHeight = 7;
 constexpr int kArrowSpacing = 8;
 constexpr int kItemHeight = 48;
+constexpr int kMaxVisibleItems = 8;
 constexpr int kPopupRadius = 8;
 constexpr double kFloatedLabelScale = 0.78;
 constexpr double kDisabledOpacity = 0.38;
@@ -68,6 +74,21 @@ QPainterPath itemPath(const QRectF& rect, double radius, bool round_top, bool ro
     return path;
 }
 
+// Forces the list-style drop-down instead of the menu-style popup. The menu style (reported by the
+// Android platform style) ignores the visible item limit and manages its own scrolling, which
+// fights the kinetic scroller, so it is turned off.
+class PopupStyle final : public QProxyStyle
+{
+public:
+    int styleHint(StyleHint hint, const QStyleOption* option, const QWidget* widget,
+                  QStyleHintReturn* return_data) const final
+    {
+        if (hint == QStyle::SH_ComboBox_Popup)
+            return 0;
+        return QProxyStyle::styleHint(hint, option, widget, return_data);
+    }
+};
+
 // List view that paints a rounded surface with an outline for the drop-down. The popup container
 // is made translucent, so the area outside the rounded corners shows the content behind it.
 class PopupView final : public QListView
@@ -77,7 +98,24 @@ public:
         : QListView(parent)
     {
         setFrameShape(QFrame::NoFrame);
+        setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         viewport()->setAutoFillBackground(false);
+
+        // Long lists do not fit the screen, so kinetic finger scrolling is enabled. The mouse
+        // gesture is used because Qt on Android synthesizes mouse events from touches, and the
+        // overshoot bounce is disabled so the list rests cleanly at its ends.
+        QScroller::grabGesture(viewport(), QScroller::LeftMouseButtonGesture);
+
+        QScroller* scroller = QScroller::scroller(viewport());
+        QScrollerProperties properties = scroller->scrollerProperties();
+        properties.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy,
+                                   QScrollerProperties::OvershootAlwaysOff);
+        properties.setScrollMetric(QScrollerProperties::HorizontalOvershootPolicy,
+                                   QScrollerProperties::OvershootAlwaysOff);
+        scroller->setScrollerProperties(properties);
+
+        new ScrollIndicator(this, kPopupRadius);
     }
 
 protected:
@@ -91,8 +129,11 @@ protected:
             QRectF surface = viewport()->rect();
             surface.adjust(0.5, 0.5, -0.5, -0.5);
 
-            painter.setPen(QPen(palette().color(QPalette::Mid), 1));
-            painter.setBrush(palette().color(QPalette::Base));
+            // The application palette is used directly: the cached popup widgets may still hold the
+            // previous theme's palette on the first open after a theme change, which would flash.
+            const QPalette palette = QApplication::palette();
+            painter.setPen(QPen(palette.color(QPalette::Mid), 1));
+            painter.setBrush(palette.color(QPalette::Base));
             painter.drawRoundedRect(surface, kPopupRadius, kPopupRadius);
         }
 
@@ -125,6 +166,10 @@ public:
         painter->save();
         painter->setRenderHint(QPainter::Antialiasing);
 
+        // The application palette is used directly so the items match the current theme even on
+        // the first open after a theme change, when the cached view palette may be stale.
+        const QPalette palette = QApplication::palette();
+
         double layer_opacity = 0.0;
         if (option.state & QStyle::State_Selected)
             layer_opacity = kSelectedLayerOpacity;
@@ -133,7 +178,7 @@ public:
 
         if (layer_opacity > 0.0)
         {
-            QColor layer = option.palette.color(QPalette::Highlight);
+            QColor layer = palette.color(QPalette::Highlight);
             layer.setAlphaF(layer_opacity);
 
             const bool first = index.row() == 0;
@@ -157,7 +202,7 @@ public:
             Qt::AlignRight : Qt::AlignLeft;
 
         painter->setFont(option.font);
-        painter->setPen(option.palette.color(QPalette::Text));
+        painter->setPen(palette.color(QPalette::Text));
         painter->drawText(text_rect, Qt::AlignVCenter | Qt::AlignAbsolute | alignment, elided);
 
         painter->restore();
@@ -173,6 +218,12 @@ ComboBox::ComboBox(QWidget* parent)
       focus_progress_(0.0)
 {
     setFont(Controls::scaledFont(font(), Controls::kFontScale));
+
+    // The proxy style is parented to the widget so it is destroyed with it.
+    PopupStyle* popup_style = new PopupStyle();
+    popup_style->setParent(this);
+    setStyle(popup_style);
+    setMaxVisibleItems(kMaxVisibleItems);
 
     setView(new PopupView(this));
     setItemDelegate(new ItemDelegate(this));

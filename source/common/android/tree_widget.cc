@@ -23,6 +23,7 @@
 #include <QStyledItemDelegate>
 
 #include "common/android/controls.h"
+#include "common/android/scroll_indicator.h"
 
 namespace {
 
@@ -118,6 +119,8 @@ TreeWidget::TreeWidget(QWidget* parent)
     // Qt on Android synthesizes mouse events from touches, so the scroller listens to the mouse
     // gesture: grabbing the touch gesture would swallow row taps.
     QScroller::grabGesture(viewport(), QScroller::LeftMouseButtonGesture);
+
+    new ScrollIndicator(this);
 
     connect(this, &QTreeWidget::itemClicked, this, &TreeWidget::onItemClicked);
 }

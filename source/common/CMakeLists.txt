@@ -165,6 +165,8 @@ if (ANDROID)
         android/radio_button.h
         android/scroll_area.cc
         android/scroll_area.h
+        android/scroll_indicator.cc
+        android/scroll_indicator.h
         android/switch.cc
         android/switch.h
         android/tree_widget.cc

@@ -29,6 +29,7 @@ class QVariantAnimation;
 class ComboBox final : public QComboBox
 {
     Q_OBJECT
+    Q_PROPERTY(QString label READ label WRITE setLabel)
 
 public:
     explicit ComboBox(QWidget* parent = nullptr);

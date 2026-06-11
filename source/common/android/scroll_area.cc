@@ -21,6 +21,8 @@
 #include <QScroller>
 #include <QScrollerProperties>
 
+#include "common/android/scroll_indicator.h"
+
 //--------------------------------------------------------------------------------------------------
 ScrollArea::ScrollArea(QWidget* parent)
     : QScrollArea(parent)
@@ -43,6 +45,8 @@ ScrollArea::ScrollArea(QWidget* parent)
     properties.setScrollMetric(QScrollerProperties::HorizontalOvershootPolicy,
                                QScrollerProperties::OvershootAlwaysOff);
     scroller->setScrollerProperties(properties);
+
+    new ScrollIndicator(this);
 }
 
 //--------------------------------------------------------------------------------------------------

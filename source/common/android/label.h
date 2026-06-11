@@ -26,6 +26,7 @@
 class Label final : public QLabel
 {
     Q_OBJECT
+    Q_PROPERTY(Role role READ role WRITE setRole)
 
 public:
     enum class Role
@@ -34,6 +35,7 @@ public:
         BODY,   // Regular text.
         CAPTION // Muted secondary text.
     };
+    Q_ENUM(Role)
 
     explicit Label(QWidget* parent = nullptr);
     explicit Label(const QString& text, QWidget* parent = nullptr);
