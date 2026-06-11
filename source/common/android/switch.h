@@ -37,6 +37,7 @@ public:
     // QCheckBox implementation.
     QSize sizeHint() const final;
     QSize minimumSizeHint() const final;
+    int heightForWidth(int width) const final;
 
 protected:
     // QCheckBox implementation.

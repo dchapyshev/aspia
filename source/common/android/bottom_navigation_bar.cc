@@ -56,6 +56,16 @@ int BottomNavigationBar::addItem(const QString& text, const QString& icon_file_p
 }
 
 //--------------------------------------------------------------------------------------------------
+void BottomNavigationBar::setItemText(int index, const QString& text)
+{
+    if (index < 0 || index >= items_.size())
+        return;
+
+    items_[index].text = text;
+    update();
+}
+
+//--------------------------------------------------------------------------------------------------
 void BottomNavigationBar::setCurrentIndex(int index)
 {
     if (index < 0 || index >= items_.size() || index == current_)

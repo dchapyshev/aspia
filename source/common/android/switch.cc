@@ -51,6 +51,11 @@ Switch::Switch(const QString& text, QWidget* parent)
 {
     setFont(Controls::scaledFont(font(), Controls::kFontScale));
 
+    // The label wraps to several lines when it does not fit, so the height follows the width.
+    QSizePolicy policy(QSizePolicy::Preferred, QSizePolicy::Minimum);
+    policy.setHeightForWidth(true);
+    setSizePolicy(policy);
+
     connect(animation_, &QVariantAnimation::valueChanged, this, [this](const QVariant& value)
     {
         progress_ = value.toDouble();
@@ -77,7 +82,26 @@ QSize Switch::sizeHint() const
 //--------------------------------------------------------------------------------------------------
 QSize Switch::minimumSizeHint() const
 {
-    return sizeHint();
+    // A small width so the layout can shrink the control and wrap the label instead of forcing it
+    // wider than the screen.
+    return QSize(kTrackWidth + kTextSpacing, qMax(kMinTargetSize, QFontMetrics(font()).height()));
+}
+
+//--------------------------------------------------------------------------------------------------
+int Switch::heightForWidth(int width) const
+{
+    QFontMetrics fm(font());
+
+    if (text().isEmpty())
+        return qMax(kMinTargetSize, fm.height());
+
+    const int text_width = width - kTrackWidth - kTextSpacing;
+    if (text_width <= 0)
+        return qMax(kMinTargetSize, fm.height());
+
+    const QRect bounds = fm.boundingRect(QRect(0, 0, text_width, 0),
+                                         Qt::TextWordWrap | Qt::AlignLeft, text());
+    return qMax(kMinTargetSize, bounds.height());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -138,16 +162,15 @@ void Switch::paintEvent(QPaintEvent* /* event */)
 
     if (!text().isEmpty())
     {
-        const QFontMetricsF fm(font());
-
-        // The baseline is placed so the text is optically centered on the track, ignoring the
-        // line leading that Qt::AlignVCenter would add.
-        const double baseline = track.center().y() + (fm.ascent() - fm.descent()) / 2.0;
-        const double text_x = rtl ? (track.left() - kTextSpacing - fm.horizontalAdvance(text()))
-                                  : (track.right() + kTextSpacing);
+        QRectF text_rect = rect();
+        if (rtl)
+            text_rect.setRight(track.left() - kTextSpacing);
+        else
+            text_rect.setLeft(track.right() + kTextSpacing);
 
         painter.setPen(palette().color(QPalette::WindowText));
-        painter.drawText(QPointF(text_x, baseline), text());
+        painter.drawText(text_rect, Qt::TextWordWrap | Qt::AlignVCenter |
+                                        (rtl ? Qt::AlignRight : Qt::AlignLeft), text());
     }
 }
 

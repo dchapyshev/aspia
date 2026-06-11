@@ -34,6 +34,7 @@ public:
     ~BottomNavigationBar() final;
 
     int addItem(const QString& text, const QString& icon_file_path = QString());
+    void setItemText(int index, const QString& text);
 
     int currentIndex() const { return current_; }
     void setCurrentIndex(int index);

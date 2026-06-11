@@ -37,6 +37,7 @@ public:
     // QRadioButton implementation.
     QSize sizeHint() const final;
     QSize minimumSizeHint() const final;
+    int heightForWidth(int width) const final;
 
 protected:
     // QRadioButton implementation.
