@@ -1,0 +1,8 @@
+# clangd code model configuration.
+#
+# On Windows Qt Creator feeds clangd an MSVC-style command (--driver-mode=cl, MSVC target). In
+# that mode clang ignores the GCC-style -std=gnu++20 flag from the build and falls back to an
+# older default standard, which breaks Qt's connect() overloads and fires inline-variable
+# diagnostics. The standard is restored with the MSVC-style flag, which clang-cl honors.
+CompileFlags:
+  Add: [/std:c++20]
