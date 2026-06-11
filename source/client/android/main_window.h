@@ -41,13 +41,18 @@ protected:
 
 private slots:
     void onSectionChanged(int index);
+    void onRouterActionsChanged();
 
 private:
+    // Gates the window behind the master password: prompts to create or unlock it, and reloads the
+    // content that depends on the unlocked data cryptor once it is open.
+    void runMasterPasswordGate();
+    void onUnlocked();
     void retranslate();
 
-    AppBar* app_bar_;
-    QStackedWidget* content_;
-    BottomNavigationBar* navigation_;
+    AppBar* app_bar_ = nullptr;
+    QStackedWidget* content_ = nullptr;
+    BottomNavigationBar* navigation_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(AndroidMainWindow)
 };

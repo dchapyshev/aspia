@@ -23,6 +23,8 @@
 
 #include "base/gui_application.h"
 #include "base/net/udp_channel.h"
+#include "client/android/master_password_dialog.h"
+#include "common/android/button.h"
 #include "common/android/combo_box.h"
 #include "common/android/label.h"
 #include "common/android/switch.h"
@@ -74,6 +76,7 @@ void SettingsWidget::buildContent()
     layout->setSpacing(kRowSpacing);
 
     buildInterfaceSection(layout);
+    buildSecuritySection(layout);
     buildUdpSection(layout);
     buildDesktopSection(layout);
     layout->addStretch();
@@ -131,6 +134,20 @@ void SettingsWidget::buildInterfaceSection(QVBoxLayout* layout)
         GuiApplication::instance()->setTheme(id);
     });
     layout->addWidget(theme);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::buildSecuritySection(QVBoxLayout* layout)
+{
+    addSectionHeader(layout, tr("Security"));
+
+    Button* change_password = new Button(tr("Change Master Password"), Button::Role::FILLED);
+    connect(change_password, &Button::clicked, this, [this]()
+    {
+        MasterPasswordDialog dialog(MasterPasswordDialog::Mode::CHANGE, this);
+        dialog.exec();
+    });
+    layout->addWidget(change_password);
 }
 
 //--------------------------------------------------------------------------------------------------

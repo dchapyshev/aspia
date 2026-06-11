@@ -47,6 +47,7 @@ private:
     void addBoolSetting(QVBoxLayout* layout, const QString& text, bool value,
                         const std::function<void(bool)>& on_changed);
     void buildInterfaceSection(QVBoxLayout* layout);
+    void buildSecuritySection(QVBoxLayout* layout);
     void buildUdpSection(QVBoxLayout* layout);
     void buildDesktopSection(QVBoxLayout* layout);
 

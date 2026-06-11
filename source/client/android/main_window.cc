@@ -18,17 +18,30 @@
 
 #include "client/android/main_window.h"
 
+#include <QCoreApplication>
+#include <QDialog>
 #include <QEvent>
 #include <QStackedWidget>
 #include <QVBoxLayout>
 
+#include "client/android/master_password_dialog.h"
 #include "client/android/routers_widget.h"
 #include "client/android/settings_widget.h"
+#include "client/master_password.h"
 #include "common/android/app_bar.h"
 #include "common/android/bottom_navigation_bar.h"
 #include "common/android/label.h"
 
 namespace {
+
+// Order of the pages in the stacked content and of the bottom navigation items.
+enum Section
+{
+    SECTION_LOCAL = 0,
+    SECTION_REMOTE,
+    SECTION_ROUTERS,
+    SECTION_SETTINGS
+};
 
 //--------------------------------------------------------------------------------------------------
 QWidget* createPlaceholder(const QString& text)
@@ -47,10 +60,15 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
       content_(new QStackedWidget(this)),
       navigation_(new BottomNavigationBar(this))
 {
+    RoutersWidget* routers = new RoutersWidget(this);
+
     content_->addWidget(createPlaceholder(tr("Local")));
     content_->addWidget(createPlaceholder(tr("Remote")));
-    content_->addWidget(new RoutersWidget(this));
+    content_->addWidget(routers);
     content_->addWidget(new SettingsWidget(this));
+
+    connect(routers, &RoutersWidget::appBarActionsChanged,
+            this, &AndroidMainWindow::onRouterActionsChanged);
 
     navigation_->addItem(tr("Local"), ":/img/folder.svg");
     navigation_->addItem(tr("Remote"), ":/img/workspace.svg");
@@ -68,6 +86,10 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
             this, &AndroidMainWindow::onSectionChanged);
 
     onSectionChanged(navigation_->currentIndex());
+
+    // The gate runs once the event loop is active so the window is laid out and the dialog scrim
+    // covers it.
+    QMetaObject::invokeMethod(this, [this]() { runMasterPasswordGate(); }, Qt::QueuedConnection);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -89,24 +111,27 @@ void AndroidMainWindow::onSectionChanged(int index)
 {
     content_->setCurrentIndex(index);
 
-    RoutersWidget* routers = qobject_cast<RoutersWidget*>(content_->widget(2));
-    app_bar_->setActions((index == 2 && routers) ? routers->appBarActions() : QList<QWidget*>());
+    RoutersWidget* routers = qobject_cast<RoutersWidget*>(content_->widget(SECTION_ROUTERS));
+    if (index != SECTION_ROUTERS && routers)
+        routers->resetEditMode();
+    app_bar_->setActions((index == SECTION_ROUTERS && routers) ? routers->appBarActions()
+                                                               : QList<QWidget*>());
 
     switch (index)
     {
-        case 0:
+        case SECTION_LOCAL:
             app_bar_->setTitle(tr("Local"));
             break;
 
-        case 1:
+        case SECTION_REMOTE:
             app_bar_->setTitle(tr("Remote"));
             break;
 
-        case 2:
+        case SECTION_ROUTERS:
             app_bar_->setTitle(tr("Routers"));
             break;
 
-        case 3:
+        case SECTION_SETTINGS:
             app_bar_->setTitle(tr("Settings"));
             break;
 
@@ -116,19 +141,54 @@ void AndroidMainWindow::onSectionChanged(int index)
 }
 
 //--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onRouterActionsChanged()
+{
+    RoutersWidget* routers = qobject_cast<RoutersWidget*>(content_->widget(SECTION_ROUTERS));
+    if (navigation_->currentIndex() == SECTION_ROUTERS && routers)
+        app_bar_->setActions(routers->appBarActions());
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::runMasterPasswordGate()
+{
+    const MasterPasswordDialog::Mode mode = MasterPassword::isSet() ?
+        MasterPasswordDialog::Mode::UNLOCK : MasterPasswordDialog::Mode::CREATE;
+
+    // The data cryptor is invalid until the dialog unlocks it, so quit if the user cancels.
+    MasterPasswordDialog dialog(mode, this);
+    if (dialog.exec() != QDialog::Accepted)
+    {
+        QCoreApplication::quit();
+        return;
+    }
+
+    onUnlocked();
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onUnlocked()
+{
+    if (RoutersWidget* routers = qobject_cast<RoutersWidget*>(content_->widget(SECTION_ROUTERS)))
+        routers->reload();
+}
+
+//--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::retranslate()
 {
-    navigation_->setItemText(0, tr("Local"));
-    navigation_->setItemText(1, tr("Remote"));
-    navigation_->setItemText(2, tr("Routers"));
-    navigation_->setItemText(3, tr("Settings"));
+    navigation_->setItemText(SECTION_LOCAL, tr("Local"));
+    navigation_->setItemText(SECTION_REMOTE, tr("Remote"));
+    navigation_->setItemText(SECTION_ROUTERS, tr("Routers"));
+    navigation_->setItemText(SECTION_SETTINGS, tr("Settings"));
 
-    if (Label* label = qobject_cast<Label*>(content_->widget(0)))
+    if (Label* label = qobject_cast<Label*>(content_->widget(SECTION_LOCAL)))
         label->setText(tr("Local"));
-    if (Label* label = qobject_cast<Label*>(content_->widget(1)))
+    if (Label* label = qobject_cast<Label*>(content_->widget(SECTION_REMOTE)))
         label->setText(tr("Remote"));
 
-    if (SettingsWidget* settings = qobject_cast<SettingsWidget*>(content_->widget(3)))
+    if (RoutersWidget* routers = qobject_cast<RoutersWidget*>(content_->widget(SECTION_ROUTERS)))
+        routers->retranslate();
+
+    if (SettingsWidget* settings = qobject_cast<SettingsWidget*>(content_->widget(SECTION_SETTINGS)))
         settings->retranslate();
 
     onSectionChanged(navigation_->currentIndex());

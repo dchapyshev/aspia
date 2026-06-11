@@ -23,6 +23,7 @@
 #include <QWidget>
 
 class IconButton;
+class RoutersEmptyView;
 class TreeWidget;
 
 // Routers screen for the Android client: the list of configured routers. The add and edit actions
@@ -38,11 +39,29 @@ public:
     QList<QWidget*> appBarActions() const;
 
     void reload();
+    void resetEditMode();
+    void retranslate();
+
+signals:
+    // Emitted when the set returned by appBarActions() changes (the edit action is hidden while the
+    // list is empty).
+    void appBarActionsChanged();
+
+private slots:
+    void onAddRouter();
+    void onToggleEditMode();
 
 private:
-    TreeWidget* list_;
-    IconButton* add_button_;
-    IconButton* edit_button_;
+    void updateRowActions();
+    QWidget* createRowActions(qint64 router_id);
+    void editRouter(qint64 router_id);
+    void removeRouter(qint64 router_id);
+
+    TreeWidget* list_ = nullptr;
+    RoutersEmptyView* placeholder_ = nullptr;
+    IconButton* add_button_ = nullptr;
+    IconButton* edit_button_ = nullptr;
+    bool edit_mode_ = false;
 
     Q_DISABLE_COPY_MOVE(RoutersWidget)
 };
