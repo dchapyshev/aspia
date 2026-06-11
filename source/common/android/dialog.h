@@ -30,13 +30,13 @@ class Label;
 // Modal dialog adapted for touch screens: a scrim dims the parent window and a rounded card in
 // the center holds the title, the message, custom content and the action buttons. A tap on the
 // scrim dismisses the dialog.
-class Dialog final : public QDialog
+class Dialog : public QDialog
 {
     Q_OBJECT
 
 public:
     explicit Dialog(QWidget* parent = nullptr);
-    ~Dialog() final;
+    ~Dialog() override;
 
     void setTitle(const QString& title);
     void setText(const QString& text);

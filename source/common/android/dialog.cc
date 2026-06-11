@@ -117,6 +117,13 @@ void Dialog::setText(const QString& text)
 Button* Dialog::addButton(const QString& text, Button::Role role)
 {
     Button* button = new Button(text, role, card_);
+
+    // The primary (filled) action answers the Enter key; the other buttons stay out of the way so
+    // they are not triggered as the default.
+    const bool primary = (role == Button::Role::FILLED);
+    button->setAutoDefault(primary);
+    button->setDefault(primary);
+
     button_row_->addWidget(button);
     return button;
 }

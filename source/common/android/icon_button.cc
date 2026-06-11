@@ -75,7 +75,7 @@ void IconButton::paintEvent(QPaintEvent* /* event */)
     if (!isEnabled())
         painter.setOpacity(kDisabledOpacity);
 
-    if (isDown())
+    if (isDown() || isChecked())
     {
         QColor layer = palette().color(QPalette::Highlight);
         layer.setAlphaF(kStateLayerOpacity);
