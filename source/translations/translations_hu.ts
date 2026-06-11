@@ -282,6 +282,29 @@ Routers added: %4</source>
     </message>
 </context>
 <context>
+    <name>AndroidMainWindow</name>
+    <message>
+        <location filename="../client/android/main_window.cc" line="48"/>
+        <location filename="../client/android/main_window.cc" line="52"/>
+        <location filename="../client/android/main_window.cc" line="80"/>
+        <source>Local Hosts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="49"/>
+        <location filename="../client/android/main_window.cc" line="53"/>
+        <location filename="../client/android/main_window.cc" line="84"/>
+        <source>Workspaces</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="54"/>
+        <location filename="../client/android/main_window.cc" line="88"/>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>AuthorizationDialog</name>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="14"/>
@@ -555,54 +578,54 @@ Routers added: %4</source>
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client/main.cc" line="103"/>
+        <location filename="../client/main.cc" line="115"/>
         <source>Set Master Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="105"/>
+        <location filename="../client/main.cc" line="117"/>
         <source>Set a master password required to unlock the application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="113"/>
+        <location filename="../client/main.cc" line="125"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="115"/>
+        <location filename="../client/main.cc" line="127"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="119"/>
+        <location filename="../client/main.cc" line="131"/>
         <source>Do you want to enter a different password?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="129"/>
+        <location filename="../client/main.cc" line="141"/>
         <source>Unable to set master password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="77"/>
+        <location filename="../client/main.cc" line="89"/>
         <source>Unlock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="79"/>
+        <location filename="../client/main.cc" line="91"/>
         <source>Enter the master password to unlock the application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="95"/>
+        <location filename="../client/main.cc" line="107"/>
         <source>Invalid master password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="58"/>
+        <location filename="../client/main.cc" line="70"/>
         <source>Aspia Client</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4925,6 +4948,114 @@ Are you sure you want to continue?</source>
         <location filename="../host/ui/settings_util.cc" line="246"/>
         <location filename="../host/ui/settings_util.cc" line="291"/>
         <source>The existing settings will be overwritten. Continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SettingsWidget</name>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="92"/>
+        <source>Interface</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="95"/>
+        <source>Language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="108"/>
+        <source>Theme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="124"/>
+        <source>UDP Connections</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="138"/>
+        <source>Allow direct connections</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="139"/>
+        <source>Allow UDP Hole Punching</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="140"/>
+        <source>Allow PCP protocol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="141"/>
+        <source>Allow NAT-PMP protocol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="142"/>
+        <source>Allow UPnP protocol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="148"/>
+        <source>Remote Desktop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="150"/>
+        <source>Enable audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="155"/>
+        <source>Enable clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="160"/>
+        <source>Show shape of remote cursor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="166"/>
+        <source>Show position of remote cursor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="172"/>
+        <source>Disable desktop effects</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="178"/>
+        <source>Disable desktop wallpaper</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="184"/>
+        <source>Lock computer at disconnect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="190"/>
+        <source>Block remote input</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="196"/>
+        <source>Send key combinations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="203"/>
+        <source>Preferred resolution</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="204"/>
+        <source>None</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
