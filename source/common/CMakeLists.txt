@@ -141,6 +141,28 @@ if (WIN32)
         win/format_enumerator.h)
 endif()
 
+if (ANDROID)
+    list(APPEND SOURCE_COMMON_ANDROID
+        android/button.cc
+        android/button.h
+        android/combo_box.cc
+        android/combo_box.h
+        android/controls.cc
+        android/controls.h
+        android/dialog.cc
+        android/dialog.h
+        android/label.cc
+        android/label.h
+        android/line_edit.cc
+        android/line_edit.h
+        android/radio_button.cc
+        android/radio_button.h
+        android/switch.cc
+        android/switch.h
+        android/tree_widget.cc
+        android/tree_widget.h)
+endif()
+
 list(APPEND SOURCE_COMMON_RESOURCES resources/common.qrc)
 
 source_group("" FILES ${SOURCE_COMMON})
@@ -155,8 +177,13 @@ if (APPLE)
     source_group(mac FILES ${SOURCE_COMMON_MAC})
 endif()
 
+if (ANDROID)
+    source_group(android FILES ${SOURCE_COMMON_ANDROID})
+endif()
+
 add_library(aspia_common STATIC
     ${SOURCE_COMMON}
+    ${SOURCE_COMMON_ANDROID}
     ${SOURCE_COMMON_DESKTOP}
     ${SOURCE_COMMON_WIN}
     ${SOURCE_COMMON_MAC}
