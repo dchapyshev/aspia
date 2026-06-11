@@ -19,10 +19,11 @@
 #ifndef COMMON_ANDROID_APP_BAR_H
 #define COMMON_ANDROID_APP_BAR_H
 
+#include <QList>
 #include <QWidget>
 
-// Top app bar for touch screens: a title with an optional leading back button. Sits at the top of
-// a screen and drives screen-level navigation.
+// Top app bar for touch screens: a title with an optional leading back button and trailing action
+// buttons. Sits at the top of a screen and drives screen-level navigation.
 class AppBar final : public QWidget
 {
     Q_OBJECT
@@ -37,6 +38,10 @@ public:
     void setBackVisible(bool visible);
     bool isBackVisible() const { return back_visible_; }
 
+    // Places |actions| as trailing buttons; pass an empty list to clear them. The widgets are
+    // reparented into the bar.
+    void setActions(const QList<QWidget*>& actions);
+
     // QWidget implementation.
     QSize sizeHint() const final;
 
@@ -47,10 +52,15 @@ protected:
     // QWidget implementation.
     void paintEvent(QPaintEvent* event) final;
     void mousePressEvent(QMouseEvent* event) final;
+    void resizeEvent(QResizeEvent* event) final;
 
 private:
+    void relayoutActions();
+    int actionsWidth() const;
+
     QString title_;
     bool back_visible_;
+    QList<QWidget*> actions_;
 
     Q_DISABLE_COPY_MOVE(AppBar)
 };

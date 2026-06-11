@@ -20,6 +20,7 @@
 
 #include <QMouseEvent>
 #include <QPainter>
+#include <QResizeEvent>
 
 #include "common/android/controls.h"
 
@@ -61,6 +62,27 @@ void AppBar::setBackVisible(bool visible)
         return;
 
     back_visible_ = visible;
+    update();
+}
+
+//--------------------------------------------------------------------------------------------------
+void AppBar::setActions(const QList<QWidget*>& actions)
+{
+    for (QWidget* widget : actions_)
+    {
+        if (widget && !actions.contains(widget))
+            widget->hide();
+    }
+
+    actions_ = actions;
+
+    for (QWidget* widget : actions_)
+    {
+        widget->setParent(this);
+        widget->show();
+    }
+
+    relayoutActions();
     update();
 }
 
@@ -117,6 +139,16 @@ void AppBar::paintEvent(QPaintEvent* /* event */)
             content.setLeft(content.left() + kBackWidth);
     }
 
+    // Reserve the trailing edge for the action buttons.
+    const int actions_extent = actionsWidth();
+    if (actions_extent > 0)
+    {
+        if (rtl)
+            content.setLeft(content.left() + actions_extent);
+        else
+            content.setRight(content.right() - actions_extent);
+    }
+
     QFont title_font = Controls::scaledFont(font(), kTitleFontScale);
     title_font.setWeight(QFont::DemiBold);
 
@@ -138,4 +170,34 @@ void AppBar::mousePressEvent(QMouseEvent* event)
                              : (x <= kHorizontalPadding + kBackWidth);
     if (on_back)
         emit backClicked();
+}
+
+//--------------------------------------------------------------------------------------------------
+void AppBar::resizeEvent(QResizeEvent* event)
+{
+    QWidget::resizeEvent(event);
+    relayoutActions();
+}
+
+//--------------------------------------------------------------------------------------------------
+void AppBar::relayoutActions()
+{
+    const bool rtl = (layoutDirection() == Qt::RightToLeft);
+    int x = rtl ? kHorizontalPadding : (width() - kHorizontalPadding - actionsWidth());
+
+    for (QWidget* widget : actions_)
+    {
+        const QSize hint = widget->sizeHint();
+        widget->setGeometry(x, (height() - hint.height()) / 2, hint.width(), hint.height());
+        x += hint.width();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+int AppBar::actionsWidth() const
+{
+    int total = 0;
+    for (QWidget* widget : actions_)
+        total += widget->sizeHint().width();
+    return total;
 }
