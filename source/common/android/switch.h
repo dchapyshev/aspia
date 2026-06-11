@@ -20,6 +20,7 @@
 #define COMMON_ANDROID_SWITCH_H
 
 #include <QCheckBox>
+#include <QRectF>
 
 class QVariantAnimation;
 
@@ -48,6 +49,8 @@ private slots:
     void onToggled(bool checked);
 
 private:
+    QRectF trackRect() const;
+
     QVariantAnimation* animation_;
     double progress_;
 

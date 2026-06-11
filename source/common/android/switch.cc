@@ -115,12 +115,7 @@ void Switch::paintEvent(QPaintEvent* /* event */)
 
     const bool rtl = (layoutDirection() == Qt::RightToLeft);
 
-    QRectF track(0, 0, kTrackWidth, kTrackHeight);
-    track.moveTop(rect().center().y() - kTrackHeight / 2.0);
-    if (rtl)
-        track.moveRight(rect().right());
-    else
-        track.moveLeft(rect().left());
+    const QRectF track = trackRect();
 
     const QColor accent = palette().color(QPalette::Highlight);
     const QColor outline = palette().color(QPalette::Mid);
@@ -177,7 +172,25 @@ void Switch::paintEvent(QPaintEvent* /* event */)
 //--------------------------------------------------------------------------------------------------
 bool Switch::hitButton(const QPoint& pos) const
 {
-    return rect().contains(pos);
+    // Only the track toggles the switch, not the label or the empty area of the row. The hit area
+    // is grown vertically to a comfortable touch height while staying within the track width.
+    QRectF hit = trackRect();
+    const double grow = (kMinTargetSize - hit.height()) / 2.0;
+    if (grow > 0.0)
+        hit.adjust(0, -grow, 0, grow);
+    return hit.toRect().contains(pos);
+}
+
+//--------------------------------------------------------------------------------------------------
+QRectF Switch::trackRect() const
+{
+    QRectF track(0, 0, kTrackWidth, kTrackHeight);
+    track.moveTop(rect().center().y() - kTrackHeight / 2.0);
+    if (layoutDirection() == Qt::RightToLeft)
+        track.moveRight(rect().right());
+    else
+        track.moveLeft(rect().left());
+    return track;
 }
 
 //--------------------------------------------------------------------------------------------------
