@@ -100,6 +100,8 @@ public:
         setFrameShape(QFrame::NoFrame);
         setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        // Per-pixel scrolling, otherwise the kinetic scroller quantizes to whole items and jumps.
+        setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
         viewport()->setAutoFillBackground(false);
 
         // Long lists do not fit the screen, so kinetic finger scrolling is enabled. The mouse
