@@ -288,22 +288,44 @@ Routers added: %4</source>
 <context>
     <name>AndroidMainWindow</name>
     <message>
-        <location filename="../client/android/main_window.cc" line="48"/>
-        <location filename="../client/android/main_window.cc" line="52"/>
-        <location filename="../client/android/main_window.cc" line="80"/>
         <source>Local Hosts</source>
-        <translation>Локальные хосты</translation>
+        <translation type="vanished">Локальные хосты</translation>
+    </message>
+    <message>
+        <source>Workspaces</source>
+        <translation type="vanished">Рабочие пространства</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="49"/>
-        <location filename="../client/android/main_window.cc" line="53"/>
-        <location filename="../client/android/main_window.cc" line="84"/>
-        <source>Workspaces</source>
-        <translation>Рабочие пространства</translation>
+        <location filename="../client/android/main_window.cc" line="54"/>
+        <location filename="../client/android/main_window.cc" line="94"/>
+        <location filename="../client/android/main_window.cc" line="117"/>
+        <location filename="../client/android/main_window.cc" line="123"/>
+        <source>Local</source>
+        <translation>Локальные</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="54"/>
-        <location filename="../client/android/main_window.cc" line="88"/>
+        <location filename="../client/android/main_window.cc" line="50"/>
+        <location filename="../client/android/main_window.cc" line="55"/>
+        <location filename="../client/android/main_window.cc" line="98"/>
+        <location filename="../client/android/main_window.cc" line="118"/>
+        <location filename="../client/android/main_window.cc" line="125"/>
+        <source>Remote</source>
+        <translation>Удаленные</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="51"/>
+        <location filename="../client/android/main_window.cc" line="56"/>
+        <location filename="../client/android/main_window.cc" line="102"/>
+        <location filename="../client/android/main_window.cc" line="119"/>
+        <location filename="../client/android/main_window.cc" line="127"/>
+        <source>Routers</source>
+        <translation>Маршутизаторы</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="57"/>
+        <location filename="../client/android/main_window.cc" line="106"/>
+        <location filename="../client/android/main_window.cc" line="120"/>
         <source>Settings</source>
         <translation>Параметры</translation>
     </message>
@@ -5434,107 +5456,107 @@ Are you sure you want to continue?</source>
 <context>
     <name>SettingsWidget</name>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="92"/>
+        <location filename="../client/android/settings_widget.cc" line="107"/>
         <source>Interface</source>
         <translation>Интерфейс</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="95"/>
+        <location filename="../client/android/settings_widget.cc" line="110"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="108"/>
+        <location filename="../client/android/settings_widget.cc" line="123"/>
         <source>Theme</source>
         <translation>Тема</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="124"/>
+        <location filename="../client/android/settings_widget.cc" line="139"/>
         <source>UDP Connections</source>
         <translation>UDP подключения</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="138"/>
+        <location filename="../client/android/settings_widget.cc" line="153"/>
         <source>Allow direct connections</source>
         <translation>Разрешить прямые подключения</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="139"/>
+        <location filename="../client/android/settings_widget.cc" line="154"/>
         <source>Allow UDP Hole Punching</source>
         <translation>Разрешить UDP Hole Punching</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="140"/>
+        <location filename="../client/android/settings_widget.cc" line="155"/>
         <source>Allow PCP protocol</source>
         <translation>Разрешить PCP протокол</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="141"/>
+        <location filename="../client/android/settings_widget.cc" line="156"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>Разрешить NAT-PMP протокол</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="142"/>
+        <location filename="../client/android/settings_widget.cc" line="157"/>
         <source>Allow UPnP protocol</source>
         <translation>Разрешить UPnP протокол</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="148"/>
+        <location filename="../client/android/settings_widget.cc" line="163"/>
         <source>Remote Desktop</source>
         <translation>Удаленный рабочий стол</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="150"/>
+        <location filename="../client/android/settings_widget.cc" line="165"/>
         <source>Enable audio</source>
         <translation>Включить звук</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="155"/>
+        <location filename="../client/android/settings_widget.cc" line="170"/>
         <source>Enable clipboard</source>
         <translation>Включить буфер обмена</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="160"/>
+        <location filename="../client/android/settings_widget.cc" line="175"/>
         <source>Show shape of remote cursor</source>
         <translation>Показывать форму удаленного курсора</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="166"/>
+        <location filename="../client/android/settings_widget.cc" line="181"/>
         <source>Show position of remote cursor</source>
         <translation>Показывать положение удаленного курсора</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="172"/>
+        <location filename="../client/android/settings_widget.cc" line="187"/>
         <source>Disable desktop effects</source>
         <translation>Отключить эффекты рабочего стола</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="178"/>
+        <location filename="../client/android/settings_widget.cc" line="193"/>
         <source>Disable desktop wallpaper</source>
         <translation>Отключить обои рабочего стола</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="184"/>
+        <location filename="../client/android/settings_widget.cc" line="199"/>
         <source>Lock computer at disconnect</source>
         <translation>Блокировать компьютер при отключении</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="190"/>
+        <location filename="../client/android/settings_widget.cc" line="205"/>
         <source>Block remote input</source>
         <translation>Блокировать удаленный ввод</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="196"/>
+        <location filename="../client/android/settings_widget.cc" line="211"/>
         <source>Send key combinations</source>
         <translation>Отправлять комбинации клавиш</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="203"/>
+        <location filename="../client/android/settings_widget.cc" line="218"/>
         <source>Preferred resolution</source>
         <translation>Предпочитаемое разрешение</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="204"/>
+        <location filename="../client/android/settings_widget.cc" line="219"/>
         <source>None</source>
         <translation>Нет</translation>
     </message>

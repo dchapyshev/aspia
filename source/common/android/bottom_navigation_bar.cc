@@ -21,6 +21,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 
+#include "base/gui_application.h"
 #include "common/android/controls.h"
 
 namespace {
@@ -131,8 +132,7 @@ void BottomNavigationBar::paintEvent(QPaintEvent* /* event */)
             const qreal dpr = devicePixelRatioF();
             const int icon_px = qRound(kIconSize * dpr);
 
-            QPixmap icon = Controls::tintedPixmap(item.icon_file_path, QSize(icon_px, icon_px),
-                                                  color);
+            QPixmap icon = GuiApplication::svgPixmap(item.icon_file_path, QSize(icon_px, icon_px));
             icon.setDevicePixelRatio(dpr);
             painter.drawPixmap(QPointF(cell.center().x() - kIconSize / 2.0, top), icon);
         }
