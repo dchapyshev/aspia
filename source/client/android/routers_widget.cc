@@ -80,8 +80,8 @@ RoutersWidget::RoutersWidget(QWidget* parent)
     : QWidget(parent),
       list_(new TreeWidget(this)),
       placeholder_(new RoutersEmptyView(this)),
-      add_button_(new IconButton(":/img/add.svg", this)),
-      edit_button_(new IconButton(":/img/pencil-drawing.svg", this)),
+      add_button_(new IconButton(":/img/material/add_2.svg", this)),
+      edit_button_(new IconButton(":/img/material/edit.svg", this)),
       edit_mode_(false)
 {
     // A trailing column hosts the per-row edit and delete buttons, shown only in edit mode.
@@ -213,8 +213,8 @@ QWidget* RoutersWidget::createRowActions(qint64 router_id)
 {
     QWidget* actions = new QWidget();
 
-    IconButton* edit_button = new IconButton(":/img/pencil-drawing.svg", actions);
-    IconButton* delete_button = new IconButton(":/img/cancel.svg", actions);
+    IconButton* edit_button = new IconButton(":/img/material/edit.svg", actions);
+    IconButton* delete_button = new IconButton(":/img/material/delete.svg", actions);
 
     QHBoxLayout* layout = new QHBoxLayout(actions);
     layout->setContentsMargins(0, 0, 0, 0);

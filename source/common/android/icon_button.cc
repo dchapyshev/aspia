@@ -20,7 +20,7 @@
 
 #include <QPainter>
 
-#include "base/gui_application.h"
+#include "common/android/controls.h"
 
 namespace {
 
@@ -90,7 +90,9 @@ void IconButton::paintEvent(QPaintEvent* /* event */)
         const qreal dpr = devicePixelRatioF();
         const int icon_px = qRound(kIconSize * dpr);
 
-        QPixmap icon = GuiApplication::svgPixmap(icon_file_path_, QSize(icon_px, icon_px));
+        // Monochrome icons are tinted to the on-surface color so they follow the current theme.
+        QPixmap icon = Controls::tintedPixmap(icon_file_path_, QSize(icon_px, icon_px),
+                                              palette().color(QPalette::WindowText));
         icon.setDevicePixelRatio(dpr);
         painter.drawPixmap(QPointF(rect().center().x() - kIconSize / 2.0,
                                    rect().center().y() - kIconSize / 2.0), icon);
