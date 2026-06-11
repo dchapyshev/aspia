@@ -3,6 +3,7 @@
 # On Windows Qt Creator feeds clangd an MSVC-style command (--driver-mode=cl, MSVC target). In
 # that mode clang ignores the GCC-style -std=gnu++20 flag from the build and falls back to an
 # older default standard, which breaks Qt's connect() overloads and fires inline-variable
-# diagnostics. The standard is restored with the MSVC-style flag, which clang-cl honors.
+# diagnostics. The standard is forced through -Xclang so it reaches the frontend regardless of
+# the driver mode, keeping this safe on the GCC-style commands used on Linux and macOS.
 CompileFlags:
-  Add: [/std:c++20]
+  Add: [-Xclang, -std=c++20]

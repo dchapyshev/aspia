@@ -145,6 +145,8 @@ if (ANDROID)
     list(APPEND SOURCE_COMMON_ANDROID
         android/button.cc
         android/button.h
+        android/card.cc
+        android/card.h
         android/combo_box.cc
         android/combo_box.h
         android/controls.cc
