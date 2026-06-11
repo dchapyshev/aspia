@@ -24,7 +24,7 @@
 #include "client/application.h"
 
 #if defined(Q_OS_ANDROID)
-#include <QLabel>
+#include "client/android/main_window.h"
 #else
 #include <QCommandLineParser>
 
@@ -61,9 +61,8 @@ int main(int argc, char* argv[])
     LOG(INFO) << "Command line:" << application.arguments();
 
 #if defined(Q_OS_ANDROID)
-    QLabel label("Hello World");
-    label.setAlignment(Qt::AlignCenter);
-    label.show();
+    AndroidMainWindow main_window;
+    main_window.show();
 
     return application.exec();
 #else

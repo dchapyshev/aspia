@@ -62,6 +62,12 @@ if (WIN32)
     list(APPEND SOURCE_CLIENT_CORE client.rc)
 endif()
 
+list(APPEND SOURCE_CLIENT_ANDROID
+    android/main_window.cc
+    android/main_window.h
+    android/settings_widget.cc
+    android/settings_widget.h)
+
 list(APPEND SOURCE_CLIENT_CORE_ONLINE_CHECKER
     online_checker/online_checker.cc
     online_checker/online_checker.h
@@ -277,6 +283,7 @@ list(APPEND SOURCE_CLIENT_CORE_DESKTOP_HOSTS_TAB
     desktop/hosts/sidebar_items.h)
 
 source_group("" FILES ${SOURCE_CLIENT_CORE})
+source_group(android FILES ${SOURCE_CLIENT_ANDROID})
 source_group(online_checker FILES ${SOURCE_CLIENT_CORE_ONLINE_CHECKER})
 source_group(desktop FILES ${SOURCE_CLIENT_CORE_DESKTOP})
 source_group(desktop\\desktop FILES ${SOURCE_CLIENT_CORE_DESKTOP_DESKTOP})
@@ -307,6 +314,7 @@ endif()
 if (ANDROID)
     qt_add_executable(aspia_client
         ${SOURCE_CLIENT_CORE}
+        ${SOURCE_CLIENT_ANDROID}
         ${SOURCE_CLIENT_CORE_ONLINE_CHECKER})
 else()
     add_executable(aspia_client MACOSX_BUNDLE
