@@ -72,10 +72,14 @@ void Label::changeEvent(QEvent* event)
 {
     QLabel::changeEvent(event);
 
-    // The caption color is derived from the application palette, so it is recalculated when the
-    // system theme changes.
-    if (event->type() == QEvent::ApplicationPaletteChange && !applying_palette_)
+    // The caption color is derived from the palette, so it is recalculated on a theme change.
+    // Nested widgets receive PaletteChange (only top-level widgets get ApplicationPaletteChange);
+    // the guard skips the PaletteChange that setPalette() raises from applyRole() itself.
+    if ((event->type() == QEvent::ApplicationPaletteChange ||
+         event->type() == QEvent::PaletteChange) && !applying_palette_)
+    {
         applyRole();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
