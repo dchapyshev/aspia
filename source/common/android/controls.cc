@@ -18,7 +18,10 @@
 
 #include "common/android/controls.h"
 
+#include <QPainter>
 #include <QVariantAnimation>
+
+#include "base/gui_application.h"
 
 namespace {
 
@@ -73,4 +76,18 @@ QColor Controls::contrastColor(const QColor& background)
     const double luminance =
         0.299 * background.redF() + 0.587 * background.greenF() + 0.114 * background.blueF();
     return luminance > 0.5 ? QColor(Qt::black) : QColor(Qt::white);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QPixmap Controls::tintedPixmap(const QString& svg_file_path, const QSize& size, const QColor& color)
+{
+    QPixmap pixmap = GuiApplication::svgPixmap(svg_file_path, size);
+    if (pixmap.isNull())
+        return pixmap;
+
+    QPainter painter(&pixmap);
+    painter.setCompositionMode(QPainter::CompositionMode_SourceIn);
+    painter.fillRect(pixmap.rect(), color);
+    return pixmap;
 }

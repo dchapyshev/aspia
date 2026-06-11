@@ -21,6 +21,8 @@
 
 #include <QColor>
 #include <QFont>
+#include <QPixmap>
+#include <QString>
 
 class QObject;
 class QVariantAnimation;
@@ -51,6 +53,11 @@ public:
     // Returns a contrasting color (black or white) for text drawn on |background|, picked from
     // its luminance. The Android platform palette does not provide a usable highlighted text color.
     static QColor contrastColor(const QColor& background);
+
+    // Renders the SVG at |svg_file_path| to |size| and recolors it with |color|, for monochrome
+    // icons that follow the current palette.
+    static QPixmap tintedPixmap(const QString& svg_file_path, const QSize& size,
+                                const QColor& color);
 
 private:
     Q_DISABLE_COPY_MOVE(Controls)

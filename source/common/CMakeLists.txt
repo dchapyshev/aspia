@@ -143,6 +143,10 @@ endif()
 
 if (ANDROID)
     list(APPEND SOURCE_COMMON_ANDROID
+        android/app_bar.cc
+        android/app_bar.h
+        android/bottom_navigation_bar.cc
+        android/bottom_navigation_bar.h
         android/button.cc
         android/button.h
         android/card.cc
@@ -159,6 +163,8 @@ if (ANDROID)
         android/line_edit.h
         android/radio_button.cc
         android/radio_button.h
+        android/scroll_area.cc
+        android/scroll_area.h
         android/switch.cc
         android/switch.h
         android/tree_widget.cc
