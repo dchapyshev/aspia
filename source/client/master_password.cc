@@ -18,6 +18,8 @@
 
 #include "client/master_password.h"
 
+#include <optional>
+
 #include "base/logging.h"
 #include "base/crypto/data_cryptor.h"
 #include "base/crypto/password_hash.h"
@@ -53,7 +55,24 @@ bool checkVerifier(const SecureByteArray& key, const QByteArray& verifier)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool changeKeyAndReencrypt(const SecureByteArray& new_key, const QByteArray& new_salt, const QByteArray& new_verifier)
+std::optional<QByteArray> decryptField(DataCryptor& cryptor, const QByteArray& blob)
+{
+    if (blob.isEmpty())
+        return QByteArray();
+    return cryptor.decrypt(blob);
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray encryptField(DataCryptor& cryptor, const QByteArray& plain)
+{
+    if (plain.isEmpty())
+        return QByteArray();
+    return cryptor.encrypt(plain).value_or(QByteArray());
+}
+
+//--------------------------------------------------------------------------------------------------
+bool changeKeyAndReencrypt(const SecureByteArray& new_key, const QByteArray& new_salt,
+                           const QByteArray& new_verifier)
 {
     Database& db = Database::instance();
     if (!db.isValid())
@@ -63,18 +82,86 @@ bool changeKeyAndReencrypt(const SecureByteArray& new_key, const QByteArray& new
     }
 
     DataCryptor& cryptor = DataCryptor::instance();
-    SecureByteArray old_key = cryptor.key();
+    const SecureByteArray old_key = cryptor.key();
 
-    // Read decrypted data with the current key.
     QList<HostConfig> hosts = db.allHosts();
     QList<GroupConfig> groups = db.allGroups();
     QList<RouterConfig> routers = db.routerList();
 
-    // Switch the cryptor to the new key so writes are encrypted with it.
+    // The configs hold the fields still encrypted with the current key, so they are decrypted to
+    // plaintext before the key is switched. Rewriting the stored blobs as-is would leave them
+    // readable only with the old key.
+    struct HostFields { QByteArray name, comment, address, username, password; };
+    struct GroupFields { QByteArray name, comment; };
+    struct RouterFields { QByteArray name, address, username, password, device_token; };
+
+    QList<HostFields> host_fields;
+    QList<GroupFields> group_fields;
+    QList<RouterFields> router_fields;
+
+    for (const HostConfig& host : std::as_const(hosts))
+    {
+        std::optional<QByteArray> name = decryptField(cryptor, host.encryptedName());
+        std::optional<QByteArray> comment = decryptField(cryptor, host.encryptedComment());
+        std::optional<QByteArray> address = decryptField(cryptor, host.encryptedAddress());
+        std::optional<QByteArray> username = decryptField(cryptor, host.encryptedUsername());
+        std::optional<QByteArray> password = decryptField(cryptor, host.encryptedPassword());
+
+        if (!name || !comment || !address || !username || !password)
+        {
+            LOG(ERROR) << "Unable to decrypt host:" << host.id();
+            return false;
+        }
+
+        host_fields.append({ *name, *comment, *address, *username, *password });
+    }
+
+    for (const GroupConfig& group : std::as_const(groups))
+    {
+        std::optional<QByteArray> name = decryptField(cryptor, group.encryptedName());
+        std::optional<QByteArray> comment = decryptField(cryptor, group.encryptedComment());
+
+        if (!name || !comment)
+        {
+            LOG(ERROR) << "Unable to decrypt group:" << group.id();
+            return false;
+        }
+
+        group_fields.append({ *name, *comment });
+    }
+
+    for (const RouterConfig& router : std::as_const(routers))
+    {
+        std::optional<QByteArray> name = decryptField(cryptor, router.encryptedDisplayName());
+        std::optional<QByteArray> address = decryptField(cryptor, router.encryptedAddress());
+        std::optional<QByteArray> username = decryptField(cryptor, router.encryptedUsername());
+        std::optional<QByteArray> password = decryptField(cryptor, router.encryptedPassword());
+        std::optional<QByteArray> device_token =
+            decryptField(cryptor, router.encryptedDeviceToken());
+
+        if (!name || !address || !username || !password || !device_token)
+        {
+            LOG(ERROR) << "Unable to decrypt router:" << router.routerId();
+            return false;
+        }
+
+        router_fields.append({ *name, *address, *username, *password, *device_token });
+    }
+
+    // Switch the cryptor to the new key so the fields below are re-encrypted with it.
     cryptor.setKey(new_key);
 
-    for (HostConfig host : std::as_const(hosts))
+    for (int i = 0; i < hosts.size(); ++i)
     {
+        HostConfig host = hosts[i];
+        const HostFields& fields = host_fields[i];
+
+        host.setEncryptedName(encryptField(cryptor, fields.name));
+        host.setEncryptedComment(encryptField(cryptor, fields.comment));
+        host.setEncryptedAddress(encryptField(cryptor, fields.address));
+        host.setEncryptedUsername(encryptField(cryptor, fields.username));
+        host.setEncryptedPassword(encryptField(cryptor, fields.password));
+
         if (!db.modifyHost(host))
         {
             LOG(ERROR) << "Unable to re-encrypt host:" << host.id();
@@ -83,8 +170,14 @@ bool changeKeyAndReencrypt(const SecureByteArray& new_key, const QByteArray& new
         }
     }
 
-    for (const GroupConfig& group : std::as_const(groups))
+    for (int i = 0; i < groups.size(); ++i)
     {
+        GroupConfig group = groups[i];
+        const GroupFields& fields = group_fields[i];
+
+        group.setEncryptedName(encryptField(cryptor, fields.name));
+        group.setEncryptedComment(encryptField(cryptor, fields.comment));
+
         if (!db.modifyGroup(group))
         {
             LOG(ERROR) << "Unable to re-encrypt group:" << group.id();
@@ -93,8 +186,17 @@ bool changeKeyAndReencrypt(const SecureByteArray& new_key, const QByteArray& new
         }
     }
 
-    for (const RouterConfig& router : std::as_const(routers))
+    for (int i = 0; i < routers.size(); ++i)
     {
+        RouterConfig router = routers[i];
+        const RouterFields& fields = router_fields[i];
+
+        router.setEncryptedDisplayName(encryptField(cryptor, fields.name));
+        router.setEncryptedAddress(encryptField(cryptor, fields.address));
+        router.setEncryptedUsername(encryptField(cryptor, fields.username));
+        router.setEncryptedPassword(encryptField(cryptor, fields.password));
+        router.setEncryptedDeviceToken(encryptField(cryptor, fields.device_token));
+
         if (!db.modifyRouter(router))
         {
             LOG(ERROR) << "Unable to re-encrypt router:" << router.routerId();
