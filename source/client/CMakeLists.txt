@@ -65,6 +65,8 @@ endif()
 list(APPEND SOURCE_CLIENT_ANDROID
     android/main_window.cc
     android/main_window.h
+    android/routers_widget.cc
+    android/routers_widget.h
     android/settings_widget.cc
     android/settings_widget.h)
 

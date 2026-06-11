@@ -22,6 +22,7 @@
 #include <QStackedWidget>
 #include <QVBoxLayout>
 
+#include "client/android/routers_widget.h"
 #include "client/android/settings_widget.h"
 #include "common/android/app_bar.h"
 #include "common/android/bottom_navigation_bar.h"
@@ -48,7 +49,7 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
 {
     content_->addWidget(createPlaceholder(tr("Local")));
     content_->addWidget(createPlaceholder(tr("Remote")));
-    content_->addWidget(createPlaceholder(tr("Routers")));
+    content_->addWidget(new RoutersWidget(this));
     content_->addWidget(new SettingsWidget(this));
 
     navigation_->addItem(tr("Local"), ":/img/folder.svg");
@@ -88,6 +89,9 @@ void AndroidMainWindow::onSectionChanged(int index)
 {
     content_->setCurrentIndex(index);
 
+    RoutersWidget* routers = qobject_cast<RoutersWidget*>(content_->widget(2));
+    app_bar_->setActions((index == 2 && routers) ? routers->appBarActions() : QList<QWidget*>());
+
     switch (index)
     {
         case 0:
@@ -123,8 +127,6 @@ void AndroidMainWindow::retranslate()
         label->setText(tr("Local"));
     if (Label* label = qobject_cast<Label*>(content_->widget(1)))
         label->setText(tr("Remote"));
-    if (Label* label = qobject_cast<Label*>(content_->widget(2)))
-        label->setText(tr("Routers"));
 
     if (SettingsWidget* settings = qobject_cast<SettingsWidget*>(content_->widget(3)))
         settings->retranslate();
