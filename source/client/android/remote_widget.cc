@@ -32,6 +32,7 @@
 #include "client/config.h"
 #include "client/database.h"
 #include "client/router.h"
+#include "common/android/icon_button.h"
 #include "common/android/tree_widget.h"
 
 namespace {
@@ -98,8 +99,15 @@ RemoteWidget::RemoteWidget(QWidget* parent)
     : QWidget(parent),
       stack_(new QStackedWidget(this)),
       tree_(new TreeWidget(this)),
-      host_tree_(new TreeWidget(this))
+      host_tree_(new TreeWidget(this)),
+      search_button_(new IconButton(":/img/material/search.svg", this)),
+      refresh_button_(new IconButton(":/img/material/refresh.svg", this))
 {
+    // The action buttons live in the app bar; AppBar::setActions() reparents and shows the ones it
+    // receives. Hidden by default so they do not linger in this widget.
+    search_button_->hide();
+    refresh_button_->hide();
+
     // Tree page: the router/workspace/group accordion.
     QWidget* tree_page = new QWidget(stack_);
     QVBoxLayout* tree_layout = new QVBoxLayout(tree_page);
@@ -136,6 +144,12 @@ RemoteWidget::RemoteWidget(QWidget* parent)
 
 //--------------------------------------------------------------------------------------------------
 RemoteWidget::~RemoteWidget() = default;
+
+//--------------------------------------------------------------------------------------------------
+QList<QWidget*> RemoteWidget::appBarActions() const
+{
+    return { search_button_, refresh_button_ };
+}
 
 //--------------------------------------------------------------------------------------------------
 void RemoteWidget::reload()

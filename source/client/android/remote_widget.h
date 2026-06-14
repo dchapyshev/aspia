@@ -19,9 +19,11 @@
 #ifndef CLIENT_ANDROID_REMOTE_WIDGET_H
 #define CLIENT_ANDROID_REMOTE_WIDGET_H
 
+#include <QList>
 #include <QSet>
 #include <QWidget>
 
+class IconButton;
 class Router;
 class TreeWidget;
 class QStackedWidget;
@@ -36,6 +38,9 @@ class RemoteWidget final : public QWidget
 public:
     explicit RemoteWidget(QWidget* parent = nullptr);
     ~RemoteWidget() final;
+
+    // Action buttons hosted in the app bar while the remote screen is active.
+    QList<QWidget*> appBarActions() const;
 
     // Rebuilds the router list (after the cryptor is unlocked or a router is added/removed).
     void reload();
@@ -61,6 +66,8 @@ private:
     QStackedWidget* stack_ = nullptr;
     TreeWidget* tree_ = nullptr;
     TreeWidget* host_tree_ = nullptr;
+    IconButton* search_button_ = nullptr;
+    IconButton* refresh_button_ = nullptr;
     QSet<qint64> connected_routers_;
     qint64 host_router_id_ = -1;
     qint64 host_workspace_id_ = 0;

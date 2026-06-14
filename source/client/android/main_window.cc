@@ -24,6 +24,7 @@
 #include <QStackedWidget>
 #include <QVBoxLayout>
 
+#include "client/android/local_widget.h"
 #include "client/android/master_password_dialog.h"
 #include "client/android/remote_widget.h"
 #include "client/android/routers_widget.h"
@@ -31,7 +32,6 @@
 #include "client/master_password.h"
 #include "common/android/app_bar.h"
 #include "common/android/bottom_navigation_bar.h"
-#include "common/android/label.h"
 
 namespace {
 
@@ -43,14 +43,6 @@ enum Section
     SECTION_ROUTERS,
     SECTION_SETTINGS
 };
-
-//--------------------------------------------------------------------------------------------------
-QWidget* createPlaceholder(const QString& text)
-{
-    Label* label = new Label(text, Label::Role::CAPTION);
-    label->setAlignment(Qt::AlignCenter);
-    return label;
-}
 
 } // namespace
 
@@ -64,7 +56,7 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
     RoutersWidget* routers = new RoutersWidget(this);
     RemoteWidget* remote = new RemoteWidget(this);
 
-    content_->addWidget(createPlaceholder(tr("Local")));
+    content_->addWidget(new LocalWidget(this));
     content_->addWidget(remote);
     content_->addWidget(routers);
     content_->addWidget(new SettingsWidget(this));
@@ -122,15 +114,22 @@ void AndroidMainWindow::onSectionChanged(int index)
     RoutersWidget* routers = qobject_cast<RoutersWidget*>(content_->widget(SECTION_ROUTERS));
     if (index != SECTION_ROUTERS && routers)
         routers->resetEditMode();
-    app_bar_->setActions((index == SECTION_ROUTERS && routers) ? routers->appBarActions()
-                                                               : QList<QWidget*>());
+
+    LocalWidget* local = qobject_cast<LocalWidget*>(content_->widget(SECTION_LOCAL));
+    RemoteWidget* remote = qobject_cast<RemoteWidget*>(content_->widget(SECTION_REMOTE));
+
+    QList<QWidget*> actions;
+    if (index == SECTION_LOCAL && local)
+        actions = local->appBarActions();
+    else if (index == SECTION_ROUTERS && routers)
+        actions = routers->appBarActions();
+    else if (index == SECTION_REMOTE && remote)
+        actions = remote->appBarActions();
+    app_bar_->setActions(actions);
 
     // Pick up routers added or removed elsewhere when the remote screen becomes visible.
-    if (index == SECTION_REMOTE)
-    {
-        if (RemoteWidget* remote = qobject_cast<RemoteWidget*>(content_->widget(SECTION_REMOTE)))
-            remote->reload();
-    }
+    if (index == SECTION_REMOTE && remote)
+        remote->reload();
 
     switch (index)
     {
@@ -208,8 +207,8 @@ void AndroidMainWindow::retranslate()
     navigation_->setItemText(SECTION_ROUTERS, tr("Routers"));
     navigation_->setItemText(SECTION_SETTINGS, tr("Settings"));
 
-    if (Label* label = qobject_cast<Label*>(content_->widget(SECTION_LOCAL)))
-        label->setText(tr("Local"));
+    if (LocalWidget* local = qobject_cast<LocalWidget*>(content_->widget(SECTION_LOCAL)))
+        local->retranslate();
 
     if (RoutersWidget* routers = qobject_cast<RoutersWidget*>(content_->widget(SECTION_ROUTERS)))
         routers->retranslate();
