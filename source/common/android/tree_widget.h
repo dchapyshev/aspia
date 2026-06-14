@@ -22,8 +22,8 @@
 #include <QTreeWidget>
 
 // QTreeWidget adapted for touch screens: tall rows with a full-width selection state layer, a
-// chevron expand indicator, kinetic finger scrolling and tap-to-expand on parent rows. Keeps the
-// QTreeWidget API, so it is used the same way.
+// chevron expand indicator (toggled by tapping the chevron column) and kinetic finger scrolling.
+// Keeps the QTreeWidget API, so it is used the same way.
 class TreeWidget final : public QTreeWidget
 {
     Q_OBJECT
@@ -34,14 +34,19 @@ public:
 
 protected:
     // QTreeWidget implementation.
+    void paintEvent(QPaintEvent* event) final;
+    void changeEvent(QEvent* event) final;
+    void mouseReleaseEvent(QMouseEvent* event) final;
     void drawRow(QPainter* painter, const QStyleOptionViewItem& option,
                  const QModelIndex& index) const final;
     void drawBranches(QPainter* painter, const QRect& rect, const QModelIndex& index) const final;
 
-private slots:
-    void onItemClicked(QTreeWidgetItem* item);
-
 private:
+    // Paints the list on the window background instead of the lighter base color.
+    void applyBackgroundColor();
+
+    bool applying_palette_ = false;
+
     Q_DISABLE_COPY_MOVE(TreeWidget)
 };
 

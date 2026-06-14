@@ -23,6 +23,7 @@
 #include <QDataStream>
 #include <QDir>
 #include <QIcon>
+#include <QImage>
 #include <QLocalServer>
 #include <QLocalSocket>
 #include <QOperatingSystemVersion>
@@ -313,12 +314,18 @@ QPixmap GuiApplication::svgPixmap(const QString& svg_file_path, const QSize& siz
 
     QSvgRenderer renderer(buffer);
 
-    QPixmap pixmap(size);
+    // Rasterize at device resolution and tag the pixmap with the ratio, so |size| is treated as a
+    // logical size and the icon stays crisp on high-dpi screens.
+    const qreal dpr = qApp->devicePixelRatio();
+
+    QPixmap pixmap(size * dpr);
     pixmap.fill(Qt::transparent);
 
     QPainter painter(&pixmap);
     renderer.render(&painter);
+    painter.end();
 
+    pixmap.setDevicePixelRatio(dpr);
     return pixmap;
 }
 
@@ -331,9 +338,24 @@ QIcon GuiApplication::svgIcon(const QString& svg_file_path, const QSize& size)
 
 //--------------------------------------------------------------------------------------------------
 // static
-QImage GuiApplication::svgImage(const QString &svg_file_path, const QSize &size)
+QImage GuiApplication::svgImage(const QString& svg_file_path, const QSize& size)
 {
-    return svgPixmap(svg_file_path, size).toImage();
+    QByteArray buffer = svgByteArray(svg_file_path);
+    if (buffer.isEmpty())
+    {
+        LOG(ERROR) << "Empty svg file:" << svg_file_path;
+        return QImage();
+    }
+
+    QSvgRenderer renderer(buffer);
+
+    QImage image(size, QImage::Format_ARGB32_Premultiplied);
+    image.fill(Qt::transparent);
+
+    QPainter painter(&image);
+    renderer.render(&painter);
+
+    return image;
 }
 
 //--------------------------------------------------------------------------------------------------

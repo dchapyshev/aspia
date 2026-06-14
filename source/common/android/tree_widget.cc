@@ -18,8 +18,11 @@
 
 #include "common/android/tree_widget.h"
 
+#include <QEvent>
+#include <QMouseEvent>
 #include <QPainter>
 #include <QScroller>
+#include <QStyle>
 #include <QStyledItemDelegate>
 
 #include "common/android/controls.h"
@@ -33,13 +36,23 @@ constexpr int kIconSize = 24;
 constexpr int kIconSpacing = 12;
 constexpr int kChevronWidth = 12;
 constexpr int kChevronHeight = 7;
-constexpr int kIndentation = 28;
+constexpr int kChevronAreaWidth = 44;
+constexpr int kIndentation = 16;
 constexpr double kSelectedLayerOpacity = 0.12;
 constexpr double kHoverLayerOpacity = 0.08;
 constexpr double kChevronOpacity = 0.6;
 
-// Draws tree items as tall touch targets with an optional leading icon. The row background and
-// the state layer are drawn by the view, so the delegate paints the content only.
+//--------------------------------------------------------------------------------------------------
+QRect chevronArea(const QRect& content, bool rtl)
+{
+    return rtl ? QRect(content.left(), content.top(), kChevronAreaWidth, content.height()) :
+                 QRect(content.right() - kChevronAreaWidth + 1, content.top(), kChevronAreaWidth,
+                       content.height());
+}
+
+// Draws tree items as tall touch targets with a leading icon and, for rows that have children,
+// a trailing accordion chevron (down when collapsed, up when expanded). The row background and the
+// state layer are drawn by the view, so the delegate paints the content only.
 class ItemDelegate final : public QStyledItemDelegate
 {
 public:
@@ -54,6 +67,7 @@ public:
     {
         QSize size = QStyledItemDelegate::sizeHint(option, index);
         size.setHeight(qMax(size.height(), kItemHeight));
+        size.setWidth(size.width() + 2 * kHorizontalPadding);
         return size;
     }
 
@@ -65,8 +79,7 @@ public:
 
         const bool rtl = (option.direction == Qt::RightToLeft);
 
-        QRect content = rtl ? option.rect.adjusted(kHorizontalPadding, 0, 0, 0) :
-                              option.rect.adjusted(0, 0, -kHorizontalPadding, 0);
+        QRect content = option.rect.adjusted(kHorizontalPadding, 0, -kHorizontalPadding, 0);
 
         const QIcon icon = index.data(Qt::DecorationRole).value<QIcon>();
         if (!icon.isNull())
@@ -84,6 +97,18 @@ public:
                 content.setLeft(icon_rect.right() + kIconSpacing);
         }
 
+        if (index.model()->hasChildren(index))
+        {
+            const QRect area = chevronArea(content, rtl);
+            drawChevron(painter, area, option.state & QStyle::State_Open,
+                        option.palette.color(QPalette::WindowText));
+
+            if (rtl)
+                content.setLeft(area.right() + 1);
+            else
+                content.setRight(area.left() - 1);
+        }
+
         const QString elided = option.fontMetrics.elidedText(
             index.data(Qt::DisplayRole).toString(), Qt::ElideRight, content.width());
         const Qt::Alignment alignment = rtl ? Qt::AlignRight : Qt::AlignLeft;
@@ -93,6 +118,31 @@ public:
         painter->drawText(content, Qt::AlignVCenter | Qt::AlignAbsolute | alignment, elided);
 
         painter->restore();
+    }
+
+private:
+    static void drawChevron(QPainter* painter, const QRect& area, bool expanded, QColor color)
+    {
+        const QPointF center = area.center();
+        color.setAlphaF(kChevronOpacity);
+
+        QPolygonF chevron;
+        if (expanded)
+        {
+            chevron << QPointF(center.x() - kChevronWidth / 2.0, center.y() + kChevronHeight / 2.0)
+                    << QPointF(center.x() + kChevronWidth / 2.0, center.y() + kChevronHeight / 2.0)
+                    << QPointF(center.x(), center.y() - kChevronHeight / 2.0);
+        }
+        else
+        {
+            chevron << QPointF(center.x() - kChevronWidth / 2.0, center.y() - kChevronHeight / 2.0)
+                    << QPointF(center.x() + kChevronWidth / 2.0, center.y() - kChevronHeight / 2.0)
+                    << QPointF(center.x(), center.y() + kChevronHeight / 2.0);
+        }
+
+        painter->setPen(Qt::NoPen);
+        painter->setBrush(color);
+        painter->drawPolygon(chevron);
     }
 };
 
@@ -120,13 +170,63 @@ TreeWidget::TreeWidget(QWidget* parent)
     // gesture: grabbing the touch gesture would swallow row taps.
     QScroller::grabGesture(viewport(), QScroller::LeftMouseButtonGesture);
 
-    new ScrollIndicator(this);
+    applyBackgroundColor();
 
-    connect(this, &QTreeWidget::itemClicked, this, &TreeWidget::onItemClicked);
+    new ScrollIndicator(this);
 }
 
 //--------------------------------------------------------------------------------------------------
 TreeWidget::~TreeWidget() = default;
+
+//--------------------------------------------------------------------------------------------------
+void TreeWidget::paintEvent(QPaintEvent* event)
+{
+    QTreeWidget::paintEvent(event);
+
+    // A top separator that sets the list off from whatever is above it, mirroring the navigation
+    // bar border.
+    QPainter painter(viewport());
+    painter.setPen(palette().color(QPalette::Mid));
+    painter.drawLine(0, 0, viewport()->width(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TreeWidget::changeEvent(QEvent* event)
+{
+    QTreeWidget::changeEvent(event);
+
+    // The base color is reset from the theme on a palette change; the guard skips the change that
+    // applyBackgroundColor() raises itself.
+    if ((event->type() == QEvent::ApplicationPaletteChange ||
+         event->type() == QEvent::PaletteChange) && !applying_palette_)
+    {
+        applyBackgroundColor();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void TreeWidget::mouseReleaseEvent(QMouseEvent* event)
+{
+    const QPoint pos = event->position().toPoint();
+    const QModelIndex index = indexAt(pos);
+
+    // A tap on the trailing chevron of a parent row toggles it instead of activating the row.
+    if (index.isValid() && model()->hasChildren(index))
+    {
+        const bool rtl = (layoutDirection() == Qt::RightToLeft);
+        const QRect content =
+            visualRect(index).adjusted(kHorizontalPadding, 0, -kHorizontalPadding, 0);
+
+        if (chevronArea(content, rtl).contains(pos))
+        {
+            setExpanded(index, !isExpanded(index));
+            event->accept();
+            return;
+        }
+    }
+
+    QTreeWidget::mouseReleaseEvent(event);
+}
 
 //--------------------------------------------------------------------------------------------------
 void TreeWidget::drawRow(QPainter* painter, const QStyleOptionViewItem& option,
@@ -155,57 +255,20 @@ void TreeWidget::drawRow(QPainter* painter, const QStyleOptionViewItem& option,
 }
 
 //--------------------------------------------------------------------------------------------------
-void TreeWidget::drawBranches(QPainter* painter, const QRect& rect,
-                              const QModelIndex& index) const
+void TreeWidget::drawBranches(QPainter* /* painter */, const QRect& /* rect */,
+                              const QModelIndex& /* index */) const
 {
-    if (!model()->hasChildren(index))
-        return;
-
-    painter->save();
-    painter->setRenderHint(QPainter::Antialiasing);
-
-    // The chevron is centered in the branch section adjacent to the content: it points towards
-    // the content when collapsed and down when expanded.
-    const bool rtl = (layoutDirection() == Qt::RightToLeft);
-    const QRectF section = rtl ?
-        QRectF(rect.left(), rect.top(), indentation(), rect.height()) :
-        QRectF(rect.right() - indentation(), rect.top(), indentation(), rect.height());
-    const QPointF center = section.center();
-
-    QColor color = palette().color(QPalette::WindowText);
-    color.setAlphaF(kChevronOpacity);
-
-    QPolygonF chevron;
-    if (isExpanded(index))
-    {
-        chevron << QPointF(center.x() - kChevronWidth / 2.0, center.y() - kChevronHeight / 2.0)
-                << QPointF(center.x() + kChevronWidth / 2.0, center.y() - kChevronHeight / 2.0)
-                << QPointF(center.x(), center.y() + kChevronHeight / 2.0);
-    }
-    else if (rtl)
-    {
-        chevron << QPointF(center.x() + kChevronHeight / 2.0, center.y() - kChevronWidth / 2.0)
-                << QPointF(center.x() + kChevronHeight / 2.0, center.y() + kChevronWidth / 2.0)
-                << QPointF(center.x() - kChevronHeight / 2.0, center.y());
-    }
-    else
-    {
-        chevron << QPointF(center.x() - kChevronHeight / 2.0, center.y() - kChevronWidth / 2.0)
-                << QPointF(center.x() - kChevronHeight / 2.0, center.y() + kChevronWidth / 2.0)
-                << QPointF(center.x() + kChevronHeight / 2.0, center.y());
-    }
-
-    painter->setPen(Qt::NoPen);
-    painter->setBrush(color);
-    painter->drawPolygon(chevron);
-
-    painter->restore();
+    // The expand indicator is a trailing accordion chevron drawn by the delegate, so the leading
+    // branch area is left empty.
 }
 
 //--------------------------------------------------------------------------------------------------
-void TreeWidget::onItemClicked(QTreeWidgetItem* item)
+void TreeWidget::applyBackgroundColor()
 {
-    // Parent rows expand and collapse with a tap anywhere on the row.
-    if (item->childCount() > 0)
-        item->setExpanded(!item->isExpanded());
+    QPalette pal = palette();
+    pal.setColor(QPalette::Base, pal.color(QPalette::Window));
+
+    applying_palette_ = true;
+    setPalette(pal);
+    applying_palette_ = false;
 }

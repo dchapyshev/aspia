@@ -87,13 +87,9 @@ void IconButton::paintEvent(QPaintEvent* /* event */)
 
     if (!icon_file_path_.isEmpty())
     {
-        const qreal dpr = devicePixelRatioF();
-        const int icon_px = qRound(kIconSize * dpr);
-
         // Monochrome icons are tinted to the on-surface color so they follow the current theme.
-        QPixmap icon = Controls::tintedPixmap(icon_file_path_, QSize(icon_px, icon_px),
+        QPixmap icon = Controls::tintedPixmap(icon_file_path_, QSize(kIconSize, kIconSize),
                                               palette().color(QPalette::WindowText));
-        icon.setDevicePixelRatio(dpr);
         painter.drawPixmap(QPointF(rect().center().x() - kIconSize / 2.0,
                                    rect().center().y() - kIconSize / 2.0), icon);
     }

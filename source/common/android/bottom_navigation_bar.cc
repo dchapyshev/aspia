@@ -129,11 +129,7 @@ void BottomNavigationBar::paintEvent(QPaintEvent* /* event */)
 
         if (!item.icon_file_path.isEmpty())
         {
-            const qreal dpr = devicePixelRatioF();
-            const int icon_px = qRound(kIconSize * dpr);
-
-            QPixmap icon = GuiApplication::svgPixmap(item.icon_file_path, QSize(icon_px, icon_px));
-            icon.setDevicePixelRatio(dpr);
+            QPixmap icon = GuiApplication::svgPixmap(item.icon_file_path, QSize(kIconSize, kIconSize));
             painter.drawPixmap(QPointF(cell.center().x() - kIconSize / 2.0, top), icon);
         }
 
