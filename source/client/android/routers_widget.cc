@@ -20,46 +20,25 @@
 
 #include <QDateTime>
 #include <QGridLayout>
-#include <QHBoxLayout>
-#include <QHeaderView>
 #include <QPainter>
 #include <QSet>
-#include <QTreeWidgetItem>
+#include <QVBoxLayout>
 
 #include "base/crypto/data_cryptor.h"
-#include "base/gui_application.h"
 #include "base/net/tcp_channel.h"
 #include "client/android/router_edit_dialog.h"
-#include "client/android/router_status_dialog.h"
 #include "client/android/two_factor_dialog.h"
 #include "client/config.h"
 #include "client/database.h"
 #include "client/router.h"
 #include "common/android/controls.h"
 #include "common/android/icon_button.h"
-#include "common/android/tree_widget.h"
+#include "common/android/scroll_area.h"
 
 namespace {
 
-constexpr int kRowActionsWidth = 96;
 constexpr double kPlaceholderTextOpacity = 0.6;
-
-//--------------------------------------------------------------------------------------------------
-QString statusIconPath(Router::Status status)
-{
-    switch (status)
-    {
-        case Router::Status::CONNECTING:
-            return ":/img/router-connecting.svg";
-
-        case Router::Status::ONLINE:
-            return ":/img/router-online.svg";
-
-        case Router::Status::OFFLINE:
-        default:
-            return ":/img/router-offline.svg";
-    }
-}
+constexpr int kMaxEvents = 7;
 
 } // namespace
 
@@ -101,20 +80,18 @@ private:
 //--------------------------------------------------------------------------------------------------
 RoutersWidget::RoutersWidget(QWidget* parent)
     : QWidget(parent),
-      list_(new TreeWidget(this)),
+      scroll_(new ScrollArea(this)),
+      container_(new QWidget(scroll_)),
+      cards_layout_(new QVBoxLayout(container_)),
       placeholder_(new RoutersEmptyView(this)),
       add_button_(new IconButton(":/img/material/add_2.svg", this)),
-      edit_button_(new IconButton(":/img/material/edit.svg", this)),
-      edit_mode_(false)
+      edit_button_(new IconButton(":/img/material/edit.svg", this))
 {
-    // A trailing column hosts the per-row edit and delete buttons, shown only in edit mode.
-    list_->setRootIsDecorated(false);
-    list_->setColumnCount(2);
-    list_->header()->setStretchLastSection(false);
-    list_->header()->setSectionResizeMode(0, QHeaderView::Stretch);
-    list_->header()->setSectionResizeMode(1, QHeaderView::Fixed);
-    list_->setColumnWidth(1, kRowActionsWidth);
-    list_->setColumnHidden(1, true);
+    cards_layout_->setContentsMargins(0, 0, 0, 0);
+    cards_layout_->setSpacing(0);
+    cards_layout_->addStretch();
+
+    scroll_->setWidget(container_);
 
     edit_button_->setCheckable(true);
 
@@ -126,14 +103,13 @@ RoutersWidget::RoutersWidget(QWidget* parent)
     // The placeholder overlaps the list, so it dims the empty surface and shows the hint on top.
     QGridLayout* layout = new QGridLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
-    layout->addWidget(list_, 0, 0);
+    layout->addWidget(scroll_, 0, 0);
     layout->addWidget(placeholder_, 0, 0);
     placeholder_->raise();
     placeholder_->hide();
 
     connect(add_button_, &IconButton::clicked, this, &RoutersWidget::onAddRouter);
     connect(edit_button_, &IconButton::clicked, this, &RoutersWidget::onToggleEditMode);
-    connect(list_, &QTreeWidget::itemClicked, this, &RoutersWidget::onRouterActivated);
 
     retranslate();
     reload();
@@ -146,7 +122,7 @@ RoutersWidget::~RoutersWidget() = default;
 QList<QWidget*> RoutersWidget::appBarActions() const
 {
     // The edit action is meaningful only when there is at least one router to act on.
-    if (list_->topLevelItemCount() == 0)
+    if (cards_.isEmpty())
         return { add_button_ };
 
     return { add_button_, edit_button_ };
@@ -155,29 +131,50 @@ QList<QWidget*> RoutersWidget::appBarActions() const
 //--------------------------------------------------------------------------------------------------
 void RoutersWidget::reload()
 {
-    list_->clear();
+    clearCards();
 
     // The router fields are decrypted with the master-password-derived key, so there is nothing to
     // show until the cryptor is unlocked.
     if (!DataCryptor::instance().isValid())
+    {
+        cards_layout_->addStretch();
+        placeholder_->hide();
+        emit appBarActionsChanged();
         return;
+    }
 
     syncSessions();
 
-    for (const RouterConfig& router : Database::instance().routerList())
+    for (const RouterConfig& config : Database::instance().routerList())
     {
-        const qint64 router_id = router.routerId();
+        const qint64 router_id = config.routerId();
         const Router* session = sessions_.value(router_id);
         const Router::Status status = session ? session->status() : Router::Status::OFFLINE;
 
-        QTreeWidgetItem* item = new QTreeWidgetItem(list_, {router.displayLabel()});
-        item->setIcon(0, GuiApplication::svgIcon(statusIconPath(status)));
-        item->setData(0, Qt::UserRole, router_id);
+        // The event log is filled lazily when the panel is opened, so the card starts empty.
+        RouterCard* card = new RouterCard(router_id, config.displayLabel(), container_);
+        card->setStatus(status);
+        card->setEditMode(edit_mode_);
+
+        connect(card, &RouterCard::expandRequested, this, &RoutersWidget::onCardExpandRequested);
+        connect(card, &RouterCard::editRequested, this, &RoutersWidget::onEditRouter);
+        connect(card, &RouterCard::removeRequested, this, &RoutersWidget::onRemoveRouter);
+
+        cards_layout_->addWidget(card);
+        cards_.insert(router_id, card);
     }
 
-    placeholder_->setVisible(list_->topLevelItemCount() == 0);
+    cards_layout_->addStretch();
 
-    updateRowActions();
+    // With no rows there is nothing to edit, so edit mode is dropped to keep it from silently
+    // persisting and decorating the next added router.
+    if (cards_.isEmpty() && edit_mode_)
+    {
+        edit_mode_ = false;
+        edit_button_->setChecked(false);
+    }
+
+    placeholder_->setVisible(cards_.isEmpty());
     emit appBarActionsChanged();
 }
 
@@ -189,8 +186,9 @@ void RoutersWidget::resetEditMode()
 
     edit_mode_ = false;
     edit_button_->setChecked(false);
-    list_->setColumnHidden(1, true);
-    updateRowActions();
+
+    for (RouterCard* card : std::as_const(cards_))
+        card->setEditMode(false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -211,74 +209,51 @@ void RoutersWidget::onAddRouter()
 void RoutersWidget::onToggleEditMode()
 {
     edit_mode_ = edit_button_->isChecked();
-    list_->setColumnHidden(1, !edit_mode_);
-    updateRowActions();
+
+    // Entering edit mode closes the open panel; panels cannot be opened while editing.
+    if (edit_mode_)
+    {
+        if (RouterCard* card = cards_.value(expanded_router_id_))
+            card->setExpanded(false);
+        expanded_router_id_ = -1;
+    }
+
+    for (RouterCard* card : std::as_const(cards_))
+        card->setEditMode(edit_mode_);
 }
 
 //--------------------------------------------------------------------------------------------------
-void RoutersWidget::onRouterActivated(QTreeWidgetItem* item, int /* column */)
+void RoutersWidget::onCardExpandRequested(qint64 router_id)
 {
-    // In edit mode the row hosts the edit and delete buttons; tapping the row itself does nothing.
-    if (edit_mode_ || !item)
+    // Panels stay shut in edit mode, where the row hosts the edit and delete actions instead.
+    if (edit_mode_)
         return;
 
-    const qint64 router_id = item->data(0, Qt::UserRole).toLongLong();
-
-    RouterStatusDialog dialog(item->text(0), router_id, events_.value(router_id), this);
-    connect(this, &RoutersWidget::sig_routerEvent, &dialog, &RouterStatusDialog::onRouterEvent);
-    connect(&dialog, &RouterStatusDialog::sig_clearEvents, this, [this](qint64 id)
+    // Tapping the open router closes its panel; tapping another closes the previous one first, so
+    // only a single panel is ever open.
+    if (expanded_router_id_ == router_id)
     {
-        auto it = events_.find(id);
-        if (it != events_.end())
-            it->clear();
-    });
-    dialog.exec();
-}
-
-//--------------------------------------------------------------------------------------------------
-void RoutersWidget::updateRowActions()
-{
-    // With no rows there is nothing to edit, so edit mode is left to keep it from silently
-    // persisting and decorating the next added router.
-    if (list_->topLevelItemCount() == 0 && edit_mode_)
-    {
-        edit_mode_ = false;
-        edit_button_->setChecked(false);
-        list_->setColumnHidden(1, true);
+        if (RouterCard* card = cards_.value(router_id))
+            card->setExpanded(false);
+        expanded_router_id_ = -1;
+        return;
     }
 
-    for (int i = 0; i < list_->topLevelItemCount(); ++i)
-    {
-        QTreeWidgetItem* item = list_->topLevelItem(i);
-        if (edit_mode_)
-            list_->setItemWidget(item, 1, createRowActions(item->data(0, Qt::UserRole).toLongLong()));
-        else
-            list_->setItemWidget(item, 1, nullptr);
-    }
+    if (RouterCard* previous = cards_.value(expanded_router_id_))
+        previous->setExpanded(false);
+
+    RouterCard* card = cards_.value(router_id);
+    if (!card)
+        return;
+
+    // Fill the log from the stored history only now that the panel is being shown.
+    card->setEvents(events_.value(router_id));
+    card->setExpanded(true);
+    expanded_router_id_ = router_id;
 }
 
 //--------------------------------------------------------------------------------------------------
-QWidget* RoutersWidget::createRowActions(qint64 router_id)
-{
-    QWidget* actions = new QWidget();
-
-    IconButton* edit_button = new IconButton(":/img/material/edit.svg", actions);
-    IconButton* delete_button = new IconButton(":/img/material/delete.svg", actions);
-
-    QHBoxLayout* layout = new QHBoxLayout(actions);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(0);
-    layout->addWidget(edit_button);
-    layout->addWidget(delete_button);
-
-    connect(edit_button, &IconButton::clicked, this, [this, router_id]() { editRouter(router_id); });
-    connect(delete_button, &IconButton::clicked, this, [this, router_id]() { removeRouter(router_id); });
-
-    return actions;
-}
-
-//--------------------------------------------------------------------------------------------------
-void RoutersWidget::editRouter(qint64 router_id)
+void RoutersWidget::onEditRouter(qint64 router_id)
 {
     RouterEditDialog dialog(router_id, this);
     if (dialog.exec() == QDialog::Accepted)
@@ -286,10 +261,25 @@ void RoutersWidget::editRouter(qint64 router_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RoutersWidget::removeRouter(qint64 router_id)
+void RoutersWidget::onRemoveRouter(qint64 router_id)
 {
     if (Database::instance().removeRouter(router_id))
         reload();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RoutersWidget::clearCards()
+{
+    QLayoutItem* item;
+    while ((item = cards_layout_->takeAt(0)) != nullptr)
+    {
+        if (QWidget* widget = item->widget())
+            widget->deleteLater();
+        delete item;
+    }
+
+    cards_.clear();
+    expanded_router_id_ = -1;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -336,8 +326,8 @@ void RoutersWidget::createRouterSession(const RouterConfig& config)
 
     connect(router, &Router::sig_statusChanged, this, [this](qint64 id, Router::Status status)
     {
-        if (QTreeWidgetItem* item = itemForRouter(id))
-            item->setIcon(0, GuiApplication::svgIcon(statusIconPath(status)));
+        if (RouterCard* card = cards_.value(id))
+            card->setStatus(status);
 
         const Router* session = sessions_.value(id);
         const QString address = session ? session->config().address() : QString();
@@ -420,20 +410,18 @@ void RoutersWidget::addRouterEvent(qint64 router_id, RouterEvent::Severity sever
 
     auto it = events_.find(router_id);
     if (it != events_.end())
+    {
         it->append(event);
 
-    emit sig_routerEvent(router_id, event);
-}
-
-//--------------------------------------------------------------------------------------------------
-QTreeWidgetItem* RoutersWidget::itemForRouter(qint64 router_id) const
-{
-    for (int i = 0; i < list_->topLevelItemCount(); ++i)
-    {
-        QTreeWidgetItem* item = list_->topLevelItem(i);
-        if (item->data(0, Qt::UserRole).toLongLong() == router_id)
-            return item;
+        // Cap the stored history so it matches what the card keeps on screen.
+        while (it->size() > kMaxEvents)
+            it->removeFirst();
     }
 
-    return nullptr;
+    // Only the open panel shows its log live; the others are refilled from events_ when expanded.
+    if (router_id == expanded_router_id_)
+    {
+        if (RouterCard* card = cards_.value(router_id))
+            card->appendEvent(event);
+    }
 }
