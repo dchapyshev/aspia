@@ -21,6 +21,7 @@
 
 #include <QQueue>
 #include <QObject>
+#include <QStringList>
 
 #include <asio/ip/tcp.hpp>
 
@@ -61,6 +62,11 @@ public:
     // (~1/s with a burst of 60). Routers facing corporate NAT may need a much higher value.
     void setMaxConnectionsPerMinute(int max_per_minute);
 
+    // Restricts the addresses allowed to connect. Entries are literal IPs or CIDR subnets; an empty
+    // list allows any address. Rejected peers are dropped at accept time, before the handshake, so
+    // unwanted traffic never consumes a pending slot.
+    void setWhiteList(const QStringList& white_list);
+
     void start(quint16 port, const QString& iface = QString());
 
     bool hasReadyConnections();
@@ -86,6 +92,9 @@ private:
         ServerAuthenticatorLegacy::AnonymousAccess::DISABLE;
 
     quint32 anonymous_session_types_ = 0;
+
+    // Empty list means any address is allowed.
+    QStringList white_list_;
 
     // Anti-flood gate: handles both per-address rate limiting and the global pending cap, plus
     // rate-limited rejection logging.

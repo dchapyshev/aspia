@@ -65,12 +65,6 @@ public:
     void setHostWhiteList(const WhiteList& list);
     WhiteList hostWhiteList() const;
 
-    void setAdminWhiteList(const WhiteList& list);
-    WhiteList adminWhiteList() const;
-
-    void setManagerWhiteList(const WhiteList& list);
-    WhiteList managerWhiteList() const;
-
     void setRelayWhiteList(const WhiteList& list);
     WhiteList relayWhiteList() const;
 

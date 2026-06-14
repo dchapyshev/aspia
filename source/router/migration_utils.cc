@@ -52,15 +52,6 @@ void doConfigMigrate(const QJsonDocument& doc)
         return;
     }
 
-    if (root_object.contains("AdminWhiteList"))
-    {
-        QString value = root_object["AdminWhiteList"].toString();
-        LOG(INFO) << "AdminWhiteList:" << value;
-
-        QStringList list = value.split(';', Qt::SkipEmptyParts);
-        settings.setAdminWhiteList(list);
-    }
-
     if (root_object.contains("ClientWhiteList"))
     {
         QString value = root_object["ClientWhiteList"].toString();

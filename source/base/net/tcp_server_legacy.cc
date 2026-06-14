@@ -23,6 +23,7 @@
 #include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
 #include "base/net/flood_guard.h"
+#include "base/net/net_utils.h"
 #include "base/net/tcp_channel_legacy.h"
 #include "base/peer/server_authenticator_legacy.h"
 
@@ -90,6 +91,12 @@ void TcpServerLegacy::setMaxConnectionsPerMinute(int max_per_minute)
     }
 
     flood_guard_->setRateLimit(FloodGuard::Seconds{60}, max_per_minute);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpServerLegacy::setWhiteList(const QStringList& white_list)
+{
+    white_list_ = white_list;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -225,6 +232,23 @@ void TcpServerLegacy::doAccept()
                 // socket goes out of scope here - asio's destructor closes the descriptor.
                 doAccept();
                 return;
+            }
+
+            // The white list is enforced here, before the handshake, so unwanted peers are dropped
+            // without consuming a pending slot or any cryptographic work.
+            if (!white_list_.isEmpty())
+            {
+                std::error_code endpoint_error;
+                const asio::ip::tcp::endpoint endpoint = socket.remote_endpoint(endpoint_error);
+                const QString address = endpoint_error ?
+                    QString() : QString::fromStdString(endpoint.address().to_string());
+
+                if (!NetUtils::isAddressInWhiteList(white_list_, address))
+                {
+                    LOG(TRACE) << "Connection rejected by white list:" << address;
+                    doAccept();
+                    return;
+                }
             }
 
             ServerAuthenticatorLegacy* authenticator = new ServerAuthenticatorLegacy();

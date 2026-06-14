@@ -65,6 +65,11 @@ public:
     static bool isAddressEqual(const QString& address1, const QString& address2);
     static bool isAddressEqual(const std::string& address1, const std::string& address2);
 
+    // Returns true if |address| matches an entry in |white_list| (a literal IP or a CIDR subnet).
+    // An empty list allows any address. IPv4-mapped IPv6 peers are normalized to plain IPv4 so that
+    // they match IPv4 entries.
+    static bool isAddressInWhiteList(const QStringList& white_list, const QString& address);
+
 private:
     Q_DISABLE_COPY_MOVE(NetUtils)
 };

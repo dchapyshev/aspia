@@ -368,3 +368,39 @@ bool NetUtils::isAddressEqual(const std::string& address1, const std::string& ad
 {
     return isAddressEqual(QString::fromStdString(address1), QString::fromStdString(address2));
 }
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool NetUtils::isAddressInWhiteList(const QStringList& white_list, const QString& address_string)
+{
+    if (white_list.isEmpty())
+        return true;
+
+    QHostAddress address(address_string);
+
+    // Dual-stack listeners report IPv4 peers as IPv4-mapped IPv6 (::ffff:a.b.c.d). Normalize them
+    // back to plain IPv4 so that both literal and subnet entries match.
+    bool is_ipv4 = false;
+    const quint32 ipv4 = address.toIPv4Address(&is_ipv4);
+    if (is_ipv4)
+        address = QHostAddress(ipv4);
+
+    if (address.protocol() != QAbstractSocket::IPv4Protocol &&
+        address.protocol() != QAbstractSocket::IPv6Protocol)
+    {
+        return false;
+    }
+
+    for (const auto& entry : white_list)
+    {
+        QHostAddress white_list_address(entry);
+        if (white_list_address == address)
+            return true;
+
+        const QPair<QHostAddress, int> subnet = QHostAddress::parseSubnet(entry);
+        if (subnet.second >= 0 && address.isInSubnet(subnet))
+            return true;
+    }
+
+    return false;
+}

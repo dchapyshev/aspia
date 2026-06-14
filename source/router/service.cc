@@ -18,7 +18,6 @@
 
 #include "router/service.h"
 
-#include <QHostAddress>
 #include <QTimer>
 
 #include "base/logging.h"
@@ -37,38 +36,6 @@
 #include "router/host_legacy.h"
 #include "router/settings.h"
 #include "router/router_user_list.h"
-
-namespace {
-
-//--------------------------------------------------------------------------------------------------
-bool isAddressAllowed(const QStringList& white_list, const QString& address_string)
-{
-    if (white_list.isEmpty())
-        return true;
-
-    QHostAddress address(address_string);
-    if (address.protocol() != QAbstractSocket::IPv4Protocol &&
-        address.protocol() != QAbstractSocket::IPv6Protocol)
-    {
-        LOG(ERROR) << "Invalid peer IP address:" << address_string;
-        return false;
-    }
-
-    for (const auto& entry : white_list)
-    {
-        QHostAddress white_list_address(entry);
-        if (white_list_address == address)
-            return true;
-
-        QPair<QHostAddress, int> subnet = QHostAddress::parseSubnet(entry);
-        if (subnet.second >= 0 && address.isInSubnet(subnet))
-            return true;
-    }
-
-    return false;
-}
-
-} // namespace
 
 //--------------------------------------------------------------------------------------------------
 // static
@@ -627,18 +594,6 @@ bool Service::start()
     else
         LOG(INFO) << "Allowed hosts:" << host_white_list_;
 
-    admin_white_list_ = settings.adminWhiteList();
-    if (admin_white_list_.isEmpty())
-        LOG(INFO) << "Connections from all admins will be allowed";
-    else
-        LOG(INFO) << "Allowed admins:" << admin_white_list_;
-
-    manager_white_list_ = settings.managerWhiteList();
-    if (manager_white_list_.isEmpty())
-        LOG(INFO) << "Connections from all managers will be allowed";
-    else
-        LOG(INFO) << "Allowed managers:" << manager_white_list_;
-
     relay_white_list_ = settings.relayWhiteList();
     if (relay_white_list_.isEmpty())
         LOG(INFO) << "Connections from all relays will be allowed";
@@ -685,6 +640,7 @@ bool Service::start()
         ServerAuthenticator::AnonymousAccess::ENABLE, proto::router::SESSION_TYPE_HOST);
     host_server_->setMaxPendingConnections(kHostMaxPendingConnections);
     host_server_->setMaxConnectionsPerMinute(kHostMaxConnectionsPerMinute);
+    host_server_->setWhiteList(host_white_list_);
     host_server_->start(port, listen_interface);
 
     host_legacy_server_ = new TcpServerLegacy(this);
@@ -695,6 +651,7 @@ bool Service::start()
         ServerAuthenticatorLegacy::AnonymousAccess::ENABLE, proto::router::SESSION_TYPE_HOST);
     host_legacy_server_->setMaxPendingConnections(kHostMaxPendingConnections);
     host_legacy_server_->setMaxConnectionsPerMinute(kHostMaxConnectionsPerMinute);
+    host_legacy_server_->setWhiteList(host_white_list_);
     host_legacy_server_->start(legacy_port, listen_interface);
 
     // Relay listener accepts relay sessions only (anonymous access).
@@ -706,6 +663,7 @@ bool Service::start()
         ServerAuthenticator::AnonymousAccess::ENABLE, proto::router::SESSION_TYPE_RELAY);
     relay_server_->setMaxPendingConnections(kRelayMaxPendingConnections);
     relay_server_->setMaxConnectionsPerMinute(kRelayMaxConnectionsPerMinute);
+    relay_server_->setWhiteList(relay_white_list_);
     relay_server_->start(relay_port, listen_interface);
 
     // Client listener accepts admin/manager/client sessions only. These session types always
@@ -716,6 +674,7 @@ bool Service::start()
     client_server_->setUserList(user_list);
     client_server_->setMaxPendingConnections(kClientMaxPendingConnections);
     client_server_->setMaxConnectionsPerMinute(kClientMaxConnectionsPerMinute);
+    client_server_->setWhiteList(client_white_list_);
     client_server_->start(client_port, listen_interface);
 
     if (settings.isStunEnabled())
@@ -736,28 +695,17 @@ void Service::addHost(TcpChannel* channel, bool is_legacy)
     LOG(INFO) << "New session:" << address;
 
     Host* host = nullptr;
-
-    if (isAddressAllowed(host_white_list_, address))
+    if (!is_legacy)
     {
-        if (!is_legacy)
-        {
-            HostNG* host_ng = new HostNG(channel, this);
-            connect(host_ng, &HostNG::sig_hostIdAssigned, this, &Service::onHostIdAssigned);
-            host = host_ng;
-        }
-        else
-        {
-            HostLegacy* host_legacy = new HostLegacy(channel, this);
-            connect(host_legacy, &HostLegacy::sig_hostIdAssigned, this, &Service::onHostIdAssigned);
-            host = host_legacy;
-        }
+        HostNG* host_ng = new HostNG(channel, this);
+        connect(host_ng, &HostNG::sig_hostIdAssigned, this, &Service::onHostIdAssigned);
+        host = host_ng;
     }
-
-    if (!host)
+    else
     {
-        LOG(ERROR) << "Connection is rejected for" << address;
-        channel->deleteLater();
-        return;
+        HostLegacy* host_legacy = new HostLegacy(channel, this);
+        connect(host_legacy, &HostLegacy::sig_hostIdAssigned, this, &Service::onHostIdAssigned);
+        host = host_legacy;
     }
 
     hosts_.emplace_back(host);
@@ -775,31 +723,19 @@ void Service::addClient(TcpChannel* channel)
     LOG(INFO) << "New client session:" << session_type << "(" << address << ")";
 
     Client* client = nullptr;
-
     switch (session_type)
     {
         case proto::router::SESSION_TYPE_CLIENT:
-        {
-            if (!isAddressAllowed(client_white_list_, address))
-                break;
-
             client = new Client(channel, this);
-        }
-        break;
+            break;
 
         case proto::router::SESSION_TYPE_MANAGER:
-        {
-            if (isAddressAllowed(manager_white_list_, address))
-                client = new ClientManager(channel, this);
-        }
-        break;
+            client = new ClientManager(channel, this);
+            break;
 
         case proto::router::SESSION_TYPE_ADMIN:
-        {
-            if (isAddressAllowed(admin_white_list_, address))
-                client = new ClientAdmin(channel, this);
-        }
-        break;
+            client = new ClientAdmin(channel, this);
+            break;
 
         default:
             LOG(ERROR) << "Unsupported client session type:" << session_type;
@@ -827,13 +763,6 @@ void Service::addRelay(TcpChannel* channel)
     QString address = QString::fromStdString(channel->peerAddress());
 
     LOG(INFO) << "New relay session:" << address;
-
-    if (!isAddressAllowed(relay_white_list_, address))
-    {
-        LOG(ERROR) << "Connection is rejected for" << address;
-        channel->deleteLater();
-        return;
-    }
 
     Relay* relay = new Relay(channel, this);
     relays_.emplace_back(relay);
