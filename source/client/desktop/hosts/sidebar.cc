@@ -969,7 +969,7 @@ void Sidebar::onRouterErrorOccurred(qint64 router_id, TcpChannel::ErrorCode erro
         severity = Severity::CRITICAL;
     }
 
-    const QString message = tr("Network error: %1.").arg(TcpChannel::errorToString(error_code));
+    const QString message = tr("Network error: %1").arg(TcpChannel::errorToString(error_code));
     addRouterEvent(severity, router_id, message);
 }
 

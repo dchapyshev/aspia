@@ -362,7 +362,7 @@ void RoutersWidget::createRouterSession(const RouterConfig& config)
         }
 
         addRouterEvent(id, severity,
-                       tr("Network error: %1.").arg(TcpChannel::errorToString(error_code)));
+                       tr("Network error: %1").arg(TcpChannel::errorToString(error_code)));
     });
 
     connect(router, &Router::sig_twoFactorCodeRequired, this, [this](qint64 id)
