@@ -108,6 +108,7 @@ RoutersWidget::RoutersWidget(QWidget* parent)
       edit_mode_(false)
 {
     // A trailing column hosts the per-row edit and delete buttons, shown only in edit mode.
+    list_->setRootIsDecorated(false);
     list_->setColumnCount(2);
     list_->header()->setStretchLastSection(false);
     list_->header()->setSectionResizeMode(0, QHeaderView::Stretch);

@@ -124,10 +124,8 @@ void RouterStatusDialog::appendEvent(const RouterEvent& event)
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(kIconSpacing);
 
-    const qreal dpr = devicePixelRatioF();
     QPixmap pixmap = GuiApplication::svgPixmap(iconForSeverity(event.severity),
-                                               QSize(kIconSize * dpr, kIconSize * dpr));
-    pixmap.setDevicePixelRatio(dpr);
+                                               QSize(kIconSize, kIconSize));
 
     QLabel* icon = new QLabel(row);
     icon->setFixedSize(kIconSize, kIconSize);
