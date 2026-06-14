@@ -157,6 +157,8 @@ if (ANDROID)
         android/controls.h
         android/dialog.cc
         android/dialog.h
+        android/expandable_panel.cc
+        android/expandable_panel.h
         android/icon_button.cc
         android/icon_button.h
         android/label.cc
