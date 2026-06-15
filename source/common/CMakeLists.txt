@@ -173,6 +173,8 @@ if (ANDROID)
         android/scroll_indicator.h
         android/switch.cc
         android/switch.h
+        android/text_area.cc
+        android/text_area.h
         android/tree_widget.cc
         android/tree_widget.h)
 endif()

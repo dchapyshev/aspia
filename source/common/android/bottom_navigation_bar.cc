@@ -74,7 +74,7 @@ void BottomNavigationBar::setCurrentIndex(int index)
 
     current_ = index;
     update();
-    emit currentChanged(current_);
+    emit sig_currentChanged(current_);
 }
 
 //--------------------------------------------------------------------------------------------------

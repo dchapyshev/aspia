@@ -51,7 +51,7 @@ public:
     QSize sizeHint() const final;
 
 signals:
-    void headerClicked();
+    void sig_headerClicked();
 
 protected:
     // QWidget implementation.

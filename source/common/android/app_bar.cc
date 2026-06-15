@@ -169,7 +169,7 @@ void AppBar::mousePressEvent(QMouseEvent* event)
     const bool on_back = rtl ? (x >= width() - kHorizontalPadding - kBackWidth)
                              : (x <= kHorizontalPadding + kBackWidth);
     if (on_back)
-        emit backClicked();
+        emit sig_backClicked();
 }
 
 //--------------------------------------------------------------------------------------------------

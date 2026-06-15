@@ -46,7 +46,7 @@ public:
     QSize sizeHint() const final;
 
 signals:
-    void backClicked();
+    void sig_backClicked();
 
 protected:
     // QWidget implementation.

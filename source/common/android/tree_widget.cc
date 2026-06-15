@@ -24,6 +24,7 @@
 #include <QScroller>
 #include <QStyle>
 #include <QStyledItemDelegate>
+#include <QTimer>
 
 #include "common/android/controls.h"
 #include "common/android/scroll_indicator.h"
@@ -41,6 +42,8 @@ constexpr int kIndentation = 16;
 constexpr double kSelectedLayerOpacity = 0.12;
 constexpr double kHoverLayerOpacity = 0.08;
 constexpr double kChevronOpacity = 0.6;
+constexpr int kLongPressTimeout = 500;
+constexpr int kLongPressMoveThreshold = 16;
 
 //--------------------------------------------------------------------------------------------------
 QRect chevronArea(const QRect& content, bool rtl)
@@ -170,6 +173,24 @@ TreeWidget::TreeWidget(QWidget* parent)
     // gesture: grabbing the touch gesture would swallow row taps.
     QScroller::grabGesture(viewport(), QScroller::LeftMouseButtonGesture);
 
+    // Long press is detected from the synthesized mouse stream: a press starts a timer that, unless
+    // a move or a scroll cancels it first, reports a long press on the pressed row.
+    long_press_timer_ = new QTimer(this);
+    long_press_timer_->setSingleShot(true);
+    long_press_timer_->setInterval(kLongPressTimeout);
+    connect(long_press_timer_, &QTimer::timeout, this, [this]()
+    {
+        if (QTreeWidgetItem* item = itemAt(press_pos_))
+            emit sig_itemLongPressed(item);
+    });
+
+    connect(QScroller::scroller(viewport()), &QScroller::stateChanged, this,
+            [this](QScroller::State state)
+    {
+        if (state == QScroller::Dragging || state == QScroller::Scrolling)
+            long_press_timer_->stop();
+    });
+
     applyBackgroundColor();
 
     new ScrollIndicator(this);
@@ -205,8 +226,28 @@ void TreeWidget::changeEvent(QEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
+void TreeWidget::mousePressEvent(QMouseEvent* event)
+{
+    press_pos_ = event->position().toPoint();
+    long_press_timer_->start();
+
+    QTreeWidget::mousePressEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TreeWidget::mouseMoveEvent(QMouseEvent* event)
+{
+    if ((event->position().toPoint() - press_pos_).manhattanLength() > kLongPressMoveThreshold)
+        long_press_timer_->stop();
+
+    QTreeWidget::mouseMoveEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
 void TreeWidget::mouseReleaseEvent(QMouseEvent* event)
 {
+    long_press_timer_->stop();
+
     const QPoint pos = event->position().toPoint();
     const QModelIndex index = indexAt(pos);
 

@@ -161,7 +161,7 @@ void ExpandablePanel::mouseReleaseEvent(QMouseEvent* event)
     // they never reach here. Taps inside the open panel are left to its children.
     if (event->position().toPoint().y() < kHeaderHeight)
     {
-        emit headerClicked();
+        emit sig_headerClicked();
         event->accept();
         return;
     }

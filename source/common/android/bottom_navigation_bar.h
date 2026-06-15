@@ -43,7 +43,7 @@ public:
     QSize sizeHint() const final;
 
 signals:
-    void currentChanged(int index);
+    void sig_currentChanged(int index);
 
 protected:
     // QWidget implementation.

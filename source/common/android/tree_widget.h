@@ -19,7 +19,10 @@
 #ifndef COMMON_ANDROID_TREE_WIDGET_H
 #define COMMON_ANDROID_TREE_WIDGET_H
 
+#include <QPoint>
 #include <QTreeWidget>
+
+class QTimer;
 
 // QTreeWidget adapted for touch screens: tall rows with a full-width selection state layer, a
 // chevron expand indicator (toggled by tapping the chevron column) and kinetic finger scrolling.
@@ -32,10 +35,15 @@ public:
     explicit TreeWidget(QWidget* parent = nullptr);
     ~TreeWidget() final;
 
+signals:
+    void sig_itemLongPressed(QTreeWidgetItem* item);
+
 protected:
     // QTreeWidget implementation.
     void paintEvent(QPaintEvent* event) final;
     void changeEvent(QEvent* event) final;
+    void mousePressEvent(QMouseEvent* event) final;
+    void mouseMoveEvent(QMouseEvent* event) final;
     void mouseReleaseEvent(QMouseEvent* event) final;
     void drawRow(QPainter* painter, const QStyleOptionViewItem& option,
                  const QModelIndex& index) const final;
@@ -46,6 +54,8 @@ private:
     void applyBackgroundColor();
 
     bool applying_palette_ = false;
+    QTimer* long_press_timer_ = nullptr;
+    QPoint press_pos_;
 
     Q_DISABLE_COPY_MOVE(TreeWidget)
 };
