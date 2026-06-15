@@ -44,6 +44,7 @@ private slots:
     void onRouterActionsChanged();
     void onLocalActionsChanged();
     void onLocalTitleChanged(const QString& title, bool back_visible);
+    void onRoutersTitleChanged(const QString& title, bool back_visible);
     void onRemoteTitleChanged(const QString& title, bool back_visible);
     void onBackClicked();
 

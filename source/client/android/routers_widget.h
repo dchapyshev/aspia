@@ -28,13 +28,15 @@
 class IconButton;
 class Router;
 class RouterConfig;
+class RouterEditor;
 class RoutersEmptyView;
 class ScrollArea;
+class QStackedWidget;
 class QVBoxLayout;
 
 // Routers screen for the Android client: the list of configured routers. Each router is a card whose
-// connection status panel slides out below it on tap. The add and edit actions are exposed via
-// appBarActions() to be hosted in the top app bar.
+// connection status panel slides out below it on tap and whose editor opens on a long press. The add
+// action is exposed via appBarActions() to be hosted in the top app bar.
 class RoutersWidget final : public QWidget
 {
     Q_OBJECT
@@ -46,22 +48,31 @@ public:
     QList<QWidget*> appBarActions() const;
 
     void reload();
-    void resetEditMode();
+
+    // Returns to the list from the editor. Driven by the app bar back button.
+    void goBack();
+
+    // Returns to the list page without saving, used when the tab is left.
+    void resetToList();
+
     void retranslate();
 
 signals:
-    // Emitted when the set returned by appBarActions() changes (the edit action is hidden while the
-    // list is empty).
+    // Requests the host bar to show |title| with a back button (editor) or the default state.
+    void sig_titleChanged(const QString& title, bool back_visible);
+
+    // Emitted when the set returned by appBarActions() changes (the editor hides the actions).
     void appBarActionsChanged();
 
 private slots:
     void onAddRouter();
-    void onToggleEditMode();
     void onCardExpandRequested(qint64 router_id);
     void onEditRouter(qint64 router_id);
-    void onRemoveRouter(qint64 router_id);
+    void returnFromEditor();
 
 private:
+    void showList();
+    bool isEditorPage() const;
     void clearCards();
 
     // Connects to the configured routers, reusing existing sessions and dropping removed ones.
@@ -70,13 +81,13 @@ private:
     void requestTwoFactorCode(qint64 router_id, const QString& otpauth_uri);
     void addRouterEvent(qint64 router_id, RouterEvent::Severity severity, const QString& text);
 
+    QStackedWidget* stack_ = nullptr;
     ScrollArea* scroll_ = nullptr;
     QWidget* container_ = nullptr;
     QVBoxLayout* cards_layout_ = nullptr;
     RoutersEmptyView* placeholder_ = nullptr;
+    RouterEditor* editor_ = nullptr;
     IconButton* add_button_ = nullptr;
-    IconButton* edit_button_ = nullptr;
-    bool edit_mode_ = false;
     qint64 expanded_router_id_ = -1;
 
     QHash<qint64, Router*> sessions_;

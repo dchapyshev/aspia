@@ -64,6 +64,8 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
 
     connect(routers, &RoutersWidget::appBarActionsChanged,
             this, &AndroidMainWindow::onRouterActionsChanged);
+    connect(routers, &RoutersWidget::sig_titleChanged,
+            this, &AndroidMainWindow::onRoutersTitleChanged);
     connect(local, &LocalWidget::sig_titleChanged,
             this, &AndroidMainWindow::onLocalTitleChanged);
     connect(local, &LocalWidget::sig_appBarActionsChanged,
@@ -118,7 +120,7 @@ void AndroidMainWindow::onSectionChanged(int index)
 
     RoutersWidget* routers = qobject_cast<RoutersWidget*>(content_->widget(SECTION_ROUTERS));
     if (index != SECTION_ROUTERS && routers)
-        routers->resetEditMode();
+        routers->resetToList();
 
     LocalWidget* local = qobject_cast<LocalWidget*>(content_->widget(SECTION_LOCAL));
     RemoteWidget* remote = qobject_cast<RemoteWidget*>(content_->widget(SECTION_REMOTE));
@@ -188,6 +190,16 @@ void AndroidMainWindow::onLocalTitleChanged(const QString& title, bool back_visi
 }
 
 //--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onRoutersTitleChanged(const QString& title, bool back_visible)
+{
+    if (navigation_->currentIndex() != SECTION_ROUTERS)
+        return;
+
+    app_bar_->setTitle(title.isEmpty() ? tr("Routers") : title);
+    app_bar_->setBackVisible(back_visible);
+}
+
+//--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onRemoteTitleChanged(const QString& title, bool back_visible)
 {
     if (navigation_->currentIndex() != SECTION_REMOTE)
@@ -210,6 +222,11 @@ void AndroidMainWindow::onBackClicked()
         case SECTION_REMOTE:
             if (RemoteWidget* remote = qobject_cast<RemoteWidget*>(content_->widget(SECTION_REMOTE)))
                 remote->goBack();
+            break;
+
+        case SECTION_ROUTERS:
+            if (RoutersWidget* routers = qobject_cast<RoutersWidget*>(content_->widget(SECTION_ROUTERS)))
+                routers->goBack();
             break;
 
         default:

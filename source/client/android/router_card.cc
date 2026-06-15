@@ -29,7 +29,6 @@
 #include "base/gui_application.h"
 #include "common/android/card.h"
 #include "common/android/controls.h"
-#include "common/android/icon_button.h"
 #include "common/android/label.h"
 
 namespace {
@@ -156,23 +155,13 @@ RouterCard::RouterCard(qint64 router_id, const QString& name, QWidget* parent)
     : ExpandablePanel(parent),
       router_id_(router_id)
 {
-    // Header: status icon, name and the edit/delete actions shown only in edit mode.
+    // Header: status icon and name.
     status_icon_ = new QLabel();
     status_icon_->setFixedSize(kStatusIconSize, kStatusIconSize);
     headerLayout()->addWidget(status_icon_);
 
     name_label_ = new Label(name, Label::Role::BODY);
     headerLayout()->addWidget(name_label_, 1);
-
-    edit_button_ = new IconButton(":/img/material/edit.svg");
-    delete_button_ = new IconButton(":/img/material/delete.svg");
-    edit_button_->hide();
-    delete_button_->hide();
-    headerLayout()->addWidget(edit_button_);
-    headerLayout()->addWidget(delete_button_);
-
-    connect(edit_button_, &IconButton::clicked, this, [this]() { emit editRequested(router_id_); });
-    connect(delete_button_, &IconButton::clicked, this, [this]() { emit removeRequested(router_id_); });
 
     // Panel: the connection event log on a lifted surface.
     contentLayout()->setContentsMargins(kContentHMargin, 0, kContentHMargin, kContentHMargin);
@@ -188,6 +177,7 @@ RouterCard::RouterCard(qint64 router_id, const QString& name, QWidget* parent)
     contentLayout()->addWidget(card);
 
     connect(this, &ExpandablePanel::sig_headerClicked, this, [this]() { emit expandRequested(router_id_); });
+    connect(this, &ExpandablePanel::sig_headerLongPressed, this, [this]() { emit editRequested(router_id_); });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -204,13 +194,6 @@ void RouterCard::setStatus(Router::Status status)
 {
     status_icon_->setPixmap(GuiApplication::svgPixmap(statusIconPath(status),
                                                       QSize(kStatusIconSize, kStatusIconSize)));
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterCard::setEditMode(bool edit_mode)
-{
-    edit_button_->setVisible(edit_mode);
-    delete_button_->setVisible(edit_mode);
 }
 
 //--------------------------------------------------------------------------------------------------

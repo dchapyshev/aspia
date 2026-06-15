@@ -22,6 +22,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QResizeEvent>
+#include <QTimer>
 #include <QVBoxLayout>
 #include <QVariantAnimation>
 
@@ -32,6 +33,8 @@ namespace {
 constexpr int kHeaderHeight = 56;
 constexpr int kHeaderHMargin = 13;
 constexpr int kHeaderSpacing = 12;
+constexpr int kLongPressTimeout = 500;
+constexpr int kLongPressMoveThreshold = 16;
 
 } // namespace
 
@@ -42,10 +45,19 @@ ExpandablePanel::ExpandablePanel(QWidget* parent)
       content_(new QWidget(this)),
       header_layout_(new QHBoxLayout(header_)),
       content_layout_(new QVBoxLayout(content_)),
-      animation_(Controls::createAnimation(this))
+      animation_(Controls::createAnimation(this)),
+      long_press_timer_(new QTimer(this))
 {
     header_layout_->setContentsMargins(kHeaderHMargin, 0, kHeaderHMargin, 0);
     header_layout_->setSpacing(kHeaderSpacing);
+
+    long_press_timer_->setSingleShot(true);
+    long_press_timer_->setInterval(kLongPressTimeout);
+    connect(long_press_timer_, &QTimer::timeout, this, [this]()
+    {
+        long_pressed_ = true;
+        emit sig_headerLongPressed();
+    });
 
     content_layout_->setContentsMargins(0, 0, 0, 0);
     content_layout_->setSpacing(0);
@@ -147,6 +159,9 @@ void ExpandablePanel::mousePressEvent(QMouseEvent* event)
     // on the header keeps the tap so mouseReleaseEvent() can report it.
     if (event->position().toPoint().y() < kHeaderHeight)
     {
+        press_pos_ = event->position().toPoint();
+        long_pressed_ = false;
+        long_press_timer_->start();
         event->accept();
         return;
     }
@@ -155,8 +170,28 @@ void ExpandablePanel::mousePressEvent(QMouseEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
+void ExpandablePanel::mouseMoveEvent(QMouseEvent* event)
+{
+    // A drag (the start of a scroll) is not a long press, so the pending timer is cancelled.
+    if ((event->position().toPoint() - press_pos_).manhattanLength() > kLongPressMoveThreshold)
+        long_press_timer_->stop();
+
+    QWidget::mouseMoveEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
 void ExpandablePanel::mouseReleaseEvent(QMouseEvent* event)
 {
+    long_press_timer_->stop();
+
+    // A long press already reported the header; swallow the release so it does not also click.
+    if (long_pressed_)
+    {
+        long_pressed_ = false;
+        event->accept();
+        return;
+    }
+
     // A tap on the header reports a click; widgets placed in the header consume their own taps, so
     // they never reach here. Taps inside the open panel are left to its children.
     if (event->position().toPoint().y() < kHeaderHeight)

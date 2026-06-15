@@ -16,27 +16,39 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_ANDROID_ROUTER_EDIT_DIALOG_H
-#define CLIENT_ANDROID_ROUTER_EDIT_DIALOG_H
+#ifndef CLIENT_ANDROID_ROUTER_EDITOR_H
+#define CLIENT_ANDROID_ROUTER_EDITOR_H
 
 #include <QByteArray>
+#include <QWidget>
 
-#include "common/android/dialog.h"
-
+class Button;
 class Label;
 class LineEdit;
 
-// Dialog for adding a new router or editing an existing one. Pass a router id to edit, or -1 to add.
-class RouterEditDialog final : public Dialog
+// Full-screen editor for a router. On save the router is written to the local database; the delete
+// action is shown only when editing an existing router.
+class RouterEditor final : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit RouterEditDialog(qint64 router_id, QWidget* parent = nullptr);
-    ~RouterEditDialog() final;
+    explicit RouterEditor(QWidget* parent = nullptr);
+    ~RouterEditor() final;
+
+    // Resets the form for adding a new router.
+    void prepareForAdd();
+
+    // Loads the router |router_id| into the form for editing.
+    void prepareForEdit(qint64 router_id);
+
+signals:
+    // Emitted after the router has been saved to or removed from the database.
+    void sig_accepted();
 
 private slots:
     void onSaveClicked();
+    void onDeleteClicked();
 
 private:
     void showError(const QString& message);
@@ -46,10 +58,11 @@ private:
     LineEdit* username_ = nullptr;
     LineEdit* password_ = nullptr;
     Label* error_ = nullptr;
+    Button* delete_button_ = nullptr;
     qint64 router_id_ = -1;
     QByteArray encrypted_device_token_;
 
-    Q_DISABLE_COPY_MOVE(RouterEditDialog)
+    Q_DISABLE_COPY_MOVE(RouterEditor)
 };
 
-#endif // CLIENT_ANDROID_ROUTER_EDIT_DIALOG_H
+#endif // CLIENT_ANDROID_ROUTER_EDITOR_H

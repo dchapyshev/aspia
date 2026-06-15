@@ -22,20 +22,18 @@
 #include <QGridLayout>
 #include <QPainter>
 #include <QSet>
+#include <QStackedWidget>
 #include <QVBoxLayout>
-
-#include <optional>
 
 #include "base/crypto/data_cryptor.h"
 #include "base/net/tcp_channel.h"
-#include "client/android/router_edit_dialog.h"
+#include "client/android/router_editor.h"
 #include "client/android/two_factor_dialog.h"
 #include "client/config.h"
 #include "client/database.h"
 #include "client/router.h"
 #include "common/android/controls.h"
 #include "common/android/icon_button.h"
-#include "common/android/message_dialog.h"
 #include "common/android/scroll_area.h"
 
 namespace {
@@ -83,12 +81,13 @@ private:
 //--------------------------------------------------------------------------------------------------
 RoutersWidget::RoutersWidget(QWidget* parent)
     : QWidget(parent),
+      stack_(new QStackedWidget(this)),
       scroll_(new ScrollArea(this)),
       container_(new QWidget(scroll_)),
       cards_layout_(new QVBoxLayout(container_)),
       placeholder_(new RoutersEmptyView(this)),
-      add_button_(new IconButton(":/img/material/add_2.svg", this)),
-      edit_button_(new IconButton(":/img/material/edit.svg", this))
+      editor_(new RouterEditor(this)),
+      add_button_(new IconButton(":/img/material/add_2.svg", this))
 {
     cards_layout_->setContentsMargins(0, 0, 0, 0);
     cards_layout_->setSpacing(0);
@@ -96,23 +95,29 @@ RoutersWidget::RoutersWidget(QWidget* parent)
 
     scroll_->setWidget(container_);
 
-    edit_button_->setCheckable(true);
-
-    // The action buttons live in the app bar; AppBar::setActions() reparents and shows the ones it
-    // receives. Hidden by default so an excluded button does not linger in this widget.
+    // The add action lives in the app bar; AppBar::setActions() reparents and shows it. Hidden by
+    // default so it does not linger in this widget.
     add_button_->hide();
-    edit_button_->hide();
 
-    // The placeholder overlaps the list, so it dims the empty surface and shows the hint on top.
-    QGridLayout* layout = new QGridLayout(this);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->addWidget(scroll_, 0, 0);
-    layout->addWidget(placeholder_, 0, 0);
+    // List page: the scrollable cards with the empty-state hint overlaid on top.
+    QWidget* list_page = new QWidget(stack_);
+    QGridLayout* list_layout = new QGridLayout(list_page);
+    list_layout->setContentsMargins(0, 0, 0, 0);
+    list_layout->addWidget(scroll_, 0, 0);
+    list_layout->addWidget(placeholder_, 0, 0);
     placeholder_->raise();
     placeholder_->hide();
 
+    stack_->addWidget(list_page);
+    stack_->addWidget(editor_);
+
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+    layout->addWidget(stack_);
+
     connect(add_button_, &IconButton::clicked, this, &RoutersWidget::onAddRouter);
-    connect(edit_button_, &IconButton::clicked, this, &RoutersWidget::onToggleEditMode);
+    connect(editor_, &RouterEditor::sig_accepted, this, &RoutersWidget::returnFromEditor);
 
     retranslate();
     reload();
@@ -124,11 +129,11 @@ RoutersWidget::~RoutersWidget() = default;
 //--------------------------------------------------------------------------------------------------
 QList<QWidget*> RoutersWidget::appBarActions() const
 {
-    // The edit action is meaningful only when there is at least one router to act on.
-    if (cards_.isEmpty())
-        return { add_button_ };
+    // The editor screen has its own form; no list actions there.
+    if (isEditorPage())
+        return {};
 
-    return { add_button_, edit_button_ };
+    return { add_button_ };
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -157,11 +162,9 @@ void RoutersWidget::reload()
         // The event log is filled lazily when the panel is opened, so the card starts empty.
         RouterCard* card = new RouterCard(router_id, config.displayLabel(), container_);
         card->setStatus(status);
-        card->setEditMode(edit_mode_);
 
         connect(card, &RouterCard::expandRequested, this, &RoutersWidget::onCardExpandRequested);
         connect(card, &RouterCard::editRequested, this, &RoutersWidget::onEditRouter);
-        connect(card, &RouterCard::removeRequested, this, &RoutersWidget::onRemoveRouter);
 
         cards_layout_->addWidget(card);
         cards_.insert(router_id, card);
@@ -169,29 +172,21 @@ void RoutersWidget::reload()
 
     cards_layout_->addStretch();
 
-    // With no rows there is nothing to edit, so edit mode is dropped to keep it from silently
-    // persisting and decorating the next added router.
-    if (cards_.isEmpty() && edit_mode_)
-    {
-        edit_mode_ = false;
-        edit_button_->setChecked(false);
-    }
-
     placeholder_->setVisible(cards_.isEmpty());
     emit appBarActionsChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
-void RoutersWidget::resetEditMode()
+void RoutersWidget::goBack()
 {
-    if (!edit_mode_)
-        return;
+    showList();
+}
 
-    edit_mode_ = false;
-    edit_button_->setChecked(false);
-
-    for (RouterCard* card : std::as_const(cards_))
-        card->setEditMode(false);
+//--------------------------------------------------------------------------------------------------
+void RoutersWidget::resetToList()
+{
+    if (isEditorPage())
+        stack_->setCurrentIndex(0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -203,35 +198,15 @@ void RoutersWidget::retranslate()
 //--------------------------------------------------------------------------------------------------
 void RoutersWidget::onAddRouter()
 {
-    RouterEditDialog dialog(-1, this);
-    if (dialog.exec() == QDialog::Accepted)
-        reload();
-}
-
-//--------------------------------------------------------------------------------------------------
-void RoutersWidget::onToggleEditMode()
-{
-    edit_mode_ = edit_button_->isChecked();
-
-    // Entering edit mode closes the open panel; panels cannot be opened while editing.
-    if (edit_mode_)
-    {
-        if (RouterCard* card = cards_.value(expanded_router_id_))
-            card->setExpanded(false);
-        expanded_router_id_ = -1;
-    }
-
-    for (RouterCard* card : std::as_const(cards_))
-        card->setEditMode(edit_mode_);
+    editor_->prepareForAdd();
+    stack_->setCurrentIndex(1);
+    emit sig_titleChanged(tr("Add Router"), true);
+    emit appBarActionsChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
 void RoutersWidget::onCardExpandRequested(qint64 router_id)
 {
-    // Panels stay shut in edit mode, where the row hosts the edit and delete actions instead.
-    if (edit_mode_)
-        return;
-
     // Tapping the open router closes its panel; tapping another closes the previous one first, so
     // only a single panel is ever open.
     if (expanded_router_id_ == router_id)
@@ -258,27 +233,32 @@ void RoutersWidget::onCardExpandRequested(qint64 router_id)
 //--------------------------------------------------------------------------------------------------
 void RoutersWidget::onEditRouter(qint64 router_id)
 {
-    RouterEditDialog dialog(router_id, this);
-    if (dialog.exec() == QDialog::Accepted)
-        reload();
+    editor_->prepareForEdit(router_id);
+    stack_->setCurrentIndex(1);
+    emit sig_titleChanged(tr("Edit Router"), true);
+    emit appBarActionsChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
-void RoutersWidget::onRemoveRouter(qint64 router_id)
+void RoutersWidget::returnFromEditor()
 {
-    Database& db = Database::instance();
+    // The router list changed (added, edited or removed), so it is rebuilt before returning.
+    reload();
+    showList();
+}
 
-    const std::optional<RouterConfig> config = db.findRouter(router_id);
-    const QString name = config.has_value() ? config->displayLabel() : QString();
+//--------------------------------------------------------------------------------------------------
+void RoutersWidget::showList()
+{
+    stack_->setCurrentIndex(0);
+    emit sig_titleChanged(QString(), false);
+    emit appBarActionsChanged();
+}
 
-    if (!MessageDialog::confirm(this, tr("Delete Router"),
-                                tr("Delete the router \"%1\"?").arg(name), tr("Delete")))
-    {
-        return;
-    }
-
-    if (db.removeRouter(router_id))
-        reload();
+//--------------------------------------------------------------------------------------------------
+bool RoutersWidget::isEditorPage() const
+{
+    return stack_->currentIndex() == 1;
 }
 
 //--------------------------------------------------------------------------------------------------

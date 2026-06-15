@@ -19,9 +19,11 @@
 #ifndef COMMON_ANDROID_EXPANDABLE_PANEL_H
 #define COMMON_ANDROID_EXPANDABLE_PANEL_H
 
+#include <QPoint>
 #include <QWidget>
 
 class QHBoxLayout;
+class QTimer;
 class QVBoxLayout;
 class QVariantAnimation;
 
@@ -52,12 +54,14 @@ public:
 
 signals:
     void sig_headerClicked();
+    void sig_headerLongPressed();
 
 protected:
     // QWidget implementation.
     void paintEvent(QPaintEvent* event) override;
     void resizeEvent(QResizeEvent* event) final;
     void mousePressEvent(QMouseEvent* event) final;
+    void mouseMoveEvent(QMouseEvent* event) final;
     void mouseReleaseEvent(QMouseEvent* event) final;
 
 private:
@@ -68,7 +72,10 @@ private:
     QHBoxLayout* header_layout_ = nullptr;
     QVBoxLayout* content_layout_ = nullptr;
     QVariantAnimation* animation_ = nullptr;
+    QTimer* long_press_timer_ = nullptr;
+    QPoint press_pos_;
     bool expanded_ = false;
+    bool long_pressed_ = false;
 
     Q_DISABLE_COPY_MOVE(ExpandablePanel)
 };

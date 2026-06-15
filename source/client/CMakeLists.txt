@@ -79,8 +79,8 @@ list(APPEND SOURCE_CLIENT_ANDROID
     android/remote_widget.h
     android/router_card.cc
     android/router_card.h
-    android/router_edit_dialog.cc
-    android/router_edit_dialog.h
+    android/router_editor.cc
+    android/router_editor.h
     android/routers_widget.cc
     android/routers_widget.h
     android/settings_widget.cc

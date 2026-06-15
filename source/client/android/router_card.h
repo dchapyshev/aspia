@@ -26,7 +26,6 @@
 #include "client/router.h"
 #include "common/android/expandable_panel.h"
 
-class IconButton;
 class Label;
 class QLabel;
 class QVBoxLayout;
@@ -46,8 +45,8 @@ struct RouterEvent
     QString text;
 };
 
-// A router row in the routers list: an ExpandablePanel whose header shows the status icon and name
-// (with edit and delete actions in edit mode) and whose panel lists the connection events.
+// A router row in the routers list: an ExpandablePanel whose header shows the status icon and name,
+// opens the connection event log on tap and the editor on a long press.
 class RouterCard final : public ExpandablePanel
 {
     Q_OBJECT
@@ -60,7 +59,6 @@ public:
 
     void setName(const QString& name);
     void setStatus(Router::Status status);
-    void setEditMode(bool edit_mode);
 
     void setEvents(const QList<RouterEvent>& events);
     void appendEvent(const RouterEvent& event);
@@ -68,7 +66,6 @@ public:
 signals:
     void expandRequested(qint64 router_id);
     void editRequested(qint64 router_id);
-    void removeRequested(qint64 router_id);
 
 private:
     void clearEvents();
@@ -76,8 +73,6 @@ private:
     qint64 router_id_;
     QLabel* status_icon_ = nullptr;
     Label* name_label_ = nullptr;
-    IconButton* edit_button_ = nullptr;
-    IconButton* delete_button_ = nullptr;
     QVBoxLayout* events_layout_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(RouterCard)
