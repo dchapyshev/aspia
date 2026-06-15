@@ -121,7 +121,7 @@ void RadioButton::paintEvent(QPaintEvent* /* event */)
     else
         ring.moveLeft(rect().left());
 
-    const QColor accent = palette().color(QPalette::Highlight);
+    const QColor accent = Controls::accentColor();
     const QColor outline = palette().color(QPalette::Mid);
 
     // State layer around the ring while the button is pressed.

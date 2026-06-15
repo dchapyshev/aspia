@@ -58,6 +58,16 @@ public:
     // surfaces; the platform palette has no error role.
     static QColor errorColor();
 
+    // Accent color for selected and interactive elements, taken from the platform highlight so it
+    // follows the system theme. The lightness is adjusted when the highlight does not contrast
+    // enough with the window background, keeping it readable on every device.
+    static QColor accentColor();
+
+    // Surface color for cards and panels that sit on the window background. Derived from the window
+    // color so it follows the theme, nudged toward the text color so it stays distinct from the
+    // background even when the platform Base and Window roles coincide.
+    static QColor surfaceColor();
+
     // Renders the SVG at |svg_file_path| to |size| and recolors it with |color|, for monochrome
     // icons that follow the current palette.
     static QPixmap tintedPixmap(const QString& svg_file_path, const QSize& size,

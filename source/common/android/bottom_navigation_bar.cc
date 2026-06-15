@@ -92,7 +92,7 @@ void BottomNavigationBar::paintEvent(QPaintEvent* /* event */)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    const QColor accent = palette().color(QPalette::Highlight);
+    const QColor accent = Controls::accentColor();
     const QColor on_surface = palette().color(QPalette::WindowText);
 
     // A hairline divider separates the bar from the content above it.

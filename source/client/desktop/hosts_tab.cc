@@ -28,6 +28,7 @@
 #include <optional>
 
 #include "base/logging.h"
+#include "base/crypto/secure_string.h"
 #include "base/net/address.h"
 #include "base/peer/host_id.h"
 #include "base/peer/user.h"
@@ -35,6 +36,7 @@
 #include "client/aab_importer.h"
 #include "client/database.h"
 #include "client/json_backup.h"
+#include "client/master_password.h"
 #include "client/settings.h"
 #include "client/desktop/hosts/content_widget.h"
 #include "client/desktop/hosts/local_group_widget.h"
@@ -48,6 +50,7 @@
 #include "client/desktop/hosts/router_users_widget.h"
 #include "client/desktop/hosts/router_workspace_dialog.h"
 #include "client/desktop/hosts/search_widget.h"
+#include "common/desktop/credentials_dialog.h"
 #include "common/desktop/msg_box.h"
 #include "proto/peer.h"
 #include "proto/router_admin.h"
@@ -1349,7 +1352,51 @@ void HostsTab::onExportBookAction()
         return;
     }
 
-    JsonBackup::exportToFile(this, file_path);
+    if (!Database::instance().isValid())
+    {
+        MsgBox::warning(this, tr("Address book database is not available."));
+        return;
+    }
+
+    CredentialsDialog dialog(CredentialsDialog::Type::SET_PASSWORD, this);
+    dialog.setWindowTitle(tr("Export Address Book"));
+    dialog.setHeaderIcon(":/img/lock.svg");
+    dialog.setHeaderText(tr("Enter a password to encrypt the address book."));
+    dialog.setValidator([](CredentialsDialog* d) -> bool
+    {
+        if (!MasterPassword::isSafePassword(d->password()))
+        {
+            QString unsafe = tr("Password you entered does not meet the security requirements!");
+            QString safe = tr("The password must contain lowercase and uppercase characters, "
+                              "numbers and should not be shorter than %n characters.",
+                              "", MasterPassword::kSafePasswordLength);
+            QString question = tr("Do you want to enter a different password?");
+
+            if (MsgBox::warning(d, QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
+                                MsgBox::Yes | MsgBox::No) == MsgBox::Yes)
+                return false;
+        }
+        return true;
+    });
+
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    JsonBackup::ExportCounts counts;
+    const JsonBackup::Result result = JsonBackup::exportToFile(file_path, dialog.password(), &counts);
+
+    if (result != JsonBackup::Result::SUCCESS)
+    {
+        MsgBox::warning(this, tr("Failed to export the address book."));
+        return;
+    }
+
+    MsgBox::information(this,
+        tr("Export completed successfully.\n"
+           "Routers exported: %1\n"
+           "Groups exported: %2\n"
+           "Hosts exported: %3")
+            .arg(counts.routers).arg(counts.groups).arg(counts.hosts));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1376,8 +1423,51 @@ void HostsTab::onImportBookAction()
         return;
     }
 
-    if (!JsonBackup::importFromFile(this, file_path))
+    CredentialsDialog dialog(CredentialsDialog::Type::ENTER_PASSWORD, this);
+    dialog.setWindowTitle(tr("Unlock"));
+    dialog.setHeaderIcon(":/img/lock.svg");
+    dialog.setHeaderText(tr("Address book is encrypted. To open, you must enter a password."));
+    dialog.setShowPasswordButtonVisible(true);
+
+    if (dialog.exec() != QDialog::Accepted)
         return;
+
+    JsonBackup::ImportCounts counts;
+    const JsonBackup::Result result = JsonBackup::importFromFile(file_path, dialog.password(), &counts);
+
+    switch (result)
+    {
+        case JsonBackup::Result::SUCCESS:
+            break;
+
+        case JsonBackup::Result::WRONG_PASSWORD:
+            MsgBox::warning(this, tr("Unable to decrypt the file with the specified password."));
+            return;
+
+        case JsonBackup::Result::UNSUPPORTED_VERSION:
+            MsgBox::warning(this, tr("Unsupported file format version."));
+            return;
+
+        case JsonBackup::Result::NOTHING_IMPORTED:
+            MsgBox::information(this, tr("Nothing was imported."));
+            return;
+
+        default:
+            MsgBox::warning(this, tr("The file is not a valid address book."));
+            return;
+    }
+
+    MsgBox::information(this,
+        tr("Import completed successfully.\n"
+           "Routers added: %1\n"
+           "Routers skipped: %2\n"
+           "Groups added: %3\n"
+           "Groups skipped: %4\n"
+           "Hosts added: %5\n"
+           "Hosts skipped: %6")
+            .arg(counts.routers).arg(counts.routers_skipped)
+            .arg(counts.groups).arg(counts.groups_skipped)
+            .arg(counts.hosts).arg(counts.hosts_skipped));
 
     reloadRouters();
     ui->sidebar->reloadGroups();

@@ -180,7 +180,7 @@ public:
 
         if (layer_opacity > 0.0)
         {
-            QColor layer = palette.color(QPalette::Highlight);
+            QColor layer = Controls::accentColor();
             layer.setAlphaF(layer_opacity);
 
             const bool first = index.row() == 0;
@@ -283,7 +283,7 @@ void ComboBox::paintEvent(QPaintEvent* /* event */)
 
     const bool rtl = (layoutDirection() == Qt::RightToLeft);
 
-    const QColor accent = palette().color(QPalette::Highlight);
+    const QColor accent = Controls::accentColor();
     const QColor outline = palette().color(QPalette::Mid);
 
     QRectF field = rect();

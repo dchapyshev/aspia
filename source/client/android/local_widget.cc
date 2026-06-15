@@ -18,6 +18,7 @@
 
 #include "client/android/local_widget.h"
 
+#include <QFileDialog>
 #include <QHeaderView>
 #include <QStackedWidget>
 #include <QTreeWidgetItem>
@@ -27,10 +28,13 @@
 #include "base/gui_application.h"
 #include "client/android/local_group_editor.h"
 #include "client/android/local_host_editor.h"
+#include "client/android/password_dialog.h"
 #include "client/config.h"
 #include "client/database.h"
+#include "client/json_backup.h"
 #include "common/android/icon_button.h"
 #include "common/android/menu.h"
+#include "common/android/message_dialog.h"
 #include "common/android/tree_widget.h"
 
 namespace {
@@ -189,22 +193,96 @@ void LocalWidget::onItemActivated(QTreeWidgetItem* item, int /* column */)
 //--------------------------------------------------------------------------------------------------
 void LocalWidget::onShowMenu()
 {
-    enum { kAddGroup, kAddHost };
+    enum { kImport, kExport, kAddGroup, kAddHost };
 
     Menu* menu = new Menu(this);
+    menu->addItem(tr("Import"), GuiApplication::svgIcon(":/img/material/download.svg"));
+    menu->addItem(tr("Export"), GuiApplication::svgIcon(":/img/material/upload.svg"));
     menu->addItem(tr("Add Group"), GuiApplication::svgIcon(":/img/material/create_new_folder.svg"));
     menu->addItem(tr("Add Host"), GuiApplication::svgIcon(":/img/material/add_2.svg"));
 
     connect(menu, &Menu::sig_triggered, this, [this](int index)
     {
-        if (index == kAddGroup)
-            onAddGroup();
-        else
-            onAddHost();
+        switch (index)
+        {
+            case kImport: onImport(); break;
+            case kExport: onExport(); break;
+            case kAddGroup: onAddGroup(); break;
+            case kAddHost: onAddHost(); break;
+            default: break;
+        }
     });
 
     // Anchor the menu to the button; it drops from the button's near edge per layout direction.
     menu->popup(QRect(overflow_button_->mapToGlobal(QPoint(0, 0)), overflow_button_->size()));
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalWidget::onImport()
+{
+    const QString path = QFileDialog::getOpenFileName(
+        this, tr("Import Address Book"), QString(), tr("Address book (*.json)"));
+    if (path.isEmpty())
+        return;
+
+    PasswordDialog dialog(PasswordDialog::Mode::ENTER, this);
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    JsonBackup::ImportCounts counts;
+    switch (JsonBackup::importFromFile(path, dialog.password(), &counts))
+    {
+        case JsonBackup::Result::SUCCESS:
+            reload();
+            MessageDialog::info(this, tr("Import"),
+                tr("Imported %n router(s), ", nullptr, counts.routers) +
+                tr("%n group(s), ", nullptr, counts.groups) +
+                tr("%n host(s).", nullptr, counts.hosts));
+            break;
+
+        case JsonBackup::Result::WRONG_PASSWORD:
+            MessageDialog::info(this, tr("Import"), tr("Invalid password."));
+            break;
+
+        case JsonBackup::Result::UNSUPPORTED_VERSION:
+            MessageDialog::info(this, tr("Import"),
+                tr("The file was created by a newer version and cannot be imported."));
+            break;
+
+        case JsonBackup::Result::NOTHING_IMPORTED:
+            MessageDialog::info(this, tr("Import"), tr("The address book is already up to date."));
+            break;
+
+        default:
+            MessageDialog::info(this, tr("Import"), tr("Failed to import the address book."));
+            break;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalWidget::onExport()
+{
+    const QString path = QFileDialog::getSaveFileName(
+        this, tr("Export Address Book"), "aspia.json", tr("Address book (*.json)"));
+    if (path.isEmpty())
+        return;
+
+    PasswordDialog dialog(PasswordDialog::Mode::SET, this);
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    JsonBackup::ExportCounts counts;
+    if (JsonBackup::exportToFile(path, dialog.password(), &counts) == JsonBackup::Result::SUCCESS)
+    {
+        MessageDialog::info(this, tr("Export"),
+            tr("Exported %n router(s), ", nullptr, counts.routers) +
+            tr("%n group(s), ", nullptr, counts.groups) +
+            tr("%n host(s).", nullptr, counts.hosts));
+    }
+    else
+    {
+        MessageDialog::info(this, tr("Export"), tr("Failed to export the address book."));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

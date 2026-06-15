@@ -21,6 +21,8 @@
 #include <QPainter>
 #include <QVBoxLayout>
 
+#include "common/android/controls.h"
+
 namespace {
 
 constexpr int kCornerRadius = 12;
@@ -71,7 +73,7 @@ void Card::paintEvent(QPaintEvent* /* event */)
     if (role_ == Role::FILLED)
     {
         painter.setPen(Qt::NoPen);
-        painter.setBrush(palette().color(QPalette::Base));
+        painter.setBrush(Controls::surfaceColor());
     }
     else
     {

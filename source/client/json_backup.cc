@@ -36,9 +36,6 @@
 #include "base/crypto/secure_memory.h"
 #include "base/crypto/secure_string.h"
 #include "client/database.h"
-#include "client/master_password.h"
-#include "common/desktop/credentials_dialog.h"
-#include "common/desktop/msg_box.h"
 #include "proto/router.h"
 
 namespace {
@@ -49,16 +46,7 @@ constexpr int kVerifierPayloadSize = 32;
 constexpr int kMaxNameLength = 64;
 constexpr int kMaxCommentLength = 2048;
 
-//--------------------------------------------------------------------------------------------------
-struct ImportCounters
-{
-    int routers = 0;
-    int routers_skipped = 0;
-    int groups = 0;
-    int groups_skipped = 0;
-    int hosts = 0;
-    int hosts_skipped = 0;
-};
+using ImportCounters = JsonBackup::ImportCounts;
 
 //--------------------------------------------------------------------------------------------------
 QString encryptToHex(const DataCryptor& cryptor, const QString& value)
@@ -364,52 +352,22 @@ void importHosts(const QJsonArray& hosts_array,
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool JsonBackup::exportToFile(QWidget* parent, const QString& file_path)
+JsonBackup::Result JsonBackup::exportToFile(const QString& file_path, const SecureString& password,
+                                            ExportCounts* counts)
 {
     Database& db = Database::instance();
     if (!db.isValid())
-    {
-        MsgBox::warning(parent, tr("Address book database is not available."));
-        return false;
-    }
-
-    CredentialsDialog dialog(CredentialsDialog::Type::SET_PASSWORD, parent);
-    dialog.setWindowTitle(tr("Export Address Book"));
-    dialog.setHeaderIcon(":/img/lock.svg");
-    dialog.setHeaderText(tr("Enter a password to encrypt the address book."));
-    dialog.setValidator([](CredentialsDialog* d) -> bool
-    {
-        SecureString new_password = d->password();
-
-        if (!MasterPassword::isSafePassword(new_password))
-        {
-            QString unsafe = JsonBackup::tr(
-                "Password you entered does not meet the security requirements!");
-            QString safe = JsonBackup::tr(
-                "The password must contain lowercase and uppercase characters, "
-                "numbers and should not be shorter than %n characters.",
-                "", MasterPassword::kSafePasswordLength);
-            QString question = JsonBackup::tr("Do you want to enter a different password?");
-
-            if (MsgBox::warning(d, QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
-                                MsgBox::Yes | MsgBox::No) == MsgBox::Yes)
-                return false;
-        }
-        return true;
-    });
-
-    if (dialog.exec() != QDialog::Accepted)
-        return false;
+        return Result::DATABASE_UNAVAILABLE;
 
     QByteArray salt = Random::byteArray(kSaltSize);
-    SecureByteArray key(PasswordHash::hash(PasswordHash::ARGON2ID, dialog.password(), salt));
+    SecureByteArray key(PasswordHash::hash(PasswordHash::ARGON2ID, password, salt));
     DataCryptor cryptor(CipherType::AES256_GCM, key);
 
     std::optional<QByteArray> verifier = cryptor.encrypt(Random::byteArray(kVerifierPayloadSize));
     if (!verifier.has_value())
     {
-        MsgBox::warning(parent, tr("Failed to generate verifier."));
-        return false;
+        LOG(ERROR) << "Failed to generate verifier";
+        return Result::INTERNAL_ERROR;
     }
 
     QJsonObject root;
@@ -441,101 +399,75 @@ bool JsonBackup::exportToFile(QWidget* parent, const QString& file_path)
     QSaveFile file(file_path);
     if (!file.open(QIODevice::WriteOnly))
     {
-        MsgBox::warning(parent,
-            tr("Unable to open file \"%1\": %2").arg(file_path, file.errorString()));
-        return false;
+        LOG(ERROR) << "Unable to open file" << file_path << ":" << file.errorString();
+        return Result::FILE_ERROR;
     }
 
     if (file.write(payload) != payload.size() || !file.commit())
     {
-        MsgBox::warning(parent, tr("Unable to write file \"%1\": %2").arg(file_path, file.errorString()));
-        return false;
+        LOG(ERROR) << "Unable to write file" << file_path << ":" << file.errorString();
+        return Result::FILE_ERROR;
     }
 
-    MsgBox::information(parent,
-        tr("Export completed successfully.\n"
-           "Routers exported: %1\n"
-           "Groups exported: %2\n"
-           "Hosts exported: %3")
-            .arg(routers.size())
-            .arg(groups.size())
-            .arg(hosts.size()));
+    if (counts)
+    {
+        counts->routers = static_cast<int>(routers.size());
+        counts->groups = static_cast<int>(groups.size());
+        counts->hosts = static_cast<int>(hosts.size());
+    }
 
-    return true;
+    return Result::SUCCESS;
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool JsonBackup::importFromFile(QWidget* parent, const QString& file_path)
+JsonBackup::Result JsonBackup::importFromFile(const QString& file_path, const SecureString& password,
+                                              ImportCounts* counts)
 {
     QFile file(file_path);
     if (!file.open(QIODevice::ReadOnly))
     {
-        MsgBox::warning(parent, tr("Unable to open file \"%1\": %2").arg(file_path, file.errorString()));
-        return false;
+        LOG(ERROR) << "Unable to open file" << file_path << ":" << file.errorString();
+        return Result::FILE_ERROR;
     }
 
     QByteArray buffer = file.readAll();
     file.close();
 
     if (buffer.isEmpty())
-    {
-        MsgBox::warning(parent, tr("Selected file is empty."));
-        return false;
-    }
+        return Result::INVALID_FORMAT;
 
     QJsonParseError parse_error;
     QJsonDocument document = QJsonDocument::fromJson(buffer, &parse_error);
     if (document.isNull() || !document.isObject())
     {
-        MsgBox::warning(parent, tr("The file is not a valid JSON document: %1").arg(parse_error.errorString()));
-        return false;
+        LOG(ERROR) << "Invalid JSON document:" << parse_error.errorString();
+        return Result::INVALID_FORMAT;
     }
 
     QJsonObject root = document.object();
 
-    int version = root.value("version").toInt(0);
-    if (version != kFormatVersion)
-    {
-        MsgBox::warning(parent, tr("Unsupported file format version: %1").arg(version));
-        return false;
-    }
+    if (root.value("version").toInt(0) != kFormatVersion)
+        return Result::UNSUPPORTED_VERSION;
 
     QByteArray salt = QByteArray::fromHex(root.value("salt").toString().toLatin1());
     QByteArray verifier = QByteArray::fromHex(root.value("verifier").toString().toLatin1());
 
     if (salt.isEmpty() || verifier.isEmpty())
-    {
-        MsgBox::warning(parent, tr("The file is corrupted or not encrypted."));
-        return false;
-    }
+        return Result::INVALID_FORMAT;
 
-    CredentialsDialog dialog(CredentialsDialog::Type::ENTER_PASSWORD, parent);
-    dialog.setWindowTitle(tr("Unlock"));
-    dialog.setHeaderIcon(":/img/lock.svg");
-    dialog.setHeaderText(tr("Address book is encrypted. To open, you must enter a password."));
-    dialog.setShowPasswordButtonVisible(true);
-
-    if (dialog.exec() != QDialog::Accepted)
-        return false;
-
-    SecureByteArray key(PasswordHash::hash(PasswordHash::ARGON2ID, dialog.password(), salt));
+    SecureByteArray key(PasswordHash::hash(PasswordHash::ARGON2ID, password, salt));
     auto cryptor = std::make_unique<DataCryptor>(CipherType::AES256_GCM, key);
 
     if (!cryptor->decrypt(verifier).has_value())
-    {
-        MsgBox::warning(parent, tr("Unable to decrypt the file with the specified password."));
-        return false;
-    }
+        return Result::WRONG_PASSWORD;
 
     Database& db = Database::instance();
     if (!db.isValid())
-    {
-        MsgBox::warning(parent, tr("Address book database is not available."));
-        return false;
-    }
+        return Result::DATABASE_UNAVAILABLE;
 
-    ImportCounters counters;
+    ImportCounts local_counters;
+    ImportCounters& counters = counts ? *counts : local_counters;
 
     QHash<qint64, qint64> router_id_map;
     QJsonArray routers_array = root.value("routers").toArray();
@@ -560,26 +492,8 @@ bool JsonBackup::importFromFile(QWidget* parent, const QString& file_path)
 
     cryptor.reset();
 
-    if (counters.routers == 0 && counters.groups == 0 && counters.hosts == 0)
-    {
-        MsgBox::information(parent, tr("Nothing was imported."));
-        return false;
-    }
+    if (counters.total() == 0)
+        return Result::NOTHING_IMPORTED;
 
-    MsgBox::information(parent,
-        tr("Import completed successfully.\n"
-           "Routers added: %1\n"
-           "Routers skipped: %2\n"
-           "Groups added: %3\n"
-           "Groups skipped: %4\n"
-           "Hosts added: %5\n"
-           "Hosts skipped: %6")
-            .arg(counters.routers)
-            .arg(counters.routers_skipped)
-            .arg(counters.groups)
-            .arg(counters.groups_skipped)
-            .arg(counters.hosts)
-            .arg(counters.hosts_skipped));
-
-    return true;
+    return Result::SUCCESS;
 }

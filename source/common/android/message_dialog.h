@@ -34,6 +34,9 @@ public:
     static bool confirm(QWidget* parent, const QString& title, const QString& text,
                         const QString& accept_text);
 
+    // Shows a modal message with a single OK button.
+    static void info(QWidget* parent, const QString& title, const QString& text);
+
 private:
     Q_DISABLE_COPY_MOVE(MessageDialog)
 };

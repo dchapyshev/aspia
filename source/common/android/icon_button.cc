@@ -77,7 +77,7 @@ void IconButton::paintEvent(QPaintEvent* /* event */)
 
     if (isDown() || isChecked())
     {
-        QColor layer = palette().color(QPalette::Highlight);
+        QColor layer = Controls::accentColor();
         layer.setAlphaF(kStateLayerOpacity);
 
         painter.setPen(Qt::NoPen);

@@ -294,7 +294,7 @@ void TreeWidget::drawRow(QPainter* painter, const QStyleOptionViewItem& option,
 
     if (layer_opacity > 0.0)
     {
-        QColor layer = palette().color(QPalette::Highlight);
+        QColor layer = Controls::accentColor();
         layer.setAlphaF(layer_opacity);
         painter->fillRect(QRect(0, option.rect.top(), viewport()->width(), option.rect.height()),
                           layer);

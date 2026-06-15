@@ -62,6 +62,8 @@ signals:
 private slots:
     void onItemActivated(QTreeWidgetItem* item, int column);
     void onShowMenu();
+    void onImport();
+    void onExport();
     void onAddGroup();
     void onAddHost();
 

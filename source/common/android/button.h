@@ -19,6 +19,7 @@
 #ifndef COMMON_ANDROID_BUTTON_H
 #define COMMON_ANDROID_BUTTON_H
 
+#include <QColor>
 #include <QPushButton>
 
 class QVariantAnimation;
@@ -44,6 +45,10 @@ public:
     void setRole(Role role);
     Role role() const { return role_; }
 
+    // Overrides the brand accent for this button, for destructive actions tinted with a different
+    // color. An invalid color falls back to the shared brand accent.
+    void setAccentColor(const QColor& color);
+
     // QPushButton implementation.
     QSize sizeHint() const final;
     QSize minimumSizeHint() const final;
@@ -60,6 +65,7 @@ private:
     QVariantAnimation* animation_;
     double press_progress_;
     Role role_;
+    QColor accent_color_;
 
     Q_DISABLE_COPY_MOVE(Button)
 };

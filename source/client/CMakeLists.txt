@@ -73,6 +73,8 @@ list(APPEND SOURCE_CLIENT_ANDROID
     android/main_window.h
     android/master_password_dialog.cc
     android/master_password_dialog.h
+    android/password_dialog.cc
+    android/password_dialog.h
     android/remote_widget.cc
     android/remote_widget.h
     android/router_card.cc

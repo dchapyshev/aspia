@@ -122,7 +122,7 @@ void Menu::paintEvent(QPaintEvent* /* event */)
 
         if (i == active_)
         {
-            QColor layer = palette().color(QPalette::Highlight);
+            QColor layer = Controls::accentColor();
             layer.setAlphaF(kPressLayerOpacity);
             painter.fillRect(row, layer);
         }

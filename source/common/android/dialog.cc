@@ -72,6 +72,7 @@ Dialog::Dialog(QWidget* parent)
     setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
     setAttribute(Qt::WA_TranslucentBackground);
 
+    title_label_->setWordWrap(true);
     title_label_->setVisible(false);
     text_label_->setWordWrap(true);
     text_label_->setVisible(false);

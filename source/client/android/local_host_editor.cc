@@ -74,9 +74,7 @@ LocalHostEditor::LocalHostEditor(QWidget* parent)
 
     // The delete action is destructive, so its text is tinted red and it shows only when editing.
     delete_button_ = new Button(tr("Delete"), Button::Role::TEXT);
-    QPalette delete_palette = delete_button_->palette();
-    delete_palette.setColor(QPalette::Highlight, Controls::errorColor());
-    delete_button_->setPalette(delete_palette);
+    delete_button_->setAccentColor(Controls::errorColor());
     delete_button_->hide();
 
     QWidget* form = new QWidget();

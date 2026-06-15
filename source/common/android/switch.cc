@@ -117,7 +117,7 @@ void Switch::paintEvent(QPaintEvent* /* event */)
 
     const QRectF track = trackRect();
 
-    const QColor accent = palette().color(QPalette::Highlight);
+    const QColor accent = Controls::accentColor();
     const QColor outline = palette().color(QPalette::Mid);
     const QColor window = palette().color(QPalette::Window);
     const QColor window_text = palette().color(QPalette::WindowText);

@@ -19,24 +19,53 @@
 #ifndef CLIENT_JSON_BACKUP_H
 #define CLIENT_JSON_BACKUP_H
 
-#include <QCoreApplication>
 #include <QString>
 
-class QWidget;
+#include "base/crypto/secure_string.h"
 
 class JsonBackup
 {
-    Q_DECLARE_TR_FUNCTIONS(JsonBackup)
-
 public:
-    // Exports the local address book (groups, hosts, routers) into a JSON file at |file_path|.
-    // Shows password dialog and error/success messages on |parent|. Returns true on success.
-    static bool exportToFile(QWidget* parent, const QString& file_path);
+    enum class Result
+    {
+        SUCCESS,
+        DATABASE_UNAVAILABLE,
+        FILE_ERROR,           // The file could not be opened, read or written.
+        INVALID_FORMAT,       // Not a valid/recognized address book file.
+        UNSUPPORTED_VERSION,
+        WRONG_PASSWORD,
+        NOTHING_IMPORTED,
+        INTERNAL_ERROR,
+    };
 
-    // Imports the address book from |file_path| (JSON format) into the local database.
-    // Shows password dialog and error/success messages on |parent|.
-    // Returns true if at least one item was imported.
-    static bool importFromFile(QWidget* parent, const QString& file_path);
+    struct ExportCounts
+    {
+        int routers = 0;
+        int groups = 0;
+        int hosts = 0;
+    };
+
+    struct ImportCounts
+    {
+        int routers = 0;
+        int routers_skipped = 0;
+        int groups = 0;
+        int groups_skipped = 0;
+        int hosts = 0;
+        int hosts_skipped = 0;
+
+        int total() const { return routers + groups + hosts; }
+    };
+
+    // Exports the local address book (routers, groups, hosts) to |file_path|, encrypted with
+    // |password|. |counts| (optional) receives the number of exported entries.
+    static Result exportToFile(const QString& file_path, const SecureString& password,
+                               ExportCounts* counts = nullptr);
+
+    // Imports the address book from |file_path|, decrypting it with |password|, into the local
+    // database. |counts| (optional) receives the added/skipped tallies.
+    static Result importFromFile(const QString& file_path, const SecureString& password,
+                                 ImportCounts* counts = nullptr);
 
 private:
     Q_DISABLE_COPY_MOVE(JsonBackup)

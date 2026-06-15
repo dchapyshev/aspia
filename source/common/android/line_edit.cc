@@ -109,7 +109,7 @@ void LineEdit::paintEvent(QPaintEvent* event)
         if (!isEnabled())
             painter.setOpacity(kDisabledOpacity);
 
-        const QColor accent = palette().color(QPalette::Highlight);
+        const QColor accent = Controls::accentColor();
         const QColor outline = palette().color(QPalette::Mid);
 
         QRectF field = rect();

@@ -81,6 +81,13 @@ void Button::setRole(Role role)
 }
 
 //--------------------------------------------------------------------------------------------------
+void Button::setAccentColor(const QColor& color)
+{
+    accent_color_ = color;
+    update();
+}
+
+//--------------------------------------------------------------------------------------------------
 QSize Button::sizeHint() const
 {
     QFontMetrics fm(font());
@@ -108,7 +115,7 @@ void Button::paintEvent(QPaintEvent* /* event */)
     const QRectF surface = rect();
     const double radius = surface.height() / 2.0;
 
-    const QColor accent = palette().color(QPalette::Highlight);
+    const QColor accent = accent_color_.isValid() ? accent_color_ : Controls::accentColor();
     const bool filled = (role_ == Role::FILLED);
     const QColor foreground = filled ? Controls::contrastColor(accent) : accent;
 

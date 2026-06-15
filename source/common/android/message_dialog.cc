@@ -39,3 +39,17 @@ bool MessageDialog::confirm(QWidget* parent, const QString& title, const QString
 
     return dialog.exec() == QDialog::Accepted;
 }
+
+//--------------------------------------------------------------------------------------------------
+// static
+void MessageDialog::info(QWidget* parent, const QString& title, const QString& text)
+{
+    Dialog dialog(parent);
+    dialog.setTitle(title);
+    dialog.setText(text);
+
+    Button* ok = dialog.addButton(QObject::tr("OK"), Button::Role::FILLED);
+    QObject::connect(ok, &Button::clicked, &dialog, &QDialog::accept);
+
+    dialog.exec();
+}
