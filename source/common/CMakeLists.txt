@@ -165,6 +165,8 @@ if (ANDROID)
         android/label.h
         android/line_edit.cc
         android/line_edit.h
+        android/menu.cc
+        android/menu.h
         android/radio_button.cc
         android/radio_button.h
         android/scroll_area.cc

@@ -29,6 +29,7 @@
 #include "client/config.h"
 #include "client/database.h"
 #include "common/android/icon_button.h"
+#include "common/android/menu.h"
 #include "common/android/tree_widget.h"
 
 namespace {
@@ -51,13 +52,13 @@ LocalWidget::LocalWidget(QWidget* parent)
       tree_(new TreeWidget(this)),
       host_tree_(new TreeWidget(this)),
       editor_(new LocalHostEditor(this)),
-      add_button_(new IconButton(":/img/material/add_2.svg", this)),
-      search_button_(new IconButton(":/img/material/search.svg", this))
+      search_button_(new IconButton(":/img/material/search.svg", this)),
+      overflow_button_(new IconButton(":/img/material/more_vert.svg", this))
 {
     // The action buttons live in the app bar; AppBar::setActions() reparents and shows the ones it
     // receives. Hidden by default so they do not linger in this widget.
-    add_button_->hide();
     search_button_->hide();
+    overflow_button_->hide();
 
     // Two columns: the entry name and, for ungrouped hosts shown at the root, its address.
     tree_->setColumnCount(2);
@@ -96,7 +97,7 @@ LocalWidget::LocalWidget(QWidget* parent)
     layout->addWidget(stack_);
 
     connect(tree_, &QTreeWidget::itemClicked, this, &LocalWidget::onItemActivated);
-    connect(add_button_, &IconButton::clicked, this, &LocalWidget::onAddHost);
+    connect(overflow_button_, &IconButton::clicked, this, &LocalWidget::onShowMenu);
     connect(editor_, &LocalHostEditor::sig_accepted, this, &LocalWidget::returnFromEditor);
 
     // A long press on a host (an ungrouped host in the tree, or any host in a group) opens it for
@@ -124,7 +125,7 @@ QList<QWidget*> LocalWidget::appBarActions() const
     if (stack_->currentIndex() == kPageEditor)
         return {};
 
-    return { add_button_, search_button_ };
+    return { search_button_, overflow_button_ };
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -176,6 +177,17 @@ void LocalWidget::onItemActivated(QTreeWidgetItem* item, int /* column */)
         return;
 
     showHosts(item->data(0, kGroupIdRole).toLongLong(), item->text(0));
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalWidget::onShowMenu()
+{
+    Menu* menu = new Menu(this);
+    menu->addItem(tr("Add Host"), GuiApplication::svgIcon(":/img/material/add_2.svg"));
+    connect(menu, &Menu::sig_triggered, this, [this](int /* index */) { onAddHost(); });
+
+    // Anchor the menu to the button; it drops from the button's near edge per layout direction.
+    menu->popup(QRect(overflow_button_->mapToGlobal(QPoint(0, 0)), overflow_button_->size()));
 }
 
 //--------------------------------------------------------------------------------------------------

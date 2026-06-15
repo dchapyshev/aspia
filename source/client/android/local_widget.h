@@ -60,6 +60,7 @@ signals:
 
 private slots:
     void onItemActivated(QTreeWidgetItem* item, int column);
+    void onShowMenu();
     void onAddHost();
 
 private:
@@ -73,8 +74,8 @@ private:
     TreeWidget* tree_ = nullptr;
     TreeWidget* host_tree_ = nullptr;
     LocalHostEditor* editor_ = nullptr;
-    IconButton* add_button_ = nullptr;
     IconButton* search_button_ = nullptr;
+    IconButton* overflow_button_ = nullptr;
 
     // The group a new host is added to: the open group on the host page, or the root on the tree.
     qint64 current_group_id_ = 0;
