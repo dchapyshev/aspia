@@ -320,6 +320,15 @@ void Router::setStatus(Status status)
     if (status_ == status)
         return;
     status_ = status;
+
+    if (status_ != Status::ONLINE)
+    {
+        workspaces_loaded_ = false;
+        cached_workspaces_.clear();
+        cached_groups_.clear();
+        cached_hosts_.clear();
+    }
+
     emit sig_statusChanged(config_.routerId(), status_);
 }
 
