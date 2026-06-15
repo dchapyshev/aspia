@@ -280,6 +280,9 @@ void AndroidMainWindow::openDesktop(const HostConfig& host)
 
     root_stack_->addWidget(desktop_);
     root_stack_->setCurrentWidget(desktop_);
+
+    // Hide the system bars to give the remote desktop the whole screen.
+    showFullScreen();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -292,6 +295,8 @@ void AndroidMainWindow::onDesktopClosed()
     root_stack_->removeWidget(desktop_);
     desktop_->deleteLater();
     desktop_ = nullptr;
+
+    showMaximized();
 }
 
 //--------------------------------------------------------------------------------------------------

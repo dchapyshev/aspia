@@ -19,8 +19,6 @@
 #include "client/android/desktop_window.h"
 
 #include <QGridLayout>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
 
 #include "base/gui_application.h"
 #include "base/net/tcp_channel.h"
@@ -29,16 +27,15 @@
 #include "client/config.h"
 #include "client/router.h"
 #include "client/session_state.h"
-#include "common/android/icon_button.h"
+#include "common/android/bottom_sheet.h"
+#include "common/android/floating_action_button.h"
 #include "common/android/label.h"
 #include "proto/peer.h"
 #include "proto/router_client.h"
 
 namespace {
 
-constexpr int kTopBarHeight = 56;
-constexpr int kTopBarHMargin = 8;
-constexpr int kTopBarSpacing = 8;
+constexpr int kFabMargin = 16;
 
 } // namespace
 
@@ -47,37 +44,20 @@ DesktopWindow::DesktopWindow(const HostConfig& host, QWidget* parent)
     : QWidget(parent),
       host_(host),
       view_(new DesktopView()),
-      title_(new Label(QString(), Label::Role::BODY)),
       status_(new Label(QString(), Label::Role::BODY))
 {
-    IconButton* close_button = new IconButton(":/img/material/arrow_back.svg");
-
-    QWidget* top_bar = new QWidget();
-    top_bar->setFixedHeight(kTopBarHeight);
-    QHBoxLayout* top_layout = new QHBoxLayout(top_bar);
-    top_layout->setContentsMargins(kTopBarHMargin, 0, kTopBarHMargin, 0);
-    top_layout->setSpacing(kTopBarSpacing);
-    top_layout->addWidget(close_button);
-    top_layout->addWidget(title_, 1);
-
     // The status text floats centered over the desktop area until the first frame arrives.
     status_->setAlignment(Qt::AlignCenter);
     status_->setWordWrap(true);
     status_->setStyleSheet("color: white;");
 
-    QWidget* content = new QWidget();
-    QGridLayout* content_layout = new QGridLayout(content);
-    content_layout->setContentsMargins(0, 0, 0, 0);
-    content_layout->addWidget(view_, 0, 0);
-    content_layout->addWidget(status_, 0, 0, Qt::AlignCenter);
-
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    QGridLayout* layout = new QGridLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(0);
-    layout->addWidget(top_bar);
-    layout->addWidget(content, 1);
+    layout->addWidget(view_, 0, 0);
+    layout->addWidget(status_, 0, 0, Qt::AlignCenter);
 
-    connect(close_button, &IconButton::clicked, this, &DesktopWindow::sig_closed);
+    fab_ = new FloatingActionButton(":/img/material/more_vert.svg", this);
+    connect(fab_, &FloatingActionButton::sig_clicked, this, &DesktopWindow::onShowActions);
 
     start();
 }
@@ -91,17 +71,25 @@ DesktopWindow::~DesktopWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopWindow::resizeEvent(QResizeEvent* event)
+{
+    QWidget::resizeEvent(event);
+
+    if (fab_)
+        fab_->move(width() - fab_->width() - kFabMargin, height() - fab_->height() - kFabMargin);
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopWindow::start()
 {
-    const QString display_name = host_.name().isEmpty() ? host_.address() : host_.name();
-    title_->setText(display_name);
+    display_name_ = host_.name().isEmpty() ? host_.address() : host_.name();
 
     // An empty user name means a connection by ID with a one-time password (#host_id).
     if (host_.username().isEmpty())
         host_.setUsername(u"#" + host_.address());
 
     session_state_ = std::make_shared<SessionState>(
-        host_, proto::peer::SESSION_TYPE_DESKTOP, display_name);
+        host_, proto::peer::SESSION_TYPE_DESKTOP, display_name_);
 
     setStatusText(tr("Connecting..."));
 
@@ -230,6 +218,21 @@ void DesktopWindow::onFrameChanged(const QSize& /* screen_size */, std::shared_p
 {
     view_->setFrame(std::move(frame));
     status_->setVisible(false);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onShowActions()
+{
+    BottomSheet* sheet = new BottomSheet(this);
+    sheet->addItem(tr("Disconnect"), ":/img/material/close.svg");
+
+    connect(sheet, &BottomSheet::sig_triggered, this, [this](int index)
+    {
+        if (index == 0)
+            emit sig_closed();
+    });
+
+    sheet->showSheet();
 }
 
 //--------------------------------------------------------------------------------------------------

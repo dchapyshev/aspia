@@ -21,6 +21,7 @@
 
 #include <QPointer>
 #include <QSize>
+#include <QString>
 #include <QWidget>
 
 #include <memory>
@@ -30,6 +31,7 @@
 
 class ClientDesktop;
 class DesktopView;
+class FloatingActionButton;
 class Frame;
 class Label;
 class SessionState;
@@ -45,9 +47,14 @@ public:
 signals:
     void sig_closed();
 
+protected:
+    // QWidget implementation.
+    void resizeEvent(QResizeEvent* event) final;
+
 private slots:
     void onStatusChanged(Client::Status status, const QVariant& data);
     void onFrameChanged(const QSize& screen_size, std::shared_ptr<Frame> frame);
+    void onShowActions();
 
 private:
     void start();
@@ -56,12 +63,13 @@ private:
     void setStatusText(const QString& text);
 
     HostConfig host_;
+    QString display_name_;
     std::shared_ptr<SessionState> session_state_;
     QPointer<ClientDesktop> client_;
 
     DesktopView* view_ = nullptr;
-    Label* title_ = nullptr;
     Label* status_ = nullptr;
+    FloatingActionButton* fab_ = nullptr;
     bool connected_ = false;
 
     Q_DISABLE_COPY_MOVE(DesktopWindow)

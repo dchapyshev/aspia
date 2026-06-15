@@ -147,6 +147,8 @@ if (ANDROID)
         android/app_bar.h
         android/bottom_navigation_bar.cc
         android/bottom_navigation_bar.h
+        android/bottom_sheet.cc
+        android/bottom_sheet.h
         android/button.cc
         android/button.h
         android/card.cc
@@ -159,6 +161,8 @@ if (ANDROID)
         android/dialog.h
         android/expandable_panel.cc
         android/expandable_panel.h
+        android/floating_action_button.cc
+        android/floating_action_button.h
         android/icon_button.cc
         android/icon_button.h
         android/label.cc
