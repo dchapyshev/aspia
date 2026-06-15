@@ -24,11 +24,16 @@
 #include <QStackedWidget>
 #include <QVBoxLayout>
 
+#include <optional>
+
+#include "client/android/desktop_window.h"
 #include "client/android/local_widget.h"
 #include "client/android/master_password_dialog.h"
 #include "client/android/remote_widget.h"
 #include "client/android/routers_widget.h"
 #include "client/android/settings_widget.h"
+#include "client/config.h"
+#include "client/database.h"
 #include "client/master_password.h"
 #include "common/android/app_bar.h"
 #include "common/android/bottom_navigation_bar.h"
@@ -72,6 +77,8 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
             this, &AndroidMainWindow::onLocalActionsChanged);
     connect(remote, &RemoteWidget::sig_titleChanged,
             this, &AndroidMainWindow::onRemoteTitleChanged);
+    connect(local, &LocalWidget::sig_connectHost, this, &AndroidMainWindow::onConnectHost);
+    connect(remote, &RemoteWidget::sig_connectHost, this, &AndroidMainWindow::onConnectRouterHost);
     connect(app_bar_, &AppBar::sig_backClicked, this, &AndroidMainWindow::onBackClicked);
 
     navigation_->addItem(tr("Local"), ":/img/folder.svg");
@@ -79,12 +86,22 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
     navigation_->addItem(tr("Routers"), ":/img/stack.svg");
     navigation_->addItem(tr("Settings"), ":/img/settings.svg");
 
+    // The address book shell. While a desktop connection is active it is replaced by the desktop view.
+    shell_ = new QWidget(this);
+    QVBoxLayout* shell_layout = new QVBoxLayout(shell_);
+    shell_layout->setContentsMargins(0, 0, 0, 0);
+    shell_layout->setSpacing(0);
+    shell_layout->addWidget(app_bar_);
+    shell_layout->addWidget(content_, 1);
+    shell_layout->addWidget(navigation_);
+
+    root_stack_ = new QStackedWidget(this);
+    root_stack_->addWidget(shell_);
+
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
-    layout->addWidget(app_bar_);
-    layout->addWidget(content_, 1);
-    layout->addWidget(navigation_);
+    layout->addWidget(root_stack_);
 
     connect(navigation_, &BottomNavigationBar::sig_currentChanged,
             this, &AndroidMainWindow::onSectionChanged);
@@ -232,6 +249,49 @@ void AndroidMainWindow::onBackClicked()
         default:
             break;
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onConnectHost(qint64 entry_id)
+{
+    std::optional<HostConfig> host = Database::instance().findHost(entry_id);
+    if (!host.has_value())
+        return;
+
+    openDesktop(*host);
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onConnectRouterHost(const HostConfig& host)
+{
+    openDesktop(host);
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::openDesktop(const HostConfig& host)
+{
+    // Only a single desktop connection is supported at a time.
+    if (desktop_)
+        return;
+
+    // The desktop view takes over the whole window until the connection is closed.
+    desktop_ = new DesktopWindow(host);
+    connect(desktop_, &DesktopWindow::sig_closed, this, &AndroidMainWindow::onDesktopClosed);
+
+    root_stack_->addWidget(desktop_);
+    root_stack_->setCurrentWidget(desktop_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onDesktopClosed()
+{
+    if (!desktop_)
+        return;
+
+    root_stack_->setCurrentWidget(shell_);
+    root_stack_->removeWidget(desktop_);
+    desktop_->deleteLater();
+    desktop_ = nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------

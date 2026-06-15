@@ -63,6 +63,10 @@ if (WIN32)
 endif()
 
 list(APPEND SOURCE_CLIENT_ANDROID
+    android/desktop_view.cc
+    android/desktop_view.h
+    android/desktop_window.cc
+    android/desktop_window.h
     android/local_group_editor.cc
     android/local_group_editor.h
     android/local_host_editor.cc

@@ -45,6 +45,9 @@ constexpr int kWorkspaceIdRole = Qt::UserRole + 1;
 constexpr int kGroupIdRole = Qt::UserRole + 2;
 constexpr qint64 kRouterMarker = -1;
 
+// Item data role for the host rows on the host page.
+constexpr int kHostIdRole = Qt::UserRole;
+
 //--------------------------------------------------------------------------------------------------
 QString statusIconPath(Router::Status status)
 {
@@ -137,6 +140,7 @@ RemoteWidget::RemoteWidget(QWidget* parent)
     layout->addWidget(stack_);
 
     connect(tree_, &QTreeWidget::itemClicked, this, &RemoteWidget::onItemActivated);
+    connect(host_tree_, &QTreeWidget::itemDoubleClicked, this, &RemoteWidget::onHostActivated);
     connect(refresh_button_, &IconButton::clicked, this, &RemoteWidget::onRefreshClicked);
 
     reload();
@@ -212,6 +216,33 @@ void RemoteWidget::onItemActivated(QTreeWidgetItem* item, int /* column */)
     emit sig_titleChanged(item->text(0), true);
 
     fetchHosts(Router::CachePolicy::USE_CACHE);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RemoteWidget::onHostActivated(QTreeWidgetItem* item, int /* column */)
+{
+    if (!item)
+        return;
+
+    const HostId host_id = item->data(0, kHostIdRole).value<HostId>();
+
+    for (const Router::Host& host : std::as_const(hosts_))
+    {
+        if (host.host_id != host_id)
+            continue;
+
+        QString name = host.display_name.isEmpty() ? host.computer_name : host.display_name;
+
+        HostConfig config;
+        config.setRouterId(host_router_id_);
+        config.setAddress(hostIdToString(host.host_id));
+        config.setName(name);
+        config.setUsername(host.user_name);
+        config.setPassword(host.password);
+
+        emit sig_connectHost(config);
+        return;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -352,6 +383,7 @@ void RemoteWidget::fetchHosts(Router::CachePolicy policy)
         }
 
         host_tree_->clear();
+        hosts_ = list.hosts;
 
         for (const Router::Host& host : list.hosts)
         {
@@ -361,6 +393,7 @@ void RemoteWidget::fetchHosts(Router::CachePolicy policy)
                 new QTreeWidgetItem(host_tree_, { name, QString("ID %1").arg(host.host_id) });
             item->setIcon(0, GuiApplication::svgIcon(host.online ? ":/img/computer-online.svg"
                                                                  : ":/img/computer-offline.svg"));
+            item->setData(0, kHostIdRole, QVariant::fromValue(host.host_id));
         }
     });
 }

@@ -55,8 +55,12 @@ signals:
     // Requests the host bar to show |title| with a back button (host list) or the default state.
     void sig_titleChanged(const QString& title, bool back_visible);
 
+    // Requests a desktop connection to the given router host.
+    void sig_connectHost(const HostConfig& host);
+
 private slots:
     void onItemActivated(QTreeWidgetItem* item, int column);
+    void onHostActivated(QTreeWidgetItem* item, int column);
     void onRefreshClicked();
 
 private:
@@ -76,6 +80,9 @@ private:
     qint64 host_router_id_ = -1;
     qint64 host_workspace_id_ = 0;
     qint64 host_group_id_ = 0;
+
+    // The hosts currently shown on the host page, kept to build a connection config on tap.
+    QList<Router::Host> hosts_;
 
     Q_DISABLE_COPY_MOVE(RemoteWidget)
 };

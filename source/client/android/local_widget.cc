@@ -105,6 +105,15 @@ LocalWidget::LocalWidget(QWidget* parent)
     layout->addWidget(stack_);
 
     connect(tree_, &QTreeWidget::itemClicked, this, &LocalWidget::onItemActivated);
+
+    // A host connects on a double tap; a group opens its host list on a single tap.
+    auto connect_host = [this](QTreeWidgetItem* item, int)
+    {
+        if (item && item->data(0, kHostIdRole).isValid())
+            emit sig_connectHost(item->data(0, kHostIdRole).toLongLong());
+    };
+    connect(tree_, &QTreeWidget::itemDoubleClicked, this, connect_host);
+    connect(host_tree_, &QTreeWidget::itemDoubleClicked, this, connect_host);
     connect(overflow_button_, &IconButton::clicked, this, &LocalWidget::onShowMenu);
     connect(host_editor_, &LocalHostEditor::sig_accepted, this, &LocalWidget::returnFromEditor);
     connect(group_editor_, &LocalGroupEditor::sig_accepted, this, &LocalWidget::returnFromEditor);
@@ -183,7 +192,8 @@ void LocalWidget::onItemActivated(QTreeWidgetItem* item, int /* column */)
     if (!item)
         return;
 
-    // Host rows (ungrouped hosts at the root) are not actionable yet; only groups open a list.
+    // A host row (an ungrouped host at the root) connects on a double tap; a single tap on a group
+    // row opens its host list.
     if (item->data(0, kHostIdRole).isValid())
         return;
 

@@ -59,6 +59,9 @@ signals:
     // Emitted when the set returned by appBarActions() changes (the editor hides the actions).
     void sig_appBarActionsChanged();
 
+    // Requests a desktop connection to the local address book entry with the given id.
+    void sig_connectHost(qint64 entry_id);
+
 private slots:
     void onItemActivated(QTreeWidgetItem* item, int column);
     void onShowMenu();

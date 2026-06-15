@@ -23,6 +23,8 @@
 
 class AppBar;
 class BottomNavigationBar;
+class DesktopWindow;
+class HostConfig;
 class QStackedWidget;
 
 // Top-level application window for the Android client: a top app bar, a content area switched by
@@ -47,6 +49,9 @@ private slots:
     void onRoutersTitleChanged(const QString& title, bool back_visible);
     void onRemoteTitleChanged(const QString& title, bool back_visible);
     void onBackClicked();
+    void onConnectHost(qint64 entry_id);
+    void onConnectRouterHost(const HostConfig& host);
+    void onDesktopClosed();
 
 private:
     // Gates the window behind the master password: prompts to create or unlock it, and reloads the
@@ -55,9 +60,16 @@ private:
     void onUnlocked();
     void retranslate();
 
+    // Replaces the address book with a full-screen desktop view for the given host. Only a single
+    // desktop connection is supported at a time.
+    void openDesktop(const HostConfig& host);
+
+    QStackedWidget* root_stack_ = nullptr;
+    QWidget* shell_ = nullptr;
     AppBar* app_bar_ = nullptr;
     QStackedWidget* content_ = nullptr;
     BottomNavigationBar* navigation_ = nullptr;
+    DesktopWindow* desktop_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(AndroidMainWindow)
 };
