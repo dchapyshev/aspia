@@ -187,7 +187,7 @@ RouterCard::RouterCard(qint64 router_id, const QString& name, QWidget* parent)
 
     contentLayout()->addWidget(card);
 
-    connect(this, &ExpandablePanel::headerClicked, this, [this]() { emit expandRequested(router_id_); });
+    connect(this, &ExpandablePanel::sig_headerClicked, this, [this]() { emit expandRequested(router_id_); });
 }
 
 //--------------------------------------------------------------------------------------------------

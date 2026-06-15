@@ -42,7 +42,10 @@ protected:
 private slots:
     void onSectionChanged(int index);
     void onRouterActionsChanged();
+    void onLocalActionsChanged();
+    void onLocalTitleChanged(const QString& title, bool back_visible);
     void onRemoteTitleChanged(const QString& title, bool back_visible);
+    void onBackClicked();
 
 private:
     // Gates the window behind the master password: prompts to create or unlock it, and reloads the

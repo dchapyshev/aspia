@@ -53,19 +53,24 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
       content_(new QStackedWidget(this)),
       navigation_(new BottomNavigationBar(this))
 {
+    LocalWidget* local = new LocalWidget(this);
     RoutersWidget* routers = new RoutersWidget(this);
     RemoteWidget* remote = new RemoteWidget(this);
 
-    content_->addWidget(new LocalWidget(this));
+    content_->addWidget(local);
     content_->addWidget(remote);
     content_->addWidget(routers);
     content_->addWidget(new SettingsWidget(this));
 
     connect(routers, &RoutersWidget::appBarActionsChanged,
             this, &AndroidMainWindow::onRouterActionsChanged);
+    connect(local, &LocalWidget::sig_titleChanged,
+            this, &AndroidMainWindow::onLocalTitleChanged);
+    connect(local, &LocalWidget::sig_appBarActionsChanged,
+            this, &AndroidMainWindow::onLocalActionsChanged);
     connect(remote, &RemoteWidget::sig_titleChanged,
             this, &AndroidMainWindow::onRemoteTitleChanged);
-    connect(app_bar_, &AppBar::backClicked, remote, &RemoteWidget::goBack);
+    connect(app_bar_, &AppBar::sig_backClicked, this, &AndroidMainWindow::onBackClicked);
 
     navigation_->addItem(tr("Local"), ":/img/folder.svg");
     navigation_->addItem(tr("Remote"), ":/img/workspace.svg");
@@ -79,7 +84,7 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
     layout->addWidget(content_, 1);
     layout->addWidget(navigation_);
 
-    connect(navigation_, &BottomNavigationBar::currentChanged,
+    connect(navigation_, &BottomNavigationBar::sig_currentChanged,
             this, &AndroidMainWindow::onSectionChanged);
 
     onSectionChanged(navigation_->currentIndex());
@@ -127,8 +132,10 @@ void AndroidMainWindow::onSectionChanged(int index)
         actions = remote->appBarActions();
     app_bar_->setActions(actions);
 
-    // Pick up routers added or removed elsewhere when the remote screen becomes visible.
-    if (index == SECTION_REMOTE && remote)
+    // Refresh from storage when a browsing screen becomes visible (picks up changes made elsewhere).
+    if (index == SECTION_LOCAL && local)
+        local->reload();
+    else if (index == SECTION_REMOTE && remote)
         remote->reload();
 
     switch (index)
@@ -163,6 +170,24 @@ void AndroidMainWindow::onRouterActionsChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onLocalActionsChanged()
+{
+    LocalWidget* local = qobject_cast<LocalWidget*>(content_->widget(SECTION_LOCAL));
+    if (navigation_->currentIndex() == SECTION_LOCAL && local)
+        app_bar_->setActions(local->appBarActions());
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onLocalTitleChanged(const QString& title, bool back_visible)
+{
+    if (navigation_->currentIndex() != SECTION_LOCAL)
+        return;
+
+    app_bar_->setTitle(title.isEmpty() ? tr("Local") : title);
+    app_bar_->setBackVisible(back_visible);
+}
+
+//--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onRemoteTitleChanged(const QString& title, bool back_visible)
 {
     if (navigation_->currentIndex() != SECTION_REMOTE)
@@ -170,6 +195,26 @@ void AndroidMainWindow::onRemoteTitleChanged(const QString& title, bool back_vis
 
     app_bar_->setTitle(title.isEmpty() ? tr("Remote") : title);
     app_bar_->setBackVisible(back_visible);
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onBackClicked()
+{
+    switch (navigation_->currentIndex())
+    {
+        case SECTION_LOCAL:
+            if (LocalWidget* local = qobject_cast<LocalWidget*>(content_->widget(SECTION_LOCAL)))
+                local->goBack();
+            break;
+
+        case SECTION_REMOTE:
+            if (RemoteWidget* remote = qobject_cast<RemoteWidget*>(content_->widget(SECTION_REMOTE)))
+                remote->goBack();
+            break;
+
+        default:
+            break;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -192,6 +237,9 @@ void AndroidMainWindow::runMasterPasswordGate()
 //--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onUnlocked()
 {
+    if (LocalWidget* local = qobject_cast<LocalWidget*>(content_->widget(SECTION_LOCAL)))
+        local->reload();
+
     if (RoutersWidget* routers = qobject_cast<RoutersWidget*>(content_->widget(SECTION_ROUTERS)))
         routers->reload();
 
