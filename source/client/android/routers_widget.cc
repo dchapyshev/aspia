@@ -24,6 +24,8 @@
 #include <QSet>
 #include <QVBoxLayout>
 
+#include <optional>
+
 #include "base/crypto/data_cryptor.h"
 #include "base/net/tcp_channel.h"
 #include "client/android/router_edit_dialog.h"
@@ -33,6 +35,7 @@
 #include "client/router.h"
 #include "common/android/controls.h"
 #include "common/android/icon_button.h"
+#include "common/android/message_dialog.h"
 #include "common/android/scroll_area.h"
 
 namespace {
@@ -263,7 +266,18 @@ void RoutersWidget::onEditRouter(qint64 router_id)
 //--------------------------------------------------------------------------------------------------
 void RoutersWidget::onRemoveRouter(qint64 router_id)
 {
-    if (Database::instance().removeRouter(router_id))
+    Database& db = Database::instance();
+
+    const std::optional<RouterConfig> config = db.findRouter(router_id);
+    const QString name = config.has_value() ? config->displayLabel() : QString();
+
+    if (!MessageDialog::confirm(this, tr("Delete Router"),
+                                tr("Delete the router \"%1\"?").arg(name), tr("Delete")))
+    {
+        return;
+    }
+
+    if (db.removeRouter(router_id))
         reload();
 }
 

@@ -33,6 +33,7 @@
 #include "common/android/combo_box.h"
 #include "common/android/label.h"
 #include "common/android/line_edit.h"
+#include "common/android/message_dialog.h"
 #include "common/android/scroll_area.h"
 #include "common/android/text_area.h"
 
@@ -71,6 +72,13 @@ LocalHostEditor::LocalHostEditor(QWidget* parent)
 
     Button* save = new Button(tr("Save"), Button::Role::FILLED);
 
+    // The delete action is destructive, so its text is tinted red and it shows only when editing.
+    delete_button_ = new Button(tr("Delete"), Button::Role::TEXT);
+    QPalette delete_palette = delete_button_->palette();
+    delete_palette.setColor(QPalette::Highlight, kErrorColor);
+    delete_button_->setPalette(delete_palette);
+    delete_button_->hide();
+
     QWidget* form = new QWidget();
     QVBoxLayout* form_layout = new QVBoxLayout(form);
     form_layout->setContentsMargins(kFormMargin, kFormMargin, kFormMargin, kFormMargin);
@@ -83,6 +91,7 @@ LocalHostEditor::LocalHostEditor(QWidget* parent)
     form_layout->addWidget(password_);
     form_layout->addWidget(comment_);
     form_layout->addWidget(save);
+    form_layout->addWidget(delete_button_);
     form_layout->addStretch();
 
     ScrollArea* scroll = new ScrollArea(this);
@@ -96,6 +105,7 @@ LocalHostEditor::LocalHostEditor(QWidget* parent)
     connect(router_, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &LocalHostEditor::onRouterChanged);
     connect(save, &Button::clicked, this, &LocalHostEditor::onSaveClicked);
+    connect(delete_button_, &Button::clicked, this, &LocalHostEditor::onDeleteClicked);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -113,6 +123,7 @@ void LocalHostEditor::prepareForAdd(qint64 group_id)
     password_->clear();
     comment_->clear();
     error_->setVisible(false);
+    delete_button_->hide();
 
     loadRouters(0);
     onRouterChanged();
@@ -135,6 +146,7 @@ void LocalHostEditor::prepareForEdit(qint64 host_id)
     password_->setText(host->password().toString());
     comment_->setText(host->comment());
     error_->setVisible(false);
+    delete_button_->show();
 
     loadRouters(host->routerId());
     onRouterChanged();
@@ -218,6 +230,24 @@ void LocalHostEditor::onSaveClicked()
     if (!saved)
     {
         showError(tr("Failed to save the host."));
+        return;
+    }
+
+    emit sig_accepted();
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalHostEditor::onDeleteClicked()
+{
+    if (!MessageDialog::confirm(this, tr("Delete Host"),
+                                tr("Delete the host \"%1\"?").arg(name_->text()), tr("Delete")))
+    {
+        return;
+    }
+
+    if (!Database::instance().removeHost(entry_id_))
+    {
+        showError(tr("Failed to delete the host."));
         return;
     }
 

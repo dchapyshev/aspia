@@ -44,12 +44,13 @@ public:
     void prepareForEdit(qint64 host_id);
 
 signals:
-    // Emitted after the host has been saved to the database.
+    // Emitted after the host has been saved to or removed from the database.
     void sig_accepted();
 
 private slots:
     void onRouterChanged();
     void onSaveClicked();
+    void onDeleteClicked();
 
 private:
     void loadRouters(qint64 selected_router_id);
@@ -62,6 +63,7 @@ private:
     LineEdit* password_ = nullptr;
     TextArea* comment_ = nullptr;
     Label* error_ = nullptr;
+    Button* delete_button_ = nullptr;
     qint64 entry_id_ = -1;
     qint64 group_id_ = 0;
 

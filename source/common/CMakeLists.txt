@@ -167,6 +167,8 @@ if (ANDROID)
         android/line_edit.h
         android/menu.cc
         android/menu.h
+        android/message_dialog.cc
+        android/message_dialog.h
         android/radio_button.cc
         android/radio_button.h
         android/scroll_area.cc
