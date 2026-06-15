@@ -536,7 +536,8 @@ void Sidebar::onRefreshWorkspaces(qint64 router_id)
     if (!router)
         return;
 
-    router->listWorkspaces(0, this, [this, router_id](const Router::WorkspaceList& list)
+    router->listWorkspaces(Router::CachePolicy::RELOAD, 0, this,
+        [this, router_id](const Router::WorkspaceList& list)
     {
         setRouterWorkspaces(router_id, list.workspaces);
 
@@ -549,7 +550,7 @@ void Sidebar::onRefreshWorkspaces(qint64 router_id)
         for (const Router::Workspace& workspace : list.workspaces)
         {
             const qint64 workspace_id = workspace.entry_id;
-            router->listGroups(workspace_id, this,
+            router->listGroups(Router::CachePolicy::RELOAD, workspace_id, this,
                 [this, router_id, workspace_id](const Router::GroupList& result)
             {
                 setRouterHostGroups(router_id, workspace_id, result.groups);
@@ -570,7 +571,7 @@ void Sidebar::onRefreshHostGroups(qint64 router_id)
     const QList<qint64> workspace_ids = routerWorkspaceIds(router_id);
     for (qint64 workspace_id : std::as_const(workspace_ids))
     {
-        router->listGroups(workspace_id, this,
+        router->listGroups(Router::CachePolicy::RELOAD, workspace_id, this,
             [this, router_id, workspace_id](const Router::GroupList& result)
         {
             setRouterHostGroups(router_id, workspace_id, result.groups);

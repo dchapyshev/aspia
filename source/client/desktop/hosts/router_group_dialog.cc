@@ -59,7 +59,8 @@ RouterGroupDialog::RouterGroupDialog(
 
     Router* router = Router::instance(router_id_);
     CHECK(router);
-    router->listGroups(workspace_id_, this, &RouterGroupDialog::onGroupListReceived);
+    router->listGroups(Router::CachePolicy::USE_CACHE, workspace_id_, this,
+                       &RouterGroupDialog::onGroupListReceived);
 }
 
 //--------------------------------------------------------------------------------------------------

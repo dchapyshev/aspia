@@ -704,7 +704,8 @@ void RouterHostsWidget::fetchHosts()
     request.set_mode(proto::router::HostListRequest::MODE_ALL);
     request.set_start_item(start);
     request.set_end_item(start + hosts_page_size_ - 1);
-    router->listHosts(std::move(request), this, &RouterHostsWidget::onHostListReceived);
+    router->listHosts(Router::CachePolicy::RELOAD, std::move(request), this,
+                      &RouterHostsWidget::onHostListReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -717,7 +718,8 @@ void RouterHostsWidget::fetchWorkspaces()
     if (router->config().sessionType() != proto::router::SESSION_TYPE_ADMIN)
         return;
 
-    router->listWorkspaces(0, this, &RouterHostsWidget::onWorkspaceListReceived);
+    router->listWorkspaces(Router::CachePolicy::RELOAD, 0, this,
+                           &RouterHostsWidget::onWorkspaceListReceived);
 }
 
 //--------------------------------------------------------------------------------------------------

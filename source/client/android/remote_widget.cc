@@ -28,7 +28,6 @@
 
 #include "base/crypto/data_cryptor.h"
 #include "base/gui_application.h"
-#include "base/net/tcp_channel.h"
 #include "client/config.h"
 #include "client/database.h"
 #include "client/router.h"
@@ -138,6 +137,7 @@ RemoteWidget::RemoteWidget(QWidget* parent)
     layout->addWidget(stack_);
 
     connect(tree_, &QTreeWidget::itemClicked, this, &RemoteWidget::onItemActivated);
+    connect(refresh_button_, &IconButton::clicked, this, &RemoteWidget::onRefreshClicked);
 
     reload();
 }
@@ -177,7 +177,7 @@ void RemoteWidget::reload()
         item->setExpanded(true);
 
         if (status == Router::Status::ONLINE)
-            populateRouter(router_id);
+            fetchRouter(router_id, Router::CachePolicy::USE_CACHE);
     }
 }
 
@@ -205,9 +205,28 @@ void RemoteWidget::onItemActivated(QTreeWidgetItem* item, int /* column */)
     host_workspace_id_ = workspace_id;
     host_group_id_ = item->data(0, kGroupIdRole).toLongLong();
 
-    fetchHosts();
+    // Clear at once so the previous group's hosts are not left on screen while a request is in
+    // flight; a cached selection refills synchronously below.
+    host_tree_->clear();
     stack_->setCurrentIndex(kPageHosts);
     emit sig_titleChanged(item->text(0), true);
+
+    fetchHosts(Router::CachePolicy::USE_CACHE);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RemoteWidget::onRefreshClicked()
+{
+    for (const RouterConfig& config : Database::instance().routerList())
+    {
+        const qint64 router_id = config.routerId();
+        Router* router = Router::instance(router_id);
+        if (router && router->status() == Router::Status::ONLINE)
+            fetchRouter(router_id, Router::CachePolicy::RELOAD);
+    }
+
+    if (stack_->currentIndex() == kPageHosts)
+        fetchHosts(Router::CachePolicy::RELOAD);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -226,15 +245,22 @@ void RemoteWidget::connectRouters()
         connect(router, &Router::sig_statusChanged, this, [this](qint64 id, Router::Status status)
         {
             if (QTreeWidgetItem* item = routerItem(id))
+            {
                 item->setIcon(0, GuiApplication::svgIcon(statusIconPath(status)));
-            populateRouter(id);
+                if (status != Router::Status::ONLINE)
+                    qDeleteAll(item->takeChildren());
+            }
+            if (status == Router::Status::ONLINE)
+                fetchRouter(id, Router::CachePolicy::RELOAD);
         });
-        connect(router, &Router::sig_workspacesChanged, this, [this](qint64 id) { populateRouter(id); });
-        connect(router, &Router::sig_groupsChanged, this, [this](qint64 id) { populateRouter(id); });
+        connect(router, &Router::sig_workspacesChanged, this,
+                [this](qint64 id) { fetchRouter(id, Router::CachePolicy::RELOAD); });
+        connect(router, &Router::sig_groupsChanged, this,
+                [this](qint64 id) { fetchRouter(id, Router::CachePolicy::RELOAD); });
         connect(router, &Router::sig_hostsChanged, this, [this](qint64 id)
         {
             if (stack_->currentIndex() == kPageHosts && id == host_router_id_)
-                fetchHosts();
+                fetchHosts(Router::CachePolicy::RELOAD);
         });
 
         connected_routers_.insert(router_id);
@@ -242,44 +268,37 @@ void RemoteWidget::connectRouters()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RemoteWidget::populateRouter(qint64 router_id)
+void RemoteWidget::fetchRouter(qint64 router_id, Router::CachePolicy policy)
 {
-    QTreeWidgetItem* router_item = routerItem(router_id);
-    if (!router_item)
-        return;
-
     Router* router = Router::instance(router_id);
     if (!router || router->status() != Router::Status::ONLINE)
-    {
-        qDeleteAll(router_item->takeChildren());
         return;
-    }
 
-    router->listWorkspaces(0, this, [this, router_id](const Router::WorkspaceList& list)
+    router->listWorkspaces(policy, 0, this, [this, router_id, policy](const Router::WorkspaceList& list)
     {
-        QTreeWidgetItem* parent = routerItem(router_id);
-        if (!parent)
+        QTreeWidgetItem* router_item = routerItem(router_id);
+        if (!router_item)
             return;
 
-        qDeleteAll(parent->takeChildren());
+        qDeleteAll(router_item->takeChildren());
 
         const QIcon icon = GuiApplication::svgIcon(":/img/workspace.svg");
+        Router* session = Router::instance(router_id);
 
         for (const Router::Workspace& workspace : list.workspaces)
         {
-            QTreeWidgetItem* item = new QTreeWidgetItem(parent, { workspace.name });
+            QTreeWidgetItem* item = new QTreeWidgetItem(router_item, { workspace.name });
             item->setIcon(0, icon);
             item->setData(0, kRouterIdRole, router_id);
             item->setData(0, kWorkspaceIdRole, workspace.entry_id);
             item->setData(0, kGroupIdRole, qint64(0));
             item->setExpanded(true);
 
-            const qint64 workspace_id = workspace.entry_id;
-            Router* session = Router::instance(router_id);
             if (!session)
                 continue;
 
-            session->listGroups(workspace_id, this,
+            const qint64 workspace_id = workspace.entry_id;
+            session->listGroups(policy, workspace_id, this,
                 [this, router_id, workspace_id](const Router::GroupList& result)
             {
                 if (QTreeWidgetItem* parent = workspaceItem(router_id, workspace_id))
@@ -290,25 +309,30 @@ void RemoteWidget::populateRouter(qint64 router_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RemoteWidget::fetchHosts()
+void RemoteWidget::fetchHosts(Router::CachePolicy policy)
 {
-    host_tree_->clear();
-
     Router* router = Router::instance(host_router_id_);
     if (!router || router->status() != Router::Status::ONLINE)
         return;
 
     const qint64 router_id = host_router_id_;
+    const qint64 workspace_id = host_workspace_id_;
+    const qint64 group_id = host_group_id_;
 
     proto::router::HostListRequest request;
     request.set_mode(proto::router::HostListRequest::MODE_FILTERED);
-    request.set_workspace_id(host_workspace_id_);
-    request.set_group_id(host_group_id_);
+    request.set_workspace_id(workspace_id);
+    request.set_group_id(group_id);
 
-    router->listHosts(std::move(request), this, [this, router_id](const Router::HostList& list)
+    router->listHosts(policy, std::move(request), this,
+        [this, router_id, workspace_id, group_id](const Router::HostList& list)
     {
-        if (router_id != host_router_id_)
+        // Ignore the result if the selection changed while the request was in flight.
+        if (stack_->currentIndex() != kPageHosts || router_id != host_router_id_ ||
+            workspace_id != host_workspace_id_ || group_id != host_group_id_)
+        {
             return;
+        }
 
         host_tree_->clear();
 

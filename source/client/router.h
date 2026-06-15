@@ -60,6 +60,13 @@ public:
     };
     Q_ENUM(Status)
 
+    enum class CachePolicy
+    {
+        USE_CACHE, // Return the cached result when available; otherwise fetch and cache it.
+        RELOAD     // Always fetch from the server and refresh the cache.
+    };
+    Q_ENUM(CachePolicy)
+
     // Plain (decrypted) workspace data shared between Router and the UI.
     //   * incoming: filled from the decoded server list. access entries carry only user_id;
     //     public_key is always empty (UI has no use for it).
@@ -257,18 +264,22 @@ public:
     //----------------------------------------------------------------------------------------------
 
     // Workspace list (response is the decoded plain struct). workspace_id == 0 returns all visible
-    // workspaces; > 0 narrows to a single entry.
+    // workspaces; > 0 narrows to a single entry. With |policy| == USE_CACHE the cached result of the
+    // all-workspaces query is returned without a request when available.
     template<typename HandlerT>
-    void listWorkspaces(qint64 workspace_id, QObject* receiver, HandlerT handler);
+    void listWorkspaces(CachePolicy policy, qint64 workspace_id, QObject* receiver, HandlerT handler);
 
     // Host-group list of a workspace (response is the decoded plain struct with comments decrypted
-    // via the cached workspace cryptor).
+    // via the cached workspace cryptor). With |policy| == USE_CACHE a cached result is returned
+    // without a request when available.
     template<typename HandlerT>
-    void listGroups(qint64 workspace_id, QObject* receiver, HandlerT handler);
+    void listGroups(CachePolicy policy, qint64 workspace_id, QObject* receiver, HandlerT handler);
 
-    // Host list. Caller supplies a pre-filled request (mode, filters, etc).
+    // Host list. Caller supplies a pre-filled request (mode, filters, etc). Filtered queries are
+    // cached; with |policy| == USE_CACHE a cached result is returned without a request when available.
     template<typename HandlerT>
-    void listHosts(proto::router::HostListRequest request, QObject* receiver, HandlerT handler);
+    void listHosts(CachePolicy policy, proto::router::HostListRequest request, QObject* receiver,
+                   HandlerT handler);
 
     // Substring search over hosts by display name and host_id across every workspace accessible
     // to the user. The response is the decoded plain HostList struct (full match set, no
@@ -442,6 +453,27 @@ private:
     QString user_name_;
     SecureByteArray user_private_key_;
     std::unordered_map<qint64, DataCryptor> workspace_cryptors_;
+
+    // Identifies a cached filtered host list by its (workspace, group) selection.
+    struct HostCacheKey
+    {
+        qint64 workspace_id = 0;
+        qint64 group_id = 0;
+
+        bool operator==(const HostCacheKey& other) const = default;
+
+        friend size_t qHash(const HostCacheKey& key, size_t seed = 0)
+        {
+            return qHashMulti(seed, key.workspace_id, key.group_id);
+        }
+    };
+
+    // Decoded list cache served to list* callers when CachePolicy::USE_CACHE is requested. A present
+    // key means the data was fetched (an empty list is a valid cached value).
+    bool workspaces_loaded_ = false;
+    QList<Workspace> cached_workspaces_;
+    QHash<qint64, QList<Group>> cached_groups_;     // key: workspace_id
+    QHash<HostCacheKey, QList<Host>> cached_hosts_; // key: (workspace_id, group_id)
 
     Q_DISABLE_COPY_MOVE(Router)
 };
@@ -746,48 +778,91 @@ void Router::deleteGroup(qint64 workspace_id, qint64 entry_id, QObject* receiver
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
-void Router::listWorkspaces(qint64 workspace_id, QObject* receiver, HandlerT handler)
+void Router::listWorkspaces(CachePolicy policy, qint64 workspace_id, QObject* receiver, HandlerT handler)
 {
+    if (policy == CachePolicy::USE_CACHE && workspace_id == 0 && workspaces_loaded_)
+    {
+        Router::WorkspaceList cached;
+        cached.workspaces = cached_workspaces_;
+        invokeHandler(receiver, handler, cached);
+        return;
+    }
+
     proto::router::ClientToRouter message;
     auto* request = message.mutable_workspace_list_request();
     request->set_request_id(nextRequestId());
     request->set_workspace_id(workspace_id);
     registerPending<proto::router::WorkspaceList>(request, receiver, std::move(handler),
-        [this](const proto::router::WorkspaceList& raw)
+        [this, workspace_id](const proto::router::WorkspaceList& raw)
     {
-        return decodeWorkspaceList(raw);
+        Router::WorkspaceList decoded = decodeWorkspaceList(raw);
+        if (workspace_id == 0)
+        {
+            cached_workspaces_ = decoded.workspaces;
+            workspaces_loaded_ = true;
+        }
+        return decoded;
     });
     emitSend(proto::router::CHANNEL_ID_CLIENT, message);
 }
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
-void Router::listGroups(qint64 workspace_id, QObject* receiver, HandlerT handler)
+void Router::listGroups(CachePolicy policy, qint64 workspace_id, QObject* receiver, HandlerT handler)
 {
+    if (policy == CachePolicy::USE_CACHE && cached_groups_.contains(workspace_id))
+    {
+        Router::GroupList cached;
+        cached.workspace_id = workspace_id;
+        cached.groups = cached_groups_.value(workspace_id);
+        invokeHandler(receiver, handler, cached);
+        return;
+    }
+
     proto::router::ClientToRouter message;
     auto* request = message.mutable_group_list_request();
     request->set_request_id(nextRequestId());
     request->set_workspace_id(workspace_id);
     registerPending<proto::router::GroupList>(request, receiver, std::move(handler),
-        [this](const proto::router::GroupList& raw)
+        [this, workspace_id](const proto::router::GroupList& raw)
     {
-        return decodeGroupList(raw);
+        Router::GroupList decoded = decodeGroupList(raw);
+        cached_groups_[workspace_id] = decoded.groups;
+        return decoded;
     });
     emitSend(proto::router::CHANNEL_ID_CLIENT, message);
 }
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
-void Router::listHosts(proto::router::HostListRequest request, QObject* receiver, HandlerT handler)
+void Router::listHosts(CachePolicy policy, proto::router::HostListRequest request, QObject* receiver,
+                       HandlerT handler)
 {
+    // Only filtered (per workspace/group) queries are cached; the paginated MODE_ALL query is not.
+    const bool cacheable = request.mode() == proto::router::HostListRequest::MODE_FILTERED;
+    const HostCacheKey key{ request.workspace_id(), request.group_id() };
+
+    if (policy == CachePolicy::USE_CACHE && cacheable && cached_hosts_.contains(key))
+    {
+        Router::HostList cached;
+        cached.workspace_id = key.workspace_id;
+        cached.group_id = key.group_id;
+        cached.hosts = cached_hosts_.value(key);
+        invokeHandler(receiver, handler, cached);
+        return;
+    }
+
     request.set_request_id(nextRequestId());
     proto::router::ClientToRouter message;
     message.mutable_host_list_request()->Swap(&request);
     registerPending<proto::router::HostList>(
         &message.host_list_request(), receiver, std::move(handler),
-        [this](const proto::router::HostList& raw)
+        [this, cacheable, key](const proto::router::HostList& raw)
     {
-        return decodeHostList(raw);
+        Router::HostList decoded = decodeHostList(raw);
+        if (cacheable)
+            cached_hosts_[key] = decoded.hosts;
+        return decoded;
     });
     emitSend(proto::router::CHANNEL_ID_CLIENT, message);
 }

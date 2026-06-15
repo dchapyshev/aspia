@@ -65,7 +65,8 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const QString& workspace_na
             reject();
     });
 
-    router->listGroups(host_.workspace_id, this, &RouterHostDialog::onGroupListReceived);
+    router->listGroups(Router::CachePolicy::USE_CACHE, host_.workspace_id, this,
+                       &RouterHostDialog::onGroupListReceived);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -79,7 +79,7 @@ private slots:
     void onHostContextMenu(const QPoint& pos);
 
 private:
-    void fetchHosts();
+    void fetchHosts(Router::CachePolicy policy);
     void updateStatusLabel();
     void startDrag();
 

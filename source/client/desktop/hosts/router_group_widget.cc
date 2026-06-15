@@ -175,7 +175,10 @@ void RouterGroupWidget::showGroup(qint64 router_id, qint64 workspace_id,
             disconnect(prev, &Router::sig_hostsChanged, this, nullptr);
 
         if (Router* curr = Router::instance(router_id))
-            connect(curr, &Router::sig_hostsChanged, this, &RouterGroupWidget::fetchHosts);
+        {
+            connect(curr, &Router::sig_hostsChanged, this,
+                    [this]() { fetchHosts(Router::CachePolicy::RELOAD); });
+        }
     }
 
     router_id_ = router_id;
@@ -185,7 +188,7 @@ void RouterGroupWidget::showGroup(qint64 router_id, qint64 workspace_id,
 
     ui->tree_host->clear();
     updateStatusLabel();
-    fetchHosts();
+    fetchHosts(Router::CachePolicy::USE_CACHE);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -257,7 +260,7 @@ void RouterGroupWidget::restoreState(const QByteArray& state)
 //--------------------------------------------------------------------------------------------------
 void RouterGroupWidget::reload()
 {
-    fetchHosts();
+    fetchHosts(Router::CachePolicy::RELOAD);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -291,7 +294,7 @@ void RouterGroupWidget::onEditHost()
 
     RouterHostDialog dialog(router_id_, workspace_name_, item->host, this);
     if (dialog.exec() == QDialog::Accepted)
-        fetchHosts();
+        fetchHosts(Router::CachePolicy::RELOAD);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -424,7 +427,7 @@ void RouterGroupWidget::onHostContextMenu(const QPoint& pos)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterGroupWidget::fetchHosts()
+void RouterGroupWidget::fetchHosts(Router::CachePolicy policy)
 {
     if (router_id_ == 0)
         return;
@@ -437,7 +440,7 @@ void RouterGroupWidget::fetchHosts()
     request.set_mode(proto::router::HostListRequest::MODE_FILTERED);
     request.set_workspace_id(workspace_id_);
     request.set_group_id(group_id_);
-    router->listHosts(std::move(request), this, &RouterGroupWidget::onHostListReceived);
+    router->listHosts(policy, std::move(request), this, &RouterGroupWidget::onHostListReceived);
 }
 
 //--------------------------------------------------------------------------------------------------

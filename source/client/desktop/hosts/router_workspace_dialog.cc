@@ -76,12 +76,14 @@ RouterWorkspaceDialog::RouterWorkspaceDialog(
 
     // Always fetch the full list so we have all the other names available for uniqueness
     // validation; in modify mode the entry matching entry_id_ also populates the form.
-    router->listWorkspaces(0, this, &RouterWorkspaceDialog::onWorkspaceListReceived);
+    router->listWorkspaces(Router::CachePolicy::USE_CACHE, 0, this,
+                           &RouterWorkspaceDialog::onWorkspaceListReceived);
     router->listUsers(this, &RouterWorkspaceDialog::onUserListReceived);
 
     proto::router::HostListRequest host_request;
     host_request.set_mode(proto::router::HostListRequest::MODE_ALL);
-    router->listHosts(std::move(host_request), this, &RouterWorkspaceDialog::onHostListReceived);
+    router->listHosts(Router::CachePolicy::RELOAD, std::move(host_request), this,
+                      &RouterWorkspaceDialog::onHostListReceived);
 }
 
 //--------------------------------------------------------------------------------------------------

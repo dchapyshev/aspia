@@ -23,14 +23,17 @@
 #include <QSet>
 #include <QWidget>
 
+#include "client/router.h"
+
 class IconButton;
-class Router;
 class TreeWidget;
 class QStackedWidget;
 class QTreeWidgetItem;
 
 // Remote screen for the Android client: an accordion tree of routers -> workspaces -> groups. A tap
-// on a workspace or group opens its host list; routers expand to reveal their content.
+// on a workspace or group opens its host list; routers expand to reveal their content. Fetched lists
+// are served from the Router cache, so a tab switch shows the stored content without a request; the
+// refresh action and router notifications re-fetch from the server.
 class RemoteWidget final : public QWidget
 {
     Q_OBJECT
@@ -54,11 +57,12 @@ signals:
 
 private slots:
     void onItemActivated(QTreeWidgetItem* item, int column);
+    void onRefreshClicked();
 
 private:
     void connectRouters();
-    void populateRouter(qint64 router_id);
-    void fetchHosts();
+    void fetchRouter(qint64 router_id, Router::CachePolicy policy);
+    void fetchHosts(Router::CachePolicy policy);
     void showTree();
     QTreeWidgetItem* routerItem(qint64 router_id) const;
     QTreeWidgetItem* workspaceItem(qint64 router_id, qint64 workspace_id) const;
