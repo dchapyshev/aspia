@@ -56,6 +56,7 @@ private:
     bool applying_palette_ = false;
     QTimer* long_press_timer_ = nullptr;
     QPoint press_pos_;
+    bool long_pressed_ = false;
 
     Q_DISABLE_COPY_MOVE(TreeWidget)
 };

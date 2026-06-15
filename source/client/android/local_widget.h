@@ -24,6 +24,7 @@
 #include <QWidget>
 
 class IconButton;
+class LocalGroupEditor;
 class LocalHostEditor;
 class TreeWidget;
 class QStackedWidget;
@@ -61,19 +62,23 @@ signals:
 private slots:
     void onItemActivated(QTreeWidgetItem* item, int column);
     void onShowMenu();
+    void onAddGroup();
     void onAddHost();
 
 private:
     void populateGroups(qint64 parent_id, QTreeWidgetItem* parent);
     void showTree();
     void showHosts(qint64 group_id, const QString& title);
+    void editGroup(qint64 group_id);
     void editHost(qint64 host_id);
     void returnFromEditor();
+    bool isEditorPage() const;
 
     QStackedWidget* stack_ = nullptr;
     TreeWidget* tree_ = nullptr;
     TreeWidget* host_tree_ = nullptr;
-    LocalHostEditor* editor_ = nullptr;
+    LocalGroupEditor* group_editor_ = nullptr;
+    LocalHostEditor* host_editor_ = nullptr;
     IconButton* search_button_ = nullptr;
     IconButton* overflow_button_ = nullptr;
 

@@ -80,6 +80,13 @@ QColor Controls::contrastColor(const QColor& background)
 
 //--------------------------------------------------------------------------------------------------
 // static
+QColor Controls::errorColor()
+{
+    return QColor(0xE5, 0x48, 0x4D);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
 QPixmap Controls::tintedPixmap(const QString& svg_file_path, const QSize& size, const QColor& color)
 {
     QPixmap pixmap = GuiApplication::svgPixmap(svg_file_path, size);

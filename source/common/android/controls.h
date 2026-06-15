@@ -54,6 +54,10 @@ public:
     // its luminance. The Android platform palette does not provide a usable highlighted text color.
     static QColor contrastColor(const QColor& background);
 
+    // Color for error and destructive text. A fixed hex stays readable on both light and dark
+    // surfaces; the platform palette has no error role.
+    static QColor errorColor();
+
     // Renders the SVG at |svg_file_path| to |size| and recolors it with |color|, for monochrome
     // icons that follow the current palette.
     static QPixmap tintedPixmap(const QString& svg_file_path, const QSize& size,

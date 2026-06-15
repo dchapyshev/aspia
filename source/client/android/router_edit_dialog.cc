@@ -27,15 +27,10 @@
 #include "client/config.h"
 #include "client/database.h"
 #include "common/android/button.h"
+#include "common/android/controls.h"
 #include "common/android/label.h"
 #include "common/android/line_edit.h"
 #include "proto/router.h"
-
-namespace {
-
-const QColor kErrorColor(0xE5, 0x48, 0x4D);
-
-} // namespace
 
 //--------------------------------------------------------------------------------------------------
 RouterEditDialog::RouterEditDialog(qint64 router_id, QWidget* parent)
@@ -57,7 +52,7 @@ RouterEditDialog::RouterEditDialog(qint64 router_id, QWidget* parent)
 
     // A fixed hex keeps the error color readable on both light and dark cards and survives the
     // palette reset that the caption role applies on theme changes.
-    error_->setStyleSheet(QString("color: %1;").arg(kErrorColor.name()));
+    error_->setStyleSheet(QString("color: %1;").arg(Controls::errorColor().name()));
     error_->setWordWrap(true);
     error_->setVisible(false);
 

@@ -181,7 +181,10 @@ TreeWidget::TreeWidget(QWidget* parent)
     connect(long_press_timer_, &QTimer::timeout, this, [this]()
     {
         if (QTreeWidgetItem* item = itemAt(press_pos_))
+        {
+            long_pressed_ = true;
             emit sig_itemLongPressed(item);
+        }
     });
 
     connect(QScroller::scroller(viewport()), &QScroller::stateChanged, this,
@@ -229,6 +232,7 @@ void TreeWidget::changeEvent(QEvent* event)
 void TreeWidget::mousePressEvent(QMouseEvent* event)
 {
     press_pos_ = event->position().toPoint();
+    long_pressed_ = false;
     long_press_timer_->start();
 
     QTreeWidget::mousePressEvent(event);
@@ -247,6 +251,14 @@ void TreeWidget::mouseMoveEvent(QMouseEvent* event)
 void TreeWidget::mouseReleaseEvent(QMouseEvent* event)
 {
     long_press_timer_->stop();
+
+    // A long press already handled the row; swallow the release so it does not also click.
+    if (long_pressed_)
+    {
+        long_pressed_ = false;
+        event->accept();
+        return;
+    }
 
     const QPoint pos = event->position().toPoint();
     const QModelIndex index = indexAt(pos);

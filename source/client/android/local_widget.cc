@@ -25,6 +25,7 @@
 
 #include "base/crypto/data_cryptor.h"
 #include "base/gui_application.h"
+#include "client/android/local_group_editor.h"
 #include "client/android/local_host_editor.h"
 #include "client/config.h"
 #include "client/database.h"
@@ -36,7 +37,8 @@ namespace {
 
 constexpr int kPageTree = 0;
 constexpr int kPageHosts = 1;
-constexpr int kPageEditor = 2;
+constexpr int kPageHostEditor = 2;
+constexpr int kPageGroupEditor = 3;
 
 // Item data roles. A host row (an ungrouped host shown at the root) carries kHostIdRole; a group
 // row carries kGroupIdRole.
@@ -51,7 +53,8 @@ LocalWidget::LocalWidget(QWidget* parent)
       stack_(new QStackedWidget(this)),
       tree_(new TreeWidget(this)),
       host_tree_(new TreeWidget(this)),
-      editor_(new LocalHostEditor(this)),
+      group_editor_(new LocalGroupEditor(this)),
+      host_editor_(new LocalHostEditor(this)),
       search_button_(new IconButton(":/img/material/search.svg", this)),
       overflow_button_(new IconButton(":/img/material/more_vert.svg", this))
 {
@@ -89,7 +92,8 @@ LocalWidget::LocalWidget(QWidget* parent)
 
     stack_->addWidget(tree_page);
     stack_->addWidget(host_page);
-    stack_->addWidget(editor_);
+    stack_->addWidget(host_editor_);
+    stack_->addWidget(group_editor_);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -98,14 +102,17 @@ LocalWidget::LocalWidget(QWidget* parent)
 
     connect(tree_, &QTreeWidget::itemClicked, this, &LocalWidget::onItemActivated);
     connect(overflow_button_, &IconButton::clicked, this, &LocalWidget::onShowMenu);
-    connect(editor_, &LocalHostEditor::sig_accepted, this, &LocalWidget::returnFromEditor);
+    connect(host_editor_, &LocalHostEditor::sig_accepted, this, &LocalWidget::returnFromEditor);
+    connect(group_editor_, &LocalGroupEditor::sig_accepted, this, &LocalWidget::returnFromEditor);
 
-    // A long press on a host (an ungrouped host in the tree, or any host in a group) opens it for
-    // editing.
+    // A long press opens the row for editing: an ungrouped host in the tree, a group in the tree,
+    // or a host inside an opened group.
     connect(tree_, &TreeWidget::sig_itemLongPressed, this, [this](QTreeWidgetItem* item)
     {
         if (item->data(0, kHostIdRole).isValid())
             editHost(item->data(0, kHostIdRole).toLongLong());
+        else
+            editGroup(item->data(0, kGroupIdRole).toLongLong());
     });
     connect(host_tree_, &TreeWidget::sig_itemLongPressed, this, [this](QTreeWidgetItem* item)
     {
@@ -121,8 +128,8 @@ LocalWidget::~LocalWidget() = default;
 //--------------------------------------------------------------------------------------------------
 QList<QWidget*> LocalWidget::appBarActions() const
 {
-    // The editor screen has its own form; no browsing actions there.
-    if (stack_->currentIndex() == kPageEditor)
+    // The editor screens have their own forms; no browsing actions there.
+    if (isEditorPage())
         return {};
 
     return { search_button_, overflow_button_ };
@@ -154,7 +161,7 @@ void LocalWidget::reload()
 //--------------------------------------------------------------------------------------------------
 void LocalWidget::goBack()
 {
-    if (stack_->currentIndex() == kPageEditor)
+    if (isEditorPage())
         returnFromEditor();
     else
         showTree();
@@ -182,29 +189,58 @@ void LocalWidget::onItemActivated(QTreeWidgetItem* item, int /* column */)
 //--------------------------------------------------------------------------------------------------
 void LocalWidget::onShowMenu()
 {
+    enum { kAddGroup, kAddHost };
+
     Menu* menu = new Menu(this);
+    menu->addItem(tr("Add Group"), GuiApplication::svgIcon(":/img/material/create_new_folder.svg"));
     menu->addItem(tr("Add Host"), GuiApplication::svgIcon(":/img/material/add_2.svg"));
-    connect(menu, &Menu::sig_triggered, this, [this](int /* index */) { onAddHost(); });
+
+    connect(menu, &Menu::sig_triggered, this, [this](int index)
+    {
+        if (index == kAddGroup)
+            onAddGroup();
+        else
+            onAddHost();
+    });
 
     // Anchor the menu to the button; it drops from the button's near edge per layout direction.
     menu->popup(QRect(overflow_button_->mapToGlobal(QPoint(0, 0)), overflow_button_->size()));
 }
 
 //--------------------------------------------------------------------------------------------------
+void LocalWidget::onAddGroup()
+{
+    // current_group_id_ holds the target: the open group on the host page, or the root on the tree.
+    group_editor_->prepareForAdd(current_group_id_);
+    stack_->setCurrentIndex(kPageGroupEditor);
+    emit sig_titleChanged(tr("Add Group"), true);
+    emit sig_appBarActionsChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
 void LocalWidget::onAddHost()
 {
     // current_group_id_ holds the target: the open group on the host page, or the root on the tree.
-    editor_->prepareForAdd(current_group_id_);
-    stack_->setCurrentIndex(kPageEditor);
+    host_editor_->prepareForAdd(current_group_id_);
+    stack_->setCurrentIndex(kPageHostEditor);
     emit sig_titleChanged(tr("Add Host"), true);
+    emit sig_appBarActionsChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalWidget::editGroup(qint64 group_id)
+{
+    group_editor_->prepareForEdit(group_id);
+    stack_->setCurrentIndex(kPageGroupEditor);
+    emit sig_titleChanged(tr("Edit Group"), true);
     emit sig_appBarActionsChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
 void LocalWidget::editHost(qint64 host_id)
 {
-    editor_->prepareForEdit(host_id);
-    stack_->setCurrentIndex(kPageEditor);
+    host_editor_->prepareForEdit(host_id);
+    stack_->setCurrentIndex(kPageHostEditor);
     emit sig_titleChanged(tr("Edit Host"), true);
     emit sig_appBarActionsChanged();
 }
@@ -220,6 +256,13 @@ void LocalWidget::returnFromEditor()
         showHosts(current_group_id_, current_title_);
 
     emit sig_appBarActionsChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool LocalWidget::isEditorPage() const
+{
+    const int page = stack_->currentIndex();
+    return page == kPageHostEditor || page == kPageGroupEditor;
 }
 
 //--------------------------------------------------------------------------------------------------

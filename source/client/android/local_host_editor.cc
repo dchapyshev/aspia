@@ -31,6 +31,7 @@
 #include "client/database.h"
 #include "common/android/button.h"
 #include "common/android/combo_box.h"
+#include "common/android/controls.h"
 #include "common/android/label.h"
 #include "common/android/line_edit.h"
 #include "common/android/message_dialog.h"
@@ -39,7 +40,6 @@
 
 namespace {
 
-const QColor kErrorColor(0xE5, 0x48, 0x4D);
 constexpr int kFormMargin = 16;
 constexpr int kFormSpacing = 8;
 
@@ -66,7 +66,7 @@ LocalHostEditor::LocalHostEditor(QWidget* parent)
 
     // A fixed hex keeps the error color readable on both light and dark surfaces and survives the
     // palette reset that the caption role applies on theme changes.
-    error_->setStyleSheet(QString("color: %1;").arg(kErrorColor.name()));
+    error_->setStyleSheet(QString("color: %1;").arg(Controls::errorColor().name()));
     error_->setWordWrap(true);
     error_->setVisible(false);
 
@@ -75,7 +75,7 @@ LocalHostEditor::LocalHostEditor(QWidget* parent)
     // The delete action is destructive, so its text is tinted red and it shows only when editing.
     delete_button_ = new Button(tr("Delete"), Button::Role::TEXT);
     QPalette delete_palette = delete_button_->palette();
-    delete_palette.setColor(QPalette::Highlight, kErrorColor);
+    delete_palette.setColor(QPalette::Highlight, Controls::errorColor());
     delete_button_->setPalette(delete_palette);
     delete_button_->hide();
 
