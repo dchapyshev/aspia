@@ -193,13 +193,13 @@ void LocalWidget::onItemActivated(QTreeWidgetItem* item, int /* column */)
 //--------------------------------------------------------------------------------------------------
 void LocalWidget::onShowMenu()
 {
-    enum { kImport, kExport, kAddGroup, kAddHost };
+    enum { kAddGroup, kAddHost, kImport, kExport };
 
     Menu* menu = new Menu(this);
-    menu->addItem(tr("Import"), GuiApplication::svgIcon(":/img/material/download.svg"));
-    menu->addItem(tr("Export"), GuiApplication::svgIcon(":/img/material/upload.svg"));
     menu->addItem(tr("Add Group"), GuiApplication::svgIcon(":/img/material/create_new_folder.svg"));
     menu->addItem(tr("Add Host"), GuiApplication::svgIcon(":/img/material/add_2.svg"));
+    menu->addItem(tr("Import"), GuiApplication::svgIcon(":/img/material/download.svg"));
+    menu->addItem(tr("Export"), GuiApplication::svgIcon(":/img/material/upload.svg"));
 
     connect(menu, &Menu::sig_triggered, this, [this](int index)
     {
