@@ -21,6 +21,7 @@
 #include <QCoreApplication>
 #include <QDialog>
 #include <QEvent>
+#include <QJniObject>
 #include <QStackedWidget>
 #include <QVBoxLayout>
 
@@ -40,6 +41,10 @@
 
 namespace {
 
+// android.view.WindowManager.LayoutParams display cutout modes.
+constexpr int kCutoutModeDefault = 0;
+constexpr int kCutoutModeShortEdges = 1;
+
 // Order of the pages in the stacked content and of the bottom navigation items.
 enum Section
 {
@@ -48,6 +53,36 @@ enum Section
     SECTION_ROUTERS,
     SECTION_SETTINGS
 };
+
+//--------------------------------------------------------------------------------------------------
+// Allows or forbids the window from drawing into the display cutout area (the camera notch). Pairs
+// with clearing WA_ContentsMarginsRespectsSafeArea so the content actually fills the cutout instead
+// of being letterboxed below it.
+void setDrawIntoCutout(bool enable)
+{
+    const int mode = enable ? kCutoutModeShortEdges : kCutoutModeDefault;
+
+    QNativeInterface::QAndroidApplication::runOnAndroidMainThread([mode]() -> QVariant
+    {
+        QJniObject activity = QNativeInterface::QAndroidApplication::context();
+        if (!activity.isValid())
+            return QVariant();
+
+        QJniObject window = activity.callObjectMethod("getWindow", "()Landroid/view/Window;");
+        if (!window.isValid())
+            return QVariant();
+
+        QJniObject params = window.callObjectMethod(
+            "getAttributes", "()Landroid/view/WindowManager$LayoutParams;");
+        if (!params.isValid())
+            return QVariant();
+
+        params.setField<jint>("layoutInDisplayCutoutMode", mode);
+        window.callMethod<void>("setAttributes", "(Landroid/view/WindowManager$LayoutParams;)V",
+                                params.object());
+        return QVariant();
+    });
+}
 
 } // namespace
 
@@ -281,7 +316,10 @@ void AndroidMainWindow::openDesktop(const HostConfig& host)
     root_stack_->addWidget(desktop_);
     root_stack_->setCurrentWidget(desktop_);
 
-    // Hide the system bars to give the remote desktop the whole screen.
+    // Hide the system bars and let the desktop view fill the whole screen, including the camera
+    // cutout: allow drawing into the cutout and stop the layout from reserving the safe area.
+    setDrawIntoCutout(true);
+    setAttribute(Qt::WA_ContentsMarginsRespectsSafeArea, false);
     showFullScreen();
 }
 
@@ -296,6 +334,8 @@ void AndroidMainWindow::onDesktopClosed()
     desktop_->deleteLater();
     desktop_ = nullptr;
 
+    setDrawIntoCutout(false);
+    setAttribute(Qt::WA_ContentsMarginsRespectsSafeArea, true);
     showMaximized();
 }
 
