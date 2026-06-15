@@ -250,8 +250,16 @@ void RemoteWidget::connectRouters()
                 if (status != Router::Status::ONLINE)
                     qDeleteAll(item->takeChildren());
             }
+
             if (status == Router::Status::ONLINE)
+            {
                 fetchRouter(id, Router::CachePolicy::RELOAD);
+            }
+            else if (stack_->currentIndex() == kPageHosts && id == host_router_id_)
+            {
+                // The open host list belongs to a router that just dropped; return to the tree root.
+                showTree();
+            }
         });
         connect(router, &Router::sig_workspacesChanged, this,
                 [this](qint64 id) { fetchRouter(id, Router::CachePolicy::RELOAD); });
