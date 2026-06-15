@@ -232,7 +232,16 @@ void RemoteWidget::onRefreshClicked()
 //--------------------------------------------------------------------------------------------------
 void RemoteWidget::connectRouters()
 {
-    for (const RouterConfig& config : Database::instance().routerList())
+    const QList<RouterConfig> configs = Database::instance().routerList();
+
+    QSet<qint64> present;
+    for (const RouterConfig& config : configs)
+        present.insert(config.routerId());
+
+    // Forget routers that were removed; their Router objects (and our connections to them) are gone.
+    connected_routers_.intersect(present);
+
+    for (const RouterConfig& config : configs)
     {
         const qint64 router_id = config.routerId();
         if (connected_routers_.contains(router_id))

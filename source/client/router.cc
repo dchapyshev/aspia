@@ -327,6 +327,7 @@ void Router::setStatus(Status status)
         cached_workspaces_.clear();
         cached_groups_.clear();
         cached_hosts_.clear();
+        pending_.clear();
     }
 
     emit sig_statusChanged(config_.routerId(), status_);
