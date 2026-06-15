@@ -20,11 +20,14 @@
 #define CLIENT_ANDROID_DESKTOP_VIEW_H
 
 #include <QImage>
+#include <QPointF>
+#include <QSizeF>
 #include <QWidget>
 
 #include <memory>
 
 class Frame;
+class QPinchGesture;
 
 class DesktopView final : public QWidget
 {
@@ -39,11 +42,31 @@ public:
 
 protected:
     // QWidget implementation.
+    bool event(QEvent* event) final;
     void paintEvent(QPaintEvent* event) final;
+    void mousePressEvent(QMouseEvent* event) final;
+    void mouseMoveEvent(QMouseEvent* event) final;
+    void mouseReleaseEvent(QMouseEvent* event) final;
 
 private:
+    void handlePinch(QPinchGesture* gesture);
+
+    // Size of the frame fitted into the widget (aspect ratio preserved) at zoom 1.
+    QSizeF fittedSize() const;
+
+    // Keeps the scaled frame from being dragged past the widget edges; centers it on the axes where
+    // it is smaller than the widget.
+    void clampContentPos();
+
     std::shared_ptr<Frame> frame_;
     QImage image_;
+
+    // Zoom factor (1 = fit to widget) and the top-left of the scaled frame within the widget.
+    qreal zoom_ = 1.0;
+    QPointF content_pos_;
+
+    QPoint pan_last_;
+    bool panning_ = false;
 
     Q_DISABLE_COPY_MOVE(DesktopView)
 };

@@ -18,9 +18,17 @@
 
 #include "client/android/desktop_view.h"
 
+#include <QGestureEvent>
+#include <QMouseEvent>
 #include <QPainter>
 
 #include "base/desktop/frame.h"
+
+namespace {
+
+constexpr qreal kMaxZoom = 5.0;
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 DesktopView::DesktopView(QWidget* parent)
@@ -30,6 +38,8 @@ DesktopView::DesktopView(QWidget* parent)
     pal.setColor(QPalette::Window, Qt::black);
     setPalette(pal);
     setAutoFillBackground(true);
+
+    grabGesture(Qt::PinchGesture);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -61,6 +71,22 @@ void DesktopView::refresh()
 }
 
 //--------------------------------------------------------------------------------------------------
+bool DesktopView::event(QEvent* event)
+{
+    if (event->type() == QEvent::Gesture)
+    {
+        QGestureEvent* gesture_event = static_cast<QGestureEvent*>(event);
+        if (QGesture* gesture = gesture_event->gesture(Qt::PinchGesture))
+        {
+            handlePinch(static_cast<QPinchGesture*>(gesture));
+            return true;
+        }
+    }
+
+    return QWidget::event(event);
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopView::paintEvent(QPaintEvent* /* event */)
 {
     QPainter painter(this);
@@ -69,11 +95,84 @@ void DesktopView::paintEvent(QPaintEvent* /* event */)
     if (image_.isNull())
         return;
 
-    // Fit the frame into the widget preserving the aspect ratio, centered.
-    const QSize scaled = image_.size().scaled(size(), Qt::KeepAspectRatio);
-    const QRect target(QPoint((width() - scaled.width()) / 2, (height() - scaled.height()) / 2),
-                       scaled);
+    clampContentPos();
 
     painter.setRenderHint(QPainter::SmoothPixmapTransform);
-    painter.drawImage(target, image_);
+    painter.drawImage(QRectF(content_pos_, fittedSize() * zoom_), image_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopView::mousePressEvent(QMouseEvent* event)
+{
+    // A single-finger drag pans the frame while it is zoomed in.
+    if (zoom_ > 1.0)
+    {
+        panning_ = true;
+        pan_last_ = event->position().toPoint();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopView::mouseMoveEvent(QMouseEvent* event)
+{
+    if (!panning_)
+        return;
+
+    const QPoint pos = event->position().toPoint();
+    content_pos_ += pos - pan_last_;
+    pan_last_ = pos;
+
+    clampContentPos();
+    update();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopView::mouseReleaseEvent(QMouseEvent* /* event */)
+{
+    panning_ = false;
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopView::handlePinch(QPinchGesture* gesture)
+{
+    const QPinchGesture::ChangeFlags flags = gesture->changeFlags();
+
+    if (flags & QPinchGesture::ScaleFactorChanged)
+    {
+        const qreal previous_zoom = zoom_;
+        zoom_ = qBound(1.0, zoom_ * gesture->scaleFactor(), kMaxZoom);
+
+        // Keep the point under the fingers anchored while scaling.
+        const qreal scale = zoom_ / previous_zoom;
+        const QPointF anchor = mapFromGlobal(gesture->centerPoint().toPoint());
+        content_pos_ = anchor - scale * (anchor - content_pos_);
+    }
+
+    if (flags & QPinchGesture::CenterPointChanged)
+        content_pos_ += gesture->centerPoint() - gesture->lastCenterPoint();
+
+    clampContentPos();
+    update();
+}
+
+//--------------------------------------------------------------------------------------------------
+QSizeF DesktopView::fittedSize() const
+{
+    return QSizeF(image_.size()).scaled(QSizeF(size()), Qt::KeepAspectRatio);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopView::clampContentPos()
+{
+    const QSizeF content = fittedSize() * zoom_;
+
+    if (content.width() <= width())
+        content_pos_.setX((width() - content.width()) / 2.0);
+    else
+        content_pos_.setX(qBound(width() - content.width(), content_pos_.x(), qreal(0)));
+
+    if (content.height() <= height())
+        content_pos_.setY((height() - content.height()) / 2.0);
+    else
+        content_pos_.setY(qBound(height() - content.height(), content_pos_.y(), qreal(0)));
 }
