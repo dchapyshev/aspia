@@ -19,11 +19,7 @@
 #include "base/codec/video_decoder_h264_sw.h"
 
 #include "base/logging.h"
-#include "base/serialization.h"
-#include "base/desktop/frame.h"
 #include "proto/desktop_video.h"
-
-#include <libyuv/convert_argb.h>
 
 #include <wels/codec_api.h>
 #include <wels/codec_def.h>
@@ -77,10 +73,17 @@ bool VideoDecoderH264SW::initialize()
 }
 
 //--------------------------------------------------------------------------------------------------
-VideoDecoder::Result VideoDecoderH264SW::decode(const proto::video::Packet& packet, Frame* frame)
+VideoDecoder::Result VideoDecoderH264SW::decode(const proto::video::Packet& packet)
 {
-    if (!decoder_ || !frame)
+    if (!decoder_)
         return Result::PERMANENT_ERROR;
+
+    const QSize size = frameSize(packet);
+    if (size.isEmpty())
+    {
+        LOG(ERROR) << "Unknown frame size";
+        return Result::TEMPORARY_ERROR;
+    }
 
     if (packet.data().empty())
     {
@@ -127,10 +130,10 @@ VideoDecoder::Result VideoDecoderH264SW::decode(const proto::video::Packet& pack
 
     // OpenH264 reports the coded buffer size (rounded up to a 16-pixel macroblock boundary), so
     // anything that covers the display size is fine; the dirty rects are within display bounds.
-    if (info.UsrData.sSystemBuffer.iWidth < frame->size().width() ||
-        info.UsrData.sSystemBuffer.iHeight < frame->size().height())
+    if (info.UsrData.sSystemBuffer.iWidth < size.width() ||
+        info.UsrData.sSystemBuffer.iHeight < size.height())
     {
-        LOG(ERROR) << "Decoded frame is smaller than expected" << frame->size();
+        LOG(ERROR) << "Decoded frame is smaller than expected" << size;
         return Result::TEMPORARY_ERROR;
     }
 
@@ -141,26 +144,10 @@ VideoDecoder::Result VideoDecoderH264SW::decode(const proto::video::Packet& pack
         return Result::TEMPORARY_ERROR;
     }
 
-    QRect frame_rect(QPoint(0, 0), frame->size());
-
-    for (int i = 0; i < packet.dirty_rect_size(); ++i)
-    {
-        QRect rect = parse(packet.dirty_rect(i));
-        if (!frame_rect.contains(rect))
-        {
-            LOG(ERROR) << "The rectangle is outside the screen area";
-            return Result::TEMPORARY_ERROR;
-        }
-
-        const int y_offset = rect.y() * y_stride + rect.x();
-        const int uv_offset = (rect.y() / 2) * uv_stride + (rect.x() / 2);
-
-        libyuv::I420ToARGB(planes[0] + y_offset, y_stride,
-                           planes[1] + uv_offset, uv_stride,
-                           planes[2] + uv_offset, uv_stride,
-                           frame->frameDataAtPos(rect.topLeft()), frame->stride(),
-                           rect.width(), rect.height());
-    }
+    frame_.reset(YuvFormat::I420, size);
+    frame_.setPlane(0, planes[0], y_stride);
+    frame_.setPlane(1, planes[1], uv_stride);
+    frame_.setPlane(2, planes[2], uv_stride);
 
     return Result::SUCCESS;
 }

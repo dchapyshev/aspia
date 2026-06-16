@@ -168,30 +168,6 @@ ComPtr<ID3D11Texture2D> D3D11VideoContext::createDefaultArgbTexture(int width, i
 }
 
 //--------------------------------------------------------------------------------------------------
-ComPtr<ID3D11Texture2D> D3D11VideoContext::createStagingArgbTexture(int width, int height)
-{
-    D3D11_TEXTURE2D_DESC desc;
-    memset(&desc, 0, sizeof(desc));
-    desc.Width = static_cast<UINT>(width);
-    desc.Height = static_cast<UINT>(height);
-    desc.MipLevels = 1;
-    desc.ArraySize = 1;
-    desc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-    desc.SampleDesc.Count = 1;
-    desc.Usage = D3D11_USAGE_STAGING;
-    desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
-
-    ComPtr<ID3D11Texture2D> texture;
-    _com_error error = device_->CreateTexture2D(&desc, nullptr, &texture);
-    if (FAILED(error.Error()))
-    {
-        LOG(ERROR) << "CreateTexture2D (staging ARGB) failed:" << error;
-        return nullptr;
-    }
-    return texture;
-}
-
-//--------------------------------------------------------------------------------------------------
 ComPtr<ID3D11Texture2D> D3D11VideoContext::createNv12Texture(int width, int height)
 {
     D3D11_TEXTURE2D_DESC desc;

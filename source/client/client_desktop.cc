@@ -28,7 +28,7 @@
 #include "base/codec/video_decoder.h"
 #include "base/codec/webm_file_writer.h"
 #include "base/codec/webm_video_encoder.h"
-#include "base/desktop/frame_aligned.h"
+#include "base/desktop/frame.h"
 #include "base/desktop/mouse_cursor.h"
 #include "common/desktop_session_constants.h"
 #include "proto/desktop_audio.h"
@@ -350,12 +350,12 @@ void ClientDesktop::onRecordingChanged(bool enable, const QString& file_path)
 
         connect(webm_video_encode_timer_, &QTimer::timeout, this, [this]()
         {
-            if (!webm_video_encoder_ || !webm_file_writer_ || !desktop_frame_)
+            if (!webm_video_encoder_ || !webm_file_writer_ || !yuv_converter_.frame())
                 return;
 
             proto::video::Packet packet;
 
-            if (webm_video_encoder_->encode(*desktop_frame_, &packet))
+            if (webm_video_encoder_->encode(*yuv_converter_.frame(), &packet))
                 webm_file_writer_->addVideoPacket(packet);
         });
 
@@ -754,9 +754,7 @@ void ClientDesktop::readVideoPacket(const proto::video::Packet& packet)
         }
 
         video_capturer_type_ = format.capturer_type();
-        desktop_frame_ = FrameAligned::create(video_size, 32);
-
-        emit sig_frameChanged(screen_size, desktop_frame_);
+        screen_size_ = screen_size;
     }
 
     if (packet.flags() & proto::video::PACKET_FLAG_IS_KEY_FRAME)
@@ -769,13 +767,7 @@ void ClientDesktop::readVideoPacket(const proto::video::Packet& packet)
         return;
     }
 
-    if (!desktop_frame_)
-    {
-        CLOG(ERROR) << "The desktop frame is not initialized";
-        return;
-    }
-
-    const VideoDecoder::Result decode_result = video_decoder_->decode(packet, desktop_frame_.get());
+    const VideoDecoder::Result decode_result = video_decoder_->decode(packet);
     if (decode_result == VideoDecoder::Result::PERMANENT_ERROR)
     {
         if (video_encoding_ != proto::video::ENCODING_H264)
@@ -821,6 +813,25 @@ void ClientDesktop::readVideoPacket(const proto::video::Packet& packet)
         return;
     }
 
+    const int rect_count = packet.dirty_rect_size();
+    if (dirty_rects_.capacity() < rect_count)
+        dirty_rects_.reserve(rect_count);
+
+    dirty_rects_.resize(rect_count);
+    for (int i = 0; i < rect_count; ++i)
+        dirty_rects_[i] = parse(packet.dirty_rect(i));
+
+    const YuvConverter::Result convert_result =
+        yuv_converter_.convert(video_decoder_->frame(), dirty_rects_);
+    if (convert_result == YuvConverter::Result::FAILED)
+    {
+        LOG(ERROR) << "Unable to convert frame";
+        return;
+    }
+
+    if (convert_result == YuvConverter::Result::NEW_FRAME)
+        emit sig_frameChanged(screen_size_, yuv_converter_.frame());
+
     ++video_packet_count_;
     ++fps_frame_count_;
 
@@ -830,16 +841,7 @@ void ClientDesktop::readVideoPacket(const proto::video::Packet& packet)
     min_video_packet_ = std::min(min_video_packet_, packet_size);
     max_video_packet_ = std::max(max_video_packet_, packet_size);
 
-    // Pass the list of changed regions to the rendering side so the widget can repaint only the
-    // updated parts of the desktop instead of the whole frame. The rectangles are passed as a
-    // signal argument (and thus copied across the thread boundary) rather than read back from the
-    // shared frame, which is concurrently written by the decoder thread.
-    QList<QRect> dirty_rects;
-    dirty_rects.reserve(packet.dirty_rect_size());
-    for (int i = 0; i < packet.dirty_rect_size(); ++i)
-        dirty_rects.append(parse(packet.dirty_rect(i)));
-
-    emit sig_drawFrame(dirty_rects);
+    emit sig_drawFrame(dirty_rects_);
 }
 
 //--------------------------------------------------------------------------------------------------

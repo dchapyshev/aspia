@@ -21,59 +21,11 @@
 #include <QThread>
 
 #include "base/logging.h"
-#include "base/serialization.h"
-#include "base/desktop/frame.h"
 #include "proto/desktop_video.h"
-
-#include <libyuv/convert_from.h>
-#include <libyuv/convert_argb.h>
 
 #define VPX_CODEC_DISABLE_COMPAT 1
 #include <vpx/vpx_decoder.h>
 #include <vpx/vp8dx.h>
-
-namespace {
-
-//--------------------------------------------------------------------------------------------------
-bool convertImage(const proto::video::Packet& packet, vpx_image_t* image, Frame* frame)
-{
-    if (image->fmt != VPX_IMG_FMT_I420)
-        return false;
-
-    QRect frame_rect = QRect(QPoint(0, 0), frame->size());
-
-    quint8* y_data = image->planes[0];
-    quint8* u_data = image->planes[1];
-    quint8* v_data = image->planes[2];
-
-    int y_stride = image->stride[0];
-    int uv_stride = image->stride[1];
-
-    for (int i = 0; i < packet.dirty_rect_size(); ++i)
-    {
-        QRect rect = parse(packet.dirty_rect(i));
-        if (!frame_rect.contains(rect))
-        {
-            LOG(ERROR) << "The rectangle is outside the screen area";
-            return false;
-        }
-
-        int y_offset = y_stride * rect.y() + rect.x();
-        int uv_offset = uv_stride * rect.y() / 2 + rect.x() / 2;
-
-        libyuv::I420ToARGB(y_data + y_offset, y_stride,
-                           u_data + uv_offset, uv_stride,
-                           v_data + uv_offset, uv_stride,
-                           frame->frameDataAtPos(rect.topLeft()),
-                           frame->stride(),
-                           rect.width(),
-                           rect.height());
-    }
-
-    return true;
-}
-
-} // namespace
 
 //--------------------------------------------------------------------------------------------------
 VideoDecoderVpx::VideoDecoderVpx(proto::video::Encoding encoding)
@@ -122,8 +74,15 @@ VideoDecoderVpx::~VideoDecoderVpx()
 }
 
 //--------------------------------------------------------------------------------------------------
-VideoDecoder::Result VideoDecoderVpx::decode(const proto::video::Packet& packet, Frame* frame)
+VideoDecoder::Result VideoDecoderVpx::decode(const proto::video::Packet& packet)
 {
+    const QSize size = frameSize(packet);
+    if (size.isEmpty())
+    {
+        LOG(ERROR) << "Unknown frame size";
+        return Result::TEMPORARY_ERROR;
+    }
+
     // Do the actual decoding.
     vpx_codec_err_t ret =
         vpx_codec_decode(codec_.get(),
@@ -151,13 +110,22 @@ VideoDecoder::Result VideoDecoderVpx::decode(const proto::video::Packet& packet,
         return Result::TEMPORARY_ERROR;
     }
 
-    if (QSize(static_cast<int>(image->d_w), static_cast<int>(image->d_h)) != frame->size())
+    if (image->fmt != VPX_IMG_FMT_I420)
+    {
+        LOG(ERROR) << "Unexpected pixel format from libvpx:" << image->fmt;
+        return Result::TEMPORARY_ERROR;
+    }
+
+    if (QSize(static_cast<int>(image->d_w), static_cast<int>(image->d_h)) != size)
     {
         LOG(ERROR) << "Size of the encoded frame doesn't match size in the header";
         return Result::TEMPORARY_ERROR;
     }
 
-    if (!convertImage(packet, image, frame))
-        return Result::TEMPORARY_ERROR;
+    frame_.reset(YuvFormat::I420, size);
+    frame_.setPlane(0, image->planes[0], image->stride[0]);
+    frame_.setPlane(1, image->planes[1], image->stride[1]);
+    frame_.setPlane(2, image->planes[2], image->stride[2]);
+
     return Result::SUCCESS;
 }

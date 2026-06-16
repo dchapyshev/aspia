@@ -32,10 +32,10 @@
 
 #include <memory>
 
-// Hardware H.264 decoder built on a Media Foundation async MFT. Runs zero-copy through D3D11:
-// decoder produces NV12 textures, ID3D11VideoProcessor converts to ARGB on the GPU, staging
-// readback lands the pixels in Frame. Returns nullptr from create() when no HW MFT is available -
-// callers should fall back to a software decoder.
+// Hardware H.264 decoder built on a Media Foundation async MFT. Decode runs on the GPU through
+// D3D11; the decoder produces NV12 textures which are read back into a CPU staging texture exposed
+// as the NV12 frame(). Returns nullptr from create() when no HW MFT is available - callers should
+// fall back to a software decoder.
 class VideoDecoderH264MF final : public VideoDecoder
 {
 public:
@@ -48,7 +48,7 @@ public:
     ~VideoDecoderH264MF() final;
 
     // VideoDecoder implementation.
-    Result decode(const proto::video::Packet& packet, Frame* frame) final;
+    Result decode(const proto::video::Packet& packet) final;
 
 private:
     VideoDecoderH264MF();
@@ -61,14 +61,13 @@ private:
     bool selectOutputType();
     bool beginStreaming();
     void endStreaming();
-    bool refreshOutputDimensions();
-    bool allocateGpuResources(const QSize& size);
+    bool validateOutputType();
 
     bool waitForEvent(MediaEventType expected);
     bool feedInput(const std::string& data, quint64 sample_time_100ns);
     bool readOutput(Microsoft::WRL::ComPtr<IMFSample>* out_sample);
-    bool copySampleToFrame(
-        IMFSample* sample, const proto::video::Packet& packet, Frame* frame);
+    bool mapSampleToFrame(IMFSample* sample, const QSize& size);
+    void unmapStaging();
 
     bool mf_started_ = false;
     bool streaming_ = false;
@@ -78,24 +77,16 @@ private:
     quint64 frame_counter_ = 0;
     quint32 output_sample_size_ = 0;
 
-    int output_width_ = 0;
-    int output_height_ = 0;
-    int output_stride_ = 0;
-
     std::unique_ptr<D3D11VideoContext> d3d_;
 
     Microsoft::WRL::ComPtr<IMFTransform> decoder_;
     Microsoft::WRL::ComPtr<IMFMediaEventGenerator> event_gen_;
 
-    // VideoProcessor path: NV12->ARGB on GPU, then staging readback as ARGB.
-    Microsoft::WRL::ComPtr<ID3D11Texture2D> argb_target_;
-    Microsoft::WRL::ComPtr<ID3D11Texture2D> argb_staging_;
-    Microsoft::WRL::ComPtr<ID3D11VideoProcessorEnumerator> vp_enumerator_;
-    Microsoft::WRL::ComPtr<ID3D11VideoProcessor> vp_processor_;
-    Microsoft::WRL::ComPtr<ID3D11VideoProcessorOutputView> vp_output_view_;
-
-    // libyuv path: raw NV12 readback to CPU, then libyuv::NV12ToARGB into the Frame.
+    // CPU-readable copy of the decoder's NV12 output. It is kept mapped between decode() calls so
+    // frame_ can point straight into it without an extra copy; unmapStaging() releases the mapping
+    // before the next readback and on teardown.
     Microsoft::WRL::ComPtr<ID3D11Texture2D> nv12_staging_;
+    bool nv12_mapped_ = false;
 
     DWORD input_stream_id_ = 0;
     DWORD output_stream_id_ = 0;

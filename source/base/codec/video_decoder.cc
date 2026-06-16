@@ -57,3 +57,14 @@ std::unique_ptr<VideoDecoder> VideoDecoder::create(proto::video::Encoding encodi
             return nullptr;
     }
 }
+
+//--------------------------------------------------------------------------------------------------
+QSize VideoDecoder::frameSize(const proto::video::Packet& packet) const
+{
+    if (packet.has_format())
+    {
+        const proto::video::Rect& rect = packet.format().video_rect();
+        return QSize(rect.width(), rect.height());
+    }
+    return frame_.size();
+}

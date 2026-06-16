@@ -21,8 +21,10 @@
 
 #include <QList>
 #include <QRect>
+#include <QSize>
 
 #include "base/serialization.h"
+#include "base/codec/yuv_converter.h"
 #include "client/client.h"
 #include "common/clipboard_file_transfer.h"
 #include "common/clipboard_monitor.h"
@@ -169,7 +171,10 @@ private:
     bool started_ = false;
     bool key_frame_received_ = false;
 
-    std::shared_ptr<Frame> desktop_frame_;
+    YuvConverter yuv_converter_;
+    QSize screen_size_;
+    QList<QRect> dirty_rects_;
+
     proto::control::Config desktop_config_;
 
     Parser<proto::video::HostToClient,

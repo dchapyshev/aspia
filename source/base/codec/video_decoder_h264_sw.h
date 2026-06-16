@@ -37,7 +37,7 @@ public:
     ~VideoDecoderH264SW() final;
 
     // VideoDecoder implementation.
-    Result decode(const proto::video::Packet& packet, Frame* frame) final;
+    Result decode(const proto::video::Packet& packet) final;
 
 private:
     VideoDecoderH264SW() = default;

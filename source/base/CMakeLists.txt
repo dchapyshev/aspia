@@ -217,6 +217,8 @@ list(APPEND SOURCE_BASE_CODEC
     codec/webm_file_writer.h
     codec/webm_video_encoder.cc
     codec/webm_video_encoder.h
+    codec/yuv_converter.cc
+    codec/yuv_converter.h
     codec/zstd_compress.cc
     codec/zstd_compress.h)
 

@@ -20,12 +20,8 @@
 
 #include "base/codec/mf_runtime.h"
 #include "base/logging.h"
-#include "base/serialization.h"
-#include "base/desktop/frame.h"
 #include "base/win/scoped_co_mem.h"
 #include "proto/desktop_video.h"
-
-#include <libyuv/convert_argb.h>
 
 #include <comdef.h>
 #include <mferror.h>
@@ -39,12 +35,6 @@ namespace {
 const UINT32 kAssumedFrameRateNum = 1000;
 const UINT32 kAssumedFrameRateDen = 80;
 const LONGLONG kFrameDuration100ns = 800000;
-
-// Selects the NV12-to-ARGB implementation. VideoProcessor stays on the GPU (the converted ARGB
-// only crosses GPU->CPU once at the very end) while libyuv reads raw NV12 back to system memory
-// before converting. Default to VP since chroma upsampling artifacts on decode are typically
-// much milder than the subsampling artifacts on encode.
-constexpr bool kUseLibyuvForChromaConversion = false;
 
 } // namespace
 
@@ -136,9 +126,9 @@ bool VideoDecoderH264MF::initialize()
 }
 
 //--------------------------------------------------------------------------------------------------
-VideoDecoder::Result VideoDecoderH264MF::decode(const proto::video::Packet& packet, Frame* frame)
+VideoDecoder::Result VideoDecoderH264MF::decode(const proto::video::Packet& packet)
 {
-    if (!mf_started_ || !frame)
+    if (!mf_started_)
         return Result::PERMANENT_ERROR;
 
     if (packet.data().empty())
@@ -147,19 +137,24 @@ VideoDecoder::Result VideoDecoderH264MF::decode(const proto::video::Packet& pack
         return Result::TEMPORARY_ERROR;
     }
 
-    if (!decoder_ || last_size_ != frame->size())
+    const QSize size = frameSize(packet);
+    if (size.isEmpty())
     {
-        const QSize new_size = frame->size();
+        LOG(ERROR) << "Unknown frame size";
+        return Result::TEMPORARY_ERROR;
+    }
 
+    if (!decoder_ || last_size_ != size)
+    {
         destroyDecoder();
-        if (!createDecoder(new_size))
+        if (!createDecoder(size))
         {
             // HW MFT cannot be (re)initialized for this frame size or driver state - signal a
             // fallback to the software decoder instead of looping forever on the same failure.
-            LOG(ERROR) << "Unable to create H264 decoder for" << new_size;
+            LOG(ERROR) << "Unable to create H264 decoder for" << size;
             return Result::PERMANENT_ERROR;
         }
-        last_size_ = new_size;
+        last_size_ = size;
     }
 
     const quint64 sample_time = frame_counter_ * static_cast<quint64>(kFrameDuration100ns);
@@ -183,7 +178,7 @@ VideoDecoder::Result VideoDecoderH264MF::decode(const proto::video::Packet& pack
     if (!sample)
         return Result::TEMPORARY_ERROR;
 
-    if (!copySampleToFrame(sample.Get(), packet, frame))
+    if (!mapSampleToFrame(sample.Get(), size))
         return Result::TEMPORARY_ERROR;
 
     ++frame_counter_;
@@ -256,7 +251,7 @@ bool VideoDecoderH264MF::createDecoder(const QSize& size)
     if (!configureMediaTypes(size))
         return false;
 
-    if (!refreshOutputDimensions())
+    if (!validateOutputType())
         return false;
 
     MFT_OUTPUT_STREAM_INFO out_info;
@@ -272,9 +267,6 @@ bool VideoDecoderH264MF::createDecoder(const QSize& size)
                              MFT_OUTPUT_STREAM_CAN_PROVIDE_SAMPLES)) != 0;
     output_sample_size_ = out_info.cbSize;
 
-    if (!allocateGpuResources(size))
-        return false;
-
     if (!beginStreaming())
         return false;
 
@@ -287,11 +279,7 @@ void VideoDecoderH264MF::destroyDecoder()
     if (streaming_)
         endStreaming();
 
-    vp_output_view_.Reset();
-    vp_processor_.Reset();
-    vp_enumerator_.Reset();
-    argb_target_.Reset();
-    argb_staging_.Reset();
+    unmapStaging();
     nv12_staging_.Reset();
 
     event_gen_.Reset();
@@ -306,9 +294,6 @@ void VideoDecoderH264MF::destroyDecoder()
     is_async_ = false;
     output_provides_samples_ = false;
     output_sample_size_ = 0;
-    output_width_ = 0;
-    output_height_ = 0;
-    output_stride_ = 0;
     frame_counter_ = 0;
 }
 
@@ -442,7 +427,7 @@ void VideoDecoderH264MF::endStreaming()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoDecoderH264MF::refreshOutputDimensions()
+bool VideoDecoderH264MF::validateOutputType()
 {
     ComPtr<IMFMediaType> out_type;
     _com_error error = decoder_->GetOutputCurrentType(output_stream_id_, &out_type);
@@ -455,96 +440,8 @@ bool VideoDecoderH264MF::refreshOutputDimensions()
     UINT32 width = 0;
     UINT32 height = 0;
     MFGetAttributeSize(out_type.Get(), MF_MT_FRAME_SIZE, &width, &height);
-    output_width_ = static_cast<int>(width);
-    output_height_ = static_cast<int>(height);
 
-    UINT32 stride = 0;
-    if (SUCCEEDED(out_type->GetUINT32(MF_MT_DEFAULT_STRIDE, &stride)))
-        output_stride_ = static_cast<int>(stride);
-    else
-        output_stride_ = output_width_;
-
-    return output_width_ > 0 && output_height_ > 0;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool VideoDecoderH264MF::allocateGpuResources(const QSize& size)
-{
-    if constexpr (kUseLibyuvForChromaConversion)
-    {
-        nv12_staging_ = d3d_->createStagingNv12Texture(size.width(), size.height());
-        if (!nv12_staging_)
-            return false;
-        return true;
-    }
-
-    argb_target_ = d3d_->createDefaultArgbTexture(size.width(), size.height());
-    if (!argb_target_)
-        return false;
-
-    argb_staging_ = d3d_->createStagingArgbTexture(size.width(), size.height());
-    if (!argb_staging_)
-        return false;
-
-    D3D11_VIDEO_PROCESSOR_CONTENT_DESC content_desc;
-    memset(&content_desc, 0, sizeof(content_desc));
-    content_desc.InputFrameFormat = D3D11_VIDEO_FRAME_FORMAT_PROGRESSIVE;
-    content_desc.InputFrameRate.Numerator = kAssumedFrameRateNum;
-    content_desc.InputFrameRate.Denominator = kAssumedFrameRateDen;
-    content_desc.InputWidth = static_cast<UINT>(size.width());
-    content_desc.InputHeight = static_cast<UINT>(size.height());
-    content_desc.OutputFrameRate.Numerator = kAssumedFrameRateNum;
-    content_desc.OutputFrameRate.Denominator = kAssumedFrameRateDen;
-    content_desc.OutputWidth = static_cast<UINT>(size.width());
-    content_desc.OutputHeight = static_cast<UINT>(size.height());
-    content_desc.Usage = D3D11_VIDEO_USAGE_PLAYBACK_NORMAL;
-
-    _com_error error = d3d_->videoDevice()->CreateVideoProcessorEnumerator(&content_desc, &vp_enumerator_);
-    if (FAILED(error.Error()))
-    {
-        LOG(ERROR) << "CreateVideoProcessorEnumerator failed:" << error;
-        return false;
-    }
-
-    error = d3d_->videoDevice()->CreateVideoProcessor(vp_enumerator_.Get(), 0, &vp_processor_);
-    if (FAILED(error.Error()))
-    {
-        LOG(ERROR) << "CreateVideoProcessor failed:" << error;
-        return false;
-    }
-
-    D3D11_VIDEO_PROCESSOR_OUTPUT_VIEW_DESC ov_desc;
-    memset(&ov_desc, 0, sizeof(ov_desc));
-    ov_desc.ViewDimension = D3D11_VPOV_DIMENSION_TEXTURE2D;
-    ov_desc.Texture2D.MipSlice = 0;
-
-    error = d3d_->videoDevice()->CreateVideoProcessorOutputView(
-        argb_target_.Get(), vp_enumerator_.Get(), &ov_desc, &vp_output_view_);
-    if (FAILED(error.Error()))
-    {
-        LOG(ERROR) << "CreateVideoProcessorOutputView failed:" << error;
-        return false;
-    }
-
-    const RECT full_rect = { 0, 0, size.width(), size.height() };
-    d3d_->videoContext()->VideoProcessorSetStreamSourceRect(vp_processor_.Get(), 0, TRUE, &full_rect);
-    d3d_->videoContext()->VideoProcessorSetStreamDestRect(vp_processor_.Get(), 0, TRUE, &full_rect);
-    d3d_->videoContext()->VideoProcessorSetOutputTargetRect(vp_processor_.Get(), TRUE, &full_rect);
-
-    // Mirror the encoder's color space pinning - BT.601 Limited matches encoder VP output and
-    // libyuv defaults so HW and SW decoder paths produce identical ARGB pixels.
-    D3D11_VIDEO_PROCESSOR_COLOR_SPACE nv12_cs;
-    memset(&nv12_cs, 0, sizeof(nv12_cs));
-    nv12_cs.YCbCr_Matrix = 0;  // BT.601.
-    nv12_cs.Nominal_Range = 2; // Limited range 16-235.
-    d3d_->videoContext()->VideoProcessorSetStreamColorSpace(vp_processor_.Get(), 0, &nv12_cs);
-
-    D3D11_VIDEO_PROCESSOR_COLOR_SPACE rgb_cs;
-    memset(&rgb_cs, 0, sizeof(rgb_cs));
-    rgb_cs.RGB_Range = 0; // Full range 0-255 (target ARGB).
-    d3d_->videoContext()->VideoProcessorSetOutputColorSpace(vp_processor_.Get(), &rgb_cs);
-
-    return true;
+    return width > 0 && height > 0;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -669,7 +566,7 @@ bool VideoDecoderH264MF::readOutput(ComPtr<IMFSample>* out_sample)
 
     if (error.Error() == MF_E_TRANSFORM_STREAM_CHANGE)
     {
-        if (!selectOutputType() || !refreshOutputDimensions())
+        if (!selectOutputType() || !validateOutputType())
             return false;
         return readOutput(out_sample);
     }
@@ -692,8 +589,7 @@ bool VideoDecoderH264MF::readOutput(ComPtr<IMFSample>* out_sample)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoDecoderH264MF::copySampleToFrame(
-    IMFSample* sample, const proto::video::Packet& packet, Frame* frame)
+bool VideoDecoderH264MF::mapSampleToFrame(IMFSample* sample, const QSize& size)
 {
     ComPtr<IMFMediaBuffer> buffer;
     _com_error error = sample->GetBufferByIndex(0, &buffer);
@@ -722,115 +618,57 @@ bool VideoDecoderH264MF::copySampleToFrame(
     UINT subresource = 0;
     dxgi_buffer->GetSubresourceIndex(&subresource);
 
-    if constexpr (kUseLibyuvForChromaConversion)
-    {
-        // Pull raw NV12 from the decoder's pool texture into our CPU-readable staging copy,
-        // then let libyuv handle NV12->ARGB on the CPU (matches the SW decoder path exactly).
-        d3d_->deviceContext()->CopySubresourceRegion(nv12_staging_.Get(), 0, 0, 0, 0,
-                                                    nv12_texture.Get(), subresource, nullptr);
+    // The decoder's output texture is allocated at the coded (macroblock-aligned) size, which can be
+    // larger than the display size. The staging copy and the UV plane offset must match that coded
+    // size, otherwise the NV12 copy mangles the UV plane.
+    D3D11_TEXTURE2D_DESC src_desc;
+    nv12_texture->GetDesc(&src_desc);
 
-        D3D11_MAPPED_SUBRESOURCE mapped;
-        error = d3d_->deviceContext()->Map(nv12_staging_.Get(), 0, D3D11_MAP_READ, 0, &mapped);
-        if (FAILED(error.Error()))
+    // Release the previous frame's mapping before the GPU writes the staging texture again.
+    unmapStaging();
+
+    if (!nv12_staging_)
+    {
+        nv12_staging_ = d3d_->createStagingNv12Texture(
+            static_cast<int>(src_desc.Width), static_cast<int>(src_desc.Height));
+        if (!nv12_staging_)
         {
-            LOG(ERROR) << "Map nv12_staging_ failed:" << error;
+            LOG(ERROR) << "Failed to create NV12 staging texture";
             return false;
         }
-
-        const int y_stride = static_cast<int>(mapped.RowPitch);
-        const int uv_stride = y_stride;
-        const quint8* y_plane = static_cast<const quint8*>(mapped.pData);
-        const quint8* uv_plane = y_plane + y_stride * output_height_;
-
-        QRect frame_rect(QPoint(0, 0), frame->size());
-        bool ok = true;
-
-        for (int i = 0; i < packet.dirty_rect_size(); ++i)
-        {
-            QRect rect = parse(packet.dirty_rect(i));
-            if (!frame_rect.contains(rect))
-            {
-                LOG(ERROR) << "The rectangle is outside the screen area";
-                ok = false;
-                break;
-            }
-
-            const int y_offset = rect.y() * y_stride + rect.x();
-            const int uv_offset = (rect.y() / 2) * uv_stride + (rect.x() & ~1);
-
-            libyuv::NV12ToARGB(y_plane + y_offset, y_stride,
-                               uv_plane + uv_offset, uv_stride,
-                               frame->frameDataAtPos(rect.topLeft()), frame->stride(),
-                               rect.width(), rect.height());
-        }
-
-        d3d_->deviceContext()->Unmap(nv12_staging_.Get(), 0);
-        return ok;
     }
 
-    D3D11_VIDEO_PROCESSOR_INPUT_VIEW_DESC iv_desc;
-    memset(&iv_desc, 0, sizeof(iv_desc));
-    iv_desc.FourCC = 0;
-    iv_desc.ViewDimension = D3D11_VPIV_DIMENSION_TEXTURE2D;
-    iv_desc.Texture2D.MipSlice = 0;
-    iv_desc.Texture2D.ArraySlice = subresource;
-
-    ComPtr<ID3D11VideoProcessorInputView> input_view;
-    error = d3d_->videoDevice()->CreateVideoProcessorInputView(
-        nv12_texture.Get(), vp_enumerator_.Get(), &iv_desc, &input_view);
-    if (FAILED(error.Error()))
-    {
-        LOG(ERROR) << "CreateVideoProcessorInputView failed:" << error;
-        return false;
-    }
-
-    D3D11_VIDEO_PROCESSOR_STREAM stream;
-    memset(&stream, 0, sizeof(stream));
-    stream.Enable = TRUE;
-    stream.OutputIndex = 0;
-    stream.InputFrameOrField = 0;
-    stream.pInputSurface = input_view.Get();
-
-    error = d3d_->videoContext()->VideoProcessorBlt(vp_processor_.Get(), vp_output_view_.Get(), 0, 1, &stream);
-    if (FAILED(error.Error()))
-    {
-        LOG(ERROR) << "VideoProcessorBlt failed:" << error;
-        return false;
-    }
-
-    d3d_->deviceContext()->CopyResource(argb_staging_.Get(), argb_target_.Get());
+    // Pull raw NV12 from the decoder's pool texture into our CPU-readable staging copy. The mapping
+    // is held open so frame_ can reference it directly.
+    d3d_->deviceContext()->CopySubresourceRegion(nv12_staging_.Get(), 0, 0, 0, 0,
+                                                nv12_texture.Get(), subresource, nullptr);
 
     D3D11_MAPPED_SUBRESOURCE mapped;
-    error = d3d_->deviceContext()->Map(argb_staging_.Get(), 0, D3D11_MAP_READ, 0, &mapped);
+    error = d3d_->deviceContext()->Map(nv12_staging_.Get(), 0, D3D11_MAP_READ, 0, &mapped);
     if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "Map argb_staging_ failed:" << error;
+        LOG(ERROR) << "Map nv12_staging_ failed:" << error;
         return false;
     }
+    nv12_mapped_ = true;
 
-    QRect frame_rect(QPoint(0, 0), frame->size());
-    const quint8* src_base = static_cast<const quint8*>(mapped.pData);
-    bool ok = true;
+    const int src_stride = static_cast<int>(mapped.RowPitch);
+    const quint8* y_plane = static_cast<const quint8*>(mapped.pData);
+    const quint8* uv_plane = y_plane + src_stride * static_cast<int>(src_desc.Height);
 
-    for (int i = 0; i < packet.dirty_rect_size(); ++i)
+    frame_.reset(YuvFormat::NV12, size);
+    frame_.setPlane(0, y_plane, src_stride);
+    frame_.setPlane(1, uv_plane, src_stride);
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void VideoDecoderH264MF::unmapStaging()
+{
+    if (nv12_mapped_)
     {
-        QRect rect = parse(packet.dirty_rect(i));
-        if (!frame_rect.contains(rect))
-        {
-            LOG(ERROR) << "The rectangle is outside the screen area";
-            ok = false;
-            break;
-        }
-
-        const int row_bytes = rect.width() * 4;
-        const quint8* src = src_base + rect.y() * mapped.RowPitch + rect.x() * 4;
-        quint8* dst = frame->frameDataAtPos(rect.topLeft());
-        const int dst_stride = frame->stride();
-
-        for (int y = 0; y < rect.height(); ++y)
-            memcpy(dst + y * dst_stride, src + y * mapped.RowPitch, row_bytes);
+        d3d_->deviceContext()->Unmap(nv12_staging_.Get(), 0);
+        nv12_mapped_ = false;
     }
-
-    d3d_->deviceContext()->Unmap(argb_staging_.Get(), 0);
-    return ok;
 }
