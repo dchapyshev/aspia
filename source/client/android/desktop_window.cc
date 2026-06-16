@@ -21,6 +21,7 @@
 #include <QGridLayout>
 
 #include "base/gui_application.h"
+#include "base/desktop/mouse_cursor.h"
 #include "base/net/tcp_channel.h"
 #include "client/android/desktop_view.h"
 #include "client/client_desktop.h"
@@ -30,6 +31,7 @@
 #include "common/android/bottom_sheet.h"
 #include "common/android/floating_action_button.h"
 #include "common/android/label.h"
+#include "proto/desktop_input.h"
 #include "proto/peer.h"
 #include "proto/router_client.h"
 
@@ -159,6 +161,10 @@ void DesktopWindow::startNewClient()
             [this](const QList<QRect>& /* dirty_rects */) { view_->refresh(); }, Qt::QueuedConnection);
     connect(client, &Client::sig_statusChanged,
             this, &DesktopWindow::onStatusChanged, Qt::QueuedConnection);
+    connect(client, &ClientDesktop::sig_mouseCursorChanged,
+            view_, &DesktopView::setCursorShape, Qt::QueuedConnection);
+    connect(view_, &DesktopView::sig_mouseEvent,
+            client, &ClientDesktop::onMouseEvent, Qt::QueuedConnection);
 
     client->moveToThread(GuiApplication::ioThread());
     client->setSessionState(session_state_);

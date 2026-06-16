@@ -19,15 +19,23 @@
 #ifndef CLIENT_ANDROID_DESKTOP_VIEW_H
 #define CLIENT_ANDROID_DESKTOP_VIEW_H
 
+#include <QElapsedTimer>
 #include <QImage>
+#include <QPoint>
 #include <QPointF>
 #include <QSizeF>
 #include <QWidget>
 
 #include <memory>
 
+namespace proto::input {
+class MouseEvent;
+} // namespace proto::input
+
 class Frame;
-class QPinchGesture;
+class MouseCursor;
+class QTimer;
+class QTouchEvent;
 
 class DesktopView final : public QWidget
 {
@@ -38,35 +46,71 @@ public:
     ~DesktopView() final;
 
     void setFrame(std::shared_ptr<Frame> frame);
+    void setCursorShape(std::shared_ptr<MouseCursor> cursor);
     void refresh();
+
+signals:
+    void sig_mouseEvent(const proto::input::MouseEvent& event);
 
 protected:
     // QWidget implementation.
     bool event(QEvent* event) final;
     void paintEvent(QPaintEvent* event) final;
-    void mousePressEvent(QMouseEvent* event) final;
-    void mouseMoveEvent(QMouseEvent* event) final;
-    void mouseReleaseEvent(QMouseEvent* event) final;
+
+private slots:
+    void onLongPress();
+    void onEdgeScroll();
 
 private:
-    void handlePinch(QPinchGesture* gesture);
+    void handleTouch(QTouchEvent* event);
+    void startDrag();
+    void updateEdgeScroll(const QPointF& finger_pos);
+    void moveCursorBy(const QPointF& widget_delta);
+    void applyZoom(qreal factor, const QPointF& anchor);
+    void sendMouse(quint32 mask);
+    void sendClick(quint32 mask);
 
-    // Size of the frame fitted into the widget (aspect ratio preserved) at zoom 1.
+    // Size of the frame fitted into the widget (aspect ratio preserved) at zoom 1, and the ratio of
+    // on-screen pixels to host pixels.
     QSizeF fittedSize() const;
+    qreal contentScale() const;
 
-    // Keeps the scaled frame from being dragged past the widget edges; centers it on the axes where
-    // it is smaller than the widget.
+    // Maps a host-frame point to its on-screen position and back.
+    QPointF frameToWidget(const QPointF& frame_pos) const;
+
     void clampContentPos();
+    void clampCursor();
+    void ensureCursorVisible();
 
     std::shared_ptr<Frame> frame_;
     QImage image_;
+    QImage cursor_image_;
+    QPoint cursor_hotspot_;
 
-    // Zoom factor (1 = fit to widget) and the top-left of the scaled frame within the widget.
+    // Zoom factor (1 = fit to widget), top-left of the scaled frame, and the virtual cursor position
+    // in host-frame coordinates.
     qreal zoom_ = 1.0;
     QPointF content_pos_;
+    QPointF cursor_pos_;
 
-    QPoint pan_last_;
-    bool panning_ = false;
+    // Touch gesture state.
+    enum class Gesture { NONE, ONE_FINGER, TWO_FINGER, IGNORED };
+    Gesture gesture_ = Gesture::NONE;
+    QPointF last_point_;
+    bool moved_ = false;
+    qreal pinch_distance_ = 0.0;
+    QPointF pinch_centroid_;
+    bool pinch_moved_ = false;
+
+    // Buttons currently held while moving the cursor (a tap-then-hold drag presses the left button).
+    quint32 button_mask_ = 0;
+    bool armed_drag_ = false;
+    bool dragging_ = false;
+    QElapsedTimer gesture_timer_;
+    qint64 last_tap_time_ = -10000;
+    QTimer* long_press_timer_ = nullptr;
+    QTimer* edge_scroll_timer_ = nullptr;
+    QPointF edge_velocity_;
 
     Q_DISABLE_COPY_MOVE(DesktopView)
 };
