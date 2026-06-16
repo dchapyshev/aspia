@@ -100,8 +100,6 @@ VideoDecoder::Result VideoDecoderH264SW::decode(const proto::video::Packet& pack
         static_cast<int>(packet.data().size()),
         planes, &info);
 
-    // DecodeFrame2 may buffer the bitstream without producing output on the first call (typical
-    // warm-up before SPS/PPS arrive). Pump it once more with a null input to drain.
     if (info.iBufferStatus != 1 && (state == dsErrorFree || state == dsNoParamSets))
         state = decoder_->DecodeFrame2(nullptr, 0, planes, &info);
 
@@ -111,16 +109,15 @@ VideoDecoder::Result VideoDecoderH264SW::decode(const proto::video::Packet& pack
         return Result::TEMPORARY_ERROR;
     }
 
-    if (info.iBufferStatus != 1)
-        return Result::TEMPORARY_ERROR;
-
-    // FlushFrame finalizes the current decoded frame so the planes pointers contain ready data.
     state = decoder_->FlushFrame(planes, &info);
     if (state != dsErrorFree)
     {
         LOG(ERROR) << "FlushFrame failed:" << state;
         return Result::TEMPORARY_ERROR;
     }
+
+    if (info.iBufferStatus != 1)
+        return Result::TEMPORARY_ERROR;
 
     if (!planes[0] || !planes[1] || !planes[2])
         return Result::TEMPORARY_ERROR;
