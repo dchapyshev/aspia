@@ -695,6 +695,10 @@ if (LINUX)
     set(BASE_PLATFORM_LIBS ${X11_LIB} ${XFIXES_LIB} stdc++fs)
 endif()
 
+if (ANDROID)
+    set(BASE_PLATFORM_LIBS log)
+endif()
+
 target_link_libraries(aspia_base PRIVATE aspia_proto
     ${THIRD_PARTY_LIBS} ${BASE_PLATFORM_LIBS} ${QT_COMMON_LIBS} ${QT_PLATFORM_LIBS})
 

@@ -43,6 +43,10 @@
 #include <sys/syslimits.h>
 #endif // defined(Q_OS_MACOS)
 
+#if defined(Q_OS_ANDROID)
+#include <android/log.h>
+#endif // defined(Q_OS_ANDROID)
+
 namespace {
 
 const LoggingSeverity kDefaultLogLevel = LOG_FATAL;
@@ -56,6 +60,10 @@ qint64 g_max_log_file_age = kDefaultMaxLogFileAge;
 QString g_log_dir_path;
 QString g_log_file_path;
 LoggingFile g_log_file;
+
+#if defined(Q_OS_ANDROID)
+const char kAndroidLogTag[] = "Aspia";
+#endif // defined(Q_OS_ANDROID)
 
 //--------------------------------------------------------------------------------------------------
 const QString& severityName(LoggingSeverity severity)
@@ -147,6 +155,22 @@ LoggingSeverity qtMessageTypeToSeverity(QtMsgType type)
             return LOG_INFO;
     }
 }
+
+#if defined(Q_OS_ANDROID)
+//--------------------------------------------------------------------------------------------------
+int severityToAndroidPriority(LoggingSeverity severity)
+{
+    switch (severity)
+    {
+        case LOG_TRACE:   return ANDROID_LOG_VERBOSE;
+        case LOG_INFO:    return ANDROID_LOG_INFO;
+        case LOG_WARNING: return ANDROID_LOG_WARN;
+        case LOG_ERROR:   return ANDROID_LOG_ERROR;
+        case LOG_FATAL:   return ANDROID_LOG_FATAL;
+        default:          return ANDROID_LOG_DEFAULT;
+    }
+}
+#endif // defined(Q_OS_ANDROID)
 
 //--------------------------------------------------------------------------------------------------
 void qtMessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg)
@@ -424,17 +448,27 @@ LogMessage::~LogMessage()
 
     if ((g_logging_destination & LOG_TO_STDOUT) != 0)
     {
+#if defined(Q_OS_ANDROID)
+        __android_log_print(severityToAndroidPriority(severity_), kAndroidLogTag, "%s",
+                            message.trimmed().constData());
+#else
         debugPrint(message.data());
         fwrite(message.data(), message.size(), 1, stderr);
         fflush(stderr);
+#endif // defined(Q_OS_ANDROID)
     }
     else if (severity_ >= LOG_ERROR)
     {
         // When we're only outputting to a log file, above a certain log level, we
-        // should still output to stderr so that we can better detect and diagnose
+        // should still output to the console so that we can better detect and diagnose
         // problems with unit tests, especially on the buildbots.
+#if defined(Q_OS_ANDROID)
+        __android_log_print(severityToAndroidPriority(severity_), kAndroidLogTag, "%s",
+                            message.trimmed().constData());
+#else
         fwrite(message.data(), message.size(), 1, stderr);
         fflush(stderr);
+#endif // defined(Q_OS_ANDROID)
     }
 
     // Write to log file.
