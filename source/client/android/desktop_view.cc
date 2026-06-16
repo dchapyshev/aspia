@@ -48,6 +48,11 @@ constexpr qreal kEdgeMargin = 80.0;
 constexpr int kEdgeScrollIntervalMs = 16;
 constexpr qreal kEdgeMaxSpeed = 18.0;
 
+// Two-finger movement (widget pixels) needed to lock into zoom or scroll, and the finger travel per
+// wheel step.
+constexpr qreal kTwoFingerDecide = 16.0;
+constexpr qreal kScrollStep = 40.0;
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -209,6 +214,10 @@ void DesktopView::handleTouch(QTouchEvent* event)
         pinch_moved_ = false;
         pinch_centroid_ = sum / count;
         pinch_distance_ = QLineF(down[0], down[1]).length();
+        two_finger_mode_ = TwoFingerMode::UNDECIDED;
+        two_finger_start_centroid_ = pinch_centroid_;
+        two_finger_start_distance_ = pinch_distance_;
+        scroll_accumulator_ = 0.0;
     }
     else if (count == 1 && gesture_ == Gesture::NONE)
     {
@@ -254,24 +263,46 @@ void DesktopView::handleTouch(QTouchEvent* event)
         const QPointF centroid = sum / count;
         const qreal distance = QLineF(down[0], down[1]).length();
 
-        if ((centroid - pinch_centroid_).manhattanLength() > kMoveThreshold ||
-            qAbs(distance - pinch_distance_) > kMoveThreshold)
-        {
+        const qreal distance_change = qAbs(distance - two_finger_start_distance_);
+        const qreal centroid_move = (centroid - two_finger_start_centroid_).manhattanLength();
+
+        if (distance_change > kMoveThreshold || centroid_move > kMoveThreshold)
             pinch_moved_ = true;
+
+        // Lock the gesture to zoom or scroll once it has moved enough to tell them apart.
+        if (two_finger_mode_ == TwoFingerMode::UNDECIDED &&
+            (distance_change > kTwoFingerDecide || centroid_move > kTwoFingerDecide))
+        {
+            two_finger_mode_ = (distance_change > centroid_move) ?
+                TwoFingerMode::ZOOM : TwoFingerMode::SCROLL;
         }
 
-        if (pinch_distance_ > 0.0)
-            applyZoom(distance / pinch_distance_, centroid);
+        if (two_finger_mode_ == TwoFingerMode::ZOOM)
+        {
+            if (pinch_distance_ > 0.0)
+                applyZoom(distance / pinch_distance_, centroid);
 
-        content_pos_ += centroid - pinch_centroid_;
-        clampContentPos();
+            content_pos_ += centroid - pinch_centroid_;
+            clampContentPos();
 
-        // Keep the cursor on screen: zoom/pan must not leave it outside the visible area.
-        ensureCursorVisible();
+            // Keep the cursor on screen: zoom/pan must not leave it outside the visible area.
+            ensureCursorVisible();
+            update();
+        }
+        else if (two_finger_mode_ == TwoFingerMode::SCROLL)
+        {
+            // Fingers moving down scroll the content up, so it follows the fingers.
+            scroll_accumulator_ += pinch_centroid_.y() - centroid.y();
+            const int steps = static_cast<int>(scroll_accumulator_ / kScrollStep);
+            if (steps != 0)
+            {
+                sendWheel(steps);
+                scroll_accumulator_ -= steps * kScrollStep;
+            }
+        }
 
         pinch_centroid_ = centroid;
         pinch_distance_ = distance;
-        update();
     }
 
     // Finger lifts: a tap that never turned into a drag is a click.
@@ -408,6 +439,26 @@ void DesktopView::sendClick(quint32 mask)
 {
     sendMouse(mask);
     sendMouse(0);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopView::sendWheel(int steps)
+{
+    if (image_.isNull() || steps == 0)
+        return;
+
+    // Positive steps scroll down, negative scroll up.
+    const quint32 wheel = (steps > 0) ?
+        proto::input::MouseEvent::WHEEL_DOWN : proto::input::MouseEvent::WHEEL_UP;
+
+    proto::input::MouseEvent event;
+    event.set_x(qRound(cursor_pos_.x()));
+    event.set_y(qRound(cursor_pos_.y()));
+    event.set_mask(wheel);
+
+    const int count = qAbs(steps);
+    for (int i = 0; i < count; ++i)
+        emit sig_mouseEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------

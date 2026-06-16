@@ -69,6 +69,7 @@ private:
     void applyZoom(qreal factor, const QPointF& anchor);
     void sendMouse(quint32 mask);
     void sendClick(quint32 mask);
+    void sendWheel(int steps);
 
     // Size of the frame fitted into the widget (aspect ratio preserved) at zoom 1, and the ratio of
     // on-screen pixels to host pixels.
@@ -101,6 +102,13 @@ private:
     qreal pinch_distance_ = 0.0;
     QPointF pinch_centroid_;
     bool pinch_moved_ = false;
+
+    // A two-finger gesture is locked to zooming or scrolling once it moves far enough.
+    enum class TwoFingerMode { UNDECIDED, ZOOM, SCROLL };
+    TwoFingerMode two_finger_mode_ = TwoFingerMode::UNDECIDED;
+    qreal two_finger_start_distance_ = 0.0;
+    QPointF two_finger_start_centroid_;
+    qreal scroll_accumulator_ = 0.0;
 
     // Buttons currently held while moving the cursor (a tap-then-hold drag presses the left button).
     quint32 button_mask_ = 0;
