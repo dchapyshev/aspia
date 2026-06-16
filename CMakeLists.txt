@@ -50,6 +50,10 @@ add_definitions(-DASPIA_VERSION_MAJOR=${ASPIA_VERSION_MAJOR}
 
 if (ANDROID)
     message(STATUS "Android detected")
+
+    # Only the Android toolchain knows the NDK sysroot, so generate the clangd config here. This lets
+    # clangd resolve <jni.h> for the Android sources without committing a machine-specific path.
+    configure_file(${CMAKE_SOURCE_DIR}/.clangd.in ${CMAKE_SOURCE_DIR}/.clangd @ONLY)
 elseif (UNIX AND NOT APPLE)
     message(STATUS "Linux detected")
     set(LINUX TRUE)

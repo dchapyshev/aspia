@@ -1,0 +1,15 @@
+# Generated from .clangd.in by CMake during the Android configure. Edit the template, not this file.
+#
+# On Windows Qt Creator feeds clangd a host (MSVC-style) command. In that mode clang drops the
+# GCC-style -std flag from the build (breaking Qt's connect() overloads and firing inline-variable
+# diagnostics) and does not know the Android NDK include path, so <jni.h> pulled in by the Android Qt
+# headers is not found. Both are restored below; the NDK path comes from the toolchain at configure
+# time and is kept out of version control.
+CompileFlags:
+  Add: [-Xclang, -std=c++20]
+
+---
+If:
+  PathMatch: .*/android/.*
+CompileFlags:
+  Add: [-Xclang, -isystem, -Xclang, "@CMAKE_SYSROOT@/usr/include"]
