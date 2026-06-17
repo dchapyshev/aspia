@@ -161,6 +161,11 @@ bool ScreenCapturerDxgi::selectScreen(ScreenId screen_id)
 {
     LOG(INFO) << "Select screen with ID:" << screen_id;
 
+    // Drop the cached frame so the next capture rebuilds it from scratch. Reusing it across a screen
+    // change makes the duplicator apply only an (empty) diff to a stale/black buffer, so the first
+    // frame of the new screen - which becomes the keyframe - comes out black.
+    frame_.reset();
+
     if (screen_id == kFullDesktopScreenId)
     {
         current_screen_index_ = -1;

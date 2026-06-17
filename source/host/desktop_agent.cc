@@ -972,6 +972,9 @@ void DesktopAgent::selectScreen(ScreenCapturer::ScreenId screen_id, const QSize&
         last_screen_id_ = screen_id;
     }
 
+    if (video_encoder_)
+        video_encoder_->setKeyFrameRequired(true);
+
     sendCurrentScreenList();
 }
 
@@ -1015,7 +1018,7 @@ void DesktopAgent::encodeScreen(const Frame* frame)
     if (!frame || !video_encoder_)
         return;
 
-    if (frame->constUpdatedRegion().isEmpty() && frame_count_ > 0)
+    if (frame->constUpdatedRegion().isEmpty() && frame_count_ > 0 && !video_encoder_->isKeyFrameRequired())
         return;
 
     ++frame_count_;

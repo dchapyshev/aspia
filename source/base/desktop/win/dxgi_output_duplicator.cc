@@ -243,34 +243,24 @@ bool DxgiOutputDuplicator::duplicate(Context* context, const QPoint& offset, Sha
     Region updated_region;
     updated_region.swap(context->updated_region);
 
-    if (error.Error() == S_OK && frame_info.AccumulatedFrames > 0 && resource)
+    // Copies |region| (relative to (0, 0)) from the cached texture into |target| at |offset|.
+    auto copyRegionToTarget = [&](const Region& region)
     {
-        detectUpdatedRegion(frame_info, &context->updated_region);
-        spreadContextChange(context);
-
-        if (!texture_->copyFrom(frame_info, resource.Get()))
-            return false;
-
-        updated_region += context->updated_region;
-
-        // TODO(zijiehe): Figure out why clearing context->updated_region() here triggers screen
-        // flickering?
-
         const Frame& source = texture_->asDesktopFrame();
 
         if (rotation_ != Rotation::CLOCK_WISE_0)
         {
-            for (const auto& rect : updated_region)
+            for (const auto& rect : region)
             {
-                // The |updated_region| returned by Windows is rotated, but the |source| frame is
-                // not. So we need to rotate it reversely.
+                // The |region| returned by Windows is rotated, but the |source| frame is not. So we
+                // need to rotate it reversely.
                 const QRect source_rect = rotateRect(rect, desktopSize(), reverseRotation(rotation_));
                 rotateFrame(source, source_rect, rotation_, offset, target.get());
             }
         }
         else
         {
-            for (const auto& rect : updated_region)
+            for (const auto& rect : region)
             {
                 // The Rect in |target|, starts from offset.
                 QRect dest_rect = rect;
@@ -281,12 +271,41 @@ bool DxgiOutputDuplicator::duplicate(Context* context, const QPoint& offset, Sha
                                  dest_rect.width(), dest_rect.height());
             }
         }
+    };
+
+    if (error.Error() == S_OK && frame_info.AccumulatedFrames > 0 && resource)
+    {
+        detectUpdatedRegion(frame_info, &context->updated_region);
+        spreadContextChange(context);
+
+        if (!texture_->copyFrom(frame_info, resource.Get()))
+            return false;
+
+        updated_region += context->updated_region;
+
+        copyRegionToTarget(updated_region);
 
         updated_region.translate(offset.x(), offset.y());
         *target->updatedRegion() += updated_region;
         ++num_frames_captured_;
+        context->require_full_copy = false;
 
         return texture_->release() && releaseFrame();
+    }
+
+    // No new frame was produced (a static screen, typical right after a screen switch). The full
+    // monitor that setup() queued for this fresh context would otherwise be dropped, leaving the
+    // target black until something changes on screen. Copy it from the last captured texture so the
+    // current content is delivered immediately.
+    if (context->require_full_copy && num_frames_captured_ > 0 && !updated_region.isEmpty())
+    {
+        copyRegionToTarget(updated_region);
+
+        updated_region.translate(offset.x(), offset.y());
+        *target->updatedRegion() += updated_region;
+        context->require_full_copy = false;
+
+        return error.Error() == DXGI_ERROR_WAIT_TIMEOUT || releaseFrame();
     }
 
     if (num_frames_captured_ == 0)
@@ -434,6 +453,7 @@ void DxgiOutputDuplicator::setup(Context* context)
 
     // Always copy entire monitor during the first duplicate() function call.
     context->updated_region += untranslatedDesktopRect();
+    context->require_full_copy = true;
     DCHECK(std::find(contexts_.begin(), contexts_.end(), context) == contexts_.end());
     contexts_.emplace_back(context);
 }

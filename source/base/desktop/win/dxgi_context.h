@@ -32,6 +32,12 @@ struct DxgiOutputContext final
     // The updated region DxgiOutputDuplicator::detectUpdatedRegion() output during last
     // duplicate() function call. It's always relative to the (0, 0).
     Region updated_region;
+
+    // Set when the context is (re)created (a fresh DxgiFrame, e.g. after a screen switch). Until the
+    // first frame is actually copied, the full monitor must be delivered. If the very first capture
+    // times out (a static screen right after a switch), the cached texture is copied instead so the
+    // target is not left black.
+    bool require_full_copy = true;
 };
 
 // A DxgiAdapterContext stores the status of a single DxgiFrame of DxgiAdapterDuplicator.
