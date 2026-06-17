@@ -46,6 +46,11 @@ LineEdit::LineEdit(QWidget* parent)
     setFrame(false);
     setStyleSheet("LineEdit { background: transparent; border: none; }");
 
+    // Android draws draggable text handles (the teardrop under the cursor) in a separate popup
+    // window that frequently lingers on screen after the field or its dialog is gone. Suppress the
+    // handles - tapping still positions the cursor.
+    setInputMethodHints(inputMethodHints() | Qt::ImhNoTextHandles);
+
     setFont(Controls::scaledFont(font(), Controls::kFontScale));
 
     // The top text margin keeps the text vertically centered in the field, which starts below

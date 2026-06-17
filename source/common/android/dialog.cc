@@ -18,6 +18,7 @@
 
 #include "common/android/dialog.h"
 
+#include <QGuiApplication>
 #include <QHBoxLayout>
 #include <QMouseEvent>
 #include <QPainter>
@@ -127,6 +128,16 @@ Button* Dialog::addButton(const QString& text, Button::Role role)
 
     button_row_->addWidget(button);
     return button;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Dialog::done(int result)
+{
+    if (QWidget* focus = focusWidget())
+        focus->clearFocus();
+
+    QGuiApplication::inputMethod()->hide();
+    QDialog::done(result);
 }
 
 //--------------------------------------------------------------------------------------------------

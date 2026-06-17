@@ -47,6 +47,9 @@ public:
     // Adds an action button to the trailing edge of the button row.
     Button* addButton(const QString& text, Button::Role role = Button::Role::TEXT);
 
+    // QDialog implementation.
+    void done(int result) final;
+
 protected:
     // QDialog implementation.
     void mousePressEvent(QMouseEvent* event) final;
