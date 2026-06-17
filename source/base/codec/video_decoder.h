@@ -74,6 +74,8 @@ public:
             stride_[index] = stride;
         }
 
+        bool isValid() const { return plane_[0] != nullptr; }
+
         YuvFormat format() const { return format_; }
         const QSize& size() const { return size_; }
 

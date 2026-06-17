@@ -350,12 +350,15 @@ void ClientDesktop::onRecordingChanged(bool enable, const QString& file_path)
 
         connect(webm_video_encode_timer_, &QTimer::timeout, this, [this]()
         {
-            if (!webm_video_encoder_ || !webm_file_writer_ || !yuv_converter_.frame())
+            if (!webm_video_encoder_ || !webm_file_writer_ || !video_decoder_ ||
+                !video_decoder_->frame().isValid())
+            {
                 return;
+            }
 
             proto::video::Packet packet;
 
-            if (webm_video_encoder_->encode(*yuv_converter_.frame(), &packet))
+            if (webm_video_encoder_->encode(video_decoder_->frame(), &packet))
                 webm_file_writer_->addVideoPacket(packet);
         });
 
