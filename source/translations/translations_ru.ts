@@ -3248,8 +3248,8 @@ Hosts skipped: %6</source>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="56"/>
-        <source>Enter the master password to unlock the application.</source>
-        <translation>Введите мастер-пароль, чтобы разблокировать приложение.</translation>
+        <source>Enter the master password.</source>
+        <translation>Введите мастер-пароль.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="60"/>

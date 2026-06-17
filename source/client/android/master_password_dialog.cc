@@ -48,7 +48,7 @@ MasterPasswordDialog::MasterPasswordDialog(Mode mode, QWidget* parent)
 
         case Mode::UNLOCK:
             setTitle(tr("Unlock"));
-            setText(tr("Enter the master password to unlock the application."));
+            setText(tr("Enter the master password."));
             break;
 
         case Mode::CHANGE:
@@ -88,8 +88,7 @@ MasterPasswordDialog::MasterPasswordDialog(Mode mode, QWidget* parent)
     }
 
     addButton(tr("Cancel"), Button::Role::TEXT);
-    Button* accept = addButton(change ? tr("Change") : (create ? tr("OK") : tr("Unlock")),
-                               Button::Role::FILLED);
+    Button* accept = addButton(change ? tr("Change") : tr("OK"), Button::Role::FILLED);
 
     connect(accept, &Button::clicked, this, &MasterPasswordDialog::onAccept);
 }
