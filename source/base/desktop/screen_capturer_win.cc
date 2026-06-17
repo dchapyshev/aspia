@@ -521,6 +521,14 @@ QPoint ScreenCapturerWin::cursorPosition()
 }
 
 //--------------------------------------------------------------------------------------------------
+void ScreenCapturerWin::resetCursorCache()
+{
+    // Clear the remembered shape so the next captureCursor() treats the current cursor as new and
+    // emits it even if it has not changed.
+    memset(&prev_cursor_info_, 0, sizeof(prev_cursor_info_));
+}
+
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerWin::reset()
 {
     desktop_dc_.close();

@@ -377,6 +377,9 @@ void DesktopAgent::onClientConfigured()
         cursor_encoder_ = std::make_unique<CursorEncoder>();
     }
 
+    if (screen_capturer_)
+        screen_capturer_->resetCursorCache();
+
     if (desktop_environment_)
     {
         desktop_environment_->setWallpaper(merged_config.wallpaper());

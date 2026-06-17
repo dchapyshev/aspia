@@ -38,6 +38,7 @@ public:
     ScreenId currentScreen() const final;
     const MouseCursor* captureCursor() final;
     QPoint cursorPosition() final;
+    void resetCursorCache() final;
 
 protected:
     // ScreenCapturer implementation.

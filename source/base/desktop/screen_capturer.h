@@ -95,6 +95,7 @@ public:
     virtual const Frame* captureFrame(Error* error) = 0;
     virtual const MouseCursor* captureCursor() = 0;
     virtual QPoint cursorPosition() = 0;
+    virtual void resetCursorCache() { /* Nothing */ }
 
     // Rect of the entire virtual desktop (covering all monitors).
     virtual const QRect& desktopRect() const = 0;
