@@ -378,7 +378,10 @@ void DesktopAgent::onClientConfigured()
     }
 
     if (screen_capturer_)
+    {
         screen_capturer_->resetCursorCache();
+        sendCurrentScreenList();
+    }
 
     if (desktop_environment_)
     {
@@ -969,6 +972,18 @@ void DesktopAgent::selectScreen(ScreenCapturer::ScreenId screen_id, const QSize&
         last_screen_id_ = screen_id;
     }
 
+    sendCurrentScreenList();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::sendCurrentScreenList()
+{
+    if (!screen_capturer_)
+    {
+        LOG(WARNING) << "Screen capturer is not initialized";
+        return;
+    }
+
     ScreenCapturer::ScreenList screen_list;
     if (!screen_capturer_->screenList(&screen_list))
     {
@@ -976,14 +991,13 @@ void DesktopAgent::selectScreen(ScreenCapturer::ScreenId screen_id, const QSize&
         return;
     }
 
+    const ScreenCapturer::ScreenId current = screen_capturer_->currentScreen();
+
     if (screen_resizer_)
     {
-        screen_list.resolutions = screen_resizer_->supportedResolutions(screen_id);
+        screen_list.resolutions = screen_resizer_->supportedResolutions(current);
         if (screen_list.resolutions.isEmpty())
             LOG(INFO) << "No supported resolutions";
-
-        for (const auto& resolition : std::as_const(screen_list.resolutions))
-            LOG(INFO) << "Supported resolution:" << resolition;
     }
 
     for (const auto& screen : std::as_const(screen_list.screens))
@@ -992,7 +1006,7 @@ void DesktopAgent::selectScreen(ScreenCapturer::ScreenId screen_id, const QSize&
                   << "resolution:" << screen.resolution << "DPI:" << screen.dpi << ")";
     }
 
-    onScreenListChanged(screen_list, screen_id);
+    onScreenListChanged(screen_list, current);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -88,6 +88,7 @@ private:
     void selectCapturer(ScreenCapturer::Error last_error);
     ScreenCapturer::ScreenId defaultScreen();
     void selectScreen(ScreenCapturer::ScreenId screen_id, const QSize& resolution);
+    void sendCurrentScreenList();
     void encodeScreen(const Frame* frame);
     void encodeCursor(const MouseCursor* cursor);
     void encodeAudio(const proto::audio::Packet& packet);
