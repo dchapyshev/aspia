@@ -39,7 +39,9 @@ public:
     ~BottomSheet() final;
 
     void setTitle(const QString& title);
-    void addItem(const QString& text, const QString& icon_file_path = QString());
+
+    // A |selected| item is drawn highlighted (accent color) to mark the current choice.
+    void addItem(const QString& text, const QString& icon_file_path = QString(), bool selected = false);
 
     // Covers the top-level window and shows the sheet over its content.
     void showSheet();
@@ -62,6 +64,7 @@ private:
     {
         QString icon_file_path;
         QString text;
+        bool selected = false;
     };
 
     // Animates the vertical offset to |target_offset| (0 = fully shown), closing the sheet when the

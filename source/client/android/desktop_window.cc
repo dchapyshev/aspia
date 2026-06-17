@@ -250,7 +250,10 @@ void DesktopWindow::onShowActions()
     const int screen_count = screen_list_.screen_size() > 1 ? screen_list_.screen_size() : 0;
 
     for (int i = 0; i < screen_count; ++i)
-        sheet->addItem(tr("Monitor %1").arg(i + 1), ":/img/material/monitor.svg");
+    {
+        const bool selected = screen_list_.screen(i).id() == screen_list_.current_screen();
+        sheet->addItem(tr("Monitor %1").arg(i + 1), ":/img/material/monitor.svg", selected);
+    }
 
     sheet->addItem(tr("Disconnect"), ":/img/material/close.svg");
 

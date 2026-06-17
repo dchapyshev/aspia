@@ -86,9 +86,9 @@ void BottomSheet::setTitle(const QString& title)
 }
 
 //--------------------------------------------------------------------------------------------------
-void BottomSheet::addItem(const QString& text, const QString& icon_file_path)
+void BottomSheet::addItem(const QString& text, const QString& icon_file_path, bool selected)
 {
-    items_.append({ icon_file_path, text });
+    items_.append({ icon_file_path, text, selected });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -198,6 +198,9 @@ void BottomSheet::paintEvent(QPaintEvent* /* event */)
     {
         const QRect item = itemRect(i);
 
+        const QColor foreground = items_[i].selected ?
+            Controls::accentColor() : palette().color(QPalette::WindowText);
+
         if (i == active_)
         {
             QColor layer = Controls::accentColor();
@@ -215,7 +218,7 @@ void BottomSheet::paintEvent(QPaintEvent* /* event */)
             if (!items_[i].icon_file_path.isEmpty())
             {
                 const QPixmap icon = Controls::tintedPixmap(items_[i].icon_file_path,
-                    QSize(kRowIconSize, kRowIconSize), palette().color(QPalette::WindowText));
+                    QSize(kRowIconSize, kRowIconSize), foreground);
                 const int icon_x = rtl ? item.right() - kHorizontalPadding - kRowIconSize + 1
                                        : item.left() + kHorizontalPadding;
                 painter.drawPixmap(QPoint(icon_x, item.center().y() - kRowIconSize / 2), icon);
@@ -227,7 +230,7 @@ void BottomSheet::paintEvent(QPaintEvent* /* event */)
 
             // AlignAbsolute keeps the requested side fixed; QPainter would otherwise mirror
             // AlignLeft/AlignRight under an RTL layout.
-            painter.setPen(palette().color(QPalette::WindowText));
+            painter.setPen(foreground);
             painter.drawText(text_rect,
                              Qt::AlignVCenter | Qt::AlignAbsolute | (rtl ? Qt::AlignRight : Qt::AlignLeft),
                              items_[i].text);
@@ -244,13 +247,13 @@ void BottomSheet::paintEvent(QPaintEvent* /* event */)
             if (!items_[i].icon_file_path.isEmpty())
             {
                 const QPixmap icon = Controls::tintedPixmap(items_[i].icon_file_path,
-                    QSize(kCellIconSize, kCellIconSize), palette().color(QPalette::WindowText));
+                    QSize(kCellIconSize, kCellIconSize), foreground);
                 painter.drawPixmap(QPoint(item.center().x() - kCellIconSize / 2, block_top), icon);
             }
 
             const QRect caption_rect(item.left(), block_top + kCellIconSize + kCaptionTopMargin,
                                      item.width(), caption_height);
-            painter.setPen(palette().color(QPalette::WindowText));
+            painter.setPen(foreground);
             const QString caption = painter.fontMetrics().elidedText(
                 items_[i].text, Qt::ElideRight, caption_rect.width());
             painter.drawText(caption_rect, Qt::AlignHCenter | Qt::AlignVCenter, caption);
