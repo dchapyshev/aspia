@@ -273,9 +273,9 @@ void DesktopWindow::onShowActions()
 
     action_sheet_->addItem(tr("Disconnect"), ":/img/material/close.svg");
 
-    connect(action_sheet_, &BottomSheet::sig_triggered, this, [this, screen_count](int index)
+    connect(action_sheet_, &BottomSheet::sig_triggered, this, [this](int index)
     {
-        if (index < screen_count)
+        if (index >= 0 && index < screen_list_.screen_size())
             emit sig_screenSelected(screen_list_.screen(index));
         else
             emit sig_closed();
