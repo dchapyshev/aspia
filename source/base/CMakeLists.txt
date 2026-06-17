@@ -338,7 +338,9 @@ list(APPEND SOURCE_BASE_DESKTOP
     desktop/screen_capturer.cc
     desktop/screen_capturer.h
     desktop/screen_capturer_helper.cc
-    desktop/screen_capturer_helper.h)
+    desktop/screen_capturer_helper.h
+    desktop/shared_frame.cc
+    desktop/shared_frame.h)
 
 if (WIN32)
     list(APPEND SOURCE_BASE_DESKTOP
