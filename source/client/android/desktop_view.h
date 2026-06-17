@@ -21,8 +21,10 @@
 
 #include <QElapsedTimer>
 #include <QImage>
+#include <QList>
 #include <QPoint>
 #include <QPointF>
+#include <QRect>
 #include <QSizeF>
 #include <QWidget>
 
@@ -48,7 +50,7 @@ public:
 
     void setFrame(SharedFrame frame);
     void setCursorShape(std::shared_ptr<MouseCursor> cursor);
-    void refresh();
+    void refresh(const QList<QRect>& dirty_rects);
 
 signals:
     void sig_mouseEvent(const proto::input::MouseEvent& event);

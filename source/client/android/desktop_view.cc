@@ -129,9 +129,24 @@ void DesktopView::setCursorShape(std::shared_ptr<MouseCursor> cursor)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopView::refresh()
+void DesktopView::refresh(const QList<QRect>& dirty_rects)
 {
-    update();
+    if (image_.isNull() || dirty_rects.isEmpty())
+    {
+        update();
+        return;
+    }
+
+    const qreal scale = contentScale();
+
+    for (const QRect& frame_rect : dirty_rects)
+    {
+        // Map the host-frame rectangle to on-screen coordinates (accounting for zoom and pan),
+        // expand by a pixel to cover smooth-scaling bleed, and clamp to the widget.
+        const QRectF widget_rect(frameToWidget(frame_rect.topLeft()),
+                                 QSizeF(frame_rect.width() * scale, frame_rect.height() * scale));
+        update(widget_rect.toAlignedRect().adjusted(-1, -1, 1, 1) & rect());
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -21,7 +21,6 @@
 
 #include <QEvent>
 #include <QList>
-#include <QPainter>
 #include <QSet>
 #include <QTimer>
 #include <QWidget>
@@ -103,8 +102,6 @@ private:
     void enableKeyHooks(bool enable);
     void releaseMouseButtons();
     void releaseKeyboardButtons();
-
-    QPainter painter_;
 
 #if defined(Q_OS_WINDOWS)
     static LRESULT CALLBACK keyboardHookProc(INT code, WPARAM wparam, LPARAM lparam);

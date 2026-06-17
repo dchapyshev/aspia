@@ -19,6 +19,7 @@
 #include "client/desktop/desktop/desktop_widget.h"
 
 #include <QApplication>
+#include <QPainter>
 #include <QResizeEvent>
 #include <QSvgRenderer>
 #include <QWheelEvent>
@@ -494,11 +495,11 @@ void DesktopWidget::userLeftFromWindow()
 //--------------------------------------------------------------------------------------------------
 void DesktopWidget::paintEvent(QPaintEvent* /* event */)
 {
-    painter_.begin(this);
+    QPainter painter(this);
 
 #if !defined(Q_OS_MACOS)
     // SmoothPixmapTransform causes too much CPU load in MacOSX.
-    painter_.setRenderHint(QPainter::SmoothPixmapTransform);
+    painter.setRenderHint(QPainter::SmoothPixmapTransform);
 #endif
     if (current_error_code_ == proto::video::ERROR_CODE_OK)
     {
@@ -508,23 +509,23 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
                 // The IO thread writes this buffer in place; the read access holds the lock so we
                 // never paint a half-written frame.
                 const SharedFrame::ReadAccess lock = frame_.read();
-                painter_.drawImage(rect(), frame_image_);
+                painter.drawImage(rect(), frame_image_);
             }
 
             if (enable_remote_cursor_pos_)
             {
                 if (!remote_cursor_shape_.isNull())
                 {
-                    painter_.drawPixmap(QRect(remote_cursor_pos_ - remote_cursor_hotspot_,
+                    painter.drawPixmap(QRect(remote_cursor_pos_ - remote_cursor_hotspot_,
                                               remote_cursor_shape_.size()),
                                         remote_cursor_shape_,
                                         remote_cursor_shape_.rect());
                 }
                 else
                 {
-                    painter_.setBrush(QBrush(Qt::black));
-                    painter_.setPen(QPen(Qt::white));
-                    painter_.drawEllipse(remote_cursor_pos_, 3, 3);
+                    painter.setBrush(QBrush(Qt::black));
+                    painter.setPen(QPen(Qt::white));
+                    painter.drawEllipse(remote_cursor_pos_, 3, 3);
                 }
             }
         }
@@ -552,21 +553,21 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
                            table_rect.height() - kTitleHeight - (kBorderSize * 2));
 
         if (error_image_)
-            painter_.drawImage(rect(), *error_image_);
+            painter.drawImage(rect(), *error_image_);
 
-        painter_.fillRect(table_rect, QColor(167, 167, 167));
-        painter_.fillRect(title_rect, QColor(207, 207, 207));
-        painter_.fillRect(message_rect, QColor(255, 255, 255));
+        painter.fillRect(table_rect, QColor(167, 167, 167));
+        painter.fillRect(title_rect, QColor(207, 207, 207));
+        painter.fillRect(message_rect, QColor(255, 255, 255));
 
         QImage icon = GuiApplication::svgImage(":/img/computer.svg", QSize(24, 24));
         QPoint icon_pos(title_rect.x() + 8, title_rect.y() + (kTitleHeight / 2) - (icon.height() / 2));
 
         title_rect.setLeft(icon_pos.x() + icon.width() + 8);
 
-        painter_.setPen(Qt::black);
+        painter.setPen(Qt::black);
 
-        painter_.drawImage(icon_pos, icon);
-        painter_.drawText(title_rect, Qt::AlignVCenter, "Aspia");
+        painter.drawImage(icon_pos, icon);
+        painter.drawText(title_rect, Qt::AlignVCenter, "Aspia");
 
         QString message;
         switch (last_error_code_)
@@ -585,10 +586,8 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
                 break;
         }
 
-        painter_.drawText(message_rect, Qt::AlignCenter, message);
+        painter.drawText(message_rect, Qt::AlignCenter, message);
     }
-
-    painter_.end();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -163,8 +163,7 @@ void DesktopWindow::startNewClient()
 
     connect(client, &ClientDesktop::sig_frameChanged,
             this, &DesktopWindow::onFrameChanged, Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_drawFrame, this,
-            [this](const QList<QRect>& /* dirty_rects */) { view_->refresh(); }, Qt::QueuedConnection);
+    connect(client, &ClientDesktop::sig_drawFrame, view_, &DesktopView::refresh, Qt::QueuedConnection);
     connect(client, &Client::sig_statusChanged,
             this, &DesktopWindow::onStatusChanged, Qt::QueuedConnection);
     connect(client, &ClientDesktop::sig_mouseCursorChanged,
