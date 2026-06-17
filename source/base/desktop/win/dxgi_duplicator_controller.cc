@@ -512,6 +512,13 @@ bool DxgiDuplicatorController::ensureFrameCaptured(Context* context, SharedPoint
         }
     }
 
+    // The warm-up above consumed the full-frame request that setup() queued for |context| (it was
+    // spent on the throwaway priming frames). Re-arm it so the first frame delivered to the caller is
+    // a complete one, not just the diff since the priming frame - otherwise a fresh (black) target
+    // buffer shows up black with the picture filling in piece by piece.
+    for (size_t i = 0; i < duplicators_.size() && i < context->contexts.size(); ++i)
+        duplicators_[i].requestFullCopy(&context->contexts[i]);
+
     return true;
 }
 

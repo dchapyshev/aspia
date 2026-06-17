@@ -75,6 +75,10 @@ public:
 
     void setup(Context* context);
 
+    // Re-queues a full-monitor copy on each output for an already-registered context (see
+    // DxgiOutputDuplicator::requestFullCopy).
+    void requestFullCopy(Context* context);
+
     void unregister(const Context* const context);
 
     // The minimum num_frames_captured() returned by |duplicators_|.

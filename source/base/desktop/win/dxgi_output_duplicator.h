@@ -71,6 +71,11 @@ public:
 
     void setup(Context* context);
 
+    // Re-queues a full-monitor copy for an already-registered context. Used after the warm-up
+    // capture in ensureFrameCaptured(), which consumes the initial full-frame request, so the first
+    // frame actually delivered to the caller is complete instead of a diff against a fresh buffer.
+    void requestFullCopy(Context* context);
+
     void unregister(const Context* const context);
 
     // How many frames have been captured by this DxigOutputDuplicator.

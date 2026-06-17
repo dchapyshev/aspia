@@ -459,6 +459,13 @@ void DxgiOutputDuplicator::setup(Context* context)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DxgiOutputDuplicator::requestFullCopy(Context* context)
+{
+    context->updated_region += untranslatedDesktopRect();
+    context->require_full_copy = true;
+}
+
+//--------------------------------------------------------------------------------------------------
 void DxgiOutputDuplicator::unregister(const Context* const context)
 {
     auto it = std::find(contexts_.begin(), contexts_.end(), context);

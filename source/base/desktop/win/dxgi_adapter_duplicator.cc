@@ -149,6 +149,13 @@ void DxgiAdapterDuplicator::setup(Context* context)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DxgiAdapterDuplicator::requestFullCopy(Context* context)
+{
+    for (size_t i = 0; i < duplicators_.size() && i < context->contexts.size(); ++i)
+        duplicators_[i].requestFullCopy(&context->contexts[i]);
+}
+
+//--------------------------------------------------------------------------------------------------
 void DxgiAdapterDuplicator::unregister(const Context* const context)
 {
     DCHECK_EQ(context->contexts.size(), duplicators_.size());
