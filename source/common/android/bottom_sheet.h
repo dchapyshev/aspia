@@ -43,6 +43,10 @@ public:
     // A |selected| item is drawn highlighted (accent color) to mark the current choice.
     void addItem(const QString& text, const QString& icon_file_path = QString(), bool selected = false);
 
+    // Marks |index| as the selected item (and clears the rest); pass -1 to clear. Updates a sheet
+    // that is already shown, e.g. when the current screen changes from another client.
+    void setSelected(int index);
+
     // Covers the top-level window and shows the sheet over its content.
     void showSheet();
 

@@ -240,24 +240,40 @@ void DesktopWindow::onFrameChanged(const QSize& /* screen_size */, std::shared_p
 void DesktopWindow::onScreenListChanged(const proto::screen::ScreenList& screen_list)
 {
     screen_list_ = screen_list;
+
+    // The current screen can change from another client while our action sheet is open, so refresh
+    // its highlight to match.
+    if (action_sheet_)
+    {
+        int selected = -1;
+        for (int i = 0; i < screen_list_.screen_size(); ++i)
+        {
+            if (screen_list_.screen(i).id() == screen_list_.current_screen())
+            {
+                selected = i;
+                break;
+            }
+        }
+        action_sheet_->setSelected(selected);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopWindow::onShowActions()
 {
-    BottomSheet* sheet = new BottomSheet(this);
+    action_sheet_ = new BottomSheet(this);
 
     const int screen_count = screen_list_.screen_size() > 1 ? screen_list_.screen_size() : 0;
 
     for (int i = 0; i < screen_count; ++i)
     {
         const bool selected = screen_list_.screen(i).id() == screen_list_.current_screen();
-        sheet->addItem(tr("Monitor %1").arg(i + 1), ":/img/material/monitor.svg", selected);
+        action_sheet_->addItem(tr("Monitor %1").arg(i + 1), ":/img/material/monitor.svg", selected);
     }
 
-    sheet->addItem(tr("Disconnect"), ":/img/material/close.svg");
+    action_sheet_->addItem(tr("Disconnect"), ":/img/material/close.svg");
 
-    connect(sheet, &BottomSheet::sig_triggered, this, [this, screen_count](int index)
+    connect(action_sheet_, &BottomSheet::sig_triggered, this, [this, screen_count](int index)
     {
         if (index < screen_count)
             emit sig_screenSelected(screen_list_.screen(index));
@@ -265,7 +281,7 @@ void DesktopWindow::onShowActions()
             emit sig_closed();
     });
 
-    sheet->showSheet();
+    action_sheet_->showSheet();
 }
 
 //--------------------------------------------------------------------------------------------------

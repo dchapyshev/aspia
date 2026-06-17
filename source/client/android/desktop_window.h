@@ -30,6 +30,7 @@
 #include "client/config.h"
 #include "proto/desktop_screen.h"
 
+class BottomSheet;
 class ClientDesktop;
 class DesktopView;
 class FloatingActionButton;
@@ -70,6 +71,7 @@ private:
     QPointer<ClientDesktop> client_;
 
     proto::screen::ScreenList screen_list_;
+    QPointer<BottomSheet> action_sheet_;
 
     DesktopView* view_ = nullptr;
     Label* status_ = nullptr;

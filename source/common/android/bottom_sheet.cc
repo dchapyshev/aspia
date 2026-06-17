@@ -92,6 +92,15 @@ void BottomSheet::addItem(const QString& text, const QString& icon_file_path, bo
 }
 
 //--------------------------------------------------------------------------------------------------
+void BottomSheet::setSelected(int index)
+{
+    for (int i = 0; i < items_.size(); ++i)
+        items_[i].selected = (i == index);
+
+    update();
+}
+
+//--------------------------------------------------------------------------------------------------
 void BottomSheet::showSheet()
 {
     // Cover the whole top-level window so a tap anywhere outside the sheet is caught and closes it.
