@@ -1467,74 +1467,74 @@ Routers added: %4</source>
     <message>
         <location filename="../client/android/desktop_window.cc" line="95"/>
         <source>Connecting...</source>
-        <translation type="unfinished"></translation>
+        <translation>Подключение...</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="109"/>
         <location filename="../client/android/desktop_window.cc" line="201"/>
         <source>The specified router is unavailable.</source>
-        <translation type="unfinished">Указанный маршрутизатор недоступен.</translation>
+        <translation>Указанный маршрутизатор недоступен.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="115"/>
         <location filename="../client/android/desktop_window.cc" line="205"/>
         <source>The specified router is offline.</source>
-        <translation type="unfinished">Указанный маршрутизатор не в сети.</translation>
+        <translation>Указанный маршрутизатор не в сети.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="120"/>
         <source>Requesting connection to the host...</source>
-        <translation type="unfinished">Запрашивается подключение к хосту...</translation>
+        <translation>Запрашивается подключение к хосту...</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="136"/>
         <source>The host with the specified ID is not online.</source>
-        <translation type="unfinished"></translation>
+        <translation>Хост с указанным ID не в сети.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="139"/>
         <source>Access is denied.</source>
-        <translation type="unfinished"></translation>
+        <translation>Доступ запрещен.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="142"/>
         <source>There are no relays available or the key pool is empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Нет доступных релеев или пул ключей пуст.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="145"/>
         <source>Error requesting connection via router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка при запросе соединения через маршрутизатор.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="181"/>
         <source>Connecting to host %1...</source>
-        <translation type="unfinished">Подключение к хосту %1...</translation>
+        <translation>Подключение к хосту %1...</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="186"/>
         <source>Connection established.</source>
-        <translation type="unfinished"></translation>
+        <translation>Соединение установлено.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="191"/>
         <source>The connection to the host has been lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Соединение с хостом потеряно.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="209"/>
         <source>Error requesting connection via router: %1.</source>
-        <translation type="unfinished">Ошибка при запросе соединения через маршрутизатор: %1.</translation>
+        <translation>Ошибка при запросе соединения через маршрутизатор: %1.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="213"/>
         <source>The host version is newer than the client. Please update the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Версия хоста новее клиента. Обновите приложение.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="232"/>
         <source>Disconnect</source>
-        <translation type="unfinished">Отключить</translation>
+        <translation>Отключить</translation>
     </message>
 </context>
 <context>

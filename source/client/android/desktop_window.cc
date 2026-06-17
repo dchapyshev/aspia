@@ -40,6 +40,10 @@ namespace {
 
 constexpr int kFabMargin = 16;
 
+// The status text is limited to this fraction of the window width, so short messages stay on one
+// line and only a genuinely long one wraps.
+constexpr double kStatusWidthFactor = 0.9;
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -77,6 +81,9 @@ DesktopWindow::~DesktopWindow()
 void DesktopWindow::resizeEvent(QResizeEvent* event)
 {
     QWidget::resizeEvent(event);
+
+    if (status_)
+        status_->setFixedWidth(qRound(width() * kStatusWidthFactor));
 
     if (fab_)
         fab_->move(width() - fab_->width() - kFabMargin, height() - fab_->height() - kFabMargin);
