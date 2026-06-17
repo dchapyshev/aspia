@@ -38,6 +38,21 @@
 //--------------------------------------------------------------------------------------------------
 int main(int argc, char* argv[])
 {
+#if defined(Q_OS_ANDROID)
+    // When the Qt event loop ends, Qt's Android platform calls exit(), which runs the C++ runtime's
+    // global destructors (__cxa_finalize). Those tear down std::thread/std::mutex statics while
+    // Android's own threads (notably the HWUI render threads "hwuiTask") are still running, so a
+    // render thread locks an already-destroyed mutex and the process aborts with
+    // "FORTIFY: pthread_mutex_lock called on a destroyed mutex" (SIGABRT). This is a long-standing
+    // Qt-on-Android shutdown race. QT_ANDROID_NO_EXIT_CALL makes Qt skip that exit() call, so the
+    // global destructors are not run and the race cannot occur (Android reclaims the process).
+    // Refs:
+    //   https://bugreports.qt.io/browse/QTBUG-85449
+    //   https://bugreports.qt.io/browse/QTBUG-82617
+    //   https://developernote.com/2022/03/crash-at-std-thread-and-std-mutex-destructors-on-android/
+    qputenv("QT_ANDROID_NO_EXIT_CALL", "1");
+#endif // defined(Q_OS_ANDROID)
+
     Q_INIT_RESOURCE(common);
     Q_INIT_RESOURCE(common_translations);
 
