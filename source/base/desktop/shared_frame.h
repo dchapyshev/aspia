@@ -39,7 +39,7 @@ public:
     SharedFrame() = default;
     explicit SharedFrame(std::unique_ptr<Frame> frame);
 
-    explicit operator bool() const { return core_ != nullptr; }
+    bool isValid() const { return core_ != nullptr; }
 
     // Immutable metadata; safe to read without a lock.
     QSize size() const;

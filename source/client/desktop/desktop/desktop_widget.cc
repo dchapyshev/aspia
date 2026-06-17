@@ -130,8 +130,9 @@ DesktopWidget::DesktopWidget(QWidget* parent)
         {
             current_error_code_ = last_error_code_;
 
-            if (frame_)
+            if (frame_.isValid())
             {
+                const SharedFrame::ReadAccess lock = frame_.read();
                 error_image_ = std::make_unique<QImage>(
                     frame_image_.convertToFormat(QImage::Format_Grayscale8));
             }
@@ -161,30 +162,43 @@ DesktopWidget::~DesktopWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
-Frame* DesktopWidget::desktopFrame()
+QSize DesktopWidget::frameSize() const
 {
-    return frame_.get();
+    return frame_.size();
 }
 
 //--------------------------------------------------------------------------------------------------
-const QImage& DesktopWidget::desktopImage()
+bool DesktopWidget::hasFrame() const
 {
-    return frame_image_;
+    return frame_.isValid();
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWidget::setDesktopFrame(std::shared_ptr<Frame> frame)
+QImage DesktopWidget::frameImage() const
+{
+    if (!frame_.isValid())
+        return QImage();
+
+    // Deep copy under the read lock so the caller (screenshot) can use it without holding the lock.
+    const SharedFrame::ReadAccess lock = frame_.read();
+    return frame_image_.copy();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWidget::setDesktopFrame(SharedFrame frame)
 {
     frame_ = std::move(frame);
-    if (!frame_)
+    if (!frame_.isValid())
     {
         frame_image_ = QImage();
         return;
     }
 
-    const QSize& frame_size = frame_->size();
-    frame_image_ = QImage(frame_->frameData(), frame_size.width(), frame_size.height(),
-                          frame_->stride(), QImage::Format_RGB32);
+    const SharedFrame::ReadAccess access = frame_.read();
+    const Frame& source = access.get();
+    const QSize& frame_size = source.size();
+    frame_image_ = QImage(source.frameData(), frame_size.width(), frame_size.height(),
+                          source.stride(), QImage::Format_RGB32);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -215,13 +229,13 @@ void DesktopWidget::drawDesktopFrame(const QList<QRect>& dirty_rects)
     last_error_code_ = proto::video::ERROR_CODE_OK;
     current_error_code_ = proto::video::ERROR_CODE_OK;
 
-    if (full_update || !frame_ || dirty_rects.isEmpty())
+    if (full_update || !frame_.isValid() || dirty_rects.isEmpty())
     {
         update();
         return;
     }
 
-    const QSize& frame_size = frame_->size();
+    const QSize frame_size = frame_.size();
     QSize widget_size = size();
     QRect widget_rect = rect();
 
@@ -274,7 +288,7 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
                                  const QPoint& pos,
                                  const QPoint& delta)
 {
-    if (!frame_)
+    if (!frame_.isValid())
         return;
 
     quint32 mask;
@@ -490,7 +504,12 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
     {
         if (!frame_image_.isNull())
         {
-            painter_.drawImage(rect(), frame_image_);
+            {
+                // The IO thread writes this buffer in place; the read access holds the lock so we
+                // never paint a half-written frame.
+                const SharedFrame::ReadAccess lock = frame_.read();
+                painter_.drawImage(rect(), frame_image_);
+            }
 
             if (enable_remote_cursor_pos_)
             {
@@ -668,9 +687,9 @@ void DesktopWidget::updateCursorShape()
     // The desktop frame is rendered scaled to the widget size. The cursor is scaled by the same
     // factor so it matches the scale of the remote desktop content. The device pixel ratio of the
     // client screen is applied on top of that by Qt itself.
-    if (frame_)
+    if (frame_.isValid())
     {
-        const QSize& frame_size = frame_->size();
+        const QSize frame_size = frame_.size();
         QSize widget_size = size();
 
         if (frame_size.width() > 0 && frame_size.height() > 0)

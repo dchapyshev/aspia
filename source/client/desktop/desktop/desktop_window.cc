@@ -33,7 +33,6 @@
 #include <QWindow>
 
 #include "base/logging.h"
-#include "base/desktop/frame.h"
 #include "base/desktop/mouse_cursor.h"
 #include "client/settings.h"
 #include "client/desktop/desktop/desktop_toolbar.h"
@@ -339,11 +338,10 @@ void DesktopWindow::onScreenListChanged(const proto::screen::ScreenList& screen_
 //--------------------------------------------------------------------------------------------------
 void DesktopWindow::onCursorPositionChanged(const proto::cursor::Position& position)
 {
-    Frame* frame = desktop_->desktopFrame();
-    if (!frame)
+    if (!desktop_->hasFrame())
         return;
 
-    const QSize& frame_size = frame->size();
+    const QSize frame_size = desktop_->frameSize();
 
     int pos_x = int(double(desktop_->width() * position.x()) / double(frame_size.width()));
     int pos_y = int(double(desktop_->height() * position.y()) / double(frame_size.height()));
@@ -397,14 +395,14 @@ void DesktopWindow::onFrameError(proto::video::ErrorCode error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWindow::onFrameChanged(const QSize& screen_size, std::shared_ptr<Frame> frame)
+void DesktopWindow::onFrameChanged(const QSize& screen_size, SharedFrame frame)
 {
     screen_size_ = screen_size;
     LOG(INFO) << "Screen size changed:" << screen_size_;
 
-    bool has_old_frame = desktop_->desktopFrame() != nullptr;
+    bool has_old_frame = desktop_->hasFrame();
 
-    desktop_->setDesktopFrame(frame);
+    desktop_->setDesktopFrame(std::move(frame));
     onScaleDesktop();
 
     if (!has_old_frame)
@@ -488,7 +486,7 @@ void DesktopWindow::onInternalReset()
 
     wheel_angle_ = QPoint();
 
-    desktop_->setDesktopFrame(nullptr);
+    desktop_->setDesktopFrame(SharedFrame());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -731,10 +729,9 @@ void DesktopWindow::onMouseEvent(const proto::input::MouseEvent& event)
         scroll_timer_->stop();
     }
 
-    Frame* current_frame = desktop_->desktopFrame();
-    if (current_frame)
+    if (desktop_->hasFrame())
     {
-        const QSize& source_size = current_frame->size();
+        const QSize source_size = desktop_->frameSize();
         QSize scaled_size = desktop_->size();
 
         double scale_x = (scaled_size.width() * 100) / static_cast<double>(source_size.width());
@@ -864,7 +861,7 @@ void DesktopWindow::onTakeScreenshot()
         return;
     }
 
-    const QImage& image = desktop_->desktopImage();
+    const QImage image = desktop_->frameImage();
     if (image.isNull())
     {
         LOG(INFO) << "No desktop frame";

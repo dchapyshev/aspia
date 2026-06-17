@@ -24,6 +24,7 @@
 #include <optional>
 
 #include "client/client_desktop.h"
+#include "base/desktop/shared_frame.h"
 #include "client/desktop/client_window.h"
 
 class MouseCursor;
@@ -59,7 +60,7 @@ public slots:
     void onTaskManagerChanged(const proto::task_manager::HostToClient& message);
     void onMetricsChanged(const ClientDesktop::Metrics& metrics);
     void onFrameError(proto::video::ErrorCode error_code);
-    void onFrameChanged(const QSize& screen_size, std::shared_ptr<Frame> frame);
+    void onFrameChanged(const QSize& screen_size, SharedFrame frame);
     void onDrawFrame(const QList<QRect>& dirty_rects);
     void onMouseCursorChanged(std::shared_ptr<MouseCursor> mouse_cursor);
     void onSessionListChanged(const proto::control::SessionList& sessions);

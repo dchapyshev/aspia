@@ -82,28 +82,31 @@ DesktopView::DesktopView(QWidget* parent)
 DesktopView::~DesktopView() = default;
 
 //--------------------------------------------------------------------------------------------------
-void DesktopView::setFrame(std::shared_ptr<Frame> frame)
+void DesktopView::setFrame(SharedFrame frame)
 {
     const bool was_null = image_.isNull();
 
     frame_ = std::move(frame);
 
-    if (frame_)
+    if (frame_.isValid())
     {
-        const QSize& size = frame_->size();
-        image_ = QImage(frame_->frameData(), size.width(), size.height(), frame_->stride(),
+        const SharedFrame::ReadAccess access = frame_.read();
+        const Frame& source = access.get();
+        const QSize& size = source.size();
+        image_ = QImage(source.frameData(), size.width(), size.height(), source.stride(),
                         QImage::Format_RGB32);
+
+        // Start the cursor at the center of the first frame. A draw frame always follows a new frame,
+        // so the repaint is left to it.
+        if (was_null)
+            cursor_pos_ = QPointF(image_.width() / 2.0, image_.height() / 2.0);
     }
     else
     {
+        // The frame was cleared (on disconnect) and no draw frame follows, so repaint now.
         image_ = QImage();
+        update();
     }
-
-    // Start the cursor at the center of the first frame.
-    if (was_null && !image_.isNull())
-        cursor_pos_ = QPointF(image_.width() / 2.0, image_.height() / 2.0);
-
-    update();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -159,7 +162,12 @@ void DesktopView::paintEvent(QPaintEvent* /* event */)
     clampContentPos();
 
     painter.setRenderHint(QPainter::SmoothPixmapTransform);
-    painter.drawImage(QRectF(content_pos_, fittedSize() * zoom_), image_);
+    {
+        // The IO thread writes this buffer in place; the read access holds the lock so we never
+        // paint a half-written frame.
+        const SharedFrame::ReadAccess lock = frame_.read();
+        painter.drawImage(QRectF(content_pos_, fittedSize() * zoom_), image_);
+    }
 
     const QPointF cursor_center = frameToWidget(cursor_pos_);
     if (!cursor_image_.isNull())

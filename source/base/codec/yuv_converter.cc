@@ -42,15 +42,20 @@ YuvConverter::Result YuvConverter::convert(
 {
     Result result = Result::LAST_FRAME;
 
-    if (!frame_ || frame_->size() != src.size())
+    if (!frame_.isValid() || frame_.size() != src.size())
     {
-        frame_ = FrameAligned::create(src.size(), kArgbAlignment);
-        if (!frame_)
+        std::unique_ptr<FrameAligned> aligned = FrameAligned::create(src.size(), kArgbAlignment);
+        if (!aligned)
             return Result::FAILED;
+        frame_ = SharedFrame(std::move(aligned));
         result = Result::NEW_FRAME;
     }
 
-    Frame* dst = frame_.get();
+    // The GUI thread paints this same buffer; the write access holds the lock while converting so a
+    // paint never sees a half-written frame.
+    const SharedFrame::WriteAccess access = frame_.write();
+    Frame& dst = access.get();
+
     const QRect frame_rect(QPoint(0, 0), src.size());
     const int y_stride = src.planeStride(0);
 
@@ -68,7 +73,7 @@ YuvConverter::Result YuvConverter::convert(
 
             libyuv::NV12ToARGB(src.planeData(0) + y_offset, y_stride,
                                src.planeData(1) + uv_offset, uv_stride,
-                               dst->frameDataAtPos(rect.topLeft()), dst->stride(),
+                               dst.frameDataAtPos(rect.topLeft()), dst.stride(),
                                rect.width(), rect.height());
         }
     }
@@ -89,7 +94,7 @@ YuvConverter::Result YuvConverter::convert(
             libyuv::I420ToARGB(src.planeData(0) + y_offset, y_stride,
                                src.planeData(1) + u_offset, u_stride,
                                src.planeData(2) + v_offset, v_stride,
-                               dst->frameDataAtPos(rect.topLeft()), dst->stride(),
+                               dst.frameDataAtPos(rect.topLeft()), dst.stride(),
                                rect.width(), rect.height());
         }
     }

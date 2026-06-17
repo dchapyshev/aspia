@@ -28,11 +28,12 @@
 
 #include <memory>
 
+#include "base/desktop/shared_frame.h"
+
 namespace proto::input {
 class MouseEvent;
 } // namespace proto::input
 
-class Frame;
 class MouseCursor;
 class QTimer;
 class QTouchEvent;
@@ -45,7 +46,7 @@ public:
     explicit DesktopView(QWidget* parent = nullptr);
     ~DesktopView() final;
 
-    void setFrame(std::shared_ptr<Frame> frame);
+    void setFrame(SharedFrame frame);
     void setCursorShape(std::shared_ptr<MouseCursor> cursor);
     void refresh();
 
@@ -83,7 +84,7 @@ private:
     void clampCursor();
     void ensureCursorVisible();
 
-    std::shared_ptr<Frame> frame_;
+    SharedFrame frame_;
     QImage image_;
     QImage cursor_image_;
     QPoint cursor_hotspot_;

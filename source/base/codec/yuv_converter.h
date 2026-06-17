@@ -22,11 +22,8 @@
 #include <QList>
 #include <QRect>
 
-#include <memory>
-
 #include "base/codec/video_decoder.h"
-
-class Frame;
+#include "base/desktop/shared_frame.h"
 
 // Converts decoded YUV video frames (I420 / NV12) into the ARGB pixel format used for rendering and
 // owns the ARGB output frame. Only the rectangles in the source frame's updated region are converted,
@@ -48,10 +45,10 @@ public:
     // size changes.
     Result convert(const VideoDecoder::YuvView& src, const QList<QRect>& dirty_rects);
 
-    const std::shared_ptr<Frame>& frame() const { return frame_; }
+    const SharedFrame& frame() const { return frame_; }
 
 private:
-    std::shared_ptr<Frame> frame_;
+    SharedFrame frame_;
 
     Q_DISABLE_COPY_MOVE(YuvConverter)
 };

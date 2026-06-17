@@ -26,6 +26,7 @@
 
 #include <memory>
 
+#include "base/desktop/shared_frame.h"
 #include "client/client.h"
 #include "client/config.h"
 #include "proto/desktop_screen.h"
@@ -34,7 +35,6 @@ class BottomSheet;
 class ClientDesktop;
 class DesktopView;
 class FloatingActionButton;
-class Frame;
 class Label;
 class SessionState;
 
@@ -56,7 +56,7 @@ protected:
 
 private slots:
     void onStatusChanged(Client::Status status, const QVariant& data);
-    void onFrameChanged(const QSize& screen_size, std::shared_ptr<Frame> frame);
+    void onFrameChanged(const QSize& screen_size, SharedFrame frame);
     void onScreenListChanged(const proto::screen::ScreenList& screen_list);
     void onShowActions();
 

@@ -28,6 +28,7 @@
 
 #include <memory>
 
+#include "base/desktop/shared_frame.h"
 #include "proto/desktop_video.h"
 
 namespace proto::input {
@@ -44,8 +45,6 @@ class MouseEvent;
 #include <CoreGraphics/CGEventTypes.h>
 #endif // defined(Q_OS_MACOS)
 
-class Frame;
-
 class DesktopWidget final : public QWidget
 {
     Q_OBJECT
@@ -54,9 +53,10 @@ public:
     explicit DesktopWidget(QWidget* parent);
     ~DesktopWidget() final;
 
-    Frame* desktopFrame();
-    const QImage& desktopImage();
-    void setDesktopFrame(std::shared_ptr<Frame> frame);
+    QSize frameSize() const;
+    bool hasFrame() const;
+    QImage frameImage() const;
+    void setDesktopFrame(SharedFrame frame);
     void setDesktopFrameError(proto::video::ErrorCode error_code);
     void drawDesktopFrame(const QList<QRect>& dirty_rects);
     void setCursorShape(QPixmap&& cursor_shape, const QPoint& hotspot);
@@ -122,7 +122,7 @@ private:
     proto::video::ErrorCode current_error_code_ = proto::video::ERROR_CODE_OK;
     std::unique_ptr<QImage> error_image_;
 
-    std::shared_ptr<Frame> frame_;
+    SharedFrame frame_;
     QImage frame_image_;
 
     bool enable_key_sequenses_ = true;

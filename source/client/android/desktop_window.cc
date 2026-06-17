@@ -203,7 +203,7 @@ void DesktopWindow::onStatusChanged(Client::Status status, const QVariant& data)
             if (data.canConvert<TcpChannel::ErrorCode>())
                 message = TcpChannel::errorToString(data.value<TcpChannel::ErrorCode>());
             setStatusText(message);
-            view_->setFrame(nullptr);
+            view_->setFrame(SharedFrame());
             connected_ = false;
         }
         break;
@@ -230,7 +230,7 @@ void DesktopWindow::onStatusChanged(Client::Status status, const QVariant& data)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWindow::onFrameChanged(const QSize& /* screen_size */, std::shared_ptr<Frame> frame)
+void DesktopWindow::onFrameChanged(const QSize& /* screen_size */, SharedFrame frame)
 {
     view_->setFrame(std::move(frame));
     status_->setVisible(false);
