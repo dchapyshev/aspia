@@ -169,8 +169,12 @@ void DesktopWindow::startNewClient()
             this, &DesktopWindow::onStatusChanged, Qt::QueuedConnection);
     connect(client, &ClientDesktop::sig_mouseCursorChanged,
             view_, &DesktopView::setCursorShape, Qt::QueuedConnection);
+    connect(client, &ClientDesktop::sig_screenListChanged,
+            this, &DesktopWindow::onScreenListChanged, Qt::QueuedConnection);
     connect(view_, &DesktopView::sig_mouseEvent,
             client, &ClientDesktop::onMouseEvent, Qt::QueuedConnection);
+    connect(this, &DesktopWindow::sig_screenSelected,
+            client, &ClientDesktop::onCurrentScreenChanged, Qt::QueuedConnection);
 
     client->moveToThread(GuiApplication::ioThread());
     client->setSessionState(session_state_);
@@ -233,14 +237,28 @@ void DesktopWindow::onFrameChanged(const QSize& /* screen_size */, std::shared_p
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopWindow::onScreenListChanged(const proto::screen::ScreenList& screen_list)
+{
+    screen_list_ = screen_list;
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopWindow::onShowActions()
 {
     BottomSheet* sheet = new BottomSheet(this);
+
+    const int screen_count = screen_list_.screen_size() > 1 ? screen_list_.screen_size() : 0;
+
+    for (int i = 0; i < screen_count; ++i)
+        sheet->addItem(tr("Monitor %1").arg(i + 1), ":/img/material/monitor.svg");
+
     sheet->addItem(tr("Disconnect"), ":/img/material/close.svg");
 
-    connect(sheet, &BottomSheet::sig_triggered, this, [this](int index)
+    connect(sheet, &BottomSheet::sig_triggered, this, [this, screen_count](int index)
     {
-        if (index == 0)
+        if (index < screen_count)
+            emit sig_screenSelected(screen_list_.screen(index));
+        else
             emit sig_closed();
     });
 

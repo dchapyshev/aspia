@@ -28,6 +28,7 @@
 
 #include "client/client.h"
 #include "client/config.h"
+#include "proto/desktop_screen.h"
 
 class ClientDesktop;
 class DesktopView;
@@ -46,6 +47,7 @@ public:
 
 signals:
     void sig_closed();
+    void sig_screenSelected(const proto::screen::Screen& screen);
 
 protected:
     // QWidget implementation.
@@ -54,6 +56,7 @@ protected:
 private slots:
     void onStatusChanged(Client::Status status, const QVariant& data);
     void onFrameChanged(const QSize& screen_size, std::shared_ptr<Frame> frame);
+    void onScreenListChanged(const proto::screen::ScreenList& screen_list);
     void onShowActions();
 
 private:
@@ -65,6 +68,8 @@ private:
     HostConfig host_;
     std::shared_ptr<SessionState> session_state_;
     QPointer<ClientDesktop> client_;
+
+    proto::screen::ScreenList screen_list_;
 
     DesktopView* view_ = nullptr;
     Label* status_ = nullptr;
