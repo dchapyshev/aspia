@@ -23,10 +23,12 @@
 
 #include "base/gui_application.h"
 #include "base/net/udp_channel.h"
+#include "client/database.h"
 #include "client/android/master_password_dialog.h"
 #include "common/android/button.h"
 #include "common/android/combo_box.h"
 #include "common/android/label.h"
+#include "common/android/line_edit.h"
 #include "common/android/switch.h"
 
 namespace {
@@ -134,6 +136,15 @@ void SettingsWidget::buildInterfaceSection(QVBoxLayout* layout)
         GuiApplication::instance()->setTheme(id);
     });
     layout->addWidget(theme);
+
+    LineEdit* display_name = new LineEdit();
+    display_name->setLabel(tr("Display name when connected"));
+    display_name->setText(Database::instance().displayName());
+    connect(display_name, &QLineEdit::editingFinished, this, [display_name]()
+    {
+        Database::instance().setDisplayName(display_name->text());
+    });
+    layout->addWidget(display_name);
 }
 
 //--------------------------------------------------------------------------------------------------

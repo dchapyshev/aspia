@@ -63,7 +63,6 @@ private:
     void setStatusText(const QString& text);
 
     HostConfig host_;
-    QString display_name_;
     std::shared_ptr<SessionState> session_state_;
     QPointer<ClientDesktop> client_;
 

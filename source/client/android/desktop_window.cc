@@ -23,11 +23,12 @@
 #include "base/gui_application.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/net/tcp_channel.h"
-#include "client/android/desktop_view.h"
 #include "client/client_desktop.h"
 #include "client/config.h"
+#include "client/database.h"
 #include "client/router.h"
 #include "client/session_state.h"
+#include "client/android/desktop_view.h"
 #include "common/android/bottom_sheet.h"
 #include "common/android/floating_action_button.h"
 #include "common/android/label.h"
@@ -84,14 +85,12 @@ void DesktopWindow::resizeEvent(QResizeEvent* event)
 //--------------------------------------------------------------------------------------------------
 void DesktopWindow::start()
 {
-    display_name_ = host_.name().isEmpty() ? host_.address() : host_.name();
-
     // An empty user name means a connection by ID with a one-time password (#host_id).
     if (host_.username().isEmpty())
         host_.setUsername(u"#" + host_.address());
 
     session_state_ = std::make_shared<SessionState>(
-        host_, proto::peer::SESSION_TYPE_DESKTOP, display_name_);
+        host_, proto::peer::SESSION_TYPE_DESKTOP, Database::instance().displayName());
 
     setStatusText(tr("Connecting..."));
 
