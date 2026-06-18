@@ -27,6 +27,7 @@
 #include <memory>
 
 #include "base/desktop/shared_frame.h"
+#include "base/scoped_qpointer.h"
 #include "client/client.h"
 #include "client/config.h"
 #include "proto/desktop_screen.h"
@@ -41,6 +42,7 @@ class DesktopView;
 class FloatingActionButton;
 class KeyBar;
 class Label;
+class Router;
 class SessionState;
 
 class DesktopWindow final : public QWidget
@@ -66,16 +68,19 @@ private slots:
     void onCapabilitiesChanged(const proto::control::Capabilities& capabilities);
     void onShowActions();
     void onKeyboardInsetChanged(int inset);
+    void onApplicationStateChanged(Qt::ApplicationState state);
 
 private:
     void start();
     void fetchConnectionOffer();
+    void requestConnectionOffer(Router* router);
     void startNewClient();
+    void reconnect();
     void setStatusText(const QString& text);
 
     HostConfig host_;
     std::shared_ptr<SessionState> session_state_;
-    QPointer<ClientDesktop> client_;
+    ScopedQPointer<ClientDesktop> client_;
 
     proto::screen::ScreenList screen_list_;
     QPointer<BottomSheet> action_sheet_;
@@ -85,6 +90,10 @@ private:
     FloatingActionButton* fab_ = nullptr;
     KeyBar* key_bar_ = nullptr;
     bool connected_ = false;
+
+    // True once a session has been established at least once, so a connection lost in the background
+    // is auto-reconnected when the app returns to the foreground.
+    bool was_connected_ = false;
     bool host_is_windows_ = false;
 
     Q_DISABLE_COPY_MOVE(DesktopWindow)

@@ -21,7 +21,7 @@
 #include <QGridLayout>
 
 #include "base/gui_application.h"
-#include "base/desktop/mouse_cursor.h"
+#include "base/logging.h"
 #include "base/net/tcp_channel.h"
 #include "client/client_desktop.h"
 #include "client/config.h"
@@ -82,15 +82,16 @@ DesktopWindow::DesktopWindow(const HostConfig& host, QWidget* parent)
     connect(key_bar_, &KeyBar::sig_modifierToggled, view_, &DesktopView::onModifierToggled);
     connect(key_bar_, &KeyBar::sig_specialKey, view_, &DesktopView::onSpecialKey);
 
+    connect(GuiApplication::instance(), &QGuiApplication::applicationStateChanged,
+            this, &DesktopWindow::onApplicationStateChanged);
+
     start();
 }
 
 //--------------------------------------------------------------------------------------------------
 DesktopWindow::~DesktopWindow()
 {
-    // The client lives on the IO thread; let its own event loop delete it.
-    if (client_)
-        client_->deleteLater();
+    client_.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -137,12 +138,38 @@ void DesktopWindow::fetchConnectionOffer()
         return;
     }
 
-    if (router->status() != Router::Status::ONLINE)
+    if (router->status() == Router::Status::ONLINE)
     {
-        setStatusText(tr("The specified router is offline."));
+        requestConnectionOffer(router);
         return;
     }
 
+    // The router connection is also dropped while the app is in the background.
+    setStatusText(tr("Connecting to router..."));
+
+    // Drop any previous pending wait, then subscribe again.
+    disconnect(router, &Router::sig_statusChanged, this, nullptr);
+    connect(router, &Router::sig_statusChanged, this,
+        [this](qint64 /* router_id */, Router::Status status)
+    {
+        if (status != Router::Status::ONLINE)
+            return;
+
+        Router* router = Router::instance(session_state_->routerId());
+        if (!router)
+            return;
+
+        disconnect(router, &Router::sig_statusChanged, this, nullptr);
+        requestConnectionOffer(router);
+    });
+
+    if (router->status() == Router::Status::OFFLINE)
+        router->connectToRouter();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::requestConnectionOffer(Router* router)
+{
     session_state_->setRouterVersion(router->version());
     setStatusText(tr("Requesting connection to the host..."));
 
@@ -231,6 +258,14 @@ void DesktopWindow::startNewClient()
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopWindow::reconnect()
+{
+    LOG(INFO) << "Reconnecting after returning to foreground";
+    client_.reset();
+    start();
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopWindow::onStatusChanged(Client::Status status, const QVariant& data)
 {
     switch (status)
@@ -241,6 +276,7 @@ void DesktopWindow::onStatusChanged(Client::Status status, const QVariant& data)
 
         case Client::Status::HOST_CONNECTED:
             connected_ = true;
+            was_connected_ = true;
             setStatusText(tr("Connection established."));
             break;
 
@@ -375,6 +411,15 @@ void DesktopWindow::onKeyboardInsetChanged(int inset)
     key_bar_->setGeometry(0, height() - inset - bar_height, width(), bar_height);
     key_bar_->raise();
     key_bar_->show();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onApplicationStateChanged(Qt::ApplicationState state)
+{
+    // The connection was established before but is now down (Android dropped it while backgrounded),
+    // so reconnect as soon as the app is active again.
+    if (state == Qt::ApplicationActive && was_connected_ && !connected_)
+        reconnect();
 }
 
 //--------------------------------------------------------------------------------------------------

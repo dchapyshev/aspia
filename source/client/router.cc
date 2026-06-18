@@ -130,6 +130,9 @@ Router::Router(const RouterConfig& config, QObject* parent)
 
     reconnect_timer_->setSingleShot(true);
     connect(reconnect_timer_, &QTimer::timeout, this, &Router::onReconnectTimeout);
+
+    connect(GuiApplication::instance(), &QGuiApplication::applicationStateChanged,
+            this, &Router::onApplicationStateChanged);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -312,6 +315,22 @@ void Router::onReconnectTimeout()
         return;
     LOG(INFO) << "Reconnecting to router" << config_.address();
     setupChannel();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::onApplicationStateChanged(Qt::ApplicationState state)
+{
+#if defined(Q_OS_ANDROID)
+    // On Android the OS freezes the process in the background and the connection is dropped.
+    if (state == Qt::ApplicationActive && status_ == Status::CONNECTING && !tcp_channel_)
+    {
+        LOG(INFO) << "Reconnecting to router on returning to foreground";
+        reconnect_timer_->stop();
+        setupChannel();
+    }
+#else
+    Q_UNUSED(state)
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------

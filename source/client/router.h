@@ -323,6 +323,7 @@ private slots:
     void onTcpErrorOccurred(TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& bytes);
     void onReconnectTimeout();
+    void onApplicationStateChanged(Qt::ApplicationState state);
 
 private:
     struct Pending
