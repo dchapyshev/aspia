@@ -26,6 +26,7 @@
 class IconButton;
 class LocalGroupEditor;
 class LocalHostEditor;
+class OnlineChecker;
 class TreeWidget;
 class QStackedWidget;
 class QTreeWidgetItem;
@@ -69,6 +70,7 @@ private slots:
     void onExport();
     void onAddGroup();
     void onAddHost();
+    void onOnlineCheckerResult(qint64 entry_id, bool online);
 
 private:
     void populateGroups(qint64 parent_id, QTreeWidgetItem* parent);
@@ -86,6 +88,7 @@ private:
     LocalHostEditor* host_editor_ = nullptr;
     IconButton* search_button_ = nullptr;
     IconButton* overflow_button_ = nullptr;
+    OnlineChecker* online_checker_ = nullptr;
 
     // The group a new host is added to: the open group on the host page, or the root on the tree.
     qint64 current_group_id_ = 0;

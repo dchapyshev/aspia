@@ -32,6 +32,7 @@
 #include "client/config.h"
 #include "client/database.h"
 #include "client/json_backup.h"
+#include "client/online_checker/online_checker.h"
 #include "common/android/icon_button.h"
 #include "common/android/menu.h"
 #include "common/android/message_dialog.h"
@@ -60,7 +61,8 @@ LocalWidget::LocalWidget(QWidget* parent)
       group_editor_(new LocalGroupEditor(this)),
       host_editor_(new LocalHostEditor(this)),
       search_button_(new IconButton(":/img/material/search.svg", this)),
-      overflow_button_(new IconButton(":/img/material/more_vert.svg", this))
+      overflow_button_(new IconButton(":/img/material/more_vert.svg", this)),
+      online_checker_(new OnlineChecker(this))
 {
     // The action buttons live in the app bar; AppBar::setActions() reparents and shows the ones it
     // receives. Hidden by default so they do not linger in this widget.
@@ -132,6 +134,9 @@ LocalWidget::LocalWidget(QWidget* parent)
         editHost(item->data(0, kHostIdRole).toLongLong());
     });
 
+    connect(online_checker_, &OnlineChecker::sig_checkerResult,
+            this, &LocalWidget::onOnlineCheckerResult);
+
     reload();
 }
 
@@ -162,13 +167,17 @@ void LocalWidget::reload()
     // Top-level groups, then the ungrouped hosts (group_id 0) shown directly at the root.
     populateGroups(0, nullptr);
 
+    OnlineChecker::HostList hosts;
     const QIcon icon = GuiApplication::svgIcon(":/img/computer.svg");
     for (const HostConfig& host : Database::instance().hostList(0))
     {
         QTreeWidgetItem* item = new QTreeWidgetItem(tree_, { host.name(), host.address() });
         item->setIcon(0, icon);
         item->setData(0, kHostIdRole, host.id());
+        hosts.append(host);
     }
+
+    online_checker_->start(hosts);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -316,6 +325,25 @@ void LocalWidget::onAddHost()
 }
 
 //--------------------------------------------------------------------------------------------------
+void LocalWidget::onOnlineCheckerResult(qint64 entry_id, bool online)
+{
+    const QIcon icon = GuiApplication::svgIcon(
+        online ? ":/img/computer-online.svg" : ":/img/computer-offline.svg");
+
+    // The host may be shown in the root tree (ungrouped) or in an opened group's list.
+    for (TreeWidget* tree : { tree_, host_tree_ })
+    {
+        for (int i = 0; i < tree->topLevelItemCount(); ++i)
+        {
+            QTreeWidgetItem* item = tree->topLevelItem(i);
+            const QVariant host_id = item->data(0, kHostIdRole);
+            if (host_id.isValid() && host_id.toLongLong() == entry_id)
+                item->setIcon(0, icon);
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void LocalWidget::editGroup(qint64 group_id)
 {
     group_editor_->prepareForEdit(group_id);
@@ -390,6 +418,7 @@ void LocalWidget::showHosts(qint64 group_id, const QString& title)
 
     host_tree_->clear();
 
+    OnlineChecker::HostList hosts;
     const QIcon icon = GuiApplication::svgIcon(":/img/computer.svg");
 
     for (const HostConfig& host : Database::instance().hostList(group_id))
@@ -397,7 +426,10 @@ void LocalWidget::showHosts(qint64 group_id, const QString& title)
         QTreeWidgetItem* item = new QTreeWidgetItem(host_tree_, { host.name(), host.address() });
         item->setIcon(0, icon);
         item->setData(0, kHostIdRole, host.id());
+        hosts.append(host);
     }
+
+    online_checker_->start(hosts);
 
     stack_->setCurrentIndex(kPageHosts);
     emit sig_titleChanged(title, true);
