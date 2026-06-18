@@ -39,6 +39,7 @@
 #include "client/desktop/desktop/desktop_widget.h"
 #include "client/desktop/desktop/statistics_dialog.h"
 #include "client/desktop/desktop/task_manager_window.h"
+#include "common/clipboard.h"
 #include "common/desktop_session_constants.h"
 #include "common/desktop/msg_box.h"
 #include "proto/desktop_control.h"
@@ -251,6 +252,27 @@ Client* DesktopWindow::createClient()
 
     connect(toolbar_, &DesktopToolBar::sig_switchSession, client, &ClientDesktop::onSwitchSession,
             Qt::QueuedConnection);
+
+    // The clipboard lives here on the GUI thread; the client runs on the I/O thread, so the
+    // connections are queued. Created only when enabled to avoid monitoring the local clipboard.
+    if (desktop_config_.clipboard())
+    {
+        Clipboard* clipboard = Clipboard::create(this);
+        if (clipboard)
+        {
+            connect(clipboard, &Clipboard::sig_clipboardEvent,
+                    client, &ClientDesktop::onClipboardEvent, Qt::QueuedConnection);
+            connect(clipboard, &Clipboard::sig_localFileListChanged,
+                    client, &ClientDesktop::onClipboardLocalFileListChanged, Qt::QueuedConnection);
+            connect(clipboard, &Clipboard::sig_fileDataRequest,
+                    client, &ClientDesktop::onClipboardFileDataRequest, Qt::QueuedConnection);
+            connect(client, &ClientDesktop::sig_injectClipboardEvent,
+                    clipboard, &Clipboard::injectClipboardEvent, Qt::QueuedConnection);
+            connect(client, &ClientDesktop::sig_clipboardFileData,
+                    clipboard, &Clipboard::addFileData, Qt::QueuedConnection);
+            clipboard->start();
+        }
+    }
 
     return client;
 }

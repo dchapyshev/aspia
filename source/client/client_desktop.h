@@ -27,8 +27,8 @@
 #include "base/codec/yuv_converter.h"
 #include "base/desktop/shared_frame.h"
 #include "client/client.h"
+#include "common/clipboard.h"
 #include "common/clipboard_file_transfer.h"
-#include "common/clipboard_monitor.h"
 #include "proto/desktop_audio.h"
 #include "proto/desktop_control.h"
 #include "proto/desktop_cursor.h"
@@ -128,9 +128,14 @@ public slots:
     void onTaskManager(const proto::task_manager::ClientToHost& message);
     void onMetricsRequest();
     void onSwitchSession(quint32 session_id);
+    void onClipboardEvent(const proto::clipboard::Event& event);
+    void onClipboardLocalFileListChanged(const QVector<LocalFileEntry>& files);
+    void onClipboardFileDataRequest(int file_index);
 
 signals:
     void sig_capabilities(const proto::control::Capabilities& capabilities);
+    void sig_injectClipboardEvent(const proto::clipboard::Event& event);
+    void sig_clipboardFileData(int file_index, const QByteArray& data, bool is_last);
     void sig_screenListChanged(const proto::screen::ScreenList& screen_list);
     void sig_screenTypeChanged(const proto::screen::ScreenType& screen_type);
     void sig_cursorPositionChanged(const proto::cursor::Position& position);
@@ -148,7 +153,6 @@ protected:
     void onMessageReceived(quint8 channel_id, const QByteArray& buffer) final;
 
 private slots:
-    void onClipboardEvent(const proto::clipboard::Event& event);
     void onRepeatedTimer();
 
 private:
@@ -191,7 +195,6 @@ private:
     std::unique_ptr<CursorDecoder> cursor_decoder_;
     std::unique_ptr<AudioDecoder> audio_decoder_;
     std::unique_ptr<AudioPlayer> audio_player_;
-    ClipboardMonitor* clipboard_monitor_ = nullptr;
     ClipboardFileTransfer* clipboard_file_transfer_ = nullptr;
 
     ScopedQPointer<QTimer> webm_video_encode_timer_;

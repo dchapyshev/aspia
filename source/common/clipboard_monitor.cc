@@ -19,19 +19,8 @@
 #include "common/clipboard_monitor.h"
 
 #include "base/logging.h"
+#include "common/clipboard.h"
 #include "proto/desktop_clipboard.h"
-
-#if defined(Q_OS_WINDOWS)
-#include "common/clipboard_win.h"
-#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
-#include "common/clipboard_x11.h"
-#elif defined(Q_OS_MACOS)
-#include "common/clipboard_mac.h"
-#elif defined(Q_OS_ANDROID)
-// There is no clipboard implementation for Android yet.
-#else
-#error Not implemented
-#endif
 
 namespace {
 
@@ -104,17 +93,7 @@ void ClipboardMonitor::onBeforeThreadRunning()
 {
     LOG(INFO) << "Thread starting";
 
-#if defined(Q_OS_WINDOWS)
-    clipboard_ = std::make_unique<ClipboardWin>();
-#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
-    clipboard_ = std::make_unique<ClipboardX11>();
-#elif defined(Q_OS_MAC)
-    clipboard_ = std::make_unique<ClipboardMac>();
-#elif defined(Q_OS_ANDROID)
-    // There is no clipboard implementation for Android yet.
-#else
-#error Not implemented
-#endif
+    clipboard_.reset(Clipboard::create());
 
     if (!clipboard_)
     {

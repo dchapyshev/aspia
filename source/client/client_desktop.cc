@@ -94,17 +94,9 @@ void ClientDesktop::onStarted()
 
     repeated_timer_->start();
 
-    clipboard_monitor_ = new ClipboardMonitor(this);
-    connect(clipboard_monitor_, &ClipboardMonitor::sig_clipboardEvent,
-            this, &ClientDesktop::onClipboardEvent);
-
+    // The clipboard itself lives on the GUI thread and is wired to this client by the GUI. Only the
+    // file transfer, which sends/receives over the network, stays here.
     clipboard_file_transfer_ = new ClipboardFileTransfer(this);
-
-    connect(clipboard_monitor_, &ClipboardMonitor::sig_localFileListChanged,
-            clipboard_file_transfer_, &ClipboardFileTransfer::setLocalFileList);
-
-    connect(clipboard_monitor_, &ClipboardMonitor::sig_fileDataRequest,
-            clipboard_file_transfer_, &ClipboardFileTransfer::requestFileData);
 
     connect(clipboard_file_transfer_, &ClipboardFileTransfer::sig_sendMessage,
             this, [this](const QByteArray& buffer)
@@ -113,12 +105,7 @@ void ClientDesktop::onStarted()
     });
 
     connect(clipboard_file_transfer_, &ClipboardFileTransfer::sig_fileDataChunk,
-            this, [this](int file_index, const QByteArray& data, bool is_last)
-    {
-        clipboard_monitor_->addFileData(file_index, data, is_last);
-    });
-
-    clipboard_monitor_->start();
+            this, &ClientDesktop::sig_clipboardFileData);
 
     audio_player_ = AudioPlayer::create();
 
@@ -580,6 +567,20 @@ void ClientDesktop::onClipboardEvent(const proto::clipboard::Event& event)
 }
 
 //--------------------------------------------------------------------------------------------------
+void ClientDesktop::onClipboardLocalFileListChanged(const QVector<LocalFileEntry>& files)
+{
+    if (clipboard_file_transfer_)
+        clipboard_file_transfer_->setLocalFileList(files);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientDesktop::onClipboardFileDataRequest(int file_index)
+{
+    if (clipboard_file_transfer_)
+        clipboard_file_transfer_->requestFileData(file_index);
+}
+
+//--------------------------------------------------------------------------------------------------
 void ClientDesktop::onRepeatedTimer()
 {
     if (force_reliable_active_ && reliable_hold_seconds_ > 0)
@@ -935,10 +936,10 @@ void ClientDesktop::readClipboardEvent(const proto::clipboard::Event& event)
         return;
     }
 
-    if (clipboard_monitor_ && desktop_config_.clipboard())
+    if (desktop_config_.clipboard())
     {
         ++read_clipboard_count_;
-        clipboard_monitor_->injectClipboardEvent(event);
+        emit sig_injectClipboardEvent(event);
     }
 }
 
