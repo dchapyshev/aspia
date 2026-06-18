@@ -33,10 +33,13 @@
 #include "base/desktop/shared_frame.h"
 
 namespace proto::input {
+class KeyEvent;
 class MouseEvent;
 } // namespace proto::input
 
 class MouseCursor;
+class QKeyEvent;
+class QShowEvent;
 class QTimer;
 class QTouchEvent;
 
@@ -53,12 +56,16 @@ public:
     void refresh(const QList<QRect>& dirty_rects);
 
 signals:
+    void sig_keyEvent(const proto::input::KeyEvent& event);
     void sig_mouseEvent(const proto::input::MouseEvent& event);
 
 protected:
     // QWidget implementation.
     bool event(QEvent* event) final;
     void paintEvent(QPaintEvent* event) final;
+    void keyPressEvent(QKeyEvent* event) final;
+    void keyReleaseEvent(QKeyEvent* event) final;
+    void showEvent(QShowEvent* event) final;
 
 private slots:
     void onLongPress();
@@ -70,6 +77,7 @@ private:
     void updateEdgeScroll(const QPointF& finger_pos);
     void moveCursorBy(const QPointF& widget_delta);
     void applyZoom(qreal factor, const QPointF& anchor);
+    void sendKey(QKeyEvent* event, bool pressed);
     void sendMouse(quint32 mask);
     void sendClick(quint32 mask);
     void sendWheel(int steps);

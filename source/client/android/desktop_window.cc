@@ -172,6 +172,8 @@ void DesktopWindow::startNewClient()
             this, &DesktopWindow::onScreenListChanged, Qt::QueuedConnection);
     connect(view_, &DesktopView::sig_mouseEvent,
             client, &ClientDesktop::onMouseEvent, Qt::QueuedConnection);
+    connect(view_, &DesktopView::sig_keyEvent,
+            client, &ClientDesktop::onKeyEvent, Qt::QueuedConnection);
     connect(this, &DesktopWindow::sig_screenSelected,
             client, &ClientDesktop::onCurrentScreenChanged, Qt::QueuedConnection);
 

@@ -18,6 +18,7 @@
 
 #include "client/android/desktop_view.h"
 
+#include <QKeyEvent>
 #include <QLineF>
 #include <QPainter>
 #include <QTimer>
@@ -25,6 +26,7 @@
 
 #include "base/desktop/frame.h"
 #include "base/desktop/mouse_cursor.h"
+#include "common/keycode_converter.h"
 #include "proto/desktop_input.h"
 
 namespace {
@@ -63,8 +65,8 @@ DesktopView::DesktopView(QWidget* parent)
     pal.setColor(QPalette::Window, kBackgroundColor);
     setPalette(pal);
     setAutoFillBackground(true);
-
     setAttribute(Qt::WA_AcceptTouchEvents);
+    setFocusPolicy(Qt::StrongFocus);
 
     gesture_timer_.start();
 
@@ -202,6 +204,25 @@ void DesktopView::paintEvent(QPaintEvent* /* event */)
         painter.setBrush(Qt::white);
         painter.drawEllipse(cursor_center, 6.0, 6.0);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopView::keyPressEvent(QKeyEvent* event)
+{
+    sendKey(event, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopView::keyReleaseEvent(QKeyEvent* event)
+{
+    sendKey(event, false);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopView::showEvent(QShowEvent* event)
+{
+    QWidget::showEvent(event);
+    setFocus();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -444,6 +465,28 @@ void DesktopView::applyZoom(qreal factor, const QPointF& anchor)
     // Keep the point between the fingers anchored while scaling.
     const qreal scale = zoom_ / previous_zoom;
     content_pos_ = anchor - scale * (anchor - content_pos_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopView::sendKey(QKeyEvent* event, bool pressed)
+{
+    quint32 usb_keycode = KeycodeConverter::nativeKeycodeToUsbKeycode(
+        static_cast<int>(event->nativeScanCode()));
+
+    if (usb_keycode == KeycodeConverter::invalidUsbKeycode())
+        usb_keycode = KeycodeConverter::qtKeycodeToUsbKeycode(event->key());
+
+    if (usb_keycode == KeycodeConverter::invalidUsbKeycode())
+    {
+        event->ignore();
+        return;
+    }
+
+    proto::input::KeyEvent key_event;
+    key_event.set_usb_keycode(usb_keycode);
+    key_event.set_flags(pressed ? proto::input::KeyEvent::PRESSED : 0);
+
+    emit sig_keyEvent(key_event);
 }
 
 //--------------------------------------------------------------------------------------------------
