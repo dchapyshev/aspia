@@ -47,6 +47,7 @@
 #include "host/ui/notifier_window.h"
 #include "host/ui/security_log_dialog.h"
 #include "host/ui/user_settings.h"
+#include "proto/desktop_clipboard.h"
 #include "proto/user.h"
 #include "ui_host_window.h"
 

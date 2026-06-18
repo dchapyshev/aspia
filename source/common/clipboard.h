@@ -19,6 +19,7 @@
 #ifndef COMMON_CLIPBOARD_H
 #define COMMON_CLIPBOARD_H
 
+#include <QMetaType>
 #include <QObject>
 #include <QVector>
 
@@ -35,6 +36,8 @@ struct LocalFileEntry
     qint64 access_time = 0;
     qint64 modify_time = 0;
 };
+
+Q_DECLARE_METATYPE(LocalFileEntry)
 
 class Clipboard : public QObject
 {

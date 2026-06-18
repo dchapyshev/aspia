@@ -36,6 +36,7 @@
 #include "common/android/label.h"
 #include "common/clipboard.h"
 #include "common/desktop_session_constants.h"
+#include "proto/desktop_clipboard.h"
 #include "proto/desktop_control.h"
 #include "proto/desktop_input.h"
 #include "proto/peer.h"

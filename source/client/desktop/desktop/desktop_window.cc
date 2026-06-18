@@ -42,6 +42,7 @@
 #include "common/clipboard.h"
 #include "common/desktop_session_constants.h"
 #include "common/desktop/msg_box.h"
+#include "proto/desktop_clipboard.h"
 #include "proto/desktop_control.h"
 #include "proto/desktop_cursor.h"
 #include "proto/desktop_input.h"
