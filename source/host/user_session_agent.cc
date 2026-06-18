@@ -23,7 +23,6 @@
 #include "base/ipc/ipc_channel.h"
 #include "host/host_storage.h"
 #include "common/clipboard_file_transfer.h"
-#include "common/clipboard_monitor.h"
 #include "proto/desktop_channel.h"
 #include "proto/desktop_clipboard.h"
 #include "proto/desktop_user.h"
@@ -200,8 +199,7 @@ void UserSessionAgent::onIpcMessageReceived(quint32 channel_id, const QByteArray
 
             if (message.has_event())
             {
-                if (clipboard_)
-                    clipboard_->injectClipboardEvent(message.event());
+                emit sig_injectClipboardEvent(message.event());
             }
             else
             {
@@ -286,20 +284,11 @@ void UserSessionAgent::onConnectEvent(const proto::user::ConnectEvent& event)
     LOG(INFO) << "Connect event received";
     clients_.emplace_back(event);
 
-    if (!clipboard_)
+    if (!clipboard_file_transfer_)
     {
-        clipboard_ = new ClipboardMonitor(this);
-
-        connect(clipboard_, &ClipboardMonitor::sig_clipboardEvent,
-                this, &UserSessionAgent::onClipboardEvent);
-
+        // The clipboard itself lives on the GUI thread (created by HostWindow); only the file
+        // transfer, which sends/receives over the network, stays here.
         clipboard_file_transfer_ = new ClipboardFileTransfer(this);
-
-        connect(clipboard_, &ClipboardMonitor::sig_localFileListChanged,
-                clipboard_file_transfer_, &ClipboardFileTransfer::setLocalFileList);
-
-        connect(clipboard_, &ClipboardMonitor::sig_fileDataRequest,
-                clipboard_file_transfer_, &ClipboardFileTransfer::requestFileData);
 
         connect(clipboard_file_transfer_, &ClipboardFileTransfer::sig_sendMessage,
                 this, [this](const QByteArray& buffer)
@@ -308,12 +297,7 @@ void UserSessionAgent::onConnectEvent(const proto::user::ConnectEvent& event)
         });
 
         connect(clipboard_file_transfer_, &ClipboardFileTransfer::sig_fileDataChunk,
-                this, [this](int file_index, const QByteArray& data, bool is_last)
-        {
-            clipboard_->addFileData(file_index, data, is_last);
-        });
-
-        clipboard_->start();
+                this, &UserSessionAgent::sig_clipboardFileData);
     }
 
     emit sig_clientListChanged(clients_);
@@ -345,16 +329,6 @@ void UserSessionAgent::onDisconnectEvent(const proto::user::DisconnectEvent& eve
     {
         LOG(INFO) << "Last desktop client is disconnected";
 
-        if (clipboard_)
-        {
-            clipboard_->disconnect(this);
-            clipboard_.reset();
-        }
-        else
-        {
-            LOG(ERROR) << "No clipboard instance";
-        }
-
         clipboard_file_transfer_.reset();
     }
 
@@ -370,6 +344,20 @@ void UserSessionAgent::onClipboardEvent(const proto::clipboard::Event& event)
     proto::clipboard::HostToClient message;
     message.mutable_event()->CopyFrom(event);
     sendNetworkMessage(proto::desktop::CHANNEL_ID_CLIPBOARD, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSessionAgent::onClipboardLocalFileListChanged(const QVector<LocalFileEntry>& files)
+{
+    if (clipboard_file_transfer_)
+        clipboard_file_transfer_->setLocalFileList(files);
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSessionAgent::onClipboardFileDataRequest(int file_index)
+{
+    if (clipboard_file_transfer_)
+        clipboard_file_transfer_->requestFileData(file_index);
 }
 
 //--------------------------------------------------------------------------------------------------

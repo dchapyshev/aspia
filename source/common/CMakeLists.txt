@@ -21,8 +21,6 @@ list(APPEND SOURCE_COMMON
     clipboard.h
     clipboard_file_transfer.cc
     clipboard_file_transfer.h
-    clipboard_monitor.cc
-    clipboard_monitor.h
     desktop_session_constants.cc
     desktop_session_constants.h
     file_depacketizer.cc

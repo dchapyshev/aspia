@@ -32,6 +32,7 @@
 #include "base/net/address.h"
 #include "base/peer/host_id.h"
 #include "build/build_config.h"
+#include "common/clipboard.h"
 #include "common/desktop/about_dialog.h"
 #include "common/desktop/chat_widget.h"
 #include "common/desktop/language_action.h"
@@ -177,44 +178,44 @@ void HostWindow::connectToService()
         return;
     }
 
-    UserSessionAgent* agent = new UserSessionAgent();
+    // Drop any clipboard left over from a previous agent before wiring up a new one.
+    clipboard_.reset();
 
-    agent->moveToThread(GuiApplication::ioThread());
+    agent_ = new UserSessionAgent();
+    agent_->moveToThread(GuiApplication::ioThread());
 
-    connect(agent, &UserSessionAgent::sig_statusChanged, this, &HostWindow::onStatusChanged,
+    connect(agent_, &UserSessionAgent::sig_statusChanged, this, &HostWindow::onStatusChanged,
             Qt::QueuedConnection);
-    connect(agent, &UserSessionAgent::sig_clientListChanged, this, &HostWindow::onClientListChanged,
+    connect(agent_, &UserSessionAgent::sig_clientListChanged, this, &HostWindow::onClientListChanged,
             Qt::QueuedConnection);
-    connect(agent, &UserSessionAgent::sig_credentialsChanged, this, &HostWindow::onCredentialsChanged,
+    connect(agent_, &UserSessionAgent::sig_credentialsChanged, this, &HostWindow::onCredentialsChanged,
             Qt::QueuedConnection);
-    connect(agent, &UserSessionAgent::sig_routerStateChanged, this, &HostWindow::onRouterStateChanged,
+    connect(agent_, &UserSessionAgent::sig_routerStateChanged, this, &HostWindow::onRouterStateChanged,
             Qt::QueuedConnection);
-    connect(agent, &UserSessionAgent::sig_confirmationRequest, this, &HostWindow::onConfirmationRequest,
+    connect(agent_, &UserSessionAgent::sig_confirmationRequest, this, &HostWindow::onConfirmationRequest,
             Qt::QueuedConnection);
-    connect(agent, &UserSessionAgent::sig_recordingStateChanged, this, &HostWindow::onRecordingStateChanged,
+    connect(agent_, &UserSessionAgent::sig_recordingStateChanged, this, &HostWindow::onRecordingStateChanged,
             Qt::QueuedConnection);
-    connect(agent, &UserSessionAgent::sig_chat, this, &HostWindow::onChat,
+    connect(agent_, &UserSessionAgent::sig_chat, this, &HostWindow::onChat,
             Qt::QueuedConnection);
 
-    connect(this, &HostWindow::sig_connectToService, agent, &UserSessionAgent::onConnectToService,
+    connect(this, &HostWindow::sig_connectToService, agent_, &UserSessionAgent::onConnectToService,
             Qt::QueuedConnection);
-    connect(this, &HostWindow::sig_disconnectFromService, agent, &UserSessionAgent::deleteLater,
+    connect(this, &HostWindow::sig_updateCredentials, agent_, &UserSessionAgent::onUpdateCredentials,
             Qt::QueuedConnection);
-    connect(this, &HostWindow::sig_updateCredentials, agent, &UserSessionAgent::onUpdateCredentials,
+    connect(this, &HostWindow::sig_oneTimeSessions, agent_, &UserSessionAgent::onOneTimeSessions,
             Qt::QueuedConnection);
-    connect(this, &HostWindow::sig_oneTimeSessions, agent, &UserSessionAgent::onOneTimeSessions,
+    connect(this, &HostWindow::sig_killClient, agent_, &UserSessionAgent::onStopClient,
             Qt::QueuedConnection);
-    connect(this, &HostWindow::sig_killClient, agent, &UserSessionAgent::onStopClient,
+    connect(this, &HostWindow::sig_connectConfirmation, agent_, &UserSessionAgent::onConnectConfirmation,
             Qt::QueuedConnection);
-    connect(this, &HostWindow::sig_connectConfirmation, agent, &UserSessionAgent::onConnectConfirmation,
+    connect(this, &HostWindow::sig_mouseLock, agent_, &UserSessionAgent::onMouseLock,
             Qt::QueuedConnection);
-    connect(this, &HostWindow::sig_mouseLock, agent, &UserSessionAgent::onMouseLock,
+    connect(this, &HostWindow::sig_keyboardLock, agent_, &UserSessionAgent::onKeyboardLock,
             Qt::QueuedConnection);
-    connect(this, &HostWindow::sig_keyboardLock, agent, &UserSessionAgent::onKeyboardLock,
+    connect(this, &HostWindow::sig_pause, agent_, &UserSessionAgent::onPause,
             Qt::QueuedConnection);
-    connect(this, &HostWindow::sig_pause, agent, &UserSessionAgent::onPause,
-            Qt::QueuedConnection);
-    connect(this, &HostWindow::sig_chat, agent, &UserSessionAgent::onChat,
+    connect(this, &HostWindow::sig_chat, agent_, &UserSessionAgent::onChat,
             Qt::QueuedConnection);
 
     LOG(INFO) << "Connecting to service";
@@ -276,7 +277,7 @@ void HostWindow::onStatusChanged(UserSessionAgent::Status status)
     {
         LOG(INFO) << "The connection to the service is lost. The application will be closed.";
         connected_to_service_ = false;
-        emit sig_disconnectFromService();
+        agent_.reset();
         realClose();
     }
     else if (status == UserSessionAgent::Status::SERVICE_NOT_AVAILABLE)
@@ -284,7 +285,7 @@ void HostWindow::onStatusChanged(UserSessionAgent::Status status)
         LOG(INFO) << "The connection to the service has not been established. "
                      "The application works offline.";
         connected_to_service_ = false;
-        emit sig_disconnectFromService();
+        agent_.reset();
     }
     else
     {
@@ -317,6 +318,42 @@ void HostWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
     }
 
     notifier_->onClientListChanged(clients);
+
+    bool has_desktop = false;
+    for (const auto& client : std::as_const(clients))
+    {
+        if (client.session_type == proto::peer::SESSION_TYPE_DESKTOP)
+        {
+            has_desktop = true;
+            break;
+        }
+    }
+
+    if (!has_desktop)
+    {
+        clipboard_.reset();
+        return;
+    }
+
+    if (clipboard_ || !agent_)
+        return;
+
+    clipboard_ = Clipboard::create(this);
+    if (!clipboard_)
+        return;
+
+    connect(clipboard_, &Clipboard::sig_clipboardEvent,
+            agent_, &UserSessionAgent::onClipboardEvent, Qt::QueuedConnection);
+    connect(clipboard_, &Clipboard::sig_localFileListChanged,
+            agent_, &UserSessionAgent::onClipboardLocalFileListChanged, Qt::QueuedConnection);
+    connect(clipboard_, &Clipboard::sig_fileDataRequest,
+            agent_, &UserSessionAgent::onClipboardFileDataRequest, Qt::QueuedConnection);
+    connect(agent_, &UserSessionAgent::sig_injectClipboardEvent,
+            clipboard_, &Clipboard::injectClipboardEvent, Qt::QueuedConnection);
+    connect(agent_, &UserSessionAgent::sig_clipboardFileData,
+            clipboard_, &Clipboard::addFileData, Qt::QueuedConnection);
+
+    clipboard_->start();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -462,7 +499,7 @@ void HostWindow::realClose()
 {
     LOG(INFO) << "realClose called";
 
-    emit sig_disconnectFromService();
+    agent_.reset();
     should_be_quit_ = true;
     close();
 }

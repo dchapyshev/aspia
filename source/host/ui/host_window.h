@@ -25,6 +25,7 @@
 
 #include <memory>
 
+#include "base/scoped_qpointer.h"
 #include "host/user_session_agent.h"
 
 namespace Ui {
@@ -32,6 +33,7 @@ class HostWindow;
 } // namespace Ui
 
 class ChatWidget;
+class Clipboard;
 class NotifierWindow;
 class StatusDialog;
 
@@ -50,7 +52,6 @@ public slots:
 
 signals:
     void sig_connectToService();
-    void sig_disconnectFromService();
     void sig_updateCredentials(proto::user::CredentialsRequest_Type type);
     void sig_oneTimeSessions(quint32 sessions);
     void sig_killClient(quint32 id);
@@ -105,6 +106,9 @@ private:
     ChatWidget* chat_widget_ = nullptr;
 
     StatusDialog* status_dialog_ = nullptr;
+
+    ScopedQPointer<UserSessionAgent> agent_;
+    ScopedQPointer<Clipboard> clipboard_;
     proto::user::RouterState::State last_state_ = proto::user::RouterState::DISABLED;
 
     Q_DISABLE_COPY_MOVE(HostWindow)

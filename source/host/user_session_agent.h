@@ -24,10 +24,10 @@
 
 #include "base/scoped_qpointer.h"
 #include "base/serialization.h"
+#include "common/clipboard.h"
 #include "proto/user.h"
 
 class ClipboardFileTransfer;
-class ClipboardMonitor;
 class IpcChannel;
 
 namespace proto::clipboard {
@@ -79,6 +79,9 @@ public slots:
     void onKeyboardLock(bool enable);
     void onPause(bool enable);
     void onChat(const proto::chat::Chat& chat);
+    void onClipboardEvent(const proto::clipboard::Event& event);
+    void onClipboardLocalFileListChanged(const QVector<LocalFileEntry>& files);
+    void onClipboardFileDataRequest(int file_index);
 
 signals:
     void sig_statusChanged(UserSessionAgent::Status status);
@@ -88,6 +91,8 @@ signals:
     void sig_confirmationRequest(const proto::user::ConfirmationRequest& request);
     void sig_recordingStateChanged(bool started);
     void sig_chat(const proto::chat::Chat& chat);
+    void sig_injectClipboardEvent(const proto::clipboard::Event& event);
+    void sig_clipboardFileData(int file_index, const QByteArray& data, bool is_last);
 
 private slots:
     void onIpcConnected();
@@ -96,13 +101,11 @@ private slots:
     void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer, bool reliable);
     void onConnectEvent(const proto::user::ConnectEvent& event);
     void onDisconnectEvent(const proto::user::DisconnectEvent& event);
-    void onClipboardEvent(const proto::clipboard::Event& event);
 
 private:
     void sendServiceMessage();
     void sendNetworkMessage(quint8 net_channel_id, const QByteArray& buffer);
 
-    ScopedQPointer<ClipboardMonitor> clipboard_;
     ScopedQPointer<ClipboardFileTransfer> clipboard_file_transfer_;
     ScopedQPointer<IpcChannel> ipc_channel_;
 
