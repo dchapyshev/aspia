@@ -106,6 +106,9 @@ private:
             // Nothing
         }
 
+        SocketData(SocketData&&) = default;
+        ~SocketData();
+
         void cancel();
 
         quint64 unique_id;

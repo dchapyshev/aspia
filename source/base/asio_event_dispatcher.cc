@@ -681,6 +681,20 @@ void AsioEventDispatcher::MultimediaTimer::cancel()
 #endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
+AsioEventDispatcher::SocketData::~SocketData()
+{
+#if defined(Q_OS_UNIX)
+    // The fd is owned by the notifier source, not by us. Detach it without closing to avoid a double
+    // close (fatal under fdsan on Android).
+    if (!handle.is_open())
+        return;
+
+    cancel();
+    handle.release();
+#endif
+}
+
+//--------------------------------------------------------------------------------------------------
 void AsioEventDispatcher::SocketData::cancel()
 {
     std::error_code ignored_error;
