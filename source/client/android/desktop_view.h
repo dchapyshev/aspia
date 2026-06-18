@@ -60,10 +60,20 @@ public:
 
     void showSoftwareKeyboard();
 
+    // Height (widget pixels) of the key bar shown above the keyboard, so it is excluded from the
+    // area used to keep the remote cursor visible.
+    void setKeyBarHeight(int height);
+
+public slots:
+    void onModifierToggled(quint32 usb_keycode, bool active);
+    void onSpecialKey(quint32 usb_keycode);
+
 signals:
     void sig_keyEvent(const proto::input::KeyEvent& event);
     void sig_textEvent(const proto::input::TextEvent& event);
     void sig_mouseEvent(const proto::input::MouseEvent& event);
+    void sig_keyboardInsetChanged(int inset);
+    void sig_modifiersCleared();
 
 protected:
     // QWidget implementation.
@@ -87,6 +97,8 @@ private:
     void moveCursorBy(const QPointF& widget_delta);
     void applyZoom(qreal factor, const QPointF& anchor);
     void sendKey(QKeyEvent* event, bool pressed);
+    void sendRawKey(quint32 usb_keycode, bool pressed);
+    void sendKeyWithModifiers(quint32 usb_keycode);
     void sendMouse(quint32 mask);
     void sendClick(quint32 mask);
     void sendWheel(int steps);
@@ -118,8 +130,13 @@ private:
     QPointF content_pos_;
     QPointF cursor_pos_;
 
-    // Height (widget pixels) of the on-screen keyboard overlapping the bottom of the view.
+    // Height (widget pixels) of the on-screen keyboard overlapping the bottom of the view, and of
+    // the key bar shown above it.
     int keyboard_inset_ = 0;
+    int key_bar_height_ = 0;
+
+    // Modifiers from the key bar held down for the next key, applied once and then released.
+    QList<quint32> sticky_modifiers_;
 
     // Touch gesture state.
     enum class Gesture { NONE, ONE_FINGER, TWO_FINGER, IGNORED };

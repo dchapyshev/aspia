@@ -35,6 +35,7 @@ class BottomSheet;
 class ClientDesktop;
 class DesktopView;
 class FloatingActionButton;
+class KeyBar;
 class Label;
 class SessionState;
 
@@ -59,6 +60,7 @@ private slots:
     void onFrameChanged(const QSize& screen_size, SharedFrame frame);
     void onScreenListChanged(const proto::screen::ScreenList& screen_list);
     void onShowActions();
+    void onKeyboardInsetChanged(int inset);
 
 private:
     void start();
@@ -76,6 +78,7 @@ private:
     DesktopView* view_ = nullptr;
     Label* status_ = nullptr;
     FloatingActionButton* fab_ = nullptr;
+    KeyBar* key_bar_ = nullptr;
     bool connected_ = false;
 
     Q_DISABLE_COPY_MOVE(DesktopWindow)

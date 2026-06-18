@@ -29,6 +29,7 @@
 #include "client/router.h"
 #include "client/session_state.h"
 #include "client/android/desktop_view.h"
+#include "client/android/key_bar.h"
 #include "common/android/bottom_sheet.h"
 #include "common/android/floating_action_button.h"
 #include "common/android/label.h"
@@ -66,6 +67,16 @@ DesktopWindow::DesktopWindow(const HostConfig& host, QWidget* parent)
     fab_ = new FloatingActionButton(":/img/material/more_vert.svg", this);
     connect(fab_, &FloatingActionButton::sig_clicked, this, &DesktopWindow::onShowActions);
 
+    // Key bar with modifiers and special keys, shown above the keyboard while it is open.
+    key_bar_ = new KeyBar(this);
+    key_bar_->hide();
+    view_->setKeyBarHeight(key_bar_->height());
+
+    connect(view_, &DesktopView::sig_keyboardInsetChanged, this, &DesktopWindow::onKeyboardInsetChanged);
+    connect(view_, &DesktopView::sig_modifiersCleared, key_bar_, &KeyBar::clearModifiers);
+    connect(key_bar_, &KeyBar::sig_modifierToggled, view_, &DesktopView::onModifierToggled);
+    connect(key_bar_, &KeyBar::sig_specialKey, view_, &DesktopView::onSpecialKey);
+
     start();
 }
 
@@ -87,6 +98,10 @@ void DesktopWindow::resizeEvent(QResizeEvent* event)
 
     if (fab_)
         fab_->move(width() - fab_->width() - kFabMargin, height() - fab_->height() - kFabMargin);
+
+    // Keep the key bar spanning the width; its vertical position is set when the keyboard changes.
+    if (key_bar_ && key_bar_->isVisible())
+        key_bar_->setGeometry(0, key_bar_->y(), width(), key_bar_->height());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -292,6 +307,21 @@ void DesktopWindow::onShowActions()
     });
 
     action_sheet_->showSheet();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onKeyboardInsetChanged(int inset)
+{
+    if (inset <= 0)
+    {
+        key_bar_->hide();
+        return;
+    }
+
+    const int bar_height = key_bar_->height();
+    key_bar_->setGeometry(0, height() - inset - bar_height, width(), bar_height);
+    key_bar_->raise();
+    key_bar_->show();
 }
 
 //--------------------------------------------------------------------------------------------------

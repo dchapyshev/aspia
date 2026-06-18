@@ -26,6 +26,8 @@
 #include <QTimer>
 #include <QTouchEvent>
 
+#include <utility>
+
 #include "base/desktop/frame.h"
 #include "base/desktop/mouse_cursor.h"
 #include "common/keycode_converter.h"
@@ -175,6 +177,26 @@ void DesktopView::showSoftwareKeyboard()
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopView::setKeyBarHeight(int height)
+{
+    key_bar_height_ = height;
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopView::onModifierToggled(quint32 usb_keycode, bool active)
+{
+    sticky_modifiers_.removeAll(usb_keycode);
+    if (active)
+        sticky_modifiers_.append(usb_keycode);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopView::onSpecialKey(quint32 usb_keycode)
+{
+    sendKeyWithModifiers(usb_keycode);
+}
+
+//--------------------------------------------------------------------------------------------------
 bool DesktopView::event(QEvent* event)
 {
     switch (event->type())
@@ -248,15 +270,30 @@ void DesktopView::showEvent(QShowEvent* event)
 //--------------------------------------------------------------------------------------------------
 void DesktopView::inputMethodEvent(QInputMethodEvent* event)
 {
-    // The on-screen keyboard delivers its result as committed text rather than scan codes, so forward
-    // it to the host as a text event. Special keys (Backspace, Enter) still arrive as key events and
-    // are handled by sendKey().
+    // The on-screen keyboard delivers its result as committed text rather than scan codes. Special
+    // keys (Backspace, Enter) still arrive as key events and are handled by sendKey().
     const QString commit = event->commitString();
     if (!commit.isEmpty())
     {
-        proto::input::TextEvent text_event;
-        text_event.set_text(commit.toStdString());
-        emit sig_textEvent(text_event);
+        if (sticky_modifiers_.isEmpty())
+        {
+            // Forward the text as is so any layout/unicode is preserved.
+            proto::input::TextEvent text_event;
+            text_event.set_text(commit.toStdString());
+            emit sig_textEvent(text_event);
+        }
+        else
+        {
+            // A bar modifier is held, so the character must be sent as a key event to combine with
+            // it (e.g. Ctrl+C). Map the typed character back to a USB keycode.
+            for (const QChar& character : commit)
+            {
+                quint32 usb_keycode =
+                    KeycodeConverter::qtKeycodeToUsbKeycode(character.toUpper().unicode());
+                if (usb_keycode != KeycodeConverter::invalidUsbKeycode())
+                    sendKeyWithModifiers(usb_keycode);
+            }
+        }
     }
 
     event->accept();
@@ -326,6 +363,7 @@ void DesktopView::onKeyboardRectangleChanged()
         return;
 
     keyboard_inset_ = inset;
+    emit sig_keyboardInsetChanged(inset);
 
     // Re-fit and bring the remote cursor above the keyboard.
     clampContentPos();
@@ -570,11 +608,37 @@ void DesktopView::sendKey(QKeyEvent* event, bool pressed)
         return;
     }
 
+    sendRawKey(usb_keycode, pressed);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopView::sendRawKey(quint32 usb_keycode, bool pressed)
+{
     proto::input::KeyEvent key_event;
     key_event.set_usb_keycode(usb_keycode);
     key_event.set_flags(pressed ? proto::input::KeyEvent::PRESSED : 0);
 
     emit sig_keyEvent(key_event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopView::sendKeyWithModifiers(quint32 usb_keycode)
+{
+    for (quint32 modifier : std::as_const(sticky_modifiers_))
+        sendRawKey(modifier, true);
+
+    sendRawKey(usb_keycode, true);
+    sendRawKey(usb_keycode, false);
+
+    for (auto it = sticky_modifiers_.crbegin(); it != sticky_modifiers_.crend(); ++it)
+        sendRawKey(*it, false);
+
+    if (!sticky_modifiers_.isEmpty())
+    {
+        // Sticky modifiers act on a single key, so drop them and let the bar reset its buttons.
+        sticky_modifiers_.clear();
+        emit sig_modifiersCleared();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -635,7 +699,9 @@ qreal DesktopView::contentScale() const
 //--------------------------------------------------------------------------------------------------
 qreal DesktopView::viewportHeight() const
 {
-    return height() - keyboard_inset_;
+    // The key bar sits above the keyboard, so it also reduces the visible area.
+    const int bar = (keyboard_inset_ > 0) ? key_bar_height_ : 0;
+    return height() - keyboard_inset_ - bar;
 }
 
 //--------------------------------------------------------------------------------------------------
