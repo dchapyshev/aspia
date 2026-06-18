@@ -107,6 +107,10 @@ public:
     // function returns an empty rect.
     const QRect& screenRect(int monitor_id) const;
 
+    // Same as screenRect() but in the original Windows virtual-screen coordinates (before the
+    // bounding box is normalized to the origin). Used to map the OS-reported cursor position.
+    const QRect& initialScreenRect(int monitor_id) const;
+
 private:
     // DxgiFrameContext calls private unregister(Context*) function in reset().
     friend void DxgiFrameContext::reset();

@@ -66,6 +66,11 @@ public:
     // Returns the desktop rect covered by this DxgiOutputDuplicator.
     const QRect& desktopRect() const { return desktop_rect_; }
 
+    // The desktop rect in the original Windows virtual-screen coordinates (before the controller
+    // normalizes the bounding box to the origin). Needed to map the cursor position, which the OS
+    // reports in virtual-screen coordinates.
+    const QRect& initialDesktopRect() const { return initial_desktop_rect_; }
+
     // Returns the device name from DXGI_OUTPUT_DESC.
     const QString& deviceName() const { return device_name_; }
 

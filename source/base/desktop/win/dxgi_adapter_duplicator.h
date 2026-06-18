@@ -65,6 +65,10 @@ public:
     // [0, screenCount()).
     const QRect& screenRect(int id) const;
 
+    // Same as screenRect() but in the original Windows virtual-screen coordinates (see
+    // DxgiOutputDuplicator::initialDesktopRect()). |id| should be between [0, screenCount()).
+    const QRect& initialScreenRect(int id) const;
+
     // Returns the device name of one screen owned by this DxgiAdapterDuplicator. |id| should be
     // between [0, screenCount()).
     const QString& deviceName(int id) const;

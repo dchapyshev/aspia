@@ -167,6 +167,23 @@ const QRect& DxgiDuplicatorController::screenRect(int monitor_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
+const QRect& DxgiDuplicatorController::initialScreenRect(int monitor_id) const
+{
+    DCHECK_GE(monitor_id, 0);
+
+    for (size_t i = 0; i < duplicators_.size(); ++i)
+    {
+        if (monitor_id >= duplicators_[i].screenCount())
+            monitor_id -= duplicators_[i].screenCount();
+        else
+            return duplicators_[i].initialScreenRect(monitor_id);
+    }
+
+    static const QRect kEmptyRect;
+    return kEmptyRect;
+}
+
+//--------------------------------------------------------------------------------------------------
 DxgiDuplicatorController::Result DxgiDuplicatorController::doDuplicate(DxgiFrame* frame, int monitor_id)
 {
     DCHECK(frame);

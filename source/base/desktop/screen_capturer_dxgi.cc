@@ -267,7 +267,9 @@ const QRect& ScreenCapturerDxgi::desktopRect() const
 //--------------------------------------------------------------------------------------------------
 const QRect& ScreenCapturerDxgi::currentScreenRect() const
 {
-    return controller_->screenRect(current_screen_index_);
+    // The cursor position is reported by the OS in Windows virtual-screen coordinates, so this must
+    // return the screen rect in the same space (not the normalized rect DXGI uses for compositing).
+    return controller_->initialScreenRect(current_screen_index_);
 }
 
 //--------------------------------------------------------------------------------------------------
