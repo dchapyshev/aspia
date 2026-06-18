@@ -18,7 +18,6 @@
 
 #include "client/android/settings_widget.h"
 
-#include <QSize>
 #include <QVBoxLayout>
 
 #include "base/gui_application.h"
@@ -36,15 +35,6 @@ namespace {
 constexpr int kContentMargin = 16;
 constexpr int kRowSpacing = 8;
 constexpr int kSectionSpacing = 24;
-
-// Predefined resolutions offered in addition to "None", largest first.
-const QSize kResolutions[] =
-{
-    QSize(3840, 2160), QSize(2560, 1440), QSize(1920, 1200), QSize(1920, 1080),
-    QSize(1680, 1050), QSize(1600, 900),  QSize(1440, 900),  QSize(1366, 768),
-    QSize(1280, 1024), QSize(1280, 800),  QSize(1280, 720),  QSize(1024, 768),
-    QSize(800, 600)
-};
 
 } // namespace
 
@@ -241,29 +231,4 @@ void SettingsWidget::buildDesktopSection(QVBoxLayout* layout)
     {
         settings_.setSendKeyCombinations(checked);
     });
-
-    ComboBox* resolution = new ComboBox();
-    resolution->setLabel(tr("Preferred resolution"));
-    resolution->addItem(tr("None"), QSize());
-    for (const QSize& size : kResolutions)
-        resolution->addItem(QString("%1x%2").arg(size.width()).arg(size.height()), size);
-
-    const QSize current(desktop_config_.preferred_resolution().width(),
-                        desktop_config_.preferred_resolution().height());
-    resolution->setCurrentIndex(qMax(0, resolution->findData(current)));
-    connect(resolution, &QComboBox::currentIndexChanged, this, [this, resolution](int /* index */)
-    {
-        const QSize size = resolution->currentData().toSize();
-        if (size.isEmpty())
-        {
-            desktop_config_.clear_preferred_resolution();
-        }
-        else
-        {
-            desktop_config_.mutable_preferred_resolution()->set_width(size.width());
-            desktop_config_.mutable_preferred_resolution()->set_height(size.height());
-        }
-        settings_.setDesktopConfig(desktop_config_);
-    });
-    layout->addWidget(resolution);
 }
