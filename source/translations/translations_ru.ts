@@ -603,32 +603,32 @@ Routers added: %4</source>
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client/main.cc" line="89"/>
+        <location filename="../client/main.cc" line="104"/>
         <source>Unlock</source>
         <translation>Разблокировка</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="91"/>
+        <location filename="../client/main.cc" line="106"/>
         <source>Enter the master password to unlock the application.</source>
         <translation>Введите мастер-пароль, чтобы разблокировать приложение.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="115"/>
+        <location filename="../client/main.cc" line="130"/>
         <source>Set Master Password</source>
         <translation>Установка мастер-пароля</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="117"/>
+        <location filename="../client/main.cc" line="132"/>
         <source>Set a master password required to unlock the application.</source>
         <translation>Установите мастер-пароль, необходимый для разблокировки приложения.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="125"/>
+        <location filename="../client/main.cc" line="140"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="127"/>
+        <location filename="../client/main.cc" line="142"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
@@ -637,22 +637,22 @@ Routers added: %4</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="131"/>
+        <location filename="../client/main.cc" line="146"/>
         <source>Do you want to enter a different password?</source>
         <translation>Вы хотите ввести другой пароль?</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="141"/>
+        <location filename="../client/main.cc" line="156"/>
         <source>Unable to set master password.</source>
         <translation>Не удалось установить мастер-пароль.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="107"/>
+        <location filename="../client/main.cc" line="122"/>
         <source>Invalid master password.</source>
         <translation>Неверный мастер-пароль.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="70"/>
+        <location filename="../client/main.cc" line="85"/>
         <source>Aspia Client</source>
         <translation>Клиент Aspia</translation>
     </message>
@@ -1257,8 +1257,8 @@ Routers added: %4</source>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="219"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="587"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="867"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="570"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="850"/>
         <source>Scale</source>
         <translation>Масштаб</translation>
     </message>
@@ -1348,8 +1348,8 @@ Routers added: %4</source>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="398"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="401"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="433"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="590"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="416"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="573"/>
         <source>Start recording</source>
         <translation>Начать запись</translation>
     </message>
@@ -1365,61 +1365,61 @@ Routers added: %4</source>
         <translation>Переключение сессии</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="331"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="598"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="314"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="581"/>
         <source>Resolution selection</source>
         <translation>Выбор разрешения</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1042"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1025"/>
         <source>Session %1</source>
         <translation>Сессия %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1042"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1025"/>
         <source>Session %1 (%2)</source>
         <translation>Сессия %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="428"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="590"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="411"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="573"/>
         <source>Stop recording</source>
         <translation>Остановить запись</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="696"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="679"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Вы действительно хотите выключить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="711"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="737"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="694"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="720"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="712"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="695"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Вы действительно хотите перезагрузить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="717"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="743"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="700"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="726"/>
         <source>Wait for host</source>
         <translation>Ожидание хоста</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="738"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="721"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Вы действительно хотите перезагрузить удаленный компьютер в безопасном режиме?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="763"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="746"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Вы действительно хотите завершить сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="778"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="761"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Вы действительно хотите заблокировать сеанс пользователя на удаленном компьютере?</translation>
     </message>
@@ -1427,22 +1427,22 @@ Routers added: %4</source>
 <context>
     <name>DesktopWidget</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="556"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="576"/>
         <source>The session was paused by a remote user</source>
         <translation>Сессия приостановлена удаленным пользователем</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="559"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="579"/>
         <source>The session is temporarily unavailable</source>
         <translation>Сессия временно недоступна</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="562"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="582"/>
         <source>The session is permanently unavailable</source>
         <translation>Сессия недоступна</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="565"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="585"/>
         <source>Error while receiving video stream: %1</source>
         <translation>Ошибка при получении видео-потока: %1</translation>
     </message>
@@ -1450,89 +1450,104 @@ Routers added: %4</source>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="857"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="854"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="859"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="856"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="890"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="887"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="95"/>
+        <location filename="../client/android/desktop_window.cc" line="119"/>
         <source>Connecting...</source>
         <translation>Подключение...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="109"/>
-        <location filename="../client/android/desktop_window.cc" line="201"/>
+        <location filename="../client/android/desktop_window.cc" line="133"/>
+        <location filename="../client/android/desktop_window.cc" line="234"/>
         <source>The specified router is unavailable.</source>
         <translation>Указанный маршрутизатор недоступен.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="115"/>
-        <location filename="../client/android/desktop_window.cc" line="205"/>
+        <location filename="../client/android/desktop_window.cc" line="139"/>
+        <location filename="../client/android/desktop_window.cc" line="238"/>
         <source>The specified router is offline.</source>
         <translation>Указанный маршрутизатор не в сети.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="120"/>
+        <location filename="../client/android/desktop_window.cc" line="144"/>
         <source>Requesting connection to the host...</source>
         <translation>Запрашивается подключение к хосту...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="136"/>
+        <location filename="../client/android/desktop_window.cc" line="160"/>
         <source>The host with the specified ID is not online.</source>
         <translation>Хост с указанным ID не в сети.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="139"/>
+        <location filename="../client/android/desktop_window.cc" line="163"/>
         <source>Access is denied.</source>
         <translation>Доступ запрещен.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="142"/>
+        <location filename="../client/android/desktop_window.cc" line="166"/>
         <source>There are no relays available or the key pool is empty.</source>
         <translation>Нет доступных релеев или пул ключей пуст.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="145"/>
+        <location filename="../client/android/desktop_window.cc" line="169"/>
         <source>Error requesting connection via router.</source>
         <translation>Ошибка при запросе соединения через маршрутизатор.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="181"/>
+        <location filename="../client/android/desktop_window.cc" line="214"/>
         <source>Connecting to host %1...</source>
         <translation>Подключение к хосту %1...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="186"/>
+        <location filename="../client/android/desktop_window.cc" line="219"/>
         <source>Connection established.</source>
         <translation>Соединение установлено.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="191"/>
+        <location filename="../client/android/desktop_window.cc" line="224"/>
         <source>The connection to the host has been lost.</source>
         <translation>Соединение с хостом потеряно.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="209"/>
+        <location filename="../client/android/desktop_window.cc" line="242"/>
         <source>Error requesting connection via router: %1.</source>
         <translation>Ошибка при запросе соединения через маршрутизатор: %1.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="213"/>
+        <location filename="../client/android/desktop_window.cc" line="246"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>Версия хоста новее клиента. Обновите приложение.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="232"/>
+        <location filename="../client/android/desktop_window.cc" line="306"/>
+        <source>Monitor %1</source>
+        <translation>Монитор %1</translation>
+    </message>
+    <message>
+        <location filename="../client/android/desktop_window.cc" line="310"/>
+        <source>Keyboard</source>
+        <translation>Клавиатура</translation>
+    </message>
+    <message>
+        <location filename="../client/android/desktop_window.cc" line="318"/>
+        <source>Ctrl+Alt+Del</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../client/android/desktop_window.cc" line="322"/>
         <source>Disconnect</source>
         <translation>Отключить</translation>
     </message>
@@ -2958,6 +2973,17 @@ Hosts skipped: %6</source>
     </message>
 </context>
 <context>
+    <name>KeyBar</name>
+    <message>
+        <source>Up</source>
+        <translation type="obsolete">Вверх</translation>
+    </message>
+    <message>
+        <source>Down</source>
+        <translation type="obsolete">Неактивен</translation>
+    </message>
+</context>
+<context>
     <name>LocalGroupDialog</name>
     <message>
         <location filename="../client/desktop/hosts/local_group_dialog.ui" line="14"/>
@@ -3503,7 +3529,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/android/local_widget.cc" line="294"/>
         <source>Failed to export the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось экспортировать адресную книгу.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="323"/>
@@ -5758,17 +5784,16 @@ Are you sure you want to continue?</source>
 <context>
     <name>SelectScreenAction</name>
     <message>
-        <location filename="../client/desktop/desktop/select_screen_action.h" line="34"/>
         <source>Full Desktop</source>
-        <translation>Весь рабочий стол</translation>
+        <translation type="vanished">Весь рабочий стол</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/select_screen_action.h" line="49"/>
+        <location filename="../client/desktop/desktop/select_screen_action.h" line="38"/>
         <source>Monitor %1 (primary)</source>
         <translation>Монитор %1 (основной)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/select_screen_action.h" line="51"/>
+        <location filename="../client/desktop/desktop/select_screen_action.h" line="40"/>
         <source>Monitor %1</source>
         <translation>Монитор %1</translation>
     </message>
@@ -6199,124 +6224,122 @@ Are you sure you want to continue?</source>
 <context>
     <name>SettingsWidget</name>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="112"/>
+        <location filename="../client/android/settings_widget.cc" line="102"/>
         <source>Interface</source>
         <translation>Интерфейс</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="115"/>
+        <location filename="../client/android/settings_widget.cc" line="105"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="128"/>
+        <location filename="../client/android/settings_widget.cc" line="118"/>
         <source>Theme</source>
         <translation>Тема</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="141"/>
+        <location filename="../client/android/settings_widget.cc" line="131"/>
         <source>Display name when connected</source>
         <translation>Отображаемое имя при подключении</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="153"/>
+        <location filename="../client/android/settings_widget.cc" line="143"/>
         <source>Security</source>
         <translation>Безопасность</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="155"/>
+        <location filename="../client/android/settings_widget.cc" line="145"/>
         <source>Change Master Password</source>
         <translation>Изменение мастер-пароля</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="167"/>
+        <location filename="../client/android/settings_widget.cc" line="157"/>
         <source>UDP Connections</source>
         <translation>UDP подключения</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="181"/>
+        <location filename="../client/android/settings_widget.cc" line="171"/>
         <source>Allow direct connections</source>
         <translation>Разрешить прямые подключения</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="182"/>
+        <location filename="../client/android/settings_widget.cc" line="172"/>
         <source>Allow UDP Hole Punching</source>
         <translation>Разрешить UDP Hole Punching</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="183"/>
+        <location filename="../client/android/settings_widget.cc" line="173"/>
         <source>Allow PCP protocol</source>
         <translation>Разрешить PCP протокол</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="184"/>
+        <location filename="../client/android/settings_widget.cc" line="174"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>Разрешить NAT-PMP протокол</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="185"/>
+        <location filename="../client/android/settings_widget.cc" line="175"/>
         <source>Allow UPnP protocol</source>
         <translation>Разрешить UPnP протокол</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="191"/>
+        <location filename="../client/android/settings_widget.cc" line="181"/>
         <source>Remote Desktop</source>
         <translation>Удаленный рабочий стол</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="193"/>
+        <location filename="../client/android/settings_widget.cc" line="183"/>
         <source>Enable audio</source>
         <translation>Включить звук</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="198"/>
+        <location filename="../client/android/settings_widget.cc" line="188"/>
         <source>Enable clipboard</source>
         <translation>Включить буфер обмена</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="203"/>
+        <location filename="../client/android/settings_widget.cc" line="193"/>
         <source>Show shape of remote cursor</source>
         <translation>Показывать форму удаленного курсора</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="209"/>
+        <location filename="../client/android/settings_widget.cc" line="199"/>
         <source>Show position of remote cursor</source>
         <translation>Показывать положение удаленного курсора</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="215"/>
+        <location filename="../client/android/settings_widget.cc" line="205"/>
         <source>Disable desktop effects</source>
         <translation>Отключить эффекты рабочего стола</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="221"/>
+        <location filename="../client/android/settings_widget.cc" line="211"/>
         <source>Disable desktop wallpaper</source>
         <translation>Отключить обои рабочего стола</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="227"/>
+        <location filename="../client/android/settings_widget.cc" line="217"/>
         <source>Lock computer at disconnect</source>
         <translation>Блокировать компьютер при отключении</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="233"/>
+        <location filename="../client/android/settings_widget.cc" line="223"/>
         <source>Block remote input</source>
         <translation>Блокировать удаленный ввод</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="239"/>
+        <location filename="../client/android/settings_widget.cc" line="229"/>
         <source>Send key combinations</source>
         <translation>Отправлять комбинации клавиш</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="246"/>
         <source>Preferred resolution</source>
-        <translation>Предпочитаемое разрешение</translation>
+        <translation type="vanished">Предпочитаемое разрешение</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="247"/>
         <source>None</source>
-        <translation>Нет</translation>
+        <translation type="vanished">Нет</translation>
     </message>
 </context>
 <context>

@@ -71,21 +71,21 @@ KeyBar::KeyBar(QWidget* parent)
     row->setSpacing(6);
     row->setSizeConstraint(QLayout::SetMinimumSize);
 
-    addSpecialKey(row, tr("Esc"), kUsbEscape);
-    addSpecialKey(row, tr("Tab"), kUsbTab);
-    addModifier(row, tr("Ctrl"), kUsbLeftCtrl);
-    addModifier(row, tr("Alt"), kUsbLeftAlt);
-    addModifier(row, tr("Shift"), kUsbLeftShift);
-    addModifier(row, tr("Win"), kUsbLeftMeta);
-    addSpecialKey(row, tr("Left"), kUsbLeft);
-    addSpecialKey(row, tr("Up"), kUsbUp);
-    addSpecialKey(row, tr("Down"), kUsbDown);
-    addSpecialKey(row, tr("Right"), kUsbRight);
-    addSpecialKey(row, tr("Home"), kUsbHome);
-    addSpecialKey(row, tr("End"), kUsbEnd);
-    addSpecialKey(row, tr("PgUp"), kUsbPageUp);
-    addSpecialKey(row, tr("PgDn"), kUsbPageDown);
-    addSpecialKey(row, tr("Del"), kUsbDelete);
+    addSpecialKey(row, "Esc", kUsbEscape);
+    addSpecialKey(row, "Tab", kUsbTab);
+    addModifier(row, "Ctrl", kUsbLeftCtrl);
+    addModifier(row, "Alt", kUsbLeftAlt);
+    addModifier(row, "Shift", kUsbLeftShift);
+    addModifier(row, "Win", kUsbLeftMeta);
+    addSpecialKey(row, "Left", kUsbLeft);
+    addSpecialKey(row, "Up", kUsbUp);
+    addSpecialKey(row, "Down", kUsbDown);
+    addSpecialKey(row, "Right", kUsbRight);
+    addSpecialKey(row, "Home", kUsbHome);
+    addSpecialKey(row, "End", kUsbEnd);
+    addSpecialKey(row, "PgUp", kUsbPageUp);
+    addSpecialKey(row, "PgDn", kUsbPageDown);
+    addSpecialKey(row, "Del", kUsbDelete);
 
     scroll->setWidget(content);
 
