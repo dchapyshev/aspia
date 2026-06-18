@@ -34,9 +34,11 @@
 #include "common/android/bottom_sheet.h"
 #include "common/android/floating_action_button.h"
 #include "common/android/label.h"
+#include "common/android/message_dialog.h"
 #include "common/clipboard.h"
 #include "common/desktop_session_constants.h"
 #include "proto/desktop_clipboard.h"
+#include "proto/desktop_power.h"
 #include "proto/desktop_control.h"
 #include "proto/desktop_input.h"
 #include "proto/peer.h"
@@ -249,6 +251,8 @@ void DesktopWindow::startNewClient()
             client, &ClientDesktop::onTextEvent, Qt::QueuedConnection);
     connect(this, &DesktopWindow::sig_screenSelected,
             client, &ClientDesktop::onCurrentScreenChanged, Qt::QueuedConnection);
+    connect(this, &DesktopWindow::sig_powerControl,
+            client, &ClientDesktop::onPowerControl, Qt::QueuedConnection);
 
     client->moveToThread(GuiApplication::ioThread());
     client->setSessionState(session_state_);
@@ -346,11 +350,11 @@ void DesktopWindow::onCapabilitiesChanged(const proto::control::Capabilities& ca
 {
     for (int i = 0; i < capabilities.flag_size(); ++i)
     {
-        if (capabilities.flag(i).name() == kFlagOSWindows)
-        {
+        const std::string& name = capabilities.flag(i).name();
+        if (name == kFlagOSWindows)
             host_is_windows_ = true;
-            break;
-        }
+        else if (name == kFlagPowerControl)
+            power_control_available_ = true;
     }
 }
 
@@ -367,10 +371,17 @@ void DesktopWindow::onShowActions()
         action_sheet_->addItem(tr("Monitor %1").arg(i + 1), ":/img/material/monitor.svg", selected);
     }
 
-    const int keyboard_index = screen_count;
-    action_sheet_->addItem(tr("Keyboard"), ":/img/material/keyboard.svg");
+    int next_index = screen_count;
 
-    int next_index = keyboard_index + 1;
+    int power_index = -1;
+    if (power_control_available_)
+    {
+        power_index = next_index++;
+        action_sheet_->addItem(tr("Power"), ":/img/material/power.svg");
+    }
+
+    const int keyboard_index = next_index++;
+    action_sheet_->addItem(tr("Keyboard"), ":/img/material/keyboard.svg");
 
     int ctrl_alt_del_index = -1;
     if (host_is_windows_)
@@ -383,9 +394,11 @@ void DesktopWindow::onShowActions()
     action_sheet_->addItem(tr("Disconnect"), ":/img/material/close.svg");
 
     connect(action_sheet_, &BottomSheet::sig_triggered, this,
-            [this, keyboard_index, ctrl_alt_del_index, disconnect_index](int index)
+            [this, power_index, keyboard_index, ctrl_alt_del_index, disconnect_index](int index)
     {
-        if (index == keyboard_index)
+        if (index == power_index)
+            showPowerActions();
+        else if (index == keyboard_index)
             view_->showSoftwareKeyboard();
         else if (index == ctrl_alt_del_index)
             view_->sendCtrlAltDelete();
@@ -396,6 +409,62 @@ void DesktopWindow::onShowActions()
     });
 
     action_sheet_->showSheet();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::showPowerActions()
+{
+    BottomSheet* sheet = new BottomSheet(this);
+
+    // A leading back item returns to the main action sheet instead of a title.
+    sheet->addItem(tr("Back"), ":/img/material/arrow_back.svg");
+    sheet->addItem(tr("Shutdown"), ":/img/material/power.svg");
+    sheet->addItem(tr("Reboot"), ":/img/material/restart.svg");
+    sheet->addItem(tr("Safe Mode"), ":/img/material/restart.svg");
+    sheet->addItem(tr("Logoff"), ":/img/material/logout.svg");
+    sheet->addItem(tr("Lock"), ":/img/material/lock.svg");
+
+    connect(sheet, &BottomSheet::sig_triggered, this, [this](int index)
+    {
+        switch (index)
+        {
+            case 0:
+                onShowActions();
+                break;
+            case 1:
+                triggerPowerAction(proto::power::Control::ACTION_SHUTDOWN,
+                    tr("Are you sure you want to shutdown the remote computer?"));
+                break;
+            case 2:
+                triggerPowerAction(proto::power::Control::ACTION_REBOOT,
+                    tr("Are you sure you want to reboot the remote computer?"));
+                break;
+            case 3:
+                triggerPowerAction(proto::power::Control::ACTION_REBOOT_SAFE_MODE,
+                    tr("Are you sure you want to reboot the remote computer in Safe Mode?"));
+                break;
+            case 4:
+                triggerPowerAction(proto::power::Control::ACTION_LOGOFF,
+                    tr("Are you sure you want to end the user session on the remote computer?"));
+                break;
+            case 5:
+                triggerPowerAction(proto::power::Control::ACTION_LOCK,
+                    tr("Are you sure you want to lock the user session on the remote computer?"));
+                break;
+            default:
+                break;
+        }
+    });
+
+    sheet->showSheet();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::triggerPowerAction(
+    proto::power::Control::Action action, const QString& confirm_text)
+{
+    if (MessageDialog::confirm(this, tr("Confirmation"), confirm_text, tr("Yes")))
+        emit sig_powerControl(action);
 }
 
 //--------------------------------------------------------------------------------------------------

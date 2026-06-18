@@ -84,6 +84,9 @@ private:
     int columnCount() const;
     int rowCount() const;
 
+    // Height of a landscape cell, sized to fit the icon and a caption wrapped to up to two lines.
+    int landscapeCellHeight() const;
+
     // Width reserved on the leading side for the title shown inline with the buttons in landscape
     // (zero when there is no title); includes the gap before the first button.
     int landscapeTitleWidth() const;

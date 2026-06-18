@@ -30,6 +30,7 @@
 #include "base/scoped_qpointer.h"
 #include "client/client.h"
 #include "client/config.h"
+#include "proto/desktop_power.h"
 #include "proto/desktop_screen.h"
 
 namespace proto::control {
@@ -56,6 +57,7 @@ public:
 signals:
     void sig_closed();
     void sig_screenSelected(const proto::screen::Screen& screen);
+    void sig_powerControl(proto::power::Control::Action action);
 
 protected:
     // QWidget implementation.
@@ -76,6 +78,8 @@ private:
     void requestConnectionOffer(Router* router);
     void startNewClient();
     void reconnect();
+    void showPowerActions();
+    void triggerPowerAction(proto::power::Control::Action action, const QString& confirm_text);
     void setStatusText(const QString& text);
 
     HostConfig host_;
@@ -95,6 +99,7 @@ private:
     // is auto-reconnected when the app returns to the foreground.
     bool was_connected_ = false;
     bool host_is_windows_ = false;
+    bool power_control_available_ = false;
 
     Q_DISABLE_COPY_MOVE(DesktopWindow)
 };

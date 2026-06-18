@@ -19,6 +19,7 @@
 #include "common/android/bottom_sheet.h"
 
 #include <QEvent>
+#include <QFontMetrics>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPixmap>
@@ -34,12 +35,14 @@ constexpr int kRowIconSize = 24;
 constexpr int kRowIconSpacing = 16;
 
 // Compact button layout (landscape).
-constexpr int kCellWidth = 88;
+constexpr int kCellWidth = 102;
 constexpr int kCellHeight = 72;
 constexpr int kCellIconSize = 28;
 constexpr int kCellRadius = 12;
 constexpr int kCaptionTopMargin = 4;
+constexpr int kCaptionHPadding = 6;
 constexpr double kCaptionFontScale = 0.85;
+constexpr int kCaptionMaxLines = 2;
 
 constexpr int kTitleHeight = 44;
 constexpr int kTitleSpacing = 16;
@@ -193,7 +196,7 @@ void BottomSheet::paintEvent(QPaintEvent* /* event */)
             const int title_width = landscapeTitleWidth() - kTitleSpacing;
             const int title_left = rtl ? width() - kHorizontalPadding - title_width
                                        : kHorizontalPadding;
-            title_rect = QRect(title_left, itemsTop(), title_width, kCellHeight);
+            title_rect = QRect(title_left, itemsTop(), title_width, landscapeCellHeight());
         }
 
         painter.drawText(title_rect,
@@ -248,8 +251,9 @@ void BottomSheet::paintEvent(QPaintEvent* /* event */)
         {
             painter.setFont(caption_font);
 
-            // Center the icon-over-caption block vertically so it lines up with the inline title.
-            const int caption_height = painter.fontMetrics().height();
+            // Center the icon-over-caption block vertically so it lines up with the inline title. The
+            // caption may wrap to up to two lines, so reserve that height for every cell in the row.
+            const int caption_height = kCaptionMaxLines * painter.fontMetrics().height();
             const int block_height = kCellIconSize + kCaptionTopMargin + caption_height;
             const int block_top = item.top() + (item.height() - block_height) / 2;
 
@@ -260,12 +264,17 @@ void BottomSheet::paintEvent(QPaintEvent* /* event */)
                 painter.drawPixmap(QPoint(item.center().x() - kCellIconSize / 2, block_top), icon);
             }
 
-            const QRect caption_rect(item.left(), block_top + kCellIconSize + kCaptionTopMargin,
-                                     item.width(), caption_height);
+            // Inset horizontally so wrapped captions keep a gap from the neighbouring cells.
+            const QRect caption_rect(item.left() + kCaptionHPadding,
+                                     block_top + kCellIconSize + kCaptionTopMargin,
+                                     item.width() - 2 * kCaptionHPadding, caption_height);
             painter.setPen(foreground);
-            const QString caption = painter.fontMetrics().elidedText(
-                items_[i].text, Qt::ElideRight, caption_rect.width());
-            painter.drawText(caption_rect, Qt::AlignHCenter | Qt::AlignVCenter, caption);
+
+            // Keep word boundaries when possible, but still break a long single word so a caption
+            // without spaces (common after translation) fits the narrow cell instead of overflowing.
+            painter.drawText(caption_rect,
+                             Qt::AlignHCenter | Qt::AlignTop | Qt::TextWordWrap | Qt::TextWrapAnywhere,
+                             items_[i].text);
         }
     }
 }
@@ -367,7 +376,7 @@ bool BottomSheet::isPortrait() const
 //--------------------------------------------------------------------------------------------------
 QRect BottomSheet::sheetRect() const
 {
-    const int row_height = isPortrait() ? kRowHeight : kCellHeight;
+    const int row_height = isPortrait() ? kRowHeight : landscapeCellHeight();
 
     int sheet_height = kHandleTopMargin + kHandleHeight + kVerticalPadding +
                        rowCount() * row_height + kVerticalPadding;
@@ -407,6 +416,13 @@ int BottomSheet::rowCount() const
 }
 
 //--------------------------------------------------------------------------------------------------
+int BottomSheet::landscapeCellHeight() const
+{
+    const int line_height = QFontMetrics(Controls::scaledFont(font(), kCaptionFontScale)).height();
+    return kCellIconSize + kCaptionTopMargin + kCaptionMaxLines * line_height + 2 * kVerticalPadding;
+}
+
+//--------------------------------------------------------------------------------------------------
 int BottomSheet::landscapeTitleWidth() const
 {
     if (title_.isEmpty())
@@ -431,11 +447,12 @@ QRect BottomSheet::itemRect(int index) const
     const int area_width = width() - area_left - kHorizontalPadding;
     const int cells_in_row = qMin(columns, int(items_.size()) - row * columns);
     const int row_left = area_left + (area_width - cells_in_row * kCellWidth) / 2;
-    const int y = itemsTop() + row * kCellHeight;
+    const int cell_height = landscapeCellHeight();
+    const int y = itemsTop() + row * cell_height;
 
     const int column_pos = (layoutDirection() == Qt::RightToLeft) ? (cells_in_row - 1 - column)
                                                                   : column;
-    return QRect(row_left + column_pos * kCellWidth, y, kCellWidth, kCellHeight);
+    return QRect(row_left + column_pos * kCellWidth, y, kCellWidth, cell_height);
 }
 
 //--------------------------------------------------------------------------------------------------
