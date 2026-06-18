@@ -28,17 +28,6 @@ class SelectScreenAction final : public QAction
     Q_OBJECT
 
 public:
-    explicit SelectScreenAction(QObject* parent)
-        : QAction(parent)
-    {
-        QString text = tr("Full Desktop");
-        setText(text);
-        setToolTip(text);
-        setIcon(QIcon(":/img/computer.svg"));
-        setCheckable(true);
-        screen_.set_id(-1);
-    }
-
     SelectScreenAction(int number, const proto::screen::Screen& screen, bool is_primary, QObject* parent)
         : QAction(parent),
           screen_(screen)

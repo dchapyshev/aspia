@@ -272,8 +272,6 @@ void DesktopToolBar::setScreenList(const proto::screen::ScreenList& screen_list)
         }
     }
 
-    bool is_full_desktop = false;
-
     // If it has only one screen or an empty list is received.
     if (screen_list.screen_size() > 1)
     {
@@ -308,21 +306,6 @@ void DesktopToolBar::setScreenList(const proto::screen::ScreenList& screen_list)
                 onChangeScreenAction(action);
             });
         }
-
-        SelectScreenAction* full_desktop_action = new SelectScreenAction(ui->toolbar);
-        if (screen_list.current_screen() == -1)
-        {
-            full_desktop_action->setChecked(true);
-            is_full_desktop = true;
-        }
-
-        connect(full_desktop_action, &SelectScreenAction::triggered, this, [this, full_desktop_action]()
-        {
-            onChangeScreenAction(full_desktop_action);
-        });
-
-        ui->toolbar->insertAction(ui->action_power_control, full_desktop_action);
-        screen_actions_.append(full_desktop_action);
     }
     else
     {
@@ -346,7 +329,7 @@ void DesktopToolBar::setScreenList(const proto::screen::ScreenList& screen_list)
             resolution_select_action->setVisible(false);
     }
 
-    if (screen_list.resolution_size() > 0 && !is_full_desktop)
+    if (screen_list.resolution_size() > 0)
     {
         for (int i = 0; i < screen_list.resolution_size(); ++i)
         {
