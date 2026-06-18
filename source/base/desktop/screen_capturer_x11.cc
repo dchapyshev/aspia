@@ -76,8 +76,12 @@ bool ScreenCapturerX11::screenList(ScreenList* screens)
 
     if (!use_randr_)
     {
-        LOG(INFO) << "No screen list";
-        screens->screens.push_back({});
+        // Without XRandR there is no per-monitor selection available. Expose a single synthetic
+        // screen that covers the entire root window.
+        LOG(INFO) << "No XRandR, exposing single synthetic screen";
+        screens->screens.emplace_back(
+            static_cast<ScreenId>(0), "Desktop", QPoint(0, 0),
+            x_server_pixel_buffer_.windowSize(), QPoint(96, 96), true);
         return true;
     }
 
@@ -119,9 +123,9 @@ bool ScreenCapturerX11::selectScreen(ScreenId screen_id)
     // created.
     queue_.reset();
 
-    if (!use_randr_ || screen_id == kFullDesktopScreenId)
+    if (!use_randr_)
     {
-        selected_monitor_name_ = kFullDesktopScreenId;
+        selected_monitor_name_ = 0;
         selected_monitor_rect_ = QRect(QPoint(0, 0), x_server_pixel_buffer_.windowSize());
         return true;
     }
@@ -353,7 +357,22 @@ bool ScreenCapturerX11::init()
     initXrandr();
 
     // Default source set here so that selected_monitor_rect_ is sized correctly.
-    if (!selectScreen(kFullDesktopScreenId))
+    ScreenId default_screen = 0;
+    if (use_randr_)
+    {
+        // Prefer the primary monitor, fall back to the first one.
+        default_screen = (num_monitors_ > 0) ? static_cast<ScreenId>(monitors_[0].name) : 0;
+        for (int i = 0; i < num_monitors_; ++i)
+        {
+            if (monitors_[i].primary)
+            {
+                default_screen = static_cast<ScreenId>(monitors_[i].name);
+                break;
+            }
+        }
+    }
+
+    if (!selectScreen(default_screen))
     {
         LOG(ERROR) << "Unable select screen";
     }
@@ -489,12 +508,6 @@ void ScreenCapturerX11::updateMonitors()
 
     if (selected_monitor_name_)
     {
-        if (selected_monitor_name_ == static_cast<Atom>(kFullDesktopScreenId))
-        {
-            selected_monitor_rect_ = QRect(QPoint(0, 0), x_server_pixel_buffer_.windowSize());
-            return;
-        }
-
         for (int i = 0; i < num_monitors_; ++i)
         {
             XRRMonitorInfo& m = monitors_[i];

@@ -109,12 +109,6 @@ bool DxgiDuplicatorController::retrieveD3dInfo(D3dInfo* info)
 }
 
 //--------------------------------------------------------------------------------------------------
-DxgiDuplicatorController::Result DxgiDuplicatorController::duplicate(DxgiFrame* frame)
-{
-    return doDuplicate(frame, -1);
-}
-
-//--------------------------------------------------------------------------------------------------
 DxgiDuplicatorController::Result DxgiDuplicatorController::duplicateMonitor(DxgiFrame* frame, int monitor_id)
 {
     DCHECK_GE(monitor_id, 0);
@@ -223,19 +217,7 @@ DxgiDuplicatorController::Result DxgiDuplicatorController::doDuplicate(DxgiFrame
 
     if (ensureFrameCaptured(frame->context(), shared_frame))
     {
-        bool result;
-
-        if (monitor_id < 0)
-        {
-            // Capture entire screen.
-            result = doDuplicateAll(frame->context(), shared_frame);
-        }
-        else
-        {
-            result = doDuplicateOne(frame->context(), monitor_id, shared_frame);
-        }
-
-        if (result)
+        if (doDuplicateOne(frame->context(), monitor_id, shared_frame))
         {
             ++succeeded_duplications_;
             return Result::SUCCEEDED;
@@ -443,9 +425,6 @@ int DxgiDuplicatorController::doScreenCount() const
 //--------------------------------------------------------------------------------------------------
 QSize DxgiDuplicatorController::selectedDesktopSize(int monitor_id) const
 {
-    if (monitor_id < 0)
-        return desktopRect().size();
-
     return screenRect(monitor_id).size();
 }
 

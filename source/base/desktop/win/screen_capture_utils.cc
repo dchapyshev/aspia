@@ -150,12 +150,6 @@ bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screen_list)
 // static
 bool ScreenCaptureUtils::isScreenValid(ScreenCapturer::ScreenId screen, std::wstring* device_key)
 {
-    if (screen == ScreenCapturer::kFullDesktopScreenId)
-    {
-        device_key->clear();
-        return true;
-    }
-
     DISPLAY_DEVICEW device;
     device.cb = sizeof(device);
 
@@ -182,9 +176,6 @@ QRect ScreenCaptureUtils::fullScreenRect()
 QRect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
                                      const std::wstring& device_key)
 {
-    if (screen == ScreenCapturer::kFullDesktopScreenId)
-        return fullScreenRect();
-
     DISPLAY_DEVICEW device;
     device.cb = sizeof(device);
     if (!EnumDisplayDevicesW(nullptr, static_cast<DWORD>(screen), &device, 0))

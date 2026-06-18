@@ -52,7 +52,7 @@ private:
     Context* context();
 
     std::optional<QSize> last_frame_size_;
-    ScreenCapturer::ScreenId source_id_ = ScreenCapturer::kFullDesktopScreenId;
+    ScreenCapturer::ScreenId source_id_ = ScreenCapturer::kInvalidScreenId;
     SharedPointer<Frame> frame_;
     Context context_;
 };

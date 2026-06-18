@@ -44,7 +44,7 @@ protected:
     // ScreenCapturer implementation.
     void reset() override;
 
-    ScreenId current_screen_id_ = kFullDesktopScreenId;
+    ScreenId current_screen_id_ = kInvalidScreenId;
 
 private:
     void checkScreenType(const wchar_t* desktop_name);

@@ -166,13 +166,6 @@ bool ScreenCapturerDxgi::selectScreen(ScreenId screen_id)
     // frame of the new screen - which becomes the keyframe - comes out black.
     frame_.reset();
 
-    if (screen_id == kFullDesktopScreenId)
-    {
-        current_screen_index_ = -1;
-        current_screen_id_ = screen_id;
-        return true;
-    }
-
     QStringList device_names;
     if (!controller_->deviceNames(&device_names))
     {
@@ -200,16 +193,8 @@ const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
     if (!frame_)
         frame_ = std::make_unique<DxgiFrame>(controller_);
 
-    DxgiDuplicatorController::Result result;
-
-    if (current_screen_index_ == -1)
-    {
-        result = controller_->duplicate(frame_.get());
-    }
-    else
-    {
-        result = controller_->duplicateMonitor(frame_.get(), current_screen_index_);
-    }
+    DxgiDuplicatorController::Result result =
+        controller_->duplicateMonitor(frame_.get(), current_screen_index_);
 
     using DuplicateResult = DxgiDuplicatorController::Result;
 
@@ -282,9 +267,6 @@ const QRect& ScreenCapturerDxgi::desktopRect() const
 //--------------------------------------------------------------------------------------------------
 const QRect& ScreenCapturerDxgi::currentScreenRect() const
 {
-    if (current_screen_index_ == -1)
-        return controller_->desktopRect();
-
     return controller_->screenRect(current_screen_index_);
 }
 

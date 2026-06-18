@@ -93,10 +93,8 @@ private:
     QRect selected_monitor_rect_;
     QRect full_screen_rect_;
 
-    // selected_monitor_name_ will be changed to kFullDesktopScreenId
-    // by a call to SelectSource() at the end of Init() because
-    // selected_monitor_rect_ should be updated as well.
-    // Setting it to kFullDesktopScreenId here might be misleading.
+    // Set by a call to selectScreen() at the end of init() because selected_monitor_rect_ should be
+    // updated as well. For displays without XRandR it stays 0 (the single synthetic screen).
     Atom selected_monitor_name_ = 0;
 
     typedef XRRMonitorInfo* (*get_monitors_func)(Display*, Window, X11_Bool, int*);

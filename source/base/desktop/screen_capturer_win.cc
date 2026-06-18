@@ -511,13 +511,7 @@ const MouseCursor* ScreenCapturerWin::captureCursor()
 QPoint ScreenCapturerWin::cursorPosition()
 {
     QPoint cursor_pos(curr_cursor_info_.ptScreenPos.x, curr_cursor_info_.ptScreenPos.y);
-
-    if (current_screen_id_ == kFullDesktopScreenId)
-        cursor_pos = cursor_pos - desktopRect().topLeft();
-    else
-        cursor_pos = cursor_pos - currentScreenRect().topLeft();
-
-    return cursor_pos;
+    return cursor_pos - currentScreenRect().topLeft();
 }
 
 //--------------------------------------------------------------------------------------------------

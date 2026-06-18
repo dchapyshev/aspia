@@ -56,7 +56,7 @@ protected:
 private:
     std::shared_ptr<DxgiDuplicatorController> controller_;
 
-    int current_screen_index_ = -1;
+    int current_screen_index_ = 0;
     std::unique_ptr<DxgiFrame> frame_;
     int temporary_error_count_ = 0;
 

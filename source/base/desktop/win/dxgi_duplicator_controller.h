@@ -85,12 +85,6 @@ public:
     // information in |info| may not accurate.
     bool retrieveD3dInfo(D3dInfo* info);
 
-    // Captures current screen and writes into |frame|.
-    // TODO(zijiehe): Windows cannot guarantee the frames returned by each IDXGIOutputDuplication
-    // are synchronized. But we are using a totally different threading model than the way Windows
-    // suggested, it's hard to synchronize them manually. We should find a way to do it.
-    Result duplicate(DxgiFrame* frame);
-
     // Captures one monitor and writes into target. |monitor_id| should >= 0. If |monitor_id| is
     // greater than the total screen count of all the Duplicators, this function returns false.
     Result duplicateMonitor(DxgiFrame* frame, int monitor_id);
@@ -117,7 +111,7 @@ private:
     // DxgiFrameContext calls private unregister(Context*) function in reset().
     friend void DxgiFrameContext::reset();
 
-    // Does the real duplication work. Setting |monitor_id| < 0 to capture entire screen. This
+    // Does the real duplication work for the monitor identified by |monitor_id| (>= 0). This
     // function calls initialize(). And if the duplication failed, this function calls
     // deinitialize() to ensure the Dxgi components can be reinitialized next time.
     Result doDuplicate(DxgiFrame* frame, int monitor_id);

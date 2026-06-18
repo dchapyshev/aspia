@@ -932,7 +932,7 @@ ScreenCapturer::ScreenId DesktopAgent::defaultScreen()
     if (!screen_capturer_->screenList(&screen_list))
     {
         LOG(ERROR) << "ScreenCapturer::screenList failed";
-        return ScreenCapturer::kFullDesktopScreenId;
+        return ScreenCapturer::kInvalidScreenId;
     }
 
     for (const auto& screen : std::as_const(screen_list.screens))
@@ -944,8 +944,15 @@ ScreenCapturer::ScreenId DesktopAgent::defaultScreen()
         }
     }
 
-    LOG(INFO) << "Primary screen NOT found";
-    return ScreenCapturer::kFullDesktopScreenId;
+    if (!screen_list.screens.isEmpty())
+    {
+        ScreenCapturer::ScreenId first_id = screen_list.screens.first().id;
+        LOG(INFO) << "Primary screen NOT found, using first screen:" << first_id;
+        return first_id;
+    }
+
+    LOG(INFO) << "Screen list is empty";
+    return ScreenCapturer::kInvalidScreenId;
 }
 
 //--------------------------------------------------------------------------------------------------
