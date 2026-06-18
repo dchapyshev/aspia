@@ -32,6 +32,10 @@ AudioPlayer::AudioPlayer()
 AudioPlayer::~AudioPlayer()
 {
     LOG(INFO) << "Dtor";
+
+    // Tear down the output first. Its stop() blocks until any in-flight data callback returns, so
+    // |onMoreDataRequired| can no longer touch the queues and mutex below while they are destroyed.
+    output_.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
