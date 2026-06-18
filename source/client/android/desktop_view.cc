@@ -57,6 +57,10 @@ constexpr qreal kEdgeMaxSpeed = 18.0;
 constexpr qreal kTwoFingerDecide = 16.0;
 constexpr qreal kScrollStep = 40.0;
 
+// Gap (widget pixels) kept between the remote cursor and the top of the on-screen keyboard, so a
+// focused field at the very bottom is not flush against the keyboard.
+constexpr qreal kKeyboardCursorMargin = 48.0;
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -81,6 +85,12 @@ DesktopView::DesktopView(QWidget* parent)
     edge_scroll_timer_ = new QTimer(this);
     edge_scroll_timer_->setInterval(kEdgeScrollIntervalMs);
     connect(edge_scroll_timer_, &QTimer::timeout, this, &DesktopView::onEdgeScroll);
+
+    QInputMethod* input_method = QGuiApplication::inputMethod();
+    connect(input_method, &QInputMethod::keyboardRectangleChanged,
+            this, &DesktopView::onKeyboardRectangleChanged);
+    connect(input_method, &QInputMethod::visibleChanged,
+            this, &DesktopView::onKeyboardRectangleChanged);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -276,6 +286,54 @@ QVariant DesktopView::inputMethodQuery(Qt::InputMethodQuery query) const
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopView::onLongPress()
+{
+    // The finger has been held still long enough: grab the left button so the next moves drag.
+    if (gesture_ == Gesture::ONE_FINGER && !moved_ && !dragging_)
+        startDrag();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopView::onEdgeScroll()
+{
+    if (!dragging_)
+    {
+        edge_scroll_timer_->stop();
+        return;
+    }
+
+    moveCursorBy(edge_velocity_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopView::onKeyboardRectangleChanged()
+{
+    QInputMethod* input_method = QGuiApplication::inputMethod();
+
+    int inset = 0;
+    if (input_method->isVisible())
+    {
+        // On Android the keyboard rectangle comes in physical pixels while widget geometry is in
+        // logical pixels, so scale it down by the device pixel ratio before measuring the overlap
+        // with the bottom of the view.
+        const qreal dpr = devicePixelRatioF();
+        const qreal keyboard_top = input_method->keyboardRectangle().top() / dpr;
+        const qreal view_bottom = mapToGlobal(QPoint(0, height())).y();
+        inset = qBound(0, qRound(view_bottom - keyboard_top), height());
+    }
+
+    if (inset == keyboard_inset_)
+        return;
+
+    keyboard_inset_ = inset;
+
+    // Re-fit and bring the remote cursor above the keyboard.
+    clampContentPos();
+    ensureCursorVisible();
+    update();
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopView::handleTouch(QTouchEvent* event)
 {
     if (image_.isNull())
@@ -451,14 +509,6 @@ void DesktopView::startDrag()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopView::onLongPress()
-{
-    // The finger has been held still long enough: grab the left button so the next moves drag.
-    if (gesture_ == Gesture::ONE_FINGER && !moved_ && !dragging_)
-        startDrag();
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopView::updateEdgeScroll(const QPointF& finger_pos)
 {
     auto axis_speed = [](qreal pos, qreal size) -> qreal
@@ -477,18 +527,6 @@ void DesktopView::updateEdgeScroll(const QPointF& finger_pos)
         edge_scroll_timer_->stop();
     else if (!edge_scroll_timer_->isActive())
         edge_scroll_timer_->start();
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopView::onEdgeScroll()
-{
-    if (!dragging_)
-    {
-        edge_scroll_timer_->stop();
-        return;
-    }
-
-    moveCursorBy(edge_velocity_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -595,6 +633,12 @@ qreal DesktopView::contentScale() const
 }
 
 //--------------------------------------------------------------------------------------------------
+qreal DesktopView::viewportHeight() const
+{
+    return height() - keyboard_inset_;
+}
+
+//--------------------------------------------------------------------------------------------------
 QPointF DesktopView::frameToWidget(const QPointF& frame_pos) const
 {
     return content_pos_ + frame_pos * contentScale();
@@ -610,10 +654,20 @@ void DesktopView::clampContentPos()
     else
         content_pos_.setX(qBound(width() - content.width(), content_pos_.x(), qreal(0)));
 
-    if (content.height() <= height())
-        content_pos_.setY((height() - content.height()) / 2.0);
+    // Use the area above the on-screen keyboard so content is centered/panned in the visible part.
+    const qreal visible_height = viewportHeight();
+
+    if (content.height() <= visible_height)
+    {
+        content_pos_.setY((visible_height - content.height()) / 2.0);
+    }
     else
-        content_pos_.setY(qBound(height() - content.height(), content_pos_.y(), qreal(0)));
+    {
+        // While the keyboard is shown, allow panning a little past the content bottom so a field at
+        // the very edge can sit above the keyboard with a margin.
+        const qreal extra = (keyboard_inset_ > 0) ? kKeyboardCursorMargin : 0.0;
+        content_pos_.setY(qBound(visible_height - content.height() - extra, content_pos_.y(), qreal(0)));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -631,6 +685,9 @@ void DesktopView::ensureCursorVisible()
 {
     const QPointF pos = frameToWidget(cursor_pos_);
 
+    // Keep a margin above the keyboard so the focused field is not flush against it.
+    const qreal bottom = viewportHeight() - ((keyboard_inset_ > 0) ? kKeyboardCursorMargin : 0.0);
+
     qreal dx = 0.0;
     qreal dy = 0.0;
     if (pos.x() < 0.0)
@@ -639,8 +696,8 @@ void DesktopView::ensureCursorVisible()
         dx = width() - pos.x();
     if (pos.y() < 0.0)
         dy = -pos.y();
-    else if (pos.y() > height())
-        dy = height() - pos.y();
+    else if (pos.y() > bottom)
+        dy = bottom - pos.y();
 
     content_pos_ += QPointF(dx, dy);
     clampContentPos();

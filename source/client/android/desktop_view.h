@@ -78,6 +78,7 @@ protected:
 private slots:
     void onLongPress();
     void onEdgeScroll();
+    void onKeyboardRectangleChanged();
 
 private:
     void handleTouch(QTouchEvent* event);
@@ -94,6 +95,10 @@ private:
     // on-screen pixels to host pixels.
     QSizeF fittedSize() const;
     qreal contentScale() const;
+
+    // Height of the area not covered by the on-screen keyboard, used as the visible bottom for
+    // panning so the remote cursor stays above the keyboard.
+    qreal viewportHeight() const;
 
     // Maps a host-frame point to its on-screen position and back.
     QPointF frameToWidget(const QPointF& frame_pos) const;
@@ -112,6 +117,9 @@ private:
     qreal zoom_ = 1.0;
     QPointF content_pos_;
     QPointF cursor_pos_;
+
+    // Height (widget pixels) of the on-screen keyboard overlapping the bottom of the view.
+    int keyboard_inset_ = 0;
 
     // Touch gesture state.
     enum class Gesture { NONE, ONE_FINGER, TWO_FINGER, IGNORED };
