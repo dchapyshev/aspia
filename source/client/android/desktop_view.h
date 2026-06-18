@@ -56,6 +56,10 @@ public:
 
     void setFrame(SharedFrame frame);
     void setCursorShape(std::shared_ptr<MouseCursor> cursor);
+
+    // Moves the virtual cursor to the host's reported cursor position (host-frame coordinates).
+    void setCursorPosition(const QPointF& position);
+
     void refresh(const QList<QRect>& dirty_rects);
 
     void showSoftwareKeyboard();

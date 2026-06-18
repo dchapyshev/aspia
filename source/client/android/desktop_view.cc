@@ -154,6 +154,16 @@ void DesktopView::setCursorShape(std::shared_ptr<MouseCursor> cursor)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopView::setCursorPosition(const QPointF& position)
+{
+    // The position comes from the host, so unlike moveCursorBy() no mouse event is sent back.
+    cursor_pos_ = position;
+    clampCursor();
+    ensureCursorVisible();
+    update();
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopView::refresh(const QList<QRect>& dirty_rects)
 {
     if (image_.isNull() || dirty_rects.isEmpty())

@@ -19,6 +19,7 @@
 #include "client/android/desktop_window.h"
 
 #include <QGridLayout>
+#include <QPointF>
 
 #include "base/gui_application.h"
 #include "base/logging.h"
@@ -38,9 +39,10 @@
 #include "common/clipboard.h"
 #include "common/desktop_session_constants.h"
 #include "proto/desktop_clipboard.h"
-#include "proto/desktop_power.h"
 #include "proto/desktop_control.h"
+#include "proto/desktop_cursor.h"
 #include "proto/desktop_input.h"
+#include "proto/desktop_power.h"
 #include "proto/peer.h"
 #include "proto/router_client.h"
 
@@ -239,6 +241,8 @@ void DesktopWindow::startNewClient()
             this, &DesktopWindow::onStatusChanged, Qt::QueuedConnection);
     connect(client, &ClientDesktop::sig_mouseCursorChanged,
             view_, &DesktopView::setCursorShape, Qt::QueuedConnection);
+    connect(client, &ClientDesktop::sig_cursorPositionChanged,
+            this, &DesktopWindow::onCursorPositionChanged, Qt::QueuedConnection);
     connect(client, &ClientDesktop::sig_screenListChanged,
             this, &DesktopWindow::onScreenListChanged, Qt::QueuedConnection);
     connect(client, &ClientDesktop::sig_capabilities,
@@ -356,6 +360,12 @@ void DesktopWindow::onCapabilitiesChanged(const proto::control::Capabilities& ca
         else if (name == kFlagPowerControl)
             power_control_available_ = true;
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onCursorPositionChanged(const proto::cursor::Position& position)
+{
+    view_->setCursorPosition(QPointF(position.x(), position.y()));
 }
 
 //--------------------------------------------------------------------------------------------------

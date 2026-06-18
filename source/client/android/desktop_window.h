@@ -37,6 +37,10 @@ namespace proto::control {
 class Capabilities;
 } // namespace proto::control
 
+namespace proto::cursor {
+class Position;
+} // namespace proto::cursor
+
 class BottomSheet;
 class ClientDesktop;
 class DesktopView;
@@ -68,6 +72,7 @@ private slots:
     void onFrameChanged(const QSize& screen_size, SharedFrame frame);
     void onScreenListChanged(const proto::screen::ScreenList& screen_list);
     void onCapabilitiesChanged(const proto::control::Capabilities& capabilities);
+    void onCursorPositionChanged(const proto::cursor::Position& position);
     void onShowActions();
     void onKeyboardInsetChanged(int inset);
     void onApplicationStateChanged(Qt::ApplicationState state);
