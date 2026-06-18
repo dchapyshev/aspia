@@ -84,7 +84,7 @@ DesktopView::~DesktopView() = default;
 //--------------------------------------------------------------------------------------------------
 void DesktopView::setFrame(SharedFrame frame)
 {
-    const bool was_null = image_.isNull();
+    const QSize previous_size = image_.size();
 
     frame_ = std::move(frame);
 
@@ -96,10 +96,13 @@ void DesktopView::setFrame(SharedFrame frame)
         image_ = QImage(source.frameData(), size.width(), size.height(), source.stride(),
                         QImage::Format_RGB32);
 
-        // Start the cursor at the center of the first frame. A draw frame always follows a new frame,
-        // so the repaint is left to it.
-        if (was_null)
+        if (image_.size() != previous_size)
+        {
+            zoom_ = 1.0;
             cursor_pos_ = QPointF(image_.width() / 2.0, image_.height() / 2.0);
+            clampContentPos();
+            update();
+        }
     }
     else
     {
