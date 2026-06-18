@@ -226,9 +226,4 @@ void SettingsWidget::buildDesktopSection(QVBoxLayout* layout)
         desktop_config_.set_block_input(checked);
         settings_.setDesktopConfig(desktop_config_);
     });
-    addBoolSetting(layout, tr("Send key combinations"), settings_.sendKeyCombinations(),
-                   [this](bool checked)
-    {
-        settings_.setSendKeyCombinations(checked);
-    });
 }
