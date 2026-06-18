@@ -156,6 +156,11 @@ void AppBar::paintEvent(QPaintEvent* /* event */)
     painter.setFont(title_font);
     painter.setPen(on_surface);
     painter.drawText(content, Qt::AlignVCenter | Qt::AlignAbsolute | alignment, title_);
+
+    // A bottom separator that sets the bar off from the content below it.
+    painter.setRenderHint(QPainter::Antialiasing, false);
+    painter.setPen(palette().color(QPalette::Mid));
+    painter.drawLine(0, height() - 1, width(), height() - 1);
 }
 
 //--------------------------------------------------------------------------------------------------

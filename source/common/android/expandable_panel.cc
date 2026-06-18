@@ -138,8 +138,11 @@ QSize ExpandablePanel::sizeHint() const
 //--------------------------------------------------------------------------------------------------
 void ExpandablePanel::paintEvent(QPaintEvent* /* event */)
 {
-    // A separator at the top of every item divides the list and sets the first item off from
-    // whatever is above it.
+    // A separator at the top divides consecutive items. The first item is set off by the app bar's
+    // bottom border instead, so the topmost item draws no separator.
+    if (y() == 0)
+        return;
+
     QPainter painter(this);
     painter.setPen(palette().color(QPalette::Mid));
     painter.drawLine(0, 0, width(), 0);

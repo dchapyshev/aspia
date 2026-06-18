@@ -203,18 +203,6 @@ TreeWidget::TreeWidget(QWidget* parent)
 TreeWidget::~TreeWidget() = default;
 
 //--------------------------------------------------------------------------------------------------
-void TreeWidget::paintEvent(QPaintEvent* event)
-{
-    QTreeWidget::paintEvent(event);
-
-    // A top separator that sets the list off from whatever is above it, mirroring the navigation
-    // bar border.
-    QPainter painter(viewport());
-    painter.setPen(palette().color(QPalette::Mid));
-    painter.drawLine(0, 0, viewport()->width(), 0);
-}
-
-//--------------------------------------------------------------------------------------------------
 void TreeWidget::changeEvent(QEvent* event)
 {
     QTreeWidget::changeEvent(event);

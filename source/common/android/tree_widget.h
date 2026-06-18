@@ -40,7 +40,6 @@ signals:
 
 protected:
     // QTreeWidget implementation.
-    void paintEvent(QPaintEvent* event) final;
     void changeEvent(QEvent* event) final;
     void mousePressEvent(QMouseEvent* event) final;
     void mouseMoveEvent(QMouseEvent* event) final;
