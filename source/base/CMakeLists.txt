@@ -434,12 +434,6 @@ list(APPEND SOURCE_BASE_FILES
     files/file_util.cc
     files/file_util.h)
 
-if (UNIX)
-    list(APPEND SOURCE_BASE_FILES
-        files/file_descriptor_watcher_posix.cc
-        files/file_descriptor_watcher_posix.h)
-endif()
-
 if (APPLE)
     list(APPEND SOURCE_BASE_FILES
         files/base_paths_mac.mm)

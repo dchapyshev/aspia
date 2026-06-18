@@ -21,11 +21,39 @@
 #include "base/logging.h"
 #include "proto/desktop_clipboard.h"
 
+#if defined(Q_OS_WINDOWS)
+#include "common/clipboard_win.h"
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+#include "common/clipboard_x11.h"
+#elif defined(Q_OS_MACOS)
+#include "common/clipboard_mac.h"
+#elif defined(Q_OS_ANDROID)
+#include "common/clipboard_android.h"
+#endif
+
 //--------------------------------------------------------------------------------------------------
 Clipboard::Clipboard(QObject* parent)
     : QObject(parent)
 {
     // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+Clipboard* Clipboard::create(QObject* parent)
+{
+#if defined(Q_OS_WINDOWS)
+    return new ClipboardWin(parent);
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+    return new ClipboardX11(parent);
+#elif defined(Q_OS_MACOS)
+    return new ClipboardMac(parent);
+#elif defined(Q_OS_ANDROID)
+    return new ClipboardAndroid(parent);
+#else
+    LOG(ERROR) << "No clipboard implementation for this platform";
+    return nullptr;
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -21,7 +21,7 @@
 
 #include "common/clipboard.h"
 
-class FileDescriptorWatcher;
+class QSocketNotifier;
 class XServerClipboard;
 struct _XDisplay;
 
@@ -46,7 +46,7 @@ private:
     std::unique_ptr<XServerClipboard> x_server_clipboard_;
 
     // Watcher used to handle X11 events from |display_|.
-    std::unique_ptr<FileDescriptorWatcher> x_connection_watcher_;
+    QSocketNotifier* x_connection_notifier_ = nullptr;
 
     // Connection to the X server, used by |x_server_clipboard_|. This is created and owned by
     // this class.

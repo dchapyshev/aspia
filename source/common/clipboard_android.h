@@ -16,35 +16,29 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_FILES_FILE_DESCRIPTOR_WATCHER_POSIX_H
-#define BASE_FILES_FILE_DESCRIPTOR_WATCHER_POSIX_H
+#ifndef COMMON_CLIPBOARD_ANDROID_H
+#define COMMON_CLIPBOARD_ANDROID_H
 
-#include <QtClassHelperMacros>
+#include "common/clipboard.h"
 
-#include <functional>
-#include <memory>
-
-class FileDescriptorWatcher
+class ClipboardAndroid final : public Clipboard
 {
+    Q_OBJECT
+
 public:
-    FileDescriptorWatcher();
-    ~FileDescriptorWatcher();
+    explicit ClipboardAndroid(QObject* parent = nullptr);
+    ~ClipboardAndroid() final = default;
 
-    enum class Mode
-    {
-        WATCH_READ,
-        WATCH_WRITE
-    };
+protected:
+    // Clipboard implementation.
+    void init() final;
+    void setData(const QString& mime_type, const QByteArray& data) final;
 
-    using Callback = std::function<void()>;
-
-    void startWatching(int fd, Mode mode, const Callback& callback);
+private slots:
+    void onDataChanged();
 
 private:
-    class Watcher;
-    std::unique_ptr<Watcher> impl_;
-
-    Q_DISABLE_COPY(FileDescriptorWatcher)
+    Q_DISABLE_COPY_MOVE(ClipboardAndroid)
 };
 
-#endif // BASE_FILES_FILE_DESCRIPTOR_WATCHER_POSIX_H
+#endif // COMMON_CLIPBOARD_ANDROID_H

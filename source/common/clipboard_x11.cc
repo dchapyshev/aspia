@@ -18,8 +18,9 @@
 
 #include "common/clipboard_x11.h"
 
+#include <QSocketNotifier>
+
 #include "base/logging.h"
-#include "base/files/file_descriptor_watcher_posix.h"
 #include "base/x11/x_server_clipboard.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -53,11 +54,12 @@ void ClipboardX11::init()
     x_server_clipboard_->init(
         display_, std::bind(&ClipboardX11::onTextData, this, std::placeholders::_1));
 
-    x_connection_watcher_ = std::make_unique<FileDescriptorWatcher>();
-    x_connection_watcher_->startWatching(
-        ConnectionNumber(display_),
-        FileDescriptorWatcher::Mode::WATCH_READ,
-        std::bind(&ClipboardX11::pumpXEvents, this));
+    x_connection_notifier_ = new QSocketNotifier(
+        ConnectionNumber(display_), QSocketNotifier::Read, this);
+    connect(x_connection_notifier_, &QSocketNotifier::activated, this, [this]()
+    {
+        pumpXEvents();
+    });
 
     pumpXEvents();
 }

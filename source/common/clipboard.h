@@ -44,6 +44,9 @@ public:
     explicit Clipboard(QObject* parent);
     virtual ~Clipboard() = default;
 
+    // Creates the clipboard implementation for the current platform (nullptr if unsupported).
+    static Clipboard* create(QObject* parent = nullptr);
+
     static const QString kMimeTypeTextUtf8;
     static const QString kMimeTypeFileList;
 

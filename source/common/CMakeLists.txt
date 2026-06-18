@@ -63,6 +63,12 @@ if (LINUX)
         file_platform_util_linux.cc)
 endif()
 
+if (ANDROID)
+    list(APPEND SOURCE_COMMON
+        clipboard_android.cc
+        clipboard_android.h)
+endif()
+
 if (APPLE)
     list(APPEND SOURCE_COMMON
         clipboard_mac.mm
