@@ -33,6 +33,8 @@
 #include "common/android/bottom_sheet.h"
 #include "common/android/floating_action_button.h"
 #include "common/android/label.h"
+#include "common/desktop_session_constants.h"
+#include "proto/desktop_control.h"
 #include "proto/desktop_input.h"
 #include "proto/peer.h"
 #include "proto/router_client.h"
@@ -185,6 +187,8 @@ void DesktopWindow::startNewClient()
             view_, &DesktopView::setCursorShape, Qt::QueuedConnection);
     connect(client, &ClientDesktop::sig_screenListChanged,
             this, &DesktopWindow::onScreenListChanged, Qt::QueuedConnection);
+    connect(client, &ClientDesktop::sig_capabilities,
+            this, &DesktopWindow::onCapabilitiesChanged, Qt::QueuedConnection);
     connect(view_, &DesktopView::sig_mouseEvent,
             client, &ClientDesktop::onMouseEvent, Qt::QueuedConnection);
     connect(view_, &DesktopView::sig_keyEvent,
@@ -277,6 +281,19 @@ void DesktopWindow::onScreenListChanged(const proto::screen::ScreenList& screen_
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopWindow::onCapabilitiesChanged(const proto::control::Capabilities& capabilities)
+{
+    for (int i = 0; i < capabilities.flag_size(); ++i)
+    {
+        if (capabilities.flag(i).name() == kFlagOSWindows)
+        {
+            host_is_windows_ = true;
+            break;
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopWindow::onShowActions()
 {
     action_sheet_ = new BottomSheet(this);
@@ -292,14 +309,25 @@ void DesktopWindow::onShowActions()
     const int keyboard_index = screen_count;
     action_sheet_->addItem(tr("Keyboard"), ":/img/material/keyboard.svg");
 
-    const int disconnect_index = keyboard_index + 1;
+    int next_index = keyboard_index + 1;
+
+    int ctrl_alt_del_index = -1;
+    if (host_is_windows_)
+    {
+        ctrl_alt_del_index = next_index++;
+        action_sheet_->addItem(tr("Ctrl+Alt+Del"), ":/img/material/lock.svg");
+    }
+
+    const int disconnect_index = next_index;
     action_sheet_->addItem(tr("Disconnect"), ":/img/material/close.svg");
 
     connect(action_sheet_, &BottomSheet::sig_triggered, this,
-            [this, keyboard_index, disconnect_index](int index)
+            [this, keyboard_index, ctrl_alt_del_index, disconnect_index](int index)
     {
         if (index == keyboard_index)
             view_->showSoftwareKeyboard();
+        else if (index == ctrl_alt_del_index)
+            view_->sendCtrlAltDelete();
         else if (index == disconnect_index)
             emit sig_closed();
         else if (index >= 0 && index < screen_list_.screen_size())

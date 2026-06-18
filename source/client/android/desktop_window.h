@@ -31,6 +31,10 @@
 #include "client/config.h"
 #include "proto/desktop_screen.h"
 
+namespace proto::control {
+class Capabilities;
+} // namespace proto::control
+
 class BottomSheet;
 class ClientDesktop;
 class DesktopView;
@@ -59,6 +63,7 @@ private slots:
     void onStatusChanged(Client::Status status, const QVariant& data);
     void onFrameChanged(const QSize& screen_size, SharedFrame frame);
     void onScreenListChanged(const proto::screen::ScreenList& screen_list);
+    void onCapabilitiesChanged(const proto::control::Capabilities& capabilities);
     void onShowActions();
     void onKeyboardInsetChanged(int inset);
 
@@ -80,6 +85,7 @@ private:
     FloatingActionButton* fab_ = nullptr;
     KeyBar* key_bar_ = nullptr;
     bool connected_ = false;
+    bool host_is_windows_ = false;
 
     Q_DISABLE_COPY_MOVE(DesktopWindow)
 };

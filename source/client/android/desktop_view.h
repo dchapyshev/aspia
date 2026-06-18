@@ -64,6 +64,9 @@ public:
     // area used to keep the remote cursor visible.
     void setKeyBarHeight(int height);
 
+    // Sends the Ctrl+Alt+Del sequence (recognized by a Windows host).
+    void sendCtrlAltDelete();
+
 public slots:
     void onModifierToggled(quint32 usb_keycode, bool active);
     void onSpecialKey(quint32 usb_keycode);

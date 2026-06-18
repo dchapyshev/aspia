@@ -63,6 +63,11 @@ constexpr qreal kScrollStep = 40.0;
 // focused field at the very bottom is not flush against the keyboard.
 constexpr qreal kKeyboardCursorMargin = 48.0;
 
+// USB HID usage codes (page 0x07) used to synthesize the Ctrl+Alt+Del shortcut.
+const quint32 kUsbLeftCtrl = 0x0700e0;
+const quint32 kUsbLeftAlt  = 0x0700e2;
+const quint32 kUsbDelete   = 0x07004c;
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -180,6 +185,17 @@ void DesktopView::showSoftwareKeyboard()
 void DesktopView::setKeyBarHeight(int height)
 {
     key_bar_height_ = height;
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopView::sendCtrlAltDelete()
+{
+    sendRawKey(kUsbLeftCtrl, true);
+    sendRawKey(kUsbLeftAlt, true);
+    sendRawKey(kUsbDelete, true);
+    sendRawKey(kUsbDelete, false);
+    sendRawKey(kUsbLeftAlt, false);
+    sendRawKey(kUsbLeftCtrl, false);
 }
 
 //--------------------------------------------------------------------------------------------------
