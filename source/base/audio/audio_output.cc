@@ -26,6 +26,8 @@
 #include "base/audio/audio_output_mac.h"
 #elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 #include "base/audio/audio_output_pulse.h"
+#elif defined(Q_OS_ANDROID)
+#include "base/audio/audio_output_android.h"
 #endif
 
 #include <cstring>
@@ -47,6 +49,8 @@ std::unique_ptr<AudioOutput> AudioOutput::create(const NeedMoreDataCB& need_more
     return std::make_unique<AudioOutputMac>(need_more_data_cb);
 #elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     return std::make_unique<AudioOutputPulse>(need_more_data_cb);
+#elif defined(Q_OS_ANDROID)
+    return std::make_unique<AudioOutputAndroid>(need_more_data_cb);
 #else
     NOTIMPLEMENTED();
     return nullptr;

@@ -101,6 +101,19 @@ if (WIN32)
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif()
 
+if (ANDROID)
+    # The oboe vcpkg port installs only the library and headers (no CMake config), so wrap them in an
+    # imported target. Oboe pulls in the NDK system libraries log and OpenSLES.
+    find_library(OBOE_LIBRARY NAMES oboe REQUIRED)
+    find_path(OBOE_INCLUDE_DIR "oboe/Oboe.h" REQUIRED)
+
+    add_library(oboe::oboe UNKNOWN IMPORTED)
+    set_target_properties(oboe::oboe PROPERTIES
+        IMPORTED_LOCATION "${OBOE_LIBRARY}"
+        INTERFACE_INCLUDE_DIRECTORIES "${OBOE_INCLUDE_DIR}"
+        INTERFACE_LINK_LIBRARIES "log;OpenSLES")
+endif()
+
 if (LINUX)
     find_package(Qt6EglFSDeviceIntegrationPrivate CONFIG REQUIRED)
     find_package(Qt6InputSupportPrivate CONFIG REQUIRED)

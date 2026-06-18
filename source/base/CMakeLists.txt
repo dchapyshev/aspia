@@ -177,6 +177,12 @@ if (APPLE)
         audio/audio_output_mac.h)
 endif()
 
+if (ANDROID)
+    list(APPEND SOURCE_BASE_AUDIO
+        audio/audio_output_android.cc
+        audio/audio_output_android.h)
+endif()
+
 list(APPEND SOURCE_BASE_CODEC
     codec/audio_bus.cc
     codec/audio_bus.h
@@ -692,7 +698,7 @@ if (LINUX)
 endif()
 
 if (ANDROID)
-    set(BASE_PLATFORM_LIBS log)
+    set(BASE_PLATFORM_LIBS log oboe::oboe)
 endif()
 
 target_link_libraries(aspia_base PRIVATE aspia_proto

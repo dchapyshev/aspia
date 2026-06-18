@@ -17,6 +17,10 @@
     "libyuv",
     "miniupnpc",
     "nayuki-qr-code-generator",
+    {
+      "name": "oboe",
+      "platform": "android"
+    },
     "openh264",
     "openssl",
     "opus",
