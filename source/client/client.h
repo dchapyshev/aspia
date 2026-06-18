@@ -32,6 +32,7 @@
 #include "client/session_state.h"
 
 class RelayPeer;
+class SessionKeeper;
 class UdpAttempt;
 class UdpChannel;
 
@@ -135,6 +136,7 @@ private:
 
     std::list<ScopedQPointer<UdpAttempt>> attempts_;
     std::shared_ptr<SessionState> session_state_;
+    SessionKeeper* session_keeper_ = nullptr;
 
     enum class State { CREATED, STARTED, STOPPPED };
     State state_ = State::CREATED;

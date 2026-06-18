@@ -26,6 +26,7 @@
 #include "base/peer/client_authenticator.h"
 #include "base/peer/client_authenticator_legacy.h"
 #include "base/peer/relay_peer.h"
+#include "client/session_keeper.h"
 #include "client/settings.h"
 #include "client/udp_attempt.h"
 #include "proto/key_exchange.h"
@@ -52,6 +53,8 @@ Client::Client(QObject* parent)
 {
     CLOG(INFO) << "Ctor";
 
+    session_keeper_ = SessionKeeper::create(this);
+
 #if defined(Q_OS_MACOS)
     addAppNapBlock();
 #endif // defined(Q_OS_MACOS)
@@ -64,6 +67,9 @@ Client::~Client()
 
     state_ = State::STOPPPED;
     emit sig_statusChanged(Status::STOPPED);
+
+    if (session_keeper_)
+        session_keeper_->release();
 
 #if defined(Q_OS_MACOS)
     releaseAppNapBlock();
@@ -316,6 +322,9 @@ void Client::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
     // Show an error to the user.
     emit sig_statusChanged(Status::HOST_DISCONNECTED, QVariant::fromValue(error_code));
 
+    if (session_keeper_)
+        session_keeper_->release();
+
     if (tcp_channel_)
     {
         tcp_channel_->disconnect();
@@ -564,6 +573,9 @@ void Client::tcpChannelReady()
     }
 
     emit sig_statusChanged(Status::HOST_CONNECTED);
+
+    if (session_keeper_)
+        session_keeper_->acquire();
 
     // Signal that everything is ready to start the session (connection established,
     // authentication passed).

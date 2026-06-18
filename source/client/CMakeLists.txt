@@ -51,6 +51,8 @@ list(APPEND SOURCE_CLIENT_CORE
     pch.h
     router.cc
     router.h
+    session_keeper.cc
+    session_keeper.h
     session_state.cc
     session_state.h
     settings.cc
@@ -89,6 +91,8 @@ list(APPEND SOURCE_CLIENT_ANDROID
     android/router_editor.h
     android/routers_widget.cc
     android/routers_widget.h
+    android/session_keeper_android.cc
+    android/session_keeper_android.h
     android/settings_widget.cc
     android/settings_widget.h
     android/two_factor_dialog.cc
