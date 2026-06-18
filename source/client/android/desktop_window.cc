@@ -174,6 +174,8 @@ void DesktopWindow::startNewClient()
             client, &ClientDesktop::onMouseEvent, Qt::QueuedConnection);
     connect(view_, &DesktopView::sig_keyEvent,
             client, &ClientDesktop::onKeyEvent, Qt::QueuedConnection);
+    connect(view_, &DesktopView::sig_textEvent,
+            client, &ClientDesktop::onTextEvent, Qt::QueuedConnection);
     connect(this, &DesktopWindow::sig_screenSelected,
             client, &ClientDesktop::onCurrentScreenChanged, Qt::QueuedConnection);
 
@@ -272,14 +274,21 @@ void DesktopWindow::onShowActions()
         action_sheet_->addItem(tr("Monitor %1").arg(i + 1), ":/img/material/monitor.svg", selected);
     }
 
+    const int keyboard_index = screen_count;
+    action_sheet_->addItem(tr("Keyboard"), ":/img/material/keyboard.svg");
+
+    const int disconnect_index = keyboard_index + 1;
     action_sheet_->addItem(tr("Disconnect"), ":/img/material/close.svg");
 
-    connect(action_sheet_, &BottomSheet::sig_triggered, this, [this](int index)
+    connect(action_sheet_, &BottomSheet::sig_triggered, this,
+            [this, keyboard_index, disconnect_index](int index)
     {
-        if (index >= 0 && index < screen_list_.screen_size())
-            emit sig_screenSelected(screen_list_.screen(index));
-        else
+        if (index == keyboard_index)
+            view_->showSoftwareKeyboard();
+        else if (index == disconnect_index)
             emit sig_closed();
+        else if (index >= 0 && index < screen_list_.screen_size())
+            emit sig_screenSelected(screen_list_.screen(index));
     });
 
     action_sheet_->showSheet();

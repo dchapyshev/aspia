@@ -18,6 +18,8 @@
 
 #include "client/android/desktop_view.h"
 
+#include <QGuiApplication>
+#include <QInputMethod>
 #include <QKeyEvent>
 #include <QLineF>
 #include <QPainter>
@@ -67,6 +69,7 @@ DesktopView::DesktopView(QWidget* parent)
     setAutoFillBackground(true);
     setAttribute(Qt::WA_AcceptTouchEvents);
     setFocusPolicy(Qt::StrongFocus);
+    setAttribute(Qt::WA_InputMethodEnabled, true);
 
     gesture_timer_.start();
 
@@ -155,6 +158,13 @@ void DesktopView::refresh(const QList<QRect>& dirty_rects)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopView::showSoftwareKeyboard()
+{
+    setFocus();
+    QGuiApplication::inputMethod()->show();
+}
+
+//--------------------------------------------------------------------------------------------------
 bool DesktopView::event(QEvent* event)
 {
     switch (event->type())
@@ -223,6 +233,41 @@ void DesktopView::showEvent(QShowEvent* event)
 {
     QWidget::showEvent(event);
     setFocus();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopView::inputMethodEvent(QInputMethodEvent* event)
+{
+    // The on-screen keyboard delivers its result as committed text rather than scan codes, so forward
+    // it to the host as a text event. Special keys (Backspace, Enter) still arrive as key events and
+    // are handled by sendKey().
+    const QString commit = event->commitString();
+    if (!commit.isEmpty())
+    {
+        proto::input::TextEvent text_event;
+        text_event.set_text(commit.toStdString());
+        emit sig_textEvent(text_event);
+    }
+
+    event->accept();
+}
+
+//--------------------------------------------------------------------------------------------------
+QVariant DesktopView::inputMethodQuery(Qt::InputMethodQuery query) const
+{
+    switch (query)
+    {
+        case Qt::ImEnabled:
+            return true;
+
+        case Qt::ImHints:
+            // No autocorrect/prediction/auto-capitalization: send exactly what the user types.
+            return static_cast<int>(Qt::ImhNoPredictiveText | Qt::ImhNoAutoUppercase |
+                                    Qt::ImhPreferLowercase);
+
+        default:
+            return QWidget::inputMethodQuery(query);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

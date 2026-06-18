@@ -26,6 +26,7 @@
 #include <QPointF>
 #include <QRect>
 #include <QSizeF>
+#include <QVariant>
 #include <QWidget>
 
 #include <memory>
@@ -35,9 +36,11 @@
 namespace proto::input {
 class KeyEvent;
 class MouseEvent;
+class TextEvent;
 } // namespace proto::input
 
 class MouseCursor;
+class QInputMethodEvent;
 class QKeyEvent;
 class QShowEvent;
 class QTimer;
@@ -55,8 +58,11 @@ public:
     void setCursorShape(std::shared_ptr<MouseCursor> cursor);
     void refresh(const QList<QRect>& dirty_rects);
 
+    void showSoftwareKeyboard();
+
 signals:
     void sig_keyEvent(const proto::input::KeyEvent& event);
+    void sig_textEvent(const proto::input::TextEvent& event);
     void sig_mouseEvent(const proto::input::MouseEvent& event);
 
 protected:
@@ -66,6 +72,8 @@ protected:
     void keyPressEvent(QKeyEvent* event) final;
     void keyReleaseEvent(QKeyEvent* event) final;
     void showEvent(QShowEvent* event) final;
+    void inputMethodEvent(QInputMethodEvent* event) final;
+    QVariant inputMethodQuery(Qt::InputMethodQuery query) const final;
 
 private slots:
     void onLongPress();
