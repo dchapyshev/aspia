@@ -251,14 +251,17 @@ void TreeWidget::mouseReleaseEvent(QMouseEvent* event)
     const QPoint pos = event->position().toPoint();
     const QModelIndex index = indexAt(pos);
 
-    // A tap on the trailing chevron of a parent row toggles it instead of activating the row.
+    // A tap on the trailing chevron of a parent row - and the whole area beyond it up to the row
+    // edge - toggles the row instead of activating it.
     if (index.isValid() && model()->hasChildren(index))
     {
         const bool rtl = (layoutDirection() == Qt::RightToLeft);
         const QRect content =
             visualRect(index).adjusted(kHorizontalPadding, 0, -kHorizontalPadding, 0);
+        const QRect chevron = chevronArea(content, rtl);
 
-        if (chevronArea(content, rtl).contains(pos))
+        const bool on_trailing = rtl ? (pos.x() <= chevron.right()) : (pos.x() >= chevron.left());
+        if (on_trailing)
         {
             setExpanded(index, !isExpanded(index));
             event->accept();
