@@ -136,6 +136,14 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
 
     setStyle(new CustomStyle(nullptr, small_icon_size_));
 
+#if defined(Q_OS_ANDROID)
+    // Pin the default font now, before any theme is applied. Switching the base style / color scheme
+    // (setTheme()) otherwise makes Qt re-derive a different base size from the style; widgets created
+    // afterwards capture that inflated size and scale it again (Controls::scaledFont), so on restart
+    // with a non-default theme every font grows. Setting the font explicitly stops the re-derivation.
+    setFont(font());
+#endif
+
 #if defined(Q_OS_WINDOWS)
     message_window_ = std::make_unique<MessageWindow>();
     bool created = message_window_->create([this](
