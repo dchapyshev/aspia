@@ -29,6 +29,10 @@
 
 namespace {
 
+// Compact height for the bar keys. Smaller than the shared Button height to keep this auxiliary bar
+// from eating too much screen above the on-screen keyboard.
+constexpr int kKeyHeight = 32;
+
 // USB HID usage codes (page 0x07) for the keys offered by the bar.
 const quint32 kUsbLeftCtrl  = 0x0700e0;
 const quint32 kUsbLeftShift = 0x0700e1;
@@ -67,8 +71,8 @@ KeyBar::KeyBar(QWidget* parent)
     content->setFocusPolicy(Qt::NoFocus);
 
     QHBoxLayout* row = new QHBoxLayout(content);
-    row->setContentsMargins(8, 6, 8, 6);
-    row->setSpacing(6);
+    row->setContentsMargins(8, 3, 8, 3);
+    row->setSpacing(4);
     row->setSizeConstraint(QLayout::SetMinimumSize);
 
     addSpecialKey(row, "Esc", kUsbEscape);
@@ -111,6 +115,7 @@ void KeyBar::addModifier(QHBoxLayout* layout, const QString& text, quint32 usb_k
 {
     Button* button = new Button(text, Button::Role::TEXT, layout->parentWidget());
     button->setFocusPolicy(Qt::NoFocus);
+    button->setFixedHeight(kKeyHeight);
 
     connect(button, &QPushButton::clicked, this, [this, button, usb_keycode]()
     {
@@ -129,6 +134,7 @@ void KeyBar::addSpecialKey(QHBoxLayout* layout, const QString& text, quint32 usb
 {
     Button* button = new Button(text, Button::Role::TEXT, layout->parentWidget());
     button->setFocusPolicy(Qt::NoFocus);
+    button->setFixedHeight(kKeyHeight);
 
     connect(button, &QPushButton::clicked, this, [this, usb_keycode]()
     {
