@@ -298,6 +298,48 @@ bool MasterPassword::unlock(const SecureString& password)
 
 //--------------------------------------------------------------------------------------------------
 // static
+bool MasterPassword::unlockWithKey(const SecureByteArray& key)
+{
+    Database& db = Database::instance();
+    if (!db.isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    QByteArray verifier = db.masterPasswordVerifier();
+    if (verifier.isEmpty())
+    {
+        LOG(ERROR) << "Master password is not set";
+        return false;
+    }
+
+    quint32 version = db.masterPasswordVersion();
+    if (version != kCurrentVersion)
+    {
+        LOG(ERROR) << "Unsupported master password version:" << version;
+        return false;
+    }
+
+    if (!checkVerifier(key, verifier))
+    {
+        LOG(INFO) << "Invalid key";
+        return false;
+    }
+
+    DataCryptor::instance().setKey(key);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+SecureByteArray MasterPassword::currentKey()
+{
+    return DataCryptor::instance().key();
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
 bool MasterPassword::setNew(const SecureString& new_password)
 {
     if (new_password.isEmpty())

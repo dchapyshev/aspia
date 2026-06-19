@@ -19,6 +19,7 @@
 #ifndef CLIENT_MASTER_PASSWORD_H
 #define CLIENT_MASTER_PASSWORD_H
 
+class SecureByteArray;
 class SecureString;
 
 class MasterPassword
@@ -30,6 +31,14 @@ public:
     static bool isSet();
 
     static bool unlock(const SecureString& password);
+
+    // Recovers the unlock with a key derived earlier (e.g. unwrapped via biometric unlock),
+    // verifying it against the stored verifier before activating the data cryptor.
+    static bool unlockWithKey(const SecureByteArray& key);
+
+    // Returns the active data cryptor key. Valid only after a successful unlock; used to wrap the
+    // key for biometric unlock.
+    static SecureByteArray currentKey();
 
     static bool setNew(const SecureString& new_password);
     static bool change(const SecureString& current_password, const SecureString& new_password);
