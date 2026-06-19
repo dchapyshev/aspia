@@ -334,14 +334,15 @@ QVariant DesktopView::inputMethodQuery(Qt::InputMethodQuery query) const
             return true;
 
         case Qt::ImHints:
-            // This is a remote session where passwords may be typed, so the input is marked
-            // sensitive: Qt maps ImhSensitiveData to Android TYPE_TEXT_VARIATION_VISIBLE_PASSWORD, so
-            // the keyboard does not store it in its dictionary, learn from it or offer suggestions,
-            // while keeping the text visible and the layout unrestricted (unlike ImhHiddenText, which
-            // would switch to a masked password field with no extra benefit here). The keyboard's own
-            // toolbar above the keys is not controllable through inputType - it is a keyboard setting.
+            // This is a remote session where passwords may be typed. ImhNoPredictiveText maps to
+            // Android TYPE_TEXT_FLAG_NO_SUGGESTIONS, which already keeps the keyboard from storing the
+            // input in its dictionary, learning from it or offering suggestions. ImhSensitiveData is
+            // intentionally NOT set: it maps to TYPE_TEXT_VARIATION_VISIBLE_PASSWORD, and keyboards
+            // like Gboard force an extra number row and a persistent toolbar for any password field,
+            // which wastes vertical space. Dropping it leaves a plain non-learning text field that
+            // renders just the keys.
             return static_cast<int>(Qt::ImhNoPredictiveText | Qt::ImhNoAutoUppercase |
-                                    Qt::ImhPreferLowercase | Qt::ImhSensitiveData);
+                                    Qt::ImhPreferLowercase);
 
         default:
             return QWidget::inputMethodQuery(query);
