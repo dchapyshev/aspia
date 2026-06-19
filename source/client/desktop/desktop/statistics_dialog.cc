@@ -45,13 +45,13 @@ QString capturerToString(quint32 type)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString encoderToString(quint32 type)
+QString encoderToString(quint32 type, bool hardware_decoder)
 {
     switch (static_cast<proto::video::Encoding>(type))
     {
         case proto::video::ENCODING_VP8: return "VP8";
         case proto::video::ENCODING_VP9: return "VP9";
-        case proto::video::ENCODING_H264: return "H264";
+        case proto::video::ENCODING_H264: return hardware_decoder ? "H264HW" : "H264SW";
         default: return "UNKNOWN";
     }
 }
@@ -137,7 +137,7 @@ void StatisticsDialog::setMetrics(const ClientDesktop::Metrics& metrics)
                 break;
             case 10:
                 item->setText(1, capturerToString(metrics.video_capturer_type) + " / " +
-                    encoderToString(metrics.video_encoder_type));
+                    encoderToString(metrics.video_encoder_type, metrics.video_decoder_hardware));
                 break;
             case 11:
                 item->setText(1, QString::number(metrics.fps));

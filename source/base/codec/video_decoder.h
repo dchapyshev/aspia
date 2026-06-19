@@ -107,6 +107,9 @@ public:
     // decode() call.
     const YuvView& frame() const { return frame_; }
 
+    // Whether decoding runs on dedicated hardware (a GPU or codec block) rather than on the CPU.
+    virtual bool isHardwareAccelerated() const { return false; }
+
 protected:
     VideoDecoder() = default;
 

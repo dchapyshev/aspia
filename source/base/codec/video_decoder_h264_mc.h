@@ -42,6 +42,7 @@ public:
 
     // VideoDecoder implementation.
     Result decode(const proto::video::Packet& packet) final;
+    bool isHardwareAccelerated() const final { return true; }
 
 private:
     VideoDecoderH264MC() = default;

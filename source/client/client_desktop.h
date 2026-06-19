@@ -107,6 +107,7 @@ public:
         size_t avg_audio_packet = 0;
         quint32 video_capturer_type = 0;
         quint32 video_encoder_type = 0;
+        bool video_decoder_hardware = false;
         int fps = 0;
         int read_clipboard = 0;
         int send_clipboard = 0;

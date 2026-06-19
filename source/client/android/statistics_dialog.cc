@@ -138,13 +138,13 @@ QString capturerToString(quint32 type)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString encoderToString(quint32 type)
+QString encoderToString(quint32 type, bool hardware_decoder)
 {
     switch (static_cast<proto::video::Encoding>(type))
     {
         case proto::video::ENCODING_VP8: return "VP8";
         case proto::video::ENCODING_VP9: return "VP9";
-        case proto::video::ENCODING_H264: return "H264";
+        case proto::video::ENCODING_H264: return hardware_decoder ? "H264HW" : "H264SW";
         default: return "UNKNOWN";
     }
 }
@@ -186,7 +186,7 @@ StatisticsDialog::StatisticsDialog(QWidget* parent)
     addRow("Video Packet MIN/MAX/AVG");
     addRow("Audio Packet Count");
     addRow("Audio Packet MIN/MAX/AVG");
-    addRow("Video Capturer/Encoder");
+    addRow("Video Capturer/Codec");
     addRow("FPS");
     addRow("Clipboard Event Read/Send");
     addRow("Cursor Shape Count/Cache");
@@ -246,7 +246,7 @@ void StatisticsDialog::setMetrics(const ClientDesktop::Metrics& metrics)
         Formatter::sizeToString(metrics.max_audio_packet) + " / " +
         Formatter::sizeToString(metrics.avg_audio_packet));
     set(ROW_VIDEO_CODEC, capturerToString(metrics.video_capturer_type) + " / " +
-        encoderToString(metrics.video_encoder_type));
+        encoderToString(metrics.video_encoder_type, metrics.video_decoder_hardware));
     set(ROW_FPS, QString::number(metrics.fps));
     set(ROW_CLIPBOARD, QString::number(metrics.read_clipboard) + " / " +
         QString::number(metrics.send_clipboard));

@@ -511,6 +511,7 @@ void ClientDesktop::onMetricsRequest()
 
     metrics.video_capturer_type = video_capturer_type_;
     metrics.video_encoder_type = video_encoding_;
+    metrics.video_decoder_hardware = video_decoder_ && video_decoder_->isHardwareAccelerated();
     metrics.fps = fps_;
     metrics.read_clipboard = read_clipboard_count_;
     metrics.send_clipboard = send_clipboard_count_;
