@@ -24,6 +24,9 @@
 #include "client/application.h"
 
 #if defined(Q_OS_ANDROID)
+#include <QCoreApplication>
+#include <QJniObject>
+
 #include "client/android/main_window.h"
 #else
 #include <QCommandLineParser>
@@ -58,6 +61,25 @@ int main(int argc, char* argv[])
 
     LoggingSettings logging_settings;
     logging_settings.min_log_level = LOG_INFO;
+
+#if defined(Q_OS_ANDROID)
+    // Android defaults to logcat only (LOG_TO_STDOUT). Also write a log file so it can be pulled from
+    // devices whose logcat is restricted (e.g. Huawei), then point that file at the external app files
+    // dir (/sdcard/Android/data/<package>/files/log) so adb can pull it without root.
+    logging_settings.destination = LOG_TO_ALL;
+
+    QJniObject context = QNativeInterface::QAndroidApplication::context();
+    if (context.isValid())
+    {
+        QJniObject files_dir = context.callObjectMethod(
+            "getExternalFilesDir", "(Ljava/lang/String;)Ljava/io/File;", nullptr);
+        if (files_dir.isValid())
+        {
+            logging_settings.log_dir =
+                files_dir.callObjectMethod<jstring>("getAbsolutePath").toString() + "/log";
+        }
+    }
+#endif // defined(Q_OS_ANDROID)
 
     ScopedLogging scoped_logging(logging_settings);
 

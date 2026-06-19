@@ -240,6 +240,12 @@ if (WIN32)
         codec/video_encoder_h264_mf.h)
 endif()
 
+if (ANDROID)
+    list(APPEND SOURCE_BASE_CODEC
+        codec/video_decoder_h264_mc.cc
+        codec/video_decoder_h264_mc.h)
+endif()
+
 list(APPEND SOURCE_BASE_CODEC_TESTS
     codec/scale_reducer_unittest.cc)
 
@@ -698,7 +704,7 @@ if (LINUX)
 endif()
 
 if (ANDROID)
-    set(BASE_PLATFORM_LIBS log oboe::oboe)
+    set(BASE_PLATFORM_LIBS log mediandk oboe::oboe)
 endif()
 
 target_link_libraries(aspia_base PRIVATE aspia_proto
