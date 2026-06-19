@@ -65,6 +65,8 @@ if (WIN32)
 endif()
 
 list(APPEND SOURCE_CLIENT_ANDROID
+    android/biometric_gate.cc
+    android/biometric_gate.h
     android/desktop_view.cc
     android/desktop_view.h
     android/desktop_window.cc
