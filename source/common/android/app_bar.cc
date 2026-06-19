@@ -25,6 +25,8 @@
 #include <QPainter>
 #include <QResizeEvent>
 
+#include <utility>
+
 #include "common/android/controls.h"
 
 namespace {
@@ -88,16 +90,17 @@ void AppBar::setBackVisible(bool visible)
 //--------------------------------------------------------------------------------------------------
 void AppBar::setActions(const QList<QWidget*>& actions)
 {
-    for (QWidget* widget : actions_)
+    for (QWidget* widget : std::as_const(actions_))
     {
         if (widget && !actions.contains(widget))
             widget->hide();
     }
 
-    actions_ = actions;
+    actions_.clear();
 
-    for (QWidget* widget : actions_)
+    for (QWidget* widget : actions)
     {
+        actions_.append(widget);
         widget->setParent(this);
         widget->show();
     }
@@ -257,8 +260,11 @@ void AppBar::relayoutActions()
     const bool rtl = (layoutDirection() == Qt::RightToLeft);
     int x = rtl ? kHorizontalPadding : (width() - kHorizontalPadding - actionsWidth());
 
-    for (QWidget* widget : actions_)
+    for (QWidget* widget : std::as_const(actions_))
     {
+        if (!widget)
+            continue;
+
         const QSize hint = widget->sizeHint();
         widget->setGeometry(x, (height() - hint.height()) / 2, hint.width(), hint.height());
         x += hint.width();
@@ -269,7 +275,10 @@ void AppBar::relayoutActions()
 int AppBar::actionsWidth() const
 {
     int total = 0;
-    for (QWidget* widget : actions_)
-        total += widget->sizeHint().width();
+    for (QWidget* widget : std::as_const(actions_))
+    {
+        if (widget)
+            total += widget->sizeHint().width();
+    }
     return total;
 }

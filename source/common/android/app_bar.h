@@ -20,6 +20,7 @@
 #define COMMON_ANDROID_APP_BAR_H
 
 #include <QList>
+#include <QPointer>
 #include <QWidget>
 
 class QLineEdit;
@@ -71,7 +72,7 @@ private:
     QString title_;
     bool back_visible_;
     bool search_mode_ = false;
-    QList<QWidget*> actions_;
+    QList<QPointer<QWidget>> actions_;
     QLineEdit* search_field_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(AppBar)
