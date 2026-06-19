@@ -52,9 +52,9 @@ Menu::Menu(QWidget* parent)
 Menu::~Menu() = default;
 
 //--------------------------------------------------------------------------------------------------
-void Menu::addItem(const QString& text, const QIcon& icon)
+void Menu::addItem(const QString& text, const QString& icon_file_path)
 {
-    items_.append({ icon, text });
+    items_.append({ icon_file_path, text });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -127,12 +127,13 @@ void Menu::paintEvent(QPaintEvent* /* event */)
             painter.fillRect(row, layer);
         }
 
-        if (!items_[i].icon.isNull())
+        if (!items_[i].icon_file_path.isEmpty())
         {
             const int icon_x = rtl ? row.right() - kHorizontalPadding - kIconSize + 1
                                    : row.left() + kHorizontalPadding;
-            items_[i].icon.paint(&painter, QRect(icon_x, row.center().y() - kIconSize / 2,
-                                                 kIconSize, kIconSize));
+            const QPixmap icon = Controls::tintedPixmap(items_[i].icon_file_path,
+                QSize(kIconSize, kIconSize), palette().color(QPalette::WindowText));
+            painter.drawPixmap(QPoint(icon_x, row.center().y() - kIconSize / 2), icon);
         }
 
         const QRect text_rect = rtl ? row.adjusted(kHorizontalPadding, 0, -icon_margin, 0)
@@ -220,7 +221,7 @@ bool Menu::hasIcons() const
 {
     for (const Item& item : items_)
     {
-        if (!item.icon.isNull())
+        if (!item.icon_file_path.isEmpty())
             return true;
     }
 

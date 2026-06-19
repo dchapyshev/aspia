@@ -46,11 +46,17 @@ AppBar::AppBar(QWidget* parent)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
-    // Borderless field that blends into the bar; only shown in search mode.
+    // Borderless field that blends into the bar; only shown in search mode. The transparent
+    // background is set through the palette (Base only), not a style sheet: a style sheet would
+    // freeze the text color so it stops following a theme change. Other roles keep inheriting.
     search_field_->setFrame(false);
     search_field_->setPlaceholderText(tr("Search"));
     search_field_->setFont(Controls::scaledFont(font(), kTitleFontScale));
-    search_field_->setStyleSheet("background: transparent;");
+
+    QPalette transparent_base;
+    transparent_base.setColor(QPalette::Base, Qt::transparent);
+    search_field_->setPalette(transparent_base);
+
     search_field_->hide();
 
     connect(search_field_, &QLineEdit::textChanged, this, &AppBar::sig_searchTextChanged);

@@ -19,7 +19,6 @@
 #ifndef COMMON_ANDROID_MENU_H
 #define COMMON_ANDROID_MENU_H
 
-#include <QIcon>
 #include <QList>
 #include <QPoint>
 #include <QRect>
@@ -35,7 +34,9 @@ public:
     explicit Menu(QWidget* parent = nullptr);
     ~Menu() final;
 
-    void addItem(const QString& text, const QIcon& icon = QIcon());
+    // |icon_file_path| is an SVG resource path; the icon is tinted to the current theme color when
+    // drawn, so it follows a theme change.
+    void addItem(const QString& text, const QString& icon_file_path = QString());
 
     // Shows the menu below |anchor| (global coordinates), aligned to its near edge per the layout
     // direction: dropping from the anchor's right edge in LTR and from its left edge in RTL.
@@ -54,7 +55,7 @@ protected:
 private:
     struct Item
     {
-        QIcon icon;
+        QString icon_file_path;
         QString text;
     };
 

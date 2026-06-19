@@ -44,7 +44,14 @@ LineEdit::LineEdit(QWidget* parent)
       focus_progress_(0.0)
 {
     setFrame(false);
-    setStyleSheet("LineEdit { background: transparent; border: none; }");
+
+    // Transparent input background so the custom-drawn rounded outline shows on the parent surface.
+    // Only the Base role is set; the rest (notably the text color) keeps inheriting the application
+    // palette, so the input text follows a theme change. A style sheet would instead freeze the text
+    // color. The floating label is painted from the live palette in paintEvent().
+    QPalette transparent_base;
+    transparent_base.setColor(QPalette::Base, Qt::transparent);
+    setPalette(transparent_base);
 
     // Android draws draggable text handles (the teardrop under the cursor) in a separate popup
     // window that frequently lingers on screen after the field or its dialog is gone. Suppress the

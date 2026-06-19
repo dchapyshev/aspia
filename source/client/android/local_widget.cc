@@ -270,10 +270,10 @@ void LocalWidget::onShowMenu()
     enum { kAddGroup, kAddHost, kImport, kExport };
 
     Menu* menu = new Menu(this);
-    menu->addItem(tr("Add Group"), GuiApplication::svgIcon(":/img/material/create_new_folder.svg"));
-    menu->addItem(tr("Add Host"), GuiApplication::svgIcon(":/img/material/add_2.svg"));
-    menu->addItem(tr("Import"), GuiApplication::svgIcon(":/img/material/download.svg"));
-    menu->addItem(tr("Export"), GuiApplication::svgIcon(":/img/material/upload.svg"));
+    menu->addItem(tr("Add Group"), ":/img/material/create_new_folder.svg");
+    menu->addItem(tr("Add Host"), ":/img/material/add_2.svg");
+    menu->addItem(tr("Import"), ":/img/material/download.svg");
+    menu->addItem(tr("Export"), ":/img/material/upload.svg");
 
     connect(menu, &Menu::sig_triggered, this, [this](int index)
     {
