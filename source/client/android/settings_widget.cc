@@ -18,11 +18,16 @@
 
 #include "client/android/settings_widget.h"
 
+#include <QDialog>
+#include <QPointer>
+#include <QSignalBlocker>
 #include <QVBoxLayout>
 
 #include "base/gui_application.h"
 #include "base/net/udp_channel.h"
 #include "client/database.h"
+#include "client/master_password.h"
+#include "client/android/biometric_gate.h"
 #include "client/android/master_password_dialog.h"
 #include "common/android/button.h"
 #include "common/android/combo_box.h"
@@ -149,6 +154,44 @@ void SettingsWidget::buildSecuritySection(QVBoxLayout* layout)
         dialog.exec();
     });
     layout->addWidget(change_password);
+
+    const BiometricGate::Status biometric_status = BiometricGate::status();
+    const bool biometric_enabled = Database::instance().isBiometricUnlockEnabled();
+    const bool usable = biometric_status == BiometricGate::Status::AVAILABLE || biometric_enabled;
+
+    QPointer<Switch> biometric = new Switch(tr("Unlock with biometrics"));
+    biometric->setChecked(biometric_enabled);
+    biometric->setEnabled(usable);
+    layout->addWidget(biometric);
+
+    if (usable)
+    {
+        connect(biometric, &Switch::toggled, this, [this, biometric](bool checked)
+        {
+            if (setBiometricEnabled(checked))
+                return;
+
+            // setBiometricEnabled() runs nested event loops (master password and the biometric
+            // prompt); the switch may have been destroyed by the time they return.
+            if (!biometric)
+                return;
+
+            QSignalBlocker blocker(biometric);
+            biometric->setChecked(!checked);
+        });
+    }
+    else
+    {
+        QString hint;
+        if (biometric_status == BiometricGate::Status::NONE_ENROLLED)
+            hint = tr("Set up a fingerprint in the system settings to use this.");
+        else
+            hint = tr("Biometrics are not available on this device.");
+
+        Label* label = new Label(hint, Label::Role::CAPTION);
+        label->setWordWrap(true);
+        layout->addWidget(label);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -226,4 +269,34 @@ void SettingsWidget::buildDesktopSection(QVBoxLayout* layout)
         desktop_config_.set_block_input(checked);
         settings_.setDesktopConfig(desktop_config_);
     });
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SettingsWidget::setBiometricEnabled(bool enable)
+{
+    Database& db = Database::instance();
+
+    if (!enable)
+    {
+        db.clearBiometricUnlock();
+        BiometricGate::deleteKey();
+        return true;
+    }
+
+    // Confirm the master password before binding its key to a biometric, so a momentarily unlocked
+    // app cannot be used to enroll someone else's fingerprint.
+    MasterPasswordDialog dialog(MasterPasswordDialog::Mode::UNLOCK, this);
+    if (dialog.exec() != QDialog::Accepted)
+        return false;
+
+    BiometricGate::Prompt prompt;
+    prompt.title = tr("Enable biometric unlock");
+    prompt.negative_text = tr("Cancel");
+
+    std::optional<BiometricGate::Blob> blob =
+        BiometricGate::enroll(MasterPassword::currentKey(), prompt);
+    if (!blob.has_value())
+        return false;
+
+    return db.setBiometricBlob(BiometricGate::pack(*blob));
 }

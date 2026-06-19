@@ -51,6 +51,10 @@ private:
     void buildUdpSection(QVBoxLayout* layout);
     void buildDesktopSection(QVBoxLayout* layout);
 
+    // Enables or disables biometric unlock, returning whether the requested state was reached so the
+    // caller can revert the switch on cancellation or failure.
+    bool setBiometricEnabled(bool enable);
+
     Settings settings_;
     proto::control::Config desktop_config_;
     quint32 udp_methods_;
