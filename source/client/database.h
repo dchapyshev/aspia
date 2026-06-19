@@ -81,6 +81,12 @@ public:
     QByteArray masterPasswordVerifier() const;
     quint32 masterPasswordVersion() const;
 
+    // Biometric unlock.
+    bool isBiometricUnlockEnabled() const;
+    QByteArray biometricBlob() const;
+    bool setBiometricBlob(const QByteArray& blob);
+    bool clearBiometricUnlock();
+
 private:
     Database() = default;
 

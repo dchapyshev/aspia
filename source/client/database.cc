@@ -29,12 +29,13 @@
 
 namespace {
 
-constexpr auto kSettingDisplayName  = "display_name";
-constexpr auto kSettingCheckUpdates = "check_updates";
-constexpr auto kSettingUpdateServer = "update_server";
-constexpr auto kSettingSalt         = "master_password_salt";
-constexpr auto kSettingVerifier     = "master_password_verifier";
-constexpr auto kSettingVersion      = "master_password_version";
+constexpr auto kSettingDisplayName   = "display_name";
+constexpr auto kSettingCheckUpdates  = "check_updates";
+constexpr auto kSettingUpdateServer  = "update_server";
+constexpr auto kSettingSalt          = "master_password_salt";
+constexpr auto kSettingVerifier      = "master_password_verifier";
+constexpr auto kSettingVersion       = "master_password_version";
+constexpr auto kSettingBiometricBlob = "biometric_blob";
 
 //--------------------------------------------------------------------------------------------------
 HostConfig readHost(const SqlQuery& query)
@@ -714,6 +715,33 @@ QByteArray Database::masterPasswordVerifier() const
 quint32 Database::masterPasswordVersion() const
 {
     return readSetting(kSettingVersion).toUInt();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::isBiometricUnlockEnabled() const
+{
+    // The presence of a wrapped key is the single source of truth for the feature being enabled.
+    return !biometricBlob().isEmpty();
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray Database::biometricBlob() const
+{
+    return QByteArray::fromBase64(readSetting(kSettingBiometricBlob).toLatin1());
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setBiometricBlob(const QByteArray& blob)
+{
+    return writeSetting(kSettingBiometricBlob, QString::fromLatin1(blob.toBase64()));
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::clearBiometricUnlock()
+{
+    // Overwrite the wrapped key so the stored blob does not survive disabling the feature
+    // (the database runs with secure_delete enabled).
+    return writeSetting(kSettingBiometricBlob, QString());
 }
 
 //--------------------------------------------------------------------------------------------------
