@@ -27,6 +27,22 @@ namespace {
 constexpr qsizetype kMinCacheSize = 2;
 constexpr qsizetype kMaxCacheSize = 30;
 
+//--------------------------------------------------------------------------------------------------
+MouseCursor::Type parseType(proto::cursor::Shape::Type type)
+{
+    switch (type)
+    {
+        case proto::cursor::Shape::TYPE_ARROW:
+            return MouseCursor::Type::ARROW;
+
+        case proto::cursor::Shape::TYPE_IBEAM:
+            return MouseCursor::Type::IBEAM;
+
+        default:
+            return MouseCursor::Type::UNKNOWN;
+    }
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -133,6 +149,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::cursor::Shape& c
 
         std::unique_ptr<MouseCursor> mouse_cursor =
             std::make_unique<MouseCursor>(std::move(image), size, hotspot, dpi);
+        mouse_cursor->setType(parseType(cursor_shape.type()));
 
         if (cursor_shape.flags() & proto::cursor::Shape::RESET_CACHE)
         {

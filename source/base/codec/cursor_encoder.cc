@@ -42,6 +42,22 @@ quint8* outputBuffer(proto::cursor::Shape* cursor_shape, size_t size)
     return reinterpret_cast<quint8*>(cursor_shape->mutable_data()->data());
 }
 
+//--------------------------------------------------------------------------------------------------
+proto::cursor::Shape::Type serializeType(MouseCursor::Type type)
+{
+    switch (type)
+    {
+        case MouseCursor::Type::ARROW:
+            return proto::cursor::Shape::TYPE_ARROW;
+
+        case MouseCursor::Type::IBEAM:
+            return proto::cursor::Shape::TYPE_IBEAM;
+
+        default:
+            return proto::cursor::Shape::TYPE_UNKNOWN;
+    }
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -164,6 +180,7 @@ bool CursorEncoder::encode(const MouseCursor& mouse_cursor, proto::cursor::Shape
     cursor_shape->set_hotspot_y(mouse_cursor.hotSpot().y());
     cursor_shape->set_dpi_x(dpi.x());
     cursor_shape->set_dpi_y(dpi.y());
+    cursor_shape->set_type(serializeType(mouse_cursor.type()));
 
     // Compress the cursor using ZSTD.
     if (!compressCursor(mouse_cursor, cursor_shape))

@@ -31,6 +31,13 @@ message Shape
         CACHE       = 128;
     }
 
+    enum Type
+    {
+        TYPE_UNKNOWN = 0;
+        TYPE_ARROW   = 1;
+        TYPE_IBEAM   = 2;
+    }
+
     // We use only the first byte in this field.
     // If bit 7 is set to 1, then bits 0-4 contain the cursor index in the cache.
     // If bit 7 is not set, then the cursor image is received.
@@ -53,6 +60,9 @@ message Shape
     // Screen DPI for current cursor.
     int32 dpi_x = 7;
     int32 dpi_y = 8;
+
+    // Cursor shape type.
+    Type type = 9;
 }
 
 message Position

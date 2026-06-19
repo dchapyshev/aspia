@@ -53,6 +53,30 @@ bool isSameCursorShape(const CURSORINFO& left, const CURSORINFO& right)
 }
 
 //--------------------------------------------------------------------------------------------------
+// Determines the logical type of |cursor| by matching it against the predefined system cursors.
+MouseCursor::Type cursorType(HCURSOR cursor)
+{
+    static const struct
+    {
+        const wchar_t* id;
+        MouseCursor::Type type;
+    } kStandardCursors[] =
+    {
+        { IDC_ARROW, MouseCursor::Type::ARROW },
+        { IDC_IBEAM, MouseCursor::Type::IBEAM }
+    };
+
+    for (const auto& item : kStandardCursors)
+    {
+        // System cursors are shared handles, so a direct comparison is valid here.
+        if (cursor == LoadCursorW(nullptr, item.id))
+            return item.type;
+    }
+
+    return MouseCursor::Type::UNKNOWN;
+}
+
+//--------------------------------------------------------------------------------------------------
 // Scans a 32bpp bitmap looking for any pixels with non-zero alpha component.
 // Returns true if non-zero alpha is found. |stride| is expressed in pixels.
 bool hasAlphaChannel(const quint32* data, int width, int height)
@@ -495,6 +519,7 @@ const MouseCursor* ScreenCapturerWin::captureCursor()
                 int dpi_y = GetDeviceCaps(desktop_dc_, LOGPIXELSY);
 
                 mouse_cursor_->dpi() = QPoint(dpi_x, dpi_y);
+                mouse_cursor_->setType(cursorType(curr_cursor_info_.hCursor));
                 return mouse_cursor_.get();
             }
         }

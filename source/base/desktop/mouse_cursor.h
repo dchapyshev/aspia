@@ -26,11 +26,21 @@
 
 class MouseCursor
 {
+    Q_GADGET
+
 public:
     static const int kBytesPerPixel = 4;
     static const int kBitsPerPixel = 32;
     static const int kDefaultDpiX = 96;
     static const int kDefaultDpiY = 96;
+
+    enum class Type
+    {
+        UNKNOWN = 0,
+        ARROW   = 1,
+        IBEAM   = 2
+    };
+    Q_ENUM(Type)
 
     MouseCursor() = default;
     MouseCursor(QByteArray&& image, const QSize& size, const QPoint& hotspot,
@@ -57,6 +67,9 @@ public:
     const QPoint& constDpi() const { return dpi_; }
     QPoint& dpi() { return dpi_; }
 
+    Type type() const { return type_; }
+    void setType(Type type) { type_ = type; }
+
     const QByteArray& constImage() const { return image_; }
     QByteArray& image() { return image_; }
 
@@ -69,6 +82,7 @@ private:
     QSize size_;
     QPoint hotspot_;
     QPoint dpi_;
+    Type type_ = Type::UNKNOWN;
 };
 
 Q_DECLARE_METATYPE(MouseCursor)

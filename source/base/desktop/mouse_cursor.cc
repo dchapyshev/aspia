@@ -60,10 +60,12 @@ MouseCursor& MouseCursor::operator=(MouseCursor&& other) noexcept
         size_ = other.size_;
         hotspot_ = other.hotspot_;
         dpi_ = other.dpi_;
+        type_ = other.type_;
 
         other.size_ = QSize();
         other.hotspot_ = QPoint();
         other.dpi_ = QPoint();
+        other.type_ = Type::UNKNOWN;
     }
 
     return *this;
@@ -85,5 +87,5 @@ int MouseCursor::stride() const
 bool MouseCursor::equals(const MouseCursor& other)
 {
     return size_ == other.size_ && hotspot_ == other.hotspot_ && dpi_ == other.dpi_ &&
-           image_ == other.image_;
+           type_ == other.type_ && image_ == other.image_;
 }
