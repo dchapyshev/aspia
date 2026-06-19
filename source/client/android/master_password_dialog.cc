@@ -18,10 +18,13 @@
 
 #include "client/android/master_password_dialog.h"
 
+#include <QTimer>
 #include <QVBoxLayout>
 
 #include "base/crypto/secure_string.h"
+#include "client/database.h"
 #include "client/master_password.h"
+#include "client/android/biometric_gate.h"
 #include "common/android/button.h"
 #include "common/android/controls.h"
 #include "common/android/label.h"
@@ -91,6 +94,14 @@ MasterPasswordDialog::MasterPasswordDialog(Mode mode, QWidget* parent)
     Button* accept = addButton(change ? tr("Change") : tr("OK"), Button::Role::FILLED);
 
     connect(accept, &Button::clicked, this, &MasterPasswordDialog::onAccept);
+
+    // The system already shows a biometric prompt automatically when unlock is available; the
+    // password entry stays as the fallback if the user dismisses it.
+    const bool biometric_available = mode_ == Mode::UNLOCK &&
+        Database::instance().isBiometricUnlockEnabled() &&
+        BiometricGate::status() == BiometricGate::Status::AVAILABLE;
+    if (biometric_available)
+        QTimer::singleShot(0, this, &MasterPasswordDialog::tryBiometricUnlock);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -149,7 +160,52 @@ void MasterPasswordDialog::onAccept()
         }
     }
 
+    // The master key changed, so any biometric enrollment bound to the old key no longer works.
+    Database::instance().clearBiometricUnlock();
+    BiometricGate::deleteKey();
+
     accept();
+}
+
+//--------------------------------------------------------------------------------------------------
+void MasterPasswordDialog::tryBiometricUnlock()
+{
+    Database& db = Database::instance();
+
+    std::optional<BiometricGate::Blob> blob = BiometricGate::unpack(db.biometricBlob());
+    if (!blob.has_value())
+        return;
+
+    BiometricGate::Prompt prompt;
+    prompt.title = tr("Unlock");
+    prompt.negative_text = tr("Use password");
+
+    BiometricGate::UnlockResult result = BiometricGate::unlock(*blob, prompt);
+
+    switch (result.result)
+    {
+        case BiometricGate::Result::SUCCESS:
+            if (MasterPassword::unlockWithKey(result.key))
+            {
+                accept();
+                return;
+            }
+            // The blob decrypted but did not match the stored verifier; the enrollment is broken.
+            dropBiometric(tr("Biometric unlock failed. Enter the master password."));
+            break;
+
+        case BiometricGate::Result::KEY_INVALIDATED:
+            dropBiometric(tr("Biometrics changed. Enter the master password to continue."));
+            break;
+
+        case BiometricGate::Result::FAILED:
+            showError(tr("Biometric unlock failed. Enter the master password."));
+            break;
+
+        case BiometricGate::Result::CANCELED:
+            // The user chose to enter the password instead; stay silent.
+            break;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -157,4 +213,13 @@ void MasterPasswordDialog::showError(const QString& message)
 {
     error_->setText(message);
     error_->setVisible(true);
+}
+
+//--------------------------------------------------------------------------------------------------
+void MasterPasswordDialog::dropBiometric(const QString& message)
+{
+    Database::instance().clearBiometricUnlock();
+    BiometricGate::deleteKey();
+
+    showError(message);
 }

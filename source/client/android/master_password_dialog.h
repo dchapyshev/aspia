@@ -44,9 +44,13 @@ public:
 
 private slots:
     void onAccept();
+    void tryBiometricUnlock();
 
 private:
     void showError(const QString& message);
+
+    // Discards a broken or invalidated biometric enrollment and reports the reason to the user.
+    void dropBiometric(const QString& message);
 
     LineEdit* current_ = nullptr;
     LineEdit* password_ = nullptr;
