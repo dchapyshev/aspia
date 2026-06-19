@@ -79,6 +79,7 @@ private slots:
     void onAddGroup();
     void onAddHost();
     void onOnlineCheckerResult(qint64 entry_id, bool online);
+    void onRefreshClicked();
 
 private:
     void populateGroups(qint64 parent_id, QTreeWidgetItem* parent);
@@ -99,6 +100,7 @@ private:
     LocalHostEditor* host_editor_ = nullptr;
     SearchWidget* search_page_ = nullptr;
     IconButton* search_button_ = nullptr;
+    IconButton* refresh_button_ = nullptr;
     IconButton* overflow_button_ = nullptr;
     OnlineChecker* online_checker_ = nullptr;
 

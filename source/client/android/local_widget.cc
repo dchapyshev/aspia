@@ -64,12 +64,14 @@ LocalWidget::LocalWidget(QWidget* parent)
       host_editor_(new LocalHostEditor(this)),
       search_page_(new SearchWidget(this)),
       search_button_(new IconButton(":/img/material/search.svg", this)),
+      refresh_button_(new IconButton(":/img/material/refresh.svg", this)),
       overflow_button_(new IconButton(":/img/material/more_vert.svg", this)),
       online_checker_(new OnlineChecker(this))
 {
     // The action buttons live in the app bar; AppBar::setActions() reparents and shows the ones it
     // receives. Hidden by default so they do not linger in this widget.
     search_button_->hide();
+    refresh_button_->hide();
     overflow_button_->hide();
 
     // Two columns: the entry name and, for ungrouped hosts shown at the root, its address.
@@ -121,6 +123,7 @@ LocalWidget::LocalWidget(QWidget* parent)
     connect(tree_, &QTreeWidget::itemDoubleClicked, this, connect_host);
     connect(host_tree_, &QTreeWidget::itemDoubleClicked, this, connect_host);
     connect(search_button_, &IconButton::clicked, this, &LocalWidget::showSearch);
+    connect(refresh_button_, &IconButton::clicked, this, &LocalWidget::onRefreshClicked);
     connect(search_page_, &SearchWidget::sig_activated, this, [this](const QVariant& data)
     {
         emit sig_connectHost(data.toLongLong());
@@ -159,7 +162,7 @@ QList<QWidget*> LocalWidget::appBarActions() const
     if (isEditorPage() || isSearchPage())
         return {};
 
-    return { search_button_, overflow_button_ };
+    return { search_button_, refresh_button_, overflow_button_ };
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -396,6 +399,25 @@ void LocalWidget::onOnlineCheckerResult(qint64 entry_id, bool online)
                 item->setIcon(0, icon);
         }
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalWidget::onRefreshClicked()
+{
+    // Recheck the hosts visible on the current page: the open group's list, or the ungrouped hosts
+    // at the root. invalidate() drops their cached status so start() issues a fresh probe.
+    const qint64 group_id = (stack_->currentIndex() == kPageHosts) ? current_group_id_ : 0;
+
+    QList<qint64> entry_ids;
+    OnlineChecker::HostList hosts;
+    for (const HostConfig& host : Database::instance().hostList(group_id))
+    {
+        entry_ids.append(host.id());
+        hosts.append(host);
+    }
+
+    online_checker_->invalidate(entry_ids);
+    online_checker_->start(hosts);
 }
 
 //--------------------------------------------------------------------------------------------------
