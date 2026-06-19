@@ -1465,163 +1465,163 @@ Routers added: %4</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="125"/>
+        <location filename="../client/android/desktop_window.cc" line="127"/>
         <source>Connecting...</source>
         <translation>Подключение...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="139"/>
-        <location filename="../client/android/desktop_window.cc" line="299"/>
+        <location filename="../client/android/desktop_window.cc" line="141"/>
+        <location filename="../client/android/desktop_window.cc" line="303"/>
         <source>The specified router is unavailable.</source>
         <translation>Указанный маршрутизатор недоступен.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="303"/>
+        <location filename="../client/android/desktop_window.cc" line="307"/>
         <source>The specified router is offline.</source>
         <translation>Указанный маршрутизатор не в сети.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="176"/>
+        <location filename="../client/android/desktop_window.cc" line="178"/>
         <source>Requesting connection to the host...</source>
         <translation>Запрашивается подключение к хосту...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="150"/>
+        <location filename="../client/android/desktop_window.cc" line="152"/>
         <source>Connecting to router...</source>
         <translation>Подключение к маршрутизатору...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="192"/>
+        <location filename="../client/android/desktop_window.cc" line="194"/>
         <source>The host with the specified ID is not online.</source>
         <translation>Хост с указанным ID не в сети.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="195"/>
+        <location filename="../client/android/desktop_window.cc" line="197"/>
         <source>Access is denied.</source>
         <translation>Доступ запрещен.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="198"/>
+        <location filename="../client/android/desktop_window.cc" line="200"/>
         <source>There are no relays available or the key pool is empty.</source>
         <translation>Нет доступных релеев или пул ключей пуст.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="201"/>
+        <location filename="../client/android/desktop_window.cc" line="203"/>
         <source>Error requesting connection via router.</source>
         <translation>Ошибка при запросе соединения через маршрутизатор.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="278"/>
+        <location filename="../client/android/desktop_window.cc" line="282"/>
         <source>Connecting to host %1...</source>
         <translation>Подключение к хосту %1...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="284"/>
+        <location filename="../client/android/desktop_window.cc" line="288"/>
         <source>Connection established.</source>
         <translation>Соединение установлено.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="289"/>
+        <location filename="../client/android/desktop_window.cc" line="293"/>
         <source>The connection to the host has been lost.</source>
         <translation>Соединение с хостом потеряно.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="307"/>
+        <location filename="../client/android/desktop_window.cc" line="311"/>
         <source>Error requesting connection via router: %1.</source>
         <translation>Ошибка при запросе соединения через маршрутизатор: %1.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="311"/>
+        <location filename="../client/android/desktop_window.cc" line="315"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>Версия хоста новее клиента. Обновите приложение.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="371"/>
+        <location filename="../client/android/desktop_window.cc" line="381"/>
         <source>Monitor %1</source>
         <translation>Монитор %1</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="380"/>
+        <location filename="../client/android/desktop_window.cc" line="390"/>
         <source>Power</source>
         <translation>Питание</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="384"/>
+        <location filename="../client/android/desktop_window.cc" line="394"/>
         <source>Keyboard</source>
         <translation>Клавиатура</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="390"/>
+        <location filename="../client/android/desktop_window.cc" line="400"/>
         <source>Ctrl+Alt+Del</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="394"/>
+        <location filename="../client/android/desktop_window.cc" line="404"/>
         <source>Disconnect</source>
         <translation>Отключить</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="420"/>
+        <location filename="../client/android/desktop_window.cc" line="430"/>
         <source>Back</source>
         <translation>Назад</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="421"/>
+        <location filename="../client/android/desktop_window.cc" line="431"/>
         <source>Shutdown</source>
         <translation>Выключение</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="422"/>
+        <location filename="../client/android/desktop_window.cc" line="432"/>
         <source>Reboot</source>
         <translation>Перезагрузка</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="423"/>
+        <location filename="../client/android/desktop_window.cc" line="433"/>
         <source>Safe Mode</source>
         <translation>Безопасный режим</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="424"/>
+        <location filename="../client/android/desktop_window.cc" line="434"/>
         <source>Logoff</source>
         <translation>Выход из системы</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="425"/>
+        <location filename="../client/android/desktop_window.cc" line="435"/>
         <source>Lock</source>
         <translation>Блокировка</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="436"/>
+        <location filename="../client/android/desktop_window.cc" line="446"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Вы действительно хотите выключить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="440"/>
+        <location filename="../client/android/desktop_window.cc" line="450"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Вы действительно хотите перезагрузить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="444"/>
+        <location filename="../client/android/desktop_window.cc" line="454"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Вы действительно хотите перезагрузить удаленный компьютер в безопасном режиме?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="448"/>
+        <location filename="../client/android/desktop_window.cc" line="458"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Вы действительно хотите завершить сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="452"/>
+        <location filename="../client/android/desktop_window.cc" line="462"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Вы действительно хотите заблокировать сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="466"/>
+        <location filename="../client/android/desktop_window.cc" line="476"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="466"/>
+        <location filename="../client/android/desktop_window.cc" line="476"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
@@ -3498,120 +3498,120 @@ Hosts skipped: %6</source>
 <context>
     <name>LocalWidget</name>
     <message>
-        <location filename="../client/android/local_widget.cc" line="209"/>
-        <location filename="../client/android/local_widget.cc" line="304"/>
+        <location filename="../client/android/local_widget.cc" line="218"/>
+        <location filename="../client/android/local_widget.cc" line="313"/>
         <source>Add Group</source>
         <translation>Добавить группу</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="210"/>
-        <location filename="../client/android/local_widget.cc" line="314"/>
+        <location filename="../client/android/local_widget.cc" line="219"/>
+        <location filename="../client/android/local_widget.cc" line="323"/>
         <source>Add Host</source>
         <translation>Добавить хост</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="211"/>
-        <location filename="../client/android/local_widget.cc" line="247"/>
-        <location filename="../client/android/local_widget.cc" line="254"/>
-        <location filename="../client/android/local_widget.cc" line="258"/>
+        <location filename="../client/android/local_widget.cc" line="220"/>
+        <location filename="../client/android/local_widget.cc" line="256"/>
         <location filename="../client/android/local_widget.cc" line="263"/>
         <location filename="../client/android/local_widget.cc" line="267"/>
+        <location filename="../client/android/local_widget.cc" line="272"/>
+        <location filename="../client/android/local_widget.cc" line="276"/>
         <source>Import</source>
         <translation>Импорт</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="212"/>
-        <location filename="../client/android/local_widget.cc" line="287"/>
-        <location filename="../client/android/local_widget.cc" line="294"/>
+        <location filename="../client/android/local_widget.cc" line="221"/>
+        <location filename="../client/android/local_widget.cc" line="296"/>
+        <location filename="../client/android/local_widget.cc" line="303"/>
         <source>Export</source>
         <translation>Экспорт</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="234"/>
+        <location filename="../client/android/local_widget.cc" line="243"/>
         <source>Import Address Book</source>
         <translation>Импорт адресной книги</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="234"/>
-        <location filename="../client/android/local_widget.cc" line="276"/>
+        <location filename="../client/android/local_widget.cc" line="243"/>
+        <location filename="../client/android/local_widget.cc" line="285"/>
         <source>Address book (*.json)</source>
         <translation>Адресная книга (*.json)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_widget.cc" line="248"/>
+        <location filename="../client/android/local_widget.cc" line="257"/>
         <source>Imported %n router(s), </source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Импортирован %n роутер, </numerusform>
+            <numerusform>Импортировано %n роутера, </numerusform>
+            <numerusform>Импортировано %n роутеров, </numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_widget.cc" line="249"/>
-        <location filename="../client/android/local_widget.cc" line="289"/>
+        <location filename="../client/android/local_widget.cc" line="258"/>
+        <location filename="../client/android/local_widget.cc" line="298"/>
         <source>%n group(s), </source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n группа, </numerusform>
+            <numerusform>%n группы, </numerusform>
+            <numerusform>%n групп, </numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_widget.cc" line="250"/>
-        <location filename="../client/android/local_widget.cc" line="290"/>
-        <source>%n host(s).</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_widget.cc" line="254"/>
-        <source>Invalid password.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../client/android/local_widget.cc" line="259"/>
-        <source>The file was created by a newer version and cannot be imported.</source>
-        <translation type="unfinished"></translation>
+        <location filename="../client/android/local_widget.cc" line="299"/>
+        <source>%n host(s).</source>
+        <translation>
+            <numerusform>%n хост </numerusform>
+            <numerusform>%n хоста </numerusform>
+            <numerusform>%n хостов </numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="263"/>
-        <source>The address book is already up to date.</source>
-        <translation type="unfinished"></translation>
+        <source>Invalid password.</source>
+        <translation>Неверный пароль.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="267"/>
-        <source>Failed to import the address book.</source>
-        <translation type="unfinished"></translation>
+        <location filename="../client/android/local_widget.cc" line="268"/>
+        <source>The file was created by a newer version and cannot be imported.</source>
+        <translation>Файл был создан более новой версией программы и не может быть импортирован.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="272"/>
+        <source>The address book is already up to date.</source>
+        <translation>Адресная книга уже актуальна.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="276"/>
+        <source>Failed to import the address book.</source>
+        <translation>Не удалось импортировать адресную книгу.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="285"/>
         <source>Export Address Book</source>
         <translation>Экспорт адресной книги</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_widget.cc" line="288"/>
+        <location filename="../client/android/local_widget.cc" line="297"/>
         <source>Exported %n router(s), </source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Экспортирован %n маршрутизатор, </numerusform>
+            <numerusform>Экспортировано %n маршрутизатора, </numerusform>
+            <numerusform>Экспортировано %n маршрутизаторов, </numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="294"/>
+        <location filename="../client/android/local_widget.cc" line="303"/>
         <source>Failed to export the address book.</source>
         <translation>Не удалось экспортировать адресную книгу.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="323"/>
+        <location filename="../client/android/local_widget.cc" line="351"/>
         <source>Edit Group</source>
         <translation>Изменить группу</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="332"/>
+        <location filename="../client/android/local_widget.cc" line="360"/>
         <source>Edit Host</source>
         <translation>Изменить хост</translation>
     </message>
@@ -3739,94 +3739,111 @@ Hosts skipped: %6</source>
 <context>
     <name>MasterPasswordDialog</name>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="45"/>
+        <location filename="../client/android/master_password_dialog.cc" line="48"/>
         <source>Set Master Password</source>
         <translation>Установка мастер-пароля</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="46"/>
+        <location filename="../client/android/master_password_dialog.cc" line="49"/>
         <source>Set a master password required to unlock the application.</source>
         <translation>Установите мастер-пароль, необходимый для разблокировки приложения.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="50"/>
+        <location filename="../client/android/master_password_dialog.cc" line="53"/>
+        <location filename="../client/android/master_password_dialog.cc" line="180"/>
         <source>Unlock</source>
         <translation>Разблокировка</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="51"/>
+        <location filename="../client/android/master_password_dialog.cc" line="54"/>
         <source>Enter the master password.</source>
         <translation>Введите мастер-пароль.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="55"/>
+        <location filename="../client/android/master_password_dialog.cc" line="58"/>
         <source>Change Master Password</source>
         <translation>Изменение мастер-пароля</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="56"/>
+        <location filename="../client/android/master_password_dialog.cc" line="59"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>Введите свой текущий пароль и выберите новый.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="60"/>
+        <location filename="../client/android/master_password_dialog.cc" line="63"/>
         <source>New Password</source>
         <translation>Новый пароль</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="60"/>
+        <location filename="../client/android/master_password_dialog.cc" line="63"/>
         <source>Password</source>
         <translation>Пароль</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="75"/>
+        <location filename="../client/android/master_password_dialog.cc" line="78"/>
         <source>Current Password</source>
         <translation>Текущий пароль</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="85"/>
+        <location filename="../client/android/master_password_dialog.cc" line="88"/>
         <source>Confirm Password</source>
         <translation>Подтверждение пароля</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="90"/>
+        <location filename="../client/android/master_password_dialog.cc" line="93"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="91"/>
+        <location filename="../client/android/master_password_dialog.cc" line="94"/>
         <source>Change</source>
         <translation>Изменить</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="91"/>
+        <location filename="../client/android/master_password_dialog.cc" line="94"/>
         <source>OK</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="106"/>
+        <location filename="../client/android/master_password_dialog.cc" line="117"/>
         <source>Invalid master password.</source>
         <translation>Неверный мастер-пароль.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="119"/>
+        <location filename="../client/android/master_password_dialog.cc" line="130"/>
         <source>Password cannot be empty.</source>
         <translation>Пароль не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="126"/>
+        <location filename="../client/android/master_password_dialog.cc" line="137"/>
         <source>The entered passwords do not match.</source>
         <translation>Введенные пароли не совпадают.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="136"/>
+        <location filename="../client/android/master_password_dialog.cc" line="147"/>
         <source>Unable to set master password.</source>
         <translation>Не удалось установить мастер-пароль.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="145"/>
+        <location filename="../client/android/master_password_dialog.cc" line="156"/>
         <source>Invalid current password or unable to change it.</source>
         <translation>Неверный текущий пароль или невозможно изменить его.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="181"/>
+        <source>Use password</source>
+        <translation>Использовать пароль</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="194"/>
+        <location filename="../client/android/master_password_dialog.cc" line="202"/>
+        <source>Biometric unlock failed. Enter the master password.</source>
+        <translation>Не удалось разблокировать с помощью биометрии. Введите мастер-пароль.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="198"/>
+        <source>Biometrics changed. Enter the master password to continue.</source>
+        <translation>Биометрические данные изменились. Введите мастер-пароль, чтобы продолжить.</translation>
     </message>
 </context>
 <context>
@@ -4059,12 +4076,12 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../common/android/message_dialog.cc" line="34"/>
         <source>Cancel</source>
-        <translation type="unfinished">Отмена</translation>
+        <translation>Отмена</translation>
     </message>
     <message>
         <location filename="../common/android/message_dialog.cc" line="51"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -6298,114 +6315,138 @@ Are you sure you want to continue?</source>
 <context>
     <name>SettingsWidget</name>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="102"/>
+        <location filename="../client/android/settings_widget.cc" line="107"/>
         <source>Interface</source>
         <translation>Интерфейс</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="105"/>
+        <location filename="../client/android/settings_widget.cc" line="110"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="118"/>
+        <location filename="../client/android/settings_widget.cc" line="123"/>
         <source>Theme</source>
         <translation>Тема</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="131"/>
+        <location filename="../client/android/settings_widget.cc" line="136"/>
         <source>Display name when connected</source>
         <translation>Отображаемое имя при подключении</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="143"/>
+        <location filename="../client/android/settings_widget.cc" line="148"/>
         <source>Security</source>
         <translation>Безопасность</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="145"/>
+        <location filename="../client/android/settings_widget.cc" line="150"/>
         <source>Change Master Password</source>
         <translation>Изменение мастер-пароля</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="157"/>
+        <location filename="../client/android/settings_widget.cc" line="162"/>
+        <source>Unlock with biometrics</source>
+        <translation>Разблокировать с помощью биометрии</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="187"/>
+        <source>Set up a fingerprint in the system settings to use this.</source>
+        <translation>Настройте отпечаток пальца в параметрах системы, чтобы использовать эту функцию.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="189"/>
+        <source>Biometrics are not available on this device.</source>
+        <translation>Биометрическая аутентификация недоступна на этом устройстве.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="200"/>
         <source>UDP Connections</source>
         <translation>UDP подключения</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="171"/>
+        <location filename="../client/android/settings_widget.cc" line="214"/>
         <source>Allow direct connections</source>
         <translation>Разрешить прямые подключения</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="172"/>
+        <location filename="../client/android/settings_widget.cc" line="215"/>
         <source>Allow UDP Hole Punching</source>
         <translation>Разрешить UDP Hole Punching</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="173"/>
+        <location filename="../client/android/settings_widget.cc" line="216"/>
         <source>Allow PCP protocol</source>
         <translation>Разрешить PCP протокол</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="174"/>
+        <location filename="../client/android/settings_widget.cc" line="217"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>Разрешить NAT-PMP протокол</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="175"/>
+        <location filename="../client/android/settings_widget.cc" line="218"/>
         <source>Allow UPnP protocol</source>
         <translation>Разрешить UPnP протокол</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="181"/>
+        <location filename="../client/android/settings_widget.cc" line="224"/>
         <source>Remote Desktop</source>
         <translation>Удаленный рабочий стол</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="183"/>
+        <location filename="../client/android/settings_widget.cc" line="226"/>
         <source>Enable audio</source>
         <translation>Включить звук</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="188"/>
+        <location filename="../client/android/settings_widget.cc" line="231"/>
         <source>Enable clipboard</source>
         <translation>Включить буфер обмена</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="193"/>
+        <location filename="../client/android/settings_widget.cc" line="236"/>
         <source>Show shape of remote cursor</source>
         <translation>Показывать форму удаленного курсора</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="199"/>
+        <location filename="../client/android/settings_widget.cc" line="242"/>
         <source>Show position of remote cursor</source>
         <translation>Показывать положение удаленного курсора</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="205"/>
+        <location filename="../client/android/settings_widget.cc" line="248"/>
         <source>Disable desktop effects</source>
         <translation>Отключить эффекты рабочего стола</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="211"/>
+        <location filename="../client/android/settings_widget.cc" line="254"/>
         <source>Disable desktop wallpaper</source>
         <translation>Отключить обои рабочего стола</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="217"/>
+        <location filename="../client/android/settings_widget.cc" line="260"/>
         <source>Lock computer at disconnect</source>
         <translation>Блокировать компьютер при отключении</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="223"/>
+        <location filename="../client/android/settings_widget.cc" line="266"/>
         <source>Block remote input</source>
         <translation>Блокировать удаленный ввод</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="229"/>
+        <location filename="../client/android/settings_widget.cc" line="293"/>
+        <source>Enable biometric unlock</source>
+        <translation>Включить разблокировку с помощью биометрии</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="294"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
         <source>Send key combinations</source>
-        <translation>Отправлять комбинации клавиш</translation>
+        <translation type="vanished">Отправлять комбинации клавиш</translation>
     </message>
     <message>
         <source>Preferred resolution</source>

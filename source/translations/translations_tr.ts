@@ -1445,163 +1445,163 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="125"/>
+        <location filename="../client/android/desktop_window.cc" line="127"/>
         <source>Connecting...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="139"/>
-        <location filename="../client/android/desktop_window.cc" line="299"/>
+        <location filename="../client/android/desktop_window.cc" line="141"/>
+        <location filename="../client/android/desktop_window.cc" line="303"/>
         <source>The specified router is unavailable.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="303"/>
+        <location filename="../client/android/desktop_window.cc" line="307"/>
         <source>The specified router is offline.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="176"/>
+        <location filename="../client/android/desktop_window.cc" line="178"/>
         <source>Requesting connection to the host...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="150"/>
+        <location filename="../client/android/desktop_window.cc" line="152"/>
         <source>Connecting to router...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="192"/>
+        <location filename="../client/android/desktop_window.cc" line="194"/>
         <source>The host with the specified ID is not online.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="195"/>
+        <location filename="../client/android/desktop_window.cc" line="197"/>
         <source>Access is denied.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="198"/>
+        <location filename="../client/android/desktop_window.cc" line="200"/>
         <source>There are no relays available or the key pool is empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="201"/>
+        <location filename="../client/android/desktop_window.cc" line="203"/>
         <source>Error requesting connection via router.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="278"/>
+        <location filename="../client/android/desktop_window.cc" line="282"/>
         <source>Connecting to host %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="284"/>
+        <location filename="../client/android/desktop_window.cc" line="288"/>
         <source>Connection established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="289"/>
+        <location filename="../client/android/desktop_window.cc" line="293"/>
         <source>The connection to the host has been lost.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="307"/>
+        <location filename="../client/android/desktop_window.cc" line="311"/>
         <source>Error requesting connection via router: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="311"/>
+        <location filename="../client/android/desktop_window.cc" line="315"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="371"/>
+        <location filename="../client/android/desktop_window.cc" line="381"/>
         <source>Monitor %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="380"/>
+        <location filename="../client/android/desktop_window.cc" line="390"/>
         <source>Power</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="384"/>
+        <location filename="../client/android/desktop_window.cc" line="394"/>
         <source>Keyboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="390"/>
+        <location filename="../client/android/desktop_window.cc" line="400"/>
         <source>Ctrl+Alt+Del</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="394"/>
+        <location filename="../client/android/desktop_window.cc" line="404"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="420"/>
+        <location filename="../client/android/desktop_window.cc" line="430"/>
         <source>Back</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="421"/>
+        <location filename="../client/android/desktop_window.cc" line="431"/>
         <source>Shutdown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="422"/>
+        <location filename="../client/android/desktop_window.cc" line="432"/>
         <source>Reboot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="423"/>
+        <location filename="../client/android/desktop_window.cc" line="433"/>
         <source>Safe Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="424"/>
+        <location filename="../client/android/desktop_window.cc" line="434"/>
         <source>Logoff</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="425"/>
+        <location filename="../client/android/desktop_window.cc" line="435"/>
         <source>Lock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="436"/>
+        <location filename="../client/android/desktop_window.cc" line="446"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="440"/>
+        <location filename="../client/android/desktop_window.cc" line="450"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="444"/>
+        <location filename="../client/android/desktop_window.cc" line="454"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="448"/>
+        <location filename="../client/android/desktop_window.cc" line="458"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="452"/>
+        <location filename="../client/android/desktop_window.cc" line="462"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="466"/>
+        <location filename="../client/android/desktop_window.cc" line="476"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="466"/>
+        <location filename="../client/android/desktop_window.cc" line="476"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3331,112 +3331,112 @@ Hosts skipped: %6</source>
 <context>
     <name>LocalWidget</name>
     <message>
-        <location filename="../client/android/local_widget.cc" line="209"/>
-        <location filename="../client/android/local_widget.cc" line="304"/>
+        <location filename="../client/android/local_widget.cc" line="218"/>
+        <location filename="../client/android/local_widget.cc" line="313"/>
         <source>Add Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="210"/>
-        <location filename="../client/android/local_widget.cc" line="314"/>
+        <location filename="../client/android/local_widget.cc" line="219"/>
+        <location filename="../client/android/local_widget.cc" line="323"/>
         <source>Add Host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="211"/>
-        <location filename="../client/android/local_widget.cc" line="247"/>
-        <location filename="../client/android/local_widget.cc" line="254"/>
-        <location filename="../client/android/local_widget.cc" line="258"/>
+        <location filename="../client/android/local_widget.cc" line="220"/>
+        <location filename="../client/android/local_widget.cc" line="256"/>
         <location filename="../client/android/local_widget.cc" line="263"/>
         <location filename="../client/android/local_widget.cc" line="267"/>
+        <location filename="../client/android/local_widget.cc" line="272"/>
+        <location filename="../client/android/local_widget.cc" line="276"/>
         <source>Import</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="212"/>
-        <location filename="../client/android/local_widget.cc" line="287"/>
-        <location filename="../client/android/local_widget.cc" line="294"/>
+        <location filename="../client/android/local_widget.cc" line="221"/>
+        <location filename="../client/android/local_widget.cc" line="296"/>
+        <location filename="../client/android/local_widget.cc" line="303"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="234"/>
+        <location filename="../client/android/local_widget.cc" line="243"/>
         <source>Import Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="234"/>
-        <location filename="../client/android/local_widget.cc" line="276"/>
+        <location filename="../client/android/local_widget.cc" line="243"/>
+        <location filename="../client/android/local_widget.cc" line="285"/>
         <source>Address book (*.json)</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_widget.cc" line="248"/>
+        <location filename="../client/android/local_widget.cc" line="257"/>
         <source>Imported %n router(s), </source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_widget.cc" line="249"/>
-        <location filename="../client/android/local_widget.cc" line="289"/>
+        <location filename="../client/android/local_widget.cc" line="258"/>
+        <location filename="../client/android/local_widget.cc" line="298"/>
         <source>%n group(s), </source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_widget.cc" line="250"/>
-        <location filename="../client/android/local_widget.cc" line="290"/>
+        <location filename="../client/android/local_widget.cc" line="259"/>
+        <location filename="../client/android/local_widget.cc" line="299"/>
         <source>%n host(s).</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="254"/>
+        <location filename="../client/android/local_widget.cc" line="263"/>
         <source>Invalid password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="259"/>
+        <location filename="../client/android/local_widget.cc" line="268"/>
         <source>The file was created by a newer version and cannot be imported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="263"/>
+        <location filename="../client/android/local_widget.cc" line="272"/>
         <source>The address book is already up to date.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="267"/>
+        <location filename="../client/android/local_widget.cc" line="276"/>
         <source>Failed to import the address book.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="276"/>
+        <location filename="../client/android/local_widget.cc" line="285"/>
         <source>Export Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_widget.cc" line="288"/>
+        <location filename="../client/android/local_widget.cc" line="297"/>
         <source>Exported %n router(s), </source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="294"/>
+        <location filename="../client/android/local_widget.cc" line="303"/>
         <source>Failed to export the address book.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="323"/>
+        <location filename="../client/android/local_widget.cc" line="351"/>
         <source>Edit Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="332"/>
+        <location filename="../client/android/local_widget.cc" line="360"/>
         <source>Edit Host</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3560,93 +3560,110 @@ Hosts skipped: %6</source>
 <context>
     <name>MasterPasswordDialog</name>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="45"/>
+        <location filename="../client/android/master_password_dialog.cc" line="48"/>
         <source>Set Master Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="46"/>
+        <location filename="../client/android/master_password_dialog.cc" line="49"/>
         <source>Set a master password required to unlock the application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="50"/>
+        <location filename="../client/android/master_password_dialog.cc" line="53"/>
+        <location filename="../client/android/master_password_dialog.cc" line="180"/>
         <source>Unlock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="51"/>
+        <location filename="../client/android/master_password_dialog.cc" line="54"/>
         <source>Enter the master password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="55"/>
+        <location filename="../client/android/master_password_dialog.cc" line="58"/>
         <source>Change Master Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="56"/>
+        <location filename="../client/android/master_password_dialog.cc" line="59"/>
         <source>Enter your current password and choose a new one.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="60"/>
+        <location filename="../client/android/master_password_dialog.cc" line="63"/>
         <source>New Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="60"/>
+        <location filename="../client/android/master_password_dialog.cc" line="63"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="75"/>
+        <location filename="../client/android/master_password_dialog.cc" line="78"/>
         <source>Current Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="85"/>
+        <location filename="../client/android/master_password_dialog.cc" line="88"/>
         <source>Confirm Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="90"/>
+        <location filename="../client/android/master_password_dialog.cc" line="93"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="91"/>
+        <location filename="../client/android/master_password_dialog.cc" line="94"/>
         <source>Change</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="91"/>
+        <location filename="../client/android/master_password_dialog.cc" line="94"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="106"/>
+        <location filename="../client/android/master_password_dialog.cc" line="117"/>
         <source>Invalid master password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="119"/>
+        <location filename="../client/android/master_password_dialog.cc" line="130"/>
         <source>Password cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="126"/>
+        <location filename="../client/android/master_password_dialog.cc" line="137"/>
         <source>The entered passwords do not match.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="136"/>
+        <location filename="../client/android/master_password_dialog.cc" line="147"/>
         <source>Unable to set master password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="145"/>
+        <location filename="../client/android/master_password_dialog.cc" line="156"/>
         <source>Invalid current password or unable to change it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="181"/>
+        <source>Use password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="194"/>
+        <location filename="../client/android/master_password_dialog.cc" line="202"/>
+        <source>Biometric unlock failed. Enter the master password.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="198"/>
+        <source>Biometrics changed. Enter the master password to continue.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5627,113 +5644,133 @@ Are you sure you want to continue?</source>
 <context>
     <name>SettingsWidget</name>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="102"/>
+        <location filename="../client/android/settings_widget.cc" line="107"/>
         <source>Interface</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="105"/>
+        <location filename="../client/android/settings_widget.cc" line="110"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="118"/>
+        <location filename="../client/android/settings_widget.cc" line="123"/>
         <source>Theme</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="131"/>
+        <location filename="../client/android/settings_widget.cc" line="136"/>
         <source>Display name when connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="143"/>
+        <location filename="../client/android/settings_widget.cc" line="148"/>
         <source>Security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="145"/>
+        <location filename="../client/android/settings_widget.cc" line="150"/>
         <source>Change Master Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="157"/>
+        <location filename="../client/android/settings_widget.cc" line="162"/>
+        <source>Unlock with biometrics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="187"/>
+        <source>Set up a fingerprint in the system settings to use this.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="189"/>
+        <source>Biometrics are not available on this device.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="200"/>
         <source>UDP Connections</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="171"/>
+        <location filename="../client/android/settings_widget.cc" line="214"/>
         <source>Allow direct connections</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="172"/>
+        <location filename="../client/android/settings_widget.cc" line="215"/>
         <source>Allow UDP Hole Punching</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="173"/>
+        <location filename="../client/android/settings_widget.cc" line="216"/>
         <source>Allow PCP protocol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="174"/>
+        <location filename="../client/android/settings_widget.cc" line="217"/>
         <source>Allow NAT-PMP protocol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="175"/>
+        <location filename="../client/android/settings_widget.cc" line="218"/>
         <source>Allow UPnP protocol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="181"/>
+        <location filename="../client/android/settings_widget.cc" line="224"/>
         <source>Remote Desktop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="183"/>
+        <location filename="../client/android/settings_widget.cc" line="226"/>
         <source>Enable audio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="188"/>
+        <location filename="../client/android/settings_widget.cc" line="231"/>
         <source>Enable clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="193"/>
+        <location filename="../client/android/settings_widget.cc" line="236"/>
         <source>Show shape of remote cursor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="199"/>
+        <location filename="../client/android/settings_widget.cc" line="242"/>
         <source>Show position of remote cursor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="205"/>
+        <location filename="../client/android/settings_widget.cc" line="248"/>
         <source>Disable desktop effects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="211"/>
+        <location filename="../client/android/settings_widget.cc" line="254"/>
         <source>Disable desktop wallpaper</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="217"/>
+        <location filename="../client/android/settings_widget.cc" line="260"/>
         <source>Lock computer at disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="223"/>
+        <location filename="../client/android/settings_widget.cc" line="266"/>
         <source>Block remote input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="229"/>
-        <source>Send key combinations</source>
+        <location filename="../client/android/settings_widget.cc" line="293"/>
+        <source>Enable biometric unlock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="294"/>
+        <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
