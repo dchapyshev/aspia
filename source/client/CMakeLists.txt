@@ -97,6 +97,8 @@ list(APPEND SOURCE_CLIENT_ANDROID
     android/session_keeper_android.h
     android/settings_widget.cc
     android/settings_widget.h
+    android/statistics_dialog.cc
+    android/statistics_dialog.h
     android/two_factor_dialog.cc
     android/two_factor_dialog.h)
 

@@ -19,6 +19,7 @@
 #ifndef COMMON_ANDROID_BOTTOM_SHEET_H
 #define COMMON_ANDROID_BOTTOM_SHEET_H
 
+#include <QElapsedTimer>
 #include <QList>
 #include <QPoint>
 #include <QString>
@@ -53,6 +54,10 @@ public:
 signals:
     void sig_triggered(int index);
 
+    // Emitted after the drag handle is tapped several times in quick succession - a hidden gesture
+    // used to reveal the statistics dialog without a dedicated button.
+    void sig_secretGesture();
+
 protected:
     // QWidget implementation.
     void paintEvent(QPaintEvent* event) final;
@@ -80,6 +85,9 @@ private:
 
     bool isPortrait() const;
     QRect sheetRect() const;
+
+    // Tap target for the hidden gesture: the strip at the top of the sheet that holds the handle.
+    QRect handleHitRect() const;
     int itemsTop() const;
     int columnCount() const;
     int rowCount() const;
@@ -106,6 +114,10 @@ private:
     bool dragging_ = false;
     bool close_on_finish_ = false;
     QVariantAnimation* offset_animation_ = nullptr;
+
+    // Consecutive taps on the handle strip; reset when too slow (see handle tap constants in the .cc).
+    int handle_taps_ = 0;
+    QElapsedTimer handle_tap_timer_;
 
     Q_DISABLE_COPY_MOVE(BottomSheet)
 };

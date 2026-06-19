@@ -32,6 +32,7 @@
 #include "client/settings.h"
 #include "client/android/desktop_view.h"
 #include "client/android/key_bar.h"
+#include "client/android/statistics_dialog.h"
 #include "common/android/bottom_sheet.h"
 #include "common/android/floating_action_button.h"
 #include "common/android/label.h"
@@ -418,7 +419,42 @@ void DesktopWindow::onShowActions()
             emit sig_screenSelected(screen_list_.screen(index));
     });
 
+    connect(action_sheet_, &BottomSheet::sig_secretGesture, this, &DesktopWindow::onShowStatistics);
+
     action_sheet_->showSheet();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onShowStatistics()
+{
+    ClientDesktop* client = client_.get();
+    if (!client)
+        return;
+
+    // Tapping the handle closes the action sheet so the statistics dialog is shown on its own.
+    if (action_sheet_)
+        action_sheet_->close();
+
+    if (statistics_dialog_)
+    {
+        statistics_dialog_->raise();
+        return;
+    }
+
+    StatisticsDialog* dialog = new StatisticsDialog(this);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    statistics_dialog_ = dialog;
+
+    // The client lives on the I/O thread, so metric requests and updates cross threads.
+    connect(dialog, &StatisticsDialog::sig_metricsRequired,
+            client, &ClientDesktop::onMetricsRequest, Qt::QueuedConnection);
+    connect(client, &ClientDesktop::sig_metrics,
+            dialog, &StatisticsDialog::setMetrics, Qt::QueuedConnection);
+
+    // Populate immediately instead of waiting for the first one-second refresh.
+    QMetaObject::invokeMethod(client, &ClientDesktop::onMetricsRequest, Qt::QueuedConnection);
+
+    dialog->show();
 }
 
 //--------------------------------------------------------------------------------------------------

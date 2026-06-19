@@ -56,6 +56,10 @@ constexpr double kScrimOpacity = 0.4;
 constexpr double kPressLayerOpacity = 0.12;
 constexpr int kDragThreshold = 12;
 
+// Hidden gesture: this many taps on the handle strip, no slower than this apart, reveal the statistics.
+constexpr int kSecretTapCount = 5;
+constexpr int kSecretTapResetMs = 2000;
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -343,11 +347,29 @@ void BottomSheet::mouseReleaseEvent(QMouseEvent* event)
 
     pressed_ = false;
 
-    const int item = itemAt(event->position().toPoint());
+    const QPoint pos = event->position().toPoint();
+    const int item = itemAt(pos);
     if (item >= 0)
     {
         emit sig_triggered(item);
         close();
+        return;
+    }
+
+    // A tap on the handle strip (no item there) drives the hidden statistics gesture.
+    if (handleHitRect().contains(pos))
+    {
+        if (handle_tap_timer_.isValid() && handle_tap_timer_.elapsed() > kSecretTapResetMs)
+            handle_taps_ = 0;
+
+        ++handle_taps_;
+        handle_tap_timer_.restart();
+
+        if (handle_taps_ >= kSecretTapCount)
+        {
+            handle_taps_ = 0;
+            emit sig_secretGesture();
+        }
     }
 }
 
@@ -386,6 +408,15 @@ QRect BottomSheet::sheetRect() const
         sheet_height += kTitleHeight;
 
     return QRect(0, height() - sheet_height, width(), sheet_height);
+}
+
+//--------------------------------------------------------------------------------------------------
+QRect BottomSheet::handleHitRect() const
+{
+    // Whole top strip above the items so the small visual handle is easy to hit.
+    const QRect sheet = sheetRect();
+    const int strip_height = kHandleTopMargin + kHandleHeight + kVerticalPadding;
+    return QRect(sheet.left(), sheet.top(), sheet.width(), strip_height);
 }
 
 //--------------------------------------------------------------------------------------------------

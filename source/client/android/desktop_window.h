@@ -49,6 +49,7 @@ class KeyBar;
 class Label;
 class Router;
 class SessionState;
+class StatisticsDialog;
 
 class DesktopWindow final : public QWidget
 {
@@ -74,6 +75,7 @@ private slots:
     void onCapabilitiesChanged(const proto::control::Capabilities& capabilities);
     void onCursorPositionChanged(const proto::cursor::Position& position);
     void onShowActions();
+    void onShowStatistics();
     void onKeyboardInsetChanged(int inset);
     void onApplicationStateChanged(Qt::ApplicationState state);
 
@@ -93,6 +95,7 @@ private:
 
     proto::screen::ScreenList screen_list_;
     QPointer<BottomSheet> action_sheet_;
+    QPointer<StatisticsDialog> statistics_dialog_;
 
     DesktopView* view_ = nullptr;
     Label* status_ = nullptr;
