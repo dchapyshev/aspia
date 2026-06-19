@@ -95,6 +95,8 @@ list(APPEND SOURCE_CLIENT_ANDROID
     android/router_editor.h
     android/routers_widget.cc
     android/routers_widget.h
+    android/search_widget.cc
+    android/search_widget.h
     android/session_keeper_android.cc
     android/session_keeper_android.h
     android/settings_widget.cc

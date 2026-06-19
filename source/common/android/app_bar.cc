@@ -18,6 +18,9 @@
 
 #include "common/android/app_bar.h"
 
+#include <QGuiApplication>
+#include <QInputMethod>
+#include <QLineEdit>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QResizeEvent>
@@ -31,15 +34,26 @@ constexpr int kHorizontalPadding = 16;
 constexpr int kBackWidth = 40;
 constexpr int kBackArrowSize = 18;
 constexpr double kTitleFontScale = 1.3;
+constexpr int kSearchFieldHeight = 40;
 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 AppBar::AppBar(QWidget* parent)
     : QWidget(parent),
-      back_visible_(false)
+      back_visible_(false),
+      search_field_(new QLineEdit(this))
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+    // Borderless field that blends into the bar; only shown in search mode.
+    search_field_->setFrame(false);
+    search_field_->setPlaceholderText(tr("Search"));
+    search_field_->setFont(Controls::scaledFont(font(), kTitleFontScale));
+    search_field_->setStyleSheet("background: transparent;");
+    search_field_->hide();
+
+    connect(search_field_, &QLineEdit::textChanged, this, &AppBar::sig_searchTextChanged);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -83,6 +97,30 @@ void AppBar::setActions(const QList<QWidget*>& actions)
     }
 
     relayoutActions();
+    update();
+}
+
+//--------------------------------------------------------------------------------------------------
+void AppBar::setSearchMode(bool enabled)
+{
+    if (search_mode_ == enabled)
+        return;
+
+    search_mode_ = enabled;
+
+    if (enabled)
+    {
+        search_field_->clear();
+        relayoutSearchField();
+        search_field_->show();
+        search_field_->setFocus(Qt::OtherFocusReason);
+        QGuiApplication::inputMethod()->show();
+    }
+    else
+    {
+        search_field_->hide();
+    }
+
     update();
 }
 
@@ -149,13 +187,17 @@ void AppBar::paintEvent(QPaintEvent* /* event */)
             content.setRight(content.right() - actions_extent);
     }
 
-    QFont title_font = Controls::scaledFont(font(), kTitleFontScale);
-    title_font.setWeight(QFont::DemiBold);
+    // In search mode the inline field covers the title area.
+    if (!search_mode_)
+    {
+        QFont title_font = Controls::scaledFont(font(), kTitleFontScale);
+        title_font.setWeight(QFont::DemiBold);
 
-    const Qt::Alignment alignment = rtl ? Qt::AlignRight : Qt::AlignLeft;
-    painter.setFont(title_font);
-    painter.setPen(on_surface);
-    painter.drawText(content, Qt::AlignVCenter | Qt::AlignAbsolute | alignment, title_);
+        const Qt::Alignment alignment = rtl ? Qt::AlignRight : Qt::AlignLeft;
+        painter.setFont(title_font);
+        painter.setPen(on_surface);
+        painter.drawText(content, Qt::AlignVCenter | Qt::AlignAbsolute | alignment, title_);
+    }
 
     // A bottom separator that sets the bar off from the content below it.
     painter.setRenderHint(QPainter::Antialiasing, false);
@@ -182,6 +224,25 @@ void AppBar::resizeEvent(QResizeEvent* event)
 {
     QWidget::resizeEvent(event);
     relayoutActions();
+    relayoutSearchField();
+}
+
+//--------------------------------------------------------------------------------------------------
+void AppBar::relayoutSearchField()
+{
+    if (!search_mode_)
+        return;
+
+    const bool rtl = (layoutDirection() == Qt::RightToLeft);
+    const int back_extent = back_visible_ ? kBackWidth : 0;
+    const int actions_extent = actionsWidth();
+
+    // The field fills the space between the leading back button and the trailing actions.
+    const int width_available = qMax(0, width() - 2 * kHorizontalPadding - back_extent - actions_extent);
+    const int x = kHorizontalPadding + (rtl ? actions_extent : back_extent);
+
+    search_field_->setGeometry(x, (height() - kSearchFieldHeight) / 2, width_available,
+                               kSearchFieldHeight);
 }
 
 //--------------------------------------------------------------------------------------------------

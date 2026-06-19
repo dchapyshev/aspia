@@ -31,6 +31,7 @@
 #include "client/config.h"
 #include "client/database.h"
 #include "client/router.h"
+#include "client/android/search_widget.h"
 #include "common/android/icon_button.h"
 #include "common/android/tree_widget.h"
 
@@ -38,6 +39,7 @@ namespace {
 
 constexpr int kPageTree = 0;
 constexpr int kPageHosts = 1;
+constexpr int kPageSearch = 2;
 
 // Item data roles. A router row is marked by a workspace id of -1.
 constexpr int kRouterIdRole = Qt::UserRole;
@@ -102,6 +104,7 @@ RemoteWidget::RemoteWidget(QWidget* parent)
       stack_(new QStackedWidget(this)),
       tree_(new TreeWidget(this)),
       host_tree_(new TreeWidget(this)),
+      search_page_(new SearchWidget(this)),
       search_button_(new IconButton(":/img/material/search.svg", this)),
       refresh_button_(new IconButton(":/img/material/refresh.svg", this))
 {
@@ -133,6 +136,7 @@ RemoteWidget::RemoteWidget(QWidget* parent)
 
     stack_->addWidget(tree_page);
     stack_->addWidget(host_page);
+    stack_->addWidget(search_page_);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -142,6 +146,26 @@ RemoteWidget::RemoteWidget(QWidget* parent)
     connect(tree_, &QTreeWidget::itemClicked, this, &RemoteWidget::onItemActivated);
     connect(host_tree_, &QTreeWidget::itemDoubleClicked, this, &RemoteWidget::onHostActivated);
     connect(refresh_button_, &IconButton::clicked, this, &RemoteWidget::onRefreshClicked);
+    connect(search_button_, &IconButton::clicked, this, &RemoteWidget::showSearch);
+    connect(search_page_, &SearchWidget::sig_activated, this, [this](const QVariant& data)
+    {
+        const int index = data.toInt();
+        if (index < 0 || index >= search_results_.size())
+            return;
+
+        const SearchHost& match = search_results_.at(index);
+        const QString name = match.host.display_name.isEmpty() ? match.host.computer_name
+                                                               : match.host.display_name;
+
+        HostConfig config;
+        config.setRouterId(match.router_id);
+        config.setAddress(hostIdToString(match.host.host_id));
+        config.setName(name);
+        config.setUsername(match.host.user_name);
+        config.setPassword(match.host.password);
+
+        emit sig_connectHost(config);
+    });
 
     reload();
 }
@@ -152,6 +176,9 @@ RemoteWidget::~RemoteWidget() = default;
 //--------------------------------------------------------------------------------------------------
 QList<QWidget*> RemoteWidget::appBarActions() const
 {
+    // The search screen has its own field; no browsing actions there.
+    if (isSearchPage())
+        return {};
     return { search_button_, refresh_button_ };
 }
 
@@ -188,7 +215,84 @@ void RemoteWidget::reload()
 //--------------------------------------------------------------------------------------------------
 void RemoteWidget::goBack()
 {
+    const bool from_search = isSearchPage();
     showTree();
+    if (from_search)
+        emit sig_searchModeChanged(false);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RemoteWidget::showSearch()
+{
+    search_page_->reset();
+    search_query_.clear();
+    search_results_.clear();
+
+    stack_->setCurrentIndex(kPageSearch);
+    emit sig_searchModeChanged(true);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool RemoteWidget::isSearchPage() const
+{
+    return stack_->currentIndex() == kPageSearch;
+}
+
+//--------------------------------------------------------------------------------------------------
+void RemoteWidget::searchQuery(const QString& query)
+{
+    search_query_ = query;
+    search_results_.clear();
+
+    if (query.isEmpty())
+    {
+        search_page_->setResults({}, QString());
+        return;
+    }
+
+    // Each online router is searched across all of its workspaces; results stream in asynchronously.
+    for (const RouterConfig& config : Database::instance().routerList())
+    {
+        const qint64 router_id = config.routerId();
+        Router* router = Router::instance(router_id);
+        if (!router || router->status() != Router::Status::ONLINE)
+            continue;
+
+        router->searchHosts(query, this, [this, router_id, query](const Router::HostList& list)
+        {
+            // Ignore responses for a query the user has already moved on from.
+            if (query != search_query_)
+                return;
+
+            for (const Router::Host& host : list.hosts)
+                search_results_.append({ router_id, host });
+
+            rebuildSearchResults();
+        });
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void RemoteWidget::rebuildSearchResults()
+{
+    QList<SearchWidget::Result> results;
+
+    for (int i = 0; i < search_results_.size(); ++i)
+    {
+        const SearchHost& match = search_results_.at(i);
+        const QString name = match.host.display_name.isEmpty() ? match.host.computer_name
+                                                               : match.host.display_name;
+
+        SearchWidget::Result result;
+        result.title = name;
+        result.subtitle = QString("ID %1").arg(match.host.host_id);
+        result.icon_file_path = match.host.online ? ":/img/computer-online.svg"
+                                                   : ":/img/computer-offline.svg";
+        result.data = i;
+        results.append(result);
+    }
+
+    search_page_->setResults(results, search_query_);
 }
 
 //--------------------------------------------------------------------------------------------------

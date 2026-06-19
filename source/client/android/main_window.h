@@ -25,6 +25,8 @@ class AppBar;
 class BottomNavigationBar;
 class DesktopWindow;
 class HostConfig;
+class LocalWidget;
+class RemoteWidget;
 class QStackedWidget;
 
 // Top-level application window for the Android client: a top app bar, a content area switched by
@@ -50,6 +52,8 @@ private slots:
     void onRemoteTitleChanged(const QString& title, bool back_visible);
     void onSettingsTitleChanged(const QString& title, bool back_visible);
     void onSettingsActionsChanged();
+    void onSearchModeChanged(bool active);
+    void onSearchTextChanged(const QString& text);
     void onBackClicked();
     void onConnectHost(qint64 entry_id);
     void onConnectRouterHost(const HostConfig& host);

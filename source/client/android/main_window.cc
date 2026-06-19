@@ -113,6 +113,10 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
             this, &AndroidMainWindow::onLocalActionsChanged);
     connect(remote, &RemoteWidget::sig_titleChanged,
             this, &AndroidMainWindow::onRemoteTitleChanged);
+    connect(local, &LocalWidget::sig_searchModeChanged,
+            this, &AndroidMainWindow::onSearchModeChanged);
+    connect(remote, &RemoteWidget::sig_searchModeChanged,
+            this, &AndroidMainWindow::onSearchModeChanged);
     connect(settings, &SettingsWidget::sig_titleChanged,
             this, &AndroidMainWindow::onSettingsTitleChanged);
     connect(settings, &SettingsWidget::sig_appBarActionsChanged,
@@ -120,6 +124,7 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
     connect(local, &LocalWidget::sig_connectHost, this, &AndroidMainWindow::onConnectHost);
     connect(remote, &RemoteWidget::sig_connectHost, this, &AndroidMainWindow::onConnectRouterHost);
     connect(app_bar_, &AppBar::sig_backClicked, this, &AndroidMainWindow::onBackClicked);
+    connect(app_bar_, &AppBar::sig_searchTextChanged, this, &AndroidMainWindow::onSearchTextChanged);
 
     navigation_->addItem(tr("Local"), ":/img/folder.svg");
     navigation_->addItem(tr("Remote"), ":/img/workspace.svg");
@@ -240,6 +245,44 @@ void AndroidMainWindow::onLocalActionsChanged()
     LocalWidget* local = qobject_cast<LocalWidget*>(content_->widget(SECTION_LOCAL));
     if (navigation_->currentIndex() == SECTION_LOCAL && local)
         app_bar_->setActions(local->appBarActions());
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onSearchModeChanged(bool active)
+{
+    if (active)
+    {
+        // The field text is routed to the active tab by onSearchTextChanged().
+        app_bar_->setActions({});
+        app_bar_->setBackVisible(true);
+        app_bar_->setSearchMode(true);
+    }
+    else
+    {
+        app_bar_->setSearchMode(false);
+        // Restore the bar to the current tab's default state.
+        onSectionChanged(navigation_->currentIndex());
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onSearchTextChanged(const QString& text)
+{
+    switch (navigation_->currentIndex())
+    {
+        case SECTION_LOCAL:
+            if (LocalWidget* local = qobject_cast<LocalWidget*>(content_->widget(SECTION_LOCAL)))
+                local->searchQuery(text);
+            break;
+
+        case SECTION_REMOTE:
+            if (RemoteWidget* remote = qobject_cast<RemoteWidget*>(content_->widget(SECTION_REMOTE)))
+                remote->searchQuery(text);
+            break;
+
+        default:
+            break;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

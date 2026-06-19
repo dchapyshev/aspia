@@ -22,8 +22,11 @@
 #include <QList>
 #include <QWidget>
 
+class QLineEdit;
+
 // Top app bar for touch screens: a title with an optional leading back button and trailing action
-// buttons. Sits at the top of a screen and drives screen-level navigation.
+// buttons. Sits at the top of a screen and drives screen-level navigation. In search mode the title
+// is replaced by an inline text field.
 class AppBar final : public QWidget
 {
     Q_OBJECT
@@ -42,11 +45,17 @@ public:
     // reparented into the bar.
     void setActions(const QList<QWidget*>& actions);
 
+    // Replaces the title with an inline, focused search field; the field is cleared on entry and its
+    // text is reported through sig_searchTextChanged(). The caller drives the back button and actions.
+    void setSearchMode(bool enabled);
+    bool isSearchMode() const { return search_mode_; }
+
     // QWidget implementation.
     QSize sizeHint() const final;
 
 signals:
     void sig_backClicked();
+    void sig_searchTextChanged(const QString& text);
 
 protected:
     // QWidget implementation.
@@ -56,11 +65,14 @@ protected:
 
 private:
     void relayoutActions();
+    void relayoutSearchField();
     int actionsWidth() const;
 
     QString title_;
     bool back_visible_;
+    bool search_mode_ = false;
     QList<QWidget*> actions_;
+    QLineEdit* search_field_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(AppBar)
 };

@@ -32,6 +32,7 @@
 #include "client/config.h"
 #include "client/database.h"
 #include "client/json_backup.h"
+#include "client/android/search_widget.h"
 #include "client/online_checker/online_checker.h"
 #include "common/android/icon_button.h"
 #include "common/android/menu.h"
@@ -44,6 +45,7 @@ constexpr int kPageTree = 0;
 constexpr int kPageHosts = 1;
 constexpr int kPageHostEditor = 2;
 constexpr int kPageGroupEditor = 3;
+constexpr int kPageSearch = 4;
 
 // Item data roles. A host row (an ungrouped host shown at the root) carries kHostIdRole; a group
 // row carries kGroupIdRole.
@@ -60,6 +62,7 @@ LocalWidget::LocalWidget(QWidget* parent)
       host_tree_(new TreeWidget(this)),
       group_editor_(new LocalGroupEditor(this)),
       host_editor_(new LocalHostEditor(this)),
+      search_page_(new SearchWidget(this)),
       search_button_(new IconButton(":/img/material/search.svg", this)),
       overflow_button_(new IconButton(":/img/material/more_vert.svg", this)),
       online_checker_(new OnlineChecker(this))
@@ -100,6 +103,7 @@ LocalWidget::LocalWidget(QWidget* parent)
     stack_->addWidget(host_page);
     stack_->addWidget(host_editor_);
     stack_->addWidget(group_editor_);
+    stack_->addWidget(search_page_);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -116,6 +120,11 @@ LocalWidget::LocalWidget(QWidget* parent)
     };
     connect(tree_, &QTreeWidget::itemDoubleClicked, this, connect_host);
     connect(host_tree_, &QTreeWidget::itemDoubleClicked, this, connect_host);
+    connect(search_button_, &IconButton::clicked, this, &LocalWidget::showSearch);
+    connect(search_page_, &SearchWidget::sig_activated, this, [this](const QVariant& data)
+    {
+        emit sig_connectHost(data.toLongLong());
+    });
     connect(overflow_button_, &IconButton::clicked, this, &LocalWidget::onShowMenu);
     connect(host_editor_, &LocalHostEditor::sig_accepted, this, &LocalWidget::returnFromEditor);
     connect(group_editor_, &LocalGroupEditor::sig_accepted, this, &LocalWidget::returnFromEditor);
@@ -146,8 +155,8 @@ LocalWidget::~LocalWidget() = default;
 //--------------------------------------------------------------------------------------------------
 QList<QWidget*> LocalWidget::appBarActions() const
 {
-    // The editor screens have their own forms; no browsing actions there.
-    if (isEditorPage())
+    // The editor and search screens have their own forms; no browsing actions there.
+    if (isEditorPage() || isSearchPage())
         return {};
 
     return { search_button_, overflow_button_ };
@@ -184,9 +193,55 @@ void LocalWidget::reload()
 void LocalWidget::goBack()
 {
     if (isEditorPage())
+    {
         returnFromEditor();
-    else
+    }
+    else if (isSearchPage())
+    {
         showTree();
+        emit sig_searchModeChanged(false);
+    }
+    else
+    {
+        showTree();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalWidget::showSearch()
+{
+    search_page_->reset();
+    stack_->setCurrentIndex(kPageSearch);
+    emit sig_searchModeChanged(true);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool LocalWidget::isSearchPage() const
+{
+    return stack_->currentIndex() == kPageSearch;
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalWidget::searchQuery(const QString& query)
+{
+    if (query.isEmpty())
+    {
+        search_page_->setResults({}, QString());
+        return;
+    }
+
+    QList<SearchWidget::Result> results;
+    for (const HostConfig& host : Database::instance().searchHosts(query))
+    {
+        SearchWidget::Result result;
+        result.title = host.name();
+        result.subtitle = host.address();
+        result.icon_file_path = ":/img/computer.svg";
+        result.data = host.id();
+        results.append(result);
+    }
+
+    search_page_->setResults(results, query);
 }
 
 //--------------------------------------------------------------------------------------------------

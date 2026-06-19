@@ -27,6 +27,7 @@ class IconButton;
 class LocalGroupEditor;
 class LocalHostEditor;
 class OnlineChecker;
+class SearchWidget;
 class TreeWidget;
 class QStackedWidget;
 class QTreeWidgetItem;
@@ -51,6 +52,10 @@ public:
     // Returns to the tree from the host list. Driven by the app bar back button.
     void goBack();
 
+    // Filters the address book by |query|; fed by the app bar search field while the search screen
+    // is shown.
+    void searchQuery(const QString& query);
+
     void retranslate();
 
 signals:
@@ -59,6 +64,9 @@ signals:
 
     // Emitted when the set returned by appBarActions() changes (the editor hides the actions).
     void sig_appBarActionsChanged();
+
+    // Enters (true) or leaves (false) the search screen, so the host bar shows its search field.
+    void sig_searchModeChanged(bool active);
 
     // Requests a desktop connection to the local address book entry with the given id.
     void sig_connectHost(qint64 entry_id);
@@ -81,11 +89,15 @@ private:
     void returnFromEditor();
     bool isEditorPage() const;
 
+    void showSearch();
+    bool isSearchPage() const;
+
     QStackedWidget* stack_ = nullptr;
     TreeWidget* tree_ = nullptr;
     TreeWidget* host_tree_ = nullptr;
     LocalGroupEditor* group_editor_ = nullptr;
     LocalHostEditor* host_editor_ = nullptr;
+    SearchWidget* search_page_ = nullptr;
     IconButton* search_button_ = nullptr;
     IconButton* overflow_button_ = nullptr;
     OnlineChecker* online_checker_ = nullptr;

@@ -26,6 +26,7 @@
 #include "client/router.h"
 
 class IconButton;
+class SearchWidget;
 class TreeWidget;
 class QStackedWidget;
 class QTreeWidgetItem;
@@ -51,9 +52,16 @@ public:
     // Returns to the tree from the host list. Driven by the app bar back button.
     void goBack();
 
+    // Searches every online router by |query|; fed by the app bar search field while the search
+    // screen is shown.
+    void searchQuery(const QString& query);
+
 signals:
     // Requests the host bar to show |title| with a back button (host list) or the default state.
     void sig_titleChanged(const QString& title, bool back_visible);
+
+    // Enters (true) or leaves (false) the search screen, so the host bar shows its search field.
+    void sig_searchModeChanged(bool active);
 
     // Requests a desktop connection to the given router host.
     void sig_connectHost(const HostConfig& host);
@@ -71,9 +79,22 @@ private:
     QTreeWidgetItem* routerItem(qint64 router_id) const;
     QTreeWidgetItem* workspaceItem(qint64 router_id, qint64 workspace_id) const;
 
+    void showSearch();
+    bool isSearchPage() const;
+    void rebuildSearchResults();
+
+    // A search match, kept so the connection config can be rebuilt on tap (each router is searched
+    // independently, so the owning router id travels with the host).
+    struct SearchHost
+    {
+        qint64 router_id = -1;
+        Router::Host host;
+    };
+
     QStackedWidget* stack_ = nullptr;
     TreeWidget* tree_ = nullptr;
     TreeWidget* host_tree_ = nullptr;
+    SearchWidget* search_page_ = nullptr;
     IconButton* search_button_ = nullptr;
     IconButton* refresh_button_ = nullptr;
     QSet<qint64> connected_routers_;
@@ -83,6 +104,10 @@ private:
 
     // The hosts currently shown on the host page, kept to build a connection config on tap.
     QList<Router::Host> hosts_;
+
+    // The active search query and its accumulated matches from every online router.
+    QString search_query_;
+    QList<SearchHost> search_results_;
 
     Q_DISABLE_COPY_MOVE(RemoteWidget)
 };
