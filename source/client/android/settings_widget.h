@@ -19,17 +19,24 @@
 #ifndef CLIENT_ANDROID_SETTINGS_WIDGET_H
 #define CLIENT_ANDROID_SETTINGS_WIDGET_H
 
+#include <QList>
+#include <QWidget>
+
 #include <functional>
 
 #include "client/settings.h"
-#include "common/android/scroll_area.h"
 #include "proto/desktop_control.h"
 
 class QVBoxLayout;
+class QStackedWidget;
+class AboutWidget;
+class IconButton;
+class ScrollArea;
 
 // Settings screen for the Android client: the same preferences as the desktop client, applied
-// immediately on change. Backed by the shared Settings storage.
-class SettingsWidget final : public ScrollArea
+// immediately on change. Backed by the shared Settings storage. The about screen is hosted as a
+// sub-page reached from the top app bar action.
+class SettingsWidget final : public QWidget
 {
     Q_OBJECT
 
@@ -41,8 +48,27 @@ public:
     // because only top-level widgets receive QEvent::LanguageChange.
     void retranslate();
 
+    // The app bar action (opens the about screen). Empty while the about screen is shown.
+    QList<QWidget*> appBarActions() const;
+
+    // Returns to the settings page from the about screen. Driven by the app bar back button.
+    void goBack();
+
+    // Returns to the settings page without animation, used when the tab is left.
+    void resetToSettings();
+
+signals:
+    // Requests the host bar to show |title| with a back button (about) or the default state.
+    void sig_titleChanged(const QString& title, bool back_visible);
+
+    // Emitted when the set returned by appBarActions() changes (the about screen hides the action).
+    void sig_appBarActionsChanged();
+
 private:
-    void buildContent();
+    void showAbout();
+    bool isAboutPage() const;
+
+    void buildSettings();
     void addSectionHeader(QVBoxLayout* layout, const QString& text);
     void addBoolSetting(QVBoxLayout* layout, const QString& text, bool value,
                         const std::function<void(bool)>& on_changed);
@@ -54,6 +80,11 @@ private:
     // Enables or disables biometric unlock, returning whether the requested state was reached so the
     // caller can revert the switch on cancellation or failure.
     bool setBiometricEnabled(bool enable);
+
+    QStackedWidget* stack_;
+    ScrollArea* settings_page_;
+    AboutWidget* about_page_;
+    IconButton* about_button_;
 
     Settings settings_;
     proto::control::Config desktop_config_;

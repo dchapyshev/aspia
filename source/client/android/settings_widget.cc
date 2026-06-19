@@ -21,18 +21,22 @@
 #include <QDialog>
 #include <QPointer>
 #include <QSignalBlocker>
+#include <QStackedWidget>
 #include <QVBoxLayout>
 
 #include "base/gui_application.h"
 #include "base/net/udp_channel.h"
 #include "client/database.h"
 #include "client/master_password.h"
+#include "client/android/about_widget.h"
 #include "client/android/biometric_gate.h"
 #include "client/android/master_password_dialog.h"
 #include "common/android/button.h"
 #include "common/android/combo_box.h"
+#include "common/android/icon_button.h"
 #include "common/android/label.h"
 #include "common/android/line_edit.h"
+#include "common/android/scroll_area.h"
 #include "common/android/switch.h"
 
 namespace {
@@ -45,11 +49,27 @@ constexpr int kSectionSpacing = 24;
 
 //--------------------------------------------------------------------------------------------------
 SettingsWidget::SettingsWidget(QWidget* parent)
-    : ScrollArea(parent),
+    : QWidget(parent),
+      stack_(new QStackedWidget(this)),
+      settings_page_(new ScrollArea()),
+      about_page_(new AboutWidget()),
+      about_button_(new IconButton(":/img/material/info.svg", this)),
       desktop_config_(settings_.desktopConfig()),
       udp_methods_(settings_.udpMethods())
 {
-    buildContent();
+    // The about action lives in the app bar; AppBar::setActions() reparents and shows it. Hidden by
+    // default so it does not linger in this widget.
+    about_button_->hide();
+    connect(about_button_, &IconButton::clicked, this, &SettingsWidget::showAbout);
+
+    buildSettings();
+
+    stack_->addWidget(settings_page_);
+    stack_->addWidget(about_page_);
+
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->addWidget(stack_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -60,13 +80,53 @@ void SettingsWidget::retranslate()
 {
     // The controls are built with translated strings, so the content is rebuilt. The current
     // values come from the in-memory state, so nothing is lost.
-    buildContent();
+    buildSettings();
+    about_page_->retranslate();
 }
 
 //--------------------------------------------------------------------------------------------------
-void SettingsWidget::buildContent()
+QList<QWidget*> SettingsWidget::appBarActions() const
 {
-    QWidget* content = new QWidget(this);
+    if (isAboutPage())
+        return {};
+    return { about_button_ };
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::goBack()
+{
+    if (!isAboutPage())
+        return;
+
+    stack_->setCurrentWidget(settings_page_);
+    emit sig_titleChanged(QString(), false);
+    emit sig_appBarActionsChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::resetToSettings()
+{
+    stack_->setCurrentWidget(settings_page_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::showAbout()
+{
+    stack_->setCurrentWidget(about_page_);
+    emit sig_titleChanged(tr("About"), true);
+    emit sig_appBarActionsChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SettingsWidget::isAboutPage() const
+{
+    return stack_->currentWidget() == about_page_;
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::buildSettings()
+{
+    QWidget* content = new QWidget(settings_page_);
 
     QVBoxLayout* layout = new QVBoxLayout(content);
     layout->setContentsMargins(kContentMargin, kContentMargin, kContentMargin, kContentMargin);
@@ -79,7 +139,7 @@ void SettingsWidget::buildContent()
     layout->addStretch();
 
     // setWidget() deletes the previously set content widget.
-    setWidget(content);
+    settings_page_->setWidget(content);
 }
 
 //--------------------------------------------------------------------------------------------------

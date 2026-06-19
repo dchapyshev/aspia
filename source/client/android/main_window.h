@@ -48,6 +48,8 @@ private slots:
     void onLocalTitleChanged(const QString& title, bool back_visible);
     void onRoutersTitleChanged(const QString& title, bool back_visible);
     void onRemoteTitleChanged(const QString& title, bool back_visible);
+    void onSettingsTitleChanged(const QString& title, bool back_visible);
+    void onSettingsActionsChanged();
     void onBackClicked();
     void onConnectHost(qint64 entry_id);
     void onConnectRouterHost(const HostConfig& host);

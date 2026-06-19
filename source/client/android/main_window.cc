@@ -96,11 +96,12 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
     LocalWidget* local = new LocalWidget(this);
     RoutersWidget* routers = new RoutersWidget(this);
     RemoteWidget* remote = new RemoteWidget(this);
+    SettingsWidget* settings = new SettingsWidget(this);
 
     content_->addWidget(local);
     content_->addWidget(remote);
     content_->addWidget(routers);
-    content_->addWidget(new SettingsWidget(this));
+    content_->addWidget(settings);
 
     connect(routers, &RoutersWidget::appBarActionsChanged,
             this, &AndroidMainWindow::onRouterActionsChanged);
@@ -112,6 +113,10 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
             this, &AndroidMainWindow::onLocalActionsChanged);
     connect(remote, &RemoteWidget::sig_titleChanged,
             this, &AndroidMainWindow::onRemoteTitleChanged);
+    connect(settings, &SettingsWidget::sig_titleChanged,
+            this, &AndroidMainWindow::onSettingsTitleChanged);
+    connect(settings, &SettingsWidget::sig_appBarActionsChanged,
+            this, &AndroidMainWindow::onSettingsActionsChanged);
     connect(local, &LocalWidget::sig_connectHost, this, &AndroidMainWindow::onConnectHost);
     connect(remote, &RemoteWidget::sig_connectHost, this, &AndroidMainWindow::onConnectRouterHost);
     connect(app_bar_, &AppBar::sig_backClicked, this, &AndroidMainWindow::onBackClicked);
@@ -176,6 +181,10 @@ void AndroidMainWindow::onSectionChanged(int index)
 
     LocalWidget* local = qobject_cast<LocalWidget*>(content_->widget(SECTION_LOCAL));
     RemoteWidget* remote = qobject_cast<RemoteWidget*>(content_->widget(SECTION_REMOTE));
+    SettingsWidget* settings = qobject_cast<SettingsWidget*>(content_->widget(SECTION_SETTINGS));
+
+    if (index != SECTION_SETTINGS && settings)
+        settings->resetToSettings();
 
     QList<QWidget*> actions;
     if (index == SECTION_LOCAL && local)
@@ -184,6 +193,8 @@ void AndroidMainWindow::onSectionChanged(int index)
         actions = routers->appBarActions();
     else if (index == SECTION_REMOTE && remote)
         actions = remote->appBarActions();
+    else if (index == SECTION_SETTINGS && settings)
+        actions = settings->appBarActions();
     app_bar_->setActions(actions);
 
     // Refresh from storage when a browsing screen becomes visible (picks up changes made elsewhere).
@@ -262,6 +273,24 @@ void AndroidMainWindow::onRemoteTitleChanged(const QString& title, bool back_vis
 }
 
 //--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onSettingsTitleChanged(const QString& title, bool back_visible)
+{
+    if (navigation_->currentIndex() != SECTION_SETTINGS)
+        return;
+
+    app_bar_->setTitle(title.isEmpty() ? tr("Settings") : title);
+    app_bar_->setBackVisible(back_visible);
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onSettingsActionsChanged()
+{
+    SettingsWidget* settings = qobject_cast<SettingsWidget*>(content_->widget(SECTION_SETTINGS));
+    if (navigation_->currentIndex() == SECTION_SETTINGS && settings)
+        app_bar_->setActions(settings->appBarActions());
+}
+
+//--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onBackClicked()
 {
     switch (navigation_->currentIndex())
@@ -279,6 +308,11 @@ void AndroidMainWindow::onBackClicked()
         case SECTION_ROUTERS:
             if (RoutersWidget* routers = qobject_cast<RoutersWidget*>(content_->widget(SECTION_ROUTERS)))
                 routers->goBack();
+            break;
+
+        case SECTION_SETTINGS:
+            if (SettingsWidget* settings = qobject_cast<SettingsWidget*>(content_->widget(SECTION_SETTINGS)))
+                settings->goBack();
             break;
 
         default:
