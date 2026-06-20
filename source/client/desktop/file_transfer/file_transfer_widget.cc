@@ -19,7 +19,7 @@
 #include "client/desktop/file_transfer/file_transfer_widget.h"
 
 #include "base/logging.h"
-#include "client/desktop/file_transfer/file_error_code.h"
+#include "client/file_error_code.h"
 #include "common/desktop/formatter.h"
 #include "common/desktop/msg_box.h"
 #include "ui_file_transfer_widget.h"

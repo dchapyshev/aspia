@@ -21,7 +21,7 @@
 #include <QPointer>
 
 #include "base/logging.h"
-#include "client/desktop/file_transfer/file_error_code.h"
+#include "client/file_error_code.h"
 #include "common/desktop/msg_box.h"
 #include "ui_file_remove_widget.h"
 

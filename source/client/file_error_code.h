@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_DESKTOP_FILE_TRANSFER_FILE_ERROR_CODE_H
-#define CLIENT_DESKTOP_FILE_TRANSFER_FILE_ERROR_CODE_H
+#ifndef CLIENT_FILE_ERROR_CODE_H
+#define CLIENT_FILE_ERROR_CODE_H
 
 #include <QString>
 
@@ -27,4 +27,4 @@ enum ErrorCode : int;
 
 QString fileErrorToString(proto::file_transfer::ErrorCode error_code);
 
-#endif // CLIENT_DESKTOP_FILE_TRANSFER_FILE_ERROR_CODE_H
+#endif // CLIENT_FILE_ERROR_CODE_H

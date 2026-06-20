@@ -25,8 +25,8 @@
 #include <QMenu>
 
 #include "base/logging.h"
+#include "client/file_error_code.h"
 #include "client/desktop/file_transfer/address_bar_model.h"
-#include "client/desktop/file_transfer/file_error_code.h"
 #include "client/desktop/file_transfer/file_item_delegate.h"
 #include "client/desktop/file_transfer/file_list_model.h"
 #include "common/file_platform_util.h"

@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/desktop/file_transfer/file_error_code.h"
-
-#include "proto/file_transfer.h"
+#include "client/file_error_code.h"
 
 #include <QCoreApplication>
+
+#include "proto/file_transfer.h"
 
 //--------------------------------------------------------------------------------------------------
 QString fileErrorToString(proto::file_transfer::ErrorCode error_code)
