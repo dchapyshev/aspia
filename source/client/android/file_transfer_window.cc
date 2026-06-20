@@ -30,9 +30,9 @@
 #include "client/android/file_panel_widget.h"
 #include "client/android/file_progress_sheet.h"
 #include "common/android/app_bar.h"
-#include "common/android/button.h"
 #include "common/android/label.h"
 #include "common/android/message_dialog.h"
+#include "common/android/segmented_button.h"
 #include "proto/peer.h"
 #include "proto/router_client.h"
 
@@ -69,20 +69,10 @@ FileTransferWindow::FileTransferWindow(const HostConfig& host, QWidget* parent)
     status_->setAlignment(Qt::AlignCenter);
 
     // Switcher shown only on a narrow screen.
-    local_tab_ = new Button(tr("This Device"), Button::Role::TEXT, this);
-    remote_tab_ = new Button(host_title, Button::Role::TEXT, this);
-    // Equal halves; Ignored lets the layout shrink each tab below its text width (Button forces its
-    // minimum size hint to the full text otherwise) so a long host name does not overflow.
-    local_tab_->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
-    remote_tab_->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
-    connect(local_tab_, &Button::clicked, this, [this]() { setActivePanel(0); });
-    connect(remote_tab_, &Button::clicked, this, [this]() { setActivePanel(1); });
-
-    segment_ = new QWidget(this);
-    QHBoxLayout* segment_layout = new QHBoxLayout(segment_);
-    segment_layout->setContentsMargins(0, 0, 0, 0);
-    segment_layout->addWidget(local_tab_, 1);
-    segment_layout->addWidget(remote_tab_, 1);
+    segment_ = new SegmentedButton(this);
+    segment_->addSegment(tr("This Device"));
+    segment_->addSegment(host_title);
+    connect(segment_, &SegmentedButton::sig_currentChanged, this, &FileTransferWindow::setActivePanel);
 
     QWidget* panels = new QWidget(this);
     panels_layout_ = new QHBoxLayout(panels);
@@ -486,8 +476,7 @@ void FileTransferWindow::applyLayout()
         remote_panel_->setVisible(active_panel_ == 1);
     }
 
-    local_tab_->setRole(active_panel_ == 0 ? Button::Role::FILLED : Button::Role::TEXT);
-    remote_tab_->setRole(active_panel_ == 1 ? Button::Role::FILLED : Button::Role::TEXT);
+    segment_->setCurrentIndex(active_panel_);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -37,11 +37,11 @@ class List;
 } // namespace proto::file_transfer
 
 class AppBar;
-class Button;
 class ClientFileTransfer;
 class FilePanelWidget;
 class Label;
 class Router;
+class SegmentedButton;
 class SessionState;
 class QHBoxLayout;
 class QWidget;
@@ -103,9 +103,7 @@ private:
     Label* status_ = nullptr;
     FilePanelWidget* local_panel_ = nullptr;
     FilePanelWidget* remote_panel_ = nullptr;
-    QWidget* segment_ = nullptr;
-    Button* local_tab_ = nullptr;
-    Button* remote_tab_ = nullptr;
+    SegmentedButton* segment_ = nullptr;
     QHBoxLayout* panels_layout_ = nullptr;
 
     // On a narrow screen only one panel is shown at a time; 0 = this device, 1 = remote host.

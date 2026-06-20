@@ -184,6 +184,8 @@ if (ANDROID)
         android/scroll_area.h
         android/scroll_indicator.cc
         android/scroll_indicator.h
+        android/segmented_button.cc
+        android/segmented_button.h
         android/switch.cc
         android/switch.h
         android/text_area.cc
