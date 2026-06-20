@@ -92,6 +92,10 @@ private:
     // True if |path| is the root of one of the known locations (a drive or special folder).
     bool isLocationRoot(const QString& path) const;
 
+    // The absolute path of |name| inside the current folder, inserting a separator if the current
+    // path lacks a trailing one (location roots like "/storage/emulated/0" do).
+    QString itemPath(const QString& name) const;
+
     // Enables the delete button only while a file or folder is selected.
     void updateActions();
 

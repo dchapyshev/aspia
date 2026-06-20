@@ -36,11 +36,15 @@ public:
     void setCurrentItem(const QString& text);
     void setProgress(int percentage);
 
+    // Shows the current transfer speed; hidden until first set (removal has no speed).
+    void setSpeed(qint64 bytes_per_second);
+
 signals:
     void sig_cancel();
 
 private:
     Label* item_ = nullptr;
+    Label* speed_ = nullptr;
     QProgressBar* bar_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(FileProgressSheet)

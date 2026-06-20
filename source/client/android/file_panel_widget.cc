@@ -306,17 +306,10 @@ void FilePanelWidget::onItemClicked(QTreeWidgetItem* item, int /* column */)
         return;
     }
 
-    // A folder opens on tap; a file is just selected (by the view) and sent with the send button.
-    // Per-item actions (upload, delete) stay on long-press.
+    // A folder opens on tap; a file is just selected (by the view). Per-item actions (upload,
+    // download, delete) are on long-press.
     if (item->data(0, kIsDirRole).toBool())
-    {
-        // Location paths do not always end with a separator (e.g. "/storage/emulated/0").
-        QString base = current_path_;
-        if (!base.endsWith('/'))
-            base += '/';
-
-        setPath(base + item->data(0, kNameRole).toString() + "/");
-    }
+        setPath(itemPath(item->data(0, kNameRole).toString()) + "/");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -370,12 +363,7 @@ void FilePanelWidget::onNewFolderClicked()
         return;
     }
 
-    // Location paths do not always end with a separator (e.g. "/storage/emulated/0").
-    QString base = current_path_;
-    if (!base.endsWith('/'))
-        base += '/';
-
-    emit sig_createDirectoryRequested(base + folder_name);
+    emit sig_createDirectoryRequested(itemPath(folder_name));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -390,7 +378,7 @@ void FilePanelWidget::onDeleteClicked()
         if (item->data(0, kPathRole).isValid())
             continue;
 
-        items.emplace_back(current_path_ + item->data(0, kNameRole).toString(),
+        items.emplace_back(itemPath(item->data(0, kNameRole).toString()),
                            item->data(0, kIsDirRole).toBool());
     }
 
@@ -406,7 +394,12 @@ void FilePanelWidget::onDeleteClicked()
 //--------------------------------------------------------------------------------------------------
 void FilePanelWidget::setPath(const QString& path)
 {
+    // Keep a trailing separator so currentPath() can be concatenated with item names directly (a
+    // location root like "/storage/emulated/0" arrives without one).
     current_path_ = path;
+    if (!current_path_.isEmpty() && !current_path_.endsWith('/'))
+        current_path_ += '/';
+
     selectCurrentLocation();
 
     // Show the full path in the address field; the drive list (empty path) falls back to the root
@@ -470,6 +463,16 @@ bool FilePanelWidget::isLocationRoot(const QString& path) const
 }
 
 //--------------------------------------------------------------------------------------------------
+QString FilePanelWidget::itemPath(const QString& name) const
+{
+    QString base = current_path_;
+    if (!base.endsWith('/'))
+        base += '/';
+
+    return base + name;
+}
+
+//--------------------------------------------------------------------------------------------------
 void FilePanelWidget::updateActions()
 {
     const QList<QTreeWidgetItem*> selected = list_->selectedItems();
@@ -525,7 +528,7 @@ void FilePanelWidget::showItemActions(QTreeWidgetItem* item)
                 return;
 
             FileRemover::TaskList items;
-            items.emplace_back(current_path_ + name, is_directory);
+            items.emplace_back(itemPath(name), is_directory);
             emit sig_removeRequested(items);
         }
     });

@@ -396,6 +396,8 @@ void FileTransferWindow::sendItems(FilePanelWidget* sender, const QList<FileTran
     {
         progress->setCurrentItem(source);
     }, Qt::QueuedConnection);
+    connect(transfer, &FileTransfer::sig_currentSpeedChanged, progress,
+            &FileProgressSheet::setSpeed, Qt::QueuedConnection);
     connect(transfer, &FileTransfer::sig_errorOccurred, this, [transfer](const FileTransfer::Error& error)
     {
         // MVP: overwrite on conflict, skip other errors, to keep the queue moving without prompting.

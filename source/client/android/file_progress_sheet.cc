@@ -23,22 +23,26 @@
 
 #include "common/android/button.h"
 #include "common/android/label.h"
+#include "common/desktop/formatter.h"
 
 //--------------------------------------------------------------------------------------------------
 FileProgressSheet::FileProgressSheet(const QString& title, QWidget* parent)
     : Dialog(parent),
       item_(new Label(QString(), Label::Role::CAPTION, this)),
+      speed_(new Label(QString(), Label::Role::CAPTION, this)),
       bar_(new QProgressBar(this))
 {
     setTitle(title);
 
     item_->setWordWrap(true);
+    speed_->hide();
 
     bar_->setRange(0, 100);
     bar_->setTextVisible(false);
 
     contentLayout()->addWidget(item_);
     contentLayout()->addWidget(bar_);
+    contentLayout()->addWidget(speed_);
 
     Button* cancel = addButton(tr("Cancel"), Button::Role::TEXT);
     connect(cancel, &Button::clicked, this, [this]()
@@ -60,4 +64,11 @@ void FileProgressSheet::setCurrentItem(const QString& text)
 void FileProgressSheet::setProgress(int percentage)
 {
     bar_->setValue(percentage);
+}
+
+//--------------------------------------------------------------------------------------------------
+void FileProgressSheet::setSpeed(qint64 bytes_per_second)
+{
+    speed_->setText(Formatter::transferSpeedToString(bytes_per_second));
+    speed_->show();
 }
