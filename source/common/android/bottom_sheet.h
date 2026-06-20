@@ -41,8 +41,10 @@ public:
 
     void setTitle(const QString& title);
 
-    // A |selected| item is drawn highlighted (accent color) to mark the current choice.
-    void addItem(const QString& text, const QString& icon_file_path = QString(), bool selected = false);
+    // A |selected| item is drawn highlighted (accent color) to mark the current choice. When |tinted|
+    // is false the icon is drawn in its own colors instead of being recolored to the theme.
+    void addItem(const QString& text, const QString& icon_file_path = QString(), bool selected = false,
+                 bool tinted = true);
 
     // Marks |index| as the selected item (and clears the rest); pass -1 to clear. Updates a sheet
     // that is already shown, e.g. when the current screen changes from another client.
@@ -74,6 +76,7 @@ private:
         QString icon_file_path;
         QString text;
         bool selected = false;
+        bool tinted = true;
     };
 
     // Animates the vertical offset to |target_offset| (0 = fully shown), closing the sheet when the
@@ -84,6 +87,11 @@ private:
     void dismiss();
 
     bool isPortrait() const;
+
+    // Recomputes the bottom system-bar inset (navigation bar) so the sheet rests above it instead of
+    // being clipped. Cached because it is queried over JNI; refreshed on show and on resize.
+    void updateBottomInset();
+
     QRect sheetRect() const;
 
     // Tap target for the hidden gesture: the strip at the top of the sheet that holds the handle.
@@ -105,6 +113,9 @@ private:
     QString title_;
     QList<Item> items_;
     int active_ = -1;
+
+    // Bottom system-bar inset, kept above the navigation bar. Refreshed on show and resize.
+    int bottom_inset_ = 0;
 
     // Vertical offset of the sheet below its resting position, driven by the drag-to-dismiss gesture
     // and the show/hide animation (0 = fully shown).

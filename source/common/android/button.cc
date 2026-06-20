@@ -100,7 +100,9 @@ QSize Button::sizeHint() const
 //--------------------------------------------------------------------------------------------------
 QSize Button::minimumSizeHint() const
 {
-    return sizeHint();
+    // Allow the layout to shrink the button below its text width (a long caption then elides in
+    // paintEvent) so it cannot overflow a narrow container.
+    return QSize(kMinWidth, kButtonHeight);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -137,8 +139,14 @@ void Button::paintEvent(QPaintEvent* /* event */)
         painter.drawRoundedRect(surface, radius, radius);
     }
 
+    // sizeHint already reserves the horizontal padding, and drawText centers within the full surface,
+    // so elide against the whole width - only a genuinely shrunk button (long caption, tight layout)
+    // then gets the ellipsis.
+    const QString shown = painter.fontMetrics().elidedText(
+        text(), Qt::ElideRight, int(surface.width()));
+
     painter.setPen(foreground);
-    painter.drawText(surface, Qt::AlignCenter, text());
+    painter.drawText(surface, Qt::AlignCenter, shown);
 }
 
 //--------------------------------------------------------------------------------------------------

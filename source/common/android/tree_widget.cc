@@ -100,7 +100,9 @@ public:
                 content.setLeft(icon_rect.right() + kIconSpacing);
         }
 
-        if (index.model()->hasChildren(index))
+        // The chevron belongs to the tree column only; on a multi-column row it must not repeat in
+        // (and crop) the trailing columns.
+        if (index.column() == 0 && index.model()->hasChildren(index))
         {
             const QRect area = chevronArea(content, rtl);
             drawChevron(painter, area, option.state & QStyle::State_Open,

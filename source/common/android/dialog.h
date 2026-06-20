@@ -58,6 +58,9 @@ protected:
     void showEvent(QShowEvent* event) final;
 
 private:
+    // Caps the card width to the screen so long content does not overflow a narrow display.
+    void updateCardWidth();
+
     QWidget* card_;
     Label* title_label_;
     Label* text_label_;

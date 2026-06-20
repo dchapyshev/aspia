@@ -161,8 +161,7 @@ void Dialog::paintEvent(QPaintEvent* /* event */)
 void Dialog::resizeEvent(QResizeEvent* event)
 {
     QDialog::resizeEvent(event);
-
-    card_->setFixedWidth(qMin(kMaxCardWidth, width() - kScreenMargin * 2));
+    updateCardWidth();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -173,4 +172,20 @@ void Dialog::showEvent(QShowEvent* event)
     // The dialog covers the whole parent window, so the scrim dims everything behind the card.
     if (parentWidget())
         setGeometry(parentWidget()->window()->geometry());
+
+    // Constrain the card to the final geometry: setGeometry above does not always trigger a resize
+    // event, which would otherwise leave the card at its content width and overflow a narrow screen.
+    updateCardWidth();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Dialog::updateCardWidth()
+{
+    // The dialog is a native window on Android whose own width may be sized to its content, so the
+    // card is capped against the parent window (the actual screen) instead.
+    int available = width();
+    if (parentWidget() && parentWidget()->window())
+        available = parentWidget()->window()->width();
+
+    card_->setFixedWidth(qMin(kMaxCardWidth, available - kScreenMargin * 2));
 }

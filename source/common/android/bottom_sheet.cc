@@ -20,11 +20,13 @@
 
 #include <QEvent>
 #include <QFontMetrics>
+#include <QJniObject>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPixmap>
 #include <QVariantAnimation>
 
+#include "base/gui_application.h"
 #include "common/android/controls.h"
 
 namespace {
@@ -93,9 +95,9 @@ void BottomSheet::setTitle(const QString& title)
 }
 
 //--------------------------------------------------------------------------------------------------
-void BottomSheet::addItem(const QString& text, const QString& icon_file_path, bool selected)
+void BottomSheet::addItem(const QString& text, const QString& icon_file_path, bool selected, bool tinted)
 {
-    items_.append({ icon_file_path, text, selected });
+    items_.append({ icon_file_path, text, selected, tinted });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -119,6 +121,8 @@ void BottomSheet::showSheet()
     setGeometry(host->rect());
     host->installEventFilter(this);
 
+    updateBottomInset();
+
     // Start fully below the bottom edge so the first frame is off-screen, then slide in.
     offset_ = sheetRect().height();
 
@@ -138,6 +142,7 @@ bool BottomSheet::eventFilter(QObject* watched, QEvent* event)
         offset_animation_->stop();
         offset_ = 0;
         setGeometry(parentWidget()->rect());
+        updateBottomInset();
         active_ = -1;
         update();
     }
@@ -163,10 +168,11 @@ void BottomSheet::paintEvent(QPaintEvent* /* event */)
     // The sheet itself rides the drag/animation offset; the scrim above stays put.
     painter.translate(0, offset_);
 
-    // Extend the rounded rect below the bottom edge so only the top corners are rounded.
+    // Fill the surface down to the window bottom (under the navigation bar) so only the top corners
+    // are rounded and no gap shows above the bar.
     painter.setPen(Qt::NoPen);
     painter.setBrush(Controls::surfaceColor());
-    painter.drawRoundedRect(QRect(sheet.left(), sheet.top(), sheet.width(), sheet.height() + kCornerRadius),
+    painter.drawRoundedRect(QRect(sheet.left(), sheet.top(), sheet.width(), height() - sheet.top() + kCornerRadius),
                             kCornerRadius, kCornerRadius);
 
     // The drag handle.
@@ -233,8 +239,10 @@ void BottomSheet::paintEvent(QPaintEvent* /* event */)
         {
             if (!items_[i].icon_file_path.isEmpty())
             {
-                const QPixmap icon = Controls::tintedPixmap(items_[i].icon_file_path,
-                    QSize(kRowIconSize, kRowIconSize), foreground);
+                const QSize icon_size(kRowIconSize, kRowIconSize);
+                const QPixmap icon = items_[i].tinted ?
+                    Controls::tintedPixmap(items_[i].icon_file_path, icon_size, foreground) :
+                    GuiApplication::svgPixmap(items_[i].icon_file_path, icon_size);
                 const int icon_x = rtl ? item.right() - kHorizontalPadding - kRowIconSize + 1
                                        : item.left() + kHorizontalPadding;
                 painter.drawPixmap(QPoint(icon_x, item.center().y() - kRowIconSize / 2), icon);
@@ -263,8 +271,10 @@ void BottomSheet::paintEvent(QPaintEvent* /* event */)
 
             if (!items_[i].icon_file_path.isEmpty())
             {
-                const QPixmap icon = Controls::tintedPixmap(items_[i].icon_file_path,
-                    QSize(kCellIconSize, kCellIconSize), foreground);
+                const QSize icon_size(kCellIconSize, kCellIconSize);
+                const QPixmap icon = items_[i].tinted ?
+                    Controls::tintedPixmap(items_[i].icon_file_path, icon_size, foreground) :
+                    GuiApplication::svgPixmap(items_[i].icon_file_path, icon_size);
                 painter.drawPixmap(QPoint(item.center().x() - kCellIconSize / 2, block_top), icon);
             }
 
@@ -396,6 +406,37 @@ bool BottomSheet::isPortrait() const
 }
 
 //--------------------------------------------------------------------------------------------------
+void BottomSheet::updateBottomInset()
+{
+    bottom_inset_ = 0;
+
+    QJniObject activity = QNativeInterface::QAndroidApplication::context();
+    if (!activity.isValid())
+        return;
+
+    QJniObject window = activity.callObjectMethod("getWindow", "()Landroid/view/Window;");
+    if (!window.isValid())
+        return;
+
+    QJniObject decor = window.callObjectMethod("getDecorView", "()Landroid/view/View;");
+    if (!decor.isValid())
+        return;
+
+    QJniObject insets = decor.callObjectMethod("getRootWindowInsets", "()Landroid/view/WindowInsets;");
+    if (!insets.isValid())
+        return;
+
+    // WindowInsets.Type.navigationBars(); the reported inset is in physical pixels.
+    const jint type = QJniObject::callStaticMethod<jint>(
+        "android/view/WindowInsets$Type", "navigationBars", "()I");
+    QJniObject bars = insets.callObjectMethod("getInsets", "(I)Landroid/graphics/Insets;", type);
+    if (!bars.isValid())
+        return;
+
+    bottom_inset_ = qRound(bars.getField<jint>("bottom") / devicePixelRatioF());
+}
+
+//--------------------------------------------------------------------------------------------------
 QRect BottomSheet::sheetRect() const
 {
     const int row_height = isPortrait() ? kRowHeight : landscapeCellHeight();
@@ -407,7 +448,7 @@ QRect BottomSheet::sheetRect() const
     if (isPortrait() && !title_.isEmpty())
         sheet_height += kTitleHeight;
 
-    return QRect(0, height() - sheet_height, width(), sheet_height);
+    return QRect(0, height() - sheet_height - bottom_inset_, width(), sheet_height);
 }
 
 //--------------------------------------------------------------------------------------------------
