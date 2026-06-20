@@ -24,7 +24,6 @@
 #include <QFileInfo>
 #include <QStandardPaths>
 #include <QStorageInfo>
-#include <QTimer>
 
 #include "base/logging.h"
 #include "base/files/file_enumerator.h"
@@ -32,10 +31,6 @@
 #include "common/file_packetizer.h"
 #include "common/file_task.h"
 #include "proto/file_transfer.h"
-
-#if defined(Q_OS_WINDOWS)
-#include <qt_windows.h>
-#endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_ANDROID)
 #include <QCoreApplication>
@@ -195,21 +190,9 @@ void addDesktopDrives(proto::file_transfer::DriveList* drive_list)
 
 //--------------------------------------------------------------------------------------------------
 FileWorker::FileWorker(QObject* parent)
-    : QObject(parent),
-      idle_timer_(new QTimer(this))
+    : QObject(parent)
 {
     LOG(INFO) << "Ctor";
-
-    connect(idle_timer_, &QTimer::timeout, this, []()
-    {
-#if defined(Q_OS_WINDOWS)
-        // We send a notification to the system that it is used to prevent the screen saver, going into
-        // hibernation mode, etc.
-        SetThreadExecutionState(ES_SYSTEM_REQUIRED);
-#endif // defined(Q_OS_WINDOWS)
-    });
-
-    idle_timer_->start(std::chrono::seconds(60));
 }
 
 //--------------------------------------------------------------------------------------------------

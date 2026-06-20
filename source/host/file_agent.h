@@ -22,6 +22,7 @@
 #include <QObject>
 
 #include "base/serialization.h"
+#include "base/desktop/power_save_blocker.h"
 #include "proto/file_transfer.h"
 
 class FileWorker;
@@ -46,6 +47,8 @@ private slots:
 private:
     IpcChannel* ipc_channel_ = nullptr;
     FileWorker* worker_ = nullptr;
+
+    PowerSaveBlocker power_save_blocker_;
 
     Parser<proto::file_transfer::Request> request_;
     Serializer<proto::file_transfer::Reply> reply_;

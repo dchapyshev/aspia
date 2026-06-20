@@ -25,7 +25,6 @@
 class FileDepacketizer;
 class FilePacketizer;
 class FileTask;
-class QTimer;
 
 namespace proto::file_transfer {
 class CreateDirectoryRequest;
@@ -61,8 +60,6 @@ private:
     void doUploadRequest(const proto::file_transfer::UploadRequest& request, proto::file_transfer::Reply* reply);
     void doPacketRequest(const proto::file_transfer::PacketRequest& request, proto::file_transfer::Reply* reply);
     void doPacket(const proto::file_transfer::Packet& packet, proto::file_transfer::Reply* reply);
-
-    QTimer* idle_timer_ = nullptr;
 
     std::unique_ptr<FileDepacketizer> depacketizer_;
     std::unique_ptr<FilePacketizer> packetizer_;
