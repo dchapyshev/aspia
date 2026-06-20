@@ -85,6 +85,9 @@ private:
     // Selects the location that owns the current path (its longest matching prefix).
     void selectCurrentLocation();
 
+    // True if |path| is the root of one of the known locations (a drive or special folder).
+    bool isLocationRoot(const QString& path) const;
+
     void showItemActions(QTreeWidgetItem* item);
     void showError(const QString& message);
 

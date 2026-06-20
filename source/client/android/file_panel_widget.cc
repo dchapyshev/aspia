@@ -316,7 +316,14 @@ void FilePanelWidget::onItemClicked(QTreeWidgetItem* item, int /* column */)
     // A folder opens on tap; a file is just selected (by the view) and sent with the send button.
     // Per-item actions (upload, delete) stay on long-press.
     if (item->data(0, kIsDirRole).toBool())
-        setPath(current_path_ + item->data(0, kNameRole).toString() + "/");
+    {
+        // Location paths do not always end with a separator (e.g. "/storage/emulated/0").
+        QString base = current_path_;
+        if (!base.endsWith('/'))
+            base += '/';
+
+        setPath(base + item->data(0, kNameRole).toString() + "/");
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -328,7 +335,14 @@ void FilePanelWidget::onLocationActivated(int index)
 //--------------------------------------------------------------------------------------------------
 void FilePanelWidget::onUpClicked()
 {
-    if (!current_path_.isEmpty())
+    if (current_path_.isEmpty())
+        return;
+
+    // Going up from a location root returns to the location list rather than the file-system parent,
+    // which may be outside accessible storage.
+    if (isLocationRoot(current_path_))
+        setPath(QString());
+    else
         setPath(parentPath(current_path_));
 }
 
@@ -443,6 +457,26 @@ void FilePanelWidget::selectCurrentLocation()
     }
 
     path_combo_->setCurrentIndex(best_index);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool FilePanelWidget::isLocationRoot(const QString& path) const
+{
+    QString trimmed = path;
+    if (trimmed.endsWith('/'))
+        trimmed.chop(1);
+
+    for (int i = 1; i < path_combo_->count(); ++i)
+    {
+        QString location = path_combo_->itemData(i).toString();
+        if (location.endsWith('/'))
+            location.chop(1);
+
+        if (location == trimmed)
+            return true;
+    }
+
+    return false;
 }
 
 //--------------------------------------------------------------------------------------------------
