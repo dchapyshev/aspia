@@ -42,6 +42,10 @@ public:
     void setBackVisible(bool visible);
     bool isBackVisible() const { return back_visible_; }
 
+    // The separator line below the bar; shown by default. Hidden when the content directly below
+    // already reads as attached to the bar.
+    void setBottomBorderVisible(bool visible);
+
     // Places |actions| as trailing buttons; pass an empty list to clear them. The widgets are
     // reparented into the bar.
     void setActions(const QList<QWidget*>& actions);
@@ -71,6 +75,7 @@ private:
 
     QString title_;
     bool back_visible_;
+    bool bottom_border_ = true;
     bool search_mode_ = false;
     QList<QPointer<QWidget>> actions_;
     QLineEdit* search_field_ = nullptr;

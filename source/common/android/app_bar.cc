@@ -88,6 +88,16 @@ void AppBar::setBackVisible(bool visible)
 }
 
 //--------------------------------------------------------------------------------------------------
+void AppBar::setBottomBorderVisible(bool visible)
+{
+    if (bottom_border_ == visible)
+        return;
+
+    bottom_border_ = visible;
+    update();
+}
+
+//--------------------------------------------------------------------------------------------------
 void AppBar::setActions(const QList<QWidget*>& actions)
 {
     for (QWidget* widget : std::as_const(actions_))
@@ -209,9 +219,12 @@ void AppBar::paintEvent(QPaintEvent* /* event */)
     }
 
     // A bottom separator that sets the bar off from the content below it.
-    painter.setRenderHint(QPainter::Antialiasing, false);
-    painter.setPen(palette().color(QPalette::Mid));
-    painter.drawLine(0, height() - 1, width(), height() - 1);
+    if (bottom_border_)
+    {
+        painter.setRenderHint(QPainter::Antialiasing, false);
+        painter.setPen(palette().color(QPalette::Mid));
+        painter.drawLine(0, height() - 1, width(), height() - 1);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

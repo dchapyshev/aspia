@@ -22,18 +22,15 @@
 #include <QTreeWidgetItem>
 #include <QVBoxLayout>
 
-#include <utility>
-
 #include "base/gui_application.h"
 #include "client/file_error_code.h"
 #include "common/file_platform_util.h"
 #include "common/android/bottom_sheet.h"
 #include "common/android/button.h"
+#include "common/android/combo_box.h"
 #include "common/android/dialog.h"
 #include "common/android/icon_button.h"
-#include "common/android/label.h"
 #include "common/android/line_edit.h"
-#include "common/android/menu.h"
 #include "common/android/message_dialog.h"
 #include "common/android/tree_widget.h"
 #include "proto/file_transfer.h"
@@ -59,16 +56,35 @@ QString parentPath(const QString& path)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The last component of a path, used as the breadcrumb caption (e.g. "C:/Users/" -> "Users").
-QString segmentName(const QString& path)
+// The SVG resource for a storage location icon, by its type.
+const char* driveIconPath(proto::file_transfer::DriveList::Item::Type type)
 {
-    QString trimmed = path;
-    if (trimmed.endsWith('/'))
-        trimmed.chop(1);
+    switch (type)
+    {
+        case proto::file_transfer::DriveList::Item::TYPE_HOME_FOLDER:
+            return ":/img/home.svg";
 
-    const int last_slash = trimmed.lastIndexOf('/');
-    const QString name = (last_slash >= 0) ? trimmed.mid(last_slash + 1) : trimmed;
-    return name.isEmpty() ? path : name;
+        case proto::file_transfer::DriveList::Item::TYPE_DESKTOP_FOLDER:
+            return ":/img/desktop.svg";
+
+        case proto::file_transfer::DriveList::Item::TYPE_DOWNLOAD_FOLDER:
+            return ":/img/folder-downloads.svg";
+
+        case proto::file_transfer::DriveList::Item::TYPE_PICTURES_FOLDER:
+            return ":/img/folder-pictures.svg";
+
+        case proto::file_transfer::DriveList::Item::TYPE_DOCUMENTS_FOLDER:
+            return ":/img/folder-documents.svg";
+
+        case proto::file_transfer::DriveList::Item::TYPE_CAMERA_FOLDER:
+            return ":/img/folder-camera.svg";
+
+        case proto::file_transfer::DriveList::Item::TYPE_SD_CARD:
+            return ":/img/sd.svg";
+
+        default:
+            return ":/img/hdd.svg";
+    }
 }
 
 } // namespace
@@ -77,28 +93,28 @@ QString segmentName(const QString& path)
 FilePanelWidget::FilePanelWidget(FileTask::Target target, QWidget* parent)
     : QWidget(parent),
       target_(target),
-      title_(new Label(QString(), Label::Role::TITLE, this)),
-      path_button_(new Button(QString(), Button::Role::TEXT, this)),
+      path_combo_(new ComboBox(this)),
       up_button_(new IconButton(":/img/arrow-up.svg", this)),
       list_(new TreeWidget(this))
 {
     IconButton* new_folder_button = new IconButton(":/img/material/create_new_folder.svg", this);
     IconButton* refresh_button = new IconButton(":/img/material/refresh.svg", this);
 
-    QHBoxLayout* path_row = new QHBoxLayout();
-    path_row->setContentsMargins(0, 0, 0, 0);
-    path_row->addWidget(up_button_);
-    path_row->addWidget(path_button_, 1);
-    path_row->addWidget(new_folder_button);
-    path_row->addWidget(refresh_button);
+    // Navigation on the left, actions on the right; the row grows as more operations are added.
+    QHBoxLayout* toolbar = new QHBoxLayout();
+    toolbar->setContentsMargins(0, 0, 0, 0);
+    toolbar->addWidget(up_button_);
+    toolbar->addStretch();
+    toolbar->addWidget(new_folder_button);
+    toolbar->addWidget(refresh_button);
 
     list_->setColumnCount(1);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
-    layout->addWidget(title_);
-    layout->addLayout(path_row);
+    layout->addWidget(path_combo_);
+    layout->addLayout(toolbar);
     layout->addWidget(list_, 1);
 
     connect(list_, &QTreeWidget::itemClicked, this, &FilePanelWidget::onItemClicked);
@@ -106,9 +122,8 @@ FilePanelWidget::FilePanelWidget(FileTask::Target target, QWidget* parent)
     connect(up_button_, &IconButton::clicked, this, &FilePanelWidget::onUpClicked);
     connect(new_folder_button, &IconButton::clicked, this, &FilePanelWidget::onNewFolderClicked);
     connect(refresh_button, &IconButton::clicked, this, &FilePanelWidget::refresh);
-    connect(path_button_, &Button::clicked, this, &FilePanelWidget::showPathMenu);
+    connect(path_combo_, &QComboBox::activated, this, &FilePanelWidget::onLocationActivated);
 
-    path_button_->setText(tr("This computer"));
     up_button_->setEnabled(false);
 }
 
@@ -118,13 +133,9 @@ FilePanelWidget::~FilePanelWidget() = default;
 //--------------------------------------------------------------------------------------------------
 void FilePanelWidget::setTitle(const QString& title)
 {
-    title_->setText(title);
-}
-
-//--------------------------------------------------------------------------------------------------
-void FilePanelWidget::setHeaderVisible(bool visible)
-{
-    title_->setVisible(visible);
+    root_name_ = title;
+    if (path_combo_->count() > 0)
+        path_combo_->setItemText(0, root_name_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -138,6 +149,9 @@ void FilePanelWidget::onDriveList(
     }
 
     list_->clear();
+
+    path_combo_->clear();
+    path_combo_->addItem(GuiApplication::svgIcon(":/img/computer.svg"), root_name_, QString());
 
     for (int i = 0; i < drive_list.item_size(); ++i)
     {
@@ -185,10 +199,17 @@ void FilePanelWidget::onDriveList(
                 break;
         }
 
+        const QIcon icon = GuiApplication::svgIcon(driveIconPath(drive.type()));
+
         QTreeWidgetItem* item = new QTreeWidgetItem(list_, { name });
-        item->setIcon(0, FilePlatformUtil::driveIcon(drive.type()));
+        item->setIcon(0, icon);
         item->setData(0, kPathRole, path);
+
+        path_combo_->addItem(icon, name, path);
     }
+
+    // clear()/addItem reset the selection, so reselect the current location.
+    selectCurrentLocation();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -277,6 +298,12 @@ void FilePanelWidget::onItemClicked(QTreeWidgetItem* item, int /* column */)
 }
 
 //--------------------------------------------------------------------------------------------------
+void FilePanelWidget::onLocationActivated(int index)
+{
+    setPath(path_combo_->itemData(index).toString());
+}
+
+//--------------------------------------------------------------------------------------------------
 void FilePanelWidget::onUpClicked()
 {
     if (!current_path_.isEmpty())
@@ -321,32 +348,31 @@ void FilePanelWidget::onNewFolderClicked()
 void FilePanelWidget::setPath(const QString& path)
 {
     current_path_ = path;
-    path_button_->setText(path.isEmpty() ? tr("This computer") : path);
+    selectCurrentLocation();
     up_button_->setEnabled(!path.isEmpty());
 
     refresh();
 }
 
 //--------------------------------------------------------------------------------------------------
-void FilePanelWidget::showPathMenu()
+void FilePanelWidget::selectCurrentLocation()
 {
-    // The breadcrumb: the root (drive list) followed by every parent down to the current directory.
-    QList<QString> paths;
-    for (QString path = current_path_; !path.isEmpty(); path = parentPath(path))
-        paths.prepend(path);
+    // Item 0 is "This computer"; pick the location whose path is the longest prefix of the current
+    // one, so a folder deep inside a drive still shows that drive as the selected location.
+    int best_index = 0;
+    int best_length = -1;
 
-    Menu* menu = new Menu(this);
-    menu->addItem(tr("This computer"));
-    for (const QString& path : std::as_const(paths))
-        menu->addItem(segmentName(path));
-
-    connect(menu, &Menu::sig_triggered, this, [this, paths](int index)
+    for (int i = 1; i < path_combo_->count(); ++i)
     {
-        setPath(index == 0 ? QString() : paths.at(index - 1));
-    });
+        const QString location = path_combo_->itemData(i).toString();
+        if (current_path_.startsWith(location) && location.length() > best_length)
+        {
+            best_index = i;
+            best_length = location.length();
+        }
+    }
 
-    const QRect anchor(path_button_->mapToGlobal(QPoint(0, 0)), path_button_->size());
-    menu->popup(anchor);
+    path_combo_->setCurrentIndex(best_index);
 }
 
 //--------------------------------------------------------------------------------------------------

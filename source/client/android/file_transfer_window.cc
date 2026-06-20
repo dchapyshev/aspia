@@ -54,6 +54,7 @@ FileTransferWindow::FileTransferWindow(const HostConfig& host, QWidget* parent)
 
     app_bar_->setTitle(tr("File Transfer"));
     app_bar_->setBackVisible(true);
+    app_bar_->setBottomBorderVisible(false);
     connect(app_bar_, &AppBar::sig_backClicked, this, &FileTransferWindow::sig_closed);
 
     local_panel_->setTitle(tr("This device"));
@@ -93,9 +94,9 @@ FileTransferWindow::FileTransferWindow(const HostConfig& host, QWidget* parent)
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(app_bar_);
-    layout->addWidget(segment_);
     layout->addWidget(status_);
     layout->addWidget(panels, 1);
+    layout->addWidget(segment_);
 
     initPanel(local_panel_, FileTask::Target::LOCAL);
     initPanel(remote_panel_, FileTask::Target::REMOTE);
@@ -484,10 +485,6 @@ void FileTransferWindow::applyLayout()
         local_panel_->setVisible(active_panel_ == 0);
         remote_panel_->setVisible(active_panel_ == 1);
     }
-
-    // The panel header repeats the switcher caption, so show it only in landscape (no switcher).
-    local_panel_->setHeaderVisible(landscape);
-    remote_panel_->setHeaderVisible(landscape);
 
     local_tab_->setRole(active_panel_ == 0 ? Button::Role::FILLED : Button::Role::TEXT);
     remote_tab_->setRole(active_panel_ == 1 ? Button::Role::FILLED : Button::Role::TEXT);

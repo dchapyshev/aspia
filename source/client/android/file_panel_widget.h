@@ -19,6 +19,7 @@
 #ifndef CLIENT_ANDROID_FILE_PANEL_WIDGET_H
 #define CLIENT_ANDROID_FILE_PANEL_WIDGET_H
 
+#include <QList>
 #include <QWidget>
 
 #include "client/file_remover.h"
@@ -31,9 +32,8 @@ class DriveList;
 class List;
 } // namespace proto::file_transfer
 
-class Button;
+class ComboBox;
 class IconButton;
-class Label;
 class TreeWidget;
 class QTreeWidgetItem;
 
@@ -51,10 +51,8 @@ public:
     FileTask::Target target() const { return target_; }
     const QString& currentPath() const { return current_path_; }
 
+    // The side's name, shown as the root entry of the path combo box.
     void setTitle(const QString& title);
-
-    // Hidden in portrait, where the panel switcher already names the side.
-    void setHeaderVisible(bool visible);
 
     // Replies routed from the window's client.
     void onDriveList(proto::file_transfer::ErrorCode error_code,
@@ -75,23 +73,27 @@ signals:
 
 private slots:
     void onItemClicked(QTreeWidgetItem* item, int column);
+    void onLocationActivated(int index);
     void onUpClicked();
     void onNewFolderClicked();
 
 private:
-    // Opens a breadcrumb popup to jump straight to the root or any parent of the current directory.
-    void showPathMenu();
-
     void setPath(const QString& path);
+
+    // Selects the location that owns the current path (its longest matching prefix).
+    void selectCurrentLocation();
+
     void showItemActions(QTreeWidgetItem* item);
     void showError(const QString& message);
 
     const FileTask::Target target_;
 
-    Label* title_ = nullptr;
-    Button* path_button_ = nullptr;
+    ComboBox* path_combo_ = nullptr;
     IconButton* up_button_ = nullptr;
     TreeWidget* list_ = nullptr;
+
+    // Shown as the root entry of the path combo box (the side's name, e.g. "This device").
+    QString root_name_;
 
     // Empty means the drive list (the root); otherwise a directory path ending with '/'.
     QString current_path_;

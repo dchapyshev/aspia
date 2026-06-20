@@ -20,6 +20,7 @@
 
 #include <QApplication>
 #include <QFrame>
+#include <QIcon>
 #include <QListView>
 #include <QPainter>
 #include <QPainterPath>
@@ -41,7 +42,11 @@ constexpr int kLabelPadding = 4;
 constexpr int kArrowWidth = 12;
 constexpr int kArrowHeight = 7;
 constexpr int kArrowSpacing = 8;
+constexpr int kFieldIconSize = 22;
+constexpr int kFieldIconSpacing = 10;
 constexpr int kItemHeight = 48;
+constexpr int kIconSize = 24;
+constexpr int kIconSpacing = 12;
 constexpr int kMaxVisibleItems = 8;
 constexpr int kPopupRadius = 8;
 constexpr double kFloatedLabelScale = 0.78;
@@ -197,15 +202,30 @@ public:
                 painter->fillRect(rect, layer);
         }
 
-        const QRect text_rect = option.rect.adjusted(kHorizontalPadding, 0, -kHorizontalPadding, 0);
+        const bool rtl = (option.direction == Qt::RightToLeft);
+        QRect content = option.rect.adjusted(kHorizontalPadding, 0, -kHorizontalPadding, 0);
+
+        // An optional leading icon, drawn with its own colors (e.g. a drive icon).
+        const QIcon icon = qvariant_cast<QIcon>(index.data(Qt::DecorationRole));
+        if (!icon.isNull())
+        {
+            const QRect icon_rect(rtl ? content.right() - kIconSize : content.left(),
+                                  content.center().y() - kIconSize / 2, kIconSize, kIconSize);
+            icon.paint(painter, icon_rect);
+
+            if (rtl)
+                content.setRight(icon_rect.left() - kIconSpacing);
+            else
+                content.setLeft(icon_rect.right() + kIconSpacing);
+        }
+
         const QString elided = option.fontMetrics.elidedText(
-            index.data(Qt::DisplayRole).toString(), Qt::ElideRight, text_rect.width());
-        const Qt::Alignment alignment = (option.direction == Qt::RightToLeft) ?
-            Qt::AlignRight : Qt::AlignLeft;
+            index.data(Qt::DisplayRole).toString(), Qt::ElideRight, content.width());
+        const Qt::Alignment alignment = rtl ? Qt::AlignRight : Qt::AlignLeft;
 
         painter->setFont(option.font);
         painter->setPen(palette.color(QPalette::Text));
-        painter->drawText(text_rect, Qt::AlignVCenter | Qt::AlignAbsolute | alignment, elided);
+        painter->drawText(content, Qt::AlignVCenter | Qt::AlignAbsolute | alignment, elided);
 
         painter->restore();
     }
@@ -358,6 +378,21 @@ void ComboBox::paintEvent(QPaintEvent* /* event */)
             text_rect.setRight(arrow_center_x - kArrowWidth / 2.0 - kArrowSpacing);
         }
 
+        // An optional leading icon for the current item, drawn with its own colors.
+        const QIcon icon = (currentIndex() >= 0) ? itemIcon(currentIndex()) : QIcon();
+        if (!icon.isNull())
+        {
+            const QRect icon_rect(
+                rtl ? int(text_rect.right()) - kFieldIconSize : int(text_rect.left()),
+                int(text_rect.center().y()) - kFieldIconSize / 2, kFieldIconSize, kFieldIconSize);
+            icon.paint(&painter, icon_rect);
+
+            if (rtl)
+                text_rect.setRight(icon_rect.left() - kFieldIconSpacing);
+            else
+                text_rect.setLeft(icon_rect.right() + kFieldIconSpacing);
+        }
+
         const QFontMetricsF metrics(font());
         const QString elided = metrics.elidedText(currentText(), Qt::ElideRight, text_rect.width());
 
@@ -396,5 +431,9 @@ void ComboBox::focusOutEvent(QFocusEvent* event)
 //--------------------------------------------------------------------------------------------------
 int ComboBox::labelOverflow() const
 {
+    // Without a label there is nothing resting on the outline, so no extra room is reserved above it.
+    if (label_.isEmpty())
+        return 0;
+
     return QFontMetrics(Controls::scaledFont(font(), kFloatedLabelScale)).height() / 2;
 }
