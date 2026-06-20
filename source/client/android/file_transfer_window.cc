@@ -32,7 +32,7 @@
 #include "common/android/app_bar.h"
 #include "common/android/label.h"
 #include "common/android/message_dialog.h"
-#include "common/android/segmented_button.h"
+#include "common/android/tab_bar.h"
 #include "proto/peer.h"
 #include "proto/router_client.h"
 
@@ -69,10 +69,10 @@ FileTransferWindow::FileTransferWindow(const HostConfig& host, QWidget* parent)
     status_->setAlignment(Qt::AlignCenter);
 
     // Switcher shown only on a narrow screen.
-    segment_ = new SegmentedButton(this);
-    segment_->addSegment(tr("This Device"));
-    segment_->addSegment(host_title);
-    connect(segment_, &SegmentedButton::sig_currentChanged, this, &FileTransferWindow::setActivePanel);
+    tab_bar_ = new TabBar(this);
+    tab_bar_->addTab(tr("This Device"));
+    tab_bar_->addTab(host_title);
+    connect(tab_bar_, &TabBar::sig_currentChanged, this, &FileTransferWindow::setActivePanel);
 
     QWidget* panels = new QWidget(this);
     panels_layout_ = new QHBoxLayout(panels);
@@ -86,7 +86,7 @@ FileTransferWindow::FileTransferWindow(const HostConfig& host, QWidget* parent)
     layout->addWidget(app_bar_);
     layout->addWidget(status_);
     layout->addWidget(panels, 1);
-    layout->addWidget(segment_);
+    layout->addWidget(tab_bar_);
 
     initPanel(local_panel_, FileTask::Target::LOCAL);
     initPanel(remote_panel_, FileTask::Target::REMOTE);
@@ -469,7 +469,7 @@ void FileTransferWindow::applyLayout()
     // Landscape shows both panels side by side; portrait shows one at a time with the switcher.
     const bool landscape = width() > height();
 
-    segment_->setVisible(!landscape);
+    tab_bar_->setVisible(!landscape);
 
     if (landscape)
     {
@@ -482,7 +482,7 @@ void FileTransferWindow::applyLayout()
         remote_panel_->setVisible(active_panel_ == 1);
     }
 
-    segment_->setCurrentIndex(active_panel_);
+    tab_bar_->setCurrentIndex(active_panel_);
 }
 
 //--------------------------------------------------------------------------------------------------

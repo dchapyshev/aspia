@@ -16,23 +16,23 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON_ANDROID_SEGMENTED_BUTTON_H
-#define COMMON_ANDROID_SEGMENTED_BUTTON_H
+#ifndef COMMON_ANDROID_TAB_BAR_H
+#define COMMON_ANDROID_TAB_BAR_H
 
 #include <QStringList>
 #include <QWidget>
 
-// A row of mutually exclusive segments sharing a single outline, with the selected one filled. Used
-// as a touch-friendly tab switcher; reads as one control split in parts rather than separate buttons.
-class SegmentedButton final : public QWidget
+// A row of text tabs sharing a top divider, with an accent indicator above the selected one. A flat,
+// neutral switcher that blends into the surface it sits on rather than reading as a boxed control.
+class TabBar final : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit SegmentedButton(QWidget* parent = nullptr);
-    ~SegmentedButton() final;
+    explicit TabBar(QWidget* parent = nullptr);
+    ~TabBar() final;
 
-    void addSegment(const QString& text);
+    void addTab(const QString& text);
 
     void setCurrentIndex(int index);
     int currentIndex() const { return current_; }
@@ -50,13 +50,13 @@ protected:
     void mouseReleaseEvent(QMouseEvent* event) final;
 
 private:
-    int segmentAt(const QPoint& pos) const;
+    int tabAt(const QPoint& pos) const;
 
-    QStringList segments_;
+    QStringList tabs_;
     int current_ = 0;
     int pressed_ = -1;
 
-    Q_DISABLE_COPY_MOVE(SegmentedButton)
+    Q_DISABLE_COPY_MOVE(TabBar)
 };
 
-#endif // COMMON_ANDROID_SEGMENTED_BUTTON_H
+#endif // COMMON_ANDROID_TAB_BAR_H

@@ -184,10 +184,10 @@ if (ANDROID)
         android/scroll_area.h
         android/scroll_indicator.cc
         android/scroll_indicator.h
-        android/segmented_button.cc
-        android/segmented_button.h
         android/switch.cc
         android/switch.h
+        android/tab_bar.cc
+        android/tab_bar.h
         android/text_area.cc
         android/text_area.h
         android/tree_widget.cc

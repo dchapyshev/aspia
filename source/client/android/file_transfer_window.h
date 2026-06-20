@@ -41,8 +41,8 @@ class ClientFileTransfer;
 class FilePanelWidget;
 class Label;
 class Router;
-class SegmentedButton;
 class SessionState;
+class TabBar;
 class QHBoxLayout;
 class QWidget;
 
@@ -103,7 +103,7 @@ private:
     Label* status_ = nullptr;
     FilePanelWidget* local_panel_ = nullptr;
     FilePanelWidget* remote_panel_ = nullptr;
-    SegmentedButton* segment_ = nullptr;
+    TabBar* tab_bar_ = nullptr;
     QHBoxLayout* panels_layout_ = nullptr;
 
     // On a narrow screen only one panel is shown at a time; 0 = this device, 1 = remote host.
