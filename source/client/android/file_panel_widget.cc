@@ -305,6 +305,16 @@ void FilePanelWidget::refresh()
 }
 
 //--------------------------------------------------------------------------------------------------
+void FilePanelWidget::setTransferAllowed(bool allowed)
+{
+    if (transfer_allowed_ == allowed)
+        return;
+
+    transfer_allowed_ = allowed;
+    updateTransferActions();
+}
+
+//--------------------------------------------------------------------------------------------------
 void FilePanelWidget::onItemClicked(QTreeWidgetItem* item, int /* column */)
 {
     if (!item)
@@ -437,6 +447,7 @@ void FilePanelWidget::setPath(const QString& path)
     selectCurrentLocation();
     up_button_->setEnabled(!path.isEmpty());
 
+    emit sig_pathChanged(path);
     refresh();
 }
 
@@ -497,7 +508,7 @@ void FilePanelWidget::updateTransferActions()
         }
     }
 
-    send_button_->setEnabled(has_selection);
+    send_button_->setEnabled(has_selection && transfer_allowed_);
     delete_button_->setEnabled(has_selection);
 }
 

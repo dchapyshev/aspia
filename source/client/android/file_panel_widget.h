@@ -64,12 +64,17 @@ public:
     // Re-requests the current location (the drive list at the root, otherwise the file list).
     void refresh();
 
+    // Allows sending from this panel only while the other side has a valid destination folder open;
+    // driven by the owning window from the other panel's path changes.
+    void setTransferAllowed(bool allowed);
+
 signals:
     void sig_driveListRequested();
     void sig_fileListRequested(const QString& path);
     void sig_createDirectoryRequested(const QString& path);
     void sig_sendRequested(const QList<FileTransfer::Item>& items);
     void sig_removeRequested(const FileRemover::TaskList& items);
+    void sig_pathChanged(const QString& path);
 
 private slots:
     void onItemClicked(QTreeWidgetItem* item, int column);
@@ -107,6 +112,9 @@ private:
 
     // Empty means the drive list (the root); otherwise a directory path ending with '/'.
     QString current_path_;
+
+    // True while the other side has a destination folder open, so sending from here is possible.
+    bool transfer_allowed_ = false;
 
     Q_DISABLE_COPY_MOVE(FilePanelWidget)
 };

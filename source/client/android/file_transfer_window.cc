@@ -359,6 +359,12 @@ void FileTransferWindow::initPanel(FilePanelWidget* panel, FileTask::Target targ
     {
         removeItems(panel, items);
     });
+    connect(panel, &FilePanelWidget::sig_pathChanged, this, [this, panel](const QString& path)
+    {
+        // A folder open on one side is the destination the other side can send into.
+        FilePanelWidget* other = (panel == local_panel_) ? remote_panel_ : local_panel_;
+        other->setTransferAllowed(!path.isEmpty());
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
