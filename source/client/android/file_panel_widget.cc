@@ -370,7 +370,12 @@ void FilePanelWidget::onNewFolderClicked()
         return;
     }
 
-    emit sig_createDirectoryRequested(current_path_ + folder_name);
+    // Location paths do not always end with a separator (e.g. "/storage/emulated/0").
+    QString base = current_path_;
+    if (!base.endsWith('/'))
+        base += '/';
+
+    emit sig_createDirectoryRequested(base + folder_name);
 }
 
 //--------------------------------------------------------------------------------------------------
