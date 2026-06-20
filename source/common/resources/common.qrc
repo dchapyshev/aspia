@@ -47,6 +47,27 @@
         <file>replay.svg</file>
         <file>help.svg</file>
         <file>file.svg</file>
+        <file>file-7zip.svg</file>
+        <file>file-apk.svg</file>
+        <file>file-avi.svg</file>
+        <file>file-dll.svg</file>
+        <file>file-dmg.svg</file>
+        <file>file-document.svg</file>
+        <file>file-exe.svg</file>
+        <file>file-gif.svg</file>
+        <file>file-jpg.svg</file>
+        <file>file-mov.svg</file>
+        <file>file-mpg.svg</file>
+        <file>file-pdf.svg</file>
+        <file>file-png.svg</file>
+        <file>file-rar.svg</file>
+        <file>file-zip.svg</file>
+        <file>file-symlink.svg</file>
+        <file>file-mkv.svg</file>
+        <file>file-word.svg</file>
+        <file>file-xls.svg</file>
+        <file>file-ppt.svg</file>
+        <file>file-mp3.svg</file>
         <file>connected.svg</file>
         <file>network-card.svg</file>
         <file>memory-slot.svg</file>

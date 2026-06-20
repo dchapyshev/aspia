@@ -18,6 +18,7 @@
 
 #include "common/file_platform_util.h"
 
+#include <QFileInfo>
 #include <QMimeDatabase>
 
 #include "base/logging.h"
@@ -38,6 +39,64 @@ const int kMinFileNameLength = 1;
 // We use FAT variant: 255 characters long.
 const int kMaxFileNameLength = (kMaxPathLength - 5);
 
+//--------------------------------------------------------------------------------------------------
+// The icon resource for a file by its extension, or the generic file icon.
+QString iconForFile(const QString& file_name)
+{
+    static const struct
+    {
+        const char* extension;
+        const char* icon;
+    } kIcons[] =
+    {
+        { "txt",  ":/img/file-document.svg" },
+        { "log",  ":/img/file-document.svg" },
+        { "ini",  ":/img/file-document.svg" },
+        { "cfg",  ":/img/file-document.svg" },
+        { "conf", ":/img/file-document.svg" },
+        { "md",   ":/img/file-document.svg" },
+        { "csv",  ":/img/file-document.svg" },
+        { "xml",  ":/img/file-document.svg" },
+        { "json", ":/img/file-document.svg" },
+        { "yml",  ":/img/file-document.svg" },
+        { "yaml", ":/img/file-document.svg" },
+        { "doc",  ":/img/file-word.svg" },
+        { "docx", ":/img/file-word.svg" },
+        { "xls",  ":/img/file-xls.svg" },
+        { "xlsx", ":/img/file-xls.svg" },
+        { "ppt",  ":/img/file-ppt.svg" },
+        { "pptx", ":/img/file-ppt.svg" },
+        { "jpg",  ":/img/file-jpg.svg" },
+        { "jpeg", ":/img/file-jpg.svg" },
+        { "png",  ":/img/file-png.svg" },
+        { "gif",  ":/img/file-gif.svg" },
+        { "pdf",  ":/img/file-pdf.svg" },
+        { "zip",  ":/img/file-zip.svg" },
+        { "rar",  ":/img/file-rar.svg" },
+        { "7z",   ":/img/file-7zip.svg" },
+        { "apk",  ":/img/file-apk.svg" },
+        { "avi",  ":/img/file-avi.svg" },
+        { "dll",  ":/img/file-dll.svg" },
+        { "dmg",  ":/img/file-dmg.svg" },
+        { "exe",  ":/img/file-exe.svg" },
+        { "mov",  ":/img/file-mov.svg" },
+        { "mpg",  ":/img/file-mpg.svg" },
+        { "mpeg", ":/img/file-mpg.svg" },
+        { "mkv",  ":/img/file-mkv.svg" },
+        { "mp3",  ":/img/file-mp3.svg" },
+        { "lnk",  ":/img/file-symlink.svg" },
+    };
+
+    const QString extension = QFileInfo(file_name).suffix().toLower();
+    for (const auto& entry : kIcons)
+    {
+        if (extension == QString::fromLatin1(entry.extension))
+            return QString::fromLatin1(entry.icon);
+    }
+
+    return QString::fromLatin1(":/img/file.svg");
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -46,7 +105,7 @@ std::pair<QIcon, QString> FilePlatformUtil::fileTypeInfo(const QString& file_nam
 {
     static QMimeDatabase mime_database;
     QMimeType mime_type = mime_database.mimeTypeForFile(file_name, QMimeDatabase::MatchExtension);
-    return std::pair<QIcon, QString>(QIcon(QStringLiteral(":/img/file.svg")), mime_type.comment());
+    return std::pair<QIcon, QString>(QIcon(iconForFile(file_name)), mime_type.comment());
 }
 
 //--------------------------------------------------------------------------------------------------

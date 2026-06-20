@@ -235,7 +235,6 @@ void FilePanelWidget::onFileList(
     list_->clear();
 
     const QIcon folder_icon = GuiApplication::svgIcon(":/img/folder.svg");
-    const QIcon file_icon = GuiApplication::svgIcon(":/img/file.svg");
 
     // Folders first, then files, both kept in the order the host reported.
     for (int i = 0; i < file_list.item_size(); ++i)
@@ -256,9 +255,10 @@ void FilePanelWidget::onFileList(
         if (entry.is_directory())
             continue;
 
-        QTreeWidgetItem* item = new QTreeWidgetItem(list_, { QString::fromStdString(entry.name()) });
-        item->setIcon(0, file_icon);
-        item->setData(0, kNameRole, QString::fromStdString(entry.name()));
+        const QString name = QString::fromStdString(entry.name());
+        QTreeWidgetItem* item = new QTreeWidgetItem(list_, { name });
+        item->setIcon(0, FilePlatformUtil::fileTypeInfo(name).first);
+        item->setData(0, kNameRole, name);
         item->setData(0, kIsDirRole, false);
         item->setData(0, kSizeRole, static_cast<qint64>(entry.size()));
     }
