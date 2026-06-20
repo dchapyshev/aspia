@@ -97,9 +97,9 @@ FilePanelWidget::FilePanelWidget(FileTask::Target target, QWidget* parent)
       up_button_(new IconButton(":/img/material/arrow_upward.svg", this)),
       list_(new TreeWidget(this))
 {
-    IconButton* new_folder_button = new IconButton(":/img/material/create_new_folder.svg", this);
     IconButton* refresh_button = new IconButton(":/img/material/refresh.svg", this);
 
+    new_folder_button_ = new IconButton(":/img/material/create_new_folder.svg", this);
     delete_button_ = new IconButton(":/img/material/delete.svg", this);
 
     // All actions are grouped at the leading edge, in the same order as the desktop toolbar:
@@ -108,7 +108,7 @@ FilePanelWidget::FilePanelWidget(FileTask::Target target, QWidget* parent)
     toolbar->setContentsMargins(0, 0, 0, 0);
     toolbar->addWidget(up_button_);
     toolbar->addWidget(refresh_button);
-    toolbar->addWidget(new_folder_button);
+    toolbar->addWidget(new_folder_button_);
     toolbar->addWidget(delete_button_);
     toolbar->addStretch();
 
@@ -125,12 +125,13 @@ FilePanelWidget::FilePanelWidget(FileTask::Target target, QWidget* parent)
     connect(list_, &QTreeWidget::itemSelectionChanged, this, &FilePanelWidget::updateActions);
     connect(list_, &TreeWidget::sig_itemLongPressed, this, &FilePanelWidget::showItemActions);
     connect(up_button_, &IconButton::clicked, this, &FilePanelWidget::onUpClicked);
-    connect(new_folder_button, &IconButton::clicked, this, &FilePanelWidget::onNewFolderClicked);
+    connect(new_folder_button_, &IconButton::clicked, this, &FilePanelWidget::onNewFolderClicked);
     connect(refresh_button, &IconButton::clicked, this, &FilePanelWidget::refresh);
     connect(delete_button_, &IconButton::clicked, this, &FilePanelWidget::onDeleteClicked);
     connect(path_combo_, &QComboBox::activated, this, &FilePanelWidget::onLocationActivated);
 
     up_button_->setEnabled(false);
+    new_folder_button_->setEnabled(false);
     delete_button_->setEnabled(false);
 }
 
@@ -416,6 +417,7 @@ void FilePanelWidget::setPath(const QString& path)
     path_combo_->setFieldText(field, field_icon);
 
     up_button_->setEnabled(!path.isEmpty());
+    new_folder_button_->setEnabled(!path.isEmpty());
 
     emit sig_pathChanged(path);
     refresh();

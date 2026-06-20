@@ -106,6 +106,7 @@ private:
 
     ComboBox* path_combo_ = nullptr;
     IconButton* up_button_ = nullptr;
+    IconButton* new_folder_button_ = nullptr;
     IconButton* delete_button_ = nullptr;
     TreeWidget* list_ = nullptr;
 
