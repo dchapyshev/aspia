@@ -57,7 +57,7 @@ FileTransferWindow::FileTransferWindow(const HostConfig& host, QWidget* parent)
     app_bar_->setBottomBorderVisible(false);
     connect(app_bar_, &AppBar::sig_backClicked, this, &FileTransferWindow::sig_closed);
 
-    local_panel_->setTitle(tr("This device"));
+    local_panel_->setTitle(tr("This Device"));
     remote_panel_->setTitle(host_title);
 
     // Ignored horizontal policy drops the panels' minimum width from the layout calculation. Without
@@ -69,7 +69,7 @@ FileTransferWindow::FileTransferWindow(const HostConfig& host, QWidget* parent)
     status_->setAlignment(Qt::AlignCenter);
 
     // Switcher shown only on a narrow screen.
-    local_tab_ = new Button(tr("This device"), Button::Role::TEXT, this);
+    local_tab_ = new Button(tr("This Device"), Button::Role::TEXT, this);
     remote_tab_ = new Button(host_title, Button::Role::TEXT, this);
     // Equal halves; Ignored lets the layout shrink each tab below its text width (Button forces its
     // minimum size hint to the full text otherwise) so a long host name does not overflow.

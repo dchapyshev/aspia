@@ -38,6 +38,9 @@ public:
     void setLabel(const QString& label);
     const QString& label() const { return label_; }
 
+    // Marks the item at |index| as nested under the preceding top-level item (drawn with an indent).
+    void setItemIndented(int index);
+
     // QComboBox implementation.
     QSize sizeHint() const final;
     QSize minimumSizeHint() const final;

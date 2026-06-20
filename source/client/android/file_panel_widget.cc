@@ -195,11 +195,11 @@ void FilePanelWidget::onDriveList(
                 break;
 
             case proto::file_transfer::DriveList::Item::TYPE_INTERNAL_STORAGE:
-                name = tr("Internal storage");
+                name = tr("Internal Storage");
                 break;
 
             case proto::file_transfer::DriveList::Item::TYPE_SD_CARD:
-                name = tr("SD card");
+                name = tr("SD Card");
                 break;
 
             case proto::file_transfer::DriveList::Item::TYPE_DOWNLOAD_FOLDER:
@@ -230,6 +230,7 @@ void FilePanelWidget::onDriveList(
         item->setData(0, kPathRole, path);
 
         path_combo_->addItem(icon, name, path);
+        path_combo_->setItemIndented(path_combo_->count() - 1);
     }
 
     // clear()/addItem reset the selection, so reselect the current location.

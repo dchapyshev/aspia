@@ -47,7 +47,12 @@ constexpr int kFieldIconSpacing = 10;
 constexpr int kItemHeight = 48;
 constexpr int kIconSize = 24;
 constexpr int kIconSpacing = 12;
+constexpr int kIndentStep = 28;
 constexpr int kMaxVisibleItems = 8;
+
+// Item data role marking an item nested one level under the preceding top-level one; the delegate
+// draws it with a leading indent.
+constexpr int kIndentRole = Qt::UserRole + 1;
 constexpr int kPopupRadius = 8;
 constexpr double kFloatedLabelScale = 0.78;
 constexpr double kDisabledOpacity = 0.38;
@@ -203,7 +208,9 @@ public:
         }
 
         const bool rtl = (option.direction == Qt::RightToLeft);
-        QRect content = option.rect.adjusted(kHorizontalPadding, 0, -kHorizontalPadding, 0);
+        const int indent = index.data(kIndentRole).toBool() ? kIndentStep : 0;
+        QRect content = option.rect.adjusted(kHorizontalPadding + (rtl ? 0 : indent), 0,
+                                             -kHorizontalPadding - (rtl ? indent : 0), 0);
 
         // An optional leading icon, drawn with its own colors (e.g. a drive icon).
         const QIcon icon = qvariant_cast<QIcon>(index.data(Qt::DecorationRole));
@@ -278,6 +285,12 @@ void ComboBox::setLabel(const QString& label)
 
     label_ = label;
     update();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ComboBox::setItemIndented(int index)
+{
+    setItemData(index, true, kIndentRole);
 }
 
 //--------------------------------------------------------------------------------------------------

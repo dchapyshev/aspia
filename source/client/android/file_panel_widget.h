@@ -96,7 +96,7 @@ private:
     IconButton* delete_button_ = nullptr;
     TreeWidget* list_ = nullptr;
 
-    // Shown as the root entry of the path combo box (the side's name, e.g. "This device").
+    // Shown as the root entry of the path combo box (the side's name, e.g. "This Device").
     QString root_name_;
 
     // Empty means the drive list (the root); otherwise a directory path ending with '/'.
