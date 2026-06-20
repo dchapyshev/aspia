@@ -21,9 +21,14 @@
 
 #include <QWidget>
 
+namespace proto::peer {
+enum SessionType : int;
+} // namespace proto::peer
+
 class AppBar;
 class BottomNavigationBar;
 class DesktopWindow;
+class FileTransferWindow;
 class HostConfig;
 class LocalWidget;
 class RemoteWidget;
@@ -55,9 +60,10 @@ private slots:
     void onSearchModeChanged(bool active);
     void onSearchTextChanged(const QString& text);
     void onBackClicked();
-    void onConnectHost(qint64 entry_id);
-    void onConnectRouterHost(const HostConfig& host);
+    void onConnectHost(qint64 entry_id, proto::peer::SessionType session_type);
+    void onConnectRouterHost(const HostConfig& host, proto::peer::SessionType session_type);
     void onDesktopClosed();
+    void onFileTransferClosed();
 
 private:
     // Gates the window behind the master password: prompts to create or unlock it, and reloads the
@@ -66,9 +72,15 @@ private:
     void onUnlocked();
     void retranslate();
 
-    // Replaces the address book with a full-screen desktop view for the given host. Only a single
-    // desktop connection is supported at a time.
+    // Routes a connection request to the matching session window. Only a single session is supported
+    // at a time.
+    void openSession(const HostConfig& host, proto::peer::SessionType session_type);
+
+    // Replaces the address book with a full-screen desktop view for the given host.
     void openDesktop(const HostConfig& host);
+
+    // Opens the file transfer screen for the given host as a regular page (not full-screen).
+    void openFileTransfer(const HostConfig& host);
 
     QStackedWidget* root_stack_ = nullptr;
     QWidget* shell_ = nullptr;
@@ -76,6 +88,7 @@ private:
     QStackedWidget* content_ = nullptr;
     BottomNavigationBar* navigation_ = nullptr;
     DesktopWindow* desktop_ = nullptr;
+    FileTransferWindow* file_transfer_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(AndroidMainWindow)
 };

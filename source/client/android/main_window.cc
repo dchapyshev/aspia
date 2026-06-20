@@ -28,6 +28,7 @@
 #include <optional>
 
 #include "client/android/desktop_window.h"
+#include "client/android/file_transfer_window.h"
 #include "client/android/local_widget.h"
 #include "client/android/master_password_dialog.h"
 #include "client/android/remote_widget.h"
@@ -38,6 +39,7 @@
 #include "client/master_password.h"
 #include "common/android/app_bar.h"
 #include "common/android/bottom_navigation_bar.h"
+#include "proto/peer.h"
 
 namespace {
 
@@ -364,19 +366,41 @@ void AndroidMainWindow::onBackClicked()
 }
 
 //--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::onConnectHost(qint64 entry_id)
+void AndroidMainWindow::onConnectHost(qint64 entry_id, proto::peer::SessionType session_type)
 {
     std::optional<HostConfig> host = Database::instance().findHost(entry_id);
     if (!host.has_value())
         return;
 
-    openDesktop(*host);
+    openSession(*host, session_type);
 }
 
 //--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::onConnectRouterHost(const HostConfig& host)
+void AndroidMainWindow::onConnectRouterHost(const HostConfig& host, proto::peer::SessionType session_type)
 {
-    openDesktop(host);
+    openSession(host, session_type);
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::openSession(const HostConfig& host, proto::peer::SessionType session_type)
+{
+    // Only a single session (desktop or file transfer) is supported at a time.
+    if (desktop_ || file_transfer_)
+        return;
+
+    switch (session_type)
+    {
+        case proto::peer::SESSION_TYPE_DESKTOP:
+            openDesktop(host);
+            break;
+
+        case proto::peer::SESSION_TYPE_FILE_TRANSFER:
+            openFileTransfer(host);
+            break;
+
+        default:
+            break;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -414,6 +438,30 @@ void AndroidMainWindow::onDesktopClosed()
     setDrawIntoCutout(false);
     setAttribute(Qt::WA_ContentsMarginsRespectsSafeArea, true);
     showMaximized();
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::openFileTransfer(const HostConfig& host)
+{
+    // The file transfer screen is a regular page: the system bars stay visible (no full-screen or
+    // cutout drawing, unlike the desktop view).
+    file_transfer_ = new FileTransferWindow(host);
+    connect(file_transfer_, &FileTransferWindow::sig_closed, this, &AndroidMainWindow::onFileTransferClosed);
+
+    root_stack_->addWidget(file_transfer_);
+    root_stack_->setCurrentWidget(file_transfer_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onFileTransferClosed()
+{
+    if (!file_transfer_)
+        return;
+
+    root_stack_->setCurrentWidget(shell_);
+    root_stack_->removeWidget(file_transfer_);
+    file_transfer_->deleteLater();
+    file_transfer_ = nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------

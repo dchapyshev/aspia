@@ -36,6 +36,8 @@ list(APPEND SOURCE_CLIENT_CORE
     client_system_info.h
     client_text_chat.cc
     client_text_chat.h
+    file_error_code.cc
+    file_error_code.h
     file_remove_queue_builder.cc
     file_remove_queue_builder.h
     file_remover.cc
@@ -73,6 +75,12 @@ list(APPEND SOURCE_CLIENT_ANDROID
     android/desktop_view.h
     android/desktop_window.cc
     android/desktop_window.h
+    android/file_panel_widget.cc
+    android/file_panel_widget.h
+    android/file_progress_sheet.cc
+    android/file_progress_sheet.h
+    android/file_transfer_window.cc
+    android/file_transfer_window.h
     android/key_bar.cc
     android/key_bar.h
     android/local_group_editor.cc
@@ -165,8 +173,6 @@ list(APPEND SOURCE_CLIENT_CORE_DESKTOP_FILE_TRANSFER
     desktop/file_transfer/address_bar.h
     desktop/file_transfer/address_bar_model.cc
     desktop/file_transfer/address_bar_model.h
-    desktop/file_transfer/file_error_code.cc
-    desktop/file_transfer/file_error_code.h
     desktop/file_transfer/file_item_delegate.cc
     desktop/file_transfer/file_item_delegate.h
     desktop/file_transfer/file_list.cc

@@ -32,8 +32,10 @@
 #include "client/database.h"
 #include "client/router.h"
 #include "client/android/search_widget.h"
+#include "common/android/bottom_sheet.h"
 #include "common/android/icon_button.h"
 #include "common/android/tree_widget.h"
+#include "proto/peer.h"
 
 namespace {
 
@@ -144,7 +146,14 @@ RemoteWidget::RemoteWidget(QWidget* parent)
     layout->addWidget(stack_);
 
     connect(tree_, &QTreeWidget::itemClicked, this, &RemoteWidget::onItemActivated);
-    connect(host_tree_, &QTreeWidget::itemDoubleClicked, this, &RemoteWidget::onHostActivated);
+
+    // A tap on a host opens the session-type chooser.
+    connect(host_tree_, &QTreeWidget::itemClicked, this, [this](QTreeWidgetItem* item, int)
+    {
+        HostConfig config;
+        if (hostConfigForItem(item, &config))
+            showSessionMenu(config);
+    });
     connect(refresh_button_, &IconButton::clicked, this, &RemoteWidget::onRefreshClicked);
     connect(search_button_, &IconButton::clicked, this, &RemoteWidget::showSearch);
     connect(search_page_, &SearchWidget::sig_activated, this, [this](const QVariant& data)
@@ -164,7 +173,7 @@ RemoteWidget::RemoteWidget(QWidget* parent)
         config.setUsername(match.host.user_name);
         config.setPassword(match.host.password);
 
-        emit sig_connectHost(config);
+        showSessionMenu(config);
     });
 
     reload();
@@ -320,33 +329,6 @@ void RemoteWidget::onItemActivated(QTreeWidgetItem* item, int /* column */)
     emit sig_titleChanged(item->text(0), true);
 
     fetchHosts(Router::CachePolicy::USE_CACHE);
-}
-
-//--------------------------------------------------------------------------------------------------
-void RemoteWidget::onHostActivated(QTreeWidgetItem* item, int /* column */)
-{
-    if (!item)
-        return;
-
-    const HostId host_id = item->data(0, kHostIdRole).value<HostId>();
-
-    for (const Router::Host& host : std::as_const(hosts_))
-    {
-        if (host.host_id != host_id)
-            continue;
-
-        QString name = host.display_name.isEmpty() ? host.computer_name : host.display_name;
-
-        HostConfig config;
-        config.setRouterId(host_router_id_);
-        config.setAddress(hostIdToString(host.host_id));
-        config.setName(name);
-        config.setUsername(host.user_name);
-        config.setPassword(host.password);
-
-        emit sig_connectHost(config);
-        return;
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -507,6 +489,60 @@ void RemoteWidget::showTree()
 {
     stack_->setCurrentIndex(kPageTree);
     emit sig_titleChanged(QString(), false);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool RemoteWidget::hostConfigForItem(QTreeWidgetItem* item, HostConfig* config) const
+{
+    if (!item || !item->data(0, kHostIdRole).isValid())
+        return false;
+
+    const HostId host_id = item->data(0, kHostIdRole).value<HostId>();
+
+    for (const Router::Host& host : std::as_const(hosts_))
+    {
+        if (host.host_id != host_id)
+            continue;
+
+        const QString name = host.display_name.isEmpty() ? host.computer_name : host.display_name;
+
+        config->setRouterId(host_router_id_);
+        config->setAddress(hostIdToString(host.host_id));
+        config->setName(name);
+        config->setUsername(host.user_name);
+        config->setPassword(host.password);
+        return true;
+    }
+
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+void RemoteWidget::showSessionMenu(const HostConfig& host)
+{
+    static const struct
+    {
+        proto::peer::SessionType type;
+        const char* name;
+        const char* icon;
+    } kSessions[] =
+    {
+        { proto::peer::SESSION_TYPE_DESKTOP,       QT_TRANSLATE_NOOP("RemoteWidget", "Desktop"),
+          ":/img/workstation.svg" },
+        { proto::peer::SESSION_TYPE_FILE_TRANSFER, QT_TRANSLATE_NOOP("RemoteWidget", "File Transfer"),
+          ":/img/file-explorer.svg" },
+    };
+
+    BottomSheet* sheet = new BottomSheet(this);
+    for (const auto& session : kSessions)
+        sheet->addItem(tr(session.name), session.icon, false, false);
+
+    connect(sheet, &BottomSheet::sig_triggered, this, [this, host](int index)
+    {
+        emit sig_connectHost(host, kSessions[index].type);
+    });
+
+    sheet->showSheet();
 }
 
 //--------------------------------------------------------------------------------------------------

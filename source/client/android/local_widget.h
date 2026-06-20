@@ -23,6 +23,10 @@
 #include <QString>
 #include <QWidget>
 
+namespace proto::peer {
+enum SessionType : int;
+} // namespace proto::peer
+
 class IconButton;
 class LocalGroupEditor;
 class LocalHostEditor;
@@ -68,8 +72,8 @@ signals:
     // Enters (true) or leaves (false) the search screen, so the host bar shows its search field.
     void sig_searchModeChanged(bool active);
 
-    // Requests a desktop connection to the local address book entry with the given id.
-    void sig_connectHost(qint64 entry_id);
+    // Requests a connection of the given session type to the local address book entry with |entry_id|.
+    void sig_connectHost(qint64 entry_id, proto::peer::SessionType session_type);
 
 private slots:
     void onItemActivated(QTreeWidgetItem* item, int column);
@@ -85,6 +89,9 @@ private:
     void populateGroups(qint64 parent_id, QTreeWidgetItem* parent);
     void showTree();
     void showHosts(qint64 group_id, const QString& title);
+
+    // Opens the session-type bottom sheet (Desktop / File Transfer) for the host with |host_id|.
+    void showSessionMenu(qint64 host_id);
     void editGroup(qint64 group_id);
     void editHost(qint64 host_id);
     void returnFromEditor();

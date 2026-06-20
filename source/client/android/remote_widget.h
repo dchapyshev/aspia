@@ -25,6 +25,10 @@
 
 #include "client/router.h"
 
+namespace proto::peer {
+enum SessionType : int;
+} // namespace proto::peer
+
 class IconButton;
 class SearchWidget;
 class TreeWidget;
@@ -63,12 +67,11 @@ signals:
     // Enters (true) or leaves (false) the search screen, so the host bar shows its search field.
     void sig_searchModeChanged(bool active);
 
-    // Requests a desktop connection to the given router host.
-    void sig_connectHost(const HostConfig& host);
+    // Requests a connection of the given session type to the given router host.
+    void sig_connectHost(const HostConfig& host, proto::peer::SessionType session_type);
 
 private slots:
     void onItemActivated(QTreeWidgetItem* item, int column);
-    void onHostActivated(QTreeWidgetItem* item, int column);
     void onRefreshClicked();
 
 private:
@@ -76,6 +79,14 @@ private:
     void fetchRouter(qint64 router_id, Router::CachePolicy policy);
     void fetchHosts(Router::CachePolicy policy);
     void showTree();
+
+    // Builds the connection config for a host row from the cached host list. Returns false if the
+    // host is no longer present.
+    bool hostConfigForItem(QTreeWidgetItem* item, HostConfig* config) const;
+
+    // Opens the session-type bottom sheet (Desktop / File Transfer) for the given router host.
+    void showSessionMenu(const HostConfig& host);
+
     QTreeWidgetItem* routerItem(qint64 router_id) const;
     QTreeWidgetItem* workspaceItem(qint64 router_id, qint64 workspace_id) const;
 

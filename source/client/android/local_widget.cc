@@ -34,10 +34,12 @@
 #include "client/json_backup.h"
 #include "client/android/search_widget.h"
 #include "client/online_checker/online_checker.h"
+#include "common/android/bottom_sheet.h"
 #include "common/android/icon_button.h"
 #include "common/android/menu.h"
 #include "common/android/message_dialog.h"
 #include "common/android/tree_widget.h"
+#include "proto/peer.h"
 
 namespace {
 
@@ -114,19 +116,19 @@ LocalWidget::LocalWidget(QWidget* parent)
 
     connect(tree_, &QTreeWidget::itemClicked, this, &LocalWidget::onItemActivated);
 
-    // A host connects on a double tap; a group opens its host list on a single tap.
-    auto connect_host = [this](QTreeWidgetItem* item, int)
+    // A tap on a host opens the session-type chooser. The group tree is routed through
+    // onItemActivated (it must also open groups); the host list has only hosts.
+    connect(host_tree_, &QTreeWidget::itemClicked, this, [this](QTreeWidgetItem* item, int)
     {
         if (item && item->data(0, kHostIdRole).isValid())
-            emit sig_connectHost(item->data(0, kHostIdRole).toLongLong());
-    };
-    connect(tree_, &QTreeWidget::itemDoubleClicked, this, connect_host);
-    connect(host_tree_, &QTreeWidget::itemDoubleClicked, this, connect_host);
+            showSessionMenu(item->data(0, kHostIdRole).toLongLong());
+    });
+
     connect(search_button_, &IconButton::clicked, this, &LocalWidget::showSearch);
     connect(refresh_button_, &IconButton::clicked, this, &LocalWidget::onRefreshClicked);
     connect(search_page_, &SearchWidget::sig_activated, this, [this](const QVariant& data)
     {
-        emit sig_connectHost(data.toLongLong());
+        showSessionMenu(data.toLongLong());
     });
     connect(overflow_button_, &IconButton::clicked, this, &LocalWidget::onShowMenu);
     connect(host_editor_, &LocalHostEditor::sig_accepted, this, &LocalWidget::returnFromEditor);
@@ -259,10 +261,12 @@ void LocalWidget::onItemActivated(QTreeWidgetItem* item, int /* column */)
     if (!item)
         return;
 
-    // A host row (an ungrouped host at the root) connects on a double tap; a single tap on a group
-    // row opens its host list.
+    // A tap on a host row opens the session-type chooser; on a group row it opens the host list.
     if (item->data(0, kHostIdRole).isValid())
+    {
+        showSessionMenu(item->data(0, kHostIdRole).toLongLong());
         return;
+    }
 
     showHosts(item->data(0, kGroupIdRole).toLongLong(), item->text(0));
 }
@@ -510,4 +514,32 @@ void LocalWidget::showHosts(qint64 group_id, const QString& title)
 
     stack_->setCurrentIndex(kPageHosts);
     emit sig_titleChanged(title, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalWidget::showSessionMenu(qint64 host_id)
+{
+    static const struct
+    {
+        proto::peer::SessionType type;
+        const char* name;
+        const char* icon;
+    } kSessions[] =
+    {
+        { proto::peer::SESSION_TYPE_DESKTOP,       QT_TRANSLATE_NOOP("LocalWidget", "Desktop"),
+          ":/img/workstation.svg" },
+        { proto::peer::SESSION_TYPE_FILE_TRANSFER, QT_TRANSLATE_NOOP("LocalWidget", "File Transfer"),
+          ":/img/file-explorer.svg" },
+    };
+
+    BottomSheet* sheet = new BottomSheet(this);
+    for (const auto& session : kSessions)
+        sheet->addItem(tr(session.name), session.icon, false, false);
+
+    connect(sheet, &BottomSheet::sig_triggered, this, [this, host_id](int index)
+    {
+        emit sig_connectHost(host_id, kSessions[index].type);
+    });
+
+    sheet->showSheet();
 }
