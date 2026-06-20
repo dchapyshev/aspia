@@ -76,6 +76,8 @@ private slots:
     void onLocationActivated(int index);
     void onUpClicked();
     void onNewFolderClicked();
+    void onSendClicked();
+    void onDeleteClicked();
 
 private:
     void setPath(const QString& path);
@@ -90,6 +92,8 @@ private:
 
     ComboBox* path_combo_ = nullptr;
     IconButton* up_button_ = nullptr;
+    IconButton* send_button_ = nullptr;
+    IconButton* delete_button_ = nullptr;
     TreeWidget* list_ = nullptr;
 
     // Shown as the root entry of the path combo box (the side's name, e.g. "This device").

@@ -94,19 +94,39 @@ FilePanelWidget::FilePanelWidget(FileTask::Target target, QWidget* parent)
     : QWidget(parent),
       target_(target),
       path_combo_(new ComboBox(this)),
-      up_button_(new IconButton(":/img/arrow-up.svg", this)),
+      up_button_(new IconButton(":/img/material/arrow_upward.svg", this)),
       list_(new TreeWidget(this))
 {
     IconButton* new_folder_button = new IconButton(":/img/material/create_new_folder.svg", this);
     IconButton* refresh_button = new IconButton(":/img/material/refresh.svg", this);
 
-    // Navigation on the left, actions on the right; the row grows as more operations are added.
+    const bool is_local = (target_ == FileTask::Target::LOCAL);
+
+    // The send arrow points towards the other panel: outward to the right for the local side and to
+    // the left for the remote one.
+    send_button_ = new IconButton(
+        is_local ? ":/img/material/send.svg" : ":/img/material/send_left.svg", this);
+    delete_button_ = new IconButton(":/img/material/delete.svg", this);
+
+    // The send button takes the edge facing the other panel (trailing for the local side, leading
+    // for the remote one); the other buttons are grouped at the opposite edge, in the same order as
+    // the desktop toolbar: up, refresh, new folder, delete.
     QHBoxLayout* toolbar = new QHBoxLayout();
     toolbar->setContentsMargins(0, 0, 0, 0);
+    if (!is_local)
+    {
+        toolbar->addWidget(send_button_);
+        toolbar->addStretch();
+    }
     toolbar->addWidget(up_button_);
-    toolbar->addStretch();
-    toolbar->addWidget(new_folder_button);
     toolbar->addWidget(refresh_button);
+    toolbar->addWidget(new_folder_button);
+    toolbar->addWidget(delete_button_);
+    if (is_local)
+    {
+        toolbar->addStretch();
+        toolbar->addWidget(send_button_);
+    }
 
     list_->setColumnCount(1);
 
@@ -122,9 +142,13 @@ FilePanelWidget::FilePanelWidget(FileTask::Target target, QWidget* parent)
     connect(up_button_, &IconButton::clicked, this, &FilePanelWidget::onUpClicked);
     connect(new_folder_button, &IconButton::clicked, this, &FilePanelWidget::onNewFolderClicked);
     connect(refresh_button, &IconButton::clicked, this, &FilePanelWidget::refresh);
+    connect(send_button_, &IconButton::clicked, this, &FilePanelWidget::onSendClicked);
+    connect(delete_button_, &IconButton::clicked, this, &FilePanelWidget::onDeleteClicked);
     connect(path_combo_, &QComboBox::activated, this, &FilePanelWidget::onLocationActivated);
 
     up_button_->setEnabled(false);
+    send_button_->setEnabled(false);
+    delete_button_->setEnabled(false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -288,13 +312,10 @@ void FilePanelWidget::onItemClicked(QTreeWidgetItem* item, int /* column */)
         return;
     }
 
+    // A folder opens on tap; a file is just selected (by the view) and sent with the send button.
+    // Per-item actions (upload, delete) stay on long-press.
     if (item->data(0, kIsDirRole).toBool())
-    {
         setPath(current_path_ + item->data(0, kNameRole).toString() + "/");
-        return;
-    }
-
-    showItemActions(item);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -345,11 +366,59 @@ void FilePanelWidget::onNewFolderClicked()
 }
 
 //--------------------------------------------------------------------------------------------------
+void FilePanelWidget::onSendClicked()
+{
+    const QList<QTreeWidgetItem*> selected = list_->selectedItems();
+
+    QList<FileTransfer::Item> items;
+    for (QTreeWidgetItem* item : selected)
+    {
+        // Drive rows are not transferable; only files and folders are.
+        if (item->data(0, kPathRole).isValid())
+            continue;
+
+        items.emplace_back(item->data(0, kNameRole).toString(),
+                           item->data(0, kSizeRole).toLongLong(),
+                           item->data(0, kIsDirRole).toBool());
+    }
+
+    if (!items.isEmpty())
+        emit sig_sendRequested(items);
+}
+
+//--------------------------------------------------------------------------------------------------
+void FilePanelWidget::onDeleteClicked()
+{
+    const QList<QTreeWidgetItem*> selected = list_->selectedItems();
+
+    FileRemover::TaskList items;
+    for (QTreeWidgetItem* item : selected)
+    {
+        // Drive rows cannot be removed; only files and folders are.
+        if (item->data(0, kPathRole).isValid())
+            continue;
+
+        items.emplace_back(current_path_ + item->data(0, kNameRole).toString(),
+                           item->data(0, kIsDirRole).toBool());
+    }
+
+    if (items.empty())
+        return;
+
+    if (!MessageDialog::confirm(this, tr("Delete"), tr("Delete the selected items?"), tr("Delete")))
+        return;
+
+    emit sig_removeRequested(items);
+}
+
+//--------------------------------------------------------------------------------------------------
 void FilePanelWidget::setPath(const QString& path)
 {
     current_path_ = path;
     selectCurrentLocation();
     up_button_->setEnabled(!path.isEmpty());
+    send_button_->setEnabled(!path.isEmpty());
+    delete_button_->setEnabled(!path.isEmpty());
 
     refresh();
 }
