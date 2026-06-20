@@ -28,15 +28,21 @@ message DriveList
     {
         enum Type
         {
-            TYPE_UNKNOWN        = 0;
-            TYPE_CDROM          = 1;
-            TYPE_REMOVABLE      = 2;
-            TYPE_FIXED          = 3;
-            TYPE_REMOTE         = 4;
-            TYPE_RAM            = 5;
-            TYPE_HOME_FOLDER    = 6;
-            TYPE_DESKTOP_FOLDER = 7;
-            TYPE_ROOT_DIRECTORY = 8;
+            TYPE_UNKNOWN          = 0;
+            TYPE_CDROM            = 1;
+            TYPE_REMOVABLE        = 2;
+            TYPE_FIXED            = 3;
+            TYPE_REMOTE           = 4;
+            TYPE_RAM              = 5;
+            TYPE_HOME_FOLDER      = 6;
+            TYPE_DESKTOP_FOLDER   = 7;
+            TYPE_ROOT_DIRECTORY   = 8;
+            TYPE_DOWNLOAD_FOLDER  = 9;
+            TYPE_PICTURES_FOLDER  = 10;
+            TYPE_DOCUMENTS_FOLDER = 11;
+            TYPE_CAMERA_FOLDER    = 12;
+            TYPE_INTERNAL_STORAGE = 13;
+            TYPE_SD_CARD          = 14;
         }
 
         Type type   = 1;
