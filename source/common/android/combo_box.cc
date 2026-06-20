@@ -294,6 +294,14 @@ void ComboBox::setItemIndented(int index)
 }
 
 //--------------------------------------------------------------------------------------------------
+void ComboBox::setFieldText(const QString& text, const QIcon& icon)
+{
+    field_text_ = text;
+    field_icon_ = icon;
+    update();
+}
+
+//--------------------------------------------------------------------------------------------------
 QSize ComboBox::sizeHint() const
 {
     return QSize(QComboBox::sizeHint().width(), kFieldHeight + labelOverflow());
@@ -377,7 +385,9 @@ void ComboBox::paintEvent(QPaintEvent* /* event */)
     painter.setBrush(palette().color(QPalette::WindowText));
     painter.drawPolygon(arrow);
 
-    if (!currentText().isEmpty())
+    // A field text override (e.g. a full path) takes precedence over the selected item's text.
+    const QString display = field_text_.isEmpty() ? currentText() : field_text_;
+    if (!display.isEmpty())
     {
         QRectF text_rect = field;
         if (rtl)
@@ -391,8 +401,10 @@ void ComboBox::paintEvent(QPaintEvent* /* event */)
             text_rect.setRight(arrow_center_x - kArrowWidth / 2.0 - kArrowSpacing);
         }
 
-        // An optional leading icon for the current item, drawn with its own colors.
-        const QIcon icon = (currentIndex() >= 0) ? itemIcon(currentIndex()) : QIcon();
+        // The field icon override takes precedence (e.g. a folder icon for a path), else the
+        // selected item's own icon.
+        const QIcon icon = !field_icon_.isNull() ? field_icon_
+                         : (currentIndex() >= 0 ? itemIcon(currentIndex()) : QIcon());
         if (!icon.isNull())
         {
             const QRect icon_rect(
@@ -406,8 +418,11 @@ void ComboBox::paintEvent(QPaintEvent* /* event */)
                 text_rect.setLeft(icon_rect.right() + kFieldIconSpacing);
         }
 
+        // A path (field text override) elides in the middle so both its root and current folder stay
+        // visible; a plain item label elides at the end.
         const QFontMetricsF metrics(font());
-        const QString elided = metrics.elidedText(currentText(), Qt::ElideRight, text_rect.width());
+        const Qt::TextElideMode elide_mode = field_text_.isEmpty() ? Qt::ElideRight : Qt::ElideMiddle;
+        const QString elided = metrics.elidedText(display, elide_mode, text_rect.width());
 
         painter.setFont(font());
         painter.setPen(palette().color(QPalette::WindowText));

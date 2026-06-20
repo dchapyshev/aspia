@@ -64,8 +64,8 @@ public:
     // Re-requests the current location (the drive list at the root, otherwise the file list).
     void refresh();
 
-    // Allows sending from this panel only while the other side has a valid destination folder open;
-    // driven by the owning window from the other panel's path changes.
+    // Whether the other side has a destination folder open; controls whether the per-item menu
+    // offers upload/download. Driven by the owning window from the other panel's path changes.
     void setTransferAllowed(bool allowed);
 
 signals:
@@ -81,7 +81,6 @@ private slots:
     void onLocationActivated(int index);
     void onUpClicked();
     void onNewFolderClicked();
-    void onSendClicked();
     void onDeleteClicked();
 
 private:
@@ -93,8 +92,8 @@ private:
     // True if |path| is the root of one of the known locations (a drive or special folder).
     bool isLocationRoot(const QString& path) const;
 
-    // Enables the send and delete buttons only while a file or folder is selected.
-    void updateTransferActions();
+    // Enables the delete button only while a file or folder is selected.
+    void updateActions();
 
     void showItemActions(QTreeWidgetItem* item);
     void showError(const QString& message);
@@ -103,7 +102,6 @@ private:
 
     ComboBox* path_combo_ = nullptr;
     IconButton* up_button_ = nullptr;
-    IconButton* send_button_ = nullptr;
     IconButton* delete_button_ = nullptr;
     TreeWidget* list_ = nullptr;
 
@@ -113,7 +111,7 @@ private:
     // Empty means the drive list (the root); otherwise a directory path ending with '/'.
     QString current_path_;
 
-    // True while the other side has a destination folder open, so sending from here is possible.
+    // True while the other side has a destination folder open, so transfers from here are possible.
     bool transfer_allowed_ = false;
 
     Q_DISABLE_COPY_MOVE(FilePanelWidget)

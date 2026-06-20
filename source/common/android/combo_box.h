@@ -20,6 +20,7 @@
 #define COMMON_ANDROID_COMBO_BOX_H
 
 #include <QComboBox>
+#include <QIcon>
 
 class QVariantAnimation;
 
@@ -41,6 +42,11 @@ public:
     // Marks the item at |index| as nested under the preceding top-level item (drawn with an indent).
     void setItemIndented(int index);
 
+    // Shows |text| in the field regardless of the selected item (e.g. a full path). A non-null |icon|
+    // overrides the leading icon too; otherwise the selected item's icon is used. Empty |text|
+    // restores the selected item's own text.
+    void setFieldText(const QString& text, const QIcon& icon = QIcon());
+
     // QComboBox implementation.
     QSize sizeHint() const final;
     QSize minimumSizeHint() const final;
@@ -57,6 +63,8 @@ private:
     QVariantAnimation* focus_animation_;
     double focus_progress_;
     QString label_;
+    QString field_text_;
+    QIcon field_icon_;
 
     Q_DISABLE_COPY_MOVE(ComboBox)
 };

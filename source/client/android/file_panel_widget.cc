@@ -100,33 +100,17 @@ FilePanelWidget::FilePanelWidget(FileTask::Target target, QWidget* parent)
     IconButton* new_folder_button = new IconButton(":/img/material/create_new_folder.svg", this);
     IconButton* refresh_button = new IconButton(":/img/material/refresh.svg", this);
 
-    const bool is_local = (target_ == FileTask::Target::LOCAL);
-
-    // The send arrow points towards the other panel: outward to the right for the local side and to
-    // the left for the remote one.
-    send_button_ = new IconButton(
-        is_local ? ":/img/material/send.svg" : ":/img/material/send_left.svg", this);
     delete_button_ = new IconButton(":/img/material/delete.svg", this);
 
-    // The send button takes the edge facing the other panel (trailing for the local side, leading
-    // for the remote one); the other buttons are grouped at the opposite edge, in the same order as
-    // the desktop toolbar: up, refresh, new folder, delete.
+    // All actions are grouped at the leading edge, in the same order as the desktop toolbar:
+    // up, refresh, new folder, delete.
     QHBoxLayout* toolbar = new QHBoxLayout();
     toolbar->setContentsMargins(0, 0, 0, 0);
-    if (!is_local)
-    {
-        toolbar->addWidget(send_button_);
-        toolbar->addStretch();
-    }
     toolbar->addWidget(up_button_);
     toolbar->addWidget(refresh_button);
     toolbar->addWidget(new_folder_button);
     toolbar->addWidget(delete_button_);
-    if (is_local)
-    {
-        toolbar->addStretch();
-        toolbar->addWidget(send_button_);
-    }
+    toolbar->addStretch();
 
     list_->setColumnCount(1);
 
@@ -138,17 +122,15 @@ FilePanelWidget::FilePanelWidget(FileTask::Target target, QWidget* parent)
     layout->addWidget(list_, 1);
 
     connect(list_, &QTreeWidget::itemClicked, this, &FilePanelWidget::onItemClicked);
-    connect(list_, &QTreeWidget::itemSelectionChanged, this, &FilePanelWidget::updateTransferActions);
+    connect(list_, &QTreeWidget::itemSelectionChanged, this, &FilePanelWidget::updateActions);
     connect(list_, &TreeWidget::sig_itemLongPressed, this, &FilePanelWidget::showItemActions);
     connect(up_button_, &IconButton::clicked, this, &FilePanelWidget::onUpClicked);
     connect(new_folder_button, &IconButton::clicked, this, &FilePanelWidget::onNewFolderClicked);
     connect(refresh_button, &IconButton::clicked, this, &FilePanelWidget::refresh);
-    connect(send_button_, &IconButton::clicked, this, &FilePanelWidget::onSendClicked);
     connect(delete_button_, &IconButton::clicked, this, &FilePanelWidget::onDeleteClicked);
     connect(path_combo_, &QComboBox::activated, this, &FilePanelWidget::onLocationActivated);
 
     up_button_->setEnabled(false);
-    send_button_->setEnabled(false);
     delete_button_->setEnabled(false);
 }
 
@@ -236,7 +218,7 @@ void FilePanelWidget::onDriveList(
 
     // clear()/addItem reset the selection, so reselect the current location.
     selectCurrentLocation();
-    updateTransferActions();
+    updateActions();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -280,7 +262,7 @@ void FilePanelWidget::onFileList(
         item->setData(0, kSizeRole, static_cast<qint64>(entry.size()));
     }
 
-    updateTransferActions();
+    updateActions();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -307,11 +289,8 @@ void FilePanelWidget::refresh()
 //--------------------------------------------------------------------------------------------------
 void FilePanelWidget::setTransferAllowed(bool allowed)
 {
-    if (transfer_allowed_ == allowed)
-        return;
-
+    // Only affects the per-item menu, read when it opens; nothing to repaint here.
     transfer_allowed_ = allowed;
-    updateTransferActions();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -395,27 +374,6 @@ void FilePanelWidget::onNewFolderClicked()
 }
 
 //--------------------------------------------------------------------------------------------------
-void FilePanelWidget::onSendClicked()
-{
-    const QList<QTreeWidgetItem*> selected = list_->selectedItems();
-
-    QList<FileTransfer::Item> items;
-    for (QTreeWidgetItem* item : selected)
-    {
-        // Drive rows are not transferable; only files and folders are.
-        if (item->data(0, kPathRole).isValid())
-            continue;
-
-        items.emplace_back(item->data(0, kNameRole).toString(),
-                           item->data(0, kSizeRole).toLongLong(),
-                           item->data(0, kIsDirRole).toBool());
-    }
-
-    if (!items.isEmpty())
-        emit sig_sendRequested(items);
-}
-
-//--------------------------------------------------------------------------------------------------
 void FilePanelWidget::onDeleteClicked()
 {
     const QList<QTreeWidgetItem*> selected = list_->selectedItems();
@@ -445,6 +403,20 @@ void FilePanelWidget::setPath(const QString& path)
 {
     current_path_ = path;
     selectCurrentLocation();
+
+    // Show the full path in the address field; the drive list (empty path) falls back to the root
+    // entry's name via the selected item. A folder deeper than a location root carries a folder icon
+    // instead of the owning drive's icon.
+    QString field = path;
+    if (field.endsWith('/'))
+        field.chop(1);
+
+    QIcon field_icon;
+    if (!path.isEmpty() && !isLocationRoot(path))
+        field_icon = GuiApplication::svgIcon(":/img/folder.svg");
+
+    path_combo_->setFieldText(field, field_icon);
+
     up_button_->setEnabled(!path.isEmpty());
 
     emit sig_pathChanged(path);
@@ -493,14 +465,14 @@ bool FilePanelWidget::isLocationRoot(const QString& path) const
 }
 
 //--------------------------------------------------------------------------------------------------
-void FilePanelWidget::updateTransferActions()
+void FilePanelWidget::updateActions()
 {
     const QList<QTreeWidgetItem*> selected = list_->selectedItems();
 
     bool has_selection = false;
     for (QTreeWidgetItem* item : selected)
     {
-        // Drive rows are not transferable.
+        // Drive rows cannot be removed.
         if (!item->data(0, kPathRole).isValid())
         {
             has_selection = true;
@@ -508,7 +480,6 @@ void FilePanelWidget::updateTransferActions()
         }
     }
 
-    send_button_->setEnabled(has_selection && transfer_allowed_);
     delete_button_->setEnabled(has_selection);
 }
 
@@ -524,14 +495,21 @@ void FilePanelWidget::showItemActions(QTreeWidgetItem* item)
 
     BottomSheet* sheet = new BottomSheet(this);
     sheet->setTitle(name);
-    const bool is_local = (target_ == FileTask::Target::LOCAL);
-    sheet->addItem(is_local ? tr("Upload") : tr("Download"),
-                   is_local ? ":/img/material/upload.svg" : ":/img/material/download.svg");
+
+    // Upload/download is offered only when the other side has a destination folder open.
+    const bool can_transfer = transfer_allowed_;
+    if (can_transfer)
+    {
+        const bool is_local = (target_ == FileTask::Target::LOCAL);
+        sheet->addItem(is_local ? tr("Upload") : tr("Download"),
+                       is_local ? ":/img/material/upload.svg" : ":/img/material/download.svg");
+    }
     sheet->addItem(tr("Delete"), ":/img/material/delete.svg");
 
-    connect(sheet, &BottomSheet::sig_triggered, this, [this, name, is_directory, size](int index)
+    connect(sheet, &BottomSheet::sig_triggered, this,
+            [this, name, is_directory, size, can_transfer](int index)
     {
-        if (index == 0)
+        if (can_transfer && index == 0)
         {
             emit sig_sendRequested({ FileTransfer::Item(name, size, is_directory) });
         }
