@@ -88,6 +88,9 @@ private:
     // True if |path| is the root of one of the known locations (a drive or special folder).
     bool isLocationRoot(const QString& path) const;
 
+    // Enables the send and delete buttons only while a file or folder is selected.
+    void updateTransferActions();
+
     void showItemActions(QTreeWidgetItem* item);
     void showError(const QString& message);
 

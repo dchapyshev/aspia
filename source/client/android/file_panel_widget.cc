@@ -138,6 +138,7 @@ FilePanelWidget::FilePanelWidget(FileTask::Target target, QWidget* parent)
     layout->addWidget(list_, 1);
 
     connect(list_, &QTreeWidget::itemClicked, this, &FilePanelWidget::onItemClicked);
+    connect(list_, &QTreeWidget::itemSelectionChanged, this, &FilePanelWidget::updateTransferActions);
     connect(list_, &TreeWidget::sig_itemLongPressed, this, &FilePanelWidget::showItemActions);
     connect(up_button_, &IconButton::clicked, this, &FilePanelWidget::onUpClicked);
     connect(new_folder_button, &IconButton::clicked, this, &FilePanelWidget::onNewFolderClicked);
@@ -235,6 +236,7 @@ void FilePanelWidget::onDriveList(
 
     // clear()/addItem reset the selection, so reselect the current location.
     selectCurrentLocation();
+    updateTransferActions();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -277,6 +279,8 @@ void FilePanelWidget::onFileList(
         item->setData(0, kIsDirRole, false);
         item->setData(0, kSizeRole, static_cast<qint64>(entry.size()));
     }
+
+    updateTransferActions();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -432,8 +436,6 @@ void FilePanelWidget::setPath(const QString& path)
     current_path_ = path;
     selectCurrentLocation();
     up_button_->setEnabled(!path.isEmpty());
-    send_button_->setEnabled(!path.isEmpty());
-    delete_button_->setEnabled(!path.isEmpty());
 
     refresh();
 }
@@ -480,6 +482,26 @@ bool FilePanelWidget::isLocationRoot(const QString& path) const
 }
 
 //--------------------------------------------------------------------------------------------------
+void FilePanelWidget::updateTransferActions()
+{
+    const QList<QTreeWidgetItem*> selected = list_->selectedItems();
+
+    bool has_selection = false;
+    for (QTreeWidgetItem* item : selected)
+    {
+        // Drive rows are not transferable.
+        if (!item->data(0, kPathRole).isValid())
+        {
+            has_selection = true;
+            break;
+        }
+    }
+
+    send_button_->setEnabled(has_selection);
+    delete_button_->setEnabled(has_selection);
+}
+
+//--------------------------------------------------------------------------------------------------
 void FilePanelWidget::showItemActions(QTreeWidgetItem* item)
 {
     if (!item || item->data(0, kPathRole).isValid() || current_path_.isEmpty())
@@ -491,8 +513,9 @@ void FilePanelWidget::showItemActions(QTreeWidgetItem* item)
 
     BottomSheet* sheet = new BottomSheet(this);
     sheet->setTitle(name);
-    sheet->addItem(target_ == FileTask::Target::LOCAL ? tr("Upload") : tr("Download"),
-                   ":/img/file-explorer.svg", false, false);
+    const bool is_local = (target_ == FileTask::Target::LOCAL);
+    sheet->addItem(is_local ? tr("Upload") : tr("Download"),
+                   is_local ? ":/img/material/upload.svg" : ":/img/material/download.svg");
     sheet->addItem(tr("Delete"), ":/img/material/delete.svg");
 
     connect(sheet, &BottomSheet::sig_triggered, this, [this, name, is_directory, size](int index)
