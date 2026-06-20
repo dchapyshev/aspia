@@ -54,6 +54,13 @@ int main(int argc, char* argv[])
     //   https://bugreports.qt.io/browse/QTBUG-82617
     //   https://developernote.com/2022/03/crash-at-std-thread-and-std-mutex-destructors-on-android/
     qputenv("QT_ANDROID_NO_EXIT_CALL", "1");
+
+    // Force the software (raster) widget backing store. The app uses no OpenGL widgets, so the RHI
+    // compositor is only pulled in for translucent top-level surfaces (dialogs, bottom sheets, menus).
+    // Its QOpenGLContext::makeCurrent aborts with a qFatal (SIGABRT) when the surface is momentarily
+    // invalid - e.g. while the on-screen keyboard is shown during a repaint. Raster avoids OpenGL
+    // entirely and removes that crash.
+    qputenv("QT_WIDGETS_RHI", "0");
 #endif // defined(Q_OS_ANDROID)
 
     Q_INIT_RESOURCE(common);
