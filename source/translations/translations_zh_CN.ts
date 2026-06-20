@@ -332,34 +332,34 @@ Routers added: %4</source>
 <context>
     <name>AndroidMainWindow</name>
     <message>
-        <location filename="../client/android/main_window.cc" line="129"/>
-        <location filename="../client/android/main_window.cc" line="214"/>
-        <location filename="../client/android/main_window.cc" line="294"/>
-        <location filename="../client/android/main_window.cc" line="452"/>
+        <location filename="../client/android/main_window.cc" line="131"/>
+        <location filename="../client/android/main_window.cc" line="216"/>
+        <location filename="../client/android/main_window.cc" line="296"/>
+        <location filename="../client/android/main_window.cc" line="500"/>
         <source>Local</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="130"/>
-        <location filename="../client/android/main_window.cc" line="218"/>
-        <location filename="../client/android/main_window.cc" line="314"/>
-        <location filename="../client/android/main_window.cc" line="453"/>
+        <location filename="../client/android/main_window.cc" line="132"/>
+        <location filename="../client/android/main_window.cc" line="220"/>
+        <location filename="../client/android/main_window.cc" line="316"/>
+        <location filename="../client/android/main_window.cc" line="501"/>
         <source>Remote</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="131"/>
-        <location filename="../client/android/main_window.cc" line="222"/>
-        <location filename="../client/android/main_window.cc" line="304"/>
-        <location filename="../client/android/main_window.cc" line="454"/>
+        <location filename="../client/android/main_window.cc" line="133"/>
+        <location filename="../client/android/main_window.cc" line="224"/>
+        <location filename="../client/android/main_window.cc" line="306"/>
+        <location filename="../client/android/main_window.cc" line="502"/>
         <source>Routers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="132"/>
-        <location filename="../client/android/main_window.cc" line="226"/>
-        <location filename="../client/android/main_window.cc" line="324"/>
-        <location filename="../client/android/main_window.cc" line="455"/>
+        <location filename="../client/android/main_window.cc" line="134"/>
+        <location filename="../client/android/main_window.cc" line="228"/>
+        <location filename="../client/android/main_window.cc" line="326"/>
+        <location filename="../client/android/main_window.cc" line="503"/>
         <source>Settings</source>
         <translation type="unfinished">设置</translation>
     </message>
@@ -367,7 +367,7 @@ Routers added: %4</source>
 <context>
     <name>AppBar</name>
     <message>
-        <location filename="../common/android/app_bar.cc" line="53"/>
+        <location filename="../common/android/app_bar.cc" line="55"/>
         <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
@@ -646,54 +646,54 @@ Routers added: %4</source>
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client/main.cc" line="152"/>
+        <location filename="../client/main.cc" line="159"/>
         <source>Set Master Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="154"/>
+        <location filename="../client/main.cc" line="161"/>
         <source>Set a master password required to unlock the application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="162"/>
+        <location filename="../client/main.cc" line="169"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation type="unfinished">您输入的密码不符合安全要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="164"/>
+        <location filename="../client/main.cc" line="171"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform>密码必须包含大小写字符、数字，并且不得少于 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="168"/>
+        <location filename="../client/main.cc" line="175"/>
         <source>Do you want to enter a different password?</source>
         <translation type="unfinished">您想输入其他密码吗？</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="178"/>
+        <location filename="../client/main.cc" line="185"/>
         <source>Unable to set master password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="126"/>
+        <location filename="../client/main.cc" line="133"/>
         <source>Unlock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="128"/>
+        <location filename="../client/main.cc" line="135"/>
         <source>Enter the master password to unlock the application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="144"/>
+        <location filename="../client/main.cc" line="151"/>
         <source>Invalid master password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="107"/>
+        <location filename="../client/main.cc" line="114"/>
         <source>Aspia Client</source>
         <translation>Aspia 客户端</translation>
     </message>
@@ -1777,77 +1777,77 @@ Routers added: %4</source>
 <context>
     <name>FileError</name>
     <message>
-        <location filename="../client/desktop/file_transfer/file_error_code.cc" line="33"/>
+        <location filename="../client/file_error_code.cc" line="33"/>
         <source>Successfully completed</source>
         <translation>已完成</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_error_code.cc" line="37"/>
+        <location filename="../client/file_error_code.cc" line="37"/>
         <source>Invalid request</source>
         <translation>无效请求</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_error_code.cc" line="41"/>
+        <location filename="../client/file_error_code.cc" line="41"/>
         <source>Invalid directory or file name</source>
         <translation>无效目录或文件</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_error_code.cc" line="45"/>
+        <location filename="../client/file_error_code.cc" line="45"/>
         <source>Path not found</source>
         <translation>找不到路径</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_error_code.cc" line="49"/>
+        <location filename="../client/file_error_code.cc" line="49"/>
         <source>Path already exists</source>
         <translation>路径已存在</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_error_code.cc" line="53"/>
+        <location filename="../client/file_error_code.cc" line="53"/>
         <source>No drives found</source>
         <translation>找不到驱动器</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_error_code.cc" line="57"/>
+        <location filename="../client/file_error_code.cc" line="57"/>
         <source>Disk full</source>
         <translation>磁盘已满</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_error_code.cc" line="61"/>
+        <location filename="../client/file_error_code.cc" line="61"/>
         <source>Access denied</source>
         <translation>拒绝访问</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_error_code.cc" line="65"/>
+        <location filename="../client/file_error_code.cc" line="65"/>
         <source>Could not open file for reading</source>
         <translation>无法打开文件进行读取</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_error_code.cc" line="69"/>
+        <location filename="../client/file_error_code.cc" line="69"/>
         <source>Could not create or replace file</source>
         <translation>无法创建或替换文件</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_error_code.cc" line="73"/>
+        <location filename="../client/file_error_code.cc" line="73"/>
         <source>Could not write to file</source>
         <translation>无法写入文件</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_error_code.cc" line="77"/>
+        <location filename="../client/file_error_code.cc" line="77"/>
         <source>Could not read file</source>
         <translation>无法读取文件</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_error_code.cc" line="81"/>
+        <location filename="../client/file_error_code.cc" line="81"/>
         <source>Drive not ready</source>
         <translation>驱动器未就绪</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_error_code.cc" line="85"/>
+        <location filename="../client/file_error_code.cc" line="85"/>
         <source>No logged in user</source>
         <translation>没有登录用户</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_error_code.cc" line="89"/>
+        <location filename="../client/file_error_code.cc" line="89"/>
         <source>Unknown error code</source>
         <translation>未知错误代码</translation>
     </message>
@@ -1997,6 +1997,130 @@ Routers added: %4</source>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="462"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation type="unfinished">是否确定要删除所选项目？</translation>
+    </message>
+</context>
+<context>
+    <name>FilePanelWidget</name>
+    <message>
+        <location filename="../client/android/file_panel_widget.cc" line="154"/>
+        <source>Failed to get list of drives: %1</source>
+        <translation type="unfinished">无法获取驱动器列表: %1</translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_panel_widget.cc" line="173"/>
+        <source>Home Folder</source>
+        <translation type="unfinished">主文件夹</translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_panel_widget.cc" line="177"/>
+        <source>Desktop</source>
+        <translation type="unfinished">桌面</translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_panel_widget.cc" line="181"/>
+        <source>Internal Storage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_panel_widget.cc" line="185"/>
+        <source>SD Card</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_panel_widget.cc" line="189"/>
+        <source>Downloads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_panel_widget.cc" line="193"/>
+        <source>Camera</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_panel_widget.cc" line="197"/>
+        <source>Pictures</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_panel_widget.cc" line="201"/>
+        <source>Documents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_panel_widget.cc" line="230"/>
+        <source>Failed to get list of files: %1</source>
+        <translation type="unfinished">无法获取文件列表：%1</translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_panel_widget.cc" line="273"/>
+        <source>Failed to create directory: %1</source>
+        <translation type="unfinished">无法创建目录：%1</translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_panel_widget.cc" line="342"/>
+        <source>Create Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_panel_widget.cc" line="345"/>
+        <source>Folder name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_panel_widget.cc" line="348"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_panel_widget.cc" line="349"/>
+        <source>Create</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_panel_widget.cc" line="362"/>
+        <source>Name contains invalid characters.</source>
+        <translation type="unfinished">名称包含无效字符。</translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_panel_widget.cc" line="388"/>
+        <location filename="../client/android/file_panel_widget.cc" line="515"/>
+        <location filename="../client/android/file_panel_widget.cc" line="526"/>
+        <location filename="../client/android/file_panel_widget.cc" line="527"/>
+        <source>Delete</source>
+        <translation type="unfinished">删除</translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_panel_widget.cc" line="388"/>
+        <source>Delete the selected items?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_panel_widget.cc" line="512"/>
+        <source>Upload</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_panel_widget.cc" line="512"/>
+        <source>Download</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_panel_widget.cc" line="527"/>
+        <source>Delete &quot;%1&quot;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_panel_widget.cc" line="542"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>FileProgressSheet</name>
+    <message>
+        <location filename="../client/android/file_progress_sheet.cc" line="47"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2222,6 +2346,93 @@ Routers added: %4</source>
         <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="171"/>
         <source>Session error: %1</source>
         <translation type="unfinished">会话错误: %1</translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_transfer_window.cc" line="55"/>
+        <location filename="../client/android/file_transfer_window.cc" line="111"/>
+        <location filename="../client/android/file_transfer_window.cc" line="192"/>
+        <location filename="../client/android/file_transfer_window.cc" line="378"/>
+        <location filename="../client/android/file_transfer_window.cc" line="389"/>
+        <source>File Transfer</source>
+        <translation type="unfinished">文件传输</translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_transfer_window.cc" line="60"/>
+        <location filename="../client/android/file_transfer_window.cc" line="73"/>
+        <source>This Device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_transfer_window.cc" line="112"/>
+        <source>To browse files on this device, allow access to all files on the next screen.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_transfer_window.cc" line="113"/>
+        <source>Allow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_transfer_window.cc" line="154"/>
+        <source>Connecting to host %1...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_transfer_window.cc" line="165"/>
+        <source>The connection to the host has been lost.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_transfer_window.cc" line="169"/>
+        <location filename="../client/android/file_transfer_window.cc" line="253"/>
+        <source>The specified router is unavailable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_transfer_window.cc" line="173"/>
+        <source>The specified router is offline.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_transfer_window.cc" line="177"/>
+        <location filename="../client/android/file_transfer_window.cc" line="301"/>
+        <source>Error requesting connection via router.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_transfer_window.cc" line="181"/>
+        <source>The host version is newer than the client. Please update the application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_transfer_window.cc" line="193"/>
+        <source>There is no logged in user on the host. The session is unavailable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_transfer_window.cc" line="239"/>
+        <source>Connecting...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_transfer_window.cc" line="264"/>
+        <source>Connecting to router...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_transfer_window.cc" line="289"/>
+        <source>Requesting connection to the host...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_transfer_window.cc" line="379"/>
+        <source>Open a destination folder on the other side first.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_transfer_window.cc" line="431"/>
+        <source>Deleting</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3416,114 +3627,124 @@ Hosts skipped: %6</source>
 <context>
     <name>LocalWidget</name>
     <message>
-        <location filename="../client/android/local_widget.cc" line="273"/>
-        <location filename="../client/android/local_widget.cc" line="368"/>
+        <location filename="../client/android/local_widget.cc" line="280"/>
+        <location filename="../client/android/local_widget.cc" line="375"/>
         <source>Add Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="274"/>
-        <location filename="../client/android/local_widget.cc" line="378"/>
+        <location filename="../client/android/local_widget.cc" line="281"/>
+        <location filename="../client/android/local_widget.cc" line="385"/>
         <source>Add Host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="275"/>
-        <location filename="../client/android/local_widget.cc" line="311"/>
+        <location filename="../client/android/local_widget.cc" line="282"/>
         <location filename="../client/android/local_widget.cc" line="318"/>
-        <location filename="../client/android/local_widget.cc" line="322"/>
-        <location filename="../client/android/local_widget.cc" line="327"/>
-        <location filename="../client/android/local_widget.cc" line="331"/>
+        <location filename="../client/android/local_widget.cc" line="325"/>
+        <location filename="../client/android/local_widget.cc" line="329"/>
+        <location filename="../client/android/local_widget.cc" line="334"/>
+        <location filename="../client/android/local_widget.cc" line="338"/>
         <source>Import</source>
         <translation type="unfinished">导入</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="276"/>
-        <location filename="../client/android/local_widget.cc" line="351"/>
+        <location filename="../client/android/local_widget.cc" line="283"/>
         <location filename="../client/android/local_widget.cc" line="358"/>
+        <location filename="../client/android/local_widget.cc" line="365"/>
         <source>Export</source>
         <translation type="unfinished">导出</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="298"/>
+        <location filename="../client/android/local_widget.cc" line="305"/>
         <source>Import Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="298"/>
-        <location filename="../client/android/local_widget.cc" line="340"/>
+        <location filename="../client/android/local_widget.cc" line="305"/>
+        <location filename="../client/android/local_widget.cc" line="347"/>
         <source>Address book (*.json)</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_widget.cc" line="312"/>
+        <location filename="../client/android/local_widget.cc" line="319"/>
         <source>Imported %n router(s), </source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_widget.cc" line="313"/>
-        <location filename="../client/android/local_widget.cc" line="353"/>
+        <location filename="../client/android/local_widget.cc" line="320"/>
+        <location filename="../client/android/local_widget.cc" line="360"/>
         <source>%n group(s), </source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_widget.cc" line="314"/>
-        <location filename="../client/android/local_widget.cc" line="354"/>
+        <location filename="../client/android/local_widget.cc" line="321"/>
+        <location filename="../client/android/local_widget.cc" line="361"/>
         <source>%n host(s).</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="318"/>
+        <location filename="../client/android/local_widget.cc" line="325"/>
         <source>Invalid password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="323"/>
+        <location filename="../client/android/local_widget.cc" line="330"/>
         <source>The file was created by a newer version and cannot be imported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="327"/>
+        <location filename="../client/android/local_widget.cc" line="334"/>
         <source>The address book is already up to date.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="331"/>
+        <location filename="../client/android/local_widget.cc" line="338"/>
         <source>Failed to import the address book.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="340"/>
+        <location filename="../client/android/local_widget.cc" line="347"/>
         <source>Export Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_widget.cc" line="352"/>
+        <location filename="../client/android/local_widget.cc" line="359"/>
         <source>Exported %n router(s), </source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="358"/>
+        <location filename="../client/android/local_widget.cc" line="365"/>
         <source>Failed to export the address book.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="406"/>
+        <location filename="../client/android/local_widget.cc" line="432"/>
         <source>Edit Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="415"/>
+        <location filename="../client/android/local_widget.cc" line="441"/>
         <source>Edit Host</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="529"/>
+        <source>Desktop</source>
+        <translation type="unfinished">桌面</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="531"/>
+        <source>File Transfer</source>
+        <translation type="unfinished">文件传输</translation>
     </message>
 </context>
 <context>
@@ -3988,6 +4209,19 @@ Hosts skipped: %6</source>
         <location filename="../common/android/message_dialog.cc" line="51"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RemoteWidget</name>
+    <message>
+        <location filename="../client/android/remote_widget.cc" line="530"/>
+        <source>Desktop</source>
+        <translation type="unfinished">桌面</translation>
+    </message>
+    <message>
+        <location filename="../client/android/remote_widget.cc" line="532"/>
+        <source>File Transfer</source>
+        <translation type="unfinished">文件传输</translation>
     </message>
 </context>
 <context>
