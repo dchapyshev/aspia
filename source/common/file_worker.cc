@@ -37,6 +37,162 @@
 #include <qt_windows.h>
 #endif // defined(Q_OS_WINDOWS)
 
+#if defined(Q_OS_ANDROID)
+#include <QCoreApplication>
+#include <QJniEnvironment>
+#include <QJniObject>
+#endif // defined(Q_OS_ANDROID)
+
+namespace {
+
+#if defined(Q_OS_ANDROID)
+
+//--------------------------------------------------------------------------------------------------
+// Builds the drive list shown for the local Android device: the user storages and a few quick
+// folders, instead of the raw POSIX mount points reported by QStorageInfo.
+void addAndroidDrives(proto::file_transfer::DriveList* drive_list)
+{
+    QJniObject ext_dir = QJniObject::callStaticObjectMethod(
+        "android/os/Environment", "getExternalStorageDirectory", "()Ljava/io/File;");
+    QString internal_path;
+    if (ext_dir.isValid())
+    {
+        internal_path = ext_dir.callObjectMethod(
+            "getAbsolutePath", "()Ljava/lang/String;").toString();
+    }
+
+    if (!internal_path.isEmpty())
+    {
+        proto::file_transfer::DriveList::Item* item = drive_list->add_item();
+        item->set_type(proto::file_transfer::DriveList::Item::TYPE_INTERNAL_STORAGE);
+        item->set_path(internal_path.toStdString());
+    }
+
+    // Removable storage: the second and later entries of getExternalFilesDirs point at SD cards. The
+    // returned path is the app sandbox on that volume, so trim it back to the volume root.
+    QJniObject context = QNativeInterface::QAndroidApplication::context();
+    if (context.isValid())
+    {
+        QJniObject dirs = context.callObjectMethod(
+            "getExternalFilesDirs", "(Ljava/lang/String;)[Ljava/io/File;", nullptr);
+        if (dirs.isValid())
+        {
+            QJniEnvironment env;
+            jobjectArray array = dirs.object<jobjectArray>();
+            const jsize count = env->GetArrayLength(array);
+
+            for (jsize i = 1; i < count; ++i)
+            {
+                QJniObject dir = env->GetObjectArrayElement(array, i);
+                if (!dir.isValid())
+                    continue;
+
+                const QString path = dir.callObjectMethod(
+                    "getAbsolutePath", "()Ljava/lang/String;").toString();
+                const int android_index = path.indexOf("/Android/");
+                if (android_index <= 0)
+                    continue;
+
+                proto::file_transfer::DriveList::Item* item = drive_list->add_item();
+                item->set_type(proto::file_transfer::DriveList::Item::TYPE_SD_CARD);
+                item->set_path(path.left(android_index).toStdString());
+            }
+        }
+    }
+
+    if (internal_path.isEmpty())
+        return;
+
+    const struct
+    {
+        const char* sub_path;
+        proto::file_transfer::DriveList::Item::Type type;
+    } kQuickFolders[] =
+    {
+        { "/Download",  proto::file_transfer::DriveList::Item::TYPE_DOWNLOAD_FOLDER },
+        { "/DCIM",      proto::file_transfer::DriveList::Item::TYPE_CAMERA_FOLDER },
+        { "/Pictures",  proto::file_transfer::DriveList::Item::TYPE_PICTURES_FOLDER },
+        { "/Documents", proto::file_transfer::DriveList::Item::TYPE_DOCUMENTS_FOLDER },
+    };
+
+    for (const auto& folder : kQuickFolders)
+    {
+        const QString path = internal_path + folder.sub_path;
+        if (!QDir(path).exists())
+            continue;
+
+        proto::file_transfer::DriveList::Item* item = drive_list->add_item();
+        item->set_type(folder.type);
+        item->set_path(path.toStdString());
+    }
+}
+
+#else // defined(Q_OS_ANDROID)
+
+//--------------------------------------------------------------------------------------------------
+// Builds the drive list for the desktop: the mounted volumes plus the Desktop and Home folders.
+void addDesktopDrives(proto::file_transfer::DriveList* drive_list)
+{
+    QList<QStorageInfo> volumes = QStorageInfo::mountedVolumes();
+
+    for (const auto& volume : std::as_const(volumes))
+    {
+        proto::file_transfer::DriveList::Item* item = drive_list->add_item();
+
+#if defined(Q_OS_WINDOWS)
+        switch (GetDriveTypeW(qUtf16Printable(volume.rootPath())))
+        {
+            case DRIVE_REMOVABLE:
+                item->set_type(proto::file_transfer::DriveList::Item::TYPE_REMOVABLE);
+                break;
+
+            case DRIVE_FIXED:
+                item->set_type(proto::file_transfer::DriveList::Item::TYPE_FIXED);
+                break;
+
+            case DRIVE_REMOTE:
+                item->set_type(proto::file_transfer::DriveList::Item::TYPE_REMOTE);
+                break;
+
+            case DRIVE_CDROM:
+                item->set_type(proto::file_transfer::DriveList::Item::TYPE_CDROM);
+                break;
+
+            case DRIVE_RAMDISK:
+                item->set_type(proto::file_transfer::DriveList::Item::TYPE_RAM);
+                break;
+
+            default:
+                break;
+        }
+#else
+        item->set_type(proto::file_transfer::DriveList::Item::TYPE_FIXED);
+#endif
+
+        item->set_path(volume.rootPath().toStdString());
+    }
+
+    QString desktop_path = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+    if (!desktop_path.isEmpty())
+    {
+        proto::file_transfer::DriveList::Item* item = drive_list->add_item();
+        item->set_type(proto::file_transfer::DriveList::Item::TYPE_DESKTOP_FOLDER);
+        item->set_path(desktop_path.toStdString());
+    }
+
+    QString home_path = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+    if (!home_path.isEmpty())
+    {
+        proto::file_transfer::DriveList::Item* item = drive_list->add_item();
+        item->set_type(proto::file_transfer::DriveList::Item::TYPE_HOME_FOLDER);
+        item->set_path(home_path.toStdString());
+    }
+}
+
+#endif // defined(Q_OS_ANDROID)
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 FileWorker::FileWorker(QObject* parent)
     : QObject(parent),
@@ -124,60 +280,11 @@ void FileWorker::doDriveListRequest(proto::file_transfer::Reply* reply)
 {
     proto::file_transfer::DriveList* drive_list = reply->mutable_drive_list();
 
-    QList<QStorageInfo> volumes = QStorageInfo::mountedVolumes();
-
-    for (const auto& volume : std::as_const(volumes))
-    {
-        proto::file_transfer::DriveList::Item* item = drive_list->add_item();
-
-#if defined(Q_OS_WINDOWS)
-        switch (GetDriveTypeW(qUtf16Printable(volume.rootPath())))
-        {
-            case DRIVE_REMOVABLE:
-                item->set_type(proto::file_transfer::DriveList::Item::TYPE_REMOVABLE);
-                break;
-
-            case DRIVE_FIXED:
-                item->set_type(proto::file_transfer::DriveList::Item::TYPE_FIXED);
-                break;
-
-            case DRIVE_REMOTE:
-                item->set_type(proto::file_transfer::DriveList::Item::TYPE_REMOTE);
-                break;
-
-            case DRIVE_CDROM:
-                item->set_type(proto::file_transfer::DriveList::Item::TYPE_CDROM);
-                break;
-
-            case DRIVE_RAMDISK:
-                item->set_type(proto::file_transfer::DriveList::Item::TYPE_RAM);
-                break;
-
-            default:
-                break;
-        }
+#if defined(Q_OS_ANDROID)
+    addAndroidDrives(drive_list);
 #else
-        item->set_type(proto::file_transfer::DriveList::Item::TYPE_FIXED);
+    addDesktopDrives(drive_list);
 #endif
-
-        item->set_path(volume.rootPath().toStdString());
-    }
-
-    QString desktop_path = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
-    if (!desktop_path.isEmpty())
-    {
-        proto::file_transfer::DriveList::Item* item = drive_list->add_item();
-        item->set_type(proto::file_transfer::DriveList::Item::TYPE_DESKTOP_FOLDER);
-        item->set_path(desktop_path.toStdString());
-    }
-
-    QString home_path = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-    if (!home_path.isEmpty())
-    {
-        proto::file_transfer::DriveList::Item* item = drive_list->add_item();
-        item->set_type(proto::file_transfer::DriveList::Item::TYPE_HOME_FOLDER);
-        item->set_path(home_path.toStdString());
-    }
 
     if (drive_list->item_size() == 0)
         reply->set_error_code(proto::file_transfer::ERROR_CODE_NO_DRIVES_FOUND);

@@ -64,7 +64,8 @@ endif()
 if (ANDROID)
     list(APPEND SOURCE_COMMON
         clipboard_android.cc
-        clipboard_android.h)
+        clipboard_android.h
+        file_platform_util_android.cc)
 endif()
 
 if (APPLE)
