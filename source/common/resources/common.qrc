@@ -30,6 +30,10 @@
         <file>lock.svg</file>
         <file>computer.svg</file>
         <file>folder.svg</file>
+        <file>folder-camera.svg</file>
+        <file>folder-documents.svg</file>
+        <file>folder-downloads.svg</file>
+        <file>folder-pictures.svg</file>
         <file>file-explorer.svg</file>
         <file>language.svg</file>
         <file>door.svg</file>
@@ -48,6 +52,7 @@
         <file>microchip.svg</file>
         <file>video-card.svg</file>
         <file>hdd.svg</file>
+        <file>sd.svg</file>
         <file>computer-mouse.svg</file>
         <file>add-folder.svg</file>
         <file>remove-folder.svg</file>
