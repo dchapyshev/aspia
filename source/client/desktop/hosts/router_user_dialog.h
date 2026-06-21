@@ -73,6 +73,8 @@ private:
     void setAccountChanged(bool changed);
     void updateLoadingState();
     void updateTokenTree();
+    void setAccessLevel(proto::router::SessionType session_type);
+    static proto::router::SessionType accessLevelFromSessions(quint32 sessions);
     static QString sessionTypeToString(proto::router::SessionType session_type);
     static QString formatTimestamp(qint64 unix_seconds);
 

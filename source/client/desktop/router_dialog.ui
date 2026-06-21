@@ -56,7 +56,7 @@
      <item row="2" column="0">
       <widget class="QLabel" name="label_session_type">
        <property name="text">
-        <string>Session Type:</string>
+        <string>Access Level:</string>
        </property>
       </widget>
      </item>
@@ -127,8 +127,6 @@
    <header>common/desktop/password_edit.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../../common/resources/common.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

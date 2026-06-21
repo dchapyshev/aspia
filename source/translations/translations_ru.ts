@@ -344,34 +344,34 @@ Routers added: %4</source>
         <translation type="vanished">Рабочие пространства</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="132"/>
-        <location filename="../client/android/main_window.cc" line="217"/>
-        <location filename="../client/android/main_window.cc" line="297"/>
-        <location filename="../client/android/main_window.cc" line="527"/>
+        <location filename="../client/android/main_window.cc" line="136"/>
+        <location filename="../client/android/main_window.cc" line="224"/>
+        <location filename="../client/android/main_window.cc" line="304"/>
+        <location filename="../client/android/main_window.cc" line="577"/>
         <source>Local</source>
         <translation>Локальные</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="133"/>
-        <location filename="../client/android/main_window.cc" line="221"/>
-        <location filename="../client/android/main_window.cc" line="317"/>
-        <location filename="../client/android/main_window.cc" line="528"/>
+        <location filename="../client/android/main_window.cc" line="137"/>
+        <location filename="../client/android/main_window.cc" line="228"/>
+        <location filename="../client/android/main_window.cc" line="324"/>
+        <location filename="../client/android/main_window.cc" line="578"/>
         <source>Remote</source>
         <translation>Удаленные</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="134"/>
-        <location filename="../client/android/main_window.cc" line="225"/>
-        <location filename="../client/android/main_window.cc" line="307"/>
-        <location filename="../client/android/main_window.cc" line="529"/>
+        <location filename="../client/android/main_window.cc" line="138"/>
+        <location filename="../client/android/main_window.cc" line="232"/>
+        <location filename="../client/android/main_window.cc" line="314"/>
+        <location filename="../client/android/main_window.cc" line="579"/>
         <source>Routers</source>
         <translation>Маршутизаторы</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="135"/>
-        <location filename="../client/android/main_window.cc" line="229"/>
-        <location filename="../client/android/main_window.cc" line="327"/>
-        <location filename="../client/android/main_window.cc" line="530"/>
+        <location filename="../client/android/main_window.cc" line="139"/>
+        <location filename="../client/android/main_window.cc" line="236"/>
+        <location filename="../client/android/main_window.cc" line="334"/>
+        <location filename="../client/android/main_window.cc" line="580"/>
         <source>Settings</source>
         <translation>Параметры</translation>
     </message>
@@ -4650,8 +4650,12 @@ Hosts skipped: %6</source>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="59"/>
+        <source>Access Level:</source>
+        <translation>Уровень доступа:</translation>
+    </message>
+    <message>
         <source>Session Type:</source>
-        <translation>Тип сессии:</translation>
+        <translation type="vanished">Тип сессии:</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="69"/>
@@ -5420,119 +5424,123 @@ Hosts skipped: %6</source>
         <translation>Пароль (повторить):</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="75"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="58"/>
+        <source>Access Level:</source>
+        <translation>Уровень доступа:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="85"/>
         <source>Disable User Account</source>
         <translation>Отключить пользователя</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="82"/>
         <source>Allowed Session Types:</source>
-        <translation>Разрешенные типы сессий:</translation>
+        <translation type="vanished">Разрешенные типы сессий:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="107"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="95"/>
         <source>Reset two-factor authentication</source>
         <translation>Сбросить двухфакторную аутентификацию</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="115"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="103"/>
         <source>Sessions</source>
         <translation>Сессии</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="131"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="119"/>
         <source>Signed in</source>
         <translation>Выполнен вход</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="136"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="124"/>
         <source>Last activity</source>
         <translation>Последняя активность</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="141"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="129"/>
         <source>Address</source>
         <translation>Адрес</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="164"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="152"/>
         <source>Sign out</source>
         <translation>Завершить сеанс</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="171"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="159"/>
         <source>Sign out all</source>
         <translation>Завершить все сеансы</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="194"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="182"/>
         <source>Invalid user request.</source>
         <translation>Неверный запрос пользователя.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="196"/>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="250"/>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="349"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="184"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="238"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="337"/>
         <source>Unknown internal error.</source>
         <translation>Неизвестная внутренняя ошибка.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="198"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="186"/>
         <source>Invalid data was passed.</source>
         <translation>Переданы некорректные данные.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="200"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="188"/>
         <source>A user with the specified name already exists.</source>
         <translation>Пользователь с указанным именем уже существует.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="202"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="190"/>
         <source>Unknown error type.</source>
         <translation>Неизвестный тип ошибки.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="215"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="203"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
         <translation>Сброс двухфакторной аутентификации приведёт к выходу пользователя из всех сеансов и потребует повторной настройки при следующем входе. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="264"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="252"/>
         <source>Are you sure you want to sign this user out of this session?</source>
         <translation>Вы уверены, что хотите завершить этот сеанс пользователя?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="291"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="279"/>
         <source>Are you sure you want to sign this user out of all sessions?</source>
         <translation>Вы уверены, что хотите завершить все сеансы этого пользователя?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="345"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="333"/>
         <source>Session not found. The list may be out of date.</source>
         <translation>Сеанс не найден. Возможно, список устарел.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="347"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="335"/>
         <source>Invalid sign-out request.</source>
         <translation>Недопустимый запрос на завершение сеанса.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="380"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="368"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
         <translation>Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="392"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="380"/>
         <source>The username you entered already exists.</source>
         <translation>Введенное вами имя пользователя уже существует.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="404"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="392"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введенные пароли не совпадают.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="413"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="401"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Пароль не может быть пустой и не должен превышать %n символ.</numerusform>
@@ -5541,12 +5549,12 @@ Hosts skipped: %6</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="423"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="411"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="424"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="412"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
@@ -5555,42 +5563,42 @@ Hosts skipped: %6</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="428"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="416"/>
         <source>Do you want to enter a different password?</source>
         <translation>Вы хотите ввести другой пароль?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="431"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="419"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="451"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="439"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Неизвестная внутренняя ошибка при создании или изменении пользователя.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="508"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="491"/>
         <source>Double-click to change</source>
         <translation>Двойной щелчок для изменения</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="560"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="562"/>
         <source>Administrator</source>
         <translation>Администратор</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="564"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="566"/>
         <source>Manager</source>
         <translation>Менеджер</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="568"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="570"/>
         <source>Client</source>
         <translation>Клиент</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="586"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="588"/>
         <source>Never</source>
         <translation>Никогда</translation>
     </message>

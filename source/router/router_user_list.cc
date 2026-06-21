@@ -19,7 +19,24 @@
 #include "router/router_user_list.h"
 
 #include "base/logging.h"
+#include "proto/router.h"
 #include "router/database.h"
+
+namespace {
+
+//--------------------------------------------------------------------------------------------------
+// Expands the session mask according to the privilege hierarchy: an administrator implies a manager
+// and a client, a manager implies a client.
+quint32 expandSessionTypes(quint32 sessions)
+{
+    if (sessions & proto::router::SESSION_TYPE_ADMIN)
+        sessions |= proto::router::SESSION_TYPE_MANAGER | proto::router::SESSION_TYPE_CLIENT;
+    if (sessions & proto::router::SESSION_TYPE_MANAGER)
+        sessions |= proto::router::SESSION_TYPE_CLIENT;
+    return sessions;
+}
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 RouterUserList::~RouterUserList() = default;
@@ -40,7 +57,9 @@ SharedPointer<RouterUserList> RouterUserList::open()
 //--------------------------------------------------------------------------------------------------
 User RouterUserList::find(const QString& username) const
 {
-    return Database::instance().findUser(username);
+    User user = Database::instance().findUser(username);
+    user.sessions = expandSessionTypes(user.sessions);
+    return user;
 }
 
 //--------------------------------------------------------------------------------------------------

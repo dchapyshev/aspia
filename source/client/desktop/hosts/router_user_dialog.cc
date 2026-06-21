@@ -45,25 +45,19 @@ RouterUserDialog::RouterUserDialog(qint64 router_id, qint64 user_id, QWidget* pa
 
     ui->checkbox_disable->setChecked(false);
 
-    auto add_session = [&](proto::router::SessionType session_type)
+    // The higher levels imply the lower ones (an administrator can also act as a manager and a
+    // client, a manager as a client), so a single level is stored instead of a set of types.
+    auto add_level = [&](proto::router::SessionType session_type)
     {
-        QTreeWidgetItem* item = new QTreeWidgetItem();
-
-        item->setText(0, sessionTypeToString(session_type));
-        item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
-        item->setData(0, Qt::UserRole, QVariant(session_type));
-
-        if (entry_id_ == 0 && session_type == proto::router::SESSION_TYPE_CLIENT)
-            item->setCheckState(0, Qt::Checked);
-        else
-            item->setCheckState(0, Qt::Unchecked);
-
-        ui->tree_sessions->addTopLevelItem(item);
+        ui->combo_access_level->addItem(sessionTypeToString(session_type), QVariant(session_type));
     };
 
-    add_session(proto::router::SESSION_TYPE_ADMIN);
-    add_session(proto::router::SESSION_TYPE_MANAGER);
-    add_session(proto::router::SESSION_TYPE_CLIENT);
+    add_level(proto::router::SESSION_TYPE_ADMIN);
+    add_level(proto::router::SESSION_TYPE_MANAGER);
+    add_level(proto::router::SESSION_TYPE_CLIENT);
+
+    if (entry_id_ == 0)
+        setAccessLevel(proto::router::SESSION_TYPE_CLIENT);
 
     connect(ui->buttonbox, &QDialogButtonBox::clicked, this, &RouterUserDialog::onButtonBoxClicked);
     connect(ui->edit_username, &QLineEdit::textEdited, this, [this]()
@@ -144,13 +138,7 @@ void RouterUserDialog::onUserListReceived(const proto::router::UserList& list)
             ui->edit_username->setText(user_.name);
             ui->button_reset_otp->setVisible(user.otp_active());
 
-            for (int j = 0; j < ui->tree_sessions->topLevelItemCount(); ++j)
-            {
-                QTreeWidgetItem* item = ui->tree_sessions->topLevelItem(j);
-                const quint32 session_type = item->data(0, Qt::UserRole).toUInt();
-                item->setCheckState(0,
-                    (user_.sessions & session_type) ? Qt::Checked : Qt::Unchecked);
-            }
+            setAccessLevel(accessLevelFromSessions(user_.sessions));
 
             tokens_.reserve(user.token_size());
             for (int j = 0; j < user.token_size(); ++j)
@@ -453,13 +441,8 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
         }
     }
 
-    quint32 sessions = 0;
-    for (int i = 0; i < ui->tree_sessions->topLevelItemCount(); ++i)
-    {
-        QTreeWidgetItem* item = ui->tree_sessions->topLevelItem(i);
-        if (item->checkState(0) == Qt::Checked)
-            sessions |= item->data(0, Qt::UserRole).toUInt();
-    }
+    // Only the selected level is stored; the router expands it to the implied lower levels.
+    quint32 sessions = ui->combo_access_level->currentData().toUInt();
 
     quint32 flags = 0;
     if (!ui->checkbox_disable->isChecked())
@@ -521,7 +504,7 @@ void RouterUserDialog::updateLoadingState()
 
     ui->edit_username->setEnabled(ready);
     ui->checkbox_disable->setEnabled(ready);
-    ui->tree_sessions->setEnabled(ready);
+    ui->combo_access_level->setEnabled(ready);
     ui->edit_password->setEnabled(ready && account_changed_);
     ui->edit_password_retry->setEnabled(ready && account_changed_);
 
@@ -546,6 +529,25 @@ void RouterUserDialog::updateTokenTree()
 
     ui->button_revoke_token->setEnabled(false);
     ui->button_revoke_all_tokens->setEnabled(!tokens_.isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterUserDialog::setAccessLevel(proto::router::SessionType session_type)
+{
+    int index = ui->combo_access_level->findData(QVariant(session_type));
+    if (index >= 0)
+        ui->combo_access_level->setCurrentIndex(index);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+proto::router::SessionType RouterUserDialog::accessLevelFromSessions(quint32 sessions)
+{
+    if (sessions & proto::router::SESSION_TYPE_ADMIN)
+        return proto::router::SESSION_TYPE_ADMIN;
+    if (sessions & proto::router::SESSION_TYPE_MANAGER)
+        return proto::router::SESSION_TYPE_MANAGER;
+    return proto::router::SESSION_TYPE_CLIENT;
 }
 
 //--------------------------------------------------------------------------------------------------

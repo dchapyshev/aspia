@@ -52,6 +52,13 @@
              </property>
             </widget>
            </item>
+           <item>
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>Access Level:</string>
+             </property>
+            </widget>
+           </item>
           </layout>
          </item>
          <item>
@@ -65,6 +72,9 @@
            <item>
             <widget class="PasswordEdit" name="edit_password_retry"/>
            </item>
+           <item>
+            <widget class="QComboBox" name="combo_access_level"/>
+           </item>
           </layout>
          </item>
         </layout>
@@ -74,28 +84,6 @@
          <property name="text">
           <string>Disable User Account</string>
          </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Allowed Session Types:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QTreeWidget" name="tree_sessions">
-         <property name="indentation">
-          <number>0</number>
-         </property>
-         <attribute name="headerVisible">
-          <bool>false</bool>
-         </attribute>
-         <column>
-          <property name="text">
-           <string notr="true">1</string>
-          </property>
-         </column>
         </widget>
        </item>
        <item>

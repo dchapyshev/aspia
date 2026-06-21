@@ -332,34 +332,34 @@ Routers added: %4</source>
 <context>
     <name>AndroidMainWindow</name>
     <message>
-        <location filename="../client/android/main_window.cc" line="132"/>
-        <location filename="../client/android/main_window.cc" line="217"/>
-        <location filename="../client/android/main_window.cc" line="297"/>
-        <location filename="../client/android/main_window.cc" line="527"/>
+        <location filename="../client/android/main_window.cc" line="136"/>
+        <location filename="../client/android/main_window.cc" line="224"/>
+        <location filename="../client/android/main_window.cc" line="304"/>
+        <location filename="../client/android/main_window.cc" line="577"/>
         <source>Local</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="133"/>
-        <location filename="../client/android/main_window.cc" line="221"/>
-        <location filename="../client/android/main_window.cc" line="317"/>
-        <location filename="../client/android/main_window.cc" line="528"/>
+        <location filename="../client/android/main_window.cc" line="137"/>
+        <location filename="../client/android/main_window.cc" line="228"/>
+        <location filename="../client/android/main_window.cc" line="324"/>
+        <location filename="../client/android/main_window.cc" line="578"/>
         <source>Remote</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="134"/>
-        <location filename="../client/android/main_window.cc" line="225"/>
-        <location filename="../client/android/main_window.cc" line="307"/>
-        <location filename="../client/android/main_window.cc" line="529"/>
+        <location filename="../client/android/main_window.cc" line="138"/>
+        <location filename="../client/android/main_window.cc" line="232"/>
+        <location filename="../client/android/main_window.cc" line="314"/>
+        <location filename="../client/android/main_window.cc" line="579"/>
         <source>Routers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="135"/>
-        <location filename="../client/android/main_window.cc" line="229"/>
-        <location filename="../client/android/main_window.cc" line="327"/>
-        <location filename="../client/android/main_window.cc" line="530"/>
+        <location filename="../client/android/main_window.cc" line="139"/>
+        <location filename="../client/android/main_window.cc" line="236"/>
+        <location filename="../client/android/main_window.cc" line="334"/>
+        <location filename="../client/android/main_window.cc" line="580"/>
         <source>Settings</source>
         <translation type="unfinished">設定</translation>
     </message>
@@ -4490,7 +4490,7 @@ Hosts skipped: %6</source>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="59"/>
-        <source>Session Type:</source>
+        <source>Access Level:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5221,173 +5221,177 @@ Hosts skipped: %6</source>
         <translation>密碼（再次輸入）：</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="75"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="58"/>
+        <source>Access Level:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="85"/>
         <source>Disable User Account</source>
         <translation>停用使用者帳號</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="82"/>
         <source>Allowed Session Types:</source>
-        <translation>允許的工作階段類型：</translation>
+        <translation type="vanished">允許的工作階段類型：</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="107"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="95"/>
         <source>Reset two-factor authentication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="115"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="103"/>
         <source>Sessions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="131"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="119"/>
         <source>Signed in</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="136"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="124"/>
         <source>Last activity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="141"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="129"/>
         <source>Address</source>
         <translation type="unfinished">位址</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="164"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="152"/>
         <source>Sign out</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="171"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="159"/>
         <source>Sign out all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="194"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="182"/>
         <source>Invalid user request.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="196"/>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="250"/>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="349"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="184"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="238"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="337"/>
         <source>Unknown internal error.</source>
         <translation type="unfinished">未知的內部錯誤。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="198"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="186"/>
         <source>Invalid data was passed.</source>
         <translation type="unfinished">傳入了無效資料。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="200"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="188"/>
         <source>A user with the specified name already exists.</source>
         <translation type="unfinished">具有指定名稱的使用者已存在。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="202"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="190"/>
         <source>Unknown error type.</source>
         <translation type="unfinished">未知錯誤類型。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="215"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="203"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="264"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="252"/>
         <source>Are you sure you want to sign this user out of this session?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="291"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="279"/>
         <source>Are you sure you want to sign this user out of all sessions?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="345"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="333"/>
         <source>Session not found. The list may be out of date.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="347"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="335"/>
         <source>Invalid sign-out request.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="380"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="368"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
         <translation type="unfinished">使用者名稱不能為空，只能包含字母字元、數字和_、-、.、@ 字元。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="392"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="380"/>
         <source>The username you entered already exists.</source>
         <translation type="unfinished">您輸入的使用者名稱已存在。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="404"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="392"/>
         <source>The passwords you entered do not match.</source>
         <translation type="unfinished">您輸入的密碼不符。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="413"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="401"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation type="unfinished">
             <numerusform>密碼不能為空且不應超過 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="423"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="411"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation type="unfinished">您輸入的密碼不符合安全要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="424"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="412"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform>密碼必須包含小寫和大寫字符、數字，並且不得少於 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="428"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="416"/>
         <source>Do you want to enter a different password?</source>
         <translation type="unfinished">您想輸入其他密碼嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="431"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="419"/>
         <source>Warning</source>
         <translation type="unfinished">警告</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="451"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="439"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation type="unfinished">建立或修改使用者時出現未知的內部錯誤。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="508"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="491"/>
         <source>Double-click to change</source>
         <translation type="unfinished">點選兩次以修改</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="560"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="562"/>
         <source>Administrator</source>
         <translation type="unfinished">管理員</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="564"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="566"/>
         <source>Manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="568"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="570"/>
         <source>Client</source>
         <translation type="unfinished">客戶端</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="586"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="588"/>
         <source>Never</source>
         <translation type="unfinished">永不</translation>
     </message>
