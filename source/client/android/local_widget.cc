@@ -421,6 +421,21 @@ void LocalWidget::onRefreshClicked()
     }
 
     online_checker_->invalidate(entry_ids);
+
+    // Reset the probed hosts to the neutral icon before starting, so it is visible that the statuses
+    // are being refreshed instead of leaving the stale online/offline marks during the recheck.
+    const QIcon neutral_icon = GuiApplication::svgIcon(":/img/computer.svg");
+    for (TreeWidget* tree : { tree_, host_tree_ })
+    {
+        for (int i = 0; i < tree->topLevelItemCount(); ++i)
+        {
+            QTreeWidgetItem* item = tree->topLevelItem(i);
+            const QVariant host_id = item->data(0, kHostIdRole);
+            if (host_id.isValid() && entry_ids.contains(host_id.toLongLong()))
+                item->setIcon(0, neutral_icon);
+        }
+    }
+
     online_checker_->start(hosts);
 }
 
