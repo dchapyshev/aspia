@@ -84,53 +84,10 @@ if (APPLE)
         input_injector_mac.h)
 endif()
 
-list(APPEND SOURCE_HOST_CORE_UI
-    ui/application.cc
-    ui/application.h
-    ui/change_password_dialog.cc
-    ui/change_password_dialog.h
-    ui/change_password_dialog.ui
-    ui/check_password_dialog.cc
-    ui/check_password_dialog.h
-    ui/check_password_dialog.ui
-    ui/config_dialog.cc
-    ui/config_dialog.h
-    ui/config_dialog.ui
-    ui/connect_confirm_dialog.cc
-    ui/connect_confirm_dialog.h
-    ui/connect_confirm_dialog.ui
-    ui/host_main.cc
-    ui/host_main.h
-    ui/host_window.cc
-    ui/host_window.h
-    ui/host_window.ui
-    ui/notifier_window.cc
-    ui/notifier_window.h
-    ui/notifier_window.ui
-    ui/security_log_dialog.cc
-    ui/security_log_dialog.h
-    ui/security_log_dialog.ui
-    ui/settings_util.cc
-    ui/settings_util.h
-    ui/user_dialog.cc
-    ui/user_dialog.h
-    ui/user_dialog.ui
-    ui/user_settings.cc
-    ui/user_settings.h)
+include(ui/sources.cmake)
 
 if (WIN32)
-    list(APPEND SOURCE_HOST_CORE_WIN
-        win/process_monitor.cc
-        win/process_monitor.h
-        win/system_info.cc
-        win/system_info.h
-        win/task_manager.cc
-        win/task_manager.h
-        win/touch_injector.cc
-        win/touch_injector.h
-        win/touch_injector_defines.h
-        win/updater_launcher.cc
-        win/updater_launcher.h)
+    include(win/sources.cmake)
 endif()
 
 source_group("" FILES ${SOURCE_HOST_CORE})
