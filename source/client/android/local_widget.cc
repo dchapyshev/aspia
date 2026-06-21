@@ -530,6 +530,8 @@ void LocalWidget::showSessionMenu(qint64 host_id)
           ":/img/workstation.svg" },
         { proto::peer::SESSION_TYPE_FILE_TRANSFER, QT_TRANSLATE_NOOP("LocalWidget", "File Transfer"),
           ":/img/file-explorer.svg" },
+        { proto::peer::SESSION_TYPE_CHAT,          QT_TRANSLATE_NOOP("LocalWidget", "Chat"),
+          ":/img/chat.svg" },
     };
 
     BottomSheet* sheet = new BottomSheet(this);

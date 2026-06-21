@@ -27,6 +27,7 @@ enum SessionType : int;
 
 class AppBar;
 class BottomNavigationBar;
+class ChatWindow;
 class DesktopWindow;
 class FileTransferWindow;
 class HostConfig;
@@ -64,6 +65,7 @@ private slots:
     void onConnectRouterHost(const HostConfig& host, proto::peer::SessionType session_type);
     void onDesktopClosed();
     void onFileTransferClosed();
+    void onChatClosed();
 
 private:
     // Gates the window behind the master password: prompts to create or unlock it, and reloads the
@@ -82,6 +84,9 @@ private:
     // Opens the file transfer screen for the given host as a regular page (not full-screen).
     void openFileTransfer(const HostConfig& host);
 
+    // Opens the chat screen for the given host as a regular page (not full-screen).
+    void openChat(const HostConfig& host);
+
     QStackedWidget* root_stack_ = nullptr;
     QWidget* shell_ = nullptr;
     AppBar* app_bar_ = nullptr;
@@ -89,6 +94,7 @@ private:
     BottomNavigationBar* navigation_ = nullptr;
     DesktopWindow* desktop_ = nullptr;
     FileTransferWindow* file_transfer_ = nullptr;
+    ChatWindow* chat_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(AndroidMainWindow)
 };

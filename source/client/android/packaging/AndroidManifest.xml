@@ -32,6 +32,7 @@
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="unspecified"
+            android:windowSoftInputMode="adjustResize"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

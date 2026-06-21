@@ -531,6 +531,8 @@ void RemoteWidget::showSessionMenu(const HostConfig& host)
           ":/img/workstation.svg" },
         { proto::peer::SESSION_TYPE_FILE_TRANSFER, QT_TRANSLATE_NOOP("RemoteWidget", "File Transfer"),
           ":/img/file-explorer.svg" },
+        { proto::peer::SESSION_TYPE_CHAT,          QT_TRANSLATE_NOOP("RemoteWidget", "Chat"),
+          ":/img/chat.svg" },
     };
 
     BottomSheet* sheet = new BottomSheet(this);

@@ -71,6 +71,10 @@ list(APPEND SOURCE_CLIENT_ANDROID
     android/about_widget.h
     android/biometric_gate.cc
     android/biometric_gate.h
+    android/chat_view.cc
+    android/chat_view.h
+    android/chat_window.cc
+    android/chat_window.h
     android/desktop_view.cc
     android/desktop_view.h
     android/desktop_window.cc

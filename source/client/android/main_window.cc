@@ -27,6 +27,7 @@
 
 #include <optional>
 
+#include "client/android/chat_window.h"
 #include "client/android/desktop_window.h"
 #include "client/android/file_transfer_window.h"
 #include "client/android/local_widget.h"
@@ -384,8 +385,8 @@ void AndroidMainWindow::onConnectRouterHost(const HostConfig& host, proto::peer:
 //--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::openSession(const HostConfig& host, proto::peer::SessionType session_type)
 {
-    // Only a single session (desktop or file transfer) is supported at a time.
-    if (desktop_ || file_transfer_)
+    // Only a single session is supported at a time.
+    if (desktop_ || file_transfer_ || chat_)
         return;
 
     switch (session_type)
@@ -396,6 +397,10 @@ void AndroidMainWindow::openSession(const HostConfig& host, proto::peer::Session
 
         case proto::peer::SESSION_TYPE_FILE_TRANSFER:
             openFileTransfer(host);
+            break;
+
+        case proto::peer::SESSION_TYPE_CHAT:
+            openChat(host);
             break;
 
         default:
@@ -462,6 +467,28 @@ void AndroidMainWindow::onFileTransferClosed()
     root_stack_->removeWidget(file_transfer_);
     file_transfer_->deleteLater();
     file_transfer_ = nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::openChat(const HostConfig& host)
+{
+    chat_ = new ChatWindow(host);
+    connect(chat_, &ChatWindow::sig_closed, this, &AndroidMainWindow::onChatClosed);
+
+    root_stack_->addWidget(chat_);
+    root_stack_->setCurrentWidget(chat_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onChatClosed()
+{
+    if (!chat_)
+        return;
+
+    root_stack_->setCurrentWidget(shell_);
+    root_stack_->removeWidget(chat_);
+    chat_->deleteLater();
+    chat_ = nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
