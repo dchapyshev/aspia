@@ -162,6 +162,10 @@ TreeWidget::TreeWidget(QWidget* parent)
     setHeaderHidden(true);
     setFrameShape(QFrame::NoFrame);
     setIndentation(kIndentation);
+    // The chevron is drawn by the delegate, so Qt's own indicator column is not needed; dropping it
+    // also removes the empty indent reserved before top-level rows (the icon then lines up with the
+    // trailing padding).
+    setRootIsDecorated(false);
     setUniformRowHeights(true);
     setAnimated(true);
     setExpandsOnDoubleClick(false);
