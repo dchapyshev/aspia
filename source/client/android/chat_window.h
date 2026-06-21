@@ -36,7 +36,7 @@ class AppBar;
 class ChatView;
 class ClientChat;
 class IconButton;
-class Label;
+class QTimer;
 class Router;
 class SessionState;
 
@@ -70,6 +70,10 @@ private slots:
     void onSaveChat();
     void onClearChat();
 
+    // Throttled send of our own typing status; clears the incoming "is typing" line on timeout.
+    void onTyping();
+    void clearTypingStatus();
+
 private:
     // A persisted chat entry: a message, or (when |status| is set) a status line.
     struct HistoryMessage
@@ -100,8 +104,9 @@ private:
     ScopedQPointer<ClientChat> client_;
 
     AppBar* app_bar_ = nullptr;
-    Label* status_ = nullptr;
     ChatView* view_ = nullptr;
+    QTimer* typing_throttle_ = nullptr;
+    QTimer* typing_clear_timer_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(ChatWindow)
 };

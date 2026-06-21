@@ -213,6 +213,12 @@ ChatView::ChatView(QWidget* parent)
     QScroller::grabGesture(input_->viewport(), QScroller::LeftMouseButtonGesture);
 
     connect(input_, &QTextEdit::textChanged, this, &ChatView::updateInputHeight);
+    connect(input_, &QTextEdit::textChanged, this, [this]()
+    {
+        // Skip the programmatic clear after sending; only a real edit means the user is typing.
+        if (!input_->document()->isEmpty())
+            emit sig_typing();
+    });
 
     InputBar* input_bar = new InputBar(this);
     QHBoxLayout* bar_layout = new QHBoxLayout(input_bar);
@@ -225,10 +231,16 @@ ChatView::ChatView(QWidget* parent)
     input_row->setContentsMargins(8, 4, 8, 12);
     input_row->addWidget(input_bar);
 
+    status_ = new Label(QString(), Label::Role::CAPTION, this);
+    status_->setAlignment(Qt::AlignCenter);
+    // Reserve one line so the status text appears and disappears without shifting the messages.
+    status_->setMinimumHeight(QFontMetrics(status_->font()).height());
+
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(scroll_, 1);
+    layout->addWidget(status_);
     layout->addLayout(input_row);
 
     // The button must not take focus from the field: otherwise the first tap only moves focus and
@@ -297,6 +309,12 @@ void ChatView::clear()
             item->widget()->deleteLater();
         delete item;
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatView::setStatusText(const QString& text)
+{
+    status_->setText(text);
 }
 
 //--------------------------------------------------------------------------------------------------

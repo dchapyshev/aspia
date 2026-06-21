@@ -23,6 +23,7 @@
 #include <QWidget>
 
 class IconButton;
+class Label;
 class QTextEdit;
 class QVBoxLayout;
 class QScrollArea;
@@ -39,11 +40,17 @@ public:
     void addStatus(const QString& text);
     void clear();
 
+    // The always-visible line above the input field; an empty text keeps its reserved height.
+    void setStatusText(const QString& text);
+
     // Enables the input field and send button (disabled until the session connects).
     void setInputEnabled(bool enabled);
 
 signals:
     void sig_sendText(const QString& text);
+
+    // Emitted while the user is typing (each text change with non-empty content).
+    void sig_typing();
 
 protected:
     // QWidget implementation.
@@ -59,6 +66,7 @@ private:
 
     QVBoxLayout* messages_layout_ = nullptr;
     QScrollArea* scroll_ = nullptr;
+    Label* status_ = nullptr;
     QTextEdit* input_ = nullptr;
     IconButton* send_button_ = nullptr;
 

@@ -31,12 +31,14 @@
 #include <QResizeEvent>
 #include <QSaveFile>
 #include <QTextStream>
+#include <QTimer>
 #include <QVBoxLayout>
 
 #include "base/crypto/generic_hash.h"
 #include "base/files/base_paths.h"
 #include "base/gui_application.h"
 #include "base/logging.h"
+#include "base/sys_info.h"
 #include "client/client_text_chat.h"
 #include "client/database.h"
 #include "client/router.h"
@@ -44,7 +46,6 @@
 #include "client/android/chat_view.h"
 #include "common/android/app_bar.h"
 #include "common/android/icon_button.h"
-#include "common/android/label.h"
 #include "common/android/message_dialog.h"
 #include "proto/chat.h"
 #include "proto/peer.h"
@@ -54,6 +55,12 @@ namespace {
 
 const int kMaxStoredMessages = 30;
 const char kHistoryDirName[] = "chat";
+
+// How often our own typing status is re-sent while the user keeps typing.
+const int kTypingThrottleMs = 3000;
+
+// How long an incoming "is typing" line stays before it is cleared.
+const int kTypingClearMs = 5000;
 
 //--------------------------------------------------------------------------------------------------
 // A stable identifier for the chat with a host, derived from its address and credentials.
@@ -117,9 +124,18 @@ ChatWindow::ChatWindow(const HostConfig& host, QWidget* parent)
       host_(host),
       display_name_(Database::instance().displayName()),
       app_bar_(new AppBar(this)),
-      status_(new Label(QString(), Label::Role::CAPTION, this)),
-      view_(new ChatView(this))
+      view_(new ChatView(this)),
+      typing_throttle_(new QTimer(this)),
+      typing_clear_timer_(new QTimer(this))
 {
+    // Fall back to the device name when no display name is configured, so our messages and typing
+    // status carry an identifiable source on the other end.
+    if (display_name_.isEmpty())
+        display_name_ = SysInfo::computerName();
+
+    typing_throttle_->setSingleShot(true);
+    typing_clear_timer_->setSingleShot(true);
+    connect(typing_clear_timer_, &QTimer::timeout, this, &ChatWindow::clearTypingStatus);
     app_bar_->setTitle(tr("Chat"));
     app_bar_->setBackVisible(true);
     connect(app_bar_, &AppBar::sig_backClicked, this, &ChatWindow::sig_closed);
@@ -130,15 +146,13 @@ ChatWindow::ChatWindow(const HostConfig& host, QWidget* parent)
     connect(clear_button, &IconButton::clicked, this, &ChatWindow::onClearChat);
     app_bar_->setActions({ save_button, clear_button });
 
-    status_->setAlignment(Qt::AlignCenter);
-
     connect(view_, &ChatView::sig_sendText, this, &ChatWindow::onSendText);
+    connect(view_, &ChatView::sig_typing, this, &ChatWindow::onTyping);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(app_bar_);
-    layout->addWidget(status_);
     layout->addWidget(view_, 1);
 
     connect(QGuiApplication::inputMethod(), &QInputMethod::keyboardRectangleChanged,
@@ -186,7 +200,7 @@ void ChatWindow::onStatusChanged(Client::Status status, const QVariant& /* data 
             break;
 
         case Client::Status::HOST_CONNECTED:
-            status_->setVisible(false);
+            view_->setStatusText(QString());
             view_->setInputEnabled(true);
             break;
 
@@ -230,7 +244,18 @@ void ChatWindow::onChatMessage(const proto::chat::Chat& chat)
     }
     else if (chat.has_chat_status())
     {
-        const QString text = statusToString(chat.chat_status());
+        const proto::chat::Status& chat_status = chat.chat_status();
+
+        // Typing is transient: shown on the status line and auto-cleared, never stored.
+        if (chat_status.code() == proto::chat::Status::CODE_TYPING)
+        {
+            const QString user = QString::fromStdString(chat_status.source());
+            view_->setStatusText(tr("%1 is typing...").arg(user));
+            typing_clear_timer_->start(kTypingClearMs);
+            return;
+        }
+
+        const QString text = statusToString(chat_status);
         if (!text.isEmpty())
         {
             view_->addStatus(text);
@@ -358,8 +383,7 @@ void ChatWindow::startNewClient()
 //--------------------------------------------------------------------------------------------------
 void ChatWindow::setStatusText(const QString& text)
 {
-    status_->setText(text);
-    status_->setVisible(true);
+    view_->setStatusText(text);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -506,4 +530,28 @@ void ChatWindow::onClearChat()
     view_->clear();
     history_messages_.clear();
     saveHistory();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWindow::onTyping()
+{
+    // Throttle: at most one typing status per interval while the user keeps editing.
+    if (typing_throttle_->isActive())
+        return;
+
+    proto::chat::Chat chat;
+    proto::chat::Status* status = chat.mutable_chat_status();
+    status->set_timestamp(QDateTime::currentSecsSinceEpoch());
+    status->set_source(display_name_.toStdString());
+    status->set_code(proto::chat::Status::CODE_TYPING);
+
+    emit sig_chatMessage(chat);
+
+    typing_throttle_->start(kTypingThrottleMs);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWindow::clearTypingStatus()
+{
+    view_->setStatusText(QString());
 }

@@ -642,110 +642,115 @@ Routers added: %4</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="93"/>
+        <location filename="../client/android/chat_window.cc" line="100"/>
         <source>User %1 has joined the chat</source>
         <translation>Пользователь %1 присоединился к чату</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="96"/>
+        <location filename="../client/android/chat_window.cc" line="103"/>
         <source>User %1 has left the chat</source>
         <translation>Пользователь %1 покинул чат</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="99"/>
+        <location filename="../client/android/chat_window.cc" line="106"/>
         <source>User %1 is logged in</source>
         <translation>Пользователь %1 вошёл в систему</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="102"/>
+        <location filename="../client/android/chat_window.cc" line="109"/>
         <source>User %1 is not logged in</source>
         <translation>Пользователь %1 не вошёл в систему</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="105"/>
+        <location filename="../client/android/chat_window.cc" line="112"/>
         <source>There are no connected users</source>
         <translation>Нет подключённых пользователей</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="123"/>
-        <location filename="../client/android/chat_window.cc" line="480"/>
+        <location filename="../client/android/chat_window.cc" line="139"/>
+        <location filename="../client/android/chat_window.cc" line="504"/>
         <source>Chat</source>
         <translation>Чат</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="185"/>
+        <location filename="../client/android/chat_window.cc" line="199"/>
         <source>Connecting to host %1...</source>
         <translation>Подключение к хосту %1...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="194"/>
+        <location filename="../client/android/chat_window.cc" line="208"/>
         <source>The connection to the host has been lost.</source>
         <translation>Соединение с хостом потеряно.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="199"/>
-        <location filename="../client/android/chat_window.cc" line="287"/>
+        <location filename="../client/android/chat_window.cc" line="213"/>
+        <location filename="../client/android/chat_window.cc" line="312"/>
         <source>The specified router is unavailable.</source>
         <translation>Указанный маршрутизатор недоступен.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="203"/>
+        <location filename="../client/android/chat_window.cc" line="217"/>
         <source>The specified router is offline.</source>
         <translation>Указанный маршрутизатор не в сети.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="207"/>
-        <location filename="../client/android/chat_window.cc" line="335"/>
+        <location filename="../client/android/chat_window.cc" line="221"/>
+        <location filename="../client/android/chat_window.cc" line="360"/>
         <source>Error requesting connection via router.</source>
         <translation>Ошибка при запросе соединения через маршрутизатор.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="211"/>
+        <location filename="../client/android/chat_window.cc" line="225"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>Версия хоста новее клиента. Обновите приложение.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="273"/>
+        <location filename="../client/android/chat_window.cc" line="253"/>
+        <source>%1 is typing...</source>
+        <translation>%1 печатает...</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="298"/>
         <source>Connecting...</source>
         <translation>Подключение...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="298"/>
+        <location filename="../client/android/chat_window.cc" line="323"/>
         <source>Connecting to router...</source>
         <translation>Подключение к маршрутизатору...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="323"/>
+        <location filename="../client/android/chat_window.cc" line="348"/>
         <source>Requesting connection to the host...</source>
         <translation>Запрашивается подключение к хосту...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="473"/>
+        <location filename="../client/android/chat_window.cc" line="497"/>
         <source>Save Chat</source>
         <translation>Сохранить чат</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="473"/>
+        <location filename="../client/android/chat_window.cc" line="497"/>
         <source>Text files (*.txt)</source>
         <translation>Текстовые файлы (*.txt)</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="480"/>
+        <location filename="../client/android/chat_window.cc" line="504"/>
         <source>Could not open the file for writing.</source>
         <translation>Не удалось открыть файл для записи.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="503"/>
+        <location filename="../client/android/chat_window.cc" line="527"/>
         <source>Clear Chat</source>
         <translation>Очистить чат</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="503"/>
+        <location filename="../client/android/chat_window.cc" line="527"/>
         <source>Clear the chat history?</source>
         <translation>Очистить историю чата?</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="503"/>
+        <location filename="../client/android/chat_window.cc" line="527"/>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
