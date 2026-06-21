@@ -33,9 +33,21 @@ message Shape
 
     enum Type
     {
-        TYPE_UNKNOWN = 0;
-        TYPE_ARROW   = 1;
-        TYPE_IBEAM   = 2;
+        TYPE_UNKNOWN         = 0;
+        TYPE_ARROW           = 1;
+        TYPE_UP_ARROW        = 2;
+        TYPE_CROSS           = 3;
+        TYPE_WAIT            = 4;
+        TYPE_IBEAM           = 5;
+        TYPE_SIZE_VERTICAL   = 6;
+        TYPE_SIZE_HORIZONTAL = 7;
+        TYPE_SIZE_BDIAG      = 8;
+        TYPE_SIZE_FDIAG      = 9;
+        TYPE_SIZE_ALL        = 10;
+        TYPE_POINTING_HAND   = 11;
+        TYPE_FORBIDDEN       = 12;
+        TYPE_WHATS_THIS      = 13;
+        TYPE_BUSY            = 14;
     }
 
     // We use only the first byte in this field.

@@ -36,9 +36,21 @@ public:
 
     enum class Type
     {
-        UNKNOWN = 0,
-        ARROW   = 1,
-        IBEAM   = 2
+        UNKNOWN         = 0,
+        ARROW           = 1,
+        UP_ARROW        = 2,
+        CROSS           = 3,
+        WAIT            = 4,
+        IBEAM           = 5,
+        SIZE_VERTICAL   = 6,
+        SIZE_HORIZONTAL = 7,
+        SIZE_BDIAG      = 8,
+        SIZE_FDIAG      = 9,
+        SIZE_ALL        = 10,
+        POINTING_HAND   = 11,
+        FORBIDDEN       = 12,
+        WHATS_THIS      = 13,
+        BUSY            = 14
     };
     Q_ENUM(Type)
 

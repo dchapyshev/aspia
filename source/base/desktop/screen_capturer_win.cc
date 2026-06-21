@@ -20,6 +20,8 @@
 
 #include <QTimer>
 
+#include <array>
+
 #include "base/logging.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/screen_capturer_dxgi.h"
@@ -62,15 +64,37 @@ MouseCursor::Type cursorType(HCURSOR cursor)
         MouseCursor::Type type;
     } kStandardCursors[] =
     {
-        { IDC_ARROW, MouseCursor::Type::ARROW },
-        { IDC_IBEAM, MouseCursor::Type::IBEAM }
+        { IDC_ARROW,       MouseCursor::Type::ARROW           },
+        { IDC_UPARROW,     MouseCursor::Type::UP_ARROW        },
+        { IDC_CROSS,       MouseCursor::Type::CROSS           },
+        { IDC_WAIT,        MouseCursor::Type::WAIT            },
+        { IDC_IBEAM,       MouseCursor::Type::IBEAM           },
+        { IDC_SIZENS,      MouseCursor::Type::SIZE_VERTICAL   },
+        { IDC_SIZEWE,      MouseCursor::Type::SIZE_HORIZONTAL },
+        { IDC_SIZENESW,    MouseCursor::Type::SIZE_BDIAG      },
+        { IDC_SIZENWSE,    MouseCursor::Type::SIZE_FDIAG      },
+        { IDC_SIZEALL,     MouseCursor::Type::SIZE_ALL        },
+        { IDC_HAND,        MouseCursor::Type::POINTING_HAND   },
+        { IDC_NO,          MouseCursor::Type::FORBIDDEN       },
+        { IDC_HELP,        MouseCursor::Type::WHATS_THIS      },
+        { IDC_APPSTARTING, MouseCursor::Type::BUSY            }
     };
 
-    for (const auto& item : kStandardCursors)
+    // System cursor handles are shared and stable for the process lifetime, so resolve them once
+    // instead of calling LoadCursorW on every lookup.
+    static const std::array<HCURSOR, std::size(kStandardCursors)> handles = []()
+    {
+        std::array<HCURSOR, std::size(kStandardCursors)> result;
+        for (size_t i = 0; i < std::size(kStandardCursors); ++i)
+            result[i] = LoadCursorW(nullptr, kStandardCursors[i].id);
+        return result;
+    }();
+
+    for (size_t i = 0; i < std::size(kStandardCursors); ++i)
     {
         // System cursors are shared handles, so a direct comparison is valid here.
-        if (cursor == LoadCursorW(nullptr, item.id))
-            return item.type;
+        if (cursor == handles[i])
+            return kStandardCursors[i].type;
     }
 
     return MouseCursor::Type::UNKNOWN;

@@ -50,8 +50,44 @@ proto::cursor::Shape::Type serializeType(MouseCursor::Type type)
         case MouseCursor::Type::ARROW:
             return proto::cursor::Shape::TYPE_ARROW;
 
+        case MouseCursor::Type::UP_ARROW:
+            return proto::cursor::Shape::TYPE_UP_ARROW;
+
+        case MouseCursor::Type::CROSS:
+            return proto::cursor::Shape::TYPE_CROSS;
+
+        case MouseCursor::Type::WAIT:
+            return proto::cursor::Shape::TYPE_WAIT;
+
         case MouseCursor::Type::IBEAM:
             return proto::cursor::Shape::TYPE_IBEAM;
+
+        case MouseCursor::Type::SIZE_VERTICAL:
+            return proto::cursor::Shape::TYPE_SIZE_VERTICAL;
+
+        case MouseCursor::Type::SIZE_HORIZONTAL:
+            return proto::cursor::Shape::TYPE_SIZE_HORIZONTAL;
+
+        case MouseCursor::Type::SIZE_BDIAG:
+            return proto::cursor::Shape::TYPE_SIZE_BDIAG;
+
+        case MouseCursor::Type::SIZE_FDIAG:
+            return proto::cursor::Shape::TYPE_SIZE_FDIAG;
+
+        case MouseCursor::Type::SIZE_ALL:
+            return proto::cursor::Shape::TYPE_SIZE_ALL;
+
+        case MouseCursor::Type::POINTING_HAND:
+            return proto::cursor::Shape::TYPE_POINTING_HAND;
+
+        case MouseCursor::Type::FORBIDDEN:
+            return proto::cursor::Shape::TYPE_FORBIDDEN;
+
+        case MouseCursor::Type::WHATS_THIS:
+            return proto::cursor::Shape::TYPE_WHATS_THIS;
+
+        case MouseCursor::Type::BUSY:
+            return proto::cursor::Shape::TYPE_BUSY;
 
         default:
             return proto::cursor::Shape::TYPE_UNKNOWN;
