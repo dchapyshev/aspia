@@ -339,8 +339,9 @@ void Service::sendKeyPool(quint32 key_count)
         // Add the key to the outgoing message.
         proto::router::RelayKey* key = relay_key_pool->add_key();
 
+        // The encryption algorithm is algorithm-agnostic for the key material and is selected per
+        // connection by the router, so it is not set here.
         key->set_type(proto::router::RelayKey::TYPE_X25519);
-        key->set_encryption(proto::router::RelayKey::ENCRYPTION_CHACHA20_POLY1305);
         key->set_public_key(session_key.publicKey().toStdString());
         key->set_iv(session_key.iv().toStdString());
 

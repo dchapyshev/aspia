@@ -26,6 +26,13 @@ package proto.relay;
 // If the authentication failed, then the connection should be dropped.
 message PeerToRelay
 {
+    enum Encryption
+    {
+        ENCRYPTION_UNKNOWN           = 0;
+        ENCRYPTION_CHACHA20_POLY1305 = 1;
+        ENCRYPTION_AES256_GCM        = 2;
+    }
+
     // Unique key identifier in the relay pool.
     uint32 key_id = 1;
 
@@ -43,4 +50,8 @@ message PeerToRelay
 
     // Encrypted secret.
     bytes data = 3;
+
+    // Algorithm used to encrypt 'data'. Absent (UNKNOWN) means ChaCha20-Poly1305, for peers that
+    // predate AES support.
+    Encryption encryption = 4;
 }

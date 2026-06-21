@@ -52,8 +52,13 @@ QByteArray decryptSecret(const proto::relay::PeerToRelay& message, const Session
         return QByteArray();
     }
 
-    std::unique_ptr<StreamDecryptor> decryptor =
-        StreamDecryptor::createForChaCha20Poly1305(key.first, key.second);
+    // Peers that predate AES support leave the field unset (UNKNOWN), which means ChaCha20-Poly1305.
+    std::unique_ptr<StreamDecryptor> decryptor;
+    if (message.encryption() == proto::relay::PeerToRelay::ENCRYPTION_AES256_GCM)
+        decryptor = StreamDecryptor::createForAes256Gcm(key.first, key.second);
+    else
+        decryptor = StreamDecryptor::createForChaCha20Poly1305(key.first, key.second);
+
     if (!decryptor)
     {
         LOG(ERROR) << "Decryptor not created";

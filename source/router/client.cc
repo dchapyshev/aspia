@@ -504,6 +504,12 @@ void Client::readConnectionRequest(const proto::router::ConnectionRequest& reque
     offer_credentials->set_port(relay->peerData()->second);
     offer_credentials->mutable_key()->Swap(&credentials->key);
 
+    // AES-256-GCM is used only when both peers support it; legacy peers (and their relay code) only
+    // understand ChaCha20-Poly1305. The key material itself is algorithm-agnostic.
+    const bool aes = host->version() >= kVersion_3_0_0 && version() >= kVersion_3_0_0;
+    offer_credentials->mutable_key()->set_encryption(aes ?
+        proto::router::RelayKey::ENCRYPTION_AES256_GCM : proto::router::RelayKey::ENCRYPTION_CHACHA20_POLY1305);
+
     proto::relay::PeerToRelay::Secret secret;
     secret.set_random_data(Random::string(16));
     secret.set_client_address(address());

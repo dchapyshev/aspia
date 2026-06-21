@@ -256,7 +256,8 @@ QByteArray RelayPeer::authenticationMessage(const proto::router::RelayKey& key, 
         return QByteArray();
     }
 
-    if (key.encryption() != proto::router::RelayKey::ENCRYPTION_CHACHA20_POLY1305)
+    if (key.encryption() != proto::router::RelayKey::ENCRYPTION_CHACHA20_POLY1305 &&
+        key.encryption() != proto::router::RelayKey::ENCRYPTION_AES256_GCM)
     {
         CLOG(ERROR) << "Unsupported encryption type:" << key.encryption();
         return QByteArray();
@@ -296,11 +297,23 @@ QByteArray RelayPeer::authenticationMessage(const proto::router::RelayKey& key, 
 
     SecureByteArray session_key(GenericHash::hash(GenericHash::Type::BLAKE2s256, temp.toByteArray()));
 
-    std::unique_ptr<StreamEncryptor> encryptor =
-        StreamEncryptor::createForChaCha20Poly1305(session_key, QByteArray::fromStdString(key.iv()));
+    std::unique_ptr<StreamEncryptor> encryptor;
+    proto::relay::PeerToRelay::Encryption encryption;
+
+    if (key.encryption() == proto::router::RelayKey::ENCRYPTION_AES256_GCM)
+    {
+        encryptor = StreamEncryptor::createForAes256Gcm(session_key, QByteArray::fromStdString(key.iv()));
+        encryption = proto::relay::PeerToRelay::ENCRYPTION_AES256_GCM;
+    }
+    else
+    {
+        encryptor = StreamEncryptor::createForChaCha20Poly1305(session_key, QByteArray::fromStdString(key.iv()));
+        encryption = proto::relay::PeerToRelay::ENCRYPTION_CHACHA20_POLY1305;
+    }
+
     if (!encryptor)
     {
-        CLOG(ERROR) << "createForChaCha20Poly1305 failed";
+        CLOG(ERROR) << "Failed to create encryptor";
         return QByteArray();
     }
 
@@ -316,6 +329,7 @@ QByteArray RelayPeer::authenticationMessage(const proto::router::RelayKey& key, 
     message.set_key_id(key.key_id());
     message.set_public_key(key_pair.publicKey().toStdString());
     message.set_data(std::move(encrypted_secret));
+    message.set_encryption(encryption);
 
     return serialize(message);
 }
