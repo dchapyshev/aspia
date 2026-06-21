@@ -417,7 +417,16 @@ void FileClient::onMessage(quint8 tcp_channel_id, const QByteArray& buffer)
 {
     if (!has_logged_on_user_)
     {
+        proto::file_transfer::Request request;
+        if (!parse(buffer, &request))
+        {
+            CLOG(ERROR) << "Unable to parse request";
+            onError(FROM_HERE);
+            return;
+        }
+
         proto::file_transfer::Reply reply;
+        reply.set_request_id(request.request_id());
         reply.set_error_code(proto::file_transfer::ERROR_CODE_NO_LOGGED_ON_USER);
         send(proto::peer::CHANNEL_ID_0, serialize(reply));
         return;

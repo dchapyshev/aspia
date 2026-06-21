@@ -153,6 +153,7 @@ message Reply
     DriveList drive_list = 2;
     List file_list       = 3;
     Packet packet        = 4;
+    int64 request_id     = 5;
 }
 
 message Request
@@ -166,4 +167,5 @@ message Request
     UploadRequest upload_request                    = 7;
     PacketRequest packet_request                    = 8;
     Packet packet                                   = 9;
+    int64 request_id                                = 10;
 }

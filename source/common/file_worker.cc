@@ -216,6 +216,9 @@ void FileWorker::doRequest(const FileTask& task)
 void FileWorker::doRequest(
     const proto::file_transfer::Request& request, proto::file_transfer::Reply* reply)
 {
+    // The reply always mirrors the request id back to the sender.
+    reply->set_request_id(request.request_id());
+
     if (request.has_drive_list_request())
     {
         doDriveListRequest(reply);
