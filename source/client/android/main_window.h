@@ -19,6 +19,7 @@
 #ifndef CLIENT_ANDROID_MAIN_WINDOW_H
 #define CLIENT_ANDROID_MAIN_WINDOW_H
 
+#include <QDateTime>
 #include <QWidget>
 
 namespace proto::peer {
@@ -67,11 +68,19 @@ private slots:
     void onFileTransferClosed();
     void onChatClosed();
 
+    // Tracks foreground/background transitions to re-lock the app after it has been in the background
+    // longer than the timeout.
+    void onApplicationStateChanged(Qt::ApplicationState state);
+
 private:
     // Gates the window behind the master password: prompts to create or unlock it, and reloads the
     // content that depends on the unlocked data cryptor once it is open.
     void runMasterPasswordGate();
     void onUnlocked();
+
+    // Prompts to unlock (password or fingerprint) again after the background timeout; quits if the
+    // user cancels.
+    void relock();
     void retranslate();
 
     // Routes a connection request to the matching session window. Only a single session is supported
@@ -95,6 +104,11 @@ private:
     DesktopWindow* desktop_ = nullptr;
     FileTransferWindow* file_transfer_ = nullptr;
     ChatWindow* chat_ = nullptr;
+
+    // When the app went to the background (invalid while in the foreground), and a guard against
+    // re-entering the lock prompt while it is already shown.
+    QDateTime background_since_;
+    bool relocking_ = false;
 
     Q_DISABLE_COPY_MOVE(AndroidMainWindow)
 };

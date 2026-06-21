@@ -27,6 +27,7 @@
 
 #include <optional>
 
+#include "base/gui_application.h"
 #include "client/android/chat_window.h"
 #include "client/android/desktop_window.h"
 #include "client/android/file_transfer_window.h"
@@ -47,6 +48,9 @@ namespace {
 // android.view.WindowManager.LayoutParams display cutout modes.
 constexpr int kCutoutModeDefault = 0;
 constexpr int kCutoutModeShortEdges = 1;
+
+// Re-lock the app once it has spent at least this long in the background.
+constexpr int kLockTimeoutSec = 3 * 60;
 
 // Order of the pages in the stacked content and of the bottom navigation items.
 enum Section
@@ -155,6 +159,9 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
             this, &AndroidMainWindow::onSectionChanged);
 
     onSectionChanged(navigation_->currentIndex());
+
+    connect(GuiApplication::instance(), &QGuiApplication::applicationStateChanged,
+            this, &AndroidMainWindow::onApplicationStateChanged);
 
     // The gate runs once the event loop is active so the window is laid out and the dialog scrim
     // covers it.
@@ -492,10 +499,36 @@ void AndroidMainWindow::onChatClosed()
 }
 
 //--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onApplicationStateChanged(Qt::ApplicationState state)
+{
+    if (state == Qt::ApplicationActive)
+    {
+        // Back in the foreground: re-lock if the background timeout has elapsed.
+        if (relocking_ || !MasterPassword::isSet() || !background_since_.isValid())
+            return;
+
+        const qint64 elapsed = background_since_.secsTo(QDateTime::currentDateTime());
+        background_since_ = QDateTime();
+
+        if (elapsed >= kLockTimeoutSec)
+            relock();
+    }
+    else if (!relocking_ && !background_since_.isValid())
+    {
+        // Leaving the foreground: remember when, ignoring the transitions caused by the lock prompt.
+        background_since_ = QDateTime::currentDateTime();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::runMasterPasswordGate()
 {
     const MasterPasswordDialog::Mode mode = MasterPassword::isSet() ?
         MasterPasswordDialog::Mode::UNLOCK : MasterPasswordDialog::Mode::CREATE;
+
+    // The prompt itself sends the app through the background states (the fingerprint sheet), so guard
+    // against the timer treating that as a real background trip.
+    relocking_ = true;
 
     // The data cryptor is invalid until the dialog unlocks it, so quit if the user cancels.
     MasterPasswordDialog dialog(mode, this);
@@ -505,6 +538,7 @@ void AndroidMainWindow::runMasterPasswordGate()
         return;
     }
 
+    relocking_ = false;
     onUnlocked();
 }
 
@@ -519,6 +553,22 @@ void AndroidMainWindow::onUnlocked()
 
     if (RemoteWidget* remote = qobject_cast<RemoteWidget*>(content_->widget(SECTION_REMOTE)))
         remote->reload();
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::relock()
+{
+    relocking_ = true;
+
+    // The data cryptor stays open; this only re-verifies the user (password or fingerprint).
+    MasterPasswordDialog dialog(MasterPasswordDialog::Mode::UNLOCK, this);
+    if (dialog.exec() != QDialog::Accepted)
+    {
+        QCoreApplication::quit();
+        return;
+    }
+
+    relocking_ = false;
 }
 
 //--------------------------------------------------------------------------------------------------
