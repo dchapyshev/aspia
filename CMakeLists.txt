@@ -24,6 +24,8 @@ project(aspia)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/source/cmake)
 
+include(Utils)
+
 if (WIN32)
     include(FindWDK)
 endif()
