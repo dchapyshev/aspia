@@ -74,124 +74,17 @@ if (APPLE)
         clipboard_mac.h
         file_platform_util_mac.mm)
 
-    list(APPEND SOURCE_COMMON_MAC
-        mac/file_data_provider.mm
-        mac/file_data_provider.h
-        mac/file_promise_writer.mm
-        mac/file_promise_writer.h)
+    include(mac/sources.cmake)
 endif()
 
-list(APPEND SOURCE_COMMON_DESKTOP
-    desktop/about_dialog.cc
-    desktop/about_dialog.h
-    desktop/about_dialog.ui
-    desktop/chat_status_message.cc
-    desktop/chat_status_message.h
-    desktop/chat_status_message.ui
-    desktop/chat_incoming_message.cc
-    desktop/chat_incoming_message.h
-    desktop/chat_incoming_message.ui
-    desktop/chat_message.h
-    desktop/chat_outgoing_message.cc
-    desktop/chat_outgoing_message.h
-    desktop/chat_outgoing_message.ui
-    desktop/chat_widget.cc
-    desktop/chat_widget.h
-    desktop/chat_widget.ui
-    desktop/credentials_dialog.cc
-    desktop/credentials_dialog.h
-    desktop/credentials_dialog.ui
-    desktop/dialog_button_box.cc
-    desktop/dialog_button_box.h
-    desktop/download_dialog.cc
-    desktop/download_dialog.h
-    desktop/download_dialog.ui
-    desktop/formatter.cc
-    desktop/formatter.h
-    desktop/icon_text_button.cc
-    desktop/icon_text_button.h
-    desktop/language_action.h
-    desktop/msg_box.cc
-    desktop/msg_box.h
-    desktop/password_edit.cc
-    desktop/password_edit.h
-    desktop/session_type.cc
-    desktop/session_type.h
-    desktop/status_dialog.cc
-    desktop/status_dialog.h
-    desktop/status_dialog.ui
-    desktop/two_factor_code_dialog.cc
-    desktop/two_factor_code_dialog.h
-    desktop/two_factor_code_dialog.ui
-    desktop/two_factor_enroll_dialog.cc
-    desktop/two_factor_enroll_dialog.h
-    desktop/two_factor_enroll_dialog.ui
-    desktop/update_dialog.cc
-    desktop/update_dialog.h
-    desktop/update_dialog.ui)
+include(desktop/sources.cmake)
 
 if (WIN32)
-    list(APPEND SOURCE_COMMON_DESKTOP
-        desktop/taskbar_button.cc
-        desktop/taskbar_button.h
-        desktop/taskbar_progress.cc
-        desktop/taskbar_progress.h)
-
-    list(APPEND SOURCE_COMMON_WIN
-        win/file_object.cc
-        win/file_object.h
-        win/file_stream.cc
-        win/file_stream.h
-        win/format_enumerator.cc
-        win/format_enumerator.h)
+    include(win/sources.cmake)
 endif()
 
 if (ANDROID)
-    list(APPEND SOURCE_COMMON_ANDROID
-        android/app_bar.cc
-        android/app_bar.h
-        android/bottom_navigation_bar.cc
-        android/bottom_navigation_bar.h
-        android/bottom_sheet.cc
-        android/bottom_sheet.h
-        android/button.cc
-        android/button.h
-        android/card.cc
-        android/card.h
-        android/combo_box.cc
-        android/combo_box.h
-        android/controls.cc
-        android/controls.h
-        android/dialog.cc
-        android/dialog.h
-        android/expandable_panel.cc
-        android/expandable_panel.h
-        android/floating_action_button.cc
-        android/floating_action_button.h
-        android/icon_button.cc
-        android/icon_button.h
-        android/label.cc
-        android/label.h
-        android/line_edit.cc
-        android/line_edit.h
-        android/menu.cc
-        android/menu.h
-        android/message_dialog.cc
-        android/message_dialog.h
-        android/radio_button.cc
-        android/radio_button.h
-        android/scroll_area.cc
-        android/scroll_area.h
-        android/scroll_indicator.cc
-        android/scroll_indicator.h
-        android/switch.cc
-        android/switch.h
-        android/tab_bar.cc
-        android/tab_bar.h
-        android/text_area.cc
-        android/text_area.h
-        android/tree_widget.cc
-        android/tree_widget.h)
+    include(android/sources.cmake)
 endif()
 
 list(APPEND SOURCE_COMMON_RESOURCES resources/common.qrc)
