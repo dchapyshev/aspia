@@ -344,34 +344,34 @@ Routers added: %4</source>
         <translation type="vanished">Рабочие пространства</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="131"/>
-        <location filename="../client/android/main_window.cc" line="216"/>
-        <location filename="../client/android/main_window.cc" line="296"/>
-        <location filename="../client/android/main_window.cc" line="500"/>
+        <location filename="../client/android/main_window.cc" line="132"/>
+        <location filename="../client/android/main_window.cc" line="217"/>
+        <location filename="../client/android/main_window.cc" line="297"/>
+        <location filename="../client/android/main_window.cc" line="527"/>
         <source>Local</source>
         <translation>Локальные</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="132"/>
-        <location filename="../client/android/main_window.cc" line="220"/>
-        <location filename="../client/android/main_window.cc" line="316"/>
-        <location filename="../client/android/main_window.cc" line="501"/>
+        <location filename="../client/android/main_window.cc" line="133"/>
+        <location filename="../client/android/main_window.cc" line="221"/>
+        <location filename="../client/android/main_window.cc" line="317"/>
+        <location filename="../client/android/main_window.cc" line="528"/>
         <source>Remote</source>
         <translation>Удаленные</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="133"/>
-        <location filename="../client/android/main_window.cc" line="224"/>
-        <location filename="../client/android/main_window.cc" line="306"/>
-        <location filename="../client/android/main_window.cc" line="502"/>
+        <location filename="../client/android/main_window.cc" line="134"/>
+        <location filename="../client/android/main_window.cc" line="225"/>
+        <location filename="../client/android/main_window.cc" line="307"/>
+        <location filename="../client/android/main_window.cc" line="529"/>
         <source>Routers</source>
         <translation>Маршутизаторы</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="134"/>
-        <location filename="../client/android/main_window.cc" line="228"/>
-        <location filename="../client/android/main_window.cc" line="326"/>
-        <location filename="../client/android/main_window.cc" line="503"/>
+        <location filename="../client/android/main_window.cc" line="135"/>
+        <location filename="../client/android/main_window.cc" line="229"/>
+        <location filename="../client/android/main_window.cc" line="327"/>
+        <location filename="../client/android/main_window.cc" line="530"/>
         <source>Settings</source>
         <translation>Параметры</translation>
     </message>
@@ -480,6 +480,14 @@ Routers added: %4</source>
         <location filename="../common/desktop/chat_outgoing_message.ui" line="48"/>
         <source>Time</source>
         <translation>Время</translation>
+    </message>
+</context>
+<context>
+    <name>ChatView</name>
+    <message>
+        <location filename="../client/android/chat_view.cc" line="197"/>
+        <source>Message</source>
+        <translation>Сообщение</translation>
     </message>
 </context>
 <context>
@@ -632,6 +640,114 @@ Routers added: %4</source>
         <location filename="../client/desktop/chat/chat_window.ui" line="93"/>
         <source>F5</source>
         <translation></translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="93"/>
+        <source>User %1 has joined the chat</source>
+        <translation>Пользователь %1 присоединился к чату</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="96"/>
+        <source>User %1 has left the chat</source>
+        <translation>Пользователь %1 покинул чат</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="99"/>
+        <source>User %1 is logged in</source>
+        <translation>Пользователь %1 вошёл в систему</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="102"/>
+        <source>User %1 is not logged in</source>
+        <translation>Пользователь %1 не вошёл в систему</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="105"/>
+        <source>There are no connected users</source>
+        <translation>Нет подключённых пользователей</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="123"/>
+        <location filename="../client/android/chat_window.cc" line="480"/>
+        <source>Chat</source>
+        <translation>Чат</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="185"/>
+        <source>Connecting to host %1...</source>
+        <translation>Подключение к хосту %1...</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="194"/>
+        <source>The connection to the host has been lost.</source>
+        <translation>Соединение с хостом потеряно.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="199"/>
+        <location filename="../client/android/chat_window.cc" line="287"/>
+        <source>The specified router is unavailable.</source>
+        <translation>Указанный маршрутизатор недоступен.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="203"/>
+        <source>The specified router is offline.</source>
+        <translation>Указанный маршрутизатор не в сети.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="207"/>
+        <location filename="../client/android/chat_window.cc" line="335"/>
+        <source>Error requesting connection via router.</source>
+        <translation>Ошибка при запросе соединения через маршрутизатор.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="211"/>
+        <source>The host version is newer than the client. Please update the application.</source>
+        <translation>Версия хоста новее клиента. Обновите приложение.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="273"/>
+        <source>Connecting...</source>
+        <translation>Подключение...</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="298"/>
+        <source>Connecting to router...</source>
+        <translation>Подключение к маршрутизатору...</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="323"/>
+        <source>Requesting connection to the host...</source>
+        <translation>Запрашивается подключение к хосту...</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="473"/>
+        <source>Save Chat</source>
+        <translation>Сохранить чат</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="473"/>
+        <source>Text files (*.txt)</source>
+        <translation>Текстовые файлы (*.txt)</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="480"/>
+        <source>Could not open the file for writing.</source>
+        <translation>Не удалось открыть файл для записи.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="503"/>
+        <source>Clear Chat</source>
+        <translation>Очистить чат</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="503"/>
+        <source>Clear the chat history?</source>
+        <translation>Очистить историю чата?</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="503"/>
+        <source>Clear</source>
+        <translation>Очистить</translation>
     </message>
 </context>
 <context>
@@ -2022,115 +2138,115 @@ Routers added: %4</source>
 <context>
     <name>FilePanelWidget</name>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="154"/>
+        <location filename="../client/android/file_panel_widget.cc" line="155"/>
         <source>Failed to get list of drives: %1</source>
         <translation>Не удалось получить список дисков: %1</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="173"/>
+        <location filename="../client/android/file_panel_widget.cc" line="174"/>
         <source>Home Folder</source>
         <translation>Домашняя папка</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="177"/>
+        <location filename="../client/android/file_panel_widget.cc" line="178"/>
         <source>Desktop</source>
         <translation>Рабочий стол</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="181"/>
+        <location filename="../client/android/file_panel_widget.cc" line="182"/>
         <source>Internal Storage</source>
         <translation>Внутреннее хранилище</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="185"/>
+        <location filename="../client/android/file_panel_widget.cc" line="186"/>
         <source>SD Card</source>
         <translation>SD-карта</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="189"/>
+        <location filename="../client/android/file_panel_widget.cc" line="190"/>
         <source>Downloads</source>
         <translation>Загрузки</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="193"/>
+        <location filename="../client/android/file_panel_widget.cc" line="194"/>
         <source>Camera</source>
         <translation>Камера</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="197"/>
+        <location filename="../client/android/file_panel_widget.cc" line="198"/>
         <source>Pictures</source>
         <translation>Изображения</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="201"/>
+        <location filename="../client/android/file_panel_widget.cc" line="202"/>
         <source>Documents</source>
         <translation>Документы</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="230"/>
+        <location filename="../client/android/file_panel_widget.cc" line="231"/>
         <source>Failed to get list of files: %1</source>
         <translation>Не удалось получить список файлов: %1</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="273"/>
+        <location filename="../client/android/file_panel_widget.cc" line="274"/>
         <source>Failed to create directory: %1</source>
         <translation>Не удалось создать директорию: %1</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="342"/>
+        <location filename="../client/android/file_panel_widget.cc" line="343"/>
         <source>Create Folder</source>
         <translation>Создать папку</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="345"/>
+        <location filename="../client/android/file_panel_widget.cc" line="346"/>
         <source>Folder name</source>
         <translation>Имя папки</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="348"/>
+        <location filename="../client/android/file_panel_widget.cc" line="349"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="349"/>
+        <location filename="../client/android/file_panel_widget.cc" line="350"/>
         <source>Create</source>
         <translation>Создать</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="362"/>
+        <location filename="../client/android/file_panel_widget.cc" line="363"/>
         <source>Name contains invalid characters.</source>
         <translation>Имя содержит некорректные символы.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="388"/>
-        <location filename="../client/android/file_panel_widget.cc" line="515"/>
-        <location filename="../client/android/file_panel_widget.cc" line="526"/>
-        <location filename="../client/android/file_panel_widget.cc" line="527"/>
+        <location filename="../client/android/file_panel_widget.cc" line="389"/>
+        <location filename="../client/android/file_panel_widget.cc" line="517"/>
+        <location filename="../client/android/file_panel_widget.cc" line="528"/>
+        <location filename="../client/android/file_panel_widget.cc" line="529"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="388"/>
+        <location filename="../client/android/file_panel_widget.cc" line="389"/>
         <source>Delete the selected items?</source>
         <translation>Удалить выбранные элементы?</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="512"/>
+        <location filename="../client/android/file_panel_widget.cc" line="514"/>
         <source>Upload</source>
         <translation>Загрузить</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="512"/>
+        <location filename="../client/android/file_panel_widget.cc" line="514"/>
         <source>Download</source>
         <translation>Скачать</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="527"/>
+        <location filename="../client/android/file_panel_widget.cc" line="529"/>
         <source>Delete &quot;%1&quot;?</source>
         <translation>Удалить &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="542"/>
+        <location filename="../client/android/file_panel_widget.cc" line="544"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
@@ -3893,6 +4009,11 @@ Hosts skipped: %6</source>
         <source>File Transfer</source>
         <translation>Передача файлов</translation>
     </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="533"/>
+        <source>Chat</source>
+        <translation>Чат</translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>
@@ -4373,6 +4494,11 @@ Hosts skipped: %6</source>
         <location filename="../client/android/remote_widget.cc" line="532"/>
         <source>File Transfer</source>
         <translation>Передача файлов</translation>
+    </message>
+    <message>
+        <location filename="../client/android/remote_widget.cc" line="534"/>
+        <source>Chat</source>
+        <translation>Чат</translation>
     </message>
 </context>
 <context>

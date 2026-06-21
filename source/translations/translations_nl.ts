@@ -332,34 +332,34 @@ Routers added: %4</source>
 <context>
     <name>AndroidMainWindow</name>
     <message>
-        <location filename="../client/android/main_window.cc" line="131"/>
-        <location filename="../client/android/main_window.cc" line="216"/>
-        <location filename="../client/android/main_window.cc" line="296"/>
-        <location filename="../client/android/main_window.cc" line="500"/>
+        <location filename="../client/android/main_window.cc" line="132"/>
+        <location filename="../client/android/main_window.cc" line="217"/>
+        <location filename="../client/android/main_window.cc" line="297"/>
+        <location filename="../client/android/main_window.cc" line="527"/>
         <source>Local</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="132"/>
-        <location filename="../client/android/main_window.cc" line="220"/>
-        <location filename="../client/android/main_window.cc" line="316"/>
-        <location filename="../client/android/main_window.cc" line="501"/>
+        <location filename="../client/android/main_window.cc" line="133"/>
+        <location filename="../client/android/main_window.cc" line="221"/>
+        <location filename="../client/android/main_window.cc" line="317"/>
+        <location filename="../client/android/main_window.cc" line="528"/>
         <source>Remote</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="133"/>
-        <location filename="../client/android/main_window.cc" line="224"/>
-        <location filename="../client/android/main_window.cc" line="306"/>
-        <location filename="../client/android/main_window.cc" line="502"/>
+        <location filename="../client/android/main_window.cc" line="134"/>
+        <location filename="../client/android/main_window.cc" line="225"/>
+        <location filename="../client/android/main_window.cc" line="307"/>
+        <location filename="../client/android/main_window.cc" line="529"/>
         <source>Routers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="134"/>
-        <location filename="../client/android/main_window.cc" line="228"/>
-        <location filename="../client/android/main_window.cc" line="326"/>
-        <location filename="../client/android/main_window.cc" line="503"/>
+        <location filename="../client/android/main_window.cc" line="135"/>
+        <location filename="../client/android/main_window.cc" line="229"/>
+        <location filename="../client/android/main_window.cc" line="327"/>
+        <location filename="../client/android/main_window.cc" line="530"/>
         <source>Settings</source>
         <translation type="unfinished">Instellingen</translation>
     </message>
@@ -467,6 +467,14 @@ Routers added: %4</source>
     <message>
         <location filename="../common/desktop/chat_outgoing_message.ui" line="48"/>
         <source>Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ChatView</name>
+    <message>
+        <location filename="../client/android/chat_view.cc" line="197"/>
+        <source>Message</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -619,6 +627,114 @@ Routers added: %4</source>
         <location filename="../client/desktop/chat/chat_window.ui" line="93"/>
         <source>F5</source>
         <translation type="unfinished">F5</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="93"/>
+        <source>User %1 has joined the chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="96"/>
+        <source>User %1 has left the chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="99"/>
+        <source>User %1 is logged in</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="102"/>
+        <source>User %1 is not logged in</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="105"/>
+        <source>There are no connected users</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="123"/>
+        <location filename="../client/android/chat_window.cc" line="480"/>
+        <source>Chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="185"/>
+        <source>Connecting to host %1...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="194"/>
+        <source>The connection to the host has been lost.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="199"/>
+        <location filename="../client/android/chat_window.cc" line="287"/>
+        <source>The specified router is unavailable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="203"/>
+        <source>The specified router is offline.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="207"/>
+        <location filename="../client/android/chat_window.cc" line="335"/>
+        <source>Error requesting connection via router.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="211"/>
+        <source>The host version is newer than the client. Please update the application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="273"/>
+        <source>Connecting...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="298"/>
+        <source>Connecting to router...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="323"/>
+        <source>Requesting connection to the host...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="473"/>
+        <source>Save Chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="473"/>
+        <source>Text files (*.txt)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="480"/>
+        <source>Could not open the file for writing.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="503"/>
+        <source>Clear Chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="503"/>
+        <source>Clear the chat history?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="503"/>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2006,115 +2122,115 @@ Routers added: %4</source>
 <context>
     <name>FilePanelWidget</name>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="154"/>
+        <location filename="../client/android/file_panel_widget.cc" line="155"/>
         <source>Failed to get list of drives: %1</source>
         <translation type="unfinished">Kon lijst van schijven niet maken: %1</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="173"/>
+        <location filename="../client/android/file_panel_widget.cc" line="174"/>
         <source>Home Folder</source>
         <translation type="unfinished">Thuismap</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="177"/>
+        <location filename="../client/android/file_panel_widget.cc" line="178"/>
         <source>Desktop</source>
         <translation type="unfinished">Bureablad</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="181"/>
+        <location filename="../client/android/file_panel_widget.cc" line="182"/>
         <source>Internal Storage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="185"/>
+        <location filename="../client/android/file_panel_widget.cc" line="186"/>
         <source>SD Card</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="189"/>
+        <location filename="../client/android/file_panel_widget.cc" line="190"/>
         <source>Downloads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="193"/>
+        <location filename="../client/android/file_panel_widget.cc" line="194"/>
         <source>Camera</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="197"/>
+        <location filename="../client/android/file_panel_widget.cc" line="198"/>
         <source>Pictures</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="201"/>
+        <location filename="../client/android/file_panel_widget.cc" line="202"/>
         <source>Documents</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="230"/>
+        <location filename="../client/android/file_panel_widget.cc" line="231"/>
         <source>Failed to get list of files: %1</source>
         <translation type="unfinished">Kon lijst van bestanden niet maken: %1</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="273"/>
+        <location filename="../client/android/file_panel_widget.cc" line="274"/>
         <source>Failed to create directory: %1</source>
         <translation type="unfinished">Kon lijst van mappen niet maken: %1</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="342"/>
+        <location filename="../client/android/file_panel_widget.cc" line="343"/>
         <source>Create Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="345"/>
+        <location filename="../client/android/file_panel_widget.cc" line="346"/>
         <source>Folder name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="348"/>
+        <location filename="../client/android/file_panel_widget.cc" line="349"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="349"/>
+        <location filename="../client/android/file_panel_widget.cc" line="350"/>
         <source>Create</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="362"/>
+        <location filename="../client/android/file_panel_widget.cc" line="363"/>
         <source>Name contains invalid characters.</source>
         <translation type="unfinished">De naam bevat ongeldige karakters.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="388"/>
-        <location filename="../client/android/file_panel_widget.cc" line="515"/>
-        <location filename="../client/android/file_panel_widget.cc" line="526"/>
-        <location filename="../client/android/file_panel_widget.cc" line="527"/>
+        <location filename="../client/android/file_panel_widget.cc" line="389"/>
+        <location filename="../client/android/file_panel_widget.cc" line="517"/>
+        <location filename="../client/android/file_panel_widget.cc" line="528"/>
+        <location filename="../client/android/file_panel_widget.cc" line="529"/>
         <source>Delete</source>
         <translation type="unfinished">Verwijderen</translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="388"/>
+        <location filename="../client/android/file_panel_widget.cc" line="389"/>
         <source>Delete the selected items?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="512"/>
+        <location filename="../client/android/file_panel_widget.cc" line="514"/>
         <source>Upload</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="512"/>
+        <location filename="../client/android/file_panel_widget.cc" line="514"/>
         <source>Download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="527"/>
+        <location filename="../client/android/file_panel_widget.cc" line="529"/>
         <source>Delete &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/file_panel_widget.cc" line="542"/>
+        <location filename="../client/android/file_panel_widget.cc" line="544"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3766,6 +3882,11 @@ Hosts skipped: %6</source>
         <source>File Transfer</source>
         <translation type="unfinished">Bestands Overdracht</translation>
     </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="533"/>
+        <source>Chat</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>
@@ -4242,6 +4363,11 @@ Hosts skipped: %6</source>
         <location filename="../client/android/remote_widget.cc" line="532"/>
         <source>File Transfer</source>
         <translation type="unfinished">Bestands Overdracht</translation>
+    </message>
+    <message>
+        <location filename="../client/android/remote_widget.cc" line="534"/>
+        <source>Chat</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
