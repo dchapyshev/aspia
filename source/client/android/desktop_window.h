@@ -30,6 +30,7 @@
 #include "base/scoped_qpointer.h"
 #include "client/client.h"
 #include "client/config.h"
+#include "proto/desktop_control.h"
 #include "proto/desktop_power.h"
 #include "proto/desktop_screen.h"
 
@@ -63,6 +64,7 @@ signals:
     void sig_closed();
     void sig_screenSelected(const proto::screen::Screen& screen);
     void sig_powerControl(proto::power::Control::Action action);
+    void sig_switchSession(quint32 session_id);
 
 protected:
     // QWidget implementation.
@@ -72,6 +74,7 @@ private slots:
     void onStatusChanged(Client::Status status, const QVariant& data);
     void onFrameChanged(const QSize& screen_size, SharedFrame frame);
     void onScreenListChanged(const proto::screen::ScreenList& screen_list);
+    void onSessionListChanged(const proto::control::SessionList& session_list);
     void onCapabilitiesChanged(const proto::control::Capabilities& capabilities);
     void onCursorPositionChanged(const proto::cursor::Position& position);
     void onShowActions();
@@ -86,6 +89,7 @@ private:
     void startNewClient();
     void reconnect();
     void showPowerActions();
+    void showSessionActions();
     void triggerPowerAction(proto::power::Control::Action action, const QString& confirm_text);
     void setStatusText(const QString& text);
 
@@ -94,6 +98,7 @@ private:
     ScopedQPointer<ClientDesktop> client_;
 
     proto::screen::ScreenList screen_list_;
+    proto::control::SessionList session_list_;
     QPointer<BottomSheet> action_sheet_;
     QPointer<StatisticsDialog> statistics_dialog_;
 

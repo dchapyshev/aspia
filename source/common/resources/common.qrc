@@ -17,6 +17,8 @@
         <file>material/lock.svg</file>
         <file>material/power.svg</file>
         <file>material/restart.svg</file>
+        <file>material/group.svg</file>
+        <file>material/person.svg</file>
         <file>material/logout.svg</file>
         <file>material/create_new_folder.svg</file>
         <file>material/upload.svg</file>

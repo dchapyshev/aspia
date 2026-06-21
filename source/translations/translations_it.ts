@@ -1627,163 +1627,179 @@ Routers added: %4</source>
         <translation type="unfinished">Non è stato possibile salvare l&apos;immagine</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="128"/>
+        <location filename="../client/android/desktop_window.cc" line="149"/>
         <source>Connecting...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="142"/>
-        <location filename="../client/android/desktop_window.cc" line="304"/>
+        <location filename="../client/android/desktop_window.cc" line="163"/>
+        <location filename="../client/android/desktop_window.cc" line="329"/>
         <source>The specified router is unavailable.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="308"/>
+        <location filename="../client/android/desktop_window.cc" line="333"/>
         <source>The specified router is offline.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="179"/>
+        <location filename="../client/android/desktop_window.cc" line="200"/>
         <source>Requesting connection to the host...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="153"/>
+        <location filename="../client/android/desktop_window.cc" line="70"/>
+        <source>Session %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/desktop_window.cc" line="71"/>
+        <source>Session %1 (%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/desktop_window.cc" line="174"/>
         <source>Connecting to router...</source>
         <translation type="unfinished">Connessione al router...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="195"/>
+        <location filename="../client/android/desktop_window.cc" line="216"/>
         <source>The host with the specified ID is not online.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="198"/>
+        <location filename="../client/android/desktop_window.cc" line="219"/>
         <source>Access is denied.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="201"/>
+        <location filename="../client/android/desktop_window.cc" line="222"/>
         <source>There are no relays available or the key pool is empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="204"/>
+        <location filename="../client/android/desktop_window.cc" line="225"/>
         <source>Error requesting connection via router.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="283"/>
+        <location filename="../client/android/desktop_window.cc" line="308"/>
         <source>Connecting to host %1...</source>
         <translation type="unfinished">Connessione ad host %1...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="289"/>
+        <location filename="../client/android/desktop_window.cc" line="314"/>
         <source>Connection established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="294"/>
+        <location filename="../client/android/desktop_window.cc" line="319"/>
         <source>The connection to the host has been lost.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="312"/>
+        <location filename="../client/android/desktop_window.cc" line="337"/>
         <source>Error requesting connection via router: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="316"/>
+        <location filename="../client/android/desktop_window.cc" line="341"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="382"/>
+        <location filename="../client/android/desktop_window.cc" line="423"/>
         <source>Monitor %1</source>
         <translation type="unfinished">Monitor %1</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="391"/>
+        <location filename="../client/android/desktop_window.cc" line="431"/>
         <source>Power</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="395"/>
+        <location filename="../client/android/desktop_window.cc" line="435"/>
         <source>Keyboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="401"/>
+        <location filename="../client/android/desktop_window.cc" line="440"/>
         <source>Ctrl+Alt+Del</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="405"/>
+        <location filename="../client/android/desktop_window.cc" line="447"/>
+        <source>Users</source>
+        <translation type="unfinished">Utenti</translation>
+    </message>
+    <message>
+        <location filename="../client/android/desktop_window.cc" line="452"/>
         <source>Disconnect</source>
         <translation type="unfinished">Disconnesso</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="466"/>
+        <location filename="../client/android/desktop_window.cc" line="515"/>
+        <location filename="../client/android/desktop_window.cc" line="563"/>
         <source>Back</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="467"/>
+        <location filename="../client/android/desktop_window.cc" line="516"/>
         <source>Shutdown</source>
         <translation type="unfinished">Spegni</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="468"/>
+        <location filename="../client/android/desktop_window.cc" line="517"/>
         <source>Reboot</source>
         <translation type="unfinished">Riavvia</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="469"/>
+        <location filename="../client/android/desktop_window.cc" line="518"/>
         <source>Safe Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="470"/>
+        <location filename="../client/android/desktop_window.cc" line="519"/>
         <source>Logoff</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="471"/>
+        <location filename="../client/android/desktop_window.cc" line="520"/>
         <source>Lock</source>
         <translation type="unfinished">Blocca</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="482"/>
+        <location filename="../client/android/desktop_window.cc" line="531"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation type="unfinished">Sei sicuro di voler spegnere il computer remoto ?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="486"/>
+        <location filename="../client/android/desktop_window.cc" line="535"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation type="unfinished">Sei sicuro di voler riavviare il computer remoto ?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="490"/>
+        <location filename="../client/android/desktop_window.cc" line="539"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation type="unfinished">Sei sicuro di voler riavviare il computer remoto in Modalità Sicura ?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="494"/>
+        <location filename="../client/android/desktop_window.cc" line="543"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation type="unfinished">Sei sicuro di voler chiudere la sessione utente sul computer remoto ?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="498"/>
+        <location filename="../client/android/desktop_window.cc" line="547"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation type="unfinished">Se iscuro di voler bloccare la sessione utente sul computer remoto ?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="512"/>
+        <location filename="../client/android/desktop_window.cc" line="602"/>
         <source>Confirmation</source>
         <translation type="unfinished">Conferma</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="512"/>
+        <location filename="../client/android/desktop_window.cc" line="602"/>
         <source>Yes</source>
         <translation type="unfinished">Sì</translation>
     </message>
@@ -3872,27 +3888,27 @@ Hosts skipped: %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="432"/>
+        <location filename="../client/android/local_widget.cc" line="447"/>
         <source>Edit Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="441"/>
+        <location filename="../client/android/local_widget.cc" line="456"/>
         <source>Edit Host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="529"/>
+        <location filename="../client/android/local_widget.cc" line="544"/>
         <source>Desktop</source>
         <translation type="unfinished">Desktop</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="531"/>
+        <location filename="../client/android/local_widget.cc" line="546"/>
         <source>File Transfer</source>
         <translation type="unfinished">Trasferimento File</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="533"/>
+        <location filename="../client/android/local_widget.cc" line="548"/>
         <source>Chat</source>
         <translation type="unfinished">Chatj</translation>
     </message>

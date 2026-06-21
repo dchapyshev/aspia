@@ -55,6 +55,27 @@ constexpr int kFabMargin = 16;
 // line and only a genuinely long one wraps.
 constexpr double kStatusWidthFactor = 0.9;
 
+//--------------------------------------------------------------------------------------------------
+// A session is offered for switching when it is the console session or an active one (matches the
+// desktop client).
+bool isSessionVisible(const proto::control::Session& session, const proto::control::SessionList& list)
+{
+    return session.session_id() == list.console_session_id() || session.is_active();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString formatSessionText(int index, const QString& user_name, bool is_console)
+{
+    QString text = user_name.isEmpty() ?
+        QCoreApplication::translate("DesktopWindow", "Session %1").arg(index + 1) :
+        QCoreApplication::translate("DesktopWindow", "Session %1 (%2)").arg(index + 1).arg(user_name);
+
+    if (is_console)
+        text.append("*");
+
+    return text;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -246,6 +267,8 @@ void DesktopWindow::startNewClient()
             this, &DesktopWindow::onCursorPositionChanged, Qt::QueuedConnection);
     connect(client, &ClientDesktop::sig_screenListChanged,
             this, &DesktopWindow::onScreenListChanged, Qt::QueuedConnection);
+    connect(client, &ClientDesktop::sig_sessionListChanged,
+            this, &DesktopWindow::onSessionListChanged, Qt::QueuedConnection);
     connect(client, &ClientDesktop::sig_capabilities,
             this, &DesktopWindow::onCapabilitiesChanged, Qt::QueuedConnection);
     connect(view_, &DesktopView::sig_mouseEvent,
@@ -258,6 +281,8 @@ void DesktopWindow::startNewClient()
             client, &ClientDesktop::onCurrentScreenChanged, Qt::QueuedConnection);
     connect(this, &DesktopWindow::sig_powerControl,
             client, &ClientDesktop::onPowerControl, Qt::QueuedConnection);
+    connect(this, &DesktopWindow::sig_switchSession,
+            client, &ClientDesktop::onSwitchSession, Qt::QueuedConnection);
 
     client->moveToThread(GuiApplication::ioThread());
     client->setSessionState(session_state_);
@@ -351,6 +376,12 @@ void DesktopWindow::onScreenListChanged(const proto::screen::ScreenList& screen_
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopWindow::onSessionListChanged(const proto::control::SessionList& session_list)
+{
+    session_list_ = session_list;
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopWindow::onCapabilitiesChanged(const proto::control::Capabilities& capabilities)
 {
     for (int i = 0; i < capabilities.flag_size(); ++i)
@@ -378,6 +409,7 @@ void DesktopWindow::onShowActions()
     int power_index = -1;
     int keyboard_index = -1;
     int ctrl_alt_del_index = -1;
+    int users_index = -1;
 
     // Until the connection is established only disconnecting makes sense; the host actions all need a
     // live session.
@@ -407,16 +439,25 @@ void DesktopWindow::onShowActions()
             ctrl_alt_del_index = next_index++;
             action_sheet_->addItem(tr("Ctrl+Alt+Del"), ":/img/material/lock.svg");
         }
+
+        // Only shown once the host has sent a session list (there are users to switch between).
+        if (session_list_.session_size() > 0)
+        {
+            users_index = next_index++;
+            action_sheet_->addItem(tr("Users"), ":/img/material/group.svg");
+        }
     }
 
     const int disconnect_index = next_index;
     action_sheet_->addItem(tr("Disconnect"), ":/img/material/close.svg");
 
     connect(action_sheet_, &BottomSheet::sig_triggered, this,
-            [this, power_index, keyboard_index, ctrl_alt_del_index, disconnect_index](int index)
+            [this, power_index, keyboard_index, ctrl_alt_del_index, users_index, disconnect_index](int index)
     {
         if (index == power_index)
             showPowerActions();
+        else if (index == users_index)
+            showSessionActions();
         else if (index == keyboard_index)
             view_->showSoftwareKeyboard();
         else if (index == ctrl_alt_del_index)
@@ -508,6 +549,47 @@ void DesktopWindow::showPowerActions()
             default:
                 break;
         }
+    });
+
+    sheet->showSheet();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::showSessionActions()
+{
+    BottomSheet* sheet = new BottomSheet(this);
+
+    // A leading back item returns to the main action sheet instead of a title.
+    sheet->addItem(tr("Back"), ":/img/material/arrow_back.svg");
+
+    // Map each sheet row (after the Back item) to its session id.
+    QList<quint32> session_ids;
+    for (int i = 0; i < session_list_.session_size(); ++i)
+    {
+        const proto::control::Session& session = session_list_.session(i);
+        if (!isSessionVisible(session, session_list_))
+            continue;
+
+        const QString user_name = QString::fromStdString(session.user_name());
+        const bool is_console = session.session_id() == session_list_.console_session_id();
+        const bool current = session.session_id() == session_list_.current_session_id();
+
+        session_ids.append(session.session_id());
+        sheet->addItem(formatSessionText(i, user_name, is_console),
+                       ":/img/material/person.svg", current);
+    }
+
+    connect(sheet, &BottomSheet::sig_triggered, this, [this, session_ids](int index)
+    {
+        if (index == 0)
+        {
+            onShowActions();
+            return;
+        }
+
+        const int session_index = index - 1;
+        if (session_index >= 0 && session_index < session_ids.size())
+            emit sig_switchSession(session_ids[session_index]);
     });
 
     sheet->showSheet();
