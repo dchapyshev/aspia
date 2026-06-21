@@ -374,31 +374,39 @@ void DesktopWindow::onShowActions()
 {
     action_sheet_ = new BottomSheet(this);
 
-    const int screen_count = screen_list_.screen_size() > 1 ? screen_list_.screen_size() : 0;
-
-    for (int i = 0; i < screen_count; ++i)
-    {
-        const bool selected = screen_list_.screen(i).id() == screen_list_.current_screen();
-        action_sheet_->addItem(tr("Monitor %1").arg(i + 1), ":/img/material/monitor.svg", selected);
-    }
-
-    int next_index = screen_count;
-
+    int next_index = 0;
     int power_index = -1;
-    if (power_control_available_)
-    {
-        power_index = next_index++;
-        action_sheet_->addItem(tr("Power"), ":/img/material/power.svg");
-    }
-
-    const int keyboard_index = next_index++;
-    action_sheet_->addItem(tr("Keyboard"), ":/img/material/keyboard.svg");
-
+    int keyboard_index = -1;
     int ctrl_alt_del_index = -1;
-    if (host_is_windows_)
+
+    // Until the connection is established only disconnecting makes sense; the host actions all need a
+    // live session.
+    if (connected_)
     {
-        ctrl_alt_del_index = next_index++;
-        action_sheet_->addItem(tr("Ctrl+Alt+Del"), ":/img/material/lock.svg");
+        const int screen_count = screen_list_.screen_size() > 1 ? screen_list_.screen_size() : 0;
+
+        for (int i = 0; i < screen_count; ++i)
+        {
+            const bool selected = screen_list_.screen(i).id() == screen_list_.current_screen();
+            action_sheet_->addItem(tr("Monitor %1").arg(i + 1), ":/img/material/monitor.svg", selected);
+        }
+
+        next_index = screen_count;
+
+        if (power_control_available_)
+        {
+            power_index = next_index++;
+            action_sheet_->addItem(tr("Power"), ":/img/material/power.svg");
+        }
+
+        keyboard_index = next_index++;
+        action_sheet_->addItem(tr("Keyboard"), ":/img/material/keyboard.svg");
+
+        if (host_is_windows_)
+        {
+            ctrl_alt_del_index = next_index++;
+            action_sheet_->addItem(tr("Ctrl+Alt+Del"), ":/img/material/lock.svg");
+        }
     }
 
     const int disconnect_index = next_index;
