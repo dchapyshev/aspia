@@ -218,54 +218,60 @@ bool IpcServer::Listener::listen(asio::io_context& io_context,
     // mode with INTERACTIVE_USER; peer identity is verified via path + processId checks at accept.
     Q_UNUSED(target_user_sid)
 
-    mode_t socket_mode;
-    switch (access_mode)
+    // The acceptor is created and bound only once and kept open across connections; after a
+    // connection is accepted the listener is re-armed by calling async_accept again on the same
+    // acceptor. Re-binding the same socket path (unlike a Windows named pipe) fails with EADDRINUSE.
+    if (!acceptor_ || !acceptor_->is_open())
     {
-        case AccessMode::INTERACTIVE_USER:
-        case AccessMode::SPECIFIC_USER:
-            socket_mode = 0666;
-            break;
+        mode_t socket_mode;
+        switch (access_mode)
+        {
+            case AccessMode::INTERACTIVE_USER:
+            case AccessMode::SPECIFIC_USER:
+                socket_mode = 0666;
+                break;
 
-        case AccessMode::SYSTEM_ONLY:
-            socket_mode = 0600;
-            break;
+            case AccessMode::SYSTEM_ONLY:
+                socket_mode = 0600;
+                break;
 
-        default:
-            LOG(ERROR) << "Unknown access mode:" << access_mode;
+            default:
+                LOG(ERROR) << "Unknown access mode:" << access_mode;
+                return false;
+        }
+
+        std::string channel_file = channel_path.toLocal8Bit().toStdString();
+
+        asio::local::stream_protocol::endpoint endpoint(channel_file);
+        acceptor_ = std::make_unique<asio::local::stream_protocol::acceptor>(io_context);
+
+        std::error_code error_code;
+        acceptor_->open(endpoint.protocol(), error_code);
+        if (error_code)
+        {
+            LOG(ERROR) << "acceptor_->open failed:" << error_code;
             return false;
-    }
+        }
 
-    std::string channel_file = channel_path.toLocal8Bit().toStdString();
+        acceptor_->bind(endpoint, error_code);
+        if (error_code)
+        {
+            LOG(ERROR) << "acceptor_->bind failed:" << error_code;
+            return false;
+        }
 
-    asio::local::stream_protocol::endpoint endpoint(channel_file);
-    acceptor_ = std::make_unique<asio::local::stream_protocol::acceptor>(io_context);
+        if (chmod(channel_file.c_str(), socket_mode) != 0)
+        {
+            PLOG(ERROR) << "chmod failed (path:" << channel_file << "mode:" << Qt::oct << socket_mode << ")";
+            return false;
+        }
 
-    std::error_code error_code;
-    acceptor_->open(endpoint.protocol(), error_code);
-    if (error_code)
-    {
-        LOG(ERROR) << "acceptor_->open failed:" << error_code;
-        return false;
-    }
-
-    acceptor_->bind(endpoint, error_code);
-    if (error_code)
-    {
-        LOG(ERROR) << "acceptor_->bind failed:" << error_code;
-        return false;
-    }
-
-    if (chmod(channel_file.c_str(), socket_mode) != 0)
-    {
-        PLOG(ERROR) << "chmod failed (path:" << channel_file << "mode:" << Qt::oct << socket_mode << ")";
-        return false;
-    }
-
-    acceptor_->listen(asio::local::stream_protocol::socket::max_listen_connections, error_code);
-    if (error_code)
-    {
-        LOG(ERROR) << "acceptor_->listen failed:" << error_code;
-        return false;
+        acceptor_->listen(asio::local::stream_protocol::socket::max_listen_connections, error_code);
+        if (error_code)
+        {
+            LOG(ERROR) << "acceptor_->listen failed:" << error_code;
+            return false;
+        }
     }
 
     acceptor_->async_accept(std::bind(
