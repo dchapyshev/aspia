@@ -550,7 +550,7 @@ void DesktopManager::attach(const Location& location, SessionId session_id)
 
     QString ipc_channel_name = IpcServer::createUniqueId();
 
-    // Desktop agent runs as SYSTEM in the user's session.
+    // The desktop agent runs as SYSTEM (Windows) or root (Linux) in the user's session.
     if (!ipc_server_->start(ipc_channel_name, IpcServer::AccessMode::SYSTEM_ONLY))
     {
         dettach(FROM_HERE);
@@ -662,10 +662,11 @@ bool DesktopManager::startProcess(const QString& ipc_channel_name)
 
         QString user_name = splitted.front();
 
-        // Pass DISPLAY and the X authority cookie via env so the agent can open the user's display.
+        // The service runs as root, so the agent is started as root too (like SYSTEM on Windows).
+        // DISPLAY and the active session's X authority cookie let it open the user's display.
         QByteArray command_line =
-            QString("sudo -u %1 env DISPLAY=':0' XAUTHORITY='%2' %3=%4 %5 &")
-                .arg(user_name, X11Util::xauthorityForUser(user_name), IpcServer::kChannelIdEnvVar,
+            QString("env DISPLAY=':0' XAUTHORITY='%1' %2=%3 %4 &")
+                .arg(X11Util::xauthorityForUser(user_name), IpcServer::kChannelIdEnvVar,
                      ipc_channel_name, filePath()).toLocal8Bit();
 
         LOG(INFO) << "Start desktop session agent:" << command_line;
@@ -687,7 +688,7 @@ bool DesktopManager::startProcess(const QString& ipc_channel_name)
     LOG(WARNING) << "Connected X sessions not found";
 
     QByteArray command_line =
-        QString("sudo -u root env DISPLAY=':0' XAUTHORITY='%1' %2=%3 %4 &")
+        QString("env DISPLAY=':0' XAUTHORITY='%1' %2=%3 %4 &")
             .arg(X11Util::xauthorityForUser("root"), IpcServer::kChannelIdEnvVar, ipc_channel_name,
                  filePath()).toLocal8Bit();
 
