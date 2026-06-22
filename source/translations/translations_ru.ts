@@ -7050,9 +7050,13 @@ Are you sure you want to continue?</source>
 <context>
     <name>SidebarRouterClients</name>
     <message>
-        <location filename="../client/desktop/hosts/sidebar_items.cc" line="187"/>
         <source>Active Clients</source>
-        <translation>Активные клиенты</translation>
+        <translation type="vanished">Активные клиенты</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/hosts/sidebar_items.cc" line="187"/>
+        <source>Clients</source>
+        <translation type="unfinished">Клиенты</translation>
     </message>
 </context>
 <context>
@@ -7066,13 +7070,13 @@ Are you sure you want to continue?</source>
 <context>
     <name>SidebarRouterRelays</name>
     <message>
+        <location filename="../client/desktop/hosts/sidebar_items.cc" line="202"/>
         <source>Relays</source>
-        <translation type="vanished">Ретрансляторы</translation>
+        <translation>Ретрансляторы</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar_items.cc" line="202"/>
         <source>Active Relays</source>
-        <translation>Активные ретрансляторы</translation>
+        <translation type="vanished">Активные ретрансляторы</translation>
     </message>
 </context>
 <context>

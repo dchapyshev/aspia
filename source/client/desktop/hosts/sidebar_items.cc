@@ -184,7 +184,7 @@ SidebarRouterClients::SidebarRouterClients(qint64 router_id, QTreeWidgetItem* pa
 //--------------------------------------------------------------------------------------------------
 void SidebarRouterClients::retranslate()
 {
-    setText(0, tr("Active Clients"));
+    setText(0, tr("Clients"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -199,5 +199,5 @@ SidebarRouterRelays::SidebarRouterRelays(qint64 router_id, QTreeWidgetItem* pare
 //--------------------------------------------------------------------------------------------------
 void SidebarRouterRelays::retranslate()
 {
-    setText(0, tr("Active Relays"));
+    setText(0, tr("Relays"));
 }

@@ -6642,7 +6642,7 @@ Are you sure you want to continue?</source>
     <name>SidebarRouterClients</name>
     <message>
         <location filename="../client/desktop/hosts/sidebar_items.cc" line="187"/>
-        <source>Active Clients</source>
+        <source>Clients</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6658,7 +6658,7 @@ Are you sure you want to continue?</source>
     <name>SidebarRouterRelays</name>
     <message>
         <location filename="../client/desktop/hosts/sidebar_items.cc" line="202"/>
-        <source>Active Relays</source>
+        <source>Relays</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
