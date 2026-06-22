@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/xml_settings.h"
 #include "base/crypto/secure_byte_array.h"
+#include "base/files/base_paths.h"
 #include "base/net/net_utils.h"
 #include "build/build_config.h"
 
@@ -37,7 +38,7 @@ bool isValidWhiteListEntry(const QString& entry)
 } // namespace
 //--------------------------------------------------------------------------------------------------
 Settings::Settings()
-    : impl_(XmlSettings::format(), QSettings::SystemScope, "aspia", "router")
+    : impl_(BasePaths::appConfigDir() + "/router.conf", XmlSettings::format())
 {
     // Nothing
 }

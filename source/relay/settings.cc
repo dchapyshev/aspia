@@ -19,11 +19,12 @@
 #include "relay/settings.h"
 
 #include "base/xml_settings.h"
+#include "base/files/base_paths.h"
 #include "build/build_config.h"
 
 //--------------------------------------------------------------------------------------------------
 Settings::Settings()
-    : impl_(XmlSettings::format(), QSettings::SystemScope, "aspia", "relay")
+    : impl_(BasePaths::appConfigDir() + "/relay.conf", XmlSettings::format())
 {
     // Nothing
 }
