@@ -23,6 +23,7 @@
 #include <QSize>
 
 #include <memory>
+#include <vector>
 
 #include "base/x11/x11_headers.h"
 #include "host/input_injector.h"
@@ -55,6 +56,11 @@ private:
     void setAutoRepeatEnabled(bool enable);
     void releasePressedKeys();
 
+    // Finds a spare keycode that can be temporarily remapped to inject arbitrary Unicode characters.
+    void initTextInjection();
+    // Injects a single Unicode code point by remapping the spare keycode to the matching keysym.
+    void injectUnicode(uint code_point);
+
     // X11 graphics context.
     Display* display_ = nullptr;
     Window root_window_ = BadValue;
@@ -75,6 +81,14 @@ private:
     int pointer_button_map_[kNumPointerButtons];
 
     QSet<int> pressed_keys_;
+
+    // Spare keycodes temporarily remapped for Unicode text injection. They are used round-robin so
+    // that consecutive characters get distinct keycodes; otherwise the destination application,
+    // which translates keycodes to keysyms using its own (asynchronously updated) keymap, would see
+    // every character as the last one remapped. |keysyms_per_keycode_| is the keymap width.
+    std::vector<int> spare_keycodes_;
+    size_t next_keycode_index_ = 0;
+    int keysyms_per_keycode_ = 0;
 
     Q_DISABLE_COPY(InputInjectorX11)
 };

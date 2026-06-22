@@ -18,6 +18,8 @@
 
 #include "host/input_injector_x11.h"
 
+#include <vector>
+
 #include "base/logging.h"
 #include "base/x11/x11_headers.h"
 #include "common/keycode_converter.h"
@@ -157,9 +159,24 @@ void InputInjectorX11::injectKeyEvent(const proto::input::KeyEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorX11::injectTextEvent(const proto::input::TextEvent& /* event */)
+void InputInjectorX11::injectTextEvent(const proto::input::TextEvent& event)
 {
-    NOTIMPLEMENTED();
+    if (spare_keycodes_.empty())
+    {
+        LOG(ERROR) << "Text injection is not available: no spare keycodes";
+        return;
+    }
+
+    QString text = QString::fromStdString(event.text());
+    if (text.isEmpty())
+        return;
+
+    // toUcs4 decodes surrogate pairs, so characters outside the BMP are injected correctly.
+    const QList<uint> code_points = text.toUcs4();
+    for (uint code_point : code_points)
+        injectUnicode(code_point);
+
+    XFlush(display_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -288,6 +305,7 @@ bool InputInjectorX11::init()
 
     initMouseButtonMap();
     setAutoRepeatEnabled(false);
+    initTextInjection();
     return true;
 }
 
@@ -477,4 +495,98 @@ void InputInjectorX11::releasePressedKeys()
             right_button_pressed_ = false;
         }
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void InputInjectorX11::initTextInjection()
+{
+    int min_keycode = 0;
+    int max_keycode = 0;
+    XDisplayKeycodes(display_, &min_keycode, &max_keycode);
+
+    KeySym* mapping = XGetKeyboardMapping(
+        display_, min_keycode, max_keycode - min_keycode + 1, &keysyms_per_keycode_);
+    if (!mapping || keysyms_per_keycode_ <= 0)
+    {
+        LOG(ERROR) << "Unable to get keyboard mapping for text injection";
+        if (mapping)
+            XFree(mapping);
+        keysyms_per_keycode_ = 0;
+        return;
+    }
+
+    // Collect every keycode that is not bound to any keysym; such keycodes can be remapped on the
+    // fly without disturbing the real keyboard. Scan from the top, where spare keycodes usually live.
+    for (int keycode = max_keycode; keycode >= min_keycode; --keycode)
+    {
+        bool unused = true;
+        for (int level = 0; level < keysyms_per_keycode_; ++level)
+        {
+            if (mapping[(keycode - min_keycode) * keysyms_per_keycode_ + level] != NoSymbol)
+            {
+                unused = false;
+                break;
+            }
+        }
+
+        if (unused)
+            spare_keycodes_.push_back(keycode);
+    }
+
+    XFree(mapping);
+
+    if (spare_keycodes_.empty())
+        LOG(ERROR) << "No spare keycode available for text injection";
+    else
+        LOG(INFO) << "Text injection ready, spare keycodes:" << spare_keycodes_.size();
+}
+
+//--------------------------------------------------------------------------------------------------
+void InputInjectorX11::injectUnicode(uint code_point)
+{
+    KeySym keysym = NoSymbol;
+
+    switch (code_point)
+    {
+        case '\b':
+            keysym = XK_BackSpace;
+            break;
+
+        case '\t':
+            keysym = XK_Tab;
+            break;
+
+        // Some applications check for the return key explicitly, so map both CR and LF to it.
+        case '\r':
+        case '\n':
+            keysym = XK_Return;
+            break;
+
+        default:
+        {
+            if (code_point < 0x20) // Skip other control characters.
+                return;
+
+            // Latin-1 code points map directly to keysyms; anything else uses the Unicode keysym
+            // range (0x01000000 + code point).
+            keysym = (code_point <= 0x00ff) ? code_point : (0x01000000 | code_point);
+        }
+        break;
+    }
+
+    // Pick the next spare keycode in round-robin order. Using a distinct keycode for each character
+    // in a burst prevents the destination application from resolving them all to the last keysym.
+    int keycode = spare_keycodes_[next_keycode_index_];
+    next_keycode_index_ = (next_keycode_index_ + 1) % spare_keycodes_.size();
+
+    // Temporarily bind the keysym to the spare keycode at every level, so the produced character
+    // does not depend on the active keyboard layout, group, or modifier state.
+    std::vector<KeySym> keysyms(static_cast<size_t>(keysyms_per_keycode_), keysym);
+    XChangeKeyboardMapping(display_, keycode, keysyms_per_keycode_, keysyms.data(), 1);
+
+    // Make sure the new mapping is in effect before the key is synthesized.
+    XSync(display_, X11_False);
+
+    XTestFakeKeyEvent(display_, keycode, X11_True, CurrentTime);
+    XTestFakeKeyEvent(display_, keycode, X11_False, CurrentTime);
 }
