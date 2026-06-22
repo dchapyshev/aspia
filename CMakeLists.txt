@@ -121,6 +121,7 @@ if (LINUX)
     find_package(Qt6InputSupportPrivate CONFIG REQUIRED)
     find_package(Qt6OpenGL CONFIG REQUIRED)
     find_package(Qt6XcbQpaPrivate CONFIG REQUIRED)
+    find_package(Qt6DBus CONFIG REQUIRED)
     find_package(ICU REQUIRED COMPONENTS uc)
 
     find_library(XFIXES_LIB NAMES libXfixes Xfixes REQUIRED)

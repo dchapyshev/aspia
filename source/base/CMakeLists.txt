@@ -147,6 +147,7 @@ endif()
 
 if (LINUX)
     include(audio/linux/sources.cmake)
+    include(desktop/wayland/sources.cmake)
     include(desktop/x11/sources.cmake)
     include(linux/sources.cmake)
     include(x11/sources.cmake)
@@ -176,6 +177,7 @@ endif()
 
 if (LINUX)
     source_group(audio\\linux FILES ${SOURCE_BASE_AUDIO_LINUX})
+    source_group(desktop\\wayland FILES ${SOURCE_BASE_DESKTOP_WAYLAND})
     source_group(desktop\\x11 FILES ${SOURCE_BASE_DESKTOP_X11})
     source_group(linux FILES ${SOURCE_BASE_LINUX})
     source_group(posix FILES ${SOURCE_BASE_POSIX})
@@ -194,6 +196,7 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_CODEC}
     ${SOURCE_BASE_CRYPTO}
     ${SOURCE_BASE_DESKTOP}
+    ${SOURCE_BASE_DESKTOP_WAYLAND}
     ${SOURCE_BASE_DESKTOP_WIN}
     ${SOURCE_BASE_DESKTOP_X11}
     ${SOURCE_BASE_FILES}
@@ -220,6 +223,12 @@ endif()
 
 if (LINUX)
     set(BASE_PLATFORM_LIBS ${X11_LIB} ${XFIXES_LIB} stdc++fs ${CMAKE_DL_LIBS})
+
+    # PipeWire is loaded dynamically (see base/desktop/wayland/pipewire), so only its headers are
+    # needed at build time, not the library.
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(PIPEWIRE REQUIRED libpipewire-0.3)
+    target_include_directories(aspia_base PRIVATE ${PIPEWIRE_INCLUDE_DIRS})
 endif()
 
 if (ANDROID)
