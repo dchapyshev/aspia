@@ -83,6 +83,11 @@ int installService(QTextStream& out)
 
     controller->setDescription(Service::kDescription);
 
+#if defined(Q_OS_WINDOWS)
+    // Start only after the network stack is up.
+    controller->setDependencies({ "RpcSs", "Tcpip", "NDIS", "AFD" });
+#endif
+
     // Run the service under its low-privilege account with access only to the directory it needs
     // (config files).
     const QString account = ServiceController::lowPrivilegeAccount(Service::kName);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 
 <?include version.wxi ?>
 
@@ -38,16 +38,24 @@
     <DirectoryRef Id="INSTALLLOCATION" FileSource="$(var.SourceFiles)">
         <Component Id ="Applications" DiskId="1" Guid="{A462DE7C-8791-4123-8690-D67E34B1ECA5}">
             <File Id="aspia_relay.exe" Name="aspia_relay.exe" KeyPath="yes" />
-            <ServiceInstall Id="ServiceInstaller" Type="ownProcess" Vital="yes" Name="$(var.ServiceName)" DisplayName="$(var.ServiceDisplayName)" Description="$(var.ServiceDescription)" Start="auto" Account="LocalSystem" ErrorControl="ignore" Interactive="no">
-                <ServiceDependency Id="RpcSs"/>
-                <ServiceDependency Id="Tcpip"/>
-                <ServiceDependency Id="NDIS"/>
-                <ServiceDependency Id="AFD"/>
-                <util:ServiceConfig FirstFailureActionType="restart" SecondFailureActionType="restart" ThirdFailureActionType="restart" RestartServiceDelayInSeconds="60"/>
-            </ServiceInstall>
-            <ServiceControl Id="StartService" Stop="both" Remove="uninstall" Name="$(var.ServiceName)" Wait="yes" />
         </Component>
     </DirectoryRef>
+
+    <!-- Deferred actions run as LocalSystem so they can create the service and adjust the access
+         rights of its directories. -->
+    <CustomAction Id="InstallService" FileKey="aspia_relay.exe" ExeCommand="--install" Execute="deferred" Impersonate="no" Return="check" />
+    <CustomAction Id="RollbackInstallService" FileKey="aspia_relay.exe" ExeCommand="--remove" Execute="rollback" Impersonate="no" Return="ignore" />
+    <CustomAction Id="RemoveService" FileKey="aspia_relay.exe" ExeCommand="--remove" Execute="deferred" Impersonate="no" Return="ignore" />
+    <CustomAction Id="RollbackRemoveService" FileKey="aspia_relay.exe" ExeCommand="--install" Execute="rollback" Impersonate="no" Return="ignore" />
+
+    <InstallExecuteSequence>
+        <!-- Remove the service while its files are still on disk. -->
+        <Custom Action="RollbackRemoveService" Before="RemoveService">Installed AND REMOVE="ALL"</Custom>
+        <Custom Action="RemoveService" Before="RemoveFiles">Installed AND REMOVE="ALL"</Custom>
+        <!-- Install the service once its files have been laid down. -->
+        <Custom Action="RollbackInstallService" Before="InstallService">NOT Installed</Custom>
+        <Custom Action="InstallService" After="InstallFiles">NOT Installed</Custom>
+    </InstallExecuteSequence>
 
     <!-- Product features -->
     <Feature Id="FeatureProduct" Title="$(var.ProductName)" InstallDefault="local" ConfigurableDirectory="INSTALLLOCATION" Level="1">
