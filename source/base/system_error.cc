@@ -65,8 +65,16 @@ QString SystemError::toString(Code code)
     constexpr int kErrorMessageBufferSize = 256;
     wchar_t msgbuf[kErrorMessageBufferSize];
 
-    DWORD len = FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr,
-                               code, 0, msgbuf, static_cast<DWORD>(std::size(msgbuf)), nullptr);
+    const DWORD flags = FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS;
+    const DWORD size = static_cast<DWORD>(std::size(msgbuf));
+
+    // Request the US English message first. If the English resource is not installed on the system,
+    // fall back to the default language (|dwLanguageId| == 0).
+    DWORD len = FormatMessageW(flags, nullptr, code, MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),
+                               msgbuf, size, nullptr);
+    if (!len)
+        len = FormatMessageW(flags, nullptr, code, 0, msgbuf, size, nullptr);
+
     if (len)
         return QString::fromWCharArray(msgbuf, len).trimmed() + ' ' + QString::number(code, 16);
 
