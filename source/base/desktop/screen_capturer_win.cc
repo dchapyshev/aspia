@@ -221,12 +221,6 @@ ScreenCapturerWin::ScreenCapturerWin(Type type, QObject* parent)
     {
         switchToInputDesktop();
 
-        // If the monitor is turned off, this call will turn it on.
-        if (!SetThreadExecutionState(ES_DISPLAY_REQUIRED))
-        {
-            PLOG(ERROR) << "SetThreadExecutionState failed";
-        }
-
         wchar_t desktop[100] = { 0 };
         if (desktop_.assignedDesktop().name(desktop, sizeof(desktop)))
         {

@@ -20,6 +20,10 @@
 
 #include "base/logging.h"
 
+#if defined(Q_OS_WINDOWS)
+#include "base/win/scoped_thread_desktop.h"
+#endif // defined(Q_OS_WINDOWS)
+
 namespace {
 
 #if defined(Q_OS_WINDOWS)
@@ -68,6 +72,31 @@ void deletePowerRequest(HANDLE handle)
         PLOG(ERROR) << "PowerClearRequest(PowerRequestDisplayRequired) failed";
 }
 
+//--------------------------------------------------------------------------------------------------
+// The power request only prevents the display from turning off, it does not turn on a display that
+// is already off. The only reliable way to wake a powered-off display is to simulate user input. A
+// zero-delta mouse move resets the input idle timer and wakes the monitor without moving the cursor
+// or affecting the foreground application.
+void wakeUpDisplay()
+{
+    ScopedThreadDesktop desktop;
+    Desktop input_desktop(Desktop::inputDesktop());
+
+    if (input_desktop.isValid() && !desktop.isSame(input_desktop))
+        desktop.setThreadDesktop(std::move(input_desktop));
+
+    INPUT input;
+    memset(&input, 0, sizeof(input));
+
+    input.type       = INPUT_MOUSE;
+    input.mi.dx      = 0;
+    input.mi.dy      = 0;
+    input.mi.dwFlags = MOUSEEVENTF_MOVE;
+
+    if (!SendInput(1, &input, sizeof(input)))
+        PLOG(ERROR) << "SendInput failed";
+}
+
 #endif // defined(Q_OS_WINDOWS)
 
 } // namespace
@@ -82,6 +111,9 @@ PowerSaveBlocker::PowerSaveBlocker()
 
     // The display and the system will stay on as long as the class instance exists.
     handle_.reset(createPowerRequest(kDescription));
+
+    // The power request keeps the display on, but does not turn it back on if it is already off.
+    wakeUpDisplay();
 #else // defined(Q_OS_WINDOWS)
     NOTIMPLEMENTED();
 #endif // defined(Q_OS_*)
