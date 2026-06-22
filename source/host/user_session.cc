@@ -44,7 +44,13 @@
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX)
+#include "base/linux/libsystemd.h"
 #include "base/x11/x11_util.h"
+
+#include <pwd.h>
+
+#include <cstdlib>
+#include <cstring>
 #endif // defined(Q_OS_LINUX)
 
 namespace {
@@ -757,53 +763,60 @@ void UserSession::attach(const Location& location, AttachReason reason, SessionI
 #elif defined(Q_OS_LINUX)
     // Launch the GUI through the user's own systemd manager (not via sudo from the service). A unit
     // started by the user manager is a member of the user session, so the GUI's own privilege
-    // elevation (pkexec) can reach the session authentication agent. DISPLAY and the X authority
-    // cookie are injected so it can open the user's display.
-    std::error_code ignored_error;
-    std::filesystem::directory_iterator it("/usr/share/xsessions/", ignored_error);
-    if (it == std::filesystem::end(it))
+    // elevation (pkexec) can reach the session authentication agent. Only a real user session gets
+    // a GUI - the display-manager greeter does not.
+    char* sd_session = nullptr;
+    uid_t uid = 0;
+    if (LibSystemd::seatGetActive("seat0", &sd_session, &uid) < 0 || !sd_session)
     {
-        LOG(ERROR) << "No X11 sessions";
+        LOG(ERROR) << "No active session on seat0";
         dettach(FROM_HERE);
         return;
     }
 
-    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen("who", "r"), pclose);
-    if (!pipe)
+    char* session_class = nullptr;
+    LibSystemd::sessionGetClass(sd_session, &session_class);
+    const bool is_user_session = session_class && strcmp(session_class, "user") == 0;
+    free(session_class);
+    free(sd_session);
+
+    if (!is_user_session)
     {
-        LOG(ERROR) << "Unable to open pipe";
+        LOG(INFO) << "Active session is not a user session; the GUI is not started";
         dettach(FROM_HERE);
         return;
     }
 
-    std::array<char, 512> buffer;
-    while (fgets(buffer.data(), buffer.size(), pipe.get()))
+    const struct passwd* pw = getpwuid(uid);
+    if (!pw)
     {
-        QString line = QString::fromLocal8Bit(buffer.data()).toLower();
-
-        if (!line.contains(":0") && !line.contains("tty2"))
-            continue;
-
-        QStringList splitted = line.split(' ', Qt::SkipEmptyParts);
-        if (splitted.isEmpty())
-            continue;
-
-        QString user_name = splitted.front();
-        QString file_path = QCoreApplication::applicationDirPath() + '/' + kExecutableNameForUi;
-
-        QByteArray command_line =
-            QString("systemd-run --machine=%1@.host --user --collect "
-                    "--setenv=DISPLAY=':0' --setenv=XAUTHORITY='%2' "
-                    "--setenv=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u %1)/bus "
-                    "%3 --hidden")
-                .arg(user_name, X11Util::xauthorityForUser(user_name), file_path).toLocal8Bit();
-
-        LOG(INFO) << "Start user session GUI:" << command_line;
-
-        int ret = system(command_line.data());
-        LOG(INFO) << "system result:" << ret;
-        break;
+        PLOG(ERROR) << "getpwuid failed for uid" << uid;
+        dettach(FROM_HERE);
+        return;
     }
+
+    const QString user_name = QString::fromLocal8Bit(pw->pw_name);
+
+    QString display;
+    QString xauthority;
+    if (!X11Util::sessionEnvironment(user_name, &display, &xauthority))
+    {
+        LOG(INFO) << "Display for" << user_name << "is not available yet";
+        dettach(FROM_HERE);
+        return;
+    }
+
+    const QString file_path = QCoreApplication::applicationDirPath() + '/' + kExecutableNameForUi;
+
+    QByteArray command_line =
+        QString("systemd-run --machine=%1@.host --user --collect "
+                "--setenv=DISPLAY=%2 --setenv=XAUTHORITY=%3 %4 --hidden")
+            .arg(user_name, display, xauthority, file_path).toLocal8Bit();
+
+    LOG(INFO) << "Start user session GUI:" << command_line;
+
+    int ret = system(command_line.data());
+    LOG(INFO) << "system result:" << ret;
 #else
     NOTIMPLEMENTED();
 #endif

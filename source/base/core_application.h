@@ -21,8 +21,13 @@
 
 #include <QCoreApplication>
 
+#include "base/scoped_qpointer.h"
+
+class QSocketNotifier;
 class MessageWindow;
 class Thread;
+
+struct sd_login_monitor;
 
 class CoreApplication final : public QCoreApplication
 {
@@ -45,6 +50,12 @@ private:
     std::unique_ptr<MessageWindow> message_window_;
     bool is_service_ = false;
 #endif // defined(Q_OS_WINDOWS)
+
+#if defined(Q_OS_LINUX)
+    sd_login_monitor* login_monitor_ = nullptr;
+    ScopedQPointer<QSocketNotifier> session_notifier_;
+    int last_active_session_ = -1;
+#endif // defined(Q_OS_LINUX)
 
     Q_DISABLE_COPY_MOVE(CoreApplication)
 };

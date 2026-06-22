@@ -19,14 +19,20 @@
 #include "base/core_application.h"
 
 #include "base/logging.h"
+#include "base/session_id.h"
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
 #include <wtsapi32.h>
-#include "base/session_id.h"
 #include "base/thread.h"
 #include "base/win/message_window.h"
 #endif // defined(Q_OS_WINDOWS)
+
+#if defined(Q_OS_LINUX)
+#include <QSocketNotifier>
+
+#include "base/linux/libsystemd.h"
+#endif // defined(Q_OS_LINUX)
 
 //--------------------------------------------------------------------------------------------------
 CoreApplication::CoreApplication(int& argc, char* argv[])
@@ -135,6 +141,36 @@ CoreApplication::CoreApplication(int& argc, char* argv[])
 
     ui_thread_->start();
 #endif // defined(Q_OS_WINDOWS)
+
+#if defined(Q_OS_LINUX)
+    // Watch the active session on the local seat via logind and report changes, so the service can
+    // follow the console session (user switching, display-manager greeter) like the WTS session
+    // notifications on Windows.
+    if (LibSystemd::loginMonitorNew("session", &login_monitor_) >= 0 && login_monitor_)
+    {
+        last_active_session_ = activeConsoleSessionId();
+
+        session_notifier_ = new QSocketNotifier(
+            LibSystemd::loginMonitorGetFd(login_monitor_), QSocketNotifier::Read);
+
+        connect(session_notifier_, &QSocketNotifier::activated, this, [this]()
+        {
+            LibSystemd::loginMonitorFlush(login_monitor_);
+
+            SessionId active = activeConsoleSessionId();
+            if (active == last_active_session_)
+                return;
+
+            LOG(INFO) << "Active console session changed:" << last_active_session_ << "->" << active;
+            last_active_session_ = active;
+            emit sig_sessionEvent(0, static_cast<quint32>(active));
+        });
+    }
+    else
+    {
+        LOG(ERROR) << "sd_login_monitor_new failed";
+    }
+#endif // defined(Q_OS_LINUX)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -146,6 +182,11 @@ CoreApplication::~CoreApplication()
     if (ui_thread_)
         ui_thread_->stop();
 #endif // defined(Q_OS_WINDOWS)
+
+#if defined(Q_OS_LINUX)
+    if (login_monitor_)
+        login_monitor_ = LibSystemd::loginMonitorUnref(login_monitor_);
+#endif // defined(Q_OS_LINUX)
 }
 
 //--------------------------------------------------------------------------------------------------

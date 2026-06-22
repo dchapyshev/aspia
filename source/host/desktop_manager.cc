@@ -41,15 +41,25 @@
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX)
+#include "base/linux/libsystemd.h"
 #include "base/x11/x11_util.h"
 
+#include <pwd.h>
 #include <signal.h>
 #include <spawn.h>
+
+#include <cstdlib>
 #endif // defined(Q_OS_LINUX)
 
 namespace {
 
+#if defined(Q_OS_LINUX)
+// The session's X server may still be starting up right after a user logs in or switches; retry
+// quickly so capture begins as soon as the display is available, within the client's start timeout.
+constexpr std::chrono::milliseconds kRestartTimeout { 1000 };
+#else
 constexpr std::chrono::milliseconds kRestartTimeout { 5000 };
+#endif
 constexpr std::chrono::milliseconds kAttachTimeout { 15000 };
 
 #if defined(Q_OS_LINUX)
@@ -414,6 +424,16 @@ void DesktopManager::onUserSessionEvent(quint32 event_type, quint32 session_id)
             // Ignore other events.
             break;
     }
+#elif defined(Q_OS_LINUX)
+    // The active console session changed (user switch or the display-manager greeter). Follow it:
+    // detach from the previous session and attach to the new active one.
+    if (session_id == static_cast<quint32>(session_id_))
+        return;
+
+    LOG(INFO) << "Active console session changed to" << session_id << "- reattaching";
+
+    dettach(FROM_HERE);
+    attach(FROM_HERE, activeConsoleSessionId());
 #else
     NOTIMPLEMENTED();
 #endif
@@ -423,7 +443,13 @@ void DesktopManager::onUserSessionEvent(quint32 event_type, quint32 session_id)
 void DesktopManager::onRestartTimeout()
 {
     LOG(INFO) << "Restarting...";
+#if defined(Q_OS_LINUX)
+    // Always re-attach to the current active console session: the previous session id may have been
+    // cleared by a failed attach, and the active session can change while we retry.
+    SessionId session_id = activeConsoleSessionId();
+#else
     SessionId session_id = session_id_;
+#endif
     dettach(FROM_HERE);
     attach(FROM_HERE, session_id);
 }
@@ -632,65 +658,42 @@ bool DesktopManager::startProcess(const QString& ipc_channel_name)
 
     return true;
 #elif defined(Q_OS_LINUX)
-    std::error_code ignored_error;
-    std::filesystem::directory_iterator it("/usr/share/xsessions/", ignored_error);
-    if (it == std::filesystem::end(it))
+    // Determine the user of the active console session (a logged-in user or the display-manager
+    // greeter) to locate its X authority cookie.
+    char* session = nullptr;
+    uid_t uid = 0;
+    if (LibSystemd::seatGetActive("seat0", &session, &uid) < 0 || !session)
     {
-        LOG(ERROR) << "No X11 sessions";
+        LOG(ERROR) << "No active session on seat0";
+        return false;
+    }
+    free(session);
+
+    const struct passwd* pw = getpwuid(uid);
+    if (!pw)
+    {
+        PLOG(ERROR) << "getpwuid failed for uid" << uid;
         return false;
     }
 
-    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen("who", "r"), pclose);
-    if (!pipe)
+    const QString user_name = QString::fromLocal8Bit(pw->pw_name);
+
+    QString display;
+    QString xauthority;
+    if (!X11Util::sessionEnvironment(user_name, &display, &xauthority))
     {
-        LOG(ERROR) << "Unable to open pipe";
+        // The session's X server is still starting up (its display is not published yet). Do not
+        // launch a doomed agent; the caller retries shortly via the restart timer.
+        LOG(INFO) << "Display for" << user_name << "is not available yet";
         return false;
     }
 
-    LOG(INFO) << "WHO:";
-    std::array<char, 512> buffer;
-    while (fgets(buffer.data(), buffer.size(), pipe.get()))
-    {
-        QString line = QString::fromLocal8Bit(buffer.data()).toLower();
-        LOG(INFO) << line;
-        if (!line.contains(":0"))
-            continue;
-
-        QStringList splitted = line.split(' ', Qt::SkipEmptyParts);
-        if (splitted.isEmpty())
-            continue;
-
-        QString user_name = splitted.front();
-
-        // The service runs as root, so the agent is started as root too (like SYSTEM on Windows).
-        // DISPLAY and the active session's X authority cookie let it open the user's display.
-        QByteArray command_line =
-            QString("env DISPLAY=':0' XAUTHORITY='%1' %2=%3 %4 &")
-                .arg(X11Util::xauthorityForUser(user_name), IpcServer::kChannelIdEnvVar,
-                     ipc_channel_name, filePath()).toLocal8Bit();
-
-        LOG(INFO) << "Start desktop session agent:" << command_line;
-
-        char sh_name[] = "sh";
-        char sh_arguments[] = "-c";
-        char* argv[] = { sh_name, sh_arguments, command_line.data(), nullptr };
-
-        pid_t pid;
-        if (posix_spawn(&pid, "/bin/sh", nullptr, nullptr, argv, environ) != 0)
-        {
-            PLOG(ERROR) << "Unable to start process";
-            return false;
-        }
-
-        return true;
-    }
-
-    LOG(WARNING) << "Connected X sessions not found";
-
+    // The service runs as root, so the agent is started as root too (like SYSTEM on Windows).
+    // DISPLAY and the active session's X authority cookie let it open that session's display.
     QByteArray command_line =
-        QString("env DISPLAY=':0' XAUTHORITY='%1' %2=%3 %4 &")
-            .arg(X11Util::xauthorityForUser("root"), IpcServer::kChannelIdEnvVar, ipc_channel_name,
-                 filePath()).toLocal8Bit();
+        QString("env DISPLAY='%1' XAUTHORITY='%2' %3=%4 %5 &")
+            .arg(display, xauthority, IpcServer::kChannelIdEnvVar, ipc_channel_name, filePath())
+            .toLocal8Bit();
 
     LOG(INFO) << "Start desktop session agent:" << command_line;
 

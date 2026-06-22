@@ -25,6 +25,12 @@
 #include <qt_windows.h>
 #endif // defined(Q_OS_WINDOWS)
 
+#if defined(Q_OS_LINUX)
+#include <cstdlib>
+
+#include "base/linux/libsystemd.h"
+#endif // defined(Q_OS_LINUX)
+
 #include "base/logging.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -44,6 +50,22 @@ SessionId activeConsoleSessionId()
 {
 #if defined(Q_OS_WINDOWS)
     return WTSGetActiveConsoleSessionId();
+#elif defined(Q_OS_LINUX)
+    // The session currently shown on the local console of the primary seat - a logged-in user or
+    // the display manager greeter. Identified by its VT number, which changes when the user is
+    // switched, so callers can detect the change and follow the active session.
+    char* session = nullptr;
+    if (LibSystemd::seatGetActive("seat0", &session, nullptr) < 0 || !session)
+        return kInvalidSessionId;
+
+    unsigned vtnr = 0;
+    int ret = LibSystemd::sessionGetVt(session, &vtnr);
+    free(session);
+
+    if (ret < 0 || vtnr == 0)
+        return kInvalidSessionId;
+
+    return static_cast<SessionId>(vtnr);
 #else
     return 1;
 #endif

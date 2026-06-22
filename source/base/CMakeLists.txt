@@ -148,6 +148,7 @@ endif()
 if (LINUX)
     include(audio/linux/sources.cmake)
     include(desktop/x11/sources.cmake)
+    include(linux/sources.cmake)
     include(x11/sources.cmake)
 endif()
 
@@ -176,6 +177,7 @@ endif()
 if (LINUX)
     source_group(audio\\linux FILES ${SOURCE_BASE_AUDIO_LINUX})
     source_group(desktop\\x11 FILES ${SOURCE_BASE_DESKTOP_X11})
+    source_group(linux FILES ${SOURCE_BASE_LINUX})
     source_group(posix FILES ${SOURCE_BASE_POSIX})
     source_group(x11 FILES ${SOURCE_BASE_X11})
 endif()
@@ -196,6 +198,7 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_DESKTOP_X11}
     ${SOURCE_BASE_FILES}
     ${SOURCE_BASE_IPC}
+    ${SOURCE_BASE_LINUX}
     ${SOURCE_BASE_MAC}
     ${SOURCE_BASE_NET}
     ${SOURCE_BASE_PEER}
@@ -216,7 +219,7 @@ if (WIN32)
 endif()
 
 if (LINUX)
-    set(BASE_PLATFORM_LIBS ${X11_LIB} ${XFIXES_LIB} stdc++fs)
+    set(BASE_PLATFORM_LIBS ${X11_LIB} ${XFIXES_LIB} stdc++fs ${CMAKE_DL_LIBS})
 endif()
 
 if (ANDROID)

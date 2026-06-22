@@ -23,7 +23,10 @@
 
 #include <pwd.h>
 
+#include <array>
+#include <cstdio>
 #include <filesystem>
+#include <memory>
 
 //--------------------------------------------------------------------------------------------------
 // static
@@ -64,5 +67,50 @@ QString X11Util::xauthorityForUser(const QString& user_name)
     if (QFileInfo::exists(gdm_auth))
         return gdm_auth;
 
-    return QString::fromLocal8Bit(pw->pw_dir) + "/.Xauthority";
+    // Classic setups (startx) keep the cookie in the home directory. Return it only if it exists;
+    // an empty result means no usable cookie yet (e.g. the X server is still starting up).
+    const QString home_auth = QString::fromLocal8Bit(pw->pw_dir) + "/.Xauthority";
+    if (QFileInfo::exists(home_auth))
+        return home_auth;
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool X11Util::sessionEnvironment(const QString& user_name, QString* display, QString* xauthority)
+{
+    if (user_name.isEmpty())
+        return false;
+
+    // The graphical session imports DISPLAY/XAUTHORITY into the user's systemd manager, so this is
+    // a display-manager-agnostic source for them (the display number is not assumed to be :0).
+    const QString command =
+        QString("systemctl --user --machine=%1@.host show-environment 2>/dev/null").arg(user_name);
+
+    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(command.toLocal8Bit().constData(), "r"), pclose);
+    if (!pipe)
+        return false;
+
+    QString found_display;
+    QString found_xauthority;
+
+    std::array<char, 1024> buffer;
+    while (fgets(buffer.data(), buffer.size(), pipe.get()))
+    {
+        const QString line = QString::fromLocal8Bit(buffer.data()).trimmed();
+        if (line.startsWith("DISPLAY="))
+            found_display = line.mid(8);
+        else if (line.startsWith("XAUTHORITY="))
+            found_xauthority = line.mid(11);
+    }
+
+    if (found_display.isEmpty())
+        return false;
+
+    if (display)
+        *display = found_display;
+    if (xauthority)
+        *xauthority = found_xauthority;
+    return true;
 }
