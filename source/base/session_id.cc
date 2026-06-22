@@ -25,11 +25,10 @@
 #include <qt_windows.h>
 #endif // defined(Q_OS_WINDOWS)
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 #include <cstdlib>
-
 #include "base/linux/libsystemd.h"
-#endif // defined(Q_OS_LINUX)
+#endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 
 #include "base/logging.h"
 
@@ -50,7 +49,7 @@ SessionId activeConsoleSessionId()
 {
 #if defined(Q_OS_WINDOWS)
     return WTSGetActiveConsoleSessionId();
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     // The session currently shown on the local console of the primary seat - a logged-in user or
     // the display manager greeter. Identified by its VT number, which changes when the user is
     // switched, so callers can detect the change and follow the active session.

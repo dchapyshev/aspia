@@ -51,11 +51,11 @@ private:
     bool is_service_ = false;
 #endif // defined(Q_OS_WINDOWS)
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     sd_login_monitor* login_monitor_ = nullptr;
     ScopedQPointer<QSocketNotifier> session_notifier_;
     int last_active_session_ = -1;
-#endif // defined(Q_OS_LINUX)
+#endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 
     Q_DISABLE_COPY_MOVE(CoreApplication)
 };

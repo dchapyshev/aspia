@@ -28,11 +28,10 @@
 #include "base/win/message_window.h"
 #endif // defined(Q_OS_WINDOWS)
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 #include <QSocketNotifier>
-
 #include "base/linux/libsystemd.h"
-#endif // defined(Q_OS_LINUX)
+#endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 
 //--------------------------------------------------------------------------------------------------
 CoreApplication::CoreApplication(int& argc, char* argv[])
@@ -142,7 +141,7 @@ CoreApplication::CoreApplication(int& argc, char* argv[])
     ui_thread_->start();
 #endif // defined(Q_OS_WINDOWS)
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     // Watch the active session on the local seat via logind and report changes, so the service can
     // follow the console session (user switching, display-manager greeter) like the WTS session
     // notifications on Windows.
@@ -183,10 +182,10 @@ CoreApplication::~CoreApplication()
         ui_thread_->stop();
 #endif // defined(Q_OS_WINDOWS)
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     if (login_monitor_)
         login_monitor_ = LibSystemd::loginMonitorUnref(login_monitor_);
-#endif // defined(Q_OS_LINUX)
+#endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 }
 
 //--------------------------------------------------------------------------------------------------
