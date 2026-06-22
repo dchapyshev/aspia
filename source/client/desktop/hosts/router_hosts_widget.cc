@@ -391,6 +391,12 @@ void RouterHostsWidget::onModifyHost()
         return;
     }
 
+    if (tree_item->info.workspace_id <= 0)
+    {
+        MsgBox::warning(this, tr("The host is not assigned to any workspace."));
+        return;
+    }
+
     RouterHostDialog dialog(router_id_, workspaceNameById(tree_item->info.workspace_id),
                             tree_item->info, this);
     if (dialog.exec() == QDialog::Accepted)
