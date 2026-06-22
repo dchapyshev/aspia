@@ -41,6 +41,8 @@
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX)
+#include "base/x11/x11_util.h"
+
 #include <signal.h>
 #include <spawn.h>
 #endif // defined(Q_OS_LINUX)
@@ -659,10 +661,12 @@ bool DesktopManager::startProcess(const QString& ipc_channel_name)
             continue;
 
         QString user_name = splitted.front();
+
+        // Pass DISPLAY and the X authority cookie via env so the agent can open the user's display.
         QByteArray command_line =
-            QString("sudo DISPLAY=':0' -u %1 env %2=%3 %4 &")
-                .arg(user_name, IpcServer::kChannelIdEnvVar, ipc_channel_name,
-                     filePath()).toLocal8Bit();
+            QString("sudo -u %1 env DISPLAY=':0' XAUTHORITY='%2' %3=%4 %5 &")
+                .arg(user_name, X11Util::xauthorityForUser(user_name), IpcServer::kChannelIdEnvVar,
+                     ipc_channel_name, filePath()).toLocal8Bit();
 
         LOG(INFO) << "Start desktop session agent:" << command_line;
 
@@ -683,8 +687,9 @@ bool DesktopManager::startProcess(const QString& ipc_channel_name)
     LOG(WARNING) << "Connected X sessions not found";
 
     QByteArray command_line =
-        QString("sudo DISPLAY=':0' -u root env %1=%2 %3 &")
-            .arg(IpcServer::kChannelIdEnvVar, ipc_channel_name, filePath()).toLocal8Bit();
+        QString("sudo -u root env DISPLAY=':0' XAUTHORITY='%1' %2=%3 %4 &")
+            .arg(X11Util::xauthorityForUser("root"), IpcServer::kChannelIdEnvVar, ipc_channel_name,
+                 filePath()).toLocal8Bit();
 
     LOG(INFO) << "Start desktop session agent:" << command_line;
 
