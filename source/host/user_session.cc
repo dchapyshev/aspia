@@ -43,6 +43,10 @@
 #include <UserEnv.h>
 #endif // defined(Q_OS_WINDOWS)
 
+#if defined(Q_OS_LINUX)
+#include "base/x11/x11_util.h"
+#endif // defined(Q_OS_LINUX)
+
 namespace {
 
 #if defined(Q_OS_UNIX)
@@ -751,6 +755,10 @@ void UserSession::attach(const Location& location, AttachReason reason, SessionI
         return;
     }
 #elif defined(Q_OS_LINUX)
+    // Launch the GUI through the user's own systemd manager (not via sudo from the service). A unit
+    // started by the user manager is a member of the user session, so the GUI's own privilege
+    // elevation (pkexec) can reach the session authentication agent. DISPLAY and the X authority
+    // cookie are injected so it can open the user's display.
     std::error_code ignored_error;
     std::filesystem::directory_iterator it("/usr/share/xsessions/", ignored_error);
     if (it == std::filesystem::end(it))
@@ -773,25 +781,28 @@ void UserSession::attach(const Location& location, AttachReason reason, SessionI
     {
         QString line = QString::fromLocal8Bit(buffer.data()).toLower();
 
-        if (line.contains(":0") || line.contains("tty2"))
-        {
-            QStringList splitted = line.split(' ', Qt::SkipEmptyParts);
+        if (!line.contains(":0") && !line.contains("tty2"))
+            continue;
 
-            if (!splitted.isEmpty())
-            {
-                QString user_name = splitted.front();
-                QString file_path = QCoreApplication::applicationDirPath();
-                file_path.append(kExecutableNameForUi);
+        QStringList splitted = line.split(' ', Qt::SkipEmptyParts);
+        if (splitted.isEmpty())
+            continue;
 
-                QByteArray command_line =
-                    QString("sudo DISPLAY=':0' FONTCONFIG_PATH=/etc/fonts "
-                            "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u %1)/bus "
-                            "-u %1 %2 --hidden &").arg(user_name, file_path).toLocal8Bit();
+        QString user_name = splitted.front();
+        QString file_path = QCoreApplication::applicationDirPath() + '/' + kExecutableNameForUi;
 
-                int ret = system(command_line.data());
-                LOG(INFO) << "system result:" << ret;
-            }
-        }
+        QByteArray command_line =
+            QString("systemd-run --machine=%1@.host --user --collect "
+                    "--setenv=DISPLAY=':0' --setenv=XAUTHORITY='%2' "
+                    "--setenv=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u %1)/bus "
+                    "%3 --hidden")
+                .arg(user_name, X11Util::xauthorityForUser(user_name), file_path).toLocal8Bit();
+
+        LOG(INFO) << "Start user session GUI:" << command_line;
+
+        int ret = system(command_line.data());
+        LOG(INFO) << "system result:" << ret;
+        break;
     }
 #else
     NOTIMPLEMENTED();

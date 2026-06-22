@@ -59,6 +59,38 @@
 #include <shellapi.h>
 #endif // defined(Q_OS_WINDOWS)
 
+#if defined(Q_OS_LINUX)
+#include "base/x11/x11_util.h"
+#endif // defined(Q_OS_LINUX)
+
+namespace {
+
+#if defined(Q_OS_LINUX)
+//--------------------------------------------------------------------------------------------------
+// Builds the argument list to run the application with |option| as root via pkexec. pkexec resets
+// the environment, so the display and its X authority cookie are passed explicitly: the elevated
+// process runs as root and needs them to open the user's display.
+QStringList pkexecArguments(const QString& option)
+{
+    QString display = qEnvironmentVariable("DISPLAY");
+    if (display.isEmpty())
+        display = ":0";
+
+    QString xauthority = qEnvironmentVariable("XAUTHORITY");
+    if (xauthority.isEmpty())
+        xauthority = X11Util::xauthorityForUser(qEnvironmentVariable("USER"));
+
+    QStringList arguments;
+    arguments << "env" << ("DISPLAY=" + display);
+    if (!xauthority.isEmpty())
+        arguments << ("XAUTHORITY=" + xauthority);
+    arguments << QCoreApplication::applicationFilePath() << option;
+    return arguments;
+}
+#endif // defined(Q_OS_LINUX)
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 HostWindow::HostWindow(QWidget* parent)
     : QMainWindow(parent),
@@ -678,8 +710,7 @@ void HostWindow::onSecurityLog()
         });
 
         ui->action_security_log->setEnabled(false);
-        process->start("pkexec", QStringList() << "env" << "DISPLAY=:0"
-            << QApplication::applicationFilePath() << "--security-log");
+        process->start("pkexec", pkexecArguments("--security-log"));
         return;
     }
 #endif // defined(Q_OS_LINUX)
@@ -764,8 +795,7 @@ void HostWindow::onSettings()
         });
 
         ui->action_settings->setEnabled(false);
-        process->start("pkexec", QStringList() << "env" << "DISPLAY=:0"
-            << QApplication::applicationFilePath() << "--config");
+        process->start("pkexec", pkexecArguments("--config"));
         return;
     }
 #endif // defined(Q_OS_LINUX)
