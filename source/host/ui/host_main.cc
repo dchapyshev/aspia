@@ -256,7 +256,11 @@ int hostMain(int argc, char* argv[])
         if (application.isRunning())
         {
             LOG(INFO) << "Application already running";
-            application.activate();
+
+            if (parser.isSet(hidden_option))
+                LOG(INFO) << "Hidden launch, keep the existing instance in the tray";
+            else
+                application.activate();
         }
         else
         {
