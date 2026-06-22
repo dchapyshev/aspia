@@ -59,38 +59,6 @@
 #include <shellapi.h>
 #endif // defined(Q_OS_WINDOWS)
 
-#if defined(Q_OS_LINUX)
-#include "base/x11/x11_util.h"
-#endif // defined(Q_OS_LINUX)
-
-namespace {
-
-#if defined(Q_OS_LINUX)
-//--------------------------------------------------------------------------------------------------
-// Builds the argument list to run the application with |option| as root via pkexec. pkexec resets
-// the environment, so the display and its X authority cookie are passed explicitly: the elevated
-// process runs as root and needs them to open the user's display.
-QStringList pkexecArguments(const QString& option)
-{
-    QString display = qEnvironmentVariable("DISPLAY");
-    if (display.isEmpty())
-        display = ":0";
-
-    QString xauthority = qEnvironmentVariable("XAUTHORITY");
-    if (xauthority.isEmpty())
-        xauthority = X11Util::xauthorityForUser(qEnvironmentVariable("USER"));
-
-    QStringList arguments;
-    arguments << "env" << ("DISPLAY=" + display);
-    if (!xauthority.isEmpty())
-        arguments << ("XAUTHORITY=" + xauthority);
-    arguments << QCoreApplication::applicationFilePath() << option;
-    return arguments;
-}
-#endif // defined(Q_OS_LINUX)
-
-} // namespace
-
 //--------------------------------------------------------------------------------------------------
 HostWindow::HostWindow(QWidget* parent)
     : QMainWindow(parent),
@@ -710,7 +678,7 @@ void HostWindow::onSecurityLog()
         });
 
         ui->action_security_log->setEnabled(false);
-        process->start("pkexec", pkexecArguments("--security-log"));
+        process->start("pkexec", QStringList() << QCoreApplication::applicationFilePath() << "--security-log");
         return;
     }
 #endif // defined(Q_OS_LINUX)
@@ -795,7 +763,11 @@ void HostWindow::onSettings()
         });
 
         ui->action_settings->setEnabled(false);
-        process->start("pkexec", pkexecArguments("--config"));
+
+        // Run the application itself as root so its dialog can edit the system configuration. It is
+        // the direct pkexec target, so the bundled polkit policy applies (branded prompt); DISPLAY
+        // and the X authority cookie are preserved from this process via the policy's allow_gui.
+        process->start("pkexec", QStringList() << QCoreApplication::applicationFilePath() << "--config");
         return;
     }
 #endif // defined(Q_OS_LINUX)

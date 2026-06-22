@@ -277,6 +277,10 @@ if (LINUX)
         install(FILES host/linux/aspia-host-service.service
             DESTINATION lib/systemd/system COMPONENT host)
 
+        # PolicyKit action for the elevated settings/security-log dialogs.
+        install(FILES host/linux/org.aspia.host.policy
+            DESTINATION share/polkit-1/actions COMPONENT host)
+
         set(CPACK_DEBIAN_HOST_FILE_NAME
             "${CPACK_COMPONENT_HOST_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
     endif()
