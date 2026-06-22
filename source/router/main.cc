@@ -82,6 +82,18 @@ int stopService(QTextStream& out)
 //--------------------------------------------------------------------------------------------------
 int installService(QTextStream& out)
 {
+    // The service is never installed without a configuration. On a clean system there is none yet,
+    // so this is a no-op (the package install must not fail); the user creates the configuration
+    // first and runs --install afterwards. On an upgrade the existing configuration is present, so
+    // the service is reinstalled and its parameters refreshed.
+    Settings settings;
+    if (settings.isEmpty())
+    {
+        out << "Configuration does not exist; the service was not installed. Create it with "
+               "--create-config, then run --install." << Qt::endl;
+        return 0;
+    }
+
     std::unique_ptr<ServiceController> controller = ServiceController::install(
         Service::kName, Service::kDisplayName, QCoreApplication::applicationFilePath());
     if (!controller)

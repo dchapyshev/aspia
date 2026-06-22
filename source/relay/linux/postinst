@@ -1,8 +1,9 @@
 #!/bin/sh
 set -e
 
-# Register and configure the service via the application itself, so the account and sandboxing are
-# provisioned in a single place shared with the command line.
+# Register the service via the application itself (account and sandboxing are provisioned there,
+# shared with the command line). --install is a no-op when no configuration exists yet, so a clean
+# install does not fail; on an upgrade it refreshes an already-configured service.
 if [ "$1" = "configure" ]; then
     /usr/bin/aspia_relay --install
 fi
