@@ -1,0 +1,8 @@
+#!/bin/sh
+set -e
+
+# Register and configure the service via the application itself, so the account and sandboxing are
+# provisioned in a single place shared with the command line.
+if [ "$1" = "configure" ]; then
+    /usr/bin/aspia_router --install
+fi

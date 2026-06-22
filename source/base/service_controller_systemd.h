@@ -39,7 +39,8 @@ public:
     QString description() const final;
     bool setDependencies(const QStringList& dependencies) final;
     QStringList dependencies() const final;
-    bool setAccount(const QString& username, const QString& password) final;
+    bool setAccount(const QString& username, const QString& password,
+                    const QStringList& paths) final;
     QString filePath() const final;
     bool isRunning() const final;
     bool start() final;

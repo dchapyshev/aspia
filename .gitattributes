@@ -81,3 +81,10 @@
 # All other extensions not explicitly mentioned here are left for Git to
 # handle automatically.
 # You must not rely on them having a particular line ending style!
+
+# systemd unit files and Debian maintainer scripts are consumed on Linux and
+# must keep LF line endings regardless of core.autocrlf.
+*.service text eol=lf
+**/linux/postinst text eol=lf
+**/linux/prerm text eol=lf
+**/linux/postrm text eol=lf

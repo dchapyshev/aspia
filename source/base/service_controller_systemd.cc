@@ -23,6 +23,8 @@
 #include <QFileInfo>
 #include <QProcess>
 
+#include <pwd.h>
+
 #include <sstream>
 #include <inipp.h>
 
@@ -33,6 +35,26 @@ namespace {
 
 const char kSystemdPath[] = "/etc/systemd/system";
 using IniFile = inipp::Ini<char>;
+
+// Sandboxing directives applied together with the low-privilege account. See systemd.exec(5). Both
+// the router and the relay are network daemons that only need their own directories, so the same
+// set fits both. An empty CapabilityBoundingSet drops all capabilities.
+const struct
+{
+    const char* key;
+    const char* value;
+} kSandboxing[] = {
+    { "NoNewPrivileges",         "yes" },
+    { "ProtectSystem",           "strict" },
+    { "ProtectHome",             "yes" },
+    { "PrivateTmp",              "yes" },
+    { "PrivateDevices",          "yes" },
+    { "ProtectKernelTunables",   "yes" },
+    { "ProtectControlGroups",    "yes" },
+    { "RestrictAddressFamilies", "AF_INET AF_INET6" },
+    { "RestrictNamespaces",      "yes" },
+    { "CapabilityBoundingSet",   "" },
+};
 
 //--------------------------------------------------------------------------------------------------
 QString unitName(const QString& name)
@@ -196,6 +218,44 @@ bool updateUnitFile(const QString& unit_name, Updater&& updater)
     return reloadSystemd();
 }
 
+//--------------------------------------------------------------------------------------------------
+bool runProcess(const QString& program, const QStringList& arguments)
+{
+    QProcess process;
+    process.start(program, arguments);
+
+    if (!process.waitForStarted())
+    {
+        PLOG(ERROR) << "Failed to start" << program;
+        return false;
+    }
+
+    if (!process.waitForFinished())
+    {
+        LOG(ERROR) << program << "did not finish:" << arguments;
+        return false;
+    }
+
+    if (process.exitStatus() != QProcess::NormalExit || process.exitCode() != 0)
+    {
+        const QByteArray standard_error = process.readAllStandardError().trimmed();
+        LOG(ERROR) << program << "failed:" << arguments << standard_error;
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ensureUserExists(const QString& user)
+{
+    if (getpwnam(user.toLocal8Bit().constData()))
+        return true;
+
+    return runProcess("useradd", { "--system", "--user-group", "--no-create-home",
+                                   "--shell", "/usr/sbin/nologin", user });
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -348,14 +408,57 @@ QStringList ServiceControllerSystemd::dependencies() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ServiceControllerSystemd::setAccount(const QString& username, const QString& /* password */)
+bool ServiceControllerSystemd::setAccount(const QString& username, const QString& /* password */,
+                                          const QStringList& paths)
 {
+    // Provision the account before pointing the unit at it, so a failure here leaves the service on
+    // its previous account.
+    if (!username.isEmpty())
+    {
+        if (!ensureUserExists(username))
+        {
+            LOG(ERROR) << "Failed to create system user" << username;
+            return false;
+        }
+
+        // Own the directories so the service can read its configuration and write its state,
+        // including any files a prior create-config left owned by root.
+        for (const QString& path : paths)
+        {
+            QDir().mkpath(path);
+
+            if (!runProcess("chown", { "-R", QString("%1:%1").arg(username), path }))
+            {
+                LOG(ERROR) << "Failed to change owner of" << path;
+                return false;
+            }
+        }
+    }
+
     return updateUnitFile(unit_name_, [&](IniFile* ini)
     {
         if (username.isEmpty())
-            return removeKey(ini, "Service", "User");
+        {
+            // Restore the default account and drop the sandboxing along with it.
+            removeKey(ini, "Service", "User");
+            removeKey(ini, "Service", "Group");
+            removeKey(ini, "Service", "ReadWritePaths");
+
+            for (const auto& directive : kSandboxing)
+                removeKey(ini, "Service", directive.key);
+            return;
+        }
 
         setKeyValue(ini, "Service", "User", username);
+        setKeyValue(ini, "Service", "Group", username);
+
+        // Allow writes only to the service directories; the rest of the file system is read-only
+        // under ProtectSystem=strict.
+        if (!paths.isEmpty())
+            setKeyValue(ini, "Service", "ReadWritePaths", paths.join(' '));
+
+        for (const auto& directive : kSandboxing)
+            setKeyValue(ini, "Service", directive.key, directive.value);
     });
 }
 

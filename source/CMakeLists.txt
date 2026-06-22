@@ -338,8 +338,10 @@ if (LINUX)
     set(CPACK_COMPONENT_ROUTER_DISPLAY_NAME "Aspia Router")
     set(CPACK_COMPONENT_ROUTER_DESCRIPTION "Provides a connection routing service.")
 
-    # Service file.
-    install(FILES router/linux/aspia-router.service DESTINATION lib/systemd/system COMPONENT router)
+    # The service is registered by the application itself (aspia_router --install/--remove), invoked
+    # from the package maintainer scripts, so the account and sandboxing are configured in one place.
+    set(CPACK_DEBIAN_ROUTER_PACKAGE_CONTROL_EXTRA
+        "${CMAKE_CURRENT_SOURCE_DIR}/router/linux/postinst;${CMAKE_CURRENT_SOURCE_DIR}/router/linux/prerm")
 
     set(CPACK_DEBIAN_ROUTER_FILE_NAME
         "${CPACK_COMPONENT_ROUTER_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
@@ -357,8 +359,10 @@ if (LINUX)
     set(CPACK_COMPONENT_RELAY_DISPLAY_NAME "Aspia Relay")
     set(CPACK_COMPONENT_RELAY_DESCRIPTION "Provides a service for transferring data between peers.")
 
-    # Service file.
-    install(FILES relay/linux/aspia-relay.service DESTINATION lib/systemd/system COMPONENT relay)
+    # The service is registered by the application itself (aspia_relay --install/--remove), invoked
+    # from the package maintainer scripts, so the account and sandboxing are configured in one place.
+    set(CPACK_DEBIAN_RELAY_PACKAGE_CONTROL_EXTRA
+        "${CMAKE_CURRENT_SOURCE_DIR}/relay/linux/postinst;${CMAKE_CURRENT_SOURCE_DIR}/relay/linux/prerm")
 
     set(CPACK_DEBIAN_RELAY_FILE_NAME
         "${CPACK_COMPONENT_RELAY_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
