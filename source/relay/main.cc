@@ -23,6 +23,7 @@
 #include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
 #include "base/service_controller.h"
+#include "base/files/base_paths.h"
 #include "build/version.h"
 #include "relay/service.h"
 #include "relay/settings.h"
@@ -81,6 +82,17 @@ int installService(QTextStream& out)
     }
 
     controller->setDescription(Service::kDescription);
+
+    // Run the service under its low-privilege account with access only to the directory it needs
+    // (config files).
+    const QString account = ServiceController::lowPrivilegeAccount(Service::kName);
+    if (!account.isEmpty() &&
+        !controller->setAccount(account, QString(), { BasePaths::appConfigDir() }))
+    {
+        out << "Warning: failed to reduce service privileges. The service runs under the default "
+               "system account." << Qt::endl;
+    }
+
     out << "The service has been successfully installed." << Qt::endl;
     return 0;
 }
@@ -127,6 +139,11 @@ int main(int argc, char* argv[])
 {
     LoggingSettings logging_settings;
     logging_settings.min_log_level = LOG_INFO;
+#if defined(Q_OS_WINDOWS)
+    // The service runs under a low-privilege account that can only write to its own directories, so
+    // place the logs next to the application data instead of the system temp directory.
+    logging_settings.log_dir = BasePaths::appConfigDir() + "/logs";
+#endif
 
     ScopedLogging scoped_logging(logging_settings);
 

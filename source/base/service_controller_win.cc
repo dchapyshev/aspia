@@ -20,7 +20,77 @@
 
 #include <QDir>
 
+#include <aclapi.h>
+
 #include "base/logging.h"
+#include "base/win/scoped_local.h"
+
+namespace {
+
+//--------------------------------------------------------------------------------------------------
+bool grantFileAccess(const QString& account, const QString& path)
+{
+    // Resolve the account name (for example "NT SERVICE\\aspia-router") to a SID.
+    BYTE sid[SECURITY_MAX_SID_SIZE];
+    DWORD sid_size = sizeof(sid);
+    wchar_t domain[256];
+    DWORD domain_size = _countof(domain);
+    SID_NAME_USE name_use;
+
+    if (!LookupAccountNameW(nullptr, qUtf16Printable(account), sid, &sid_size, domain,
+                            &domain_size, &name_use))
+    {
+        PLOG(ERROR) << "LookupAccountNameW failed for" << account;
+        return false;
+    }
+
+    std::wstring native_path = QDir::toNativeSeparators(path).toStdWString();
+
+    // Read the current DACL so the new ACE is merged into it instead of replacing existing rights.
+    PACL old_dacl = nullptr;
+    ScopedLocal<PSECURITY_DESCRIPTOR> sd;
+    DWORD result = GetNamedSecurityInfoW(native_path.c_str(), SE_FILE_OBJECT,
+        DACL_SECURITY_INFORMATION, nullptr, nullptr, &old_dacl, nullptr, sd.recieve());
+    if (result != ERROR_SUCCESS)
+    {
+        SetLastError(result);
+        PLOG(ERROR) << "GetNamedSecurityInfoW failed for" << path;
+        return false;
+    }
+
+    EXPLICIT_ACCESSW ea;
+    memset(&ea, 0, sizeof(ea));
+
+    // "Modify": read, write and delete, but not changing permissions or taking ownership.
+    ea.grfAccessPermissions = FILE_GENERIC_READ | FILE_GENERIC_WRITE | FILE_GENERIC_EXECUTE | DELETE;
+    ea.grfAccessMode        = GRANT_ACCESS;
+    ea.grfInheritance       = CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE;
+    ea.Trustee.TrusteeForm  = TRUSTEE_IS_SID;
+    ea.Trustee.TrusteeType  = TRUSTEE_IS_UNKNOWN;
+    ea.Trustee.ptstrName    = reinterpret_cast<LPWSTR>(sid);
+
+    ScopedLocal<PACL> new_dacl;
+    result = SetEntriesInAclW(1, &ea, old_dacl, new_dacl.recieve());
+    if (result != ERROR_SUCCESS)
+    {
+        SetLastError(result);
+        PLOG(ERROR) << "SetEntriesInAclW failed";
+        return false;
+    }
+
+    result = SetNamedSecurityInfoW(native_path.data(), SE_FILE_OBJECT, DACL_SECURITY_INFORMATION,
+                                   nullptr, nullptr, new_dacl.get(), nullptr);
+    if (result != ERROR_SUCCESS)
+    {
+        SetLastError(result);
+        PLOG(ERROR) << "SetNamedSecurityInfoW failed for" << path;
+        return false;
+    }
+
+    return true;
+}
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 ServiceControllerWin::ServiceControllerWin(SC_HANDLE sc_manager, SC_HANDLE service)
@@ -310,11 +380,28 @@ QStringList ServiceControllerWin::dependencies() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ServiceControllerWin::setAccount(const QString& username, const QString& password)
+bool ServiceControllerWin::setAccount(const QString& username, const QString& password,
+                                      const QStringList& paths)
 {
+    // Grant the account access to its directories before switching to it, so a failure here leaves
+    // the service on its previous account. The per-service virtual account is managed by the SCM,
+    // so only the file access has to be provisioned.
+    for (const QString& path : paths)
+    {
+        QDir().mkpath(path);
+
+        if (!grantFileAccess(username, path))
+        {
+            LOG(ERROR) << "Failed to grant access to" << path << "for" << username;
+            return false;
+        }
+    }
+
+    // Virtual service accounts ("NT SERVICE\<name>") have no password: ChangeServiceConfigW
+    // requires nullptr for them, not an empty string.
     if (!ChangeServiceConfigW(service_, SERVICE_NO_CHANGE, SERVICE_NO_CHANGE, SERVICE_NO_CHANGE,
-        nullptr, nullptr, nullptr, nullptr, qUtf16Printable(username), qUtf16Printable(password),
-        nullptr))
+        nullptr, nullptr, nullptr, nullptr, qUtf16Printable(username),
+        password.isEmpty() ? nullptr : qUtf16Printable(password), nullptr))
     {
         PLOG(ERROR) << "ChangeServiceConfigW failed";
         return false;

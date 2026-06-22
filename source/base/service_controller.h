@@ -36,11 +36,23 @@ public:
     static bool isInstalled(const QString& name);
     static bool isRunning(const QString& name);
 
+    // The dedicated low-privilege account a service of the given name can run under instead of
+    // the default system account: "NT SERVICE\<name>" on Windows, a fixed system user on Linux.
+    // Empty if not supported. Apply it with setAccount().
+    static QString lowPrivilegeAccount(const QString& name);
+
     virtual bool setDescription(const QString& description) = 0;
     virtual QString description() const = 0;
     virtual bool setDependencies(const QStringList& dependencies) = 0;
     virtual QStringList dependencies() const = 0;
-    virtual bool setAccount(const QString& username, const QString& password) = 0;
+
+    // Sets the account the service runs under and grants it access to |paths| (the directories the
+    // service reads and writes). On Linux the account is created if it does not exist yet. An empty
+    // |username| restores the default system account. Granting happens before the account switch,
+    // so a provisioning failure leaves the service on its previous account.
+    virtual bool setAccount(
+        const QString& username, const QString& password, const QStringList& paths) = 0;
+
     virtual QString filePath() const = 0;
     virtual bool isRunning() const = 0;
     virtual bool start() = 0;

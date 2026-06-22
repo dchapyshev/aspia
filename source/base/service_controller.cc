@@ -59,6 +59,19 @@ std::unique_ptr<ServiceController> ServiceController::install(
 
 //--------------------------------------------------------------------------------------------------
 // static
+QString ServiceController::lowPrivilegeAccount(const QString& name)
+{
+#if defined(Q_OS_WINDOWS)
+    return "NT SERVICE\\" + name;
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+    return "aspia";
+#else
+    return QString();
+#endif
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
 bool ServiceController::remove(const QString& name)
 {
 #if defined(Q_OS_WINDOWS)
