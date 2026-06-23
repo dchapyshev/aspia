@@ -18,9 +18,9 @@
 
 #include "base/desktop/wayland/pipewire.h"
 
-#include "base/logging.h"
-
 #include <dlfcn.h>
+
+#include "base/logging.h"
 
 namespace {
 
@@ -77,5 +77,6 @@ bool PipeWire::ensureLoaded()
 // static
 const PipeWireApi* PipeWire::api()
 {
-    return &g_api;
+    // Null until the library has been loaded successfully, so callers can detect that.
+    return g_handle ? &g_api : nullptr;
 }

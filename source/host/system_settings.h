@@ -44,6 +44,10 @@ public:
     quint32 preferredVideoCapturer() const;
     void setPreferredVideoCapturer(quint32 type);
 
+    // Token for restoring a Wayland portal session without re-prompting the user.
+    QString waylandRestoreToken() const;
+    void setWaylandRestoreToken(const QString& token);
+
     bool isApplicationShutdownDisabled() const;
     void setApplicationShutdownDisabled(bool value);
 

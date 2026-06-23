@@ -17,6 +17,8 @@
 #
 
 collect_sources(SOURCE_BASE_DESKTOP_WAYLAND
+    egl_dmabuf.cc
+    egl_dmabuf.h
     pipewire.cc
     pipewire.h
     wayland_portal.cc

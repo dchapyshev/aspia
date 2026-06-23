@@ -18,7 +18,5 @@
 
 collect_sources(SOURCE_BASE_X11
     x11_headers.h
-    x11_util.cc
-    x11_util.h
     x_server_clipboard.cc
     x_server_clipboard.h)

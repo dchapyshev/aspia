@@ -42,7 +42,7 @@
 
 #if defined(Q_OS_LINUX)
 #include "base/linux/libsystemd.h"
-#include "base/x11/x11_util.h"
+#include "base/linux/session_environment.h"
 
 #include <pwd.h>
 #include <signal.h>
@@ -678,21 +678,25 @@ bool DesktopManager::startProcess(const QString& ipc_channel_name)
 
     const QString user_name = QString::fromLocal8Bit(pw->pw_name);
 
-    QString display;
-    QString xauthority;
-    if (!X11Util::sessionEnvironment(user_name, &display, &xauthority))
+    QMap<QString, QString> session_env;
+    if (!SessionEnvironment::get(user_name, &session_env))
     {
-        // The session's X server is still starting up (its display is not published yet). Do not
-        // launch a doomed agent; the caller retries shortly via the restart timer.
-        LOG(INFO) << "Display for" << user_name << "is not available yet";
+        // The session's display is not published yet. Do not launch a doomed agent; the caller
+        // retries shortly via the restart timer.
+        LOG(INFO) << "Graphical session for" << user_name << "is not available yet";
         return false;
     }
 
-    // The service runs as root, so the agent is started as root too (like SYSTEM on Windows).
-    // DISPLAY and the active session's X authority cookie let it open that session's display.
+    // The service runs as root, so the agent is started as root too (like SYSTEM on Windows). It
+    // does not inherit the user session, so the variables that let it reach the display and (on
+    // Wayland) the desktop portal are passed explicitly.
+    QString env_prefix = "env";
+    for (auto it = session_env.constBegin(); it != session_env.constEnd(); ++it)
+        env_prefix += QString(" %1='%2'").arg(it.key(), it.value());
+
     QByteArray command_line =
-        QString("env DISPLAY='%1' XAUTHORITY='%2' %3=%4 %5 &")
-            .arg(display, xauthority, IpcServer::kChannelIdEnvVar, ipc_channel_name, filePath())
+        QString("%1 %2=%3 %4 &")
+            .arg(env_prefix, IpcServer::kChannelIdEnvVar, ipc_channel_name, filePath())
             .toLocal8Bit();
 
     LOG(INFO) << "Start desktop session agent:" << command_line;

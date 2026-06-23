@@ -28,6 +28,7 @@ const QString kApplication = "host";
 
 const QString kApplicationShutdown = "application_shutdown";
 const QString kPreferredVideoCapturer = "preferred_video_capturer";
+const QString kWaylandRestoreToken = "wayland_restore_token";
 
 const QString kUpdateServer = "update/server";
 const QString kUpdateAutoUpdate = "update/auto_update";
@@ -85,6 +86,18 @@ quint32 SystemSettings::preferredVideoCapturer() const
 void SystemSettings::setPreferredVideoCapturer(quint32 type)
 {
     settings_.setValue(kPreferredVideoCapturer, type);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SystemSettings::waylandRestoreToken() const
+{
+    return settings_.value(kWaylandRestoreToken).toString();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SystemSettings::setWaylandRestoreToken(const QString& token)
+{
+    settings_.setValue(kWaylandRestoreToken, token);
 }
 
 //--------------------------------------------------------------------------------------------------

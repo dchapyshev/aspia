@@ -18,4 +18,6 @@
 
 collect_sources(SOURCE_BASE_LINUX
     libsystemd.cc
-    libsystemd.h)
+    libsystemd.h
+    session_environment.cc
+    session_environment.h)

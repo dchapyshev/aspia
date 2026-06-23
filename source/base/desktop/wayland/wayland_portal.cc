@@ -25,6 +25,7 @@
 #include <QDBusObjectPath>
 #include <QDBusReply>
 #include <QDBusUnixFileDescriptor>
+#include <QDBusVariant>
 
 #include <unistd.h>
 
@@ -40,15 +41,23 @@ const char kRequestIface[] = "org.freedesktop.portal.Request";
 const char kSessionIface[] = "org.freedesktop.portal.Session";
 
 // RemoteDesktop device types.
-const uint kDeviceKeyboard = 1;
-const uint kDevicePointer = 2;
+const quint32 kDeviceKeyboard = 1;
+const quint32 kDevicePointer = 2;
 
-// ScreenCast source types and cursor modes.
-const uint kSourceMonitor = 1;
-const uint kCursorEmbedded = 2;
+// ScreenCast source types.
+const quint32 kSourceMonitor = 1;
+
+// ScreenCast cursor modes.
+const quint32 kCursorHidden = 1;
+const quint32 kCursorEmbedded = 2;
+const quint32 kCursorMetadata = 4;
 
 // Persist the grant until the user revokes it.
-const uint kPersistModePersistent = 2;
+const quint32 kPersistModePersistent = 2;
+
+// RemoteDesktop owns the combined session; persistence (persist_mode/restore_token) is available
+// from RemoteDesktop version 2.
+const quint32 kRemoteDesktopPersistVersion = 2;
 
 //--------------------------------------------------------------------------------------------------
 QPoint pointFromVariant(const QVariant& value)
@@ -113,6 +122,7 @@ WaylandPortal::~WaylandPortal()
 void WaylandPortal::start(const QString& restore_token)
 {
     restore_token_in_ = restore_token;
+    queryCapabilities();
     createSession();
 }
 
@@ -152,7 +162,7 @@ void WaylandPortal::notifyPointerMotionAbsolute(double x, double y)
 }
 
 //--------------------------------------------------------------------------------------------------
-void WaylandPortal::notifyPointerButton(int32_t button, bool pressed)
+void WaylandPortal::notifyPointerButton(qint32 button, bool pressed)
 {
     if (step_ != Step::STARTED)
         return;
@@ -173,7 +183,7 @@ void WaylandPortal::notifyPointerAxis(double dx, double dy)
 }
 
 //--------------------------------------------------------------------------------------------------
-void WaylandPortal::notifyPointerAxisDiscrete(uint32_t axis, int32_t steps)
+void WaylandPortal::notifyPointerAxisDiscrete(quint32 axis, qint32 steps)
 {
     if (step_ != Step::STARTED)
         return;
@@ -183,7 +193,7 @@ void WaylandPortal::notifyPointerAxisDiscrete(uint32_t axis, int32_t steps)
 }
 
 //--------------------------------------------------------------------------------------------------
-void WaylandPortal::notifyKeyboardKeycode(int32_t keycode, bool pressed)
+void WaylandPortal::notifyKeyboardKeycode(qint32 keycode, bool pressed)
 {
     if (step_ != Step::STARTED)
         return;
@@ -194,7 +204,7 @@ void WaylandPortal::notifyKeyboardKeycode(int32_t keycode, bool pressed)
 }
 
 //--------------------------------------------------------------------------------------------------
-void WaylandPortal::notifyKeyboardKeysym(int32_t keysym, bool pressed)
+void WaylandPortal::notifyKeyboardKeysym(qint32 keysym, bool pressed)
 {
     if (step_ != Step::STARTED)
         return;
@@ -230,6 +240,10 @@ void WaylandPortal::onResponse(uint response, const QVariantMap& results)
                 fail();
                 return;
             }
+            // Watch for the session being closed by the compositor or the user.
+            QDBusConnection::sessionBus().connect(
+                kPortalService, session_handle_, kSessionIface, "Closed",
+                this, SLOT(onSessionClosed(QVariantMap)));
             selectDevices();
             break;
 
@@ -278,6 +292,22 @@ void WaylandPortal::onResponse(uint response, const QVariantMap& results)
 }
 
 //--------------------------------------------------------------------------------------------------
+void WaylandPortal::onSessionClosed(const QVariantMap& /* details */)
+{
+    LOG(INFO) << "Wayland portal session closed";
+
+    QDBusConnection::sessionBus().disconnect(
+        kPortalService, session_handle_, kSessionIface, "Closed",
+        this, SLOT(onSessionClosed(QVariantMap)));
+
+    // The session is gone; the handle must not be closed again from the destructor.
+    session_handle_.clear();
+    step_ = Step::FAILED;
+
+    emit sig_closed();
+}
+
+//--------------------------------------------------------------------------------------------------
 QString WaylandPortal::newToken(const QString& prefix)
 {
     return prefix + QString::number(++token_counter_);
@@ -295,6 +325,22 @@ QString WaylandPortal::prepareRequest(const QString& token_prefix)
         this, SLOT(onResponse(uint, QVariantMap)));
 
     return token;
+}
+
+//--------------------------------------------------------------------------------------------------
+void WaylandPortal::queryCapabilities()
+{
+    screen_cast_version_ = portalProperty(kScreenCastIface, "version");
+    available_source_types_ = portalProperty(kScreenCastIface, "AvailableSourceTypes");
+    available_cursor_modes_ = portalProperty(kScreenCastIface, "AvailableCursorModes");
+
+    remote_desktop_version_ = portalProperty(kRemoteDesktopIface, "version");
+    available_device_types_ = portalProperty(kRemoteDesktopIface, "AvailableDeviceTypes");
+
+    LOG(INFO) << "Portal capabilities (ScreenCast v" << screen_cast_version_ << ", RemoteDesktop v"
+              << remote_desktop_version_ << ", cursor modes:" << available_cursor_modes_
+              << ", source types:" << available_source_types_
+              << ", device types:" << available_device_types_ << ")";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -320,12 +366,21 @@ void WaylandPortal::selectDevices()
 {
     step_ = Step::SELECT_DEVICES;
 
+    quint32 device_types = kDeviceKeyboard | kDevicePointer;
+    if (available_device_types_)
+        device_types &= available_device_types_;
+
     QVariantMap options;
     options["handle_token"] = prepareRequest("aspia_req");
-    options["types"] = kDeviceKeyboard | kDevicePointer;
-    options["persist_mode"] = kPersistModePersistent;
-    if (!restore_token_in_.isEmpty())
-        options["restore_token"] = restore_token_in_;
+    options["types"] = device_types;
+
+    // Persistence is only available from RemoteDesktop version 2.
+    if (remote_desktop_version_ >= kRemoteDesktopPersistVersion)
+    {
+        options["persist_mode"] = kPersistModePersistent;
+        if (!restore_token_in_.isEmpty())
+            options["restore_token"] = restore_token_in_;
+    }
 
     QDBusMessage reply = remote_desktop_->callWithArgumentList(QDBus::Block, "SelectDevices",
         { QVariant::fromValue(QDBusObjectPath(session_handle_)), options });
@@ -341,11 +396,26 @@ void WaylandPortal::selectSources()
 {
     step_ = Step::SELECT_SOURCES;
 
+    // Prefer separate cursor metadata, fall back to an embedded cursor, then to a hidden one.
+    quint32 cursor_mode = kCursorHidden;
+    if (available_cursor_modes_ & kCursorMetadata)
+        cursor_mode = kCursorMetadata;
+    else if (available_cursor_modes_ & kCursorEmbedded)
+        cursor_mode = kCursorEmbedded;
+
+    quint32 source_types = kSourceMonitor;
+    if (available_source_types_)
+        source_types &= available_source_types_;
+
     QVariantMap options;
     options["handle_token"] = prepareRequest("aspia_req");
-    options["types"] = kSourceMonitor;
+    options["types"] = source_types;
     options["multiple"] = false;
-    options["cursor_mode"] = kCursorEmbedded;
+    options["cursor_mode"] = cursor_mode;
+
+    // Persistence of the combined session is governed by RemoteDesktop (it owns the session), so it
+    // is requested in SelectDevices rather than here, to avoid restoring screen capture without the
+    // matching input grant.
 
     QDBusMessage reply = screen_cast_->callWithArgumentList(QDBus::Block, "SelectSources",
         { QVariant::fromValue(QDBusObjectPath(session_handle_)), options });
@@ -404,4 +474,18 @@ void WaylandPortal::fail()
 {
     step_ = Step::FAILED;
     emit sig_started(false);
+}
+
+//--------------------------------------------------------------------------------------------------
+quint32 WaylandPortal::portalProperty(const QString& interface, const QString& property) const
+{
+    QDBusInterface properties(
+        kPortalService, kPortalObject, "org.freedesktop.DBus.Properties",
+        QDBusConnection::sessionBus());
+
+    QDBusReply<QDBusVariant> reply = properties.call("Get", interface, property);
+    if (!reply.isValid())
+        return 0;
+
+    return reply.value().variant().toUInt();
 }

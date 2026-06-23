@@ -47,7 +47,10 @@
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX)
+#include "base/desktop/screen_capturer_pipewire.h"
 #include "base/desktop/screen_capturer_x11.h"
+#include "base/desktop/wayland/wayland_portal.h"
+#include "host/input_injector_wayland.h"
 #include "host/input_injector_x11.h"
 #endif // defined(Q_OS_LINUX)
 
@@ -162,6 +165,11 @@ DesktopAgent::DesktopAgent(QObject* parent)
     connect(ipc_channel_, &IpcChannel::sig_errorOccurred, this, &DesktopAgent::onIpcErrorOccurred);
     connect(ipc_channel_, &IpcChannel::sig_messageReceived, this, &DesktopAgent::onIpcMessageReceived);
 
+#if defined(Q_OS_LINUX)
+    wayland_ = qEnvironmentVariableIsSet("WAYLAND_DISPLAY");
+    LOG(INFO) << "Session type:" << (wayland_ ? "Wayland" : "X11");
+#endif // defined(Q_OS_LINUX)
+
     selectCapturer(ScreenCapturer::Error::SUCCEEDED);
 
     capture_scheduler_.setFps(defaultCaptureFps());
@@ -180,7 +188,48 @@ DesktopAgent::DesktopAgent(QObject* parent)
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX)
-    input_injector_ = InputInjectorX11::create();
+    if (wayland_)
+    {
+        // The portal session is negotiated asynchronously (it may show a permission dialog). The
+        // capturer and injector are created once it is ready, on the shared portal session.
+        wayland_portal_ = new WaylandPortal();
+
+        connect(wayland_portal_.get(), &WaylandPortal::sig_started, this, [this](bool success)
+        {
+            if (!success)
+            {
+                LOG(ERROR) << "Wayland portal session failed to start";
+                return;
+            }
+
+            LOG(INFO) << "Wayland portal session started";
+
+            // Persist the restore token so subsequent starts skip the permission dialog.
+            const QString token = wayland_portal_->restoreToken();
+            if (!token.isEmpty())
+                SystemSettings().setWaylandRestoreToken(token);
+
+            selectCapturer(ScreenCapturer::Error::SUCCEEDED);
+            input_injector_ = InputInjectorWayland::create(wayland_portal_.get(), this);
+
+            // Resume capture if a client configured before the portal was ready.
+            if (!clients_.isEmpty())
+                capture_timer_->start(0);
+        });
+
+        connect(wayland_portal_.get(), &WaylandPortal::sig_closed, this, [this]()
+        {
+            LOG(WARNING) << "Wayland portal session closed; stopping capture";
+            capture_timer_->stop();
+        });
+
+        // Reuse a previously granted session if the user allowed persistence.
+        wayland_portal_->start(SystemSettings().waylandRestoreToken());
+    }
+    else
+    {
+        input_injector_ = InputInjectorX11::create();
+    }
 #endif // defined(Q_OS_LINUX)
 }
 
@@ -880,11 +929,29 @@ void DesktopAgent::selectCapturer(ScreenCapturer::Error last_error)
 #if defined(Q_OS_WINDOWS)
     screen_capturer_ = ScreenCapturerWin::create(preferred_capturer_, last_error, this);
 #elif defined(Q_OS_LINUX)
-    screen_capturer_ = ScreenCapturerX11::create(this);
-    if (!screen_capturer_)
+    if (wayland_)
     {
-        LOG(ERROR) << "Unable to create X11 screen capturer";
-        return;
+        if (!wayland_portal_ || !wayland_portal_->isStarted())
+        {
+            // The portal is not ready yet; the capturer is created from the sig_started handler.
+            return;
+        }
+
+        screen_capturer_ = ScreenCapturerPipeWire::create(wayland_portal_.get(), this);
+        if (!screen_capturer_)
+        {
+            LOG(ERROR) << "Unable to create PipeWire screen capturer";
+            return;
+        }
+    }
+    else
+    {
+        screen_capturer_ = ScreenCapturerX11::create(this);
+        if (!screen_capturer_)
+        {
+            LOG(ERROR) << "Unable to create X11 screen capturer";
+            return;
+        }
     }
 #else
     NOTIMPLEMENTED();

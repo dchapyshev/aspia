@@ -48,6 +48,7 @@ class InputInjector;
 class IpcChannel;
 class ScaleReducer;
 class VideoEncoder;
+class WaylandPortal;
 
 class DesktopAgent final : public QObject
 {
@@ -102,6 +103,15 @@ private:
     PowerSaveBlocker power_save_blocker_;
     InputInjector* input_injector_ = nullptr;
     ScopedQPointer<ScreenCapturer> screen_capturer_;
+
+#if defined(Q_OS_LINUX)
+    // On Wayland, capture and input go through one xdg-desktop-portal session, owned here and
+    // observed (via QPointer) by the PipeWire capturer and the portal input injector. Null/false on
+    // X11.
+    ScopedQPointer<WaylandPortal> wayland_portal_;
+    bool wayland_ = false;
+#endif // defined(Q_OS_LINUX)
+
     ScopedQPointer<AudioCapturerWrapper> audio_capturer_;
     DesktopEnvironment* desktop_environment_ = nullptr;
     std::unique_ptr<DesktopResizer> screen_resizer_;

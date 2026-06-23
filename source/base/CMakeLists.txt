@@ -224,11 +224,12 @@ endif()
 if (LINUX)
     set(BASE_PLATFORM_LIBS ${X11_LIB} ${XFIXES_LIB} stdc++fs ${CMAKE_DL_LIBS})
 
-    # PipeWire is loaded dynamically (see base/desktop/wayland/pipewire), so only its headers are
-    # needed at build time, not the library.
+    # PipeWire, EGL/GBM and libdrm are loaded dynamically (see base/desktop/wayland), so only their
+    # headers are needed at build time, not the libraries.
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(PIPEWIRE REQUIRED libpipewire-0.3)
-    target_include_directories(aspia_base PRIVATE ${PIPEWIRE_INCLUDE_DIRS})
+    pkg_check_modules(LIBDRM REQUIRED libdrm)
+    target_include_directories(aspia_base PRIVATE ${PIPEWIRE_INCLUDE_DIRS} ${LIBDRM_INCLUDE_DIRS})
 endif()
 
 if (ANDROID)

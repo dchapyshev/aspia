@@ -23,8 +23,6 @@
 #include <QPoint>
 #include <QSize>
 
-#include <cstdint>
-
 class QDBusInterface;
 
 // Negotiates a single xdg-desktop-portal session that provides both screen capture (ScreenCast) and
@@ -44,7 +42,7 @@ public:
 
     struct Stream
     {
-        uint32_t node_id = 0;
+        quint32 node_id = 0;
         QPoint position;
         QSize size;
     };
@@ -65,11 +63,11 @@ public:
     // Remote desktop input. Pointer coordinates are absolute within the captured stream. Button and
     // key codes are Linux evdev codes (X keycode minus 8 for keys).
     void notifyPointerMotionAbsolute(double x, double y);
-    void notifyPointerButton(int32_t button, bool pressed);
+    void notifyPointerButton(qint32 button, bool pressed);
     void notifyPointerAxis(double dx, double dy);
-    void notifyPointerAxisDiscrete(uint32_t axis, int32_t steps);
-    void notifyKeyboardKeycode(int32_t keycode, bool pressed);
-    void notifyKeyboardKeysym(int32_t keysym, bool pressed);
+    void notifyPointerAxisDiscrete(quint32 axis, qint32 steps);
+    void notifyKeyboardKeycode(qint32 keycode, bool pressed);
+    void notifyKeyboardKeysym(qint32 keysym, bool pressed);
 
 signals:
     void sig_started(bool success);
@@ -79,6 +77,9 @@ private slots:
     // Single handler for org.freedesktop.portal.Request::Response. The pending step determines how
     // the results are interpreted (requests are issued strictly sequentially).
     void onResponse(uint response, const QVariantMap& results);
+
+    // org.freedesktop.portal.Session::Closed: the compositor or user ended the session.
+    void onSessionClosed(const QVariantMap& details);
 
 private:
     enum class Step
@@ -97,6 +98,7 @@ private:
     // call options.
     QString prepareRequest(const QString& token_prefix);
 
+    void queryCapabilities();
     void createSession();
     void selectDevices();
     void selectSources();
@@ -104,8 +106,18 @@ private:
     void openPipeWireRemote();
     void fail();
 
+    // Reads a uint portal property (version/AvailableCursorModes/...) via the Properties interface.
+    quint32 portalProperty(const QString& interface, const QString& property) const;
+
     QDBusInterface* screen_cast_ = nullptr;
     QDBusInterface* remote_desktop_ = nullptr;
+
+    // Portal capabilities, queried before negotiation so options are gated on what is supported.
+    quint32 screen_cast_version_ = 0;
+    quint32 remote_desktop_version_ = 0;
+    quint32 available_cursor_modes_ = 0;
+    quint32 available_source_types_ = 0;
+    quint32 available_device_types_ = 0;
 
     QString sender_name_; // Unique bus name with the leading ':' removed and '.' -> '_'.
     QString session_handle_;

@@ -45,7 +45,7 @@
 
 #if defined(Q_OS_LINUX)
 #include "base/linux/libsystemd.h"
-#include "base/x11/x11_util.h"
+#include "base/linux/session_environment.h"
 
 #include <pwd.h>
 
@@ -799,7 +799,7 @@ void UserSession::attach(const Location& location, AttachReason reason, SessionI
 
     QString display;
     QString xauthority;
-    if (!X11Util::sessionEnvironment(user_name, &display, &xauthority))
+    if (!SessionEnvironment::get(user_name, &display, &xauthority))
     {
         LOG(INFO) << "Display for" << user_name << "is not available yet";
         dettach(FROM_HERE);

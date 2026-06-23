@@ -73,7 +73,7 @@ public:
     // Loads libpipewire and resolves its symbols once. Returns false if it is not available.
     static bool ensureLoaded();
 
-    // Resolved function table. Valid only after ensureLoaded() returned true.
+    // Resolved function table, or nullptr if the library has not been loaded successfully.
     static const PipeWireApi* api();
 };
 
