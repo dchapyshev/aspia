@@ -21,6 +21,7 @@
 
 #include <QtClassHelperMacros>
 #include <QtSystemDetection>
+#include <QtTypes>
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_object.h"
@@ -35,7 +36,9 @@ public:
 private:
 #if defined(Q_OS_WINDOWS)
     ScopedHandle handle_;
-#endif // defined(Q_OS_WINDOWS)
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+    quint32 cookie_ = 0;
+#endif // defined(Q_OS_*)
 
     Q_DISABLE_COPY_MOVE(PowerSaveBlocker)
 };

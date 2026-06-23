@@ -24,7 +24,19 @@
 #include "base/win/scoped_thread_desktop.h"
 #endif // defined(Q_OS_WINDOWS)
 
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+#include <QDBusConnection>
+#include <QDBusInterface>
+#include <QDBusReply>
+#endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+
 namespace {
+
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+const char kScreenSaverService[] = "org.freedesktop.ScreenSaver";
+const char kScreenSaverPath[] = "/org/freedesktop/ScreenSaver";
+const char kScreenSaverIface[] = "org.freedesktop.ScreenSaver";
+#endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 
 #if defined(Q_OS_WINDOWS)
 
@@ -114,7 +126,18 @@ PowerSaveBlocker::PowerSaveBlocker()
 
     // The power request keeps the display on, but does not turn it back on if it is already off.
     wakeUpDisplay();
-#else // defined(Q_OS_WINDOWS)
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+    // Keep the screen from blanking for the duration of the session. On Wayland a screen blank makes
+    // the compositor renegotiate the screen-cast stream, which breaks capture (the stream ends with
+    // "no more input formats"). org.freedesktop.ScreenSaver is implemented by both GNOME and KDE.
+    QDBusInterface screen_saver(
+        kScreenSaverService, kScreenSaverPath, kScreenSaverIface, QDBusConnection::sessionBus());
+    QDBusReply<uint> reply = screen_saver.call("Inhibit", "Aspia", "Remote desktop session is active");
+    if (reply.isValid())
+        cookie_ = reply.value();
+    else
+        LOG(ERROR) << "ScreenSaver.Inhibit failed:" << reply.error().message();
+#else
     NOTIMPLEMENTED();
 #endif // defined(Q_OS_*)
 }
@@ -126,5 +149,12 @@ PowerSaveBlocker::~PowerSaveBlocker()
 
 #if defined(Q_OS_WINDOWS)
     deletePowerRequest(handle_.release());
-#endif // defined(Q_OS_WINDOWS)
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+    if (cookie_)
+    {
+        QDBusInterface screen_saver(
+            kScreenSaverService, kScreenSaverPath, kScreenSaverIface, QDBusConnection::sessionBus());
+        screen_saver.call("UnInhibit", cookie_);
+    }
+#endif // defined(Q_OS_*)
 }
