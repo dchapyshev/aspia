@@ -26,6 +26,7 @@
 #include <QRect>
 #include <QSize>
 
+#include <atomic>
 #include <memory>
 
 #include "base/desktop/frame.h"
@@ -43,21 +44,23 @@ struct PipeWireApi;
 
 class EglDmaBuf;
 class MouseCursor;
-class WaylandPortal;
+class WaylandCaptureSource;
 
-// Screen capturer for Wayland sessions. Drives a PipeWire screen-cast stream fed by a portal session
-// already negotiated by |portal| (which also carries the input grant). PipeWire delivers frames on
-// its own thread loop; they are copied once into a reused two-frame queue and handed to the capture
-// thread without further allocation. The portal exposes a single monitor stream, so one screen is
+// Screen capturer for Wayland sessions. Drives a PipeWire screen-cast stream provided by |source| (the
+// xdg-desktop-portal session, or Mutter's ScreenCast interface for the login screen). PipeWire delivers
+// frames on its own thread loop; they are copied once into a reused two-frame queue and handed to the
+// capture thread without further allocation. A single monitor stream is exposed, so one screen is
 // reported. The cursor arrives as separate metadata (cursor_mode METADATA), not baked into frames.
 class ScreenCapturerPipeWire final : public ScreenCapturer
 {
+    Q_OBJECT
+
 public:
-    explicit ScreenCapturerPipeWire(WaylandPortal* portal, QObject* parent = nullptr);
+    explicit ScreenCapturerPipeWire(WaylandCaptureSource* source, QObject* parent = nullptr);
     ~ScreenCapturerPipeWire() final;
 
-    // |portal| must already be started.
-    static ScreenCapturerPipeWire* create(WaylandPortal* portal, QObject* parent = nullptr);
+    // |source| must already be started.
+    static ScreenCapturerPipeWire* create(WaylandCaptureSource* source, QObject* parent = nullptr);
 
     // ScreenCapturer implementation.
     int screenCount() final;
@@ -69,6 +72,15 @@ public:
     QPoint cursorPosition() final;
     const QRect& desktopRect() const final;
     const QRect& currentScreenRect() const final;
+
+    // Flags the stream for a restart from the PipeWire state-changed callback (called on the PipeWire
+    // thread). captureFrame() then emits sig_restartRequired() on the capture thread.
+    void requestRestart();
+
+signals:
+    // The stream entered an unrecoverable error (e.g. the compositor reconfigured the monitor and
+    // produced a new node). The owner must re-negotiate the capture source from scratch.
+    void sig_restartRequired();
 
 protected:
     // ScreenCapturer implementation.
@@ -90,7 +102,7 @@ private:
     void handleParamChanged(quint32 id, const spa_pod* param);
     void handleProcess();
 
-    QPointer<WaylandPortal> portal_;
+    WaylandCaptureSource* source_ = nullptr;
 
     const PipeWireApi* api_ = nullptr;
     pw_thread_loop* thread_loop_ = nullptr;
@@ -98,6 +110,10 @@ private:
     pw_core* core_ = nullptr;
     pw_stream* stream_ = nullptr;
     std::unique_ptr<spa_hook> stream_listener_;
+
+    // Set from the PipeWire state-changed callback when the stream errors, consumed on the capture
+    // thread to re-create the stream.
+    std::atomic<bool> restart_requested_ = false;
 
     // Imports DMA-BUF frames via EGL/GBM when the compositor delivers them.
     std::unique_ptr<EglDmaBuf> egl_dmabuf_;

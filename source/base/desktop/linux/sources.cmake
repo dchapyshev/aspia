@@ -19,10 +19,14 @@
 collect_sources(SOURCE_BASE_DESKTOP_LINUX
     egl_dmabuf.cc
     egl_dmabuf.h
+    mutter_screen_cast.cc
+    mutter_screen_cast.h
     pipewire.cc
     pipewire.h
     shared_x_display.cc
     shared_x_display.h
+    wayland_capture_source.h
+    wayland_input_target.h
     wayland_portal.cc
     wayland_portal.h
     x_atom_cache.cc

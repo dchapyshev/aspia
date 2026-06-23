@@ -678,16 +678,21 @@ bool DesktopManager::startProcess(const QString& ipc_channel_name)
     char* session_class = nullptr;
     LibSystemd::sessionGetClass(session, &session_class);
     const bool is_user_session = session_class && strcmp(session_class, "user") == 0;
+    const bool is_greeter_session = session_class && strcmp(session_class, "greeter") == 0;
     free(session_class);
     free(session);
 
-    if (!is_user_session)
+    if (!is_user_session && !is_greeter_session)
     {
-        // The display-manager greeter has no per-user systemd manager to launch the agent through;
-        // wait until a user logs in (the caller retries via the restart timer).
-        LOG(INFO) << "Active session is not a user session; the desktop agent is not started";
+        // Not a graphical seat session (e.g. background/manager). Wait until one becomes active (the
+        // caller retries via the restart timer).
+        LOG(INFO) << "Active session is neither a user nor a greeter session; the agent is not started";
         return false;
     }
+
+    // The greeter runs its own compositor under a dedicated user (gdm-greeter, sddm, ...) that has its
+    // own systemd manager and screen-cast D-Bus interface, so the agent is launched there exactly like
+    // in a user session - this is what lets the login screen be captured.
 
     const struct passwd* pw = getpwuid(uid);
     if (!pw)

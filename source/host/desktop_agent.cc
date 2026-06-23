@@ -49,6 +49,8 @@
 #if defined(Q_OS_LINUX)
 #include "base/desktop/screen_capturer_pipewire.h"
 #include "base/desktop/screen_capturer_x11.h"
+#include "base/desktop/linux/mutter_screen_cast.h"
+#include "base/desktop/linux/wayland_capture_source.h"
 #include "base/desktop/linux/wayland_portal.h"
 #include "host/input_injector_wayland.h"
 #include "host/input_injector_x11.h"
@@ -188,7 +190,33 @@ DesktopAgent::DesktopAgent(QObject* parent)
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX)
-    if (wayland_)
+    if (wayland_ && MutterScreenCast::isAvailable())
+    {
+        // GNOME: capture the monitor directly through Mutter's ScreenCast interface. This skips the
+        // portal permission dialog and works on the login screen (where no one can grant permission).
+        mutter_screen_cast_ = new MutterScreenCast();
+
+        connect(mutter_screen_cast_.get(), &MutterScreenCast::sig_started, this, [this](bool success)
+        {
+            if (!success)
+            {
+                LOG(ERROR) << "Mutter screen cast failed to start";
+                return;
+            }
+
+            LOG(INFO) << "Mutter screen cast started";
+            selectCapturer(ScreenCapturer::Error::SUCCEEDED);
+            input_injector_ = InputInjectorWayland::create(
+                mutter_screen_cast_.get(), mutter_screen_cast_.get(), this);
+
+            // Resume capture if a client configured before the source was ready.
+            if (!clients_.isEmpty())
+                capture_timer_->start(0);
+        });
+
+        mutter_screen_cast_->start();
+    }
+    else if (wayland_)
     {
         // The portal session is negotiated asynchronously (it may show a permission dialog). The
         // capturer and injector are created once it is ready, on the shared portal session.
@@ -210,7 +238,8 @@ DesktopAgent::DesktopAgent(QObject* parent)
                 SystemSettings().setWaylandRestoreToken(token);
 
             selectCapturer(ScreenCapturer::Error::SUCCEEDED);
-            input_injector_ = InputInjectorWayland::create(wayland_portal_.get(), this);
+            input_injector_ =
+                InputInjectorWayland::create(wayland_portal_.get(), wayland_portal_.get(), this);
 
             // Resume capture if a client configured before the portal was ready.
             if (!clients_.isEmpty())
@@ -918,6 +947,37 @@ void DesktopAgent::startClient(const QString& ipc_channel_name)
     client->start(ipc_channel_name);
 }
 
+#if defined(Q_OS_LINUX)
+//--------------------------------------------------------------------------------------------------
+WaylandCaptureSource* DesktopAgent::captureSource() const
+{
+    if (mutter_screen_cast_)
+        return mutter_screen_cast_.get();
+    return wayland_portal_.get();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::onCaptureSourceRestart()
+{
+    // A monitor reconfiguration can produce a burst of stream errors; do not restart faster than this.
+    if (source_restart_timer_.isValid() && source_restart_timer_.elapsed() < 2000)
+    {
+        LOG(WARNING) << "Capture source restart throttled";
+        return;
+    }
+    source_restart_timer_.restart();
+
+    LOG(INFO) << "Renegotiating the capture source after a stream error";
+
+    // Re-running start() drops the old session and negotiates a fresh node; the existing sig_started
+    // handler then recreates the capturer (and input injector) on the new stream.
+    if (mutter_screen_cast_)
+        mutter_screen_cast_->start();
+    else if (wayland_portal_)
+        wayland_portal_->start(SystemSettings().waylandRestoreToken());
+}
+#endif // defined(Q_OS_LINUX)
+
 //--------------------------------------------------------------------------------------------------
 void DesktopAgent::selectCapturer(ScreenCapturer::Error last_error)
 {
@@ -934,18 +994,25 @@ void DesktopAgent::selectCapturer(ScreenCapturer::Error last_error)
 #elif defined(Q_OS_LINUX)
     if (wayland_)
     {
-        if (!wayland_portal_ || !wayland_portal_->isStarted())
+        WaylandCaptureSource* source = captureSource();
+        if (!source || !source->isStarted())
         {
-            // The portal is not ready yet; the capturer is created from the sig_started handler.
+            // The capture source is not ready yet; the capturer is created from the sig_started handler.
             return;
         }
 
-        screen_capturer_ = ScreenCapturerPipeWire::create(wayland_portal_.get(), this);
-        if (!screen_capturer_)
+        ScreenCapturerPipeWire* capturer = ScreenCapturerPipeWire::create(source, this);
+        if (!capturer)
         {
             LOG(ERROR) << "Unable to create PipeWire screen capturer";
             return;
         }
+
+        // Queued: the signal fires from inside captureFrame(); the restart deletes this capturer, so it
+        // must run after the capture call stack unwinds.
+        connect(capturer, &ScreenCapturerPipeWire::sig_restartRequired,
+                this, &DesktopAgent::onCaptureSourceRestart, Qt::QueuedConnection);
+        screen_capturer_ = capturer;
     }
     else
     {

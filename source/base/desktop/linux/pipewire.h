@@ -31,6 +31,7 @@
     X(pw_context_new) \
     X(pw_context_destroy) \
     X(pw_context_connect_fd) \
+    X(pw_context_connect) \
     X(pw_core_disconnect) \
     X(pw_thread_loop_new) \
     X(pw_thread_loop_destroy) \

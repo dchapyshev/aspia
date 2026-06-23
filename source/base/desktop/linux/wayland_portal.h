@@ -23,6 +23,9 @@
 #include <QPoint>
 #include <QSize>
 
+#include "base/desktop/linux/wayland_capture_source.h"
+#include "base/desktop/linux/wayland_input_target.h"
+
 class QDBusInterface;
 
 // Negotiates a single xdg-desktop-portal session that provides both screen capture (ScreenCast) and
@@ -32,7 +35,10 @@ class QDBusInterface;
 // The negotiation is asynchronous (it involves a user permission dialog); sig_started is emitted
 // with the result. On success pipeWireFd() and stream() describe the capture source, and the
 // notify*() methods inject input on the same session.
-class WaylandPortal final : public QObject
+class WaylandPortal final
+    : public QObject,
+      public WaylandCaptureSource,
+      public WaylandInputTarget
 {
     Q_OBJECT
 
@@ -40,34 +46,29 @@ public:
     explicit WaylandPortal(QObject* parent = nullptr);
     ~WaylandPortal() final;
 
-    struct Stream
-    {
-        quint32 node_id = 0;
-        QPoint position;
-        QSize size;
-    };
+    using Stream = WaylandCaptureSource::Stream;
 
     // Starts the session. |restore_token| (from a previous restoreToken()) lets the portal skip the
     // permission dialog if the user allowed persistence.
     void start(const QString& restore_token = QString());
 
-    bool isStarted() const;
+    bool isStarted() const final;
 
     // File descriptor for pw_context_connect_fd(). Owned by this object; valid while started.
-    int pipeWireFd() const;
-    const Stream& stream() const;
+    int pipeWireFd() const final;
+    const Stream& stream() const final;
 
     // Token for persisting the grant across sessions; valid after a successful start.
     QString restoreToken() const;
 
-    // Remote desktop input. Pointer coordinates are absolute within the captured stream. Button and
-    // key codes are Linux evdev codes (X keycode minus 8 for keys).
-    void notifyPointerMotionAbsolute(double x, double y);
-    void notifyPointerButton(qint32 button, bool pressed);
-    void notifyPointerAxis(double dx, double dy);
-    void notifyPointerAxisDiscrete(quint32 axis, qint32 steps);
-    void notifyKeyboardKeycode(qint32 keycode, bool pressed);
-    void notifyKeyboardKeysym(qint32 keysym, bool pressed);
+    // WaylandInputTarget implementation. Pointer coordinates are absolute within the captured stream;
+    // button and key codes are Linux evdev codes (X keycode minus 8 for keys).
+    void notifyPointerMotionAbsolute(double x, double y) final;
+    void notifyPointerButton(qint32 button, bool pressed) final;
+    void notifyPointerAxis(double dx, double dy) final;
+    void notifyPointerAxisDiscrete(quint32 axis, qint32 steps) final;
+    void notifyKeyboardKeycode(qint32 keycode, bool pressed) final;
+    void notifyKeyboardKeysym(qint32 keysym, bool pressed) final;
 
 signals:
     void sig_started(bool success);

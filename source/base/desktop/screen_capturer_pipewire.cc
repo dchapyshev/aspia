@@ -40,7 +40,7 @@
 #include "base/desktop/region.h"
 #include "base/desktop/linux/egl_dmabuf.h"
 #include "base/desktop/linux/pipewire.h"
-#include "base/desktop/linux/wayland_portal.h"
+#include "base/desktop/linux/wayland_capture_source.h"
 
 namespace {
 
@@ -120,7 +120,7 @@ const spa_pod* buildFormat(spa_pod_builder* builder, quint32 format,
 
 //--------------------------------------------------------------------------------------------------
 void onStreamStateChanged(
-    void* /* data */, pw_stream_state old_state, pw_stream_state state, const char* error)
+    void* data, pw_stream_state old_state, pw_stream_state state, const char* error)
 {
     const PipeWireApi* pw = PipeWire::api();
     if (pw)
@@ -128,14 +128,21 @@ void onStreamStateChanged(
         LOG(INFO) << "PipeWire stream state:" << pw->pw_stream_state_as_string(old_state) << "->"
                   << pw->pw_stream_state_as_string(state) << (error ? error : "");
     }
+
+    // The compositor drops the stream into the error state when it renegotiates the format in a way
+    // the current connection cannot follow (a resolution change, a monitor reconfiguration, the screen
+    // blanking). Re-create the stream so it negotiates the new format from scratch instead of staying
+    // black. The restart itself is done on the capture thread (here we only flag it).
+    if (state == PW_STREAM_STATE_ERROR && data)
+        static_cast<ScreenCapturerPipeWire*>(data)->requestRestart();
 }
 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-ScreenCapturerPipeWire::ScreenCapturerPipeWire(WaylandPortal* portal, QObject* parent)
+ScreenCapturerPipeWire::ScreenCapturerPipeWire(WaylandCaptureSource* source, QObject* parent)
     : ScreenCapturer(Type::LINUX_WAYLAND, parent),
-      portal_(portal)
+      source_(source)
 {
     // Nothing
 }
@@ -148,9 +155,9 @@ ScreenCapturerPipeWire::~ScreenCapturerPipeWire()
 
 //--------------------------------------------------------------------------------------------------
 // static
-ScreenCapturerPipeWire* ScreenCapturerPipeWire::create(WaylandPortal* portal, QObject* parent)
+ScreenCapturerPipeWire* ScreenCapturerPipeWire::create(WaylandCaptureSource* source, QObject* parent)
 {
-    std::unique_ptr<ScreenCapturerPipeWire> self(new ScreenCapturerPipeWire(portal, parent));
+    std::unique_ptr<ScreenCapturerPipeWire> self(new ScreenCapturerPipeWire(source, parent));
     if (!self->init())
         return nullptr;
     return self.release();
@@ -194,6 +201,17 @@ ScreenCapturer::ScreenId ScreenCapturerPipeWire::currentScreen() const
 //--------------------------------------------------------------------------------------------------
 const Frame* ScreenCapturerPipeWire::captureFrame(Error* error)
 {
+    // The stream errored on a renegotiation (resolution change, monitor reconfiguration, screen
+    // blank). The compositor may have produced a brand-new node, so reconnecting to the old one loops
+    // forever - ask the owner to re-negotiate the whole capture source instead.
+    if (restart_requested_.exchange(false))
+    {
+        LOG(INFO) << "PipeWire stream error; requesting a capture source restart";
+        emit sig_restartRequired();
+        *error = Error::TEMPORARY;
+        return nullptr;
+    }
+
     QMutexLocker locker(&frame_mutex_);
 
     if (has_new_frame_)
@@ -285,20 +303,20 @@ void ScreenCapturerPipeWire::reset()
 //--------------------------------------------------------------------------------------------------
 bool ScreenCapturerPipeWire::init()
 {
-    if (!portal_ || !portal_->isStarted())
+    if (!source_ || !source_->isStarted())
     {
         LOG(ERROR) << "Wayland portal is not started";
         return false;
     }
 
-    screen_rect_ = QRect(QPoint(0, 0), portal_->stream().size);
+    screen_rect_ = QRect(QPoint(0, 0), source_->stream().size);
     return startStream();
 }
 
 //--------------------------------------------------------------------------------------------------
 bool ScreenCapturerPipeWire::startStream()
 {
-    if (!portal_)
+    if (!source_)
         return false;
 
     if (!PipeWire::ensureLoaded())
@@ -336,23 +354,39 @@ bool ScreenCapturerPipeWire::startStream()
 
     api_->pw_thread_loop_lock(thread_loop_);
 
-    // pw_context_connect_fd() takes ownership of the descriptor and closes it on disconnect, so we
-    // pass a private duplicate and leave the portal's descriptor untouched.
-    int own_fd = ::dup(portal_->pipeWireFd());
-    if (own_fd < 0)
+    const int source_fd = source_->pipeWireFd();
+    if (source_fd >= 0)
     {
-        LOG(ERROR) << "Unable to duplicate the PipeWire descriptor";
-        api_->pw_thread_loop_unlock(thread_loop_);
-        return false;
-    }
+        // The portal handed us a descriptor. pw_context_connect_fd() takes ownership and closes it on
+        // disconnect, so pass a private duplicate and leave the source's descriptor untouched.
+        int own_fd = ::dup(source_fd);
+        if (own_fd < 0)
+        {
+            LOG(ERROR) << "Unable to duplicate the PipeWire descriptor";
+            api_->pw_thread_loop_unlock(thread_loop_);
+            return false;
+        }
 
-    core_ = api_->pw_context_connect_fd(context_, own_fd, nullptr, 0);
-    if (!core_)
+        core_ = api_->pw_context_connect_fd(context_, own_fd, nullptr, 0);
+        if (!core_)
+        {
+            LOG(ERROR) << "pw_context_connect_fd failed";
+            ::close(own_fd);
+            api_->pw_thread_loop_unlock(thread_loop_);
+            return false;
+        }
+    }
+    else
     {
-        LOG(ERROR) << "pw_context_connect_fd failed";
-        ::close(own_fd);
-        api_->pw_thread_loop_unlock(thread_loop_);
-        return false;
+        // The stream lives on the session's own PipeWire daemon (Mutter ScreenCast); connect to the
+        // default socket.
+        core_ = api_->pw_context_connect(context_, nullptr, 0);
+        if (!core_)
+        {
+            LOG(ERROR) << "pw_context_connect failed";
+            api_->pw_thread_loop_unlock(thread_loop_);
+            return false;
+        }
     }
 
     stream_ = api_->pw_stream_new(core_, "aspia-capture", api_->pw_properties_new(
@@ -386,7 +420,7 @@ bool ScreenCapturerPipeWire::startStream()
     const spa_pod* params[16];
     const int n_params = buildFormatParams(&builder, params, true);
 
-    int ret = api_->pw_stream_connect(stream_, PW_DIRECTION_INPUT, portal_->stream().node_id,
+    int ret = api_->pw_stream_connect(stream_, PW_DIRECTION_INPUT, source_->stream().node_id,
         static_cast<pw_stream_flags>(PW_STREAM_FLAG_AUTOCONNECT | PW_STREAM_FLAG_MAP_BUFFERS),
         params, n_params);
 
@@ -398,7 +432,7 @@ bool ScreenCapturerPipeWire::startStream()
         return false;
     }
 
-    LOG(INFO) << "PipeWire stream started (node:" << portal_->stream().node_id << ")";
+    LOG(INFO) << "PipeWire stream started (node:" << source_->stream().node_id << ")";
     return true;
 }
 
@@ -430,6 +464,12 @@ void ScreenCapturerPipeWire::stopStream()
 
     api_->pw_thread_loop_destroy(thread_loop_);
     thread_loop_ = nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenCapturerPipeWire::requestRestart()
+{
+    restart_requested_.store(true);
 }
 
 //--------------------------------------------------------------------------------------------------

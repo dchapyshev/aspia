@@ -20,25 +20,27 @@
 #define HOST_INPUT_INJECTOR_WAYLAND_H
 
 #include <QPoint>
-#include <QPointer>
 #include <QSize>
 
 #include "host/input_injector.h"
 
-class WaylandPortal;
+class WaylandCaptureSource;
+class WaylandInputTarget;
 
-// Injects input on Wayland sessions through the xdg-desktop-portal RemoteDesktop interface of
-// |portal| (the same session that drives screen capture). XTest is not available on Wayland, so all
-// events go through the portal: keys as evdev keycodes, text as keysyms, the pointer as absolute
-// coordinates inside the captured stream.
+// Injects input on Wayland sessions through |target| (the xdg-desktop-portal RemoteDesktop session, or
+// Mutter's RemoteDesktop interface for the login screen). XTest is not available on Wayland, so all
+// events go through it: keys as evdev keycodes, text as keysyms, the pointer as absolute coordinates
+// inside the captured stream. |source| provides the stream geometry used to rescale coordinates.
 class InputInjectorWayland final : public InputInjector
 {
 public:
-    explicit InputInjectorWayland(WaylandPortal* portal, QObject* parent = nullptr);
+    InputInjectorWayland(WaylandCaptureSource* source, WaylandInputTarget* target,
+                         QObject* parent = nullptr);
     ~InputInjectorWayland() final;
 
-    // The portal is owned elsewhere (shared with the screen capturer) and must already be started.
-    static InputInjectorWayland* create(WaylandPortal* portal, QObject* parent = nullptr);
+    // |source|/|target| are owned elsewhere (shared with the screen capturer) and must be started.
+    static InputInjectorWayland* create(WaylandCaptureSource* source, WaylandInputTarget* target,
+                                        QObject* parent = nullptr);
 
     // InputInjector implementation.
     void setScreenInfo(const QSize& screen_size, const QPoint& offset) final;
@@ -51,7 +53,8 @@ public:
 private:
     void injectUnicode(uint code_point);
 
-    QPointer<WaylandPortal> portal_;
+    WaylandCaptureSource* source_ = nullptr;
+    WaylandInputTarget* target_ = nullptr;
     QSize screen_size_;
     QPoint screen_offset_;
 

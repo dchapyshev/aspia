@@ -19,6 +19,7 @@
 #ifndef HOST_DESKTOP_AGENT_H
 #define HOST_DESKTOP_AGENT_H
 
+#include <QElapsedTimer>
 #include <QObject>
 
 #include "base/scoped_qpointer.h"
@@ -46,8 +47,10 @@ class DesktopEnvironment;
 class DesktopResizer;
 class InputInjector;
 class IpcChannel;
+class MutterScreenCast;
 class ScaleReducer;
 class VideoEncoder;
+class WaylandCaptureSource;
 class WaylandPortal;
 
 class DesktopAgent final : public QObject
@@ -87,6 +90,12 @@ private slots:
 private:
     void startClient(const QString& ipc_channel_name);
     void selectCapturer(ScreenCapturer::Error last_error);
+#if defined(Q_OS_LINUX)
+    // The active Wayland capture source - Mutter's ScreenCast if available, otherwise the portal.
+    WaylandCaptureSource* captureSource() const;
+    // Re-negotiates the capture source after the PipeWire stream errors (monitor reconfiguration).
+    void onCaptureSourceRestart();
+#endif // defined(Q_OS_LINUX)
     ScreenCapturer::ScreenId defaultScreen();
     void selectScreen(ScreenCapturer::ScreenId screen_id, const QSize& resolution);
     void sendCurrentScreenList();
@@ -109,6 +118,11 @@ private:
     // observed (via QPointer) by the PipeWire capturer and the portal input injector. Null/false on
     // X11.
     ScopedQPointer<WaylandPortal> wayland_portal_;
+    // Alternative capture source on GNOME: Mutter's ScreenCast interface used directly (no portal
+    // dialog, works on the login screen). Mutually exclusive with wayland_portal_.
+    ScopedQPointer<MutterScreenCast> mutter_screen_cast_;
+    // Throttles capture-source restarts so a persistent stream error cannot spin.
+    QElapsedTimer source_restart_timer_;
     bool wayland_ = false;
 #endif // defined(Q_OS_LINUX)
 

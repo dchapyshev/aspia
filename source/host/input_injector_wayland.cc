@@ -19,7 +19,8 @@
 #include "host/input_injector_wayland.h"
 
 #include "base/logging.h"
-#include "base/desktop/linux/wayland_portal.h"
+#include "base/desktop/linux/wayland_capture_source.h"
+#include "base/desktop/linux/wayland_input_target.h"
 #include "common/keycode_converter.h"
 #include "proto/desktop_input.h"
 
@@ -41,9 +42,11 @@ const quint32 kAxisVertical = 0;
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-InputInjectorWayland::InputInjectorWayland(WaylandPortal* portal, QObject* parent)
+InputInjectorWayland::InputInjectorWayland(
+    WaylandCaptureSource* source, WaylandInputTarget* target, QObject* parent)
     : InputInjector(parent),
-      portal_(portal)
+      source_(source),
+      target_(target)
 {
     // Nothing
 }
@@ -53,9 +56,10 @@ InputInjectorWayland::~InputInjectorWayland() = default;
 
 //--------------------------------------------------------------------------------------------------
 // static
-InputInjectorWayland* InputInjectorWayland::create(WaylandPortal* portal, QObject* parent)
+InputInjectorWayland* InputInjectorWayland::create(
+    WaylandCaptureSource* source, WaylandInputTarget* target, QObject* parent)
 {
-    return new InputInjectorWayland(portal, parent);
+    return new InputInjectorWayland(source, target, parent);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -74,7 +78,7 @@ void InputInjectorWayland::setBlockInput(bool /* enable */)
 //--------------------------------------------------------------------------------------------------
 void InputInjectorWayland::injectKeyEvent(const proto::input::KeyEvent& event)
 {
-    if (!portal_)
+    if (!target_)
         return;
 
     int keycode = KeycodeConverter::usbKeycodeToNativeKeycode(event.usb_keycode());
@@ -85,13 +89,13 @@ void InputInjectorWayland::injectKeyEvent(const proto::input::KeyEvent& event)
     }
 
     bool pressed = (event.flags() & proto::input::KeyEvent::PRESSED) != 0;
-    portal_->notifyKeyboardKeycode(keycode - kXkbKeycodeOffset, pressed);
+    target_->notifyKeyboardKeycode(keycode - kXkbKeycodeOffset, pressed);
 }
 
 //--------------------------------------------------------------------------------------------------
 void InputInjectorWayland::injectTextEvent(const proto::input::TextEvent& event)
 {
-    if (!portal_)
+    if (!target_)
         return;
 
     QString text = QString::fromStdString(event.text());
@@ -107,7 +111,7 @@ void InputInjectorWayland::injectTextEvent(const proto::input::TextEvent& event)
 //--------------------------------------------------------------------------------------------------
 void InputInjectorWayland::injectMouseEvent(const proto::input::MouseEvent& event)
 {
-    if (!portal_)
+    if (!target_)
         return;
 
     QPointF pos(event.x() + screen_offset_.x(), event.y() + screen_offset_.y());
@@ -115,14 +119,14 @@ void InputInjectorWayland::injectMouseEvent(const proto::input::MouseEvent& even
     // Client coordinates are in the captured frame's pixel space - the monitor's physical resolution.
     // The portal expects pointer coordinates in the stream's logical coordinate space, so on a scaled
     // output (e.g. KDE fractional scaling) the two differ and the coordinates must be rescaled.
-    const QSize logical_size = portal_->stream().size;
+    const QSize logical_size = source_->stream().size;
     if (logical_size.isValid() && screen_size_.width() > 0 && screen_size_.height() > 0)
     {
         pos.setX(pos.x() * logical_size.width() / screen_size_.width());
         pos.setY(pos.y() * logical_size.height() / screen_size_.height());
     }
 
-    portal_->notifyPointerMotionAbsolute(pos.x(), pos.y());
+    target_->notifyPointerMotionAbsolute(pos.x(), pos.y());
 
     bool left_button_pressed = (event.mask() & proto::input::MouseEvent::LEFT_BUTTON) != 0;
     bool middle_button_pressed = (event.mask() & proto::input::MouseEvent::MIDDLE_BUTTON) != 0;
@@ -132,38 +136,38 @@ void InputInjectorWayland::injectMouseEvent(const proto::input::MouseEvent& even
 
     if (left_button_pressed_ != left_button_pressed)
     {
-        portal_->notifyPointerButton(kBtnLeft, left_button_pressed);
+        target_->notifyPointerButton(kBtnLeft, left_button_pressed);
         left_button_pressed_ = left_button_pressed;
     }
 
     if (middle_button_pressed_ != middle_button_pressed)
     {
-        portal_->notifyPointerButton(kBtnMiddle, middle_button_pressed);
+        target_->notifyPointerButton(kBtnMiddle, middle_button_pressed);
         middle_button_pressed_ = middle_button_pressed;
     }
 
     if (right_button_pressed_ != right_button_pressed)
     {
-        portal_->notifyPointerButton(kBtnRight, right_button_pressed);
+        target_->notifyPointerButton(kBtnRight, right_button_pressed);
         right_button_pressed_ = right_button_pressed;
     }
 
     if (back_button_pressed_ != back_button_pressed)
     {
-        portal_->notifyPointerButton(kBtnSide, back_button_pressed);
+        target_->notifyPointerButton(kBtnSide, back_button_pressed);
         back_button_pressed_ = back_button_pressed;
     }
 
     if (forward_button_pressed_ != forward_button_pressed)
     {
-        portal_->notifyPointerButton(kBtnExtra, forward_button_pressed);
+        target_->notifyPointerButton(kBtnExtra, forward_button_pressed);
         forward_button_pressed_ = forward_button_pressed;
     }
 
     if (event.mask() & proto::input::MouseEvent::WHEEL_UP)
-        portal_->notifyPointerAxisDiscrete(kAxisVertical, -1);
+        target_->notifyPointerAxisDiscrete(kAxisVertical, -1);
     else if (event.mask() & proto::input::MouseEvent::WHEEL_DOWN)
-        portal_->notifyPointerAxisDiscrete(kAxisVertical, 1);
+        target_->notifyPointerAxisDiscrete(kAxisVertical, 1);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -184,6 +188,6 @@ void InputInjectorWayland::injectUnicode(uint code_point)
     qint32 keysym = (code_point <= 0x00ff) ?
         static_cast<qint32>(code_point) : static_cast<qint32>(0x01000000 | code_point);
 
-    portal_->notifyKeyboardKeysym(keysym, true);
-    portal_->notifyKeyboardKeysym(keysym, false);
+    target_->notifyKeyboardKeysym(keysym, true);
+    target_->notifyKeyboardKeysym(keysym, false);
 }
