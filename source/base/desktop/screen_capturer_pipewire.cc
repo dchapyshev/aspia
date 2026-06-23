@@ -101,11 +101,18 @@ const spa_pod* buildFormat(spa_pod_builder* builder, quint32 format,
         spa_pod_builder_pop(builder, &modifier_frame);
     }
 
+    // spa_pod_builder_addv reads Rectangle/Fraction arguments as pointers (va_arg(spa_rectangle*)),
+    // so the choice values must be passed by address, not by value.
+    struct spa_rectangle size_def = SPA_RECTANGLE(1920, 1080);
+    struct spa_rectangle size_min = SPA_RECTANGLE(1, 1);
+    struct spa_rectangle size_max = SPA_RECTANGLE(8192, 8192);
+    struct spa_fraction rate_def = SPA_FRACTION(30, 1);
+    struct spa_fraction rate_min = SPA_FRACTION(0, 1);
+    struct spa_fraction rate_max = SPA_FRACTION(120, 1);
+
     spa_pod_builder_add(builder,
-        SPA_FORMAT_VIDEO_size, SPA_POD_CHOICE_RANGE_Rectangle(
-            SPA_RECTANGLE(1920, 1080), SPA_RECTANGLE(1, 1), SPA_RECTANGLE(8192, 8192)),
-        SPA_FORMAT_VIDEO_framerate, SPA_POD_CHOICE_RANGE_Fraction(
-            SPA_FRACTION(30, 1), SPA_FRACTION(0, 1), SPA_FRACTION(120, 1)),
+        SPA_FORMAT_VIDEO_size, SPA_POD_CHOICE_RANGE_Rectangle(&size_def, &size_min, &size_max),
+        SPA_FORMAT_VIDEO_framerate, SPA_POD_CHOICE_RANGE_Fraction(&rate_def, &rate_min, &rate_max),
         0);
 
     return static_cast<const spa_pod*>(spa_pod_builder_pop(builder, &format_frame));
@@ -198,6 +205,7 @@ const Frame* ScreenCapturerPipeWire::captureFrame(Error* error)
             return nullptr;
         }
 
+        frame->setCapturerType(static_cast<quint32>(type()));
         screen_rect_ = QRect(QPoint(0, 0), frame->size());
 
         // Report the damaged regions accumulated since the last capture, or the whole frame when no
@@ -227,6 +235,7 @@ const Frame* ScreenCapturerPipeWire::captureFrame(Error* error)
         return nullptr;
     }
 
+    frame->setCapturerType(static_cast<quint32>(type()));
     frame->updatedRegion()->clear();
     *error = Error::SUCCEEDED;
     return frame;
