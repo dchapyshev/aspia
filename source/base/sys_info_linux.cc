@@ -25,6 +25,7 @@
 #include "base/logging.h"
 #include "base/smbios.h"
 
+#include <netdb.h>
 #include <sys/param.h>
 #include <sys/sysinfo.h>
 #include <sys/utsname.h>
@@ -111,15 +112,58 @@ QString SysInfo::computerName()
 // static
 QString SysInfo::computerDomain()
 {
-    NOTIMPLEMENTED();
-    return QString();
+    char host_name[256];
+    if (gethostname(host_name, sizeof(host_name)) != 0)
+    {
+        PLOG(ERROR) << "gethostname failed";
+        return QString();
+    }
+    host_name[sizeof(host_name) - 1] = 0;
+
+    // Resolve the canonical FQDN and take everything after the first label as the DNS domain (the
+    // closest analogue of the Windows primary DNS suffix).
+    struct addrinfo hints = {};
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_flags = AI_CANONNAME;
+
+    struct addrinfo* info = nullptr;
+    if (getaddrinfo(host_name, nullptr, &hints, &info) != 0 || !info)
+        return QString();
+
+    QString fqdn = QString::fromLocal8Bit(info->ai_canonname);
+    freeaddrinfo(info);
+
+    const int dot = fqdn.indexOf('.');
+    if (dot < 0)
+        return QString();
+
+    return fqdn.mid(dot + 1);
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
 QString SysInfo::computerWorkgroup()
 {
-    NOTIMPLEMENTED();
+    // The NetBIOS workgroup is configured for Samba in smb.conf.
+    QFile file("/etc/samba/smb.conf");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return QString();
+
+    QByteArray line;
+    while (!(line = file.readLine()).isEmpty())
+    {
+        const QByteArray trimmed = line.trimmed();
+        if (trimmed.isEmpty() || trimmed.startsWith('#') || trimmed.startsWith(';'))
+            continue;
+
+        const int eq = trimmed.indexOf('=');
+        if (eq < 0)
+            continue;
+
+        if (trimmed.left(eq).trimmed().toLower() == "workgroup")
+            return QString::fromLocal8Bit(trimmed.mid(eq + 1).trimmed());
+    }
+
     return QString();
 }
 
