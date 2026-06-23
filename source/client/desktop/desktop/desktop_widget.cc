@@ -33,7 +33,7 @@
 #include "proto/desktop_input.h"
 
 #if defined(Q_OS_LINUX)
-#include "base/x11/x11_headers.h"
+#include "base/linux/x11_headers.h"
 #endif // defined(Q_OS_LINUX)
 
 #if defined(Q_OS_MACOS)

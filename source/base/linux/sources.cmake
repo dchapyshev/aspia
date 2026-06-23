@@ -20,4 +20,7 @@ collect_sources(SOURCE_BASE_LINUX
     libsystemd.cc
     libsystemd.h
     session_environment.cc
-    session_environment.h)
+    session_environment.h
+    x11_headers.h
+    x_server_clipboard.cc
+    x_server_clipboard.h)

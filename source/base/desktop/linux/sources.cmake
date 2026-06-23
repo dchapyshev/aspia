@@ -16,9 +16,15 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-collect_sources(SOURCE_BASE_DESKTOP_X11
+collect_sources(SOURCE_BASE_DESKTOP_LINUX
+    egl_dmabuf.cc
+    egl_dmabuf.h
+    pipewire.cc
+    pipewire.h
     shared_x_display.cc
     shared_x_display.h
+    wayland_portal.cc
+    wayland_portal.h
     x_atom_cache.cc
     x_atom_cache.h
     x_error_trap.cc

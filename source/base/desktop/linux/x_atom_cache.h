@@ -16,10 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_DESKTOP_X11_X_ATOM_CACHE_H
-#define BASE_DESKTOP_X11_X_ATOM_CACHE_H
+#ifndef BASE_DESKTOP_LINUX_X_ATOM_CACHE_H
+#define BASE_DESKTOP_LINUX_X_ATOM_CACHE_H
 
-#include "base/x11/x11_headers.h"
+#include "base/linux/x11_headers.h"
 
 // A cache of Atom. Each Atom object is created on demand.
 class XAtomCache final
@@ -46,4 +46,4 @@ private:
     Atom icc_profile_ = X11_None;
 };
 
-#endif // BASE_DESKTOP_X11_X_ATOM_CACHE_H
+#endif // BASE_DESKTOP_LINUX_X_ATOM_CACHE_H

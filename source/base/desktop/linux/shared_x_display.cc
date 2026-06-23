@@ -16,13 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/desktop/x11/shared_x_display.h"
+#include "base/desktop/linux/shared_x_display.h"
 
 #include "base/logging.h"
 
 #include <algorithm>
 
-#include "base/x11/x11_headers.h"
+#include "base/linux/x11_headers.h"
 
 namespace {
 

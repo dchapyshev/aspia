@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_DESKTOP_WAYLAND_WAYLAND_PORTAL_H
-#define BASE_DESKTOP_WAYLAND_WAYLAND_PORTAL_H
+#ifndef BASE_DESKTOP_LINUX_WAYLAND_PORTAL_H
+#define BASE_DESKTOP_LINUX_WAYLAND_PORTAL_H
 
 #include <QObject>
 #include <QPoint>
@@ -133,4 +133,4 @@ private:
     Q_DISABLE_COPY_MOVE(WaylandPortal)
 };
 
-#endif // BASE_DESKTOP_WAYLAND_WAYLAND_PORTAL_H
+#endif // BASE_DESKTOP_LINUX_WAYLAND_PORTAL_H

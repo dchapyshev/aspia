@@ -147,10 +147,8 @@ endif()
 
 if (LINUX)
     include(audio/linux/sources.cmake)
-    include(desktop/wayland/sources.cmake)
-    include(desktop/x11/sources.cmake)
+    include(desktop/linux/sources.cmake)
     include(linux/sources.cmake)
-    include(x11/sources.cmake)
 endif()
 
 if (APPLE)
@@ -177,11 +175,9 @@ endif()
 
 if (LINUX)
     source_group(audio\\linux FILES ${SOURCE_BASE_AUDIO_LINUX})
-    source_group(desktop\\wayland FILES ${SOURCE_BASE_DESKTOP_WAYLAND})
-    source_group(desktop\\x11 FILES ${SOURCE_BASE_DESKTOP_X11})
+    source_group(desktop\\linux FILES ${SOURCE_BASE_DESKTOP_LINUX})
     source_group(linux FILES ${SOURCE_BASE_LINUX})
     source_group(posix FILES ${SOURCE_BASE_POSIX})
-    source_group(x11 FILES ${SOURCE_BASE_X11})
 endif()
 
 if (APPLE)
@@ -196,9 +192,8 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_CODEC}
     ${SOURCE_BASE_CRYPTO}
     ${SOURCE_BASE_DESKTOP}
-    ${SOURCE_BASE_DESKTOP_WAYLAND}
+    ${SOURCE_BASE_DESKTOP_LINUX}
     ${SOURCE_BASE_DESKTOP_WIN}
-    ${SOURCE_BASE_DESKTOP_X11}
     ${SOURCE_BASE_FILES}
     ${SOURCE_BASE_IPC}
     ${SOURCE_BASE_LINUX}
@@ -207,8 +202,7 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_PEER}
     ${SOURCE_BASE_POSIX}
     ${SOURCE_BASE_SQL}
-    ${SOURCE_BASE_WIN}
-    ${SOURCE_BASE_X11})
+    ${SOURCE_BASE_WIN})
 
 set_property(TARGET aspia_base PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_base PROPERTY AUTOUIC ON)
@@ -224,7 +218,7 @@ endif()
 if (LINUX)
     set(BASE_PLATFORM_LIBS ${X11_LIB} ${XFIXES_LIB} stdc++fs ${CMAKE_DL_LIBS})
 
-    # PipeWire, EGL/GBM and libdrm are loaded dynamically (see base/desktop/wayland), so only their
+    # PipeWire, EGL/GBM and libdrm are loaded dynamically (see base/desktop/linux), so only their
     # headers are needed at build time, not the libraries.
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(PIPEWIRE REQUIRED libpipewire-0.3)

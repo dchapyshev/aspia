@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_X11_X_SERVER_CLIPBOARD_H
-#define BASE_X11_X_SERVER_CLIPBOARD_H
+#ifndef BASE_LINUX_X_SERVER_CLIPBOARD_H
+#define BASE_LINUX_X_SERVER_CLIPBOARD_H
 
 #include <QtClassHelperMacros>
 
@@ -26,7 +26,7 @@
 #include <set>
 #include <string>
 
-#include "base/x11/x11_headers.h"
+#include "base/linux/x11_headers.h"
 
 class XServerClipboard
 {
@@ -135,4 +135,4 @@ private:
     Q_DISABLE_COPY(XServerClipboard)
 };
 
-#endif // BASE_X11_X_SERVER_CLIPBOARD_H
+#endif // BASE_LINUX_X_SERVER_CLIPBOARD_H

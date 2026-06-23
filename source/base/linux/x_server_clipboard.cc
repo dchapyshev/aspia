@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/x11/x_server_clipboard.h"
+#include "base/linux/x_server_clipboard.h"
 
 #include "base/logging.h"
 

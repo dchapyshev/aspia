@@ -16,12 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/desktop/x11/x_server_pixel_buffer.h"
+#include "base/desktop/linux/x_server_pixel_buffer.h"
 
 #include "base/logging.h"
 #include "base/desktop/frame.h"
-#include "base/desktop/x11/x_atom_cache.h"
-#include "base/desktop/x11/x_error_trap.h"
+#include "base/desktop/linux/x_atom_cache.h"
+#include "base/desktop/linux/x_error_trap.h"
 
 #include <stdint.h>
 #include <string.h>

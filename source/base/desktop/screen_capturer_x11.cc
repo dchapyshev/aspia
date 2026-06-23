@@ -21,7 +21,7 @@
 #include "base/logging.h"
 #include "base/desktop/frame_aligned.h"
 #include "base/desktop/mouse_cursor.h"
-#include "base/desktop/x11/x_error_trap.h"
+#include "base/desktop/linux/x_error_trap.h"
 
 #include <dlfcn.h>
 

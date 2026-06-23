@@ -49,7 +49,7 @@
 #if defined(Q_OS_LINUX)
 #include "base/desktop/screen_capturer_pipewire.h"
 #include "base/desktop/screen_capturer_x11.h"
-#include "base/desktop/wayland/wayland_portal.h"
+#include "base/desktop/linux/wayland_portal.h"
 #include "host/input_injector_wayland.h"
 #include "host/input_injector_x11.h"
 #endif // defined(Q_OS_LINUX)

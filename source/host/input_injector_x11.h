@@ -25,7 +25,7 @@
 #include <memory>
 #include <vector>
 
-#include "base/x11/x11_headers.h"
+#include "base/linux/x11_headers.h"
 #include "host/input_injector.h"
 
 class InputInjectorX11 final : public InputInjector

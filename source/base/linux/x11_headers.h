@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_X11_X11_HEADERS_H
-#define BASE_X11_X11_HEADERS_H
+#ifndef BASE_LINUX_X11_HEADERS_H
+#define BASE_LINUX_X11_HEADERS_H
 
 // X11 declares 'typedef struct _XRegion *Region;', which collides with our Region class from
 // base/desktop/region.h. The X11 region type is not used in the project, so rename it to X11Region
@@ -104,4 +104,4 @@
 #define X11_Expose 12
 #define X11_CREATE 1
 
-#endif // BASE_X11_X11_HEADERS_H
+#endif // BASE_LINUX_X11_HEADERS_H

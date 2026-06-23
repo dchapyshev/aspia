@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/desktop/wayland/wayland_portal.h"
+#include "base/desktop/linux/wayland_portal.h"
 
 #include <QDBusArgument>
 #include <QDBusConnection>

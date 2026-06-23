@@ -18,15 +18,15 @@
 
 // Don't include this file in any .h files because it pulls in some X headers.
 
-#ifndef BASE_DESKTOP_X11_X_SERVER_PIXEL_BUFFER_H
-#define BASE_DESKTOP_X11_X_SERVER_PIXEL_BUFFER_H
+#ifndef BASE_DESKTOP_LINUX_X_SERVER_PIXEL_BUFFER_H
+#define BASE_DESKTOP_LINUX_X_SERVER_PIXEL_BUFFER_H
 
 #include <QRect>
 
 #include <memory>
 #include <vector>
 
-#include "base/x11/x11_headers.h"
+#include "base/linux/x11_headers.h"
 
 class Frame;
 class XAtomCache;
@@ -85,4 +85,4 @@ private:
     Q_DISABLE_COPY(XServerPixelBuffer)
 };
 
-#endif // BASE_DESKTOP_X11_X_SERVER_PIXEL_BUFFER_H
+#endif // BASE_DESKTOP_LINUX_X_SERVER_PIXEL_BUFFER_H

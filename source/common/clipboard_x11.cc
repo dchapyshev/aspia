@@ -21,7 +21,7 @@
 #include <QSocketNotifier>
 
 #include "base/logging.h"
-#include "base/x11/x_server_clipboard.h"
+#include "base/linux/x_server_clipboard.h"
 
 //--------------------------------------------------------------------------------------------------
 ClipboardX11::ClipboardX11(QObject* parent)

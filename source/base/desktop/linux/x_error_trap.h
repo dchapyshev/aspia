@@ -16,12 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_DESKTOP_X11_X_ERROR_TRAP_H
-#define BASE_DESKTOP_X11_X_ERROR_TRAP_H
+#ifndef BASE_DESKTOP_LINUX_X_ERROR_TRAP_H
+#define BASE_DESKTOP_LINUX_X_ERROR_TRAP_H
 
 #include <QtClassHelperMacros>
 
-#include "base/x11/x11_headers.h"
+#include "base/linux/x11_headers.h"
 
 // Helper class that registers X Window error handler. Caller can use
 // GetLastErrorAndDisable() to get the last error that was caught, if any.
@@ -41,4 +41,4 @@ private:
     Q_DISABLE_COPY(XErrorTrap)
 };
 
-#endif // BASE_DESKTOP_X11_X_ERROR_TRAP_H
+#endif // BASE_DESKTOP_LINUX_X_ERROR_TRAP_H

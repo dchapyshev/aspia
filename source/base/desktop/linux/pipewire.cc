@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/desktop/wayland/pipewire.h"
+#include "base/desktop/linux/pipewire.h"
 
 #include <dlfcn.h>
 

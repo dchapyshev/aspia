@@ -22,11 +22,11 @@
 #include "base/desktop/screen_capturer.h"
 #include "base/desktop/screen_capturer_helper.h"
 #include "base/desktop/frame.h"
-#include "base/desktop/x11/x_atom_cache.h"
-#include "base/desktop/x11/x_server_pixel_buffer.h"
-#include "base/desktop/x11/shared_x_display.h"
+#include "base/desktop/linux/x_atom_cache.h"
+#include "base/desktop/linux/x_server_pixel_buffer.h"
+#include "base/desktop/linux/shared_x_display.h"
 
-#include "base/x11/x11_headers.h"
+#include "base/linux/x11_headers.h"
 
 class ScreenCapturerX11 final
     : public ScreenCapturer,

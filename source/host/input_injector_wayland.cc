@@ -19,7 +19,7 @@
 #include "host/input_injector_wayland.h"
 
 #include "base/logging.h"
-#include "base/desktop/wayland/wayland_portal.h"
+#include "base/desktop/linux/wayland_portal.h"
 #include "common/keycode_converter.h"
 #include "proto/desktop_input.h"
 

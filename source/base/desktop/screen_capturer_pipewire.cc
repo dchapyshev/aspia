@@ -38,9 +38,9 @@
 #include "base/desktop/frame_aligned.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/region.h"
-#include "base/desktop/wayland/egl_dmabuf.h"
-#include "base/desktop/wayland/pipewire.h"
-#include "base/desktop/wayland/wayland_portal.h"
+#include "base/desktop/linux/egl_dmabuf.h"
+#include "base/desktop/linux/pipewire.h"
+#include "base/desktop/linux/wayland_portal.h"
 
 namespace {
 

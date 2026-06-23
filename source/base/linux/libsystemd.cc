@@ -18,11 +18,11 @@
 
 #include "base/linux/libsystemd.h"
 
-#include "base/logging.h"
+#include <systemd/sd-login.h>
 
 #include <dlfcn.h>
 
-#include <systemd/sd-login.h>
+#include "base/logging.h"
 
 namespace {
 
