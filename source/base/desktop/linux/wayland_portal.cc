@@ -23,6 +23,9 @@
 #include <QDBusInterface>
 #include <QDBusMessage>
 #include <QDBusObjectPath>
+#include <QDBusPendingCall>
+#include <QDBusPendingCallWatcher>
+#include <QDBusPendingReply>
 #include <QDBusReply>
 #include <QDBusUnixFileDescriptor>
 #include <QDBusVariant>
@@ -217,6 +220,9 @@ void WaylandPortal::notifyKeyboardKeysym(qint32 keysym, bool pressed)
 //--------------------------------------------------------------------------------------------------
 void WaylandPortal::onResponse(uint response, const QVariantMap& results)
 {
+    LOG(INFO) << "Portal Response received (step:" << static_cast<int>(step_)
+              << "response:" << response << ")";
+
     QDBusConnection::sessionBus().disconnect(
         kPortalService, pending_request_path_, kRequestIface, "Response",
         this, SLOT(onResponse(uint, QVariantMap)));
@@ -328,6 +334,29 @@ QString WaylandPortal::prepareRequest(const QString& token_prefix)
 }
 
 //--------------------------------------------------------------------------------------------------
+void WaylandPortal::issueRequest(QDBusInterface* interface, const QString& method,
+                                 const QVariantList& arguments, const char* description)
+{
+    QDBusPendingCall call = interface->asyncCallWithArgumentList(method, arguments);
+    QDBusPendingCallWatcher* watcher = new QDBusPendingCallWatcher(call, this);
+
+    connect(watcher, &QDBusPendingCallWatcher::finished, this, [this, description](
+        QDBusPendingCallWatcher* w)
+    {
+        w->deleteLater();
+
+        // The real result is delivered to onResponse via the request's Response signal; here we only
+        // detect a failure of the call itself.
+        const QDBusPendingReply<QDBusObjectPath> reply = *w;
+        if (reply.isError())
+        {
+            LOG(ERROR) << description << "failed:" << reply.error().message();
+            fail();
+        }
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
 void WaylandPortal::queryCapabilities()
 {
     screen_cast_version_ = portalProperty(kScreenCastIface, "version");
@@ -352,13 +381,7 @@ void WaylandPortal::createSession()
     options["handle_token"] = prepareRequest("aspia_req");
     options["session_handle_token"] = newToken("aspia_ses");
 
-    QDBusMessage reply = remote_desktop_->callWithArgumentList(
-        QDBus::Block, "CreateSession", { options });
-    if (reply.type() == QDBusMessage::ErrorMessage)
-    {
-        LOG(ERROR) << "CreateSession failed:" << reply.errorMessage();
-        fail();
-    }
+    issueRequest(remote_desktop_, "CreateSession", { options }, "CreateSession");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -382,13 +405,8 @@ void WaylandPortal::selectDevices()
             options["restore_token"] = restore_token_in_;
     }
 
-    QDBusMessage reply = remote_desktop_->callWithArgumentList(QDBus::Block, "SelectDevices",
-        { QVariant::fromValue(QDBusObjectPath(session_handle_)), options });
-    if (reply.type() == QDBusMessage::ErrorMessage)
-    {
-        LOG(ERROR) << "SelectDevices failed:" << reply.errorMessage();
-        fail();
-    }
+    issueRequest(remote_desktop_, "SelectDevices",
+        { QVariant::fromValue(QDBusObjectPath(session_handle_)), options }, "SelectDevices");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -417,13 +435,8 @@ void WaylandPortal::selectSources()
     // is requested in SelectDevices rather than here, to avoid restoring screen capture without the
     // matching input grant.
 
-    QDBusMessage reply = screen_cast_->callWithArgumentList(QDBus::Block, "SelectSources",
-        { QVariant::fromValue(QDBusObjectPath(session_handle_)), options });
-    if (reply.type() == QDBusMessage::ErrorMessage)
-    {
-        LOG(ERROR) << "SelectSources failed:" << reply.errorMessage();
-        fail();
-    }
+    issueRequest(screen_cast_, "SelectSources",
+        { QVariant::fromValue(QDBusObjectPath(session_handle_)), options }, "SelectSources");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -434,13 +447,8 @@ void WaylandPortal::startSession()
     QVariantMap options;
     options["handle_token"] = prepareRequest("aspia_req");
 
-    QDBusMessage reply = remote_desktop_->callWithArgumentList(QDBus::Block, "Start",
-        { QVariant::fromValue(QDBusObjectPath(session_handle_)), QString(), options });
-    if (reply.type() == QDBusMessage::ErrorMessage)
-    {
-        LOG(ERROR) << "Start failed:" << reply.errorMessage();
-        fail();
-    }
+    issueRequest(remote_desktop_, "Start",
+        { QVariant::fromValue(QDBusObjectPath(session_handle_)), QString(), options }, "Start");
 }
 
 //--------------------------------------------------------------------------------------------------

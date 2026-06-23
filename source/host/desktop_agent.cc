@@ -639,7 +639,10 @@ void DesktopAgent::onCaptureScreen()
 
     if (!screen_capturer_)
     {
-        LOG(ERROR) << "Screen capturer is NOT initialized";
+        // The capturer is created asynchronously (on Wayland only after the desktop portal session is
+        // granted). Until then poll at a low rate instead of busy-looping on the zero-delay timer and
+        // flooding the log - the flood blocks the event loop and starves the portal's reply.
+        capture_timer_->start(250);
         return;
     }
 

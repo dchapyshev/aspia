@@ -97,6 +97,11 @@ private:
     // Connects onResponse to the predicted request handle and returns the handle_token to put in the
     // call options.
     QString prepareRequest(const QString& token_prefix);
+    // Issues an asynchronous portal request; the result arrives via onResponse, this only reports a
+    // failure of the call itself. Async (not QDBus::Block) so the delayed Start response - which the
+    // compositor sends only after the user confirms the dialog - is delivered through the event loop.
+    void issueRequest(QDBusInterface* interface, const QString& method, const QVariantList& arguments,
+                      const char* description);
 
     void queryCapabilities();
     void createSession();
