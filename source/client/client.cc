@@ -545,15 +545,26 @@ void Client::onRelayConnectionReady()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onRelayConnectionError()
+void Client::onRelayConnectionError(std::optional<TcpChannel::ErrorCode> error_code)
 {
-    LOG(INFO) << "Relay connection error";
+    LOG(INFO) << "Relay connection error:" << error_code.has_value();
     CHECK(relay_peer_);
 
     relay_peer_->disconnect();
     relay_peer_.reset();
 
-    emit sig_statusChanged(Status::ROUTER_ERROR, tr("Failed to connect to the relay server"));
+    if (error_code.has_value())
+    {
+        // The relay transport was established, but the peer authentication failed. This is a
+        // host-level error (e.g. wrong user name or password), so report it the same way as the
+        // direct connection path instead of a misleading "failed to connect to the relay".
+        emit sig_statusChanged(Status::HOST_DISCONNECTED, QVariant::fromValue(*error_code));
+    }
+    else
+    {
+        // RelayPeer could not reach the relay server itself.
+        emit sig_statusChanged(Status::ROUTER_ERROR, tr("Failed to connect to the relay server"));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

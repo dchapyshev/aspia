@@ -230,7 +230,9 @@ void RelayPeer::onConnected()
                 disconnect(pending_channel_, nullptr, this, nullptr);
                 is_finished_ = true;
 
-                emit sig_connectionError();
+                // Propagate the real authentication error (e.g. ACCESS_DENIED) so the owner can tell a
+                // wrong user name/password from a relay transport failure.
+                emit sig_connectionError(std::make_optional(error_code));
             });
 
             CLOG(INFO) << "Start authentication";
@@ -244,7 +246,10 @@ void RelayPeer::onErrorOccurred(const Location& location, const std::error_code&
 {
     CLOG(ERROR) << "Failed to connect to relay server:" << error_code << "(" << location << ")";
     is_finished_ = true;
-    emit sig_connectionError();
+
+    // RelayPeer's own failure to reach the relay server (no peer authentication happened) - report it
+    // without a channel error code.
+    emit sig_connectionError(std::nullopt);
 }
 
 //--------------------------------------------------------------------------------------------------

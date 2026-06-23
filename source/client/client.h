@@ -25,6 +25,7 @@
 
 #include <list>
 #include <memory>
+#include <optional>
 
 #include "base/logging.h"
 #include "base/net/tcp_channel.h"
@@ -114,7 +115,7 @@ private slots:
     void onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer);
     void onUdpErrorOccurred();
     void onRelayConnectionReady();
-    void onRelayConnectionError();
+    void onRelayConnectionError(std::optional<TcpChannel::ErrorCode> error_code);
 
 private:
     void tcpChannelReady();

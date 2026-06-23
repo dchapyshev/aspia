@@ -23,6 +23,8 @@
 
 #include <asio/ip/tcp.hpp>
 
+#include <optional>
+
 #include "base/logging.h"
 #include "base/shared_pointer.h"
 #include "base/net/tcp_channel.h"
@@ -52,7 +54,9 @@ public:
 
 signals:
     void sig_connectionReady();
-    void sig_connectionError();
+    // |error_code| is set when the relay transport was established but peer authentication failed
+    // (carries the real channel error); it is empty for RelayPeer's own failure to reach the relay.
+    void sig_connectionError(std::optional<TcpChannel::ErrorCode> error_code);
 
 private:
     void onConnected();
