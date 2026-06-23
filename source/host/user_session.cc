@@ -45,10 +45,10 @@
 
 #if defined(Q_OS_LINUX)
 #include "base/linux/libsystemd.h"
-#include "base/linux/session_environment.h"
 
 #include <pwd.h>
 
+#include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #endif // defined(Q_OS_LINUX)
@@ -125,6 +125,43 @@ bool createProcessWithToken(HANDLE token, const QString& command_line)
     return true;
 }
 #endif // defined(Q_OS_WINDOWS)
+
+#if defined(Q_OS_LINUX)
+//--------------------------------------------------------------------------------------------------
+// Returns true once the user's graphical session has imported its display environment into the
+// systemd user manager. Right after boot the session is already reported active, but the compositor
+// imports WAYLAND_DISPLAY (or DISPLAY on X11) into the user manager slightly later; launching the GUI
+// before that leaves it without a display and it exits.
+bool isGraphicalEnvironmentReady(const QString& user_name)
+{
+    const QByteArray command =
+        QString("systemctl --machine=%1@.host --user show-environment 2>/dev/null")
+            .arg(user_name).toLocal8Bit();
+
+    FILE* pipe = popen(command.constData(), "r");
+    if (!pipe)
+    {
+        PLOG(ERROR) << "popen failed";
+        return false;
+    }
+
+    QByteArray output;
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), pipe))
+        output.append(buffer);
+
+    pclose(pipe);
+
+    const QList<QByteArray> lines = output.split('\n');
+    for (const QByteArray& line : lines)
+    {
+        if (line.startsWith("WAYLAND_DISPLAY=") || line.startsWith("DISPLAY="))
+            return true;
+    }
+
+    return false;
+}
+#endif // defined(Q_OS_LINUX)
 
 } // namespace
 
@@ -678,6 +715,20 @@ void UserSession::onStartupUserCheck()
 
     if (attempt_count++ <= 60)
         startup_timer_->start();
+#elif defined(Q_OS_LINUX)
+    // Retry attaching to the active console session for the first minute after the service starts -
+    // the graphical environment is imported into the user manager a moment after the session becomes
+    // active (see the readiness gate in attach()). Each attach() that finds it not ready re-arms this
+    // timer, so this just bounds the total number of attempts.
+    static int attempt_count = 0;
+
+    if (attempt_count++ > 60)
+    {
+        LOG(WARNING) << "Graphical environment did not become ready in time";
+        return;
+    }
+
+    attach(FROM_HERE, AttachReason::STARTUP, activeConsoleSessionId());
 #endif // defined(Q_OS_WINDOWS)
 }
 
@@ -797,21 +848,26 @@ void UserSession::attach(const Location& location, AttachReason reason, SessionI
 
     const QString user_name = QString::fromLocal8Bit(pw->pw_name);
 
-    QString display;
-    QString xauthority;
-    if (!SessionEnvironment::get(user_name, &display, &xauthority))
+    // Right after boot the session is reported active before the compositor imports its display
+    // environment (WAYLAND_DISPLAY/DISPLAY) into the user manager. Launching the GUI before that
+    // leaves it without a display and it exits. Wait until the environment is ready, retrying shortly.
+    if (!isGraphicalEnvironmentReady(user_name))
     {
-        LOG(INFO) << "Display for" << user_name << "is not available yet";
+        LOG(INFO) << "Graphical environment for" << user_name << "is not ready yet; will retry";
         dettach(FROM_HERE);
+        if (reason == AttachReason::STARTUP)
+            startup_timer_->start();
         return;
     }
 
     const QString file_path = QCoreApplication::applicationDirPath() + '/' + kExecutableNameForUi;
 
+    // Launch through the user's systemd manager so the unit inherits the session environment
+    // (WAYLAND_DISPLAY or DISPLAY/XAUTHORITY, the session bus, XDG_RUNTIME_DIR, ...). This works for
+    // both X11 and Wayland sessions - do not gate on an X11 display.
     QByteArray command_line =
-        QString("systemd-run --machine=%1@.host --user --collect "
-                "--setenv=DISPLAY=%2 --setenv=XAUTHORITY=%3 %4 --hidden")
-            .arg(user_name, display, xauthority, file_path).toLocal8Bit();
+        QString("systemd-run --machine=%1@.host --user --collect %2 --hidden")
+            .arg(user_name, file_path).toLocal8Bit();
 
     LOG(INFO) << "Start user session GUI:" << command_line;
 
