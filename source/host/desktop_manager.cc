@@ -42,13 +42,12 @@
 
 #if defined(Q_OS_LINUX)
 #include "base/linux/libsystemd.h"
-#include "base/linux/session_environment.h"
 
 #include <pwd.h>
 #include <signal.h>
-#include <spawn.h>
 
 #include <cstdlib>
+#include <cstring>
 #endif // defined(Q_OS_LINUX)
 
 namespace {
@@ -576,8 +575,17 @@ void DesktopManager::attach(const Location& location, SessionId session_id)
 
     QString ipc_channel_name = IpcServer::createUniqueId();
 
-    // The desktop agent runs as SYSTEM (Windows) or root (Linux) in the user's session.
-    if (!ipc_server_->start(ipc_channel_name, IpcServer::AccessMode::SYSTEM_ONLY))
+#if defined(Q_OS_WINDOWS)
+    // The desktop agent runs as SYSTEM in the user's session.
+    const IpcServer::AccessMode access_mode = IpcServer::AccessMode::SYSTEM_ONLY;
+#else
+    // On Linux the agent runs as the user (inside the user's session, for both X11 and Wayland), so
+    // an interactive-user channel is required. The connecting peer is still verified by executable
+    // path in onIpcNewConnection().
+    const IpcServer::AccessMode access_mode = IpcServer::AccessMode::INTERACTIVE_USER;
+#endif
+
+    if (!ipc_server_->start(ipc_channel_name, access_mode))
     {
         dettach(FROM_HERE);
         restart_timer_->start();
@@ -658,8 +666,7 @@ bool DesktopManager::startProcess(const QString& ipc_channel_name)
 
     return true;
 #elif defined(Q_OS_LINUX)
-    // Determine the user of the active console session (a logged-in user or the display-manager
-    // greeter) to locate its X authority cookie.
+    // Determine the active console session and its user.
     char* session = nullptr;
     uid_t uid = 0;
     if (LibSystemd::seatGetActive("seat0", &session, &uid) < 0 || !session)
@@ -667,7 +674,20 @@ bool DesktopManager::startProcess(const QString& ipc_channel_name)
         LOG(ERROR) << "No active session on seat0";
         return false;
     }
+
+    char* session_class = nullptr;
+    LibSystemd::sessionGetClass(session, &session_class);
+    const bool is_user_session = session_class && strcmp(session_class, "user") == 0;
+    free(session_class);
     free(session);
+
+    if (!is_user_session)
+    {
+        // The display-manager greeter has no per-user systemd manager to launch the agent through;
+        // wait until a user logs in (the caller retries via the restart timer).
+        LOG(INFO) << "Active session is not a user session; the desktop agent is not started";
+        return false;
+    }
 
     const struct passwd* pw = getpwuid(uid);
     if (!pw)
@@ -678,41 +698,25 @@ bool DesktopManager::startProcess(const QString& ipc_channel_name)
 
     const QString user_name = QString::fromLocal8Bit(pw->pw_name);
 
-    QMap<QString, QString> session_env;
-    if (!SessionEnvironment::get(user_name, &session_env))
-    {
-        // The session's display is not published yet. Do not launch a doomed agent; the caller
-        // retries shortly via the restart timer.
-        LOG(INFO) << "Graphical session for" << user_name << "is not available yet";
-        return false;
-    }
-
-    // The service runs as root, so the agent is started as root too (like SYSTEM on Windows). It
-    // does not inherit the user session, so the variables that let it reach the display and (on
-    // Wayland) the desktop portal are passed explicitly.
-    QString env_prefix = "env";
-    for (auto it = session_env.constBegin(); it != session_env.constEnd(); ++it)
-        env_prefix += QString(" %1='%2'").arg(it.key(), it.value());
+    // Screen capture and input run inside the user's session: on Wayland the desktop portal lives on
+    // the user's session D-Bus (unreachable by root), and on X11 the user owns the display. Launch the
+    // agent through the user's own systemd manager so it runs as the user and inherits the session
+    // environment (DISPLAY/XAUTHORITY, WAYLAND_DISPLAY, the session bus, XDG_RUNTIME_DIR, ...).
+    const QString log_level = QString::fromLocal8Bit(qgetenv("ASPIA_LOG_LEVEL"));
+    QString log_setenv;
+    if (!log_level.isEmpty())
+        log_setenv = QString(" --setenv=ASPIA_LOG_LEVEL=%1").arg(log_level);
 
     QByteArray command_line =
-        QString("%1 %2=%3 %4 &")
-            .arg(env_prefix, IpcServer::kChannelIdEnvVar, ipc_channel_name, filePath())
+        QString("systemd-run --machine=%1@.host --user --collect --setenv=%2=%3%4 %5")
+            .arg(user_name, IpcServer::kChannelIdEnvVar, ipc_channel_name, log_setenv, filePath())
             .toLocal8Bit();
 
     LOG(INFO) << "Start desktop session agent:" << command_line;
 
-    char sh_name[] = "sh";
-    char sh_arguments[] = "-c";
-    char* argv[] = { sh_name, sh_arguments, command_line.data(), nullptr };
-
-    pid_t pid;
-    if (posix_spawn(&pid, "/bin/sh", nullptr, nullptr, argv, environ) != 0)
-    {
-        PLOG(ERROR) << "Unable to start process";
-        return false;
-    }
-
-    return true;
+    int ret = system(command_line.data());
+    LOG(INFO) << "system result:" << ret;
+    return ret == 0;
 #else
     NOTIMPLEMENTED();
     return false;

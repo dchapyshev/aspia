@@ -111,8 +111,15 @@ QString DesktopClient::attach()
 
     QString channel_name = IpcServer::createUniqueId();
 
+#if defined(Q_OS_WINDOWS)
     // Desktop agent runs as SYSTEM in the user's session.
-    if (!ipc_server_->start(channel_name, IpcServer::AccessMode::SYSTEM_ONLY))
+    const IpcServer::AccessMode access_mode = IpcServer::AccessMode::SYSTEM_ONLY;
+#else
+    // On Linux the agent runs as the user (both X11 and Wayland); allow the user to connect.
+    const IpcServer::AccessMode access_mode = IpcServer::AccessMode::INTERACTIVE_USER;
+#endif
+
+    if (!ipc_server_->start(channel_name, access_mode))
     {
         CLOG(ERROR) << "Unable to start IPC server";
         emit sig_finished();
