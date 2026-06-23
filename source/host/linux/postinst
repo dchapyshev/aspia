@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+
+# Enable and (re)start the host service directly. Unlike the router/relay the host needs no prior
+# configuration to run, so the service is started right away; restart also refreshes it on upgrade.
+if [ "$1" = "configure" ] && [ -d /run/systemd/system ]; then
+    systemctl daemon-reload >/dev/null 2>&1 || true
+    systemctl enable aspia-host-service.service >/dev/null 2>&1 || true
+    systemctl restart aspia-host-service.service >/dev/null 2>&1 || true
+fi

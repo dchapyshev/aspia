@@ -77,6 +77,10 @@ if (LINUX)
         Qt6::OpenGL
         Qt6::InputSupportPrivate
         Qt6::XcbQpaPrivate
+        Qt6::QWaylandIntegrationPlugin
+        Qt6::QWaylandXdgShellIntegrationPlugin
+        Qt6::QWaylandEglClientBufferPlugin
+        Qt6::QWaylandBradientDecorationPlugin
         Qt6::DBus)
 endif()
 
@@ -281,6 +285,11 @@ if (LINUX)
         # PolicyKit action for the elevated settings/security-log dialogs.
         install(FILES host/linux/org.aspia.host.policy
             DESTINATION share/polkit-1/actions COMPONENT host)
+
+        # The host runs without prior configuration, so the maintainer scripts enable and start the
+        # systemd service directly (and restart it on upgrade) rather than via --install.
+        set(CPACK_DEBIAN_HOST_PACKAGE_CONTROL_EXTRA
+            "${CMAKE_CURRENT_SOURCE_DIR}/host/linux/postinst;${CMAKE_CURRENT_SOURCE_DIR}/host/linux/prerm")
 
         set(CPACK_DEBIAN_HOST_FILE_NAME
             "${CPACK_COMPONENT_HOST_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")

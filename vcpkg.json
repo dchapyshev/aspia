@@ -98,6 +98,10 @@
       "platform": "!android"
     },
     {
+      "name": "qtwayland",
+      "platform": "linux"
+    },
+    {
       "name": "qttools",
       "platform": "!android"
     },
