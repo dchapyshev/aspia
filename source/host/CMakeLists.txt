@@ -47,7 +47,6 @@ list(APPEND SOURCE_HOST_CORE
     host_utils.cc
     host_utils.h
     input_injector.h
-    pch.h
     router_manager.cc
     router_manager.h
     service.cc
@@ -120,8 +119,6 @@ set_property(TARGET aspia_host_core PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_host_core PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_host_core PROPERTY AUTORCC ON)
 qt_import_plugins(aspia_host_core INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE imageformats iconengines EXCLUDE_BY_TYPE "")
-
-target_precompile_headers(aspia_host_core PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:pch.h>")
 
 if (LINUX)
     set(HOST_PLATFORM_LIBS

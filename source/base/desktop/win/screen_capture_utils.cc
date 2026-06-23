@@ -18,6 +18,8 @@
 
 #include "base/desktop/win/screen_capture_utils.h"
 
+#include <QRect>
+
 #include <qt_windows.h>
 #include <comdef.h>
 #include <VersionHelpers.h>

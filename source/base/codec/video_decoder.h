@@ -19,8 +19,8 @@
 #ifndef BASE_CODEC_VIDEO_DECODER_H
 #define BASE_CODEC_VIDEO_DECODER_H
 
+#include <QObject>
 #include <QSize>
-#include <QtTypes>
 
 #include <memory>
 

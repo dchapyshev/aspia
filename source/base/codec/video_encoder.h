@@ -19,7 +19,7 @@
 #ifndef BASE_CODEC_VIDEO_ENCODER_H
 #define BASE_CODEC_VIDEO_ENCODER_H
 
-#include <QtTypes>
+#include <QObject>
 
 #include <memory>
 #include <string>

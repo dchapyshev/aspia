@@ -19,6 +19,8 @@
 #ifndef BASE_DESKTOP_SCREEN_CAPTURER_GDI_H
 #define BASE_DESKTOP_SCREEN_CAPTURER_GDI_H
 
+#include <QRect>
+
 #include "base/desktop/screen_capturer_win.h"
 
 class Differ;

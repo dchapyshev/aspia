@@ -20,6 +20,7 @@
 #define HOST_UI_HOST_WINDOW_H
 
 #include <QMainWindow>
+#include <QMenu>
 #include <QPointer>
 #include <QSystemTrayIcon>
 

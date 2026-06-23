@@ -49,8 +49,7 @@ list(APPEND SOURCE_PROTO
     task_manager.proto
     user.proto
     router_constants.h
-    router_constants.cc
-    pch.h)
+    router_constants.cc)
 
 source_group("" FILES ${SOURCE_PROTO} ${PROTO_CC_FILES} ${PROTO_H_FILES})
 
@@ -82,5 +81,3 @@ protobuf_generate(LANGUAGE qt
                   ${PROTO_FILES})
 
 target_link_libraries(aspia_proto ${THIRD_PARTY_LIBS} ${QT_COMMON_LIBS} ${QT_PLATFORM_LIBS})
-
-target_precompile_headers(aspia_proto PRIVATE pch.h)

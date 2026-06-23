@@ -19,6 +19,8 @@
 #ifndef BASE_CODEC_MULTI_CHANNEL_RESAMPLER_H
 #define BASE_CODEC_MULTI_CHANNEL_RESAMPLER_H
 
+#include <QtClassHelperMacros>
+
 #include <cstddef>
 #include <functional>
 #include <memory>

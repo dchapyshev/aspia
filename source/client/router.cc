@@ -30,6 +30,7 @@
 #include "base/net/address.h"
 #include "base/net/tcp_channel_ng.h"
 #include "base/peer/client_authenticator.h"
+#include "build/build_config.h"
 #include "client/database.h"
 #include "proto/key_exchange.h"
 

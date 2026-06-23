@@ -28,6 +28,7 @@
 #include "base/logging.h"
 #include "base/net/address.h"
 #include "base/peer/user.h"
+#include "build/build_config.h"
 #include "common/desktop/msg_box.h"
 #include "host/database.h"
 #include "host/system_settings.h"

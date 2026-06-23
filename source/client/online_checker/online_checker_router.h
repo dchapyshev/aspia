@@ -19,6 +19,7 @@
 #ifndef CLIENT_ONLINE_CHECKER_ONLINE_CHECKER_ROUTER_H
 #define CLIENT_ONLINE_CHECKER_ONLINE_CHECKER_ROUTER_H
 
+#include <QObject>
 #include <QQueue>
 
 #include "client/config.h"

@@ -24,6 +24,7 @@
 #include <QPixmap>
 #include <QRegularExpression>
 #include <QRegularExpressionValidator>
+#include <QTimer>
 #include <QUrl>
 #include <QUrlQuery>
 

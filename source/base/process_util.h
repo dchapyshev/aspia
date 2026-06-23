@@ -19,7 +19,7 @@
 #ifndef BASE_PROCESS_UTIL_H
 #define BASE_PROCESS_UTIL_H
 
-#include <QString>
+#include <QObject>
 
 class ProcessUtil
 {

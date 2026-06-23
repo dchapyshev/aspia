@@ -18,6 +18,8 @@
 
 #include "client/desktop/file_transfer/file_transfer_window.h"
 
+#include <QIODevice>
+
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "client/client_file_transfer.h"

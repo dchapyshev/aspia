@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/sys_info.h"
+#include "proto/peer.h"
 
 //--------------------------------------------------------------------------------------------------
 ChatClient::ChatClient(TcpChannel* tcp_channel, QObject* parent)

@@ -18,6 +18,7 @@
 
 #include "client/file_transfer.h"
 
+#include "base/location.h"
 #include "base/logging.h"
 #include "client/file_transfer_queue_builder.h"
 #include "common/file_packet.h"

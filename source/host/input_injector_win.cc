@@ -18,6 +18,8 @@
 
 #include "host/input_injector_win.h"
 
+#include <QTimer>
+
 #include <qt_windows.h>
 #include <sas.h>
 

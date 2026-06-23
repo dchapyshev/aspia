@@ -24,6 +24,7 @@
 #include "base/sql/sql_database.h"
 
 #include <QByteArray>
+#include <QObject>
 #include <QString>
 #include <QVector>
 

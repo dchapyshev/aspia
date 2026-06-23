@@ -19,6 +19,8 @@
 #ifndef BASE_DESKTOP_WIN_DXGI_TEXTURE_H
 #define BASE_DESKTOP_WIN_DXGI_TEXTURE_H
 
+#include <QSize>
+
 #include <memory>
 
 #include <d3d11.h>

@@ -20,7 +20,6 @@ list(APPEND SOURCE_RELAY
     main.cc
     migration_utils.cc
     migration_utils.h
-    pch.h
     pending_session.cc
     pending_session.h
     service.cc
@@ -71,5 +70,3 @@ target_link_libraries(aspia_relay
 set_property(TARGET aspia_relay PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_relay PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_relay PROPERTY AUTORCC ON)
-
-target_precompile_headers(aspia_relay PRIVATE pch.h)

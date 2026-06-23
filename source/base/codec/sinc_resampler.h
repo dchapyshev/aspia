@@ -19,6 +19,8 @@
 #ifndef BASE_CODEC_SINC_RESAMPLER_H
 #define BASE_CODEC_SINC_RESAMPLER_H
 
+#include <QtClassHelperMacros>
+
 #include "base/aligned_memory.h"
 
 #include <functional>

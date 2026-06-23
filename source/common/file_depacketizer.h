@@ -19,6 +19,8 @@
 #ifndef COMMON_FILE_DEPACKETIZER_H
 #define COMMON_FILE_DEPACKETIZER_H
 
+#include <QString>
+
 #include <memory>
 
 class QFile;

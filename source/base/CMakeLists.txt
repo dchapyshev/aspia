@@ -46,7 +46,6 @@ list(APPEND SOURCE_BASE
     logging_file.cc
     logging_file.h
     numeric_utils.h
-    pch.h
     power_controller.cc
     power_controller.h
     process_util.cc
@@ -202,8 +201,6 @@ set_property(TARGET aspia_base PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_base PROPERTY AUTORCC ON)
 qt_import_plugins(aspia_base INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE "" EXCLUDE_BY_TYPE imageformats)
 
-target_precompile_headers(aspia_base PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:pch.h>")
-
 if (WIN32)
     set(BASE_PLATFORM_LIBS mfuuid strmiids wevtapi)
 endif()
@@ -261,7 +258,5 @@ set_property(TARGET aspia_base_tests PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_base_tests PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_base_tests PROPERTY AUTORCC ON)
 qt_import_plugins(aspia_base_tests INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE "" EXCLUDE_BY_TYPE imageformats)
-
-target_precompile_headers(aspia_base_tests PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:pch.h>")
 
 add_test(NAME aspia_base_tests COMMAND aspia_base_tests)

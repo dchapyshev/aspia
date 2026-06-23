@@ -19,6 +19,8 @@
 #ifndef BASE_CODEC_AUDIO_DECODER_H
 #define BASE_CODEC_AUDIO_DECODER_H
 
+#include <QtClassHelperMacros>
+
 #include <memory>
 
 struct OpusDecoder;

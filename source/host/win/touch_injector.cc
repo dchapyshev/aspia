@@ -18,6 +18,7 @@
 
 #include "host/win/touch_injector.h"
 
+#include <QRect>
 #include <QVector>
 
 #include "base/logging.h"

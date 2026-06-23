@@ -19,6 +19,8 @@
 #ifndef ROUTER_WORKSPACE_H
 #define ROUTER_WORKSPACE_H
 
+#include <QtTypes>
+
 #include <string>
 #include <string_view>
 

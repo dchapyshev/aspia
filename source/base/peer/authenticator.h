@@ -19,8 +19,10 @@
 #ifndef BASE_PEER_AUTHENTICATOR_H
 #define BASE_PEER_AUTHENTICATOR_H
 
+#include <QObject>
 #include <QVersionNumber>
 
+#include "base/logging.h"
 #include "base/crypto/generic_hash.h"
 
 class Location;
@@ -31,6 +33,10 @@ namespace proto::key_exchange {
 enum Encryption : int;
 enum Identify : int;
 } // namespace proto::key_exchange
+
+namespace proto::peer {
+class Version;
+} // namespace proto::peer
 
 class Authenticator : public QObject
 {
