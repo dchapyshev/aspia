@@ -102,12 +102,23 @@ int hostMain(int argc, char* argv[])
         }
     }
 
+#if defined(Q_OS_LINUX)
+    // The host GUI (tray, notifier, dialogs) does nothing Wayland-specific, but a native Wayland client
+    // cannot position or stack its own windows - the notifier has to sit in a screen corner and stay on
+    // top. Run the GUI through Xwayland, where the existing X11 window management works on every
+    // compositor (GNOME exposes no positioning protocol natively). Screen capture and input stay native
+    // Wayland in the separate agent process via the portal.
+    qputenv("QT_QPA_PLATFORM", "xcb");
+#endif
+
     Application::setApplicationVersion(ASPIA_VERSION_STRING);
     Application::setHighDpiScaleFactorRoundingPolicy(
         Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
 
     Application application(argc, argv);
     Application::setQuitOnLastWindowClosed(false);
+
+    LOG(INFO) << "QPA platform:" << Application::platformName();
 
     HostUtils::printDebugInfo();
 
