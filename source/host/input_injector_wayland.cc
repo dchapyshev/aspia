@@ -59,8 +59,9 @@ InputInjectorWayland* InputInjectorWayland::create(WaylandPortal* portal, QObjec
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorWayland::setScreenInfo(const QSize& /* screen_size */, const QPoint& offset)
+void InputInjectorWayland::setScreenInfo(const QSize& screen_size, const QPoint& offset)
 {
+    screen_size_ = screen_size;
     screen_offset_ = offset;
 }
 
@@ -109,8 +110,17 @@ void InputInjectorWayland::injectMouseEvent(const proto::input::MouseEvent& even
     if (!portal_)
         return;
 
-    QPoint pos(event.x(), event.y());
-    pos += screen_offset_;
+    QPointF pos(event.x() + screen_offset_.x(), event.y() + screen_offset_.y());
+
+    // Client coordinates are in the captured frame's pixel space - the monitor's physical resolution.
+    // The portal expects pointer coordinates in the stream's logical coordinate space, so on a scaled
+    // output (e.g. KDE fractional scaling) the two differ and the coordinates must be rescaled.
+    const QSize logical_size = portal_->stream().size;
+    if (logical_size.isValid() && screen_size_.width() > 0 && screen_size_.height() > 0)
+    {
+        pos.setX(pos.x() * logical_size.width() / screen_size_.width());
+        pos.setY(pos.y() * logical_size.height() / screen_size_.height());
+    }
 
     portal_->notifyPointerMotionAbsolute(pos.x(), pos.y());
 

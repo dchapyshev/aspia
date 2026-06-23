@@ -21,6 +21,7 @@
 
 #include <QPoint>
 #include <QPointer>
+#include <QSize>
 
 #include "host/input_injector.h"
 
@@ -51,6 +52,7 @@ private:
     void injectUnicode(uint code_point);
 
     QPointer<WaylandPortal> portal_;
+    QSize screen_size_;
     QPoint screen_offset_;
 
     bool left_button_pressed_ = false;
