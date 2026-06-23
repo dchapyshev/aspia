@@ -135,10 +135,6 @@ include(net/sources.cmake)
 include(peer/sources.cmake)
 include(sql/sources.cmake)
 
-if (UNIX)
-    include(posix/sources.cmake)
-endif()
-
 if (WIN32)
     include(audio/win/sources.cmake)
     include(desktop/win/sources.cmake)
@@ -169,7 +165,6 @@ source_group(sql FILES ${SOURCE_BASE_SQL} ${SOURCE_BASE_SQL_TESTS})
 if (WIN32)
     source_group(audio\\win FILES ${SOURCE_BASE_AUDIO_WIN})
     source_group(desktop\\win FILES ${SOURCE_BASE_DESKTOP_WIN} ${SOURCE_BASE_DESKTOP_WIN_TESTS})
-    source_group(posix FILES ${SOURCE_BASE_POSIX})
     source_group(win FILES ${SOURCE_BASE_WIN} ${SOURCE_BASE_WIN_TESTS})
 endif()
 
@@ -177,7 +172,6 @@ if (LINUX)
     source_group(audio\\linux FILES ${SOURCE_BASE_AUDIO_LINUX})
     source_group(desktop\\linux FILES ${SOURCE_BASE_DESKTOP_LINUX})
     source_group(linux FILES ${SOURCE_BASE_LINUX})
-    source_group(posix FILES ${SOURCE_BASE_POSIX})
 endif()
 
 if (APPLE)
@@ -200,7 +194,6 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_MAC}
     ${SOURCE_BASE_NET}
     ${SOURCE_BASE_PEER}
-    ${SOURCE_BASE_POSIX}
     ${SOURCE_BASE_SQL}
     ${SOURCE_BASE_WIN})
 
