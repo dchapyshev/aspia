@@ -589,6 +589,12 @@ bool Database::openDatabase()
     if (!db_.open(file_path))
         return false;
 
+    // The configuration is shared with the elevated settings editor (a separate process). Wait out
+    // its brief write locks instead of failing reads with "database is locked". Otherwise a settings
+    // change racing with this read is misread (e.g. router treated as disabled).
+    if (!db_.setBusyTimeout(5000))
+        LOG(WARNING) << "Unable to set busy timeout:" << db_.lastError();
+
     if (!db_.exec("PRAGMA secure_delete = ON"))
         LOG(WARNING) << "Unable to enable secure_delete:" << db_.lastError();
 
