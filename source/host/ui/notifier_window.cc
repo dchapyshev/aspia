@@ -28,6 +28,7 @@
 #include <QTimer>
 #include <QTranslator>
 #include <QToolButton>
+#include <QWindow>
 
 #include "base/gui_application.h"
 #include "base/logging.h"
@@ -328,27 +329,13 @@ bool NotifierWindow::eventFilter(QObject* object, QEvent* event)
                 QMouseEvent* mouse_event = static_cast<QMouseEvent*>(event);
                 if (mouse_event->button() == Qt::LeftButton)
                 {
-                    start_pos_ = mouse_event->pos();
+                    // Ask the compositor to perform an interactive move. On Wayland a client cannot
+                    // reposition itself, so dragging the window by hand (move()) does nothing; this is
+                    // the portable way and works on X11 as well.
+                    if (QWindow* handle = windowHandle())
+                        handle->startSystemMove();
                     return true;
                 }
-            }
-            break;
-
-            case QEvent::MouseMove:
-            {
-                QMouseEvent* mouse_event = static_cast<QMouseEvent*>(event);
-                if (mouse_event->buttons() & Qt::LeftButton && start_pos_.x() >= 0)
-                {
-                    QPoint diff = mouse_event->pos() - start_pos_;
-                    move(pos() + diff);
-                    return true;
-                }
-            }
-            break;
-
-            case QEvent::MouseButtonRelease:
-            {
-                start_pos_ = QPoint(-1, -1);
             }
             break;
 

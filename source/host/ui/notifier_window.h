@@ -75,7 +75,6 @@ private:
 
     std::unique_ptr<Ui::NotifierWindow> ui;
     bool should_be_close_ = false;
-    QPoint start_pos_;
     QRect window_rect_;
 
     Q_DISABLE_COPY_MOVE(NotifierWindow)
