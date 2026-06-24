@@ -214,6 +214,13 @@ if (LINUX)
     pkg_check_modules(PIPEWIRE REQUIRED libpipewire-0.3)
     pkg_check_modules(LIBDRM REQUIRED libdrm)
     target_include_directories(aspia_base PRIVATE ${PIPEWIRE_INCLUDE_DIRS} ${LIBDRM_INCLUDE_DIRS})
+
+    # libwayland-client is linked (the generated xdg-output stubs call wl_proxy_* directly); it is
+    # already pulled in via the static Qt Wayland plugins. The generated client header lives in the
+    # base binary directory.
+    find_library(WAYLAND_CLIENT_LIB NAMES wayland-client REQUIRED)
+    list(APPEND BASE_PLATFORM_LIBS ${WAYLAND_CLIENT_LIB})
+    target_include_directories(aspia_base PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 endif()
 
 if (ANDROID)

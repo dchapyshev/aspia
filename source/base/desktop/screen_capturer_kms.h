@@ -60,10 +60,15 @@ protected:
 
 private:
     bool init();
-    // Returns the framebuffer id currently scanned out on an active CRTC, or 0 if none.
+    // Returns the framebuffer id currently scanned out on an active CRTC, or 0 if none. Also records
+    // the captured CRTC id and the logical desktop extent across all active CRTCs.
     quint32 activeFramebufferId();
+    // Finds the hardware cursor plane on the captured CRTC, returning its framebuffer id, size and
+    // position (any output pointer may be null). Returns false if no cursor plane is active there.
+    bool findCursorPlane(quint32* fb_id, QSize* size, QPoint* position);
 
     int drm_fd_ = -1;
+    quint32 crtc_id_ = 0;
     std::unique_ptr<EglDmaBuf> egl_dmabuf_;
     std::unique_ptr<Differ> differ_;
     FrameQueue<Frame> queue_;
@@ -75,6 +80,9 @@ private:
     QPoint cursor_position_;
 
     QRect screen_rect_;
+    // Logical desktop extent across all active CRTCs. The compositor maps the absolute pointer over
+    // this whole area, so input must be scaled to it rather than to the captured CRTC alone.
+    QRect desktop_rect_;
 
     Q_DISABLE_COPY_MOVE(ScreenCapturerKms)
 };

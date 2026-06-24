@@ -21,6 +21,33 @@ collect_sources(SOURCE_BASE_LINUX
     libdrm.h
     libsystemd.cc
     libsystemd.h
+    wayland_output_layout.cc
+    wayland_output_layout.h
     x11_headers.h
     x_server_clipboard.cc
     x_server_clipboard.h)
+
+# Generate the Wayland xdg-output client stubs used by wayland_output_layout.cc to read the
+# compositor's logical monitor layout. wayland-scanner and the protocol XML ship with the system
+# wayland-scanner / wayland-protocols packages.
+find_program(WAYLAND_SCANNER_EXECUTABLE NAMES wayland-scanner REQUIRED)
+find_file(XDG_OUTPUT_PROTOCOL_XML
+    NAMES xdg-output-unstable-v1.xml
+    PATHS /usr/share/wayland-protocols /usr/local/share/wayland-protocols
+    PATH_SUFFIXES unstable/xdg-output
+    REQUIRED)
+set(XDG_OUTPUT_CLIENT_HEADER "${CMAKE_CURRENT_BINARY_DIR}/xdg-output-client-protocol.h")
+set(XDG_OUTPUT_PROTOCOL_CODE "${CMAKE_CURRENT_BINARY_DIR}/xdg-output-protocol.c")
+add_custom_command(
+    OUTPUT "${XDG_OUTPUT_CLIENT_HEADER}"
+    COMMAND ${WAYLAND_SCANNER_EXECUTABLE} client-header
+            "${XDG_OUTPUT_PROTOCOL_XML}" "${XDG_OUTPUT_CLIENT_HEADER}"
+    DEPENDS "${XDG_OUTPUT_PROTOCOL_XML}"
+    VERBATIM)
+add_custom_command(
+    OUTPUT "${XDG_OUTPUT_PROTOCOL_CODE}"
+    COMMAND ${WAYLAND_SCANNER_EXECUTABLE} private-code
+            "${XDG_OUTPUT_PROTOCOL_XML}" "${XDG_OUTPUT_PROTOCOL_CODE}"
+    DEPENDS "${XDG_OUTPUT_PROTOCOL_XML}"
+    VERBATIM)
+list(APPEND SOURCE_BASE_LINUX "${XDG_OUTPUT_CLIENT_HEADER}" "${XDG_OUTPUT_PROTOCOL_CODE}")

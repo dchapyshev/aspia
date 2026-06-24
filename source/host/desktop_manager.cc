@@ -240,6 +240,43 @@ bool startProcessWithToken(HANDLE token, const QString& command_line, const QStr
 }
 #endif // defined(Q_OS_WINDOWS)
 
+#if defined(Q_OS_LINUX)
+//--------------------------------------------------------------------------------------------------
+// Returns true once the user's graphical session has imported its display environment into the
+// systemd user manager. Right after login the session is already reported active, but the compositor
+// imports WAYLAND_DISPLAY (or DISPLAY on X11) into the user manager slightly later; launching the
+// agent before that makes it inherit no WAYLAND_DISPLAY and mis-detect the session as X11.
+bool isGraphicalEnvironmentReady(const QString& user_name)
+{
+    const QByteArray command =
+        QString("systemctl --machine=%1@.host --user show-environment 2>/dev/null")
+            .arg(user_name).toLocal8Bit();
+
+    FILE* pipe = popen(command.constData(), "r");
+    if (!pipe)
+    {
+        PLOG(ERROR) << "popen failed";
+        return false;
+    }
+
+    QByteArray output;
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), pipe))
+        output.append(buffer);
+
+    pclose(pipe);
+
+    const QList<QByteArray> lines = output.split('\n');
+    for (const QByteArray& line : lines)
+    {
+        if (line.startsWith("WAYLAND_DISPLAY=") || line.startsWith("DISPLAY="))
+            return true;
+    }
+
+    return false;
+}
+#endif // defined(Q_OS_LINUX)
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -690,32 +727,51 @@ bool DesktopManager::startProcess(const QString& ipc_channel_name)
         return false;
     }
 
-    // The greeter runs its own compositor under a dedicated user (gdm-greeter, sddm, ...) that has its
-    // own systemd manager and screen-cast D-Bus interface, so the agent is launched there exactly like
-    // in a user session - this is what lets the login screen be captured.
-
-    const struct passwd* pw = getpwuid(uid);
-    if (!pw)
-    {
-        PLOG(ERROR) << "getpwuid failed for uid" << uid;
-        return false;
-    }
-
-    const QString user_name = QString::fromLocal8Bit(pw->pw_name);
-
-    // Screen capture and input run inside the user's session: on Wayland the desktop portal lives on
-    // the user's session D-Bus (unreachable by root), and on X11 the user owns the display. Launch the
-    // agent through the user's own systemd manager so it runs as the user and inherits the session
-    // environment (DISPLAY/XAUTHORITY, WAYLAND_DISPLAY, the session bus, XDG_RUNTIME_DIR, ...).
     const QString log_level = QString::fromLocal8Bit(qgetenv("ASPIA_LOG_LEVEL"));
     QString log_setenv;
     if (!log_level.isEmpty())
         log_setenv = QString(" --setenv=ASPIA_LOG_LEVEL=%1").arg(log_level);
 
-    QByteArray command_line =
-        QString("systemd-run --machine=%1@.host --user --collect --setenv=%2=%3%4 %5")
+    QByteArray command_line;
+
+    if (is_greeter_session)
+    {
+        // The compositor inhibits the screen-cast portal on the greeter, so the login screen cannot be
+        // captured through it. Run the agent as the (root) service user via a system transient unit: it
+        // captures below the compositor via DRM/KMS and injects via uinput, both of which need root and
+        // work without the portal or the compositor's cooperation.
+        command_line = QString("systemd-run --collect --setenv=%1=%2%3 %4")
+            .arg(IpcServer::kChannelIdEnvVar, ipc_channel_name, log_setenv, filePath()).toLocal8Bit();
+    }
+    else
+    {
+        const struct passwd* pw = getpwuid(uid);
+        if (!pw)
+        {
+            PLOG(ERROR) << "getpwuid failed for uid" << uid;
+            return false;
+        }
+
+        const QString user_name = QString::fromLocal8Bit(pw->pw_name);
+
+        // Right after login the session is active but the compositor has not yet imported
+        // WAYLAND_DISPLAY into the user manager. Launching now would make the agent inherit no
+        // WAYLAND_DISPLAY and capture as X11 on a Wayland session (black screen). Defer until ready;
+        // the restart timer retries every second (a brief freeze on the client until the agent starts).
+        if (!isGraphicalEnvironmentReady(user_name))
+        {
+            LOG(INFO) << "User graphical environment not ready yet; deferring agent start";
+            return false;
+        }
+
+        // In a user session capture/input run inside it: on Wayland the portal lives on the user's
+        // session D-Bus (unreachable by root) and on X11 the user owns the display. Launch the agent
+        // through the user's own systemd manager so it runs as the user and inherits the session
+        // environment (DISPLAY/XAUTHORITY, WAYLAND_DISPLAY, the session bus, XDG_RUNTIME_DIR, ...).
+        command_line = QString("systemd-run --machine=%1@.host --user --collect --setenv=%2=%3%4 %5")
             .arg(user_name, IpcServer::kChannelIdEnvVar, ipc_channel_name, log_setenv, filePath())
             .toLocal8Bit();
+    }
 
     LOG(INFO) << "Start desktop session agent:" << command_line;
 

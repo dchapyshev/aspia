@@ -96,6 +96,9 @@ private:
     WaylandCaptureSource* captureSource() const;
     // Re-negotiates the capture source after the PipeWire stream errors (monitor reconfiguration).
     void onCaptureSourceRestart();
+    // Greeter (uinput) only: reads the compositor's logical monitor layout over Wayland and programs
+    // the injector's absolute-pointer mapping (offset + scale). Returns false if it could not.
+    bool setupKmsInputMapping();
 #endif // defined(Q_OS_LINUX)
     ScreenCapturer::ScreenId defaultScreen();
     void selectScreen(ScreenCapturer::ScreenId screen_id, const QSize& resolution);
@@ -127,6 +130,9 @@ private:
     bool wayland_ = false;
     // Running as root for the greeter: capture below the compositor via DRM/KMS and inject via uinput.
     bool kms_ = false;
+    // Greeter pointer mapping: programmed once from the Wayland layout, with a few retries.
+    bool kms_input_mapped_ = false;
+    int kms_map_attempts_ = 0;
 #endif // defined(Q_OS_LINUX)
 
     ScopedQPointer<AudioCapturerWrapper> audio_capturer_;

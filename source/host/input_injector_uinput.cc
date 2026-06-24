@@ -184,10 +184,17 @@ void InputInjectorUinput::injectTextEvent(const proto::input::TextEvent& /* even
 //--------------------------------------------------------------------------------------------------
 void InputInjectorUinput::injectMouseEvent(const proto::input::MouseEvent& event)
 {
-    const QPoint pos(event.x() + screen_offset_.x(), event.y() + screen_offset_.y());
-
-    if (screen_size_.width() > 1 && screen_size_.height() > 1)
+    if (abs_mapped_)
     {
+        // Exact mapping from the compositor's logical layout (handles multi-monitor offset and scale).
+        emitEvent(EV_ABS, ABS_X,
+                  qBound(0, static_cast<int>(abs_base_x_ + event.x() * abs_scale_x_), int(kAbsMax)));
+        emitEvent(EV_ABS, ABS_Y,
+                  qBound(0, static_cast<int>(abs_base_y_ + event.y() * abs_scale_y_), int(kAbsMax)));
+    }
+    else if (screen_size_.width() > 1 && screen_size_.height() > 1)
+    {
+        const QPoint pos(event.x() + screen_offset_.x(), event.y() + screen_offset_.y());
         emitEvent(EV_ABS, ABS_X, pos.x() * kAbsMax / (screen_size_.width() - 1));
         emitEvent(EV_ABS, ABS_Y, pos.y() * kAbsMax / (screen_size_.height() - 1));
     }
@@ -236,4 +243,14 @@ void InputInjectorUinput::injectMouseEvent(const proto::input::MouseEvent& event
 void InputInjectorUinput::injectTouchEvent(const proto::input::TouchEvent& /* event */)
 {
     NOTIMPLEMENTED();
+}
+
+//--------------------------------------------------------------------------------------------------
+void InputInjectorUinput::setAbsMapping(double scale_x, double base_x, double scale_y, double base_y)
+{
+    abs_scale_x_ = scale_x;
+    abs_base_x_ = base_x;
+    abs_scale_y_ = scale_y;
+    abs_base_y_ = base_y;
+    abs_mapped_ = true;
 }

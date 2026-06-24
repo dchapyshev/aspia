@@ -49,12 +49,16 @@
 #if defined(Q_OS_LINUX)
 #include <unistd.h>
 
+#include <cstdlib>
+
 #include "base/desktop/screen_capturer_kms.h"
 #include "base/desktop/screen_capturer_pipewire.h"
 #include "base/desktop/screen_capturer_x11.h"
 #include "base/desktop/linux/mutter_screen_cast.h"
 #include "base/desktop/linux/wayland_capture_source.h"
 #include "base/desktop/linux/wayland_portal.h"
+#include "base/linux/libsystemd.h"
+#include "base/linux/wayland_output_layout.h"
 #include "host/input_injector_uinput.h"
 #include "host/input_injector_wayland.h"
 #include "host/input_injector_x11.h"
@@ -533,8 +537,86 @@ void DesktopAgent::onInjectMouseEvent(const proto::input::MouseEvent& event)
     out_event.set_x(pos_x);
     out_event.set_y(pos_y);
 
+#if defined(Q_OS_LINUX)
+    // On the greeter (uinput), learn the exact pointer mapping from the compositor's logical layout
+    // on first use. Read once via Wayland; retry a few times in case the compositor is not ready yet.
+    if (kms_ && !kms_input_mapped_ && kms_map_attempts_ < 20)
+    {
+        ++kms_map_attempts_;
+        if (setupKmsInputMapping())
+            kms_input_mapped_ = true;
+    }
+#endif // defined(Q_OS_LINUX)
+
     input_injector_->injectMouseEvent(out_event);
 }
+
+#if defined(Q_OS_LINUX)
+//--------------------------------------------------------------------------------------------------
+bool DesktopAgent::setupKmsInputMapping()
+{
+    if (!screen_capturer_ || !input_injector_)
+        return false;
+
+    // The active seat session is the greeter; read its compositor's Wayland socket.
+    char* session = nullptr;
+    uid_t uid = 0;
+    if (LibSystemd::seatGetActive("seat0", &session, &uid) < 0 || !session)
+        return false;
+    free(session);
+
+    const QString runtime_dir = QString("/run/user/%1/").arg(uid);
+    QString socket_path;
+    for (const char* name : { "wayland-0", "wayland-1" })
+    {
+        const QString candidate = runtime_dir + name;
+        if (access(candidate.toLocal8Bit().constData(), F_OK) == 0)
+        {
+            socket_path = candidate;
+            break;
+        }
+    }
+    if (socket_path.isEmpty())
+        return false;
+
+    const QList<WaylandOutputLayout::Output> outputs = WaylandOutputLayout::query(socket_path);
+    if (outputs.isEmpty())
+        return false;
+
+    const QSize captured = screen_capturer_->currentScreenRect().size();
+
+    // Bounding box of all outputs is the logical desktop the absolute pointer is mapped onto; the
+    // output whose mode matches the captured framebuffer gives its offset and logical size (scale).
+    QRect desktop;
+    QRect captured_logical;
+    bool found = false;
+    for (const WaylandOutputLayout::Output& output : outputs)
+    {
+        desktop = desktop.united(output.logical);
+        if (!found && output.physical == captured)
+        {
+            captured_logical = output.logical;
+            found = true;
+        }
+    }
+    if (!found || desktop.isEmpty() || captured.isEmpty())
+        return false;
+
+    // abs = base + pixel * scale, mapping captured-physical pixels onto the whole logical desktop.
+    const double max = 65535.0;
+    const double scale_x = static_cast<double>(captured_logical.width()) * max /
+                           (static_cast<double>(captured.width()) * desktop.width());
+    const double base_x = static_cast<double>(captured_logical.x()) * max / desktop.width();
+    const double scale_y = static_cast<double>(captured_logical.height()) * max /
+                           (static_cast<double>(captured.height()) * desktop.height());
+    const double base_y = static_cast<double>(captured_logical.y()) * max / desktop.height();
+
+    static_cast<InputInjectorUinput*>(input_injector_)->setAbsMapping(scale_x, base_x, scale_y, base_y);
+    LOG(INFO) << "KMS pointer mapped via Wayland: captured" << captured
+              << "logical" << captured_logical << "desktop" << desktop;
+    return true;
+}
+#endif // defined(Q_OS_LINUX)
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgent::onInjectKeyEvent(const proto::input::KeyEvent& event)

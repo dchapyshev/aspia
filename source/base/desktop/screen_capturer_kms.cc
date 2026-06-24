@@ -23,6 +23,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+#include <algorithm>
 #include <array>
 
 #include "base/logging.h"
@@ -199,18 +200,35 @@ quint32 ScreenCapturerKms::activeFramebufferId()
         return 0;
 
     quint32 fb_id = 0;
-    for (int i = 0; i < resources->count_crtcs && fb_id == 0; ++i)
+    int total_width = 0;
+    int max_height = 0;
+    for (int i = 0; i < resources->count_crtcs; ++i)
     {
         drmModeCrtc* crtc = LibDrm::modeGetCrtc(drm_fd_, resources->crtcs[i]);
         if (crtc)
         {
             if (crtc->mode_valid && crtc->buffer_id)
-                fb_id = crtc->buffer_id;
+            {
+                // The compositor maps the absolute pointer over the whole logical desktop. Its layout
+                // (monitor positions) is not exposed by DRM, so assume the outputs are laid out left
+                // to right with the captured (first active) one at the origin.
+                total_width += static_cast<int>(crtc->width);
+                max_height = std::max(max_height, static_cast<int>(crtc->height));
+                if (!fb_id)
+                {
+                    fb_id = crtc->buffer_id;
+                    crtc_id_ = resources->crtcs[i];
+                }
+            }
             LibDrm::modeFreeCrtc(crtc);
         }
     }
 
     LibDrm::modeFreeResources(resources);
+
+    if (total_width > 0 && max_height > 0)
+        desktop_rect_ = QRect(0, 0, total_width, max_height);
+
     return fb_id;
 }
 
@@ -311,33 +329,39 @@ const Frame* ScreenCapturerKms::captureFrame(Error* error)
 }
 
 //--------------------------------------------------------------------------------------------------
-const MouseCursor* ScreenCapturerKms::captureCursor()
+bool ScreenCapturerKms::findCursorPlane(quint32* fb_id, QSize* size, QPoint* position)
 {
     drmModePlaneRes* plane_res = LibDrm::modeGetPlaneResources(drm_fd_);
     if (!plane_res)
-        return nullptr;
+        return false;
 
-    quint32 cursor_fb_id = 0;
-    QSize cursor_size;
+    bool found = false;
 
     // The cursor is a small framebuffer bound to a CRTC; the primary plane is screen-sized and the
-    // overlay planes are normally inactive, so the small active plane is the hardware cursor.
-    for (uint32_t i = 0; i < plane_res->count_planes && !cursor_fb_id; ++i)
+    // overlay planes are normally inactive, so the small active plane is the hardware cursor. Only
+    // the cursor on the captured CRTC counts - on another output it is not on the screen we serve.
+    for (uint32_t i = 0; i < plane_res->count_planes && !found; ++i)
     {
         drmModePlane* plane = LibDrm::modeGetPlane(drm_fd_, plane_res->planes[i]);
         if (!plane)
             continue;
 
-        if (plane->fb_id && plane->crtc_id)
+        const bool on_captured_crtc =
+            plane->crtc_id && (crtc_id_ == 0 || plane->crtc_id == crtc_id_);
+        if (plane->fb_id && on_captured_crtc)
         {
             drmModeFB2* fb = LibDrm::modeGetFB2(drm_fd_, plane->fb_id);
             if (fb && fb->width && fb->height &&
                 fb->width <= kMaxCursorSize && fb->height <= kMaxCursorSize)
             {
-                cursor_fb_id = plane->fb_id;
-                cursor_size = QSize(static_cast<int>(fb->width), static_cast<int>(fb->height));
-                cursor_position_ = QPoint(static_cast<int>(plane->crtc_x),
-                                          static_cast<int>(plane->crtc_y));
+                if (fb_id)
+                    *fb_id = plane->fb_id;
+                if (size)
+                    *size = QSize(static_cast<int>(fb->width), static_cast<int>(fb->height));
+                if (position)
+                    *position = QPoint(static_cast<int>(plane->crtc_x),
+                                       static_cast<int>(plane->crtc_y));
+                found = true;
             }
             if (fb)
                 LibDrm::modeFreeFB2(fb);
@@ -347,8 +371,15 @@ const MouseCursor* ScreenCapturerKms::captureCursor()
     }
 
     LibDrm::modeFreePlaneResources(plane_res);
+    return found;
+}
 
-    if (!cursor_fb_id)
+//--------------------------------------------------------------------------------------------------
+const MouseCursor* ScreenCapturerKms::captureCursor()
+{
+    quint32 cursor_fb_id = 0;
+    QSize cursor_size;
+    if (!findCursorPlane(&cursor_fb_id, &cursor_size, &cursor_position_))
         return nullptr;
 
     // Re-read the shape only when the cursor plane's framebuffer changes.
@@ -389,7 +420,9 @@ QPoint ScreenCapturerKms::cursorPosition()
 //--------------------------------------------------------------------------------------------------
 const QRect& ScreenCapturerKms::desktopRect() const
 {
-    return screen_rect_;
+    // The full logical desktop (all active CRTCs), so the absolute pointer is scaled to the area the
+    // compositor maps it over. Falls back to the captured screen until the first frame computes it.
+    return desktop_rect_.isEmpty() ? screen_rect_ : desktop_rect_;
 }
 
 //--------------------------------------------------------------------------------------------------
