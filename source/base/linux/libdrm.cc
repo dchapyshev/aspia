@@ -42,6 +42,10 @@ decltype(&drmModeGetPlaneResources) g_mode_get_plane_resources = nullptr;
 decltype(&drmModeFreePlaneResources) g_mode_free_plane_resources = nullptr;
 decltype(&drmModeGetPlane) g_mode_get_plane = nullptr;
 decltype(&drmModeFreePlane) g_mode_free_plane = nullptr;
+decltype(&drmModeGetConnectorCurrent) g_mode_get_connector_current = nullptr;
+decltype(&drmModeFreeConnector) g_mode_free_connector = nullptr;
+decltype(&drmModeGetEncoder) g_mode_get_encoder = nullptr;
+decltype(&drmModeFreeEncoder) g_mode_free_encoder = nullptr;
 // drmCloseBufferHandle is newer than some build hosts' libdrm headers, so it is typed by hand and
 // resolved at runtime on the target (which ships a recent libdrm).
 int (*g_close_buffer_handle)(int fd, uint32_t handle) = nullptr;
@@ -95,11 +99,21 @@ bool LibDrm::ensureLoaded()
         reinterpret_cast<decltype(g_mode_get_plane)>(dlsym(g_handle, "drmModeGetPlane"));
     g_mode_free_plane =
         reinterpret_cast<decltype(g_mode_free_plane)>(dlsym(g_handle, "drmModeFreePlane"));
+    g_mode_get_connector_current =
+        reinterpret_cast<decltype(g_mode_get_connector_current)>(dlsym(g_handle, "drmModeGetConnectorCurrent"));
+    g_mode_free_connector =
+        reinterpret_cast<decltype(g_mode_free_connector)>(dlsym(g_handle, "drmModeFreeConnector"));
+    g_mode_get_encoder =
+        reinterpret_cast<decltype(g_mode_get_encoder)>(dlsym(g_handle, "drmModeGetEncoder"));
+    g_mode_free_encoder =
+        reinterpret_cast<decltype(g_mode_free_encoder)>(dlsym(g_handle, "drmModeFreeEncoder"));
 
     if (!g_mode_get_resources || !g_mode_free_resources || !g_mode_get_crtc || !g_mode_free_crtc ||
         !g_mode_get_fb2 || !g_mode_free_fb2 || !g_prime_handle_to_fd || !g_drop_master ||
         !g_close_buffer_handle || !g_set_client_cap || !g_mode_get_plane_resources ||
-        !g_mode_free_plane_resources || !g_mode_get_plane || !g_mode_free_plane)
+        !g_mode_free_plane_resources || !g_mode_get_plane || !g_mode_free_plane ||
+        !g_mode_get_connector_current || !g_mode_free_connector || !g_mode_get_encoder ||
+        !g_mode_free_encoder)
     {
         LOG(ERROR) << "Unable to resolve libdrm symbols";
         dlclose(g_handle);
@@ -235,4 +249,40 @@ void LibDrm::modeFreePlane(drmModePlane* plane)
     if (!ensureLoaded())
         return;
     g_mode_free_plane(plane);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+drmModeConnector* LibDrm::modeGetConnectorCurrent(int fd, uint32_t connector_id)
+{
+    if (!ensureLoaded())
+        return nullptr;
+    return g_mode_get_connector_current(fd, connector_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void LibDrm::modeFreeConnector(drmModeConnector* connector)
+{
+    if (!ensureLoaded())
+        return;
+    g_mode_free_connector(connector);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+drmModeEncoder* LibDrm::modeGetEncoder(int fd, uint32_t encoder_id)
+{
+    if (!ensureLoaded())
+        return nullptr;
+    return g_mode_get_encoder(fd, encoder_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void LibDrm::modeFreeEncoder(drmModeEncoder* encoder)
+{
+    if (!ensureLoaded())
+        return;
+    g_mode_free_encoder(encoder);
 }

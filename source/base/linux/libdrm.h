@@ -53,6 +53,11 @@ public:
     static void modeFreePlaneResources(drmModePlaneRes* resources);
     static drmModePlane* modeGetPlane(int fd, uint32_t plane_id);
     static void modeFreePlane(drmModePlane* plane);
+
+    static drmModeConnector* modeGetConnectorCurrent(int fd, uint32_t connector_id);
+    static void modeFreeConnector(drmModeConnector* connector);
+    static drmModeEncoder* modeGetEncoder(int fd, uint32_t encoder_id);
+    static void modeFreeEncoder(drmModeEncoder* encoder);
 };
 
 #endif // BASE_LINUX_LIBDRM_H
