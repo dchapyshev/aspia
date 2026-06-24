@@ -54,9 +54,9 @@ quint8 diffPartialBlock(const quint8* prev_image, const quint8* curr_image, int 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Differ::Differ(const QSize& size)
+Differ::Differ(const QSize& size, int stride)
     : screen_rect_(QPoint(0, 0), size),
-      bytes_per_row_(size.width() * kBytesPerPixel),
+      bytes_per_row_(stride),
       diff_width_(((size.width() + kBlockSize - 1) / kBlockSize) + 1),
       diff_height_(((size.height() + kBlockSize - 1) / kBlockSize) + 1),
       full_blocks_x_(size.width() / kBlockSize),

@@ -164,7 +164,7 @@ const Frame* ScreenCapturerGdi::captureFrame(Error* error)
 
     if (!previous || previous->size() != current->size())
     {
-        differ_ = std::make_unique<Differ>(screen_rect_.size());
+        differ_ = std::make_unique<Differ>(screen_rect_.size(), current->stride());
         *current->updatedRegion() += QRect(QPoint(0, 0), screen_rect_.size());
     }
     else

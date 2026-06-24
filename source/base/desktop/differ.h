@@ -27,7 +27,7 @@
 class Differ
 {
 public:
-    explicit Differ(const QSize& size);
+    Differ(const QSize& size, int stride);
     ~Differ() = default;
 
     void calcDirtyRegion(const quint8* prev_image, const quint8* curr_image, Region* changed_region);

@@ -21,6 +21,7 @@
 
 #include <QElapsedTimer>
 #include <QObject>
+#include <QTimer>
 
 #include "base/scoped_qpointer.h"
 #include "base/serialization.h"
@@ -124,6 +125,8 @@ private:
     // Throttles capture-source restarts so a persistent stream error cannot spin.
     QElapsedTimer source_restart_timer_;
     bool wayland_ = false;
+    // Running as root for the greeter: capture below the compositor via DRM/KMS and inject via uinput.
+    bool kms_ = false;
 #endif // defined(Q_OS_LINUX)
 
     ScopedQPointer<AudioCapturerWrapper> audio_capturer_;

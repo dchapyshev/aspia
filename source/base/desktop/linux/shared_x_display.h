@@ -20,6 +20,7 @@
 #define BASE_DESKTOP_LINUX_SHARED_X_DISPLAY_H
 
 #include <QtClassHelperMacros>
+#include <QString>
 
 #include <map>
 #include <memory>

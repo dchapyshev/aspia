@@ -40,6 +40,7 @@ QString capturerToString(quint32 type)
         case ScreenCapturer::Type::WIN_DXGI: return "WIN_DXGI";
         case ScreenCapturer::Type::LINUX_X11: return "LINUX_X11";
         case ScreenCapturer::Type::LINUX_WAYLAND: return "LINUX_WAYLAND";
+        case ScreenCapturer::Type::LINUX_KMS: return "LINUX_KMS";
         case ScreenCapturer::Type::MACOSX: return "MACOSX";
         default: return "UNKNOWN";
     }

@@ -42,7 +42,8 @@ public:
         WIN_DXGI      = 3,
         LINUX_X11     = 4,
         LINUX_WAYLAND = 5,
-        MACOSX        = 6
+        LINUX_KMS     = 6,
+        MACOSX        = 7
     };
     Q_ENUM(Type)
 

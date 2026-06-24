@@ -73,6 +73,8 @@ endif()
 
 if (LINUX)
     list(APPEND SOURCE_HOST_CORE
+        input_injector_uinput.cc
+        input_injector_uinput.h
         input_injector_wayland.cc
         input_injector_wayland.h
         input_injector_x11.cc

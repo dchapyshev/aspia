@@ -70,6 +70,8 @@ if (LINUX)
         desktop_environment_linux.h
         desktop_resizer_x11.cc
         desktop_resizer_x11.h
+        screen_capturer_kms.cc
+        screen_capturer_kms.h
         screen_capturer_pipewire.cc
         screen_capturer_pipewire.h
         screen_capturer_x11.cc

@@ -47,11 +47,15 @@
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX)
+#include <unistd.h>
+
+#include "base/desktop/screen_capturer_kms.h"
 #include "base/desktop/screen_capturer_pipewire.h"
 #include "base/desktop/screen_capturer_x11.h"
 #include "base/desktop/linux/mutter_screen_cast.h"
 #include "base/desktop/linux/wayland_capture_source.h"
 #include "base/desktop/linux/wayland_portal.h"
+#include "host/input_injector_uinput.h"
 #include "host/input_injector_wayland.h"
 #include "host/input_injector_x11.h"
 #endif // defined(Q_OS_LINUX)
@@ -168,8 +172,11 @@ DesktopAgent::DesktopAgent(QObject* parent)
     connect(ipc_channel_, &IpcChannel::sig_messageReceived, this, &DesktopAgent::onIpcMessageReceived);
 
 #if defined(Q_OS_LINUX)
+    // Running as root means the service launched us for the greeter, where the compositor inhibits the
+    // portal/screen-cast. Capture below the compositor via DRM/KMS and inject via uinput instead.
+    kms_ = (geteuid() == 0);
     wayland_ = qEnvironmentVariableIsSet("WAYLAND_DISPLAY");
-    LOG(INFO) << "Session type:" << (wayland_ ? "Wayland" : "X11");
+    LOG(INFO) << "Session type:" << (kms_ ? "KMS (root)" : (wayland_ ? "Wayland" : "X11"));
 #endif // defined(Q_OS_LINUX)
 
     selectCapturer(ScreenCapturer::Error::SUCCEEDED);
@@ -190,7 +197,14 @@ DesktopAgent::DesktopAgent(QObject* parent)
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX)
-    if (wayland_ && MutterScreenCast::isAvailable())
+    if (kms_)
+    {
+        // Greeter: input via uinput (the KMS capturer is created in selectCapturer above).
+        input_injector_ = InputInjectorUinput::create(this);
+        if (!input_injector_)
+            LOG(ERROR) << "Unable to create uinput input injector";
+    }
+    else if (wayland_ && MutterScreenCast::isAvailable())
     {
         // GNOME: capture the monitor directly through Mutter's ScreenCast interface. This skips the
         // portal permission dialog and works on the login screen (where no one can grant permission).
@@ -992,7 +1006,13 @@ void DesktopAgent::selectCapturer(ScreenCapturer::Error last_error)
 #if defined(Q_OS_WINDOWS)
     screen_capturer_ = ScreenCapturerWin::create(preferred_capturer_, last_error, this);
 #elif defined(Q_OS_LINUX)
-    if (wayland_)
+    if (kms_)
+    {
+        screen_capturer_ = ScreenCapturerKms::create(this);
+        if (!screen_capturer_)
+            LOG(ERROR) << "Unable to create KMS screen capturer";
+    }
+    else if (wayland_)
     {
         WaylandCaptureSource* source = captureSource();
         if (!source || !source->isStarted())

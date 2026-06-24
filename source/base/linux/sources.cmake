@@ -17,6 +17,8 @@
 #
 
 collect_sources(SOURCE_BASE_LINUX
+    libdrm.cc
+    libdrm.h
     libsystemd.cc
     libsystemd.h
     x11_headers.h
