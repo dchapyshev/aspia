@@ -44,6 +44,11 @@ public:
     // Returns nullptr if DRM/KMS is unavailable or the EGL import path could not be initialized.
     static ScreenCapturerKms* create(QObject* parent = nullptr);
 
+    // Returns true only if a capturer initializes AND a trial frame is captured successfully. Init alone
+    // can succeed on a GPU that cannot actually export its scan-out framebuffer, so a probe capture is
+    // required before committing to this backend.
+    static bool isAvailable();
+
     // ScreenCapturer implementation.
     int screenCount() final;
     bool screenList(ScreenList* screens) final;

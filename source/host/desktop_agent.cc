@@ -285,7 +285,14 @@ void DesktopAgent::setupLinuxCapture()
         }
     }
 
-    // No usable compositor screen-cast: capture below the compositor with DRM/KMS + uinput.
+    // No usable compositor screen-cast: capture below the compositor with DRM/KMS + uinput. A trial
+    // capture confirms the scan-out framebuffer can actually be read before committing to this backend.
+    if (!ScreenCapturerKms::isAvailable())
+    {
+        LOG(ERROR) << "No usable screen capturer is available for this session";
+        return;
+    }
+
     capture_mode_ = CaptureMode::KMS;
     input_injector_ = InputInjectorUinput::create(this);
     if (!input_injector_)

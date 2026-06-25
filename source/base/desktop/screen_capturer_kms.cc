@@ -307,6 +307,21 @@ ScreenCapturerKms* ScreenCapturerKms::create(QObject* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
+// static
+bool ScreenCapturerKms::isAvailable()
+{
+    std::unique_ptr<ScreenCapturerKms> self(new ScreenCapturerKms());
+    if (!self->init())
+        return false;
+
+    // init() only confirms DRM and the EGL import path are set up. A trial capture additionally verifies
+    // that an active CRTC's scan-out framebuffer can really be read and imported, so we never select a
+    // KMS capturer that would yield only black frames.
+    Error error = Error::TEMPORARY;
+    return self->captureFrame(&error) != nullptr && error == Error::SUCCEEDED;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool ScreenCapturerKms::init()
 {
     if (!LibDrm::ensureLoaded())
