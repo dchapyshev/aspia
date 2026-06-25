@@ -20,6 +20,7 @@
 
 #include <QGuiApplication>
 #include <QHideEvent>
+#include <QLayout>
 #include <QMenu>
 #include <QMouseEvent>
 #include <QPainter>
@@ -259,10 +260,7 @@ void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& cli
         ui->button_lock_mouse->setVisible(has_desktop);
         ui->button_pause->setVisible(has_desktop);
 
-        ui->tree->resizeColumnToContents(1);
-
-        int first_column_width = ui->tree->header()->width() - ui->tree->columnWidth(1);
-        ui->tree->setColumnWidth(0, first_column_width);
+        updateTreeColumns();
     }
     else
     {
@@ -416,6 +414,14 @@ void NotifierWindow::onUpdateWindowPosition()
 {
     onShowNotifier();
 
+    // When the GUI starts at login the window can be laid out before the session's screen geometry and
+    // DPI are final (the first run here even reports an oversized screen and off-screen position). Re-
+    // activate the layout and refit the tree columns so the content is corrected once this runs again
+    // after the screen settles (it is re-invoked on availableGeometryChanged).
+    if (QLayout* window_layout = layout())
+        window_layout->activate();
+    updateTreeColumns();
+
     QRect available_rect = currentAvailableRect();
     QSize window_size = frameSize();
 
@@ -507,6 +513,18 @@ void NotifierWindow::onThemeChanged()
         QString("<html><head/><body><p><span style=\"font-weight:700;\">%1</span></p></body></html>")
             .arg(tr("Aspia Host")));
     ui->label_title->setStyleSheet("padding: 3px;");
+}
+
+//--------------------------------------------------------------------------------------------------
+void NotifierWindow::updateTreeColumns()
+{
+    if (ui->content->isHidden() || ui->tree->topLevelItemCount() == 0)
+        return;
+
+    // The disconnect button lives in column 1; size it to its contents and give the remaining width to
+    // the session name in column 0.
+    ui->tree->resizeColumnToContents(1);
+    ui->tree->setColumnWidth(0, ui->tree->header()->width() - ui->tree->columnWidth(1));
 }
 
 //--------------------------------------------------------------------------------------------------

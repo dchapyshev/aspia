@@ -20,6 +20,7 @@
 
 #include <QCommandLineParser>
 #include <QSysInfo>
+#include <QThread>
 
 #include "base/logging.h"
 #include "build/version.h"
@@ -40,16 +41,36 @@
 #include "base/win/desktop.h"
 #endif // defined(Q_OS_WINDOWS)
 
+#if defined(Q_OS_LINUX)
+#include <unistd.h>
+
+#include "base/linux/x11_headers.h"
+#endif // defined(Q_OS_LINUX)
+
 namespace {
+
+#if defined(Q_OS_LINUX)
+//--------------------------------------------------------------------------------------------------
+// Called by Xlib when the X11 (Xwayland) connection is lost. The host GUI runs on Xwayland, so this
+// fires whenever the user's session ends or the active session switches at login. Exit cleanly here
+// instead of letting Qt's xcb plugin abort the process; the host service starts a fresh GUI for the
+// new session.
+int onX11IoError(Display* /* display */)
+{
+    LOG(INFO) << "X11 connection lost (session ended or switched); exiting host GUI";
+    _exit(0);
+    return 0;
+}
+#endif // defined(Q_OS_LINUX)
 
 //--------------------------------------------------------------------------------------------------
 bool waitForValidInputDesktop()
 {
-#if defined(Q_OS_WINDOWS)
     int max_attempt_count = 600;
 
     do
     {
+#if defined(Q_OS_WINDOWS)
         Desktop input_desktop(Desktop::inputDesktop());
         if (input_desktop.isValid())
         {
@@ -63,17 +84,29 @@ bool waitForValidInputDesktop()
                 break;
             }
         }
-
-        Sleep(100);
+#elif defined(Q_OS_LINUX)
+        // The service may launch the GUI a moment before the session's X server (Xwayland) is accepting
+        // connections: the display environment is imported into the user manager slightly before the
+        // server is actually ready. Creating the QApplication then fails and the GUI exits. Wait until
+        // the X display can be opened before continuing.
+        Display* display = XOpenDisplay(nullptr);
+        if (display)
+        {
+            XCloseDisplay(display);
+            break;
+        }
+#else
+        break;
+#endif // defined(Q_OS_WINDOWS)
+        QThread::msleep(100);
     }
     while (--max_attempt_count > 0);
 
     if (max_attempt_count == 0)
     {
-        LOG(ERROR) << "Exceeded the number of attempts";
+        LOG(ERROR) << "Timed out waiting for a valid input desktop";
         return false;
     }
-#endif // defined(Q_OS_WINDOWS)
 
     return true;
 }
@@ -117,6 +150,13 @@ int hostMain(int argc, char* argv[])
 
     Application application(argc, argv);
     Application::setQuitOnLastWindowClosed(false);
+
+#if defined(Q_OS_LINUX)
+    // Qt's xcb plugin installs its own X11 I/O-error handler in the line above that aborts the process
+    // when the Xwayland connection drops (every session end / login switch). Override it so the GUI
+    // exits cleanly instead of crashing.
+    XSetIOErrorHandler(onX11IoError);
+#endif
 
     LOG(INFO) << "QPA platform:" << Application::platformName();
 

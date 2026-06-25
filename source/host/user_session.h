@@ -112,6 +112,9 @@ private:
     SessionId session_id_ = kInvalidSessionId;
     bool is_console_ = true;
     int desktop_client_count_ = 0;
+    // Bounded retry counter for waiting on the session's graphical environment; reset whenever a new
+    // attach sequence begins (service start or an active-session change).
+    int startup_attempts_ = 0;
 
     Parser<proto::user::UserToService> incoming_message_;
     Serializer<proto::user::ServiceToUser> outgoing_message_;

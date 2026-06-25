@@ -493,6 +493,19 @@ void UserSession::onUserSessionEvent(quint32 status, quint32 session_id)
             // Ignore other events.
             break;
     }
+#elif defined(Q_OS_LINUX)
+    // The active console session changed (login, user switch, unlock). The GUI is per-session and is
+    // not relaunched by anything else once the startup retry window has passed, so relaunch it for the
+    // now active session by restarting the bounded retry loop that waits for the session's display
+    // environment (mirrors the startup path).
+    if (state_ != State::DETTACHED && session_id == static_cast<quint32>(session_id_))
+        return;
+
+    LOG(INFO) << "Active console session changed to" << session_id << "- relaunching GUI";
+
+    dettach(FROM_HERE);
+    startup_attempts_ = 0;
+    startup_timer_->start();
 #endif // defined(Q_OS_WINDOWS)
 }
 
@@ -711,18 +724,14 @@ void UserSession::onStartupUserCheck()
         return;
     }
 
-    static int attempt_count = 0;
-
-    if (attempt_count++ <= 60)
+    if (startup_attempts_++ <= 60)
         startup_timer_->start();
 #elif defined(Q_OS_LINUX)
     // Retry attaching to the active console session for the first minute after the service starts -
     // the graphical environment is imported into the user manager a moment after the session becomes
     // active (see the readiness gate in attach()). Each attach() that finds it not ready re-arms this
     // timer, so this just bounds the total number of attempts.
-    static int attempt_count = 0;
-
-    if (attempt_count++ > 60)
+    if (startup_attempts_++ > 60)
     {
         LOG(WARNING) << "Graphical environment did not become ready in time";
         return;
