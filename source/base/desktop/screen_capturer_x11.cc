@@ -181,6 +181,7 @@ const Frame* ScreenCapturerX11::captureFrame(Error* error)
         // We set the top-left of the frame so the mouse cursor will be composited
         // properly, and our frame buffer will not be overrun while blitting.
         frame->setTopLeft(selected_monitor_rect_.topLeft());
+        frame->setCapturerType(static_cast<quint32>(type()));
         queue_.replaceCurrentFrame(std::move(frame));
     }
 

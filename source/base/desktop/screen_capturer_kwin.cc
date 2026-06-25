@@ -38,6 +38,7 @@
 #include <array>
 #include <cerrno>
 #include <cstring>
+#include <utility>
 
 #include "base/logging.h"
 #include "base/desktop/differ.h"
@@ -61,6 +62,18 @@ const quint32 kFormatRgba8888 = 17;
 const int kMaxCards = 8;
 // A hardware cursor framebuffer is small; this tells it apart from the screen-sized primary plane.
 const int kMaxCursorSize = 256;
+
+//--------------------------------------------------------------------------------------------------
+// Maps a compositor output name to a stable screen id. The id only needs to be stable within the
+// running host process (the client round-trips it back during the same session), so a plain FNV-1a
+// hash of the name is enough and avoids depending on output enumeration order.
+ScreenCapturer::ScreenId outputId(const QString& name)
+{
+    quint32 hash = 2166136261u;
+    for (QChar ch : name)
+        hash = (hash ^ static_cast<quint16>(ch.unicode())) * 16777619u;
+    return static_cast<ScreenCapturer::ScreenId>(hash & 0x7fffffffu);
+}
 
 //--------------------------------------------------------------------------------------------------
 // Closes the unique GEM handles opened by drmModeGetFB2() for |fb|.
@@ -309,8 +322,16 @@ bool ScreenCapturerKwin::capture()
     {
         QDBusUnixFileDescriptor write_fd(fds[1]);
         ::close(fds[1]);
-        reply = screenshot_->call(QDBus::Block, "CaptureWorkspace",
-                                  QVariant::fromValue(options), QVariant::fromValue(write_fd));
+        if (selected_output_.isEmpty())
+        {
+            reply = screenshot_->call(QDBus::Block, "CaptureWorkspace",
+                                      QVariant::fromValue(options), QVariant::fromValue(write_fd));
+        }
+        else
+        {
+            reply = screenshot_->call(QDBus::Block, "CaptureScreen", selected_output_,
+                                      QVariant::fromValue(options), QVariant::fromValue(write_fd));
+        }
     }
 
     if (reply.type() != QDBusMessage::ReplyMessage)
@@ -374,40 +395,152 @@ bool ScreenCapturerKwin::capture()
     else
         libyuv::ARGBCopy(src, stride, current->frameData(), current->stride(), width, height);
 
+    // Input-mapping geometry: the compositor maps the absolute pointer over the whole logical workspace,
+    // so report the workspace bounding box and the captured output's offset within it (zero when the
+    // whole workspace is captured). Falls back to the captured frame alone when the layout is unknown.
+    QRect desktop;
+    for (const WaylandOutputLayout::Output& output : std::as_const(outputs_))
+        desktop = desktop.united(output.logical);
+
+    QPoint offset(0, 0);
+    if (!selected_output_.isEmpty())
+    {
+        for (const WaylandOutputLayout::Output& output : std::as_const(outputs_))
+        {
+            if (output.name == selected_output_)
+            {
+                offset = output.logical.topLeft() - desktop.topLeft();
+                break;
+            }
+        }
+    }
+
     screen_rect_ = QRect(QPoint(0, 0), size);
+    desktop_rect_ = desktop.isEmpty() ? screen_rect_ : QRect(QPoint(0, 0), desktop.size());
+    current->setTopLeft(offset);
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenCapturerKwin::refreshOutputs()
+{
+    outputs_age_.restart();
+
+    QString socket_path;
+    for (const char* name : { "wayland-0", "wayland-1" })
+    {
+        const QString candidate = QString("/run/user/%1/").arg(session_uid_) + name;
+        if (access(candidate.toLocal8Bit().constData(), F_OK) == 0)
+        {
+            socket_path = candidate;
+            break;
+        }
+    }
+    if (socket_path.isEmpty())
+        return;
+
+    const QList<WaylandOutputLayout::Output> outputs = WaylandOutputLayout::query(socket_path);
+    if (!outputs.isEmpty())
+        outputs_ = outputs;
 }
 
 //--------------------------------------------------------------------------------------------------
 int ScreenCapturerKwin::screenCount()
 {
-    return 1;
+    // Called once per captured frame; re-read the layout on a throttle rather than on every call, since
+    // querying Wayland opens a fresh socket connection each time.
+    if (!outputs_age_.isValid() || outputs_age_.elapsed() > 2000)
+        refreshOutputs();
+
+    return outputs_.isEmpty() ? 1 : static_cast<int>(outputs_.size());
 }
 
 //--------------------------------------------------------------------------------------------------
 bool ScreenCapturerKwin::screenList(ScreenList* screens)
 {
-    Screen screen;
-    screen.id = 0;
-    screen.position = QPoint(0, 0);
-    screen.resolution = screen_rect_.size();
-    screen.is_primary = true;
+    screens->screens.clear();
+    screens->resolutions.clear();
 
-    screens->screens.append(screen);
-    screens->resolutions.append(screen_rect_.size());
+    refreshOutputs();
+
+    if (outputs_.isEmpty())
+    {
+        // No layout available: expose the whole captured workspace as a single screen.
+        Screen screen;
+        screen.id = 0;
+        screen.position = QPoint(0, 0);
+        screen.resolution = screen_rect_.size();
+        screen.dpi = QPoint(96, 96);
+        screen.is_primary = true;
+        screens->screens.append(screen);
+        screens->resolutions.append(screen_rect_.size());
+        return true;
+    }
+
+    for (const WaylandOutputLayout::Output& output : std::as_const(outputs_))
+    {
+        Screen screen;
+        screen.id = outputId(output.name);
+        screen.title = output.name;
+        screen.position = output.logical.topLeft();
+        screen.resolution = output.logical.size();
+        screen.dpi = QPoint(96, 96);
+        screens->screens.append(screen);
+        screens->resolutions.append(output.logical.size());
+    }
+
+    // Exactly one screen is primary: prefer the one at the layout origin, else the first.
+    int primary_index = 0;
+    for (int i = 0; i < screens->screens.size(); ++i)
+    {
+        if (screens->screens[i].position == QPoint(0, 0))
+        {
+            primary_index = i;
+            break;
+        }
+    }
+    screens->screens[primary_index].is_primary = true;
+
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ScreenCapturerKwin::selectScreen(ScreenId /* screen_id */)
+bool ScreenCapturerKwin::selectScreen(ScreenId screen_id)
 {
-    return true;
+    refreshOutputs();
+
+    if (outputs_.isEmpty())
+    {
+        // Single-screen fallback (whole workspace); nothing to switch.
+        selected_output_.clear();
+        return true;
+    }
+
+    for (const WaylandOutputLayout::Output& output : std::as_const(outputs_))
+    {
+        if (outputId(output.name) != screen_id)
+            continue;
+
+        if (selected_output_ != output.name)
+        {
+            selected_output_ = output.name;
+            // Drop frames sized for the previously captured output.
+            queue_.reset();
+            differ_.reset();
+        }
+
+        LOG(INFO) << "KWin selected screen:" << output.name;
+        return true;
+    }
+
+    LOG(ERROR) << "KWin selectScreen: unknown screen id" << screen_id;
+    return false;
 }
 
 //--------------------------------------------------------------------------------------------------
 ScreenCapturer::ScreenId ScreenCapturerKwin::currentScreen() const
 {
-    return 0;
+    return selected_output_.isEmpty() ? 0 : outputId(selected_output_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -605,7 +738,9 @@ bool ScreenCapturerKwin::findCursorPlane(quint32* fb_id, QSize* size, QPoint* po
 //--------------------------------------------------------------------------------------------------
 const QRect& ScreenCapturerKwin::desktopRect() const
 {
-    return screen_rect_;
+    // The full logical workspace (all outputs), so the absolute pointer is mapped over the whole desktop
+    // even when a single output is captured. Falls back to the captured frame until the layout is known.
+    return desktop_rect_.isEmpty() ? screen_rect_ : desktop_rect_;
 }
 
 //--------------------------------------------------------------------------------------------------

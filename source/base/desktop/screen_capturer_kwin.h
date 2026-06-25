@@ -21,6 +21,7 @@
 
 #include <QByteArray>
 #include <QDBusConnection>
+#include <QElapsedTimer>
 #include <QRect>
 #include <QString>
 
@@ -30,6 +31,7 @@
 
 #include "base/desktop/frame.h"
 #include "base/desktop/screen_capturer.h"
+#include "base/linux/wayland_output_layout.h"
 
 class Differ;
 class EglDmaBuf;
@@ -74,9 +76,12 @@ protected:
 
 private:
     bool init();
-    // Captures the whole workspace into the current queue frame (allocating it to match). Returns false
-    // on any D-Bus or pipe error.
+    // Captures the selected output (or the whole workspace when none is selected) into the current queue
+    // frame, allocating it to match. Returns false on any D-Bus or pipe error.
     bool capture();
+    // Re-reads the compositor's output layout into |outputs_| over Wayland (used for the screen list and
+    // input geometry); keeps the previous layout if the query fails.
+    void refreshOutputs();
     // Opens the DRM device and EGL importer used to read the hardware cursor. Best-effort: on failure
     // the screen is still captured, just without a cursor.
     void initCursorCapture();
@@ -94,7 +99,17 @@ private:
 
     FrameQueue<Frame> queue_;
     std::unique_ptr<Differ> differ_;
+    // Rect of the captured frame (the selected output, or the whole workspace).
     QRect screen_rect_;
+    // Whole-workspace bounding box in logical coordinates, reported to the input injector so the absolute
+    // pointer is mapped over the entire desktop even when a single output is captured.
+    QRect desktop_rect_;
+
+    // Output the client selected for capture by connector name (empty = whole workspace). The cached
+    // compositor output layout backs the screen list and is refreshed on a throttle in screenCount().
+    QString selected_output_;
+    QList<WaylandOutputLayout::Output> outputs_;
+    QElapsedTimer outputs_age_;
     // Reused staging buffer for the raw pixels read from the pipe (KWin's stride may differ from the
     // frame's, so a straight copy into the frame is not possible).
     QByteArray read_buffer_;
