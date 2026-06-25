@@ -42,6 +42,7 @@
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX)
+#include <cstring>
 #include <unistd.h>
 
 #include "base/linux/x11_headers.h"
@@ -72,28 +73,26 @@ bool waitForValidInputDesktop()
     {
 #if defined(Q_OS_WINDOWS)
         Desktop input_desktop(Desktop::inputDesktop());
-        if (input_desktop.isValid())
+        if (input_desktop.isValid() && input_desktop.setThreadDesktop())
         {
-            if (input_desktop.setThreadDesktop())
-            {
-                wchar_t desktop_name[100] = { 0 };
-                if (input_desktop.name(desktop_name, sizeof(desktop_name)))
-                {
-                    LOG(INFO) << "Attached to desktop:" << desktop_name;
-                }
-                break;
-            }
+            wchar_t desktop_name[100] = { 0 };
+            if (input_desktop.name(desktop_name, sizeof(desktop_name)))
+                LOG(INFO) << "Attached to desktop:" << desktop_name;
+            break;
         }
 #elif defined(Q_OS_LINUX)
-        // The service may launch the GUI a moment before the session's X server (Xwayland) is accepting
-        // connections: the display environment is imported into the user manager slightly before the
-        // server is actually ready. Creating the QApplication then fails and the GUI exits. Wait until
-        // the X display can be opened before continuing.
+        // Wait for the X server (Xwayland) to accept connections and for the session's HiDPI scale to be
+        // published as Xft.dpi in the X resource manager. GNOME/KDE publish it a moment after the
+        // session becomes active; if Qt initializes earlier it assumes a 1.0 scale and lays every window
+        // out at the wrong size (the mis-sized notifier at login on a HiDPI display).
         Display* display = XOpenDisplay(nullptr);
         if (display)
         {
+            const char* resources = XResourceManagerString(display);
+            const bool ready = resources && std::strstr(resources, "Xft.dpi");
             XCloseDisplay(display);
-            break;
+            if (ready)
+                break;
         }
 #else
         break;
