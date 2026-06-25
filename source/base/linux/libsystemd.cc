@@ -34,6 +34,7 @@ bool g_load_failed = false;
 decltype(&sd_seat_get_active) g_seat_get_active = nullptr;
 decltype(&sd_session_get_vt) g_session_get_vt = nullptr;
 decltype(&sd_session_get_class) g_session_get_class = nullptr;
+decltype(&sd_session_get_type) g_session_get_type = nullptr;
 decltype(&sd_login_monitor_new) g_login_monitor_new = nullptr;
 decltype(&sd_login_monitor_unref) g_login_monitor_unref = nullptr;
 decltype(&sd_login_monitor_get_fd) g_login_monitor_get_fd = nullptr;
@@ -66,6 +67,8 @@ bool LibSystemd::ensureLoaded()
         reinterpret_cast<decltype(g_session_get_vt)>(dlsym(g_handle, "sd_session_get_vt"));
     g_session_get_class =
         reinterpret_cast<decltype(g_session_get_class)>(dlsym(g_handle, "sd_session_get_class"));
+    g_session_get_type =
+        reinterpret_cast<decltype(g_session_get_type)>(dlsym(g_handle, "sd_session_get_type"));
     g_login_monitor_new =
         reinterpret_cast<decltype(g_login_monitor_new)>(dlsym(g_handle, "sd_login_monitor_new"));
     g_login_monitor_unref =
@@ -75,8 +78,9 @@ bool LibSystemd::ensureLoaded()
     g_login_monitor_flush =
         reinterpret_cast<decltype(g_login_monitor_flush)>(dlsym(g_handle, "sd_login_monitor_flush"));
 
-    if (!g_seat_get_active || !g_session_get_vt || !g_session_get_class || !g_login_monitor_new ||
-        !g_login_monitor_unref || !g_login_monitor_get_fd || !g_login_monitor_flush)
+    if (!g_seat_get_active || !g_session_get_vt || !g_session_get_class || !g_session_get_type ||
+        !g_login_monitor_new || !g_login_monitor_unref || !g_login_monitor_get_fd ||
+        !g_login_monitor_flush)
     {
         LOG(ERROR) << "Unable to resolve libsystemd symbols";
         dlclose(g_handle);
@@ -113,6 +117,15 @@ int LibSystemd::sessionGetClass(const char* session, char** clazz)
     if (!ensureLoaded())
         return -1;
     return g_session_get_class(session, clazz);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+int LibSystemd::sessionGetType(const char* session, char** type)
+{
+    if (!ensureLoaded())
+        return -1;
+    return g_session_get_type(session, type);
 }
 
 //--------------------------------------------------------------------------------------------------

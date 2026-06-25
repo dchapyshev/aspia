@@ -39,6 +39,7 @@ public:
     static int seatGetActive(const char* seat, char** session, uid_t* uid);
     static int sessionGetVt(const char* session, unsigned* vtnr);
     static int sessionGetClass(const char* session, char** clazz);
+    static int sessionGetType(const char* session, char** type);
 
     static int loginMonitorNew(const char* category, sd_login_monitor** ret);
     static sd_login_monitor* loginMonitorUnref(sd_login_monitor* monitor);
