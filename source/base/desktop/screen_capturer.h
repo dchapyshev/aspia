@@ -43,7 +43,9 @@ public:
         LINUX_X11     = 4,
         LINUX_WAYLAND = 5,
         LINUX_KMS     = 6,
-        MACOSX        = 7
+        LINUX_KWIN    = 7,
+        LINUX_WLR     = 8,
+        MACOSX        = 9
     };
     Q_ENUM(Type)
 

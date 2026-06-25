@@ -41,6 +41,8 @@ QString capturerToString(quint32 type)
         case ScreenCapturer::Type::LINUX_X11: return "LINUX_X11";
         case ScreenCapturer::Type::LINUX_WAYLAND: return "LINUX_WAYLAND";
         case ScreenCapturer::Type::LINUX_KMS: return "LINUX_KMS";
+        case ScreenCapturer::Type::LINUX_KWIN: return "LINUX_KWIN";
+        case ScreenCapturer::Type::LINUX_WLR: return "LINUX_WLR";
         case ScreenCapturer::Type::MACOSX: return "MACOSX";
         default: return "UNKNOWN";
     }
