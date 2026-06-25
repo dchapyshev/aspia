@@ -24,23 +24,20 @@
 
 #include "host/input_injector.h"
 
-class WaylandCaptureSource;
-class WaylandInputTarget;
+class WaylandCompositorSource;
 
-// Injects input on Wayland sessions through |target| (the xdg-desktop-portal RemoteDesktop session, or
-// Mutter's RemoteDesktop interface for the login screen). XTest is not available on Wayland, so all
-// events go through it: keys as evdev keycodes, text as keysyms, the pointer as absolute coordinates
-// inside the captured stream. |source| provides the stream geometry used to rescale coordinates.
+// Injects input on Wayland sessions through the compositor |source| (Mutter's RemoteDesktop interface,
+// or the xdg-desktop-portal RemoteDesktop session). XTest is not available on Wayland, so all events go
+// through it: keys as evdev keycodes, text as keysyms, the pointer as absolute coordinates inside the
+// captured stream. The same source also supplies the stream geometry used to rescale coordinates.
 class InputInjectorWayland final : public InputInjector
 {
 public:
-    InputInjectorWayland(WaylandCaptureSource* source, WaylandInputTarget* target,
-                         QObject* parent = nullptr);
+    explicit InputInjectorWayland(WaylandCompositorSource* source, QObject* parent = nullptr);
     ~InputInjectorWayland() final;
 
-    // |source|/|target| are owned elsewhere (shared with the screen capturer) and must be started.
-    static InputInjectorWayland* create(WaylandCaptureSource* source, WaylandInputTarget* target,
-                                        QObject* parent = nullptr);
+    // |source| is owned by the screen capturer (shared with it) and must be started.
+    static InputInjectorWayland* create(WaylandCompositorSource* source, QObject* parent = nullptr);
 
     // InputInjector implementation.
     void setScreenInfo(const QSize& screen_size, const QPoint& offset) final;
@@ -53,8 +50,7 @@ public:
 private:
     void injectUnicode(uint code_point);
 
-    WaylandCaptureSource* source_ = nullptr;
-    WaylandInputTarget* target_ = nullptr;
+    WaylandCompositorSource* source_ = nullptr;
     QSize screen_size_;
     QPoint screen_offset_;
 

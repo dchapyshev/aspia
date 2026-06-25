@@ -33,6 +33,7 @@
 #include <unistd.h>
 
 #include "base/logging.h"
+#include "base/linux/session_dbus.h"
 
 namespace {
 
@@ -89,19 +90,19 @@ QSize sizeFromVariant(const QVariant& value)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-WaylandPortal::WaylandPortal(QObject* parent)
-    : QObject(parent)
+WaylandPortal::WaylandPortal(uid_t session_uid, QObject* parent)
+    : WaylandCompositorSource(parent),
+      connection_name_(QString("aspia-portal-%1").arg(session_uid)),
+      bus_(SessionDBus::connectAsUser(session_uid, connection_name_))
 {
-    QDBusConnection bus = QDBusConnection::sessionBus();
-
     screen_cast_ = new QDBusInterface(
-        kPortalService, kPortalObject, kScreenCastIface, bus, this);
+        kPortalService, kPortalObject, kScreenCastIface, bus_, this);
     remote_desktop_ = new QDBusInterface(
-        kPortalService, kPortalObject, kRemoteDesktopIface, bus, this);
+        kPortalService, kPortalObject, kRemoteDesktopIface, bus_, this);
 
     // The request/session handle paths embed the unique connection name with the leading ':'
     // removed and dots replaced by underscores.
-    sender_name_ = bus.baseService();
+    sender_name_ = bus_.baseService();
     if (sender_name_.startsWith(':'))
         sender_name_ = sender_name_.mid(1);
     sender_name_.replace('.', '_');
@@ -115,16 +116,40 @@ WaylandPortal::~WaylandPortal()
 
     if (!session_handle_.isEmpty())
     {
-        QDBusInterface session(
-            kPortalService, session_handle_, kSessionIface, QDBusConnection::sessionBus());
+        QDBusInterface session(kPortalService, session_handle_, kSessionIface, bus_);
         session.call("Close");
     }
+
+    if (bus_.isConnected())
+        QDBusConnection::disconnectFromBus(connection_name_);
 }
 
 //--------------------------------------------------------------------------------------------------
-void WaylandPortal::start(const QString& restore_token)
+// static
+bool WaylandPortal::isScreenCastAvailable(uid_t session_uid)
 {
-    restore_token_in_ = restore_token;
+    const QString name = QString("aspia-portal-probe-%1").arg(session_uid);
+    QDBusConnection bus = SessionDBus::connectAsUser(session_uid, name);
+
+    // The ScreenCast portal is backed (a working backend like xdg-desktop-portal-wlr) only when it
+    // advertises at least one source type; the gtk-only setup leaves the property unreadable.
+    bool available = false;
+    if (bus.isConnected())
+    {
+        QDBusInterface properties(
+            kPortalService, kPortalObject, "org.freedesktop.DBus.Properties", bus);
+        QDBusReply<QDBusVariant> reply = properties.call("Get", kScreenCastIface, "AvailableSourceTypes");
+        available = reply.isValid() && reply.value().variant().toUInt() != 0;
+    }
+
+    if (bus.isConnected())
+        QDBusConnection::disconnectFromBus(name);
+    return available;
+}
+
+//--------------------------------------------------------------------------------------------------
+void WaylandPortal::start()
+{
     queryCapabilities();
     createSession();
 }
@@ -223,7 +248,7 @@ void WaylandPortal::onResponse(uint response, const QVariantMap& results)
     LOG(INFO) << "Portal Response received (step:" << static_cast<int>(step_)
               << "response:" << response << ")";
 
-    QDBusConnection::sessionBus().disconnect(
+    bus_.disconnect(
         kPortalService, pending_request_path_, kRequestIface, "Response",
         this, SLOT(onResponse(uint, QVariantMap)));
 
@@ -247,7 +272,7 @@ void WaylandPortal::onResponse(uint response, const QVariantMap& results)
                 return;
             }
             // Watch for the session being closed by the compositor or the user.
-            QDBusConnection::sessionBus().connect(
+            bus_.connect(
                 kPortalService, session_handle_, kSessionIface, "Closed",
                 this, SLOT(onSessionClosed(QVariantMap)));
             selectDevices();
@@ -302,7 +327,7 @@ void WaylandPortal::onSessionClosed(const QVariantMap& /* details */)
 {
     LOG(INFO) << "Wayland portal session closed";
 
-    QDBusConnection::sessionBus().disconnect(
+    bus_.disconnect(
         kPortalService, session_handle_, kSessionIface, "Closed",
         this, SLOT(onSessionClosed(QVariantMap)));
 
@@ -326,7 +351,7 @@ QString WaylandPortal::prepareRequest(const QString& token_prefix)
     pending_request_path_ = QString("/org/freedesktop/portal/desktop/request/%1/%2")
         .arg(sender_name_, token);
 
-    QDBusConnection::sessionBus().connect(
+    bus_.connect(
         kPortalService, pending_request_path_, kRequestIface, "Response",
         this, SLOT(onResponse(uint, QVariantMap)));
 
@@ -489,7 +514,7 @@ quint32 WaylandPortal::portalProperty(const QString& interface, const QString& p
 {
     QDBusInterface properties(
         kPortalService, kPortalObject, "org.freedesktop.DBus.Properties",
-        QDBusConnection::sessionBus());
+        bus_);
 
     QDBusReply<QDBusVariant> reply = properties.call("Get", interface, property);
     if (!reply.isValid())

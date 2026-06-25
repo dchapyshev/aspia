@@ -19,12 +19,12 @@
 #ifndef BASE_DESKTOP_LINUX_WAYLAND_PORTAL_H
 #define BASE_DESKTOP_LINUX_WAYLAND_PORTAL_H
 
+#include <QDBusConnection>
 #include <QObject>
 #include <QPoint>
 #include <QSize>
 
-#include "base/desktop/linux/wayland_capture_source.h"
-#include "base/desktop/linux/wayland_input_target.h"
+#include "base/desktop/linux/wayland_compositor_source.h"
 
 class QDBusInterface;
 
@@ -35,22 +35,20 @@ class QDBusInterface;
 // The negotiation is asynchronous (it involves a user permission dialog); sig_started is emitted
 // with the result. On success pipeWireFd() and stream() describe the capture source, and the
 // notify*() methods inject input on the same session.
-class WaylandPortal final
-    : public QObject,
-      public WaylandCaptureSource,
-      public WaylandInputTarget
+class WaylandPortal final : public WaylandCompositorSource
 {
     Q_OBJECT
 
 public:
-    explicit WaylandPortal(QObject* parent = nullptr);
+    explicit WaylandPortal(uid_t session_uid, QObject* parent = nullptr);
     ~WaylandPortal() final;
+
+    // Returns true if a ScreenCast portal backend is available on |session_uid|'s session bus.
+    static bool isScreenCastAvailable(uid_t session_uid);
 
     using Stream = WaylandCaptureSource::Stream;
 
-    // Starts the session. |restore_token| (from a previous restoreToken()) lets the portal skip the
-    // permission dialog if the user allowed persistence.
-    void start(const QString& restore_token = QString());
+    void start() final;
 
     bool isStarted() const final;
 
@@ -71,7 +69,6 @@ public:
     void notifyKeyboardKeysym(qint32 keysym, bool pressed) final;
 
 signals:
-    void sig_started(bool success);
     void sig_closed();
 
 private slots:
@@ -114,6 +111,9 @@ private:
 
     // Reads a uint portal property (version/AvailableCursorModes/...) via the Properties interface.
     quint32 portalProperty(const QString& interface, const QString& property) const;
+
+    QString connection_name_;
+    QDBusConnection bus_;
 
     QDBusInterface* screen_cast_ = nullptr;
     QDBusInterface* remote_desktop_ = nullptr;

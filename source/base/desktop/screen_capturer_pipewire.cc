@@ -41,6 +41,7 @@
 #include "base/desktop/linux/egl_dmabuf.h"
 #include "base/desktop/linux/pipewire.h"
 #include "base/desktop/linux/wayland_capture_source.h"
+#include "base/desktop/linux/wayland_compositor_source.h"
 
 namespace {
 
@@ -140,11 +141,15 @@ void onStreamStateChanged(
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-ScreenCapturerPipeWire::ScreenCapturerPipeWire(WaylandCaptureSource* source, QObject* parent)
+ScreenCapturerPipeWire::ScreenCapturerPipeWire(uid_t session_uid, QObject* parent)
     : ScreenCapturer(Type::LINUX_WAYLAND, parent),
-      source_(source)
+      source_(WaylandCompositorSource::create(session_uid))
 {
-    // Nothing
+    if (source_)
+    {
+        connect(source_.get(), &WaylandCompositorSource::sig_started,
+                this, &ScreenCapturerPipeWire::onSourceStarted);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -155,11 +160,17 @@ ScreenCapturerPipeWire::~ScreenCapturerPipeWire()
 
 //--------------------------------------------------------------------------------------------------
 // static
-ScreenCapturerPipeWire* ScreenCapturerPipeWire::create(WaylandCaptureSource* source, QObject* parent)
+ScreenCapturerPipeWire* ScreenCapturerPipeWire::create(uid_t session_uid, QObject* parent)
 {
-    std::unique_ptr<ScreenCapturerPipeWire> self(new ScreenCapturerPipeWire(source, parent));
-    if (!self->init())
+    std::unique_ptr<ScreenCapturerPipeWire> self(new ScreenCapturerPipeWire(session_uid, parent));
+    if (!self->source_)
+    {
+        LOG(ERROR) << "No compositor capture source available";
         return nullptr;
+    }
+
+    // Negotiation is asynchronous; the PipeWire stream is built in onSourceStarted().
+    self->source_->start();
     return self.release();
 }
 
@@ -203,11 +214,12 @@ const Frame* ScreenCapturerPipeWire::captureFrame(Error* error)
 {
     // The stream errored on a renegotiation (resolution change, monitor reconfiguration, screen
     // blank). The compositor may have produced a brand-new node, so reconnecting to the old one loops
-    // forever - ask the owner to re-negotiate the whole capture source instead.
+    // forever - re-negotiate the whole capture source instead. Queued so it runs off the capture call
+    // stack (it tears down and rebuilds the stream).
     if (restart_requested_.exchange(false))
     {
-        LOG(INFO) << "PipeWire stream error; requesting a capture source restart";
-        emit sig_restartRequired();
+        LOG(INFO) << "PipeWire stream error; re-negotiating the capture source";
+        QMetaObject::invokeMethod(this, &ScreenCapturerPipeWire::onRestartSource, Qt::QueuedConnection);
         *error = Error::TEMPORARY;
         return nullptr;
     }
@@ -480,6 +492,34 @@ void ScreenCapturerPipeWire::stopStream()
 void ScreenCapturerPipeWire::requestRestart()
 {
     restart_requested_.store(true);
+}
+
+//--------------------------------------------------------------------------------------------------
+WaylandCompositorSource* ScreenCapturerPipeWire::compositorSource() const
+{
+    return source_.get();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenCapturerPipeWire::onSourceStarted(bool success)
+{
+    if (success && init())
+    {
+        emit sig_started(true);
+    }
+    else
+    {
+        LOG(ERROR) << "Capture source failed to start";
+        emit sig_started(false);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenCapturerPipeWire::onRestartSource()
+{
+    stopStream();
+    if (source_)
+        source_->start();
 }
 
 //--------------------------------------------------------------------------------------------------

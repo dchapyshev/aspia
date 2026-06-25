@@ -19,7 +19,6 @@
 #ifndef HOST_DESKTOP_AGENT_H
 #define HOST_DESKTOP_AGENT_H
 
-#include <QElapsedTimer>
 #include <QObject>
 #include <QTimer>
 
@@ -50,7 +49,6 @@ class DesktopEnvironment;
 class DesktopResizer;
 class InputInjector;
 class IpcChannel;
-class MutterScreenCast;
 class ScaleReducer;
 class VideoEncoder;
 
@@ -89,23 +87,19 @@ private slots:
     void onOverflowCheck();
 
 #if defined(Q_OS_LINUX)
-    // org.gnome.Mutter.ScreenCast (and future compositor sources) signal readiness asynchronously; the
-    // PipeWire capturer and the compositor input injector are created here once the source is started.
+    // The compositor capture path reports the result of its asynchronous negotiation; on failure the
+    // agent falls back to DRM/KMS.
     void onCompositorSourceStarted(bool success);
-    // Re-negotiates the compositor capture source after the PipeWire stream errors (e.g. a monitor
-    // reconfiguration produced a new node).
-    void onCaptureSourceRestart();
 #endif // defined(Q_OS_LINUX)
 
 private:
     void startClient(const QString& ipc_channel_name);
     void selectCapturer(ScreenCapturer::Error last_error);
 #if defined(Q_OS_LINUX)
-    // Chooses the Linux capture path and creates the matching input injector: X11, or on Wayland a
-    // compositor source (Mutter/...) on a user session, otherwise DRM/KMS + uinput.
+    // Chooses the Linux capture path: X11, or on Wayland a compositor source / KWin / wlr on a user
+    // session, otherwise DRM/KMS + uinput.
     void setupLinuxCapture();
-    // Drops the compositor source and switches to DRM/KMS + uinput (compositor capture unavailable or
-    // failed to start).
+    // Switches to DRM/KMS + uinput after the compositor capture path failed to start.
     void fallbackToKms();
 #endif // defined(Q_OS_LINUX)
     ScreenCapturer::ScreenId defaultScreen();
@@ -127,19 +121,14 @@ private:
 
 #if defined(Q_OS_LINUX)
     // X11: X11 grabber + injector. KMS: capture below the compositor via DRM/KMS + uinput (login
-    // screen, or no usable compositor screen-cast). COMPOSITOR: GNOME Mutter ScreenCast (PipeWire) with
-    // its own input. KWIN: KDE KWin ScreenShot2 polling + uinput input. WLR: wlroots zwlr_screencopy +
-    // uinput input. The last three are user sessions.
+    // screen, or no usable compositor screen-cast). COMPOSITOR: a PipeWire stream from a compositor
+    // source (Mutter ScreenCast or the xdg-desktop-portal session, picked inside the capturer) with its
+    // own input. KWIN: KDE KWin ScreenShot2 polling + uinput. WLR: wlroots zwlr_screencopy + uinput.
     enum class CaptureMode { X11, KMS, COMPOSITOR, KWIN, WLR };
     CaptureMode capture_mode_ = CaptureMode::KMS;
 
-    // Active session user's uid (for COMPOSITOR/KWIN: reaching the session bus as that user).
+    // Active session user's uid (for COMPOSITOR/KWIN/WLR: reaching the session bus as that user).
     uid_t session_uid_ = 0;
-    // Active compositor capture source (GNOME Mutter ScreenCast). Null unless capture_mode_ is
-    // COMPOSITOR; it provides both the PipeWire stream and the input target.
-    ScopedQPointer<MutterScreenCast> mutter_screen_cast_;
-    // Throttles capture-source restarts so a persistent stream error cannot spin.
-    QElapsedTimer source_restart_timer_;
 #endif // defined(Q_OS_LINUX)
 
     ScopedQPointer<AudioCapturerWrapper> audio_capturer_;

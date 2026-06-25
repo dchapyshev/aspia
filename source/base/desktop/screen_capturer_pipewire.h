@@ -26,9 +26,12 @@
 #include <QRect>
 #include <QSize>
 
+#include <sys/types.h>
+
 #include <atomic>
 #include <memory>
 
+#include "base/scoped_qpointer.h"
 #include "base/desktop/frame.h"
 #include "base/desktop/region.h"
 #include "base/desktop/screen_capturer.h"
@@ -44,23 +47,27 @@ struct PipeWireApi;
 
 class EglDmaBuf;
 class MouseCursor;
-class WaylandCaptureSource;
+class WaylandCompositorSource;
 
-// Screen capturer for Wayland sessions. Drives a PipeWire screen-cast stream provided by |source| (the
-// xdg-desktop-portal session, or Mutter's ScreenCast interface for the login screen). PipeWire delivers
-// frames on its own thread loop; they are copied once into a reused two-frame queue and handed to the
-// capture thread without further allocation. A single monitor stream is exposed, so one screen is
-// reported. The cursor arrives as separate metadata (cursor_mode METADATA), not baked into frames.
+// Screen capturer for Wayland sessions. It owns the compositor capture source (Mutter ScreenCast or the
+// xdg-desktop-portal session), negotiates it asynchronously, and drives the resulting PipeWire stream.
+// PipeWire delivers frames on its own thread loop; they are copied once into a reused two-frame queue
+// and handed to the capture thread without further allocation. A single monitor stream is exposed, so
+// one screen is reported. The cursor arrives as separate metadata (cursor_mode METADATA), not baked
+// into frames. The source also injects input, which is routed in through the inject* slots rather than
+// by sharing the source object with the input injector.
 class ScreenCapturerPipeWire final : public ScreenCapturer
 {
     Q_OBJECT
 
 public:
-    explicit ScreenCapturerPipeWire(WaylandCaptureSource* source, QObject* parent = nullptr);
+    explicit ScreenCapturerPipeWire(uid_t session_uid, QObject* parent = nullptr);
     ~ScreenCapturerPipeWire() final;
 
-    // |source| must already be started.
-    static ScreenCapturerPipeWire* create(WaylandCaptureSource* source, QObject* parent = nullptr);
+    // Creates the capturer and begins negotiating a compositor capture source; the stream becomes
+    // available asynchronously (sig_started reports the outcome). Returns nullptr if no compositor
+    // source backend is available.
+    static ScreenCapturerPipeWire* create(uid_t session_uid, QObject* parent = nullptr);
 
     // ScreenCapturer implementation.
     int screenCount() final;
@@ -74,17 +81,28 @@ public:
     const QRect& currentScreenRect() const final;
 
     // Flags the stream for a restart from the PipeWire state-changed callback (called on the PipeWire
-    // thread). captureFrame() then emits sig_restartRequired() on the capture thread.
+    // thread). captureFrame() then triggers an internal re-negotiation on the capture thread.
     void requestRestart();
 
+    // The compositor source backing the stream (it is also the input target). Valid after
+    // sig_started(true); the input injector is built on it and shares it with the capturer.
+    WaylandCompositorSource* compositorSource() const;
+
 signals:
-    // The stream entered an unrecoverable error (e.g. the compositor reconfigured the monitor and
-    // produced a new node). The owner must re-negotiate the capture source from scratch.
-    void sig_restartRequired();
+    // The capture source finished negotiating its stream. On success the stream is live; on failure the
+    // owner should fall back to another capture path.
+    void sig_started(bool success);
 
 protected:
     // ScreenCapturer implementation.
     void reset() final;
+
+private slots:
+    // The compositor source finished negotiating; builds the PipeWire stream (or reports failure).
+    void onSourceStarted(bool success);
+    // Re-negotiates the source after a stream error (queued from captureFrame so it runs off the
+    // capture call stack).
+    void onRestartSource();
 
 private:
     bool init();
@@ -102,7 +120,7 @@ private:
     void handleParamChanged(quint32 id, const spa_pod* param);
     void handleProcess();
 
-    WaylandCaptureSource* source_ = nullptr;
+    ScopedQPointer<WaylandCompositorSource> source_;
 
     const PipeWireApi* api_ = nullptr;
     pw_thread_loop* thread_loop_ = nullptr;

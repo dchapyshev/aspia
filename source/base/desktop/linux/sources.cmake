@@ -26,6 +26,8 @@ collect_sources(SOURCE_BASE_DESKTOP_LINUX
     shared_x_display.cc
     shared_x_display.h
     wayland_capture_source.h
+    wayland_compositor_source.cc
+    wayland_compositor_source.h
     wayland_input_target.h
     wayland_portal.cc
     wayland_portal.h

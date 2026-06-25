@@ -24,8 +24,7 @@
 
 #include <sys/types.h>
 
-#include "base/desktop/linux/wayland_capture_source.h"
-#include "base/desktop/linux/wayland_input_target.h"
+#include "base/desktop/linux/wayland_compositor_source.h"
 
 class QDBusInterface;
 
@@ -34,10 +33,7 @@ class QDBusInterface;
 // this interface; calling it directly skips the dialog, which is what allows capturing the login
 // screen (where no one can grant permission). The negotiation is synchronous - Mutter returns the
 // session/stream object paths immediately and signals the PipeWire node a moment later.
-class MutterScreenCast final
-    : public QObject,
-      public WaylandCaptureSource,
-      public WaylandInputTarget
+class MutterScreenCast final : public WaylandCompositorSource
 {
     Q_OBJECT
 
@@ -48,7 +44,7 @@ public:
     // Returns true if the session bus connection succeeded and org.gnome.Mutter.ScreenCast is present.
     bool isAvailable() const;
 
-    void start();
+    void start() final;
 
     // WaylandCaptureSource implementation.
     bool isStarted() const final;
@@ -65,7 +61,6 @@ public:
     void notifyKeyboardKeysym(qint32 keysym, bool pressed) final;
 
 signals:
-    void sig_started(bool success);
     void sig_closed();
 
 private slots:

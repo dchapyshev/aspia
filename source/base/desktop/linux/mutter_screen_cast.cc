@@ -140,7 +140,7 @@ const uint kCursorModeMetadata = 2;
 
 //--------------------------------------------------------------------------------------------------
 MutterScreenCast::MutterScreenCast(uid_t session_uid, QObject* parent)
-    : QObject(parent),
+    : WaylandCompositorSource(parent),
       session_uid_(session_uid),
       connection_name_(QString("aspia-mutter-%1").arg(session_uid)),
       bus_(SessionDBus::connectAsUser(session_uid, connection_name_))
