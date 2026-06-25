@@ -21,7 +21,10 @@
 #include <QDBusError>
 #include <QString>
 
+#include <cstdlib>
+
 #include "base/logging.h"
+#include "base/linux/libsystemd.h"
 #include "base/linux/scoped_user_credentials.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -53,4 +56,19 @@ QDBusConnection SessionDBus::connectAsUser(uid_t uid, const QString& connection_
 
     QDBusConnection::disconnectFromBus(connection_name);
     return QDBusConnection(QString());
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QDBusConnection SessionDBus::connectAsActiveUser(const QString& connection_name)
+{
+    uid_t uid = 0;
+    char* session = nullptr;
+    if (LibSystemd::seatGetActive("seat0", &session, &uid) < 0)
+        return QDBusConnection(QString());
+
+    if (session)
+        free(session);
+
+    return connectAsUser(uid, connection_name);
 }

@@ -39,6 +39,10 @@ public:
     // Connects to |uid|'s session bus authenticated as that user. |connection_name| names the Qt D-Bus
     // connection. Returns an invalid (not connected) QDBusConnection on failure.
     static QDBusConnection connectAsUser(uid_t uid, const QString& connection_name);
+
+    // Like connectAsUser(), but for the user owning the active session of seat0 (the locally logged-in
+    // user or the greeter), so callers do not resolve the uid themselves.
+    static QDBusConnection connectAsActiveUser(const QString& connection_name);
 };
 
 #endif // BASE_LINUX_SESSION_DBUS_H

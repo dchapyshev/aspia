@@ -25,9 +25,11 @@
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
-#include <QDBusConnection>
 #include <QDBusInterface>
 #include <QDBusReply>
+#include <QString>
+
+#include "base/linux/session_dbus.h"
 #endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 
 namespace {
@@ -115,6 +117,9 @@ void wakeUpDisplay()
 
 //--------------------------------------------------------------------------------------------------
 PowerSaveBlocker::PowerSaveBlocker()
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+    : bus_(SessionDBus::connectAsActiveUser("aspia-power-save"))
+#endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 {
     LOG(INFO) << "Ctor";
 
@@ -130,8 +135,7 @@ PowerSaveBlocker::PowerSaveBlocker()
     // Keep the screen from blanking for the duration of the session. On Wayland a screen blank makes
     // the compositor renegotiate the screen-cast stream, which breaks capture (the stream ends with
     // "no more input formats"). org.freedesktop.ScreenSaver is implemented by both GNOME and KDE.
-    QDBusInterface screen_saver(
-        kScreenSaverService, kScreenSaverPath, kScreenSaverIface, QDBusConnection::sessionBus());
+    QDBusInterface screen_saver(kScreenSaverService, kScreenSaverPath, kScreenSaverIface, bus_);
     QDBusReply<uint> reply = screen_saver.call("Inhibit", "Aspia", "Remote desktop session is active");
     if (reply.isValid())
         cookie_ = reply.value();
@@ -150,11 +154,14 @@ PowerSaveBlocker::~PowerSaveBlocker()
 #if defined(Q_OS_WINDOWS)
     deletePowerRequest(handle_.release());
 #elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
-    if (cookie_)
+    if (bus_.isConnected())
     {
-        QDBusInterface screen_saver(
-            kScreenSaverService, kScreenSaverPath, kScreenSaverIface, QDBusConnection::sessionBus());
-        screen_saver.call("UnInhibit", cookie_);
+        if (cookie_)
+        {
+            QDBusInterface screen_saver(kScreenSaverService, kScreenSaverPath, kScreenSaverIface, bus_);
+            screen_saver.call("UnInhibit", cookie_);
+        }
+        QDBusConnection::disconnectFromBus(bus_.name());
     }
 #endif // defined(Q_OS_*)
 }

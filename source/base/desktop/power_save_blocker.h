@@ -27,6 +27,10 @@
 #include "base/win/scoped_object.h"
 #endif // defined(Q_OS_WINDOWS)
 
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+#include <QDBusConnection>
+#endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+
 class PowerSaveBlocker
 {
 public:
@@ -37,6 +41,8 @@ private:
 #if defined(Q_OS_WINDOWS)
     ScopedHandle handle_;
 #elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+    // Screen-saver inhibit on the active session user's bus (the root agent reaches it via SessionDBus).
+    QDBusConnection bus_;
     quint32 cookie_ = 0;
 #endif // defined(Q_OS_*)
 
