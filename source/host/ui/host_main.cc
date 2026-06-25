@@ -42,7 +42,6 @@
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX)
-#include <cstring>
 #include <unistd.h>
 
 #include "base/linux/x11_headers.h"
@@ -81,18 +80,14 @@ bool waitForValidInputDesktop()
             break;
         }
 #elif defined(Q_OS_LINUX)
-        // Wait for the X server (Xwayland) to accept connections and for the session's HiDPI scale to be
-        // published as Xft.dpi in the X resource manager. GNOME/KDE publish it a moment after the
-        // session becomes active; if Qt initializes earlier it assumes a 1.0 scale and lays every window
-        // out at the wrong size (the mis-sized notifier at login on a HiDPI display).
+        // The service may launch the GUI a moment before the session's X server (Xwayland) is accepting
+        // connections; creating the QApplication then fails and the GUI exits. Wait until the display
+        // can be opened.
         Display* display = XOpenDisplay(nullptr);
         if (display)
         {
-            const char* resources = XResourceManagerString(display);
-            const bool ready = resources && std::strstr(resources, "Xft.dpi");
             XCloseDisplay(display);
-            if (ready)
-                break;
+            break;
         }
 #else
         break;

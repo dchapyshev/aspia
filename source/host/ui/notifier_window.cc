@@ -154,6 +154,15 @@ NotifierWindow::NotifierWindow(QWidget* parent)
             std::chrono::milliseconds(500), this, &NotifierWindow::onUpdateWindowPosition);
     });
 
+    // The display scale can be applied a moment after the session starts (and the window may have been
+    // laid out at the previous scale). Re-fit when the logical DPI changes so the window does not stay
+    // mis-sized.
+    connect(QApplication::primaryScreen(), &QScreen::logicalDotsPerInchChanged, this, [this]()
+    {
+        LOG(INFO) << "Screen DPI changed";
+        onUpdateWindowPosition();
+    });
+
     connect(ui->tree, &QTreeWidget::itemDoubleClicked,
             this, [](QTreeWidgetItem* item, int /* column */)
     {
