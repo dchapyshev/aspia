@@ -54,6 +54,11 @@ const char kService[] = "org.kde.KWin.ScreenShot2";
 const char kPath[] = "/org/kde/KWin/ScreenShot2";
 const char kInterface[] = "org.kde.KWin.ScreenShot2";
 
+// ScreenShot2 interface version. KWin 5.x exposes version 4 and reads pixels back from the GPU into the
+// CPU synchronously, which is too slow on real hardware to use as a video source. KWin 6.0+ exposes
+// version 5 with a fast path. Below this we report unavailable and let the agent fall back to KMS.
+const uint kMinInterfaceVersion = 5;
+
 const int kAlignment = 32;
 // QImage::Format_RGBA8888 - bytes R,G,B,A in memory; everything else KWin returns (RGB32/ARGB32/
 // ARGB32_Premultiplied) is B,G,R,A, which matches the frame's packed BGRA directly.
@@ -205,8 +210,16 @@ bool ScreenCapturerKwin::isAvailable(uid_t session_uid)
     QDBusConnection bus = SessionDBus::connectAsUser(session_uid, name);
 
     bool available = false;
-    if (bus.isConnected() && bus.interface())
-        available = bus.interface()->isServiceRegistered(kService).value();
+    if (bus.isConnected() && bus.interface() &&
+        bus.interface()->isServiceRegistered(kService).value())
+    {
+        // Only KWin 6.0+ (interface version 5 and up) is fast enough; older KWin reads frames back too
+        // slowly to drive video, so we report unavailable and the agent uses the KMS path instead.
+        QDBusInterface screenshot(kService, kPath, kInterface, bus);
+        const uint version = screenshot.property("Version").toUInt();
+        available = version >= kMinInterfaceVersion;
+        LOG(INFO) << "KWin ScreenShot2 interface version" << version << "(required" << kMinInterfaceVersion << ")";
+    }
 
     if (bus.isConnected())
         QDBusConnection::disconnectFromBus(name);
