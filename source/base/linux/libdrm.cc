@@ -20,6 +20,8 @@
 
 #include <dlfcn.h>
 
+#include <cstring>
+
 #include "base/logging.h"
 
 namespace {
@@ -46,6 +48,11 @@ decltype(&drmModeGetConnectorCurrent) g_mode_get_connector_current = nullptr;
 decltype(&drmModeFreeConnector) g_mode_free_connector = nullptr;
 decltype(&drmModeGetEncoder) g_mode_get_encoder = nullptr;
 decltype(&drmModeFreeEncoder) g_mode_free_encoder = nullptr;
+decltype(&drmIoctl) g_drm_ioctl = nullptr;
+decltype(&drmModeObjectGetProperties) g_mode_object_get_properties = nullptr;
+decltype(&drmModeFreeObjectProperties) g_mode_free_object_properties = nullptr;
+decltype(&drmModeGetProperty) g_mode_get_property = nullptr;
+decltype(&drmModeFreeProperty) g_mode_free_property = nullptr;
 // drmCloseBufferHandle is newer than some build hosts' libdrm headers, so it is typed by hand and
 // resolved at runtime on the target (which ships a recent libdrm).
 int (*g_close_buffer_handle)(int fd, uint32_t handle) = nullptr;
@@ -107,6 +114,16 @@ bool LibDrm::ensureLoaded()
         reinterpret_cast<decltype(g_mode_get_encoder)>(dlsym(g_handle, "drmModeGetEncoder"));
     g_mode_free_encoder =
         reinterpret_cast<decltype(g_mode_free_encoder)>(dlsym(g_handle, "drmModeFreeEncoder"));
+    // Optional (resolved but not required): used only for the cursor CPU read path.
+    g_drm_ioctl = reinterpret_cast<decltype(g_drm_ioctl)>(dlsym(g_handle, "drmIoctl"));
+    g_mode_object_get_properties = reinterpret_cast<decltype(g_mode_object_get_properties)>(
+        dlsym(g_handle, "drmModeObjectGetProperties"));
+    g_mode_free_object_properties = reinterpret_cast<decltype(g_mode_free_object_properties)>(
+        dlsym(g_handle, "drmModeFreeObjectProperties"));
+    g_mode_get_property =
+        reinterpret_cast<decltype(g_mode_get_property)>(dlsym(g_handle, "drmModeGetProperty"));
+    g_mode_free_property =
+        reinterpret_cast<decltype(g_mode_free_property)>(dlsym(g_handle, "drmModeFreeProperty"));
 
     if (!g_mode_get_resources || !g_mode_free_resources || !g_mode_get_crtc || !g_mode_free_crtc ||
         !g_mode_get_fb2 || !g_mode_free_fb2 || !g_prime_handle_to_fd || !g_drop_master ||
@@ -285,4 +302,58 @@ void LibDrm::modeFreeEncoder(drmModeEncoder* encoder)
     if (!ensureLoaded())
         return;
     g_mode_free_encoder(encoder);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+int LibDrm::mapDumbBuffer(int fd, uint32_t handle, uint64_t* offset)
+{
+    if (!ensureLoaded() || !g_drm_ioctl)
+        return -1;
+
+    struct drm_mode_map_dumb arg;
+    memset(&arg, 0, sizeof(arg));
+    arg.handle = handle;
+
+    const int result = g_drm_ioctl(fd, DRM_IOCTL_MODE_MAP_DUMB, &arg);
+    if (result == 0 && offset)
+        *offset = arg.offset;
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+drmModeObjectProperties* LibDrm::modeObjectGetProperties(int fd, uint32_t object_id,
+                                                         uint32_t object_type)
+{
+    if (!ensureLoaded() || !g_mode_object_get_properties)
+        return nullptr;
+    return g_mode_object_get_properties(fd, object_id, object_type);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void LibDrm::modeFreeObjectProperties(drmModeObjectProperties* props)
+{
+    if (!ensureLoaded() || !g_mode_free_object_properties)
+        return;
+    g_mode_free_object_properties(props);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+drmModePropertyRes* LibDrm::modeGetProperty(int fd, uint32_t property_id)
+{
+    if (!ensureLoaded() || !g_mode_get_property)
+        return nullptr;
+    return g_mode_get_property(fd, property_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void LibDrm::modeFreeProperty(drmModePropertyRes* property)
+{
+    if (!ensureLoaded() || !g_mode_free_property)
+        return;
+    g_mode_free_property(property);
 }

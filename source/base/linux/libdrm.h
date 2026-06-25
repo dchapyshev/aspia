@@ -58,6 +58,19 @@ public:
     static void modeFreeConnector(drmModeConnector* connector);
     static drmModeEncoder* modeGetEncoder(int fd, uint32_t encoder_id);
     static void modeFreeEncoder(drmModeEncoder* encoder);
+
+    // Maps a dumb buffer for CPU access, returning the mmap offset in |offset|. Used to read small
+    // linear buffers (the hardware cursor) without the dmabuf/EGL path, which some virtual GPUs
+    // (vmwgfx) cannot export. Returns a negative value if unsupported.
+    static int mapDumbBuffer(int fd, uint32_t handle, uint64_t* offset);
+
+    // Object property enumeration, used to read the cursor plane's HOTSPOT_X/HOTSPOT_Y (paravirtual
+    // drivers expose the cursor hotspot this way rather than via the plane position).
+    static drmModeObjectProperties* modeObjectGetProperties(int fd, uint32_t object_id,
+                                                            uint32_t object_type);
+    static void modeFreeObjectProperties(drmModeObjectProperties* props);
+    static drmModePropertyRes* modeGetProperty(int fd, uint32_t property_id);
+    static void modeFreeProperty(drmModePropertyRes* property);
 };
 
 #endif // BASE_LINUX_LIBDRM_H
