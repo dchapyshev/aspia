@@ -33,6 +33,7 @@
 
 #include <algorithm>
 #include <array>
+#include <utility>
 
 #include "base/logging.h"
 #include "base/desktop/frame_aligned.h"
@@ -70,6 +71,18 @@ quint32 drmFourcc(quint32 spa_format)
         case SPA_VIDEO_FORMAT_RGBx: return DRM_FORMAT_XBGR8888;
         default: return 0;
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Maps a compositor connector name to a stable screen id. The id only needs to be stable within the
+// running host process (the client round-trips it back during the same session), so a plain FNV-1a
+// hash of the connector is enough and avoids depending on monitor enumeration order.
+ScreenCapturer::ScreenId connectorId(const QString& connector)
+{
+    quint32 hash = 2166136261u;
+    for (QChar ch : connector)
+        hash = (hash ^ static_cast<quint16>(ch.unicode())) * 16777619u;
+    return static_cast<ScreenCapturer::ScreenId>(hash & 0x7fffffffu);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -177,7 +190,13 @@ ScreenCapturerPipeWire* ScreenCapturerPipeWire::create(uid_t session_uid, QObjec
 //--------------------------------------------------------------------------------------------------
 int ScreenCapturerPipeWire::screenCount()
 {
-    return 1;
+    if (!source_)
+        return 1;
+
+    // The Mutter ScreenCast source can record each monitor individually; the portal source exposes a
+    // single user-picked stream and reports no monitors, so one screen is presented.
+    const int count = source_->monitors().size();
+    return count > 0 ? count : 1;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -186,27 +205,80 @@ bool ScreenCapturerPipeWire::screenList(ScreenList* screens)
     screens->screens.clear();
     screens->resolutions.clear();
 
-    Screen screen;
-    screen.id = 0;
-    screen.position = QPoint(0, 0);
-    screen.resolution = screen_rect_.size();
-    screen.is_primary = true;
+    const QList<WaylandCompositorSource::MonitorInfo> monitors =
+        source_ ? source_->monitors() : QList<WaylandCompositorSource::MonitorInfo>();
 
-    screens->screens.append(screen);
+    if (monitors.isEmpty())
+    {
+        // Single-stream source (portal): expose one screen covering the captured stream.
+        Screen screen;
+        screen.id = 0;
+        screen.position = QPoint(0, 0);
+        screen.resolution = screen_rect_.size();
+        screen.dpi = QPoint(96, 96);
+        screen.is_primary = true;
+        screens->screens.append(screen);
+        return true;
+    }
+
+    for (const WaylandCompositorSource::MonitorInfo& monitor : std::as_const(monitors))
+    {
+        Screen screen;
+        screen.id = connectorId(monitor.connector);
+        screen.title = monitor.title;
+        screen.position = monitor.position;
+        screen.resolution = monitor.size;
+        screen.dpi = QPoint(96, 96);
+        screen.is_primary = monitor.primary;
+        screens->screens.append(screen);
+    }
+
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ScreenCapturerPipeWire::selectScreen(ScreenId /* screen_id */)
+bool ScreenCapturerPipeWire::selectScreen(ScreenId screen_id)
 {
-    // A portal session exposes a single monitor stream; there is nothing to switch.
-    return true;
+    if (!source_)
+        return true;
+
+    const QList<WaylandCompositorSource::MonitorInfo> monitors = source_->monitors();
+    if (monitors.isEmpty())
+    {
+        // Single-stream source (portal): there is nothing to switch.
+        return true;
+    }
+
+    for (const WaylandCompositorSource::MonitorInfo& monitor : std::as_const(monitors))
+    {
+        if (connectorId(monitor.connector) != screen_id)
+            continue;
+
+        if (source_->recordedMonitor() == monitor.connector)
+            return true; // Already recording this monitor.
+
+        // Switch the recorded monitor and renegotiate the stream. Queued so it runs off the capture
+        // call stack: onRestartSource() tears down the PipeWire stream and re-starts the source, which
+        // records the newly requested connector.
+        source_->setRequestedMonitor(monitor.connector);
+        QMetaObject::invokeMethod(this, &ScreenCapturerPipeWire::onRestartSource, Qt::QueuedConnection);
+
+        LOG(INFO) << "Selecting monitor:" << monitor.connector;
+        return true;
+    }
+
+    LOG(ERROR) << "selectScreen: unknown screen id" << screen_id;
+    return false;
 }
 
 //--------------------------------------------------------------------------------------------------
 ScreenCapturer::ScreenId ScreenCapturerPipeWire::currentScreen() const
 {
-    return 0;
+    if (!source_)
+        return 0;
+
+    const QString connector = source_->recordedMonitor();
+    return connector.isEmpty() ? 0 : connectorId(connector);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -339,8 +411,11 @@ bool ScreenCapturerPipeWire::startStream()
         return false;
 
     // Off-screen EGL/GBM importer for DMA-BUF frames. If it fails to initialize, only MemFd/MemPtr
-    // formats are offered and capture still works.
-    egl_dmabuf_ = std::make_unique<EglDmaBuf>();
+    // formats are offered and capture still works. Created once and reused across stream restarts:
+    // re-initializing EGL/GBM on every monitor switch churns the driver's EGL display/context and
+    // crashes Mesa (libgallium GPF) after a few cycles, so it must outlive individual streams.
+    if (!egl_dmabuf_)
+        egl_dmabuf_ = std::make_unique<EglDmaBuf>();
 
     api_->pw_init(nullptr, nullptr);
 
@@ -440,7 +515,9 @@ bool ScreenCapturerPipeWire::startStream()
     spa_pod_builder builder = SPA_POD_BUILDER_INIT(pod_buffer, sizeof(pod_buffer));
 
     const spa_pod* params[16];
-    const int n_params = buildFormatParams(&builder, params, true);
+    // Skip DMA-BUF formats if a previous stream already proved the import path unusable on this GPU,
+    // so a switch does not repeat the failed-import then renegotiate-to-shm cycle on every stream.
+    const int n_params = buildFormatParams(&builder, params, !dmabuf_disabled_);
 
     int ret = api_->pw_stream_connect(stream_, PW_DIRECTION_INPUT, source_->stream().node_id,
         static_cast<pw_stream_flags>(PW_STREAM_FLAG_AUTOCONNECT | PW_STREAM_FLAG_MAP_BUFFERS),

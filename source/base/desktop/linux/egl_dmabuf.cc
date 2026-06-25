@@ -226,6 +226,7 @@ bool EglDmaBuf::imageFromDmaBuf(const QSize& image_size, quint32 fourcc, const P
     if (image == EGL_NO_IMAGE_KHR)
     {
         LOG(ERROR) << "eglCreateImageKHR failed:" << egl_->fp_eglGetError();
+        egl_->fp_eglMakeCurrent(egl_->display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
         return false;
     }
 
@@ -263,6 +264,11 @@ bool EglDmaBuf::imageFromDmaBuf(const QSize& image_size, quint32 fourcc, const P
     egl_->glDeleteFramebuffers(1, &framebuffer);
     egl_->glDeleteTextures(1, &texture);
     egl_->eglDestroyImageKHR(egl_->display, image);
+
+    // Release the context from this thread. The importer is reused across stream restarts, and after a
+    // monitor switch the PipeWire stream runs on a fresh thread; a context left current on the previous
+    // (now finished) thread could not be bound on the new one.
+    egl_->fp_eglMakeCurrent(egl_->display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
 
     return result;
 }

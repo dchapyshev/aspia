@@ -28,6 +28,8 @@
 #include <QDBusVariant>
 #include <QMetaType>
 
+#include <utility>
+
 #include "base/logging.h"
 #include "base/linux/session_dbus.h"
 
@@ -114,6 +116,69 @@ const QDBusArgument& operator>>(const QDBusArgument& argument, GnomeMonitor& mon
     return argument;
 }
 
+// One monitor reference inside a logical monitor: the (ssss) spec identifying a physical monitor.
+struct GnomeMonitorSpec
+{
+    QString connector;
+    QString vendor;
+    QString product;
+    QString serial;
+};
+
+// A logical monitor from GetCurrentState: its position and scale in the layout, the primary flag and
+// the physical monitors assigned to it.
+struct GnomeLogicalMonitor
+{
+    int x = 0;
+    int y = 0;
+    double scale = 0.0;
+    quint32 transform = 0;
+    bool primary = false;
+    QList<GnomeMonitorSpec> monitors;
+    QVariantMap properties;
+};
+
+Q_DECLARE_METATYPE(GnomeMonitorSpec)
+Q_DECLARE_METATYPE(GnomeLogicalMonitor)
+
+//--------------------------------------------------------------------------------------------------
+QDBusArgument& operator<<(QDBusArgument& argument, const GnomeMonitorSpec& spec)
+{
+    argument.beginStructure();
+    argument << spec.connector << spec.vendor << spec.product << spec.serial;
+    argument.endStructure();
+    return argument;
+}
+
+//--------------------------------------------------------------------------------------------------
+const QDBusArgument& operator>>(const QDBusArgument& argument, GnomeMonitorSpec& spec)
+{
+    argument.beginStructure();
+    argument >> spec.connector >> spec.vendor >> spec.product >> spec.serial;
+    argument.endStructure();
+    return argument;
+}
+
+//--------------------------------------------------------------------------------------------------
+QDBusArgument& operator<<(QDBusArgument& argument, const GnomeLogicalMonitor& monitor)
+{
+    argument.beginStructure();
+    argument << monitor.x << monitor.y << monitor.scale << monitor.transform << monitor.primary;
+    argument << monitor.monitors << monitor.properties;
+    argument.endStructure();
+    return argument;
+}
+
+//--------------------------------------------------------------------------------------------------
+const QDBusArgument& operator>>(const QDBusArgument& argument, GnomeLogicalMonitor& monitor)
+{
+    argument.beginStructure();
+    argument >> monitor.x >> monitor.y >> monitor.scale >> monitor.transform >> monitor.primary;
+    argument >> monitor.monitors >> monitor.properties;
+    argument.endStructure();
+    return argument;
+}
+
 namespace {
 
 const char kService[] = "org.gnome.Mutter.ScreenCast";
@@ -146,6 +211,11 @@ MutterScreenCast::MutterScreenCast(uid_t session_uid, QObject* parent)
       bus_(SessionDBus::connectAsUser(session_uid, connection_name_))
 {
     LOG(INFO) << "Ctor";
+
+    // Drop the cached monitor layout whenever the compositor reconfigures outputs, so the next query
+    // re-reads it instead of polling DisplayConfig on every captured frame.
+    bus_.connect(kDisplayService, kDisplayPath, kDisplayIface, "MonitorsChanged",
+                 this, SLOT(onMonitorsChanged()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -191,13 +261,14 @@ void MutterScreenCast::start()
     started_ = false;
     stream_ = Stream();
 
-    const QString connector = primaryConnector();
+    const QString connector = connectorToRecord();
     if (connector.isEmpty())
     {
         LOG(ERROR) << "No monitor connector available";
         fail();
         return;
     }
+    recorded_connector_ = connector;
 
     QDBusConnection bus = bus_;
 
@@ -271,6 +342,27 @@ void MutterScreenCast::start()
     }
 
     LOG(INFO) << "Mutter screen cast started, waiting for node (connector:" << connector << ")";
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<WaylandCompositorSource::MonitorInfo> MutterScreenCast::monitors() const
+{
+    refreshMonitors();
+    return monitors_cache_;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString MutterScreenCast::recordedMonitor() const
+{
+    // Report the requested monitor as soon as it is set, so the client reflects the selection without
+    // waiting for the renegotiated stream; start() turns it into |recorded_connector_| once recorded.
+    return requested_connector_.isEmpty() ? recorded_connector_ : requested_connector_;
+}
+
+//--------------------------------------------------------------------------------------------------
+void MutterScreenCast::setRequestedMonitor(const QString& connector)
+{
+    requested_connector_ = connector;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -361,33 +453,113 @@ void MutterScreenCast::onPipeWireStreamAdded(uint node_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString MutterScreenCast::primaryConnector() const
+void MutterScreenCast::onMonitorsChanged()
 {
+    LOG(INFO) << "Monitor layout changed";
+    monitors_valid_ = false;
+}
+
+//--------------------------------------------------------------------------------------------------
+void MutterScreenCast::refreshMonitors() const
+{
+    if (monitors_valid_)
+        return;
+
     qDBusRegisterMetaType<GnomeMonitorMode>();
     qDBusRegisterMetaType<QList<GnomeMonitorMode>>();
     qDBusRegisterMetaType<GnomeMonitor>();
     qDBusRegisterMetaType<QList<GnomeMonitor>>();
+    qDBusRegisterMetaType<GnomeMonitorSpec>();
+    qDBusRegisterMetaType<QList<GnomeMonitorSpec>>();
+    qDBusRegisterMetaType<GnomeLogicalMonitor>();
+    qDBusRegisterMetaType<QList<GnomeLogicalMonitor>>();
+
+    // Cache the result (even when empty) until the next MonitorsChanged signal invalidates it.
+    monitors_cache_.clear();
+    monitors_valid_ = true;
 
     QDBusInterface display(kDisplayService, kDisplayPath, kDisplayIface, bus_);
     QDBusMessage reply = display.call("GetCurrentState");
-    if (reply.type() != QDBusMessage::ReplyMessage || reply.arguments().size() < 2)
+    if (reply.type() != QDBusMessage::ReplyMessage || reply.arguments().size() < 3)
     {
         LOG(ERROR) << "GetCurrentState failed:" << reply.errorMessage();
-        return QString();
+        return;
     }
 
-    // Reply layout: (u serial, a((ssss)a(siiddada{sv})a{sv}) monitors, ...). Return the connector of
-    // the first monitor.
+    // Reply layout: (u serial, a((ssss)a(siiddada{sv})a{sv}) monitors,
+    //                a(iiduba(ssss)a{sv}) logical_monitors, a{sv} properties).
     const QList<GnomeMonitor> monitors = qdbus_cast<QList<GnomeMonitor>>(reply.arguments().at(1));
-    if (monitors.isEmpty())
+    const QList<GnomeLogicalMonitor> logical =
+        qdbus_cast<QList<GnomeLogicalMonitor>>(reply.arguments().at(2));
+
+    for (const GnomeMonitor& monitor : std::as_const(monitors))
     {
-        LOG(ERROR) << "No monitors in GetCurrentState reply";
-        return QString();
+        MonitorInfo info;
+        info.connector = monitor.connector;
+        info.title = monitor.product.isEmpty() ? monitor.connector : monitor.product;
+
+        // Resolution is the current mode, falling back to the first listed mode.
+        for (const GnomeMonitorMode& mode : std::as_const(monitor.modes))
+        {
+            if (mode.properties.value("is-current").toBool())
+            {
+                info.size = QSize(mode.width, mode.height);
+                break;
+            }
+        }
+        if (info.size.isEmpty() && !monitor.modes.isEmpty())
+            info.size = QSize(monitor.modes.first().width, monitor.modes.first().height);
+
+        // Position and the primary flag come from the logical monitor this connector is assigned to.
+        for (const GnomeLogicalMonitor& lm : std::as_const(logical))
+        {
+            bool found = false;
+            for (const GnomeMonitorSpec& spec : std::as_const(lm.monitors))
+            {
+                if (spec.connector == monitor.connector)
+                {
+                    info.position = QPoint(lm.x, lm.y);
+                    info.primary = lm.primary;
+                    found = true;
+                    break;
+                }
+            }
+            if (found)
+                break;
+        }
+
+        monitors_cache_.append(info);
     }
 
-    const QString connector = monitors.first().connector;
-    LOG(INFO) << "Primary monitor connector:" << connector << "(monitors:" << monitors.size() << ")";
-    return connector;
+    LOG(INFO) << "Monitor layout:" << monitors_cache_.size() << "monitor(s)";
+}
+
+//--------------------------------------------------------------------------------------------------
+QString MutterScreenCast::connectorToRecord() const
+{
+    refreshMonitors();
+
+    // Honour the client's choice when that monitor is still present.
+    if (!requested_connector_.isEmpty())
+    {
+        for (const MonitorInfo& info : std::as_const(monitors_cache_))
+        {
+            if (info.connector == requested_connector_)
+                return requested_connector_;
+        }
+        LOG(INFO) << "Requested monitor" << requested_connector_ << "is gone; using primary";
+    }
+
+    // Otherwise the primary monitor, falling back to the first one.
+    for (const MonitorInfo& info : std::as_const(monitors_cache_))
+    {
+        if (info.primary)
+            return info.connector;
+    }
+    if (!monitors_cache_.isEmpty())
+        return monitors_cache_.first().connector;
+
+    return QString();
 }
 
 //--------------------------------------------------------------------------------------------------

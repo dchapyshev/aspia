@@ -45,6 +45,9 @@ public:
     bool isAvailable() const;
 
     void start() final;
+    QList<MonitorInfo> monitors() const final;
+    QString recordedMonitor() const final;
+    void setRequestedMonitor(const QString& connector) final;
 
     // WaylandCaptureSource implementation.
     bool isStarted() const final;
@@ -66,9 +69,14 @@ signals:
 private slots:
     // org.gnome.Mutter.ScreenCast.Stream::PipeWireStreamAdded - delivers the PipeWire node id.
     void onPipeWireStreamAdded(uint node_id);
+    // org.gnome.Mutter.DisplayConfig::MonitorsChanged - invalidates the cached monitor layout.
+    void onMonitorsChanged();
 
 private:
-    QString primaryConnector() const;
+    // Re-reads the monitor layout from DisplayConfig into |monitors_cache_| when it is invalid.
+    void refreshMonitors() const;
+    // Connector to record: the requested one if still present, otherwise the primary monitor.
+    QString connectorToRecord() const;
     void fail();
 
     // Connection to the session user's bus, authenticated as that user (the host runs as root).
@@ -86,6 +94,15 @@ private:
     QString remote_desktop_session_path_;
     bool started_ = false;
     Stream stream_;
+
+    // Monitor the client asked to record (empty = use the primary) and the one actually recorded.
+    QString requested_connector_;
+    QString recorded_connector_;
+
+    // Monitor layout cache, lazily filled and invalidated by the MonitorsChanged signal so the layout
+    // is not re-read from D-Bus on every screenCount() call.
+    mutable QList<MonitorInfo> monitors_cache_;
+    mutable bool monitors_valid_ = false;
 
     Q_DISABLE_COPY_MOVE(MutterScreenCast)
 };

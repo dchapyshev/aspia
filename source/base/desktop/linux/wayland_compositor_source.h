@@ -19,7 +19,11 @@
 #ifndef BASE_DESKTOP_LINUX_WAYLAND_COMPOSITOR_SOURCE_H
 #define BASE_DESKTOP_LINUX_WAYLAND_COMPOSITOR_SOURCE_H
 
+#include <QList>
 #include <QObject>
+#include <QPoint>
+#include <QSize>
+#include <QString>
 
 #include <sys/types.h>
 
@@ -48,6 +52,27 @@ public:
 
     // Begins asynchronous negotiation of the capture stream; sig_started() reports the outcome.
     virtual void start() = 0;
+
+    struct MonitorInfo
+    {
+        QString connector;   // stable monitor id as the compositor reports it (e.g. "DP-1")
+        QString title;       // human-readable name, falling back to the connector
+        QPoint position;     // position in the compositor's logical layout
+        QSize size;          // monitor resolution in physical pixels
+        bool primary = false;
+    };
+
+    // The monitors the compositor can record individually. Empty for single-stream sources (the
+    // xdg-desktop-portal session, where the user already picked one monitor in its dialog), in which
+    // case the capturer reports a single screen and cannot switch.
+    virtual QList<MonitorInfo> monitors() const { return {}; }
+
+    // Connector the source is currently recording (or about to record after the next start()); empty
+    // for single-stream sources.
+    virtual QString recordedMonitor() const { return QString(); }
+
+    // Requests that the next negotiation record |connector|; takes effect on the following start().
+    virtual void setRequestedMonitor(const QString& /* connector */) { /* Nothing */ }
 
 signals:
     void sig_started(bool success);
