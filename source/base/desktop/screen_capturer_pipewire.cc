@@ -378,9 +378,19 @@ bool ScreenCapturerPipeWire::startStream()
     }
     else
     {
-        // The stream lives on the session's own PipeWire daemon (Mutter ScreenCast); connect to the
-        // default socket.
-        core_ = api_->pw_context_connect(context_, nullptr, 0);
+        // The stream lives on the session's own PipeWire daemon (Mutter ScreenCast). The root host's
+        // environment does not point at the user's runtime dir, so give pw the socket path explicitly;
+        // root can open it (the socket is not uid-restricted). pw_context_connect takes ownership of
+        // the properties.
+        const uid_t uid = source_->pipeWireUid();
+        pw_properties* properties = nullptr;
+        if (uid != static_cast<uid_t>(-1))
+        {
+            const QByteArray remote = QString("/run/user/%1/pipewire-0").arg(uid).toLocal8Bit();
+            properties = api_->pw_properties_new(PW_KEY_REMOTE_NAME, remote.constData(), nullptr);
+        }
+
+        core_ = api_->pw_context_connect(context_, properties, 0);
         if (!core_)
         {
             LOG(ERROR) << "pw_context_connect failed";

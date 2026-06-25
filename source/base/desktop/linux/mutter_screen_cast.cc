@@ -29,6 +29,7 @@
 #include <QMetaType>
 
 #include "base/logging.h"
+#include "base/linux/session_dbus.h"
 
 // org.gnome.Mutter.DisplayConfig.GetCurrentState monitor layout, demarshalled via qdbus_cast (manual
 // QDBusArgument navigation does not descend reliably into these nested structures). Only the connector
@@ -138,8 +139,11 @@ const uint kCursorModeMetadata = 2;
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-MutterScreenCast::MutterScreenCast(QObject* parent)
-    : QObject(parent)
+MutterScreenCast::MutterScreenCast(uid_t session_uid, QObject* parent)
+    : QObject(parent),
+      session_uid_(session_uid),
+      connection_name_(QString("aspia-mutter-%1").arg(session_uid)),
+      bus_(SessionDBus::connectAsUser(session_uid, connection_name_))
 {
     LOG(INFO) << "Ctor";
 }
@@ -153,17 +157,18 @@ MutterScreenCast::~MutterScreenCast()
         remote_desktop_session_->call("Stop");
     if (session_)
         session_->call("Stop");
+
+    if (bus_.isConnected())
+        QDBusConnection::disconnectFromBus(connection_name_);
 }
 
 //--------------------------------------------------------------------------------------------------
-// static
-bool MutterScreenCast::isAvailable()
+bool MutterScreenCast::isAvailable() const
 {
-    QDBusConnection bus = QDBusConnection::sessionBus();
-    if (!bus.isConnected() || !bus.interface())
+    if (!bus_.isConnected() || !bus_.interface())
         return false;
 
-    return bus.interface()->isServiceRegistered(kService).value();
+    return bus_.interface()->isServiceRegistered(kService).value();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -194,7 +199,7 @@ void MutterScreenCast::start()
         return;
     }
 
-    QDBusConnection bus = QDBusConnection::sessionBus();
+    QDBusConnection bus = bus_;
 
     // RemoteDesktop session carries input. Create it first so the ScreenCast session can be linked to
     // it (input is delivered against the stream of the linked screen-cast session).
@@ -288,6 +293,13 @@ int MutterScreenCast::pipeWireFd() const
 }
 
 //--------------------------------------------------------------------------------------------------
+uid_t MutterScreenCast::pipeWireUid() const
+{
+    // The node is on this user's PipeWire daemon; the consumer connects to its socket explicitly.
+    return session_uid_;
+}
+
+//--------------------------------------------------------------------------------------------------
 void MutterScreenCast::notifyPointerMotionAbsolute(double x, double y)
 {
     if (!started_ || !remote_desktop_session_)
@@ -356,7 +368,7 @@ QString MutterScreenCast::primaryConnector() const
     qDBusRegisterMetaType<GnomeMonitor>();
     qDBusRegisterMetaType<QList<GnomeMonitor>>();
 
-    QDBusInterface display(kDisplayService, kDisplayPath, kDisplayIface, QDBusConnection::sessionBus());
+    QDBusInterface display(kDisplayService, kDisplayPath, kDisplayIface, bus_);
     QDBusMessage reply = display.call("GetCurrentState");
     if (reply.type() != QDBusMessage::ReplyMessage || reply.arguments().size() < 2)
     {

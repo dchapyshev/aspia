@@ -19,7 +19,10 @@
 #ifndef BASE_DESKTOP_LINUX_MUTTER_SCREEN_CAST_H
 #define BASE_DESKTOP_LINUX_MUTTER_SCREEN_CAST_H
 
+#include <QDBusConnection>
 #include <QObject>
+
+#include <sys/types.h>
 
 #include "base/desktop/linux/wayland_capture_source.h"
 #include "base/desktop/linux/wayland_input_target.h"
@@ -39,11 +42,11 @@ class MutterScreenCast final
     Q_OBJECT
 
 public:
-    explicit MutterScreenCast(QObject* parent = nullptr);
+    explicit MutterScreenCast(uid_t session_uid, QObject* parent = nullptr);
     ~MutterScreenCast() final;
 
-    // Returns true if org.gnome.Mutter.ScreenCast is available on the session bus.
-    static bool isAvailable();
+    // Returns true if the session bus connection succeeded and org.gnome.Mutter.ScreenCast is present.
+    bool isAvailable() const;
 
     void start();
 
@@ -51,6 +54,7 @@ public:
     bool isStarted() const final;
     const Stream& stream() const final;
     int pipeWireFd() const final;
+    uid_t pipeWireUid() const final;
 
     // WaylandInputTarget implementation.
     void notifyPointerMotionAbsolute(double x, double y) final;
@@ -71,6 +75,11 @@ private slots:
 private:
     QString primaryConnector() const;
     void fail();
+
+    // Connection to the session user's bus, authenticated as that user (the host runs as root).
+    uid_t session_uid_;
+    QString connection_name_;
+    QDBusConnection bus_;
 
     QDBusInterface* screen_cast_ = nullptr;
     QDBusInterface* session_ = nullptr;

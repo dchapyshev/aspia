@@ -22,6 +22,8 @@
 #include <QPoint>
 #include <QSize>
 
+#include <sys/types.h>
+
 // Abstract provider of a PipeWire screen-capture stream on Wayland. Implemented by WaylandPortal (via
 // xdg-desktop-portal, which asks the user for permission) and by MutterScreenCast (via the compositor's
 // org.gnome.Mutter.ScreenCast D-Bus interface directly, without a permission dialog - used to capture
@@ -44,6 +46,12 @@ public:
     // File descriptor for pw_context_connect_fd(), or -1 when the consumer should connect to the
     // default PipeWire socket (the stream lives on the session's own PipeWire daemon).
     virtual int pipeWireFd() const = 0;
+
+    // When pipeWireFd() is -1, the uid whose PipeWire daemon provides the stream. The root host's
+    // environment does not point at the user's runtime dir, so the consumer connects to
+    // /run/user/<uid>/pipewire-0 explicitly (root may open it). Returns (uid_t)-1 to use the default
+    // socket from the environment.
+    virtual uid_t pipeWireUid() const { return static_cast<uid_t>(-1); }
 };
 
 #endif // BASE_DESKTOP_LINUX_WAYLAND_CAPTURE_SOURCE_H
