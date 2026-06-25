@@ -28,6 +28,7 @@
 #include <algorithm>
 #include <array>
 #include <cstdlib>
+#include <utility>
 
 #include "base/logging.h"
 #include "base/desktop/differ.h"
@@ -44,6 +45,15 @@ const int kAlignment = 32;
 const int kMaxCards = 8;
 // A hardware cursor framebuffer is small; this tells it apart from the screen-sized primary plane.
 const int kMaxCursorSize = 256;
+
+// One active CRTC, i.e. one lit-up monitor selectable for capture.
+struct Monitor
+{
+    quint32 crtc_id = 0;
+    quint32 fb_id = 0;
+    QSize mode_size;
+    QString connector;
+};
 
 //--------------------------------------------------------------------------------------------------
 // Returns the kernel connector type name as compositors use it (e.g. "eDP", "HDMI-A", "DP"). The
@@ -74,6 +84,129 @@ const char* connectorTypeName(uint32_t type)
         case DRM_MODE_CONNECTOR_USB: return "USB";
         default: return "Unknown";
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Returns the connector name driving |crtc_id| (e.g. "eDP-1") using the already-fetched |resources|:
+// the connector whose currently bound encoder points at the CRTC. Empty if none does.
+QString connectorNameForCrtc(int drm_fd, drmModeRes* resources, quint32 crtc_id)
+{
+    if (!crtc_id || !resources)
+        return QString();
+
+    QString name;
+    for (int i = 0; i < resources->count_connectors && name.isEmpty(); ++i)
+    {
+        drmModeConnector* connector =
+            LibDrm::modeGetConnectorCurrent(drm_fd, resources->connectors[i]);
+        if (!connector)
+            continue;
+
+        // The connector drives the CRTC through its currently bound encoder.
+        if (connector->encoder_id)
+        {
+            drmModeEncoder* encoder = LibDrm::modeGetEncoder(drm_fd, connector->encoder_id);
+            if (encoder)
+            {
+                if (encoder->crtc_id == crtc_id)
+                {
+                    name = QString("%1-%2").arg(connectorTypeName(connector->connector_type))
+                                           .arg(connector->connector_type_id);
+                }
+                LibDrm::modeFreeEncoder(encoder);
+            }
+        }
+
+        LibDrm::modeFreeConnector(connector);
+    }
+
+    return name;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Counts the CRTCs currently scanning out a framebuffer (one per lit-up monitor). Cheap enough to
+// call on every captured frame: it issues only DRM ioctls and resolves no connector names.
+int activeCrtcCount(int drm_fd)
+{
+    drmModeRes* resources = LibDrm::modeGetResources(drm_fd);
+    if (!resources)
+        return 0;
+
+    int active = 0;
+    for (int i = 0; i < resources->count_crtcs; ++i)
+    {
+        drmModeCrtc* crtc = LibDrm::modeGetCrtc(drm_fd, resources->crtcs[i]);
+        if (crtc)
+        {
+            if (crtc->mode_valid && crtc->buffer_id)
+                ++active;
+            LibDrm::modeFreeCrtc(crtc);
+        }
+    }
+
+    LibDrm::modeFreeResources(resources);
+    return active;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Enumerates every active CRTC with its connector name and current mode size. Each entry is one
+// monitor selectable for capture; its CRTC id is the stable screen id reported to the client.
+QList<Monitor> activeMonitors(int drm_fd)
+{
+    QList<Monitor> monitors;
+
+    drmModeRes* resources = LibDrm::modeGetResources(drm_fd);
+    if (!resources)
+        return monitors;
+
+    for (int i = 0; i < resources->count_crtcs; ++i)
+    {
+        drmModeCrtc* crtc = LibDrm::modeGetCrtc(drm_fd, resources->crtcs[i]);
+        if (crtc)
+        {
+            if (crtc->mode_valid && crtc->buffer_id)
+            {
+                Monitor monitor;
+                monitor.crtc_id = resources->crtcs[i];
+                monitor.fb_id = crtc->buffer_id;
+                monitor.mode_size =
+                    QSize(static_cast<int>(crtc->width), static_cast<int>(crtc->height));
+                monitor.connector = connectorNameForCrtc(drm_fd, resources, monitor.crtc_id);
+                monitors.append(monitor);
+            }
+            LibDrm::modeFreeCrtc(crtc);
+        }
+    }
+
+    LibDrm::modeFreeResources(resources);
+    return monitors;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Reads the active seat compositor's logical output layout over Wayland (positions and logical sizes,
+// fractional scale folded in). Empty when no active Wayland session is reachable.
+QList<WaylandOutputLayout::Output> queryCompositorOutputs()
+{
+    char* session = nullptr;
+    uid_t uid = 0;
+    if (LibSystemd::seatGetActive("seat0", &session, &uid) < 0 || !session)
+        return {};
+    free(session);
+
+    QString socket_path;
+    for (const char* name : { "wayland-0", "wayland-1" })
+    {
+        const QString candidate = QString("/run/user/%1/").arg(uid) + name;
+        if (access(candidate.toLocal8Bit().constData(), F_OK) == 0)
+        {
+            socket_path = candidate;
+            break;
+        }
+    }
+    if (socket_path.isEmpty())
+        return {};
+
+    return WaylandOutputLayout::query(socket_path);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -235,7 +368,9 @@ quint32 ScreenCapturerKms::activeFramebufferId()
     if (!resources)
         return 0;
 
-    quint32 fb_id = 0;
+    quint32 first_fb_id = 0;
+    quint32 first_crtc_id = 0;
+    quint32 selected_fb_id = 0;
     int active = 0;
     for (int i = 0; i < resources->count_crtcs; ++i)
     {
@@ -245,11 +380,13 @@ quint32 ScreenCapturerKms::activeFramebufferId()
             if (crtc->mode_valid && crtc->buffer_id)
             {
                 ++active;
-                if (!fb_id)
+                if (!first_fb_id)
                 {
-                    fb_id = crtc->buffer_id;
-                    crtc_id_ = resources->crtcs[i];
+                    first_fb_id = crtc->buffer_id;
+                    first_crtc_id = resources->crtcs[i];
                 }
+                if (selected_crtc_id_ && resources->crtcs[i] == selected_crtc_id_)
+                    selected_fb_id = crtc->buffer_id;
             }
             LibDrm::modeFreeCrtc(crtc);
         }
@@ -266,7 +403,16 @@ quint32 ScreenCapturerKms::activeFramebufferId()
         input_geometry_attempts_ = 0;
     }
 
-    return fb_id;
+    // Capture the client-selected monitor; fall back to the first active CRTC when nothing is selected
+    // yet or the selected monitor is no longer lit up.
+    if (selected_fb_id)
+    {
+        crtc_id_ = selected_crtc_id_;
+        return selected_fb_id;
+    }
+
+    crtc_id_ = first_crtc_id;
+    return first_fb_id;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -281,26 +427,7 @@ void ScreenCapturerKms::updateInputGeometry(const QSize& captured)
 
     // The active seat session's compositor exposes the logical monitor layout over Wayland (readable
     // by a root process even on the login screen). DRM has no logical layout, so this is the source.
-    char* session = nullptr;
-    uid_t uid = 0;
-    if (LibSystemd::seatGetActive("seat0", &session, &uid) < 0 || !session)
-        return;
-    free(session);
-
-    QString socket_path;
-    for (const char* name : { "wayland-0", "wayland-1" })
-    {
-        const QString candidate = QString("/run/user/%1/").arg(uid) + name;
-        if (access(candidate.toLocal8Bit().constData(), F_OK) == 0)
-        {
-            socket_path = candidate;
-            break;
-        }
-    }
-    if (socket_path.isEmpty())
-        return;
-
-    const QList<WaylandOutputLayout::Output> outputs = WaylandOutputLayout::query(socket_path);
+    const QList<WaylandOutputLayout::Output> outputs = queryCompositorOutputs();
     if (outputs.isEmpty())
         return;
 
@@ -365,32 +492,7 @@ QString ScreenCapturerKms::capturedConnectorName()
     if (!resources)
         return QString();
 
-    QString name;
-    for (int i = 0; i < resources->count_connectors && name.isEmpty(); ++i)
-    {
-        drmModeConnector* connector =
-            LibDrm::modeGetConnectorCurrent(drm_fd_, resources->connectors[i]);
-        if (!connector)
-            continue;
-
-        // The connector drives our CRTC through its currently bound encoder.
-        if (connector->encoder_id)
-        {
-            drmModeEncoder* encoder = LibDrm::modeGetEncoder(drm_fd_, connector->encoder_id);
-            if (encoder)
-            {
-                if (encoder->crtc_id == crtc_id_)
-                {
-                    name = QString("%1-%2").arg(connectorTypeName(connector->connector_type))
-                                           .arg(connector->connector_type_id);
-                }
-                LibDrm::modeFreeEncoder(encoder);
-            }
-        }
-
-        LibDrm::modeFreeConnector(connector);
-    }
-
+    const QString name = connectorNameForCrtc(drm_fd_, resources, crtc_id_);
     LibDrm::modeFreeResources(resources);
     return name;
 }
@@ -398,7 +500,7 @@ QString ScreenCapturerKms::capturedConnectorName()
 //--------------------------------------------------------------------------------------------------
 int ScreenCapturerKms::screenCount()
 {
-    return 1;
+    return activeCrtcCount(drm_fd_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -407,26 +509,117 @@ bool ScreenCapturerKms::screenList(ScreenList* screens)
     screens->screens.clear();
     screens->resolutions.clear();
 
-    Screen screen;
-    screen.id = 0;
-    screen.position = QPoint(0, 0);
-    screen.resolution = screen_rect_.size();
-    screen.is_primary = true;
+    const QList<Monitor> monitors = activeMonitors(drm_fd_);
+    if (monitors.isEmpty())
+    {
+        // No active CRTC yet: expose a single synthetic screen covering the captured framebuffer so
+        // the client always has something to select.
+        Screen screen;
+        screen.id = static_cast<ScreenId>(crtc_id_);
+        screen.position = QPoint(0, 0);
+        screen.resolution = screen_rect_.size();
+        screen.dpi = QPoint(96, 96);
+        screen.is_primary = true;
+        screens->screens.append(screen);
+        return true;
+    }
 
-    screens->screens.append(screen);
+    // Positions come from the compositor's logical layout, matched to each CRTC by connector name (the
+    // captured-buffer size from DRM is the resolution). DRM alone has no cross-monitor layout.
+    const QList<WaylandOutputLayout::Output> outputs = queryCompositorOutputs();
+
+    // When the layout is unavailable (no compositor reachable), tile the monitors left to right so
+    // they do not all collapse onto the same origin.
+    QPoint fallback_position(0, 0);
+
+    for (const Monitor& monitor : std::as_const(monitors))
+    {
+        QRect logical;
+        for (const WaylandOutputLayout::Output& output : std::as_const(outputs))
+        {
+            if (!monitor.connector.isEmpty() && output.name == monitor.connector)
+            {
+                logical = output.logical;
+                break;
+            }
+        }
+
+        Screen screen;
+        screen.id = static_cast<ScreenId>(monitor.crtc_id);
+        screen.resolution = monitor.mode_size;
+        screen.dpi = QPoint(96, 96);
+        screen.title = monitor.connector.isEmpty() ?
+            QString("Screen %1").arg(monitor.crtc_id) : monitor.connector;
+
+        if (!logical.isEmpty())
+        {
+            screen.position = logical.topLeft();
+        }
+        else
+        {
+            screen.position = fallback_position;
+            fallback_position.rx() += monitor.mode_size.width();
+        }
+
+        screens->screens.append(screen);
+    }
+
+    // Exactly one screen is primary: prefer the one at the layout origin, else the first.
+    int primary_index = 0;
+    for (int i = 0; i < screens->screens.size(); ++i)
+    {
+        if (screens->screens[i].position == QPoint(0, 0))
+        {
+            primary_index = i;
+            break;
+        }
+    }
+    screens->screens[primary_index].is_primary = true;
+
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ScreenCapturerKms::selectScreen(ScreenId /* screen_id */)
+bool ScreenCapturerKms::selectScreen(ScreenId screen_id)
 {
-    return true;
+    const QList<Monitor> monitors = activeMonitors(drm_fd_);
+
+    // The capturer may have no active CRTC yet (created before the compositor lit an output). Accept
+    // the request and bind it on the first frame that finds the CRTC active.
+    if (monitors.isEmpty())
+    {
+        selected_crtc_id_ = static_cast<quint32>(screen_id);
+        queue_.reset();
+        input_geometry_valid_ = false;
+        input_geometry_attempts_ = 0;
+        return true;
+    }
+
+    for (const Monitor& monitor : std::as_const(monitors))
+    {
+        if (static_cast<ScreenId>(monitor.crtc_id) == screen_id)
+        {
+            selected_crtc_id_ = monitor.crtc_id;
+
+            // Drop frames sized for the previously selected monitor and re-learn the input geometry
+            // for the new one.
+            queue_.reset();
+            input_geometry_valid_ = false;
+            input_geometry_attempts_ = 0;
+
+            LOG(INFO) << "KMS selected screen: CRTC" << monitor.crtc_id << monitor.connector;
+            return true;
+        }
+    }
+
+    LOG(ERROR) << "KMS selectScreen: CRTC" << screen_id << "is not an active monitor";
+    return false;
 }
 
 //--------------------------------------------------------------------------------------------------
 ScreenCapturer::ScreenId ScreenCapturerKms::currentScreen() const
 {
-    return 0;
+    return static_cast<ScreenId>(selected_crtc_id_ ? selected_crtc_id_ : crtc_id_);
 }
 
 //--------------------------------------------------------------------------------------------------

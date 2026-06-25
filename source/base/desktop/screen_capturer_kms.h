@@ -77,6 +77,8 @@ private:
 
     int drm_fd_ = -1;
     quint32 crtc_id_ = 0;
+    // CRTC the client selected for capture (0 = none yet; the first active CRTC is captured then).
+    quint32 selected_crtc_id_ = 0;
     int active_crtc_count_ = 0;
     std::unique_ptr<EglDmaBuf> egl_dmabuf_;
     std::unique_ptr<Differ> differ_;
