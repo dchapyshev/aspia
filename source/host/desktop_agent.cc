@@ -50,15 +50,16 @@
 #include <unistd.h>
 
 #include <cstdlib>
+#include <cstring>
 
 #include "base/desktop/screen_capturer_kms.h"
+#include "base/desktop/screen_capturer_kwin.h"
 #include "base/desktop/screen_capturer_pipewire.h"
+#include "base/desktop/screen_capturer_wlr.h"
 #include "base/desktop/screen_capturer_x11.h"
 #include "base/desktop/linux/mutter_screen_cast.h"
 #include "base/desktop/linux/wayland_capture_source.h"
-#include "base/desktop/linux/wayland_portal.h"
 #include "base/linux/libsystemd.h"
-#include "base/linux/wayland_output_layout.h"
 #include "host/input_injector_uinput.h"
 #include "host/input_injector_wayland.h"
 #include "host/input_injector_x11.h"
@@ -176,11 +177,9 @@ DesktopAgent::DesktopAgent(QObject* parent)
     connect(ipc_channel_, &IpcChannel::sig_messageReceived, this, &DesktopAgent::onIpcMessageReceived);
 
 #if defined(Q_OS_LINUX)
-    // Running as root means the service launched us for the greeter, where the compositor inhibits the
-    // portal/screen-cast. Capture below the compositor via DRM/KMS and inject via uinput instead.
-    kms_ = (geteuid() == 0);
-    wayland_ = qEnvironmentVariableIsSet("WAYLAND_DISPLAY");
-    LOG(INFO) << "Session type:" << (kms_ ? "KMS (root)" : (wayland_ ? "Wayland" : "X11"));
+    // The agent always runs as root (launched by the service). Choose the capture path and create the
+    // matching input injector before the first selectCapturer().
+    setupLinuxCapture();
 #endif // defined(Q_OS_LINUX)
 
     selectCapturer(ScreenCapturer::Error::SUCCEEDED);
@@ -199,85 +198,6 @@ DesktopAgent::DesktopAgent(QObject* parent)
     if (!SetProcessShutdownParameters(0, SHUTDOWN_NORETRY))
         PLOG(ERROR) << "SetProcessShutdownParameters failed";
 #endif // defined(Q_OS_WINDOWS)
-
-#if defined(Q_OS_LINUX)
-    if (kms_)
-    {
-        // Greeter: input via uinput (the KMS capturer is created in selectCapturer above).
-        input_injector_ = InputInjectorUinput::create(this);
-        if (!input_injector_)
-            LOG(ERROR) << "Unable to create uinput input injector";
-    }
-    else if (wayland_ && MutterScreenCast::isAvailable())
-    {
-        // GNOME: capture the monitor directly through Mutter's ScreenCast interface. This skips the
-        // portal permission dialog and works on the login screen (where no one can grant permission).
-        mutter_screen_cast_ = new MutterScreenCast();
-
-        connect(mutter_screen_cast_.get(), &MutterScreenCast::sig_started, this, [this](bool success)
-        {
-            if (!success)
-            {
-                LOG(ERROR) << "Mutter screen cast failed to start";
-                return;
-            }
-
-            LOG(INFO) << "Mutter screen cast started";
-            selectCapturer(ScreenCapturer::Error::SUCCEEDED);
-            input_injector_ = InputInjectorWayland::create(
-                mutter_screen_cast_.get(), mutter_screen_cast_.get(), this);
-
-            // Resume capture if a client configured before the source was ready.
-            if (!clients_.isEmpty())
-                capture_timer_->start(0);
-        });
-
-        mutter_screen_cast_->start();
-    }
-    else if (wayland_)
-    {
-        // The portal session is negotiated asynchronously (it may show a permission dialog). The
-        // capturer and injector are created once it is ready, on the shared portal session.
-        wayland_portal_ = new WaylandPortal();
-
-        connect(wayland_portal_.get(), &WaylandPortal::sig_started, this, [this](bool success)
-        {
-            if (!success)
-            {
-                LOG(ERROR) << "Wayland portal session failed to start";
-                return;
-            }
-
-            LOG(INFO) << "Wayland portal session started";
-
-            // Persist the restore token so subsequent starts skip the permission dialog.
-            const QString token = wayland_portal_->restoreToken();
-            if (!token.isEmpty())
-                SystemSettings().setWaylandRestoreToken(token);
-
-            selectCapturer(ScreenCapturer::Error::SUCCEEDED);
-            input_injector_ =
-                InputInjectorWayland::create(wayland_portal_.get(), wayland_portal_.get(), this);
-
-            // Resume capture if a client configured before the portal was ready.
-            if (!clients_.isEmpty())
-                capture_timer_->start(0);
-        });
-
-        connect(wayland_portal_.get(), &WaylandPortal::sig_closed, this, [this]()
-        {
-            LOG(WARNING) << "Wayland portal session closed; stopping capture";
-            capture_timer_->stop();
-        });
-
-        // Reuse a previously granted session if the user allowed persistence.
-        wayland_portal_->start(SystemSettings().waylandRestoreToken());
-    }
-    else
-    {
-        input_injector_ = InputInjectorX11::create();
-    }
-#endif // defined(Q_OS_LINUX)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -285,6 +205,155 @@ DesktopAgent::~DesktopAgent()
 {
     LOG(INFO) << "Dtor";
 }
+
+#if defined(Q_OS_LINUX)
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::setupLinuxCapture()
+{
+    // X11 (login screen or desktop): the X11 grabber and injector use the display and cookie passed in
+    // the environment.
+    if (qgetenv("ASPIA_DISPLAY") == "x11")
+    {
+        capture_mode_ = CaptureMode::X11;
+        input_injector_ = InputInjectorX11::create();
+        if (!input_injector_)
+            LOG(ERROR) << "Unable to create X11 input injector";
+        LOG(INFO) << "Capture mode: X11";
+        return;
+    }
+
+    // Wayland. The compositor screen-cast interfaces are only reachable on a real user session; on the
+    // login screen (greeter) capture below the compositor via DRM/KMS instead.
+    uid_t uid = 0;
+    bool is_user_session = false;
+    char* session = nullptr;
+    if (LibSystemd::seatGetActive("seat0", &session, &uid) >= 0 && session)
+    {
+        char* session_class = nullptr;
+        if (LibSystemd::sessionGetClass(session, &session_class) >= 0 && session_class)
+        {
+            is_user_session = (strcmp(session_class, "user") == 0);
+            free(session_class);
+        }
+        free(session);
+    }
+
+    session_uid_ = uid;
+
+    LOG(INFO) << "Wayland capture setup: is_user_session:" << is_user_session << "uid:" << uid;
+
+    if (is_user_session)
+    {
+        // Priority: GNOME Mutter ScreenCast (captured below as a PipeWire stream, no permission dialog).
+        mutter_screen_cast_ = new MutterScreenCast(uid);
+        const bool mutter_available = mutter_screen_cast_->isAvailable();
+        LOG(INFO) << "Mutter ScreenCast available:" << mutter_available;
+        if (mutter_available)
+        {
+            capture_mode_ = CaptureMode::COMPOSITOR;
+            connect(mutter_screen_cast_.get(), &MutterScreenCast::sig_started,
+                    this, &DesktopAgent::onCompositorSourceStarted);
+            LOG(INFO) << "Capture mode: compositor (Mutter ScreenCast)";
+            mutter_screen_cast_->start();
+            return;
+        }
+        mutter_screen_cast_.reset();
+
+        // KDE KWin ScreenShot2 (no dialog; per-frame screenshot poll). Input goes through uinput. The
+        // capturer itself is created in selectCapturer.
+        const bool kwin_available = ScreenCapturerKwin::isAvailable(uid);
+        LOG(INFO) << "KWin ScreenShot2 available:" << kwin_available;
+        if (kwin_available)
+        {
+            capture_mode_ = CaptureMode::KWIN;
+            input_injector_ = InputInjectorUinput::create(this);
+            if (!input_injector_)
+                LOG(ERROR) << "Unable to create uinput input injector";
+            LOG(INFO) << "Capture mode: KWin ScreenShot2";
+            return;
+        }
+
+        // wlroots compositors (sway, labwc, Wayfire, ...) via zwlr_screencopy. Input goes through
+        // uinput. The capturer itself is created in selectCapturer.
+        const bool wlr_available = ScreenCapturerWlr::isAvailable(uid);
+        LOG(INFO) << "wlr-screencopy available:" << wlr_available;
+        if (wlr_available)
+        {
+            capture_mode_ = CaptureMode::WLR;
+            input_injector_ = InputInjectorUinput::create(this);
+            if (!input_injector_)
+                LOG(ERROR) << "Unable to create uinput input injector";
+            LOG(INFO) << "Capture mode: wlr-screencopy";
+            return;
+        }
+    }
+
+    // No usable compositor screen-cast: capture below the compositor with DRM/KMS + uinput.
+    capture_mode_ = CaptureMode::KMS;
+    input_injector_ = InputInjectorUinput::create(this);
+    if (!input_injector_)
+        LOG(ERROR) << "Unable to create uinput input injector";
+    LOG(INFO) << "Capture mode: KMS";
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::onCompositorSourceStarted(bool success)
+{
+    if (!success)
+    {
+        LOG(ERROR) << "Compositor capture source failed to start, falling back to KMS";
+        fallbackToKms();
+        return;
+    }
+
+    LOG(INFO) << "Compositor capture source started";
+
+    selectCapturer(ScreenCapturer::Error::SUCCEEDED);
+    input_injector_ = InputInjectorWayland::create(
+        mutter_screen_cast_.get(), mutter_screen_cast_.get(), this);
+    if (!input_injector_)
+        LOG(ERROR) << "Unable to create Wayland input injector";
+
+    // Resume capture if a client configured before the source was ready.
+    if (!clients_.isEmpty())
+        capture_timer_->start(0);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::fallbackToKms()
+{
+    mutter_screen_cast_.reset();
+
+    capture_mode_ = CaptureMode::KMS;
+    input_injector_ = InputInjectorUinput::create(this);
+    if (!input_injector_)
+        LOG(ERROR) << "Unable to create uinput input injector";
+
+    selectCapturer(ScreenCapturer::Error::SUCCEEDED);
+
+    if (!clients_.isEmpty())
+        capture_timer_->start(0);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::onCaptureSourceRestart()
+{
+    // A monitor reconfiguration can produce a burst of stream errors; do not restart faster than this.
+    if (source_restart_timer_.isValid() && source_restart_timer_.elapsed() < 2000)
+    {
+        LOG(WARNING) << "Capture source restart throttled";
+        return;
+    }
+    source_restart_timer_.restart();
+
+    LOG(INFO) << "Renegotiating the capture source after a stream error";
+
+    // Re-running start() drops the old session and negotiates a fresh node; the sig_started handler then
+    // recreates the capturer and input injector on the new stream.
+    if (mutter_screen_cast_)
+        mutter_screen_cast_->start();
+}
+#endif // defined(Q_OS_LINUX)
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgent::start(const QString& ipc_channel_name)
@@ -537,86 +606,8 @@ void DesktopAgent::onInjectMouseEvent(const proto::input::MouseEvent& event)
     out_event.set_x(pos_x);
     out_event.set_y(pos_y);
 
-#if defined(Q_OS_LINUX)
-    // On the greeter (uinput), learn the exact pointer mapping from the compositor's logical layout
-    // on first use. Read once via Wayland; retry a few times in case the compositor is not ready yet.
-    if (kms_ && !kms_input_mapped_ && kms_map_attempts_ < 20)
-    {
-        ++kms_map_attempts_;
-        if (setupKmsInputMapping())
-            kms_input_mapped_ = true;
-    }
-#endif // defined(Q_OS_LINUX)
-
     input_injector_->injectMouseEvent(out_event);
 }
-
-#if defined(Q_OS_LINUX)
-//--------------------------------------------------------------------------------------------------
-bool DesktopAgent::setupKmsInputMapping()
-{
-    if (!screen_capturer_ || !input_injector_)
-        return false;
-
-    // The active seat session is the greeter; read its compositor's Wayland socket.
-    char* session = nullptr;
-    uid_t uid = 0;
-    if (LibSystemd::seatGetActive("seat0", &session, &uid) < 0 || !session)
-        return false;
-    free(session);
-
-    const QString runtime_dir = QString("/run/user/%1/").arg(uid);
-    QString socket_path;
-    for (const char* name : { "wayland-0", "wayland-1" })
-    {
-        const QString candidate = runtime_dir + name;
-        if (access(candidate.toLocal8Bit().constData(), F_OK) == 0)
-        {
-            socket_path = candidate;
-            break;
-        }
-    }
-    if (socket_path.isEmpty())
-        return false;
-
-    const QList<WaylandOutputLayout::Output> outputs = WaylandOutputLayout::query(socket_path);
-    if (outputs.isEmpty())
-        return false;
-
-    const QSize captured = screen_capturer_->currentScreenRect().size();
-
-    // Bounding box of all outputs is the logical desktop the absolute pointer is mapped onto; the
-    // output whose mode matches the captured framebuffer gives its offset and logical size (scale).
-    QRect desktop;
-    QRect captured_logical;
-    bool found = false;
-    for (const WaylandOutputLayout::Output& output : outputs)
-    {
-        desktop = desktop.united(output.logical);
-        if (!found && output.physical == captured)
-        {
-            captured_logical = output.logical;
-            found = true;
-        }
-    }
-    if (!found || desktop.isEmpty() || captured.isEmpty())
-        return false;
-
-    // abs = base + pixel * scale, mapping captured-physical pixels onto the whole logical desktop.
-    const double max = 65535.0;
-    const double scale_x = static_cast<double>(captured_logical.width()) * max /
-                           (static_cast<double>(captured.width()) * desktop.width());
-    const double base_x = static_cast<double>(captured_logical.x()) * max / desktop.width();
-    const double scale_y = static_cast<double>(captured_logical.height()) * max /
-                           (static_cast<double>(captured.height()) * desktop.height());
-    const double base_y = static_cast<double>(captured_logical.y()) * max / desktop.height();
-
-    static_cast<InputInjectorUinput*>(input_injector_)->setAbsMapping(scale_x, base_x, scale_y, base_y);
-    LOG(INFO) << "KMS pointer mapped via Wayland: captured" << captured
-              << "logical" << captured_logical << "desktop" << desktop;
-    return true;
-}
-#endif // defined(Q_OS_LINUX)
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgent::onInjectKeyEvent(const proto::input::KeyEvent& event)
@@ -1043,37 +1034,6 @@ void DesktopAgent::startClient(const QString& ipc_channel_name)
     client->start(ipc_channel_name);
 }
 
-#if defined(Q_OS_LINUX)
-//--------------------------------------------------------------------------------------------------
-WaylandCaptureSource* DesktopAgent::captureSource() const
-{
-    if (mutter_screen_cast_)
-        return mutter_screen_cast_.get();
-    return wayland_portal_.get();
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopAgent::onCaptureSourceRestart()
-{
-    // A monitor reconfiguration can produce a burst of stream errors; do not restart faster than this.
-    if (source_restart_timer_.isValid() && source_restart_timer_.elapsed() < 2000)
-    {
-        LOG(WARNING) << "Capture source restart throttled";
-        return;
-    }
-    source_restart_timer_.restart();
-
-    LOG(INFO) << "Renegotiating the capture source after a stream error";
-
-    // Re-running start() drops the old session and negotiates a fresh node; the existing sig_started
-    // handler then recreates the capturer (and input injector) on the new stream.
-    if (mutter_screen_cast_)
-        mutter_screen_cast_->start();
-    else if (wayland_portal_)
-        wayland_portal_->start(SystemSettings().waylandRestoreToken());
-}
-#endif // defined(Q_OS_LINUX)
-
 //--------------------------------------------------------------------------------------------------
 void DesktopAgent::selectCapturer(ScreenCapturer::Error last_error)
 {
@@ -1088,42 +1048,66 @@ void DesktopAgent::selectCapturer(ScreenCapturer::Error last_error)
 #if defined(Q_OS_WINDOWS)
     screen_capturer_ = ScreenCapturerWin::create(preferred_capturer_, last_error, this);
 #elif defined(Q_OS_LINUX)
-    if (kms_)
+    switch (capture_mode_)
     {
-        screen_capturer_ = ScreenCapturerKms::create(this);
-        if (!screen_capturer_)
-            LOG(ERROR) << "Unable to create KMS screen capturer";
-    }
-    else if (wayland_)
-    {
-        WaylandCaptureSource* source = captureSource();
-        if (!source || !source->isStarted())
+        case CaptureMode::X11:
         {
-            // The capture source is not ready yet; the capturer is created from the sig_started handler.
-            return;
+            screen_capturer_ = ScreenCapturerX11::create(this);
+            if (!screen_capturer_)
+            {
+                LOG(ERROR) << "Unable to create X11 screen capturer";
+                return;
+            }
         }
+        break;
 
-        ScreenCapturerPipeWire* capturer = ScreenCapturerPipeWire::create(source, this);
-        if (!capturer)
+        case CaptureMode::KMS:
         {
-            LOG(ERROR) << "Unable to create PipeWire screen capturer";
-            return;
+            screen_capturer_ = ScreenCapturerKms::create(this);
+            if (!screen_capturer_)
+                LOG(ERROR) << "Unable to create KMS screen capturer";
         }
+        break;
 
-        // Queued: the signal fires from inside captureFrame(); the restart deletes this capturer, so it
-        // must run after the capture call stack unwinds.
-        connect(capturer, &ScreenCapturerPipeWire::sig_restartRequired,
-                this, &DesktopAgent::onCaptureSourceRestart, Qt::QueuedConnection);
-        screen_capturer_ = capturer;
-    }
-    else
-    {
-        screen_capturer_ = ScreenCapturerX11::create(this);
-        if (!screen_capturer_)
+        case CaptureMode::KWIN:
         {
-            LOG(ERROR) << "Unable to create X11 screen capturer";
-            return;
+            screen_capturer_ = ScreenCapturerKwin::create(session_uid_, this);
+            if (!screen_capturer_)
+                LOG(ERROR) << "Unable to create KWin screen capturer";
         }
+        break;
+
+        case CaptureMode::WLR:
+        {
+            screen_capturer_ = ScreenCapturerWlr::create(session_uid_, this);
+            if (!screen_capturer_)
+                LOG(ERROR) << "Unable to create wlr screen capturer";
+        }
+        break;
+
+        case CaptureMode::COMPOSITOR:
+        {
+            WaylandCaptureSource* source = mutter_screen_cast_.get();
+            if (!source || !source->isStarted())
+            {
+                // The source is still negotiating; the capturer is created from the sig_started handler.
+                return;
+            }
+
+            ScreenCapturerPipeWire* capturer = ScreenCapturerPipeWire::create(source, this);
+            if (!capturer)
+            {
+                LOG(ERROR) << "Unable to create PipeWire screen capturer";
+                return;
+            }
+
+            // Queued: the signal fires from inside captureFrame(); the restart deletes this capturer, so
+            // it must run after the capture call stack unwinds.
+            connect(capturer, &ScreenCapturerPipeWire::sig_restartRequired,
+                    this, &DesktopAgent::onCaptureSourceRestart, Qt::QueuedConnection);
+            screen_capturer_ = capturer;
+        }
+        break;
     }
 #else
     NOTIMPLEMENTED();

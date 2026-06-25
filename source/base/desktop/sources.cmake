@@ -72,8 +72,12 @@ if (LINUX)
         desktop_resizer_x11.h
         screen_capturer_kms.cc
         screen_capturer_kms.h
+        screen_capturer_kwin.cc
+        screen_capturer_kwin.h
         screen_capturer_pipewire.cc
         screen_capturer_pipewire.h
+        screen_capturer_wlr.cc
+        screen_capturer_wlr.h
         screen_capturer_x11.cc
         screen_capturer_x11.h)
 endif()

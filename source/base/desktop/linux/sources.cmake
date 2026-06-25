@@ -35,3 +35,25 @@ collect_sources(SOURCE_BASE_DESKTOP_LINUX
     x_error_trap.h
     x_server_pixel_buffer.cc
     x_server_pixel_buffer.h)
+
+# Generate the wlr-screencopy client stubs used by ScreenCapturerWlr. The protocol XML is vendored
+# (it ships with wlr-protocols, which is not packaged on the build host). CMAKE_CURRENT_* here refer to
+# base/ (this file is include()'d from base/CMakeLists.txt), and base's binary dir is already on the
+# include path, so the generated header is reachable by its short name.
+find_program(WAYLAND_SCANNER_EXECUTABLE NAMES wayland-scanner REQUIRED)
+set(WLR_SCREENCOPY_XML "${CMAKE_CURRENT_SOURCE_DIR}/desktop/linux/wlr-screencopy-unstable-v1.xml")
+set(WLR_SCREENCOPY_HEADER "${CMAKE_CURRENT_BINARY_DIR}/wlr-screencopy-unstable-v1-client-protocol.h")
+set(WLR_SCREENCOPY_CODE "${CMAKE_CURRENT_BINARY_DIR}/wlr-screencopy-unstable-v1-protocol.c")
+add_custom_command(
+    OUTPUT "${WLR_SCREENCOPY_HEADER}"
+    COMMAND ${WAYLAND_SCANNER_EXECUTABLE} client-header
+            "${WLR_SCREENCOPY_XML}" "${WLR_SCREENCOPY_HEADER}"
+    DEPENDS "${WLR_SCREENCOPY_XML}"
+    VERBATIM)
+add_custom_command(
+    OUTPUT "${WLR_SCREENCOPY_CODE}"
+    COMMAND ${WAYLAND_SCANNER_EXECUTABLE} private-code
+            "${WLR_SCREENCOPY_XML}" "${WLR_SCREENCOPY_CODE}"
+    DEPENDS "${WLR_SCREENCOPY_XML}"
+    VERBATIM)
+list(APPEND SOURCE_BASE_DESKTOP_LINUX "${WLR_SCREENCOPY_HEADER}" "${WLR_SCREENCOPY_CODE}")

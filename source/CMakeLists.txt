@@ -266,6 +266,11 @@ if (LINUX)
         install(FILES host/linux/aspia-host.desktop
             DESTINATION share/applications COMPONENT host)
 
+        # Desktop file for the desktop agent. KWin authorizes org.kde.KWin.ScreenShot2 by matching the
+        # caller's executable path to a .desktop that declares X-KDE-DBUS-Restricted-Interfaces.
+        install(FILES host/linux/aspia-desktop-agent.desktop
+            DESTINATION share/applications COMPONENT host)
+
         # Host icons.
         install(FILES host/linux/icons/16x16/aspia_host.png
             DESTINATION share/icons/hicolor/16x16/apps COMPONENT host)

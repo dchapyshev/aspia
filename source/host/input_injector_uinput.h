@@ -45,11 +45,6 @@ public:
     void injectMouseEvent(const proto::input::MouseEvent& event) final;
     void injectTouchEvent(const proto::input::TouchEvent& event) final;
 
-    // Sets the exact pixel->abs mapping (abs = base + pixel * scale per axis), derived from the
-    // compositor's logical monitor layout. The absolute pointer's range is mapped by the compositor
-    // onto the whole logical desktop, so this folds in the captured monitor's offset and scale.
-    void setAbsMapping(double scale_x, double base_x, double scale_y, double base_y);
-
 private:
     bool init();
     void emitEvent(quint16 type, quint16 code, qint32 value);
@@ -57,12 +52,6 @@ private:
     int fd_ = -1;
     QSize screen_size_;
     QPoint screen_offset_;
-
-    bool abs_mapped_ = false;
-    double abs_scale_x_ = 0.0;
-    double abs_base_x_ = 0.0;
-    double abs_scale_y_ = 0.0;
-    double abs_base_y_ = 0.0;
 
     bool left_button_pressed_ = false;
     bool middle_button_pressed_ = false;

@@ -21,6 +21,10 @@ collect_sources(SOURCE_BASE_LINUX
     libdrm.h
     libsystemd.cc
     libsystemd.h
+    scoped_user_credentials.cc
+    scoped_user_credentials.h
+    session_dbus.cc
+    session_dbus.h
     wayland_output_layout.cc
     wayland_output_layout.h
     x11_headers.h

@@ -20,6 +20,7 @@
 #define BASE_DESKTOP_SCREEN_CAPTURER_KMS_H
 
 #include <QRect>
+#include <QString>
 
 #include <memory>
 
@@ -60,15 +61,23 @@ protected:
 
 private:
     bool init();
-    // Returns the framebuffer id currently scanned out on an active CRTC, or 0 if none. Also records
-    // the captured CRTC id and the logical desktop extent across all active CRTCs.
+    // Returns the framebuffer id currently scanned out on an active CRTC, or 0 if none. Records the
+    // captured CRTC id and the active-CRTC count (a change re-triggers input-geometry detection).
     quint32 activeFramebufferId();
     // Finds the hardware cursor plane on the captured CRTC, returning its framebuffer id, size and
     // position (any output pointer may be null). Returns false if no cursor plane is active there.
     bool findCursorPlane(quint32* fb_id, QSize* size, QPoint* position);
+    // Reads the compositor's logical monitor layout over Wayland and computes the screen size and the
+    // captured monitor's offset to report to the input injector (folding in the monitor position and
+    // fractional scale). Falls back to the captured size alone when the layout is unavailable.
+    void updateInputGeometry(const QSize& captured);
+    // Returns the connector name of the captured CRTC (e.g. "eDP-1"), used to match it to the right
+    // compositor output. Empty if it cannot be resolved.
+    QString capturedConnectorName();
 
     int drm_fd_ = -1;
     quint32 crtc_id_ = 0;
+    int active_crtc_count_ = 0;
     std::unique_ptr<EglDmaBuf> egl_dmabuf_;
     std::unique_ptr<Differ> differ_;
     FrameQueue<Frame> queue_;
@@ -80,9 +89,13 @@ private:
     QPoint cursor_position_;
 
     QRect screen_rect_;
-    // Logical desktop extent across all active CRTCs. The compositor maps the absolute pointer over
-    // this whole area, so input must be scaled to it rather than to the captured CRTC alone.
+    // Input-mapping geometry from the compositor's logical layout: the compositor maps the absolute
+    // pointer over the whole logical desktop, so the injector is given this (scaled) desktop size and
+    // the captured monitor's offset within it, not the captured CRTC alone.
     QRect desktop_rect_;
+    QPoint capture_offset_;
+    bool input_geometry_valid_ = false;
+    int input_geometry_attempts_ = 0;
 
     Q_DISABLE_COPY_MOVE(ScreenCapturerKms)
 };

@@ -18,6 +18,8 @@
 
 #include "base/desktop/screen_capturer_kms.h"
 
+#include <QString>
+
 #include <drm/drm_fourcc.h>
 
 #include <fcntl.h>
@@ -25,6 +27,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cstdlib>
 
 #include "base/logging.h"
 #include "base/desktop/differ.h"
@@ -32,6 +35,8 @@
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/linux/egl_dmabuf.h"
 #include "base/linux/libdrm.h"
+#include "base/linux/libsystemd.h"
+#include "base/linux/wayland_output_layout.h"
 
 namespace {
 
@@ -39,6 +44,37 @@ const int kAlignment = 32;
 const int kMaxCards = 8;
 // A hardware cursor framebuffer is small; this tells it apart from the screen-sized primary plane.
 const int kMaxCursorSize = 256;
+
+//--------------------------------------------------------------------------------------------------
+// Returns the kernel connector type name as compositors use it (e.g. "eDP", "HDMI-A", "DP"). The
+// output name a compositor reports is this plus "-" plus the connector's per-type id (e.g. "eDP-1").
+const char* connectorTypeName(uint32_t type)
+{
+    switch (type)
+    {
+        case DRM_MODE_CONNECTOR_VGA: return "VGA";
+        case DRM_MODE_CONNECTOR_DVII: return "DVI-I";
+        case DRM_MODE_CONNECTOR_DVID: return "DVI-D";
+        case DRM_MODE_CONNECTOR_DVIA: return "DVI-A";
+        case DRM_MODE_CONNECTOR_Composite: return "Composite";
+        case DRM_MODE_CONNECTOR_SVIDEO: return "SVIDEO";
+        case DRM_MODE_CONNECTOR_LVDS: return "LVDS";
+        case DRM_MODE_CONNECTOR_Component: return "Component";
+        case DRM_MODE_CONNECTOR_9PinDIN: return "DIN";
+        case DRM_MODE_CONNECTOR_DisplayPort: return "DP";
+        case DRM_MODE_CONNECTOR_HDMIA: return "HDMI-A";
+        case DRM_MODE_CONNECTOR_HDMIB: return "HDMI-B";
+        case DRM_MODE_CONNECTOR_TV: return "TV";
+        case DRM_MODE_CONNECTOR_eDP: return "eDP";
+        case DRM_MODE_CONNECTOR_VIRTUAL: return "Virtual";
+        case DRM_MODE_CONNECTOR_DSI: return "DSI";
+        case DRM_MODE_CONNECTOR_DPI: return "DPI";
+        case DRM_MODE_CONNECTOR_WRITEBACK: return "Writeback";
+        case DRM_MODE_CONNECTOR_SPI: return "SPI";
+        case DRM_MODE_CONNECTOR_USB: return "USB";
+        default: return "Unknown";
+    }
+}
 
 //--------------------------------------------------------------------------------------------------
 // Imports framebuffer |fb| into |dst| (|dst_stride| bytes per row) as packed BGRA via EGL/GBM. The
@@ -200,8 +236,7 @@ quint32 ScreenCapturerKms::activeFramebufferId()
         return 0;
 
     quint32 fb_id = 0;
-    int total_width = 0;
-    int max_height = 0;
+    int active = 0;
     for (int i = 0; i < resources->count_crtcs; ++i)
     {
         drmModeCrtc* crtc = LibDrm::modeGetCrtc(drm_fd_, resources->crtcs[i]);
@@ -209,11 +244,7 @@ quint32 ScreenCapturerKms::activeFramebufferId()
         {
             if (crtc->mode_valid && crtc->buffer_id)
             {
-                // The compositor maps the absolute pointer over the whole logical desktop. Its layout
-                // (monitor positions) is not exposed by DRM, so assume the outputs are laid out left
-                // to right with the captured (first active) one at the origin.
-                total_width += static_cast<int>(crtc->width);
-                max_height = std::max(max_height, static_cast<int>(crtc->height));
+                ++active;
                 if (!fb_id)
                 {
                     fb_id = crtc->buffer_id;
@@ -226,10 +257,142 @@ quint32 ScreenCapturerKms::activeFramebufferId()
 
     LibDrm::modeFreeResources(resources);
 
-    if (total_width > 0 && max_height > 0)
-        desktop_rect_ = QRect(0, 0, total_width, max_height);
+    // A change in the active-CRTC count means a monitor was connected or disconnected, so the logical
+    // layout changed: re-read the input geometry.
+    if (active != active_crtc_count_)
+    {
+        active_crtc_count_ = active;
+        input_geometry_valid_ = false;
+        input_geometry_attempts_ = 0;
+    }
 
     return fb_id;
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenCapturerKms::updateInputGeometry(const QSize& captured)
+{
+    // Fallback: map over the captured monitor alone (single output, no offset, no scale).
+    desktop_rect_ = QRect(QPoint(0, 0), captured);
+    capture_offset_ = QPoint(0, 0);
+
+    if (captured.isEmpty())
+        return;
+
+    // The active seat session's compositor exposes the logical monitor layout over Wayland (readable
+    // by a root process even on the login screen). DRM has no logical layout, so this is the source.
+    char* session = nullptr;
+    uid_t uid = 0;
+    if (LibSystemd::seatGetActive("seat0", &session, &uid) < 0 || !session)
+        return;
+    free(session);
+
+    QString socket_path;
+    for (const char* name : { "wayland-0", "wayland-1" })
+    {
+        const QString candidate = QString("/run/user/%1/").arg(uid) + name;
+        if (access(candidate.toLocal8Bit().constData(), F_OK) == 0)
+        {
+            socket_path = candidate;
+            break;
+        }
+    }
+    if (socket_path.isEmpty())
+        return;
+
+    const QList<WaylandOutputLayout::Output> outputs = WaylandOutputLayout::query(socket_path);
+    if (outputs.isEmpty())
+        return;
+
+    // The bounding box of all logical outputs is the area the compositor maps the absolute pointer
+    // over.
+    QRect logical_desktop;
+    for (const WaylandOutputLayout::Output& output : outputs)
+        logical_desktop = logical_desktop.united(output.logical);
+
+    // Match the captured CRTC to its output by connector name: this stays correct even when two
+    // monitors share a physical size (where a size match would be ambiguous). Fall back to a size
+    // match only if the connector name cannot be resolved or does not appear in the layout.
+    const QString connector = capturedConnectorName();
+    QRect captured_logical;
+    for (const WaylandOutputLayout::Output& output : outputs)
+    {
+        if (!connector.isEmpty() && output.name == connector)
+        {
+            captured_logical = output.logical;
+            break;
+        }
+    }
+    if (captured_logical.isEmpty())
+    {
+        for (const WaylandOutputLayout::Output& output : outputs)
+        {
+            if (output.physical == captured)
+            {
+                captured_logical = output.logical;
+                break;
+            }
+        }
+    }
+    if (logical_desktop.isEmpty() || captured_logical.isEmpty())
+        return;
+
+    // Express the logical desktop and this monitor's offset in the captured monitor's physical pixels
+    // (= logical * scale). The injector's plain (pixel + offset) / size mapping then lands captured-
+    // physical pixels on the right logical point, fractional scale included.
+    const double scale_x = static_cast<double>(captured.width()) / captured_logical.width();
+    const double scale_y = static_cast<double>(captured.height()) / captured_logical.height();
+
+    desktop_rect_ = QRect(0, 0,
+                          qRound(scale_x * logical_desktop.width()),
+                          qRound(scale_y * logical_desktop.height()));
+    capture_offset_ = QPoint(qRound(scale_x * captured_logical.x()),
+                             qRound(scale_y * captured_logical.y()));
+    input_geometry_valid_ = true;
+
+    LOG(INFO) << "KMS input geometry: connector" << connector << "captured" << captured << "logical"
+              << captured_logical << "logical-desktop" << logical_desktop << "-> screen"
+              << desktop_rect_.size() << "offset" << capture_offset_;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString ScreenCapturerKms::capturedConnectorName()
+{
+    if (!crtc_id_)
+        return QString();
+
+    drmModeRes* resources = LibDrm::modeGetResources(drm_fd_);
+    if (!resources)
+        return QString();
+
+    QString name;
+    for (int i = 0; i < resources->count_connectors && name.isEmpty(); ++i)
+    {
+        drmModeConnector* connector =
+            LibDrm::modeGetConnectorCurrent(drm_fd_, resources->connectors[i]);
+        if (!connector)
+            continue;
+
+        // The connector drives our CRTC through its currently bound encoder.
+        if (connector->encoder_id)
+        {
+            drmModeEncoder* encoder = LibDrm::modeGetEncoder(drm_fd_, connector->encoder_id);
+            if (encoder)
+            {
+                if (encoder->crtc_id == crtc_id_)
+                {
+                    name = QString("%1-%2").arg(connectorTypeName(connector->connector_type))
+                                           .arg(connector->connector_type_id);
+                }
+                LibDrm::modeFreeEncoder(encoder);
+            }
+        }
+
+        LibDrm::modeFreeConnector(connector);
+    }
+
+    LibDrm::modeFreeResources(resources);
+    return name;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -309,6 +472,16 @@ const Frame* ScreenCapturerKms::captureFrame(Error* error)
         return nullptr;
 
     screen_rect_ = QRect(QPoint(0, 0), size);
+
+    // Learn the input-mapping geometry (screen size + this monitor's offset, scale folded in) from the
+    // compositor's logical layout, lazily and with a few retries until the compositor is reachable.
+    // The frame's top-left carries the offset that the agent passes to the injector via setScreenInfo.
+    if (!input_geometry_valid_ && input_geometry_attempts_ < 30)
+    {
+        ++input_geometry_attempts_;
+        updateInputGeometry(size);
+    }
+    current->setTopLeft(capture_offset_);
 
     // Report only the changed region. On the first frame after a (re)allocation there is nothing to
     // diff against, so the whole screen is reported.
@@ -438,4 +611,7 @@ void ScreenCapturerKms::reset()
     differ_.reset();
     mouse_cursor_.reset();
     last_cursor_fb_id_ = 0;
+    input_geometry_valid_ = false;
+    input_geometry_attempts_ = 0;
+    active_crtc_count_ = 0;
 }

@@ -23,6 +23,8 @@
 #include <QObject>
 #include <QTimer>
 
+#include <sys/types.h>
+
 #include "base/scoped_qpointer.h"
 #include "base/serialization.h"
 #include "base/desktop/capture_scheduler.h"
@@ -51,8 +53,6 @@ class IpcChannel;
 class MutterScreenCast;
 class ScaleReducer;
 class VideoEncoder;
-class WaylandCaptureSource;
-class WaylandPortal;
 
 class DesktopAgent final : public QObject
 {
@@ -88,17 +88,25 @@ private slots:
     void onCaptureScreen();
     void onOverflowCheck();
 
+#if defined(Q_OS_LINUX)
+    // org.gnome.Mutter.ScreenCast (and future compositor sources) signal readiness asynchronously; the
+    // PipeWire capturer and the compositor input injector are created here once the source is started.
+    void onCompositorSourceStarted(bool success);
+    // Re-negotiates the compositor capture source after the PipeWire stream errors (e.g. a monitor
+    // reconfiguration produced a new node).
+    void onCaptureSourceRestart();
+#endif // defined(Q_OS_LINUX)
+
 private:
     void startClient(const QString& ipc_channel_name);
     void selectCapturer(ScreenCapturer::Error last_error);
 #if defined(Q_OS_LINUX)
-    // The active Wayland capture source - Mutter's ScreenCast if available, otherwise the portal.
-    WaylandCaptureSource* captureSource() const;
-    // Re-negotiates the capture source after the PipeWire stream errors (monitor reconfiguration).
-    void onCaptureSourceRestart();
-    // Greeter (uinput) only: reads the compositor's logical monitor layout over Wayland and programs
-    // the injector's absolute-pointer mapping (offset + scale). Returns false if it could not.
-    bool setupKmsInputMapping();
+    // Chooses the Linux capture path and creates the matching input injector: X11, or on Wayland a
+    // compositor source (Mutter/...) on a user session, otherwise DRM/KMS + uinput.
+    void setupLinuxCapture();
+    // Drops the compositor source and switches to DRM/KMS + uinput (compositor capture unavailable or
+    // failed to start).
+    void fallbackToKms();
 #endif // defined(Q_OS_LINUX)
     ScreenCapturer::ScreenId defaultScreen();
     void selectScreen(ScreenCapturer::ScreenId screen_id, const QSize& resolution);
@@ -118,21 +126,20 @@ private:
     ScopedQPointer<ScreenCapturer> screen_capturer_;
 
 #if defined(Q_OS_LINUX)
-    // On Wayland, capture and input go through one xdg-desktop-portal session, owned here and
-    // observed (via QPointer) by the PipeWire capturer and the portal input injector. Null/false on
-    // X11.
-    ScopedQPointer<WaylandPortal> wayland_portal_;
-    // Alternative capture source on GNOME: Mutter's ScreenCast interface used directly (no portal
-    // dialog, works on the login screen). Mutually exclusive with wayland_portal_.
+    // X11: X11 grabber + injector. KMS: capture below the compositor via DRM/KMS + uinput (login
+    // screen, or no usable compositor screen-cast). COMPOSITOR: GNOME Mutter ScreenCast (PipeWire) with
+    // its own input. KWIN: KDE KWin ScreenShot2 polling + uinput input. WLR: wlroots zwlr_screencopy +
+    // uinput input. The last three are user sessions.
+    enum class CaptureMode { X11, KMS, COMPOSITOR, KWIN, WLR };
+    CaptureMode capture_mode_ = CaptureMode::KMS;
+
+    // Active session user's uid (for COMPOSITOR/KWIN: reaching the session bus as that user).
+    uid_t session_uid_ = 0;
+    // Active compositor capture source (GNOME Mutter ScreenCast). Null unless capture_mode_ is
+    // COMPOSITOR; it provides both the PipeWire stream and the input target.
     ScopedQPointer<MutterScreenCast> mutter_screen_cast_;
     // Throttles capture-source restarts so a persistent stream error cannot spin.
     QElapsedTimer source_restart_timer_;
-    bool wayland_ = false;
-    // Running as root for the greeter: capture below the compositor via DRM/KMS and inject via uinput.
-    bool kms_ = false;
-    // Greeter pointer mapping: programmed once from the Wayland layout, with a few retries.
-    bool kms_input_mapped_ = false;
-    int kms_map_attempts_ = 0;
 #endif // defined(Q_OS_LINUX)
 
     ScopedQPointer<AudioCapturerWrapper> audio_capturer_;
