@@ -44,13 +44,11 @@
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX)
-#include "base/linux/libsystemd.h"
+#include "base/linux/session_util.h"
 
 #include <pwd.h>
 
-#include <cstdio>
 #include <cstdlib>
-#include <cstring>
 #endif // defined(Q_OS_LINUX)
 
 namespace {
@@ -126,43 +124,6 @@ bool createProcessWithToken(HANDLE token, const QString& command_line)
 }
 #endif // defined(Q_OS_WINDOWS)
 
-#if defined(Q_OS_LINUX)
-//--------------------------------------------------------------------------------------------------
-// Returns true once the user's graphical session has imported its display environment into the
-// systemd user manager. Right after boot the session is already reported active, but the compositor
-// imports WAYLAND_DISPLAY (or DISPLAY on X11) into the user manager slightly later; launching the GUI
-// before that leaves it without a display and it exits.
-bool isGraphicalEnvironmentReady(const QString& user_name)
-{
-    const QByteArray command =
-        QString("systemctl --machine=%1@.host --user show-environment 2>/dev/null")
-            .arg(user_name).toLocal8Bit();
-
-    FILE* pipe = popen(command.constData(), "r");
-    if (!pipe)
-    {
-        PLOG(ERROR) << "popen failed";
-        return false;
-    }
-
-    QByteArray output;
-    char buffer[256];
-    while (fgets(buffer, sizeof(buffer), pipe))
-        output.append(buffer);
-
-    pclose(pipe);
-
-    const QList<QByteArray> lines = output.split('\n');
-    for (const QByteArray& line : lines)
-    {
-        if (line.startsWith("WAYLAND_DISPLAY=") || line.startsWith("DISPLAY="))
-            return true;
-    }
-
-    return false;
-}
-#endif // defined(Q_OS_LINUX)
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -183,7 +144,17 @@ UserSession::UserSession(QObject* parent)
     startup_timer_->setSingleShot(true);
     startup_timer_->setInterval(std::chrono::seconds(1));
 
-    connect(attach_timer_, &QTimer::timeout, this, [this]() { dettach(FROM_HERE); });
+    connect(attach_timer_, &QTimer::timeout, this, [this]()
+    {
+        LOG(INFO) << "UI process did not attach in time";
+        dettach(FROM_HERE);
+#if defined(Q_OS_LINUX)
+        // The GUI may have been launched during an unstable moment (e.g. a logout/login on the same VT,
+        // where the session briefly disappears and reappears). Keep retrying so it reliably comes back
+        // once the session settles, instead of giving up after one failed launch.
+        startup_timer_->start();
+#endif // defined(Q_OS_LINUX)
+    });
     connect(dettach_timer_, &QTimer::timeout, this, &UserSession::onDettachTimeout);
     connect(startup_timer_, &QTimer::timeout, this, &UserSession::onStartupUserCheck);
     connect(CoreApplication::instance(), &CoreApplication::sig_sessionEvent,
@@ -825,22 +796,17 @@ void UserSession::attach(const Location& location, AttachReason reason, SessionI
     // started by the user manager is a member of the user session, so the GUI's own privilege
     // elevation (pkexec) can reach the session authentication agent. Only a real user session gets
     // a GUI - the display-manager greeter does not.
-    char* sd_session = nullptr;
+    QString sd_session_id;
     uid_t uid = 0;
-    if (LibSystemd::seatGetActive("seat0", &sd_session, &uid) < 0 || !sd_session)
+
+    if (!SessionUtil::activeSession(&sd_session_id, &uid))
     {
         LOG(ERROR) << "No active session on seat0";
         dettach(FROM_HERE);
         return;
     }
 
-    char* session_class = nullptr;
-    LibSystemd::sessionGetClass(sd_session, &session_class);
-    const bool is_user_session = session_class && strcmp(session_class, "user") == 0;
-    free(session_class);
-    free(sd_session);
-
-    if (!is_user_session)
+    if (SessionUtil::sessionClass(sd_session_id) != SessionUtil::SessionClass::USER)
     {
         LOG(INFO) << "Active session is not a user session; the GUI is not started";
         dettach(FROM_HERE);
@@ -860,7 +826,7 @@ void UserSession::attach(const Location& location, AttachReason reason, SessionI
     // Right after boot the session is reported active before the compositor imports its display
     // environment (WAYLAND_DISPLAY/DISPLAY) into the user manager. Launching the GUI before that
     // leaves it without a display and it exits. Wait until the environment is ready, retrying shortly.
-    if (!isGraphicalEnvironmentReady(user_name))
+    if (!SessionUtil::isGraphicalEnvReady(user_name))
     {
         LOG(INFO) << "Graphical environment for" << user_name << "is not ready yet; will retry";
         dettach(FROM_HERE);
@@ -871,12 +837,24 @@ void UserSession::attach(const Location& location, AttachReason reason, SessionI
 
     const QString file_path = QCoreApplication::applicationDirPath() + '/' + kExecutableNameForUi;
 
-    // Launch through the user's systemd manager so the unit inherits the session environment
-    // (WAYLAND_DISPLAY or DISPLAY/XAUTHORITY, the session bus, XDG_RUNTIME_DIR, ...). This works for
-    // both X11 and Wayland sessions - do not gate on an X11 display.
-    QByteArray command_line =
-        QString("systemd-run --machine=%1@.host --user --collect %2 --hidden")
-            .arg(user_name, file_path).toLocal8Bit();
+    // The systemd user manager imports DISPLAY/WAYLAND_DISPLAY but not always XAUTHORITY (notably on
+    // X11 sessions), so a GUI launched through it cannot authenticate to the X server. Read the display
+    // and authority from the session's own processes and pass them to the unit explicitly.
+    QString display;
+    QString xauthority;
+
+    SessionUtil::readX11Env(uid, sd_session_id, &display, &xauthority);
+
+    // Launch through the user's systemd manager so the unit inherits the rest of the session environment
+    // (the session bus, XDG_RUNTIME_DIR, ...). Works for both X11 and Wayland sessions.
+    QString command = QString("systemd-run --machine=%1@.host --user --collect").arg(user_name);
+    if (!display.isEmpty())
+        command += " --setenv=DISPLAY=" + display;
+    if (!xauthority.isEmpty())
+        command += " --setenv=XAUTHORITY=" + xauthority;
+    command += ' ' + file_path + " --hidden";
+
+    const QByteArray command_line = command.toLocal8Bit();
 
     LOG(INFO) << "Start user session GUI:" << command_line;
 

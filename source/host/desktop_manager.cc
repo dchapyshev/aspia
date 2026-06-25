@@ -41,13 +41,12 @@
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX)
-#include "base/linux/libsystemd.h"
+#include "base/linux/session_util.h"
 
 #include <pwd.h>
 #include <signal.h>
 
 #include <cstdlib>
-#include <cstring>
 #endif // defined(Q_OS_LINUX)
 
 namespace {
@@ -239,55 +238,6 @@ bool startProcessWithToken(HANDLE token, const QString& command_line, const QStr
     return true;
 }
 #endif // defined(Q_OS_WINDOWS)
-
-#if defined(Q_OS_LINUX)
-//--------------------------------------------------------------------------------------------------
-// Reads the user's graphical session environment from its systemd user manager and fills the display
-// variables the (root) agent needs to attach to that session. Right after login the session is already
-// reported active, but the compositor imports WAYLAND_DISPLAY/DISPLAY into the user manager slightly
-// later; this returns false (not ready) until at least one of them is present, so the caller retries.
-bool fetchSessionGraphicalEnv(const QString& user_name, QString* wayland_display, QString* display,
-                              QString* xauthority)
-{
-    const QByteArray command =
-        QString("systemctl --machine=%1@.host --user show-environment 2>/dev/null")
-            .arg(user_name).toLocal8Bit();
-
-    FILE* pipe = popen(command.constData(), "r");
-    if (!pipe)
-    {
-        PLOG(ERROR) << "popen failed";
-        return false;
-    }
-
-    QByteArray output;
-    char buffer[256];
-    while (fgets(buffer, sizeof(buffer), pipe))
-        output.append(buffer);
-
-    pclose(pipe);
-
-    const QList<QByteArray> lines = output.split('\n');
-    for (const QByteArray& line : lines)
-    {
-        const int eq = line.indexOf('=');
-        if (eq <= 0)
-            continue;
-
-        const QByteArray key = line.left(eq);
-        const QString value = QString::fromLocal8Bit(line.mid(eq + 1));
-
-        if (key == "WAYLAND_DISPLAY")
-            *wayland_display = value;
-        else if (key == "DISPLAY")
-            *display = value;
-        else if (key == "XAUTHORITY")
-            *xauthority = value;
-    }
-
-    return !wayland_display->isEmpty() || !display->isEmpty();
-}
-#endif // defined(Q_OS_LINUX)
 
 } // namespace
 
@@ -711,22 +661,17 @@ bool DesktopManager::startProcess(const QString& ipc_channel_name)
     return true;
 #elif defined(Q_OS_LINUX)
     // Determine the active console session and its user.
-    char* session = nullptr;
+    QString session_id;
     uid_t uid = 0;
-    if (LibSystemd::seatGetActive("seat0", &session, &uid) < 0 || !session)
+    if (!SessionUtil::activeSession(&session_id, &uid))
     {
         LOG(ERROR) << "No active session on seat0";
         return false;
     }
 
-    char* session_class = nullptr;
-    LibSystemd::sessionGetClass(session, &session_class);
-    const bool is_user_session = session_class && strcmp(session_class, "user") == 0;
-    const bool is_greeter_session = session_class && strcmp(session_class, "greeter") == 0;
-    free(session_class);
-    free(session);
-
-    if (!is_user_session && !is_greeter_session)
+    const SessionUtil::SessionClass session_class = SessionUtil::sessionClass(session_id);
+    if (session_class != SessionUtil::SessionClass::USER &&
+        session_class != SessionUtil::SessionClass::GREETER)
     {
         // Not a graphical seat session (e.g. background/manager). Wait until one becomes active (the
         // caller retries via the restart timer).
@@ -745,7 +690,30 @@ bool DesktopManager::startProcess(const QString& ipc_channel_name)
     // needs DISPLAY and the X authority cookie, since the root unit has no session environment.
     QString session_setenv = " --setenv=ASPIA_DISPLAY=wayland";
 
-    if (is_user_session)
+    // Authoritative session type from logind: an X11 session (user desktop or the login-screen greeter)
+    // must use the X11 capture path, regardless of any (possibly stale) display env vars.
+    if (SessionUtil::sessionType(session_id) == SessionUtil::SessionType::X11)
+    {
+        // X11 session (user desktop or the greeter): the root agent has no session environment, so it
+        // needs the display and X authority cookie to open the display. Read them from the active
+        // session's own processes (the per-user systemd manager does not carry the cookie, and the
+        // greeter has no such manager at all).
+        QString display;
+        QString xauthority;
+
+        if (!SessionUtil::readX11Env(uid, session_id, &display, &xauthority))
+        {
+            // Right after the session becomes active its X server may still be starting; defer and let
+            // the restart timer retry.
+            LOG(INFO) << "X11 session environment not ready yet; deferring agent start";
+            return false;
+        }
+
+        session_setenv = QString(" --setenv=ASPIA_DISPLAY=x11 --setenv=DISPLAY=%1").arg(display);
+        if (!xauthority.isEmpty())
+            session_setenv += QString(" --setenv=XAUTHORITY=%1").arg(xauthority);
+    }
+    else if (session_class == SessionUtil::SessionClass::USER)
     {
         const struct passwd* pw = getpwuid(uid);
         if (!pw)
@@ -755,24 +723,15 @@ bool DesktopManager::startProcess(const QString& ipc_channel_name)
         }
         const QString user_name = QString::fromLocal8Bit(pw->pw_name);
 
-        // Right after login the session is active but the compositor has not yet imported its display
-        // environment. Defer until ready; the restart timer retries every second.
-        QString wayland_display, display, xauthority;
-        if (!fetchSessionGraphicalEnv(user_name, &wayland_display, &display, &xauthority))
+        // Wayland user session: defer until the compositor has imported its display environment, so the
+        // KMS/compositor path starts against a live session. The restart timer retries every second.
+        if (!SessionUtil::isGraphicalEnvReady(user_name))
         {
             LOG(INFO) << "User graphical environment not ready yet; deferring agent start";
             return false;
         }
-
-        if (wayland_display.isEmpty())
-        {
-            // X11 session: pass the display and cookie so the root agent can open the X display.
-            session_setenv = QString(" --setenv=ASPIA_DISPLAY=x11 --setenv=DISPLAY=%1").arg(display);
-            if (!xauthority.isEmpty())
-                session_setenv += QString(" --setenv=XAUTHORITY=%1").arg(xauthority);
-        }
-        // Wayland user session falls through to the KMS path (no display env needed).
     }
+    // Wayland greeter falls through to the KMS path with ASPIA_DISPLAY=wayland.
 
     const QByteArray command_line =
         QString("systemd-run --collect --setenv=%1=%2%3%4 %5")
