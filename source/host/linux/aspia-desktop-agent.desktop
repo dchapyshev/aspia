@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Aspia Desktop Agent
+Exec=/usr/bin/aspia_desktop_agent
+Type=Application
+Categories=Utility;
+Terminal=false
+NoDisplay=true
+X-KDE-DBUS-Restricted-Interfaces=org.kde.KWin.ScreenShot2
