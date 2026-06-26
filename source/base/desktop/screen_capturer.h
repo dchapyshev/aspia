@@ -45,7 +45,8 @@ public:
         LINUX_KMS     = 6,
         LINUX_KWIN    = 7,
         LINUX_WLR     = 8,
-        MACOSX        = 9
+        LINUX_VT      = 9,
+        MACOSX        = 10
     };
     Q_ENUM(Type)
 

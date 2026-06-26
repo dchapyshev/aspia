@@ -76,10 +76,14 @@ if (LINUX)
         screen_capturer_kwin.h
         screen_capturer_pipewire.cc
         screen_capturer_pipewire.h
+        screen_capturer_vt.cc
+        screen_capturer_vt.h
         screen_capturer_wlr.cc
         screen_capturer_wlr.h
         screen_capturer_x11.cc
-        screen_capturer_x11.h)
+        screen_capturer_x11.h
+        vt_session.cc
+        vt_session.h)
 endif()
 
 if (APPLE)
