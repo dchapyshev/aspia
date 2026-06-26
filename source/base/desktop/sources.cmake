@@ -68,6 +68,8 @@ if (LINUX)
     collect_sources(SOURCE_BASE_DESKTOP
         desktop_environment_linux.cc
         desktop_environment_linux.h
+        desktop_resizer_vt.cc
+        desktop_resizer_vt.h
         desktop_resizer_x11.cc
         desktop_resizer_x11.h
         screen_capturer_kms.cc

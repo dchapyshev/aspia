@@ -42,6 +42,9 @@ public:
     // Returns nullptr if |session| has no allocated VT.
     static ScreenCapturerVt* create(VtSession* session, QObject* parent = nullptr);
 
+    // Pixel size of one character cell; used to map a target resolution to a terminal grid.
+    QSize cellSize() const { return QSize(cell_width_, cell_height_); }
+
     // ScreenCapturer implementation.
     int screenCount() final;
     bool screenList(ScreenList* screens) final;
@@ -59,6 +62,9 @@ protected:
 
 private:
     bool init();
+    // Reads the VT's live geometry from /dev/vcsa and returns the rendered pixel size. Lets screenList
+    // report the current resolution directly (like desktop capturers query the OS), not a cached frame.
+    QSize currentResolution() const;
     // Renders the cell grid into |frame_|: |codepoints| (Unicode from /dev/vcsu) drive the glyphs and
     // |attributes| (from /dev/vcsa) drive the colors. Also draws the text cursor.
     void renderConsole(const quint32* codepoints, const quint8* attributes, int rows, int cols,

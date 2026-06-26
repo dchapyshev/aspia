@@ -37,6 +37,10 @@ public:
     // The allocated VT number, or -1 if not started.
     int vtNumber() const { return vt_num_; }
 
+    // Resizes the virtual terminal grid to |rows| x |cols| (VT_RESIZE) and notifies the running program
+    // (TIOCSWINSZ -> SIGWINCH). Note: VT_RESIZE is kernel-global - it changes the grid of all VTs.
+    bool resize(int rows, int cols);
+
     // Injects |length| bytes into the VT's input queue as if typed (TIOCSTI). No-op until started.
     void sendInput(const char* data, int length);
 

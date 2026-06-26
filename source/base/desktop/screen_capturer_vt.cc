@@ -299,10 +299,34 @@ bool ScreenCapturerVt::screenList(ScreenList* screens)
     Screen screen;
     screen.id = 0;
     screen.position = QPoint(0, 0);
-    screen.resolution = screen_rect_.size();
+    screen.resolution = currentResolution();
+    screen.dpi = QPoint(96, 96);
     screen.is_primary = true;
     screens->screens.append(screen);
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+QSize ScreenCapturerVt::currentResolution() const
+{
+    const int vt = session_ ? session_->vtNumber() : -1;
+    if (vt >= 0)
+    {
+        const QByteArray path = QByteArray("/dev/vcsa") + QByteArray::number(vt);
+        const int fd = ::open(path.constData(), O_RDONLY | O_CLOEXEC);
+        if (fd >= 0)
+        {
+            // Header: lines, columns, cursor column, cursor row.
+            quint8 header[4] = {};
+            const ssize_t count = ::read(fd, header, sizeof(header));
+            ::close(fd);
+
+            if (count == static_cast<ssize_t>(sizeof(header)) && header[0] > 0 && header[1] > 0)
+                return QSize(header[1] * cell_width_, header[0] * cell_height_);
+        }
+    }
+
+    return screen_rect_.size();
 }
 
 //--------------------------------------------------------------------------------------------------

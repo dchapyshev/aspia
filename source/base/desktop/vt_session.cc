@@ -90,10 +90,10 @@ bool VtSession::start()
     if (pid == 0)
     {
         // Child: become a session leader and let agetty open the VT, set it as the controlling terminal
-        // and run the login prompt. --noclear keeps the existing screen content for the first capture.
+        // and run the login prompt. Without --noclear agetty clears the screen first, so a fresh
+        // connection shows a clean prompt instead of stale content left in the VT buffer.
         ::setsid();
-        ::execl(kGettyPath, "agetty", "--noclear", tty_name.constData(), "linux",
-                static_cast<char*>(nullptr));
+        ::execl(kGettyPath, "agetty", tty_name.constData(), "linux", static_cast<char*>(nullptr));
         _exit(127);
     }
 
@@ -115,6 +115,38 @@ bool VtSession::start()
     }
 
     LOG(INFO) << "VT login session started on" << tty_name.constData() << "(pid" << child_pid_ << ")";
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool VtSession::resize(int rows, int cols)
+{
+    if (console_fd_ < 0)
+        return false;
+
+    // VT_RESIZE changes the cell grid of all virtual terminals (the kernel keeps a single geometry for
+    // them); harmless for the others while they are idle or in graphics mode.
+    struct vt_sizes sizes = {};
+    sizes.v_rows = static_cast<unsigned short>(rows);
+    sizes.v_cols = static_cast<unsigned short>(cols);
+
+    if (::ioctl(console_fd_, VT_RESIZE, &sizes) != 0)
+    {
+        PLOG(ERROR) << "ioctl(VT_RESIZE) failed";
+        return false;
+    }
+
+    // Tell the running program (getty/login/shell) the new size so it reflows (SIGWINCH).
+    if (tty_fd_ >= 0)
+    {
+        struct winsize ws = {};
+        ws.ws_row = static_cast<unsigned short>(rows);
+        ws.ws_col = static_cast<unsigned short>(cols);
+        if (::ioctl(tty_fd_, TIOCSWINSZ, &ws) != 0)
+            PLOG(ERROR) << "ioctl(TIOCSWINSZ) failed";
+    }
+
+    LOG(INFO) << "VT resized to" << cols << "x" << rows;
     return true;
 }
 
