@@ -66,6 +66,13 @@ private:
 
     VtSession* session_;
 
+    // FreeType-backed monospace font (with a per-code-point glyph cache) and its cell metrics.
+    struct FontData;
+    std::unique_ptr<FontData> font_;
+    int cell_width_ = 0;
+    int cell_height_ = 0;
+    int cell_ascent_ = 0;
+
     std::unique_ptr<Frame> frame_;
     // Previous /dev/vcsa snapshot; an unchanged read yields an empty updated region so idle consoles are
     // not re-encoded every poll.
