@@ -21,6 +21,7 @@
 #include <algorithm>
 
 #include "base/logging.h"
+#include "base/desktop/screen_capturer_vt.h"
 #include "base/desktop/vt_monitors.h"
 #include "host/system_settings.h"
 
@@ -44,9 +45,9 @@ const int kDefaultRows = 36;
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-DesktopResizerVt::DesktopResizerVt(VtMonitors* monitors, const QSize& cell_size)
-    : monitors_(monitors),
-      cell_(cell_size)
+DesktopResizerVt::DesktopResizerVt(ScreenCapturerVt* capturer)
+    : monitors_(capturer ? capturer->monitors().get() : nullptr),
+      cell_(capturer ? capturer->cellSize() : QSize())
 {
     if (cell_.width() <= 0)
         cell_.setWidth(8);

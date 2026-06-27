@@ -60,8 +60,6 @@
 #include "base/desktop/screen_capturer_vt.h"
 #include "base/desktop/screen_capturer_wlr.h"
 #include "base/desktop/screen_capturer_x11.h"
-#include "base/desktop/vt_monitors.h"
-#include "base/desktop/vt_session.h"
 #include "base/desktop/linux/wayland_compositor_source.h"
 #include "base/linux/libsystemd.h"
 #include "host/desktop_resizer_vt.h"
@@ -217,10 +215,8 @@ DesktopAgent::~DesktopAgent()
 void DesktopAgent::setupLinuxCapture()
 {
     // TEMPORARY: force the VT console capturer for testing, bypassing all other backends.
-    if (setupVtFallback())
-        LOG(INFO) << "Capture mode: VT console (FORCED)";
-    else
-        LOG(ERROR) << "Unable to start VT console session";
+    capture_mode_ = CaptureMode::VT;
+    LOG(INFO) << "Capture mode: VT console (FORCED)";
     return;
 
     // X11 (login screen or desktop): the X11 grabber and injector use the display passed in the env.
@@ -310,41 +306,10 @@ void DesktopAgent::setupLinuxCapture()
         return;
     }
 
-    // Nothing graphical is available (headless / text mode): start a dedicated VT login terminal and
-    // expose it. Keystrokes are injected straight into that VT (see InputInjectorVt).
-    if (setupVtFallback())
-    {
-        LOG(INFO) << "Capture mode: VT console";
-        return;
-    }
-
-    LOG(ERROR) << "No usable screen capturer is available for this session";
-}
-
-//--------------------------------------------------------------------------------------------------
-bool DesktopAgent::setupVtFallback()
-{
-    // Two terminals, exposed to the client as switchable monitors.
-    std::vector<ScopedQPointer<VtSession>> sessions;
-    for (int i = 0; i < 2; ++i)
-    {
-        ScopedQPointer<VtSession> session(new VtSession());
-        if (session->start())
-            sessions.push_back(std::move(session));
-    }
-
-    if (sessions.empty())
-        return false;
-
-    vt_monitors_ = std::make_shared<VtMonitors>(std::move(sessions));
+    // Nothing graphical is available (headless / text mode): capture a dedicated VT login terminal,
+    // created and owned by ScreenCapturerVt (see selectCapturer()).
     capture_mode_ = CaptureMode::VT;
-
-    InputInjectorVt* injector = new InputInjectorVt(vt_monitors_, this);
-    // A finished terminal text selection is published to the client clipboard (only the agent reaches it).
-    connect(injector, &InputInjectorVt::sig_terminalClipboard, this,
-            [this](const QString& text) { sendClipboardText(text.toStdString()); });
-    input_injector_ = injector;
-    return true;
+    LOG(INFO) << "Capture mode: VT console";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -849,12 +814,11 @@ void DesktopAgent::onCaptureScreen()
 
         screen_resizer_.reset();
 #if defined(Q_OS_LINUX)
-        if (capture_mode_ == CaptureMode::VT && vt_monitors_ && screen_capturer_)
+        if (capture_mode_ == CaptureMode::VT && screen_capturer_)
         {
-            // The VT console resizes via its own grid; map resolutions through the renderer's cell size.
+            // The VT console resizes via its own grid (the terminals are owned by the capturer).
             screen_resizer_ = std::make_unique<DesktopResizerVt>(
-                vt_monitors_.get(),
-                static_cast<ScreenCapturerVt*>(screen_capturer_.get())->cellSize());
+                static_cast<ScreenCapturerVt*>(screen_capturer_.get()));
         }
         else
 #endif
@@ -1146,9 +1110,20 @@ void DesktopAgent::selectCapturer(ScreenCapturer::Error last_error)
 
         case CaptureMode::VT:
         {
-            screen_capturer_ = ScreenCapturerVt::create(vt_monitors_.get(), this);
-            if (!screen_capturer_)
+            ScreenCapturerVt* capturer = ScreenCapturerVt::create(this);
+            screen_capturer_ = capturer;
+            if (!capturer)
+            {
                 LOG(ERROR) << "Unable to create VT screen capturer";
+                return;
+            }
+
+            // The input injector is built on the capturer's terminals (the capturer owns them). A finished
+            // terminal text selection is published to the client clipboard (only the agent reaches it).
+            InputInjectorVt* injector = InputInjectorVt::create(capturer, this);
+            connect(injector, &InputInjectorVt::sig_terminalClipboard, this,
+                    [this](const QString& text) { sendClipboardText(text.toStdString()); });
+            input_injector_ = injector;
         }
         break;
 

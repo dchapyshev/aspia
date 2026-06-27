@@ -115,9 +115,9 @@ struct ScreenCapturerVt::FontData
 };
 
 //--------------------------------------------------------------------------------------------------
-ScreenCapturerVt::ScreenCapturerVt(VtMonitors* monitors, QObject* parent)
+ScreenCapturerVt::ScreenCapturerVt(SharedPointer<VtMonitors> monitors, QObject* parent)
     : ScreenCapturer(Type::LINUX_VT, parent),
-      monitors_(monitors)
+      monitors_(std::move(monitors))
 {
     LOG(INFO) << "Ctor";
 }
@@ -130,9 +130,26 @@ ScreenCapturerVt::~ScreenCapturerVt()
 
 //--------------------------------------------------------------------------------------------------
 // static
-ScreenCapturerVt* ScreenCapturerVt::create(VtMonitors* monitors, QObject* parent)
+ScreenCapturerVt* ScreenCapturerVt::create(QObject* parent)
 {
-    std::unique_ptr<ScreenCapturerVt> self(new ScreenCapturerVt(monitors, parent));
+    // Two login terminals, exposed to the client as switchable monitors.
+    std::vector<ScopedQPointer<VtSession>> sessions;
+    for (int i = 0; i < 2; ++i)
+    {
+        ScopedQPointer<VtSession> session(new VtSession());
+        if (session->start())
+            sessions.push_back(std::move(session));
+    }
+
+    if (sessions.empty())
+    {
+        LOG(ERROR) << "No VT session could be started";
+        return nullptr;
+    }
+
+    SharedPointer<VtMonitors> monitors(new VtMonitors(std::move(sessions)));
+
+    std::unique_ptr<ScreenCapturerVt> self(new ScreenCapturerVt(std::move(monitors), parent));
     if (!self->init())
         return nullptr;
     return self.release();

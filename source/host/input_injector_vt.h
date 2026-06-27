@@ -21,10 +21,10 @@
 
 #include <QString>
 
-#include <memory>
-
+#include "base/shared_pointer.h"
 #include "host/input_injector.h"
 
+class ScreenCapturerVt;
 class VtMonitors;
 
 // Feeds input into the active virtual terminal. Keystrokes and mouse events are handed to libvterm, which
@@ -37,8 +37,10 @@ class InputInjectorVt final : public InputInjector
     Q_OBJECT
 
 public:
-    explicit InputInjectorVt(std::shared_ptr<VtMonitors> monitors, QObject* parent = nullptr);
     ~InputInjectorVt() final = default;
+
+    // Builds the injector on the capturer's terminals (the capturer owns them).
+    static InputInjectorVt* create(ScreenCapturerVt* capturer, QObject* parent = nullptr);
 
     // Stores the client's clipboard text; typed into the terminal on a paste gesture.
     void setClipboard(const QString& text) { clipboard_ = text; }
@@ -56,9 +58,11 @@ signals:
     void sig_terminalClipboard(const QString& text);
 
 private:
+    InputInjectorVt(SharedPointer<VtMonitors> monitors, QObject* parent);
+
     void paste();
 
-    std::shared_ptr<VtMonitors> monitors_;
+    SharedPointer<VtMonitors> monitors_;
     bool shift_ = false;
     bool ctrl_ = false;
     bool alt_ = false;

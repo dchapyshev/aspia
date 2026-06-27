@@ -23,15 +23,25 @@
 #include <algorithm>
 #include <utility>
 
+#include "base/desktop/screen_capturer_vt.h"
 #include "base/desktop/vt_monitors.h"
 #include "proto/desktop_input.h"
 
 //--------------------------------------------------------------------------------------------------
-InputInjectorVt::InputInjectorVt(std::shared_ptr<VtMonitors> monitors, QObject* parent)
+InputInjectorVt::InputInjectorVt(SharedPointer<VtMonitors> monitors, QObject* parent)
     : InputInjector(parent),
       monitors_(std::move(monitors))
 {
     // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+InputInjectorVt* InputInjectorVt::create(ScreenCapturerVt* capturer, QObject* parent)
+{
+    if (!capturer)
+        return nullptr;
+    return new InputInjectorVt(capturer->monitors(), parent);
 }
 
 //--------------------------------------------------------------------------------------------------

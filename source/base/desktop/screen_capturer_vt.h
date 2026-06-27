@@ -23,6 +23,7 @@
 
 #include <memory>
 
+#include "base/shared_pointer.h"
 #include "base/desktop/screen_capturer.h"
 #include "base/desktop/vt_monitors.h"
 
@@ -35,11 +36,14 @@ class Frame;
 class ScreenCapturerVt final : public ScreenCapturer
 {
 public:
-    explicit ScreenCapturerVt(VtMonitors* monitors, QObject* parent = nullptr);
     ~ScreenCapturerVt() final;
 
-    // Returns nullptr if no terminal is available.
-    static ScreenCapturerVt* create(VtMonitors* monitors, QObject* parent = nullptr);
+    // Starts the login terminals (owned by the capturer) and the renderer. Returns nullptr if no terminal
+    // could be started.
+    static ScreenCapturerVt* create(QObject* parent = nullptr);
+
+    // The terminals exposed as switchable monitors; input and resize components are built on top of them.
+    SharedPointer<VtMonitors> monitors() const { return monitors_; }
 
     // Pixel size of one character cell; used to map a target resolution to a terminal grid.
     QSize cellSize() const { return QSize(cell_width_, cell_height_); }
@@ -60,6 +64,8 @@ protected:
     void reset() final;
 
 private:
+    ScreenCapturerVt(SharedPointer<VtMonitors> monitors, QObject* parent);
+
     bool init();
     // Returns the live rendered pixel size (grid times cell). Lets screenList report the current resolution
     // directly (like desktop capturers query the OS), not a cached frame.
@@ -67,7 +73,7 @@ private:
     // Rasterizes |screen| (cells, colors and cursor from libvterm) into |frame_|.
     void renderConsole(const VtScreen& screen);
 
-    VtMonitors* monitors_;
+    SharedPointer<VtMonitors> monitors_;
 
     // FreeType-backed monospace font (with a per-code-point glyph cache) and its cell metrics.
     struct FontData;

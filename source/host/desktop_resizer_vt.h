@@ -23,14 +23,16 @@
 
 #include <QSize>
 
+class ScreenCapturerVt;
 class VtMonitors;
 
 // Resizes the virtual terminals (one per monitor) by mapping a requested resolution to a terminal grid
-// (using the renderer's character cell size) and applying it via VtSession::resize.
+// (using the renderer's character cell size) and applying it via VtSession::resize. Operates on the
+// terminals owned by the capturer.
 class DesktopResizerVt final : public DesktopResizer
 {
 public:
-    DesktopResizerVt(VtMonitors* monitors, const QSize& cell_size);
+    explicit DesktopResizerVt(ScreenCapturerVt* capturer);
     ~DesktopResizerVt() final = default;
 
     // DesktopResizer implementation.

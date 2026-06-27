@@ -54,7 +54,6 @@ class InputInjector;
 class IpcChannel;
 class ScaleReducer;
 class VideoEncoder;
-class VtMonitors;
 
 class DesktopAgent final : public QObject
 {
@@ -104,9 +103,6 @@ private:
     // Chooses the Linux capture path: X11, or on Wayland a compositor source / KWin / wlr on a user
     // session, otherwise DRM/KMS + uinput.
     void setupLinuxCapture();
-    // Starts a dedicated background VT login terminal and routes capture + input to it. The last fallback
-    // when no graphical capture works. Returns false if the VT session could not be started.
-    bool setupVtFallback();
     // Switches to DRM/KMS + uinput after the compositor capture path failed to start.
     void fallbackToKms();
     // Sends |text| (UTF-8) to the connected clients as a clipboard event (a finished terminal selection).
@@ -139,9 +135,6 @@ private:
 
     // Active session user's uid (for COMPOSITOR/KWIN/WLR: reaching the session bus as that user).
     uid_t session_uid_ = 0;
-
-    // Owns the dedicated background login terminals (switchable monitors) when capture_mode_ is VT.
-    std::shared_ptr<VtMonitors> vt_monitors_;
 #endif // defined(Q_OS_LINUX)
 
     ScopedQPointer<AudioCapturerWrapper> audio_capturer_;
