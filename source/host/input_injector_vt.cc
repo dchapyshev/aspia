@@ -103,6 +103,12 @@ void InputInjectorVt::injectKeyEvent(const proto::input::KeyEvent& event)
         default: break;
     }
 
+    if (usage >= 0x3a && usage <= 0x45) // F1 - F12
+    {
+        session->inputFunctionKey(static_cast<int>(usage) - 0x3a + 1, shift_, ctrl_, alt_);
+        return;
+    }
+
     char32_t ch = 0;
 
     if (usage >= 0x04 && usage <= 0x1d) // a - z

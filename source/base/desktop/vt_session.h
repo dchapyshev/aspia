@@ -112,6 +112,8 @@ public:
     // relevant mode.
     void inputUnichar(char32_t ch, bool ctrl, bool alt);
     void inputKey(VtKey key, bool shift, bool ctrl, bool alt);
+    // Function key F|number| (1-based: 1 = F1).
+    void inputFunctionKey(int number, bool shift, bool ctrl, bool alt);
     void inputMouseMove(int col, int row);
     void inputMouseButton(int button, bool pressed);
 

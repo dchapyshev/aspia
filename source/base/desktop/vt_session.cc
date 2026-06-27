@@ -490,6 +490,15 @@ void VtSession::inputKey(VtKey key, bool shift, bool ctrl, bool alt)
 }
 
 //--------------------------------------------------------------------------------------------------
+void VtSession::inputFunctionKey(int number, bool shift, bool ctrl, bool alt)
+{
+    if (!vt_)
+        return;
+    vterm_keyboard_key(vt_, static_cast<VTermKey>(VTERM_KEY_FUNCTION(number)), modifiers(shift, ctrl, alt));
+    flushOutput();
+}
+
+//--------------------------------------------------------------------------------------------------
 void VtSession::inputMouseMove(int col, int row)
 {
     if (!vt_)
