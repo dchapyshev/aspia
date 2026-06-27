@@ -19,6 +19,7 @@
 #include "base/desktop/vt_session.h"
 
 #include <QSocketNotifier>
+#include <QTimer>
 
 #include <vterm.h>
 
@@ -138,7 +139,43 @@ VtSession::~VtSession()
 //--------------------------------------------------------------------------------------------------
 bool VtSession::start()
 {
-    // Open a PTY: the login session runs on the slave, we drive the master. Non-blocking so the read/write
+    // Set up the terminal emulator.
+    vt_ = vterm_new(kDefaultRows, kDefaultCols);
+    if (!vt_)
+    {
+        LOG(ERROR) << "vterm_new failed";
+        return false;
+    }
+    vterm_set_utf8(vt_, 1);
+
+    screen_ = vterm_obtain_screen(vt_);
+    state_ = vterm_obtain_state(vt_);
+
+    vterm_screen_reset(screen_, 1);
+    vterm_screen_enable_altscreen(screen_, 1);
+
+    // damage / movecursor bump a generation counter so the renderer re-renders exactly when libvterm
+    // changes. settermprop tracks the mouse-reporting mode. libvterm keeps a pointer to the callbacks, so
+    // the table must outlive the terminal.
+    static VTermScreenCallbacks screen_callbacks = {};
+    screen_callbacks.damage = onDamage;
+    screen_callbacks.movecursor = onMoveCursor;
+    screen_callbacks.settermprop = onSetTermProp;
+    vterm_screen_set_callbacks(screen_, &screen_callbacks, this);
+
+    VTermColor fg;
+    VTermColor bg;
+    vterm_color_rgb(&fg, 0xcc, 0xcc, 0xcc);
+    vterm_color_rgb(&bg, 0x00, 0x00, 0x00);
+    vterm_state_set_default_colors(state_, &fg, &bg);
+
+    return spawnLogin();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool VtSession::spawnLogin()
+{
+    // Open a PTY: the login prompt runs on the slave, we drive the master. Non-blocking so the read/write
     // notifiers never stall the event loop.
     master_fd_ = ::posix_openpt(O_RDWR | O_NOCTTY);
     if (master_fd_ < 0 || ::grantpt(master_fd_) != 0 || ::unlockpt(master_fd_) != 0)
@@ -190,40 +227,15 @@ bool VtSession::start()
 
     child_pid_ = pid;
 
-    // Set up the terminal emulator.
-    vt_ = vterm_new(kDefaultRows, kDefaultCols);
-    if (!vt_)
-    {
-        LOG(ERROR) << "vterm_new failed";
-        return false;
-    }
-    vterm_set_utf8(vt_, 1);
+    // Match the PTY window size to the emulator grid (preserved across respawns).
+    int rows = kDefaultRows;
+    int cols = kDefaultCols;
+    if (vt_)
+        vterm_get_size(vt_, &rows, &cols);
 
-    screen_ = vterm_obtain_screen(vt_);
-    state_ = vterm_obtain_state(vt_);
-
-    vterm_screen_reset(screen_, 1);
-    vterm_screen_enable_altscreen(screen_, 1);
-
-    // damage / movecursor bump a generation counter so the renderer re-renders exactly when libvterm
-    // changes. settermprop tracks the mouse-reporting mode. libvterm keeps a pointer to the callbacks, so
-    // the table must outlive the terminal.
-    static VTermScreenCallbacks screen_callbacks = {};
-    screen_callbacks.damage = onDamage;
-    screen_callbacks.movecursor = onMoveCursor;
-    screen_callbacks.settermprop = onSetTermProp;
-    vterm_screen_set_callbacks(screen_, &screen_callbacks, this);
-
-    VTermColor fg;
-    VTermColor bg;
-    vterm_color_rgb(&fg, 0xcc, 0xcc, 0xcc);
-    vterm_color_rgb(&bg, 0x00, 0x00, 0x00);
-    vterm_state_set_default_colors(state_, &fg, &bg);
-
-    // Match the PTY window size to the emulator grid.
     struct winsize ws = {};
-    ws.ws_row = kDefaultRows;
-    ws.ws_col = kDefaultCols;
+    ws.ws_row = static_cast<unsigned short>(rows);
+    ws.ws_col = static_cast<unsigned short>(cols);
     ::ioctl(master_fd_, TIOCSWINSZ, &ws);
 
     read_notifier_ = new QSocketNotifier(master_fd_, QSocketNotifier::Read);
@@ -233,8 +245,55 @@ bool VtSession::start()
     write_notifier_->setEnabled(false);
     connect(write_notifier_.get(), &QSocketNotifier::activated, this, &VtSession::onWritable);
 
-    LOG(INFO) << "VT login session started (pid" << child_pid_ << ")";
+    spawn_timer_.start();
+    LOG(INFO) << "VT login prompt started (pid" << child_pid_ << ")";
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void VtSession::restartLogin()
+{
+    if (read_notifier_)
+        read_notifier_->setEnabled(false);
+    if (write_notifier_)
+        write_notifier_->setEnabled(false);
+    read_notifier_.reset();
+    write_notifier_.reset();
+    pending_write_.clear();
+
+    if (child_pid_ > 0)
+    {
+        ::kill(-child_pid_, SIGKILL);
+        ::kill(child_pid_, SIGKILL);
+
+        int status = 0;
+        ::waitpid(child_pid_, &status, 0);
+        child_pid_ = -1;
+    }
+
+    if (master_fd_ >= 0)
+    {
+        ::close(master_fd_);
+        master_fd_ = -1;
+    }
+
+    // Clear the leftover screen (e.g. the "login timed out" message) so the fresh prompt starts clean.
+    if (vt_)
+    {
+        const char clear[] = "\x1b[H\x1b[2J";
+        vterm_input_write(vt_, clear, sizeof(clear) - 1);
+    }
+
+    spawnLogin();
+}
+
+//--------------------------------------------------------------------------------------------------
+void VtSession::scheduleRestart()
+{
+    const qint64 elapsed = spawn_timer_.elapsed();
+    const int delay = (elapsed >= 1000) ? 0 : static_cast<int>(1000 - elapsed);
+
+    QTimer::singleShot(delay, this, [this]() { restartLogin(); });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -437,13 +496,16 @@ void VtSession::onReadable()
         {
             continue;
         }
-        else if (count < 0)
+        else if (count < 0 && (errno == EAGAIN || errno == EWOULDBLOCK))
         {
-            break; // EAGAIN / EWOULDBLOCK: the buffer is drained.
+            break; // No more data right now; wait for the next readable notification.
         }
         else
         {
-            read_notifier_->setEnabled(false); // EOF: the session ended.
+            // EOF (count == 0), or on Linux EIO once the slave side closes: the login/shell exited
+            // (e.g. login timed out). Respawn a fresh login prompt.
+            read_notifier_->setEnabled(false);
+            scheduleRestart();
             break;
         }
     }

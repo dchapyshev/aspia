@@ -22,6 +22,7 @@
 #include <sys/types.h>
 
 #include <QByteArray>
+#include <QElapsedTimer>
 #include <QObject>
 #include <QSocketNotifier>
 
@@ -117,6 +118,12 @@ private slots:
     void onWritable();
 
 private:
+    // Opens a fresh PTY, forks a login prompt on it and arms the notifiers. Used by start() and on respawn.
+    bool spawnLogin();
+    // Tears down the dead PTY, clears the screen and spawns a new login prompt.
+    void restartLogin();
+    // Schedules restartLogin(), throttled so a failing login cannot busy-loop.
+    void scheduleRestart();
     void writeMaster(const char* data, int length);
     // Drains libvterm's pending output (query replies, key and mouse reports) to the PTY.
     void flushOutput();
@@ -134,6 +141,7 @@ private:
 
     bool mouse_active_ = false;
     quint64 generation_ = 0;
+    QElapsedTimer spawn_timer_; // measures time since the last login spawn, for throttling respawns
 
     Q_DISABLE_COPY_MOVE(VtSession)
 };
