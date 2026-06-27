@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_DESKTOP_LINUX_SHARED_X_DISPLAY_H
-#define BASE_DESKTOP_LINUX_SHARED_X_DISPLAY_H
+#ifndef HOST_LINUX_SHARED_X_DISPLAY_H
+#define HOST_LINUX_SHARED_X_DISPLAY_H
 
 #include <QtClassHelperMacros>
 #include <QString>
@@ -80,4 +80,4 @@ private:
     Q_DISABLE_COPY(SharedXDisplay)
 };
 
-#endif // BASE_DESKTOP_LINUX_SHARED_X_DISPLAY_H
+#endif // HOST_LINUX_SHARED_X_DISPLAY_H

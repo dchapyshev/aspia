@@ -20,11 +20,11 @@
 #define HOST_SCREEN_CAPTURER_X11_H
 
 #include "base/desktop/frame.h"
-#include "base/desktop/linux/shared_x_display.h"
-#include "base/desktop/linux/x_atom_cache.h"
-#include "base/desktop/linux/x_server_pixel_buffer.h"
 #include "host/screen_capturer.h"
 #include "host/screen_capturer_helper.h"
+#include "host/linux/shared_x_display.h"
+#include "host/linux/x_atom_cache.h"
+#include "host/linux/x_server_pixel_buffer.h"
 
 #include "base/linux/x11_headers.h"
 

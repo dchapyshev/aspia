@@ -39,10 +39,10 @@
 #include "base/desktop/frame_aligned.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/region.h"
-#include "base/desktop/linux/egl_dmabuf.h"
-#include "base/desktop/linux/pipewire.h"
-#include "base/desktop/linux/wayland_capture_source.h"
-#include "base/desktop/linux/wayland_compositor_source.h"
+#include "host/linux/egl_dmabuf.h"
+#include "host/linux/pipewire.h"
+#include "host/linux/wayland_capture_source.h"
+#include "host/linux/wayland_compositor_source.h"
 
 namespace {
 

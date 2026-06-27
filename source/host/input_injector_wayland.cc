@@ -19,8 +19,8 @@
 #include "host/input_injector_wayland.h"
 
 #include "base/logging.h"
-#include "base/desktop/linux/wayland_compositor_source.h"
 #include "common/keycode_converter.h"
+#include "host/linux/wayland_compositor_source.h"
 #include "proto/desktop_input.h"
 
 namespace {

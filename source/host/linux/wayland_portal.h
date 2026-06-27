@@ -16,15 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_DESKTOP_LINUX_WAYLAND_PORTAL_H
-#define BASE_DESKTOP_LINUX_WAYLAND_PORTAL_H
+#ifndef HOST_LINUX_WAYLAND_PORTAL_H
+#define HOST_LINUX_WAYLAND_PORTAL_H
 
 #include <QDBusConnection>
 #include <QObject>
 #include <QPoint>
 #include <QSize>
 
-#include "base/desktop/linux/wayland_compositor_source.h"
+#include "host/linux/wayland_compositor_source.h"
 
 class QDBusInterface;
 
@@ -139,4 +139,4 @@ private:
     Q_DISABLE_COPY_MOVE(WaylandPortal)
 };
 
-#endif // BASE_DESKTOP_LINUX_WAYLAND_PORTAL_H
+#endif // HOST_LINUX_WAYLAND_PORTAL_H

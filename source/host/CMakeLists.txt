@@ -127,8 +127,16 @@ if (WIN32)
     include(win/sources.cmake)
 endif()
 
+if (LINUX)
+    include(linux/sources.cmake)
+endif()
+
 source_group("" FILES ${SOURCE_HOST_CORE})
 source_group(ui FILES ${SOURCE_HOST_CORE_UI})
+
+if (LINUX)
+    source_group(linux FILES ${SOURCE_HOST_CORE_LINUX})
+endif()
 
 if (WIN32)
     source_group(win FILES ${SOURCE_HOST_CORE_WIN})
@@ -141,7 +149,8 @@ endif()
 add_library(aspia_host_core SHARED
     ${SOURCE_HOST_CORE}
     ${SOURCE_HOST_CORE_UI}
-    ${SOURCE_HOST_CORE_WIN})
+    ${SOURCE_HOST_CORE_WIN}
+    ${SOURCE_HOST_CORE_LINUX})
 target_link_libraries(aspia_host_core PRIVATE
     aspia_base
     aspia_common
@@ -155,6 +164,19 @@ set_property(TARGET aspia_host_core PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_host_core PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_host_core PROPERTY AUTORCC ON)
 qt_import_plugins(aspia_host_core INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE imageformats iconengines EXCLUDE_BY_TYPE "")
+
+if (LINUX)
+    # The screen capturers compile the PipeWire/DRM and generated wlr-screencopy stubs (host/linux); only
+    # their headers are needed at build time (PipeWire/EGL/GBM/libdrm are loaded dynamically). The binary
+    # dir is on the include path so the generated wlr-screencopy header is reachable by its short name.
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(PIPEWIRE REQUIRED libpipewire-0.3)
+    pkg_check_modules(LIBDRM REQUIRED libdrm)
+    find_library(WAYLAND_CLIENT_LIB NAMES wayland-client REQUIRED)
+    target_include_directories(aspia_host_core PRIVATE
+        ${PIPEWIRE_INCLUDE_DIRS} ${LIBDRM_INCLUDE_DIRS} ${CMAKE_CURRENT_BINARY_DIR})
+    target_link_libraries(aspia_host_core PRIVATE ${WAYLAND_CLIENT_LIB})
+endif()
 
 if (LINUX)
     set(HOST_PLATFORM_LIBS stdc++fs)

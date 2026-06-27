@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_DESKTOP_LINUX_WAYLAND_INPUT_TARGET_H
-#define BASE_DESKTOP_LINUX_WAYLAND_INPUT_TARGET_H
+#ifndef HOST_LINUX_WAYLAND_INPUT_TARGET_H
+#define HOST_LINUX_WAYLAND_INPUT_TARGET_H
 
 #include <QtGlobal>
 
@@ -38,4 +38,4 @@ public:
     virtual void notifyKeyboardKeysym(qint32 keysym, bool pressed) = 0;
 };
 
-#endif // BASE_DESKTOP_LINUX_WAYLAND_INPUT_TARGET_H
+#endif // HOST_LINUX_WAYLAND_INPUT_TARGET_H

@@ -16,9 +16,11 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-collect_sources(SOURCE_BASE_DESKTOP_LINUX
+collect_sources(SOURCE_HOST_CORE_LINUX
     egl_dmabuf.cc
     egl_dmabuf.h
+    libdrm.cc
+    libdrm.h
     mutter_screen_cast.cc
     mutter_screen_cast.h
     pipewire.cc
@@ -40,10 +42,10 @@ collect_sources(SOURCE_BASE_DESKTOP_LINUX
 
 # Generate the wlr-screencopy client stubs used by ScreenCapturerWlr. The protocol XML is vendored
 # (it ships with wlr-protocols, which is not packaged on the build host). CMAKE_CURRENT_* here refer to
-# base/ (this file is include()'d from base/CMakeLists.txt), and base's binary dir is already on the
+# host/ (this file is include()'d from host/CMakeLists.txt); host's binary dir is on aspia_host_core's
 # include path, so the generated header is reachable by its short name.
 find_program(WAYLAND_SCANNER_EXECUTABLE NAMES wayland-scanner REQUIRED)
-set(WLR_SCREENCOPY_XML "${CMAKE_CURRENT_SOURCE_DIR}/desktop/linux/wlr-screencopy-unstable-v1.xml")
+set(WLR_SCREENCOPY_XML "${CMAKE_CURRENT_SOURCE_DIR}/linux/wlr-screencopy-unstable-v1.xml")
 set(WLR_SCREENCOPY_HEADER "${CMAKE_CURRENT_BINARY_DIR}/wlr-screencopy-unstable-v1-client-protocol.h")
 set(WLR_SCREENCOPY_CODE "${CMAKE_CURRENT_BINARY_DIR}/wlr-screencopy-unstable-v1-protocol.c")
 add_custom_command(
@@ -58,4 +60,4 @@ add_custom_command(
             "${WLR_SCREENCOPY_XML}" "${WLR_SCREENCOPY_CODE}"
     DEPENDS "${WLR_SCREENCOPY_XML}"
     VERBATIM)
-list(APPEND SOURCE_BASE_DESKTOP_LINUX "${WLR_SCREENCOPY_HEADER}" "${WLR_SCREENCOPY_CODE}")
+list(APPEND SOURCE_HOST_CORE_LINUX "${WLR_SCREENCOPY_HEADER}" "${WLR_SCREENCOPY_CODE}")

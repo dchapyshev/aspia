@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_DESKTOP_LINUX_EGL_DMABUF_H
-#define BASE_DESKTOP_LINUX_EGL_DMABUF_H
+#ifndef HOST_LINUX_EGL_DMABUF_H
+#define HOST_LINUX_EGL_DMABUF_H
 
 #include <QList>
 #include <QRect>
@@ -68,4 +68,4 @@ private:
     bool initialized_ = false;
 };
 
-#endif // BASE_DESKTOP_LINUX_EGL_DMABUF_H
+#endif // HOST_LINUX_EGL_DMABUF_H

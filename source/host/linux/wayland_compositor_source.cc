@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/desktop/linux/wayland_compositor_source.h"
+#include "host/linux/wayland_compositor_source.h"
 
 #include "base/scoped_qpointer.h"
-#include "base/desktop/linux/mutter_screen_cast.h"
-#include "base/desktop/linux/wayland_portal.h"
+#include "host/linux/mutter_screen_cast.h"
+#include "host/linux/wayland_portal.h"
 
 //--------------------------------------------------------------------------------------------------
 WaylandCompositorSource::WaylandCompositorSource(QObject* parent)

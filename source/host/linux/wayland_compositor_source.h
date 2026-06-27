@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_DESKTOP_LINUX_WAYLAND_COMPOSITOR_SOURCE_H
-#define BASE_DESKTOP_LINUX_WAYLAND_COMPOSITOR_SOURCE_H
+#ifndef HOST_LINUX_WAYLAND_COMPOSITOR_SOURCE_H
+#define HOST_LINUX_WAYLAND_COMPOSITOR_SOURCE_H
 
 #include <QList>
 #include <QObject>
@@ -27,8 +27,8 @@
 
 #include <sys/types.h>
 
-#include "base/desktop/linux/wayland_capture_source.h"
-#include "base/desktop/linux/wayland_input_target.h"
+#include "host/linux/wayland_capture_source.h"
+#include "host/linux/wayland_input_target.h"
 
 // A compositor-provided source that supplies both a PipeWire capture stream and an input channel on
 // Wayland, negotiated asynchronously. The concrete backends - GNOME Mutter ScreenCast (used directly,
@@ -81,4 +81,4 @@ protected:
     explicit WaylandCompositorSource(QObject* parent = nullptr);
 };
 
-#endif // BASE_DESKTOP_LINUX_WAYLAND_COMPOSITOR_SOURCE_H
+#endif // HOST_LINUX_WAYLAND_COMPOSITOR_SOURCE_H

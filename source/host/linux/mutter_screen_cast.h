@@ -16,15 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_DESKTOP_LINUX_MUTTER_SCREEN_CAST_H
-#define BASE_DESKTOP_LINUX_MUTTER_SCREEN_CAST_H
+#ifndef HOST_LINUX_MUTTER_SCREEN_CAST_H
+#define HOST_LINUX_MUTTER_SCREEN_CAST_H
 
 #include <QDBusConnection>
 #include <QObject>
 
 #include <sys/types.h>
 
-#include "base/desktop/linux/wayland_compositor_source.h"
+#include "host/linux/wayland_compositor_source.h"
 
 class QDBusInterface;
 
@@ -107,4 +107,4 @@ private:
     Q_DISABLE_COPY_MOVE(MutterScreenCast)
 };
 
-#endif // BASE_DESKTOP_LINUX_MUTTER_SCREEN_CAST_H
+#endif // HOST_LINUX_MUTTER_SCREEN_CAST_H

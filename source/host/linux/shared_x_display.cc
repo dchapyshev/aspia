@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/desktop/linux/shared_x_display.h"
+#include "host/linux/shared_x_display.h"
 
 #include "base/logging.h"
 

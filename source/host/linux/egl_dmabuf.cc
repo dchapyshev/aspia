@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/desktop/linux/egl_dmabuf.h"
+#include "host/linux/egl_dmabuf.h"
 
 #include <EGL/egl.h>
 #include <EGL/eglext.h>

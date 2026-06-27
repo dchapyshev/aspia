@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_DESKTOP_LINUX_X_ATOM_CACHE_H
-#define BASE_DESKTOP_LINUX_X_ATOM_CACHE_H
+#ifndef HOST_LINUX_X_ATOM_CACHE_H
+#define HOST_LINUX_X_ATOM_CACHE_H
 
 #include "base/linux/x11_headers.h"
 
@@ -46,4 +46,4 @@ private:
     Atom icc_profile_ = X11_None;
 };
 
-#endif // BASE_DESKTOP_LINUX_X_ATOM_CACHE_H
+#endif // HOST_LINUX_X_ATOM_CACHE_H

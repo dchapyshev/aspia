@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_DESKTOP_LINUX_WAYLAND_CAPTURE_SOURCE_H
-#define BASE_DESKTOP_LINUX_WAYLAND_CAPTURE_SOURCE_H
+#ifndef HOST_LINUX_WAYLAND_CAPTURE_SOURCE_H
+#define HOST_LINUX_WAYLAND_CAPTURE_SOURCE_H
 
 #include <QPoint>
 #include <QSize>
@@ -54,4 +54,4 @@ public:
     virtual uid_t pipeWireUid() const { return static_cast<uid_t>(-1); }
 };
 
-#endif // BASE_DESKTOP_LINUX_WAYLAND_CAPTURE_SOURCE_H
+#endif // HOST_LINUX_WAYLAND_CAPTURE_SOURCE_H

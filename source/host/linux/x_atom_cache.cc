@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/desktop/linux/x_atom_cache.h"
+#include "host/linux/x_atom_cache.h"
 
 #include "base/logging.h"
 #include "base/linux/libx11.h"

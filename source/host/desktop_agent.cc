@@ -54,7 +54,6 @@
 #include <cstdlib>
 #include <cstring>
 
-#include "base/desktop/linux/wayland_compositor_source.h"
 #include "base/linux/libsystemd.h"
 #include "host/desktop_resizer_vt.h"
 #include "host/input_injector_uinput.h"
@@ -67,6 +66,7 @@
 #include "host/screen_capturer_vt.h"
 #include "host/screen_capturer_wlr.h"
 #include "host/screen_capturer_x11.h"
+#include "host/linux/wayland_compositor_source.h"
 #endif // defined(Q_OS_LINUX)
 
 namespace {

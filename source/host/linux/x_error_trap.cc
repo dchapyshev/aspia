@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/desktop/linux/x_error_trap.h"
+#include "host/linux/x_error_trap.h"
 
 #include <cassert>
 #include <cstddef>

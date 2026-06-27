@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_LINUX_LIBDRM_H
-#define BASE_LINUX_LIBDRM_H
+#ifndef HOST_LINUX_LIBDRM_H
+#define HOST_LINUX_LIBDRM_H
 
 #include <QtClassHelperMacros>
 
@@ -73,4 +73,4 @@ public:
     static void modeFreeProperty(drmModePropertyRes* property);
 };
 
-#endif // BASE_LINUX_LIBDRM_H
+#endif // HOST_LINUX_LIBDRM_H

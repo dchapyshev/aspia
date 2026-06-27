@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/desktop/linux/mutter_screen_cast.h"
+#include "host/linux/mutter_screen_cast.h"
 
 #include <QDBusArgument>
 #include <QDBusConnection>

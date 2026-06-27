@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/linux/libdrm.h"
+#include "host/linux/libdrm.h"
 
 #include <dlfcn.h>
 

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_DESKTOP_LINUX_X_ERROR_TRAP_H
-#define BASE_DESKTOP_LINUX_X_ERROR_TRAP_H
+#ifndef HOST_LINUX_X_ERROR_TRAP_H
+#define HOST_LINUX_X_ERROR_TRAP_H
 
 #include <QtClassHelperMacros>
 
@@ -41,4 +41,4 @@ private:
     Q_DISABLE_COPY(XErrorTrap)
 };
 
-#endif // BASE_DESKTOP_LINUX_X_ERROR_TRAP_H
+#endif // HOST_LINUX_X_ERROR_TRAP_H

@@ -18,8 +18,8 @@
 
 // Don't include this file in any .h files because it pulls in some X headers.
 
-#ifndef BASE_DESKTOP_LINUX_X_SERVER_PIXEL_BUFFER_H
-#define BASE_DESKTOP_LINUX_X_SERVER_PIXEL_BUFFER_H
+#ifndef HOST_LINUX_X_SERVER_PIXEL_BUFFER_H
+#define HOST_LINUX_X_SERVER_PIXEL_BUFFER_H
 
 #include <QRect>
 
@@ -85,4 +85,4 @@ private:
     Q_DISABLE_COPY(XServerPixelBuffer)
 };
 
-#endif // BASE_DESKTOP_LINUX_X_SERVER_PIXEL_BUFFER_H
+#endif // HOST_LINUX_X_SERVER_PIXEL_BUFFER_H

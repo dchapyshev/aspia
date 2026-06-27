@@ -141,7 +141,6 @@ endif()
 
 if (LINUX)
     include(audio/linux/sources.cmake)
-    include(desktop/linux/sources.cmake)
     include(linux/sources.cmake)
 endif()
 
@@ -167,7 +166,6 @@ endif()
 
 if (LINUX)
     source_group(audio\\linux FILES ${SOURCE_BASE_AUDIO_LINUX})
-    source_group(desktop\\linux FILES ${SOURCE_BASE_DESKTOP_LINUX})
     source_group(linux FILES ${SOURCE_BASE_LINUX})
 endif()
 
@@ -183,7 +181,6 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_CODEC}
     ${SOURCE_BASE_CRYPTO}
     ${SOURCE_BASE_DESKTOP}
-    ${SOURCE_BASE_DESKTOP_LINUX}
     ${SOURCE_BASE_FILES}
     ${SOURCE_BASE_IPC}
     ${SOURCE_BASE_LINUX}
@@ -205,19 +202,12 @@ endif()
 if (LINUX)
     set(BASE_PLATFORM_LIBS stdc++fs ${CMAKE_DL_LIBS})
 
-    # PipeWire, EGL/GBM and libdrm are loaded dynamically (see base/desktop/linux), so only their
-    # headers are needed at build time, not the libraries.
-    find_package(PkgConfig REQUIRED)
-    pkg_check_modules(PIPEWIRE REQUIRED libpipewire-0.3)
-    pkg_check_modules(LIBDRM REQUIRED libdrm)
-    target_include_directories(aspia_base PUBLIC ${PIPEWIRE_INCLUDE_DIRS} ${LIBDRM_INCLUDE_DIRS})
-
-    # libwayland-client is linked (the generated xdg-output stubs call wl_proxy_* directly); it is
-    # already pulled in via the static Qt Wayland plugins. The generated client header lives in the
-    # base binary directory.
+    # libwayland-client is linked (the generated xdg-output stubs in base/linux call wl_proxy_* directly);
+    # it is already pulled in via the static Qt Wayland plugins. The generated xdg-output client header
+    # lives in the base binary directory.
     find_library(WAYLAND_CLIENT_LIB NAMES wayland-client REQUIRED)
     list(APPEND BASE_PLATFORM_LIBS ${WAYLAND_CLIENT_LIB})
-    target_include_directories(aspia_base PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
+    target_include_directories(aspia_base PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 endif()
 
 if (ANDROID)
