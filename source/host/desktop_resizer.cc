@@ -16,16 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/desktop/desktop_resizer.h"
+#include "host/desktop_resizer.h"
 
 #include "base/logging.h"
 
 #if defined(Q_OS_WINDOWS)
-#include "base/desktop/desktop_resizer_win.h"
+#include "host/desktop_resizer_win.h"
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
-#include "base/desktop/desktop_resizer_x11.h"
+#include "host/desktop_resizer_x11.h"
 #endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 
 //--------------------------------------------------------------------------------------------------

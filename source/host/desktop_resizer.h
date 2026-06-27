@@ -16,29 +16,27 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_DESKTOP_DESKTOP_RESIZER_WIN_H
-#define BASE_DESKTOP_DESKTOP_RESIZER_WIN_H
+#ifndef HOST_DESKTOP_RESIZER_H
+#define HOST_DESKTOP_RESIZER_H
 
-#include <QMap>
+#include "base/desktop/screen_capturer.h"
 
-#include "base/desktop/desktop_resizer.h"
+#include <memory>
 
-class DesktopResizerWin final : public DesktopResizer
+class DesktopResizer
 {
 public:
-    DesktopResizerWin();
-    ~DesktopResizerWin() final;
+    virtual ~DesktopResizer() = default;
 
-    QList<QSize> supportedResolutions(ScreenId screen_id) final;
-    bool setResolution(ScreenId screen_id, const QSize& resolution) final;
-    void restoreResolution(ScreenId screen_id) final;
-    void restoreResulution() final;
+    using ScreenId = ScreenCapturer::ScreenId;
 
-private:
-    class Screen;
-    QMap<ScreenId, Screen> screens_;
+    // Create a platform-specific DesktopResizer instance.
+    static std::unique_ptr<DesktopResizer> create();
 
-    Q_DISABLE_COPY_MOVE(DesktopResizerWin)
+    virtual QList<QSize> supportedResolutions(ScreenId screen_id) = 0;
+    virtual bool setResolution(ScreenId screen_id, const QSize& resolution) = 0;
+    virtual void restoreResolution(ScreenId screen_id) = 0;
+    virtual void restoreResulution() = 0;
 };
 
-#endif // BASE_DESKTOP_DESKTOP_RESIZER_WIN_H
+#endif // HOST_DESKTOP_RESIZER_H

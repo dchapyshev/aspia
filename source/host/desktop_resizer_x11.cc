@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/desktop/desktop_resizer_x11.h"
+#include "host/desktop_resizer_x11.h"
 
 #include "base/logging.h"
 

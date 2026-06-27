@@ -16,16 +16,22 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_DESKTOP_DESKTOP_RESIZER_X11_H
-#define BASE_DESKTOP_DESKTOP_RESIZER_X11_H
+#ifndef HOST_DESKTOP_RESIZER_VT_H
+#define HOST_DESKTOP_RESIZER_VT_H
 
-#include "base/desktop/desktop_resizer.h"
+#include "host/desktop_resizer.h"
 
-class DesktopResizerX11 final : public DesktopResizer
+#include <QSize>
+
+class VtMonitors;
+
+// Resizes the virtual terminals (one per monitor) by mapping a requested resolution to a terminal grid
+// (using the renderer's character cell size) and applying it via VtSession::resize.
+class DesktopResizerVt final : public DesktopResizer
 {
 public:
-    DesktopResizerX11();
-    ~DesktopResizerX11() final;
+    DesktopResizerVt(VtMonitors* monitors, const QSize& cell_size);
+    ~DesktopResizerVt() final = default;
 
     // DesktopResizer implementation.
     QList<QSize> supportedResolutions(ScreenId screen_id) final;
@@ -34,7 +40,12 @@ public:
     void restoreResulution() final;
 
 private:
-    Q_DISABLE_COPY(DesktopResizerX11)
+    bool resizeSession(ScreenId screen_id, const QSize& resolution);
+
+    VtMonitors* monitors_;
+    QSize cell_;
+
+    Q_DISABLE_COPY_MOVE(DesktopResizerVt)
 };
 
-#endif // BASE_DESKTOP_DESKTOP_RESIZER_X11_H
+#endif // HOST_DESKTOP_RESIZER_VT_H

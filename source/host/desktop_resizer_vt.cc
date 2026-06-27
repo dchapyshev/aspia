@@ -16,12 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/desktop/desktop_resizer_vt.h"
+#include "host/desktop_resizer_vt.h"
 
 #include <algorithm>
 
 #include "base/logging.h"
 #include "base/desktop/vt_monitors.h"
+#include "host/system_settings.h"
 
 namespace {
 
@@ -51,6 +52,15 @@ DesktopResizerVt::DesktopResizerVt(VtMonitors* monitors, const QSize& cell_size)
         cell_.setWidth(8);
     if (cell_.height() <= 0)
         cell_.setHeight(16);
+
+    // Restore the resolution last chosen on this host. The client may override it afterwards via its own
+    // preferred resolution; that is fine - the saved value is only the starting point.
+    const QSize saved_resolution = SystemSettings().vtResolution();
+    if (!saved_resolution.isEmpty() && monitors_)
+    {
+        for (int i = 0; i < monitors_->count(); ++i)
+            resizeSession(i, saved_resolution);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -71,14 +81,14 @@ QList<QSize> DesktopResizerVt::supportedResolutions(ScreenId /* screen_id */)
 //--------------------------------------------------------------------------------------------------
 bool DesktopResizerVt::setResolution(ScreenId screen_id, const QSize& resolution)
 {
-    VtSession* session = monitors_ ? monitors_->session(static_cast<int>(screen_id)) : nullptr;
-    if (!session || resolution.width() <= 0 || resolution.height() <= 0)
+    if (!resizeSession(screen_id, resolution))
         return false;
 
-    const int cols = std::clamp(resolution.width() / cell_.width(), kMinCols, kMaxCols);
-    const int rows = std::clamp(resolution.height() / cell_.height(), kMinRows, kMaxRows);
-
-    return session->resize(rows, cols);
+    // Remember the chosen resolution so the next VT session starts at the same size.
+    SystemSettings settings;
+    settings.setVtResolution(resolution);
+    settings.sync();
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -97,4 +107,16 @@ void DesktopResizerVt::restoreResulution()
 
     for (int i = 0; i < monitors_->count(); ++i)
         restoreResolution(i);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool DesktopResizerVt::resizeSession(ScreenId screen_id, const QSize& resolution)
+{
+    VtSession* session = monitors_ ? monitors_->session(static_cast<int>(screen_id)) : nullptr;
+    if (!session || resolution.width() <= 0 || resolution.height() <= 0)
+        return false;
+
+    const int cols = std::clamp(resolution.width() / cell_.width(), kMinCols, kMaxCols);
+    const int rows = std::clamp(resolution.height() / cell_.height(), kMinRows, kMaxRows);
+    return session->resize(rows, cols);
 }

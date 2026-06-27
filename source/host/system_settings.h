@@ -20,6 +20,7 @@
 #define HOST_SYSTEM_SETTINGS_H
 
 #include <QSettings>
+#include <QSize>
 
 // System-wide host settings. Readable by any user but writable only by administrators (UAC
 // elevation on Windows, root on POSIX). Intended for non-sensitive host configuration that
@@ -43,6 +44,9 @@ public:
 
     quint32 preferredVideoCapturer() const;
     void setPreferredVideoCapturer(quint32 type);
+
+    QSize vtResolution() const;
+    void setVtResolution(const QSize& resolution);
 
     // Token for restoring a Wayland portal session without re-prompting the user.
     QString waylandRestoreToken() const;

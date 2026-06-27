@@ -33,6 +33,8 @@ list(APPEND SOURCE_HOST_CORE
     desktop_client.h
     desktop_manager.cc
     desktop_manager.h
+    desktop_resizer.cc
+    desktop_resizer.h
     file_agent.cc
     file_agent.h
     file_agent_main.cc
@@ -66,6 +68,8 @@ list(APPEND SOURCE_HOST_CORE
 
 if (WIN32)
     list(APPEND SOURCE_HOST_CORE
+        desktop_resizer_win.cc
+        desktop_resizer_win.h
         host_core.rc
         input_injector_win.cc
         input_injector_win.h)
@@ -73,6 +77,10 @@ endif()
 
 if (LINUX)
     list(APPEND SOURCE_HOST_CORE
+        desktop_resizer_vt.cc
+        desktop_resizer_vt.h
+        desktop_resizer_x11.cc
+        desktop_resizer_x11.h
         input_injector_uinput.cc
         input_injector_uinput.h
         input_injector_vt.cc

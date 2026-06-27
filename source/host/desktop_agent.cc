@@ -30,13 +30,13 @@
 #include "base/codec/cursor_encoder.h"
 #include "base/codec/scale_reducer.h"
 #include "base/codec/video_encoder.h"
-#include "base/desktop/desktop_resizer.h"
 #include "base/desktop/desktop_environment.h"
 #include "base/desktop/frame.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
 #include "host/desktop_agent_client.h"
+#include "host/desktop_resizer.h"
 #include "host/input_injector.h"
 #include "host/system_settings.h"
 #include "proto/desktop_audio.h"
@@ -54,7 +54,6 @@
 #include <cstdlib>
 #include <cstring>
 
-#include "base/desktop/desktop_resizer_vt.h"
 #include "base/desktop/screen_capturer_kms.h"
 #include "base/desktop/screen_capturer_kwin.h"
 #include "base/desktop/screen_capturer_pipewire.h"
@@ -65,6 +64,7 @@
 #include "base/desktop/vt_session.h"
 #include "base/desktop/linux/wayland_compositor_source.h"
 #include "base/linux/libsystemd.h"
+#include "host/desktop_resizer_vt.h"
 #include "host/input_injector_uinput.h"
 #include "host/input_injector_vt.h"
 #include "host/input_injector_wayland.h"

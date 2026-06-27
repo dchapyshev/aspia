@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/desktop/desktop_resizer_win.h"
+#include "host/desktop_resizer_win.h"
 
 #include "base/logging.h"
 #include "base/desktop/win/screen_capture_utils.h"
