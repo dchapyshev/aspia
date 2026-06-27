@@ -136,7 +136,6 @@ include(sql/sources.cmake)
 
 if (WIN32)
     include(audio/win/sources.cmake)
-    include(desktop/win/sources.cmake)
     include(win/sources.cmake)
 endif()
 
@@ -163,7 +162,6 @@ source_group(sql FILES ${SOURCE_BASE_SQL} ${SOURCE_BASE_SQL_TESTS})
 
 if (WIN32)
     source_group(audio\\win FILES ${SOURCE_BASE_AUDIO_WIN})
-    source_group(desktop\\win FILES ${SOURCE_BASE_DESKTOP_WIN} ${SOURCE_BASE_DESKTOP_WIN_TESTS})
     source_group(win FILES ${SOURCE_BASE_WIN} ${SOURCE_BASE_WIN_TESTS})
 endif()
 
@@ -186,7 +184,6 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_CRYPTO}
     ${SOURCE_BASE_DESKTOP}
     ${SOURCE_BASE_DESKTOP_LINUX}
-    ${SOURCE_BASE_DESKTOP_WIN}
     ${SOURCE_BASE_FILES}
     ${SOURCE_BASE_IPC}
     ${SOURCE_BASE_LINUX}
@@ -213,14 +210,14 @@ if (LINUX)
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(PIPEWIRE REQUIRED libpipewire-0.3)
     pkg_check_modules(LIBDRM REQUIRED libdrm)
-    target_include_directories(aspia_base PRIVATE ${PIPEWIRE_INCLUDE_DIRS} ${LIBDRM_INCLUDE_DIRS})
+    target_include_directories(aspia_base PUBLIC ${PIPEWIRE_INCLUDE_DIRS} ${LIBDRM_INCLUDE_DIRS})
 
     # libwayland-client is linked (the generated xdg-output stubs call wl_proxy_* directly); it is
     # already pulled in via the static Qt Wayland plugins. The generated client header lives in the
     # base binary directory.
     find_library(WAYLAND_CLIENT_LIB NAMES wayland-client REQUIRED)
     list(APPEND BASE_PLATFORM_LIBS ${WAYLAND_CLIENT_LIB})
-    target_include_directories(aspia_base PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+    target_include_directories(aspia_base PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
 endif()
 
 if (ANDROID)
@@ -247,7 +244,6 @@ add_executable(aspia_base_tests
     ${SOURCE_BASE_CODEC_TESTS}
     ${SOURCE_BASE_CRYPTO_TESTS}
     ${SOURCE_BASE_DESKTOP_TESTS}
-    ${SOURCE_BASE_DESKTOP_WIN_TESTS}
     ${SOURCE_BASE_FILES_TESTS}
     ${SOURCE_BASE_NET_TESTS}
     ${SOURCE_BASE_PEER_TESTS}

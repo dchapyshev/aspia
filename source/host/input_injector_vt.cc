@@ -23,8 +23,8 @@
 #include <algorithm>
 #include <utility>
 
-#include "base/desktop/screen_capturer_vt.h"
 #include "base/desktop/vt_monitors.h"
+#include "host/screen_capturer_vt.h"
 #include "proto/desktop_input.h"
 
 //--------------------------------------------------------------------------------------------------

@@ -51,6 +51,10 @@ list(APPEND SOURCE_HOST_CORE
     input_injector.h
     router_manager.cc
     router_manager.h
+    screen_capturer.cc
+    screen_capturer.h
+    screen_capturer_helper.cc
+    screen_capturer_helper.h
     service.cc
     service.h
     service_main.cc
@@ -72,7 +76,13 @@ if (WIN32)
         desktop_resizer_win.h
         host_core.rc
         input_injector_win.cc
-        input_injector_win.h)
+        input_injector_win.h
+        screen_capturer_dxgi.cc
+        screen_capturer_dxgi.h
+        screen_capturer_gdi.cc
+        screen_capturer_gdi.h
+        screen_capturer_win.cc
+        screen_capturer_win.h)
 endif()
 
 if (LINUX)
@@ -88,13 +98,27 @@ if (LINUX)
         input_injector_wayland.cc
         input_injector_wayland.h
         input_injector_x11.cc
-        input_injector_x11.h)
+        input_injector_x11.h
+        screen_capturer_kms.cc
+        screen_capturer_kms.h
+        screen_capturer_kwin.cc
+        screen_capturer_kwin.h
+        screen_capturer_pipewire.cc
+        screen_capturer_pipewire.h
+        screen_capturer_vt.cc
+        screen_capturer_vt.h
+        screen_capturer_wlr.cc
+        screen_capturer_wlr.h
+        screen_capturer_x11.cc
+        screen_capturer_x11.h)
 endif()
 
 if (APPLE)
     list(APPEND SOURCE_HOST_CORE
         input_injector_mac.mm
-        input_injector_mac.h)
+        input_injector_mac.h
+        screen_capturer_mac.mm
+        screen_capturer_mac.h)
 endif()
 
 include(ui/sources.cmake)

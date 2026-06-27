@@ -19,7 +19,7 @@
 #include "host/desktop_resizer_win.h"
 
 #include "base/logging.h"
-#include "base/desktop/win/screen_capture_utils.h"
+#include "host/win/screen_capture_utils.h"
 
 #include <qt_windows.h>
 

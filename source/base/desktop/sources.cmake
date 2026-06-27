@@ -39,10 +39,6 @@ collect_sources(SOURCE_BASE_DESKTOP
     power_save_blocker.h
     region.cc
     region.h
-    screen_capturer.cc
-    screen_capturer.h
-    screen_capturer_helper.cc
-    screen_capturer_helper.h
     shared_frame.cc
     shared_frame.h)
 
@@ -51,31 +47,13 @@ if (WIN32)
         desktop_environment_win.cc
         desktop_environment_win.h
         frame_dib.cc
-        frame_dib.h
-        screen_capturer_dxgi.cc
-        screen_capturer_dxgi.h
-        screen_capturer_gdi.cc
-        screen_capturer_gdi.h
-        screen_capturer_win.cc
-        screen_capturer_win.h)
+        frame_dib.h)
 endif()
 
 if (LINUX)
     collect_sources(SOURCE_BASE_DESKTOP
         desktop_environment_linux.cc
         desktop_environment_linux.h
-        screen_capturer_kms.cc
-        screen_capturer_kms.h
-        screen_capturer_kwin.cc
-        screen_capturer_kwin.h
-        screen_capturer_pipewire.cc
-        screen_capturer_pipewire.h
-        screen_capturer_vt.cc
-        screen_capturer_vt.h
-        screen_capturer_wlr.cc
-        screen_capturer_wlr.h
-        screen_capturer_x11.cc
-        screen_capturer_x11.h
         vt_monitors.h
         vt_session.cc
         vt_session.h)
@@ -84,9 +62,7 @@ endif()
 if (APPLE)
     collect_sources(SOURCE_BASE_DESKTOP
         desktop_environment_mac.mm
-        desktop_environment_mac.h
-        screen_capturer_mac.mm
-        screen_capturer_mac.h)
+        desktop_environment_mac.h)
 endif()
 
 collect_sources(SOURCE_BASE_DESKTOP_TESTS

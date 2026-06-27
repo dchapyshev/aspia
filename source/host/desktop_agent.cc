@@ -44,8 +44,8 @@
 #include "proto/desktop_internal.h"
 
 #if defined(Q_OS_WINDOWS)
-#include "base/desktop/screen_capturer_win.h"
 #include "host/input_injector_win.h"
+#include "host/screen_capturer_win.h"
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX)
@@ -54,12 +54,6 @@
 #include <cstdlib>
 #include <cstring>
 
-#include "base/desktop/screen_capturer_kms.h"
-#include "base/desktop/screen_capturer_kwin.h"
-#include "base/desktop/screen_capturer_pipewire.h"
-#include "base/desktop/screen_capturer_vt.h"
-#include "base/desktop/screen_capturer_wlr.h"
-#include "base/desktop/screen_capturer_x11.h"
 #include "base/desktop/linux/wayland_compositor_source.h"
 #include "base/linux/libsystemd.h"
 #include "host/desktop_resizer_vt.h"
@@ -67,6 +61,12 @@
 #include "host/input_injector_vt.h"
 #include "host/input_injector_wayland.h"
 #include "host/input_injector_x11.h"
+#include "host/screen_capturer_kms.h"
+#include "host/screen_capturer_kwin.h"
+#include "host/screen_capturer_pipewire.h"
+#include "host/screen_capturer_vt.h"
+#include "host/screen_capturer_wlr.h"
+#include "host/screen_capturer_x11.h"
 #endif // defined(Q_OS_LINUX)
 
 namespace {

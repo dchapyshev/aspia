@@ -30,7 +30,7 @@
 #include "base/serialization.h"
 #include "base/desktop/capture_scheduler.h"
 #include "base/desktop/power_save_blocker.h"
-#include "base/desktop/screen_capturer.h"
+#include "host/screen_capturer.h"
 #include "proto/desktop_audio.h"
 #include "proto/desktop_clipboard.h"
 #include "proto/desktop_cursor.h"

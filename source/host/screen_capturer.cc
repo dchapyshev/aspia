@@ -16,27 +16,18 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_DESKTOP_RESIZER_H
-#define HOST_DESKTOP_RESIZER_H
-
 #include "host/screen_capturer.h"
 
-#include <memory>
-
-class DesktopResizer
+//--------------------------------------------------------------------------------------------------
+ScreenCapturer::ScreenCapturer(Type type, QObject* parent)
+    : QObject(parent),
+      type_(type)
 {
-public:
-    virtual ~DesktopResizer() = default;
+    // Nothing
+}
 
-    using ScreenId = ScreenCapturer::ScreenId;
-
-    // Create a platform-specific DesktopResizer instance.
-    static std::unique_ptr<DesktopResizer> create();
-
-    virtual QList<QSize> supportedResolutions(ScreenId screen_id) = 0;
-    virtual bool setResolution(ScreenId screen_id, const QSize& resolution) = 0;
-    virtual void restoreResolution(ScreenId screen_id) = 0;
-    virtual void restoreResulution() = 0;
-};
-
-#endif // HOST_DESKTOP_RESIZER_H
+//--------------------------------------------------------------------------------------------------
+ScreenCapturer::Type ScreenCapturer::type() const
+{
+    return type_;
+}

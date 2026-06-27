@@ -22,7 +22,7 @@
 #include <QVector>
 
 #include "base/logging.h"
-#include "base/desktop/win/screen_capture_utils.h"
+#include "host/win/screen_capture_utils.h"
 #include "proto/desktop_input.h"
 
 namespace {

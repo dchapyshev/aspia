@@ -17,8 +17,29 @@
 #
 
 collect_sources(SOURCE_HOST_CORE_WIN
+    d3d_device.cc
+    d3d_device.h
+    dxgi_adapter_duplicator.cc
+    dxgi_adapter_duplicator.h
+    dxgi_context.cc
+    dxgi_context.h
+    dxgi_duplicator_controller.cc
+    dxgi_duplicator_controller.h
+    dxgi_frame.cc
+    dxgi_frame.h
+    dxgi_output_duplicator.cc
+    dxgi_output_duplicator.h
+    dxgi_texture.cc
+    dxgi_texture.h
+    dxgi_texture_mapping.cc
+    dxgi_texture_mapping.h
+    dxgi_texture_staging.cc
+    dxgi_texture_staging.h
     process_monitor.cc
     process_monitor.h
+    screen_capture_utils.cc
+    screen_capture_utils.h
+    swdevice_defines.h
     system_info.cc
     system_info.h
     task_manager.cc
@@ -27,4 +48,6 @@ collect_sources(SOURCE_HOST_CORE_WIN
     touch_injector.h
     touch_injector_defines.h
     updater_launcher.cc
-    updater_launcher.h)
+    updater_launcher.h
+    virtual_display.cc
+    virtual_display.h)
