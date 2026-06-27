@@ -77,9 +77,10 @@ private:
     int cell_ascent_ = 0;
 
     std::unique_ptr<Frame> frame_;
-    // Working screen snapshot and the libvterm generation it was rendered at; an unchanged generation yields
-    // an empty updated region so idle terminals are not re-encoded every poll.
+    // Working screen snapshot and the last rendered one; an unchanged generation skips the frame entirely,
+    // and a changed one is diffed cell by cell to build the updated region.
     VtScreen screen_;
+    VtScreen last_screen_;
     quint64 last_generation_ = 0;
 
     QRect screen_rect_;

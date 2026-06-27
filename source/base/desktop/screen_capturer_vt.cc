@@ -29,6 +29,7 @@
 #include "base/logging.h"
 #include "base/desktop/frame.h"
 #include "base/desktop/frame_aligned.h"
+#include "base/desktop/region.h"
 
 namespace {
 
@@ -49,6 +50,19 @@ const char* const kFontCandidates[] =
     "/usr/share/fonts/TTF/DejaVuSansMono.ttf",
     "/usr/share/fonts/liberation/LiberationMono-Regular.ttf"
 };
+
+//--------------------------------------------------------------------------------------------------
+// True if cell (|row|, |col|) is inside |screen|'s text selection (reading-order range).
+bool cellSelected(const VtScreen& screen, int row, int col)
+{
+    if (!screen.has_selection)
+        return false;
+    const bool after_start = (row > screen.sel_start_row) ||
+                             (row == screen.sel_start_row && col >= screen.sel_start_col);
+    const bool before_end = (row < screen.sel_end_row) ||
+                            (row == screen.sel_end_row && col <= screen.sel_end_col);
+    return after_start && before_end;
+}
 
 } // namespace
 
@@ -185,25 +199,14 @@ void ScreenCapturerVt::renderConsole(const VtScreen& screen)
     const int width = cols * cell_width_;
     const int height = rows * cell_height_;
 
-    // Selected cells are drawn in reverse video (foreground and background colors swapped).
-    auto isSelected = [&screen](int row, int col) -> bool
-    {
-        if (!screen.has_selection)
-            return false;
-        const bool after_start = (row > screen.sel_start_row) ||
-                                 (row == screen.sel_start_row && col >= screen.sel_start_col);
-        const bool before_end = (row < screen.sel_end_row) ||
-                                (row == screen.sel_end_row && col <= screen.sel_end_col);
-        return after_start && before_end;
-    };
-
-    // Pass 1: fill cell backgrounds (frame is BGRA, cell colors are RGB).
+    // Pass 1: fill cell backgrounds (frame is BGRA, cell colors are RGB). Selected cells are drawn in
+    // reverse video (foreground and background swapped).
     for (int row = 0; row < rows; ++row)
     {
         for (int col = 0; col < cols; ++col)
         {
             const VtCell& cell = screen.cells[static_cast<size_t>(row) * cols + col];
-            const quint8* bg = isSelected(row, col) ? cell.fg : cell.bg;
+            const quint8* bg = cellSelected(screen, row, col) ? cell.fg : cell.bg;
 
             for (int y = 0; y < cell_height_; ++y)
             {
@@ -232,7 +235,7 @@ void ScreenCapturerVt::renderConsole(const VtScreen& screen)
             if (!glyph || glyph->coverage.empty())
                 continue;
 
-            const quint8* fg = isSelected(row, col) ? cell.bg : cell.fg;
+            const quint8* fg = cellSelected(screen, row, col) ? cell.bg : cell.fg;
             const int origin_x = col * cell_width_ + glyph->left;
             const int origin_y = row * cell_height_ + cell_ascent_ - glyph->top;
 
@@ -376,7 +379,8 @@ const Frame* ScreenCapturerVt::captureFrame(Error* error)
         return frame_.get();
     }
 
-    if (!frame_ || frame_->size() != size)
+    const bool size_changed = !frame_ || frame_->size() != size;
+    if (size_changed)
     {
         frame_ = FrameAligned::create(size, kFrameAlignment);
         if (!frame_)
@@ -388,8 +392,52 @@ const Frame* ScreenCapturerVt::captureFrame(Error* error)
 
     screen_rect_ = QRect(QPoint(0, 0), size);
     cursor_position_ = QPoint(screen_.cursor_col * cell_width_, screen_.cursor_row * cell_height_);
-    *frame_->updatedRegion() = screen_rect_;
+
+    Region* region = frame_->updatedRegion();
+    region->clear();
+
+    if (size_changed || last_screen_.cols != screen_.cols || last_screen_.rows != screen_.rows)
+    {
+        // First frame or a geometry change: everything is dirty.
+        *region += screen_rect_;
+    }
+    else
+    {
+        // A cell's pixels depend on its content, its selection state and whether the cursor sits on it;
+        // mark per-row spans where any of those differs from the previously rendered screen.
+        for (int row = 0; row < screen_.rows; ++row)
+        {
+            int first = -1;
+            int last = -1;
+
+            for (int col = 0; col < screen_.cols; ++col)
+            {
+                const size_t index = static_cast<size_t>(row) * screen_.cols + col;
+                const bool was_cursor =
+                    (last_screen_.cursor_row == row && last_screen_.cursor_col == col);
+                const bool is_cursor = (screen_.cursor_row == row && screen_.cursor_col == col);
+
+                const bool dirty = !(screen_.cells[index] == last_screen_.cells[index]) ||
+                                   cellSelected(screen_, row, col) != cellSelected(last_screen_, row, col) ||
+                                   is_cursor != was_cursor;
+                if (dirty)
+                {
+                    if (first < 0)
+                        first = col;
+                    last = col;
+                }
+            }
+
+            if (first >= 0)
+            {
+                *region += QRect(first * cell_width_, row * cell_height_,
+                                 (last - first + 1) * cell_width_, cell_height_);
+            }
+        }
+    }
+
     last_generation_ = screen_.generation;
+    last_screen_ = screen_;
 
     *error = Error::SUCCEEDED;
     return frame_.get();
@@ -424,4 +472,5 @@ const QRect& ScreenCapturerVt::currentScreenRect() const
 void ScreenCapturerVt::reset()
 {
     last_generation_ = 0;
+    last_screen_ = VtScreen();
 }
