@@ -758,7 +758,7 @@ void ClientDesktop::readVideoPacket(const proto::video::Packet& packet)
             }
         }
 
-        video_capturer_type_ = format.capturer_type();
+        video_capturer_type_ = static_cast<quint32>(format.capturer_type());
         screen_size_ = screen_size;
     }
 

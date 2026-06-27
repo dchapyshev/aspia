@@ -1355,7 +1355,7 @@ void DesktopAgent::encodeScreen(const Frame* frame)
         proto::video::PacketFormat* format = packet->mutable_format();
 
         // In video packets that contain the format, we pass the screen capture type.
-        format->set_capturer_type(frame->capturerType());
+        format->set_capturer_type(static_cast<proto::video::ScreenCapturerType>(frame->capturerType()));
 
         // Real screen size.
         proto::video::Size* screen_size = format->mutable_screen_size();

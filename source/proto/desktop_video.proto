@@ -46,12 +46,27 @@ enum Encoding
     ENCODING_H264    = 8;
 }
 
+enum ScreenCapturerType
+{
+    SCREEN_CAPTURER_TYPE_DEFAULT       = 0;
+    SCREEN_CAPTURER_TYPE_FAKE          = 1;
+    SCREEN_CAPTURER_TYPE_WIN_GDI       = 2;
+    SCREEN_CAPTURER_TYPE_WIN_DXGI      = 3;
+    SCREEN_CAPTURER_TYPE_LINUX_X11     = 4;
+    SCREEN_CAPTURER_TYPE_LINUX_WAYLAND = 5;
+    SCREEN_CAPTURER_TYPE_LINUX_KMS     = 6;
+    SCREEN_CAPTURER_TYPE_LINUX_KWIN    = 7;
+    SCREEN_CAPTURER_TYPE_LINUX_WLR     = 8;
+    SCREEN_CAPTURER_TYPE_LINUX_VT      = 9;
+    SCREEN_CAPTURER_TYPE_MACOSX        = 10;
+}
+
 message PacketFormat
 {
-    Rect video_rect          = 1;
+    Rect video_rect                  = 1;
     // Field 2 (pixel format) is deprecated.
-    Size screen_size         = 3;
-    uint32 capturer_type     = 4;
+    Size screen_size                 = 3;
+    ScreenCapturerType capturer_type = 4;
 }
 
 enum ErrorCode

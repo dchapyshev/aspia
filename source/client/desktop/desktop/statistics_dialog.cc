@@ -21,7 +21,6 @@
 #include <QTimer>
 
 #include "base/logging.h"
-#include "base/desktop/screen_capturer.h"
 #include "base/net/udp_channel.h"
 #include "common/desktop/formatter.h"
 #include "proto/desktop_video.h"
@@ -32,19 +31,19 @@ namespace {
 //--------------------------------------------------------------------------------------------------
 QString capturerToString(quint32 type)
 {
-    switch (static_cast<ScreenCapturer::Type>(type))
+    switch (static_cast<proto::video::ScreenCapturerType>(type))
     {
-        case ScreenCapturer::Type::DEFAULT: return "DEFAULT";
-        case ScreenCapturer::Type::FAKE: return "FAKE";
-        case ScreenCapturer::Type::WIN_GDI: return "WIN_GDI";
-        case ScreenCapturer::Type::WIN_DXGI: return "WIN_DXGI";
-        case ScreenCapturer::Type::LINUX_X11: return "LINUX_X11";
-        case ScreenCapturer::Type::LINUX_WAYLAND: return "LINUX_WAYLAND";
-        case ScreenCapturer::Type::LINUX_KMS: return "LINUX_KMS";
-        case ScreenCapturer::Type::LINUX_KWIN: return "LINUX_KWIN";
-        case ScreenCapturer::Type::LINUX_WLR: return "LINUX_WLR";
-        case ScreenCapturer::Type::LINUX_VT: return "LINUX_VT";
-        case ScreenCapturer::Type::MACOSX: return "MACOSX";
+        case proto::video::SCREEN_CAPTURER_TYPE_DEFAULT: return "DEFAULT";
+        case proto::video::SCREEN_CAPTURER_TYPE_FAKE: return "FAKE";
+        case proto::video::SCREEN_CAPTURER_TYPE_WIN_GDI: return "WIN_GDI";
+        case proto::video::SCREEN_CAPTURER_TYPE_WIN_DXGI: return "WIN_DXGI";
+        case proto::video::SCREEN_CAPTURER_TYPE_LINUX_X11: return "LINUX_X11";
+        case proto::video::SCREEN_CAPTURER_TYPE_LINUX_WAYLAND: return "LINUX_WAYLAND";
+        case proto::video::SCREEN_CAPTURER_TYPE_LINUX_KMS: return "LINUX_KMS";
+        case proto::video::SCREEN_CAPTURER_TYPE_LINUX_KWIN: return "LINUX_KWIN";
+        case proto::video::SCREEN_CAPTURER_TYPE_LINUX_WLR: return "LINUX_WLR";
+        case proto::video::SCREEN_CAPTURER_TYPE_LINUX_VT: return "LINUX_VT";
+        case proto::video::SCREEN_CAPTURER_TYPE_MACOSX: return "MACOSX";
         default: return "UNKNOWN";
     }
 }
