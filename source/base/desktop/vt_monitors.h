@@ -19,10 +19,10 @@
 #ifndef BASE_DESKTOP_VT_MONITORS_H
 #define BASE_DESKTOP_VT_MONITORS_H
 
-#include <memory>
 #include <utility>
 #include <vector>
 
+#include "base/scoped_qpointer.h"
 #include "base/desktop/vt_session.h"
 
 // A set of virtual terminals presented to the client as switchable monitors. One instance is shared by the
@@ -31,7 +31,7 @@
 class VtMonitors
 {
 public:
-    explicit VtMonitors(std::vector<std::shared_ptr<VtSession>> sessions)
+    explicit VtMonitors(std::vector<ScopedQPointer<VtSession>> sessions)
         : sessions_(std::move(sessions))
     {
         // Nothing
@@ -54,7 +54,7 @@ public:
     VtSession* activeSession() const { return session(active_); }
 
 private:
-    std::vector<std::shared_ptr<VtSession>> sessions_;
+    std::vector<ScopedQPointer<VtSession>> sessions_;
     int active_ = 0;
 
     VtMonitors(const VtMonitors&) = delete;

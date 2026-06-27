@@ -18,7 +18,7 @@
 
 #include "base/desktop/vt_session.h"
 
-#include <QByteArray>
+#include <QSocketNotifier>
 
 #include <vterm.h>
 
@@ -101,25 +101,32 @@ int onMoveCursor(VTermPos /* pos */, VTermPos /* oldpos */, int /* visible */, v
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-VtSession::VtSession() = default;
+VtSession::VtSession(QObject* parent)
+    : QObject(parent)
+{
+    // Nothing
+}
 
 //--------------------------------------------------------------------------------------------------
 VtSession::~VtSession()
 {
-    stop_.store(true);
+    // Stop reacting to the PTY (notifiers must not watch a closed fd) before tearing down the emulator.
+    if (read_notifier_)
+        read_notifier_->setEnabled(false);
+    if (write_notifier_)
+        write_notifier_->setEnabled(false);
+    read_notifier_.reset();
+    write_notifier_.reset();
 
     if (child_pid_ > 0)
     {
-        // Kill the login/shell process group; closing the slave makes the pump's master read return EOF.
+        // Kill the login/shell process group.
         ::kill(-child_pid_, SIGKILL);
         ::kill(child_pid_, SIGKILL);
 
         int status = 0;
         ::waitpid(child_pid_, &status, 0);
     }
-
-    if (pump_thread_.joinable())
-        pump_thread_.join();
 
     if (vt_)
         vterm_free(vt_);
@@ -131,13 +138,17 @@ VtSession::~VtSession()
 //--------------------------------------------------------------------------------------------------
 bool VtSession::start()
 {
-    // Open a PTY: the login session runs on the slave, we drive the master.
+    // Open a PTY: the login session runs on the slave, we drive the master. Non-blocking so the read/write
+    // notifiers never stall the event loop.
     master_fd_ = ::posix_openpt(O_RDWR | O_NOCTTY);
     if (master_fd_ < 0 || ::grantpt(master_fd_) != 0 || ::unlockpt(master_fd_) != 0)
     {
         PLOG(ERROR) << "Unable to open pty";
         return false;
     }
+
+    const int flags = ::fcntl(master_fd_, F_GETFL, 0);
+    ::fcntl(master_fd_, F_SETFL, flags | O_NONBLOCK);
 
     const char* slave_name = ::ptsname(master_fd_);
     if (!slave_name)
@@ -195,8 +206,8 @@ bool VtSession::start()
     vterm_screen_enable_altscreen(screen_, 1);
 
     // damage / movecursor bump a generation counter so the renderer re-renders exactly when libvterm
-    // changes (instead of comparing cells). settermprop tracks the mouse-reporting mode. libvterm keeps a
-    // pointer to the callbacks, so the table must outlive the terminal.
+    // changes. settermprop tracks the mouse-reporting mode. libvterm keeps a pointer to the callbacks, so
+    // the table must outlive the terminal.
     static VTermScreenCallbacks screen_callbacks = {};
     screen_callbacks.damage = onDamage;
     screen_callbacks.movecursor = onMoveCursor;
@@ -215,7 +226,12 @@ bool VtSession::start()
     ws.ws_col = kDefaultCols;
     ::ioctl(master_fd_, TIOCSWINSZ, &ws);
 
-    pump_thread_ = std::thread(&VtSession::pumpLoop, this);
+    read_notifier_ = new QSocketNotifier(master_fd_, QSocketNotifier::Read);
+    connect(read_notifier_.get(), &QSocketNotifier::activated, this, &VtSession::onReadable);
+
+    write_notifier_ = new QSocketNotifier(master_fd_, QSocketNotifier::Write);
+    write_notifier_->setEnabled(false);
+    connect(write_notifier_.get(), &QSocketNotifier::activated, this, &VtSession::onWritable);
 
     LOG(INFO) << "VT login session started (pid" << child_pid_ << ")";
     return true;
@@ -224,7 +240,6 @@ bool VtSession::start()
 //--------------------------------------------------------------------------------------------------
 bool VtSession::consoleSize(int* cols, int* rows) const
 {
-    std::scoped_lock lock(mutex_);
     if (!vt_)
         return false;
 
@@ -242,13 +257,11 @@ bool VtSession::consoleSize(int* cols, int* rows) const
 //--------------------------------------------------------------------------------------------------
 bool VtSession::resize(int rows, int cols)
 {
-    {
-        std::scoped_lock lock(mutex_);
-        if (!vt_)
-            return false;
-        vterm_set_size(vt_, rows, cols);
-        flushOutputLocked();
-    }
+    if (!vt_)
+        return false;
+
+    vterm_set_size(vt_, rows, cols);
+    flushOutput();
 
     // Resize the PTY too so the running program reflows (SIGWINCH).
     struct winsize ws = {};
@@ -264,7 +277,6 @@ bool VtSession::resize(int rows, int cols)
 //--------------------------------------------------------------------------------------------------
 bool VtSession::captureScreen(VtScreen* out)
 {
-    std::scoped_lock lock(mutex_);
     if (!vt_)
         return false;
 
@@ -274,7 +286,7 @@ bool VtSession::captureScreen(VtScreen* out)
 
     out->rows = rows;
     out->cols = cols;
-    out->generation = generation_.load(std::memory_order_relaxed);
+    out->generation = generation_;
     out->cells.assign(static_cast<size_t>(rows) * cols, VtCell());
 
     for (int row = 0; row < rows; ++row)
@@ -319,7 +331,6 @@ bool VtSession::captureScreen(VtScreen* out)
 //--------------------------------------------------------------------------------------------------
 std::string VtSession::selectionText(int start_col, int start_row, int end_col, int end_row)
 {
-    std::scoped_lock lock(mutex_);
     if (!vt_)
         return {};
 
@@ -370,82 +381,100 @@ std::string VtSession::selectionText(int start_col, int start_row, int end_col, 
 //--------------------------------------------------------------------------------------------------
 void VtSession::inputUnichar(char32_t ch, bool ctrl, bool alt)
 {
-    std::scoped_lock lock(mutex_);
     if (!vt_)
         return;
     vterm_keyboard_unichar(vt_, ch, modifiers(false, ctrl, alt));
-    flushOutputLocked();
+    flushOutput();
 }
 
 //--------------------------------------------------------------------------------------------------
 void VtSession::inputKey(VtKey key, bool shift, bool ctrl, bool alt)
 {
-    std::scoped_lock lock(mutex_);
     if (!vt_)
         return;
     vterm_keyboard_key(vt_, vtermKey(key), modifiers(shift, ctrl, alt));
-    flushOutputLocked();
+    flushOutput();
 }
 
 //--------------------------------------------------------------------------------------------------
 void VtSession::inputMouseMove(int col, int row)
 {
-    std::scoped_lock lock(mutex_);
     if (!vt_)
         return;
     vterm_mouse_move(vt_, row, col, VTERM_MOD_NONE);
-    flushOutputLocked();
+    flushOutput();
 }
 
 //--------------------------------------------------------------------------------------------------
 void VtSession::inputMouseButton(int button, bool pressed)
 {
-    std::scoped_lock lock(mutex_);
     if (!vt_)
         return;
     vterm_mouse_button(vt_, button, pressed, VTERM_MOD_NONE);
-    flushOutputLocked();
+    flushOutput();
 }
 
 //--------------------------------------------------------------------------------------------------
 void VtSession::paste(const std::string& text)
 {
-    std::scoped_lock lock(mutex_);
     writeMaster(text.data(), static_cast<int>(text.size()));
 }
 
 //--------------------------------------------------------------------------------------------------
-void VtSession::pumpLoop()
+void VtSession::onReadable()
 {
     char buf[4096];
 
-    while (!stop_.load(std::memory_order_relaxed))
+    for (;;)
     {
         const ssize_t count = ::read(master_fd_, buf, sizeof(buf));
         if (count > 0)
         {
-            std::scoped_lock lock(mutex_);
             vterm_input_write(vt_, buf, static_cast<size_t>(count));
-            flushOutputLocked();
+            flushOutput();
         }
         else if (count < 0 && errno == EINTR)
         {
             continue;
         }
+        else if (count < 0)
+        {
+            break; // EAGAIN / EWOULDBLOCK: the buffer is drained.
+        }
         else
         {
-            break; // EOF (session ended) or error.
+            read_notifier_->setEnabled(false); // EOF: the session ended.
+            break;
         }
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-void VtSession::flushOutputLocked()
+void VtSession::onWritable()
 {
-    char out[1024];
-    size_t count;
-    while ((count = vterm_output_read(vt_, out, sizeof(out))) > 0)
-        writeMaster(out, static_cast<int>(count));
+    while (!pending_write_.isEmpty())
+    {
+        const ssize_t count = ::write(master_fd_, pending_write_.constData(), pending_write_.size());
+        if (count > 0)
+        {
+            pending_write_.remove(0, static_cast<int>(count));
+        }
+        else if (count < 0 && errno == EINTR)
+        {
+            continue;
+        }
+        else if (count < 0 && (errno == EAGAIN || errno == EWOULDBLOCK))
+        {
+            return; // Still full; wait for the next writable notification.
+        }
+        else
+        {
+            pending_write_.clear();
+            break;
+        }
+    }
+
+    write_notifier_->setEnabled(false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -454,15 +483,44 @@ void VtSession::writeMaster(const char* data, int length)
     if (master_fd_ < 0)
         return;
 
+    // Preserve order: if output is already queued, append to it instead of writing directly.
+    if (!pending_write_.isEmpty())
+    {
+        pending_write_.append(data, length);
+        return;
+    }
+
     int offset = 0;
     while (offset < length)
     {
         const ssize_t count = ::write(master_fd_, data + offset, length - offset);
         if (count > 0)
+        {
             offset += static_cast<int>(count);
+        }
         else if (count < 0 && errno == EINTR)
+        {
             continue;
+        }
+        else if (count < 0 && (errno == EAGAIN || errno == EWOULDBLOCK))
+        {
+            pending_write_.append(data + offset, length - offset);
+            write_notifier_->setEnabled(true);
+            return;
+        }
         else
-            break;
+        {
+            PLOG(ERROR) << "Unable to write to pty";
+            return;
+        }
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void VtSession::flushOutput()
+{
+    char out[1024];
+    size_t count;
+    while ((count = vterm_output_read(vt_, out, sizeof(out))) > 0)
+        writeMaster(out, static_cast<int>(count));
 }

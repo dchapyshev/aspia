@@ -324,10 +324,10 @@ void DesktopAgent::setupLinuxCapture()
 bool DesktopAgent::setupVtFallback()
 {
     // Two terminals, exposed to the client as switchable monitors.
-    std::vector<std::shared_ptr<VtSession>> sessions;
+    std::vector<ScopedQPointer<VtSession>> sessions;
     for (int i = 0; i < 2; ++i)
     {
-        auto session = std::make_shared<VtSession>();
+        ScopedQPointer<VtSession> session(new VtSession());
         if (session->start())
             sessions.push_back(std::move(session));
     }

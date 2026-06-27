@@ -87,7 +87,7 @@ private:
     // Working screen snapshot and the libvterm generation it was rendered at; an unchanged generation yields
     // an empty updated region so idle terminals are not re-encoded every poll.
     VtScreen screen_;
-    std::uint64_t last_generation_ = 0;
+    quint64 last_generation_ = 0;
 
     QRect screen_rect_;
     QPoint cursor_position_;

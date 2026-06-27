@@ -203,7 +203,7 @@ void ScreenCapturerVt::renderConsole(const VtScreen& screen)
         for (int col = 0; col < cols; ++col)
         {
             const VtCell& cell = screen.cells[static_cast<size_t>(row) * cols + col];
-            const std::uint8_t* bg = isSelected(row, col) ? cell.fg : cell.bg;
+            const quint8* bg = isSelected(row, col) ? cell.fg : cell.bg;
 
             for (int y = 0; y < cell_height_; ++y)
             {
@@ -232,7 +232,7 @@ void ScreenCapturerVt::renderConsole(const VtScreen& screen)
             if (!glyph || glyph->coverage.empty())
                 continue;
 
-            const std::uint8_t* fg = isSelected(row, col) ? cell.bg : cell.fg;
+            const quint8* fg = isSelected(row, col) ? cell.bg : cell.fg;
             const int origin_x = col * cell_width_ + glyph->left;
             const int origin_y = row * cell_height_ + cell_ascent_ - glyph->top;
 

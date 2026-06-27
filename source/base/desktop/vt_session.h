@@ -21,12 +21,14 @@
 
 #include <sys/types.h>
 
-#include <atomic>
-#include <cstdint>
-#include <mutex>
+#include <QByteArray>
+#include <QObject>
+#include <QSocketNotifier>
+
 #include <string>
-#include <thread>
 #include <vector>
+
+#include "base/scoped_qpointer.h"
 
 struct VTerm;
 struct VTermScreen;
@@ -36,8 +38,8 @@ struct VTermState;
 struct VtCell
 {
     char32_t ch = 0; // 0 = blank
-    std::uint8_t fg[3] = { 0, 0, 0 };
-    std::uint8_t bg[3] = { 0, 0, 0 };
+    quint8 fg[3] = { 0, 0, 0 };
+    quint8 bg[3] = { 0, 0, 0 };
 
     bool operator==(const VtCell&) const = default;
 };
@@ -49,7 +51,7 @@ struct VtScreen
     int rows = 0;
     int cursor_col = 0;
     int cursor_row = 0;
-    std::uint64_t generation = 0; // bumped on every libvterm change; lets the renderer skip idle frames
+    quint64 generation = 0; // bumped on every libvterm change; lets the renderer skip idle frames
     std::vector<VtCell> cells;    // rows * cols, row-major
 };
 
@@ -60,16 +62,18 @@ enum class VtKey
 };
 
 // Owns a login session on a pseudo-terminal and emulates a terminal over it with libvterm. A login prompt
-// runs on the PTY slave (a fresh session asking for login and password); a pump thread feeds the PTY output
-// into libvterm, which maintains the screen the renderer reads. Keyboard and mouse input go through libvterm
-// too, so it produces the correct escape sequences (cursor-key modes, mouse reporting, ...) for the running
-// application. This is the last-resort "give me a terminal" path used when no graphical capture works.
-// Needs root (to spawn login).
-class VtSession
+// runs on the PTY slave (a fresh session asking for login and password); the PTY output is read on the
+// event loop (a socket notifier) and fed into libvterm, which maintains the screen the renderer reads.
+// Keyboard and mouse input go through libvterm too, so it produces the correct escape sequences for the
+// running application. Everything runs on one thread, so libvterm needs no locking. This is the last-resort
+// "give me a terminal" path used when no graphical capture works. Needs root (to spawn login).
+class VtSession final : public QObject
 {
+    Q_OBJECT
+
 public:
-    VtSession();
-    ~VtSession();
+    explicit VtSession(QObject* parent = nullptr);
+    ~VtSession() final;
 
     // Opens a PTY and starts a login prompt on it, plus the emulator. Returns false on failure.
     bool start();
@@ -102,18 +106,20 @@ public:
     void paste(const std::string& text);
 
     // True while the running application has mouse reporting enabled.
-    bool mouseActive() const { return mouse_active_.load(std::memory_order_relaxed); }
+    bool mouseActive() const { return mouse_active_; }
     // Internal: updated from the libvterm settermprop callback.
-    void updateMouseActive(bool active) { mouse_active_.store(active, std::memory_order_relaxed); }
+    void updateMouseActive(bool active) { mouse_active_ = active; }
     // Internal: bumped from the libvterm damage / cursor callbacks on every visible change.
-    void notifyChanged() { generation_.fetch_add(1, std::memory_order_relaxed); }
+    void notifyChanged() { ++generation_; }
+
+private slots:
+    void onReadable();
+    void onWritable();
 
 private:
-    void pumpLoop();
     void writeMaster(const char* data, int length);
-    // Drains libvterm's pending output (query replies, key and mouse reports) to the PTY. Caller holds the
-    // lock.
-    void flushOutputLocked();
+    // Drains libvterm's pending output (query replies, key and mouse reports) to the PTY.
+    void flushOutput();
 
     int master_fd_ = -1; // PTY master
     pid_t child_pid_ = -1;
@@ -122,17 +128,14 @@ private:
     VTermScreen* screen_ = nullptr;
     VTermState* state_ = nullptr;
 
-    std::thread pump_thread_;
-    std::atomic_bool stop_{false};
-    std::atomic_bool mouse_active_{false};
-    std::atomic<std::uint64_t> generation_{0};
+    ScopedQPointer<QSocketNotifier> read_notifier_;
+    ScopedQPointer<QSocketNotifier> write_notifier_;
+    QByteArray pending_write_; // output that did not fit the PTY buffer, flushed on the write notifier
 
-    // Guards the libvterm instance: the pump thread feeds it while input and capture touch it from the agent
-    // thread.
-    mutable std::mutex mutex_;
+    bool mouse_active_ = false;
+    quint64 generation_ = 0;
 
-    VtSession(const VtSession&) = delete;
-    VtSession& operator=(const VtSession&) = delete;
+    Q_DISABLE_COPY_MOVE(VtSession)
 };
 
 #endif // BASE_DESKTOP_VT_SESSION_H
