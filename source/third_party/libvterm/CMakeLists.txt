@@ -16,10 +16,20 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-if (APPLE)
-    add_subdirectory(portaudio)
-endif()
+list(APPEND SOURCE_LIBVTERM
+    src/encoding.c
+    src/keyboard.c
+    src/mouse.c
+    src/parser.c
+    src/pen.c
+    src/screen.c
+    src/state.c
+    src/unicode.c
+    src/vterm.c)
 
-if (LINUX)
-    add_subdirectory(libvterm)
-endif()
+source_group("" FILES ${SOURCE_LIBVTERM})
+
+add_library(vterm STATIC ${SOURCE_LIBVTERM})
+target_include_directories(vterm PUBLIC include)
+set_target_properties(vterm PROPERTIES LANGUAGE C LINKER_LANGUAGE C C_STANDARD 99)
+set_target_properties(vterm PROPERTIES FOLDER third_party)

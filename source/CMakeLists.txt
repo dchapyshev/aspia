@@ -111,7 +111,7 @@ if (LINUX OR APPLE)
 endif()
 
 if (LINUX)
-    list(APPEND THIRD_PARTY_LIBS freetype)
+    list(APPEND THIRD_PARTY_LIBS freetype vterm)
 endif()
 
 include_directories(${PROJECT_SOURCE_DIR}/source ${PROJECT_BINARY_DIR}/source)
