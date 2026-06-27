@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_DESKTOP_VT_MONITORS_H
-#define BASE_DESKTOP_VT_MONITORS_H
+#ifndef HOST_LINUX_VT_MONITORS_H
+#define HOST_LINUX_VT_MONITORS_H
 
 #include <utility>
 #include <vector>
 
 #include "base/scoped_qpointer.h"
-#include "base/desktop/vt_session.h"
+#include "host/linux/vt_session.h"
 
 // A set of virtual terminals presented to the client as switchable monitors. One instance is shared by the
 // capturer, input injector and resizer: the capturer selects the active terminal, the injector sends input
@@ -61,4 +61,4 @@ private:
     VtMonitors& operator=(const VtMonitors&) = delete;
 };
 
-#endif // BASE_DESKTOP_VT_MONITORS_H
+#endif // HOST_LINUX_VT_MONITORS_H

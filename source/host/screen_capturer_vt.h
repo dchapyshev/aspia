@@ -24,8 +24,8 @@
 #include <memory>
 
 #include "base/shared_pointer.h"
-#include "base/desktop/vt_monitors.h"
 #include "host/screen_capturer.h"
+#include "host/linux/vt_monitors.h"
 
 class Frame;
 

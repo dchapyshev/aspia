@@ -21,9 +21,9 @@
 #include <algorithm>
 
 #include "base/logging.h"
-#include "base/desktop/vt_monitors.h"
 #include "host/screen_capturer_vt.h"
 #include "host/system_settings.h"
+#include "host/linux/vt_monitors.h"
 
 namespace {
 

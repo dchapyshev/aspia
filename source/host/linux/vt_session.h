@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_DESKTOP_VT_SESSION_H
-#define BASE_DESKTOP_VT_SESSION_H
+#ifndef HOST_LINUX_VT_SESSION_H
+#define HOST_LINUX_VT_SESSION_H
 
 #include <sys/types.h>
 
@@ -167,4 +167,4 @@ private:
     Q_DISABLE_COPY_MOVE(VtSession)
 };
 
-#endif // BASE_DESKTOP_VT_SESSION_H
+#endif // HOST_LINUX_VT_SESSION_H

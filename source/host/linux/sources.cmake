@@ -27,6 +27,9 @@ collect_sources(SOURCE_HOST_CORE_LINUX
     pipewire.h
     shared_x_display.cc
     shared_x_display.h
+    vt_monitors.h
+    vt_session.cc
+    vt_session.h
     wayland_capture_source.h
     wayland_compositor_source.cc
     wayland_compositor_source.h

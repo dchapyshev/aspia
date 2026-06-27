@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/desktop/vt_session.h"
+#include "host/linux/vt_session.h"
 
 #include <QSocketNotifier>
 #include <QTimer>

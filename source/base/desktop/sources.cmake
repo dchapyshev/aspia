@@ -53,10 +53,7 @@ endif()
 if (LINUX)
     collect_sources(SOURCE_BASE_DESKTOP
         desktop_environment_linux.cc
-        desktop_environment_linux.h
-        vt_monitors.h
-        vt_session.cc
-        vt_session.h)
+        desktop_environment_linux.h)
 endif()
 
 if (APPLE)
