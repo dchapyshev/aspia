@@ -53,7 +53,15 @@ struct VtScreen
     int cursor_col = 0;
     int cursor_row = 0;
     quint64 generation = 0; // bumped on every libvterm change; lets the renderer skip idle frames
-    std::vector<VtCell> cells;    // rows * cols, row-major
+
+    // Highlighted text selection (cell coordinates, reading order), drawn as reverse video.
+    bool has_selection = false;
+    int sel_start_col = 0;
+    int sel_start_row = 0;
+    int sel_end_col = 0;
+    int sel_end_row = 0;
+
+    std::vector<VtCell> cells; // rows * cols, row-major
 };
 
 // Non-printable keys the injector can send (mapped to the terminal's escape sequences by libvterm).
@@ -94,6 +102,10 @@ public:
     // Extracts the text covered by a selection (cell coordinates, inclusive) as UTF-8, with trailing spaces
     // trimmed per line and rows joined by newlines.
     std::string selectionText(int start_col, int start_row, int end_col, int end_row);
+
+    // Sets / clears the highlighted text selection (cell coordinates). The capturer reads it for rendering.
+    void setSelection(int start_col, int start_row, int end_col, int end_row);
+    void clearSelection();
 
     // Input. Mouse coordinates are in character cells (0-based; libvterm adds the protocol offset).
     // Everything funnels through libvterm, which emits nothing when the application has not enabled the
@@ -142,6 +154,13 @@ private:
     bool mouse_active_ = false;
     quint64 generation_ = 0;
     QElapsedTimer spawn_timer_; // measures time since the last login spawn, for throttling respawns
+
+    // Highlighted text selection in cell coordinates (ordered in reading order).
+    bool has_selection_ = false;
+    int sel_start_col_ = 0;
+    int sel_start_row_ = 0;
+    int sel_end_col_ = 0;
+    int sel_end_row_ = 0;
 
     Q_DISABLE_COPY_MOVE(VtSession)
 };

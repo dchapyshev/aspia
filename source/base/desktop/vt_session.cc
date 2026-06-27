@@ -384,6 +384,12 @@ bool VtSession::captureScreen(VtScreen* out)
     vterm_state_get_cursorpos(state_, &cursor);
     out->cursor_row = cursor.row;
     out->cursor_col = cursor.col;
+
+    out->has_selection = has_selection_;
+    out->sel_start_col = sel_start_col_;
+    out->sel_start_row = sel_start_row_;
+    out->sel_end_col = sel_end_col_;
+    out->sel_end_row = sel_end_row_;
     return true;
 }
 
@@ -435,6 +441,34 @@ std::string VtSession::selectionText(int start_col, int start_row, int end_col, 
     }
 
     return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+void VtSession::setSelection(int start_col, int start_row, int end_col, int end_row)
+{
+    // Order the endpoints in reading order (top-to-bottom, left-to-right).
+    if (start_row > end_row || (start_row == end_row && start_col > end_col))
+    {
+        std::swap(start_row, end_row);
+        std::swap(start_col, end_col);
+    }
+
+    sel_start_col_ = start_col;
+    sel_start_row_ = start_row;
+    sel_end_col_ = end_col;
+    sel_end_row_ = end_row;
+    has_selection_ = true;
+    notifyChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+void VtSession::clearSelection()
+{
+    if (!has_selection_)
+        return;
+
+    has_selection_ = false;
+    notifyChanged();
 }
 
 //--------------------------------------------------------------------------------------------------

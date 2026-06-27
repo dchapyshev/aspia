@@ -186,14 +186,14 @@ void ScreenCapturerVt::renderConsole(const VtScreen& screen)
     const int height = rows * cell_height_;
 
     // Selected cells are drawn in reverse video (foreground and background colors swapped).
-    auto isSelected = [this](int row, int col) -> bool
+    auto isSelected = [&screen](int row, int col) -> bool
     {
-        if (!has_selection_)
+        if (!screen.has_selection)
             return false;
-        const bool after_start = (row > selection_start_.y()) ||
-                                 (row == selection_start_.y() && col >= selection_start_.x());
-        const bool before_end = (row < selection_end_.y()) ||
-                                (row == selection_end_.y() && col <= selection_end_.x());
+        const bool after_start = (row > screen.sel_start_row) ||
+                                 (row == screen.sel_start_row && col >= screen.sel_start_col);
+        const bool before_end = (row < screen.sel_end_row) ||
+                                (row == screen.sel_end_row && col <= screen.sel_end_col);
         return after_start && before_end;
     };
 
@@ -286,41 +286,6 @@ void ScreenCapturerVt::renderConsole(const VtScreen& screen)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string ScreenCapturerVt::selectionText(const QPoint& start, const QPoint& end)
-{
-    VtSession* session = monitors_ ? monitors_->activeSession() : nullptr;
-    if (!session || cell_width_ <= 0 || cell_height_ <= 0)
-        return {};
-
-    return session->selectionText(start.x() / cell_width_, start.y() / cell_height_,
-                                  end.x() / cell_width_, end.y() / cell_height_);
-}
-
-//--------------------------------------------------------------------------------------------------
-void ScreenCapturerVt::setSelection(const QPoint& start, const QPoint& end)
-{
-    if (cell_width_ <= 0 || cell_height_ <= 0)
-        return;
-
-    QPoint a(start.x() / cell_width_, start.y() / cell_height_);
-    QPoint b(end.x() / cell_width_, end.y() / cell_height_);
-
-    // Order the endpoints in reading order (top-to-bottom, left-to-right).
-    if (b.y() < a.y() || (b.y() == a.y() && b.x() < a.x()))
-        std::swap(a, b);
-
-    selection_start_ = a;
-    selection_end_ = b;
-    has_selection_ = true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void ScreenCapturerVt::clearSelection()
-{
-    has_selection_ = false;
-}
-
-//--------------------------------------------------------------------------------------------------
 int ScreenCapturerVt::screenCount()
 {
     return monitors_ ? monitors_->count() : 0;
@@ -402,13 +367,9 @@ const Frame* ScreenCapturerVt::captureFrame(Error* error)
 
     const QSize size(screen_.cols * cell_width_, screen_.rows * cell_height_);
 
-    // Re-render only when libvterm reported a change (generation) or the selection moved; otherwise report
-    // an empty region so the encoder skips the frame.
-    if (frame_ && frame_->size() == size &&
-        screen_.generation == last_generation_ &&
-        has_selection_ == last_has_selection_ &&
-        selection_start_ == last_selection_start_ &&
-        selection_end_ == last_selection_end_)
+    // Re-render only when libvterm reported a change (generation; bumped for content, cursor and selection);
+    // otherwise report an empty region so the encoder skips the frame.
+    if (frame_ && frame_->size() == size && screen_.generation == last_generation_)
     {
         frame_->updatedRegion()->clear();
         *error = Error::SUCCEEDED;
@@ -429,9 +390,6 @@ const Frame* ScreenCapturerVt::captureFrame(Error* error)
     cursor_position_ = QPoint(screen_.cursor_col * cell_width_, screen_.cursor_row * cell_height_);
     *frame_->updatedRegion() = screen_rect_;
     last_generation_ = screen_.generation;
-    last_has_selection_ = has_selection_;
-    last_selection_start_ = selection_start_;
-    last_selection_end_ = selection_end_;
 
     *error = Error::SUCCEEDED;
     return frame_.get();

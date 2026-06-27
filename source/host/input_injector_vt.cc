@@ -76,6 +76,13 @@ void InputInjectorVt::injectKeyEvent(const proto::input::KeyEvent& event)
     if (!session)
         return;
 
+    // Paste shortcuts: Shift+Insert and Ctrl+Shift+V. Consumed so they are not typed into the terminal.
+    if ((usage == 0x49 && shift_) || (usage == 0x19 && shift_ && ctrl_))
+    {
+        paste();
+        return;
+    }
+
     // Non-printable keys: libvterm turns them into the right escape sequences (respecting cursor-key mode).
     switch (usage)
     {
@@ -168,29 +175,78 @@ void InputInjectorVt::injectMouseEvent(const proto::input::MouseEvent& event)
     const int col = std::clamp(event.x() * cols / screen_size_.width(), 0, cols - 1);
     const int row = std::clamp(event.y() * rows / screen_size_.height(), 0, rows - 1);
 
+    const quint32 mask = event.mask();
+
+    // Middle-click pastes the stored clipboard text (classic terminal behavior).
+    if (mask & Mouse::MIDDLE_BUTTON)
+    {
+        if (!middle_down_)
+        {
+            middle_down_ = true;
+            paste();
+        }
+        return;
+    }
+    middle_down_ = false;
+
+    // Text selection. Like graphical terminals: a plain left-drag selects while the application has no mouse
+    // reporting (e.g. a shell); once an application grabs the mouse (mc, vim), Shift is required.
+    const bool left = (mask & Mouse::LEFT_BUTTON) != 0;
+    if (selecting_)
+    {
+        if (left)
+        {
+            session->setSelection(selection_start_col_, selection_start_row_, col, row);
+            return;
+        }
+
+        // Released: copy the covered text (only if the selection spans more than the start cell).
+        selecting_ = false;
+        const bool moved = (col != selection_start_col_ || row != selection_start_row_);
+        const std::string text = moved
+            ? session->selectionText(selection_start_col_, selection_start_row_, col, row) : std::string();
+        session->clearSelection();
+
+        if (!text.empty())
+            emit sig_terminalClipboard(QString::fromStdString(text));
+        return;
+    }
+    if (left && (shift_ || !session->mouseActive()))
+    {
+        selecting_ = true;
+        selection_start_col_ = col;
+        selection_start_row_ = row;
+        session->setSelection(col, row, col, row);
+        return;
+    }
+
     // Position first, so button and wheel reports carry the new cell. libvterm emits nothing unless the
     // application enabled mouse reporting.
     session->inputMouseMove(col, row);
-
-    const quint32 mask = event.mask();
 
     if (mask & Mouse::WHEEL_UP)
         session->inputMouseButton(4, true);
     if (mask & Mouse::WHEEL_DOWN)
         session->inputMouseButton(5, true);
 
-    // Button press/release transitions (libvterm buttons: 1 = left, 2 = middle, 3 = right).
-    const quint32 buttons = mask & (Mouse::LEFT_BUTTON | Mouse::MIDDLE_BUTTON | Mouse::RIGHT_BUTTON);
+    // Button press/release transitions (libvterm buttons: 1 = left, 3 = right; middle is paste, not sent).
+    const quint32 buttons = mask & (Mouse::LEFT_BUTTON | Mouse::RIGHT_BUTTON);
     const quint32 changed = buttons ^ last_buttons_;
 
     if (changed & Mouse::LEFT_BUTTON)
         session->inputMouseButton(1, (buttons & Mouse::LEFT_BUTTON) != 0);
-    if (changed & Mouse::MIDDLE_BUTTON)
-        session->inputMouseButton(2, (buttons & Mouse::MIDDLE_BUTTON) != 0);
     if (changed & Mouse::RIGHT_BUTTON)
         session->inputMouseButton(3, (buttons & Mouse::RIGHT_BUTTON) != 0);
 
     last_buttons_ = buttons;
+}
+
+//--------------------------------------------------------------------------------------------------
+void InputInjectorVt::paste()
+{
+    VtSession* session = monitors_ ? monitors_->activeSession() : nullptr;
+    if (session && !clipboard_.isEmpty())
+        session->paste(clipboard_.toStdString());
 }
 
 //--------------------------------------------------------------------------------------------------

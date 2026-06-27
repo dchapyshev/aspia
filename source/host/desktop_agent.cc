@@ -19,6 +19,7 @@
 #include "host/desktop_agent.h"
 
 #include <QCoreApplication>
+#include <QString>
 #include <QTimer>
 
 #include "base/core_application.h"
@@ -337,7 +338,12 @@ bool DesktopAgent::setupVtFallback()
 
     vt_monitors_ = std::make_shared<VtMonitors>(std::move(sessions));
     capture_mode_ = CaptureMode::VT;
-    input_injector_ = new InputInjectorVt(vt_monitors_, this);
+
+    InputInjectorVt* injector = new InputInjectorVt(vt_monitors_, this);
+    // A finished terminal text selection is published to the client clipboard (only the agent reaches it).
+    connect(injector, &InputInjectorVt::sig_terminalClipboard, this,
+            [this](const QString& text) { sendClipboardText(text.toStdString()); });
+    input_injector_ = injector;
     return true;
 }
 
@@ -633,11 +639,6 @@ void DesktopAgent::onInjectMouseEvent(const proto::input::MouseEvent& event)
     out_event.set_x(pos_x);
     out_event.set_y(pos_y);
 
-#if defined(Q_OS_LINUX)
-    if (capture_mode_ == CaptureMode::VT && handleTerminalMouse(QPoint(pos_x, pos_y), event.mask()))
-        return;
-#endif // defined(Q_OS_LINUX)
-
     input_injector_->injectMouseEvent(out_event);
 }
 
@@ -646,16 +647,6 @@ void DesktopAgent::onInjectKeyEvent(const proto::input::KeyEvent& event)
 {
     if (is_paused_ || is_keyboard_locked_ || !input_injector_)
         return;
-
-#if defined(Q_OS_LINUX)
-    if (capture_mode_ == CaptureMode::VT && (event.usb_keycode() >> 16) == 0x07)
-    {
-        const quint32 usage = event.usb_keycode() & 0xffff;
-        if (usage == 0xe1 || usage == 0xe5) // left / right shift
-            terminal_shift_ = (event.flags() & proto::input::KeyEvent::PRESSED) != 0;
-    }
-#endif // defined(Q_OS_LINUX)
-
     input_injector_->injectKeyEvent(event);
 }
 
@@ -694,81 +685,17 @@ void DesktopAgent::onSelectScreen(const proto::screen::Screen& screen)
 void DesktopAgent::onClipboardEvent(const proto::clipboard::Event& event)
 {
 #if defined(Q_OS_LINUX)
-    // Store the client's clipboard text; it is pasted into the terminal on middle-click. Other capture
-    // modes route the clipboard through the host GUI, not here.
-    if (capture_mode_ != CaptureMode::VT)
+    // Forward the client's clipboard text to the VT injector (pasted into the terminal on demand). Other
+    // capture modes route the clipboard through the host GUI, not here.
+    if (capture_mode_ != CaptureMode::VT || !input_injector_)
         return;
 
     if (event.mime_type() == "text/plain; charset=UTF-8")
-        terminal_clipboard_ = event.data();
+        static_cast<InputInjectorVt*>(input_injector_)->setClipboard(QString::fromStdString(event.data()));
 #endif // defined(Q_OS_LINUX)
 }
 
 #if defined(Q_OS_LINUX)
-//--------------------------------------------------------------------------------------------------
-bool DesktopAgent::handleTerminalMouse(const QPoint& pos, quint32 mask)
-{
-    ScreenCapturerVt* capturer = static_cast<ScreenCapturerVt*>(screen_capturer_.get());
-    if (!capturer)
-        return false;
-
-    // Middle-click pastes the stored clipboard text into the terminal (classic terminal behavior).
-    if (mask & proto::input::MouseEvent::MIDDLE_BUTTON)
-    {
-        if (!terminal_middle_down_)
-        {
-            terminal_middle_down_ = true;
-            VtSession* session = vt_monitors_ ? vt_monitors_->activeSession() : nullptr;
-            if (session && !terminal_clipboard_.empty())
-                session->paste(terminal_clipboard_);
-        }
-        return true;
-    }
-    terminal_middle_down_ = false;
-
-    const bool left = (mask & proto::input::MouseEvent::LEFT_BUTTON) != 0;
-
-    if (!terminal_selecting_)
-    {
-        // Like graphical terminals: a plain left-drag selects text while the application has no mouse
-        // reporting (e.g. a shell); once an application grabs the mouse (mc, vim), a left-drag goes to it
-        // and Shift is required to select text instead.
-        VtSession* session = vt_monitors_ ? vt_monitors_->activeSession() : nullptr;
-        const bool app_mouse = session && session->mouseActive();
-        if (!left || (app_mouse && !terminal_shift_))
-            return false;
-
-        terminal_selecting_ = true;
-        terminal_selection_start_ = pos;
-        capturer->setSelection(pos, pos);
-        return true;
-    }
-
-    if (left)
-    {
-        capturer->setSelection(terminal_selection_start_, pos);
-        return true;
-    }
-
-    // Left button released: finish the selection. Copy only if it actually spans more than one cell, so a
-    // plain click does not overwrite the clipboard.
-    terminal_selecting_ = false;
-    capturer->clearSelection();
-
-    const QSize cell = capturer->cellSize();
-    const bool moved = cell.width() > 0 && cell.height() > 0 &&
-        (terminal_selection_start_.x() / cell.width() != pos.x() / cell.width() ||
-         terminal_selection_start_.y() / cell.height() != pos.y() / cell.height());
-
-    if (moved)
-    {
-        const std::string text = capturer->selectionText(terminal_selection_start_, pos);
-        if (!text.empty())
-            sendClipboardText(text);
-    }
-    return true;
-}
-
 //--------------------------------------------------------------------------------------------------
 void DesktopAgent::sendClipboardText(const std::string& text)
 {

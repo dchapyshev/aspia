@@ -109,10 +109,7 @@ private:
     bool setupVtFallback();
     // Switches to DRM/KMS + uinput after the compositor capture path failed to start.
     void fallbackToKms();
-    // Handles a VT terminal mouse event: Shift + left-drag selects and copies, middle-click pastes the
-    // stored clipboard. Returns true if the event was consumed and must not be injected as a mouse event.
-    bool handleTerminalMouse(const QPoint& pos, quint32 mask);
-    // Sends |text| (UTF-8) to the connected clients as a clipboard event.
+    // Sends |text| (UTF-8) to the connected clients as a clipboard event (a finished terminal selection).
     void sendClipboardText(const std::string& text);
 #endif // defined(Q_OS_LINUX)
     ScreenCapturer::ScreenId defaultScreen();
@@ -145,14 +142,6 @@ private:
 
     // Owns the dedicated background login terminals (switchable monitors) when capture_mode_ is VT.
     std::shared_ptr<VtMonitors> vt_monitors_;
-
-    // Terminal text selection (VT): Shift + left-drag selects, releasing copies into the clipboard.
-    bool terminal_shift_ = false;
-    bool terminal_selecting_ = false;
-    QPoint terminal_selection_start_;
-    // Last clipboard text from the client; pasted into the terminal on middle-click.
-    std::string terminal_clipboard_;
-    bool terminal_middle_down_ = false;
 #endif // defined(Q_OS_LINUX)
 
     ScopedQPointer<AudioCapturerWrapper> audio_capturer_;

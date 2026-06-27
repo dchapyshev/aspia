@@ -44,13 +44,6 @@ public:
     // Pixel size of one character cell; used to map a target resolution to a terminal grid.
     QSize cellSize() const { return QSize(cell_width_, cell_height_); }
 
-    // Returns the text (UTF-8) covered by a pixel-space selection rectangle on the active terminal.
-    std::string selectionText(const QPoint& start, const QPoint& end);
-
-    // Sets/clears the highlighted text selection (pixel-space). The highlight is drawn into the frame.
-    void setSelection(const QPoint& start, const QPoint& end);
-    void clearSelection();
-
     // ScreenCapturer implementation.
     int screenCount() final;
     bool screenList(ScreenList* screens) final;
@@ -91,15 +84,6 @@ private:
 
     QRect screen_rect_;
     QPoint cursor_position_;
-
-    // Text selection in cell coordinates (ordered in reading order). Drawn as reverse video; compared
-    // against the last rendered values so a selection change forces a re-render.
-    bool has_selection_ = false;
-    QPoint selection_start_;
-    QPoint selection_end_;
-    bool last_has_selection_ = false;
-    QPoint last_selection_start_;
-    QPoint last_selection_end_;
 
     Q_DISABLE_COPY_MOVE(ScreenCapturerVt)
 };
