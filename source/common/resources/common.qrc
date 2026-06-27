@@ -175,4 +175,7 @@
         <file>search.svg</file>
         <file>computer-update.svg</file>
     </qresource>
+    <qresource prefix="/fonts">
+        <file alias="JetBrainsMono-Regular.ttf">fonts/JetBrainsMono-Regular.ttf</file>
+    </qresource>
 </RCC>

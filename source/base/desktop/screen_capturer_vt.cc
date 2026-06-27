@@ -18,6 +18,8 @@
 
 #include "base/desktop/screen_capturer_vt.h"
 
+#include <QFile>
+
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
@@ -40,16 +42,6 @@ const int kFontPixelSize = 16;
 // size a clean multiple, so the selectable resolutions land on standard values.
 const int kCellWidth = 10;
 const int kCellHeight = 20;
-
-// Candidate monospace fonts, tried in order; the first that loads is used.
-const char* const kFontCandidates[] =
-{
-    "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf",
-    "/usr/share/fonts/truetype/liberation/LiberationMono-Regular.ttf",
-    "/usr/share/fonts/dejavu/DejaVuSansMono.ttf",
-    "/usr/share/fonts/TTF/DejaVuSansMono.ttf",
-    "/usr/share/fonts/liberation/LiberationMono-Regular.ttf"
-};
 
 //--------------------------------------------------------------------------------------------------
 // True if cell (|row|, |col|) is inside |screen|'s text selection (reading-order range).
@@ -80,6 +72,7 @@ struct ScreenCapturerVt::FontData
 
     FT_Library library = nullptr;
     FT_Face face = nullptr;
+    QByteArray font_data; // backs FT_New_Memory_Face; must outlive the face
     std::unordered_map<char32_t, Glyph> cache;
 
     ~FontData()
@@ -161,18 +154,20 @@ bool ScreenCapturerVt::init()
         return false;
     }
 
-    for (const char* path : kFontCandidates)
+    // The font is embedded in the application resources, so it works on systems without installed fonts.
+    QFile font_file(":/fonts/JetBrainsMono-Regular.ttf");
+    if (!font_file.open(QIODevice::ReadOnly))
     {
-        if (FT_New_Face(font_->library, path, 0, &font_->face) == 0)
-        {
-            LOG(INFO) << "VT font:" << path;
-            break;
-        }
+        LOG(ERROR) << "Unable to open the embedded font";
+        return false;
     }
+    font_->font_data = font_file.readAll();
 
-    if (!font_->face)
+    if (FT_New_Memory_Face(font_->library,
+                           reinterpret_cast<const FT_Byte*>(font_->font_data.constData()),
+                           font_->font_data.size(), 0, &font_->face) != 0)
     {
-        LOG(ERROR) << "No monospace font found";
+        LOG(ERROR) << "FT_New_Memory_Face failed";
         return false;
     }
 
