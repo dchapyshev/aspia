@@ -133,11 +133,7 @@ set_property(TARGET aspia_host_core PROPERTY AUTORCC ON)
 qt_import_plugins(aspia_host_core INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE imageformats iconengines EXCLUDE_BY_TYPE "")
 
 if (LINUX)
-    set(HOST_PLATFORM_LIBS
-        stdc++fs
-        ${XI_LIB}
-        ${X11_LIB}
-        ${XEXT_LIB})
+    set(HOST_PLATFORM_LIBS stdc++fs)
 endif()
 
 if (WIN32)

@@ -19,6 +19,7 @@
 #include "base/desktop/linux/x_atom_cache.h"
 
 #include "base/logging.h"
+#include "base/linux/libx11.h"
 
 //--------------------------------------------------------------------------------------------------
 XAtomCache::XAtomCache(::Display* display)
@@ -67,7 +68,7 @@ Atom XAtomCache::createIfNotExist(Atom* atom, const char* name)
 
     if (*atom == X11_None)
     {
-        *atom = XInternAtom(display(), name, X11_True);
+        *atom = LibX11::internAtom(display(), name, X11_True);
     }
 
     return *atom;

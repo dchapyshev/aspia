@@ -21,10 +21,16 @@ collect_sources(SOURCE_BASE_LINUX
     libdrm.h
     libsystemd.cc
     libsystemd.h
+    libx11.cc
+    libx11.h
     libxdamage.cc
     libxdamage.h
+    libxext.cc
+    libxext.h
     libxfixes.cc
     libxfixes.h
+    libxi.cc
+    libxi.h
     libxrandr.cc
     libxrandr.h
     libxtst.cc

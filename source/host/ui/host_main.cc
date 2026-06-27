@@ -44,7 +44,7 @@
 #if defined(Q_OS_LINUX)
 #include <unistd.h>
 
-#include "base/linux/x11_headers.h"
+#include "base/linux/libx11.h"
 #endif // defined(Q_OS_LINUX)
 
 namespace {
@@ -83,10 +83,10 @@ bool waitForValidInputDesktop()
         // The service may launch the GUI a moment before the session's X server (Xwayland) is accepting
         // connections; creating the QApplication then fails and the GUI exits. Wait until the display
         // can be opened.
-        Display* display = XOpenDisplay(nullptr);
+        Display* display = LibX11::openDisplay(nullptr);
         if (display)
         {
-            XCloseDisplay(display);
+            LibX11::closeDisplay(display);
             break;
         }
 #else
@@ -149,7 +149,7 @@ int hostMain(int argc, char* argv[])
     // Qt's xcb plugin installs its own X11 I/O-error handler in the line above that aborts the process
     // when the Xwayland connection drops (every session end / login switch). Override it so the GUI
     // exits cleanly instead of crashing.
-    XSetIOErrorHandler(onX11IoError);
+    LibX11::setIoErrorHandler(onX11IoError);
 #endif
 
     LOG(INFO) << "QPA platform:" << Application::platformName();

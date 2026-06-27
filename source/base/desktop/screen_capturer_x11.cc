@@ -22,6 +22,7 @@
 #include "base/desktop/frame_aligned.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/linux/x_error_trap.h"
+#include "base/linux/libx11.h"
 #include "base/linux/libxdamage.h"
 #include "base/linux/libxfixes.h"
 #include "base/linux/libxrandr.h"
@@ -96,7 +97,7 @@ bool ScreenCapturerX11::screenList(ScreenList* screens)
     {
         XRRMonitorInfo& m = monitors_[i];
 
-        char* monitor_title = XGetAtomName(display(), m.name);
+        char* monitor_title = LibX11::getAtomName(display(), m.name);
         QPoint position(m.x, m.y);
         QSize resolution(m.width, m.height);
         QPoint dpi(96, 96);
@@ -111,7 +112,7 @@ bool ScreenCapturerX11::screenList(ScreenList* screens)
         // Note name is an X11 Atom used to id the monitor.
         screens->screens.emplace_back(
             static_cast<ScreenId>(m.name), title, position, resolution, dpi, primary);
-        XFree(monitor_title);
+        LibX11::free(monitor_title);
     }
 
     return true;
@@ -243,7 +244,7 @@ const MouseCursor* ScreenCapturerX11::captureCursor()
     while (dst < dst_end)
         *dst++ = static_cast<uint32_t>(*src++);
 
-    XFree(x_image);
+    LibX11::free(x_image);
 
     mouse_cursor_ = std::make_unique<MouseCursor>(std::move(image_data), size, hotspot);
     return mouse_cursor_.get();
@@ -261,13 +262,13 @@ QPoint ScreenCapturerX11::cursorPosition()
     unsigned int mask;
 
     XErrorTrap errorTrap(display_->display());
-    X11_Bool result = XQueryPointer(display_->display(),
-                                    root_window_,
-                                    &root_window,
-                                    &child_window,
-                                    &root_x, &root_y,
-                                    &win_x, &win_y,
-                                    &mask);
+    X11_Bool result = LibX11::queryPointer(display_->display(),
+                                           root_window_,
+                                           &root_window,
+                                           &child_window,
+                                           &root_x, &root_y,
+                                           &win_x, &win_y,
+                                           &mask);
     if (!result || errorTrap.lastErrorAndDisable() != 0)
     {
         LOG(ERROR) << "XQueryPointer failed";
@@ -315,7 +316,7 @@ bool ScreenCapturerX11::init()
         return false;
     }
 
-    gc_ = XCreateGC(display(), root_window_, 0, nullptr);
+    gc_ = LibX11::createGc(display(), root_window_, 0, nullptr);
     if (gc_ == nullptr)
     {
         LOG(ERROR) << "Unable to get graphics context";
@@ -338,7 +339,7 @@ bool ScreenCapturerX11::init()
     }
 
     // Register for changes to the dimensions of the root window.
-    XSelectInput(display(), root_window_, StructureNotifyMask);
+    LibX11::selectInput(display(), root_window_, StructureNotifyMask);
 
     if (has_xfixes_)
     {
@@ -585,7 +586,7 @@ void ScreenCapturerX11::deinitXlib()
 
     if (gc_)
     {
-        XFreeGC(display(), gc_);
+        LibX11::freeGc(display(), gc_);
         gc_ = nullptr;
     }
 
@@ -640,7 +641,7 @@ Frame* ScreenCapturerX11::captureFrameImpl()
             *updated_region +=
                 QRect(QPoint(rects[i].x, rects[i].y), QSize(rects[i].width, rects[i].height));
         }
-        XFree(rects);
+        LibX11::free(rects);
         helper_.invalidateRegion(*updated_region);
 
         // Capture the damaged portions of the desktop.

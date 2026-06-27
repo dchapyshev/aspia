@@ -33,7 +33,7 @@
 #include "proto/desktop_input.h"
 
 #if defined(Q_OS_LINUX)
-#include "base/linux/x11_headers.h"
+#include "base/linux/libx11.h"
 #endif // defined(Q_OS_LINUX)
 
 #if defined(Q_OS_MACOS)
@@ -54,7 +54,7 @@ bool isNumLockActivated()
 #if defined(Q_OS_WINDOWS)
     return GetKeyState(VK_NUMLOCK) != 0;
 #elif defined(Q_OS_LINUX)
-    Display* display = XOpenDisplay(nullptr);
+    Display* display = LibX11::openDisplay(nullptr);
     if (!display)
     {
         LOG(ERROR) << "XOpenDisplay failed";
@@ -62,8 +62,8 @@ bool isNumLockActivated()
     }
 
     unsigned state = 0;
-    XkbGetIndicatorState(display, XkbUseCoreKbd, &state);
-    XCloseDisplay(display);
+    LibX11::xkbGetIndicatorState(display, XkbUseCoreKbd, &state);
+    LibX11::closeDisplay(display);
 
     return (state & 2) != 0;
 #elif defined(Q_OS_MACOS)
@@ -81,7 +81,7 @@ bool isCapsLockActivated()
 #if defined(Q_OS_WINDOWS)
     return GetKeyState(VK_CAPITAL) != 0;
 #elif defined(Q_OS_LINUX)
-    Display* display = XOpenDisplay(nullptr);
+    Display* display = LibX11::openDisplay(nullptr);
     if (!display)
     {
         LOG(ERROR) << "XOpenDisplay failed";
@@ -89,8 +89,8 @@ bool isCapsLockActivated()
     }
 
     unsigned state = 0;
-    XkbGetIndicatorState(display, XkbUseCoreKbd, &state);
-    XCloseDisplay(display);
+    LibX11::xkbGetIndicatorState(display, XkbUseCoreKbd, &state);
+    LibX11::closeDisplay(display);
 
     return (state & 1) != 0;
 #elif defined(Q_OS_MACOS)

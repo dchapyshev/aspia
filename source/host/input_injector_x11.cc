@@ -21,8 +21,9 @@
 #include <vector>
 
 #include "base/logging.h"
+#include "base/linux/libx11.h"
+#include "base/linux/libxi.h"
 #include "base/linux/libxtst.h"
-#include "base/linux/x11_headers.h"
 #include "common/keycode_converter.h"
 #include "proto/desktop_input.h"
 
@@ -78,7 +79,7 @@ InputInjectorX11::~InputInjectorX11()
     setAutoRepeatEnabled(true);
 
     if (display_)
-        XCloseDisplay(display_);
+        LibX11::closeDisplay(display_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -156,7 +157,7 @@ void InputInjectorX11::injectKeyEvent(const proto::input::KeyEvent& event)
     }
 
     LibXtst::fakeKeyEvent(display_, keycode, is_pressed, CurrentTime);
-    XFlush(display_);
+    LibX11::flush(display_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -177,7 +178,7 @@ void InputInjectorX11::injectTextEvent(const proto::input::TextEvent& event)
     for (uint code_point : code_points)
         injectUnicode(code_point);
 
-    XFlush(display_);
+    LibX11::flush(display_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -271,7 +272,7 @@ void InputInjectorX11::injectMouseEvent(const proto::input::MouseEvent& event)
         }
     }
 
-    XFlush(display_);
+    LibX11::flush(display_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -283,14 +284,14 @@ void InputInjectorX11::injectTouchEvent(const proto::input::TouchEvent& /* event
 //--------------------------------------------------------------------------------------------------
 bool InputInjectorX11::init()
 {
-    display_ = XOpenDisplay(nullptr);
+    display_ = LibX11::openDisplay(nullptr);
     if (!display_)
     {
         LOG(ERROR) << "XOpenDisplay failed";
         return false;
     }
 
-    root_window_ = XRootWindow(display_, DefaultScreen(display_));
+    root_window_ = LibX11::rootWindow(display_, DefaultScreen(display_));
     if (root_window_ == BadValue)
     {
         LOG(ERROR) << "Unable to get the root window";
@@ -315,9 +316,9 @@ void InputInjectorX11::initMouseButtonMap()
     // Do not touch global pointer mapping, since this may affect the local user. Instead, try to
     // work around it by reversing the mapping. Note that if a user has a global mapping that
     // completely disables a button (by assigning 0 to it), we won't be able to inject it.
-    int num_buttons = XGetPointerMapping(display_, nullptr, 0);
+    int num_buttons = LibX11::getPointerMapping(display_, nullptr, 0);
     std::unique_ptr<unsigned char[]> pointer_mapping(new unsigned char[num_buttons]);
-    num_buttons = XGetPointerMapping(display_, pointer_mapping.get(), num_buttons);
+    num_buttons = LibX11::getPointerMapping(display_, pointer_mapping.get(), num_buttons);
 
     for (int i = 0; i < kNumPointerButtons; i++)
         pointer_button_map_[i] = -1;
@@ -338,7 +339,7 @@ void InputInjectorX11::initMouseButtonMap()
     }
 
     int opcode, event, error;
-    if (!XQueryExtension(display_, "XInputExtension", &opcode, &event, &error))
+    if (!LibX11::queryExtension(display_, "XInputExtension", &opcode, &event, &error))
     {
         // If XInput is not available, we're done. But it would be very unusual to
         // have a server that supports XTest but not XInput, so log it as an error.
@@ -354,7 +355,7 @@ void InputInjectorX11::initMouseButtonMap()
     bool device_found = false;
     int num_devices;
 
-    XDeviceInfo* devices = XListInputDevices(display_, &num_devices);
+    XDeviceInfo* devices = LibXi::listInputDevices(display_, &num_devices);
 
     for (int i = 0; i < num_devices; i++)
     {
@@ -367,7 +368,7 @@ void InputInjectorX11::initMouseButtonMap()
             break;
         }
     }
-    XFreeDeviceList(devices);
+    LibXi::freeDeviceList(devices);
 
     if (!device_found)
     {
@@ -375,34 +376,34 @@ void InputInjectorX11::initMouseButtonMap()
         return;
     }
 
-    XDevice* device = XOpenDevice(display_, device_id);
+    XDevice* device = LibXi::openDevice(display_, device_id);
     if (!device)
     {
         LOG(ERROR) << "Cannot open XTest device.";
         return;
     }
 
-    int num_device_buttons = XGetDeviceButtonMapping(display_, device, nullptr, 0);
+    int num_device_buttons = LibXi::getDeviceButtonMapping(display_, device, nullptr, 0);
     std::unique_ptr<unsigned char[]> button_mapping(new unsigned char[num_buttons]);
 
     for (int i = 0; i < num_device_buttons; i++)
         button_mapping[i] = i + 1;
 
-    error = XSetDeviceButtonMapping(display_, device, button_mapping.get(), num_device_buttons);
+    error = LibXi::setDeviceButtonMapping(display_, device, button_mapping.get(), num_device_buttons);
     if (error != Success)
     {
         LOG(ERROR) << "Failed to set XTest device button mapping:" << error;
     }
 
-    XCloseDevice(display_, device);
+    LibXi::closeDevice(display_, device);
 }
 
 //--------------------------------------------------------------------------------------------------
 void InputInjectorX11::setLockStates(bool caps, bool num)
 {
     // The lock bits associated with each lock key.
-    unsigned int caps_lock_mask = XkbKeysymToModifiers(display_, XK_Caps_Lock);
-    unsigned int num_lock_mask = XkbKeysymToModifiers(display_, XK_Num_Lock);
+    unsigned int caps_lock_mask = LibX11::xkbKeysymToModifiers(display_, XK_Caps_Lock);
+    unsigned int num_lock_mask = LibX11::xkbKeysymToModifiers(display_, XK_Num_Lock);
 
     // The lock bits we want to update
     unsigned int update_mask = caps_lock_mask | num_lock_mask;
@@ -416,7 +417,7 @@ void InputInjectorX11::setLockStates(bool caps, bool num)
     if (num)
         lock_values |= num_lock_mask;
 
-    XkbLockModifiers(display_, XkbUseCoreKbd, update_mask, lock_values);
+    LibX11::xkbLockModifiers(display_, XkbUseCoreKbd, update_mask, lock_values);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -425,8 +426,8 @@ bool InputInjectorX11::isLockKey(int keycode)
     XkbStateRec state;
     KeySym keysym;
 
-    if (XkbGetState(display_, XkbUseCoreKbd, &state) == Success &&
-        XkbLookupKeySym(display_, keycode, XkbStateMods(&state), nullptr, &keysym) == X11_True)
+    if (LibX11::xkbGetState(display_, XkbUseCoreKbd, &state) == Success &&
+        LibX11::xkbLookupKeySym(display_, keycode, XkbStateMods(&state), nullptr, &keysym) == X11_True)
     {
         return keysym == XK_Caps_Lock || keysym == XK_Num_Lock;
     }
@@ -438,7 +439,7 @@ bool InputInjectorX11::isLockKey(int keycode)
 bool InputInjectorX11::isAutoRepeatEnabled()
 {
     XKeyboardState state;
-    if (!XGetKeyboardControl(display_, &state))
+    if (!LibX11::getKeyboardControl(display_, &state))
     {
         LOG(ERROR) << "Failed to get keyboard auto-repeat status, assuming ON";
         return true;
@@ -456,8 +457,8 @@ void InputInjectorX11::setAutoRepeatEnabled(bool enable)
     XKeyboardControl control;
     control.auto_repeat_mode = enable ? AutoRepeatModeOn : AutoRepeatModeOff;
 
-    XChangeKeyboardControl(display_, KBAutoRepeatMode, &control);
-    XFlush(display_);
+    LibX11::changeKeyboardControl(display_, KBAutoRepeatMode, &control);
+    LibX11::flush(display_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -469,7 +470,7 @@ void InputInjectorX11::releasePressedKeys()
         while (it != pressed_keys_.end())
         {
             LibXtst::fakeKeyEvent(display_, *it, 0, CurrentTime);
-            XFlush(display_);
+            LibX11::flush(display_);
 
             it = pressed_keys_.erase(it);
         }
@@ -502,15 +503,15 @@ void InputInjectorX11::initTextInjection()
 {
     int min_keycode = 0;
     int max_keycode = 0;
-    XDisplayKeycodes(display_, &min_keycode, &max_keycode);
+    LibX11::displayKeycodes(display_, &min_keycode, &max_keycode);
 
-    KeySym* mapping = XGetKeyboardMapping(
+    KeySym* mapping = LibX11::getKeyboardMapping(
         display_, min_keycode, max_keycode - min_keycode + 1, &keysyms_per_keycode_);
     if (!mapping || keysyms_per_keycode_ <= 0)
     {
         LOG(ERROR) << "Unable to get keyboard mapping for text injection";
         if (mapping)
-            XFree(mapping);
+            LibX11::free(mapping);
         keysyms_per_keycode_ = 0;
         return;
     }
@@ -533,7 +534,7 @@ void InputInjectorX11::initTextInjection()
             spare_keycodes_.push_back(keycode);
     }
 
-    XFree(mapping);
+    LibX11::free(mapping);
 
     if (spare_keycodes_.empty())
         LOG(ERROR) << "No spare keycode available for text injection";
@@ -582,10 +583,10 @@ void InputInjectorX11::injectUnicode(uint code_point)
     // Temporarily bind the keysym to the spare keycode at every level, so the produced character
     // does not depend on the active keyboard layout, group, or modifier state.
     std::vector<KeySym> keysyms(static_cast<size_t>(keysyms_per_keycode_), keysym);
-    XChangeKeyboardMapping(display_, keycode, keysyms_per_keycode_, keysyms.data(), 1);
+    LibX11::changeKeyboardMapping(display_, keycode, keysyms_per_keycode_, keysyms.data(), 1);
 
     // Make sure the new mapping is in effect before the key is synthesized.
-    XSync(display_, X11_False);
+    LibX11::sync(display_, X11_False);
 
     LibXtst::fakeKeyEvent(display_, keycode, X11_True, CurrentTime);
     LibXtst::fakeKeyEvent(display_, keycode, X11_False, CurrentTime);

@@ -22,8 +22,8 @@
 
 #include <algorithm>
 
+#include "base/linux/libx11.h"
 #include "base/linux/libxtst.h"
-#include "base/linux/x11_headers.h"
 
 namespace {
 
@@ -117,14 +117,14 @@ SharedXDisplay::SharedXDisplay(Display* display)
 SharedXDisplay::~SharedXDisplay()
 {
     DCHECK(event_handlers_.empty());
-    XCloseDisplay(display_);
+    LibX11::closeDisplay(display_);
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
 std::shared_ptr<SharedXDisplay> SharedXDisplay::create(const QString& display_name)
 {
-    Display* display = XOpenDisplay(display_name.isEmpty() ? nullptr : display_name.toLocal8Bit().data());
+    Display* display = LibX11::openDisplay(display_name.isEmpty() ? nullptr : display_name.toLocal8Bit().data());
     if (!display)
     {
         LOG(ERROR) << "Unable to open display";
@@ -174,12 +174,12 @@ void SharedXDisplay::processPendingXEvents()
 
     // Find the number of events that are outstanding "now."  We don't just loop on XPending because
     // we want to guarantee this terminates.
-    int events_to_process = XPending(display());
+    int events_to_process = LibX11::pending(display());
     XEvent e;
 
     for (int i = 0; i < events_to_process; i++)
     {
-        XNextEvent(display(), &e);
+        LibX11::nextEvent(display(), &e);
 
         EventHandlersMap::iterator handlers = event_handlers_.find(e.type);
         if (handlers == event_handlers_.end())

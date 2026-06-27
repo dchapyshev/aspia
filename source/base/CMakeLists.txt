@@ -206,7 +206,7 @@ if (WIN32)
 endif()
 
 if (LINUX)
-    set(BASE_PLATFORM_LIBS ${X11_LIB} stdc++fs ${CMAKE_DL_LIBS})
+    set(BASE_PLATFORM_LIBS stdc++fs ${CMAKE_DL_LIBS})
 
     # PipeWire, EGL/GBM and libdrm are loaded dynamically (see base/desktop/linux), so only their
     # headers are needed at build time, not the libraries.
