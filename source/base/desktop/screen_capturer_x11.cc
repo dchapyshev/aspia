@@ -22,6 +22,7 @@
 #include "base/desktop/frame_aligned.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/linux/x_error_trap.h"
+#include "base/linux/libxdamage.h"
 
 #include <dlfcn.h>
 
@@ -418,7 +419,7 @@ void ScreenCapturerX11::initXDamage()
         return;
 
     // Check for XDamage extension.
-    if (!XDamageQueryExtension(display(), &damage_event_base_, &damage_error_base_))
+    if (!LibXdamage::queryExtension(display(), &damage_event_base_, &damage_error_base_))
     {
         LOG(INFO) << "X server does not support XDamage";
         return;
@@ -429,7 +430,7 @@ void ScreenCapturerX11::initXDamage()
     // notifications properly.
 
     // Request notifications every time the screen becomes damaged.
-    damage_handle_ = XDamageCreate(display(), root_window_, XDamageReportNonEmpty);
+    damage_handle_ = LibXdamage::create(display(), root_window_, XDamageReportNonEmpty);
     if (!damage_handle_)
     {
         LOG(ERROR) << "Unable to initialize XDamage";
@@ -440,7 +441,7 @@ void ScreenCapturerX11::initXDamage()
     damage_region_ = XFixesCreateRegion(display(), 0, 0);
     if (!damage_region_)
     {
-        XDamageDestroy(display(), damage_handle_);
+        LibXdamage::destroy(display(), damage_handle_);
         LOG(ERROR) << "Unable to create XFixes region";
         return;
     }
@@ -592,7 +593,7 @@ void ScreenCapturerX11::deinitXlib()
     {
         if (damage_handle_)
         {
-            XDamageDestroy(display(), damage_handle_);
+            LibXdamage::destroy(display(), damage_handle_);
             damage_handle_ = 0;
         }
 
@@ -628,7 +629,7 @@ Frame* ScreenCapturerX11::captureFrameImpl()
     if (use_damage_ && queue_.previousFrame())
     {
         // Atomically fetch and clear the damage region.
-        XDamageSubtract(display(), damage_handle_, X11_None, damage_region_);
+        LibXdamage::subtract(display(), damage_handle_, X11_None, damage_region_);
         int rectsNum = 0;
         XRectangle bounds;
         XRectangle* rects = XFixesFetchRegionAndBounds(display(), damage_region_,
