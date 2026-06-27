@@ -18,6 +18,8 @@
 
 #include "host/input_injector_vt.h"
 
+#include <QString>
+
 #include <algorithm>
 #include <utility>
 
@@ -138,9 +140,15 @@ void InputInjectorVt::injectKeyEvent(const proto::input::KeyEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorVt::injectTextEvent(const proto::input::TextEvent& /* event */)
+void InputInjectorVt::injectTextEvent(const proto::input::TextEvent& event)
 {
-    // Not used: input arrives as key events.
+    VtSession* session = monitors_ ? monitors_->activeSession() : nullptr;
+    if (!session)
+        return;
+
+    // Committed Unicode text (on-screen keyboard, IME, ...): type each code point into the terminal.
+    for (char32_t ch : QString::fromStdString(event.text()).toUcs4())
+        session->inputUnichar(ch, false, false);
 }
 
 //--------------------------------------------------------------------------------------------------
