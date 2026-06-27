@@ -19,6 +19,7 @@
 #include "base/linux/x_server_clipboard.h"
 
 #include "base/logging.h"
+#include "base/linux/libxfixes.h"
 
 //--------------------------------------------------------------------------------------------------
 XServerClipboard::XServerClipboard() = default;
@@ -40,7 +41,7 @@ void XServerClipboard::init(Display* display, const ClipboardChangedCallback& ca
     // responsibility for handling X Errors outside this class, since X Error handlers are global
     // to all X connections.
     int xfixes_error_base;
-    if (!XFixesQueryExtension(display_, &xfixes_event_base_, &xfixes_error_base))
+    if (!LibXfixes::queryExtension(display_, &xfixes_event_base_, &xfixes_error_base))
     {
         LOG(ERROR) << "X server does not support XFixes";
         return;
@@ -78,8 +79,8 @@ void XServerClipboard::init(Display* display, const ClipboardChangedCallback& ca
         LOG(ERROR) << "XInternAtoms failed";
     }
 
-    XFixesSelectSelectionInput(display_, clipboard_window_, clipboard_atom_,
-                               XFixesSetSelectionOwnerNotifyMask);
+    LibXfixes::selectSelectionInput(
+        display_, clipboard_window_, clipboard_atom_, XFixesSetSelectionOwnerNotifyMask);
 }
 
 //--------------------------------------------------------------------------------------------------

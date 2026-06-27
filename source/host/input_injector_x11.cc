@@ -212,9 +212,8 @@ void InputInjectorX11::injectMouseEvent(const proto::input::MouseEvent& event)
         last_mouse_pos_.setX(std::max(0, pos.x()));
         last_mouse_pos_.setY(std::max(0, pos.y()));
 
-        LibXtst::fakeMotionEvent(display_, DefaultScreen(display_),
-                             last_mouse_pos_.x(), last_mouse_pos_.y(),
-                             CurrentTime);
+        LibXtst::fakeMotionEvent(
+            display_, DefaultScreen(display_), last_mouse_pos_.x(), last_mouse_pos_.y(), CurrentTime);
     }
 
     if (left_button_pressed_ != left_button_pressed)

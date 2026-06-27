@@ -23,6 +23,8 @@
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/linux/x_error_trap.h"
 #include "base/linux/libxdamage.h"
+#include "base/linux/libxfixes.h"
+#include "base/linux/libxrandr.h"
 
 #include <dlfcn.h>
 
@@ -211,7 +213,7 @@ const MouseCursor* ScreenCapturerX11::captureCursor()
     XFixesCursorImage* x_image = nullptr;
     {
         XErrorTrap error_trap(display());
-        x_image = XFixesGetCursorImage(display());
+        x_image = LibXfixes::getCursorImage(display());
         if (!x_image || error_trap.lastErrorAndDisable() != 0)
         {
             LOG(ERROR) << "XFixesGetCursorImage failed";
@@ -325,7 +327,7 @@ bool ScreenCapturerX11::init()
 
     // Check for XFixes extension. This is required for cursor shape notifications, and for our use
     // of XDamage.
-    if (XFixesQueryExtension(display(), &xfixes_event_base_, &xfixes_error_base_))
+    if (LibXfixes::queryExtension(display(), &xfixes_event_base_, &xfixes_error_base_))
     {
         LOG(INFO) << "X server supports XFixes";
         has_xfixes_ = true;
@@ -341,7 +343,7 @@ bool ScreenCapturerX11::init()
     if (has_xfixes_)
     {
         // Register for changes to the cursor shape.
-        XFixesSelectCursorInput(display(), root_window_, XFixesDisplayCursorNotifyMask);
+        LibXfixes::selectCursorInput(display(), root_window_, XFixesDisplayCursorNotifyMask);
         display_->addEventHandler(xfixes_event_base_ + XFixesCursorNotify, this);
         captureCursor();
     }
@@ -397,7 +399,7 @@ bool ScreenCapturerX11::handleXEvent(const XEvent& event)
     }
     else if (use_randr_ && event.type == randr_event_base_ + RRScreenChangeNotify)
     {
-        XRRUpdateConfiguration(const_cast<XEvent*>(&event));
+        LibXrandr::updateConfiguration(const_cast<XEvent*>(&event));
         updateMonitors();
         LOG(INFO) << "XRandR screen change event received";
         return true;
@@ -438,7 +440,7 @@ void ScreenCapturerX11::initXDamage()
     }
 
     // Create an XFixes server-side region to collate damage into.
-    damage_region_ = XFixesCreateRegion(display(), 0, 0);
+    damage_region_ = LibXfixes::createRegion(display(), 0, 0);
     if (!damage_region_)
     {
         LibXdamage::destroy(display(), damage_handle_);
@@ -459,8 +461,8 @@ void ScreenCapturerX11::initXrandr()
     int minor_version = 0;
     int error_base_ignored = 0;
 
-    if (XRRQueryExtension(display(), &randr_event_base_, &error_base_ignored) &&
-        XRRQueryVersion(display(), &major_version, &minor_version))
+    if (LibXrandr::queryExtension(display(), &randr_event_base_, &error_base_ignored) &&
+        LibXrandr::queryVersion(display(), &major_version, &minor_version))
     {
         if (major_version > 1 || (major_version == 1 && minor_version >= 5))
         {
@@ -478,7 +480,7 @@ void ScreenCapturerX11::initXrandr()
                 monitors_ = get_monitors_(display(), root_window_, true, &num_monitors_);
 
                 // Register for screen change notifications
-                XRRSelectInput(display(), root_window_, RRScreenChangeNotifyMask);
+                LibXrandr::selectInput(display(), root_window_, RRScreenChangeNotifyMask);
                 display_->addEventHandler(randr_event_base_ + RRScreenChangeNotify, this);
             }
             else
@@ -599,7 +601,7 @@ void ScreenCapturerX11::deinitXlib()
 
         if (damage_region_)
         {
-            XFixesDestroyRegion(display(), damage_region_);
+            LibXfixes::destroyRegion(display(), damage_region_);
             damage_region_ = 0;
         }
     }
@@ -632,8 +634,7 @@ Frame* ScreenCapturerX11::captureFrameImpl()
         LibXdamage::subtract(display(), damage_handle_, X11_None, damage_region_);
         int rectsNum = 0;
         XRectangle bounds;
-        XRectangle* rects = XFixesFetchRegionAndBounds(display(), damage_region_,
-                                                       &rectsNum, &bounds);
+        XRectangle* rects = LibXfixes::fetchRegionAndBounds(display(), damage_region_, &rectsNum, &bounds);
         for (int i = 0; i < rectsNum; ++i)
         {
             *updated_region +=

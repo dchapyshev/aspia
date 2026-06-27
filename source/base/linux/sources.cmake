@@ -23,6 +23,10 @@ collect_sources(SOURCE_BASE_LINUX
     libsystemd.h
     libxdamage.cc
     libxdamage.h
+    libxfixes.cc
+    libxfixes.h
+    libxrandr.cc
+    libxrandr.h
     libxtst.cc
     libxtst.h
     scoped_user_credentials.cc

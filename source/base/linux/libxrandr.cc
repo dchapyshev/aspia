@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/linux/libxdamage.h"
+#include "base/linux/libxrandr.h"
 
 #include <dlfcn.h>
 
@@ -24,21 +24,21 @@
 
 namespace {
 
-// Pointer types are taken from the real libXdamage declarations; only the addresses are resolved
+// Pointer types are taken from the real libXrandr declarations; only the addresses are resolved
 // dynamically.
 void* g_handle = nullptr;
 bool g_load_failed = false;
 
-decltype(&XDamageQueryExtension) g_query_extension = nullptr;
-decltype(&XDamageCreate) g_create = nullptr;
-decltype(&XDamageDestroy) g_destroy = nullptr;
-decltype(&XDamageSubtract) g_subtract = nullptr;
+decltype(&XRRQueryExtension) g_query_extension = nullptr;
+decltype(&XRRQueryVersion) g_query_version = nullptr;
+decltype(&XRRSelectInput) g_select_input = nullptr;
+decltype(&XRRUpdateConfiguration) g_update_configuration = nullptr;
 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool LibXdamage::ensureLoaded()
+bool LibXrandr::ensureLoaded()
 {
     if (g_handle)
         return true;
@@ -47,23 +47,26 @@ bool LibXdamage::ensureLoaded()
     if (g_load_failed)
         return false;
 
-    g_handle = dlopen("libXdamage.so.1", RTLD_LAZY);
+    g_handle = dlopen("libXrandr.so.2", RTLD_LAZY);
     if (!g_handle)
     {
-        LOG(ERROR) << "Unable to load libXdamage.so.1:" << dlerror();
+        LOG(ERROR) << "Unable to load libXrandr.so.2:" << dlerror();
         g_load_failed = true;
         return false;
     }
 
     g_query_extension =
-        reinterpret_cast<decltype(g_query_extension)>(dlsym(g_handle, "XDamageQueryExtension"));
-    g_create = reinterpret_cast<decltype(g_create)>(dlsym(g_handle, "XDamageCreate"));
-    g_destroy = reinterpret_cast<decltype(g_destroy)>(dlsym(g_handle, "XDamageDestroy"));
-    g_subtract = reinterpret_cast<decltype(g_subtract)>(dlsym(g_handle, "XDamageSubtract"));
+        reinterpret_cast<decltype(g_query_extension)>(dlsym(g_handle, "XRRQueryExtension"));
+    g_query_version =
+        reinterpret_cast<decltype(g_query_version)>(dlsym(g_handle, "XRRQueryVersion"));
+    g_select_input =
+        reinterpret_cast<decltype(g_select_input)>(dlsym(g_handle, "XRRSelectInput"));
+    g_update_configuration =
+        reinterpret_cast<decltype(g_update_configuration)>(dlsym(g_handle, "XRRUpdateConfiguration"));
 
-    if (!g_query_extension || !g_create || !g_destroy || !g_subtract)
+    if (!g_query_extension || !g_query_version || !g_select_input || !g_update_configuration)
     {
-        LOG(ERROR) << "Unable to resolve libXdamage symbols";
+        LOG(ERROR) << "Unable to resolve libXrandr symbols";
         dlclose(g_handle);
         g_handle = nullptr;
         g_load_failed = true;
@@ -75,7 +78,7 @@ bool LibXdamage::ensureLoaded()
 
 //--------------------------------------------------------------------------------------------------
 // static
-int LibXdamage::queryExtension(Display* display, int* event_base, int* error_base)
+int LibXrandr::queryExtension(Display* display, int* event_base, int* error_base)
 {
     if (!ensureLoaded())
         return 0;
@@ -84,27 +87,27 @@ int LibXdamage::queryExtension(Display* display, int* event_base, int* error_bas
 
 //--------------------------------------------------------------------------------------------------
 // static
-Damage LibXdamage::create(Display* display, Drawable drawable, int level)
+int LibXrandr::queryVersion(Display* display, int* major, int* minor)
 {
     if (!ensureLoaded())
         return 0;
-    return g_create(display, drawable, level);
+    return g_query_version(display, major, minor);
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-void LibXdamage::destroy(Display* display, Damage damage)
+void LibXrandr::selectInput(Display* display, Window window, int mask)
 {
     if (!ensureLoaded())
         return;
-    g_destroy(display, damage);
+    g_select_input(display, window, mask);
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-void LibXdamage::subtract(Display* display, Damage damage, XserverRegion repair, XserverRegion parts)
+int LibXrandr::updateConfiguration(XEvent* event)
 {
     if (!ensureLoaded())
-        return;
-    g_subtract(display, damage, repair, parts);
+        return 0;
+    return g_update_configuration(event);
 }

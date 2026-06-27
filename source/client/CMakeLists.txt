@@ -91,7 +91,7 @@ if (WIN32)
 endif()
 
 if (LINUX)
-    set(CLIENT_PLATFORM_LIBS stdc++fs ${XFIXES_LIB})
+    set(CLIENT_PLATFORM_LIBS stdc++fs)
 endif()
 
 if (APPLE)

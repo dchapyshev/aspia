@@ -126,12 +126,6 @@ if (LINUX)
     find_package(ICU REQUIRED COMPONENTS uc)
     find_package(freetype CONFIG REQUIRED)
 
-    find_library(XFIXES_LIB NAMES libXfixes Xfixes REQUIRED)
-    message(STATUS "XFixes library: ${XFIXES_LIB}")
-
-    find_library(XRANDR_LIB NAMES libXrandr Xrandr REQUIRED)
-    message(STATUS "XRandr library: ${XRANDR_LIB}")
-
     find_library(XI_LIB NAMES libXi Xi REQUIRED)
     message(STATUS "Xi library: ${XI_LIB}")
 

@@ -135,8 +135,6 @@ qt_import_plugins(aspia_host_core INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE imagefor
 if (LINUX)
     set(HOST_PLATFORM_LIBS
         stdc++fs
-        ${XFIXES_LIB}
-        ${XRANDR_LIB}
         ${XI_LIB}
         ${X11_LIB}
         ${XEXT_LIB})

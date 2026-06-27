@@ -16,28 +16,28 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_LINUX_LIBXDAMAGE_H
-#define BASE_LINUX_LIBXDAMAGE_H
+#ifndef BASE_LINUX_LIBXRANDR_H
+#define BASE_LINUX_LIBXRANDR_H
 
 #include <QtClassHelperMacros>
 
 #include "base/linux/x11_headers.h"
 
-// Thin wrapper over the subset of libXdamage (the DAMAGE extension) used to track changed screen regions.
-// The library is loaded dynamically on first use and the resolved symbols are cached, so the binary does
-// not link against libXdamage. Every call is a no-op if the library or a symbol is unavailable.
-class LibXdamage
+// Thin wrapper over the subset of libXrandr (the RANDR extension) used to track screen configuration
+// changes. The library is loaded dynamically on first use and the resolved symbols are cached, so the
+// binary does not link against libXrandr. Every call is a no-op if the library or a symbol is unavailable.
+class LibXrandr
 {
-    Q_DISABLE_COPY_MOVE(LibXdamage)
+    Q_DISABLE_COPY_MOVE(LibXrandr)
 
 public:
-    // Loads libXdamage and resolves its symbols once. Returns false if it is not available.
+    // Loads libXrandr and resolves its symbols once. Returns false if it is not available.
     static bool ensureLoaded();
 
     static int queryExtension(Display* display, int* event_base, int* error_base);
-    static Damage create(Display* display, Drawable drawable, int level);
-    static void destroy(Display* display, Damage damage);
-    static void subtract(Display* display, Damage damage, XserverRegion repair, XserverRegion parts);
+    static int queryVersion(Display* display, int* major, int* minor);
+    static void selectInput(Display* display, Window window, int mask);
+    static int updateConfiguration(XEvent* event);
 };
 
-#endif // BASE_LINUX_LIBXDAMAGE_H
+#endif // BASE_LINUX_LIBXRANDR_H
