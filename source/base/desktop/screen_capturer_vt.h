@@ -84,10 +84,10 @@ private:
     int cell_ascent_ = 0;
 
     std::unique_ptr<Frame> frame_;
-    // Working screen snapshot and the previous one; an unchanged snapshot yields an empty updated region so
-    // idle terminals are not re-encoded every poll.
+    // Working screen snapshot and the libvterm generation it was rendered at; an unchanged generation yields
+    // an empty updated region so idle terminals are not re-encoded every poll.
     VtScreen screen_;
-    VtScreen last_screen_;
+    std::uint64_t last_generation_ = 0;
 
     QRect screen_rect_;
     QPoint cursor_position_;

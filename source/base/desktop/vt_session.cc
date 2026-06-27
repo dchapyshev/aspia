@@ -84,6 +84,20 @@ int onSetTermProp(VTermProp prop, VTermValue* value, void* user)
     return 1;
 }
 
+//--------------------------------------------------------------------------------------------------
+int onDamage(VTermRect /* rect */, void* user)
+{
+    static_cast<VtSession*>(user)->notifyChanged();
+    return 1;
+}
+
+//--------------------------------------------------------------------------------------------------
+int onMoveCursor(VTermPos /* pos */, VTermPos /* oldpos */, int /* visible */, void* user)
+{
+    static_cast<VtSession*>(user)->notifyChanged();
+    return 1;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -180,9 +194,12 @@ bool VtSession::start()
     vterm_screen_reset(screen_, 1);
     vterm_screen_enable_altscreen(screen_, 1);
 
-    // Track the application's mouse-reporting mode so the agent knows when a plain left-drag should select
-    // text. libvterm keeps a pointer to the callbacks, so the table must outlive the terminal.
+    // damage / movecursor bump a generation counter so the renderer re-renders exactly when libvterm
+    // changes (instead of comparing cells). settermprop tracks the mouse-reporting mode. libvterm keeps a
+    // pointer to the callbacks, so the table must outlive the terminal.
     static VTermScreenCallbacks screen_callbacks = {};
+    screen_callbacks.damage = onDamage;
+    screen_callbacks.movecursor = onMoveCursor;
     screen_callbacks.settermprop = onSetTermProp;
     vterm_screen_set_callbacks(screen_, &screen_callbacks, this);
 
@@ -257,6 +274,7 @@ bool VtSession::captureScreen(VtScreen* out)
 
     out->rows = rows;
     out->cols = cols;
+    out->generation = generation_.load(std::memory_order_relaxed);
     out->cells.assign(static_cast<size_t>(rows) * cols, VtCell());
 
     for (int row = 0; row < rows; ++row)

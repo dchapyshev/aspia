@@ -49,7 +49,8 @@ struct VtScreen
     int rows = 0;
     int cursor_col = 0;
     int cursor_row = 0;
-    std::vector<VtCell> cells; // rows * cols, row-major
+    std::uint64_t generation = 0; // bumped on every libvterm change; lets the renderer skip idle frames
+    std::vector<VtCell> cells;    // rows * cols, row-major
 };
 
 // Non-printable keys the injector can send (mapped to the terminal's escape sequences by libvterm).
@@ -104,6 +105,8 @@ public:
     bool mouseActive() const { return mouse_active_.load(std::memory_order_relaxed); }
     // Internal: updated from the libvterm settermprop callback.
     void updateMouseActive(bool active) { mouse_active_.store(active, std::memory_order_relaxed); }
+    // Internal: bumped from the libvterm damage / cursor callbacks on every visible change.
+    void notifyChanged() { generation_.fetch_add(1, std::memory_order_relaxed); }
 
 private:
     void pumpLoop();
@@ -122,6 +125,7 @@ private:
     std::thread pump_thread_;
     std::atomic_bool stop_{false};
     std::atomic_bool mouse_active_{false};
+    std::atomic<std::uint64_t> generation_{0};
 
     // Guards the libvterm instance: the pump thread feeds it while input and capture touch it from the agent
     // thread.

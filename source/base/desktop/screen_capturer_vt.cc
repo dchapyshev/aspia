@@ -402,14 +402,13 @@ const Frame* ScreenCapturerVt::captureFrame(Error* error)
 
     const QSize size(screen_.cols * cell_width_, screen_.rows * cell_height_);
 
-    // An unchanged screen needs no re-render and reports an empty region so the encoder skips the frame.
+    // Re-render only when libvterm reported a change (generation) or the selection moved; otherwise report
+    // an empty region so the encoder skips the frame.
     if (frame_ && frame_->size() == size &&
-        screen_.cursor_col == last_screen_.cursor_col &&
-        screen_.cursor_row == last_screen_.cursor_row &&
+        screen_.generation == last_generation_ &&
         has_selection_ == last_has_selection_ &&
         selection_start_ == last_selection_start_ &&
-        selection_end_ == last_selection_end_ &&
-        screen_.cells == last_screen_.cells)
+        selection_end_ == last_selection_end_)
     {
         frame_->updatedRegion()->clear();
         *error = Error::SUCCEEDED;
@@ -429,7 +428,7 @@ const Frame* ScreenCapturerVt::captureFrame(Error* error)
     screen_rect_ = QRect(QPoint(0, 0), size);
     cursor_position_ = QPoint(screen_.cursor_col * cell_width_, screen_.cursor_row * cell_height_);
     *frame_->updatedRegion() = screen_rect_;
-    last_screen_ = screen_;
+    last_generation_ = screen_.generation;
     last_has_selection_ = has_selection_;
     last_selection_start_ = selection_start_;
     last_selection_end_ = selection_end_;
@@ -466,5 +465,5 @@ const QRect& ScreenCapturerVt::currentScreenRect() const
 //--------------------------------------------------------------------------------------------------
 void ScreenCapturerVt::reset()
 {
-    last_screen_ = VtScreen();
+    last_generation_ = 0;
 }
