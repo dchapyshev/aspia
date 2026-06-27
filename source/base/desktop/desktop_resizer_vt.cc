@@ -21,32 +21,30 @@
 #include <algorithm>
 
 #include "base/logging.h"
-#include "base/desktop/vt_session.h"
+#include "base/desktop/vt_monitors.h"
 
 namespace {
 
-// Terminal grids (columns x rows) offered to the client as selectable resolutions.
-const struct GridSize
+// Standard resolutions offered to the client. With the renderer's fixed cell these map to whole terminal
+// grids, so the on-screen size matches the selection exactly.
+const QSize kResolutions[] =
 {
-    int cols;
-    int rows;
-} kGrids[] =
-{
-    {  80, 25 }, { 100, 30 }, { 120, 40 }, { 132, 43 }, { 160, 50 }, { 200, 60 }, { 240, 67 }
+    QSize(640, 480), QSize(800, 600), QSize(1280, 720), QSize(1280, 800), QSize(1440, 900),
+    QSize(1600, 900), QSize(1920, 1080), QSize(1920, 1200), QSize(2560, 1440)
 };
 
 const int kMinCols = 40;
-const int kMaxCols = 240;
-const int kMinRows = 10;
-const int kMaxRows = 75;
-const int kDefaultCols = 80;
-const int kDefaultRows = 25;
+const int kMaxCols = 256;
+const int kMinRows = 15;
+const int kMaxRows = 80;
+const int kDefaultCols = 128; // 1280 x 720
+const int kDefaultRows = 36;
 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-DesktopResizerVt::DesktopResizerVt(VtSession* session, const QSize& cell_size)
-    : session_(session),
+DesktopResizerVt::DesktopResizerVt(VtMonitors* monitors, const QSize& cell_size)
+    : monitors_(monitors),
       cell_(cell_size)
 {
     if (cell_.width() <= 0)
@@ -59,32 +57,44 @@ DesktopResizerVt::DesktopResizerVt(VtSession* session, const QSize& cell_size)
 QList<QSize> DesktopResizerVt::supportedResolutions(ScreenId /* screen_id */)
 {
     QList<QSize> resolutions;
-    for (const GridSize& grid : kGrids)
-        resolutions.append(QSize(grid.cols * cell_.width(), grid.rows * cell_.height()));
+    for (const QSize& res : kResolutions)
+    {
+        const int cols = std::clamp(res.width() / cell_.width(), kMinCols, kMaxCols);
+        const int rows = std::clamp(res.height() / cell_.height(), kMinRows, kMaxRows);
+        const QSize snapped(cols * cell_.width(), rows * cell_.height());
+        if (!resolutions.contains(snapped))
+            resolutions.append(snapped);
+    }
     return resolutions;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DesktopResizerVt::setResolution(ScreenId /* screen_id */, const QSize& resolution)
+bool DesktopResizerVt::setResolution(ScreenId screen_id, const QSize& resolution)
 {
-    if (!session_ || resolution.width() <= 0 || resolution.height() <= 0)
+    VtSession* session = monitors_ ? monitors_->session(static_cast<int>(screen_id)) : nullptr;
+    if (!session || resolution.width() <= 0 || resolution.height() <= 0)
         return false;
 
     const int cols = std::clamp(resolution.width() / cell_.width(), kMinCols, kMaxCols);
     const int rows = std::clamp(resolution.height() / cell_.height(), kMinRows, kMaxRows);
 
-    return session_->resize(rows, cols);
+    return session->resize(rows, cols);
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopResizerVt::restoreResolution(ScreenId /* screen_id */)
+void DesktopResizerVt::restoreResolution(ScreenId screen_id)
 {
-    if (session_)
-        session_->resize(kDefaultRows, kDefaultCols);
+    VtSession* session = monitors_ ? monitors_->session(static_cast<int>(screen_id)) : nullptr;
+    if (session)
+        session->resize(kDefaultRows, kDefaultCols);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopResizerVt::restoreResulution()
 {
-    restoreResolution(0);
+    if (!monitors_)
+        return;
+
+    for (int i = 0; i < monitors_->count(); ++i)
+        restoreResolution(i);
 }

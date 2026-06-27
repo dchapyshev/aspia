@@ -23,14 +23,14 @@
 
 #include <QSize>
 
-class VtSession;
+class VtMonitors;
 
-// Resizes a VtSession's virtual terminal by mapping a requested resolution to a terminal grid (using the
-// renderer's character cell size) and applying it via VtSession::resize.
+// Resizes the virtual terminals (one per monitor) by mapping a requested resolution to a terminal grid
+// (using the renderer's character cell size) and applying it via VtSession::resize.
 class DesktopResizerVt final : public DesktopResizer
 {
 public:
-    DesktopResizerVt(VtSession* session, const QSize& cell_size);
+    DesktopResizerVt(VtMonitors* monitors, const QSize& cell_size);
     ~DesktopResizerVt() final = default;
 
     // DesktopResizer implementation.
@@ -40,7 +40,7 @@ public:
     void restoreResulution() final;
 
 private:
-    VtSession* session_;
+    VtMonitors* monitors_;
     QSize cell_;
 
     Q_DISABLE_COPY_MOVE(DesktopResizerVt)

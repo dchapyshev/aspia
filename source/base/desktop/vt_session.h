@@ -21,34 +21,97 @@
 
 #include <sys/types.h>
 
-// Owns a login session on a dedicated Linux virtual terminal. It allocates a free VT, starts a getty
-// (login prompt) on it, and injects keystrokes into it. The VT lives in the background - the foreground
-// console is untouched - while the kernel renders its text into /dev/vcsa<N> for ScreenCapturerVt to read.
-// This is the last-resort "give me a terminal" path used when no graphical capture works. Needs root.
+#include <atomic>
+#include <cstdint>
+#include <mutex>
+#include <thread>
+#include <vector>
+
+struct VTerm;
+struct VTermScreen;
+struct VTermState;
+
+// One rendered character cell: a code point and its resolved RGB colors (reverse video already folded in).
+struct VtCell
+{
+    char32_t ch = 0; // 0 = blank
+    std::uint8_t fg[3] = { 0, 0, 0 };
+    std::uint8_t bg[3] = { 0, 0, 0 };
+
+    bool operator==(const VtCell&) const = default;
+};
+
+// A snapshot of the terminal screen for the renderer.
+struct VtScreen
+{
+    int cols = 0;
+    int rows = 0;
+    int cursor_col = 0;
+    int cursor_row = 0;
+    std::vector<VtCell> cells; // rows * cols, row-major
+};
+
+// Non-printable keys the injector can send (mapped to the terminal's escape sequences by libvterm).
+enum class VtKey
+{
+    ENTER, TAB, BACKSPACE, ESCAPE, UP, DOWN, LEFT, RIGHT, INSERT, DELETE, HOME, END, PAGE_UP, PAGE_DOWN
+};
+
+// Owns a login session on a pseudo-terminal and emulates a terminal over it with libvterm. A login prompt
+// runs on the PTY slave (a fresh session asking for login and password); a pump thread feeds the PTY output
+// into libvterm, which maintains the screen the renderer reads. Keyboard and mouse input go through libvterm
+// too, so it produces the correct escape sequences (cursor-key modes, mouse reporting, ...) for the running
+// application. This is the last-resort "give me a terminal" path used when no graphical capture works.
+// Needs root (to spawn login).
 class VtSession
 {
 public:
     VtSession();
     ~VtSession();
 
-    // Allocates a free VT and starts a getty (login prompt) on it. Returns false on failure.
+    // Opens a PTY and starts a login prompt on it, plus the emulator. Returns false on failure.
     bool start();
 
-    // The allocated VT number, or -1 if not started.
-    int vtNumber() const { return vt_num_; }
+    // True once a terminal is running.
+    bool isRunning() const { return master_fd_ >= 0; }
 
-    // Resizes the virtual terminal grid to |rows| x |cols| (VT_RESIZE) and notifies the running program
-    // (TIOCSWINSZ -> SIGWINCH). Note: VT_RESIZE is kernel-global - it changes the grid of all VTs.
+    // Current terminal geometry in character cells.
+    bool consoleSize(int* cols, int* rows) const;
+
+    // Resizes the terminal grid and the PTY window (SIGWINCH to the running program).
     bool resize(int rows, int cols);
 
-    // Injects |length| bytes into the VT's input queue as if typed (TIOCSTI). No-op until started.
-    void sendInput(const char* data, int length);
+    // Copies the current screen into |out|. Returns false if no terminal is running.
+    bool captureScreen(VtScreen* out);
+
+    // Input. Mouse coordinates are in character cells (0-based; libvterm adds the protocol offset).
+    // Everything funnels through libvterm, which emits nothing when the application has not enabled the
+    // relevant mode.
+    void inputUnichar(char32_t ch, bool ctrl, bool alt);
+    void inputKey(VtKey key, bool shift, bool ctrl, bool alt);
+    void inputMouseMove(int col, int row);
+    void inputMouseButton(int button, bool pressed);
 
 private:
-    int console_fd_ = -1;
-    int tty_fd_ = -1;
-    int vt_num_ = -1;
+    void pumpLoop();
+    void writeMaster(const char* data, int length);
+    // Drains libvterm's pending output (query replies, key and mouse reports) to the PTY. Caller holds the
+    // lock.
+    void flushOutputLocked();
+
+    int master_fd_ = -1; // PTY master
     pid_t child_pid_ = -1;
+
+    VTerm* vt_ = nullptr;
+    VTermScreen* screen_ = nullptr;
+    VTermState* state_ = nullptr;
+
+    std::thread pump_thread_;
+    std::atomic_bool stop_{false};
+
+    // Guards the libvterm instance: the pump thread feeds it while input and capture touch it from the agent
+    // thread.
+    mutable std::mutex mutex_;
 
     VtSession(const VtSession&) = delete;
     VtSession& operator=(const VtSession&) = delete;

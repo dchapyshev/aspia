@@ -18,20 +18,62 @@
 
 #include "base/desktop/vt_session.h"
 
+#include <QByteArray>
+
+#include <vterm.h>
+
 #include <fcntl.h>
-#include <linux/vt.h>
 #include <signal.h>
+#include <stdlib.h>
 #include <sys/ioctl.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
-#include <QByteArray>
+#include <cerrno>
+#include <utility>
 
 #include "base/logging.h"
 
 namespace {
 
-const char kGettyPath[] = "/sbin/agetty";
+const char kLoginPath[] = "/bin/login";
+
+// Initial terminal size: a mid-range standard resolution (1280 x 720 with the renderer's 10x20 cell).
+const int kDefaultCols = 128;
+const int kDefaultRows = 36;
+
+//--------------------------------------------------------------------------------------------------
+VTermModifier modifiers(bool shift, bool ctrl, bool alt)
+{
+    int mod = VTERM_MOD_NONE;
+    if (shift) mod |= VTERM_MOD_SHIFT;
+    if (ctrl)  mod |= VTERM_MOD_CTRL;
+    if (alt)   mod |= VTERM_MOD_ALT;
+    return static_cast<VTermModifier>(mod);
+}
+
+//--------------------------------------------------------------------------------------------------
+VTermKey vtermKey(VtKey key)
+{
+    switch (key)
+    {
+        case VtKey::ENTER:     return VTERM_KEY_ENTER;
+        case VtKey::TAB:       return VTERM_KEY_TAB;
+        case VtKey::BACKSPACE: return VTERM_KEY_BACKSPACE;
+        case VtKey::ESCAPE:    return VTERM_KEY_ESCAPE;
+        case VtKey::UP:        return VTERM_KEY_UP;
+        case VtKey::DOWN:      return VTERM_KEY_DOWN;
+        case VtKey::LEFT:      return VTERM_KEY_LEFT;
+        case VtKey::RIGHT:     return VTERM_KEY_RIGHT;
+        case VtKey::INSERT:    return VTERM_KEY_INS;
+        case VtKey::DELETE:    return VTERM_KEY_DEL;
+        case VtKey::HOME:      return VTERM_KEY_HOME;
+        case VtKey::END:       return VTERM_KEY_END;
+        case VtKey::PAGE_UP:   return VTERM_KEY_PAGEUP;
+        case VtKey::PAGE_DOWN: return VTERM_KEY_PAGEDOWN;
+    }
+    return VTERM_KEY_NONE;
+}
 
 } // namespace
 
@@ -41,9 +83,11 @@ VtSession::VtSession() = default;
 //--------------------------------------------------------------------------------------------------
 VtSession::~VtSession()
 {
+    stop_.store(true);
+
     if (child_pid_ > 0)
     {
-        // Kill the getty/login/shell process group, then free the VT (the hang-up finishes any stragglers).
+        // Kill the login/shell process group; closing the slave makes the pump's master read return EOF.
         ::kill(-child_pid_, SIGKILL);
         ::kill(child_pid_, SIGKILL);
 
@@ -51,34 +95,35 @@ VtSession::~VtSession()
         ::waitpid(child_pid_, &status, 0);
     }
 
-    if (tty_fd_ >= 0)
-        ::close(tty_fd_);
+    if (pump_thread_.joinable())
+        pump_thread_.join();
 
-    if (console_fd_ >= 0)
-    {
-        if (vt_num_ > 0)
-            ::ioctl(console_fd_, VT_DISALLOCATE, vt_num_);
-        ::close(console_fd_);
-    }
+    if (vt_)
+        vterm_free(vt_);
+
+    if (master_fd_ >= 0)
+        ::close(master_fd_);
 }
 
 //--------------------------------------------------------------------------------------------------
 bool VtSession::start()
 {
-    console_fd_ = ::open("/dev/tty0", O_RDWR | O_NOCTTY | O_CLOEXEC);
-    if (console_fd_ < 0)
+    // Open a PTY: the login session runs on the slave, we drive the master.
+    master_fd_ = ::posix_openpt(O_RDWR | O_NOCTTY);
+    if (master_fd_ < 0 || ::grantpt(master_fd_) != 0 || ::unlockpt(master_fd_) != 0)
     {
-        PLOG(ERROR) << "Unable to open /dev/tty0";
+        PLOG(ERROR) << "Unable to open pty";
         return false;
     }
 
-    if (::ioctl(console_fd_, VT_OPENQRY, &vt_num_) != 0 || vt_num_ <= 0)
+    const char* slave_name = ::ptsname(master_fd_);
+    if (!slave_name)
     {
-        PLOG(ERROR) << "ioctl(VT_OPENQRY) failed";
+        PLOG(ERROR) << "ptsname failed";
         return false;
     }
 
-    const QByteArray tty_name = "tty" + QByteArray::number(vt_num_);
+    const QByteArray slave_path = slave_name;
 
     const pid_t pid = ::fork();
     if (pid < 0)
@@ -89,79 +134,244 @@ bool VtSession::start()
 
     if (pid == 0)
     {
-        // Child: become a session leader and let agetty open the VT, set it as the controlling terminal
-        // and run the login prompt. Without --noclear agetty clears the screen first, so a fresh
-        // connection shows a clean prompt instead of stale content left in the VT buffer.
+        // Child: own a new session on the PTY slave as the controlling terminal, then run the login prompt.
         ::setsid();
-        ::execl(kGettyPath, "agetty", tty_name.constData(), "linux", static_cast<char*>(nullptr));
+
+        const int slave = ::open(slave_path.constData(), O_RDWR);
+        if (slave < 0)
+            _exit(127);
+
+        ::ioctl(slave, TIOCSCTTY, 0);
+        ::dup2(slave, STDIN_FILENO);
+        ::dup2(slave, STDOUT_FILENO);
+        ::dup2(slave, STDERR_FILENO);
+        if (slave > STDERR_FILENO)
+            ::close(slave);
+        ::close(master_fd_);
+
+        ::setenv("TERM", "xterm", 1);
+        ::execl(kLoginPath, "login", static_cast<char*>(nullptr));
         _exit(127);
     }
 
     child_pid_ = pid;
 
-    // A separate handle to the VT, used to inject input with TIOCSTI (works on a background VT as root).
-    const QByteArray tty_path = "/dev/" + tty_name;
-    tty_fd_ = ::open(tty_path.constData(), O_RDWR | O_NOCTTY | O_CLOEXEC);
-    if (tty_fd_ < 0)
+    // Set up the terminal emulator.
+    vt_ = vterm_new(kDefaultRows, kDefaultCols);
+    if (!vt_)
     {
-        PLOG(ERROR) << "Unable to open" << tty_path.constData() << "for input";
+        LOG(ERROR) << "vterm_new failed";
+        return false;
     }
-    else
-    {
-        // Put the VT in UTF-8 mode so /dev/vcsu reports real Unicode code points for the renderer.
-        const char utf8_mode[] = "\x1b%G";
-        if (::write(tty_fd_, utf8_mode, sizeof(utf8_mode) - 1) < 0)
-            PLOG(ERROR) << "Unable to set VT UTF-8 mode";
-    }
+    vterm_set_utf8(vt_, 1);
 
-    LOG(INFO) << "VT login session started on" << tty_name.constData() << "(pid" << child_pid_ << ")";
+    screen_ = vterm_obtain_screen(vt_);
+    state_ = vterm_obtain_state(vt_);
+
+    vterm_screen_reset(screen_, 1);
+    vterm_screen_enable_altscreen(screen_, 1);
+
+    VTermColor fg;
+    VTermColor bg;
+    vterm_color_rgb(&fg, 0xcc, 0xcc, 0xcc);
+    vterm_color_rgb(&bg, 0x00, 0x00, 0x00);
+    vterm_state_set_default_colors(state_, &fg, &bg);
+
+    // Match the PTY window size to the emulator grid.
+    struct winsize ws = {};
+    ws.ws_row = kDefaultRows;
+    ws.ws_col = kDefaultCols;
+    ::ioctl(master_fd_, TIOCSWINSZ, &ws);
+
+    pump_thread_ = std::thread(&VtSession::pumpLoop, this);
+
+    LOG(INFO) << "VT login session started (pid" << child_pid_ << ")";
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool VtSession::consoleSize(int* cols, int* rows) const
+{
+    std::scoped_lock lock(mutex_);
+    if (!vt_)
+        return false;
+
+    int r = 0;
+    int c = 0;
+    vterm_get_size(vt_, &r, &c);
+
+    if (rows)
+        *rows = r;
+    if (cols)
+        *cols = c;
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 bool VtSession::resize(int rows, int cols)
 {
-    if (console_fd_ < 0)
-        return false;
-
-    // VT_RESIZE changes the cell grid of all virtual terminals (the kernel keeps a single geometry for
-    // them); harmless for the others while they are idle or in graphics mode.
-    struct vt_sizes sizes = {};
-    sizes.v_rows = static_cast<unsigned short>(rows);
-    sizes.v_cols = static_cast<unsigned short>(cols);
-
-    if (::ioctl(console_fd_, VT_RESIZE, &sizes) != 0)
     {
-        PLOG(ERROR) << "ioctl(VT_RESIZE) failed";
-        return false;
+        std::scoped_lock lock(mutex_);
+        if (!vt_)
+            return false;
+        vterm_set_size(vt_, rows, cols);
+        flushOutputLocked();
     }
 
-    // Tell the running program (getty/login/shell) the new size so it reflows (SIGWINCH).
-    if (tty_fd_ >= 0)
-    {
-        struct winsize ws = {};
-        ws.ws_row = static_cast<unsigned short>(rows);
-        ws.ws_col = static_cast<unsigned short>(cols);
-        if (::ioctl(tty_fd_, TIOCSWINSZ, &ws) != 0)
-            PLOG(ERROR) << "ioctl(TIOCSWINSZ) failed";
-    }
+    // Resize the PTY too so the running program reflows (SIGWINCH).
+    struct winsize ws = {};
+    ws.ws_row = static_cast<unsigned short>(rows);
+    ws.ws_col = static_cast<unsigned short>(cols);
+    if (::ioctl(master_fd_, TIOCSWINSZ, &ws) != 0)
+        PLOG(ERROR) << "ioctl(TIOCSWINSZ) failed";
 
     LOG(INFO) << "VT resized to" << cols << "x" << rows;
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-void VtSession::sendInput(const char* data, int length)
+bool VtSession::captureScreen(VtScreen* out)
 {
-    if (tty_fd_ < 0)
+    std::scoped_lock lock(mutex_);
+    if (!vt_)
+        return false;
+
+    int rows = 0;
+    int cols = 0;
+    vterm_get_size(vt_, &rows, &cols);
+
+    out->rows = rows;
+    out->cols = cols;
+    out->cells.assign(static_cast<size_t>(rows) * cols, VtCell());
+
+    for (int row = 0; row < rows; ++row)
+    {
+        for (int col = 0; col < cols; ++col)
+        {
+            VTermPos pos;
+            pos.row = row;
+            pos.col = col;
+
+            VTermScreenCell cell;
+            if (!vterm_screen_get_cell(screen_, pos, &cell))
+                continue;
+
+            VtCell& dst = out->cells[static_cast<size_t>(row) * cols + col];
+            dst.ch = cell.chars[0];
+
+            VTermColor fg = cell.fg;
+            VTermColor bg = cell.bg;
+            vterm_screen_convert_color_to_rgb(screen_, &fg);
+            vterm_screen_convert_color_to_rgb(screen_, &bg);
+
+            if (cell.attrs.reverse)
+                std::swap(fg, bg);
+
+            dst.fg[0] = fg.rgb.red;
+            dst.fg[1] = fg.rgb.green;
+            dst.fg[2] = fg.rgb.blue;
+            dst.bg[0] = bg.rgb.red;
+            dst.bg[1] = bg.rgb.green;
+            dst.bg[2] = bg.rgb.blue;
+        }
+    }
+
+    VTermPos cursor;
+    vterm_state_get_cursorpos(state_, &cursor);
+    out->cursor_row = cursor.row;
+    out->cursor_col = cursor.col;
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void VtSession::inputUnichar(char32_t ch, bool ctrl, bool alt)
+{
+    std::scoped_lock lock(mutex_);
+    if (!vt_)
+        return;
+    vterm_keyboard_unichar(vt_, ch, modifiers(false, ctrl, alt));
+    flushOutputLocked();
+}
+
+//--------------------------------------------------------------------------------------------------
+void VtSession::inputKey(VtKey key, bool shift, bool ctrl, bool alt)
+{
+    std::scoped_lock lock(mutex_);
+    if (!vt_)
+        return;
+    vterm_keyboard_key(vt_, vtermKey(key), modifiers(shift, ctrl, alt));
+    flushOutputLocked();
+}
+
+//--------------------------------------------------------------------------------------------------
+void VtSession::inputMouseMove(int col, int row)
+{
+    std::scoped_lock lock(mutex_);
+    if (!vt_)
+        return;
+    vterm_mouse_move(vt_, row, col, VTERM_MOD_NONE);
+    flushOutputLocked();
+}
+
+//--------------------------------------------------------------------------------------------------
+void VtSession::inputMouseButton(int button, bool pressed)
+{
+    std::scoped_lock lock(mutex_);
+    if (!vt_)
+        return;
+    vterm_mouse_button(vt_, button, pressed, VTERM_MOD_NONE);
+    flushOutputLocked();
+}
+
+//--------------------------------------------------------------------------------------------------
+void VtSession::pumpLoop()
+{
+    char buf[4096];
+
+    while (!stop_.load(std::memory_order_relaxed))
+    {
+        const ssize_t count = ::read(master_fd_, buf, sizeof(buf));
+        if (count > 0)
+        {
+            std::scoped_lock lock(mutex_);
+            vterm_input_write(vt_, buf, static_cast<size_t>(count));
+            flushOutputLocked();
+        }
+        else if (count < 0 && errno == EINTR)
+        {
+            continue;
+        }
+        else
+        {
+            break; // EOF (session ended) or error.
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void VtSession::flushOutputLocked()
+{
+    char out[1024];
+    size_t count;
+    while ((count = vterm_output_read(vt_, out, sizeof(out))) > 0)
+        writeMaster(out, static_cast<int>(count));
+}
+
+//--------------------------------------------------------------------------------------------------
+void VtSession::writeMaster(const char* data, int length)
+{
+    if (master_fd_ < 0)
         return;
 
-    for (int i = 0; i < length; ++i)
+    int offset = 0;
+    while (offset < length)
     {
-        if (::ioctl(tty_fd_, TIOCSTI, &data[i]) != 0)
-        {
-            PLOG(ERROR) << "ioctl(TIOCSTI) failed";
+        const ssize_t count = ::write(master_fd_, data + offset, length - offset);
+        if (count > 0)
+            offset += static_cast<int>(count);
+        else if (count < 0 && errno == EINTR)
+            continue;
+        else
             break;
-        }
     }
 }

@@ -124,6 +124,7 @@ if (LINUX)
     find_package(Qt6WaylandClient CONFIG REQUIRED)
     find_package(Qt6DBus CONFIG REQUIRED)
     find_package(ICU REQUIRED COMPONENTS uc)
+    find_package(freetype CONFIG REQUIRED)
 
     find_library(XFIXES_LIB NAMES libXfixes Xfixes REQUIRED)
     message(STATUS "XFixes library: ${XFIXES_LIB}")

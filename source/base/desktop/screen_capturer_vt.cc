@@ -21,10 +21,6 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-#include <fcntl.h>
-#include <unistd.h>
-
-#include <cerrno>
 #include <cstring>
 #include <unordered_map>
 #include <vector>
@@ -32,21 +28,16 @@
 #include "base/logging.h"
 #include "base/desktop/frame.h"
 #include "base/desktop/frame_aligned.h"
-#include "base/desktop/vt_session.h"
 
 namespace {
 
 const size_t kFrameAlignment = 32;
 const int kFontPixelSize = 16;
 
-// Standard VGA text palette, indexed by the 4-bit color value, stored as R, G, B.
-const quint8 kVgaPalette[16][3] =
-{
-    {   0,   0,   0 }, {   0,   0, 170 }, {   0, 170,   0 }, {   0, 170, 170 },
-    { 170,   0,   0 }, { 170,   0, 170 }, { 170,  85,   0 }, { 170, 170, 170 },
-    {  85,  85,  85 }, {  85,  85, 255 }, {  85, 255,  85 }, {  85, 255, 255 },
-    { 255,  85,  85 }, { 255,  85, 255 }, { 255, 255,  85 }, { 255, 255, 255 }
-};
+// Fixed character cell; the (smaller) glyph is rendered inside it. Round cell dimensions keep the rendered
+// size a clean multiple, so the selectable resolutions land on standard values.
+const int kCellWidth = 10;
+const int kCellHeight = 20;
 
 // Candidate monospace fonts, tried in order; the first that loads is used.
 const char* const kFontCandidates[] =
@@ -116,9 +107,9 @@ struct ScreenCapturerVt::FontData
 };
 
 //--------------------------------------------------------------------------------------------------
-ScreenCapturerVt::ScreenCapturerVt(VtSession* session, QObject* parent)
+ScreenCapturerVt::ScreenCapturerVt(VtMonitors* monitors, QObject* parent)
     : ScreenCapturer(Type::LINUX_VT, parent),
-      session_(session)
+      monitors_(monitors)
 {
     LOG(INFO) << "Ctor";
 }
@@ -131,9 +122,9 @@ ScreenCapturerVt::~ScreenCapturerVt()
 
 //--------------------------------------------------------------------------------------------------
 // static
-ScreenCapturerVt* ScreenCapturerVt::create(VtSession* session, QObject* parent)
+ScreenCapturerVt* ScreenCapturerVt::create(VtMonitors* monitors, QObject* parent)
 {
-    std::unique_ptr<ScreenCapturerVt> self(new ScreenCapturerVt(session, parent));
+    std::unique_ptr<ScreenCapturerVt> self(new ScreenCapturerVt(monitors, parent));
     if (!self->init())
         return nullptr;
     return self.release();
@@ -142,7 +133,7 @@ ScreenCapturerVt* ScreenCapturerVt::create(VtSession* session, QObject* parent)
 //--------------------------------------------------------------------------------------------------
 bool ScreenCapturerVt::init()
 {
-    if (!session_ || session_->vtNumber() < 0)
+    if (!monitors_ || monitors_->count() == 0)
     {
         LOG(ERROR) << "No VT session to capture";
         return false;
@@ -172,47 +163,42 @@ bool ScreenCapturerVt::init()
 
     FT_Set_Pixel_Sizes(font_->face, 0, kFontPixelSize);
 
-    // Cell metrics from the scaled face: monospace advance, line height and baseline (26.6 fixed-point).
-    FT_Load_Char(font_->face, 'M', FT_LOAD_DEFAULT);
-    cell_width_ = static_cast<int>(font_->face->glyph->advance.x >> 6);
-    cell_height_ = static_cast<int>(font_->face->size->metrics.height >> 6);
-    cell_ascent_ = static_cast<int>(font_->face->size->metrics.ascender >> 6);
-
-    if (cell_width_ <= 0 || cell_height_ <= 0)
-    {
-        LOG(ERROR) << "Invalid font metrics";
-        return false;
-    }
+    // Use a fixed cell; place the glyph on the baseline, vertically centered in the cell (26.6 fixed-point).
+    const int font_height = static_cast<int>(font_->face->size->metrics.height >> 6);
+    const int ascender = static_cast<int>(font_->face->size->metrics.ascender >> 6);
+    cell_width_ = kCellWidth;
+    cell_height_ = kCellHeight;
+    cell_ascent_ = (cell_height_ - font_height) / 2 + ascender;
 
     LOG(INFO) << "VT cell:" << cell_width_ << "x" << cell_height_;
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-void ScreenCapturerVt::renderConsole(const quint32* codepoints, const quint8* attributes, int rows,
-                                     int cols, int cursor_x, int cursor_y)
+void ScreenCapturerVt::renderConsole(const VtScreen& screen)
 {
     quint8* data = frame_->frameData();
     const int stride = frame_->stride();
+    const int rows = screen.rows;
+    const int cols = screen.cols;
     const int width = cols * cell_width_;
     const int height = rows * cell_height_;
 
-    // Pass 1: fill cell backgrounds.
+    // Pass 1: fill cell backgrounds (frame is BGRA, cell colors are RGB).
     for (int row = 0; row < rows; ++row)
     {
         for (int col = 0; col < cols; ++col)
         {
-            const quint8 attr = attributes[(row * cols + col) * 2 + 1];
-            const quint8* bg = kVgaPalette[(attr >> 4) & 0x07];
+            const VtCell& cell = screen.cells[static_cast<size_t>(row) * cols + col];
 
             for (int y = 0; y < cell_height_; ++y)
             {
                 quint8* line = data + (row * cell_height_ + y) * stride + col * cell_width_ * 4;
                 for (int x = 0; x < cell_width_; ++x)
                 {
-                    line[x * 4 + 0] = bg[2];
-                    line[x * 4 + 1] = bg[1];
-                    line[x * 4 + 2] = bg[0];
+                    line[x * 4 + 0] = cell.bg[2];
+                    line[x * 4 + 1] = cell.bg[1];
+                    line[x * 4 + 2] = cell.bg[0];
                     line[x * 4 + 3] = 255;
                 }
             }
@@ -224,16 +210,14 @@ void ScreenCapturerVt::renderConsole(const quint32* codepoints, const quint8* at
     {
         for (int col = 0; col < cols; ++col)
         {
-            const int index = row * cols + col;
-            const quint32 codepoint = codepoints[index];
-            if (codepoint == 0 || codepoint == ' ')
+            const VtCell& cell = screen.cells[static_cast<size_t>(row) * cols + col];
+            if (cell.ch == 0 || cell.ch == ' ')
                 continue;
 
-            const FontData::Glyph* glyph = font_->glyph(codepoint);
+            const FontData::Glyph* glyph = font_->glyph(cell.ch);
             if (!glyph || glyph->coverage.empty())
                 continue;
 
-            const quint8* fg = kVgaPalette[attributes[index * 2 + 1] & 0x0f];
             const int origin_x = col * cell_width_ + glyph->left;
             const int origin_y = row * cell_height_ + cell_ascent_ - glyph->top;
 
@@ -257,27 +241,29 @@ void ScreenCapturerVt::renderConsole(const quint32* codepoints, const quint8* at
                         continue;
 
                     quint8* pixel = line + px * 4;
-                    pixel[0] = static_cast<quint8>((fg[2] * alpha + pixel[0] * (255 - alpha)) / 255);
-                    pixel[1] = static_cast<quint8>((fg[1] * alpha + pixel[1] * (255 - alpha)) / 255);
-                    pixel[2] = static_cast<quint8>((fg[0] * alpha + pixel[2] * (255 - alpha)) / 255);
+                    pixel[0] = static_cast<quint8>((cell.fg[2] * alpha + pixel[0] * (255 - alpha)) / 255);
+                    pixel[1] = static_cast<quint8>((cell.fg[1] * alpha + pixel[1] * (255 - alpha)) / 255);
+                    pixel[2] = static_cast<quint8>((cell.fg[0] * alpha + pixel[2] * (255 - alpha)) / 255);
                 }
             }
         }
     }
 
     // Text cursor: a solid underline over the bottom two rows of its cell.
+    const int cursor_x = screen.cursor_col;
+    const int cursor_y = screen.cursor_row;
     if (cursor_x >= 0 && cursor_x < cols && cursor_y >= 0 && cursor_y < rows)
     {
-        const quint8* fg = kVgaPalette[attributes[(cursor_y * cols + cursor_x) * 2 + 1] & 0x0f];
+        const VtCell& cell = screen.cells[static_cast<size_t>(cursor_y) * cols + cursor_x];
 
         for (int y = cell_height_ - 2; y < cell_height_; ++y)
         {
             quint8* line = data + (cursor_y * cell_height_ + y) * stride + cursor_x * cell_width_ * 4;
             for (int x = 0; x < cell_width_; ++x)
             {
-                line[x * 4 + 0] = fg[2];
-                line[x * 4 + 1] = fg[1];
-                line[x * 4 + 2] = fg[0];
+                line[x * 4 + 0] = cell.fg[2];
+                line[x * 4 + 1] = cell.fg[1];
+                line[x * 4 + 2] = cell.fg[0];
                 line[x * 4 + 3] = 255;
             }
         }
@@ -287,7 +273,7 @@ void ScreenCapturerVt::renderConsole(const quint32* codepoints, const quint8* at
 //--------------------------------------------------------------------------------------------------
 int ScreenCapturerVt::screenCount()
 {
-    return 1;
+    return monitors_ ? monitors_->count() : 0;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -296,35 +282,39 @@ bool ScreenCapturerVt::screenList(ScreenList* screens)
     screens->screens.clear();
     screens->resolutions.clear();
 
-    Screen screen;
-    screen.id = 0;
-    screen.position = QPoint(0, 0);
-    screen.resolution = currentResolution();
-    screen.dpi = QPoint(96, 96);
-    screen.is_primary = true;
-    screens->screens.append(screen);
+    // One monitor per terminal, laid out left to right with each one's own resolution.
+    int offset_x = 0;
+    for (int i = 0; i < monitors_->count(); ++i)
+    {
+        VtSession* session = monitors_->session(i);
+
+        int cols = 0;
+        int rows = 0;
+        const QSize resolution = (session && session->consoleSize(&cols, &rows))
+            ? QSize(cols * cell_width_, rows * cell_height_) : QSize();
+
+        Screen screen;
+        screen.id = i;
+        screen.position = QPoint(offset_x, 0);
+        screen.resolution = resolution;
+        screen.dpi = QPoint(96, 96);
+        screen.is_primary = (i == 0);
+        screens->screens.append(screen);
+
+        offset_x += resolution.width();
+    }
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 QSize ScreenCapturerVt::currentResolution() const
 {
-    const int vt = session_ ? session_->vtNumber() : -1;
-    if (vt >= 0)
-    {
-        const QByteArray path = QByteArray("/dev/vcsa") + QByteArray::number(vt);
-        const int fd = ::open(path.constData(), O_RDONLY | O_CLOEXEC);
-        if (fd >= 0)
-        {
-            // Header: lines, columns, cursor column, cursor row.
-            quint8 header[4] = {};
-            const ssize_t count = ::read(fd, header, sizeof(header));
-            ::close(fd);
+    VtSession* session = monitors_ ? monitors_->activeSession() : nullptr;
 
-            if (count == static_cast<ssize_t>(sizeof(header)) && header[0] > 0 && header[1] > 0)
-                return QSize(header[1] * cell_width_, header[0] * cell_height_);
-        }
-    }
+    int cols = 0;
+    int rows = 0;
+    if (session && session->consoleSize(&cols, &rows))
+        return QSize(cols * cell_width_, rows * cell_height_);
 
     return screen_rect_.size();
 }
@@ -332,13 +322,19 @@ QSize ScreenCapturerVt::currentResolution() const
 //--------------------------------------------------------------------------------------------------
 bool ScreenCapturerVt::selectScreen(ScreenId screen_id)
 {
-    return screen_id == 0 || screen_id == kInvalidScreenId;
+    if (screen_id == kInvalidScreenId)
+        return true;
+    if (screen_id < 0 || screen_id >= monitors_->count())
+        return false;
+
+    monitors_->setActive(static_cast<int>(screen_id));
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 ScreenCapturer::ScreenId ScreenCapturerVt::currentScreen() const
 {
-    return 0;
+    return monitors_ ? monitors_->active() : 0;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -347,87 +343,20 @@ const Frame* ScreenCapturerVt::captureFrame(Error* error)
     DCHECK(error);
     *error = Error::TEMPORARY;
 
-    const int vt = session_ ? session_->vtNumber() : -1;
-    if (vt < 0)
+    VtSession* session = monitors_ ? monitors_->activeSession() : nullptr;
+    if (!session || !session->captureScreen(&screen_))
         return nullptr;
 
-    const QByteArray path = QByteArray("/dev/vcsa") + QByteArray::number(vt);
-    const int fd = ::open(path.constData(), O_RDONLY | O_CLOEXEC);
-    if (fd < 0)
+    if (screen_.rows <= 0 || screen_.cols <= 0)
         return nullptr;
 
-    // Header: lines, columns, cursor column, cursor row. The cells follow as (character, attribute).
-    quint8 header[4] = {};
-    if (::read(fd, header, sizeof(header)) != static_cast<ssize_t>(sizeof(header)))
-    {
-        ::close(fd);
-        return nullptr;
-    }
+    const QSize size(screen_.cols * cell_width_, screen_.rows * cell_height_);
 
-    const int rows = header[0];
-    const int cols = header[1];
-    const int cursor_x = header[2];
-    const int cursor_y = header[3];
-
-    if (rows <= 0 || cols <= 0)
-    {
-        ::close(fd);
-        return nullptr;
-    }
-
-    const int cells_size = rows * cols * 2;
-    QByteArray cells(cells_size, 0);
-    int received = 0;
-    while (received < cells_size)
-    {
-        const ssize_t count = ::read(fd, cells.data() + received, cells_size - received);
-        if (count > 0)
-            received += static_cast<int>(count);
-        else if (count < 0 && errno == EINTR)
-            continue;
-        else
-            break;
-    }
-    ::close(fd);
-
-    if (received != cells_size)
-        return nullptr;
-
-    // Unicode code points (4 bytes per cell, no header) from /dev/vcsu; the geometry comes from vcsa.
-    const QByteArray uni_path = QByteArray("/dev/vcsu") + QByteArray::number(vt);
-    const int uni_fd = ::open(uni_path.constData(), O_RDONLY | O_CLOEXEC);
-    if (uni_fd < 0)
-        return nullptr;
-
-    const int uni_size = rows * cols * 4;
-    QByteArray uni(uni_size, 0);
-    received = 0;
-    while (received < uni_size)
-    {
-        const ssize_t count = ::read(uni_fd, uni.data() + received, uni_size - received);
-        if (count > 0)
-            received += static_cast<int>(count);
-        else if (count < 0 && errno == EINTR)
-            continue;
-        else
-            break;
-    }
-    ::close(uni_fd);
-
-    if (received != uni_size)
-        return nullptr;
-
-    // Snapshot of geometry, content and cursor. An identical poll needs no re-render and reports an
-    // empty region so the encoder skips the unchanged frame.
-    QByteArray snapshot;
-    snapshot.reserve(static_cast<int>(sizeof(header)) + cells_size + uni_size);
-    snapshot.append(reinterpret_cast<const char*>(header), sizeof(header));
-    snapshot.append(cells);
-    snapshot.append(uni);
-
-    const QSize size(cols * cell_width_, rows * cell_height_);
-
-    if (frame_ && frame_->size() == size && snapshot == last_console_)
+    // An unchanged screen needs no re-render and reports an empty region so the encoder skips the frame.
+    if (frame_ && frame_->size() == size &&
+        screen_.cursor_col == last_screen_.cursor_col &&
+        screen_.cursor_row == last_screen_.cursor_row &&
+        screen_.cells == last_screen_.cells)
     {
         frame_->updatedRegion()->clear();
         *error = Error::SUCCEEDED;
@@ -442,13 +371,12 @@ const Frame* ScreenCapturerVt::captureFrame(Error* error)
         frame_->setCapturerType(static_cast<quint32>(type()));
     }
 
-    renderConsole(reinterpret_cast<const quint32*>(uni.constData()),
-                  reinterpret_cast<const quint8*>(cells.constData()), rows, cols, cursor_x, cursor_y);
+    renderConsole(screen_);
 
     screen_rect_ = QRect(QPoint(0, 0), size);
-    cursor_position_ = QPoint(cursor_x * cell_width_, cursor_y * cell_height_);
+    cursor_position_ = QPoint(screen_.cursor_col * cell_width_, screen_.cursor_row * cell_height_);
     *frame_->updatedRegion() = screen_rect_;
-    last_console_ = snapshot;
+    last_screen_ = screen_;
 
     *error = Error::SUCCEEDED;
     return frame_.get();
@@ -482,5 +410,5 @@ const QRect& ScreenCapturerVt::currentScreenRect() const
 //--------------------------------------------------------------------------------------------------
 void ScreenCapturerVt::reset()
 {
-    last_console_.clear();
+    last_screen_ = VtScreen();
 }

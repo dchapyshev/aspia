@@ -23,15 +23,15 @@
 
 #include "host/input_injector.h"
 
-class VtSession;
+class VtMonitors;
 
-// Feeds keystrokes into a VtSession's virtual terminal. Key events (USB HID codes) are translated to the
-// byte sequences a terminal expects and injected into the VT; mouse and touch input are ignored. This is
-// the input side of the VT console fallback, paired with ScreenCapturerVt.
+// Feeds input into the active virtual terminal. Key events (USB HID codes) and mouse events are handed to
+// libvterm, which produces the right escape sequences (and emits nothing for mouse unless the application
+// enabled mouse reporting). This is the input side of the VT console fallback, paired with ScreenCapturerVt.
 class InputInjectorVt final : public InputInjector
 {
 public:
-    explicit InputInjectorVt(std::shared_ptr<VtSession> session, QObject* parent = nullptr);
+    explicit InputInjectorVt(std::shared_ptr<VtMonitors> monitors, QObject* parent = nullptr);
     ~InputInjectorVt() final = default;
 
     // InputInjector implementation.
@@ -43,9 +43,15 @@ public:
     void injectTouchEvent(const proto::input::TouchEvent& event) final;
 
 private:
-    std::shared_ptr<VtSession> session_;
+    std::shared_ptr<VtMonitors> monitors_;
     bool shift_ = false;
     bool ctrl_ = false;
+    bool alt_ = false;
+
+    // Pixel size of the rendered terminal (from setScreenInfo) and the last button mask, used to map
+    // pointer coordinates to cells and to detect button press/release transitions.
+    QSize screen_size_;
+    quint32 last_buttons_ = 0;
 
     Q_DISABLE_COPY_MOVE(InputInjectorVt)
 };

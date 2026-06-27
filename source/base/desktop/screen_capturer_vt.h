@@ -19,28 +19,27 @@
 #ifndef BASE_DESKTOP_SCREEN_CAPTURER_VT_H
 #define BASE_DESKTOP_SCREEN_CAPTURER_VT_H
 
-#include <QByteArray>
 #include <QRect>
 
 #include <memory>
 
 #include "base/desktop/screen_capturer.h"
+#include "base/desktop/vt_monitors.h"
 
 class Frame;
-class VtSession;
 
-// Renders a Linux virtual terminal as a video frame. The kernel keeps the VT's screen content (characters
-// and VGA attributes) in /dev/vcsa<N>; this reads it and rasterizes the cell grid with a built-in VGA
-// font. It captures the VT owned by a VtSession (a dedicated background login terminal), so it needs no
+// Renders a set of Linux text terminals as a video frame, exposing them as switchable monitors. Each
+// VtSession runs a login shell on a pseudo-terminal and emulates the terminal with libvterm; this reads the
+// active terminal's character grid and rasterizes it with a monospace font (via FreeType). It needs no
 // compositor, GPU or portal - the last fallback when no graphical capturer works. The agent runs as root.
 class ScreenCapturerVt final : public ScreenCapturer
 {
 public:
-    explicit ScreenCapturerVt(VtSession* session, QObject* parent = nullptr);
+    explicit ScreenCapturerVt(VtMonitors* monitors, QObject* parent = nullptr);
     ~ScreenCapturerVt() final;
 
-    // Returns nullptr if |session| has no allocated VT.
-    static ScreenCapturerVt* create(VtSession* session, QObject* parent = nullptr);
+    // Returns nullptr if no terminal is available.
+    static ScreenCapturerVt* create(VtMonitors* monitors, QObject* parent = nullptr);
 
     // Pixel size of one character cell; used to map a target resolution to a terminal grid.
     QSize cellSize() const { return QSize(cell_width_, cell_height_); }
@@ -62,15 +61,13 @@ protected:
 
 private:
     bool init();
-    // Reads the VT's live geometry from /dev/vcsa and returns the rendered pixel size. Lets screenList
-    // report the current resolution directly (like desktop capturers query the OS), not a cached frame.
+    // Returns the live rendered pixel size (grid times cell). Lets screenList report the current resolution
+    // directly (like desktop capturers query the OS), not a cached frame.
     QSize currentResolution() const;
-    // Renders the cell grid into |frame_|: |codepoints| (Unicode from /dev/vcsu) drive the glyphs and
-    // |attributes| (from /dev/vcsa) drive the colors. Also draws the text cursor.
-    void renderConsole(const quint32* codepoints, const quint8* attributes, int rows, int cols,
-                       int cursor_x, int cursor_y);
+    // Rasterizes |screen| (cells, colors and cursor from libvterm) into |frame_|.
+    void renderConsole(const VtScreen& screen);
 
-    VtSession* session_;
+    VtMonitors* monitors_;
 
     // FreeType-backed monospace font (with a per-code-point glyph cache) and its cell metrics.
     struct FontData;
@@ -80,9 +77,10 @@ private:
     int cell_ascent_ = 0;
 
     std::unique_ptr<Frame> frame_;
-    // Previous /dev/vcsa snapshot; an unchanged read yields an empty updated region so idle consoles are
-    // not re-encoded every poll.
-    QByteArray last_console_;
+    // Working screen snapshot and the previous one; an unchanged snapshot yields an empty updated region so
+    // idle terminals are not re-encoded every poll.
+    VtScreen screen_;
+    VtScreen last_screen_;
 
     QRect screen_rect_;
     QPoint cursor_position_;

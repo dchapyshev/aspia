@@ -84,6 +84,7 @@ if (LINUX)
         screen_capturer_wlr.h
         screen_capturer_x11.cc
         screen_capturer_x11.h
+        vt_monitors.h
         vt_session.cc
         vt_session.h)
 endif()
