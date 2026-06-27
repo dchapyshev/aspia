@@ -27,6 +27,7 @@
 #include "common/desktop_session_constants.h"
 #include "proto/desktop_audio.h"
 #include "proto/desktop_channel.h"
+#include "proto/desktop_clipboard.h"
 #include "proto/desktop_input.h"
 #include "proto/desktop_power.h"
 #include "proto/desktop_screen.h"
@@ -67,6 +68,12 @@ void DesktopAgentClient::onScreenListData(const QByteArray& buffer)
 void DesktopAgentClient::onScreenTypeData(const QByteArray& buffer)
 {
     sendSessionMessage(proto::desktop::CHANNEL_ID_SCREEN, buffer, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgentClient::onClipboardData(const QByteArray& buffer)
+{
+    sendSessionMessage(proto::desktop::CHANNEL_ID_CLIPBOARD, buffer, true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -219,6 +226,18 @@ void DesktopAgentClient::readSessionMessage(quint8 channel_id, const QByteArray&
 
         if (message.has_screen())
             emit sig_selectScreen(message.screen());
+    }
+    else if (channel_id == proto::desktop::CHANNEL_ID_CLIPBOARD)
+    {
+        proto::clipboard::ClientToHost message;
+        if (!parse(buffer, &message))
+        {
+            CLOG(ERROR) << "Unable to parse clipboard message";
+            return;
+        }
+
+        if (message.has_event())
+            emit sig_clipboardEvent(message.event());
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_AUDIO)
     {

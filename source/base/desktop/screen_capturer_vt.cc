@@ -23,6 +23,7 @@
 
 #include <cstring>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 #include "base/logging.h"
@@ -184,21 +185,34 @@ void ScreenCapturerVt::renderConsole(const VtScreen& screen)
     const int width = cols * cell_width_;
     const int height = rows * cell_height_;
 
+    // Selected cells are drawn in reverse video (foreground and background colors swapped).
+    auto isSelected = [this](int row, int col) -> bool
+    {
+        if (!has_selection_)
+            return false;
+        const bool after_start = (row > selection_start_.y()) ||
+                                 (row == selection_start_.y() && col >= selection_start_.x());
+        const bool before_end = (row < selection_end_.y()) ||
+                                (row == selection_end_.y() && col <= selection_end_.x());
+        return after_start && before_end;
+    };
+
     // Pass 1: fill cell backgrounds (frame is BGRA, cell colors are RGB).
     for (int row = 0; row < rows; ++row)
     {
         for (int col = 0; col < cols; ++col)
         {
             const VtCell& cell = screen.cells[static_cast<size_t>(row) * cols + col];
+            const std::uint8_t* bg = isSelected(row, col) ? cell.fg : cell.bg;
 
             for (int y = 0; y < cell_height_; ++y)
             {
                 quint8* line = data + (row * cell_height_ + y) * stride + col * cell_width_ * 4;
                 for (int x = 0; x < cell_width_; ++x)
                 {
-                    line[x * 4 + 0] = cell.bg[2];
-                    line[x * 4 + 1] = cell.bg[1];
-                    line[x * 4 + 2] = cell.bg[0];
+                    line[x * 4 + 0] = bg[2];
+                    line[x * 4 + 1] = bg[1];
+                    line[x * 4 + 2] = bg[0];
                     line[x * 4 + 3] = 255;
                 }
             }
@@ -218,6 +232,7 @@ void ScreenCapturerVt::renderConsole(const VtScreen& screen)
             if (!glyph || glyph->coverage.empty())
                 continue;
 
+            const std::uint8_t* fg = isSelected(row, col) ? cell.bg : cell.fg;
             const int origin_x = col * cell_width_ + glyph->left;
             const int origin_y = row * cell_height_ + cell_ascent_ - glyph->top;
 
@@ -241,9 +256,9 @@ void ScreenCapturerVt::renderConsole(const VtScreen& screen)
                         continue;
 
                     quint8* pixel = line + px * 4;
-                    pixel[0] = static_cast<quint8>((cell.fg[2] * alpha + pixel[0] * (255 - alpha)) / 255);
-                    pixel[1] = static_cast<quint8>((cell.fg[1] * alpha + pixel[1] * (255 - alpha)) / 255);
-                    pixel[2] = static_cast<quint8>((cell.fg[0] * alpha + pixel[2] * (255 - alpha)) / 255);
+                    pixel[0] = static_cast<quint8>((fg[2] * alpha + pixel[0] * (255 - alpha)) / 255);
+                    pixel[1] = static_cast<quint8>((fg[1] * alpha + pixel[1] * (255 - alpha)) / 255);
+                    pixel[2] = static_cast<quint8>((fg[0] * alpha + pixel[2] * (255 - alpha)) / 255);
                 }
             }
         }
@@ -268,6 +283,41 @@ void ScreenCapturerVt::renderConsole(const VtScreen& screen)
             }
         }
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+std::string ScreenCapturerVt::selectionText(const QPoint& start, const QPoint& end)
+{
+    VtSession* session = monitors_ ? monitors_->activeSession() : nullptr;
+    if (!session || cell_width_ <= 0 || cell_height_ <= 0)
+        return {};
+
+    return session->selectionText(start.x() / cell_width_, start.y() / cell_height_,
+                                  end.x() / cell_width_, end.y() / cell_height_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenCapturerVt::setSelection(const QPoint& start, const QPoint& end)
+{
+    if (cell_width_ <= 0 || cell_height_ <= 0)
+        return;
+
+    QPoint a(start.x() / cell_width_, start.y() / cell_height_);
+    QPoint b(end.x() / cell_width_, end.y() / cell_height_);
+
+    // Order the endpoints in reading order (top-to-bottom, left-to-right).
+    if (b.y() < a.y() || (b.y() == a.y() && b.x() < a.x()))
+        std::swap(a, b);
+
+    selection_start_ = a;
+    selection_end_ = b;
+    has_selection_ = true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenCapturerVt::clearSelection()
+{
+    has_selection_ = false;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -356,6 +406,9 @@ const Frame* ScreenCapturerVt::captureFrame(Error* error)
     if (frame_ && frame_->size() == size &&
         screen_.cursor_col == last_screen_.cursor_col &&
         screen_.cursor_row == last_screen_.cursor_row &&
+        has_selection_ == last_has_selection_ &&
+        selection_start_ == last_selection_start_ &&
+        selection_end_ == last_selection_end_ &&
         screen_.cells == last_screen_.cells)
     {
         frame_->updatedRegion()->clear();
@@ -377,6 +430,9 @@ const Frame* ScreenCapturerVt::captureFrame(Error* error)
     cursor_position_ = QPoint(screen_.cursor_col * cell_width_, screen_.cursor_row * cell_height_);
     *frame_->updatedRegion() = screen_rect_;
     last_screen_ = screen_;
+    last_has_selection_ = has_selection_;
+    last_selection_start_ = selection_start_;
+    last_selection_end_ = selection_end_;
 
     *error = Error::SUCCEEDED;
     return frame_.get();

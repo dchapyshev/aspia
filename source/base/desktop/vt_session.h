@@ -24,6 +24,7 @@
 #include <atomic>
 #include <cstdint>
 #include <mutex>
+#include <string>
 #include <thread>
 #include <vector>
 
@@ -84,6 +85,10 @@ public:
     // Copies the current screen into |out|. Returns false if no terminal is running.
     bool captureScreen(VtScreen* out);
 
+    // Extracts the text covered by a selection (cell coordinates, inclusive) as UTF-8, with trailing spaces
+    // trimmed per line and rows joined by newlines.
+    std::string selectionText(int start_col, int start_row, int end_col, int end_row);
+
     // Input. Mouse coordinates are in character cells (0-based; libvterm adds the protocol offset).
     // Everything funnels through libvterm, which emits nothing when the application has not enabled the
     // relevant mode.
@@ -91,6 +96,14 @@ public:
     void inputKey(VtKey key, bool shift, bool ctrl, bool alt);
     void inputMouseMove(int col, int row);
     void inputMouseButton(int button, bool pressed);
+
+    // Writes |text| (UTF-8) to the terminal as if pasted.
+    void paste(const std::string& text);
+
+    // True while the running application has mouse reporting enabled.
+    bool mouseActive() const { return mouse_active_.load(std::memory_order_relaxed); }
+    // Internal: updated from the libvterm settermprop callback.
+    void updateMouseActive(bool active) { mouse_active_.store(active, std::memory_order_relaxed); }
 
 private:
     void pumpLoop();
@@ -108,6 +121,7 @@ private:
 
     std::thread pump_thread_;
     std::atomic_bool stop_{false};
+    std::atomic_bool mouse_active_{false};
 
     // Guards the libvterm instance: the pump thread feeds it while input and capture touch it from the agent
     // thread.

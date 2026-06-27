@@ -24,12 +24,15 @@
 
 #include <sys/types.h>
 
+#include <memory>
+
 #include "base/scoped_qpointer.h"
 #include "base/serialization.h"
 #include "base/desktop/capture_scheduler.h"
 #include "base/desktop/power_save_blocker.h"
 #include "base/desktop/screen_capturer.h"
 #include "proto/desktop_audio.h"
+#include "proto/desktop_clipboard.h"
 #include "proto/desktop_cursor.h"
 #include "proto/desktop_screen.h"
 #include "proto/desktop_video.h"
@@ -51,6 +54,7 @@ class InputInjector;
 class IpcChannel;
 class ScaleReducer;
 class VideoEncoder;
+class VtMonitors;
 
 class DesktopAgent final : public QObject
 {
@@ -77,6 +81,7 @@ private slots:
     void onInjectTouchEvent(const proto::input::TouchEvent& event);
 
     void onSelectScreen(const proto::screen::Screen& screen);
+    void onClipboardEvent(const proto::clipboard::Event& event);
     void onScreenListChanged(
         const ScreenCapturer::ScreenList& list, ScreenCapturer::ScreenId current);
     void onScreenTypeChanged(ScreenCapturer::ScreenType type, const QString& name);
@@ -99,8 +104,16 @@ private:
     // Chooses the Linux capture path: X11, or on Wayland a compositor source / KWin / wlr on a user
     // session, otherwise DRM/KMS + uinput.
     void setupLinuxCapture();
+    // Starts a dedicated background VT login terminal and routes capture + input to it. The last fallback
+    // when no graphical capture works. Returns false if the VT session could not be started.
+    bool setupVtFallback();
     // Switches to DRM/KMS + uinput after the compositor capture path failed to start.
     void fallbackToKms();
+    // Handles a VT terminal mouse event: Shift + left-drag selects and copies, middle-click pastes the
+    // stored clipboard. Returns true if the event was consumed and must not be injected as a mouse event.
+    bool handleTerminalMouse(const QPoint& pos, quint32 mask);
+    // Sends |text| (UTF-8) to the connected clients as a clipboard event.
+    void sendClipboardText(const std::string& text);
 #endif // defined(Q_OS_LINUX)
     ScreenCapturer::ScreenId defaultScreen();
     void selectScreen(ScreenCapturer::ScreenId screen_id, const QSize& resolution);
@@ -124,11 +137,22 @@ private:
     // screen, or no usable compositor screen-cast). COMPOSITOR: a PipeWire stream from a compositor
     // source (Mutter ScreenCast or the xdg-desktop-portal session, picked inside the capturer) with its
     // own input. KWIN: KDE KWin ScreenShot2 polling + uinput. WLR: wlroots zwlr_screencopy + uinput.
-    enum class CaptureMode { X11, KMS, COMPOSITOR, KWIN, WLR };
+    enum class CaptureMode { X11, KMS, COMPOSITOR, KWIN, WLR, VT };
     CaptureMode capture_mode_ = CaptureMode::KMS;
 
     // Active session user's uid (for COMPOSITOR/KWIN/WLR: reaching the session bus as that user).
     uid_t session_uid_ = 0;
+
+    // Owns the dedicated background login terminals (switchable monitors) when capture_mode_ is VT.
+    std::shared_ptr<VtMonitors> vt_monitors_;
+
+    // Terminal text selection (VT): Shift + left-drag selects, releasing copies into the clipboard.
+    bool terminal_shift_ = false;
+    bool terminal_selecting_ = false;
+    QPoint terminal_selection_start_;
+    // Last clipboard text from the client; pasted into the terminal on middle-click.
+    std::string terminal_clipboard_;
+    bool terminal_middle_down_ = false;
 #endif // defined(Q_OS_LINUX)
 
     ScopedQPointer<AudioCapturerWrapper> audio_capturer_;
@@ -164,7 +188,8 @@ private:
     Serializer<proto::screen::HostToClient,
                proto::cursor::HostToClient,
                proto::video::HostToClient,
-               proto::audio::HostToClient> outgoing_message_;
+               proto::audio::HostToClient,
+               proto::clipboard::HostToClient> outgoing_message_;
 
     bool is_paused_ = false;
     bool is_mouse_locked_ = false;

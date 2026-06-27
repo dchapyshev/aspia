@@ -33,6 +33,10 @@ namespace proto::audio {
 class Pause;
 } // namespace proto::audio
 
+namespace proto::clipboard {
+class Event;
+} // namespace proto::clipboard
+
 namespace proto::power {
 class Control;
 } // namespace proto::power
@@ -70,6 +74,7 @@ public:
     void onVideoData(const QByteArray& buffer, bool is_key_frame);
     void onScreenListData(const QByteArray& buffer);
     void onScreenTypeData(const QByteArray& buffer);
+    void onClipboardData(const QByteArray& buffer);
     void onCursorPositionData(const QByteArray& buffer);
     void onCursorShapeData(const QByteArray& buffer);
     void onAudioData(const QByteArray& buffer);
@@ -83,6 +88,7 @@ signals:
     void sig_injectMouseEvent(const proto::input::MouseEvent& event);
     void sig_injectTouchEvent(const proto::input::TouchEvent& event);
     void sig_selectScreen(const proto::screen::Screen& screen);
+    void sig_clipboardEvent(const proto::clipboard::Event& event);
     void sig_preferredSizeChanged(const QSize& size);
     void sig_keyFrameRequested();
     void sig_configured();

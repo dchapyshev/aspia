@@ -29,6 +29,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+#include <algorithm>
 #include <cerrno>
 #include <utility>
 
@@ -73,6 +74,14 @@ VTermKey vtermKey(VtKey key)
         case VtKey::PAGE_DOWN: return VTERM_KEY_PAGEDOWN;
     }
     return VTERM_KEY_NONE;
+}
+
+//--------------------------------------------------------------------------------------------------
+int onSetTermProp(VTermProp prop, VTermValue* value, void* user)
+{
+    if (prop == VTERM_PROP_MOUSE)
+        static_cast<VtSession*>(user)->updateMouseActive(value->number != VTERM_PROP_MOUSE_NONE);
+    return 1;
 }
 
 } // namespace
@@ -170,6 +179,12 @@ bool VtSession::start()
 
     vterm_screen_reset(screen_, 1);
     vterm_screen_enable_altscreen(screen_, 1);
+
+    // Track the application's mouse-reporting mode so the agent knows when a plain left-drag should select
+    // text. libvterm keeps a pointer to the callbacks, so the table must outlive the terminal.
+    static VTermScreenCallbacks screen_callbacks = {};
+    screen_callbacks.settermprop = onSetTermProp;
+    vterm_screen_set_callbacks(screen_, &screen_callbacks, this);
 
     VTermColor fg;
     VTermColor bg;
@@ -284,6 +299,57 @@ bool VtSession::captureScreen(VtScreen* out)
 }
 
 //--------------------------------------------------------------------------------------------------
+std::string VtSession::selectionText(int start_col, int start_row, int end_col, int end_row)
+{
+    std::scoped_lock lock(mutex_);
+    if (!vt_)
+        return {};
+
+    int rows = 0;
+    int cols = 0;
+    vterm_get_size(vt_, &rows, &cols);
+
+    // Order the endpoints top-to-bottom (and left-to-right within a single row).
+    if (start_row > end_row || (start_row == end_row && start_col > end_col))
+    {
+        std::swap(start_row, end_row);
+        std::swap(start_col, end_col);
+    }
+
+    start_row = std::clamp(start_row, 0, rows - 1);
+    end_row = std::clamp(end_row, 0, rows - 1);
+    start_col = std::clamp(start_col, 0, cols - 1);
+    end_col = std::clamp(end_col, 0, cols - 1);
+
+    std::string result;
+    std::vector<char> buffer(static_cast<size_t>(cols) * 4 + 1);
+
+    for (int row = start_row; row <= end_row; ++row)
+    {
+        const int from = (row == start_row) ? start_col : 0;
+        const int to = (row == end_row) ? end_col : cols - 1;
+
+        VTermRect rect;
+        rect.start_row = row;
+        rect.end_row = row + 1;
+        rect.start_col = from;
+        rect.end_col = to + 1;
+
+        const size_t count = vterm_screen_get_text(screen_, buffer.data(), buffer.size() - 1, rect);
+
+        std::string line(buffer.data(), count);
+        const size_t last = line.find_last_not_of(' ');
+        line = (last == std::string::npos) ? std::string() : line.substr(0, last + 1);
+
+        if (row != start_row)
+            result += '\n';
+        result += line;
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
 void VtSession::inputUnichar(char32_t ch, bool ctrl, bool alt)
 {
     std::scoped_lock lock(mutex_);
@@ -321,6 +387,13 @@ void VtSession::inputMouseButton(int button, bool pressed)
         return;
     vterm_mouse_button(vt_, button, pressed, VTERM_MOD_NONE);
     flushOutputLocked();
+}
+
+//--------------------------------------------------------------------------------------------------
+void VtSession::paste(const std::string& text)
+{
+    std::scoped_lock lock(mutex_);
+    writeMaster(text.data(), static_cast<int>(text.size()));
 }
 
 //--------------------------------------------------------------------------------------------------

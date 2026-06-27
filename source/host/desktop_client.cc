@@ -205,7 +205,10 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
         if (!config_.has_value() || !config_->clipboard())
             return;
 
+        // The host GUI handles the system clipboard for graphical sessions; the agent handles it for the
+        // VT terminal. Route to both - only the active one acts on it.
         emit sig_userMessage(net_channel_id, buffer);
+        sendIpcSessionMessage(net_channel_id, buffer);
     }
     else if (net_channel_id == proto::desktop::CHANNEL_ID_USER)
     {

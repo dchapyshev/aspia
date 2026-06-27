@@ -53,14 +53,19 @@
 #include <cstdlib>
 #include <cstring>
 
+#include "base/desktop/desktop_resizer_vt.h"
 #include "base/desktop/screen_capturer_kms.h"
 #include "base/desktop/screen_capturer_kwin.h"
 #include "base/desktop/screen_capturer_pipewire.h"
+#include "base/desktop/screen_capturer_vt.h"
 #include "base/desktop/screen_capturer_wlr.h"
 #include "base/desktop/screen_capturer_x11.h"
+#include "base/desktop/vt_monitors.h"
+#include "base/desktop/vt_session.h"
 #include "base/desktop/linux/wayland_compositor_source.h"
 #include "base/linux/libsystemd.h"
 #include "host/input_injector_uinput.h"
+#include "host/input_injector_vt.h"
 #include "host/input_injector_wayland.h"
 #include "host/input_injector_x11.h"
 #endif // defined(Q_OS_LINUX)
@@ -210,6 +215,13 @@ DesktopAgent::~DesktopAgent()
 //--------------------------------------------------------------------------------------------------
 void DesktopAgent::setupLinuxCapture()
 {
+    // TEMPORARY: force the VT console capturer for testing, bypassing all other backends.
+    if (setupVtFallback())
+        LOG(INFO) << "Capture mode: VT console (FORCED)";
+    else
+        LOG(ERROR) << "Unable to start VT console session";
+    return;
+
     // X11 (login screen or desktop): the X11 grabber and injector use the display passed in the env.
     if (qgetenv("ASPIA_DISPLAY") == "x11")
     {
@@ -287,17 +299,46 @@ void DesktopAgent::setupLinuxCapture()
 
     // No usable compositor screen-cast: capture below the compositor with DRM/KMS + uinput. A trial
     // capture confirms the scan-out framebuffer can actually be read before committing to this backend.
-    if (!ScreenCapturerKms::isAvailable())
+    if (ScreenCapturerKms::isAvailable())
     {
-        LOG(ERROR) << "No usable screen capturer is available for this session";
+        capture_mode_ = CaptureMode::KMS;
+        input_injector_ = InputInjectorUinput::create(this);
+        if (!input_injector_)
+            LOG(ERROR) << "Unable to create uinput input injector";
+        LOG(INFO) << "Capture mode: KMS";
         return;
     }
 
-    capture_mode_ = CaptureMode::KMS;
-    input_injector_ = InputInjectorUinput::create(this);
-    if (!input_injector_)
-        LOG(ERROR) << "Unable to create uinput input injector";
-    LOG(INFO) << "Capture mode: KMS";
+    // Nothing graphical is available (headless / text mode): start a dedicated VT login terminal and
+    // expose it. Keystrokes are injected straight into that VT (see InputInjectorVt).
+    if (setupVtFallback())
+    {
+        LOG(INFO) << "Capture mode: VT console";
+        return;
+    }
+
+    LOG(ERROR) << "No usable screen capturer is available for this session";
+}
+
+//--------------------------------------------------------------------------------------------------
+bool DesktopAgent::setupVtFallback()
+{
+    // Two terminals, exposed to the client as switchable monitors.
+    std::vector<std::shared_ptr<VtSession>> sessions;
+    for (int i = 0; i < 2; ++i)
+    {
+        auto session = std::make_shared<VtSession>();
+        if (session->start())
+            sessions.push_back(std::move(session));
+    }
+
+    if (sessions.empty())
+        return false;
+
+    vt_monitors_ = std::make_shared<VtMonitors>(std::move(sessions));
+    capture_mode_ = CaptureMode::VT;
+    input_injector_ = new InputInjectorVt(vt_monitors_, this);
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -592,6 +633,11 @@ void DesktopAgent::onInjectMouseEvent(const proto::input::MouseEvent& event)
     out_event.set_x(pos_x);
     out_event.set_y(pos_y);
 
+#if defined(Q_OS_LINUX)
+    if (capture_mode_ == CaptureMode::VT && handleTerminalMouse(QPoint(pos_x, pos_y), event.mask()))
+        return;
+#endif // defined(Q_OS_LINUX)
+
     input_injector_->injectMouseEvent(out_event);
 }
 
@@ -600,6 +646,16 @@ void DesktopAgent::onInjectKeyEvent(const proto::input::KeyEvent& event)
 {
     if (is_paused_ || is_keyboard_locked_ || !input_injector_)
         return;
+
+#if defined(Q_OS_LINUX)
+    if (capture_mode_ == CaptureMode::VT && (event.usb_keycode() >> 16) == 0x07)
+    {
+        const quint32 usage = event.usb_keycode() & 0xffff;
+        if (usage == 0xe1 || usage == 0xe5) // left / right shift
+            terminal_shift_ = (event.flags() & proto::input::KeyEvent::PRESSED) != 0;
+    }
+#endif // defined(Q_OS_LINUX)
+
     input_injector_->injectKeyEvent(event);
 }
 
@@ -633,6 +689,99 @@ void DesktopAgent::onSelectScreen(const proto::screen::Screen& screen)
 
     selectScreen(screen_id, resolution);
 }
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::onClipboardEvent(const proto::clipboard::Event& event)
+{
+#if defined(Q_OS_LINUX)
+    // Store the client's clipboard text; it is pasted into the terminal on middle-click. Other capture
+    // modes route the clipboard through the host GUI, not here.
+    if (capture_mode_ != CaptureMode::VT)
+        return;
+
+    if (event.mime_type() == "text/plain; charset=UTF-8")
+        terminal_clipboard_ = event.data();
+#endif // defined(Q_OS_LINUX)
+}
+
+#if defined(Q_OS_LINUX)
+//--------------------------------------------------------------------------------------------------
+bool DesktopAgent::handleTerminalMouse(const QPoint& pos, quint32 mask)
+{
+    ScreenCapturerVt* capturer = static_cast<ScreenCapturerVt*>(screen_capturer_.get());
+    if (!capturer)
+        return false;
+
+    // Middle-click pastes the stored clipboard text into the terminal (classic terminal behavior).
+    if (mask & proto::input::MouseEvent::MIDDLE_BUTTON)
+    {
+        if (!terminal_middle_down_)
+        {
+            terminal_middle_down_ = true;
+            VtSession* session = vt_monitors_ ? vt_monitors_->activeSession() : nullptr;
+            if (session && !terminal_clipboard_.empty())
+                session->paste(terminal_clipboard_);
+        }
+        return true;
+    }
+    terminal_middle_down_ = false;
+
+    const bool left = (mask & proto::input::MouseEvent::LEFT_BUTTON) != 0;
+
+    if (!terminal_selecting_)
+    {
+        // Like graphical terminals: a plain left-drag selects text while the application has no mouse
+        // reporting (e.g. a shell); once an application grabs the mouse (mc, vim), a left-drag goes to it
+        // and Shift is required to select text instead.
+        VtSession* session = vt_monitors_ ? vt_monitors_->activeSession() : nullptr;
+        const bool app_mouse = session && session->mouseActive();
+        if (!left || (app_mouse && !terminal_shift_))
+            return false;
+
+        terminal_selecting_ = true;
+        terminal_selection_start_ = pos;
+        capturer->setSelection(pos, pos);
+        return true;
+    }
+
+    if (left)
+    {
+        capturer->setSelection(terminal_selection_start_, pos);
+        return true;
+    }
+
+    // Left button released: finish the selection. Copy only if it actually spans more than one cell, so a
+    // plain click does not overwrite the clipboard.
+    terminal_selecting_ = false;
+    capturer->clearSelection();
+
+    const QSize cell = capturer->cellSize();
+    const bool moved = cell.width() > 0 && cell.height() > 0 &&
+        (terminal_selection_start_.x() / cell.width() != pos.x() / cell.width() ||
+         terminal_selection_start_.y() / cell.height() != pos.y() / cell.height());
+
+    if (moved)
+    {
+        const std::string text = capturer->selectionText(terminal_selection_start_, pos);
+        if (!text.empty())
+            sendClipboardText(text);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::sendClipboardText(const std::string& text)
+{
+    proto::clipboard::Event* event =
+        outgoing_message_.newMessage<proto::clipboard::HostToClient>().mutable_event();
+    event->set_mime_type("text/plain; charset=UTF-8");
+    event->set_data(text);
+
+    const QByteArray& buffer = outgoing_message_.serialize<proto::clipboard::HostToClient>();
+    for (auto* client : std::as_const(clients_))
+        client->onClipboardData(buffer);
+}
+#endif // defined(Q_OS_LINUX)
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgent::onScreenListChanged(
@@ -772,7 +921,19 @@ void DesktopAgent::onCaptureScreen()
         LOG(INFO) << "Screen count changed from" << count << "to" << screen_count_;
 
         screen_resizer_.reset();
-        screen_resizer_ = DesktopResizer::create();
+#if defined(Q_OS_LINUX)
+        if (capture_mode_ == CaptureMode::VT && vt_monitors_ && screen_capturer_)
+        {
+            // The VT console resizes via its own grid; map resolutions through the renderer's cell size.
+            screen_resizer_ = std::make_unique<DesktopResizerVt>(
+                vt_monitors_.get(),
+                static_cast<ScreenCapturerVt*>(screen_capturer_.get())->cellSize());
+        }
+        else
+#endif
+        {
+            screen_resizer_ = DesktopResizer::create();
+        }
 
         screen_count_ = count;
 
@@ -1011,6 +1172,7 @@ void DesktopAgent::startClient(const QString& ipc_channel_name)
     connect(client, &DesktopAgentClient::sig_injectTextEvent, this, &DesktopAgent::onInjectTextEvent);
     connect(client, &DesktopAgentClient::sig_injectTouchEvent, this, &DesktopAgent::onInjectTouchEvent);
     connect(client, &DesktopAgentClient::sig_selectScreen, this, &DesktopAgent::onSelectScreen);
+    connect(client, &DesktopAgentClient::sig_clipboardEvent, this, &DesktopAgent::onClipboardEvent);
     connect(client, &DesktopAgentClient::sig_preferredSizeChanged, this, &DesktopAgent::onPreferredSizeChanged);
     connect(client, &DesktopAgentClient::sig_keyFrameRequested, this, &DesktopAgent::onKeyFrameRequested);
     connect(client, &DesktopAgentClient::sig_configured, this, &DesktopAgent::onClientConfigured);
@@ -1052,6 +1214,14 @@ void DesktopAgent::selectCapturer(ScreenCapturer::Error last_error)
             screen_capturer_ = ScreenCapturerKms::create(this);
             if (!screen_capturer_)
                 LOG(ERROR) << "Unable to create KMS screen capturer";
+        }
+        break;
+
+        case CaptureMode::VT:
+        {
+            screen_capturer_ = ScreenCapturerVt::create(vt_monitors_.get(), this);
+            if (!screen_capturer_)
+                LOG(ERROR) << "Unable to create VT screen capturer";
         }
         break;
 
