@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/desktop/capture_scheduler.h"
+#include "host/capture_scheduler.h"
 
 #include <algorithm>
 

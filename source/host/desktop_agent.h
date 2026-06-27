@@ -28,8 +28,8 @@
 
 #include "base/scoped_qpointer.h"
 #include "base/serialization.h"
-#include "base/desktop/capture_scheduler.h"
 #include "base/desktop/power_save_blocker.h"
+#include "host/capture_scheduler.h"
 #include "host/screen_capturer.h"
 #include "proto/desktop_audio.h"
 #include "proto/desktop_clipboard.h"

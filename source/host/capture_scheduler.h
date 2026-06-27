@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_DESKTOP_CAPTURE_SCHEDULER_H
-#define BASE_DESKTOP_CAPTURE_SCHEDULER_H
+#ifndef HOST_CAPTURE_SCHEDULER_H
+#define HOST_CAPTURE_SCHEDULER_H
 
 #include <QtClassHelperMacros>
 #include <chrono>
@@ -46,4 +46,4 @@ private:
     Q_DISABLE_COPY_MOVE(CaptureScheduler)
 };
 
-#endif // BASE_DESKTOP_CAPTURE_SCHEDULER_H
+#endif // HOST_CAPTURE_SCHEDULER_H

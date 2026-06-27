@@ -17,8 +17,6 @@
 #
 
 collect_sources(SOURCE_BASE_DESKTOP
-    capture_scheduler.cc
-    capture_scheduler.h
     desktop_environment.cc
     desktop_environment.h
     diff_block_32bpp_c.cc

@@ -17,6 +17,8 @@
 #
 
 list(APPEND SOURCE_HOST_CORE
+    capture_scheduler.cc
+    capture_scheduler.h
     chat_client.cc
     chat_client.h
     client.cc
