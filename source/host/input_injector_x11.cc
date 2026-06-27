@@ -21,6 +21,7 @@
 #include <vector>
 
 #include "base/logging.h"
+#include "base/linux/libxtst.h"
 #include "base/linux/x11_headers.h"
 #include "common/keycode_converter.h"
 #include "proto/desktop_input.h"
@@ -39,10 +40,10 @@ bool ignoreXServerGrabs(Display* display, bool ignore)
     int major = 0;
     int minor = 0;
 
-    if (!XTestQueryExtension(display, &test_event_base, &test_error_base, &major, &minor))
+    if (!LibXtst::queryExtension(display, &test_event_base, &test_error_base, &major, &minor))
         return false;
 
-    XTestGrabControl(display, ignore);
+    LibXtst::grabControl(display, ignore);
     return true;
 }
 
@@ -125,7 +126,7 @@ void InputInjectorX11::injectKeyEvent(const proto::input::KeyEvent& event)
 
             // Key is already held down, so lift the key up to ensure this repeated press takes
             // effect.
-            XTestFakeKeyEvent(display_, keycode, X11_False, CurrentTime);
+            LibXtst::fakeKeyEvent(display_, keycode, X11_False, CurrentTime);
         }
 
         if (!isLockKey(keycode))
@@ -154,7 +155,7 @@ void InputInjectorX11::injectKeyEvent(const proto::input::KeyEvent& event)
         pressed_keys_.remove(keycode);
     }
 
-    XTestFakeKeyEvent(display_, keycode, is_pressed, CurrentTime);
+    LibXtst::fakeKeyEvent(display_, keycode, is_pressed, CurrentTime);
     XFlush(display_);
 }
 
@@ -211,38 +212,38 @@ void InputInjectorX11::injectMouseEvent(const proto::input::MouseEvent& event)
         last_mouse_pos_.setX(std::max(0, pos.x()));
         last_mouse_pos_.setY(std::max(0, pos.y()));
 
-        XTestFakeMotionEvent(display_, DefaultScreen(display_),
+        LibXtst::fakeMotionEvent(display_, DefaultScreen(display_),
                              last_mouse_pos_.x(), last_mouse_pos_.y(),
                              CurrentTime);
     }
 
     if (left_button_pressed_ != left_button_pressed)
     {
-        XTestFakeButtonEvent(display_, pointer_button_map_[0], left_button_pressed, CurrentTime);
+        LibXtst::fakeButtonEvent(display_, pointer_button_map_[0], left_button_pressed, CurrentTime);
         left_button_pressed_ = left_button_pressed;
     }
 
     if (middle_button_pressed_ != middle_button_pressed)
     {
-        XTestFakeButtonEvent(display_, pointer_button_map_[1], middle_button_pressed, CurrentTime);
+        LibXtst::fakeButtonEvent(display_, pointer_button_map_[1], middle_button_pressed, CurrentTime);
         middle_button_pressed_ = middle_button_pressed;
     }
 
     if (right_button_pressed_ != right_button_pressed)
     {
-        XTestFakeButtonEvent(display_, pointer_button_map_[2], right_button_pressed, CurrentTime);
+        LibXtst::fakeButtonEvent(display_, pointer_button_map_[2], right_button_pressed, CurrentTime);
         right_button_pressed_ = right_button_pressed;
     }
 
     if (back_button_pressed_ != back_button_pressed)
     {
-        XTestFakeButtonEvent(display_, pointer_button_map_[7], back_button_pressed, CurrentTime);
+        LibXtst::fakeButtonEvent(display_, pointer_button_map_[7], back_button_pressed, CurrentTime);
         back_button_pressed_ = back_button_pressed;
     }
 
     if (forward_button_pressed_ != forward_button_pressed)
     {
-        XTestFakeButtonEvent(display_, pointer_button_map_[8], forward_button_pressed, CurrentTime);
+        LibXtst::fakeButtonEvent(display_, pointer_button_map_[8], forward_button_pressed, CurrentTime);
         forward_button_pressed_ = forward_button_pressed;
     }
 
@@ -266,8 +267,8 @@ void InputInjectorX11::injectMouseEvent(const proto::input::MouseEvent& event)
         for (int i = 0; i < wheel_ticks; ++i)
         {
             // Generate a button-down and a button-up to simulate a wheel click.
-            XTestFakeButtonEvent(display_, wheel_button, true, CurrentTime);
-            XTestFakeButtonEvent(display_, wheel_button, false, CurrentTime);
+            LibXtst::fakeButtonEvent(display_, wheel_button, true, CurrentTime);
+            LibXtst::fakeButtonEvent(display_, wheel_button, false, CurrentTime);
         }
     }
 
@@ -468,7 +469,7 @@ void InputInjectorX11::releasePressedKeys()
         auto it = pressed_keys_.begin();
         while (it != pressed_keys_.end())
         {
-            XTestFakeKeyEvent(display_, *it, 0, CurrentTime);
+            LibXtst::fakeKeyEvent(display_, *it, 0, CurrentTime);
             XFlush(display_);
 
             it = pressed_keys_.erase(it);
@@ -479,19 +480,19 @@ void InputInjectorX11::releasePressedKeys()
     {
         if (left_button_pressed_)
         {
-            XTestFakeButtonEvent(display_, pointer_button_map_[0], 0, CurrentTime);
+            LibXtst::fakeButtonEvent(display_, pointer_button_map_[0], 0, CurrentTime);
             left_button_pressed_ = false;
         }
 
         if (middle_button_pressed_)
         {
-            XTestFakeButtonEvent(display_, pointer_button_map_[1], 0, CurrentTime);
+            LibXtst::fakeButtonEvent(display_, pointer_button_map_[1], 0, CurrentTime);
             middle_button_pressed_ = false;
         }
 
         if (right_button_pressed_)
         {
-            XTestFakeButtonEvent(display_, pointer_button_map_[2], 0, CurrentTime);
+            LibXtst::fakeButtonEvent(display_, pointer_button_map_[2], 0, CurrentTime);
             right_button_pressed_ = false;
         }
     }
@@ -587,6 +588,6 @@ void InputInjectorX11::injectUnicode(uint code_point)
     // Make sure the new mapping is in effect before the key is synthesized.
     XSync(display_, X11_False);
 
-    XTestFakeKeyEvent(display_, keycode, X11_True, CurrentTime);
-    XTestFakeKeyEvent(display_, keycode, X11_False, CurrentTime);
+    LibXtst::fakeKeyEvent(display_, keycode, X11_True, CurrentTime);
+    LibXtst::fakeKeyEvent(display_, keycode, X11_False, CurrentTime);
 }

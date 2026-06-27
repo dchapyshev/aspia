@@ -138,7 +138,6 @@ if (LINUX)
         ${XFIXES_LIB}
         ${XDAMAGE_LIB}
         ${XRANDR_LIB}
-        ${XTST_LIB}
         ${XI_LIB}
         ${X11_LIB}
         ${XEXT_LIB})

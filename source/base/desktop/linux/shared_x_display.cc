@@ -22,6 +22,7 @@
 
 #include <algorithm>
 
+#include "base/linux/libxtst.h"
 #include "base/linux/x11_headers.h"
 
 namespace {
@@ -201,8 +202,8 @@ void SharedXDisplay::ignoreXServerGrabs()
     int major = 0;
     int minor = 0;
 
-    if (XTestQueryExtension(display(), &test_event_base, &test_error_base, &major, &minor))
+    if (LibXtst::queryExtension(display(), &test_event_base, &test_error_base, &major, &minor))
     {
-        XTestGrabControl(display(), true);
+        LibXtst::grabControl(display(), true);
     }
 }

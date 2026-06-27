@@ -21,6 +21,8 @@ collect_sources(SOURCE_BASE_LINUX
     libdrm.h
     libsystemd.cc
     libsystemd.h
+    libxtst.cc
+    libxtst.h
     scoped_user_credentials.cc
     scoped_user_credentials.h
     session_dbus.cc
