@@ -29,6 +29,15 @@ public:
     explicit ClientTerminal(QObject* parent = nullptr);
     ~ClientTerminal() final;
 
+public slots:
+    void sendCredentials(const QString& user_name, const QString& password);
+    void sendInput(const QByteArray& data);
+    void sendResize(int columns, int rows);
+
+signals:
+    void sig_outputReceived(const QByteArray& data);
+    void sig_resultReceived(int result_code);
+
 protected:
     // Client implementation.
     void onStarted() final;

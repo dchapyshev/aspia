@@ -20,6 +20,4 @@ if (APPLE)
     add_subdirectory(portaudio)
 endif()
 
-if (LINUX)
-    add_subdirectory(libvterm)
-endif()
+add_subdirectory(libvterm)

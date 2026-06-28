@@ -17,5 +17,7 @@
 #
 
 collect_sources(SOURCE_CLIENT_CORE_DESKTOP_TERMINAL
+    terminal_widget.cc
+    terminal_widget.h
     terminal_window.cc
     terminal_window.h)

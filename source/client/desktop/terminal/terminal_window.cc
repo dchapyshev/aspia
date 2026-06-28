@@ -18,18 +18,25 @@
 
 #include "client/desktop/terminal/terminal_window.h"
 
-#include <QLabel>
 #include <QVBoxLayout>
 
 #include "base/logging.h"
 #include "client/client_terminal.h"
+#include "client/desktop/terminal/terminal_widget.h"
 #include "proto/peer.h"
 
 //--------------------------------------------------------------------------------------------------
 TerminalWindow::TerminalWindow(QWidget* parent)
-    : ClientWindow(proto::peer::SESSION_TYPE_TERMINAL, parent)
+    : ClientWindow(proto::peer::SESSION_TYPE_TERMINAL, parent),
+      terminal_widget_(new TerminalWidget(this))
 {
     LOG(INFO) << "Ctor";
+
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->addWidget(terminal_widget_);
+
+    setFocusProxy(terminal_widget_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -42,11 +49,26 @@ TerminalWindow::~TerminalWindow()
 Client* TerminalWindow::createClient()
 {
     LOG(INFO) << "Create client";
-    return new ClientTerminal();
+
+    ClientTerminal* client = new ClientTerminal();
+
+    connect(terminal_widget_, &TerminalWidget::sig_credentials,
+            client, &ClientTerminal::sendCredentials, Qt::QueuedConnection);
+    connect(terminal_widget_, &TerminalWidget::sig_input,
+            client, &ClientTerminal::sendInput, Qt::QueuedConnection);
+    connect(terminal_widget_, &TerminalWidget::sig_resize,
+            client, &ClientTerminal::sendResize, Qt::QueuedConnection);
+
+    connect(client, &ClientTerminal::sig_outputReceived,
+            terminal_widget_, &TerminalWidget::writeOutput, Qt::QueuedConnection);
+    connect(client, &ClientTerminal::sig_resultReceived,
+            terminal_widget_, &TerminalWidget::onResult, Qt::QueuedConnection);
+
+    return client;
 }
 
 //--------------------------------------------------------------------------------------------------
 void TerminalWindow::onInternalReset()
 {
-    // TODO
+    // Nothing.
 }

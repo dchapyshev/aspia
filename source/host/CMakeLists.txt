@@ -73,6 +73,8 @@ list(APPEND SOURCE_HOST_CORE
     terminal_agent_main.h
     terminal_client.cc
     terminal_client.h
+    terminal_process.cc
+    terminal_process.h
     udp_attempt.cc
     udp_attempt.h
     user_session_agent.cc
@@ -94,7 +96,9 @@ if (WIN32)
         screen_capturer_gdi.cc
         screen_capturer_gdi.h
         screen_capturer_win.cc
-        screen_capturer_win.h)
+        screen_capturer_win.h
+        terminal_process_win.cc
+        terminal_process_win.h)
 endif()
 
 if (LINUX)
@@ -124,7 +128,9 @@ if (LINUX)
         screen_capturer_wlr.cc
         screen_capturer_wlr.h
         screen_capturer_x11.cc
-        screen_capturer_x11.h)
+        screen_capturer_x11.h
+        terminal_process_unix.cc
+        terminal_process_unix.h)
 endif()
 
 if (APPLE)
@@ -198,6 +204,11 @@ if (LINUX OR APPLE)
     # PAM is used to validate operating system credentials for terminal sessions.
     find_library(PAM_LIB NAMES pam REQUIRED)
     target_link_libraries(aspia_host_core PRIVATE ${PAM_LIB})
+endif()
+
+if (LINUX)
+    # forkpty() for terminal sessions lives in libutil.
+    target_link_libraries(aspia_host_core PRIVATE util)
 endif()
 
 if (LINUX)

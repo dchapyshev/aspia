@@ -21,6 +21,8 @@
 
 #include "client/desktop/client_window.h"
 
+class TerminalWidget;
+
 class TerminalWindow final : public ClientWindow
 {
     Q_OBJECT
@@ -35,6 +37,8 @@ protected:
     void onInternalReset() final;
 
 private:
+    TerminalWidget* terminal_widget_ = nullptr;
+
     Q_DISABLE_COPY_MOVE(TerminalWindow)
 };
 

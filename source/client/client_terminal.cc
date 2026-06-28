@@ -19,6 +19,9 @@
 #include "client/client_terminal.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
+#include "proto/peer.h"
+#include "proto/terminal.h"
 
 //--------------------------------------------------------------------------------------------------
 ClientTerminal::ClientTerminal(QObject* parent)
@@ -34,13 +37,53 @@ ClientTerminal::~ClientTerminal()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientTerminal::onStarted()
+void ClientTerminal::sendCredentials(const QString& user_name, const QString& password)
 {
-    CLOG(INFO) << "Terminal session started";
+    proto::terminal::ClientToHost message;
+    proto::terminal::Credentials* credentials = message.mutable_credentials();
+    credentials->set_user_name(user_name.toStdString());
+    credentials->set_password(password.toStdString());
+    sendMessage(proto::peer::CHANNEL_ID_0, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientTerminal::onMessageReceived(quint8 /* channel_id */, const QByteArray& /* buffer */)
+void ClientTerminal::sendInput(const QByteArray& data)
 {
-    // TODO
+    proto::terminal::ClientToHost message;
+    message.mutable_data()->set_data(std::string(data.constData(), data.size()));
+    sendMessage(proto::peer::CHANNEL_ID_0, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientTerminal::sendResize(int columns, int rows)
+{
+    proto::terminal::ClientToHost message;
+    proto::terminal::Resize* resize = message.mutable_resize();
+    resize->set_columns(columns);
+    resize->set_rows(rows);
+    sendMessage(proto::peer::CHANNEL_ID_0, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientTerminal::onStarted()
+{
+    CLOG(INFO) << "Terminal session started";
+    emit sig_showSessionWindow();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientTerminal::onMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
+{
+    proto::terminal::HostToClient message;
+    if (!parse(buffer, &message))
+    {
+        CLOG(ERROR) << "Unable to parse message";
+        return;
+    }
+
+    if (message.has_data())
+        emit sig_outputReceived(QByteArray::fromStdString(message.data().data()));
+
+    if (message.has_result())
+        emit sig_resultReceived(message.result().code());
 }

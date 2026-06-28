@@ -104,6 +104,7 @@ set(THIRD_PARTY_LIBS
     miniupnpc::miniupnpc
     unofficial::nayuki-qr-code-generator::nayuki-qr-code-generator
     unofficial::sqlite3::sqlite3
+    vterm
     yuv)
 
 if (LINUX OR APPLE)
@@ -111,7 +112,7 @@ if (LINUX OR APPLE)
 endif()
 
 if (LINUX)
-    list(APPEND THIRD_PARTY_LIBS freetype vterm)
+    list(APPEND THIRD_PARTY_LIBS freetype)
 endif()
 
 include_directories(${PROJECT_SOURCE_DIR}/source ${PROJECT_BINARY_DIR}/source)

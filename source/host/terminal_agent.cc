@@ -21,7 +21,17 @@
 #include <QCoreApplication>
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/ipc/ipc_channel.h"
+#include "host/terminal_process.h"
+#include "proto/terminal.h"
+
+namespace {
+
+const int kDefaultColumns = 80;
+const int kDefaultRows = 24;
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 TerminalAgent::TerminalAgent(QObject* parent)
@@ -55,6 +65,23 @@ void TerminalAgent::start(const QString& channel_id)
 void TerminalAgent::onIpcConnected()
 {
     ipc_channel_->setPaused(false);
+
+    terminal_process_ = TerminalProcess::create(this);
+    if (!terminal_process_)
+    {
+        LOG(ERROR) << "Terminal sessions are not supported on this system";
+        QCoreApplication::quit();
+        return;
+    }
+
+    connect(terminal_process_, &TerminalProcess::sig_output, this, &TerminalAgent::onPtyOutput);
+    connect(terminal_process_, &TerminalProcess::sig_finished, this, &TerminalAgent::onPtyFinished);
+
+    if (!terminal_process_->start(kDefaultColumns, kDefaultRows))
+    {
+        LOG(ERROR) << "Unable to start terminal process";
+        QCoreApplication::quit();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -73,7 +100,39 @@ void TerminalAgent::onIpcErrorOccurred()
 
 //--------------------------------------------------------------------------------------------------
 void TerminalAgent::onIpcMessageReceived(
-    quint32 /* ipc_channel_id */, const QByteArray& /* buffer */, bool /* reliable */)
+    quint32 /* ipc_channel_id */, const QByteArray& buffer, bool /* reliable */)
 {
-    // TODO
+    if (!terminal_process_)
+        return;
+
+    proto::terminal::ClientToHost message;
+    if (!parse(buffer, &message))
+    {
+        LOG(ERROR) << "Unable to parse message";
+        return;
+    }
+
+    if (message.has_data())
+        terminal_process_->writeInput(QByteArray::fromStdString(message.data().data()));
+
+    if (message.has_resize())
+        terminal_process_->resize(message.resize().columns(), message.resize().rows());
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalAgent::onPtyOutput(const QByteArray& data)
+{
+    if (!ipc_channel_)
+        return;
+
+    proto::terminal::HostToClient message;
+    message.mutable_data()->set_data(std::string(data.constData(), data.size()));
+    ipc_channel_->send(0, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalAgent::onPtyFinished()
+{
+    LOG(INFO) << "Terminal process finished";
+    QCoreApplication::quit();
 }

@@ -23,6 +23,7 @@
 #include <QString>
 
 class IpcChannel;
+class TerminalProcess;
 
 class TerminalAgent final : public QObject
 {
@@ -40,8 +41,12 @@ private slots:
     void onIpcErrorOccurred();
     void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer, bool reliable);
 
+    void onPtyOutput(const QByteArray& data);
+    void onPtyFinished();
+
 private:
     IpcChannel* ipc_channel_ = nullptr;
+    TerminalProcess* terminal_process_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(TerminalAgent)
 };

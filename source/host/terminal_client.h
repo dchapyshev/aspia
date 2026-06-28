@@ -19,6 +19,8 @@
 #ifndef HOST_TERMINAL_CLIENT_H
 #define HOST_TERMINAL_CLIENT_H
 
+#include <QList>
+
 #include "base/scoped_qpointer.h"
 #include "host/client.h"
 
@@ -62,6 +64,10 @@ private:
 
     QTimer* attach_timer_ = nullptr;
     bool agent_launched_ = false;
+    bool finished_ = false;
+
+    // Client messages that arrived after the agent was launched but before its IPC channel connected.
+    QList<QByteArray> pending_to_agent_;
 
     Q_DISABLE_COPY_MOVE(TerminalClient)
 };

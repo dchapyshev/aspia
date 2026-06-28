@@ -27,6 +27,9 @@
 #include "base/win/scoped_object.h"
 #include "base/win/security_helpers.h"
 
+#include <vector>
+
+#include <AclApi.h>
 #include <UserEnv.h>
 #endif // defined(Q_OS_WINDOWS)
 
@@ -191,6 +194,100 @@ bool launchAgentAsUser(const QString& user_name, const QString& agent_path, cons
 
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
+bool addExplicitAce(HANDLE object, PSID sid, DWORD access, DWORD inheritance)
+{
+    PACL old_dacl = nullptr;
+    PSECURITY_DESCRIPTOR descriptor = nullptr;
+    if (GetSecurityInfo(object, SE_WINDOW_OBJECT, DACL_SECURITY_INFORMATION, nullptr, nullptr,
+                        &old_dacl, nullptr, &descriptor) != ERROR_SUCCESS)
+    {
+        PLOG(ERROR) << "GetSecurityInfo failed";
+        return false;
+    }
+
+    EXPLICIT_ACCESSW entry;
+    memset(&entry, 0, sizeof(entry));
+    entry.grfAccessPermissions = access;
+    entry.grfAccessMode = GRANT_ACCESS;
+    entry.grfInheritance = inheritance;
+    entry.Trustee.TrusteeForm = TRUSTEE_IS_SID;
+    entry.Trustee.TrusteeType = TRUSTEE_IS_USER;
+    entry.Trustee.ptstrName = reinterpret_cast<LPWSTR>(sid);
+
+    bool result = false;
+
+    PACL new_dacl = nullptr;
+    if (SetEntriesInAclW(1, &entry, old_dacl, &new_dacl) == ERROR_SUCCESS)
+    {
+        result = SetSecurityInfo(object, SE_WINDOW_OBJECT, DACL_SECURITY_INFORMATION, nullptr,
+                                 nullptr, new_dacl, nullptr) == ERROR_SUCCESS;
+        if (new_dacl)
+            LocalFree(new_dacl);
+    }
+
+    LocalFree(descriptor);
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Grants the target user access to the interactive window station and its default desktop. Without
+// this a process launched under a user other than the one owning the console fails to initialize.
+bool grantWindowStationAccess(HANDLE token)
+{
+    DWORD length = 0;
+    GetTokenInformation(token, TokenUser, nullptr, 0, &length);
+    if (length == 0)
+        return false;
+
+    std::vector<char> buffer(length);
+    if (!GetTokenInformation(token, TokenUser, buffer.data(), length, &length))
+    {
+        PLOG(ERROR) << "GetTokenInformation failed";
+        return false;
+    }
+
+    PSID sid = reinterpret_cast<TOKEN_USER*>(buffer.data())->User.Sid;
+
+    HWINSTA station = OpenWindowStationW(L"winsta0", FALSE, READ_CONTROL | WRITE_DAC);
+    if (!station)
+    {
+        PLOG(ERROR) << "OpenWindowStationW failed";
+        return false;
+    }
+
+    HWINSTA previous_station = GetProcessWindowStation();
+    SetProcessWindowStation(station);
+    HDESK desktop = OpenDesktopW(L"default", 0, FALSE, READ_CONTROL | WRITE_DAC);
+    SetProcessWindowStation(previous_station);
+
+    bool result = true;
+
+    // First ACE is inheritable (flows to desktops); the second one applies to the station itself.
+    if (!addExplicitAce(station, sid, GENERIC_ALL,
+                        CONTAINER_INHERIT_ACE | INHERIT_ONLY_ACE | OBJECT_INHERIT_ACE) ||
+        !addExplicitAce(station, sid, WINSTA_ALL_ACCESS | STANDARD_RIGHTS_REQUIRED,
+                        NO_PROPAGATE_INHERIT_ACE))
+    {
+        result = false;
+    }
+
+    if (desktop)
+    {
+        if (!addExplicitAce(desktop, sid, GENERIC_ALL, NO_PROPAGATE_INHERIT_ACE))
+            result = false;
+        CloseDesktop(desktop);
+    }
+    else
+    {
+        PLOG(ERROR) << "OpenDesktopW failed";
+        result = false;
+    }
+
+    CloseWindowStation(station);
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
 std::wstring createEnvironment(HANDLE token, const QString& name, const QString& value)
 {
     void* environment = nullptr;
@@ -337,6 +434,11 @@ void TerminalClient::onIpcNewConnection()
 
     sendResult(proto::terminal::Result::CODE_SUCCESS);
 
+    // Flush messages that arrived while the agent was starting up (e.g. the initial resize).
+    for (const QByteArray& message : std::as_const(pending_to_agent_))
+        ipc_channel_->send(0, message);
+    pending_to_agent_.clear();
+
     CLOG(INFO) << "Terminal agent is connected";
 }
 
@@ -376,14 +478,13 @@ void TerminalClient::onMessage(quint8 /* tcp_channel_id */, const QByteArray& bu
         if (!parse(buffer, &message))
         {
             CLOG(ERROR) << "Unable to parse message";
-            onError(FROM_HERE);
             return;
         }
 
         if (!message.has_credentials())
         {
-            CLOG(ERROR) << "Credentials expected as the first message";
-            onError(FROM_HERE);
+            // Input or resize messages may arrive before authentication completes (the client sends
+            // the initial resize right after the credentials). Ignore them until the agent starts.
             return;
         }
 
@@ -393,8 +494,10 @@ void TerminalClient::onMessage(quint8 /* tcp_channel_id */, const QByteArray& bu
         if (!launchAgent(QString::fromStdString(credentials.user_name()),
                          QString::fromStdString(credentials.password()), ipc_channel_id))
         {
+            // Keep the session alive so the user can try again with different credentials.
+            CLOG(WARNING) << "Authentication failed";
             sendResult(proto::terminal::Result::CODE_AUTHENTICATION_ERROR);
-            onError(FROM_HERE);
+            ipc_server_.reset();
             return;
         }
 
@@ -407,7 +510,8 @@ void TerminalClient::onMessage(quint8 /* tcp_channel_id */, const QByteArray& bu
 
     if (!ipc_channel_)
     {
-        CLOG(ERROR) << "IPC channel is not connected";
+        // The agent is still starting up; queue the message until its IPC channel connects.
+        pending_to_agent_.append(buffer);
         return;
     }
 
@@ -455,6 +559,9 @@ bool TerminalClient::launchAgent(
         CLOG(ERROR) << "Unable to start IPC server";
         return false;
     }
+
+    if (!grantWindowStationAccess(user_token))
+        CLOG(WARNING) << "Unable to grant window station access; the agent may fail to start";
 
     CLOG(INFO) << "Starting terminal agent process";
     if (!startProcessWithToken(user_token, agentFilePath(), ipc_channel_id))
@@ -530,6 +637,10 @@ void TerminalClient::sendResult(proto::terminal::Result::Code code)
 //--------------------------------------------------------------------------------------------------
 void TerminalClient::onError(const Location& location)
 {
+    if (finished_)
+        return;
+    finished_ = true;
+
     CLOG(ERROR) << "Error occurred (" << location << ")";
 
     attach_timer_->stop();
