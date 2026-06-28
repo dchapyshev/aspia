@@ -88,6 +88,7 @@ UserDialog::UserDialog(qint64 entry_id, QWidget* parent)
     add_session(proto::peer::SESSION_TYPE_FILE_TRANSFER);
     add_session(proto::peer::SESSION_TYPE_SYSTEM_INFO);
     add_session(proto::peer::SESSION_TYPE_CHAT);
+    add_session(proto::peer::SESSION_TYPE_TERMINAL);
 
     connect(ui->button_check_all, &QPushButton::clicked, this, &UserDialog::onCheckAllButtonPressed);
     connect(ui->button_check_none, &QPushButton::clicked, this, &UserDialog::onCheckNoneButtonPressed);

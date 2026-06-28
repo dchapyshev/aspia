@@ -41,6 +41,9 @@ const char* sessionTypeToString(proto::peer::SessionType session_type)
         case proto::peer::SESSION_TYPE_CHAT:
             return QT_TRANSLATE_NOOP("SessionType", "Chat");
 
+        case proto::peer::SESSION_TYPE_TERMINAL:
+            return QT_TRANSLATE_NOOP("SessionType", "Terminal");
+
         default:
             return "";
     }
@@ -70,6 +73,9 @@ QIcon sessionIcon(proto::peer::SessionType session_type)
 
         case proto::peer::SESSION_TYPE_CHAT:
             return QIcon(":/img/chat.svg");
+
+        case proto::peer::SESSION_TYPE_TERMINAL:
+            return QIcon(":/img/terminal.svg");
 
         default:
             return QIcon();
