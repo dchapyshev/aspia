@@ -359,6 +359,10 @@ void UserSession::onClientStarted()
             sendConnectEvent(client_id, session_type, computer_name, display_name);
             break;
 
+        case proto::peer::SESSION_TYPE_TERMINAL:
+            sendConnectEvent(client_id, session_type, computer_name, display_name);
+            break;
+
         default:
             break;
     }
@@ -393,6 +397,10 @@ void UserSession::onClientFinished()
         break;
 
         case proto::peer::SESSION_TYPE_FILE_TRANSFER:
+            sendDisconnectEvent(client->clientId());
+            break;
+
+        case proto::peer::SESSION_TYPE_TERMINAL:
             sendDisconnectEvent(client->clientId());
             break;
 

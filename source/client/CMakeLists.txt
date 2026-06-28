@@ -34,6 +34,8 @@ list(APPEND SOURCE_CLIENT_CORE
     main.cc
     client_system_info.cc
     client_system_info.h
+    client_terminal.cc
+    client_terminal.h
     client_text_chat.cc
     client_text_chat.h
     file_error_code.cc
