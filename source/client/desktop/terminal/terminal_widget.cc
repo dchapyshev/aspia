@@ -30,6 +30,9 @@ namespace {
 const char kFontResource[] = ":/fonts/JetBrainsMono-Regular.ttf";
 const int kFontPointSize = 11;
 
+// Inner padding (in pixels) between the terminal grid and the widget edges.
+const int kPadding = 6;
+
 //--------------------------------------------------------------------------------------------------
 VTermModifier modifiersFromEvent(const QKeyEvent* event)
 {
@@ -157,8 +160,8 @@ void TerminalWidget::paintEvent(QPaintEvent* /* event */)
             if (!vterm_screen_get_cell(screen_, pos, &cell))
                 continue;
 
-            const int x = col * char_width_;
-            const int y = row * line_height_;
+            const int x = kPadding + col * char_width_;
+            const int y = kPadding + row * line_height_;
             const int cell_width = (cell.width > 1 ? cell.width : 1) * char_width_;
 
             QColor fg = toColor(cell.fg, default_fg_);
@@ -190,8 +193,8 @@ void TerminalWidget::paintEvent(QPaintEvent* /* event */)
 
     if (cursor_visible_)
     {
-        const int x = cursor_col_ * char_width_;
-        const int y = cursor_row_ * line_height_;
+        const int x = kPadding + cursor_col_ * char_width_;
+        const int y = kPadding + cursor_row_ * line_height_;
 
         if (hasFocus())
         {
@@ -307,8 +310,8 @@ void TerminalWidget::resizeEvent(QResizeEvent* /* event */)
     if (char_width_ <= 0 || line_height_ <= 0)
         return;
 
-    const int columns = std::max(1, width() / char_width_);
-    const int rows = std::max(1, height() / line_height_);
+    const int columns = std::max(1, (width() - 2 * kPadding) / char_width_);
+    const int rows = std::max(1, (height() - 2 * kPadding) / line_height_);
 
     if (columns == columns_ && rows == rows_)
         return;

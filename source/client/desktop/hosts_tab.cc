@@ -810,6 +810,7 @@ void HostsTab::onSearchContextMenu(const QPoint& pos)
     menu.addAction(ui->action_file_transfer_connect);
     menu.addAction(ui->action_chat_connect);
     menu.addAction(ui->action_system_info_connect);
+    menu.addAction(ui->action_terminal_connect);
 
     // Router hosts have no address-book record to edit, copy or delete.
     if (item->type() == SearchWidget::Item::Type::LOCAL)
@@ -1012,6 +1013,7 @@ void HostsTab::onHostContextMenu(const QPoint& pos, int column)
         menu.addAction(ui->action_file_transfer_connect);
         menu.addAction(ui->action_chat_connect);
         menu.addAction(ui->action_system_info_connect);
+        menu.addAction(ui->action_terminal_connect);
     }
     menu.addSeparator();
 
@@ -1097,6 +1099,7 @@ void HostsTab::onRouterGroupContextMenu(const QPoint& pos)
     addProxy(ui->action_file_transfer_connect);
     addProxy(ui->action_chat_connect);
     addProxy(ui->action_system_info_connect);
+    addProxy(ui->action_terminal_connect);
     if (ui->action_edit_host->isVisible())
     {
         menu.addSeparator();
@@ -1594,6 +1597,7 @@ void HostsTab::updateActionsState()
     ui->action_file_transfer->setVisible(false);
     ui->action_chat->setVisible(false);
     ui->action_system_info->setVisible(false);
+    ui->action_terminal->setVisible(false);
 
     ui->action_add_user->setVisible(false);
     ui->action_edit_user->setVisible(false);
@@ -1617,6 +1621,7 @@ void HostsTab::updateActionsState()
     ui->action_file_transfer_connect->setVisible(false);
     ui->action_chat_connect->setVisible(false);
     ui->action_system_info_connect->setVisible(false);
+    ui->action_terminal_connect->setVisible(false);
 
     SidebarItem* sidebar_item = ui->sidebar->currentItem();
 
@@ -1635,6 +1640,7 @@ void HostsTab::updateActionsState()
         ui->action_file_transfer_connect->setVisible(has_item);
         ui->action_chat_connect->setVisible(has_item);
         ui->action_system_info_connect->setVisible(has_item);
+        ui->action_terminal_connect->setVisible(has_item);
     }
     else if (sidebar_item && sidebar_item->itemType() == SidebarItem::LOCAL_GROUP)
     {
@@ -1714,6 +1720,7 @@ void HostsTab::updateActionsState()
         ui->action_file_transfer_connect->setVisible(can_connect);
         ui->action_chat_connect->setVisible(can_connect);
         ui->action_system_info_connect->setVisible(can_connect);
+        ui->action_terminal_connect->setVisible(can_connect);
     }
 
     if (sidebar_item && sidebar_item->itemType() == SidebarItem::ROUTER)
@@ -1737,6 +1744,7 @@ void HostsTab::updateActionsState()
         ui->action_file_transfer->setVisible(true);
         ui->action_chat->setVisible(true);
         ui->action_system_info->setVisible(true);
+        ui->action_terminal->setVisible(true);
     }
 
     if (current_content_ != search_widget_ && sidebar_item &&
