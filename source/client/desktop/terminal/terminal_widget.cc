@@ -21,6 +21,10 @@
 #include <QFontDatabase>
 #include <QKeyEvent>
 #include <QPainter>
+#include <QScrollBar>
+#include <QWheelEvent>
+
+#include <algorithm>
 
 #include "base/logging.h"
 #include "proto/terminal.h"
@@ -32,6 +36,9 @@ const int kFontPointSize = 11;
 
 // Inner padding (in pixels) between the terminal grid and the widget edges.
 const int kPadding = 6;
+
+// Maximum number of scrollback (history) lines kept above the visible screen.
+const int kMaxScrollback = 5000;
 
 //--------------------------------------------------------------------------------------------------
 VTermModifier modifiersFromEvent(const QKeyEvent* event)
@@ -82,6 +89,13 @@ TerminalWidget::TerminalWidget(QWidget* parent)
     setPalette(pal);
     setAutoFillBackground(true);
 
+    scrollbar_ = new QScrollBar(Qt::Vertical, this);
+    scrollbar_->setVisible(false);
+    connect(scrollbar_, &QScrollBar::valueChanged, this, [this](int value)
+    {
+        setScrollOffset(scrollbar_->maximum() - value);
+    });
+
     vterm_ = vterm_new(rows_, columns_);
     vterm_set_utf8(vterm_, 1);
 
@@ -95,8 +109,8 @@ TerminalWidget::TerminalWidget(QWidget* parent)
         &TerminalWidget::onSetTermProp, // settermprop
         nullptr,                        // bell
         nullptr,                        // resize
-        nullptr,                        // sb_pushline
-        nullptr,                        // sb_popline
+        &TerminalWidget::onPushLine,    // sb_pushline
+        &TerminalWidget::onPopLine,     // sb_popline
         nullptr                         // sb_clear
     };
 
@@ -148,50 +162,39 @@ void TerminalWidget::paintEvent(QPaintEvent* /* event */)
     painter.fillRect(rect(), default_bg_);
     painter.setFont(font_);
 
+    const int history = static_cast<int>(scrollback_.size());
+
     for (int row = 0; row < rows_; ++row)
     {
+        // Index in the combined (scrollback + live screen) line stream.
+        const int line_index = history - scroll_offset_ + row;
+
         for (int col = 0; col < columns_; ++col)
         {
-            VTermPos pos;
-            pos.row = row;
-            pos.col = col;
-
             VTermScreenCell cell;
-            if (!vterm_screen_get_cell(screen_, pos, &cell))
-                continue;
 
-            const int x = kPadding + col * char_width_;
-            const int y = kPadding + row * line_height_;
-            const int cell_width = (cell.width > 1 ? cell.width : 1) * char_width_;
-
-            QColor fg = toColor(cell.fg, default_fg_);
-            QColor bg = toColor(cell.bg, default_bg_);
-
-            if (cell.attrs.reverse)
-                std::swap(fg, bg);
-
-            if (bg != default_bg_)
-                painter.fillRect(x, y, cell_width, line_height_, bg);
-
-            if (cell.chars[0] != 0)
+            if (line_index < history)
             {
-                QFont cell_font = font_;
-                if (cell.attrs.bold)
-                    cell_font.setBold(true);
-                if (cell.attrs.italic)
-                    cell_font.setItalic(true);
-                if (cell.attrs.underline != VTERM_UNDERLINE_OFF)
-                    cell_font.setUnderline(true);
-                painter.setFont(cell_font);
-
-                const char32_t glyph = static_cast<char32_t>(cell.chars[0]);
-                painter.setPen(fg);
-                painter.drawText(x, y + ascent_, QString::fromUcs4(&glyph, 1));
+                const std::vector<VTermScreenCell>& line = scrollback_[line_index];
+                if (col >= static_cast<int>(line.size()))
+                    continue;
+                cell = line[col];
             }
+            else
+            {
+                VTermPos pos;
+                pos.row = line_index - history;
+                pos.col = col;
+                if (!vterm_screen_get_cell(screen_, pos, &cell))
+                    continue;
+            }
+
+            drawCell(painter, col, row, cell);
         }
     }
 
-    if (cursor_visible_)
+    // The cursor is only shown on the live screen (not when scrolled into history).
+    if (scroll_offset_ == 0 && cursor_visible_)
     {
         const int x = kPadding + cursor_col_ * char_width_;
         const int y = kPadding + cursor_row_ * line_height_;
@@ -221,6 +224,65 @@ void TerminalWidget::paintEvent(QPaintEvent* /* event */)
 }
 
 //--------------------------------------------------------------------------------------------------
+void TerminalWidget::drawCell(QPainter& painter, int column, int row, const VTermScreenCell& cell) const
+{
+    const int x = kPadding + column * char_width_;
+    const int y = kPadding + row * line_height_;
+    const int cell_width = (cell.width > 1 ? cell.width : 1) * char_width_;
+
+    QColor fg = toColor(cell.fg, default_fg_);
+    QColor bg = toColor(cell.bg, default_bg_);
+
+    if (cell.attrs.reverse)
+        std::swap(fg, bg);
+
+    if (bg != default_bg_)
+        painter.fillRect(x, y, cell_width, line_height_, bg);
+
+    if (cell.chars[0] != 0)
+    {
+        QFont cell_font = font_;
+        if (cell.attrs.bold)
+            cell_font.setBold(true);
+        if (cell.attrs.italic)
+            cell_font.setItalic(true);
+        if (cell.attrs.underline != VTERM_UNDERLINE_OFF)
+            cell_font.setUnderline(true);
+        painter.setFont(cell_font);
+
+        const char32_t glyph = static_cast<char32_t>(cell.chars[0]);
+        painter.setPen(fg);
+        painter.drawText(x, y + ascent_, QString::fromUcs4(&glyph, 1));
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWidget::updateScrollbar()
+{
+    const int history = static_cast<int>(scrollback_.size());
+
+    scrollbar_->blockSignals(true);
+    scrollbar_->setRange(0, history);
+    scrollbar_->setPageStep(rows_);
+    scrollbar_->setValue(history - scroll_offset_);
+    scrollbar_->blockSignals(false);
+
+    scrollbar_->setVisible(history > 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWidget::setScrollOffset(int offset)
+{
+    offset = std::clamp(offset, 0, static_cast<int>(scrollback_.size()));
+    if (offset == scroll_offset_)
+        return;
+
+    scroll_offset_ = offset;
+    updateScrollbar();
+    update();
+}
+
+//--------------------------------------------------------------------------------------------------
 void TerminalWidget::keyPressEvent(QKeyEvent* event)
 {
     if (mode_ != Mode::CONNECTED)
@@ -228,6 +290,9 @@ void TerminalWidget::keyPressEvent(QKeyEvent* event)
         handleLoginKey(event);
         return;
     }
+
+    // Typing returns the view to the live screen.
+    setScrollOffset(0);
 
     const VTermModifier modifiers = modifiersFromEvent(event);
 
@@ -307,10 +372,13 @@ void TerminalWidget::keyPressEvent(QKeyEvent* event)
 //--------------------------------------------------------------------------------------------------
 void TerminalWidget::resizeEvent(QResizeEvent* /* event */)
 {
+    const int scrollbar_width = scrollbar_->sizeHint().width();
+    scrollbar_->setGeometry(width() - scrollbar_width, 0, scrollbar_width, height());
+
     if (char_width_ <= 0 || line_height_ <= 0)
         return;
 
-    const int columns = std::max(1, (width() - 2 * kPadding) / char_width_);
+    const int columns = std::max(1, (width() - scrollbar_width - 2 * kPadding) / char_width_);
     const int rows = std::max(1, (height() - 2 * kPadding) / line_height_);
 
     if (columns == columns_ && rows == rows_)
@@ -324,7 +392,18 @@ void TerminalWidget::resizeEvent(QResizeEvent* /* event */)
     if (mode_ == Mode::CONNECTED)
         emit sig_resize(columns_, rows_);
 
+    updateScrollbar();
     update();
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWidget::wheelEvent(QWheelEvent* event)
+{
+    const int steps = event->angleDelta().y() / 120;
+    if (steps != 0)
+        setScrollOffset(scroll_offset_ + steps * 3);
+
+    event->accept();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -467,6 +546,52 @@ int TerminalWidget::onSetTermProp(VTermProp prop, VTermValue* value, void* user)
         self->update();
     }
 
+    return 1;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+int TerminalWidget::onPushLine(int cols, const VTermScreenCell* cells, void* user)
+{
+    TerminalWidget* self = reinterpret_cast<TerminalWidget*>(user);
+
+    self->scrollback_.emplace_back(cells, cells + cols);
+    if (static_cast<int>(self->scrollback_.size()) > kMaxScrollback)
+        self->scrollback_.pop_front();
+
+    // Keep the viewport anchored on the same content while the user is scrolled into history.
+    if (self->scroll_offset_ > 0)
+    {
+        self->scroll_offset_ =
+            std::min(self->scroll_offset_ + 1, static_cast<int>(self->scrollback_.size()));
+    }
+
+    self->updateScrollbar();
+    return 1;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+int TerminalWidget::onPopLine(int cols, VTermScreenCell* cells, void* user)
+{
+    TerminalWidget* self = reinterpret_cast<TerminalWidget*>(user);
+    if (self->scrollback_.empty())
+        return 0;
+
+    const std::vector<VTermScreenCell>& line = self->scrollback_.back();
+
+    VTermScreenCell blank = {};
+    blank.width = 1;
+
+    for (int i = 0; i < cols; ++i)
+        cells[i] = (i < static_cast<int>(line.size())) ? line[i] : blank;
+
+    self->scrollback_.pop_back();
+
+    if (self->scroll_offset_ > static_cast<int>(self->scrollback_.size()))
+        self->scroll_offset_ = static_cast<int>(self->scrollback_.size());
+
+    self->updateScrollbar();
     return 1;
 }
 

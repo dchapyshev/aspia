@@ -23,7 +23,14 @@
 #include <QFont>
 #include <QWidget>
 
+#include <deque>
+#include <vector>
+
 #include <vterm.h>
+
+class QPainter;
+class QScrollBar;
+class QWheelEvent;
 
 // Terminal emulator widget. The terminal state machine is driven by libvterm and the visible screen
 // is rendered with QPainter. Right after start it shows a local login prompt (user name and password
@@ -54,6 +61,7 @@ protected:
     void resizeEvent(QResizeEvent* event) final;
     void focusInEvent(QFocusEvent* event) final;
     void focusOutEvent(QFocusEvent* event) final;
+    void wheelEvent(QWheelEvent* event) final;
 
 private:
     enum class Mode
@@ -67,12 +75,17 @@ private:
     void handleLoginKey(QKeyEvent* event);
     void writeLocal(const QString& text);
     void flushInput();
+    void drawCell(QPainter& painter, int column, int row, const VTermScreenCell& cell) const;
+    void updateScrollbar();
+    void setScrollOffset(int offset);
     QColor toColor(const VTermColor& color, const QColor& fallback) const;
 
     // libvterm screen callbacks.
     static int onDamage(VTermRect rect, void* user);
     static int onMoveCursor(VTermPos pos, VTermPos old_pos, int visible, void* user);
     static int onSetTermProp(VTermProp prop, VTermValue* value, void* user);
+    static int onPushLine(int cols, const VTermScreenCell* cells, void* user);
+    static int onPopLine(int cols, VTermScreenCell* cells, void* user);
     static void onOutput(const char* bytes, size_t length, void* user);
 
     VTerm* vterm_ = nullptr;
@@ -95,6 +108,10 @@ private:
     QString login_password_;
 
     QByteArray pending_input_;
+
+    std::deque<std::vector<VTermScreenCell>> scrollback_;
+    int scroll_offset_ = 0;
+    QScrollBar* scrollbar_ = nullptr;
 
     QColor default_fg_;
     QColor default_bg_;
