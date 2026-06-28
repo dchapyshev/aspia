@@ -48,6 +48,8 @@ list(APPEND SOURCE_BASE
     numeric_utils.h
     power_controller.cc
     power_controller.h
+    power_save_blocker.cc
+    power_save_blocker.h
     process_util.cc
     process_util.h
     scoped_clear_last_error.cc

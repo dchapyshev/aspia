@@ -31,8 +31,6 @@ collect_sources(SOURCE_BASE_DESKTOP
     frame_rotation.h
     mouse_cursor.cc
     mouse_cursor.h
-    power_save_blocker.cc
-    power_save_blocker.h
     region.cc
     region.h
     shared_frame.cc

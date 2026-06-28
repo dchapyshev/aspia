@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/desktop/power_save_blocker.h"
+#include "base/power_save_blocker.h"
 
 #include "base/logging.h"
 

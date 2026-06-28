@@ -21,8 +21,8 @@
 
 #include <QObject>
 
+#include "base/power_save_blocker.h"
 #include "base/serialization.h"
-#include "base/desktop/power_save_blocker.h"
 #include "proto/file_transfer.h"
 
 class FileWorker;
