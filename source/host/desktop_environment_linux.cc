@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/desktop/desktop_environment_linux.h"
+#include "host/desktop_environment_linux.h"
 
 #include "base/logging.h"
 

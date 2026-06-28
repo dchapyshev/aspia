@@ -16,16 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/desktop/desktop_environment.h"
+#include "host/desktop_environment.h"
 
 #include "base/logging.h"
 
 #if defined(Q_OS_WINDOWS)
-#include "base/desktop/desktop_environment_win.h"
+#include "host/desktop_environment_win.h"
 #elif defined(Q_OS_MACOS)
-#include "base/desktop/desktop_environment_mac.h"
+#include "host/desktop_environment_mac.h"
 #elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
-#include "base/desktop/desktop_environment_linux.h"
+#include "host/desktop_environment_linux.h"
 #else
 #warning Not supported platform
 #endif

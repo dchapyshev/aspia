@@ -17,8 +17,6 @@
 #
 
 collect_sources(SOURCE_BASE_DESKTOP
-    desktop_environment.cc
-    desktop_environment.h
     diff_block_32bpp_c.cc
     diff_block_32bpp_c.h
     diff_block_32bpp_sse2.cc
@@ -42,22 +40,8 @@ collect_sources(SOURCE_BASE_DESKTOP
 
 if (WIN32)
     collect_sources(SOURCE_BASE_DESKTOP
-        desktop_environment_win.cc
-        desktop_environment_win.h
         frame_dib.cc
         frame_dib.h)
-endif()
-
-if (LINUX)
-    collect_sources(SOURCE_BASE_DESKTOP
-        desktop_environment_linux.cc
-        desktop_environment_linux.h)
-endif()
-
-if (APPLE)
-    collect_sources(SOURCE_BASE_DESKTOP
-        desktop_environment_mac.mm
-        desktop_environment_mac.h)
 endif()
 
 collect_sources(SOURCE_BASE_DESKTOP_TESTS

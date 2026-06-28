@@ -33,6 +33,8 @@ list(APPEND SOURCE_HOST_CORE
     desktop_agent_main.h
     desktop_client.cc
     desktop_client.h
+    desktop_environment.cc
+    desktop_environment.h
     desktop_manager.cc
     desktop_manager.h
     desktop_resizer.cc
@@ -74,6 +76,8 @@ list(APPEND SOURCE_HOST_CORE
 
 if (WIN32)
     list(APPEND SOURCE_HOST_CORE
+        desktop_environment_win.cc
+        desktop_environment_win.h
         desktop_resizer_win.cc
         desktop_resizer_win.h
         host_core.rc
@@ -89,6 +93,8 @@ endif()
 
 if (LINUX)
     list(APPEND SOURCE_HOST_CORE
+        desktop_environment_linux.cc
+        desktop_environment_linux.h
         desktop_resizer_vt.cc
         desktop_resizer_vt.h
         desktop_resizer_x11.cc
@@ -117,6 +123,8 @@ endif()
 
 if (APPLE)
     list(APPEND SOURCE_HOST_CORE
+        desktop_environment_mac.mm
+        desktop_environment_mac.h
         input_injector_mac.mm
         input_injector_mac.h
         screen_capturer_mac.mm

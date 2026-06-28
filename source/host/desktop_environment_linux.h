@@ -16,16 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_DESKTOP_DESKTOP_ENVIRONMENT_MAC_H
-#define BASE_DESKTOP_DESKTOP_ENVIRONMENT_MAC_H
+#ifndef HOST_DESKTOP_ENVIRONMENT_LINUX_H
+#define HOST_DESKTOP_ENVIRONMENT_LINUX_H
 
-#include "base/desktop/desktop_environment.h"
+#include "host/desktop_environment.h"
 
-class DesktopEnvironmentMac final : public DesktopEnvironment
+class DesktopEnvironmentLinux final : public DesktopEnvironment
 {
 public:
-    explicit DesktopEnvironmentMac(QObject* parent = nullptr);
-    ~DesktopEnvironmentMac() final;
+    explicit DesktopEnvironmentLinux(QObject* parent = nullptr);
+    ~DesktopEnvironmentLinux() final;
 
 protected:
     void disableWallpaper() final;
@@ -33,7 +33,7 @@ protected:
     void revertAll() final;
 
 private:
-    Q_DISABLE_COPY(DesktopEnvironmentMac)
+    Q_DISABLE_COPY(DesktopEnvironmentLinux)
 };
 
-#endif // BASE_DESKTOP_DESKTOP_ENVIRONMENT_MAC_H
+#endif // HOST_DESKTOP_ENVIRONMENT_LINUX_H

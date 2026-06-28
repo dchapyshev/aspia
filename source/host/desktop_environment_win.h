@@ -16,16 +16,18 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_DESKTOP_DESKTOP_ENVIRONMENT_LINUX_H
-#define BASE_DESKTOP_DESKTOP_ENVIRONMENT_LINUX_H
+#ifndef HOST_DESKTOP_ENVIRONMENT_WIN_H
+#define HOST_DESKTOP_ENVIRONMENT_WIN_H
 
-#include "base/desktop/desktop_environment.h"
+#include "host/desktop_environment.h"
 
-class DesktopEnvironmentLinux final : public DesktopEnvironment
+class DesktopEnvironmentWin final : public DesktopEnvironment
 {
+    Q_OBJECT
+
 public:
-    explicit DesktopEnvironmentLinux(QObject* parent = nullptr);
-    ~DesktopEnvironmentLinux() final;
+    explicit DesktopEnvironmentWin(QObject* parent = nullptr);
+    ~DesktopEnvironmentWin() final;
 
 protected:
     void disableWallpaper() final;
@@ -33,7 +35,14 @@ protected:
     void revertAll() final;
 
 private:
-    Q_DISABLE_COPY(DesktopEnvironmentLinux)
+    bool wallpaper_changed_ = false;
+    bool drop_shadow_changed_ = false;
+    bool animation_changed_ = false;
+    bool drag_full_windows_ = false;
+    bool ui_effects_changed_ = false;
+    bool client_area_animation_changed_ = false;
+
+    Q_DISABLE_COPY_MOVE(DesktopEnvironmentWin)
 };
 
-#endif // BASE_DESKTOP_DESKTOP_ENVIRONMENT_LINUX_H
+#endif // HOST_DESKTOP_ENVIRONMENT_WIN_H
