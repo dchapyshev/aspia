@@ -173,6 +173,7 @@
         <file>disconnect-all.svg</file>
         <file>disconnect-one.svg</file>
         <file>copy.svg</file>
+        <file>select-all.svg</file>
         <file>search.svg</file>
         <file>computer-update.svg</file>
     </qresource>

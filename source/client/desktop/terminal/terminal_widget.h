@@ -28,6 +28,7 @@
 
 #include <vterm.h>
 
+class QMouseEvent;
 class QPainter;
 class QScrollBar;
 class QWheelEvent;
@@ -63,6 +64,10 @@ protected:
     void focusInEvent(QFocusEvent* event) final;
     void focusOutEvent(QFocusEvent* event) final;
     void wheelEvent(QWheelEvent* event) final;
+    void mousePressEvent(QMouseEvent* event) final;
+    void mouseReleaseEvent(QMouseEvent* event) final;
+    void mouseMoveEvent(QMouseEvent* event) final;
+    void mouseDoubleClickEvent(QMouseEvent* event) final;
 
 private:
     enum class Mode
@@ -72,13 +77,32 @@ private:
         CONNECTED
     };
 
+    // A position in the combined (scrollback + live screen) line stream.
+    struct Position
+    {
+        int line = 0;
+        int column = 0;
+    };
+
     void startLoginPrompt();
     void handleLoginKey(QKeyEvent* event);
     void writeLocal(const QString& text);
     void flushInput();
-    void drawCell(QPainter& painter, int column, int row, const VTermScreenCell& cell) const;
+    void drawCell(QPainter& painter, int column, int row, const VTermScreenCell& cell, bool selected) const;
     void updateScrollbar();
     void setScrollOffset(int offset);
+    bool mouseReportingActive() const;
+    void cellAt(const QPoint& position, int* row, int* column) const;
+    Position positionAt(const QPoint& position) const;
+    bool cellAtLine(int line, int column, VTermScreenCell* cell) const;
+    bool isSelected(int line, int column) const;
+    QString selectedText() const;
+    void selectWordAt(const Position& position);
+    void selectLineAt(int line);
+    void clearSelection();
+    void copySelection();
+    void paste();
+    void showContextMenu(const QPoint& global_position);
     QColor toColor(const VTermColor& color, const QColor& fallback) const;
 
     // libvterm screen callbacks.
@@ -103,6 +127,7 @@ private:
     int cursor_row_ = 0;
     int cursor_col_ = 0;
     bool cursor_visible_ = true;
+    int mouse_mode_ = 0; // VTERM_PROP_MOUSE_NONE
 
     Mode mode_ = Mode::LOGIN_USER;
     QString login_user_;
@@ -114,8 +139,16 @@ private:
     int scroll_offset_ = 0;
     QScrollBar* scrollbar_ = nullptr;
 
+    bool selecting_ = false;
+    bool has_selection_ = false;
+    Position selection_anchor_;
+    Position selection_point_;
+    qint64 last_double_click_ms_ = 0;
+
     QColor default_fg_;
     QColor default_bg_;
+    QColor selection_fg_;
+    QColor selection_bg_;
 
     Q_DISABLE_COPY_MOVE(TerminalWidget)
 };

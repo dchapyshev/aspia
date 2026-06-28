@@ -18,8 +18,15 @@
 
 #include "client/desktop/terminal/terminal_widget.h"
 
+#include <QAction>
+#include <QApplication>
+#include <QClipboard>
+#include <QDateTime>
 #include <QFontDatabase>
+#include <QIcon>
 #include <QKeyEvent>
+#include <QMenu>
+#include <QMouseEvent>
 #include <QPainter>
 #include <QScrollBar>
 #include <QWheelEvent>
@@ -41,18 +48,36 @@ const int kPadding = 6;
 const int kMaxScrollback = 5000;
 
 //--------------------------------------------------------------------------------------------------
+VTermModifier vtermModifiers(Qt::KeyboardModifiers modifiers)
+{
+    int result = VTERM_MOD_NONE;
+
+    if (modifiers & Qt::ShiftModifier)
+        result |= VTERM_MOD_SHIFT;
+    if (modifiers & Qt::ControlModifier)
+        result |= VTERM_MOD_CTRL;
+    if (modifiers & Qt::AltModifier)
+        result |= VTERM_MOD_ALT;
+
+    return static_cast<VTermModifier>(result);
+}
+
+//--------------------------------------------------------------------------------------------------
 VTermModifier modifiersFromEvent(const QKeyEvent* event)
 {
-    int modifiers = VTERM_MOD_NONE;
+    return vtermModifiers(event->modifiers());
+}
 
-    if (event->modifiers() & Qt::ShiftModifier)
-        modifiers |= VTERM_MOD_SHIFT;
-    if (event->modifiers() & Qt::ControlModifier)
-        modifiers |= VTERM_MOD_CTRL;
-    if (event->modifiers() & Qt::AltModifier)
-        modifiers |= VTERM_MOD_ALT;
-
-    return static_cast<VTermModifier>(modifiers);
+//--------------------------------------------------------------------------------------------------
+int vtermMouseButton(Qt::MouseButton button)
+{
+    switch (button)
+    {
+        case Qt::LeftButton:   return 1;
+        case Qt::MiddleButton: return 2;
+        case Qt::RightButton:  return 3;
+        default:               return 0;
+    }
 }
 
 } // namespace
@@ -63,6 +88,9 @@ TerminalWidget::TerminalWidget(QWidget* parent)
       default_fg_(0xD4, 0xD4, 0xD4),
       default_bg_(0x1E, 0x1E, 0x1E)
 {
+    selection_bg_ = palette().color(QPalette::Highlight);
+    selection_fg_ = palette().color(QPalette::HighlightedText);
+
     int font_id = QFontDatabase::addApplicationFont(kFontResource);
     QString family = "monospace";
     if (font_id != -1)
@@ -83,6 +111,7 @@ TerminalWidget::TerminalWidget(QWidget* parent)
 
     setFocusPolicy(Qt::StrongFocus);
     setAttribute(Qt::WA_OpaquePaintEvent);
+    setMouseTracking(true);
 
     QPalette pal = palette();
     pal.setColor(QPalette::Window, default_bg_);
@@ -208,7 +237,7 @@ void TerminalWidget::paintEvent(QPaintEvent* /* event */)
                     continue;
             }
 
-            drawCell(painter, col, row, cell);
+            drawCell(painter, col, row, cell, isSelected(line_index, col));
         }
     }
 
@@ -243,7 +272,8 @@ void TerminalWidget::paintEvent(QPaintEvent* /* event */)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TerminalWidget::drawCell(QPainter& painter, int column, int row, const VTermScreenCell& cell) const
+void TerminalWidget::drawCell(
+    QPainter& painter, int column, int row, const VTermScreenCell& cell, bool selected) const
 {
     const int x = kPadding + column * char_width_;
     const int y = kPadding + row * line_height_;
@@ -255,7 +285,13 @@ void TerminalWidget::drawCell(QPainter& painter, int column, int row, const VTer
     if (cell.attrs.reverse)
         std::swap(fg, bg);
 
-    if (bg != default_bg_)
+    if (selected)
+    {
+        fg = selection_fg_;
+        bg = selection_bg_;
+    }
+
+    if (bg != default_bg_ || selected)
         painter.fillRect(x, y, cell_width, line_height_, bg);
 
     if (cell.chars[0] != 0)
@@ -310,8 +346,27 @@ void TerminalWidget::keyPressEvent(QKeyEvent* event)
         return;
     }
 
-    // Typing returns the view to the live screen.
+    if (event->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier))
+    {
+        if (event->key() == Qt::Key_C)
+        {
+            copySelection();
+            return;
+        }
+        if (event->key() == Qt::Key_V)
+        {
+            paste();
+            return;
+        }
+    }
+
+    // Typing returns the view to the live screen and clears the selection.
     setScrollOffset(0);
+    if (has_selection_)
+    {
+        clearSelection();
+        update();
+    }
 
     const VTermModifier modifiers = modifiersFromEvent(event);
 
@@ -419,6 +474,7 @@ void TerminalWidget::resizeEvent(QResizeEvent* /* event */)
     columns_ = columns;
     rows_ = rows;
 
+    clearSelection();
     vterm_set_size(vterm_, rows_, columns_);
 
     if (mode_ == Mode::CONNECTED)
@@ -432,10 +488,405 @@ void TerminalWidget::resizeEvent(QResizeEvent* /* event */)
 void TerminalWidget::wheelEvent(QWheelEvent* event)
 {
     const int steps = event->angleDelta().y() / 120;
-    if (steps != 0)
+
+    // Shift bypasses the application's mouse reporting and always scrolls the local history.
+    const bool to_application = mouseReportingActive() && !(event->modifiers() & Qt::ShiftModifier);
+
+    if (to_application && steps != 0)
+    {
+        int row = 0;
+        int column = 0;
+        cellAt(event->position().toPoint(), &row, &column);
+
+        const VTermModifier modifiers = vtermModifiers(event->modifiers());
+        const int button = steps > 0 ? 4 : 5;
+
+        for (int i = 0; i < std::abs(steps); ++i)
+        {
+            vterm_mouse_move(vterm_, row, column, modifiers);
+            vterm_mouse_button(vterm_, button, true, modifiers);
+        }
+
+        flushInput();
+    }
+    else if (steps != 0)
+    {
         setScrollOffset(scroll_offset_ + steps * 3);
+    }
 
     event->accept();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool TerminalWidget::mouseReportingActive() const
+{
+    return mode_ == Mode::CONNECTED && mouse_mode_ != VTERM_PROP_MOUSE_NONE && scroll_offset_ == 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWidget::cellAt(const QPoint& position, int* row, int* column) const
+{
+    *column = std::clamp((position.x() - kPadding) / char_width_, 0, columns_ - 1);
+    *row = std::clamp((position.y() - kPadding) / line_height_, 0, rows_ - 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWidget::mousePressEvent(QMouseEvent* event)
+{
+    setFocus();
+
+    const bool shift = event->modifiers() & Qt::ShiftModifier;
+    const bool to_application = mouseReportingActive() && !shift;
+
+    // Right-click opens the context menu unless the application is grabbing the mouse.
+    if (event->button() == Qt::RightButton && !to_application)
+    {
+        showContextMenu(event->globalPosition().toPoint());
+        event->accept();
+        return;
+    }
+
+    // Middle-click pastes the clipboard (when not reporting to the application).
+    if (event->button() == Qt::MiddleButton && !to_application)
+    {
+        paste();
+        event->accept();
+        return;
+    }
+
+    if (to_application)
+    {
+        const int button = vtermMouseButton(event->button());
+        if (button != 0)
+        {
+            int row = 0;
+            int column = 0;
+            cellAt(event->position().toPoint(), &row, &column);
+
+            const VTermModifier modifiers = vtermModifiers(event->modifiers());
+            vterm_mouse_move(vterm_, row, column, modifiers);
+            vterm_mouse_button(vterm_, button, true, modifiers);
+            flushInput();
+        }
+
+        event->accept();
+        return;
+    }
+
+    if (event->button() == Qt::LeftButton)
+    {
+        const Position position = positionAt(event->position().toPoint());
+
+        // A press shortly after a double-click is a triple-click: select the whole line.
+        if (QDateTime::currentMSecsSinceEpoch() - last_double_click_ms_ <
+            QApplication::doubleClickInterval())
+        {
+            selectLineAt(position.line);
+        }
+        else
+        {
+            clearSelection();
+            selection_anchor_ = position;
+            selection_point_ = position;
+            selecting_ = true;
+            update();
+        }
+
+        event->accept();
+        return;
+    }
+
+    QWidget::mousePressEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWidget::mouseReleaseEvent(QMouseEvent* event)
+{
+    if (selecting_)
+    {
+        selecting_ = false;
+        event->accept();
+        return;
+    }
+
+    const bool shift = event->modifiers() & Qt::ShiftModifier;
+    const int button = vtermMouseButton(event->button());
+
+    if (!mouseReportingActive() || shift || button == 0)
+    {
+        QWidget::mouseReleaseEvent(event);
+        return;
+    }
+
+    int row = 0;
+    int column = 0;
+    cellAt(event->position().toPoint(), &row, &column);
+
+    const VTermModifier modifiers = vtermModifiers(event->modifiers());
+    vterm_mouse_move(vterm_, row, column, modifiers);
+    vterm_mouse_button(vterm_, button, false, modifiers);
+    flushInput();
+
+    event->accept();
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWidget::mouseMoveEvent(QMouseEvent* event)
+{
+    if (selecting_)
+    {
+        selection_point_ = positionAt(event->position().toPoint());
+        has_selection_ = selection_point_.line != selection_anchor_.line ||
+                         selection_point_.column != selection_anchor_.column;
+        update();
+        event->accept();
+        return;
+    }
+
+    // CLICK mode reports presses only; DRAG mode reports moves while a button is held; MOVE mode
+    // reports every motion.
+    const bool report = mouseReportingActive() &&
+        (mouse_mode_ == VTERM_PROP_MOUSE_MOVE ||
+         (mouse_mode_ == VTERM_PROP_MOUSE_DRAG && event->buttons() != Qt::NoButton));
+
+    if (!report)
+    {
+        QWidget::mouseMoveEvent(event);
+        return;
+    }
+
+    int row = 0;
+    int column = 0;
+    cellAt(event->position().toPoint(), &row, &column);
+
+    vterm_mouse_move(vterm_, row, column, vtermModifiers(event->modifiers()));
+    flushInput();
+
+    event->accept();
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWidget::mouseDoubleClickEvent(QMouseEvent* event)
+{
+    const bool shift = event->modifiers() & Qt::ShiftModifier;
+
+    if (event->button() == Qt::LeftButton && (!mouseReportingActive() || shift))
+    {
+        selectWordAt(positionAt(event->position().toPoint()));
+        last_double_click_ms_ = QDateTime::currentMSecsSinceEpoch();
+        selecting_ = false;
+        event->accept();
+        return;
+    }
+
+    QWidget::mouseDoubleClickEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+TerminalWidget::Position TerminalWidget::positionAt(const QPoint& position) const
+{
+    const int visible_row = std::clamp((position.y() - kPadding) / line_height_, 0, rows_ - 1);
+
+    Position result;
+    result.line = static_cast<int>(scrollback_.size()) - scroll_offset_ + visible_row;
+    result.column = std::clamp((position.x() - kPadding) / char_width_, 0, columns_);
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool TerminalWidget::cellAtLine(int line, int column, VTermScreenCell* cell) const
+{
+    const int history = static_cast<int>(scrollback_.size());
+    if (line < history)
+    {
+        const std::vector<VTermScreenCell>& scrollback_line = scrollback_[line];
+        if (column < 0 || column >= static_cast<int>(scrollback_line.size()))
+            return false;
+        *cell = scrollback_line[column];
+        return true;
+    }
+
+    VTermPos pos;
+    pos.row = line - history;
+    pos.col = column;
+    return vterm_screen_get_cell(screen_, pos, cell) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool TerminalWidget::isSelected(int line, int column) const
+{
+    if (!has_selection_)
+        return false;
+
+    Position start = selection_anchor_;
+    Position end = selection_point_;
+    if (start.line > end.line || (start.line == end.line && start.column > end.column))
+        std::swap(start, end);
+
+    if (line < start.line || line > end.line)
+        return false;
+    if (line == start.line && column < start.column)
+        return false;
+    if (line == end.line && column >= end.column)
+        return false;
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString TerminalWidget::selectedText() const
+{
+    if (!has_selection_)
+        return QString();
+
+    Position start = selection_anchor_;
+    Position end = selection_point_;
+    if (start.line > end.line || (start.line == end.line && start.column > end.column))
+        std::swap(start, end);
+
+    QString result;
+
+    for (int line = start.line; line <= end.line; ++line)
+    {
+        const int from = (line == start.line) ? start.column : 0;
+        const int to = (line == end.line) ? end.column : columns_;
+
+        QString text;
+        for (int column = from; column < to && column < columns_; ++column)
+        {
+            VTermScreenCell cell;
+            if (!cellAtLine(line, column, &cell))
+                continue;
+            if (cell.width == 0)
+                continue; // Second half of a double-width character.
+
+            if (cell.chars[0] == 0)
+            {
+                text += QChar(' ');
+            }
+            else
+            {
+                for (int i = 0; i < VTERM_MAX_CHARS_PER_CELL && cell.chars[i] != 0; ++i)
+                {
+                    const char32_t glyph = static_cast<char32_t>(cell.chars[i]);
+                    text += QString::fromUcs4(&glyph, 1);
+                }
+            }
+        }
+
+        // Trailing whitespace is not part of the copied text.
+        while (!text.isEmpty() && text.back() == QChar(' '))
+            text.chop(1);
+
+        result += text;
+        if (line != end.line)
+            result += QChar('\n');
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWidget::selectWordAt(const Position& position)
+{
+    auto isWordChar = [this](int line, int column)
+    {
+        VTermScreenCell cell;
+        if (!cellAtLine(line, column, &cell) || cell.chars[0] == 0)
+            return false;
+        return !QChar::isSpace(cell.chars[0]);
+    };
+
+    int left = position.column;
+    int right = position.column;
+
+    if (isWordChar(position.line, position.column))
+    {
+        while (left > 0 && isWordChar(position.line, left - 1))
+            --left;
+        while (right < columns_ - 1 && isWordChar(position.line, right + 1))
+            ++right;
+        ++right;
+    }
+    else
+    {
+        right = left + 1;
+    }
+
+    selection_anchor_ = { position.line, left };
+    selection_point_ = { position.line, right };
+    has_selection_ = true;
+    update();
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWidget::selectLineAt(int line)
+{
+    selection_anchor_ = { line, 0 };
+    selection_point_ = { line, columns_ };
+    has_selection_ = true;
+    selecting_ = false;
+    update();
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWidget::clearSelection()
+{
+    has_selection_ = false;
+    selecting_ = false;
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWidget::copySelection()
+{
+    const QString text = selectedText();
+    if (!text.isEmpty())
+        QApplication::clipboard()->setText(text);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWidget::paste()
+{
+    QString text = QApplication::clipboard()->text();
+    if (text.isEmpty())
+        return;
+
+    // Terminals expect Enter as a carriage return.
+    text.replace("\r\n", "\r");
+    text.replace('\n', '\r');
+
+    setScrollOffset(0);
+    emit sig_input(text.toUtf8());
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWidget::showContextMenu(const QPoint& global_position)
+{
+    QMenu menu(this);
+
+    QAction* copy_action = menu.addAction(QIcon(":/img/copy.svg"), tr("Copy"));
+    copy_action->setEnabled(has_selection_);
+
+    QAction* paste_action = menu.addAction(QIcon(":/img/paste.svg"), tr("Paste"));
+    paste_action->setEnabled(!QApplication::clipboard()->text().isEmpty());
+
+    QAction* select_all_action = menu.addAction(QIcon(":/img/select-all.svg"), tr("Select All"));
+
+    QAction* chosen = menu.exec(global_position);
+    if (chosen == copy_action)
+    {
+        copySelection();
+    }
+    else if (chosen == paste_action)
+    {
+        paste();
+    }
+    else if (chosen == select_all_action)
+    {
+        selection_anchor_ = { 0, 0 };
+        selection_point_ = { static_cast<int>(scrollback_.size()) + rows_ - 1, columns_ };
+        has_selection_ = true;
+        update();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -571,11 +1022,16 @@ int TerminalWidget::onMoveCursor(VTermPos pos, VTermPos /* old_pos */, int visib
 // static
 int TerminalWidget::onSetTermProp(VTermProp prop, VTermValue* value, void* user)
 {
+    TerminalWidget* self = reinterpret_cast<TerminalWidget*>(user);
+
     if (prop == VTERM_PROP_CURSORVISIBLE)
     {
-        TerminalWidget* self = reinterpret_cast<TerminalWidget*>(user);
         self->cursor_visible_ = (value->boolean != 0);
         self->update();
+    }
+    else if (prop == VTERM_PROP_MOUSE)
+    {
+        self->mouse_mode_ = value->number;
     }
 
     return 1;
@@ -597,6 +1053,9 @@ int TerminalWidget::onPushLine(int cols, const VTermScreenCell* cells, void* use
         self->scroll_offset_ =
             std::min(self->scroll_offset_ + 1, static_cast<int>(self->scrollback_.size()));
     }
+
+    // Line indices shift as content scrolls, so any existing selection is dropped.
+    self->clearSelection();
 
     self->updateScrollbar();
     return 1;
