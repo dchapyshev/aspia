@@ -46,8 +46,6 @@
 #if defined(Q_OS_LINUX)
 #include "base/linux/session_util.h"
 
-#include <pwd.h>
-
 #include <cstdlib>
 #endif // defined(Q_OS_LINUX)
 
@@ -813,15 +811,12 @@ void UserSession::attach(const Location& location, AttachReason reason, SessionI
         return;
     }
 
-    const struct passwd* pw = getpwuid(uid);
-    if (!pw)
+    const QString user_name = SessionUtil::userNameByUid(uid);
+    if (user_name.isEmpty())
     {
-        PLOG(ERROR) << "getpwuid failed for uid" << uid;
         dettach(FROM_HERE);
         return;
     }
-
-    const QString user_name = QString::fromLocal8Bit(pw->pw_name);
 
     // Right after boot the session is reported active before the compositor imports its display
     // environment (WAYLAND_DISPLAY/DISPLAY) into the user manager. Launching the GUI before that

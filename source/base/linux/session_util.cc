@@ -18,12 +18,14 @@
 
 #include "base/linux/session_util.h"
 
+#include "base/logging.h"
 #include "base/linux/libsystemd.h"
 
 #include <QByteArray>
 #include <QDir>
 
 #include <fcntl.h>
+#include <pwd.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
@@ -76,6 +78,20 @@ bool SessionUtil::activeSession(QString* session_id, uid_t* uid)
     *session_id = QString::fromLocal8Bit(session);
     free(session);
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QString SessionUtil::userNameByUid(uid_t uid)
+{
+    const struct passwd* pw = getpwuid(uid);
+    if (!pw)
+    {
+        PLOG(ERROR) << "getpwuid failed for uid" << uid;
+        return QString();
+    }
+
+    return QString::fromLocal8Bit(pw->pw_name);
 }
 
 //--------------------------------------------------------------------------------------------------

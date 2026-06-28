@@ -51,10 +51,7 @@
 #if defined(Q_OS_LINUX)
 #include <unistd.h>
 
-#include <cstdlib>
-#include <cstring>
-
-#include "base/linux/libsystemd.h"
+#include "base/linux/session_util.h"
 #include "host/desktop_resizer_vt.h"
 #include "host/input_injector_uinput.h"
 #include "host/input_injector_vt.h"
@@ -214,14 +211,33 @@ DesktopAgent::~DesktopAgent()
 //--------------------------------------------------------------------------------------------------
 void DesktopAgent::setupLinuxCapture()
 {
-    // TEMPORARY: force the VT console capturer for testing, bypassing all other backends.
-    capture_mode_ = CaptureMode::VT;
-    LOG(INFO) << "Capture mode: VT console (FORCED)";
-    return;
+    // The agent runs as root in a system unit with no session environment, so it determines the active
+    // session and its type from logind itself.
+    QString session_id;
+    uid_t uid = 0;
+    if (!SessionUtil::activeSession(&session_id, &uid))
+        LOG(ERROR) << "Unable to determine the active session";
 
-    // X11 (login screen or desktop): the X11 grabber and injector use the display passed in the env.
-    if (qgetenv("ASPIA_DISPLAY") == "x11")
+    session_uid_ = uid;
+
+    // X11 session (user desktop or the login-screen greeter): use the X11 grabber and injector. The
+    // root unit has no session environment, so read the display and X authority cookie from the
+    // session's own processes and export them for the X11 client libraries.
+    if (SessionUtil::sessionType(session_id) == SessionUtil::SessionType::X11)
     {
+        QString display;
+        QString xauthority;
+        if (SessionUtil::readX11Env(uid, session_id, &display, &xauthority))
+        {
+            qputenv("DISPLAY", display.toLocal8Bit());
+            if (!xauthority.isEmpty())
+                qputenv("XAUTHORITY", xauthority.toLocal8Bit());
+        }
+        else
+        {
+            LOG(ERROR) << "Unable to read the X11 session environment";
+        }
+
         capture_mode_ = CaptureMode::X11;
         input_injector_ = InputInjectorX11::create();
         if (!input_injector_)
@@ -232,21 +248,8 @@ void DesktopAgent::setupLinuxCapture()
 
     // Wayland. The compositor screen-cast interfaces are only reachable on a real user session; on the
     // login screen (greeter) capture below the compositor via DRM/KMS instead.
-    uid_t uid = 0;
-    bool is_user_session = false;
-    char* session = nullptr;
-    if (LibSystemd::seatGetActive("seat0", &session, &uid) >= 0 && session)
-    {
-        char* session_class = nullptr;
-        if (LibSystemd::sessionGetClass(session, &session_class) >= 0 && session_class)
-        {
-            is_user_session = (strcmp(session_class, "user") == 0);
-            free(session_class);
-        }
-        free(session);
-    }
-
-    session_uid_ = uid;
+    const bool is_user_session =
+        (SessionUtil::sessionClass(session_id) == SessionUtil::SessionClass::USER);
 
     LOG(INFO) << "Wayland capture setup: is_user_session:" << is_user_session << "uid:" << uid;
 

@@ -50,6 +50,9 @@ public:
     // Returns false if there is no active session.
     static bool activeSession(QString* session_id, uid_t* uid);
 
+    // Returns the login name of |uid|, or an empty string (with an error logged) on failure.
+    static QString userNameByUid(uid_t uid);
+
     // Returns the logind type of |session_id|, or UNKNOWN on failure / an unrecognized value.
     static SessionType sessionType(const QString& session_id);
 

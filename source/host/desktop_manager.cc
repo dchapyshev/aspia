@@ -43,7 +43,6 @@
 #if defined(Q_OS_LINUX)
 #include "base/linux/session_util.h"
 
-#include <pwd.h>
 #include <signal.h>
 
 #include <cstdlib>
@@ -684,44 +683,27 @@ bool DesktopManager::startProcess(const QString& ipc_channel_name)
     if (!log_level.isEmpty())
         log_setenv = QString(" --setenv=ASPIA_LOG_LEVEL=%1").arg(log_level);
 
-    // The agent ALWAYS runs as root via a system transient unit: capture is done below the compositor
-    // via DRM/KMS (or, for X11 sessions, the X11 grabber) and input via uinput, none of which need to
-    // run as the user. ASPIA_DISPLAY tells the agent which capture path to use; for X11 it also
-    // needs DISPLAY and the X authority cookie, since the root unit has no session environment.
-    QString session_setenv = " --setenv=ASPIA_DISPLAY=wayland";
-
-    // Authoritative session type from logind: an X11 session (user desktop or the login-screen greeter)
-    // must use the X11 capture path, regardless of any (possibly stale) display env vars.
+    // The agent ALWAYS runs as root via a system transient unit and derives the capture type itself
+    // from logind (and, for X11, reads the display and X authority cookie from the session's own
+    // processes). The manager only gates the start on session readiness, so the agent comes up against
+    // a live session.
     if (SessionUtil::sessionType(session_id) == SessionUtil::SessionType::X11)
     {
-        // X11 session (user desktop or the greeter): the root agent has no session environment, so it
-        // needs the display and X authority cookie to open the display. Read them from the active
-        // session's own processes (the per-user systemd manager does not carry the cookie, and the
-        // greeter has no such manager at all).
+        // Right after the session becomes active its X server may still be starting; wait until the
+        // display and cookie are readable before launching the agent. The restart timer retries.
         QString display;
         QString xauthority;
-
         if (!SessionUtil::readX11Env(uid, session_id, &display, &xauthority))
         {
-            // Right after the session becomes active its X server may still be starting; defer and let
-            // the restart timer retry.
             LOG(INFO) << "X11 session environment not ready yet; deferring agent start";
             return false;
         }
-
-        session_setenv = QString(" --setenv=ASPIA_DISPLAY=x11 --setenv=DISPLAY=%1").arg(display);
-        if (!xauthority.isEmpty())
-            session_setenv += QString(" --setenv=XAUTHORITY=%1").arg(xauthority);
     }
     else if (session_class == SessionUtil::SessionClass::USER)
     {
-        const struct passwd* pw = getpwuid(uid);
-        if (!pw)
-        {
-            PLOG(ERROR) << "getpwuid failed for uid" << uid;
+        const QString user_name = SessionUtil::userNameByUid(uid);
+        if (user_name.isEmpty())
             return false;
-        }
-        const QString user_name = QString::fromLocal8Bit(pw->pw_name);
 
         // Wayland user session: defer until the compositor has imported its display environment, so the
         // KMS/compositor path starts against a live session. The restart timer retries every second.
@@ -731,11 +713,11 @@ bool DesktopManager::startProcess(const QString& ipc_channel_name)
             return false;
         }
     }
-    // Wayland greeter falls through to the KMS path with ASPIA_DISPLAY=wayland.
+    // The Wayland greeter has no readiness gate; it falls through to the KMS path.
 
     const QByteArray command_line =
-        QString("systemd-run --collect --setenv=%1=%2%3%4 %5")
-            .arg(IpcServer::kChannelIdEnvVar, ipc_channel_name, session_setenv, log_setenv, filePath())
+        QString("systemd-run --collect --setenv=%1=%2%3 %4")
+            .arg(IpcServer::kChannelIdEnvVar, ipc_channel_name, log_setenv, filePath())
             .toLocal8Bit();
 
     LOG(INFO) << "Start desktop session agent:" << command_line;
