@@ -75,12 +75,14 @@ HostsTab::HostsTab(QWidget* parent)
     session_type_group->addAction(ui->action_file_transfer);
     session_type_group->addAction(ui->action_chat);
     session_type_group->addAction(ui->action_system_info);
+    session_type_group->addAction(ui->action_terminal);
 
     QActionGroup* session_connect_group = new QActionGroup(this);
     session_connect_group->addAction(ui->action_desktop_connect);
     session_connect_group->addAction(ui->action_file_transfer_connect);
     session_connect_group->addAction(ui->action_chat_connect);
     session_connect_group->addAction(ui->action_system_info_connect);
+    session_connect_group->addAction(ui->action_terminal_connect);
 
     Settings settings;
 
@@ -97,6 +99,9 @@ HostsTab::HostsTab(QWidget* parent)
             break;
         case proto::peer::SESSION_TYPE_SYSTEM_INFO:
             ui->action_system_info->setChecked(true);
+            break;
+        case proto::peer::SESSION_TYPE_TERMINAL:
+            ui->action_terminal->setChecked(true);
             break;
         default:
             break;
@@ -250,12 +255,13 @@ HostsTab::HostsTab(QWidget* parent)
     addActions(ActionRole::ACTION,
     {
         ui->action_desktop_connect, ui->action_file_transfer_connect, ui->action_chat_connect,
-        ui->action_system_info_connect
+        ui->action_system_info_connect, ui->action_terminal_connect
     });
     addActions(ActionRole::VIEW, { ui->action_reload, ui->action_online_check });
     addActions(ActionRole::SESSION_TYPE,
     {
-        ui->action_desktop, ui->action_file_transfer, ui->action_chat, ui->action_system_info
+        ui->action_desktop, ui->action_file_transfer, ui->action_chat, ui->action_system_info,
+        ui->action_terminal
     });
 
     local_group_widget_->setOnlineCheckEnabled(ui->action_online_check->isChecked());
@@ -637,6 +643,8 @@ void HostsTab::onConnectAction(QAction* action)
         session_type = proto::peer::SESSION_TYPE_CHAT;
     else if (action == ui->action_system_info_connect)
         session_type = proto::peer::SESSION_TYPE_SYSTEM_INFO;
+    else if (action == ui->action_terminal_connect)
+        session_type = proto::peer::SESSION_TYPE_TERMINAL;
     else
         return;
 
@@ -776,6 +784,7 @@ void HostsTab::onLocalHostContextMenu(qint64 entry_id, const QPoint& pos)
         menu.addAction(ui->action_file_transfer_connect);
         menu.addAction(ui->action_chat_connect);
         menu.addAction(ui->action_system_info_connect);
+        menu.addAction(ui->action_terminal_connect);
         menu.addSeparator();
         menu.addAction(ui->action_edit_host);
         menu.addAction(ui->action_copy_host);
@@ -1759,6 +1768,8 @@ proto::peer::SessionType HostsTab::defaultSessionType() const
         return proto::peer::SESSION_TYPE_CHAT;
     else if (ui->action_system_info->isChecked())
         return proto::peer::SESSION_TYPE_SYSTEM_INFO;
+    else if (ui->action_terminal->isChecked())
+        return proto::peer::SESSION_TYPE_TERMINAL;
     else
         return proto::peer::SESSION_TYPE_UNKNOWN;
 }

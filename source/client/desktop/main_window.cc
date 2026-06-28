@@ -47,6 +47,7 @@
 #include "client/desktop/file_transfer/file_transfer_window.h"
 #include "client/desktop/hosts/search_dialog.h"
 #include "client/desktop/sys_info/system_info_window.h"
+#include "client/desktop/terminal/terminal_window.h"
 #include "common/update_checker.h"
 #include "common/update_info.h"
 #include "common/desktop/about_dialog.h"
@@ -442,6 +443,10 @@ void MainWindow::onConnect(const HostConfig& host, proto::peer::SessionType sess
 
         case proto::peer::SESSION_TYPE_CHAT:
             client_window = new ChatWindow();
+            break;
+
+        case proto::peer::SESSION_TYPE_TERMINAL:
+            client_window = new TerminalWindow();
             break;
 
         default:

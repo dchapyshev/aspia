@@ -230,6 +230,27 @@
     <string>System Information</string>
    </property>
   </action>
+  <action name="action_terminal">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../common/resources/common.qrc">
+     <normaloff>:/img/terminal.svg</normaloff>:/img/terminal.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Terminal</string>
+   </property>
+  </action>
+  <action name="action_terminal_connect">
+   <property name="icon">
+    <iconset resource="../../common/resources/common.qrc">
+     <normaloff>:/img/terminal.svg</normaloff>:/img/terminal.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Terminal</string>
+   </property>
+  </action>
   <action name="action_add_workspace">
    <property name="icon">
     <iconset resource="../../common/resources/common.qrc">

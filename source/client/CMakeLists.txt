@@ -75,6 +75,7 @@ include(desktop/file_transfer/sources.cmake)
 include(desktop/sys_info/sources.cmake)
 include(desktop/chat/sources.cmake)
 include(desktop/hosts/sources.cmake)
+include(desktop/terminal/sources.cmake)
 
 source_group("" FILES ${SOURCE_CLIENT_CORE})
 source_group(android FILES ${SOURCE_CLIENT_ANDROID})
@@ -84,6 +85,7 @@ source_group(desktop\\desktop FILES ${SOURCE_CLIENT_CORE_DESKTOP_DESKTOP})
 source_group(desktop\\file_transfer FILES ${SOURCE_CLIENT_CORE_DESKTOP_FILE_TRANSFER})
 source_group(desktop\\sys_info FILES ${SOURCE_CLIENT_CORE_DESKTOP_SYS_INFO})
 source_group(desktop\\chat FILES ${SOURCE_CLIENT_CORE_DESKTOP_CHAT})
+source_group(desktop\\terminal FILES ${SOURCE_CLIENT_CORE_DESKTOP_TERMINAL})
 source_group(desktop\\hosts FILES ${SOURCE_CLIENT_CORE_DESKTOP_HOSTS_TAB})
 
 if (WIN32)
@@ -119,6 +121,7 @@ else()
         ${SOURCE_CLIENT_CORE_DESKTOP_FILE_TRANSFER}
         ${SOURCE_CLIENT_CORE_DESKTOP_SYS_INFO}
         ${SOURCE_CLIENT_CORE_DESKTOP_CHAT}
+        ${SOURCE_CLIENT_CORE_DESKTOP_TERMINAL}
         ${SOURCE_CLIENT_CORE_DESKTOP_HOSTS_TAB})
 endif()
 
