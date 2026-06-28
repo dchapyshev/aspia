@@ -1,0 +1,4 @@
+# PAM policy for Aspia terminal sessions. Used to validate the operating system credentials supplied
+# by the client before the terminal agent is launched under that account.
+@include common-auth
+@include common-account

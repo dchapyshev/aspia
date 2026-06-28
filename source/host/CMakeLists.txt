@@ -69,6 +69,10 @@ list(APPEND SOURCE_HOST_CORE
     system_settings.h
     terminal_agent.cc
     terminal_agent.h
+    terminal_agent_main.cc
+    terminal_agent_main.h
+    terminal_client.cc
+    terminal_client.h
     udp_attempt.cc
     udp_attempt.h
     user_session_agent.cc
@@ -154,8 +158,8 @@ if (WIN32)
     source_group(win FILES ${SOURCE_HOST_CORE_WIN})
 
     set(HOST_PLATFORM_LIBS
-        avrt crypt32 dbghelp dxgi d3d11 imm32 iphlpapi netapi32 setupapi userenv uxtheme version
-        winmm wtsapi32)
+        advapi32 avrt crypt32 dbghelp dxgi d3d11 imm32 iphlpapi netapi32 setupapi userenv uxtheme
+        version winmm wtsapi32)
 endif()
 
 add_library(aspia_host_core SHARED
@@ -188,6 +192,12 @@ if (LINUX)
     target_include_directories(aspia_host_core PRIVATE
         ${PIPEWIRE_INCLUDE_DIRS} ${LIBDRM_INCLUDE_DIRS} ${CMAKE_CURRENT_BINARY_DIR})
     target_link_libraries(aspia_host_core PRIVATE ${WAYLAND_CLIENT_LIB})
+endif()
+
+if (LINUX OR APPLE)
+    # PAM is used to validate operating system credentials for terminal sessions.
+    find_library(PAM_LIB NAMES pam REQUIRED)
+    target_link_libraries(aspia_host_core PRIVATE ${PAM_LIB})
 endif()
 
 if (LINUX)
@@ -226,3 +236,10 @@ if (WIN32)
     set_target_properties(aspia_file_agent PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 endif()
 target_link_libraries(aspia_file_agent aspia_host_core ${HOST_PLATFORM_LIBS})
+
+# Aspia Terminal Agent
+add_executable(aspia_terminal_agent WIN32 terminal_agent_entry_point.cc terminal_agent.rc)
+if (WIN32)
+    set_target_properties(aspia_terminal_agent PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+endif()
+target_link_libraries(aspia_terminal_agent aspia_host_core ${HOST_PLATFORM_LIBS})

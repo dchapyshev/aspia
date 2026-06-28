@@ -51,6 +51,7 @@
 #include "host/service.h"
 #include "host/system_info_client.h"
 #include "host/chat_client.h"
+#include "host/terminal_client.h"
 #include "host/user_session.h"
 #include "proto/chat.h"
 
@@ -958,6 +959,15 @@ void Service::startClient(const PendingConfirmation& pending)
         connect(client, &Client::sig_started, this, &Service::onChatClientStarted);
         connect(client, &Client::sig_finished, this, &Service::onChatClientFinished);
         connect(client, &ChatClient::sig_messageReceived, this, &Service::onChatClientMessage);
+    }
+    else if (session_type == proto::peer::SESSION_TYPE_TERMINAL)
+    {
+        TerminalClient* client = new TerminalClient(tcp_channel, this);
+        client_to_start = client;
+
+        connect(client, &Client::sig_finished, this, &Service::onClientFinished);
+        connect(client, &Client::sig_started, user_session_, &UserSession::onClientStarted);
+        connect(client, &Client::sig_finished, user_session_, &UserSession::onClientFinished);
     }
 
     if (!client_to_start)

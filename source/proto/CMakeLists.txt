@@ -47,6 +47,7 @@ list(APPEND SOURCE_PROTO
     stun.proto
     system_info.proto
     task_manager.proto
+    terminal.proto
     user.proto
     router_constants.h
     router_constants.cc)

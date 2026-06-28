@@ -1,0 +1,72 @@
+//
+// Aspia Project
+// Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package proto.terminal;
+
+// Sent once by the client right after the session starts. The terminal agent process is launched
+// under the supplied operating system account after the credentials are validated.
+message Credentials
+{
+    string user_name = 1;
+    string password  = 2;
+}
+
+// Raw pseudo-terminal byte stream. Client to host carries keyboard input, host to client carries
+// the shell output.
+message Data
+{
+    bytes data = 1;
+}
+
+// New visible terminal size in character cells.
+message Resize
+{
+    uint32 columns = 1;
+    uint32 rows    = 2;
+}
+
+// Host to client report about the result of launching the terminal agent.
+message Result
+{
+    enum Code
+    {
+        CODE_UNKNOWN              = 0;
+        CODE_SUCCESS              = 1;
+        CODE_AUTHENTICATION_ERROR = 2;
+        CODE_LAUNCH_ERROR         = 3;
+    }
+
+    Code code = 1;
+}
+
+message ClientToHost
+{
+    Credentials credentials = 1;
+    Data data               = 2;
+    Resize resize           = 3;
+}
+
+message HostToClient
+{
+    Data data     = 1;
+    Result result = 2;
+}

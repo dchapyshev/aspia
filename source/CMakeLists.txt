@@ -258,6 +258,7 @@ if (LINUX)
         aspia_host
         aspia_desktop_agent
         aspia_file_agent
+        aspia_terminal_agent
             BUNDLE DESTINATION . COMPONENT host
             RUNTIME DESTINATION bin COMPONENT host
             LIBRARY DESTINATION lib COMPONENT host)
@@ -294,6 +295,10 @@ if (LINUX)
         # PolicyKit action for the elevated settings/security-log dialogs.
         install(FILES host/linux/org.aspia.host.policy
             DESTINATION share/polkit-1/actions COMPONENT host)
+
+        # PAM policy used to validate operating system credentials for terminal sessions.
+        install(FILES host/linux/aspia-terminal.pam
+            DESTINATION /etc/pam.d RENAME aspia-terminal COMPONENT host)
 
         # The host runs without prior configuration, so the maintainer scripts enable and start the
         # systemd service directly (and restart it on upgrade) rather than via --install.
