@@ -64,8 +64,6 @@ void TerminalAgent::start(const QString& channel_id)
 //--------------------------------------------------------------------------------------------------
 void TerminalAgent::onIpcConnected()
 {
-    ipc_channel_->setPaused(false);
-
     terminal_process_ = TerminalProcess::create(this);
     if (!terminal_process_)
     {
@@ -77,11 +75,7 @@ void TerminalAgent::onIpcConnected()
     connect(terminal_process_, &TerminalProcess::sig_output, this, &TerminalAgent::onPtyOutput);
     connect(terminal_process_, &TerminalProcess::sig_finished, this, &TerminalAgent::onPtyFinished);
 
-    if (!terminal_process_->start(kDefaultColumns, kDefaultRows))
-    {
-        LOG(ERROR) << "Unable to start terminal process";
-        QCoreApplication::quit();
-    }
+    ipc_channel_->setPaused(false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -112,11 +106,27 @@ void TerminalAgent::onIpcMessageReceived(
         return;
     }
 
+    if (!process_started_)
+    {
+        const int columns = message.has_resize() ? message.resize().columns() : kDefaultColumns;
+        const int rows = message.has_resize() ? message.resize().rows() : kDefaultRows;
+
+        if (!terminal_process_->start(columns, rows))
+        {
+            LOG(ERROR) << "Unable to start terminal process";
+            QCoreApplication::quit();
+            return;
+        }
+
+        process_started_ = true;
+    }
+    else if (message.has_resize())
+    {
+        terminal_process_->resize(message.resize().columns(), message.resize().rows());
+    }
+
     if (message.has_data())
         terminal_process_->writeInput(QByteArray::fromStdString(message.data().data()));
-
-    if (message.has_resize())
-        terminal_process_->resize(message.resize().columns(), message.resize().rows());
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -59,7 +59,10 @@ T conPtyFunction(const char* name)
 bool createOverlappedPipe(ScopedHandle* read_end, ScopedHandle* write_end)
 {
     static unsigned counter = 0;
-    const DWORD buffer_size = 16 * 1024;
+
+    // Headroom for what ConPTY may write between the wakeups of the agent's I/O context; doRead()
+    // drains the pipe completely on each wakeup, so this only needs to cover the scheduling latency.
+    const DWORD buffer_size = 64 * 1024;
 
     const std::wstring name = L"\\\\.\\pipe\\aspia.conpty." +
         std::to_wstring(GetCurrentProcessId()) + L'.' + std::to_wstring(counter++);
@@ -282,7 +285,29 @@ void TerminalProcessWin::doRead()
             return;
         }
 
-        emit sig_output(QByteArray(read_buffer_.data(), static_cast<int>(bytes_transferred)));
+        QByteArray batch(read_buffer_.data(), static_cast<int>(bytes_transferred));
+
+        // Drain everything already buffered in the pipe before returning to the I/O context. ConPTY
+        // corrupts the stream it produces whenever its output pipe is left non-empty, so the pipe is
+        // emptied fully on each wakeup instead of one async read at a time.
+        for (;;)
+        {
+            DWORD available = 0;
+            if (!PeekNamedPipe(output_stream_.native_handle(), nullptr, 0, nullptr, &available,
+                               nullptr) || available == 0)
+            {
+                break;
+            }
+
+            std::error_code read_error;
+            size_t read = output_stream_.read_some(asio::buffer(read_buffer_), read_error);
+            if (read_error || read == 0)
+                break;
+
+            batch.append(read_buffer_.data(), static_cast<int>(read));
+        }
+
+        emit sig_output(batch);
         doRead();
     });
 }

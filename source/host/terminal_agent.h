@@ -47,6 +47,7 @@ private slots:
 private:
     IpcChannel* ipc_channel_ = nullptr;
     TerminalProcess* terminal_process_ = nullptr;
+    bool process_started_ = false;
 
     Q_DISABLE_COPY_MOVE(TerminalAgent)
 };

@@ -33,7 +33,6 @@
 
 #include <algorithm>
 
-#include "base/logging.h"
 #include "proto/terminal.h"
 
 namespace {
@@ -129,6 +128,10 @@ TerminalWidget::TerminalWidget(QWidget* parent)
     vterm_set_utf8(vterm_, 1);
 
     screen_ = vterm_obtain_screen(vterm_);
+
+    // Full-screen applications (Far, vim, mc) use the alternate screen. It must be enabled so libvterm
+    // does not reflow their content on resize (the application repaints instead).
+    vterm_screen_enable_altscreen(screen_, 1);
 
     static const VTermScreenCallbacks kCallbacks =
     {
