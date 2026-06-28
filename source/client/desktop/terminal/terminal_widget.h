@@ -56,6 +56,7 @@ signals:
 
 protected:
     // QWidget implementation.
+    bool event(QEvent* event) final;
     void paintEvent(QPaintEvent* event) final;
     void keyPressEvent(QKeyEvent* event) final;
     void resizeEvent(QResizeEvent* event) final;

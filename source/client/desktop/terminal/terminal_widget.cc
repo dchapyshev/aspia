@@ -156,6 +156,25 @@ void TerminalWidget::onResult(int result_code)
 }
 
 //--------------------------------------------------------------------------------------------------
+bool TerminalWidget::event(QEvent* event)
+{
+    if (event->type() == QEvent::ShortcutOverride)
+    {
+        QKeyEvent* key_event = static_cast<QKeyEvent*>(event);
+        const int key = key_event->key();
+
+        if (key == Qt::Key_Tab || key == Qt::Key_Backtab ||
+            (key >= Qt::Key_F1 && key <= Qt::Key_F35))
+        {
+            event->accept();
+            return true;
+        }
+    }
+
+    return QWidget::event(event);
+}
+
+//--------------------------------------------------------------------------------------------------
 void TerminalWidget::paintEvent(QPaintEvent* /* event */)
 {
     QPainter painter(this);
@@ -351,8 +370,21 @@ void TerminalWidget::keyPressEvent(QKeyEvent* event)
             vterm_keyboard_key(vterm_, VTERM_KEY_DEL, modifiers);
             break;
 
+        case Qt::Key_Insert:
+            vterm_keyboard_key(vterm_, VTERM_KEY_INS, modifiers);
+            break;
+
         default:
         {
+            // Function keys (F1..F35) carry no text and are sent as VTermKey codes.
+            if (event->key() >= Qt::Key_F1 && event->key() <= Qt::Key_F35)
+            {
+                const int number = event->key() - Qt::Key_F1 + 1;
+                vterm_keyboard_key(vterm_, static_cast<VTermKey>(VTERM_KEY_FUNCTION(number)),
+                                   modifiers);
+                break;
+            }
+
             const QString text = event->text();
             if (text.isEmpty())
             {
