@@ -29,6 +29,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QScrollBar>
+#include <QShowEvent>
 #include <QTimer>
 #include <QWheelEvent>
 
@@ -229,6 +230,15 @@ bool TerminalWidget::event(QEvent* event)
     }
 
     return QWidget::event(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWidget::showEvent(QShowEvent* event)
+{
+    QWidget::showEvent(event);
+
+    // Take the keyboard focus so the in-terminal login prompt can be typed without clicking first.
+    setFocus();
 }
 
 //--------------------------------------------------------------------------------------------------

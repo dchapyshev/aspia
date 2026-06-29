@@ -31,6 +31,7 @@
 class QMouseEvent;
 class QPainter;
 class QScrollBar;
+class QShowEvent;
 class QTimer;
 class QWheelEvent;
 
@@ -59,6 +60,7 @@ signals:
 protected:
     // QWidget implementation.
     bool event(QEvent* event) final;
+    void showEvent(QShowEvent* event) final;
     void paintEvent(QPaintEvent* event) final;
     void keyPressEvent(QKeyEvent* event) final;
     void resizeEvent(QResizeEvent* event) final;
