@@ -23,6 +23,8 @@ endif()
 if (LINUX)
     # Wayland client stubs for wlr-screencopy (used by the wlroots screen capturer).
     add_subdirectory(wlr-protocols)
+    # Wayland client stubs for xdg-output (used to read the compositor's monitor layout).
+    add_subdirectory(wayland-protocols)
 endif()
 
 add_subdirectory(libvterm)

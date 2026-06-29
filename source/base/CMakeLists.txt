@@ -204,12 +204,11 @@ endif()
 if (LINUX)
     set(BASE_PLATFORM_LIBS stdc++fs ${CMAKE_DL_LIBS})
 
-    # libwayland-client is linked (the generated xdg-output stubs in base/linux call wl_proxy_* directly);
-    # it is already pulled in via the static Qt Wayland plugins. The generated xdg-output client header
-    # lives in the base binary directory.
+    # libwayland-client is linked (the vendored xdg-output stubs call wl_proxy_* directly); it is also
+    # pulled in via the static Qt Wayland plugins. The xdg-output client stubs come from the
+    # third_party/wayland-protocols static library.
     find_library(WAYLAND_CLIENT_LIB NAMES wayland-client REQUIRED)
-    list(APPEND BASE_PLATFORM_LIBS ${WAYLAND_CLIENT_LIB})
-    target_include_directories(aspia_base PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+    list(APPEND BASE_PLATFORM_LIBS ${WAYLAND_CLIENT_LIB} wayland_protocols)
 endif()
 
 if (ANDROID)
