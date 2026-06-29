@@ -31,6 +31,7 @@
 class QMouseEvent;
 class QPainter;
 class QScrollBar;
+class QTimer;
 class QWheelEvent;
 
 // Terminal emulator widget. The terminal state machine is driven by libvterm and the visible screen
@@ -91,6 +92,7 @@ private:
     void drawCell(QPainter& painter, int column, int row, const VTermScreenCell& cell, bool selected) const;
     void updateScrollbar();
     void setScrollOffset(int offset);
+    void finishResize();
     bool mouseReportingActive() const;
     void cellAt(const QPoint& position, int* row, int* column) const;
     Position positionAt(const QPoint& position) const;
@@ -123,6 +125,8 @@ private:
 
     int columns_ = 80;
     int rows_ = 24;
+    bool resizing_ = false;
+    QTimer* resize_timer_ = nullptr;
 
     int cursor_row_ = 0;
     int cursor_col_ = 0;

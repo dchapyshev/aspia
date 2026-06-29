@@ -29,7 +29,12 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QScrollBar>
+#include <QTimer>
 #include <QWheelEvent>
+
+#if defined(Q_OS_WINDOWS)
+#include <qt_windows.h>
+#endif
 
 #include <algorithm>
 
@@ -45,6 +50,10 @@ const int kPadding = 6;
 
 // Maximum number of scrollback (history) lines kept above the visible screen.
 const int kMaxScrollback = 5000;
+
+// Idle delay after the last resize event before the grid is recomputed and the host is told the new
+// size. While dragging the content is just stretched to follow the window.
+const int kResizeFinishMs = 150;
 
 //--------------------------------------------------------------------------------------------------
 VTermModifier vtermModifiers(Qt::KeyboardModifiers modifiers)
@@ -122,6 +131,22 @@ TerminalWidget::TerminalWidget(QWidget* parent)
     connect(scrollbar_, &QScrollBar::valueChanged, this, [this](int value)
     {
         setScrollOffset(scrollbar_->maximum() - value);
+    });
+
+    resize_timer_ = new QTimer(this);
+    resize_timer_->setSingleShot(true);
+    connect(resize_timer_, &QTimer::timeout, this, [this]
+    {
+#if defined(Q_OS_WINDOWS)
+        // While the mouse button is still held the window border is being dragged (a pause in the drag
+        // would otherwise trip the idle timer); keep waiting so the grid snaps only once, on release.
+        if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
+        {
+            resize_timer_->start(kResizeFinishMs);
+            return;
+        }
+#endif
+        finishResize();
     });
 
     vterm_ = vterm_new(rows_, columns_);
@@ -211,6 +236,22 @@ void TerminalWidget::paintEvent(QPaintEvent* /* event */)
 {
     QPainter painter(this);
     painter.fillRect(rect(), default_bg_);
+
+    // While a resize is in progress the grid is not recomputed yet; scale the current content to
+    // follow the drag, then snap to the real grid in finishResize(). The scale is uniform on both
+    // axes (by the smaller ratio) so the content keeps its proportions instead of being distorted.
+    if (resizing_)
+    {
+        const qreal grid_width = columns_ * char_width_ + 2 * kPadding;
+        const qreal grid_height = rows_ * line_height_ + 2 * kPadding;
+        if (grid_width > 0 && grid_height > 0)
+        {
+            const qreal scale = std::min(width() / grid_width, height() / grid_height);
+            painter.translate((width() - grid_width * scale) / 2.0, (height() - grid_height * scale) / 2.0);
+            painter.scale(scale, scale);
+        }
+    }
+
     painter.setFont(font_);
 
     const int history = static_cast<int>(scrollback_.size());
@@ -468,22 +509,46 @@ void TerminalWidget::resizeEvent(QResizeEvent* /* event */)
     if (char_width_ <= 0 || line_height_ <= 0)
         return;
 
+    // Before the session is connected there is no running application to stretch and no host to spare,
+    // so the grid is applied immediately.
+    if (mode_ != Mode::CONNECTED)
+    {
+        finishResize();
+        return;
+    }
+
+    // During a window drag the grid and the host are not touched on every step - that would resize the
+    // host pseudo-terminal on every pixel and reflow the content constantly. Instead the current
+    // content is stretched to follow the window (see paintEvent) and the real grid is applied once the
+    // size settles.
+    resizing_ = true;
+    resize_timer_->start(kResizeFinishMs);
+    update();
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWidget::finishResize()
+{
+    resizing_ = false;
+
+    const int scrollbar_width = scrollbar_->sizeHint().width();
     const int columns = std::max(1, (width() - scrollbar_width - 2 * kPadding) / char_width_);
     const int rows = std::max(1, (height() - 2 * kPadding) / line_height_);
 
-    if (columns == columns_ && rows == rows_)
-        return;
+    if (columns != columns_ || rows != rows_)
+    {
+        columns_ = columns;
+        rows_ = rows;
 
-    columns_ = columns;
-    rows_ = rows;
+        clearSelection();
+        vterm_set_size(vterm_, rows_, columns_);
 
-    clearSelection();
-    vterm_set_size(vterm_, rows_, columns_);
+        if (mode_ == Mode::CONNECTED)
+            emit sig_resize(columns_, rows_);
 
-    if (mode_ == Mode::CONNECTED)
-        emit sig_resize(columns_, rows_);
+        updateScrollbar();
+    }
 
-    updateScrollbar();
     update();
 }
 
