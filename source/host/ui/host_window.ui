@@ -260,6 +260,7 @@ border-radius: 2px;
      <string>Access</string>
     </property>
     <addaction name="action_desktop_manage"/>
+    <addaction name="action_terminal"/>
     <addaction name="action_file_transfer"/>
     <addaction name="action_system_info"/>
     <addaction name="action_text_chat"/>
@@ -328,6 +329,17 @@ border-radius: 2px;
    </property>
    <property name="text">
     <string>Desktop</string>
+   </property>
+  </action>
+  <action name="action_terminal">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Terminal</string>
    </property>
   </action>
   <action name="action_desktop_view">

@@ -97,6 +97,7 @@ HostWindow::HostWindow(QWidget* parent)
     quint32 one_time_sessions = user_settings.oneTimeSessions();
 
     ui->action_desktop_manage->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_DESKTOP);
+    ui->action_terminal->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_TERMINAL);
     ui->action_file_transfer->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_FILE_TRANSFER);
     ui->action_system_info->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_SYSTEM_INFO);
     ui->action_text_chat->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_CHAT);
@@ -1058,6 +1059,9 @@ quint32 HostWindow::calcOneTimeSessions()
 
     if (ui->action_desktop_manage->isChecked())
         sessions |= proto::peer::SESSION_TYPE_DESKTOP;
+
+    if (ui->action_terminal->isChecked())
+        sessions |= proto::peer::SESSION_TYPE_TERMINAL;
 
     if (ui->action_file_transfer->isChecked())
         sessions |= proto::peer::SESSION_TYPE_FILE_TRANSFER;

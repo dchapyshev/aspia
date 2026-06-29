@@ -831,92 +831,92 @@ Routers added: %4</source>
 <context>
     <name>ClientWindow</name>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="206"/>
+        <location filename="../client/desktop/client_window.cc" line="234"/>
         <source>Session started.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="214"/>
+        <location filename="../client/desktop/client_window.cc" line="242"/>
         <source>Error requesting connection via router: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="218"/>
+        <location filename="../client/desktop/client_window.cc" line="246"/>
         <source>The specified router is unavailable.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="222"/>
+        <location filename="../client/desktop/client_window.cc" line="250"/>
         <source>The specified router is offline.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="230"/>
+        <location filename="../client/desktop/client_window.cc" line="258"/>
         <source>Connecting to host %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="234"/>
+        <location filename="../client/desktop/client_window.cc" line="262"/>
         <source>Connecting to host %1:%2...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="245"/>
+        <location filename="../client/desktop/client_window.cc" line="273"/>
         <source>Connection to host %1 established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="249"/>
+        <location filename="../client/desktop/client_window.cc" line="277"/>
         <source>Connection to host %1:%2 established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="274"/>
+        <location filename="../client/desktop/client_window.cc" line="302"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="290"/>
+        <location filename="../client/desktop/client_window.cc" line="318"/>
         <source>Timeout waiting for reconnection to host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="298"/>
+        <location filename="../client/desktop/client_window.cc" line="326"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="304"/>
+        <location filename="../client/desktop/client_window.cc" line="332"/>
         <source>Attempting to connect in compatibility mode...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="366"/>
+        <location filename="../client/desktop/client_window.cc" line="394"/>
         <source>Requesting connection to the host...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="374"/>
+        <location filename="../client/desktop/client_window.cc" line="402"/>
         <source>Connection offer received.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="395"/>
+        <location filename="../client/desktop/client_window.cc" line="423"/>
         <source>The host with the specified ID is not online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="398"/>
+        <location filename="../client/desktop/client_window.cc" line="426"/>
         <source>Access is denied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="401"/>
+        <location filename="../client/desktop/client_window.cc" line="429"/>
         <source>There are no relays available or the key pool is empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="404"/>
+        <location filename="../client/desktop/client_window.cc" line="432"/>
         <source>Unknown error</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1362,230 +1362,236 @@ Routers added: %4</source>
 <context>
     <name>DesktopToolBar</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="117"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="120"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="118"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="121"/>
         <source>Lock toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="129"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="130"/>
         <source>Auto size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="132"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="133"/>
         <source>Automatic window size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="144"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="145"/>
         <source>Full screen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="147"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="148"/>
         <source>Switch to full screen mode or back</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="158"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="159"/>
         <source>Automatic scrolling</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="170"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="171"/>
         <source>Ctrl+Alt+Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="173"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="174"/>
         <source>Send Ctrl+Alt+Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="185"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="188"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="186"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="189"/>
         <source>Advanced menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="193"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="196"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="199"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="194"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="197"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="200"/>
         <source>Save screenshot...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="208"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="211"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="209"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="212"/>
+        <source>Terminal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="221"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="224"/>
         <source>File transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="219"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="570"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="850"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="232"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="577"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="857"/>
         <source>Scale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="228"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="231"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="241"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="244"/>
         <source>Power control</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="239"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="252"/>
         <source>Shutdown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="244"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="257"/>
         <source>Reboot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="249"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="262"/>
         <source>Logoff</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="254"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="267"/>
         <source>Lock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="263"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="276"/>
         <source>System Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="275"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="288"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="278"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="291"/>
         <source>Close session</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="337"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="350"/>
         <source>Fit window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="346"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="359"/>
         <source>Minimize</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="349"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="362"/>
         <source>Minimize window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="354"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="357"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="367"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="370"/>
         <source>Statistics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="362"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="375"/>
         <source>Reboot (Safe mode)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="365"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="378"/>
         <source>Reboot in safe mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="374"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="387"/>
         <source>Paste clipboard as keystrokes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="383"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="386"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="396"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="399"/>
         <source>Text Chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="398"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="401"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="416"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="573"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="411"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="414"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="422"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="580"/>
         <source>Start recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="410"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="413"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="423"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="426"/>
         <source>Task Manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="425"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="438"/>
         <source>Switch Session</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="314"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="581"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="320"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="588"/>
         <source>Resolution selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1025"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1032"/>
         <source>Session %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1025"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1032"/>
         <source>Session %1 (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="411"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="573"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="417"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="580"/>
         <source>Stop recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="679"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="686"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="694"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="720"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="701"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="727"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="695"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="702"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="700"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="726"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="707"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="733"/>
         <source>Wait for host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="721"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="728"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="746"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="753"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="761"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="768"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2476,19 +2482,19 @@ Routers added: %4</source>
 <context>
     <name>FileTransferWindow</name>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="48"/>
-        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="260"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="47"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="239"/>
         <source>Local Computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="49"/>
-        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="261"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="48"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="240"/>
         <source>Remote Computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="173"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="152"/>
         <source>Session error: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2783,9 +2789,9 @@ Routers added: %4</source>
     <name>HostWindow</name>
     <message>
         <location filename="../host/ui/host_window.ui" line="26"/>
-        <location filename="../host/ui/host_window.cc" line="476"/>
-        <location filename="../host/ui/host_window.cc" line="829"/>
-        <location filename="../host/ui/host_window.cc" line="1039"/>
+        <location filename="../host/ui/host_window.cc" line="485"/>
+        <location filename="../host/ui/host_window.cc" line="838"/>
+        <location filename="../host/ui/host_window.cc" line="1048"/>
         <source>Aspia Host</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2801,8 +2807,8 @@ Routers added: %4</source>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="204"/>
-        <location filename="../host/ui/host_window.cc" line="420"/>
-        <location filename="../host/ui/host_window.cc" line="952"/>
+        <location filename="../host/ui/host_window.cc" line="429"/>
+        <location filename="../host/ui/host_window.cc" line="961"/>
         <source>Router is disabled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2817,154 +2823,159 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="269"/>
+        <location filename="../host/ui/host_window.ui" line="270"/>
         <source>View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="273"/>
+        <location filename="../host/ui/host_window.ui" line="274"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="278"/>
+        <location filename="../host/ui/host_window.ui" line="279"/>
         <source>Theme</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="291"/>
+        <location filename="../host/ui/host_window.ui" line="292"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="296"/>
+        <location filename="../host/ui/host_window.ui" line="297"/>
         <source>Online Help...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="299"/>
+        <location filename="../host/ui/host_window.ui" line="300"/>
         <source>F1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="304"/>
+        <location filename="../host/ui/host_window.ui" line="305"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="309"/>
+        <location filename="../host/ui/host_window.ui" line="310"/>
         <source>Security Log...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="314"/>
+        <location filename="../host/ui/host_window.ui" line="315"/>
         <source>Settings...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="319"/>
-        <location filename="../host/ui/host_window.cc" line="813"/>
+        <location filename="../host/ui/host_window.ui" line="320"/>
+        <location filename="../host/ui/host_window.cc" line="822"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="330"/>
+        <location filename="../host/ui/host_window.ui" line="331"/>
         <source>Desktop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="341"/>
+        <location filename="../host/ui/host_window.ui" line="342"/>
+        <source>Terminal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/host_window.ui" line="353"/>
         <source>Desktop View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="352"/>
+        <location filename="../host/ui/host_window.ui" line="364"/>
         <source>File Transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="363"/>
+        <location filename="../host/ui/host_window.ui" line="375"/>
         <source>System Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="374"/>
+        <location filename="../host/ui/host_window.ui" line="386"/>
         <source>Text Chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="379"/>
+        <location filename="../host/ui/host_window.ui" line="391"/>
         <source>Show chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="241"/>
-        <location filename="../host/ui/host_window.cc" line="808"/>
+        <location filename="../host/ui/host_window.cc" line="250"/>
+        <location filename="../host/ui/host_window.cc" line="817"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="370"/>
+        <location filename="../host/ui/host_window.cc" line="379"/>
         <source>Not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="424"/>
+        <location filename="../host/ui/host_window.cc" line="433"/>
         <source>Connecting to router %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="428"/>
+        <location filename="../host/ui/host_window.cc" line="437"/>
         <source>Connected to router %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="432"/>
+        <location filename="../host/ui/host_window.cc" line="441"/>
         <source>Failed to connect to router %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="472"/>
+        <location filename="../host/ui/host_window.cc" line="481"/>
         <source>Screen recording has started.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="474"/>
+        <location filename="../host/ui/host_window.cc" line="483"/>
         <source>Screen recording stopped.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="797"/>
+        <location filename="../host/ui/host_window.cc" line="806"/>
         <source>Settings storage is unavailable.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="846"/>
+        <location filename="../host/ui/host_window.cc" line="855"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="957"/>
+        <location filename="../host/ui/host_window.cc" line="966"/>
         <source>Connecting to router...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="962"/>
+        <location filename="../host/ui/host_window.cc" line="971"/>
         <source>Connected to router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="967"/>
+        <location filename="../host/ui/host_window.cc" line="976"/>
         <source>Connection error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1036"/>
+        <location filename="../host/ui/host_window.cc" line="1045"/>
         <source>IP addresses:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1040"/>
+        <location filename="../host/ui/host_window.cc" line="1049"/>
         <source>ID: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3008,244 +3019,249 @@ Routers added: %4</source>
     </message>
     <message>
         <location filename="../client/desktop/hosts_tab.ui" line="119"/>
-        <source>Add Host</source>
+        <source>Clear Events</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client/desktop/hosts_tab.ui" line="128"/>
-        <source>Delete Host</source>
+        <source>Add Host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client/desktop/hosts_tab.ui" line="137"/>
-        <source>Edit Host</source>
+        <source>Delete Host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client/desktop/hosts_tab.ui" line="146"/>
+        <source>Edit Host</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/hosts_tab.ui" line="155"/>
         <source>Copy Host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="158"/>
-        <location filename="../client/desktop/hosts_tab.ui" line="161"/>
-        <location filename="../client/desktop/hosts_tab.ui" line="206"/>
-        <location filename="../client/desktop/hosts_tab.ui" line="209"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="167"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="170"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="215"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="218"/>
         <source>Desktop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="173"/>
-        <location filename="../client/desktop/hosts_tab.ui" line="218"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="182"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="227"/>
         <source>File Transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="185"/>
-        <location filename="../client/desktop/hosts_tab.ui" line="227"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="194"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="236"/>
         <source>Chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="197"/>
-        <location filename="../client/desktop/hosts_tab.ui" line="236"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="206"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="245"/>
         <source>System Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="248"/>
         <location filename="../client/desktop/hosts_tab.ui" line="257"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="266"/>
         <source>Terminal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="266"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="275"/>
         <source>Add Workspace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="275"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="284"/>
         <source>Edit Workspace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="284"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="293"/>
         <source>Delete Workspace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="293"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="302"/>
         <source>Add User</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="302"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="311"/>
         <source>Edit User</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="311"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="320"/>
         <source>Delete User</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="320"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="329"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="329"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="338"/>
         <source>Disconnect All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="338"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="347"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="347"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="356"/>
         <source>Check for Updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="356"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="365"/>
         <source>Save...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="359"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="368"/>
         <source>Ctrl+S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="368"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="377"/>
         <source>Reload</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="371"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="380"/>
         <source>F5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="380"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="389"/>
         <source>Import Old Address Book...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="389"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="398"/>
         <source>Export Address Book...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="398"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="407"/>
         <source>Import Address Book...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="406"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="415"/>
         <source>Auto-refresh Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="428"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="429"/>
         <source>Hosts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="913"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="920"/>
         <source>(copy)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="663"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="692"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="734"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="878"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="909"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="952"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="665"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="694"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="736"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="885"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="916"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="959"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="917"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="924"/>
         <source>Failed to add the host to the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="956"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="963"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="966"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="973"/>
         <source>Unable to remove host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1021"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="1046"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="1071"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1028"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1053"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1078"/>
         <source>Copy Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1022"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="1047"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="1072"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1029"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1054"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1079"/>
         <source>Copy Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1172"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1179"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1282"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1289"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1332"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1351"/>
         <source>Import Old Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1334"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1353"/>
         <source>Address Book (*.aab);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1357"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="1374"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1376"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1393"/>
         <source>Export Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1359"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="1430"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1378"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1449"/>
         <source>Address Book (*.json);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1369"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1388"/>
         <source>Address book database is not available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1376"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1395"/>
         <source>Enter a password to encrypt the address book.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1381"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1400"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts_tab.cc" line="1382"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1401"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -3254,17 +3270,17 @@ Routers added: %4</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1385"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1404"/>
         <source>Do you want to enter a different password?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1402"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1421"/>
         <source>Failed to export the address book.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1407"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1426"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -3272,42 +3288,42 @@ Hosts exported: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1428"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1447"/>
         <source>Import Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1439"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1458"/>
         <source>Unlock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1441"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1460"/>
         <source>Address book is encrypted. To open, you must enter a password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1456"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1475"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1460"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1479"/>
         <source>Unsupported file format version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1464"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1483"/>
         <source>Nothing was imported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1468"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1487"/>
         <source>The file is not a valid address book.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1473"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1492"/>
         <source>Import completed successfully.
 Routers added: %1
 Routers skipped: %2
@@ -3318,17 +3334,17 @@ Hosts skipped: %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1793"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1821"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1800"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1828"/>
         <source>The host has an invalid host ID.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1809"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1837"/>
         <source>The host has an incorrect address.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3910,94 +3926,94 @@ Hosts skipped: %6</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="82"/>
+        <location filename="../client/desktop/main_window.ui" line="88"/>
         <source>View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="111"/>
-        <location filename="../client/desktop/main_window.ui" line="173"/>
+        <location filename="../client/desktop/main_window.ui" line="117"/>
+        <location filename="../client/desktop/main_window.ui" line="179"/>
         <source>Tool Bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="138"/>
+        <location filename="../client/desktop/main_window.ui" line="144"/>
         <source>F1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="181"/>
+        <location filename="../client/desktop/main_window.ui" line="187"/>
         <source>Status Bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="70"/>
+        <location filename="../client/desktop/main_window.ui" line="76"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="165"/>
+        <location filename="../client/desktop/main_window.ui" line="171"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="135"/>
+        <location filename="../client/desktop/main_window.ui" line="141"/>
         <source>Online Help...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="14"/>
+        <location filename="../client/desktop/main_window.ui" line="20"/>
         <location filename="../client/desktop/main_window.cc" line="298"/>
         <source>Aspia Client</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="62"/>
+        <location filename="../client/desktop/main_window.ui" line="68"/>
         <source>File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="77"/>
+        <location filename="../client/desktop/main_window.ui" line="83"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="94"/>
+        <location filename="../client/desktop/main_window.ui" line="100"/>
         <source>Session Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="99"/>
+        <location filename="../client/desktop/main_window.ui" line="105"/>
         <source>Actions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="147"/>
+        <location filename="../client/desktop/main_window.ui" line="153"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="156"/>
+        <location filename="../client/desktop/main_window.ui" line="162"/>
         <source>Settings...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="189"/>
+        <location filename="../client/desktop/main_window.ui" line="195"/>
         <source>Search Field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="197"/>
+        <location filename="../client/desktop/main_window.ui" line="203"/>
         <source>Large icons</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="205"/>
+        <location filename="../client/desktop/main_window.ui" line="211"/>
         <source>Open Sessions in Tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.ui" line="213"/>
+        <location filename="../client/desktop/main_window.ui" line="219"/>
         <source>Always on Top</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6296,27 +6312,27 @@ Are you sure you want to continue?</source>
     <name>Sidebar</name>
     <message>
         <location filename="../client/desktop/hosts/sidebar.cc" line="74"/>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="748"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="755"/>
         <source>Local</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="929"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="936"/>
         <source>Connecting to router %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="933"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="940"/>
         <source>Connection to router %1 established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="937"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="944"/>
         <source>Disconnected from router %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="981"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="988"/>
         <source>To complete the migration from a previous version, you need to change your password.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6379,44 +6395,49 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="650"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="536"/>
+        <source>Event history cleared.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="657"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="663"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="670"/>
         <source>Unable to remove group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="727"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="734"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="973"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="980"/>
         <source>Network error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="1427"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="1434"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="1436"/>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="1598"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="1443"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="1605"/>
         <source>Failed to move the group.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="1489"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="1496"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="1507"/>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="1675"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="1514"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="1682"/>
         <source>Failed to move the host to the selected group.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8290,137 +8311,137 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="444"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="429"/>
         <source>Summary</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="451"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="436"/>
         <source>Hardware</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="454"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="439"/>
         <source>Devices</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="457"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="442"/>
         <source>Video Adapters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="460"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="445"/>
         <source>Monitors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="463"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="448"/>
         <source>Printers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="466"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="451"/>
         <source>Power Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="479"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="464"/>
         <source>Software</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="482"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="467"/>
         <source>Applications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="485"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="470"/>
         <source>Drivers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="488"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="473"/>
         <source>Services</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="491"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="476"/>
         <source>Processes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="494"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="479"/>
         <source>Licenses</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="507"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="492"/>
         <source>Network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="510"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="495"/>
         <source>Network Adapters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="513"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="498"/>
         <source>Routes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="516"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="501"/>
         <source>Connections</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="519"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="504"/>
         <source>Network Shares</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="522"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="507"/>
         <source>Open Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="535"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="520"/>
         <source>Operating System</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="538"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="523"/>
         <source>Environment Variables</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="541"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="526"/>
         <source>Event Logs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="544"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="529"/>
         <source>Users</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="547"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="532"/>
         <source>User Groups</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="140"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="139"/>
         <source>HTML File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="140"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="139"/>
         <source>HTML File (*.html)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="151"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="150"/>
         <source>Failed to save file: %1</source>
         <translation type="unfinished"></translation>
     </message>
