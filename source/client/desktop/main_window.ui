@@ -10,6 +10,12 @@
     <height>645</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>800</width>
+    <height>500</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>Aspia Client</string>
   </property>

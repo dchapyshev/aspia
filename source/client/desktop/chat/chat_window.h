@@ -59,10 +59,6 @@ protected:
 
 private:
     std::unique_ptr<Ui::ChatWindow> ui;
-    QAction* action_desktop_ = nullptr;
-    QAction* action_terminal_ = nullptr;
-    QAction* action_file_transfer_ = nullptr;
-    QAction* action_system_info_ = nullptr;
     Q_DISABLE_COPY_MOVE(ChatWindow)
 };
 

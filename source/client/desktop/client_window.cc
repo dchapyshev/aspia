@@ -18,6 +18,7 @@
 
 #include "client/desktop/client_window.h"
 
+#include <QAction>
 #include <QCursor>
 #include <QEvent>
 #include <QGuiApplication>
@@ -68,6 +69,8 @@ ClientWindow::ClientWindow(proto::peer::SessionType session_type, QWidget* paren
         session_state_->setAutoReconnect(false);
         onStatusChanged(Client::Status::WAIT_FOR_HOST_TIMEOUT, QVariant());
     });
+
+    createSessionConnectActions();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -136,7 +139,32 @@ void ClientWindow::setTabbedMode(bool /* tabbed */)
 //--------------------------------------------------------------------------------------------------
 QList<QPair<Tab::ActionRole, QList<QAction*>>> ClientWindow::tabActionGroups() const
 {
-    return {};
+    return {{ Tab::ActionRole::ACTION, session_connect_actions_ }};
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientWindow::createSessionConnectActions()
+{
+    static const proto::peer::SessionType kOrder[] = {
+        proto::peer::SESSION_TYPE_DESKTOP,
+        proto::peer::SESSION_TYPE_TERMINAL,
+        proto::peer::SESSION_TYPE_FILE_TRANSFER,
+        proto::peer::SESSION_TYPE_SYSTEM_INFO,
+        proto::peer::SESSION_TYPE_CHAT
+    };
+
+    for (proto::peer::SessionType type : kOrder)
+    {
+        if (type == session_type_)
+            continue;
+
+        QAction* action = new QAction(sessionIcon(type), sessionName(type), this);
+        connect(action, &QAction::triggered, this, [this, type]()
+        {
+            emit sig_connectRequested(sessionState()->host(), type);
+        });
+        session_connect_actions_.append(action);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

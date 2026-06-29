@@ -76,10 +76,6 @@ private:
     QHBoxLayout* layout_ = nullptr;
     QList<SysInfoWidget*> sys_info_widgets_;
     int current_widget_ = 0;
-    QAction* action_desktop_ = nullptr;
-    QAction* action_terminal_ = nullptr;
-    QAction* action_file_transfer_ = nullptr;
-    QAction* action_text_chat_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(SystemInfoWindow)
 };

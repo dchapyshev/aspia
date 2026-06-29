@@ -22,7 +22,6 @@
 #include "base/crypto/generic_hash.h"
 #include "client/client_text_chat.h"
 #include "common/desktop/chat_widget.h"
-#include "common/desktop/session_type.h"
 #include "proto/chat.h"
 #include "proto/peer.h"
 #include "ui_chat_window.h"
@@ -65,21 +64,6 @@ ChatWindow::ChatWindow(QWidget* parent)
         chat.mutable_chat_status()->CopyFrom(status);
         emit sig_chatMessage(chat);
     });
-
-    auto make_action = [this](proto::peer::SessionType type)
-    {
-        QAction* action = new QAction(sessionIcon(type), sessionName(type), this);
-        connect(action, &QAction::triggered, this, [this, type]()
-        {
-            emit sig_connectRequested(sessionState()->host(), type);
-        });
-        return action;
-    };
-
-    action_desktop_ = make_action(proto::peer::SESSION_TYPE_DESKTOP);
-    action_terminal_ = make_action(proto::peer::SESSION_TYPE_TERMINAL);
-    action_file_transfer_ = make_action(proto::peer::SESSION_TYPE_FILE_TRANSFER);
-    action_system_info_ = make_action(proto::peer::SESSION_TYPE_SYSTEM_INFO);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -116,8 +100,7 @@ QList<QPair<Tab::ActionRole, QList<QAction*>>> ChatWindow::tabActionGroups() con
 {
     return {
         { Tab::ActionRole::FILE, ui->text_chat_widget->tabActions() },
-        { Tab::ActionRole::ACTION,
-          { action_desktop_, action_terminal_, action_file_transfer_, action_system_info_ } }
+        { Tab::ActionRole::ACTION, sessionConnectActions() }
     };
 }
 

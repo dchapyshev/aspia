@@ -31,6 +31,7 @@ namespace proto::peer {
 enum SessionType : int;
 } // namespace proto::peer
 
+class QAction;
 class QTimer;
 class StatusDialog;
 
@@ -112,6 +113,12 @@ protected:
     virtual Client* createClient() = 0;
     virtual void onInternalReset() = 0;
 
+    // Returns actions that launch every session type except this window's own, targeting the
+    // current host, in a fixed order. Built once on construction. The default tabActionGroups()
+    // exposes them in the ACTION group; subclasses that override tabActionGroups() insert them
+    // where appropriate.
+    const QList<QAction*>& sessionConnectActions() const { return session_connect_actions_; }
+
     // QWidget implementation.
     void changeEvent(QEvent* event) override;
     void closeEvent(QCloseEvent* event) override;
@@ -135,12 +142,16 @@ private:
     // discard the old instance and build a new one).
     void startNewClient();
 
+    // Builds session_connect_actions_ for every session type except session_type_.
+    void createSessionConnectActions();
+
     const proto::peer::SessionType session_type_;
     std::shared_ptr<SessionState> session_state_;
     ScopedQPointer<Client> client_;
     StatusDialog* status_dialog_ = nullptr;
     QTimer* drag_poll_timer_ = nullptr;
     QTimer* reconnect_timeout_timer_ = nullptr;
+    QList<QAction*> session_connect_actions_;
 };
 
 #endif // CLIENT_DESKTOP_CLIENT_WINDOW_H
