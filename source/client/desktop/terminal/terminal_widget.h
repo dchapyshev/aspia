@@ -133,6 +133,10 @@ private:
     int cursor_row_ = 0;
     int cursor_col_ = 0;
     bool cursor_visible_ = true;
+    int cursor_shape_ = VTERM_PROP_CURSORSHAPE_BLOCK;
+    bool cursor_blink_ = false;
+    bool blink_visible_ = true;
+    QTimer* blink_timer_ = nullptr;
     int mouse_mode_ = 0; // VTERM_PROP_MOUSE_NONE
     bool alt_screen_ = false;
     bool suppress_scrollback_ = false;

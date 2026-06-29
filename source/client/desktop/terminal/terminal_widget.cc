@@ -134,6 +134,14 @@ TerminalWidget::TerminalWidget(QWidget* parent)
         setScrollOffset(scrollbar_->maximum() - value);
     });
 
+    blink_timer_ = new QTimer(this);
+    blink_timer_->setInterval(530);
+    connect(blink_timer_, &QTimer::timeout, this, [this]
+    {
+        blink_visible_ = !blink_visible_;
+        update();
+    });
+
     resize_timer_ = new QTimer(this);
     resize_timer_->setSingleShot(true);
     connect(resize_timer_, &QTimer::timeout, this, [this]
@@ -295,14 +303,34 @@ void TerminalWidget::paintEvent(QPaintEvent* /* event */)
         }
     }
 
-    // The cursor is only shown on the live screen (not when scrolled into history).
-    if (scroll_offset_ == 0 && cursor_visible_)
+    // The cursor is only shown on the live screen (not when scrolled into history), and hidden during
+    // the dark phase of a blink while focused.
+    const bool blink_hidden = hasFocus() && cursor_blink_ && !blink_visible_;
+    if (scroll_offset_ == 0 && cursor_visible_ && !blink_hidden)
     {
         const int x = kPadding + cursor_col_ * char_width_;
         const int y = kPadding + cursor_row_ * line_height_;
 
-        if (hasFocus())
+        if (!hasFocus())
         {
+            // Unfocused: outline the cell regardless of the requested shape.
+            painter.setPen(default_fg_);
+            painter.drawRect(x, y, char_width_ - 1, line_height_ - 1);
+        }
+        else if (cursor_shape_ == VTERM_PROP_CURSORSHAPE_UNDERLINE)
+        {
+            const int thickness = std::max(2, line_height_ / 10);
+            painter.fillRect(x, y + line_height_ - thickness, char_width_, thickness, default_fg_);
+        }
+        else if (cursor_shape_ == VTERM_PROP_CURSORSHAPE_BAR_LEFT)
+        {
+            const int thickness = std::max(2, char_width_ / 6);
+            painter.fillRect(x, y, thickness, line_height_, default_fg_);
+        }
+        else
+        {
+            // Block: invert the cell - fill with the foreground and repaint the glyph in the
+            // background color.
             painter.fillRect(x, y, char_width_, line_height_, default_fg_);
 
             VTermPos pos;
@@ -313,14 +341,10 @@ void TerminalWidget::paintEvent(QPaintEvent* /* event */)
             if (vterm_screen_get_cell(screen_, pos, &cell) && cell.chars[0] != 0)
             {
                 const char32_t glyph = static_cast<char32_t>(cell.chars[0]);
+                painter.setFont(font_);
                 painter.setPen(default_bg_);
                 painter.drawText(x, y + ascent_, QString::fromUcs4(&glyph, 1));
             }
-        }
-        else
-        {
-            painter.setPen(default_fg_);
-            painter.drawRect(x, y, char_width_ - 1, line_height_ - 1);
         }
     }
 }
@@ -1005,6 +1029,11 @@ void TerminalWidget::showContextMenu(const QPoint& global_position)
 void TerminalWidget::focusInEvent(QFocusEvent* event)
 {
     QWidget::focusInEvent(event);
+
+    blink_visible_ = true;
+    if (cursor_blink_)
+        blink_timer_->start();
+
     update();
 }
 
@@ -1012,6 +1041,10 @@ void TerminalWidget::focusInEvent(QFocusEvent* event)
 void TerminalWidget::focusOutEvent(QFocusEvent* event)
 {
     QWidget::focusOutEvent(event);
+
+    // No blinking while unfocused - the cursor is drawn as a hollow outline instead.
+    blink_timer_->stop();
+
     update();
 }
 
@@ -1126,6 +1159,12 @@ int TerminalWidget::onMoveCursor(VTermPos pos, VTermPos /* old_pos */, int visib
     self->cursor_row_ = pos.row;
     self->cursor_col_ = pos.col;
     self->cursor_visible_ = (visible != 0);
+
+    // Keep the cursor solid right after it moves (e.g. while typing) by restarting the blink phase.
+    self->blink_visible_ = true;
+    if (self->cursor_blink_ && self->hasFocus())
+        self->blink_timer_->start();
+
     self->update();
     return 1;
 }
@@ -1139,6 +1178,21 @@ int TerminalWidget::onSetTermProp(VTermProp prop, VTermValue* value, void* user)
     if (prop == VTERM_PROP_CURSORVISIBLE)
     {
         self->cursor_visible_ = (value->boolean != 0);
+        self->update();
+    }
+    else if (prop == VTERM_PROP_CURSORBLINK)
+    {
+        self->cursor_blink_ = (value->boolean != 0);
+        self->blink_visible_ = true;
+        if (self->cursor_blink_ && self->hasFocus())
+            self->blink_timer_->start();
+        else
+            self->blink_timer_->stop();
+        self->update();
+    }
+    else if (prop == VTERM_PROP_CURSORSHAPE)
+    {
+        self->cursor_shape_ = value->number;
         self->update();
     }
     else if (prop == VTERM_PROP_MOUSE)
