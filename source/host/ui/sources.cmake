@@ -31,6 +31,8 @@ collect_sources(SOURCE_HOST_CORE_UI
     connect_confirm_dialog.cc
     connect_confirm_dialog.h
     connect_confirm_dialog.ui
+    elevate_util.cc
+    elevate_util.h
     host_main.cc
     host_main.h
     host_window.cc

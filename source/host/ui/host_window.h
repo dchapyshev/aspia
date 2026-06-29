@@ -35,6 +35,7 @@ class HostWindow;
 
 class ChatWidget;
 class Clipboard;
+class ElevateUtil;
 class NotifierWindow;
 class StatusDialog;
 
@@ -98,6 +99,7 @@ private:
     quint32 calcOneTimeSessions();
 
     std::unique_ptr<Ui::HostWindow> ui;
+    std::unique_ptr<ElevateUtil> elevate_util_;
     bool should_be_quit_ = false;
     bool connected_to_service_ = false;
 

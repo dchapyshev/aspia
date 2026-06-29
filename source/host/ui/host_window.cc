@@ -21,9 +21,7 @@
 #include <QActionGroup>
 #include <QCloseEvent>
 #include <QDesktopServices>
-#include <QDir>
 #include <QNetworkInterface>
-#include <QProcess>
 #include <QTimer>
 #include <QUrl>
 
@@ -44,6 +42,7 @@
 #include "host/ui/check_password_dialog.h"
 #include "host/ui/config_dialog.h"
 #include "host/ui/connect_confirm_dialog.h"
+#include "host/ui/elevate_util.h"
 #include "host/ui/notifier_window.h"
 #include "host/ui/security_log_dialog.h"
 #include "host/ui/user_settings.h"
@@ -51,18 +50,11 @@
 #include "proto/user.h"
 #include "ui_host_window.h"
 
-#if defined(Q_OS_WINDOWS)
-#include "base/process_util.h"
-
-#include <QWinEventNotifier>
-#include <qt_windows.h>
-#include <shellapi.h>
-#endif // defined(Q_OS_WINDOWS)
-
 //--------------------------------------------------------------------------------------------------
 HostWindow::HostWindow(QWidget* parent)
     : QMainWindow(parent),
-      ui(std::make_unique<Ui::HostWindow>())
+      ui(std::make_unique<Ui::HostWindow>()),
+      elevate_util_(ElevateUtil::create())
 {
     LOG(INFO) << "Ctor";
 
@@ -617,80 +609,14 @@ void HostWindow::onSecurityLog()
 {
     LOG(INFO) << "[ACTION] Security Log";
 
-#if defined(Q_OS_WINDOWS)
-    if (!ProcessUtil::isProcessElevated())
+    if (elevate_util_ && elevate_util_->runElevated("--security-log", winId(), [this]()
     {
-        LOG(INFO) << "Process not elevated";
-
-        QString current_exec_file =
-            QDir::toNativeSeparators(QCoreApplication::applicationFilePath());
-        if (!current_exec_file.isEmpty())
-        {
-            SHELLEXECUTEINFOW sei;
-            memset(&sei, 0, sizeof(sei));
-
-            sei.cbSize = sizeof(sei);
-            sei.lpVerb = L"runas";
-            sei.lpFile = qUtf16Printable(current_exec_file);
-            sei.hwnd = reinterpret_cast<HWND>(winId());
-            sei.nShow = SW_SHOW;
-            sei.lpParameters = L"--security-log";
-            sei.fMask = SEE_MASK_NOCLOSEPROCESS;
-
-            if (ShellExecuteExW(&sei))
-            {
-                QWinEventNotifier* process_watcher = new QWinEventNotifier(this);
-
-                connect(process_watcher, &QWinEventNotifier::activated, this, [this, process_watcher]
-                {
-                    process_watcher->deleteLater();
-                    ui->action_security_log->setEnabled(true);
-                });
-
-                ui->action_security_log->setEnabled(false);
-
-                process_watcher->setHandle(sei.hProcess);
-                process_watcher->setEnabled(true);
-            }
-            else
-            {
-                PLOG(ERROR) << "ShellExecuteExW failed";
-            }
-        }
-        else
-        {
-            LOG(ERROR) << "Empty file path";
-        }
-
-        return;
-    }
-#endif
-
-#if defined(Q_OS_LINUX)
-    uid_t self_uid = getuid();
-    uid_t effective_uid = geteuid();
-
-    if (self_uid != 0 && self_uid == effective_uid)
+        ui->action_security_log->setEnabled(true);
+    }))
     {
-        LOG(INFO) << "Start security log dialog as super user";
-
-        QProcess* process = new QProcess(this);
-
-        connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
-                this, [this, process](int exit_code, QProcess::ExitStatus exit_status)
-        {
-            LOG(INFO) << "Process finished with exit code:" << exit_code
-                      << "(status:" << exit_status << ")";
-
-            process->deleteLater();
-            ui->action_security_log->setEnabled(true);
-        });
-
         ui->action_security_log->setEnabled(false);
-        process->start("pkexec", QStringList() << QCoreApplication::applicationFilePath() << "--security-log");
         return;
     }
-#endif // defined(Q_OS_LINUX)
 
     SecurityLogDialog(this).exec();
 }
@@ -700,86 +626,15 @@ void HostWindow::onSettings()
 {
     LOG(INFO) << "[ACTION] Settings";
 
-#if defined(Q_OS_WINDOWS)
-    if (!ProcessUtil::isProcessElevated())
+    if (elevate_util_ && elevate_util_->runElevated("--config", winId(), [this]()
     {
-        LOG(INFO) << "Process not elevated";
-
-        QString current_exec_file =
-            QDir::toNativeSeparators(QCoreApplication::applicationFilePath());
-        if (!current_exec_file.isEmpty())
-        {
-            SHELLEXECUTEINFOW sei;
-            memset(&sei, 0, sizeof(sei));
-
-            sei.cbSize = sizeof(sei);
-            sei.lpVerb = L"runas";
-            sei.lpFile = qUtf16Printable(current_exec_file);
-            sei.hwnd = reinterpret_cast<HWND>(winId());
-            sei.nShow = SW_SHOW;
-            sei.lpParameters = L"--config";
-            sei.fMask = SEE_MASK_NOCLOSEPROCESS;
-
-            if (ShellExecuteExW(&sei))
-            {
-                QWinEventNotifier* process_watcher = new QWinEventNotifier(this);
-
-                connect(process_watcher, &QWinEventNotifier::activated, this, [this, process_watcher]
-                {
-                    process_watcher->deleteLater();
-                    ui->action_settings->setEnabled(true);
-                    onSettingsChanged();
-                });
-
-                ui->action_settings->setEnabled(false);
-
-                process_watcher->setHandle(sei.hProcess);
-                process_watcher->setEnabled(true);
-            }
-            else
-            {
-                PLOG(ERROR) << "ShellExecuteExW failed";
-            }
-        }
-        else
-        {
-            LOG(ERROR) << "Empty file path";
-        }
-
-        return;
-    }
-#endif
-
-#if defined(Q_OS_LINUX)
-    uid_t self_uid = getuid();
-    uid_t effective_uid = geteuid();
-
-    if (self_uid != 0 && self_uid == effective_uid)
+        ui->action_settings->setEnabled(true);
+        onSettingsChanged();
+    }))
     {
-        LOG(INFO) << "Start settings dialog as super user";
-
-        QProcess* process = new QProcess(this);
-
-        connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
-                this, [this, process](int exit_code, QProcess::ExitStatus exit_status)
-        {
-            LOG(INFO) << "Process finished with exit code:" << exit_code
-                      << "(status:" << exit_status << ")";
-
-            process->deleteLater();
-            ui->action_settings->setEnabled(true);
-            onSettingsChanged();
-        });
-
         ui->action_settings->setEnabled(false);
-
-        // Run the application itself as root so its dialog can edit the system configuration. It is
-        // the direct pkexec target, so the bundled polkit policy applies (branded prompt); DISPLAY
-        // and the X authority cookie are preserved from this process via the policy's allow_gui.
-        process->start("pkexec", QStringList() << QCoreApplication::applicationFilePath() << "--config");
         return;
     }
-#endif // defined(Q_OS_LINUX)
 
     switch (Database::instance().passwordProtectionState())
     {
