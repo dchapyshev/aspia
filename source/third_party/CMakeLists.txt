@@ -20,4 +20,9 @@ if (APPLE)
     add_subdirectory(portaudio)
 endif()
 
+if (LINUX)
+    # Wayland client stubs for wlr-screencopy (used by the wlroots screen capturer).
+    add_subdirectory(wlr-protocols)
+endif()
+
 add_subdirectory(libvterm)
