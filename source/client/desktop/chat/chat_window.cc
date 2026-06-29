@@ -77,6 +77,7 @@ ChatWindow::ChatWindow(QWidget* parent)
     };
 
     action_desktop_ = make_action(proto::peer::SESSION_TYPE_DESKTOP);
+    action_terminal_ = make_action(proto::peer::SESSION_TYPE_TERMINAL);
     action_file_transfer_ = make_action(proto::peer::SESSION_TYPE_FILE_TRANSFER);
     action_system_info_ = make_action(proto::peer::SESSION_TYPE_SYSTEM_INFO);
 }
@@ -115,7 +116,8 @@ QList<QPair<Tab::ActionRole, QList<QAction*>>> ChatWindow::tabActionGroups() con
 {
     return {
         { Tab::ActionRole::FILE, ui->text_chat_widget->tabActions() },
-        { Tab::ActionRole::ACTION, { action_desktop_, action_file_transfer_, action_system_info_ } }
+        { Tab::ActionRole::ACTION,
+          { action_desktop_, action_terminal_, action_file_transfer_, action_system_info_ } }
     };
 }
 

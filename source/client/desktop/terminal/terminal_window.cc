@@ -18,11 +18,13 @@
 
 #include "client/desktop/terminal/terminal_window.h"
 
+#include <QAction>
 #include <QVBoxLayout>
 
 #include "base/logging.h"
 #include "client/client_terminal.h"
 #include "client/desktop/terminal/terminal_widget.h"
+#include "common/desktop/session_type.h"
 #include "proto/peer.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -37,6 +39,21 @@ TerminalWindow::TerminalWindow(QWidget* parent)
     layout->addWidget(terminal_widget_);
 
     setFocusProxy(terminal_widget_);
+
+    auto make_action = [this](proto::peer::SessionType type)
+    {
+        QAction* action = new QAction(sessionIcon(type), sessionName(type), this);
+        connect(action, &QAction::triggered, this, [this, type]()
+        {
+            emit sig_connectRequested(sessionState()->host(), type);
+        });
+        return action;
+    };
+
+    action_desktop_ = make_action(proto::peer::SESSION_TYPE_DESKTOP);
+    action_file_transfer_ = make_action(proto::peer::SESSION_TYPE_FILE_TRANSFER);
+    action_system_info_ = make_action(proto::peer::SESSION_TYPE_SYSTEM_INFO);
+    action_text_chat_ = make_action(proto::peer::SESSION_TYPE_CHAT);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -65,6 +82,15 @@ Client* TerminalWindow::createClient()
             terminal_widget_, &TerminalWidget::onResult, Qt::QueuedConnection);
 
     return client;
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<QPair<Tab::ActionRole, QList<QAction*>>> TerminalWindow::tabActionGroups() const
+{
+    return {
+        { Tab::ActionRole::ACTION,
+          { action_desktop_, action_file_transfer_, action_system_info_, action_text_chat_ } }
+    };
 }
 
 //--------------------------------------------------------------------------------------------------

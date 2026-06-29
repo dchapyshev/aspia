@@ -71,6 +71,7 @@
      <addaction name="action_autosize"/>
      <addaction name="action_fullscreen"/>
      <addaction name="separator"/>
+     <addaction name="action_terminal"/>
      <addaction name="action_file_transfer"/>
      <addaction name="action_text_chat"/>
      <addaction name="action_task_manager"/>
@@ -197,6 +198,18 @@
    </property>
    <property name="toolTip">
     <string>Save screenshot...</string>
+   </property>
+  </action>
+  <action name="action_terminal">
+   <property name="icon">
+    <iconset resource="../../../common/resources/common.qrc">
+     <normaloff>:/img/terminal.svg</normaloff>:/img/terminal.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Terminal</string>
+   </property>
+   <property name="toolTip">
+    <string>Terminal</string>
    </property>
   </action>
   <action name="action_file_transfer">

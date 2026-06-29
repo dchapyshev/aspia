@@ -100,6 +100,7 @@ private:
 
     std::unique_ptr<Ui::FileTransferWindow> ui;
     QAction* action_desktop_ = nullptr;
+    QAction* action_terminal_ = nullptr;
     QAction* action_text_chat_ = nullptr;
     QAction* action_system_info_ = nullptr;
 

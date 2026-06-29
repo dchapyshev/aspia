@@ -64,6 +64,7 @@ FileTransferWindow::FileTransferWindow(QWidget* parent)
     };
 
     action_desktop_ = make_action(proto::peer::SESSION_TYPE_DESKTOP);
+    action_terminal_ = make_action(proto::peer::SESSION_TYPE_TERMINAL);
     action_text_chat_ = make_action(proto::peer::SESSION_TYPE_CHAT);
     action_system_info_ = make_action(proto::peer::SESSION_TYPE_SYSTEM_INFO);
 
@@ -115,7 +116,8 @@ Client* FileTransferWindow::createClient()
 //--------------------------------------------------------------------------------------------------
 QList<QPair<Tab::ActionRole, QList<QAction*>>> FileTransferWindow::tabActionGroups() const
 {
-    return {{ Tab::ActionRole::ACTION, { action_desktop_, action_text_chat_, action_system_info_ }}};
+    return {{ Tab::ActionRole::ACTION,
+              { action_desktop_, action_terminal_, action_text_chat_, action_system_info_ }}};
 }
 
 //--------------------------------------------------------------------------------------------------

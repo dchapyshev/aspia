@@ -1428,6 +1428,10 @@ Routers added: %4</source>
         <translation>Сохранить снимок экрана...</translation>
     </message>
     <message>
+        <source>Terminal</source>
+        <translation>Терминал</translation>
+    </message>
+    <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="208"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="211"/>
         <source>File transfer</source>

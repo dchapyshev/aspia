@@ -31,6 +31,9 @@ public:
     explicit TerminalWindow(QWidget* parent = nullptr);
     ~TerminalWindow() final;
 
+    // ClientWindow implementation.
+    QList<QPair<Tab::ActionRole, QList<QAction*>>> tabActionGroups() const final;
+
 protected:
     // ClientWindow implementation.
     Client* createClient() final;
@@ -38,6 +41,10 @@ protected:
 
 private:
     TerminalWidget* terminal_widget_ = nullptr;
+    QAction* action_desktop_ = nullptr;
+    QAction* action_file_transfer_ = nullptr;
+    QAction* action_system_info_ = nullptr;
+    QAction* action_text_chat_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(TerminalWindow)
 };

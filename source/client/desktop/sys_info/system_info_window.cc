@@ -188,6 +188,7 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
     };
 
     action_desktop_ = make_action(proto::peer::SESSION_TYPE_DESKTOP);
+    action_terminal_ = make_action(proto::peer::SESSION_TYPE_TERMINAL);
     action_file_transfer_ = make_action(proto::peer::SESSION_TYPE_FILE_TRANSFER);
     action_text_chat_ = make_action(proto::peer::SESSION_TYPE_CHAT);
 }
@@ -228,7 +229,8 @@ QList<QPair<Tab::ActionRole, QList<QAction*>>> SystemInfoWindow::tabActionGroups
     return {
         { Tab::ActionRole::FILE, { ui->action_save, ui->action_print } },
         { Tab::ActionRole::VIEW, { ui->action_refresh } },
-        { Tab::ActionRole::ACTION, { action_desktop_, action_file_transfer_, action_text_chat_ } }
+        { Tab::ActionRole::ACTION,
+          { action_desktop_, action_terminal_, action_file_transfer_, action_text_chat_ } }
     };
 }
 

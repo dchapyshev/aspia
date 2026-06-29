@@ -128,6 +128,12 @@ DesktopToolBar::DesktopToolBar(QWidget* parent)
 
     connect(ui->action_cad, &QAction::triggered, this, &DesktopToolBar::onCtrlAltDel);
 
+    connect(ui->action_terminal, &QAction::triggered, this, [this]()
+    {
+        LOG(INFO) << "[ACTION] Terminal requested";
+        emit sig_startSession(proto::peer::SESSION_TYPE_TERMINAL);
+    });
+
     connect(ui->action_file_transfer, &QAction::triggered, this, [this]()
     {
         LOG(INFO) << "[ACTION] File transfer requested";
@@ -475,7 +481,8 @@ QList<QPair<Tab::ActionRole, QList<QAction*>>> DesktopToolBar::tabActionGroups()
     }});
     groups.append({ Tab::ActionRole::ACTION,
     {
-        ui->action_file_transfer, ui->action_text_chat, ui->action_task_manager, ui->action_system_info
+        ui->action_terminal, ui->action_file_transfer, ui->action_text_chat, ui->action_task_manager,
+        ui->action_system_info
     }});
     groups.append({ Tab::ActionRole::FILE,
     {
