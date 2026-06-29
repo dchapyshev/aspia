@@ -225,10 +225,12 @@ void TerminalWidget::onResult(int result_code)
 {
     if (result_code == proto::terminal::Result::CODE_AUTHENTICATION_ERROR)
     {
-        writeLocal("\r\nAuthentication failed.\r\n");
         login_user_.clear();
         login_password_.clear();
-        startLoginPrompt();
+
+        mode_ = Mode::LOGIN_USER;
+        writeLocal("\r\n" + tr("Authentication failed.") + "\r\n");
+        writeLocal(tr("User name") + ": ");
     }
 }
 
@@ -1108,7 +1110,10 @@ void TerminalWidget::focusOutEvent(QFocusEvent* event)
 void TerminalWidget::startLoginPrompt()
 {
     mode_ = Mode::LOGIN_USER;
-    writeLocal("login: ");
+
+    writeLocal(tr("Enter your user name and password to authenticate on the remote computer."));
+    writeLocal("\r\n\r\n");
+    writeLocal(tr("User name") + ": ");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1120,7 +1125,7 @@ void TerminalWidget::handleLoginKey(QKeyEvent* event)
         case Qt::Key_Enter:
             if (mode_ == Mode::LOGIN_USER)
             {
-                writeLocal("\r\npassword: ");
+                writeLocal("\r\n" + tr("Password") + ": ");
                 mode_ = Mode::LOGIN_PASSWORD;
             }
             else

@@ -54,6 +54,9 @@
 
 namespace {
 
+// Number of failed credential attempts after which the session is closed.
+const int kMaxAuthFailures = 5;
+
 #if defined(Q_OS_WINDOWS)
 const char kTerminalAgentFile[] = "aspia_terminal_agent.exe";
 const wchar_t kDefaultDesktopName[] = L"winsta0\\default";
@@ -494,10 +497,19 @@ void TerminalClient::onMessage(quint8 /* tcp_channel_id */, const QByteArray& bu
         if (!launchAgent(QString::fromStdString(credentials.user_name()),
                          QString::fromStdString(credentials.password()), ipc_channel_id))
         {
-            // Keep the session alive so the user can try again with different credentials.
-            CLOG(WARNING) << "Authentication failed";
+            ++auth_failure_count_;
+            CLOG(WARNING) << "Authentication failed (attempt" << auth_failure_count_ << "of"
+                          << kMaxAuthFailures << ")";
+
             sendResult(proto::terminal::Result::CODE_AUTHENTICATION_ERROR);
             ipc_server_.reset();
+
+            // Allow another attempt until the limit is reached, then close the session.
+            if (auth_failure_count_ >= kMaxAuthFailures)
+            {
+                CLOG(WARNING) << "Maximum authentication attempts reached, closing session";
+                onError(FROM_HERE);
+            }
             return;
         }
 

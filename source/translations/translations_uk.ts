@@ -823,7 +823,7 @@ Routers added: %4</source>
         <translation>Клієнт Aspia</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="556"/>
+        <location filename="../client/client.cc" line="566"/>
         <source>Failed to connect to the relay server</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2476,19 +2476,19 @@ Routers added: %4</source>
 <context>
     <name>FileTransferWindow</name>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="46"/>
-        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="258"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="48"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="260"/>
         <source>Local Computer</source>
         <translation type="unfinished">Локальний комп&apos;ютер</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="47"/>
-        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="259"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="49"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="261"/>
         <source>Remote Computer</source>
         <translation type="unfinished">Віддалений комп&apos;ютер</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="171"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="173"/>
         <source>Session error: %1</source>
         <translation type="unfinished">Помилка сесії: %1</translation>
     </message>
@@ -2710,18 +2710,18 @@ Routers added: %4</source>
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host/ui/host_main.cc" line="147"/>
+        <location filename="../host/ui/host_main.cc" line="192"/>
         <source>Application integrity check failed. Components are missing or damaged.</source>
         <translation>Перевірку цілістності програми не пройдено. Певні компоненти відсутні або пошкоджені.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_main.cc" line="161"/>
+        <location filename="../host/ui/host_main.cc" line="206"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation>Параметри імпорту і експорту не можуть бути задані одночасно.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_main.cc" line="213"/>
-        <location filename="../host/ui/host_main.cc" line="248"/>
+        <location filename="../host/ui/host_main.cc" line="258"/>
+        <location filename="../host/ui/host_main.cc" line="293"/>
         <source>Settings storage is unavailable.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2729,37 +2729,37 @@ Routers added: %4</source>
 <context>
     <name>HostMain</name>
     <message>
-        <location filename="../host/ui/host_main.cc" line="115"/>
+        <location filename="../host/ui/host_main.cc" line="160"/>
         <source>Launch the application hidden.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_main.cc" line="117"/>
+        <location filename="../host/ui/host_main.cc" line="162"/>
         <source>Export parameters to file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_main.cc" line="119"/>
+        <location filename="../host/ui/host_main.cc" line="164"/>
         <source>Import parameters from file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_main.cc" line="121"/>
+        <location filename="../host/ui/host_main.cc" line="166"/>
         <source>Do not display any messages during import and export.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_main.cc" line="123"/>
+        <location filename="../host/ui/host_main.cc" line="168"/>
         <source>Calling the update check dialog.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_main.cc" line="125"/>
+        <location filename="../host/ui/host_main.cc" line="170"/>
         <source>Calling the settings dialog.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_main.cc" line="127"/>
+        <location filename="../host/ui/host_main.cc" line="172"/>
         <source>Calling the security log dialog.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2784,8 +2784,8 @@ Routers added: %4</source>
     <message>
         <location filename="../host/ui/host_window.ui" line="26"/>
         <location filename="../host/ui/host_window.cc" line="476"/>
-        <location filename="../host/ui/host_window.cc" line="827"/>
-        <location filename="../host/ui/host_window.cc" line="1037"/>
+        <location filename="../host/ui/host_window.cc" line="829"/>
+        <location filename="../host/ui/host_window.cc" line="1039"/>
         <source>Aspia Host</source>
         <translation type="unfinished">Хост Aspia</translation>
     </message>
@@ -2802,7 +2802,7 @@ Routers added: %4</source>
     <message>
         <location filename="../host/ui/host_window.ui" line="204"/>
         <location filename="../host/ui/host_window.cc" line="420"/>
-        <location filename="../host/ui/host_window.cc" line="950"/>
+        <location filename="../host/ui/host_window.cc" line="952"/>
         <source>Router is disabled</source>
         <translation type="unfinished">Маршрутизатор відключено</translation>
     </message>
@@ -2863,7 +2863,7 @@ Routers added: %4</source>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="319"/>
-        <location filename="../host/ui/host_window.cc" line="811"/>
+        <location filename="../host/ui/host_window.cc" line="813"/>
         <source>Hide</source>
         <translation type="unfinished">Сховати</translation>
     </message>
@@ -2899,7 +2899,7 @@ Routers added: %4</source>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="241"/>
-        <location filename="../host/ui/host_window.cc" line="806"/>
+        <location filename="../host/ui/host_window.cc" line="808"/>
         <source>Show</source>
         <translation type="unfinished">Показати</translation>
     </message>
@@ -2934,37 +2934,37 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="795"/>
+        <location filename="../host/ui/host_window.cc" line="797"/>
         <source>Settings storage is unavailable.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="844"/>
+        <location filename="../host/ui/host_window.cc" line="846"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation type="unfinished">Якщо ви закриєте Aspia, підключитись до цього комп&apos;ютера буде неможливо поки ви не увімкнете комп&apos;ютер або Aspia вручну.Ви хочете закрити програму?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="955"/>
+        <location filename="../host/ui/host_window.cc" line="957"/>
         <source>Connecting to router...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="960"/>
+        <location filename="../host/ui/host_window.cc" line="962"/>
         <source>Connected to router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="965"/>
+        <location filename="../host/ui/host_window.cc" line="967"/>
         <source>Connection error</source>
         <translation type="unfinished">Помилка підключення</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1034"/>
+        <location filename="../host/ui/host_window.cc" line="1036"/>
         <source>IP addresses:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1038"/>
+        <location filename="../host/ui/host_window.cc" line="1040"/>
         <source>ID: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3051,193 +3051,199 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="239"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="242"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="251"/>
+        <source>Terminal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/hosts_tab.ui" line="260"/>
         <source>Add Workspace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="248"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="269"/>
         <source>Edit Workspace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="257"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="278"/>
         <source>Delete Workspace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="266"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="287"/>
         <source>Add User</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="275"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="296"/>
         <source>Edit User</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="284"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="305"/>
         <source>Delete User</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="293"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="314"/>
         <source>Disconnect</source>
         <translation type="unfinished">Відключити</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="302"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="323"/>
         <source>Disconnect All</source>
         <translation type="unfinished">Відключити всі</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="311"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="332"/>
         <source>Remove</source>
         <translation type="unfinished">Видалити</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="320"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="341"/>
         <source>Check for Updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="329"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="350"/>
         <source>Save...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="332"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="353"/>
         <source>Ctrl+S</source>
         <translation type="unfinished">Ctrl+S</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="341"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="362"/>
         <source>Reload</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="344"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="365"/>
         <source>F5</source>
         <translation type="unfinished">F5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="353"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="374"/>
         <source>Import Old Address Book...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="362"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="383"/>
         <source>Export Address Book...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="371"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="392"/>
         <source>Import Address Book...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="379"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="400"/>
         <source>Auto-refresh Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="422"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="428"/>
         <source>Hosts</source>
         <translation type="unfinished">Хости</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="903"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="913"/>
         <source>(copy)</source>
         <translation type="unfinished">(копіювати)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="655"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="684"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="726"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="868"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="899"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="942"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="663"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="692"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="734"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="878"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="909"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="952"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="907"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="917"/>
         <source>Failed to add the host to the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="946"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="956"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="956"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="966"/>
         <source>Unable to remove host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1010"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="1035"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="1060"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1021"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1046"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1071"/>
         <source>Copy Row</source>
         <translation type="unfinished">Копіювати рядок</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1011"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="1036"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="1061"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1022"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1047"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1072"/>
         <source>Copy Value</source>
         <translation type="unfinished">Копіювати значення</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1160"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1172"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1270"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1282"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1320"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1332"/>
         <source>Import Old Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1322"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1334"/>
         <source>Address Book (*.aab);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1345"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="1362"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1357"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1374"/>
         <source>Export Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1347"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="1418"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1359"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1430"/>
         <source>Address Book (*.json);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1357"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1369"/>
         <source>Address book database is not available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1364"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1376"/>
         <source>Enter a password to encrypt the address book.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1369"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1381"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation type="unfinished">Введений пароль не задовільняє вимог безпеки!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts_tab.cc" line="1370"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1382"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символ.</numerusform>
@@ -3246,17 +3252,17 @@ Routers added: %4</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1373"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1385"/>
         <source>Do you want to enter a different password?</source>
         <translation type="unfinished">Бажаєте ввести інший пароль?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1390"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1402"/>
         <source>Failed to export the address book.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1395"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1407"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -3264,42 +3270,42 @@ Hosts exported: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1416"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1428"/>
         <source>Import Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1427"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1439"/>
         <source>Unlock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1429"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1441"/>
         <source>Address book is encrypted. To open, you must enter a password.</source>
         <translation type="unfinished">Адресну книгу зашифровано. Для перегляду введіть пароль.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1444"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1456"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1448"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1460"/>
         <source>Unsupported file format version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1452"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1464"/>
         <source>Nothing was imported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1456"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1468"/>
         <source>The file is not a valid address book.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1461"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1473"/>
         <source>Import completed successfully.
 Routers added: %1
 Routers skipped: %2
@@ -3310,17 +3316,17 @@ Hosts skipped: %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1774"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1793"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1781"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1800"/>
         <source>The host has an invalid host ID.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1790"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1809"/>
         <source>The host has an incorrect address.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3968,7 +3974,7 @@ Hosts skipped: %6</source>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="14"/>
-        <location filename="../client/desktop/main_window.cc" line="297"/>
+        <location filename="../client/desktop/main_window.cc" line="298"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Клієнт Aspia</translation>
     </message>
@@ -4028,23 +4034,23 @@ Hosts skipped: %6</source>
         <translation>Налаштування...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="78"/>
-        <location filename="../client/desktop/main_window.cc" line="261"/>
+        <location filename="../client/desktop/main_window.cc" line="79"/>
+        <location filename="../client/desktop/main_window.cc" line="262"/>
         <source>Search...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="161"/>
+        <location filename="../client/desktop/main_window.cc" line="162"/>
         <source>Hosts</source>
         <translation type="unfinished">Хости</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="283"/>
+        <location filename="../client/desktop/main_window.cc" line="284"/>
         <source>Settings</source>
         <translation type="unfinished">Налаштування</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="395"/>
+        <location filename="../client/desktop/main_window.cc" line="396"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4271,19 +4277,19 @@ Hosts skipped: %6</source>
     <name>NotifierWindow</name>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="293"/>
-        <location filename="../host/ui/notifier_window.cc" line="279"/>
+        <location filename="../host/ui/notifier_window.cc" line="287"/>
         <source>Lock mouse</source>
         <translation>Блокувати мишу</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="319"/>
-        <location filename="../host/ui/notifier_window.cc" line="287"/>
+        <location filename="../host/ui/notifier_window.cc" line="295"/>
         <source>Lock keyboard</source>
         <translation>Блокувати клавіатуру</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="345"/>
-        <location filename="../host/ui/notifier_window.cc" line="295"/>
+        <location filename="../host/ui/notifier_window.cc" line="303"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
@@ -4294,27 +4300,27 @@ Hosts skipped: %6</source>
         <translation>Відключити все</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="246"/>
+        <location filename="../host/ui/notifier_window.cc" line="257"/>
         <source>Disconnect</source>
         <translation type="unfinished">Відключити</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="279"/>
+        <location filename="../host/ui/notifier_window.cc" line="287"/>
         <source>Unlock mouse</source>
         <translation type="unfinished">Розблокувати мишу</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="287"/>
+        <location filename="../host/ui/notifier_window.cc" line="295"/>
         <source>Unlock keyboard</source>
         <translation type="unfinished">Розблокувати клавіатуру</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="295"/>
+        <location filename="../host/ui/notifier_window.cc" line="303"/>
         <source>Resume</source>
         <translation type="unfinished">Продовжити</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="521"/>
+        <location filename="../host/ui/notifier_window.cc" line="523"/>
         <source>Aspia Host</source>
         <translation type="unfinished">Хост Aspia</translation>
     </message>
@@ -4983,47 +4989,52 @@ Hosts skipped: %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="410"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="396"/>
+        <source>The host is not assigned to any workspace.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="416"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="435"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="441"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation type="unfinished">Ви впевнені, що хочете від&apos;єднатись від всіх хостів?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="460"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="466"/>
         <source>Confirmation</source>
         <translation type="unfinished">Підтвердження</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="461"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="467"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="592"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="598"/>
         <source>Invalid host request.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="594"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="600"/>
         <source>Unknown internal error.</source>
         <translation type="unfinished">Невідома внутрішня помилка.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="596"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="602"/>
         <source>Invalid entry id.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="598"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="604"/>
         <source>Unknown error type.</source>
         <translation type="unfinished">Невідомий тип помилки.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="751"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="757"/>
         <source>%n host(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -5032,22 +5043,22 @@ Hosts skipped: %6</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="780"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="786"/>
         <source>Save File</source>
         <translation type="unfinished">Зберегти файл</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="780"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="786"/>
         <source>JSON files (*.json)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="791"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="797"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished">Неможливо відкрити файл для запису.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="840"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="846"/>
         <source>Unable to write file.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6082,6 +6093,11 @@ Are you sure you want to continue?</source>
         <source>Chat</source>
         <translation type="unfinished">Чат</translation>
     </message>
+    <message>
+        <location filename="../common/desktop/session_type.cc" line="45"/>
+        <source>Terminal</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SettingsTab</name>
@@ -6321,59 +6337,59 @@ Are you sure you want to continue?</source>
 <context>
     <name>SettingsUtil</name>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="268"/>
+        <location filename="../host/ui/settings_util.cc" line="269"/>
         <source>The configuration was successfully imported.</source>
         <translation>Конфігурацію імпортовано успішно.</translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="324"/>
+        <location filename="../host/ui/settings_util.cc" line="325"/>
         <source>The configuration was successfully exported.</source>
         <translation>Кофігурацію експортовано успішно.</translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="245"/>
-        <location filename="../host/ui/settings_util.cc" line="290"/>
+        <location filename="../host/ui/settings_util.cc" line="246"/>
+        <location filename="../host/ui/settings_util.cc" line="291"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="216"/>
+        <location filename="../host/ui/settings_util.cc" line="217"/>
         <source>Source settings file does not exist.</source>
         <translation>Вихідний файл налаштувань відсутній.</translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="225"/>
+        <location filename="../host/ui/settings_util.cc" line="226"/>
         <source>Unable to open the source file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="237"/>
+        <location filename="../host/ui/settings_util.cc" line="238"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
         <translation>Неможливо прочитати вихідний файл: файл пошкоджено або формат файлу невідомний.</translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="246"/>
-        <location filename="../host/ui/settings_util.cc" line="291"/>
+        <location filename="../host/ui/settings_util.cc" line="247"/>
+        <location filename="../host/ui/settings_util.cc" line="292"/>
         <source>The existing settings will be overwritten. Continue?</source>
         <translation>Поточні налаштування будуть перезаписані. Продовжити?</translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="263"/>
+        <location filename="../host/ui/settings_util.cc" line="264"/>
         <source>Unable to write the secure database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="283"/>
+        <location filename="../host/ui/settings_util.cc" line="284"/>
         <source>Unable to read the secure database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="311"/>
+        <location filename="../host/ui/settings_util.cc" line="312"/>
         <source>Unable to open the target file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="319"/>
+        <location filename="../host/ui/settings_util.cc" line="320"/>
         <source>Unable to write the target file.</source>
         <translation>Неможливо записати цільовий файл.</translation>
     </message>
@@ -6685,7 +6701,7 @@ Are you sure you want to continue?</source>
     <name>StatisticsDialog</name>
     <message>
         <location filename="../client/desktop/desktop/statistics_dialog.ui" line="14"/>
-        <location filename="../client/android/statistics_dialog.cc" line="172"/>
+        <location filename="../client/android/statistics_dialog.cc" line="176"/>
         <source>Statistics</source>
         <translation>Статистика</translation>
     </message>
@@ -6700,7 +6716,7 @@ Are you sure you want to continue?</source>
         <translation>Значення</translation>
     </message>
     <message>
-        <location filename="../client/android/statistics_dialog.cc" line="205"/>
+        <location filename="../client/android/statistics_dialog.cc" line="209"/>
         <source>Close</source>
         <translation type="unfinished">Закрити</translation>
     </message>
@@ -8922,6 +8938,45 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>TerminalWidget</name>
+    <message>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="232"/>
+        <source>Authentication failed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="233"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1116"/>
+        <source>User name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1060"/>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1063"/>
+        <source>Paste</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1066"/>
+        <source>Select All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1114"/>
+        <source>Enter your user name and password to authenticate on the remote computer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1128"/>
+        <source>Password</source>
+        <translation type="unfinished">Пароль</translation>
+    </message>
+</context>
+<context>
     <name>TwoFactorCodeDialog</name>
     <message>
         <location filename="../common/desktop/two_factor_code_dialog.ui" line="14"/>
@@ -9132,22 +9187,22 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="161"/>
+        <location filename="../host/ui/user_dialog.cc" line="162"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="178"/>
+        <location filename="../host/ui/user_dialog.cc" line="179"/>
         <source>The username you entered already exists.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="187"/>
+        <location filename="../host/ui/user_dialog.cc" line="188"/>
         <source>The passwords you entered do not match.</source>
         <translation type="unfinished">Введені паролі не співпадають.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="197"/>
+        <location filename="../host/ui/user_dialog.cc" line="198"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation type="unfinished">
             <numerusform>Пароль не може бути порожнім або довшим за %n символ.</numerusform>
@@ -9156,12 +9211,12 @@ Are you sure you want to continue?</source>
         </translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="207"/>
+        <location filename="../host/ui/user_dialog.cc" line="208"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation type="unfinished">Введений пароль не задовільняє вимог безпеки!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="210"/>
+        <location filename="../host/ui/user_dialog.cc" line="211"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символ.</numerusform>
@@ -9170,24 +9225,24 @@ Are you sure you want to continue?</source>
         </translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="214"/>
+        <location filename="../host/ui/user_dialog.cc" line="215"/>
         <source>Do you want to enter a different password?</source>
         <translation type="unfinished">Бажаєте ввести інший пароль?</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="217"/>
+        <location filename="../host/ui/user_dialog.cc" line="218"/>
         <source>Warning</source>
         <translation type="unfinished">Попередження</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="235"/>
-        <location filename="../host/ui/user_dialog.cc" line="265"/>
-        <location filename="../host/ui/user_dialog.cc" line="275"/>
+        <location filename="../host/ui/user_dialog.cc" line="236"/>
+        <location filename="../host/ui/user_dialog.cc" line="266"/>
+        <location filename="../host/ui/user_dialog.cc" line="276"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="313"/>
+        <location filename="../host/ui/user_dialog.cc" line="314"/>
         <source>Double-click to change</source>
         <translation type="unfinished">Подвійний клік для зміни</translation>
     </message>

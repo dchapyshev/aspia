@@ -65,6 +65,7 @@ private:
     QTimer* attach_timer_ = nullptr;
     bool agent_launched_ = false;
     bool finished_ = false;
+    int auth_failure_count_ = 0;
 
     // Client messages that arrived after the agent was launched but before its IPC channel connected.
     QList<QByteArray> pending_to_agent_;
