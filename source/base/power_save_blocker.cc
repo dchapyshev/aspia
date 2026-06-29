@@ -25,6 +25,14 @@
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+#include <linux/uinput.h>
+
+#include <fcntl.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
+
+#include <cstring>
+
 #include <QDBusInterface>
 #include <QDBusReply>
 #include <QString>
@@ -38,6 +46,80 @@ namespace {
 const char kScreenSaverService[] = "org.freedesktop.ScreenSaver";
 const char kScreenSaverPath[] = "/org/freedesktop/ScreenSaver";
 const char kScreenSaverIface[] = "org.freedesktop.ScreenSaver";
+
+// Time to let the display server / compositor enumerate the new uinput device (via udev) before
+// feeding it events - otherwise the motion is emitted before anyone is reading the device and lost.
+const int kUinputSettleMs = 400;
+
+//--------------------------------------------------------------------------------------------------
+// The screen-saver inhibit prevents the display from blanking but cannot turn a display that is
+// already off back on. The only display-server-agnostic way (X11 and Wayland alike) to wake it is to
+// feed a real input event through the kernel input subsystem: DPMS / idle wake keys off kernel input
+// events regardless of who produced them. We create a throwaway virtual pointer via uinput, nudge it
+// (net-zero, so the cursor stays put), and remove it. Requires write access to /dev/uinput, i.e. the
+// process must run as root.
+void wakeUpDisplay()
+{
+    int fd = open("/dev/uinput", O_WRONLY | O_NONBLOCK | O_CLOEXEC);
+    if (fd < 0)
+    {
+        PLOG(ERROR) << "Unable to open /dev/uinput";
+        return;
+    }
+
+    // A relative pointer with a button. Some input stacks ignore a pointer that exposes no buttons.
+    if (ioctl(fd, UI_SET_EVBIT, EV_REL) < 0 ||
+        ioctl(fd, UI_SET_RELBIT, REL_X) < 0 ||
+        ioctl(fd, UI_SET_RELBIT, REL_Y) < 0 ||
+        ioctl(fd, UI_SET_EVBIT, EV_KEY) < 0 ||
+        ioctl(fd, UI_SET_KEYBIT, BTN_LEFT) < 0)
+    {
+        PLOG(ERROR) << "uinput ioctl(UI_SET_*) failed";
+        close(fd);
+        return;
+    }
+
+    struct uinput_setup setup;
+    memset(&setup, 0, sizeof(setup));
+    setup.id.bustype = BUS_VIRTUAL;
+    setup.id.vendor = 0x1209;
+    setup.id.product = 0xa591;
+    strncpy(setup.name, "Aspia Wakeup", sizeof(setup.name) - 1);
+
+    if (ioctl(fd, UI_DEV_SETUP, &setup) < 0 || ioctl(fd, UI_DEV_CREATE) < 0)
+    {
+        PLOG(ERROR) << "Unable to create uinput device";
+        close(fd);
+        return;
+    }
+
+    usleep(kUinputSettleMs * 1000);
+
+    auto emitEvent = [fd](quint16 type, quint16 code, qint32 value)
+    {
+        struct input_event event;
+        memset(&event, 0, sizeof(event));
+        event.type = type;
+        event.code = code;
+        event.value = value;
+        if (write(fd, &event, sizeof(event)) != sizeof(event))
+            PLOG(ERROR) << "Unable to write uinput event";
+    };
+
+    // Nudge the pointer and immediately move it back, so the cursor ends where it started.
+    emitEvent(EV_REL, REL_X, 4);
+    emitEvent(EV_REL, REL_Y, 4);
+    emitEvent(EV_SYN, SYN_REPORT, 0);
+    emitEvent(EV_REL, REL_X, -4);
+    emitEvent(EV_REL, REL_Y, -4);
+    emitEvent(EV_SYN, SYN_REPORT, 0);
+
+    // Let the events drain before the device is destroyed.
+    usleep(50 * 1000);
+
+    ioctl(fd, UI_DEV_DESTROY);
+    close(fd);
+}
 #endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 
 #if defined(Q_OS_WINDOWS)
@@ -141,6 +223,9 @@ PowerSaveBlocker::PowerSaveBlocker()
         cookie_ = reply.value();
     else
         LOG(ERROR) << "ScreenSaver.Inhibit failed:" << reply.error().message();
+
+    // Inhibit keeps the display from blanking, but does not turn it back on if it is already off.
+    wakeUpDisplay();
 #else
     NOTIMPLEMENTED();
 #endif // defined(Q_OS_*)
