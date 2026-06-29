@@ -142,6 +142,15 @@ TerminalWidget::TerminalWidget(QWidget* parent)
         update();
     });
 
+    bell_timer_ = new QTimer(this);
+    bell_timer_->setSingleShot(true);
+    bell_timer_->setInterval(120);
+    connect(bell_timer_, &QTimer::timeout, this, [this]
+    {
+        bell_flash_ = false;
+        update();
+    });
+
     resize_timer_ = new QTimer(this);
     resize_timer_->setSingleShot(true);
     connect(resize_timer_, &QTimer::timeout, this, [this]
@@ -173,7 +182,7 @@ TerminalWidget::TerminalWidget(QWidget* parent)
         nullptr,                        // moverect
         &TerminalWidget::onMoveCursor,  // movecursor
         &TerminalWidget::onSetTermProp, // settermprop
-        nullptr,                        // bell
+        &TerminalWidget::onBell,        // bell
         nullptr,                        // resize
         &TerminalWidget::onPushLine,    // sb_pushline
         &TerminalWidget::onPopLine,     // sb_popline
@@ -346,6 +355,13 @@ void TerminalWidget::paintEvent(QPaintEvent* /* event */)
                 painter.drawText(x, y + ascent_, QString::fromUcs4(&glyph, 1));
             }
         }
+    }
+
+    // Visual bell: a short translucent flash over the whole widget (drawn in unscaled coordinates).
+    if (bell_flash_)
+    {
+        painter.resetTransform();
+        painter.fillRect(rect(), QColor(default_fg_.red(), default_fg_.green(), default_fg_.blue(), 64));
     }
 }
 
@@ -1209,6 +1225,21 @@ int TerminalWidget::onSetTermProp(VTermProp prop, VTermValue* value, void* user)
         self->update();
     }
 
+    return 1;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+int TerminalWidget::onBell(void* user)
+{
+    TerminalWidget* self = reinterpret_cast<TerminalWidget*>(user);
+
+    QApplication::beep();
+
+    // Briefly flash the screen so the bell is noticeable even with the system sound muted.
+    self->bell_flash_ = true;
+    self->bell_timer_->start();
+    self->update();
     return 1;
 }
 

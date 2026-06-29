@@ -113,6 +113,7 @@ private:
     static int onDamage(VTermRect rect, void* user);
     static int onMoveCursor(VTermPos pos, VTermPos old_pos, int visible, void* user);
     static int onSetTermProp(VTermProp prop, VTermValue* value, void* user);
+    static int onBell(void* user);
     static int onPushLine(int cols, const VTermScreenCell* cells, void* user);
     static int onPopLine(int cols, VTermScreenCell* cells, void* user);
     static void onOutput(const char* bytes, size_t length, void* user);
@@ -140,6 +141,8 @@ private:
     int mouse_mode_ = 0; // VTERM_PROP_MOUSE_NONE
     bool alt_screen_ = false;
     bool suppress_scrollback_ = false;
+    bool bell_flash_ = false;
+    QTimer* bell_timer_ = nullptr;
 
     Mode mode_ = Mode::LOGIN_USER;
     QString login_user_;
