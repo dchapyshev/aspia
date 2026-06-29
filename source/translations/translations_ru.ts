@@ -7019,6 +7019,10 @@ Are you sure you want to continue?</source>
         <translation>Пароль обновлен. Ожидание новых ключей шифрования...</translation>
     </message>
     <message>
+        <source>Event history cleared.</source>
+        <translation>История событий очищена.</translation>
+    </message>
+    <message>
         <location filename="../client/desktop/hosts/sidebar.cc" line="514"/>
         <source>Invalid password change request.</source>
         <translation>Недопустимый запрос на изменение пароля.</translation>

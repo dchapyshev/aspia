@@ -533,6 +533,7 @@ QList<RouterStatusWidget::Event> Sidebar::routerEvents(qint64 router_id) const
 void Sidebar::clearRouterEvents(qint64 router_id)
 {
     router_events_[router_id].clear();
+    addRouterEvent(Severity::INFO, router_id, tr("Event history cleared."));
 }
 
 //--------------------------------------------------------------------------------------------------

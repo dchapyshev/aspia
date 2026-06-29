@@ -1765,7 +1765,6 @@ void HostsTab::updateActionsState()
     {
         show_session_types = show_session_types ||
             sidebar_item->itemType() == SidebarItem::LOCAL_GROUP ||
-            sidebar_item->itemType() == SidebarItem::ROUTER_HOSTS ||
             sidebar_item->itemType() == SidebarItem::ROUTER_GROUP ||
             sidebar_item->itemType() == SidebarItem::ROUTER_WORKSPACE;
     }
