@@ -24,7 +24,7 @@
 #include "proto/system_info.h"
 
 #if defined(Q_OS_WINDOWS)
-#include "host/win/system_info.h"
+#include "host/system_info.h"
 #endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------

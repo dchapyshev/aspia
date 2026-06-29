@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/win/system_info.h"
+#include "host/system_info.h"
 
 #include <QProcessEnvironment>
 #include <QStorageInfo>

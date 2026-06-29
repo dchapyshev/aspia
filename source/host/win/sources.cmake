@@ -40,8 +40,6 @@ collect_sources(SOURCE_HOST_CORE_WIN
     screen_capture_utils.cc
     screen_capture_utils.h
     swdevice_defines.h
-    system_info.cc
-    system_info.h
     task_manager.cc
     task_manager.h
     touch_injector.cc
