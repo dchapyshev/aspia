@@ -940,7 +940,14 @@ void TerminalWidget::paste()
     text.replace('\n', '\r');
 
     setScrollOffset(0);
-    emit sig_input(text.toUtf8());
+
+    // Wrap the text in bracketed-paste markers when the application enabled the mode (DECSET 2004), so
+    // it can tell pasted text from typed input and does not execute it line by line. start/end_paste
+    // emit the markers only while the mode is active; otherwise the text is sent unchanged.
+    vterm_keyboard_start_paste(vterm_);
+    pending_input_.append(text.toUtf8());
+    vterm_keyboard_end_paste(vterm_);
+    flushInput();
 }
 
 //--------------------------------------------------------------------------------------------------
