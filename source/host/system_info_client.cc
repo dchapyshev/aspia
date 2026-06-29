@@ -20,12 +20,9 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "host/system_info.h"
 #include "proto/peer.h"
 #include "proto/system_info.h"
-
-#if defined(Q_OS_WINDOWS)
-#include "host/system_info.h"
-#endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
 SystemInfoClient::SystemInfoClient(TcpChannel* tcp_channel, QObject* parent)
@@ -47,9 +44,8 @@ void SystemInfoClient::onStart()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SystemInfoClient::onMessage(quint8 channel_id, const QByteArray& buffer)
+void SystemInfoClient::onMessage(quint8 /* channel_id */, const QByteArray& buffer)
 {
-#if defined(Q_OS_WINDOWS)
     proto::system_info::SystemInfoRequest request;
     if (!parse(buffer, &request))
     {
@@ -61,5 +57,4 @@ void SystemInfoClient::onMessage(quint8 channel_id, const QByteArray& buffer)
     createSystemInfo(request, &system_info);
 
     send(proto::peer::CHANNEL_ID_0, serialize(system_info));
-#endif // defined(Q_OS_WINDOWS)
 }

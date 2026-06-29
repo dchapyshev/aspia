@@ -63,6 +63,7 @@ list(APPEND SOURCE_HOST_CORE
     service.h
     service_main.cc
     service_main.h
+    system_info.cc
     system_info.h
     system_info_client.cc
     system_info_client.h
@@ -98,7 +99,6 @@ if (WIN32)
         screen_capturer_gdi.h
         screen_capturer_win.cc
         screen_capturer_win.h
-        system_info.cc
         terminal_process_win.cc
         terminal_process_win.h)
 endif()

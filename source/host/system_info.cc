@@ -28,6 +28,10 @@
 #include "base/logging.h"
 #include "base/smbios_parser.h"
 #include "base/sys_info.h"
+#include "common/system_info_constants.h"
+#include "proto/system_info.h"
+
+#if defined(Q_OS_WINDOWS)
 #include "base/net/adapter_enumerator.h"
 #include "base/net/connect_enumerator.h"
 #include "base/net/net_utils.h"
@@ -40,12 +44,12 @@
 #include "base/win/net_share_enumerator.h"
 #include "base/win/service_enumerator.h"
 #include "base/win/user_enumerator.h"
-#include "common/system_info_constants.h"
-#include "proto/system_info.h"
 #include "host/win/process_monitor.h"
+#endif // defined(Q_OS_WINDOWS)
 
 namespace {
 
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillDevices(proto::system_info::SystemInfo* system_info)
 {
@@ -62,7 +66,9 @@ void fillDevices(proto::system_info::SystemInfo* system_info)
         device->set_device_id(enumerator.deviceID().toStdString());
     }
 }
+#endif // defined(Q_OS_WINDOWS)
 
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillPrinters(proto::system_info::SystemInfo* system_info)
 {
@@ -80,7 +86,9 @@ void fillPrinters(proto::system_info::SystemInfo* system_info)
         printer->set_share_name(enumerator.shareName().toStdString());
     }
 }
+#endif // defined(Q_OS_WINDOWS)
 
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillNetworkAdapters(proto::system_info::SystemInfo* system_info)
 {
@@ -125,7 +133,9 @@ void fillNetworkAdapters(proto::system_info::SystemInfo* system_info)
         }
     }
 }
+#endif // defined(Q_OS_WINDOWS)
 
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillNetworkShares(proto::system_info::SystemInfo* system_info)
 {
@@ -173,7 +183,9 @@ void fillNetworkShares(proto::system_info::SystemInfo* system_info)
         }
     }
 }
+#endif // defined(Q_OS_WINDOWS)
 
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillServices(proto::system_info::SystemInfo* system_info)
 {
@@ -254,7 +266,9 @@ void fillServices(proto::system_info::SystemInfo* system_info)
         service->set_start_name(enumerator.startName().toStdString());
     }
 }
+#endif // defined(Q_OS_WINDOWS)
 
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillDrivers(proto::system_info::SystemInfo* system_info)
 {
@@ -333,7 +347,9 @@ void fillDrivers(proto::system_info::SystemInfo* system_info)
         driver->set_binary_path(enumerator.binaryPath().toStdString());
     }
 }
+#endif // defined(Q_OS_WINDOWS)
 
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillMonitors(proto::system_info::SystemInfo* system_info)
 {
@@ -485,7 +501,9 @@ void fillMonitors(proto::system_info::SystemInfo* system_info)
         }
     }
 }
+#endif // defined(Q_OS_WINDOWS)
 
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillConnection(proto::system_info::SystemInfo* system_info)
 {
@@ -518,7 +536,9 @@ void fillConnection(proto::system_info::SystemInfo* system_info)
         connection->set_local_port(enumerator.localPort());
     }
 }
+#endif // defined(Q_OS_WINDOWS)
 
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillRoutes(proto::system_info::SystemInfo* system_info)
 {
@@ -533,6 +553,7 @@ void fillRoutes(proto::system_info::SystemInfo* system_info)
         route->set_metric(entry.metric);
     }
 }
+#endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
 void fillEnvironmentVariables(proto::system_info::SystemInfo* system_info)
@@ -552,6 +573,7 @@ void fillEnvironmentVariables(proto::system_info::SystemInfo* system_info)
     }
 }
 
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillVideoAdapters(proto::system_info::SystemInfo* system_info)
 {
@@ -571,7 +593,9 @@ void fillVideoAdapters(proto::system_info::SystemInfo* system_info)
         adapter->set_memory_size(enumerator.memorySize());
     }
 }
+#endif // defined(Q_OS_WINDOWS)
 
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillPowerOptions(proto::system_info::SystemInfo* system_info)
 {
@@ -658,6 +682,7 @@ void fillPowerOptions(proto::system_info::SystemInfo* system_info)
             append_state(proto::system_info::PowerOptions::Battery::STATE_POWER_ONLINE);
     }
 }
+#endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
 void fillComputer(proto::system_info::SystemInfo* system_info)
@@ -676,8 +701,10 @@ void fillOperatingSystem(proto::system_info::SystemInfo* system_info)
     operating_system->set_name(SysInfo::operatingSystemName().toStdString());
     operating_system->set_version(SysInfo::operatingSystemVersion().toStdString());
     operating_system->set_arch(SysInfo::operatingSystemArchitecture().toStdString());
+#if defined(Q_OS_WINDOWS)
     operating_system->set_key(SysInfo::operatingSystemKey().toStdString());
     operating_system->set_install_date(SysInfo::operatingSystemInstallDate());
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -803,6 +830,7 @@ void fillDrives(proto::system_info::SystemInfo* system_info)
     }
 }
 
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillEventLogs(proto::system_info::SystemInfo* system_info,
                    const proto::system_info::EventLogsData& data)
@@ -877,6 +905,7 @@ void fillEventLogs(proto::system_info::SystemInfo* system_info,
         enumerator.advance();
     }
 }
+#endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
 void fillLicensesInfo(proto::system_info::SystemInfo* system_info)
@@ -890,6 +919,7 @@ void fillApplicationsInfo(proto::system_info::SystemInfo* system_info)
     readApplicationsInformation(system_info->mutable_applications());
 }
 
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillOpenFilesInfo(proto::system_info::SystemInfo* system_info)
 {
@@ -904,7 +934,9 @@ void fillOpenFilesInfo(proto::system_info::SystemInfo* system_info)
         open_file->set_file_path(enumerator.filePath().toStdString());
     }
 }
+#endif // defined(Q_OS_WINDOWS)
 
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillLocalUsersInfo(proto::system_info::SystemInfo* system_info)
 {
@@ -938,7 +970,9 @@ void fillLocalUsersInfo(proto::system_info::SystemInfo* system_info)
         local_user->set_last_logon_time(enumerator.lastLogonTime());
     }
 }
+#endif // defined(Q_OS_WINDOWS)
 
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillLocalUserGroupsInfo(proto::system_info::SystemInfo* system_info)
 {
@@ -951,7 +985,9 @@ void fillLocalUserGroupsInfo(proto::system_info::SystemInfo* system_info)
         local_group->set_comment(enumerator.comment().toStdString());
     }
 }
+#endif // defined(Q_OS_WINDOWS)
 
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillProcessesInfo(proto::system_info::SystemInfo* system_info)
 {
@@ -976,6 +1012,7 @@ void fillProcessesInfo(proto::system_info::SystemInfo* system_info)
         process_item->set_memory(process.mem_private_working_set);
     }
 }
+#endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
 void fillSummaryInfo(proto::system_info::SystemInfo* system_info)
@@ -1011,58 +1048,82 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
     {
         fillSummaryInfo(system_info);
     }
+#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_Devices)
     {
         fillDevices(system_info);
     }
+#endif // defined(Q_OS_WINDOWS)
+#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_VideoAdapters)
     {
         fillVideoAdapters(system_info);
     }
+#endif // defined(Q_OS_WINDOWS)
+#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_Monitors)
     {
         fillMonitors(system_info);
     }
+#endif // defined(Q_OS_WINDOWS)
+#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_Printers)
     {
         fillPrinters(system_info);
     }
+#endif // defined(Q_OS_WINDOWS)
+#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_PowerOptions)
     {
         fillPowerOptions(system_info);
     }
+#endif // defined(Q_OS_WINDOWS)
+#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_Drivers)
     {
         fillDrivers(system_info);
     }
+#endif // defined(Q_OS_WINDOWS)
+#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_Services)
     {
         fillServices(system_info);
     }
+#endif // defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_EnvironmentVariables)
     {
         fillEnvironmentVariables(system_info);
     }
+#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_EventLogs)
     {
         fillEventLogs(system_info, request.event_logs_data());
     }
+#endif // defined(Q_OS_WINDOWS)
+#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_NetworkAdapters)
     {
         fillNetworkAdapters(system_info);
     }
+#endif // defined(Q_OS_WINDOWS)
+#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_Routes)
     {
         fillRoutes(system_info);
     }
+#endif // defined(Q_OS_WINDOWS)
+#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_Connections)
     {
         fillConnection(system_info);
     }
+#endif // defined(Q_OS_WINDOWS)
+#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_NetworkShares)
     {
         fillNetworkShares(system_info);
     }
+#endif // defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_Licenses)
     {
         fillLicensesInfo(system_info);
@@ -1071,22 +1132,30 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
     {
         fillApplicationsInfo(system_info);
     }
+#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_OpenFiles)
     {
         fillOpenFilesInfo(system_info);
     }
+#endif // defined(Q_OS_WINDOWS)
+#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_LocalUsers)
     {
         fillLocalUsersInfo(system_info);
     }
+#endif // defined(Q_OS_WINDOWS)
+#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_LocalUserGroups)
     {
         fillLocalUserGroupsInfo(system_info);
     }
+#endif // defined(Q_OS_WINDOWS)
+#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_Processes)
     {
         fillProcessesInfo(system_info);
     }
+#endif // defined(Q_OS_WINDOWS)
     else
     {
         LOG(ERROR) << "Unknown system info category:" << category;
