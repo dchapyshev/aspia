@@ -33,3 +33,10 @@ add_library(vterm STATIC ${SOURCE_LIBVTERM})
 target_include_directories(vterm PUBLIC include)
 set_target_properties(vterm PROPERTIES LANGUAGE C LINKER_LANGUAGE C C_STANDARD 99)
 set_target_properties(vterm PROPERTIES FOLDER third_party)
+
+# Vendored third-party code - silence its compiler warnings.
+if(MSVC)
+    target_compile_options(vterm PRIVATE /wd4018 /wd4244 /wd4245 /wd4267 /wd4996)
+else()
+    target_compile_options(vterm PRIVATE -w)
+endif()
