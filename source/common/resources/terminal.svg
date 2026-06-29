@@ -1,1 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?><!-- Generator: Adobe Illustrator 19.1.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  --><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 48 48" width="48px" height="48px"><g><path fill="#CFD8DC" d="M41,6H7C6.4,6,6,6.4,6,7v35h36V7C42,6.4,41.6,6,41,6z"/></g><rect x="8" y="13" fill="#263238" width="32" height="27"/><g><circle fill="#90A4AE" cx="13.5" cy="9.5" r="1.5"/><circle fill="#90A4AE" cx="9.5" cy="9.5" r="1.5"/></g><g><path fill="#18FFFF" d="M18.5,26.5l-3.5-2V22l6,3.4v2.1L15,31v-2.5L18.5,26.5z"/><rect x="23" y="29" fill="#18FFFF" width="10" height="2"/></g></svg>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 30 30" width="48px" height="48px">
+<g>
+	<rect x="2.5" y="3.5" style="fill:#424E5C;" width="25" height="23"/>
+	<g>
+		<path style="fill:#AFC5D8;" d="M27,4v22H3V4H27 M28,3H2v24h26V3L28,3z"/>
+	</g>
+</g>
+<g>
+	<rect x="2" y="3" style="fill:#AFC5D8;" width="26" height="4"/>
+</g>
+<rect x="14" y="20" style="fill:#BAE0BD;" width="8" height="1"/>
+<polygon style="fill:#BAE0BD;" points="8.5,20.4 7.8,19.6 11.4,16.5 7.8,13.4 8.5,12.6 12.9,16.5 "/>
+</svg>

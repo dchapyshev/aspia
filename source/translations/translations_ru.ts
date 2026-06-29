@@ -2881,8 +2881,12 @@ Routers added: %4</source>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="330"/>
+        <source>Desktop</source>
+        <translation>Рабочий стол</translation>
+    </message>
+    <message>
         <source>Desktop Management</source>
-        <translation>Управление рабочим столом</translation>
+        <translation type="vanished">Управление рабочим столом</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="341"/>
@@ -3043,122 +3047,128 @@ Routers added: %4</source>
         <translation>Копировать хост</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="158"/>
-        <location filename="../client/desktop/hosts_tab.ui" line="203"/>
         <source>Desktop Management</source>
-        <translation>Управление рабочим столом</translation>
+        <translation type="vanished">Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="170"/>
-        <location filename="../client/desktop/hosts_tab.ui" line="212"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="158"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="161"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="206"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="209"/>
+        <source>Desktop</source>
+        <translation>Рабочий стол</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/hosts_tab.ui" line="173"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="218"/>
         <source>File Transfer</source>
         <translation>Передача файлов</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="182"/>
-        <location filename="../client/desktop/hosts_tab.ui" line="221"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="185"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="227"/>
         <source>Chat</source>
         <translation>Чат</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="194"/>
-        <location filename="../client/desktop/hosts_tab.ui" line="230"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="197"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="236"/>
         <source>System Information</source>
         <translation>Информация о системе</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="242"/>
-        <location filename="../client/desktop/hosts_tab.ui" line="251"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="248"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="257"/>
         <source>Terminal</source>
         <translation>Терминал</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="260"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="266"/>
         <source>Add Workspace</source>
         <translation>Добавить рабочее пространство</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="269"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="275"/>
         <source>Edit Workspace</source>
         <translation>Изменить рабочее пространство</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="278"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="284"/>
         <source>Delete Workspace</source>
         <translation>Удалить рабочее пространство</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="287"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="293"/>
         <source>Add User</source>
         <translation>Добавить пользователя</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="296"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="302"/>
         <source>Edit User</source>
         <translation>Изменить пользователя</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="305"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="311"/>
         <source>Delete User</source>
         <translation>Удалить пользователя</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="314"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="320"/>
         <source>Disconnect</source>
         <translation>Отключить</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="323"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="329"/>
         <source>Disconnect All</source>
         <translation>Отключить всех</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="332"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="338"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="341"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="347"/>
         <source>Check for Updates</source>
         <translation>Проверка обновлений</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="350"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="356"/>
         <source>Save...</source>
         <translation>Сохранить...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="353"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="359"/>
         <source>Ctrl+S</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="362"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="368"/>
         <source>Reload</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="365"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="371"/>
         <source>F5</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="374"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="380"/>
         <source>Import Old Address Book...</source>
         <translation>Импорт старой адресной книги...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="383"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="389"/>
         <source>Export Address Book...</source>
         <translation>Экспорт адресной книги...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="392"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="398"/>
         <source>Import Address Book...</source>
         <translation>Импорт адресной книги...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="400"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="406"/>
         <source>Auto-refresh Status</source>
         <translation>Автообновление состояния</translation>
     </message>
@@ -6452,9 +6462,13 @@ Are you sure you want to continue?</source>
 <context>
     <name>SessionType</name>
     <message>
-        <location filename="../common/desktop/session_type.cc" line="33"/>
         <source>Desktop Management</source>
-        <translation>Управление рабочим столом</translation>
+        <translation type="vanished">Управление рабочим столом</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/session_type.cc" line="33"/>
+        <source>Desktop</source>
+        <translation>Рабочий стол</translation>
     </message>
     <message>
         <location filename="../common/desktop/session_type.cc" line="36"/>

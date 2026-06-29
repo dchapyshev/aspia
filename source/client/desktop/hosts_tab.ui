@@ -155,7 +155,10 @@
      <normaloff>:/img/workstation.svg</normaloff>:/img/workstation.svg</iconset>
    </property>
    <property name="text">
-    <string>Desktop Management</string>
+    <string>Desktop</string>
+   </property>
+   <property name="toolTip">
+    <string>Desktop</string>
    </property>
   </action>
   <action name="action_file_transfer">
@@ -200,7 +203,10 @@
      <normaloff>:/img/workstation.svg</normaloff>:/img/workstation.svg</iconset>
    </property>
    <property name="text">
-    <string>Desktop Management</string>
+    <string>Desktop</string>
+   </property>
+   <property name="toolTip">
+    <string>Desktop</string>
    </property>
   </action>
   <action name="action_file_transfer_connect">
