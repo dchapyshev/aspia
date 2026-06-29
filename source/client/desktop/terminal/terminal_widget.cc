@@ -499,6 +499,26 @@ void TerminalWidget::keyPressEvent(QKeyEvent* event)
             }
 
             const QString text = event->text();
+
+            // Alt (but not AltGr, which is reported as Ctrl+Alt) turns the key into a meta sequence:
+            // ESC followed by the character. While Alt is held text() is usually empty, so the
+            // character is taken from the key code.
+            if ((event->modifiers() & Qt::AltModifier) && !(event->modifiers() & Qt::ControlModifier))
+            {
+                char32_t character = 0;
+                if (!text.isEmpty() && text.front().isPrint())
+                    character = text.front().unicode();
+                else if (event->key() >= Qt::Key_Space && event->key() <= Qt::Key_AsciiTilde)
+                    character = (event->modifiers() & Qt::ShiftModifier) ?
+                        static_cast<char32_t>(event->key()) : QChar(event->key()).toLower().unicode();
+
+                if (character != 0)
+                {
+                    vterm_keyboard_unichar(vterm_, character, VTERM_MOD_ALT);
+                    break;
+                }
+            }
+
             if (text.isEmpty())
             {
                 QWidget::keyPressEvent(event);
