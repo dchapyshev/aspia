@@ -780,11 +780,16 @@ void HostsTab::onLocalHostContextMenu(qint64 entry_id, const QPoint& pos)
 
     if (entry_id)
     {
-        menu.addAction(ui->action_desktop_connect);
-        menu.addAction(ui->action_terminal_connect);
-        menu.addAction(ui->action_file_transfer_connect);
-        menu.addAction(ui->action_chat_connect);
-        menu.addAction(ui->action_system_info_connect);
+        auto addProxy = [&menu](QAction* action)
+        {
+            menu.addAction(action->icon(), action->text(), action, &QAction::triggered);
+        };
+
+        addProxy(ui->action_desktop_connect);
+        addProxy(ui->action_terminal_connect);
+        addProxy(ui->action_file_transfer_connect);
+        addProxy(ui->action_chat_connect);
+        addProxy(ui->action_system_info_connect);
         menu.addSeparator();
         menu.addAction(ui->action_edit_host);
         menu.addAction(ui->action_copy_host);
