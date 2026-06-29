@@ -224,12 +224,20 @@ void HostWindow::connectToService()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostWindow::activateHost()
+void HostWindow::activateHost(bool hidden)
 {
-    LOG(INFO) << "Activating host";
+    LOG(INFO) << "Activating host (hidden:" << hidden << ")";
 
-    show();
-    activateWindow();
+    // A hidden activation comes from the service relaunching the GUI (e.g. after the service
+    // restarted): only re-establish the service connection, without popping up the window. A
+    // non-hidden activation means the user started the host application manually, so show the
+    // window as well.
+    if (!hidden)
+    {
+        show();
+        activateWindow();
+    }
+
     connectToService();
 }
 

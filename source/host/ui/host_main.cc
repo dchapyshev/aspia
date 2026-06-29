@@ -301,11 +301,7 @@ int hostMain(int argc, char* argv[])
         if (application.isRunning())
         {
             LOG(INFO) << "Application already running";
-
-            if (parser.isSet(hidden_option))
-                LOG(INFO) << "Hidden launch, keep the existing instance in the tray";
-            else
-                application.activate();
+            application.activate(parser.isSet(hidden_option));
         }
         else
         {

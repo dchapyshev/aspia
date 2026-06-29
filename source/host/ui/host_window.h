@@ -48,7 +48,7 @@ public:
 
 public slots:
     void connectToService();
-    void activateHost();
+    void activateHost(bool hidden);
     void hideToTray();
 
 signals:

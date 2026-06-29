@@ -33,7 +33,8 @@
 
 namespace {
 
-const char kActivateMessage[] = "activate";
+const char kActivateVisibleMessage[] = "activate_visible";
+const char kActivateHiddenMessage[] = "activate_hidden";
 
 class EventFilter final : public QAbstractNativeEventFilter
 {
@@ -90,10 +91,15 @@ Application::Application(int& argc, char* argv[])
 
     connect(this, &Application::sig_messageReceived, this, [this](const QByteArray& message)
     {
-        if (message == kActivateMessage)
+        if (message == kActivateVisibleMessage)
         {
             LOG(INFO) << "Activate message received";
-            emit sig_activated();
+            emit sig_activated(false);
+        }
+        else if (message == kActivateHiddenMessage)
+        {
+            LOG(INFO) << "Activate (hidden) message received";
+            emit sig_activated(true);
         }
         else
         {
@@ -126,8 +132,8 @@ Application* Application::instance()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Application::activate()
+void Application::activate(bool hidden)
 {
-    LOG(INFO) << "Sending activate message";
-    sendMessage(kActivateMessage);
+    LOG(INFO) << "Sending activate message (hidden:" << hidden << ")";
+    sendMessage(hidden ? kActivateHiddenMessage : kActivateVisibleMessage);
 }

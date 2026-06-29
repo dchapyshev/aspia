@@ -32,10 +32,10 @@ public:
     static Application* instance();
 
 public slots:
-    void activate();
+    void activate(bool hidden);
 
 signals:
-    void sig_activated();
+    void sig_activated(bool hidden);
 
 private:
     Q_DISABLE_COPY_MOVE(Application)
