@@ -170,7 +170,7 @@ bool TerminalProcessWin::start(int columns, int rows)
     memset(&startup_info, 0, sizeof(startup_info));
     startup_info.StartupInfo.cb = sizeof(startup_info);
 
-    size_t attribute_list_size = 0;
+    SIZE_T attribute_list_size = 0;
     InitializeProcThreadAttributeList(nullptr, 1, 0, &attribute_list_size);
 
     startup_info.lpAttributeList = reinterpret_cast<LPPROC_THREAD_ATTRIBUTE_LIST>(
