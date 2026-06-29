@@ -33,8 +33,13 @@
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX)
-#include <signal.h>
-#include <spawn.h>
+#include <cstdlib>
+
+#include <grp.h>
+#include <pwd.h>
+#include <unistd.h>
+
+#include "base/linux/session_util.h"
 #endif // defined(Q_OS_LINUX)
 
 #include "base/location.h"
@@ -50,6 +55,66 @@ namespace {
 
 #if defined(Q_OS_LINUX)
 const char kFileTransferAgentFile[] = "aspia_file_agent";
+
+//--------------------------------------------------------------------------------------------------
+// Forks and execs the file-transfer agent as |user_name| (the active logged-in user), so it accesses
+// the file system with that user's own permissions. Returns false if the user is unknown or fork failed.
+bool launchAgentAsUser(const QString& user_name, const QString& agent_path, const QString& ipc_channel_id)
+{
+    const std::string user_name_utf8 = user_name.toStdString();
+
+    struct passwd* pw = getpwnam(user_name_utf8.c_str());
+    if (!pw)
+    {
+        LOG(ERROR) << "Unknown user:" << user_name;
+        return false;
+    }
+
+    const uid_t uid = pw->pw_uid;
+    const gid_t gid = pw->pw_gid;
+    const std::string home_dir = pw->pw_dir ? pw->pw_dir : "/";
+    const std::string agent_path_utf8 = agent_path.toStdString();
+    const std::string channel_id_utf8 = ipc_channel_id.toStdString();
+
+    pid_t pid = fork();
+    if (pid < 0)
+    {
+        PLOG(ERROR) << "fork failed";
+        return false;
+    }
+
+    if (pid == 0)
+    {
+        // Child process: drop privileges to the target user and exec the agent.
+        if (setsid() == -1)
+            _exit(127);
+
+        if (initgroups(user_name_utf8.c_str(), gid) != 0)
+            _exit(127);
+        if (setgid(gid) != 0)
+            _exit(127);
+        if (setuid(uid) != 0)
+            _exit(127);
+
+        setenv("HOME", home_dir.c_str(), 1);
+        setenv("USER", user_name_utf8.c_str(), 1);
+        setenv("LOGNAME", user_name_utf8.c_str(), 1);
+        setenv(IpcServer::kChannelIdEnvVar, channel_id_utf8.c_str(), 1);
+
+        if (chdir(home_dir.c_str()) != 0)
+        {
+            // Non-fatal: fall back to the root directory.
+            if (chdir("/") != 0)
+                _exit(127);
+        }
+
+        char* argv[] = { const_cast<char*>(agent_path_utf8.c_str()), nullptr };
+        execv(agent_path_utf8.c_str(), argv);
+        _exit(127);
+    }
+
+    return true;
+}
 #endif // defined(Q_OS_LINUX)
 
 #if defined(Q_OS_WINDOWS)
@@ -349,59 +414,42 @@ void FileClient::onStart()
         return;
     }
 #elif defined(Q_OS_LINUX)
-    std::error_code ignored_error;
-    std::filesystem::directory_iterator it("/usr/share/xsessions/", ignored_error);
-    if (it == std::filesystem::end(it))
+    // The agent must run as the active logged-in user so it accesses the file system with that user's
+    // permissions. Determine that user from logind.
+    QString session_id;
+    uid_t uid = 0;
+    if (!SessionUtil::activeSession(&session_id, &uid) ||
+        SessionUtil::sessionClass(session_id) != SessionUtil::SessionClass::USER)
     {
-        CLOG(ERROR) << "No X11 sessions";
+        CLOG(WARNING) << "No active user session";
+
+        // There is no logged in user. The session starts, but responds to all client requests with
+        // an error.
+        onStarted(FROM_HERE, false);
+        return;
+    }
+
+    const QString user_name = SessionUtil::userNameByUid(uid);
+    if (user_name.isEmpty())
+    {
+        CLOG(ERROR) << "Unable to resolve user name for uid:" << uid;
         onError(FROM_HERE);
         return;
     }
 
-    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen("who", "r"), pclose);
-    if (!pipe)
+    if (!startIpcServer(ipc_channel_id, QString()))
     {
-        CLOG(ERROR) << "Unable to open pipe";
+        CLOG(ERROR) << "Unable to start IPC server";
         onError(FROM_HERE);
         return;
     }
 
-    std::array<char, 512> buffer;
-    while (fgets(buffer.data(), buffer.size(), pipe.get()))
+    CLOG(INFO) << "Starting agent process for user:" << user_name;
+    if (!launchAgentAsUser(user_name, agentFilePath(), ipc_channel_id))
     {
-        QString line = QString::fromLocal8Bit(buffer.data()).toLower();
-        if (!line.contains(":0"))
-            continue;
-
-        QStringList splitted = line.split(' ', Qt::SkipEmptyParts);
-        if (splitted.isEmpty())
-            continue;
-
-        if (!startIpcServer(ipc_channel_id, QString()))
-        {
-            CLOG(ERROR) << "Unable to start IPC server";
-            onError(FROM_HERE);
-            return;
-        }
-
-        QString user_name = splitted.front();
-        QByteArray command_line = QString("sudo -u %1 env %2=%3 %4 &")
-                                      .arg(user_name, IpcServer::kChannelIdEnvVar, ipc_channel_id,
-                                           agentFilePath()).toLocal8Bit();
-
-        CLOG(INFO) << "Start file transfer session agent:" << command_line;
-
-        char sh_name[] = "sh";
-        char sh_arguments[] = "-c";
-        char* argv[] = { sh_name, sh_arguments, command_line.data(), nullptr };
-
-        pid_t pid;
-        if (posix_spawn(&pid, "/bin/sh", nullptr, nullptr, argv, environ) != 0)
-        {
-            CLOG(ERROR) << "Unable to start process";
-            onError(FROM_HERE);
-            return;
-        }
+        CLOG(ERROR) << "launchAgentAsUser failed";
+        onError(FROM_HERE);
+        return;
     }
 #else
     NOTIMPLEMENTED();

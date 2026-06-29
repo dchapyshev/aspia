@@ -278,6 +278,24 @@ Routers added: %4</source>
         <translation>Рабочий стол</translation>
     </message>
     <message>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="87"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="181"/>
+        <source>Downloads</source>
+        <translation>Загрузки</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="91"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="185"/>
+        <source>Documents</source>
+        <translation>Документы</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="95"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="189"/>
+        <source>Pictures</source>
+        <translation>Изображения</translation>
+    </message>
+    <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="311"/>
         <source>Computer</source>
         <translation>Компьютер</translation>
@@ -321,6 +339,21 @@ Routers added: %4</source>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="475"/>
         <source>Desktop Folder</source>
         <translation>Папка рабочего стола</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="505"/>
+        <source>Downloads Folder</source>
+        <translation>Папка загрузок</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="508"/>
+        <source>Documents Folder</source>
+        <translation>Папка документов</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="511"/>
+        <source>Pictures Folder</source>
+        <translation>Папка изображений</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="478"/>

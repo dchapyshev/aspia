@@ -124,6 +124,46 @@ void addAndroidDrives(proto::file_transfer::DriveList* drive_list)
 
 #else // defined(Q_OS_ANDROID)
 
+#if defined(Q_OS_LINUX)
+//--------------------------------------------------------------------------------------------------
+// QStorageInfo lists every POSIX mount on Linux - snap squashfs images, tmpfs, the boot partition,
+// pseudo filesystems and so on. Keep only the volumes a user would actually browse.
+bool isUserVisibleVolume(const QStorageInfo& volume)
+{
+    if (!volume.isValid() || !volume.isReady())
+        return false;
+
+    static const char* const kPseudoFileSystems[] = {
+        "squashfs", "tmpfs", "devtmpfs", "ramfs", "overlay", "proc", "sysfs", "cgroup", "cgroup2",
+        "devpts", "mqueue", "hugetlbfs", "debugfs", "tracefs", "securityfs", "pstore", "bpf",
+        "configfs", "fusectl", "nsfs", "autofs", "efivarfs", "binfmt_misc"
+    };
+
+    const QByteArray fs_type = volume.fileSystemType();
+    for (const char* pseudo : kPseudoFileSystems)
+    {
+        if (fs_type == pseudo)
+            return false;
+    }
+
+    static const char* const kSystemPaths[] = { "/snap", "/var/snap", "/boot", "/sys", "/proc", "/dev" };
+
+    const QByteArray root = volume.rootPath().toUtf8();
+    for (const char* prefix : kSystemPaths)
+    {
+        QByteArray path_prefix(prefix);
+        if (root == path_prefix)
+            return false;
+
+        path_prefix += '/';
+        if (root.startsWith(path_prefix))
+            return false;
+    }
+
+    return true;
+}
+#endif // defined(Q_OS_LINUX)
+
 //--------------------------------------------------------------------------------------------------
 // Builds the drive list for the desktop: the mounted volumes plus the Desktop and Home folders.
 void addDesktopDrives(proto::file_transfer::DriveList* drive_list)
@@ -132,6 +172,11 @@ void addDesktopDrives(proto::file_transfer::DriveList* drive_list)
 
     for (const auto& volume : std::as_const(volumes))
     {
+#if defined(Q_OS_LINUX)
+        if (!isUserVisibleVolume(volume))
+            continue;
+#endif // defined(Q_OS_LINUX)
+
         proto::file_transfer::DriveList::Item* item = drive_list->add_item();
 
 #if defined(Q_OS_WINDOWS)
@@ -167,20 +212,28 @@ void addDesktopDrives(proto::file_transfer::DriveList* drive_list)
         item->set_path(volume.rootPath().toStdString());
     }
 
-    QString desktop_path = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
-    if (!desktop_path.isEmpty())
+    const struct
     {
-        proto::file_transfer::DriveList::Item* item = drive_list->add_item();
-        item->set_type(proto::file_transfer::DriveList::Item::TYPE_DESKTOP_FOLDER);
-        item->set_path(desktop_path.toStdString());
-    }
+        QStandardPaths::StandardLocation location;
+        proto::file_transfer::DriveList::Item::Type type;
+    } kQuickFolders[] =
+    {
+        { QStandardPaths::DesktopLocation,   proto::file_transfer::DriveList::Item::TYPE_DESKTOP_FOLDER },
+        { QStandardPaths::HomeLocation,      proto::file_transfer::DriveList::Item::TYPE_HOME_FOLDER },
+        { QStandardPaths::DownloadLocation,  proto::file_transfer::DriveList::Item::TYPE_DOWNLOAD_FOLDER },
+        { QStandardPaths::DocumentsLocation, proto::file_transfer::DriveList::Item::TYPE_DOCUMENTS_FOLDER },
+        { QStandardPaths::PicturesLocation,  proto::file_transfer::DriveList::Item::TYPE_PICTURES_FOLDER },
+    };
 
-    QString home_path = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-    if (!home_path.isEmpty())
+    for (const auto& folder : kQuickFolders)
     {
+        const QString path = QStandardPaths::writableLocation(folder.location);
+        if (path.isEmpty() || !QDir(path).exists())
+            continue;
+
         proto::file_transfer::DriveList::Item* item = drive_list->add_item();
-        item->set_type(proto::file_transfer::DriveList::Item::TYPE_HOME_FOLDER);
-        item->set_path(home_path.toStdString());
+        item->set_type(folder.type);
+        item->set_path(path.toStdString());
     }
 }
 

@@ -138,6 +138,18 @@ QIcon FilePlatformUtil::driveIcon(proto::file_transfer::DriveList::Item::Type ty
             icon_name = QStringLiteral(":/img/desktop.svg");
             break;
 
+        case proto::file_transfer::DriveList::Item::TYPE_DOWNLOAD_FOLDER:
+            icon_name = ":/img/folder-downloads.svg";
+            break;
+
+        case proto::file_transfer::DriveList::Item::TYPE_PICTURES_FOLDER:
+            icon_name = ":/img/folder-pictures.svg";
+            break;
+
+        case proto::file_transfer::DriveList::Item::TYPE_DOCUMENTS_FOLDER:
+            icon_name = ":/img/folder-documents.svg";
+            break;
+
         case proto::file_transfer::DriveList::Item::TYPE_ROOT_DIRECTORY:
             icon_name = QStringLiteral(":/img/folder.svg");
             break;

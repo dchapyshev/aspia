@@ -20,9 +20,11 @@
 
 #include <QImage>
 
+#include "base/win/scoped_co_mem.h"
 #include "base/win/scoped_user_object.h"
 
 #include <shellapi.h>
+#include <shlobj.h>
 
 namespace {
 
@@ -56,6 +58,26 @@ QIcon stockIcon(SHSTOCKICONID icon_id)
     }
 
     return QIcon(QStringLiteral(":/img/file.svg"));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Windows has no stock icon id for the Downloads/Documents/Pictures folders (only the generic
+// SIID_FOLDER), so their distinct shell icons are taken from the known folder itself by its path.
+QIcon knownFolderIcon(REFKNOWNFOLDERID folder_id)
+{
+    ScopedCoMem<wchar_t> folder_path;
+    if (FAILED(SHGetKnownFolderPath(folder_id, KF_FLAG_DEFAULT, nullptr, &folder_path)) || !folder_path)
+        return stockIcon(SIID_FOLDER);
+
+    SHFILEINFO file_info;
+    memset(&file_info, 0, sizeof(file_info));
+    SHGetFileInfoW(folder_path, 0, &file_info, sizeof(file_info), SHGFI_ICON | SHGFI_SMALLICON);
+
+    ScopedHICON icon(file_info.hIcon);
+    if (icon.isValid())
+        return QPixmap::fromImage(QImage::fromHICON(icon));
+
+    return stockIcon(SIID_FOLDER);
 }
 
 } // namespace
@@ -127,6 +149,15 @@ QIcon FilePlatformUtil::driveIcon(proto::file_transfer::DriveList::Item::Type ty
 
         case proto::file_transfer::DriveList::Item::TYPE_DESKTOP_FOLDER:
             return stockIcon(SIID_DESKTOP);
+
+        case proto::file_transfer::DriveList::Item::TYPE_DOWNLOAD_FOLDER:
+            return knownFolderIcon(FOLDERID_Downloads);
+
+        case proto::file_transfer::DriveList::Item::TYPE_PICTURES_FOLDER:
+            return knownFolderIcon(FOLDERID_Pictures);
+
+        case proto::file_transfer::DriveList::Item::TYPE_DOCUMENTS_FOLDER:
+            return knownFolderIcon(FOLDERID_Documents);
 
         default:
             return stockIcon(SIID_DRIVEFIXED);
