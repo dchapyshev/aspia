@@ -1759,14 +1759,22 @@ void HostsTab::updateActionsState()
         ui->action_add_workspace->setVisible(is_admin_online);
         ui->action_change_router_password->setVisible(is_online);
     }
-    else
+
+    bool show_session_types = (current_content_ == search_widget_);
+    if (sidebar_item)
     {
-        ui->action_desktop->setVisible(true);
-        ui->action_file_transfer->setVisible(true);
-        ui->action_chat->setVisible(true);
-        ui->action_system_info->setVisible(true);
-        ui->action_terminal->setVisible(true);
+        show_session_types = show_session_types ||
+            sidebar_item->itemType() == SidebarItem::LOCAL_GROUP ||
+            sidebar_item->itemType() == SidebarItem::ROUTER_HOSTS ||
+            sidebar_item->itemType() == SidebarItem::ROUTER_GROUP ||
+            sidebar_item->itemType() == SidebarItem::ROUTER_WORKSPACE;
     }
+
+    ui->action_desktop->setVisible(show_session_types);
+    ui->action_terminal->setVisible(show_session_types);
+    ui->action_file_transfer->setVisible(show_session_types);
+    ui->action_chat->setVisible(show_session_types);
+    ui->action_system_info->setVisible(show_session_types);
 
     if (current_content_ != search_widget_ && sidebar_item &&
         (sidebar_item->itemType() == SidebarItem::ROUTER_GROUP ||
