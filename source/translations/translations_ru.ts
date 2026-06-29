@@ -3027,6 +3027,10 @@ Routers added: %4</source>
         <translation>Изменить пароль</translation>
     </message>
     <message>
+        <source>Clear Events</source>
+        <translation>Очистить события</translation>
+    </message>
+    <message>
         <location filename="../client/desktop/hosts_tab.ui" line="119"/>
         <source>Add Host</source>
         <translation>Добавить хост</translation>

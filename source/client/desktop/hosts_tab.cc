@@ -202,6 +202,7 @@ HostsTab::HostsTab(QWidget* parent)
     connect(ui->action_edit_router, &QAction::triggered, ui->sidebar, &Sidebar::onEditRouter);
     connect(ui->action_delete_router, &QAction::triggered, ui->sidebar, &Sidebar::onRemoveRouter);
     connect(ui->action_change_router_password, &QAction::triggered, this, &HostsTab::onChangeRouterPassword);
+    connect(ui->action_clear_router_events, &QAction::triggered, this, &HostsTab::onClearRouterEvents);
     connect(ui->sidebar, &Sidebar::sig_routersChanged, this, &HostsTab::reloadRouters);
     connect(ui->sidebar, &Sidebar::sig_routerHostMoved, this, [this](qint64 /* router_id */)
     {
@@ -240,7 +241,7 @@ HostsTab::HostsTab(QWidget* parent)
     addActions(ActionRole::EDIT,
     {
         ui->action_add_router, ui->action_edit_router, ui->action_delete_router,
-        ui->action_change_router_password
+        ui->action_change_router_password, ui->action_clear_router_events
     });
     addActions(ActionRole::EDIT,
     {
@@ -595,6 +596,7 @@ void HostsTab::onSidebarContextMenu(SidebarItem::Type type, const QPoint& pos)
 
         menu.addAction(ui->action_edit_router);
         menu.addAction(ui->action_delete_router);
+        menu.addAction(ui->action_clear_router_events);
 
         auto* router_item = static_cast<SidebarRouter*>(item);
         Router* router = Router::instance(router_item->routerId());
@@ -1321,6 +1323,18 @@ void HostsTab::onChangeRouterPassword()
 }
 
 //--------------------------------------------------------------------------------------------------
+void HostsTab::onClearRouterEvents()
+{
+    SidebarItem* sidebar_item = ui->sidebar->currentItem();
+    if (!sidebar_item || sidebar_item->itemType() != SidebarItem::ROUTER)
+        return;
+
+    const qint64 router_id = static_cast<SidebarRouter*>(sidebar_item)->routerId();
+    ui->sidebar->clearRouterEvents(router_id);
+    router_status_widget_->showRouter(router_id, ui->sidebar->routerEvents(router_id));
+}
+
+//--------------------------------------------------------------------------------------------------
 void HostsTab::onImportOldBookAction()
 {
     LOG(INFO) << "[ACTION] Import address book";
@@ -1592,6 +1606,7 @@ void HostsTab::updateActionsState()
     ui->action_edit_router->setVisible(false);
     ui->action_delete_router->setVisible(false);
     ui->action_change_router_password->setVisible(false);
+    ui->action_clear_router_events->setVisible(false);
 
     ui->action_add_host->setVisible(false);
     ui->action_delete_host->setVisible(false);
@@ -1732,6 +1747,7 @@ void HostsTab::updateActionsState()
     {
         ui->action_edit_router->setVisible(true);
         ui->action_delete_router->setVisible(true);
+        ui->action_clear_router_events->setVisible(true);
 
         // Workspaces are managed from the sidebar tree. Adding one targets the whole router, so
         // its action lives on the router node when connected as an administrator.

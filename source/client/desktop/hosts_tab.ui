@@ -110,6 +110,15 @@
     <string>Change Password</string>
    </property>
   </action>
+  <action name="action_clear_router_events">
+   <property name="icon">
+    <iconset resource="../../common/resources/common.qrc">
+     <normaloff>:/img/clean.svg</normaloff>:/img/clean.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Clear Events</string>
+   </property>
+  </action>
   <action name="action_add_host">
    <property name="icon">
     <iconset resource="../../common/resources/common.qrc">

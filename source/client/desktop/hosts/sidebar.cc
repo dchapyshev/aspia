@@ -530,6 +530,12 @@ QList<RouterStatusWidget::Event> Sidebar::routerEvents(qint64 router_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
+void Sidebar::clearRouterEvents(qint64 router_id)
+{
+    router_events_[router_id].clear();
+}
+
+//--------------------------------------------------------------------------------------------------
 void Sidebar::onRefreshWorkspaces(qint64 router_id)
 {
     Router* router = routers_.value(router_id);

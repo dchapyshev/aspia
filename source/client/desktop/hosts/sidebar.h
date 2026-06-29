@@ -59,6 +59,7 @@ public:
 
     void changeRouterPassword(qint64 router_id);
     QList<RouterStatusWidget::Event> routerEvents(qint64 router_id) const;
+    void clearRouterEvents(qint64 router_id);
 
 public slots:
     void onRefreshWorkspaces(qint64 router_id);
