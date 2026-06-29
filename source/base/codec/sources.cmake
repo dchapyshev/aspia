@@ -59,7 +59,11 @@ collect_sources(SOURCE_BASE_CODEC
     yuv_converter.cc
     yuv_converter.h
     zstd_compress.cc
-    zstd_compress.h)
+    zstd_compress.h
+    zstd_stream_compressor.cc
+    zstd_stream_compressor.h
+    zstd_stream_decompressor.cc
+    zstd_stream_decompressor.h)
 
 if (WIN32)
     collect_sources(SOURCE_BASE_CODEC

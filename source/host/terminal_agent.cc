@@ -22,6 +22,7 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "base/codec/zstd_stream_compressor.h"
 #include "base/ipc/ipc_channel.h"
 #include "host/terminal_process.h"
 #include "proto/terminal.h"
@@ -35,7 +36,8 @@ const int kDefaultRows = 24;
 
 //--------------------------------------------------------------------------------------------------
 TerminalAgent::TerminalAgent(QObject* parent)
-    : QObject(parent)
+    : QObject(parent),
+      output_compressor_(std::make_unique<ZstdStreamCompressor>())
 {
     LOG(INFO) << "Ctor";
 }
@@ -136,7 +138,7 @@ void TerminalAgent::onPtyOutput(const QByteArray& data)
         return;
 
     proto::terminal::HostToClient message;
-    message.mutable_data()->set_data(std::string(data.constData(), data.size()));
+    message.mutable_data()->set_data(output_compressor_->compress(data));
     ipc_channel_->send(0, serialize(message));
 }
 

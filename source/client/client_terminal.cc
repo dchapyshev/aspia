@@ -20,12 +20,14 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "base/codec/zstd_stream_decompressor.h"
 #include "proto/peer.h"
 #include "proto/terminal.h"
 
 //--------------------------------------------------------------------------------------------------
 ClientTerminal::ClientTerminal(QObject* parent)
-    : Client(parent)
+    : Client(parent),
+      output_decompressor_(std::make_unique<ZstdStreamDecompressor>())
 {
     CLOG(INFO) << "Ctor";
 }
@@ -82,7 +84,7 @@ void ClientTerminal::onMessageReceived(quint8 /* channel_id */, const QByteArray
     }
 
     if (message.has_data())
-        emit sig_outputReceived(QByteArray::fromStdString(message.data().data()));
+        emit sig_outputReceived(output_decompressor_->decompress(message.data().data()));
 
     if (message.has_result())
         emit sig_resultReceived(message.result().code());

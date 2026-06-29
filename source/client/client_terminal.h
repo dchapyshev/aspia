@@ -19,7 +19,11 @@
 #ifndef CLIENT_CLIENT_TERMINAL_H
 #define CLIENT_CLIENT_TERMINAL_H
 
+#include <memory>
+
 #include "client/client.h"
+
+class ZstdStreamDecompressor;
 
 class ClientTerminal final : public Client
 {
@@ -44,6 +48,9 @@ protected:
     void onMessageReceived(quint8 channel_id, const QByteArray& buffer) final;
 
 private:
+    // Streaming zstd decompressor for the host -> client output, paired with the host's compressor.
+    std::unique_ptr<ZstdStreamDecompressor> output_decompressor_;
+
     Q_DISABLE_COPY_MOVE(ClientTerminal)
 };
 

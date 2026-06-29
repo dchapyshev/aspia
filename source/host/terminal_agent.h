@@ -22,8 +22,11 @@
 #include <QObject>
 #include <QString>
 
+#include <memory>
+
 class IpcChannel;
 class TerminalProcess;
+class ZstdStreamCompressor;
 
 class TerminalAgent final : public QObject
 {
@@ -48,6 +51,10 @@ private:
     IpcChannel* ipc_channel_ = nullptr;
     TerminalProcess* terminal_process_ = nullptr;
     bool process_started_ = false;
+
+    // Streaming zstd compressor for the host -> client output (the PTY byte stream is highly
+    // compressible). Client input is left uncompressed.
+    std::unique_ptr<ZstdStreamCompressor> output_compressor_;
 
     Q_DISABLE_COPY_MOVE(TerminalAgent)
 };
