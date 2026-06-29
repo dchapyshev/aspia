@@ -132,6 +132,8 @@ private:
     int cursor_col_ = 0;
     bool cursor_visible_ = true;
     int mouse_mode_ = 0; // VTERM_PROP_MOUSE_NONE
+    bool alt_screen_ = false;
+    bool suppress_scrollback_ = false;
 
     Mode mode_ = Mode::LOGIN_USER;
     QString login_user_;

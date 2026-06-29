@@ -366,12 +366,16 @@ void TerminalWidget::updateScrollbar()
     scrollbar_->setValue(history - scroll_offset_);
     scrollbar_->blockSignals(false);
 
-    scrollbar_->setVisible(history > 0);
+    scrollbar_->setVisible(!alt_screen_ && history > 0);
 }
 
 //--------------------------------------------------------------------------------------------------
 void TerminalWidget::setScrollOffset(int offset)
 {
+    // No history scrolling while a full-screen application owns the alternate screen.
+    if (alt_screen_)
+        offset = 0;
+
     offset = std::clamp(offset, 0, static_cast<int>(scrollback_.size()));
     if (offset == scroll_offset_)
         return;
@@ -541,7 +545,10 @@ void TerminalWidget::finishResize()
         rows_ = rows;
 
         clearSelection();
+
+        suppress_scrollback_ = true;
         vterm_set_size(vterm_, rows_, columns_);
+        suppress_scrollback_ = false;
 
         if (mode_ == Mode::CONNECTED)
             emit sig_resize(columns_, rows_);
@@ -1101,6 +1108,15 @@ int TerminalWidget::onSetTermProp(VTermProp prop, VTermValue* value, void* user)
     {
         self->mouse_mode_ = value->number;
     }
+    else if (prop == VTERM_PROP_ALTSCREEN)
+    {
+        // The alternate screen (used by full-screen applications like Far, vim, mc) has no scrollback,
+        // so the history view and the scrollbar are disabled while it is active.
+        self->alt_screen_ = (value->boolean != 0);
+        self->scroll_offset_ = 0;
+        self->updateScrollbar();
+        self->update();
+    }
 
     return 1;
 }
@@ -1110,6 +1126,12 @@ int TerminalWidget::onSetTermProp(VTermProp prop, VTermValue* value, void* user)
 int TerminalWidget::onPushLine(int cols, const VTermScreenCell* cells, void* user)
 {
     TerminalWidget* self = reinterpret_cast<TerminalWidget*>(user);
+
+    // A resize must not fabricate scrollback. ConPTY keeps full-screen applications (Far) on the
+    // primary screen, so the spare lines libvterm scrolls off while resizing are stale frame content,
+    // not history - dropping them keeps such garbage out of the scrollbar.
+    if (self->suppress_scrollback_)
+        return 1;
 
     self->scrollback_.emplace_back(cells, cells + cols);
     if (static_cast<int>(self->scrollback_.size()) > kMaxScrollback)
@@ -1134,7 +1156,10 @@ int TerminalWidget::onPushLine(int cols, const VTermScreenCell* cells, void* use
 int TerminalWidget::onPopLine(int cols, VTermScreenCell* cells, void* user)
 {
     TerminalWidget* self = reinterpret_cast<TerminalWidget*>(user);
-    if (self->scrollback_.empty())
+
+    // While resizing do not pull scrollback back into the screen (it would drag stale content into the
+    // top of a full-screen application); let libvterm blank-fill instead.
+    if (self->suppress_scrollback_ || self->scrollback_.empty())
         return 0;
 
     const std::vector<VTermScreenCell>& line = self->scrollback_.back();
