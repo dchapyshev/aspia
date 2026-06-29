@@ -82,9 +82,13 @@
 # handle automatically.
 # You must not rely on them having a particular line ending style!
 
-# systemd unit files and Debian maintainer scripts are consumed on Linux and
-# must keep LF line endings regardless of core.autocrlf.
+# systemd unit files, Debian maintainer scripts, PAM policies, .desktop entries and polkit policies
+# are consumed on Linux and must keep LF line endings regardless of core.autocrlf (CRLF breaks the
+# PAM @include parser, etc.).
 *.service text eol=lf
+*.pam text eol=lf
+*.desktop text eol=lf
+*.policy text eol=lf
 **/linux/postinst text eol=lf
 **/linux/prerm text eol=lf
 **/linux/postrm text eol=lf
