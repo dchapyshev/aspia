@@ -155,17 +155,17 @@ TerminalWidget::TerminalWidget(QWidget* parent)
     resize_timer_->setSingleShot(true);
     connect(resize_timer_, &QTimer::timeout, this, [this]
     {
-#if defined(Q_OS_WINDOWS)
-        // While the mouse button is still held the window border is being dragged (a pause in the drag
-        // would otherwise trip the idle timer); keep waiting so the grid snaps only once, on release.
-        if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
+        // The snap is normally driven by the end of the border drag (WM_EXITSIZEMOVE). This timer is a
+        // fallback: while the drag is still in progress, keep waiting.
+        if (in_size_move_)
         {
             resize_timer_->start(kResizeFinishMs);
             return;
         }
-#endif
         finishResize();
     });
+
+    qApp->installNativeEventFilter(this);
 
     vterm_ = vterm_new(rows_, columns_);
     vterm_set_utf8(vterm_, 1);
@@ -199,6 +199,8 @@ TerminalWidget::TerminalWidget(QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 TerminalWidget::~TerminalWidget()
 {
+    qApp->removeNativeEventFilter(this);
+
     if (vterm_)
         vterm_free(vterm_);
 }
@@ -583,19 +585,27 @@ void TerminalWidget::resizeEvent(QResizeEvent* /* event */)
     if (char_width_ <= 0 || line_height_ <= 0)
         return;
 
-    // Before the session is connected there is no running application to stretch and no host to spare,
-    // so the grid is applied immediately.
-    if (mode_ != Mode::CONNECTED)
+    const int columns = std::max(1, (width() - scrollbar_width - 2 * kPadding) / char_width_);
+    const int rows = std::max(1, (height() - 2 * kPadding) / line_height_);
+
+    if (columns == columns_ && rows == rows_)
     {
-        finishResize();
+        // Settled back to the current grid (e.g. the transient layout resize seen while switching
+        // tabs); drop any queued resize so the host is not resized - and full-screen apps not
+        // repainted - for nothing.
+        resize_timer_->stop();
+        if (resizing_)
+        {
+            resizing_ = false;
+            update();
+        }
         return;
     }
 
-    // During a window drag the grid and the host are not touched on every step - that would resize the
-    // host pseudo-terminal on every pixel and reflow the content constantly. Instead the current
-    // content is stretched to follow the window (see paintEvent) and the real grid is applied once the
-    // size settles.
-    resizing_ = true;
+    // Stretch the content only during an interactive window-border drag (between WM_ENTERSIZEMOVE and
+    // WM_EXITSIZEMOVE). Other resizes (tab layout, maximize) do not stretch. Either way the grid change
+    // is applied once the size settles (finishResize), so brief transients never reach the host.
+    resizing_ = (mode_ == Mode::CONNECTED && in_size_move_);
     resize_timer_->start(kResizeFinishMs);
     update();
 }
@@ -627,6 +637,36 @@ void TerminalWidget::finishResize()
     }
 
     update();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool TerminalWidget::nativeEventFilter(
+    const QByteArray& event_type, void* message, qintptr* /* result */)
+{
+#if defined(Q_OS_WINDOWS)
+    if (event_type == "windows_generic_MSG")
+    {
+        const MSG* msg = static_cast<const MSG*>(message);
+        if (window() && msg->hwnd == reinterpret_cast<HWND>(window()->winId()))
+        {
+            if (msg->message == WM_ENTERSIZEMOVE)
+            {
+                in_size_move_ = true;
+            }
+            else if (msg->message == WM_EXITSIZEMOVE)
+            {
+                in_size_move_ = false;
+                if (resizing_)
+                    finishResize();
+            }
+        }
+    }
+#else
+    (void)event_type;
+    (void)message;
+#endif
+
+    return false;
 }
 
 //--------------------------------------------------------------------------------------------------

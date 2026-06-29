@@ -19,6 +19,7 @@
 #ifndef CLIENT_DESKTOP_TERMINAL_TERMINAL_WIDGET_H
 #define CLIENT_DESKTOP_TERMINAL_TERMINAL_WIDGET_H
 
+#include <QAbstractNativeEventFilter>
 #include <QColor>
 #include <QFont>
 #include <QWidget>
@@ -40,7 +41,9 @@ class QWheelEvent;
 // entered directly in the terminal); the collected credentials are reported via sig_credentials. Once
 // connected, keyboard input is reported via sig_input and the host shell output is fed via
 // writeOutput().
-class TerminalWidget final : public QWidget
+class TerminalWidget final
+    : public QWidget,
+      public QAbstractNativeEventFilter
 {
     Q_OBJECT
 
@@ -71,6 +74,9 @@ protected:
     void mouseReleaseEvent(QMouseEvent* event) final;
     void mouseMoveEvent(QMouseEvent* event) final;
     void mouseDoubleClickEvent(QMouseEvent* event) final;
+
+    // QAbstractNativeEventFilter implementation.
+    bool nativeEventFilter(const QByteArray& event_type, void* message, qintptr* result) final;
 
 private:
     enum class Mode
@@ -129,6 +135,7 @@ private:
     int columns_ = 80;
     int rows_ = 24;
     bool resizing_ = false;
+    bool in_size_move_ = false;
     QTimer* resize_timer_ = nullptr;
 
     int cursor_row_ = 0;
