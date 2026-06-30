@@ -18,14 +18,150 @@
 
 #include "base/sys_info.h"
 
-#include "base/logging.h"
-#include "base/system_error.h"
-#include "base/win/registry.h"
-#include "base/win/windows_version.h"
+#include <qt_windows.h>
 
 #include <LM.h>
 
+#include <memory>
+
+#include "base/logging.h"
+#include "base/system_error.h"
+#include "base/win/registry.h"
+#include "base/win/scoped_object.h"
+#include "base/win/windows_version.h"
+
 namespace {
+
+//--------------------------------------------------------------------------------------------------
+SysInfo::Service::Status serviceStatus(DWORD state)
+{
+    switch (state)
+    {
+        case SERVICE_CONTINUE_PENDING: return SysInfo::Service::Status::CONTINUE_PENDING;
+        case SERVICE_PAUSE_PENDING:    return SysInfo::Service::Status::PAUSE_PENDING;
+        case SERVICE_PAUSED:           return SysInfo::Service::Status::PAUSED;
+        case SERVICE_RUNNING:          return SysInfo::Service::Status::RUNNING;
+        case SERVICE_START_PENDING:    return SysInfo::Service::Status::START_PENDING;
+        case SERVICE_STOP_PENDING:     return SysInfo::Service::Status::STOP_PENDING;
+        case SERVICE_STOPPED:          return SysInfo::Service::Status::STOPPED;
+        default:                       return SysInfo::Service::Status::UNKNOWN;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+SysInfo::Service::StartupType serviceStartupType(DWORD start_type)
+{
+    switch (start_type)
+    {
+        case SERVICE_AUTO_START:   return SysInfo::Service::StartupType::AUTO_START;
+        case SERVICE_DEMAND_START: return SysInfo::Service::StartupType::DEMAND_START;
+        case SERVICE_DISABLED:     return SysInfo::Service::StartupType::DISABLED;
+        case SERVICE_BOOT_START:   return SysInfo::Service::StartupType::BOOT_START;
+        case SERVICE_SYSTEM_START: return SysInfo::Service::StartupType::SYSTEM_START;
+        default:                   return SysInfo::Service::StartupType::UNKNOWN;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+QString serviceDescription(SC_HANDLE service_handle)
+{
+    DWORD bytes_needed = 0;
+
+    if (QueryServiceConfig2W(service_handle, SERVICE_CONFIG_DESCRIPTION, nullptr, 0, &bytes_needed) ||
+        GetLastError() != ERROR_INSUFFICIENT_BUFFER)
+    {
+        return QString();
+    }
+
+    std::unique_ptr<quint8[]> buffer = std::make_unique<quint8[]>(bytes_needed);
+
+    if (!QueryServiceConfig2W(service_handle, SERVICE_CONFIG_DESCRIPTION, buffer.get(), bytes_needed,
+        &bytes_needed))
+    {
+        return QString();
+    }
+
+    auto* description = reinterpret_cast<SERVICE_DESCRIPTION*>(buffer.get());
+    if (!description->lpDescription)
+        return QString();
+
+    return QString::fromWCharArray(description->lpDescription);
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<SysInfo::Service> enumerateServices(DWORD service_type)
+{
+    QList<SysInfo::Service> result;
+
+    ScopedScHandle manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ENUMERATE_SERVICE));
+    if (!manager.isValid())
+    {
+        PLOG(ERROR) << "OpenSCManagerW failed";
+        return result;
+    }
+
+    DWORD bytes_needed = 0;
+    DWORD services_count = 0;
+    DWORD resume_handle = 0;
+
+    if (EnumServicesStatusExW(manager, SC_ENUM_PROCESS_INFO, service_type, SERVICE_STATE_ALL,
+        nullptr, 0, &bytes_needed, &services_count, &resume_handle, nullptr) ||
+        GetLastError() != ERROR_MORE_DATA)
+    {
+        PLOG(ERROR) << "Unexpected return value";
+        return result;
+    }
+
+    std::unique_ptr<quint8[]> buffer = std::make_unique<quint8[]>(bytes_needed);
+
+    if (!EnumServicesStatusExW(manager, SC_ENUM_PROCESS_INFO, service_type, SERVICE_STATE_ALL,
+        buffer.get(), bytes_needed, &bytes_needed, &services_count, &resume_handle, nullptr))
+    {
+        PLOG(ERROR) << "EnumServicesStatusExW failed";
+        return result;
+    }
+
+    auto* status_array = reinterpret_cast<ENUM_SERVICE_STATUS_PROCESS*>(buffer.get());
+    for (DWORD i = 0; i < services_count; ++i)
+    {
+        const ENUM_SERVICE_STATUS_PROCESS& src = status_array[i];
+
+        SysInfo::Service service;
+        if (src.lpServiceName)
+            service.name = QString::fromWCharArray(src.lpServiceName);
+        if (src.lpDisplayName)
+            service.display_name = QString::fromWCharArray(src.lpDisplayName);
+        service.status = serviceStatus(src.ServiceStatusProcess.dwCurrentState);
+
+        ScopedScHandle service_handle(OpenServiceW(manager, src.lpServiceName,
+            SERVICE_QUERY_CONFIG | SERVICE_QUERY_STATUS));
+        if (service_handle.isValid())
+        {
+            service.description = serviceDescription(service_handle);
+
+            DWORD config_bytes = 0;
+            if (!QueryServiceConfigW(service_handle, nullptr, 0, &config_bytes) &&
+                GetLastError() == ERROR_INSUFFICIENT_BUFFER)
+            {
+                std::unique_ptr<quint8[]> config_buffer = std::make_unique<quint8[]>(config_bytes);
+                auto* config = reinterpret_cast<LPQUERY_SERVICE_CONFIG>(config_buffer.get());
+
+                if (QueryServiceConfigW(service_handle, config, config_bytes, &config_bytes))
+                {
+                    service.startup_type = serviceStartupType(config->dwStartType);
+                    if (config->lpBinaryPathName)
+                        service.binary_path = QString::fromWCharArray(config->lpBinaryPathName);
+                    if (config->lpServiceStartName)
+                        service.start_name = QString::fromWCharArray(config->lpServiceStartName);
+                }
+            }
+        }
+
+        result.append(std::move(service));
+    }
+
+    return result;
+}
 
 //--------------------------------------------------------------------------------------------------
 bool isWow64Process()
@@ -526,4 +662,18 @@ QList<SysInfo::UserGroup> SysInfo::userGroups()
 
     NetApiBufferFree(group_info);
     return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::Service> SysInfo::services()
+{
+    return enumerateServices(SERVICE_WIN32);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::Service> SysInfo::drivers()
+{
+    return enumerateServices(SERVICE_DRIVER);
 }

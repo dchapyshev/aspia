@@ -20,7 +20,13 @@
 
 #include <QByteArray>
 #include <QDateTime>
+#include <QDBusArgument>
+#include <QDBusConnection>
+#include <QDBusMessage>
+#include <QDBusObjectPath>
+#include <QDBusVariant>
 #include <QFile>
+#include <QHash>
 #include <QSet>
 
 #include "base/logging.h"
@@ -35,6 +41,141 @@
 #include <sys/sysinfo.h>
 #include <sys/utsname.h>
 #include <unistd.h>
+
+namespace {
+
+//--------------------------------------------------------------------------------------------------
+SysInfo::Service::Status statusFromActiveState(const QString& active)
+{
+    if (active == "active")
+        return SysInfo::Service::Status::RUNNING;
+    if (active == "activating")
+        return SysInfo::Service::Status::START_PENDING;
+    if (active == "deactivating")
+        return SysInfo::Service::Status::STOP_PENDING;
+    if (active == "inactive" || active == "failed")
+        return SysInfo::Service::Status::STOPPED;
+
+    return SysInfo::Service::Status::UNKNOWN;
+}
+
+//--------------------------------------------------------------------------------------------------
+SysInfo::Service::StartupType startupFromUnitFileState(const QString& state)
+{
+    if (state == "enabled" || state == "enabled-runtime")
+        return SysInfo::Service::StartupType::AUTO_START;
+    if (state == "static" || state == "indirect" || state == "generated")
+        return SysInfo::Service::StartupType::DEMAND_START;
+    if (state == "disabled" || state == "masked" || state == "masked-runtime")
+        return SysInfo::Service::StartupType::DISABLED;
+
+    return SysInfo::Service::StartupType::UNKNOWN;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Maps each service unit name to its unit-file state via the systemd D-Bus interface.
+QHash<QString, QString> unitFileStates()
+{
+    QHash<QString, QString> result;
+
+    QDBusMessage call = QDBusMessage::createMethodCall(
+        "org.freedesktop.systemd1", "/org/freedesktop/systemd1",
+        "org.freedesktop.systemd1.Manager", "ListUnitFiles");
+
+    const QDBusMessage reply = QDBusConnection::systemBus().call(call);
+    if (reply.type() != QDBusMessage::ReplyMessage || reply.arguments().isEmpty())
+        return result;
+
+    const QDBusArgument arg = reply.arguments().constFirst().value<QDBusArgument>();
+    arg.beginArray();
+    while (!arg.atEnd())
+    {
+        QString path;
+        QString state;
+
+        arg.beginStructure();
+        arg >> path >> state;
+        arg.endStructure();
+
+        // The path is the full unit-file path; the unit name is its basename.
+        result.insert(path.section(QChar('/'), -1), state);
+    }
+    arg.endArray();
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Reads the ExecStart command and the User a service unit runs as, from its systemd D-Bus object.
+void readServiceExecAndUser(const QString& object_path, QString* binary_path, QString* start_name)
+{
+    QDBusMessage call = QDBusMessage::createMethodCall(
+        "org.freedesktop.systemd1", object_path,
+        "org.freedesktop.DBus.Properties", "GetAll");
+    call << QString("org.freedesktop.systemd1.Service");
+
+    const QDBusMessage reply = QDBusConnection::systemBus().call(call);
+    if (reply.type() != QDBusMessage::ReplyMessage || reply.arguments().isEmpty())
+        return;
+
+    bool dynamic_user = false;
+
+    const QDBusArgument arg = reply.arguments().constFirst().value<QDBusArgument>();
+    arg.beginMap();
+    while (!arg.atEnd())
+    {
+        QString key;
+        QDBusVariant value;
+
+        arg.beginMapEntry();
+        arg >> key >> value;
+        arg.endMapEntry();
+
+        if (key == "User")
+        {
+            *start_name = value.variant().toString();
+        }
+        else if (key == "DynamicUser")
+        {
+            dynamic_user = value.variant().toBool();
+        }
+        else if (key == "ExecStart")
+        {
+            // ExecStart is a(sasbttttuii): a list of (path, argv, ...) command structures.
+            const QDBusArgument exec = value.variant().value<QDBusArgument>();
+            exec.beginArray();
+            if (!exec.atEnd())
+            {
+                QString path;
+                QStringList argv;
+                bool ignore_failure = false;
+                qulonglong start_time = 0;
+                qulonglong start_time_monotonic = 0;
+                qulonglong stop_time = 0;
+                qulonglong stop_time_monotonic = 0;
+                uint pid = 0;
+                int code = 0;
+                int status = 0;
+
+                exec.beginStructure();
+                exec >> path >> argv >> ignore_failure >> start_time >> start_time_monotonic
+                     >> stop_time >> stop_time_monotonic >> pid >> code >> status;
+                exec.endStructure();
+
+                *binary_path = argv.isEmpty() ? path : argv.join(QChar(' '));
+            }
+            exec.endArray();
+        }
+    }
+    arg.endMap();
+
+    // A system service with no User= directive runs as root. Services with a dynamic user have no
+    // fixed account, so they are left without a user name.
+    if (start_name->isEmpty() && !dynamic_user)
+        *start_name = "root";
+}
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 //static
@@ -444,4 +585,69 @@ QList<SysInfo::UserGroup> SysInfo::userGroups()
 
     endgrent();
     return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::Service> SysInfo::services()
+{
+    QList<Service> result;
+
+    const QHash<QString, QString> unit_file_states = unitFileStates();
+
+    QDBusMessage call = QDBusMessage::createMethodCall(
+        "org.freedesktop.systemd1", "/org/freedesktop/systemd1",
+        "org.freedesktop.systemd1.Manager", "ListUnits");
+
+    const QDBusMessage reply = QDBusConnection::systemBus().call(call);
+    if (reply.type() != QDBusMessage::ReplyMessage || reply.arguments().isEmpty())
+        return result;
+
+    const QDBusArgument arg = reply.arguments().constFirst().value<QDBusArgument>();
+    arg.beginArray();
+    while (!arg.atEnd())
+    {
+        QString name;
+        QString description;
+        QString load_state;
+        QString active_state;
+        QString sub_state;
+        QString following;
+        QDBusObjectPath unit_path;
+        quint32 job_id = 0;
+        QString job_type;
+        QDBusObjectPath job_path;
+
+        arg.beginStructure();
+        arg >> name >> description >> load_state >> active_state >> sub_state >> following
+            >> unit_path >> job_id >> job_type >> job_path;
+        arg.endStructure();
+
+        // Skip non-services and units that are merely referenced but have no unit file on the
+        // system (load_state "not-found"/"masked"); those have no executable or startup type.
+        if (!name.endsWith(".service") || load_state != "loaded")
+            continue;
+
+        Service service;
+        // The short name drops the ".service" suffix; the full unit name stays as the display name.
+        service.name = name.chopped(8);
+        service.display_name = name;
+        service.description = description;
+        service.status = statusFromActiveState(active_state);
+        service.startup_type = startupFromUnitFileState(unit_file_states.value(name));
+        readServiceExecAndUser(unit_path.path(), &service.binary_path, &service.start_name);
+
+        result.append(std::move(service));
+    }
+    arg.endArray();
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::Service> SysInfo::drivers()
+{
+    // systemd has no Windows-style kernel drivers.
+    return QList<Service>();
 }

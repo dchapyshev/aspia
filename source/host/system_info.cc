@@ -41,7 +41,6 @@
 #include "base/win/power_info.h"
 #include "base/win/printer_enumerator.h"
 #include "base/win/net_share_enumerator.h"
-#include "base/win/service_enumerator.h"
 #include "host/win/process_monitor.h"
 #endif // defined(Q_OS_WINDOWS)
 
@@ -170,169 +169,163 @@ void fillNetworkShares(proto::system_info::SystemInfo* system_info)
 }
 #endif // defined(Q_OS_WINDOWS)
 
-#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillServices(proto::system_info::SystemInfo* system_info)
 {
-    for (ServiceEnumerator enumerator(ServiceEnumerator::Type::SERVICES);
-         !enumerator.isAtEnd();
-         enumerator.advance())
+    const QList<SysInfo::Service> services = SysInfo::services();
+    for (const SysInfo::Service& service : services)
     {
-        proto::system_info::Services::Service* service =
+        proto::system_info::Services::Service* item =
             system_info->mutable_services()->add_service();
 
-        service->set_name(enumerator.name().toStdString());
-        service->set_display_name(enumerator.displayName().toStdString());
-        service->set_description(enumerator.description().toStdString());
+        item->set_name(service.name.toStdString());
+        item->set_display_name(service.display_name.toStdString());
+        item->set_description(service.description.toStdString());
 
-        switch (enumerator.status())
+        switch (service.status)
         {
-            case ServiceEnumerator::Status::CONTINUE_PENDING:
-                service->set_status(proto::system_info::Services::Service::STATUS_CONTINUE_PENDING);
+            case SysInfo::Service::Status::CONTINUE_PENDING:
+                item->set_status(proto::system_info::Services::Service::STATUS_CONTINUE_PENDING);
                 break;
 
-            case ServiceEnumerator::Status::PAUSE_PENDING:
-                service->set_status(proto::system_info::Services::Service::STATUS_PAUSE_PENDING);
+            case SysInfo::Service::Status::PAUSE_PENDING:
+                item->set_status(proto::system_info::Services::Service::STATUS_PAUSE_PENDING);
                 break;
 
-            case ServiceEnumerator::Status::PAUSED:
-                service->set_status(proto::system_info::Services::Service::STATUS_PAUSED);
+            case SysInfo::Service::Status::PAUSED:
+                item->set_status(proto::system_info::Services::Service::STATUS_PAUSED);
                 break;
 
-            case ServiceEnumerator::Status::RUNNING:
-                service->set_status(proto::system_info::Services::Service::STATUS_RUNNING);
+            case SysInfo::Service::Status::RUNNING:
+                item->set_status(proto::system_info::Services::Service::STATUS_RUNNING);
                 break;
 
-            case ServiceEnumerator::Status::START_PENDING:
-                service->set_status(proto::system_info::Services::Service::STATUS_START_PENDING);
+            case SysInfo::Service::Status::START_PENDING:
+                item->set_status(proto::system_info::Services::Service::STATUS_START_PENDING);
                 break;
 
-            case ServiceEnumerator::Status::STOP_PENDING:
-                service->set_status(proto::system_info::Services::Service::STATUS_STOP_PENDING);
+            case SysInfo::Service::Status::STOP_PENDING:
+                item->set_status(proto::system_info::Services::Service::STATUS_STOP_PENDING);
                 break;
 
-            case ServiceEnumerator::Status::STOPPED:
-                service->set_status(proto::system_info::Services::Service::STATUS_STOPPED);
+            case SysInfo::Service::Status::STOPPED:
+                item->set_status(proto::system_info::Services::Service::STATUS_STOPPED);
                 break;
 
             default:
-                service->set_status(proto::system_info::Services::Service::STATUS_UNKNOWN);
+                item->set_status(proto::system_info::Services::Service::STATUS_UNKNOWN);
                 break;
         }
 
-        switch (enumerator.startupType())
+        switch (service.startup_type)
         {
-            case ServiceEnumerator::StartupType::AUTO_START:
-                service->set_startup_type(proto::system_info::Services::Service::STARTUP_TYPE_AUTO_START);
+            case SysInfo::Service::StartupType::AUTO_START:
+                item->set_startup_type(proto::system_info::Services::Service::STARTUP_TYPE_AUTO_START);
                 break;
 
-            case ServiceEnumerator::StartupType::DEMAND_START:
-                service->set_startup_type(proto::system_info::Services::Service::STARTUP_TYPE_DEMAND_START);
+            case SysInfo::Service::StartupType::DEMAND_START:
+                item->set_startup_type(proto::system_info::Services::Service::STARTUP_TYPE_DEMAND_START);
                 break;
 
-            case ServiceEnumerator::StartupType::DISABLED:
-                service->set_startup_type(proto::system_info::Services::Service::STARTUP_TYPE_DISABLED);
+            case SysInfo::Service::StartupType::DISABLED:
+                item->set_startup_type(proto::system_info::Services::Service::STARTUP_TYPE_DISABLED);
                 break;
 
-            case ServiceEnumerator::StartupType::BOOT_START:
-                service->set_startup_type(proto::system_info::Services::Service::STARTUP_TYPE_BOOT_START);
+            case SysInfo::Service::StartupType::BOOT_START:
+                item->set_startup_type(proto::system_info::Services::Service::STARTUP_TYPE_BOOT_START);
                 break;
 
-            case ServiceEnumerator::StartupType::SYSTEM_START:
-                service->set_startup_type(proto::system_info::Services::Service::STARTUP_TYPE_SYSTEM_START);
+            case SysInfo::Service::StartupType::SYSTEM_START:
+                item->set_startup_type(proto::system_info::Services::Service::STARTUP_TYPE_SYSTEM_START);
                 break;
 
             default:
-                service->set_startup_type(proto::system_info::Services::Service::STARTUP_TYPE_UNKNOWN);
+                item->set_startup_type(proto::system_info::Services::Service::STARTUP_TYPE_UNKNOWN);
                 break;
         }
 
-        service->set_binary_path(enumerator.binaryPath().toStdString());
-        service->set_start_name(enumerator.startName().toStdString());
+        item->set_binary_path(service.binary_path.toStdString());
+        item->set_start_name(service.start_name.toStdString());
     }
 }
-#endif // defined(Q_OS_WINDOWS)
 
-#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillDrivers(proto::system_info::SystemInfo* system_info)
 {
-    for (ServiceEnumerator enumerator(ServiceEnumerator::Type::DRIVERS);
-         !enumerator.isAtEnd();
-         enumerator.advance())
+    const QList<SysInfo::Service> drivers = SysInfo::drivers();
+    for (const SysInfo::Service& driver : drivers)
     {
-        proto::system_info::Drivers::Driver* driver = system_info->mutable_drivers()->add_driver();
+        proto::system_info::Drivers::Driver* item = system_info->mutable_drivers()->add_driver();
 
-        driver->set_name(enumerator.name().toStdString());
-        driver->set_display_name(enumerator.displayName().toStdString());
-        driver->set_description(enumerator.description().toStdString());
+        item->set_name(driver.name.toStdString());
+        item->set_display_name(driver.display_name.toStdString());
+        item->set_description(driver.description.toStdString());
 
-        switch (enumerator.status())
+        switch (driver.status)
         {
-            case ServiceEnumerator::Status::CONTINUE_PENDING:
-                driver->set_status(proto::system_info::Drivers::Driver::STATUS_CONTINUE_PENDING);
+            case SysInfo::Service::Status::CONTINUE_PENDING:
+                item->set_status(proto::system_info::Drivers::Driver::STATUS_CONTINUE_PENDING);
                 break;
 
-            case ServiceEnumerator::Status::PAUSE_PENDING:
-                driver->set_status(proto::system_info::Drivers::Driver::STATUS_PAUSE_PENDING);
+            case SysInfo::Service::Status::PAUSE_PENDING:
+                item->set_status(proto::system_info::Drivers::Driver::STATUS_PAUSE_PENDING);
                 break;
 
-            case ServiceEnumerator::Status::PAUSED:
-                driver->set_status(proto::system_info::Drivers::Driver::STATUS_PAUSED);
+            case SysInfo::Service::Status::PAUSED:
+                item->set_status(proto::system_info::Drivers::Driver::STATUS_PAUSED);
                 break;
 
-            case ServiceEnumerator::Status::RUNNING:
-                driver->set_status(proto::system_info::Drivers::Driver::STATUS_RUNNING);
+            case SysInfo::Service::Status::RUNNING:
+                item->set_status(proto::system_info::Drivers::Driver::STATUS_RUNNING);
                 break;
 
-            case ServiceEnumerator::Status::START_PENDING:
-                driver->set_status(proto::system_info::Drivers::Driver::STATUS_START_PENDING);
+            case SysInfo::Service::Status::START_PENDING:
+                item->set_status(proto::system_info::Drivers::Driver::STATUS_START_PENDING);
                 break;
 
-            case ServiceEnumerator::Status::STOP_PENDING:
-                driver->set_status(proto::system_info::Drivers::Driver::STATUS_STOP_PENDING);
+            case SysInfo::Service::Status::STOP_PENDING:
+                item->set_status(proto::system_info::Drivers::Driver::STATUS_STOP_PENDING);
                 break;
 
-            case ServiceEnumerator::Status::STOPPED:
-                driver->set_status(proto::system_info::Drivers::Driver::STATUS_STOPPED);
+            case SysInfo::Service::Status::STOPPED:
+                item->set_status(proto::system_info::Drivers::Driver::STATUS_STOPPED);
                 break;
 
             default:
-                driver->set_status(proto::system_info::Drivers::Driver::STATUS_UNKNOWN);
+                item->set_status(proto::system_info::Drivers::Driver::STATUS_UNKNOWN);
                 break;
         }
 
-        switch (enumerator.startupType())
+        switch (driver.startup_type)
         {
-            case ServiceEnumerator::StartupType::AUTO_START:
-                driver->set_startup_type(proto::system_info::Drivers::Driver::STARTUP_TYPE_AUTO_START);
+            case SysInfo::Service::StartupType::AUTO_START:
+                item->set_startup_type(proto::system_info::Drivers::Driver::STARTUP_TYPE_AUTO_START);
                 break;
 
-            case ServiceEnumerator::StartupType::DEMAND_START:
-                driver->set_startup_type(proto::system_info::Drivers::Driver::STARTUP_TYPE_DEMAND_START);
+            case SysInfo::Service::StartupType::DEMAND_START:
+                item->set_startup_type(proto::system_info::Drivers::Driver::STARTUP_TYPE_DEMAND_START);
                 break;
 
-            case ServiceEnumerator::StartupType::DISABLED:
-                driver->set_startup_type(proto::system_info::Drivers::Driver::STARTUP_TYPE_DISABLED);
+            case SysInfo::Service::StartupType::DISABLED:
+                item->set_startup_type(proto::system_info::Drivers::Driver::STARTUP_TYPE_DISABLED);
                 break;
 
-            case ServiceEnumerator::StartupType::BOOT_START:
-                driver->set_startup_type(proto::system_info::Drivers::Driver::STARTUP_TYPE_BOOT_START);
+            case SysInfo::Service::StartupType::BOOT_START:
+                item->set_startup_type(proto::system_info::Drivers::Driver::STARTUP_TYPE_BOOT_START);
                 break;
 
-            case ServiceEnumerator::StartupType::SYSTEM_START:
-                driver->set_startup_type(proto::system_info::Drivers::Driver::STARTUP_TYPE_SYSTEM_START);
+            case SysInfo::Service::StartupType::SYSTEM_START:
+                item->set_startup_type(proto::system_info::Drivers::Driver::STARTUP_TYPE_SYSTEM_START);
                 break;
 
             default:
-                driver->set_startup_type(proto::system_info::Drivers::Driver::STARTUP_TYPE_UNKNOWN);
+                item->set_startup_type(proto::system_info::Drivers::Driver::STARTUP_TYPE_UNKNOWN);
                 break;
         }
 
-        driver->set_binary_path(enumerator.binaryPath().toStdString());
+        item->set_binary_path(driver.binary_path.toStdString());
     }
 }
-#endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
@@ -1046,18 +1039,14 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
         fillPowerOptions(system_info);
     }
 #endif // defined(Q_OS_WINDOWS)
-#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_Drivers)
     {
         fillDrivers(system_info);
     }
-#endif // defined(Q_OS_WINDOWS)
-#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_Services)
     {
         fillServices(system_info);
     }
-#endif // defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_EnvironmentVariables)
     {
         fillEnvironmentVariables(system_info);

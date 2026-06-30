@@ -63,8 +63,6 @@ collect_sources(SOURCE_BASE_WIN
     scoped_wts_memory.h
     security_helpers.cc
     security_helpers.h
-    service_enumerator.cc
-    service_enumerator.h
     session_enumerator.cc
     session_enumerator.h
     session_info.cc

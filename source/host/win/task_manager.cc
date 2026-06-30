@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "base/service_controller.h"
-#include "base/win/service_enumerator.h"
+#include "base/sys_info.h"
 #include "base/win/session_enumerator.h"
 #include "base/win/session_info.h"
 #include "host/win/process_monitor.h"
@@ -214,34 +214,34 @@ void TaskManager::sendServiceList()
     proto::task_manager::HostToClient message;
     proto::task_manager::ServiceList* service_list = message.mutable_service_list();
 
-    for (ServiceEnumerator enumerator(ServiceEnumerator::Type::SERVICES);
-         !enumerator.isAtEnd(); enumerator.advance())
+    const QList<SysInfo::Service> services = SysInfo::services();
+    for (const SysInfo::Service& service : services)
     {
         proto::task_manager::Service* item = service_list->add_service();
 
-        item->set_name(enumerator.name().toStdString());
-        item->set_display_name(enumerator.displayName().toStdString());
-        item->set_description(enumerator.description().toStdString());
+        item->set_name(service.name.toStdString());
+        item->set_display_name(service.display_name.toStdString());
+        item->set_description(service.description.toStdString());
 
-        switch (enumerator.startupType())
+        switch (service.startup_type)
         {
-            case ServiceEnumerator::StartupType::AUTO_START:
+            case SysInfo::Service::StartupType::AUTO_START:
                 item->set_startup_type(proto::task_manager::Service::STARTUP_TYPE_AUTO_START);
                 break;
 
-            case ServiceEnumerator::StartupType::DEMAND_START:
+            case SysInfo::Service::StartupType::DEMAND_START:
                 item->set_startup_type(proto::task_manager::Service::STARTUP_TYPE_DEMAND_START);
                 break;
 
-            case ServiceEnumerator::StartupType::DISABLED:
+            case SysInfo::Service::StartupType::DISABLED:
                 item->set_startup_type(proto::task_manager::Service::STARTUP_TYPE_DISABLED);
                 break;
 
-            case ServiceEnumerator::StartupType::BOOT_START:
+            case SysInfo::Service::StartupType::BOOT_START:
                 item->set_startup_type(proto::task_manager::Service::STARTUP_TYPE_BOOT_START);
                 break;
 
-            case ServiceEnumerator::StartupType::SYSTEM_START:
+            case SysInfo::Service::StartupType::SYSTEM_START:
                 item->set_startup_type(proto::task_manager::Service::STARTUP_TYPE_SYSTEM_START);
                 break;
 
@@ -250,33 +250,33 @@ void TaskManager::sendServiceList()
                 break;
         }
 
-        switch (enumerator.status())
+        switch (service.status)
         {
-            case ServiceEnumerator::Status::CONTINUE_PENDING:
+            case SysInfo::Service::Status::CONTINUE_PENDING:
                 item->set_status(proto::task_manager::Service::STATUS_CONTINUE_PENDING);
                 break;
 
-            case ServiceEnumerator::Status::PAUSE_PENDING:
+            case SysInfo::Service::Status::PAUSE_PENDING:
                 item->set_status(proto::task_manager::Service::STATUS_PAUSE_PENDING);
                 break;
 
-            case ServiceEnumerator::Status::PAUSED:
+            case SysInfo::Service::Status::PAUSED:
                 item->set_status(proto::task_manager::Service::STATUS_PAUSED);
                 break;
 
-            case ServiceEnumerator::Status::RUNNING:
+            case SysInfo::Service::Status::RUNNING:
                 item->set_status(proto::task_manager::Service::STATUS_RUNNING);
                 break;
 
-            case ServiceEnumerator::Status::START_PENDING:
+            case SysInfo::Service::Status::START_PENDING:
                 item->set_status(proto::task_manager::Service::STATUS_START_PENDING);
                 break;
 
-            case ServiceEnumerator::Status::STOP_PENDING:
+            case SysInfo::Service::Status::STOP_PENDING:
                 item->set_status(proto::task_manager::Service::STATUS_STOP_PENDING);
                 break;
 
-            case ServiceEnumerator::Status::STOPPED:
+            case SysInfo::Service::Status::STOPPED:
                 item->set_status(proto::task_manager::Service::STATUS_STOPPED);
                 break;
 

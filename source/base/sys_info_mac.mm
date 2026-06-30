@@ -151,3 +151,35 @@ QByteArray SysInfo::smbiosDump()
     NOTIMPLEMENTED();
     return QByteArray();
 }
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::User> SysInfo::users()
+{
+    NOTIMPLEMENTED();
+    return QList<User>();
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::UserGroup> SysInfo::userGroups()
+{
+    NOTIMPLEMENTED();
+    return QList<UserGroup>();
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::Service> SysInfo::services()
+{
+    NOTIMPLEMENTED();
+    return QList<Service>();
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::Service> SysInfo::drivers()
+{
+    NOTIMPLEMENTED();
+    return QList<Service>();
+}
