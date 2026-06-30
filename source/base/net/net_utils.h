@@ -65,6 +65,24 @@ public:
         QString state;
     };
 
+    struct Share
+    {
+        QString name;
+        QString local_path;
+        QString description;
+        QString type;
+        quint32 current_uses = 0;
+        quint32 max_uses = 0;
+    };
+
+    struct OpenFile
+    {
+        quint32 id = 0;
+        QString user_name;
+        quint32 lock_count = 0;
+        QString file_path;
+    };
+
     // Returns the IP addresses of all active (up, non-loopback) interfaces that have a global address.
     static QStringList localIpList();
 
@@ -77,6 +95,12 @@ public:
 
     // Returns the host's active TCP and UDP connections (IPv4).
     static QList<Connection> connections();
+
+    // Returns the SMB shares exported by the host.
+    static QList<Share> networkShares();
+
+    // Returns the files currently opened by remote clients over SMB.
+    static QList<OpenFile> openFiles();
 
     // Returns the IPv4 address of the host's default gateway, or an empty string if it cannot be
     // determined.

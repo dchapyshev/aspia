@@ -105,3 +105,19 @@ QList<NetUtils::Connection> NetUtils::connections()
     // Not implemented on macOS.
     return QList<NetUtils::Connection>();
 }
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<NetUtils::Share> NetUtils::networkShares()
+{
+    // Not implemented on macOS.
+    return QList<NetUtils::Share>();
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<NetUtils::OpenFile> NetUtils::openFiles()
+{
+    // Not implemented on macOS.
+    return QList<NetUtils::OpenFile>();
+}

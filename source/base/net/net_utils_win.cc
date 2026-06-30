@@ -22,11 +22,14 @@
 #include <WinSock2.h>
 #include <WS2tcpip.h>
 #include <iphlpapi.h>
+#include <LM.h>
 #include <TlHelp32.h>
 
 #include <limits>
 #include <vector>
 
+#include "base/logging.h"
+#include "base/system_error.h"
 #include "base/win/scoped_object.h"
 
 namespace {
@@ -221,6 +224,21 @@ QString tcpStateToString(DWORD state)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
+QString shareTypeString(DWORD type)
+{
+    switch (type)
+    {
+        case STYPE_DISKTREE:  return "Disk";
+        case STYPE_PRINTQ:    return "Printer";
+        case STYPE_DEVICE:    return "Device";
+        case STYPE_IPC:       return "IPC";
+        case STYPE_SPECIAL:   return "Special";
+        case STYPE_TEMPORARY: return "Temporary";
+        default:              return QString();
+    }
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -364,5 +382,82 @@ QList<NetUtils::Connection> NetUtils::connections()
         }
     }
 
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<NetUtils::Share> NetUtils::networkShares()
+{
+    QList<Share> result;
+
+    PSHARE_INFO_502 share_info = nullptr;
+    DWORD entries_read = 0;
+    DWORD total_entries = 0;
+
+    DWORD error_code = NetShareEnum(nullptr, 502, reinterpret_cast<LPBYTE*>(&share_info),
+                                    MAX_PREFERRED_LENGTH, &entries_read, &total_entries, nullptr);
+    if (error_code != NERR_Success)
+    {
+        LOG(ERROR) << "NetShareEnum failed:" << SystemError(error_code).toString();
+        return result;
+    }
+
+    for (DWORD i = 0; i < entries_read; ++i)
+    {
+        const SHARE_INFO_502& info = share_info[i];
+
+        Share share;
+        if (info.shi502_netname)
+            share.name = QString::fromWCharArray(info.shi502_netname);
+        if (info.shi502_path)
+            share.local_path = QString::fromWCharArray(info.shi502_path);
+        if (info.shi502_remark)
+            share.description = QString::fromWCharArray(info.shi502_remark);
+        share.type = shareTypeString(info.shi502_type);
+        share.current_uses = info.shi502_current_uses;
+        share.max_uses = info.shi502_max_uses;
+
+        result.append(std::move(share));
+    }
+
+    NetApiBufferFree(share_info);
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<NetUtils::OpenFile> NetUtils::openFiles()
+{
+    QList<OpenFile> result;
+
+    PFILE_INFO_3 file_info = nullptr;
+    DWORD entries_read = 0;
+    DWORD total_entries = 0;
+
+    DWORD error_code = NetFileEnum(nullptr, nullptr, nullptr, 3, reinterpret_cast<LPBYTE*>(&file_info),
+                                   MAX_PREFERRED_LENGTH, &entries_read, &total_entries, nullptr);
+    if (error_code != NERR_Success)
+    {
+        LOG(ERROR) << "NetFileEnum failed:" << SystemError(error_code).toString();
+        return result;
+    }
+
+    for (DWORD i = 0; i < entries_read; ++i)
+    {
+        const FILE_INFO_3& info = file_info[i];
+
+        OpenFile open_file;
+        open_file.id = info.fi3_id;
+        if (info.fi3_username)
+            open_file.user_name = QString::fromWCharArray(info.fi3_username);
+        open_file.lock_count = info.fi3_num_locks;
+        if (info.fi3_pathname)
+            open_file.file_path = QString::fromWCharArray(info.fi3_pathname);
+
+        result.append(std::move(open_file));
+    }
+
+    NetApiBufferFree(file_info);
     return result;
 }

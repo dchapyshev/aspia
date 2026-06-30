@@ -32,7 +32,6 @@ public:
     ~EventEnumeratorWin() final;
 
     // EventEnumerator implementation.
-    quint32 count() const final;
     bool isAtEnd() const final;
     void advance() final;
     Type type() const final;
@@ -50,7 +49,6 @@ private:
     QString log_name_;
     ScopedEvtHandle query_;
     ScopedEvtHandle render_context_;
-    quint32 records_count_ = 0;
 
     mutable int remaining_ = 0;
     mutable bool event_ready_ = false;

@@ -29,6 +29,7 @@
 #include <ifaddrs.h>
 #include <limits.h>
 #include <netinet/in.h>
+#include <pwd.h>
 #include <sys/socket.h>
 #include <unistd.h>
 
@@ -354,6 +355,21 @@ void parseProcNet(const QString& path, const QString& protocol, bool with_remote
     }
 }
 
+//--------------------------------------------------------------------------------------------------
+QString userNameByUid(const QByteArray& uid_string)
+{
+    bool ok = false;
+    const uid_t uid = uid_string.toUInt(&ok);
+    if (!ok)
+        return QString::fromUtf8(uid_string);
+
+    const struct passwd* pw = getpwuid(uid);
+    if (pw && pw->pw_name)
+        return QString::fromLocal8Bit(pw->pw_name);
+
+    return QString::fromUtf8(uid_string);
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -458,6 +474,114 @@ QList<NetUtils::Connection> NetUtils::connections()
 
     parseProcNet("/proc/net/tcp", "TCP", true, process_names, &result);
     parseProcNet("/proc/net/udp", "UDP", false, process_names, &result);
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<NetUtils::Share> NetUtils::networkShares()
+{
+    QList<Share> result;
+
+    // testparm dumps the effective Samba configuration; absent on hosts without Samba.
+    QProcess process;
+    process.setProcessChannelMode(QProcess::MergedChannels);
+    process.start("testparm", QStringList() << "-s");
+    if (!process.waitForStarted() || !process.waitForFinished())
+        return result;
+
+    Share share;
+    bool in_share = false;
+
+    const QList<QByteArray> lines = process.readAllStandardOutput().split('\n');
+    for (const QByteArray& raw : lines)
+    {
+        const QByteArray line = raw.trimmed();
+
+        // A "[name]" line starts a share section; [global] holds server-wide settings.
+        if (line.startsWith('[') && line.endsWith(']'))
+        {
+            if (in_share)
+                result.append(std::move(share));
+
+            const QString name = QString::fromUtf8(line.mid(1, line.size() - 2));
+
+            share = Share();
+            share.name = name;
+            share.type = "Disk";
+            in_share = (name.compare("global", Qt::CaseInsensitive) != 0);
+            continue;
+        }
+
+        if (!in_share)
+            continue;
+
+        const int equal = line.indexOf('=');
+        if (equal < 0)
+            continue;
+
+        const QByteArray key = line.left(equal).trimmed().toLower();
+        const QString value = QString::fromUtf8(line.mid(equal + 1).trimmed());
+
+        if (key == "path")
+            share.local_path = value;
+        else if (key == "comment")
+            share.description = value;
+        else if (key == "max connections")
+            share.max_uses = value.toUInt();
+        else if (key == "printable" && value.compare("yes", Qt::CaseInsensitive) == 0)
+            share.type = "Printer";
+    }
+
+    if (in_share)
+        result.append(std::move(share));
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<NetUtils::OpenFile> NetUtils::openFiles()
+{
+    QList<OpenFile> result;
+
+    // smbstatus lists files opened by remote SMB clients; reading its databases requires root.
+    QProcess process;
+    process.start("smbstatus", QStringList() << "-L");
+    if (!process.waitForStarted() || !process.waitForFinished())
+        return result;
+
+    bool past_header = false;
+
+    const QList<QByteArray> lines = process.readAllStandardOutput().split('\n');
+    for (const QByteArray& raw : lines)
+    {
+        const QByteArray line = raw.trimmed();
+
+        // The dashed rule separates the column header from the data rows.
+        if (line.startsWith("---"))
+        {
+            past_header = true;
+            continue;
+        }
+
+        if (!past_header || line.isEmpty())
+            continue;
+
+        // Fields: Pid[0] Uid[1] DenyMode[2] Access[3] R/W[4] Oplock[5] SharePath[6] Name[7] Time...
+        const QList<QByteArray> fields = line.simplified().split(' ');
+        if (fields.size() < 8)
+            continue;
+
+        OpenFile open_file;
+        open_file.id = fields[0].toUInt();
+        open_file.user_name = userNameByUid(fields[1]);
+        open_file.file_path =
+            QString("%1/%2").arg(QString::fromUtf8(fields[6]), QString::fromUtf8(fields[7]));
+
+        result.append(std::move(open_file));
+    }
 
     return result;
 }

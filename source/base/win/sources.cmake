@@ -27,8 +27,6 @@ collect_sources(SOURCE_BASE_WIN
     file_version_info.h
     message_window.cc
     message_window.h
-    net_share_enumerator.cc
-    net_share_enumerator.h
     power_info.cc
     power_info.h
     printer_enumerator.cc

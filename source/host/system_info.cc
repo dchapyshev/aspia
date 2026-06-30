@@ -36,11 +36,9 @@
 #include "proto/system_info.h"
 
 #if defined(Q_OS_WINDOWS)
-#include "base/net/open_files_enumerator.h"
 #include "base/win/battery_enumerator.h"
 #include "base/win/power_info.h"
 #include "base/win/printer_enumerator.h"
-#include "base/win/net_share_enumerator.h"
 #endif // defined(Q_OS_WINDOWS)
 
 namespace {
@@ -115,55 +113,23 @@ void fillNetworkAdapters(proto::system_info::SystemInfo* system_info)
     }
 }
 
-#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillNetworkShares(proto::system_info::SystemInfo* system_info)
 {
-    for (NetShareEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    const QList<NetUtils::Share> shares = NetUtils::networkShares();
+    for (const NetUtils::Share& item : shares)
     {
         proto::system_info::NetworkShares::Share* share =
             system_info->mutable_network_shares()->add_share();
 
-        share->set_name(enumerator.name().toStdString());
-        share->set_description(enumerator.description().toStdString());
-        share->set_local_path(enumerator.localPath().toStdString());
-        share->set_current_uses(enumerator.currentUses());
-        share->set_max_uses(enumerator.maxUses());
-
-        using ShareType = NetShareEnumerator::Type;
-
-        switch (enumerator.type())
-        {
-            case ShareType::DISK:
-                share->set_type("Disk");
-                break;
-
-            case ShareType::PRINTER:
-                share->set_type("Printer");
-                break;
-
-            case ShareType::DEVICE:
-                share->set_type("Device");
-                break;
-
-            case ShareType::IPC:
-                share->set_type("IPC");
-                break;
-
-            case ShareType::SPECIAL:
-                share->set_type("Special");
-                break;
-
-            case ShareType::TEMPORARY:
-                share->set_type("Temporary");
-                break;
-
-            default:
-                break;
-        }
+        share->set_name(item.name.toStdString());
+        share->set_description(item.description.toStdString());
+        share->set_local_path(item.local_path.toStdString());
+        share->set_type(item.type.toStdString());
+        share->set_current_uses(item.current_uses);
+        share->set_max_uses(item.max_uses);
     }
 }
-#endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
 void fillServices(proto::system_info::SystemInfo* system_info)
@@ -809,7 +775,6 @@ void fillEventLogs(proto::system_info::SystemInfo* system_info,
         return;
 
     system_info->mutable_event_logs()->set_type(data.type());
-    system_info->mutable_event_logs()->set_total_records(enumerator->count());
 
     while (!enumerator->isAtEnd())
     {
@@ -870,22 +835,21 @@ void fillApplicationsInfo(proto::system_info::SystemInfo* system_info)
     readApplicationsInformation(system_info->mutable_applications());
 }
 
-#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillOpenFilesInfo(proto::system_info::SystemInfo* system_info)
 {
-    for (OpenFilesEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    const QList<NetUtils::OpenFile> open_files = NetUtils::openFiles();
+    for (const NetUtils::OpenFile& item : open_files)
     {
         proto::system_info::OpenFiles::OpenFile* open_file =
             system_info->mutable_open_files()->add_open_file();
 
-        open_file->set_id(enumerator.id());
-        open_file->set_user_name(enumerator.userName().toStdString());
-        open_file->set_lock_count(enumerator.lockCount());
-        open_file->set_file_path(enumerator.filePath().toStdString());
+        open_file->set_id(item.id);
+        open_file->set_user_name(item.user_name.toStdString());
+        open_file->set_lock_count(item.lock_count);
+        open_file->set_file_path(item.file_path.toStdString());
     }
 }
-#endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
 void fillLocalUsersInfo(proto::system_info::SystemInfo* system_info)
@@ -1036,12 +1000,10 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
     {
         fillConnection(system_info);
     }
-#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_NetworkShares)
     {
         fillNetworkShares(system_info);
     }
-#endif // defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_Licenses)
     {
         fillLicensesInfo(system_info);
@@ -1050,12 +1012,10 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
     {
         fillApplicationsInfo(system_info);
     }
-#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_OpenFiles)
     {
         fillOpenFilesInfo(system_info);
     }
-#endif // defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_LocalUsers)
     {
         fillLocalUsersInfo(system_info);

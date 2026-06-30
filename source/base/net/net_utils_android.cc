@@ -85,3 +85,19 @@ QList<NetUtils::Connection> NetUtils::connections()
     NOTIMPLEMENTED();
     return QList<Connection>();
 }
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<NetUtils::Share> NetUtils::networkShares()
+{
+    NOTIMPLEMENTED();
+    return QList<Share>();
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<NetUtils::OpenFile> NetUtils::openFiles()
+{
+    NOTIMPLEMENTED();
+    return QList<OpenFile>();
+}

@@ -50,9 +50,7 @@ if (WIN32)
     collect_sources(SOURCE_BASE_NET
         firewall_manager.cc
         firewall_manager.h
-        net_utils_win.cc
-        open_files_enumerator.cc
-        open_files_enumerator.h)
+        net_utils_win.cc)
 endif()
 
 if (LINUX)
