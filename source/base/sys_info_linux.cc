@@ -238,7 +238,7 @@ void readSessionProperties(const QString& object_path, SysInfo::Session* session
     session->session_name = !tty.isEmpty() ? tty : display;
 }
 
-struct PciDisplay
+struct PciDevice
 {
     QString vendor;
     QString device;
@@ -252,10 +252,10 @@ struct DrmVersion
 };
 
 //--------------------------------------------------------------------------------------------------
-// Maps the PCI slot of each display controller to its vendor/device names reported by lspci.
-QHash<QString, PciDisplay> pciDisplayDevices()
+// Maps each PCI slot to its vendor/device names as reported by lspci.
+QHash<QString, PciDevice> pciDevices()
 {
-    QHash<QString, PciDisplay> result;
+    QHash<QString, PciDevice> result;
 
     QProcess process;
     process.start("lspci", QStringList() << "-D" << "-mm");
@@ -270,18 +270,11 @@ QHash<QString, PciDisplay> pciDisplayDevices()
         if (fields.size() < 6)
             continue;
 
-        const QString device_class = QString::fromUtf8(fields[1]);
-        if (!device_class.contains("VGA") && !device_class.contains("3D") &&
-            !device_class.contains("Display"))
-        {
-            continue;
-        }
+        PciDevice device;
+        device.vendor = QString::fromUtf8(fields[3]);
+        device.device = QString::fromUtf8(fields[5]);
 
-        PciDisplay display;
-        display.vendor = QString::fromUtf8(fields[3]);
-        display.device = QString::fromUtf8(fields[5]);
-
-        result.insert(QString::fromUtf8(fields[0]).trimmed(), display);
+        result.insert(QString::fromUtf8(fields[0]).trimmed(), device);
     }
 
     return result;
@@ -894,7 +887,7 @@ QList<SysInfo::VideoAdapter> SysInfo::videoAdapters()
 {
     QList<VideoAdapter> result;
 
-    const QHash<QString, PciDisplay> displays = pciDisplayDevices();
+    const QHash<QString, PciDevice> displays = pciDevices();
 
     // GPU cards are /sys/class/drm/card<N>; connector entries carry a "-<connector>" suffix.
     const QStringList cards = QDir("/sys/class/drm").entryList(QDir::Dirs | QDir::NoDotAndDotDot);
@@ -908,7 +901,7 @@ QList<SysInfo::VideoAdapter> SysInfo::videoAdapters()
 
         VideoAdapter adapter;
 
-        const PciDisplay display = displays.value(slot);
+        const PciDevice display = displays.value(slot);
         adapter.description = QString("%1 %2").arg(display.vendor, display.device).trimmed();
         adapter.adapter_string = display.device;
         adapter.driver_provider = display.vendor;
@@ -926,6 +919,66 @@ QList<SysInfo::VideoAdapter> SysInfo::videoAdapters()
         adapter.memory_size = readSysAttribute(device_path + "/mem_info_vram_total").toULongLong();
 
         result.append(std::move(adapter));
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::Device> SysInfo::devices()
+{
+    QList<Device> result;
+
+    const QHash<QString, PciDevice> pci = pciDevices();
+
+    // PCI devices: friendly name and vendor come from lspci, the id from the modalias.
+    const QString pci_path = "/sys/bus/pci/devices";
+    const QStringList pci_slots = QDir(pci_path).entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+    for (const QString& slot : pci_slots)
+    {
+        const QString path = QString("%1/%2").arg(pci_path, slot);
+        const PciDevice info = pci.value(slot);
+
+        Device device;
+        device.friendly_name = info.device;
+        device.driver_vendor = info.vendor;
+
+        // Windows-style id, e.g. "PCI\VEN_8086&DEV_9A49&SUBSYS_1EBF1043&REV_01" (/sys ids are
+        // "0x"-prefixed; SUBSYS is the subsystem device followed by the subsystem vendor).
+        const QString vendor = readSysAttribute(path + "/vendor").mid(2).toUpper();
+        const QString dev = readSysAttribute(path + "/device").mid(2).toUpper();
+        const QString subvendor = readSysAttribute(path + "/subsystem_vendor").mid(2).toUpper();
+        const QString subdevice = readSysAttribute(path + "/subsystem_device").mid(2).toUpper();
+        const QString revision = readSysAttribute(path + "/revision").mid(2).toUpper();
+        device.device_id = QString("PCI\\VEN_%1&DEV_%2&SUBSYS_%3%4&REV_%5")
+                               .arg(vendor, dev, subdevice, subvendor, revision);
+
+        result.append(std::move(device));
+    }
+
+    // USB devices: name/vendor come from sysfs; interface nodes contain ':' and are skipped.
+    const QString usb_path = "/sys/bus/usb/devices";
+    const QStringList usb_devices = QDir(usb_path).entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+    for (const QString& name : usb_devices)
+    {
+        if (name.contains(':'))
+            continue;
+
+        const QString path = QString("%1/%2").arg(usb_path, name);
+
+        Device device;
+        device.friendly_name = readSysAttribute(path + "/product");
+        device.driver_vendor = readSysAttribute(path + "/manufacturer");
+
+        // Windows-style id, e.g. "USB\VID_046D&PID_C539&REV_3906".
+        const QString vid = readSysAttribute(path + "/idVendor").toUpper();
+        const QString pid = readSysAttribute(path + "/idProduct").toUpper();
+        const QString revision = readSysAttribute(path + "/bcdDevice").remove('.').toUpper();
+        if (!vid.isEmpty())
+            device.device_id = QString("USB\\VID_%1&PID_%2&REV_%3").arg(vid, pid, revision);
+
+        result.append(std::move(device));
     }
 
     return result;

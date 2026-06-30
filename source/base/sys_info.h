@@ -121,6 +121,14 @@ public:
         quint64 memory_size = 0;
     };
 
+    struct Device
+    {
+        QString friendly_name;
+        QString description;
+        QString driver_vendor;
+        QString device_id;
+    };
+
     static QString operatingSystemName();
     static QString operatingSystemVersion();
     static QString operatingSystemArchitecture();
@@ -151,8 +159,8 @@ public:
     static QList<Session> sessions();
 
     static QList<Monitor> monitors();
-
     static QList<VideoAdapter> videoAdapters();
+    static QList<Device> devices();
 
 private:
     Q_DISABLE_COPY_MOVE(SysInfo)

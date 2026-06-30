@@ -50,16 +50,6 @@
      </column>
      <column>
       <property name="text">
-       <string>Driver Version</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Driver Date</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
        <string>Driver Vendor</string>
       </property>
      </column>

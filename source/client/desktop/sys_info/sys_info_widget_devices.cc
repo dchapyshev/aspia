@@ -112,10 +112,8 @@ void SysInfoWidgetDevices::setSystemInfo(const proto::system_info::SystemInfo& s
         QTreeWidgetItem* item = new QTreeWidgetItem();
         item->setIcon(0, item_icon);
         item->setText(0, name);
-        item->setText(1, QString::fromStdString(device.driver_version()));
-        item->setText(2, QString::fromStdString(device.driver_date()));
-        item->setText(3, QString::fromStdString(device.driver_vendor()));
-        item->setText(4, QString::fromStdString(device.device_id()));
+        item->setText(1, QString::fromStdString(device.driver_vendor()));
+        item->setText(2, QString::fromStdString(device.device_id()));
 
         tree->addTopLevelItem(item);
     }

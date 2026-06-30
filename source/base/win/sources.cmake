@@ -23,8 +23,6 @@ collect_sources(SOURCE_BASE_WIN
     desktop.h
     device.cc
     device.h
-    device_enumerator.cc
-    device_enumerator.h
     file_version_info.cc
     file_version_info.h
     message_window.cc

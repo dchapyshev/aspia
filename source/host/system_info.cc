@@ -39,7 +39,6 @@
 #include "base/net/connect_enumerator.h"
 #include "base/net/open_files_enumerator.h"
 #include "base/win/battery_enumerator.h"
-#include "base/win/device_enumerator.h"
 #include "base/win/power_info.h"
 #include "base/win/printer_enumerator.h"
 #include "base/win/net_share_enumerator.h"
@@ -47,24 +46,21 @@
 
 namespace {
 
-#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillDevices(proto::system_info::SystemInfo* system_info)
 {
-    for (DeviceEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    const QList<SysInfo::Device> devices = SysInfo::devices();
+    for (const SysInfo::Device& item : devices)
     {
         proto::system_info::WindowsDevices::Device* device =
             system_info->mutable_windows_devices()->add_device();
 
-        device->set_friendly_name(enumerator.friendlyName().toStdString());
-        device->set_description(enumerator.description().toStdString());
-        device->set_driver_version(enumerator.driverVersion().toStdString());
-        device->set_driver_date(enumerator.driverDate().toStdString());
-        device->set_driver_vendor(enumerator.driverVendor().toStdString());
-        device->set_device_id(enumerator.deviceID().toStdString());
+        device->set_friendly_name(item.friendly_name.toStdString());
+        device->set_description(item.description.toStdString());
+        device->set_driver_vendor(item.driver_vendor.toStdString());
+        device->set_device_id(item.device_id.toStdString());
     }
 }
-#endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
@@ -1005,12 +1001,10 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
     {
         fillSummaryInfo(system_info);
     }
-#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_Devices)
     {
         fillDevices(system_info);
     }
-#endif // defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_VideoAdapters)
     {
         fillVideoAdapters(system_info);

@@ -207,3 +207,11 @@ QList<SysInfo::VideoAdapter> SysInfo::videoAdapters()
     NOTIMPLEMENTED();
     return QList<VideoAdapter>();
 }
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::Device> SysInfo::devices()
+{
+    NOTIMPLEMENTED();
+    return QList<Device>();
+}

@@ -28,14 +28,19 @@
 #include "base/logging.h"
 #include "base/session_id.h"
 #include "base/system_error.h"
-#include "base/win/device_enumerator.h"
 #include "base/win/registry.h"
+#include "base/win/scoped_device_info.h"
 #include "base/win/scoped_object.h"
 #include "base/win/scoped_wts_memory.h"
 #include "base/win/session_info.h"
 #include "base/win/windows_version.h"
 
 namespace {
+
+const char kClassRootPath[] = "SYSTEM\\CurrentControlSet\\Control\\Class\\";
+const char kDriverVersionKey[] = "DriverVersion";
+const char kDriverDateKey[] = "DriverDate";
+const char kProviderNameKey[] = "ProviderName";
 
 //--------------------------------------------------------------------------------------------------
 SysInfo::Service::Status serviceStatus(DWORD state)
@@ -261,6 +266,86 @@ QString digitalProductIdToString(quint8* product_id, size_t product_id_size)
     }
 
     return QString::fromStdU16String(key);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Reads a string device-registry property (SPDRP_*), or an empty string on failure.
+QString deviceProperty(HDEVINFO device_info, SP_DEVINFO_DATA* device_info_data, DWORD property)
+{
+    wchar_t buffer[MAX_PATH] = { 0 };
+
+    if (!SetupDiGetDeviceRegistryPropertyW(device_info, device_info_data, property, nullptr,
+        reinterpret_cast<PBYTE>(buffer), ARRAYSIZE(buffer), nullptr))
+    {
+        return QString();
+    }
+
+    return QString::fromWCharArray(buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString deviceInstanceId(HDEVINFO device_info, SP_DEVINFO_DATA* device_info_data)
+{
+    wchar_t device_id[MAX_PATH] = { 0 };
+
+    if (!SetupDiGetDeviceInstanceIdW(device_info, device_info_data, device_id, ARRAYSIZE(device_id),
+        nullptr))
+    {
+        PLOG(ERROR) << "SetupDiGetDeviceInstanceIdW failed";
+        return QString();
+    }
+
+    return QString::fromWCharArray(device_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString driverKeyPath(HDEVINFO device_info, SP_DEVINFO_DATA* device_info_data)
+{
+    QString driver = deviceProperty(device_info, device_info_data, SPDRP_DRIVER);
+    if (driver.isEmpty())
+        return QString();
+
+    return kClassRootPath + driver;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString driverRegistryString(HDEVINFO device_info, SP_DEVINFO_DATA* device_info_data,
+                             const QString& value_name)
+{
+    QString key_path = driverKeyPath(device_info, device_info_data);
+    if (key_path.isEmpty())
+        return QString();
+
+    RegKey key(HKEY_LOCAL_MACHINE, key_path, KEY_READ);
+    if (!key.isValid())
+        return QString();
+
+    wchar_t value[MAX_PATH] = { 0 };
+    DWORD value_size = ARRAYSIZE(value);
+
+    if (key.readValue(value_name, value, &value_size, nullptr) != ERROR_SUCCESS)
+        return QString();
+
+    return QString::fromWCharArray(value);
+}
+
+//--------------------------------------------------------------------------------------------------
+DWORD driverRegistryDW(HDEVINFO device_info, SP_DEVINFO_DATA* device_info_data,
+                       const QString& value_name)
+{
+    QString key_path = driverKeyPath(device_info, device_info_data);
+    if (key_path.isEmpty())
+        return 0;
+
+    RegKey key(HKEY_LOCAL_MACHINE, key_path, KEY_READ);
+    if (!key.isValid())
+        return 0;
+
+    DWORD value = 0;
+    if (key.readValueDW(value_name, &value) != ERROR_SUCCESS)
+        return 0;
+
+    return value;
 }
 
 } // namespace
@@ -776,11 +861,24 @@ QList<SysInfo::Monitor> SysInfo::monitors()
 {
     QList<Monitor> result;
 
-    for (DeviceEnumerator enumerator(&GUID_DEVCLASS_MONITOR, DIGCF_PROFILE | DIGCF_PRESENT);
-         !enumerator.isAtEnd(); enumerator.advance())
+    ScopedDeviceInfo device_info(SetupDiGetClassDevsW(
+        &GUID_DEVCLASS_MONITOR, nullptr, nullptr, DIGCF_PROFILE | DIGCF_PRESENT));
+    if (!device_info.isValid())
+    {
+        PLOG(ERROR) << "SetupDiGetClassDevsW failed";
+        return result;
+    }
+
+    HDEVINFO info = device_info.get();
+
+    SP_DEVINFO_DATA data;
+    memset(&data, 0, sizeof(data));
+    data.cbSize = sizeof(data);
+
+    for (DWORD index = 0; SetupDiEnumDeviceInfo(info, index, &data); ++index)
     {
         QString key_path = QString("SYSTEM\\CurrentControlSet\\Enum\\%1\\Device Parameters")
-                               .arg(enumerator.deviceID());
+                               .arg(deviceInstanceId(info, &data));
 
         RegKey key;
         if (key.open(HKEY_LOCAL_MACHINE, key_path, KEY_READ) != ERROR_SUCCESS)
@@ -791,9 +889,9 @@ QList<SysInfo::Monitor> SysInfo::monitors()
             continue;
 
         Monitor monitor;
-        monitor.system_name = enumerator.friendlyName();
+        monitor.system_name = deviceProperty(info, &data, SPDRP_FRIENDLYNAME);
         if (monitor.system_name.isEmpty())
-            monitor.system_name = enumerator.description();
+            monitor.system_name = deviceProperty(info, &data, SPDRP_DEVICEDESC);
         monitor.edid = std::move(edid);
 
         result.append(std::move(monitor));
@@ -808,21 +906,68 @@ QList<SysInfo::VideoAdapter> SysInfo::videoAdapters()
 {
     QList<VideoAdapter> result;
 
-    for (DeviceEnumerator enumerator(&GUID_DEVCLASS_DISPLAY, DIGCF_PROFILE | DIGCF_PRESENT);
-         !enumerator.isAtEnd(); enumerator.advance())
+    ScopedDeviceInfo device_info(SetupDiGetClassDevsW(
+        &GUID_DEVCLASS_DISPLAY, nullptr, nullptr, DIGCF_PROFILE | DIGCF_PRESENT));
+    if (!device_info.isValid())
+    {
+        PLOG(ERROR) << "SetupDiGetClassDevsW failed";
+        return result;
+    }
+
+    HDEVINFO info = device_info.get();
+
+    SP_DEVINFO_DATA data;
+    memset(&data, 0, sizeof(data));
+    data.cbSize = sizeof(data);
+
+    for (DWORD index = 0; SetupDiEnumDeviceInfo(info, index, &data); ++index)
     {
         VideoAdapter adapter;
-        adapter.description = enumerator.description();
-        adapter.adapter_string = enumerator.driverRegistryString("HardwareInformation.AdapterString");
-        adapter.bios_string = enumerator.driverRegistryString("HardwareInformation.BiosString");
-        adapter.chip_type = enumerator.driverRegistryString("HardwareInformation.ChipType");
-        adapter.dac_type = enumerator.driverRegistryString("HardwareInformation.DacType");
-        adapter.driver_date = enumerator.driverDate();
-        adapter.driver_version = enumerator.driverVersion();
-        adapter.driver_provider = enumerator.driverVendor();
-        adapter.memory_size = enumerator.driverRegistryDW("HardwareInformation.MemorySize");
+        adapter.description = deviceProperty(info, &data, SPDRP_DEVICEDESC);
+        adapter.adapter_string = driverRegistryString(info, &data, "HardwareInformation.AdapterString");
+        adapter.bios_string = driverRegistryString(info, &data, "HardwareInformation.BiosString");
+        adapter.chip_type = driverRegistryString(info, &data, "HardwareInformation.ChipType");
+        adapter.dac_type = driverRegistryString(info, &data, "HardwareInformation.DacType");
+        adapter.driver_date = driverRegistryString(info, &data, kDriverDateKey);
+        adapter.driver_version = driverRegistryString(info, &data, kDriverVersionKey);
+        adapter.driver_provider = driverRegistryString(info, &data, kProviderNameKey);
+        adapter.memory_size = driverRegistryDW(info, &data, "HardwareInformation.MemorySize");
 
         result.append(std::move(adapter));
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::Device> SysInfo::devices()
+{
+    QList<Device> result;
+
+    ScopedDeviceInfo device_info(SetupDiGetClassDevsW(
+        nullptr, nullptr, nullptr, DIGCF_ALLCLASSES | DIGCF_PRESENT | DIGCF_PROFILE));
+    if (!device_info.isValid())
+    {
+        PLOG(ERROR) << "SetupDiGetClassDevsW failed";
+        return result;
+    }
+
+    HDEVINFO info = device_info.get();
+
+    SP_DEVINFO_DATA data;
+    memset(&data, 0, sizeof(data));
+    data.cbSize = sizeof(data);
+
+    for (DWORD index = 0; SetupDiEnumDeviceInfo(info, index, &data); ++index)
+    {
+        Device device;
+        device.friendly_name = deviceProperty(info, &data, SPDRP_FRIENDLYNAME);
+        device.description = deviceProperty(info, &data, SPDRP_DEVICEDESC);
+        device.driver_vendor = driverRegistryString(info, &data, kProviderNameKey);
+        device.device_id = deviceInstanceId(info, &data);
+
+        result.append(std::move(device));
     }
 
     return result;
