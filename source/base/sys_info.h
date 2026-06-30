@@ -108,6 +108,19 @@ public:
         QByteArray edid;
     };
 
+    struct VideoAdapter
+    {
+        QString description;
+        QString adapter_string;
+        QString bios_string;
+        QString chip_type;
+        QString dac_type;
+        QString driver_date;
+        QString driver_version;
+        QString driver_provider;
+        quint64 memory_size = 0;
+    };
+
     static QString operatingSystemName();
     static QString operatingSystemVersion();
     static QString operatingSystemArchitecture();
@@ -138,6 +151,8 @@ public:
     static QList<Session> sessions();
 
     static QList<Monitor> monitors();
+
+    static QList<VideoAdapter> videoAdapters();
 
 private:
     Q_DISABLE_COPY_MOVE(SysInfo)

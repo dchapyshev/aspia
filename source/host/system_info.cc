@@ -545,27 +545,26 @@ void fillEnvironmentVariables(proto::system_info::SystemInfo* system_info)
     }
 }
 
-#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillVideoAdapters(proto::system_info::SystemInfo* system_info)
 {
-    for (VideoAdapterEnumarator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    const QList<SysInfo::VideoAdapter> adapters = SysInfo::videoAdapters();
+    for (const SysInfo::VideoAdapter& item : adapters)
     {
         proto::system_info::VideoAdapters::Adapter* adapter =
             system_info->mutable_video_adapters()->add_adapter();
 
-        adapter->set_description(enumerator.description().toStdString());
-        adapter->set_adapter_string(enumerator.adapterString().toStdString());
-        adapter->set_bios_string(enumerator.biosString().toStdString());
-        adapter->set_chip_type(enumerator.chipString().toStdString());
-        adapter->set_dac_type(enumerator.dacType().toStdString());
-        adapter->set_driver_date(enumerator.driverDate().toStdString());
-        adapter->set_driver_version(enumerator.driverVersion().toStdString());
-        adapter->set_driver_provider(enumerator.driverVendor().toStdString());
-        adapter->set_memory_size(enumerator.memorySize());
+        adapter->set_description(item.description.toStdString());
+        adapter->set_adapter_string(item.adapter_string.toStdString());
+        adapter->set_bios_string(item.bios_string.toStdString());
+        adapter->set_chip_type(item.chip_type.toStdString());
+        adapter->set_dac_type(item.dac_type.toStdString());
+        adapter->set_driver_date(item.driver_date.toStdString());
+        adapter->set_driver_version(item.driver_version.toStdString());
+        adapter->set_driver_provider(item.driver_provider.toStdString());
+        adapter->set_memory_size(item.memory_size);
     }
 }
-#endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
@@ -1012,12 +1011,10 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
         fillDevices(system_info);
     }
 #endif // defined(Q_OS_WINDOWS)
-#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_VideoAdapters)
     {
         fillVideoAdapters(system_info);
     }
-#endif // defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_Monitors)
     {
         fillMonitors(system_info);

@@ -801,3 +801,29 @@ QList<SysInfo::Monitor> SysInfo::monitors()
 
     return result;
 }
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::VideoAdapter> SysInfo::videoAdapters()
+{
+    QList<VideoAdapter> result;
+
+    for (DeviceEnumerator enumerator(&GUID_DEVCLASS_DISPLAY, DIGCF_PROFILE | DIGCF_PRESENT);
+         !enumerator.isAtEnd(); enumerator.advance())
+    {
+        VideoAdapter adapter;
+        adapter.description = enumerator.description();
+        adapter.adapter_string = enumerator.driverRegistryString("HardwareInformation.AdapterString");
+        adapter.bios_string = enumerator.driverRegistryString("HardwareInformation.BiosString");
+        adapter.chip_type = enumerator.driverRegistryString("HardwareInformation.ChipType");
+        adapter.dac_type = enumerator.driverRegistryString("HardwareInformation.DacType");
+        adapter.driver_date = enumerator.driverDate();
+        adapter.driver_version = enumerator.driverVersion();
+        adapter.driver_provider = enumerator.driverVendor();
+        adapter.memory_size = enumerator.driverRegistryDW("HardwareInformation.MemorySize");
+
+        result.append(std::move(adapter));
+    }
+
+    return result;
+}

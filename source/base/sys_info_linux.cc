@@ -27,17 +27,22 @@
 #include <QDBusVariant>
 #include <QDir>
 #include <QFile>
+#include <QFileInfo>
 #include <QHash>
+#include <QProcess>
 #include <QSet>
 
 #include "base/logging.h"
 #include "base/smbios.h"
 
+#include <drm/drm.h>
+#include <fcntl.h>
 #include <grp.h>
 #include <lastlog.h>
 #include <netdb.h>
 #include <pwd.h>
 #include <shadow.h>
+#include <sys/ioctl.h>
 #include <sys/param.h>
 #include <sys/sysinfo.h>
 #include <sys/utsname.h>
@@ -231,6 +236,101 @@ void readSessionProperties(const QString& object_path, SysInfo::Session* session
 
     // Prefer the TTY (text/remote sessions); fall back to the X11/Wayland display.
     session->session_name = !tty.isEmpty() ? tty : display;
+}
+
+struct PciDisplay
+{
+    QString vendor;
+    QString device;
+};
+
+struct DrmVersion
+{
+    QString version;
+    QString date;
+    QString desc;
+};
+
+//--------------------------------------------------------------------------------------------------
+// Maps the PCI slot of each display controller to its vendor/device names reported by lspci.
+QHash<QString, PciDisplay> pciDisplayDevices()
+{
+    QHash<QString, PciDisplay> result;
+
+    QProcess process;
+    process.start("lspci", QStringList() << "-D" << "-mm");
+    if (!process.waitForFinished(5000))
+        return result;
+
+    // lspci -mm output is machine-readable with quoted fields: SLOT "Class" "Vendor" "Device" ...
+    const QList<QByteArray> lines = process.readAllStandardOutput().split('\n');
+    for (const QByteArray& line : lines)
+    {
+        const QList<QByteArray> fields = line.split('"');
+        if (fields.size() < 6)
+            continue;
+
+        const QString device_class = QString::fromUtf8(fields[1]);
+        if (!device_class.contains("VGA") && !device_class.contains("3D") &&
+            !device_class.contains("Display"))
+        {
+            continue;
+        }
+
+        PciDisplay display;
+        display.vendor = QString::fromUtf8(fields[3]);
+        display.device = QString::fromUtf8(fields[5]);
+
+        result.insert(QString::fromUtf8(fields[0]).trimmed(), display);
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Reads the DRM driver version, date and description of a card via the DRM_IOCTL_VERSION ioctl.
+DrmVersion readDrmVersion(const QString& node)
+{
+    DrmVersion result;
+
+    int fd = open(node.toLocal8Bit().constData(), O_RDONLY | O_CLOEXEC);
+    if (fd < 0)
+        return result;
+
+    drm_version version = {};
+
+    // The first call reports the field lengths; allocate buffers and call again to fetch the data.
+    if (ioctl(fd, DRM_IOCTL_VERSION, &version) >= 0)
+    {
+        QByteArray name(static_cast<qsizetype>(version.name_len), 0);
+        QByteArray date(static_cast<qsizetype>(version.date_len), 0);
+        QByteArray desc(static_cast<qsizetype>(version.desc_len), 0);
+
+        version.name = name.data();
+        version.date = date.data();
+        version.desc = desc.data();
+
+        if (ioctl(fd, DRM_IOCTL_VERSION, &version) >= 0)
+        {
+            result.version = QString("%1.%2.%3").arg(version.version_major)
+                .arg(version.version_minor).arg(version.version_patchlevel);
+            result.date = QString::fromLatin1(date).trimmed();
+            result.desc = QString::fromLatin1(desc).trimmed();
+        }
+    }
+
+    close(fd);
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString readSysAttribute(const QString& path)
+{
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly))
+        return QString();
+
+    return QString::fromLatin1(file.readAll()).trimmed();
 }
 
 } // namespace
@@ -783,6 +883,49 @@ QList<SysInfo::Monitor> SysInfo::monitors()
         monitor.edid = std::move(edid);
 
         result.append(std::move(monitor));
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::VideoAdapter> SysInfo::videoAdapters()
+{
+    QList<VideoAdapter> result;
+
+    const QHash<QString, PciDisplay> displays = pciDisplayDevices();
+
+    // GPU cards are /sys/class/drm/card<N>; connector entries carry a "-<connector>" suffix.
+    const QStringList cards = QDir("/sys/class/drm").entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+    for (const QString& card : cards)
+    {
+        if (!card.startsWith("card") || card.contains('-'))
+            continue;
+
+        const QString device_path = QString("/sys/class/drm/%1/device").arg(card);
+        const QString slot = QFileInfo(QFile::symLinkTarget(device_path)).fileName();
+
+        VideoAdapter adapter;
+
+        const PciDisplay display = displays.value(slot);
+        adapter.description = QString("%1 %2").arg(display.vendor, display.device).trimmed();
+        adapter.adapter_string = display.device;
+        adapter.driver_provider = display.vendor;
+
+        const DrmVersion drm = readDrmVersion(QString("/dev/dri/%1").arg(card));
+        adapter.driver_version = drm.version;
+        adapter.chip_type = drm.desc;
+
+        // Modern DRM drivers report a placeholder date of "0"; treat it as unset.
+        if (drm.date != "0")
+            adapter.driver_date = drm.date;
+
+        // VBIOS version and total dedicated video memory (in bytes) are exposed by amdgpu.
+        adapter.bios_string = readSysAttribute(device_path + "/vbios_version");
+        adapter.memory_size = readSysAttribute(device_path + "/mem_info_vram_total").toULongLong();
+
+        result.append(std::move(adapter));
     }
 
     return result;

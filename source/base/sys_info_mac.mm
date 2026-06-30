@@ -199,3 +199,11 @@ QList<SysInfo::Monitor> SysInfo::monitors()
     NOTIMPLEMENTED();
     return QList<Monitor>();
 }
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::VideoAdapter> SysInfo::videoAdapters()
+{
+    NOTIMPLEMENTED();
+    return QList<VideoAdapter>();
+}

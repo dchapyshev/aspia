@@ -40,7 +40,6 @@ public:
     QString driverVendor() const;
     QString deviceID() const;
 
-protected:
     QString driverRegistryString(const QString& key_name) const;
     DWORD driverRegistryDW(const QString& key_name) const;
 
@@ -52,21 +51,6 @@ private:
     DWORD device_index_ = 0;
 
     Q_DISABLE_COPY_MOVE(DeviceEnumerator)
-};
-
-class VideoAdapterEnumarator final : public DeviceEnumerator
-{
-public:
-    VideoAdapterEnumarator();
-
-    QString adapterString() const;
-    QString biosString() const;
-    QString chipString() const;
-    QString dacType() const;
-    quint64 memorySize() const;
-
-private:
-    Q_DISABLE_COPY_MOVE(VideoAdapterEnumarator)
 };
 
 #endif // BASE_WIN_DEVICE_ENUMERATOR_H
