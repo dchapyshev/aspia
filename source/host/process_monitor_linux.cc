@@ -114,6 +114,11 @@ bool readProcessStat(ProcessMonitor::ProcessId pid, ProcessRaw* raw)
     if (fields.size() < 13)
         return false;
 
+    // Skip zombie (defunct) processes: they have already exited and are awaiting reaping by their
+    // parent, so they have no executable image or memory.
+    if (fields[0] == "Z")
+        return false;
+
     // fields[k] is stat field (3 + k): session = field 6, utime = field 14, stime = field 15.
     raw->session_id = fields[3].toUInt();
     raw->cpu_time = fields[11].toLongLong() + fields[12].toLongLong();
