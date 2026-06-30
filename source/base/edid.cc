@@ -270,7 +270,7 @@ QString Edid::getManufacturerSignature() const
 //--------------------------------------------------------------------------------------------------
 QString Edid::monitorId() const
 {
-    return QString("%1%2}")
+    return QString("%1%2")
         .arg(getManufacturerSignature()).arg(edid_->id_product_code, 4, 16, QChar('0'));
 }
 

@@ -21,13 +21,13 @@
 
 #include <QString>
 
-#include "base/edid.h"
 #include "base/win/scoped_device_info.h"
 
 class DeviceEnumerator
 {
 public:
     DeviceEnumerator();
+    DeviceEnumerator(const GUID* class_guid, DWORD flags);
     virtual ~DeviceEnumerator();
 
     bool isAtEnd() const;
@@ -41,8 +41,6 @@ public:
     QString deviceID() const;
 
 protected:
-    DeviceEnumerator(const GUID* class_guid, DWORD flags);
-
     QString driverRegistryString(const QString& key_name) const;
     DWORD driverRegistryDW(const QString& key_name) const;
 
@@ -54,18 +52,6 @@ private:
     DWORD device_index_ = 0;
 
     Q_DISABLE_COPY_MOVE(DeviceEnumerator)
-};
-
-class MonitorEnumerator final : public DeviceEnumerator
-{
-public:
-    MonitorEnumerator();
-    ~MonitorEnumerator() final = default;
-
-    Edid edid() const;
-
-private:
-    Q_DISABLE_COPY_MOVE(MonitorEnumerator)
 };
 
 class VideoAdapterEnumarator final : public DeviceEnumerator

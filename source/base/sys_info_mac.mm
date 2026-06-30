@@ -191,3 +191,11 @@ QList<SysInfo::Session> SysInfo::sessions()
     NOTIMPLEMENTED();
     return QList<Session>();
 }
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::Monitor> SysInfo::monitors()
+{
+    NOTIMPLEMENTED();
+    return QList<Monitor>();
+}

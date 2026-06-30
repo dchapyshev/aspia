@@ -19,6 +19,7 @@
 #ifndef BASE_SYS_INFO_H
 #define BASE_SYS_INFO_H
 
+#include <QByteArray>
 #include <QList>
 #include <QString>
 
@@ -101,6 +102,12 @@ public:
         bool locked = false;
     };
 
+    struct Monitor
+    {
+        QString system_name;
+        QByteArray edid;
+    };
+
     static QString operatingSystemName();
     static QString operatingSystemVersion();
     static QString operatingSystemArchitecture();
@@ -129,6 +136,8 @@ public:
     static QList<Service> drivers();
 
     static QList<Session> sessions();
+
+    static QList<Monitor> monitors();
 
 private:
     Q_DISABLE_COPY_MOVE(SysInfo)

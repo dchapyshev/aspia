@@ -205,39 +205,6 @@ QString DeviceEnumerator::deviceID() const
 }
 
 //--------------------------------------------------------------------------------------------------
-MonitorEnumerator::MonitorEnumerator()
-    : DeviceEnumerator(&GUID_DEVCLASS_MONITOR, DIGCF_PROFILE | DIGCF_PRESENT)
-{
-    // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
-Edid MonitorEnumerator::edid() const
-{
-    QString key_path = QString("SYSTEM\\CurrentControlSet\\Enum\\%1\\Device Parameters").arg(deviceID());
-
-    RegKey key;
-    LONG status = key.open(HKEY_LOCAL_MACHINE, key_path, KEY_READ);
-    if (status != ERROR_SUCCESS)
-    {
-        LOG(ERROR) << "Unable to open registry key:"
-                   << SystemError(static_cast<DWORD>(status)).toString();
-        return Edid();
-    }
-
-    QByteArray buffer;
-    status = key.readValueBIN("EDID", &buffer);
-    if (status != ERROR_SUCCESS)
-    {
-        LOG(ERROR) << "Unable to read EDID data from registry:"
-                   << SystemError(static_cast<DWORD>(status)).toString();
-        return Edid();
-    }
-
-    return Edid(buffer);
-}
-
-//--------------------------------------------------------------------------------------------------
 VideoAdapterEnumarator::VideoAdapterEnumarator()
     : DeviceEnumerator(&GUID_DEVCLASS_DISPLAY, DIGCF_PROFILE | DIGCF_PRESENT)
 {

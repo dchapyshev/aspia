@@ -25,6 +25,7 @@
 #include <QDBusMessage>
 #include <QDBusObjectPath>
 #include <QDBusVariant>
+#include <QDir>
 #include <QFile>
 #include <QHash>
 #include <QSet>
@@ -747,6 +748,42 @@ QList<SysInfo::Session> SysInfo::sessions()
         result.append(std::move(session));
     }
     arg.endArray();
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::Monitor> SysInfo::monitors()
+{
+    QList<Monitor> result;
+
+    // The kernel exposes each connector's raw EDID at /sys/class/drm/<connector>/edid; a non-empty
+    // file means a display is connected.
+    const QStringList connectors = QDir("/sys/class/drm").entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+
+    for (const QString& connector : connectors)
+    {
+        QFile file(QString("/sys/class/drm/%1/edid").arg(connector));
+        if (!file.open(QIODevice::ReadOnly))
+            continue;
+
+        // Files under /sys report a size of zero, so QFile::readAll() yields nothing; read in chunks.
+        QByteArray edid;
+        char buffer[256];
+        qint64 read_bytes;
+        while ((read_bytes = file.read(buffer, sizeof(buffer))) > 0)
+            edid.append(buffer, read_bytes);
+
+        if (edid.isEmpty())
+            continue;
+
+        Monitor monitor;
+        monitor.system_name = connector;
+        monitor.edid = std::move(edid);
+
+        result.append(std::move(monitor));
+    }
 
     return result;
 }

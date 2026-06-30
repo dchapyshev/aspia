@@ -21,12 +21,14 @@
 #include <qt_windows.h>
 
 #include <LM.h>
+#include <devguid.h>
 
 #include <memory>
 
 #include "base/logging.h"
 #include "base/session_id.h"
 #include "base/system_error.h"
+#include "base/win/device_enumerator.h"
 #include "base/win/registry.h"
 #include "base/win/scoped_object.h"
 #include "base/win/scoped_wts_memory.h"
@@ -763,6 +765,38 @@ QList<SysInfo::Session> SysInfo::sessions()
         }
 
         result.append(std::move(session));
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::Monitor> SysInfo::monitors()
+{
+    QList<Monitor> result;
+
+    for (DeviceEnumerator enumerator(&GUID_DEVCLASS_MONITOR, DIGCF_PROFILE | DIGCF_PRESENT);
+         !enumerator.isAtEnd(); enumerator.advance())
+    {
+        QString key_path = QString("SYSTEM\\CurrentControlSet\\Enum\\%1\\Device Parameters")
+                               .arg(enumerator.deviceID());
+
+        RegKey key;
+        if (key.open(HKEY_LOCAL_MACHINE, key_path, KEY_READ) != ERROR_SUCCESS)
+            continue;
+
+        QByteArray edid;
+        if (key.readValueBIN("EDID", &edid) != ERROR_SUCCESS)
+            continue;
+
+        Monitor monitor;
+        monitor.system_name = enumerator.friendlyName();
+        if (monitor.system_name.isEmpty())
+            monitor.system_name = enumerator.description();
+        monitor.edid = std::move(edid);
+
+        result.append(std::move(monitor));
     }
 
     return result;

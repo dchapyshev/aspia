@@ -24,6 +24,7 @@
 #include <thread>
 
 #include "base/applications_reader.h"
+#include "base/edid.h"
 #include "base/event_enumerator.h"
 #include "base/license_reader.h"
 #include "base/logging.h"
@@ -327,13 +328,13 @@ void fillDrivers(proto::system_info::SystemInfo* system_info)
     }
 }
 
-#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillMonitors(proto::system_info::SystemInfo* system_info)
 {
-    for (MonitorEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    const QList<SysInfo::Monitor> monitors = SysInfo::monitors();
+    for (const SysInfo::Monitor& item : monitors)
     {
-        Edid edid = enumerator.edid();
+        Edid edid(item.edid);
         if (!edid.isValid())
         {
             LOG(INFO) << "No EDID information for monitor";
@@ -343,11 +344,7 @@ void fillMonitors(proto::system_info::SystemInfo* system_info)
         proto::system_info::Monitors::Monitor* monitor =
             system_info->mutable_monitors()->add_monitor();
 
-        QString system_name = enumerator.friendlyName();
-        if (system_name.isEmpty())
-            system_name = enumerator.description();
-
-        monitor->set_system_name(system_name.toStdString());
+        monitor->set_system_name(item.system_name.toStdString());
         monitor->set_monitor_name(edid.monitorName().toStdString());
         monitor->set_manufacturer_name(edid.manufacturerName().toStdString());
         monitor->set_monitor_id(edid.monitorId().toStdString());
@@ -479,7 +476,6 @@ void fillMonitors(proto::system_info::SystemInfo* system_info)
         }
     }
 }
-#endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
@@ -1022,12 +1018,10 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
         fillVideoAdapters(system_info);
     }
 #endif // defined(Q_OS_WINDOWS)
-#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_Monitors)
     {
         fillMonitors(system_info);
     }
-#endif // defined(Q_OS_WINDOWS)
 #if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_Printers)
     {
