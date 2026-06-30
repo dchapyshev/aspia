@@ -77,3 +77,11 @@ QList<NetUtils::Adapter> NetUtils::adapters()
     NOTIMPLEMENTED();
     return QList<Adapter>();
 }
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<NetUtils::Connection> NetUtils::connections()
+{
+    NOTIMPLEMENTED();
+    return QList<Connection>();
+}

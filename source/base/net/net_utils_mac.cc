@@ -97,3 +97,11 @@ QList<NetUtils::Adapter> NetUtils::adapters()
     // Not implemented on macOS.
     return QList<NetUtils::Adapter>();
 }
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<NetUtils::Connection> NetUtils::connections()
+{
+    // Not implemented on macOS.
+    return QList<NetUtils::Connection>();
+}

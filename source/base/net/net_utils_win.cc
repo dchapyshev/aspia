@@ -22,9 +22,12 @@
 #include <WinSock2.h>
 #include <WS2tcpip.h>
 #include <iphlpapi.h>
+#include <TlHelp32.h>
 
 #include <limits>
 #include <vector>
+
+#include "base/win/scoped_object.h"
 
 namespace {
 
@@ -136,6 +139,88 @@ QString ipv4MaskString(ULONG prefix_length)
     return buffer;
 }
 
+//--------------------------------------------------------------------------------------------------
+QByteArray extendedTcpTable()
+{
+    ULONG size = sizeof(MIB_TCPTABLE_OWNER_PID);
+
+    QByteArray buffer;
+    buffer.resize(size);
+
+    DWORD ret = GetExtendedTcpTable(buffer.data(), &size, TRUE, AF_INET, TCP_TABLE_OWNER_PID_ALL, 0);
+    if (ret == ERROR_INSUFFICIENT_BUFFER)
+    {
+        buffer.resize(size);
+        ret = GetExtendedTcpTable(buffer.data(), &size, TRUE, AF_INET, TCP_TABLE_OWNER_PID_ALL, 0);
+    }
+
+    if (ret != NO_ERROR)
+        return QByteArray();
+
+    return buffer;
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray extendedUdpTable()
+{
+    ULONG size = sizeof(MIB_UDPTABLE_OWNER_PID);
+
+    QByteArray buffer;
+    buffer.resize(size);
+
+    DWORD ret = GetExtendedUdpTable(buffer.data(), &size, TRUE, AF_INET, UDP_TABLE_OWNER_PID, 0);
+    if (ret == ERROR_INSUFFICIENT_BUFFER)
+    {
+        buffer.resize(size);
+        ret = GetExtendedUdpTable(buffer.data(), &size, TRUE, AF_INET, UDP_TABLE_OWNER_PID, 0);
+    }
+
+    if (ret != NO_ERROR)
+        return QByteArray();
+
+    return buffer;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString processNameByPid(HANDLE snapshot, DWORD process_id)
+{
+    PROCESSENTRY32W entry;
+    entry.dwSize = sizeof(entry);
+
+    if (Process32FirstW(snapshot, &entry))
+    {
+        do
+        {
+            if (entry.th32ProcessID == process_id)
+                return QString::fromWCharArray(entry.szExeFile);
+        }
+        while (Process32NextW(snapshot, &entry));
+    }
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString tcpStateToString(DWORD state)
+{
+    switch (state)
+    {
+        case MIB_TCP_STATE_CLOSED:     return "CLOSED";
+        case MIB_TCP_STATE_LISTEN:     return "LISTENING";
+        case MIB_TCP_STATE_SYN_SENT:   return "SYN_SENT";
+        case MIB_TCP_STATE_SYN_RCVD:   return "SYN_RCVD";
+        case MIB_TCP_STATE_ESTAB:      return "ESTABLISHED";
+        case MIB_TCP_STATE_FIN_WAIT1:  return "FIN_WAIT1";
+        case MIB_TCP_STATE_FIN_WAIT2:  return "FIN_WAIT2";
+        case MIB_TCP_STATE_CLOSE_WAIT: return "CLOSE_WAIT";
+        case MIB_TCP_STATE_CLOSING:    return "CLOSING";
+        case MIB_TCP_STATE_LAST_ACK:   return "LAST_ACK";
+        case MIB_TCP_STATE_TIME_WAIT:  return "TIME_WAIT";
+        case MIB_TCP_STATE_DELETE_TCB: return "DELETE_TCB";
+        default:                       return "UNKNOWN";
+    }
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -227,6 +312,56 @@ QList<NetUtils::Adapter> NetUtils::adapters()
             adapter.dns_servers.append(socketAddressString(dns->Address));
 
         result.append(std::move(adapter));
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<NetUtils::Connection> NetUtils::connections()
+{
+    QList<Connection> result;
+
+    ScopedHandle snapshot(CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0));
+
+    const QByteArray tcp_buffer = extendedTcpTable();
+    if (!tcp_buffer.isEmpty())
+    {
+        const auto* table = reinterpret_cast<const MIB_TCPTABLE_OWNER_PID*>(tcp_buffer.constData());
+        for (DWORD i = 0; i < table->dwNumEntries; ++i)
+        {
+            const MIB_TCPROW_OWNER_PID& row = table->table[i];
+
+            Connection connection;
+            connection.protocol = "TCP";
+            connection.process_name = processNameByPid(snapshot.get(), row.dwOwningPid);
+            connection.local_address = ipToString(row.dwLocalAddr);
+            connection.local_port = ntohs(static_cast<u_short>(row.dwLocalPort));
+            connection.remote_address = ipToString(row.dwRemoteAddr);
+            connection.remote_port = ntohs(static_cast<u_short>(row.dwRemotePort));
+            connection.state = tcpStateToString(row.dwState);
+
+            result.append(std::move(connection));
+        }
+    }
+
+    const QByteArray udp_buffer = extendedUdpTable();
+    if (!udp_buffer.isEmpty())
+    {
+        const auto* table = reinterpret_cast<const MIB_UDPTABLE_OWNER_PID*>(udp_buffer.constData());
+        for (DWORD i = 0; i < table->dwNumEntries; ++i)
+        {
+            const MIB_UDPROW_OWNER_PID& row = table->table[i];
+
+            Connection connection;
+            connection.protocol = "UDP";
+            connection.process_name = processNameByPid(snapshot.get(), row.dwOwningPid);
+            connection.local_address = ipToString(row.dwLocalAddr);
+            connection.local_port = ntohs(static_cast<u_short>(row.dwLocalPort));
+
+            result.append(std::move(connection));
+        }
     }
 
     return result;

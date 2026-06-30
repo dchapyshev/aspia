@@ -54,6 +54,17 @@ public:
         QStringList dns_servers;
     };
 
+    struct Connection
+    {
+        QString protocol;
+        QString process_name;
+        QString local_address;
+        QString remote_address;
+        quint16 local_port = 0;
+        quint16 remote_port = 0;
+        QString state;
+    };
+
     // Returns the IP addresses of all active (up, non-loopback) interfaces that have a global address.
     static QStringList localIpList();
 
@@ -63,6 +74,9 @@ public:
 
     // Returns the host's network adapters with their IPv4 configuration.
     static QList<Adapter> adapters();
+
+    // Returns the host's active TCP and UDP connections (IPv4).
+    static QList<Connection> connections();
 
     // Returns the IPv4 address of the host's default gateway, or an empty string if it cannot be
     // determined.

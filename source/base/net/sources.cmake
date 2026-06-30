@@ -48,8 +48,6 @@ collect_sources(SOURCE_BASE_NET
 
 if (WIN32)
     collect_sources(SOURCE_BASE_NET
-        connect_enumerator.cc
-        connect_enumerator.h
         firewall_manager.cc
         firewall_manager.h
         net_utils_win.cc

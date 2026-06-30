@@ -18,14 +18,19 @@
 
 #include "base/net/net_utils.h"
 
+#include <QDir>
 #include <QFile>
+#include <QFileInfo>
 #include <QHash>
 #include <QProcess>
 
 #include <arpa/inet.h>
+#include <dirent.h>
 #include <ifaddrs.h>
+#include <limits.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
+#include <unistd.h>
 
 namespace {
 
@@ -209,6 +214,146 @@ QHash<QString, InterfaceInfo> networkInfoByInterface()
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
+QString connectionStateToString(int state)
+{
+    switch (state)
+    {
+        case 0x01: return "ESTABLISHED";
+        case 0x02: return "SYN_SENT";
+        case 0x03: return "SYN_RCVD";
+        case 0x04: return "FIN_WAIT1";
+        case 0x05: return "FIN_WAIT2";
+        case 0x06: return "TIME_WAIT";
+        case 0x07: return "CLOSED";
+        case 0x08: return "CLOSE_WAIT";
+        case 0x09: return "LAST_ACK";
+        case 0x0A: return "LISTENING";
+        case 0x0B: return "CLOSING";
+        default:   return "UNKNOWN";
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+QString processName(const QString& pid)
+{
+    // Prefer the real executable name; /proc/<pid>/comm is truncated to 15 characters.
+    char buffer[PATH_MAX];
+    const QByteArray exe = QString("/proc/%1/exe").arg(pid).toLocal8Bit();
+    const ssize_t length = readlink(exe.constData(), buffer, sizeof(buffer) - 1);
+    if (length > 0)
+    {
+        QString target = QString::fromLocal8Bit(buffer, length);
+
+        // A replaced binary keeps a " (deleted)" suffix on the link target.
+        if (target.endsWith(" (deleted)"))
+            target.chop(10);
+
+        return QFileInfo(target).fileName();
+    }
+
+    // Fall back to comm for kernel threads and inaccessible processes.
+    QFile comm(QString("/proc/%1/comm").arg(pid));
+    if (comm.open(QIODevice::ReadOnly))
+        return QString::fromLatin1(comm.readLine()).trimmed();
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Maps a socket inode to the owning process name by scanning the /proc/<pid>/fd symlinks. Only the
+// caller's own sockets resolve unless running as root.
+QHash<QString, QString> socketProcessNames()
+{
+    QHash<QString, QString> result;
+
+    const QStringList pids = QDir("/proc").entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+    for (const QString& pid : pids)
+    {
+        bool is_pid = false;
+        pid.toUInt(&is_pid);
+        if (!is_pid)
+            continue;
+
+        const QString name = processName(pid);
+
+        const QString fd_path = QString("/proc/%1/fd").arg(pid);
+        DIR* fd_dir = opendir(fd_path.toLocal8Bit().constData());
+        if (!fd_dir)
+            continue;
+
+        struct dirent* fd_entry;
+        while ((fd_entry = readdir(fd_dir)) != nullptr)
+        {
+            char buffer[256];
+            const QByteArray link =
+                QString("%1/%2").arg(fd_path, QString::fromLatin1(fd_entry->d_name)).toLocal8Bit();
+
+            const ssize_t length = readlink(link.constData(), buffer, sizeof(buffer) - 1);
+            if (length <= 0)
+                continue;
+
+            // Socket links read as "socket:[12345]"; map the inode to the process name.
+            const QByteArray target(buffer, length);
+            if (!target.startsWith("socket:["))
+                continue;
+
+            result.insert(QString::fromLatin1(target.mid(8, target.size() - 9)), name);
+        }
+
+        closedir(fd_dir);
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Parses one /proc/net/{tcp,udp} table. |with_remote| reports the peer endpoint and the state; it is
+// disabled for UDP, which is connectionless (matching the Windows path).
+void parseProcNet(const QString& path, const QString& protocol, bool with_remote,
+                  const QHash<QString, QString>& process_names, QList<NetUtils::Connection>* result)
+{
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly))
+        return;
+
+    file.readLine(); // Skip the header line.
+
+    QByteArray line;
+    while (!(line = file.readLine()).isEmpty())
+    {
+        // Fields: sl[0] local_address[1] rem_address[2] st[3] ... inode[9]. Addresses are
+        // "HEXIP:HEXPORT" with the IP in host-order hex of in_addr.s_addr.
+        const QList<QByteArray> fields = line.simplified().split(' ');
+        if (fields.size() < 10)
+            continue;
+
+        const QList<QByteArray> local = fields[1].split(':');
+        if (local.size() != 2)
+            continue;
+
+        NetUtils::Connection connection;
+        connection.protocol = protocol;
+        connection.process_name = process_names.value(QString::fromLatin1(fields[9]));
+        connection.local_address = hexToIpv4(local[0]);
+        connection.local_port = local[1].toUShort(nullptr, 16);
+
+        if (with_remote)
+        {
+            const QList<QByteArray> remote = fields[2].split(':');
+            if (remote.size() == 2)
+            {
+                connection.remote_address = hexToIpv4(remote[0]);
+                connection.remote_port = remote[1].toUShort(nullptr, 16);
+            }
+
+            connection.state = connectionStateToString(fields[3].toInt(nullptr, 16));
+        }
+
+        result->append(std::move(connection));
+    }
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -300,5 +445,19 @@ QList<NetUtils::Adapter> NetUtils::adapters()
     }
 
     freeifaddrs(ifaddr);
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<NetUtils::Connection> NetUtils::connections()
+{
+    QList<Connection> result;
+
+    const QHash<QString, QString> process_names = socketProcessNames();
+
+    parseProcNet("/proc/net/tcp", "TCP", true, process_names, &result);
+    parseProcNet("/proc/net/udp", "UDP", false, process_names, &result);
+
     return result;
 }

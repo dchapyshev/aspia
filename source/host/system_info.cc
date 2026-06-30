@@ -36,7 +36,6 @@
 #include "proto/system_info.h"
 
 #if defined(Q_OS_WINDOWS)
-#include "base/net/connect_enumerator.h"
 #include "base/net/open_files_enumerator.h"
 #include "base/win/battery_enumerator.h"
 #include "base/win/power_info.h"
@@ -473,40 +472,24 @@ void fillMonitors(proto::system_info::SystemInfo* system_info)
     }
 }
 
-#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillConnection(proto::system_info::SystemInfo* system_info)
 {
-    for (ConnectEnumerator enumerator(ConnectEnumerator::Mode::TCP);
-         !enumerator.isAtEnd();
-         enumerator.advance())
+    const QList<NetUtils::Connection> connections = NetUtils::connections();
+    for (const NetUtils::Connection& item : connections)
     {
         proto::system_info::Connections::Connection* connection =
             system_info->mutable_connections()->add_connection();
 
-        connection->set_protocol(enumerator.protocol().toStdString());
-        connection->set_process_name(enumerator.processName().toStdString());
-        connection->set_local_address(enumerator.localAddress().toStdString());
-        connection->set_remote_address(enumerator.remoteAddress().toStdString());
-        connection->set_local_port(enumerator.localPort());
-        connection->set_remote_port(enumerator.remotePort());
-        connection->set_state(enumerator.state().toStdString());
-    }
-
-    for (ConnectEnumerator enumerator(ConnectEnumerator::Mode::UDP);
-         !enumerator.isAtEnd();
-         enumerator.advance())
-    {
-        proto::system_info::Connections::Connection* connection =
-            system_info->mutable_connections()->add_connection();
-
-        connection->set_protocol(enumerator.protocol().toStdString());
-        connection->set_process_name(enumerator.processName().toStdString());
-        connection->set_local_address(enumerator.localAddress().toStdString());
-        connection->set_local_port(enumerator.localPort());
+        connection->set_protocol(item.protocol.toStdString());
+        connection->set_process_name(item.process_name.toStdString());
+        connection->set_local_address(item.local_address.toStdString());
+        connection->set_remote_address(item.remote_address.toStdString());
+        connection->set_local_port(item.local_port);
+        connection->set_remote_port(item.remote_port);
+        connection->set_state(item.state.toStdString());
     }
 }
-#endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
 void fillRoutes(proto::system_info::SystemInfo* system_info)
@@ -1049,12 +1032,10 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
     {
         fillRoutes(system_info);
     }
-#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_Connections)
     {
         fillConnection(system_info);
     }
-#endif // defined(Q_OS_WINDOWS)
 #if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_NetworkShares)
     {
