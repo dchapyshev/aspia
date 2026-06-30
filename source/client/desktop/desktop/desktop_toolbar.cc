@@ -246,6 +246,15 @@ void DesktopToolBar::enableCtrlAltDelFeature(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopToolBar::enableRebootInSafeMode(bool enable)
+{
+    LOG(INFO) << "enableRebootInSafeMode:" << enable;
+    ui->action_reboot_safe_mode->setVisible(enable);
+    ui->action_reboot_safe_mode->setEnabled(enable);
+    updateSize();
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enablePasteAsKeystrokesFeature(bool enable)
 {
     LOG(INFO) << "enablePasteAsKeystrokesFeature:" << enable;

@@ -338,7 +338,10 @@ void DesktopWindow::onCapabilitiesChanged(const proto::control::Capabilities& ca
         bool value = flag.value();
 
         if (name == kFlagOSWindows)
+        {
             toolbar_->enableCtrlAltDelFeature(true);
+            toolbar_->enableRebootInSafeMode(true);
+        }
         else if (name == kFlagPasteAsKeystrokes)
             toolbar_->enablePasteAsKeystrokesFeature(value);
         else if (name == kFlagPowerControl)

@@ -60,6 +60,7 @@ public:
     void enableTextChat(bool enable);
     void enableTaskManager(bool enable);
     void enableCtrlAltDelFeature(bool enable);
+    void enableRebootInSafeMode(bool enable);
     void enablePasteAsKeystrokesFeature(bool enable);
 
     void setScreenList(const proto::screen::ScreenList& screen_list);

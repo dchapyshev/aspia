@@ -27,6 +27,12 @@
 #include "base/win/scoped_impersonator.h"
 #include "base/win/scoped_object.h"
 #include "base/win/session_info.h"
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+#include <QDBusArgument>
+#include <QDBusConnection>
+#include <QDBusMessage>
+#include <QDBusObjectPath>
+#include <QDBusVariant>
 #endif // defined(Q_OS_WINDOWS)
 
 namespace {
@@ -92,6 +98,56 @@ bool createPrivilegedToken(ScopedHandle* token_out)
 }
 #endif // defined(Q_OS_WINDOWS)
 
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+//--------------------------------------------------------------------------------------------------
+QDBusMessage logindManagerCall(const QString& method)
+{
+    return QDBusMessage::createMethodCall(
+        "org.freedesktop.login1", "/org/freedesktop/login1",
+        "org.freedesktop.login1.Manager", method);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool callLogind(const QDBusMessage& call)
+{
+    const QDBusMessage reply = QDBusConnection::systemBus().call(call);
+    if (reply.type() == QDBusMessage::ErrorMessage)
+    {
+        LOG(ERROR) << "logind call" << call.member() << "failed:" << reply.errorMessage();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Returns the id of the active session on the primary seat, or an empty string if there is none.
+QString activeSessionId()
+{
+    QDBusMessage call = QDBusMessage::createMethodCall(
+        "org.freedesktop.login1", "/org/freedesktop/login1/seat/seat0",
+        "org.freedesktop.DBus.Properties", "Get");
+    call << QString("org.freedesktop.login1.Seat") << QString("ActiveSession");
+
+    const QDBusMessage reply = QDBusConnection::systemBus().call(call);
+    if (reply.type() != QDBusMessage::ReplyMessage || reply.arguments().isEmpty())
+        return QString();
+
+    // The ActiveSession property is a (so) structure: session id and object path.
+    const QDBusArgument arg =
+        reply.arguments().constFirst().value<QDBusVariant>().variant().value<QDBusArgument>();
+
+    QString session_id;
+    QDBusObjectPath object_path;
+
+    arg.beginStructure();
+    arg >> session_id >> object_path;
+    arg.endStructure();
+
+    return session_id;
+}
+#endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -131,6 +187,10 @@ bool PowerController::shutdown()
     }
 
     return result;
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+    QDBusMessage call = logindManagerCall("PowerOff");
+    call << false;
+    return callLogind(call);
 #else
     NOTIMPLEMENTED();
     return false;
@@ -172,6 +232,10 @@ bool PowerController::reboot()
         PLOG(ERROR) << "InitiateSystemShutdownExW failed";
 
     return result;
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+    QDBusMessage call = logindManagerCall("Reboot");
+    call << false;
+    return callLogind(call);
 #else
     NOTIMPLEMENTED();
     return false;
@@ -204,6 +268,17 @@ bool PowerController::logoff()
     }
 
     return true;
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+    QString session_id = activeSessionId();
+    if (session_id.isEmpty())
+    {
+        LOG(ERROR) << "No active session to log off";
+        return false;
+    }
+
+    QDBusMessage call = logindManagerCall("TerminateSession");
+    call << session_id;
+    return callLogind(call);
 #else
     NOTIMPLEMENTED();
     return false;
@@ -222,6 +297,8 @@ bool PowerController::lock()
     }
 
     return true;
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+    return callLogind(logindManagerCall("LockSessions"));
 #else
     NOTIMPLEMENTED();
     return false;

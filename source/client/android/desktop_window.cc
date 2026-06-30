@@ -515,12 +515,18 @@ void DesktopWindow::showPowerActions()
     sheet->addItem(tr("Back"), ":/img/material/arrow_back.svg");
     sheet->addItem(tr("Shutdown"), ":/img/material/power.svg");
     sheet->addItem(tr("Reboot"), ":/img/material/restart.svg");
-    sheet->addItem(tr("Safe Mode"), ":/img/material/restart.svg");
+    if (host_is_windows_) // Safe mode is a Windows-only feature.
+        sheet->addItem(tr("Safe Mode"), ":/img/material/restart.svg");
     sheet->addItem(tr("Logoff"), ":/img/material/logout.svg");
     sheet->addItem(tr("Lock"), ":/img/material/lock.svg");
 
     connect(sheet, &BottomSheet::sig_triggered, this, [this](int index)
     {
+        // When the host is not Windows the "Safe Mode" item is absent, so the items after it shift
+        // up by one; realign them with the indices below.
+        if (!host_is_windows_ && index >= 3)
+            ++index;
+
         switch (index)
         {
             case 0:
