@@ -23,6 +23,10 @@
 
 #include <sys/types.h>
 
+#include <cstddef>
+#include <cstdint>
+
+struct sd_journal;
 struct sd_login_monitor;
 
 // Thin wrapper over the subset of libsystemd (sd-login) used by the host. The library is loaded
@@ -45,6 +49,16 @@ public:
     static sd_login_monitor* loginMonitorUnref(sd_login_monitor* monitor);
     static int loginMonitorGetFd(sd_login_monitor* monitor);
     static int loginMonitorFlush(sd_login_monitor* monitor);
+
+    static int journalOpen(sd_journal** journal);
+    static void journalClose(sd_journal* journal);
+    static int journalAddMatch(sd_journal* journal, const void* data, size_t size);
+    static int journalSeekHead(sd_journal* journal);
+    static int journalSeekTail(sd_journal* journal);
+    static int journalNext(sd_journal* journal);
+    static int journalPrevious(sd_journal* journal);
+    static int journalGetData(sd_journal* journal, const char* field, const void** data, size_t* length);
+    static int journalGetRealtimeUsec(sd_journal* journal, uint64_t* usec);
 };
 
 #endif // BASE_LINUX_LIBSYSTEMD_H

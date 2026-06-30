@@ -18,11 +18,14 @@
 
 #include "base/linux/libsystemd.h"
 
+// base/logging.h must precede the <systemd/...> headers: sd-journal.h pulls in <syslog.h>, whose
+// LOG_INFO/LOG_WARNING macros would clobber the logging severity constants.
+#include "base/logging.h"
+
+#include <systemd/sd-journal.h>
 #include <systemd/sd-login.h>
 
 #include <dlfcn.h>
-
-#include "base/logging.h"
 
 namespace {
 
@@ -39,6 +42,16 @@ decltype(&sd_login_monitor_new) g_login_monitor_new = nullptr;
 decltype(&sd_login_monitor_unref) g_login_monitor_unref = nullptr;
 decltype(&sd_login_monitor_get_fd) g_login_monitor_get_fd = nullptr;
 decltype(&sd_login_monitor_flush) g_login_monitor_flush = nullptr;
+
+decltype(&sd_journal_open) g_journal_open = nullptr;
+decltype(&sd_journal_close) g_journal_close = nullptr;
+decltype(&sd_journal_add_match) g_journal_add_match = nullptr;
+decltype(&sd_journal_seek_head) g_journal_seek_head = nullptr;
+decltype(&sd_journal_seek_tail) g_journal_seek_tail = nullptr;
+decltype(&sd_journal_next) g_journal_next = nullptr;
+decltype(&sd_journal_previous) g_journal_previous = nullptr;
+decltype(&sd_journal_get_data) g_journal_get_data = nullptr;
+decltype(&sd_journal_get_realtime_usec) g_journal_get_realtime_usec = nullptr;
 
 } // namespace
 
@@ -78,9 +91,30 @@ bool LibSystemd::ensureLoaded()
     g_login_monitor_flush =
         reinterpret_cast<decltype(g_login_monitor_flush)>(dlsym(g_handle, "sd_login_monitor_flush"));
 
+    g_journal_open =
+        reinterpret_cast<decltype(g_journal_open)>(dlsym(g_handle, "sd_journal_open"));
+    g_journal_close =
+        reinterpret_cast<decltype(g_journal_close)>(dlsym(g_handle, "sd_journal_close"));
+    g_journal_add_match =
+        reinterpret_cast<decltype(g_journal_add_match)>(dlsym(g_handle, "sd_journal_add_match"));
+    g_journal_seek_head =
+        reinterpret_cast<decltype(g_journal_seek_head)>(dlsym(g_handle, "sd_journal_seek_head"));
+    g_journal_seek_tail =
+        reinterpret_cast<decltype(g_journal_seek_tail)>(dlsym(g_handle, "sd_journal_seek_tail"));
+    g_journal_next =
+        reinterpret_cast<decltype(g_journal_next)>(dlsym(g_handle, "sd_journal_next"));
+    g_journal_previous =
+        reinterpret_cast<decltype(g_journal_previous)>(dlsym(g_handle, "sd_journal_previous"));
+    g_journal_get_data =
+        reinterpret_cast<decltype(g_journal_get_data)>(dlsym(g_handle, "sd_journal_get_data"));
+    g_journal_get_realtime_usec = reinterpret_cast<decltype(g_journal_get_realtime_usec)>(
+        dlsym(g_handle, "sd_journal_get_realtime_usec"));
+
     if (!g_seat_get_active || !g_session_get_vt || !g_session_get_class || !g_session_get_type ||
         !g_login_monitor_new || !g_login_monitor_unref || !g_login_monitor_get_fd ||
-        !g_login_monitor_flush)
+        !g_login_monitor_flush || !g_journal_open || !g_journal_close || !g_journal_add_match ||
+        !g_journal_seek_head || !g_journal_seek_tail || !g_journal_next || !g_journal_previous ||
+        !g_journal_get_data || !g_journal_get_realtime_usec)
     {
         LOG(ERROR) << "Unable to resolve libsystemd symbols";
         dlclose(g_handle);
@@ -162,4 +196,85 @@ int LibSystemd::loginMonitorFlush(sd_login_monitor* monitor)
     if (!ensureLoaded())
         return -1;
     return g_login_monitor_flush(monitor);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+int LibSystemd::journalOpen(sd_journal** journal)
+{
+    if (!ensureLoaded())
+        return -1;
+    return g_journal_open(journal, SD_JOURNAL_LOCAL_ONLY);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void LibSystemd::journalClose(sd_journal* journal)
+{
+    if (!ensureLoaded())
+        return;
+    g_journal_close(journal);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+int LibSystemd::journalAddMatch(sd_journal* journal, const void* data, size_t size)
+{
+    if (!ensureLoaded())
+        return -1;
+    return g_journal_add_match(journal, data, size);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+int LibSystemd::journalSeekHead(sd_journal* journal)
+{
+    if (!ensureLoaded())
+        return -1;
+    return g_journal_seek_head(journal);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+int LibSystemd::journalSeekTail(sd_journal* journal)
+{
+    if (!ensureLoaded())
+        return -1;
+    return g_journal_seek_tail(journal);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+int LibSystemd::journalNext(sd_journal* journal)
+{
+    if (!ensureLoaded())
+        return -1;
+    return g_journal_next(journal);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+int LibSystemd::journalPrevious(sd_journal* journal)
+{
+    if (!ensureLoaded())
+        return -1;
+    return g_journal_previous(journal);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+int LibSystemd::journalGetData(sd_journal* journal, const char* field, const void** data, size_t* length)
+{
+    if (!ensureLoaded())
+        return -1;
+    return g_journal_get_data(journal, field, data, length);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+int LibSystemd::journalGetRealtimeUsec(sd_journal* journal, uint64_t* usec)
+{
+    if (!ensureLoaded())
+        return -1;
+    return g_journal_get_realtime_usec(journal, usec);
 }

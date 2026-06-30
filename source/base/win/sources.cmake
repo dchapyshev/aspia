@@ -25,8 +25,6 @@ collect_sources(SOURCE_BASE_WIN
     device.h
     device_enumerator.cc
     device_enumerator.h
-    event_enumerator.cc
-    event_enumerator.h
     file_version_info.cc
     file_version_info.h
     message_window.cc

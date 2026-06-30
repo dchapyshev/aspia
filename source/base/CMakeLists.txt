@@ -35,6 +35,8 @@ list(APPEND SOURCE_BASE
     debug.h
     edid.cc
     edid.h
+    event_enumerator.cc
+    event_enumerator.h
     gui_application.cc
     gui_application.h
     license_reader.cc
@@ -86,6 +88,8 @@ if (WIN32)
     list(APPEND SOURCE_BASE
         core_service.h
         core_service_win.cc
+        event_enumerator_win.cc
+        event_enumerator_win.h
         service_controller_win.cc
         service_controller_win.h
         sys_info_win.cc)
@@ -95,6 +99,8 @@ if (LINUX)
     list(APPEND SOURCE_BASE
         core_service.h
         core_service_posix.cc
+        event_enumerator_linux.cc
+        event_enumerator_linux.h
         service_controller_systemd.cc
         service_controller_systemd.h
         sys_info_linux.cc)

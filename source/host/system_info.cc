@@ -24,6 +24,7 @@
 #include <thread>
 
 #include "base/applications_reader.h"
+#include "base/event_enumerator.h"
 #include "base/license_reader.h"
 #include "base/logging.h"
 #include "base/smbios_parser.h"
@@ -38,7 +39,6 @@
 #include "base/net/open_files_enumerator.h"
 #include "base/win/battery_enumerator.h"
 #include "base/win/device_enumerator.h"
-#include "base/win/event_enumerator.h"
 #include "base/win/power_info.h"
 #include "base/win/printer_enumerator.h"
 #include "base/win/net_share_enumerator.h"
@@ -806,7 +806,6 @@ void fillDrives(proto::system_info::SystemInfo* system_info)
     }
 }
 
-#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillEventLogs(proto::system_info::SystemInfo* system_info,
                    const proto::system_info::EventLogsData& data)
@@ -830,15 +829,18 @@ void fillEventLogs(proto::system_info::SystemInfo* system_info,
             return;
     }
 
-    EventEnumerator enumerator(log_name, data.record_start(), data.record_count());
+    std::unique_ptr<EventEnumerator> enumerator =
+        EventEnumerator::create(log_name, data.record_start(), data.record_count());
+    if (!enumerator)
+        return;
 
     system_info->mutable_event_logs()->set_type(data.type());
-    system_info->mutable_event_logs()->set_total_records(enumerator.count());
+    system_info->mutable_event_logs()->set_total_records(enumerator->count());
 
-    while (!enumerator.isAtEnd())
+    while (!enumerator->isAtEnd())
     {
         proto::system_info::EventLogs::Event::Level level;
-        switch (enumerator.type())
+        switch (enumerator->type())
         {
             case EventEnumerator::Type::ERR:
                 level = proto::system_info::EventLogs::Event::LEVEL_ERROR;
@@ -872,16 +874,15 @@ void fillEventLogs(proto::system_info::SystemInfo* system_info,
             system_info->mutable_event_logs()->add_event();
 
         event->set_level(level);
-        event->set_time(enumerator.time());
-        event->set_category(enumerator.category().toStdString());
-        event->set_event_id(enumerator.eventId());
-        event->set_source(enumerator.source().toStdString());
-        event->set_description(enumerator.description().toStdString());
+        event->set_time(enumerator->time());
+        event->set_category(enumerator->category().toStdString());
+        event->set_event_id(enumerator->eventId());
+        event->set_source(enumerator->source().toStdString());
+        event->set_description(enumerator->description().toStdString());
 
-        enumerator.advance();
+        enumerator->advance();
     }
 }
-#endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
 void fillLicensesInfo(proto::system_info::SystemInfo* system_info)
@@ -1051,12 +1052,10 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
     {
         fillEnvironmentVariables(system_info);
     }
-#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_EventLogs)
     {
         fillEventLogs(system_info, request.event_logs_data());
     }
-#endif // defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_NetworkAdapters)
     {
         fillNetworkAdapters(system_info);

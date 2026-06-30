@@ -16,53 +16,43 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_WIN_EVENT_ENUMERATOR_H
-#define BASE_WIN_EVENT_ENUMERATOR_H
+#ifndef BASE_EVENT_ENUMERATOR_H
+#define BASE_EVENT_ENUMERATOR_H
 
-#include <QByteArray>
 #include <QObject>
 #include <QString>
 
-#include "base/win/scoped_object.h"
+#include <memory>
 
 class EventEnumerator
 {
     Q_GADGET
 
 public:
-    EventEnumerator(const QString& log_name, quint32 start, quint32 count);
-    ~EventEnumerator();
-
-    quint32 count() const;
-    bool isAtEnd() const;
-    void advance();
+    virtual ~EventEnumerator() = default;
 
     enum class Type { UNKNOWN, ERR, WARN, INFO, AUDIT_SUCCESS, AUDIT_FAILURE, SUCCESS };
     Q_ENUM(Type)
 
-    Type type() const;
-    qint64 time() const;
-    QString category() const;
-    quint32 eventId() const;
-    QString source() const;
-    QString description() const;
+    static std::unique_ptr<EventEnumerator> create(
+        const QString& log_name, quint32 start, quint32 count);
+
+    virtual quint32 count() const = 0;
+    virtual bool isAtEnd() const = 0;
+    virtual void advance() = 0;
+
+    virtual Type type() const = 0;
+    virtual qint64 time() const = 0;
+    virtual QString category() const = 0;
+    virtual quint32 eventId() const = 0;
+    virtual QString source() const = 0;
+    virtual QString description() const = 0;
+
+protected:
+    EventEnumerator() = default;
 
 private:
-    bool fetchNext() const;
-    bool renderSystem() const;
-    QString eventDataString() const;
-
-    QString log_name_;
-    ScopedEvtHandle query_;
-    ScopedEvtHandle render_context_;
-    quint32 records_count_ = 0;
-
-    mutable int remaining_ = 0;
-    mutable bool event_ready_ = false;
-    mutable ScopedEvtHandle event_;
-    mutable QByteArray values_buffer_;
-
     Q_DISABLE_COPY_MOVE(EventEnumerator)
 };
 
-#endif // BASE_WIN_EVENT_ENUMERATOR_H
+#endif // BASE_EVENT_ENUMERATOR_H

@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/win/event_enumerator.h"
+#include "base/event_enumerator_win.h"
 
 #include <QStringList>
 
@@ -103,7 +103,7 @@ QString formatEventMessage(EVT_HANDLE metadata, EVT_HANDLE event, EVT_FORMAT_MES
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-EventEnumerator::EventEnumerator(const QString& log_name, quint32 start, quint32 count)
+EventEnumeratorWin::EventEnumeratorWin(const QString& log_name, quint32 start, quint32 count)
     : log_name_(log_name)
 {
     if (!count)
@@ -142,16 +142,16 @@ EventEnumerator::EventEnumerator(const QString& log_name, quint32 start, quint32
 }
 
 //--------------------------------------------------------------------------------------------------
-EventEnumerator::~EventEnumerator() = default;
+EventEnumeratorWin::~EventEnumeratorWin() = default;
 
 //--------------------------------------------------------------------------------------------------
-quint32 EventEnumerator::count() const
+quint32 EventEnumeratorWin::count() const
 {
     return records_count_;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool EventEnumerator::isAtEnd() const
+bool EventEnumeratorWin::isAtEnd() const
 {
     if (!query_.isValid())
         return true;
@@ -163,7 +163,7 @@ bool EventEnumerator::isAtEnd() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void EventEnumerator::advance()
+void EventEnumeratorWin::advance()
 {
     event_.reset();
     event_ready_ = false;
@@ -171,7 +171,7 @@ void EventEnumerator::advance()
 }
 
 //--------------------------------------------------------------------------------------------------
-EventEnumerator::Type EventEnumerator::type() const
+EventEnumerator::Type EventEnumeratorWin::type() const
 {
     EVT_VARIANT* values = systemValues(values_buffer_);
 
@@ -199,7 +199,7 @@ EventEnumerator::Type EventEnumerator::type() const
 }
 
 //--------------------------------------------------------------------------------------------------
-qint64 EventEnumerator::time() const
+qint64 EventEnumeratorWin::time() const
 {
     EVT_VARIANT* values = systemValues(values_buffer_);
     if (!hasValue(values[EvtSystemTimeCreated]))
@@ -215,7 +215,7 @@ qint64 EventEnumerator::time() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString EventEnumerator::category() const
+QString EventEnumeratorWin::category() const
 {
     EVT_VARIANT* values = systemValues(values_buffer_);
     quint16 task = hasValue(values[EvtSystemTask]) ? values[EvtSystemTask].UInt16Val : 0;
@@ -223,7 +223,7 @@ QString EventEnumerator::category() const
 }
 
 //--------------------------------------------------------------------------------------------------
-quint32 EventEnumerator::eventId() const
+quint32 EventEnumeratorWin::eventId() const
 {
     EVT_VARIANT* values = systemValues(values_buffer_);
     if (!hasValue(values[EvtSystemEventID]))
@@ -233,7 +233,7 @@ quint32 EventEnumerator::eventId() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString EventEnumerator::source() const
+QString EventEnumeratorWin::source() const
 {
     EVT_VARIANT* values = systemValues(values_buffer_);
     if (!hasValue(values[EvtSystemProviderName]) || !values[EvtSystemProviderName].StringVal)
@@ -243,7 +243,7 @@ QString EventEnumerator::source() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString EventEnumerator::description() const
+QString EventEnumeratorWin::description() const
 {
     if (!event_ready_)
         return QString();
@@ -263,7 +263,7 @@ QString EventEnumerator::description() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool EventEnumerator::fetchNext() const
+bool EventEnumeratorWin::fetchNext() const
 {
     if (remaining_ <= 0)
         return false;
@@ -293,7 +293,7 @@ bool EventEnumerator::fetchNext() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool EventEnumerator::renderSystem() const
+bool EventEnumeratorWin::renderSystem() const
 {
     DWORD buffer_used = 0;
     DWORD property_count = 0;
@@ -317,7 +317,7 @@ bool EventEnumerator::renderSystem() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString EventEnumerator::eventDataString() const
+QString EventEnumeratorWin::eventDataString() const
 {
     ScopedEvtHandle context(EvtCreateRenderContext(0, nullptr, EvtRenderContextUser));
     if (!context.isValid())
