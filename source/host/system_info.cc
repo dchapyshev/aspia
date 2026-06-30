@@ -30,6 +30,7 @@
 #include "base/sys_info.h"
 #include "base/net/net_utils.h"
 #include "common/system_info_constants.h"
+#include "host/process_monitor.h"
 #include "proto/system_info.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -41,7 +42,6 @@
 #include "base/win/power_info.h"
 #include "base/win/printer_enumerator.h"
 #include "base/win/net_share_enumerator.h"
-#include "host/win/process_monitor.h"
 #endif // defined(Q_OS_WINDOWS)
 
 namespace {
@@ -948,16 +948,17 @@ void fillLocalUserGroupsInfo(proto::system_info::SystemInfo* system_info)
     }
 }
 
-#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillProcessesInfo(proto::system_info::SystemInfo* system_info)
 {
-    ProcessMonitor process_monitor;
+    std::unique_ptr<ProcessMonitor> process_monitor = ProcessMonitor::create();
+    if (!process_monitor)
+        return;
 
-    process_monitor.processes(true);
+    process_monitor->processes(true);
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
-    ProcessMonitor::ProcessMap map = process_monitor.processes(false);
+    ProcessMonitor::ProcessMap map = process_monitor->processes(false);
     for (auto it = map.cbegin(), it_end = map.cend(); it != it_end; ++it)
     {
         proto::system_info::Processes::Process* process_item =
@@ -973,7 +974,6 @@ void fillProcessesInfo(proto::system_info::SystemInfo* system_info)
         process_item->set_memory(process.mem_private_working_set);
     }
 }
-#endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
 void fillSummaryInfo(proto::system_info::SystemInfo* system_info)
@@ -1099,12 +1099,10 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
     {
         fillLocalUserGroupsInfo(system_info);
     }
-#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_Processes)
     {
         fillProcessesInfo(system_info);
     }
-#endif // defined(Q_OS_WINDOWS)
     else
     {
         LOG(ERROR) << "Unknown system info category:" << category;

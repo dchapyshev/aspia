@@ -25,9 +25,12 @@
 #include <memory>
 
 #include "base/logging.h"
+#include "base/session_id.h"
 #include "base/system_error.h"
 #include "base/win/registry.h"
 #include "base/win/scoped_object.h"
+#include "base/win/scoped_wts_memory.h"
+#include "base/win/session_info.h"
 #include "base/win/windows_version.h"
 
 namespace {
@@ -676,4 +679,91 @@ QList<SysInfo::Service> SysInfo::services()
 QList<SysInfo::Service> SysInfo::drivers()
 {
     return enumerateServices(SERVICE_DRIVER);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::Session> SysInfo::sessions()
+{
+    QList<Session> result;
+
+    DWORD level = 1;
+    ScopedWtsMemory<WTS_SESSION_INFO_1W> info;
+    DWORD count = 0;
+
+    if (!WTSEnumerateSessionsExW(WTS_CURRENT_SERVER_HANDLE, &level, 0, info.receive(), &count))
+    {
+        PLOG(ERROR) << "WTSEnumerateSessionsExW failed";
+        return result;
+    }
+
+    for (DWORD i = 0; i < count; ++i)
+    {
+        SessionId session_id = info[i]->SessionId;
+        if (session_id == kServiceSessionId) // Don't add the system session.
+            continue;
+
+        SessionInfo session_info(session_id);
+        if (!session_info.isValid())
+            continue;
+
+        Session session;
+        session.id           = session_id;
+        session.user_name    = session_info.userName();
+        session.domain_name  = session_info.domain();
+        session.session_name = session_info.winStationName();
+        session.client_name  = session_info.clientName();
+        session.locked       = session_info.isUserLocked();
+
+        switch (session_info.connectState())
+        {
+            case SessionInfo::ConnectState::ACTIVE:
+                session.connect_state = Session::ConnectState::ACTIVE;
+                break;
+
+            case SessionInfo::ConnectState::CONNECTED:
+                session.connect_state = Session::ConnectState::CONNECTED;
+                break;
+
+            case SessionInfo::ConnectState::CONNECT_QUERY:
+                session.connect_state = Session::ConnectState::CONNECT_QUERY;
+                break;
+
+            case SessionInfo::ConnectState::SHADOW:
+                session.connect_state = Session::ConnectState::SHADOW;
+                break;
+
+            case SessionInfo::ConnectState::DISCONNECTED:
+                session.connect_state = Session::ConnectState::DISCONNECTED;
+                break;
+
+            case SessionInfo::ConnectState::IDLE:
+                session.connect_state = Session::ConnectState::IDLE;
+                break;
+
+            case SessionInfo::ConnectState::LISTEN:
+                session.connect_state = Session::ConnectState::LISTEN;
+                break;
+
+            case SessionInfo::ConnectState::RESET:
+                session.connect_state = Session::ConnectState::RESET;
+                break;
+
+            case SessionInfo::ConnectState::DOWN:
+                session.connect_state = Session::ConnectState::DOWN;
+                break;
+
+            case SessionInfo::ConnectState::INIT:
+                session.connect_state = Session::ConnectState::INIT;
+                break;
+
+            default:
+                session.connect_state = Session::ConnectState::UNKNOWN;
+                break;
+        }
+
+        result.append(std::move(session));
+    }
+
+    return result;
 }

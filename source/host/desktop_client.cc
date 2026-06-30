@@ -27,9 +27,12 @@
 #include "base/numeric_utils.h"
 #include "base/process_util.h"
 #include "base/serialization.h"
+#include "base/session_id.h"
+#include "base/sys_info.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
 #include "host/desktop_manager.h"
+#include "host/task_manager.h"
 #include "proto/desktop_channel.h"
 #include "proto/desktop_power.h"
 #include "proto/desktop_video.h"
@@ -37,11 +40,8 @@
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/safe_mode_util.h"
-#include "base/win/session_enumerator.h"
-#include "base/win/session_info.h"
 #include "host/host_storage.h"
 #include "host/service.h"
-#include "host/win/task_manager.h"
 #endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
@@ -413,21 +413,15 @@ void DesktopClient::sendSessionList()
     session_list->set_current_session_id(current_session_id);
     session_list->set_console_session_id(console_session_id);
 
-    for (SessionEnumerator it; !it.isAtEnd(); it.advance())
+    const QList<SysInfo::Session> sessions = SysInfo::sessions();
+    for (const SysInfo::Session& session_info : sessions)
     {
-        if (it.sessionId() == kServiceSessionId) // Don't add system session.
-            continue;
-
-        SessionInfo session_info(it.sessionId());
-        if (!session_info.isValid())
-            continue;
-
         proto::control::Session* session = session_list->add_session();
-        session->set_session_id(session_info.sessionId());
-        session->set_user_name(session_info.userName().toStdString());
-        session->set_domain_name(session_info.domain().toStdString());
-        session->set_is_locked(session_info.isUserLocked());
-        session->set_is_active(session_info.connectState() == SessionInfo::ConnectState::ACTIVE);
+        session->set_session_id(session_info.id);
+        session->set_user_name(session_info.user_name.toStdString());
+        session->set_domain_name(session_info.domain_name.toStdString());
+        session->set_is_locked(session_info.locked);
+        session->set_is_active(session_info.connect_state == SysInfo::Session::ConnectState::ACTIVE);
     }
 
     CLOG(INFO) << "Send:" << *session_list;
@@ -522,7 +516,6 @@ void DesktopClient::readPowerControl(const proto::power::Control& control)
 //--------------------------------------------------------------------------------------------------
 void DesktopClient::readTaskManager(const proto::task_manager::ClientToHost& message)
 {
-#if defined(Q_OS_WINDOWS)
     if (!task_manager_)
     {
         task_manager_ = new TaskManager(this);
@@ -530,5 +523,4 @@ void DesktopClient::readTaskManager(const proto::task_manager::ClientToHost& mes
                 this, &DesktopClient::onTaskManagerMessage);
     }
     task_manager_->readMessage(message);
-#endif // defined(Q_OS_WINDOWS)
 }

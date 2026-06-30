@@ -432,6 +432,7 @@ void DesktopAgentClient::sendCapabilities()
     add_flag(kFlagFileClipboard, true);
 #elif defined(Q_OS_LINUX)
     add_flag(kFlagOSLinux, true);
+    add_flag(kFlagTaskManager, true);
 #elif defined(Q_OS_MACOS)
     add_flag(kFlagOSMacOS, true);
 #else

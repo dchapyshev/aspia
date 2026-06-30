@@ -16,20 +16,28 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/win/task_manager.h"
+#include "host/task_manager.h"
+
+#if defined(Q_OS_WINDOWS)
+#include <qt_windows.h>
+
+#include <WtsApi32.h>
+#elif defined(Q_OS_LINUX)
+#include <QDBusConnection>
+#include <QDBusMessage>
+#endif
 
 #include "base/logging.h"
 #include "base/service_controller.h"
+#include "base/session_id.h"
 #include "base/sys_info.h"
-#include "base/win/session_enumerator.h"
-#include "base/win/session_info.h"
-#include "host/win/process_monitor.h"
+#include "host/process_monitor.h"
 #include "proto/task_manager.h"
 
 //--------------------------------------------------------------------------------------------------
 TaskManager::TaskManager(QObject* parent)
     : QObject(parent),
-      process_monitor_(std::make_unique<ProcessMonitor>())
+      process_monitor_(ProcessMonitor::create())
 {
     LOG(INFO) << "Ctor";
 }
@@ -129,25 +137,46 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
             return;
         }
 
+        SessionId session_id = message.user_request().session_id();
+
         switch (message.user_request().command())
         {
             case proto::task_manager::UserRequest::COMMAND_DISCONNECT:
             {
-                if (!WTSDisconnectSession(WTS_CURRENT_SERVER_HANDLE, message.user_request().session_id(), FALSE))
+#if defined(Q_OS_WINDOWS)
+                if (!WTSDisconnectSession(WTS_CURRENT_SERVER_HANDLE, session_id, FALSE))
                 {
-                    PLOG(ERROR) << "WTSLogoffSession failed";
+                    PLOG(ERROR) << "WTSDisconnectSession failed";
                     return;
                 }
+#else
+                LOG(ERROR) << "Disconnecting a session is not supported on this platform";
+                return;
+#endif
             }
             break;
 
             case proto::task_manager::UserRequest::COMMAND_LOGOFF:
             {
-                if (!WTSLogoffSession(WTS_CURRENT_SERVER_HANDLE, message.user_request().session_id(), FALSE))
+#if defined(Q_OS_WINDOWS)
+                if (!WTSLogoffSession(WTS_CURRENT_SERVER_HANDLE, session_id, FALSE))
                 {
                     PLOG(ERROR) << "WTSLogoffSession failed";
                     return;
                 }
+#elif defined(Q_OS_LINUX)
+                QDBusMessage call = QDBusMessage::createMethodCall(
+                    "org.freedesktop.login1", "/org/freedesktop/login1",
+                    "org.freedesktop.login1.Manager", "TerminateSession");
+                call << QString::number(static_cast<qint64>(session_id));
+
+                const QDBusMessage reply = QDBusConnection::systemBus().call(call);
+                if (reply.type() == QDBusMessage::ErrorMessage)
+                {
+                    LOG(ERROR) << "TerminateSession failed:" << reply.errorMessage();
+                    return;
+                }
+#endif
             }
             break;
 
@@ -295,62 +324,55 @@ void TaskManager::sendUserList()
     proto::task_manager::HostToClient message;
     proto::task_manager::UserList* user_list = message.mutable_user_list();
 
-    for (SessionEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    const QList<SysInfo::Session> sessions = SysInfo::sessions();
+    for (const SysInfo::Session& session : sessions)
     {
-        // Skip services.
-        if (enumerator.sessionId() == kServiceSessionId)
-            continue;
-
-        SessionInfo session_info(enumerator.sessionId());
-        if (!session_info.isValid())
-            continue;
-
         proto::task_manager::User* item = user_list->add_user();
 
-        item->set_user_name(enumerator.userName().toStdString());
-        item->set_session_id(enumerator.sessionId());
-        item->set_session_name(enumerator.sessionName().toStdString());
-        item->set_client_name(session_info.clientName().toStdString());
+        item->set_user_name(session.user_name.toStdString());
+        item->set_session_id(session.id);
+        item->set_session_name(session.session_name.toStdString());
+        item->set_client_name(session.client_name.toStdString());
 
-        switch (session_info.connectState())
+        switch (session.connect_state)
         {
-            case SessionInfo::ConnectState::ACTIVE:
+            case SysInfo::Session::ConnectState::ACTIVE:
                 item->set_connect_state(proto::task_manager::User::CONNECT_STATE_ACTIVE);
                 break;
 
-            case SessionInfo::ConnectState::CONNECTED:
+            case SysInfo::Session::ConnectState::CONNECTED:
                 item->set_connect_state(proto::task_manager::User::CONNECT_STATE_CONNECTED);
                 break;
 
-            case SessionInfo::ConnectState::CONNECT_QUERY:
+            case SysInfo::Session::ConnectState::CONNECT_QUERY:
                 item->set_connect_state(proto::task_manager::User::CONNECT_STATE_CONNECT_QUERY);
                 break;
 
-            case SessionInfo::ConnectState::SHADOW:
+            case SysInfo::Session::ConnectState::SHADOW:
                 item->set_connect_state(proto::task_manager::User::CONNECT_STATE_SHADOW);
                 break;
 
-            case SessionInfo::ConnectState::DISCONNECTED:
+            case SysInfo::Session::ConnectState::DISCONNECTED:
                 item->set_connect_state(proto::task_manager::User::CONNECT_STATE_DISCONNECTED);
                 break;
 
-            case SessionInfo::ConnectState::IDLE:
+            case SysInfo::Session::ConnectState::IDLE:
                 item->set_connect_state(proto::task_manager::User::CONNECT_STATE_IDLE);
                 break;
 
-            case SessionInfo::ConnectState::LISTEN:
+            case SysInfo::Session::ConnectState::LISTEN:
                 item->set_connect_state(proto::task_manager::User::CONNECT_STATE_LISTEN);
                 break;
 
-            case SessionInfo::ConnectState::RESET:
+            case SysInfo::Session::ConnectState::RESET:
                 item->set_connect_state(proto::task_manager::User::CONNECT_STATE_RESET);
                 break;
 
-            case SessionInfo::ConnectState::DOWN:
+            case SysInfo::Session::ConnectState::DOWN:
                 item->set_connect_state(proto::task_manager::User::CONNECT_STATE_DOWN);
                 break;
 
-            case SessionInfo::ConnectState::INIT:
+            case SysInfo::Session::ConnectState::INIT:
                 item->set_connect_state(proto::task_manager::User::CONNECT_STATE_INIT);
                 break;
 

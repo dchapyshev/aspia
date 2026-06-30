@@ -53,6 +53,8 @@ list(APPEND SOURCE_HOST_CORE
     host_utils.cc
     host_utils.h
     input_injector.h
+    process_monitor.cc
+    process_monitor.h
     router_manager.cc
     router_manager.h
     screen_capturer.cc
@@ -69,6 +71,8 @@ list(APPEND SOURCE_HOST_CORE
     system_info_client.h
     system_settings.cc
     system_settings.h
+    task_manager.cc
+    task_manager.h
     terminal_agent.cc
     terminal_agent.h
     terminal_agent_main.cc
@@ -93,6 +97,8 @@ if (WIN32)
         host_core.rc
         input_injector_win.cc
         input_injector_win.h
+        process_monitor_win.cc
+        process_monitor_win.h
         screen_capturer_dxgi.cc
         screen_capturer_dxgi.h
         screen_capturer_gdi.cc
@@ -119,6 +125,8 @@ if (LINUX)
         input_injector_wayland.h
         input_injector_x11.cc
         input_injector_x11.h
+        process_monitor_linux.cc
+        process_monitor_linux.h
         screen_capturer_kms.cc
         screen_capturer_kms.h
         screen_capturer_kwin.cc
@@ -141,6 +149,8 @@ if (APPLE)
         desktop_environment_mac.h
         input_injector_mac.mm
         input_injector_mac.h
+        process_monitor_mac.mm
+        process_monitor_mac.h
         screen_capturer_mac.mm
         screen_capturer_mac.h)
 endif()

@@ -16,48 +16,24 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_WIN_PROCESS_MONITOR_H
-#define HOST_WIN_PROCESS_MONITOR_H
+#ifndef HOST_PROCESS_MONITOR_WIN_H
+#define HOST_PROCESS_MONITOR_WIN_H
+
+#include "host/process_monitor.h"
 
 #include <QByteArray>
-#include <QMap>
-#include <QString>
 
-class ProcessMonitor
+class ProcessMonitorWin final : public ProcessMonitor
 {
 public:
-    ProcessMonitor();
-    ~ProcessMonitor();
+    ProcessMonitorWin();
+    ~ProcessMonitorWin() final;
 
-    struct ProcessEntry
-    {
-        bool process_name_changed = false;
-        QString process_name;
-
-        bool user_name_changed = false;
-        QString user_name;
-
-        bool file_path_changed = false;
-        QString file_path;
-
-        qint64 cpu_time = 0;
-        qint32 cpu_ratio = 0;
-        quint32 session_id = 0;
-        qint64 mem_private_working_set = 0;
-        qint64 mem_working_set = 0;
-        qint64 mem_peak_working_set = 0;
-        qint64 mem_working_set_delta = 0;
-        quint32 thread_count = 0;
-    };
-
-    using ProcessId = quint32;
-    using ProcessMap = QMap<ProcessId, ProcessEntry>;
-
-    const ProcessMap& processes(bool reset_cache);
-    int calcCpuUsage();
-    int calcMemoryUsage();
-
-    bool endProcess(ProcessId process_id);
+    // ProcessMonitor implementation.
+    const ProcessMap& processes(bool reset_cache) final;
+    int calcCpuUsage() final;
+    int calcMemoryUsage() final;
+    bool endProcess(ProcessId process_id) final;
 
 private:
     bool updateSnapshot();
@@ -75,7 +51,7 @@ private:
     qint64 prev_cpu_idle_time_[kMaxCpuCount];
     qint64 prev_cpu_total_time_[kMaxCpuCount];
 
-    Q_DISABLE_COPY_MOVE(ProcessMonitor)
+    Q_DISABLE_COPY_MOVE(ProcessMonitorWin)
 };
 
-#endif // HOST_WIN_PROCESS_MONITOR_H
+#endif // HOST_PROCESS_MONITOR_WIN_H

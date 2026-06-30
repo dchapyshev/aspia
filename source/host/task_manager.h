@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_WIN_TASK_MANAGER_H
-#define HOST_WIN_TASK_MANAGER_H
+#ifndef HOST_TASK_MANAGER_H
+#define HOST_TASK_MANAGER_H
 
 #include <QObject>
 
@@ -54,4 +54,4 @@ private:
     Q_DISABLE_COPY_MOVE(TaskManager)
 };
 
-#endif // HOST_WIN_TASK_MANAGER_H
+#endif // HOST_TASK_MANAGER_H

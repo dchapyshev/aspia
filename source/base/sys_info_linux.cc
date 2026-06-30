@@ -175,6 +175,63 @@ void readServiceExecAndUser(const QString& object_path, QString* binary_path, QS
         *start_name = "root";
 }
 
+//--------------------------------------------------------------------------------------------------
+SysInfo::Session::ConnectState sessionStateFromString(const QString& state)
+{
+    if (state == "active")
+        return SysInfo::Session::ConnectState::ACTIVE;
+    if (state == "online")
+        return SysInfo::Session::ConnectState::CONNECTED;
+    if (state == "closing")
+        return SysInfo::Session::ConnectState::DISCONNECTED;
+
+    return SysInfo::Session::ConnectState::UNKNOWN;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Fills the per-session details from a logind session object via the D-Bus interface.
+void readSessionProperties(const QString& object_path, SysInfo::Session* session)
+{
+    QDBusMessage call = QDBusMessage::createMethodCall(
+        "org.freedesktop.login1", object_path,
+        "org.freedesktop.DBus.Properties", "GetAll");
+    call << QString("org.freedesktop.login1.Session");
+
+    const QDBusMessage reply = QDBusConnection::systemBus().call(call);
+    if (reply.type() != QDBusMessage::ReplyMessage || reply.arguments().isEmpty())
+        return;
+
+    QString tty;
+    QString display;
+
+    const QDBusArgument arg = reply.arguments().constFirst().value<QDBusArgument>();
+    arg.beginMap();
+    while (!arg.atEnd())
+    {
+        QString key;
+        QDBusVariant value;
+
+        arg.beginMapEntry();
+        arg >> key >> value;
+        arg.endMapEntry();
+
+        if (key == "State")
+            session->connect_state = sessionStateFromString(value.variant().toString());
+        else if (key == "LockedHint")
+            session->locked = value.variant().toBool();
+        else if (key == "RemoteHost")
+            session->client_name = value.variant().toString();
+        else if (key == "TTY")
+            tty = value.variant().toString();
+        else if (key == "Display")
+            display = value.variant().toString();
+    }
+    arg.endMap();
+
+    // Prefer the TTY (text/remote sessions); fall back to the X11/Wayland display.
+    session->session_name = !tty.isEmpty() ? tty : display;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -650,4 +707,46 @@ QList<SysInfo::Service> SysInfo::drivers()
 {
     // systemd has no Windows-style kernel drivers.
     return QList<Service>();
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::Session> SysInfo::sessions()
+{
+    QList<Session> result;
+
+    QDBusMessage call = QDBusMessage::createMethodCall(
+        "org.freedesktop.login1", "/org/freedesktop/login1",
+        "org.freedesktop.login1.Manager", "ListSessions");
+
+    const QDBusMessage reply = QDBusConnection::systemBus().call(call);
+    if (reply.type() != QDBusMessage::ReplyMessage || reply.arguments().isEmpty())
+        return result;
+
+    // ListSessions returns a(susso): session id, user id, user name, seat id, object path.
+    const QDBusArgument arg = reply.arguments().constFirst().value<QDBusArgument>();
+    arg.beginArray();
+    while (!arg.atEnd())
+    {
+        QString session_id;
+        quint32 user_id = 0;
+        QString user_name;
+        QString seat_id;
+        QDBusObjectPath object_path;
+
+        arg.beginStructure();
+        arg >> session_id >> user_id >> user_name >> seat_id >> object_path;
+        arg.endStructure();
+
+        Session session;
+        session.id = session_id.toUInt();
+        session.user_name = user_name;
+
+        readSessionProperties(object_path.path(), &session);
+
+        result.append(std::move(session));
+    }
+    arg.endArray();
+
+    return result;
 }

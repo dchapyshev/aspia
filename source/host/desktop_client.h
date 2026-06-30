@@ -96,9 +96,7 @@ private:
 
     bool force_reliable_ = false;
 
-#if defined(Q_OS_WINDOWS)
     TaskManager* task_manager_ = nullptr;
-#endif // defined(Q_OS_WINDOWS)
 
     Q_DISABLE_COPY_MOVE(DesktopClient)
 };

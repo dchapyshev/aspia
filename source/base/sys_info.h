@@ -75,6 +75,32 @@ public:
         QString start_name;
     };
 
+    struct Session
+    {
+        enum class ConnectState
+        {
+            UNKNOWN       = 0,
+            ACTIVE        = 1,
+            CONNECTED     = 2,
+            CONNECT_QUERY = 3,
+            SHADOW        = 4,
+            DISCONNECTED  = 5,
+            IDLE          = 6,
+            LISTEN        = 7,
+            RESET         = 8,
+            DOWN          = 9,
+            INIT          = 10
+        };
+
+        quint32 id = 0;
+        QString user_name;
+        QString domain_name;
+        QString session_name;
+        QString client_name;
+        ConnectState connect_state = ConnectState::UNKNOWN;
+        bool locked = false;
+    };
+
     static QString operatingSystemName();
     static QString operatingSystemVersion();
     static QString operatingSystemArchitecture();
@@ -101,6 +127,8 @@ public:
 
     static QList<Service> services();
     static QList<Service> drivers();
+
+    static QList<Session> sessions();
 
 private:
     Q_DISABLE_COPY_MOVE(SysInfo)

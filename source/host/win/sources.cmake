@@ -35,13 +35,9 @@ collect_sources(SOURCE_HOST_CORE_WIN
     dxgi_texture_mapping.h
     dxgi_texture_staging.cc
     dxgi_texture_staging.h
-    process_monitor.cc
-    process_monitor.h
     screen_capture_utils.cc
     screen_capture_utils.h
     swdevice_defines.h
-    task_manager.cc
-    task_manager.h
     touch_injector.cc
     touch_injector.h
     touch_injector_defines.h

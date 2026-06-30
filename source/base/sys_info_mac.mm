@@ -183,3 +183,11 @@ QList<SysInfo::Service> SysInfo::drivers()
     NOTIMPLEMENTED();
     return QList<Service>();
 }
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::Session> SysInfo::sessions()
+{
+    NOTIMPLEMENTED();
+    return QList<Session>();
+}

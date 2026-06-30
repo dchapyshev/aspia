@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/win/process_monitor.h"
+#include "host/process_monitor_win.h"
 
 #include <QSet>
 
@@ -289,7 +289,7 @@ void updateProcess(ProcessMonitor::ProcessEntry* entry, const OWN_SYSTEM_PROCESS
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-ProcessMonitor::ProcessMonitor()
+ProcessMonitorWin::ProcessMonitorWin()
 {
     LOG(INFO) << "Ctor";
 
@@ -351,7 +351,7 @@ ProcessMonitor::ProcessMonitor()
 }
 
 //--------------------------------------------------------------------------------------------------
-ProcessMonitor::~ProcessMonitor()
+ProcessMonitorWin::~ProcessMonitorWin()
 {
     LOG(INFO) << "Dtor";
 
@@ -360,7 +360,7 @@ ProcessMonitor::~ProcessMonitor()
 }
 
 //--------------------------------------------------------------------------------------------------
-const ProcessMonitor::ProcessMap& ProcessMonitor::processes(bool reset_cache)
+const ProcessMonitor::ProcessMap& ProcessMonitorWin::processes(bool reset_cache)
 {
     if (reset_cache)
         table_.clear();
@@ -375,7 +375,7 @@ const ProcessMonitor::ProcessMap& ProcessMonitor::processes(bool reset_cache)
 }
 
 //--------------------------------------------------------------------------------------------------
-int ProcessMonitor::calcCpuUsage()
+int ProcessMonitorWin::calcCpuUsage()
 {
     NtQuerySystemInformationFunc nt_query_system_information_func =
         reinterpret_cast<NtQuerySystemInformationFunc>(nt_query_system_info_func_);
@@ -429,7 +429,7 @@ int ProcessMonitor::calcCpuUsage()
 }
 
 //--------------------------------------------------------------------------------------------------
-int ProcessMonitor::calcMemoryUsage()
+int ProcessMonitorWin::calcMemoryUsage()
 {
     MEMORYSTATUSEX status;
     status.dwLength = sizeof(status);
@@ -444,7 +444,7 @@ int ProcessMonitor::calcMemoryUsage()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ProcessMonitor::endProcess(ProcessId process_id)
+bool ProcessMonitorWin::endProcess(ProcessId process_id)
 {
     auto result = table_.find(process_id);
     if (result == table_.end())
@@ -484,7 +484,7 @@ bool ProcessMonitor::endProcess(ProcessId process_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ProcessMonitor::updateSnapshot()
+bool ProcessMonitorWin::updateSnapshot()
 {
     while (true)
     {
@@ -511,7 +511,7 @@ bool ProcessMonitor::updateSnapshot()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ProcessMonitor::updateTable()
+void ProcessMonitorWin::updateTable()
 {
     OWN_SYSTEM_PROCESS_INFORMATION* current;
     qint64 last_total_time = 0;
