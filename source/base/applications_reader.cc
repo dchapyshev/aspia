@@ -18,6 +18,9 @@
 
 #include "base/applications_reader.h"
 
+#include <QFile>
+#include <QProcess>
+
 #include "base/logging.h"
 #include "proto/system_info.h"
 
@@ -32,8 +35,6 @@ const char kUninstallKeyPath[] = "Software\\Microsoft\\Windows\\CurrentVersion\\
 const char kDisplayName[] = "DisplayName";
 const char kDisplayVersion[] = "DisplayVersion";
 const char kPublisher[] = "Publisher";
-const char kInstallDate[] = "InstallDate";
-const char kInstallLocation[] = "InstallLocation";
 const char kSystemComponent[] = "SystemComponent";
 const char kParentKeyName[] = "ParentKeyName";
 
@@ -80,17 +81,109 @@ bool addApplication(
     if (status == ERROR_SUCCESS)
         item->set_publisher(value.toStdString());
 
-    status = key.readValue(kInstallDate, &value);
-    if (status == ERROR_SUCCESS)
-        item->set_install_date(value.toStdString());
-
-    status = key.readValue(kInstallLocation, &value);
-    if (status == ERROR_SUCCESS)
-        item->set_install_location(value.toStdString());
-
     return true;
 }
 #endif // defined(Q_OS_WINDOWS)
+
+#if defined(Q_OS_LINUX)
+//--------------------------------------------------------------------------------------------------
+// Reads installed packages from the dpkg database (Debian/Ubuntu). Returns false if the database is
+// absent (not a dpkg-based system).
+bool readDpkgPackages(proto::system_info::Applications* applications)
+{
+    QFile file("/var/lib/dpkg/status");
+    if (!file.open(QIODevice::ReadOnly))
+        return false;
+
+    QByteArray name;
+    QByteArray version;
+    QByteArray maintainer;
+    bool installed = false;
+
+    auto flush = [&]()
+    {
+        if (installed && !name.isEmpty())
+        {
+            proto::system_info::Applications::Application* item = applications->add_application();
+            item->set_name(name.toStdString());
+            if (!version.isEmpty())
+                item->set_version(version.toStdString());
+            if (!maintainer.isEmpty())
+                item->set_publisher(maintainer.toStdString());
+        }
+
+        name.clear();
+        version.clear();
+        maintainer.clear();
+        installed = false;
+    };
+
+    // The status file is a sequence of stanzas separated by blank lines; one stanza per package.
+    QByteArray line;
+    while (!(line = file.readLine()).isEmpty())
+    {
+        if (line.trimmed().isEmpty())
+        {
+            flush();
+            continue;
+        }
+
+        // Continuation lines of multi-line fields (Description) start with whitespace.
+        if (line.at(0) == ' ' || line.at(0) == '\t')
+            continue;
+
+        int colon = line.indexOf(':');
+        if (colon < 0)
+            continue;
+
+        const QByteArray key = line.left(colon).trimmed();
+        const QByteArray value = line.mid(colon + 1).trimmed();
+
+        if (key == "Package")
+            name = value;
+        else if (key == "Version")
+            version = value;
+        else if (key == "Maintainer")
+            maintainer = value;
+        else if (key == "Status")
+            installed = value.contains("installed"); // e.g. "install ok installed".
+    }
+
+    flush();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Reads installed packages from the rpm database (RedHat/Fedora/SUSE) via the rpm tool.
+void readRpmPackages(proto::system_info::Applications* applications)
+{
+    QProcess process;
+    process.start("rpm", QStringList()
+        << "-qa" << "--qf" << "%{NAME}\\t%{VERSION}-%{RELEASE}\\t%{VENDOR}\\n");
+    if (!process.waitForStarted() || !process.waitForFinished())
+        return;
+
+    const QList<QByteArray> lines = process.readAllStandardOutput().split('\n');
+    for (const QByteArray& line : lines)
+    {
+        if (line.isEmpty())
+            continue;
+
+        const QList<QByteArray> parts = line.split('\t');
+        if (parts.isEmpty() || parts.at(0).isEmpty())
+            continue;
+
+        proto::system_info::Applications::Application* item = applications->add_application();
+        item->set_name(parts.at(0).toStdString());
+
+        if (parts.size() > 1 && !parts.at(1).isEmpty())
+            item->set_version(parts.at(1).toStdString());
+
+        if (parts.size() > 2 && !parts.at(2).isEmpty() && parts.at(2) != "(none)")
+            item->set_publisher(parts.at(2).toStdString());
+    }
+}
+#endif // defined(Q_OS_LINUX)
 
 } // namespace
 
@@ -149,6 +242,9 @@ void readApplicationsInformation(proto::system_info::Applications* applications)
 #else
 #error Unknown Architecture
 #endif
+#elif defined(Q_OS_LINUX)
+    if (!readDpkgPackages(applications))
+        readRpmPackages(applications);
 #else
     Q_UNUSED(applications)
     NOTIMPLEMENTED();

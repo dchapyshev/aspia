@@ -28,13 +28,13 @@
 #include "base/logging.h"
 #include "base/smbios_parser.h"
 #include "base/sys_info.h"
+#include "base/net/net_utils.h"
 #include "common/system_info_constants.h"
 #include "proto/system_info.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/net/adapter_enumerator.h"
 #include "base/net/connect_enumerator.h"
-#include "base/net/net_utils.h"
 #include "base/net/open_files_enumerator.h"
 #include "base/win/battery_enumerator.h"
 #include "base/win/device_enumerator.h"
@@ -43,7 +43,6 @@
 #include "base/win/printer_enumerator.h"
 #include "base/win/net_share_enumerator.h"
 #include "base/win/service_enumerator.h"
-#include "base/win/user_enumerator.h"
 #include "host/win/process_monitor.h"
 #endif // defined(Q_OS_WINDOWS)
 
@@ -538,7 +537,6 @@ void fillConnection(proto::system_info::SystemInfo* system_info)
 }
 #endif // defined(Q_OS_WINDOWS)
 
-#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillRoutes(proto::system_info::SystemInfo* system_info)
 {
@@ -553,7 +551,6 @@ void fillRoutes(proto::system_info::SystemInfo* system_info)
         route->set_metric(entry.metric);
     }
 }
-#endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
 void fillEnvironmentVariables(proto::system_info::SystemInfo* system_info)
@@ -936,56 +933,41 @@ void fillOpenFilesInfo(proto::system_info::SystemInfo* system_info)
 }
 #endif // defined(Q_OS_WINDOWS)
 
-#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillLocalUsersInfo(proto::system_info::SystemInfo* system_info)
 {
-    for (UserEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    const QList<SysInfo::User> users = SysInfo::users();
+    for (const SysInfo::User& user : users)
     {
         proto::system_info::LocalUsers::LocalUser* local_user =
             system_info->mutable_local_users()->add_local_user();
 
-        local_user->set_name(enumerator.name().toStdString());
-        local_user->set_full_name(enumerator.fullName().toStdString());
-        local_user->set_comment(enumerator.comment().toStdString());
-        local_user->set_home_dir(enumerator.homeDir().toStdString());
+        local_user->set_name(user.name.toStdString());
+        local_user->set_full_name(user.full_name.toStdString());
+        local_user->set_home_dir(user.home_dir.toStdString());
 
-        auto groups = enumerator.groups();
-        for (const auto& group : std::as_const(groups))
-        {
-            proto::system_info::LocalUsers::LocalUser::LocalUserGroup* group_item =
-                local_user->add_group();
+        for (const SysInfo::UserGroup& group : user.groups)
+            local_user->add_group()->set_name(group.name.toStdString());
 
-            group_item->set_name(group.first.toStdString());
-            group_item->set_comment(group.second.toStdString());
-        }
-
-        local_user->set_disabled(enumerator.isDisabled());
-        local_user->set_password_cant_change(enumerator.isPasswordCantChange());
-        local_user->set_password_expired(enumerator.isPasswordExpired());
-        local_user->set_dont_expire_password(enumerator.isDontExpirePassword());
-        local_user->set_lockout(enumerator.isLockout());
-        local_user->set_number_logons(enumerator.numberLogons());
-        local_user->set_bad_password_count(enumerator.badPasswordCount());
-        local_user->set_last_logon_time(enumerator.lastLogonTime());
+        local_user->set_disabled(user.disabled);
+        local_user->set_password_expired(user.password_expired);
+        local_user->set_dont_expire_password(user.dont_expire_password);
+        local_user->set_last_logon_time(user.last_logon_time);
     }
 }
-#endif // defined(Q_OS_WINDOWS)
 
-#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillLocalUserGroupsInfo(proto::system_info::SystemInfo* system_info)
 {
-    for (UserGroupEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    const QList<SysInfo::UserGroup> groups = SysInfo::userGroups();
+    for (const SysInfo::UserGroup& group : groups)
     {
         proto::system_info::LocalUserGroups::LocalUserGroup* local_group =
             system_info->mutable_local_user_groups()->add_local_user_group();
 
-        local_group->set_name(enumerator.name().toStdString());
-        local_group->set_comment(enumerator.comment().toStdString());
+        local_group->set_name(group.name.toStdString());
     }
 }
-#endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
@@ -1106,12 +1088,10 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
         fillNetworkAdapters(system_info);
     }
 #endif // defined(Q_OS_WINDOWS)
-#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_Routes)
     {
         fillRoutes(system_info);
     }
-#endif // defined(Q_OS_WINDOWS)
 #if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_Connections)
     {
@@ -1138,18 +1118,14 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
         fillOpenFilesInfo(system_info);
     }
 #endif // defined(Q_OS_WINDOWS)
-#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_LocalUsers)
     {
         fillLocalUsersInfo(system_info);
     }
-#endif // defined(Q_OS_WINDOWS)
-#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_LocalUserGroups)
     {
         fillLocalUserGroupsInfo(system_info);
     }
-#endif // defined(Q_OS_WINDOWS)
 #if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_Processes)
     {

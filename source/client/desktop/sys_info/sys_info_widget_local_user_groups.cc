@@ -90,7 +90,6 @@ void SysInfoWidgetLocalUserGroups::setSystemInfo(const proto::system_info::Syste
         QTreeWidgetItem* item = new QTreeWidgetItem();
         item->setIcon(0, item_icon);
         item->setText(0, QString::fromStdString(local_user_group.name()));
-        item->setText(1, QString::fromStdString(local_user_group.comment()));
 
         ui->tree->addTopLevelItem(item);
     }

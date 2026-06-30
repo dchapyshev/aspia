@@ -110,8 +110,6 @@ void SysInfoWidgetApplications::setSystemInfo(const proto::system_info::SystemIn
         item->setText(0, QString::fromStdString(application.name()));
         item->setText(1, QString::fromStdString(application.version()));
         item->setText(2, QString::fromStdString(application.publisher()));
-        item->setText(3, QString::fromStdString(application.install_date()));
-        item->setText(4, QString::fromStdString(application.install_location()));
 
         ui->tree->addTopLevelItem(item);
     }

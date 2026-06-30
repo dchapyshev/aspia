@@ -146,17 +146,12 @@ void SysInfoWidgetLocalUsers::setSystemInfo(const proto::system_info::SystemInfo
         if (!user.full_name().empty())
             group << mk(tr("Full Name"), user.full_name());
 
-        if (!user.comment().empty())
-            group << mk(tr("Description"), user.comment());
-
         if (!user.home_dir().empty())
             group << mk(tr("Home Directory"), user.home_dir());
 
         group << mk(tr("Disabled"), user.disabled() ? tr("Yes") : tr("No"));
-        group << mk(tr("Password Can't Change"), user.password_cant_change() ? tr("Yes") : tr("No"));
         group << mk(tr("Password Expired"), user.password_expired() ? tr("Yes") : tr("No"));
         group << mk(tr("Don't Expire Password"), user.dont_expire_password() ? tr("Yes") : tr("No"));
-        group << mk(tr("Lockout"), user.lockout() ? tr("Yes") : tr("No"));
 
         QString last_logon;
         if (user.last_logon_time() == 0)
@@ -165,8 +160,6 @@ void SysInfoWidgetLocalUsers::setSystemInfo(const proto::system_info::SystemInfo
             last_logon = Formatter::timeToString(static_cast<time_t>(user.last_logon_time()));
 
         group << mk(tr("Last Logon"), last_logon);
-        group << mk(tr("Number Logons"), QString::number(user.number_logons()));
-        group << mk(tr("Bad Password Count"), QString::number(user.bad_password_count()));
 
         QList<QTreeWidgetItem*> groups_group;
 
@@ -174,7 +167,7 @@ void SysInfoWidgetLocalUsers::setSystemInfo(const proto::system_info::SystemInfo
         {
             const proto::system_info::LocalUsers::LocalUser::LocalUserGroup& local_user_group =
                 user.group(j);
-            groups_group << mk(QString::fromStdString(local_user_group.name()), local_user_group.comment());
+            groups_group << mk(QString::fromStdString(local_user_group.name()), QString());
         }
 
         if (!groups_group.isEmpty())

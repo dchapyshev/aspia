@@ -58,16 +58,6 @@
        <string>Publisher</string>
       </property>
      </column>
-     <column>
-      <property name="text">
-       <string>Install Date</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Install Location</string>
-      </property>
-     </column>
     </widget>
    </item>
   </layout>

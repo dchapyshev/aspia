@@ -474,11 +474,9 @@ message Applications
 {
     message Application
     {
-        string name             = 1;
-        string version          = 2;
-        string publisher        = 3;
-        string install_date     = 4;
-        string install_location = 5;
+        string name      = 1;
+        string version   = 2;
+        string publisher = 3;
     }
 
     repeated Application application = 1;
@@ -503,23 +501,17 @@ message LocalUsers
     {
         message LocalUserGroup
         {
-            string name    = 1;
-            string comment = 2;
+            string name = 1;
         }
 
         string name                   = 1;
         string full_name              = 2;
-        string comment                = 3;
-        string home_dir               = 4;
-        repeated LocalUserGroup group = 5;
-        bool disabled                 = 6;
-        bool password_cant_change     = 7;
-        bool password_expired         = 8;
-        bool dont_expire_password     = 9;
-        bool lockout                  = 10;
-        uint32 number_logons          = 11;
-        uint32 bad_password_count     = 12;
-        uint64 last_logon_time        = 13;
+        string home_dir               = 3;
+        repeated LocalUserGroup group = 4;
+        bool disabled                 = 5;
+        bool password_expired         = 6;
+        bool dont_expire_password     = 7;
+        uint64 last_logon_time        = 8;
     }
 
     repeated LocalUser local_user = 1;
@@ -529,8 +521,7 @@ message LocalUserGroups
 {
     message LocalUserGroup
     {
-        string name    = 1;
-        string comment = 2;
+        string name = 1;
     }
 
     repeated LocalUserGroup local_user_group = 1;

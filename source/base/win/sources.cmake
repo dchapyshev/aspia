@@ -69,8 +69,6 @@ collect_sources(SOURCE_BASE_WIN
     session_enumerator.h
     session_info.cc
     session_info.h
-    user_enumerator.cc
-    user_enumerator.h
     window_station.cc
     window_station.h
     windows_version.cc

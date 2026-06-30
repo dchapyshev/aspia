@@ -19,6 +19,7 @@
 #include "base/sys_info.h"
 
 #include "base/logging.h"
+#include "base/system_error.h"
 #include "base/win/registry.h"
 #include "base/win/windows_version.h"
 
@@ -420,4 +421,109 @@ QByteArray SysInfo::smbiosDump()
     }
 
     return buffer;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::User> SysInfo::users()
+{
+    QList<User> result;
+
+    USER_INFO_3* user_info = nullptr;
+    DWORD entries_read = 0;
+    DWORD total_entries = 0;
+
+    DWORD error_code = NetUserEnum(nullptr, 3, FILTER_NORMAL_ACCOUNT,
+        reinterpret_cast<LPBYTE*>(&user_info), MAX_PREFERRED_LENGTH, &entries_read, &total_entries,
+        nullptr);
+    if (error_code != NERR_Success)
+    {
+        LOG(ERROR) << "NetUserEnum failed:" << SystemError(error_code).toString();
+        return result;
+    }
+
+    for (DWORD i = 0; i < total_entries; ++i)
+    {
+        const USER_INFO_3& src = user_info[i];
+        User user;
+
+        if (src.usri3_name)
+            user.name = QString::fromWCharArray(src.usri3_name);
+        if (src.usri3_full_name)
+            user.full_name = QString::fromWCharArray(src.usri3_full_name);
+        if (src.usri3_home_dir)
+            user.home_dir = QString::fromWCharArray(src.usri3_home_dir);
+
+        user.disabled = (src.usri3_flags & UF_ACCOUNTDISABLE) != 0;
+        user.password_expired = (src.usri3_flags & UF_PASSWORD_EXPIRED) != 0;
+        user.dont_expire_password = (src.usri3_flags & UF_DONT_EXPIRE_PASSWD) != 0;
+        user.last_logon_time = src.usri3_last_logon;
+
+        if (src.usri3_name)
+        {
+            LPLOCALGROUP_USERS_INFO_0 member_info = nullptr;
+            DWORD member_entries_read = 0;
+            DWORD member_total_entries = 0;
+
+            DWORD member_error = NetUserGetLocalGroups(nullptr, src.usri3_name, 0, LG_INCLUDE_INDIRECT,
+                reinterpret_cast<LPBYTE*>(&member_info), MAX_PREFERRED_LENGTH, &member_entries_read,
+                &member_total_entries);
+            if (member_error == NERR_Success)
+            {
+                for (DWORD j = 0; j < member_total_entries; ++j)
+                {
+                    if (!member_info[j].lgrui0_name)
+                        continue;
+
+                    UserGroup group;
+                    group.name = QString::fromWCharArray(member_info[j].lgrui0_name);
+
+                    user.groups.append(std::move(group));
+                }
+
+                NetApiBufferFree(member_info);
+            }
+            else
+            {
+                LOG(ERROR) << "NetUserGetLocalGroups failed:" << SystemError(member_error).toString();
+            }
+        }
+
+        result.append(std::move(user));
+    }
+
+    NetApiBufferFree(user_info);
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::UserGroup> SysInfo::userGroups()
+{
+    QList<UserGroup> result;
+
+    LOCALGROUP_INFO_1* group_info = nullptr;
+    DWORD entries_read = 0;
+    DWORD total_entries = 0;
+
+    DWORD error_code = NetLocalGroupEnum(nullptr, 1, reinterpret_cast<LPBYTE*>(&group_info),
+        MAX_PREFERRED_LENGTH, &entries_read, &total_entries, nullptr);
+    if (error_code != NERR_Success)
+    {
+        LOG(ERROR) << "NetLocalGroupEnum failed:" << SystemError(error_code).toString();
+        return result;
+    }
+
+    for (DWORD i = 0; i < total_entries; ++i)
+    {
+        UserGroup group;
+
+        if (group_info[i].lgrpi1_name)
+            group.name = QString::fromWCharArray(group_info[i].lgrpi1_name);
+
+        result.append(std::move(group));
+    }
+
+    NetApiBufferFree(group_info);
+    return result;
 }

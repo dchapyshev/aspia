@@ -19,13 +19,18 @@
 #include "base/sys_info.h"
 
 #include <QByteArray>
+#include <QDateTime>
 #include <QFile>
 #include <QSet>
 
 #include "base/logging.h"
 #include "base/smbios.h"
 
+#include <grp.h>
+#include <lastlog.h>
 #include <netdb.h>
+#include <pwd.h>
+#include <shadow.h>
 #include <sys/param.h>
 #include <sys/sysinfo.h>
 #include <sys/utsname.h>
@@ -325,5 +330,118 @@ QByteArray SysInfo::smbiosDump()
     result.append(reinterpret_cast<const char*>(&length), sizeof(length));
     result.append(table);
 
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::User> SysInfo::users()
+{
+    QList<User> result;
+
+    // Last login times are stored in a flat database indexed by uid.
+    QFile lastlog_file("/var/log/lastlog");
+    if (!lastlog_file.open(QIODevice::ReadOnly))
+        LOG(INFO) << "Unable to open /var/log/lastlog";
+
+    const qint64 today_days = QDateTime::currentSecsSinceEpoch() / 86400;
+
+    setpwent();
+
+    for (struct passwd* pw = getpwent(); pw != nullptr; pw = getpwent())
+    {
+        User user;
+
+        if (pw->pw_name)
+            user.name = QString::fromUtf8(pw->pw_name);
+
+        // The GECOS field stores the full name in its first comma-separated component.
+        if (pw->pw_gecos && pw->pw_gecos[0] != '\0')
+        {
+            const QByteArray gecos(pw->pw_gecos);
+            const int comma = gecos.indexOf(',');
+            user.full_name = QString::fromUtf8(comma >= 0 ? gecos.left(comma) : gecos);
+        }
+
+        if (pw->pw_dir)
+            user.home_dir = QString::fromUtf8(pw->pw_dir);
+
+        // Treat an account whose login shell denies interactive login as disabled.
+        if (pw->pw_shell)
+        {
+            const QByteArray shell(pw->pw_shell);
+            user.disabled = shell.endsWith("/nologin") || shell.endsWith("/false");
+        }
+
+        // Primary and supplementary groups the user belongs to.
+        int count = 0;
+        getgrouplist(pw->pw_name, pw->pw_gid, nullptr, &count);
+        if (count > 0)
+        {
+            QList<gid_t> gids(count);
+            if (getgrouplist(pw->pw_name, pw->pw_gid, gids.data(), &count) != -1)
+            {
+                for (gid_t gid : std::as_const(gids))
+                {
+                    struct group* gr = getgrgid(gid);
+                    if (gr && gr->gr_name)
+                    {
+                        UserGroup group;
+                        group.name = QString::fromUtf8(gr->gr_name);
+                        user.groups.append(std::move(group));
+                    }
+                }
+            }
+        }
+
+        // Password aging from the shadow database (requires root privileges).
+        if (struct spwd* sp = getspnam(pw->pw_name))
+        {
+            // A negative or conventional 99999 maximum age means the password never expires.
+            user.dont_expire_password = sp->sp_max < 0 || sp->sp_max >= 99999;
+
+            if (!user.dont_expire_password && sp->sp_lstchg > 0 && sp->sp_max >= 0)
+                user.password_expired = (sp->sp_lstchg + sp->sp_max) < today_days;
+        }
+
+        // Last login time, indexed by uid in the lastlog database.
+        if (lastlog_file.isOpen())
+        {
+            struct lastlog entry = {};
+            if (lastlog_file.seek(static_cast<qint64>(pw->pw_uid) * sizeof(entry)) &&
+                lastlog_file.read(reinterpret_cast<char*>(&entry), sizeof(entry)) ==
+                    static_cast<qint64>(sizeof(entry)) &&
+                entry.ll_time != 0)
+            {
+                user.last_logon_time = static_cast<quint64>(entry.ll_time);
+            }
+        }
+
+        result.append(std::move(user));
+    }
+
+    endpwent();
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::UserGroup> SysInfo::userGroups()
+{
+    QList<UserGroup> result;
+
+    setgrent();
+
+    for (struct group* gr = getgrent(); gr != nullptr; gr = getgrent())
+    {
+        UserGroup group;
+
+        if (gr->gr_name)
+            group.name = QString::fromUtf8(gr->gr_name);
+
+        result.append(std::move(group));
+    }
+
+    endgrent();
     return result;
 }

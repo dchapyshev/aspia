@@ -19,11 +19,29 @@
 #ifndef BASE_SYS_INFO_H
 #define BASE_SYS_INFO_H
 
+#include <QList>
 #include <QString>
 
 class SysInfo
 {
 public:
+    struct UserGroup
+    {
+        QString name;
+    };
+
+    struct User
+    {
+        QString name;
+        QString full_name;
+        QString home_dir;
+        QList<UserGroup> groups;
+        bool disabled = false;
+        bool password_expired = false;
+        bool dont_expire_password = false;
+        quint64 last_logon_time = 0;
+    };
+
     static QString operatingSystemName();
     static QString operatingSystemVersion();
     static QString operatingSystemArchitecture();
@@ -44,6 +62,9 @@ public:
     static int processorThreads();
 
     static QByteArray smbiosDump();
+
+    static QList<User> users();
+    static QList<UserGroup> userGroups();
 
 private:
     Q_DISABLE_COPY_MOVE(SysInfo)
