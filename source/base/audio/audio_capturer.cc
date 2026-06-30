@@ -18,6 +18,7 @@
 
 #include "base/audio/audio_capturer.h"
 
+#include "base/logging.h"
 #include "proto/desktop_audio.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -25,13 +26,8 @@
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
-#include "base/logging.h"
 #include "base/audio/audio_capturer_linux.h"
 #endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
-
-#if defined(Q_OS_MACOS)
-#include "base/logging.h"
-#endif // defined(Q_OS_MACOS)
 
 //--------------------------------------------------------------------------------------------------
 // Returns true if the sampling rate is supported by Pepper.

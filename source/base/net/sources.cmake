@@ -67,6 +67,11 @@ if (APPLE)
         net_utils_mac.cc)
 endif()
 
+if (ANDROID)
+    collect_sources(SOURCE_BASE_NET
+        net_utils_android.cc)
+endif()
+
 collect_sources(SOURCE_BASE_NET_TESTS
     address_unittest.cc
     anti_replay_window_unittest.cc

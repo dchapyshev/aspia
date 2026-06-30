@@ -223,12 +223,12 @@ add_subdirectory(base)
 add_subdirectory(client)
 add_subdirectory(common)
 add_subdirectory(proto)
+add_subdirectory(third_party)
 
 if (NOT ANDROID)
     add_subdirectory(drivers)
     add_subdirectory(relay)
     add_subdirectory(router)
-    add_subdirectory(third_party)
 
     if (WIN32 OR LINUX)
         add_subdirectory(host)

@@ -19,6 +19,7 @@
 #ifndef COMMON_ANDROID_MESSAGE_DIALOG_H
 #define COMMON_ANDROID_MESSAGE_DIALOG_H
 
+#include <QObject>
 #include <QString>
 
 class QWidget;
