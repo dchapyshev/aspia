@@ -33,12 +33,36 @@ public:
         quint32 metric = 0;
     };
 
+    struct Adapter
+    {
+        struct Address
+        {
+            QString ip;
+            QString mask;
+        };
+
+        QString adapter_name;
+        QString connection_name;
+        QString interface_type;
+        quint32 mtu = 0;
+        quint64 speed = 0;
+        QString mac;
+        bool dhcp4_enabled = false;
+        QString dhcp4_server;
+        QList<Address> addresses;
+        QStringList gateways;
+        QStringList dns_servers;
+    };
+
     // Returns the IP addresses of all active (up, non-loopback) interfaces that have a global address.
     static QStringList localIpList();
 
     // Returns the host's IPv4 routing table. Uses platform routing APIs, since Qt exposes no routing
     // information.
     static QList<Route> routeTable();
+
+    // Returns the host's network adapters with their IPv4 configuration.
+    static QList<Adapter> adapters();
 
     // Returns the IPv4 address of the host's default gateway, or an empty string if it cannot be
     // determined.

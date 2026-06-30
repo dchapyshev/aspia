@@ -33,7 +33,6 @@
 #include "proto/system_info.h"
 
 #if defined(Q_OS_WINDOWS)
-#include "base/net/adapter_enumerator.h"
 #include "base/net/connect_enumerator.h"
 #include "base/net/open_files_enumerator.h"
 #include "base/win/battery_enumerator.h"
@@ -87,52 +86,39 @@ void fillPrinters(proto::system_info::SystemInfo* system_info)
 }
 #endif // defined(Q_OS_WINDOWS)
 
-#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillNetworkAdapters(proto::system_info::SystemInfo* system_info)
 {
-    for (AdapterEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    const QList<NetUtils::Adapter> adapters = NetUtils::adapters();
+    for (const NetUtils::Adapter& adapter : adapters)
     {
-        proto::system_info::NetworkAdapters::Adapter* adapter =
+        proto::system_info::NetworkAdapters::Adapter* item =
             system_info->mutable_network_adapters()->add_adapter();
 
-        adapter->set_adapter_name(enumerator.adapterName().toStdString());
-        adapter->set_connection_name(enumerator.connectionName().toStdString());
-        adapter->set_iface(enumerator.interfaceType().toStdString());
-        adapter->set_speed(enumerator.speed());
-        adapter->set_mac(enumerator.macAddress().toStdString());
-        adapter->set_dhcp_enabled(enumerator.isDhcp4Enabled());
+        item->set_adapter_name(adapter.adapter_name.toStdString());
+        item->set_connection_name(adapter.connection_name.toStdString());
+        item->set_iface(adapter.interface_type.toStdString());
+        item->set_speed(adapter.speed);
+        item->set_mac(adapter.mac.toStdString());
+        item->set_dhcp_enabled(adapter.dhcp4_enabled);
 
-        if (enumerator.isDhcp4Enabled())
+        if (adapter.dhcp4_enabled && !adapter.dhcp4_server.isEmpty())
+            item->add_dhcp()->append(adapter.dhcp4_server.toStdString());
+
+        for (const QString& gateway : adapter.gateways)
+            item->add_gateway()->assign(gateway.toStdString());
+
+        for (const NetUtils::Adapter::Address& address : adapter.addresses)
         {
-            QString dhcp4_server = enumerator.dhcp4Server();
-            if (!dhcp4_server.isEmpty())
-                adapter->add_dhcp()->append(dhcp4_server.toStdString());
+            proto::system_info::NetworkAdapters::Adapter::Address* item_address = item->add_address();
+            item_address->set_ip(address.ip.toStdString());
+            item_address->set_mask(address.mask.toStdString());
         }
 
-        for (AdapterEnumerator::GatewayEnumerator gateway(enumerator);
-             !gateway.isAtEnd(); gateway.advance())
-        {
-            adapter->add_gateway()->assign(gateway.address().toStdString());
-        }
-
-        for (AdapterEnumerator::IpAddressEnumerator ip(enumerator);
-             !ip.isAtEnd(); ip.advance())
-        {
-            proto::system_info::NetworkAdapters::Adapter::Address* address = adapter->add_address();
-
-            address->set_ip(ip.address().toStdString());
-            address->set_mask(ip.mask().toStdString());
-        }
-
-        for (AdapterEnumerator::DnsEnumerator dns(enumerator);
-             !dns.isAtEnd(); dns.advance())
-        {
-            adapter->add_dns()->assign(dns.address().toStdString());
-        }
+        for (const QString& dns : adapter.dns_servers)
+            item->add_dns()->assign(dns.toStdString());
     }
 }
-#endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
@@ -1082,12 +1068,10 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
         fillEventLogs(system_info, request.event_logs_data());
     }
 #endif // defined(Q_OS_WINDOWS)
-#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_NetworkAdapters)
     {
         fillNetworkAdapters(system_info);
     }
-#endif // defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_Routes)
     {
         fillRoutes(system_info);

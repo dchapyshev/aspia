@@ -17,8 +17,6 @@
 #
 
 collect_sources(SOURCE_BASE_NET
-    adapter_enumerator.cc
-    adapter_enumerator.h
     anti_replay_window.cc
     anti_replay_window.h
     address.cc
@@ -54,8 +52,19 @@ if (WIN32)
         connect_enumerator.h
         firewall_manager.cc
         firewall_manager.h
+        net_utils_win.cc
         open_files_enumerator.cc
         open_files_enumerator.h)
+endif()
+
+if (LINUX)
+    collect_sources(SOURCE_BASE_NET
+        net_utils_linux.cc)
+endif()
+
+if (APPLE)
+    collect_sources(SOURCE_BASE_NET
+        net_utils_mac.cc)
 endif()
 
 collect_sources(SOURCE_BASE_NET_TESTS

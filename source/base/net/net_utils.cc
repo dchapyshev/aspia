@@ -21,29 +21,7 @@
 #include <QHostAddress>
 #include <QNetworkInterface>
 
-#if defined(Q_OS_WINDOWS)
-#include <qt_windows.h>
-#include <iphlpapi.h>
-#include <WS2tcpip.h>
-#include <WinSock2.h>
-#endif // defined(Q_OS_WINDOWS)
-
-#if defined(Q_OS_LINUX)
-#include <QFile>
-#endif // defined(Q_OS_LINUX)
-
-#if defined(Q_OS_MACOS)
-#include <QtEndian>
-
-#include <sys/socket.h>
-#include <sys/sysctl.h>
-#include <sys/types.h>
-#include <net/route.h>
-#include <netinet/in.h>
-#endif // defined(Q_OS_MACOS)
-
 #include <limits>
-#include <vector>
 
 namespace {
 
@@ -60,47 +38,6 @@ bool isValidHostNameChar(const QChar c)
 
     return false;
 }
-
-//--------------------------------------------------------------------------------------------------
-#if defined(Q_OS_WINDOWS)
-QString ipToString(DWORD ip)
-{
-    char buffer[46 + 1];
-
-    if (!inet_ntop(AF_INET, &ip, buffer, _countof(buffer)))
-        return QString();
-
-    return buffer;
-}
-#endif // defined(Q_OS_WINDOWS)
-
-//--------------------------------------------------------------------------------------------------
-#if defined(Q_OS_LINUX)
-// Converts an in_addr.s_addr stored as host-order hex (the form used in /proc/net/route) to a
-// dotted IPv4 string.
-QString hexToIpv4(const QByteArray& hex)
-{
-    bool ok = false;
-    const quint32 value = hex.toUInt(&ok, 16);
-    if (!ok)
-        return QString();
-
-    return QString("%1.%2.%3.%4")
-        .arg(value & 0xFF).arg((value >> 8) & 0xFF).arg((value >> 16) & 0xFF).arg((value >> 24) & 0xFF);
-}
-#endif // defined(Q_OS_LINUX)
-
-//--------------------------------------------------------------------------------------------------
-#if defined(Q_OS_MACOS)
-QString sockaddrToIpv4(const sockaddr* address)
-{
-    if (!address || address->sa_family != AF_INET)
-        return QString();
-
-    const auto* in = reinterpret_cast<const sockaddr_in*>(address);
-    return QHostAddress(qFromBigEndian<quint32>(in->sin_addr.s_addr)).toString();
-}
-#endif // defined(Q_OS_MACOS)
 
 } // namespace
 
@@ -133,98 +70,6 @@ QStringList NetUtils::localIpList()
     }
 
     return result;
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-QList<NetUtils::Route> NetUtils::routeTable()
-{
-    QList<Route> routes;
-
-#if defined(Q_OS_WINDOWS)
-    ULONG buffer_size = sizeof(MIB_IPFORWARDTABLE);
-
-    std::vector<char> buffer(buffer_size);
-    PMIB_IPFORWARDTABLE table = reinterpret_cast<PMIB_IPFORWARDTABLE>(buffer.data());
-
-    DWORD error_code = GetIpForwardTable(table, &buffer_size, 0);
-    if (error_code == ERROR_INSUFFICIENT_BUFFER)
-    {
-        buffer.resize(buffer_size);
-        table = reinterpret_cast<PMIB_IPFORWARDTABLE>(buffer.data());
-        error_code = GetIpForwardTable(table, &buffer_size, 0);
-    }
-
-    if (error_code != NO_ERROR)
-        return routes;
-
-    routes.reserve(table->dwNumEntries);
-    for (DWORD i = 0; i < table->dwNumEntries; ++i)
-    {
-        const MIB_IPFORWARDROW& row = table->table[i];
-        routes.emplaceBack(ipToString(row.dwForwardDest), ipToString(row.dwForwardMask),
-                           ipToString(row.dwForwardNextHop), row.dwForwardMetric1);
-    }
-#elif defined(Q_OS_LINUX)
-    // /proc/net/route lists routes in tab-separated fields: Iface Destination Gateway Flags RefCnt
-    // Use Metric Mask MTU Window IRTT. Addresses are host-order hex of in_addr.s_addr.
-    QFile file("/proc/net/route");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return routes;
-
-    file.readLine(); // Skip the header line.
-
-    while (!file.atEnd())
-    {
-        const QList<QByteArray> fields = file.readLine().simplified().split(' ');
-        if (fields.size() < 8)
-            continue;
-
-        // Fields: destination[1], gateway[2], metric[6], mask[7].
-        routes.emplaceBack(hexToIpv4(fields[1]), hexToIpv4(fields[7]),
-                           hexToIpv4(fields[2]), fields[6].toUInt());
-    }
-#elif defined(Q_OS_MACOS)
-    int mib[6] = { CTL_NET, PF_ROUTE, 0, AF_INET, NET_RT_DUMP, 0 };
-
-    size_t needed = 0;
-    if (sysctl(mib, 6, nullptr, &needed, nullptr, 0) < 0 || needed == 0)
-        return routes;
-
-    std::vector<char> buffer(needed);
-    if (sysctl(mib, 6, buffer.data(), &needed, nullptr, 0) < 0)
-        return routes;
-
-    char* end = buffer.data() + needed;
-    for (char* next = buffer.data(); next < end;)
-    {
-        auto* message = reinterpret_cast<rt_msghdr*>(next);
-        next += message->rtm_msglen;
-
-        // The sockaddr array follows the header; present entries are selected by the rtm_addrs mask.
-        auto* address = reinterpret_cast<sockaddr*>(message + 1);
-        sockaddr* table[RTAX_MAX] = {};
-        for (int i = 0; i < RTAX_MAX; ++i)
-        {
-            if (!(message->rtm_addrs & (1 << i)))
-                continue;
-
-            table[i] = address;
-            const size_t len = address->sa_len ? address->sa_len : sizeof(quint32);
-            const size_t step = (len + sizeof(quint32) - 1) & ~(sizeof(quint32) - 1);
-            address = reinterpret_cast<sockaddr*>(reinterpret_cast<char*>(address) + step);
-        }
-
-        if (!table[RTAX_DST] || table[RTAX_DST]->sa_family != AF_INET)
-            continue;
-
-        // Metric is not exposed by the routing socket, so it stays 0.
-        routes.emplaceBack(sockaddrToIpv4(table[RTAX_DST]), sockaddrToIpv4(table[RTAX_NETMASK]),
-                           sockaddrToIpv4(table[RTAX_GATEWAY]), quint32(0));
-    }
-#endif
-
-    return routes;
 }
 
 //--------------------------------------------------------------------------------------------------
