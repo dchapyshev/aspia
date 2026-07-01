@@ -22,6 +22,7 @@
 
 #include <LM.h>
 #include <devguid.h>
+#include <winspool.h>
 
 #include <memory>
 
@@ -968,6 +969,63 @@ QList<SysInfo::Device> SysInfo::devices()
         device.device_id = deviceInstanceId(info, &data);
 
         result.append(std::move(device));
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::Printer> SysInfo::printers()
+{
+    QList<Printer> result;
+
+    const DWORD flags = PRINTER_ENUM_FAVORITE | PRINTER_ENUM_LOCAL | PRINTER_ENUM_NETWORK;
+    DWORD bytes_needed = 0;
+    DWORD count = 0;
+
+    if (EnumPrintersW(flags, nullptr, 2, nullptr, 0, &bytes_needed, &count) ||
+        GetLastError() != ERROR_INSUFFICIENT_BUFFER)
+    {
+        PLOG(ERROR) << "Unexpected return value";
+        return result;
+    }
+
+    QByteArray info_buffer;
+    info_buffer.resize(bytes_needed);
+
+    if (!EnumPrintersW(flags, nullptr, 2, reinterpret_cast<LPBYTE>(info_buffer.data()), bytes_needed,
+                       &bytes_needed, &count))
+    {
+        PLOG(ERROR) << "EnumPrintersW failed";
+        return result;
+    }
+
+    std::wstring default_printer;
+    wchar_t default_printer_name[256] = { 0 };
+    DWORD characters_count = ARRAYSIZE(default_printer_name);
+    if (GetDefaultPrinterW(default_printer_name, &characters_count))
+        default_printer = default_printer_name;
+
+    const PRINTER_INFO_2W* info = reinterpret_cast<const PRINTER_INFO_2W*>(info_buffer.constData());
+    for (DWORD i = 0; i < count; ++i)
+    {
+        const PRINTER_INFO_2W& item = info[i];
+
+        Printer printer;
+        if (item.pPrinterName)
+            printer.name = QString::fromWCharArray(item.pPrinterName);
+        if (item.pShareName)
+            printer.share_name = QString::fromWCharArray(item.pShareName);
+        if (item.pPortName)
+            printer.port_name = QString::fromWCharArray(item.pPortName);
+        if (item.pDriverName)
+            printer.driver_name = QString::fromWCharArray(item.pDriverName);
+        printer.is_default = item.pPrinterName && default_printer == item.pPrinterName;
+        printer.is_shared = (item.Attributes & PRINTER_ATTRIBUTE_SHARED) != 0;
+        printer.jobs_count = static_cast<int>(item.cJobs);
+
+        result.append(std::move(printer));
     }
 
     return result;

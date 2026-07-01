@@ -215,3 +215,11 @@ QList<SysInfo::Device> SysInfo::devices()
     NOTIMPLEMENTED();
     return QList<Device>();
 }
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::Printer> SysInfo::printers()
+{
+    NOTIMPLEMENTED();
+    return QList<Printer>();
+}

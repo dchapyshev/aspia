@@ -29,8 +29,6 @@ collect_sources(SOURCE_BASE_WIN
     message_window.h
     power_info.cc
     power_info.h
-    printer_enumerator.cc
-    printer_enumerator.h
     registry.cc
     registry.h
     resource_util.cc

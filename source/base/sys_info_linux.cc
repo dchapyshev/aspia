@@ -30,6 +30,7 @@
 #include <QFileInfo>
 #include <QHash>
 #include <QProcess>
+#include <QProcessEnvironment>
 #include <QSet>
 
 #include "base/logging.h"
@@ -324,6 +325,74 @@ QString readSysAttribute(const QString& path)
         return QString();
 
     return QString::fromLatin1(file.readAll()).trimmed();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Runs a CUPS command. LC_ALL=C keeps the output non-localized so it stays parseable.
+QByteArray runCupsCommand(const QString& program, const QStringList& arguments)
+{
+    QProcessEnvironment environment = QProcessEnvironment::systemEnvironment();
+    environment.insert("LC_ALL", "C");
+
+    QProcess process;
+    process.setProcessEnvironment(environment);
+    process.start(program, arguments);
+    if (!process.waitForStarted() || !process.waitForFinished())
+        return QByteArray();
+
+    return process.readAllStandardOutput();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Extracts a value from a "key=value ..." lpoptions line; space-containing values are single-quoted.
+QString cupsOption(const QString& options, const QString& key)
+{
+    const int start = options.indexOf(key + "=");
+    if (start < 0)
+        return QString();
+
+    const int pos = start + key.size() + 1;
+    if (pos >= options.size())
+        return QString();
+
+    if (options[pos] == '\'')
+    {
+        const int end = options.indexOf('\'', pos + 1);
+        return (end < 0) ? QString() : options.mid(pos + 1, end - pos - 1);
+    }
+
+    const int end = options.indexOf(' ', pos);
+    return (end < 0) ? options.mid(pos) : options.mid(pos, end - pos);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString defaultPrinter()
+{
+    // "system default destination: <name>", or a line without a colon if none is set.
+    const QByteArray output = runCupsCommand("lpstat", QStringList() << "-d");
+    const int colon = output.indexOf(':');
+    if (colon < 0)
+        return QString();
+
+    return QString::fromUtf8(output.mid(colon + 1)).trimmed();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Number of queued jobs per printer, from lpstat job ids of the form "<printer>-<number>".
+QHash<QString, int> printerJobCounts()
+{
+    QHash<QString, int> result;
+
+    const QList<QByteArray> lines = runCupsCommand("lpstat", QStringList() << "-o").split('\n');
+    for (const QByteArray& line : lines)
+    {
+        const QByteArray job = line.trimmed().split(' ').value(0);
+        const int dash = job.lastIndexOf('-');
+        if (dash > 0)
+            ++result[QString::fromUtf8(job.left(dash))];
+    }
+
+    return result;
 }
 
 } // namespace
@@ -979,6 +1048,40 @@ QList<SysInfo::Device> SysInfo::devices()
             device.device_id = QString("USB\\VID_%1&PID_%2&REV_%3").arg(vid, pid, revision);
 
         result.append(std::move(device));
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::Printer> SysInfo::printers()
+{
+    QList<Printer> result;
+
+    const QString default_printer = defaultPrinter();
+    const QHash<QString, int> jobs = printerJobCounts();
+
+    const QList<QByteArray> names = runCupsCommand("lpstat", QStringList() << "-e").split('\n');
+    for (const QByteArray& raw : names)
+    {
+        const QString name = QString::fromUtf8(raw).trimmed();
+        if (name.isEmpty())
+            continue;
+
+        // lpoptions reports the printer attributes as a single "key=value" line.
+        const QString options =
+            QString::fromUtf8(runCupsCommand("lpoptions", QStringList() << "-p" << name)).trimmed();
+
+        Printer printer;
+        printer.name = name;
+        printer.port_name = cupsOption(options, "device-uri");
+        printer.driver_name = cupsOption(options, "printer-make-and-model");
+        printer.is_shared = cupsOption(options, "printer-is-shared") == "true";
+        printer.is_default = (name == default_printer);
+        printer.jobs_count = jobs.value(name);
+
+        result.append(std::move(printer));
     }
 
     return result;

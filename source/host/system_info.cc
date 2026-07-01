@@ -39,7 +39,6 @@
 #if defined(Q_OS_WINDOWS)
 #include "base/win/battery_enumerator.h"
 #include "base/win/power_info.h"
-#include "base/win/printer_enumerator.h"
 #endif // defined(Q_OS_WINDOWS)
 
 namespace {
@@ -60,25 +59,24 @@ void fillDevices(proto::system_info::SystemInfo* system_info)
     }
 }
 
-#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillPrinters(proto::system_info::SystemInfo* system_info)
 {
-    for (PrinterEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    const QList<SysInfo::Printer> printers = SysInfo::printers();
+    for (const SysInfo::Printer& item : printers)
     {
         proto::system_info::Printers::Printer* printer =
             system_info->mutable_printers()->add_printer();
 
-        printer->set_name(enumerator.name().toStdString());
-        printer->set_is_default(enumerator.isDefault());
-        printer->set_is_shared(enumerator.isShared());
-        printer->set_port(enumerator.portName().toStdString());
-        printer->set_driver(enumerator.driverName().toStdString());
-        printer->set_jobs_count(static_cast<quint32>(enumerator.jobsCount()));
-        printer->set_share_name(enumerator.shareName().toStdString());
+        printer->set_name(item.name.toStdString());
+        printer->set_is_default(item.is_default);
+        printer->set_is_shared(item.is_shared);
+        printer->set_port(item.port_name.toStdString());
+        printer->set_driver(item.driver_name.toStdString());
+        printer->set_jobs_count(static_cast<quint32>(item.jobs_count));
+        printer->set_share_name(item.share_name.toStdString());
     }
 }
-#endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
 void fillNetworkAdapters(proto::system_info::SystemInfo* system_info)
@@ -971,12 +969,10 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
     {
         fillMonitors(system_info);
     }
-#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_Printers)
     {
         fillPrinters(system_info);
     }
-#endif // defined(Q_OS_WINDOWS)
 #if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_PowerOptions)
     {

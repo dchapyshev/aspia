@@ -129,6 +129,17 @@ public:
         QString device_id;
     };
 
+    struct Printer
+    {
+        QString name;
+        QString share_name;
+        QString port_name;
+        QString driver_name;
+        bool is_default = false;
+        bool is_shared = false;
+        int jobs_count = 0;
+    };
+
     static QString operatingSystemName();
     static QString operatingSystemVersion();
     static QString operatingSystemArchitecture();
@@ -161,6 +172,7 @@ public:
     static QList<Monitor> monitors();
     static QList<VideoAdapter> videoAdapters();
     static QList<Device> devices();
+    static QList<Printer> printers();
 
 private:
     Q_DISABLE_COPY_MOVE(SysInfo)
