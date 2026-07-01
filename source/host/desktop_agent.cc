@@ -255,8 +255,42 @@ void DesktopAgent::setupLinuxCapture()
 
     if (is_user_session)
     {
-        // KDE KWin ScreenShot2 (no dialog; per-frame screenshot poll). Checked before the PipeWire
-        // compositor path so KDE uses KWin rather than its portal.
+        // GNOME Mutter ScreenCast: a compositor-native PipeWire stream captured without a permission
+        // dialog. The input injector is built in onCompositorSourceStarted(), once the capturer's source
+        // has negotiated and can be shared with it.
+        if (WaylandCompositorSource::isMutterAvailable(uid))
+        {
+            capture_mode_ = CaptureMode::COMPOSITOR;
+            LOG(INFO) << "Capture mode: compositor (Mutter)";
+            return;
+        }
+
+        // wlroots compositors via zwlr_screencopy (wl_shm): compositor-native, no dialog.
+        if (ScreenCapturerWlr::isAvailable(uid))
+        {
+            capture_mode_ = CaptureMode::WLR;
+            input_injector_ = InputInjectorUinput::create(this);
+            if (!input_injector_)
+                LOG(ERROR) << "Unable to create uinput input injector";
+            LOG(INFO) << "Capture mode: wlr-screencopy";
+            return;
+        }
+
+        // Direct DRM/KMS read: imports the scan-out framebuffer zero-copy, the fastest path on real GPU
+        // hardware (and GPU-passthrough VMs). Its trial capture self-validates that the driver can export
+        // the buffer; it fails on VMs whose driver cannot, where KWin ScreenShot2 takes over below.
+        if (ScreenCapturerKms::isAvailable())
+        {
+            capture_mode_ = CaptureMode::KMS;
+            input_injector_ = InputInjectorUinput::create(this);
+            if (!input_injector_)
+                LOG(ERROR) << "Unable to create uinput input injector";
+            LOG(INFO) << "Capture mode: KMS";
+            return;
+        }
+
+        // KDE KWin ScreenShot2 (no dialog; per-frame screenshot poll). Used only where KMS cannot export
+        // the scan-out buffer, since its synchronous glReadPixels readback is slow on real GPU hardware.
         const bool kwin_available = ScreenCapturerKwin::isAvailable(uid);
         LOG(INFO) << "KWin ScreenShot2 available:" << kwin_available;
         if (kwin_available)
@@ -269,44 +303,28 @@ void DesktopAgent::setupLinuxCapture()
             return;
         }
 
-        // GNOME Mutter ScreenCast or the xdg-desktop-portal session, captured as a PipeWire stream (the
-        // capturer picks the backend). Input reaches the same source through the capturer's slots.
-        const bool compositor_available = WaylandCompositorSource::isAvailable(uid);
-        LOG(INFO) << "Compositor ScreenCast available:" << compositor_available;
-        if (compositor_available)
+        // xdg-desktop-portal ScreenCast: last resort, prompts the user when capture starts. Input is
+        // built in onCompositorSourceStarted() like the Mutter path.
+        if (WaylandCompositorSource::isPortalAvailable(uid))
         {
-            // The input injector is built in onCompositorSourceStarted(), once the capturer's source
-            // has negotiated and can be shared with it.
             capture_mode_ = CaptureMode::COMPOSITOR;
-            LOG(INFO) << "Capture mode: compositor (PipeWire)";
-            return;
-        }
-
-        // wlroots compositors via zwlr_screencopy (wl_shm). Temporary fallback for when the portal is
-        // unavailable; to be removed once the portal path is the sole wlroots route.
-        const bool wlr_available = ScreenCapturerWlr::isAvailable(uid);
-        LOG(INFO) << "wlr-screencopy available:" << wlr_available;
-        if (wlr_available)
-        {
-            capture_mode_ = CaptureMode::WLR;
-            input_injector_ = InputInjectorUinput::create(this);
-            if (!input_injector_)
-                LOG(ERROR) << "Unable to create uinput input injector";
-            LOG(INFO) << "Capture mode: wlr-screencopy";
+            LOG(INFO) << "Capture mode: compositor (portal)";
             return;
         }
     }
-
-    // No usable compositor screen-cast: capture below the compositor with DRM/KMS + uinput. A trial
-    // capture confirms the scan-out framebuffer can actually be read before committing to this backend.
-    if (ScreenCapturerKms::isAvailable())
+    else
     {
-        capture_mode_ = CaptureMode::KMS;
-        input_injector_ = InputInjectorUinput::create(this);
-        if (!input_injector_)
-            LOG(ERROR) << "Unable to create uinput input injector";
-        LOG(INFO) << "Capture mode: KMS";
-        return;
+        // No usable compositor screen-cast: capture below the compositor with DRM/KMS + uinput. A trial
+        // capture confirms the scan-out framebuffer can actually be read before committing to this backend.
+        if (ScreenCapturerKms::isAvailable())
+        {
+            capture_mode_ = CaptureMode::KMS;
+            input_injector_ = InputInjectorUinput::create(this);
+            if (!input_injector_)
+                LOG(ERROR) << "Unable to create uinput input injector";
+            LOG(INFO) << "Capture mode: KMS";
+            return;
+        }
     }
 
     // Nothing graphical is available (headless / text mode): capture a dedicated VT login terminal,

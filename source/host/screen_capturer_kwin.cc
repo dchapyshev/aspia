@@ -27,6 +27,9 @@
 #include <QDBusInterface>
 #include <QDBusMessage>
 #include <QDBusUnixFileDescriptor>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
 #include <QVariant>
 
 #include <drm/drm_fourcc.h>
@@ -54,10 +57,8 @@ const char kService[] = "org.kde.KWin.ScreenShot2";
 const char kPath[] = "/org/kde/KWin/ScreenShot2";
 const char kInterface[] = "org.kde.KWin.ScreenShot2";
 
-// ScreenShot2 interface version. KWin 5.x exposes version 4 and reads pixels back from the GPU into the
-// CPU synchronously, which is too slow on real hardware to use as a video source. KWin 6.0+ exposes
-// version 5 with a fast path. Below this we report unavailable and let the agent fall back to KMS.
-const uint kMinInterfaceVersion = 5;
+// When set to 1 in KWin's own environment, this disables the ScreenShot2 caller permission check.
+const char kNoPermissionChecksEnv[] = "KWIN_SCREENSHOT_NO_PERMISSION_CHECKS";
 
 const int kAlignment = 32;
 // QImage::Format_RGBA8888 - bytes R,G,B,A in memory; everything else KWin returns (RGB32/ARGB32/
@@ -67,6 +68,59 @@ const quint32 kFormatRgba8888 = 17;
 const int kMaxCards = 8;
 // A hardware cursor framebuffer is small; this tells it apart from the screen-sized primary plane.
 const int kMaxCursorSize = 256;
+
+//--------------------------------------------------------------------------------------------------
+// KWin authorizes org.kde.KWin.ScreenShot2 by reading the caller's /proc/<pid>/exe and matching it to a
+// .desktop that declares the interface. The agent runs as root, whose exe an unprivileged compositor
+// cannot read, so the call is always denied unless KWin itself was started with
+// KWIN_SCREENSHOT_NO_PERMISSION_CHECKS=1. Returns true only when that variable is set in the environment
+// of the session's kwin_wayland process.
+bool kwinPermissionChecksDisabled(uid_t session_uid)
+{
+    const QStringList pids = QDir("/proc").entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+    for (const QString& pid : pids)
+    {
+        bool is_pid = false;
+        pid.toUInt(&is_pid);
+        if (!is_pid)
+            continue;
+
+        const QString dir = "/proc/" + pid;
+        if (QFileInfo(dir).ownerId() != session_uid)
+            continue;
+
+        QFile comm(dir + "/comm");
+        if (!comm.open(QIODevice::ReadOnly))
+            continue;
+        if (QString::fromLatin1(comm.readLine()).trimmed() != "kwin_wayland")
+            continue;
+
+        QFile environ_file(dir + "/environ");
+        if (!environ_file.open(QIODevice::ReadOnly))
+            return false;
+
+        // /proc reports size 0, so read to EOF in chunks rather than relying on readAll().
+        QByteArray data;
+        for (;;)
+        {
+            const QByteArray chunk = environ_file.read(4096);
+            if (chunk.isEmpty())
+                break;
+            data.append(chunk);
+        }
+
+        const QList<QByteArray> entries = data.split('\0');
+        for (const QByteArray& entry : entries)
+        {
+            const int separator = entry.indexOf('=');
+            if (separator > 0 && entry.left(separator) == kNoPermissionChecksEnv)
+                return entry.mid(separator + 1).toInt() == 1;
+        }
+        return false;
+    }
+
+    return false;
+}
 
 //--------------------------------------------------------------------------------------------------
 // Maps a compositor output name to a stable screen id. The id only needs to be stable within the
@@ -206,6 +260,16 @@ ScreenCapturerKwin::~ScreenCapturerKwin()
 // static
 bool ScreenCapturerKwin::isAvailable(uid_t session_uid)
 {
+    // KWin denies ScreenShot2 to the agent (a root process whose exe the compositor cannot read) unless
+    // KWin was started with KWIN_SCREENSHOT_NO_PERMISSION_CHECKS=1. Without it every capture would fail,
+    // so report unavailable here and let the agent pick another capture path.
+    if (!kwinPermissionChecksDisabled(session_uid))
+    {
+        LOG(INFO) << "KWIN_SCREENSHOT_NO_PERMISSION_CHECKS is not set for KWin; "
+                     "ScreenShot2 is unavailable for the agent";
+        return false;
+    }
+
     const QString name = QString("aspia-kwin-probe-%1").arg(session_uid);
     QDBusConnection bus = SessionDBus::connectAsUser(session_uid, name);
 
@@ -213,12 +277,8 @@ bool ScreenCapturerKwin::isAvailable(uid_t session_uid)
     if (bus.isConnected() && bus.interface() &&
         bus.interface()->isServiceRegistered(kService).value())
     {
-        // Only KWin 6.0+ (interface version 5 and up) is fast enough; older KWin reads frames back too
-        // slowly to drive video, so we report unavailable and the agent uses the KMS path instead.
-        QDBusInterface screenshot(kService, kPath, kInterface, bus);
-        const uint version = screenshot.property("Version").toUInt();
-        available = version >= kMinInterfaceVersion;
-        LOG(INFO) << "KWin ScreenShot2 interface version" << version << "(required" << kMinInterfaceVersion << ")";
+        available = true;
+        LOG(INFO) << "KWin ScreenShot2 is available";
     }
 
     if (bus.isConnected())

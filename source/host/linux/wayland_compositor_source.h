@@ -42,9 +42,13 @@ class WaylandCompositorSource
     Q_OBJECT
 
 public:
-    // Returns true if any compositor screen-cast backend is available on the active session of
-    // |session_uid|.
-    static bool isAvailable(uid_t session_uid);
+    // Returns true if GNOME Mutter ScreenCast is available on the active session of |session_uid|. Mutter
+    // captures without a permission dialog, so it is preferred over the below-compositor KMS path.
+    static bool isMutterAvailable(uid_t session_uid);
+
+    // Returns true if the xdg-desktop-portal ScreenCast backend is available on the active session of
+    // |session_uid|. The portal prompts the user when capture starts, so it is used only as a last resort.
+    static bool isPortalAvailable(uid_t session_uid);
 
     // Creates the best available backend (Mutter ScreenCast first, then the xdg-desktop-portal session),
     // or nullptr if none is available.

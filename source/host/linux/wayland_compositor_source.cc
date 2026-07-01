@@ -31,14 +31,17 @@ WaylandCompositorSource::WaylandCompositorSource(QObject* parent)
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool WaylandCompositorSource::isAvailable(uid_t session_uid)
+bool WaylandCompositorSource::isMutterAvailable(uid_t session_uid)
 {
-    // Mutter is probed by a throwaway instance (it connects to the session bus and checks the
-    // interface); the portal exposes a static check.
+    // Probed by a throwaway instance: it connects to the session bus and checks the interface.
     MutterScreenCast mutter(session_uid);
-    if (mutter.isAvailable())
-        return true;
+    return mutter.isAvailable();
+}
 
+//--------------------------------------------------------------------------------------------------
+// static
+bool WaylandCompositorSource::isPortalAvailable(uid_t session_uid)
+{
     return WaylandPortal::isScreenCastAvailable(session_uid);
 }
 
