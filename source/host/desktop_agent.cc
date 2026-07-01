@@ -276,9 +276,9 @@ void DesktopAgent::setupLinuxCapture()
             return;
         }
 
-        // Direct DRM/KMS read: imports the scan-out framebuffer zero-copy, the fastest path on real GPU
-        // hardware (and GPU-passthrough VMs). Its trial capture self-validates that the driver can export
-        // the buffer; it fails on VMs whose driver cannot, where KWin ScreenShot2 takes over below.
+        // Direct DRM/KMS read: imports the scan-out framebuffer zero-copy, avoiding the GPU->CPU readback
+        // entirely. Its trial capture self-validates that the driver can export the buffer; it fails where
+        // the driver cannot (some setups, typically VMs), and KWin ScreenShot2 takes over below.
         if (ScreenCapturerKms::isAvailable())
         {
             capture_mode_ = CaptureMode::KMS;
@@ -290,7 +290,8 @@ void DesktopAgent::setupLinuxCapture()
         }
 
         // KDE KWin ScreenShot2 (no dialog; per-frame screenshot poll). Used only where KMS cannot export
-        // the scan-out buffer, since its synchronous glReadPixels readback is slow on real GPU hardware.
+        // the scan-out buffer, and only when isAvailable()'s throughput probe finds its glReadPixels
+        // readback fast enough (that cost is GPU-driver dependent).
         const bool kwin_available = ScreenCapturerKwin::isAvailable(uid);
         LOG(INFO) << "KWin ScreenShot2 available:" << kwin_available;
         if (kwin_available)

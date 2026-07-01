@@ -28,6 +28,7 @@
 #include <QDBusMessage>
 #include <QDBusUnixFileDescriptor>
 #include <QDir>
+#include <QElapsedTimer>
 #include <QFile>
 #include <QFileInfo>
 #include <QVariant>
@@ -38,6 +39,7 @@
 #include <sys/mman.h>
 #include <unistd.h>
 
+#include <algorithm>
 #include <array>
 #include <cerrno>
 #include <cstring>
@@ -59,6 +61,15 @@ const char kInterface[] = "org.kde.KWin.ScreenShot2";
 
 // When set to 1 in KWin's own environment, this disables the ScreenShot2 caller permission check.
 const char kNoPermissionChecksEnv[] = "KWIN_SCREENSHOT_NO_PERMISSION_CHECKS";
+
+// KWin reads captured frames back with a synchronous glReadPixels, whose cost depends entirely on the
+// GPU driver's readback implementation - cheap with some, a slow blocking transfer with others.
+// isAvailable() times a few trial captures and reports the backend usable only when the throughput stays
+// above this floor (megapixels per second).
+const double kMinThroughputMpps = 80.0;
+// Trial captures used to gauge the throughput; the best result is kept, as scheduling jitter only ever
+// makes an individual capture look slower than the backend really is.
+const int kThroughputTrials = 3;
 
 const int kAlignment = 32;
 // QImage::Format_RGBA8888 - bytes R,G,B,A in memory; everything else KWin returns (RGB32/ARGB32/
@@ -120,6 +131,69 @@ bool kwinPermissionChecksDisabled(uid_t session_uid)
     }
 
     return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Runs one CaptureWorkspace, draining the pixels, and returns the achieved throughput in megapixels per
+// second (0 on failure). Used to tell a fast KWin backend from a slow one, since the cost of its
+// glReadPixels readback is GPU-driver dependent.
+double measureThroughputMpps(QDBusInterface& screenshot)
+{
+    int fds[2];
+    if (pipe2(fds, O_CLOEXEC) != 0)
+        return 0.0;
+
+    QVariantMap options;
+    options.insert("include-cursor", false);
+
+    QElapsedTimer timer;
+    timer.start();
+
+    QDBusMessage reply;
+    {
+        QDBusUnixFileDescriptor write_fd(fds[1]);
+        ::close(fds[1]);
+        reply = screenshot.call(QDBus::Block, "CaptureWorkspace",
+                                QVariant::fromValue(options), QVariant::fromValue(write_fd));
+    }
+
+    if (reply.type() != QDBusMessage::ReplyMessage)
+    {
+        ::close(fds[0]);
+        return 0.0;
+    }
+
+    const QVariantMap results = qdbus_cast<QVariantMap>(reply.arguments().value(0));
+    const int width = results.value("width").toInt();
+    const int height = results.value("height").toInt();
+    const int stride = results.value("stride").toInt();
+    if (width <= 0 || height <= 0 || stride < width * 4)
+    {
+        ::close(fds[0]);
+        return 0.0;
+    }
+
+    const qint64 total = static_cast<qint64>(height) * stride;
+    qint64 received = 0;
+    char buffer[65536];
+    while (received < total)
+    {
+        const ssize_t count = ::read(fds[0], buffer, sizeof(buffer));
+        if (count > 0)
+            received += count;
+        else if (count < 0 && errno == EINTR)
+            continue;
+        else
+            break;
+    }
+    ::close(fds[0]);
+
+    const qint64 elapsed_us = timer.nsecsElapsed() / 1000;
+    if (received != total || elapsed_us <= 0)
+        return 0.0;
+
+    const double megapixels = static_cast<double>(width) * height / 1e6;
+    return megapixels / (static_cast<double>(elapsed_us) / 1e6);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -277,8 +351,19 @@ bool ScreenCapturerKwin::isAvailable(uid_t session_uid)
     if (bus.isConnected() && bus.interface() &&
         bus.interface()->isServiceRegistered(kService).value())
     {
-        available = true;
-        LOG(INFO) << "KWin ScreenShot2 is available";
+        // Time a few trial captures: the speed of KWin's glReadPixels readback depends on the GPU driver,
+        // and with a slow one it cannot drive video. Report unavailable when the throughput is too low and
+        // let the agent fall through to another capture path.
+        QDBusInterface screenshot(kService, kPath, kInterface, bus);
+        measureThroughputMpps(screenshot);  // warm-up: the first capture also pays one-time setup
+
+        double best_mpps = 0.0;
+        for (int i = 0; i < kThroughputTrials; ++i)
+            best_mpps = std::max(best_mpps, measureThroughputMpps(screenshot));
+
+        available = best_mpps >= kMinThroughputMpps;
+        LOG(INFO) << "KWin ScreenShot2 throughput:" << best_mpps << "MP/s (required"
+                  << kMinThroughputMpps << ") ->" << (available ? "usable" : "too slow");
     }
 
     if (bus.isConnected())
