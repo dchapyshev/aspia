@@ -395,6 +395,92 @@ QHash<QString, int> printerJobCounts()
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
+struct ModuleInfo
+{
+    QString description;
+    QString path;
+};
+
+//--------------------------------------------------------------------------------------------------
+// Module names configured to load at boot (systemd-modules-load and the legacy /etc/modules), with
+// '-' normalized to '_' the way the kernel does.
+QSet<QString> bootLoadedModules()
+{
+    QSet<QString> result;
+
+    QStringList files;
+    const char* dirs[] = { "/etc/modules-load.d", "/usr/lib/modules-load.d", "/run/modules-load.d" };
+    for (const char* dir : dirs)
+    {
+        const QFileInfoList entries = QDir(dir).entryInfoList(QStringList() << "*.conf", QDir::Files);
+        for (const QFileInfo& entry : std::as_const(entries))
+            files.append(entry.absoluteFilePath());
+    }
+    files.append("/etc/modules");
+
+    for (const QString& path : std::as_const(files))
+    {
+        QFile file(path);
+        if (!file.open(QIODevice::ReadOnly))
+            continue;
+
+        while (!file.atEnd())
+        {
+            QString line = QString::fromUtf8(file.readLine());
+            const int comment = line.indexOf('#');
+            if (comment >= 0)
+                line = line.left(comment);
+
+            QString name = line.simplified().section(' ', 0, 0);
+            if (!name.isEmpty())
+                result.insert(name.replace('-', '_'));
+        }
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Descriptions and object-file paths for all modules in a single modinfo call. Blocks start at the
+// "filename:" line; the module name is derived from the .ko basename.
+QHash<QString, ModuleInfo> moduleInfoMap(const QStringList& names)
+{
+    QHash<QString, ModuleInfo> result;
+    if (names.isEmpty())
+        return result;
+
+    QProcess process;
+    process.start("modinfo", names);
+    if (!process.waitForStarted() || !process.waitForFinished())
+        return result;
+
+    QString current;
+
+    const QList<QByteArray> lines = process.readAllStandardOutput().split('\n');
+    for (const QByteArray& line : lines)
+    {
+        const int colon = line.indexOf(':');
+        if (colon < 0)
+            continue;
+
+        const QByteArray key = line.left(colon).trimmed();
+        const QString value = QString::fromUtf8(line.mid(colon + 1)).trimmed();
+
+        if (key == "filename")
+        {
+            current = QFileInfo(value).fileName().section('.', 0, 0).replace('-', '_');
+            result[current].path = value;
+        }
+        else if (key == "description" && !current.isEmpty())
+        {
+            result[current].description = value;
+        }
+    }
+
+    return result;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -868,8 +954,67 @@ QList<SysInfo::Service> SysInfo::services()
 // static
 QList<SysInfo::Service> SysInfo::drivers()
 {
-    // systemd has no Windows-style kernel drivers.
-    return QList<Service>();
+    QList<Service> result;
+
+    // /proc reports size 0, so read line by line until empty rather than using atEnd()/readAll().
+    QFile file("/proc/modules");
+    if (!file.open(QIODevice::ReadOnly))
+        return result;
+
+    struct LoadedModule
+    {
+        QString name;
+        QString state;
+    };
+
+    QList<LoadedModule> loaded;
+    QStringList names;
+
+    QByteArray line;
+    while (!(line = file.readLine()).isEmpty())
+    {
+        // /proc/modules: name size refcount deps state offset.
+        const QList<QByteArray> fields = line.simplified().split(' ');
+        if (fields.size() < 5)
+            continue;
+
+        LoadedModule module;
+        module.name = QString::fromUtf8(fields[0]);
+        module.state = QString::fromUtf8(fields[4]);
+
+        loaded.append(module);
+        names.append(module.name);
+    }
+
+    const QSet<QString> boot_modules = bootLoadedModules();
+    const QHash<QString, ModuleInfo> info = moduleInfoMap(names);
+
+    for (const LoadedModule& module : std::as_const(loaded))
+    {
+        const ModuleInfo module_info = info.value(module.name);
+
+        Service driver;
+        driver.name = module.name;
+        driver.display_name = module.name;
+        driver.description = module_info.description;
+        driver.binary_path = module_info.path;
+
+        if (module.state == "Live")
+            driver.status = Service::Status::RUNNING;
+        else if (module.state == "Loading")
+            driver.status = Service::Status::START_PENDING;
+        else if (module.state == "Unloading")
+            driver.status = Service::Status::STOP_PENDING;
+
+        // A module listed in the boot configuration is loaded at boot; anything else is loaded on
+        // demand (udev/modalias or an explicit request).
+        driver.startup_type = boot_modules.contains(module.name) ?
+            Service::StartupType::BOOT_START : Service::StartupType::DEMAND_START;
+
+        result.append(std::move(driver));
+    }
+
+    return result;
 }
 
 //--------------------------------------------------------------------------------------------------
