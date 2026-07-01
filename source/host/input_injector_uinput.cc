@@ -18,6 +18,8 @@
 
 #include "host/input_injector_uinput.h"
 
+#include <QString>
+
 #include <linux/input-event-codes.h>
 #include <linux/uinput.h>
 
@@ -39,6 +41,82 @@ const qint32 kAbsMax = 65535;
 
 // X11 keycodes are offset by 8 from the kernel/evdev keycodes uinput expects.
 const int kXkbKeycodeOffset = 8;
+
+//--------------------------------------------------------------------------------------------------
+// Maps a printable ASCII character to an evdev key code plus whether Shift is required, assuming a US
+// keyboard layout on the host. Characters outside this set (non-Latin scripts, layout-specific keys)
+// cannot be resolved without the host keymap and are reported as unmapped.
+bool charToKey(char32_t ch, quint16* code, bool* shift)
+{
+    static const quint16 letters[26] = {
+        KEY_A, KEY_B, KEY_C, KEY_D, KEY_E, KEY_F, KEY_G, KEY_H, KEY_I, KEY_J, KEY_K, KEY_L, KEY_M,
+        KEY_N, KEY_O, KEY_P, KEY_Q, KEY_R, KEY_S, KEY_T, KEY_U, KEY_V, KEY_W, KEY_X, KEY_Y, KEY_Z
+    };
+    static const quint16 digits[10] = {
+        KEY_0, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9
+    };
+
+    if (ch >= U'a' && ch <= U'z')
+    {
+        *code = letters[ch - U'a'];
+        *shift = false;
+        return true;
+    }
+
+    if (ch >= U'A' && ch <= U'Z')
+    {
+        *code = letters[ch - U'A'];
+        *shift = true;
+        return true;
+    }
+
+    if (ch >= U'0' && ch <= U'9')
+    {
+        *code = digits[ch - U'0'];
+        *shift = false;
+        return true;
+    }
+
+    struct Symbol
+    {
+        char32_t ch;
+        quint16 code;
+        bool shift;
+    };
+
+    static const Symbol symbols[] = {
+        { U' ',  KEY_SPACE,       false }, { U'\t', KEY_TAB,        false },
+        { U'\n', KEY_ENTER,       false }, { U'\r', KEY_ENTER,      false },
+        { U'!',  KEY_1,           true  }, { U'@',  KEY_2,          true  },
+        { U'#',  KEY_3,           true  }, { U'$',  KEY_4,          true  },
+        { U'%',  KEY_5,           true  }, { U'^',  KEY_6,          true  },
+        { U'&',  KEY_7,           true  }, { U'*',  KEY_8,          true  },
+        { U'(',  KEY_9,           true  }, { U')',  KEY_0,          true  },
+        { U'-',  KEY_MINUS,       false }, { U'_',  KEY_MINUS,      true  },
+        { U'=',  KEY_EQUAL,       false }, { U'+',  KEY_EQUAL,      true  },
+        { U'[',  KEY_LEFTBRACE,   false }, { U'{',  KEY_LEFTBRACE,  true  },
+        { U']',  KEY_RIGHTBRACE,  false }, { U'}',  KEY_RIGHTBRACE, true  },
+        { U'\\', KEY_BACKSLASH,   false }, { U'|',  KEY_BACKSLASH,  true  },
+        { U';',  KEY_SEMICOLON,   false }, { U':',  KEY_SEMICOLON,  true  },
+        { U'\'', KEY_APOSTROPHE,  false }, { U'"',  KEY_APOSTROPHE, true  },
+        { U'`',  KEY_GRAVE,       false }, { U'~',  KEY_GRAVE,      true  },
+        { U',',  KEY_COMMA,       false }, { U'<',  KEY_COMMA,      true  },
+        { U'.',  KEY_DOT,         false }, { U'>',  KEY_DOT,        true  },
+        { U'/',  KEY_SLASH,       false }, { U'?',  KEY_SLASH,      true  }
+    };
+
+    for (const Symbol& symbol : symbols)
+    {
+        if (symbol.ch == ch)
+        {
+            *code = symbol.code;
+            *shift = symbol.shift;
+            return true;
+        }
+    }
+
+    return false;
+}
 
 } // namespace
 
@@ -176,9 +254,34 @@ void InputInjectorUinput::injectKeyEvent(const proto::input::KeyEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorUinput::injectTextEvent(const proto::input::TextEvent& /* event */)
+void InputInjectorUinput::injectTextEvent(const proto::input::TextEvent& event)
 {
-    // uinput delivers key codes, not Unicode; text injection is not supported on this path.
+    if (fd_ < 0)
+        return;
+
+    // Committed Unicode text (on-screen keyboard, IME). uinput delivers key codes interpreted by the
+    // host layout, so each character is typed as its US-layout key sequence.
+    for (char32_t ch : QString::fromStdString(event.text()).toUcs4())
+    {
+        quint16 code = 0;
+        bool shift = false;
+        if (!charToKey(ch, &code, &shift))
+        {
+            LOG(WARNING) << "Unmapped character for text injection:" << static_cast<quint32>(ch);
+            continue;
+        }
+
+        if (shift)
+            emitEvent(EV_KEY, KEY_LEFTSHIFT, 1);
+
+        emitEvent(EV_KEY, code, 1);
+        emitEvent(EV_KEY, code, 0);
+
+        if (shift)
+            emitEvent(EV_KEY, KEY_LEFTSHIFT, 0);
+
+        emitEvent(EV_SYN, SYN_REPORT, 0);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
