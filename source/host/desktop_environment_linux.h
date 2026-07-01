@@ -21,6 +21,10 @@
 
 #include "host/desktop_environment.h"
 
+#include <QString>
+
+#include <sys/types.h>
+
 class DesktopEnvironmentLinux final : public DesktopEnvironment
 {
 public:
@@ -33,6 +37,42 @@ protected:
     void revertAll() final;
 
 private:
+    enum class Desktop { OTHER, GNOME, KDE };
+
+    // Fills the target of the active graphical session (uid, group, home, user name, desktop).
+    // Returns false if there is no usable active session, in which case nothing must be changed.
+    bool resolveTarget();
+
+    // Detects the desktop by the shell process (gnome-shell / plasmashell) owned by |uid|.
+    static Desktop detectDesktop(uid_t uid);
+
+    // Runs a command as the session user on the user's session bus. Optionally captures stdout.
+    // Returns true only if the command exited successfully.
+    bool runAsUser(const QString& program, const QStringList& arguments, QString* output);
+
+    // The base class issues disable/revert back-to-back when the client changes several settings at
+    // once; applying each immediately makes the desktop flicker. Instead the requests only record the
+    // desired state and applyDesired() reconciles it once per event-loop turn (and synchronously on
+    // teardown).
+    void scheduleApply();
+    void applyDesired();
+
+    Desktop desktop_ = Desktop::OTHER;
+    uid_t uid_ = 0;
+    gid_t gid_ = 0;
+    QString user_name_;
+    QString home_dir_;
+
+    bool apply_scheduled_ = false;
+    bool desired_wallpaper_disabled_ = false;
+    bool desired_effects_disabled_ = false;
+    bool applied_wallpaper_disabled_ = false;
+    bool applied_effects_disabled_ = false;
+
+    // Originals captured on the disable transition, so revert is always possible.
+    QString saved_picture_options_;
+    QString saved_animations_;
+
     Q_DISABLE_COPY(DesktopEnvironmentLinux)
 };
 
