@@ -17,8 +17,6 @@
 #
 
 collect_sources(SOURCE_BASE_WIN
-    battery_enumerator.cc
-    battery_enumerator.h
     desktop.cc
     desktop.h
     device.cc
@@ -27,8 +25,6 @@ collect_sources(SOURCE_BASE_WIN
     file_version_info.h
     message_window.cc
     message_window.h
-    power_info.cc
-    power_info.h
     registry.cc
     registry.h
     resource_util.cc

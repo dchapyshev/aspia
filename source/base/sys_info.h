@@ -140,6 +140,44 @@ public:
         int jobs_count = 0;
     };
 
+    struct PowerOptions
+    {
+        enum class PowerSource { UNKNOWN, DC_BATTERY, AC_LINE };
+        enum class BatteryStatus { UNKNOWN, HIGH, LOW, CRITICAL, CHARGING, NO_BATTERY };
+
+        struct Battery
+        {
+            enum State
+            {
+                CHARGING     = 1,
+                CRITICAL     = 2,
+                DISCHARGING  = 4,
+                POWER_ONLINE = 8
+            };
+
+            QString device_name;
+            QString manufacturer;
+            QString manufacture_date;
+            QString unique_id;
+            QString serial_number;
+            QString temperature;
+            quint32 design_capacity = 0;
+            QString type;
+            quint32 full_charged_capacity = 0;
+            quint32 depreciation = 0;
+            quint32 current_capacity = 0;
+            quint32 voltage = 0;
+            quint32 state = 0;
+        };
+
+        PowerSource power_source = PowerSource::UNKNOWN;
+        BatteryStatus battery_status = BatteryStatus::UNKNOWN;
+        quint64 full_battery_life_time = 0;
+        quint64 remaining_battery_life_time = 0;
+        quint32 battery_life_percent = 0;
+        QList<Battery> batteries;
+    };
+
     static QString operatingSystemName();
     static QString operatingSystemVersion();
     static QString operatingSystemArchitecture();
@@ -173,6 +211,7 @@ public:
     static QList<VideoAdapter> videoAdapters();
     static QList<Device> devices();
     static QList<Printer> printers();
+    static PowerOptions powerOptions();
 
 private:
     Q_DISABLE_COPY_MOVE(SysInfo)

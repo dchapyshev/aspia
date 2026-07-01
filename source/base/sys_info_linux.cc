@@ -1231,3 +1231,121 @@ QList<SysInfo::Printer> SysInfo::printers()
 
     return result;
 }
+
+//--------------------------------------------------------------------------------------------------
+// static
+SysInfo::PowerOptions SysInfo::powerOptions()
+{
+    PowerOptions result;
+
+    const QString base = "/sys/class/power_supply";
+    const QStringList supplies = QDir(base).entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+
+    // First pass: mains (AC) state and the set of system batteries. Peripheral batteries (mouse,
+    // keyboard - scope "Device") and USB-C power sources are ignored.
+    bool ac_online = false;
+    QStringList battery_names;
+
+    for (const QString& supply : supplies)
+    {
+        const QString dir = QString("%1/%2").arg(base, supply);
+        const QString type = readSysAttribute(dir + "/type");
+
+        if (type == "Mains")
+        {
+            if (readSysAttribute(dir + "/online") == "1")
+                ac_online = true;
+        }
+        else if (type == "Battery" && readSysAttribute(dir + "/scope") != "Device")
+        {
+            battery_names.append(supply);
+        }
+    }
+
+    for (const QString& supply : std::as_const(battery_names))
+    {
+        const QString dir = QString("%1/%2").arg(base, supply);
+
+        const QString status = readSysAttribute(dir + "/status");
+        const QString level = readSysAttribute(dir + "/capacity_level");
+        const quint32 capacity = readSysAttribute(dir + "/capacity").toUInt();
+
+        if (result.battery_life_percent == 0)
+            result.battery_life_percent = capacity;
+
+        if (result.battery_status == PowerOptions::BatteryStatus::UNKNOWN)
+        {
+            if (status == "Charging")
+                result.battery_status = PowerOptions::BatteryStatus::CHARGING;
+            else if (level == "Critical")
+                result.battery_status = PowerOptions::BatteryStatus::CRITICAL;
+            else if (level == "Low")
+                result.battery_status = PowerOptions::BatteryStatus::LOW;
+            else
+                result.battery_status = PowerOptions::BatteryStatus::HIGH;
+        }
+
+        if (result.power_source == PowerOptions::PowerSource::UNKNOWN)
+        {
+            if (status == "Discharging")
+                result.power_source = PowerOptions::PowerSource::DC_BATTERY;
+            else if (status == "Charging" || status == "Full" || status == "Not charging")
+                result.power_source = PowerOptions::PowerSource::AC_LINE;
+        }
+
+        PowerOptions::Battery battery;
+        battery.device_name = readSysAttribute(dir + "/model_name");
+        battery.manufacturer = readSysAttribute(dir + "/manufacturer");
+        battery.serial_number = readSysAttribute(dir + "/serial_number");
+        battery.unique_id = battery.serial_number.isEmpty() ? supply : battery.serial_number;
+        battery.type = readSysAttribute(dir + "/technology");
+        battery.voltage = readSysAttribute(dir + "/voltage_now").toUInt() / 1000; // uV -> mV
+
+        const QString temp = readSysAttribute(dir + "/temp"); // tenths of a degree Celsius
+        if (!temp.isEmpty())
+            battery.temperature = QString::number(temp.toInt() / 10.0);
+
+        // Prefer energy (uWh) and fall back to charge (uAh); both are reported in milli-units.
+        auto capacityValue = [&](const QString& energy, const QString& charge) -> quint32
+        {
+            const QString value = readSysAttribute(dir + "/" + energy);
+            if (!value.isEmpty())
+                return static_cast<quint32>(value.toULongLong() / 1000);
+            return static_cast<quint32>(readSysAttribute(dir + "/" + charge).toULongLong() / 1000);
+        };
+
+        battery.design_capacity = capacityValue("energy_full_design", "charge_full_design");
+        battery.full_charged_capacity = capacityValue("energy_full", "charge_full");
+        battery.current_capacity = capacityValue("energy_now", "charge_now");
+
+        if (battery.design_capacity != 0 && battery.full_charged_capacity <= battery.design_capacity)
+        {
+            battery.depreciation =
+                100 - (battery.full_charged_capacity * 100 / battery.design_capacity);
+        }
+
+        if (status == "Charging")
+            battery.state |= PowerOptions::Battery::CHARGING;
+        else if (status == "Discharging")
+            battery.state |= PowerOptions::Battery::DISCHARGING;
+        if (level == "Critical")
+            battery.state |= PowerOptions::Battery::CRITICAL;
+        if (ac_online || status == "Charging" || status == "Full" || status == "Not charging")
+            battery.state |= PowerOptions::Battery::POWER_ONLINE;
+
+        result.batteries.append(std::move(battery));
+    }
+
+    if (battery_names.isEmpty())
+    {
+        result.battery_status = PowerOptions::BatteryStatus::NO_BATTERY;
+        if (ac_online)
+            result.power_source = PowerOptions::PowerSource::AC_LINE;
+    }
+    else if (result.power_source == PowerOptions::PowerSource::UNKNOWN && ac_online)
+    {
+        result.power_source = PowerOptions::PowerSource::AC_LINE;
+    }
+
+    return result;
+}

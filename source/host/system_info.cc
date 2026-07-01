@@ -36,11 +36,6 @@
 #include "host/process_monitor.h"
 #include "proto/system_info.h"
 
-#if defined(Q_OS_WINDOWS)
-#include "base/win/battery_enumerator.h"
-#include "base/win/power_info.h"
-#endif // defined(Q_OS_WINDOWS)
-
 namespace {
 
 //--------------------------------------------------------------------------------------------------
@@ -511,20 +506,19 @@ void fillVideoAdapters(proto::system_info::SystemInfo* system_info)
     }
 }
 
-#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void fillPowerOptions(proto::system_info::SystemInfo* system_info)
 {
+    const SysInfo::PowerOptions power = SysInfo::powerOptions();
     proto::system_info::PowerOptions* power_options = system_info->mutable_power_options();
-    PowerInfo power_info;
 
-    switch (power_info.powerSource())
+    switch (power.power_source)
     {
-        case PowerInfo::PowerSource::DC_BATTERY:
+        case SysInfo::PowerOptions::PowerSource::DC_BATTERY:
             power_options->set_power_source(proto::system_info::PowerOptions::POWER_SOURCE_DC_BATTERY);
             break;
 
-        case PowerInfo::PowerSource::AC_LINE:
+        case SysInfo::PowerOptions::PowerSource::AC_LINE:
             power_options->set_power_source(proto::system_info::PowerOptions::POWER_SOURCE_AC_LINE);
             break;
 
@@ -532,25 +526,25 @@ void fillPowerOptions(proto::system_info::SystemInfo* system_info)
             break;
     }
 
-    switch (power_info.batteryStatus())
+    switch (power.battery_status)
     {
-        case PowerInfo::BatteryStatus::HIGH:
+        case SysInfo::PowerOptions::BatteryStatus::HIGH:
             power_options->set_battery_status(proto::system_info::PowerOptions::BATTERY_STATUS_HIGH);
             break;
 
-        case PowerInfo::BatteryStatus::LOW:
+        case SysInfo::PowerOptions::BatteryStatus::LOW:
             power_options->set_battery_status(proto::system_info::PowerOptions::BATTERY_STATUS_LOW);
             break;
 
-        case PowerInfo::BatteryStatus::CRITICAL:
+        case SysInfo::PowerOptions::BatteryStatus::CRITICAL:
             power_options->set_battery_status(proto::system_info::PowerOptions::BATTERY_STATUS_CRITICAL);
             break;
 
-        case PowerInfo::BatteryStatus::CHARGING:
+        case SysInfo::PowerOptions::BatteryStatus::CHARGING:
             power_options->set_battery_status(proto::system_info::PowerOptions::BATTERY_STATUS_CHARGING);
             break;
 
-        case PowerInfo::BatteryStatus::NO_BATTERY:
+        case SysInfo::PowerOptions::BatteryStatus::NO_BATTERY:
             power_options->set_battery_status(proto::system_info::PowerOptions::BATTERY_STATUS_NO_BATTERY);
             break;
 
@@ -558,47 +552,28 @@ void fillPowerOptions(proto::system_info::SystemInfo* system_info)
             break;
     }
 
-    power_options->set_battery_life_percent(power_info.batteryLifePercent());
-    power_options->set_full_battery_life_time(power_info.batteryFullLifeTime());
-    power_options->set_remaining_battery_life_time(power_info.batteryRemainingLifeTime());
+    power_options->set_battery_life_percent(power.battery_life_percent);
+    power_options->set_full_battery_life_time(power.full_battery_life_time);
+    power_options->set_remaining_battery_life_time(power.remaining_battery_life_time);
 
-    for (BatteryEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    for (const SysInfo::PowerOptions::Battery& item : power.batteries)
     {
         proto::system_info::PowerOptions::Battery* battery = power_options->add_battery();
-        battery->set_device_name(enumerator.deviceName().toStdString());
-        battery->set_manufacturer(enumerator.manufacturer().toStdString());
-        battery->set_manufacture_date(enumerator.manufactureDate().toStdString());
-        battery->set_unique_id(enumerator.uniqueId().toStdString());
-        battery->set_serial_number(enumerator.serialNumber().toStdString());
-        battery->set_temperature(enumerator.temperature().toStdString());
-        battery->set_design_capacity(enumerator.designCapacity());
-        battery->set_type(enumerator.type().toStdString());
-        battery->set_full_charged_capacity(enumerator.fullChargedCapacity());
-        battery->set_depreciation(enumerator.depreciation());
-        battery->set_current_capacity(enumerator.currentCapacity());
-        battery->set_voltage(enumerator.voltage());
-
-        auto append_state = [&](proto::system_info::PowerOptions::Battery::State state)
-        {
-            battery->set_state(battery->state() | static_cast<quint32>(state));
-        };
-
-        quint32 state = enumerator.state();
-
-        if (state & BatteryEnumerator::CHARGING)
-            append_state(proto::system_info::PowerOptions::Battery::STATE_CHARGING);
-
-        if (state & BatteryEnumerator::CRITICAL)
-            append_state(proto::system_info::PowerOptions::Battery::STATE_CRITICAL);
-
-        if (state & BatteryEnumerator::DISCHARGING)
-            append_state(proto::system_info::PowerOptions::Battery::STATE_DISCHARGING);
-
-        if (state & BatteryEnumerator::POWER_ONLINE)
-            append_state(proto::system_info::PowerOptions::Battery::STATE_POWER_ONLINE);
+        battery->set_device_name(item.device_name.toStdString());
+        battery->set_manufacturer(item.manufacturer.toStdString());
+        battery->set_manufacture_date(item.manufacture_date.toStdString());
+        battery->set_unique_id(item.unique_id.toStdString());
+        battery->set_serial_number(item.serial_number.toStdString());
+        battery->set_temperature(item.temperature.toStdString());
+        battery->set_design_capacity(item.design_capacity);
+        battery->set_type(item.type.toStdString());
+        battery->set_full_charged_capacity(item.full_charged_capacity);
+        battery->set_depreciation(item.depreciation);
+        battery->set_current_capacity(item.current_capacity);
+        battery->set_voltage(item.voltage);
+        battery->set_state(item.state);
     }
 }
-#endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
 void fillComputer(proto::system_info::SystemInfo* system_info)
@@ -973,12 +948,10 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
     {
         fillPrinters(system_info);
     }
-#if defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_PowerOptions)
     {
         fillPowerOptions(system_info);
     }
-#endif // defined(Q_OS_WINDOWS)
     else if (category == kSystemInfo_Drivers)
     {
         fillDrivers(system_info);

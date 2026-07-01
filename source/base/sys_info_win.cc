@@ -22,6 +22,8 @@
 
 #include <LM.h>
 #include <devguid.h>
+#include <winioctl.h>
+#include <batclass.h>
 #include <winspool.h>
 
 #include <memory>
@@ -29,6 +31,7 @@
 #include "base/logging.h"
 #include "base/session_id.h"
 #include "base/system_error.h"
+#include "base/win/device.h"
 #include "base/win/registry.h"
 #include "base/win/scoped_device_info.h"
 #include "base/win/scoped_object.h"
@@ -347,6 +350,127 @@ DWORD driverRegistryDW(HDEVINFO device_info, SP_DEVINFO_DATA* device_info_data,
         return 0;
 
     return value;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool batteryInformation(Device& battery, ULONG tag, BATTERY_QUERY_INFORMATION_LEVEL level,
+                        LPVOID buffer, ULONG buffer_size)
+{
+    BATTERY_QUERY_INFORMATION battery_info;
+    memset(&battery_info, 0, sizeof(battery_info));
+    battery_info.BatteryTag = tag;
+    battery_info.InformationLevel = level;
+
+    ULONG bytes_returned = 0;
+    return battery.ioControl(IOCTL_BATTERY_QUERY_INFORMATION, &battery_info, sizeof(battery_info),
+                             buffer, buffer_size, &bytes_returned);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool batteryStatus(Device& battery, ULONG tag, BATTERY_STATUS* status)
+{
+    BATTERY_WAIT_STATUS status_request;
+    memset(&status_request, 0, sizeof(status_request));
+    status_request.BatteryTag = tag;
+
+    BATTERY_STATUS status_reply;
+    memset(&status_reply, 0, sizeof(status_reply));
+
+    DWORD bytes_returned = 0;
+    if (!battery.ioControl(IOCTL_BATTERY_QUERY_STATUS, &status_request, sizeof(status_request),
+                           &status_reply, sizeof(status_reply), &bytes_returned))
+    {
+        return false;
+    }
+
+    *status = status_reply;
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString batteryChemistry(const UCHAR chemistry[4])
+{
+    if (memcmp(chemistry, "PbAc", 4) == 0)
+        return "Lead Acid";
+    if (memcmp(chemistry, "LION", 4) == 0 || memcmp(chemistry, "Li-I", 4) == 0)
+        return "Lithium Ion";
+    if (memcmp(chemistry, "NiCd", 4) == 0)
+        return "Nickel Cadmium";
+    if (memcmp(chemistry, "NiMH", 4) == 0)
+        return "Nickel Metal Hydride";
+    if (memcmp(chemistry, "NiZn", 4) == 0)
+        return "Nickel Zinc";
+    if (memcmp(chemistry, "RAM", 3) == 0)
+        return "Rechargeable Alkaline-Manganese";
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Reads one battery's details via the battery-class IOCTLs.
+SysInfo::PowerOptions::Battery readBattery(Device& battery, ULONG tag)
+{
+    SysInfo::PowerOptions::Battery result;
+
+    wchar_t text[256] = { 0 };
+    if (batteryInformation(battery, tag, BatteryDeviceName, text, sizeof(text)))
+        result.device_name = QString::fromWCharArray(text);
+
+    memset(text, 0, sizeof(text));
+    if (batteryInformation(battery, tag, BatteryManufactureName, text, sizeof(text)))
+        result.manufacturer = QString::fromWCharArray(text);
+
+    memset(text, 0, sizeof(text));
+    if (batteryInformation(battery, tag, BatteryUniqueID, text, sizeof(text)))
+        result.unique_id = QString::fromWCharArray(text);
+
+    memset(text, 0, sizeof(text));
+    if (batteryInformation(battery, tag, BatterySerialNumber, text, sizeof(text)))
+        result.serial_number = QString::fromWCharArray(text);
+
+    memset(text, 0, sizeof(text));
+    if (batteryInformation(battery, tag, BatteryTemperature, text, sizeof(text)))
+        result.temperature = QString::fromWCharArray(text);
+
+    BATTERY_MANUFACTURE_DATE date;
+    memset(&date, 0, sizeof(date));
+    if (batteryInformation(battery, tag, BatteryManufactureDate, &date, sizeof(date)))
+        result.manufacture_date = QString("%1-%2-%3").arg(date.Day).arg(date.Month).arg(date.Year);
+
+    BATTERY_INFORMATION info;
+    memset(&info, 0, sizeof(info));
+    if (batteryInformation(battery, tag, BatteryInformation, &info, sizeof(info)))
+    {
+        result.design_capacity = info.DesignedCapacity;
+        result.full_charged_capacity = info.FullChargedCapacity;
+        result.type = batteryChemistry(info.Chemistry);
+
+        if (info.DesignedCapacity != 0)
+        {
+            const int percent = 100 - (static_cast<int>(info.FullChargedCapacity) * 100) /
+                                          static_cast<int>(info.DesignedCapacity);
+            if (percent > 0)
+                result.depreciation = static_cast<quint32>(percent);
+        }
+    }
+
+    BATTERY_STATUS status;
+    if (batteryStatus(battery, tag, &status))
+    {
+        result.current_capacity = status.Capacity;
+        result.voltage = status.Voltage;
+
+        if (status.PowerState & BATTERY_CHARGING)
+            result.state |= SysInfo::PowerOptions::Battery::CHARGING;
+        if (status.PowerState & BATTERY_CRITICAL)
+            result.state |= SysInfo::PowerOptions::Battery::CRITICAL;
+        if (status.PowerState & BATTERY_DISCHARGING)
+            result.state |= SysInfo::PowerOptions::Battery::DISCHARGING;
+        if (status.PowerState & BATTERY_POWER_ON_LINE)
+            result.state |= SysInfo::PowerOptions::Battery::POWER_ONLINE;
+    }
+
+    return result;
 }
 
 } // namespace
@@ -1026,6 +1150,96 @@ QList<SysInfo::Printer> SysInfo::printers()
         printer.jobs_count = static_cast<int>(item.cJobs);
 
         result.append(std::move(printer));
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+SysInfo::PowerOptions SysInfo::powerOptions()
+{
+    PowerOptions result;
+
+    SYSTEM_POWER_STATUS power_status;
+    memset(&power_status, 0, sizeof(power_status));
+    if (GetSystemPowerStatus(&power_status))
+    {
+        switch (power_status.ACLineStatus)
+        {
+            case 0:  result.power_source = PowerOptions::PowerSource::DC_BATTERY; break;
+            case 1:  result.power_source = PowerOptions::PowerSource::AC_LINE; break;
+            default: break;
+        }
+
+        switch (power_status.BatteryFlag)
+        {
+            case 1:   result.battery_status = PowerOptions::BatteryStatus::HIGH; break;
+            case 2:   result.battery_status = PowerOptions::BatteryStatus::LOW; break;
+            case 4:   result.battery_status = PowerOptions::BatteryStatus::CRITICAL; break;
+            case 8:   result.battery_status = PowerOptions::BatteryStatus::CHARGING; break;
+            case 128: result.battery_status = PowerOptions::BatteryStatus::NO_BATTERY; break;
+            default:  break;
+        }
+
+        if (power_status.BatteryFlag != 128)
+        {
+            result.battery_life_percent = power_status.BatteryLifePercent;
+            if (power_status.BatteryFullLifeTime != 0xFFFFFFFF)
+                result.full_battery_life_time = power_status.BatteryFullLifeTime;
+            if (power_status.BatteryLifeTime != 0xFFFFFFFF)
+                result.remaining_battery_life_time = power_status.BatteryLifeTime;
+        }
+    }
+    else
+    {
+        PLOG(ERROR) << "GetSystemPowerStatus failed";
+    }
+
+    ScopedDeviceInfo device_info(SetupDiGetClassDevsW(&GUID_DEVCLASS_BATTERY, nullptr, nullptr,
+        DIGCF_PROFILE | DIGCF_PRESENT | DIGCF_DEVICEINTERFACE));
+    if (!device_info.isValid())
+        return result;
+
+    SP_DEVICE_INTERFACE_DATA interface_data;
+    memset(&interface_data, 0, sizeof(interface_data));
+    interface_data.cbSize = sizeof(interface_data);
+
+    for (DWORD index = 0; SetupDiEnumDeviceInterfaces(
+             device_info.get(), nullptr, &GUID_DEVCLASS_BATTERY, index, &interface_data); ++index)
+    {
+        DWORD required_size = 0;
+        if (SetupDiGetDeviceInterfaceDetailW(device_info.get(), &interface_data, nullptr, 0,
+                                             &required_size, nullptr) ||
+            GetLastError() != ERROR_INSUFFICIENT_BUFFER)
+        {
+            continue;
+        }
+
+        std::unique_ptr<quint8[]> buffer = std::make_unique<quint8[]>(required_size);
+        auto* detail = reinterpret_cast<PSP_DEVICE_INTERFACE_DETAIL_DATA_W>(buffer.get());
+        detail->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA_W);
+
+        if (!SetupDiGetDeviceInterfaceDetailW(device_info.get(), &interface_data, detail,
+                                              required_size, &required_size, nullptr))
+        {
+            continue;
+        }
+
+        ::Device battery;
+        if (!battery.open(QString::fromWCharArray(detail->DevicePath)))
+            continue;
+
+        ULONG input = 0;
+        ULONG tag = 0;
+        ULONG bytes_returned = 0;
+        if (!battery.ioControl(IOCTL_BATTERY_QUERY_TAG, &input, sizeof(input), &tag, sizeof(tag),
+                               &bytes_returned))
+        {
+            continue;
+        }
+
+        result.batteries.append(readBattery(battery, tag));
     }
 
     return result;

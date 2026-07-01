@@ -223,3 +223,11 @@ QList<SysInfo::Printer> SysInfo::printers()
     NOTIMPLEMENTED();
     return QList<Printer>();
 }
+
+//--------------------------------------------------------------------------------------------------
+// static
+SysInfo::PowerOptions SysInfo::powerOptions()
+{
+    NOTIMPLEMENTED();
+    return PowerOptions();
+}
