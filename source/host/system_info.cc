@@ -476,18 +476,19 @@ void fillRoutes(proto::system_info::SystemInfo* system_info)
 //--------------------------------------------------------------------------------------------------
 void fillEnvironmentVariables(proto::system_info::SystemInfo* system_info)
 {
-    QStringList list = QProcessEnvironment::systemEnvironment().toStringList();
+    const QStringList list = QProcessEnvironment::systemEnvironment().toStringList();
 
     for (const auto& item : std::as_const(list))
     {
+        // Split on the first '=' only so values may contain '='; skip entries with no name.
+        const qsizetype pos = item.indexOf('=');
+        if (pos <= 0)
+            continue;
+
         proto::system_info::EnvironmentVariables::Variable* variable =
             system_info->mutable_env_vars()->add_variable();
-        QStringList splitted = item.split('=');
-        if (splitted.size() == 2)
-        {
-            variable->set_name(splitted[0].toStdString());
-            variable->set_value(splitted[1].toStdString());
-        }
+        variable->set_name(item.left(pos).toStdString());
+        variable->set_value(item.mid(pos + 1).toStdString());
     }
 }
 
