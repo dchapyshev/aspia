@@ -59,6 +59,9 @@ public:
     static int journalPrevious(sd_journal* journal);
     static int journalGetData(sd_journal* journal, const char* field, const void** data, size_t* length);
     static int journalGetRealtimeUsec(sd_journal* journal, uint64_t* usec);
+    static int journalSeekCursor(sd_journal* journal, const char* cursor);
+    static int journalGetCursor(sd_journal* journal, char** cursor);
+    static int journalTestCursor(sd_journal* journal, const char* cursor);
 };
 
 #endif // BASE_LINUX_LIBSYSTEMD_H

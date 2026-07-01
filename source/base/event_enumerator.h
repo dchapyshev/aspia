@@ -19,6 +19,7 @@
 #ifndef BASE_EVENT_ENUMERATOR_H
 #define BASE_EVENT_ENUMERATOR_H
 
+#include <QByteArray>
 #include <QObject>
 #include <QString>
 
@@ -34,19 +35,28 @@ public:
     enum class Type { UNKNOWN, ERR, WARN, INFO, AUDIT_SUCCESS, AUDIT_FAILURE, SUCCESS };
     Q_ENUM(Type)
 
-    static std::unique_ptr<EventEnumerator> create(
-        const QString& log_name, quint32 start, quint32 count);
+    // Direction to read relative to |cursor|. Ignored when the cursor is empty (newest page).
+    enum class Direction { OLDER, NEWER };
 
-    virtual quint32 count() const = 0;
+    static std::unique_ptr<EventEnumerator> create(
+        const QString& log_name, const QByteArray& cursor, Direction direction, quint32 count);
+
     virtual bool isAtEnd() const = 0;
     virtual void advance() = 0;
 
     virtual Type type() const = 0;
     virtual qint64 time() const = 0;
-    virtual QString category() const = 0;
     virtual quint32 eventId() const = 0;
     virtual QString source() const = 0;
     virtual QString description() const = 0;
+
+    // Cursors of the newest and oldest entry of the returned page; used by the client to page.
+    virtual QByteArray firstCursor() const = 0;
+    virtual QByteArray lastCursor() const = 0;
+
+    // True when the page reaches the newest/oldest end of the log.
+    virtual bool atNewest() const = 0;
+    virtual bool atOldest() const = 0;
 
 protected:
     EventEnumerator() = default;

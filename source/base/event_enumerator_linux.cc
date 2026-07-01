@@ -18,10 +18,12 @@
 
 #include "base/event_enumerator_linux.h"
 
-#include <QByteArray>
-
 #include "base/logging.h"
 #include "base/linux/libsystemd.h"
+
+#include <algorithm>
+#include <cstdlib>
+#include <cstring>
 
 namespace {
 
@@ -56,111 +58,193 @@ void addLogMatches(sd_journal* journal, const QString& log_name)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
+// Reads a journal field of the current entry without the "FIELD=" prefix.
+QString readField(sd_journal* journal, const char* field)
+{
+    const void* data = nullptr;
+    size_t length = 0;
+    if (LibSystemd::journalGetData(journal, field, &data, &length) < 0)
+        return QString();
+
+    const char* chars = static_cast<const char*>(data);
+    const char* separator = static_cast<const char*>(memchr(chars, '=', length));
+    if (!separator)
+        return QString();
+
+    const qsizetype offset = (separator - chars) + 1;
+    return QString::fromUtf8(chars + offset, static_cast<qsizetype>(length) - offset);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Returns the opaque cursor of the current entry.
+QByteArray currentCursor(sd_journal* journal)
+{
+    char* cursor = nullptr;
+    if (LibSystemd::journalGetCursor(journal, &cursor) < 0 || !cursor)
+        return QByteArray();
+
+    QByteArray result(cursor);
+    free(cursor);
+    return result;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-EventEnumeratorLinux::EventEnumeratorLinux(const QString& log_name, quint32 start, quint32 count)
+EventEnumeratorLinux::EventEnumeratorLinux(const QString& log_name, const QByteArray& cursor,
+                                           Direction direction, quint32 count)
 {
     if (!count)
         return;
 
-    int ret = LibSystemd::journalOpen(&journal_);
+    sd_journal* journal = nullptr;
+    int ret = LibSystemd::journalOpen(&journal);
     if (ret < 0)
     {
         LOG(ERROR) << "journalOpen failed:" << ret;
-        journal_ = nullptr;
         return;
     }
 
-    addLogMatches(journal_, log_name);
+    addLogMatches(journal, log_name);
 
-    // Count the total number of matching entries for the client's pagination.
-    if (LibSystemd::journalSeekHead(journal_) >= 0)
-    {
-        while (LibSystemd::journalNext(journal_) > 0)
-            ++records_count_;
-    }
+    // NEWER reads forwards (next) and is reversed afterwards so the page stays newest-first; OLDER
+    // reads backwards (previous). An empty cursor jumps to an end of the log: OLDER is the newest
+    // page (from the tail), NEWER is the oldest page (from the head).
+    const bool read_forward = (direction == Direction::NEWER);
 
-    // Position at the newest entry, then skip |start| entries going backwards.
-    if (LibSystemd::journalSeekTail(journal_) < 0 || LibSystemd::journalPrevious(journal_) <= 0)
+    // Position at the first entry of the page.
+    bool positioned = false;
+    if (cursor.isEmpty())
     {
-        at_end_ = true;
-        return;
-    }
-
-    for (quint32 i = 0; i < start; ++i)
-    {
-        if (LibSystemd::journalPrevious(journal_) <= 0)
+        if (read_forward)
         {
-            at_end_ = true;
-            return;
+            positioned = LibSystemd::journalSeekHead(journal) >= 0 &&
+                         LibSystemd::journalNext(journal) > 0;
+            at_oldest_ = true;
+        }
+        else
+        {
+            positioned = LibSystemd::journalSeekTail(journal) >= 0 &&
+                         LibSystemd::journalPrevious(journal) > 0;
+            at_newest_ = true;
+        }
+    }
+    else if (read_forward)
+    {
+        // Skip to the first entry strictly newer than the cursor.
+        if (LibSystemd::journalSeekCursor(journal, cursor.constData()) >= 0 &&
+            LibSystemd::journalNext(journal) > 0)
+        {
+            if (LibSystemd::journalTestCursor(journal, cursor.constData()) > 0)
+                positioned = LibSystemd::journalNext(journal) > 0;
+            else
+                positioned = true;
+        }
+    }
+    else
+    {
+        // Skip to the first entry strictly older than the cursor.
+        if (LibSystemd::journalSeekCursor(journal, cursor.constData()) >= 0 &&
+            LibSystemd::journalPrevious(journal) > 0)
+        {
+            if (LibSystemd::journalTestCursor(journal, cursor.constData()) > 0)
+                positioned = LibSystemd::journalPrevious(journal) > 0;
+            else
+                positioned = true;
         }
     }
 
-    remaining_ = static_cast<int>(count);
+    if (positioned)
+    {
+        QByteArray first_read;
+        QByteArray last_read;
+        bool more = true;
+
+        for (quint32 i = 0; i < count; ++i)
+        {
+            const QByteArray current = currentCursor(journal);
+            if (i == 0)
+                first_read = current;
+            last_read = current;
+
+            Record record;
+
+            const QString priority = readField(journal, "PRIORITY");
+            record.type = priority.isEmpty() ? Type::INFO : typeFromPriority(priority.toInt());
+
+            uint64_t usec = 0;
+            if (LibSystemd::journalGetRealtimeUsec(journal, &usec) >= 0)
+                record.time = static_cast<qint64>(usec / 1000000ULL);
+
+            record.source = readField(journal, "SYSLOG_IDENTIFIER");
+            if (record.source.isEmpty())
+                record.source = readField(journal, "_COMM");
+
+            record.description = readField(journal, "MESSAGE");
+
+            records_.append(std::move(record));
+
+            const int step = read_forward ? LibSystemd::journalNext(journal)
+                                          : LibSystemd::journalPrevious(journal);
+            if (step <= 0)
+            {
+                more = false;
+                break;
+            }
+        }
+
+        const bool hit_boundary = !more;
+
+        if (read_forward)
+        {
+            std::reverse(records_.begin(), records_.end());
+            first_cursor_ = last_read;   // newest entry of the page
+            last_cursor_ = first_read;   // oldest entry of the page
+            at_newest_ = hit_boundary;   // reading newer hit the tail
+        }
+        else
+        {
+            first_cursor_ = first_read;  // newest entry of the page
+            last_cursor_ = last_read;    // oldest entry of the page
+            at_oldest_ = hit_boundary;   // reading older hit the head
+        }
+    }
+
+    LibSystemd::journalClose(journal);
 }
 
 //--------------------------------------------------------------------------------------------------
-EventEnumeratorLinux::~EventEnumeratorLinux()
-{
-    if (journal_)
-        LibSystemd::journalClose(journal_);
-}
-
-//--------------------------------------------------------------------------------------------------
-quint32 EventEnumeratorLinux::count() const
-{
-    return records_count_;
-}
+EventEnumeratorLinux::~EventEnumeratorLinux() = default;
 
 //--------------------------------------------------------------------------------------------------
 bool EventEnumeratorLinux::isAtEnd() const
 {
-    return at_end_ || !journal_ || remaining_ <= 0;
+    return index_ >= records_.size();
 }
 
 //--------------------------------------------------------------------------------------------------
 void EventEnumeratorLinux::advance()
 {
-    if (!journal_)
-    {
-        at_end_ = true;
-        return;
-    }
-
-    --remaining_;
-    if (remaining_ <= 0 || LibSystemd::journalPrevious(journal_) <= 0)
-        at_end_ = true;
+    ++index_;
 }
 
 //--------------------------------------------------------------------------------------------------
 EventEnumerator::Type EventEnumeratorLinux::type() const
 {
-    const QString priority = readField("PRIORITY");
-    if (priority.isEmpty())
+    if (index_ < 0 || index_ >= records_.size())
         return Type::INFO;
 
-    return typeFromPriority(priority.toInt());
+    return records_[index_].type;
 }
 
 //--------------------------------------------------------------------------------------------------
 qint64 EventEnumeratorLinux::time() const
 {
-    if (!journal_)
+    if (index_ < 0 || index_ >= records_.size())
         return 0;
 
-    uint64_t usec = 0;
-    if (LibSystemd::journalGetRealtimeUsec(journal_, &usec) < 0)
-        return 0;
-
-    return static_cast<qint64>(usec / 1000000ULL);
-}
-
-//--------------------------------------------------------------------------------------------------
-QString EventEnumeratorLinux::category() const
-{
-    // The journal has no equivalent of the Windows task category.
-    return QString();
+    return records_[index_].time;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -173,35 +257,41 @@ quint32 EventEnumeratorLinux::eventId() const
 //--------------------------------------------------------------------------------------------------
 QString EventEnumeratorLinux::source() const
 {
-    QString identifier = readField("SYSLOG_IDENTIFIER");
-    if (identifier.isEmpty())
-        identifier = readField("_COMM");
+    if (index_ < 0 || index_ >= records_.size())
+        return QString();
 
-    return identifier;
+    return records_[index_].source;
 }
 
 //--------------------------------------------------------------------------------------------------
 QString EventEnumeratorLinux::description() const
 {
-    return readField("MESSAGE");
+    if (index_ < 0 || index_ >= records_.size())
+        return QString();
+
+    return records_[index_].description;
 }
 
 //--------------------------------------------------------------------------------------------------
-QString EventEnumeratorLinux::readField(const char* field) const
+QByteArray EventEnumeratorLinux::firstCursor() const
 {
-    if (!journal_)
-        return QString();
+    return first_cursor_;
+}
 
-    const void* data = nullptr;
-    size_t length = 0;
-    if (LibSystemd::journalGetData(journal_, field, &data, &length) < 0)
-        return QString();
+//--------------------------------------------------------------------------------------------------
+QByteArray EventEnumeratorLinux::lastCursor() const
+{
+    return last_cursor_;
+}
 
-    // The returned data has the form "FIELD=value"; strip the "FIELD=" prefix.
-    const QByteArray raw(static_cast<const char*>(data), static_cast<qsizetype>(length));
-    int separator = raw.indexOf('=');
-    if (separator < 0)
-        return QString();
+//--------------------------------------------------------------------------------------------------
+bool EventEnumeratorLinux::atNewest() const
+{
+    return at_newest_;
+}
 
-    return QString::fromUtf8(raw.mid(separator + 1));
+//--------------------------------------------------------------------------------------------------
+bool EventEnumeratorLinux::atOldest() const
+{
+    return at_oldest_;
 }

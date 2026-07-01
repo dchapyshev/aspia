@@ -393,22 +393,31 @@ message EventLogs
 
         Level level        = 1;
         int64 time         = 2;
-        string category    = 3;
-        uint32 event_id    = 4;
-        string source      = 5;
-        string description = 6;
+        uint32 event_id    = 3;
+        string source      = 4;
+        string description = 5;
     }
 
     Event.Type type = 1;
-    uint32 total_records = 2;
-    repeated Event event = 3;
+    repeated Event event = 2;
+    bytes first_cursor = 3;
+    bytes last_cursor = 4;
+    bool at_newest = 5;
+    bool at_oldest = 6;
 }
 
 message EventLogsData
 {
+    enum Direction
+    {
+        DIRECTION_OLDER = 0;
+        DIRECTION_NEWER = 1;
+    }
+
     EventLogs.Event.Type type = 1;
-    uint32 record_start = 2;
-    uint32 record_count = 3;
+    uint32 record_count = 2;
+    bytes cursor = 3;
+    Direction direction = 4;
 }
 
 message Routes

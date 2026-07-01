@@ -19,6 +19,8 @@
 #ifndef CLIENT_DESKTOP_SYS_INFO_SYS_INFO_EVENT_LOGS_H
 #define CLIENT_DESKTOP_SYS_INFO_SYS_INFO_EVENT_LOGS_H
 
+#include <QByteArray>
+
 #include <memory>
 
 #include "client/desktop/sys_info/sys_info_widget.h"
@@ -48,11 +50,11 @@ protected:
 
 private slots:
     void onContextMenu(const QPoint& point);
-    void onPageActivated(int index);
 
 private:
     proto::system_info::SystemInfoRequest createRequest(
-        proto::system_info::EventLogs::Event::Type type, quint32 start) const;
+        proto::system_info::EventLogs::Event::Type type, const QByteArray& cursor,
+        proto::system_info::EventLogsData::Direction direction) const;
     static QString levelToString(proto::system_info::EventLogs::Event::Level value);
 
     std::unique_ptr<Ui::SysInfoEventLogs> ui;
@@ -60,10 +62,11 @@ private:
 
     static const quint32 kRecordsPerPage = 1000;
 
-    proto::system_info::EventLogs::Event::Type current_type_ =
-        proto::system_info::EventLogs::Event::TYPE_SYSTEM;
-    quint32 total_records_ = 0;
-    quint32 start_record_ = 0;
+    QByteArray first_cursor_;
+    QByteArray last_cursor_;
+    QByteArray pending_cursor_;
+    proto::system_info::EventLogsData::Direction pending_direction_ =
+        proto::system_info::EventLogsData::DIRECTION_OLDER;
 };
 
 #endif // CLIENT_DESKTOP_SYS_INFO_SYS_INFO_EVENT_LOGS_H

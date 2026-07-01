@@ -18,6 +18,7 @@
 
 #include "host/system_info.h"
 
+#include <QByteArray>
 #include <QProcessEnvironment>
 #include <QStorageInfo>
 
@@ -769,8 +770,12 @@ void fillEventLogs(proto::system_info::SystemInfo* system_info,
             return;
     }
 
-    std::unique_ptr<EventEnumerator> enumerator =
-        EventEnumerator::create(log_name, data.record_start(), data.record_count());
+    EventEnumerator::Direction direction =
+        (data.direction() == proto::system_info::EventLogsData::DIRECTION_NEWER) ?
+            EventEnumerator::Direction::NEWER : EventEnumerator::Direction::OLDER;
+
+    std::unique_ptr<EventEnumerator> enumerator = EventEnumerator::create(
+        log_name, QByteArray::fromStdString(data.cursor()), direction, data.record_count());
     if (!enumerator)
         return;
 
@@ -814,13 +819,18 @@ void fillEventLogs(proto::system_info::SystemInfo* system_info,
 
         event->set_level(level);
         event->set_time(enumerator->time());
-        event->set_category(enumerator->category().toStdString());
         event->set_event_id(enumerator->eventId());
         event->set_source(enumerator->source().toStdString());
         event->set_description(enumerator->description().toStdString());
 
         enumerator->advance();
     }
+
+    proto::system_info::EventLogs* event_logs = system_info->mutable_event_logs();
+    event_logs->set_first_cursor(enumerator->firstCursor().toStdString());
+    event_logs->set_last_cursor(enumerator->lastCursor().toStdString());
+    event_logs->set_at_newest(enumerator->atNewest());
+    event_logs->set_at_oldest(enumerator->atOldest());
 }
 
 //--------------------------------------------------------------------------------------------------

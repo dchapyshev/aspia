@@ -28,7 +28,8 @@
 class EventEnumeratorWin final : public EventEnumerator
 {
 public:
-    EventEnumeratorWin(const QString& log_name, quint32 start, quint32 count);
+    EventEnumeratorWin(const QString& log_name, const QByteArray& cursor, Direction direction,
+                       quint32 count);
     ~EventEnumeratorWin() final;
 
     // EventEnumerator implementation.
@@ -36,10 +37,13 @@ public:
     void advance() final;
     Type type() const final;
     qint64 time() const final;
-    QString category() const final;
     quint32 eventId() const final;
     QString source() const final;
     QString description() const final;
+    QByteArray firstCursor() const final;
+    QByteArray lastCursor() const final;
+    bool atNewest() const final;
+    bool atOldest() const final;
 
 private:
     bool fetchNext() const;
@@ -50,7 +54,14 @@ private:
     ScopedEvtHandle query_;
     ScopedEvtHandle render_context_;
 
+    // The opaque cursor encodes the record offset from the newest record; |start_| is the offset of
+    // this page's newest record.
+    quint32 start_ = 0;
+    quint32 count_ = 0;
+
     mutable int remaining_ = 0;
+    mutable quint32 read_count_ = 0;
+    bool at_oldest_hint_ = false;
     mutable bool event_ready_ = false;
     mutable ScopedEvtHandle event_;
     mutable QByteArray values_buffer_;

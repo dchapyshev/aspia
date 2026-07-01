@@ -21,32 +21,45 @@
 
 #include "base/event_enumerator.h"
 
-struct sd_journal;
+#include <QList>
 
 class EventEnumeratorLinux final : public EventEnumerator
 {
 public:
-    EventEnumeratorLinux(const QString& log_name, quint32 start, quint32 count);
+    EventEnumeratorLinux(const QString& log_name, const QByteArray& cursor, Direction direction,
+                         quint32 count);
     ~EventEnumeratorLinux() final;
 
     // EventEnumerator implementation.
-    quint32 count() const final;
     bool isAtEnd() const final;
     void advance() final;
     Type type() const final;
     qint64 time() const final;
-    QString category() const final;
     quint32 eventId() const final;
     QString source() const final;
     QString description() const final;
+    QByteArray firstCursor() const final;
+    QByteArray lastCursor() const final;
+    bool atNewest() const final;
+    bool atOldest() const final;
 
 private:
-    QString readField(const char* field) const;
+    struct Record
+    {
+        Type type = Type::INFO;
+        qint64 time = 0;
+        QString source;
+        QString description;
+    };
 
-    sd_journal* journal_ = nullptr;
-    quint32 records_count_ = 0;
-    int remaining_ = 0;
-    bool at_end_ = false;
+    // The page is read into memory in the constructor (a NEWER page is read oldest-first and then
+    // reversed), so the journal handle does not outlive the constructor.
+    QList<Record> records_;
+    qsizetype index_ = 0;
+    QByteArray first_cursor_;
+    QByteArray last_cursor_;
+    bool at_newest_ = false;
+    bool at_oldest_ = false;
 
     Q_DISABLE_COPY_MOVE(EventEnumeratorLinux)
 };

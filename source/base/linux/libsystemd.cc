@@ -52,6 +52,9 @@ decltype(&sd_journal_next) g_journal_next = nullptr;
 decltype(&sd_journal_previous) g_journal_previous = nullptr;
 decltype(&sd_journal_get_data) g_journal_get_data = nullptr;
 decltype(&sd_journal_get_realtime_usec) g_journal_get_realtime_usec = nullptr;
+decltype(&sd_journal_seek_cursor) g_journal_seek_cursor = nullptr;
+decltype(&sd_journal_get_cursor) g_journal_get_cursor = nullptr;
+decltype(&sd_journal_test_cursor) g_journal_test_cursor = nullptr;
 
 } // namespace
 
@@ -109,12 +112,19 @@ bool LibSystemd::ensureLoaded()
         reinterpret_cast<decltype(g_journal_get_data)>(dlsym(g_handle, "sd_journal_get_data"));
     g_journal_get_realtime_usec = reinterpret_cast<decltype(g_journal_get_realtime_usec)>(
         dlsym(g_handle, "sd_journal_get_realtime_usec"));
+    g_journal_seek_cursor =
+        reinterpret_cast<decltype(g_journal_seek_cursor)>(dlsym(g_handle, "sd_journal_seek_cursor"));
+    g_journal_get_cursor =
+        reinterpret_cast<decltype(g_journal_get_cursor)>(dlsym(g_handle, "sd_journal_get_cursor"));
+    g_journal_test_cursor =
+        reinterpret_cast<decltype(g_journal_test_cursor)>(dlsym(g_handle, "sd_journal_test_cursor"));
 
     if (!g_seat_get_active || !g_session_get_vt || !g_session_get_class || !g_session_get_type ||
         !g_login_monitor_new || !g_login_monitor_unref || !g_login_monitor_get_fd ||
         !g_login_monitor_flush || !g_journal_open || !g_journal_close || !g_journal_add_match ||
         !g_journal_seek_head || !g_journal_seek_tail || !g_journal_next || !g_journal_previous ||
-        !g_journal_get_data || !g_journal_get_realtime_usec)
+        !g_journal_get_data || !g_journal_get_realtime_usec || !g_journal_seek_cursor ||
+        !g_journal_get_cursor || !g_journal_test_cursor)
     {
         LOG(ERROR) << "Unable to resolve libsystemd symbols";
         dlclose(g_handle);
@@ -277,4 +287,31 @@ int LibSystemd::journalGetRealtimeUsec(sd_journal* journal, uint64_t* usec)
     if (!ensureLoaded())
         return -1;
     return g_journal_get_realtime_usec(journal, usec);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+int LibSystemd::journalSeekCursor(sd_journal* journal, const char* cursor)
+{
+    if (!ensureLoaded())
+        return -1;
+    return g_journal_seek_cursor(journal, cursor);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+int LibSystemd::journalGetCursor(sd_journal* journal, char** cursor)
+{
+    if (!ensureLoaded())
+        return -1;
+    return g_journal_get_cursor(journal, cursor);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+int LibSystemd::journalTestCursor(sd_journal* journal, const char* cursor)
+{
+    if (!ensureLoaded())
+        return -1;
+    return g_journal_test_cursor(journal, cursor);
 }

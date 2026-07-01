@@ -48,6 +48,13 @@
        <number>5</number>
       </property>
       <item>
+       <widget class="QPushButton" name="button_first">
+        <property name="text">
+         <string>First</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="button_prev">
         <property name="text">
          <string>Previous</string>
@@ -62,7 +69,11 @@
        </widget>
       </item>
       <item>
-       <widget class="QComboBox" name="combobox_page"/>
+       <widget class="QPushButton" name="button_last">
+        <property name="text">
+         <string>Last</string>
+        </property>
+       </widget>
       </item>
       <item>
        <spacer name="horizontalSpacer">
@@ -122,11 +133,6 @@
       <column>
        <property name="text">
         <string>Level</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Category</string>
        </property>
       </column>
       <column>

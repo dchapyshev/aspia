@@ -27,6 +27,9 @@
 
 namespace {
 
+// Maximum length of the single-line description preview shown in the tree column.
+const int kMaxDescriptionLength = 150;
+
 class EventItem final : public QTreeWidgetItem
 {
 public:
@@ -61,9 +64,6 @@ SysInfoWidgetEventLogs::SysInfoWidgetEventLogs(QWidget* parent)
 {
     ui->setupUi(this);
     ui->tree->setMouseTracking(true);
-
-    // Hide description column.
-    ui->tree->setColumnHidden(5, true);
 
     ui->combobox_type->addItem(tr("Application"),
         static_cast<quint32>(proto::system_info::EventLogs::Event::TYPE_APPLICATION));
@@ -104,7 +104,7 @@ SysInfoWidgetEventLogs::SysInfoWidgetEventLogs(QWidget* parent)
         QString description;
 
         if (current)
-            description = current->text(5);
+            description = current->data(4, Qt::UserRole).toString();
         ui->edit_description->setPlainText(description);
 
         bool enable = !description.isEmpty();
@@ -115,40 +115,45 @@ SysInfoWidgetEventLogs::SysInfoWidgetEventLogs(QWidget* parent)
 
     connect(ui->button_next, &QPushButton::clicked, this, [this]()
     {
-        int index = ui->combobox_page->currentIndex() + 1;
-        int count = ui->combobox_page->count();
-
-        if (index >= count)
-            return;
-
-        onPageActivated(index);
+        pending_cursor_ = last_cursor_;
+        pending_direction_ = proto::system_info::EventLogsData::DIRECTION_OLDER;
+        emit sig_systemInfoRequest(request());
     });
 
     connect(ui->button_prev, &QPushButton::clicked, this, [this]()
     {
-        int index = ui->combobox_page->currentIndex() - 1;
-        if (index < 0)
-            return;
-
-        onPageActivated(index);
+        pending_cursor_ = first_cursor_;
+        pending_direction_ = proto::system_info::EventLogsData::DIRECTION_NEWER;
+        emit sig_systemInfoRequest(request());
     });
 
-    connect(ui->combobox_page, QOverload<int>::of(&QComboBox::activated),
-            this, &SysInfoWidgetEventLogs::onPageActivated);
+    connect(ui->button_first, &QPushButton::clicked, this, [this]()
+    {
+        pending_cursor_ = QByteArray();
+        pending_direction_ = proto::system_info::EventLogsData::DIRECTION_OLDER;
+        emit sig_systemInfoRequest(request());
+    });
+
+    connect(ui->button_last, &QPushButton::clicked, this, [this]()
+    {
+        pending_cursor_ = QByteArray();
+        pending_direction_ = proto::system_info::EventLogsData::DIRECTION_NEWER;
+        emit sig_systemInfoRequest(request());
+    });
 
     connect(ui->combobox_type, QOverload<int>::of(&QComboBox::activated), this, [this](int index)
     {
         proto::system_info::EventLogs::Event::Type type =
             static_cast<proto::system_info::EventLogs::Event::Type>(
                 ui->combobox_type->itemData(index).toInt());
-        emit sig_systemInfoRequest(createRequest(type, 0));
+        emit sig_systemInfoRequest(createRequest(
+            type, QByteArray(), proto::system_info::EventLogsData::DIRECTION_OLDER));
     });
 
     ui->tree->setColumnWidth(0, 150);
     ui->tree->setColumnWidth(1, 120);
     ui->tree->setColumnWidth(2, 80);
-    ui->tree->setColumnWidth(3, 80);
-    ui->tree->setColumnWidth(4, 140);
+    ui->tree->setColumnWidth(3, 140);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -166,7 +171,7 @@ proto::system_info::SystemInfoRequest SysInfoWidgetEventLogs::request() const
     proto::system_info::EventLogs::Event::Type type =
         static_cast<proto::system_info::EventLogs::Event::Type>(
             ui->combobox_type->currentData().toInt());
-    return createRequest(type, start_record_);
+    return createRequest(type, pending_cursor_, pending_direction_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -178,38 +183,25 @@ void SysInfoWidgetEventLogs::setSystemInfo(const proto::system_info::SystemInfo&
     if (!system_info.has_event_logs())
     {
         ui->tree->setEnabled(false);
-        ui->button_next->setEnabled(false);
+        ui->button_first->setEnabled(false);
         ui->button_prev->setEnabled(false);
-        ui->combobox_page->setEnabled(false);
+        ui->button_next->setEnabled(false);
+        ui->button_last->setEnabled(false);
         return;
     }
 
     const proto::system_info::EventLogs& event_logs = system_info.event_logs();
 
-    total_records_ = event_logs.total_records();
-    if (current_type_ != event_logs.type())
-    {
-        current_type_ = event_logs.type();
-        start_record_ = 0;
-    }
+    first_cursor_ = QByteArray::fromStdString(event_logs.first_cursor());
+    last_cursor_ = QByteArray::fromStdString(event_logs.last_cursor());
 
-    ui->combobox_page->clear();
-    ui->combobox_page->setEnabled(true);
-
-    quint32 page_count = std::max(total_records_ / kRecordsPerPage, 1U);
-    for (quint32 i = 1; i <= page_count; ++i)
-        ui->combobox_page->addItem(tr("Page %1/%2").arg(i).arg(page_count));
-
-    int current_page = std::max(0, static_cast<int>(start_record_ / kRecordsPerPage));
-
-    ui->button_prev->setEnabled(current_page > 0);
-    ui->button_next->setEnabled(current_page < ui->combobox_page->count() - 1);
+    // "First"/"Previous" step toward the newest entries, "Last"/"Next" toward the oldest.
+    ui->button_first->setEnabled(!event_logs.at_newest());
+    ui->button_prev->setEnabled(!event_logs.at_newest());
+    ui->button_last->setEnabled(!event_logs.at_oldest());
+    ui->button_next->setEnabled(!event_logs.at_oldest());
 
     LOG(INFO) << "Events count:" << event_logs.event_size();
-    LOG(INFO) << "Current page:" << current_page << "(total:" << total_records_
-              << "start:" << start_record_ << ")";
-
-    ui->combobox_page->setCurrentIndex(current_page);
 
     QIcon error_icon(":/img/high-importance.svg");
     QIcon warning_icon(":/img/box-important.svg");
@@ -220,12 +212,20 @@ void SysInfoWidgetEventLogs::setSystemInfo(const proto::system_info::SystemInfo&
         const proto::system_info::EventLogs::Event& event = event_logs.event(i);
 
         EventItem* item = new EventItem(event.time());
+        const QString description = QString::fromStdString(event.description());
+
+        // The tree cell shows a single-line, length-limited preview; the full text stays in the item
+        // for the description panel below.
+        QString preview = description.simplified();
+        if (preview.length() > kMaxDescriptionLength)
+            preview = preview.left(kMaxDescriptionLength) + "...";
+
         item->setText(0, Formatter::timeToString(event.time()));
         item->setText(1, levelToString(event.level()));
-        item->setText(2, QString::fromStdString(event.category()));
-        item->setText(3, QString::number(event.event_id()));
-        item->setText(4, QString::fromStdString(event.source()));
-        item->setText(5, QString::fromStdString(event.description()));
+        item->setText(2, QString::number(event.event_id()));
+        item->setText(3, QString::fromStdString(event.source()));
+        item->setText(4, preview);
+        item->setData(4, Qt::UserRole, description);
 
         switch (event.level())
         {
@@ -280,20 +280,14 @@ void SysInfoWidgetEventLogs::onContextMenu(const QPoint& point)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SysInfoWidgetEventLogs::onPageActivated(int index)
-{
-    start_record_ = static_cast<quint32>(index) * kRecordsPerPage;
-    LOG(INFO) << "Page activated:" << index << "(start:" << start_record_ << ")";
-    emit sig_systemInfoRequest(request());
-}
-
-//--------------------------------------------------------------------------------------------------
 proto::system_info::SystemInfoRequest SysInfoWidgetEventLogs::createRequest(
-    proto::system_info::EventLogs::Event::Type type, quint32 start) const
+    proto::system_info::EventLogs::Event::Type type, const QByteArray& cursor,
+    proto::system_info::EventLogsData::Direction direction) const
 {
-    ui->button_next->setEnabled(false);
+    ui->button_first->setEnabled(false);
     ui->button_prev->setEnabled(false);
-    ui->combobox_page->setEnabled(false);
+    ui->button_next->setEnabled(false);
+    ui->button_last->setEnabled(false);
     ui->combobox_type->setEnabled(false);
 
     proto::system_info::SystemInfoRequest system_info_request;
@@ -301,8 +295,9 @@ proto::system_info::SystemInfoRequest SysInfoWidgetEventLogs::createRequest(
 
     proto::system_info::EventLogsData* data = system_info_request.mutable_event_logs_data();
     data->set_type(type);
-    data->set_record_start(start);
     data->set_record_count(kRecordsPerPage);
+    data->set_cursor(cursor.toStdString());
+    data->set_direction(direction);
 
     return system_info_request;
 }

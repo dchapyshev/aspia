@@ -50,28 +50,6 @@ bool hasValue(const EVT_VARIANT& value)
 }
 
 //--------------------------------------------------------------------------------------------------
-quint32 logRecordCount(const QString& log_name)
-{
-    ScopedEvtHandle log(EvtOpenLog(nullptr, qUtf16Printable(log_name), EvtOpenChannelPath));
-    if (!log.isValid())
-    {
-        PLOG(ERROR) << "EvtOpenLog failed";
-        return 0;
-    }
-
-    EVT_VARIANT value;
-    DWORD buffer_used = 0;
-
-    if (!EvtGetLogInfo(log.get(), EvtLogNumberOfLogRecords, sizeof(value), &value, &buffer_used))
-    {
-        PLOG(ERROR) << "EvtGetLogInfo failed";
-        return 0;
-    }
-
-    return static_cast<quint32>(value.UInt64Val);
-}
-
-//--------------------------------------------------------------------------------------------------
 QString formatEventMessage(EVT_HANDLE metadata, EVT_HANDLE event, EVT_FORMAT_MESSAGE_FLAGS flag)
 {
     DWORD buffer_used = 0;
@@ -100,16 +78,58 @@ QString formatEventMessage(EVT_HANDLE metadata, EVT_HANDLE event, EVT_FORMAT_MES
     return QString::fromWCharArray(buffer.c_str());
 }
 
+//--------------------------------------------------------------------------------------------------
+// Returns the total number of records in the log via an O(1) metadata query.
+quint32 logRecordCount(const QString& log_name)
+{
+    ScopedEvtHandle log(EvtOpenLog(nullptr, qUtf16Printable(log_name), EvtOpenChannelPath));
+    if (!log.isValid())
+    {
+        PLOG(ERROR) << "EvtOpenLog failed";
+        return 0;
+    }
+
+    EVT_VARIANT value;
+    DWORD buffer_used = 0;
+
+    if (!EvtGetLogInfo(log.get(), EvtLogNumberOfLogRecords, sizeof(value), &value, &buffer_used))
+    {
+        PLOG(ERROR) << "EvtGetLogInfo failed";
+        return 0;
+    }
+
+    return static_cast<quint32>(value.UInt64Val);
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-EventEnumeratorWin::EventEnumeratorWin(const QString& log_name, quint32 start, quint32 count)
-    : log_name_(log_name)
+EventEnumeratorWin::EventEnumeratorWin(const QString& log_name, const QByteArray& cursor,
+                                       Direction direction, quint32 count)
+    : log_name_(log_name),
+      count_(count)
 {
     if (!count)
         return;
 
-    records_count_ = logRecordCount(log_name_);
+    // The opaque cursor carries the record offset of the page boundary; compute this page's start.
+    if (!cursor.isEmpty())
+    {
+        const quint32 offset = cursor.toUInt();
+        if (direction == Direction::OLDER)
+            start_ = offset + 1;
+        else if (offset > count)
+            start_ = offset - count;
+        // Otherwise NEWER navigation reached the newest records and start_ stays 0.
+    }
+    else if (direction == Direction::NEWER)
+    {
+        // Empty cursor + NEWER jumps to the oldest page, i.e. the last records of the log.
+        const quint32 total = logRecordCount(log_name_);
+        start_ = (total > count) ? total - count : 0;
+        at_oldest_hint_ = true;
+    }
+    // Otherwise (empty cursor + OLDER) this is the newest page and start_ stays 0.
 
     render_context_.reset(EvtCreateRenderContext(0, nullptr, EvtRenderContextSystem));
     if (!render_context_.isValid())
@@ -127,28 +147,19 @@ EventEnumeratorWin::EventEnumeratorWin(const QString& log_name, quint32 start, q
         return;
     }
 
-    if (start > 0)
+    if (start_ > 0)
     {
-        if (!EvtSeek(query_.get(), static_cast<LONGLONG>(start), nullptr, 0, EvtSeekRelativeToFirst))
-        {
+        if (!EvtSeek(query_.get(), static_cast<LONGLONG>(start_), nullptr, 0, EvtSeekRelativeToFirst))
             PLOG(ERROR) << "EvtSeek failed";
-        }
     }
 
     remaining_ = static_cast<int>(count);
 
-    LOG(TRACE) << "Log name:" << log_name_;
-    LOG(TRACE) << "Total:" << records_count_ << "start:" << start << "count:" << count;
+    LOG(TRACE) << "Log name:" << log_name_ << "start:" << start_ << "count:" << count;
 }
 
 //--------------------------------------------------------------------------------------------------
 EventEnumeratorWin::~EventEnumeratorWin() = default;
-
-//--------------------------------------------------------------------------------------------------
-quint32 EventEnumeratorWin::count() const
-{
-    return records_count_;
-}
 
 //--------------------------------------------------------------------------------------------------
 bool EventEnumeratorWin::isAtEnd() const
@@ -168,6 +179,36 @@ void EventEnumeratorWin::advance()
     event_.reset();
     event_ready_ = false;
     --remaining_;
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray EventEnumeratorWin::firstCursor() const
+{
+    if (read_count_ == 0)
+        return QByteArray();
+
+    return QByteArray::number(start_);
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray EventEnumeratorWin::lastCursor() const
+{
+    if (read_count_ == 0)
+        return QByteArray();
+
+    return QByteArray::number(start_ + read_count_ - 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool EventEnumeratorWin::atNewest() const
+{
+    return start_ == 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool EventEnumeratorWin::atOldest() const
+{
+    return at_oldest_hint_ || read_count_ < count_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -212,14 +253,6 @@ qint64 EventEnumeratorWin::time() const
         return 0;
 
     return static_cast<qint64>((file_time - kUnixEpochOffset) / 10000000ULL);
-}
-
-//--------------------------------------------------------------------------------------------------
-QString EventEnumeratorWin::category() const
-{
-    EVT_VARIANT* values = systemValues(values_buffer_);
-    quint16 task = hasValue(values[EvtSystemTask]) ? values[EvtSystemTask].UInt16Val : 0;
-    return QString::number(task);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -284,6 +317,7 @@ bool EventEnumeratorWin::fetchNext() const
         if (renderSystem())
         {
             event_ready_ = true;
+            ++read_count_;
             return true;
         }
 

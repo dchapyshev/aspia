@@ -27,12 +27,12 @@
 //--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<EventEnumerator> EventEnumerator::create(
-    const QString& log_name, quint32 start, quint32 count)
+    const QString& log_name, const QByteArray& cursor, Direction direction, quint32 count)
 {
 #if defined(Q_OS_WINDOWS)
-    return std::make_unique<EventEnumeratorWin>(log_name, start, count);
+    return std::make_unique<EventEnumeratorWin>(log_name, cursor, direction, count);
 #elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
-    return std::make_unique<EventEnumeratorLinux>(log_name, start, count);
+    return std::make_unique<EventEnumeratorLinux>(log_name, cursor, direction, count);
 #else
     return nullptr;
 #endif
