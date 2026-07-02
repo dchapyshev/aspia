@@ -215,29 +215,10 @@ QList<WaylandOutputLayout::Output> queryCompositorOutputs()
 }
 
 //--------------------------------------------------------------------------------------------------
-// Reads a single-plane scan-out buffer into |dst| (packed BGRA, |dst_stride| bytes per row) through a
-// CPU mapping of its DMA-BUF, converting from the scan-out's pixel format. Used as a fallback when the
-// EGL/GL readback is unavailable: a VM whose 3D acceleration is inactive runs on software GL, which
-// cannot read the hardware scan-out buffer. Returns false for a format with no conversion below.
-bool readDmaBufCpu(int dmabuf_fd, const drmModeFB2* fb, quint8* dst, int dst_stride)
+bool convertToBgra(const quint8* src, int src_stride, const drmModeFB2* fb, quint8* dst, int dst_stride)
 {
     const int width = static_cast<int>(fb->width);
     const int height = static_cast<int>(fb->height);
-    const int src_stride = static_cast<int>(fb->pitches[0]);
-    const size_t map_size = fb->offsets[0] + static_cast<size_t>(src_stride) * height;
-
-    void* map = mmap(nullptr, map_size, PROT_READ, MAP_SHARED, dmabuf_fd, 0);
-    if (map == MAP_FAILED)
-        return false;
-
-    // Bracket the read with a DMA-BUF sync so the CPU sees coherent data (best effort; ignore failures).
-    dma_buf_sync sync = {};
-    sync.flags = DMA_BUF_SYNC_START | DMA_BUF_SYNC_READ;
-    ioctl(dmabuf_fd, DMA_BUF_IOCTL_SYNC, &sync);
-
-    // Convert into the frame's packed BGRA, which libyuv names ARGB. A DRM format lists its channels most-
-    // to least-significant, so the little-endian memory byte order is the reverse (noted per case).
-    const quint8* src = static_cast<const quint8*>(map) + fb->offsets[0];
     int rc = -1;
     switch (fb->pixel_format)
     {
@@ -273,11 +254,57 @@ bool readDmaBufCpu(int dmabuf_fd, const drmModeFB2* fb, quint8* dst, int dst_str
                        << Qt::hex << fb->pixel_format;
             break;
     }
+    return rc == 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Reads a single-plane scan-out buffer into |dst| (packed BGRA) through a CPU mapping of its exported
+// DMA-BUF. Used when the EGL/GL readback is unavailable: a VM whose 3D acceleration is inactive runs on
+// software GL, which cannot read the hardware scan-out buffer.
+bool readDmaBufCpu(int dmabuf_fd, const drmModeFB2* fb, quint8* dst, int dst_stride)
+{
+    const size_t map_size = fb->offsets[0] + static_cast<size_t>(fb->pitches[0]) * fb->height;
+
+    void* map = mmap(nullptr, map_size, PROT_READ, MAP_SHARED, dmabuf_fd, 0);
+    if (map == MAP_FAILED)
+        return false;
+
+    // Bracket the read with a DMA-BUF sync so the CPU sees coherent data (best effort; ignore failures).
+    dma_buf_sync sync = {};
+    sync.flags = DMA_BUF_SYNC_START | DMA_BUF_SYNC_READ;
+    ioctl(dmabuf_fd, DMA_BUF_IOCTL_SYNC, &sync);
+
+    const bool ok = convertToBgra(static_cast<const quint8*>(map) + fb->offsets[0],
+                                  static_cast<int>(fb->pitches[0]), fb, dst, dst_stride);
 
     sync.flags = DMA_BUF_SYNC_END | DMA_BUF_SYNC_READ;
     ioctl(dmabuf_fd, DMA_BUF_IOCTL_SYNC, &sync);
     munmap(map, map_size);
-    return rc == 0;
+    return ok;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Reads a single-plane scan-out buffer into |dst| (packed BGRA) by mapping its GEM handle directly as a
+// dumb buffer. Last-resort CPU path for drivers that cannot PRIME-export the scan-out at all (e.g.
+// vmwgfx on a software VM), where both the EGL and the DMA-BUF paths are impossible.
+bool readDumbBufferCpu(int drm_fd, const drmModeFB2* fb, quint8* dst, int dst_stride)
+{
+    if (!fb->handles[0])
+        return false;
+
+    uint64_t map_offset = 0;
+    if (LibDrm::mapDumbBuffer(drm_fd, fb->handles[0], &map_offset) != 0)
+        return false;
+
+    const size_t map_size = static_cast<size_t>(fb->pitches[0]) * fb->height;
+    void* map = mmap(nullptr, map_size, PROT_READ, MAP_SHARED, drm_fd, static_cast<off_t>(map_offset));
+    if (map == MAP_FAILED)
+        return false;
+
+    const bool ok = convertToBgra(static_cast<const quint8*>(map),
+                                  static_cast<int>(fb->pitches[0]), fb, dst, dst_stride);
+    munmap(map, map_size);
+    return ok;
 }
 
 } // namespace
@@ -673,49 +700,74 @@ bool ScreenCapturerKms::importFb(drmModeFB2* fb, quint8* dst, int dst_stride)
     const quint64 modifier =
         (fb->flags & DRM_MODE_FB_MODIFIERS) ? fb->modifier : DRM_FORMAT_MOD_INVALID;
 
-    // Export each plane's GEM handle as a DMA-BUF descriptor for the EGL importer. Handles created by
-    // drmModeGetFB2() live in our fd namespace and must be released afterwards.
+    // The dumb-buffer path needs only the GEM handle; the EGL and DMA-BUF paths need the scan-out
+    // exported as a DMA-BUF first. Skip that export once we know the driver cannot PRIME-export. Handles
+    // created by drmModeGetFB2() live in our fd namespace and must be released afterwards.
     std::array<EglDmaBuf::Plane, 4> planes;
     std::array<int, 4> prime_fds = { -1, -1, -1, -1 };
     int plane_count = 0;
 
-    for (int i = 0; i < 4; ++i)
+    if (readback_ != Readback::DUMB_CPU)
     {
-        if (!fb->handles[i])
-            continue;
-
-        int prime_fd = -1;
-        if (LibDrm::primeHandleToFD(drm_fd_, fb->handles[i], DRM_CLOEXEC, &prime_fd) != 0 ||
-            prime_fd < 0)
+        for (int i = 0; i < 4; ++i)
         {
-            LOG(ERROR) << "drmPrimeHandleToFD failed for plane" << i;
-            break;
-        }
+            if (!fb->handles[i])
+                continue;
 
-        prime_fds[plane_count] = prime_fd;
-        planes[plane_count].fd = prime_fd;
-        planes[plane_count].offset = fb->offsets[i];
-        planes[plane_count].stride = fb->pitches[i];
-        ++plane_count;
+            int prime_fd = -1;
+            if (LibDrm::primeHandleToFD(drm_fd_, fb->handles[i], DRM_CLOEXEC, &prime_fd) != 0 ||
+                prime_fd < 0)
+            {
+                // Some drivers (e.g. vmwgfx on a software VM) cannot export the scan-out at all; fall
+                // through to the dumb-buffer mapping below.
+                if (readback_ == Readback::UNKNOWN)
+                    LOG(INFO) << "KMS: scan-out cannot be PRIME-exported, trying dumb-buffer mapping";
+                break;
+            }
+
+            prime_fds[plane_count] = prime_fd;
+            planes[plane_count].fd = prime_fd;
+            planes[plane_count].offset = fb->offsets[i];
+            planes[plane_count].stride = fb->pitches[i];
+            ++plane_count;
+        }
     }
 
+    const Readback initial = readback_;
     bool ok = false;
-    if (!prefer_cpu_readback_ && plane_count > 0)
+
+    // GPU path: EGL import of the exported DMA-BUF.
+    if ((readback_ == Readback::UNKNOWN || readback_ == Readback::EGL) && plane_count > 0)
     {
         ok = egl_dmabuf_->imageFromDmaBuf(size, fourcc, planes.data(), plane_count, modifier,
                                           QRect(QPoint(0, 0), size), dst, dst_stride);
+        if (ok)
+            readback_ = Readback::EGL;
     }
 
-    // Fallback (and the path used from then on) for software GL, where the EGL readback fails: read the
-    // single-plane scan-out buffer directly through a CPU mapping of its DMA-BUF.
-    if (!ok && plane_count == 1 && prime_fds[0] >= 0)
+    // CPU path 1: map the exported DMA-BUF directly (software GL cannot do the EGL readback).
+    if (!ok && (readback_ == Readback::UNKNOWN || readback_ == Readback::DMABUF_CPU) &&
+        plane_count == 1 && prime_fds[0] >= 0)
     {
         ok = readDmaBufCpu(prime_fds[0], fb, dst, dst_stride);
-        if (ok && !prefer_cpu_readback_)
-        {
-            prefer_cpu_readback_ = true;
-            LOG(INFO) << "KMS: EGL readback unavailable; using CPU DMA-BUF mapping for readback";
-        }
+        if (ok)
+            readback_ = Readback::DMABUF_CPU;
+    }
+
+    // CPU path 2: map the GEM handle as a dumb buffer (the driver cannot PRIME-export at all).
+    if (!ok && (readback_ == Readback::UNKNOWN || readback_ == Readback::DUMB_CPU))
+    {
+        ok = readDumbBufferCpu(drm_fd_, fb, dst, dst_stride);
+        if (ok)
+            readback_ = Readback::DUMB_CPU;
+    }
+
+    if (initial == Readback::UNKNOWN && ok)
+    {
+        const char* method = (readback_ == Readback::EGL)         ? "EGL" :
+                             (readback_ == Readback::DMABUF_CPU)  ? "CPU DMA-BUF mapping" :
+                                                                    "CPU dumb-buffer mapping";
+        LOG(INFO) << "KMS readback method:" << method;
     }
 
     for (int i = 0; i < plane_count; ++i)

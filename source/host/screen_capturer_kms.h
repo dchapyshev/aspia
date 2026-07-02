@@ -100,9 +100,8 @@ private:
     quint32 selected_crtc_id_ = 0;
     int active_crtc_count_ = 0;
     std::unique_ptr<EglDmaBuf> egl_dmabuf_;
-    // Set once (on the EGL->CPU fallback) when GL readback is unavailable, so later frames go straight to
-    // the CPU DMA-BUF mapping instead of retrying the failing EGL import every time.
-    bool prefer_cpu_readback_ = false;
+    enum class Readback { UNKNOWN, EGL, DMABUF_CPU, DUMB_CPU };
+    Readback readback_ = Readback::UNKNOWN;
     std::unique_ptr<Differ> differ_;
     FrameQueue<Frame> queue_;
 
