@@ -273,28 +273,33 @@ void MutterScreenCast::start()
     QDBusConnection bus = bus_;
 
     // RemoteDesktop session carries input. Create it first so the ScreenCast session can be linked to
-    // it (input is delivered against the stream of the linked screen-cast session).
+    // it (input is delivered against the stream of the linked screen-cast session). Some compositors
+    // inhibit it (e.g. a GNOME greeter refusing remote input); capture does not need it, so on failure
+    // continue with a capture-only ScreenCast session and let input go through uinput instead.
     remote_desktop_ =
         new QDBusInterface(kRemoteDesktopService, kRemoteDesktopPath, kRemoteDesktopIface, bus, this);
     QDBusReply<QDBusObjectPath> remote_desktop_reply = remote_desktop_->call("CreateSession");
-    if (!remote_desktop_reply.isValid())
-    {
-        LOG(ERROR) << "RemoteDesktop.CreateSession failed:" << remote_desktop_reply.error().message();
-        fail();
-        return;
-    }
-    remote_desktop_session_path_ = remote_desktop_reply.value().path();
-    remote_desktop_session_ = new QDBusInterface(
-        kRemoteDesktopService, remote_desktop_session_path_, kRemoteDesktopSessionIface, bus, this);
 
     QString remote_desktop_session_id;
+    if (remote_desktop_reply.isValid())
     {
+        remote_desktop_session_path_ = remote_desktop_reply.value().path();
+        remote_desktop_session_ = new QDBusInterface(
+            kRemoteDesktopService, remote_desktop_session_path_, kRemoteDesktopSessionIface, bus, this);
+
         QDBusInterface properties(
             kRemoteDesktopService, remote_desktop_session_path_, kPropertiesIface, bus);
         QDBusReply<QDBusVariant> id_reply =
             properties.call("Get", kRemoteDesktopSessionIface, "SessionId");
         if (id_reply.isValid())
             remote_desktop_session_id = id_reply.value().variant().toString();
+    }
+    else
+    {
+        LOG(WARNING) << "RemoteDesktop.CreateSession failed:" << remote_desktop_reply.error().message()
+                     << "- capturing without compositor input";
+        delete remote_desktop_;
+        remote_desktop_ = nullptr;
     }
 
     // ScreenCast session, linked to the RemoteDesktop session so input targets its stream.
@@ -332,16 +337,26 @@ void MutterScreenCast::start()
     bus.connect(kService, stream_path_, kStreamIface, "PipeWireStreamAdded",
                 this, SLOT(onPipeWireStreamAdded(uint)));
 
-    // Starting the RemoteDesktop session also starts the linked ScreenCast stream.
-    QDBusReply<void> start_reply = remote_desktop_session_->call("Start");
+    // Start the stream: via the RemoteDesktop session when present (that also starts the linked
+    // ScreenCast stream), otherwise via the ScreenCast session directly.
+    QDBusReply<void> start_reply = remote_desktop_session_ ?
+        remote_desktop_session_->call("Start") : session_->call("Start");
     if (!start_reply.isValid())
     {
-        LOG(ERROR) << "RemoteDesktop.Session.Start failed:" << start_reply.error().message();
+        LOG(ERROR) << "Session.Start failed:" << start_reply.error().message();
         fail();
         return;
     }
 
     LOG(INFO) << "Mutter screen cast started, waiting for node (connector:" << connector << ")";
+}
+
+//--------------------------------------------------------------------------------------------------
+bool MutterScreenCast::supportsInput() const
+{
+    // Input goes through the RemoteDesktop session; without it (inhibited by the compositor) the stream
+    // is capture-only and the caller must inject input another way.
+    return remote_desktop_session_ != nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------

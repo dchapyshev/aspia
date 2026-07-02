@@ -74,6 +74,12 @@ public:
     // empty and false is returned if no display is found.
     static bool readX11Env(uid_t uid, const QString& session_id, QString* display, QString* xauthority);
 
+    // Returns the D-Bus session bus address advertised by |uid|'s graphical session, or an empty string
+    // if none is found. A normal login uses the systemd user bus at /run/user/UID/bus, but a greeter
+    // (e.g. gdm) runs its compositor on a private bus (unix:abstract=...); reading the address from the
+    // session's own process is the only way to reach that compositor's D-Bus services.
+    static QString sessionBusAddress(uid_t uid);
+
 private:
     Q_DISABLE_COPY_MOVE(SessionUtil)
 };

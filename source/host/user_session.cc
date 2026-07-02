@@ -832,17 +832,21 @@ void UserSession::attach(const Location& location, AttachReason reason, SessionI
 
     const QString file_path = QCoreApplication::applicationDirPath() + '/' + kExecutableNameForUi;
 
-    // The systemd user manager imports DISPLAY/WAYLAND_DISPLAY but not always XAUTHORITY (notably on
-    // X11 sessions), so a GUI launched through it cannot authenticate to the X server. Read the display
-    // and authority from the session's own processes and pass them to the unit explicitly.
+    // The GUI is a Qt xcb app that must authenticate to the (X)Wayland server; read the display and
+    // authority from the session's own processes and pass them to the unit explicitly.
     QString display;
     QString xauthority;
 
     SessionUtil::readX11Env(uid, sd_session_id, &display, &xauthority);
 
-    // Launch through the user's systemd manager so the unit inherits the rest of the session environment
-    // (the session bus, XDG_RUNTIME_DIR, ...). Works for both X11 and Wayland sessions.
-    QString command = QString("systemd-run --machine=%1@.host --user --collect").arg(user_name);
+    // Launch the GUI as the session user via --uid, not --machine=<user>@.host --user: the latter is
+    // unsupported on older systemd (RHEL 8: "Execution in user context is not supported on non-local
+    // systems"), while --uid works everywhere. That runs outside the user's session slice, so the
+    // session environment (runtime dir, session bus, display) is passed explicitly.
+    const QString runtime_dir = QString("/run/user/%1").arg(uid);
+    QString command = QString("systemd-run --uid=%1 --collect").arg(user_name);
+    command += " --setenv=XDG_RUNTIME_DIR=" + runtime_dir;
+    command += " --setenv=DBUS_SESSION_BUS_ADDRESS=unix:path=" + runtime_dir + "/bus";
     if (!display.isEmpty())
         command += " --setenv=DISPLAY=" + display;
     if (!xauthority.isEmpty())

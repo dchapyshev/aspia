@@ -33,6 +33,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cstdlib>
 #include <utility>
 
 #include "base/logging.h"
@@ -43,6 +44,15 @@
 #include "host/linux/pipewire.h"
 #include "host/linux/wayland_capture_source.h"
 #include "host/linux/wayland_compositor_source.h"
+
+// AlmaLinux 8 ships PipeWire 0.3.6, whose SPA headers predate these format-negotiation flags. Define
+// them when the system headers are too old; on newer SPA (where they exist) the guards are no-ops.
+#ifndef SPA_POD_PROP_FLAG_MANDATORY
+#define SPA_POD_PROP_FLAG_MANDATORY (1u << 3)
+#endif
+#ifndef SPA_POD_PROP_FLAG_DONT_FIXATE
+#define SPA_POD_PROP_FLAG_DONT_FIXATE (1u << 4)
+#endif
 
 namespace {
 
@@ -509,16 +519,18 @@ bool ScreenCapturerPipeWire::startStream()
     }
     else
     {
-        // The stream lives on the session's own PipeWire daemon (Mutter ScreenCast). The root host's
-        // environment does not point at the user's runtime dir, so give pw the socket path explicitly;
-        // root can open it (the socket is not uid-restricted). pw_context_connect takes ownership of
-        // the properties.
+        // The stream lives on the session's own PipeWire daemon (Mutter ScreenCast). The root host has
+        // no XDG_RUNTIME_DIR of its own, and older PipeWire (e.g. 0.3.6 on RHEL 8) builds the socket path
+        // from XDG_RUNTIME_DIR plus the remote name rather than accepting a full path - so point the
+        // runtime dir at the session user's and pass the plain socket name. root can open it (the socket
+        // is not uid-restricted). pw_context_connect takes ownership of the properties.
         const uid_t uid = source_->pipeWireUid();
         pw_properties* properties = nullptr;
         if (uid != static_cast<uid_t>(-1))
         {
-            const QByteArray remote = QString("/run/user/%1/pipewire-0").arg(uid).toLocal8Bit();
-            properties = api_->pw_properties_new(PW_KEY_REMOTE_NAME, remote.constData(), nullptr);
+            const QByteArray runtime_dir = QString("/run/user/%1").arg(uid).toLocal8Bit();
+            setenv("XDG_RUNTIME_DIR", runtime_dir.constData(), 1);
+            properties = api_->pw_properties_new(PW_KEY_REMOTE_NAME, "pipewire-0", nullptr);
         }
 
         core_ = api_->pw_context_connect(context_, properties, 0);

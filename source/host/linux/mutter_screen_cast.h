@@ -45,6 +45,7 @@ public:
     bool isAvailable() const;
 
     void start() final;
+    bool supportsInput() const final;
     QList<MonitorInfo> monitors() const final;
     QString recordedMonitor() const final;
     void setRequestedMonitor(const QString& connector) final;

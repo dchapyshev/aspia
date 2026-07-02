@@ -139,26 +139,36 @@ SessionUtil::SessionClass SessionUtil::sessionClass(const QString& session_id)
 // static
 bool SessionUtil::isGraphicalEnvReady(const QString& user_name)
 {
-    const QByteArray command =
-        QString("systemctl --machine=%1@.host --user show-environment 2>/dev/null")
-            .arg(user_name).toLocal8Bit();
-
-    FILE* pipe = popen(command.constData(), "r");
-    if (!pipe)
+    const struct passwd* pw = getpwnam(user_name.toLocal8Bit().constData());
+    if (!pw)
         return false;
+    const uid_t uid = pw->pw_uid;
 
-    QByteArray output;
-    char buffer[256];
-    while (fgets(buffer, sizeof(buffer), pipe))
-        output.append(buffer);
-
-    pclose(pipe);
-
-    const QList<QByteArray> lines = output.split('\n');
-    for (const QByteArray& line : std::as_const(lines))
+    // A freshly-active session may not yet have a graphical display. Detect readiness by finding a
+    // process of the session user that carries WAYLAND_DISPLAY or DISPLAY. The systemd user manager does
+    // not import these on every distribution (e.g. GNOME on RHEL 8), so /proc is the portable source of
+    // truth - and the same place the GUI launch reads the display from (see readX11Env()).
+    const QStringList entries = QDir("/proc").entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+    for (const QString& name : entries)
     {
-        if (line.startsWith("WAYLAND_DISPLAY=") || line.startsWith("DISPLAY="))
-            return true;
+        bool is_pid = false;
+        name.toLongLong(&is_pid);
+        if (!is_pid)
+            continue;
+
+        const QString proc_dir = "/proc/" + name;
+
+        struct stat st;
+        if (stat(proc_dir.toLocal8Bit().constData(), &st) != 0 || st.st_uid != uid)
+            continue;
+
+        const QByteArray env_data = readProcFile(proc_dir + "/environ");
+        const QList<QByteArray> vars = env_data.split('\0');
+        for (const QByteArray& var : vars)
+        {
+            if (var.startsWith("WAYLAND_DISPLAY=") || var.startsWith("DISPLAY="))
+                return true;
+        }
     }
 
     return false;
@@ -228,4 +238,58 @@ bool SessionUtil::readX11Env(uid_t uid, const QString& session_id, QString* disp
     }
 
     return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QString SessionUtil::sessionBusAddress(uid_t uid)
+{
+    // Return the D-Bus session bus advertised by the session user's processes. A user login points at
+    // /run/user/UID/bus, but a gdm greeter's compositor runs on a private bus (unix:abstract=...), so read
+    // the actual address instead of assuming the path. Prefer a graphical client (carrying WAYLAND_DISPLAY
+    // or DISPLAY): its bus is unambiguously the session bus. The compositor itself may not carry those
+    // (it is the display server, e.g. a greeter's gnome-shell), so fall back to any process of the user
+    // that advertises a bus - the whole session shares one.
+    QString fallback_bus;
+
+    const QStringList entries = QDir("/proc").entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+    for (const QString& name : entries)
+    {
+        bool is_pid = false;
+        name.toLongLong(&is_pid);
+        if (!is_pid)
+            continue;
+
+        const QString proc_dir = "/proc/" + name;
+
+        struct stat st;
+        if (stat(proc_dir.toLocal8Bit().constData(), &st) != 0 || st.st_uid != uid)
+            continue;
+
+        const QByteArray env_data = readProcFile(proc_dir + "/environ");
+        if (env_data.isEmpty())
+            continue;
+
+        QString bus_address;
+        bool graphical = false;
+        const QList<QByteArray> vars = env_data.split('\0');
+        for (const QByteArray& var : vars)
+        {
+            if (var.startsWith("DBUS_SESSION_BUS_ADDRESS="))
+                bus_address = QString::fromLocal8Bit(var.mid(25));
+            else if (var.startsWith("WAYLAND_DISPLAY=") || var.startsWith("DISPLAY="))
+                graphical = true;
+        }
+
+        if (bus_address.isEmpty())
+            continue;
+
+        if (graphical)
+            return bus_address;
+
+        if (fallback_bus.isEmpty())
+            fallback_bus = bus_address;
+    }
+
+    return fallback_bus;
 }

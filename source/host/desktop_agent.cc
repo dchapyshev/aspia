@@ -315,6 +315,16 @@ void DesktopAgent::setupLinuxCapture()
     }
     else
     {
+        // The login-screen greeter runs its own compositor (e.g. gdm's gnome-shell). Its Mutter ScreenCast
+        // is reachable on the greeter's own bus, giving a compositor-native capture just like a user
+        // session - preferred over KMS, which some drivers (older vmwgfx on RHEL 8) cannot read.
+        if (WaylandCompositorSource::isMutterAvailable(uid))
+        {
+            capture_mode_ = CaptureMode::COMPOSITOR;
+            LOG(INFO) << "Capture mode: compositor (Mutter, greeter)";
+            return;
+        }
+
         // No usable compositor screen-cast: capture below the compositor with DRM/KMS + uinput. A trial
         // capture confirms the scan-out framebuffer can actually be read before committing to this backend.
         if (ScreenCapturerKms::isAvailable())
@@ -350,9 +360,21 @@ void DesktopAgent::onCompositorSourceStarted(bool success)
     if (capturer)
     {
         WaylandCompositorSource* source = capturer->compositorSource();
-        input_injector_ = InputInjectorWayland::create(source, this);
-        if (!input_injector_)
-            LOG(ERROR) << "Unable to create Wayland input injector";
+        if (source->supportsInput())
+        {
+            input_injector_ = InputInjectorWayland::create(source, this);
+            if (!input_injector_)
+                LOG(ERROR) << "Unable to create Wayland input injector";
+        }
+        else
+        {
+            // The compositor accepts capture but not input (e.g. a greeter inhibiting remote input):
+            // inject at the kernel level instead.
+            input_injector_ = InputInjectorUinput::create(this);
+            if (!input_injector_)
+                LOG(ERROR) << "Unable to create uinput input injector";
+            LOG(INFO) << "Compositor input inhibited; using uinput";
+        }
     }
 
     // Resume capture if a client connected while the source was negotiating.

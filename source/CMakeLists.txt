@@ -444,6 +444,22 @@ if (LINUX)
     set(CPACK_RPM_COMPONENT_INSTALL ON)
     set(CPACK_RPM_PACKAGE_LICENSE "GPLv3")
 
+    # Do not let the RPM claim ownership of system directories that other packages (systemd, pam, polkit,
+    # hicolor-icon-theme, ...) already own - otherwise rpm reports file conflicts on install. Only the
+    # files placed inside them are packaged.
+    set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION
+        "/etc/pam.d"
+        "/usr/lib/systemd" "/usr/lib/systemd/system"
+        "/usr/share/applications"
+        "/usr/share/polkit-1" "/usr/share/polkit-1/actions"
+        "/usr/share/icons" "/usr/share/icons/hicolor"
+        "/usr/share/icons/hicolor/16x16" "/usr/share/icons/hicolor/16x16/apps"
+        "/usr/share/icons/hicolor/24x24" "/usr/share/icons/hicolor/24x24/apps"
+        "/usr/share/icons/hicolor/32x32" "/usr/share/icons/hicolor/32x32/apps"
+        "/usr/share/icons/hicolor/48x48" "/usr/share/icons/hicolor/48x48/apps"
+        "/usr/share/icons/hicolor/64x64" "/usr/share/icons/hicolor/64x64/apps"
+        "/usr/share/icons/hicolor/128x128" "/usr/share/icons/hicolor/128x128/apps")
+
     set(CPACK_COMPONENTS_ALL host client router relay)
 endif()
 

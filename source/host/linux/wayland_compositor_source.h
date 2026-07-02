@@ -57,6 +57,11 @@ public:
     // Begins asynchronous negotiation of the capture stream; sig_started() reports the outcome.
     virtual void start() = 0;
 
+    // True if the source can inject input through the compositor. False when only capture is available
+    // (e.g. a greeter that inhibits remote input), so the caller falls back to uinput. Valid after
+    // start() reports success.
+    virtual bool supportsInput() const { return true; }
+
     struct MonitorInfo
     {
         QString connector;   // stable monitor id as the compositor reports it (e.g. "DP-1")

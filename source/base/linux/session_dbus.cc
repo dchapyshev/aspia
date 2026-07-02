@@ -26,6 +26,7 @@
 #include "base/logging.h"
 #include "base/linux/libsystemd.h"
 #include "base/linux/scoped_user_credentials.h"
+#include "base/linux/session_util.h"
 
 //--------------------------------------------------------------------------------------------------
 // static
@@ -33,8 +34,11 @@ QDBusConnection SessionDBus::connectAsUser(uid_t uid, const QString& connection_
 {
     // An explicit address is required: under a real/saved uid mismatch libdbus treats the process as
     // setuid and refuses to read DBUS_SESSION_BUS_ADDRESS or autolaunch a bus, but it still honors an
-    // address passed in directly.
-    const QString address = QString("unix:path=/run/user/%1/bus").arg(uid);
+    // address passed in directly. Prefer the address the session actually advertises (a greeter runs its
+    // compositor on a private bus, not the standard user bus), falling back to the systemd user bus.
+    QString address = SessionUtil::sessionBusAddress(uid);
+    if (address.isEmpty())
+        address = QString("unix:path=/run/user/%1/bus").arg(uid);
 
     {
         ScopedUserCredentials credentials(uid);

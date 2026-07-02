@@ -687,9 +687,17 @@ bool ScreenCapturerKms::probeReadback()
 
     for (Readback method : kMethods)
     {
+        const char* name = (method == Readback::EGL)        ? "EGL" :
+                           (method == Readback::DMABUF_CPU) ? "CPU DMA-BUF mapping" :
+                                                              "CPU dumb-buffer mapping";
+
         drmModeFB2* fb = LibDrm::modeGetFB2(drm_fd_, fb_id);
         if (!fb || !fb->width || !fb->height || !fb->handles[0])
         {
+            LOG(ERROR) << "KMS probe: framebuffer" << fb_id << "not readable: handle0="
+                       << (fb ? fb->handles[0] : 0) << "size="
+                       << (fb ? fb->width : 0) << "x" << (fb ? fb->height : 0) << "format="
+                       << (fb ? fb->pixel_format : 0);
             if (fb)
                 LibDrm::modeFreeFB2(fb);
             return false;
@@ -704,12 +712,11 @@ bool ScreenCapturerKms::probeReadback()
 
         if (ok)
         {
-            const char* name = (method == Readback::EGL)        ? "EGL" :
-                               (method == Readback::DMABUF_CPU) ? "CPU DMA-BUF mapping" :
-                                                                  "CPU dumb-buffer mapping";
             LOG(INFO) << "KMS readback method:" << name;
             return true;
         }
+
+        LOG(INFO) << "KMS probe: readback method" << name << "did not work, trying next";
     }
 
     readback_ = Readback::UNKNOWN;
