@@ -27,8 +27,6 @@
 #include "base/linux/libxrandr.h"
 #include "host/linux/x_error_trap.h"
 
-#include <dlfcn.h>
-
 //--------------------------------------------------------------------------------------------------
 ScreenCapturerX11::ScreenCapturerX11(QObject* parent)
     : ScreenCapturer(ScreenCapturer::Type::LINUX_X11, parent)
@@ -467,18 +465,11 @@ void ScreenCapturerX11::initXrandr()
     {
         if (major_version > 1 || (major_version == 1 && minor_version >= 5))
         {
-            // Dynamically link XRRGetMonitors and XRRFreeMonitors as a workaround to avoid a
-            // dependency issue with Debian 8.
-            get_monitors_ = reinterpret_cast<get_monitors_func>(
-                dlsym(RTLD_DEFAULT, "XRRGetMonitors"));
-            free_monitors_ = reinterpret_cast<free_monitors_func>(
-                dlsym(RTLD_DEFAULT, "XRRFreeMonitors"));
-
-            if (get_monitors_ && free_monitors_)
+            monitors_ = LibXrandr::getMonitors(display(), root_window_, true, &num_monitors_);
+            if (monitors_)
             {
                 use_randr_ = true;
                 LOG(INFO) << "Using XRandR extension v" << major_version << '.' << minor_version;
-                monitors_ = get_monitors_(display(), root_window_, true, &num_monitors_);
 
                 // Register for screen change notifications
                 LibXrandr::selectInput(display(), root_window_, RRScreenChangeNotifyMask);
@@ -505,11 +496,11 @@ void ScreenCapturerX11::updateMonitors()
 {
     if (monitors_)
     {
-        free_monitors_(monitors_);
+        LibXrandr::freeMonitors(monitors_);
         monitors_ = nullptr;
     }
 
-    monitors_ = get_monitors_(display(), root_window_, true, &num_monitors_);
+    monitors_ = LibXrandr::getMonitors(display(), root_window_, true, &num_monitors_);
 
     if (selected_monitor_name_)
     {
@@ -580,7 +571,7 @@ void ScreenCapturerX11::deinitXlib()
 {
     if (monitors_)
     {
-        free_monitors_(monitors_);
+        LibXrandr::freeMonitors(monitors_);
         monitors_ = nullptr;
     }
 

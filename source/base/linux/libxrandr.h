@@ -38,6 +38,10 @@ public:
     static int queryVersion(Display* display, int* major, int* minor);
     static void selectInput(Display* display, Window window, int mask);
     static int updateConfiguration(XEvent* event);
+
+    // Monitor enumeration (XRandR 1.5+). getMonitors() returns nullptr if the extension is too old.
+    static XRRMonitorInfo* getMonitors(Display* display, Window window, int get_active, int* nmonitors);
+    static void freeMonitors(XRRMonitorInfo* monitors);
 };
 
 #endif // BASE_LINUX_LIBXRANDR_H

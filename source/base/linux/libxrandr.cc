@@ -33,6 +33,8 @@ decltype(&XRRQueryExtension) g_query_extension = nullptr;
 decltype(&XRRQueryVersion) g_query_version = nullptr;
 decltype(&XRRSelectInput) g_select_input = nullptr;
 decltype(&XRRUpdateConfiguration) g_update_configuration = nullptr;
+decltype(&XRRGetMonitors) g_get_monitors = nullptr;
+decltype(&XRRFreeMonitors) g_free_monitors = nullptr;
 
 } // namespace
 
@@ -63,6 +65,14 @@ bool LibXrandr::ensureLoaded()
         reinterpret_cast<decltype(g_select_input)>(dlsym(g_handle, "XRRSelectInput"));
     g_update_configuration =
         reinterpret_cast<decltype(g_update_configuration)>(dlsym(g_handle, "XRRUpdateConfiguration"));
+
+    // Monitor enumeration (XRandR 1.5+). Optional: resolved here so callers reach it through the
+    // library handle rather than the global symbol namespace (where it is not visible), but a missing
+    // symbol on an older library must not fail the whole load.
+    g_get_monitors =
+        reinterpret_cast<decltype(g_get_monitors)>(dlsym(g_handle, "XRRGetMonitors"));
+    g_free_monitors =
+        reinterpret_cast<decltype(g_free_monitors)>(dlsym(g_handle, "XRRFreeMonitors"));
 
     if (!g_query_extension || !g_query_version || !g_select_input || !g_update_configuration)
     {
@@ -110,4 +120,22 @@ int LibXrandr::updateConfiguration(XEvent* event)
     if (!ensureLoaded())
         return 0;
     return g_update_configuration(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+XRRMonitorInfo* LibXrandr::getMonitors(Display* display, Window window, int get_active, int* nmonitors)
+{
+    if (!ensureLoaded() || !g_get_monitors)
+        return nullptr;
+    return g_get_monitors(display, window, get_active, nmonitors);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void LibXrandr::freeMonitors(XRRMonitorInfo* monitors)
+{
+    if (!ensureLoaded() || !g_free_monitors)
+        return;
+    g_free_monitors(monitors);
 }
