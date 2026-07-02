@@ -182,9 +182,14 @@ ScreenCapturerPipeWire* ScreenCapturerPipeWire::create(uid_t session_uid, QObjec
         return nullptr;
     }
 
-    // Negotiation is asynchronous; the PipeWire stream is built in onSourceStarted().
-    self->source_->start();
-    return self.release();
+    // Start negotiation on the next event-loop turn, not here: the caller connects to sig_started only
+    // after create() returns, and the source can fail (and emit sig_started) synchronously - e.g. when
+    // the compositor inhibits screencast on a locked screen. Emitting before the caller has connected
+    // would lose that failure and, with it, the fallback to KMS.
+    ScreenCapturerPipeWire* capturer = self.release();
+    QMetaObject::invokeMethod(capturer, [capturer]() { capturer->source_->start(); },
+                              Qt::QueuedConnection);
+    return capturer;
 }
 
 //--------------------------------------------------------------------------------------------------

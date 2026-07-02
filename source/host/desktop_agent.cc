@@ -804,6 +804,14 @@ void DesktopAgent::onCaptureScreen()
 
     if (!screen_capturer_)
     {
+#if defined(Q_OS_LINUX)
+        // Creation can fail transiently (e.g. a KMS scan-out readback hitting a compositor modeset while
+        // the screen locks or unlocks), so re-attempt it here instead of leaving the client on "session
+        // unavailable" forever. COMPOSITOR negotiates its source asynchronously and must not be recreated.
+        if (capture_mode_ != CaptureMode::COMPOSITOR)
+            selectCapturer(ScreenCapturer::Error::TEMPORARY);
+#endif // defined(Q_OS_LINUX)
+
         // The capturer is created asynchronously (on Wayland only after the desktop portal session is
         // granted). Until then poll at a low rate instead of busy-looping on the zero-delay timer and
         // flooding the log - the flood blocks the event loop and starves the portal's reply.
