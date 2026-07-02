@@ -68,14 +68,13 @@ protected:
 
 private:
     bool init();
-    // Reads the active scan-out once into a throwaway buffer to confirm capture works and to pick the
-    // readback method (EGL, or the CPU DMA-BUF mapping used when GL readback is unavailable). Called from
-    // init(), so the method is fixed before the first real frame.
+    // Picks the readback method by importing the active scan-out once per candidate (EGL, CPU DMA-BUF
+    // mapping, CPU dumb-buffer mapping) and keeping the first that works. Called from init(), so the
+    // method is fixed before the first real frame; also confirms capture is possible at all.
     bool probeReadback();
 
-    // Imports framebuffer |fb| into |dst| (|dst_stride| bytes per row) as packed BGRA, via EGL/GBM or,
-    // once GL readback is found unavailable, a direct CPU DMA-BUF mapping. Releases the GEM handles that
-    // drmModeGetFB2() opened for |fb|.
+    // Imports framebuffer |fb| into |dst| (|dst_stride| bytes per row) as packed BGRA using the readback
+    // method already chosen by probeReadback(). Releases the GEM handles drmModeGetFB2() opened for |fb|.
     bool importFb(drmModeFB2* fb, quint8* dst, int dst_stride);
 
     // Returns the framebuffer id currently scanned out on an active CRTC, or 0 if none. Records the
