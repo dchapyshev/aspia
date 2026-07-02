@@ -274,7 +274,12 @@ void DesktopEnvironmentLinux::applyDesired()
             if (runAsUser("gsettings",
                           QStringList() << "get" << kBackgroundSchema << kPictureOptions, &options))
             {
-                saved_picture_options_ = options;
+                // Never capture an already-disabled value as the "original". A session that could not
+                // revert on logout (its user bus was already gone) leaves picture-options at "none" in the
+                // persistent dconf; saving that and later restoring it to "none" would lose the wallpaper
+                // for good. When it is already "none", reset to the schema default on revert instead.
+                saved_picture_options_ =
+                    (options == "'none'" || options == "none") ? QString() : options;
                 runAsUser("gsettings",
                           QStringList() << "set" << kBackgroundSchema << kPictureOptions << "none",
                           nullptr);
@@ -284,8 +289,18 @@ void DesktopEnvironmentLinux::applyDesired()
         }
         else if (!desired_wallpaper_disabled_ && applied_wallpaper_disabled_)
         {
-            runAsUser("gsettings", QStringList()
-                << "set" << kBackgroundSchema << kPictureOptions << saved_picture_options_, nullptr);
+            if (saved_picture_options_.isEmpty())
+            {
+                // No valid original was captured (it was already "none"): reset to the schema default so
+                // the wallpaper reappears - picture-uri was never touched.
+                runAsUser("gsettings",
+                          QStringList() << "reset" << kBackgroundSchema << kPictureOptions, nullptr);
+            }
+            else
+            {
+                runAsUser("gsettings", QStringList()
+                    << "set" << kBackgroundSchema << kPictureOptions << saved_picture_options_, nullptr);
+            }
             applied_wallpaper_disabled_ = false;
             LOG(INFO) << "GNOME wallpaper restored";
         }
