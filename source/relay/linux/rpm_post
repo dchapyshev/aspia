@@ -1,0 +1,5 @@
+# Register the service via the application itself (account and sandboxing are provisioned there,
+# shared with the command line). --install is a no-op when no configuration exists yet, so a clean
+# install does not fail; on an upgrade it refreshes an already-configured service. %post runs on both
+# install ($1=1) and upgrade ($1=2).
+/usr/bin/aspia_relay --install || true

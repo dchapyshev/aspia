@@ -1,0 +1,7 @@
+# Enable and (re)start the host service. The host needs no prior configuration, so it starts right
+# away; %post also runs on upgrade ($1=2), refreshing the service.
+if [ -d /run/systemd/system ]; then
+    systemctl daemon-reload >/dev/null 2>&1 || true
+    systemctl enable aspia-host-service.service >/dev/null 2>&1 || true
+    systemctl restart aspia-host-service.service >/dev/null 2>&1 || true
+fi

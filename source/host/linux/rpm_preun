@@ -1,0 +1,4 @@
+# Stop and disable the service only on final removal ($1=0), not on upgrade ($1=1).
+if [ "$1" = "0" ] && [ -d /run/systemd/system ]; then
+    systemctl disable --now aspia-host-service.service >/dev/null 2>&1 || true
+fi

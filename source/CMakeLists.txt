@@ -310,6 +310,16 @@ if (LINUX)
 
         set(CPACK_DEBIAN_HOST_FILE_NAME
             "${CPACK_COMPONENT_HOST_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
+
+        # RPM equivalents of the maintainer scripts (RPM scriptlet argument semantics differ from
+        # Debian: %post runs on install and upgrade, %preun receives 0 only on final removal).
+        set(CPACK_RPM_HOST_POST_INSTALL_SCRIPT_FILE
+            "${CMAKE_CURRENT_SOURCE_DIR}/host/linux/rpm_post")
+        set(CPACK_RPM_HOST_PRE_UNINSTALL_SCRIPT_FILE
+            "${CMAKE_CURRENT_SOURCE_DIR}/host/linux/rpm_preun")
+        set(CPACK_RPM_HOST_PACKAGE_NAME "${CPACK_COMPONENT_HOST_NAME}")
+        set(CPACK_RPM_HOST_FILE_NAME
+            "${CPACK_COMPONENT_HOST_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.rpm")
     endif()
 
     if (APPLE)
@@ -351,6 +361,10 @@ if (LINUX)
 
     set(CPACK_DEBIAN_CLIENT_FILE_NAME
         "${CPACK_COMPONENT_CLIENT_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
+
+    set(CPACK_RPM_CLIENT_PACKAGE_NAME "${CPACK_COMPONENT_CLIENT_NAME}")
+    set(CPACK_RPM_CLIENT_FILE_NAME
+        "${CPACK_COMPONENT_CLIENT_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.rpm")
 endif()
 
 if (APPLE)
@@ -376,6 +390,14 @@ if (LINUX)
 
     set(CPACK_DEBIAN_ROUTER_FILE_NAME
         "${CPACK_COMPONENT_ROUTER_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
+
+    set(CPACK_RPM_ROUTER_POST_INSTALL_SCRIPT_FILE
+        "${CMAKE_CURRENT_SOURCE_DIR}/router/linux/rpm_post")
+    set(CPACK_RPM_ROUTER_PRE_UNINSTALL_SCRIPT_FILE
+        "${CMAKE_CURRENT_SOURCE_DIR}/router/linux/rpm_preun")
+    set(CPACK_RPM_ROUTER_PACKAGE_NAME "${CPACK_COMPONENT_ROUTER_NAME}")
+    set(CPACK_RPM_ROUTER_FILE_NAME
+        "${CPACK_COMPONENT_ROUTER_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.rpm")
 endif()
 
 #--------------------------------------------------------------------------------------------------
@@ -397,15 +419,30 @@ if (LINUX)
 
     set(CPACK_DEBIAN_RELAY_FILE_NAME
         "${CPACK_COMPONENT_RELAY_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
+
+    set(CPACK_RPM_RELAY_POST_INSTALL_SCRIPT_FILE
+        "${CMAKE_CURRENT_SOURCE_DIR}/relay/linux/rpm_post")
+    set(CPACK_RPM_RELAY_PRE_UNINSTALL_SCRIPT_FILE
+        "${CMAKE_CURRENT_SOURCE_DIR}/relay/linux/rpm_preun")
+    set(CPACK_RPM_RELAY_PACKAGE_NAME "${CPACK_COMPONENT_RELAY_NAME}")
+    set(CPACK_RPM_RELAY_FILE_NAME
+        "${CPACK_COMPONENT_RELAY_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.rpm")
 endif()
 
 if (LINUX)
-    set(CPACK_GENERATOR "DEB")
+    # Build both Debian (.deb) and RPM (.rpm) packages in one cpack run. RPM requires rpmbuild on the
+    # build host. Auto-dependency generation (find-requires, on by default for both) resolves to the
+    # SONAMEs of linked libraries, which are identical across distributions, so the RPMs built here are
+    # installable on RHEL-family systems (e.g. AlmaLinux).
+    set(CPACK_GENERATOR "DEB;RPM")
 
     set(CPACK_DEB_COMPONENT_INSTALL ON)
     set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
     set(CPACK_DEBIAN_PACKAGE_SECTION "net")
     set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
+
+    set(CPACK_RPM_COMPONENT_INSTALL ON)
+    set(CPACK_RPM_PACKAGE_LICENSE "GPLv3")
 
     set(CPACK_COMPONENTS_ALL host client router relay)
 endif()
