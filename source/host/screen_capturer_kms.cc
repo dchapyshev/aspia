@@ -33,6 +33,7 @@
 #include <algorithm>
 #include <array>
 #include <cstdlib>
+#include <cstring>
 #include <utility>
 
 #include "base/logging.h"
@@ -542,7 +543,8 @@ const MouseCursor* ScreenCapturerKms::captureCursor()
 {
     quint32 cursor_fb_id = 0;
     QSize cursor_size;
-    if (!findCursorPlane(&cursor_fb_id, &cursor_size, &cursor_position_))
+    QPoint hotspot;
+    if (!findCursorPlane(&cursor_fb_id, &cursor_size, &cursor_position_, &hotspot))
         return nullptr;
 
     // Re-read the shape only when the cursor plane's framebuffer changes.
@@ -568,9 +570,10 @@ const MouseCursor* ScreenCapturerKms::captureCursor()
     if (!ok)
         return nullptr;
 
-    // The cursor plane position is the image top-left on screen, reported via cursorPosition(), so
-    // the shape carries a zero hotspot.
-    mouse_cursor_ = std::make_unique<MouseCursor>(std::move(image), cursor_size, QPoint(0, 0));
+    // Paravirtual drivers (vmwgfx) place the cursor plane at the pointer position and report the
+    // hotspot in plane properties; standard drivers place the image top-left and report no hotspot.
+    // Either way the client draws the image so the hotspot lands on cursorPosition().
+    mouse_cursor_ = std::make_unique<MouseCursor>(std::move(image), cursor_size, hotspot);
     return mouse_cursor_.get();
 }
 
@@ -931,7 +934,7 @@ QString ScreenCapturerKms::capturedConnectorName()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ScreenCapturerKms::findCursorPlane(quint32* fb_id, QSize* size, QPoint* position)
+bool ScreenCapturerKms::findCursorPlane(quint32* fb_id, QSize* size, QPoint* position, QPoint* hotspot)
 {
     drmModePlaneRes* plane_res = LibDrm::modeGetPlaneResources(drm_fd_);
     if (!plane_res)
@@ -963,6 +966,30 @@ bool ScreenCapturerKms::findCursorPlane(quint32* fb_id, QSize* size, QPoint* pos
                 if (position)
                     *position = QPoint(static_cast<int>(plane->crtc_x),
                                        static_cast<int>(plane->crtc_y));
+                if (hotspot)
+                {
+                    // Paravirtual drivers (vmwgfx) report the cursor hotspot in plane properties rather
+                    // than via the plane position.
+                    drmModeObjectProperties* props = LibDrm::modeObjectGetProperties(
+                        drm_fd_, plane->plane_id, DRM_MODE_OBJECT_PLANE);
+                    if (props)
+                    {
+                        for (uint32_t p = 0; p < props->count_props; ++p)
+                        {
+                            drmModePropertyRes* prop = LibDrm::modeGetProperty(drm_fd_, props->props[p]);
+                            if (!prop)
+                                continue;
+
+                            if (strcmp(prop->name, "HOTSPOT_X") == 0)
+                                hotspot->setX(static_cast<int>(props->prop_values[p]));
+                            else if (strcmp(prop->name, "HOTSPOT_Y") == 0)
+                                hotspot->setY(static_cast<int>(props->prop_values[p]));
+
+                            LibDrm::modeFreeProperty(prop);
+                        }
+                        LibDrm::modeFreeObjectProperties(props);
+                    }
+                }
                 found = true;
             }
             if (fb)

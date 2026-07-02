@@ -89,9 +89,10 @@ private:
     // compositor output. Empty if it cannot be resolved.
     QString capturedConnectorName();
 
-    // Finds the hardware cursor plane on the captured CRTC, returning its framebuffer id, size and
-    // position (any output pointer may be null). Returns false if no cursor plane is active there.
-    bool findCursorPlane(quint32* fb_id, QSize* size, QPoint* position);
+    // Finds the hardware cursor plane on the captured CRTC, returning its framebuffer id, size,
+    // position and hotspot (any output pointer may be null). Returns false if no cursor plane is active
+    // there.
+    bool findCursorPlane(quint32* fb_id, QSize* size, QPoint* position, QPoint* hotspot);
 
     int drm_fd_ = -1;
     quint32 crtc_id_ = 0;
