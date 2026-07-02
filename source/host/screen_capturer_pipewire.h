@@ -20,6 +20,7 @@
 #define HOST_SCREEN_CAPTURER_PIPEWIRE_H
 
 #include <QByteArray>
+#include <QElapsedTimer>
 #include <QMutex>
 #include <QPoint>
 #include <QPointer>
@@ -84,6 +85,10 @@ public:
     // thread). captureFrame() then triggers an internal re-negotiation on the capture thread.
     void requestRestart();
 
+    // Records the paused/unpaused stream state from the PipeWire state-changed callback (called on the
+    // PipeWire thread). captureFrame() falls back to KMS if the stream stays paused (a locked session).
+    void setStreamPaused(bool paused);
+
     // The compositor source backing the stream (it is also the input target). Valid after
     // sig_started(true); the input injector is built on it and shares it with the capturer.
     WaylandCompositorSource* compositorSource() const;
@@ -132,6 +137,15 @@ private:
     // Set from the PipeWire state-changed callback when the stream errors, consumed on the capture
     // thread to re-create the stream.
     std::atomic<bool> restart_requested_ = false;
+
+    // Set from the PipeWire state-changed callback to mirror the paused state. Read on the capture
+    // thread by captureFrame(), which measures how long it stays paused (|paused_since_|) and, past a
+    // grace period, falls back to KMS - the compositor pauses screencast on a locked session, so a
+    // prolonged pause means the lock screen is only reachable below the compositor. |fallback_requested_|
+    // makes that fire once.
+    std::atomic<bool> stream_paused_ = false;
+    QElapsedTimer paused_since_;
+    bool fallback_requested_ = false;
 
     // Imports DMA-BUF frames via EGL/GBM when the compositor delivers them.
     std::unique_ptr<EglDmaBuf> egl_dmabuf_;

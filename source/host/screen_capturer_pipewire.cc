@@ -54,6 +54,11 @@ const int kMaxCursorSide = 384;
 // Maximum number of damage regions requested in the video-damage metadata.
 const int kMaxDamageRegions = 16;
 
+// How long the compositor stream may stay paused before capture falls back to KMS. A normal pause
+// (renegotiation) lasts a fraction of a second; a much longer one means the session is locked and the
+// compositor will not resume until it unlocks, so the lock screen is only reachable below it.
+const int kPausedFallbackMs = 1500;
+
 // 32-bit packed RGB formats offered to the compositor.
 const quint32 kVideoFormats[] = {
     SPA_VIDEO_FORMAT_BGRx, SPA_VIDEO_FORMAT_BGRA,
@@ -143,12 +148,21 @@ void onStreamStateChanged(
                   << pw->pw_stream_state_as_string(state) << (error ? error : "");
     }
 
+    if (!data)
+        return;
+
+    ScreenCapturerPipeWire* self = static_cast<ScreenCapturerPipeWire*>(data);
+
+    // A locked session pauses the stream (the compositor stops delivering the session content); the
+    // capture thread watches how long it stays paused and falls back to KMS.
+    self->setStreamPaused(state == PW_STREAM_STATE_PAUSED);
+
     // The compositor drops the stream into the error state when it renegotiates the format in a way
     // the current connection cannot follow (a resolution change, a monitor reconfiguration, the screen
     // blanking). Re-create the stream so it negotiates the new format from scratch instead of staying
     // black. The restart itself is done on the capture thread (here we only flag it).
-    if (state == PW_STREAM_STATE_ERROR && data)
-        static_cast<ScreenCapturerPipeWire*>(data)->requestRestart();
+    if (state == PW_STREAM_STATE_ERROR)
+        self->requestRestart();
 }
 
 } // namespace
@@ -299,6 +313,31 @@ const Frame* ScreenCapturerPipeWire::captureFrame(Error* error)
         QMetaObject::invokeMethod(this, &ScreenCapturerPipeWire::onRestartSource, Qt::QueuedConnection);
         *error = Error::TEMPORARY;
         return nullptr;
+    }
+
+    // A prolonged paused state means the compositor stopped delivering frames without an error - most
+    // often the session locked (the compositor pauses screencast while locked; the lock screen itself is
+    // only reachable below the compositor). Fall back to KMS so the lock screen is captured instead of a
+    // frozen frame. Routed through the owner (parent) queued, so the fallback - which deletes this
+    // capturer - does not run on captureFrame()'s stack.
+    if (stream_paused_.load(std::memory_order_relaxed))
+    {
+        if (!paused_since_.isValid())
+            paused_since_.start();
+
+        if (!fallback_requested_ && paused_since_.hasExpired(kPausedFallbackMs))
+        {
+            fallback_requested_ = true;
+            LOG(INFO) << "Compositor stream paused for" << kPausedFallbackMs
+                      << "ms (session likely locked); falling back to KMS";
+            QMetaObject::invokeMethod(parent(), [this]() { emit sig_started(false); },
+                                      Qt::QueuedConnection);
+        }
+    }
+    else
+    {
+        paused_since_.invalidate();
+        fallback_requested_ = false;
     }
 
     QMutexLocker locker(&frame_mutex_);
@@ -574,6 +613,12 @@ void ScreenCapturerPipeWire::stopStream()
 void ScreenCapturerPipeWire::requestRestart()
 {
     restart_requested_.store(true);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenCapturerPipeWire::setStreamPaused(bool paused)
+{
+    stream_paused_.store(paused, std::memory_order_relaxed);
 }
 
 //--------------------------------------------------------------------------------------------------
