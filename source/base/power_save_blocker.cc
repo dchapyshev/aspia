@@ -18,13 +18,9 @@
 
 #include "base/power_save_blocker.h"
 
-#include "base/logging.h"
-
-#if defined(Q_OS_WINDOWS)
-#include "base/win/scoped_thread_desktop.h"
-#endif // defined(Q_OS_WINDOWS)
-
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+#include <QTimer>
+
 #include <linux/uinput.h>
 
 #include <fcntl.h>
@@ -32,39 +28,36 @@
 #include <unistd.h>
 
 #include <cstring>
-
-#include <QDBusInterface>
-#include <QDBusReply>
-#include <QString>
-
-#include "base/linux/session_dbus.h"
 #endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+
+#include "base/logging.h"
+
+#if defined(Q_OS_WINDOWS)
+#include "base/win/scoped_thread_desktop.h"
+#endif // defined(Q_OS_WINDOWS)
 
 namespace {
 
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
-const char kScreenSaverService[] = "org.freedesktop.ScreenSaver";
-const char kScreenSaverPath[] = "/org/freedesktop/ScreenSaver";
-const char kScreenSaverIface[] = "org.freedesktop.ScreenSaver";
+// Delay before the first nudge, to let the compositor's input stack enumerate the new uinput device
+// (via udev/logind) - a nudge emitted before anyone reads the device is lost.
+const int kInitialWakeDelayMs = 1000;
 
-// Time to let the display server / compositor enumerate the new uinput device (via udev) before
-// feeding it events - otherwise the motion is emitted before anyone is reading the device and lost.
-const int kUinputSettleMs = 400;
+// Interval of the repeating keep-awake nudge, used only where the screen-saver inhibit is unavailable
+// (e.g. GNOME). Shorter than any practical blank timeout so the display never idles off.
+const int kWakeIntervalMs = 30000;
 
 //--------------------------------------------------------------------------------------------------
-// The screen-saver inhibit prevents the display from blanking but cannot turn a display that is
-// already off back on. The only display-server-agnostic way (X11 and Wayland alike) to wake it is to
-// feed a real input event through the kernel input subsystem: DPMS / idle wake keys off kernel input
-// events regardless of who produced them. We create a throwaway virtual pointer via uinput, nudge it
-// (net-zero, so the cursor stays put), and remove it. Requires write access to /dev/uinput, i.e. the
-// process must run as root.
-void wakeUpDisplay()
+// Creates a persistent virtual pointer via uinput. Returns its fd, or -1 on failure. The device must
+// outlive a single nudge: a throwaway one is destroyed before the compositor's input stack enumerates
+// it, so its events never reach anyone. Requires write access to /dev/uinput (i.e. running as root).
+int createWakeDevice()
 {
     int fd = open("/dev/uinput", O_WRONLY | O_NONBLOCK | O_CLOEXEC);
     if (fd < 0)
     {
         PLOG(ERROR) << "Unable to open /dev/uinput";
-        return;
+        return -1;
     }
 
     // A relative pointer with a button. Some input stacks ignore a pointer that exposes no buttons.
@@ -76,7 +69,7 @@ void wakeUpDisplay()
     {
         PLOG(ERROR) << "uinput ioctl(UI_SET_*) failed";
         close(fd);
-        return;
+        return -1;
     }
 
     struct uinput_setup setup;
@@ -90,10 +83,20 @@ void wakeUpDisplay()
     {
         PLOG(ERROR) << "Unable to create uinput device";
         close(fd);
-        return;
+        return -1;
     }
 
-    usleep(kUinputSettleMs * 1000);
+    return fd;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Feeds a net-zero pointer motion through |fd|. The kernel input event resets the idle timer and
+// wakes a DPMS-off display regardless of the display server; the move cancels itself so the cursor
+// stays put.
+void emitWakeNudge(int fd)
+{
+    if (fd < 0)
+        return;
 
     auto emitEvent = [fd](quint16 type, quint16 code, qint32 value)
     {
@@ -106,19 +109,12 @@ void wakeUpDisplay()
             PLOG(ERROR) << "Unable to write uinput event";
     };
 
-    // Nudge the pointer and immediately move it back, so the cursor ends where it started.
-    emitEvent(EV_REL, REL_X, 4);
-    emitEvent(EV_REL, REL_Y, 4);
+    emitEvent(EV_REL, REL_X, 1);
+    emitEvent(EV_REL, REL_Y, 1);
     emitEvent(EV_SYN, SYN_REPORT, 0);
-    emitEvent(EV_REL, REL_X, -4);
-    emitEvent(EV_REL, REL_Y, -4);
+    emitEvent(EV_REL, REL_X, -1);
+    emitEvent(EV_REL, REL_Y, -1);
     emitEvent(EV_SYN, SYN_REPORT, 0);
-
-    // Let the events drain before the device is destroyed.
-    usleep(50 * 1000);
-
-    ioctl(fd, UI_DEV_DESTROY);
-    close(fd);
 }
 #endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 
@@ -198,10 +194,8 @@ void wakeUpDisplay()
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-PowerSaveBlocker::PowerSaveBlocker()
-#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
-    : bus_(SessionDBus::connectAsActiveUser("aspia-power-save"))
-#endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+PowerSaveBlocker::PowerSaveBlocker(QObject* parent)
+    : QObject(parent)
 {
     LOG(INFO) << "Ctor";
 
@@ -214,18 +208,24 @@ PowerSaveBlocker::PowerSaveBlocker()
     // The power request keeps the display on, but does not turn it back on if it is already off.
     wakeUpDisplay();
 #elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
-    // Keep the screen from blanking for the duration of the session. On Wayland a screen blank makes
-    // the compositor renegotiate the screen-cast stream, which breaks capture (the stream ends with
-    // "no more input formats"). org.freedesktop.ScreenSaver is implemented by both GNOME and KDE.
-    QDBusInterface screen_saver(kScreenSaverService, kScreenSaverPath, kScreenSaverIface, bus_);
-    QDBusReply<uint> reply = screen_saver.call("Inhibit", "Aspia", "Remote desktop session is active");
-    if (reply.isValid())
-        cookie_ = reply.value();
-    else
-        LOG(ERROR) << "ScreenSaver.Inhibit failed:" << reply.error().message();
+    // Keep the screen from blanking for the duration of the session (on Wayland a blank makes the
+    // compositor renegotiate the screen-cast stream and breaks capture; with KMS a blanked CRTC has no
+    // scan-out to read at all). A screen-saver inhibit over D-Bus is unreliable (GNOME does not provide
+    // org.freedesktop.ScreenSaver) and cannot wake an already-off display, so feed input through a
+    // persistent uinput device instead: it works on every compositor and X11 alike.
+    uinput_fd_ = createWakeDevice();
+    if (uinput_fd_ >= 0)
+    {
+        // Keep the display awake for the whole session with a periodic nudge.
+        wake_timer_ = new QTimer(this);
+        wake_timer_->setInterval(kWakeIntervalMs);
+        connect(wake_timer_, &QTimer::timeout, this, &PowerSaveBlocker::onWakeUp);
+        wake_timer_->start();
 
-    // Inhibit keeps the display from blanking, but does not turn it back on if it is already off.
-    wakeUpDisplay();
+        // Wake it now (if already off) once the compositor's input stack has had time to enumerate the
+        // device - a nudge sent before that is read by no one and lost.
+        QTimer::singleShot(kInitialWakeDelayMs, this, &PowerSaveBlocker::onWakeUp);
+    }
 #else
     NOTIMPLEMENTED();
 #endif // defined(Q_OS_*)
@@ -239,14 +239,20 @@ PowerSaveBlocker::~PowerSaveBlocker()
 #if defined(Q_OS_WINDOWS)
     deletePowerRequest(handle_.release());
 #elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
-    if (bus_.isConnected())
+    // |wake_timer_| is a child object and is destroyed with this one.
+    if (uinput_fd_ >= 0)
     {
-        if (cookie_)
-        {
-            QDBusInterface screen_saver(kScreenSaverService, kScreenSaverPath, kScreenSaverIface, bus_);
-            screen_saver.call("UnInhibit", cookie_);
-        }
-        QDBusConnection::disconnectFromBus(bus_.name());
+        ioctl(uinput_fd_, UI_DEV_DESTROY);
+        close(uinput_fd_);
+        uinput_fd_ = -1;
     }
 #endif // defined(Q_OS_*)
 }
+
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+//--------------------------------------------------------------------------------------------------
+void PowerSaveBlocker::onWakeUp()
+{
+    emitWakeNudge(uinput_fd_);
+}
+#endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
