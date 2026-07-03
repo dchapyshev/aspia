@@ -26,7 +26,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [ubuntu22.04, rpios12]
+        os: [ubuntu22.04, rpios12, alma8.10]
         build_type: [release, debug]
         include:
           - os: ubuntu22.04
@@ -35,6 +35,9 @@ jobs:
           - os: rpios12
             arch: arm64
             triplet: arm64-linux
+          - os: alma8.10
+            arch: x64
+            triplet: x64-linux
 
     steps:
       # Step 1
@@ -52,6 +55,14 @@ jobs:
           VCPKG_DEFAULT_HOST_TRIPLET: ${{ matrix.triplet }}
           VCPKG_DOWNLOADS: /home/shared/vcpkg/downloads
         run: |
+          # AlmaLinux self-hosted runner: enable the gcc-toolset-12 compiler and the locally built
+          # cmake/ninja (both newer than the system packages). No-op on the Debian/Ubuntu runners.
+          if [ -f /opt/rh/gcc-toolset-12/enable ]; then
+            source /opt/rh/gcc-toolset-12/enable
+            export PATH=/usr/local/bin:$PATH
+            export CC=gcc CXX=g++
+          fi
+
           env
 
           if [ -z "${{ matrix.triplet }}" ]; then
@@ -93,5 +104,6 @@ jobs:
           name: build-${{ matrix.os }}-${{ matrix.arch }}-${{ matrix.build_type }}
           path: |
             ${{ github.workspace }}/*.deb
+            ${{ github.workspace }}/*.rpm
           if-no-files-found: error
           retention-days: 7
