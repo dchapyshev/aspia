@@ -292,8 +292,20 @@ if (LINUX)
         install(FILES host/linux/org.aspia.host.policy
             DESTINATION share/polkit-1/actions COMPONENT host)
 
-        # PAM policy used to validate operating system credentials for terminal sessions.
-        install(FILES host/linux/aspia-terminal.pam
+        # PAM policy used to validate operating system credentials for terminal sessions. The policy
+        # pulls in the distribution's aggregate auth/account stack, which is named differently across
+        # families: Debian/Ubuntu use common-auth/common-account, while RHEL/Fedora and SUSE use
+        # system-auth. Pick the matching file for the distribution being built for (DEB is built on
+        # Debian/Ubuntu, RPM on RHEL/Alma).
+        set(ASPIA_PAM_POLICY "host/linux/aspia-terminal.pam")
+        if (EXISTS "/etc/os-release")
+            file(READ "/etc/os-release" ASPIA_OS_RELEASE)
+            if (ASPIA_OS_RELEASE MATCHES "(rhel|fedora|centos|almalinux|rocky|suse|opensuse)")
+                set(ASPIA_PAM_POLICY "host/linux/aspia-terminal-rhel.pam")
+            endif()
+        endif()
+
+        install(FILES ${ASPIA_PAM_POLICY}
             DESTINATION /etc/pam.d RENAME aspia-terminal COMPONENT host)
 
         # The host runs without prior configuration, so the maintainer scripts enable and start the
