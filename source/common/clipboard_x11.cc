@@ -21,7 +21,7 @@
 #include <QSocketNotifier>
 
 #include "base/logging.h"
-#include "base/linux/libx11.h"
+#include "base/linux/x11_headers.h"
 #include "base/linux/x_server_clipboard.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -36,7 +36,7 @@ ClipboardX11::~ClipboardX11()
 {
     if (display_)
     {
-        LibX11::closeDisplay(display_);
+        XCloseDisplay(display_);
         display_ = nullptr;
     }
 }
@@ -44,7 +44,7 @@ ClipboardX11::~ClipboardX11()
 //--------------------------------------------------------------------------------------------------
 void ClipboardX11::init()
 {
-    display_ = LibX11::openDisplay(nullptr);
+    display_ = XOpenDisplay(nullptr);
     if (!display_)
     {
         LOG(ERROR) << "Couldn't open X display";
@@ -86,10 +86,10 @@ void ClipboardX11::pumpXEvents()
 {
     DCHECK(display_ && x_server_clipboard_);
 
-    while (LibX11::pending(display_))
+    while (XPending(display_))
     {
         XEvent event;
-        LibX11::nextEvent(display_, &event);
+        XNextEvent(display_, &event);
         x_server_clipboard_->processXEvent(&event);
     }
 }

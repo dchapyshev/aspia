@@ -21,7 +21,7 @@
 #include <cassert>
 #include <cstddef>
 
-#include "base/linux/libx11.h"
+#include "base/linux/x11_headers.h"
 
 namespace {
 
@@ -45,7 +45,7 @@ XErrorTrap::XErrorTrap(Display* display)
       enabled_(true)
 {
     assert(!g_xserver_error_trap_enabled);
-    original_error_handler_ = LibX11::setErrorHandler(&XServerErrorHandler);
+    original_error_handler_ = XSetErrorHandler(&XServerErrorHandler);
     g_xserver_error_trap_enabled = true;
     g_last_xserver_error_code = 0;
 }
@@ -56,7 +56,7 @@ int XErrorTrap::lastErrorAndDisable()
     enabled_ = false;
 
     assert(g_xserver_error_trap_enabled);
-    LibX11::setErrorHandler(original_error_handler_);
+    XSetErrorHandler(original_error_handler_);
     g_xserver_error_trap_enabled = false;
     return g_last_xserver_error_code;
 }

@@ -21,10 +21,7 @@
 #include "base/logging.h"
 #include "base/desktop/frame_aligned.h"
 #include "base/desktop/mouse_cursor.h"
-#include "base/linux/libx11.h"
-#include "base/linux/libxdamage.h"
-#include "base/linux/libxfixes.h"
-#include "base/linux/libxrandr.h"
+#include "base/linux/x11_headers.h"
 #include "host/linux/x_error_trap.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -95,7 +92,7 @@ bool ScreenCapturerX11::screenList(ScreenList* screens)
     {
         XRRMonitorInfo& m = monitors_[i];
 
-        char* monitor_title = LibX11::getAtomName(display(), m.name);
+        char* monitor_title = XGetAtomName(display(), m.name);
         QPoint position(m.x, m.y);
         QSize resolution(m.width, m.height);
         QPoint dpi(96, 96);
@@ -110,7 +107,7 @@ bool ScreenCapturerX11::screenList(ScreenList* screens)
         // Note name is an X11 Atom used to id the monitor.
         screens->screens.emplace_back(
             static_cast<ScreenId>(m.name), title, position, resolution, dpi, primary);
-        LibX11::free(monitor_title);
+        XFree(monitor_title);
     }
 
     return true;
@@ -212,7 +209,7 @@ const MouseCursor* ScreenCapturerX11::captureCursor()
     XFixesCursorImage* x_image = nullptr;
     {
         XErrorTrap error_trap(display());
-        x_image = LibXfixes::getCursorImage(display());
+        x_image = XFixesGetCursorImage(display());
         if (!x_image || error_trap.lastErrorAndDisable() != 0)
         {
             LOG(ERROR) << "XFixesGetCursorImage failed";
@@ -242,7 +239,7 @@ const MouseCursor* ScreenCapturerX11::captureCursor()
     while (dst < dst_end)
         *dst++ = static_cast<uint32_t>(*src++);
 
-    LibX11::free(x_image);
+    XFree(x_image);
 
     mouse_cursor_ = std::make_unique<MouseCursor>(std::move(image_data), size, hotspot);
     return mouse_cursor_.get();
@@ -260,13 +257,13 @@ QPoint ScreenCapturerX11::cursorPosition()
     unsigned int mask;
 
     XErrorTrap errorTrap(display_->display());
-    X11_Bool result = LibX11::queryPointer(display_->display(),
-                                           root_window_,
-                                           &root_window,
-                                           &child_window,
-                                           &root_x, &root_y,
-                                           &win_x, &win_y,
-                                           &mask);
+    X11_Bool result = XQueryPointer(display_->display(),
+                                    root_window_,
+                                    &root_window,
+                                    &child_window,
+                                    &root_x, &root_y,
+                                    &win_x, &win_y,
+                                    &mask);
     if (!result || errorTrap.lastErrorAndDisable() != 0)
     {
         LOG(ERROR) << "XQueryPointer failed";
@@ -314,7 +311,7 @@ bool ScreenCapturerX11::init()
         return false;
     }
 
-    gc_ = LibX11::createGc(display(), root_window_, 0, nullptr);
+    gc_ = XCreateGC(display(), root_window_, 0, nullptr);
     if (gc_ == nullptr)
     {
         LOG(ERROR) << "Unable to get graphics context";
@@ -326,7 +323,7 @@ bool ScreenCapturerX11::init()
 
     // Check for XFixes extension. This is required for cursor shape notifications, and for our use
     // of XDamage.
-    if (LibXfixes::queryExtension(display(), &xfixes_event_base_, &xfixes_error_base_))
+    if (XFixesQueryExtension(display(), &xfixes_event_base_, &xfixes_error_base_))
     {
         LOG(INFO) << "X server supports XFixes";
         has_xfixes_ = true;
@@ -337,12 +334,12 @@ bool ScreenCapturerX11::init()
     }
 
     // Register for changes to the dimensions of the root window.
-    LibX11::selectInput(display(), root_window_, StructureNotifyMask);
+    XSelectInput(display(), root_window_, StructureNotifyMask);
 
     if (has_xfixes_)
     {
         // Register for changes to the cursor shape.
-        LibXfixes::selectCursorInput(display(), root_window_, XFixesDisplayCursorNotifyMask);
+        XFixesSelectCursorInput(display(), root_window_, XFixesDisplayCursorNotifyMask);
         display_->addEventHandler(xfixes_event_base_ + XFixesCursorNotify, this);
         captureCursor();
     }
@@ -398,7 +395,7 @@ bool ScreenCapturerX11::handleXEvent(const XEvent& event)
     }
     else if (use_randr_ && event.type == randr_event_base_ + RRScreenChangeNotify)
     {
-        LibXrandr::updateConfiguration(const_cast<XEvent*>(&event));
+        XRRUpdateConfiguration(const_cast<XEvent*>(&event));
         updateMonitors();
         LOG(INFO) << "XRandR screen change event received";
         return true;
@@ -420,7 +417,7 @@ void ScreenCapturerX11::initXDamage()
         return;
 
     // Check for XDamage extension.
-    if (!LibXdamage::queryExtension(display(), &damage_event_base_, &damage_error_base_))
+    if (!XDamageQueryExtension(display(), &damage_event_base_, &damage_error_base_))
     {
         LOG(INFO) << "X server does not support XDamage";
         return;
@@ -431,7 +428,7 @@ void ScreenCapturerX11::initXDamage()
     // notifications properly.
 
     // Request notifications every time the screen becomes damaged.
-    damage_handle_ = LibXdamage::create(display(), root_window_, XDamageReportNonEmpty);
+    damage_handle_ = XDamageCreate(display(), root_window_, XDamageReportNonEmpty);
     if (!damage_handle_)
     {
         LOG(ERROR) << "Unable to initialize XDamage";
@@ -439,10 +436,10 @@ void ScreenCapturerX11::initXDamage()
     }
 
     // Create an XFixes server-side region to collate damage into.
-    damage_region_ = LibXfixes::createRegion(display(), 0, 0);
+    damage_region_ = XFixesCreateRegion(display(), 0, 0);
     if (!damage_region_)
     {
-        LibXdamage::destroy(display(), damage_handle_);
+        XDamageDestroy(display(), damage_handle_);
         LOG(ERROR) << "Unable to create XFixes region";
         return;
     }
@@ -460,19 +457,19 @@ void ScreenCapturerX11::initXrandr()
     int minor_version = 0;
     int error_base_ignored = 0;
 
-    if (LibXrandr::queryExtension(display(), &randr_event_base_, &error_base_ignored) &&
-        LibXrandr::queryVersion(display(), &major_version, &minor_version))
+    if (XRRQueryExtension(display(), &randr_event_base_, &error_base_ignored) &&
+        XRRQueryVersion(display(), &major_version, &minor_version))
     {
         if (major_version > 1 || (major_version == 1 && minor_version >= 5))
         {
-            monitors_ = LibXrandr::getMonitors(display(), root_window_, true, &num_monitors_);
+            monitors_ = XRRGetMonitors(display(), root_window_, true, &num_monitors_);
             if (monitors_)
             {
                 use_randr_ = true;
                 LOG(INFO) << "Using XRandR extension v" << major_version << '.' << minor_version;
 
                 // Register for screen change notifications
-                LibXrandr::selectInput(display(), root_window_, RRScreenChangeNotifyMask);
+                XRRSelectInput(display(), root_window_, RRScreenChangeNotifyMask);
                 display_->addEventHandler(randr_event_base_ + RRScreenChangeNotify, this);
             }
             else
@@ -496,11 +493,11 @@ void ScreenCapturerX11::updateMonitors()
 {
     if (monitors_)
     {
-        LibXrandr::freeMonitors(monitors_);
+        XRRFreeMonitors(monitors_);
         monitors_ = nullptr;
     }
 
-    monitors_ = LibXrandr::getMonitors(display(), root_window_, true, &num_monitors_);
+    monitors_ = XRRGetMonitors(display(), root_window_, true, &num_monitors_);
 
     if (selected_monitor_name_)
     {
@@ -571,13 +568,13 @@ void ScreenCapturerX11::deinitXlib()
 {
     if (monitors_)
     {
-        LibXrandr::freeMonitors(monitors_);
+        XRRFreeMonitors(monitors_);
         monitors_ = nullptr;
     }
 
     if (gc_)
     {
-        LibX11::freeGc(display(), gc_);
+        XFreeGC(display(), gc_);
         gc_ = nullptr;
     }
 
@@ -587,13 +584,13 @@ void ScreenCapturerX11::deinitXlib()
     {
         if (damage_handle_)
         {
-            LibXdamage::destroy(display(), damage_handle_);
+            XDamageDestroy(display(), damage_handle_);
             damage_handle_ = 0;
         }
 
         if (damage_region_)
         {
-            LibXfixes::destroyRegion(display(), damage_region_);
+            XFixesDestroyRegion(display(), damage_region_);
             damage_region_ = 0;
         }
     }
@@ -623,16 +620,16 @@ Frame* ScreenCapturerX11::captureFrameImpl()
     if (use_damage_ && queue_.previousFrame())
     {
         // Atomically fetch and clear the damage region.
-        LibXdamage::subtract(display(), damage_handle_, X11_None, damage_region_);
+        XDamageSubtract(display(), damage_handle_, X11_None, damage_region_);
         int rectsNum = 0;
         XRectangle bounds;
-        XRectangle* rects = LibXfixes::fetchRegionAndBounds(display(), damage_region_, &rectsNum, &bounds);
+        XRectangle* rects = XFixesFetchRegionAndBounds(display(), damage_region_, &rectsNum, &bounds);
         for (int i = 0; i < rectsNum; ++i)
         {
             *updated_region +=
                 QRect(QPoint(rects[i].x, rects[i].y), QSize(rects[i].width, rects[i].height));
         }
-        LibX11::free(rects);
+        XFree(rects);
         helper_.invalidateRegion(*updated_region);
 
         // Capture the damaged portions of the desktop.

@@ -19,20 +19,6 @@
 collect_sources(SOURCE_BASE_LINUX
     libsystemd.cc
     libsystemd.h
-    libx11.cc
-    libx11.h
-    libxdamage.cc
-    libxdamage.h
-    libxext.cc
-    libxext.h
-    libxfixes.cc
-    libxfixes.h
-    libxi.cc
-    libxi.h
-    libxrandr.cc
-    libxrandr.h
-    libxtst.cc
-    libxtst.h
     scoped_user_credentials.cc
     scoped_user_credentials.h
     session_dbus.cc

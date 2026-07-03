@@ -20,8 +20,7 @@
 
 #include "base/logging.h"
 #include "base/desktop/frame.h"
-#include "base/linux/libx11.h"
-#include "base/linux/libxext.h"
+#include "base/linux/x11_headers.h"
 #include "host/linux/x_atom_cache.h"
 #include "host/linux/x_error_trap.h"
 
@@ -45,7 +44,7 @@ bool getWindowRect(::Display* display, ::Window window, QRect* rect,
 
     {
         XErrorTrap errorTrap(display);
-        if (!LibX11::getWindowAttributes(display, window, attributes) ||
+        if (!XGetWindowAttributes(display, window, attributes) ||
             errorTrap.lastErrorAndDisable() != 0)
         {
             return false;
@@ -57,11 +56,11 @@ bool getWindowRect(::Display* display, ::Window window, QRect* rect,
     {
         XErrorTrap errorTrap(display);
         ::Window child;
-        if (!LibX11::translateCoordinates(display, window, attributes->root, -rect->left(),
-                                          -rect->top(), &offsetX, &offsetY, &child) ||
-                                          errorTrap.lastErrorAndDisable() != 0)
-                                          {
-                                          return false;
+        if (!XTranslateCoordinates(display, window, attributes->root, -rect->left(),
+                                   -rect->top(), &offsetX, &offsetY, &child) ||
+            errorTrap.lastErrorAndDisable() != 0)
+        {
+            return false;
         }
     }
     rect->translate(offsetX, offsetY);
@@ -226,13 +225,13 @@ void XServerPixelBuffer::release()
 
     if (shm_pixmap_)
     {
-        LibX11::freePixmap(display_, shm_pixmap_);
+        XFreePixmap(display_, shm_pixmap_);
         shm_pixmap_ = 0;
     }
 
     if (shm_gc_)
     {
-        LibX11::freeGc(display_, shm_gc_);
+        XFreeGC(display_, shm_gc_);
         shm_gc_ = nullptr;
     }
 
@@ -284,7 +283,7 @@ void XServerPixelBuffer::initShm(const XWindowAttributes& attributes)
     int major, minor;
     X11_Bool have_pixmaps;
 
-    if (!LibXext::shmQueryVersion(display_, &major, &minor, &have_pixmaps))
+    if (!XShmQueryVersion(display_, &major, &minor, &have_pixmaps))
     {
         LOG(INFO) << "Shared memory not supported. captureRect will use the XImage API instead";
         return;
@@ -296,7 +295,7 @@ void XServerPixelBuffer::initShm(const XWindowAttributes& attributes)
     shm_segment_info_->shmaddr = nullptr;
     shm_segment_info_->readOnly = X11_False;
 
-    x_shm_image_ = LibXext::shmCreateImage(
+    x_shm_image_ = XShmCreateImage(
         display_, default_visual, default_depth, ZPixmap, 0, shm_segment_info_,
         window_rect_.width(), window_rect_.height());
     if (x_shm_image_)
@@ -312,8 +311,8 @@ void XServerPixelBuffer::initShm(const XWindowAttributes& attributes)
                 x_shm_image_->data = shm_segment_info_->shmaddr;
 
                 XErrorTrap error_trap(display_);
-                using_shm = LibXext::shmAttach(display_, shm_segment_info_);
-                LibX11::sync(display_, X11_False);
+                using_shm = XShmAttach(display_, shm_segment_info_);
+                XSync(display_, X11_False);
 
                 if (error_trap.lastErrorAndDisable() != 0)
                     using_shm = false;
@@ -350,7 +349,7 @@ void XServerPixelBuffer::initShm(const XWindowAttributes& attributes)
 //--------------------------------------------------------------------------------------------------
 bool XServerPixelBuffer::initPixmaps(int depth)
 {
-    int format = LibXext::shmPixmapFormat(display_);
+    int format = XShmPixmapFormat(display_);
     if (format != ZPixmap)
     {
         LOG(ERROR) << "Unsupported format:" << format;
@@ -359,10 +358,10 @@ bool XServerPixelBuffer::initPixmaps(int depth)
 
     {
         XErrorTrap error_trap(display_);
-        shm_pixmap_ = LibXext::shmCreatePixmap(
+        shm_pixmap_ = XShmCreatePixmap(
             display_, window_, shm_segment_info_->shmaddr, shm_segment_info_,
             window_rect_.width(), window_rect_.height(), depth);
-        LibX11::sync(display_, X11_False);
+        XSync(display_, X11_False);
         if (error_trap.lastErrorAndDisable() != 0)
         {
             LOG(ERROR) << "XShmCreatePixmap failed";
@@ -381,14 +380,14 @@ bool XServerPixelBuffer::initPixmaps(int depth)
         shm_gc_values.subwindow_mode = IncludeInferiors;
         shm_gc_values.graphics_exposures = X11_False;
 
-        shm_gc_ = LibX11::createGc(display_, window_, GCSubwindowMode | GCGraphicsExposures, &shm_gc_values);
-        LibX11::sync(display_, X11_False);
+        shm_gc_ = XCreateGC(display_, window_, GCSubwindowMode | GCGraphicsExposures, &shm_gc_values);
+        XSync(display_, X11_False);
 
         if (error_trap.lastErrorAndDisable() != 0)
         {
             LOG(ERROR) << "XCreateGC failed";
 
-            LibX11::freePixmap(display_, shm_pixmap_);
+            XFreePixmap(display_, shm_pixmap_);
             shm_pixmap_ = 0;
             shm_gc_ = 0;  // See shm_pixmap_ comment above.
             return false;
@@ -404,7 +403,7 @@ bool XServerPixelBuffer::isWindowValid() const
     XWindowAttributes attributes;
     {
         XErrorTrap error_trap(display_);
-        if (!LibX11::getWindowAttributes(display_, window_, &attributes) ||
+        if (!XGetWindowAttributes(display_, window_, &attributes) ||
             error_trap.lastErrorAndDisable() != 0)
         {
             return false;
@@ -422,7 +421,7 @@ void XServerPixelBuffer::synchronize()
         XErrorTrap error_trap(display_);
         // XShmGetImage fails if the window is partially out of screen.
         xshm_get_image_succeeded_ =
-            LibXext::shmGetImage(display_, window_, x_shm_image_, 0, 0, AllPlanes);
+            XShmGetImage(display_, window_, x_shm_image_, 0, 0, AllPlanes);
     }
 }
 
@@ -439,9 +438,9 @@ bool XServerPixelBuffer::captureRect(const QRect& rect, Frame* frame)
     {
         if (shm_pixmap_)
         {
-            LibX11::copyArea(display_, window_, shm_pixmap_, shm_gc_, rect.left(), rect.top(),
-                             rect.width(), rect.height(), rect.left(), rect.top());
-            LibX11::sync(display_, X11_False);
+            XCopyArea(display_, window_, shm_pixmap_, shm_gc_, rect.left(), rect.top(),
+                      rect.width(), rect.height(), rect.left(), rect.top());
+            XSync(display_, X11_False);
         }
 
         image = x_shm_image_;
@@ -454,8 +453,8 @@ bool XServerPixelBuffer::captureRect(const QRect& rect, Frame* frame)
         if (x_image_)
         XDestroyImage(x_image_);
 
-        x_image_ = LibX11::getImage(display_, window_, rect.left(), rect.top(), rect.width(), rect.height(),
-                                    AllPlanes, ZPixmap);
+        x_image_ = XGetImage(display_, window_, rect.left(), rect.top(), rect.width(), rect.height(),
+                             AllPlanes, ZPixmap);
         if (!x_image_)
             return false;
 

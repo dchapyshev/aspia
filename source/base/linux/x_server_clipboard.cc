@@ -19,8 +19,7 @@
 #include "base/linux/x_server_clipboard.h"
 
 #include "base/logging.h"
-#include "base/linux/libx11.h"
-#include "base/linux/libxfixes.h"
+#include "base/linux/x11_headers.h"
 
 //--------------------------------------------------------------------------------------------------
 XServerClipboard::XServerClipboard() = default;
@@ -42,16 +41,16 @@ void XServerClipboard::init(Display* display, const ClipboardChangedCallback& ca
     // responsibility for handling X Errors outside this class, since X Error handlers are global
     // to all X connections.
     int xfixes_error_base;
-    if (!LibXfixes::queryExtension(display_, &xfixes_event_base_, &xfixes_error_base))
+    if (!XFixesQueryExtension(display_, &xfixes_event_base_, &xfixes_error_base))
     {
         LOG(ERROR) << "X server does not support XFixes";
         return;
     }
 
-    clipboard_window_ = LibX11::createSimpleWindow(display_,
-                                                   DefaultRootWindow(display_),
-                                                   0, 0, 1, 1,  // x, y, width, height
-                                                   0, 0, 0);
+    clipboard_window_ = XCreateSimpleWindow(display_,
+                                            DefaultRootWindow(display_),
+                                            0, 0, 1, 1,  // x, y, width, height
+                                            0, 0, 0);
 
     static const char* const kAtomNames[] =
     {
@@ -65,7 +64,7 @@ void XServerClipboard::init(Display* display, const ClipboardChangedCallback& ca
     static const int kNumAtomNames = std::size(kAtomNames);
 
     Atom atoms[kNumAtomNames];
-    if (LibX11::internAtoms(display_, const_cast<char**>(kAtomNames), kNumAtomNames, X11_False, atoms))
+    if (XInternAtoms(display_, const_cast<char**>(kAtomNames), kNumAtomNames, X11_False, atoms))
     {
         clipboard_atom_ = atoms[0];
         large_selection_atom_ = atoms[1];
@@ -80,7 +79,7 @@ void XServerClipboard::init(Display* display, const ClipboardChangedCallback& ca
         LOG(ERROR) << "XInternAtoms failed";
     }
 
-    LibXfixes::selectSelectionInput(
+    XFixesSelectSelectionInput(
         display_, clipboard_window_, clipboard_atom_, XFixesSetSelectionOwnerNotifyMask);
 }
 
@@ -171,13 +170,13 @@ void XServerClipboard::onPropertyNotify(XEvent* event)
         unsigned long item_count, after;
         unsigned char *data;
 
-        LibX11::getWindowProperty(display_, clipboard_window_, large_selection_property_,
-                                  0, ~0L, X11_True, AnyPropertyType, &type, &format,
-                                  &item_count, &after, &data);
+        XGetWindowProperty(display_, clipboard_window_, large_selection_property_,
+                           0, ~0L, X11_True, AnyPropertyType, &type, &format,
+                           &item_count, &after, &data);
         if (type != X11_None)
         {
             // TODO(lambroslambrou): Properly support large transfers - http://crbug.com/151447.
-            LibX11::free(data);
+            XFree(data);
 
             // If the property is zero-length then the large transfer is complete.
             if (item_count == 0)
@@ -196,9 +195,9 @@ void XServerClipboard::onSelectionNotify(XEvent* event)
         unsigned long item_count, after;
         unsigned char *data;
 
-        LibX11::getWindowProperty(display_, clipboard_window_, event->xselection.property,
-                                  0, ~0L, X11_True, AnyPropertyType, &type, &format,
-                                  &item_count, &after, &data);
+        XGetWindowProperty(display_, clipboard_window_, event->xselection.property,
+                           0, ~0L, X11_True, AnyPropertyType, &type, &format,
+                           &item_count, &after, &data);
         if (type == large_selection_atom_)
         {
             // Large selection - just read and ignore these for now.
@@ -211,7 +210,7 @@ void XServerClipboard::onSelectionNotify(XEvent* event)
             if (type != X11_None)
             {
                 handleSelectionNotify(&event->xselection, type, format, item_count, data);
-                LibX11::free(data);
+                XFree(data);
                 return;
             }
         }
@@ -254,8 +253,8 @@ void XServerClipboard::onSelectionRequest(XEvent* event)
                                selection_event.target);
         }
     }
-    LibX11::sendEvent(display_, selection_event.requestor, X11_False, 0,
-                      reinterpret_cast<XEvent*>(&selection_event));
+    XSendEvent(display_, selection_event.requestor, X11_False, 0,
+               reinterpret_cast<XEvent*>(&selection_event));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -272,8 +271,8 @@ void XServerClipboard::sendTargetsResponse(Window requestor, Atom property)
     targets[0] = timestamp_atom_;
     targets[1] = utf8_string_atom_;
     targets[2] = XA_STRING;
-    LibX11::changeProperty(display_, requestor, property, XA_ATOM, 32, PropModeReplace,
-                           reinterpret_cast<unsigned char*>(targets), 3);
+    XChangeProperty(display_, requestor, property, XA_ATOM, 32, PropModeReplace,
+                    reinterpret_cast<unsigned char*>(targets), 3);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -286,8 +285,8 @@ void XServerClipboard::sendTimestampResponse(Window requestor, Atom property)
     // recommends doing a zero-length property append, and getting a timestamp from the subsequent
     // PropertyNotify event.
     Time time = CurrentTime;
-    LibX11::changeProperty(display_, requestor, property, XA_INTEGER, 32,
-                           PropModeReplace, reinterpret_cast<unsigned char*>(&time), 1);
+    XChangeProperty(display_, requestor, property, XA_INTEGER, 32,
+                    PropModeReplace, reinterpret_cast<unsigned char*>(&time), 1);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -296,9 +295,9 @@ void XServerClipboard::sendStringResponse(Window requestor, Atom property, Atom 
     if (!data_.empty())
     {
         // Return the actual string data; we always return UTF8, regardless of the configured locale.
-        LibX11::changeProperty(display_, requestor, property, target, 8, PropModeReplace,
-                               reinterpret_cast<unsigned char*>(const_cast<char*>(data_.data())),
-                               data_.size());
+        XChangeProperty(display_, requestor, property, target, 8, PropModeReplace,
+                        reinterpret_cast<unsigned char*>(const_cast<char*>(data_.data())),
+                        data_.size());
     }
 }
 
@@ -382,22 +381,22 @@ void XServerClipboard::notifyClipboardText(const std::string& text)
 //--------------------------------------------------------------------------------------------------
 void XServerClipboard::requestSelectionTargets(Atom selection)
 {
-    LibX11::convertSelection(display_, selection, targets_atom_, targets_atom_,
-                             clipboard_window_, CurrentTime);
+    XConvertSelection(display_, selection, targets_atom_, targets_atom_,
+                      clipboard_window_, CurrentTime);
 }
 
 //--------------------------------------------------------------------------------------------------
 void XServerClipboard::requestSelectionString(Atom selection, Atom target)
 {
-    LibX11::convertSelection(display_, selection, target, selection_string_atom_,
-                             clipboard_window_, CurrentTime);
+    XConvertSelection(display_, selection, target, selection_string_atom_,
+                      clipboard_window_, CurrentTime);
 }
 
 //--------------------------------------------------------------------------------------------------
 void XServerClipboard::assertSelectionOwnership(Atom selection)
 {
-    LibX11::setSelectionOwner(display_, selection, clipboard_window_, CurrentTime);
-    if (LibX11::getSelectionOwner(display_, selection) == clipboard_window_)
+    XSetSelectionOwner(display_, selection, clipboard_window_, CurrentTime);
+    if (XGetSelectionOwner(display_, selection) == clipboard_window_)
     {
         selections_owned_.insert(selection);
     }

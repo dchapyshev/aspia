@@ -112,6 +112,34 @@
         "unicode"
       ],
       "platform": "linux | osx"
+    },
+    {
+      "name": "libx11",
+      "platform": "linux"
+    },
+    {
+      "name": "libxdamage",
+      "platform": "linux"
+    },
+    {
+      "name": "libxext",
+      "platform": "linux"
+    },
+    {
+      "name": "libxfixes",
+      "platform": "linux"
+    },
+    {
+      "name": "libxi",
+      "platform": "linux"
+    },
+    {
+      "name": "libxrandr",
+      "platform": "linux"
+    },
+    {
+      "name": "libxtst",
+      "platform": "linux"
     }
   ]
 }

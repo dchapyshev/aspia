@@ -215,6 +215,13 @@ if (LINUX)
     # third_party/wayland-protocols static library.
     find_library(WAYLAND_CLIENT_LIB NAMES wayland-client REQUIRED)
     list(APPEND BASE_PLATFORM_LIBS ${WAYLAND_CLIENT_LIB} wayland_protocols)
+
+    # Xlib and the extensions (DAMAGE/SHM/XFIXES/RANDR/XTEST) are linked directly from the static vcpkg
+    # ports (base/linux/libx11.cc etc. call them straight, no more dlopen). The same static archives back
+    # Qt's xcb platform plugin, so the linker pulls one copy and there is no duplicate-libX11 state.
+    find_package(X11 REQUIRED)
+    list(APPEND BASE_PLATFORM_LIBS
+        X11::X11 X11::Xext X11::Xdamage X11::Xfixes X11::Xi X11::Xrandr X11::Xtst)
 endif()
 
 if (ANDROID)
