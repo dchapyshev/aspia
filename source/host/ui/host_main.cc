@@ -68,6 +68,10 @@ bool waitForValidInputDesktop()
 {
     int max_attempt_count = 600;
 
+#if defined(Q_OS_LINUX)
+    int xsettings_attempt_count = 150;
+#endif
+
     do
     {
 #if defined(Q_OS_WINDOWS)
@@ -86,8 +90,26 @@ bool waitForValidInputDesktop()
         Display* display = LibX11::openDisplay(nullptr);
         if (display)
         {
+            // Qt's xcb backend takes font DPI/scaling (Xft/DPI) from the XSETTINGS manager and follows
+            // its runtime changes, but only when the manager selection already has an owner at
+            // application startup - an application started earlier never reconnects to it. The GUI can
+            // start before the DE's xsettings daemon right after login, so also wait for the owner
+            // (bounded separately; a DE that has none proceeds after the timeout).
+            const QByteArray selection_name =
+                "_XSETTINGS_S" + QByteArray::number(DefaultScreen(display));
+            const Atom selection = LibX11::internAtom(display, selection_name.constData(), 0);
+            const bool has_xsettings = LibX11::getSelectionOwner(display, selection) != 0;
+
             LibX11::closeDisplay(display);
-            break;
+
+            if (has_xsettings)
+                break;
+
+            if (--xsettings_attempt_count == 0)
+            {
+                LOG(WARNING) << "XSETTINGS manager did not appear; the GUI may not pick up display scaling";
+                break;
+            }
         }
 #else
         break;
