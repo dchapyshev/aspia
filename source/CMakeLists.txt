@@ -77,10 +77,6 @@ if (LINUX)
         Qt6::OpenGL
         Qt6::InputSupportPrivate
         Qt6::XcbQpaPrivate
-        Qt6::QWaylandIntegrationPlugin
-        Qt6::QWaylandXdgShellIntegrationPlugin
-        Qt6::QWaylandEglClientBufferPlugin
-        Qt6::QWaylandBradientDecorationPlugin
         Qt6::DBus)
 endif()
 
