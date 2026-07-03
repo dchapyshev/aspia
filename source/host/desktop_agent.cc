@@ -20,6 +20,7 @@
 
 #include <QCoreApplication>
 #include <QString>
+#include <QThread>
 #include <QTimer>
 
 #include "base/core_application.h"
@@ -72,6 +73,19 @@ constexpr int kDefaultScreenCaptureFps = 24;
 constexpr int kMinScreenCaptureFps = 10;
 constexpr int kMaxScreenCaptureFpsHighEnd = 30;
 constexpr int kMaxScreenCaptureFpsLowEnd = 20;
+
+#if defined(Q_OS_LINUX)
+// Right after login the compositor needs a moment to register its screen-cast interface, so every
+// Wayland probe can fail transiently. Retry the probe chain within this window before committing to
+// the VT console fallback; bounded well under the client's start timeout.
+constexpr std::chrono::milliseconds kWaylandProbeTimeout { 5000 };
+constexpr std::chrono::milliseconds kWaylandProbeRetryDelay { 250 };
+
+// A backend committed during the login transition can pass its trial capture on the outgoing
+// compositor's buffer and then fail on every real frame once the session settles; after this long
+// without a single frame the capture path selection is re-run (see reselectLinuxCapture()).
+constexpr std::chrono::milliseconds kCaptureErrorReprobeDelay { 3000 };
+#endif // defined(Q_OS_LINUX)
 
 //--------------------------------------------------------------------------------------------------
 int defaultCaptureFps()
@@ -209,6 +223,72 @@ DesktopAgent::~DesktopAgent()
 
 #if defined(Q_OS_LINUX)
 //--------------------------------------------------------------------------------------------------
+bool DesktopAgent::probeUserWaylandCapture(uid_t uid)
+{
+    // GNOME Mutter ScreenCast: a compositor-native PipeWire stream captured without a permission
+    // dialog. The input injector is built in onCompositorSourceStarted(), once the capturer's
+    // source has negotiated and can be shared with it.
+    if (WaylandCompositorSource::isMutterAvailable(uid))
+    {
+        capture_mode_ = CaptureMode::COMPOSITOR;
+        LOG(INFO) << "Capture mode: compositor (Mutter)";
+        return true;
+    }
+
+    // wlroots compositors via zwlr_screencopy (wl_shm): compositor-native, no dialog.
+    if (ScreenCapturerWlr::isAvailable(uid))
+    {
+        capture_mode_ = CaptureMode::WLR;
+        if (!input_injector_)
+            input_injector_ = InputInjectorUinput::create(this);
+        if (!input_injector_)
+            LOG(ERROR) << "Unable to create uinput input injector";
+        LOG(INFO) << "Capture mode: wlr-screencopy";
+        return true;
+    }
+
+    // Direct DRM/KMS read: imports the scan-out framebuffer zero-copy, avoiding the GPU->CPU
+    // readback entirely. Its trial capture self-validates that the driver can export the buffer;
+    // it fails where the driver cannot (some setups, typically VMs), and KWin ScreenShot2 takes
+    // over below.
+    if (ScreenCapturerKms::isAvailable())
+    {
+        capture_mode_ = CaptureMode::KMS;
+        if (!input_injector_)
+            input_injector_ = InputInjectorUinput::create(this);
+        if (!input_injector_)
+            LOG(ERROR) << "Unable to create uinput input injector";
+        LOG(INFO) << "Capture mode: KMS";
+        return true;
+    }
+
+    // KDE KWin ScreenShot2 (no dialog; per-frame screenshot poll). Used only where KMS cannot
+    // export the scan-out buffer, and only when isAvailable()'s throughput probe finds its
+    // glReadPixels readback fast enough (that cost is GPU-driver dependent).
+    if (ScreenCapturerKwin::isAvailable(uid))
+    {
+        capture_mode_ = CaptureMode::KWIN;
+        if (!input_injector_)
+            input_injector_ = InputInjectorUinput::create(this);
+        if (!input_injector_)
+            LOG(ERROR) << "Unable to create uinput input injector";
+        LOG(INFO) << "Capture mode: KWin ScreenShot2";
+        return true;
+    }
+
+    // xdg-desktop-portal ScreenCast: last resort, prompts the user when capture starts. Input is
+    // built in onCompositorSourceStarted() like the Mutter path.
+    if (WaylandCompositorSource::isPortalAvailable(uid))
+    {
+        capture_mode_ = CaptureMode::COMPOSITOR;
+        LOG(INFO) << "Capture mode: compositor (portal)";
+        return true;
+    }
+
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopAgent::setupLinuxCapture()
 {
     // The agent runs as root in a system unit with no session environment, so it determines the active
@@ -255,74 +335,48 @@ void DesktopAgent::setupLinuxCapture()
 
     if (is_user_session)
     {
-        // GNOME Mutter ScreenCast: a compositor-native PipeWire stream captured without a permission
-        // dialog. The input injector is built in onCompositorSourceStarted(), once the capturer's source
-        // has negotiated and can be shared with it.
-        if (WaylandCompositorSource::isMutterAvailable(uid))
-        {
-            capture_mode_ = CaptureMode::COMPOSITOR;
-            LOG(INFO) << "Capture mode: compositor (Mutter)";
-            return;
-        }
+        // Right after login every probe below can fail transiently (the compositor registers its
+        // screen-cast interface a moment after the display environment appears), so retry the chain
+        // briefly instead of committing to the VT console fallback right away.
+        QElapsedTimer probe_time;
+        probe_time.start();
 
-        // wlroots compositors via zwlr_screencopy (wl_shm): compositor-native, no dialog.
-        if (ScreenCapturerWlr::isAvailable(uid))
+        for (;;)
         {
-            capture_mode_ = CaptureMode::WLR;
-            input_injector_ = InputInjectorUinput::create(this);
-            if (!input_injector_)
-                LOG(ERROR) << "Unable to create uinput input injector";
-            LOG(INFO) << "Capture mode: wlr-screencopy";
-            return;
-        }
+            if (probeUserWaylandCapture(uid))
+                return;
 
-        // Direct DRM/KMS read: imports the scan-out framebuffer zero-copy, avoiding the GPU->CPU readback
-        // entirely. Its trial capture self-validates that the driver can export the buffer; it fails where
-        // the driver cannot (some setups, typically VMs), and KWin ScreenShot2 takes over below.
-        if (ScreenCapturerKms::isAvailable())
-        {
-            capture_mode_ = CaptureMode::KMS;
-            input_injector_ = InputInjectorUinput::create(this);
-            if (!input_injector_)
-                LOG(ERROR) << "Unable to create uinput input injector";
-            LOG(INFO) << "Capture mode: KMS";
-            return;
-        }
+            if (probe_time.elapsed() >= kWaylandProbeTimeout.count())
+                break;
 
-        // KDE KWin ScreenShot2 (no dialog; per-frame screenshot poll). Used only where KMS cannot export
-        // the scan-out buffer, and only when isAvailable()'s throughput probe finds its glReadPixels
-        // readback fast enough (that cost is GPU-driver dependent).
-        const bool kwin_available = ScreenCapturerKwin::isAvailable(uid);
-        LOG(INFO) << "KWin ScreenShot2 available:" << kwin_available;
-        if (kwin_available)
-        {
-            capture_mode_ = CaptureMode::KWIN;
-            input_injector_ = InputInjectorUinput::create(this);
-            if (!input_injector_)
-                LOG(ERROR) << "Unable to create uinput input injector";
-            LOG(INFO) << "Capture mode: KWin ScreenShot2";
-            return;
-        }
-
-        // xdg-desktop-portal ScreenCast: last resort, prompts the user when capture starts. Input is
-        // built in onCompositorSourceStarted() like the Mutter path.
-        if (WaylandCompositorSource::isPortalAvailable(uid))
-        {
-            capture_mode_ = CaptureMode::COMPOSITOR;
-            LOG(INFO) << "Capture mode: compositor (portal)";
-            return;
+            LOG(INFO) << "No Wayland capture path available yet; retrying";
+            QThread::msleep(kWaylandProbeRetryDelay.count());
         }
     }
     else
     {
-        // The login-screen greeter runs its own compositor (e.g. gdm's gnome-shell). Its Mutter ScreenCast
-        // is reachable on the greeter's own bus, giving a compositor-native capture just like a user
-        // session - preferred over KMS, which some drivers (older vmwgfx on RHEL 8) cannot read.
-        if (WaylandCompositorSource::isMutterAvailable(uid))
+        // The login-screen greeter runs its own compositor (e.g. gdm's gnome-shell). Prefer its Mutter
+        // ScreenCast - a compositor-native capture that works where KMS cannot (older vmwgfx on RHEL 8).
+        // The greeter registers that interface a moment after it comes up (e.g. right after logout); in
+        // that window the scan-out can briefly be a buffer KMS reads but that breaks once the compositor
+        // renders through the GPU, so wait for the compositor before committing to KMS.
+        QElapsedTimer probe_time;
+        probe_time.start();
+
+        for (;;)
         {
-            capture_mode_ = CaptureMode::COMPOSITOR;
-            LOG(INFO) << "Capture mode: compositor (Mutter, greeter)";
-            return;
+            if (WaylandCompositorSource::isMutterAvailable(uid))
+            {
+                capture_mode_ = CaptureMode::COMPOSITOR;
+                LOG(INFO) << "Capture mode: compositor (Mutter, greeter)";
+                return;
+            }
+
+            if (probe_time.elapsed() >= kWaylandProbeTimeout.count())
+                break;
+
+            LOG(INFO) << "Greeter compositor not ready yet; retrying";
+            QThread::msleep(kWaylandProbeRetryDelay.count());
         }
 
         // No usable compositor screen-cast: capture below the compositor with DRM/KMS + uinput. A trial
@@ -342,6 +396,74 @@ void DesktopAgent::setupLinuxCapture()
     // created and owned by ScreenCapturerVt (see selectCapturer()).
     capture_mode_ = CaptureMode::VT;
     LOG(INFO) << "Capture mode: VT console";
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::reselectLinuxCapture()
+{
+    QString session_id;
+    uid_t uid = 0;
+    if (!SessionUtil::activeSession(&session_id, &uid))
+    {
+        LOG(ERROR) << "Unable to determine the active session";
+        return;
+    }
+
+    LOG(INFO) << "Persistent capture failures; re-running the capture path selection";
+
+    session_uid_ = uid;
+
+    bool found = false;
+    if (SessionUtil::sessionClass(session_id) == SessionUtil::SessionClass::USER)
+    {
+        found = probeUserWaylandCapture(uid);
+    }
+    else if (WaylandCompositorSource::isMutterAvailable(uid))
+    {
+        capture_mode_ = CaptureMode::COMPOSITOR;
+        LOG(INFO) << "Capture mode: compositor (Mutter, greeter)";
+        found = true;
+    }
+    else if (ScreenCapturerKms::isAvailable())
+    {
+        capture_mode_ = CaptureMode::KMS;
+        if (!input_injector_)
+            input_injector_ = InputInjectorUinput::create(this);
+        if (!input_injector_)
+            LOG(ERROR) << "Unable to create uinput input injector";
+        LOG(INFO) << "Capture mode: KMS";
+        found = true;
+    }
+
+    if (!found)
+    {
+        LOG(INFO) << "No Wayland capture path available; keeping the current one";
+        return;
+    }
+
+    selectCapturer(ScreenCapturer::Error::TEMPORARY);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::registerCaptureFailure()
+{
+    // Only the probed Wayland backends can be committed on a transient buffer; X11/VT do not have
+    // this failure mode, and COMPOSITOR reports its startup outcome via onCompositorSourceStarted().
+    if (capture_mode_ != CaptureMode::KMS && capture_mode_ != CaptureMode::KWIN &&
+        capture_mode_ != CaptureMode::WLR)
+        return;
+
+    if (!capture_error_time_.isValid())
+    {
+        capture_error_time_.start();
+        return;
+    }
+
+    if (capture_error_time_.elapsed() < kCaptureErrorReprobeDelay.count())
+        return;
+
+    capture_error_time_.invalidate();
+    reselectLinuxCapture();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -831,7 +953,11 @@ void DesktopAgent::onCaptureScreen()
         // the screen locks or unlocks), so re-attempt it here instead of leaving the client on "session
         // unavailable" forever. COMPOSITOR negotiates its source asynchronously and must not be recreated.
         if (capture_mode_ != CaptureMode::COMPOSITOR)
+        {
             selectCapturer(ScreenCapturer::Error::TEMPORARY);
+            if (!screen_capturer_)
+                registerCaptureFailure();
+        }
 #endif // defined(Q_OS_LINUX)
 
         // The capturer is created asynchronously (on Wayland only after the desktop portal session is
@@ -936,6 +1062,10 @@ void DesktopAgent::onCaptureScreen()
         const QByteArray& buffer = outgoing_message_.serialize<proto::video::HostToClient>();
         for (auto* client : std::as_const(clients_))
             client->onVideoData(buffer, false);
+
+#if defined(Q_OS_LINUX)
+        registerCaptureFailure();
+#endif
     }
     else
     {
@@ -943,7 +1073,21 @@ void DesktopAgent::onCaptureScreen()
             input_injector_->setScreenInfo(screen_capturer_->desktopRect().size(), frame->topLeft());
 
         encodeScreen(frame);
+
+#if defined(Q_OS_LINUX)
+        capture_error_time_.invalidate();
+#endif
     }
+
+#if defined(Q_OS_LINUX)
+    // The failure path above may have re-run the capture path selection; if the replacement capturer
+    // did not come up, poll at a low rate like the creation path does.
+    if (!screen_capturer_)
+    {
+        capture_timer_->start(250);
+        return;
+    }
+#endif
 
     encodeCursor(screen_capturer_->captureCursor());
 

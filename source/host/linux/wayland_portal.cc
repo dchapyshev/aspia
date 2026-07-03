@@ -136,10 +136,17 @@ bool WaylandPortal::isScreenCastAvailable(uid_t session_uid)
     bool available = false;
     if (bus.isConnected())
     {
-        QDBusInterface properties(
-            kPortalService, kPortalObject, "org.freedesktop.DBus.Properties", bus);
-        QDBusReply<QDBusVariant> reply = properties.call("Get", kScreenCastIface, "AvailableSourceTypes");
-        available = reply.isValid() && reply.value().variant().toUInt() != 0;
+        // Use a raw message, not QDBusInterface: its constructor does a blocking introspection with the
+        // default timeout, and this probe activates xdg-desktop-portal.service - on an absent or broken
+        // backend that would block setupLinuxCapture for ~50 s. The portal is a last resort, so cap the
+        // call with a short timeout and fail fast.
+        QDBusMessage message = QDBusMessage::createMethodCall(
+            kPortalService, kPortalObject, "org.freedesktop.DBus.Properties", "Get");
+        message << QString(kScreenCastIface) << QString("AvailableSourceTypes");
+
+        const QDBusMessage reply = bus.call(message, QDBus::Block, 3000);
+        if (reply.type() == QDBusMessage::ReplyMessage && !reply.arguments().isEmpty())
+            available = reply.arguments().at(0).value<QDBusVariant>().variant().toUInt() != 0;
     }
 
     if (bus.isConnected())

@@ -559,6 +559,11 @@ void DesktopManager::attach(const Location& location, SessionId session_id)
         return;
     }
 
+    // A pending restart (scheduled by an earlier failed attach) is superseded by this attach; left
+    // running it would fire mid-attach, tear down the IPC server the just-launched agent is about to
+    // connect to and spawn a duplicate agent racing the first one for the capture device.
+    restart_timer_->stop();
+
     state_ = State::ATTACHING;
     session_id_ = session_id;
     is_console_ = session_id == activeConsoleSessionId();

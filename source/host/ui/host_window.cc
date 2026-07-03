@@ -50,6 +50,14 @@
 #include "proto/user.h"
 #include "ui_host_window.h"
 
+namespace {
+
+// How many one-second tray availability checks to make before creating the tray icon anyway (an
+// XEmbed-only tray does not report availability but can still host the icon).
+constexpr int kTrayWaitMaxAttempts = 30;
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 HostWindow::HostWindow(QWidget* parent)
     : QMainWindow(parent),
@@ -73,11 +81,21 @@ HostWindow::HostWindow(QWidget* parent)
     tray_menu_.addAction(ui->action_show_hide);
     tray_menu_.addAction(ui->action_exit);
 
-    tray_icon_.setIcon(QIcon(":/img/aspia-host.ico"));
-    tray_icon_.setContextMenu(&tray_menu_);
-    tray_icon_.show();
-
-    updateTrayIconTooltip();
+    // Qt probes the D-Bus status-notifier tray once, when the icon object is created; an icon created
+    // before the shell registers its notifier host silently falls back to XEmbed, which modern shells
+    // do not display. Right after login the GUI can start ahead of the shell, so wait until the tray
+    // reports availability before creating the icon.
+    if (QSystemTrayIcon::isSystemTrayAvailable())
+    {
+        createTrayIcon();
+    }
+    else
+    {
+        LOG(INFO) << "System tray is not available yet; waiting";
+        tray_wait_timer_ = new QTimer(this);
+        connect(tray_wait_timer_, &QTimer::timeout, this, &HostWindow::onTrayAvailabilityCheck);
+        tray_wait_timer_->start(std::chrono::seconds(1));
+    }
 
     QTimer* tray_tooltip_timer = new QTimer(this);
 
@@ -100,15 +118,6 @@ HostWindow::HostWindow(QWidget* parent)
     createThemeMenu(user_settings.theme());
 
     onSettingsChanged();
-
-    connect(&tray_icon_, &QSystemTrayIcon::activated, this, [this](QSystemTrayIcon::ActivationReason reason)
-    {
-        if (reason == QSystemTrayIcon::Context)
-            return;
-
-        LOG(INFO) << "[ACTION] Tray icon activated";
-        onShowHide();
-    });
 
     connect(ui->menu_language, &QMenu::triggered, this, &HostWindow::onLanguageChanged);
     connect(ui->menu_theme, &QMenu::triggered, this, &HostWindow::onThemeChanged);
@@ -474,7 +483,8 @@ void HostWindow::onRecordingStateChanged(bool started)
     else
         message = tr("Screen recording stopped.");
 
-    tray_icon_.showMessage(tr("Aspia Host"), message, QIcon(":/img/aspia-host.ico"), 1200);
+    if (tray_icon_)
+        tray_icon_->showMessage(tr("Aspia Host"), message, QIcon(":/img/aspia-host.ico"), 1200);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -759,6 +769,25 @@ void HostWindow::onOneTimeSessionsChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
+void HostWindow::onTrayAvailabilityCheck()
+{
+    ++tray_wait_attempts_;
+    if (!QSystemTrayIcon::isSystemTrayAvailable() && tray_wait_attempts_ < kTrayWaitMaxAttempts)
+        return;
+
+    if (tray_wait_attempts_ >= kTrayWaitMaxAttempts)
+        LOG(INFO) << "System tray still not available; creating the icon anyway";
+    else
+        LOG(INFO) << "System tray became available on attempt" << tray_wait_attempts_;
+
+    tray_wait_timer_->stop();
+    tray_wait_timer_->deleteLater();
+    tray_wait_timer_ = nullptr;
+
+    createTrayIcon();
+}
+
+//--------------------------------------------------------------------------------------------------
 void HostWindow::createLanguageMenu(const QString& current_locale)
 {
     Application::LocaleList locale_list = GuiApplication::instance()->localeList();
@@ -800,6 +829,26 @@ void HostWindow::createThemeMenu(const QString& current_theme)
         action->setChecked(theme_id == current_theme);
         ui->menu_theme->addAction(action);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostWindow::createTrayIcon()
+{
+    tray_icon_.reset(new QSystemTrayIcon(this));
+    tray_icon_->setIcon(QIcon(":/img/aspia-host.ico"));
+    tray_icon_->setContextMenu(&tray_menu_);
+
+    connect(tray_icon_, &QSystemTrayIcon::activated, this, [this](QSystemTrayIcon::ActivationReason reason)
+    {
+        if (reason == QSystemTrayIcon::Context)
+            return;
+
+        LOG(INFO) << "[ACTION] Tray icon activated";
+        onShowHide();
+    });
+
+    tray_icon_->show();
+    updateTrayIconTooltip();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -856,6 +905,9 @@ void HostWindow::updateStatusBar()
 //--------------------------------------------------------------------------------------------------
 void HostWindow::updateTrayIconTooltip()
 {
+    if (!tray_icon_)
+        return;
+
     QString ipv4;
     QString ipv6;
 
@@ -904,7 +956,7 @@ void HostWindow::updateTrayIconTooltip()
     tooltip += tr("ID: %1").arg(ui->edit_id->text()) + '\n';
     tooltip += ip;
 
-    tray_icon_.setToolTip(tooltip);
+    tray_icon_->setToolTip(tooltip);
 }
 
 //--------------------------------------------------------------------------------------------------

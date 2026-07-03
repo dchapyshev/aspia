@@ -37,6 +37,7 @@ class ChatWidget;
 class Clipboard;
 class ElevateUtil;
 class NotifierWindow;
+class QTimer;
 class StatusDialog;
 
 class HostWindow final : public QMainWindow
@@ -90,10 +91,12 @@ private slots:
     void onSettingsChanged();
     void onKillSession(quint32 session_id);
     void onOneTimeSessionsChanged();
+    void onTrayAvailabilityCheck();
 
 private:
     void createLanguageMenu(const QString& current_locale);
     void createThemeMenu(const QString& current_theme);
+    void createTrayIcon();
     void updateStatusBar();
     void updateTrayIconTooltip();
     quint32 calcOneTimeSessions();
@@ -103,7 +106,11 @@ private:
     bool should_be_quit_ = false;
     bool connected_to_service_ = false;
 
-    QSystemTrayIcon tray_icon_;
+    // Created only when the shell's tray is available (see createTrayIcon()).
+    ScopedQPointer<QSystemTrayIcon> tray_icon_;
+    QTimer* tray_wait_timer_ = nullptr;
+    int tray_wait_attempts_ = 0;
+
     QMenu tray_menu_;
     QPointer<NotifierWindow> notifier_;
     ChatWidget* chat_widget_ = nullptr;

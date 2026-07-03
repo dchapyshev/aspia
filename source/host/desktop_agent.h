@@ -19,6 +19,7 @@
 #ifndef HOST_DESKTOP_AGENT_H
 #define HOST_DESKTOP_AGENT_H
 
+#include <QElapsedTimer>
 #include <QObject>
 #include <QTimer>
 
@@ -100,9 +101,18 @@ private:
     void startClient(const QString& ipc_channel_name);
     void selectCapturer(ScreenCapturer::Error last_error);
 #if defined(Q_OS_LINUX)
+    // One pass of the Wayland user-session capture chain (compositor screen-cast, wlr, KMS, KWin,
+    // portal); sets the capture mode and input injector. Returns false if no path is available yet.
+    bool probeUserWaylandCapture(uid_t uid);
     // Chooses the Linux capture path: X11, or on Wayland a compositor source / KWin / wlr on a user
     // session, otherwise DRM/KMS + uinput.
     void setupLinuxCapture();
+    // Re-runs the capture path selection. A backend committed while the session was still settling
+    // (login/logout transition) can pass its trial capture and then fail on every real frame.
+    void reselectLinuxCapture();
+    // Called on every failed capture attempt: once no frame has been produced for a while, re-runs
+    // the capture path selection against the settled session.
+    void registerCaptureFailure();
     // Switches to DRM/KMS + uinput after the compositor capture path failed to start.
     void fallbackToKms();
     // Sends |text| (UTF-8) to the connected clients as a clipboard event (a finished terminal selection).
@@ -135,6 +145,9 @@ private:
 
     // Active session user's uid (for COMPOSITOR/KWIN/WLR: reaching the session bus as that user).
     uid_t session_uid_ = 0;
+
+    // Runs while capture attempts fail without a single frame (see registerCaptureFailure()).
+    QElapsedTimer capture_error_time_;
 #endif // defined(Q_OS_LINUX)
 
     ScopedQPointer<AudioCapturerWrapper> audio_capturer_;

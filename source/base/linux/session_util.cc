@@ -62,6 +62,62 @@ QByteArray readProcFile(const QString& path)
     return data;
 }
 
+//--------------------------------------------------------------------------------------------------
+// Reads the display and X authority from |uid|'s running X server (Xwayland or Xorg) command line.
+// This is authoritative: a client process environment can carry a stale or mismatched XAUTHORITY (seen
+// on KDE/SDDM, where dconf-service kept a different cookie than kwin's Xwayland actually uses).
+bool readXServerDisplay(uid_t uid, QString* display, QString* xauthority)
+{
+    const QStringList entries = QDir("/proc").entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+    for (const QString& name : entries)
+    {
+        bool is_pid = false;
+        name.toLongLong(&is_pid);
+        if (!is_pid)
+            continue;
+
+        const QString proc_dir = "/proc/" + name;
+
+        struct stat st;
+        if (stat(proc_dir.toLocal8Bit().constData(), &st) != 0 || st.st_uid != uid)
+            continue;
+
+        const QByteArray comm = readProcFile(proc_dir + "/comm").trimmed();
+        if (comm != "Xwayland" && comm != "Xorg")
+            continue;
+
+        // The X server is launched as "Xwayland :N ... -auth <file>": take the display token and the
+        // authority path from its arguments.
+        const QList<QByteArray> args = readProcFile(proc_dir + "/cmdline").split('\0');
+        QString found_display;
+        QString found_xauthority;
+        for (int i = 0; i < args.size(); ++i)
+        {
+            const QByteArray& arg = args[i];
+            if (found_display.isEmpty() && arg.size() >= 2 && arg.startsWith(':'))
+            {
+                bool ok = false;
+                arg.mid(1).toInt(&ok);
+                if (ok)
+                    found_display = QString::fromLocal8Bit(arg);
+            }
+            else if (arg == "-auth" && (i + 1) < args.size())
+            {
+                found_xauthority = QString::fromLocal8Bit(args[i + 1]);
+            }
+        }
+
+        if (!found_display.isEmpty() && !found_xauthority.isEmpty())
+        {
+            *display = found_display;
+            *xauthority = found_xauthority;
+            return true;
+        }
+    }
+
+    return false;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -181,7 +237,17 @@ bool SessionUtil::readX11Env(uid_t uid, const QString& session_id, QString* disp
     display->clear();
     xauthority->clear();
 
+    // The session user's own X server is the authoritative source for the display and its authority
+    // cookie; prefer it over scraping client process environments, which can carry a stale or mismatched
+    // XAUTHORITY. Fall back to scraping only if no X server exposes them (e.g. an Xorg with -displayfd).
+    if (readXServerDisplay(uid, display, xauthority))
+        return true;
+
     const QByteArray scope = QString("session-%1.scope").arg(session_id).toLocal8Bit();
+
+    // On a systemd user session the graphical processes that carry the display live under the user
+    // manager (user@UID.service), not the logind session scope, so accept either.
+    const QByteArray user_service = QString("user@%1.service").arg(uid).toLocal8Bit();
 
     // A process may carry DISPLAY but not XAUTHORITY; prefer one that has both (needed to authenticate
     // to the X server) and only fall back to a DISPLAY-only match if nothing better is found.
@@ -202,7 +268,8 @@ bool SessionUtil::readX11Env(uid_t uid, const QString& session_id, QString* disp
         if (stat(proc_dir.toLocal8Bit().constData(), &st) != 0 || st.st_uid != uid)
             continue;
 
-        if (!readProcFile(proc_dir + "/cgroup").contains(scope))
+        const QByteArray cgroup = readProcFile(proc_dir + "/cgroup");
+        if (!cgroup.contains(scope) && !cgroup.contains(user_service))
             continue;
 
         const QByteArray env_data = readProcFile(proc_dir + "/environ");
