@@ -36,9 +36,10 @@
 #include <unistd.h>
 
 #include <QGuiApplication>
-#include <QLibrary>
 #include <QProcess>
 #include <QtGui/qguiapplication_platform.h>
+
+#include <xcb/xcb.h>
 #endif // defined(Q_OS_LINUX)
 
 namespace {
@@ -109,9 +110,9 @@ public:
 // Grants or revokes access to the running X display for the root user via the X SECURITY extension
 // (the same operation as "xhost +SI:localuser:root"). wlroots/labwc Xwayland authorizes clients by the
 // session uid and issues no MIT cookie, so the dialog launched via pkexec (which runs as root) cannot
-// otherwise reach the display. We reuse the connection Qt already opened for the xcb platform and
-// resolve the entry points from the in-process libxcb - so there is no extra build or package
-// dependency (nothing X11 is pulled onto headless servers), and this runs only in the GUI.
+// otherwise reach the display. We reuse the connection Qt already opened for the xcb platform; the xcb
+// entry points are linked statically into the binary, so there is no extra runtime dependency (nothing
+// X11 is pulled onto headless servers). This runs only in the GUI.
 void setRootDisplayAccess(bool allow)
 {
     auto* x11_app = qApp->nativeInterface<QNativeInterface::QX11Application>();
@@ -122,23 +123,11 @@ void setRootDisplayAccess(bool allow)
     if (!connection)
         return;
 
-    struct XcbVoidCookie { unsigned int sequence; };
-    using ChangeHostsFn = XcbVoidCookie (*)(xcb_connection_t*, quint8, quint8, quint16, const quint8*);
-    using FlushFn = int (*)(xcb_connection_t*);
-
-    QLibrary xcb_library("xcb", 1);
-    auto change_hosts = reinterpret_cast<ChangeHostsFn>(xcb_library.resolve("xcb_change_hosts"));
-    auto flush = reinterpret_cast<FlushFn>(xcb_library.resolve("xcb_flush"));
-    if (!change_hosts || !flush)
-    {
-        LOG(ERROR) << "Unable to resolve xcb entry points";
-        return;
-    }
-
-    // X SECURITY: mode insert(0)/delete(1), family server-interpreted(5), address "type\0value".
+    // X SECURITY: family server-interpreted, address "type\0value".
     static const quint8 kRootAddress[] = "localuser\0root";
-    change_hosts(connection, allow ? 0 : 1, 5, sizeof(kRootAddress) - 1, kRootAddress);
-    flush(connection);
+    xcb_change_hosts(connection, allow ? XCB_HOST_MODE_INSERT : XCB_HOST_MODE_DELETE,
+                     XCB_FAMILY_SERVER_INTERPRETED, sizeof(kRootAddress) - 1, kRootAddress);
+    xcb_flush(connection);
 }
 
 //--------------------------------------------------------------------------------------------------

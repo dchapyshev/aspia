@@ -98,12 +98,13 @@
       "platform": "!android"
     },
     {
-      "name": "qtwayland",
-      "platform": "linux"
-    },
-    {
       "name": "qttools",
       "platform": "!android"
+    },
+    {
+      "name": "dbus",
+      "default-features": false,
+      "platform": "linux"
     },
     "sqlite3",
     {
@@ -139,6 +140,42 @@
     },
     {
       "name": "libxtst",
+      "platform": "linux"
+    },
+    {
+      "name": "libxrender",
+      "platform": "linux"
+    },
+    {
+      "name": "libxkbcommon",
+      "platform": "linux"
+    },
+    {
+      "name": "xcb",
+      "platform": "linux"
+    },
+    {
+      "name": "xcb-util",
+      "platform": "linux"
+    },
+    {
+      "name": "xcb-util-wm",
+      "platform": "linux"
+    },
+    {
+      "name": "xcb-image",
+      "platform": "linux"
+    },
+    {
+      "name": "xcb-keysyms",
+      "platform": "linux"
+    },
+    {
+      "name": "xcb-render-util",
+      "platform": "linux"
+    },
+    {
+      "name": "xcb-util-cursor",
       "platform": "linux"
     }
   ]

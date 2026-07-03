@@ -847,14 +847,18 @@ void UserSession::attach(const Location& location, AttachReason reason, SessionI
 
     SessionUtil::readX11Env(uid, sd_session_id, &display, &xauthority);
 
-    // Launch the GUI as the session user via --uid, not --machine=<user>@.host --user: the latter is
-    // unsupported on older systemd (RHEL 8: "Execution in user context is not supported on non-local
-    // systems"), while --uid works everywhere. That runs outside the user's session slice, so the
-    // session environment (runtime dir, session bus, display) is passed explicitly.
+    // Launch the GUI through the user's own systemd manager so the unit is a member of the user session:
+    // that is what lets the GUI's privilege elevation (pkexec) reach the session authentication agent. A
+    // unit started outside the session (systemd-run --uid lands in system.slice) has no session, so
+    // polkit finds no agent and pkexec exits without prompting. --machine=<user>@.host --user reaches the
+    // user manager on modern systemd but is unsupported on RHEL 8 ("Execution in user context is not
+    // supported on non-local systems"), so instead drop to the user with runuser and talk to the local
+    // user manager directly - that works on RHEL 8 too. The unit inherits the session bus and runtime dir
+    // from the user manager; only DISPLAY/XAUTHORITY are not always imported, so pass them explicitly.
     const QString runtime_dir = QString("/run/user/%1").arg(uid);
-    QString command = QString("systemd-run --uid=%1 --collect").arg(user_name);
-    command += " --setenv=XDG_RUNTIME_DIR=" + runtime_dir;
-    command += " --setenv=DBUS_SESSION_BUS_ADDRESS=unix:path=" + runtime_dir + "/bus";
+    QString command =
+        QString("runuser -u %1 -- env XDG_RUNTIME_DIR=%2 DBUS_SESSION_BUS_ADDRESS=unix:path=%2/bus "
+                "systemd-run --user --collect").arg(user_name, runtime_dir);
     if (!display.isEmpty())
         command += " --setenv=DISPLAY=" + display;
     if (!xauthority.isEmpty())
