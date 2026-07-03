@@ -206,10 +206,15 @@ if (LINUX)
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(PIPEWIRE REQUIRED libpipewire-0.3)
     pkg_check_modules(LIBDRM REQUIRED libdrm)
-    find_library(WAYLAND_CLIENT_LIB NAMES wayland-client REQUIRED)
+    # Wayland client comes from the static vcpkg port (libwayland-client.a pulls in libffi); link both
+    # explicitly so nothing links the system libwayland-client. List the static archive name first: the
+    # build host also ships a system libwayland-client.so that find_library would otherwise prefer. The
+    # wlr-screencopy protocol stubs are the third_party/wlr-protocols static library.
+    find_library(WAYLAND_CLIENT_LIB NAMES libwayland-client.a wayland-client REQUIRED)
+    find_library(FFI_LIB NAMES ffi REQUIRED)
     target_include_directories(aspia_host_core PRIVATE
         ${PIPEWIRE_INCLUDE_DIRS} ${LIBDRM_INCLUDE_DIRS})
-    target_link_libraries(aspia_host_core PRIVATE ${WAYLAND_CLIENT_LIB} wlr_protocols)
+    target_link_libraries(aspia_host_core PRIVATE ${WAYLAND_CLIENT_LIB} ${FFI_LIB} wlr_protocols)
 endif()
 
 if (LINUX OR APPLE)

@@ -77,14 +77,18 @@
         },
         {
           "name": "opengl",
-          "platform": "linux | osx"
-        },
-        {
-          "name": "egl",
-          "platform": "linux"
+          "platform": "osx"
         },
         {
           "name": "dbus",
+          "platform": "linux"
+        },
+        {
+          "name": "sessionmanager",
+          "platform": "linux"
+        },
+        {
+          "name": "xcb-sm",
           "platform": "linux"
         },
         {
@@ -176,6 +180,21 @@
     },
     {
       "name": "xcb-util-cursor",
+      "platform": "linux"
+    },
+    {
+      "name": "libsm",
+      "platform": "linux"
+    },
+    {
+      "name": "libice",
+      "platform": "linux"
+    },
+    {
+      "name": "wayland",
+      "features": [
+        "force-build"
+      ],
       "platform": "linux"
     }
   ]

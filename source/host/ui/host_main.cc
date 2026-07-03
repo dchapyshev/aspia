@@ -19,6 +19,7 @@
 #include "host/ui/host_main.h"
 
 #include <QCommandLineParser>
+#include <QFile>
 #include <QSysInfo>
 #include <QThread>
 
@@ -130,6 +131,36 @@ bool waitForValidInputDesktop()
 
     return true;
 }
+
+#if defined(Q_OS_LINUX)
+//--------------------------------------------------------------------------------------------------
+// True when this process was launched by a desktop session restore rather than by the host service or
+// the user. XSMP session managers (ksmserver, gnome-session) export DESKTOP_AUTOSTART_ID for the clients
+// they relaunch; KDE Plasma restores non-XSMP apps through plasma-fallback-session-restore, which runs
+// them inside its own systemd user service, so the process cgroup carries its name. Such a launch must
+// not pop the main window: the service already runs the real hidden instance, and showing the window
+// here also makes the window manager save it and restore it again on the next login (a self-sustaining
+// loop).
+bool isSessionRestoreLaunch()
+{
+    if (qEnvironmentVariableIsSet("DESKTOP_AUTOSTART_ID"))
+        return true;
+
+    // plasma-fallback-session-restore runs the app under its own systemd user service, whose name
+    // contains "session-restore". Depending on how it is spawned that shows up either in the process
+    // cgroup or in the MEMORY_PRESSURE_WATCH path systemd exports from the same service. systemd
+    // escapes the dashes of the unit name as \x2d in those paths, so normalize before matching.
+    QByteArray unit_paths = qgetenv("MEMORY_PRESSURE_WATCH");
+
+    QFile cgroup("/proc/self/cgroup");
+    if (cgroup.open(QIODevice::ReadOnly))
+        unit_paths += cgroup.readAll();
+
+    unit_paths.replace("\\x2d", "-");
+
+    return unit_paths.contains("session-restore");
+}
+#endif // defined(Q_OS_LINUX)
 
 } // namespace
 
@@ -324,10 +355,20 @@ int hostMain(int argc, char* argv[])
     }
     else
     {
+        bool hidden = parser.isSet(hidden_option);
+
+#if defined(Q_OS_LINUX)
+        if (!hidden && isSessionRestoreLaunch())
+        {
+            LOG(INFO) << "Launched by desktop session restore; starting hidden";
+            hidden = true;
+        }
+#endif // defined(Q_OS_LINUX)
+
         if (application.isRunning())
         {
             LOG(INFO) << "Application already running";
-            application.activate(parser.isSet(hidden_option));
+            application.activate(hidden);
         }
         else
         {
@@ -337,7 +378,7 @@ int hostMain(int argc, char* argv[])
             QObject::connect(&application, &Application::sig_activated,
                              &window, &HostWindow::activateHost);
 
-            if (parser.isSet(hidden_option))
+            if (hidden)
             {
                 LOG(INFO) << "Hide window to tray";
                 window.hideToTray();

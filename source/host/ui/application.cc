@@ -21,6 +21,7 @@
 #include <QAbstractEventDispatcher>
 #include <QAbstractNativeEventFilter>
 #include <QIcon>
+#include <QSessionManager>
 
 #include "base/logging.h"
 #include "build/build_config.h"
@@ -88,6 +89,17 @@ Application::Application(int& argc, char* argv[])
     setWindowIcon(QIcon(":/img/aspia-host.ico"));
 
     QAbstractEventDispatcher::instance()->installNativeEventFilter(EventFilter::instance());
+
+#if defined(Q_OS_LINUX)
+    // The GUI is owned by the host service, not the desktop session: the service starts it hidden in the
+    // tray and restarts it as needed. Tell the session manager never to restore it, so neither ksmserver
+    // nor the KDE fallback session-restore relaunches it at the next login - a relaunch arrives without
+    // --hidden and pops the main window up over the tray-only instance already started by the service.
+    connect(this, &QGuiApplication::saveStateRequest, this, [](QSessionManager& manager)
+    {
+        manager.setRestartHint(QSessionManager::RestartNever);
+    });
+#endif // defined(Q_OS_LINUX)
 
     connect(this, &Application::sig_messageReceived, this, [this](const QByteArray& message)
     {

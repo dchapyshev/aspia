@@ -20,7 +20,7 @@
 # read the compositor's logical monitor layout. These were generated once from
 # xdg-output-unstable-v1.xml (kept here for reference only) with "wayland-scanner client-header" and
 # "wayland-scanner private-code"; regenerate them by hand if the protocol XML is ever updated.
-# wayland-util.h comes from the system libwayland-dev.
+# wayland-util.h comes from the static vcpkg wayland port.
 
 list(APPEND SOURCE_WAYLAND_PROTOCOLS
     xdg-output-client-protocol.h
@@ -28,8 +28,10 @@ list(APPEND SOURCE_WAYLAND_PROTOCOLS
 
 source_group("" FILES ${SOURCE_WAYLAND_PROTOCOLS})
 
+find_path(WAYLAND_INCLUDE_DIR wayland-util.h REQUIRED)
+
 add_library(wayland_protocols STATIC ${SOURCE_WAYLAND_PROTOCOLS})
-target_include_directories(wayland_protocols PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(wayland_protocols PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${WAYLAND_INCLUDE_DIR})
 set_target_properties(wayland_protocols PROPERTIES LANGUAGE C LINKER_LANGUAGE C C_STANDARD 99)
 set_target_properties(wayland_protocols PROPERTIES FOLDER third_party)
 
