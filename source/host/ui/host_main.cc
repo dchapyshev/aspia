@@ -69,7 +69,10 @@ bool waitForValidInputDesktop()
     int max_attempt_count = 600;
 
 #if defined(Q_OS_LINUX)
-    int xsettings_attempt_count = 150;
+    // Must stay well under the service's attach timeout: a compositor without XSETTINGS at all (e.g.
+    // wlroots-based) never produces an owner, and a GUI still waiting when the timeout hits is killed
+    // and relaunched in an endless loop, never reaching the give-up branch below.
+    int xsettings_attempt_count = 80;
 #endif
 
     do
@@ -92,9 +95,10 @@ bool waitForValidInputDesktop()
         {
             // Qt's xcb backend takes font DPI/scaling (Xft/DPI) from the XSETTINGS manager and follows
             // its runtime changes, but only when the manager selection already has an owner at
-            // application startup - an application started earlier never reconnects to it. The GUI can
-            // start before the DE's xsettings daemon right after login, so also wait for the owner
-            // (bounded separately; a DE that has none proceeds after the timeout).
+            // application startup - an application started earlier never reconnects to it. The DE's
+            // xsettings daemon can come up tens of seconds after the X server right after login, so
+            // also wait for the owner (bounded separately; a DE that has none proceeds after the
+            // timeout).
             const QByteArray selection_name =
                 "_XSETTINGS_S" + QByteArray::number(DefaultScreen(display));
             const Atom selection = LibX11::internAtom(display, selection_name.constData(), 0);

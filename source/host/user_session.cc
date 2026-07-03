@@ -830,6 +830,14 @@ void UserSession::attach(const Location& location, AttachReason reason, SessionI
         return;
     }
 
+    // A GUI launched on a previous attach attempt may still be hanging around: right after login it
+    // waits for the session to settle before creating its UI (which can outlast the attach timeout),
+    // and a failed IPC connect leaves it running offline. Its state is unknown, so kill it and launch
+    // a fresh instance instead of waiting on it.
+    const int killed_count = SessionUtil::killProcesses(uid, kExecutableNameForUi, "--hidden");
+    if (killed_count > 0)
+        LOG(INFO) << "Killed" << killed_count << "stale user session GUI process(es)";
+
     const QString file_path = QCoreApplication::applicationDirPath() + '/' + kExecutableNameForUi;
 
     // The GUI is a Qt xcb app that must authenticate to the (X)Wayland server; read the display and

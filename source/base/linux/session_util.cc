@@ -26,6 +26,7 @@
 
 #include <fcntl.h>
 #include <pwd.h>
+#include <signal.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
@@ -359,4 +360,43 @@ QString SessionUtil::sessionBusAddress(uid_t uid)
     }
 
     return fallback_bus;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+int SessionUtil::killProcesses(uid_t uid, const QByteArray& comm, const QByteArray& argument)
+{
+    // The kernel truncates a process name to TASK_COMM_LEN-1 characters, so match what /proc reports.
+    const QByteArray truncated_comm = comm.left(15);
+
+    int killed_count = 0;
+
+    const QStringList entries = QDir("/proc").entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+    for (const QString& name : entries)
+    {
+        bool is_pid = false;
+        const qint64 pid = name.toLongLong(&is_pid);
+        if (!is_pid)
+            continue;
+
+        const QString proc_dir = "/proc/" + name;
+
+        struct stat st;
+        if (stat(proc_dir.toLocal8Bit().constData(), &st) != 0 || st.st_uid != uid)
+            continue;
+
+        if (readProcFile(proc_dir + "/comm").trimmed() != truncated_comm)
+            continue;
+
+        const QList<QByteArray> args = readProcFile(proc_dir + "/cmdline").split('\0');
+        if (!argument.isEmpty() && !args.contains(argument))
+            continue;
+
+        if (kill(static_cast<pid_t>(pid), SIGKILL) == 0)
+            ++killed_count;
+        else
+            PLOG(ERROR) << "kill failed for pid" << pid;
+    }
+
+    return killed_count;
 }

@@ -590,6 +590,16 @@ void DesktopManager::attach(const Location& location, SessionId session_id)
         return;
     }
 
+#if defined(Q_OS_LINUX)
+    // An agent from a previous attach attempt may still be alive: probing the capture path can outlast
+    // the attach timeout, and a driver call can hang it outright. Two agents would fight over the DRM
+    // device (seen as prime-export/EGL failures breaking capture), so kill the stale one and start
+    // fresh instead of waiting on a process in an unknown state.
+    const int killed_count = SessionUtil::killProcesses(0, "aspia_desktop_agent", QByteArray());
+    if (killed_count > 0)
+        LOG(INFO) << "Killed" << killed_count << "stale desktop agent process(es)";
+#endif // defined(Q_OS_LINUX)
+
     if (!startProcess(ipc_channel_name))
     {
         dettach(FROM_HERE);

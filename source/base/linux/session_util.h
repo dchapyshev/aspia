@@ -80,6 +80,11 @@ public:
     // session's own process is the only way to reach that compositor's D-Bus services.
     static QString sessionBusAddress(uid_t uid);
 
+    // Kills (SIGKILL) every running process of |uid| named |comm| whose command line contains
+    // |argument| (any process of that name if |argument| is empty). Returns the number of processes
+    // killed.
+    static int killProcesses(uid_t uid, const QByteArray& comm, const QByteArray& argument);
+
 private:
     Q_DISABLE_COPY_MOVE(SessionUtil)
 };
