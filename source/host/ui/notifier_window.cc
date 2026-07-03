@@ -124,6 +124,8 @@ NotifierWindow::NotifierWindow(QWidget* parent)
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
+    expanded_size_ = size();
+
     setAttribute(Qt::WA_TranslucentBackground);
 
     ui->label_title->installEventFilter(this);
@@ -431,6 +433,12 @@ void NotifierWindow::onUpdateWindowPosition()
         window_layout->activate();
     updateTreeColumns();
 
+    // A display scale change keeps the window's physical size, collapsing its logical size to whatever
+    // the layout minimum is. Logical sizes are scale-independent, so re-assert the intended one (the
+    // window is expanded by the onShowNotifier() call above) to restore the designed proportions at
+    // any DPI.
+    setFixedSize(expanded_size_);
+
     QRect available_rect = currentAvailableRect();
     QSize window_size = frameSize();
 
@@ -455,13 +463,12 @@ void NotifierWindow::onShowNotifier()
         ui->show_panel->hide();
 
         QPoint window_pos = window_rect_.topLeft();
-        QSize window_size = window_rect_.size();
 
-        LOG(INFO) << "Notifier window size:" << window_size;
+        LOG(INFO) << "Notifier window size:" << expanded_size_;
         LOG(INFO) << "Notifier window moved to:" << window_pos;
 
         move(window_pos);
-        setFixedSize(window_size);
+        setFixedSize(expanded_size_);
     }
     else
     {

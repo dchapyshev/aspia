@@ -78,6 +78,11 @@ private:
     bool should_be_close_ = false;
     QRect window_rect_;
 
+    // The designed logical size of the expanded window. A display scale change keeps the window's
+    // physical size (collapsing its logical one to whatever the layout minimum is), so
+    // onUpdateWindowPosition() re-asserts this; logical sizes are scale-independent.
+    QSize expanded_size_;
+
     Q_DISABLE_COPY_MOVE(NotifierWindow)
 };
 
