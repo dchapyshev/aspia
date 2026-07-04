@@ -282,3 +282,46 @@ if (WIN32)
     set_target_properties(aspia_terminal_agent PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 endif()
 target_link_libraries(aspia_terminal_agent aspia_host_core ${HOST_PLATFORM_LIBS})
+
+if (APPLE)
+    # Ship the whole host as a single application bundle. aspia_host is the bundle's main executable
+    # (what a double-click launches); the service, the agents and the shared library live next to it
+    # in Contents/MacOS so every component resolves its siblings through applicationDirPath() and the
+    # service's executable-path anti-spoofing check keeps working unchanged. The bundle keeps the
+    # aspia_host name (the code looks the binaries up by these exact names); it is renamed to a
+    # human-readable "Aspia Host.app" at install/packaging time.
+    set(HOST_ICON ${PROJECT_SOURCE_DIR}/source/common/resources/aspia-host.icns)
+    set_source_files_properties(${HOST_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+    target_sources(aspia_host PRIVATE ${HOST_ICON})
+
+    set_target_properties(aspia_host PROPERTIES
+        MACOSX_BUNDLE TRUE
+        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
+
+    # $<TARGET_FILE_DIR:aspia_host> is the bundle's Contents/MacOS directory.
+    set(HOST_BUNDLE_MACOS_DIR $<TARGET_FILE_DIR:aspia_host>)
+
+    # The service and agents are built straight into the bundle. They depend on aspia_host so the
+    # bundle directory exists first (aspia_host itself depends on aspia_host_core, so no cycle).
+    foreach(host_helper aspia_host_service aspia_desktop_agent aspia_file_agent aspia_terminal_agent)
+        set_target_properties(${host_helper} PROPERTIES
+            RUNTIME_OUTPUT_DIRECTORY ${HOST_BUNDLE_MACOS_DIR})
+        add_dependencies(${host_helper} aspia_host)
+    endforeach()
+
+    # The shared library is built before the bundle exists (aspia_host links it), so it cannot be
+    # emitted into the bundle directly. Copy it in once the bundle is created.
+    add_custom_command(TARGET aspia_host POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE:aspia_host_core> ${HOST_BUNDLE_MACOS_DIR}/
+        COMMENT "Copying aspia_host_core into the host bundle")
+
+    # Every executable loads libaspia_host_core.dylib (install name @rpath/...) from next to itself.
+    set_target_properties(aspia_host aspia_host_service aspia_desktop_agent aspia_file_agent
+                          aspia_terminal_agent PROPERTIES
+        INSTALL_RPATH "@executable_path"
+        BUILD_WITH_INSTALL_RPATH ON)
+
+    # The .pkg installer is built out of this bundle by installer/macos/build_host_pkg.sh (kept
+    # outside CMake, next to the Windows WiX installer, because signing/notarization belong there).
+endif()
