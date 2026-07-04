@@ -88,12 +88,15 @@ bool addApplication(
 #if defined(Q_OS_LINUX)
 //--------------------------------------------------------------------------------------------------
 // Reads installed packages from the dpkg database (Debian/Ubuntu). Returns false if the database is
-// absent (not a dpkg-based system).
+// absent or empty - dpkg may be installed on an rpm-based distribution (only to build .deb packages),
+// leaving an empty status file, in which case the caller should fall back to the rpm database.
 bool readDpkgPackages(proto::system_info::Applications* applications)
 {
     QFile file("/var/lib/dpkg/status");
     if (!file.open(QIODevice::ReadOnly))
         return false;
+
+    const int initial_count = applications->application_size();
 
     QByteArray name;
     QByteArray version;
@@ -150,7 +153,7 @@ bool readDpkgPackages(proto::system_info::Applications* applications)
     }
 
     flush();
-    return true;
+    return applications->application_size() > initial_count;
 }
 
 //--------------------------------------------------------------------------------------------------
