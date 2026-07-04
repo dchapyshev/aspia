@@ -25,6 +25,8 @@
 
 #if defined(Q_OS_WINDOWS)
 #include "base/codec/video_decoder_h264_mf.h"
+#elif defined(Q_OS_MACOS)
+#include "base/codec/video_decoder_h264_vt.h"
 #elif defined(Q_OS_ANDROID)
 #include "base/codec/video_decoder_h264_mc.h"
 #endif
@@ -49,6 +51,10 @@ std::unique_ptr<VideoDecoder> VideoDecoder::create(proto::video::Encoding encodi
                 if (auto decoder = VideoDecoderH264MF::create())
                     return decoder;
                 LOG(WARNING) << "Media Foundation H264 decoder unavailable, falling back to OpenH264";
+#elif defined(Q_OS_MACOS)
+                if (auto decoder = VideoDecoderH264VT::create())
+                    return decoder;
+                LOG(WARNING) << "VideoToolbox H264 decoder unavailable, falling back to OpenH264";
 #elif defined(Q_OS_ANDROID)
                 if (auto decoder = VideoDecoderH264MC::create())
                     return decoder;

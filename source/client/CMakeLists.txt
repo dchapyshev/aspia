@@ -99,7 +99,10 @@ if (LINUX)
 endif()
 
 if (APPLE)
-    set(CLIENT_PLATFORM_LIBS ${COREAUDIO_LIB} ${AUDIOTOOLBOX_LIB} portaudio)
+    # VideoToolbox/CoreMedia/CoreVideo back the hardware H264 decoder.
+    set(CLIENT_PLATFORM_LIBS
+        ${COREAUDIO_LIB} ${AUDIOTOOLBOX_LIB} portaudio
+        ${VIDEOTOOLBOX_LIB} ${COREMEDIA_LIB} ${COREVIDEO_LIB})
     set(aspia_client_ICON ${PROJECT_SOURCE_DIR}/source/common/resources/aspia-client.icns)
     set(aspia_client_PLIST ${PROJECT_SOURCE_DIR}/source/client/Info.plist)
 

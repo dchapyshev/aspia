@@ -230,7 +230,8 @@ if (APPLE)
         ${SCREENCAPTUREKIT_LIB}
         ${COREMEDIA_LIB}
         ${COREVIDEO_LIB}
-        ${COREGRAPHICS_LIB})
+        ${COREGRAPHICS_LIB}
+        ${VIDEOTOOLBOX_LIB})
 endif()
 
 if (LINUX)

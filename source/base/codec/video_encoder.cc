@@ -26,6 +26,10 @@
 #include "base/codec/video_encoder_h264_mf.h"
 #endif
 
+#if defined(Q_OS_MACOS)
+#include "base/codec/video_encoder_h264_vt.h"
+#endif
+
 //--------------------------------------------------------------------------------------------------
 // static
 const size_t VideoEncoder::kInitialEncodeBufferSize = 1 * 1024 * 1024; // 1 MB
@@ -43,6 +47,11 @@ std::unique_ptr<VideoEncoder> VideoEncoder::create(proto::video::Encoding encodi
 #if defined(Q_OS_WINDOWS)
         case proto::video::ENCODING_H264:
             return VideoEncoderH264MF::create();
+#endif
+
+#if defined(Q_OS_MACOS)
+        case proto::video::ENCODING_H264:
+            return VideoEncoderH264VT::create();
 #endif
 
         default:
@@ -64,6 +73,11 @@ bool VideoEncoder::isSupported(proto::video::Encoding encoding)
 #if defined(Q_OS_WINDOWS)
         case proto::video::ENCODING_H264:
             return VideoEncoderH264MF::isHardwareSupported();
+#endif
+
+#if defined(Q_OS_MACOS)
+        case proto::video::ENCODING_H264:
+            return VideoEncoderH264VT::isHardwareSupported();
 #endif
 
         default:
