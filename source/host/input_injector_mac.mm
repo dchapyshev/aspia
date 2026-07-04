@@ -18,50 +18,300 @@
 
 #include "host/input_injector_mac.h"
 
+#include <CoreGraphics/CoreGraphics.h>
+
 #include "base/logging.h"
+#include "common/keycode_converter.h"
+#include "proto/desktop_input.h"
+
+namespace {
+
+// USB HID usage codes of the modifier keys (see the HID Usage Tables, keyboard page).
+const quint32 kUsbCodeLeftCtrl   = 0x0700e0;
+const quint32 kUsbCodeLeftShift  = 0x0700e1;
+const quint32 kUsbCodeLeftAlt    = 0x0700e2;
+const quint32 kUsbCodeLeftGui    = 0x0700e3;
+const quint32 kUsbCodeRightCtrl  = 0x0700e4;
+const quint32 kUsbCodeRightShift = 0x0700e5;
+const quint32 kUsbCodeRightAlt   = 0x0700e6;
+const quint32 kUsbCodeRightGui   = 0x0700e7;
+
+// Injected events are posted at the HID level, the same layer physical devices feed into. A host
+// service running as root may post there without additional privileges.
+const CGEventTapLocation kEventTap = kCGHIDEventTap;
+
+//--------------------------------------------------------------------------------------------------
+void postEvent(CGEventRef event)
+{
+    if (!event)
+        return;
+
+    CGEventPost(kEventTap, event);
+    CFRelease(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void postMouseEvent(CGEventType type, CGPoint position, CGMouseButton button, int click_state)
+{
+    CGEventRef event = CGEventCreateMouseEvent(nullptr, type, position, button);
+    if (!event)
+    {
+        LOG(ERROR) << "CGEventCreateMouseEvent failed";
+        return;
+    }
+
+    // A non-zero click state distinguishes a click from a bare move/drag and lets applications
+    // perform their own multi-click detection.
+    if (click_state)
+        CGEventSetIntegerValueField(event, kCGMouseEventClickState, click_state);
+
+    postEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void postScrollEvent(int32_t lines)
+{
+    CGEventRef event = CGEventCreateScrollWheelEvent(nullptr, kCGScrollEventUnitLine, 1, lines);
+    if (!event)
+    {
+        LOG(ERROR) << "CGEventCreateScrollWheelEvent failed";
+        return;
+    }
+
+    postEvent(event);
+}
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 InputInjectorMac::InputInjectorMac(QObject* parent)
     : InputInjector(parent)
 {
-    // Nothing
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-InputInjectorMac::~InputInjectorMac() = default;
+InputInjectorMac::~InputInjectorMac()
+{
+    LOG(INFO) << "Dtor";
+
+    // Release any keys still held so they do not get stuck after the session ends.
+    for (const quint32& key : std::as_const(pressed_keys_))
+    {
+        const int keycode = KeycodeConverter::usbKeycodeToNativeKeycode(key);
+        if (keycode == KeycodeConverter::invalidNativeKeycode())
+            continue;
+
+        postEvent(CGEventCreateKeyboardEvent(nullptr, static_cast<CGKeyCode>(keycode), false));
+    }
+}
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorMac::setScreenInfo(const QSize& /* screen_size */, const QPoint& /* offset */)
+// static
+InputInjectorMac* InputInjectorMac::create(QObject* parent)
 {
-    NOTIMPLEMENTED();
+    return new InputInjectorMac(parent);
+}
+
+//--------------------------------------------------------------------------------------------------
+void InputInjectorMac::setScreenInfo(const QSize& /* screen_size */, const QPoint& offset)
+{
+    // macOS event coordinates are absolute global-display points, so only the offset of the captured
+    // region relative to the main display is needed.
+    screen_offset_ = offset;
 }
 
 //--------------------------------------------------------------------------------------------------
 void InputInjectorMac::setBlockInput(bool /* enable */)
 {
-    NOTIMPLEMENTED();
+    // Blocking local input on macOS requires an event tap that swallows physical events (and
+    // Accessibility permission). Not supported; remote input is injected alongside local input.
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorMac::injectKeyEvent(const proto::input::KeyEvent& /* event */)
+void InputInjectorMac::injectKeyEvent(const proto::input::KeyEvent& event)
 {
-    NOTIMPLEMENTED();
+    const bool pressed = (event.flags() & proto::input::KeyEvent::PRESSED) != 0;
+
+    if (pressed)
+    {
+        pressed_keys_.insert(event.usb_keycode());
+    }
+    else
+    {
+        if (!pressed_keys_.contains(event.usb_keycode()))
+        {
+            LOG(INFO) << "No pressed key in the list";
+            return;
+        }
+
+        pressed_keys_.remove(event.usb_keycode());
+    }
+
+    const int keycode = KeycodeConverter::usbKeycodeToNativeKeycode(event.usb_keycode());
+    if (keycode == KeycodeConverter::invalidNativeKeycode())
+    {
+        LOG(ERROR) << "Invalid key code:" << event.usb_keycode();
+        return;
+    }
+
+    CGEventRef key_event =
+        CGEventCreateKeyboardEvent(nullptr, static_cast<CGKeyCode>(keycode), pressed);
+    if (!key_event)
+    {
+        LOG(ERROR) << "CGEventCreateKeyboardEvent failed";
+        return;
+    }
+
+    // Apply the currently-held modifiers so applications interpret the keystroke correctly (e.g. an
+    // uppercase letter while Shift is down). pressed_keys_ already reflects this event.
+    const bool caps_lock = (event.flags() & proto::input::KeyEvent::CAPSLOCK) != 0;
+    CGEventSetFlags(key_event, static_cast<CGEventFlags>(currentModifierFlags(caps_lock)));
+
+    postEvent(key_event);
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorMac::injectTextEvent(const proto::input::TextEvent& /* event */)
+void InputInjectorMac::injectTextEvent(const proto::input::TextEvent& event)
 {
-    NOTIMPLEMENTED();
+    const QString text = QString::fromStdString(event.text());
+    if (text.isEmpty())
+        return;
+
+    // Inject the literal characters independently of the active keyboard layout by attaching the
+    // UTF-16 string to the event. The virtual key code is irrelevant in this mode.
+    const auto* chars = reinterpret_cast<const UniChar*>(text.utf16());
+    const auto length = static_cast<UniCharCount>(text.size());
+
+    CGEventRef key_down = CGEventCreateKeyboardEvent(nullptr, 0, true);
+    if (key_down)
+    {
+        CGEventKeyboardSetUnicodeString(key_down, length, chars);
+        postEvent(key_down);
+    }
+
+    CGEventRef key_up = CGEventCreateKeyboardEvent(nullptr, 0, false);
+    if (key_up)
+    {
+        CGEventKeyboardSetUnicodeString(key_up, length, chars);
+        postEvent(key_up);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorMac::injectMouseEvent(const proto::input::MouseEvent& /* event */)
+void InputInjectorMac::injectMouseEvent(const proto::input::MouseEvent& event)
 {
-    NOTIMPLEMENTED();
+    const quint32 mask = event.mask();
+    const QPoint pos(event.x() + screen_offset_.x(), event.y() + screen_offset_.y());
+    const CGPoint cg_pos = CGPointMake(pos.x(), pos.y());
+
+    // A move must be classified as a drag while a button is held, otherwise applications ignore it
+    // during selection.
+    if (pos != last_mouse_pos_)
+    {
+        CGEventType move_type = kCGEventMouseMoved;
+        CGMouseButton drag_button = kCGMouseButtonLeft;
+
+        if (mask & proto::input::MouseEvent::LEFT_BUTTON)
+        {
+            move_type = kCGEventLeftMouseDragged;
+            drag_button = kCGMouseButtonLeft;
+        }
+        else if (mask & proto::input::MouseEvent::RIGHT_BUTTON)
+        {
+            move_type = kCGEventRightMouseDragged;
+            drag_button = kCGMouseButtonRight;
+        }
+        else if (mask & proto::input::MouseEvent::MIDDLE_BUTTON)
+        {
+            move_type = kCGEventOtherMouseDragged;
+            drag_button = kCGMouseButtonCenter;
+        }
+
+        postMouseEvent(move_type, cg_pos, drag_button, 0);
+        last_mouse_pos_ = pos;
+    }
+
+    // Post an event for every button whose state changed since the previous mouse event.
+    const struct
+    {
+        int flag;
+        CGEventType down;
+        CGEventType up;
+        CGMouseButton button;
+    } buttons[] = {
+        { proto::input::MouseEvent::LEFT_BUTTON,
+          kCGEventLeftMouseDown, kCGEventLeftMouseUp, kCGMouseButtonLeft },
+        { proto::input::MouseEvent::RIGHT_BUTTON,
+          kCGEventRightMouseDown, kCGEventRightMouseUp, kCGMouseButtonRight },
+        { proto::input::MouseEvent::MIDDLE_BUTTON,
+          kCGEventOtherMouseDown, kCGEventOtherMouseUp, kCGMouseButtonCenter },
+        // Back and forward map to the extra buttons 3 and 4.
+        { proto::input::MouseEvent::BACK_BUTTON,
+          kCGEventOtherMouseDown, kCGEventOtherMouseUp, static_cast<CGMouseButton>(3) },
+        { proto::input::MouseEvent::FORWARD_BUTTON,
+          kCGEventOtherMouseDown, kCGEventOtherMouseUp, static_cast<CGMouseButton>(4) },
+    };
+
+    for (const auto& button : buttons)
+    {
+        const bool was_down = (last_mouse_mask_ & button.flag) != 0;
+        const bool is_down = (mask & button.flag) != 0;
+
+        if (was_down != is_down)
+            postMouseEvent(is_down ? button.down : button.up, cg_pos, button.button, 1);
+    }
+
+    if (mask & proto::input::MouseEvent::WHEEL_UP)
+        postScrollEvent(1);
+    else if (mask & proto::input::MouseEvent::WHEEL_DOWN)
+        postScrollEvent(-1);
+
+    last_mouse_mask_ = mask;
 }
 
 //--------------------------------------------------------------------------------------------------
 void InputInjectorMac::injectTouchEvent(const proto::input::TouchEvent& /* event */)
 {
-    NOTIMPLEMENTED();
+    // macOS has no public API for synthesizing touch input.
+}
+
+//--------------------------------------------------------------------------------------------------
+quint64 InputInjectorMac::currentModifierFlags(bool caps_lock) const
+{
+    CGEventFlags flags = 0;
+
+    for (const quint32& key : pressed_keys_)
+    {
+        switch (key)
+        {
+            case kUsbCodeLeftShift:
+            case kUsbCodeRightShift:
+                flags |= kCGEventFlagMaskShift;
+                break;
+
+            case kUsbCodeLeftCtrl:
+            case kUsbCodeRightCtrl:
+                flags |= kCGEventFlagMaskControl;
+                break;
+
+            case kUsbCodeLeftAlt:
+            case kUsbCodeRightAlt:
+                flags |= kCGEventFlagMaskAlternate;
+                break;
+
+            case kUsbCodeLeftGui:
+            case kUsbCodeRightGui:
+                flags |= kCGEventFlagMaskCommand;
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    if (caps_lock)
+        flags |= kCGEventFlagMaskAlphaShift;
+
+    return flags;
 }
