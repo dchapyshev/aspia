@@ -53,8 +53,11 @@
 
 namespace {
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
 const char kFileTransferAgentFile[] = "aspia_file_agent";
+#endif
+
+#if defined(Q_OS_LINUX)
 
 //--------------------------------------------------------------------------------------------------
 // Forks and execs the file-transfer agent as |user_name| (the active logged-in user), so it accesses

@@ -22,7 +22,11 @@
 #include <memory>
 
 #include <csignal>
+#if defined(Q_OS_MACOS)
+#include <util.h>
+#else
 #include <pty.h>
+#endif
 #include <sys/ioctl.h>
 #include <sys/wait.h>
 #include <unistd.h>

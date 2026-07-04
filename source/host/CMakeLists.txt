@@ -152,7 +152,9 @@ if (APPLE)
         process_monitor_mac.mm
         process_monitor_mac.h
         screen_capturer_mac.mm
-        screen_capturer_mac.h)
+        screen_capturer_mac.h
+        terminal_process_unix.cc
+        terminal_process_unix.h)
 endif()
 
 include(ui/sources.cmake)

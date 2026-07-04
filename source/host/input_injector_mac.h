@@ -24,7 +24,7 @@
 class InputInjectorMac final : public InputInjector
 {
 public:
-    InputInjectorMac();
+    explicit InputInjectorMac(QObject* parent = nullptr);
     ~InputInjectorMac();
 
     // InputInjector implementation.

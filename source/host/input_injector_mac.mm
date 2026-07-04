@@ -21,7 +21,11 @@
 #include "base/logging.h"
 
 //--------------------------------------------------------------------------------------------------
-InputInjectorMac::InputInjectorMac() = default;
+InputInjectorMac::InputInjectorMac(QObject* parent)
+    : InputInjector(parent)
+{
+    // Nothing
+}
 
 //--------------------------------------------------------------------------------------------------
 InputInjectorMac::~InputInjectorMac() = default;

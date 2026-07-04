@@ -223,7 +223,7 @@ if (NOT ANDROID)
     add_subdirectory(relay)
     add_subdirectory(router)
 
-    if (WIN32 OR LINUX)
+    if (WIN32 OR LINUX OR APPLE)
         add_subdirectory(host)
     endif()
 endif()
