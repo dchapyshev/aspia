@@ -225,6 +225,14 @@ if (LINUX OR APPLE)
     target_link_libraries(aspia_host_core PRIVATE ${PAM_LIB})
 endif()
 
+if (APPLE)
+    target_link_libraries(aspia_host_core PRIVATE
+        ${SCREENCAPTUREKIT_LIB}
+        ${COREMEDIA_LIB}
+        ${COREVIDEO_LIB}
+        ${COREGRAPHICS_LIB})
+endif()
+
 if (LINUX)
     # forkpty() for terminal sessions lives in libutil.
     target_link_libraries(aspia_host_core PRIVATE util)
