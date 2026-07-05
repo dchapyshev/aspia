@@ -19,6 +19,8 @@
 collect_sources(SOURCE_HOST_ANDROID
     application.cc
     application.h
+    home_widget.cc
+    home_widget.h
     main.cc
     main_window.cc
     main_window.h)

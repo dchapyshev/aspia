@@ -19,30 +19,63 @@
 #include "host/android/main_window.h"
 
 #include <QEvent>
+#include <QStackedWidget>
 #include <QVBoxLayout>
 
 #include "base/logging.h"
 #include "common/android/app_bar.h"
+#include "common/android/bottom_navigation_bar.h"
 #include "common/android/label.h"
+#include "host/android/home_widget.h"
+
+namespace {
+
+// Order of the pages in the stacked content and of the bottom navigation items.
+enum Section
+{
+    SECTION_HOME = 0,
+    SECTION_SETTINGS
+};
+
+//--------------------------------------------------------------------------------------------------
+// Placeholder page shown until the real section content is implemented: a centered caption.
+Label* createPlaceholder(QWidget* parent)
+{
+    Label* label = new Label(QString(), Label::Role::BODY, parent);
+    label->setAlignment(Qt::AlignCenter);
+    label->setWordWrap(true);
+    return label;
+}
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 AndroidMainWindow::AndroidMainWindow(QWidget* parent)
     : QWidget(parent),
       app_bar_(new AppBar(this)),
-      status_label_(new Label(QString(), Label::Role::BODY, this))
+      content_(new QStackedWidget(this)),
+      navigation_(new BottomNavigationBar(this))
 {
     LOG(INFO) << "Ctor";
 
-    status_label_->setAlignment(Qt::AlignCenter);
-    status_label_->setWordWrap(true);
+    content_->addWidget(new HomeWidget(this));
+    content_->addWidget(createPlaceholder(this));
+
+    navigation_->addItem(tr("Home"), ":/img/home.svg");
+    navigation_->addItem(tr("Settings"), ":/img/settings.svg");
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(app_bar_);
-    layout->addWidget(status_label_, 1);
+    layout->addWidget(content_, 1);
+    layout->addWidget(navigation_);
+
+    connect(navigation_, &BottomNavigationBar::sig_currentChanged,
+            this, &AndroidMainWindow::onSectionChanged);
 
     retranslate();
+    onSectionChanged(navigation_->currentIndex());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -61,7 +94,36 @@ void AndroidMainWindow::changeEvent(QEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onSectionChanged(int index)
+{
+    content_->setCurrentIndex(index);
+    app_bar_->setTitle(sectionTitle(index));
+}
+
+//--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::retranslate()
 {
-    app_bar_->setTitle(tr("Aspia Host"));
+    navigation_->setItemText(SECTION_HOME, tr("Home"));
+    navigation_->setItemText(SECTION_SETTINGS, tr("Settings"));
+
+    if (HomeWidget* home = qobject_cast<HomeWidget*>(content_->widget(SECTION_HOME)))
+        home->retranslate();
+    if (Label* settings = qobject_cast<Label*>(content_->widget(SECTION_SETTINGS)))
+        settings->setText(sectionTitle(SECTION_SETTINGS));
+
+    app_bar_->setTitle(sectionTitle(navigation_->currentIndex()));
+}
+
+//--------------------------------------------------------------------------------------------------
+QString AndroidMainWindow::sectionTitle(int index) const
+{
+    switch (index)
+    {
+        case SECTION_HOME:
+            return tr("Home");
+        case SECTION_SETTINGS:
+            return tr("Settings");
+        default:
+            return QString();
+    }
 }

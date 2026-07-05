@@ -22,11 +22,12 @@
 #include <QWidget>
 
 class AppBar;
-class Label;
+class BottomNavigationBar;
+class QStackedWidget;
 
-// Top-level application window for the Android host: a top app bar with a content area. For now
-// the content is a placeholder; the host sections (status, users, settings) will fill it as the
-// host is ported to Android.
+// Top-level application window for the Android host: a top app bar, a content area switched by the
+// bottom navigation bar between the Home and Settings sections. The section pages are placeholders for
+// now and are filled in as the host is ported to Android.
 class AndroidMainWindow final : public QWidget
 {
     Q_OBJECT
@@ -39,11 +40,16 @@ protected:
     // QWidget implementation.
     void changeEvent(QEvent* event) final;
 
+private slots:
+    void onSectionChanged(int index);
+
 private:
     void retranslate();
+    QString sectionTitle(int index) const;
 
     AppBar* app_bar_ = nullptr;
-    Label* status_label_ = nullptr;
+    QStackedWidget* content_ = nullptr;
+    BottomNavigationBar* navigation_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(AndroidMainWindow)
 };
