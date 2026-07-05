@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_ANDROID_HOME_WIDGET_H
-#define HOST_ANDROID_HOME_WIDGET_H
+#ifndef HOST_ANDROID_CONNECTION_WIDGET_H
+#define HOST_ANDROID_CONNECTION_WIDGET_H
 
 #include <QString>
 
@@ -31,13 +31,13 @@ class QLabel;
 // Home section of the Android host: shows the connection credentials (host ID and one-time password)
 // and the router connection state, mirroring the desktop host main window. The values are set through
 // the public setters; the host agent that supplies them is not wired in yet.
-class HomeWidget final : public ScrollArea
+class ConnectionWidget final : public ScrollArea
 {
     Q_OBJECT
 
 public:
-    explicit HomeWidget(QWidget* parent = nullptr);
-    ~HomeWidget() final;
+    explicit ConnectionWidget(QWidget* parent = nullptr);
+    ~ConnectionWidget() final;
 
     enum class RouterState
     {
@@ -81,7 +81,7 @@ private:
     RouterState router_state_ = RouterState::DISABLED;
     QString router_;
 
-    Q_DISABLE_COPY_MOVE(HomeWidget)
+    Q_DISABLE_COPY_MOVE(ConnectionWidget)
 };
 
-#endif // HOST_ANDROID_HOME_WIDGET_H
+#endif // HOST_ANDROID_CONNECTION_WIDGET_H

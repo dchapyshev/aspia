@@ -26,8 +26,7 @@ class BottomNavigationBar;
 class QStackedWidget;
 
 // Top-level application window for the Android host: a top app bar, a content area switched by the
-// bottom navigation bar between the Home and Settings sections. The section pages are placeholders for
-// now and are filled in as the host is ported to Android.
+// bottom navigation bar between the Connection and Settings sections.
 class AndroidMainWindow final : public QWidget
 {
     Q_OBJECT

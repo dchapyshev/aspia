@@ -25,7 +25,7 @@
 #include "base/logging.h"
 #include "common/android/app_bar.h"
 #include "common/android/bottom_navigation_bar.h"
-#include "host/android/home_widget.h"
+#include "host/android/connection_widget.h"
 #include "host/android/settings_widget.h"
 
 namespace {
@@ -33,7 +33,7 @@ namespace {
 // Order of the pages in the stacked content and of the bottom navigation items.
 enum Section
 {
-    SECTION_HOME = 0,
+    SECTION_CONNECTION = 0,
     SECTION_SETTINGS
 };
 
@@ -54,12 +54,12 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
     connect(settings, &SettingsWidget::sig_appBarActionsChanged,
             this, &AndroidMainWindow::onSettingsActionsChanged);
 
-    content_->addWidget(new HomeWidget(this));
+    content_->addWidget(new ConnectionWidget(this));
     content_->addWidget(settings);
 
     connect(app_bar_, &AppBar::sig_backClicked, this, &AndroidMainWindow::onBackClicked);
 
-    navigation_->addItem(tr("Home"), ":/img/home.svg");
+    navigation_->addItem(tr("Connection"), ":/img/computer.svg");
     navigation_->addItem(tr("Settings"), ":/img/settings.svg");
 
     QVBoxLayout* layout = new QVBoxLayout(this);
@@ -143,10 +143,10 @@ void AndroidMainWindow::onBackClicked()
 //--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::retranslate()
 {
-    navigation_->setItemText(SECTION_HOME, tr("Home"));
+    navigation_->setItemText(SECTION_CONNECTION, tr("Connection"));
     navigation_->setItemText(SECTION_SETTINGS, tr("Settings"));
 
-    if (HomeWidget* home = qobject_cast<HomeWidget*>(content_->widget(SECTION_HOME)))
+    if (ConnectionWidget* home = qobject_cast<ConnectionWidget*>(content_->widget(SECTION_CONNECTION)))
         home->retranslate();
     if (SettingsWidget* settings = qobject_cast<SettingsWidget*>(content_->widget(SECTION_SETTINGS)))
         settings->retranslate();
@@ -159,8 +159,8 @@ QString AndroidMainWindow::sectionTitle(int index) const
 {
     switch (index)
     {
-        case SECTION_HOME:
-            return tr("Home");
+        case SECTION_CONNECTION:
+            return tr("Connection");
         case SECTION_SETTINGS:
             return tr("Settings");
         default:

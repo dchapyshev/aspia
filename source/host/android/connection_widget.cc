@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/android/home_widget.h"
+#include "host/android/connection_widget.h"
 
 #include <QEvent>
 #include <QHBoxLayout>
@@ -40,7 +40,7 @@ constexpr int kRouterIconSize = 22;
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-HomeWidget::HomeWidget(QWidget* parent)
+ConnectionWidget::ConnectionWidget(QWidget* parent)
     : ScrollArea(parent)
 {
     QWidget* content = new QWidget(this);
@@ -67,7 +67,7 @@ HomeWidget::HomeWidget(QWidget* parent)
 
     new_password_button_ = new IconButton(":/img/replay.svg", password_card);
     connect(new_password_button_, &IconButton::clicked,
-            this, &HomeWidget::sig_newPasswordRequested);
+            this, &ConnectionWidget::sig_newPasswordRequested);
 
     QHBoxLayout* password_row = new QHBoxLayout();
     password_row->setContentsMargins(0, 0, 0, 0);
@@ -137,24 +137,24 @@ HomeWidget::HomeWidget(QWidget* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-HomeWidget::~HomeWidget() = default;
+ConnectionWidget::~ConnectionWidget() = default;
 
 //--------------------------------------------------------------------------------------------------
-void HomeWidget::setHostId(const QString& host_id)
+void ConnectionWidget::setHostId(const QString& host_id)
 {
     host_id_ = host_id;
     id_value_->setText(host_id_);
 }
 
 //--------------------------------------------------------------------------------------------------
-void HomeWidget::setPassword(const QString& password)
+void ConnectionWidget::setPassword(const QString& password)
 {
     password_ = password;
     password_value_->setText(password_);
 }
 
 //--------------------------------------------------------------------------------------------------
-void HomeWidget::setRouterState(RouterState state, const QString& router)
+void ConnectionWidget::setRouterState(RouterState state, const QString& router)
 {
     router_state_ = state;
     router_ = router;
@@ -162,7 +162,7 @@ void HomeWidget::setRouterState(RouterState state, const QString& router)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HomeWidget::retranslate()
+void ConnectionWidget::retranslate()
 {
     id_caption_->setText(tr("Your ID"));
     password_caption_->setText(tr("One-time password"));
@@ -173,7 +173,7 @@ void HomeWidget::retranslate()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HomeWidget::changeEvent(QEvent* event)
+void ConnectionWidget::changeEvent(QEvent* event)
 {
     ScrollArea::changeEvent(event);
 
@@ -184,7 +184,7 @@ void HomeWidget::changeEvent(QEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HomeWidget::updateRouterRow()
+void ConnectionWidget::updateRouterRow()
 {
     QString icon;
     QColor color;
@@ -218,7 +218,7 @@ void HomeWidget::updateRouterRow()
 }
 
 //--------------------------------------------------------------------------------------------------
-QString HomeWidget::routerStatusText() const
+QString ConnectionWidget::routerStatusText() const
 {
     switch (router_state_)
     {
