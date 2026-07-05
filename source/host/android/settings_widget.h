@@ -65,7 +65,11 @@ private:
 
     void buildSettings();
     void addSectionHeader(QVBoxLayout* layout, const QString& text);
+    void addSessionSwitch(QVBoxLayout* layout, const QString& text, quint32 session_flag,
+                          quint32 current);
+
     void buildInterfaceSection(QVBoxLayout* layout);
+    void buildAccessSection(QVBoxLayout* layout);
     void buildRouterSection(QVBoxLayout* layout);
 
     QStackedWidget* stack_;
