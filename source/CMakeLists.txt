@@ -222,10 +222,10 @@ if (NOT ANDROID)
     add_subdirectory(drivers)
     add_subdirectory(relay)
     add_subdirectory(router)
+endif()
 
-    if (WIN32 OR LINUX)
-        add_subdirectory(host)
-    endif()
+if (WIN32 OR LINUX OR ANDROID)
+    add_subdirectory(host)
 endif()
 
 ###################################################################################################

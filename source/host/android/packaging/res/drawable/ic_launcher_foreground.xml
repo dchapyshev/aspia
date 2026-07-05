@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- The 48x48 glyph is scaled to 52% of the canvas to fit the adaptive icon safe zone. -->
+    <group
+        android:scaleX="1.17"
+        android:scaleY="1.17"
+        android:translateX="25.92"
+        android:translateY="25.92">
+        <path
+            android:fillColor="#546E7A"
+            android:pathData="M5.3796,0.047h42.6557v34.5734h-42.6557z"/>
+        <path
+            android:fillColor="#BBDEFB"
+            android:pathData="M8,2.6674h37.302v29.235h-37.302z"/>
+        <path
+            android:fillColor="#546E7A"
+            android:pathData="M0.0094,13.2821h42.6557v34.7281h-42.6557z"/>
+        <path
+            android:fillColor="#BBDEFB"
+            android:pathData="M2.6298,16.0572h37.302v29.235h-37.302z"/>
+        <path
+            android:fillColor="#546E7A"
+            android:pathData="m5.5091,19.9615 1.2656,-1.3008 7.875,6.5742 -7.875,6.5742 -1.2656,-1.2891 6.3867,-5.2617z"/>
+        <path
+            android:fillColor="#546E7A"
+            android:pathData="M29.4137,31.711H18.6275v-2.0644h10.7862z"/>
+    </group>
+</vector>

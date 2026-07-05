@@ -16,6 +16,43 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
+# On Android the host is a standalone application: the portable core files (host root) plus the Android
+# UI (host/android). The desktop host (service, agents, desktop capturers/injectors, host/ui) is not
+# built - the same split as the client, where host/ui is the desktop UI and host/android the Android UI.
+if (ANDROID)
+    # Portable core files this build needs. More are added here as the host is ported to Android.
+    list(APPEND SOURCE_HOST_CORE
+        screen_capturer.cc
+        screen_capturer.h
+        screen_capturer_android.cc
+        screen_capturer_android.h)
+
+    # Android UI.
+    include(android/sources.cmake)
+
+    source_group("" FILES ${SOURCE_HOST_CORE})
+    source_group(android FILES ${SOURCE_HOST_ANDROID})
+
+    qt_add_executable(aspia_host ${SOURCE_HOST_CORE} ${SOURCE_HOST_ANDROID})
+    target_link_libraries(aspia_host PRIVATE
+        aspia_base
+        aspia_common
+        aspia_proto
+        ${QT_COMMON_LIBS}
+        ${THIRD_PARTY_LIBS})
+    set_property(TARGET aspia_host PROPERTY AUTOMOC ON)
+    set_property(TARGET aspia_host PROPERTY AUTORCC ON)
+    qt_import_plugins(aspia_host INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE imageformats iconengines EXCLUDE_BY_TYPE "")
+
+    set_target_properties(aspia_host PROPERTIES
+        QT_ANDROID_PACKAGE_NAME "org.aspia.host"
+        QT_ANDROID_APP_NAME "Aspia Host"
+        QT_ANDROID_APP_ICON "@mipmap/ic_launcher"
+        QT_ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android/packaging")
+
+    return()
+endif()
+
 list(APPEND SOURCE_HOST_CORE
     capture_scheduler.cc
     capture_scheduler.h
