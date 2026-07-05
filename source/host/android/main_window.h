@@ -53,6 +53,10 @@ private:
     QStackedWidget* content_ = nullptr;
     BottomNavigationBar* navigation_ = nullptr;
 
+    // Set once the settings tab has been unlocked with the protection password (if any); the prompt is
+    // then not shown again for the rest of the session.
+    bool settings_unlocked_ = false;
+
     Q_DISABLE_COPY_MOVE(AndroidMainWindow)
 };
 

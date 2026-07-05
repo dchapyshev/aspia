@@ -25,7 +25,9 @@
 #include "base/logging.h"
 #include "common/android/app_bar.h"
 #include "common/android/bottom_navigation_bar.h"
+#include "host/database.h"
 #include "host/android/connection_widget.h"
+#include "host/android/password_dialog.h"
 #include "host/android/settings_widget.h"
 
 namespace {
@@ -96,6 +98,20 @@ void AndroidMainWindow::changeEvent(QEvent* event)
 //--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onSectionChanged(int index)
 {
+    // Gate the settings tab behind the protection password, if one is set. On failure the tab switch
+    // is reverted to the connection tab (which re-enters this slot without a gate).
+    if (index == SECTION_SETTINGS && !settings_unlocked_)
+    {
+        if (Database::instance().passwordProtectionState() == Database::PasswordProtection::ENABLED &&
+            !PasswordDialog::verify(this))
+        {
+            navigation_->setCurrentIndex(SECTION_CONNECTION);
+            return;
+        }
+
+        settings_unlocked_ = true;
+    }
+
     SettingsWidget* settings = qobject_cast<SettingsWidget*>(content_->widget(SECTION_SETTINGS));
 
     // Leaving the settings tab returns its sub-page (about) to the settings page.

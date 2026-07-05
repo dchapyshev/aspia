@@ -73,8 +73,12 @@ private:
     void addSectionHeader(QVBoxLayout* layout, const QString& text);
 
     void buildInterfaceSection(QVBoxLayout* layout);
-    void buildUsersSection(QVBoxLayout* layout);
+    void buildSecuritySection(QVBoxLayout* layout);
     void buildRouterSection(QVBoxLayout* layout);
+
+    void onEnableProtection();
+    void onChangePassword();
+    void onDisableProtection();
 
     QStackedWidget* stack_;
     ScrollArea* settings_page_;

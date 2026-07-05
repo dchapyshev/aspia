@@ -22,19 +22,25 @@
 #include <QStackedWidget>
 #include <QVBoxLayout>
 
+#include <optional>
+
+#include "base/crypto/secure_string.h"
 #include "base/gui_application.h"
 #include "base/net/address.h"
 #include "build/build_config.h"
 #include "common/android/about_widget.h"
 #include "common/android/button.h"
 #include "common/android/combo_box.h"
+#include "common/android/controls.h"
 #include "common/android/icon_button.h"
 #include "common/android/label.h"
 #include "common/android/line_edit.h"
+#include "common/android/message_dialog.h"
 #include "common/android/scroll_area.h"
 #include "common/android/switch.h"
 #include "host/database.h"
 #include "host/user_settings.h"
+#include "host/android/password_dialog.h"
 #include "host/android/user_editor_widget.h"
 #include "host/android/users_widget.h"
 
@@ -190,7 +196,7 @@ void SettingsWidget::buildSettings()
     layout->setSpacing(kRowSpacing);
 
     buildInterfaceSection(layout);
-    buildUsersSection(layout);
+    buildSecuritySection(layout);
     buildRouterSection(layout);
     layout->addStretch();
 
@@ -242,13 +248,41 @@ void SettingsWidget::buildInterfaceSection(QVBoxLayout* layout)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SettingsWidget::buildUsersSection(QVBoxLayout* layout)
+void SettingsWidget::buildSecuritySection(QVBoxLayout* layout)
 {
-    addSectionHeader(layout, tr("Users"));
+    addSectionHeader(layout, tr("Security"));
 
     Button* manage = new Button(tr("Manage users"), Button::Role::FILLED);
     connect(manage, &Button::clicked, this, &SettingsWidget::showUsers);
     layout->addWidget(manage);
+
+    switch (Database::instance().passwordProtectionState())
+    {
+        case Database::PasswordProtection::ENABLED:
+        {
+            Button* change = new Button(tr("Change password"), Button::Role::FILLED);
+            connect(change, &Button::clicked, this, &SettingsWidget::onChangePassword);
+            layout->addWidget(change);
+
+            Button* disable = new Button(tr("Disable password protection"), Button::Role::TEXT);
+            disable->setAccentColor(Controls::errorColor());
+            connect(disable, &Button::clicked, this, &SettingsWidget::onDisableProtection);
+            layout->addWidget(disable);
+        }
+        break;
+
+        case Database::PasswordProtection::DISABLED:
+        {
+            Button* enable = new Button(tr("Enable password protection"), Button::Role::FILLED);
+            connect(enable, &Button::clicked, this, &SettingsWidget::onEnableProtection);
+            layout->addWidget(enable);
+        }
+        break;
+
+        case Database::PasswordProtection::UNAVAILABLE:
+            // The settings storage is not readable; the password controls are omitted.
+            break;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -330,4 +364,50 @@ void SettingsWidget::buildRouterSection(QVBoxLayout* layout)
             public_key->setText(QString::fromUtf8(db.routerPublicKey().toHex()));
         }
     });
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::onEnableProtection()
+{
+    std::optional<SecureString> password = PasswordDialog::create(this);
+    if (!password)
+        return;
+
+    if (!Database::instance().setPassword(*password))
+    {
+        MessageDialog::info(this, tr("Error"), tr("An error occurred while processing the password."));
+        return;
+    }
+
+    buildSettings();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::onChangePassword()
+{
+    // Confirm the current password before setting a new one.
+    if (!PasswordDialog::verify(this))
+        return;
+
+    std::optional<SecureString> password = PasswordDialog::create(this);
+    if (!password)
+        return;
+
+    if (!Database::instance().setPassword(*password))
+    {
+        MessageDialog::info(this, tr("Error"), tr("An error occurred while processing the password."));
+        return;
+    }
+
+    buildSettings();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::onDisableProtection()
+{
+    if (!PasswordDialog::verify(this))
+        return;
+
+    Database::instance().clearPassword();
+    buildSettings();
 }
