@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/android/about_widget.h"
+#include "common/android/about_widget.h"
 
 #include <QLabel>
 #include <QSysInfo>

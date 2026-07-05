@@ -48,8 +48,16 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
 {
     LOG(INFO) << "Ctor";
 
+    SettingsWidget* settings = new SettingsWidget(this);
+    connect(settings, &SettingsWidget::sig_titleChanged,
+            this, &AndroidMainWindow::onSettingsTitleChanged);
+    connect(settings, &SettingsWidget::sig_appBarActionsChanged,
+            this, &AndroidMainWindow::onSettingsActionsChanged);
+
     content_->addWidget(new HomeWidget(this));
-    content_->addWidget(new SettingsWidget(this));
+    content_->addWidget(settings);
+
+    connect(app_bar_, &AppBar::sig_backClicked, this, &AndroidMainWindow::onBackClicked);
 
     navigation_->addItem(tr("Home"), ":/img/home.svg");
     navigation_->addItem(tr("Settings"), ":/img/settings.svg");
@@ -88,8 +96,48 @@ void AndroidMainWindow::changeEvent(QEvent* event)
 //--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onSectionChanged(int index)
 {
+    SettingsWidget* settings = qobject_cast<SettingsWidget*>(content_->widget(SECTION_SETTINGS));
+
+    // Leaving the settings tab returns its sub-page (about) to the settings page.
+    if (index != SECTION_SETTINGS && settings)
+        settings->resetToSettings();
+
     content_->setCurrentIndex(index);
+
+    app_bar_->setBackVisible(false);
     app_bar_->setTitle(sectionTitle(index));
+
+    // The about action belongs to the settings tab; show it only there.
+    app_bar_->setActions((index == SECTION_SETTINGS && settings) ? settings->appBarActions()
+                                                                 : QList<QWidget*>());
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onSettingsTitleChanged(const QString& title, bool back_visible)
+{
+    if (navigation_->currentIndex() != SECTION_SETTINGS)
+        return;
+
+    app_bar_->setTitle(title.isEmpty() ? sectionTitle(SECTION_SETTINGS) : title);
+    app_bar_->setBackVisible(back_visible);
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onSettingsActionsChanged()
+{
+    SettingsWidget* settings = qobject_cast<SettingsWidget*>(content_->widget(SECTION_SETTINGS));
+    if (navigation_->currentIndex() == SECTION_SETTINGS && settings)
+        app_bar_->setActions(settings->appBarActions());
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onBackClicked()
+{
+    if (navigation_->currentIndex() != SECTION_SETTINGS)
+        return;
+
+    if (SettingsWidget* settings = qobject_cast<SettingsWidget*>(content_->widget(SECTION_SETTINGS)))
+        settings->goBack();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -103,7 +151,7 @@ void AndroidMainWindow::retranslate()
     if (SettingsWidget* settings = qobject_cast<SettingsWidget*>(content_->widget(SECTION_SETTINGS)))
         settings->retranslate();
 
-    app_bar_->setTitle(sectionTitle(navigation_->currentIndex()));
+    onSectionChanged(navigation_->currentIndex());
 }
 
 //--------------------------------------------------------------------------------------------------

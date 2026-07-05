@@ -18,11 +18,15 @@
 
 #include "host/android/settings_widget.h"
 
+#include <QStackedWidget>
 #include <QVBoxLayout>
 
 #include "base/gui_application.h"
+#include "common/android/about_widget.h"
 #include "common/android/combo_box.h"
+#include "common/android/icon_button.h"
 #include "common/android/label.h"
+#include "common/android/scroll_area.h"
 #include "host/user_settings.h"
 
 namespace {
@@ -35,9 +39,25 @@ constexpr int kSectionSpacing = 24;
 
 //--------------------------------------------------------------------------------------------------
 SettingsWidget::SettingsWidget(QWidget* parent)
-    : ScrollArea(parent)
+    : QWidget(parent),
+      stack_(new QStackedWidget(this)),
+      settings_page_(new ScrollArea()),
+      about_page_(new AboutWidget()),
+      about_button_(new IconButton(":/img/material/info.svg", this))
 {
-    buildContent();
+    // The about action lives in the app bar; AppBar::setActions() reparents and shows it. Hidden by
+    // default so it does not linger in this widget.
+    about_button_->hide();
+    connect(about_button_, &IconButton::clicked, this, &SettingsWidget::showAbout);
+
+    buildSettings();
+
+    stack_->addWidget(settings_page_);
+    stack_->addWidget(about_page_);
+
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->addWidget(stack_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -47,14 +67,54 @@ SettingsWidget::~SettingsWidget() = default;
 void SettingsWidget::retranslate()
 {
     // The controls are built with translated strings, so the content is rebuilt. The current values
-    // come from Settings, so nothing is lost.
-    buildContent();
+    // come from UserSettings, so nothing is lost.
+    buildSettings();
+    about_page_->retranslate();
 }
 
 //--------------------------------------------------------------------------------------------------
-void SettingsWidget::buildContent()
+QList<QWidget*> SettingsWidget::appBarActions() const
 {
-    QWidget* content = new QWidget(this);
+    if (isAboutPage())
+        return {};
+    return { about_button_ };
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::goBack()
+{
+    if (!isAboutPage())
+        return;
+
+    stack_->setCurrentWidget(settings_page_);
+    emit sig_titleChanged(QString(), false);
+    emit sig_appBarActionsChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::resetToSettings()
+{
+    stack_->setCurrentWidget(settings_page_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::showAbout()
+{
+    stack_->setCurrentWidget(about_page_);
+    emit sig_titleChanged(tr("About"), true);
+    emit sig_appBarActionsChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SettingsWidget::isAboutPage() const
+{
+    return stack_->currentWidget() == about_page_;
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::buildSettings()
+{
+    QWidget* content = new QWidget(settings_page_);
 
     QVBoxLayout* layout = new QVBoxLayout(content);
     layout->setContentsMargins(kContentMargin, kContentMargin, kContentMargin, kContentMargin);
@@ -64,7 +124,7 @@ void SettingsWidget::buildContent()
     layout->addStretch();
 
     // setWidget() deletes the previously set content widget.
-    setWidget(content);
+    settings_page_->setWidget(content);
 }
 
 //--------------------------------------------------------------------------------------------------

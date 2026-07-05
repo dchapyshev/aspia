@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_ANDROID_ABOUT_WIDGET_H
-#define CLIENT_ANDROID_ABOUT_WIDGET_H
+#ifndef COMMON_ANDROID_ABOUT_WIDGET_H
+#define COMMON_ANDROID_ABOUT_WIDGET_H
 
 #include "common/android/scroll_area.h"
 
@@ -38,4 +38,4 @@ private:
     Q_DISABLE_COPY_MOVE(AboutWidget)
 };
 
-#endif // CLIENT_ANDROID_ABOUT_WIDGET_H
+#endif // COMMON_ANDROID_ABOUT_WIDGET_H

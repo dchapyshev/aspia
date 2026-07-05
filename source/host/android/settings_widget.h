@@ -19,11 +19,19 @@
 #ifndef HOST_ANDROID_SETTINGS_WIDGET_H
 #define HOST_ANDROID_SETTINGS_WIDGET_H
 
-#include "common/android/scroll_area.h"
+#include <QList>
+#include <QWidget>
 
+class AboutWidget;
+class IconButton;
+class ScrollArea;
+class QStackedWidget;
 class QVBoxLayout;
 
-class SettingsWidget final : public ScrollArea
+// Settings section of the Android host. Exposes the interface preferences (language and theme),
+// applied immediately and stored in UserSettings. The about screen is hosted as a sub-page reached
+// from the top app bar action.
+class SettingsWidget final : public QWidget
 {
     Q_OBJECT
 
@@ -31,12 +39,38 @@ public:
     explicit SettingsWidget(QWidget* parent = nullptr);
     ~SettingsWidget() final;
 
+    // Rebuilds the content with the current language. Called by the parent on a language change,
+    // because only top-level widgets receive QEvent::LanguageChange.
     void retranslate();
 
+    // The app bar action (opens the about screen). Empty while the about screen is shown.
+    QList<QWidget*> appBarActions() const;
+
+    // Returns to the settings page from the about screen. Driven by the app bar back button.
+    void goBack();
+
+    // Returns to the settings page without animation, used when the tab is left.
+    void resetToSettings();
+
+signals:
+    // Requests the app bar to show |title| with a back button (about) or the default state.
+    void sig_titleChanged(const QString& title, bool back_visible);
+
+    // Emitted when the set returned by appBarActions() changes (the about screen hides the action).
+    void sig_appBarActionsChanged();
+
 private:
-    void buildContent();
+    void showAbout();
+    bool isAboutPage() const;
+
+    void buildSettings();
     void addSectionHeader(QVBoxLayout* layout, const QString& text);
     void buildInterfaceSection(QVBoxLayout* layout);
+
+    QStackedWidget* stack_;
+    ScrollArea* settings_page_;
+    AboutWidget* about_page_;
+    IconButton* about_button_;
 
     Q_DISABLE_COPY_MOVE(SettingsWidget)
 };

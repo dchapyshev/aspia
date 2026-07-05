@@ -42,6 +42,9 @@ protected:
 
 private slots:
     void onSectionChanged(int index);
+    void onSettingsTitleChanged(const QString& title, bool back_visible);
+    void onSettingsActionsChanged();
+    void onBackClicked();
 
 private:
     void retranslate();

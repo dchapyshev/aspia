@@ -17,8 +17,6 @@
 #
 
 collect_sources(SOURCE_CLIENT_ANDROID
-    about_widget.cc
-    about_widget.h
     biometric_gate.cc
     biometric_gate.h
     chat_view.cc
