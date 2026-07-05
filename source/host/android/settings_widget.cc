@@ -18,15 +18,21 @@
 
 #include "host/android/settings_widget.h"
 
+#include <QByteArray>
 #include <QStackedWidget>
 #include <QVBoxLayout>
 
 #include "base/gui_application.h"
+#include "base/net/address.h"
+#include "build/build_config.h"
 #include "common/android/about_widget.h"
 #include "common/android/combo_box.h"
 #include "common/android/icon_button.h"
 #include "common/android/label.h"
+#include "common/android/line_edit.h"
 #include "common/android/scroll_area.h"
+#include "common/android/switch.h"
+#include "host/database.h"
 #include "host/user_settings.h"
 
 namespace {
@@ -121,6 +127,7 @@ void SettingsWidget::buildSettings()
     layout->setSpacing(kRowSpacing);
 
     buildInterfaceSection(layout);
+    buildRouterSection(layout);
     layout->addStretch();
 
     // setWidget() deletes the previously set content widget.
@@ -168,4 +175,85 @@ void SettingsWidget::buildInterfaceSection(QVBoxLayout* layout)
         GuiApplication::instance()->setTheme(id);
     });
     layout->addWidget(theme);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::buildRouterSection(QVBoxLayout* layout)
+{
+    addSectionHeader(layout, tr("Router"));
+
+    Database& db = Database::instance();
+    const bool enabled = db.isRouterEnabled();
+
+    Switch* enable = new Switch(tr("Enable the use of a router"));
+    enable->setChecked(enabled);
+    layout->addWidget(enable);
+
+    LineEdit* address = new LineEdit();
+    address->setLabel(tr("Address"));
+    address->setText(db.routerAddress().toString());
+    address->setEnabled(enabled);
+    layout->addWidget(address);
+
+    LineEdit* public_key = new LineEdit();
+    public_key->setLabel(tr("Public Key"));
+    public_key->setText(QString::fromUtf8(db.routerPublicKey().toHex()));
+    public_key->setEnabled(enabled);
+    layout->addWidget(public_key);
+
+    Label* hint = new Label(tr("A router is required to connect to a computer if there is no direct "
+                               "connection (bypass NAT). Aspia does not provide a public router, but "
+                               "you can install your own. You can download the router on the "
+                               "<a href=\"https://aspia.org\">official website</a>."),
+                            Label::Role::CAPTION);
+    hint->setWordWrap(true);
+    hint->setTextFormat(Qt::RichText);
+    hint->setOpenExternalLinks(true);
+    layout->addWidget(hint);
+
+    connect(enable, &QCheckBox::toggled, this, [address, public_key](bool checked)
+    {
+        Database::instance().setRouterEnabled(checked);
+        address->setEnabled(checked);
+        public_key->setEnabled(checked);
+    });
+
+    // Values are validated and stored on commit. Invalid input is reverted to the stored value: a
+    // modal dialog cannot be shown here because the on-screen keyboard is still up, and a translucent
+    // top-level surface aborts the process (QOpenGLContext::makeCurrent) while the surface is invalid.
+    connect(address, &QLineEdit::editingFinished, this, [address]()
+    {
+        Database& db = Database::instance();
+
+        const Address parsed = Address::fromString(address->text().trimmed(), DEFAULT_ROUTER_TCP_PORT);
+
+        QSignalBlocker blocker(address);
+        if (parsed.isValid())
+        {
+            db.setRouterAddress(parsed);
+            address->setText(parsed.toString());
+        }
+        else
+        {
+            address->setText(db.routerAddress().toString());
+        }
+    });
+
+    connect(public_key, &QLineEdit::editingFinished, this, [public_key]()
+    {
+        Database& db = Database::instance();
+
+        const QByteArray key = QByteArray::fromHex(public_key->text().trimmed().toUtf8());
+
+        QSignalBlocker blocker(public_key);
+        if (key.size() == 32)
+        {
+            db.setRouterPublicKey(key);
+            public_key->setText(QString::fromUtf8(key.toHex()));
+        }
+        else
+        {
+            public_key->setText(QString::fromUtf8(db.routerPublicKey().toHex()));
+        }
+    });
 }

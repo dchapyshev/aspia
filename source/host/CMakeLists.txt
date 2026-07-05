@@ -22,6 +22,8 @@
 if (ANDROID)
     # Portable core files this build needs. More are added here as the host is ported to Android.
     list(APPEND SOURCE_HOST_CORE
+        database.cc
+        database.h
         input_injector.h
         input_injector_android.cc
         input_injector_android.h

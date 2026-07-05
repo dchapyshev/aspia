@@ -66,6 +66,7 @@ private:
     void buildSettings();
     void addSectionHeader(QVBoxLayout* layout, const QString& text);
     void buildInterfaceSection(QVBoxLayout* layout);
+    void buildRouterSection(QVBoxLayout* layout);
 
     QStackedWidget* stack_;
     ScrollArea* settings_page_;
