@@ -37,7 +37,7 @@
 
 #include "base/logging.h"
 #include "base/security_log.h"
-#include "host/ui/user_settings.h"
+#include "host/user_settings.h"
 #include "ui_security_log_dialog.h"
 
 namespace {

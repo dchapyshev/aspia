@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/ui/user_settings.h"
+#include "host/user_settings.h"
 
 #include <QLocale>
 

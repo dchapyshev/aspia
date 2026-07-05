@@ -26,7 +26,7 @@
 #include "base/logging.h"
 #include "build/build_config.h"
 #include "build/version.h"
-#include "host/ui/user_settings.h"
+#include "host/user_settings.h"
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>

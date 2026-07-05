@@ -25,8 +25,8 @@
 #include "base/logging.h"
 #include "common/android/app_bar.h"
 #include "common/android/bottom_navigation_bar.h"
-#include "common/android/label.h"
 #include "host/android/home_widget.h"
+#include "host/android/settings_widget.h"
 
 namespace {
 
@@ -36,16 +36,6 @@ enum Section
     SECTION_HOME = 0,
     SECTION_SETTINGS
 };
-
-//--------------------------------------------------------------------------------------------------
-// Placeholder page shown until the real section content is implemented: a centered caption.
-Label* createPlaceholder(QWidget* parent)
-{
-    Label* label = new Label(QString(), Label::Role::BODY, parent);
-    label->setAlignment(Qt::AlignCenter);
-    label->setWordWrap(true);
-    return label;
-}
 
 } // namespace
 
@@ -59,7 +49,7 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
     LOG(INFO) << "Ctor";
 
     content_->addWidget(new HomeWidget(this));
-    content_->addWidget(createPlaceholder(this));
+    content_->addWidget(new SettingsWidget(this));
 
     navigation_->addItem(tr("Home"), ":/img/home.svg");
     navigation_->addItem(tr("Settings"), ":/img/settings.svg");
@@ -89,8 +79,10 @@ void AndroidMainWindow::changeEvent(QEvent* event)
 {
     QWidget::changeEvent(event);
 
+    // The language is switched from the settings combo box, and retranslation rebuilds that combo, so
+    // the rebuild is deferred to avoid destroying the sender during its own signal.
     if (event->type() == QEvent::LanguageChange)
-        retranslate();
+        QMetaObject::invokeMethod(this, [this]() { retranslate(); }, Qt::QueuedConnection);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -108,8 +100,8 @@ void AndroidMainWindow::retranslate()
 
     if (HomeWidget* home = qobject_cast<HomeWidget*>(content_->widget(SECTION_HOME)))
         home->retranslate();
-    if (Label* settings = qobject_cast<Label*>(content_->widget(SECTION_SETTINGS)))
-        settings->setText(sectionTitle(SECTION_SETTINGS));
+    if (SettingsWidget* settings = qobject_cast<SettingsWidget*>(content_->widget(SECTION_SETTINGS)))
+        settings->retranslate();
 
     app_bar_->setTitle(sectionTitle(navigation_->currentIndex()));
 }

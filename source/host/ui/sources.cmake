@@ -48,6 +48,4 @@ collect_sources(SOURCE_HOST_CORE_UI
     settings_util.h
     user_dialog.cc
     user_dialog.h
-    user_dialog.ui
-    user_settings.cc
-    user_settings.h)
+    user_dialog.ui)

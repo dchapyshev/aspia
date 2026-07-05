@@ -19,11 +19,11 @@
 #include "host/android/application.h"
 
 #include <QIcon>
-#include <QLocale>
 
 #include "base/logging.h"
 #include "build/build_config.h"
 #include "build/version.h"
+#include "host/user_settings.h"
 
 //--------------------------------------------------------------------------------------------------
 Application::Application(int& argc, char* argv[])
@@ -36,13 +36,16 @@ Application::Application(int& argc, char* argv[])
     setApplicationVersion(ASPIA_VERSION_STRING);
     setWindowIcon(QIcon(":/img/aspia-host.ico"));
 
-    // There is no settings storage yet, so the system locale and theme are followed.
-    QString locale = QLocale::system().bcp47Name();
-    if (!hasLocale(locale))
-        locale = DEFAULT_LOCALE;
+    UserSettings settings;
 
-    setLocale(locale);
-    setTheme("auto");
+    if (!hasLocale(settings.locale()))
+    {
+        LOG(INFO) << "Set default locale";
+        settings.setLocale(DEFAULT_LOCALE);
+    }
+
+    setLocale(settings.locale());
+    setTheme(settings.theme());
 }
 
 //--------------------------------------------------------------------------------------------------

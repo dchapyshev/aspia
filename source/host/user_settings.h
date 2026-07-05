@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_UI_USER_SETTINGS_H
-#define HOST_UI_USER_SETTINGS_H
+#ifndef HOST_USER_SETTINGS_H
+#define HOST_USER_SETTINGS_H
 
 #include <QSettings>
 
@@ -52,4 +52,4 @@ private:
     Q_DISABLE_COPY_MOVE(UserSettings)
 };
 
-#endif // HOST_UI_USER_SETTINGS_H
+#endif // HOST_USER_SETTINGS_H

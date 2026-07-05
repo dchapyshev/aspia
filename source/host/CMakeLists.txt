@@ -28,7 +28,9 @@ if (ANDROID)
         screen_capturer.cc
         screen_capturer.h
         screen_capturer_android.cc
-        screen_capturer_android.h)
+        screen_capturer_android.h
+        user_settings.cc
+        user_settings.h)
 
     # Android UI.
     include(android/sources.cmake)
@@ -126,7 +128,9 @@ list(APPEND SOURCE_HOST_CORE
     user_session_agent.cc
     user_session_agent.h
     user_session.cc
-    user_session.h)
+    user_session.h
+    user_settings.cc
+    user_settings.h)
 
 if (WIN32)
     list(APPEND SOURCE_HOST_CORE

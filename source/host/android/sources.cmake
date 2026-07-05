@@ -23,4 +23,6 @@ collect_sources(SOURCE_HOST_ANDROID
     home_widget.h
     main.cc
     main_window.cc
-    main_window.h)
+    main_window.h
+    settings_widget.cc
+    settings_widget.h)
