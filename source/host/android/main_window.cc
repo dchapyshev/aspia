@@ -31,6 +31,7 @@
 #include "host/android/password_dialog.h"
 #include "host/android/server.h"
 #include "host/android/settings_widget.h"
+#include "proto/user.h"
 
 namespace {
 
@@ -58,7 +59,8 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
     connect(settings, &SettingsWidget::sig_appBarActionsChanged,
             this, &AndroidMainWindow::onSettingsActionsChanged);
 
-    content_->addWidget(new ConnectionWidget(this));
+    connection_ = new ConnectionWidget(this);
+    content_->addWidget(connection_);
     content_->addWidget(settings);
 
     connect(app_bar_, &AppBar::sig_backClicked, this, &AndroidMainWindow::onBackClicked);
@@ -79,8 +81,13 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
     retranslate();
     onSectionChanged(navigation_->currentIndex());
 
-    // Run the host server on the application I/O thread.
+    // Run the host server on the application I/O thread. Its credentials/router-state signals are
+    // delivered here queued (cross-thread) and shown on the connection screen.
     server_ = new Server();
+    connect(server_, &Server::sig_credentialsChanged,
+            this, &AndroidMainWindow::onCredentialsChanged);
+    connect(server_, &Server::sig_routerStateChanged,
+            this, &AndroidMainWindow::onRouterStateChanged);
     server_->moveToThread(GuiApplication::ioThread());
     QMetaObject::invokeMethod(server_, &Server::start, Qt::QueuedConnection);
 }
@@ -161,6 +168,43 @@ void AndroidMainWindow::onBackClicked()
 
     if (SettingsWidget* settings = qobject_cast<SettingsWidget*>(content_->widget(SECTION_SETTINGS)))
         settings->goBack();
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onCredentialsChanged(const QString& host_id, const QString& password)
+{
+    // The one-time password is only meaningful once the router has assigned an ID.
+    const bool has_id = !host_id.isEmpty();
+
+    connection_->setHostId(has_id ? host_id : QString("-"));
+    connection_->setPassword((has_id && !password.isEmpty()) ? password : QString("-"));
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onRouterStateChanged(int state, const QString& router)
+{
+    ConnectionWidget::RouterState mapped = ConnectionWidget::RouterState::DISABLED;
+
+    switch (state)
+    {
+        case proto::user::RouterState::CONNECTING:
+            mapped = ConnectionWidget::RouterState::CONNECTING;
+            break;
+
+        case proto::user::RouterState::CONNECTED:
+            mapped = ConnectionWidget::RouterState::CONNECTED;
+            break;
+
+        case proto::user::RouterState::FAILED:
+            mapped = ConnectionWidget::RouterState::FAILED;
+            break;
+
+        default:
+            mapped = ConnectionWidget::RouterState::DISABLED;
+            break;
+    }
+
+    connection_->setRouterState(mapped, router);
 }
 
 //--------------------------------------------------------------------------------------------------

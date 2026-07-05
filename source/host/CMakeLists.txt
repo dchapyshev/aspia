@@ -26,11 +26,15 @@ if (ANDROID)
         client.h
         database.cc
         database.h
+        host_storage.cc
+        host_storage.h
         host_user_list.cc
         host_user_list.h
         input_injector.h
         input_injector_android.cc
         input_injector_android.h
+        router_manager.cc
+        router_manager.h
         screen_capturer.cc
         screen_capturer.h
         screen_capturer_android.cc

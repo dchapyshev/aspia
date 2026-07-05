@@ -22,9 +22,16 @@
 #include <QList>
 #include <QObject>
 
+#include "base/peer/host_id.h"
 #include "base/scoped_qpointer.h"
 
+namespace proto::user {
+class RouterState;
+} // namespace proto::user
+
 class Client;
+class RouterManager;
+class SecureString;
 class TcpChannel;
 class TcpServer;
 
@@ -44,14 +51,24 @@ public slots:
     void start();
     void stop();
 
+signals:
+    void sig_credentialsChanged(const QString& host_id, const QString& password);
+    void sig_routerStateChanged(int state, const QString& router);
+
 private slots:
     void onNewConnection();
+    void onNewRelayConnection();
     void onClientFinished();
+    void onRouterStateChanged(const proto::user::RouterState& state);
+    void onCredentialsChanged(HostId host_id, const SecureString& password);
 
 private:
-    void startClient(TcpChannel* tcp_channel);
+    void connectToRouter();
+    void startClient(TcpChannel* tcp_channel, const QString& stun_host = QString(),
+                     quint16 stun_port = 0);
 
     ScopedQPointer<TcpServer> tcp_server_;
+    ScopedQPointer<RouterManager> router_manager_;
     QList<Client*> clients_;
 
     Q_DISABLE_COPY_MOVE(Server)

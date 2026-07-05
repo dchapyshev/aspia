@@ -18,16 +18,25 @@
 
 #include "host/android/server.h"
 
+#include <optional>
+
 #include "base/logging.h"
+#include "base/crypto/secure_string.h"
+#include "base/net/address.h"
 #include "base/net/tcp_channel.h"
 #include "base/net/tcp_server.h"
+#include "base/peer/host_id.h"
 #include "base/peer/user_list.h"
+#include "build/build_config.h"
 #include "host/client.h"
 #include "host/database.h"
 #include "host/host_user_list.h"
+#include "host/router_manager.h"
+#include "host/user_settings.h"
 #include "host/android/desktop_client.h"
 #include "host/android/file_client.h"
 #include "proto/peer.h"
+#include "proto/user.h"
 
 namespace {
 
@@ -77,6 +86,9 @@ void Server::start()
     tcp_server_->setUserList(SharedPointer<UserList>(new HostUserList));
 
     LOG(INFO) << "Host server started on port" << db.tcpPort();
+
+    if (db.isRouterEnabled())
+        connectToRouter();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -85,6 +97,7 @@ void Server::stop()
     if (!tcp_server_)
         return;
 
+    router_manager_.reset();
     tcp_server_.reset();
 
     LOG(INFO) << "Host server stopped";
@@ -104,6 +117,23 @@ void Server::onNewConnection()
 }
 
 //--------------------------------------------------------------------------------------------------
+void Server::onNewRelayConnection()
+{
+    if (!router_manager_)
+        return;
+
+    while (router_manager_->hasReadyConnections())
+    {
+        std::optional<RouterManager::ReadyConnection> connection =
+            router_manager_->nextReadyConnection();
+        if (!connection.has_value())
+            continue;
+
+        startClient(connection->tcp_channel, connection->stun_host, connection->stun_port);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void Server::onClientFinished()
 {
     Client* client = dynamic_cast<Client*>(sender());
@@ -117,7 +147,51 @@ void Server::onClientFinished()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::startClient(TcpChannel* tcp_channel)
+void Server::onRouterStateChanged(const proto::user::RouterState& state)
+{
+    QString router;
+
+    if (state.state() != proto::user::RouterState::DISABLED)
+    {
+        Address address(DEFAULT_ROUTER_TCP_PORT);
+        address.setHost(QString::fromStdString(state.host_name()));
+        address.setPort(static_cast<quint16>(state.host_port()));
+        router = address.toString();
+    }
+
+    emit sig_routerStateChanged(static_cast<int>(state.state()), router);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Server::onCredentialsChanged(HostId host_id, const SecureString& password)
+{
+    emit sig_credentialsChanged(hostIdToString(host_id), password.toString());
+}
+
+//--------------------------------------------------------------------------------------------------
+void Server::connectToRouter()
+{
+    if (router_manager_)
+        return;
+
+    router_manager_ = new RouterManager(this);
+
+    connect(router_manager_, &RouterManager::sig_clientConnected,
+            this, &Server::onNewRelayConnection);
+    connect(router_manager_, &RouterManager::sig_routerStateChanged,
+            this, &Server::onRouterStateChanged);
+    connect(router_manager_, &RouterManager::sig_credentialsChanged,
+            this, &Server::onCredentialsChanged);
+
+    router_manager_->start();
+
+    // The desktop host pushes the allowed one-time session types from the user session; here they are
+    // taken directly from the settings.
+    router_manager_->onOneTimeSessionsChanged(UserSettings().oneTimeSessions());
+}
+
+//--------------------------------------------------------------------------------------------------
+void Server::startClient(TcpChannel* tcp_channel, const QString& stun_host, quint16 stun_port)
 {
     tcp_channel->setParent(this);
     tcp_channel->setReadBufferSize(kReadBufferSize);
@@ -161,7 +235,6 @@ void Server::startClient(TcpChannel* tcp_channel)
 
     clients_.append(client);
 
-    // A direct connection carries no STUN endpoint (the router provides one for relayed connections,
-    // which the Android host does not use yet), so UDP relies on the peer address alone.
-    client->start(QString(), 0);
+    // Direct connections carry no STUN endpoint; relayed connections get one from the router.
+    client->start(stun_host, stun_port);
 }

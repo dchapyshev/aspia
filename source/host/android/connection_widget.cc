@@ -113,23 +113,23 @@ ConnectionWidget::ConnectionWidget(QWidget* parent)
     access_card->contentLayout()->addWidget(file_transfer_session_);
     layout->addWidget(access_card);
 
-    // Push the router state card to the bottom edge, above the navigation bar.
+    // Push the router state to the bottom edge, above the navigation bar.
     layout->addStretch();
 
-    // Router state card.
-    Card* router_card = new Card(content);
-    router_icon_ = new QLabel(router_card);
+    // Router state as a plain status line (not a card): an icon and a wrapping caption.
+    router_icon_ = new QLabel(content);
     router_icon_->setFixedSize(kRouterIconSize, kRouterIconSize);
-    router_text_ = new Label(QString(), Label::Role::BODY, router_card);
+
+    router_text_ = new Label(QString(), Label::Role::CAPTION, content);
+    router_text_->setWordWrap(true);
 
     QHBoxLayout* router_row = new QHBoxLayout();
     router_row->setContentsMargins(0, 0, 0, 0);
     router_row->setSpacing(kCardSpacing / 2);
-    router_row->addWidget(router_icon_);
+    router_row->addWidget(router_icon_, 0, Qt::AlignTop);
     router_row->addWidget(router_text_, 1);
 
-    router_card->contentLayout()->addLayout(router_row);
-    layout->addWidget(router_card);
+    layout->addLayout(router_row);
 
     setWidget(content);
 

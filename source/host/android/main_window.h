@@ -25,6 +25,7 @@
 
 class AppBar;
 class BottomNavigationBar;
+class ConnectionWidget;
 class Server;
 class QStackedWidget;
 
@@ -48,6 +49,10 @@ private slots:
     void onSettingsActionsChanged();
     void onBackClicked();
 
+    // Forwarded from the host server (queued from the I/O thread) to the connection screen.
+    void onCredentialsChanged(const QString& host_id, const QString& password);
+    void onRouterStateChanged(int state, const QString& router);
+
 private:
     void retranslate();
     QString sectionTitle(int index) const;
@@ -55,6 +60,7 @@ private:
     AppBar* app_bar_ = nullptr;
     QStackedWidget* content_ = nullptr;
     BottomNavigationBar* navigation_ = nullptr;
+    ConnectionWidget* connection_ = nullptr;
 
     // Host server, moved to and driven from the application I/O thread.
     ScopedQPointer<Server> server_;
