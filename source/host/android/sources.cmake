@@ -21,6 +21,10 @@ collect_sources(SOURCE_HOST_ANDROID
     application.h
     connection_widget.cc
     connection_widget.h
+    desktop_client.cc
+    desktop_client.h
+    file_client.cc
+    file_client.h
     main.cc
     main_window.cc
     main_window.h

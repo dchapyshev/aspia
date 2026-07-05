@@ -22,6 +22,8 @@
 if (ANDROID)
     # Portable core files this build needs. More are added here as the host is ported to Android.
     list(APPEND SOURCE_HOST_CORE
+        client.cc
+        client.h
         database.cc
         database.h
         host_user_list.cc
@@ -33,6 +35,8 @@ if (ANDROID)
         screen_capturer.h
         screen_capturer_android.cc
         screen_capturer_android.h
+        udp_attempt.cc
+        udp_attempt.h
         user_settings.cc
         user_settings.h)
 
