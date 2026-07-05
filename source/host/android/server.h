@@ -19,10 +19,13 @@
 #ifndef HOST_ANDROID_SERVER_H
 #define HOST_ANDROID_SERVER_H
 
+#include <QList>
 #include <QObject>
 
 #include "base/scoped_qpointer.h"
 
+class Client;
+class TcpChannel;
 class TcpServer;
 
 // Host server for Android, the in-process analog of the desktop Service. It is moved to the
@@ -43,9 +46,13 @@ public slots:
 
 private slots:
     void onNewConnection();
+    void onClientFinished();
 
 private:
+    void startClient(TcpChannel* tcp_channel);
+
     ScopedQPointer<TcpServer> tcp_server_;
+    QList<Client*> clients_;
 
     Q_DISABLE_COPY_MOVE(Server)
 };

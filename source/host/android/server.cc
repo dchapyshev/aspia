@@ -22,8 +22,12 @@
 #include "base/net/tcp_channel.h"
 #include "base/net/tcp_server.h"
 #include "base/peer/user_list.h"
+#include "host/client.h"
 #include "host/database.h"
 #include "host/host_user_list.h"
+#include "host/android/desktop_client.h"
+#include "host/android/file_client.h"
+#include "proto/peer.h"
 
 namespace {
 
@@ -31,6 +35,10 @@ namespace {
 // expected. Tight caps limit the damage of a flood; latecomers retry shortly.
 constexpr int kMaxPendingConnections = 10;
 constexpr int kMaxConnectionsPerMinute = 30;
+
+// Per-connection socket buffers.
+constexpr int kReadBufferSize = 2 * 1024 * 1024; // 2 MB.
+constexpr int kWriteBufferSize = 2 * 1024 * 1024; // 2 MB.
 
 } // namespace
 
@@ -87,13 +95,73 @@ void Server::onNewConnection()
 {
     while (tcp_server_ && tcp_server_->hasReadyConnections())
     {
-        TcpChannel* channel = tcp_server_->nextReadyConnection();
-        if (!channel)
+        TcpChannel* tcp_channel = tcp_server_->nextReadyConnection();
+        if (!tcp_channel)
             break;
 
-        // TODO: hand the channel to a client session. For now the connection is only logged and
-        // dropped.
-        LOG(INFO) << "New connection accepted";
-        channel->deleteLater();
+        startClient(tcp_channel);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void Server::onClientFinished()
+{
+    Client* client = dynamic_cast<Client*>(sender());
+    if (!client)
+        return;
+
+    LOG(INFO) << "Client finished:" << client->clientId();
+
+    clients_.removeOne(client);
+    client->deleteLater();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Server::startClient(TcpChannel* tcp_channel)
+{
+    tcp_channel->setParent(this);
+    tcp_channel->setReadBufferSize(kReadBufferSize);
+    tcp_channel->setWriteBufferSize(kWriteBufferSize);
+
+    const auto session_type = static_cast<proto::peer::SessionType>(tcp_channel->peerSessionType());
+
+    Client* client = nullptr;
+
+    switch (session_type)
+    {
+        case proto::peer::SESSION_TYPE_DESKTOP:
+        {
+            DesktopClient* desktop_client = new DesktopClient(tcp_channel, this);
+            desktop_client->setFeature(Client::FEATURE_UDP, true);
+            desktop_client->setFeature(Client::FEATURE_BANDWIDTH, true);
+            client = desktop_client;
+        }
+        break;
+
+        case proto::peer::SESSION_TYPE_FILE_TRANSFER:
+        {
+            FileClient* file_client = new FileClient(tcp_channel, this);
+            file_client->setFeature(Client::FEATURE_UDP, true);
+            client = file_client;
+        }
+        break;
+
+        default:
+            break;
+    }
+
+    if (!client)
+    {
+        LOG(ERROR) << "Unsupported session type:" << session_type;
+        tcp_channel->deleteLater();
+        return;
+    }
+
+    connect(client, &Client::sig_finished, this, &Server::onClientFinished);
+
+    clients_.append(client);
+
+    // A direct connection carries no STUN endpoint (the router provides one for relayed connections,
+    // which the Android host does not use yet), so UDP relies on the peer address alone.
+    client->start(QString(), 0);
 }
