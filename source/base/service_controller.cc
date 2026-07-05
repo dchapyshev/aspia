@@ -28,6 +28,10 @@
 #include "base/service_controller_systemd.h"
 #endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 
+#if defined(Q_OS_MACOS)
+#include "base/service_controller_launchd.h"
+#endif // defined(Q_OS_MACOS)
+
 //--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<ServiceController> ServiceController::open(const QString& name)
@@ -36,6 +40,8 @@ std::unique_ptr<ServiceController> ServiceController::open(const QString& name)
     return ServiceControllerWin::open(name);
 #elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     return ServiceControllerSystemd::open(name);
+#elif defined(Q_OS_MACOS)
+    return ServiceControllerLaunchd::open(name);
 #else
     NOTIMPLEMENTED();
     return nullptr;
@@ -51,6 +57,8 @@ std::unique_ptr<ServiceController> ServiceController::install(
     return ServiceControllerWin::install(name, display_name, file_path);
 #elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     return ServiceControllerSystemd::install(name, display_name, file_path);
+#elif defined(Q_OS_MACOS)
+    return ServiceControllerLaunchd::install(name, display_name, file_path);
 #else
     NOTIMPLEMENTED();
     return nullptr;
@@ -66,6 +74,7 @@ QString ServiceController::lowPrivilegeAccount(const QString& name)
 #elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     return "aspia";
 #else
+    // On macOS launchd daemons run as root; there is no dedicated low-privilege account.
     return QString();
 #endif
 }
@@ -78,6 +87,8 @@ bool ServiceController::remove(const QString& name)
     return ServiceControllerWin::remove(name);
 #elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     return ServiceControllerSystemd::remove(name);
+#elif defined(Q_OS_MACOS)
+    return ServiceControllerLaunchd::remove(name);
 #else
     NOTIMPLEMENTED();
     return false;
@@ -92,6 +103,8 @@ bool ServiceController::isInstalled(const QString& name)
     return ServiceControllerWin::isInstalled(name);
 #elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     return ServiceControllerSystemd::isInstalled(name);
+#elif defined(Q_OS_MACOS)
+    return ServiceControllerLaunchd::isInstalled(name);
 #else
     NOTIMPLEMENTED();
     return false;
@@ -106,6 +119,8 @@ bool ServiceController::isRunning(const QString& name)
     return ServiceControllerWin::isRunning(name);
 #elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     return ServiceControllerSystemd::isRunning(name);
+#elif defined(Q_OS_MACOS)
+    return ServiceControllerLaunchd::isRunning(name);
 #else
     NOTIMPLEMENTED();
     return false;

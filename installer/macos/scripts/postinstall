@@ -1,0 +1,41 @@
+#!/bin/sh
+#
+# Registers the Aspia Host launchd daemon after the bundle is installed. Runs as root from the
+# installer.
+#
+
+APP="/Applications/Aspia Host.app"
+SERVICE="$APP/Contents/MacOS/aspia_host_service"
+
+if [ ! -x "$SERVICE" ]; then
+    echo "aspia_host_service not found at $SERVICE" >&2
+    exit 1
+fi
+
+# On upgrades an older daemon may still be registered; remove it before installing the new one so
+# launchd picks up the updated executable path. Ignore failure (nothing registered yet).
+"$SERVICE" --remove 2>/dev/null || true
+
+# Writes /Library/LaunchDaemons/org.aspia.host-service.plist and loads the daemon.
+if ! "$SERVICE" --install; then
+    echo "Failed to register the Aspia Host service" >&2
+    exit 1
+fi
+
+# The host needs two user-granted permissions that cannot be set programmatically:
+#   - Screen Recording  -> screen capture (ScreenCaptureKit)
+#   - Accessibility     -> input injection (CGEvent)
+# Open both Privacy panes so the administrator can approve them. This script runs as root outside
+# the GUI session, so the panes must be opened as the logged-in console user; skip it when nobody
+# is logged in (e.g. an unattended install).
+CONSOLE_USER="$(stat -f "%Su" /dev/console 2>/dev/null)"
+
+if [ -n "$CONSOLE_USER" ] && [ "$CONSOLE_USER" != "root" ] && [ "$CONSOLE_USER" != "loginwindow" ]; then
+    CONSOLE_UID="$(id -u "$CONSOLE_USER")"
+    open_pane() { launchctl asuser "$CONSOLE_UID" sudo -u "$CONSOLE_USER" open "$1" 2>/dev/null || true; }
+
+    open_pane "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"
+    open_pane "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture"
+fi
+
+exit 0

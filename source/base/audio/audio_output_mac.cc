@@ -174,7 +174,7 @@ bool AudioOutputMac::initDevice()
     {
         kAudioHardwarePropertyRunLoop,
         kAudioObjectPropertyScopeGlobal,
-        kAudioObjectPropertyElementMaster
+        kAudioObjectPropertyElementMain
     };
     CFRunLoopRef run_loop = nullptr;
     UInt32 size = sizeof(CFRunLoopRef);
@@ -214,7 +214,7 @@ void AudioOutputMac::terminate()
     {
         kAudioHardwarePropertyDevices,
         kAudioObjectPropertyScopeGlobal,
-        kAudioObjectPropertyElementMaster
+        kAudioObjectPropertyElementMain
     };
     AudioObjectRemovePropertyListener(
         kAudioObjectSystemObject, &property_address, &objectListenerProc, this);
@@ -238,7 +238,7 @@ bool AudioOutputMac::initPlayout()
     {
         kAudioHardwarePropertyDefaultOutputDevice,
         kAudioObjectPropertyScopeGlobal,
-        kAudioObjectPropertyElementMaster
+        kAudioObjectPropertyElementMain
     };
 
     output_device_id_ = kAudioDeviceUnknown;

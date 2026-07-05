@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>aspia_host</string>
+	<key>CFBundleGetInfoString</key>
+	<string>Aspia Host</string>
+	<key>CFBundleIconFile</key>
+	<string>aspia-host.icns</string>
+	<key>CFBundleIdentifier</key>
+	<string>org.aspia.host</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>Aspia Host</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>3.0.0</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>3.0.0</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>Dmitry Chapyshev</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>NSHighResolutionCapable</key>
+	<string>True</string>
+	<!-- Screen capture and input injection request these permissions at runtime (TCC). -->
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Aspia Host accepts incoming remote desktop connections over the local network.</string>
+</dict>
+</plist>

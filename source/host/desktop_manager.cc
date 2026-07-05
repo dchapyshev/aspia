@@ -59,7 +59,7 @@ constexpr std::chrono::milliseconds kRestartTimeout { 5000 };
 #endif
 constexpr std::chrono::milliseconds kAttachTimeout { 15000 };
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
 const char kDesktopAgentFile[] = "aspia_desktop_agent";
 #endif
 

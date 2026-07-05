@@ -132,12 +132,21 @@ if (APPLE)
 
     message(STATUS "CMAKE_OSX_ARCHITECTURES: ${CMAKE_OSX_ARCHITECTURES}")
 
+    # ScreenCaptureKit (host screen capture) requires macOS 12.3; 13.0 is the supported floor.
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "13.0")
+    message(STATUS "CMAKE_OSX_DEPLOYMENT_TARGET: ${CMAKE_OSX_DEPLOYMENT_TARGET}")
+
     find_package(Qt6OpenGL CONFIG REQUIRED)
     find_package(ICU REQUIRED COMPONENTS uc)
 
     find_library(FOUNDATION_LIB Foundation)
     find_library(COREAUDIO_LIB CoreAudio)
     find_library(AUDIOTOOLBOX_LIB AudioToolbox)
+    find_library(SCREENCAPTUREKIT_LIB ScreenCaptureKit)
+    find_library(COREMEDIA_LIB CoreMedia)
+    find_library(COREVIDEO_LIB CoreVideo)
+    find_library(COREGRAPHICS_LIB CoreGraphics)
+    find_library(VIDEOTOOLBOX_LIB VideoToolbox)
     find_program(CODESIGN_BIN NAMES codesign)
 endif()
 

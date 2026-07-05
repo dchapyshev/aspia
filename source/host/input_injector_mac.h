@@ -19,13 +19,18 @@
 #ifndef HOST_INPUT_INJECTOR_MAC_H
 #define HOST_INPUT_INJECTOR_MAC_H
 
+#include <QPoint>
+#include <QSet>
+
 #include "host/input_injector.h"
 
 class InputInjectorMac final : public InputInjector
 {
 public:
-    InputInjectorMac();
-    ~InputInjectorMac();
+    explicit InputInjectorMac(QObject* parent = nullptr);
+    ~InputInjectorMac() final;
+
+    static InputInjectorMac* create(QObject* parent = nullptr);
 
     // InputInjector implementation.
     void setScreenInfo(const QSize& screen_size, const QPoint& offset) final;
@@ -36,6 +41,25 @@ public:
     void injectTouchEvent(const proto::input::TouchEvent& event) final;
 
 private:
+    // Combined Quartz modifier flags (CGEventFlags) for the modifier keys currently held, plus the
+    // Caps Lock flag when |caps_lock| is set. Returned as quint64 to keep CoreGraphics types out of
+    // the header.
+    quint64 currentModifierFlags(bool caps_lock) const;
+
+    // Global display coordinates (top-left of the main display is the origin) the capturer/client
+    // coordinates map into.
+    QPoint screen_offset_;
+
+    // Last posted cursor position, used to decide between a move and a plain button event.
+    QPoint last_mouse_pos_ { -1, -1 };
+
+    // Previous button mask, used to detect press/release transitions.
+    quint32 last_mouse_mask_ = 0;
+
+    // USB HID codes of the keys currently held, so the destructor can release them and modifier
+    // flags can be recomputed for each event.
+    QSet<quint32> pressed_keys_;
+
     Q_DISABLE_COPY(InputInjectorMac)
 };
 

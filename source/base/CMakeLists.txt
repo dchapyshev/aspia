@@ -110,6 +110,8 @@ if (APPLE)
     list(APPEND SOURCE_BASE
         core_service.h
         core_service_posix.cc
+        service_controller_launchd.cc
+        service_controller_launchd.h
         sys_info_mac.mm)
 endif()
 

@@ -224,7 +224,7 @@ if (NOT ANDROID)
     add_subdirectory(router)
 endif()
 
-if (WIN32 OR LINUX OR ANDROID)
+if (WIN32 OR LINUX OR APPLE OR ANDROID)
     add_subdirectory(host)
 endif()
 

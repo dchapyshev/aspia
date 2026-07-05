@@ -77,6 +77,14 @@ if (WIN32)
         video_encoder_h264_mf.h)
 endif()
 
+if (APPLE)
+    collect_sources(SOURCE_BASE_CODEC
+        video_decoder_h264_vt.cc
+        video_decoder_h264_vt.h
+        video_encoder_h264_vt.cc
+        video_encoder_h264_vt.h)
+endif()
+
 if (ANDROID)
     collect_sources(SOURCE_BASE_CODEC
         video_decoder_h264_mc.cc
