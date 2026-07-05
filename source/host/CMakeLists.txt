@@ -24,6 +24,8 @@ if (ANDROID)
     list(APPEND SOURCE_HOST_CORE
         database.cc
         database.h
+        host_user_list.cc
+        host_user_list.h
         input_injector.h
         input_injector_android.cc
         input_injector_android.h

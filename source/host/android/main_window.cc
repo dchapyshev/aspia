@@ -22,12 +22,14 @@
 #include <QStackedWidget>
 #include <QVBoxLayout>
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "common/android/app_bar.h"
 #include "common/android/bottom_navigation_bar.h"
 #include "host/database.h"
 #include "host/android/connection_widget.h"
 #include "host/android/password_dialog.h"
+#include "host/android/server.h"
 #include "host/android/settings_widget.h"
 
 namespace {
@@ -76,6 +78,11 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
 
     retranslate();
     onSectionChanged(navigation_->currentIndex());
+
+    // Run the host server on the application I/O thread.
+    server_ = new Server();
+    server_->moveToThread(GuiApplication::ioThread());
+    QMetaObject::invokeMethod(server_, &Server::start, Qt::QueuedConnection);
 }
 
 //--------------------------------------------------------------------------------------------------

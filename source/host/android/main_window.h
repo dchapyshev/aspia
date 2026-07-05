@@ -21,8 +21,11 @@
 
 #include <QWidget>
 
+#include "base/scoped_qpointer.h"
+
 class AppBar;
 class BottomNavigationBar;
+class Server;
 class QStackedWidget;
 
 // Top-level application window for the Android host: a top app bar, a content area switched by the
@@ -52,6 +55,9 @@ private:
     AppBar* app_bar_ = nullptr;
     QStackedWidget* content_ = nullptr;
     BottomNavigationBar* navigation_ = nullptr;
+
+    // Host server, moved to and driven from the application I/O thread.
+    ScopedQPointer<Server> server_;
 
     // Set once the settings tab has been unlocked with the protection password (if any); the prompt is
     // then not shown again for the rest of the session.

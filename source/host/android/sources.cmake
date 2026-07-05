@@ -26,6 +26,8 @@ collect_sources(SOURCE_HOST_ANDROID
     main_window.h
     password_dialog.cc
     password_dialog.h
+    server.cc
+    server.h
     settings_widget.cc
     settings_widget.h
     user_editor_widget.cc
