@@ -18,7 +18,12 @@
 
 #include "host/android/main_window.h"
 
+#include <QApplication>
 #include <QEvent>
+#include <QInputMethod>
+#include <QResizeEvent>
+#include <QScrollArea>
+#include <QScrollBar>
 #include <QStackedWidget>
 #include <QVBoxLayout>
 
@@ -78,6 +83,9 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
     connect(navigation_, &BottomNavigationBar::sig_currentChanged,
             this, &AndroidMainWindow::onSectionChanged);
 
+    connect(QGuiApplication::inputMethod(), &QInputMethod::keyboardRectangleChanged,
+            this, &AndroidMainWindow::onUpdateKeyboardInset);
+
     retranslate();
     onSectionChanged(navigation_->currentIndex());
 
@@ -107,6 +115,16 @@ void AndroidMainWindow::changeEvent(QEvent* event)
     // the rebuild is deferred to avoid destroying the sender during its own signal.
     if (event->type() == QEvent::LanguageChange)
         QMetaObject::invokeMethod(this, [this]() { retranslate(); }, Qt::QueuedConnection);
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::resizeEvent(QResizeEvent* event)
+{
+    QWidget::resizeEvent(event);
+
+    // A key press on the on-screen keyboard can restore the full window height with the keyboard still
+    // up, which arrives as a resize rather than a keyboard rectangle change; recompute the inset here.
+    onUpdateKeyboardInset();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -171,6 +189,42 @@ void AndroidMainWindow::onBackClicked()
 }
 
 //--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onUpdateKeyboardInset()
+{
+    const QInputMethod* input_method = QGuiApplication::inputMethod();
+    const bool keyboard_visible = input_method->isVisible();
+
+    QScrollArea* area = focusedScrollArea();
+
+    int inset = 0;
+    if (keyboard_visible && area)
+    {
+        // Overlap of the keyboard with the scroll viewport. Backing out the inset already applied gives
+        // the viewport bottom Android itself settled on: zero when adjustResize resized the window above
+        // the keyboard, positive when it left the window at full height (e.g. after a key press on the
+        // on-screen keyboard). The keyboard rectangle is in physical pixels, so scale it down.
+        const int keyboard_top = qRound(input_method->keyboardRectangle().top() / devicePixelRatioF());
+        const QWidget* viewport = area->viewport();
+        const int viewport_bottom = viewport->mapToGlobal(QPoint(0, viewport->height())).y();
+        inset = qMax(0, viewport_bottom + keyboard_inset_ - keyboard_top);
+    }
+
+    // The bottom navigation would sit over the field the keyboard pushes up, so hide it while typing.
+    navigation_->setVisible(!keyboard_visible);
+
+    if (inset != keyboard_inset_)
+    {
+        keyboard_inset_ = inset;
+        layout()->setContentsMargins(0, 0, 0, inset);
+    }
+
+    // Bring the focused field into the content area above the keyboard. Deferred so it runs after the
+    // layout has settled around the new inset.
+    if (keyboard_visible && area)
+        QMetaObject::invokeMethod(this, &AndroidMainWindow::scrollFocusIntoView, Qt::QueuedConnection);
+}
+
+//--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onCredentialsChanged(const QString& host_id, const QString& password)
 {
     // The one-time password is only meaningful once the router has assigned an ID.
@@ -219,6 +273,50 @@ void AndroidMainWindow::retranslate()
         settings->retranslate();
 
     onSectionChanged(navigation_->currentIndex());
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::scrollFocusIntoView()
+{
+    QScrollArea* area = focusedScrollArea();
+    if (!area)
+        return;
+
+    QWidget* focus = QApplication::focusWidget();
+    if (!focus)
+        return;
+
+    // Place the focused field just above the bottom of the viewport. Scrolling by the exact overlap
+    // keeps the field flush above the keyboard in both directions, so a field left too high is pulled
+    // back down instead of leaving a gap.
+    static const int kMargin = 16;
+    const QWidget* viewport = area->viewport();
+    const int viewport_bottom = viewport->mapToGlobal(QPoint(0, viewport->height())).y();
+    const int field_bottom = focus->mapToGlobal(QPoint(0, focus->height())).y();
+    const int delta = field_bottom + kMargin - viewport_bottom;
+    if (delta == 0)
+        return;
+
+    QScrollBar* bar = area->verticalScrollBar();
+    bar->setValue(bar->value() + delta);
+}
+
+//--------------------------------------------------------------------------------------------------
+QScrollArea* AndroidMainWindow::focusedScrollArea() const
+{
+    QWidget* focus = QApplication::focusWidget();
+    if (!focus)
+        return nullptr;
+
+    // The scroll area enclosing the focused field, but only within this window: a modal dialog on top
+    // has its own scroll area and manages its own keyboard, so it must not drive the inset here.
+    for (QWidget* widget = focus->parentWidget(); widget; widget = widget->parentWidget())
+    {
+        if (QScrollArea* area = qobject_cast<QScrollArea*>(widget))
+            return isAncestorOf(area) ? area : nullptr;
+    }
+
+    return nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------

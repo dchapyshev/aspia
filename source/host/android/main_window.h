@@ -27,6 +27,7 @@ class AppBar;
 class BottomNavigationBar;
 class ConnectionWidget;
 class Server;
+class QScrollArea;
 class QStackedWidget;
 
 // Top-level application window for the Android host: a top app bar, a content area switched by the
@@ -42,6 +43,7 @@ public:
 protected:
     // QWidget implementation.
     void changeEvent(QEvent* event) final;
+    void resizeEvent(QResizeEvent* event) final;
 
 private slots:
     void onSectionChanged(int index);
@@ -49,12 +51,20 @@ private slots:
     void onSettingsActionsChanged();
     void onBackClicked();
 
+    // Lifts the content above the on-screen keyboard by the amount the keyboard overlaps the window.
+    // Android's adjustResize is unreliable here (a key press on the on-screen keyboard can restore the
+    // full window height with the keyboard still up), so the keyboard rectangle reported by Qt is the
+    // source of truth. The bottom navigation is hidden while the keyboard is up.
+    void onUpdateKeyboardInset();
+
     // Forwarded from the host server (queued from the I/O thread) to the connection screen.
     void onCredentialsChanged(const QString& host_id, const QString& password);
     void onRouterStateChanged(int state, const QString& router);
 
 private:
     void retranslate();
+    void scrollFocusIntoView();
+    QScrollArea* focusedScrollArea() const;
     QString sectionTitle(int index) const;
 
     AppBar* app_bar_ = nullptr;
@@ -64,6 +74,9 @@ private:
 
     // Host server, moved to and driven from the application I/O thread.
     ScopedQPointer<Server> server_;
+
+    // Cached bottom inset applied for the on-screen keyboard; -1 forces the first update to apply.
+    int keyboard_inset_ = -1;
 
     // Set once the settings tab has been unlocked with the protection password (if any); the prompt is
     // then not shown again for the rest of the session.
