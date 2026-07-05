@@ -27,6 +27,9 @@
 #include "common/android/controls.h"
 #include "common/android/icon_button.h"
 #include "common/android/label.h"
+#include "common/android/switch.h"
+#include "host/user_settings.h"
+#include "proto/peer.h"
 
 namespace {
 
@@ -74,6 +77,41 @@ HomeWidget::HomeWidget(QWidget* parent)
     password_card->contentLayout()->addWidget(password_caption_);
     password_card->contentLayout()->addLayout(password_row);
     layout->addWidget(password_card);
+
+    // Access card: the session types an incoming connection is allowed to use. Only the desktop and
+    // file transfer sessions are implemented by the Android host. Backed by the one-time session mask
+    // in UserSettings; each switch flips only its own bit, leaving the others untouched.
+    Card* access_card = new Card(content);
+    access_caption_ = new Label(QString(), Label::Role::CAPTION, access_card);
+    desktop_session_ = new Switch(access_card);
+    file_transfer_session_ = new Switch(access_card);
+
+    const quint32 sessions = UserSettings().oneTimeSessions();
+
+    const auto bind_session = [this](Switch* control, quint32 flag, quint32 current)
+    {
+        control->setChecked((current & flag) != 0);
+        connect(control, &QCheckBox::toggled, this, [flag](bool checked)
+        {
+            UserSettings settings;
+            quint32 mask = settings.oneTimeSessions();
+
+            if (checked)
+                mask |= flag;
+            else
+                mask &= ~flag;
+
+            settings.setOneTimeSessions(mask);
+        });
+    };
+
+    bind_session(desktop_session_, proto::peer::SESSION_TYPE_DESKTOP, sessions);
+    bind_session(file_transfer_session_, proto::peer::SESSION_TYPE_FILE_TRANSFER, sessions);
+
+    access_card->contentLayout()->addWidget(access_caption_);
+    access_card->contentLayout()->addWidget(desktop_session_);
+    access_card->contentLayout()->addWidget(file_transfer_session_);
+    layout->addWidget(access_card);
 
     // Push the router state card to the bottom edge, above the navigation bar.
     layout->addStretch();
@@ -128,6 +166,9 @@ void HomeWidget::retranslate()
 {
     id_caption_->setText(tr("Your ID"));
     password_caption_->setText(tr("One-time password"));
+    access_caption_->setText(tr("Access"));
+    desktop_session_->setText(tr("Desktop"));
+    file_transfer_session_->setText(tr("File Transfer"));
     updateRouterRow();
 }
 

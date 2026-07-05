@@ -37,7 +37,6 @@
 #include "host/user_settings.h"
 #include "host/android/user_editor_widget.h"
 #include "host/android/users_widget.h"
-#include "proto/peer.h"
 
 namespace {
 
@@ -191,7 +190,6 @@ void SettingsWidget::buildSettings()
     layout->setSpacing(kRowSpacing);
 
     buildInterfaceSection(layout);
-    buildAccessSection(layout);
     buildUsersSection(layout);
     buildRouterSection(layout);
     layout->addStretch();
@@ -207,27 +205,6 @@ void SettingsWidget::addSectionHeader(QVBoxLayout* layout, const QString& text)
         layout->addSpacing(kSectionSpacing);
 
     layout->addWidget(new Label(text, Label::Role::CAPTION));
-}
-
-//--------------------------------------------------------------------------------------------------
-void SettingsWidget::addSessionSwitch(QVBoxLayout* layout, const QString& text, quint32 session_flag,
-                                      quint32 current)
-{
-    Switch* control = new Switch(text);
-    control->setChecked((current & session_flag) != 0);
-    connect(control, &QCheckBox::toggled, this, [session_flag](bool checked)
-    {
-        UserSettings settings;
-        quint32 sessions = settings.oneTimeSessions();
-
-        if (checked)
-            sessions |= session_flag;
-        else
-            sessions &= ~session_flag;
-
-        settings.setOneTimeSessions(sessions);
-    });
-    layout->addWidget(control);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -262,18 +239,6 @@ void SettingsWidget::buildInterfaceSection(QVBoxLayout* layout)
         GuiApplication::instance()->setTheme(id);
     });
     layout->addWidget(theme);
-}
-
-//--------------------------------------------------------------------------------------------------
-void SettingsWidget::buildAccessSection(QVBoxLayout* layout)
-{
-    addSectionHeader(layout, tr("Access"));
-
-    const quint32 sessions = UserSettings().oneTimeSessions();
-
-    // The Android host implements only the remote desktop and file transfer sessions.
-    addSessionSwitch(layout, tr("Desktop"), proto::peer::SESSION_TYPE_DESKTOP, sessions);
-    addSessionSwitch(layout, tr("File Transfer"), proto::peer::SESSION_TYPE_FILE_TRANSFER, sessions);
 }
 
 //--------------------------------------------------------------------------------------------------

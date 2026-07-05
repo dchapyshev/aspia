@@ -25,6 +25,7 @@
 
 class IconButton;
 class Label;
+class Switch;
 class QLabel;
 
 // Home section of the Android host: shows the connection credentials (host ID and one-time password)
@@ -69,6 +70,9 @@ private:
     Label* password_caption_ = nullptr;
     Label* password_value_ = nullptr;
     IconButton* new_password_button_ = nullptr;
+    Label* access_caption_ = nullptr;
+    Switch* desktop_session_ = nullptr;
+    Switch* file_transfer_session_ = nullptr;
     QLabel* router_icon_ = nullptr;
     Label* router_text_ = nullptr;
 
