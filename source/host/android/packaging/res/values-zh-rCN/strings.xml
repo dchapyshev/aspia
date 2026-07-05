@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Aspia 主机</string>
+    <string name="accessibility_service_description">允许 Aspia 主机在会话期间注入远程点按、滑动和按键操作。</string>
 </resources>

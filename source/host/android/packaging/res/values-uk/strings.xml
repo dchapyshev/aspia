@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Хост Aspia</string>
+    <string name="accessibility_service_description">Дозволяє Хосту Aspia передавати віддалені дотики, свайпи та дії клавіш під час сесії.</string>
 </resources>

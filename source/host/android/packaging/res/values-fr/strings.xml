@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Hôte Aspia</string>
+    <string name="accessibility_service_description">"Permet à Aspia Host d'injecter des touchers, balayages et actions clavier distants pendant une session."</string>
 </resources>
