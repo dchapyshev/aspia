@@ -25,12 +25,14 @@
 class AboutWidget;
 class IconButton;
 class ScrollArea;
+class UserEditorWidget;
+class UsersWidget;
 class QStackedWidget;
 class QVBoxLayout;
 
 // Settings section of the Android host. Exposes the interface preferences (language and theme),
-// applied immediately and stored in UserSettings. The about screen is hosted as a sub-page reached
-// from the top app bar action.
+// applied immediately and stored in UserSettings. The about and user management screens are hosted as
+// sub-pages reached from the top app bar action.
 class SettingsWidget final : public QWidget
 {
     Q_OBJECT
@@ -61,7 +63,11 @@ signals:
 
 private:
     void showAbout();
+    void showUsers();
+    void showUserEditor(qint64 entry_id);
     bool isAboutPage() const;
+    bool isUsersPage() const;
+    bool isEditorPage() const;
 
     void buildSettings();
     void addSectionHeader(QVBoxLayout* layout, const QString& text);
@@ -70,12 +76,17 @@ private:
 
     void buildInterfaceSection(QVBoxLayout* layout);
     void buildAccessSection(QVBoxLayout* layout);
+    void buildUsersSection(QVBoxLayout* layout);
     void buildRouterSection(QVBoxLayout* layout);
 
     QStackedWidget* stack_;
     ScrollArea* settings_page_;
     AboutWidget* about_page_;
+    UsersWidget* users_page_;
+    UserEditorWidget* editor_page_;
     IconButton* about_button_;
+    IconButton* add_user_button_;
+    IconButton* save_button_;
 
     Q_DISABLE_COPY_MOVE(SettingsWidget)
 };

@@ -26,6 +26,7 @@
 #include "base/net/address.h"
 #include "build/build_config.h"
 #include "common/android/about_widget.h"
+#include "common/android/button.h"
 #include "common/android/combo_box.h"
 #include "common/android/icon_button.h"
 #include "common/android/label.h"
@@ -34,6 +35,8 @@
 #include "common/android/switch.h"
 #include "host/database.h"
 #include "host/user_settings.h"
+#include "host/android/user_editor_widget.h"
+#include "host/android/users_widget.h"
 #include "proto/peer.h"
 
 namespace {
@@ -50,17 +53,34 @@ SettingsWidget::SettingsWidget(QWidget* parent)
       stack_(new QStackedWidget(this)),
       settings_page_(new ScrollArea()),
       about_page_(new AboutWidget()),
-      about_button_(new IconButton(":/img/material/info.svg", this))
+      users_page_(new UsersWidget()),
+      editor_page_(new UserEditorWidget()),
+      about_button_(new IconButton(":/img/material/info.svg", this)),
+      add_user_button_(new IconButton(":/img/material/add_2.svg", this)),
+      save_button_(new IconButton(":/img/done.svg", this))
 {
-    // The about action lives in the app bar; AppBar::setActions() reparents and shows it. Hidden by
-    // default so it does not linger in this widget.
+    // The sub-page actions live in the app bar; AppBar::setActions() reparents and shows them. Hidden
+    // by default so they do not linger in this widget.
     about_button_->hide();
     connect(about_button_, &IconButton::clicked, this, &SettingsWidget::showAbout);
+
+    add_user_button_->hide();
+    connect(add_user_button_, &IconButton::clicked, this, [this]() { showUserEditor(0); });
+
+    save_button_->hide();
+    connect(save_button_, &IconButton::clicked, this, [this]() { editor_page_->save(); });
+
+    connect(users_page_, &UsersWidget::sig_editUser, this, &SettingsWidget::showUserEditor);
+
+    // A saved user returns to the (reloaded) list.
+    connect(editor_page_, &UserEditorWidget::sig_saved, this, &SettingsWidget::showUsers);
 
     buildSettings();
 
     stack_->addWidget(settings_page_);
     stack_->addWidget(about_page_);
+    stack_->addWidget(users_page_);
+    stack_->addWidget(editor_page_);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -77,11 +97,17 @@ void SettingsWidget::retranslate()
     // come from UserSettings, so nothing is lost.
     buildSettings();
     about_page_->retranslate();
+    users_page_->retranslate();
+    editor_page_->retranslate();
 }
 
 //--------------------------------------------------------------------------------------------------
 QList<QWidget*> SettingsWidget::appBarActions() const
 {
+    if (isEditorPage())
+        return { save_button_ };
+    if (isUsersPage())
+        return { add_user_button_ };
     if (isAboutPage())
         return {};
     return { about_button_ };
@@ -90,7 +116,14 @@ QList<QWidget*> SettingsWidget::appBarActions() const
 //--------------------------------------------------------------------------------------------------
 void SettingsWidget::goBack()
 {
-    if (!isAboutPage())
+    // The user editor is opened from the user list, so it returns there rather than to the settings.
+    if (isEditorPage())
+    {
+        showUsers();
+        return;
+    }
+
+    if (!isAboutPage() && !isUsersPage())
         return;
 
     stack_->setCurrentWidget(settings_page_);
@@ -113,9 +146,39 @@ void SettingsWidget::showAbout()
 }
 
 //--------------------------------------------------------------------------------------------------
+void SettingsWidget::showUsers()
+{
+    users_page_->reload();
+    stack_->setCurrentWidget(users_page_);
+    emit sig_titleChanged(tr("Users"), true);
+    emit sig_appBarActionsChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::showUserEditor(qint64 entry_id)
+{
+    editor_page_->load(entry_id);
+    stack_->setCurrentWidget(editor_page_);
+    emit sig_titleChanged(editor_page_->isEditing() ? tr("Edit User") : tr("Add User"), true);
+    emit sig_appBarActionsChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
 bool SettingsWidget::isAboutPage() const
 {
     return stack_->currentWidget() == about_page_;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SettingsWidget::isUsersPage() const
+{
+    return stack_->currentWidget() == users_page_;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SettingsWidget::isEditorPage() const
+{
+    return stack_->currentWidget() == editor_page_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -129,6 +192,7 @@ void SettingsWidget::buildSettings()
 
     buildInterfaceSection(layout);
     buildAccessSection(layout);
+    buildUsersSection(layout);
     buildRouterSection(layout);
     layout->addStretch();
 
@@ -210,6 +274,16 @@ void SettingsWidget::buildAccessSection(QVBoxLayout* layout)
     // The Android host implements only the remote desktop and file transfer sessions.
     addSessionSwitch(layout, tr("Desktop"), proto::peer::SESSION_TYPE_DESKTOP, sessions);
     addSessionSwitch(layout, tr("File Transfer"), proto::peer::SESSION_TYPE_FILE_TRANSFER, sessions);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::buildUsersSection(QVBoxLayout* layout)
+{
+    addSectionHeader(layout, tr("Users"));
+
+    Button* manage = new Button(tr("Manage users"), Button::Role::FILLED);
+    connect(manage, &Button::clicked, this, &SettingsWidget::showUsers);
+    layout->addWidget(manage);
 }
 
 //--------------------------------------------------------------------------------------------------
