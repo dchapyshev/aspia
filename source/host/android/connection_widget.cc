@@ -31,6 +31,7 @@
 #include "common/android/icon_button.h"
 #include "common/android/label.h"
 #include "common/android/switch.h"
+#include "common/desktop/session_type.h"
 #include "host/user_settings.h"
 #include "proto/peer.h"
 
@@ -39,6 +40,12 @@ namespace {
 constexpr int kContentMargin = 16;
 constexpr int kCardSpacing = 16;
 constexpr int kRouterIconSize = 22;
+constexpr int kSessionIconSize = 40;
+
+const char kDisplayNameProperty[] = "aspia_display_name";
+const char kComputerNameProperty[] = "aspia_computer_name";
+const char kShowComputerNameProperty[] = "aspia_show_computer_name";
+const char kNameLabelProperty[] = "aspia_name_label";
 
 //--------------------------------------------------------------------------------------------------
 // Opens the system share sheet with |text| as plain text (ACTION_SEND).
@@ -157,6 +164,11 @@ ConnectionWidget::ConnectionWidget(QWidget* parent)
     access_card->contentLayout()->addWidget(file_transfer_session_);
     layout->addWidget(access_card);
 
+    clients_card_ = new Card(content);
+    clients_layout_ = clients_card_->contentLayout();
+    clients_card_->hide();
+    layout->addWidget(clients_card_);
+
     // Push the router state to the bottom edge, above the navigation bar.
     layout->addStretch();
 
@@ -216,6 +228,54 @@ void ConnectionWidget::setRouterState(RouterState state, const QString& router)
 }
 
 //--------------------------------------------------------------------------------------------------
+void ConnectionWidget::setConnectedClients(const QList<Server::ClientInfo>& clients)
+{
+    // Drop the previous rows.
+    while (QLayoutItem* item = clients_layout_->takeAt(0))
+    {
+        delete item->widget();
+        delete item;
+    }
+
+    // The card is shown only while at least one client is connected.
+    clients_card_->setVisible(!clients.isEmpty());
+
+    for (const Server::ClientInfo& client : clients)
+    {
+        QWidget* row = new QWidget(clients_card_);
+
+        QHBoxLayout* row_layout = new QHBoxLayout(row);
+        row_layout->setContentsMargins(0, 0, 0, 0);
+        row_layout->setSpacing(kCardSpacing / 2);
+
+        QLabel* icon = new QLabel(row);
+        icon->setFixedSize(kSessionIconSize, kSessionIconSize);
+        icon->setPixmap(sessionIcon(client.session_type).pixmap(
+            QSize(kSessionIconSize, kSessionIconSize), devicePixelRatioF()));
+
+        const QString primary = !client.display_name.isEmpty() ? client.display_name : client.computer_name;
+        Label* name = new Label(primary, Label::Role::BODY, row);
+        Label* type = new Label(sessionName(client.session_type), Label::Role::CAPTION, row);
+
+        QVBoxLayout* text_layout = new QVBoxLayout();
+        text_layout->setContentsMargins(0, 0, 0, 0);
+        text_layout->setSpacing(0);
+        text_layout->addWidget(name);
+        text_layout->addWidget(type);
+
+        row_layout->addWidget(icon, 0, Qt::AlignVCenter);
+        row_layout->addLayout(text_layout, 1);
+
+        row->setProperty(kDisplayNameProperty, client.display_name);
+        row->setProperty(kComputerNameProperty, client.computer_name);
+        row->setProperty(kNameLabelProperty, QVariant::fromValue<QObject*>(name));
+        row->installEventFilter(this);
+
+        clients_layout_->addWidget(row);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 QList<QWidget*> ConnectionWidget::appBarActions() const
 {
     return { share_button_ };
@@ -230,6 +290,29 @@ void ConnectionWidget::changeEvent(QEvent* event)
     // the theme changes.
     if (event->type() == QEvent::PaletteChange)
         updateRouterRow();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ConnectionWidget::eventFilter(QObject* watched, QEvent* event)
+{
+    if (event->type() == QEvent::MouseButtonRelease)
+    {
+        const QString display = watched->property(kDisplayNameProperty).toString();
+        const QString computer = watched->property(kComputerNameProperty).toString();
+
+        // Toggle only when both names are present; otherwise the single one always shows.
+        if (!display.isEmpty() && !computer.isEmpty())
+        {
+            const bool show_computer = !watched->property(kShowComputerNameProperty).toBool();
+            watched->setProperty(kShowComputerNameProperty, show_computer);
+
+            auto* name = qobject_cast<Label*>(watched->property(kNameLabelProperty).value<QObject*>());
+            if (name)
+                name->setText(show_computer ? computer : display);
+        }
+    }
+
+    return ScrollArea::eventFilter(watched, event);
 }
 
 //--------------------------------------------------------------------------------------------------

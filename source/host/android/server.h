@@ -21,9 +21,14 @@
 
 #include <QList>
 #include <QObject>
+#include <QString>
 
 #include "base/peer/host_id.h"
 #include "base/scoped_qpointer.h"
+
+namespace proto::peer {
+enum SessionType : int;
+} // namespace proto::peer
 
 namespace proto::user {
 class RouterState;
@@ -47,6 +52,14 @@ public:
     explicit Server(QObject* parent = nullptr);
     ~Server() final;
 
+    struct ClientInfo
+    {
+        quint32 client_id = 0;
+        QString display_name;
+        QString computer_name;
+        proto::peer::SessionType session_type = {};
+    };
+
 public slots:
     // Both run on the I/O thread (invoke queued after moveToThread).
     void start();
@@ -55,10 +68,12 @@ public slots:
 signals:
     void sig_credentialsChanged(const QString& host_id, const QString& password);
     void sig_routerStateChanged(int state, const QString& router);
+    void sig_connectedClientsChanged(const QList<ClientInfo>& clients);
 
 private slots:
     void onNewConnection();
     void onNewRelayConnection();
+    void onClientStarted();
     void onClientFinished();
     void onRouterStateChanged(const proto::user::RouterState& state);
     void onCredentialsChanged(HostId host_id, const SecureString& password);
@@ -71,9 +86,12 @@ private:
     ScopedQPointer<TcpServer> tcp_server_;
     ScopedQPointer<RouterManager> router_manager_;
     QList<Client*> file_clients_;
+    QList<ClientInfo> connected_clients_;
     ScopedQPointer<DesktopAgent> desktop_agent_;
 
     Q_DISABLE_COPY_MOVE(Server)
 };
+
+Q_DECLARE_METATYPE(Server::ClientInfo)
 
 #endif // HOST_ANDROID_SERVER_H

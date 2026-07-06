@@ -57,6 +57,7 @@ Server::Server(QObject* parent)
     : QObject(parent)
 {
     LOG(INFO) << "Ctor";
+    qRegisterMetaType<QList<ClientInfo>>();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -140,6 +141,25 @@ void Server::onNewRelayConnection()
 }
 
 //--------------------------------------------------------------------------------------------------
+void Server::onClientStarted()
+{
+    Client* client = dynamic_cast<Client*>(sender());
+    if (!client)
+        return;
+
+    LOG(INFO) << "Client started:" << client->clientId();
+
+    ClientInfo info;
+    info.client_id = client->clientId();
+    info.computer_name = client->computerName();
+    info.display_name = client->displayName();
+    info.session_type = client->sessionType();
+
+    connected_clients_.append(info);
+    emit sig_connectedClientsChanged(connected_clients_);
+}
+
+//--------------------------------------------------------------------------------------------------
 void Server::onClientFinished()
 {
     Client* client = dynamic_cast<Client*>(sender());
@@ -148,8 +168,14 @@ void Server::onClientFinished()
 
     LOG(INFO) << "Client finished:" << client->clientId();
 
-    file_clients_.removeOne(client);
-    client->deleteLater();
+    const quint32 client_id = client->clientId();
+    connected_clients_.removeIf([client_id](const ClientInfo& info) { return info.client_id == client_id; });
+
+    // Only file clients are owned here; desktop clients are owned by the desktop agent.
+    if (file_clients_.removeOne(client))
+        client->deleteLater();
+
+    emit sig_connectedClientsChanged(connected_clients_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -212,6 +238,10 @@ void Server::startClient(TcpChannel* tcp_channel, const QString& stun_host, quin
         desktop_client->setFeature(Client::FEATURE_UDP, true);
         desktop_client->setFeature(Client::FEATURE_BANDWIDTH, true);
 
+        // Track the client for the connected-clients list; the agent owns and deletes it.
+        connect(desktop_client, &Client::sig_started, this, &Server::onClientStarted);
+        connect(desktop_client, &Client::sig_finished, this, &Server::onClientFinished);
+
         desktop_agent_->addClient(desktop_client);
         desktop_client->start(stun_host, stun_port);
         return;
@@ -227,6 +257,7 @@ void Server::startClient(TcpChannel* tcp_channel, const QString& stun_host, quin
     FileClient* file_client = new FileClient(tcp_channel, this);
     file_client->setFeature(Client::FEATURE_UDP, true);
 
+    connect(file_client, &Client::sig_started, this, &Server::onClientStarted);
     connect(file_client, &Client::sig_finished, this, &Server::onClientFinished);
 
     file_clients_.append(file_client);

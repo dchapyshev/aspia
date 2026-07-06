@@ -19,14 +19,15 @@
 #ifndef HOST_ANDROID_MAIN_WINDOW_H
 #define HOST_ANDROID_MAIN_WINDOW_H
 
+#include <QList>
 #include <QWidget>
 
 #include "base/scoped_qpointer.h"
+#include "host/android/server.h"
 
 class AppBar;
 class BottomNavigationBar;
 class ConnectionWidget;
-class Server;
 class QScrollArea;
 class QStackedWidget;
 
@@ -59,6 +60,7 @@ private slots:
     // Forwarded from the host server (queued from the I/O thread) to the connection screen.
     void onCredentialsChanged(const QString& host_id, const QString& password);
     void onRouterStateChanged(int state, const QString& router);
+    void onConnectedClientsChanged(const QList<Server::ClientInfo>& clients);
 
 private:
     void scrollFocusIntoView();

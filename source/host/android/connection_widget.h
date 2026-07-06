@@ -23,11 +23,14 @@
 #include <QString>
 
 #include "common/android/scroll_area.h"
+#include "host/android/server.h"
 
+class Card;
 class IconButton;
 class Label;
 class Switch;
 class QLabel;
+class QVBoxLayout;
 
 // Home section of the Android host: shows the connection credentials (host ID and one-time password)
 // and the router connection state, mirroring the desktop host main window. The values are set through
@@ -51,6 +54,7 @@ public:
     void setHostId(const QString& host_id);
     void setPassword(const QString& password);
     void setRouterState(RouterState state, const QString& router = QString());
+    void setConnectedClients(const QList<Server::ClientInfo>& clients);
 
     // The app bar action for this section (shares the host ID and one-time password).
     QList<QWidget*> appBarActions() const;
@@ -62,6 +66,9 @@ signals:
 protected:
     // QWidget implementation.
     void changeEvent(QEvent* event) final;
+
+    // QObject implementation.
+    bool eventFilter(QObject* watched, QEvent* event) final;
 
 private slots:
     void onShare();
@@ -79,6 +86,8 @@ private:
     Label* access_caption_ = nullptr;
     Switch* desktop_session_ = nullptr;
     Switch* file_transfer_session_ = nullptr;
+    Card* clients_card_ = nullptr;
+    QVBoxLayout* clients_layout_ = nullptr;
     QLabel* router_icon_ = nullptr;
     Label* router_text_ = nullptr;
 

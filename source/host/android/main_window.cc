@@ -102,6 +102,8 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
             this, &AndroidMainWindow::onCredentialsChanged);
     connect(server_, &Server::sig_routerStateChanged,
             this, &AndroidMainWindow::onRouterStateChanged);
+    connect(server_, &Server::sig_connectedClientsChanged,
+            this, &AndroidMainWindow::onConnectedClientsChanged);
     server_->moveToThread(GuiApplication::ioThread());
     QMetaObject::invokeMethod(server_, &Server::start, Qt::QueuedConnection);
 
@@ -261,6 +263,12 @@ void AndroidMainWindow::onRouterStateChanged(int state, const QString& router)
     }
 
     connection_->setRouterState(mapped, router);
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onConnectedClientsChanged(const QList<Server::ClientInfo>& clients)
+{
+    connection_->setConnectedClients(clients);
 }
 
 //--------------------------------------------------------------------------------------------------
