@@ -307,13 +307,13 @@ public final class FloatingMenu
         int pad = Math.round(6 * density);
         panel.setPadding(pad, pad, pad, pad);
 
-        addItem(panel, context, "ic_menu_clipboard", "Sync clipboard",
+        addItem(panel, context, "ic_menu_clipboard", str(context, "menu_sync_clipboard"),
                 () -> { syncClipboard(context); closeMenu(); });
-        addItem(panel, context, "ic_menu_back", "Back",
+        addItem(panel, context, "ic_menu_back", str(context, "menu_back"),
                 () -> { InputService.globalAction(1); closeMenu(); });
-        addItem(panel, context, "ic_menu_home", "Home",
+        addItem(panel, context, "ic_menu_home", str(context, "menu_home"),
                 () -> { InputService.globalAction(2); closeMenu(); });
-        addItem(panel, context, "ic_menu_recents", "Recents",
+        addItem(panel, context, "ic_menu_recents", str(context, "menu_recents"),
                 () -> { InputService.globalAction(3); closeMenu(); });
 
         panel.setOnTouchListener((view, event) ->
@@ -369,6 +369,13 @@ public final class FloatingMenu
         }
 
         sMenu = null;
+    }
+
+    // Resolves a localized string resource by name (falls back to the name if it is missing).
+    private static String str(Context context, String name)
+    {
+        int id = context.getResources().getIdentifier(name, "string", context.getPackageName());
+        return id != 0 ? context.getString(id) : name;
     }
 
     private static void addItem(LinearLayout panel, Context context, String iconName, String label,

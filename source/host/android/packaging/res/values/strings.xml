@@ -2,4 +2,8 @@
 <resources>
     <string name="app_name">Aspia Host</string>
     <string name="accessibility_service_description">Allows Aspia Host to inject remote taps, swipes and key actions during a session.</string>
+    <string name="menu_sync_clipboard">Sync clipboard</string>
+    <string name="menu_back">Back</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_recents">Recents</string>
 </resources>

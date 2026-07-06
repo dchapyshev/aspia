@@ -2,4 +2,8 @@
 <resources>
     <string name="app_name">Хост Aspia</string>
     <string name="accessibility_service_description">Позволяет Хосту Aspia передавать удаленные касания, свайпы и действия клавиш во время сессии.</string>
+    <string name="menu_sync_clipboard">Синхр. буфер обмена</string>
+    <string name="menu_back">Назад</string>
+    <string name="menu_home">Домой</string>
+    <string name="menu_recents">Недавние</string>
 </resources>

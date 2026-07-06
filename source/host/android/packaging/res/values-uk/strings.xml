@@ -2,4 +2,8 @@
 <resources>
     <string name="app_name">Хост Aspia</string>
     <string name="accessibility_service_description">Дозволяє Хосту Aspia передавати віддалені дотики, свайпи та дії клавіш під час сесії.</string>
+    <string name="menu_sync_clipboard">Синхронізувати буфер обміну</string>
+    <string name="menu_back">Назад</string>
+    <string name="menu_home">Додому</string>
+    <string name="menu_recents">Останні</string>
 </resources>
