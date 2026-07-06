@@ -182,13 +182,6 @@ QTreeWidget* SysInfoWidgetLicenses::treeWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SysInfoWidgetLicenses::retranslate()
-{
-    ui->retranslateUi(this);
-    SysInfoWidget::retranslate();
-}
-
-//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetLicenses::onContextMenu(const QPoint& point)
 {
     QTreeWidgetItem* current_item = ui->tree->itemAt(point);

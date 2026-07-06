@@ -172,13 +172,6 @@ QTreeWidget* SysInfoWidgetPrinters::treeWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SysInfoWidgetPrinters::retranslate()
-{
-    ui->retranslateUi(this);
-    SysInfoWidget::retranslate();
-}
-
-//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetPrinters::onContextMenu(const QPoint& point)
 {
     QTreeWidgetItem* current_item = ui->tree->itemAt(point);

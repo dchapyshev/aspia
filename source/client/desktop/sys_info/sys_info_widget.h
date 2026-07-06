@@ -56,15 +56,6 @@ protected:
     void copyRow(QTreeWidgetItem* item);
     void copyColumn(QTreeWidgetItem* item, int column);
 
-    // QWidget implementation.
-    void changeEvent(QEvent* event) override;
-
-    // Called on QEvent::LanguageChange. Subclasses override to re-apply translated text on
-    // their own UI elements (typically by invoking ui.retranslateUi(this) and then calling
-    // SysInfoWidget::retranslate() which re-requests the data from the host so the tree
-    // items are rebuilt by setSystemInfo() with the new translations).
-    virtual void retranslate();
-
 private:
     bool state_restored_ = false;
 };

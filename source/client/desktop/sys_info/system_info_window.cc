@@ -353,22 +353,6 @@ void SystemInfoWindow::onInternalReset()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SystemInfoWindow::changeEvent(QEvent* event)
-{
-    ClientWindow::changeEvent(event);
-
-    if (event->type() == QEvent::LanguageChange)
-    {
-        ui->retranslateUi(this);
-
-        // Category labels are tr() strings cached in QTreeWidgetItem text. Rebuild the tree
-        // so the new language is picked up; current selection is restored from current_widget_.
-        ui->tree_category->clear();
-        buildCategoryTree();
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void SystemInfoWindow::onCategoryItemClicked(QTreeWidgetItem* item, int /* column */)
 {
     CategoryItem* category_item = static_cast<CategoryItem*>(item);

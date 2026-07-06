@@ -62,9 +62,6 @@ protected:
     // ClientWindow implementation.
     void onInternalReset() final;
 
-    // QWidget implementation.
-    void changeEvent(QEvent* event) final;
-
 private slots:
     void onCategoryItemClicked(QTreeWidgetItem* item, int column);
     void onRefresh();

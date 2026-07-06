@@ -46,10 +46,6 @@ public:
     void setHostVersion(const QVersionNumber& host_version);
     void setClientVersion(const QVersionNumber& client_version);
 
-protected:
-    // SysInfoWidget implementation.
-    void retranslate() final;
-
 private slots:
     void onContextMenu(const QPoint& point);
 

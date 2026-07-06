@@ -175,13 +175,6 @@ QTreeWidget* SysInfoWidgetVideoAdapters::treeWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SysInfoWidgetVideoAdapters::retranslate()
-{
-    ui->retranslateUi(this);
-    SysInfoWidget::retranslate();
-}
-
-//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetVideoAdapters::onContextMenu(const QPoint& point)
 {
     QTreeWidgetItem* current_item = ui->tree->itemAt(point);
