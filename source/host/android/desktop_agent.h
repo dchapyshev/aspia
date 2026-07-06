@@ -116,6 +116,10 @@ private:
 
     proto::video::Encoding video_encoding_;
 
+    // Whether the hardware H264 encoder is usable on this device. Cleared for good when it fails at
+    // runtime, so the fallback to VP8 is not overridden by the next client (re)configuration.
+    bool h264_enabled_;
+
     QSize source_size_;
     QSize preferred_size_;
     quint64 frame_count_ = 0;

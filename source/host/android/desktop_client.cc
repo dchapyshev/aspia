@@ -135,10 +135,11 @@ void DesktopClient::handleControl(const QByteArray& buffer)
 
         vp8_supported_ = has_flag(kFlagVideoVP8);
         vp9_supported_ = has_flag(kFlagVideoVP9);
+        h264_supported_ = has_flag(kFlagVideoH264);
         opus_supported_ = has_flag(kFlagAudioOpus);
 
         LOG(INFO) << "Client capabilities: vp8:" << vp8_supported_ << "vp9:" << vp9_supported_
-                  << "opus:" << opus_supported_;
+                  << "h264:" << h264_supported_ << "opus:" << opus_supported_;
 
         sendCapabilities();
 

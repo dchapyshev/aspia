@@ -88,7 +88,9 @@ endif()
 if (ANDROID)
     collect_sources(SOURCE_BASE_CODEC
         video_decoder_h264_mc.cc
-        video_decoder_h264_mc.h)
+        video_decoder_h264_mc.h
+        video_encoder_h264_mc.cc
+        video_encoder_h264_mc.h)
 endif()
 
 collect_sources(SOURCE_BASE_CODEC_TESTS

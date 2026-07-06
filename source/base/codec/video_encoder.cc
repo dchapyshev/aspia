@@ -30,6 +30,10 @@
 #include "base/codec/video_encoder_h264_vt.h"
 #endif
 
+#if defined(Q_OS_ANDROID)
+#include "base/codec/video_encoder_h264_mc.h"
+#endif
+
 //--------------------------------------------------------------------------------------------------
 // static
 const size_t VideoEncoder::kInitialEncodeBufferSize = 1 * 1024 * 1024; // 1 MB
@@ -52,6 +56,11 @@ std::unique_ptr<VideoEncoder> VideoEncoder::create(proto::video::Encoding encodi
 #if defined(Q_OS_MACOS)
         case proto::video::ENCODING_H264:
             return VideoEncoderH264VT::create();
+#endif
+
+#if defined(Q_OS_ANDROID)
+        case proto::video::ENCODING_H264:
+            return VideoEncoderH264MC::create();
 #endif
 
         default:
@@ -78,6 +87,11 @@ bool VideoEncoder::isSupported(proto::video::Encoding encoding)
 #if defined(Q_OS_MACOS)
         case proto::video::ENCODING_H264:
             return VideoEncoderH264VT::isHardwareSupported();
+#endif
+
+#if defined(Q_OS_ANDROID)
+        case proto::video::ENCODING_H264:
+            return VideoEncoderH264MC::isHardwareSupported();
 #endif
 
         default:

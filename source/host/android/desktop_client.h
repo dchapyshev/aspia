@@ -45,6 +45,7 @@ public:
     bool isConfigured() const { return configured_; }
     bool isVp8Supported() const { return vp8_supported_; }
     bool isVp9Supported() const { return vp9_supported_; }
+    bool isH264Supported() const { return h264_supported_; }
     bool isOpusSupported() const { return opus_supported_; }
     bool isAudioEnabled() const { return audio_enabled_; }
     const QSize& preferredSize() const { return preferred_size_; }
@@ -82,6 +83,7 @@ private:
     // Codecs the connected client advertised; the agent uses them to pick a common encoding.
     bool vp8_supported_ = false;
     bool vp9_supported_ = false;
+    bool h264_supported_ = false;
     bool opus_supported_ = false;
 
     // Set once the client has sent its config; the agent captures only for configured clients.
