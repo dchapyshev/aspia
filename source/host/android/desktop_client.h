@@ -19,6 +19,8 @@
 #ifndef HOST_ANDROID_DESKTOP_CLIENT_H
 #define HOST_ANDROID_DESKTOP_CLIENT_H
 
+#include <QSize>
+
 #include "host/client.h"
 
 class DesktopClient final : public Client
@@ -29,12 +31,44 @@ public:
     explicit DesktopClient(TcpChannel* tcp_channel, QObject* parent = nullptr);
     ~DesktopClient() final;
 
+    bool isConfigured() const { return configured_; }
+    bool isVp8Supported() const { return vp8_supported_; }
+    bool isVp9Supported() const { return vp9_supported_; }
+    const QSize& preferredSize() const { return preferred_size_; }
+
+    // Forward shared session data (encoded once by the DesktopAgent) to this client's channel.
+    void onVideoData(const QByteArray& buffer, bool is_key_frame);
+    void onScreenListData(const QByteArray& buffer);
+
+signals:
+    void sig_configured();
+    void sig_keyFrameRequested();
+    void sig_preferredSizeChanged();
+    void sig_screenListRequested();
+
 protected:
     // Client implementation.
     void onStart() final;
     void onMessage(quint8 channel_id, const QByteArray& buffer) final;
 
 private:
+    void handleControl(const QByteArray& buffer);
+    void handleVideoControl(const QByteArray& buffer);
+    void handleScreenControl(const QByteArray& buffer);
+    void sendCapabilities();
+
+    // Codecs the connected client advertised; the agent uses them to pick a common encoding.
+    bool vp8_supported_ = false;
+    bool vp9_supported_ = false;
+
+    // Set once the client has sent its config; the agent captures only for configured clients.
+    bool configured_ = false;
+
+    // Video is muted for this client while it is paused; the agent keeps encoding for the others.
+    bool is_paused_ = false;
+
+    QSize preferred_size_;
+
     Q_DISABLE_COPY_MOVE(DesktopClient)
 };
 

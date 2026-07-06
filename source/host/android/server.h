@@ -30,6 +30,7 @@ class RouterState;
 } // namespace proto::user
 
 class Client;
+class DesktopAgent;
 class RouterManager;
 class SecureString;
 class TcpChannel;
@@ -69,7 +70,8 @@ private:
 
     ScopedQPointer<TcpServer> tcp_server_;
     ScopedQPointer<RouterManager> router_manager_;
-    QList<Client*> clients_;
+    QList<Client*> file_clients_;
+    ScopedQPointer<DesktopAgent> desktop_agent_;
 
     Q_DISABLE_COPY_MOVE(Server)
 };

@@ -90,8 +90,8 @@ private:
     QRect screen_rect_;
     QPoint dpi_ = QPoint(96, 96);
 
-    // Filled by onStarted() before start()'s main-thread call returns.
-    bool start_ok_ = false;
+    // Default display geometry queried synchronously in start(), used to report a resolution before the
+    // projection (which needs user consent) is running.
     QSize start_size_;
     QPoint start_dpi_ = QPoint(96, 96);
 
@@ -100,6 +100,10 @@ private:
     QMutex frame_mutex_;
     FrameQueue<Frame> queue_;
     bool has_new_frame_ = false;
+
+    // Set (under |frame_mutex_|) when the user declined the screen capture consent; captureFrame() then
+    // reports a permanent error so the caller stops instead of waiting for frames that never arrive.
+    bool consent_failed_ = false;
 
     Q_DISABLE_COPY_MOVE(ScreenCapturerAndroid)
 };

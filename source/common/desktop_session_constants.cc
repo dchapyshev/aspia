@@ -46,6 +46,7 @@ const char kFlagAudioOpus[] = "opus";
 const char kFlagOSWindows[] = "windows";
 const char kFlagOSMacOS[] = "macos";
 const char kFlagOSLinux[] = "linux";
+const char kFlagOSAndroid[] = "android";
 const char kFlagPasteAsKeystrokes[] = "paste_as_keystrokes";
 const char kFlagClipboard[] = "clipboard";
 const char kFlagCursorShape[] = "cursor_shape";

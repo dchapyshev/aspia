@@ -6,6 +6,9 @@
     android:versionName="1.0">
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"  />
     <uses-permission android:name="android.permission.INTERNET"  />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"  />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION"  />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"  />
     <supports-screens
         android:anyDensity="true"
         android:largeScreens="true"
@@ -40,6 +43,17 @@
                 android:name="android.app.arguments"
                 android:value="" />
         </activity>
+
+        <activity
+            android:name="org.aspia.host.ScreenCapturePermissionActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:excludeFromRecents="true"
+            android:exported="false" />
+
+        <service
+            android:name="org.aspia.host.ScreenCaptureService"
+            android:foregroundServiceType="mediaProjection"
+            android:exported="false" />
 
         <service
             android:name="org.aspia.host.InputService"

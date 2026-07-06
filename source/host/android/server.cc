@@ -33,6 +33,7 @@
 #include "host/host_user_list.h"
 #include "host/router_manager.h"
 #include "host/user_settings.h"
+#include "host/android/desktop_agent.h"
 #include "host/android/desktop_client.h"
 #include "host/android/file_client.h"
 #include "proto/peer.h"
@@ -87,6 +88,10 @@ void Server::start()
 
     LOG(INFO) << "Host server started on port" << db.tcpPort();
 
+    // Shared engine for all desktop clients; it owns them and captures only while at least one is
+    // connected.
+    desktop_agent_ = new DesktopAgent(this);
+
     if (db.isRouterEnabled())
         connectToRouter();
 }
@@ -97,6 +102,7 @@ void Server::stop()
     if (!tcp_server_)
         return;
 
+    desktop_agent_.reset();
     router_manager_.reset();
     tcp_server_.reset();
 
@@ -142,7 +148,7 @@ void Server::onClientFinished()
 
     LOG(INFO) << "Client finished:" << client->clientId();
 
-    clients_.removeOne(client);
+    file_clients_.removeOne(client);
     client->deleteLater();
 }
 
@@ -199,42 +205,32 @@ void Server::startClient(TcpChannel* tcp_channel, const QString& stun_host, quin
 
     const auto session_type = static_cast<proto::peer::SessionType>(tcp_channel->peerSessionType());
 
-    Client* client = nullptr;
-
-    switch (session_type)
+    // Desktop clients are owned and tracked by the shared agent; file transfer clients are kept here.
+    if (session_type == proto::peer::SESSION_TYPE_DESKTOP)
     {
-        case proto::peer::SESSION_TYPE_DESKTOP:
-        {
-            DesktopClient* desktop_client = new DesktopClient(tcp_channel, this);
-            desktop_client->setFeature(Client::FEATURE_UDP, true);
-            desktop_client->setFeature(Client::FEATURE_BANDWIDTH, true);
-            client = desktop_client;
-        }
-        break;
+        DesktopClient* desktop_client = new DesktopClient(tcp_channel, this);
+        desktop_client->setFeature(Client::FEATURE_UDP, true);
+        desktop_client->setFeature(Client::FEATURE_BANDWIDTH, true);
 
-        case proto::peer::SESSION_TYPE_FILE_TRANSFER:
-        {
-            FileClient* file_client = new FileClient(tcp_channel, this);
-            file_client->setFeature(Client::FEATURE_UDP, true);
-            client = file_client;
-        }
-        break;
-
-        default:
-            break;
+        desktop_agent_->addClient(desktop_client);
+        desktop_client->start(stun_host, stun_port);
+        return;
     }
 
-    if (!client)
+    if (session_type != proto::peer::SESSION_TYPE_FILE_TRANSFER)
     {
         LOG(ERROR) << "Unsupported session type:" << session_type;
         tcp_channel->deleteLater();
         return;
     }
 
-    connect(client, &Client::sig_finished, this, &Server::onClientFinished);
+    FileClient* file_client = new FileClient(tcp_channel, this);
+    file_client->setFeature(Client::FEATURE_UDP, true);
 
-    clients_.append(client);
+    connect(file_client, &Client::sig_finished, this, &Server::onClientFinished);
+
+    file_clients_.append(file_client);
 
     // Direct connections carry no STUN endpoint; relayed connections get one from the router.
-    client->start(stun_host, stun_port);
+    file_client->start(stun_host, stun_port);
 }

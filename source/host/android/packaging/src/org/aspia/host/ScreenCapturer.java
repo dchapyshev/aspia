@@ -22,35 +22,31 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
 import android.media.Image;
 import android.media.ImageReader;
 import android.media.projection.MediaProjection;
+import android.media.projection.MediaProjectionConfig;
 import android.media.projection.MediaProjectionManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.WindowMetrics;
+import android.view.Display;
 
 import java.nio.ByteBuffer;
 
-// MediaProjection screen capture backing ScreenCapturerAndroid. The native side drives start()/stop()
-// through JNI; produced images are forwarded to nativeOnFrame() on a dedicated handler thread. A single
-// capture session is active at a time (the host serves one desktop), so the state is kept static and the
-// token identifies the owning native capturer.
+// MediaProjection screen capture backing ScreenCapturerAndroid. The native side asks for a capture via
+// requestCapture(), which launches the consent Activity; on consent the ScreenCaptureService (a
+// foreground service of type mediaProjection, required to obtain the projection on modern Android)
+// calls startProjection() and frames are forwarded to nativeOnFrame() on a dedicated handler thread. A
+// single capture session is active at a time (the host serves one desktop), so the state is kept static
+// and the token identifies the owning native capturer.
 public final class ScreenCapturer
 {
     private static final String TAG = "Aspia";
-
-    // Screen capture consent, obtained from a MediaProjection permission Intent (Activity result). The
-    // flow that requests it is wired in separately; start() reuses the stored result. getMediaProjection
-    // also requires a running foreground service of type mediaProjection on modern Android.
-    private static int sResultCode = Activity.RESULT_CANCELED;
-    private static Intent sResultData = null;
 
     private static MediaProjection sProjection = null;
     private static VirtualDisplay sVirtualDisplay = null;
@@ -70,38 +66,84 @@ public final class ScreenCapturer
         // Static-only.
     }
 
-    // Returns the Intent that asks the user for screen capture consent; the resulting resultCode and
-    // data Intent must be handed back through setPermissionResult() before start() is called.
+    // Returns the Intent that asks the user for screen capture consent. On Android 14+ the consent
+    // dialog is configured to capture the whole display, so it defaults to (and is locked on) the
+    // entire screen instead of a single app - the host needs the full screen.
     public static Intent createPermissionIntent(Activity activity)
     {
         MediaProjectionManager manager = (MediaProjectionManager)
             activity.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+        {
+            return manager.createScreenCaptureIntent(
+                MediaProjectionConfig.createConfigForDefaultDisplay());
+        }
+
         return manager.createScreenCaptureIntent();
     }
 
-    // Stores the consent result from the permission Intent for the next start().
-    public static synchronized void setPermissionResult(int resultCode, Intent data)
+    // Real pixel geometry of the default display; usable before the projection exists so the native side
+    // can report a screen resolution as soon as the capturer is created.
+    private static DisplayMetrics realMetrics(Context context)
     {
-        sResultCode = resultCode;
-        sResultData = data;
+        DisplayManager manager = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
+        Display display = manager.getDisplay(Display.DEFAULT_DISPLAY);
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getRealMetrics(metrics);
+        return metrics;
     }
 
-    // Starts the projection and begins delivering frames. Reports the outcome and the chosen virtual
-    // display geometry through nativeOnStarted() before returning.
-    public static synchronized void start(Activity activity, long token)
+    public static int displayWidth(Context context)
+    {
+        return realMetrics(context).widthPixels;
+    }
+
+    public static int displayHeight(Context context)
+    {
+        return realMetrics(context).heightPixels;
+    }
+
+    public static int displayDpi(Context context)
+    {
+        return realMetrics(context).densityDpi;
+    }
+
+    // Launches the transparent consent Activity for |token|. On consent it starts the foreground service
+    // that owns the projection; on refusal notifyDenied() reports the failure to the native side.
+    public static void requestCapture(Context context, long token)
+    {
+        Intent intent = new Intent(context, ScreenCapturePermissionActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(ScreenCapturePermissionActivity.EXTRA_TOKEN, token);
+        context.startActivity(intent);
+    }
+
+    // Reports that the user declined the screen capture consent.
+    public static void notifyDenied(long token)
+    {
+        Log.i(TAG, "Screen capture consent denied");
+        nativeOnStarted(token, false, 0, 0, 0);
+    }
+
+    // Starts the projection and begins delivering frames. Called from the foreground service so the
+    // projection is obtained while a mediaProjection-type service is running. Reports the outcome and the
+    // chosen virtual display geometry through nativeOnStarted().
+    public static synchronized void startProjection(Context context, int resultCode, Intent data,
+                                                    long token)
     {
         try
         {
-            if (sResultData == null)
+            if (data == null)
             {
-                Log.e(TAG, "Screen capture consent is not available");
+                Log.e(TAG, "Screen capture consent data is missing");
                 nativeOnStarted(token, false, 0, 0, 0);
                 return;
             }
 
             MediaProjectionManager manager = (MediaProjectionManager)
-                activity.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-            sProjection = manager.getMediaProjection(sResultCode, sResultData);
+                context.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+            sProjection = manager.getMediaProjection(resultCode, data);
             if (sProjection == null)
             {
                 Log.e(TAG, "getMediaProjection returned null");
@@ -123,24 +165,10 @@ public final class ScreenCapturer
                 }
             }, sHandler);
 
-            final int dpi = activity.getResources().getConfiguration().densityDpi;
-
-            int width;
-            int height;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
-            {
-                WindowMetrics metrics = activity.getWindowManager().getCurrentWindowMetrics();
-                Rect bounds = metrics.getBounds();
-                width = bounds.width();
-                height = bounds.height();
-            }
-            else
-            {
-                Point size = new Point();
-                activity.getWindowManager().getDefaultDisplay().getRealSize(size);
-                width = size.x;
-                height = size.y;
-            }
+            DisplayMetrics metrics = realMetrics(context);
+            final int width = metrics.widthPixels;
+            final int height = metrics.heightPixels;
+            final int dpi = metrics.densityDpi;
 
             sToken = token;
 
@@ -178,7 +206,23 @@ public final class ScreenCapturer
         }
     }
 
-    // Stops the projection and releases all resources for |token|.
+    // Stops the capture for |token|: stops the foreground service (which releases the projection in its
+    // onDestroy) and releases directly in case the service was never started.
+    public static void stopCapture(Context context, long token)
+    {
+        try
+        {
+            context.stopService(new Intent(context, ScreenCaptureService.class));
+        }
+        catch (Throwable t)
+        {
+            Log.e(TAG, "Unable to stop screen capture service", t);
+        }
+
+        stop(token);
+    }
+
+    // Releases all projection resources for |token|.
     public static synchronized void stop(long token)
     {
         if (token != sToken)

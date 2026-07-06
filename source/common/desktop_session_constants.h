@@ -45,6 +45,7 @@ extern const char kFlagAudioOpus[];
 extern const char kFlagOSWindows[];
 extern const char kFlagOSMacOS[];
 extern const char kFlagOSLinux[];
+extern const char kFlagOSAndroid[];
 extern const char kFlagPasteAsKeystrokes[];
 extern const char kFlagClipboard[];
 extern const char kFlagCursorShape[];
