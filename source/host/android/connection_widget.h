@@ -21,8 +21,8 @@
 
 #include <QList>
 #include <QString>
+#include <QWidget>
 
-#include "common/android/scroll_area.h"
 #include "host/android/server.h"
 
 class Card;
@@ -35,7 +35,7 @@ class QVBoxLayout;
 // Home section of the Android host: shows the connection credentials (host ID and one-time password)
 // and the router connection state, mirroring the desktop host main window. The values are set through
 // the public setters; the host agent that supplies them is not wired in yet.
-class ConnectionWidget final : public ScrollArea
+class ConnectionWidget final : public QWidget
 {
     Q_OBJECT
 

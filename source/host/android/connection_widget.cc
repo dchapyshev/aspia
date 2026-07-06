@@ -30,6 +30,7 @@
 #include "common/android/controls.h"
 #include "common/android/icon_button.h"
 #include "common/android/label.h"
+#include "common/android/scroll_area.h"
 #include "common/android/switch.h"
 #include "common/desktop/session_type.h"
 #include "host/user_settings.h"
@@ -92,9 +93,11 @@ void shareText(const QString& text)
 
 //--------------------------------------------------------------------------------------------------
 ConnectionWidget::ConnectionWidget(QWidget* parent)
-    : ScrollArea(parent)
+    : QWidget(parent)
 {
-    QWidget* content = new QWidget(this);
+    // Scrollable stack of cards.
+    ScrollArea* scroll_area = new ScrollArea(this);
+    QWidget* content = new QWidget(scroll_area);
 
     QVBoxLayout* layout = new QVBoxLayout(content);
     layout->setContentsMargins(kContentMargin, kContentMargin, kContentMargin, kContentMargin);
@@ -169,25 +172,30 @@ ConnectionWidget::ConnectionWidget(QWidget* parent)
     clients_card_->hide();
     layout->addWidget(clients_card_);
 
-    // Push the router state to the bottom edge, above the navigation bar.
+    // Keep the cards top-aligned; the router state sits below, outside the scroll area.
     layout->addStretch();
 
-    // Router state as a plain status line (not a card): an icon and a wrapping caption.
-    router_icon_ = new QLabel(content);
+    scroll_area->setWidget(content);
+
+    // Router state as a plain status line (not a card): an icon and a wrapping caption. Pinned below the
+    // scroll area so it stays visible however many clients are connected.
+    router_icon_ = new QLabel(this);
     router_icon_->setFixedSize(kRouterIconSize, kRouterIconSize);
 
-    router_text_ = new Label(QString(), Label::Role::CAPTION, content);
+    router_text_ = new Label(QString(), Label::Role::CAPTION, this);
     router_text_->setWordWrap(true);
 
     QHBoxLayout* router_row = new QHBoxLayout();
-    router_row->setContentsMargins(0, 0, 0, 0);
+    router_row->setContentsMargins(kContentMargin, kContentMargin, kContentMargin, kContentMargin);
     router_row->setSpacing(kCardSpacing / 2);
     router_row->addWidget(router_icon_, 0, Qt::AlignTop);
     router_row->addWidget(router_text_, 1);
 
-    layout->addLayout(router_row);
-
-    setWidget(content);
+    QVBoxLayout* outer_layout = new QVBoxLayout(this);
+    outer_layout->setContentsMargins(0, 0, 0, 0);
+    outer_layout->setSpacing(0);
+    outer_layout->addWidget(scroll_area, 1);
+    outer_layout->addLayout(router_row);
 
     // Lives in the top app bar; AppBar::setActions() reparents and shows it when this section is active.
     share_button_ = new IconButton(":/img/material/share.svg", this);
@@ -284,7 +292,7 @@ QList<QWidget*> ConnectionWidget::appBarActions() const
 //--------------------------------------------------------------------------------------------------
 void ConnectionWidget::changeEvent(QEvent* event)
 {
-    ScrollArea::changeEvent(event);
+    QWidget::changeEvent(event);
 
     // The router icon is a tinted pixmap that does not follow the palette on its own; recolor it when
     // the theme changes.
@@ -312,7 +320,7 @@ bool ConnectionWidget::eventFilter(QObject* watched, QEvent* event)
         }
     }
 
-    return ScrollArea::eventFilter(watched, event);
+    return QWidget::eventFilter(watched, event);
 }
 
 //--------------------------------------------------------------------------------------------------
