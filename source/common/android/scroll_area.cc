@@ -18,10 +18,53 @@
 
 #include "common/android/scroll_area.h"
 
+#include <QLinearGradient>
+#include <QPainter>
+#include <QResizeEvent>
+#include <QScrollBar>
 #include <QScroller>
 #include <QScrollerProperties>
+#include <QShowEvent>
 
 #include "common/android/scroll_indicator.h"
+
+namespace {
+
+constexpr int kFadeHeight = 24;
+
+//--------------------------------------------------------------------------------------------------
+// A gradient along the top or bottom edge: content fades into the background there instead of being cut
+// off abruptly. Transparent to touch so scrolling passes through.
+class FadeOverlay final : public QWidget
+{
+public:
+    FadeOverlay(QWidget* parent, bool at_bottom)
+        : QWidget(parent),
+          at_bottom_(at_bottom)
+    {
+        setAttribute(Qt::WA_TransparentForMouseEvents);
+    }
+
+protected:
+    void paintEvent(QPaintEvent* /* event */) final
+    {
+        QColor opaque = palette().color(QPalette::Window);
+        QColor transparent = opaque;
+        transparent.setAlpha(0);
+
+        QLinearGradient gradient(0, 0, 0, height());
+        gradient.setColorAt(0.0, at_bottom_ ? transparent : opaque);
+        gradient.setColorAt(1.0, at_bottom_ ? opaque : transparent);
+
+        QPainter painter(this);
+        painter.fillRect(rect(), gradient);
+    }
+
+private:
+    const bool at_bottom_;
+};
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 ScrollArea::ScrollArea(QWidget* parent)
@@ -46,8 +89,47 @@ ScrollArea::ScrollArea(QWidget* parent)
                                QScrollerProperties::OvershootAlwaysOff);
     scroller->setScrollerProperties(properties);
 
+    top_fade_ = new FadeOverlay(this, false);
+    bottom_fade_ = new FadeOverlay(this, true);
+
+    connect(verticalScrollBar(), &QScrollBar::valueChanged, this, &ScrollArea::updateFades);
+    connect(verticalScrollBar(), &QScrollBar::rangeChanged, this, [this]() { updateFades(); });
+
+    // Created last so the scroll indicator stays above the fades at the corners.
     new ScrollIndicator(this);
 }
 
 //--------------------------------------------------------------------------------------------------
 ScrollArea::~ScrollArea() = default;
+
+//--------------------------------------------------------------------------------------------------
+void ScrollArea::resizeEvent(QResizeEvent* event)
+{
+    QScrollArea::resizeEvent(event);
+
+    top_fade_->setGeometry(0, 0, width(), kFadeHeight);
+    bottom_fade_->setGeometry(0, height() - kFadeHeight, width(), kFadeHeight);
+    top_fade_->raise();
+    bottom_fade_->raise();
+
+    updateFades();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScrollArea::showEvent(QShowEvent* event)
+{
+    QScrollArea::showEvent(event);
+    updateFades();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScrollArea::updateFades()
+{
+    const QScrollBar* scroll_bar = verticalScrollBar();
+
+    top_fade_->setVisible(scroll_bar->value() > scroll_bar->minimum());
+    bottom_fade_->setVisible(scroll_bar->value() < scroll_bar->maximum());
+
+    top_fade_->update();
+    bottom_fade_->update();
+}

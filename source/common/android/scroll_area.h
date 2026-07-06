@@ -31,7 +31,19 @@ public:
     explicit ScrollArea(QWidget* parent = nullptr);
     ~ScrollArea() override;
 
+protected:
+    // QWidget implementation.
+    void resizeEvent(QResizeEvent* event) override;
+    void showEvent(QShowEvent* event) override;
+
 private:
+    // Shows the top fade only when scrolled down from the top, the bottom fade only when more content
+    // remains below.
+    void updateFades();
+
+    QWidget* top_fade_ = nullptr;
+    QWidget* bottom_fade_ = nullptr;
+
     Q_DISABLE_COPY_MOVE(ScrollArea)
 };
 
