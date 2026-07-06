@@ -337,6 +337,9 @@ void SettingsTab::onLanguageChanged()
     // The language is not switched live; the new value is applied on the next application start.
     Settings settings;
     settings.setLocale(new_locale);
+
+    MsgBox::information(this,
+        tr("The new language will be applied after the application is restarted."));
 }
 
 //--------------------------------------------------------------------------------------------------
