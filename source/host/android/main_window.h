@@ -42,7 +42,6 @@ public:
 
 protected:
     // QWidget implementation.
-    void changeEvent(QEvent* event) final;
     void resizeEvent(QResizeEvent* event) final;
 
 private slots:
@@ -62,7 +61,6 @@ private slots:
     void onRouterStateChanged(int state, const QString& router);
 
 private:
-    void retranslate();
     void scrollFocusIntoView();
     void checkAccessibilityService();
     void checkOverlayPermission();

@@ -45,8 +45,6 @@ public:
     // validation error a message is shown and nothing is written.
     void save();
 
-    void retranslate();
-
 signals:
     // The user was created, modified or deleted; the caller should return to the list.
     void sig_saved();

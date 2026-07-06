@@ -39,10 +39,7 @@ Application::Application(int& argc, char* argv[])
     UserSettings settings;
 
     if (!hasLocale(settings.locale()))
-    {
-        LOG(INFO) << "Set default locale";
         settings.setLocale(DEFAULT_LOCALE);
-    }
 
     setLocale(settings.locale());
     setTheme(settings.theme());

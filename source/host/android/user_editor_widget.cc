@@ -92,7 +92,15 @@ UserEditorWidget::UserEditorWidget(QWidget* parent)
 
     setWidget(content);
 
-    retranslate();
+    username_->setLabel(tr("User name"));
+    password_->setLabel(tr("Password"));
+    password_repeat_->setLabel(tr("Password (repeat)"));
+    password_hint_->setText(tr("Leave the password empty to keep the current one."));
+    enabled_->setText(tr("User enabled"));
+    sessions_header_->setText(tr("Allowed sessions"));
+    desktop_->setText(tr("Desktop"));
+    file_transfer_->setText(tr("File Transfer"));
+    delete_button_->setText(tr("Delete user"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -230,20 +238,6 @@ void UserEditorWidget::save()
     }
 
     emit sig_saved();
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserEditorWidget::retranslate()
-{
-    username_->setLabel(tr("User name"));
-    password_->setLabel(tr("Password"));
-    password_repeat_->setLabel(tr("Password (repeat)"));
-    password_hint_->setText(tr("Leave the password empty to keep the current one."));
-    enabled_->setText(tr("User enabled"));
-    sessions_header_->setText(tr("Allowed sessions"));
-    desktop_->setText(tr("Desktop"));
-    file_transfer_->setText(tr("File Transfer"));
-    delete_button_->setText(tr("Delete user"));
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -250,12 +250,6 @@ void LocalWidget::searchQuery(const QString& query)
 }
 
 //--------------------------------------------------------------------------------------------------
-void LocalWidget::retranslate()
-{
-    reload();
-}
-
-//--------------------------------------------------------------------------------------------------
 void LocalWidget::onItemActivated(QTreeWidgetItem* item, int /* column */)
 {
     if (!item)

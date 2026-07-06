@@ -55,8 +55,6 @@ public:
     // Returns to the list page without saving, used when the tab is left.
     void resetToList();
 
-    void retranslate();
-
 signals:
     // Requests the host bar to show |title| with a back button (editor) or the default state.
     void sig_titleChanged(const QString& title, bool back_visible);

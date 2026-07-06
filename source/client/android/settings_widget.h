@@ -44,10 +44,6 @@ public:
     explicit SettingsWidget(QWidget* parent = nullptr);
     ~SettingsWidget() final;
 
-    // Rebuilds the content with the current language. Called by the parent on a language change,
-    // because only top-level widgets receive QEvent::LanguageChange.
-    void retranslate();
-
     // The app bar action (opens the about screen). Empty while the about screen is shown.
     QList<QWidget*> appBarActions() const;
 

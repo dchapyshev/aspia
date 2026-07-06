@@ -51,8 +51,6 @@ public:
     // Clears the results (e.g. when the screen is opened).
     void reset();
 
-    void retranslate();
-
 signals:
     void sig_activated(const QVariant& data);
 

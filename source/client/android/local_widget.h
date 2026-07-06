@@ -60,8 +60,6 @@ public:
     // is shown.
     void searchQuery(const QString& query);
 
-    void retranslate();
-
 signals:
     // Requests the host bar to show |title| with a back button (host list) or the default state.
     void sig_titleChanged(const QString& title, bool back_visible);

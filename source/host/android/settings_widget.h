@@ -30,9 +30,9 @@ class UsersWidget;
 class QStackedWidget;
 class QVBoxLayout;
 
-// Settings section of the Android host. Exposes the interface preferences (language and theme),
-// applied immediately and stored in UserSettings. The about and user management screens are hosted as
-// sub-pages reached from the top app bar action.
+// Settings section of the Android host. Exposes the interface preferences (theme), applied immediately
+// and stored in UserSettings. The about and user management screens are hosted as sub-pages reached from
+// the top app bar action.
 class SettingsWidget final : public QWidget
 {
     Q_OBJECT
@@ -40,10 +40,6 @@ class SettingsWidget final : public QWidget
 public:
     explicit SettingsWidget(QWidget* parent = nullptr);
     ~SettingsWidget() final;
-
-    // Rebuilds the content with the current language. Called by the parent on a language change,
-    // because only top-level widgets receive QEvent::LanguageChange.
-    void retranslate();
 
     // The app bar action (opens the about screen). Empty while the about screen is shown.
     QList<QWidget*> appBarActions() const;

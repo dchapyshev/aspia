@@ -51,8 +51,6 @@ public:
     void setPassword(const QString& password);
     void setRouterState(RouterState state, const QString& router = QString());
 
-    void retranslate();
-
 signals:
     // The user asked for a new one-time password.
     void sig_newPasswordRequested();

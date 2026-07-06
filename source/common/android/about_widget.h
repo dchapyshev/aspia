@@ -29,9 +29,6 @@ public:
     explicit AboutWidget(QWidget* parent = nullptr);
     ~AboutWidget() final;
 
-    // Rebuilds the content with the current language.
-    void retranslate();
-
 private:
     void buildContent();
 

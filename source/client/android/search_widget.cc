@@ -218,9 +218,3 @@ void SearchWidget::reset()
     results_->clear();
     empty_label_->setVisible(false);
 }
-
-//--------------------------------------------------------------------------------------------------
-void SearchWidget::retranslate()
-{
-    empty_label_->setText(tr("Nothing found"));
-}

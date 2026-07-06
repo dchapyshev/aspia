@@ -93,12 +93,6 @@ AboutWidget::AboutWidget(QWidget* parent)
 AboutWidget::~AboutWidget() = default;
 
 //--------------------------------------------------------------------------------------------------
-void AboutWidget::retranslate()
-{
-    buildContent();
-}
-
-//--------------------------------------------------------------------------------------------------
 void AboutWidget::buildContent()
 {
     QString version = QString("<p><b>Aspia</b><br>%1</p>").arg(

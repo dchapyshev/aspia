@@ -90,7 +90,8 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
     connect(QGuiApplication::inputMethod(), &QInputMethod::keyboardRectangleChanged,
             this, &AndroidMainWindow::onUpdateKeyboardInset);
 
-    retranslate();
+    navigation_->setItemText(SECTION_CONNECTION, tr("Connection"));
+    navigation_->setItemText(SECTION_SETTINGS, tr("Settings"));
     onSectionChanged(navigation_->currentIndex());
 
     // Run the host server on the application I/O thread. Its credentials/router-state signals are
@@ -111,17 +112,6 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
 AndroidMainWindow::~AndroidMainWindow()
 {
     LOG(INFO) << "Dtor";
-}
-
-//--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::changeEvent(QEvent* event)
-{
-    QWidget::changeEvent(event);
-
-    // The language is switched from the settings combo box, and retranslation rebuilds that combo, so
-    // the rebuild is deferred to avoid destroying the sender during its own signal.
-    if (event->type() == QEvent::LanguageChange)
-        QMetaObject::invokeMethod(this, [this]() { retranslate(); }, Qt::QueuedConnection);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -266,20 +256,6 @@ void AndroidMainWindow::onRouterStateChanged(int state, const QString& router)
     }
 
     connection_->setRouterState(mapped, router);
-}
-
-//--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::retranslate()
-{
-    navigation_->setItemText(SECTION_CONNECTION, tr("Connection"));
-    navigation_->setItemText(SECTION_SETTINGS, tr("Settings"));
-
-    if (ConnectionWidget* home = qobject_cast<ConnectionWidget*>(content_->widget(SECTION_CONNECTION)))
-        home->retranslate();
-    if (SettingsWidget* settings = qobject_cast<SettingsWidget*>(content_->widget(SECTION_SETTINGS)))
-        settings->retranslate();
-
-    onSectionChanged(navigation_->currentIndex());
 }
 
 //--------------------------------------------------------------------------------------------------

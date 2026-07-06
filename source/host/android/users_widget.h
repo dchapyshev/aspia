@@ -34,9 +34,6 @@ public:
     // Rebuilds the list from the database. Called when the screen is opened.
     void reload();
 
-    // Rebuilds the content with the current language.
-    void retranslate();
-
 signals:
     // A user row was tapped; |entry_id| identifies the user to edit.
     void sig_editUser(qint64 entry_id);

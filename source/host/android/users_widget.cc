@@ -58,12 +58,6 @@ void UsersWidget::reload()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UsersWidget::retranslate()
-{
-    buildContent();
-}
-
-//--------------------------------------------------------------------------------------------------
 bool UsersWidget::eventFilter(QObject* object, QEvent* event)
 {
     if (event->type() == QEvent::MouseButtonRelease)

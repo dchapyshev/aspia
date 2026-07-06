@@ -133,7 +133,12 @@ ConnectionWidget::ConnectionWidget(QWidget* parent)
 
     setWidget(content);
 
-    retranslate();
+    id_caption_->setText(tr("Your ID"));
+    password_caption_->setText(tr("One-time password"));
+    access_caption_->setText(tr("Access"));
+    desktop_session_->setText(tr("Desktop"));
+    file_transfer_session_->setText(tr("File Transfer"));
+    updateRouterRow();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -158,17 +163,6 @@ void ConnectionWidget::setRouterState(RouterState state, const QString& router)
 {
     router_state_ = state;
     router_ = router;
-    updateRouterRow();
-}
-
-//--------------------------------------------------------------------------------------------------
-void ConnectionWidget::retranslate()
-{
-    id_caption_->setText(tr("Your ID"));
-    password_caption_->setText(tr("One-time password"));
-    access_caption_->setText(tr("Access"));
-    desktop_session_->setText(tr("Desktop"));
-    file_transfer_session_->setText(tr("File Transfer"));
     updateRouterRow();
 }
 

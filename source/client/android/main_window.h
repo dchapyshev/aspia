@@ -46,10 +46,6 @@ public:
     explicit AndroidMainWindow(QWidget* parent = nullptr);
     ~AndroidMainWindow() final;
 
-protected:
-    // QWidget implementation.
-    void changeEvent(QEvent* event) final;
-
 private slots:
     void onSectionChanged(int index);
     void onRouterActionsChanged();
@@ -81,7 +77,6 @@ private:
     // Prompts to unlock (password or fingerprint) again after the background timeout; quits if the
     // user cancels.
     void relock();
-    void retranslate();
 
     // Routes a connection request to the matching session window. Only a single session is supported
     // at a time.

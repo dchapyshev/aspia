@@ -172,17 +172,6 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
 AndroidMainWindow::~AndroidMainWindow() = default;
 
 //--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::changeEvent(QEvent* event)
-{
-    QWidget::changeEvent(event);
-
-    // The language is switched from the settings combo box, and retranslation rebuilds that combo,
-    // so the rebuild is deferred to avoid destroying the sender during its own signal.
-    if (event->type() == QEvent::LanguageChange)
-        QMetaObject::invokeMethod(this, [this]() { retranslate(); }, Qt::QueuedConnection);
-}
-
-//--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onSectionChanged(int index)
 {
     content_->setCurrentIndex(index);
@@ -569,24 +558,4 @@ void AndroidMainWindow::relock()
     }
 
     relocking_ = false;
-}
-
-//--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::retranslate()
-{
-    navigation_->setItemText(SECTION_LOCAL, tr("Local"));
-    navigation_->setItemText(SECTION_REMOTE, tr("Remote"));
-    navigation_->setItemText(SECTION_ROUTERS, tr("Routers"));
-    navigation_->setItemText(SECTION_SETTINGS, tr("Settings"));
-
-    if (LocalWidget* local = qobject_cast<LocalWidget*>(content_->widget(SECTION_LOCAL)))
-        local->retranslate();
-
-    if (RoutersWidget* routers = qobject_cast<RoutersWidget*>(content_->widget(SECTION_ROUTERS)))
-        routers->retranslate();
-
-    if (SettingsWidget* settings = qobject_cast<SettingsWidget*>(content_->widget(SECTION_SETTINGS)))
-        settings->retranslate();
-
-    onSectionChanged(navigation_->currentIndex());
 }

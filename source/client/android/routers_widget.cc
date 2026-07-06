@@ -119,7 +119,7 @@ RoutersWidget::RoutersWidget(QWidget* parent)
     connect(add_button_, &IconButton::clicked, this, &RoutersWidget::onAddRouter);
     connect(editor_, &RouterEditor::sig_accepted, this, &RoutersWidget::returnFromEditor);
 
-    retranslate();
+    placeholder_->setText(tr("No routers added"));
     reload();
 }
 
@@ -187,12 +187,6 @@ void RoutersWidget::resetToList()
 {
     if (isEditorPage())
         stack_->setCurrentIndex(0);
-}
-
-//--------------------------------------------------------------------------------------------------
-void RoutersWidget::retranslate()
-{
-    placeholder_->setText(tr("No routers added"));
 }
 
 //--------------------------------------------------------------------------------------------------

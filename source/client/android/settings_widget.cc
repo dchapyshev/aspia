@@ -76,15 +76,6 @@ SettingsWidget::SettingsWidget(QWidget* parent)
 SettingsWidget::~SettingsWidget() = default;
 
 //--------------------------------------------------------------------------------------------------
-void SettingsWidget::retranslate()
-{
-    // The controls are built with translated strings, so the content is rebuilt. The current
-    // values come from the in-memory state, so nothing is lost.
-    buildSettings();
-    about_page_->retranslate();
-}
-
-//--------------------------------------------------------------------------------------------------
 QList<QWidget*> SettingsWidget::appBarActions() const
 {
     if (isAboutPage())
@@ -165,19 +156,6 @@ void SettingsWidget::addBoolSetting(QVBoxLayout* layout, const QString& text, bo
 void SettingsWidget::buildInterfaceSection(QVBoxLayout* layout)
 {
     addSectionHeader(layout, tr("Interface"));
-
-    ComboBox* language = new ComboBox();
-    language->setLabel(tr("Language"));
-    for (const auto& locale : GuiApplication::instance()->localeList())
-        language->addItem(locale.second, locale.first);
-    language->setCurrentIndex(qMax(0, language->findData(settings_.locale())));
-    connect(language, &QComboBox::currentIndexChanged, this, [this, language](int /* index */)
-    {
-        const QString locale = language->currentData().toString();
-        settings_.setLocale(locale);
-        GuiApplication::instance()->setLocale(locale);
-    });
-    layout->addWidget(language);
 
     ComboBox* theme = new ComboBox();
     theme->setLabel(tr("Theme"));
