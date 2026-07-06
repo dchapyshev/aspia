@@ -17,6 +17,8 @@
 #
 
 collect_sources(SOURCE_HOST_ANDROID
+    audio_capturer_android.cc
+    audio_capturer_android.h
     application.cc
     application.h
     floating_menu_bridge.cc
@@ -34,6 +36,8 @@ collect_sources(SOURCE_HOST_ANDROID
     main_window.h
     password_dialog.cc
     password_dialog.h
+    screen_capturer_android.cc
+    screen_capturer_android.h
     server.cc
     server.h
     settings_widget.cc

@@ -45,12 +45,15 @@ public:
     bool isConfigured() const { return configured_; }
     bool isVp8Supported() const { return vp8_supported_; }
     bool isVp9Supported() const { return vp9_supported_; }
+    bool isOpusSupported() const { return opus_supported_; }
+    bool isAudioEnabled() const { return audio_enabled_; }
     const QSize& preferredSize() const { return preferred_size_; }
 
     // Forward shared session data (encoded once by the DesktopAgent) to this client's channel.
     void onVideoData(const QByteArray& buffer, bool is_key_frame);
     void onScreenListData(const QByteArray& buffer);
     void onClipboardData(const QByteArray& buffer);
+    void onAudioData(const QByteArray& buffer);
 
 signals:
     void sig_configured();
@@ -79,9 +82,13 @@ private:
     // Codecs the connected client advertised; the agent uses them to pick a common encoding.
     bool vp8_supported_ = false;
     bool vp9_supported_ = false;
+    bool opus_supported_ = false;
 
     // Set once the client has sent its config; the agent captures only for configured clients.
     bool configured_ = false;
+
+    // Whether the client asked for audio in its config; the agent captures only if any client did.
+    bool audio_enabled_ = false;
 
     // Video is muted for this client while it is paused; the agent keeps encoding for the others.
     bool is_paused_ = false;

@@ -137,6 +137,7 @@ QString capturerToString(quint32 type)
         case proto::video::SCREEN_CAPTURER_TYPE_LINUX_WLR: return "LINUX_WLR";
         case proto::video::SCREEN_CAPTURER_TYPE_LINUX_VT: return "LINUX_VT";
         case proto::video::SCREEN_CAPTURER_TYPE_MACOSX: return "MACOSX";
+        case proto::video::SCREEN_CAPTURER_TYPE_ANDROID_MEDIA: return "ANDROID_MEDIA";
         default: return "UNKNOWN";
     }
 }

@@ -31,16 +31,13 @@ import android.os.IBinder;
 // Foreground service of type mediaProjection. Obtaining a MediaProjection on modern Android requires
 // such a service to be running, so the projection itself is started from here (in ScreenCapturer) right
 // after the service enters the foreground.
-public final class ScreenCaptureService extends Service
+public final class MediaProjectionService extends Service
 {
     public static final String EXTRA_RESULT_CODE = "org.aspia.host.resultCode";
     public static final String EXTRA_RESULT_DATA = "org.aspia.host.resultData";
-    public static final String EXTRA_TOKEN = "org.aspia.host.token";
 
     private static final String CHANNEL_ID = "aspia_capture";
     private static final int NOTIFICATION_ID = 2;
-
-    private long token = 0;
 
     @Override
     public IBinder onBind(Intent intent)
@@ -71,7 +68,6 @@ public final class ScreenCaptureService extends Service
         }
 
         final int result_code = intent.getIntExtra(EXTRA_RESULT_CODE, Activity.RESULT_CANCELED);
-        token = intent.getLongExtra(EXTRA_TOKEN, 0);
 
         Intent result_data;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
@@ -79,7 +75,7 @@ public final class ScreenCaptureService extends Service
         else
             result_data = intent.getParcelableExtra(EXTRA_RESULT_DATA);
 
-        ScreenCapturer.startProjection(this, result_code, result_data, token);
+        MediaProjection.startProjection(this, result_code, result_data);
 
         // Do not recreate the service if the system kills it; a new session starts it again.
         return START_NOT_STICKY;
@@ -88,7 +84,7 @@ public final class ScreenCaptureService extends Service
     @Override
     public void onDestroy()
     {
-        ScreenCapturer.stop(token);
+        MediaProjection.stop();
         stopForeground(STOP_FOREGROUND_REMOVE);
         super.onDestroy();
     }

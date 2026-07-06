@@ -21,7 +21,6 @@
 #include <QTimer>
 
 #include "base/logging.h"
-#include "base/serialization.h"
 #include "base/codec/scale_reducer.h"
 #include "base/codec/video_encoder.h"
 #include "base/desktop/frame.h"
@@ -29,14 +28,14 @@
 #include "common/clipboard.h"
 #include "host/input_injector_android.h"
 #include "host/screen_capturer.h"
-#include "host/screen_capturer_android.h"
-#include "host/android/floating_menu_bridge.h"
+#include "host/android/audio_capturer_android.h"
 #include "host/android/desktop_client.h"
+#include "host/android/floating_menu_bridge.h"
+#include "host/android/screen_capturer_android.h"
 #include "proto/desktop_channel.h"
 #include "proto/desktop_clipboard.h"
 #include "proto/desktop_input.h"
 #include "proto/desktop_screen.h"
-#include "proto/desktop_video.h"
 
 namespace {
 
@@ -145,6 +144,10 @@ void DesktopAgent::onClientConfigured()
     onPreferredSizeChanged();
     sendScreenList();
 
+    // Audio capture reuses the screen MediaProjection (obtained asynchronously), so it is started lazily
+    // from onCaptureScreen once frames flow; here we only record whether a client wants it.
+    audio_enabled_ = isAudioEnabled();
+
     if (floating_menu_bridge_)
         floating_menu_bridge_->showButton();
 
@@ -192,6 +195,14 @@ void DesktopAgent::onClientFinished()
     clients_.removeOne(client);
     client->deleteLater();
 
+    audio_enabled_ = isAudioEnabled();
+    if (!audio_enabled_ && audio_capturer_)
+    {
+        LOG(INFO) << "Stopping audio capture";
+        audio_capturer_->disconnect();
+        audio_capturer_.reset();
+    }
+
     // The last desktop client left: stop capturing and release the projection (and its foreground
     // service). Capture restarts, re-requesting the consent, when a client connects again.
     if (clients_.isEmpty())
@@ -222,10 +233,10 @@ void DesktopAgent::onCaptureScreen()
     {
         const bool permanent = (error == ScreenCapturer::Error::PERMANENT);
 
-        proto::video::HostToClient message;
+        proto::video::HostToClient& message = outgoing_message_.newMessage<proto::video::HostToClient>();
         message.mutable_packet()->set_error_code(permanent ? proto::video::ERROR_CODE_PERMANENT
                                                            : proto::video::ERROR_CODE_TEMPORARY);
-        const QByteArray buffer = serialize(message);
+        const QByteArray& buffer = outgoing_message_.serialize<proto::video::HostToClient>();
         for (auto* client : std::as_const(clients_))
             client->onVideoData(buffer, false);
 
@@ -240,6 +251,15 @@ void DesktopAgent::onCaptureScreen()
     // Keep the injector's coordinate space in sync with the captured screen.
     if (input_injector_)
         input_injector_->setScreenInfo(screen_capturer_->desktopRect().size(), frame->topLeft());
+
+    if (audio_enabled_ && !audio_capturer_)
+    {
+        LOG(INFO) << "Starting audio capture";
+
+        audio_capturer_ = new AudioCapturerAndroid();
+        connect(audio_capturer_.get(), &AudioCapturerAndroid::sig_audioPacket, this, &DesktopAgent::onAudioPacket);
+        audio_capturer_->start();
+    }
 
     encodeScreen(frame);
     capture_timer_->start(kCaptureIntervalMs);
@@ -310,6 +330,13 @@ void DesktopAgent::onClipboardTextChanged(const QString& text)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopAgent::onAudioPacket(const QByteArray& packet)
+{
+    for (auto* client : std::as_const(clients_))
+        client->onAudioData(packet);
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopAgent::createVideoEncoder()
 {
     video_encoder_ = VideoEncoder::create(video_encoding_);
@@ -323,6 +350,26 @@ bool DesktopAgent::startCapturer()
     screen_capturer_ = ScreenCapturerAndroid::create(this);
     return screen_capturer_ != nullptr;
 }
+
+//--------------------------------------------------------------------------------------------------
+bool DesktopAgent::isAudioEnabled() const
+{
+    bool wanted = false;
+
+    for (auto* client : std::as_const(clients_))
+    {
+        if (!client->isConfigured())
+            continue;
+
+        if (!client->isOpusSupported())
+            return false;
+        if (client->isAudioEnabled())
+            wanted = true;
+    }
+
+    return wanted;
+}
+
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgent::sendScreenList()
@@ -402,7 +449,7 @@ void DesktopAgent::encodeScreen(const Frame* frame)
         return;
     }
 
-    proto::video::HostToClient message;
+    proto::video::HostToClient& message = outgoing_message_.newMessage<proto::video::HostToClient>();
     proto::video::Packet* packet = message.mutable_packet();
 
     const VideoEncoder::Result result = video_encoder_->encode(scaled_frame, packet);
@@ -432,7 +479,7 @@ void DesktopAgent::encodeScreen(const Frame* frame)
 
     const bool is_key_frame = packet->flags() & proto::video::PACKET_FLAG_IS_KEY_FRAME;
 
-    const QByteArray buffer = serialize(message);
+    const QByteArray& buffer = outgoing_message_.serialize<proto::video::HostToClient>();
     for (auto* client : std::as_const(clients_))
         client->onVideoData(buffer, is_key_frame);
 

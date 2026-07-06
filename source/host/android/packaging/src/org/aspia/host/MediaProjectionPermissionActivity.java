@@ -26,21 +26,16 @@ import android.os.Bundle;
 // Transparent Activity that requests the MediaProjection consent. It exists because the consent dialog
 // must be launched with startActivityForResult from an Activity; on grant it hands the result to the
 // foreground service that owns the projection, on refusal it notifies the native side.
-public final class ScreenCapturePermissionActivity extends Activity
+public final class MediaProjectionPermissionActivity extends Activity
 {
-    public static final String EXTRA_TOKEN = "org.aspia.host.token";
-
     private static final int REQUEST_CODE = 1001;
-
-    private long token = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
 
-        token = getIntent().getLongExtra(EXTRA_TOKEN, 0);
-        startActivityForResult(ScreenCapturer.createPermissionIntent(this), REQUEST_CODE);
+        startActivityForResult(MediaProjection.createPermissionIntent(this), REQUEST_CODE);
     }
 
     @Override
@@ -50,10 +45,9 @@ public final class ScreenCapturePermissionActivity extends Activity
 
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && data != null)
         {
-            Intent intent = new Intent(this, ScreenCaptureService.class);
-            intent.putExtra(ScreenCaptureService.EXTRA_RESULT_CODE, resultCode);
-            intent.putExtra(ScreenCaptureService.EXTRA_RESULT_DATA, data);
-            intent.putExtra(ScreenCaptureService.EXTRA_TOKEN, token);
+            Intent intent = new Intent(this, MediaProjectionService.class);
+            intent.putExtra(MediaProjectionService.EXTRA_RESULT_CODE, resultCode);
+            intent.putExtra(MediaProjectionService.EXTRA_RESULT_DATA, data);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 startForegroundService(intent);
@@ -62,7 +56,7 @@ public final class ScreenCapturePermissionActivity extends Activity
         }
         else
         {
-            ScreenCapturer.notifyDenied(token);
+            MediaProjection.notifyDenied();
         }
 
         finish();

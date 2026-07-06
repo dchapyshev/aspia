@@ -59,6 +59,7 @@ enum ScreenCapturerType
     SCREEN_CAPTURER_TYPE_LINUX_WLR     = 8;
     SCREEN_CAPTURER_TYPE_LINUX_VT      = 9;
     SCREEN_CAPTURER_TYPE_MACOSX        = 10;
+    SCREEN_CAPTURER_TYPE_ANDROID_MEDIA = 11;
 }
 
 message PacketFormat

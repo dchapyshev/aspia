@@ -48,13 +48,13 @@
         </activity>
 
         <activity
-            android:name="org.aspia.host.ScreenCapturePermissionActivity"
+            android:name="org.aspia.host.MediaProjectionPermissionActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:excludeFromRecents="true"
             android:exported="false" />
 
         <service
-            android:name="org.aspia.host.ScreenCaptureService"
+            android:name="org.aspia.host.MediaProjectionService"
             android:foregroundServiceType="mediaProjection"
             android:exported="false" />
 

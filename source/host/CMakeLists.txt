@@ -37,8 +37,6 @@ if (ANDROID)
         router_manager.h
         screen_capturer.cc
         screen_capturer.h
-        screen_capturer_android.cc
-        screen_capturer_android.h
         settings_util.cc
         settings_util.h
         system_settings.cc

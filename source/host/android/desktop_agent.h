@@ -19,6 +19,7 @@
 #ifndef HOST_ANDROID_DESKTOP_AGENT_H
 #define HOST_ANDROID_DESKTOP_AGENT_H
 
+#include <QByteArray>
 #include <QList>
 #include <QObject>
 #include <QSize>
@@ -26,6 +27,8 @@
 #include <memory>
 
 #include "base/scoped_qpointer.h"
+#include "base/serialization.h"
+#include "proto/desktop_video.h"
 
 namespace proto::clipboard {
 class Event;
@@ -38,10 +41,7 @@ class TextEvent;
 class TouchEvent;
 } // namespace proto::input
 
-namespace proto::video {
-enum Encoding : int;
-} // namespace proto::video
-
+class AudioCapturerAndroid;
 class FloatingMenuBridge;
 class DesktopClient;
 class Frame;
@@ -82,12 +82,17 @@ private slots:
 
     // Clipboard a client sent; queued for the overlay button to apply on the next tap.
     void onInjectClipboardEvent(const proto::clipboard::Event& event);
+
     // Device clipboard text read on an overlay tap; broadcast to all clients.
     void onClipboardTextChanged(const QString& text);
+
+    // Encoded audio from the capturer (queued from its Java reader thread); broadcast to all clients.
+    void onAudioPacket(const QByteArray& packet);
 
 private:
     void createVideoEncoder();
     bool startCapturer();
+    bool isAudioEnabled() const;
     void sendScreenList();
     void encodeScreen(const Frame* frame);
 
@@ -96,6 +101,12 @@ private:
     ScopedQPointer<InputInjector> input_injector_;
     std::unique_ptr<VideoEncoder> video_encoder_;
     std::unique_ptr<ScaleReducer> scale_reducer_;
+
+    // Reused message and serialization buffers for the video (and error) packets broadcast every frame.
+    Serializer<proto::video::HostToClient> outgoing_message_;
+
+    bool audio_enabled_ = false;
+    ScopedQPointer<AudioCapturerAndroid> audio_capturer_;
 
     // Bridge to the floating clipboard button (the only way to reach the clipboard while backgrounded).
     FloatingMenuBridge* floating_menu_bridge_ = nullptr;

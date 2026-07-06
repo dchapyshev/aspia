@@ -16,13 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/screen_capturer_android.h"
+#include "host/android/screen_capturer_android.h"
 
 #include <libyuv/convert_argb.h>
 
 #include <QCoreApplication>
 #include <QFuture>
-#include <QHash>
 #include <QJniEnvironment>
 #include <QJniObject>
 #include <QMutex>
@@ -33,72 +32,16 @@
 
 namespace {
 
-const char kCapturerClass[] = "org/aspia/host/ScreenCapturer";
+const char kCapturerClass[] = "org/aspia/host/MediaProjection";
 
 // Frame buffers are 32-byte aligned to match the other capturers (SIMD-friendly strides).
 const size_t kFrameAlignment = 32;
 
-// Maps the token handed to the Java side back to the live capturer. Guards registration so the JNI
-// callbacks, which arrive on the Android main thread and the ImageReader listener thread, never touch a
-// destroyed instance.
+// Guards the single live capturer against the JNI callbacks (Android main thread for onStarted, ImageReader
+// listener thread for onFrame), which must never touch a destroyed instance. At most one capturer exists,
+// so a bare pointer is enough.
 QMutex g_mutex;
-QHash<qint64, ScreenCapturerAndroid*> g_instances;
-qint64 g_next_token = 0;
-
-//--------------------------------------------------------------------------------------------------
-void JNICALL nativeOnStarted(JNIEnv* /* env */, jclass /* clazz */, jlong token, jboolean success,
-                             jint width, jint height, jint dpi)
-{
-    // Hold |g_mutex| across the whole call: the destructor removes the instance under the same lock, so
-    // the object cannot be freed while onStarted() runs on it.
-    QMutexLocker locker(&g_mutex);
-
-    ScreenCapturerAndroid* self = g_instances.value(token, nullptr);
-    if (self)
-        self->onStarted(success, QSize(width, height), QPoint(dpi, dpi));
-}
-
-//--------------------------------------------------------------------------------------------------
-void JNICALL nativeOnFrame(JNIEnv* env, jclass /* clazz */, jlong token, jobject buffer,
-                           jint width, jint height, jint /* pixel_stride */, jint row_stride)
-{
-    // Hold |g_mutex| across the whole call. This callback arrives on the ImageReader listener thread and
-    // must not touch a destroyed instance: the destructor removes the instance from |g_instances| under
-    // the same lock, so it blocks until an in-flight frame finishes, and later frames find no instance.
-    QMutexLocker locker(&g_mutex);
-
-    ScreenCapturerAndroid* self = g_instances.value(token, nullptr);
-    if (!self || !buffer)
-        return;
-
-    const quint8* src = static_cast<const quint8*>(env->GetDirectBufferAddress(buffer));
-    if (!src)
-        return;
-
-    self->onFrame(src, width, height, row_stride);
-}
-
-//--------------------------------------------------------------------------------------------------
-void ensureRegistered()
-{
-    QMutexLocker locker(&g_mutex);
-
-    static bool registered = false;
-    if (registered)
-        return;
-
-    const JNINativeMethod methods[] =
-    {
-        { "nativeOnStarted", "(JZIII)V", reinterpret_cast<void*>(nativeOnStarted) },
-        { "nativeOnFrame", "(JLjava/nio/ByteBuffer;IIII)V", reinterpret_cast<void*>(nativeOnFrame) }
-    };
-
-    QJniEnvironment env;
-    if (!env.registerNativeMethods(kCapturerClass, methods, 2))
-        LOG(ERROR) << "Unable to register native methods for ScreenCapturer";
-    else
-        registered = true;
-}
+ScreenCapturerAndroid* g_instance = nullptr;
 
 } // namespace
 
@@ -109,8 +52,24 @@ ScreenCapturerAndroid::ScreenCapturerAndroid(QObject* parent)
     LOG(INFO) << "Ctor";
 
     QMutexLocker locker(&g_mutex);
-    token_ = ++g_next_token;
-    g_instances.insert(token_, this);
+
+    static bool registered = false;
+    if (!registered)
+    {
+        const JNINativeMethod methods[] =
+        {
+            { "nativeOnStarted", "(ZIII)V", reinterpret_cast<void*>(nativeOnStarted) },
+            { "nativeOnFrame", "(Ljava/nio/ByteBuffer;IIII)V", reinterpret_cast<void*>(nativeOnFrame) }
+        };
+
+        QJniEnvironment env;
+        if (!env.registerNativeMethods(kCapturerClass, methods, 2))
+            LOG(ERROR) << "Unable to register native methods for ScreenCapturer";
+        else
+            registered = true;
+    }
+
+    g_instance = this;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -121,15 +80,14 @@ ScreenCapturerAndroid::~ScreenCapturerAndroid()
     stop();
 
     QMutexLocker locker(&g_mutex);
-    g_instances.remove(token_);
+    if (g_instance == this)
+        g_instance = nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
 ScreenCapturerAndroid* ScreenCapturerAndroid::create(QObject* parent)
 {
-    ensureRegistered();
-
     std::unique_ptr<ScreenCapturerAndroid> self(new ScreenCapturerAndroid(parent));
     if (!self->start())
     {
@@ -147,9 +105,8 @@ bool ScreenCapturerAndroid::start()
     // projection itself needs user consent, so requestCapture() only launches the consent flow and
     // frames start arriving later (through nativeOnFrame), after the foreground service starts it.
     ScreenCapturerAndroid* self = this;
-    const qint64 token = token_;
 
-    QNativeInterface::QAndroidApplication::runOnAndroidMainThread([self, token]() -> QVariant
+    QNativeInterface::QAndroidApplication::runOnAndroidMainThread([self]() -> QVariant
     {
         QJniObject context = QNativeInterface::QAndroidApplication::context();
         if (!context.isValid())
@@ -166,7 +123,7 @@ bool ScreenCapturerAndroid::start()
         self->start_dpi_ = QPoint(dpi, dpi);
 
         QJniObject::callStaticMethod<void>(kCapturerClass, "requestCapture",
-            "(Landroid/content/Context;J)V", context.object(), static_cast<jlong>(token));
+            "(Landroid/content/Context;)V", context.object());
         return QVariant();
     }).waitForFinished();
 
@@ -187,21 +144,54 @@ void ScreenCapturerAndroid::stop()
 
     active_ = false;
 
-    const qint64 token = token_;
-    QNativeInterface::QAndroidApplication::runOnAndroidMainThread([token]() -> QVariant
+    QNativeInterface::QAndroidApplication::runOnAndroidMainThread([]() -> QVariant
     {
         QJniObject context = QNativeInterface::QAndroidApplication::context();
         if (!context.isValid())
             return QVariant();
 
         QJniObject::callStaticMethod<void>(kCapturerClass, "stopCapture",
-            "(Landroid/content/Context;J)V", context.object(), static_cast<jlong>(token));
+            "(Landroid/content/Context;)V", context.object());
         return QVariant();
     }).waitForFinished();
 
     QMutexLocker locker(&frame_mutex_);
     queue_.reset();
     has_new_frame_ = false;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void JNICALL ScreenCapturerAndroid::nativeOnStarted(
+    JNIEnv* /* env */, jclass /* clazz */, jboolean success, jint width, jint height, jint dpi)
+{
+    // Hold |g_mutex| across the whole call: the destructor clears |g_instance| under the same lock, so the
+    // object cannot be freed while onStarted() runs on it.
+    QMutexLocker locker(&g_mutex);
+
+    if (g_instance)
+        g_instance->onStarted(success, QSize(width, height), QPoint(dpi, dpi));
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void JNICALL ScreenCapturerAndroid::nativeOnFrame(
+    JNIEnv* env, jclass /* clazz */, jobject buffer, jint width, jint height, jint /* pixel_stride */,
+    jint row_stride)
+{
+    // Hold |g_mutex| across the whole call. This callback arrives on the ImageReader listener thread and
+    // must not touch a destroyed instance: the destructor clears |g_instance| under the same lock, so it
+    // blocks until an in-flight frame finishes, and later frames find no instance.
+    QMutexLocker locker(&g_mutex);
+
+    if (!g_instance || !buffer)
+        return;
+
+    const quint8* src = static_cast<const quint8*>(env->GetDirectBufferAddress(buffer));
+    if (!src)
+        return;
+
+    g_instance->onFrame(src, width, height, row_stride);
 }
 
 //--------------------------------------------------------------------------------------------------

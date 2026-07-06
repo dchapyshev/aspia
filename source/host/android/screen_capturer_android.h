@@ -16,13 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_SCREEN_CAPTURER_ANDROID_H
-#define HOST_SCREEN_CAPTURER_ANDROID_H
+#ifndef HOST_ANDROID_SCREEN_CAPTURER_ANDROID_H
+#define HOST_ANDROID_SCREEN_CAPTURER_ANDROID_H
 
 #include <QMutex>
 #include <QPoint>
 #include <QRect>
 #include <QSize>
+
+#include <jni.h>
 
 #include "base/desktop/frame.h"
 #include "host/screen_capturer.h"
@@ -61,28 +63,30 @@ protected:
     // ScreenCapturer implementation.
     void reset() final;
 
-public:
-    // Bridge entry points invoked from the JNI callbacks (see screen_capturer_android.cc), keyed to
-    // this instance by |token_|. Not meant to be called directly.
-
-    // Called from the nativeOnStarted callback on the Android main thread while start() waits: records
-    // the virtual display geometry chosen by the Java side (or that the setup failed).
-    void onStarted(bool success, const QSize& size, const QPoint& dpi);
-
-    // Called from the nativeOnFrame callback on the ImageReader listener thread: copies |src|
-    // (RGBA_8888, so the red and blue channels are swapped into the frame's native BGRA order) into the
-    // current queue frame. |row_stride| is the source line pitch, which the reader may pad past
-    // |width| * 4.
-    void onFrame(const quint8* src, int width, int height, int row_stride);
-
 private:
     explicit ScreenCapturerAndroid(QObject* parent);
 
     bool start();
     void stop();
 
-    // Identifies this capturer to the Java side; frames and the start result carry it back.
-    qint64 token_ = 0;
+    // JNI trampolines routing to the single live capturer, guarded so they never touch a destroyed
+    // instance. nativeOnStarted arrives on the Android main thread, nativeOnFrame on the ImageReader
+    // listener thread.
+    static void JNICALL nativeOnStarted(
+        JNIEnv* env, jclass clazz, jboolean success, jint width, jint height, jint dpi);
+    static void JNICALL nativeOnFrame(
+        JNIEnv* env, jclass clazz, jobject buffer, jint width, jint height, jint pixel_stride,
+        jint row_stride);
+
+    // Records the projection outcome and the virtual display geometry chosen by the Java side (or that the
+    // setup failed). Called from nativeOnStarted while start() waits.
+    void onStarted(bool success, const QSize& size, const QPoint& dpi);
+
+    // Copies |src| (RGBA_8888, red and blue swapped into the frame's native BGRA order) into the current
+    // queue frame. |row_stride| is the source line pitch, which the reader may pad past |width| * 4. Called
+    // from nativeOnFrame.
+    void onFrame(const quint8* src, int width, int height, int row_stride);
+
     bool active_ = false;
 
     // The virtual display geometry reported by start(); |screen_rect_| tracks the frame size and stays
@@ -108,4 +112,4 @@ private:
     Q_DISABLE_COPY_MOVE(ScreenCapturerAndroid)
 };
 
-#endif // HOST_SCREEN_CAPTURER_ANDROID_H
+#endif // HOST_ANDROID_SCREEN_CAPTURER_ANDROID_H
