@@ -51,6 +51,10 @@ private:
     QSize screen_size_;
     QPoint screen_offset_;
 
+    // Android meta state accumulated from the modifier keys (Shift/Ctrl/Alt/Meta), which arrive as their
+    // own key events; applied when translating the following character keys.
+    int modifiers_ = 0;
+
     // Pointer gesture state. A press records the start point; the matching release emits a tap when the
     // pointer barely moved or a swipe otherwise, so clicks and drags both map onto a single gesture.
     bool left_pressed_ = false;

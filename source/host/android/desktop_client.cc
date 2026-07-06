@@ -25,6 +25,7 @@
 #include "common/desktop_session_constants.h"
 #include "proto/desktop_channel.h"
 #include "proto/desktop_control.h"
+#include "proto/desktop_input.h"
 #include "proto/desktop_screen.h"
 #include "proto/desktop_video.h"
 
@@ -79,6 +80,10 @@ void DesktopClient::onMessage(quint8 channel_id, const QByteArray& buffer)
 
         case proto::desktop::CHANNEL_ID_SCREEN:
             handleScreenControl(buffer);
+            break;
+
+        case proto::desktop::CHANNEL_ID_INPUT:
+            handleInput(buffer);
             break;
 
         default:
@@ -195,6 +200,27 @@ void DesktopClient::handleScreenControl(const QByteArray& buffer)
     // re-send the list and a fresh key frame.
     if (message.has_screen())
         emit sig_screenListRequested();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopClient::handleInput(const QByteArray& buffer)
+{
+    proto::input::ClientToHost message;
+    if (!parse(buffer, &message))
+    {
+        LOG(ERROR) << "Unable to parse input message";
+        return;
+    }
+
+    // The shared injector lives in the agent, so the event is only forwarded here.
+    if (message.has_mouse())
+        emit sig_injectMouseEvent(message.mouse());
+    else if (message.has_touch())
+        emit sig_injectTouchEvent(message.touch());
+    else if (message.has_key())
+        emit sig_injectKeyEvent(message.key());
+    else if (message.has_text())
+        emit sig_injectTextEvent(message.text());
 }
 
 //--------------------------------------------------------------------------------------------------

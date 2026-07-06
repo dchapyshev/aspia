@@ -26,10 +26,12 @@
 #include "base/codec/video_encoder.h"
 #include "base/desktop/frame.h"
 #include "base/desktop/region.h"
+#include "host/input_injector_android.h"
 #include "host/screen_capturer.h"
 #include "host/screen_capturer_android.h"
 #include "host/android/desktop_client.h"
 #include "proto/desktop_channel.h"
+#include "proto/desktop_input.h"
 #include "proto/desktop_screen.h"
 #include "proto/desktop_video.h"
 
@@ -72,6 +74,10 @@ void DesktopAgent::addClient(DesktopClient* client)
     connect(client, &DesktopClient::sig_keyFrameRequested, this, &DesktopAgent::onKeyFrameRequested);
     connect(client, &DesktopClient::sig_preferredSizeChanged, this, &DesktopAgent::onPreferredSizeChanged);
     connect(client, &DesktopClient::sig_screenListRequested, this, &DesktopAgent::onScreenListRequested);
+    connect(client, &DesktopClient::sig_injectKeyEvent, this, &DesktopAgent::onInjectKeyEvent);
+    connect(client, &DesktopClient::sig_injectTextEvent, this, &DesktopAgent::onInjectTextEvent);
+    connect(client, &DesktopClient::sig_injectMouseEvent, this, &DesktopAgent::onInjectMouseEvent);
+    connect(client, &DesktopClient::sig_injectTouchEvent, this, &DesktopAgent::onInjectTouchEvent);
     connect(client, &Client::sig_finished, this, &DesktopAgent::onClientFinished);
 }
 
@@ -120,6 +126,10 @@ void DesktopAgent::onClientConfigured()
         LOG(ERROR) << "Screen capturer is not available";
         return;
     }
+
+    // Input is injected through the accessibility service; it is a no-op until the user enables it.
+    if (!input_injector_)
+        input_injector_ = InputInjectorAndroid::create(this);
 
     video_encoder_->setKeyFrameRequired(true);
     onPreferredSizeChanged();
@@ -175,6 +185,7 @@ void DesktopAgent::onClientFinished()
     {
         capture_timer_->stop();
         screen_capturer_.reset();
+        input_injector_.reset();
         video_encoder_.reset();
         source_size_ = QSize();
         frame_count_ = 0;
@@ -208,8 +219,53 @@ void DesktopAgent::onCaptureScreen()
         return;
     }
 
+    // Keep the injector's coordinate space in sync with the captured screen.
+    if (input_injector_)
+        input_injector_->setScreenInfo(screen_capturer_->desktopRect().size(), frame->topLeft());
+
     encodeScreen(frame);
     capture_timer_->start(kCaptureIntervalMs);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::onInjectKeyEvent(const proto::input::KeyEvent& event)
+{
+    if (input_injector_)
+        input_injector_->injectKeyEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::onInjectTextEvent(const proto::input::TextEvent& event)
+{
+    if (input_injector_)
+        input_injector_->injectTextEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::onInjectMouseEvent(const proto::input::MouseEvent& event)
+{
+    if (!input_injector_)
+        return;
+
+    // The client's pointer position is in the scaled video space; map it back to the source screen.
+    const double scale_x = scale_reducer_->scaleFactorX();
+    const double scale_y = scale_reducer_->scaleFactorY();
+    if (scale_x <= 0.0 || scale_y <= 0.0)
+        return;
+
+    proto::input::MouseEvent out_event;
+    out_event.set_mask(event.mask());
+    out_event.set_x(static_cast<int>(static_cast<double>(event.x()) * 100.0 / scale_x));
+    out_event.set_y(static_cast<int>(static_cast<double>(event.y()) * 100.0 / scale_y));
+
+    input_injector_->injectMouseEvent(out_event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::onInjectTouchEvent(const proto::input::TouchEvent& event)
+{
+    if (input_injector_)
+        input_injector_->injectTouchEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -27,12 +27,20 @@
 
 #include "base/scoped_qpointer.h"
 
+namespace proto::input {
+class KeyEvent;
+class MouseEvent;
+class TextEvent;
+class TouchEvent;
+} // namespace proto::input
+
 namespace proto::video {
 enum Encoding : int;
 } // namespace proto::video
 
 class DesktopClient;
 class Frame;
+class InputInjector;
 class QTimer;
 class ScaleReducer;
 class ScreenCapturer;
@@ -62,6 +70,11 @@ private slots:
     void onClientFinished();
     void onCaptureScreen();
 
+    void onInjectKeyEvent(const proto::input::KeyEvent& event);
+    void onInjectTextEvent(const proto::input::TextEvent& event);
+    void onInjectMouseEvent(const proto::input::MouseEvent& event);
+    void onInjectTouchEvent(const proto::input::TouchEvent& event);
+
 private:
     void createVideoEncoder();
     bool startCapturer();
@@ -70,6 +83,7 @@ private:
 
     QTimer* capture_timer_ = nullptr;
     ScopedQPointer<ScreenCapturer> screen_capturer_;
+    ScopedQPointer<InputInjector> input_injector_;
     std::unique_ptr<VideoEncoder> video_encoder_;
     std::unique_ptr<ScaleReducer> scale_reducer_;
 

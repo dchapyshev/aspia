@@ -64,6 +64,7 @@ private slots:
 private:
     void retranslate();
     void scrollFocusIntoView();
+    void checkAccessibilityService();
     QScrollArea* focusedScrollArea() const;
     QString sectionTitle(int index) const;
 

@@ -23,6 +23,13 @@
 
 #include "host/client.h"
 
+namespace proto::input {
+class KeyEvent;
+class MouseEvent;
+class TextEvent;
+class TouchEvent;
+} // namespace proto::input
+
 class DesktopClient final : public Client
 {
     Q_OBJECT
@@ -45,6 +52,10 @@ signals:
     void sig_keyFrameRequested();
     void sig_preferredSizeChanged();
     void sig_screenListRequested();
+    void sig_injectKeyEvent(const proto::input::KeyEvent& event);
+    void sig_injectTextEvent(const proto::input::TextEvent& event);
+    void sig_injectMouseEvent(const proto::input::MouseEvent& event);
+    void sig_injectTouchEvent(const proto::input::TouchEvent& event);
 
 protected:
     // Client implementation.
@@ -55,6 +66,7 @@ private:
     void handleControl(const QByteArray& buffer);
     void handleVideoControl(const QByteArray& buffer);
     void handleScreenControl(const QByteArray& buffer);
+    void handleInput(const QByteArray& buffer);
     void sendCapabilities();
 
     // Codecs the connected client advertised; the agent uses them to pick a common encoding.

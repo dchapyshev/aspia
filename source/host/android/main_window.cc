@@ -19,18 +19,22 @@
 #include "host/android/main_window.h"
 
 #include <QApplication>
+#include <QCoreApplication>
 #include <QEvent>
 #include <QInputMethod>
+#include <QJniObject>
 #include <QResizeEvent>
 #include <QScrollArea>
 #include <QScrollBar>
 #include <QStackedWidget>
+#include <QVariant>
 #include <QVBoxLayout>
 
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "common/android/app_bar.h"
 #include "common/android/bottom_navigation_bar.h"
+#include "common/android/message_dialog.h"
 #include "host/database.h"
 #include "host/android/connection_widget.h"
 #include "host/android/password_dialog.h"
@@ -98,6 +102,9 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
             this, &AndroidMainWindow::onRouterStateChanged);
     server_->moveToThread(GuiApplication::ioThread());
     QMetaObject::invokeMethod(server_, &Server::start, Qt::QueuedConnection);
+
+    // Prompt for the accessibility service (needed to inject remote input) once the window is shown.
+    QMetaObject::invokeMethod(this, [this]() { checkAccessibilityService(); }, Qt::QueuedConnection);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -299,6 +306,39 @@ void AndroidMainWindow::scrollFocusIntoView()
 
     QScrollBar* bar = area->verticalScrollBar();
     bar->setValue(bar->value() + delta);
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::checkAccessibilityService()
+{
+    const char kInputServiceClass[] = "org/aspia/host/InputService";
+
+    QJniObject context = QNativeInterface::QAndroidApplication::context();
+    if (!context.isValid())
+        return;
+
+    const bool enabled = QJniObject::callStaticMethod<jboolean>(
+        kInputServiceClass, "isEnabled", "(Landroid/content/Context;)Z", context.object());
+    if (enabled)
+        return;
+
+    const bool open = MessageDialog::confirm(
+        this, tr("Permissions"),
+        tr("Enable the accessibility service to allow remote keyboard and mouse control."),
+        tr("Open"));
+    if (!open)
+        return;
+
+    QNativeInterface::QAndroidApplication::runOnAndroidMainThread([]() -> QVariant
+    {
+        QJniObject context = QNativeInterface::QAndroidApplication::context();
+        if (context.isValid())
+        {
+            QJniObject::callStaticMethod<void>("org/aspia/host/InputService", "openSettings",
+                "(Landroid/content/Context;)V", context.object());
+        }
+        return QVariant();
+    });
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"  />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION"  />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"  />
+    <uses-permission android:name="android.permission.OPEN_ACCESSIBILITY_DETAILS_SETTINGS"  />
     <supports-screens
         android:anyDensity="true"
         android:largeScreens="true"
