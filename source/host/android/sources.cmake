@@ -31,6 +31,8 @@ collect_sources(SOURCE_HOST_ANDROID
     desktop_client.h
     file_client.cc
     file_client.h
+    input_injector_android.cc
+    input_injector_android.h
     main.cc
     main_window.cc
     main_window.h

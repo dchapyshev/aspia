@@ -31,8 +31,6 @@ if (ANDROID)
         host_user_list.cc
         host_user_list.h
         input_injector.h
-        input_injector_android.cc
-        input_injector_android.h
         router_manager.cc
         router_manager.h
         screen_capturer.cc

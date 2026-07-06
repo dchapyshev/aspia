@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_INPUT_INJECTOR_ANDROID_H
-#define HOST_INPUT_INJECTOR_ANDROID_H
+#ifndef HOST_ANDROID_INPUT_INJECTOR_ANDROID_H
+#define HOST_ANDROID_INPUT_INJECTOR_ANDROID_H
 
 #include <QPoint>
 #include <QPointF>
@@ -65,4 +65,4 @@ private:
     Q_DISABLE_COPY(InputInjectorAndroid)
 };
 
-#endif // HOST_INPUT_INJECTOR_ANDROID_H
+#endif // HOST_ANDROID_INPUT_INJECTOR_ANDROID_H

@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/input_injector_android.h"
+#include "host/android/input_injector_android.h"
 
 #include <QJniObject>
 #include <QLineF>
