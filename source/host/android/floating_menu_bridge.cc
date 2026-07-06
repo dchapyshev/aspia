@@ -22,7 +22,6 @@
 #include <QJniEnvironment>
 #include <QJniObject>
 #include <QMutex>
-#include <QVariant>
 
 #include "base/logging.h"
 
@@ -92,39 +91,29 @@ FloatingMenuBridge::~FloatingMenuBridge()
 //--------------------------------------------------------------------------------------------------
 void FloatingMenuBridge::showButton()
 {
-    QNativeInterface::QAndroidApplication::runOnAndroidMainThread([]() -> QVariant
+    // The Java side hops to its own overlay thread; calling it directly (rather than through
+    // runOnAndroidMainThread) keeps it working while the app is backgrounded, when the Android main thread
+    // is blocked and would never run the posted work.
+    QJniObject context = QNativeInterface::QAndroidApplication::context();
+    if (context.isValid())
     {
-        QJniObject context = QNativeInterface::QAndroidApplication::context();
-        if (context.isValid())
-        {
-            QJniObject::callStaticMethod<void>(kOverlayClass, "show",
-                "(Landroid/content/Context;)V", context.object());
-        }
-        return QVariant();
-    });
+        QJniObject::callStaticMethod<void>(kOverlayClass, "show",
+            "(Landroid/content/Context;)V", context.object());
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
 void FloatingMenuBridge::hideButton()
 {
-    QNativeInterface::QAndroidApplication::runOnAndroidMainThread([]() -> QVariant
-    {
-        QJniObject::callStaticMethod<void>(kOverlayClass, "hide", "()V");
-        return QVariant();
-    });
+    QJniObject::callStaticMethod<void>(kOverlayClass, "hide", "()V");
 }
 
 //--------------------------------------------------------------------------------------------------
 void FloatingMenuBridge::setIncomingText(const QString& text)
 {
-    const QString value = text;
-    QNativeInterface::QAndroidApplication::runOnAndroidMainThread([value]() -> QVariant
-    {
-        QJniObject jni_text = QJniObject::fromString(value);
-        QJniObject::callStaticMethod<void>(kOverlayClass, "setPending",
-            "(Ljava/lang/String;)V", jni_text.object<jstring>());
-        return QVariant();
-    });
+    QJniObject jni_text = QJniObject::fromString(text);
+    QJniObject::callStaticMethod<void>(kOverlayClass, "setPending",
+        "(Ljava/lang/String;)V", jni_text.object<jstring>());
 }
 
 //--------------------------------------------------------------------------------------------------

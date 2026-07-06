@@ -46,17 +46,14 @@ QHash<qint64, ScreenCapturerAndroid*> g_instances;
 qint64 g_next_token = 0;
 
 //--------------------------------------------------------------------------------------------------
-ScreenCapturerAndroid* instanceForToken(qint64 token)
-{
-    QMutexLocker locker(&g_mutex);
-    return g_instances.value(token, nullptr);
-}
-
-//--------------------------------------------------------------------------------------------------
 void JNICALL nativeOnStarted(JNIEnv* /* env */, jclass /* clazz */, jlong token, jboolean success,
                              jint width, jint height, jint dpi)
 {
-    ScreenCapturerAndroid* self = instanceForToken(token);
+    // Hold |g_mutex| across the whole call: the destructor removes the instance under the same lock, so
+    // the object cannot be freed while onStarted() runs on it.
+    QMutexLocker locker(&g_mutex);
+
+    ScreenCapturerAndroid* self = g_instances.value(token, nullptr);
     if (self)
         self->onStarted(success, QSize(width, height), QPoint(dpi, dpi));
 }
@@ -65,7 +62,12 @@ void JNICALL nativeOnStarted(JNIEnv* /* env */, jclass /* clazz */, jlong token,
 void JNICALL nativeOnFrame(JNIEnv* env, jclass /* clazz */, jlong token, jobject buffer,
                            jint width, jint height, jint /* pixel_stride */, jint row_stride)
 {
-    ScreenCapturerAndroid* self = instanceForToken(token);
+    // Hold |g_mutex| across the whole call. This callback arrives on the ImageReader listener thread and
+    // must not touch a destroyed instance: the destructor removes the instance from |g_instances| under
+    // the same lock, so it blocks until an in-flight frame finishes, and later frames find no instance.
+    QMutexLocker locker(&g_mutex);
+
+    ScreenCapturerAndroid* self = g_instances.value(token, nullptr);
     if (!self || !buffer)
         return;
 

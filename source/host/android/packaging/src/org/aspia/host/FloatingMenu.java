@@ -30,6 +30,8 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -45,9 +47,17 @@ import android.widget.TextView;
 // Draggable floating button shown while a desktop session is active. Tapping it opens a small action
 // menu (clipboard sync, Back, Home, Recents). The menu window is focusable, so while it is open this app
 // counts as focused and may access the clipboard (Android blocks clipboard access for background apps).
+//
+// The overlay lives on its own thread rather than the main thread: when the host app is backgrounded Qt
+// blocks the Android main thread (waiting on its gui thread for the destroyed surface), so main-thread
+// work would not run until the app is reopened. A dedicated HandlerThread keeps its own Looper running, so
+// the button appears and, crucially, disappears immediately even while the app is in the background.
 public final class FloatingMenu
 {
     private static final String TAG = "Aspia";
+
+    private static HandlerThread sThread = null;
+    private static Handler sHandler = null;
 
     private static WindowManager sWindowManager = null;
     private static View sButton = null;
@@ -55,7 +65,7 @@ public final class FloatingMenu
     private static View sMenu = null;
 
     // Latest remote clipboard text, applied to the device the next time the menu syncs the clipboard.
-    private static String sPending = null;
+    private static volatile String sPending = null;
 
     // Last value synced with the device clipboard, to avoid echoing it back to the remote.
     private static String sLastSynced = null;
@@ -66,6 +76,19 @@ public final class FloatingMenu
     private FloatingMenu()
     {
         // Static-only.
+    }
+
+    // Posts view work to the dedicated overlay thread (see the class comment). All operations that touch
+    // the overlay windows must run on this thread, since that is where they are created.
+    private static synchronized void post(Runnable action)
+    {
+        if (sThread == null)
+        {
+            sThread = new HandlerThread("AspiaFloatingMenu");
+            sThread.start();
+            sHandler = new Handler(sThread.getLooper());
+        }
+        sHandler.post(action);
     }
 
     public static boolean canDraw(Context context)
@@ -100,7 +123,12 @@ public final class FloatingMenu
     }
 
     // Shows the floating button (no-op if already shown or the overlay permission is not granted).
-    public static void show(Context context)
+    public static void show(final Context context)
+    {
+        post(() -> showImpl(context));
+    }
+
+    private static void showImpl(Context context)
     {
         if (sButton != null)
             return;
@@ -228,6 +256,11 @@ public final class FloatingMenu
     }
 
     public static void hide()
+    {
+        post(FloatingMenu::hideImpl);
+    }
+
+    private static void hideImpl()
     {
         closeMenu();
 

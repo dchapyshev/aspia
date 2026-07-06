@@ -196,15 +196,17 @@ void DesktopAgent::onClientFinished()
     // service). Capture restarts, re-requesting the consent, when a client connects again.
     if (clients_.isEmpty())
     {
+        // Dispatch the button hide first: releasing the capturer blocks on the Android main thread, so
+        // scheduling the hide beforehand keeps it from being held up behind that teardown.
+        if (floating_menu_bridge_)
+            floating_menu_bridge_->hideButton();
+
         capture_timer_->stop();
         screen_capturer_.reset();
         input_injector_.reset();
         video_encoder_.reset();
         source_size_ = QSize();
         frame_count_ = 0;
-
-        if (floating_menu_bridge_)
-            floating_menu_bridge_->hideButton();
     }
 }
 
