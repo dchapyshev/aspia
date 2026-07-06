@@ -572,44 +572,6 @@ bool DesktopToolBar::isPanelPinned() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopToolBar::changeEvent(QEvent* event)
-{
-    QFrame::changeEvent(event);
-
-    if (event->type() == QEvent::LanguageChange)
-    {
-        ui->retranslateUi(this);
-
-        // Programmatically created menu titles and dynamic action texts must be re-applied
-        // because retranslateUi only touches strings declared in the .ui file.
-        if (scale_menu_)
-            scale_menu_->setTitle(tr("Scale"));
-
-        ui->action_start_recording->setText(
-            is_recording_started_ ? tr("Stop recording") : tr("Start recording"));
-
-        // The "Resolution selection" action is the screen action that hosts the resolutions
-        // submenu. Other screen actions show resolution numbers and don't need translation.
-        for (QAction* action : std::as_const(screen_actions_))
-        {
-            if (action->menu() == resolutions_menu_)
-            {
-                QString text = tr("Resolution selection");
-                action->setText(text);
-                action->setToolTip(text);
-            }
-        }
-
-        for (QAction* action : std::as_const(sessions_actions_))
-        {
-            action->setText(formatSessionText(action->property("session_index").toInt(),
-                                              action->property("user_name").toString(),
-                                              action->property("is_console").toBool()));
-        }
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enterEvent(QEnterEvent* /* event */)
 {
     if (is_tabbed_)

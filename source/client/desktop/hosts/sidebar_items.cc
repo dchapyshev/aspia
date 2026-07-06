@@ -147,14 +147,8 @@ SidebarRouterHosts::SidebarRouterHosts(qint64 router_id, QTreeWidgetItem* parent
     : SidebarItem(ROUTER_HOSTS, /*group_id=*/-1, parent),
       router_id_(router_id)
 {
-    retranslate();
-    setIcon(0, QIcon(":/img/computer.svg"));
-}
-
-//--------------------------------------------------------------------------------------------------
-void SidebarRouterHosts::retranslate()
-{
     setText(0, tr("All Hosts"));
+    setIcon(0, QIcon(":/img/computer.svg"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -162,14 +156,8 @@ SidebarRouterUsers::SidebarRouterUsers(qint64 router_id, QTreeWidgetItem* parent
     : SidebarItem(ROUTER_USERS, /*group_id=*/-1, parent),
       router_id_(router_id)
 {
-    retranslate();
-    setIcon(0, QIcon(":/img/user-account.svg"));
-}
-
-//--------------------------------------------------------------------------------------------------
-void SidebarRouterUsers::retranslate()
-{
     setText(0, tr("Users"));
+    setIcon(0, QIcon(":/img/user-account.svg"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -177,14 +165,8 @@ SidebarRouterClients::SidebarRouterClients(qint64 router_id, QTreeWidgetItem* pa
     : SidebarItem(ROUTER_CLIENTS, /*group_id=*/-1, parent),
       router_id_(router_id)
 {
-    retranslate();
-    setIcon(0, QIcon(":/img/computer.svg"));
-}
-
-//--------------------------------------------------------------------------------------------------
-void SidebarRouterClients::retranslate()
-{
     setText(0, tr("Clients"));
+    setIcon(0, QIcon(":/img/computer.svg"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -192,12 +174,6 @@ SidebarRouterRelays::SidebarRouterRelays(qint64 router_id, QTreeWidgetItem* pare
     : SidebarItem(ROUTER_RELAYS, /*group_id=*/-1, parent),
       router_id_(router_id)
 {
-    retranslate();
-    setIcon(0, QIcon(":/img/stack.svg"));
-}
-
-//--------------------------------------------------------------------------------------------------
-void SidebarRouterRelays::retranslate()
-{
     setText(0, tr("Relays"));
+    setIcon(0, QIcon(":/img/stack.svg"));
 }

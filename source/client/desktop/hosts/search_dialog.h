@@ -43,7 +43,6 @@ signals:
 protected:
     // QWidget implementation.
     void showEvent(QShowEvent* event) final;
-    void changeEvent(QEvent* event) final;
 
 private:
     std::unique_ptr<Ui::SearchDialog> ui;

@@ -298,14 +298,6 @@ void RouterGroupWidget::onEditHost()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterGroupWidget::changeEvent(QEvent* event)
-{
-    if (event->type() == QEvent::LanguageChange)
-        ui->retranslateUi(this);
-    ContentWidget::changeEvent(event);
-}
-
-//--------------------------------------------------------------------------------------------------
 bool RouterGroupWidget::eventFilter(QObject* watched, QEvent* event)
 {
     if (watched == ui->tree_host)

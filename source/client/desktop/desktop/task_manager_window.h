@@ -47,7 +47,6 @@ signals:
 
 protected:
     // QMainWindow implementation.
-    void changeEvent(QEvent* event) final;
     void closeEvent(QCloseEvent* event) final;
 
 private slots:

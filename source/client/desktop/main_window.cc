@@ -256,18 +256,6 @@ void MainWindow::onSettings()
 
     SettingsTab* settings_tab = new SettingsTab(this);
 
-    connect(settings_tab, &SettingsTab::sig_languageChanged, this, [this]()
-    {
-        ui->retranslateUi(this);
-        search_field_->setPlaceholderText(tr("Search..."));
-
-        for (int i = 0; i < ui->tabs->count(); ++i)
-        {
-            if (HostsTab* hosts = dynamic_cast<HostsTab*>(ui->tabs->widget(i)))
-                hosts->reloadRouters();
-        }
-    });
-
     connect(settings_tab, &SettingsTab::sig_desktopConfigChanged, this, [this]()
     {
         for (int i = 0; i < ui->tabs->count(); ++i)

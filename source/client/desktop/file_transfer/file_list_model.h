@@ -41,8 +41,6 @@ public:
     qint64 sizeAt(const QModelIndex& index) const;
     QModelIndex createFolder();
 
-    void retranslate();
-
     // QAbstractItemModel implementation.
     QModelIndex index(int row, int column, const QModelIndex& parent) const final;
     QModelIndex parent(const QModelIndex& child) const final;

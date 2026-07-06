@@ -504,14 +504,6 @@ void RouterHostsWidget::onCheckHostUpdates()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterHostsWidget::changeEvent(QEvent* event)
-{
-    if (event->type() == QEvent::LanguageChange)
-        ui->retranslateUi(this);
-    ContentWidget::changeEvent(event);
-}
-
-//--------------------------------------------------------------------------------------------------
 bool RouterHostsWidget::eventFilter(QObject* watched, QEvent* event)
 {
     if (watched == ui->tree_hosts && event->type() == QEvent::KeyPress)

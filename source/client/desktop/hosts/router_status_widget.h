@@ -61,10 +61,6 @@ public:
 public slots:
     void onEvent(qint64 router_id, const RouterStatusWidget::Event& event);
 
-protected:
-    // QWidget implementation.
-    void changeEvent(QEvent* event) final;
-
 private:
     void addEvent(const Event& event);
     void updateStatusLabel();

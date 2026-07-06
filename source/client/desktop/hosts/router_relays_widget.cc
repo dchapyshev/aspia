@@ -488,14 +488,6 @@ void RouterRelaysWidget::onDisconnectAllRelays()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterRelaysWidget::changeEvent(QEvent* event)
-{
-    if (event->type() == QEvent::LanguageChange)
-        ui->retranslateUi(this);
-    ContentWidget::changeEvent(event);
-}
-
-//--------------------------------------------------------------------------------------------------
 void RouterRelaysWidget::onCurrentRelayChanged()
 {
     ui->tree_peers->clear();

@@ -71,10 +71,6 @@ signals:
     void sig_currentChanged();
     void sig_contextMenu(const QPoint& global_pos, int column);
 
-protected:
-    // QWidget implementation.
-    void changeEvent(QEvent* event) final;
-
 private slots:
     void onCurrentRelayChanged();
     void onRelayContextMenu(const QPoint& pos);

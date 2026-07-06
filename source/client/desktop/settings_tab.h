@@ -45,7 +45,6 @@ public:
     bool hasStatusBar() const final;
 
 signals:
-    void sig_languageChanged();
     void sig_desktopConfigChanged();
 
 protected:

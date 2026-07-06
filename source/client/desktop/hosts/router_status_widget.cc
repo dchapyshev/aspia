@@ -133,14 +133,6 @@ void RouterStatusWidget::onEvent(qint64 router_id, const Event& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterStatusWidget::changeEvent(QEvent* event)
-{
-    if (event->type() == QEvent::LanguageChange)
-        ui->retranslateUi(this);
-    ContentWidget::changeEvent(event);
-}
-
-//--------------------------------------------------------------------------------------------------
 void RouterStatusWidget::addEvent(const Event& event)
 {
     QString icon_path;

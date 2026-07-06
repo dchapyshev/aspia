@@ -509,15 +509,6 @@ void TaskManagerWindow::readMessage(const proto::task_manager::HostToClient& mes
 }
 
 //--------------------------------------------------------------------------------------------------
-void TaskManagerWindow::changeEvent(QEvent* event)
-{
-    QMainWindow::changeEvent(event);
-
-    if (event->type() == QEvent::LanguageChange)
-        ui->retranslateUi(this);
-}
-
-//--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::closeEvent(QCloseEvent* event)
 {
     QMainWindow::closeEvent(event);

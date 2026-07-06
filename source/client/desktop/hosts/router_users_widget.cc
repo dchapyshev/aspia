@@ -288,14 +288,6 @@ void RouterUsersWidget::onDeleteUser()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterUsersWidget::changeEvent(QEvent* event)
-{
-    if (event->type() == QEvent::LanguageChange)
-        ui->retranslateUi(this);
-    ContentWidget::changeEvent(event);
-}
-
-//--------------------------------------------------------------------------------------------------
 bool RouterUsersWidget::eventFilter(QObject* watched, QEvent* event)
 {
     if (watched == ui->tree_users && event->type() == QEvent::KeyPress)

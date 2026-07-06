@@ -36,8 +36,6 @@ public:
     QString previousPath() const { return previous_path_; }
     QString pathAt(const QModelIndex& index) const;
 
-    void retranslate();
-
     bool isComputerPath(const QString& path) const;
     bool isDrivePath(const QString& path) const;
 

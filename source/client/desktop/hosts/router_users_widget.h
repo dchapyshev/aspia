@@ -66,9 +66,6 @@ signals:
     void sig_userContextMenu(const User& user, const QPoint& global_pos);
 
 protected:
-    // QWidget implementation.
-    void changeEvent(QEvent* event) final;
-
     // QObject implementation.
     bool eventFilter(QObject* watched, QEvent* event) final;
 

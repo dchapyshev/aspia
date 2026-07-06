@@ -377,14 +377,6 @@ void RouterClientsWidget::onDisconnectAllClients()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterClientsWidget::changeEvent(QEvent* event)
-{
-    if (event->type() == QEvent::LanguageChange)
-        ui->retranslateUi(this);
-    ContentWidget::changeEvent(event);
-}
-
-//--------------------------------------------------------------------------------------------------
 void RouterClientsWidget::onClientListReceived(const proto::router::ClientList& clients)
 {
     auto has_with_id = [](const proto::router::ClientList& clients, qint64 entry_id)

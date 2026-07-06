@@ -492,18 +492,6 @@ void SearchWidget::deactivate(QStatusBar* statusbar)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SearchWidget::changeEvent(QEvent* event)
-{
-    if (event->type() == QEvent::LanguageChange)
-    {
-        QStringList headers;
-        headers << tr("Name") << tr("Address / ID") << tr("Group") << tr("Comment");
-        tree_host_->setHeaderLabels(headers);
-    }
-    ContentWidget::changeEvent(event);
-}
-
-//--------------------------------------------------------------------------------------------------
 void SearchWidget::onHeaderContextMenu(const QPoint& pos)
 {
     QHeaderView* header = tree_host_->header();

@@ -45,10 +45,6 @@ public:
     Type itemType() const { return type_; }
     qint64 groupId() const { return group_id_; }
 
-    // Re-apply translated text after a language change. Data-named items (groups, routers)
-    // keep their names, so the default is a no-op; fixed-label items override it.
-    virtual void retranslate() {}
-
 protected:
     SidebarItem(Type type, qint64 group_id, QTreeWidget* parent);
     SidebarItem(Type type, qint64 group_id, QTreeWidgetItem* parent);
@@ -145,9 +141,6 @@ public:
 
     qint64 routerId() const { return router_id_; }
 
-    // SidebarItem implementation.
-    void retranslate() final;
-
 private:
     const qint64 router_id_;
 };
@@ -161,9 +154,6 @@ public:
     SidebarRouterUsers(qint64 router_id, QTreeWidgetItem* parent);
 
     qint64 routerId() const { return router_id_; }
-
-    // SidebarItem implementation.
-    void retranslate() final;
 
 private:
     const qint64 router_id_;
@@ -179,9 +169,6 @@ public:
 
     qint64 routerId() const { return router_id_; }
 
-    // SidebarItem implementation.
-    void retranslate() final;
-
 private:
     const qint64 router_id_;
 };
@@ -195,9 +182,6 @@ public:
     SidebarRouterRelays(qint64 router_id, QTreeWidgetItem* parent);
 
     qint64 routerId() const { return router_id_; }
-
-    // SidebarItem implementation.
-    void retranslate() final;
 
 private:
     const qint64 router_id_;

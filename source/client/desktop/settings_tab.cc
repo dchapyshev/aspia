@@ -313,31 +313,8 @@ bool SettingsTab::hasStatusBar() const
 //--------------------------------------------------------------------------------------------------
 void SettingsTab::changeEvent(QEvent* event)
 {
-    if (event->type() == QEvent::LanguageChange)
-    {
-        ui->retranslateUi(this);
-
-        int button_id = 0;
-        if (QAbstractButton* button = category_group_->button(button_id++))
-            button->setText(tr("General"));
-        if (QAbstractButton* button = category_group_->button(button_id++))
-            button->setText(tr("Desktop"));
-#if defined(Q_OS_WINDOWS)
-        if (QAbstractButton* button = category_group_->button(button_id++))
-            button->setText(tr("Update"));
-#endif
-
-        QSignalBlocker blocker(ui->combo_theme);
-        for (int i = 0; i < ui->combo_theme->count(); ++i)
-        {
-            QString theme_id = ui->combo_theme->itemData(i).toString();
-            ui->combo_theme->setItemText(i, GuiApplication::themeName(theme_id));
-        }
-
-        emit sig_titleChanged(tr("Settings"));
-    }
-    else if (event->type() == QEvent::PaletteChange || event->type() == QEvent::StyleChange ||
-             event->type() == QEvent::ApplicationPaletteChange)
+    if (event->type() == QEvent::PaletteChange || event->type() == QEvent::StyleChange ||
+        event->type() == QEvent::ApplicationPaletteChange)
     {
         applyCategoryStyle();
     }
@@ -357,11 +334,9 @@ void SettingsTab::onLanguageChanged()
     QString new_locale = ui->combo_language->currentData().toString();
     LOG(INFO) << "[ACTION] Language changed:" << new_locale;
 
+    // The language is not switched live; the new value is applied on the next application start.
     Settings settings;
     settings.setLocale(new_locale);
-    Application::instance()->setLocale(new_locale);
-
-    emit sig_languageChanged();
 }
 
 //--------------------------------------------------------------------------------------------------

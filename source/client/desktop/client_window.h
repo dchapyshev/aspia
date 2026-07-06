@@ -120,7 +120,6 @@ protected:
     const QList<QAction*>& sessionConnectActions() const { return session_connect_actions_; }
 
     // QWidget implementation.
-    void changeEvent(QEvent* event) override;
     void closeEvent(QCloseEvent* event) override;
     void moveEvent(QMoveEvent* event) override;
 

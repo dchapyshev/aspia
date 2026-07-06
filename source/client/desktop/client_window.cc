@@ -186,15 +186,6 @@ void ClientWindow::restoreState(const QByteArray& /* state */)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::changeEvent(QEvent* event)
-{
-    QWidget::changeEvent(event);
-
-    if (event->type() == QEvent::LanguageChange && session_state_)
-        setClientTitle(session_state_->host(), session_type_);
-}
-
-//--------------------------------------------------------------------------------------------------
 void ClientWindow::closeEvent(QCloseEvent* /* event */)
 {
     LOG(INFO) << "Close event";

@@ -63,11 +63,3 @@ void SearchDialog::showEvent(QShowEvent* event)
     ui->edit_search->setFocus();
     ui->edit_search->selectAll();
 }
-
-//--------------------------------------------------------------------------------------------------
-void SearchDialog::changeEvent(QEvent* event)
-{
-    if (event->type() == QEvent::LanguageChange)
-        ui->retranslateUi(this);
-    QDialog::changeEvent(event);
-}

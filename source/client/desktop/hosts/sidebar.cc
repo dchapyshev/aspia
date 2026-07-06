@@ -744,28 +744,6 @@ void Sidebar::onRemoveRouter()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::changeEvent(QEvent* event)
-{
-    QWidget::changeEvent(event);
-
-    if (event->type() != QEvent::LanguageChange)
-        return;
-
-    if (local_root_)
-        local_root_->setText(0, tr("Local"));
-
-    for (int i = 0; i < tree_widget_->topLevelItemCount(); ++i)
-    {
-        SidebarItem* top = static_cast<SidebarItem*>(tree_widget_->topLevelItem(i));
-        if (top->itemType() != SidebarItem::ROUTER)
-            continue;
-
-        for (int j = 0; j < top->childCount(); ++j)
-            static_cast<SidebarItem*>(top->child(j))->retranslate();
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 bool Sidebar::eventFilter(QObject* watched, QEvent* event)
 {
     if (watched == tree_widget_)

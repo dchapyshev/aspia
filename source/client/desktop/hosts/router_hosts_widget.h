@@ -78,9 +78,6 @@ signals:
     void sig_contextMenu(const QPoint& global_pos, int column);
 
 protected:
-    // QWidget implementation.
-    void changeEvent(QEvent* event) final;
-
     // QObject implementation.
     bool eventFilter(QObject* watched, QEvent* event) final;
 

@@ -100,10 +100,6 @@ signals:
     void sig_currentChanged();
     void sig_contextMenu(const QPoint& pos);
 
-protected:
-    // QWidget implementation.
-    void changeEvent(QEvent* event) final;
-
 private slots:
     void onHeaderContextMenu(const QPoint& pos);
     void dispatchRouterSearch();

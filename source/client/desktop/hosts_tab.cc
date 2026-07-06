@@ -421,17 +421,6 @@ void HostsTab::reloadRouters()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::changeEvent(QEvent* event)
-{
-    if (event->type() == QEvent::LanguageChange)
-    {
-        ui->retranslateUi(this);
-        emit sig_titleChanged(tr("Hosts"));
-    }
-    Tab::changeEvent(event);
-}
-
-//--------------------------------------------------------------------------------------------------
 void HostsTab::onSwitchContent(SidebarItem::Type type)
 {
     switch (type)

@@ -71,7 +71,6 @@ protected:
     void onInternalReset() final;
 
     // QWidget implementation.
-    void changeEvent(QEvent* event) final;
     void closeEvent(QCloseEvent* event) final;
 
 private slots:

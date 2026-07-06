@@ -267,12 +267,6 @@ void FilePanel::changeEvent(QEvent* event)
     {
         applyMirrored();
     }
-    else if (event->type() == QEvent::LanguageChange)
-    {
-        ui->retranslateUi(this);
-        ui->address_bar->retranslate();
-        ui->list->retranslate();
-    }
 }
 
 //--------------------------------------------------------------------------------------------------

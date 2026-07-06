@@ -72,9 +72,6 @@ public slots:
     void onRemoveRouter();
 
 protected:
-    // QWidget implementation.
-    void changeEvent(QEvent* event) final;
-
     // QObject implementation.
     bool eventFilter(QObject* watched, QEvent* event) final;
 

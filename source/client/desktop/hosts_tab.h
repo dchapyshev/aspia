@@ -65,10 +65,6 @@ public:
 
     void reloadRouters();
 
-protected:
-    // QWidget implementation.
-    void changeEvent(QEvent* event) final;
-
 private slots:
     void onSwitchContent(SidebarItem::Type type);
     void onSidebarContextMenu(SidebarItem::Type type, const QPoint& pos);

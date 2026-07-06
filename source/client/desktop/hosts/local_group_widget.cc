@@ -305,14 +305,6 @@ void LocalGroupWidget::deactivate(QStatusBar* statusbar)
 }
 
 //--------------------------------------------------------------------------------------------------
-void LocalGroupWidget::changeEvent(QEvent* event)
-{
-    if (event->type() == QEvent::LanguageChange)
-        ui->retranslateUi(this);
-    ContentWidget::changeEvent(event);
-}
-
-//--------------------------------------------------------------------------------------------------
 bool LocalGroupWidget::eventFilter(QObject* watched, QEvent* event)
 {
     if (watched == ui->tree_host)

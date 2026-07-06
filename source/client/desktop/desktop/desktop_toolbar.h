@@ -113,7 +113,6 @@ signals:
 
 protected:
     // QFrame implementation.
-    void changeEvent(QEvent* event) final;
     void enterEvent(QEnterEvent* event) final;
     void leaveEvent(QEvent* event) final;
 

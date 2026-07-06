@@ -216,14 +216,6 @@ QModelIndex FileListModel::createFolder()
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileListModel::retranslate()
-{
-    beginResetModel();
-    dir_type_ = tr("Folder");
-    endResetModel();
-}
-
-//--------------------------------------------------------------------------------------------------
 QModelIndex FileListModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (row < 0 || column < 0 || row >= rowCount(parent) || column >= columnCount(parent))
