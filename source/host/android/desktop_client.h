@@ -23,6 +23,10 @@
 
 #include "host/client.h"
 
+namespace proto::clipboard {
+class Event;
+} // namespace proto::clipboard
+
 namespace proto::input {
 class KeyEvent;
 class MouseEvent;
@@ -46,6 +50,7 @@ public:
     // Forward shared session data (encoded once by the DesktopAgent) to this client's channel.
     void onVideoData(const QByteArray& buffer, bool is_key_frame);
     void onScreenListData(const QByteArray& buffer);
+    void onClipboardData(const QByteArray& buffer);
 
 signals:
     void sig_configured();
@@ -56,6 +61,7 @@ signals:
     void sig_injectTextEvent(const proto::input::TextEvent& event);
     void sig_injectMouseEvent(const proto::input::MouseEvent& event);
     void sig_injectTouchEvent(const proto::input::TouchEvent& event);
+    void sig_injectClipboardEvent(const proto::clipboard::Event& event);
 
 protected:
     // Client implementation.
@@ -67,6 +73,7 @@ private:
     void handleVideoControl(const QByteArray& buffer);
     void handleScreenControl(const QByteArray& buffer);
     void handleInput(const QByteArray& buffer);
+    void handleClipboard(const QByteArray& buffer);
     void sendCapabilities();
 
     // Codecs the connected client advertised; the agent uses them to pick a common encoding.

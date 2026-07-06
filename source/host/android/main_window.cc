@@ -319,12 +319,47 @@ void AndroidMainWindow::checkAccessibilityService()
 
     const bool enabled = QJniObject::callStaticMethod<jboolean>(
         kInputServiceClass, "isEnabled", "(Landroid/content/Context;)Z", context.object());
-    if (enabled)
+    if (!enabled)
+    {
+        const bool open = MessageDialog::confirm(
+            this, tr("Permissions"),
+            tr("Enable the accessibility service to allow remote keyboard and mouse control."),
+            tr("Open"));
+        if (open)
+        {
+            QNativeInterface::QAndroidApplication::runOnAndroidMainThread([]() -> QVariant
+            {
+                QJniObject context = QNativeInterface::QAndroidApplication::context();
+                if (context.isValid())
+                {
+                    QJniObject::callStaticMethod<void>("org/aspia/host/InputService", "openSettings",
+                        "(Landroid/content/Context;)V", context.object());
+                }
+                return QVariant();
+            });
+        }
+    }
+
+    checkOverlayPermission();
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::checkOverlayPermission()
+{
+    const char kMenuClass[] = "org/aspia/host/FloatingMenu";
+
+    QJniObject context = QNativeInterface::QAndroidApplication::context();
+    if (!context.isValid())
+        return;
+
+    const bool granted = QJniObject::callStaticMethod<jboolean>(
+        kMenuClass, "canDraw", "(Landroid/content/Context;)Z", context.object());
+    if (granted)
         return;
 
     const bool open = MessageDialog::confirm(
         this, tr("Permissions"),
-        tr("Enable the accessibility service to allow remote keyboard and mouse control."),
+        tr("Allow display over other apps to show the on-screen action button during a session."),
         tr("Open"));
     if (!open)
         return;
@@ -334,7 +369,7 @@ void AndroidMainWindow::checkAccessibilityService()
         QJniObject context = QNativeInterface::QAndroidApplication::context();
         if (context.isValid())
         {
-            QJniObject::callStaticMethod<void>("org/aspia/host/InputService", "openSettings",
+            QJniObject::callStaticMethod<void>("org/aspia/host/FloatingMenu", "openPermissionSettings",
                 "(Landroid/content/Context;)V", context.object());
         }
         return QVariant();

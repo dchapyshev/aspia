@@ -26,11 +26,14 @@
 #include "base/codec/video_encoder.h"
 #include "base/desktop/frame.h"
 #include "base/desktop/region.h"
+#include "common/clipboard.h"
 #include "host/input_injector_android.h"
 #include "host/screen_capturer.h"
 #include "host/screen_capturer_android.h"
+#include "host/android/floating_menu_bridge.h"
 #include "host/android/desktop_client.h"
 #include "proto/desktop_channel.h"
+#include "proto/desktop_clipboard.h"
 #include "proto/desktop_input.h"
 #include "proto/desktop_screen.h"
 #include "proto/desktop_video.h"
@@ -55,6 +58,11 @@ DesktopAgent::DesktopAgent(QObject* parent)
     capture_timer_->setSingleShot(true);
     capture_timer_->setTimerType(Qt::PreciseTimer);
     connect(capture_timer_, &QTimer::timeout, this, &DesktopAgent::onCaptureScreen);
+
+    // Clipboard flows through the floating overlay button (background clipboard access is blocked).
+    floating_menu_bridge_ = new FloatingMenuBridge(this);
+    connect(floating_menu_bridge_, &FloatingMenuBridge::sig_clipboardText,
+            this, &DesktopAgent::onClipboardTextChanged);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -79,6 +87,8 @@ void DesktopAgent::addClient(DesktopClient* client)
     connect(client, &DesktopClient::sig_injectMouseEvent, this, &DesktopAgent::onInjectMouseEvent);
     connect(client, &DesktopClient::sig_injectTouchEvent, this, &DesktopAgent::onInjectTouchEvent);
     connect(client, &Client::sig_finished, this, &DesktopAgent::onClientFinished);
+
+    connect(client, &DesktopClient::sig_injectClipboardEvent, this, &DesktopAgent::onInjectClipboardEvent);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -135,6 +145,9 @@ void DesktopAgent::onClientConfigured()
     onPreferredSizeChanged();
     sendScreenList();
 
+    if (floating_menu_bridge_)
+        floating_menu_bridge_->showButton();
+
     capture_timer_->start(0);
 }
 
@@ -189,6 +202,9 @@ void DesktopAgent::onClientFinished()
         video_encoder_.reset();
         source_size_ = QSize();
         frame_count_ = 0;
+
+        if (floating_menu_bridge_)
+            floating_menu_bridge_->hideButton();
     }
 }
 
@@ -266,6 +282,29 @@ void DesktopAgent::onInjectTouchEvent(const proto::input::TouchEvent& event)
 {
     if (input_injector_)
         input_injector_->injectTouchEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::onInjectClipboardEvent(const proto::clipboard::Event& event)
+{
+    // Only plain text is supported; queue it for the overlay button to apply on the next tap.
+    if (event.mime_type() == Clipboard::kMimeTypeTextUtf8.toStdString() && floating_menu_bridge_)
+        floating_menu_bridge_->setIncomingText(QString::fromStdString(event.data()));
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::onClipboardTextChanged(const QString& text)
+{
+    proto::clipboard::Event event;
+    event.set_mime_type(Clipboard::kMimeTypeTextUtf8.toStdString());
+    event.set_data(text.toStdString());
+
+    proto::clipboard::HostToClient message;
+    message.mutable_event()->CopyFrom(event);
+
+    const QByteArray buffer = serialize(message);
+    for (auto* client : std::as_const(clients_))
+        client->onClipboardData(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------

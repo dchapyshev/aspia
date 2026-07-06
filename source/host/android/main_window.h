@@ -65,6 +65,7 @@ private:
     void retranslate();
     void scrollFocusIntoView();
     void checkAccessibilityService();
+    void checkOverlayPermission();
     QScrollArea* focusedScrollArea() const;
     QString sectionTitle(int index) const;
 

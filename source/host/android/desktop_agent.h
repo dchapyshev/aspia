@@ -27,6 +27,10 @@
 
 #include "base/scoped_qpointer.h"
 
+namespace proto::clipboard {
+class Event;
+} // namespace proto::clipboard
+
 namespace proto::input {
 class KeyEvent;
 class MouseEvent;
@@ -38,6 +42,7 @@ namespace proto::video {
 enum Encoding : int;
 } // namespace proto::video
 
+class FloatingMenuBridge;
 class DesktopClient;
 class Frame;
 class InputInjector;
@@ -75,6 +80,11 @@ private slots:
     void onInjectMouseEvent(const proto::input::MouseEvent& event);
     void onInjectTouchEvent(const proto::input::TouchEvent& event);
 
+    // Clipboard a client sent; queued for the overlay button to apply on the next tap.
+    void onInjectClipboardEvent(const proto::clipboard::Event& event);
+    // Device clipboard text read on an overlay tap; broadcast to all clients.
+    void onClipboardTextChanged(const QString& text);
+
 private:
     void createVideoEncoder();
     bool startCapturer();
@@ -86,6 +96,9 @@ private:
     ScopedQPointer<InputInjector> input_injector_;
     std::unique_ptr<VideoEncoder> video_encoder_;
     std::unique_ptr<ScaleReducer> scale_reducer_;
+
+    // Bridge to the floating clipboard button (the only way to reach the clipboard while backgrounded).
+    FloatingMenuBridge* floating_menu_bridge_ = nullptr;
 
     // Connected desktop clients (owned by Server). Encoded frames are broadcast to all of them.
     QList<DesktopClient*> clients_;

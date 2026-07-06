@@ -24,6 +24,7 @@
 #include "base/serialization.h"
 #include "common/desktop_session_constants.h"
 #include "proto/desktop_channel.h"
+#include "proto/desktop_clipboard.h"
 #include "proto/desktop_control.h"
 #include "proto/desktop_input.h"
 #include "proto/desktop_screen.h"
@@ -56,6 +57,12 @@ void DesktopClient::onScreenListData(const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopClient::onClipboardData(const QByteArray& buffer)
+{
+    send(proto::desktop::CHANNEL_ID_CLIPBOARD, buffer, true);
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopClient::onStart()
 {
     LOG(INFO) << "Desktop session started";
@@ -84,6 +91,10 @@ void DesktopClient::onMessage(quint8 channel_id, const QByteArray& buffer)
 
         case proto::desktop::CHANNEL_ID_INPUT:
             handleInput(buffer);
+            break;
+
+        case proto::desktop::CHANNEL_ID_CLIPBOARD:
+            handleClipboard(buffer);
             break;
 
         default:
@@ -224,16 +235,37 @@ void DesktopClient::handleInput(const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopClient::handleClipboard(const QByteArray& buffer)
+{
+    proto::clipboard::ClientToHost message;
+    if (!parse(buffer, &message))
+    {
+        LOG(ERROR) << "Unable to parse clipboard message";
+        return;
+    }
+
+    // The shared clipboard lives in the agent; the event is only forwarded here.
+    if (message.has_event())
+        emit sig_injectClipboardEvent(message.event());
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopClient::sendCapabilities()
 {
-    // The Android host advertises its OS; it offers none of the extensions (power control, screen
-    // selection, file clipboard, etc.) that the desktop hosts do.
+    // The Android host advertises its OS and text clipboard; it offers none of the other extensions
+    // (power control, screen selection, file clipboard, etc.) that the desktop hosts do.
     proto::control::HostToClient message;
     proto::control::Capabilities* capabilities = message.mutable_capabilities();
 
-    proto::control::Capabilities::Flag* flag = capabilities->add_flag();
-    flag->set_name(kFlagOSAndroid);
-    flag->set_value(true);
+    auto add_flag = [capabilities](const char* name)
+    {
+        proto::control::Capabilities::Flag* flag = capabilities->add_flag();
+        flag->set_name(name);
+        flag->set_value(true);
+    };
+
+    add_flag(kFlagOSAndroid);
+    add_flag(kFlagClipboard);
 
     send(proto::desktop::CHANNEL_ID_CONTROL, serialize(message), true);
 }

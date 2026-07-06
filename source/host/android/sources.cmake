@@ -19,6 +19,8 @@
 collect_sources(SOURCE_HOST_ANDROID
     application.cc
     application.h
+    floating_menu_bridge.cc
+    floating_menu_bridge.h
     connection_widget.cc
     connection_widget.h
     desktop_agent.cc
