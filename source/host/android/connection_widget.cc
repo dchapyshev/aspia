@@ -18,10 +18,13 @@
 
 #include "host/android/connection_widget.h"
 
+#include <QCoreApplication>
 #include <QEvent>
 #include <QHBoxLayout>
+#include <QJniObject>
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QVariant>
 
 #include "common/android/card.h"
 #include "common/android/controls.h"
@@ -36,6 +39,47 @@ namespace {
 constexpr int kContentMargin = 16;
 constexpr int kCardSpacing = 16;
 constexpr int kRouterIconSize = 22;
+
+//--------------------------------------------------------------------------------------------------
+// Opens the system share sheet with |text| as plain text (ACTION_SEND).
+void shareText(const QString& text)
+{
+    const QString value = text;
+    QNativeInterface::QAndroidApplication::runOnAndroidMainThread([value]() -> QVariant
+    {
+        QJniObject context = QNativeInterface::QAndroidApplication::context();
+        if (!context.isValid())
+            return QVariant();
+
+        QJniObject action = QJniObject::getStaticObjectField(
+            "android/content/Intent", "ACTION_SEND", "Ljava/lang/String;");
+        QJniObject intent("android/content/Intent", "(Ljava/lang/String;)V", action.object());
+
+        QJniObject mime_type = QJniObject::fromString("text/plain");
+        intent.callObjectMethod("setType", "(Ljava/lang/String;)Landroid/content/Intent;",
+                                mime_type.object());
+
+        QJniObject extra_text_key = QJniObject::getStaticObjectField(
+            "android/content/Intent", "EXTRA_TEXT", "Ljava/lang/String;");
+        QJniObject jni_text = QJniObject::fromString(value);
+        intent.callObjectMethod("putExtra",
+            "(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;",
+            extra_text_key.object(), jni_text.object());
+
+        QJniObject chooser = QJniObject::callStaticObjectMethod(
+            "android/content/Intent", "createChooser",
+            "(Landroid/content/Intent;Ljava/lang/CharSequence;)Landroid/content/Intent;",
+            intent.object(), static_cast<jobject>(nullptr));
+
+        // The application context is not an activity, so the chooser needs to start its own task.
+        const jint flag_new_task = QJniObject::getStaticField<jint>(
+            "android/content/Intent", "FLAG_ACTIVITY_NEW_TASK");
+        chooser.callObjectMethod("addFlags", "(I)Landroid/content/Intent;", flag_new_task);
+
+        context.callMethod<void>("startActivity", "(Landroid/content/Intent;)V", chooser.object());
+        return QVariant();
+    });
+}
 
 } // namespace
 
@@ -133,6 +177,11 @@ ConnectionWidget::ConnectionWidget(QWidget* parent)
 
     setWidget(content);
 
+    // Lives in the top app bar; AppBar::setActions() reparents and shows it when this section is active.
+    share_button_ = new IconButton(":/img/material/share.svg", this);
+    share_button_->hide();
+    connect(share_button_, &IconButton::clicked, this, &ConnectionWidget::onShare);
+
     id_caption_->setText(tr("Your ID"));
     password_caption_->setText(tr("One-time password"));
     access_caption_->setText(tr("Access"));
@@ -167,6 +216,12 @@ void ConnectionWidget::setRouterState(RouterState state, const QString& router)
 }
 
 //--------------------------------------------------------------------------------------------------
+QList<QWidget*> ConnectionWidget::appBarActions() const
+{
+    return { share_button_ };
+}
+
+//--------------------------------------------------------------------------------------------------
 void ConnectionWidget::changeEvent(QEvent* event)
 {
     ScrollArea::changeEvent(event);
@@ -175,6 +230,12 @@ void ConnectionWidget::changeEvent(QEvent* event)
     // the theme changes.
     if (event->type() == QEvent::PaletteChange)
         updateRouterRow();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ConnectionWidget::onShare()
+{
+    shareText(tr("Aspia ID: %1\nPassword: %2").arg(host_id_, password_));
 }
 
 //--------------------------------------------------------------------------------------------------

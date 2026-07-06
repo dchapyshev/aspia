@@ -152,9 +152,13 @@ void AndroidMainWindow::onSectionChanged(int index)
     app_bar_->setBackVisible(false);
     app_bar_->setTitle(sectionTitle(index));
 
-    // The about action belongs to the settings tab; show it only there.
-    app_bar_->setActions((index == SECTION_SETTINGS && settings) ? settings->appBarActions()
-                                                                 : QList<QWidget*>());
+    // Each section supplies its own app bar actions (connection: share; settings: about).
+    QList<QWidget*> actions;
+    if (index == SECTION_CONNECTION)
+        actions = connection_->appBarActions();
+    else if (index == SECTION_SETTINGS && settings)
+        actions = settings->appBarActions();
+    app_bar_->setActions(actions);
 }
 
 //--------------------------------------------------------------------------------------------------

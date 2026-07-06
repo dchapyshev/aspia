@@ -19,6 +19,7 @@
 #ifndef HOST_ANDROID_CONNECTION_WIDGET_H
 #define HOST_ANDROID_CONNECTION_WIDGET_H
 
+#include <QList>
 #include <QString>
 
 #include "common/android/scroll_area.h"
@@ -51,6 +52,9 @@ public:
     void setPassword(const QString& password);
     void setRouterState(RouterState state, const QString& router = QString());
 
+    // The app bar action for this section (shares the host ID and one-time password).
+    QList<QWidget*> appBarActions() const;
+
 signals:
     // The user asked for a new one-time password.
     void sig_newPasswordRequested();
@@ -58,6 +62,9 @@ signals:
 protected:
     // QWidget implementation.
     void changeEvent(QEvent* event) final;
+
+private slots:
+    void onShare();
 
 private:
     void updateRouterRow();
@@ -68,6 +75,7 @@ private:
     Label* password_caption_ = nullptr;
     Label* password_value_ = nullptr;
     IconButton* new_password_button_ = nullptr;
+    IconButton* share_button_ = nullptr;
     Label* access_caption_ = nullptr;
     Switch* desktop_session_ = nullptr;
     Switch* file_transfer_session_ = nullptr;
