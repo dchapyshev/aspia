@@ -16,9 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/ui/settings_util.h"
+#include "host/settings_util.h"
 
-#include <QAbstractButton>
 #include <QFile>
 #include <QFileInfo>
 #include <QJsonArray>
@@ -29,9 +28,15 @@
 #include "base/net/address.h"
 #include "base/peer/user.h"
 #include "build/build_config.h"
-#include "common/desktop/msg_box.h"
 #include "host/database.h"
 #include "host/system_settings.h"
+
+// The settings dialogs differ per platform, but the imported/exported data does not.
+#if defined(Q_OS_ANDROID)
+#include "common/android/message_dialog.h"
+#else
+#include "common/desktop/msg_box.h"
+#endif
 
 namespace {
 
@@ -214,7 +219,7 @@ bool SettingsUtil::importFromFile(const QString& path, bool silent, QWidget* par
     {
         LOG(ERROR) << "Source settings file does not exist";
         if (!silent)
-            MsgBox::warning(parent, tr("Source settings file does not exist."));
+            showError(parent, tr("Source settings file does not exist."));
         return false;
     }
 
@@ -223,7 +228,7 @@ bool SettingsUtil::importFromFile(const QString& path, bool silent, QWidget* par
     {
         LOG(ERROR) << "Unable to open source file:" << file.errorString();
         if (!silent)
-            MsgBox::warning(parent, tr("Unable to open the source file."));
+            showError(parent, tr("Unable to open the source file."));
         return false;
     }
 
@@ -234,25 +239,16 @@ bool SettingsUtil::importFromFile(const QString& path, bool silent, QWidget* par
         LOG(ERROR) << "Failed to parse source file:" << error.errorString();
         if (!silent)
         {
-            MsgBox::warning(parent,
+            showError(parent,
                 tr("Unable to read the source file: the file is damaged or has an unknown format."));
         }
         return false;
     }
 
-    if (!silent)
+    if (!silent && !confirmOverwrite(parent))
     {
-        MsgBox message_box(MsgBox::Warning,
-            tr("Warning"),
-            tr("The existing settings will be overwritten. Continue?"),
-            MsgBox::Yes | MsgBox::No,
-            parent);
-
-        if (message_box.exec() == MsgBox::No)
-        {
-            LOG(INFO) << "Import canceled by user";
-            return false;
-        }
+        LOG(INFO) << "Import canceled by user";
+        return false;
     }
 
     QJsonObject root = doc.object();
@@ -261,12 +257,12 @@ bool SettingsUtil::importFromFile(const QString& path, bool silent, QWidget* par
     if (!importDatabase(root.value(kDatabase).toObject()))
     {
         if (!silent)
-            MsgBox::warning(parent, tr("Unable to write the secure database."));
+            showError(parent, tr("Unable to write the secure database."));
         return false;
     }
 
     if (!silent)
-        MsgBox::information(parent, tr("The configuration was successfully imported."));
+        showInfo(parent, tr("The configuration was successfully imported."));
 
     return true;
 }
@@ -281,23 +277,14 @@ bool SettingsUtil::exportToFile(const QString& path, bool silent, QWidget* paren
     {
         LOG(ERROR) << "Database is not valid";
         if (!silent)
-            MsgBox::warning(parent, tr("Unable to read the secure database."));
+            showError(parent, tr("Unable to read the secure database."));
         return false;
     }
 
-    if (QFileInfo::exists(path) && !silent)
+    if (QFileInfo::exists(path) && !silent && !confirmOverwrite(parent))
     {
-        MsgBox message_box(MsgBox::Warning,
-            tr("Warning"),
-            tr("The existing settings will be overwritten. Continue?"),
-            MsgBox::Yes | MsgBox::No,
-            parent);
-
-        if (message_box.exec() == MsgBox::No)
-        {
-            LOG(INFO) << "Export canceled by user";
-            return false;
-        }
+        LOG(INFO) << "Export canceled by user";
+        return false;
     }
 
     QJsonObject root;
@@ -309,7 +296,7 @@ bool SettingsUtil::exportToFile(const QString& path, bool silent, QWidget* paren
     {
         LOG(ERROR) << "Unable to open target file:" << file.errorString();
         if (!silent)
-            MsgBox::warning(parent, tr("Unable to open the target file."));
+            showError(parent, tr("Unable to open the target file."));
         return false;
     }
 
@@ -317,12 +304,51 @@ bool SettingsUtil::exportToFile(const QString& path, bool silent, QWidget* paren
     {
         LOG(ERROR) << "Failed to write target file:" << file.errorString();
         if (!silent)
-            MsgBox::warning(parent, tr("Unable to write the target file."));
+            showError(parent, tr("Unable to write the target file."));
         return false;
     }
 
     if (!silent)
-        MsgBox::information(parent, tr("The configuration was successfully exported."));
+        showInfo(parent, tr("The configuration was successfully exported."));
 
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool SettingsUtil::confirmOverwrite(QWidget* parent)
+{
+#if defined(Q_OS_ANDROID)
+    return MessageDialog::confirm(parent, tr("Warning"),
+        tr("The existing settings will be overwritten. Continue?"), tr("Continue"));
+#else
+    MsgBox message_box(MsgBox::Warning,
+        tr("Warning"),
+        tr("The existing settings will be overwritten. Continue?"),
+        MsgBox::Yes | MsgBox::No,
+        parent);
+    return message_box.exec() == MsgBox::Yes;
+#endif
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void SettingsUtil::showError(QWidget* parent, const QString& text)
+{
+#if defined(Q_OS_ANDROID)
+    MessageDialog::info(parent, tr("Error"), text);
+#else
+    MsgBox::warning(parent, text);
+#endif
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void SettingsUtil::showInfo(QWidget* parent, const QString& text)
+{
+#if defined(Q_OS_ANDROID)
+    MessageDialog::info(parent, tr("Aspia"), text);
+#else
+    MsgBox::information(parent, text);
+#endif
 }

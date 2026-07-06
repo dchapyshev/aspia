@@ -44,8 +44,6 @@ collect_sources(SOURCE_HOST_CORE_UI
     security_log_dialog.cc
     security_log_dialog.h
     security_log_dialog.ui
-    settings_util.cc
-    settings_util.h
     user_dialog.cc
     user_dialog.h
     user_dialog.ui)

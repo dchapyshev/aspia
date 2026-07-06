@@ -39,6 +39,10 @@ if (ANDROID)
         screen_capturer.h
         screen_capturer_android.cc
         screen_capturer_android.h
+        settings_util.cc
+        settings_util.h
+        system_settings.cc
+        system_settings.h
         udp_attempt.cc
         udp_attempt.h
         user_settings.cc
@@ -119,6 +123,8 @@ list(APPEND SOURCE_HOST_CORE
     service.h
     service_main.cc
     service_main.h
+    settings_util.cc
+    settings_util.h
     system_info.cc
     system_info.h
     system_info_client.cc

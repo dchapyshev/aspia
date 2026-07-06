@@ -75,6 +75,7 @@ private:
     void onEnableProtection();
     void onChangePassword();
     void onDisableProtection();
+    void onImport();
 
     QStackedWidget* stack_;
     ScrollArea* settings_page_;
@@ -82,6 +83,7 @@ private:
     UsersWidget* users_page_;
     UserEditorWidget* editor_page_;
     IconButton* about_button_;
+    IconButton* import_button_;
     IconButton* add_user_button_;
     IconButton* save_button_;
 

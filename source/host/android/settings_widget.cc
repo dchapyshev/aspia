@@ -19,6 +19,7 @@
 #include "host/android/settings_widget.h"
 
 #include <QByteArray>
+#include <QFileDialog>
 #include <QStackedWidget>
 #include <QVBoxLayout>
 
@@ -39,6 +40,7 @@
 #include "common/android/scroll_area.h"
 #include "common/android/switch.h"
 #include "host/database.h"
+#include "host/settings_util.h"
 #include "host/user_settings.h"
 #include "host/android/password_dialog.h"
 #include "host/android/user_editor_widget.h"
@@ -61,6 +63,7 @@ SettingsWidget::SettingsWidget(QWidget* parent)
       users_page_(new UsersWidget()),
       editor_page_(new UserEditorWidget()),
       about_button_(new IconButton(":/img/material/info.svg", this)),
+      import_button_(new IconButton(":/img/material/download.svg", this)),
       add_user_button_(new IconButton(":/img/material/add_2.svg", this)),
       save_button_(new IconButton(":/img/done.svg", this))
 {
@@ -68,6 +71,9 @@ SettingsWidget::SettingsWidget(QWidget* parent)
     // by default so they do not linger in this widget.
     about_button_->hide();
     connect(about_button_, &IconButton::clicked, this, &SettingsWidget::showAbout);
+
+    import_button_->hide();
+    connect(import_button_, &IconButton::clicked, this, &SettingsWidget::onImport);
 
     add_user_button_->hide();
     connect(add_user_button_, &IconButton::clicked, this, [this]() { showUserEditor(0); });
@@ -104,7 +110,7 @@ QList<QWidget*> SettingsWidget::appBarActions() const
         return { add_user_button_ };
     if (isAboutPage())
         return {};
-    return { about_button_ };
+    return { import_button_, about_button_ };
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -386,4 +392,20 @@ void SettingsWidget::onDisableProtection()
 
     Database::instance().clearPassword();
     buildSettings();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::onImport()
+{
+    QString path = QFileDialog::getOpenFileName(
+        this, tr("Import"), QString(), tr("JSON files (*.json)"));
+    if (path.isEmpty())
+        return;
+
+    // SettingsUtil shows its own confirmation and result dialogs; refresh the UI on success.
+    if (SettingsUtil::importFromFile(path, false, this))
+    {
+        buildSettings();
+        users_page_->reload();
+    }
 }

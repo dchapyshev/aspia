@@ -39,7 +39,14 @@ const QString kUpdateCheckFrequency = "update/check_frequency";
 
 //--------------------------------------------------------------------------------------------------
 SystemSettings::SystemSettings()
+    // The desktop host runs as a system service and keeps these machine-wide (SystemScope). On Android
+    // the app is sandboxed and cannot write to the system scope, so use the app-private user scope there
+    // (the same split as HostStorage).
+#if defined(Q_OS_ANDROID)
+    : settings_(XmlSettings::format(), QSettings::UserScope, kOrganization, kApplication)
+#else
     : settings_(XmlSettings::format(), QSettings::SystemScope, kOrganization, kApplication)
+#endif
 {
     // Nothing
 }

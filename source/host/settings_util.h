@@ -16,10 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_UI_SETTINGS_UTIL_H
-#define HOST_UI_SETTINGS_UTIL_H
+#ifndef HOST_SETTINGS_UTIL_H
+#define HOST_SETTINGS_UTIL_H
 
 #include <QCoreApplication>
+
+class QWidget;
 
 class SettingsUtil
 {
@@ -30,7 +32,12 @@ public:
     static bool exportToFile(const QString& path, bool silent, QWidget* parent = nullptr);
 
 private:
+    // Platform-specific dialogs: MsgBox on the desktop, MessageDialog on Android.
+    static bool confirmOverwrite(QWidget* parent);
+    static void showError(QWidget* parent, const QString& text);
+    static void showInfo(QWidget* parent, const QString& text);
+
     Q_DISABLE_COPY_MOVE(SettingsUtil)
 };
 
-#endif // HOST_UI_SETTINGS_UTIL_H
+#endif // HOST_SETTINGS_UTIL_H

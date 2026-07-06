@@ -35,10 +35,10 @@
 #include "host/database.h"
 #include "host/screen_capturer.h"
 #include "host/service.h"
+#include "host/settings_util.h"
 #include "host/system_settings.h"
 #include "host/ui/change_password_dialog.h"
 #include "host/ui/check_password_dialog.h"
-#include "host/ui/settings_util.h"
 #include "host/ui/user_dialog.h"
 #include "ui_config_dialog.h"
 
