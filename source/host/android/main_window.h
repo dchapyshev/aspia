@@ -62,8 +62,10 @@ private slots:
 
 private:
     void scrollFocusIntoView();
+    void checkPermissions();
     void checkAccessibilityService();
     void checkOverlayPermission();
+    void checkStoragePermission();
     QScrollArea* focusedScrollArea() const;
     QString sectionTitle(int index) const;
 

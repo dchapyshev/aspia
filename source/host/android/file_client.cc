@@ -19,10 +19,15 @@
 #include "host/android/file_client.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
+#include "common/file_worker.h"
+#include "proto/file_transfer.h"
+#include "proto/peer.h"
 
 //--------------------------------------------------------------------------------------------------
 FileClient::FileClient(TcpChannel* tcp_channel, QObject* parent)
-    : Client(tcp_channel, parent)
+    : Client(tcp_channel, parent),
+      worker_(new FileWorker(this))
 {
     LOG(INFO) << "Ctor";
 }
@@ -36,11 +41,27 @@ FileClient::~FileClient()
 //--------------------------------------------------------------------------------------------------
 void FileClient::onStart()
 {
-    NOTIMPLEMENTED();
+    LOG(INFO) << "File transfer session started";
+    emit sig_started();
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileClient::onMessage(quint8 /* channel_id */, const QByteArray& /* buffer */)
+void FileClient::onMessage(quint8 channel_id, const QByteArray& buffer)
 {
-    NOTIMPLEMENTED();
+    if (channel_id != proto::peer::CHANNEL_ID_0)
+    {
+        LOG(INFO) << "Unhandled channel:" << channel_id;
+        return;
+    }
+
+    proto::file_transfer::Request request;
+    if (!parse(buffer, &request))
+    {
+        LOG(ERROR) << "Unable to parse file transfer request";
+        return;
+    }
+
+    proto::file_transfer::Reply reply;
+    worker_->doRequest(request, &reply);
+    send(proto::peer::CHANNEL_ID_0, serialize(reply), true);
 }

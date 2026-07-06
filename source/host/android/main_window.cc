@@ -22,6 +22,7 @@
 #include <QCoreApplication>
 #include <QEvent>
 #include <QInputMethod>
+#include <QJniEnvironment>
 #include <QJniObject>
 #include <QResizeEvent>
 #include <QScrollArea>
@@ -104,8 +105,8 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
     server_->moveToThread(GuiApplication::ioThread());
     QMetaObject::invokeMethod(server_, &Server::start, Qt::QueuedConnection);
 
-    // Prompt for the accessibility service (needed to inject remote input) once the window is shown.
-    QMetaObject::invokeMethod(this, [this]() { checkAccessibilityService(); }, Qt::QueuedConnection);
+    // Prompt for the runtime permissions the host needs, once the window is shown.
+    QMetaObject::invokeMethod(this, &AndroidMainWindow::checkPermissions, Qt::QueuedConnection);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -289,6 +290,14 @@ void AndroidMainWindow::scrollFocusIntoView()
 }
 
 //--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::checkPermissions()
+{
+    checkAccessibilityService();
+    checkOverlayPermission();
+    checkStoragePermission();
+}
+
+//--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::checkAccessibilityService()
 {
     const char kInputServiceClass[] = "org/aspia/host/InputService";
@@ -320,7 +329,6 @@ void AndroidMainWindow::checkAccessibilityService()
         }
     }
 
-    checkOverlayPermission();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -352,6 +360,55 @@ void AndroidMainWindow::checkOverlayPermission()
             QJniObject::callStaticMethod<void>("org/aspia/host/FloatingMenu", "openPermissionSettings",
                 "(Landroid/content/Context;)V", context.object());
         }
+        return QVariant();
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::checkStoragePermission()
+{
+    // The file transfer session needs "All files access" (MANAGE_EXTERNAL_STORAGE). The check is API 30+
+    // (Build.VERSION_CODES.R); earlier versions use the legacy install-time storage permission.
+    if (QJniObject::getStaticField<jint>("android/os/Build$VERSION", "SDK_INT") < 30)
+        return;
+
+    const bool granted = QJniObject::callStaticMethod<jboolean>(
+        "android/os/Environment", "isExternalStorageManager", "()Z");
+    if (granted)
+        return;
+
+    const bool open = MessageDialog::confirm(
+        this, tr("Permissions"),
+        tr("Allow access to all files so the connected user can browse and transfer files on this "
+           "device."),
+        tr("Open"));
+    if (!open)
+        return;
+
+    QNativeInterface::QAndroidApplication::runOnAndroidMainThread([]() -> QVariant
+    {
+        QJniObject context = QNativeInterface::QAndroidApplication::context();
+        if (!context.isValid())
+            return QVariant();
+
+        QJniObject package_name = context.callObjectMethod("getPackageName", "()Ljava/lang/String;");
+        QJniObject uri = QJniObject::callStaticObjectMethod(
+            "android/net/Uri", "parse", "(Ljava/lang/String;)Landroid/net/Uri;",
+            QJniObject::fromString("package:" + package_name.toString()).object<jstring>());
+
+        QJniObject intent("android/content/Intent", "(Ljava/lang/String;Landroid/net/Uri;)V",
+            QJniObject::fromString("android.settings.MANAGE_APP_ALL_FILES_ACCESS_PERMISSION")
+                .object<jstring>(),
+            uri.object());
+
+        const jint flag_new_task = QJniObject::getStaticField<jint>(
+            "android/content/Intent", "FLAG_ACTIVITY_NEW_TASK");
+        intent.callObjectMethod("addFlags", "(I)Landroid/content/Intent;", flag_new_task);
+
+        context.callMethod<void>("startActivity", "(Landroid/content/Intent;)V", intent.object());
+
+        // A device without this settings screen throws; clear the pending exception so later JNI is safe.
+        QJniEnvironment().checkAndClearExceptions();
         return QVariant();
     });
 }
