@@ -251,10 +251,13 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
                 {
                     CLOG(WARNING) << "OTP cleared but failed to revoke device tokens for user"
                                   << user_id << ":" << revoke_code;
+                    result->set_error_code(revoke_code);
                 }
-
-                CLOG(INFO) << "OTP cleared for user" << user_id << "by" << userName();
-                result->set_error_code(proto::router::kErrorOk);
+                else
+                {
+                    CLOG(INFO) << "OTP cleared for user" << user_id << "by" << userName();
+                    result->set_error_code(proto::router::kErrorOk);
+                }
                 Service::instance()->notifyChanged(Service::NOTIFY_USERS);
             }
         }
