@@ -109,10 +109,19 @@ void OnlineCheckerRouter::checkNextHost()
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerRouter::onFinished(const Location& location)
 {
+    // The timeout, a late router response and a queued checkNextHost() call can all end up here,
+    // so make sure the results and the finish signal are only emitted once.
+    if (finished_)
+        return;
+
+    finished_ = true;
+    timer_->stop();
+
     LOG(TRACE) << "Finished (" << location << ")";
 
     for (const HostConfig& host : std::as_const(hosts_))
         emit sig_checkerResult(host.id(), false);
+    hosts_.clear();
 
     emit sig_checkerFinished();
 }

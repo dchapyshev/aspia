@@ -56,6 +56,7 @@ private:
 
     QTimer* timer_ = nullptr;
     HostList hosts_;
+    bool finished_ = false;
 };
 
 #endif // CLIENT_ONLINE_CHECKER_ONLINE_CHECKER_ROUTER_H
