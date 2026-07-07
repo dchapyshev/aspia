@@ -1597,6 +1597,7 @@ std::string_view Database::addWorkspace(std::string_view name, std::string_view 
         return proto::router::kErrorInvalidData;
     }
 
+    std::set<qint64> initial_ids;
     for (const Workspace::Access& access : initial_access)
     {
         if (access.user_id <= 0 || access.wrapped_gk.empty())
@@ -1604,6 +1605,14 @@ std::string_view Database::addWorkspace(std::string_view name, std::string_view 
             LOG(ERROR) << "Invalid access record";
             return proto::router::kErrorInvalidData;
         }
+
+        if (initial_ids.contains(access.user_id))
+        {
+            LOG(ERROR) << "Duplicate user_id in initial access list:" << access.user_id;
+            return proto::router::kErrorInvalidData;
+        }
+
+        initial_ids.insert(access.user_id);
     }
 
     SqlTransaction transaction(db_);
