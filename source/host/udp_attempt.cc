@@ -237,6 +237,12 @@ void DirectUdpAttempt::start()
 
     quint16 port = 0;
     channel_->bind(&port);
+    if (port == 0)
+    {
+        // bind() failed: it has already emitted sig_errorOccurred (wired to sig_failed), so just stop
+        // instead of advertising a bogus zero port the client could never connect to.
+        return;
+    }
 
     proto::peer::HostToClient message;
     proto::peer::DirectUdpRequest* request = message.mutable_direct_udp_request();
@@ -317,9 +323,19 @@ void StunUdpAttempt::start()
         // Passive: bind the socket and advertise the external endpoint; the client connects to us.
         createChannel();
         if (socket != -1)
+        {
             channel_->bind(socket);
+        }
         else
+        {
             channel_->bind(&port);
+            if (port == 0)
+            {
+                // bind() failed and has already emitted sig_errorOccurred (wired to sig_failed); do not
+                // advertise a bogus zero port.
+                return;
+            }
+        }
 
         proto::peer::HostToClient message;
         proto::peer::StunUdpRequest* request = message.mutable_stun_udp_request();
@@ -376,6 +392,12 @@ void HostGatewayUdpAttempt::start()
 
     quint16 local_port = 0;
     channel_->bind(&local_port);
+    if (local_port == 0)
+    {
+        // bind() failed and has already emitted sig_errorOccurred (wired to sig_failed); stop before
+        // mapping/advertising a bogus zero port.
+        return;
+    }
 
     // Parent the mapper to the channel so the mapping survives as long as the channel (it travels
     // with the channel if this attempt wins, and is removed with it otherwise).

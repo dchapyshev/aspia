@@ -369,6 +369,12 @@ void GatewayUdpAttempt::start()
 
     quint16 local_port = 0;
     channel_->bind(&local_port);
+    if (local_port == 0)
+    {
+        // bind() failed and has already emitted sig_errorOccurred (wired to sig_failed); do not request
+        // a gateway mapping for a bogus zero port.
+        return;
+    }
 
     // The mapper is owned by the channel so the mapping lives as long as the channel.
     GatewayPortMapper* mapper = new GatewayPortMapper(channel_);
