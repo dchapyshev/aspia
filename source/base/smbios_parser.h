@@ -40,11 +40,14 @@ public:
     quint32 length() const;
 
 private:
+    void validate();
+
     SmbiosDump smbios_;
 
     quint8* start_ = nullptr;
     quint8* end_ = nullptr;
     quint8* pos_ = nullptr;
+    quint8* next_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(SmbiosTableEnumerator)
 };

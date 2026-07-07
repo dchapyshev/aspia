@@ -130,6 +130,7 @@ list(APPEND SOURCE_BASE_TESTS
     scoped_clear_last_error_unittest.cc
     serialization_unittest.cc
     shared_pointer_unittest.cc
+    smbios_parser_unittest.cc
     string_util_unittest.cc
     xml_settings_unittest.cc
     tests_main.cc)

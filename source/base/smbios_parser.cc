@@ -38,6 +38,8 @@ SmbiosTableEnumerator::SmbiosTableEnumerator(const QByteArray& smbios_dump)
     start_ = &smbios_.smbios_table_data[0];
     end_ = start_ + smbios_.length;
     pos_ = start_;
+
+    validate();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -52,30 +54,17 @@ const SmbiosTable* SmbiosTableEnumerator::table() const
 //--------------------------------------------------------------------------------------------------
 bool SmbiosTableEnumerator::isAtEnd() const
 {
-    return pos_ + sizeof(SmbiosTable) >= end_;
+    return pos_ >= end_;
 }
 
 //--------------------------------------------------------------------------------------------------
 void SmbiosTableEnumerator::advance()
 {
-    SmbiosTable* header = reinterpret_cast<SmbiosTable*>(pos_);
-
-    if (header->length < sizeof(SmbiosTable) || header->type == SMBIOS_TABLE_TYPE_END_OF_TABLE)
-    {
-        // If a short entry is found (less than 4 bytes), not only it is invalid, but we
-        // cannot reliably locate the next entry. Better stop at this point, and let the
-        // user know his / her table is broken.
-        pos_ = end_;
+    if (isAtEnd())
         return;
-    }
 
-    pos_ += header->length;
-
-    while (static_cast<quint32>(pos_ - start_ + 1) < smbios_.length && (pos_[0] || pos_[1]))
-        ++pos_;
-
-    // Points to the next table thas after two null bytes at the end of the strings.
-    pos_ += 2;
+    pos_ = next_;
+    validate();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -94,6 +83,48 @@ quint8 SmbiosTableEnumerator::minorVersion() const
 quint32 SmbiosTableEnumerator::length() const
 {
     return smbios_.length;
+}
+
+//--------------------------------------------------------------------------------------------------
+void SmbiosTableEnumerator::validate()
+{
+    // The table at |pos_| is exposed through table() only if it is fully contained in the
+    // buffer: the header, the formatted area declared by header->length and the double null
+    // byte terminating the string area. The string walk in smbiosString and the field accesses
+    // in the table wrappers rely on this invariant to stay within bounds. A table that fails
+    // the check also makes locating the next table unreliable, so enumeration stops at it.
+    if (!pos_ || pos_ >= end_)
+        return;
+
+    if (end_ - pos_ < static_cast<qptrdiff>(sizeof(SmbiosTable)))
+    {
+        pos_ = end_;
+        return;
+    }
+
+    const SmbiosTable* header = reinterpret_cast<const SmbiosTable*>(pos_);
+
+    if (header->length < sizeof(SmbiosTable) || header->length > end_ - pos_ ||
+        header->type == SMBIOS_TABLE_TYPE_END_OF_TABLE)
+    {
+        pos_ = end_;
+        return;
+    }
+
+    quint8* p = pos_ + header->length;
+
+    while (p + 1 < end_ && (p[0] || p[1]))
+        ++p;
+
+    if (p + 1 >= end_)
+    {
+        // No double null before the end of the buffer: the string area is truncated.
+        pos_ = end_;
+        return;
+    }
+
+    // The next table starts after the two null bytes at the end of the strings.
+    next_ = p + 2;
 }
 
 //--------------------------------------------------------------------------------------------------
