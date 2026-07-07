@@ -309,7 +309,8 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
             else
             {
                 std::string_view code = proto::router::kErrorOk;
-                QList<qint64> revoked_token_ids;
+                QList<qint64> token_ids;
+                token_ids.reserve(request.user().token_size());
 
                 for (int i = 0; i < request.user().token_size(); ++i)
                 {
@@ -320,22 +321,21 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
                         code = proto::router::kErrorInvalidRequest;
                         break;
                     }
-                    if (!database.revokeClientDeviceToken(user_id, token_id))
-                    {
-                        CLOG(WARNING) << "Device token not found: user_id=" << user_id
-                                      << "token_id=" << token_id;
-                        code = proto::router::kErrorNotFound;
-                        break;
-                    }
-                    revoked_token_ids.append(token_id);
-                    CLOG(INFO) << "Device token" << token_id << "of user" << user_id
-                               << "revoked by" << userName();
+                    token_ids.append(token_id);
                 }
 
-                if (!revoked_token_ids.isEmpty())
+                // Revoke atomically: either every requested token is removed or nothing is, so a
+                // missing token or database error never leaves a half-revoked set behind.
+                if (code == proto::router::kErrorOk && !token_ids.isEmpty())
                 {
-                    Service::instance()->stopClients(user_id, revoked_token_ids);
-                    Service::instance()->notifyChanged(Service::NOTIFY_USERS);
+                    code = database.revokeClientDeviceTokens(user_id, token_ids);
+                    if (code == proto::router::kErrorOk)
+                    {
+                        CLOG(INFO) << token_ids.size() << "device token(s) of user" << user_id
+                                   << "revoked by" << userName();
+                        Service::instance()->stopClients(user_id, token_ids);
+                        Service::instance()->notifyChanged(Service::NOTIFY_USERS);
+                    }
                 }
                 result->set_error_code(code);
             }

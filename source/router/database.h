@@ -135,11 +135,13 @@ public:
     // successful token lookup.
     bool touchClientDeviceToken(std::string_view token, std::string_view address);
 
-    // Removes a single token by its router-side row id, but only if it belongs to
+    // Removes the given tokens by their router-side row ids, but only those belonging to
     // |user_id|. The user_id check is defense in depth - the admin channel is already
     // privileged, but the extra predicate prevents a malformed request from touching another
-    // user's row. Returns false on database error or when no row matched.
-    bool revokeClientDeviceToken(qint64 user_id, qint64 token_id);
+    // user's row. All deletes run in one transaction: if any token id does not match a row the
+    // whole batch is rolled back. Returns kErrorNotFound if a token is missing, kErrorInternalError
+    // on database failure, kErrorOk when every token was revoked (or the list was empty).
+    std::string_view revokeClientDeviceTokens(qint64 user_id, const QList<qint64>& token_ids);
 
     // Removes every device token of |user_id| in a single statement. Succeeds for an existing user
     // with no tokens, but returns kErrorNotFound if the user row is absent.

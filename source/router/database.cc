@@ -822,24 +822,50 @@ bool Database::touchClientDeviceToken(std::string_view token, std::string_view a
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::revokeClientDeviceToken(qint64 user_id, qint64 token_id)
+std::string_view Database::revokeClientDeviceTokens(qint64 user_id, const QList<qint64>& token_ids)
 {
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return false;
+        return proto::router::kErrorInternalError;
     }
 
-    SqlQuery query(db_, "DELETE FROM client_device_tokens WHERE token_id=? AND user_id=?");
-    query.addInt64(token_id);
-    query.addInt64(user_id);
+    if (token_ids.isEmpty())
+        return proto::router::kErrorOk;
 
-    if (!query.exec())
+    SqlTransaction transaction(db_);
+    if (!transaction.begin())
     {
-        LOG(ERROR) << "Unable to revoke client device token:" << db_.lastError();
-        return false;
+        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
+        return proto::router::kErrorInternalError;
     }
-    return db_.changes() > 0;
+
+    for (qint64 token_id : token_ids)
+    {
+        SqlQuery query(db_, "DELETE FROM client_device_tokens WHERE token_id=? AND user_id=?");
+        query.addInt64(token_id);
+        query.addInt64(user_id);
+
+        if (!query.exec())
+        {
+            LOG(ERROR) << "Unable to revoke client device token:" << db_.lastError();
+            return proto::router::kErrorInternalError;
+        }
+
+        if (db_.changes() <= 0)
+        {
+            LOG(ERROR) << "Device token not found: user_id=" << user_id << "token_id=" << token_id;
+            return proto::router::kErrorNotFound;
+        }
+    }
+
+    if (!transaction.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    return proto::router::kErrorOk;
 }
 
 //--------------------------------------------------------------------------------------------------
