@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/files/base_paths.h"
 #include "base/sql/sql_query.h"
+#include "base/sql/sql_transaction.h"
 #include "build/build_config.h"
 
 #include <QDateTime>
@@ -697,6 +698,62 @@ bool Database::setMasterPassword(const QByteArray& salt, const QByteArray& verif
     return writeSetting(kSettingSalt, QString::fromLatin1(salt.toBase64())) &&
            writeSetting(kSettingVerifier, QString::fromLatin1(verifier.toBase64())) &&
            writeSetting(kSettingVersion, QString::number(version));
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::reencryptAll(const QList<HostConfig>& hosts,
+                            const QList<GroupConfig>& groups,
+                            const QList<RouterConfig>& routers,
+                            const QByteArray& salt,
+                            const QByteArray& verifier,
+                            quint32 version)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    SqlTransaction transaction(db_);
+    if (!transaction.begin())
+    {
+        LOG(ERROR) << "Unable to begin transaction";
+        return false;
+    }
+
+    // On any failure the early return skips commit(), so the transaction destructor rolls back and
+    // the address book stays fully readable with the old master password.
+    for (HostConfig host : hosts)
+    {
+        if (!modifyHost(host))
+        {
+            LOG(ERROR) << "Unable to re-encrypt host:" << host.id();
+            return false;
+        }
+    }
+
+    for (const GroupConfig& group : groups)
+    {
+        if (!modifyGroup(group))
+        {
+            LOG(ERROR) << "Unable to re-encrypt group:" << group.id();
+            return false;
+        }
+    }
+
+    for (const RouterConfig& router : routers)
+    {
+        if (!modifyRouter(router))
+        {
+            LOG(ERROR) << "Unable to re-encrypt router:" << router.routerId();
+            return false;
+        }
+    }
+
+    if (!setMasterPassword(salt, verifier, version))
+        return false;
+
+    return transaction.commit();
 }
 
 //--------------------------------------------------------------------------------------------------

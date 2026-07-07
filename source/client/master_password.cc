@@ -151,6 +151,9 @@ bool changeKeyAndReencrypt(const SecureByteArray& new_key, const QByteArray& new
     // Switch the cryptor to the new key so the fields below are re-encrypted with it.
     cryptor.setKey(new_key);
 
+    QList<HostConfig> new_hosts;
+    new_hosts.reserve(hosts.size());
+
     for (int i = 0; i < hosts.size(); ++i)
     {
         HostConfig host = hosts[i];
@@ -162,13 +165,11 @@ bool changeKeyAndReencrypt(const SecureByteArray& new_key, const QByteArray& new
         host.setEncryptedUsername(encryptField(cryptor, fields.username));
         host.setEncryptedPassword(encryptField(cryptor, fields.password));
 
-        if (!db.modifyHost(host))
-        {
-            LOG(ERROR) << "Unable to re-encrypt host:" << host.id();
-            cryptor.setKey(old_key);
-            return false;
-        }
+        new_hosts.append(host);
     }
+
+    QList<GroupConfig> new_groups;
+    new_groups.reserve(groups.size());
 
     for (int i = 0; i < groups.size(); ++i)
     {
@@ -178,13 +179,11 @@ bool changeKeyAndReencrypt(const SecureByteArray& new_key, const QByteArray& new
         group.setEncryptedName(encryptField(cryptor, fields.name));
         group.setEncryptedComment(encryptField(cryptor, fields.comment));
 
-        if (!db.modifyGroup(group))
-        {
-            LOG(ERROR) << "Unable to re-encrypt group:" << group.id();
-            cryptor.setKey(old_key);
-            return false;
-        }
+        new_groups.append(group);
     }
+
+    QList<RouterConfig> new_routers;
+    new_routers.reserve(routers.size());
 
     for (int i = 0; i < routers.size(); ++i)
     {
@@ -197,16 +196,14 @@ bool changeKeyAndReencrypt(const SecureByteArray& new_key, const QByteArray& new
         router.setEncryptedPassword(encryptField(cryptor, fields.password));
         router.setEncryptedDeviceToken(encryptField(cryptor, fields.device_token));
 
-        if (!db.modifyRouter(router))
-        {
-            LOG(ERROR) << "Unable to re-encrypt router:" << router.routerId();
-            cryptor.setKey(old_key);
-            return false;
-        }
+        new_routers.append(router);
     }
 
-    if (!db.setMasterPassword(new_salt, new_verifier, kCurrentVersion))
+    // Persisting all records together with the new verifier is atomic, so a failure cannot leave the
+    // address book with some records under the old key and others under the new one.
+    if (!db.reencryptAll(new_hosts, new_groups, new_routers, new_salt, new_verifier, kCurrentVersion))
     {
+        // Nothing was written, so restore the in-memory key to keep it consistent with the database.
         cryptor.setKey(old_key);
         return false;
     }

@@ -77,6 +77,16 @@ public:
     // Master password.
     bool isMasterPasswordSet() const;
     bool setMasterPassword(const QByteArray& salt, const QByteArray& verifier, quint32 version);
+
+    // Atomically rewrites every stored record with fields already re-encrypted under the new key and
+    // updates the master password verifier. Either all changes are applied or none of them are, so
+    // the address book can never be left with records under two different keys.
+    bool reencryptAll(const QList<HostConfig>& hosts,
+                      const QList<GroupConfig>& groups,
+                      const QList<RouterConfig>& routers,
+                      const QByteArray& salt,
+                      const QByteArray& verifier,
+                      quint32 version);
     QByteArray masterPasswordSalt() const;
     QByteArray masterPasswordVerifier() const;
     quint32 masterPasswordVersion() const;
