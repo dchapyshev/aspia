@@ -51,16 +51,19 @@ AsioEventDispatcher::AsioEventDispatcher(QObject* parent)
     : QAbstractEventDispatcher(parent),
       work_guard_(asio::make_work_guard(io_context_))
 {
+    // The load factor is set before reserve(): reserve() sizes the bucket array for the current
+    // max_load_factor, so the reversed order would make the maps rehash at half the reserved
+    // capacity.
 #if defined(Q_OS_WINDOWS)
-    multimedia_timers_.reserve(kReservedSizeForMultimediaTimers);
     multimedia_timers_.max_load_factor(kLoadFactorForMultimediaTimers);
+    multimedia_timers_.reserve(kReservedSizeForMultimediaTimers);
 #endif
 
-    timers_.reserve(kReservedSizeForTimers);
     timers_.max_load_factor(kLoadFactorForTimers);
+    timers_.reserve(kReservedSizeForTimers);
 
-    sockets_.reserve(kReservedSizeForSockets);
     sockets_.max_load_factor(kLoadFactorForSockets);
+    sockets_.reserve(kReservedSizeForSockets);
 }
 
 //--------------------------------------------------------------------------------------------------
