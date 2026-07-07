@@ -216,12 +216,21 @@ bool VtSession::spawnLogin()
         ::dup2(slave, STDIN_FILENO);
         ::dup2(slave, STDOUT_FILENO);
         ::dup2(slave, STDERR_FILENO);
-        if (slave > STDERR_FILENO)
-            ::close(slave);
-        ::close(master_fd_);
 
-        ::setenv("TERM", "xterm", 1);
-        ::execl(kLoginPath, "login", static_cast<char*>(nullptr));
+        // Close every descriptor inherited from the parent (the PTY slave dup, the master, and the
+        // agent's D-Bus/PipeWire/IPC sockets) so none of them leak into the root login process; only
+        // the standard streams set up above are kept. A plain close() loop is async-signal-safe, unlike
+        // walking /proc, and closefrom()/close_range() are not available on all supported targets.
+        const long max_fd = ::sysconf(_SC_OPEN_MAX);
+        const int fd_limit = (max_fd > 0) ? static_cast<int>(max_fd) : 4096;
+        for (int fd = STDERR_FILENO + 1; fd < fd_limit; ++fd)
+            ::close(fd);
+
+        // Exec login with a minimal, explicit environment. Passing it through execle() avoids setenv()
+        // between fork and exec (not async-signal-safe) and keeps the parent's environment out of the
+        // login session.
+        char* const envp[] = { const_cast<char*>("TERM=xterm"), static_cast<char*>(nullptr) };
+        ::execle(kLoginPath, "login", static_cast<char*>(nullptr), envp);
         _exit(127);
     }
 

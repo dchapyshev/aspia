@@ -885,15 +885,25 @@ void ScreenCapturerPipeWire::handleProcess()
                 std::array<EglDmaBuf::Plane, 4> planes;
                 const int plane_count =
                     std::min<int>(spa_buffer->n_datas, static_cast<int>(planes.size()));
+                bool planes_valid = true;
                 for (int i = 0; i < plane_count; ++i)
                 {
+                    // Every plane must carry chunk metadata; the has_data check above only validated the
+                    // first plane, so guard the rest before dereferencing.
+                    const auto* chunk = spa_buffer->datas[i].chunk;
+                    if (!chunk)
+                    {
+                        planes_valid = false;
+                        break;
+                    }
+
                     planes[i].fd = static_cast<int>(spa_buffer->datas[i].fd);
-                    planes[i].offset = spa_buffer->datas[i].chunk->offset;
-                    planes[i].stride = static_cast<quint32>(spa_buffer->datas[i].chunk->stride);
+                    planes[i].offset = chunk->offset;
+                    planes[i].stride = static_cast<quint32>(chunk->stride);
                 }
 
                 const QRect read_rect(crop_x, crop_y, frame_size.width(), frame_size.height());
-                if (egl_dmabuf_ && egl_dmabuf_->imageFromDmaBuf(
+                if (planes_valid && egl_dmabuf_ && egl_dmabuf_->imageFromDmaBuf(
                         format_size_, format_fourcc_, planes.data(), plane_count, format_modifier_,
                         read_rect, dst, dst_stride))
                 {

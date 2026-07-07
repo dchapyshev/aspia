@@ -652,7 +652,11 @@ void Service::onStopClient(quint32 client_id)
 //--------------------------------------------------------------------------------------------------
 void Service::onDesktopManagerAttached()
 {
-    for (auto* client : std::as_const(clients_))
+    // Iterate over a snapshot: attach() emits sig_finished() synchronously when its IPC server fails
+    // to start, and onClientFinished() then removes the client from clients_ mid-iteration.
+    const QList<Client*> clients = clients_;
+
+    for (auto* client : clients)
     {
         DesktopClient* desktop_client = dynamic_cast<DesktopClient*>(client);
         if (!desktop_client)
@@ -661,6 +665,9 @@ void Service::onDesktopManagerAttached()
         desktop_client->dettach();
 
         QString ipc_channel_name = desktop_client->attach();
+        if (ipc_channel_name.isEmpty())
+            continue;
+
         desktop_manager_->startAgentClient(ipc_channel_name);
     }
 }

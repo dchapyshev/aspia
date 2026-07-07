@@ -115,6 +115,12 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
 AndroidMainWindow::~AndroidMainWindow()
 {
     LOG(INFO) << "Dtor";
+
+    // Server lives on the I/O thread and may still emit queued signals targeting this window while it
+    // is torn down. ScopedQPointer::reset() (member destruction below) schedules deleteLater() but does
+    // not disconnect, so sever the connections to this receiver here first. See scoped_qpointer.h.
+    if (server_)
+        server_->disconnect(this);
 }
 
 //--------------------------------------------------------------------------------------------------

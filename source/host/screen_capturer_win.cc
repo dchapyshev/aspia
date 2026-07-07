@@ -396,11 +396,19 @@ MouseCursor* ScreenCapturerWin::mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
         // need to divide by 2 to get the correct mask height.
         height /= 2;
 
+        // The XOR mask occupies the second plane of |mask_data|; make sure both planes are actually
+        // present before reading it, so an unexpected mask height cannot read past the buffer.
+        if (height <= 0 || mask_data.size() < static_cast<qsizetype>(2) * static_cast<qsizetype>(width) * height)
+        {
+            LOG(ERROR) << "Invalid cursor mask dimensions";
+            return nullptr;
+        }
+
         image.resize(static_cast<size_t>(width) * static_cast<size_t>(height) *
                      static_cast<size_t>(kBytesPerPixel));
 
         // The XOR mask becomes the color bitmap.
-        memcpy(image.data(), mask_plane + (width * height), image.size());
+        memcpy(image.data(), mask_plane + (static_cast<size_t>(width) * static_cast<size_t>(height)), image.size());
     }
 
     // Reconstruct transparency from the mask if the color image does not has alpha channel.

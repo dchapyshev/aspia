@@ -61,6 +61,11 @@ public final class MediaProjection
     private static HandlerThread sHandlerThread = null;
     private static Handler sHandler = null;
 
+    // Serialises the ImageReader listener (runs on the capture HandlerThread) with sReader.close()
+    // (runs on the Android main thread via the native stop path). Without it, acquiring an image while
+    // the reader is being closed throws IllegalStateException on the listener thread.
+    private static final Object sReaderLock = new Object();
+
     // Audio capture state. Unlike the screen capture there is only ever one audio capturer, so no token
     // is needed to route frames back to the native side.
     private static AudioRecord sRecord = null;
@@ -165,13 +170,17 @@ public final class MediaProjection
             sHandlerThread.start();
             sHandler = new Handler(sHandlerThread.getLooper());
 
-            // A callback is mandatory; the projection is torn down from the native stop() path.
+            // A callback is mandatory; the projection is torn down from the native stop() path. The
+            // callback captures its own projection instance so onProjectionStopped() can tell a live,
+            // system-initiated stop from a stale callback of an already-released session.
+            final android.media.projection.MediaProjection projection = sProjection;
             sProjection.registerCallback(new android.media.projection.MediaProjection.Callback()
             {
                 @Override
                 public void onStop()
                 {
                     Log.i(TAG, "MediaProjection stopped");
+                    onProjectionStopped(projection);
                 }
             }, sHandler);
 
@@ -183,20 +192,29 @@ public final class MediaProjection
             sReader = ImageReader.newInstance(width, height, PixelFormat.RGBA_8888, 2);
             sReader.setOnImageAvailableListener(reader ->
             {
-                Image image = reader.acquireLatestImage();
-                if (image == null)
-                    return;
+                // Hold sReaderLock so this cannot run while releaseInternal() closes the reader. The
+                // identity check skips frames once the reader has been closed (sReader nulled) or
+                // replaced by a later session.
+                synchronized (sReaderLock)
+                {
+                    if (sReader != reader)
+                        return;
 
-                try
-                {
-                    Image.Plane[] planes = image.getPlanes();
-                    ByteBuffer buffer = planes[0].getBuffer();
-                    nativeOnFrame(buffer, image.getWidth(), image.getHeight(),
-                                  planes[0].getPixelStride(), planes[0].getRowStride());
-                }
-                finally
-                {
-                    image.close();
+                    Image image = reader.acquireLatestImage();
+                    if (image == null)
+                        return;
+
+                    try
+                    {
+                        Image.Plane[] planes = image.getPlanes();
+                        ByteBuffer buffer = planes[0].getBuffer();
+                        nativeOnFrame(buffer, image.getWidth(), image.getHeight(),
+                                      planes[0].getPixelStride(), planes[0].getRowStride());
+                    }
+                    finally
+                    {
+                        image.close();
+                    }
                 }
             }, sHandler);
 
@@ -236,6 +254,25 @@ public final class MediaProjection
         releaseInternal();
     }
 
+    // Handles MediaProjection.Callback.onStop() for |projection|, delivered on the capture
+    // HandlerThread. releaseInternal() nulls sProjection before stopping it, so a self-inflicted
+    // callback (and any stale one from a previous session) no longer matches sProjection here and is
+    // ignored; only a system-initiated stop of the live session (consent revoked, user switch) passes.
+    // Synchronized so the teardown cannot race a concurrent stop()/startProjection() on another thread.
+    private static synchronized void onProjectionStopped(android.media.projection.MediaProjection projection)
+    {
+        if (projection != sProjection)
+            return;
+
+        // Release the now-dead projection resources and tell native the capture is gone, otherwise the
+        // host keeps treating the session as active and streams a frozen frame.
+        releaseInternal();
+        nativeOnStarted(false, 0, 0, 0);
+    }
+
+    // Releases all projection resources. Must be called with the class monitor held: every caller
+    // (stop(), the startProjection() failure path, onProjectionStopped()) is synchronized, so the
+    // teardown never races another lifecycle operation.
     private static void releaseInternal()
     {
         if (sVirtualDisplay != null)
@@ -246,14 +283,21 @@ public final class MediaProjection
 
         if (sReader != null)
         {
-            sReader.close();
-            sReader = null;
+            // Close under sReaderLock so the listener is not mid-acquire on the HandlerThread.
+            synchronized (sReaderLock)
+            {
+                sReader.close();
+                sReader = null;
+            }
         }
 
         if (sProjection != null)
         {
-            sProjection.stop();
+            // Null the field before stop(): the onStop() callback it triggers then fails the identity
+            // check in onProjectionStopped() and the self-inflicted stop is ignored.
+            android.media.projection.MediaProjection projection = sProjection;
             sProjection = null;
+            projection.stop();
         }
 
         if (sHandlerThread != null)
@@ -327,6 +371,12 @@ public final class MediaProjection
 
     private static void readLoop(int min_buffer)
     {
+        // Capture the instance once. stopAudioCapture() releases and nulls sRecord only after joining
+        // this thread, so a captured reference is never released while this loop is still using it.
+        final AudioRecord record = sRecord;
+        if (record == null)
+            return;
+
         // A 10 ms stereo 16-bit chunk (480 frames * 2 channels * 2 bytes) matches the encoder granularity.
         final int chunk = SAMPLE_RATE / 100 * 2 * 2;
         ByteBuffer buffer = ByteBuffer.allocateDirect(Math.max(chunk, min_buffer));
@@ -334,7 +384,7 @@ public final class MediaProjection
         while (sAudioRunning)
         {
             buffer.clear();
-            int read = sRecord.read(buffer, buffer.capacity());
+            int read = record.read(buffer, buffer.capacity());
             if (read > 0)
             {
                 nativeOnAudioFrame(buffer, read);
@@ -351,19 +401,8 @@ public final class MediaProjection
     {
         sAudioRunning = false;
 
-        if (sAudioThread != null)
-        {
-            try
-            {
-                sAudioThread.join(500);
-            }
-            catch (InterruptedException e)
-            {
-                Thread.currentThread().interrupt();
-            }
-            sAudioThread = null;
-        }
-
+        // Stop recording first: this unblocks a reader thread that may be parked inside a blocking
+        // AudioRecord.read(), letting it observe sAudioRunning == false and leave readLoop().
         if (sRecord != null)
         {
             try
@@ -374,6 +413,27 @@ public final class MediaProjection
             {
                 // Ignore.
             }
+        }
+
+        // Wait for the reader thread to fully exit before releasing. A bounded join() could return
+        // while read() is still in flight, and releasing the AudioRecord under it would crash the
+        // native process; stop() above guarantees read() returns promptly, so the join completes.
+        if (sAudioThread != null)
+        {
+            try
+            {
+                sAudioThread.join();
+            }
+            catch (InterruptedException e)
+            {
+                Thread.currentThread().interrupt();
+            }
+            sAudioThread = null;
+        }
+
+        // The reader thread has exited; releasing now cannot race with read().
+        if (sRecord != null)
+        {
             sRecord.release();
             sRecord = null;
         }

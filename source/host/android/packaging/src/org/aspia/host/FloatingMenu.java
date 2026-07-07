@@ -56,9 +56,18 @@ public final class FloatingMenu
 {
     private static final String TAG = "Aspia";
 
+    // Thread lifecycle fields. Read/written only under the class monitor (see post()/opFinished()).
     private static HandlerThread sThread = null;
     private static Handler sHandler = null;
 
+    // Number of operations posted through post() and not yet finished. Guarded by the class monitor;
+    // opFinished() keeps the thread alive while anything is still queued.
+    private static int sPendingOps = 0;
+
+    // Overlay view state. These are confined to the overlay thread: they are created in showImpl(),
+    // torn down in hideImpl(), and every other access (openMenu/closeMenu and the button touch and menu
+    // click listeners) runs on that same thread, because the windows are added from it via post(), so
+    // their input and view callbacks are dispatched on its Looper. No cross-thread access, no locking.
     private static WindowManager sWindowManager = null;
     private static View sButton = null;
     private static WindowManager.LayoutParams sButtonParams = null;
@@ -88,7 +97,36 @@ public final class FloatingMenu
             sThread.start();
             sHandler = new Handler(sThread.getLooper());
         }
-        sHandler.post(action);
+
+        ++sPendingOps;
+        sHandler.post(() ->
+        {
+            try
+            {
+                action.run();
+            }
+            finally
+            {
+                opFinished();
+            }
+        });
+    }
+
+    // Runs on the overlay thread after each posted operation. Stops the thread once the overlay is gone
+    // and nothing else is queued, so it is not left running for the whole process lifetime. The counter
+    // and the thread handoff are guarded by the class monitor, so a show() racing this teardown either
+    // increments sPendingOps first (the quit is skipped and showImpl runs on the live thread) or finds
+    // sThread == null and lazily creates a fresh one - the overlay is never created on a dying Looper.
+    private static synchronized void opFinished()
+    {
+        --sPendingOps;
+
+        if (sPendingOps == 0 && sButton == null && sThread != null)
+        {
+            sThread.quitSafely();
+            sThread = null;
+            sHandler = null;
+        }
     }
 
     public static boolean canDraw(Context context)
@@ -125,7 +163,10 @@ public final class FloatingMenu
     // Shows the floating button (no-op if already shown or the overlay permission is not granted).
     public static void show(final Context context)
     {
-        post(() -> showImpl(context));
+        // Use the application context: the overlay is long-lived and its views, listeners and layout
+        // params are held in static fields, so capturing the Activity here would leak it.
+        final Context app_context = context.getApplicationContext();
+        post(() -> showImpl(app_context));
     }
 
     private static void showImpl(Context context)
@@ -281,6 +322,8 @@ public final class FloatingMenu
         sButtonParams = null;
         sPending = null;
         sLastSynced = null;
+
+        // The thread itself is stopped by opFinished() once nothing else is queued.
     }
 
     // Stores the latest remote clipboard text; applied to the device when the menu syncs the clipboard.

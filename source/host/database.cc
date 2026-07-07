@@ -296,14 +296,14 @@ bool Database::replaceUsers(const QVector<User>& users)
 
     // On any failure the early return skips commit(), so the transaction destructor rolls back and the
     // existing user list is preserved.
-    const QVector<User> existing = userList();
-    for (const User& user : std::as_const(existing))
+    SqlQuery query(db_, "DELETE FROM users");
+    if (!query.exec())
     {
-        if (!removeUser(user.entry_id))
-            return false;
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return false;
     }
 
-    for (const User& user : std::as_const(users))
+    for (const User& user : users)
     {
         if (!addUser(user))
             return false;
