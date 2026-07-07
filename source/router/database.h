@@ -286,7 +286,8 @@ public:
     std::string_view modifyGroup(qint64 workspace_id, qint64 entry_id, qint64 new_parent_id,
         std::string_view name, std::string_view comment);
 
-    // Deletes the group and all its descendants.
+    // Deletes the group and all its descendants, moving hosts from that subtree to the
+    // workspace root (group_id <- 0).
     std::string_view removeGroup(qint64 workspace_id, qint64 entry_id);
 
 private:

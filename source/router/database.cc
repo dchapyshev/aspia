@@ -2363,11 +2363,39 @@ std::string_view Database::removeGroup(qint64 workspace_id, qint64 entry_id)
         return proto::router::kErrorInvalidData;
     }
 
-    SqlQuery query(db_, "DELETE FROM host_groups WHERE id=? AND workspace_id=?");
-    query.addInt64(entry_id);
-    query.addInt64(workspace_id);
+    SqlTransaction transaction(db_);
+    if (!transaction.begin())
+    {
+        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
 
-    if (!query.exec())
+    const char kReleaseHostsSql[] =
+        "WITH RECURSIVE deleted_groups(id) AS ("
+        "    SELECT id FROM host_groups WHERE id=? AND workspace_id=?"
+        "    UNION ALL"
+        "    SELECT child.id FROM host_groups child "
+        "    JOIN deleted_groups parent ON child.parent_id = parent.id "
+        "    WHERE child.workspace_id=?"
+        ") UPDATE hosts SET group_id=0 WHERE workspace_id=? "
+        "AND group_id IN (SELECT id FROM deleted_groups)";
+    SqlQuery release_hosts(db_, kReleaseHostsSql);
+    release_hosts.addInt64(entry_id);
+    release_hosts.addInt64(workspace_id);
+    release_hosts.addInt64(workspace_id);
+    release_hosts.addInt64(workspace_id);
+
+    if (!release_hosts.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    SqlQuery delete_group(db_, "DELETE FROM host_groups WHERE id=? AND workspace_id=?");
+    delete_group.addInt64(entry_id);
+    delete_group.addInt64(workspace_id);
+
+    if (!delete_group.exec())
     {
         LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return proto::router::kErrorInternalError;
@@ -2375,6 +2403,12 @@ std::string_view Database::removeGroup(qint64 workspace_id, qint64 entry_id)
 
     if (db_.changes() == 0)
         return proto::router::kErrorNotFound;
+
+    if (!transaction.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
 
     return proto::router::kErrorOk;
 }
