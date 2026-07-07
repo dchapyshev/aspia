@@ -502,8 +502,67 @@ Qt::ItemFlags FileListModel::flags(const QModelIndex& index) const
 //--------------------------------------------------------------------------------------------------
 void FileListModel::sort(int column, Qt::SortOrder order)
 {
+    emit layoutAboutToBeChanged();
+
+    // Persistent indexes (selection, current item, open editors) hold row numbers, so after the
+    // items are reordered they must be remapped to the new rows of their items.
+    struct ItemKey
+    {
+        QString name;
+        bool is_folder = false;
+    };
+
+    const QModelIndexList old_indexes = persistentIndexList();
+
+    QList<ItemKey> keys;
+    keys.reserve(old_indexes.size());
+
+    for (const QModelIndex& index : old_indexes)
+    {
+        if (index.isValid())
+            keys.append({ nameAt(index), isFolder(index) });
+        else
+            keys.append(ItemKey());
+    }
+
     sortItems(column, order);
-    emit dataChanged(QModelIndex(), QModelIndex());
+
+    auto row_for_key = [this](const ItemKey& key) -> int
+    {
+        if (key.is_folder)
+        {
+            for (qsizetype i = 0; i < folder_items_.size(); ++i)
+            {
+                if (folder_items_.at(i).name == key.name)
+                    return static_cast<int>(i);
+            }
+        }
+        else
+        {
+            for (qsizetype i = 0; i < file_items_.size(); ++i)
+            {
+                if (file_items_.at(i).name == key.name)
+                    return static_cast<int>(folder_items_.count() + i);
+            }
+        }
+
+        return -1;
+    };
+
+    QModelIndexList new_indexes;
+    new_indexes.reserve(old_indexes.size());
+
+    for (qsizetype i = 0; i < old_indexes.size(); ++i)
+    {
+        const QModelIndex& old_index = old_indexes.at(i);
+        int row = old_index.isValid() ? row_for_key(keys.at(i)) : -1;
+
+        new_indexes.append(row != -1 ? createIndex(row, old_index.column()) : QModelIndex());
+    }
+
+    changePersistentIndexList(old_indexes, new_indexes);
+
+    emit layoutChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
