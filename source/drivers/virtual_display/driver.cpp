@@ -354,6 +354,12 @@ IndirectDeviceContext::~IndirectDeviceContext() = default;
 //--------------------------------------------------------------------------------------------------
 void IndirectDeviceContext::initAdapter()
 {
+    // D0Entry is entered on every power-up, including resume from sleep, but the adapter must be
+    // created only once. A second IddCxAdapterInitAsync would create a duplicate adapter and
+    // overwrite the stored handle, leaking the first one.
+    if (adapter_ != nullptr)
+        return;
+
     // ==============================
     // TODO: Update the below diagnostic information in accordance with the target hardware. The strings and version
     // numbers are used for telemetry and may be displayed to the user in some situations.
