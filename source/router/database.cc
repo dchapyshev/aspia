@@ -1712,16 +1712,18 @@ std::string_view Database::modifyWorkspace(qint64 entry_id, std::string_view nam
         return proto::router::kErrorInternalError;
     }
 
-    SqlQuery exists_check(db_, "SELECT 1 FROM workspaces WHERE id=?");
+    // COUNT(*) always yields exactly one row, so a failed next() is a database error and not
+    // a missing workspace.
+    SqlQuery exists_check(db_, "SELECT COUNT(*) FROM workspaces WHERE id=?");
     exists_check.addInt64(entry_id);
 
-    if (!exists_check.isValid())
+    if (!exists_check.next())
     {
-        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        LOG(ERROR) << "Unable to check workspace existence:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
 
-    if (!exists_check.next())
+    if (exists_check.columnInt64(0) == 0)
         return proto::router::kErrorNotFound;
 
     SqlQuery name_check(db_, "SELECT id FROM workspaces WHERE name=?");
@@ -1829,17 +1831,52 @@ std::string_view Database::removeWorkspace(qint64 entry_id)
         return proto::router::kErrorInvalidData;
     }
 
-    SqlQuery query(db_, "DELETE FROM workspaces WHERE id=?");
-    query.addInt64(entry_id);
+    SqlTransaction transaction(db_);
+    if (!transaction.begin())
+    {
+        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
 
-    if (!query.exec())
+    // COUNT(*) always yields exactly one row, so a failed next() is a database error and not
+    // a missing workspace.
+    SqlQuery exists_check(db_, "SELECT COUNT(*) FROM workspaces WHERE id=?");
+    exists_check.addInt64(entry_id);
+
+    if (!exists_check.next())
+    {
+        LOG(ERROR) << "Unable to check workspace existence:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    if (exists_check.columnInt64(0) == 0)
+        return proto::router::kErrorNotFound;
+
+    SqlQuery release_hosts(db_,
+        "UPDATE hosts SET workspace_id=0, group_id=0, comment=X'', user_name=X'', password=X'' "
+        "WHERE workspace_id=?");
+    release_hosts.addInt64(entry_id);
+
+    if (!release_hosts.exec())
     {
         LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
 
-    if (db_.changes() == 0)
-        return proto::router::kErrorNotFound;
+    SqlQuery delete_workspace(db_, "DELETE FROM workspaces WHERE id=?");
+    delete_workspace.addInt64(entry_id);
+
+    if (!delete_workspace.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    if (!transaction.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
 
     return proto::router::kErrorOk;
 }
