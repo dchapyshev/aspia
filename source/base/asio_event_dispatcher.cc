@@ -193,33 +193,50 @@ void AsioEventDispatcher::registerSocketNotifier(QSocketNotifier* notifier)
     if (is_socket_added)
         asyncWaitSocket(data.handle, socket);
 
-    // FD_WRITE is edge-triggered: it is recorded when the socket first becomes writable and then
-    // only after send fails with WSAEWOULDBLOCK. If the edge arrived while the write notifier was
-    // disabled, WSAEnumNetworkEvents has already consumed it and no new edge will come, so the
-    // notifier would never fire. Check writability manually and deliver the missed notification.
-    if (type == QSocketNotifier::Write)
+    // WSAEnumNetworkEvents consumes recorded events even when the corresponding notifier is not
+    // registered, and not every event is recorded again later: FD_WRITE only after send fails
+    // with WSAEWOULDBLOCK, FD_READ/FD_OOB only when recv is called or more data arrives, FD_CLOSE
+    // and a failed FD_CONNECT never. An event consumed while the notifier was disabled is lost
+    // forever and the notifier would never fire. Check the current socket state manually and
+    // deliver the missed notification.
+    fd_set fds;
+    FD_ZERO(&fds);
+    FD_SET(static_cast<SOCKET>(socket), &fds);
+
+    // A failed connection attempt is reported through the except set, not the write set.
+    fd_set except_fds = fds;
+
+    timeval timeout = { 0, 0 };
+    int ready = 0;
+
+    if (type == QSocketNotifier::Read)
+        ready = select(0, &fds, nullptr, nullptr, &timeout);
+    else if (type == QSocketNotifier::Write)
+        ready = select(0, nullptr, &fds, &except_fds, &timeout);
+    else
+        ready = select(0, nullptr, nullptr, &except_fds, &timeout);
+
+    if (ready > 0)
     {
-        fd_set write_fds;
-        FD_ZERO(&write_fds);
-        FD_SET(static_cast<SOCKET>(socket), &write_fds);
-
-        timeval timeout = { 0, 0 };
-        if (select(0, nullptr, &write_fds, nullptr, &timeout) == 1)
+        // The event is posted instead of being sent in place, so that the notifier does not
+        // fire from within registerSocketNotifier. The socket may be unregistered before the
+        // handler runs, so it is identified by unique_id at delivery time.
+        const quint64 unique_id = data.unique_id;
+        asio::post(io_context_, [this, socket, unique_id, type]() noexcept
         {
-            // The event is posted instead of being sent in place, so that the notifier does not
-            // fire from within registerSocketNotifier. The socket may be unregistered before the
-            // handler runs, so it is identified by unique_id at delivery time.
-            const quint64 unique_id = data.unique_id;
-            asio::post(io_context_, [this, socket, unique_id]() noexcept
-            {
-                auto it = sockets_.find(socket);
-                if (it == sockets_.end() || it->second.unique_id != unique_id || !it->second.write)
-                    return;
+            auto it = sockets_.find(socket);
+            if (it == sockets_.end() || it->second.unique_id != unique_id)
+                return;
 
-                QEvent event(QEvent::SockAct);
-                QCoreApplication::sendEvent(it->second.write, &event);
-            });
-        }
+            QSocketNotifier* notifier =
+                type == QSocketNotifier::Read ? it->second.read :
+                type == QSocketNotifier::Write ? it->second.write : it->second.exception;
+            if (!notifier)
+                return;
+
+            QEvent event(QEvent::SockAct);
+            QCoreApplication::sendEvent(notifier, &event);
+        });
     }
 #endif
 }
