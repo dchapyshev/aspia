@@ -41,6 +41,26 @@ namespace {
 
 constexpr int kClientDeviceTokenSize = 32;
 constexpr qint64 kClientDeviceTokenTtlSec = 7 * 24 * 3600; // 7 days, sliding window.
+constexpr qint64 kMaxHostListPageSize = 1000;
+
+// A host-list request with both range endpoints left at their proto defaults means "unpaged" -
+// callers that do not page simply leave the fields unset. Any other range is an explicit page
+// and must stay bounded.
+bool isHostListPaginationEnabled(qint64 start_item, qint64 end_item)
+{
+    return start_item != 0 || end_item != 0;
+}
+
+bool isHostListPaginationValid(qint64 start_item, qint64 end_item)
+{
+    if (!isHostListPaginationEnabled(start_item, end_item))
+        return true;
+
+    if (start_item < 0 || end_item < start_item)
+        return false;
+
+    return end_item - start_item < kMaxHostListPageSize;
+}
 
 //--------------------------------------------------------------------------------------------------
 QString databaseDirectory()
@@ -1129,7 +1149,14 @@ void Database::hosts(qint64 start_item, qint64 end_item, proto::router::HostList
         return;
     }
 
-    const bool paginate = start_item >= 0 && end_item > 0 && end_item >= start_item;
+    if (!isHostListPaginationValid(start_item, end_item))
+    {
+        LOG(ERROR) << "Invalid host list page range:" << start_item << "-" << end_item;
+        out->set_error_code(proto::router::kErrorInvalidRequest);
+        return;
+    }
+
+    const bool paginate = isHostListPaginationEnabled(start_item, end_item);
     const std::string sql = strCat({
         "SELECT id, workspace_id, group_id, display_name, computer_name, cpu_arch, version, "
         "os_name, address, comment, user_name, password, last_connect, last_modify FROM hosts",
@@ -1182,7 +1209,14 @@ void Database::hosts(qint64 workspace_id, qint64 group_id, qint64 start_item,
         return;
     }
 
-    const bool paginate = start_item >= 0 && end_item > 0 && end_item >= start_item;
+    if (!isHostListPaginationValid(start_item, end_item))
+    {
+        LOG(ERROR) << "Invalid host list page range:" << start_item << "-" << end_item;
+        out->set_error_code(proto::router::kErrorInvalidRequest);
+        return;
+    }
+
+    const bool paginate = isHostListPaginationEnabled(start_item, end_item);
     const std::string sql = strCat({
         "SELECT id, workspace_id, group_id, display_name, computer_name, cpu_arch, version, "
         "os_name, address, comment, user_name, password, last_connect, last_modify "

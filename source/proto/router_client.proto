@@ -173,6 +173,8 @@ message HostListRequest
 
     int64 request_id   = 1;
     Mode mode          = 2;
+    // Inclusive page range. Leaving both endpoints at 0 requests the unpaged mode;
+    // any other range must be valid and bounded by the router.
     int64 start_item   = 3;
     int64 end_item     = 4;
     int64 workspace_id = 5;

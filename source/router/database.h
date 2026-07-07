@@ -179,13 +179,14 @@ public:
 
     // Appends every host in the database (admin-only call site) to |out| and sets its error_code,
     // reading rows straight into the protobuf message. [start_item, end_item] gives an inclusive
-    // paging window; pass end_item <= 0 to disable paging. The Host.online field is left unset - it
-    // reflects runtime session state the database does not track and is filled by the caller.
+    // paging window; leaving both endpoints at 0 requests the unpaged mode. Any other range
+    // must be valid and bounded. The Host.online field is left unset - it reflects runtime session
+    // state the database does not track and is filled by the caller.
     void hosts(qint64 start_item, qint64 end_item, proto::router::HostList* out) const;
 
     // Appends hosts in the given workspace and group (exact match on both columns) to |out| and
-    // sets its error_code. [start_item, end_item] gives an inclusive paging window; pass
-    // end_item <= 0 to disable.
+    // sets its error_code. [start_item, end_item] gives an inclusive paging window; leaving both
+    // endpoints at 0 requests the unpaged mode. Any other range must be valid and bounded.
     void hosts(qint64 workspace_id, qint64 group_id, qint64 start_item, qint64 end_item,
         proto::router::HostList* out) const;
 
