@@ -236,6 +236,9 @@ public:
     // ignored).
     std::string_view modifyWorkspace(qint64 entry_id, std::string_view name, std::string_view comment,
         const QList<Workspace::Access>& desired_access);
+
+    // Deletes a workspace, releases its hosts (workspace_id <- 0, group_id <- 0), and clears
+    // host fields encrypted with the workspace GK.
     std::string_view removeWorkspace(qint64 entry_id);
 
     // Assigns hosts to the given workspace. desired_host_ids is the complete final set: hosts

@@ -443,7 +443,6 @@ void SessionManager::onIdleTimeout()
             session->deleteLater();
 
             it = active_sessions_.erase(it);
-            emit sig_finished();
             ++count;
         }
         else
@@ -451,6 +450,11 @@ void SessionManager::onIdleTimeout()
             ++it;
         }
     }
+
+    // Emit only after the loop finishes: sig_finished is delivered synchronously, and a connected
+    // slot must not mutate active_sessions_ while it is still being iterated here.
+    for (int i = 0; i < count; ++i)
+        emit sig_finished();
 
     LOG(INFO) << "Sessions ended by timeout:" << count;
 }
