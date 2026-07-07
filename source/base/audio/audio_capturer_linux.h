@@ -20,7 +20,17 @@
 #define BASE_AUDIO_AUDIO_CAPTURER_LINUX_H
 
 #include "base/audio/audio_capturer.h"
+#include "base/audio/audio_silence_detector.h"
+#include "base/audio/linux/pulseaudio_symbol_table.h"
 
+#include <pulse/pulseaudio.h>
+
+#include <string>
+
+// Captures the system audio (what applications play, not the microphone) through PulseAudio: a record
+// stream connected to the monitor source of the default sink. Packets are delivered from the PulseAudio
+// mainloop thread; the default sink is tracked through server change events, so the capture follows
+// when the output device changes (e.g. headphones are plugged in).
 class AudioCapturerLinux final : public AudioCapturer
 {
 public:
@@ -31,6 +41,43 @@ public:
     bool start(const PacketCapturedCallback& callback) final;
 
 private:
+    static void paContextStateCallback(pa_context* context, void* self);
+    static void paServerInfoCallback(pa_context* context, const pa_server_info* info, void* self);
+    static void paSubscribeCallback(pa_context* context, pa_subscription_event_type_t type,
+                                    uint32_t index, void* self);
+    static void paStreamStateCallback(pa_stream* stream, void* self);
+    static void paStreamReadCallback(pa_stream* stream, size_t bytes, void* self);
+
+    void paContextStateCallbackHandler(pa_context* context);
+    void paServerInfoCallbackHandler(const pa_server_info* info);
+    void paStreamStateCallbackHandler(pa_stream* stream);
+    void paStreamReadCallbackHandler(pa_stream* stream);
+
+    bool initPulseAudio();
+    void terminatePulseAudio();
+
+    // Stream management. Both are called either with the mainloop lock held (start/stop paths) or
+    // from a callback on the mainloop thread (default sink change), where the lock is already held.
+    bool connectStream();
+    void disconnectStream();
+
+    // Builds a packet from a chunk of recorded PCM and hands it to the callback; silent chunks are
+    // dropped after a grace period.
+    void processChunk(const void* data, size_t bytes);
+
+    PacketCapturedCallback callback_;
+    AudioSilenceDetector silence_detector_;
+
+    bool pa_state_changed_ = false;
+    pa_threaded_mainloop* pa_main_loop_ = nullptr;
+    pa_mainloop_api* pa_main_loop_api_ = nullptr;
+    pa_context* pa_context_ = nullptr;
+    pa_stream* stream_ = nullptr;
+
+    // The sink whose monitor is being captured; server change events compare against it to detect a
+    // default sink switch.
+    std::string default_sink_;
+
     Q_DISABLE_COPY(AudioCapturerLinux)
 };
 

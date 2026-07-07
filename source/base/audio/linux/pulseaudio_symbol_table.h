@@ -35,6 +35,8 @@
     X(pa_context_get_state)                  \
     X(pa_context_new)                        \
     X(pa_context_set_state_callback)         \
+    X(pa_context_set_subscribe_callback)     \
+    X(pa_context_subscribe)                  \
     X(pa_context_unref)                      \
     X(pa_operation_get_state)                \
     X(pa_operation_unref)                    \
@@ -42,12 +44,16 @@
     X(pa_proplist_new)                       \
     X(pa_proplist_sets)                      \
     X(pa_stream_connect_playback)            \
+    X(pa_stream_connect_record)              \
     X(pa_stream_disconnect)                  \
+    X(pa_stream_drop)                        \
     X(pa_stream_get_buffer_attr)             \
     X(pa_stream_get_state)                   \
     X(pa_stream_new_with_proplist)           \
+    X(pa_stream_peek)                        \
     X(pa_stream_readable_size)               \
     X(pa_stream_set_buffer_attr)             \
+    X(pa_stream_set_read_callback)           \
     X(pa_stream_set_state_callback)          \
     X(pa_stream_set_write_callback)          \
     X(pa_stream_unref)                       \
@@ -70,5 +76,9 @@ LATE_BINDING_SYMBOL_TABLE_DECLARE_BEGIN(PulseAudioSymbolTable)
 PULSE_AUDIO_SYMBOLS_LIST
 #undef X
 LATE_BINDING_SYMBOL_TABLE_DECLARE_END(PulseAudioSymbolTable)
+
+// The process-wide symbol table shared by the PulseAudio output and capturer (defined in
+// audio_output_pulse.cc).
+PulseAudioSymbolTable* pulseSymbolTable();
 
 #endif // BASE_AUDIO_LINUX_PULSEAUDIO_SYMBOL_TABLE_H

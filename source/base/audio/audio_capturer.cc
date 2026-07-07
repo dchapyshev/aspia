@@ -29,6 +29,10 @@
 #include "base/audio/audio_capturer_linux.h"
 #endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 
+#if defined(Q_OS_MACOS)
+#include "base/audio/audio_capturer_mac.h"
+#endif // defined(Q_OS_MACOS)
+
 //--------------------------------------------------------------------------------------------------
 // Returns true if the sampling rate is supported by Pepper.
 bool AudioCapturer::isValidSampleRate(int sample_rate)
@@ -53,6 +57,8 @@ std::unique_ptr<AudioCapturer> AudioCapturer::create()
     return std::unique_ptr<AudioCapturer>(new AudioCapturerWin());
 #elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     return std::unique_ptr<AudioCapturer>(new AudioCapturerLinux());
+#elif defined(Q_OS_MACOS)
+    return std::make_unique<AudioCapturerMac>();
 #else
     NOTIMPLEMENTED();
     return nullptr;
