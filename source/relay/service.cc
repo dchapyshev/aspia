@@ -157,6 +157,12 @@ void Service::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
     // Clearing the key pool.
     session_manager_->clearKeys();
 
+    if (tcp_channel_)
+    {
+        tcp_channel_->disconnect();
+        tcp_channel_.reset();
+    }
+
     // Retrying a connection at a time interval.
     delayedConnectToRouter();
 }
@@ -330,6 +336,12 @@ void Service::delayedConnectToRouter()
 //--------------------------------------------------------------------------------------------------
 void Service::sendKeyPool(quint32 key_count)
 {
+    if (!tcp_channel_)
+    {
+        LOG(INFO) << "No router connection; skip sending key pool";
+        return;
+    }
+
     proto::router::RelayKeyPool* relay_key_pool =
         outgoing_message_.newMessage<proto::router::RelayToRouter>().mutable_key_pool();
 

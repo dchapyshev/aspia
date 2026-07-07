@@ -23,6 +23,7 @@
 
 #include "base/serialization.h"
 #include "base/core_service.h"
+#include "base/scoped_qpointer.h"
 #include "base/net/tcp_channel.h"
 #include "proto/router_relay.h"
 
@@ -72,7 +73,7 @@ private:
     quint32 max_peer_count_ = 0;
 
     QTimer* reconnect_timer_ = nullptr;
-    TcpChannel* tcp_channel_ = nullptr;
+    ScopedQPointer<TcpChannel> tcp_channel_;
     SessionManager* session_manager_ = nullptr;
 
     Parser<proto::router::RouterToRelay> incoming_message_;
