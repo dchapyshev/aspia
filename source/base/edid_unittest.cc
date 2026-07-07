@@ -533,6 +533,80 @@ TEST(edid_test, standard_timings_aspect_4_3)
     EXPECT_EQ(frequency, 75);
 }
 
+TEST(edid_test, monitor_name_13_chars)
+{
+    QByteArray data = createValidEdidBlock();
+    quint8* raw = reinterpret_cast<quint8*>(data.data());
+
+    // A name of exactly 13 characters occupies the whole field and has no 0x0A terminator.
+    const char* name = "ABCDEFGHIJKLM";
+    for (int i = 0; i < 13; ++i)
+        raw[95 + i] = static_cast<quint8>(name[i]);
+
+    // Recompute checksum.
+    quint8 sum = 0;
+    for (int i = 0; i < 127; ++i)
+        sum += raw[i];
+    raw[127] = static_cast<quint8>(0x100 - sum);
+
+    Edid edid(data);
+    ASSERT_TRUE(edid.isValid());
+    EXPECT_EQ(edid.monitorName(), "ABCDEFGHIJKLM");
+}
+
+TEST(edid_test, week_of_manufacture_model_year_flag)
+{
+    QByteArray data = createValidEdidBlock();
+    quint8* raw = reinterpret_cast<quint8*>(data.data());
+
+    // 0xFF means that the year field contains the model year (EDID 1.4); the week is reported
+    // as unspecified.
+    raw[16] = 0xFF;
+
+    // Recompute checksum.
+    quint8 sum = 0;
+    for (int i = 0; i < 127; ++i)
+        sum += raw[i];
+    raw[127] = static_cast<quint8>(0x100 - sum);
+
+    Edid edid(data);
+    ASSERT_TRUE(edid.isValid());
+    EXPECT_EQ(edid.weekOfManufacture(), 0);
+}
+
+TEST(edid_test, standard_timings_index_out_of_range)
+{
+    QByteArray data = createValidEdidBlock();
+    Edid edid(data);
+    ASSERT_TRUE(edid.isValid());
+
+    int width = 0, height = 0, frequency = 0;
+    EXPECT_FALSE(edid.standardTimings(-1, &width, &height, &frequency));
+    EXPECT_FALSE(edid.standardTimings(8, &width, &height, &frequency));
+}
+
+TEST(edid_test, manufacturer_invalid_letters)
+{
+    QByteArray data = createValidEdidBlock();
+    quint8* raw = reinterpret_cast<quint8*>(data.data());
+
+    // Letter code 0 is outside the valid range 1..26: the signature is corrupted and must not
+    // produce garbage characters.
+    raw[8] = 0x00;
+    raw[9] = 0x00;
+
+    // Recompute checksum.
+    quint8 sum = 0;
+    for (int i = 0; i < 127; ++i)
+        sum += raw[i];
+    raw[127] = static_cast<quint8>(0x100 - sum);
+
+    Edid edid(data);
+    ASSERT_TRUE(edid.isValid());
+    EXPECT_TRUE(edid.manufacturerName().isEmpty());
+    EXPECT_EQ(edid.monitorId(), "1234");
+}
+
 TEST(edid_test, standard_timings_aspect_16_10)
 {
     QByteArray data = createValidEdidBlock();
@@ -543,6 +617,32 @@ TEST(edid_test, standard_timings_aspect_16_10)
     // width = (byte1 + 31) * 8 => byte1 = 1680/8 - 31 = 179
     // aspect 16:10 => bits 7:6 = 0x00, frequency = 60 - 60 = 0 => byte2 = 0x00
     raw[40] = 179;
+    raw[41] = 0x00;
+
+    // Recompute checksum.
+    quint8 sum = 0;
+    for (int i = 0; i < 127; ++i)
+        sum += raw[i];
+    raw[127] = static_cast<quint8>(0x100 - sum);
+
+    Edid edid(data);
+    ASSERT_TRUE(edid.isValid());
+
+    int width = 0, height = 0, frequency = 0;
+    EXPECT_TRUE(edid.standardTimings(1, &width, &height, &frequency));
+    EXPECT_EQ(width, 1680);
+    EXPECT_EQ(height, 1050);
+    EXPECT_EQ(frequency, 60);
+}
+
+TEST(edid_test, standard_timings_aspect_16_10_edid_1_4)
+{
+    QByteArray data = createValidEdidBlock();
+    quint8* raw = reinterpret_cast<quint8*>(data.data());
+
+    // EDID 1.4: ratio code 0x00 still means 16:10, not the pre-1.3 1:1.
+    raw[19] = 4;
+    raw[40] = 179; // 1680x1050@60Hz
     raw[41] = 0x00;
 
     // Recompute checksum.

@@ -24,7 +24,6 @@
 class Edid
 {
 public:
-    Edid() = default;
     explicit Edid(const QByteArray& buffer);
     ~Edid() = default;
 
@@ -236,7 +235,11 @@ private:
     const quint8* getDescriptor(int type) const;
 
     QByteArray buffer_;
+
+    // Points into buffer_, so copying would leave the copy referencing the original's data.
     const Data* edid_ = nullptr;
+
+    Q_DISABLE_COPY_MOVE(Edid)
 };
 
 #endif // BASE_EDID_H

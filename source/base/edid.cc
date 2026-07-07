@@ -118,6 +118,21 @@ static int getDataType(const quint8* descriptor)
 }
 
 //--------------------------------------------------------------------------------------------------
+static QString descriptorText(const Edid::MonitorDescriptor* descriptor)
+{
+    // The string is terminated with 0x0A only when it is shorter than the field; a string of
+    // exactly 13 characters occupies the whole field with no terminator.
+    const size_t max_length = std::size(descriptor->descriptor_data);
+
+    size_t length = 0;
+    while (length < max_length && descriptor->descriptor_data[length] != 0x0A)
+        ++length;
+
+    return QString::fromLatin1(reinterpret_cast<const char*>(descriptor->descriptor_data),
+                               static_cast<qsizetype>(length)).trimmed();
+}
+
+//--------------------------------------------------------------------------------------------------
 Edid::Edid(const QByteArray& buffer)
     : buffer_(buffer)
 {
@@ -159,13 +174,12 @@ bool Edid::isValid() const
 //--------------------------------------------------------------------------------------------------
 int Edid::weekOfManufacture() const
 {
-    quint8 week = edid_->week_of_manufacture;
+    const quint8 week = edid_->week_of_manufacture;
 
+    // Zero means "not specified" and is very common; 0xFF means that the year field contains
+    // the model year (EDID 1.4). Everything out of range is reported as unspecified.
     if (week < kMinWeekOfManufacture || week > kMaxWeekOfManufacture)
-    {
-        LOG(ERROR) << "Wrong week field value:" << week;
         return 0;
-    }
 
     return week;
 }
@@ -258,12 +272,20 @@ QString Edid::getManufacturerSignature() const
     // Bits 14:10 : first letter (01h = 'A', 02h = 'B', etc.).
     // Bits 9:5 : second letter.
     // Bits 4:0 : third letter.
-    char signature[4];
-    signature[0] = static_cast<char>(id.range(10, 14)) + 'A' - 1;
-    signature[1] = static_cast<char>(id.range(5, 9)) + 'A' - 1;
-    signature[2] = static_cast<char>(id.range(0, 4)) + 'A' - 1;
-    signature[3] = 0;
+    const quint16 letters[3] = { id.range(10, 14), id.range(5, 9), id.range(0, 4) };
 
+    char signature[4];
+
+    for (size_t i = 0; i < std::size(letters); ++i)
+    {
+        // Letter codes run from 01h ('A') to 1Ah ('Z'); anything else is a corrupted field.
+        if (letters[i] < 1 || letters[i] > 26)
+            return QString();
+
+        signature[i] = static_cast<char>('A' + letters[i] - 1);
+    }
+
+    signature[3] = 0;
     return signature;
 }
 
@@ -281,25 +303,10 @@ QString Edid::serialNumber() const
         reinterpret_cast<const MonitorDescriptor*>(
             getDescriptor(DATA_TYPE_TAG_MONITOR_SERIAL_NUMBER_ASCII));
 
-    if (descriptor)
-    {
-        const size_t kMaxMonitorSNLength = 13;
+    if (!descriptor)
+        return QString();
 
-        char sn[kMaxMonitorSNLength];
-
-        for (size_t i = 0; i < kMaxMonitorSNLength; ++i)
-        {
-            if (descriptor->descriptor_data[i] == 0x0A)
-            {
-                sn[i] = 0;
-                return sn;
-            }
-
-            sn[i] = static_cast<char>(descriptor->descriptor_data[i]);
-        }
-    }
-
-    return QString();
+    return descriptorText(descriptor);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -339,25 +346,10 @@ QString Edid::monitorName() const
     const MonitorDescriptor* descriptor =
         reinterpret_cast<const MonitorDescriptor*>(getDescriptor(DATA_TYPE_TAG_MONITOR_NAME_ASCII));
 
-    if (descriptor)
-    {
-        const size_t kMaxMonitorNameLength = 13;
+    if (!descriptor)
+        return QString();
 
-        char name[kMaxMonitorNameLength];
-
-        for (size_t i = 0; i < kMaxMonitorNameLength; ++i)
-        {
-            if (descriptor->descriptor_data[i] == 0x0A)
-            {
-                name[i] = 0;
-                return name;
-            }
-
-            name[i] = static_cast<char>(descriptor->descriptor_data[i]);
-        }
-    }
-
-    return QString();
+    return descriptorText(descriptor);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -464,6 +456,9 @@ int Edid::standardTimingsCount() const
 //--------------------------------------------------------------------------------------------------
 bool Edid::standardTimings(int index, int* width, int* height, int* frequency)
 {
+    if (index < 0 || index >= standardTimingsCount())
+        return false;
+
     quint8 byte1 = edid_->standard_timing_identification[index][0];
     quint8 byte2 = edid_->standard_timing_identification[index][1];
 
@@ -482,7 +477,8 @@ bool Edid::standardTimings(int index, int* width, int* height, int* frequency)
     {
         case 0x00:
         {
-            if (edid_->structure_revision == 3)
+            // 16:10 replaced 1:1 for this code in EDID 1.3 and is kept in later revisions.
+            if (edid_->structure_revision >= 3)
             {
                 ratio_w = 16;
                 ratio_h = 10;
