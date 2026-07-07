@@ -208,6 +208,7 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
     result->set_request_id(request.request_id());
     result->set_command_name(request.command_name());
     qint64 reset_otp_user_id = 0;
+    qint64 revoked_tokens_user_id = 0;
     qint64 deleted_user_id = 0;
 
     if (request.command_name() == proto::router::kCommandUserAdd)
@@ -297,7 +298,7 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
                 }
                 else
                 {
-                    Service::instance()->stopClients(user_id);
+                    revoked_tokens_user_id = user_id;
                     CLOG(INFO) << "All device tokens of user" << user_id
                                << "revoked by" << userName();
                     result->set_error_code(proto::router::kErrorOk);
@@ -349,6 +350,9 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
 
     if (reset_otp_user_id > 0)
         Service::instance()->stopClients(reset_otp_user_id);
+
+    if (revoked_tokens_user_id > 0)
+        Service::instance()->stopClients(revoked_tokens_user_id);
 
     if (deleted_user_id > 0)
         Service::instance()->stopClients(deleted_user_id);
