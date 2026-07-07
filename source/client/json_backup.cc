@@ -360,10 +360,15 @@ JsonBackup::Result JsonBackup::exportToFile(const QString& file_path, const Secu
         return Result::DATABASE_UNAVAILABLE;
 
     QByteArray salt = Random::byteArray(kSaltSize);
+    CHECK(!salt.isEmpty());
+
     SecureByteArray key(PasswordHash::hash(PasswordHash::ARGON2ID, password, salt));
     DataCryptor cryptor(CipherType::AES256_GCM, key);
 
-    std::optional<QByteArray> verifier = cryptor.encrypt(Random::byteArray(kVerifierPayloadSize));
+    QByteArray verifier_payload = Random::byteArray(kVerifierPayloadSize);
+    CHECK(!verifier_payload.isEmpty());
+
+    std::optional<QByteArray> verifier = cryptor.encrypt(verifier_payload);
     if (!verifier.has_value())
     {
         LOG(ERROR) << "Failed to generate verifier";

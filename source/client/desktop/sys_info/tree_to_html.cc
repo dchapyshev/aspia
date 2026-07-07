@@ -65,9 +65,12 @@ void endDocument(QXmlStreamWriter* writer)
 //--------------------------------------------------------------------------------------------------
 void tableHeader(QXmlStreamWriter* writer, const QTreeWidget* tree)
 {
+    QTreeWidgetItem* header = tree->headerItem();
+    if (!header)
+        return;
+
     writer->writeStartElement("tr");
 
-    QTreeWidgetItem* header = tree->headerItem();
     for (int i = 0; i < tree->columnCount(); ++i)
     {
         writer->writeStartElement("th");

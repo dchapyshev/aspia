@@ -156,7 +156,7 @@ proto::control::Config Settings::desktopConfig() const
 void Settings::setDesktopConfig(const proto::control::Config& config)
 {
     QByteArray buffer;
-    buffer.resize(static_cast<int>(config.ByteSizeLong()));
+    buffer.resize(static_cast<qsizetype>(config.ByteSizeLong()));
 
     config.SerializeWithCachedSizesToArray(reinterpret_cast<quint8*>(buffer.data()));
     settings_.setValue(kDesktopConfigParam, buffer);

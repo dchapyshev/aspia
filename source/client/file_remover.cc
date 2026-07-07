@@ -123,8 +123,8 @@ void FileRemover::onTaskDone(const FileTask& task)
 
     if (!request.has_remove_request())
     {
-        emit sig_errorOccurred(QString::fromStdString(request.remove_request().path()),
-                               proto::file_transfer::ERROR_CODE_UNKNOWN, ACTION_ABORT);
+        // The request is not a remove request, so there is no path to report.
+        emit sig_errorOccurred(QString(), proto::file_transfer::ERROR_CODE_UNKNOWN, ACTION_ABORT);
         return;
     }
 

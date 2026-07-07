@@ -27,6 +27,10 @@ namespace {
 constexpr qsizetype kMinCacheSize = 2;
 constexpr qsizetype kMaxCacheSize = 30;
 
+// Must match the limit on the encoder side. Real cursors are far smaller, and the bound keeps a
+// malicious host from requesting huge pixel buffer allocations.
+constexpr int kMaxCursorSize = 512;
+
 //--------------------------------------------------------------------------------------------------
 MouseCursor::Type parseType(proto::cursor::Shape::Type type)
 {
@@ -105,7 +109,8 @@ QByteArray CursorDecoder::decompressCursor(const proto::cursor::Shape& cursor_sh
         return QByteArray();
     }
 
-    if (cursor_shape.width() <= 0 || cursor_shape.height() <= 0)
+    if (cursor_shape.width() <= 0 || cursor_shape.width() > kMaxCursorSize ||
+        cursor_shape.height() <= 0 || cursor_shape.height() > kMaxCursorSize)
     {
         LOG(ERROR) << "Invalid cursor size:" << cursor_shape;
         return QByteArray();
@@ -163,8 +168,8 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::cursor::Shape& c
         QPoint hotspot(cursor_shape.hotspot_x(), cursor_shape.hotspot_y());
         QPoint dpi(cursor_shape.dpi_x(), cursor_shape.dpi_y());
 
-        if (size.width()  <= 0 || size.width()  > (std::numeric_limits<qint16>::max() / 2) ||
-            size.height() <= 0 || size.height() > (std::numeric_limits<qint16>::max() / 2))
+        if (size.width()  <= 0 || size.width()  > kMaxCursorSize ||
+            size.height() <= 0 || size.height() > kMaxCursorSize)
         {
             LOG(ERROR) << "Cursor dimensions are out of bounds for SetCursor:" << size;
             return nullptr;

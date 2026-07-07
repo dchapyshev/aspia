@@ -43,7 +43,7 @@ public:
     const FileListModel* source() const { return source_; }
 
 private:
-    const FileListModel* source_;
+    const FileListModel* source_ = nullptr;
     QString mime_type_;
     QList<FileTransfer::Item> file_list_;
 

@@ -35,6 +35,9 @@ constexpr int kCompressionRatio = 12;
 // Recommended seed value for a hash.
 constexpr quint32 kHashingSeed = 5381;
 
+// Must match the limit on the decoder side.
+constexpr int kMaxCursorSize = 512;
+
 //--------------------------------------------------------------------------------------------------
 quint8* outputBuffer(proto::cursor::Shape* cursor_shape, size_t size)
 {
@@ -179,11 +182,10 @@ bool CursorEncoder::compressCursor(
 bool CursorEncoder::encode(const MouseCursor& mouse_cursor, proto::cursor::Shape* cursor_shape)
 {
     const QSize& size = mouse_cursor.size();
-    const int kMaxSize = std::numeric_limits<qint16>::max() / 2;
 
     // Check the correctness of the cursor size.
-    if (size.width() <= 0 || size.width() > kMaxSize ||
-        size.height() <= 0 || size.height() > kMaxSize)
+    if (size.width() <= 0 || size.width() > kMaxCursorSize ||
+        size.height() <= 0 || size.height() > kMaxCursorSize)
     {
         LOG(ERROR) << "Wrong size of cursor:" << size;
         return false;
