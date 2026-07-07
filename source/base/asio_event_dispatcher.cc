@@ -512,6 +512,14 @@ void AsioEventDispatcher::asyncWaitPreciseTimer(
             return;
 
         timer.end_time += timer.interval;
+
+        // If the thread was stalled for longer than the interval, the next expiration is already
+        // in the past. Qt timers coalesce missed periods into a single event, so skip them
+        // instead of firing a rapid catch-up burst.
+        const PreciseTimePoint now = PreciseClock::now();
+        if (timer.end_time <= now)
+            timer.end_time = now + timer.interval;
+
         asyncWaitPreciseTimer(timer.handle, timer.end_time, timer_id);
     });
 }
@@ -551,6 +559,14 @@ void AsioEventDispatcher::asyncWaitCoarseTimer(
             return;
 
         timer.end_time += timer.interval;
+
+        // If the thread was stalled for longer than the interval, the next expiration is already
+        // in the past. Qt timers coalesce missed periods into a single event, so skip them
+        // instead of firing a rapid catch-up burst.
+        const CoarseTimePoint now = CoarseClock::now();
+        if (timer.end_time <= now)
+            timer.end_time = now + timer.interval;
+
         asyncWaitCoarseTimer(timer.handle, timer.end_time, timer_id);
     });
 }
@@ -623,6 +639,14 @@ void AsioEventDispatcher::asyncWaitMultimediaTimer(asio::windows::object_handle&
             return;
 
         timer.end_time += timer.interval;
+
+        // The native periodic timer keeps its own schedule and the auto-reset event coalesces
+        // missed periods. Only the bookkeeping time used by remainingTime() is adjusted here so
+        // that it does not lag behind after a stall.
+        const PreciseTimePoint now = PreciseClock::now();
+        if (timer.end_time <= now)
+            timer.end_time = now + timer.interval;
+
         asyncWaitMultimediaTimer(timer.handle, timer_id);
     });
 }
