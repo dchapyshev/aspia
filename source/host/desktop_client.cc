@@ -63,7 +63,7 @@ DesktopClient::DesktopClient(TcpChannel* tcp_channel, QObject* parent)
         if (dettach_time_.secsTo(QTime::currentTime()) > 15)
         {
             CLOG(WARNING) << "Timeout when desktop client starting";
-            emit sig_finished();
+            finish();
             return;
         }
 
@@ -75,6 +75,17 @@ DesktopClient::DesktopClient(TcpChannel* tcp_channel, QObject* parent)
 
     fake_capture_timer_->setInterval(std::chrono::milliseconds(30));
     fake_capture_timer_->start();
+
+    // The base class also emits sig_finished directly (a TCP error), bypassing finish(). Whatever the
+    // emission path, the finished client must not tick its timers again: the object lives until the
+    // deferred delete runs, and a further tick would re-emit the signal for a client that is already
+    // removed from the service list, tripping the CHECK in Service::onClientFinished.
+    connect(this, &Client::sig_finished, this, [this]()
+    {
+        finished_ = true;
+        fake_capture_timer_->stop();
+        overflow_timer_->stop();
+    });
 
     connect(overflow_timer_, &QTimer::timeout, this, &DesktopClient::onOverflowCheck);
     overflow_timer_->setInterval(std::chrono::milliseconds(1000));
@@ -118,7 +129,7 @@ QString DesktopClient::attach()
     if (!ipc_server_->start(channel_name, access_mode))
     {
         CLOG(ERROR) << "Unable to start IPC server";
-        emit sig_finished();
+        finish();
         return QString();
     }
 
@@ -128,6 +139,14 @@ QString DesktopClient::attach()
 //--------------------------------------------------------------------------------------------------
 void DesktopClient::dettach()
 {
+    // The server may still be waiting for the agent to connect if the desktop manager re-attaches
+    // before the previous agent ever showed up; drop it so the CCHECK in attach() does not fire.
+    if (ipc_server_)
+    {
+        ipc_server_->disconnect(); // Disconnect all signals.
+        ipc_server_.reset();
+    }
+
     if (ipc_channel_)
     {
         ipc_channel_->disconnect(); // Disconnect all signals.
@@ -269,7 +288,7 @@ void DesktopClient::onIpcNewConnection()
     if (!ipc_server_->hasPendingConnections())
     {
         CLOG(ERROR) << "No pending IPC connections";
-        emit sig_finished();
+        finish();
         return;
     }
 
@@ -285,7 +304,7 @@ void DesktopClient::onIpcNewConnection()
         CLOG(ERROR) << "IPC client has unexpected executable (pid:" << client_pid
                     << "path:" << actual_path << "expected:" << expected_path << ")";
         ipc_channel_.reset();
-        emit sig_finished();
+        finish();
         return;
     }
 
@@ -297,7 +316,7 @@ void DesktopClient::onIpcNewConnection()
     {
         CLOG(ERROR) << "IPC client is not our child (pid:" << client_pid << ")";
         ipc_channel_.reset();
-        emit sig_finished();
+        finish();
         return;
     }
 #endif
@@ -323,7 +342,7 @@ void DesktopClient::onIpcNewConnection()
 void DesktopClient::onIpcErrorOccurred()
 {
     CLOG(ERROR) << "Error in IPC server";
-    emit sig_finished();
+    finish();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -379,6 +398,19 @@ void DesktopClient::onOverflowCheck()
 void DesktopClient::onTaskManagerMessage(const proto::task_manager::HostToClient& message)
 {
     send(proto::desktop::CHANNEL_ID_TASK_MANAGER, serialize(message), true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Finishes the client at most once: a second sig_finished() for a client already removed from the
+// service list would trip the CHECK in Service::onClientFinished. The timers are stopped (and
+// |finished_| is set) by the sig_finished connection in the constructor, which also covers emissions
+// from the Client base class.
+void DesktopClient::finish()
+{
+    if (finished_)
+        return;
+
+    emit sig_finished();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -23,6 +23,8 @@
 #include <QThread>
 #include <QTimer>
 
+#include <climits>
+
 #include "base/core_application.h"
 #include "base/logging.h"
 #include "base/power_controller.h"
@@ -762,8 +764,11 @@ void DesktopAgent::onInjectMouseEvent(const proto::input::MouseEvent& event)
     if (is_paused_ || is_mouse_locked_ || !input_injector_)
         return;
 
-    int pos_x = int(double(event.x() * 100) / scale_reducer_->scaleFactorX());
-    int pos_y = int(double(event.y() * 100) / scale_reducer_->scaleFactorY());
+    // The client coordinates are untrusted: multiply in double (the int multiply overflows for values
+    // beyond ~21.4M) and clamp back into int range before the narrowing cast, which is undefined for
+    // out-of-range values. The injectors clamp the result into the actual screen.
+    int pos_x = int(qBound<double>(INT_MIN, double(event.x()) * 100 / scale_reducer_->scaleFactorX(), INT_MAX));
+    int pos_y = int(qBound<double>(INT_MIN, double(event.y()) * 100 / scale_reducer_->scaleFactorY(), INT_MAX));
 
     proto::input::MouseEvent out_event;
     out_event.set_mask(event.mask());
