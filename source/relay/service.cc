@@ -33,6 +33,7 @@
 namespace {
 
 const std::chrono::seconds kReconnectTimeout{ 15 };
+constexpr quint32 kMaxPeerCount = 1000;
 
 class KeyDeleter
 {
@@ -288,10 +289,17 @@ bool Service::start()
         return false;
     }
 
-    if (!max_peer_count_ || max_peer_count_ > 1000)
+    if (!max_peer_count_)
     {
         LOG(ERROR) << "Invalid max peer count";
         return false;
+    }
+
+    if (max_peer_count_ > kMaxPeerCount)
+    {
+        LOG(WARNING) << "Max peer count" << max_peer_count_
+                     << "exceeds limit" << kMaxPeerCount << ". Clamping";
+        max_peer_count_ = kMaxPeerCount;
     }
 
     session_manager_ = new SessionManager(this);
@@ -343,6 +351,13 @@ void Service::sendKeyPool(quint32 key_count)
     {
         LOG(INFO) << "No router connection; skip sending key pool";
         return;
+    }
+
+    if (key_count > kMaxPeerCount)
+    {
+        LOG(WARNING) << "Requested relay key count" << key_count
+                     << "exceeds limit" << kMaxPeerCount << ". Clamping";
+        key_count = kMaxPeerCount;
     }
 
     proto::router::RelayKeyPool* relay_key_pool =

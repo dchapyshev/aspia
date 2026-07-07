@@ -37,6 +37,13 @@
 #include "router/settings.h"
 #include "router/router_user_list.h"
 
+namespace {
+
+constexpr qsizetype kMaxRelayKeysPerSession = 1000;
+constexpr qsizetype kMaxRelayKeysTotal = 10000;
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 // static
 const char Service::kFileName[] = "aspia_router.exe";
@@ -212,6 +219,25 @@ void Service::notifyChanged(quint32 flags)
 void Service::addKey(qint64 session_id, const proto::router::RelayKey& key)
 {
     auto relay = key_pool_.find(session_id);
+
+    if (relay != key_pool_.end() && relay.value().size() >= kMaxRelayKeysPerSession)
+    {
+        LOG(WARNING) << "Relay key limit reached for session" << session_id
+                     << "key id" << key.key_id() << "will be dropped";
+        return;
+    }
+
+    qsizetype key_count = 0;
+    for (const auto& keys : std::as_const(key_pool_))
+        key_count += keys.size();
+
+    if (key_count >= kMaxRelayKeysTotal)
+    {
+        LOG(WARNING) << "Global relay key limit reached. Key id" << key.key_id()
+                     << "from session" << session_id << "will be dropped";
+        return;
+    }
+
     if (relay == key_pool_.end())
     {
         LOG(INFO) << "Host not found in key pool. It will be added";
