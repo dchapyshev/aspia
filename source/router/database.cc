@@ -1348,7 +1348,10 @@ bool Database::scheduleHostRemoval(HostId host_id)
     const QByteArray key = select.columnBlob(0);
     const qint64 timestamp = QDateTime::currentSecsSinceEpoch();
 
-    const char kSql[] = "INSERT INTO hosts_remove (host_id, key, timestamp) VALUES (?, ?, ?)";
+    // OR REPLACE keeps re-scheduling idempotent: a stale hosts_remove row (same host_id, or same
+    // key from a host that re-enrolled under a new id) is overwritten instead of aborting on the
+    // PRIMARY KEY / UNIQUE constraint and leaving the host un-removable.
+    const char kSql[] = "INSERT OR REPLACE INTO hosts_remove (host_id, key, timestamp) VALUES (?, ?, ?)";
     SqlQuery insert(db_, kSql);
     insert.addUInt64(host_id);
     insert.addBlob(key);
