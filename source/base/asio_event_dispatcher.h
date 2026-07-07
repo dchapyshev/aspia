@@ -111,10 +111,25 @@ private:
 
         void cancel();
 
+#if !defined(Q_OS_WINDOWS)
+        QSocketNotifier* notifierFor(SocketHandle::wait_type wait_type) const;
+        bool& armedFor(SocketHandle::wait_type wait_type);
+#endif
+
         quint64 unique_id;
         QSocketNotifier* read = nullptr;
         QSocketNotifier* write = nullptr;
         QSocketNotifier* exception = nullptr;
+
+#if !defined(Q_OS_WINDOWS)
+        // asio cannot cancel a single wait type on a descriptor, so a pending wait stays alive
+        // when its notifier is disabled. These flags prevent arming a duplicate wait when the
+        // notifier is re-enabled before the pending wait has completed.
+        bool read_armed = false;
+        bool write_armed = false;
+        bool exception_armed = false;
+#endif
+
         SocketHandle handle;
     };
 
@@ -135,7 +150,7 @@ private:
     void asyncWaitMultimediaTimer(asio::windows::object_handle& handle, int timer_id);
     void asyncWaitSocket(SocketHandle& handle, qintptr socket);
 #else
-    void asyncWaitSocket(SocketHandle& handle, SocketHandle::wait_type wait_type);
+    void asyncWaitSocket(SocketData& data, SocketHandle::wait_type wait_type);
 #endif
 
     quint64 uniqueId();

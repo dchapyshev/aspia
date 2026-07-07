@@ -166,21 +166,27 @@ void AsioEventDispatcher::registerSocketNotifier(QSocketNotifier* notifier)
     {
         data.read = notifier;
 #if defined(Q_OS_UNIX)
-        asyncWaitSocket(data.handle, SocketHandle::wait_read);
+        // If the previous wait has not completed yet (the notifier was disabled and enabled again
+        // quickly), it is reused. Arming a second wait for the same type would lead to duplicate
+        // event delivery.
+        if (!data.read_armed)
+            asyncWaitSocket(data, SocketHandle::wait_read);
 #endif
     }
     else if (type == QSocketNotifier::Write && !data.write)
     {
         data.write = notifier;
 #if defined(Q_OS_UNIX)
-        asyncWaitSocket(data.handle, SocketHandle::wait_write);
+        if (!data.write_armed)
+            asyncWaitSocket(data, SocketHandle::wait_write);
 #endif
     }
     else if (type == QSocketNotifier::Exception && !data.exception)
     {
         data.exception = notifier;
 #if defined(Q_OS_UNIX)
-        asyncWaitSocket(data.handle, SocketHandle::wait_error);
+        if (!data.exception_armed)
+            asyncWaitSocket(data, SocketHandle::wait_error);
 #endif
     }
     else
@@ -684,45 +690,42 @@ void AsioEventDispatcher::asyncWaitSocket(SocketHandle& handle, qintptr socket)
 
 #if defined(Q_OS_UNIX)
 //--------------------------------------------------------------------------------------------------
-void AsioEventDispatcher::asyncWaitSocket(SocketHandle& handle, SocketHandle::wait_type wait_type)
+void AsioEventDispatcher::asyncWaitSocket(SocketData& data, SocketHandle::wait_type wait_type)
 {
-    const qintptr socket = handle.native_handle();
+    const qintptr socket = data.handle.native_handle();
+    const quint64 unique_id = data.unique_id;
 
-    handle.async_wait(wait_type, [this, socket, wait_type](const std::error_code& error_code) noexcept
+    data.armedFor(wait_type) = true;
+
+    data.handle.async_wait(
+        wait_type, [this, socket, wait_type, unique_id](const std::error_code& error_code) noexcept
     {
+        // The socket may be unregistered and registered again while the wait was pending. In this
+        // case the descriptor value can be reused, so the entry is identified by unique_id, not
+        // only by the descriptor, before its armed flag is touched.
+        auto it = sockets_.find(socket);
+        if (it == sockets_.end() || it->second.unique_id != unique_id)
+            return;
+
+        SocketData& data = it->second;
+        data.armedFor(wait_type) = false;
+
         if (error_code)
         {
+            // Cancellation is normal during unregistration; anything else means that events for
+            // this socket will not be delivered anymore, this must not stay silent.
             if (error_code != asio::error::operation_aborted)
                 LOG(ERROR) << "Socket wait error:" << error_code << "socket:" << socket;
             return;
         }
 
-        auto it = sockets_.find(socket);
-        if (it == sockets_.end())
-            return;
+        QSocketNotifier* notifier = data.notifierFor(wait_type);
 
-        SocketData& data = it->second;
-        QSocketNotifier* notifier;
-
-        switch (wait_type)
-        {
-            case SocketHandle::wait_read:
-                notifier = data.read;
-                break;
-
-            case SocketHandle::wait_write:
-                notifier = data.write;
-                break;
-
-            default:
-                notifier = data.exception;
-                break;
-        }
-
+        // The notifier was disabled while the wait was pending. The readiness event is dropped
+        // intentionally: Qt delivers activation only to enabled notifiers, and the wait is not
+        // re-armed to avoid a duplicate when the notifier is enabled again.
         if (!notifier)
             return;
-
-        quint64 unique_id = data.unique_id;
 
         QEvent event(QEvent::SockAct);
         QCoreApplication::sendEvent(notifier, &event);
@@ -731,13 +734,13 @@ void AsioEventDispatcher::asyncWaitSocket(SocketHandle& handle, SocketHandle::wa
         // the socket in it. If there is no socket, then further execution should be interrupted and
         // the next asynchronous wait will not be called.
         it = sockets_.find(socket);
-        if (it == sockets_.end())
+        if (it == sockets_.end() || it->second.unique_id != unique_id)
             return;
 
-        if (it->second.unique_id != unique_id)
-            return;
-
-        asyncWaitSocket(data.handle, wait_type);
+        // Re-arm only while the notifier is still enabled, otherwise a stale wait would stay
+        // pending and re-enabling the notifier would arm a duplicate one.
+        if (it->second.notifierFor(wait_type))
+            asyncWaitSocket(it->second, wait_type);
     });
 }
 #endif // defined(Q_OS_UNIX)
@@ -778,3 +781,37 @@ void AsioEventDispatcher::SocketData::cancel()
     std::error_code ignored_error;
     handle.cancel(ignored_error);
 }
+
+#if defined(Q_OS_UNIX)
+//--------------------------------------------------------------------------------------------------
+QSocketNotifier* AsioEventDispatcher::SocketData::notifierFor(SocketHandle::wait_type wait_type) const
+{
+    switch (wait_type)
+    {
+        case SocketHandle::wait_read:
+            return read;
+
+        case SocketHandle::wait_write:
+            return write;
+
+        default:
+            return exception;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+bool& AsioEventDispatcher::SocketData::armedFor(SocketHandle::wait_type wait_type)
+{
+    switch (wait_type)
+    {
+        case SocketHandle::wait_read:
+            return read_armed;
+
+        case SocketHandle::wait_write:
+            return write_armed;
+
+        default:
+            return exception_armed;
+    }
+}
+#endif // defined(Q_OS_UNIX)
