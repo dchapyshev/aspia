@@ -128,13 +128,13 @@ void FileTransfer::start()
     LOG(INFO) << "File transfer start";
 
     FileTaskFactory* task_factory_local =
-        new FileTaskFactory(FileTask::Target::LOCAL);
+        new FileTaskFactory(FileTask::Target::LOCAL, this);
 
     connect(task_factory_local, &FileTaskFactory::sig_taskDone,
             this, &FileTransfer::onTaskDone);
 
     FileTaskFactory* task_factory_remote =
-        new FileTaskFactory(FileTask::Target::REMOTE);
+        new FileTaskFactory(FileTask::Target::REMOTE, this);
 
     connect(task_factory_remote, &FileTaskFactory::sig_taskDone,
             this, &FileTransfer::onTaskDone);
