@@ -611,7 +611,7 @@ bool Database::setUserOtp(qint64 user_id, const QByteArray& encrypted_secret, qu
         return false;
     }
 
-    SqlQuery query(db_, "UPDATE users SET otp_secret=?, otp_counter=? WHERE id=?");
+    SqlQuery query(db_, "UPDATE users SET otp_secret=?, otp_counter=? WHERE id=? AND otp_secret=X''");
     query.addBlob(encrypted_secret);
     query.addUInt64(counter);
     query.addInt64(user_id);
@@ -621,7 +621,7 @@ bool Database::setUserOtp(qint64 user_id, const QByteArray& encrypted_secret, qu
         LOG(ERROR) << "Unable to set user OTP:" << db_.lastError();
         return false;
     }
-    return true;
+    return db_.changes() > 0;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -645,7 +645,7 @@ bool Database::clearUserOtp(qint64 user_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::updateUserOtpCounter(qint64 user_id, quint64 counter)
+bool Database::consumeUserOtpCounter(qint64 user_id, quint64 counter)
 {
     if (!isValid())
     {
@@ -653,16 +653,17 @@ bool Database::updateUserOtpCounter(qint64 user_id, quint64 counter)
         return false;
     }
 
-    SqlQuery query(db_, "UPDATE users SET otp_counter=? WHERE id=?");
+    SqlQuery query(db_, "UPDATE users SET otp_counter=? WHERE id=? AND otp_counter < ?");
     query.addUInt64(counter);
     query.addInt64(user_id);
+    query.addUInt64(counter);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to update OTP counter:" << db_.lastError();
+        LOG(ERROR) << "Unable to consume OTP counter:" << db_.lastError();
         return false;
     }
-    return true;
+    return db_.changes() > 0;
 }
 
 //--------------------------------------------------------------------------------------------------

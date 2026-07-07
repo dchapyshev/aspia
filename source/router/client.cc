@@ -361,10 +361,10 @@ void Client::readTwoFactorResponse(const proto::router::TwoFactorResponse& respo
     }
     else
     {
-        if (!Database::instance().updateUserOtpCounter(userId(), matched_counter))
+        if (!Database::instance().consumeUserOtpCounter(userId(), matched_counter))
         {
-            CLOG(ERROR) << "Failed to update OTP counter for user" << userName()
-                        << ". Closing connection";
+            CLOG(INFO) << "TOTP counter was already consumed for user" << userName()
+                       << ". Closing connection";
             emit sig_finished(session_id_);
             return;
         }

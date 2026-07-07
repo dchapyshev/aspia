@@ -103,17 +103,17 @@ public:
 
     // Commits the user's TOTP enrollment: writes the (already-encrypted) shared secret and
     // seeds otp_counter with the step that produced the confirmation code. A non-empty secret
-    // column is what activates 2FA for the user. Replaces any pre-existing value (used by the
-    // admin "reset TOTP" action followed by a fresh self-enrollment).
+    // column is what activates 2FA for the user. Succeeds only while the user still has no
+    // confirmed secret, so parallel enrollment attempts cannot overwrite each other.
     bool setUserOtp(qint64 user_id, const QByteArray& encrypted_secret, quint64 counter);
 
     // Resets the user's TOTP state - clears the secret and zeroes the replay counter. The
     // next login triggers self-enrollment.
     bool clearUserOtp(qint64 user_id);
 
-    // Stores the most recently consumed TOTP step. Must be called after every successful
-    // verification so subsequent submissions of the same code are rejected.
-    bool updateUserOtpCounter(qint64 user_id, quint64 counter);
+    // Atomically consumes a TOTP step. Succeeds only if |counter| is newer than the value
+    // currently stored in the database, so parallel sessions cannot accept the same code.
+    bool consumeUserOtpCounter(qint64 user_id, quint64 counter);
 
     //----------------------------------------------------------------------------------------------
     // Client device tokens (bearer "remember this device" credentials issued during client sessions)
