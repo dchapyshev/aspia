@@ -20,6 +20,7 @@
 #include <QCoreApplication>
 #include <QElapsedTimer>
 #include <QHostInfo>
+#include <QSemaphore>
 #include <QSocketNotifier>
 #include <QTimer>
 #include <QTcpServer>
@@ -38,6 +39,11 @@
 #endif
 
 #include <gtest/gtest.h>
+
+#include <chrono>
+#include <limits>
+
+#include "base/thread.h"
 
 namespace {
 
@@ -244,6 +250,65 @@ TEST(DispatcherTests, CrossThread_Post_WakeupLatency_Soft)
         const double avg = std::accumulate(obj.deltas.begin(), obj.deltas.end(), 0.0) / obj.deltas.size();
         EXPECT_LT(avg, 50.0);
     }
+}
+
+// An idle event loop parks in a blocking wait inside processEvents. Unlike the latency test
+// above, the receiving loop here is not pumped manually, so a queued call must get through the
+// wakeUp() path to abort the blocking wait. A coalesced-away or lost wakeup would stall the
+// iteration until the acquire timeout.
+TEST(DispatcherTests, CrossThread_Post_WakesBlockedLoop)
+{
+    Thread thread(Thread::AsioDispatcher);
+    thread.start();
+
+    // The probe lives in the worker thread, queued calls to it run there.
+    QObject probe;
+    probe.moveToThread(&thread);
+
+    QSemaphore processed;
+    QMetaObject::invokeMethod(&probe, [&]() { processed.release(); }, Qt::QueuedConnection);
+    ASSERT_TRUE(processed.tryAcquire(1, 5000));
+
+    for (int i = 0; i < 20; ++i)
+    {
+        // Give the loop time to park in the blocking wait again.
+        QThread::msleep(10);
+
+        QElapsedTimer latency;
+        latency.start();
+
+        QMetaObject::invokeMethod(&probe, [&]() { processed.release(); }, Qt::QueuedConnection);
+        ASSERT_TRUE(processed.tryAcquire(1, 5000));
+        EXPECT_LT(latency.elapsed(), 1000);
+    }
+
+    thread.stop();
+}
+
+// QThread::quit() reaches the dispatcher through interrupt(). It must abort the blocking wait
+// immediately instead of waiting for the next timer or socket event.
+TEST(DispatcherTests, CrossThread_Quit_WakesBlockedLoop)
+{
+    Thread thread(Thread::AsioDispatcher);
+    thread.start();
+
+    QObject probe;
+    probe.moveToThread(&thread);
+
+    // Make sure the worker event loop is actually running before quitting it.
+    QSemaphore started;
+    QMetaObject::invokeMethod(&probe, [&]() { started.release(); }, Qt::QueuedConnection);
+    ASSERT_TRUE(started.tryAcquire(1, 5000));
+
+    // Let the loop park in the blocking wait with no pending work.
+    QThread::msleep(100);
+
+    QElapsedTimer latency;
+    latency.start();
+
+    thread.quit();
+    ASSERT_TRUE(thread.wait(5000));
+    EXPECT_LT(latency.elapsed(), 1000);
 }
 
 // Nested event loops
@@ -796,6 +861,231 @@ TEST(TimersTest, PreciseTimerStallCoalescing)
 TEST(TimersTest, CoarseTimerStallCoalescing)
 {
     runTimerStallTest(Qt::CoarseTimer);
+}
+
+TEST(TimersTest, RemainingTime)
+{
+    auto* disp = QAbstractEventDispatcher::instance(QThread::currentThread());
+    ASSERT_NE(disp, nullptr);
+
+    // Unknown timer id.
+    EXPECT_EQ(disp->remainingTime(std::numeric_limits<int>::max()), -1);
+
+    QObject owner;
+
+    // An active timer reports the time left until the first firing.
+    const int coarse_id = owner.startTimer(60000, Qt::CoarseTimer);
+    ASSERT_GT(coarse_id, 0);
+
+    const int coarse_remaining = disp->remainingTime(coarse_id);
+    EXPECT_GT(coarse_remaining, 0);
+    EXPECT_LE(coarse_remaining, 60000);
+
+    // Short precise timers may be backed by a separate native timer mechanism, they must be
+    // visible through the same interface.
+    const int precise_id = owner.startTimer(50, Qt::PreciseTimer);
+    ASSERT_GT(precise_id, 0);
+
+    const int precise_remaining = disp->remainingTime(precise_id);
+    EXPECT_GE(precise_remaining, 0);
+    EXPECT_LE(precise_remaining, 50);
+
+    // A timer whose deadline has passed but which has not fired yet (the loop is not pumped)
+    // reports zero, not a negative value.
+    const int expired_id = owner.startTimer(10, Qt::CoarseTimer);
+    ASSERT_GT(expired_id, 0);
+
+    QThread::msleep(50);
+    EXPECT_EQ(disp->remainingTime(expired_id), 0);
+
+    // A killed timer is reported as unknown.
+    owner.killTimer(coarse_id);
+    EXPECT_EQ(disp->remainingTime(coarse_id), -1);
+
+    owner.killTimer(precise_id);
+    owner.killTimer(expired_id);
+}
+
+TEST(TimersTest, RegisteredTimersReportEffectiveType)
+{
+    auto* disp = QAbstractEventDispatcher::instance(QThread::currentThread());
+    ASSERT_NE(disp, nullptr);
+
+    QObject owner;
+    EXPECT_TRUE(disp->registeredTimers(&owner).isEmpty());
+
+    // Zero-interval and long-interval precise timers are downgraded to coarse by the dispatcher.
+    // The effective type must be reported so that a timer moved to another thread is
+    // re-registered with the same behavior.
+    const int zero_id = owner.startTimer(0, Qt::PreciseTimer);
+    const int long_precise_id = owner.startTimer(500, Qt::PreciseTimer);
+    const int precise_id = owner.startTimer(50, Qt::PreciseTimer);
+    const int coarse_id = owner.startTimer(200, Qt::CoarseTimer);
+    const int very_coarse_id = owner.startTimer(1500, Qt::VeryCoarseTimer);
+
+    const QList<QAbstractEventDispatcher::TimerInfo> timers = disp->registeredTimers(&owner);
+    ASSERT_EQ(timers.size(), 5);
+
+    auto info_for = [&timers](int timer_id) -> const QAbstractEventDispatcher::TimerInfo*
+    {
+        for (const QAbstractEventDispatcher::TimerInfo& info : timers)
+        {
+            if (info.timerId == timer_id)
+                return &info;
+        }
+        return nullptr;
+    };
+
+    const auto* zero_info = info_for(zero_id);
+    ASSERT_NE(zero_info, nullptr);
+    EXPECT_EQ(zero_info->timerType, Qt::CoarseTimer);
+    EXPECT_EQ(zero_info->interval, 0);
+
+    const auto* long_precise_info = info_for(long_precise_id);
+    ASSERT_NE(long_precise_info, nullptr);
+    EXPECT_EQ(long_precise_info->timerType, Qt::CoarseTimer);
+    EXPECT_EQ(long_precise_info->interval, 500);
+
+    const auto* precise_info = info_for(precise_id);
+    ASSERT_NE(precise_info, nullptr);
+    EXPECT_EQ(precise_info->timerType, Qt::PreciseTimer);
+    EXPECT_EQ(precise_info->interval, 50);
+
+    const auto* coarse_info = info_for(coarse_id);
+    ASSERT_NE(coarse_info, nullptr);
+    EXPECT_EQ(coarse_info->timerType, Qt::CoarseTimer);
+    EXPECT_EQ(coarse_info->interval, 200);
+
+    // Very coarse intervals are rounded up to full seconds by the dispatcher.
+    const auto* very_coarse_info = info_for(very_coarse_id);
+    ASSERT_NE(very_coarse_info, nullptr);
+    EXPECT_EQ(very_coarse_info->timerType, Qt::VeryCoarseTimer);
+    EXPECT_GE(very_coarse_info->interval, 1500);
+    EXPECT_LE(very_coarse_info->interval, 2000);
+
+    // Timers of another object are not included.
+    QObject other;
+    EXPECT_TRUE(disp->registeredTimers(&other).isEmpty());
+
+    // unregisterTimers removes everything for the object in one call and reports whether
+    // anything was actually removed.
+    EXPECT_TRUE(disp->unregisterTimers(&owner));
+    EXPECT_TRUE(disp->registeredTimers(&owner).isEmpty());
+    EXPECT_FALSE(disp->unregisterTimers(&owner));
+}
+
+TEST(TimersTest, HugeIntervalClamped)
+{
+    auto* disp = QAbstractEventDispatcher::instance(QThread::currentThread());
+    ASSERT_NE(disp, nullptr);
+
+    QObject owner;
+
+    // An interval that does not fit into int milliseconds (more than ~24.8 days) must be clamped
+    // to INT_MAX in the reporting interfaces instead of overflowing into a negative value.
+    const std::chrono::milliseconds huge_interval(
+        static_cast<qint64>(std::numeric_limits<int>::max()) + 1000000);
+    const int timer_id = owner.startTimer(huge_interval, Qt::CoarseTimer);
+    ASSERT_GT(timer_id, 0);
+
+    EXPECT_EQ(disp->remainingTime(timer_id), std::numeric_limits<int>::max());
+
+    const QList<QAbstractEventDispatcher::TimerInfo> timers = disp->registeredTimers(&owner);
+    ASSERT_EQ(timers.size(), 1);
+    EXPECT_EQ(timers[0].timerId, timer_id);
+    EXPECT_EQ(timers[0].interval, std::numeric_limits<int>::max());
+    EXPECT_EQ(timers[0].timerType, Qt::CoarseTimer);
+
+    owner.killTimer(timer_id);
+}
+
+class ED_TimerIdReuseObject : public QObject
+{
+public:
+    static constexpr int kIntervalMs = 100;
+
+    QEventLoop* loop = nullptr;
+    QElapsedTimer clock;
+
+    int first_id = -1;
+    int second_id = -1;
+    int first_fires = 0;
+    int second_fires = 0;
+    bool id_reused = false;
+    qint64 second_started_ms = -1;
+    qint64 second_first_fire_ms = -1;
+
+protected:
+    void timerEvent(QTimerEvent* event) override
+    {
+        if (event->timerId() == first_id)
+        {
+            ++first_fires;
+
+            // Kill the fired timer and start a new one with the same id from inside the handler.
+            // The dispatcher must treat it as a brand new timer: no rescheduling of the old
+            // expiration and no duplicate re-arm on top of the one made at registration. Qt tags
+            // reused timer id slots with a serial counter, so the same numeric id comes back only
+            // after the serial wraps: cycle kill/start until the fired id is allocated again.
+            const int old_id = first_id;
+            first_id = -1;
+            killTimer(old_id);
+
+            second_started_ms = clock.elapsed();
+
+            int id = startTimer(kIntervalMs, Qt::CoarseTimer);
+            for (int i = 0; i < 512 && id != old_id; ++i)
+            {
+                killTimer(id);
+                id = startTimer(kIntervalMs, Qt::CoarseTimer);
+            }
+
+            second_id = id;
+            id_reused = (second_id == old_id);
+        }
+        else if (event->timerId() == second_id)
+        {
+            if (second_fires == 0)
+                second_first_fire_ms = clock.elapsed();
+
+            if (++second_fires >= 3)
+            {
+                killTimer(second_id);
+                second_id = -1;
+                if (loop)
+                    loop->quit();
+            }
+        }
+    }
+};
+
+TEST(TimersTest, TimerIdReuseInsideTimerEvent)
+{
+    QEventLoop loop;
+
+    ED_TimerIdReuseObject obj;
+    obj.loop = &loop;
+    obj.clock.start();
+
+    obj.first_id = obj.startTimer(ED_TimerIdReuseObject::kIntervalMs, Qt::CoarseTimer);
+    ASSERT_GT(obj.first_id, 0);
+
+    // Failsafe: generous to avoid CI flakiness
+    QTimer::singleShot(10000, &loop, [&]() { loop.quit(); });
+    loop.exec();
+
+    GTEST_LOG_(INFO) << "timer id was " << (obj.id_reused ? "reused" : "not reused");
+
+    EXPECT_EQ(obj.first_fires, 1);
+    ASSERT_EQ(obj.second_fires, 3);
+
+    // If the dispatcher confused the new timer with the killed one, the first firing of the new
+    // timer is delayed by an extra interval (or lost entirely). The margin is wide enough for a
+    // loaded CI, but catches the one-interval shift.
+    ASSERT_GE(obj.second_started_ms, 0);
+    ASSERT_GE(obj.second_first_fire_ms, 0);
+    EXPECT_LT(obj.second_first_fire_ms - obj.second_started_ms,
+              ED_TimerIdReuseObject::kIntervalMs * 2 - 10);
 }
 
 TEST(SocketTest, EchoClientServer)
