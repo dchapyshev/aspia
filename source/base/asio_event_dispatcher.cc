@@ -477,7 +477,11 @@ void AsioEventDispatcher::asyncWaitPreciseTimer(
     handle.async_wait([this, timer_id](const std::error_code& error_code) noexcept
     {
         if (error_code)
+        {
+            if (error_code != asio::error::operation_aborted)
+                LOG(ERROR) << "Timer wait error:" << error_code << "timer:" << timer_id;
             return;
+        }
 
         auto it = precise_timers_.find(timer_id);
         if (it == precise_timers_.end())
@@ -509,7 +513,11 @@ void AsioEventDispatcher::asyncWaitCoarseTimer(
     handle.async_wait([this, timer_id](const std::error_code& error_code) noexcept
     {
         if (error_code)
+        {
+            if (error_code != asio::error::operation_aborted)
+                LOG(ERROR) << "Timer wait error:" << error_code << "timer:" << timer_id;
             return;
+        }
 
         auto it = coarse_timers_.find(timer_id);
         if (it == coarse_timers_.end())
@@ -543,7 +551,11 @@ void AsioEventDispatcher::asyncWaitMultimediaTimer(asio::windows::object_handle&
     handle.async_wait([this, timer_id](const std::error_code& error_code) noexcept
     {
         if (error_code)
+        {
+            if (error_code != asio::error::operation_aborted)
+                LOG(ERROR) << "Timer wait error:" << error_code << "timer:" << timer_id;
             return;
+        }
 
         auto it = multimedia_timers_.find(timer_id);
         if (it == multimedia_timers_.end())
@@ -575,7 +587,11 @@ void AsioEventDispatcher::asyncWaitSocket(SocketHandle& handle, qintptr socket)
     handle.async_wait([this, socket](const std::error_code& error_code) noexcept
     {
         if (error_code)
+        {
+            if (error_code != asio::error::operation_aborted)
+                LOG(ERROR) << "Socket wait error:" << error_code << "socket:" << socket;
             return;
+        }
 
         auto it = sockets_.find(socket);
         if (it == sockets_.end())
@@ -633,7 +649,11 @@ void AsioEventDispatcher::asyncWaitSocket(SocketHandle& handle, SocketHandle::wa
     handle.async_wait(wait_type, [this, socket, wait_type](const std::error_code& error_code) noexcept
     {
         if (error_code)
+        {
+            if (error_code != asio::error::operation_aborted)
+                LOG(ERROR) << "Socket wait error:" << error_code << "socket:" << socket;
             return;
+        }
 
         auto it = sockets_.find(socket);
         if (it == sockets_.end())
