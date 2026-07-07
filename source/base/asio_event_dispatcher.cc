@@ -259,38 +259,10 @@ void AsioEventDispatcher::registerTimer(
 #if defined(Q_OS_WINDOWS)
         // In Windows asio::high_resolution_timer is equivalent to asio::steady_timer and therefore
         // only provides accuracy within 15ms. Multimedia timers provide 1ms accuracy, but their
-        // availability is very limited. We try to create no more than the quantity specified in
-        // kReservedSizeForMultimediaTimers. If the number of timers is greater or it is not possible
-        // to create a multimedia timer, then we create asio::high_resolution_timer timer.
-        while (multimedia_timers_.size() < kReservedSizeForMultimediaTimers)
-        {
-            HANDLE event = CreateEventW(nullptr, FALSE, FALSE, nullptr);
-            if (!event)
-            {
-                PLOG(ERROR) << "CreateEventW failed";
-                break;
-            }
-
-            // Now asio::windows::object_handle owns the handle.
-            asio::windows::object_handle handle(io_context_, event);
-
-            // TODO: Use CreateWaitableTimerExW with flag CREATE_WAITABLE_TIMER_HIGH_RESOLUTION after
-            // Windows 7/8 support ends.
-            const UINT flags = TIME_PERIODIC | TIME_CALLBACK_EVENT_SET;
-            quint32 native_id = timeSetEvent(
-                interval_ms, 1, reinterpret_cast<LPTIMECALLBACK>(event), 0, flags);
-            if (!native_id)
-            {
-                // Normal case if there are too many multimedia timers registered.
-                break;
-            }
-
-            auto timer = multimedia_timers_.emplace(timer_id, MultimediaTimer(
-                uniqueId(), std::move(handle), native_id, interval, end_time, object)).first;
-
-            asyncWaitMultimediaTimer(timer->second.handle, timer_id);
+        // availability is very limited. If a multimedia timer cannot be created, an ordinary
+        // asio::high_resolution_timer is created below.
+        if (tryRegisterMultimediaTimer(timer_id, interval, end_time, object))
             return;
-        }
 #endif
         auto timer = precise_timers_.emplace(timer_id, PreciseTimer(
             uniqueId(), asio::high_resolution_timer(io_context_), interval, end_time, object)).first;
@@ -549,6 +521,43 @@ void AsioEventDispatcher::asyncWaitCoarseTimer(
 }
 
 #if defined(Q_OS_WINDOWS)
+//--------------------------------------------------------------------------------------------------
+bool AsioEventDispatcher::tryRegisterMultimediaTimer(
+    int timer_id, Milliseconds interval, const PreciseTimePoint& end_time, QObject* object)
+{
+    // Multimedia timers are a limited system-wide resource, so no more than the quantity
+    // specified in kReservedSizeForMultimediaTimers is created.
+    if (multimedia_timers_.size() >= kReservedSizeForMultimediaTimers)
+        return false;
+
+    HANDLE event = CreateEventW(nullptr, FALSE, FALSE, nullptr);
+    if (!event)
+    {
+        PLOG(ERROR) << "CreateEventW failed";
+        return false;
+    }
+
+    // Now asio::windows::object_handle owns the handle.
+    asio::windows::object_handle handle(io_context_, event);
+
+    // TODO: Use CreateWaitableTimerExW with flag CREATE_WAITABLE_TIMER_HIGH_RESOLUTION after
+    // Windows 7/8 support ends.
+    const UINT flags = TIME_PERIODIC | TIME_CALLBACK_EVENT_SET;
+    quint32 native_id = timeSetEvent(
+        static_cast<UINT>(interval.count()), 1, reinterpret_cast<LPTIMECALLBACK>(event), 0, flags);
+    if (!native_id)
+    {
+        // Normal case if there are too many multimedia timers registered.
+        return false;
+    }
+
+    auto timer = multimedia_timers_.emplace(timer_id, MultimediaTimer(
+        uniqueId(), std::move(handle), native_id, interval, end_time, object)).first;
+
+    asyncWaitMultimediaTimer(timer->second.handle, timer_id);
+    return true;
+}
+
 //--------------------------------------------------------------------------------------------------
 void AsioEventDispatcher::asyncWaitMultimediaTimer(asio::windows::object_handle& handle, int timer_id)
 {

@@ -130,6 +130,8 @@ private:
         asio::steady_timer& handle, const CoarseTimePoint& end_time, int timer_id);
 
 #if defined(Q_OS_WINDOWS)
+    bool tryRegisterMultimediaTimer(
+        int timer_id, Milliseconds interval, const PreciseTimePoint& end_time, QObject* object);
     void asyncWaitMultimediaTimer(asio::windows::object_handle& handle, int timer_id);
     void asyncWaitSocket(SocketHandle& handle, qintptr socket);
 #else
