@@ -183,6 +183,20 @@ void OnlineCheckerDirect::onChecked(qint64 entry_id, bool online)
 {
     emit sig_checkerResult(entry_id, online);
 
+    // Remove the finished instance from the work queue.
+    for (auto it = work_queue_.begin(), it_end = work_queue_.end(); it != it_end; ++it)
+    {
+        Instance* instance = *it;
+
+        if (instance->entryId() == entry_id)
+        {
+            instance->deleteLater();
+            work_queue_.erase(it);
+            break;
+        }
+    }
+
+    // Take the next host from the pending queue and start checking it.
     if (!pending_queue_.isEmpty())
     {
         const HostConfig& host = pending_queue_.front();
@@ -193,27 +207,13 @@ void OnlineCheckerDirect::onChecked(qint64 entry_id, bool online)
         work_queue_.emplace_back(instance);
         instance->start();
         pending_queue_.pop_front();
+        return;
     }
-    else
+
+    if (work_queue_.isEmpty())
     {
-        for (auto it = work_queue_.begin(), it_end = work_queue_.end(); it != it_end; ++it)
-        {
-            Instance* instance = *it;
-
-            if (instance->entryId() == entry_id)
-            {
-                instance->deleteLater();
-                work_queue_.erase(it);
-                break;
-            }
-        }
-
-        if (work_queue_.isEmpty())
-        {
-            LOG(TRACE) << "No more items in queue";
-            onFinished(FROM_HERE);
-            return;
-        }
+        LOG(TRACE) << "No more items in queue";
+        onFinished(FROM_HERE);
     }
 }
 
