@@ -67,7 +67,7 @@ private:
     HostId host_id_ = kInvalidHostId;
 
     TimePoint start_time_;
-    mutable TimePoint start_idle_time_;
+    TimePoint start_idle_time_;
     qint64 bytes_transferred_ = 0;
 
     static const int kNumberOfSides = 2;

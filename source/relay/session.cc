@@ -71,6 +71,7 @@ void Session::start()
     CLOG(INFO) << "Starting peers session";
 
     start_time_ = Clock::now();
+    start_idle_time_ = start_time_;
 
     for (int i = 0; i < kNumberOfSides; ++i)
         Session::doReadSome(this, i);
@@ -79,12 +80,6 @@ void Session::start()
 //--------------------------------------------------------------------------------------------------
 std::chrono::seconds Session::idleTime(const TimePoint& current_time) const
 {
-    if (start_idle_time_ == TimePoint())
-    {
-        start_idle_time_ = current_time;
-        return std::chrono::seconds(0);
-    }
-
     return std::chrono::duration_cast<std::chrono::seconds>(current_time - start_idle_time_);
 }
 
@@ -114,7 +109,7 @@ void Session::doReadSome(Session* session, int source)
         }
 
         session->bytes_transferred_ += bytes_transferred;
-        session->start_idle_time_ = TimePoint();
+        session->start_idle_time_ = Clock::now();
 
         asio::async_write(
             session->socket_[(source + kNumberOfSides - 1) % kNumberOfSides],
