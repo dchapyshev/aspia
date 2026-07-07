@@ -96,6 +96,15 @@ bool FileDepacketizer::writeNextPacket(const proto::file_transfer::Packet& packe
         left_size_ = file_size_;
     }
 
+    // Reject a peer that sends more data than it declared (or data before the first packet, when
+    // |left_size_| is still zero). Writing past |left_size_| would underflow the unsigned counter
+    // and corrupt the seek offset of the next packet.
+    if (packet_size > left_size_)
+    {
+        LOG(ERROR) << "Packet data exceeds remaining file size";
+        return false;
+    }
+
     if (!file_->seek(file_size_ - left_size_))
     {
         LOG(ERROR) << "seek failed";
