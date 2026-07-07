@@ -255,6 +255,7 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
 
                 CLOG(INFO) << "OTP cleared for user" << user_id << "by" << userName();
                 result->set_error_code(proto::router::kErrorOk);
+                Service::instance()->notifyChanged(Service::NOTIFY_USERS);
             }
         }
     }
@@ -289,6 +290,7 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
                     CLOG(INFO) << "All device tokens of user" << user_id
                                << "revoked by" << userName();
                     result->set_error_code(proto::router::kErrorOk);
+                    Service::instance()->notifyChanged(Service::NOTIFY_USERS);
                 }
             }
             else
@@ -318,7 +320,10 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
                 }
 
                 if (!revoked_token_ids.isEmpty())
+                {
                     Service::instance()->stopClients(user_id, revoked_token_ids);
+                    Service::instance()->notifyChanged(Service::NOTIFY_USERS);
+                }
                 result->set_error_code(code);
             }
         }
