@@ -457,6 +457,7 @@ void ClientAdmin::doHostRequest(const proto::router::HostRequest& request)
             // and finalize the pending row immediately. Offline legacy hosts are handled on the
             // next HostIdRequest.
             Host* host = find_host(host_id);
+            std::string_view error_code = proto::router::kErrorOk;
             if (HostNG* host_ng = dynamic_cast<HostNG*>(host))
             {
                 host_ng->sendRemoveCommand();
@@ -466,7 +467,10 @@ void ClientAdmin::doHostRequest(const proto::router::HostRequest& request)
                 if (host_legacy->removeHostId(host_id))
                 {
                     if (!database.finalizeHostRemoval(host_id))
-                        CLOG(WARNING) << "Failed to finalize removal for legacy host_id:" << host_id;
+                    {
+                        CLOG(ERROR) << "Failed to finalize removal for legacy host_id:" << host_id;
+                        error_code = proto::router::kErrorInternalError;
+                    }
 
                     if (host_legacy->hostIdList().isEmpty())
                         Service::instance()->stopHost(host_legacy->sessionId());
@@ -475,7 +479,7 @@ void ClientAdmin::doHostRequest(const proto::router::HostRequest& request)
 
             CLOG(INFO) << "Host" << host_id << "removal scheduled by" << userName()
                        << "(online:" << (host != nullptr) << ")";
-            host_result->set_error_code(proto::router::kErrorOk);
+            host_result->set_error_code(error_code);
             Service::instance()->notifyChanged(Service::NOTIFY_HOSTS);
         }
     }
