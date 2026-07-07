@@ -154,7 +154,12 @@ bool SqlDatabase::open(const QString& file_path)
     // Register a Unicode-aware casefold() so case-insensitive search works for non-ASCII text.
     // The stock sqlite LIKE folds ASCII only; casefold() folds via the platform Unicode API and
     // the search query folds both operands: casefold(col) LIKE casefold(?). See caseFold above.
-    createScalarFunction("casefold", 1, &caseFold);
+    // A connection without it would break every search query later, so the failure is fatal.
+    if (!createScalarFunction("casefold", 1, &caseFold))
+    {
+        close();
+        return false;
+    }
 
     return true;
 }
