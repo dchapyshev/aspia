@@ -115,6 +115,11 @@ bool SqlQuery::bindBlob(int index, const void* data, qsizetype size)
     if (!stmt_)
         return false;
 
+    // A null data pointer would bind SQL NULL; use a valid empty buffer so a null input becomes
+    // an empty blob, consistently with the other bindBlob overloads.
+    if (!data)
+        data = "";
+
     if (sqlite3_bind_blob(stmt_, index, data, static_cast<int>(size),
                           SQLITE_TRANSIENT) != SQLITE_OK)
     {
@@ -127,10 +132,7 @@ bool SqlQuery::bindBlob(int index, const void* data, qsizetype size)
 //--------------------------------------------------------------------------------------------------
 bool SqlQuery::bindBlob(int index, std::string_view value)
 {
-    // A null data pointer would bind SQL NULL; use a valid empty buffer so an empty view becomes
-    // an empty blob instead.
-    const char* data = value.data() ? value.data() : "";
-    return bindBlob(index, data, static_cast<qsizetype>(value.size()));
+    return bindBlob(index, value.data(), static_cast<qsizetype>(value.size()));
 }
 
 //--------------------------------------------------------------------------------------------------
