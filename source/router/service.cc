@@ -519,6 +519,9 @@ void Service::onNotificationFlush()
 
     for (Client* client : std::as_const(clients_))
     {
+        if (!client->isTwoFactorCompleted())
+            continue;
+
         switch (client->sessionType())
         {
             case proto::router::SESSION_TYPE_ADMIN:
