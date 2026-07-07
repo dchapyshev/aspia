@@ -764,11 +764,17 @@ void DesktopAgent::onInjectMouseEvent(const proto::input::MouseEvent& event)
     if (is_paused_ || is_mouse_locked_ || !input_injector_)
         return;
 
+    const double scale_x = scale_reducer_->scaleFactorX();
+    const double scale_y = scale_reducer_->scaleFactorY();
+
+    if (scale_x <= 0.0 || scale_y <= 0.0)
+        return;
+
     // The client coordinates are untrusted: multiply in double (the int multiply overflows for values
     // beyond ~21.4M) and clamp back into int range before the narrowing cast, which is undefined for
     // out-of-range values. The injectors clamp the result into the actual screen.
-    int pos_x = int(qBound<double>(INT_MIN, double(event.x()) * 100 / scale_reducer_->scaleFactorX(), INT_MAX));
-    int pos_y = int(qBound<double>(INT_MIN, double(event.y()) * 100 / scale_reducer_->scaleFactorY(), INT_MAX));
+    int pos_x = int(qBound<double>(INT_MIN, double(event.x()) * 100 / scale_x, INT_MAX));
+    int pos_y = int(qBound<double>(INT_MIN, double(event.y()) * 100 / scale_y, INT_MAX));
 
     proto::input::MouseEvent out_event;
     out_event.set_mask(event.mask());
