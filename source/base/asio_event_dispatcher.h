@@ -141,6 +141,7 @@ private:
     asio::io_context io_context_;
     asio::executor_work_guard<asio::io_context::executor_type> work_guard_;
     std::atomic_bool interrupted_ { false };
+    std::atomic_bool wakeup_posted_ { false };
     quint64 counter_ = 0;
 
 #if defined(Q_OS_WINDOWS)

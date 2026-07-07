@@ -439,8 +439,16 @@ int AsioEventDispatcher::remainingTime(int timer_id)
 //--------------------------------------------------------------------------------------------------
 void AsioEventDispatcher::wakeUp()
 {
-    // To stop run_one inside method processEvents completes.
-    asio::post(io_context_, []() noexcept {});
+    // Qt calls wakeUp for every posted event, and posting a handler each time would allocate
+    // memory and lock the io_context queue on every call. A single pending handler is enough to
+    // make run_one inside processEvents return, so repeated calls are collapsed until it runs.
+    if (wakeup_posted_.exchange(true, std::memory_order_relaxed))
+        return;
+
+    asio::post(io_context_, [this]() noexcept
+    {
+        wakeup_posted_.store(false, std::memory_order_relaxed);
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
