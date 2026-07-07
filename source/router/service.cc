@@ -189,6 +189,7 @@ bool Service::stopRelay(qint64 relay_id)
 
         if (relay->sessionId() == relay_id)
         {
+            removeKeysForRelay(relay_id);
             relay->disconnect();
             relay->deleteLater();
             relays_.erase(it);
@@ -281,6 +282,9 @@ std::optional<Service::Credentials> Service::takeCredentials()
 //--------------------------------------------------------------------------------------------------
 void Service::removeKeysForRelay(qint64 session_id)
 {
+    if (!key_pool_.contains(session_id))
+        return;
+
     LOG(INFO) << "All keys for relay" << session_id << "removed";
     key_pool_.remove(session_id);
 }
@@ -415,6 +419,7 @@ void Service::onRelayFinished()
 {
     Relay* relay = static_cast<Relay*>(sender());
     CHECK(relay);
+    removeKeysForRelay(relay->sessionId());
     relay->disconnect();
     relay->deleteLater();
     relays_.removeOne(relay);
