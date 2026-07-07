@@ -1921,6 +1921,49 @@ std::string_view Database::setWorkspaceHosts(qint64 entry_id, const std::set<Hos
         return proto::router::kErrorInternalError;
     }
 
+    // COUNT(*) always yields exactly one row, so a failed next() is a database error and not
+    // a missing workspace.
+    SqlQuery workspace_check(db_, "SELECT COUNT(*) FROM workspaces WHERE id=?");
+    workspace_check.addInt64(entry_id);
+
+    if (!workspace_check.next())
+    {
+        LOG(ERROR) << "Unable to check workspace existence:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    if (workspace_check.columnInt64(0) == 0)
+        return proto::router::kErrorNotFound;
+
+    // Validate desired hosts before releasing anything. The caller supplies the final set, so
+    // success must mean every requested host is actually assignable to this workspace.
+    SqlQuery host_check(db_, "SELECT COUNT(*), IFNULL(MAX(workspace_id), 0) FROM hosts WHERE id=?");
+    for (HostId host_id : desired_host_ids)
+    {
+        host_check.reset();
+        host_check.addUInt64(host_id);
+
+        if (!host_check.next())
+        {
+            LOG(ERROR) << "Unable to check host existence:" << db_.lastError();
+            return proto::router::kErrorInternalError;
+        }
+
+        if (host_check.columnInt64(0) == 0)
+        {
+            LOG(ERROR) << "Host not found:" << host_id;
+            return proto::router::kErrorNotFound;
+        }
+
+        const qint64 current_workspace_id = host_check.columnInt64(1);
+        if (current_workspace_id != 0 && current_workspace_id != entry_id)
+        {
+            LOG(ERROR) << "Host" << host_id << "belongs to another workspace:"
+                       << current_workspace_id;
+            return proto::router::kErrorInvalidData;
+        }
+    }
+
     // Release: hosts currently in this workspace but no longer wanted.
     SqlQuery select_current(db_, "SELECT id FROM hosts WHERE workspace_id=?");
     select_current.addInt64(entry_id);
@@ -1950,8 +1993,8 @@ std::string_view Database::setWorkspaceHosts(qint64 entry_id, const std::set<Hos
         }
     }
 
-    // Claim: hosts the operator wants in this workspace. Only hosts that are unassigned or
-    // already in this workspace are touched; hosts in another workspace stay put.
+    // Claim: hosts the operator wants in this workspace. Validation above guarantees every
+    // desired host is unassigned or already in this workspace.
     SqlQuery claim(db_, "UPDATE hosts SET workspace_id=? WHERE id=? AND workspace_id IN (0, ?)");
     for (HostId host_id : desired_host_ids)
     {

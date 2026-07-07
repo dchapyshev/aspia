@@ -243,9 +243,9 @@ public:
 
     // Assigns hosts to the given workspace. desired_host_ids is the complete final set: hosts
     // currently in this workspace but absent from the set are released (workspace_id <- 0);
-    // hosts in the set with workspace_id 0 are claimed (workspace_id <- entry_id); hosts in
-    // the set that already belong to another workspace are left alone (the operator cannot
-    // hijack a host from another workspace through this call).
+    // hosts in the set with workspace_id 0 are claimed (workspace_id <- entry_id). Every
+    // requested host must exist and be either unassigned or already in this workspace; hosts
+    // from another workspace are rejected so OK means the final set was applied.
     std::string_view setWorkspaceHosts(qint64 entry_id, const std::set<HostId>& desired_host_ids);
 
     // Returns the set of workspace ids the given user has a workspace_access entry for.
