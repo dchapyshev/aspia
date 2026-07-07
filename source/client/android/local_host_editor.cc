@@ -22,6 +22,7 @@
 
 #include <optional>
 
+#include "base/logging.h"
 #include "base/crypto/secure_string.h"
 #include "base/net/address.h"
 #include "base/peer/host_id.h"
@@ -129,11 +130,14 @@ void LocalHostEditor::prepareForAdd(qint64 group_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void LocalHostEditor::prepareForEdit(qint64 host_id)
+bool LocalHostEditor::prepareForEdit(qint64 host_id)
 {
     std::optional<HostConfig> host = Database::instance().findHost(host_id);
     if (!host.has_value())
-        return;
+    {
+        LOG(ERROR) << "Host not found:" << host_id;
+        return false;
+    }
 
     entry_id_ = host_id;
     group_id_ = host->groupId();
@@ -149,6 +153,7 @@ void LocalHostEditor::prepareForEdit(qint64 host_id)
     loadRouters(host->routerId());
     onRouterChanged();
     name_->setFocus();
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

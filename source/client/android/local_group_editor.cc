@@ -22,6 +22,7 @@
 
 #include <optional>
 
+#include "base/logging.h"
 #include "client/config.h"
 #include "client/database.h"
 #include "common/android/button.h"
@@ -103,11 +104,14 @@ void LocalGroupEditor::prepareForAdd(qint64 parent_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void LocalGroupEditor::prepareForEdit(qint64 group_id)
+bool LocalGroupEditor::prepareForEdit(qint64 group_id)
 {
     std::optional<GroupConfig> group = Database::instance().findGroup(group_id);
     if (!group.has_value())
-        return;
+    {
+        LOG(ERROR) << "Group not found:" << group_id;
+        return false;
+    }
 
     entry_id_ = group_id;
     parent_id_ = group->parentId();
@@ -118,6 +122,7 @@ void LocalGroupEditor::prepareForEdit(qint64 group_id)
     delete_button_->show();
 
     name_->setFocus();
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

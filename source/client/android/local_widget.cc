@@ -436,7 +436,9 @@ void LocalWidget::onRefreshClicked()
 //--------------------------------------------------------------------------------------------------
 void LocalWidget::editGroup(qint64 group_id)
 {
-    group_editor_->prepareForEdit(group_id);
+    if (!group_editor_->prepareForEdit(group_id))
+        return;
+
     stack_->setCurrentIndex(kPageGroupEditor);
     emit sig_titleChanged(tr("Edit Group"), true);
     emit sig_appBarActionsChanged();
@@ -445,7 +447,9 @@ void LocalWidget::editGroup(qint64 group_id)
 //--------------------------------------------------------------------------------------------------
 void LocalWidget::editHost(qint64 host_id)
 {
-    host_editor_->prepareForEdit(host_id);
+    if (!host_editor_->prepareForEdit(host_id))
+        return;
+
     stack_->setCurrentIndex(kPageHostEditor);
     emit sig_titleChanged(tr("Edit Host"), true);
     emit sig_appBarActionsChanged();

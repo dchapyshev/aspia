@@ -38,8 +38,9 @@ public:
     // Resets the form for adding a new group under |parent_id|.
     void prepareForAdd(qint64 parent_id);
 
-    // Loads the group |group_id| into the form for editing.
-    void prepareForEdit(qint64 group_id);
+    // Loads the group |group_id| into the form for editing. Returns false if the group does not
+    // exist; the form keeps its previous state and must not be shown.
+    bool prepareForEdit(qint64 group_id);
 
 signals:
     // Emitted after the group has been saved to or removed from the database.

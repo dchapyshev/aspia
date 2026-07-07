@@ -22,6 +22,7 @@
 
 #include <optional>
 
+#include "base/logging.h"
 #include "base/crypto/secure_string.h"
 #include "base/net/address.h"
 #include "base/peer/user.h"
@@ -116,11 +117,14 @@ void RouterEditor::prepareForAdd()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterEditor::prepareForEdit(qint64 router_id)
+bool RouterEditor::prepareForEdit(qint64 router_id)
 {
     std::optional<RouterConfig> router = Database::instance().findRouter(router_id);
     if (!router.has_value())
-        return;
+    {
+        LOG(ERROR) << "Router not found:" << router_id;
+        return false;
+    }
 
     router_id_ = router_id;
     encrypted_device_token_ = router->encryptedDeviceToken();
@@ -133,6 +137,7 @@ void RouterEditor::prepareForEdit(qint64 router_id)
     delete_button_->show();
 
     name_->setFocus();
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

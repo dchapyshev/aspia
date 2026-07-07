@@ -39,8 +39,9 @@ public:
     // Resets the form for adding a new router.
     void prepareForAdd();
 
-    // Loads the router |router_id| into the form for editing.
-    void prepareForEdit(qint64 router_id);
+    // Loads the router |router_id| into the form for editing. Returns false if the router does not
+    // exist; the form keeps its previous state and must not be shown.
+    bool prepareForEdit(qint64 router_id);
 
 signals:
     // Emitted after the router has been saved to or removed from the database.

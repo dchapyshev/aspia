@@ -228,7 +228,9 @@ void RoutersWidget::onCardExpandRequested(qint64 router_id)
 //--------------------------------------------------------------------------------------------------
 void RoutersWidget::onEditRouter(qint64 router_id)
 {
-    editor_->prepareForEdit(router_id);
+    if (!editor_->prepareForEdit(router_id))
+        return;
+
     stack_->setCurrentIndex(1);
     emit sig_titleChanged(tr("Edit Router"), true);
     emit appBarActionsChanged();

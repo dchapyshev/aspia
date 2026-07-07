@@ -40,8 +40,9 @@ public:
     // Resets the form for adding a new host to |group_id| and reloads the router list.
     void prepareForAdd(qint64 group_id);
 
-    // Loads the host |host_id| into the form for editing.
-    void prepareForEdit(qint64 host_id);
+    // Loads the host |host_id| into the form for editing. Returns false if the host does not
+    // exist; the form keeps its previous state and must not be shown.
+    bool prepareForEdit(qint64 host_id);
 
 signals:
     // Emitted after the host has been saved to or removed from the database.
