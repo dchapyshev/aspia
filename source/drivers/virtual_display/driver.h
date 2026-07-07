@@ -49,22 +49,6 @@ namespace Microsoft
 }
 
 // Manages the creation and lifetime of a Direct3D render device.
-struct IndirectMonitor
-{
-    static constexpr size_t kEdidBlockSize = 128;
-    static constexpr size_t kModeListSize = 3;
-
-    const BYTE edid_block[kEdidBlockSize];
-    const struct MonitorMode
-    {
-        DWORD width;
-        DWORD height;
-        DWORD vsync;
-    } mode_list[kModeListSize];
-    const DWORD preferred_mode_idx;
-};
-
-// Manages the creation and lifetime of a Direct3D render device.
 struct Direct3DDevice
 {
     explicit Direct3DDevice(LUID adapter_luid);

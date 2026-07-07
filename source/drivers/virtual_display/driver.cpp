@@ -26,8 +26,15 @@
 
 static constexpr DWORD kIddMonitorCount = 1;
 
+struct MonitorMode
+{
+    DWORD width;
+    DWORD height;
+    DWORD vsync;
+};
+
 // Default modes reported for edid-less monitors. The first mode is set as preferred
-static const struct IndirectMonitor::MonitorMode kDefaultModes[] =
+static const MonitorMode kDefaultModes[] =
 {
     { 2560, 1440, 60 },
     { 2048, 1152, 60 },
@@ -268,7 +275,8 @@ void SwapChainProcessor::runCore()
             DWORD wait_result = WaitForMultipleObjects(std::size(wait_handles), wait_handles, FALSE, 16);
             if (wait_result == WAIT_OBJECT_0 || wait_result == WAIT_TIMEOUT)
             {
-                // We have a new buffer, so try the AcquireBuffer again
+                // Either a new buffer became available or the timeout elapsed - in both cases
+                // simply retry the AcquireBuffer.
                 continue;
             }
             else if (wait_result == WAIT_OBJECT_0 + 1)
@@ -416,6 +424,14 @@ void IndirectDeviceContext::finishInit(UINT connector_index)
 
     WDF_OBJECT_ATTRIBUTES attr;
     WDF_OBJECT_ATTRIBUTES_INIT_CONTEXT_TYPE(&attr, IndirectMonitorContextWrapper);
+    attr.EvtCleanupCallback = [](WDFOBJECT object)
+    {
+        // Automatically cleanup the context (and the swap-chain processing thread it owns) when
+        // the WDF monitor object is about to be deleted.
+        auto* context = WdfObjectGet_IndirectMonitorContextWrapper(object);
+        if (context)
+            context->Cleanup();
+    };
 
     // In the sample driver, we report a monitor right away but a real driver would do this when a monitor connection event occurs
     IDDCX_MONITOR_INFO monitor_info;
@@ -461,9 +477,11 @@ void IndirectDeviceContext::finishInit(UINT connector_index)
         // Tell the OS that the monitor has been plugged in
         IDARG_OUT_MONITORARRIVAL arrival_out;
         status = IddCxMonitorArrival(monitor_create_out.MonitorObject, &arrival_out);
-        if (NT_SUCCESS(status))
+        if (!NT_SUCCESS(status))
         {
-            // TODO: Print error message.
+            // The OS was not told about the monitor, so the created object is useless. Destroy
+            // it; the context is freed by the cleanup callback.
+            WdfObjectDelete(monitor_create_out.MonitorObject);
         }
     }
 }
@@ -555,12 +573,14 @@ NTSTATUS iddDeviceAdd(WDFDRIVER /* driver */, PWDFDEVICE_INIT device_init)
         return status;
 
     status = IddCxDeviceInitialize(device);
+    if (!NT_SUCCESS(status))
+        return status;
 
     // Create a new device context object and attach it to the WDF device object
     auto* context = WdfObjectGet_IndirectDeviceContextWrapper(device);
     context->pContext = new IndirectDeviceContext(device);
 
-    return status;
+    return STATUS_SUCCESS;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -610,22 +630,13 @@ NTSTATUS iddAdapterCommitModes(
 //--------------------------------------------------------------------------------------------------
 _Use_decl_annotations_
 NTSTATUS iddParseMonitorDescription(
-    const IDARG_IN_PARSEMONITORDESCRIPTION* in_args, IDARG_OUT_PARSEMONITORDESCRIPTION* out_args)
+    const IDARG_IN_PARSEMONITORDESCRIPTION* /* in_args */,
+    IDARG_OUT_PARSEMONITORDESCRIPTION* out_args)
 {
-    // ==============================
-    // TODO: In a real driver, this function would be called to generate monitor modes for an EDID by parsing it. In
-    // this sample driver, we hard-code the EDID, so this function can generate known modes.
-    // ==============================
-
-    out_args->MonitorModeBufferOutputCount = IndirectMonitor::kModeListSize;
-
-    if (in_args->MonitorModeBufferInputCount < IndirectMonitor::kModeListSize)
-    {
-        // Return success if there was no buffer, since the caller was only asking for a count of modes
-        return (in_args->MonitorModeBufferInputCount > 0) ? STATUS_BUFFER_TOO_SMALL : STATUS_SUCCESS;
-    }
-
-    // This EDID block does not belong to the monitors we reported earlier
+    // The monitors are reported without an EDID (MonitorDescription.DataSize = 0), so the OS has
+    // no descriptions to parse and this callback is not expected to be called. Any description
+    // passed here cannot belong to our monitors.
+    out_args->MonitorModeBufferOutputCount = 0;
     return STATUS_INVALID_PARAMETER;
 }
 
@@ -642,23 +653,24 @@ NTSTATUS iddMonitorGetDefaultModes(
     // than an EDID, those modes would also be reported here.
     // ==============================
 
+    out_args->DefaultMonitorModeBufferOutputCount = static_cast<UINT>(std::size(kDefaultModes));
+
+    // A zero-sized buffer means that only the mode count was requested.
     if (in_args->DefaultMonitorModeBufferInputCount == 0)
-    {
-        out_args->DefaultMonitorModeBufferOutputCount = std::size(kDefaultModes);
-    }
-    else
-    {
-        for (size_t i = 0; i < std::size(kDefaultModes); ++i)
-        {
-            const IndirectMonitor::MonitorMode& mode = kDefaultModes[i];
-            in_args->pDefaultMonitorModes[i] = createIddCxMonitorMode(
-                mode.width, mode.height, mode.vsync, IDDCX_MONITOR_MODE_ORIGIN_DRIVER);
-        }
+        return STATUS_SUCCESS;
 
-        out_args->DefaultMonitorModeBufferOutputCount = std::size(kDefaultModes);
-        out_args->PreferredMonitorModeIdx = 0;
+    // Filling a smaller buffer than reported above would overflow it.
+    if (in_args->DefaultMonitorModeBufferInputCount < std::size(kDefaultModes))
+        return STATUS_BUFFER_TOO_SMALL;
+
+    for (size_t i = 0; i < std::size(kDefaultModes); ++i)
+    {
+        const MonitorMode& mode = kDefaultModes[i];
+        in_args->pDefaultMonitorModes[i] = createIddCxMonitorMode(
+            mode.width, mode.height, mode.vsync, IDDCX_MONITOR_MODE_ORIGIN_DRIVER);
     }
 
+    out_args->PreferredMonitorModeIdx = 0;
     return STATUS_SUCCESS;
 }
 
@@ -676,15 +688,20 @@ NTSTATUS iddMonitorQueryModes(
 
     for (size_t i = 0; i < std::size(kDefaultModes); ++i)
     {
-        const IndirectMonitor::MonitorMode& mode = kDefaultModes[i];
+        const MonitorMode& mode = kDefaultModes[i];
         target_modes[i] = createTargetMode(mode.width, mode.height, mode.vsync);
     }
 
     out_args->TargetModeBufferOutputCount = static_cast<UINT>(target_modes.size());
 
-    if (in_args->TargetModeBufferInputCount >= target_modes.size())
-        copy(target_modes.begin(), target_modes.end(), in_args->pTargetModes);
+    // A zero-sized buffer means that only the mode count was requested.
+    if (in_args->TargetModeBufferInputCount == 0)
+        return STATUS_SUCCESS;
 
+    if (in_args->TargetModeBufferInputCount < target_modes.size())
+        return STATUS_BUFFER_TOO_SMALL;
+
+    std::copy(target_modes.begin(), target_modes.end(), in_args->pTargetModes);
     return STATUS_SUCCESS;
 }
 
