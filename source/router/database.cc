@@ -1058,7 +1058,9 @@ bool Database::updateHostInfo(HostId host_id, std::string_view computer_name, st
         return false;
     }
 
-    return true;
+    // The row is expected to exist (addHost() runs first); a zero-row update means it was removed
+    // in between, so report that instead of a silent success.
+    return db_.changes() > 0;
 }
 
 //--------------------------------------------------------------------------------------------------
