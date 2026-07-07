@@ -313,7 +313,10 @@ int createConfig(QTextStream& out)
     out << "Generate seed key..." << Qt::endl;
     QByteArray seed_key = Random::byteArray(64);
     if (seed_key.isEmpty())
+    {
         out << "Unable to generate seed key" << Qt::endl;
+        return 1;
+    }
 
     out << "Seed key successfully generated" << Qt::endl;
 

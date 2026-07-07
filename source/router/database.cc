@@ -1451,7 +1451,10 @@ bool Database::finalizeHostRemoval(HostId host_id)
         return false;
     }
 
-    return db_.changes() > 0;
+    // Idempotent: the desired end state is "no hosts_remove row for this id". A second finalization
+    // (duplicate ack, or another session already finalized) deletes zero rows but still succeeded,
+    // so report success instead of a spurious failure.
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

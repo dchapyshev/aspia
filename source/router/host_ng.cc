@@ -55,7 +55,7 @@ HostNG::~HostNG()
         if (database.isValid())
         {
             if (!database.finalizeHostRemoval(host_id_))
-                CLOG(WARNING) << "Nothing to finalize for host_id:" << host_id_;
+                CLOG(WARNING) << "Failed to finalize removal for host_id:" << host_id_;
         }
         else
         {
@@ -77,8 +77,18 @@ void HostNG::sendRemoveCommand()
 {
     proto::router::RouterToHost message;
     message.mutable_host_command()->set_command_name(proto::router::kCommandHostRemove);
-    sendMessage(0, serialize(message));
 
+    // Mark the session as "remove sent" only once we actually have a buffer to hand to the channel.
+    // The destructor treats this flag as proof the host was told, so it must not be set if the
+    // command was never serialized. TCP delivery itself is the documented reliability assumption.
+    const QByteArray serialized = serialize(message);
+    if (serialized.isEmpty())
+    {
+        CLOG(ERROR) << "Failed to serialize remove command; not marking as sent";
+        return;
+    }
+
+    sendMessage(0, serialized);
     remove_command_sent_ = true;
 }
 
