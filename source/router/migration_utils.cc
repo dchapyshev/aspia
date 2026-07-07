@@ -23,6 +23,8 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
+#include <utility>
+
 #include "base/logging.h"
 #include "base/crypto/secure_byte_array.h"
 #include "base/files/base_paths.h"
@@ -34,6 +36,19 @@ namespace {
 QString oldConfigFilePath()
 {
     return BasePaths::appConfigDir() + "/router.json";
+}
+
+//--------------------------------------------------------------------------------------------------
+// QByteArray::fromHex silently skips invalid characters, so a corrupted value would migrate into a
+// truncated (or empty) key without any error. Reject such input via a round-trip check and return
+// an empty array, letting the caller skip the key instead of storing broken material.
+QByteArray decodeHexKey(const QString& value)
+{
+    const QByteArray hex = value.toLatin1();
+    const QByteArray decoded = QByteArray::fromHex(hex);
+    if (decoded.isEmpty() || decoded.toHex() != hex.toLower())
+        return QByteArray();
+    return decoded;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -88,21 +103,28 @@ void doConfigMigrate(const QJsonDocument& doc)
 
     if (root_object.contains("PrivateKey"))
     {
-        QString value = root_object["PrivateKey"].toString();
-        LOG(INFO) << "PrivateKey:" << value;
-
-        // Hosts and relays are separate entities now, but the old config had a single key.
-        // Duplicate it into both so existing hosts and relays keep working after migration.
-        SecureByteArray private_key(QByteArray::fromHex(value.toLatin1()));
-        settings.setHostPrivateKey(private_key);
-        settings.setRelayPrivateKey(private_key);
+        QByteArray decoded = decodeHexKey(root_object["PrivateKey"].toString());
+        if (decoded.isEmpty())
+        {
+            LOG(ERROR) << "Invalid PrivateKey in old config, skipping its migration";
+        }
+        else
+        {
+            // Hosts and relays are separate entities now, but the old config had a single key.
+            // Duplicate it into both so existing hosts and relays keep working after migration.
+            SecureByteArray private_key(std::move(decoded));
+            settings.setHostPrivateKey(private_key);
+            settings.setRelayPrivateKey(private_key);
+        }
     }
 
     if (root_object.contains("SeedKey"))
     {
-        QString value = root_object["SeedKey"].toString();
-        LOG(INFO) << "SeedKey:" << value;
-        settings.setSeedKey(QByteArray::fromHex(value.toLatin1()));
+        QByteArray decoded = decodeHexKey(root_object["SeedKey"].toString());
+        if (decoded.isEmpty())
+            LOG(ERROR) << "Invalid SeedKey in old config, skipping its migration";
+        else
+            settings.setSeedKey(decoded);
     }
 
     if (root_object.contains("ListenInterface"))
