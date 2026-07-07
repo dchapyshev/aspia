@@ -58,7 +58,7 @@ private:
     void doWorkspaceRequest(const proto::router::WorkspaceRequest& request);
 
     std::string addUser(const proto::router::User& user);
-    std::string modifyUser(const proto::router::User& user);
+    std::string modifyUser(const proto::router::User& user, qint64* password_changed_user_id);
     std::string deleteUser(const proto::router::User& user);
 
     Q_DISABLE_COPY_MOVE(ClientAdmin)

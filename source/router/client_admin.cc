@@ -211,6 +211,7 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
     qint64 reset_otp_user_id = 0;
     qint64 revoked_tokens_user_id = 0;
     QList<qint64> revoked_token_ids;
+    qint64 password_changed_user_id = 0;
     qint64 deleted_user_id = 0;
 
     if (request.command_name() == proto::router::kCommandUserAdd)
@@ -219,7 +220,7 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
     }
     else if (request.command_name() == proto::router::kCommandUserModify)
     {
-        result->set_error_code(modifyUser(request.user()));
+        result->set_error_code(modifyUser(request.user(), &password_changed_user_id));
     }
     else if (request.command_name() == proto::router::kCommandUserDelete)
     {
@@ -356,6 +357,9 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
 
     if (revoked_tokens_user_id > 0)
         Service::instance()->stopClients(revoked_tokens_user_id, revoked_token_ids);
+
+    if (password_changed_user_id > 0)
+        Service::instance()->stopClients(password_changed_user_id);
 
     if (deleted_user_id > 0)
         Service::instance()->stopClients(deleted_user_id);
@@ -842,8 +846,11 @@ std::string ClientAdmin::addUser(const proto::router::User& user)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string ClientAdmin::modifyUser(const proto::router::User& user)
+std::string ClientAdmin::modifyUser(const proto::router::User& user, qint64* password_changed_user_id)
 {
+    CHECK(password_changed_user_id);
+    *password_changed_user_id = 0;
+
     CLOG(INFO) << "User modify request:" << user.name();
 
     if (user.entry_id() <= 0)
@@ -893,10 +900,8 @@ std::string ClientAdmin::modifyUser(const proto::router::User& user)
         return std::string(error_code);
     }
 
-    // The rotation revoked every device token; drop the live sessions so the new password applies
-    // immediately.
     if (password_changed)
-        Service::instance()->stopClients(new_user.entry_id);
+        *password_changed_user_id = new_user.entry_id;
 
     Service::instance()->notifyChanged(Service::NOTIFY_USERS);
     return proto::router::kErrorOk;
