@@ -65,6 +65,7 @@ private:
     Display* display_ = nullptr;
     Window root_window_ = BadValue;
 
+    QSize screen_size_;
     QPoint screen_offset_;
 
     QPoint last_mouse_pos_;

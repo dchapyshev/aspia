@@ -18,6 +18,8 @@
 
 #include "host/input_injector_wayland.h"
 
+#include <climits>
+
 #include "base/logging.h"
 #include "common/keycode_converter.h"
 #include "host/linux/wayland_compositor_source.h"
@@ -110,7 +112,13 @@ void InputInjectorWayland::injectMouseEvent(const proto::input::MouseEvent& even
     if (!source_)
         return;
 
-    QPointF pos(event.x() + screen_offset_.x(), event.y() + screen_offset_.y());
+    // The client coordinates are untrusted; add the offset in 64-bit so the sum cannot overflow a
+    // signed int, and clamp the result into the captured screen.
+    const qint64 max_x = (screen_size_.width() > 0) ? screen_size_.width() - 1 : INT_MAX;
+    const qint64 max_y = (screen_size_.height() > 0) ? screen_size_.height() - 1 : INT_MAX;
+
+    QPointF pos(qBound<qint64>(0, static_cast<qint64>(event.x()) + screen_offset_.x(), max_x),
+                qBound<qint64>(0, static_cast<qint64>(event.y()) + screen_offset_.y(), max_y));
 
     // Client coordinates are in the captured frame's pixel space - the monitor's physical resolution.
     // The portal expects pointer coordinates in the stream's logical coordinate space, so on a scaled

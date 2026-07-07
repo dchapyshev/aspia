@@ -24,6 +24,14 @@
 #include "base/linux/x11_headers.h"
 #include "host/linux/x_error_trap.h"
 
+namespace {
+
+// Number of consecutive capture failures after which the failure is reported as permanent so the
+// capturer is recreated (a transient failure resolves within a frame or two).
+const int kMaxConsecutiveFailures = 10;
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 ScreenCapturerX11::ScreenCapturerX11(QObject* parent)
     : ScreenCapturer(ScreenCapturer::Type::LINUX_X11, parent)
@@ -174,6 +182,7 @@ const Frame* ScreenCapturerX11::captureFrame(Error* error)
         if (!frame)
         {
             LOG(ERROR) << "Unable to create frame";
+            *error = Error::TEMPORARY;
             return nullptr;
         }
 
@@ -187,10 +196,25 @@ const Frame* ScreenCapturerX11::captureFrame(Error* error)
     Frame* result = captureFrameImpl();
     if (!result)
     {
-        LOG(ERROR) << "Temporarily failed to capture screen";
-        *error = Error::PERMANENT;
+        // A single failure here is usually transient (for example XShmGetImage racing a resolution
+        // change), so report it as temporary and let the capturer retry. A long streak means the
+        // capturer is broken for good (dead SHM segment); escalate to PERMANENT, which is the only
+        // signal that makes the owner recreate the capturer from scratch.
+        ++consecutive_failures_;
+        if (consecutive_failures_ >= kMaxConsecutiveFailures)
+        {
+            LOG(ERROR) << "Failed to capture screen" << consecutive_failures_ << "times in a row";
+            *error = Error::PERMANENT;
+        }
+        else
+        {
+            LOG(ERROR) << "Temporarily failed to capture screen";
+            *error = Error::TEMPORARY;
+        }
         return nullptr;
     }
+
+    consecutive_failures_ = 0;
 
     Region* updated_region = result->updatedRegion();
     last_invalid_region_ = *updated_region;
@@ -499,22 +523,39 @@ void ScreenCapturerX11::updateMonitors()
 
     monitors_ = XRRGetMonitors(display(), root_window_, true, &num_monitors_);
 
-    if (selected_monitor_name_)
-    {
-        for (int i = 0; i < num_monitors_; ++i)
-        {
-            XRRMonitorInfo& m = monitors_[i];
-            if (selected_monitor_name_ == m.name)
-            {
-                LOG(INFO) << "XRandR monitor" << m.name << "rect updated";
-                selected_monitor_rect_ = QRect(QPoint(m.x, m.y), QSize(m.width, m.height));
-                return;
-            }
-        }
+    if (!selected_monitor_name_)
+        return;
 
-        // The selected monitor is not connected anymore
+    const QRect previous_rect = selected_monitor_rect_;
+    QRect new_rect(QPoint(0, 0), QSize(0, 0));
+
+    for (int i = 0; i < num_monitors_; ++i)
+    {
+        XRRMonitorInfo& m = monitors_[i];
+        if (selected_monitor_name_ == m.name)
+        {
+            new_rect = QRect(QPoint(m.x, m.y), QSize(m.width, m.height));
+            break;
+        }
+    }
+
+    if (new_rect.isEmpty())
         LOG(INFO) << "XRandR selected monitor" << selected_monitor_name_ << "lost";
-        selected_monitor_rect_ = QRect(QPoint(0, 0), QSize(0, 0));
+    else
+        LOG(INFO) << "XRandR monitor" << selected_monitor_name_ << "rect updated";
+
+    selected_monitor_rect_ = new_rect;
+
+    // A change to the selected monitor's geometry (size or position) requires the frame buffers to be
+    // reallocated to the new size. A RRScreenChangeNotify does not always come with a root-window
+    // ConfigureNotify (the bounding box may be unchanged while a monitor grows), so without this reset
+    // the next capture would blit the new, possibly larger, rect into a frame still sized for the old
+    // geometry and overrun its buffer. Resetting also forces a full capture instead of a damage diff
+    // against a differently-sized frame.
+    if (new_rect != previous_rect)
+    {
+        queue_.reset();
+        helper_.clearInvalidRegion();
     }
 }
 

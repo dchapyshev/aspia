@@ -123,6 +123,10 @@ private:
     // current with the last buffer used.
     Region last_invalid_region_;
 
+    // Number of captureFrameImpl() failures since the last successful capture. Used by captureFrame()
+    // to escalate a persistent failure to Error::PERMANENT, which makes the owner recreate the capturer.
+    int consecutive_failures_ = 0;
+
     std::unique_ptr<XAtomCache> atom_cache_;
     std::unique_ptr<MouseCursor> mouse_cursor_;
 

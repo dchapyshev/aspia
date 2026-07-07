@@ -18,6 +18,7 @@
 
 #include "host/input_injector_x11.h"
 
+#include <climits>
 #include <vector>
 
 #include "base/logging.h"
@@ -92,9 +93,11 @@ InputInjectorX11* InputInjectorX11::create(QObject* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorX11::setScreenInfo(const QSize& /* screen_size */, const QPoint& offset)
+void InputInjectorX11::setScreenInfo(const QSize& screen_size, const QPoint& offset)
 {
-    // XTest injects in absolute pixel coordinates, so the virtual desktop size is not needed here.
+    // XTest injects in absolute pixel coordinates; the desktop size is only used to clamp untrusted
+    // client coordinates.
+    screen_size_ = screen_size;
     screen_offset_ = offset;
 }
 
@@ -182,8 +185,14 @@ void InputInjectorX11::injectTextEvent(const proto::input::TextEvent& event)
 //--------------------------------------------------------------------------------------------------
 void InputInjectorX11::injectMouseEvent(const proto::input::MouseEvent& event)
 {
-    QPoint pos(event.x(), event.y());
-    pos += screen_offset_;
+    // The client coordinates are untrusted; add the offset in 64-bit so the sum cannot overflow a
+    // signed int, and clamp the result into the desktop.
+    const qint64 max_x = (screen_size_.width() > 0) ? screen_size_.width() - 1 : INT_MAX;
+    const qint64 max_y = (screen_size_.height() > 0) ? screen_size_.height() - 1 : INT_MAX;
+
+    const QPoint pos(
+        static_cast<int>(qBound<qint64>(0, static_cast<qint64>(event.x()) + screen_offset_.x(), max_x)),
+        static_cast<int>(qBound<qint64>(0, static_cast<qint64>(event.y()) + screen_offset_.y(), max_y)));
 
     bool left_button_pressed = (event.mask() & proto::input::MouseEvent::LEFT_BUTTON) != 0;
     bool middle_button_pressed = (event.mask() & proto::input::MouseEvent::MIDDLE_BUTTON) != 0;
@@ -208,8 +217,7 @@ void InputInjectorX11::injectMouseEvent(const proto::input::MouseEvent& event)
 
     if (inject_motion)
     {
-        last_mouse_pos_.setX(std::max(0, pos.x()));
-        last_mouse_pos_.setY(std::max(0, pos.y()));
+        last_mouse_pos_ = pos;
 
         XTestFakeMotionEvent(
             display_, DefaultScreen(display_), last_mouse_pos_.x(), last_mouse_pos_.y(), CurrentTime);
