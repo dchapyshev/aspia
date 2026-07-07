@@ -72,6 +72,14 @@ AsioEventDispatcher::AsioEventDispatcher(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 AsioEventDispatcher::~AsioEventDispatcher()
 {
+#if defined(Q_OS_WINDOWS)
+    // Multimedia timers are not owned by io_context. Destroying object_handle only closes the
+    // event handle, while the native periodic timer keeps running and would signal a closed (and
+    // possibly reused by the system) handle. Kill them explicitly.
+    for (auto& [id, timer] : multimedia_timers_)
+        timer.cancel();
+#endif
+
     work_guard_.reset();
     io_context_.stop();
 }
