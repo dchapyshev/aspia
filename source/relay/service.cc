@@ -218,6 +218,9 @@ void Service::onSessionStarted()
 //--------------------------------------------------------------------------------------------------
 void Service::onSessionStatistics(const proto::router::RelayStatistics& statistics)
 {
+    if (!tcp_channel_ || !tcp_channel_->isAuthenticated())
+        return;
+
     outgoing_message_.newMessage<proto::router::RelayToRouter>().mutable_statistics()->CopyFrom(statistics);
 
     // Send a message to the router.
@@ -336,7 +339,7 @@ void Service::delayedConnectToRouter()
 //--------------------------------------------------------------------------------------------------
 void Service::sendKeyPool(quint32 key_count)
 {
-    if (!tcp_channel_)
+    if (!tcp_channel_ || !tcp_channel_->isAuthenticated())
     {
         LOG(INFO) << "No router connection; skip sending key pool";
         return;
