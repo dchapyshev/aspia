@@ -21,6 +21,7 @@
 #include <QDateTime>
 #include <QGridLayout>
 #include <QPainter>
+#include <QPointer>
 #include <QSet>
 #include <QStackedWidget>
 #include <QVBoxLayout>
@@ -376,12 +377,19 @@ void RoutersWidget::createRouterSession(const RouterConfig& config)
 //--------------------------------------------------------------------------------------------------
 void RoutersWidget::requestTwoFactorCode(qint64 router_id, const QString& otpauth_uri)
 {
-    Router* session = sessions_.value(router_id);
+    QPointer<Router> session = sessions_.value(router_id);
     if (!session)
         return;
 
     TwoFactorDialog dialog(otpauth_uri, this);
-    if (dialog.exec() == QDialog::Accepted)
+    const bool accepted = dialog.exec() == QDialog::Accepted;
+
+    // The dialog spins a nested event loop, so the session may have been destroyed by a routers
+    // reload while it was open.
+    if (!session)
+        return;
+
+    if (accepted)
         session->submitTwoFactorCode(dialog.code());
     else
         session->disconnectFromRouter();
