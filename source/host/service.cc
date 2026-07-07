@@ -642,7 +642,7 @@ void Service::onStopClient(quint32 client_id)
 
         if (client_id == 0 || client_id == current_client_id)
         {
-            emit client->sig_finished();
+            client->finish();
             if (client_id != 0)
                  break;
         }

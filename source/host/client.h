@@ -59,6 +59,11 @@ public:
     void start(const QString& stun_host, quint16 stun_port);
     void setFeature(Feature feature, bool enable);
 
+    // Tears the client down, emitting sig_finished() exactly once. Idempotent: safe to call from any
+    // path and any number of times. This is the ONLY place sig_finished() is emitted - never emit that
+    // signal directly, or a duplicate can crash the service (see finish() in client.cc).
+    void finish();
+
     quint32 clientId() const;
     proto::peer::SessionType sessionType() const;
     QVersionNumber version() const;
@@ -94,6 +99,8 @@ protected:
     virtual void onMessage(quint8 channel_id, const QByteArray& buffer) = 0;
     virtual void onBandwidthChanged(qint64 bandwidth) { /* Nothing */ };
 
+    bool isFinished() const { return finished_emitted_; }
+
 private slots:
     void onTcpErrorOccurred(TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer);
@@ -122,6 +129,7 @@ private:
     void checkBandwidth();
     void setUdpState(const Location& location, UdpState state);
 
+    bool finished_emitted_ = false;
     Features features_ = FEATURE_NONE;
     TcpChannel* tcp_channel_ = nullptr;
     UdpState udp_state_ = UdpState::DISCONNECTED;

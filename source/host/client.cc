@@ -145,6 +145,29 @@ void Client::start(const QString& stun_host, quint16 stun_port)
 }
 
 //--------------------------------------------------------------------------------------------------
+void Client::setFeature(Feature feature, bool enable)
+{
+    if (enable)
+        features_ |= feature;
+    else
+        features_ &= ~feature;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::finish()
+{
+    // The single point that emits sig_finished(), guarded so it fires at most once. A second emission
+    // would reach a client already removed from the service list and trip the CHECK in
+    // Service::onClientFinished. Every teardown path (TCP error, IPC error, timeouts, an explicit stop
+    // from Service) calls this instead of emitting the signal directly.
+    if (finished_emitted_)
+        return;
+
+    finished_emitted_ = true;
+    emit sig_finished();
+}
+
+//--------------------------------------------------------------------------------------------------
 quint32 Client::clientId() const
 {
     return tcp_channel_->instanceId();
@@ -215,15 +238,6 @@ qint64 Client::bandwidth() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::setFeature(Feature feature, bool enable)
-{
-    if (enable)
-        features_ |= feature;
-    else
-        features_ &= ~feature;
-}
-
-//--------------------------------------------------------------------------------------------------
 void Client::send(quint8 channel_id, const QByteArray& buffer, bool reliable)
 {
     last_send_time_ = Clock::now();
@@ -243,7 +257,7 @@ void Client::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
     CLOG(ERROR) << "TCP error:" << error_code;
     CCHECK(tcp_channel_);
     tcp_channel_->disconnect();
-    emit sig_finished();
+    finish();
 }
 
 //--------------------------------------------------------------------------------------------------

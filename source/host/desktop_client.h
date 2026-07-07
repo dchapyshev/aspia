@@ -77,7 +77,6 @@ private slots:
     void onTaskManagerMessage(const proto::task_manager::HostToClient& message);
 
 private:
-    void finish();
     void sendIpcSessionMessage(quint8 net_channel_id, const QByteArray& buffer);
     void sendIpcServiceMessage(const QByteArray& buffer);
     void sendSessionList();
@@ -96,7 +95,6 @@ private:
     std::optional<proto::control::Config> config_;
 
     bool force_reliable_ = false;
-    bool finished_ = false;
 
     TaskManager* task_manager_ = nullptr;
 

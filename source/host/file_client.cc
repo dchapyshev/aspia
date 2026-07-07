@@ -545,6 +545,9 @@ void FileClient::onStarted(const Location& location, bool has_user)
 //--------------------------------------------------------------------------------------------------
 void FileClient::onError(const Location& location)
 {
+    if (isFinished())
+        return;
+
     CLOG(ERROR) << "Error occurred (" << location << ")";
 
     attach_timer_->stop();
@@ -555,5 +558,5 @@ void FileClient::onError(const Location& location)
     if (ipc_channel_)
         ipc_channel_->disconnect(this);
 
-    emit sig_finished();
+    finish();
 }

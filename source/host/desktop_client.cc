@@ -76,13 +76,11 @@ DesktopClient::DesktopClient(TcpChannel* tcp_channel, QObject* parent)
     fake_capture_timer_->setInterval(std::chrono::milliseconds(30));
     fake_capture_timer_->start();
 
-    // The base class also emits sig_finished directly (a TCP error), bypassing finish(). Whatever the
-    // emission path, the finished client must not tick its timers again: the object lives until the
-    // deferred delete runs, and a further tick would re-emit the signal for a client that is already
-    // removed from the service list, tripping the CHECK in Service::onClientFinished.
+    // Once the client is finished it must not tick its timers again: the object lives until the deferred
+    // delete runs, and a live timer could keep doing work (or call finish() again, which is now a no-op
+    // but still wasteful) for a client already removed from the service list.
     connect(this, &Client::sig_finished, this, [this]()
     {
-        finished_ = true;
         fake_capture_timer_->stop();
         overflow_timer_->stop();
     });
@@ -398,19 +396,6 @@ void DesktopClient::onOverflowCheck()
 void DesktopClient::onTaskManagerMessage(const proto::task_manager::HostToClient& message)
 {
     send(proto::desktop::CHANNEL_ID_TASK_MANAGER, serialize(message), true);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Finishes the client at most once: a second sig_finished() for a client already removed from the
-// service list would trip the CHECK in Service::onClientFinished. The timers are stopped (and
-// |finished_| is set) by the sig_finished connection in the constructor, which also covers emissions
-// from the Client base class.
-void DesktopClient::finish()
-{
-    if (finished_)
-        return;
-
-    emit sig_finished();
 }
 
 //--------------------------------------------------------------------------------------------------

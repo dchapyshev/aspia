@@ -649,9 +649,8 @@ void TerminalClient::sendResult(proto::terminal::Result::Code code)
 //--------------------------------------------------------------------------------------------------
 void TerminalClient::onError(const Location& location)
 {
-    if (finished_)
+    if (isFinished())
         return;
-    finished_ = true;
 
     CLOG(ERROR) << "Error occurred (" << location << ")";
 
@@ -663,5 +662,5 @@ void TerminalClient::onError(const Location& location)
     if (ipc_channel_)
         ipc_channel_->disconnect(this);
 
-    emit sig_finished();
+    finish();
 }
