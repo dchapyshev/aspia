@@ -566,7 +566,7 @@ void Service::onRepeatedTasks()
 
     // Check if there are any sessions that have not been confirmed for more than 60 seconds and
     // delete them.
-    for (auto it = pending_confirmation_.begin(); it != pending_confirmation_.end(); ++it)
+    for (auto it = pending_confirmation_.begin(); it != pending_confirmation_.end();)
     {
         QTime time = it->start_time;
 
@@ -575,6 +575,10 @@ void Service::onRepeatedTasks()
             TcpChannel* tcp_channel = it->tcp_channel;
             tcp_channel->deleteLater();
             it = pending_confirmation_.erase(it);
+        }
+        else
+        {
+            ++it;
         }
     }
 
