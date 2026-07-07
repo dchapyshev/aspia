@@ -1127,7 +1127,7 @@ void Database::hosts(qint64 start_item, qint64 end_item, proto::router::HostList
         return;
     }
 
-    const bool paginate = end_item > 0 && end_item >= start_item;
+    const bool paginate = start_item >= 0 && end_item > 0 && end_item >= start_item;
     const std::string sql = strCat({
         "SELECT id, workspace_id, group_id, display_name, computer_name, cpu_arch, version, "
         "os_name, address, comment, user_name, password, last_connect, last_modify FROM hosts",
@@ -1180,7 +1180,7 @@ void Database::hosts(qint64 workspace_id, qint64 group_id, qint64 start_item,
         return;
     }
 
-    const bool paginate = end_item > 0 && end_item >= start_item;
+    const bool paginate = start_item >= 0 && end_item > 0 && end_item >= start_item;
     const std::string sql = strCat({
         "SELECT id, workspace_id, group_id, display_name, computer_name, cpu_arch, version, "
         "os_name, address, comment, user_name, password, last_connect, last_modify "
