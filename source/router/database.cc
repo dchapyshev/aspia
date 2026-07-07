@@ -1993,7 +1993,9 @@ std::string_view Database::setWorkspaceHosts(qint64 entry_id, const std::set<Hos
         }
     }
 
-    // Release: hosts currently in this workspace but no longer wanted.
+    // Release: hosts currently in this workspace but no longer wanted. Collect the ids while the
+    // cursor is open and update only afterwards - UPDATE-ing workspace_id (the column the SELECT
+    // filters on) with the cursor still open could skip or revisit rows on an index scan.
     SqlQuery select_current(db_, "SELECT id FROM hosts WHERE workspace_id=?");
     select_current.addInt64(entry_id);
     if (!select_current.isValid())
@@ -2002,17 +2004,21 @@ std::string_view Database::setWorkspaceHosts(qint64 entry_id, const std::set<Hos
         return proto::router::kErrorInternalError;
     }
 
+    std::vector<HostId> release_ids;
+    while (select_current.next())
+    {
+        const HostId host_id = select_current.columnUInt64(0);
+        if (!desired_host_ids.contains(host_id))
+            release_ids.push_back(host_id);
+    }
+
     // The encrypted fields are sealed with the workspace group key, so a host outside any
     // workspace cannot keep them. Clear them together with the workspace assignment.
     SqlQuery release(db_,
         "UPDATE hosts SET workspace_id=0, group_id=0, comment=X'', user_name=X'', password=X'' "
         "WHERE id=?");
-    while (select_current.next())
+    for (HostId host_id : release_ids)
     {
-        const HostId host_id = select_current.columnUInt64(0);
-        if (desired_host_ids.contains(host_id))
-            continue;
-
         release.reset();
         release.addUInt64(host_id);
         if (!release.exec())
