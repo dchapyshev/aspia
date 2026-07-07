@@ -28,6 +28,20 @@ namespace {
 // Row alignment of the ARGB output buffer, matching the value used elsewhere in the pipeline.
 const size_t kArgbAlignment = 32;
 
+//--------------------------------------------------------------------------------------------------
+// A dirty rectangle arrives from the network peer with signed, unnormalized fields. QRect::contains
+// would normalize an inverted rect, but width()/height()/topLeft() are consumed raw below and a
+// negative extent (interpreted by libyuv as a flip) would walk off the frame buffer. Validate the
+// raw components explicitly. Using subtraction instead of addition avoids int overflow on a huge
+// declared width/height.
+bool rectWithinFrame(const QRect& rect, const QSize& frame_size)
+{
+    return rect.x() >= 0 && rect.y() >= 0 &&
+           rect.width() > 0 && rect.height() > 0 &&
+           rect.width() <= frame_size.width() - rect.x() &&
+           rect.height() <= frame_size.height() - rect.y();
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -56,7 +70,6 @@ YuvConverter::Result YuvConverter::convert(
     const SharedFrame::WriteAccess access = frame_.write();
     Frame& dst = access.get();
 
-    const QRect frame_rect(QPoint(0, 0), src.size());
     const int y_stride = src.planeStride(0);
 
     if (src.format() == VideoDecoder::YuvFormat::NV12)
@@ -65,7 +78,7 @@ YuvConverter::Result YuvConverter::convert(
 
         for (const QRect& rect : dirty_rects)
         {
-            if (!frame_rect.contains(rect))
+            if (!rectWithinFrame(rect, src.size()))
                 return Result::FAILED;
 
             const int y_offset = rect.y() * y_stride + rect.x();
@@ -84,7 +97,7 @@ YuvConverter::Result YuvConverter::convert(
 
         for (const QRect& rect : dirty_rects)
         {
-            if (!frame_rect.contains(rect))
+            if (!rectWithinFrame(rect, src.size()))
                 return Result::FAILED;
 
             const int y_offset = rect.y() * y_stride + rect.x();
