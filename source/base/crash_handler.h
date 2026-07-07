@@ -24,14 +24,16 @@
 // Initializes the symbolizer and installs the platform crash handler.
 // |dump_file_prefix| is used as the leading part of the minidump file name.
 // On Windows an unhandled SEH filter is set that writes a stack trace to the
-// log and produces a minidump file. On other platforms this is a no-op for now.
+// log and produces a minidump file. On Linux and macOS handlers for the fatal
+// signals are installed that write a crash report to the log and re-raise the
+// signal so the OS produces a core dump. On Android this is a no-op.
 void installCrashHandler(const QString& dump_file_prefix);
 
 // Provides the active log file native descriptor so the crash handler can append
 // crash information to it directly, bypassing CRT and user-space locking. The value
 // is platform-specific (see LoggingFile::nativeHandle): a Win32 HANDLE cast to qintptr
 // on Windows, a POSIX file descriptor elsewhere. Pass -1 to detach.
-// No-op on platforms where the crash handler is not yet implemented.
+// No-op on platforms where the crash handler is not implemented.
 void setCrashLogHandle(qintptr handle);
 
 // Returns a symbolized stack trace of the current call stack as a string.
