@@ -71,7 +71,17 @@ qint64 nextToken()
 QJniObject toJniByteArray(const QByteArray& bytes)
 {
     QJniEnvironment env;
+
     jbyteArray array = env->NewByteArray(bytes.size());
+    if (!array)
+    {
+        // A failed NewByteArray leaves a pending OutOfMemoryError, which would make every
+        // subsequent JNI call undefined behavior.
+        env.checkAndClearExceptions();
+        LOG(ERROR) << "NewByteArray failed for" << bytes.size() << "bytes";
+        return QJniObject();
+    }
+
     env->SetByteArrayRegion(array, 0, bytes.size(), reinterpret_cast<const jbyte*>(bytes.constData()));
     return QJniObject::fromLocalRef(array);
 }
@@ -249,6 +259,12 @@ std::optional<BiometricGate::Blob> BiometricGate::enroll(const SecureByteArray& 
         }
 
         QJniObject j_key = toJniByteArray(key.toByteArray());
+        if (!j_key.isValid())
+        {
+            finishPending(token, kResultFailed, QByteArray(), QByteArray());
+            return;
+        }
+
         QJniObject j_title = QJniObject::fromString(prompt.title);
         QJniObject j_negative = QJniObject::fromString(prompt.negative_text);
 
@@ -282,6 +298,12 @@ BiometricGate::UnlockResult BiometricGate::unlock(const Blob& blob, const Prompt
 
         QJniObject j_iv = toJniByteArray(blob.iv);
         QJniObject j_ciphertext = toJniByteArray(blob.ciphertext);
+        if (!j_iv.isValid() || !j_ciphertext.isValid())
+        {
+            finishPending(token, kResultFailed, QByteArray(), QByteArray());
+            return;
+        }
+
         QJniObject j_title = QJniObject::fromString(prompt.title);
         QJniObject j_negative = QJniObject::fromString(prompt.negative_text);
 
