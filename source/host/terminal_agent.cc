@@ -20,6 +20,8 @@
 
 #include <QCoreApplication>
 
+#include <algorithm>
+
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/codec/zstd_stream_compressor.h"
@@ -31,6 +33,14 @@ namespace {
 
 const int kDefaultColumns = 80;
 const int kDefaultRows = 24;
+
+// The client-supplied terminal size is untrusted. Clamp it to a sane range before it reaches the
+// pseudo console (cast to SHORT) or forkpty, so out-of-range values cannot produce a degenerate or
+// invalid console.
+const int kMinColumns = 1;
+const int kMaxColumns = 2000;
+const int kMinRows = 1;
+const int kMaxRows = 2000;
 
 } // namespace
 
@@ -110,8 +120,12 @@ void TerminalAgent::onIpcMessageReceived(
 
     if (!process_started_)
     {
-        const int columns = message.has_resize() ? message.resize().columns() : kDefaultColumns;
-        const int rows = message.has_resize() ? message.resize().rows() : kDefaultRows;
+        const int columns = std::clamp(
+            message.has_resize() ? static_cast<int>(message.resize().columns()) : kDefaultColumns,
+            kMinColumns, kMaxColumns);
+        const int rows = std::clamp(
+            message.has_resize() ? static_cast<int>(message.resize().rows()) : kDefaultRows,
+            kMinRows, kMaxRows);
 
         if (!terminal_process_->start(columns, rows))
         {
@@ -124,7 +138,9 @@ void TerminalAgent::onIpcMessageReceived(
     }
     else if (message.has_resize())
     {
-        terminal_process_->resize(message.resize().columns(), message.resize().rows());
+        const int columns = std::clamp(static_cast<int>(message.resize().columns()), kMinColumns, kMaxColumns);
+        const int rows = std::clamp(static_cast<int>(message.resize().rows()), kMinRows, kMaxRows);
+        terminal_process_->resize(columns, rows);
     }
 
     if (message.has_data())

@@ -44,6 +44,7 @@ struct ProcessRaw
     qint64 mem_private_working_set = 0;
     qint64 mem_peak_working_set = 0;
     quint32 thread_count = 0;
+    qint64 start_time = 0;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -122,6 +123,11 @@ bool readProcessStat(ProcessMonitor::ProcessId pid, ProcessRaw* raw)
     // fields[k] is stat field (3 + k): session = field 6, utime = field 14, stime = field 15.
     raw->session_id = fields[3].toUInt();
     raw->cpu_time = fields[11].toLongLong() + fields[12].toLongLong();
+
+    // starttime is stat field 22 (fields[19]); captured as an identity token to detect PID reuse.
+    if (fields.size() > 19)
+        raw->start_time = fields[19].toLongLong();
+
     return true;
 }
 
@@ -242,6 +248,7 @@ const ProcessMonitor::ProcessMap& ProcessMonitorLinux::processes(bool reset_cach
         entry.mem_peak_working_set    = raw.mem_peak_working_set;
         entry.thread_count            = raw.thread_count;
         entry.cpu_time                = raw.cpu_time;
+        entry.start_time              = raw.start_time;
 
         entry.process_name_changed = false;
         entry.user_name_changed = false;
@@ -338,7 +345,8 @@ int ProcessMonitorLinux::calcMemoryUsage()
 //--------------------------------------------------------------------------------------------------
 bool ProcessMonitorLinux::endProcess(ProcessId process_id)
 {
-    if (!table_.contains(process_id))
+    const auto it = table_.constFind(process_id);
+    if (it == table_.constEnd())
     {
         LOG(ERROR) << "Process not found in table";
         return false;
@@ -347,6 +355,16 @@ bool ProcessMonitorLinux::endProcess(ProcessId process_id)
     if (process_id <= 1)
     {
         LOG(ERROR) << "Unable to end system process";
+        return false;
+    }
+
+    // Guard against PID reuse: the pid comes from a snapshot the client saw earlier, and the process
+    // may have exited with the pid recycled by an unrelated (possibly system) process since. Re-read
+    // the live start time and refuse to kill if it no longer matches the snapshot's identity token.
+    ProcessRaw live;
+    if (!readProcessStat(process_id, &live) || live.start_time != it.value().start_time)
+    {
+        LOG(ERROR) << "Process identity mismatch (possible PID reuse); not terminating";
         return false;
     }
 

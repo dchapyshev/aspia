@@ -176,7 +176,7 @@ QString userNameByHandle(HANDLE process)
         }
 
         token_user_buffer = std::make_unique<quint8[]>(length);
-        memset(token_user_buffer.get(), 0, sizeof(length));
+        memset(token_user_buffer.get(), 0, length);
 
         token_user = reinterpret_cast<TOKEN_USER*>(token_user_buffer.get());
     }
@@ -253,6 +253,7 @@ void updateProcess(ProcessMonitor::ProcessEntry* entry, const OWN_SYSTEM_PROCESS
     entry->mem_working_set         = info.WorkingSetSize;
     entry->mem_peak_working_set    = info.PeakWorkingSetSize;
     entry->thread_count            = info.NumberOfThreads;
+    entry->start_time              = info.CreateTime;
 
     entry->process_name_changed = false;
     entry->user_name_changed = false;
@@ -454,7 +455,7 @@ bool ProcessMonitorWin::endProcess(ProcessId process_id)
     }
 
     static const char* kBlackList[] =
-        { "services.exe", "lsass.exe", "smss.exe", "winlogon.exe", "csrss.exe" };
+        { "services.exe", "lsass.exe", "smss.exe", "winlogon.exe", "wininit.exe", "csrss.exe" };
 
     for (size_t i = 0; i < std::size(kBlackList); ++i)
     {
@@ -467,10 +468,33 @@ bool ProcessMonitorWin::endProcess(ProcessId process_id)
 
     ScopedPrivilege debug_privilege(SE_DEBUG_NAME);
 
-    ScopedHandle process(OpenProcess(PROCESS_TERMINATE, FALSE, process_id));
+    ScopedHandle process(OpenProcess(PROCESS_TERMINATE | PROCESS_QUERY_LIMITED_INFORMATION, FALSE, process_id));
     if (!process.isValid())
     {
         PLOG(ERROR) << "OpenProcess failed";
+        return false;
+    }
+
+    // Guard against PID reuse: the pid comes from a snapshot the client saw earlier, and the process
+    // may have exited with the pid recycled by an unrelated (possibly system) process since. Compare
+    // the live creation time with the snapshot's identity token and refuse to kill on mismatch.
+    FILETIME create_time;
+    FILETIME exit_time;
+    FILETIME kernel_time;
+    FILETIME user_time;
+    if (!GetProcessTimes(process, &create_time, &exit_time, &kernel_time, &user_time))
+    {
+        PLOG(ERROR) << "GetProcessTimes failed";
+        return false;
+    }
+
+    ULARGE_INTEGER live_create_time;
+    live_create_time.LowPart = create_time.dwLowDateTime;
+    live_create_time.HighPart = create_time.dwHighDateTime;
+
+    if (static_cast<qint64>(live_create_time.QuadPart) != result.value().start_time)
+    {
+        LOG(ERROR) << "Process identity mismatch (possible PID reuse); not terminating";
         return false;
     }
 

@@ -48,6 +48,11 @@ public:
         qint64 mem_peak_working_set = 0;
         qint64 mem_working_set_delta = 0;
         quint32 thread_count = 0;
+
+        // Identity token (process start/creation time in platform-specific units), compared by
+        // endProcess() with the live value to detect PID reuse between the snapshot and the kill.
+        // Not sent to the client.
+        qint64 start_time = 0;
     };
 
     using ProcessId = quint32;

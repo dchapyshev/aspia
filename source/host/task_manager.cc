@@ -223,7 +223,6 @@ void TaskManager::sendProcessList(quint32 flags)
         if (process_info.file_path_changed)
             item->set_file_path(process_info.file_path.toStdString());
 
-        item->set_session_id(process_info.session_id);
         item->set_process_id(process_id);
         item->set_session_id(process_info.session_id);
         item->set_cpu_usage(process_info.cpu_ratio);

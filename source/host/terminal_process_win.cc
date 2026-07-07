@@ -228,6 +228,9 @@ bool TerminalProcessWin::start(int columns, int rows)
     if (error_code)
     {
         LOG(ERROR) << "Unable to assign output handle:" << error_code;
+        // The shell was already spawned; terminate it so it is not left orphaned with no reader
+        // attached to its output.
+        TerminateProcess(process_handle, 0);
         return false;
     }
 
