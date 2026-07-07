@@ -20,6 +20,8 @@
 
 #include <QThread>
 
+#include <limits>
+
 #include "base/numeric_utils.h"
 #include "base/power_controller.h"
 #include "base/serialization.h"
@@ -32,6 +34,13 @@
 #include "proto/desktop_power.h"
 #include "proto/desktop_screen.h"
 #include "proto/desktop_video.h"
+
+namespace {
+
+// Upper bound for a client-supplied preferred screen dimension.
+const int kMaxScreenSize = std::numeric_limits<qint16>::max();
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 DesktopAgentClient::DesktopAgentClient(QObject* parent)
@@ -289,8 +298,6 @@ void DesktopAgentClient::sendSessionMessage(quint8 net_channel_id, const QByteAr
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::readPreferredSize(const proto::video::PreferredSize& size)
 {
-    static const int kMaxScreenSize = std::numeric_limits<qint16>::max();
-
     if (size.width() < 0 || size.width() > kMaxScreenSize ||
         size.height() < 0 || size.height() > kMaxScreenSize)
     {
@@ -360,7 +367,8 @@ void DesktopAgentClient::readConfig(const proto::control::Config& config)
     // tab. Apply it once, before the first resize event arrives. Later PreferredSize messages
     // (window resize) take over, so an already known size must not be overwritten.
     if (preferred_size_.isEmpty() && config.has_preferred_size() &&
-        config.preferred_size().width() > 0 && config.preferred_size().height() > 0)
+        config.preferred_size().width() > 0 && config.preferred_size().width() <= kMaxScreenSize &&
+        config.preferred_size().height() > 0 && config.preferred_size().height() <= kMaxScreenSize)
     {
         preferred_size_.setWidth(config.preferred_size().width());
         preferred_size_.setHeight(config.preferred_size().height());

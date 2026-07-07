@@ -177,6 +177,13 @@ void UserSessionAgent::onIpcDisconnected()
 void UserSessionAgent::onIpcErrorOccurred()
 {
     LOG(INFO) << "Unable to connect to IPC server";
+
+    if (ipc_channel_)
+    {
+        ipc_channel_->disconnect(this);
+        ipc_channel_.reset();
+    }
+
     emit sig_statusChanged(Status::SERVICE_NOT_AVAILABLE);
 }
 
