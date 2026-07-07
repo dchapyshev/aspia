@@ -441,3 +441,133 @@ TEST(xml_settings_test, roundtrip_unicode_value)
     ASSERT_TRUE(roundtrip(original, restored));
     EXPECT_EQ(restored["text"].toString(), QString::fromUtf8(u8"Привет мир"));
 }
+
+TEST(xml_settings_test, roundtrip_string_with_control_chars)
+{
+    QString value = QString("abc") + QChar(0x01) + QChar(0x1F) + "def";
+
+    QSettings::SettingsMap original;
+    original["ctrl"] = QVariant(value);
+
+    QSettings::SettingsMap restored;
+    ASSERT_TRUE(roundtrip(original, restored));
+    EXPECT_EQ(restored["ctrl"].toString(), value);
+}
+
+TEST(xml_settings_test, roundtrip_string_with_crlf)
+{
+    // Carriage returns in plain XML character data would be normalized to line feeds on read.
+    QString value = "line1\r\nline2\rline3\nline4";
+
+    QSettings::SettingsMap original;
+    original["multiline"] = QVariant(value);
+
+    QSettings::SettingsMap restored;
+    ASSERT_TRUE(roundtrip(original, restored));
+    EXPECT_EQ(restored["multiline"].toString(), value);
+}
+
+TEST(xml_settings_test, roundtrip_string_with_nul)
+{
+    QString value = QString("a") + QChar(0x00) + "b";
+
+    QSettings::SettingsMap original;
+    original["nul"] = QVariant(value);
+
+    QSettings::SettingsMap restored;
+    ASSERT_TRUE(roundtrip(original, restored));
+    EXPECT_EQ(restored["nul"].toString(), value);
+}
+
+// ============================================================================
+// Empty values must keep their keys
+// ============================================================================
+
+TEST(xml_settings_test, roundtrip_empty_string_keeps_key)
+{
+    QSettings::SettingsMap original;
+    original["empty"] = QVariant(QString());
+
+    QSettings::SettingsMap restored;
+    ASSERT_TRUE(roundtrip(original, restored));
+    EXPECT_TRUE(restored.contains("empty"));
+    EXPECT_TRUE(restored["empty"].toString().isEmpty());
+}
+
+TEST(xml_settings_test, roundtrip_empty_byte_array_keeps_key)
+{
+    QSettings::SettingsMap original;
+    original["empty"] = QVariant(QByteArray());
+
+    QSettings::SettingsMap restored;
+    ASSERT_TRUE(roundtrip(original, restored));
+    EXPECT_TRUE(restored.contains("empty"));
+    EXPECT_TRUE(restored["empty"].toByteArray().isEmpty());
+}
+
+TEST(xml_settings_test, roundtrip_empty_string_in_group_keeps_key)
+{
+    QSettings::SettingsMap original;
+    original["group/empty"] = QVariant(QString());
+    original["group/other"] = QVariant(QString("x"));
+
+    QSettings::SettingsMap restored;
+    ASSERT_TRUE(roundtrip(original, restored));
+    EXPECT_TRUE(restored.contains("group/empty"));
+    EXPECT_EQ(restored["group/other"].toString(), "x");
+}
+
+// ============================================================================
+// A key that is also a group (parent value with child values)
+// ============================================================================
+
+TEST(xml_settings_test, roundtrip_value_with_subkey)
+{
+    QSettings::SettingsMap original;
+    original["a"] = QVariant(QString("parent"));
+    original["a/b"] = QVariant(QString("child"));
+
+    QSettings::SettingsMap restored;
+    ASSERT_TRUE(roundtrip(original, restored));
+    EXPECT_EQ(restored["a"].toString(), "parent");
+    EXPECT_EQ(restored["a/b"].toString(), "child");
+}
+
+// ============================================================================
+// Large values (character data may be delivered in several chunks)
+// ============================================================================
+
+TEST(xml_settings_test, roundtrip_large_byte_array)
+{
+    QByteArray data;
+    data.resize(256 * 1024);
+    for (int i = 0; i < data.size(); ++i)
+        data[i] = static_cast<char>(i * 31 + i / 251);
+
+    QSettings::SettingsMap original;
+    original["blob"] = QVariant(data);
+
+    QSettings::SettingsMap restored;
+    ASSERT_TRUE(roundtrip(original, restored));
+    EXPECT_EQ(restored["blob"].toByteArray(), data);
+}
+
+// ============================================================================
+// writeFunc: degenerate keys must not corrupt the document
+// ============================================================================
+
+TEST(xml_settings_test, write_skips_duplicate_normalized_keys)
+{
+    // "a//b" and "a/b" normalize to the same element path; the writer must keep the document
+    // well-formed and the reader must still see the value.
+    QSettings::SettingsMap original;
+    original["a//b"] = QVariant(QString("first"));
+    original["a/b"] = QVariant(QString("second"));
+
+    QByteArray xml;
+    ASSERT_TRUE(writeMap(original, xml));
+
+    QSettings::SettingsMap restored;
+    ASSERT_TRUE(readMap(xml, restored));
+    EXPECT_EQ(restored["a/b"].toString(), "second");
+}

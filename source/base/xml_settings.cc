@@ -39,6 +39,54 @@ const QString kPointType = "point";
 const QString kVariantType = "variant";
 
 //--------------------------------------------------------------------------------------------------
+// Returns true when the string can be stored as XML character data as-is: it consists of characters
+// permitted by XML 1.0 and contains no carriage returns (the reader would silently normalize those
+// to line feeds). Everything else goes through the binary variant encoding.
+bool isXmlSafeString(const QString& value)
+{
+    for (int i = 0; i < value.size(); ++i)
+    {
+        const char16_t c = value.at(i).unicode();
+
+        if (c < 0x20)
+        {
+            if (c != 0x09 && c != 0x0A)
+                return false;
+        }
+        else if (c == 0xFFFE || c == 0xFFFF)
+        {
+            return false;
+        }
+        else if (QChar::isHighSurrogate(c))
+        {
+            if (i + 1 >= value.size() || !value.at(i + 1).isLowSurrogate())
+                return false;
+            ++i;
+        }
+        else if (QChar::isLowSurrogate(c))
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString variantToHex(const QVariant& value)
+{
+    QByteArray buffer;
+
+    {
+        QDataStream stream(&buffer, QIODevice::WriteOnly);
+        stream.setVersion(QDataStream::Qt_6_10);
+        stream << value;
+    }
+
+    return buffer.toHex();
+}
+
+//--------------------------------------------------------------------------------------------------
 QStringView variantToType(const QVariant& value)
 {
     QStringView result;
@@ -51,9 +99,12 @@ QStringView variantToType(const QVariant& value)
         case QMetaType::LongLong:
         case QMetaType::ULongLong:
         case QMetaType::Double:
-        case QMetaType::QString:
         case QMetaType::QKeySequence:
             result = kEmptyString;
+            break;
+
+        case QMetaType::QString:
+            result = isXmlSafeString(value.toString()) ? kEmptyString : kVariantType;
             break;
 
         case QMetaType::QByteArray:
@@ -97,10 +148,18 @@ QString variantToString(const QVariant& value)
         case QMetaType::LongLong:
         case QMetaType::ULongLong:
         case QMetaType::Double:
-        case QMetaType::QString:
         case QMetaType::QKeySequence:
             result = value.toString();
             break;
+
+        case QMetaType::QString:
+        {
+            QString str = value.toString();
+            // Strings with characters XML cannot carry are stored in the binary variant encoding;
+            // writing them as character data would make the whole file unwritable or unreadable.
+            result = isXmlSafeString(str) ? str : variantToHex(value);
+        }
+        break;
 
         case QMetaType::QByteArray:
             result = value.toByteArray().toHex();
@@ -132,18 +191,8 @@ QString variantToString(const QVariant& value)
             break;
 
         default:
-        {
-            QByteArray buffer;
-
-            {
-                QDataStream stream(&buffer, QIODevice::WriteOnly);
-                stream.setVersion(QDataStream::Qt_6_10);
-                stream << value;
-            }
-
-            result = buffer.toHex();
-        }
-        break;
+            result = variantToHex(value);
+            break;
     }
 
     return result;
@@ -210,9 +259,19 @@ QSettings::Format XmlSettings::format()
 // static
 bool XmlSettings::readFunc(QIODevice& device, QSettings::SettingsMap& map)
 {
+    // One entry per currently open element. The value is inserted when its element closes, so empty
+    // values keep their keys, character data split into several chunks is accumulated, and every
+    // element uses its own type attribute.
+    struct Level
+    {
+        QString name;
+        QString type;
+        QString text;
+        bool has_children = false;
+    };
+
     QXmlStreamReader xml(&device);
-    QStringList segments;
-    QString type;
+    QList<Level> levels;
 
     bool settings_found = false;
 
@@ -222,6 +281,7 @@ bool XmlSettings::readFunc(QIODevice& device, QSettings::SettingsMap& map)
         {
             case QXmlStreamReader::StartElement:
             {
+                // The root wrapper does not form a key segment.
                 if (xml.name() == kSettingsElement)
                 {
                     settings_found = true;
@@ -237,36 +297,69 @@ bool XmlSettings::readFunc(QIODevice& device, QSettings::SettingsMap& map)
                 if (name.isEmpty())
                     return false;
 
-                segments.emplace_back(name);
-                type = attributes.value(kTypeAttribute).toString();
+                if (!levels.isEmpty())
+                    levels.last().has_children = true;
+
+                Level level;
+                level.name = std::move(name);
+                level.type = attributes.value(kTypeAttribute).toString();
+                levels.append(std::move(level));
             }
             break;
 
             case QXmlStreamReader::EndElement:
             {
-                if (!segments.isEmpty())
-                    segments.removeLast();
+                // The wrapper did not push a level, so it must not pop one either.
+                if (xml.name() == kSettingsElement)
+                    continue;
+
+                if (levels.isEmpty())
+                    continue;
+
+                // A closing leaf always produces its key, even with an empty value; a group only
+                // when it carried its own character data next to the child elements.
+                Level level = levels.takeLast();
+
+                // The auto-formatting indent written before a child element ends up as trailing
+                // whitespace in the parent's own character data; it is formatting, not the value.
+                if (level.has_children)
+                {
+                    while (!level.text.isEmpty() && level.text.back().isSpace())
+                        level.text.chop(1);
+                }
+
+                if (!level.has_children || !level.text.isEmpty())
+                {
+                    QString key;
+
+                    for (const Level& parent : std::as_const(levels))
+                    {
+                        key += parent.name;
+                        key += QLatin1Char('/');
+                    }
+                    key += level.name;
+
+                    map[key] = stringToVariant(level.text, level.type);
+                }
             }
             break;
 
             case QXmlStreamReader::Characters:
             {
-                if (xml.isWhitespace())
-                    continue;
-
-                QString key;
-
-                for (int i = 0; i < segments.size(); ++i)
+                if (levels.isEmpty())
                 {
-                    if (i != 0)
-                        key += QLatin1Char('/');
-                    key += segments.at(i);
+                    // Only formatting whitespace may appear outside of the value elements.
+                    if (!xml.isWhitespace())
+                        return false;
+                    continue;
                 }
 
-                if (key.isEmpty())
-                    return false;
+                // Formatting whitespace between child elements is not data; whitespace arriving
+                // after real character data is part of a split text node and is kept.
+                if (xml.isWhitespace() && levels.last().text.isEmpty())
+                    continue;
 
-                map[key] = stringToVariant(xml.text().toString(), type);
+                levels.last().text += xml.text();
             }
             break;
 
@@ -296,8 +389,21 @@ bool XmlSettings::writeFunc(QIODevice& device, const QSettings::SettingsMap& map
         const QVariant& value = it.value();
         int count = 0;
 
-        while (count < oldSegments.size() && segments.at(count) == oldSegments.at(count))
+        // An empty key has no element to carry the value.
+        if (segments.isEmpty())
+            continue;
+
+        while (count < oldSegments.size() && count < segments.size() &&
+               segments.at(count) == oldSegments.at(count))
+        {
             ++count;
+        }
+
+        // A key that collapses into the previous one after normalization (for example a stray "//")
+        // would leave no element to open; write it as a sibling leaf instead of corrupting the
+        // currently open element.
+        if (count == segments.size())
+            --count;
 
         for (int i = oldSegments.size() - 1; i >= count; --i)
             xml.writeEndElement();

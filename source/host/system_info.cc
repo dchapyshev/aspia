@@ -622,6 +622,8 @@ void fillBios(proto::system_info::SystemInfo* system_info)
             case SMBIOS_TABLE_TYPE_BIOS:
             {
                 SmbiosBios bios_table(table);
+                if (!bios_table.isValid())
+                    continue;
 
                 proto::system_info::Bios* bios = system_info->mutable_bios();
                 bios->set_vendor(bios_table.vendor().toStdString());
