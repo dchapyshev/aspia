@@ -25,8 +25,6 @@ collect_sources(SOURCE_BASE_LINUX
     session_dbus.h
     session_util.cc
     session_util.h
-    wayland_output_layout.cc
-    wayland_output_layout.h
     x11_headers.h
     x_server_clipboard.cc
     x_server_clipboard.h)

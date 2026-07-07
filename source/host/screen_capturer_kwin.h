@@ -30,8 +30,8 @@
 #include <sys/types.h>
 
 #include "base/desktop/frame.h"
-#include "base/linux/wayland_output_layout.h"
 #include "host/screen_capturer.h"
+#include "host/linux/wayland_output_layout.h"
 
 class Differ;
 class EglDmaBuf;

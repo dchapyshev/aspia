@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_LINUX_WAYLAND_OUTPUT_LAYOUT_H
-#define BASE_LINUX_WAYLAND_OUTPUT_LAYOUT_H
+#ifndef HOST_LINUX_WAYLAND_OUTPUT_LAYOUT_H
+#define HOST_LINUX_WAYLAND_OUTPUT_LAYOUT_H
 
 #include <QList>
 #include <QRect>
@@ -45,4 +45,4 @@ public:
     static QList<Output> query(const QString& socket_path);
 };
 
-#endif // BASE_LINUX_WAYLAND_OUTPUT_LAYOUT_H
+#endif // HOST_LINUX_WAYLAND_OUTPUT_LAYOUT_H

@@ -41,9 +41,9 @@
 #include "base/desktop/frame_aligned.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/linux/libsystemd.h"
-#include "base/linux/wayland_output_layout.h"
 #include "host/linux/egl_dmabuf.h"
 #include "host/linux/libdrm.h"
+#include "host/linux/wayland_output_layout.h"
 
 namespace {
 

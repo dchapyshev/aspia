@@ -213,13 +213,6 @@ endif()
 if (LINUX)
     set(BASE_PLATFORM_LIBS stdc++fs ${CMAKE_DL_LIBS})
 
-    # libwayland-client is linked (the vendored xdg-output stubs call wl_proxy_* directly). It comes
-    # from the static vcpkg port; list the static archive name first so find_library does not pick the
-    # system libwayland-client.so of the build host. The xdg-output client stubs come from the
-    # third_party/wayland-protocols static library.
-    find_library(WAYLAND_CLIENT_LIB NAMES libwayland-client.a wayland-client REQUIRED)
-    list(APPEND BASE_PLATFORM_LIBS ${WAYLAND_CLIENT_LIB} wayland_protocols)
-
     # Xlib and the extensions (DAMAGE/SHM/XFIXES/RANDR/XTEST) are linked directly from the static vcpkg
     # ports (base/linux/libx11.cc etc. call them straight, no more dlopen). The same static archives back
     # Qt's xcb platform plugin, so the linker pulls one copy and there is no duplicate-libX11 state.

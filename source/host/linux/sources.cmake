@@ -34,6 +34,8 @@ collect_sources(SOURCE_HOST_CORE_LINUX
     wayland_compositor_source.cc
     wayland_compositor_source.h
     wayland_input_target.h
+    wayland_output_layout.cc
+    wayland_output_layout.h
     wayland_portal.cc
     wayland_portal.h
     x_atom_cache.cc
