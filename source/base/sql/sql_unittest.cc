@@ -24,6 +24,7 @@
 
 #include <QByteArray>
 #include <QString>
+#include <QTemporaryDir>
 
 namespace {
 
@@ -124,6 +125,27 @@ TEST(SqliteTest, BlobFromStringView)
 }
 
 //--------------------------------------------------------------------------------------------------
+TEST(SqliteTest, BlobFromNullPointer)
+{
+    SqlDatabase db;
+    ASSERT_TRUE(db.open(":memory:"));
+    ASSERT_TRUE(createSchema(db));
+
+    // A null pointer must bind an empty blob, not NULL - the NOT NULL column would reject the
+    // row otherwise.
+    SqlQuery insert(db, "INSERT INTO t (name, data, value) VALUES (?, ?, ?)");
+    ASSERT_TRUE(insert.bindText(1, std::string_view()));
+    ASSERT_TRUE(insert.bindBlob(2, nullptr, 0));
+    ASSERT_TRUE(insert.bindInt64(3, 0));
+    ASSERT_TRUE(insert.exec());
+
+    SqlQuery select(db, "SELECT data FROM t");
+    ASSERT_TRUE(select.next());
+    EXPECT_FALSE(select.columnIsNull(0));
+    EXPECT_TRUE(select.columnBlobView(0).empty());
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST(SqliteTest, ResetReusesStatement)
 {
     SqlDatabase db;
@@ -186,6 +208,47 @@ TEST(SqliteTest, TransactionCommitPersists)
     SqlQuery count(db, "SELECT COUNT(*) FROM t");
     ASSERT_TRUE(count.next());
     EXPECT_EQ(count.columnInt64(0), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SqliteTest, FailedCommitDoesNotWedgeConnection)
+{
+    QTemporaryDir temp_dir;
+    ASSERT_TRUE(temp_dir.isValid());
+
+    SqlDatabase writer;
+    ASSERT_TRUE(writer.open(temp_dir.filePath("test.db")));
+    ASSERT_TRUE(createSchema(writer));
+
+    SqlDatabase reader;
+    ASSERT_TRUE(reader.open(temp_dir.filePath("test.db")));
+
+    // The reader holds a shared lock for the duration of its transaction, so the writer's COMMIT
+    // (which needs an exclusive lock) fails with SQLITE_BUSY and leaves the transaction open.
+    ASSERT_TRUE(reader.beginTransaction());
+    {
+        SqlQuery select(reader, "SELECT COUNT(*) FROM t");
+        ASSERT_TRUE(select.next());
+    }
+
+    {
+        SqlTransaction transaction(writer);
+        ASSERT_TRUE(transaction.begin());
+
+        SqlQuery insert(writer, "INSERT INTO t (name, data, value) VALUES (?, ?, ?)");
+        insert.addText(QString("wedge")).addBlob(QByteArray()).addInt64(1);
+        ASSERT_TRUE(insert.exec());
+
+        EXPECT_FALSE(transaction.commit());
+    }
+
+    ASSERT_TRUE(reader.rollbackTransaction());
+
+    // A failed commit must not leave the connection inside the old transaction: the next
+    // transaction on it must begin and commit normally.
+    SqlTransaction transaction(writer);
+    EXPECT_TRUE(transaction.begin());
+    EXPECT_TRUE(transaction.commit());
 }
 
 //--------------------------------------------------------------------------------------------------
