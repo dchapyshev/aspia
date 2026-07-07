@@ -678,6 +678,7 @@ void ClientAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& requ
                     {
                         CLOG(ERROR) << "Workspace" << new_id
                                     << "created but host assignments failed:" << error_code;
+                        result->set_error_code(error_code);
                     }
                     else
                     {
@@ -726,6 +727,7 @@ void ClientAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& requ
                 {
                     CLOG(ERROR) << "Workspace" << entry_id
                                 << "modified but host assignments failed:" << error_code;
+                    result->set_error_code(error_code);
                 }
                 else
                 {
