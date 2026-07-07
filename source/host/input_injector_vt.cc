@@ -188,8 +188,12 @@ void InputInjectorVt::injectMouseEvent(const proto::input::MouseEvent& event)
     if (!session->consoleSize(&cols, &rows) || screen_size_.width() <= 0 || screen_size_.height() <= 0)
         return;
 
-    const int col = std::clamp(event.x() * cols / screen_size_.width(), 0, cols - 1);
-    const int row = std::clamp(event.y() * rows / screen_size_.height(), 0, rows - 1);
+    // The client coordinates are untrusted; compute in 64-bit so the intermediate multiply cannot
+    // overflow a signed int before the clamp.
+    const int col = static_cast<int>(std::clamp<qint64>(
+        static_cast<qint64>(event.x()) * cols / screen_size_.width(), 0, cols - 1));
+    const int row = static_cast<int>(std::clamp<qint64>(
+        static_cast<qint64>(event.y()) * rows / screen_size_.height(), 0, rows - 1));
 
     const quint32 mask = event.mask();
 

@@ -196,6 +196,12 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
 //--------------------------------------------------------------------------------------------------
 void TaskManager::sendProcessList(quint32 flags)
 {
+    if (!process_monitor_)
+    {
+        LOG(ERROR) << "Process monitor is not available on this platform";
+        return;
+    }
+
     proto::task_manager::HostToClient message;
 
     bool reset_cache = false;
