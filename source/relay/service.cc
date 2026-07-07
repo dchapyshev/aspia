@@ -136,6 +136,16 @@ void Service::onTcpConnected()
 
     // Now the session will receive incoming messages.
     tcp_channel_->setPaused(false);
+
+    // Guard against unsigned underflow: if the active session count somehow reaches or exceeds the
+    // configured maximum, there is no free capacity and no keys should be requested.
+    if (session_count_ < 0 || static_cast<quint32>(session_count_) >= max_peer_count_)
+    {
+        LOG(INFO) << "No free capacity for new keys (active:" << session_count_
+                  << "max:" << max_peer_count_ << ")";
+        return;
+    }
+
     sendKeyPool(max_peer_count_ - static_cast<quint32>(session_count_));
 }
 
