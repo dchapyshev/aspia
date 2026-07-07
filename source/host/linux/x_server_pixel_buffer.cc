@@ -151,7 +151,7 @@ void slowBlit(XImage* x_image, uint8_t* src_pos, const QRect& rect, Frame* frame
     int width = rect.width(), height = rect.height();
 
     uint32_t red_mask = x_image->red_mask;
-    uint32_t green_mask = x_image->red_mask;
+    uint32_t green_mask = x_image->green_mask;
     uint32_t blue_mask = x_image->blue_mask;
 
     uint32_t red_shift = maskToShift(red_mask);
