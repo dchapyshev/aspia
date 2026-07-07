@@ -421,6 +421,9 @@ std::string_view Database::modifyUser(
         return proto::router::kErrorInvalidData;
     }
 
+    if (password_changed)
+        *password_changed = false;
+
     SqlTransaction transaction(db_);
     if (!transaction.begin())
     {
@@ -432,6 +435,7 @@ std::string_view Database::modifyUser(
     // which must invalidate every device token and re-wrap the workspace keys.
     QByteArray old_salt;
     QByteArray old_verifier;
+    bool user_found = false;
     {
         SqlQuery select(db_, "SELECT salt, verifier FROM users WHERE id=?");
         select.addInt64(user.entry_id);
@@ -444,10 +448,14 @@ std::string_view Database::modifyUser(
 
         if (select.next())
         {
+            user_found = true;
             old_salt = select.columnBlob(0);
             old_verifier = select.columnBlob(1);
         }
     }
+
+    if (!user_found)
+        return proto::router::kErrorNotFound;
 
     const char kSql[] =
         "UPDATE users SET name=?, \"group\"=?, salt=?, verifier=?, sessions=?, flags=?, "
@@ -540,12 +548,18 @@ std::string_view Database::modifyUser(
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::removeUser(qint64 entry_id)
+std::string_view Database::removeUser(qint64 entry_id)
 {
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return false;
+        return proto::router::kErrorInternalError;
+    }
+
+    if (entry_id <= 0)
+    {
+        LOG(ERROR) << "Invalid user id:" << entry_id;
+        return proto::router::kErrorInvalidData;
     }
 
     SqlQuery query(db_, "DELETE FROM users WHERE id=?");
@@ -554,10 +568,13 @@ bool Database::removeUser(qint64 entry_id)
     if (!query.exec())
     {
         LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-        return false;
+        return proto::router::kErrorInternalError;
     }
 
-    return true;
+    if (db_.changes() == 0)
+        return proto::router::kErrorNotFound;
+
+    return proto::router::kErrorOk;
 }
 
 //--------------------------------------------------------------------------------------------------

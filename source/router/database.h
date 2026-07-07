@@ -93,7 +93,7 @@ public:
     std::string_view modifyUser(
         const RouterUser& user, const std::unordered_map<qint64, QByteArray>& wrapped_keys = {},
         bool* password_changed = nullptr);
-    bool removeUser(qint64 entry_id);
+    std::string_view removeUser(qint64 entry_id);
     RouterUser findUser(const QString& username) const;
     RouterUser findUser(qint64 entry_id) const;
 

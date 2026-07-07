@@ -859,10 +859,11 @@ std::string ClientAdmin::deleteUser(const proto::router::User& user)
 
     CLOG(INFO) << "User remove request:" << entry_id;
 
-    if (!database.removeUser(entry_id))
+    const std::string_view error_code = database.removeUser(entry_id);
+    if (error_code != proto::router::kErrorOk)
     {
-        CLOG(ERROR) << "removeUser failed";
-        return proto::router::kErrorInternalError;
+        CLOG(ERROR) << "removeUser failed:" << error_code;
+        return error_code;
     }
 
     Service::instance()->notifyChanged(Service::NOTIFY_USERS);

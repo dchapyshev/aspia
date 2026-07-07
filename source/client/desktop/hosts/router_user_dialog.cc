@@ -186,6 +186,8 @@ void RouterUserDialog::onUserResultReceived(const proto::router::UserResult& res
         message = QT_TR_NOOP("Invalid data was passed.");
     else if (error_code == proto::router::kErrorAlreadyExists)
         message = QT_TR_NOOP("A user with the specified name already exists.");
+    else if (error_code == proto::router::kErrorNotFound)
+        message = QT_TR_NOOP("User not found. The list may be out of date.");
     else
         message = QT_TR_NOOP("Unknown error type.");
 
