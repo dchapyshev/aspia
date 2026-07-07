@@ -59,9 +59,9 @@ PendingSession::PendingSession(asio::ip::tcp::socket&& socket, QObject* parent)
             address_ = QString::fromLocal8Bit(address.c_str(), static_cast<qint64>(address.size()));
         }
     }
-    catch (const std::error_code& error_code)
+    catch (const std::exception& e)
     {
-        CLOG(ERROR) << "Unable to get address for pending session:" << error_code;
+        CLOG(ERROR) << "Unable to get address for pending session:" << e.what();
     }
 }
 

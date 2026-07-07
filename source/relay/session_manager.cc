@@ -105,9 +105,9 @@ QString peerAddress(const asio::ip::tcp::socket& socket)
             return QString::fromLocal8Bit(address.c_str(), static_cast<int>(address.size()));
         }
     }
-    catch (const std::error_code& error_code)
+    catch (const std::exception& e)
     {
-        LOG(ERROR) << "Unable to get address for pending session:" << error_code;
+        LOG(ERROR) << "Unable to get address for pending session:" << e.what();
     }
 
     return QString();
@@ -172,7 +172,7 @@ bool SessionManager::start()
     LOG(INFO) << "Statistics enabled:" << settings.isStatisticsEnabled();
     LOG(INFO) << "Statistics interval:" << settings.statisticsInterval().count();
 
-    qint16 port = settings.peerPort();
+    quint16 port = settings.peerPort();
     if (port == 0)
     {
         LOG(ERROR) << "Invalid peer port";
