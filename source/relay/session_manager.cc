@@ -42,6 +42,10 @@ constexpr FloodGuard::Seconds kPerAddressWindow{ 60 };
 constexpr int kPerAddressMax = 60;
 constexpr int kMaxPendingSessions = 60;
 
+// AEAD tag size (bytes) appended to every ciphertext. A valid encrypted secret is at least this
+// long (empty plaintext plus tag); anything shorter would make the decrypted size negative.
+constexpr qsizetype kAeadTagSize = 16;
+
 //--------------------------------------------------------------------------------------------------
 // Decrypts an encrypted pair of peer identifiers using key |session_key|.
 QByteArray decryptSecret(const proto::relay::PeerToRelay& message, const SessionManager::Key& key)
@@ -66,9 +70,9 @@ QByteArray decryptSecret(const proto::relay::PeerToRelay& message, const Session
     }
 
     const std::string& source = message.data();
-    if (source.empty())
+    if (static_cast<qsizetype>(source.size()) <= kAeadTagSize)
     {
-        LOG(ERROR) << "Empty 'data' field";
+        LOG(ERROR) << "Too short 'data' field:" << source.size();
         return QByteArray();
     }
 
