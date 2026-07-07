@@ -192,6 +192,35 @@ void AsioEventDispatcher::registerSocketNotifier(QSocketNotifier* notifier)
 #if defined(Q_OS_WINDOWS)
     if (is_socket_added)
         asyncWaitSocket(data.handle, socket);
+
+    // FD_WRITE is edge-triggered: it is recorded when the socket first becomes writable and then
+    // only after send fails with WSAEWOULDBLOCK. If the edge arrived while the write notifier was
+    // disabled, WSAEnumNetworkEvents has already consumed it and no new edge will come, so the
+    // notifier would never fire. Check writability manually and deliver the missed notification.
+    if (type == QSocketNotifier::Write)
+    {
+        fd_set write_fds;
+        FD_ZERO(&write_fds);
+        FD_SET(static_cast<SOCKET>(socket), &write_fds);
+
+        timeval timeout = { 0, 0 };
+        if (select(0, nullptr, &write_fds, nullptr, &timeout) == 1)
+        {
+            // The event is posted instead of being sent in place, so that the notifier does not
+            // fire from within registerSocketNotifier. The socket may be unregistered before the
+            // handler runs, so it is identified by unique_id at delivery time.
+            const quint64 unique_id = data.unique_id;
+            asio::post(io_context_, [this, socket, unique_id]() noexcept
+            {
+                auto it = sockets_.find(socket);
+                if (it == sockets_.end() || it->second.unique_id != unique_id || !it->second.write)
+                    return;
+
+                QEvent event(QEvent::SockAct);
+                QCoreApplication::sendEvent(it->second.write, &event);
+            });
+        }
+    }
 #endif
 }
 
