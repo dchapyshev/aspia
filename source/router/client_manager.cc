@@ -123,10 +123,12 @@ void ClientManager::doHostRequest(const proto::router::HostRequest& request)
         return;
     }
 
-    // group_id == 0 keeps the host at the workspace root; > 0 must reference a group in the
-    // host's current workspace. Cross-workspace moves are not allowed.
+    // group_id == 0 keeps the host at the workspace root; any other value must reference a group
+    // in the host's current workspace. A negative or unknown id is rejected here (the hosts table
+    // has no foreign key on group_id, so an unchecked value would orphan the host). Cross-workspace
+    // moves are not allowed.
     const qint64 group_id = host.group_id();
-    if (group_id > 0 && database.findGroup(workspace_id, group_id).entry_id == 0)
+    if (group_id != 0 && database.findGroup(workspace_id, group_id).entry_id == 0)
     {
         CLOG(ERROR) << "Group" << group_id << "not found in workspace" << workspace_id;
         reply(proto::router::kErrorInvalidData);
