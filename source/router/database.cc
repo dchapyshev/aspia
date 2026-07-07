@@ -642,13 +642,33 @@ bool Database::setUserOtp(qint64 user_id, const QByteArray& encrypted_secret, qu
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::clearUserOtp(qint64 user_id)
+std::string_view Database::clearUserOtp(qint64 user_id)
 {
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return false;
+        return proto::router::kErrorInternalError;
     }
+
+    if (user_id <= 0)
+    {
+        LOG(ERROR) << "Invalid user id:" << user_id;
+        return proto::router::kErrorInvalidData;
+    }
+
+    // COUNT(*) always yields exactly one row, so a failed next() is a database error and not
+    // a missing user.
+    SqlQuery exists(db_, "SELECT COUNT(*) FROM users WHERE id=?");
+    exists.addInt64(user_id);
+
+    if (!exists.next())
+    {
+        LOG(ERROR) << "Unable to check user existence:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    if (exists.columnInt64(0) == 0)
+        return proto::router::kErrorNotFound;
 
     SqlQuery query(db_, "UPDATE users SET otp_secret=X'', otp_counter=0 WHERE id=?");
     query.addInt64(user_id);
@@ -656,9 +676,9 @@ bool Database::clearUserOtp(qint64 user_id)
     if (!query.exec())
     {
         LOG(ERROR) << "Unable to clear user OTP:" << db_.lastError();
-        return false;
+        return proto::router::kErrorInternalError;
     }
-    return true;
+    return proto::router::kErrorOk;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -823,13 +843,33 @@ bool Database::revokeClientDeviceToken(qint64 user_id, qint64 token_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::revokeUserClientDeviceTokens(qint64 user_id)
+std::string_view Database::revokeUserClientDeviceTokens(qint64 user_id)
 {
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return false;
+        return proto::router::kErrorInternalError;
     }
+
+    if (user_id <= 0)
+    {
+        LOG(ERROR) << "Invalid user id:" << user_id;
+        return proto::router::kErrorInvalidData;
+    }
+
+    // COUNT(*) always yields exactly one row, so a failed next() is a database error and not
+    // a missing user.
+    SqlQuery exists(db_, "SELECT COUNT(*) FROM users WHERE id=?");
+    exists.addInt64(user_id);
+
+    if (!exists.next())
+    {
+        LOG(ERROR) << "Unable to check user existence:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    if (exists.columnInt64(0) == 0)
+        return proto::router::kErrorNotFound;
 
     SqlQuery query(db_, "DELETE FROM client_device_tokens WHERE user_id=?");
     query.addInt64(user_id);
@@ -837,9 +877,9 @@ bool Database::revokeUserClientDeviceTokens(qint64 user_id)
     if (!query.exec())
     {
         LOG(ERROR) << "Unable to revoke client device tokens:" << db_.lastError();
-        return false;
+        return proto::router::kErrorInternalError;
     }
-    return true;
+    return proto::router::kErrorOk;
 }
 
 //--------------------------------------------------------------------------------------------------

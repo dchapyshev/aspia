@@ -237,18 +237,20 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
                 CLOG(ERROR) << "Failed to connect to database";
                 result->set_error_code(proto::router::kErrorInternalError);
             }
-            else if (!database.clearUserOtp(user_id))
+            else if (std::string_view error_code = database.clearUserOtp(user_id);
+                     error_code != proto::router::kErrorOk)
             {
-                result->set_error_code(proto::router::kErrorInternalError);
+                result->set_error_code(error_code);
             }
             else
             {
                 // Re-enrollment implies a new device key pair; existing device tokens must die
                 // with the secret they were issued against.
-                if (!database.revokeUserClientDeviceTokens(user_id))
+                const std::string_view revoke_code = database.revokeUserClientDeviceTokens(user_id);
+                if (revoke_code != proto::router::kErrorOk)
                 {
                     CLOG(WARNING) << "OTP cleared but failed to revoke device tokens for user"
-                                  << user_id;
+                                  << user_id << ":" << revoke_code;
                 }
 
                 CLOG(INFO) << "OTP cleared for user" << user_id << "by" << userName();
@@ -276,9 +278,10 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
             else if (request.user().token_size() == 0)
             {
                 // Empty list - drop every token of the user atomically.
-                if (!database.revokeUserClientDeviceTokens(user_id))
+                const std::string_view error_code = database.revokeUserClientDeviceTokens(user_id);
+                if (error_code != proto::router::kErrorOk)
                 {
-                    result->set_error_code(proto::router::kErrorInternalError);
+                    result->set_error_code(error_code);
                 }
                 else
                 {
@@ -863,7 +866,7 @@ std::string ClientAdmin::deleteUser(const proto::router::User& user)
     if (error_code != proto::router::kErrorOk)
     {
         CLOG(ERROR) << "removeUser failed:" << error_code;
-        return error_code;
+        return std::string(error_code);
     }
 
     Service::instance()->notifyChanged(Service::NOTIFY_USERS);

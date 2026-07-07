@@ -108,8 +108,8 @@ public:
     bool setUserOtp(qint64 user_id, const QByteArray& encrypted_secret, quint64 counter);
 
     // Resets the user's TOTP state - clears the secret and zeroes the replay counter. The
-    // next login triggers self-enrollment.
-    bool clearUserOtp(qint64 user_id);
+    // next login triggers self-enrollment. Returns kErrorNotFound if the user row is absent.
+    std::string_view clearUserOtp(qint64 user_id);
 
     // Atomically consumes a TOTP step. Succeeds only if |counter| is newer than the value
     // currently stored in the database, so parallel sessions cannot accept the same code.
@@ -141,9 +141,9 @@ public:
     // user's row. Returns false on database error or when no row matched.
     bool revokeClientDeviceToken(qint64 user_id, qint64 token_id);
 
-    // Removes every device token of |user_id| in a single statement. Returns false on database
-    // error.
-    bool revokeUserClientDeviceTokens(qint64 user_id);
+    // Removes every device token of |user_id| in a single statement. Succeeds for an existing user
+    // with no tokens, but returns kErrorNotFound if the user row is absent.
+    std::string_view revokeUserClientDeviceTokens(qint64 user_id);
 
     // Lists all device tokens owned by |user_id|. The router never exposes token material to
     // admins - only the opaque numeric id and timestamp metadata. Returns an empty list on
