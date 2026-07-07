@@ -208,6 +208,7 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
     result->set_request_id(request.request_id());
     result->set_command_name(request.command_name());
     qint64 reset_otp_user_id = 0;
+    qint64 deleted_user_id = 0;
 
     if (request.command_name() == proto::router::kCommandUserAdd)
     {
@@ -219,7 +220,11 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
     }
     else if (request.command_name() == proto::router::kCommandUserDelete)
     {
-        result->set_error_code(deleteUser(request.user()));
+        const qint64 user_id = request.user().entry_id();
+        const std::string error_code = deleteUser(request.user());
+        result->set_error_code(error_code);
+        if (error_code == proto::router::kErrorOk)
+            deleted_user_id = user_id;
     }
     else if (request.command_name() == proto::router::kCommandUserResetOtp)
     {
@@ -344,6 +349,9 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
 
     if (reset_otp_user_id > 0)
         Service::instance()->stopClients(reset_otp_user_id);
+
+    if (deleted_user_id > 0)
+        Service::instance()->stopClients(deleted_user_id);
 }
 
 //--------------------------------------------------------------------------------------------------
