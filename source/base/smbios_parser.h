@@ -59,6 +59,7 @@ class SmbiosBios
 public:
     explicit SmbiosBios(const SmbiosTable* table);
 
+    bool isValid() const;
     QString vendor() const;
     QString version() const;
     QString releaseDate() const;

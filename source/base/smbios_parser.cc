@@ -18,22 +18,29 @@
 
 #include "base/smbios_parser.h"
 
+#include <cstddef>
 #include <cstring>
 
 //--------------------------------------------------------------------------------------------------
 SmbiosTableEnumerator::SmbiosTableEnumerator(const QByteArray& smbios_dump)
 {
-    if (smbios_dump.isEmpty())
-        return;
-
-    if (smbios_dump.size() > sizeof(SmbiosDump))
-        return;
-
+    // Zeroed even when the dump is rejected below, so that the version and length getters stay
+    // deterministic and the slack after a short dump reads as zeros.
     memset(&smbios_, 0, sizeof(SmbiosDump));
+
+    const qsizetype header_size = static_cast<qsizetype>(offsetof(SmbiosDump, smbios_table_data));
+
+    if (smbios_dump.size() < header_size ||
+        smbios_dump.size() > static_cast<qsizetype>(sizeof(SmbiosDump)))
+        return;
+
     memcpy(&smbios_, smbios_dump.data(), smbios_dump.size());
 
-    if (smbios_.length > kSmbiosMaxDataSize)
-        return;
+    // The length field cannot be trusted: a corrupted dump may declare more data than it
+    // actually carries. Clamp it so that the enumeration never extends past the real data.
+    const quint32 available = static_cast<quint32>(smbios_dump.size() - header_size);
+    if (smbios_.length > available)
+        smbios_.length = available;
 
     start_ = &smbios_.smbios_table_data[0];
     end_ = start_ + smbios_.length;
@@ -152,6 +159,13 @@ SmbiosBios::SmbiosBios(const SmbiosTable* table)
 }
 
 //--------------------------------------------------------------------------------------------------
+bool SmbiosBios::isValid() const
+{
+    // 12h is the minimum length of the BIOS information table since SMBIOS 2.0.
+    return table_->length >= 0x12;
+}
+
+//--------------------------------------------------------------------------------------------------
 QString SmbiosBios::vendor() const
 {
     return smbiosString(table_, table_->vendor);
@@ -210,7 +224,9 @@ bool SmbiosMemoryDevice::isValid() const
 //--------------------------------------------------------------------------------------------------
 bool SmbiosMemoryDevice::isPresent() const
 {
-    return size() != 0;
+    // A module size of zero means an empty socket. 0xFFFF means the size is unknown, but the
+    // device itself is present.
+    return table_->module_size != 0;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -241,8 +257,13 @@ QString SmbiosMemoryDevice::manufacturer() const
 //--------------------------------------------------------------------------------------------------
 quint64 SmbiosMemoryDevice::size() const
 {
-    if (table_->length >= 0x20 && table_->module_size == 0x7FFF)
+    if (table_->module_size == 0x7FFF)
     {
+        // The actual size is stored in the extended field (2.7+). A table too short to carry
+        // the field cannot tell the size.
+        if (table_->length < 0x20)
+            return 0;
+
         quint32 ext_size = table_->ext_size & 0x7FFFFFFFUL;
 
         if (ext_size & 0x3FFUL)
@@ -261,25 +282,21 @@ quint64 SmbiosMemoryDevice::size() const
             return static_cast<quint64>(ext_size >> 20) * 1024ULL * 1024ULL * 1024ULL * 1024ULL;
         }
     }
-    else
-    {
-        if (table_->module_size == 0xFFFF)
-        {
-            // No installed memory device in the socket.
-            return 0;
-        }
 
-        if (table_->module_size & 0x8000)
-        {
-            // Size in kB. Convert to bytes and return.
-            return static_cast<quint64>(table_->module_size & 0x7FFF) * 1024ULL;
-        }
-        else
-        {
-            // Size in MB. Convert to bytes and return.
-            return static_cast<quint64>(table_->module_size) * 1024ULL * 1024ULL;
-        }
+    if (table_->module_size == 0xFFFF)
+    {
+        // The device is present, but its size is unknown (see isPresent).
+        return 0;
     }
+
+    if (table_->module_size & 0x8000)
+    {
+        // Size in kB. Convert to bytes and return.
+        return static_cast<quint64>(table_->module_size & 0x7FFF) * 1024ULL;
+    }
+
+    // Size in MB. Convert to bytes and return.
+    return static_cast<quint64>(table_->module_size) * 1024ULL * 1024ULL;
 }
 
 //--------------------------------------------------------------------------------------------------

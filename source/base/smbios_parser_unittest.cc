@@ -114,6 +114,41 @@ TEST(SmbiosParserTest, EmptyAndOversizedDumps)
 }
 
 //--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, RejectedDumpHasDeterministicGetters)
+{
+    // Shorter than the fixed dump header: rejected, and the getters must return zeros rather
+    // than uninitialized memory.
+    SmbiosTableEnumerator enumerator(QByteArray(3, '\x7F'));
+
+    EXPECT_TRUE(enumerator.isAtEnd());
+    EXPECT_EQ(enumerator.majorVersion(), 0);
+    EXPECT_EQ(enumerator.minorVersion(), 0);
+    EXPECT_EQ(enumerator.length(), 0u);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, TruncatedTrailingTableNotExposed)
+{
+    // The dump header claims more data than the dump carries, and the last table is cut in the
+    // middle of its string area. Without clamping the declared length to the real data, the
+    // zeroed slack behind the data would provide a fake terminator and expose the cut table.
+    QByteArray tables;
+    tables += makeTable(SMBIOS_TABLE_TYPE_BIOS, QByteArray(0x12 - 4, '\0'), { "Vendor" });
+
+    tables.append(static_cast<char>(SMBIOS_TABLE_TYPE_BASEBOARD));
+    tables.append(static_cast<char>(sizeof(SmbiosTable)));
+    tables.append(static_cast<char>(0));
+    tables.append(static_cast<char>(0));
+    tables.append("CUT"); // string area without the double null terminator
+
+    const QList<quint8> types =
+        enumerateTypes(makeDump(tables, static_cast<int>(tables.size()) + 100));
+
+    ASSERT_EQ(types.size(), 1);
+    EXPECT_EQ(types[0], SMBIOS_TABLE_TYPE_BIOS);
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST(SmbiosParserTest, BiosStrings)
 {
     QByteArray formatted(0x12 - 4, '\0');
@@ -129,9 +164,23 @@ TEST(SmbiosParserTest, BiosStrings)
     ASSERT_FALSE(enumerator.isAtEnd());
 
     SmbiosBios bios(enumerator.table());
+    ASSERT_TRUE(bios.isValid());
     EXPECT_EQ(bios.vendor(), QString("AMI"));
     EXPECT_EQ(bios.version(), QString("1.2.3"));
     EXPECT_EQ(bios.releaseDate(), QString("01/01/2020"));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, TruncatedBiosIsInvalid)
+{
+    // A BIOS table shorter than the SMBIOS 2.0 minimum (12h) must be reported as invalid.
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_BIOS, QByteArray(4, '\0'), {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    EXPECT_FALSE(SmbiosBios(enumerator.table()).isValid());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -305,11 +354,27 @@ TEST(SmbiosParserTest, MemoryDeviceSizeVariants)
         return SmbiosMemoryDevice(enumerator.table()).size();
     };
 
+    auto presentOf = [](const QByteArray& dump) -> bool
+    {
+        SmbiosTableEnumerator enumerator(dump);
+        if (enumerator.isAtEnd())
+            return false;
+        return SmbiosMemoryDevice(enumerator.table()).isPresent();
+    };
+
     // Size in kB (bit 15 set): 1024 kB.
     EXPECT_EQ(sizeOf(makeDump(makeDevice(0x8000 | 1024, 0, 0x15))), 1024ULL * 1024ULL);
 
-    // No installed device.
+    // An empty socket: no device, zero size.
+    EXPECT_EQ(sizeOf(makeDump(makeDevice(0, 0, 0x15))), 0ULL);
+    EXPECT_FALSE(presentOf(makeDump(makeDevice(0, 0, 0x15))));
+
+    // 0xFFFF: the device is present, but its size is unknown.
     EXPECT_EQ(sizeOf(makeDump(makeDevice(0xFFFF, 0, 0x15))), 0ULL);
+    EXPECT_TRUE(presentOf(makeDump(makeDevice(0xFFFF, 0, 0x15))));
+
+    // 0x7FFF points to the extended size field, but the table is too short to carry it.
+    EXPECT_EQ(sizeOf(makeDump(makeDevice(0x7FFF, 0, 0x15))), 0ULL);
 
     // Extended size: 32768 MB with zero low bits selects the GB branch (32 GB).
     EXPECT_EQ(sizeOf(makeDump(makeDevice(0x7FFF, 32768, 0x20))),
