@@ -207,6 +207,7 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
     proto::router::UserResult* result = message.mutable_user_result();
     result->set_request_id(request.request_id());
     result->set_command_name(request.command_name());
+    qint64 reset_otp_user_id = 0;
 
     if (request.command_name() == proto::router::kCommandUserAdd)
     {
@@ -244,6 +245,8 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
             }
             else
             {
+                reset_otp_user_id = user_id;
+
                 // Re-enrollment implies a new device key pair; existing device tokens must die
                 // with the secret they were issued against.
                 const std::string_view revoke_code = database.revokeUserClientDeviceTokens(user_id);
@@ -338,6 +341,9 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
     }
 
     sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+
+    if (reset_otp_user_id > 0)
+        Service::instance()->stopClients(reset_otp_user_id);
 }
 
 //--------------------------------------------------------------------------------------------------
