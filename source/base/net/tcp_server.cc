@@ -100,12 +100,12 @@ void TcpServer::setWhiteList(const QStringList& white_list)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpServer::start(quint16 port, const QString& iface)
+bool TcpServer::start(quint16 port, const QString& iface)
 {
     if (acceptor_.is_open())
     {
         LOG(ERROR) << "Tcp server is already started";
-        return;
+        return false;
     }
 
     LOG(INFO) << "Listen interface:" << (iface.isEmpty() ? "ANY" : iface) << ":" << port;
@@ -119,7 +119,7 @@ void TcpServer::start(quint16 port, const QString& iface)
         if (error_code)
         {
             LOG(ERROR) << "Invalid listen address:" << iface << "(" << error_code << ")";
-            return;
+            return false;
         }
     }
     else
@@ -133,31 +133,38 @@ void TcpServer::start(quint16 port, const QString& iface)
     if (error_code)
     {
         LOG(ERROR) << "acceptor::open failed:" << error_code;
-        return;
+        return false;
     }
 
     acceptor_.set_option(asio::ip::tcp::acceptor::reuse_address(true), error_code);
     if (error_code)
     {
         LOG(ERROR) << "acceptor::set_option failed:" << error_code;
-        return;
+        std::error_code ignored_error;
+        acceptor_.close(ignored_error);
+        return false;
     }
 
     acceptor_.bind(endpoint, error_code);
     if (error_code)
     {
         LOG(ERROR) << "acceptor::bind failed:" << error_code;
-        return;
+        std::error_code ignored_error;
+        acceptor_.close(ignored_error);
+        return false;
     }
 
     acceptor_.listen(asio::ip::tcp::socket::max_listen_connections, error_code);
     if (error_code)
     {
         LOG(ERROR) << "acceptor::listen failed:" << error_code;
-        return;
+        std::error_code ignored_error;
+        acceptor_.close(ignored_error);
+        return false;
     }
 
     doAccept();
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

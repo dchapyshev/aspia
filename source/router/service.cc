@@ -646,7 +646,11 @@ bool Service::start()
     host_server_->setMaxPendingConnections(kHostMaxPendingConnections);
     host_server_->setMaxConnectionsPerMinute(kHostMaxConnectionsPerMinute);
     host_server_->setWhiteList(host_white_list_);
-    host_server_->start(port, listen_interface);
+    if (!host_server_->start(port, listen_interface))
+    {
+        LOG(ERROR) << "Unable to start host listener";
+        return false;
+    }
 
     host_legacy_server_ = new TcpServerLegacy(this);
     connect(host_legacy_server_, &TcpServerLegacy::sig_newConnection, this, &Service::onNewLegacyHostConnection);
@@ -657,7 +661,11 @@ bool Service::start()
     host_legacy_server_->setMaxPendingConnections(kHostMaxPendingConnections);
     host_legacy_server_->setMaxConnectionsPerMinute(kHostMaxConnectionsPerMinute);
     host_legacy_server_->setWhiteList(host_white_list_);
-    host_legacy_server_->start(legacy_port, listen_interface);
+    if (!host_legacy_server_->start(legacy_port, listen_interface))
+    {
+        LOG(ERROR) << "Unable to start legacy host listener";
+        return false;
+    }
 
     // Relay listener accepts relay sessions only (anonymous access).
     relay_server_ = new TcpServer(this);
@@ -669,7 +677,11 @@ bool Service::start()
     relay_server_->setMaxPendingConnections(kRelayMaxPendingConnections);
     relay_server_->setMaxConnectionsPerMinute(kRelayMaxConnectionsPerMinute);
     relay_server_->setWhiteList(relay_white_list_);
-    relay_server_->start(relay_port, listen_interface);
+    if (!relay_server_->start(relay_port, listen_interface))
+    {
+        LOG(ERROR) << "Unable to start relay listener";
+        return false;
+    }
 
     // Client listener accepts admin/manager/client sessions only. These session types always
     // authenticate, so anonymous access stays disabled here.
@@ -680,12 +692,20 @@ bool Service::start()
     client_server_->setMaxPendingConnections(kClientMaxPendingConnections);
     client_server_->setMaxConnectionsPerMinute(kClientMaxConnectionsPerMinute);
     client_server_->setWhiteList(client_white_list_);
-    client_server_->start(client_port, listen_interface);
+    if (!client_server_->start(client_port, listen_interface))
+    {
+        LOG(ERROR) << "Unable to start client listener";
+        return false;
+    }
 
     if (settings.isStunEnabled())
     {
         stun_server_ = new StunServer(this);
-        stun_server_->start(settings.stunPort());
+        if (!stun_server_->start(settings.stunPort()))
+        {
+            LOG(ERROR) << "Unable to start STUN listener";
+            return false;
+        }
     }
 
     LOG(INFO) << "Server started";

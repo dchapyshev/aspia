@@ -67,7 +67,7 @@ public:
     // unwanted traffic never consumes a pending slot.
     void setWhiteList(const QStringList& white_list);
 
-    void start(quint16 port, const QString& iface = QString());
+    bool start(quint16 port, const QString& iface = QString());
 
     bool hasReadyConnections();
     TcpChannel* nextReadyConnection();
