@@ -44,9 +44,65 @@ AudioOutputAndroid::~AudioOutputAndroid()
 //--------------------------------------------------------------------------------------------------
 bool AudioOutputAndroid::start()
 {
+    QMutexLocker locker(&mutex_);
+
     if (stream_)
         return true;
 
+    return openStream();
+}
+
+//--------------------------------------------------------------------------------------------------
+void AudioOutputAndroid::stop()
+{
+    QMutexLocker locker(&mutex_);
+
+    if (!stream_)
+        return;
+
+    // close() blocks until any in-flight data callback returns, so no onAudioReady() runs afterwards.
+    stream_->stop();
+    stream_->close();
+    stream_.reset();
+}
+
+//--------------------------------------------------------------------------------------------------
+oboe::DataCallbackResult AudioOutputAndroid::onAudioReady(
+    oboe::AudioStream* /* stream */, void* audio_data, int32_t num_frames)
+{
+    onDataRequest(static_cast<qint16*>(audio_data), static_cast<size_t>(num_frames) * kChannels);
+    return oboe::DataCallbackResult::Continue;
+}
+
+//--------------------------------------------------------------------------------------------------
+void AudioOutputAndroid::onErrorAfterClose(oboe::AudioStream* stream, oboe::Result error)
+{
+    // AAudio does not reroute a playback stream on its own: when the output device changes
+    // (headphones plugged in or out, a Bluetooth headset connects), the stream is disconnected and
+    // Oboe closes it before invoking this callback on an internal thread. Reopening here picks up
+    // the new default route, mirroring the restart the Windows backend does on device invalidation.
+    if (error != oboe::Result::ErrorDisconnected)
+    {
+        LOG(ERROR) << "Audio stream error:" << oboe::convertToText(error);
+        return;
+    }
+
+    LOG(INFO) << "Audio stream disconnected, reopening on the current device";
+
+    QMutexLocker locker(&mutex_);
+
+    // A stale notification: stop() already released the stream, or it was already replaced.
+    if (!stream_ || stream_.get() != stream)
+        return;
+
+    // The failed stream is closed by Oboe itself; just drop the reference.
+    stream_.reset();
+    openStream();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool AudioOutputAndroid::openStream()
+{
     oboe::AudioStreamBuilder builder;
     builder.setDirection(oboe::Direction::Output)
            ->setPerformanceMode(oboe::PerformanceMode::LowLatency)
@@ -56,7 +112,8 @@ bool AudioOutputAndroid::start()
            ->setSampleRate(static_cast<int>(kSampleRate))
            ->setFramesPerDataCallback(kFramesPer10ms)
            ->setUsage(oboe::Usage::Media)
-           ->setDataCallback(this);
+           ->setDataCallback(this)
+           ->setErrorCallback(this);
 
     oboe::Result result = builder.openStream(stream_);
     if (result != oboe::Result::OK)
@@ -75,24 +132,4 @@ bool AudioOutputAndroid::start()
     }
 
     return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void AudioOutputAndroid::stop()
-{
-    if (!stream_)
-        return;
-
-    // close() blocks until any in-flight data callback returns, so no onAudioReady() runs afterwards.
-    stream_->stop();
-    stream_->close();
-    stream_.reset();
-}
-
-//--------------------------------------------------------------------------------------------------
-oboe::DataCallbackResult AudioOutputAndroid::onAudioReady(
-    oboe::AudioStream* /* stream */, void* audio_data, int32_t num_frames)
-{
-    onDataRequest(static_cast<qint16*>(audio_data), static_cast<size_t>(num_frames) * kChannels);
-    return oboe::DataCallbackResult::Continue;
 }

@@ -21,13 +21,16 @@
 
 #include "base/audio/audio_output.h"
 
+#include <QMutex>
+
 #include <memory>
 
 #include <oboe/Oboe.h>
 
 class AudioOutputAndroid final
     : public AudioOutput,
-      public oboe::AudioStreamDataCallback
+      public oboe::AudioStreamDataCallback,
+      public oboe::AudioStreamErrorCallback
 {
 public:
     explicit AudioOutputAndroid(const NeedMoreDataCB& need_more_data_cb);
@@ -41,7 +44,16 @@ public:
     oboe::DataCallbackResult onAudioReady(
         oboe::AudioStream* stream, void* audio_data, int32_t num_frames) final;
 
+    // oboe::AudioStreamErrorCallback implementation.
+    void onErrorAfterClose(oboe::AudioStream* stream, oboe::Result error) final;
+
 private:
+    // Opens and starts a playback stream on the current default route. Called with |mutex_| held.
+    bool openStream();
+
+    // Guards |stream_|: start()/stop() run on the owner thread while the disconnect notification
+    // arrives on an internal Oboe thread.
+    QMutex mutex_;
     std::shared_ptr<oboe::AudioStream> stream_;
 
     Q_DISABLE_COPY(AudioOutputAndroid)
