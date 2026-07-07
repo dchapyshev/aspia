@@ -32,6 +32,7 @@
 #include "router/client.h"
 #include "router/relay.h"
 #include "router/service.h"
+#include "router/host_legacy.h"
 #include "router/host_ng.h"
 
 //--------------------------------------------------------------------------------------------------
