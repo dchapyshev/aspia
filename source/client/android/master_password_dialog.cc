@@ -180,7 +180,11 @@ void MasterPasswordDialog::tryBiometricUnlock()
     prompt.title = tr("Unlock");
     prompt.negative_text = tr("Use password");
 
+    // unlock() spins a nested event loop while the system prompt is shown; without this the dialog
+    // buttons stay clickable and accept() could be re-entered in the middle of the prompt.
+    setEnabled(false);
     BiometricGate::UnlockResult result = BiometricGate::unlock(*blob, prompt);
+    setEnabled(true);
 
     switch (result.result)
     {
