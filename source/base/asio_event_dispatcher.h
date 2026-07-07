@@ -23,7 +23,6 @@
 #include <QEvent>
 
 #include <asio/io_context.hpp>
-#include <asio/high_resolution_timer.hpp>
 #include <asio/steady_timer.hpp>
 
 #if defined(Q_OS_WINDOWS)
@@ -60,10 +59,8 @@ public:
     static asio::io_context& ioContext();
 
 private:
-    using PreciseClock = std::chrono::high_resolution_clock;
-    using PreciseTimePoint = PreciseClock::time_point;
-    using CoarseClock = std::chrono::steady_clock;
-    using CoarseTimePoint = CoarseClock::time_point;
+    using Clock = std::chrono::steady_clock;
+    using TimePoint = Clock::time_point;
     using Milliseconds = std::chrono::milliseconds;
     using Seconds = std::chrono::seconds;
 
@@ -76,7 +73,7 @@ private:
         asio::windows::object_handle handle;
         quint32 native_id;
         Milliseconds interval;
-        PreciseTimePoint end_time;
+        TimePoint end_time;
         QObject* object;
     };
     using MultimediaTimers = std::unordered_map<int, MultimediaTimer>;
@@ -85,16 +82,16 @@ private:
     using SocketHandle = asio::posix::stream_descriptor;
 #endif
 
-    template <typename TimerHandleType, typename TimePointType>
-    struct GenericTimer
+    struct Timer
     {
         void cancel() { handle.cancel(); }
 
         quint64 unique_id;
-        TimerHandleType handle;
+        asio::steady_timer handle;
         Milliseconds interval;
-        TimePointType end_time;
+        TimePoint end_time;
         QObject* object;
+        Qt::TimerType type;
     };
 
     struct SocketData
@@ -133,20 +130,14 @@ private:
         SocketHandle handle;
     };
 
-    using PreciseTimer = GenericTimer<asio::high_resolution_timer, PreciseTimePoint>;
-    using PreciseTimers = std::unordered_map<int, PreciseTimer>;
-    using CoarseTimer = GenericTimer<asio::steady_timer, CoarseTimePoint>;
-    using CoarseTimers = std::unordered_map<int, CoarseTimer>;
+    using Timers = std::unordered_map<int, Timer>;
     using Sockets = std::unordered_map<qintptr, SocketData>;
 
-    void asyncWaitPreciseTimer(
-        asio::high_resolution_timer& handle, const PreciseTimePoint& end_time, int timer_id);
-    void asyncWaitCoarseTimer(
-        asio::steady_timer& handle, const CoarseTimePoint& end_time, int timer_id);
+    void asyncWaitTimer(asio::steady_timer& handle, const TimePoint& end_time, int timer_id);
 
 #if defined(Q_OS_WINDOWS)
     bool tryRegisterMultimediaTimer(
-        int timer_id, Milliseconds interval, const PreciseTimePoint& end_time, QObject* object);
+        int timer_id, Milliseconds interval, const TimePoint& end_time, QObject* object);
     void asyncWaitMultimediaTimer(asio::windows::object_handle& handle, int timer_id);
     void asyncWaitSocket(SocketHandle& handle, qintptr socket);
 #else
@@ -165,8 +156,7 @@ private:
     MultimediaTimers multimedia_timers_;
 #endif
 
-    PreciseTimers precise_timers_;
-    CoarseTimers coarse_timers_;
+    Timers timers_;
     Sockets sockets_;
 
     Q_DISABLE_COPY_MOVE(AsioEventDispatcher)
