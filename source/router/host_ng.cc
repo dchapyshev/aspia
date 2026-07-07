@@ -113,6 +113,15 @@ void HostNG::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void HostNG::readHostIdRequest(const proto::router::HostIdRequest& host_id_request)
 {
+    // A host requests its id exactly once per session. Reject repeats so an untrusted host cannot
+    // overwrite host_id_ after assignment and desync the pending-removal finalization done in the
+    // destructor. A failed request leaves host_id_ invalid, so a legitimate retry still works.
+    if (host_id_ != kInvalidHostId)
+    {
+        CLOG(ERROR) << "Ignoring repeated host id request; host id" << host_id_ << "already assigned";
+        return;
+    }
+
     Database& database = Database::instance();
     if (!database.isValid())
     {
