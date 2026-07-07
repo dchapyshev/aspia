@@ -82,6 +82,15 @@ bool DatagramDecryptor::decrypt(quint64 counter, const void* in, qint64 in_size,
 bool DatagramDecryptor::decrypt(quint64 counter, const void* in, qint64 in_size,
     const void* aad, qint64 aad_size, void* out)
 {
+    // A valid ciphertext is at least tag-sized (empty plaintext plus tag). Reject anything shorter
+    // before it reaches EVP: |in_size - kTagSize| would otherwise be a negative length and read
+    // past |in|.
+    if (in_size < kTagSize)
+    {
+        LOG(ERROR) << "Ciphertext shorter than authentication tag:" << in_size;
+        return false;
+    }
+
     quint8 nonce[kIVSize];
     buildNonce(counter, nonce);
 

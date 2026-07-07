@@ -107,6 +107,15 @@ bool StreamDecryptor::decrypt(const void* in, qint64 in_size, void* out)
 //--------------------------------------------------------------------------------------------------
 bool StreamDecryptor::decrypt(const void* in, qint64 in_size, const void* aad, qint64 aad_size, void* out)
 {
+    // A valid ciphertext is at least tag-sized (empty plaintext plus tag). Reject anything shorter
+    // before it reaches EVP: |in_size - kTagSize| would otherwise be a negative length and read
+    // past |in|.
+    if (in_size < kTagSize)
+    {
+        LOG(ERROR) << "Ciphertext shorter than authentication tag:" << in_size;
+        return false;
+    }
+
     if (EVP_DecryptInit_ex(ctx_.get(), nullptr, nullptr, nullptr,
         reinterpret_cast<const quint8*>(iv_.data())) != 1)
     {

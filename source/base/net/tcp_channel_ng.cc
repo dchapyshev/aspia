@@ -58,6 +58,9 @@ QStringList endpointsToString(const asio::ip::tcp::resolver::results_type& endpo
 //--------------------------------------------------------------------------------------------------
 void resizeBuffer(QByteArray* buffer, qint64 size)
 {
+    if (size < 0)
+        size = 0;
+
     if (buffer->capacity() < size)
     {
         buffer->clear();
