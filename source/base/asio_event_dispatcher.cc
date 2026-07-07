@@ -391,7 +391,11 @@ QList<QAbstractEventDispatcher::TimerInfo> AsioEventDispatcher::registeredTimers
         for (const auto& [id, timer] : timers)
         {
             if (timer.object == object)
-                list.emplace_back(id, static_cast<int>(timer.interval.count()), type);
+            {
+                const qint64 interval =
+                    std::min<qint64>(timer.interval.count(), std::numeric_limits<int>::max());
+                list.emplace_back(id, static_cast<int>(interval), type);
+            }
         }
     };
 
@@ -420,7 +424,7 @@ int AsioEventDispatcher::remainingTime(int timer_id)
         const Milliseconds remaining =
             std::chrono::duration_cast<Milliseconds>(it->second.end_time - now);
 
-        return static_cast<int>(remaining.count());
+        return static_cast<int>(std::min<qint64>(remaining.count(), std::numeric_limits<int>::max()));
     };
 
     const PreciseTimePoint now = PreciseClock::now();
