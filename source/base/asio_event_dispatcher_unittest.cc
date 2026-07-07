@@ -20,12 +20,132 @@
 #include <QCoreApplication>
 #include <QElapsedTimer>
 #include <QHostInfo>
+#include <QSocketNotifier>
 #include <QTimer>
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QThread>
 
+#if defined(Q_OS_WINDOWS)
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#else
+#include <arpa/inet.h>
+#include <fcntl.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#include <unistd.h>
+#endif
+
 #include <gtest/gtest.h>
+
+namespace {
+
+#if defined(Q_OS_WINDOWS)
+using NativeSocket = SOCKET;
+const NativeSocket kInvalidNativeSocket = INVALID_SOCKET;
+#else
+using NativeSocket = int;
+const NativeSocket kInvalidNativeSocket = -1;
+#endif
+
+// Creates a non-blocking UDP socket bound to the loopback interface. Raw sockets are used
+// instead of QAbstractSocket because the latter registers its own notifiers in the dispatcher
+// and would occupy the per-type slots these tests need to control manually. UDP gives exact
+// control over readability: one datagram - one readiness event.
+NativeSocket createBoundUdpSocket(quint16* port)
+{
+#if defined(Q_OS_WINDOWS)
+    // Sockets are created directly instead of through QtNetwork, so winsock is initialized
+    // manually.
+    static const int winsock_result = []()
+    {
+        WSADATA data;
+        return WSAStartup(MAKEWORD(2, 2), &data);
+    }();
+    if (winsock_result != 0)
+        return kInvalidNativeSocket;
+#endif
+
+    NativeSocket sock = ::socket(AF_INET, SOCK_DGRAM, 0);
+    if (sock == kInvalidNativeSocket)
+        return kInvalidNativeSocket;
+
+    sockaddr_in addr = {};
+    addr.sin_family = AF_INET;
+    addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+
+    if (::bind(sock, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) != 0)
+        return kInvalidNativeSocket;
+
+    socklen_t addr_size = sizeof(addr);
+    if (::getsockname(sock, reinterpret_cast<sockaddr*>(&addr), &addr_size) != 0)
+        return kInvalidNativeSocket;
+
+    *port = ntohs(addr.sin_port);
+
+#if defined(Q_OS_WINDOWS)
+    u_long non_blocking = 1;
+    ioctlsocket(sock, FIONBIO, &non_blocking);
+#else
+    fcntl(sock, F_SETFL, fcntl(sock, F_GETFL, 0) | O_NONBLOCK);
+#endif
+
+    return sock;
+}
+
+void sendDatagram(NativeSocket from, quint16 to_port)
+{
+    sockaddr_in addr = {};
+    addr.sin_family = AF_INET;
+    addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+    addr.sin_port = htons(to_port);
+
+    const char payload = 'x';
+    ::sendto(from, &payload, sizeof(payload), 0,
+             reinterpret_cast<const sockaddr*>(&addr), sizeof(addr));
+}
+
+void drainSocket(NativeSocket sock)
+{
+    char buffer[64];
+    while (::recv(sock, buffer, sizeof(buffer), 0) > 0);
+}
+
+void closeNativeSocket(NativeSocket sock)
+{
+#if defined(Q_OS_WINDOWS)
+    closesocket(sock);
+#else
+    ::close(sock);
+#endif
+}
+
+void pumpFor(int duration_ms)
+{
+    QElapsedTimer timer;
+    timer.start();
+    while (timer.elapsed() < duration_ms)
+    {
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 10);
+        QThread::msleep(1);
+    }
+}
+
+template <typename Predicate>
+bool pumpUntil(Predicate condition, int timeout_ms)
+{
+    QElapsedTimer timer;
+    timer.start();
+    while (!condition() && timer.elapsed() < timeout_ms)
+    {
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 10);
+        QThread::msleep(1);
+    }
+    return condition();
+}
+
+} // namespace
 
 class ED_TestObject : public QObject
 {
@@ -612,6 +732,72 @@ TEST(TimersTest, ZeroSingleShotTriggering)
     ASSERT_LT(elapsedMs, 5000);
 }
 
+// A thread stall longer than the timer interval must not cause a burst of catch-up firings:
+// missed periods are expected to be coalesced into one, like Qt native dispatchers do.
+static void runTimerStallTest(Qt::TimerType type)
+{
+    constexpr int intervalMs = 50;
+    constexpr int totalTicks = 8;
+
+    QEventLoop loop;
+    QElapsedTimer clock;
+    clock.start();
+
+    QVector<qint64> stamps;
+    bool stalled = false;
+
+    QTimer timer;
+    timer.setTimerType(type);
+    timer.setInterval(intervalMs);
+
+    QObject::connect(&timer, &QTimer::timeout, [&]()
+    {
+        stamps.append(clock.elapsed());
+
+        // Simulate a stall of several timer periods right after the first tick.
+        if (!stalled)
+        {
+            stalled = true;
+            QThread::msleep(intervalMs * 6);
+        }
+
+        if (stamps.size() >= totalTicks)
+        {
+            timer.stop();
+            loop.quit();
+        }
+    });
+
+    timer.start();
+
+    // Failsafe: generous to avoid CI flakiness
+    QTimer::singleShot(10000, &loop, [&]() { loop.quit(); });
+    loop.exec();
+
+    ASSERT_GE(stamps.size(), totalTicks);
+
+    int burstCount = 0;
+    for (int i = 1; i < stamps.size(); ++i)
+    {
+        if (stamps[i] - stamps[i - 1] < intervalMs / 5)
+            ++burstCount;
+    }
+
+    // One immediate firing right after the stall is fine (that expiration was already due), but
+    // the timer must return to its normal cadence instead of replaying every missed period.
+    EXPECT_LE(burstCount, 1);
+}
+
+TEST(TimersTest, PreciseTimerStallCoalescing)
+{
+    runTimerStallTest(Qt::PreciseTimer);
+}
+
+TEST(TimersTest, CoarseTimerStallCoalescing)
+{
+    runTimerStallTest(Qt::CoarseTimer);
+}
+
 TEST(SocketTest, EchoClientServer)
 {
     constexpr int iterations = 100;
@@ -740,4 +926,133 @@ TEST(SocketTest, EchoClientServer)
     loop.exec();
 
     SUCCEED();
+}
+
+TEST(SocketTest, ReadNotifierToggleNoDuplicates)
+{
+    quint16 port_a = 0;
+    quint16 port_b = 0;
+    NativeSocket sock_a = createBoundUdpSocket(&port_a);
+    NativeSocket sock_b = createBoundUdpSocket(&port_b);
+    ASSERT_NE(sock_a, kInvalidNativeSocket);
+    ASSERT_NE(sock_b, kInvalidNativeSocket);
+
+    // The exception notifier keeps the socket registered in the dispatcher while the read
+    // notifier is toggled. Otherwise disabling the read notifier would simply unregister the
+    // whole socket, and the toggling would not exercise the pending-wait reuse logic.
+    QSocketNotifier exception_notifier(sock_a, QSocketNotifier::Exception);
+
+    int read_count = 0;
+    QSocketNotifier read_notifier(sock_a, QSocketNotifier::Read);
+    QObject::connect(&read_notifier, &QSocketNotifier::activated, [&]()
+    {
+        ++read_count;
+        drainSocket(sock_a);
+    });
+
+    // Let the dispatcher arm the waits before toggling.
+    pumpFor(50);
+
+    // Toggle the read notifier while its wait is pending (no data has been sent yet). The
+    // dispatcher must reuse the pending wait instead of arming a duplicate one, otherwise each
+    // readiness would be delivered multiple times.
+    read_notifier.setEnabled(false);
+    read_notifier.setEnabled(true);
+    read_notifier.setEnabled(false);
+    read_notifier.setEnabled(true);
+
+    sendDatagram(sock_b, port_a);
+    ASSERT_TRUE(pumpUntil([&]() { return read_count >= 1; }, 5000));
+
+    // Give a possible duplicate delivery time to arrive.
+    pumpFor(100);
+    EXPECT_EQ(read_count, 1);
+
+    // The wait must have been re-armed after delivery: the next datagram is delivered too.
+    sendDatagram(sock_b, port_a);
+    ASSERT_TRUE(pumpUntil([&]() { return read_count >= 2; }, 5000));
+
+    pumpFor(100);
+    EXPECT_EQ(read_count, 2);
+
+    read_notifier.setEnabled(false);
+    exception_notifier.setEnabled(false);
+    closeNativeSocket(sock_a);
+    closeNativeSocket(sock_b);
+}
+
+TEST(SocketTest, WriteNotifierEnabledOnWritableSocket)
+{
+    quint16 port = 0;
+    NativeSocket sock = createBoundUdpSocket(&port);
+    ASSERT_NE(sock, kInvalidNativeSocket);
+
+    // Register the socket in the dispatcher without a write notifier and pump the loop. In
+    // Windows this makes WSAEnumNetworkEvents consume the initial FD_WRITE edge while there is
+    // no write notifier yet - after that no new edge will ever come for this socket unless a
+    // send fails with WSAEWOULDBLOCK.
+    QSocketNotifier exception_notifier(sock, QSocketNotifier::Exception);
+    pumpFor(100);
+
+    int write_count = 0;
+    QSocketNotifier write_notifier(sock, QSocketNotifier::Write);
+    QObject::connect(&write_notifier, &QSocketNotifier::activated, [&]()
+    {
+        // Disable on delivery: an enabled write notifier on a writable socket fires on every
+        // loop pass, only the fact of delivery matters here.
+        ++write_count;
+        write_notifier.setEnabled(false);
+    });
+
+    // The socket was already writable when the notifier was registered, so no readiness edge
+    // will occur. The notification must be delivered anyway.
+    ASSERT_TRUE(pumpUntil([&]() { return write_count >= 1; }, 5000));
+
+    pumpFor(100);
+    EXPECT_EQ(write_count, 1);
+
+    // Re-enabling on a still writable socket must deliver the notification again.
+    write_notifier.setEnabled(true);
+    ASSERT_TRUE(pumpUntil([&]() { return write_count >= 2; }, 5000));
+
+    write_notifier.setEnabled(false);
+    exception_notifier.setEnabled(false);
+    closeNativeSocket(sock);
+}
+
+TEST(SocketTest, ReadNotifierEnabledOnReadableSocket)
+{
+    quint16 port_a = 0;
+    quint16 port_b = 0;
+    NativeSocket sock_a = createBoundUdpSocket(&port_a);
+    NativeSocket sock_b = createBoundUdpSocket(&port_b);
+    ASSERT_NE(sock_a, kInvalidNativeSocket);
+    ASSERT_NE(sock_b, kInvalidNativeSocket);
+
+    // Register the socket in the dispatcher without a read notifier and deliver a datagram. In
+    // Windows this makes WSAEnumNetworkEvents consume the FD_READ event while there is no read
+    // notifier yet - no new event will come for this data unless recv is called or more data
+    // arrives. The same applies to FD_CLOSE of a TCP socket, which is recorded only once.
+    QSocketNotifier exception_notifier(sock_a, QSocketNotifier::Exception);
+    pumpFor(100);
+
+    sendDatagram(sock_b, port_a);
+    pumpFor(100);
+
+    int read_count = 0;
+    QSocketNotifier read_notifier(sock_a, QSocketNotifier::Read);
+    QObject::connect(&read_notifier, &QSocketNotifier::activated, [&]()
+    {
+        ++read_count;
+        drainSocket(sock_a);
+    });
+
+    // The data was already pending when the notifier was registered, so no readiness event will
+    // occur. The notification must be delivered anyway.
+    ASSERT_TRUE(pumpUntil([&]() { return read_count >= 1; }, 5000));
+
+    read_notifier.setEnabled(false);
+    exception_notifier.setEnabled(false);
+    closeNativeSocket(sock_a);
+    closeNativeSocket(sock_b);
 }
