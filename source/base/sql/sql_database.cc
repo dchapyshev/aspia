@@ -75,8 +75,15 @@ void caseFold(sqlite3_context* context, int argc, sqlite3_value** argv)
     }
 
     folded.resize(static_cast<size_t>(folded_length));
-    LCMapStringEx(LOCALE_NAME_INVARIANT, LCMAP_LOWERCASE, win_source, source_length,
-                  reinterpret_cast<wchar_t*>(folded.data()), folded_length, nullptr, nullptr, 0);
+    if (LCMapStringEx(LOCALE_NAME_INVARIANT, LCMAP_LOWERCASE, win_source, source_length,
+                      reinterpret_cast<wchar_t*>(folded.data()), folded_length, nullptr, nullptr,
+                      0) <= 0)
+    {
+        // The buffer would stay zero-filled and the row would silently stop matching searches;
+        // fall back to the original value instead.
+        sqlite3_result_value(context, argv[0]);
+        return;
+    }
 #elif defined(Q_OS_ANDROID)
     // The NDK exposes u_strFoldCase only since API 31, so Qt's own Unicode case folding is used.
     const QString folded_string = QString::fromRawData(
