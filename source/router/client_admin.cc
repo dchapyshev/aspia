@@ -357,7 +357,7 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
 //--------------------------------------------------------------------------------------------------
 void ClientAdmin::doHostRequest(const proto::router::HostRequest& request)
 {
-    auto find_host = [](HostId host_id) -> HostNG*
+    auto find_host = [](HostId host_id) -> Host*
     {
         const QList<Host*>& hosts = Service::instance()->hosts();
         for (Host* host : std::as_const(hosts))
@@ -365,6 +365,10 @@ void ClientAdmin::doHostRequest(const proto::router::HostRequest& request)
             HostNG* host_ng = dynamic_cast<HostNG*>(host);
             if (host_ng && host_ng->hostId() == host_id)
                 return host_ng;
+
+            HostLegacy* host_legacy = dynamic_cast<HostLegacy*>(host);
+            if (host_legacy && host_legacy->hasHostId(host_id))
+                return host_legacy;
         }
         return nullptr;
     };
@@ -408,7 +412,7 @@ void ClientAdmin::doHostRequest(const proto::router::HostRequest& request)
         }
         else
         {
-            HostNG* host = find_host(host_id);
+            Host* host = find_host(host_id);
             if (!host)
             {
                 CLOG(ERROR) << "No live session for host_id:" << host_id;
@@ -444,11 +448,26 @@ void ClientAdmin::doHostRequest(const proto::router::HostRequest& request)
         else
         {
             // The hosts row is now in hosts_remove; if the host is online send it the remove
-            // command and let HostNG finalize the hosts_remove row on disconnect. Otherwise
-            // the command is issued on reconnect.
-            HostNG* host = find_host(host_id);
-            if (host)
-                host->sendRemoveCommand();
+            // command and let HostNG finalize the hosts_remove row on disconnect. Legacy hosts
+            // have no router->host remove command, so remove the id from the live legacy session
+            // and finalize the pending row immediately. Offline legacy hosts are handled on the
+            // next HostIdRequest.
+            Host* host = find_host(host_id);
+            if (HostNG* host_ng = dynamic_cast<HostNG*>(host))
+            {
+                host_ng->sendRemoveCommand();
+            }
+            else if (HostLegacy* host_legacy = dynamic_cast<HostLegacy*>(host))
+            {
+                if (host_legacy->removeHostId(host_id))
+                {
+                    if (!database.finalizeHostRemoval(host_id))
+                        CLOG(WARNING) << "Failed to finalize removal for legacy host_id:" << host_id;
+
+                    if (host_legacy->hostIdList().isEmpty())
+                        Service::instance()->stopHost(host_legacy->sessionId());
+                }
+            }
 
             CLOG(INFO) << "Host" << host_id << "removal scheduled by" << userName()
                        << "(online:" << (host != nullptr) << ")";
@@ -460,7 +479,7 @@ void ClientAdmin::doHostRequest(const proto::router::HostRequest& request)
     {
         const HostId host_id = request.host().host_id();
 
-        HostNG* host = find_host(host_id);
+        HostNG* host = dynamic_cast<HostNG*>(find_host(host_id));
         if (!host)
         {
             CLOG(ERROR) << "No live session for host_id:" << host_id;

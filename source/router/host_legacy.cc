@@ -53,6 +53,23 @@ bool HostLegacy::hasHostId(HostId host_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
+bool HostLegacy::removeHostId(HostId host_id)
+{
+    for (auto it = host_id_list_.begin(), it_end = host_id_list_.end(); it != it_end; ++it)
+    {
+        if (*it == host_id)
+        {
+            CLOG(INFO) << "Host ID" << host_id << "removed from legacy session list";
+            host_id_list_.erase(it);
+            Service::instance()->notifyChanged(Service::NOTIFY_HOSTS);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
 void HostLegacy::sendConnectionOffer(const proto::router::legacy::ConnectionOffer& offer)
 {
     proto::router::legacy::RouterToPeer message;
@@ -124,6 +141,27 @@ void HostLegacy::readHostIdRequest(const proto::router::legacy::HostIdRequest& h
 
     if (error_code == proto::router::kErrorOk)
     {
+        // Legacy protocol has no router->host remove command. A reconnecting host with a
+        // pending removal must not become online again; consume the pending row and tell the
+        // legacy peer that the old id is gone.
+        if (database.hasPendingHostRemoval(host_id))
+        {
+            CLOG(INFO) << "Legacy host" << host_id << "has pending removal";
+            if (database.finalizeHostRemoval(host_id))
+            {
+                host_id_response->set_error_code(proto::router::legacy::HostIdResponse::NO_HOST_FOUND);
+                Service::instance()->notifyChanged(Service::NOTIFY_HOSTS);
+            }
+            else
+            {
+                CLOG(ERROR) << "Failed to finalize pending removal for legacy host" << host_id;
+                host_id_response->set_error_code(proto::router::legacy::HostIdResponse::UNKNOWN);
+            }
+
+            sendMessage(0, serialize(message));
+            return;
+        }
+
         host_id_response->set_error_code(proto::router::legacy::HostIdResponse::SUCCESS);
         host_id_response->set_host_id(host_id);
 
@@ -162,15 +200,6 @@ void HostLegacy::readResetHostId(const proto::router::legacy::ResetHostId& reset
         return;
     }
 
-    for (auto it = host_id_list_.begin(), it_end = host_id_list_.end(); it != it_end; ++it)
-    {
-        if (*it == host_id)
-        {
-            CLOG(INFO) << "Host ID" << host_id << "remove from list";
-            host_id_list_.erase(it);
-            return;
-        }
-    }
-
-    CLOG(ERROR) << "Host ID" << host_id << "is NOT found in list";
+    if (!removeHostId(host_id))
+        CLOG(ERROR) << "Host ID" << host_id << "is NOT found in list";
 }
