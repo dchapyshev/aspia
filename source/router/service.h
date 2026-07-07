@@ -21,6 +21,8 @@
 
 #include <QList>
 
+#include <string>
+
 #include "base/core_service.h"
 #include "base/peer/host_id.h"
 #include "base/net/tcp_server.h"
@@ -50,6 +52,8 @@ public:
     {
         qint64 session_id;
         proto::router::RelayKey key;
+        std::string peer_host;
+        quint16 peer_port;
     };
 
     using Keys = QList<proto::router::RelayKey>;

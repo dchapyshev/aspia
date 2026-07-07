@@ -34,7 +34,6 @@
 #include "proto/router_constants.h"
 #include "proto/router_legacy_host.h"
 #include "router/database.h"
-#include "router/relay.h"
 #include "router/service.h"
 #include "router/host.h"
 #include "router/host_ng.h"
@@ -465,24 +464,6 @@ void Client::readConnectionRequest(const proto::router::ConnectionRequest& reque
         return;
     }
 
-    Relay* relay = Service::instance()->relay(credentials->session_id);
-    if (!relay)
-    {
-        CLOG(ERROR) << "No relay with session id" << credentials->session_id;
-        offer->set_error_code(proto::router::ConnectionOffer::KEY_POOL_EMPTY);
-        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-        return;
-    }
-
-    const std::optional<Relay::PeerData>& peer_data = relay->peerData();
-    if (!peer_data.has_value())
-    {
-        CLOG(ERROR) << "No peer data for relay with session id" << credentials->session_id;
-        offer->set_error_code(proto::router::ConnectionOffer::KEY_POOL_EMPTY);
-        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-        return;
-    }
-
     offer->set_error_code(proto::router::ConnectionOffer::SUCCESS);
 
     proto::router::PeerInfo* peer_info = offer->mutable_peer_info();
@@ -500,8 +481,8 @@ void Client::readConnectionRequest(const proto::router::ConnectionRequest& reque
     }
 
     proto::router::RelayCredentials* offer_credentials = offer->mutable_relay();
-    offer_credentials->set_host(relay->peerData()->first);
-    offer_credentials->set_port(relay->peerData()->second);
+    offer_credentials->set_host(credentials->peer_host);
+    offer_credentials->set_port(credentials->peer_port);
     offer_credentials->mutable_key()->Swap(&credentials->key);
 
     // AES-256-GCM is used only when both peers support it; legacy peers (and their relay code) only

@@ -259,8 +259,20 @@ std::optional<Service::Credentials> Service::takeCredentials()
         return std::nullopt;
     }
 
+    // Resolve the relay before consuming a key: a one-time key must not leave the pool unless we
+    // can actually build an offer from it. On the single-threaded event loop the relay stays valid
+    // until this returns, so the caller never faces a missing relay after the key was taken.
+    Relay* relay_session = relay(preffered_relay.key());
+    if (!relay_session || !relay_session->peerData().has_value())
+    {
+        LOG(ERROR) << "Preferred relay" << preffered_relay.key() << "is not usable";
+        return std::nullopt;
+    }
+
     Credentials credentials;
     credentials.session_id = preffered_relay.key();
+    credentials.peer_host = relay_session->peerData()->first;
+    credentials.peer_port = relay_session->peerData()->second;
     credentials.key = std::move(keys.back());
 
     // Removing the key from the pool.
@@ -272,9 +284,7 @@ std::optional<Service::Credentials> Service::takeCredentials()
         key_pool_.remove(preffered_relay.key());
     }
 
-    Relay* relay_session = relay(credentials.session_id);
-    if (relay_session)
-        relay_session->sendKeyUsed(credentials.key.key_id());
+    relay_session->sendKeyUsed(credentials.key.key_id());
 
     return std::move(credentials);
 }
