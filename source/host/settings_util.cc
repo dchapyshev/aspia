@@ -177,9 +177,7 @@ bool importDatabase(const QJsonObject& obj)
 
     if (obj.contains(kUsers))
     {
-        const QVector<User> existing = db.userList();
-        for (const User& user : existing)
-            db.removeUser(user.entry_id);
+        QVector<User> users;
 
         const QJsonArray users_array = obj[kUsers].toArray();
         for (const QJsonValue& value : users_array)
@@ -200,7 +198,15 @@ bool importDatabase(const QJsonObject& obj)
                 continue;
             }
 
-            db.addUser(user);
+            users.append(user);
+        }
+
+        // Swap the whole list atomically: the old users are only dropped if the new ones are written
+        // successfully, so a failed import cannot leave the host with no users.
+        if (!db.replaceUsers(users))
+        {
+            LOG(ERROR) << "Unable to replace user list";
+            return false;
         }
     }
 

@@ -207,7 +207,7 @@ void doHostMigrate(const QJsonDocument& doc)
     if (root_object.contains("SeedKey"))
     {
         QString value = root_object["SeedKey"].toString();
-        LOG(INFO) << "SeedKey:" << value;
+        LOG(INFO) << "SeedKey: <present>";
         db.setSeedKey(QByteArray::fromHex(value.toLatin1()));
     }
 
@@ -248,7 +248,7 @@ void doHostMigrate(const QJsonDocument& doc)
             if (user_object.contains("Salt"))
             {
                 QString value = user_object["Salt"].toString();
-                LOG(INFO) << "Salt:" << value;
+                LOG(INFO) << "Salt: <present>";
                 user.salt = QByteArray::fromHex(value.toLatin1());
             }
 
@@ -262,7 +262,7 @@ void doHostMigrate(const QJsonDocument& doc)
             if (user_object.contains("Verifier"))
             {
                 QString value = user_object["Verifier"].toString();
-                LOG(INFO) << "Verifier:" << value;
+                LOG(INFO) << "Verifier: <present>";
                 user.verifier = QByteArray::fromHex(value.toLatin1());
             }
 

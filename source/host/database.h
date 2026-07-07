@@ -73,6 +73,7 @@ public:
     bool addUser(const User& user);
     bool modifyUser(const User& user);
     bool removeUser(qint64 entry_id);
+    bool replaceUsers(const QVector<User>& users);
 
     // Settings.
     QByteArray seedKey() const;

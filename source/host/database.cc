@@ -28,6 +28,7 @@
 #include "base/crypto/secure_string.h"
 #include "base/files/base_paths.h"
 #include "base/sql/sql_query.h"
+#include "base/sql/sql_transaction.h"
 #include "build/build_config.h"
 
 namespace {
@@ -275,6 +276,40 @@ bool Database::removeUser(qint64 entry_id)
     }
 
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::replaceUsers(const QVector<User>& users)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    SqlTransaction transaction(db_);
+    if (!transaction.begin())
+    {
+        LOG(ERROR) << "Unable to begin transaction";
+        return false;
+    }
+
+    // On any failure the early return skips commit(), so the transaction destructor rolls back and the
+    // existing user list is preserved.
+    const QVector<User> existing = userList();
+    for (const User& user : std::as_const(existing))
+    {
+        if (!removeUser(user.entry_id))
+            return false;
+    }
+
+    for (const User& user : std::as_const(users))
+    {
+        if (!addUser(user))
+            return false;
+    }
+
+    return transaction.commit();
 }
 
 //--------------------------------------------------------------------------------------------------

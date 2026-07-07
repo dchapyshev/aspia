@@ -631,7 +631,12 @@ void Service::onUserSessionDettached()
 //--------------------------------------------------------------------------------------------------
 void Service::onStopClient(quint32 client_id)
 {
-    for (auto* client : std::as_const(clients_))
+    // Iterate over a snapshot: emitting sig_finished() synchronously invokes onClientFinished(), which
+    // removes the client from clients_. Walking the live container while it is mutated is undefined
+    // behaviour, and for client_id == 0 (stop all) there is no early break to hide it.
+    const QList<Client*> clients = clients_;
+
+    for (auto* client : clients)
     {
         quint32 current_client_id = client->clientId();
 
