@@ -65,7 +65,9 @@ AddressBar::AddressBar(QWidget* parent)
 void AddressBar::setDriveList(const proto::file_transfer::DriveList& list)
 {
     model_->setDriveList(list);
-    emit sig_pathChanged(currentPath());
+
+    // Applying the drive list resets the model, so restore the selection of the current path.
+    onPathIndexChanged(model_->currentPathIndex());
 }
 
 //--------------------------------------------------------------------------------------------------

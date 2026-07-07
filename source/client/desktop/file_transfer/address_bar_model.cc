@@ -62,6 +62,9 @@ AddressBarModel::AddressBarModel(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 void AddressBarModel::setDriveList(const proto::file_transfer::DriveList& list)
 {
+    // The drive rows are replaced wholesale, so views must drop the indexes of the old list.
+    beginResetModel();
+
     drives_.clear();
 
     for (int i = 0; i < list.item_size(); ++i)
@@ -102,56 +105,57 @@ void AddressBarModel::setDriveList(const proto::file_transfer::DriveList& list)
         drives_.append(drive);
     }
 
-    emit dataChanged(QModelIndex(), QModelIndex());
+    endResetModel();
 }
 
 //--------------------------------------------------------------------------------------------------
 QModelIndex AddressBarModel::setCurrentPath(const QString& path)
 {
-    QModelIndex index;
-
     LOG(INFO) << "Previous path:" << previous_path_;
     LOG(INFO) << "New path:" << path;
 
     previous_path_ = current_path_;
 
+    QString new_path;
+
     if (path == computerPath())
     {
-        current_path_ = computerPath();
-        index = computerIndex();
+        new_path = computerPath();
     }
     else
     {
-        QString normalized_path = normalizePath(path);
+        new_path = normalizePath(path);
 
-        if (!FilePlatformUtil::isValidPath(normalized_path))
+        if (!FilePlatformUtil::isValidPath(new_path))
         {
-            LOG(ERROR) << "Invalid path entered:" << normalized_path;
+            LOG(ERROR) << "Invalid path entered:" << new_path;
             emit sig_invalidPathEntered();
             return QModelIndex();
         }
-        else
-        {
-            current_path_ = normalized_path;
-
-            for (int i = 0; i < drives_.count(); ++i)
-            {
-                const QString& drive_path = drives_.at(i).path;
-
-                if (drive_path.compare(current_path_, Qt::CaseInsensitive) == 0)
-                {
-                    index = createIndex(i, 0, kDriveItem);
-                    break;
-                }
-            }
-
-            if (!index.isValid())
-                index = currentFolderIndex();
-        }
     }
 
-    emit dataChanged(QModelIndex(), QModelIndex());
-    return index;
+    // The set of top level rows and the current folder item depend on the current path, so the
+    // change is structural for the model.
+    beginResetModel();
+    current_path_ = new_path;
+    endResetModel();
+
+    return currentPathIndex();
+}
+
+//--------------------------------------------------------------------------------------------------
+QModelIndex AddressBarModel::currentPathIndex() const
+{
+    if (current_path_ == computerPath())
+        return computerIndex();
+
+    for (int i = 0; i < drives_.count(); ++i)
+    {
+        if (drives_.at(i).path.compare(current_path_, Qt::CaseInsensitive) == 0)
+            return createIndex(i, 0, kDriveItem);
+    }
+
+    return currentFolderIndex();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -334,6 +338,9 @@ QVariant AddressBarModel::data(const QModelIndex& index, int role) const
     }
     else if (index.internalId() == kDriveItem)
     {
+        if (index.row() >= drives_.count())
+            return QVariant();
+
         const Drive& drive = drives_.at(index.row());
 
         switch (role)
