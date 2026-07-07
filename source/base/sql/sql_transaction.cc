@@ -51,5 +51,13 @@ bool SqlTransaction::commit()
         return false;
 
     active_ = false;
-    return db_.commitTransaction();
+
+    if (db_.commitTransaction())
+        return true;
+
+    // A failed COMMIT (SQLITE_BUSY, disk full) may leave the transaction open, and the connection
+    // would then reject every following BEGIN. Roll it back explicitly; if sqlite has already
+    // rolled it back automatically, the extra ROLLBACK fails without doing any harm.
+    db_.rollbackTransaction();
+    return false;
 }
