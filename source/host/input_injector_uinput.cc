@@ -292,9 +292,16 @@ void InputInjectorUinput::injectMouseEvent(const proto::input::MouseEvent& event
     // fractional scale, so a plain affine map is all that is needed here.
     if (screen_size_.width() > 1 && screen_size_.height() > 1)
     {
-        const QPoint pos(event.x() + screen_offset_.x(), event.y() + screen_offset_.y());
-        emitEvent(EV_ABS, ABS_X, pos.x() * kAbsMax / (screen_size_.width() - 1));
-        emitEvent(EV_ABS, ABS_Y, pos.y() * kAbsMax / (screen_size_.height() - 1));
+        // The client coordinates are untrusted; clamp them into the screen and compute in 64-bit so the
+        // intermediate multiply by kAbsMax cannot overflow a signed int.
+        const qint64 max_x = screen_size_.width() - 1;
+        const qint64 max_y = screen_size_.height() - 1;
+
+        const qint64 x = qBound<qint64>(0, static_cast<qint64>(event.x()) + screen_offset_.x(), max_x);
+        const qint64 y = qBound<qint64>(0, static_cast<qint64>(event.y()) + screen_offset_.y(), max_y);
+
+        emitEvent(EV_ABS, ABS_X, static_cast<int>(x * kAbsMax / max_x));
+        emitEvent(EV_ABS, ABS_Y, static_cast<int>(y * kAbsMax / max_y));
     }
 
     const bool left = (event.mask() & proto::input::MouseEvent::LEFT_BUTTON) != 0;

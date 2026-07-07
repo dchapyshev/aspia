@@ -266,7 +266,9 @@ void InputInjectorWin::injectKeyEvent(const proto::input::KeyEvent& event)
         return;
     }
 
-    bool prev_state = GetKeyState(VK_CAPITAL) != 0;
+    // The toggle (on/off) state is the low-order bit of GetKeyState; the high bit is the pressed
+    // state, which must not be mistaken for the lock being on.
+    bool prev_state = (GetKeyState(VK_CAPITAL) & 0x0001) != 0;
     bool curr_state = (event.flags() & proto::input::KeyEvent::CAPSLOCK) != 0;
 
     if (prev_state != curr_state)
@@ -275,7 +277,7 @@ void InputInjectorWin::injectKeyEvent(const proto::input::KeyEvent& event)
         sendKeyboardVirtualKey(VK_CAPITAL, KEYEVENTF_KEYUP);
     }
 
-    prev_state = GetKeyState(VK_NUMLOCK) != 0;
+    prev_state = (GetKeyState(VK_NUMLOCK) & 0x0001) != 0;
     curr_state = (event.flags() & proto::input::KeyEvent::NUMLOCK) != 0;
 
     if (prev_state != curr_state)
@@ -326,9 +328,16 @@ void InputInjectorWin::injectMouseEvent(const proto::input::MouseEvent& event)
         return;
     }
 
-    // Translate the coordinates of the cursor into the coordinates of the virtual screen.
-    QPoint pos(((event.x() + screen_offset_.x()) * 65535) / (screen_size_.width() - 1),
-               ((event.y() + screen_offset_.y()) * 65535) / (screen_size_.height() - 1));
+    // Translate the coordinates of the cursor into the coordinates of the virtual screen. The client
+    // coordinates are untrusted; clamp them into the screen and compute in 64-bit so the intermediate
+    // multiply by 65535 cannot overflow a signed int.
+    const qint64 max_x = screen_size_.width() - 1;
+    const qint64 max_y = screen_size_.height() - 1;
+
+    const qint64 x = qBound<qint64>(0, static_cast<qint64>(event.x()) + screen_offset_.x(), max_x);
+    const qint64 y = qBound<qint64>(0, static_cast<qint64>(event.y()) + screen_offset_.y(), max_y);
+
+    QPoint pos(static_cast<int>((x * 65535) / max_x), static_cast<int>((y * 65535) / max_y));
 
     DWORD flags = MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_VIRTUALDESK;
     DWORD mouse_data = 0;

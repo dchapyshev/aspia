@@ -382,7 +382,7 @@ void InputInjectorX11::initMouseButtonMap()
     }
 
     int num_device_buttons = XGetDeviceButtonMapping(display_, device, nullptr, 0);
-    std::unique_ptr<unsigned char[]> button_mapping(new unsigned char[num_buttons]);
+    std::unique_ptr<unsigned char[]> button_mapping(new unsigned char[num_device_buttons]);
 
     for (int i = 0; i < num_device_buttons; i++)
         button_mapping[i] = i + 1;
