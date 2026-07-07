@@ -59,6 +59,13 @@ RouterGroupDialog::RouterGroupDialog(
 
     Router* router = Router::instance(router_id_);
     CHECK(router);
+
+    connect(router, &Router::sig_statusChanged, this, [this](qint64 /* router_id */, Router::Status status)
+    {
+        if (status != Router::Status::ONLINE)
+            reject();
+    });
+
     router->listGroups(Router::CachePolicy::USE_CACHE, workspace_id_, this,
                        &RouterGroupDialog::onGroupListReceived);
 }
