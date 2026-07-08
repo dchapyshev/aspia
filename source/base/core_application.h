@@ -21,11 +21,14 @@
 
 #include <QCoreApplication>
 
+#include <memory>
+
 #include "base/scoped_qpointer.h"
 
 class QSocketNotifier;
 class MessageWindow;
 class Thread;
+class EventMonitor;
 
 struct sd_login_monitor;
 
@@ -56,6 +59,10 @@ private:
     ScopedQPointer<QSocketNotifier> session_notifier_;
     int last_active_session_ = -1;
 #endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+
+#if defined(Q_OS_MACOS)
+    std::unique_ptr<EventMonitor> event_monitor_;
+#endif // defined(Q_OS_MACOS)
 
     Q_DISABLE_COPY_MOVE(CoreApplication)
 };

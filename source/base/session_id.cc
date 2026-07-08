@@ -30,6 +30,10 @@
 #include "base/linux/libsystemd.h"
 #endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 
+#if defined(Q_OS_MACOS)
+#include <SystemConfiguration/SystemConfiguration.h>
+#endif // defined(Q_OS_MACOS)
+
 #include "base/logging.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -65,6 +69,28 @@ SessionId activeConsoleSessionId()
         return kInvalidSessionId;
 
     return static_cast<SessionId>(vtnr);
+#elif defined(Q_OS_MACOS)
+    // The user currently owning the console. Identified by uid, which changes on fast user switching,
+    // so callers can follow the active session. "loginwindow" (nobody logged in) and no console user
+    // both map to the invalid id.
+    SCDynamicStoreRef store = SCDynamicStoreCreate(nullptr, CFSTR("aspia"), nullptr, nullptr);
+    if (!store)
+        return kInvalidSessionId;
+
+    uid_t uid = 0;
+    CFStringRef user = SCDynamicStoreCopyConsoleUser(store, &uid, nullptr);
+    CFRelease(store);
+
+    if (!user)
+        return kInvalidSessionId;
+
+    const bool is_loginwindow = CFEqual(user, CFSTR("loginwindow"));
+    CFRelease(user);
+
+    if (is_loginwindow)
+        return kInvalidSessionId;
+
+    return static_cast<SessionId>(uid);
 #else
     return 1;
 #endif

@@ -33,6 +33,163 @@
 #include "base/linux/libsystemd.h"
 #endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 
+#if defined(Q_OS_MACOS)
+#include <SystemConfiguration/SystemConfiguration.h>
+#include <IOKit/IOKitLib.h>
+#include <IOKit/IOMessage.h>
+#include <IOKit/pwr_mgt/IOPMLib.h>
+#include <dispatch/dispatch.h>
+#endif // defined(Q_OS_MACOS)
+
+#if defined(Q_OS_MACOS)
+// Reports console session changes (fast user switching, login-screen) and power transitions
+// (sleep/wake) of the local machine; each callback hops back to the application thread
+// instead of requiring a CFRunLoop.
+class EventMonitor
+{
+public:
+    EventMonitor();
+    ~EventMonitor();
+
+private:
+    static void sessionStoreCallback(SCDynamicStoreRef store, CFArrayRef changed_keys, void* info);
+    static void powerCallback(
+        void* refcon, io_service_t service, natural_t message_type, void* message_arg);
+
+    dispatch_queue_t queue_ = nullptr;
+
+    // Console session (fast user switching, login-screen) via SCDynamicStore.
+    SCDynamicStoreRef session_store_ = nullptr;
+    SessionId last_active_session_ = kInvalidSessionId;
+
+    // Sleep/wake via IOKit.
+    io_connect_t power_root_port_ = MACH_PORT_NULL;
+    IONotificationPortRef power_notify_port_ = nullptr;
+    io_object_t power_notifier_ = IO_OBJECT_NULL;
+
+    Q_DISABLE_COPY_MOVE(EventMonitor)
+};
+
+//--------------------------------------------------------------------------------------------------
+EventMonitor::EventMonitor()
+    : last_active_session_(activeConsoleSessionId())
+{
+    queue_ = dispatch_queue_create("org.aspia.event-monitor", DISPATCH_QUEUE_SERIAL);
+
+    SCDynamicStoreContext context = {};
+    context.info = this;
+
+    session_store_ =
+        SCDynamicStoreCreate(nullptr, CFSTR("org.aspia.host"), sessionStoreCallback, &context);
+    if (session_store_)
+    {
+        CFStringRef key = SCDynamicStoreKeyCreateConsoleUser(nullptr);
+        CFArrayRef keys = CFArrayCreate(
+            nullptr, reinterpret_cast<const void**>(&key), 1, &kCFTypeArrayCallBacks);
+
+        SCDynamicStoreSetNotificationKeys(session_store_, keys, nullptr);
+        SCDynamicStoreSetDispatchQueue(session_store_, queue_);
+
+        CFRelease(keys);
+        CFRelease(key);
+    }
+    else
+    {
+        LOG(ERROR) << "SCDynamicStoreCreate failed";
+    }
+
+    power_root_port_ =
+        IORegisterForSystemPower(this, &power_notify_port_, powerCallback, &power_notifier_);
+    if (power_root_port_ != MACH_PORT_NULL)
+        IONotificationPortSetDispatchQueue(power_notify_port_, queue_);
+    else
+        LOG(ERROR) << "IORegisterForSystemPower failed";
+}
+
+//--------------------------------------------------------------------------------------------------
+EventMonitor::~EventMonitor()
+{
+    if (session_store_)
+    {
+        SCDynamicStoreSetDispatchQueue(session_store_, nullptr);
+        CFRelease(session_store_);
+    }
+
+    if (power_notify_port_)
+    {
+        IONotificationPortSetDispatchQueue(power_notify_port_, nullptr);
+        IODeregisterForSystemPower(&power_notifier_);
+        IOServiceClose(power_root_port_);
+        IONotificationPortDestroy(power_notify_port_);
+    }
+
+    if (queue_)
+        dispatch_release(queue_);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void EventMonitor::sessionStoreCallback(
+    SCDynamicStoreRef /* store */, CFArrayRef /* changed_keys */, void* info)
+{
+    EventMonitor* self = static_cast<EventMonitor*>(info);
+
+    // Runs on the serial notification queue. The instance can already be gone if a notification races
+    // with application shutdown.
+    CoreApplication* application = CoreApplication::instance();
+    if (!application)
+        return;
+
+    SessionId active = activeConsoleSessionId();
+    if (active == self->last_active_session_)
+        return;
+
+    LOG(INFO) << "Active console session changed:" << self->last_active_session_ << "->" << active;
+    self->last_active_session_ = active;
+
+    // The auto/queued connections marshal the slots to their own threads, as on Windows where the emit
+    // happens on the UI thread.
+    emit application->sig_sessionEvent(0, static_cast<quint32>(active));
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void EventMonitor::powerCallback(
+    void* refcon, io_service_t /* service */, natural_t message_type, void* message_arg)
+{
+    EventMonitor* self = static_cast<EventMonitor*>(refcon);
+
+    // The instance can already be gone if a notification races with application shutdown; the power
+    // change is still acknowledged so the system does not stall.
+    CoreApplication* application = CoreApplication::instance();
+
+    switch (message_type)
+    {
+        case kIOMessageCanSystemSleep:
+            // Do not veto idle sleep. The acknowledgement is mandatory, otherwise the system waits
+            // 30 seconds before sleeping.
+            IOAllowPowerChange(self->power_root_port_, reinterpret_cast<long>(message_arg));
+            break;
+
+        case kIOMessageSystemWillSleep:
+            if (application)
+                emit application->sig_powerEvent(kIOMessageSystemWillSleep);
+            // Acknowledge so the system proceeds to sleep without waiting for the timeout.
+            IOAllowPowerChange(self->power_root_port_, reinterpret_cast<long>(message_arg));
+            break;
+
+        case kIOMessageSystemWillPowerOn:
+        case kIOMessageSystemHasPoweredOn:
+            if (application)
+                emit application->sig_powerEvent(kIOMessageSystemHasPoweredOn);
+            break;
+
+        default:
+            break;
+    }
+}
+#endif // defined(Q_OS_MACOS)
+
 //--------------------------------------------------------------------------------------------------
 CoreApplication::CoreApplication(int& argc, char* argv[])
     : QCoreApplication(argc, argv)
@@ -170,6 +327,10 @@ CoreApplication::CoreApplication(int& argc, char* argv[])
         LOG(ERROR) << "sd_login_monitor_new failed";
     }
 #endif // defined(Q_OS_LINUX)
+
+#if defined(Q_OS_MACOS)
+    event_monitor_ = std::make_unique<EventMonitor>();
+#endif // defined(Q_OS_MACOS)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -186,6 +347,10 @@ CoreApplication::~CoreApplication()
     if (login_monitor_)
         login_monitor_ = LibSystemd::loginMonitorUnref(login_monitor_);
 #endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+
+#if defined(Q_OS_MACOS)
+    event_monitor_.reset();
+#endif // defined(Q_OS_MACOS)
 }
 
 //--------------------------------------------------------------------------------------------------
