@@ -16,7 +16,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-collect_sources(SOURCE_HOST_CORE_UI
+collect_sources(SOURCE_HOST_UI
     application.cc
     application.h
     change_password_dialog.cc
@@ -33,8 +33,6 @@ collect_sources(SOURCE_HOST_CORE_UI
     connect_confirm_dialog.ui
     elevate_util.cc
     elevate_util.h
-    host_main.cc
-    host_main.h
     host_window.cc
     host_window.h
     host_window.ui
@@ -49,7 +47,7 @@ collect_sources(SOURCE_HOST_CORE_UI
     user_dialog.ui)
 
 if (APPLE)
-    collect_sources(SOURCE_HOST_CORE_UI
+    collect_sources(SOURCE_HOST_UI
         permission_dialog.cc
         permission_dialog.h)
 endif()

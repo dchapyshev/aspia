@@ -9,7 +9,7 @@ WorkingDirectory=/usr/bin
 #EnvironmentFile=/usr/bin/env.sh
 #Environment=SVC=aspia-host-service
 Restart=always
-ExecStart=/usr/bin/aspia_host_service
+ExecStart=/usr/bin/aspia_host --service
 RestartSec=5000ms
 
 [Install]

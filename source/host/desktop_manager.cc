@@ -18,7 +18,6 @@
 
 #include "host/desktop_manager.h"
 
-#include <QCoreApplication>
 #include <QDir>
 #include <QFileInfo>
 #include <QTimer>
@@ -48,6 +47,10 @@
 #include <cstdlib>
 #endif // defined(Q_OS_LINUX)
 
+#if defined(Q_OS_MACOS)
+#include <cstdlib>
+#endif // defined(Q_OS_MACOS)
+
 namespace {
 
 #if defined(Q_OS_LINUX)
@@ -59,14 +62,9 @@ constexpr std::chrono::milliseconds kRestartTimeout { 5000 };
 #endif
 constexpr std::chrono::milliseconds kAttachTimeout { 15000 };
 
-#if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
-const char kDesktopAgentFile[] = "aspia_desktop_agent";
-#endif
-
 #if defined(Q_OS_WINDOWS)
 // Name of the default session desktop.
 const wchar_t kDefaultDesktopName[] = L"winsta0\\default";
-const char kDesktopAgentFile[] = "aspia_desktop_agent.exe";
 
 //--------------------------------------------------------------------------------------------------
 bool copyProcessToken(DWORD desired_access, ScopedHandle* token_out)
@@ -268,13 +266,6 @@ DesktopManager::~DesktopManager()
 }
 
 //--------------------------------------------------------------------------------------------------
-// static
-QString DesktopManager::filePath()
-{
-    return QDir::toNativeSeparators(QCoreApplication::applicationDirPath() + '/' + kDesktopAgentFile);
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopManager::startAgentClient(const QString& ipc_channel_name)
 {
     if (ipc_channel_name.isEmpty())
@@ -421,7 +412,7 @@ void DesktopManager::onUserSessionEvent(quint32 event_type, quint32 session_id)
             // Ignore other events.
             break;
     }
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
     // The active console session changed (user switch or the display-manager greeter). Follow it:
     // detach from the previous session and attach to the new active one.
     if (session_id == static_cast<quint32>(session_id_))
@@ -440,7 +431,7 @@ void DesktopManager::onUserSessionEvent(quint32 event_type, quint32 session_id)
 void DesktopManager::onRestartTimeout()
 {
     LOG(INFO) << "Restarting...";
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
     // Always re-attach to the current active console session: the previous session id may have been
     // cleared by a failed attach, and the active session can change while we retry.
     SessionId session_id = activeConsoleSessionId();
@@ -477,8 +468,10 @@ void DesktopManager::onIpcNewConnection()
 
     const quint32 client_pid = ipc_channel_->processId();
 
-    // Verify the connecting peer's executable is exactly the agent binary we shipped.
-    const QString expected_path = QFileInfo(filePath()).canonicalFilePath();
+    // Verify the connecting peer's executable is exactly the agent binary we shipped (this very
+    // aspia_host binary, run with a "--session-type" switch).
+    const QString expected_path =
+        QFileInfo(QCoreApplication::applicationFilePath()).canonicalFilePath();
     const QString actual_path = QFileInfo(ProcessUtil::filePath(client_pid)).canonicalFilePath();
     if (actual_path.isEmpty() || actual_path != expected_path)
     {
@@ -594,8 +587,11 @@ void DesktopManager::attach(const Location& location, SessionId session_id)
     // An agent from a previous attach attempt may still be alive: probing the capture path can outlast
     // the attach timeout, and a driver call can hang it outright. Two agents would fight over the DRM
     // device (seen as prime-export/EGL failures breaking capture), so kill the stale one and start
-    // fresh instead of waiting on a process in an unknown state.
-    const int killed_count = SessionUtil::killProcesses(0, "aspia_desktop_agent", QByteArray());
+    // fresh instead of waiting on a process in an unknown state. Match the session-type value so only
+    // desktop agents are killed, not the GUI or the file/terminal agents (all the same aspia_host binary).
+    const QByteArray agent_comm =
+        QFileInfo(QCoreApplication::applicationFilePath()).fileName().toLocal8Bit();
+    const int killed_count = SessionUtil::killProcesses(0, agent_comm, "desktop");
     if (killed_count > 0)
         LOG(INFO) << "Killed" << killed_count << "stale desktop agent process(es)";
 #endif // defined(Q_OS_LINUX)
@@ -666,7 +662,9 @@ bool DesktopManager::startProcess(const QString& ipc_channel_name)
         return false;
     }
 
-    if (!startProcessWithToken(session_token, filePath(), ipc_channel_name))
+    const QString command_line = QString("\"%1\" --session-type desktop").arg(
+        QDir::toNativeSeparators(QCoreApplication::applicationFilePath()));
+    if (!startProcessWithToken(session_token, command_line, ipc_channel_name))
     {
         LOG(ERROR) << "startProcessWithToken failed (session_id:" << session_id_ << ")";
         return false;
@@ -731,8 +729,28 @@ bool DesktopManager::startProcess(const QString& ipc_channel_name)
     // The Wayland greeter has no readiness gate; it falls through to the KMS path.
 
     const QByteArray command_line =
-        QString("systemd-run --collect --setenv=%1=%2%3 %4")
-            .arg(IpcServer::kChannelIdEnvVar, ipc_channel_name, log_setenv, filePath())
+        QString("systemd-run --collect --setenv=%1=%2%3 %4 --session-type desktop")
+            .arg(IpcServer::kChannelIdEnvVar, ipc_channel_name, log_setenv,
+                 QCoreApplication::applicationFilePath())
+            .toLocal8Bit();
+
+    LOG(INFO) << "Start desktop session agent:" << command_line;
+
+    int ret = system(command_line.data());
+    LOG(INFO) << "system result:" << ret;
+    return ret == 0;
+#elif defined(Q_OS_MACOS)
+    // The console session is the logged-in user's uid. Launch the agent inside that user's Aqua (GUI)
+    // session with "launchctl asuser <uid>": that places it in the user's per-user launchd domain, which
+    // is what gives access to the WindowServer (screen capture) and event injection. Unlike the GUI, the
+    // agent is NOT dropped to the user (no "sudo -u") - it stays root, matching Windows (SYSTEM) and Linux
+    // (root), so the control IPC channel can remain SYSTEM_ONLY. The channel name is passed through the
+    // environment; background it (&) so the call returns immediately, as on Linux.
+    const QByteArray command_line =
+        QString("launchctl asuser %1 env %2=%3 \"%4\" --session-type desktop &")
+            .arg(QString::number(static_cast<quint32>(session_id_)),
+                 IpcServer::kChannelIdEnvVar, ipc_channel_name,
+                 QCoreApplication::applicationFilePath())
             .toLocal8Bit();
 
     LOG(INFO) << "Start desktop session agent:" << command_line;

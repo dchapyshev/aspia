@@ -28,10 +28,6 @@ public:
     static bool isMigrationNeeded();
     static void doMigrate();
 
-    // Performs integrity checks on host components.
-    // Returns true if check succeeded. Returns false if the check fails.
-    static bool integrityCheck();
-
     enum DebugInfoFeatures
     {
         INCLUDE_DEFAULT = 0,

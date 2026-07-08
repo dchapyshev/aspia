@@ -293,9 +293,11 @@ void DesktopClient::onIpcNewConnection()
     ipc_channel_ = ipc_server_->nextPendingConnection();
     ipc_channel_->setParent(this);
 
-    // Verify the connecting peer's executable is exactly the desktop_agent binary we shipped.
+    // Verify the connecting peer's executable is exactly the agent binary we shipped (this very
+    // aspia_host binary, run with a "--session-type" switch).
     const quint32 client_pid = ipc_channel_->processId();
-    const QString expected_path = QFileInfo(DesktopManager::filePath()).canonicalFilePath();
+    const QString expected_path =
+        QFileInfo(QCoreApplication::applicationFilePath()).canonicalFilePath();
     const QString actual_path = QFileInfo(ProcessUtil::filePath(client_pid)).canonicalFilePath();
     if (actual_path.isEmpty() || actual_path != expected_path)
     {

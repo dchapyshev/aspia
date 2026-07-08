@@ -16,7 +16,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-collect_sources(SOURCE_HOST_CORE_WIN
+collect_sources(SOURCE_HOST_WIN
     d3d_device.cc
     d3d_device.h
     dxgi_adapter_duplicator.cc

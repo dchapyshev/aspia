@@ -124,11 +124,7 @@ int main(int /* argc */, const char* const* /* argv */)
     const char* kFilesTable[] =
     {
         "aspia_client.exe",
-        "aspia_desktop_agent.exe",
-        "aspia_file_agent.exe",
         "aspia_host.exe",
-        "aspia_host_core.dll",
-        "aspia_host_service.exe",
         "aspia_relay.exe",
         "aspia_router.exe"
     };

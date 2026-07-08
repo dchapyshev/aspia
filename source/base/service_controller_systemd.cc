@@ -288,11 +288,16 @@ std::unique_ptr<ServiceController> ServiceControllerSystemd::open(const QString&
 //--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<ServiceController> ServiceControllerSystemd::install(
-    const QString& name, const QString& display_name, const QString& file_path)
+    const QString& name, const QString& display_name, const QString& file_path,
+    const QStringList& arguments)
 {
     const QString service_name = unitName(name);
     const QString unit_file_path = defaultUnitFilePath(service_name);
     const QFileInfo file_info(file_path);
+
+    QString exec_start = file_path;
+    if (!arguments.isEmpty())
+        exec_start += ' ' + arguments.join(' ');
 
     IniFile ini;
     setKeyValue(&ini, "Unit", "Description", display_name);
@@ -300,7 +305,7 @@ std::unique_ptr<ServiceController> ServiceControllerSystemd::install(
     setKeyValue(&ini, "Unit", "Wants", "network-online.target");
     setKeyValue(&ini, "Service", "WorkingDirectory", file_info.absolutePath());
     setKeyValue(&ini, "Service", "Environment", "ASPIA_LOG_LEVEL=2");
-    setKeyValue(&ini, "Service", "ExecStart", file_path);
+    setKeyValue(&ini, "Service", "ExecStart", exec_start);
     setKeyValue(&ini, "Service", "Restart", "always");
     setKeyValue(&ini, "Service", "RestartSec", "5s");
     setKeyValue(&ini, "Install", "WantedBy", "multi-user.target");

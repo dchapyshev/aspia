@@ -21,7 +21,7 @@
 # built - the same split as the client, where host/ui is the desktop UI and host/android the Android UI.
 if (ANDROID)
     # Portable core files this build needs. More are added here as the host is ported to Android.
-    list(APPEND SOURCE_HOST_CORE
+    list(APPEND SOURCE_HOST
         client.cc
         client.h
         database.cc
@@ -47,10 +47,10 @@ if (ANDROID)
     # Android UI.
     include(android/sources.cmake)
 
-    source_group("" FILES ${SOURCE_HOST_CORE})
+    source_group("" FILES ${SOURCE_HOST})
     source_group(android FILES ${SOURCE_HOST_ANDROID})
 
-    qt_add_executable(aspia_host ${SOURCE_HOST_CORE} ${SOURCE_HOST_ANDROID})
+    qt_add_executable(aspia_host ${SOURCE_HOST} ${SOURCE_HOST_ANDROID})
     target_link_libraries(aspia_host PRIVATE
         aspia_base
         aspia_common
@@ -70,7 +70,7 @@ if (ANDROID)
     return()
 endif()
 
-list(APPEND SOURCE_HOST_CORE
+list(APPEND SOURCE_HOST
     capture_scheduler.cc
     capture_scheduler.h
     chat_client.cc
@@ -83,8 +83,6 @@ list(APPEND SOURCE_HOST_CORE
     desktop_agent.h
     desktop_agent_client.cc
     desktop_agent_client.h
-    desktop_agent_main.cc
-    desktop_agent_main.h
     desktop_client.cc
     desktop_client.h
     desktop_environment.cc
@@ -95,11 +93,8 @@ list(APPEND SOURCE_HOST_CORE
     desktop_resizer.h
     file_agent.cc
     file_agent.h
-    file_agent_main.cc
-    file_agent_main.h
     file_client.cc
     file_client.h
-    host_export.h
     host_storage.cc
     host_storage.h
     host_user_list.cc
@@ -107,6 +102,7 @@ list(APPEND SOURCE_HOST_CORE
     host_utils.cc
     host_utils.h
     input_injector.h
+    main.cc
     process_monitor.cc
     process_monitor.h
     router_manager.cc
@@ -117,8 +113,6 @@ list(APPEND SOURCE_HOST_CORE
     screen_capturer_helper.h
     service.cc
     service.h
-    service_main.cc
-    service_main.h
     settings_util.cc
     settings_util.h
     system_info.cc
@@ -131,8 +125,6 @@ list(APPEND SOURCE_HOST_CORE
     task_manager.h
     terminal_agent.cc
     terminal_agent.h
-    terminal_agent_main.cc
-    terminal_agent_main.h
     terminal_client.cc
     terminal_client.h
     terminal_process.cc
@@ -147,12 +139,11 @@ list(APPEND SOURCE_HOST_CORE
     user_settings.h)
 
 if (WIN32)
-    list(APPEND SOURCE_HOST_CORE
+    list(APPEND SOURCE_HOST
         desktop_environment_win.cc
         desktop_environment_win.h
         desktop_resizer_win.cc
         desktop_resizer_win.h
-        host_core.rc
         input_injector_win.cc
         input_injector_win.h
         process_monitor_win.cc
@@ -168,7 +159,7 @@ if (WIN32)
 endif()
 
 if (LINUX)
-    list(APPEND SOURCE_HOST_CORE
+    list(APPEND SOURCE_HOST
         desktop_environment_linux.cc
         desktop_environment_linux.h
         desktop_resizer_vt.cc
@@ -202,7 +193,7 @@ if (LINUX)
 endif()
 
 if (APPLE)
-    list(APPEND SOURCE_HOST_CORE
+    list(APPEND SOURCE_HOST
         desktop_environment_mac.mm
         desktop_environment_mac.h
         input_injector_mac.mm
@@ -225,27 +216,37 @@ if (LINUX)
     include(linux/sources.cmake)
 endif()
 
-source_group("" FILES ${SOURCE_HOST_CORE})
-source_group(ui FILES ${SOURCE_HOST_CORE_UI})
+source_group("" FILES ${SOURCE_HOST})
+source_group(ui FILES ${SOURCE_HOST_UI})
 
 if (LINUX)
-    source_group(linux FILES ${SOURCE_HOST_CORE_LINUX})
+    source_group(linux FILES ${SOURCE_HOST_LINUX})
 endif()
 
 if (WIN32)
-    source_group(win FILES ${SOURCE_HOST_CORE_WIN})
+    source_group(win FILES ${SOURCE_HOST_WIN})
 
     set(HOST_PLATFORM_LIBS
         advapi32 avrt crypt32 dbghelp dxgi d3d11 imm32 iphlpapi netapi32 setupapi userenv uxtheme
-        version winmm wtsapi32)
+        version winmm wtsapi32
+        Qt6::EntryPointPrivate Qt6::EntryPointImplementation)
 endif()
 
-add_library(aspia_host_core SHARED
-    ${SOURCE_HOST_CORE}
-    ${SOURCE_HOST_CORE_UI}
-    ${SOURCE_HOST_CORE_WIN}
-    ${SOURCE_HOST_CORE_LINUX})
-target_link_libraries(aspia_host_core PRIVATE
+if (LINUX)
+    set(HOST_PLATFORM_LIBS stdc++fs)
+endif()
+
+add_executable(aspia_host
+    ${SOURCE_HOST}
+    ${SOURCE_HOST_UI}
+    ${SOURCE_HOST_WIN}
+    ${SOURCE_HOST_LINUX}
+    host.rc)
+if (WIN32)
+    set_target_properties(aspia_host PROPERTIES WIN32_EXECUTABLE TRUE)
+    set_target_properties(aspia_host PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+endif()
+target_link_libraries(aspia_host PRIVATE
     aspia_base
     aspia_common
     aspia_proto
@@ -253,11 +254,10 @@ target_link_libraries(aspia_host_core PRIVATE
     ${QT_COMMON_LIBS}
     ${QT_PLATFORM_LIBS}
     ${THIRD_PARTY_LIBS})
-set_target_properties(aspia_host_core PROPERTIES COMPILE_DEFINITIONS "HOST_IMPLEMENTATION")
-set_property(TARGET aspia_host_core PROPERTY AUTOMOC ON)
-set_property(TARGET aspia_host_core PROPERTY AUTOUIC ON)
-set_property(TARGET aspia_host_core PROPERTY AUTORCC ON)
-qt_import_plugins(aspia_host_core INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE imageformats iconengines EXCLUDE_BY_TYPE "")
+set_property(TARGET aspia_host PROPERTY AUTOMOC ON)
+set_property(TARGET aspia_host PROPERTY AUTOUIC ON)
+set_property(TARGET aspia_host PROPERTY AUTORCC ON)
+qt_import_plugins(aspia_host INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE imageformats iconengines EXCLUDE_BY_TYPE "")
 
 if (LINUX)
     # The screen capturers compile the PipeWire/DRM stubs (host/linux); only their headers are needed
@@ -273,20 +273,18 @@ if (LINUX)
     # stubs used by WaylandOutputLayout are the third_party/wayland-protocols static library.
     find_library(WAYLAND_CLIENT_LIB NAMES libwayland-client.a wayland-client REQUIRED)
     find_library(FFI_LIB NAMES ffi REQUIRED)
-    target_include_directories(aspia_host_core PRIVATE
-        ${PIPEWIRE_INCLUDE_DIRS} ${LIBDRM_INCLUDE_DIRS})
-    target_link_libraries(aspia_host_core PRIVATE
-        ${WAYLAND_CLIENT_LIB} ${FFI_LIB} wayland_protocols wlr_protocols)
+    target_include_directories(aspia_host PRIVATE ${PIPEWIRE_INCLUDE_DIRS} ${LIBDRM_INCLUDE_DIRS})
+    target_link_libraries(aspia_host PRIVATE ${WAYLAND_CLIENT_LIB} ${FFI_LIB} wayland_protocols wlr_protocols)
 endif()
 
 if (LINUX OR APPLE)
     # PAM is used to validate operating system credentials for terminal sessions.
     find_library(PAM_LIB NAMES pam REQUIRED)
-    target_link_libraries(aspia_host_core PRIVATE ${PAM_LIB})
+    target_link_libraries(aspia_host PRIVATE ${PAM_LIB})
 endif()
 
 if (APPLE)
-    target_link_libraries(aspia_host_core PRIVATE
+    target_link_libraries(aspia_host PRIVATE
         ${SCREENCAPTUREKIT_LIB}
         ${COREMEDIA_LIB}
         ${COREVIDEO_LIB}
@@ -297,60 +295,10 @@ endif()
 
 if (LINUX)
     # forkpty() for terminal sessions lives in libutil.
-    target_link_libraries(aspia_host_core PRIVATE util)
+    target_link_libraries(aspia_host PRIVATE util)
 endif()
-
-if (LINUX)
-    set(HOST_PLATFORM_LIBS stdc++fs)
-endif()
-
-if (WIN32)
-    set(HOST_PLATFORM_LIBS Qt6::EntryPointPrivate Qt6::EntryPointImplementation)
-endif()
-
-# Aspia Host (GUI)
-add_executable(aspia_host ui/host_entry_point.cc ui/host.rc)
-if (WIN32)
-    set_target_properties(aspia_host PROPERTIES WIN32_EXECUTABLE TRUE)
-    set_target_properties(aspia_host PROPERTIES LINK_FLAGS "/MANIFEST:NO")
-endif()
-target_link_libraries(aspia_host aspia_host_core ${HOST_PLATFORM_LIBS})
-
-# Aspia Host Service
-add_executable(aspia_host_service service_entry_point.cc service.rc)
-if (WIN32)
-    set_target_properties(aspia_host_service PROPERTIES LINK_FLAGS "/MANIFEST:NO")
-endif()
-target_link_libraries(aspia_host_service aspia_host_core ${HOST_PLATFORM_LIBS})
-
-# Aspia Desktop Agent
-add_executable(aspia_desktop_agent WIN32 desktop_agent_entry_point.cc desktop_agent.rc)
-if (WIN32)
-    set_target_properties(aspia_desktop_agent PROPERTIES LINK_FLAGS "/MANIFEST:NO")
-endif()
-target_link_libraries(aspia_desktop_agent aspia_host_core ${HOST_PLATFORM_LIBS})
-
-# Aspia File Transfer Agent
-add_executable(aspia_file_agent WIN32 file_agent_entry_point.cc file_agent.rc)
-if (WIN32)
-    set_target_properties(aspia_file_agent PROPERTIES LINK_FLAGS "/MANIFEST:NO")
-endif()
-target_link_libraries(aspia_file_agent aspia_host_core ${HOST_PLATFORM_LIBS})
-
-# Aspia Terminal Agent
-add_executable(aspia_terminal_agent WIN32 terminal_agent_entry_point.cc terminal_agent.rc)
-if (WIN32)
-    set_target_properties(aspia_terminal_agent PROPERTIES LINK_FLAGS "/MANIFEST:NO")
-endif()
-target_link_libraries(aspia_terminal_agent aspia_host_core ${HOST_PLATFORM_LIBS})
 
 if (APPLE)
-    # Ship the whole host as a single application bundle. aspia_host is the bundle's main executable
-    # (what a double-click launches); the service, the agents and the shared library live next to it
-    # in Contents/MacOS so every component resolves its siblings through applicationDirPath() and the
-    # service's executable-path anti-spoofing check keeps working unchanged. The bundle keeps the
-    # aspia_host name (the code looks the binaries up by these exact names); it is renamed to a
-    # human-readable "Aspia Host.app" at install/packaging time.
     set(HOST_ICON ${PROJECT_SOURCE_DIR}/source/common/resources/aspia.icns)
     set_source_files_properties(${HOST_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
     target_sources(aspia_host PRIVATE ${HOST_ICON})
@@ -366,31 +314,4 @@ if (APPLE)
     set_target_properties(aspia_host PROPERTIES
         MACOSX_BUNDLE TRUE
         MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
-
-    # $<TARGET_FILE_DIR:aspia_host> is the bundle's Contents/MacOS directory.
-    set(HOST_BUNDLE_MACOS_DIR $<TARGET_FILE_DIR:aspia_host>)
-
-    # The service and agents are built straight into the bundle. They depend on aspia_host so the
-    # bundle directory exists first (aspia_host itself depends on aspia_host_core, so no cycle).
-    foreach(host_helper aspia_host_service aspia_desktop_agent aspia_file_agent aspia_terminal_agent)
-        set_target_properties(${host_helper} PROPERTIES
-            RUNTIME_OUTPUT_DIRECTORY ${HOST_BUNDLE_MACOS_DIR})
-        add_dependencies(${host_helper} aspia_host)
-    endforeach()
-
-    # The shared library is built before the bundle exists (aspia_host links it), so it cannot be
-    # emitted into the bundle directly. Copy it in once the bundle is created.
-    add_custom_command(TARGET aspia_host POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            $<TARGET_FILE:aspia_host_core> ${HOST_BUNDLE_MACOS_DIR}/
-        COMMENT "Copying aspia_host_core into the host bundle")
-
-    # Every executable loads libaspia_host_core.dylib (install name @rpath/...) from next to itself.
-    set_target_properties(aspia_host aspia_host_service aspia_desktop_agent aspia_file_agent
-                          aspia_terminal_agent PROPERTIES
-        INSTALL_RPATH "@executable_path"
-        BUILD_WITH_INSTALL_RPATH ON)
-
-    # The .pkg installer is built out of this bundle by installer/macos/build_host_pkg.sh (kept
-    # outside CMake, next to the Windows WiX installer, because signing/notarization belong there).
 endif()

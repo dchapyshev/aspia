@@ -247,12 +247,7 @@ set(CPACK_PACKAGE_VERSION_PATCH "${ASPIA_VERSION_PATCH}")
 
 if (LINUX)
     install(TARGETS
-        aspia_host_core
-        aspia_host_service
         aspia_host
-        aspia_desktop_agent
-        aspia_file_agent
-        aspia_terminal_agent
             BUNDLE DESTINATION . COMPONENT host
             RUNTIME DESTINATION bin COMPONENT host
             LIBRARY DESTINATION lib COMPONENT host)

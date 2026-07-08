@@ -444,66 +444,6 @@ void HostUtils::doMigrate()
     LOG(INFO) << "Migration is DONE";
 }
 
-//--------------------------------------------------------------------------------------------------
-// static
-bool HostUtils::integrityCheck()
-{
-#if defined(Q_OS_WINDOWS)
-    static const char* kFiles[] =
-    {
-        "aspia_host.exe",
-        "aspia_desktop_agent.exe",
-        "aspia_file_agent.exe",
-        "aspia_host_service.exe"
-    };
-    static const size_t kMinFileSize = 50 * 1024; // 50 kB.
-
-    QString current_dir = QCoreApplication::applicationDirPath();
-    QString current_file = QCoreApplication::applicationFilePath();
-
-    bool current_file_found = false;
-
-    for (size_t i = 0; i < std::size(kFiles); ++i)
-    {
-        QString file_path(current_dir);
-
-        file_path.append('/');
-        file_path.append(kFiles[i]);
-
-        if (file_path == current_file)
-            current_file_found = true;
-
-        QFileInfo file_info(file_path);
-
-        if (!file_info.exists(file_path))
-        {
-            LOG(ERROR) << "File" << file_path << "does not exist";
-            return false;
-        }
-
-        if (!file_info.isFile() || file_info.isShortcut() || file_info.isSymLink())
-        {
-            LOG(ERROR) << "File" << file_path << "is not a file";
-            return false;
-        }
-
-        qint64 file_size = file_info.size();
-        if (file_size < kMinFileSize)
-        {
-            LOG(ERROR) << "File" << file_path << "is not the correct size:" << file_size;
-            return false;
-        }
-    }
-
-    if (!current_file_found)
-    {
-        LOG(ERROR) << "Current executable file was not found in the list of components";
-        return false;
-    }
-#endif // defined(Q_OS_WINDOWS)
-
-    return true;
-}
 
 //--------------------------------------------------------------------------------------------------
 // static

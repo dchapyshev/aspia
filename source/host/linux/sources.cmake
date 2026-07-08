@@ -16,7 +16,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-collect_sources(SOURCE_HOST_CORE_LINUX
+collect_sources(SOURCE_HOST_LINUX
     egl_dmabuf.cc
     egl_dmabuf.h
     libdrm.cc

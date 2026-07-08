@@ -20,6 +20,7 @@
 #define BASE_SERVICE_CONTROLLER_H
 
 #include <QString>
+#include <QStringList>
 
 #include <memory>
 
@@ -31,7 +32,8 @@ public:
 
     static std::unique_ptr<ServiceController> open(const QString& name);
     static std::unique_ptr<ServiceController> install(
-        const QString& name, const QString& display_name, const QString& file_path);
+        const QString& name, const QString& display_name, const QString& file_path,
+        const QStringList& arguments = QStringList());
     static bool remove(const QString& name);
     static bool isInstalled(const QString& name);
     static bool isRunning(const QString& name);

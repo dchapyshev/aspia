@@ -5,19 +5,20 @@
 #
 
 APP="/Applications/Aspia Host.app"
-SERVICE="$APP/Contents/MacOS/aspia_host_service"
+# The GUI, the session agents and the service are all one binary; the service is "aspia_host --service".
+HOST="$APP/Contents/MacOS/aspia_host"
 
-if [ ! -x "$SERVICE" ]; then
-    echo "aspia_host_service not found at $SERVICE" >&2
+if [ ! -x "$HOST" ]; then
+    echo "aspia_host not found at $HOST" >&2
     exit 1
 fi
 
 # On upgrades an older daemon may still be registered; remove it before installing the new one so
 # launchd picks up the updated executable path. Ignore failure (nothing registered yet).
-"$SERVICE" --remove 2>/dev/null || true
+"$HOST" --service --remove 2>/dev/null || true
 
 # Writes /Library/LaunchDaemons/org.aspia.host-service.plist and loads the daemon.
-if ! "$SERVICE" --install; then
+if ! "$HOST" --service --install; then
     echo "Failed to register the Aspia Host service" >&2
     exit 1
 fi

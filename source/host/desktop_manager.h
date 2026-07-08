@@ -45,8 +45,6 @@ public:
     };
     Q_ENUM(State)
 
-    static QString filePath();
-
     State state() const { return state_; }
     SessionId sessionId() const { return session_id_; }
 

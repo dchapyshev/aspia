@@ -221,7 +221,7 @@ QString shortSessionType(proto::peer::SessionType session_type, qint64 client_id
 
 //--------------------------------------------------------------------------------------------------
 // static
-const char Service::kFileName[] = "aspia_host_service.exe";
+const char Service::kFileName[] = "aspia_host.exe";
 const char Service::kName[] = "aspia-host-service";
 const char Service::kDisplayName[] = "Aspia Host Service";
 const char Service::kDescription[] = "Accepts incoming remote desktop connections to this computer.";

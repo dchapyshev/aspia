@@ -127,7 +127,8 @@ std::unique_ptr<ServiceController> ServiceControllerWin::open(const QString& nam
 //--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<ServiceController> ServiceControllerWin::install(
-    const QString& name, const QString& display_name, const QString& file_path)
+    const QString& name, const QString& display_name, const QString& file_path,
+    const QStringList& arguments)
 {
     ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
     if (!sc_manager.isValid())
@@ -136,9 +137,15 @@ std::unique_ptr<ServiceController> ServiceControllerWin::install(
         return nullptr;
     }
 
+    // The SCM runs the whole lpBinaryPathName as the command line, so quote the executable (its path
+    // may contain spaces) and append the service-mode arguments.
+    QString binary_path = '"' + QDir::toNativeSeparators(file_path) + '"';
+    if (!arguments.isEmpty())
+        binary_path += ' ' + arguments.join(' ');
+
     ScopedScHandle service(CreateServiceW(sc_manager, qUtf16Printable(name),
         qUtf16Printable(display_name), SERVICE_ALL_ACCESS, SERVICE_WIN32_OWN_PROCESS,
-        SERVICE_AUTO_START, SERVICE_ERROR_NORMAL, qUtf16Printable(QDir::toNativeSeparators(file_path)),
+        SERVICE_AUTO_START, SERVICE_ERROR_NORMAL, qUtf16Printable(binary_path),
         nullptr, nullptr, nullptr, nullptr, nullptr));
     if (!service.isValid())
     {

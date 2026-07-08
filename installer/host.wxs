@@ -60,12 +60,8 @@
     <!-- Host applications and service -->
     <DirectoryRef Id="INSTALLLOCATION" FileSource="$(var.SourceFiles)">
         <Component Id ="Applications" DiskId="1" Guid="{A0E3C629-4A61-4ED0-BD9D-FE12C71D7E36}">
-            <File Id="aspia_desktop_agent.exe" Name="aspia_desktop_agent.exe" />
-            <File Id="aspia_file_agent.exe" Name="aspia_file_agent.exe" />
-            <File Id="aspia_host_service.exe" Name="aspia_host_service.exe" KeyPath="yes" />
-            <File Id="aspia_host.exe" Name="aspia_host.exe" />
-            <File Id="aspia_host_core.dll" Name="aspia_host_core.dll" />
-            <ServiceInstall Id="ServiceInstaller" Type="ownProcess" Vital="yes" Name="$(var.ServiceName)" DisplayName="$(var.ServiceDisplayName)" Description="$(var.ServiceDescription)" Start="auto" Account="LocalSystem" ErrorControl="ignore" Interactive="no">
+            <File Id="aspia_host.exe" Name="aspia_host.exe" KeyPath="yes" />
+            <ServiceInstall Id="ServiceInstaller" Type="ownProcess" Vital="yes" Name="$(var.ServiceName)" DisplayName="$(var.ServiceDisplayName)" Description="$(var.ServiceDescription)" Start="auto" Account="LocalSystem" ErrorControl="ignore" Interactive="no" Arguments="--service">
                 <ServiceDependency Id="RpcSs"/>
                 <ServiceDependency Id="Tcpip"/>
                 <ServiceDependency Id="NDIS"/>

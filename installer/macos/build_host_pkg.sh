@@ -4,7 +4,7 @@
 # aspia_host.app bundle (see the APPLE section of source/host/CMakeLists.txt).
 #
 # The installer drops the bundle into /Applications/Aspia Host.app and registers the launchd daemon
-# from its postinstall script (aspia_host_service --install, reusing ServiceControllerLaunchd).
+# from its postinstall script (aspia_host --service --install, reusing ServiceControllerLaunchd).
 #
 # Usage:
 #   installer/macos/build_host_pkg.sh <path-to-aspia_host.app> [--output <file.pkg>]
@@ -43,7 +43,7 @@ done
 
 [ -n "$APP_PATH" ] || die "usage: $(basename "$0") <path-to-aspia_host.app> [--output <file.pkg>]"
 [ -d "$APP_PATH" ] || die "bundle not found: $APP_PATH"
-[ -x "$APP_PATH/Contents/MacOS/aspia_host_service" ] || die "not a host bundle: $APP_PATH"
+[ -x "$APP_PATH/Contents/MacOS/aspia_host" ] || die "not a host bundle: $APP_PATH"
 
 # Version comes from the bundle so it always matches what was built.
 VERSION="$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" \
@@ -86,13 +86,11 @@ if [ -n "${APP_SIGN_IDENTITY:-}" ]; then
         ENTITLEMENTS_ARG=(--entitlements "$SCRIPT_DIR/host.entitlements")
     fi
 
-    # Shared library first, then every executable, then the bundle itself. The ENTITLEMENTS_ARG
-    # expansion is written to stay empty-safe under "set -u" on the stock macOS bash 3.2 (a bare
-    # "${arr[@]}" on an empty array aborts there with "unbound variable").
-    codesign "${CS_OPTS[@]}" "$APP/Contents/MacOS/libaspia_host_core.dylib"
-    for bin in aspia_host_service aspia_desktop_agent aspia_file_agent aspia_terminal_agent aspia_host; do
-        codesign "${CS_OPTS[@]}" ${ENTITLEMENTS_ARG[@]+"${ENTITLEMENTS_ARG[@]}"} "$APP/Contents/MacOS/$bin"
-    done
+    # The bundle now holds a single self-contained executable (aspia_host_core and Qt are linked in
+    # statically): the GUI, every session agent ("--session-type ...") and the service ("--service")
+    # are all the same aspia_host binary. Signing the bundle signs that main executable and seals the
+    # resources. The ENTITLEMENTS_ARG expansion stays empty-safe under "set -u" on the stock macOS
+    # bash 3.2 (a bare "${arr[@]}" on an empty array aborts there with "unbound variable").
     codesign "${CS_OPTS[@]}" ${ENTITLEMENTS_ARG[@]+"${ENTITLEMENTS_ARG[@]}"} "$APP"
 
     codesign --verify --deep --strict --verbose=2 "$APP"

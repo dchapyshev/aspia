@@ -16,21 +16,30 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/ui/host_main.h"
-
 #include <QCommandLineParser>
 #include <QFile>
+#include <QIODevice>
 #include <QSysInfo>
+#include <QTextStream>
 #include <QThread>
 
+#include "base/asio_event_dispatcher.h"
+#include "base/core_application.h"
+#include "base/ipc/ipc_server.h"
 #include "base/logging.h"
+#include "base/service_controller.h"
 #include "build/version.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/update_dialog.h"
 #include "host/database.h"
+#include "host/desktop_agent.h"
+#include "host/file_agent.h"
+#include "host/host_storage.h"
 #include "host/host_utils.h"
+#include "host/service.h"
 #include "host/settings_util.h"
 #include "host/system_settings.h"
+#include "host/terminal_agent.h"
 #include "host/ui/application.h"
 #include "host/ui/check_password_dialog.h"
 #include "host/ui/config_dialog.h"
@@ -38,6 +47,8 @@
 #include "host/ui/security_log_dialog.h"
 
 #if defined(Q_OS_WINDOWS)
+#include <Windows.h>
+
 #include "base/process_util.h"
 #include "base/win/desktop.h"
 #endif // defined(Q_OS_WINDOWS)
@@ -49,6 +60,261 @@
 #endif // defined(Q_OS_LINUX)
 
 namespace {
+
+// The kind of session a headless agent process serves. Selected on the command line via
+// "--session-type desktop|file|terminal" passed to the single aspia_host binary.
+enum class AgentSessionType
+{
+    DESKTOP,
+    FILE,
+    TERMINAL
+};
+
+#if defined(Q_OS_WINDOWS)
+//--------------------------------------------------------------------------------------------------
+// The desktop agent captures the screen and maps input coordinates, so it must be per-monitor DPI
+// aware to work in physical pixels on scaled displays. The GUI gets this from Qt (QApplication), but a
+// headless agent runs on QCoreApplication, which does not set it - and the shared binary uses the GUI
+// manifest, which deliberately leaves DPI awareness unset so Qt can select Per-Monitor V2.
+//
+// The build targets Windows 7, so the newer entry points are not in the headers; resolve the best
+// available one at runtime: Per-Monitor-V2 (Win10 1703+), then Per-Monitor (Win8.1+), then system
+// aware (always present).
+void setDesktopDpiAwareness()
+{
+    if (HMODULE user32 = GetModuleHandleW(L"user32.dll"))
+    {
+        using SetProcessDpiAwarenessContextFn = BOOL(WINAPI*)(HANDLE);
+        auto set_context = reinterpret_cast<SetProcessDpiAwarenessContextFn>(
+            GetProcAddress(user32, "SetProcessDpiAwarenessContext"));
+
+        // DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 == (DPI_AWARENESS_CONTEXT)-4.
+        if (set_context && set_context(reinterpret_cast<HANDLE>(static_cast<INT_PTR>(-4))))
+            return;
+    }
+
+    if (HMODULE shcore = LoadLibraryW(L"shcore.dll"))
+    {
+        using SetProcessDpiAwarenessFn = HRESULT(WINAPI*)(int);
+        auto set_awareness = reinterpret_cast<SetProcessDpiAwarenessFn>(
+            GetProcAddress(shcore, "SetProcessDpiAwareness"));
+
+        // PROCESS_PER_MONITOR_DPI_AWARE == 2.
+        const bool ok = set_awareness && SUCCEEDED(set_awareness(2));
+        FreeLibrary(shcore);
+        if (ok)
+            return;
+    }
+
+    // Windows Vista+ fallback: system DPI aware.
+    SetProcessDPIAware();
+}
+#endif // defined(Q_OS_WINDOWS)
+
+//--------------------------------------------------------------------------------------------------
+// Runs the host as a headless session agent (desktop/screen, file transfer or terminal). The agent is
+// the same aspia_host binary as the GUI, so it presents the same code identity to the OS - on macOS
+// that is what lets it inherit the app's privacy (TCC) grants instead of being a separate app. Returns
+// the process exit code.
+int runAgentSession(int& argc, char* argv[], AgentSessionType type)
+{
+#if defined(Q_OS_WINDOWS)
+    if (type == AgentSessionType::DESKTOP)
+        setDesktopDpiAwareness();
+#endif // defined(Q_OS_WINDOWS)
+
+#if defined(Q_OS_MACOS)
+    // The desktop agent captures the screen on a Qt worker thread that needs a real CFRunLoop (the
+    // macOS capture/display APIs deliver on the run loop). Make Qt back its stock QThread dispatchers
+    // with CoreFoundation so those threads get one. The main thread keeps AsioEventDispatcher below.
+    if (type == AgentSessionType::DESKTOP)
+        qputenv("QT_EVENT_DISPATCHER_CORE_FOUNDATION", "1");
+#endif // defined(Q_OS_MACOS)
+
+    CoreApplication::setEventDispatcher(new AsioEventDispatcher());
+    CoreApplication::setApplicationVersion(ASPIA_VERSION_STRING);
+    CoreApplication application(argc, argv);
+
+    if (type == AgentSessionType::DESKTOP)
+    {
+        HostUtils::printDebugInfo(
+            HostUtils::INCLUDE_VIDEO_ADAPTERS | HostUtils::INCLUDE_WINDOW_STATIONS);
+    }
+    else
+    {
+        HostUtils::printDebugInfo();
+    }
+
+    QString channel_id = qEnvironmentVariable(IpcServer::kChannelIdEnvVar);
+    if (channel_id.isEmpty())
+    {
+        LOG(ERROR) << "Environment variable" << IpcServer::kChannelIdEnvVar << "is not set";
+        return 1;
+    }
+
+    switch (type)
+    {
+        case AgentSessionType::DESKTOP:
+        {
+            DesktopAgent agent;
+            agent.start(channel_id);
+            return application.exec();
+        }
+
+        case AgentSessionType::FILE:
+        {
+            FileAgent agent;
+            agent.start(channel_id);
+            return application.exec();
+        }
+
+        case AgentSessionType::TERMINAL:
+        {
+            TerminalAgent agent;
+            agent.start(channel_id);
+            return application.exec();
+        }
+    }
+
+    LOG(ERROR) << "Unknown agent session type";
+    return 1;
+}
+
+//--------------------------------------------------------------------------------------------------
+int startService(QTextStream& out)
+{
+    std::unique_ptr<ServiceController> controller = ServiceController::open(Service::kName);
+    if (!controller)
+    {
+        out << "Failed to access the service. Not enough rights or service not installed." << Qt::endl;
+        return 1;
+    }
+
+    if (!controller->start())
+    {
+        out << "Failed to start the service." << Qt::endl;
+        return 1;
+    }
+
+    out << "The service started successfully." << Qt::endl;
+    return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+int stopService(QTextStream& out)
+{
+    std::unique_ptr<ServiceController> controller = ServiceController::open(Service::kName);
+    if (!controller)
+    {
+        out << "Failed to access the service. Not enough rights or service not installed." << Qt::endl;
+        return 1;
+    }
+
+    if (!controller->stop())
+    {
+        out << "Failed to stop the service." << Qt::endl;
+        return 1;
+    }
+
+    out << "The service has stopped successfully." << Qt::endl;
+    return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+int installService(QTextStream& out)
+{
+    // The service is the shared aspia_host binary; register it to run in service mode so the OS starts
+    // "aspia_host --service".
+    std::unique_ptr<ServiceController> controller = ServiceController::install(
+        Service::kName, Service::kDisplayName, CoreApplication::applicationFilePath(),
+        QStringList{ "--service" });
+    if (!controller)
+    {
+        out << "Failed to install the service." << Qt::endl;
+        return 1;
+    }
+
+    controller->setDescription(Service::kDescription);
+    out << "The service has been successfully installed." << Qt::endl;
+    return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+int removeService(QTextStream& out)
+{
+    if (ServiceController::isRunning(Service::kName))
+        stopService(out);
+
+    if (!ServiceController::remove(Service::kName))
+    {
+        out << "Failed to remove the service." << Qt::endl;
+        return 1;
+    }
+
+    out << "The service was successfully deleted." << Qt::endl;
+    return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Runs the host as the background service (aspia_host --service), or performs a one-shot management
+// action (--install/--remove/--start/--stop/--host-id). Relies on the caller's ScopedLogging.
+int runService(int& argc, char* argv[])
+{
+    CoreApplication::setEventDispatcher(new AsioEventDispatcher());
+    CoreApplication::setApplicationVersion(ASPIA_VERSION_STRING);
+
+    CoreApplication application(argc, argv);
+
+    HostUtils::printDebugInfo();
+
+    // "--service" only selects service mode in the shared aspia_host binary; recognized here so the
+    // parser accepts it. The action is chosen by install/remove/start/stop below, or defaults to
+    // running the service.
+    QCommandLineOption service_option("service",
+        CoreApplication::translate("ServiceMain", "Run in service mode."));
+    QCommandLineOption install_option("install",
+        CoreApplication::translate("ServiceMain", "Install service."));
+    QCommandLineOption remove_option("remove",
+        CoreApplication::translate("ServiceMain", "Remove service."));
+    QCommandLineOption start_option("start",
+        CoreApplication::translate("ServiceMain", "Start service."));
+    QCommandLineOption stop_option("stop",
+        CoreApplication::translate("ServiceMain", "Stop service."));
+    QCommandLineOption hostid_option("host-id",
+        CoreApplication::translate("ServiceMain", "Get current host id."));
+
+    QCommandLineParser parser;
+    parser.addOption(service_option);
+    parser.addOption(install_option);
+    parser.addOption(remove_option);
+    parser.addOption(start_option);
+    parser.addOption(stop_option);
+    parser.addOption(hostid_option);
+    parser.addHelpOption();
+    parser.addVersionOption();
+
+    parser.process(application);
+
+    QTextStream out(stdout, QIODevice::WriteOnly);
+
+    if (parser.isSet(hostid_option))
+    {
+        HostStorage storage;
+        out << storage.lastHostId() << Qt::endl;
+        return 0;
+    }
+
+    if (parser.isSet(install_option))
+        return installService(out);
+    else if (parser.isSet(remove_option))
+        return removeService(out);
+    else if (parser.isSet(start_option))
+        return startService(out);
+    else if (parser.isSet(stop_option))
+        return stopService(out);
+
+    return Service().exec(application);
+}
 
 #if defined(Q_OS_LINUX)
 //--------------------------------------------------------------------------------------------------
@@ -165,7 +431,7 @@ bool isSessionRestoreLaunch()
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-int hostMain(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
     Q_INIT_RESOURCE(common);
     Q_INIT_RESOURCE(common_translations);
@@ -174,6 +440,35 @@ int hostMain(int argc, char* argv[])
     logging_settings.min_log_level = LOG_INFO;
 
     ScopedLogging scoped_logging(logging_settings);
+
+    // The single aspia_host binary is also the background service ("--service", possibly with
+    // "--install"/"--remove"/etc.). Dispatch it here, before any application object is created.
+    for (int i = 1; i < argc; ++i)
+    {
+        if (qstrcmp(argv[i], "--service") == 0)
+            return runService(argc, argv);
+    }
+
+    // ... and the headless session agents (desktop/screen, file transfer, terminal). Sharing the binary
+    // with the GUI gives every agent the same code identity, so on macOS it inherits the app's privacy
+    // (TCC) grants. Dispatch here too, before any application object (the agent runs on CoreApplication,
+    // the GUI on GuiApplication).
+    for (int i = 1; i < argc; ++i)
+    {
+        if (qstrcmp(argv[i], "--session-type") != 0 || i + 1 >= argc)
+            continue;
+
+        const char* value = argv[i + 1];
+        if (qstrcmp(value, "desktop") == 0)
+            return runAgentSession(argc, argv, AgentSessionType::DESKTOP);
+        if (qstrcmp(value, "file") == 0)
+            return runAgentSession(argc, argv, AgentSessionType::FILE);
+        if (qstrcmp(value, "terminal") == 0)
+            return runAgentSession(argc, argv, AgentSessionType::TERMINAL);
+
+        LOG(ERROR) << "Unknown --session-type value:" << value;
+        return 1;
+    }
 
     for (int i = 0; i < argc; ++i)
     {
@@ -247,18 +542,6 @@ int hostMain(int argc, char* argv[])
     parser.addVersionOption();
 
     parser.process(application);
-
-    if (!HostUtils::integrityCheck())
-    {
-        LOG(ERROR) << "Integrity check failed";
-
-        MsgBox::warning(nullptr,
-            QApplication::translate("Host", "Application integrity check failed. Components are "
-                                            "missing or damaged."));
-        return 1;
-    }
-
-    LOG(INFO) << "Integrity check passed successfully";
 
     if (parser.isSet(import_option) && parser.isSet(export_option))
     {

@@ -87,7 +87,8 @@ void writeKeyBool(QXmlStreamWriter& writer, const QString& key, bool value)
 // Builds a system-daemon plist. launchd starts the executable with no arguments, which is the mode
 // in which the service runs its main loop (install/remove/start/stop are handled before this point).
 // An empty |username| leaves the daemon running under the default account (root).
-QByteArray generatePlist(const QString& label, const QString& file_path, const QString& username)
+QByteArray generatePlist(const QString& label, const QString& file_path,
+                         const QStringList& arguments, const QString& username)
 {
     const QFileInfo file_info(file_path);
 
@@ -119,6 +120,8 @@ QByteArray generatePlist(const QString& label, const QString& file_path, const Q
     writer.writeTextElement("key", "ProgramArguments");
     writer.writeStartElement("array");
     writer.writeTextElement("string", file_path);
+    for (const QString& argument : arguments)
+        writer.writeTextElement("string", argument);
     writer.writeEndElement(); // array
 
     writeKeyString(writer, "WorkingDirectory", file_info.absolutePath());
@@ -199,6 +202,51 @@ QString readProgramPath(const QString& path)
 }
 
 //--------------------------------------------------------------------------------------------------
+// Returns the command-line arguments stored in ProgramArguments (every <string> of the array after
+// the first, which is the executable path).
+QStringList readProgramArguments(const QString& path)
+{
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly))
+        return QStringList();
+
+    QXmlStreamReader reader(&file);
+    while (!reader.atEnd())
+    {
+        if (reader.readNext() != QXmlStreamReader::StartElement)
+            continue;
+
+        if (reader.name() != QLatin1String("key") ||
+            reader.readElementText() != QLatin1String("ProgramArguments"))
+        {
+            continue;
+        }
+
+        QStringList strings;
+        while (!reader.atEnd())
+        {
+            const QXmlStreamReader::TokenType token = reader.readNext();
+            if (token == QXmlStreamReader::StartElement &&
+                reader.name() == QLatin1String("string"))
+            {
+                strings.append(reader.readElementText());
+            }
+            else if (token == QXmlStreamReader::EndElement &&
+                     reader.name() == QLatin1String("array"))
+            {
+                break;
+            }
+        }
+
+        if (!strings.isEmpty())
+            strings.removeFirst(); // drop the executable path
+        return strings;
+    }
+
+    return QStringList();
+}
+
+//--------------------------------------------------------------------------------------------------
 bool runProcess(const QString& program, const QStringList& arguments, QByteArray* output = nullptr)
 {
     QProcess process;
@@ -267,12 +315,13 @@ std::unique_ptr<ServiceController> ServiceControllerLaunchd::open(const QString&
 //--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<ServiceController> ServiceControllerLaunchd::install(
-    const QString& name, const QString& /* display_name */, const QString& file_path)
+    const QString& name, const QString& /* display_name */, const QString& file_path,
+    const QStringList& arguments)
 {
     const QString label = serviceLabel(name);
     const QString path = plistPath(label);
 
-    if (!writePlist(path, generatePlist(label, file_path, QString())))
+    if (!writePlist(path, generatePlist(label, file_path, arguments, QString())))
         return nullptr;
 
     // Load and enable the daemon. RunAtLoad in the plist also starts it immediately.
@@ -383,8 +432,9 @@ bool ServiceControllerLaunchd::setAccount(const QString& username, const QString
     }
 
     // Rewrite the plist with (or without) the account, then reload so launchd picks up the change.
-    // An empty |username| restores the default account (root).
-    if (!writePlist(path, generatePlist(label_, program, username)))
+    // An empty |username| restores the default account (root). Preserve the program arguments the
+    // service was installed with (e.g. "--service").
+    if (!writePlist(path, generatePlist(label_, program, readProgramArguments(path), username)))
         return false;
 
     runLaunchctl({ "unload", "-w", path });

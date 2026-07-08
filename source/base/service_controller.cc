@@ -51,14 +51,15 @@ std::unique_ptr<ServiceController> ServiceController::open(const QString& name)
 //--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<ServiceController> ServiceController::install(
-    const QString& name, const QString& display_name, const QString& file_path)
+    const QString& name, const QString& display_name, const QString& file_path,
+    const QStringList& arguments)
 {
 #if defined(Q_OS_WINDOWS)
-    return ServiceControllerWin::install(name, display_name, file_path);
+    return ServiceControllerWin::install(name, display_name, file_path, arguments);
 #elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
-    return ServiceControllerSystemd::install(name, display_name, file_path);
+    return ServiceControllerSystemd::install(name, display_name, file_path, arguments);
 #elif defined(Q_OS_MACOS)
-    return ServiceControllerLaunchd::install(name, display_name, file_path);
+    return ServiceControllerLaunchd::install(name, display_name, file_path, arguments);
 #else
     NOTIMPLEMENTED();
     return nullptr;

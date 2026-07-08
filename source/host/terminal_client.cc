@@ -58,10 +58,7 @@ namespace {
 const int kMaxAuthFailures = 5;
 
 #if defined(Q_OS_WINDOWS)
-const char kTerminalAgentFile[] = "aspia_terminal_agent.exe";
 const wchar_t kDefaultDesktopName[] = L"winsta0\\default";
-#else
-const char kTerminalAgentFile[] = "aspia_terminal_agent";
 #endif
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
@@ -186,7 +183,10 @@ bool launchAgentAsUser(const QString& user_name, const QString& agent_path, cons
                 _exit(127);
         }
 
-        char* argv[] = { const_cast<char*>(agent_path_utf8.c_str()), nullptr };
+        char* argv[] = { const_cast<char*>(agent_path_utf8.c_str()),
+                         const_cast<char*>("--session-type"),
+                         const_cast<char*>("terminal"),
+                         nullptr };
         execv(agent_path_utf8.c_str(), argv);
         _exit(127);
     }
@@ -358,15 +358,6 @@ bool startProcessWithToken(HANDLE token, const QString& command_line, const QStr
 }
 #endif // defined(Q_OS_WINDOWS)
 
-//--------------------------------------------------------------------------------------------------
-QString agentFilePath()
-{
-    QString file_path = QCoreApplication::applicationDirPath();
-    file_path.append('/');
-    file_path.append(kTerminalAgentFile);
-    return QDir::toNativeSeparators(file_path);
-}
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -414,8 +405,10 @@ void TerminalClient::onIpcNewConnection()
 
     const quint32 client_pid = ipc_channel_->processId();
 
-    // Verify the connecting peer's executable is exactly the agent binary we shipped.
-    const QString expected_path = QFileInfo(agentFilePath()).canonicalFilePath();
+    // Verify the connecting peer's executable is exactly the agent binary we shipped (this very
+    // aspia_host binary, run with a "--session-type" switch).
+    const QString expected_path =
+        QFileInfo(QCoreApplication::applicationFilePath()).canonicalFilePath();
     const QString actual_path = QFileInfo(ProcessUtil::filePath(client_pid)).canonicalFilePath();
     if (actual_path.isEmpty() || actual_path != expected_path)
     {
@@ -576,7 +569,10 @@ bool TerminalClient::launchAgent(
         CLOG(WARNING) << "Unable to grant window station access; the agent may fail to start";
 
     CLOG(INFO) << "Starting terminal agent process";
-    if (!startProcessWithToken(user_token, agentFilePath(), ipc_channel_id))
+    const QString command_line =
+        QString("\"%1\" --session-type terminal").arg(
+            QDir::toNativeSeparators(QCoreApplication::applicationFilePath()));
+    if (!startProcessWithToken(user_token, command_line, ipc_channel_id))
     {
         CLOG(ERROR) << "startProcessWithToken failed";
         return false;
@@ -594,7 +590,7 @@ bool TerminalClient::launchAgent(
     }
 
     CLOG(INFO) << "Starting terminal agent process for user:" << user_name;
-    if (!launchAgentAsUser(user_name, agentFilePath(), ipc_channel_id))
+    if (!launchAgentAsUser(user_name, QCoreApplication::applicationFilePath(), ipc_channel_id))
     {
         CLOG(ERROR) << "Unable to launch agent process";
         return false;

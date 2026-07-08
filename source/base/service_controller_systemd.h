@@ -29,7 +29,8 @@ public:
 
     static std::unique_ptr<ServiceController> open(const QString& name);
     static std::unique_ptr<ServiceController> install(
-        const QString& name, const QString& display_name, const QString& file_path);
+        const QString& name, const QString& display_name, const QString& file_path,
+        const QStringList& arguments);
     static bool remove(const QString& name);
     static bool isInstalled(const QString& name);
     static bool isRunning(const QString& name);
