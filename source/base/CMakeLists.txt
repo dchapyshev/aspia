@@ -225,6 +225,10 @@ if (ANDROID)
     set(BASE_PLATFORM_LIBS log mediandk oboe::oboe)
 endif()
 
+if (APPLE)
+    set(BASE_PLATFORM_LIBS ${FOUNDATION_LIB} ${SCREENCAPTUREKIT_LIB} ${COREMEDIA_LIB})
+endif()
+
 target_link_libraries(aspia_base PRIVATE aspia_proto
     ${THIRD_PARTY_LIBS} ${BASE_PLATFORM_LIBS} ${QT_COMMON_LIBS} ${QT_PLATFORM_LIBS})
 

@@ -101,8 +101,17 @@ fi
 #--------------------------------------------------------------------------------------------------
 # Build the component package (payload installs at /, postinstall registers the daemon).
 #--------------------------------------------------------------------------------------------------
+# Disable bundle relocation. By default the installer redirects the payload to any existing bundle
+# with the same CFBundleIdentifier found elsewhere on disk (e.g. the build-tree aspia_host.app);
+# the payload then lands outside /Applications and the postinstall script - which hardcodes
+# /Applications/Aspia Host.app - fails. Pin the bundle to its fixed install location instead.
+COMPONENT_PLIST="$WORK_DIR/component.plist"
+pkgbuild --analyze --root "$STAGING" "$COMPONENT_PLIST"
+plutil -replace 0.BundleIsRelocatable -bool NO "$COMPONENT_PLIST"
+
 pkgbuild \
     --root "$STAGING" \
+    --component-plist "$COMPONENT_PLIST" \
     --identifier "$BUNDLE_ID" \
     --version "$VERSION" \
     --scripts "$SCRIPT_DIR/scripts" \
