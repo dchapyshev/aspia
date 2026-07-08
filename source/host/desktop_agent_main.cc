@@ -34,6 +34,13 @@ int desktopAgentMain(int& argc, char* argv[])
 
     ScopedLogging scoped_logging(logging_settings);
 
+#if defined(Q_OS_MACOS)
+    // The desktop agent captures the screen on a Qt worker thread that needs a real CFRunLoop (the
+    // macOS capture/display APIs deliver on the run loop). Make Qt back its stock QThread dispatchers
+    // with CoreFoundation so those threads get one. The main thread keeps AsioEventDispatcher below.
+    qputenv("QT_EVENT_DISPATCHER_CORE_FOUNDATION", "1");
+#endif // defined(Q_OS_MACOS)
+
     CoreApplication::setEventDispatcher(new AsioEventDispatcher());
     CoreApplication::setApplicationVersion(ASPIA_VERSION_STRING);
     CoreApplication application(argc, argv);
