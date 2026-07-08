@@ -47,3 +47,9 @@ collect_sources(SOURCE_HOST_CORE_UI
     user_dialog.cc
     user_dialog.h
     user_dialog.ui)
+
+if (APPLE)
+    collect_sources(SOURCE_HOST_CORE_UI
+        permission_dialog.cc
+        permission_dialog.h)
+endif()

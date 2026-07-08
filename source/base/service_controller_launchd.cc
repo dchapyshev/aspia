@@ -25,6 +25,8 @@
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 
+#include <CoreFoundation/CoreFoundation.h>
+
 #include "base/logging.h"
 
 namespace {
@@ -49,6 +51,22 @@ QString serviceLabel(const QString& name)
 QString plistPath(const QString& label)
 {
     return QDir(QString::fromUtf8(kLaunchDaemonsPath)).filePath(label + ".plist");
+}
+
+//--------------------------------------------------------------------------------------------------
+// The application bundle identifier, used to attribute the daemon to the app in Login Items so it is
+// listed under the app name instead of the signing team name.
+QString mainBundleIdentifier()
+{
+    CFBundleRef bundle = CFBundleGetMainBundle();
+    if (!bundle)
+        return QString();
+
+    CFStringRef identifier = CFBundleGetIdentifier(bundle);
+    if (!identifier)
+        return QString();
+
+    return QString::fromCFString(identifier);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -85,6 +103,18 @@ QByteArray generatePlist(const QString& label, const QString& file_path, const Q
     writer.writeStartElement("dict");
 
     writeKeyString(writer, "Label", label);
+
+    // Associate the daemon with the application bundle so Login Items lists it under the app name
+    // ("Aspia Host") instead of the Developer ID team name. Requires the daemon and the app to be
+    // signed by the same team.
+    const QString bundle_id = mainBundleIdentifier();
+    if (!bundle_id.isEmpty())
+    {
+        writer.writeTextElement("key", "AssociatedBundleIdentifiers");
+        writer.writeStartElement("array");
+        writer.writeTextElement("string", bundle_id);
+        writer.writeEndElement(); // array
+    }
 
     writer.writeTextElement("key", "ProgramArguments");
     writer.writeStartElement("array");

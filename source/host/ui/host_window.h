@@ -37,6 +37,7 @@ class ChatWidget;
 class Clipboard;
 class ElevateUtil;
 class NotifierWindow;
+class PermissionDialog;
 class QTimer;
 class StatusDialog;
 
@@ -67,6 +68,9 @@ signals:
 protected:
     // QMainWindow implementation.
     void closeEvent(QCloseEvent* event) final;
+#if defined(Q_OS_MACOS)
+    void showEvent(QShowEvent* event) final;
+#endif // defined(Q_OS_MACOS)
 
 private slots:
     void onStatusChanged(UserSessionAgent::Status status);
@@ -114,6 +118,12 @@ private:
     QMenu tray_menu_;
     QPointer<NotifierWindow> notifier_;
     ChatWidget* chat_widget_ = nullptr;
+
+#if defined(Q_OS_MACOS)
+    // The macOS privacy-permission dialog. Shown modeless so it never blocks the event loop - the app
+    // must stay able to quit, e.g. for macOS "Quit & Reopen" after a permission change.
+    QPointer<PermissionDialog> permission_dialog_;
+#endif // defined(Q_OS_MACOS)
 
     StatusDialog* status_dialog_ = nullptr;
 

@@ -151,6 +151,8 @@ if (APPLE)
     find_library(IOKIT_LIB IOKit)
     find_library(SECURITY_LIB Security)
     find_library(CARBON_LIB Carbon)
+    find_library(APPLICATIONSERVICES_LIB ApplicationServices)
+    find_library(APPKIT_LIB AppKit)
     find_program(CODESIGN_BIN NAMES codesign)
 endif()
 

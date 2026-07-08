@@ -575,6 +575,13 @@ void UserSession::onIpcDisconnected()
             ipc_channel_.reset();
         }
     }
+#elif defined(Q_OS_MACOS)
+    // The GUI process exited (the user quit it from its menu, or macOS killed it for a "Quit & Reopen"
+    // after a permission change). The host is controlled through the GUI, so remote access becomes
+    // unavailable: drop the connected clients after the grace period. The GUI is intentionally NOT
+    // relaunched - exiting it is how the user turns the host off.
+    dettach_timer_->start();
+    ipc_channel_.reset();
 #endif // defined(Q_OS_WINDOWS)
 }
 
@@ -897,17 +904,16 @@ void UserSession::attach(const Location& location, AttachReason reason, SessionI
     }
 
     const QString user_name = QString::fromLocal8Bit(pw->pw_name);
-    const QString file_path = QCoreApplication::applicationDirPath() + '/' + kExecutableNameForUi;
+    const QString app_bundle = QDir(QCoreApplication::applicationDirPath() + "/../..").canonicalPath();
 
-    // Launch the GUI as the console user inside their Aqua (GUI) session. "launchctl asuser <uid>" moves
-    // the process into the user's per-user launchd domain so it can reach the WindowServer; "sudo -u -H"
-    // drops the service's root to that user (no password: root sudo is unconditional) with the user's
-    // home. The GUI stays in the foreground of this chain, so background it ("&") and detach its
-    // descriptors - otherwise the blocking system() call below would freeze the service event loop for
-    // the whole lifetime of the GUI (systemd-run returns immediately on Linux; launchctl does not).
-    QString command =
-        QString("launchctl asuser %1 sudo -u %2 -H \"%3\" --hidden </dev/null >/dev/null 2>&1 &")
-            .arg(session_id).arg(user_name, file_path);
+    // Launch the GUI through LaunchServices ("open") as the console user inside their Aqua (GUI)
+    // session: "launchctl asuser <uid>" places it in the user's per-user launchd domain (WindowServer
+    // access) and "sudo -u" drops the service's root to that user (no password: root sudo is
+    // unconditional). Going through LaunchServices - rather than exec'ing the binary directly - is what
+    // lets macOS relaunch the GUI itself, e.g. its "Quit & Reopen" after a privacy permission change.
+    // "open" also returns immediately (no need to background it) and reuses a running instance.
+    QString command = QString("launchctl asuser %1 sudo -u %2 open \"%3\" --args --hidden")
+        .arg(session_id).arg(user_name, app_bundle);
 
     const QByteArray command_line = command.toLocal8Bit();
 

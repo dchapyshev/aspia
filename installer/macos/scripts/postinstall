@@ -22,20 +22,4 @@ if ! "$SERVICE" --install; then
     exit 1
 fi
 
-# The host needs two user-granted permissions that cannot be set programmatically:
-#   - Screen Recording  -> screen capture (ScreenCaptureKit)
-#   - Accessibility     -> input injection (CGEvent)
-# Open both Privacy panes so the administrator can approve them. This script runs as root outside
-# the GUI session, so the panes must be opened as the logged-in console user; skip it when nobody
-# is logged in (e.g. an unattended install).
-CONSOLE_USER="$(stat -f "%Su" /dev/console 2>/dev/null)"
-
-if [ -n "$CONSOLE_USER" ] && [ "$CONSOLE_USER" != "root" ] && [ "$CONSOLE_USER" != "loginwindow" ]; then
-    CONSOLE_UID="$(id -u "$CONSOLE_USER")"
-    open_pane() { launchctl asuser "$CONSOLE_UID" sudo -u "$CONSOLE_USER" open "$1" 2>/dev/null || true; }
-
-    open_pane "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"
-    open_pane "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture"
-fi
-
 exit 0

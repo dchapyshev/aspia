@@ -30,6 +30,9 @@
 	<string>NSApplication</string>
 	<key>NSHighResolutionCapable</key>
 	<string>True</string>
+	<!-- Menu-bar (tray) agent: no Dock icon. -->
+	<key>LSUIElement</key>
+	<true/>
 	<!-- Screen capture and input injection request these permissions at runtime (TCC). -->
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Aspia Host accepts incoming remote desktop connections over the local network.</string>

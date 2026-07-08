@@ -86,12 +86,14 @@ if [ -n "${APP_SIGN_IDENTITY:-}" ]; then
         ENTITLEMENTS_ARG=(--entitlements "$SCRIPT_DIR/host.entitlements")
     fi
 
-    # Shared library first, then every executable, then the bundle itself.
+    # Shared library first, then every executable, then the bundle itself. The ENTITLEMENTS_ARG
+    # expansion is written to stay empty-safe under "set -u" on the stock macOS bash 3.2 (a bare
+    # "${arr[@]}" on an empty array aborts there with "unbound variable").
     codesign "${CS_OPTS[@]}" "$APP/Contents/MacOS/libaspia_host_core.dylib"
     for bin in aspia_host_service aspia_desktop_agent aspia_file_agent aspia_terminal_agent aspia_host; do
-        codesign "${CS_OPTS[@]}" "${ENTITLEMENTS_ARG[@]}" "$APP/Contents/MacOS/$bin"
+        codesign "${CS_OPTS[@]}" ${ENTITLEMENTS_ARG[@]+"${ENTITLEMENTS_ARG[@]}"} "$APP/Contents/MacOS/$bin"
     done
-    codesign "${CS_OPTS[@]}" "${ENTITLEMENTS_ARG[@]}" "$APP"
+    codesign "${CS_OPTS[@]}" ${ENTITLEMENTS_ARG[@]+"${ENTITLEMENTS_ARG[@]}"} "$APP"
 
     codesign --verify --deep --strict --verbose=2 "$APP"
 else

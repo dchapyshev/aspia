@@ -20,8 +20,11 @@
 
 #include <QActionGroup>
 #include <QCloseEvent>
+#include <QCursor>
 #include <QDesktopServices>
+#include <QMenuBar>
 #include <QNetworkInterface>
+#include <QShowEvent>
 #include <QTimer>
 #include <QUrl>
 
@@ -50,6 +53,10 @@
 #include "proto/user.h"
 #include "ui_host_window.h"
 
+#if defined(Q_OS_MACOS)
+#include "host/ui/permission_dialog.h"
+#endif // defined(Q_OS_MACOS)
+
 namespace {
 
 // How many one-second tray availability checks to make before creating the tray icon anyway (an
@@ -70,6 +77,12 @@ HostWindow::HostWindow(QWidget* parent)
 
     ui->setupUi(this);
     setWindowFlag(Qt::WindowMaximizeButtonHint, false);
+
+#if defined(Q_OS_MACOS)
+    // The host GUI is a menu-bar (LSUIElement) agent and has no system menu bar, so render the window
+    // menu inside the window itself (as on Windows/Linux) instead of the native top bar.
+    menuBar()->setNativeMenuBar(false);
+#endif // defined(Q_OS_MACOS)
 
     ui->edit_id->setText("-");
     ui->edit_password->setText("-");
@@ -255,7 +268,16 @@ void HostWindow::hideToTray()
 //--------------------------------------------------------------------------------------------------
 void HostWindow::closeEvent(QCloseEvent* event)
 {
-    if (!should_be_quit_)
+    bool hide_to_tray = !should_be_quit_;
+
+#if defined(Q_OS_MACOS)
+    // Only the window's own close button (a spontaneous close) hides to the tray. A non-spontaneous
+    // close is an application-termination request - macOS "Quit & Reopen" after a permission change,
+    // Cmd+Q, the Exit action - and must actually quit so macOS can relaunch the GUI.
+    hide_to_tray = hide_to_tray && event->spontaneous();
+#endif // defined(Q_OS_MACOS)
+
+    if (hide_to_tray)
     {
         LOG(INFO) << "Ignored close event";
 
@@ -274,6 +296,35 @@ void HostWindow::closeEvent(QCloseEvent* event)
         QApplication::quit();
     }
 }
+
+#if defined(Q_OS_MACOS)
+//--------------------------------------------------------------------------------------------------
+void HostWindow::showEvent(QShowEvent* event)
+{
+    QMainWindow::showEvent(event);
+
+    // When the window is brought up (never on a silent --hidden start, which does not show it), prompt
+    // for the privacy permissions the host needs if any are still missing. The dialog is modeless so it
+    // never blocks the event loop - the app must stay able to quit (e.g. macOS "Quit & Reopen" restarts
+    // it so a fresh process re-reads the just-granted Screen Recording permission).
+    QTimer::singleShot(0, this, [this]()
+    {
+        if (!isVisible() || !PermissionDialog::hasMissingPermissions())
+            return;
+
+        if (permission_dialog_)
+        {
+            permission_dialog_->raise();
+            permission_dialog_->activateWindow();
+            return;
+        }
+
+        permission_dialog_ = new PermissionDialog(this);
+        permission_dialog_->setAttribute(Qt::WA_DeleteOnClose);
+        permission_dialog_->show();
+    });
+}
+#endif // defined(Q_OS_MACOS)
 
 //--------------------------------------------------------------------------------------------------
 void HostWindow::onStatusChanged(UserSessionAgent::Status status)
@@ -836,12 +887,22 @@ void HostWindow::createTrayIcon()
 {
     tray_icon_.reset(new QSystemTrayIcon(this));
     tray_icon_->setIcon(QIcon(":/img/aspia-host.ico"));
+
+#if !defined(Q_OS_MACOS)
     tray_icon_->setContextMenu(&tray_menu_);
+#endif // !defined(Q_OS_MACOS)
 
     connect(tray_icon_, &QSystemTrayIcon::activated, this, [this](QSystemTrayIcon::ActivationReason reason)
     {
         if (reason == QSystemTrayIcon::Context)
+        {
+#if defined(Q_OS_MACOS)
+            // A status item with an attached menu pops it on every click (left too). Leave it detached
+            // and show it here on right-click only, so left-click just toggles the window (as on Windows).
+            tray_menu_.popup(QCursor::pos());
+#endif // defined(Q_OS_MACOS)
             return;
+        }
 
         LOG(INFO) << "[ACTION] Tray icon activated";
         onShowHide();
