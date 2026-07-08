@@ -61,26 +61,18 @@
 
 namespace {
 
-// The kind of session a headless agent process serves. Selected on the command line via
-// "--session-type desktop|file|terminal" passed to the single aspia_host binary.
-enum class AgentSessionType
-{
-    DESKTOP,
-    FILE,
-    TERMINAL
-};
-
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 // The desktop agent captures the screen and maps input coordinates, so it must be per-monitor DPI
-// aware to work in physical pixels on scaled displays. The GUI gets this from Qt (QApplication), but a
-// headless agent runs on QCoreApplication, which does not set it - and the shared binary uses the GUI
-// manifest, which deliberately leaves DPI awareness unset so Qt can select Per-Monitor V2.
+// aware to work in physical pixels on scaled displays; the other agents do not care either way. The
+// GUI gets this from Qt (QApplication), but a headless agent runs on QCoreApplication, which does not
+// set it - and the shared binary uses the GUI manifest, which deliberately leaves DPI awareness unset
+// so Qt can select Per-Monitor V2.
 //
 // The build targets Windows 7, so the newer entry points are not in the headers; resolve the best
 // available one at runtime: Per-Monitor-V2 (Win10 1703+), then Per-Monitor (Win8.1+), then system
 // aware (always present).
-void setDesktopDpiAwareness()
+void setDpiAwareness()
 {
     if (HMODULE user32 = GetModuleHandleW(L"user32.dll"))
     {
@@ -112,30 +104,37 @@ void setDesktopDpiAwareness()
 #endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
-// Runs the host as a headless session agent (desktop/screen, file transfer or terminal). The agent is
-// the same aspia_host binary as the GUI, so it presents the same code identity to the OS - on macOS
-// that is what lets it inherit the app's privacy (TCC) grants instead of being a separate app. Returns
-// the process exit code.
-int runAgentSession(int& argc, char* argv[], AgentSessionType type)
+// Runs the host as a headless session agent; |session_type| is the "--session-type" value straight
+// from the command line ("desktop", "file" or "terminal"). The agent is the same aspia_host binary as
+// the GUI, so it presents the same code identity to the OS - on macOS that is what lets it inherit the
+// app's privacy (TCC) grants instead of being a separate app. Returns the process exit code.
+int runAgent(int& argc, char* argv[], const char* session_type)
 {
+    const bool desktop = qstrcmp(session_type, "desktop") == 0;
+    const bool file = qstrcmp(session_type, "file") == 0;
+    const bool terminal = qstrcmp(session_type, "terminal") == 0;
+
+    if (!desktop && !file && !terminal)
+    {
+        LOG(ERROR) << "Unknown --session-type value:" << session_type;
+        return 1;
+    }
+
 #if defined(Q_OS_WINDOWS)
-    if (type == AgentSessionType::DESKTOP)
-        setDesktopDpiAwareness();
+    setDpiAwareness();
 #endif // defined(Q_OS_WINDOWS)
 
-#if defined(Q_OS_MACOS)
-    // The desktop agent captures the screen on a Qt worker thread that needs a real CFRunLoop (the
-    // macOS capture/display APIs deliver on the run loop). Make Qt back its stock QThread dispatchers
-    // with CoreFoundation so those threads get one. The main thread keeps AsioEventDispatcher below.
-    if (type == AgentSessionType::DESKTOP)
-        qputenv("QT_EVENT_DISPATCHER_CORE_FOUNDATION", "1");
-#endif // defined(Q_OS_MACOS)
+    // On macOS the desktop agent captures the screen on a Qt worker thread that needs a real CFRunLoop
+    // (the capture/display APIs deliver on the run loop). Make Qt back its stock QThread dispatchers
+    // with CoreFoundation so those threads get one; other platforms and agents simply ignore the
+    // variable. The main thread keeps AsioEventDispatcher below.
+    qputenv("QT_EVENT_DISPATCHER_CORE_FOUNDATION", "1");
 
     CoreApplication::setEventDispatcher(new AsioEventDispatcher());
     CoreApplication::setApplicationVersion(ASPIA_VERSION_STRING);
     CoreApplication application(argc, argv);
 
-    if (type == AgentSessionType::DESKTOP)
+    if (desktop)
     {
         HostUtils::printDebugInfo(
             HostUtils::INCLUDE_VIDEO_ADAPTERS | HostUtils::INCLUDE_WINDOW_STATIONS);
@@ -152,32 +151,23 @@ int runAgentSession(int& argc, char* argv[], AgentSessionType type)
         return 1;
     }
 
-    switch (type)
+    if (desktop)
     {
-        case AgentSessionType::DESKTOP:
-        {
-            DesktopAgent agent;
-            agent.start(channel_id);
-            return application.exec();
-        }
-
-        case AgentSessionType::FILE:
-        {
-            FileAgent agent;
-            agent.start(channel_id);
-            return application.exec();
-        }
-
-        case AgentSessionType::TERMINAL:
-        {
-            TerminalAgent agent;
-            agent.start(channel_id);
-            return application.exec();
-        }
+        DesktopAgent agent;
+        agent.start(channel_id);
+        return application.exec();
     }
 
-    LOG(ERROR) << "Unknown agent session type";
-    return 1;
+    if (file)
+    {
+        FileAgent agent;
+        agent.start(channel_id);
+        return application.exec();
+    }
+
+    TerminalAgent agent;
+    agent.start(channel_id);
+    return application.exec();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -430,27 +420,8 @@ int main(int argc, char* argv[])
             return runServiceCommand(argc, argv, stopService);
         if (qstrcmp(argv[i], "--host-id") == 0)
             return runServiceCommand(argc, argv, printHostId);
-    }
-
-    // ... and the headless session agents (desktop/screen, file transfer, terminal). Sharing the binary
-    // with the GUI gives every agent the same code identity, so on macOS it inherits the app's privacy
-    // (TCC) grants. Dispatch here too, before any application object (the agent runs on CoreApplication,
-    // the GUI on GuiApplication).
-    for (int i = 1; i < argc; ++i)
-    {
-        if (qstrcmp(argv[i], "--session-type") != 0 || i + 1 >= argc)
-            continue;
-
-        const char* value = argv[i + 1];
-        if (qstrcmp(value, "desktop") == 0)
-            return runAgentSession(argc, argv, AgentSessionType::DESKTOP);
-        if (qstrcmp(value, "file") == 0)
-            return runAgentSession(argc, argv, AgentSessionType::FILE);
-        if (qstrcmp(value, "terminal") == 0)
-            return runAgentSession(argc, argv, AgentSessionType::TERMINAL);
-
-        LOG(ERROR) << "Unknown --session-type value:" << value;
-        return 1;
+        if (qstrcmp(argv[i], "--session-type") == 0 && i + 1 < argc)
+            return runAgent(argc, argv, argv[i + 1]);
     }
 
     for (int i = 0; i < argc; ++i)
