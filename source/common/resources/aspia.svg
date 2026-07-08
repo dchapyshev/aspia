@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generator: Adobe Illustrator 15.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+
+<svg
+   viewBox="0 0 48 48"
+   width="24px"
+   height="24px"
+   version="1.1"
+   id="svg3"
+   sodipodi:docname="aspia-console-24.svg"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   inkscape:export-filename="aspia-console-24.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs3" />
+  <sodipodi:namedview
+     id="namedview3"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="true"
+     inkscape:zoom="25.34"
+     inkscape:cx="10.812944"
+     inkscape:cy="11.779795"
+     inkscape:window-width="1920"
+     inkscape:window-height="1111"
+     inkscape:window-x="-9"
+     inkscape:window-y="1341"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg3"
+     inkscape:export-bgcolor="#ffffff00">
+    <inkscape:grid
+       id="grid3"
+       units="px"
+       originx="0"
+       originy="0"
+       spacingx="2.6666667"
+       spacingy="2.6666667"
+       empcolor="#0099e5"
+       empopacity="0.30196078"
+       color="#0099e5"
+       opacity="0.14901961"
+       empspacing="5"
+       enabled="true"
+       visible="true" />
+  </sodipodi:namedview>
+  <rect
+     x="5.3795533"
+     y="0.047002908"
+     fill="#546e7a"
+     width="42.655697"
+     height="34.573444"
+     id="rect1"
+     style="stroke-width:1.25521" />
+  <rect
+     x="8"
+     y="2.6674497"
+     fill="#bbdefb"
+     width="37.301994"
+     height="29.235018"
+     id="rect2"
+     style="stroke-width:1.2739" />
+  <rect
+     x="0.0094011817"
+     y="13.25726"
+     fill="#546e7a"
+     width="42.655697"
+     height="34.752922"
+     id="rect1-5"
+     style="stroke-width:1.25846" />
+  <rect
+     x="2.6298478"
+     y="16.057186"
+     fill="#bbdefb"
+     width="37.301994"
+     height="29.235018"
+     id="rect2-1"
+     style="stroke-width:1.2739" />
+  <text
+     xml:space="preserve"
+     style="font-size:24px;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#546e7a;stroke-width:2.66667;fill-opacity:1"
+     x="3.0599296"
+     y="31.621622"
+     id="text3"><tspan
+       sodipodi:role="line"
+       id="tspan3"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;font-family:Consolas;-inkscape-font-specification:Consolas;fill:#546e7a;stroke-width:2.66667;fill-opacity:1"
+       x="3.0599296"
+       y="31.621622">&gt;</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:14.2222px;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#f2f2f2;stroke-width:2.66667"
+     x="18.726204"
+     y="26.115158"
+     id="text4"><tspan
+       sodipodi:role="line"
+       id="tspan4"
+       style="stroke-width:2.66667"
+       x="18.726204"
+       y="26.115158" /></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;font-family:Consolas;-inkscape-font-specification:Consolas;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#546e7a;stroke-width:2.17981;fill-opacity:1"
+     x="22.787975"
+     y="21.116695"
+     id="text5"
+     transform="scale(0.81742663,1.2233514)"><tspan
+       sodipodi:role="line"
+       id="tspan5"
+       style="font-size:24px;fill:#546e7a;stroke-width:2.17981;fill-opacity:1"
+       x="22.787975"
+       y="21.116695">_</tspan></text>
+</svg>

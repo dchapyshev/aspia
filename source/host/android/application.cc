@@ -34,7 +34,7 @@ Application::Application(int& argc, char* argv[])
     setOrganizationName("Aspia");
     setApplicationName("Host");
     setApplicationVersion(ASPIA_VERSION_STRING);
-    setWindowIcon(QIcon(":/img/aspia-host.ico"));
+    setWindowIcon(QIcon(":/img/aspia.ico"));
 
     UserSettings settings;
 

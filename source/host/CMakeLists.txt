@@ -351,9 +351,17 @@ if (APPLE)
     # service's executable-path anti-spoofing check keeps working unchanged. The bundle keeps the
     # aspia_host name (the code looks the binaries up by these exact names); it is renamed to a
     # human-readable "Aspia Host.app" at install/packaging time.
-    set(HOST_ICON ${PROJECT_SOURCE_DIR}/source/common/resources/aspia-host.icns)
+    set(HOST_ICON ${PROJECT_SOURCE_DIR}/source/common/resources/aspia.icns)
     set_source_files_properties(${HOST_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
     target_sources(aspia_host PRIVATE ${HOST_ICON})
+
+    # Localized bundle display name.
+    foreach(host_lproj fr it ru uk zh-Hans)
+        set(HOST_LPROJ_FILE ${CMAKE_CURRENT_SOURCE_DIR}/lproj/${host_lproj}.lproj/InfoPlist.strings)
+        set_source_files_properties(${HOST_LPROJ_FILE} PROPERTIES
+            MACOSX_PACKAGE_LOCATION Resources/${host_lproj}.lproj)
+        target_sources(aspia_host PRIVATE ${HOST_LPROJ_FILE})
+    endforeach()
 
     set_target_properties(aspia_host PROPERTIES
         MACOSX_BUNDLE TRUE

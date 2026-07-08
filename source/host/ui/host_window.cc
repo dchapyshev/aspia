@@ -535,7 +535,7 @@ void HostWindow::onRecordingStateChanged(bool started)
         message = tr("Screen recording stopped.");
 
     if (tray_icon_)
-        tray_icon_->showMessage(tr("Aspia Host"), message, QIcon(":/img/aspia-host.ico"), 1200);
+        tray_icon_->showMessage(tr("Aspia Host"), message, QIcon(":/img/aspia.ico"), 1200);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -886,7 +886,7 @@ void HostWindow::createThemeMenu(const QString& current_theme)
 void HostWindow::createTrayIcon()
 {
     tray_icon_.reset(new QSystemTrayIcon(this));
-    tray_icon_->setIcon(QIcon(":/img/aspia-host.ico"));
+    tray_icon_->setIcon(QIcon(":/img/aspia.ico"));
 
 #if !defined(Q_OS_MACOS)
     tray_icon_->setContextMenu(&tray_menu_);

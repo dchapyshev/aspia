@@ -9,7 +9,7 @@
 	<key>CFBundleGetInfoString</key>
 	<string>Aspia Client</string>
 	<key>CFBundleIconFile</key>
-	<string></string>
+	<string>aspia.icns</string>
 	<key>CFBundleIdentifier</key>
 	<string>ru.aspia.client</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -18,6 +18,16 @@
 	<string></string>
 	<key>CFBundleName</key>
 	<string>Aspia Client</string>
+	<key>CFBundleDisplayName</key>
+	<string>Aspia Client</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>fr</string>
+		<string>ru</string>
+		<string>uk</string>
+		<string>zh-Hans</string>
+	</array>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>

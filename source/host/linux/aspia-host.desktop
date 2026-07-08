@@ -2,7 +2,7 @@
 Name=Aspia Host
 Name[ru]=Хост Aspia
 Exec=/usr/bin/aspia_host
-Icon=aspia-host
+Icon=aspia
 Type=Application
 Categories=Utility;
 Terminal=false

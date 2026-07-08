@@ -270,19 +270,9 @@ if (LINUX)
         install(FILES host/linux/aspia-desktop-agent.desktop
             DESTINATION share/applications COMPONENT host)
 
-        # Host icons.
-        install(FILES host/linux/icons/16x16/aspia-host.png
-            DESTINATION share/icons/hicolor/16x16/apps COMPONENT host)
-        install(FILES host/linux/icons/24x24/aspia-host.png
-            DESTINATION share/icons/hicolor/24x24/apps COMPONENT host)
-        install(FILES host/linux/icons/32x32/aspia-host.png
-            DESTINATION share/icons/hicolor/32x32/apps COMPONENT host)
-        install(FILES host/linux/icons/48x48/aspia-host.png
-            DESTINATION share/icons/hicolor/48x48/apps COMPONENT host)
-        install(FILES host/linux/icons/64x64/aspia-host.png
-            DESTINATION share/icons/hicolor/64x64/apps COMPONENT host)
-        install(FILES host/linux/icons/128x128/aspia-host.png
-            DESTINATION share/icons/hicolor/128x128/apps COMPONENT host)
+        # Application icon.
+        install(FILES common/resources/aspia.svg
+            DESTINATION share/icons/hicolor/scalable/apps COMPONENT host)
 
         # Service file.
         install(FILES host/linux/aspia-host-service.service
@@ -350,19 +340,9 @@ if (LINUX)
     install(FILES client/linux/aspia-client.desktop
         DESTINATION share/applications COMPONENT client)
 
-    # Icons.
-    install(FILES client/linux/icons/16x16/aspia-client.png
-        DESTINATION share/icons/hicolor/16x16/apps COMPONENT client)
-    install(FILES client/linux/icons/24x24/aspia-client.png
-        DESTINATION share/icons/hicolor/24x24/apps COMPONENT client)
-    install(FILES client/linux/icons/32x32/aspia-client.png
-        DESTINATION share/icons/hicolor/32x32/apps COMPONENT client)
-    install(FILES client/linux/icons/48x48/aspia-client.png
-        DESTINATION share/icons/hicolor/48x48/apps COMPONENT client)
-    install(FILES client/linux/icons/64x64/aspia-client.png
-        DESTINATION share/icons/hicolor/64x64/apps COMPONENT client)
-    install(FILES client/linux/icons/128x128/aspia-client.png
-        DESTINATION share/icons/hicolor/128x128/apps COMPONENT client)
+    # Application icon.
+    install(FILES common/resources/aspia.svg
+        DESTINATION share/icons/hicolor/scalable/apps COMPONENT client)
 
     set(CPACK_DEBIAN_CLIENT_FILE_NAME
         "${CPACK_COMPONENT_CLIENT_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")

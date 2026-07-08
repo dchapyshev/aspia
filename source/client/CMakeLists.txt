@@ -103,7 +103,7 @@ if (APPLE)
     set(CLIENT_PLATFORM_LIBS
         ${COREAUDIO_LIB} ${AUDIOTOOLBOX_LIB} portaudio
         ${VIDEOTOOLBOX_LIB} ${COREMEDIA_LIB} ${COREVIDEO_LIB})
-    set(aspia_client_ICON ${PROJECT_SOURCE_DIR}/source/common/resources/aspia-client.icns)
+    set(aspia_client_ICON ${PROJECT_SOURCE_DIR}/source/common/resources/aspia.icns)
     set(aspia_client_PLIST ${PROJECT_SOURCE_DIR}/source/client/Info.plist)
 
     set_source_files_properties(${aspia_client_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
@@ -157,5 +157,12 @@ endif()
 if (APPLE)
     set_target_properties(aspia_client PROPERTIES OUTPUT_NAME "Aspia Client")
     set_target_properties(aspia_client PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${aspia_client_PLIST})
-    set_target_properties(aspia_client PROPERTIES MACOSX_BUNDLE_ICONFILE ${aspia_client_ICON})
+
+    # Localized bundle display name.
+    foreach(client_lproj fr ru uk zh-Hans)
+        set(CLIENT_LPROJ_FILE ${CMAKE_CURRENT_SOURCE_DIR}/lproj/${client_lproj}.lproj/InfoPlist.strings)
+        set_source_files_properties(${CLIENT_LPROJ_FILE} PROPERTIES
+            MACOSX_PACKAGE_LOCATION Resources/${client_lproj}.lproj)
+        target_sources(aspia_client PRIVATE ${CLIENT_LPROJ_FILE})
+    endforeach()
 endif()
