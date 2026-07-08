@@ -34,7 +34,6 @@
 #include "host/database.h"
 #include "host/desktop_agent.h"
 #include "host/file_agent.h"
-#include "host/host_storage.h"
 #include "host/host_utils.h"
 #include "host/service.h"
 #include "host/settings_util.h"
@@ -246,16 +245,8 @@ int removeService(QTextStream& out)
 }
 
 //--------------------------------------------------------------------------------------------------
-int printHostId(QTextStream& out)
-{
-    HostStorage storage;
-    out << storage.lastHostId() << Qt::endl;
-    return 0;
-}
-
-//--------------------------------------------------------------------------------------------------
-// Runs a one-shot service management |command| (--install/--remove/--start/--stop/--host-id). Such a
-// command needs no service machinery - just a core application for applicationFilePath() and process
+// Runs a one-shot service management |command| (--install/--remove/--start/--stop). Such a command
+// needs no service machinery - just a core application for applicationFilePath() and process
 // spawning.
 int runServiceCommand(int& argc, char* argv[], int (*command)(QTextStream& out))
 {
@@ -418,8 +409,6 @@ int main(int argc, char* argv[])
             return runServiceCommand(argc, argv, startService);
         if (qstrcmp(argv[i], "--stop") == 0)
             return runServiceCommand(argc, argv, stopService);
-        if (qstrcmp(argv[i], "--host-id") == 0)
-            return runServiceCommand(argc, argv, printHostId);
         if (qstrcmp(argv[i], "--session-type") == 0 && i + 1 < argc)
             return runAgent(argc, argv, argv[i + 1]);
     }

@@ -21,8 +21,6 @@
 
 #include <QSettings>
 
-#include "base/peer/host_id.h"
-
 class HostStorage
 {
 public:
@@ -31,9 +29,6 @@ public:
 
     QByteArray hostKey() const;
     void setHostKey(const QByteArray& key);
-
-    HostId lastHostId() const;
-    void setLastHostId(HostId host_id);
 
     QString channelIdForUI() const;
     void setChannelIdForUI(const QString& channel_id);

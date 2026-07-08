@@ -859,7 +859,6 @@ void Service::onRemoveHost()
     db.setRouterPublicKey(QByteArray());
 
     HostStorage storage;
-    storage.setLastHostId(kInvalidHostId);
     storage.setHostKey("");
 
     LOG(INFO) << "Uninstalling the application";
