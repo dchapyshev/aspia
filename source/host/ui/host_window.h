@@ -68,9 +68,7 @@ signals:
 protected:
     // QMainWindow implementation.
     void closeEvent(QCloseEvent* event) final;
-#if defined(Q_OS_MACOS)
     void showEvent(QShowEvent* event) final;
-#endif // defined(Q_OS_MACOS)
 
 private slots:
     void onStatusChanged(UserSessionAgent::Status status);
@@ -109,6 +107,7 @@ private:
     std::unique_ptr<ElevateUtil> elevate_util_;
     bool should_be_quit_ = false;
     bool connected_to_service_ = false;
+    bool height_pinned_ = false;
 
     // Created only when the shell's tray is available (see createTrayIcon()).
     ScopedQPointer<QSystemTrayIcon> tray_icon_;

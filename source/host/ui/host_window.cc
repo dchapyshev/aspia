@@ -77,6 +77,7 @@ HostWindow::HostWindow(QWidget* parent)
 
     ui->setupUi(this);
     setWindowFlag(Qt::WindowMaximizeButtonHint, false);
+    setWindowFlag(Qt::WindowStaysOnTopHint, true);
 
 #if defined(Q_OS_MACOS)
     // The host GUI is a menu-bar (LSUIElement) agent and has no system menu bar, so render the window
@@ -141,8 +142,6 @@ HostWindow::HostWindow(QWidget* parent)
     connect(ui->action_exit, &QAction::triggered, this, &HostWindow::onExit);
     connect(ui->action_help, &QAction::triggered, this, &HostWindow::onHelp);
     connect(ui->action_about, &QAction::triggered, this, &HostWindow::onAbout);
-
-    setFixedHeight(sizeHint().height());
 
     connect(ui->button_new_password, &QPushButton::clicked, this, [this]()
     {
@@ -297,12 +296,18 @@ void HostWindow::closeEvent(QCloseEvent* event)
     }
 }
 
-#if defined(Q_OS_MACOS)
 //--------------------------------------------------------------------------------------------------
 void HostWindow::showEvent(QShowEvent* event)
 {
     QMainWindow::showEvent(event);
 
+    if (!height_pinned_)
+    {
+        height_pinned_ = true;
+        setFixedHeight(minimumSizeHint().height());
+    }
+
+#if defined(Q_OS_MACOS)
     // When the window is brought up (never on a silent --hidden start, which does not show it), prompt
     // for the privacy permissions the host needs if any are still missing. The dialog is modeless so it
     // never blocks the event loop - the app must stay able to quit (e.g. macOS "Quit & Reopen" restarts
@@ -323,8 +328,8 @@ void HostWindow::showEvent(QShowEvent* event)
         permission_dialog_->setAttribute(Qt::WA_DeleteOnClose);
         permission_dialog_->show();
     });
-}
 #endif // defined(Q_OS_MACOS)
+}
 
 //--------------------------------------------------------------------------------------------------
 void HostWindow::onStatusChanged(UserSessionAgent::Status status)

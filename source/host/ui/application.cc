@@ -120,14 +120,16 @@ Application::Application(int& argc, char* argv[])
     });
 
     UserSettings user_settings;
-    if (!hasLocale(user_settings.locale()))
-    {
-        LOG(INFO) << "Set default locale";
-        user_settings.setLocale(DEFAULT_LOCALE);
-    }
+
+    // Do not persist the default locale from here. The settings / security-log dialog is launched
+    // elevated (euid 0) in the console user's home, so a UserSettings write from the constructor would
+    // create a root-owned host.conf.
+    QString locale = user_settings.locale();
+    if (!hasLocale(locale))
+        locale = DEFAULT_LOCALE;
 
     setTheme(user_settings.theme());
-    setLocale(user_settings.locale());
+    setLocale(locale);
 }
 
 //--------------------------------------------------------------------------------------------------
