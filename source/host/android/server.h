@@ -77,9 +77,13 @@ private slots:
     void onClientFinished();
     void onRouterStateChanged(const proto::user::RouterState& state);
     void onCredentialsChanged(HostId host_id, const SecureString& password);
+    void onApplicationStateChanged(Qt::ApplicationState state);
+    void onScreenInteractiveChanged(bool interactive);
 
 private:
     void connectToRouter();
+    void disconnectFromRouter();
+    void updateRouterConnection();
     void startClient(TcpChannel* tcp_channel, const QString& stun_host = QString(),
                      quint16 stun_port = 0);
 
@@ -88,6 +92,11 @@ private:
     QList<Client*> file_clients_;
     QList<ClientInfo> connected_clients_;
     ScopedQPointer<DesktopAgent> desktop_agent_;
+
+    // The host is reachable through the router only while in the foreground with the screen on; an
+    // active session keeps it connected regardless. Both are seeded with the live state in start().
+    bool app_active_ = true;
+    bool screen_on_ = true;
 
     Q_DISABLE_COPY_MOVE(Server)
 };

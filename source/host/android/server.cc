@@ -18,6 +18,12 @@
 
 #include "host/android/server.h"
 
+#include <QGuiApplication>
+#include <QJniEnvironment>
+#include <QJniObject>
+#include <QMutex>
+#include <QVariant>
+
 #include <optional>
 
 #include "base/logging.h"
@@ -41,6 +47,8 @@
 
 namespace {
 
+const char kScreenMonitorClass[] = "org/aspia/host/ScreenMonitor";
+
 // A host serves a single user, so only a few simultaneous handshakes and a low per-address rate are
 // expected. Tight caps limit the damage of a flood; latecomers retry shortly.
 constexpr int kMaxPendingConnections = 10;
@@ -50,6 +58,23 @@ constexpr int kMaxConnectionsPerMinute = 30;
 constexpr int kReadBufferSize = 2 * 1024 * 1024; // 2 MB.
 constexpr int kWriteBufferSize = 2 * 1024 * 1024; // 2 MB.
 
+// Guards the single Server instance against the screen-state JNI callback, delivered on the Android
+// main thread. At most one server exists, so a bare pointer is enough.
+QMutex g_mutex;
+Server* g_instance = nullptr;
+
+//--------------------------------------------------------------------------------------------------
+// Called by ScreenMonitor when the display turns on or off. Hops to the server's I/O thread.
+void screenInteractiveChanged(JNIEnv* /* env */, jclass /* clazz */, jboolean interactive)
+{
+    QMutexLocker locker(&g_mutex);
+    if (g_instance)
+    {
+        QMetaObject::invokeMethod(g_instance, "onScreenInteractiveChanged", Qt::QueuedConnection,
+                                  Q_ARG(bool, interactive == JNI_TRUE));
+    }
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -58,6 +83,24 @@ Server::Server(QObject* parent)
 {
     LOG(INFO) << "Ctor";
     qRegisterMetaType<QList<ClientInfo>>();
+
+    static bool registered = false;
+    if (!registered)
+    {
+        const JNINativeMethod methods[] =
+        {
+            { "nativeOnInteractiveChanged", "(Z)V", reinterpret_cast<void*>(screenInteractiveChanged) }
+        };
+
+        QJniEnvironment env;
+        if (!env.registerNativeMethods(kScreenMonitorClass, methods, 1))
+            LOG(ERROR) << "Unable to register native methods for ScreenMonitor";
+        else
+            registered = true;
+    }
+
+    QMutexLocker locker(&g_mutex);
+    g_instance = this;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -65,6 +108,10 @@ Server::~Server()
 {
     LOG(INFO) << "Dtor";
     stop();
+
+    QMutexLocker locker(&g_mutex);
+    if (g_instance == this)
+        g_instance = nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -93,8 +140,27 @@ void Server::start()
     // connected.
     desktop_agent_ = new DesktopAgent(this);
 
-    if (db.isRouterEnabled())
-        connectToRouter();
+    // The router connection is bound to the application lifecycle: dropped while backgrounded or with
+    // the screen off, restored on return. The app-state signal comes from the GUI thread and is
+    // delivered here queued; screen on/off arrives through ScreenMonitor's JNI callback, which also
+    // reports the current state once started. The state may have changed before the subscriptions were
+    // in place, so seed the flag with the live value instead of assuming an active start.
+    app_active_ = (qGuiApp->applicationState() == Qt::ApplicationActive);
+    connect(qGuiApp, &QGuiApplication::applicationStateChanged,
+            this, &Server::onApplicationStateChanged, Qt::QueuedConnection);
+
+    QNativeInterface::QAndroidApplication::runOnAndroidMainThread([]() -> QVariant
+    {
+        QJniObject context = QNativeInterface::QAndroidApplication::context();
+        if (context.isValid())
+        {
+            QJniObject::callStaticMethod<void>(
+                kScreenMonitorClass, "start", "(Landroid/content/Context;)V", context.object());
+        }
+        return QVariant();
+    });
+
+    updateRouterConnection();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -106,6 +172,17 @@ void Server::stop()
     desktop_agent_.reset();
     router_manager_.reset();
     tcp_server_.reset();
+
+    QNativeInterface::QAndroidApplication::runOnAndroidMainThread([]() -> QVariant
+    {
+        QJniObject context = QNativeInterface::QAndroidApplication::context();
+        if (context.isValid())
+        {
+            QJniObject::callStaticMethod<void>(
+                kScreenMonitorClass, "stop", "(Landroid/content/Context;)V", context.object());
+        }
+        return QVariant();
+    });
 
     LOG(INFO) << "Host server stopped";
 }
@@ -176,6 +253,10 @@ void Server::onClientFinished()
         client->deleteLater();
 
     emit sig_connectedClientsChanged(connected_clients_);
+
+    // A session may have been the only reason the router was kept online while in the background; if it
+    // was the last one, drop the connection.
+    updateRouterConnection();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -201,6 +282,21 @@ void Server::onCredentialsChanged(HostId host_id, const SecureString& password)
 }
 
 //--------------------------------------------------------------------------------------------------
+void Server::onApplicationStateChanged(Qt::ApplicationState state)
+{
+    app_active_ = (state == Qt::ApplicationActive);
+    updateRouterConnection();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Server::onScreenInteractiveChanged(bool interactive)
+{
+    // Locking the screen does not change the Qt application state, so this is a separate signal.
+    screen_on_ = interactive;
+    updateRouterConnection();
+}
+
+//--------------------------------------------------------------------------------------------------
 void Server::connectToRouter()
 {
     if (router_manager_)
@@ -220,6 +316,50 @@ void Server::connectToRouter()
     // The desktop host pushes the allowed one-time session types from the user session; here they are
     // taken directly from the settings.
     router_manager_->onOneTimeSessionsChanged(UserSettings().oneTimeSessions());
+}
+
+//--------------------------------------------------------------------------------------------------
+void Server::disconnectFromRouter()
+{
+    if (!router_manager_)
+        return;
+
+    // reset() schedules deleteLater() but does not disconnect; sever the connections first so nothing
+    // (e.g. a reconnect timer tick before the deletion) re-emits a state on top of DISABLED below.
+    router_manager_->disconnect(this);
+    router_manager_.reset();
+
+    // Reflect the offline state on the connection screen: the assigned ID and one-time password are no
+    // longer valid, and a fresh password is issued on the next connect.
+    emit sig_routerStateChanged(static_cast<int>(proto::user::RouterState::DISABLED), QString());
+    emit sig_credentialsChanged(QString(), QString());
+
+    LOG(INFO) << "Router connection closed (host went to background)";
+}
+
+//--------------------------------------------------------------------------------------------------
+void Server::updateRouterConnection()
+{
+    // The window may already be gone (server stopped); nothing to manage then.
+    if (!tcp_server_)
+        return;
+
+    // The host is reachable through the router only while the user is looking at the app (foreground
+    // with the screen on). An active session keeps the connection regardless: it holds the app alive
+    // through its foreground service, and its relay leg must not be torn down. Otherwise Android would
+    // freeze the process in the background anyway and the router would drop the host by timeout, so the
+    // connection is closed now for a clean, immediate offline state.
+    const bool should_be_online = (app_active_ && screen_on_) || !connected_clients_.isEmpty();
+
+    if (should_be_online)
+    {
+        if (Database::instance().isRouterEnabled())
+            connectToRouter();
+    }
+    else
+    {
+        disconnectFromRouter();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
