@@ -15,10 +15,10 @@ fi
 
 # On upgrades an older daemon may still be registered; remove it before installing the new one so
 # launchd picks up the updated executable path. Ignore failure (nothing registered yet).
-"$HOST" --service --remove 2>/dev/null || true
+"$HOST" --remove 2>/dev/null || true
 
 # Writes /Library/LaunchDaemons/org.aspia.host-service.plist and loads the daemon.
-if ! "$HOST" --service --install; then
+if ! "$HOST" --install; then
     echo "Failed to register the Aspia Host service" >&2
     exit 1
 fi

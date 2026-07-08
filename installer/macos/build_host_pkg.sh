@@ -4,7 +4,7 @@
 # aspia_host.app bundle (see the APPLE section of source/host/CMakeLists.txt).
 #
 # The installer drops the bundle into /Applications/Aspia Host.app and registers the launchd daemon
-# from its postinstall script (aspia_host --service --install, reusing ServiceControllerLaunchd).
+# from its postinstall script (aspia_host --install, reusing ServiceControllerLaunchd).
 #
 # Usage:
 #   installer/macos/build_host_pkg.sh <path-to-aspia_host.app> [--output <file.pkg>]

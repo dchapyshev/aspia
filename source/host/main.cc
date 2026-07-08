@@ -226,7 +226,7 @@ int installService(QTextStream& out)
     // The service is the shared aspia_host binary; register it to run in service mode so the OS starts
     // "aspia_host --service".
     std::unique_ptr<ServiceController> controller = ServiceController::install(
-        Service::kName, Service::kDisplayName, CoreApplication::applicationFilePath(),
+        Service::kName, Service::kDisplayName, QCoreApplication::applicationFilePath(),
         QStringList{ "--service" });
     if (!controller)
     {
@@ -256,8 +256,29 @@ int removeService(QTextStream& out)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Runs the host as the background service (aspia_host --service), or performs a one-shot management
-// action (--install/--remove/--start/--stop/--host-id). Relies on the caller's ScopedLogging.
+int printHostId(QTextStream& out)
+{
+    HostStorage storage;
+    out << storage.lastHostId() << Qt::endl;
+    return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Runs a one-shot service management |command| (--install/--remove/--start/--stop/--host-id). Such a
+// command needs no service machinery - just a core application for applicationFilePath() and process
+// spawning.
+int runServiceCommand(int& argc, char* argv[], int (*command)(QTextStream& out))
+{
+    QCoreApplication::setApplicationVersion(ASPIA_VERSION_STRING);
+    QCoreApplication application(argc, argv);
+
+    QTextStream out(stdout, QIODevice::WriteOnly);
+    return command(out);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Runs the host as the background service ("--service" - what the OS service registration points at).
+// Relies on the caller's ScopedLogging.
 int runService(int& argc, char* argv[])
 {
     CoreApplication::setEventDispatcher(new AsioEventDispatcher());
@@ -266,52 +287,6 @@ int runService(int& argc, char* argv[])
     CoreApplication application(argc, argv);
 
     HostUtils::printDebugInfo();
-
-    // "--service" only selects service mode in the shared aspia_host binary; recognized here so the
-    // parser accepts it. The action is chosen by install/remove/start/stop below, or defaults to
-    // running the service.
-    QCommandLineOption service_option("service",
-        CoreApplication::translate("ServiceMain", "Run in service mode."));
-    QCommandLineOption install_option("install",
-        CoreApplication::translate("ServiceMain", "Install service."));
-    QCommandLineOption remove_option("remove",
-        CoreApplication::translate("ServiceMain", "Remove service."));
-    QCommandLineOption start_option("start",
-        CoreApplication::translate("ServiceMain", "Start service."));
-    QCommandLineOption stop_option("stop",
-        CoreApplication::translate("ServiceMain", "Stop service."));
-    QCommandLineOption hostid_option("host-id",
-        CoreApplication::translate("ServiceMain", "Get current host id."));
-
-    QCommandLineParser parser;
-    parser.addOption(service_option);
-    parser.addOption(install_option);
-    parser.addOption(remove_option);
-    parser.addOption(start_option);
-    parser.addOption(stop_option);
-    parser.addOption(hostid_option);
-    parser.addHelpOption();
-    parser.addVersionOption();
-
-    parser.process(application);
-
-    QTextStream out(stdout, QIODevice::WriteOnly);
-
-    if (parser.isSet(hostid_option))
-    {
-        HostStorage storage;
-        out << storage.lastHostId() << Qt::endl;
-        return 0;
-    }
-
-    if (parser.isSet(install_option))
-        return installService(out);
-    else if (parser.isSet(remove_option))
-        return removeService(out);
-    else if (parser.isSet(start_option))
-        return startService(out);
-    else if (parser.isSet(stop_option))
-        return stopService(out);
 
     return Service().exec(application);
 }
@@ -441,12 +416,20 @@ int main(int argc, char* argv[])
 
     ScopedLogging scoped_logging(logging_settings);
 
-    // The single aspia_host binary is also the background service ("--service", possibly with
-    // "--install"/"--remove"/etc.). Dispatch it here, before any application object is created.
     for (int i = 1; i < argc; ++i)
     {
         if (qstrcmp(argv[i], "--service") == 0)
             return runService(argc, argv);
+        if (qstrcmp(argv[i], "--install") == 0)
+            return runServiceCommand(argc, argv, installService);
+        if (qstrcmp(argv[i], "--remove") == 0)
+            return runServiceCommand(argc, argv, removeService);
+        if (qstrcmp(argv[i], "--start") == 0)
+            return runServiceCommand(argc, argv, startService);
+        if (qstrcmp(argv[i], "--stop") == 0)
+            return runServiceCommand(argc, argv, stopService);
+        if (qstrcmp(argv[i], "--host-id") == 0)
+            return runServiceCommand(argc, argv, printHostId);
     }
 
     // ... and the headless session agents (desktop/screen, file transfer, terminal). Sharing the binary
