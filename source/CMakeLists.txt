@@ -272,7 +272,7 @@ if (LINUX)
 
         # Application icon.
         install(FILES common/resources/aspia.svg
-            DESTINATION share/icons/hicolor/scalable/apps COMPONENT host)
+            DESTINATION share/icons/hicolor/scalable/apps RENAME aspia-host.svg COMPONENT host)
 
         # Service file.
         install(FILES host/linux/aspia-host-service.service
@@ -342,7 +342,7 @@ if (LINUX)
 
     # Application icon.
     install(FILES common/resources/aspia.svg
-        DESTINATION share/icons/hicolor/scalable/apps COMPONENT client)
+        DESTINATION share/icons/hicolor/scalable/apps RENAME aspia-client.svg COMPONENT client)
 
     set(CPACK_DEBIAN_CLIENT_FILE_NAME
         "${CPACK_COMPONENT_CLIENT_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
