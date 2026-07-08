@@ -42,6 +42,13 @@
 #include "host/ui/user_dialog.h"
 #include "ui_config_dialog.h"
 
+#if defined(Q_OS_MACOS)
+#include <QComboBox>
+#include <QHBoxLayout>
+
+#include "base/mac/keyboard_layout.h"
+#endif // defined(Q_OS_MACOS)
+
 namespace {
 
 class UserTreeItem final : public QTreeWidgetItem
@@ -288,6 +295,42 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     //---------------------------------------------------------------------------------------------
 
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &ConfigDialog::onButtonBoxClicked);
+
+#if defined(Q_OS_MACOS)
+    // Elevated (root) config runs outside the user's input-source context and cannot follow the system
+    // keyboard-layout switching, so place an explicit layout selector next to the buttons.
+    QList<KeyboardLayout> layouts = enabledKeyboardLayouts();
+    if (layouts.size() > 1)
+    {
+        QComboBox* layout_combo = new QComboBox(this);
+        const QString current = currentKeyboardLayout();
+
+        for (const KeyboardLayout& layout : std::as_const(layouts))
+        {
+            layout_combo->addItem(layout.name, layout.id);
+            if (layout.id == current)
+                layout_combo->setCurrentIndex(layout_combo->count() - 1);
+        }
+
+        connect(layout_combo, &QComboBox::currentIndexChanged, this, [layout_combo](int index)
+        {
+            selectKeyboardLayout(layout_combo->itemData(index).toString());
+        });
+
+        if (QBoxLayout* main_layout = qobject_cast<QBoxLayout*>(layout()))
+        {
+            main_layout->removeWidget(ui->button_box);
+
+            QHBoxLayout* row = new QHBoxLayout();
+            row->addWidget(layout_combo);
+            row->addStretch();
+            row->addWidget(ui->button_box);
+
+            main_layout->addLayout(row);
+        }
+    }
+#endif // defined(Q_OS_MACOS)
+
     reloadAll();
 
     QTimer::singleShot(0, this, &ConfigDialog::adjustSize);

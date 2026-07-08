@@ -199,6 +199,13 @@ int hostMain(int argc, char* argv[])
     Application::setHighDpiScaleFactorRoundingPolicy(
         Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
 
+#if defined(Q_OS_MACOS)
+    // The settings / security-log dialog is launched elevated through Authorization Services, which runs
+    // the process with euid 0 but the original real uid. Qt would otherwise abort on that uid mismatch
+    // ("running setuid, this is a security hole"). The launch is our own, so allow it.
+    Application::setSetuidAllowed(true);
+#endif // defined(Q_OS_MACOS)
+
     Application application(argc, argv);
     Application::setQuitOnLastWindowClosed(false);
 

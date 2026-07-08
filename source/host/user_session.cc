@@ -49,6 +49,11 @@
 #include <cstdlib>
 #endif // defined(Q_OS_LINUX)
 
+#if defined(Q_OS_MACOS)
+#include <cstdlib>
+#include <pwd.h>
+#endif // defined(Q_OS_MACOS)
+
 namespace {
 
 #if defined(Q_OS_UNIX)
@@ -146,12 +151,12 @@ UserSession::UserSession(QObject* parent)
     {
         LOG(INFO) << "UI process did not attach in time";
         dettach(FROM_HERE);
-#if defined(Q_OS_LINUX)
-        // The GUI may have been launched during an unstable moment (e.g. a logout/login on the same VT,
-        // where the session briefly disappears and reappears). Keep retrying so it reliably comes back
-        // once the session settles, instead of giving up after one failed launch.
+#if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
+        // The GUI may have been launched during an unstable moment (e.g. a login or user switch, where
+        // the active session briefly changes). Keep retrying so it reliably comes back once the session
+        // settles, instead of giving up after one failed launch.
         startup_timer_->start();
-#endif // defined(Q_OS_LINUX)
+#endif // defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
     });
     connect(dettach_timer_, &QTimer::timeout, this, &UserSession::onDettachTimeout);
     connect(startup_timer_, &QTimer::timeout, this, &UserSession::onStartupUserCheck);
@@ -462,10 +467,10 @@ void UserSession::onUserSessionEvent(quint32 status, quint32 session_id)
             // Ignore other events.
             break;
     }
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
     // The active console session changed (login, user switch, unlock). The GUI is per-session and is
     // not relaunched by anything else once the startup retry window has passed, so relaunch it for the
-    // now active session by restarting the bounded retry loop that waits for the session's display
+    // now active session by restarting the bounded retry loop that waits for the session's graphical
     // environment (mirrors the startup path).
     if (state_ != State::DETTACHED && session_id == static_cast<quint32>(session_id_))
         return;
@@ -695,11 +700,11 @@ void UserSession::onStartupUserCheck()
 
     if (startup_attempts_++ <= 60)
         startup_timer_->start();
-#elif defined(Q_OS_LINUX)
-    // Retry attaching to the active console session for the first minute after the service starts -
-    // the graphical environment is imported into the user manager a moment after the session becomes
-    // active (see the readiness gate in attach()). Each attach() that finds it not ready re-arms this
-    // timer, so this just bounds the total number of attempts.
+#elif defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
+    // Retry attaching to the active console session for the first minute after the service starts - the
+    // session's graphical environment becomes usable a moment after it turns active (Linux: the display
+    // env is imported into the user manager; macOS: the console user / Aqua session appears). Each
+    // attach() that finds it not ready re-arms this timer, so this just bounds the number of attempts.
     if (startup_attempts_++ > 60)
     {
         LOG(WARNING) << "Graphical environment did not become ready in time";
@@ -864,6 +869,45 @@ void UserSession::attach(const Location& location, AttachReason reason, SessionI
     if (!xauthority.isEmpty())
         command += " --setenv=XAUTHORITY=" + xauthority;
     command += ' ' + file_path + " --hidden";
+
+    const QByteArray command_line = command.toLocal8Bit();
+
+    LOG(INFO) << "Start user session GUI:" << command_line;
+
+    int ret = system(command_line.data());
+    LOG(INFO) << "system result:" << ret;
+#elif defined(Q_OS_MACOS)
+    // On macOS the active console session is identified by the console user's uid (see
+    // activeConsoleSessionId()). Only a logged-in user has one; at the login window there is none.
+    if (session_id == kInvalidSessionId)
+    {
+        LOG(INFO) << "No active console user; the GUI is not started";
+        dettach(FROM_HERE);
+        if (reason == AttachReason::STARTUP)
+            startup_timer_->start();
+        return;
+    }
+
+    struct passwd* pw = getpwuid(static_cast<uid_t>(session_id));
+    if (!pw)
+    {
+        LOG(ERROR) << "getpwuid failed for uid" << session_id;
+        dettach(FROM_HERE);
+        return;
+    }
+
+    const QString user_name = QString::fromLocal8Bit(pw->pw_name);
+    const QString file_path = QCoreApplication::applicationDirPath() + '/' + kExecutableNameForUi;
+
+    // Launch the GUI as the console user inside their Aqua (GUI) session. "launchctl asuser <uid>" moves
+    // the process into the user's per-user launchd domain so it can reach the WindowServer; "sudo -u -H"
+    // drops the service's root to that user (no password: root sudo is unconditional) with the user's
+    // home. The GUI stays in the foreground of this chain, so background it ("&") and detach its
+    // descriptors - otherwise the blocking system() call below would freeze the service event loop for
+    // the whole lifetime of the GUI (systemd-run returns immediately on Linux; launchctl does not).
+    QString command =
+        QString("launchctl asuser %1 sudo -u %2 -H \"%3\" --hidden </dev/null >/dev/null 2>&1 &")
+            .arg(session_id).arg(user_name, file_path);
 
     const QByteArray command_line = command.toLocal8Bit();
 

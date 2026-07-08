@@ -149,6 +149,8 @@ if (APPLE)
     find_library(VIDEOTOOLBOX_LIB VideoToolbox)
     find_library(SYSTEMCONFIGURATION_LIB SystemConfiguration)
     find_library(IOKIT_LIB IOKit)
+    find_library(SECURITY_LIB Security)
+    find_library(CARBON_LIB Carbon)
     find_program(CODESIGN_BIN NAMES codesign)
 endif()
 

@@ -42,6 +42,14 @@
 #include <xcb/xcb.h>
 #endif // defined(Q_OS_LINUX)
 
+#if defined(Q_OS_MACOS)
+#include <unistd.h>
+
+#include <QSocketNotifier>
+
+#include <Security/Authorization.h>
+#endif // defined(Q_OS_MACOS)
+
 namespace {
 
 #if defined(Q_OS_WINDOWS)
@@ -174,6 +182,87 @@ public:
 
 #endif // defined(Q_OS_LINUX)
 
+#if defined(Q_OS_MACOS)
+
+//--------------------------------------------------------------------------------------------------
+class MacElevateUtil final : public ElevateUtil
+{
+public:
+    explicit MacElevateUtil(QObject* parent)
+        : ElevateUtil(parent)
+    {
+        // Nothing.
+    }
+
+    // ElevateUtil implementation.
+    bool runElevated(const QString& argument, quintptr /* parent_window */,
+                     std::function<void()> on_finished) final
+    {
+        // Already root, or running setuid: edit the configuration in-process.
+        if (getuid() == 0 || getuid() != geteuid())
+            return false;
+
+        LOG(INFO) << "Start dialog as super user";
+
+        AuthorizationRef authorization = nullptr;
+        OSStatus status = AuthorizationCreate(
+            nullptr, kAuthorizationEmptyEnvironment, kAuthorizationFlagDefaults, &authorization);
+        if (status != errAuthorizationSuccess)
+        {
+            LOG(ERROR) << "AuthorizationCreate failed:" << status;
+            return false;
+        }
+
+        // Run the application itself as root (for the root-owned config) but inside the console user's
+        // Aqua session via "launchctl asuser <uid>" so its dialog reaches the WindowServer - a plain
+        // privileged process runs outside the GUI session and cannot show UI. Requesting the right from
+        // the application (not through an osascript helper) makes the system authentication prompt name
+        // the host rather than the interpreter.
+        QByteArray uid = QByteArray::number(getuid());
+        QByteArray app = QCoreApplication::applicationFilePath().toLocal8Bit();
+        QByteArray arg = argument.toLocal8Bit();
+        char* arguments[] = { const_cast<char*>("asuser"), uid.data(), app.data(), arg.data(), nullptr };
+
+        FILE* pipe = nullptr;
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+        // No non-deprecated replacement exists without shipping a signed SMJobBless helper.
+        status = AuthorizationExecuteWithPrivileges(
+            authorization, "/bin/launchctl", kAuthorizationFlagDefaults, arguments, &pipe);
+#pragma clang diagnostic pop
+
+        if (status != errAuthorizationSuccess)
+        {
+            if (status != errAuthorizationCanceled)
+                LOG(ERROR) << "AuthorizationExecuteWithPrivileges failed:" << status;
+            AuthorizationFree(authorization, kAuthorizationFlagDefaults);
+            return false;
+        }
+
+        // The privileged tool's stdout is connected to |pipe|; it and the config dialog that inherits
+        // the descriptor keep it open until the dialog closes. Watch for EOF to learn when it finished.
+        QSocketNotifier* notifier = new QSocketNotifier(fileno(pipe), QSocketNotifier::Read, this);
+        connect(notifier, &QSocketNotifier::activated, this,
+                [notifier, pipe, authorization, on_finished]()
+        {
+            char buffer[256];
+            if (::read(fileno(pipe), buffer, sizeof(buffer)) > 0)
+                return; // Drain any output and keep waiting for EOF.
+
+            notifier->setEnabled(false);
+            notifier->deleteLater();
+            fclose(pipe);
+            AuthorizationFree(authorization, kAuthorizationFlagDefaults);
+            on_finished();
+        });
+
+        return true;
+    }
+};
+
+#endif // defined(Q_OS_MACOS)
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -194,6 +283,8 @@ std::unique_ptr<ElevateUtil> ElevateUtil::create(QObject* parent)
     return std::make_unique<WinElevateUtil>(parent);
 #elif defined(Q_OS_LINUX)
     return std::make_unique<LinuxElevateUtil>(parent);
+#elif defined(Q_OS_MACOS)
+    return std::make_unique<MacElevateUtil>(parent);
 #else
     Q_UNUSED(parent);
     return nullptr;

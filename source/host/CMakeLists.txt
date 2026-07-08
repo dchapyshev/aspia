@@ -291,7 +291,8 @@ if (APPLE)
         ${COREMEDIA_LIB}
         ${COREVIDEO_LIB}
         ${COREGRAPHICS_LIB}
-        ${VIDEOTOOLBOX_LIB})
+        ${VIDEOTOOLBOX_LIB}
+        ${SECURITY_LIB})
 endif()
 
 if (LINUX)
