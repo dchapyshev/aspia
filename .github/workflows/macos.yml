@@ -94,6 +94,19 @@ jobs:
             cp vcpkg4aspia/vcpkg $VCPKG_DEFAULT_BINARY_CACHE/vcpkg.bak
           fi
 
+      # Step 3
+      - name: Build host installer (.pkg)
+        run: |
+          case "${{ matrix.build_type }}" in
+            release) HOST_CONFIG=Release ;;
+            debug)   HOST_CONFIG=Debug ;;
+            *) echo "Unknown build_type: ${{ matrix.build_type }}"; exit 1 ;;
+          esac
+
+          "${{ github.workspace }}/installer/macos/build_host_pkg.sh" \
+            "${{ github.workspace }}/builds/ci/${HOST_CONFIG}/aspia_host.app" \
+            --output "${{ github.workspace }}/aspia-host-${{ matrix.arch }}-${{ matrix.build_type }}.pkg"
+
       # Step 4
       - name: Upload Artifacts
         uses: actions/upload-artifact@v7
@@ -101,5 +114,6 @@ jobs:
           name: build-${{ matrix.os }}-${{ matrix.arch }}-${{ matrix.build_type }}
           path: |
             ${{ github.workspace }}/*.dmg
+            ${{ github.workspace }}/*.pkg
           if-no-files-found: error
           retention-days: 7
