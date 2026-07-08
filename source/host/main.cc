@@ -486,19 +486,7 @@ int main(int argc, char* argv[])
 
     parser.process(application);
 
-    if (parser.isSet(import_option) && parser.isSet(export_option))
-    {
-        LOG(ERROR) << "Import and export are specified at the same time";
-
-        if (!parser.isSet(silent_option))
-        {
-            MsgBox::warning(nullptr,
-                QApplication::translate("Host", "Export and import parameters can not be specified together."));
-        }
-
-        return 1;
-    }
-    else if (parser.isSet(import_option))
+    if (parser.isSet(import_option))
     {
         if (!SettingsUtil::importFromFile(parser.value(import_option), parser.isSet(silent_option)))
             return 1;
