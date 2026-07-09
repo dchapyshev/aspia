@@ -19,6 +19,8 @@
 #include "host/audio_worker.h"
 
 #include "base/logging.h"
+#include "base/audio/audio_capturer.h"
+#include "base/codec/audio_encoder.h"
 
 //--------------------------------------------------------------------------------------------------
 // On macOS the Qt dispatcher backs the thread with a CFRunLoop (via
@@ -40,13 +42,75 @@ AudioWorker::~AudioWorker()
 }
 
 //--------------------------------------------------------------------------------------------------
+void AudioWorker::setEnabled(bool enable)
+{
+    if (enable)
+    {
+        if (capturer_)
+            return;
+
+        LOG(INFO) << "Starting audio capturer";
+
+        capturer_ = AudioCapturer::create();
+        if (!capturer_)
+        {
+            LOG(ERROR) << "Unable to create audio capturer";
+            return;
+        }
+
+        encoder_ = std::make_unique<AudioEncoder>();
+
+        // The platform capturer delivers packets on its own thread; marshal each one to the worker
+        // thread for encoding. The shared_ptr keeps the packet alive inside the copyable functor
+        // without copying the PCM data itself.
+        capturer_->start([this](std::unique_ptr<proto::audio::Packet> packet)
+        {
+            std::shared_ptr<proto::audio::Packet> shared_packet(std::move(packet));
+            QMetaObject::invokeMethod(this, [this, shared_packet]()
+            {
+                encodePacket(*shared_packet);
+            }, Qt::QueuedConnection);
+        });
+    }
+    else
+    {
+        if (!capturer_)
+            return;
+
+        LOG(INFO) << "Stopping audio capturer";
+
+        capturer_.reset();
+        encoder_.reset();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void AudioWorker::onStart()
 {
     LOG(INFO) << "Audio worker started";
+
+    // Audio is latency-sensitive: a delayed packet is an audible glitch.
+    QThread::currentThread()->setPriority(QThread::HighestPriority);
 }
 
 //--------------------------------------------------------------------------------------------------
 void AudioWorker::onStop()
 {
     LOG(INFO) << "Audio worker stopped";
+
+    capturer_.reset();
+    encoder_.reset();
+}
+
+//--------------------------------------------------------------------------------------------------
+void AudioWorker::encodePacket(const proto::audio::Packet& packet)
+{
+    // The capturer may already be stopped while marshalled packets are still queued.
+    if (!encoder_)
+        return;
+
+    if (!encoder_->encode(packet, serializer_.newMessage<proto::audio::HostToClient>().mutable_packet()))
+        return;
+
+    emit sig_audioData(serializer_.serialize<proto::audio::HostToClient>());
 }

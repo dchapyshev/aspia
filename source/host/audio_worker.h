@@ -19,7 +19,14 @@
 #ifndef HOST_AUDIO_WORKER_H
 #define HOST_AUDIO_WORKER_H
 
+#include <memory>
+
+#include "base/serialization.h"
 #include "base/threading/worker.h"
+#include "proto/desktop_audio.h"
+
+class AudioCapturer;
+class AudioEncoder;
 
 class AudioWorker final : public Worker
 {
@@ -29,12 +36,27 @@ public:
     AudioWorker();
     ~AudioWorker() final;
 
+public slots:
+    // Starts or stops capturing and encoding. Runs in the worker thread; invoke it through a
+    // queued connection.
+    void setEnabled(bool enable);
+
+signals:
+    // Serialized audio message with one encoded packet, ready to be sent to clients.
+    void sig_audioData(const QByteArray& buffer);
+
 protected:
     // Worker implementation.
     void onStart() final;
     void onStop() final;
 
 private:
+    void encodePacket(const proto::audio::Packet& packet);
+
+    std::unique_ptr<AudioCapturer> capturer_;
+    std::unique_ptr<AudioEncoder> encoder_;
+    Serializer<proto::audio::HostToClient> serializer_;
+
     Q_DISABLE_COPY_MOVE(AudioWorker)
 };
 
