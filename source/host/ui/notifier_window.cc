@@ -267,6 +267,9 @@ void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& cli
 
             QToolButton* stop_button =
                 createSessionButton(ui->tree, ":/img/stop.svg", tr("Disconnect"));
+#if defined(Q_OS_MACOS)
+            stop_button->setStyleSheet(buttonStyleSheet());
+#endif // defined(Q_OS_MACOS)
             quint32 tree_item_id = tree_item->clientId();
 
             connect(stop_button, &QToolButton::clicked, this, [this, tree_item_id]()
@@ -539,18 +542,23 @@ void NotifierWindow::onThemeChanged()
         QString("<html><head/><body><p><span style=\"font-weight:700;\">%1</span></p></body></html>")
             .arg(tr("Aspia Host")));
     ui->label_title->setStyleSheet("padding: 3px;");
-}
 
-//--------------------------------------------------------------------------------------------------
-void NotifierWindow::updateTreeColumns()
-{
-    if (ui->content->isHidden() || ui->tree->topLevelItemCount() == 0)
-        return;
+#if defined(Q_OS_MACOS)
+    const QString button_style = buttonStyleSheet();
+    ui->button_show->setStyleSheet(button_style);
+    ui->button_hide->setStyleSheet(button_style);
+    ui->button_lock_mouse->setStyleSheet(button_style);
+    ui->button_lock_keyboard->setStyleSheet(button_style);
+    ui->button_pause->setStyleSheet(button_style);
+    ui->button_stop->setStyleSheet(button_style);
 
-    // The disconnect button lives in column 1; size it to its contents and give the remaining width to
-    // the session name in column 0.
-    ui->tree->resizeColumnToContents(1);
-    ui->tree->setColumnWidth(0, ui->tree->header()->width() - ui->tree->columnWidth(1));
+    // Re-style the per-session disconnect buttons already placed in the tree.
+    for (int i = 0; i < ui->tree->topLevelItemCount(); ++i)
+    {
+        if (QWidget* button = ui->tree->itemWidget(ui->tree->topLevelItem(i), 1))
+            button->setStyleSheet(button_style);
+    }
+#endif // defined(Q_OS_MACOS)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -590,4 +598,42 @@ QRect NotifierWindow::currentAvailableRect()
 
     return primary_screen->availableGeometry();
 #endif
+}
+
+//--------------------------------------------------------------------------------------------------
+void NotifierWindow::updateTreeColumns()
+{
+    if (ui->content->isHidden() || ui->tree->topLevelItemCount() == 0)
+        return;
+
+    // The disconnect button lives in column 1; size it to its contents and give the remaining width to
+    // the session name in column 0.
+    ui->tree->resizeColumnToContents(1);
+    ui->tree->setColumnWidth(0, ui->tree->header()->width() - ui->tree->columnWidth(1));
+}
+
+//--------------------------------------------------------------------------------------------------
+QString NotifierWindow::buttonStyleSheet() const
+{
+#if defined(Q_OS_MACOS)
+    const QPalette palette = GuiApplication::palette();
+    const QString background = palette.color(QPalette::Button).name(QColor::HexRgb);
+    const QString border = palette.color(QPalette::Mid).name(QColor::HexRgb);
+    const QString hover = palette.color(QPalette::Midlight).name(QColor::HexRgb);
+    const QString pressed = palette.color(QPalette::Dark).name(QColor::HexRgb);
+    const QString checked = palette.color(QPalette::Highlight).name(QColor::HexRgb);
+
+    return QString("QToolButton, QPushButton {"
+                       "border: 1px solid %1;"
+                       "border-radius: 5px;"
+                       "background-color: %2;"
+                       "padding: 2px;"
+                   "}"
+                   "QToolButton:hover, QPushButton:hover { background-color: %3; }"
+                   "QToolButton:pressed, QPushButton:pressed { background-color: %4; }"
+                   "QToolButton:checked { background-color: %5; }")
+        .arg(border, background, hover, pressed, checked);
+#else
+    return QString();
+#endif // defined(Q_OS_MACOS)
 }

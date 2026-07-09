@@ -73,6 +73,7 @@ private slots:
 private:
     QRect currentAvailableRect();
     void updateTreeColumns();
+    QString buttonStyleSheet() const;
 
     std::unique_ptr<Ui::NotifierWindow> ui;
     bool should_be_close_ = false;
