@@ -480,8 +480,14 @@ const MouseCursor* ScreenCapturerMac::captureCursor()
         if (!cg_image)
             return nullptr;
 
-        const size_t width = CGImageGetWidth(cg_image);
-        const size_t height = CGImageGetHeight(cg_image);
+        // The captured video is at the display's logical (point) resolution, so the cursor must be
+        // rendered at its logical size too. On a Retina display the source CGImage is at pixel
+        // resolution (2x/3x); drawing it into a point-sized context scales it down so the cursor
+        // matches the video scale instead of appearing oversized on the client (which sizes the
+        // cursor in the frame's coordinate space and does not use its reported DPI).
+        const NSSize size_points = ns_image.size;
+        const size_t width = static_cast<size_t>(qRound(size_points.width));
+        const size_t height = static_cast<size_t>(qRound(size_points.height));
         if (!width || !height)
             return nullptr;
 
@@ -503,23 +509,16 @@ const MouseCursor* ScreenCapturerMac::captureCursor()
         if (!context)
             return nullptr;
 
+        // Scale the (possibly Retina-resolution) source image down to the logical point size.
+        CGContextSetInterpolationQuality(context, kCGInterpolationHigh);
         CGContextDrawImage(context, CGRectMake(0, 0, width, height), cg_image);
         CGContextRelease(context);
 
-        // The image representation may be larger than the logical size (Retina); the hotspot is
-        // reported in points and has to be scaled to the pixel dimensions.
-        const NSSize size_points = ns_image.size;
-        const qreal scale_x =
-            size_points.width > 0 ? static_cast<qreal>(width) / size_points.width : 1.0;
-        const qreal scale_y =
-            size_points.height > 0 ? static_cast<qreal>(height) / size_points.height : 1.0;
-
+        // hotSpot is reported in points, matching the point-sized image rendered above.
         const NSPoint ns_hotspot = cursor.hotSpot;
-        const QPoint hotspot(static_cast<int>(ns_hotspot.x * scale_x),
-                             static_cast<int>(ns_hotspot.y * scale_y));
+        const QPoint hotspot(qRound(ns_hotspot.x), qRound(ns_hotspot.y));
 
-        const QPoint dpi(static_cast<int>(MouseCursor::kDefaultDpiX * scale_x),
-                         static_cast<int>(MouseCursor::kDefaultDpiY * scale_y));
+        const QPoint dpi(MouseCursor::kDefaultDpiX, MouseCursor::kDefaultDpiY);
 
         auto mouse_cursor = std::make_unique<MouseCursor>(
             std::move(image_data),

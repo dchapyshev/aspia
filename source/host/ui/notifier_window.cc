@@ -127,6 +127,9 @@ NotifierWindow::NotifierWindow(QWidget* parent)
     expanded_size_ = size();
 
     setAttribute(Qt::WA_TranslucentBackground);
+    // Keep the Qt::Tool window visible on macOS when the host app is not the active one; otherwise a
+    // tool window hides on app deactivation (it would vanish as soon as the user clicks another app).
+    setAttribute(Qt::WA_MacAlwaysShowToolWindow);
 
     ui->label_title->installEventFilter(this);
 
@@ -202,6 +205,13 @@ NotifierWindow::NotifierWindow(QWidget* parent)
             onUpdateWindowPosition();
         raise();
     });
+
+#if defined(Q_OS_MACOS)
+    // On macOS raise() re-orders the window front by activating the host's background agent app,
+    // which steals keyboard focus from whatever the user is typing into.
+    timer->setSingleShot(true);
+#endif // defined(Q_OS_MACOS)
+
     timer->start(std::chrono::milliseconds(500));
 
     ui->show_panel->setVisible(false);
