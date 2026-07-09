@@ -48,8 +48,6 @@ endif()
 
 if (APPLE)
     collect_sources(SOURCE_BASE_AUDIO
-        audio_capturer_mac.h
-        audio_capturer_mac.mm
         audio_output_mac.cc
         audio_output_mac.h)
 endif()

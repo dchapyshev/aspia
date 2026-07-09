@@ -204,9 +204,9 @@ void InputWorker::onStart()
     if (screen_worker_)
     {
         connect(screen_worker_, &ScreenWorker::sig_scaleFactorChanged,
-                this, &InputWorker::onScaleFactorChanged);
+                this, &InputWorker::onScaleFactorChanged, Qt::QueuedConnection);
         connect(screen_worker_, &ScreenWorker::sig_screenInfoChanged,
-                this, &InputWorker::onScreenInfoChanged);
+                this, &InputWorker::onScreenInfoChanged, Qt::QueuedConnection);
     }
     else
     {
@@ -217,14 +217,22 @@ void InputWorker::onStart()
     ipc_worker_ = WorkerManager::instance().find<IpcWorker>();
     if (ipc_worker_)
     {
-        connect(ipc_worker_, &IpcWorker::sig_injectKeyEvent, this, &InputWorker::onInjectKeyEvent);
-        connect(ipc_worker_, &IpcWorker::sig_injectTextEvent, this, &InputWorker::onInjectTextEvent);
-        connect(ipc_worker_, &IpcWorker::sig_injectMouseEvent, this, &InputWorker::onInjectMouseEvent);
-        connect(ipc_worker_, &IpcWorker::sig_injectTouchEvent, this, &InputWorker::onInjectTouchEvent);
-        connect(ipc_worker_, &IpcWorker::sig_paused, this, &InputWorker::onSetPaused);
-        connect(ipc_worker_, &IpcWorker::sig_mouseLocked, this, &InputWorker::onSetMouseLocked);
-        connect(ipc_worker_, &IpcWorker::sig_keyboardLocked, this, &InputWorker::onSetKeyboardLocked);
-        connect(ipc_worker_, &IpcWorker::sig_blockInput, this, &InputWorker::onSetBlockInput);
+        connect(ipc_worker_, &IpcWorker::sig_injectKeyEvent, this, &InputWorker::onInjectKeyEvent,
+                Qt::QueuedConnection);
+        connect(ipc_worker_, &IpcWorker::sig_injectTextEvent, this, &InputWorker::onInjectTextEvent,
+                Qt::QueuedConnection);
+        connect(ipc_worker_, &IpcWorker::sig_injectMouseEvent, this, &InputWorker::onInjectMouseEvent,
+                Qt::QueuedConnection);
+        connect(ipc_worker_, &IpcWorker::sig_injectTouchEvent, this, &InputWorker::onInjectTouchEvent,
+                Qt::QueuedConnection);
+        connect(ipc_worker_, &IpcWorker::sig_paused, this, &InputWorker::onSetPaused,
+                Qt::QueuedConnection);
+        connect(ipc_worker_, &IpcWorker::sig_mouseLocked, this, &InputWorker::onSetMouseLocked,
+                Qt::QueuedConnection);
+        connect(ipc_worker_, &IpcWorker::sig_keyboardLocked, this, &InputWorker::onSetKeyboardLocked,
+                Qt::QueuedConnection);
+        connect(ipc_worker_, &IpcWorker::sig_blockInput, this, &InputWorker::onSetBlockInput,
+                Qt::QueuedConnection);
     }
     else
     {

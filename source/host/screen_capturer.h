@@ -26,6 +26,10 @@
 
 #include <memory>
 
+namespace proto::audio {
+class Packet;
+} // namespace proto::audio
+
 class Frame;
 class MouseCursor;
 
@@ -114,6 +118,10 @@ public:
 signals:
     void sig_screenTypeChanged(ScreenCapturer::ScreenType type, const QString& name);
     void sig_desktopChanged();
+
+    // System audio captured alongside the screen (macOS: the shared SCStream captures both). Emitted
+    // from an internal capture thread, so consumers connect with a queued connection.
+    void sig_audioCaptured(std::shared_ptr<proto::audio::Packet> packet);
 
 protected:
     friend class ScreenCapturerWrapper;

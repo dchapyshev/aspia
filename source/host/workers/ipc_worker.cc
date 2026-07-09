@@ -27,10 +27,7 @@
 #include "base/power_controller.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
-#include "base/threading/worker_manager.h"
 #include "host/desktop_agent_client.h"
-#include "host/workers/audio_worker.h"
-#include "host/workers/screen_worker.h"
 
 //--------------------------------------------------------------------------------------------------
 IpcWorker::IpcWorker()
@@ -99,33 +96,6 @@ void IpcWorker::onStart()
 {
     LOG(INFO) << "IPC worker started";
 
-    // Subscribe to the serialized media produced by the screen and audio workers; it is fanned out
-    // to the clients here.
-    screen_worker_ = WorkerManager::instance().find<ScreenWorker>();
-    if (screen_worker_)
-    {
-        connect(screen_worker_, &ScreenWorker::sig_videoData, this, &IpcWorker::onVideoData);
-        connect(screen_worker_, &ScreenWorker::sig_cursorShapeData, this, &IpcWorker::onCursorShapeData);
-        connect(screen_worker_, &ScreenWorker::sig_cursorPositionData, this, &IpcWorker::onCursorPositionData);
-        connect(screen_worker_, &ScreenWorker::sig_screenListData, this, &IpcWorker::onScreenListData);
-        connect(screen_worker_, &ScreenWorker::sig_screenTypeData, this, &IpcWorker::onScreenTypeData);
-        connect(screen_worker_, &ScreenWorker::sig_clipboardData, this, &IpcWorker::onClipboardData);
-    }
-    else
-    {
-        LOG(ERROR) << "Screen worker not found";
-    }
-
-    audio_worker_ = WorkerManager::instance().find<AudioWorker>();
-    if (audio_worker_)
-    {
-        connect(audio_worker_, &AudioWorker::sig_audioData, this, &IpcWorker::onAudioData);
-    }
-    else
-    {
-        LOG(ERROR) << "Audio worker not found";
-    }
-
     overflow_timer_ = new QTimer(this);
     overflow_timer_->setInterval(std::chrono::milliseconds(1000));
     connect(overflow_timer_, &QTimer::timeout, this, &IpcWorker::onOverflowCheck);
@@ -151,17 +121,6 @@ void IpcWorker::onStart()
 void IpcWorker::onStop()
 {
     LOG(INFO) << "IPC worker stopped";
-
-    if (screen_worker_)
-    {
-        screen_worker_->disconnect(this);
-        screen_worker_ = nullptr;
-    }
-    if (audio_worker_)
-    {
-        audio_worker_->disconnect(this);
-        audio_worker_ = nullptr;
-    }
 
     for (auto* client : std::as_const(clients_))
     {

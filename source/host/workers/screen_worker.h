@@ -157,9 +157,7 @@ private:
     void createVideoEncoder();
     void updateInjectorScreenInfo(const Frame* frame);
 
-    // Source of the client requests and control commands. Resolved through WorkerManager on start.
     QPointer<IpcWorker> ipc_worker_;
-
     ScopedQPointer<InputInjector> input_injector_;
     ScopedQPointer<ScreenCapturer> screen_capturer_;
 

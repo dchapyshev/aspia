@@ -44,6 +44,11 @@ public slots:
     // queued connection.
     void onSetEnabled(bool enable);
 
+    // Encodes and sends one raw audio packet captured elsewhere. On macOS system audio is captured by
+    // the screen worker's shared SCStream (one capture permission prompt) and delivered here through a
+    // queued connection. A no-op while audio is disabled.
+    void onRawAudioData(std::shared_ptr<proto::audio::Packet> packet);
+
 signals:
     // Serialized audio message with one encoded packet, ready to be sent to clients.
     void sig_audioData(const QByteArray& buffer);

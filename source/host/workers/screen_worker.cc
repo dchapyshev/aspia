@@ -59,6 +59,8 @@
 
 #if defined(Q_OS_MACOS)
 #include "host/screen_capturer_mac.h"
+#include "host/workers/audio_worker.h"
+#include "proto/desktop_audio.h"
 #endif // defined(Q_OS_MACOS)
 
 namespace {
@@ -456,14 +458,35 @@ void ScreenWorker::onStart()
     ipc_worker_ = WorkerManager::instance().find<IpcWorker>();
     if (ipc_worker_)
     {
-        connect(ipc_worker_, &IpcWorker::sig_selectScreen, this, &ScreenWorker::onSelectScreen);
-        connect(ipc_worker_, &IpcWorker::sig_clipboardEvent, this, &ScreenWorker::onClipboardEvent);
-        connect(ipc_worker_, &IpcWorker::sig_keyFrameRequested, this, &ScreenWorker::onKeyFrameRequested);
-        connect(ipc_worker_, &IpcWorker::sig_preferredSizeChanged, this, &ScreenWorker::onSetPreferredSize);
-        connect(ipc_worker_, &IpcWorker::sig_configure, this, &ScreenWorker::onConfigure);
-        connect(ipc_worker_, &IpcWorker::sig_overflowStateChanged, this, &ScreenWorker::onOverflowStateChanged);
-        connect(ipc_worker_, &IpcWorker::sig_stopCapture, this, &ScreenWorker::onStopCapture);
-        connect(ipc_worker_, &IpcWorker::sig_paused, this, &ScreenWorker::onSetPaused);
+        connect(ipc_worker_, &IpcWorker::sig_selectScreen, this, &ScreenWorker::onSelectScreen,
+                Qt::QueuedConnection);
+        connect(ipc_worker_, &IpcWorker::sig_clipboardEvent, this, &ScreenWorker::onClipboardEvent,
+                Qt::QueuedConnection);
+        connect(ipc_worker_, &IpcWorker::sig_keyFrameRequested, this, &ScreenWorker::onKeyFrameRequested,
+                Qt::QueuedConnection);
+        connect(ipc_worker_, &IpcWorker::sig_preferredSizeChanged, this, &ScreenWorker::onSetPreferredSize,
+                Qt::QueuedConnection);
+        connect(ipc_worker_, &IpcWorker::sig_configure, this, &ScreenWorker::onConfigure,
+                Qt::QueuedConnection);
+        connect(ipc_worker_, &IpcWorker::sig_overflowStateChanged, this, &ScreenWorker::onOverflowStateChanged,
+                Qt::QueuedConnection);
+        connect(ipc_worker_, &IpcWorker::sig_stopCapture, this, &ScreenWorker::onStopCapture,
+                Qt::QueuedConnection);
+        connect(ipc_worker_, &IpcWorker::sig_paused, this, &ScreenWorker::onSetPaused,
+                Qt::QueuedConnection);
+
+        connect(this, &ScreenWorker::sig_videoData, ipc_worker_, &IpcWorker::onVideoData,
+                Qt::QueuedConnection);
+        connect(this, &ScreenWorker::sig_cursorShapeData, ipc_worker_, &IpcWorker::onCursorShapeData,
+                Qt::QueuedConnection);
+        connect(this, &ScreenWorker::sig_cursorPositionData, ipc_worker_, &IpcWorker::onCursorPositionData,
+                Qt::QueuedConnection);
+        connect(this, &ScreenWorker::sig_screenListData, ipc_worker_, &IpcWorker::onScreenListData,
+                Qt::QueuedConnection);
+        connect(this, &ScreenWorker::sig_screenTypeData, ipc_worker_, &IpcWorker::onScreenTypeData,
+                Qt::QueuedConnection);
+        connect(this, &ScreenWorker::sig_clipboardData, ipc_worker_, &IpcWorker::onClipboardData,
+                Qt::QueuedConnection);
     }
     else
     {
@@ -1046,6 +1069,13 @@ void ScreenWorker::selectCapturer(ScreenCapturer::Error last_error)
     screen_capturer_ = ScreenCapturerWin::create(preferred_capturer_, last_error, this);
 #elif defined(Q_OS_MACOS)
     screen_capturer_ = ScreenCapturerMac::create(this);
+
+    AudioWorker* audio_worker = WorkerManager::instance().find<AudioWorker>();
+    if (screen_capturer_ && audio_worker)
+    {
+        connect(screen_capturer_, &ScreenCapturer::sig_audioCaptured,
+                audio_worker, &AudioWorker::onRawAudioData, Qt::QueuedConnection);
+    }
 #elif defined(Q_OS_LINUX)
     switch (capture_mode_)
     {

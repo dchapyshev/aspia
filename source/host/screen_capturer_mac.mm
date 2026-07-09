@@ -20,6 +20,7 @@
 
 #import <AppKit/AppKit.h>
 #import <ScreenCaptureKit/ScreenCaptureKit.h>
+#import <AudioToolbox/AudioToolbox.h>
 #import <CoreMedia/CoreMedia.h>
 #import <CoreVideo/CoreVideo.h>
 #import <CoreGraphics/CoreGraphics.h>
@@ -30,10 +31,12 @@
 #include <vector>
 
 #include "base/logging.h"
+#include "base/audio/audio_silence_detector.h"
 #include "base/desktop/frame.h"
 #include "base/desktop/frame_aligned.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/region.h"
+#include "proto/desktop_audio.h"
 
 // The project is built without ARC (manual retain/release), so Objective-C objects kept beyond a
 // scope are retained explicitly and released in the owner's destructor.
@@ -64,6 +67,17 @@ struct ScreenCapturerMacImpl
     AspiaStreamOutput* output = nil;
     dispatch_queue_t queue = nullptr;
 
+    // System audio captured by the same stream (one stream -> one permission prompt). The delegate
+    // converts each audio sample on |audio_queue| (via |audio_converter|) and emits it through
+    // |owner|'s sig_audioCaptured; the silence detector and the scratch buffers are per-stream state.
+    ScreenCapturerMac* owner = nullptr;
+    dispatch_queue_t audio_queue = nullptr;
+    AudioConverterRef audio_converter = nullptr;
+    AudioSilenceDetector silence_detector { 0 };
+    std::vector<qint16> audio_conv_buffer;
+    std::vector<quint8> audio_abl_buffer;
+    bool audio_format_warned = false;
+
     // Cached display list, refreshed by updateDisplays().
     struct Display
     {
@@ -74,6 +88,130 @@ struct ScreenCapturerMacImpl
     };
     std::vector<Display> displays;
 };
+
+namespace {
+
+// System-audio format the shared SCStream is configured for.
+const int kAudioSampleRate = 48000;
+const int kAudioChannels = 2;
+
+//--------------------------------------------------------------------------------------------------
+// Target PCM format for the client: interleaved signed 16-bit stereo at 48 kHz.
+AudioStreamBasicDescription outputAudioFormat()
+{
+    AudioStreamBasicDescription asbd = {};
+    asbd.mSampleRate = kAudioSampleRate;
+    asbd.mFormatID = kAudioFormatLinearPCM;
+    asbd.mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
+    asbd.mBitsPerChannel = 16;
+    asbd.mChannelsPerFrame = kAudioChannels;
+    asbd.mFramesPerPacket = 1;
+    asbd.mBytesPerFrame = kAudioChannels * sizeof(qint16);
+    asbd.mBytesPerPacket = asbd.mBytesPerFrame;
+    return asbd;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Converts one SCStream audio sample buffer to a raw interleaved s16 stereo packet with a CoreAudio
+// AudioConverter (float32 -> s16 plus de-interleaving), or nullptr on error or detected silence.
+// |converter| is created lazily from the sample's own format and cached; |conv_buffer| / |abl_buffer|
+// are scratch storage reused across calls.
+std::unique_ptr<proto::audio::Packet> audioSampleToPacket(
+    CMSampleBufferRef sample_buffer, AudioConverterRef& converter,
+    AudioSilenceDetector& silence_detector, std::vector<qint16>& conv_buffer,
+    std::vector<quint8>& abl_buffer, bool& format_warned)
+{
+    if (!sample_buffer || !CMSampleBufferIsValid(sample_buffer) ||
+        !CMSampleBufferDataIsReady(sample_buffer))
+        return nullptr;
+
+    CMFormatDescriptionRef format = CMSampleBufferGetFormatDescription(sample_buffer);
+    if (!format)
+        return nullptr;
+
+    const AudioStreamBasicDescription* input_format =
+        CMAudioFormatDescriptionGetStreamBasicDescription(format);
+    if (!input_format)
+        return nullptr;
+
+    if (!converter)
+    {
+        const AudioStreamBasicDescription output_format = outputAudioFormat();
+        if (AudioConverterNew(input_format, &output_format, &converter) != noErr)
+        {
+            converter = nullptr;
+            if (!format_warned)
+            {
+                format_warned = true;
+                LOG(ERROR) << "AudioConverterNew failed for SCStream audio";
+            }
+            return nullptr;
+        }
+    }
+
+    const UInt32 frames = static_cast<UInt32>(CMSampleBufferGetNumSamples(sample_buffer));
+    if (!frames)
+        return nullptr;
+
+    // Input buffer list in the source (float) format, backed by |abl_buffer| scratch.
+    size_t abl_size = 0;
+    OSStatus status = CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer(
+        sample_buffer, &abl_size, nullptr, 0, nullptr, nullptr, 0, nullptr);
+    if (status != noErr || !abl_size)
+        return nullptr;
+
+    if (abl_buffer.size() < abl_size)
+        abl_buffer.resize(abl_size);
+
+    AudioBufferList* input_abl = reinterpret_cast<AudioBufferList*>(abl_buffer.data());
+    CMBlockBufferRef block_buffer = nullptr;
+
+    status = CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer(
+        sample_buffer, nullptr, input_abl, abl_size, nullptr, nullptr,
+        kCMSampleBufferFlag_AudioBufferList_Assure16ByteAlignment, &block_buffer);
+    if (status != noErr || !block_buffer)
+        return nullptr;
+
+    // Output: interleaved s16 stereo into |conv_buffer|.
+    conv_buffer.resize(static_cast<size_t>(frames) * kAudioChannels);
+
+    AudioBufferList output_abl;
+    output_abl.mNumberBuffers = 1;
+    output_abl.mBuffers[0].mNumberChannels = kAudioChannels;
+    output_abl.mBuffers[0].mDataByteSize =
+        static_cast<UInt32>(conv_buffer.size() * sizeof(qint16));
+    output_abl.mBuffers[0].mData = conv_buffer.data();
+
+    UInt32 io_frames = frames;
+    status = AudioConverterConvertComplexBuffer(converter, io_frames, input_abl, &output_abl);
+
+    // The block buffer keeps the input audio alive; release it only after the conversion.
+    CFRelease(block_buffer);
+
+    if (status != noErr)
+    {
+        if (!format_warned)
+        {
+            format_warned = true;
+            LOG(ERROR) << "AudioConverterConvertComplexBuffer failed:" << status;
+        }
+        return nullptr;
+    }
+
+    qint16* out = conv_buffer.data();
+    if (silence_detector.isSilence(out, frames))
+        return nullptr;
+
+    auto packet = std::make_unique<proto::audio::Packet>();
+    packet->add_data(out, static_cast<size_t>(frames) * kAudioChannels * sizeof(qint16));
+    packet->set_encoding(proto::audio::ENCODING_RAW);
+    packet->set_sampling_rate(proto::audio::Packet::SAMPLING_RATE_48000);
+    packet->set_bytes_per_sample(proto::audio::Packet::BYTES_PER_SAMPLE_2);
+    packet->set_channels(proto::audio::Packet::CHANNELS_STEREO);
+    return packet;
+}
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 // SCStream output/delegate. Copies each screen sample into the shared pending frame.
@@ -100,6 +238,19 @@ struct ScreenCapturerMacImpl
     didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
                    ofType:(SCStreamOutputType)type
 {
+    if (type == SCStreamOutputTypeAudio)
+    {
+        std::unique_ptr<proto::audio::Packet> packet = audioSampleToPacket(
+            sampleBuffer, impl_->audio_converter, impl_->silence_detector,
+            impl_->audio_conv_buffer, impl_->audio_abl_buffer, impl_->audio_format_warned);
+        if (packet)
+        {
+            // Emitted from the audio dispatch queue; the connected worker receives it queued.
+            emit impl_->owner->sig_audioCaptured(std::shared_ptr<proto::audio::Packet>(std::move(packet)));
+        }
+        return;
+    }
+
     if (type != SCStreamOutputTypeScreen)
         return;
 
@@ -258,8 +409,11 @@ ScreenCapturerMac::ScreenCapturerMac(QObject* parent)
 {
     LOG(INFO) << "Ctor";
 
+    impl_->owner = this;
     impl_->queue = dispatch_queue_create("org.aspia.screencapture", DISPATCH_QUEUE_SERIAL);
+    impl_->audio_queue = dispatch_queue_create("org.aspia.screencapture.audio", DISPATCH_QUEUE_SERIAL);
     impl_->output = [[AspiaStreamOutput alloc] initWithImpl:impl_.get()];
+    impl_->silence_detector.reset(kAudioSampleRate, kAudioChannels);
 
     CGDisplayRegisterReconfigurationCallback(displayReconfigurationCallback, impl_.get());
 }
@@ -281,6 +435,18 @@ ScreenCapturerMac::~ScreenCapturerMac()
     {
         dispatch_release(impl_->queue);
         impl_->queue = nullptr;
+    }
+
+    if (impl_->audio_queue)
+    {
+        dispatch_release(impl_->audio_queue);
+        impl_->audio_queue = nullptr;
+    }
+
+    if (impl_->audio_converter)
+    {
+        AudioConverterDispose(impl_->audio_converter);
+        impl_->audio_converter = nullptr;
     }
 }
 
@@ -693,6 +859,14 @@ bool ScreenCapturerMac::startStream()
     // memory bandwidth that starves the encoder. Cap delivery at the remote-desktop maximum.
     config.minimumFrameInterval = CMTimeMake(1, 30);
 
+    // Capture system audio on this same stream so screen and audio share a single permission prompt.
+    // Skip what this process plays itself, or the client audio played back on the host would loop
+    // back into the session.
+    config.capturesAudio = YES;
+    config.excludesCurrentProcessAudio = YES;
+    config.sampleRate = kAudioSampleRate;
+    config.channelCount = kAudioChannels;
+
     SCStream* stream = [[SCStream alloc] initWithFilter:filter
                                           configuration:config
                                                delegate:impl_->output];
@@ -710,6 +884,17 @@ bool ScreenCapturerMac::startStream()
         [stream release];
         [content release];
         return false;
+    }
+
+    NSError* audio_error = nil;
+    if (![stream addStreamOutput:impl_->output
+                            type:SCStreamOutputTypeAudio
+              sampleHandlerQueue:impl_->audio_queue
+                           error:&audio_error])
+    {
+        // Audio is best-effort: a failure here (e.g. macOS < 13) must not prevent screen capture.
+        LOG(ERROR) << "addStreamOutput (audio) failed:"
+                   << (audio_error ? audio_error.localizedDescription.UTF8String : "unknown");
     }
 
     __block bool started = false;

@@ -37,11 +37,9 @@ namespace proto::screen {
 class Screen;
 } // namespace proto::screen
 
-class AudioWorker;
 class DesktopAgentClient;
 class IpcChannel;
 class QTimer;
-class ScreenWorker;
 
 // Runs the I/O side of the desktop agent: the control IPC channel to the service and the connected
 // clients (protocol state, capability negotiation, config merge, overflow aggregation). Messages
@@ -123,10 +121,6 @@ private:
     ScopedQPointer<IpcChannel> ipc_channel_;
     QList<DesktopAgentClient*> clients_;
     ScopedQPointer<QTimer> overflow_timer_;
-
-    // Producers of the media fanned out to clients. Resolved through WorkerManager on start.
-    QPointer<ScreenWorker> screen_worker_;
-    QPointer<AudioWorker> audio_worker_;
 
     bool is_lock_at_disconnect_ = false;
 
