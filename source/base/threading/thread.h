@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_THREAD_H
-#define BASE_THREAD_H
+#ifndef BASE_THREADING_THREAD_H
+#define BASE_THREADING_THREAD_H
 
 #include <QThread>
 
@@ -45,4 +45,4 @@ private:
     Q_DISABLE_COPY_MOVE(Thread)
 };
 
-#endif // BASE_THREAD_H
+#endif // BASE_THREADING_THREAD_H

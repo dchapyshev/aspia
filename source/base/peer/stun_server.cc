@@ -18,9 +18,9 @@
 
 #include "base/peer/stun_server.h"
 
-#include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "base/threading/asio_event_dispatcher.h"
 #include "proto/stun.h"
 
 //--------------------------------------------------------------------------------------------------

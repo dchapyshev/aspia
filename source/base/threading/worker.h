@@ -16,39 +16,46 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_AUDIO_AUDIO_CAPTURER_WRAPPER_H
-#define BASE_AUDIO_AUDIO_CAPTURER_WRAPPER_H
+#ifndef BASE_THREADING_WORKER_H
+#define BASE_THREADING_WORKER_H
+
+#include <QObject>
 
 #include "base/threading/thread.h"
 
-class AudioCapturer;
+class WorkerManager;
 
-namespace proto::audio {
-class Packet;
-} // namespace proto::audio
-
-class AudioCapturerWrapper final : public QObject
+class Worker : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit AudioCapturerWrapper(QObject* parent = nullptr);
-    ~AudioCapturerWrapper() final;
+    Worker();
+    ~Worker() override;
 
-    void start();
+protected:
+    friend class WorkerManager;
 
-signals:
-    void sig_audioCaptured(const proto::audio::Packet& packet);
+    void start(WorkerManager* manager);
+    void stopSoon();
+
+    // Runs inside the worker thread before its event loop starts. Create here every
+    // object that must live in the worker thread.
+    virtual void onStart() = 0;
+
+    // Runs inside the worker thread after its event loop ends. Destroy here everything
+    // created in onStart().
+    virtual void onStop() = 0;
 
 private slots:
-    void onBeforeThreadRunning();
-    void onAfterThreadRunning();
+    void onThreadStarted();
+    void onThreadFinished();
 
 private:
+    WorkerManager* manager_ = nullptr;
     Thread thread_;
-    std::unique_ptr<AudioCapturer> capturer_;
 
-    Q_DISABLE_COPY_MOVE(AudioCapturerWrapper)
+    Q_DISABLE_COPY_MOVE(Worker)
 };
 
-#endif // BASE_AUDIO_AUDIO_CAPTURER_WRAPPER_H
+#endif // BASE_THREADING_WORKER_H

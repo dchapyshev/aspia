@@ -24,7 +24,7 @@
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
 #include <wtsapi32.h>
-#include "base/thread.h"
+#include "base/threading/thread.h"
 #include "base/win/message_window.h"
 #endif // defined(Q_OS_WINDOWS)
 

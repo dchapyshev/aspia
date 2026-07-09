@@ -23,8 +23,8 @@
 #include <QPalette>
 #include <QProxyStyle>
 
-#include "base/thread.h"
 #include "base/translations.h"
+#include "base/threading/thread.h"
 
 class QLocalServer;
 class QLockFile;

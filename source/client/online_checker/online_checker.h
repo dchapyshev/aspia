@@ -25,7 +25,7 @@
 #include <QObject>
 
 #include "base/scoped_qpointer.h"
-#include "base/thread.h"
+#include "base/threading/thread.h"
 #include "client/config.h"
 #include "client/online_checker/online_checker_direct.h"
 #include "client/online_checker/online_checker_router.h"

@@ -35,8 +35,8 @@
 #include <asio/error.hpp>
 #include <asio/write.hpp>
 
-#include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
+#include "base/threading/asio_event_dispatcher.h"
 
 //--------------------------------------------------------------------------------------------------
 TerminalProcessUnix::TerminalProcessUnix(QObject* parent)

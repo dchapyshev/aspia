@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_ASIO_EVENT_DISPATCHER_H
-#define BASE_ASIO_EVENT_DISPATCHER_H
+#ifndef BASE_THREADING_ASIO_EVENT_DISPATCHER_H
+#define BASE_THREADING_ASIO_EVENT_DISPATCHER_H
 
 #include <QAbstractEventDispatcher>
 #include <QEvent>
@@ -162,4 +162,4 @@ private:
     Q_DISABLE_COPY_MOVE(AsioEventDispatcher)
 };
 
-#endif // BASE_ASIO_EVENT_DISPATCHER_H
+#endif // BASE_THREADING_ASIO_EVENT_DISPATCHER_H

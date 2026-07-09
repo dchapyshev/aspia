@@ -20,7 +20,6 @@
 
 #include <QtEndian>
 
-#include "base/asio_event_dispatcher.h"
 #include "base/location.h"
 #include "base/serialization.h"
 #include "base/crypto/generic_hash.h"
@@ -29,6 +28,7 @@
 #include "base/net/tcp_channel_legacy.h"
 #include "base/net/tcp_channel_ng.h"
 #include "base/peer/authenticator.h"
+#include "base/threading/asio_event_dispatcher.h"
 #include "proto/relay_peer.h"
 #include "proto/router.h"
 

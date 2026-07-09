@@ -21,8 +21,6 @@ list(APPEND SOURCE_BASE
     aligned_memory.h
     applications_reader.cc
     applications_reader.h
-    asio_event_dispatcher.cc
-    asio_event_dispatcher.h
     bitset.h
     bucket_pool.h
     core_application.cc
@@ -75,8 +73,6 @@ list(APPEND SOURCE_BASE
     sys_info.h
     system_error.cc
     system_error.h
-    thread.cc
-    thread.h
     translations.cc
     translations.h
     version_constants.cc
@@ -122,7 +118,6 @@ endif()
 
 list(APPEND SOURCE_BASE_TESTS
     aligned_memory_unittest.cc
-    asio_event_dispatcher_unittest.cc
     bitset_unittest.cc
     bucket_pool_unittest.cc
     edid_unittest.cc
@@ -144,6 +139,7 @@ include(ipc/sources.cmake)
 include(net/sources.cmake)
 include(peer/sources.cmake)
 include(sql/sources.cmake)
+include(threading/sources.cmake)
 
 if (WIN32)
     include(audio/win/sources.cmake)
@@ -169,6 +165,7 @@ source_group(ipc FILES ${SOURCE_BASE_IPC})
 source_group(net FILES ${SOURCE_BASE_NET} ${SOURCE_BASE_NET_TESTS})
 source_group(peer FILES ${SOURCE_BASE_PEER} ${SOURCE_BASE_PEER_TESTS})
 source_group(sql FILES ${SOURCE_BASE_SQL} ${SOURCE_BASE_SQL_TESTS})
+source_group(threading FILES ${SOURCE_BASE_THREADING} ${SOURCE_BASE_THREADING_TESTS})
 
 if (WIN32)
     source_group(audio\\win FILES ${SOURCE_BASE_AUDIO_WIN})
@@ -199,6 +196,7 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_NET}
     ${SOURCE_BASE_PEER}
     ${SOURCE_BASE_SQL}
+    ${SOURCE_BASE_THREADING}
     ${SOURCE_BASE_WIN})
 
 set_property(TARGET aspia_base PROPERTY AUTOMOC ON)
@@ -255,6 +253,7 @@ add_executable(aspia_base_tests
     ${SOURCE_BASE_NET_TESTS}
     ${SOURCE_BASE_PEER_TESTS}
     ${SOURCE_BASE_SQL_TESTS}
+    ${SOURCE_BASE_THREADING_TESTS}
     ${SOURCE_BASE_WIN_TESTS})
 target_link_libraries(aspia_base_tests PRIVATE
     aspia_base

@@ -16,10 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/thread.h"
+#include "base/threading/thread.h"
 
-#include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
+#include "base/threading/asio_event_dispatcher.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_com_initializer.h"
