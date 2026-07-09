@@ -51,6 +51,19 @@ void HostStorage::setHostKey(const QByteArray& key)
 }
 
 //--------------------------------------------------------------------------------------------------
+HostId HostStorage::lastHostId() const
+{
+    return impl_.value("host_id").toULongLong();
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostStorage::setLastHostId(HostId host_id)
+{
+    impl_.setValue("host_id", host_id);
+    impl_.sync();
+}
+
+//--------------------------------------------------------------------------------------------------
 QString HostStorage::channelIdForUI() const
 {
     return impl_.value("ui_channel_id").toString();

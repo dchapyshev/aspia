@@ -240,6 +240,9 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
 
         LOG(INFO) << "Host ID received:" << host_id_;
 
+        if (host_key_storage.lastHostId() != host_id_)
+            host_key_storage.setLastHostId(host_id_);
+
         emit sig_credentialsChanged(host_id_, one_time_password_);
     }
     else if (in_message.has_connection_offer())
