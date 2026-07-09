@@ -22,12 +22,14 @@
 #include "base/threading/asio_event_dispatcher.h"
 
 #if defined(Q_OS_WINDOWS)
+#include <optional>
 #include "base/win/scoped_com_initializer.h"
 #endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
 Thread::Thread(EventDispatcher dispatcher, QObject* parent)
-    : QThread(parent)
+    : QThread(parent),
+      dispatcher_(dispatcher)
 {
     if (dispatcher == AsioDispatcher)
         setEventDispatcher(new AsioEventDispatcher());
@@ -50,8 +52,14 @@ void Thread::stop()
 void Thread::run()
 {
 #if defined(Q_OS_WINDOWS)
-    ScopedCOMInitializer com_initializer;
-    CHECK(com_initializer.isSucceeded());
+    // Asio threads join the COM multithreaded apartment. The default STA creates a hidden OLE
+    // message window on the thread.
+    std::optional<ScopedCOMInitializer> com_initializer;
+    if (dispatcher_ == AsioDispatcher)
+        com_initializer.emplace(ScopedCOMInitializer::kMTA);
+    else
+        com_initializer.emplace();
+    CHECK(com_initializer->isSucceeded());
 #endif // defined(Q_OS_WINDOWS)
 
     emit sig_beforeRunning();

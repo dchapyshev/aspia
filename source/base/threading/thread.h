@@ -42,6 +42,8 @@ protected:
     void run() final;
 
 private:
+    const EventDispatcher dispatcher_;
+
     Q_DISABLE_COPY_MOVE(Thread)
 };
 

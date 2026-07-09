@@ -140,4 +140,3 @@ message ClientToHost
     PreferredSize preferred_size = 2;
     Pause pause                  = 3;
 }
-
