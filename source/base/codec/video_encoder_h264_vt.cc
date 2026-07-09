@@ -29,10 +29,12 @@
 
 namespace {
 
-// Timing hints for the rate control. Mirrors the Media Foundation encoder: 80 ms per frame
-// (12.5 fps), which matches the capture cadence of a typical remote desktop session.
+// Timing hints for the rate control. The capture is paced up to 30 fps (see ScreenWorker); the
+// per-frame PTS duration and the ExpectedFrameRate hint are sized to that so the rate controller
+// budgets bits for the real cadence (AverageBitRate / fps) instead of a stale slower estimate.
 const int32_t kTimescale = 1000;
-const int64_t kFrameDurationMs = 80;
+const int64_t kFrameDurationMs = 33;
+const int32_t kExpectedFrameRate = 30;
 
 const quint8 kStartCode[] = { 0, 0, 0, 1 };
 
@@ -363,24 +365,38 @@ bool VideoEncoderH264VT::createSession(const QSize& size)
 
     // Require the hardware encoder: silently falling back to Apple's software H264 would defeat
     // the purpose of this codec path (VP8/VP9 are the software fallback).
+    //
+    // EnableLowLatencyRateControl puts the encoder in its real-time mode (screen sharing / video
+    // conferencing): one frame in produces one frame out with no multi-frame lookahead buffering.
+    // Without it VideoToolbox keeps a several-frame pipeline, so forcing completion every frame
+    // stalls on the whole pipeline latency (~14 ms) - slower than software VP8 and laggy at connect -
+    // and the buffered rate control smears sudden changes (window moves) into ghost trails.
     const void* spec_keys[] = {
-        kVTVideoEncoderSpecification_RequireHardwareAcceleratedVideoEncoder
+        kVTVideoEncoderSpecification_RequireHardwareAcceleratedVideoEncoder,
+        kVTVideoEncoderSpecification_EnableLowLatencyRateControl
     };
-    const void* spec_values[] = { kCFBooleanTrue };
+    const void* spec_values[] = { kCFBooleanTrue, kCFBooleanTrue };
     CFDictionaryRef specification = CFDictionaryCreate(
-        kCFAllocatorDefault, spec_keys, spec_values, 1,
+        kCFAllocatorDefault, spec_keys, spec_values, 2,
         &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 
-    // Make the session's pixel buffer pool hand out BGRA buffers matching Frame's layout.
+    // Make the session's pixel buffer pool hand out BGRA buffers matching Frame's layout, backed by
+    // IOSurface so the hardware encoder imports each frame without an extra copy.
     const int32_t pixel_format = kCVPixelFormatType_32BGRA;
     CFNumberRef format_number =
         CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &pixel_format);
-    const void* source_keys[] = { kCVPixelBufferPixelFormatTypeKey };
-    const void* source_values[] = { format_number };
+    CFDictionaryRef io_surface_properties = CFDictionaryCreate(
+        kCFAllocatorDefault, nullptr, nullptr, 0,
+        &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+    const void* source_keys[] = {
+        kCVPixelBufferPixelFormatTypeKey, kCVPixelBufferIOSurfacePropertiesKey
+    };
+    const void* source_values[] = { format_number, io_surface_properties };
     CFDictionaryRef source_attributes = CFDictionaryCreate(
-        kCFAllocatorDefault, source_keys, source_values, 1,
+        kCFAllocatorDefault, source_keys, source_values, 2,
         &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
     CFRelease(format_number);
+    CFRelease(io_surface_properties);
 
     OSStatus status = VTCompressionSessionCreate(
         kCFAllocatorDefault, size.width(), size.height(), kCMVideoCodecType_H264, specification,
@@ -408,6 +424,15 @@ bool VideoEncoderH264VT::createSession(const QSize& size)
         session_, kVTCompressionPropertyKey_ProfileLevel, kVTProfileLevel_H264_Main_AutoLevel);
     if (profile_status != noErr)
         LOG(WARNING) << "Failed to set H264 profile:" << profile_status;
+
+    // Nominal frame rate for the rate controller. Combined with AverageBitRate it fixes the
+    // per-frame bit budget; capped at the capture maximum so the encoder never overshoots the
+    // target bitrate when the real cadence is lower.
+    const int32_t expected_fps = kExpectedFrameRate;
+    CFNumberRef fps_number =
+        CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &expected_fps);
+    VTSessionSetProperty(session_, kVTCompressionPropertyKey_ExpectedFrameRate, fps_number);
+    CFRelease(fps_number);
 
     applyRateControl();
 
