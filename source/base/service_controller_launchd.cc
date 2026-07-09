@@ -84,6 +84,13 @@ void writeKeyBool(QXmlStreamWriter& writer, const QString& key, bool value)
 }
 
 //--------------------------------------------------------------------------------------------------
+void writeKeyInt(QXmlStreamWriter& writer, const QString& key, int value)
+{
+    writer.writeTextElement("key", key);
+    writer.writeTextElement("integer", QString::number(value));
+}
+
+//--------------------------------------------------------------------------------------------------
 // Builds a system-daemon plist. launchd starts the executable with no arguments, which is the mode
 // in which the service runs its main loop (install/remove/start/stop are handled before this point).
 // An empty |username| leaves the daemon running under the default account (root).
@@ -140,6 +147,16 @@ QByteArray generatePlist(const QString& label, const QString& file_path,
     // Start at boot and keep the daemon alive, restarting it if it exits (mirrors Restart=always).
     writeKeyBool(writer, "RunAtLoad", true);
     writeKeyBool(writer, "KeepAlive", true);
+
+    // Run at interactive contention level. Without this launchd treats the daemon as a background
+    // job, so macOS applies aggressive timer coalescing (~8 Hz) and I/O throttling to it and the
+    // desktop-agent process it spawns - which caps the remote-desktop frame rate far below the
+    // configured FPS. Interactive gives it the same scheduling as user-facing apps.
+    writeKeyString(writer, "ProcessType", "Interactive");
+
+    // Nudge the scheduler priority up a little so the daemon keeps relaying frames promptly under
+    // system load. A mild value (not the -20 maximum) to avoid starving the rest of the system.
+    writeKeyInt(writer, "Nice", -10);
 
     writer.writeEndElement(); // dict
     writer.writeEndElement(); // plist
