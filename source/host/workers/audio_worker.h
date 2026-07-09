@@ -16,10 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_AUDIO_WORKER_H
-#define HOST_AUDIO_WORKER_H
+#ifndef HOST_WORKERS_AUDIO_WORKER_H
+#define HOST_WORKERS_AUDIO_WORKER_H
 
 #include <memory>
+
+#include <QPointer>
 
 #include "base/serialization.h"
 #include "base/threading/worker.h"
@@ -27,6 +29,7 @@
 
 class AudioCapturer;
 class AudioEncoder;
+class IpcWorker;
 
 class AudioWorker final : public Worker
 {
@@ -39,7 +42,7 @@ public:
 public slots:
     // Starts or stops capturing and encoding. Runs in the worker thread; invoke it through a
     // queued connection.
-    void setEnabled(bool enable);
+    void onSetEnabled(bool enable);
 
 signals:
     // Serialized audio message with one encoded packet, ready to be sent to clients.
@@ -53,6 +56,9 @@ protected:
 private:
     void encodePacket(const proto::audio::Packet& packet);
 
+    // Source of the enable/disable command. Resolved through WorkerManager on start.
+    QPointer<IpcWorker> ipc_worker_;
+
     std::unique_ptr<AudioCapturer> capturer_;
     std::unique_ptr<AudioEncoder> encoder_;
     Serializer<proto::audio::HostToClient> serializer_;
@@ -60,4 +66,4 @@ private:
     Q_DISABLE_COPY_MOVE(AudioWorker)
 };
 
-#endif // HOST_AUDIO_WORKER_H
+#endif // HOST_WORKERS_AUDIO_WORKER_H

@@ -44,7 +44,7 @@ const quint32 kAxisVertical = 0;
 
 //--------------------------------------------------------------------------------------------------
 InputInjectorWayland::InputInjectorWayland(WaylandCompositorSource* source, QObject* parent)
-    : InputInjector(parent),
+    : InputInjector(Type::WAYLAND, parent),
       source_(source)
 {
     // Nothing

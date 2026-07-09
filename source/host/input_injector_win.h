@@ -20,8 +20,8 @@
 #define HOST_INPUT_INJECTOR_WIN_H
 
 #include <QSet>
-#include <QSize>
 
+#include "base/win/scoped_thread_desktop.h"
 #include "host/input_injector.h"
 #include "host/win/touch_injector.h"
 
@@ -42,8 +42,11 @@ public:
     void injectTouchEvent(const proto::input::TouchEvent& event) final;
 
 private:
+    void switchToInputDesktop();
     bool isCtrlAndAltPressed();
     void setBlockInputImpl(bool enable);
+
+    ScopedThreadDesktop desktop_;
 
     bool block_input_ = false;
     QSet<quint32> pressed_keys_;

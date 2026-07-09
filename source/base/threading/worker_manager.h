@@ -33,6 +33,8 @@ public:
     WorkerManager();
     ~WorkerManager();
 
+    static WorkerManager& instance();
+
     qint64 add(std::unique_ptr<Worker> worker);
     void start();
 
@@ -44,6 +46,20 @@ public:
             return nullptr;
 
         return dynamic_cast<T*>(it->second.get());
+    }
+
+    // Finds a worker by its type. Safe to call from any worker thread once the manager has started
+    // (the worker set does not change afterwards).
+    template <typename T>
+    T* find()
+    {
+        for (const auto& worker : workers_)
+        {
+            if (T* result = dynamic_cast<T*>(worker.second.get()))
+                return result;
+        }
+
+        return nullptr;
     }
 
 private:

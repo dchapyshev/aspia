@@ -71,8 +71,6 @@ if (ANDROID)
 endif()
 
 list(APPEND SOURCE_HOST
-    audio_worker.cc
-    audio_worker.h
     capture_scheduler.cc
     capture_scheduler.h
     chat_client.cc
@@ -81,8 +79,6 @@ list(APPEND SOURCE_HOST
     client.h
     database.cc
     database.h
-    desktop_agent.cc
-    desktop_agent.h
     desktop_agent_client.cc
     desktop_agent_client.h
     desktop_client.cc
@@ -104,10 +100,6 @@ list(APPEND SOURCE_HOST
     host_utils.cc
     host_utils.h
     input_injector.h
-    input_worker.cc
-    input_worker.h
-    ipc_worker.cc
-    ipc_worker.h
     main.cc
     process_monitor.cc
     process_monitor.h
@@ -117,8 +109,6 @@ list(APPEND SOURCE_HOST
     screen_capturer.h
     screen_capturer_helper.cc
     screen_capturer_helper.h
-    screen_worker.cc
-    screen_worker.h
     service.cc
     service.h
     settings_util.cc
@@ -215,6 +205,7 @@ if (APPLE)
 endif()
 
 include(ui/sources.cmake)
+include(workers/sources.cmake)
 
 if (WIN32)
     include(win/sources.cmake)
@@ -226,6 +217,7 @@ endif()
 
 source_group("" FILES ${SOURCE_HOST})
 source_group(ui FILES ${SOURCE_HOST_UI})
+source_group(workers FILES ${SOURCE_HOST_WORKERS})
 
 if (LINUX)
     source_group(linux FILES ${SOURCE_HOST_LINUX})
@@ -247,6 +239,7 @@ endif()
 add_executable(aspia_host
     ${SOURCE_HOST}
     ${SOURCE_HOST_UI}
+    ${SOURCE_HOST_WORKERS}
     ${SOURCE_HOST_WIN}
     ${SOURCE_HOST_LINUX}
     host.rc)

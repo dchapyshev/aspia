@@ -122,7 +122,7 @@ bool charToKey(char32_t ch, quint16* code, bool* shift)
 
 //--------------------------------------------------------------------------------------------------
 InputInjectorUinput::InputInjectorUinput(QObject* parent)
-    : InputInjector(parent)
+    : InputInjector(Type::UINPUT, parent)
 {
     // Nothing
 }

@@ -16,11 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/audio_worker.h"
+#include "host/workers/audio_worker.h"
 
 #include "base/logging.h"
 #include "base/audio/audio_capturer.h"
 #include "base/codec/audio_encoder.h"
+#include "base/threading/worker_manager.h"
+#include "host/workers/ipc_worker.h"
 
 //--------------------------------------------------------------------------------------------------
 // On macOS the Qt dispatcher backs the thread with a CFRunLoop (via
@@ -42,7 +44,7 @@ AudioWorker::~AudioWorker()
 }
 
 //--------------------------------------------------------------------------------------------------
-void AudioWorker::setEnabled(bool enable)
+void AudioWorker::onSetEnabled(bool enable)
 {
     if (enable)
     {
@@ -62,13 +64,16 @@ void AudioWorker::setEnabled(bool enable)
 
         // The platform capturer delivers packets on its own thread; marshal each one to the worker
         // thread for encoding. The shared_ptr keeps the packet alive inside the copyable functor
-        // without copying the PCM data itself.
-        capturer_->start([this](std::unique_ptr<proto::audio::Packet> packet)
+        // without copying the PCM data itself. |self| guards against this worker being destroyed
+        // while a packet is still in flight.
+        QPointer<AudioWorker> self(this);
+        capturer_->start([self](std::unique_ptr<proto::audio::Packet> packet)
         {
             std::shared_ptr<proto::audio::Packet> shared_packet(std::move(packet));
-            QMetaObject::invokeMethod(this, [this, shared_packet]()
+            QMetaObject::invokeMethod(self, [self, shared_packet]()
             {
-                encodePacket(*shared_packet);
+                if (self)
+                    self->encodePacket(*shared_packet);
             }, Qt::QueuedConnection);
         });
     }
@@ -89,6 +94,13 @@ void AudioWorker::onStart()
 {
     LOG(INFO) << "Audio worker started";
 
+    // The IPC worker toggles the pipeline through the merged configuration.
+    ipc_worker_ = WorkerManager::instance().find<IpcWorker>();
+    if (ipc_worker_)
+        connect(ipc_worker_, &IpcWorker::sig_audioEnabled, this, &AudioWorker::onSetEnabled);
+    else
+        LOG(ERROR) << "IPC worker not found";
+
     // Audio is latency-sensitive: a delayed packet is an audible glitch.
     QThread::currentThread()->setPriority(QThread::HighestPriority);
 }
@@ -97,6 +109,12 @@ void AudioWorker::onStart()
 void AudioWorker::onStop()
 {
     LOG(INFO) << "Audio worker stopped";
+
+    if (ipc_worker_)
+    {
+        ipc_worker_->disconnect(this);
+        ipc_worker_ = nullptr;
+    }
 
     capturer_.reset();
     encoder_.reset();

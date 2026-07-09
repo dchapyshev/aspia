@@ -35,12 +35,27 @@ class InputInjector : public QObject
     Q_OBJECT
 
 public:
-    explicit InputInjector(QObject* parent)
-        : QObject(parent)
+    enum class Type
+    {
+        UNKNOWN = 0,
+        WINDOWS = 1,
+        MAC     = 2,
+        X11     = 3,
+        UINPUT  = 4,
+        VT      = 5,
+        WAYLAND = 6
+    };
+    Q_ENUM(Type)
+
+    InputInjector(Type type, QObject* parent)
+        : QObject(parent),
+          type_(type)
     {
         // Nothing
     }
     virtual ~InputInjector() = default;
+
+    Type type() const { return type_; }
 
     virtual void setScreenInfo(const QSize& screen_size, const QPoint& offset) = 0;
     virtual void setBlockInput(bool enable) = 0;
@@ -48,6 +63,9 @@ public:
     virtual void injectTextEvent(const proto::input::TextEvent& event) = 0;
     virtual void injectMouseEvent(const proto::input::MouseEvent& event) = 0;
     virtual void injectTouchEvent(const proto::input::TouchEvent& event) = 0;
+
+private:
+    const Type type_;
 };
 
 #endif // HOST_INPUT_INJECTOR_H

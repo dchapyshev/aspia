@@ -20,11 +20,18 @@
 
 #include "base/logging.h"
 
+namespace {
+
+WorkerManager* g_instance = nullptr;
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 WorkerManager::WorkerManager()
     : thread_id_(std::this_thread::get_id())
 {
-    // Nothing
+    CHECK(!g_instance);
+    g_instance = this;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -44,8 +51,17 @@ WorkerManager::~WorkerManager()
     }
 
     workers_.clear();
+    g_instance = nullptr;
 
     LOG(INFO) << "All workers stopped";
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+WorkerManager& WorkerManager::instance()
+{
+    CHECK(g_instance);
+    return *g_instance;
 }
 
 //--------------------------------------------------------------------------------------------------

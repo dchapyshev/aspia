@@ -29,7 +29,7 @@
 
 //--------------------------------------------------------------------------------------------------
 InputInjectorVt::InputInjectorVt(SharedPointer<VtMonitors> monitors, QObject* parent)
-    : InputInjector(parent),
+    : InputInjector(Type::VT, parent),
       monitors_(std::move(monitors))
 {
     // Nothing

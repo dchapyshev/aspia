@@ -20,6 +20,7 @@
 
 #include "base/xml_settings.h"
 #include "build/build_config.h"
+#include "host/screen_capturer.h"
 
 namespace {
 
@@ -87,7 +88,8 @@ void SystemSettings::setUpdateServer(const QString& server)
 //--------------------------------------------------------------------------------------------------
 quint32 SystemSettings::preferredVideoCapturer() const
 {
-    return settings_.value(kPreferredVideoCapturer, 0).toUInt();
+    return settings_.value(
+        kPreferredVideoCapturer, static_cast<quint32>(ScreenCapturer::Type::DEFAULT)).toUInt();
 }
 
 //--------------------------------------------------------------------------------------------------

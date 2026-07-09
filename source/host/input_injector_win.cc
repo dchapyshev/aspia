@@ -189,7 +189,7 @@ void sendKeyboardUnicodeChar(WORD unicode_char, DWORD flags)
 
 //--------------------------------------------------------------------------------------------------
 InputInjectorWin::InputInjectorWin(QObject* parent)
-    : InputInjector(parent)
+    : InputInjector(Type::WINDOWS, parent)
 {
     LOG(INFO) << "Ctor";
 
@@ -237,6 +237,8 @@ void InputInjectorWin::setBlockInput(bool enable)
 //--------------------------------------------------------------------------------------------------
 void InputInjectorWin::injectKeyEvent(const proto::input::KeyEvent& event)
 {
+    switchToInputDesktop();
+
     if (event.flags() & proto::input::KeyEvent::PRESSED)
     {
         pressed_keys_.insert(event.usb_keycode());
@@ -297,6 +299,8 @@ void InputInjectorWin::injectKeyEvent(const proto::input::KeyEvent& event)
 //--------------------------------------------------------------------------------------------------
 void InputInjectorWin::injectTextEvent(const proto::input::TextEvent& event)
 {
+    switchToInputDesktop();
+
     QString text = QString::fromStdString(event.text());
     if (text.isEmpty())
         return;
@@ -319,6 +323,8 @@ void InputInjectorWin::injectTextEvent(const proto::input::TextEvent& event)
 //--------------------------------------------------------------------------------------------------
 void InputInjectorWin::injectMouseEvent(const proto::input::MouseEvent& event)
 {
+    switchToInputDesktop();
+
     if (screen_size_.width() <= 1 || screen_size_.height() <= 1)
         screen_size_ = QSize(GetSystemMetrics(SM_CXVIRTUALSCREEN), GetSystemMetrics(SM_CYVIRTUALSCREEN));
 
@@ -428,7 +434,23 @@ void InputInjectorWin::injectMouseEvent(const proto::input::MouseEvent& event)
 //--------------------------------------------------------------------------------------------------
 void InputInjectorWin::injectTouchEvent(const proto::input::TouchEvent& event)
 {
+    switchToInputDesktop();
     touch_injector_.injectTouchEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void InputInjectorWin::switchToInputDesktop()
+{
+    // Switch to the desktop receiving user input if different from the current one.
+    Desktop input_desktop(Desktop::inputDesktop());
+
+    if (!input_desktop.isValid() || desktop_.isSame(input_desktop))
+        return;
+
+    // If setThreadDesktop() fails, the thread keeps its current desktop; injection then lands on the
+    // wrong desktop until a later switch succeeds.
+    if (!desktop_.setThreadDesktop(std::move(input_desktop)))
+        LOG(WARNING) << "Unable to switch to the input desktop";
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -1,0 +1,1430 @@
+//
+// Aspia Project
+// Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+#include "host/workers/screen_worker.h"
+
+#include <QThread>
+#include <QTimer>
+
+#include "base/core_application.h"
+#include "base/logging.h"
+#include "base/codec/cursor_encoder.h"
+#include "base/codec/scale_reducer.h"
+#include "base/codec/video_encoder.h"
+#include "base/desktop/frame.h"
+#include "base/desktop/mouse_cursor.h"
+#include "base/threading/worker_manager.h"
+#include "host/desktop_environment.h"
+#include "host/desktop_resizer.h"
+#include "host/input_injector.h"
+#include "host/system_settings.h"
+#include "host/workers/ipc_worker.h"
+
+#if defined(Q_OS_WINDOWS)
+#include "host/screen_capturer_win.h"
+#endif // defined(Q_OS_WINDOWS)
+
+#if defined(Q_OS_LINUX)
+#include <unistd.h>
+
+#include "base/linux/session_util.h"
+#include "host/desktop_resizer_vt.h"
+#include "host/input_injector_uinput.h"
+#include "host/input_injector_vt.h"
+#include "host/input_injector_wayland.h"
+#include "host/screen_capturer_kms.h"
+#include "host/screen_capturer_kwin.h"
+#include "host/screen_capturer_pipewire.h"
+#include "host/screen_capturer_vt.h"
+#include "host/screen_capturer_wlr.h"
+#include "host/screen_capturer_x11.h"
+#include "host/linux/wayland_compositor_source.h"
+#endif // defined(Q_OS_LINUX)
+
+#if defined(Q_OS_MACOS)
+#include "host/screen_capturer_mac.h"
+#endif // defined(Q_OS_MACOS)
+
+namespace {
+
+constexpr int kDefaultScreenCaptureFps = 24;
+constexpr int kMinScreenCaptureFps = 10;
+constexpr int kMaxScreenCaptureFpsHighEnd = 30;
+constexpr int kMaxScreenCaptureFpsLowEnd = 20;
+
+#if defined(Q_OS_LINUX)
+// Right after login the compositor needs a moment to register its screen-cast interface, so every
+// Wayland probe can fail transiently. Retry the probe chain within this window before committing to
+// the VT console fallback; bounded well under the client's start timeout.
+constexpr std::chrono::milliseconds kWaylandProbeTimeout { 5000 };
+constexpr std::chrono::milliseconds kWaylandProbeRetryDelay { 250 };
+
+// A backend committed during the login transition can pass its trial capture on the outgoing
+// compositor's buffer and then fail on every real frame once the session settles; after this long
+// without a single frame the capture path selection is re-run (see reselectLinuxCapture()).
+constexpr std::chrono::milliseconds kCaptureErrorReprobeDelay { 3000 };
+#endif // defined(Q_OS_LINUX)
+
+//--------------------------------------------------------------------------------------------------
+int defaultCaptureFps()
+{
+    if (!qEnvironmentVariableIsSet("ASPIA_DEFAULT_FPS"))
+        return kDefaultScreenCaptureFps;
+
+    bool ok = false;
+    int default_fps = qEnvironmentVariableIntValue("ASPIA_DEFAULT_FPS", &ok);
+    if (!ok)
+        return kDefaultScreenCaptureFps;
+
+    if (default_fps < 1 || default_fps > 60)
+    {
+        LOG(INFO) << "Environment variable contains an incorrect default FPS:" << default_fps;
+        return kDefaultScreenCaptureFps;
+    }
+
+    LOG(INFO) << "Default FPS specified by environment variable";
+    return default_fps;
+}
+
+//--------------------------------------------------------------------------------------------------
+int maxCaptureFps()
+{
+    int max_capture_fps = kMaxScreenCaptureFpsHighEnd;
+
+    bool max_fps_from_env = false;
+    if (qEnvironmentVariableIsSet("ASPIA_MAX_FPS"))
+    {
+        bool ok = false;
+        int max_fps = qEnvironmentVariableIntValue("ASPIA_MAX_FPS", &ok);
+        if (ok)
+        {
+            LOG(INFO) << "Maximum FPS specified by environment variable";
+
+            if (max_fps < 1 || max_fps > 60)
+            {
+                LOG(INFO) << "Environment variable contains an incorrect maximum FPS:" << max_fps;
+            }
+            else
+            {
+                max_capture_fps = max_fps;
+                max_fps_from_env = true;
+            }
+        }
+    }
+
+    if (!max_fps_from_env)
+    {
+        quint32 threads = QThread::idealThreadCount();
+        if (threads <= 2)
+        {
+            LOG(INFO) << "Low-end CPU detected. Maximum capture FPS:" << kMaxScreenCaptureFpsLowEnd;
+            max_capture_fps = kMaxScreenCaptureFpsLowEnd;
+        }
+    }
+
+    return max_capture_fps;
+}
+
+//--------------------------------------------------------------------------------------------------
+int minCaptureFps()
+{
+    if (!qEnvironmentVariableIsSet("ASPIA_MIN_FPS"))
+        return kMinScreenCaptureFps;
+
+    bool ok = false;
+    int min_fps = qEnvironmentVariableIntValue("ASPIA_MIN_FPS", &ok);
+    if (!ok)
+        return kMinScreenCaptureFps;
+
+    if (min_fps < 1 || min_fps > 60)
+    {
+        LOG(INFO) << "Environment variable contains an incorrect minimum FPS:" << min_fps;
+        return kMinScreenCaptureFps;
+    }
+
+    LOG(INFO) << "Minimum FPS specified by environment variable";
+    return min_fps;
+}
+
+} // namespace
+
+//--------------------------------------------------------------------------------------------------
+// macOS needs the Qt dispatcher: it backs the thread with a CFRunLoop (via
+// QT_EVENT_DISPATCHER_CORE_FOUNDATION) that the display reconfiguration callbacks require. Windows
+// needs the asio dispatcher instead: the Qt dispatcher pumps events through an invisible message
+// window, and SetThreadDesktop() fails for a thread that owns windows, which would break attaching
+// to the active input desktop (winlogon/UAC).
+ScreenWorker::ScreenWorker()
+#if defined(Q_OS_MACOS)
+    : Worker(Thread::QtDispatcher)
+#else
+    : Worker(Thread::AsioDispatcher)
+#endif
+{
+    LOG(INFO) << "Ctor";
+}
+
+//--------------------------------------------------------------------------------------------------
+ScreenWorker::~ScreenWorker()
+{
+    LOG(INFO) << "Dtor";
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::injectKeyEvent(const proto::input::KeyEvent& event)
+{
+    if (input_injector_)
+        input_injector_->injectKeyEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::injectTextEvent(const proto::input::TextEvent& event)
+{
+    if (input_injector_)
+        input_injector_->injectTextEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::injectMouseEvent(const proto::input::MouseEvent& event)
+{
+    if (input_injector_)
+        input_injector_->injectMouseEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::injectTouchEvent(const proto::input::TouchEvent& event)
+{
+    if (input_injector_)
+        input_injector_->injectTouchEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::setBlockInput(bool enable)
+{
+    if (input_injector_)
+        input_injector_->setBlockInput(enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::onConfigure(
+    const proto::control::Config& config, bool vp8_supported, bool vp9_supported, bool h264_supported)
+{
+    if (!vp8_supported && !vp9_supported)
+    {
+        LOG(ERROR) << "No supported video encodings";
+        CoreApplication::quit();
+        return;
+    }
+
+    vp8_supported_ = vp8_supported;
+    vp9_supported_ = vp9_supported;
+    h264_supported_ = h264_supported && h264_enabled_;
+
+    LOG(INFO) << "Configuration:" << config << "vp8:" << vp8_supported_ << "vp9:" << vp9_supported_
+              << "h264:" << h264_supported_;
+
+    // The first client that requested a preferred resolution wins. It is applied to the monitors
+    // in onCaptureScreen.
+    if (preferred_resolution_.isEmpty() && config.has_preferred_resolution() &&
+        config.preferred_resolution().width() > 0 && config.preferred_resolution().height() > 0)
+    {
+        preferred_resolution_.setWidth(config.preferred_resolution().width());
+        preferred_resolution_.setHeight(config.preferred_resolution().height());
+    }
+
+    // Prefer hardware H264 when both endpoints support it; fall back to VP otherwise. The
+    // explicit reset of an H264 encoding when h264_supported_ flipped to false handles the case
+    // where the client revokes H264 capability mid-session (decoder failure -> renegotiation).
+    if (h264_supported_)
+        video_encoding_ = proto::video::ENCODING_H264;
+    else if (video_encoding_ == proto::video::ENCODING_H264)
+        video_encoding_ = proto::video::ENCODING_VP8;
+
+    createVideoEncoder();
+
+    cursor_encoder_.reset();
+    if (config.cursor_shape())
+    {
+        LOG(INFO) << "Cursor shape enabled. Init cursor encoder";
+        cursor_encoder_ = std::make_unique<CursorEncoder>();
+    }
+
+    if (screen_capturer_)
+    {
+        screen_capturer_->resetCursorCache();
+        sendCurrentScreenList();
+    }
+
+    if (desktop_environment_)
+    {
+        desktop_environment_->setWallpaper(config.wallpaper());
+        desktop_environment_->setEffects(config.effects());
+    }
+
+    is_cursor_position_ = config.cursor_position();
+
+    capture_timer_->start(0);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::onStopCapture()
+{
+    LOG(INFO) << "Stop capture";
+    capture_timer_->stop();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::onSetPaused(bool paused)
+{
+    is_paused_ = paused;
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::onSetPreferredSize(const QSize& size)
+{
+    preferred_size_ = size;
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::onSelectScreen(const proto::screen::Screen& screen)
+{
+    if (!screen_capturer_)
+    {
+        LOG(ERROR) << "Screen capturer not initialized";
+        return;
+    }
+
+    ScreenCapturer::ScreenId screen_id = static_cast<ScreenCapturer::ScreenId>(screen.id());
+    QSize resolution = parse(screen.resolution());
+
+    selectScreen(screen_id, resolution);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::onClipboardEvent(const proto::clipboard::Event& event)
+{
+#if defined(Q_OS_LINUX)
+    // Forward the client's clipboard text to the VT injector (pasted into the terminal on demand). Other
+    // capture modes route the clipboard through the host GUI, not here.
+    if (capture_mode_ != CaptureMode::VT || !input_injector_)
+        return;
+
+    if (event.mime_type() == "text/plain; charset=UTF-8")
+        static_cast<InputInjectorVt*>(input_injector_)->setClipboard(QString::fromStdString(event.data()));
+#endif // defined(Q_OS_LINUX)
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::onKeyFrameRequested()
+{
+    if (video_encoder_)
+        video_encoder_->setKeyFrameRequired(true);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::onOverflowStateChanged(proto::desktop::Overflow::State state, qint64 bandwidth)
+{
+    // When bandwidth is unknown, use a conservative limit.
+    int bandwidth_fps_limit = 20;
+    if (bandwidth > 0)
+    {
+        // Calculate FPS limit based on measured bandwidth.
+        if (bandwidth < 70 * 1024)         // < 70 KB/s
+            bandwidth_fps_limit = min_fps_;
+        else if (bandwidth < 150 * 1024)   // < 150 KB/s
+            bandwidth_fps_limit = 14;
+        else if (bandwidth < 300 * 1024)   // < 300 KB/s
+            bandwidth_fps_limit = 16;
+        else if (bandwidth < 500 * 1024)   // < 500 KB/s
+            bandwidth_fps_limit = 18;
+        else if (bandwidth < 1024 * 1024)  // < 1 MB/s
+            bandwidth_fps_limit = 20;
+        else if (bandwidth < 2048 * 1024)  // < 2 MB/s
+            bandwidth_fps_limit = 24;
+        else
+            bandwidth_fps_limit = max_fps_;
+    }
+
+    int effective_max_fps = std::min(max_fps_, bandwidth_fps_limit);
+
+    int current_fps = capture_scheduler_.fps();
+    int next_fps = current_fps;
+
+    // If the current FPS exceeds the bandwidth limit, reduce immediately.
+    if (current_fps > effective_max_fps)
+    {
+        next_fps = effective_max_fps;
+    }
+    else if (state == proto::desktop::Overflow::STATE_CRITICAL)
+    {
+        pressure_score_ = std::min(100, pressure_score_ + 20);
+        stable_seconds_ = 0;
+        cooldown_seconds_ = 15;
+
+        next_fps = std::max(min_fps_, std::min(current_fps - 3, default_fps_));
+    }
+    else if (state == proto::desktop::Overflow::STATE_WARNING)
+    {
+        pressure_score_ = std::min(100, pressure_score_ + 8);
+        stable_seconds_ = 0;
+
+        next_fps = std::max(min_fps_, std::min(current_fps - 2, default_fps_));
+    }
+    else
+    {
+        pressure_score_ = std::max(0, pressure_score_ - 3);
+        ++stable_seconds_;
+        if (cooldown_seconds_ > 0)
+            --cooldown_seconds_;
+
+        if (stable_seconds_ >= 15 && cooldown_seconds_ == 0)
+        {
+            int max_fps = effective_max_fps;
+
+            if (pressure_score_ >= 80)
+                max_fps = min_fps_;
+            else if (pressure_score_ >= 60)
+                max_fps = 18;
+            else if (pressure_score_ >= 40)
+                max_fps = 20;
+            else if (pressure_score_ >= 20)
+                max_fps = 22;
+
+            if (current_fps < std::min(max_fps, effective_max_fps))
+                next_fps = current_fps + 1;
+        }
+    }
+
+    if (current_fps != next_fps)
+        capture_scheduler_.setFps(next_fps);
+
+    if (bandwidth <= 0) // Not measured yet.
+        return;
+
+    proto::video::Encoding desired_encoding = video_encoding_;
+    const qint64 kVp9SwitchingThreshold = 1.5 * 1024 * 1024; // 1.5 MB/s
+
+    // Hardware H264 outperforms VP at every bandwidth - if it was selected at startup, keep it.
+    if (video_encoding_ != proto::video::ENCODING_H264)
+    {
+        if (bandwidth < kVp9SwitchingThreshold && vp9_supported_)
+        {
+            // For low bandwidth connections, VP9 provides better compression.
+            desired_encoding = proto::video::ENCODING_VP9;
+        }
+        else if (bandwidth >= kVp9SwitchingThreshold && vp8_supported_)
+        {
+            desired_encoding = proto::video::ENCODING_VP8;
+        }
+    }
+
+    if (desired_encoding != video_encoding_ && video_encoder_)
+    {
+        LOG(INFO) << "Switching video encoding:" << video_encoding_ << "->" << desired_encoding;
+        video_encoding_ = desired_encoding;
+        createVideoEncoder();
+    }
+
+    if (last_bandwidth_ != bandwidth && video_encoder_)
+    {
+        last_bandwidth_ = bandwidth;
+        video_encoder_->setBandwidth(bandwidth);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::onStart()
+{
+    LOG(INFO) << "Screen worker started";
+
+    ipc_worker_ = WorkerManager::instance().find<IpcWorker>();
+    if (ipc_worker_)
+    {
+        connect(ipc_worker_, &IpcWorker::sig_selectScreen, this, &ScreenWorker::onSelectScreen);
+        connect(ipc_worker_, &IpcWorker::sig_clipboardEvent, this, &ScreenWorker::onClipboardEvent);
+        connect(ipc_worker_, &IpcWorker::sig_keyFrameRequested, this, &ScreenWorker::onKeyFrameRequested);
+        connect(ipc_worker_, &IpcWorker::sig_preferredSizeChanged, this, &ScreenWorker::onSetPreferredSize);
+        connect(ipc_worker_, &IpcWorker::sig_configure, this, &ScreenWorker::onConfigure);
+        connect(ipc_worker_, &IpcWorker::sig_overflowStateChanged, this, &ScreenWorker::onOverflowStateChanged);
+        connect(ipc_worker_, &IpcWorker::sig_stopCapture, this, &ScreenWorker::onStopCapture);
+        connect(ipc_worker_, &IpcWorker::sig_paused, this, &ScreenWorker::onSetPaused);
+    }
+    else
+    {
+        LOG(ERROR) << "IPC worker not found";
+    }
+
+    preferred_capturer_ =
+        static_cast<ScreenCapturer::Type>(SystemSettings().preferredVideoCapturer());
+    h264_enabled_ = VideoEncoder::isSupported(proto::video::ENCODING_H264);
+
+    default_fps_ = defaultCaptureFps();
+    min_fps_ = minCaptureFps();
+    max_fps_ = maxCaptureFps();
+
+    desktop_environment_ = DesktopEnvironment::create(this);
+    scale_reducer_ = std::make_unique<ScaleReducer>(ScaleReducer::Quality::HIGH);
+
+    capture_timer_ = new QTimer(this);
+    capture_timer_->setTimerType(Qt::PreciseTimer);
+    connect(capture_timer_, &QTimer::timeout, this, &ScreenWorker::onCaptureScreen);
+
+#if defined(Q_OS_LINUX)
+    // The agent always runs as root (launched by the service). Choose the capture path and create the
+    // matching input injector before the first selectCapturer().
+    setupLinuxCapture();
+#endif // defined(Q_OS_LINUX)
+
+    selectCapturer(ScreenCapturer::Error::SUCCEEDED);
+
+    capture_scheduler_.setFps(default_fps_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::onStop()
+{
+    LOG(INFO) << "Screen worker stopped";
+
+    if (ipc_worker_)
+    {
+        ipc_worker_->disconnect(this);
+        ipc_worker_ = nullptr;
+    }
+
+    // Everything created in onStart() lives in the worker thread and must be destroyed here.
+    // Destroy the injector before the capturer: on Linux (VT/Wayland) it references capturer-owned
+    // resources.
+    input_injector_.reset();
+    screen_capturer_.reset();
+
+    capture_timer_.reset();
+    desktop_environment_.reset();
+
+    screen_resizer_.reset();
+    scale_reducer_.reset();
+    video_encoder_.reset();
+    cursor_encoder_.reset();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::onCaptureScreen()
+{
+    if (capture_scheduler_.isInProgress())
+    {
+        LOG(INFO) << "Capture in progress";
+        return;
+    }
+
+    if (!screen_capturer_)
+    {
+#if defined(Q_OS_LINUX)
+        // Creation can fail transiently (e.g. a KMS scan-out readback hitting a compositor modeset while
+        // the screen locks or unlocks), so re-attempt it here instead of leaving the client on "session
+        // unavailable" forever. COMPOSITOR negotiates its source asynchronously and must not be recreated.
+        if (capture_mode_ != CaptureMode::COMPOSITOR)
+        {
+            selectCapturer(ScreenCapturer::Error::TEMPORARY);
+            if (!screen_capturer_)
+                registerCaptureFailure();
+        }
+#endif // defined(Q_OS_LINUX)
+
+        // The capturer is created asynchronously (on Wayland only after the desktop portal session is
+        // granted). Until then poll at a low rate instead of busy-looping on the zero-delay timer and
+        // flooding the log - the flood blocks the event loop and starves the portal's reply.
+        capture_timer_->start(250);
+        return;
+    }
+
+    capture_scheduler_.onBeginCapture();
+
+    if (is_paused_)
+    {
+        proto::video::Packet* video_packet =
+            serializer_.newMessage<proto::video::HostToClient>().mutable_packet();
+        video_packet->set_error_code(proto::video::ERROR_CODE_PAUSED);
+
+        emit sig_videoData(serializer_.serialize<proto::video::HostToClient>(), false);
+
+        capture_timer_->start(capture_scheduler_.nextCaptureDelay());
+        return;
+    }
+
+    screen_capturer_->switchToInputDesktop();
+
+    int count = screen_capturer_->screenCount();
+    if (screen_count_ != count)
+    {
+        LOG(INFO) << "Screen count changed from" << count << "to" << screen_count_;
+
+        screen_resizer_.reset();
+#if defined(Q_OS_LINUX)
+        if (capture_mode_ == CaptureMode::VT && screen_capturer_)
+        {
+            // The VT console resizes via its own grid (the terminals are owned by the capturer).
+            screen_resizer_ = std::make_unique<DesktopResizerVt>(
+                static_cast<ScreenCapturerVt*>(screen_capturer_.get()));
+        }
+        else
+#endif
+        {
+            screen_resizer_ = DesktopResizer::create();
+        }
+
+        screen_count_ = count;
+
+        ScreenCapturer::ScreenList screen_list;
+        if (!preferred_resolution_.isEmpty() && screen_resizer_ && screen_capturer_->screenList(&screen_list))
+        {
+            for (const auto& screen : std::as_const(screen_list.screens))
+            {
+                if (!screen_resizer_->supportedResolutions(screen.id).contains(preferred_resolution_))
+                {
+                    LOG(INFO) << "Preferred resolution" << preferred_resolution_
+                              << "is not supported for screen" << screen.id << ", keeping current";
+                    continue;
+                }
+
+                LOG(INFO) << "Applying preferred resolution" << preferred_resolution_
+                          << "for screen" << screen.id;
+                screen_resizer_->setResolution(screen.id, preferred_resolution_);
+            }
+        }
+
+        selectScreen(defaultScreen(), QSize());
+    }
+
+    ScreenCapturer::Error error;
+    const Frame* frame = screen_capturer_->captureFrame(&error);
+    if (!frame)
+    {
+        proto::video::ErrorCode error_code;
+
+        switch (error)
+        {
+            case ScreenCapturer::Error::TEMPORARY:
+                error_code = proto::video::ERROR_CODE_TEMPORARY;
+                break;
+
+            case ScreenCapturer::Error::PERMANENT:
+            {
+                error_code = proto::video::ERROR_CODE_PERMANENT;
+
+                QTimer::singleShot(0, this, [this]()
+                {
+                    selectCapturer(ScreenCapturer::Error::PERMANENT);
+                });
+            }
+            break;
+
+            default:
+                NOTREACHED();
+                return;
+        }
+
+        proto::video::Packet* video_packet =
+            serializer_.newMessage<proto::video::HostToClient>().mutable_packet();
+        video_packet->set_error_code(error_code);
+
+        emit sig_videoData(serializer_.serialize<proto::video::HostToClient>(), false);
+
+#if defined(Q_OS_LINUX)
+        registerCaptureFailure();
+#endif
+    }
+    else
+    {
+        updateInjectorScreenInfo(frame);
+        encodeScreen(frame);
+
+#if defined(Q_OS_LINUX)
+        capture_error_time_.invalidate();
+#endif
+    }
+
+#if defined(Q_OS_LINUX)
+    // The failure path above may have re-run the capture path selection; if the replacement capturer
+    // did not come up, poll at a low rate like the creation path does.
+    if (!screen_capturer_)
+    {
+        capture_timer_->start(250);
+        return;
+    }
+#endif
+
+    encodeCursor(screen_capturer_->captureCursor());
+
+    if (is_cursor_position_)
+    {
+        QPoint cursor_pos = screen_capturer_->cursorPosition();
+
+        int delta_x = std::abs(cursor_pos.x() - last_cursor_pos_.x());
+        int delta_y = std::abs(cursor_pos.y() - last_cursor_pos_.y());
+
+        if (delta_x > 1 || delta_y > 1)
+        {
+            int pos_x = int(double(cursor_pos.x()) * scale_reducer_->scaleFactorX() / 100.0);
+            int pos_y = int(double(cursor_pos.y()) * scale_reducer_->scaleFactorY() / 100.0);
+
+            proto::cursor::Position* position =
+                serializer_.newMessage<proto::cursor::HostToClient>().mutable_position();
+            position->set_x(pos_x);
+            position->set_y(pos_y);
+
+            emit sig_cursorPositionData(serializer_.serialize<proto::cursor::HostToClient>());
+            last_cursor_pos_ = cursor_pos;
+        }
+    }
+
+    capture_timer_->start(capture_scheduler_.nextCaptureDelay());
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::onScreenTypeChanged(ScreenCapturer::ScreenType type, const QString& name)
+{
+    proto::screen::ScreenType* screen_type =
+        serializer_.newMessage<proto::screen::HostToClient>().mutable_screen_type();
+    screen_type->set_name(name.toStdString());
+
+    switch (type)
+    {
+        case ScreenCapturer::ScreenType::DESKTOP:
+            screen_type->set_type(proto::screen::ScreenType::TYPE_DESKTOP);
+            break;
+        case ScreenCapturer::ScreenType::LOCK:
+            screen_type->set_type(proto::screen::ScreenType::TYPE_LOCK);
+            break;
+        case ScreenCapturer::ScreenType::LOGIN:
+            screen_type->set_type(proto::screen::ScreenType::TYPE_LOGIN);
+            break;
+        case ScreenCapturer::ScreenType::OTHER:
+            screen_type->set_type(proto::screen::ScreenType::TYPE_OTHER);
+            break;
+        default:
+            screen_type->set_type(proto::screen::ScreenType::TYPE_UNKNOWN);
+            break;
+    }
+
+    emit sig_screenTypeData(serializer_.serialize<proto::screen::HostToClient>());
+}
+
+#if defined(Q_OS_LINUX)
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::onCompositorSourceStarted(bool success)
+{
+    if (!success)
+    {
+        LOG(ERROR) << "Compositor capture source failed to start, falling back to KMS";
+        fallbackToKms();
+        return;
+    }
+
+    // The capturer's source is negotiated now; build the input injector on it - the same object is
+    // shared between capture and input.
+    auto* capturer = qobject_cast<ScreenCapturerPipeWire*>(screen_capturer_.get());
+    if (capturer)
+    {
+        WaylandCompositorSource* source = capturer->compositorSource();
+        if (source->supportsInput())
+        {
+            input_injector_ = InputInjectorWayland::create(source, this);
+            if (!input_injector_)
+                LOG(ERROR) << "Unable to create Wayland input injector";
+        }
+        else
+        {
+            // The compositor accepts capture but not input (e.g. a greeter inhibiting remote input):
+            // inject at the kernel level instead.
+            input_injector_ = InputInjectorUinput::create(this);
+            if (!input_injector_)
+                LOG(ERROR) << "Unable to create uinput input injector";
+            LOG(INFO) << "Compositor input inhibited; using uinput";
+        }
+    }
+
+    // Resume capture if a client connected while the source was negotiating.
+    if (capture_timer_ && capture_timer_->isActive())
+        capture_timer_->start(0);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ScreenWorker::probeUserWaylandCapture(uid_t uid)
+{
+    // GNOME Mutter ScreenCast: a compositor-native PipeWire stream captured without a permission
+    // dialog. The input injector is built in onCompositorSourceStarted(), once the capturer's
+    // source has negotiated and can be shared with it.
+    if (WaylandCompositorSource::isMutterAvailable(uid))
+    {
+        capture_mode_ = CaptureMode::COMPOSITOR;
+        LOG(INFO) << "Capture mode: compositor (Mutter)";
+        return true;
+    }
+
+    // wlroots compositors via zwlr_screencopy (wl_shm): compositor-native, no dialog. The uinput
+    // injector is independent of the capturer, so InputWorker creates it (see the LINUX_WLR case).
+    if (ScreenCapturerWlr::isAvailable(uid))
+    {
+        capture_mode_ = CaptureMode::WLR;
+        LOG(INFO) << "Capture mode: wlr-screencopy";
+        return true;
+    }
+
+    // Direct DRM/KMS read: imports the scan-out framebuffer zero-copy, avoiding the GPU->CPU
+    // readback entirely. Its trial capture self-validates that the driver can export the buffer;
+    // it fails where the driver cannot (some setups, typically VMs), and KWin ScreenShot2 takes
+    // over below.
+    if (ScreenCapturerKms::isAvailable())
+    {
+        capture_mode_ = CaptureMode::KMS;
+        LOG(INFO) << "Capture mode: KMS";
+        return true;
+    }
+
+    // KDE KWin ScreenShot2 (no dialog; per-frame screenshot poll). Used only where KMS cannot
+    // export the scan-out buffer, and only when isAvailable()'s throughput probe finds its
+    // glReadPixels readback fast enough (that cost is GPU-driver dependent).
+    if (ScreenCapturerKwin::isAvailable(uid))
+    {
+        capture_mode_ = CaptureMode::KWIN;
+        LOG(INFO) << "Capture mode: KWin ScreenShot2";
+        return true;
+    }
+
+    // xdg-desktop-portal ScreenCast: last resort, prompts the user when capture starts. Input is
+    // built in onCompositorSourceStarted() like the Mutter path.
+    if (WaylandCompositorSource::isPortalAvailable(uid))
+    {
+        capture_mode_ = CaptureMode::COMPOSITOR;
+        LOG(INFO) << "Capture mode: compositor (portal)";
+        return true;
+    }
+
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::setupLinuxCapture()
+{
+    // The agent runs as root in a system unit with no session environment, so it determines the active
+    // session and its type from logind itself.
+    QString session_id;
+    uid_t uid = 0;
+    if (!SessionUtil::activeSession(&session_id, &uid))
+        LOG(ERROR) << "Unable to determine the active session";
+
+    session_uid_ = uid;
+
+    // X11 session (user desktop or the login-screen greeter): use the X11 grabber. The X11 injector
+    // is independent of the capturer, so InputWorker creates it (see the LINUX_X11 case). The root
+    // unit has no session environment, so read the display and X authority cookie from the session's
+    // own processes and export them for the X11 client libraries (in this process, so InputWorker
+    // sees them too).
+    if (SessionUtil::sessionType(session_id) == SessionUtil::SessionType::X11)
+    {
+        QString display;
+        QString xauthority;
+        if (SessionUtil::readX11Env(uid, session_id, &display, &xauthority))
+        {
+            qputenv("DISPLAY", display.toLocal8Bit());
+            if (!xauthority.isEmpty())
+                qputenv("XAUTHORITY", xauthority.toLocal8Bit());
+        }
+        else
+        {
+            LOG(ERROR) << "Unable to read the X11 session environment";
+        }
+
+        capture_mode_ = CaptureMode::X11;
+        LOG(INFO) << "Capture mode: X11";
+        return;
+    }
+
+    // Wayland. The compositor screen-cast interfaces are only reachable on a real user session; on the
+    // login screen (greeter) capture below the compositor via DRM/KMS instead.
+    const bool is_user_session =
+        (SessionUtil::sessionClass(session_id) == SessionUtil::SessionClass::USER);
+
+    LOG(INFO) << "Wayland capture setup: is_user_session:" << is_user_session << "uid:" << uid;
+
+    if (is_user_session)
+    {
+        // Right after login every probe below can fail transiently (the compositor registers its
+        // screen-cast interface a moment after the display environment appears), so retry the chain
+        // briefly instead of committing to the VT console fallback right away.
+        QElapsedTimer probe_time;
+        probe_time.start();
+
+        for (;;)
+        {
+            if (probeUserWaylandCapture(uid))
+                return;
+
+            if (probe_time.elapsed() >= kWaylandProbeTimeout.count())
+                break;
+
+            LOG(INFO) << "No Wayland capture path available yet; retrying";
+            QThread::msleep(kWaylandProbeRetryDelay.count());
+        }
+    }
+    else
+    {
+        // The login-screen greeter runs its own compositor (e.g. gdm's gnome-shell). Prefer its Mutter
+        // ScreenCast - a compositor-native capture that works where KMS cannot (older vmwgfx on RHEL 8).
+        // The greeter registers that interface a moment after it comes up (e.g. right after logout); in
+        // that window the scan-out can briefly be a buffer KMS reads but that breaks once the compositor
+        // renders through the GPU, so wait for the compositor before committing to KMS.
+        QElapsedTimer probe_time;
+        probe_time.start();
+
+        for (;;)
+        {
+            if (WaylandCompositorSource::isMutterAvailable(uid))
+            {
+                capture_mode_ = CaptureMode::COMPOSITOR;
+                LOG(INFO) << "Capture mode: compositor (Mutter, greeter)";
+                return;
+            }
+
+            if (probe_time.elapsed() >= kWaylandProbeTimeout.count())
+                break;
+
+            LOG(INFO) << "Greeter compositor not ready yet; retrying";
+            QThread::msleep(kWaylandProbeRetryDelay.count());
+        }
+
+        // No usable compositor screen-cast: capture below the compositor with DRM/KMS (uinput input is
+        // created by InputWorker). A trial capture confirms the scan-out framebuffer can actually be
+        // read before committing to this backend.
+        if (ScreenCapturerKms::isAvailable())
+        {
+            capture_mode_ = CaptureMode::KMS;
+            LOG(INFO) << "Capture mode: KMS";
+            return;
+        }
+    }
+
+    // Nothing graphical is available (headless / text mode): capture a dedicated VT login terminal,
+    // created and owned by ScreenCapturerVt (see selectCapturer()).
+    capture_mode_ = CaptureMode::VT;
+    LOG(INFO) << "Capture mode: VT console";
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::reselectLinuxCapture()
+{
+    QString session_id;
+    uid_t uid = 0;
+    if (!SessionUtil::activeSession(&session_id, &uid))
+    {
+        LOG(ERROR) << "Unable to determine the active session";
+        return;
+    }
+
+    LOG(INFO) << "Persistent capture failures; re-running the capture path selection";
+
+    session_uid_ = uid;
+
+    bool found = false;
+    if (SessionUtil::sessionClass(session_id) == SessionUtil::SessionClass::USER)
+    {
+        found = probeUserWaylandCapture(uid);
+    }
+    else if (WaylandCompositorSource::isMutterAvailable(uid))
+    {
+        capture_mode_ = CaptureMode::COMPOSITOR;
+        LOG(INFO) << "Capture mode: compositor (Mutter, greeter)";
+        found = true;
+    }
+    else if (ScreenCapturerKms::isAvailable())
+    {
+        capture_mode_ = CaptureMode::KMS;
+        LOG(INFO) << "Capture mode: KMS";
+        found = true;
+    }
+
+    if (!found)
+    {
+        LOG(INFO) << "No Wayland capture path available; keeping the current one";
+        return;
+    }
+
+    selectCapturer(ScreenCapturer::Error::TEMPORARY);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::registerCaptureFailure()
+{
+    // Only the probed Wayland backends can be committed on a transient buffer; X11/VT do not have
+    // this failure mode, and COMPOSITOR reports its startup outcome via onCompositorSourceStarted().
+    if (capture_mode_ != CaptureMode::KMS && capture_mode_ != CaptureMode::KWIN &&
+        capture_mode_ != CaptureMode::WLR)
+        return;
+
+    if (!capture_error_time_.isValid())
+    {
+        capture_error_time_.start();
+        return;
+    }
+
+    if (capture_error_time_.elapsed() < kCaptureErrorReprobeDelay.count())
+        return;
+
+    capture_error_time_.invalidate();
+    reselectLinuxCapture();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::fallbackToKms()
+{
+    // KMS uses the uinput injector, created by InputWorker once it sees the LINUX_KMS capture type.
+    capture_mode_ = CaptureMode::KMS;
+
+    selectCapturer(ScreenCapturer::Error::SUCCEEDED);
+
+    if (capture_timer_ && capture_timer_->isActive())
+        capture_timer_->start(0);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::sendClipboardText(const std::string& text)
+{
+    proto::clipboard::Event* event =
+        serializer_.newMessage<proto::clipboard::HostToClient>().mutable_event();
+    event->set_mime_type("text/plain; charset=UTF-8");
+    event->set_data(text);
+
+    emit sig_clipboardData(serializer_.serialize<proto::clipboard::HostToClient>());
+}
+#endif // defined(Q_OS_LINUX)
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::selectCapturer(ScreenCapturer::Error last_error)
+{
+    LOG(INFO) << "Selecting screen capturer. Preferred capturer:" << preferred_capturer_;
+
+    // Release the injector before the capturer: on Linux it may be a VT/Wayland injector that
+    // references capturer-owned resources. A VT/Wayland capture recreates it below (VT in this
+    // function, Wayland in onCompositorSourceStarted); for X11/uinput it stays null - InputWorker
+    // owns those, keyed off the capture type in sig_screenInfoChanged.
+    input_injector_.reset();
+
+    if (screen_capturer_)
+    {
+        screen_capturer_->disconnect();
+        screen_capturer_.reset();
+    }
+
+    // Tell InputWorker the capture type is momentarily unknown, so it destroys the injector it owns.
+    // A fresh one is created once the first frame reports the new capture type (see
+    // updateInjectorScreenInfo). Reset the published values so that first frame is seen as a change.
+    published_capture_type_ = ScreenCapturer::Type::UNKNOWN;
+    published_screen_size_ = QSize();
+    published_screen_offset_ = QPoint();
+
+    emit sig_screenInfoChanged(ScreenCapturer::Type::UNKNOWN, QSize(), QPoint());
+
+#if defined(Q_OS_WINDOWS)
+    screen_capturer_ = ScreenCapturerWin::create(preferred_capturer_, last_error, this);
+#elif defined(Q_OS_MACOS)
+    screen_capturer_ = ScreenCapturerMac::create(this);
+#elif defined(Q_OS_LINUX)
+    switch (capture_mode_)
+    {
+        case CaptureMode::X11:
+        {
+            screen_capturer_ = ScreenCapturerX11::create(this);
+            if (!screen_capturer_)
+            {
+                LOG(ERROR) << "Unable to create X11 screen capturer";
+                return;
+            }
+        }
+        break;
+
+        case CaptureMode::KMS:
+        {
+            screen_capturer_ = ScreenCapturerKms::create(this);
+            if (!screen_capturer_)
+                LOG(ERROR) << "Unable to create KMS screen capturer";
+        }
+        break;
+
+        case CaptureMode::VT:
+        {
+            ScreenCapturerVt* capturer = ScreenCapturerVt::create(this);
+            screen_capturer_ = capturer;
+            if (!capturer)
+            {
+                LOG(ERROR) << "Unable to create VT screen capturer";
+                return;
+            }
+
+            // The input injector is built on the capturer's terminals (the capturer owns them). A finished
+            // terminal text selection is published to the client clipboard (only the agent reaches it).
+            InputInjectorVt* injector = InputInjectorVt::create(capturer, this);
+            connect(injector, &InputInjectorVt::sig_terminalClipboard, this,
+                    [this](const QString& text) { sendClipboardText(text.toStdString()); });
+            input_injector_ = injector;
+        }
+        break;
+
+        case CaptureMode::KWIN:
+        {
+            screen_capturer_ = ScreenCapturerKwin::create(session_uid_, this);
+            if (!screen_capturer_)
+                LOG(ERROR) << "Unable to create KWin screen capturer";
+        }
+        break;
+
+        case CaptureMode::WLR:
+        {
+            screen_capturer_ = ScreenCapturerWlr::create(session_uid_, this);
+            if (!screen_capturer_)
+                LOG(ERROR) << "Unable to create wlr screen capturer";
+        }
+        break;
+
+        case CaptureMode::COMPOSITOR:
+        {
+            ScreenCapturerPipeWire* capturer = ScreenCapturerPipeWire::create(session_uid_, this);
+            if (!capturer)
+            {
+                LOG(ERROR) << "Unable to create PipeWire screen capturer";
+                return;
+            }
+
+            // The capturer owns and negotiates the source; the input injector is built on that shared
+            // source in onCompositorSourceStarted() once it is ready (or KMS on failure).
+            connect(capturer, &ScreenCapturerPipeWire::sig_started,
+                    this, &ScreenWorker::onCompositorSourceStarted);
+
+            screen_capturer_ = capturer;
+        }
+        break;
+    }
+#else
+    NOTIMPLEMENTED();
+#endif
+
+    if (!screen_capturer_)
+    {
+        LOG(ERROR) << "Unable to create screen capturer";
+        return;
+    }
+
+    LOG(INFO) << "Selected screen capturer:" << screen_capturer_->type();
+
+    connect(screen_capturer_, &ScreenCapturer::sig_screenTypeChanged,
+            this, &ScreenWorker::onScreenTypeChanged);
+
+    connect(screen_capturer_, &ScreenCapturer::sig_desktopChanged, this, [this]()
+    {
+        if (!desktop_environment_)
+        {
+            LOG(ERROR) << "Desktop environment is not initialized";
+            return;
+        }
+
+        desktop_environment_->onDesktopChanged();
+    });
+
+    if (last_screen_id_ != ScreenCapturer::kInvalidScreenId)
+    {
+        LOG(INFO) << "Restore selected screen:" << last_screen_id_;
+        selectScreen(last_screen_id_, QSize());
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+ScreenCapturer::ScreenId ScreenWorker::defaultScreen()
+{
+    if (!screen_capturer_)
+    {
+        LOG(ERROR) << "Screen capturer is not initialized";
+        return ScreenCapturer::kInvalidScreenId;
+    }
+
+    ScreenCapturer::ScreenList screen_list;
+    if (!screen_capturer_->screenList(&screen_list))
+    {
+        LOG(ERROR) << "ScreenCapturer::screenList failed";
+        return ScreenCapturer::kInvalidScreenId;
+    }
+
+    for (const auto& screen : std::as_const(screen_list.screens))
+    {
+        if (screen.is_primary)
+        {
+            LOG(INFO) << "Primary screen found:" << screen.id;
+            return screen.id;
+        }
+    }
+
+    if (!screen_list.screens.isEmpty())
+    {
+        ScreenCapturer::ScreenId first_id = screen_list.screens.first().id;
+        LOG(INFO) << "Primary screen NOT found, using first screen:" << first_id;
+        return first_id;
+    }
+
+    LOG(INFO) << "Screen list is empty";
+    return ScreenCapturer::kInvalidScreenId;
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::selectScreen(ScreenCapturer::ScreenId screen_id, const QSize& resolution)
+{
+    if (screen_id == screen_capturer_->currentScreen() && !resolution.isEmpty() && screen_resizer_)
+    {
+        LOG(INFO) << "Change resolution for screen" << screen_id << "to:" << resolution;
+        if (!screen_resizer_->setResolution(screen_id, resolution))
+        {
+            LOG(ERROR) << "setResolution failed";
+            return;
+        }
+    }
+    else
+    {
+        LOG(INFO) << "Select screen:" << screen_id;
+        if (!screen_capturer_->selectScreen(screen_id))
+        {
+            LOG(ERROR) << "ScreenCapturer::selectScreen failed";
+            return;
+        }
+
+        last_screen_id_ = screen_id;
+    }
+
+    if (video_encoder_)
+        video_encoder_->setKeyFrameRequired(true);
+
+    sendCurrentScreenList();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::sendCurrentScreenList()
+{
+    if (!screen_capturer_)
+    {
+        LOG(WARNING) << "Screen capturer is not initialized";
+        return;
+    }
+
+    ScreenCapturer::ScreenList screen_list;
+    if (!screen_capturer_->screenList(&screen_list))
+    {
+        LOG(ERROR) << "ScreenCapturer::screenList failed";
+        return;
+    }
+
+    const ScreenCapturer::ScreenId current = screen_capturer_->currentScreen();
+
+    if (screen_resizer_)
+    {
+        screen_list.resolutions = screen_resizer_->supportedResolutions(current);
+        if (screen_list.resolutions.isEmpty())
+            LOG(INFO) << "No supported resolutions";
+    }
+
+    for (const auto& screen : std::as_const(screen_list.screens))
+    {
+        LOG(INFO) << "Screen #" << screen.id << "(position:" << screen.position
+                  << "resolution:" << screen.resolution << "DPI:" << screen.dpi << ")";
+    }
+
+    sendScreenList(screen_list, current);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::sendScreenList(
+    const ScreenCapturer::ScreenList& list, ScreenCapturer::ScreenId current)
+{
+    proto::screen::ScreenList* screen_list =
+        serializer_.newMessage<proto::screen::HostToClient>().mutable_screen_list();
+    screen_list->set_current_screen(current);
+
+    for (const auto& resolition_item : list.resolutions)
+    {
+        proto::screen::Size* resolution = screen_list->add_resolution();
+        resolution->set_width(resolition_item.width());
+        resolution->set_height(resolition_item.height());
+    }
+
+    for (const auto& screen_item : list.screens)
+    {
+        proto::screen::Screen* screen = screen_list->add_screen();
+        screen->set_id(screen_item.id);
+        screen->set_title(screen_item.title.toStdString());
+
+        proto::screen::Point* position = screen->mutable_position();
+        position->set_x(screen_item.position.x());
+        position->set_y(screen_item.position.y());
+
+        proto::screen::Size* resolution = screen->mutable_resolution();
+        resolution->set_width(screen_item.resolution.width());
+        resolution->set_height(screen_item.resolution.height());
+
+        proto::screen::Point* dpi = screen->mutable_dpi();
+        dpi->set_x(screen_item.dpi.x());
+        dpi->set_y(screen_item.dpi.y());
+
+        if (screen_item.is_primary)
+            screen_list->set_primary_screen(screen_item.id);
+    }
+
+    emit sig_screenListData(serializer_.serialize<proto::screen::HostToClient>());
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::encodeScreen(const Frame* frame)
+{
+    if (!frame || !video_encoder_)
+        return;
+
+    if (frame->constUpdatedRegion().isEmpty() && frame_count_ > 0 && !video_encoder_->isKeyFrameRequired())
+        return;
+
+    ++frame_count_;
+
+    if (source_size_ != frame->size())
+    {
+        // Every time we change the resolution, we have to reset the preferred size.
+        source_size_ = frame->size();
+        preferred_size_ = QSize(0, 0);
+    }
+
+    QSize current_size = preferred_size_;
+
+    // If the preferred size is larger than the original, then we use the original size.
+    if (current_size.width() > source_size_.width() || current_size.height() > source_size_.height())
+        current_size = source_size_;
+
+    // If we don't have a preferred size, then we use the original frame size.
+    if (current_size.isEmpty())
+        current_size = source_size_;
+
+    const Frame* scaled_frame = scale_reducer_->scaleFrame(frame, current_size);
+    if (!scaled_frame)
+    {
+        LOG(ERROR) << "No scaled frame";
+        return;
+    }
+
+    // Publish the scale factors to InputWorker when they change; it maps client coordinates back
+    // into the real screen with them.
+    const double scale_x = scale_reducer_->scaleFactorX();
+    const double scale_y = scale_reducer_->scaleFactorY();
+    if (scale_x != published_scale_x_ || scale_y != published_scale_y_)
+    {
+        published_scale_x_ = scale_x;
+        published_scale_y_ = scale_y;
+        emit sig_scaleFactorChanged(scale_x, scale_y);
+    }
+
+    proto::video::HostToClient& message = serializer_.newMessage<proto::video::HostToClient>();
+    proto::video::Packet* packet = message.mutable_packet();
+
+    // Encode the frame into a video packet.
+    const VideoEncoder::Result encode_result = video_encoder_->encode(scaled_frame, packet);
+    if (encode_result == VideoEncoder::Result::PERMANENT_ERROR)
+    {
+        // HW encoder cannot handle this frame size or driver state - fall back to VP8.
+        LOG(ERROR) << "Permanent encoder failure for" << video_encoding_ << "- falling back to VP8";
+        h264_enabled_ = false;
+        video_encoding_ = proto::video::ENCODING_VP8;
+        createVideoEncoder();
+        return;
+    }
+
+    if (encode_result == VideoEncoder::Result::TEMPORARY_ERROR)
+    {
+        LOG(WARNING) << "Temporary encoder failure - skipping frame";
+        return;
+    }
+
+    if (packet->has_format())
+    {
+        proto::video::PacketFormat* format = packet->mutable_format();
+
+        // In video packets that contain the format, we pass the screen capture type.
+        format->set_capturer_type(static_cast<proto::video::ScreenCapturerType>(frame->capturerType()));
+
+        // Real screen size.
+        proto::video::Size* screen_size = format->mutable_screen_size();
+        screen_size->set_width(frame->size().width());
+        screen_size->set_height(frame->size().height());
+
+        LOG(INFO) << "Video packet has format:" << *format;
+    }
+
+    bool is_key_frame = packet->flags() & proto::video::PACKET_FLAG_IS_KEY_FRAME;
+
+    emit sig_videoData(serializer_.serialize<proto::video::HostToClient>(), is_key_frame);
+
+    video_encoder_->setEncodeBuffer(std::move(*message.mutable_packet()->mutable_data()));
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::encodeCursor(const MouseCursor* cursor)
+{
+    if (!cursor || !cursor_encoder_)
+        return;
+
+    proto::cursor::HostToClient& message = serializer_.newMessage<proto::cursor::HostToClient>();
+    if (!cursor_encoder_->encode(*cursor, message.mutable_shape()))
+        return;
+
+    emit sig_cursorShapeData(serializer_.serialize<proto::cursor::HostToClient>());
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::createVideoEncoder()
+{
+    video_encoder_ = VideoEncoder::create(video_encoding_);
+
+    // Seed the fresh encoder with the last measured bandwidth so it starts at the right quality
+    // tier immediately. Without this it would come up at its built-in defaults and only correct on
+    // the next bandwidth change - sending a high-bitrate burst over a narrow link right after a
+    // reconnect, when the encoder is recreated by onConfigure().
+    if (video_encoder_)
+        video_encoder_->setBandwidth(last_bandwidth_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::updateInjectorScreenInfo(const Frame* frame)
+{
+    const ScreenCapturer::Type type = screen_capturer_->type();
+    const QSize screen_size = screen_capturer_->desktopRect().size();
+    const QPoint offset = frame->topLeft();
+
+    // The local injector (Linux VT/Wayland: it shares the capture path) gets the update directly.
+    if (input_injector_)
+        input_injector_->setScreenInfo(screen_size, offset);
+
+    // InputWorker gets the capture backend and geometry through a queued signal; it owns the injector
+    // on Windows/macOS and, on Linux, for the X11/uinput backends. Publish only changes - this runs
+    // on every captured frame.
+    if (type != published_capture_type_ || screen_size != published_screen_size_ ||
+        offset != published_screen_offset_)
+    {
+        published_capture_type_ = type;
+        published_screen_size_ = screen_size;
+        published_screen_offset_ = offset;
+        emit sig_screenInfoChanged(type, screen_size, offset);
+    }
+}

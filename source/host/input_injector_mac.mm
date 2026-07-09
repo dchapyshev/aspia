@@ -85,7 +85,7 @@ void postScrollEvent(int32_t lines)
 
 //--------------------------------------------------------------------------------------------------
 InputInjectorMac::InputInjectorMac(QObject* parent)
-    : InputInjector(parent)
+    : InputInjector(Type::MAC, parent)
 {
     LOG(INFO) << "Ctor";
 }

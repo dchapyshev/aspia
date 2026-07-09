@@ -19,8 +19,6 @@
 collect_sources(SOURCE_BASE_AUDIO
     audio_capturer.cc
     audio_capturer.h
-    audio_capturer_wrapper.cc
-    audio_capturer_wrapper.h
     audio_output.cc
     audio_output.h
     audio_player.cc

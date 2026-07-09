@@ -64,7 +64,7 @@ bool isModifierKey(uint32_t usbKeycode)
 
 //--------------------------------------------------------------------------------------------------
 InputInjectorX11::InputInjectorX11(QObject* parent)
-    : InputInjector(parent)
+    : InputInjector(Type::X11, parent)
 {
     LOG(INFO) << "Ctor";
 }

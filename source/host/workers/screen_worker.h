@@ -16,25 +16,27 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_DESKTOP_AGENT_H
-#define HOST_DESKTOP_AGENT_H
+#ifndef HOST_WORKERS_SCREEN_WORKER_H
+#define HOST_WORKERS_SCREEN_WORKER_H
 
 #include <QElapsedTimer>
-#include <QObject>
-#include <QTimer>
+#include <QPoint>
+#include <QPointer>
+#include <QSize>
 
 #include <sys/types.h>
 
 #include <memory>
 
-#include "base/power_save_blocker.h"
 #include "base/scoped_qpointer.h"
 #include "base/serialization.h"
+#include "base/threading/worker.h"
 #include "host/capture_scheduler.h"
 #include "host/screen_capturer.h"
-#include "proto/desktop_audio.h"
 #include "proto/desktop_clipboard.h"
+#include "proto/desktop_control.h"
 #include "proto/desktop_cursor.h"
+#include "proto/desktop_internal.h"
 #include "proto/desktop_screen.h"
 #include "proto/desktop_video.h"
 
@@ -45,60 +47,87 @@ class TextEvent;
 class TouchEvent;
 } // namespace proto::input
 
-class AudioCapturerWrapper;
-class AudioEncoder;
 class CursorEncoder;
-class DesktopAgentClient;
 class DesktopEnvironment;
 class DesktopResizer;
 class InputInjector;
-class IpcChannel;
+class IpcWorker;
+class QTimer;
 class ScaleReducer;
 class VideoEncoder;
 
-class DesktopAgent final : public QObject
+// Runs the video pipeline of the desktop agent: screen capture, capture pacing and video/cursor
+// encoding. On Linux the input injector is tied to the selected capture path (it may share
+// capturer-owned resources), so it lives here too and InputWorker delegates injection to this
+// worker; on Windows and macOS injection is fully handled by InputWorker.
+class ScreenWorker final : public Worker
 {
     Q_OBJECT
 
 public:
-    explicit DesktopAgent(QObject* parent = nullptr);
-    ~DesktopAgent() final;
+    ScreenWorker();
+    ~ScreenWorker() final;
 
-    void start(const QString& ipc_channel_name);
+    // Injection entry points used by InputWorker on platforms where the injector is owned by the
+    // capture path (Linux). Not connected to signals: InputWorker invokes them in this worker's
+    // thread directly. Events arrive already gated and scaled.
+    void injectKeyEvent(const proto::input::KeyEvent& event);
+    void injectTextEvent(const proto::input::TextEvent& event);
+    void injectMouseEvent(const proto::input::MouseEvent& event);
+    void injectTouchEvent(const proto::input::TouchEvent& event);
+    void setBlockInput(bool enable);
 
-private slots:
-    void onIpcConnected();
-    void onIpcDisconnected();
-    void onIpcErrorOccurred();
-    void onIpcMessageReceived(quint32 ipc_channel_id, const QByteArray& buffer, bool reliable);
+public slots:
+    // Applies the configuration merged over all connected clients and (re)starts capturing. Codec
+    // flags carry the capability intersection of the clients.
+    void onConfigure(const proto::control::Config& config,
+                     bool vp8_supported, bool vp9_supported, bool h264_supported);
 
-    void onClientConfigured();
-    void onClientFinished();
+    // Stops capturing (the last client disconnected).
+    void onStopCapture();
 
-    void onInjectMouseEvent(const proto::input::MouseEvent& event);
-    void onInjectKeyEvent(const proto::input::KeyEvent& event);
-    void onInjectTextEvent(const proto::input::TextEvent& event);
-    void onInjectTouchEvent(const proto::input::TouchEvent& event);
-
+    void onSetPaused(bool paused);
+    void onSetPreferredSize(const QSize& size);
     void onSelectScreen(const proto::screen::Screen& screen);
     void onClipboardEvent(const proto::clipboard::Event& event);
-    void onScreenListChanged(
-        const ScreenCapturer::ScreenList& list, ScreenCapturer::ScreenId current);
-    void onScreenTypeChanged(ScreenCapturer::ScreenType type, const QString& name);
-    void onPreferredSizeChanged();
     void onKeyFrameRequested();
 
-    void onCaptureScreen();
-    void onOverflowCheck();
+    // Aggregated network feedback from the clients; drives the FPS and encoding selection.
+    void onOverflowStateChanged(proto::desktop::Overflow::State state, qint64 bandwidth);
 
+signals:
+    // Serialized messages ready to be sent to clients.
+    void sig_videoData(const QByteArray& buffer, bool is_key_frame);
+    void sig_cursorShapeData(const QByteArray& buffer);
+    void sig_cursorPositionData(const QByteArray& buffer);
+    void sig_screenListData(const QByteArray& buffer);
+    void sig_screenTypeData(const QByteArray& buffer);
+    void sig_clipboardData(const QByteArray& buffer);
+
+    // Video pipeline state InputWorker needs for scaling client coordinates and clamping them into
+    // the real screen. Emitted only when the values actually change.
+    void sig_scaleFactorChanged(double scale_x, double scale_y);
+
+    // Screen geometry plus the active capture backend. On Linux the backend decides which input
+    // injector InputWorker creates (X11/uinput), or whether it delegates to this worker (VT/Wayland,
+    // where the injector is tied to capturer-owned resources). Emitted only when a value changes.
+    void sig_screenInfoChanged(ScreenCapturer::Type type, const QSize& screen_size, const QPoint& offset);
+
+protected:
+    // Worker implementation.
+    void onStart() final;
+    void onStop() final;
+
+private slots:
+    void onCaptureScreen();
+    void onScreenTypeChanged(ScreenCapturer::ScreenType type, const QString& name);
 #if defined(Q_OS_LINUX)
-    // The compositor capture path reports the result of its asynchronous negotiation; on failure the
-    // agent falls back to DRM/KMS.
+    // The compositor capture path reports the result of its asynchronous negotiation; on failure
+    // the worker falls back to DRM/KMS.
     void onCompositorSourceStarted(bool success);
 #endif // defined(Q_OS_LINUX)
 
 private:
-    void startClient(const QString& ipc_channel_name);
     void selectCapturer(ScreenCapturer::Error last_error);
 #if defined(Q_OS_LINUX)
     // One pass of the Wayland user-session capture chain (compositor screen-cast, wlr, KMS, KWin,
@@ -121,18 +150,16 @@ private:
     ScreenCapturer::ScreenId defaultScreen();
     void selectScreen(ScreenCapturer::ScreenId screen_id, const QSize& resolution);
     void sendCurrentScreenList();
+    void sendScreenList(const ScreenCapturer::ScreenList& list, ScreenCapturer::ScreenId current);
     void encodeScreen(const Frame* frame);
     void encodeCursor(const MouseCursor* cursor);
-    void encodeAudio(const proto::audio::Packet& packet);
     void createVideoEncoder();
+    void updateInjectorScreenInfo(const Frame* frame);
 
-    // Control channel between service and agent.
-    IpcChannel* ipc_channel_ = nullptr;
+    // Source of the client requests and control commands. Resolved through WorkerManager on start.
+    QPointer<IpcWorker> ipc_worker_;
 
-    QList<DesktopAgentClient*> clients_;
-
-    PowerSaveBlocker power_save_blocker_;
-    InputInjector* input_injector_ = nullptr;
+    ScopedQPointer<InputInjector> input_injector_;
     ScopedQPointer<ScreenCapturer> screen_capturer_;
 
 #if defined(Q_OS_LINUX)
@@ -150,11 +177,10 @@ private:
     QElapsedTimer capture_error_time_;
 #endif // defined(Q_OS_LINUX)
 
-    ScopedQPointer<AudioCapturerWrapper> audio_capturer_;
-    DesktopEnvironment* desktop_environment_ = nullptr;
+    ScopedQPointer<DesktopEnvironment> desktop_environment_;
     std::unique_ptr<DesktopResizer> screen_resizer_;
 
-    ScreenCapturer::Type preferred_capturer_  = ScreenCapturer::Type::DEFAULT;
+    ScreenCapturer::Type preferred_capturer_ = ScreenCapturer::Type::DEFAULT;
     ScreenCapturer::ScreenId last_screen_id_ = ScreenCapturer::kInvalidScreenId;
 
     bool vp8_supported_ = false;
@@ -172,37 +198,37 @@ private:
     QSize preferred_resolution_;
     quint64 frame_count_ = 0;
 
-    QTimer* capture_timer_ = nullptr;
+    ScopedQPointer<QTimer> capture_timer_;
     CaptureScheduler capture_scheduler_;
 
     std::unique_ptr<ScaleReducer> scale_reducer_;
     std::unique_ptr<VideoEncoder> video_encoder_;
     std::unique_ptr<CursorEncoder> cursor_encoder_;
-    std::unique_ptr<AudioEncoder> audio_encoder_;
 
     Serializer<proto::screen::HostToClient,
                proto::cursor::HostToClient,
                proto::video::HostToClient,
-               proto::audio::HostToClient,
-               proto::clipboard::HostToClient> outgoing_message_;
+               proto::clipboard::HostToClient> serializer_;
 
     bool is_paused_ = false;
-    bool is_mouse_locked_ = false;
-    bool is_keyboard_locked_ = false;
     bool is_cursor_position_ = false;
-    bool is_lock_at_disconnect_ = false;
 
-    QTimer* overflow_timer_ = nullptr;
+    // Last values published to InputWorker (sig_scaleFactorChanged / sig_screenInfoChanged).
+    double published_scale_x_ = 0.0;
+    double published_scale_y_ = 0.0;
+    ScreenCapturer::Type published_capture_type_ = ScreenCapturer::Type::DEFAULT;
+    QSize published_screen_size_;
+    QPoint published_screen_offset_;
 
     int pressure_score_ = 0; // 0..100
     int stable_seconds_ = 0;
     int cooldown_seconds_ = 0;
 
-    const int default_fps_ = 0;
-    const int min_fps_ = 0;
-    const int max_fps_ = 0;
+    int default_fps_ = 0;
+    int min_fps_ = 0;
+    int max_fps_ = 0;
 
-    Q_DISABLE_COPY_MOVE(DesktopAgent)
+    Q_DISABLE_COPY_MOVE(ScreenWorker)
 };
 
-#endif // HOST_DESKTOP_AGENT_H
+#endif // HOST_WORKERS_SCREEN_WORKER_H

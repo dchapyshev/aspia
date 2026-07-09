@@ -28,11 +28,11 @@
 #include "base/service_controller.h"
 #include "base/ipc/ipc_server.h"
 #include "base/threading/asio_event_dispatcher.h"
+#include "base/threading/worker_manager.h"
 #include "build/version.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/update_dialog.h"
 #include "host/database.h"
-#include "host/desktop_agent.h"
 #include "host/file_agent.h"
 #include "host/host_utils.h"
 #include "host/service.h"
@@ -44,17 +44,18 @@
 #include "host/ui/config_dialog.h"
 #include "host/ui/host_window.h"
 #include "host/ui/security_log_dialog.h"
+#include "host/workers/audio_worker.h"
+#include "host/workers/input_worker.h"
+#include "host/workers/ipc_worker.h"
+#include "host/workers/screen_worker.h"
 
 #if defined(Q_OS_WINDOWS)
-#include <Windows.h>
-
 #include "base/process_util.h"
 #include "base/win/desktop.h"
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX)
 #include <unistd.h>
-
 #include "base/linux/x11_headers.h"
 #endif // defined(Q_OS_LINUX)
 
@@ -126,10 +127,15 @@ int runAgent(int& argc, char* argv[], const char* session_type)
     // On macOS the desktop agent captures the screen on a Qt worker thread that needs a real CFRunLoop
     // (the capture/display APIs deliver on the run loop). Make Qt back its stock QThread dispatchers
     // with CoreFoundation so those threads get one; other platforms and agents simply ignore the
-    // variable. The main thread keeps AsioEventDispatcher below.
+    // variable.
     qputenv("QT_EVENT_DISPATCHER_CORE_FOUNDATION", "1");
 
-    CoreApplication::setEventDispatcher(new AsioEventDispatcher());
+    // The desktop agent is a coordinator: it does no I/O on the main thread (each worker runs its
+    // own), so the main thread keeps the default (Qt) event dispatcher. The file and terminal agents
+    // do their I/O on the main thread and need the asio dispatcher there.
+    if (!desktop)
+        CoreApplication::setEventDispatcher(new AsioEventDispatcher());
+
     CoreApplication::setApplicationVersion(ASPIA_VERSION_STRING);
     CoreApplication application(argc, argv);
 
@@ -137,24 +143,24 @@ int runAgent(int& argc, char* argv[], const char* session_type)
     {
         HostUtils::printDebugInfo(
             HostUtils::INCLUDE_VIDEO_ADAPTERS | HostUtils::INCLUDE_WINDOW_STATIONS);
+
+        WorkerManager worker_manager;
+        worker_manager.add(std::make_unique<IpcWorker>());
+        worker_manager.add(std::make_unique<ScreenWorker>());
+        worker_manager.add(std::make_unique<InputWorker>());
+        worker_manager.add(std::make_unique<AudioWorker>());
+        worker_manager.start();
+
+        return application.exec();
     }
-    else
-    {
-        HostUtils::printDebugInfo();
-    }
+
+    HostUtils::printDebugInfo();
 
     QString channel_id = qEnvironmentVariable(IpcServer::kChannelIdEnvVar);
     if (channel_id.isEmpty())
     {
         LOG(ERROR) << "Environment variable" << IpcServer::kChannelIdEnvVar << "is not set";
         return 1;
-    }
-
-    if (desktop)
-    {
-        DesktopAgent agent;
-        agent.start(channel_id);
-        return application.exec();
     }
 
     if (file)
