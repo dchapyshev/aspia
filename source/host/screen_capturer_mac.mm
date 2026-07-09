@@ -689,6 +689,11 @@ bool ScreenCapturerMac::startStream()
     config.showsCursor = NO;
     config.queueDepth = 5;
 
+    // Without this ScreenCaptureKit delivers at the display's native refresh (60/120 Hz), and the
+    // delegate copies each delivered frame even though the agent consumes at most 30 fps - wasting
+    // memory bandwidth that starves the encoder. Cap delivery at the remote-desktop maximum.
+    config.minimumFrameInterval = CMTimeMake(1, 30);
+
     SCStream* stream = [[SCStream alloc] initWithFilter:filter
                                           configuration:config
                                                delegate:impl_->output];
