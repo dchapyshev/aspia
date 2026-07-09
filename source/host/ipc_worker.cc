@@ -16,54 +16,31 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/threading/worker.h"
+#include "host/ipc_worker.h"
 
-#include "base/threading/worker_manager.h"
+#include "base/logging.h"
 
 //--------------------------------------------------------------------------------------------------
-Worker::Worker(Thread::EventDispatcher dispatcher)
-    : thread_(dispatcher)
+IpcWorker::IpcWorker()
+    : Worker(Thread::AsioDispatcher)
 {
-    moveToThread(&thread_);
-    connect(&thread_, &Thread::sig_beforeRunning, this, &Worker::onThreadStarted, Qt::DirectConnection);
-    connect(&thread_, &Thread::sig_afterRunning, this, &Worker::onThreadFinished, Qt::DirectConnection);
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-Worker::~Worker()
+IpcWorker::~IpcWorker()
 {
-    // Nothing
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void Worker::start(WorkerManager* manager)
+void IpcWorker::onStart()
 {
-    manager_ = manager;
-    thread_.start();
+    LOG(INFO) << "IPC worker started";
 }
 
 //--------------------------------------------------------------------------------------------------
-void Worker::stopSoon()
+void IpcWorker::onStop()
 {
-    thread_.quit();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Worker::onThreadStarted()
-{
-    onStart();
-
-    std::lock_guard lock(manager_->lock_);
-    ++manager_->running_;
-    manager_->condition_.notify_all();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Worker::onThreadFinished()
-{
-    onStop();
-
-    std::lock_guard lock(manager_->lock_);
-    --manager_->running_;
-    manager_->condition_.notify_all();
+    LOG(INFO) << "IPC worker stopped";
 }

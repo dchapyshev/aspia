@@ -16,54 +16,40 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/threading/worker.h"
+#include "host/screen_worker.h"
 
-#include "base/threading/worker_manager.h"
+#include "base/logging.h"
 
 //--------------------------------------------------------------------------------------------------
-Worker::Worker(Thread::EventDispatcher dispatcher)
-    : thread_(dispatcher)
+// macOS needs the Qt dispatcher: it backs the thread with a CFRunLoop (via
+// QT_EVENT_DISPATCHER_CORE_FOUNDATION) that the display reconfiguration callbacks require. Windows
+// needs the asio dispatcher instead: the Qt dispatcher pumps events through an invisible message
+// window, and SetThreadDesktop() fails for a thread that owns windows, which would break attaching
+// to the active input desktop (winlogon/UAC).
+ScreenWorker::ScreenWorker()
+#if defined(Q_OS_MACOS)
+    : Worker(Thread::QtDispatcher)
+#else
+    : Worker(Thread::AsioDispatcher)
+#endif
 {
-    moveToThread(&thread_);
-    connect(&thread_, &Thread::sig_beforeRunning, this, &Worker::onThreadStarted, Qt::DirectConnection);
-    connect(&thread_, &Thread::sig_afterRunning, this, &Worker::onThreadFinished, Qt::DirectConnection);
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-Worker::~Worker()
+ScreenWorker::~ScreenWorker()
 {
-    // Nothing
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void Worker::start(WorkerManager* manager)
+void ScreenWorker::onStart()
 {
-    manager_ = manager;
-    thread_.start();
+    LOG(INFO) << "Screen worker started";
 }
 
 //--------------------------------------------------------------------------------------------------
-void Worker::stopSoon()
+void ScreenWorker::onStop()
 {
-    thread_.quit();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Worker::onThreadStarted()
-{
-    onStart();
-
-    std::lock_guard lock(manager_->lock_);
-    ++manager_->running_;
-    manager_->condition_.notify_all();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Worker::onThreadFinished()
-{
-    onStop();
-
-    std::lock_guard lock(manager_->lock_);
-    --manager_->running_;
-    manager_->condition_.notify_all();
+    LOG(INFO) << "Screen worker stopped";
 }

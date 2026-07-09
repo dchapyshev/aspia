@@ -16,54 +16,37 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/threading/worker.h"
+#include "host/audio_worker.h"
 
-#include "base/threading/worker_manager.h"
+#include "base/logging.h"
 
 //--------------------------------------------------------------------------------------------------
-Worker::Worker(Thread::EventDispatcher dispatcher)
-    : thread_(dispatcher)
+// On macOS the Qt dispatcher backs the thread with a CFRunLoop (via
+// QT_EVENT_DISPATCHER_CORE_FOUNDATION); everywhere else asio is used.
+AudioWorker::AudioWorker()
+#if defined(Q_OS_MACOS)
+    : Worker(Thread::QtDispatcher)
+#else
+    : Worker(Thread::AsioDispatcher)
+#endif
 {
-    moveToThread(&thread_);
-    connect(&thread_, &Thread::sig_beforeRunning, this, &Worker::onThreadStarted, Qt::DirectConnection);
-    connect(&thread_, &Thread::sig_afterRunning, this, &Worker::onThreadFinished, Qt::DirectConnection);
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-Worker::~Worker()
+AudioWorker::~AudioWorker()
 {
-    // Nothing
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void Worker::start(WorkerManager* manager)
+void AudioWorker::onStart()
 {
-    manager_ = manager;
-    thread_.start();
+    LOG(INFO) << "Audio worker started";
 }
 
 //--------------------------------------------------------------------------------------------------
-void Worker::stopSoon()
+void AudioWorker::onStop()
 {
-    thread_.quit();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Worker::onThreadStarted()
-{
-    onStart();
-
-    std::lock_guard lock(manager_->lock_);
-    ++manager_->running_;
-    manager_->condition_.notify_all();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Worker::onThreadFinished()
-{
-    onStop();
-
-    std::lock_guard lock(manager_->lock_);
-    --manager_->running_;
-    manager_->condition_.notify_all();
+    LOG(INFO) << "Audio worker stopped";
 }

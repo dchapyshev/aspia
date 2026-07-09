@@ -30,7 +30,7 @@ class Worker : public QObject
     Q_OBJECT
 
 public:
-    Worker();
+    explicit Worker(Thread::EventDispatcher dispatcher = Thread::AsioDispatcher);
     ~Worker() override;
 
 protected:

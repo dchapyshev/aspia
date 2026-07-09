@@ -71,6 +71,8 @@ if (ANDROID)
 endif()
 
 list(APPEND SOURCE_HOST
+    audio_worker.cc
+    audio_worker.h
     capture_scheduler.cc
     capture_scheduler.h
     chat_client.cc
@@ -102,6 +104,10 @@ list(APPEND SOURCE_HOST
     host_utils.cc
     host_utils.h
     input_injector.h
+    input_worker.cc
+    input_worker.h
+    ipc_worker.cc
+    ipc_worker.h
     main.cc
     process_monitor.cc
     process_monitor.h
@@ -111,6 +117,8 @@ list(APPEND SOURCE_HOST
     screen_capturer.h
     screen_capturer_helper.cc
     screen_capturer_helper.h
+    screen_worker.cc
+    screen_worker.h
     service.cc
     service.h
     settings_util.cc
