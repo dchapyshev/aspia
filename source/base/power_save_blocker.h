@@ -46,6 +46,13 @@ private:
 
 #if defined(Q_OS_WINDOWS)
     ScopedHandle handle_;
+#elif defined(Q_OS_MACOS)
+    // IOPMAssertionID handles (0 = kIOPMNullAssertionID = not held). Two keep the display and the
+    // system awake for the session; the third is the one-shot user-activity assertion that wakes an
+    // already-asleep display.
+    quint32 display_assertion_ = 0;
+    quint32 system_assertion_ = 0;
+    quint32 activity_assertion_ = 0;
 #elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     // Persistent virtual pointer that keeps the display awake (and wakes it when already off) by feeding
     // net-zero motion through the kernel input subsystem. It must outlive the create-nudge call: a

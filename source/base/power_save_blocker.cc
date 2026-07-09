@@ -36,6 +36,10 @@
 #include "base/win/scoped_thread_desktop.h"
 #endif // defined(Q_OS_WINDOWS)
 
+#if defined(Q_OS_MACOS)
+#include <IOKit/pwr_mgt/IOPMLib.h>
+#endif // defined(Q_OS_MACOS)
+
 namespace {
 
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
@@ -226,6 +230,30 @@ PowerSaveBlocker::PowerSaveBlocker(QObject* parent)
         // device - a nudge sent before that is read by no one and lost.
         QTimer::singleShot(kInitialWakeDelayMs, this, &PowerSaveBlocker::onWakeUp);
     }
+#elif defined(Q_OS_MACOS)
+    const CFStringRef reason = CFSTR("Aspia session is active");
+
+    // Keep the display and the system from idle-sleeping for as long as this instance exists.
+    IOPMAssertionID display_id = kIOPMNullAssertionID;
+    if (IOPMAssertionCreateWithName(kIOPMAssertionTypePreventUserIdleDisplaySleep,
+                                    kIOPMAssertionLevelOn, reason, &display_id) == kIOReturnSuccess)
+        display_assertion_ = display_id;
+    else
+        LOG(ERROR) << "IOPMAssertionCreateWithName (display) failed";
+
+    IOPMAssertionID system_id = kIOPMNullAssertionID;
+    if (IOPMAssertionCreateWithName(kIOPMAssertionTypePreventUserIdleSystemSleep,
+                                    kIOPMAssertionLevelOn, reason, &system_id) == kIOReturnSuccess)
+        system_assertion_ = system_id;
+    else
+        LOG(ERROR) << "IOPMAssertionCreateWithName (system) failed";
+
+    // The assertions keep an on display on, but do not wake one that is already asleep. Declaring
+    // user activity wakes it (mirrors the synthetic input used on Windows and Linux).
+    IOPMAssertionID activity_id = kIOPMNullAssertionID;
+    if (IOPMAssertionDeclareUserActivity(reason, kIOPMUserActiveLocal, &activity_id) ==
+            kIOReturnSuccess)
+        activity_assertion_ = activity_id;
 #else
     NOTIMPLEMENTED();
 #endif // defined(Q_OS_*)
@@ -238,6 +266,13 @@ PowerSaveBlocker::~PowerSaveBlocker()
 
 #if defined(Q_OS_WINDOWS)
     deletePowerRequest(handle_.release());
+#elif defined(Q_OS_MACOS)
+    if (activity_assertion_)
+        IOPMAssertionRelease(activity_assertion_);
+    if (system_assertion_)
+        IOPMAssertionRelease(system_assertion_);
+    if (display_assertion_)
+        IOPMAssertionRelease(display_assertion_);
 #elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     // |wake_timer_| is a child object and is destroyed with this one.
     if (uinput_fd_ >= 0)

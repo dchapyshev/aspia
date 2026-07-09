@@ -52,6 +52,7 @@ class DesktopEnvironment;
 class DesktopResizer;
 class InputInjector;
 class IpcWorker;
+class PowerSaveBlocker;
 class QTimer;
 class ScaleReducer;
 class VideoEncoder;
@@ -179,6 +180,9 @@ private:
 
     ScopedQPointer<DesktopEnvironment> desktop_environment_;
     std::unique_ptr<DesktopResizer> screen_resizer_;
+
+    // Keeps the display and the system awake for the lifetime of the capture session.
+    ScopedQPointer<PowerSaveBlocker> power_save_blocker_;
 
     ScreenCapturer::Type preferred_capturer_ = ScreenCapturer::Type::DEFAULT;
     ScreenCapturer::ScreenId last_screen_id_ = ScreenCapturer::kInvalidScreenId;

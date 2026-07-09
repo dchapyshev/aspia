@@ -23,6 +23,7 @@
 
 #include "base/core_application.h"
 #include "base/logging.h"
+#include "base/power_save_blocker.h"
 #include "base/codec/cursor_encoder.h"
 #include "base/codec/scale_reducer.h"
 #include "base/codec/video_encoder.h"
@@ -480,6 +481,8 @@ void ScreenWorker::onStart()
     desktop_environment_ = DesktopEnvironment::create(this);
     scale_reducer_ = std::make_unique<ScaleReducer>(ScaleReducer::Quality::HIGH);
 
+    power_save_blocker_ = new PowerSaveBlocker(this);
+
     capture_timer_ = new QTimer(this);
     capture_timer_->setTimerType(Qt::PreciseTimer);
     connect(capture_timer_, &QTimer::timeout, this, &ScreenWorker::onCaptureScreen);
@@ -514,6 +517,7 @@ void ScreenWorker::onStop()
 
     capture_timer_.reset();
     desktop_environment_.reset();
+    power_save_blocker_.reset();
 
     screen_resizer_.reset();
     scale_reducer_.reset();
