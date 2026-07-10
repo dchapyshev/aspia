@@ -21,6 +21,8 @@ collect_sources(SOURCE_BASE_MAC
     app_nap_blocker.h
     keyboard_layout.mm
     keyboard_layout.h
+    login_utils.mm
+    login_utils.h
     permissions.mm
     permissions.h
     nsstring_conversions.mm
