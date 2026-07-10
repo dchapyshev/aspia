@@ -31,6 +31,7 @@
 
 #include "base/logging.h"
 #include "base/session_id.h"
+#include "base/shared_pointer.h"
 
 class IpcServer;
 class Location;
@@ -57,6 +58,9 @@ public:
 
     // PID of the peer process (the other end of the pipe). Returns 0 if unavailable.
     quint32 processId() const { return process_id_; }
+
+    // Effective user id of the peer process. Returns (quint32)-1 if unavailable, 0 on Windows.
+    quint32 userId() const { return user_id_; }
 
 signals:
     void sig_connected();
@@ -133,8 +137,11 @@ private:
     const quint32 instance_id_;
     SessionId session_id_ = kInvalidSessionId;
     quint32 process_id_ = 0;
+    quint32 user_id_ = static_cast<quint32>(-1);
     QString channel_name_;
     Stream stream_;
+
+    SharedPointer<bool> alive_guard_ { new bool(true) };
 
     bool is_connected_ = false;
     bool is_paused_ = true;

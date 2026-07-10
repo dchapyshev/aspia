@@ -39,6 +39,7 @@
 #include <asio/local/stream_protocol.hpp>
 
 #include <sys/stat.h>
+#include <unistd.h>
 #endif // defined(Q_OS_UNIX)
 
 namespace {
@@ -241,6 +242,10 @@ bool IpcServer::Listener::listen(asio::io_context& io_context,
         }
 
         std::string channel_file = channel_path.toLocal8Bit().toStdString();
+
+        // A stale socket file (e.g. a fixed-name channel left over from a previous run) makes bind()
+        // fail with EADDRINUSE; remove it first.
+        ::unlink(channel_file.c_str());
 
         asio::local::stream_protocol::endpoint endpoint(channel_file);
         acceptor_ = std::make_unique<asio::local::stream_protocol::acceptor>(io_context);

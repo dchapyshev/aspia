@@ -37,6 +37,7 @@
 #if defined(Q_OS_MACOS)
 #include <sys/socket.h>
 #include <sys/un.h>
+#include <unistd.h>
 #endif // defined(Q_OS_MACOS)
 
 namespace {
@@ -148,6 +149,32 @@ quint32 peerProcessId(PipeHandle pipe_handle, bool is_server_side)
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
+quint32 peerUserId(PipeHandle pipe_handle)
+{
+#if defined(Q_OS_LINUX)
+    struct ucred cred;
+    socklen_t len = sizeof(cred);
+    if (getsockopt(pipe_handle, SOL_SOCKET, SO_PEERCRED, &cred, &len) != 0)
+        return static_cast<quint32>(-1);
+
+    return static_cast<quint32>(cred.uid);
+#elif defined(Q_OS_MACOS)
+    uid_t uid = 0;
+    gid_t gid = 0;
+    if (getpeereid(pipe_handle, &uid, &gid) != 0)
+    {
+        PLOG(ERROR) << "getpeereid failed";
+        return static_cast<quint32>(-1);
+    }
+
+    return static_cast<quint32>(uid);
+#else
+    Q_UNUSED(pipe_handle)
+    return 0;
+#endif
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -165,6 +192,7 @@ IpcChannel::IpcChannel(const QString& channel_name, Stream&& stream, QObject* pa
       instance_id_(makeInstanceId()),
       session_id_(clientSessionId(stream.native_handle())),
       process_id_(peerProcessId(stream.native_handle(), /* is_server_side */ true)),
+      user_id_(peerUserId(stream.native_handle())),
       channel_name_(channel_name),
       stream_(std::move(stream)),
       is_connected_(true)
@@ -175,6 +203,7 @@ IpcChannel::IpcChannel(const QString& channel_name, Stream&& stream, QObject* pa
 //--------------------------------------------------------------------------------------------------
 IpcChannel::~IpcChannel()
 {
+    *alive_guard_ = false;
     disconnectFrom();
 }
 
@@ -376,10 +405,14 @@ void IpcChannel::doWriteHeader()
         return;
     }
 
+    auto guard = alive_guard_;
     asio::async_write(stream_,
                       asio::buffer(&write_header_, sizeof(write_header_)),
-                      [this](const std::error_code& error_code, size_t bytes_transferred)
+                      [this, guard](const std::error_code& error_code, size_t bytes_transferred)
     {
+        if (!*guard)
+            return;
+
         if (error_code)
         {
             if (error_code == asio::error::operation_aborted)
@@ -402,9 +435,13 @@ void IpcChannel::doWriteData()
     const QByteArray& buffer = write_queue_.front().data();
 
     // Send the buffer to the recipient.
+    auto guard = alive_guard_;
     asio::async_write(stream_, asio::buffer(buffer.data(), buffer.size()),
-                      [this](const std::error_code& error_code, size_t bytes_transferred)
+                      [this, guard](const std::error_code& error_code, size_t bytes_transferred)
     {
+        if (!*guard)
+            return;
+
         if (error_code)
         {
             if (error_code == asio::error::operation_aborted)
@@ -433,10 +470,14 @@ void IpcChannel::doReadHeader()
 {
     read_state_ = ReadState::READ_HEADER;
 
+    auto guard = alive_guard_;
     asio::async_read(stream_,
                      asio::buffer(&read_header_, sizeof(read_header_)),
-                     [this](const std::error_code& error_code, size_t bytes_transferred)
+                     [this, guard](const std::error_code& error_code, size_t bytes_transferred)
     {
+        if (!*guard)
+            return;
+
         if (error_code)
         {
             if (error_code == asio::error::operation_aborted)
@@ -478,10 +519,14 @@ void IpcChannel::doReadData()
 
     read_buffer_.resize(read_header_.message_size);
 
+    auto guard = alive_guard_;
     asio::async_read(stream_,
                      asio::buffer(read_buffer_.data(), read_buffer_.size()),
-                     [this](const std::error_code& error_code, size_t bytes_transferred)
+                     [this, guard](const std::error_code& error_code, size_t bytes_transferred)
     {
+        if (!*guard)
+            return;
+
         if (error_code)
         {
             if (error_code == asio::error::operation_aborted)
