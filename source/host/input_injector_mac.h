@@ -60,6 +60,10 @@ private:
     // flags can be recomputed for each event.
     QSet<quint32> pressed_keys_;
 
+    // The login window rejects CGEventPost, so the login-window agent falls back to the deprecated
+    // CGPost* injection APIs, which still work there.
+    bool use_legacy_ = false;
+
     Q_DISABLE_COPY(InputInjectorMac)
 };
 

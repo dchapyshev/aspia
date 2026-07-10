@@ -21,6 +21,7 @@
 #include <CoreGraphics/CoreGraphics.h>
 
 #include "base/logging.h"
+#include "base/mac/login_utils.h"
 #include "common/keycode_converter.h"
 #include "proto/desktop_input.h"
 
@@ -81,6 +82,35 @@ void postScrollEvent(int32_t lines)
     postEvent(event);
 }
 
+// The login window rejects CGEventPost (it is Accessibility-gated, and that grant cannot exist before
+// login), so the login-window agent falls back to the deprecated CGPost* family, which still injects
+// there - the same fallback other remote-desktop tools use.
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
+//--------------------------------------------------------------------------------------------------
+void postLegacyMouse(CGPoint position, quint32 mask)
+{
+    CGPostMouseEvent(position, true, 3,
+                     (mask & proto::input::MouseEvent::LEFT_BUTTON) != 0,
+                     (mask & proto::input::MouseEvent::RIGHT_BUTTON) != 0,
+                     (mask & proto::input::MouseEvent::MIDDLE_BUTTON) != 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+void postLegacyKey(int virtual_key, bool down)
+{
+    CGPostKeyboardEvent(0, static_cast<CGKeyCode>(virtual_key), down);
+}
+
+//--------------------------------------------------------------------------------------------------
+void postLegacyScroll(int32_t lines)
+{
+    CGPostScrollWheelEvent(1, lines);
+}
+
+#pragma clang diagnostic pop
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -88,6 +118,13 @@ InputInjectorMac::InputInjectorMac(QObject* parent)
     : InputInjector(Type::MAC, parent)
 {
     LOG(INFO) << "Ctor";
+
+    // At the login window CGEventPost is rejected (it is Accessibility-gated and no grant can exist
+    // pre-login), so fall back to the deprecated CGPost* family there. In a normal user session the
+    // modern path works and is kept.
+    use_legacy_ = LoginUtils::isActive();
+    if (use_legacy_)
+        LOG(INFO) << "Using legacy (CGPost*) event injection for the login window";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -155,6 +192,14 @@ void InputInjectorMac::injectKeyEvent(const proto::input::KeyEvent& event)
         return;
     }
 
+    if (use_legacy_)
+    {
+        // Modifiers arrive as their own key events, so posting each key independently keeps the state
+        // consistent without a separate flags call.
+        postLegacyKey(keycode, pressed);
+        return;
+    }
+
     CGEventRef key_event =
         CGEventCreateKeyboardEvent(nullptr, static_cast<CGKeyCode>(keycode), pressed);
     if (!key_event)
@@ -204,6 +249,25 @@ void InputInjectorMac::injectMouseEvent(const proto::input::MouseEvent& event)
     const quint32 mask = event.mask();
     const QPoint pos(event.x() + screen_offset_.x(), event.y() + screen_offset_.y());
     const CGPoint cg_pos = CGPointMake(pos.x(), pos.y());
+
+    if (use_legacy_)
+    {
+        // CGPostMouseEvent carries the position and button states together; the system derives moves,
+        // drags and clicks from the state changes.
+        if (pos != last_mouse_pos_ || mask != last_mouse_mask_)
+        {
+            postLegacyMouse(cg_pos, mask);
+            last_mouse_pos_ = pos;
+        }
+
+        if (mask & proto::input::MouseEvent::WHEEL_UP)
+            postLegacyScroll(1);
+        else if (mask & proto::input::MouseEvent::WHEEL_DOWN)
+            postLegacyScroll(-1);
+
+        last_mouse_mask_ = mask;
+        return;
+    }
 
     // A move must be classified as a drag while a button is held, otherwise applications ignore it
     // during selection.
