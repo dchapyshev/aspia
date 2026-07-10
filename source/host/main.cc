@@ -59,6 +59,10 @@
 #include "base/linux/x11_headers.h"
 #endif // defined(Q_OS_LINUX)
 
+#if defined(Q_OS_MACOS)
+#include "base/mac/login_utils.h"
+#endif // defined(Q_OS_MACOS)
+
 namespace {
 
 #if defined(Q_OS_WINDOWS)
@@ -230,6 +234,13 @@ int installService(QTextStream& out)
     }
 
     controller->setDescription(Service::kDescription);
+
+#if defined(Q_OS_MACOS)
+    // Additionally register the login-window agent so the host can capture the macOS login screen.
+    if (!LoginUtils::installAgent(QCoreApplication::applicationFilePath()))
+        out << "Warning: failed to install the login-window agent." << Qt::endl;
+#endif // defined(Q_OS_MACOS)
+
     out << "The service has been successfully installed." << Qt::endl;
     return 0;
 }
@@ -239,6 +250,10 @@ int removeService(QTextStream& out)
 {
     if (ServiceController::isRunning(Service::kName))
         stopService(out);
+
+#if defined(Q_OS_MACOS)
+    LoginUtils::removeAgent();
+#endif // defined(Q_OS_MACOS)
 
     if (!ServiceController::remove(Service::kName))
     {
