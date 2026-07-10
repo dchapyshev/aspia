@@ -19,6 +19,7 @@
 #ifndef HOST_SCREEN_CAPTURER_MAC_H
 #define HOST_SCREEN_CAPTURER_MAC_H
 
+#include <QDeadlineTimer>
 #include <QRect>
 
 #include <memory>
@@ -60,7 +61,9 @@ private:
     // list and restarts the stream if the captured display changed. Returns false when the captured
     // display is gone and the capturer has to be recreated.
     bool handleDisplayChange();
-    // (Re)starts the SCStream capturing |current_screen_id_|.
+    // (Re)starts the SCStream capturing |current_screen_id_|. Both the start and the stop are
+    // asynchronous and never block on the WindowServer: captureFrame() reports a temporary error
+    // while the start is pending and a permanent one when it fails.
     bool startStream();
     void stopStream();
 
@@ -70,6 +73,11 @@ private:
     QRect current_screen_rect_;
 
     ScreenId current_screen_id_ = kInvalidScreenId;
+
+    // Deadline for the asynchronous stream start; captureFrame() converts an expired pending start
+    // into a permanent error so the agent recreates the capturer. Only touched on the capture (Qt)
+    // thread.
+    QDeadlineTimer start_deadline_;
 
     // The frame handed out to the caller. captureFrame() copies the regions accumulated in the
     // delegate's back frame into it. Only touched on the capture (Qt) thread.

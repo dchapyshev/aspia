@@ -43,6 +43,17 @@
 
 @class AspiaStreamOutput;
 
+// Lifecycle of the capture stream. STOPPED -> STARTING on a (re)start request; the asynchronous
+// completion moves STARTING -> STREAMING or FAILED; an unexpected stop of the live stream also moves
+// to FAILED. captureFrame() maps STARTING to a temporary error and FAILED to a permanent one.
+enum class StreamState
+{
+    STOPPED,
+    STARTING,
+    STREAMING,
+    FAILED
+};
+
 //--------------------------------------------------------------------------------------------------
 struct ScreenCapturerMacImpl
 {
@@ -58,12 +69,17 @@ struct ScreenCapturerMacImpl
     // thread. Covers resolution, position, scale and plug/unplug changes.
     std::atomic<bool> displays_changed { false };
 
-    // Set by the SCStream delegate when the stream stops on its own (e.g. the captured display was
-    // disconnected). captureFrame() then reports a permanent error so the capturer is recreated.
-    std::atomic<bool> stream_stopped { false };
+    // The SCStream lifecycle. The stream is created and started asynchronously by AspiaStreamOutput
+    // on ScreenCaptureKit's queues while the Qt thread may select another screen or stop capture, so
+    // these fields are guarded by |stream_lock|. |start_generation| identifies the newest start
+    // request: completion handlers of superseded requests find a different value and discard their
+    // stream. |stream_state| is written under the lock and read lock-free by captureFrame().
+    std::mutex stream_lock;
+    SCStream* stream = nil;
+    quint64 start_generation = 0;
+    std::atomic<StreamState> stream_state { StreamState::STOPPED };
 
     // ScreenCaptureKit objects.
-    SCStream* stream = nil;
     AspiaStreamOutput* output = nil;
     dispatch_queue_t queue = nullptr;
 
@@ -214,12 +230,19 @@ std::unique_ptr<proto::audio::Packet> audioSampleToPacket(
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-// SCStream output/delegate. Copies each screen sample into the shared pending frame.
+// SCStream output/delegate. Copies each screen sample into the shared pending frame and owns the
+// asynchronous stream start chain (getShareableContent -> create SCStream -> startCapture), which
+// runs on ScreenCaptureKit's queues. |lock_| guards |impl_| against the capturer's destruction:
+// every callback holds it for its whole body, and invalidate() (called from the capturer's dtor)
+// nulls the pointer so late callbacks become no-ops.
 @interface AspiaStreamOutput : NSObject <SCStreamOutput, SCStreamDelegate>
 {
     ScreenCapturerMacImpl* impl_;
+    std::mutex lock_;
 }
 - (instancetype)initWithImpl:(ScreenCapturerMacImpl*)impl;
+- (void)invalidate;
+- (void)startStreamGeneration:(quint64)generation displayId:(CGDirectDisplayID)displayId;
 @end
 
 @implementation AspiaStreamOutput
@@ -234,10 +257,208 @@ std::unique_ptr<proto::audio::Packet> audioSampleToPacket(
 }
 
 //--------------------------------------------------------------------------------------------------
+- (void)invalidate
+{
+    // After this no callback touches the capturer's state. An in-flight callback finishes first:
+    // each one holds |lock_| for its whole body, so this call blocks until it is done.
+    std::lock_guard<std::mutex> lock(lock_);
+    impl_ = nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+- (void)startStreamGeneration:(quint64)generation displayId:(CGDirectDisplayID)displayId
+{
+    // Entirely asynchronous (as WebRTC does): fetching the shareable content can stall while a
+    // session transition settles, so the capture thread never waits on it. The chain continues in
+    // createStreamWithContent and the capturer reports a temporary error until the start completes.
+    [SCShareableContent getShareableContentExcludingDesktopWindows:NO
+                                               onScreenWindowsOnly:NO
+                                                 completionHandler:^(SCShareableContent* content,
+                                                                     NSError* error)
+    {
+        if (error)
+        {
+            LOG(ERROR) << "getShareableContent failed: " << error.localizedDescription.UTF8String;
+            [self markStartFailed:generation];
+            return;
+        }
+
+        [self createStreamWithContent:content generation:generation displayId:displayId];
+    }];
+}
+
+//--------------------------------------------------------------------------------------------------
+// Runs on ScreenCaptureKit's completion queue. Builds and starts the SCStream for |displayId|.
+- (void)createStreamWithContent:(SCShareableContent*)content
+                     generation:(quint64)generation
+                      displayId:(CGDirectDisplayID)displayId
+{
+    std::lock_guard<std::mutex> lock(lock_);
+    if (!impl_)
+        return;
+
+    {
+        std::lock_guard<std::mutex> stream_lock(impl_->stream_lock);
+        if (generation != impl_->start_generation)
+            return; // Superseded by a newer start or a stop.
+    }
+
+    SCDisplay* target = nil;
+    for (SCDisplay* display in content.displays)
+    {
+        if (display.displayID == displayId)
+        {
+            target = display;
+            break;
+        }
+    }
+
+    if (!target)
+    {
+        LOG(ERROR) << "Display not found for capture:" << displayId;
+        [self markStartFailedLocked:generation];
+        return;
+    }
+
+    SCContentFilter* filter =
+        [[SCContentFilter alloc] initWithDisplay:target excludingWindows:@[]];
+
+    SCStreamConfiguration* config = [[SCStreamConfiguration alloc] init];
+    config.width = static_cast<size_t>(target.frame.size.width);
+    config.height = static_cast<size_t>(target.frame.size.height);
+    config.pixelFormat = kCVPixelFormatType_32BGRA;
+    config.showsCursor = NO;
+    config.queueDepth = 5;
+
+    // Without this ScreenCaptureKit delivers at the display's native refresh (60/120 Hz), and the
+    // delegate copies each delivered frame even though the agent consumes at most 30 fps - wasting
+    // memory bandwidth that starves the encoder. Cap delivery at the remote-desktop maximum.
+    config.minimumFrameInterval = CMTimeMake(1, 30);
+
+    // Capture system audio on this same stream so screen and audio share a single permission prompt.
+    // Skip what this process plays itself, or the client audio played back on the host would loop
+    // back into the session.
+    config.capturesAudio = YES;
+    config.excludesCurrentProcessAudio = YES;
+    config.sampleRate = kAudioSampleRate;
+    config.channelCount = kAudioChannels;
+
+    SCStream* stream = [[SCStream alloc] initWithFilter:filter
+                                          configuration:config
+                                               delegate:self];
+    [filter release];
+    [config release];
+
+    NSError* output_error = nil;
+    if (![stream addStreamOutput:self
+                            type:SCStreamOutputTypeScreen
+              sampleHandlerQueue:impl_->queue
+                           error:&output_error])
+    {
+        LOG(ERROR) << "addStreamOutput failed: "
+                   << (output_error ? output_error.localizedDescription.UTF8String : "unknown");
+        [stream release];
+        [self markStartFailedLocked:generation];
+        return;
+    }
+
+    NSError* audio_error = nil;
+    if (![stream addStreamOutput:self
+                            type:SCStreamOutputTypeAudio
+              sampleHandlerQueue:impl_->audio_queue
+                           error:&audio_error])
+    {
+        // Audio is best-effort: a failure here (e.g. macOS < 13) must not prevent screen capture.
+        LOG(ERROR) << "addStreamOutput (audio) failed:"
+                   << (audio_error ? audio_error.localizedDescription.UTF8String : "unknown");
+    }
+
+    [stream startCaptureWithCompletionHandler:^(NSError* error)
+    {
+        [self streamDidStart:stream generation:generation error:error];
+    }];
+
+    std::lock_guard<std::mutex> stream_lock(impl_->stream_lock);
+    if (generation != impl_->start_generation)
+    {
+        // Superseded while starting: this stream is not the current one anymore, discard it.
+        [stream stopCaptureWithCompletionHandler:^(NSError* /* error */) { [stream release]; }];
+        return;
+    }
+
+    // Ownership passes to the impl; stopStream() releases it.
+    impl_->stream = stream;
+}
+
+//--------------------------------------------------------------------------------------------------
+- (void)markStartFailed:(quint64)generation
+{
+    std::lock_guard<std::mutex> lock(lock_);
+    if (!impl_)
+        return;
+
+    [self markStartFailedLocked:generation];
+}
+
+//--------------------------------------------------------------------------------------------------
+// Requires |lock_| held with a valid impl.
+- (void)markStartFailedLocked:(quint64)generation
+{
+    std::lock_guard<std::mutex> stream_lock(impl_->stream_lock);
+
+    // Only the current generation may fail the state; a stale start must not clobber a newer one.
+    if (generation == impl_->start_generation)
+        impl_->stream_state.store(StreamState::FAILED, std::memory_order_relaxed);
+}
+
+//--------------------------------------------------------------------------------------------------
+- (void)streamDidStart:(SCStream*)stream generation:(quint64)generation error:(NSError*)error
+{
+    std::lock_guard<std::mutex> lock(lock_);
+    if (!impl_)
+        return;
+
+    std::lock_guard<std::mutex> stream_lock(impl_->stream_lock);
+    if (generation != impl_->start_generation)
+        return; // Superseded; the stream has already been discarded.
+
+    if (error)
+    {
+        LOG(ERROR) << "startCapture failed: " << error.localizedDescription.UTF8String;
+
+        if (impl_->stream == stream)
+        {
+            [impl_->stream release];
+            impl_->stream = nil;
+        }
+
+        impl_->stream_state.store(StreamState::FAILED, std::memory_order_relaxed);
+        return;
+    }
+
+    // Only the pending start may move the state to STREAMING. During session transitions the stream
+    // can die (didStopWithError sets FAILED) before this "success" completion is delivered; a FAILED
+    // state must survive it, or a dead stream would be considered live and never recreated.
+    if (impl_->stream != stream ||
+        impl_->stream_state.load(std::memory_order_relaxed) != StreamState::STARTING)
+    {
+        LOG(WARNING) << "Late start completion ignored (stream already stopped or replaced)";
+        return;
+    }
+
+    LOG(INFO) << "Capture stream started";
+    impl_->stream_state.store(StreamState::STREAMING, std::memory_order_relaxed);
+}
+
+//--------------------------------------------------------------------------------------------------
 - (void)stream:(SCStream*)stream
     didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
                    ofType:(SCStreamOutputType)type
 {
+    std::lock_guard<std::mutex> impl_lock(lock_);
+    if (!impl_)
+        return;
+
     if (type == SCStreamOutputTypeAudio)
     {
         std::unique_ptr<proto::audio::Packet> packet = audioSampleToPacket(
@@ -341,41 +562,28 @@ std::unique_ptr<proto::audio::Packet> audioSampleToPacket(
 //--------------------------------------------------------------------------------------------------
 - (void)stream:(SCStream*)stream didStopWithError:(NSError*)error
 {
+    std::lock_guard<std::mutex> lock(lock_);
+    if (!impl_)
+        return;
+
     LOG(ERROR) << "SCStream stopped with error: "
                << (error ? error.localizedDescription.UTF8String : "unknown");
 
-    impl_->stream_stopped = true;
+    std::lock_guard<std::mutex> stream_lock(impl_->stream_lock);
+
+    // Only the live stream's death matters; a superseded stream dying during teardown is expected.
+    if (impl_->stream == stream)
+        impl_->stream_state.store(StreamState::FAILED, std::memory_order_relaxed);
 }
 
 @end
 
 namespace {
 
-//--------------------------------------------------------------------------------------------------
-// Synchronously fetches the current shareable content. Returns a retained object (caller releases),
-// or nil on failure.
-SCShareableContent* copyShareableContent()
-{
-    __block SCShareableContent* result = nil;
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-
-    [SCShareableContent getShareableContentExcludingDesktopWindows:NO
-                                               onScreenWindowsOnly:NO
-                                                 completionHandler:^(SCShareableContent* content,
-                                                                     NSError* error)
-    {
-        if (error)
-            LOG(ERROR) << "getShareableContent failed: " << error.localizedDescription.UTF8String;
-        else
-            result = [content retain];
-
-        dispatch_semaphore_signal(semaphore);
-    }];
-
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-    dispatch_release(semaphore);
-    return result;
-}
+// How long an asynchronous stream start may stay pending before captureFrame() reports a permanent
+// error. Generous: right after a login/logout transition ScreenCaptureKit can take seconds to
+// respond while the WindowServer settles.
+const qint64 kStreamStartTimeoutMs = 10000;
 
 //--------------------------------------------------------------------------------------------------
 QRect cgRectToQRect(CGRect rect)
@@ -425,6 +633,12 @@ ScreenCapturerMac::~ScreenCapturerMac()
 
     // Remove the callback first: it references impl_, which is destroyed below.
     CGDisplayRemoveReconfigurationCallback(displayReconfigurationCallback, impl_.get());
+
+    // Detach the output/delegate from the capturer before stopping: sample callbacks and start/stop
+    // completions may still be in flight on ScreenCaptureKit's queues, and after this they are
+    // no-ops. In-flight blocks hold their own references to the output, so releasing it below is
+    // safe - it is deallocated when the last of them finishes.
+    [impl_->output invalidate];
 
     stopStream();
 
@@ -548,7 +762,9 @@ bool ScreenCapturerMac::selectScreen(ScreenId screen_id)
         return false;
     }
 
-    if (screen_id == current_screen_id_ && impl_->stream)
+    const StreamState state = impl_->stream_state.load(std::memory_order_relaxed);
+    if (screen_id == current_screen_id_ &&
+        (state == StreamState::STARTING || state == StreamState::STREAMING))
         return true;
 
     current_screen_id_ = screen_id;
@@ -569,11 +785,30 @@ ScreenCapturer::ScreenId ScreenCapturerMac::currentScreen() const
 //--------------------------------------------------------------------------------------------------
 const Frame* ScreenCapturerMac::captureFrame(Error* error)
 {
-    if (impl_->stream_stopped.load(std::memory_order_relaxed))
+    const StreamState state = impl_->stream_state.load(std::memory_order_relaxed);
+    if (state == StreamState::STARTING)
     {
-        // The stream died on its own (e.g. the captured display was disconnected). Report a
-        // permanent error so the agent recreates the capturer against the current configuration.
-        LOG(ERROR) << "Capture stream is stopped";
+        // The asynchronous start has not completed yet: report a temporary error while it is
+        // pending. If the WindowServer stalls it beyond any reasonable time (login/logout
+        // transitions), report a permanent one so the agent recreates the capturer against the
+        // settled session.
+        if (start_deadline_.hasExpired())
+        {
+            LOG(ERROR) << "Capture stream start timed out";
+            *error = Error::PERMANENT;
+            return nullptr;
+        }
+
+        *error = Error::TEMPORARY;
+        return nullptr;
+    }
+
+    if (state != StreamState::STREAMING)
+    {
+        // The start failed or the live stream died on its own (e.g. the captured display was
+        // disconnected). Report a permanent error so the agent recreates the capturer against the
+        // current configuration.
+        LOG(ERROR) << "Capture stream is not running";
         *error = Error::PERMANENT;
         return nullptr;
     }
@@ -748,31 +983,37 @@ void ScreenCapturerMac::reset()
 //--------------------------------------------------------------------------------------------------
 bool ScreenCapturerMac::updateDisplays()
 {
-    SCShareableContent* content = copyShareableContent();
-    if (!content)
+    // Enumerated with CoreGraphics rather than SCShareableContent: these calls are synchronous but
+    // never block on the WindowServer readiness (RustDesk and WebRTC enumerate the same way), while
+    // the shareable-content fetch can stall during session transitions. ScreenCaptureKit is used
+    // only where it is unavoidable - to build the capture stream itself.
+    CGDirectDisplayID ids[16];
+    quint32 count = 0;
+    if (CGGetActiveDisplayList(16, ids, &count) != kCGErrorSuccess || count == 0)
+    {
+        LOG(ERROR) << "CGGetActiveDisplayList failed or no displays";
         return false;
+    }
+
+    const CGDirectDisplayID main_display = CGMainDisplayID();
 
     impl_->displays.clear();
     QRect desktop;
 
-    const CGDirectDisplayID main_display = CGMainDisplayID();
-
-    for (SCDisplay* display in content.displays)
+    for (quint32 i = 0; i < count; ++i)
     {
         ScreenCapturerMacImpl::Display info;
-        info.id = display.displayID;
-        info.frame = cgRectToQRect(display.frame);
-        info.primary = (display.displayID == main_display);
-        info.title = QStringLiteral("Display %1").arg(display.displayID);
+        info.id = ids[i];
+        info.frame = cgRectToQRect(CGDisplayBounds(ids[i]));
+        info.primary = (ids[i] == main_display);
+        info.title = QString("Display %1").arg(ids[i]);
 
         impl_->displays.push_back(info);
         desktop = desktop.united(info.frame);
     }
 
-    [content release];
-
     desktop_rect_ = desktop;
-    return !impl_->displays.empty();
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -821,131 +1062,53 @@ bool ScreenCapturerMac::startStream()
     if (current_screen_id_ == kInvalidScreenId)
         return false;
 
-    SCShareableContent* content = copyShareableContent();
-    if (!content)
-        return false;
-
-    SCDisplay* target = nil;
-    for (SCDisplay* display in content.displays)
+    quint64 generation = 0;
     {
-        if (static_cast<ScreenId>(display.displayID) == current_screen_id_)
-        {
-            target = display;
-            break;
-        }
+        std::lock_guard<std::mutex> lock(impl_->stream_lock);
+        generation = ++impl_->start_generation;
+        impl_->stream_state.store(StreamState::STARTING, std::memory_order_relaxed);
     }
 
-    if (!target)
-    {
-        LOG(ERROR) << "Display not found for capture:" << current_screen_id_;
-        [content release];
-        return false;
-    }
+    start_deadline_.setRemainingTime(kStreamStartTimeoutMs);
 
-    current_screen_rect_ = cgRectToQRect(target.frame);
-
-    SCContentFilter* filter =
-        [[SCContentFilter alloc] initWithDisplay:target excludingWindows:@[]];
-
-    SCStreamConfiguration* config = [[SCStreamConfiguration alloc] init];
-    config.width = static_cast<size_t>(current_screen_rect_.width());
-    config.height = static_cast<size_t>(current_screen_rect_.height());
-    config.pixelFormat = kCVPixelFormatType_32BGRA;
-    config.showsCursor = NO;
-    config.queueDepth = 5;
-
-    // Without this ScreenCaptureKit delivers at the display's native refresh (60/120 Hz), and the
-    // delegate copies each delivered frame even though the agent consumes at most 30 fps - wasting
-    // memory bandwidth that starves the encoder. Cap delivery at the remote-desktop maximum.
-    config.minimumFrameInterval = CMTimeMake(1, 30);
-
-    // Capture system audio on this same stream so screen and audio share a single permission prompt.
-    // Skip what this process plays itself, or the client audio played back on the host would loop
-    // back into the session.
-    config.capturesAudio = YES;
-    config.excludesCurrentProcessAudio = YES;
-    config.sampleRate = kAudioSampleRate;
-    config.channelCount = kAudioChannels;
-
-    SCStream* stream = [[SCStream alloc] initWithFilter:filter
-                                          configuration:config
-                                               delegate:impl_->output];
-    [filter release];
-    [config release];
-
-    NSError* output_error = nil;
-    if (![stream addStreamOutput:impl_->output
-                            type:SCStreamOutputTypeScreen
-              sampleHandlerQueue:impl_->queue
-                           error:&output_error])
-    {
-        LOG(ERROR) << "addStreamOutput failed: "
-                   << (output_error ? output_error.localizedDescription.UTF8String : "unknown");
-        [stream release];
-        [content release];
-        return false;
-    }
-
-    NSError* audio_error = nil;
-    if (![stream addStreamOutput:impl_->output
-                            type:SCStreamOutputTypeAudio
-              sampleHandlerQueue:impl_->audio_queue
-                           error:&audio_error])
-    {
-        // Audio is best-effort: a failure here (e.g. macOS < 13) must not prevent screen capture.
-        LOG(ERROR) << "addStreamOutput (audio) failed:"
-                   << (audio_error ? audio_error.localizedDescription.UTF8String : "unknown");
-    }
-
-    __block bool started = false;
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-
-    [stream startCaptureWithCompletionHandler:^(NSError* error)
-    {
-        if (error)
-            LOG(ERROR) << "startCapture failed: " << error.localizedDescription.UTF8String;
-        else
-            started = true;
-
-        dispatch_semaphore_signal(semaphore);
-    }];
-
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-    dispatch_release(semaphore);
-    [content release];
-
-    if (!started)
-    {
-        [stream release];
-        return false;
-    }
-
-    // A stop notification from a previous stream instance no longer applies.
-    impl_->stream_stopped = false;
-
-    impl_->stream = stream;
+    // The shareable-content fetch, the stream creation and the capture start all happen
+    // asynchronously on ScreenCaptureKit's queues (as WebRTC does): any of them can stall while a
+    // session transition settles, so nothing here may block the capture thread. captureFrame()
+    // reports a temporary error until the start completes.
+    [impl_->output startStreamGeneration:generation
+                               displayId:static_cast<CGDirectDisplayID>(current_screen_id_)];
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void ScreenCapturerMac::stopStream()
 {
-    if (!impl_->stream)
+    SCStream* stream = nil;
+    {
+        std::lock_guard<std::mutex> lock(impl_->stream_lock);
+
+        // Invalidates any start still in flight: its completion finds a newer generation and
+        // discards its stream.
+        ++impl_->start_generation;
+        impl_->stream_state.store(StreamState::STOPPED, std::memory_order_relaxed);
+
+        stream = impl_->stream;
+        impl_->stream = nil;
+    }
+
+    if (!stream)
         return;
 
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-
-    [impl_->stream stopCaptureWithCompletionHandler:^(NSError* error)
+    // Asynchronous: never block on the WindowServer. The copied block keeps |stream| and |output|
+    // (which the stream may still call into) alive until the stop completes, then the last stream
+    // reference is dropped.
+    AspiaStreamOutput* output = impl_->output;
+    [stream stopCaptureWithCompletionHandler:^(NSError* error)
     {
         if (error)
             LOG(ERROR) << "stopCapture failed: " << error.localizedDescription.UTF8String;
 
-        dispatch_semaphore_signal(semaphore);
+        (void)output;
+        [stream release];
     }];
-
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-    dispatch_release(semaphore);
-
-    [impl_->stream release];
-    impl_->stream = nil;
 }
