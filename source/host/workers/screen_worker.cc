@@ -281,6 +281,9 @@ void ScreenWorker::onConfigure(
 
     is_cursor_position_ = config.cursor_position();
 
+    if (!power_save_blocker_)
+        power_save_blocker_ = new PowerSaveBlocker(this);
+
     capture_timer_->start(0);
 }
 
@@ -289,6 +292,8 @@ void ScreenWorker::onStopCapture()
 {
     LOG(INFO) << "Stop capture";
     capture_timer_->stop();
+
+    power_save_blocker_.reset();
 
 #if defined(Q_OS_MACOS)
     // Release the capturer so no SCStream stays alive while the persistent agent idles with no client -
@@ -516,8 +521,6 @@ void ScreenWorker::onStart()
 
     desktop_environment_ = DesktopEnvironment::create(this);
     scale_reducer_ = std::make_unique<ScaleReducer>(ScaleReducer::Quality::HIGH);
-
-    power_save_blocker_ = new PowerSaveBlocker(this);
 
     capture_timer_ = new QTimer(this);
     capture_timer_->setTimerType(Qt::PreciseTimer);
