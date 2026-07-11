@@ -61,6 +61,7 @@
 
 #if defined(Q_OS_MACOS)
 #include "base/mac/login_utils.h"
+#include "host/screen_capturer_mac.h"
 #endif // defined(Q_OS_MACOS)
 
 namespace {
@@ -145,6 +146,14 @@ int runAgent(int& argc, char* argv[], const char* agent_type)
 
     if (desktop)
     {
+#if defined(Q_OS_MACOS)
+        if (!ScreenCapturerMac::waitForDisplays())
+        {
+            LOG(ERROR) << "No online displays; exiting so launchd can restart the agent";
+            return 1;
+        }
+#endif // defined(Q_OS_MACOS)
+
         HostUtils::printDebugInfo(
             HostUtils::INCLUDE_VIDEO_ADAPTERS | HostUtils::INCLUDE_WINDOW_STATIONS);
 

@@ -18,6 +18,8 @@
 
 #include "host/screen_capturer_mac.h"
 
+#include <QThread>
+
 #import <AppKit/AppKit.h>
 #import <ScreenCaptureKit/ScreenCaptureKit.h>
 #import <AudioToolbox/AudioToolbox.h>
@@ -695,6 +697,26 @@ ScreenCapturerMac* ScreenCapturerMac::create(QObject* parent)
     }
 
     return self.release();
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool ScreenCapturerMac::waitForDisplays()
+{
+    static const int kRetryCount = 20;
+    static const int kRetryDelayMs = 250;
+
+    for (int i = 0; i < kRetryCount; ++i)
+    {
+        CGDirectDisplayID display;
+        quint32 count = 0;
+        if (CGGetOnlineDisplayList(1, &display, &count) == kCGErrorSuccess && count > 0)
+            return true;
+
+        QThread::msleep(kRetryDelayMs);
+    }
+
+    return false;
 }
 
 //--------------------------------------------------------------------------------------------------

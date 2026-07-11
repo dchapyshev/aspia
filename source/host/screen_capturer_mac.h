@@ -38,6 +38,13 @@ public:
 
     static ScreenCapturerMac* create(QObject* parent = nullptr);
 
+    // Blocks until the WindowServer reports at least one online display, or the timeout expires. A
+    // desktop agent launched at boot (login window) can start before the WindowServer is ready; the
+    // first CoreGraphics call then binds a dead connection that never sees a display for the life of
+    // the process. The agent calls this once at startup and, on failure, exits so launchd restarts it
+    // against a ready WindowServer. Returns true if a display appeared.
+    static bool waitForDisplays();
+
     // ScreenCapturer implementation.
     int screenCount() final;
     bool screenList(ScreenList* screens) final;
