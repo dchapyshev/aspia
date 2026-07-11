@@ -120,9 +120,16 @@ QString DesktopClient::attach()
 
     QString channel_name = IpcServer::createUniqueId();
 
-    // The desktop agent always runs as SYSTEM/root (launched by the service), so the data channel is
+#if defined(Q_OS_MACOS)
+    // The desktop agent is a launchd agent loaded into the active GUI session; in a user's Aqua session
+    // it runs as that user, so the data channel must be reachable by non-root. The peer is verified by
+    // executable path in onIpcNewConnection().
+    const IpcServer::AccessMode access_mode = IpcServer::AccessMode::INTERACTIVE_USER;
+#else
+    // The desktop agent runs as SYSTEM/root (launched by the service), so the data channel is
     // restricted to system processes.
     const IpcServer::AccessMode access_mode = IpcServer::AccessMode::SYSTEM_ONLY;
+#endif // defined(Q_OS_MACOS)
 
     if (!ipc_server_->start(channel_name, access_mode))
     {
@@ -294,7 +301,7 @@ void DesktopClient::onIpcNewConnection()
     ipc_channel_->setParent(this);
 
     // Verify the connecting peer's executable is exactly the agent binary we shipped (this very
-    // aspia_host binary, run with a "--session-type" switch).
+    // aspia_host binary, run with a "--agent" switch).
     const quint32 client_pid = ipc_channel_->processId();
     const QString expected_path =
         QFileInfo(QCoreApplication::applicationFilePath()).canonicalFilePath();

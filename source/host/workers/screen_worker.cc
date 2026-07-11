@@ -289,6 +289,19 @@ void ScreenWorker::onStopCapture()
 {
     LOG(INFO) << "Stop capture";
     capture_timer_->stop();
+
+#if defined(Q_OS_MACOS)
+    // Release the capturer so no SCStream stays alive while the persistent agent idles with no client -
+    // otherwise the system "screen is being recorded" indicator would stay on. It is recreated on the
+    // next client (onConfigure starts the timer, onCaptureScreen builds a fresh capturer).
+    input_injector_.reset();
+    screen_capturer_.reset();
+
+    published_capture_type_ = ScreenCapturer::Type::UNKNOWN;
+    published_screen_size_ = QSize();
+    published_screen_offset_ = QPoint();
+    emit sig_screenInfoChanged(ScreenCapturer::Type::UNKNOWN, QSize(), QPoint());
+#endif // defined(Q_OS_MACOS)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -516,7 +529,13 @@ void ScreenWorker::onStart()
     setupLinuxCapture();
 #endif // defined(Q_OS_LINUX)
 
+#if !defined(Q_OS_MACOS)
+    // On Windows and Linux the agent is spawned per session while a client is attached, so capture may
+    // start right away. On macOS the agent is a persistent launchd agent that also runs with no client;
+    // creating the capturer here would keep an idle SCStream alive and the system "screen is being
+    // recorded" indicator on. Defer it to onConfigure/onCaptureScreen (first client) instead.
     selectCapturer(ScreenCapturer::Error::SUCCEEDED);
+#endif // !defined(Q_OS_MACOS)
 
     capture_scheduler_.setFps(default_fps_);
 }
@@ -569,6 +588,10 @@ void ScreenWorker::onCaptureScreen()
             if (!screen_capturer_)
                 registerCaptureFailure();
         }
+#elif defined(Q_OS_MACOS)
+        // Creation can fail transiently while the GUI session is still coming up (the agent is reloaded
+        // by launchd on each session switch); retry so the client is not left on a stale frame.
+        selectCapturer(ScreenCapturer::Error::TEMPORARY);
 #endif // defined(Q_OS_LINUX)
 
         // The capturer is created asynchronously (on Wayland only after the desktop portal session is
@@ -597,7 +620,7 @@ void ScreenWorker::onCaptureScreen()
     int count = screen_capturer_->screenCount();
     if (screen_count_ != count)
     {
-        LOG(INFO) << "Screen count changed from" << count << "to" << screen_count_;
+        LOG(INFO) << "Screen count changed from" << screen_count_ << "to" << count;
 
         screen_resizer_.reset();
 #if defined(Q_OS_LINUX)
@@ -1238,7 +1261,20 @@ void ScreenWorker::selectScreen(ScreenCapturer::ScreenId screen_id, const QSize&
         if (!screen_capturer_->selectScreen(screen_id))
         {
             LOG(ERROR) << "ScreenCapturer::selectScreen failed";
-            return;
+
+            // The requested screen may no longer exist - its id can change across a login/logout
+            // transition. Fall back to the current default screen instead of leaving capture black;
+            // sendCurrentScreenList() below republishes the updated selection to the client.
+            const ScreenCapturer::ScreenId fallback_id = defaultScreen();
+            if (fallback_id == ScreenCapturer::kInvalidScreenId ||
+                !screen_capturer_->selectScreen(fallback_id))
+            {
+                LOG(ERROR) << "Fallback screen selection failed";
+                return;
+            }
+
+            LOG(WARNING) << "Requested screen" << screen_id << "unavailable, selected" << fallback_id;
+            screen_id = fallback_id;
         }
 
         last_screen_id_ = screen_id;

@@ -108,19 +108,19 @@ void setDpiAwareness()
 #endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
-// Runs the host as a headless session agent; |session_type| is the "--session-type" value straight
-// from the command line ("desktop", "file" or "terminal"). The agent is the same aspia_host binary as
-// the GUI, so it presents the same code identity to the OS - on macOS that is what lets it inherit the
-// app's privacy (TCC) grants instead of being a separate app. Returns the process exit code.
-int runAgent(int& argc, char* argv[], const char* session_type)
+// Runs the host as a headless agent; |agent_type| is the "--agent" value straight from the command
+// line ("desktop", "file" or "terminal"). The agent is the same aspia_host binary as the GUI, so it
+// presents the same code identity to the OS - on macOS that is what lets it inherit the app's privacy
+// (TCC) grants instead of being a separate app. Returns the process exit code.
+int runAgent(int& argc, char* argv[], const char* agent_type)
 {
-    const bool desktop = qstrcmp(session_type, "desktop") == 0;
-    const bool file = qstrcmp(session_type, "file") == 0;
-    const bool terminal = qstrcmp(session_type, "terminal") == 0;
+    const bool desktop = qstrcmp(agent_type, "desktop") == 0;
+    const bool file = qstrcmp(agent_type, "file") == 0;
+    const bool terminal = qstrcmp(agent_type, "terminal") == 0;
 
     if (!desktop && !file && !terminal)
     {
-        LOG(ERROR) << "Unknown --session-type value:" << session_type;
+        LOG(ERROR) << "Unknown --agent value:" << agent_type;
         return 1;
     }
 
@@ -430,7 +430,7 @@ int main(int argc, char* argv[])
             return runServiceCommand(argc, argv, startService);
         if (qstrcmp(argv[i], "--stop") == 0)
             return runServiceCommand(argc, argv, stopService);
-        if (qstrcmp(argv[i], "--session-type") == 0 && i + 1 < argc)
+        if (qstrcmp(argv[i], "--agent") == 0 && i + 1 < argc)
             return runAgent(argc, argv, argv[i + 1]);
     }
 

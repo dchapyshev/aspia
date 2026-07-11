@@ -915,7 +915,7 @@ void UserSession::attach(const Location& location, AttachReason reason, SessionI
     // "-n" forces a new instance: the persistent desktop agent (the same bundle, always running) is
     // otherwise the instance a bare "open" would reuse, so the GUI would never appear. Kill any stale
     // "--hidden" GUI first so the forced-new launch does not pile up duplicates on attach retries (the
-    // desktop agent runs with "--session-type", so it is not matched).
+    // desktop agent runs with "--agent", so it is not matched).
     QString command = QString(
         "launchctl asuser %1 sudo -u %2 sh -c "
         "'pkill -f \"aspia_host --hidden\"; open -n \"%3\" --args --hidden'")

@@ -30,11 +30,6 @@ public:
     // LoginWindow agent (installAgent), not a per-user agent.
     static const SessionId kSessionId;
 
-    // The fixed IPC channel name the login-window/user desktop agent and the service rendezvous on.
-    // The per-user desktop agent is spawned by the service with a unique channel, but the login-window
-    // agent is launched by launchd, so both sides must agree on a constant name.
-    static constexpr char kChannelId[] = "org.aspia.host-loginwindow";
-
     // Returns true if the local console currently shows the macOS login window (no user logged in).
     static bool isActive();
 

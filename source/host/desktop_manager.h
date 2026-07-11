@@ -79,7 +79,7 @@ private slots:
 private:
     void attach(const Location& location, SessionId session_id);
     void dettach(const Location& location);
-    bool startProcess(const QString& ipc_channel_name);
+    bool startProcess();
     void sendMessage(const QByteArray& buffer);
 
     State state_ = State::DETTACHED;

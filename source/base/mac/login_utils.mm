@@ -22,7 +22,6 @@
 #import <SystemConfiguration/SystemConfiguration.h>
 
 #include "base/logging.h"
-#include "base/ipc/ipc_server.h"
 
 namespace {
 
@@ -68,14 +67,14 @@ bool LoginUtils::installAgent(const QString& app_path)
     // session is active - the login window (as root) or a logged-in user's Aqua session (as that user)
     // - always with a proper WindowServer association, and reloads it on every session switch. This is
     // what lets capture follow the login screen and user sessions without the service spawning anything
-    // itself. It rendezvous with the service on the fixed channel, retrying until the service serves it.
+    // itself. It rendezvous with the service on the fixed, compiled-in channel (so no channel name is
+    // passed here), retrying until the service serves it (the retry is keyed off the macOS platform in
+    // IpcWorker, not passed here).
     NSDictionary* plist = @{
         @"Label" : @(kAgentLabel),
         @"LimitLoadToSessionType" : @[ @"Aqua", @"LoginWindow" ],
-        @"ProgramArguments" : @[ toNSString(app_path), @"--session-type", @"desktop" ],
+        @"ProgramArguments" : @[ toNSString(app_path), @"--agent", @"desktop" ],
         @"EnvironmentVariables" : @{
-            @(IpcServer::kChannelIdEnvVar) : @(LoginUtils::kChannelId),
-            @"ASPIA_IPC_RETRY" : @"1",
             @"ASPIA_LOG_TO_FILE" : @"1"
         },
         @"RunAtLoad" : @YES,

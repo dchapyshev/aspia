@@ -93,6 +93,8 @@ list(APPEND SOURCE_HOST
     file_agent.h
     file_client.cc
     file_client.h
+    host_constants.cc
+    host_constants.h
     host_storage.cc
     host_storage.h
     host_user_list.cc

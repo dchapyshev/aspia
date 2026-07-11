@@ -149,32 +149,6 @@ quint32 peerProcessId(PipeHandle pipe_handle, bool is_server_side)
 #endif
 }
 
-//--------------------------------------------------------------------------------------------------
-quint32 peerUserId(PipeHandle pipe_handle)
-{
-#if defined(Q_OS_LINUX)
-    struct ucred cred;
-    socklen_t len = sizeof(cred);
-    if (getsockopt(pipe_handle, SOL_SOCKET, SO_PEERCRED, &cred, &len) != 0)
-        return static_cast<quint32>(-1);
-
-    return static_cast<quint32>(cred.uid);
-#elif defined(Q_OS_MACOS)
-    uid_t uid = 0;
-    gid_t gid = 0;
-    if (getpeereid(pipe_handle, &uid, &gid) != 0)
-    {
-        PLOG(ERROR) << "getpeereid failed";
-        return static_cast<quint32>(-1);
-    }
-
-    return static_cast<quint32>(uid);
-#else
-    Q_UNUSED(pipe_handle)
-    return 0;
-#endif
-}
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -192,7 +166,6 @@ IpcChannel::IpcChannel(const QString& channel_name, Stream&& stream, QObject* pa
       instance_id_(makeInstanceId()),
       session_id_(clientSessionId(stream.native_handle())),
       process_id_(peerProcessId(stream.native_handle(), /* is_server_side */ true)),
-      user_id_(peerUserId(stream.native_handle())),
       channel_name_(channel_name),
       stream_(std::move(stream)),
       is_connected_(true)

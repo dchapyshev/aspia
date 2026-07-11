@@ -117,6 +117,7 @@ private slots:
 
 private:
     void startClient(const QString& ipc_channel_name);
+    void connectToService();
 
     ScopedQPointer<IpcChannel> ipc_channel_;
     QList<DesktopAgentClient*> clients_;

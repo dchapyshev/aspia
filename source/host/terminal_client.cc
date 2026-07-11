@@ -184,7 +184,7 @@ bool launchAgentAsUser(const QString& user_name, const QString& agent_path, cons
         }
 
         char* argv[] = { const_cast<char*>(agent_path_utf8.c_str()),
-                         const_cast<char*>("--session-type"),
+                         const_cast<char*>("--agent"),
                          const_cast<char*>("terminal"),
                          nullptr };
         execv(agent_path_utf8.c_str(), argv);
@@ -406,7 +406,7 @@ void TerminalClient::onIpcNewConnection()
     const quint32 client_pid = ipc_channel_->processId();
 
     // Verify the connecting peer's executable is exactly the agent binary we shipped (this very
-    // aspia_host binary, run with a "--session-type" switch).
+    // aspia_host binary, run with a "--agent" switch).
     const QString expected_path =
         QFileInfo(QCoreApplication::applicationFilePath()).canonicalFilePath();
     const QString actual_path = QFileInfo(ProcessUtil::filePath(client_pid)).canonicalFilePath();
@@ -570,7 +570,7 @@ bool TerminalClient::launchAgent(
 
     CLOG(INFO) << "Starting terminal agent process";
     const QString command_line =
-        QString("\"%1\" --session-type terminal").arg(
+        QString("\"%1\" --agent terminal").arg(
             QDir::toNativeSeparators(QCoreApplication::applicationFilePath()));
     if (!startProcessWithToken(user_token, command_line, ipc_channel_id))
     {

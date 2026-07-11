@@ -108,7 +108,7 @@ bool launchAgentAsUser(const QString& user_name, const QString& agent_path, cons
         }
 
         char* argv[] = { const_cast<char*>(agent_path_utf8.c_str()),
-                         const_cast<char*>("--session-type"),
+                         const_cast<char*>("--agent"),
                          const_cast<char*>("file"),
                          nullptr };
         execv(agent_path_utf8.c_str(), argv);
@@ -289,7 +289,7 @@ void FileClient::onIpcNewConnection()
     const quint32 client_pid = ipc_channel_->processId();
 
     // Verify the connecting peer's executable is exactly the agent binary we shipped (this very
-    // aspia_host binary, run with a "--session-type" switch).
+    // aspia_host binary, run with a "--agent" switch).
     const QString expected_path =
         QFileInfo(QCoreApplication::applicationFilePath()).canonicalFilePath();
     const QString actual_path = QFileInfo(ProcessUtil::filePath(client_pid)).canonicalFilePath();
@@ -402,7 +402,7 @@ void FileClient::onStart()
 
     CLOG(INFO) << "Starting agent process";
     const QString command_line =
-        QString("\"%1\" --session-type file").arg(
+        QString("\"%1\" --agent file").arg(
             QDir::toNativeSeparators(QCoreApplication::applicationFilePath()));
     if (!startProcessWithToken(session_token, command_line, ipc_channel_id))
     {

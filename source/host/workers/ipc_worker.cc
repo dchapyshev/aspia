@@ -26,8 +26,8 @@
 #include "base/logging.h"
 #include "base/power_controller.h"
 #include "base/ipc/ipc_channel.h"
-#include "base/ipc/ipc_server.h"
 #include "host/desktop_agent_client.h"
+#include "host/host_constants.h"
 
 //--------------------------------------------------------------------------------------------------
 IpcWorker::IpcWorker()
@@ -100,21 +100,7 @@ void IpcWorker::onStart()
     overflow_timer_->setInterval(std::chrono::milliseconds(1000));
     connect(overflow_timer_, &QTimer::timeout, this, &IpcWorker::onOverflowCheck);
 
-    ipc_channel_ = new IpcChannel(this);
-    connect(ipc_channel_, &IpcChannel::sig_connected, this, &IpcWorker::onIpcConnected);
-    connect(ipc_channel_, &IpcChannel::sig_disconnected, this, &IpcWorker::onIpcDisconnected);
-    connect(ipc_channel_, &IpcChannel::sig_errorOccurred, this, &IpcWorker::onIpcErrorOccurred);
-    connect(ipc_channel_, &IpcChannel::sig_messageReceived, this, &IpcWorker::onIpcMessageReceived);
-
-    QString channel_id = qEnvironmentVariable(IpcServer::kChannelIdEnvVar);
-    if (channel_id.isEmpty())
-    {
-        LOG(ERROR) << "Environment variable" << IpcServer::kChannelIdEnvVar << "is not set";
-        CoreApplication::quit();
-        return;
-    }
-
-    ipc_channel_->connectTo(channel_id);
+    connectToService();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -143,15 +129,54 @@ void IpcWorker::onIpcConnected()
 //--------------------------------------------------------------------------------------------------
 void IpcWorker::onIpcDisconnected()
 {
+#if defined(Q_OS_MACOS)
+    // The macOS desktop agent is a persistent launchd agent: the service opens and closes the control
+    // channel as clients come and go, so a dropped channel is normal - reset and reconnect instead of
+    // exiting (which would make KeepAlive respawn the process in a loop). When this agent's session is
+    // going away the next session's agent supersedes it on the service (newest connection wins), so
+    // this one is harmlessly dropped here and the OS unloads it shortly after.
+    LOG(INFO) << "Control channel dropped; resetting and reconnecting";
+
+    for (auto* client : std::as_const(clients_))
+    {
+        client->disconnect();
+        client->deleteLater();
+    }
+    clients_.clear();
+
+    overflow_timer_->stop();
+    emit sig_stopCapture();
+
+    QTimer::singleShot(std::chrono::seconds(1), this, [this]()
+    {
+        ipc_channel_.reset();
+        connectToService();
+    });
+#else
+    // On Windows and Linux the service spawns the agent per attach, so a dropped channel means the
+    // session is gone: terminate instead of reconnecting.
     LOG(ERROR) << "IPC channel is disconnected. Terminate application";
     CoreApplication::quit();
+#endif // defined(Q_OS_MACOS)
 }
 
 //--------------------------------------------------------------------------------------------------
 void IpcWorker::onIpcErrorOccurred()
 {
+#if defined(Q_OS_MACOS)
+    // The macOS desktop agent is launched by launchd, possibly before the service opens the control
+    // channel. Recreate the channel and retry (deferred, so the errored channel is not deleted
+    // mid-signal) until the service is serving.
+    LOG(INFO) << "IPC server not available yet, will retry";
+    QTimer::singleShot(std::chrono::seconds(1), this, [this]()
+    {
+        ipc_channel_.reset();
+        connectToService();
+    });
+#else
     LOG(ERROR) << "Error when connection to IPC server. Terminate application";
     CoreApplication::quit();
+#endif // defined(Q_OS_MACOS)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -360,4 +385,16 @@ void IpcWorker::startClient(const QString& ipc_channel_name)
 
     LOG(INFO) << "Starting client...";
     client->start(ipc_channel_name);
+}
+
+//--------------------------------------------------------------------------------------------------
+void IpcWorker::connectToService()
+{
+    ipc_channel_ = new IpcChannel(this);
+    connect(ipc_channel_, &IpcChannel::sig_connected, this, &IpcWorker::onIpcConnected);
+    connect(ipc_channel_, &IpcChannel::sig_disconnected, this, &IpcWorker::onIpcDisconnected);
+    connect(ipc_channel_, &IpcChannel::sig_errorOccurred, this, &IpcWorker::onIpcErrorOccurred);
+    connect(ipc_channel_, &IpcChannel::sig_messageReceived, this, &IpcWorker::onIpcMessageReceived);
+
+    ipc_channel_->connectTo(kDesktopAgentChannelId);
 }
