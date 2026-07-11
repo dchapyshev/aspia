@@ -36,6 +36,8 @@
 #include <netinet/in.h>
 #include <netinet/tcp_fsm.h>
 
+#include <cstddef>
+#include <cstring>
 #include <vector>
 
 namespace {
@@ -48,6 +50,32 @@ QString sockaddrToIpv4(const sockaddr* address)
 
     const auto* in = reinterpret_cast<const sockaddr_in*>(address);
     return QHostAddress(qFromBigEndian<quint32>(in->sin_addr.s_addr)).toString();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Decodes the netmask from a routing-socket message. Unlike a normal address it is stored as a
+// compressed sockaddr: sa_family is unset and sa_len covers only the significant leading octets
+// (trailing zero octets are omitted), so sockaddrToIpv4() cannot read it. A length of zero means
+// 0.0.0.0. Reconstructs the full 4-byte mask from the bytes at the sockaddr_in::sin_addr offset.
+QString routeNetmaskToIpv4(const sockaddr* address)
+{
+    quint8 mask[4] = { 0, 0, 0, 0 };
+
+    if (address)
+    {
+        const size_t offset = offsetof(sockaddr_in, sin_addr);
+        if (address->sa_len > offset)
+        {
+            size_t present = address->sa_len - offset;
+            if (present > sizeof(mask))
+                present = sizeof(mask);
+            memcpy(mask, reinterpret_cast<const char*>(address) + offset, present);
+        }
+    }
+
+    const quint32 value = (quint32(mask[0]) << 24) | (quint32(mask[1]) << 16) |
+                          (quint32(mask[2]) << 8) | quint32(mask[3]);
+    return QHostAddress(value).toString();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -214,8 +242,13 @@ QList<NetUtils::Route> NetUtils::routeTable()
         if (!table[RTAX_DST] || table[RTAX_DST]->sa_family != AF_INET)
             continue;
 
+        // Host routes carry no netmask sockaddr; their mask is implicitly /32. Otherwise decode the
+        // compressed netmask sockaddr (a missing one on a network route means 0.0.0.0).
+        const QString mask = (message->rtm_flags & RTF_HOST) ?
+            QString("255.255.255.255") : routeNetmaskToIpv4(table[RTAX_NETMASK]);
+
         // Metric is not exposed by the routing socket, so it stays 0.
-        routes.emplaceBack(sockaddrToIpv4(table[RTAX_DST]), sockaddrToIpv4(table[RTAX_NETMASK]),
+        routes.emplaceBack(sockaddrToIpv4(table[RTAX_DST]), mask,
                            sockaddrToIpv4(table[RTAX_GATEWAY]), quint32(0));
     }
 
