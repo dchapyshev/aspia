@@ -17,10 +17,23 @@ fi
 # launchd picks up the updated executable path. Ignore failure (nothing registered yet).
 "$HOST" --remove 2>/dev/null || true
 
-# Writes /Library/LaunchDaemons/org.aspia.host-service.plist and loads the daemon.
+# Writes /Library/LaunchDaemons/org.aspia.host-service.plist and loads the daemon; also (re)writes the
+# per-user desktop-agent LaunchAgent plist in /Library/LaunchAgents.
 if ! "$HOST" --install; then
     echo "Failed to register the Aspia Host service" >&2
     exit 1
+fi
+
+# On an upgrade the previous desktop-agent LaunchAgent keeps running the OLD binary in the logged-in
+# user's GUI session - rewriting the plist does not restart it (KeepAlive is SuccessfulExit:false).
+# Reload it so it picks up the new executable and IPC channel. Only when a user is at the console; the
+# login-window instance is loaded by launchd on its own.
+AGENT_LABEL="org.aspia.host-loginwindow"
+AGENT_PLIST="/Library/LaunchAgents/$AGENT_LABEL.plist"
+CONSOLE_UID=$(stat -f%u /dev/console 2>/dev/null)
+if [ -n "$CONSOLE_UID" ] && [ "$CONSOLE_UID" != "0" ]; then
+    launchctl bootout "gui/$CONSOLE_UID/$AGENT_LABEL" 2>/dev/null || true
+    launchctl bootstrap "gui/$CONSOLE_UID" "$AGENT_PLIST" 2>/dev/null || true
 fi
 
 exit 0
