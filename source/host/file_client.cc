@@ -32,13 +32,15 @@
 #include <WtsApi32.h>
 #endif // defined(Q_OS_WINDOWS)
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
 #include <cstdlib>
 
 #include <grp.h>
 #include <pwd.h>
 #include <unistd.h>
+#endif // defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
 
+#if defined(Q_OS_LINUX)
 #include "base/linux/session_util.h"
 #endif // defined(Q_OS_LINUX)
 
@@ -53,7 +55,7 @@
 
 namespace {
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
 
 //--------------------------------------------------------------------------------------------------
 // Forks and execs the file-transfer agent as |user_name| (the active logged-in user), so it accesses
@@ -117,7 +119,7 @@ bool launchAgentAsUser(const QString& user_name, const QString& agent_path, cons
 
     return true;
 }
-#endif // defined(Q_OS_LINUX)
+#endif // defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
 
 #if defined(Q_OS_WINDOWS)
 const wchar_t kDefaultDesktopName[] = L"winsta0\\default";
@@ -433,6 +435,43 @@ void FileClient::onStart()
         onError(FROM_HERE);
         return;
     }
+
+    if (!startIpcServer(ipc_channel_id, QString()))
+    {
+        CLOG(ERROR) << "Unable to start IPC server";
+        onError(FROM_HERE);
+        return;
+    }
+
+    CLOG(INFO) << "Starting agent process for user:" << user_name;
+    if (!launchAgentAsUser(user_name, QCoreApplication::applicationFilePath(), ipc_channel_id))
+    {
+        CLOG(ERROR) << "launchAgentAsUser failed";
+        onError(FROM_HERE);
+        return;
+    }
+#elif defined(Q_OS_MACOS)
+    // The agent must run as the active console user so it accesses the file system with that user's
+    // permissions. On macOS the active console session id is that user's uid.
+    const SessionId console_session = activeConsoleSessionId();
+    if (console_session == kInvalidSessionId)
+    {
+        CLOG(WARNING) << "No active user session";
+
+        // There is no logged in user. The session starts, but responds to all client requests with
+        // an error.
+        onStarted(FROM_HERE, false);
+        return;
+    }
+
+    struct passwd* pw = getpwuid(static_cast<uid_t>(console_session));
+    if (!pw || !pw->pw_name)
+    {
+        CLOG(ERROR) << "Unable to resolve user name for uid:" << console_session;
+        onError(FROM_HERE);
+        return;
+    }
+    const QString user_name = QString::fromUtf8(pw->pw_name);
 
     if (!startIpcServer(ipc_channel_id, QString()))
     {
