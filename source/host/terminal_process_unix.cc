@@ -19,7 +19,9 @@
 #include "host/terminal_process_unix.h"
 
 #include <cstdlib>
+#include <cstring>
 #include <memory>
+#include <string>
 
 #include <csignal>
 #if defined(Q_OS_MACOS)
@@ -27,6 +29,7 @@
 #else
 #include <pty.h>
 #endif
+#include <pwd.h>
 #include <sys/ioctl.h>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -71,15 +74,32 @@ bool TerminalProcessUnix::start(int columns, int rows)
 
     if (pid == 0)
     {
-        // Child process: launch the user's shell.
-        const char* shell = getenv("SHELL");
-        if (!shell || !shell[0])
-            shell = "/bin/bash";
+        // Child process: launch the user's login shell. The agent already dropped privileges to the
+        // target user, so take the shell from that account's passwd entry (getenv("SHELL") is not set
+        // for a service-launched process). Start it as a login shell (argv[0] prefixed with '-') so it
+        // sources the login profile - PATH additions such as Homebrew live in ~/.zprofile /
+        // ~/.bash_profile and are invisible to a non-login shell.
+        struct passwd* pw = getpwuid(getuid());
 
+        const char* shell = (pw && pw->pw_shell && pw->pw_shell[0]) ? pw->pw_shell : getenv("SHELL");
+        if (!shell || !shell[0])
+        {
+#if defined(Q_OS_MACOS)
+            shell = "/bin/zsh";
+#else
+            shell = "/bin/bash";
+#endif
+        }
+
+        setenv("SHELL", shell, 1);
         setenv("TERM", "xterm-256color", 1);
 
-        execl(shell, shell, static_cast<char*>(nullptr));
-        execl("/bin/sh", "/bin/sh", static_cast<char*>(nullptr));
+        const char* shell_base = strrchr(shell, '/');
+        shell_base = shell_base ? shell_base + 1 : shell;
+        const std::string login_argv0 = std::string("-") + shell_base;
+
+        execl(shell, login_argv0.c_str(), static_cast<char*>(nullptr));
+        execl("/bin/sh", "-sh", static_cast<char*>(nullptr));
         _exit(127);
     }
 

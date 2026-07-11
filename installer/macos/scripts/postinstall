@@ -36,4 +36,15 @@ if [ -n "$CONSOLE_UID" ] && [ "$CONSOLE_UID" != "0" ]; then
     launchctl bootstrap "gui/$CONSOLE_UID" "$AGENT_PLIST" 2>/dev/null || true
 fi
 
+# Install the PAM policy the terminal agent authenticates against (service "aspia-terminal"). macOS
+# validates local accounts through OpenDirectory (pam_opendirectory), unlike Linux (pam_unix). Without
+# this file PAM falls back to /etc/pam.d/other (pam_deny) and every terminal login is rejected.
+cat > /etc/pam.d/aspia-terminal <<'PAM_EOF'
+# PAM policy for Aspia terminal sessions on macOS. Validates the local account credentials supplied by
+# the client before the terminal agent is launched under that account.
+auth       required       pam_opendirectory.so
+account    required       pam_opendirectory.so
+PAM_EOF
+chmod 644 /etc/pam.d/aspia-terminal
+
 exit 0
