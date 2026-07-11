@@ -33,6 +33,12 @@
 #include <QDBusMessage>
 #include <QDBusObjectPath>
 #include <QDBusVariant>
+#elif defined(Q_OS_MACOS)
+#include <QProcess>
+
+#include <dlfcn.h>
+#include <pwd.h>
+#include <sys/stat.h>
 #endif // defined(Q_OS_WINDOWS)
 
 namespace {
@@ -148,6 +154,36 @@ QString activeSessionId()
 }
 #endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 
+#if defined(Q_OS_MACOS)
+//--------------------------------------------------------------------------------------------------
+// Triggers a graceful power action the way the Apple menu does: sends |loginwindow_event| (a raw Apple
+// event such as "«event aevtshut»") to loginwindow in the console user's GUI session, which lets apps
+// terminate cleanly. Invoked from the root service, so it hops into that session via
+// "launchctl asuser <uid> sudo -u <user>". Falls back to shutdown(8) (|fallback_args|) when there is
+// no GUI console user (e.g. the login window) or the event could not be delivered.
+bool macPowerAction(const QString& loginwindow_event, const QStringList& fallback_args)
+{
+    struct stat console_stat;
+    if (stat("/dev/console", &console_stat) == 0 && console_stat.st_uid != 0)
+    {
+        passwd* pw = getpwuid(console_stat.st_uid);
+        if (pw && pw->pw_name)
+        {
+            const QString script =
+                QString::fromUtf8("tell application \"loginwindow\" to ") + loginwindow_event;
+
+            const int rc = QProcess::execute("launchctl",
+                { "asuser", QString::number(console_stat.st_uid),
+                  "sudo", "-u", QString::fromUtf8(pw->pw_name), "osascript", "-e", script });
+            if (rc == 0)
+                return true;
+        }
+    }
+
+    return QProcess::execute("/sbin/shutdown", fallback_args) == 0;
+}
+#endif // defined(Q_OS_MACOS)
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -191,6 +227,9 @@ bool PowerController::shutdown()
     QDBusMessage call = logindManagerCall("PowerOff");
     call << false;
     return callLogind(call);
+#elif defined(Q_OS_MACOS)
+    // Graceful shut down (Apple menu "Shut Down"), falling back to shutdown(8) with no GUI user.
+    return macPowerAction(QString::fromUtf8("«event aevtshut»"), { "-h", "now" });
 #else
     NOTIMPLEMENTED();
     return false;
@@ -236,6 +275,9 @@ bool PowerController::reboot()
     QDBusMessage call = logindManagerCall("Reboot");
     call << false;
     return callLogind(call);
+#elif defined(Q_OS_MACOS)
+    // Graceful restart (Apple menu "Restart"), falling back to shutdown(8) with no GUI user.
+    return macPowerAction(QString::fromUtf8("«event aevtrrst»"), { "-r", "now" });
 #else
     NOTIMPLEMENTED();
     return false;
@@ -279,6 +321,13 @@ bool PowerController::logoff()
     QDBusMessage call = logindManagerCall("TerminateSession");
     call << session_id;
     return callLogind(call);
+#elif defined(Q_OS_MACOS)
+    // Called from the user's Aqua session (the desktop agent). Send the "log out" Apple event
+    // (kAELogOut) to loginwindow, which logs out immediately without the confirmation dialog. The raw
+    // event code requires guillemets, which is why the script is decoded from UTF-8.
+    const QString script =
+        QString::fromUtf8("tell application \"loginwindow\" to «event aevtrlgo»");
+    return QProcess::execute("osascript", { "-e", script }) == 0;
 #else
     NOTIMPLEMENTED();
     return false;
@@ -299,6 +348,30 @@ bool PowerController::lock()
     return true;
 #elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     return callLogind(logindManagerCall("LockSessions"));
+#elif defined(Q_OS_MACOS)
+    // Called from the user's Aqua session (the desktop agent). SACLockScreenImmediate (private
+    // login.framework) is the reliable programmatic lock on modern macOS. The framework is
+    // Apple-signed, so dlopen works under the hardened runtime.
+    void* handle = dlopen(
+        "/System/Library/PrivateFrameworks/login.framework/Versions/Current/login", RTLD_LAZY);
+    if (!handle)
+    {
+        LOG(ERROR) << "dlopen login.framework failed:" << dlerror();
+        return false;
+    }
+
+    using LockScreenFn = void (*)(void);
+    auto lock_screen = reinterpret_cast<LockScreenFn>(dlsym(handle, "SACLockScreenImmediate"));
+    if (!lock_screen)
+    {
+        LOG(ERROR) << "SACLockScreenImmediate not found";
+        dlclose(handle);
+        return false;
+    }
+
+    lock_screen();
+    dlclose(handle);
+    return true;
 #else
     NOTIMPLEMENTED();
     return false;
