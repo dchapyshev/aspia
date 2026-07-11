@@ -64,19 +64,6 @@ void HostStorage::setLastHostId(HostId host_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString HostStorage::channelIdForUI() const
-{
-    return impl_.value("ui_channel_id").toString();
-}
-
-//--------------------------------------------------------------------------------------------------
-void HostStorage::setChannelIdForUI(const QString& channel_id)
-{
-    impl_.setValue("ui_channel_id", channel_id);
-    impl_.sync();
-}
-
-//--------------------------------------------------------------------------------------------------
 qint64 HostStorage::lastUpdateCheck() const
 {
     return impl_.value("last_update_check").toLongLong();

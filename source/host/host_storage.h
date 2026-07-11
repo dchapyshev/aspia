@@ -35,9 +35,6 @@ public:
     HostId lastHostId() const;
     void setLastHostId(HostId host_id);
 
-    QString channelIdForUI() const;
-    void setChannelIdForUI(const QString& channel_id);
-
     qint64 lastUpdateCheck() const;
     void setLastUpdateCheck(qint64 timepoint);
 

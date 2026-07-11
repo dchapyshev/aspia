@@ -33,8 +33,8 @@
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
 #include "host/client.h"
-#include "host/host_storage.h"
 #include "host/database.h"
+#include "host/host_constants.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_object.h"
@@ -205,19 +205,11 @@ bool UserSession::start()
     ipc_server_ = new IpcServer(this);
     connect(ipc_server_, &IpcServer::sig_newConnection, this, &UserSession::onIpcNewConnection);
 
-    QString ipc_channel_name = IpcServer::createUniqueId();
+    LOG(INFO) << "Start IPC server for UI (channel:" << kHostUiChannelId << ")";
 
-    HostStorage ipc_storage;
-    ipc_storage.setChannelIdForUI(ipc_channel_name);
-
-    LOG(INFO) << "Start IPC server for UI (channel_name:" << ipc_channel_name << ")";
-
-    // Start the server which will accept incoming connections from UI processes in user sessions.
-    // The UI agent runs under an arbitrary logged-on user's token, so any authenticated user
-    // must be able to connect. Session ID of the connecting peer is verified in onIpcNewConnection.
-    if (!ipc_server_->start(ipc_channel_name, IpcServer::AccessMode::INTERACTIVE_USER))
+    if (!ipc_server_->start(kHostUiChannelId, IpcServer::AccessMode::INTERACTIVE_USER))
     {
-        LOG(ERROR) << "Failed to start IPC server for UI (channel_name:" << ipc_channel_name << ")";
+        LOG(ERROR) << "Failed to start IPC server for UI";
         return false;
     }
 

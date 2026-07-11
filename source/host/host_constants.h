@@ -27,4 +27,10 @@
 // is still authenticated by executable path.
 extern const char kDesktopAgentChannelId[];
 
+// Well-known IPC channel the host UI (aspia_host --hidden) and the service's UserSession rendezvous
+// on. Fixed for the same reason as kDesktopAgentChannelId: both ends are the same aspia_host binary,
+// so the name is compiled into both rather than generated and handed over. The connecting peer is
+// authenticated by executable path and session id in UserSession::onIpcNewConnection().
+extern const char kHostUiChannelId[];
+
 #endif // HOST_HOST_CONSTANTS_H

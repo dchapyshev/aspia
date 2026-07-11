@@ -21,8 +21,8 @@
 #include "base/logging.h"
 #include "base/numeric_utils.h"
 #include "base/ipc/ipc_channel.h"
-#include "host/host_storage.h"
 #include "common/clipboard_file_transfer.h"
+#include "host/host_constants.h"
 #include "proto/desktop_channel.h"
 #include "proto/desktop_clipboard.h"
 #include "proto/desktop_user.h"
@@ -55,8 +55,7 @@ UserSessionAgent::~UserSessionAgent()
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onConnectToService()
 {
-    QString channel_name = HostStorage().channelIdForUI();
-    LOG(INFO) << "Starting user session agent (channel_name:" << channel_name << ")";
+    LOG(INFO) << "Starting user session agent (channel:" << kHostUiChannelId << ")";
 
     ipc_channel_ = new IpcChannel(this);
 
@@ -65,7 +64,7 @@ void UserSessionAgent::onConnectToService()
     connect(ipc_channel_, &IpcChannel::sig_errorOccurred, this, &UserSessionAgent::onIpcErrorOccurred);
     connect(ipc_channel_, &IpcChannel::sig_messageReceived, this, &UserSessionAgent::onIpcMessageReceived);
 
-    ipc_channel_->connectTo(channel_name);
+    ipc_channel_->connectTo(kHostUiChannelId);
 }
 
 //--------------------------------------------------------------------------------------------------

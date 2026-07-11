@@ -19,3 +19,4 @@
 #include "host/host_constants.h"
 
 const char kDesktopAgentChannelId[] = "org.aspia.host.desktop-agent";
+const char kHostUiChannelId[] = "org.aspia.host.ui";
