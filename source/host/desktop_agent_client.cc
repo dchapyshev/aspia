@@ -444,6 +444,7 @@ void DesktopAgentClient::sendCapabilities()
     add_flag(kFlagTaskManager, true);
 #elif defined(Q_OS_MACOS)
     add_flag(kFlagOSMacOS, true);
+    add_flag(kFlagTaskManager, true);
 #else
 #warning Not implemented
 #endif

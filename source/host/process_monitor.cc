@@ -22,6 +22,8 @@
 #include "host/process_monitor_win.h"
 #elif defined(Q_OS_LINUX)
 #include "host/process_monitor_linux.h"
+#elif defined(Q_OS_MACOS)
+#include "host/process_monitor_mac.h"
 #endif
 
 //--------------------------------------------------------------------------------------------------
@@ -32,6 +34,8 @@ std::unique_ptr<ProcessMonitor> ProcessMonitor::create()
     return std::make_unique<ProcessMonitorWin>();
 #elif defined(Q_OS_LINUX)
     return std::make_unique<ProcessMonitorLinux>();
+#elif defined(Q_OS_MACOS)
+    return std::make_unique<ProcessMonitorMac>();
 #else
     return nullptr;
 #endif
