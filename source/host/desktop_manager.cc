@@ -258,7 +258,39 @@ DesktopManager::~DesktopManager()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopManager::startAgentClient(const QString& ipc_channel_name)
+void DesktopManager::start()
+{
+    CHECK(!ipc_server_);
+
+    ipc_server_ = new IpcServer(this);
+
+    connect(ipc_server_, &IpcServer::sig_newConnection, this, &DesktopManager::onIpcNewConnection);
+    connect(ipc_server_, &IpcServer::sig_errorOccurred, this, &DesktopManager::onIpcErrorOccurred);
+
+#if defined(Q_OS_MACOS)
+    // The macOS agent is a launchd agent that in a user's Aqua session runs as that user (only the
+    // login-window instance is root), so the channel must be reachable by non-root processes. The
+    // connecting peer's executable path is still verified in onIpcNewConnection().
+    const IpcServer::AccessMode access_mode = IpcServer::AccessMode::INTERACTIVE_USER;
+#else
+    // On Windows and Linux the agent always runs as SYSTEM/root (launched by the service), so the
+    // control channel is restricted to system processes as defence in depth on top of the executable
+    // path check in onIpcNewConnection().
+    const IpcServer::AccessMode access_mode = IpcServer::AccessMode::SYSTEM_ONLY;
+#endif // defined(Q_OS_MACOS)
+
+    if (!ipc_server_->start(kDesktopAgentChannelId, access_mode))
+    {
+        LOG(ERROR) << "Failed to start the desktop agent IPC server";
+        return;
+    }
+
+    // Keep an agent running for the active session at all times, regardless of connected clients.
+    attach(FROM_HERE, activeTargetSessionId());
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopManager::addClient(const QString& ipc_channel_name)
 {
     if (ipc_channel_name.isEmpty())
     {
@@ -278,34 +310,26 @@ void DesktopManager::startAgentClient(const QString& ipc_channel_name)
 //--------------------------------------------------------------------------------------------------
 void DesktopManager::onClientStarted()
 {
+    ++client_count_;
     LOG(INFO) << "Client started (client count:" << client_count_ << "state:" << state_ << ")";
 
-    bool is_attach_needed = !client_count_ && state_ == State::DETTACHED;
-
-    ++client_count_;
-
-    if (is_attach_needed)
-    {
-        attach(FROM_HERE, activeTargetSessionId());
+    // The agent runs continuously. If it is already connected, register this client with it now;
+    // otherwise onDesktopManagerAttached() registers every client when the agent (re)connects.
+    if (state_ != State::ATTACHED)
         return;
-    }
 
     DesktopClient* client = dynamic_cast<DesktopClient*>(sender());
     CHECK(client);
 
     QString ipc_channel_name = client->attach();
-    startAgentClient(ipc_channel_name);
+    addClient(ipc_channel_name);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopManager::onClientFinished()
 {
     client_count_ = std::max(client_count_ - 1, 0);
-    if (client_count_)
-        return;
-
-    LOG(INFO) << "Last desktop client is disconnected";
-    dettach(FROM_HERE);
+    LOG(INFO) << "Desktop client finished (client count:" << client_count_ << ")";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -532,51 +556,22 @@ void DesktopManager::attach(const Location& location, SessionId session_id)
 {
     if (state_ != State::DETTACHED)
     {
-        LOG(INFO) << "Session is already attached (session_id" << session_id_ << "from" << location << ")";
-        return;
-    }
-
-    if (!client_count_)
-    {
-        LOG(INFO) << "No active clients";
+        LOG(INFO) << "Agent is already attached (session_id" << session_id_ << "from" << location << ")";
         return;
     }
 
     // A pending restart (scheduled by an earlier failed attach) is superseded by this attach; left
-    // running it would fire mid-attach, tear down the IPC server the just-launched agent is about to
-    // connect to and spawn a duplicate agent racing the first one for the capture device.
+    // running it would fire mid-attach and spawn a duplicate agent racing the first one for the
+    // capture device.
     restart_timer_->stop();
 
     state_ = State::ATTACHING;
     session_id_ = session_id;
     is_console_ = session_id == activeTargetSessionId();
 
-    LOG(INFO) << "Attach to session" << session_id << "from" << location;
+    LOG(INFO) << "Spawn desktop agent for session" << session_id << "from" << location;
 
     attach_timer_->start();
-    ipc_server_ = new IpcServer(this);
-
-    connect(ipc_server_, &IpcServer::sig_newConnection, this, &DesktopManager::onIpcNewConnection);
-    connect(ipc_server_, &IpcServer::sig_errorOccurred, this, &DesktopManager::onIpcErrorOccurred);
-
-#if defined(Q_OS_MACOS)
-    // The macOS agent is a launchd agent that in a user's Aqua session runs as that user (only the
-    // login-window instance is root), so the channel must be reachable by non-root processes. The
-    // connecting peer's executable path is still verified in onIpcNewConnection().
-    const IpcServer::AccessMode access_mode = IpcServer::AccessMode::INTERACTIVE_USER;
-#else
-    // On Windows and Linux the agent always runs as SYSTEM/root (launched by the service), so the
-    // control channel is restricted to system processes as defence in depth on top of the executable
-    // path check in onIpcNewConnection().
-    const IpcServer::AccessMode access_mode = IpcServer::AccessMode::SYSTEM_ONLY;
-#endif // defined(Q_OS_MACOS)
-
-    if (!ipc_server_->start(kDesktopAgentChannelId, access_mode))
-    {
-        dettach(FROM_HERE);
-        restart_timer_->start();
-        return;
-    }
 
 #if defined(Q_OS_LINUX)
     // An agent from a previous attach attempt may still be alive: probing the capture path can outlast
@@ -612,17 +607,11 @@ void DesktopManager::dettach(const Location& location)
 {
     if (state_ == State::DETTACHED)
     {
-        LOG(INFO) << "Session already dettached (from" << location << ")";
+        LOG(INFO) << "Agent already dettached (from" << location << ")";
         return;
     }
 
-    LOG(INFO) << "Dettach from session" << session_id_ << "from" << location;
-
-    if (ipc_server_)
-    {
-        ipc_server_->disconnect();
-        ipc_server_.reset();
-    }
+    LOG(INFO) << "Dettach desktop agent from session" << session_id_ << "from" << location;
 
     if (ipc_channel_)
     {

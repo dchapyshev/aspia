@@ -530,10 +530,11 @@ void ScreenWorker::onStart()
 #endif // defined(Q_OS_LINUX)
 
 #if !defined(Q_OS_MACOS)
-    // On Windows and Linux the agent is spawned per session while a client is attached, so capture may
-    // start right away. On macOS the agent is a persistent launchd agent that also runs with no client;
-    // creating the capturer here would keep an idle SCStream alive and the system "screen is being
-    // recorded" indicator on. Defer it to onConfigure/onCaptureScreen (first client) instead.
+    // On Windows and Linux the capturer is passive (it captures only when captureFrame() is called on
+    // the capture timer, which starts on the first client in onConfigure()), so creating it now is
+    // harmless even though the agent runs with no client. On macOS the capturer owns a live SCStream
+    // that delivers frames as soon as it exists and keeps the system "screen is being recorded"
+    // indicator on, so it is deferred to the first client instead.
     selectCapturer(ScreenCapturer::Error::SUCCEEDED);
 #endif // !defined(Q_OS_MACOS)
 

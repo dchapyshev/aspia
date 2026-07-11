@@ -48,7 +48,8 @@ public:
     State state() const { return state_; }
     SessionId sessionId() const { return session_id_; }
 
-    void startAgentClient(const QString& ipc_channel_name);
+    void start();
+    void addClient(const QString& ipc_channel_name);
 
 public slots:
     void onClientStarted();

@@ -329,6 +329,10 @@ void Service::onStart()
     repeated_timer_->start(std::chrono::seconds(30));
     user_session_->start();
 
+    // Open the desktop agent IPC server and keep an agent running for the active session from now on,
+    // independent of connected clients.
+    desktop_manager_->start();
+
     addFirewallRules();
 
     // A host serves a single user - only a handful of simultaneous handshakes and a low
@@ -668,7 +672,7 @@ void Service::onDesktopManagerAttached()
         if (ipc_channel_name.isEmpty())
             continue;
 
-        desktop_manager_->startAgentClient(ipc_channel_name);
+        desktop_manager_->addClient(ipc_channel_name);
     }
 }
 
