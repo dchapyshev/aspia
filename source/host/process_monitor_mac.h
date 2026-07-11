@@ -36,6 +36,10 @@ public:
 private:
     ProcessMap table_;
 
+    // Previous overall-CPU tick totals, for the delta in calcCpuUsage().
+    quint64 prev_cpu_idle_ = 0;
+    quint64 prev_cpu_total_ = 0;
+
     Q_DISABLE_COPY_MOVE(ProcessMonitorMac)
 };
 
