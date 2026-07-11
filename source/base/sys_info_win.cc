@@ -45,6 +45,7 @@ const char kClassRootPath[] = "SYSTEM\\CurrentControlSet\\Control\\Class\\";
 const char kDriverVersionKey[] = "DriverVersion";
 const char kDriverDateKey[] = "DriverDate";
 const char kProviderNameKey[] = "ProviderName";
+const char kUninstallKeyPath[] = "Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall";
 
 //--------------------------------------------------------------------------------------------------
 SysInfo::Service::Status serviceStatus(DWORD state)
@@ -471,6 +472,41 @@ SysInfo::PowerOptions::Battery readBattery(Device& battery, ULONG tag)
     }
 
     return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Reads one installed-application entry from the given Uninstall subkey and appends it to |result|.
+// Skips system components, update child entries (ParentKeyName present) and entries without a name.
+void addApplication(
+    QList<SysInfo::Application>* result, HKEY root, const QString& key_name, REGSAM access)
+{
+    QString key_path = QString("%1\\%2").arg(kUninstallKeyPath, key_name);
+
+    RegKey key;
+    if (key.open(root, key_path, access | KEY_READ) != ERROR_SUCCESS)
+        return;
+
+    DWORD system_component = 0;
+    if (key.readValueDW("SystemComponent", &system_component) == ERROR_SUCCESS && system_component == 1)
+        return;
+
+    QString value;
+    if (key.readValue("ParentKeyName", &value) == ERROR_SUCCESS)
+        return;
+
+    if (key.readValue("DisplayName", &value) != ERROR_SUCCESS)
+        return;
+
+    SysInfo::Application application;
+    application.name = value;
+
+    if (key.readValue("DisplayVersion", &value) == ERROR_SUCCESS)
+        application.version = value;
+
+    if (key.readValue("Publisher", &value) == ERROR_SUCCESS)
+        application.publisher = value;
+
+    result->append(std::move(application));
 }
 
 } // namespace
@@ -1151,6 +1187,30 @@ QList<SysInfo::Printer> SysInfo::printers()
 
         result.append(std::move(printer));
     }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::Application> SysInfo::applications()
+{
+    QList<Application> result;
+
+    for (RegKeyIterator it(HKEY_LOCAL_MACHINE, kUninstallKeyPath); it.valid(); ++it)
+        addApplication(&result, HKEY_LOCAL_MACHINE, it.name(), 0);
+
+    for (RegKeyIterator it(HKEY_CURRENT_USER, kUninstallKeyPath); it.valid(); ++it)
+        addApplication(&result, HKEY_CURRENT_USER, it.name(), 0);
+
+#if defined(Q_PROCESSOR_X86_64)
+    // On a 64-bit host also read the 32-bit (WOW64) registry view, where 32-bit installers register.
+    for (RegKeyIterator it(HKEY_LOCAL_MACHINE, kUninstallKeyPath, KEY_WOW64_32KEY); it.valid(); ++it)
+        addApplication(&result, HKEY_LOCAL_MACHINE, it.name(), KEY_WOW64_32KEY);
+
+    for (RegKeyIterator it(HKEY_CURRENT_USER, kUninstallKeyPath, KEY_WOW64_32KEY); it.valid(); ++it)
+        addApplication(&result, HKEY_CURRENT_USER, it.name(), KEY_WOW64_32KEY);
+#endif // defined(Q_PROCESSOR_X86_64)
 
     return result;
 }

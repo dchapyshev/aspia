@@ -24,7 +24,6 @@
 
 #include <thread>
 
-#include "base/applications_reader.h"
 #include "base/edid.h"
 #include "base/event_enumerator.h"
 #include "base/license_reader.h"
@@ -818,7 +817,16 @@ void fillLicensesInfo(proto::system_info::SystemInfo* system_info)
 //--------------------------------------------------------------------------------------------------
 void fillApplicationsInfo(proto::system_info::SystemInfo* system_info)
 {
-    readApplicationsInformation(system_info->mutable_applications());
+    const QList<SysInfo::Application> applications = SysInfo::applications();
+    for (const SysInfo::Application& application : applications)
+    {
+        proto::system_info::Applications::Application* item =
+            system_info->mutable_applications()->add_application();
+
+        item->set_name(application.name.toStdString());
+        item->set_version(application.version.toStdString());
+        item->set_publisher(application.publisher.toStdString());
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -481,6 +481,110 @@ QHash<QString, ModuleInfo> moduleInfoMap(const QStringList& names)
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
+// Reads installed packages from the dpkg database (Debian/Ubuntu). Returns false if the database is
+// absent or empty - dpkg may be installed on an rpm-based distribution (only to build .deb packages),
+// leaving an empty status file, in which case the caller should fall back to the rpm database.
+bool readDpkgPackages(QList<SysInfo::Application>* applications)
+{
+    QFile file("/var/lib/dpkg/status");
+    if (!file.open(QIODevice::ReadOnly))
+        return false;
+
+    const int initial_count = applications->size();
+
+    QByteArray name;
+    QByteArray version;
+    QByteArray maintainer;
+    bool installed = false;
+
+    auto flush = [&]()
+    {
+        if (installed && !name.isEmpty())
+        {
+            SysInfo::Application application;
+            application.name = QString::fromUtf8(name);
+            if (!version.isEmpty())
+                application.version = QString::fromUtf8(version);
+            if (!maintainer.isEmpty())
+                application.publisher = QString::fromUtf8(maintainer);
+            applications->append(std::move(application));
+        }
+
+        name.clear();
+        version.clear();
+        maintainer.clear();
+        installed = false;
+    };
+
+    // The status file is a sequence of stanzas separated by blank lines; one stanza per package.
+    QByteArray line;
+    while (!(line = file.readLine()).isEmpty())
+    {
+        if (line.trimmed().isEmpty())
+        {
+            flush();
+            continue;
+        }
+
+        // Continuation lines of multi-line fields (Description) start with whitespace.
+        if (line.at(0) == ' ' || line.at(0) == '\t')
+            continue;
+
+        int colon = line.indexOf(':');
+        if (colon < 0)
+            continue;
+
+        const QByteArray key = line.left(colon).trimmed();
+        const QByteArray value = line.mid(colon + 1).trimmed();
+
+        if (key == "Package")
+            name = value;
+        else if (key == "Version")
+            version = value;
+        else if (key == "Maintainer")
+            maintainer = value;
+        else if (key == "Status")
+            installed = value.contains("installed"); // e.g. "install ok installed".
+    }
+
+    flush();
+    return applications->size() > initial_count;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Reads installed packages from the rpm database (RedHat/Fedora/SUSE) via the rpm tool.
+void readRpmPackages(QList<SysInfo::Application>* applications)
+{
+    QProcess process;
+    process.start("rpm", QStringList()
+        << "-qa" << "--qf" << "%{NAME}\\t%{VERSION}-%{RELEASE}\\t%{VENDOR}\\n");
+    if (!process.waitForStarted() || !process.waitForFinished())
+        return;
+
+    const QList<QByteArray> lines = process.readAllStandardOutput().split('\n');
+    for (const QByteArray& line : lines)
+    {
+        if (line.isEmpty())
+            continue;
+
+        const QList<QByteArray> parts = line.split('\t');
+        if (parts.isEmpty() || parts.at(0).isEmpty())
+            continue;
+
+        SysInfo::Application application;
+        application.name = QString::fromUtf8(parts.at(0));
+
+        if (parts.size() > 1 && !parts.at(1).isEmpty())
+            application.version = QString::fromUtf8(parts.at(1));
+
+        if (parts.size() > 2 && !parts.at(2).isEmpty() && parts.at(2) != "(none)")
+            application.publisher = QString::fromUtf8(parts.at(2));
+
+        applications->append(std::move(application));
+    }
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -1228,6 +1332,18 @@ QList<SysInfo::Printer> SysInfo::printers()
 
         result.append(std::move(printer));
     }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::Application> SysInfo::applications()
+{
+    QList<Application> result;
+
+    if (!readDpkgPackages(&result))
+        readRpmPackages(&result);
 
     return result;
 }

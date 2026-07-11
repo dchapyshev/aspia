@@ -140,6 +140,13 @@ public:
         int jobs_count = 0;
     };
 
+    struct Application
+    {
+        QString name;
+        QString version;
+        QString publisher;
+    };
+
     struct PowerOptions
     {
         enum class PowerSource { UNKNOWN, DC_BATTERY, AC_LINE };
@@ -211,6 +218,7 @@ public:
     static QList<VideoAdapter> videoAdapters();
     static QList<Device> devices();
     static QList<Printer> printers();
+    static QList<Application> applications();
     static PowerOptions powerOptions();
 
 private:

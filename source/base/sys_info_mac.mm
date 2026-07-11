@@ -778,6 +778,75 @@ QList<SysInfo::Printer> SysInfo::printers()
 
 //--------------------------------------------------------------------------------------------------
 // static
+QList<SysInfo::Application> SysInfo::applications()
+{
+    QList<Application> result;
+
+    @autoreleasepool
+    {
+        // Standard GUI application install locations: user- and system-installed apps and their
+        // Utilities subfolders. Bundles nested deeper are rare and intentionally skipped.
+        NSArray<NSString*>* directories = @[
+            @"/Applications",
+            @"/Applications/Utilities",
+            @"/System/Applications",
+            @"/System/Applications/Utilities"
+        ];
+
+        NSFileManager* file_manager = [NSFileManager defaultManager];
+
+        for (NSString* directory in directories)
+        {
+            NSArray<NSString*>* entries = [file_manager contentsOfDirectoryAtPath:directory error:nil];
+
+            for (NSString* entry in entries)
+            {
+                if (![entry hasSuffix:@".app"])
+                    continue;
+
+                NSString* app_path = [directory stringByAppendingPathComponent:entry];
+                NSString* plist_path = [app_path stringByAppendingPathComponent:@"Contents/Info.plist"];
+
+                // Reads either an XML or a binary plist; nil without a readable Info.plist.
+                NSDictionary* info = [NSDictionary dictionaryWithContentsOfFile:plist_path];
+
+                NSString* name = info[@"CFBundleDisplayName"];
+                if (name.length == 0)
+                    name = info[@"CFBundleName"];
+                if (name.length == 0)
+                    name = [entry stringByDeletingPathExtension];
+
+                NSString* version = info[@"CFBundleShortVersionString"];
+                if (version.length == 0)
+                    version = info[@"CFBundleVersion"];
+
+                Application application;
+                application.name = QString::fromUtf8(name.UTF8String);
+                if (version.length != 0)
+                    application.version = QString::fromUtf8(version.UTF8String);
+
+                // Best-effort publisher from the bundle identifier's vendor component
+                // (com.<vendor>.<app>), e.g. "com.apple.Safari" -> "Apple".
+                NSArray<NSString*>* id_parts =
+                    [info[@"CFBundleIdentifier"] componentsSeparatedByString:@"."];
+                if (id_parts.count >= 2 && [id_parts[1] length] != 0)
+                {
+                    NSString* vendor = id_parts[1];
+                    NSString* capitalized = [[[vendor substringToIndex:1] uppercaseString]
+                        stringByAppendingString:[vendor substringFromIndex:1]];
+                    application.publisher = QString::fromUtf8(capitalized.UTF8String);
+                }
+
+                result.append(std::move(application));
+            }
+        }
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
 SysInfo::PowerOptions SysInfo::powerOptions()
 {
     PowerOptions result;

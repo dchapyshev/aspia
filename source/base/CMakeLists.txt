@@ -19,8 +19,6 @@
 list(APPEND SOURCE_BASE
     aligned_memory.cc
     aligned_memory.h
-    applications_reader.cc
-    applications_reader.h
     bitset.h
     bucket_pool.h
     core_application.cc
