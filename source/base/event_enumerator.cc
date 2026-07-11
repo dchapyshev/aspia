@@ -22,6 +22,8 @@
 #include "base/event_enumerator_win.h"
 #elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 #include "base/event_enumerator_linux.h"
+#elif defined(Q_OS_MACOS)
+#include "base/event_enumerator_mac.h"
 #endif
 
 //--------------------------------------------------------------------------------------------------
@@ -33,6 +35,8 @@ std::unique_ptr<EventEnumerator> EventEnumerator::create(
     return std::make_unique<EventEnumeratorWin>(log_name, cursor, direction, count);
 #elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     return std::make_unique<EventEnumeratorLinux>(log_name, cursor, direction, count);
+#elif defined(Q_OS_MACOS)
+    return std::make_unique<EventEnumeratorMac>(log_name, cursor, direction, count);
 #else
     return nullptr;
 #endif

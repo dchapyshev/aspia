@@ -104,6 +104,8 @@ if (APPLE)
     list(APPEND SOURCE_BASE
         core_service.h
         core_service_posix.cc
+        event_enumerator_mac.h
+        event_enumerator_mac.mm
         service_controller_launchd.cc
         service_controller_launchd.h
         sys_info_mac.mm)
@@ -224,7 +226,7 @@ endif()
 if (APPLE)
     set(BASE_PLATFORM_LIBS
         ${FOUNDATION_LIB} ${SCREENCAPTUREKIT_LIB} ${COREMEDIA_LIB} ${SYSTEMCONFIGURATION_LIB}
-        ${IOKIT_LIB} ${CARBON_LIB} ${APPLICATIONSERVICES_LIB} ${APPKIT_LIB} cups)
+        ${IOKIT_LIB} ${CARBON_LIB} ${APPLICATIONSERVICES_LIB} ${APPKIT_LIB} ${OSLOG_LIB} cups)
 endif()
 
 target_link_libraries(aspia_base PRIVATE aspia_proto

@@ -153,6 +153,7 @@ if (APPLE)
     find_library(CARBON_LIB Carbon)
     find_library(APPLICATIONSERVICES_LIB ApplicationServices)
     find_library(APPKIT_LIB AppKit)
+    find_library(OSLOG_LIB OSLog)
     find_program(CODESIGN_BIN NAMES codesign)
 endif()
 

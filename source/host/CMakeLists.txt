@@ -294,7 +294,8 @@ if (APPLE)
         ${COREGRAPHICS_LIB}
         ${VIDEOTOOLBOX_LIB}
         ${AUDIOTOOLBOX_LIB}
-        ${SECURITY_LIB})
+        ${SECURITY_LIB}
+        ${OSLOG_LIB})
 endif()
 
 if (LINUX)
