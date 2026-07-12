@@ -820,16 +820,18 @@ QList<SysInfo::User> SysInfo::users()
     DWORD entries_read = 0;
     DWORD total_entries = 0;
 
+    // ERROR_MORE_DATA is a partial success: the buffer is allocated and holds |entries_read| valid
+    // entries (large domains can produce it even with MAX_PREFERRED_LENGTH).
     DWORD error_code = NetUserEnum(nullptr, 3, FILTER_NORMAL_ACCOUNT,
         reinterpret_cast<LPBYTE*>(&user_info), MAX_PREFERRED_LENGTH, &entries_read, &total_entries,
         nullptr);
-    if (error_code != NERR_Success)
+    if (error_code != NERR_Success && error_code != ERROR_MORE_DATA)
     {
         LOG(ERROR) << "NetUserEnum failed:" << SystemError(error_code).toString();
         return result;
     }
 
-    for (DWORD i = 0; i < total_entries; ++i)
+    for (DWORD i = 0; i < entries_read; ++i)
     {
         const USER_INFO_3& src = user_info[i];
         User user;
@@ -855,9 +857,9 @@ QList<SysInfo::User> SysInfo::users()
             DWORD member_error = NetUserGetLocalGroups(nullptr, src.usri3_name, 0, LG_INCLUDE_INDIRECT,
                 reinterpret_cast<LPBYTE*>(&member_info), MAX_PREFERRED_LENGTH, &member_entries_read,
                 &member_total_entries);
-            if (member_error == NERR_Success)
+            if (member_error == NERR_Success || member_error == ERROR_MORE_DATA)
             {
-                for (DWORD j = 0; j < member_total_entries; ++j)
+                for (DWORD j = 0; j < member_entries_read; ++j)
                 {
                     if (!member_info[j].lgrui0_name)
                         continue;
@@ -895,13 +897,13 @@ QList<SysInfo::UserGroup> SysInfo::userGroups()
 
     DWORD error_code = NetLocalGroupEnum(nullptr, 1, reinterpret_cast<LPBYTE*>(&group_info),
         MAX_PREFERRED_LENGTH, &entries_read, &total_entries, nullptr);
-    if (error_code != NERR_Success)
+    if (error_code != NERR_Success && error_code != ERROR_MORE_DATA)
     {
         LOG(ERROR) << "NetLocalGroupEnum failed:" << SystemError(error_code).toString();
         return result;
     }
 
-    for (DWORD i = 0; i < total_entries; ++i)
+    for (DWORD i = 0; i < entries_read; ++i)
     {
         UserGroup group;
 

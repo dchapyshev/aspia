@@ -395,9 +395,11 @@ QList<NetUtils::Share> NetUtils::networkShares()
     DWORD entries_read = 0;
     DWORD total_entries = 0;
 
+    // ERROR_MORE_DATA is a partial success: the buffer is allocated and holds |entries_read| valid
+    // entries.
     DWORD error_code = NetShareEnum(nullptr, 502, reinterpret_cast<LPBYTE*>(&share_info),
                                     MAX_PREFERRED_LENGTH, &entries_read, &total_entries, nullptr);
-    if (error_code != NERR_Success)
+    if (error_code != NERR_Success && error_code != ERROR_MORE_DATA)
     {
         LOG(ERROR) << "NetShareEnum failed:" << SystemError(error_code).toString();
         return result;
@@ -437,7 +439,7 @@ QList<NetUtils::OpenFile> NetUtils::openFiles()
 
     DWORD error_code = NetFileEnum(nullptr, nullptr, nullptr, 3, reinterpret_cast<LPBYTE*>(&file_info),
                                    MAX_PREFERRED_LENGTH, &entries_read, &total_entries, nullptr);
-    if (error_code != NERR_Success)
+    if (error_code != NERR_Success && error_code != ERROR_MORE_DATA)
     {
         LOG(ERROR) << "NetFileEnum failed:" << SystemError(error_code).toString();
         return result;

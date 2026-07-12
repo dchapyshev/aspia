@@ -207,6 +207,13 @@ SwapChainProcessor::~SwapChainProcessor()
         // Wait for the thread to terminate
         WaitForSingleObject(thread_.Get(), INFINITE);
     }
+    else if (swap_chain_)
+    {
+        // The processing thread was never created, so its cleanup did not run; without the delete
+        // the system would not provide a new swap-chain.
+        WdfObjectDelete(swap_chain_);
+        swap_chain_ = nullptr;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

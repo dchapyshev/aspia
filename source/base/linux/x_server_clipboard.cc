@@ -200,8 +200,10 @@ void XServerClipboard::onSelectionNotify(XEvent* event)
                            &item_count, &after, &data);
         if (type == large_selection_atom_)
         {
-            // Large selection - just read and ignore these for now.
+            // Large selection - just read and ignore these for now. The property carries only the
+            // lower bound of the selection size; the chunks arrive via PropertyNotify.
             large_selection_property_ = event->xselection.property;
+            XFree(data);
         }
         else
         {

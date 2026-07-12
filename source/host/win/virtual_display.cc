@@ -54,8 +54,8 @@ VirtualDisplay::VirtualDisplay()
         return;
     }
 
-    create_event_ = CreateEvent(nullptr, FALSE, FALSE, nullptr);
-    if (!create_event_)
+    create_event_.reset(CreateEvent(nullptr, FALSE, FALSE, nullptr));
+    if (!create_event_.isValid())
     {
         PLOG(ERROR) << "CreateEvent failed";
         return;
@@ -73,14 +73,14 @@ VirtualDisplay::VirtualDisplay()
         SWDeviceCapabilitiesSilentInstall | SWDeviceCapabilitiesDriverRequired;
 
     _com_error error = sw_device_create_func_(L"aspia_virtual_display", L"HTREE\\ROOT\\0",
-        &create_info, 0, nullptr, creationCallback, &create_event_, &sw_device_);
+        &create_info, 0, nullptr, creationCallback, this, &sw_device_);
     if (FAILED(error.Error()))
     {
         LOG(ERROR) << "SwCreateDevice failed:" << error.ErrorMessage() << "(" << error.Error() << ")";
         return;
     }
 
-    DWORD wait_result = WaitForSingleObject(create_event_, 10000);
+    DWORD wait_result = WaitForSingleObject(create_event_.get(), 10000);
     if (wait_result != WAIT_OBJECT_0)
     {
         LOG(ERROR) << "Unable to create device (" << wait_result << ")";
@@ -120,11 +120,11 @@ void VirtualDisplay::creationCallback(
         return;
     }
 
-    if (!self->create_event_)
+    if (!self->create_event_.isValid())
     {
         LOG(ERROR) << "Unexpected event value";
         return;
     }
 
-    SetEvent(self->create_event_);
+    SetEvent(self->create_event_.get());
 }

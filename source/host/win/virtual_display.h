@@ -26,6 +26,7 @@
 #include <QtClassHelperMacros>
 #include <qt_windows.h>
 
+#include "base/win/scoped_object.h"
 #include "host/win/swdevice_defines.h"
 
 class VirtualDisplay
@@ -48,7 +49,7 @@ private:
     SwDeviceCreateFunc sw_device_create_func_ = nullptr;
     SwDeviceCloseFunc sw_device_close_func_ = nullptr;
 
-    HANDLE create_event_ = nullptr;
+    ScopedHandle create_event_;
     HSWDEVICE sw_device_ = nullptr;
 
     bool initialized_ = false;

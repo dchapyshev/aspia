@@ -289,12 +289,16 @@ bool IpcChannel::connectAttempt()
     }
 
     std::error_code error_code;
-    stream_.assign(handle.release(), error_code);
+    stream_.assign(handle.get(), error_code);
     if (error_code)
     {
+        // On failure the stream does not take ownership; ScopedHandle closes the handle.
         CLOG(ERROR) << "Failed to assign handle:" << error_code;
         return false;
     }
+
+    // The stream owns the handle now.
+    handle.release();
 #else
     asio::local::stream_protocol::endpoint endpoint(channel_path.toLocal8Bit().toStdString());
     std::error_code error_code;
