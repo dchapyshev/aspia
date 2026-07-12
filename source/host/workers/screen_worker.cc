@@ -294,19 +294,15 @@ void ScreenWorker::onStopCapture()
     capture_timer_->stop();
 
     power_save_blocker_.reset();
-
-#if defined(Q_OS_MACOS)
-    // Release the capturer so no SCStream stays alive while the persistent agent idles with no client -
-    // otherwise the system "screen is being recorded" indicator would stay on. It is recreated on the
-    // next client (onConfigure starts the timer, onCaptureScreen builds a fresh capturer).
     input_injector_.reset();
     screen_capturer_.reset();
+    screen_resizer_.reset();
+    screen_count_ = 0;
 
     published_capture_type_ = ScreenCapturer::Type::UNKNOWN;
     published_screen_size_ = QSize();
     published_screen_offset_ = QPoint();
     emit sig_screenInfoChanged(ScreenCapturer::Type::UNKNOWN, QSize(), QPoint());
-#endif // defined(Q_OS_MACOS)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -532,15 +528,6 @@ void ScreenWorker::onStart()
     setupLinuxCapture();
 #endif // defined(Q_OS_LINUX)
 
-#if !defined(Q_OS_MACOS)
-    // On Windows and Linux the capturer is passive (it captures only when captureFrame() is called on
-    // the capture timer, which starts on the first client in onConfigure()), so creating it now is
-    // harmless even though the agent runs with no client. On macOS the capturer owns a live SCStream
-    // that delivers frames as soon as it exists and keeps the system "screen is being recorded"
-    // indicator on, so it is deferred to the first client instead.
-    selectCapturer(ScreenCapturer::Error::SUCCEEDED);
-#endif // !defined(Q_OS_MACOS)
-
     capture_scheduler_.setFps(default_fps_);
 }
 
@@ -583,18 +570,10 @@ void ScreenWorker::onCaptureScreen()
     if (!screen_capturer_)
     {
 #if defined(Q_OS_LINUX)
-        // Creation can fail transiently (e.g. a KMS scan-out readback hitting a compositor modeset while
-        // the screen locks or unlocks), so re-attempt it here instead of leaving the client on "session
-        // unavailable" forever. COMPOSITOR negotiates its source asynchronously and must not be recreated.
-        if (capture_mode_ != CaptureMode::COMPOSITOR)
-        {
-            selectCapturer(ScreenCapturer::Error::TEMPORARY);
-            if (!screen_capturer_)
-                registerCaptureFailure();
-        }
-#elif defined(Q_OS_MACOS)
-        // Creation can fail transiently while the GUI session is still coming up (the agent is reloaded
-        // by launchd on each session switch); retry so the client is not left on a stale frame.
+        selectCapturer(ScreenCapturer::Error::TEMPORARY);
+        if (!screen_capturer_)
+            registerCaptureFailure();
+#elif defined(Q_OS_MACOS) || defined(Q_OS_WINDOWS)
         selectCapturer(ScreenCapturer::Error::TEMPORARY);
 #endif // defined(Q_OS_LINUX)
 
