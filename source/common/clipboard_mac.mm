@@ -175,13 +175,15 @@ ClipboardMac::~ClipboardMac()
     // Terminate any active writers.
     {
         std::scoped_lock lock(writers_mutex_);
+        closing_ = true;
         for (auto it = active_writers_.begin(); it != active_writers_.end(); ++it)
             it.value()->terminate();
         active_writers_.clear();
     }
 
     // Release the file data provider (waits for in-flight download blocks, cleans up temp
-    // directory).
+    // directory). A block that has not registered its writer yet is turned away by |closing_| in
+    // onFileDataRequested(), so the wait cannot hang on a writer nobody would ever terminate.
     file_data_provider_.reset();
 }
 
@@ -364,13 +366,21 @@ void ClipboardMac::setDataFiles(const QByteArray& data)
     // Terminate any active writers from previous provider.
     {
         std::scoped_lock lock(writers_mutex_);
+        closing_ = true;
         for (auto it = active_writers_.begin(); it != active_writers_.end(); ++it)
             it.value()->terminate();
         active_writers_.clear();
     }
 
-    // Release the old provider before creating a new one.
+    // Release the old provider before creating a new one. Its destructor waits for in-flight
+    // download blocks; a block that has not registered its writer yet is turned away by
+    // |closing_|, so the wait cannot hang.
     file_data_provider_.reset();
+
+    {
+        std::scoped_lock lock(writers_mutex_);
+        closing_ = false;
+    }
 
     file_data_provider_.reset(FileDataProvider::create(files,
         [this](int file_index, FilePromiseWriter* writer)
@@ -402,6 +412,14 @@ void ClipboardMac::onFileDataRequested(int file_index, FilePromiseWriter* writer
     // Called from NSFilePresenter's operation queue (background thread).
     // Protect active_writers_ since addFileData runs on the clipboard thread.
     std::scoped_lock lock(writers_mutex_);
+
+    // The clipboard is tearing down or replacing the provider: nobody would feed or terminate
+    // this writer, and the provider destructor would wait on its presenter block forever.
+    if (closing_)
+    {
+        writer->terminate();
+        return;
+    }
 
     auto it = active_writers_.find(file_index);
     if (it != active_writers_.end())

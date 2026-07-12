@@ -62,6 +62,7 @@ private:
     std::unique_ptr<FileDataProvider> file_data_provider_;
     std::mutex writers_mutex_;
     QMap<int, FilePromiseWriter*> active_writers_;
+    bool closing_ = false; // Guarded by |writers_mutex_|.
 
     Q_DISABLE_COPY(ClipboardMac)
 };
