@@ -64,16 +64,13 @@ void DesktopEnvironment::setWallpaper(bool enable)
 {
     static const bool kDefaultValue = true;
 
+    // Re-applying an unchanged value must be a no-op: revertAll() below briefly restores the
+    // user's wallpaper, which visibly flashes when a repeated configure.
     bool has_changes = false;
     if (wallpaper_.has_value())
-    {
+        has_changes = (*wallpaper_ != enable);
+    else if (enable != kDefaultValue)
         has_changes = true;
-    }
-    else
-    {
-        if (enable != kDefaultValue)
-            has_changes = true;
-    }
 
     if (has_changes)
     {
@@ -91,14 +88,9 @@ void DesktopEnvironment::setEffects(bool enable)
 
     bool has_changes = false;
     if (effects_.has_value())
-    {
+        has_changes = (*effects_ != enable);
+    else if (enable != kDefaultValue)
         has_changes = true;
-    }
-    else
-    {
-        if (enable != kDefaultValue)
-            has_changes = true;
-    }
 
     if (has_changes)
     {
