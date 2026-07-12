@@ -62,7 +62,9 @@ private:
     // accepts these on the fly, so no session re-creation is needed when the bandwidth changes.
     void applyRateControl();
 
-    bool copyFrameToPixelBuffer(const Frame* frame, CVPixelBufferRef pixel_buffer);
+    // Copies only |region| of |frame| into the persistent |pixel_buffer_|, which retains the rest of
+    // the previous frame. Key frames pass the whole image; other frames pass just the changed area.
+    bool copyRegionToPixelBuffer(const Frame* frame, const Region& region);
 
     // Repacks the AVCC sample (length-prefixed NAL units) into Annex B in |encode_buffer_|,
     // prepending the SPS/PPS parameter sets on key frames.
@@ -88,6 +90,11 @@ private:
     quint32 target_bitrate_bps_ = 5 * 1000 * 1000;
 
     VTCompressionSessionRef session_ = nullptr;
+
+    // Persistent source buffer, reused across frames so only the changed region has to be copied into
+    // it each time (the encoder is done with it after the synchronous CompleteFrames call). Created
+    // from the session pool in createSession(), released in destroySession().
+    CVPixelBufferRef pixel_buffer_ = nullptr;
 
     // Result of the last encoded frame, written by outputCallback().
     OSStatus output_status_ = noErr;

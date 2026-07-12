@@ -177,21 +177,24 @@ VideoEncoder::Result VideoEncoderH264VT::encode(const Frame* frame, proto::video
 
     QRect image_rect(QPoint(0, 0), last_size_);
 
-    // The dirty region advertised to the client. A key frame refreshes the whole image; otherwise it
-    // is this frame's own updated area plus any area carried over from earlier dropped frames.
-    Region frame_region;
+    // This frame's own changed area (the whole image on a key frame). It is both the region copied
+    // into the source buffer and the base of the dirty rectangles sent to the client.
+    Region updated_region;
 
     if (is_key_frame)
     {
-        frame_region += image_rect;
+        updated_region += image_rect;
     }
     else
     {
         for (const auto& rect : frame->constUpdatedRegion())
-            frame_region += alignRect(rect);
-        frame_region.intersect(image_rect);
-        frame_region += pending_region_;
+            updated_region += alignRect(rect);
+        updated_region.intersect(image_rect);
     }
+
+    // Advertise the changed area plus anything carried over from earlier dropped frames.
+    Region frame_region = updated_region;
+    frame_region += pending_region_;
 
     for (const auto& rect : frame_region)
     {
@@ -202,26 +205,10 @@ VideoEncoder::Result VideoEncoderH264VT::encode(const Frame* frame, proto::video
         dirty_rect->set_height(rect.height());
     }
 
-    CVPixelBufferPoolRef pool = VTCompressionSessionGetPixelBufferPool(session_);
-    if (!pool)
-    {
-        LOG(ERROR) << "VTCompressionSessionGetPixelBufferPool failed";
+    // Refresh only the changed pixels in the persistent source buffer; the carried-over area is
+    // already present from when it was last copied, so it does not need copying again.
+    if (!copyRegionToPixelBuffer(frame, updated_region))
         return Result::TEMPORARY_ERROR;
-    }
-
-    CVPixelBufferRef pixel_buffer = nullptr;
-    if (CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, pool, &pixel_buffer) !=
-            kCVReturnSuccess || !pixel_buffer)
-    {
-        LOG(ERROR) << "CVPixelBufferPoolCreatePixelBuffer failed";
-        return Result::TEMPORARY_ERROR;
-    }
-
-    if (!copyFrameToPixelBuffer(frame, pixel_buffer))
-    {
-        CVPixelBufferRelease(pixel_buffer);
-        return Result::TEMPORARY_ERROR;
-    }
 
     CFDictionaryRef frame_options = nullptr;
     if (is_key_frame)
@@ -241,9 +228,8 @@ VideoEncoder::Result VideoEncoderH264VT::encode(const Frame* frame, proto::video
     const CMTime duration = CMTimeMake(kFrameDurationMs, kTimescale);
 
     OSStatus status = VTCompressionSessionEncodeFrame(
-        session_, pixel_buffer, pts, duration, frame_options, nullptr, nullptr);
+        session_, pixel_buffer_, pts, duration, frame_options, nullptr, nullptr);
 
-    CVPixelBufferRelease(pixel_buffer);
     if (frame_options)
         CFRelease(frame_options);
 
@@ -453,6 +439,19 @@ bool VideoEncoderH264VT::createSession(const QSize& size)
 
     VTCompressionSessionPrepareToEncodeFrames(session_);
 
+    // Allocate the persistent source buffer from the session pool. It is IOSurface-backed and matches
+    // the session size, so the hardware imports it without an extra copy; only the changed region is
+    // written into it each frame. The first frame is always a key frame, which copies the whole image.
+    CVPixelBufferPoolRef pool = VTCompressionSessionGetPixelBufferPool(session_);
+    if (!pool || CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, pool, &pixel_buffer_) !=
+            kCVReturnSuccess || !pixel_buffer_)
+    {
+        LOG(ERROR) << "Failed to create the source pixel buffer";
+        pixel_buffer_ = nullptr;
+        destroySession();
+        return false;
+    }
+
     frame_counter_ = 0;
     return true;
 }
@@ -466,6 +465,12 @@ void VideoEncoderH264VT::destroySession()
     VTCompressionSessionInvalidate(session_);
     CFRelease(session_);
     session_ = nullptr;
+
+    if (pixel_buffer_)
+    {
+        CVPixelBufferRelease(pixel_buffer_);
+        pixel_buffer_ = nullptr;
+    }
 
     if (output_sample_)
     {
@@ -489,44 +494,45 @@ void VideoEncoderH264VT::applyRateControl()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderH264VT::copyFrameToPixelBuffer(const Frame* frame, CVPixelBufferRef pixel_buffer)
+bool VideoEncoderH264VT::copyRegionToPixelBuffer(const Frame* frame, const Region& region)
 {
-    if (CVPixelBufferLockBaseAddress(pixel_buffer, 0) != kCVReturnSuccess)
+    if (CVPixelBufferLockBaseAddress(pixel_buffer_, 0) != kCVReturnSuccess)
     {
         LOG(ERROR) << "CVPixelBufferLockBaseAddress failed";
         return false;
     }
 
-    const size_t width = CVPixelBufferGetWidth(pixel_buffer);
-    const size_t height = CVPixelBufferGetHeight(pixel_buffer);
-    const size_t dst_stride = CVPixelBufferGetBytesPerRow(pixel_buffer);
-    auto* dst = static_cast<quint8*>(CVPixelBufferGetBaseAddress(pixel_buffer));
+    const size_t dst_stride = CVPixelBufferGetBytesPerRow(pixel_buffer_);
+    auto* dst = static_cast<quint8*>(CVPixelBufferGetBaseAddress(pixel_buffer_));
 
-    const QSize frame_size = frame->size();
     bool result = false;
-
-    // The buffer is rounded down to even, so it may be one pixel shorter/narrower than the frame; it
-    // must never be larger (that would read past the frame).
-    if (dst && static_cast<int>(width) <= frame_size.width() &&
-        static_cast<int>(height) <= frame_size.height())
+    if (dst)
     {
         const quint8* src = frame->frameData();
         const size_t src_stride = static_cast<size_t>(frame->stride());
-        const size_t row_bytes =
-            std::min(src_stride, static_cast<size_t>(width) * Frame::kBytesPerPixel);
+        const int bytes_per_pixel = Frame::kBytesPerPixel;
 
-        for (size_t y = 0; y < height; ++y)
-            memcpy(dst + y * dst_stride, src + y * src_stride, row_bytes);
+        // Every rectangle is clipped to the (even) image bounds by the caller, so it fits both the
+        // source frame and the destination buffer without further clamping. Only these pixels are
+        // copied; the rest of the buffer still holds the previous frame.
+        for (const auto& rect : region)
+        {
+            const size_t x_offset = static_cast<size_t>(rect.x()) * bytes_per_pixel;
+            const size_t row_bytes = static_cast<size_t>(rect.width()) * bytes_per_pixel;
+            const int y_end = rect.y() + rect.height();
+
+            for (int y = rect.y(); y < y_end; ++y)
+                memcpy(dst + y * dst_stride + x_offset, src + y * src_stride + x_offset, row_bytes);
+        }
 
         result = true;
     }
     else
     {
-        LOG(ERROR) << "Pixel buffer larger than frame:" << width << "x" << height
-                   << "vs" << frame_size;
+        LOG(ERROR) << "CVPixelBufferGetBaseAddress returned null";
     }
 
-    CVPixelBufferUnlockBaseAddress(pixel_buffer, 0);
+    CVPixelBufferUnlockBaseAddress(pixel_buffer_, 0);
     return result;
 }
 
