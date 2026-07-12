@@ -594,21 +594,27 @@ bool VideoEncoderH264VT::writeAnnexB(CMSampleBufferRef sample, bool is_key_frame
         }
     }
 
+    // Map the encoded data once. VideoToolbox delivers the sample as a single contiguous block, so a
+    // direct pointer lets us read the NAL length prefixes and copy the payloads without a
+    // CMBlockBufferCopyDataBytes round-trip (two per NAL) and the resize() zero-fill of the old path.
+    size_t contiguous_length = 0;
+    char* data = nullptr;
+    if (CMBlockBufferGetDataPointer(block, 0, &contiguous_length, nullptr, &data) != noErr ||
+        !data || contiguous_length < block_length)
+    {
+        LOG(ERROR) << "CMBlockBufferGetDataPointer failed or not contiguous";
+        return false;
+    }
+
+    const quint8* src = reinterpret_cast<const quint8*>(data);
+
     // Repack the AVCC NAL units (big-endian length prefix) into Annex B (start codes).
     size_t offset = 0;
     while (offset + static_cast<size_t>(nal_length_size) <= block_length)
     {
-        quint8 length_prefix[4] = { 0, 0, 0, 0 };
-        if (CMBlockBufferCopyDataBytes(block, offset, static_cast<size_t>(nal_length_size),
-                                       length_prefix) != noErr)
-        {
-            LOG(ERROR) << "CMBlockBufferCopyDataBytes (length) failed";
-            return false;
-        }
-
         size_t nal_length = 0;
         for (int i = 0; i < nal_length_size; ++i)
-            nal_length = (nal_length << 8) | length_prefix[i];
+            nal_length = (nal_length << 8) | src[offset + i];
 
         offset += static_cast<size_t>(nal_length_size);
         if (!nal_length || offset + nal_length > block_length)
@@ -617,17 +623,8 @@ bool VideoEncoderH264VT::writeAnnexB(CMSampleBufferRef sample, bool is_key_frame
             return false;
         }
 
-        const size_t buffer_offset = encode_buffer_.size();
-        encode_buffer_.resize(buffer_offset + sizeof(kStartCode) + nal_length);
-        memcpy(encode_buffer_.data() + buffer_offset, kStartCode, sizeof(kStartCode));
-
-        if (CMBlockBufferCopyDataBytes(
-                block, offset, nal_length,
-                encode_buffer_.data() + buffer_offset + sizeof(kStartCode)) != noErr)
-        {
-            LOG(ERROR) << "CMBlockBufferCopyDataBytes (payload) failed";
-            return false;
-        }
+        encode_buffer_.append(reinterpret_cast<const char*>(kStartCode), sizeof(kStartCode));
+        encode_buffer_.append(reinterpret_cast<const char*>(src + offset), nal_length);
 
         offset += nal_length;
     }
