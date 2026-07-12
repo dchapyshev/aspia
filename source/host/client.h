@@ -155,6 +155,11 @@ private:
 
     QTimer* probe_timer_ = nullptr;
     TimePoint last_send_time_;
+
+    // Set when the peer's first message arrives; no probe train is sent before that (see
+    // onTcpMessageReceived).
+    bool peer_ready_ = false;
+
     BandwidthProbe tcp_probe_;
     BandwidthProbe udp_probe_;
     quint32 next_train_id_ = 0;

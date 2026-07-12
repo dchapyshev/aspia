@@ -140,6 +140,9 @@ Client::Client(TcpChannel* tcp_channel, QObject* parent)
 
     connect(probe_timer_, &QTimer::timeout, this, [this]()
     {
+        if (!peer_ready_)
+            return;
+
         TimePoint current_time = Clock::now();
 
         // A train whose ack never came (lost probes on UDP, a client that went away mid-measurement)
@@ -187,11 +190,10 @@ void Client::start(const QString& stun_host, quint16 stun_port)
     CLOG(INFO) << "Starting (type:" << tcp_channel_->type() << "stun:" << stun_host << ":"
                << stun_port << "features:" << features_ << ")";
 
+    // No probe train is sent here: the first one goes out when the peer's first message arrives
+    // (see onTcpMessageReceived) - only that proves the peer reads the channel in real time.
     if (features_ & FEATURE_BANDWIDTH)
-    {
         startBandwidthProbing();
-        sendTcpBandwidthProbe(Clock::now());
-    }
 
     onStart();
 
@@ -319,6 +321,18 @@ void Client::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
 //--------------------------------------------------------------------------------------------------
 void Client::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer)
 {
+    // The peer's first message proves it finished its handshake and reads the channel in real time -
+    // only now is a probe train meaningful. A train sent earlier could arrive while the peer's
+    // channel was still paused, get read out of the buffer in one burst on unpause, and measure as
+    // an instant arrival: a fast-link verdict on any link, however slow.
+    if (!peer_ready_)
+    {
+        peer_ready_ = true;
+
+        if (features_ & FEATURE_BANDWIDTH)
+            sendTcpBandwidthProbe(Clock::now());
+    }
+
     if (tcp_channel_id != proto::peer::CHANNEL_ID_CONTROL)
     {
         onMessage(tcp_channel_id, buffer);
