@@ -112,6 +112,7 @@ private:
     static CGEventRef keyboardFilterProc(
         CGEventTapProxy proxy, CGEventType type, CGEventRef event, void* user_info);
     ScopedCFTypeRef<CFMachPortRef> event_tap_;
+    ScopedCFTypeRef<CFRunLoopSourceRef> event_tap_source_;
 #endif // defined(Q_OS_MACOS)
 
     QTimer* error_timer_ = nullptr;

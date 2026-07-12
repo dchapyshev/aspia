@@ -762,16 +762,27 @@ void DesktopWidget::enableKeyHooks(bool enable)
             return;
         }
 
-        CFRunLoopSourceRef run_loop_source =
+        event_tap_source_ =
             CFMachPortCreateRunLoopSource(kCFAllocatorDefault, event_tap_.get(), 0);
+        if (!event_tap_source_)
+        {
+            LOG(ERROR) << "CFMachPortCreateRunLoopSource failed";
+            event_tap_.reset(nullptr);
+            return;
+        }
 
-        CFRunLoopAddSource(CFRunLoopGetCurrent(), run_loop_source, kCFRunLoopCommonModes);
+        CFRunLoopAddSource(CFRunLoopGetCurrent(), event_tap_source_.get(), kCFRunLoopCommonModes);
         CGEventTapEnable(event_tap_.get(), true);
     }
     else
     {
-        if (event_tap_)
-            CGEventTapEnable(event_tap_.get(), false);
+        if (!event_tap_)
+            return;
+
+        CGEventTapEnable(event_tap_.get(), false);
+        CFRunLoopRemoveSource(CFRunLoopGetCurrent(), event_tap_source_.get(), kCFRunLoopCommonModes);
+        event_tap_source_.reset(nullptr);
+        event_tap_.reset(nullptr);
     }
 #else
     Q_UNUSED(enable)
