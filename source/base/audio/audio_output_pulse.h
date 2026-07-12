@@ -54,6 +54,7 @@ private:
 
     bool initDevice();
     bool initPlayout();
+    void disconnectStream();
     void terminate();
     bool initPulseAudio();
     void terminatePulseAudio();

@@ -93,9 +93,6 @@ bool AudioOutputPulse::start()
 //--------------------------------------------------------------------------------------------------
 void AudioOutputPulse::stop()
 {
-    if (!playout_initialized_)
-        return;
-
     if (!play_stream_)
         return;
 
@@ -105,26 +102,7 @@ void AudioOutputPulse::stop()
 
     {
         ScopedPaLock pa_lock(pa_main_loop_);
-
-        // Unset this here so that we don't get a TERMINATED callback.
-        LATE(pa_stream_set_state_callback)(play_stream_, nullptr, nullptr);
-        LATE(pa_stream_set_write_callback)(play_stream_, nullptr, nullptr);
-
-        if (LATE(pa_stream_get_state)(play_stream_) != PA_STREAM_UNCONNECTED)
-        {
-            // Disconnect the stream.
-            if (LATE(pa_stream_disconnect)(play_stream_) != PA_OK)
-            {
-                LOG(ERROR) << "Failed to disconnect play stream:"
-                           << LATE(pa_context_errno)(pa_context_);
-                return;
-            }
-
-            LOG(INFO) << "Disconnected playback";
-        }
-
-        LATE(pa_stream_unref)(play_stream_);
-        play_stream_ = nullptr;
+        disconnectStream();
     }
 
     play_buffer_.reset();
@@ -298,12 +276,27 @@ bool AudioOutputPulse::initPlayout()
                                          nullptr))
     {
         LOG(ERROR) << "Failed to connect play stream:" << LATE(pa_context_errno)(pa_context_);
+        disconnectStream();
         return false;
     }
 
-    // Wait for state change.
-    while (LATE(pa_stream_get_state)(play_stream_) != PA_STREAM_READY)
+    // Wait for the stream to become ready. A terminal state ends the wait too: the state callback
+    // signals on it only once, so another wait iteration would sleep forever.
+    while (true)
+    {
+        pa_stream_state_t state = LATE(pa_stream_get_state)(play_stream_);
+        if (state == PA_STREAM_READY)
+            break;
+
+        if (state == PA_STREAM_FAILED || state == PA_STREAM_TERMINATED)
+        {
+            LOG(ERROR) << "Play stream connection failed:" << LATE(pa_context_errno)(pa_context_);
+            disconnectStream();
+            return false;
+        }
+
         LATE(pa_threaded_mainloop_wait)(pa_main_loop_);
+    }
 
     const struct pa_buffer_attr* buffer = LATE(pa_stream_get_buffer_attr)(play_stream_);
     period_time_ = kBufferTimeMs;
@@ -318,6 +311,34 @@ bool AudioOutputPulse::initPlayout()
 
     LOG(INFO) << "Audio playout initialized";
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Must be called with the PA mainloop lock held.
+void AudioOutputPulse::disconnectStream()
+{
+    if (!play_stream_)
+        return;
+
+    // Unset the callbacks here so that we don't get a TERMINATED callback.
+    LATE(pa_stream_set_state_callback)(play_stream_, nullptr, nullptr);
+    LATE(pa_stream_set_write_callback)(play_stream_, nullptr, nullptr);
+
+    if (LATE(pa_stream_get_state)(play_stream_) != PA_STREAM_UNCONNECTED)
+    {
+        if (LATE(pa_stream_disconnect)(play_stream_) != PA_OK)
+        {
+            LOG(ERROR) << "Failed to disconnect play stream:"
+                       << LATE(pa_context_errno)(pa_context_);
+        }
+        else
+        {
+            LOG(INFO) << "Disconnected playback";
+        }
+    }
+
+    LATE(pa_stream_unref)(play_stream_);
+    play_stream_ = nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
