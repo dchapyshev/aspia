@@ -410,9 +410,12 @@ void FileTransferWindow::sendItems(FilePanelWidget* sender, const QList<FileTran
             transfer->setAction(type, action);
         }, Qt::QueuedConnection);
     }, Qt::QueuedConnection);
-    connect(transfer, &FileTransfer::sig_finished, this, [this, progress]()
+    // The sheet is WA_DeleteOnClose and the user can dismiss it before the transfer finishes, so
+    // it must be closed via its own connection (auto-broken on delete), not a captured pointer.
+    connect(transfer, &FileTransfer::sig_finished, progress, &FileProgressSheet::close,
+            Qt::QueuedConnection);
+    connect(transfer, &FileTransfer::sig_finished, this, [this]()
     {
-        progress->close();
         local_panel_->refresh();
         remote_panel_->refresh();
     }, Qt::QueuedConnection);
@@ -447,9 +450,12 @@ void FileTransferWindow::removeItems(FilePanelWidget* sender, const FileRemover:
             remover->setAction(FileRemover::ACTION_SKIP_ALL);
         }, Qt::QueuedConnection);
     }, Qt::QueuedConnection);
-    connect(remover, &FileRemover::sig_finished, this, [progress, sender]()
+    // The sheet is WA_DeleteOnClose and the user can dismiss it before the removal finishes, so
+    // it must be closed via its own connection (auto-broken on delete), not a captured pointer.
+    connect(remover, &FileRemover::sig_finished, progress, &FileProgressSheet::close,
+            Qt::QueuedConnection);
+    connect(remover, &FileRemover::sig_finished, this, [sender]()
     {
-        progress->close();
         sender->refresh();
     }, Qt::QueuedConnection);
     connect(progress, &FileProgressSheet::sig_cancel, remover, &FileRemover::stop, Qt::QueuedConnection);
