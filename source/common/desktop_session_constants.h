@@ -22,7 +22,6 @@
 extern const char kSelectScreenExtension[]; // Deprecated.
 extern const char kPreferredSizeExtension[]; // Deprecated.
 extern const char kPowerControlExtension[]; // Deprecated.
-extern const char kSystemInfoExtension[]; // Deprecated.
 extern const char kTaskManagerExtension[]; // Deprecated.
 extern const char kVideoPauseExtension[]; // Deprecated.
 extern const char kAudioPauseExtension[]; // Deprecated.
@@ -56,7 +55,6 @@ extern const char kFlagLockAtDisconnect[];
 extern const char kFlagBlockInput[];
 extern const char kFlagPowerControl[];
 extern const char kFlagSelectScreen[];
-extern const char kFlagSystemInfo[];
 extern const char kFlagTaskManager[];
 extern const char kFlagFileClipboard[];
 

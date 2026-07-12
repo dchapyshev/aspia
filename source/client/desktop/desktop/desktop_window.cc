@@ -345,8 +345,6 @@ void DesktopWindow::onCapabilitiesChanged(const proto::control::Capabilities& ca
             toolbar_->enablePowerControl(value);
         else if (name == kFlagSelectScreen)
             toolbar_->enableScreenSelect(value);
-        else if (name == kFlagSystemInfo)
-            toolbar_->enableSystemInfo(value);
         else if (name == kFlagTaskManager)
             toolbar_->enableTaskManager(value);
     }

@@ -275,9 +275,6 @@
    <property name="text">
     <string>System Information</string>
    </property>
-   <property name="visible">
-    <bool>false</bool>
-   </property>
   </action>
   <action name="action_close">
    <property name="icon">

@@ -209,8 +209,9 @@ HRESULT FileObject::GetData(FORMATETC* pFormatEtc, STGMEDIUM* pMedium)
 
         LOG(INFO) << "File content requested:" << QString::fromStdString(file.path());
 
+        // The stream is owned by its COM reference holders: the consumer that receives
+        // |pMedium->pstm| and the callback subscriber; it deletes itself on the last Release().
         FileStream* stream = new FileStream(file.file_size());
-        streams_[index] = stream;
 
         pMedium->tymed = TYMED_ISTREAM;
         pMedium->pUnkForRelease = nullptr;

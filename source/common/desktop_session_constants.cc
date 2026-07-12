@@ -22,7 +22,6 @@
 const char kSelectScreenExtension[] = "select_screen";
 const char kPreferredSizeExtension[] = "preferred_size";
 const char kPowerControlExtension[] = "power_control";
-const char kSystemInfoExtension[] = "system_info";
 const char kTaskManagerExtension[] = "task_manager";
 const char kVideoPauseExtension[] = "video_pause";
 const char kAudioPauseExtension[] = "audio_pause";
@@ -57,6 +56,5 @@ const char kFlagLockAtDisconnect[] = "lock_at_disconnect";
 const char kFlagBlockInput[] = "block_input";
 const char kFlagPowerControl[] = "power_control";
 const char kFlagSelectScreen[] = "select_screen";
-const char kFlagSystemInfo[] = "system_info";
 const char kFlagTaskManager[] = "task_manager";
 const char kFlagFileClipboard[] = "file_clipboard";

@@ -422,30 +422,27 @@ void DesktopAgentClient::sendCapabilities()
         flag->set_value(value);
     };
 
+    // Capabilities implemented by the agent on every platform.
     add_flag(kFlagClipboard, true);
-
-#if defined(Q_OS_WINDOWS)
-    add_flag(kFlagOSWindows, true);
     add_flag(kFlagCursorPosition, true);
     add_flag(kFlagCursorShape, true);
     add_flag(kFlagPasteAsKeystrokes, true);
-    add_flag(kFlagBlockInput, true);
-    add_flag(kFlagDesktopEffects, true);
     add_flag(kFlagDesktopWallpaper, true);
     add_flag(kFlagLockAtDisconnect, true);
     add_flag(kFlagPowerControl, true);
     add_flag(kFlagSelectScreen, true);
-    add_flag(kFlagSystemInfo, true);
     add_flag(kFlagTaskManager, true);
+
+#if defined(Q_OS_WINDOWS)
+    add_flag(kFlagOSWindows, true);
+    add_flag(kFlagBlockInput, true);
+    add_flag(kFlagDesktopEffects, true);
     add_flag(kFlagFileClipboard, true);
 #elif defined(Q_OS_LINUX)
     add_flag(kFlagOSLinux, true);
-    add_flag(kFlagPowerControl, true);
-    add_flag(kFlagTaskManager, true);
 #elif defined(Q_OS_MACOS)
     add_flag(kFlagOSMacOS, true);
-    add_flag(kFlagPowerControl, true);
-    add_flag(kFlagTaskManager, true);
+    add_flag(kFlagFileClipboard, true);
 #else
 #warning Not implemented
 #endif

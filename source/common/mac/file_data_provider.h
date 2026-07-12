@@ -42,11 +42,13 @@ class FileDataProvider final
 {
 public:
     using FileDataRequestCallback = std::function<void(int file_index, FilePromiseWriter* writer)>;
+    using FileDataFinishedCallback = std::function<void(int file_index, FilePromiseWriter* writer)>;
 
     ~FileDataProvider();
 
     static FileDataProvider* create(const proto::clipboard::Event::FileList& files,
-                                    FileDataRequestCallback callback);
+                                    FileDataRequestCallback request_callback,
+                                    FileDataFinishedCallback finished_callback);
 
     // Creates empty temp files, registers NSFilePresenters, writes file URLs
     // to NSPasteboard. This is instant — no network transfer occurs.
@@ -55,14 +57,20 @@ public:
     // Called from NSFilePresenter (on background queue) when file data is needed.
     void onFileRequested(int file_index, FilePromiseWriter* writer);
 
+    // Called from NSFilePresenter (on background queue) right before |writer| is destroyed, so the
+    // subscriber can drop its reference to it.
+    void onFileFinished(int file_index, FilePromiseWriter* writer);
+
     const proto::clipboard::Event::FileList& files() const { return files_; }
     const QString& tempDir() const { return temp_dir_; }
 
 private:
     FileDataProvider(const proto::clipboard::Event::FileList& files,
-                     FileDataRequestCallback callback);
+                     FileDataRequestCallback request_callback,
+                     FileDataFinishedCallback finished_callback);
 
-    FileDataRequestCallback callback_;
+    FileDataRequestCallback request_callback_;
+    FileDataFinishedCallback finished_callback_;
     proto::clipboard::Event::FileList files_;
     QString temp_dir_;
 

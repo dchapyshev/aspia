@@ -210,15 +210,6 @@ void DesktopToolBar::enablePowerControl(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopToolBar::enableSystemInfo(bool enable)
-{
-    LOG(INFO) << "enableSystemInfo:" << enable;
-    ui->action_system_info->setVisible(enable);
-    ui->action_system_info->setEnabled(enable);
-    updateSize();
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enableTextChat(bool enable)
 {
     LOG(INFO) << "enableTextChat:" << enable;

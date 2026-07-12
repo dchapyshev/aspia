@@ -53,6 +53,7 @@ private:
     void setDataText(const QByteArray& data);
     void setDataFiles(const QByteArray& data);
     void onFileDataRequested(int file_index, FilePromiseWriter* writer);
+    void onFileDataFinished(int file_index, FilePromiseWriter* writer);
 
     QTimer* timer_ = nullptr;
     int current_change_count_ = 0;

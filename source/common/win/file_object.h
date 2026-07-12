@@ -23,8 +23,6 @@
 #include <memory>
 #include <shlobj.h>
 
-#include <QMap>
-
 #include "common/win/file_stream.h"
 #include "proto/desktop_clipboard.h"
 
@@ -64,7 +62,6 @@ private:
 
     FileDataRequestCallback file_data_request_callback_;
     proto::clipboard::Event::FileList files_;
-    QMap<int, FileStream*> streams_;
 };
 
 #endif // COMMON_WIN_FILE_OBJECT_H

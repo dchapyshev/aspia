@@ -56,7 +56,6 @@ public:
 
     void enableScreenSelect(bool enable);
     void enablePowerControl(bool enable);
-    void enableSystemInfo(bool enable);
     void enableTextChat(bool enable);
     void enableTaskManager(bool enable);
     void enableCtrlAltDelFeature(bool enable);

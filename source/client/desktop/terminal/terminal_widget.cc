@@ -104,7 +104,7 @@ QString terminalFontFamily()
             if (!families.isEmpty())
                 return families.front();
         }
-        return "monospace";
+        return QString("monospace");
     }();
 
     return family;

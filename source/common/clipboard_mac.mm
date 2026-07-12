@@ -173,11 +173,15 @@ ClipboardMac::~ClipboardMac()
     LOG(INFO) << "Dtor";
 
     // Terminate any active writers.
-    for (auto it = active_writers_.begin(); it != active_writers_.end(); ++it)
-        it.value()->terminate();
-    active_writers_.clear();
+    {
+        std::scoped_lock lock(writers_mutex_);
+        for (auto it = active_writers_.begin(); it != active_writers_.end(); ++it)
+            it.value()->terminate();
+        active_writers_.clear();
+    }
 
-    // Release the file data provider (cleans up temp directory).
+    // Release the file data provider (waits for in-flight download blocks, cleans up temp
+    // directory).
     file_data_provider_.reset();
 }
 
@@ -372,6 +376,10 @@ void ClipboardMac::setDataFiles(const QByteArray& data)
         [this](int file_index, FilePromiseWriter* writer)
         {
             onFileDataRequested(file_index, writer);
+        },
+        [this](int file_index, FilePromiseWriter* writer)
+        {
+            onFileDataFinished(file_index, writer);
         }));
 
     if (!file_data_provider_)
@@ -404,6 +412,19 @@ void ClipboardMac::onFileDataRequested(int file_index, FilePromiseWriter* writer
 
     active_writers_[file_index] = writer;
     emit sig_fileDataRequest(file_index);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClipboardMac::onFileDataFinished(int file_index, FilePromiseWriter* writer)
+{
+    // Called from NSFilePresenter's operation queue right before |writer| is deleted. On a normal
+    // completion the entry is already erased by addFileData(); on an error path (destination not
+    // writable, write failure) it is still here and would become dangling.
+    std::scoped_lock lock(writers_mutex_);
+
+    auto it = active_writers_.find(file_index);
+    if (it != active_writers_.end() && it.value() == writer)
+        active_writers_.erase(it);
 }
 
 //--------------------------------------------------------------------------------------------------

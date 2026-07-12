@@ -674,7 +674,6 @@ void ClientDesktop::readLegacyCapabilities(const proto::legacy::Capabilities& le
 
     add_flag(kFlagSelectScreen, extension_list.contains(kSelectScreenExtension));
     add_flag(kFlagPowerControl, extension_list.contains(kPowerControlExtension));
-    add_flag(kFlagSystemInfo, extension_list.contains(kSystemInfoExtension));
     add_flag(kFlagTaskManager, extension_list.contains(kTaskManagerExtension));
 
     CLOG(INFO) << "Converted:" << capabilities;
@@ -1072,7 +1071,7 @@ void ClientDesktop::sendCapabilities()
         add_flag(kFlagVideoH264, true);
     add_flag(kFlagAudioOpus, true);
 
-#if defined(Q_OS_WINDOWS)
+#if defined(Q_OS_WINDOWS) || defined(Q_OS_MACOS)
     add_flag(kFlagFileClipboard, true);
 #endif
 

@@ -43,6 +43,7 @@
                       fileIndex:(int)fileIndex
                        provider:(FileDataProvider*)provider;
 - (void)stopPresenting;
+- (void)waitForPendingOperations;
 
 @end
 
@@ -78,6 +79,11 @@
     [NSFileCoordinator removeFilePresenter:self];
 }
 
+- (void)waitForPendingOperations
+{
+    [_queue waitUntilAllOperationsAreFinished];
+}
+
 - (NSURL*)presentedItemURL
 {
     return _url;
@@ -105,6 +111,10 @@
     QString dest_path = QString(_provider->tempDir() + '/' +
                                 QString::fromStdString(file.path()));
     bool success = writer->writeToDestination(dest_path);
+
+    // Unregister the writer before deleting it: on an error path (destination not writable, write
+    // failure) the subscriber still holds the pointer and would use it for the next data chunk.
+    _provider->onFileFinished(_file_index, writer);
     delete writer;
 
     if (!success)
@@ -124,8 +134,10 @@
 
 //--------------------------------------------------------------------------------------------------
 FileDataProvider::FileDataProvider(const proto::clipboard::Event::FileList& files,
-                                   FileDataRequestCallback callback)
-    : callback_(std::move(callback)),
+                                   FileDataRequestCallback request_callback,
+                                   FileDataFinishedCallback finished_callback)
+    : request_callback_(std::move(request_callback)),
+      finished_callback_(std::move(finished_callback)),
       files_(files)
 {
     temp_dir_ = QDir::tempPath() + "/aspia-clipboard-" +
@@ -143,9 +155,13 @@ FileDataProvider::~FileDataProvider()
 {
     LOG(INFO) << "Destroying FileDataProvider, cleaning up";
 
-    // Remove all file presenters.
+    // Remove all file presenters. Wait for the in-flight download blocks: they reference this
+    // provider, and by now their writers have been terminated by the owner, so they finish promptly.
     for (AsFilePresenter* presenter in file_presenters_)
+    {
         [presenter stopPresenting];
+        [presenter waitForPendingOperations];
+    }
     [file_presenters_ removeAllObjects];
     file_presenters_ = nil;
 
@@ -157,7 +173,8 @@ FileDataProvider::~FileDataProvider()
 //--------------------------------------------------------------------------------------------------
 // static
 FileDataProvider* FileDataProvider::create(const proto::clipboard::Event::FileList& files,
-                                           FileDataRequestCallback callback)
+                                           FileDataRequestCallback request_callback,
+                                           FileDataFinishedCallback finished_callback)
 {
     if (files.file_size() == 0)
     {
@@ -165,7 +182,7 @@ FileDataProvider* FileDataProvider::create(const proto::clipboard::Event::FileLi
         return nullptr;
     }
 
-    return new FileDataProvider(files, std::move(callback));
+    return new FileDataProvider(files, std::move(request_callback), std::move(finished_callback));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -223,6 +240,13 @@ void FileDataProvider::writeToPasteboard()
 //--------------------------------------------------------------------------------------------------
 void FileDataProvider::onFileRequested(int file_index, FilePromiseWriter* writer)
 {
-    if (callback_)
-        callback_(file_index, writer);
+    if (request_callback_)
+        request_callback_(file_index, writer);
+}
+
+//--------------------------------------------------------------------------------------------------
+void FileDataProvider::onFileFinished(int file_index, FilePromiseWriter* writer)
+{
+    if (finished_callback_)
+        finished_callback_(file_index, writer);
 }
