@@ -78,7 +78,7 @@ void addAndroidDrives(proto::file_transfer::DriveList* drive_list)
 
             for (jsize i = 1; i < count; ++i)
             {
-                QJniObject dir = env->GetObjectArrayElement(array, i);
+                QJniObject dir = QJniObject::fromLocalRef(env->GetObjectArrayElement(array, i));
                 if (!dir.isValid())
                     continue;
 
