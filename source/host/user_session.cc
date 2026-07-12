@@ -269,32 +269,27 @@ void UserSession::onClientConfirmation(const proto::user::ConfirmationRequest& r
 
     Database& db = Database::instance();
 
-#if defined(Q_OS_WINDOWS)
+    // No GUI process is attached (the login screen, or the grace period right after the GUI dropped),
+    // so the request cannot be shown to anyone. Decide it here instead of sending it to a GUI that is
+    // not there, where it would hang until the client times out.
     if (state_ == State::DETTACHED || dettach_timer_->isActive())
     {
         LOG(INFO) << "No active GUI process";
 
-        SessionId session_id = activeConsoleSessionId();
-        if (session_id == kInvalidSessionId)
+        switch (consoleUserState())
         {
-            LOG(INFO) << "Reject: invalid console session id";
-            emit sig_confirmationReply(request.id(), false);
-            return;
-        }
+            case ConsoleUserState::UNKNOWN:
+                LOG(ERROR) << "Reject: unable to get session info";
+                emit sig_confirmationReply(request.id(), false);
+                return;
 
-        SessionInfo session_info(session_id);
-        if (!session_info.isValid())
-        {
-            LOG(ERROR) << "Reject: unable to get session info";
-            emit sig_confirmationReply(request.id(), false);
-            return;
-        }
+            case ConsoleUserState::ACTIVE:
+                LOG(INFO) << "Reject: user is active, but there is no connection to the GUI";
+                emit sig_confirmationReply(request.id(), false);
+                return;
 
-        if (session_info.connectState() == SessionInfo::ConnectState::ACTIVE)
-        {
-            LOG(INFO) << "Reject: user is active, but there is no connection to the GUI";
-            emit sig_confirmationReply(request.id(), false);
-            return;
+            case ConsoleUserState::NO_USER:
+                break;
         }
 
         if (!db.connectConfirmation())
@@ -315,7 +310,6 @@ void UserSession::onClientConfirmation(const proto::user::ConfirmationRequest& r
         emit sig_confirmationReply(request.id(), false);
         return;
     }
-#endif // defined(Q_OS_WINDOWS)
 
     if (!db.connectConfirmation())
     {

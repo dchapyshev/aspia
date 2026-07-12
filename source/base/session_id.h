@@ -37,8 +37,16 @@ using SessionId = pid_t;
 extern const SessionId kInvalidSessionId;
 extern const SessionId kServiceSessionId;
 
+enum class ConsoleUserState
+{
+    UNKNOWN,
+    NO_USER,
+    ACTIVE
+};
+
 SessionId activeConsoleSessionId();
 SessionId currentProcessSessionId();
+ConsoleUserState consoleUserState();
 const char* sessionStatusToString(quint32 status);
 
 #endif // BASE_SESSION_ID_H

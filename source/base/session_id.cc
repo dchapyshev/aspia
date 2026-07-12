@@ -23,10 +23,12 @@
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
+#include "base/win/session_info.h"
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 #include <cstdlib>
+#include <cstring>
 #include "base/linux/libsystemd.h"
 #endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 
@@ -111,6 +113,49 @@ SessionId currentProcessSessionId()
     return session_id;
 #else
     return 0;
+#endif
+}
+
+//--------------------------------------------------------------------------------------------------
+ConsoleUserState consoleUserState()
+{
+#if defined(Q_OS_WINDOWS)
+    SessionId session_id = activeConsoleSessionId();
+    if (session_id == kInvalidSessionId)
+        return ConsoleUserState::UNKNOWN;
+
+    SessionInfo session_info(session_id);
+    if (!session_info.isValid())
+        return ConsoleUserState::UNKNOWN;
+
+    if (session_info.connectState() == SessionInfo::ConnectState::ACTIVE)
+        return ConsoleUserState::ACTIVE;
+
+    return ConsoleUserState::NO_USER;
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+    // seat0's active session exists both for a logged-in user and for the display-manager greeter;
+    // the session class ("user" vs "greeter") tells them apart.
+    char* session = nullptr;
+    if (LibSystemd::seatGetActive("seat0", &session, nullptr) < 0 || !session)
+        return ConsoleUserState::NO_USER;
+
+    char* session_class = nullptr;
+    int ret = LibSystemd::sessionGetClass(session, &session_class);
+    free(session);
+
+    if (ret < 0 || !session_class)
+        return ConsoleUserState::UNKNOWN;
+
+    const bool is_user = strcmp(session_class, "user") == 0;
+    free(session_class);
+
+    return is_user ? ConsoleUserState::ACTIVE : ConsoleUserState::NO_USER;
+#elif defined(Q_OS_MACOS)
+    // The login window (nobody logged in) maps to the invalid id; a logged-in user maps to their uid.
+    return activeConsoleSessionId() == kInvalidSessionId ?
+        ConsoleUserState::NO_USER : ConsoleUserState::ACTIVE;
+#else
+    return ConsoleUserState::NO_USER;
 #endif
 }
 
