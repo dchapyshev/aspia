@@ -85,11 +85,15 @@ void ScopedClipboard::setData(UINT format, HANDLE mem)
     if (!opened_)
     {
         LOG(ERROR) << "Clipboard is not open";
+        GlobalFree(mem);
         return;
     }
 
-    // The caller must not close the handle that SetClipboardData returns.
-    SetClipboardData(format, mem);
+    if (!SetClipboardData(format, mem))
+    {
+        PLOG(ERROR) << "SetClipboardData failed";
+        GlobalFree(mem);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

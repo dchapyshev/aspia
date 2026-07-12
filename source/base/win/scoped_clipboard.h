@@ -30,6 +30,8 @@ public:
 
     bool init(HWND owner);
     BOOL empty();
+
+    // Takes ownership of |mem| (an HGLOBAL).
     void setData(UINT format, HANDLE mem);
 
     //
