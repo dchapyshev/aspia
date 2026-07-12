@@ -111,14 +111,7 @@ WaylandPortal::WaylandPortal(uid_t session_uid, QObject* parent)
 //--------------------------------------------------------------------------------------------------
 WaylandPortal::~WaylandPortal()
 {
-    if (pipewire_fd_ >= 0)
-        ::close(pipewire_fd_);
-
-    if (!session_handle_.isEmpty())
-    {
-        QDBusInterface session(kPortalService, session_handle_, kSessionIface, bus_);
-        session.call("Close");
-    }
+    closeSession();
 
     if (bus_.isConnected())
         QDBusConnection::disconnectFromBus(connection_name_);
@@ -157,6 +150,7 @@ bool WaylandPortal::isScreenCastAvailable(uid_t session_uid)
 //--------------------------------------------------------------------------------------------------
 void WaylandPortal::start()
 {
+    closeSession();
     queryCapabilities();
     createSession();
 }
@@ -514,6 +508,40 @@ void WaylandPortal::fail()
 {
     step_ = Step::FAILED;
     emit sig_started(false);
+}
+
+//--------------------------------------------------------------------------------------------------
+void WaylandPortal::closeSession()
+{
+    if (pipewire_fd_ >= 0)
+    {
+        ::close(pipewire_fd_);
+        pipewire_fd_ = -1;
+    }
+
+    // If a negotiation was interrupted mid-flight, its Response subscription is still live (a
+    // repeated disconnect after a delivered response is a harmless no-op).
+    if (!pending_request_path_.isEmpty())
+    {
+        bus_.disconnect(
+            kPortalService, pending_request_path_, kRequestIface, "Response",
+            this, SLOT(onResponse(uint, QVariantMap)));
+        pending_request_path_.clear();
+    }
+
+    if (!session_handle_.isEmpty())
+    {
+        bus_.disconnect(
+            kPortalService, session_handle_, kSessionIface, "Closed",
+            this, SLOT(onSessionClosed(QVariantMap)));
+
+        QDBusInterface session(kPortalService, session_handle_, kSessionIface, bus_);
+        session.call("Close");
+        session_handle_.clear();
+    }
+
+    stream_ = Stream();
+    step_ = Step::IDLE;
 }
 
 //--------------------------------------------------------------------------------------------------

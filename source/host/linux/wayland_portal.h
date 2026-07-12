@@ -108,6 +108,7 @@ private:
     void startSession();
     void openPipeWireRemote();
     void fail();
+    void closeSession();
 
     // Reads a uint portal property (version/AvailableCursorModes/...) via the Properties interface.
     quint32 portalProperty(const QString& interface, const QString& property) const;
