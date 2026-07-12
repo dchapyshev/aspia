@@ -44,6 +44,7 @@ class Position;
 
 class BottomSheet;
 class ClientDesktop;
+class Clipboard;
 class DesktopView;
 class FloatingActionButton;
 class KeyBar;
@@ -96,6 +97,7 @@ private:
     HostConfig host_;
     std::shared_ptr<SessionState> session_state_;
     ScopedQPointer<ClientDesktop> client_;
+    ScopedQPointer<Clipboard> clipboard_;
 
     proto::screen::ScreenList screen_list_;
     proto::control::SessionList session_list_;

@@ -23,6 +23,7 @@
 
 #include <optional>
 
+#include "base/scoped_qpointer.h"
 #include "client/client_desktop.h"
 #include "base/desktop/shared_frame.h"
 #include "client/desktop/client_window.h"
@@ -31,6 +32,7 @@ class MouseCursor;
 class QHBoxLayout;
 class QScrollArea;
 
+class Clipboard;
 class DesktopToolBar;
 class DesktopWidget;
 class StatisticsDialog;
@@ -113,6 +115,7 @@ private:
 
     QPointer<TaskManagerWindow> task_manager_;
     QPointer<StatisticsDialog> statistics_dialog_;
+    ScopedQPointer<Clipboard> clipboard_;
 
     QTimer* resize_timer_ = nullptr;
     QSize screen_size_;

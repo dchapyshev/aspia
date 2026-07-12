@@ -256,23 +256,20 @@ Client* DesktopWindow::createClient()
 
     // The clipboard lives here on the GUI thread; the client runs on the I/O thread, so the
     // connections are queued. Created only when enabled to avoid monitoring the local clipboard.
-    if (desktop_config_.clipboard())
+    clipboard_.reset(desktop_config_.clipboard() ? Clipboard::create(this) : nullptr);
+    if (clipboard_)
     {
-        Clipboard* clipboard = Clipboard::create(this);
-        if (clipboard)
-        {
-            connect(clipboard, &Clipboard::sig_clipboardEvent,
-                    client, &ClientDesktop::onClipboardEvent, Qt::QueuedConnection);
-            connect(clipboard, &Clipboard::sig_localFileListChanged,
-                    client, &ClientDesktop::onClipboardLocalFileListChanged, Qt::QueuedConnection);
-            connect(clipboard, &Clipboard::sig_fileDataRequest,
-                    client, &ClientDesktop::onClipboardFileDataRequest, Qt::QueuedConnection);
-            connect(client, &ClientDesktop::sig_injectClipboardEvent,
-                    clipboard, &Clipboard::injectClipboardEvent, Qt::QueuedConnection);
-            connect(client, &ClientDesktop::sig_clipboardFileData,
-                    clipboard, &Clipboard::addFileData, Qt::QueuedConnection);
-            clipboard->start();
-        }
+        connect(clipboard_, &Clipboard::sig_clipboardEvent,
+                client, &ClientDesktop::onClipboardEvent, Qt::QueuedConnection);
+        connect(clipboard_, &Clipboard::sig_localFileListChanged,
+                client, &ClientDesktop::onClipboardLocalFileListChanged, Qt::QueuedConnection);
+        connect(clipboard_, &Clipboard::sig_fileDataRequest,
+                client, &ClientDesktop::onClipboardFileDataRequest, Qt::QueuedConnection);
+        connect(client, &ClientDesktop::sig_injectClipboardEvent,
+                clipboard_, &Clipboard::injectClipboardEvent, Qt::QueuedConnection);
+        connect(client, &ClientDesktop::sig_clipboardFileData,
+                clipboard_, &Clipboard::addFileData, Qt::QueuedConnection);
+        clipboard_->start();
     }
 
     return client;
