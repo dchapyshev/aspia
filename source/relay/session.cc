@@ -44,7 +44,7 @@ Session::Session(std::pair<asio::ip::tcp::socket, asio::ip::tcp::socket>&& socke
     }
 
     for (size_t i = 0; i < kNumberOfSides; ++i)
-        std::fill(buffer_[i].begin(), buffer_[i].end(), 0);
+        std::fill(io_->buffer[i].begin(), io_->buffer[i].end(), 0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -52,7 +52,7 @@ Session::~Session()
 {
     // Mark guard before releasing resources so that any pending ASIO handlers
     // (already completed but not yet dispatched) will see the object is gone.
-    *alive_guard_ = false;
+    io_->alive = false;
 
     std::error_code ignored_code;
     for (int i = 0; i < kNumberOfSides; ++i)
@@ -93,12 +93,12 @@ std::chrono::seconds Session::duration(const TimePoint& current_time) const
 // static
 void Session::doReadSome(Session* session, int source)
 {
-    auto guard = session->alive_guard_;
+    auto io = session->io_;
     session->socket_[source].async_read_some(
-        asio::buffer(session->buffer_[source].data(), session->buffer_[source].size()),
-        [guard, session, source](const std::error_code& error_code, size_t bytes_transferred)
+        asio::buffer(session->io_->buffer[source].data(), session->io_->buffer[source].size()),
+        [io, session, source](const std::error_code& error_code, size_t bytes_transferred)
     {
-        if (!*guard)
+        if (!io->alive)
             return;
 
         if (error_code)
@@ -113,10 +113,10 @@ void Session::doReadSome(Session* session, int source)
 
         asio::async_write(
             session->socket_[(source + kNumberOfSides - 1) % kNumberOfSides],
-            asio::const_buffer(session->buffer_[source].data(), bytes_transferred),
-            [guard, session, source](const std::error_code& error_code, size_t /* bytes_transferred */)
+            asio::const_buffer(session->io_->buffer[source].data(), bytes_transferred),
+            [io, session, source](const std::error_code& error_code, size_t /* bytes_transferred */)
         {
-            if (!*guard)
+            if (!io->alive)
                 return;
 
             if (error_code)

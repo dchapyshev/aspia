@@ -165,6 +165,13 @@ private:
         PcpMapResponse pcp_map;
     };
 
+    struct IoState
+    {
+        bool alive = true;
+        Request request {};
+        Response response {};
+    };
+
     //----------------------------------------------------------------------------------------------
     // Generic
     //----------------------------------------------------------------------------------------------
@@ -193,9 +200,6 @@ private:
     asio::ip::udp::endpoint gateway_;
     asio::steady_timer retransmit_timer_;
 
-    Request request_ {};
-    Response response_ {};
-
     Type type_ = Type::NONE;
     Phase phase_ = Phase::PCP;
     int tries_ = 0;
@@ -209,7 +213,7 @@ private:
     std::array<quint8, 16> client_ip_ {}; // Local address as IPv4-mapped IPv6 (for PCP).
     std::array<quint8, 12> nonce_ {};     // PCP mapping nonce.
 
-    SharedPointer<bool> alive_guard_ { new bool(true) };
+    SharedPointer<IoState> io_ { new IoState() };
 
     Q_DISABLE_COPY_MOVE(PcpPortMapper)
 };

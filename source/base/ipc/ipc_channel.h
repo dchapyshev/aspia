@@ -131,23 +131,27 @@ private:
 
     using WriteQueue = QQueue<WriteTask>;
 
+    struct IoState
+    {
+        bool alive = true;
+        WriteQueue write_queue;
+        Header write_header {};
+        Header read_header {};
+        QByteArray read_buffer;
+    };
+
     const quint32 instance_id_;
     SessionId session_id_ = kInvalidSessionId;
     quint32 process_id_ = 0;
     QString channel_name_;
     Stream stream_;
 
-    SharedPointer<bool> alive_guard_ { new bool(true) };
+    SharedPointer<IoState> io_ { new IoState() };
 
     bool is_connected_ = false;
     bool is_paused_ = true;
 
-    WriteQueue write_queue_;
-    Header write_header_;
-
     ReadState read_state_ = ReadState::IDLE;
-    Header read_header_;
-    QByteArray read_buffer_;
 
     LOG_DECLARE_CONTEXT(IpcChannel);
     Q_DISABLE_COPY_MOVE(IpcChannel)

@@ -170,13 +170,13 @@ IpcChannel::IpcChannel(const QString& channel_name, Stream&& stream, QObject* pa
       stream_(std::move(stream)),
       is_connected_(true)
 {
-    write_queue_.reserve(kWriteQueueReservedSize);
+    io_->write_queue.reserve(kWriteQueueReservedSize);
 }
 
 //--------------------------------------------------------------------------------------------------
 IpcChannel::~IpcChannel()
 {
-    *alive_guard_ = false;
+    io_->alive = false;
     disconnectFrom();
 }
 
@@ -225,17 +225,17 @@ void IpcChannel::setPaused(bool enable)
             break;
     }
 
-    CDCHECK_EQ(read_header_.message_size, 0);
+    CDCHECK_EQ(io_->read_header.message_size, 0);
     doReadHeader();
 }
 
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::send(quint32 channel_id, const QByteArray& buffer, bool reliable)
 {
-    const bool schedule_write = write_queue_.empty();
+    const bool schedule_write = io_->write_queue.empty();
 
     // Add the buffer to the queue for sending.
-    write_queue_.emplace_back(channel_id, buffer, reliable);
+    io_->write_queue.emplace_back(channel_id, buffer, reliable);
 
     if (schedule_write)
         doWriteHeader();
@@ -362,32 +362,32 @@ void IpcChannel::onErrorOccurred(const Location& location, const std::error_code
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::onMessageReceived()
 {
-    emit sig_messageReceived(read_header_.channel_id, read_buffer_, !!read_header_.reliable);
-    memset(&read_header_, 0, sizeof(Header));
+    emit sig_messageReceived(io_->read_header.channel_id, io_->read_buffer, !!io_->read_header.reliable);
+    memset(&io_->read_header, 0, sizeof(Header));
 }
 
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::doWriteHeader()
 {
-    const WriteTask& task = write_queue_.front();
+    const WriteTask& task = io_->write_queue.front();
 
-    write_header_.magic = kHeaderMagic;
-    write_header_.message_size = task.data().size();
-    write_header_.channel_id = task.channelId();
-    write_header_.reliable = task.reliable() ? 1 : 0;
+    io_->write_header.magic = kHeaderMagic;
+    io_->write_header.message_size = task.data().size();
+    io_->write_header.channel_id = task.channelId();
+    io_->write_header.reliable = task.reliable() ? 1 : 0;
 
-    if (!write_header_.message_size || write_header_.message_size > kMaxMessageSize)
+    if (!io_->write_header.message_size || io_->write_header.message_size > kMaxMessageSize)
     {
         onErrorOccurred(FROM_HERE, asio::error::message_size);
         return;
     }
 
-    auto guard = alive_guard_;
+    auto io = io_;
     asio::async_write(stream_,
-                      asio::buffer(&write_header_, sizeof(write_header_)),
-                      [this, guard](const std::error_code& error_code, size_t bytes_transferred)
+                      asio::buffer(&io_->write_header, sizeof(io_->write_header)),
+                      [this, io](const std::error_code& error_code, size_t bytes_transferred)
     {
-        if (!*guard)
+        if (!io->alive)
             return;
 
         if (error_code)
@@ -399,7 +399,7 @@ void IpcChannel::doWriteHeader()
             return;
         }
 
-        CDCHECK_EQ(bytes_transferred, sizeof(write_header_.message_size));
+        CDCHECK_EQ(bytes_transferred, sizeof(io_->write_header.message_size));
         doWriteData();
     });
 }
@@ -407,16 +407,16 @@ void IpcChannel::doWriteHeader()
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::doWriteData()
 {
-    CDCHECK(!write_queue_.empty());
+    CDCHECK(!io_->write_queue.empty());
 
-    const QByteArray& buffer = write_queue_.front().data();
+    const QByteArray& buffer = io_->write_queue.front().data();
 
     // Send the buffer to the recipient.
-    auto guard = alive_guard_;
+    auto io = io_;
     asio::async_write(stream_, asio::buffer(buffer.data(), buffer.size()),
-                      [this, guard](const std::error_code& error_code, size_t bytes_transferred)
+                      [this, io](const std::error_code& error_code, size_t bytes_transferred)
     {
-        if (!*guard)
+        if (!io->alive)
             return;
 
         if (error_code)
@@ -428,14 +428,14 @@ void IpcChannel::doWriteData()
             return;
         }
 
-        CDCHECK_EQ(bytes_transferred, write_header_.message_size);
-        CDCHECK(!write_queue_.empty());
+        CDCHECK_EQ(bytes_transferred, io_->write_header.message_size);
+        CDCHECK(!io_->write_queue.empty());
 
         // Delete the sent message from the queue.
-        write_queue_.pop_front();
+        io_->write_queue.pop_front();
 
         // If the queue is not empty, then we send the following message.
-        if (write_queue_.empty())
+        if (io_->write_queue.empty())
             return;
 
         doWriteHeader();
@@ -447,12 +447,12 @@ void IpcChannel::doReadHeader()
 {
     read_state_ = ReadState::READ_HEADER;
 
-    auto guard = alive_guard_;
+    auto io = io_;
     asio::async_read(stream_,
-                     asio::buffer(&read_header_, sizeof(read_header_)),
-                     [this, guard](const std::error_code& error_code, size_t bytes_transferred)
+                     asio::buffer(&io_->read_header, sizeof(io_->read_header)),
+                     [this, io](const std::error_code& error_code, size_t bytes_transferred)
     {
-        if (!*guard)
+        if (!io->alive)
             return;
 
         if (error_code)
@@ -464,16 +464,16 @@ void IpcChannel::doReadHeader()
             return;
         }
 
-        CDCHECK_EQ(bytes_transferred, sizeof(read_header_));
+        CDCHECK_EQ(bytes_transferred, sizeof(io_->read_header));
 
-        if (read_header_.magic != kHeaderMagic)
+        if (io_->read_header.magic != kHeaderMagic)
         {
-            CLOG(ERROR) << "Invalid header magic:" << Qt::hex << read_header_.magic;
+            CLOG(ERROR) << "Invalid header magic:" << Qt::hex << io_->read_header.magic;
             onErrorOccurred(FROM_HERE, asio::error::invalid_argument);
             return;
         }
 
-        if (!read_header_.message_size || read_header_.message_size > kMaxMessageSize)
+        if (!io_->read_header.message_size || io_->read_header.message_size > kMaxMessageSize)
         {
             onErrorOccurred(FROM_HERE, asio::error::message_size);
             return;
@@ -488,20 +488,20 @@ void IpcChannel::doReadData()
 {
     read_state_ = ReadState::READ_DATA;
 
-    if (read_buffer_.capacity() < static_cast<qsizetype>(read_header_.message_size))
+    if (io_->read_buffer.capacity() < static_cast<qsizetype>(io_->read_header.message_size))
     {
-        read_buffer_.clear();
-        read_buffer_.reserve(read_header_.message_size);
+        io_->read_buffer.clear();
+        io_->read_buffer.reserve(io_->read_header.message_size);
     }
 
-    read_buffer_.resize(read_header_.message_size);
+    io_->read_buffer.resize(io_->read_header.message_size);
 
-    auto guard = alive_guard_;
+    auto io = io_;
     asio::async_read(stream_,
-                     asio::buffer(read_buffer_.data(), read_buffer_.size()),
-                     [this, guard](const std::error_code& error_code, size_t bytes_transferred)
+                     asio::buffer(io_->read_buffer.data(), io_->read_buffer.size()),
+                     [this, io](const std::error_code& error_code, size_t bytes_transferred)
     {
-        if (!*guard)
+        if (!io->alive)
             return;
 
         if (error_code)
@@ -513,7 +513,7 @@ void IpcChannel::doReadData()
             return;
         }
 
-        CDCHECK_EQ(bytes_transferred, read_header_.message_size);
+        CDCHECK_EQ(bytes_transferred, io_->read_header.message_size);
 
         if (is_paused_)
         {
@@ -529,7 +529,7 @@ void IpcChannel::doReadData()
             return;
         }
 
-        CDCHECK_EQ(read_header_.message_size, 0);
+        CDCHECK_EQ(io_->read_header.message_size, 0);
         doReadHeader();
     });
 }

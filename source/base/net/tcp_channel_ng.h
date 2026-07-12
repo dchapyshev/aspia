@@ -112,6 +112,14 @@ private:
         quint32 length;
     };
 
+    struct IoState
+    {
+        bool alive = true;
+        Header read_header;
+        QByteArray read_buffer;
+        QQueue<QByteArray> write_queue;
+    };
+
     void init();
     void setConnected(bool connected);
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
@@ -124,7 +132,7 @@ private:
     void scheduleKeepAlivePing();
     void scheduleKeepAlivePongTimeout();
 
-    SharedPointer<bool> alive_guard_ { new bool(true) };
+    SharedPointer<IoState> io_ { new IoState() };
     asio::io_context& io_context_;
     asio::ip::tcp::socket socket_;
     std::unique_ptr<asio::ip::tcp::resolver> resolver_;
@@ -146,11 +154,8 @@ private:
     std::unique_ptr<StreamDecryptor> decryptor_;
 
     QList<QByteArray> write_pool_;
-    QQueue<QByteArray> write_queue_;
 
     ReadState state_ = ReadState::IDLE;
-    Header read_header_;
-    QByteArray read_buffer_;
     QByteArray decrypt_buffer_;
 
     Q_DISABLE_COPY_MOVE(TcpChannelNG)

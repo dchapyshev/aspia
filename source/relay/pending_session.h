@@ -75,15 +75,19 @@ private:
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
     void onMessage();
 
-    SharedPointer<bool> alive_guard_ { new bool(true) };
+    struct IoState
+    {
+        bool alive = true;
+        quint32 buffer_size = 0;
+        QByteArray buffer;
+    };
+
+    SharedPointer<IoState> io_ { new IoState() };
 
     QString address_;
     TimePoint start_time_;
     QTimer* timer_ = nullptr;
     asio::ip::tcp::socket socket_;
-
-    quint32 buffer_size_ = 0;
-    QByteArray buffer_;
 
     QByteArray secret_;
     quint32 key_id_ = static_cast<quint32>(-1);

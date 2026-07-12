@@ -102,7 +102,7 @@ TcpChannelLegacy::~TcpChannelLegacy()
 {
     // Mark guard before releasing resources so that any pending ASIO handlers
     // (already completed but not yet dispatched) will see the object is gone.
-    *alive_guard_ = false;
+    io_->alive = false;
     disconnectFrom();
 }
 
@@ -129,7 +129,7 @@ void TcpChannelLegacy::connectTo(const QString& address, quint16 port, const Sec
     std::string host = address.toLocal8Bit().toStdString();
     std::string service = std::to_string(port);
 
-    auto guard = alive_guard_;
+    auto io = io_;
 
     // Fast path for IP addresses. The ASIO resolver serializes all lookups for the io_context through
     // a single background thread, so a literal address could otherwise wait behind slow or failing
@@ -142,9 +142,9 @@ void TcpChannelLegacy::connectTo(const QString& address, quint16 port, const Sec
         CLOG(INFO) << "Address is an IP, skipping resolve for" << host << ":" << service;
 
         asio::ip::tcp::endpoint endpoint(ip_address, port);
-        socket_.async_connect(endpoint, [this, guard, endpoint](const std::error_code& error_code)
+        socket_.async_connect(endpoint, [this, io, endpoint](const std::error_code& error_code)
         {
-            if (!*guard)
+            if (!io->alive)
                 return;
 
             if (error_code)
@@ -170,9 +170,9 @@ void TcpChannelLegacy::connectTo(const QString& address, quint16 port, const Sec
     CLOG(INFO) << "Start resolving for" << host << ":" << service;
 
     resolver_->async_resolve(host, service,
-        [this, guard](const std::error_code& error_code, const asio::ip::tcp::resolver::results_type& endpoints)
+        [this, io](const std::error_code& error_code, const asio::ip::tcp::resolver::results_type& endpoints)
     {
-        if (!*guard)
+        if (!io->alive)
             return;
 
         if (error_code)
@@ -197,9 +197,9 @@ void TcpChannelLegacy::connectTo(const QString& address, quint16 port, const Sec
 
             return true;
         },
-            [this, guard](const std::error_code& error_code, const asio::ip::tcp::endpoint& endpoint)
+            [this, io](const std::error_code& error_code, const asio::ip::tcp::endpoint& endpoint)
         {
-            if (!*guard)
+            if (!io->alive)
                 return;
 
             if (error_code)
@@ -605,18 +605,18 @@ void TcpChannelLegacy::onErrorOccurred(const Location& location, ErrorCode error
 
     disconnectFrom();
 
-    if (!*alive_guard_)
+    if (!io_->alive)
         return;
 
-    *alive_guard_ = false;
+    io_->alive = false;
     emit sig_errorOccurred(error_code);
 }
 
 //--------------------------------------------------------------------------------------------------
 void TcpChannelLegacy::onMessageReceived()
 {
-    char* read_data = read_buffer_.data();
-    size_t read_size = read_buffer_.size();
+    char* read_data = io_->read_buffer.data();
+    size_t read_size = io_->read_buffer.size();
 
     UserDataHeader header;
 
@@ -730,12 +730,12 @@ void TcpChannelLegacy::doWrite()
 
         asio::const_buffer variable_size = variable_size_writer_.variableSize(target_data_size);
 
-        resizeBuffer(&write_buffer_, variable_size.size() + target_data_size);
+        resizeBuffer(&io_->write_buffer, variable_size.size() + target_data_size);
 
         // Copy the size of the message to the buffer.
-        memcpy(write_buffer_.data(), variable_size.data(), variable_size.size());
+        memcpy(io_->write_buffer.data(), variable_size.data(), variable_size.size());
 
-        char* write_buffer = write_buffer_.data() + variable_size.size();
+        char* write_buffer = io_->write_buffer.data() + variable_size.size();
         if (is_channel_id_supported_)
         {
             UserDataHeader header;
@@ -765,18 +765,18 @@ void TcpChannelLegacy::doWrite()
     {
         CDCHECK_EQ(task.type(), WriteTask::Type::SERVICE_DATA);
 
-        resizeBuffer(&write_buffer_, source_buffer.size());
+        resizeBuffer(&io_->write_buffer, source_buffer.size());
 
         // Service data does not need encryption. Copy the source buffer.
-        memcpy(write_buffer_.data(), source_buffer.data(), source_buffer.size());
+        memcpy(io_->write_buffer.data(), source_buffer.data(), source_buffer.size());
     }
 
     // Send the buffer to the recipient.
-    auto guard = alive_guard_;
-    asio::async_write(socket_, asio::buffer(write_buffer_.data(), write_buffer_.size()),
-        [this, guard](const std::error_code& error_code, size_t bytes_transferred)
+    auto io = io_;
+    asio::async_write(socket_, asio::buffer(io_->write_buffer.data(), io_->write_buffer.size()),
+        [this, io](const std::error_code& error_code, size_t bytes_transferred)
     {
-        if (!*guard)
+        if (!io->alive)
             return;
 
         if (error_code)
@@ -808,11 +808,11 @@ void TcpChannelLegacy::doReadSize()
 {
     state_ = ReadState::READ_SIZE;
 
-    auto guard = alive_guard_;
-    asio::async_read(socket_, variable_size_reader_.buffer(),
-        [this, guard](const std::error_code& error_code, size_t bytes_transferred)
+    auto io = io_;
+    asio::async_read(socket_, io_->variable_size_reader.buffer(),
+        [this, io](const std::error_code& error_code, size_t bytes_transferred)
     {
-        if (!*guard)
+        if (!io->alive)
             return;
 
         if (error_code)
@@ -826,7 +826,7 @@ void TcpChannelLegacy::doReadSize()
         // Update RX statistics.
         addRxBytes(bytes_transferred);
 
-        std::optional<size_t> size = variable_size_reader_.messageSize();
+        std::optional<size_t> size = io_->variable_size_reader.messageSize();
         if (size.has_value())
         {
             size_t message_size = *size;
@@ -858,15 +858,15 @@ void TcpChannelLegacy::doReadSize()
 //--------------------------------------------------------------------------------------------------
 void TcpChannelLegacy::doReadUserData(size_t length)
 {
-    resizeBuffer(&read_buffer_, length);
+    resizeBuffer(&io_->read_buffer, length);
 
     state_ = ReadState::READ_USER_DATA;
 
-    auto guard = alive_guard_;
-    asio::async_read(socket_, asio::buffer(read_buffer_.data(), read_buffer_.size()),
-        [this, guard](const std::error_code& error_code, size_t bytes_transferred)
+    auto io = io_;
+    asio::async_read(socket_, asio::buffer(io_->read_buffer.data(), io_->read_buffer.size()),
+        [this, io](const std::error_code& error_code, size_t bytes_transferred)
     {
-        if (!*guard)
+        if (!io->alive)
             return;
 
         if (error_code)
@@ -883,7 +883,7 @@ void TcpChannelLegacy::doReadUserData(size_t length)
         // Update RX statistics.
         addRxBytes(bytes_transferred);
 
-        CDCHECK_EQ(bytes_transferred, read_buffer_.size());
+        CDCHECK_EQ(bytes_transferred, io_->read_buffer.size());
 
         if (paused_)
         {
@@ -906,15 +906,15 @@ void TcpChannelLegacy::doReadUserData(size_t length)
 //--------------------------------------------------------------------------------------------------
 void TcpChannelLegacy::doReadServiceHeader()
 {
-    resizeBuffer(&read_buffer_, sizeof(ServiceHeader));
+    resizeBuffer(&io_->read_buffer, sizeof(ServiceHeader));
 
     state_ = ReadState::READ_SERVICE_HEADER;
 
-    auto guard = alive_guard_;
-    asio::async_read(socket_, asio::buffer(read_buffer_.data(), read_buffer_.size()),
-        [this, guard](const std::error_code& error_code, size_t bytes_transferred)
+    auto io = io_;
+    asio::async_read(socket_, asio::buffer(io_->read_buffer.data(), io_->read_buffer.size()),
+        [this, io](const std::error_code& error_code, size_t bytes_transferred)
     {
-        if (!*guard)
+        if (!io->alive)
             return;
 
         if (error_code)
@@ -926,13 +926,13 @@ void TcpChannelLegacy::doReadServiceHeader()
         }
 
         CDCHECK_EQ(state_, ReadState::READ_SERVICE_HEADER);
-        CDCHECK_EQ(read_buffer_.size(), sizeof(ServiceHeader));
-        CDCHECK_EQ(bytes_transferred, read_buffer_.size());
+        CDCHECK_EQ(io_->read_buffer.size(), sizeof(ServiceHeader));
+        CDCHECK_EQ(bytes_transferred, io_->read_buffer.size());
 
         // Update RX statistics.
         addRxBytes(bytes_transferred);
 
-        ServiceHeader* header = reinterpret_cast<ServiceHeader*>(read_buffer_.data());
+        ServiceHeader* header = reinterpret_cast<ServiceHeader*>(io_->read_buffer.data());
         if (header->length > kMaxMessageSize)
         {
             CLOG(INFO) << "Too big service message:" << header->length;
@@ -962,22 +962,22 @@ void TcpChannelLegacy::doReadServiceHeader()
 //--------------------------------------------------------------------------------------------------
 void TcpChannelLegacy::doReadServiceData(size_t length)
 {
-    CDCHECK_EQ(read_buffer_.size(), sizeof(ServiceHeader));
+    CDCHECK_EQ(io_->read_buffer.size(), sizeof(ServiceHeader));
     CDCHECK_EQ(state_, ReadState::READ_SERVICE_HEADER);
     CDCHECK_GT(length, 0u);
 
-    read_buffer_.resize(read_buffer_.size() + static_cast<qsizetype>(length));
+    io_->read_buffer.resize(io_->read_buffer.size() + static_cast<qsizetype>(length));
 
     // Now we read the data after the header.
     state_ = ReadState::READ_SERVICE_DATA;
 
-    auto guard = alive_guard_;
+    auto io = io_;
     asio::async_read(socket_,
-        asio::buffer(read_buffer_.data() + sizeof(ServiceHeader),
-                     read_buffer_.size() - sizeof(ServiceHeader)),
-        [this, guard](const std::error_code& error_code, size_t bytes_transferred)
+        asio::buffer(io_->read_buffer.data() + sizeof(ServiceHeader),
+                     io_->read_buffer.size() - sizeof(ServiceHeader)),
+        [this, io](const std::error_code& error_code, size_t bytes_transferred)
     {
-        if (!*guard)
+        if (!io->alive)
             return;
 
         if (error_code)
@@ -989,15 +989,15 @@ void TcpChannelLegacy::doReadServiceData(size_t length)
         }
 
         CDCHECK_EQ(state_, ReadState::READ_SERVICE_DATA);
-        CDCHECK_GT(read_buffer_.size(), sizeof(ServiceHeader));
+        CDCHECK_GT(io_->read_buffer.size(), sizeof(ServiceHeader));
 
         // Update RX statistics.
         addRxBytes(bytes_transferred);
 
         // Incoming buffer contains a service header.
-        ServiceHeader* header = reinterpret_cast<ServiceHeader*>(read_buffer_.data());
+        ServiceHeader* header = reinterpret_cast<ServiceHeader*>(io_->read_buffer.data());
 
-        CDCHECK_EQ(bytes_transferred, read_buffer_.size() - sizeof(ServiceHeader));
+        CDCHECK_EQ(bytes_transferred, io_->read_buffer.size() - sizeof(ServiceHeader));
         CDCHECK_LE(header->length, kMaxMessageSize);
 
         if (header->type == KEEP_ALIVE)
@@ -1006,12 +1006,12 @@ void TcpChannelLegacy::doReadServiceData(size_t length)
             {
                 // Send pong.
                 sendKeepAlive(KEEP_ALIVE_PONG,
-                              read_buffer_.data() + sizeof(ServiceHeader),
-                              read_buffer_.size() - sizeof(ServiceHeader));
+                              io_->read_buffer.data() + sizeof(ServiceHeader),
+                              io_->read_buffer.size() - sizeof(ServiceHeader));
             }
             else
             {
-                if (read_buffer_.size() < static_cast<qsizetype>(sizeof(ServiceHeader) + header->length))
+                if (io_->read_buffer.size() < static_cast<qsizetype>(sizeof(ServiceHeader) + header->length))
                 {
                     onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
                     return;
@@ -1024,7 +1024,7 @@ void TcpChannelLegacy::doReadServiceData(size_t length)
                 }
 
                 // Pong must contain the same data as ping.
-                if (memcmp(read_buffer_.data() + sizeof(ServiceHeader),
+                if (memcmp(io_->read_buffer.data() + sizeof(ServiceHeader),
                            keep_alive_counter_.data(),
                            keep_alive_counter_.size()) != 0)
                 {

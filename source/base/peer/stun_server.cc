@@ -38,7 +38,7 @@ StunServer::~StunServer()
 
     // Mark guard before releasing resources so that any pending ASIO handlers
     // (already completed but not yet dispatched) will see the object is gone.
-    *alive_guard_ = false;
+    io_->alive = false;
 
     std::error_code ignored_error;
     udp_socket_.cancel(ignored_error);
@@ -84,11 +84,12 @@ bool StunServer::start(quint16 port)
 //--------------------------------------------------------------------------------------------------
 void StunServer::doReceiveRequest()
 {
-    auto guard = alive_guard_;
-    udp_socket_.async_receive_from(asio::buffer(read_buffer_.data(), read_buffer_.size()), remote_endpoint_,
-        [this, guard](const std::error_code& error_code, size_t bytes_transferred)
+    auto io = io_;
+    udp_socket_.async_receive_from(
+        asio::buffer(io_->read_buffer.data(), io_->read_buffer.size()), io_->remote_endpoint,
+        [this, io](const std::error_code& error_code, size_t bytes_transferred)
     {
-        if (!*guard)
+        if (!io->alive)
             return;
 
         if (error_code)
@@ -102,7 +103,7 @@ void StunServer::doReceiveRequest()
         }
 
         proto::stun::PeerToStun message;
-        if (!message.ParseFromArray(read_buffer_.data(), static_cast<int>(bytes_transferred)))
+        if (!message.ParseFromArray(io_->read_buffer.data(), static_cast<int>(bytes_transferred)))
         {
             LOG(ERROR) << "Unable to parse message";
         }
@@ -111,7 +112,7 @@ void StunServer::doReceiveRequest()
             const proto::stun::EndpointRequest& request = message.endpoint_request();
 
             if (request.magic_number() == 0xA0B1C2D3)
-                doSendAddressReply(request.transaction_id(), remote_endpoint_);
+                doSendAddressReply(request.transaction_id(), io_->remote_endpoint);
             else
                 LOG(ERROR) << "Invalid magic number:" << message.endpoint_request().magic_number();
         }

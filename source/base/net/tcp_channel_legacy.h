@@ -189,6 +189,14 @@ private:
         quint32 length;   // Additional data size.
     };
 
+    struct IoState
+    {
+        bool alive = true;
+        VariableSizeReader variable_size_reader;
+        QByteArray read_buffer;
+        QByteArray write_buffer;
+    };
+
     void init();
     void setConnected(bool connected);
 
@@ -212,7 +220,7 @@ private:
     void onKeepAliveTimer();
     void sendKeepAlive(quint8 flags, const void* data, size_t size);
 
-    SharedPointer<bool> alive_guard_ { new bool(true) };
+    SharedPointer<IoState> io_ { new IoState() };
     asio::io_context& io_context_;
     asio::ip::tcp::socket socket_;
     std::unique_ptr<asio::ip::tcp::resolver> resolver_;
@@ -231,11 +239,8 @@ private:
 
     QQueue<WriteTask> write_queue_;
     VariableSizeWriter variable_size_writer_;
-    QByteArray write_buffer_;
 
     ReadState state_ = ReadState::IDLE;
-    VariableSizeReader variable_size_reader_;
-    QByteArray read_buffer_;
     QByteArray decrypt_buffer_;
 
     bool is_channel_id_supported_ = false;

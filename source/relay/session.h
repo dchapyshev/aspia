@@ -73,10 +73,15 @@ private:
     static const int kNumberOfSides = 2;
     static const int kBufferSize = 8192;
 
-    SharedPointer<bool> alive_guard_ { new bool(true) };
+    struct IoState
+    {
+        bool alive = true;
+        std::array<quint8, kBufferSize> buffer[kNumberOfSides];
+    };
+
+    SharedPointer<IoState> io_ { new IoState() };
 
     asio::ip::tcp::socket socket_[kNumberOfSides];
-    std::array<quint8, kBufferSize> buffer_[kNumberOfSides];
 
     LOG_DECLARE_CONTEXT(Session);
     Q_DISABLE_COPY_MOVE(Session)

@@ -76,7 +76,7 @@ PcpPortMapper::PcpPortMapper(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 PcpPortMapper::~PcpPortMapper()
 {
-    *alive_guard_ = false;
+    io_->alive = false;
 
     // Best-effort removal with lifetime 0, sent synchronously over the connected socket; the
     // response is not awaited. The protocol that established the mapping is the one used to drop it.
@@ -178,7 +178,7 @@ void PcpPortMapper::startPhase(Phase phase)
     {
         case Phase::PCP:
         {
-            request_ = makePcpMapRequest(kLeaseSeconds);
+            io_->request = makePcpMapRequest(kLeaseSeconds);
         }
         break;
 
@@ -187,7 +187,7 @@ void PcpPortMapper::startPhase(Phase phase)
             NatPmpPublicAddressRequest request = {};
             request.version = kNatPmpVersion;
             request.opcode = NATPMP_PUBLIC_ADDRESS;
-            request_ = request;
+            io_->request = request;
         }
         break;
 
@@ -199,7 +199,7 @@ void PcpPortMapper::startPhase(Phase phase)
             request.internal_port = internal_port_;
             request.external_port = internal_port_;
             request.lifetime = kLeaseSeconds;
-            request_ = request;
+            io_->request = request;
         }
         break;
     }
@@ -211,15 +211,15 @@ void PcpPortMapper::startPhase(Phase phase)
 //--------------------------------------------------------------------------------------------------
 void PcpPortMapper::sendRequest()
 {
-    auto guard = alive_guard_;
+    auto io = io_;
 
     // The variant carries the active request type, so its wire size is known statically here.
-    std::visit([this, guard](const auto& request)
+    std::visit([this, io](const auto& request)
     {
         socket_.async_send(asio::buffer(&request, sizeof(request)),
-            [this, guard](const std::error_code& error_code, size_t /* bytes */)
+            [this, io](const std::error_code& error_code, size_t /* bytes */)
         {
-            if (!*guard || finished_)
+            if (!io->alive || finished_)
                 return;
 
             if (error_code)
@@ -230,7 +230,7 @@ void PcpPortMapper::sendRequest()
 
             startRetransmitTimer();
         });
-    }, request_);
+    }, io_->request);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -238,11 +238,11 @@ void PcpPortMapper::startRetransmitTimer()
 {
     retransmit_timer_.expires_after(std::chrono::milliseconds(kInitialTimeoutMs << tries_));
 
-    auto guard = alive_guard_;
-    retransmit_timer_.async_wait([this, guard](const std::error_code& error_code)
+    auto io = io_;
+    retransmit_timer_.async_wait([this, io](const std::error_code& error_code)
     {
         // A cancelled timer (response arrived) reports operation_aborted.
-        if (!*guard || finished_ || error_code)
+        if (!io->alive || finished_ || error_code)
             return;
 
         if (++tries_ < kMaxTries)
@@ -267,11 +267,11 @@ void PcpPortMapper::startRetransmitTimer()
 //--------------------------------------------------------------------------------------------------
 void PcpPortMapper::startReceive()
 {
-    auto guard = alive_guard_;
-    socket_.async_receive(asio::buffer(&response_, sizeof(response_)),
-        [this, guard](const std::error_code& error_code, size_t bytes)
+    auto io = io_;
+    socket_.async_receive(asio::buffer(&io_->response, sizeof(io_->response)),
+        [this, io](const std::error_code& error_code, size_t bytes)
     {
-        if (!*guard)
+        if (!io->alive)
             return;
 
         onResponse(error_code, bytes);
@@ -342,7 +342,7 @@ void PcpPortMapper::onPcpResponse(size_t bytes)
         return;
     }
 
-    const PcpResponseHeader& header = response_.pcp_header;
+    const PcpResponseHeader& header = io_->response.pcp_header;
 
     // A NAT-PMP-only gateway answers our PCP probe with a different version; fall back to NAT-PMP.
     if (header.version != kPcpVersion || header.opcode != (kPcpResponseBit | kPcpOpcodeMap))
@@ -363,7 +363,7 @@ void PcpPortMapper::onPcpResponse(size_t bytes)
     // (RFC 6887 11.4); the internal IP is matched implicitly by the connected socket. A truncated or
     // mismatched datagram is not our mapping, so keep waiting (the retransmit timer drives further
     // attempts). The size check short-circuits to avoid reading fields out of a truncated datagram.
-    const PcpMapData& map = response_.pcp_map.data;
+    const PcpMapData& map = io_->response.pcp_map.data;
     if (bytes < sizeof(PcpMapResponse) ||
         map.protocol != kPcpProtocolUdp ||
         map.internal_port != internal_port_ ||
@@ -417,7 +417,7 @@ void PcpPortMapper::onNatPmpResponse(size_t bytes)
         return;
     }
 
-    const NatPmpResponseHeader& header = response_.natpmp_header;
+    const NatPmpResponseHeader& header = io_->response.natpmp_header;
 
     const quint8 sent_opcode =
         (phase_ == Phase::NATPMP_PUBLIC_ADDRESS) ? NATPMP_PUBLIC_ADDRESS : NATPMP_MAP_UDP;
@@ -453,7 +453,7 @@ void PcpPortMapper::onPublicAddressResponse(size_t bytes)
         return;
     }
 
-    external_address_ = QHostAddress(quint32(response_.public_address.external_ip)).toString();
+    external_address_ = QHostAddress(quint32(io_->response.public_address.external_ip)).toString();
 
     if (NetUtils::isPrivateIpAddress(external_address_))
     {
@@ -475,7 +475,7 @@ void PcpPortMapper::onMappingResponse(size_t bytes)
         return;
     }
 
-    external_port_ = response_.mapping.external_port;
+    external_port_ = io_->response.mapping.external_port;
     type_ = Type::NATPMP;
     finished_ = true;
 

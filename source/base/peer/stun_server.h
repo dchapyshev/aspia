@@ -42,11 +42,16 @@ private:
     void doReceiveRequest();
     bool doSendAddressReply(quint32 transaction_id, const asio::ip::udp::endpoint& remote_endpoint);
 
-    SharedPointer<bool> alive_guard_ { new bool(true) };
+    struct IoState
+    {
+        bool alive = true;
+        asio::ip::udp::endpoint remote_endpoint;
+        std::array<quint8, 1024> read_buffer;
+    };
+
+    SharedPointer<IoState> io_ { new IoState() };
     quint16 port_ = 0;
     asio::ip::udp::socket udp_socket_;
-    asio::ip::udp::endpoint remote_endpoint_;
-    std::array<quint8, 1024> read_buffer_;
 
     Q_DISABLE_COPY_MOVE(StunServer)
 };

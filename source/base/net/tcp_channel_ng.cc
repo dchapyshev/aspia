@@ -103,7 +103,7 @@ TcpChannelNG::~TcpChannelNG()
 {
     // Mark guard before releasing resources so that any pending ASIO handlers
     // (already completed but not yet dispatched) will see the object is gone.
-    *alive_guard_ = false;
+    io_->alive = false;
     setConnected(false);
 }
 
@@ -136,10 +136,10 @@ void TcpChannelNG::connectTo(const QString& address, quint16 port, const Seconds
     SharedPointer<asio::steady_timer> watchdog(new asio::steady_timer(io_context_));
     watchdog->expires_after(timeout);
 
-    auto guard = alive_guard_;
-    watchdog->async_wait([this, guard, watchdog](const std::error_code& error_code)
+    auto io = io_;
+    watchdog->async_wait([this, io, watchdog](const std::error_code& error_code)
     {
-        if (*guard && !error_code)
+        if (io->alive && !error_code)
             onErrorOccurred(FROM_HERE, ErrorCode::SOCKET_TIMEOUT);
     });
 
@@ -154,10 +154,10 @@ void TcpChannelNG::connectTo(const QString& address, quint16 port, const Seconds
         CLOG(TRACE) << "Address is an IP, skipping resolve for" << host << ":" << service;
 
         asio::ip::tcp::endpoint endpoint(ip_address, port);
-        socket_.async_connect(endpoint, [this, guard, watchdog, endpoint](
+        socket_.async_connect(endpoint, [this, io, watchdog, endpoint](
             const std::error_code& error_code)
         {
-            if (!*guard)
+            if (!io->alive)
                 return;
 
             if (error_code)
@@ -182,10 +182,10 @@ void TcpChannelNG::connectTo(const QString& address, quint16 port, const Seconds
 
     CLOG(TRACE) << "Start resolving for" << host << ":" << service;
 
-    resolver_->async_resolve(host, service, [this, guard, watchdog](
+    resolver_->async_resolve(host, service, [this, io, watchdog](
         const std::error_code& error_code, const asio::ip::tcp::resolver::results_type& endpoints)
     {
-        if (!*guard)
+        if (!io->alive)
             return;
 
         if (error_code)
@@ -211,9 +211,9 @@ void TcpChannelNG::connectTo(const QString& address, quint16 port, const Seconds
 
             return true;
         },
-            [this, guard, watchdog](const std::error_code& error_code, const asio::ip::tcp::endpoint& endpoint)
+            [this, io, watchdog](const std::error_code& error_code, const asio::ip::tcp::endpoint& endpoint)
         {
-            if (!*guard)
+            if (!io->alive)
                 return;
 
             if (error_code)
@@ -269,7 +269,7 @@ void TcpChannelNG::setPaused(bool enable)
 //--------------------------------------------------------------------------------------------------
 void TcpChannelNG::send(quint8 channel_id, const QByteArray& buffer)
 {
-    if (!*alive_guard_)
+    if (!io_->alive)
         return;
 
     // USER_DATA may only be sent over an authenticated channel.
@@ -321,7 +321,7 @@ qint64 TcpChannelNG::pendingBytes() const
 {
     qint64 result = 0;
 
-    for (const QByteArray& buffer : std::as_const(write_queue_))
+    for (const QByteArray& buffer : std::as_const(io_->write_queue))
         result += buffer.size();
 
     return result;
@@ -336,7 +336,7 @@ void TcpChannelNG::init()
     authenticator_->setParent(this);
 
     write_pool_.reserve(kWritePoolReservedSize);
-    write_queue_.reserve(kWriteQueueReservedSize);
+    io_->write_queue.reserve(kWriteQueueReservedSize);
 
     keep_alive_counter_.resize(sizeof(quint32));
     memset(keep_alive_counter_.data(), 0, keep_alive_counter_.size());
@@ -523,7 +523,7 @@ void TcpChannelNG::onErrorOccurred(const Location& location, ErrorCode error_cod
 {
     CLOG(TRACE) << "Connection finished:" << error_code << "from" << location;
 
-    if (!*alive_guard_)
+    if (!io_->alive)
         return;
 
     if (authenticator_)
@@ -534,27 +534,27 @@ void TcpChannelNG::onErrorOccurred(const Location& location, ErrorCode error_cod
 
     setConnected(false);
 
-    *alive_guard_ = false;
+    io_->alive = false;
     emit sig_errorOccurred(error_code);
 }
 
 //--------------------------------------------------------------------------------------------------
 void TcpChannelNG::onMessageReceived()
 {
-    if (read_buffer_.isEmpty())
+    if (io_->read_buffer.isEmpty())
     {
         onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
         return;
     }
 
-    if (read_buffer_.size() > kMaxMessageSize || read_buffer_.size() != read_header_.length)
+    if (io_->read_buffer.size() > kMaxMessageSize || io_->read_buffer.size() != io_->read_header.length)
     {
-        CLOG(INFO) << "Invalid message length:" << read_header_.length;
+        CLOG(INFO) << "Invalid message length:" << io_->read_header.length;
         onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
         return;
     }
 
-    if (read_header_.type == AUTH_DATA)
+    if (io_->read_header.type == AUTH_DATA)
     {
         if (!authenticator_ || authenticated_)
         {
@@ -564,14 +564,14 @@ void TcpChannelNG::onMessageReceived()
 
         if (!decryptor_)
         {
-            authenticator_->onIncomingMessage(read_buffer_);
+            authenticator_->onIncomingMessage(io_->read_buffer);
             return;
         }
 
-        resizeBuffer(&decrypt_buffer_, decryptor_->decryptedDataSize(read_buffer_.size()));
+        resizeBuffer(&decrypt_buffer_, decryptor_->decryptedDataSize(io_->read_buffer.size()));
 
-        if (!decryptor_->decrypt(read_buffer_.data(), read_buffer_.size(), // Data
-                                 &read_header_, sizeof(read_header_), // AAD
+        if (!decryptor_->decrypt(io_->read_buffer.data(), io_->read_buffer.size(), // Data
+                                 &io_->read_header, sizeof(io_->read_header), // AAD
                                  decrypt_buffer_.data()))
         {
             onErrorOccurred(FROM_HERE, ErrorCode::ACCESS_DENIED);
@@ -597,10 +597,10 @@ void TcpChannelNG::onMessageReceived()
         return;
     }
 
-    resizeBuffer(&decrypt_buffer_, decryptor_->decryptedDataSize(read_buffer_.size()));
+    resizeBuffer(&decrypt_buffer_, decryptor_->decryptedDataSize(io_->read_buffer.size()));
 
-    if (!decryptor_->decrypt(read_buffer_.data(), read_buffer_.size(), // Data
-                             &read_header_, sizeof(read_header_), // AAD
+    if (!decryptor_->decrypt(io_->read_buffer.data(), io_->read_buffer.size(), // Data
+                             &io_->read_header, sizeof(io_->read_header), // AAD
                              decrypt_buffer_.data()))
     {
         onErrorOccurred(FROM_HERE, ErrorCode::CRYPTO_ERROR);
@@ -612,13 +612,13 @@ void TcpChannelNG::onMessageReceived()
     // when they actually fire.
     rx_since_last_check_ = true;
 
-    if (read_header_.type == USER_DATA)
+    if (io_->read_header.type == USER_DATA)
     {
-        emit sig_messageReceived(read_header_.param1, decrypt_buffer_);
+        emit sig_messageReceived(io_->read_header.param1, decrypt_buffer_);
     }
-    else if (read_header_.type == KEEP_ALIVE)
+    else if (io_->read_header.type == KEEP_ALIVE)
     {
-        if (read_header_.param1 & KEEP_ALIVE_PING)
+        if (io_->read_header.param1 & KEEP_ALIVE_PING)
         {
             addWriteTask(KEEP_ALIVE, KEEP_ALIVE_PONG, decrypt_buffer_, true);
             return;
@@ -723,8 +723,8 @@ void TcpChannelNG::addWriteTask(quint8 type, quint8 param, const QByteArray& dat
         memcpy(write_buffer.data() + sizeof(Header), data.data(), data.size());
     }
 
-    const bool schedule_write = write_queue_.isEmpty();
-    write_queue_.emplace_back(std::move(write_buffer));
+    const bool schedule_write = io_->write_queue.isEmpty();
+    io_->write_queue.emplace_back(std::move(write_buffer));
     if (schedule_write)
         doWrite();
 }
@@ -732,14 +732,14 @@ void TcpChannelNG::addWriteTask(quint8 type, quint8 param, const QByteArray& dat
 //--------------------------------------------------------------------------------------------------
 void TcpChannelNG::doWrite()
 {
-    const QByteArray& buffer = write_queue_.front();
+    const QByteArray& buffer = io_->write_queue.front();
 
-    auto guard = alive_guard_;
+    auto io = io_;
     asio::async_write(socket_,
         asio::buffer(buffer.data(), buffer.size()),
-        [this, guard](const std::error_code& error_code, size_t bytes_transferred)
+        [this, io](const std::error_code& error_code, size_t bytes_transferred)
     {
-        if (!*guard)
+        if (!io->alive)
             return;
 
         if (error_code)
@@ -751,13 +751,13 @@ void TcpChannelNG::doWrite()
         }
 
         addTxBytes(bytes_transferred); // Update TX statistics.
-        CDCHECK(!write_queue_.isEmpty());
+        CDCHECK(!io_->write_queue.isEmpty());
 
         if (write_pool_.size() < kWritePoolReservedSize)
-            write_pool_.emplace_back(std::move(write_queue_.front()));
-        write_queue_.pop_front();
+            write_pool_.emplace_back(std::move(io_->write_queue.front()));
+        io_->write_queue.pop_front();
 
-        if (!write_queue_.isEmpty())
+        if (!io_->write_queue.isEmpty())
             doWrite();
     });
 }
@@ -767,11 +767,11 @@ void TcpChannelNG::doReadHeader()
 {
     state_ = ReadState::READ_HEADER;
 
-    auto guard = alive_guard_;
-    asio::async_read(socket_, asio::mutable_buffer(&read_header_, sizeof(Header)),
-        [this, guard](const std::error_code& error_code, size_t bytes_transferred)
+    auto io = io_;
+    asio::async_read(socket_, asio::mutable_buffer(&io_->read_header, sizeof(Header)),
+        [this, io](const std::error_code& error_code, size_t bytes_transferred)
     {
-        if (!*guard)
+        if (!io->alive)
             return;
 
         if (error_code)
@@ -788,15 +788,15 @@ void TcpChannelNG::doReadHeader()
         // would let it pin |kMaxMessageSize| of memory per channel before authenticating.
         // Enforce a much tighter cap for AUTH_DATA - real handshake frames stay well below it.
         const quint32 max_length = authenticated_ ? kMaxMessageSize : kMaxAuthMessageSize;
-        if (read_header_.length > max_length)
+        if (io_->read_header.length > max_length)
         {
-            CLOG(ERROR) << "Too big incoming message:" << read_header_.length
+            CLOG(ERROR) << "Too big incoming message:" << io_->read_header.length
                         << "(limit:" << max_length << ")";
             onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
             return;
         }
 
-        if (read_header_.length)
+        if (io_->read_header.length)
             doReadData();
         else
             doReadHeader();
@@ -806,15 +806,15 @@ void TcpChannelNG::doReadHeader()
 //--------------------------------------------------------------------------------------------------
 void TcpChannelNG::doReadData()
 {
-    resizeBuffer(&read_buffer_, read_header_.length);
+    resizeBuffer(&io_->read_buffer, io_->read_header.length);
 
     state_ = ReadState::READ_DATA;
 
-    auto guard = alive_guard_;
-    asio::async_read(socket_, asio::buffer(read_buffer_.data(), read_buffer_.size()),
-        [this, guard](const std::error_code& error_code, size_t bytes_transferred)
+    auto io = io_;
+    asio::async_read(socket_, asio::buffer(io_->read_buffer.data(), io_->read_buffer.size()),
+        [this, io](const std::error_code& error_code, size_t bytes_transferred)
     {
-        if (!*guard)
+        if (!io->alive)
             return;
 
         if (error_code)
@@ -826,7 +826,7 @@ void TcpChannelNG::doReadData()
         }
 
         addRxBytes(bytes_transferred); // Update RX statistics.
-        CDCHECK_EQ(bytes_transferred, read_buffer_.size());
+        CDCHECK_EQ(bytes_transferred, io_->read_buffer.size());
 
         if (paused_)
         {
@@ -852,15 +852,15 @@ void TcpChannelNG::scheduleKeepAlivePing()
     rx_since_last_check_ = false;
     keep_alive_timer_.expires_after(kKeepAliveInterval);
 
-    auto guard = alive_guard_;
-    keep_alive_timer_.async_wait([this, guard](const std::error_code& error_code)
+    auto io = io_;
+    keep_alive_timer_.async_wait([this, io](const std::error_code& error_code)
     {
-        if (!*guard || error_code)
+        if (!io->alive || error_code)
             return;
 
         // Incoming traffic since last check or pending outgoing data both prove the
         // connection is alive. Skip the PING and reschedule the next interval.
-        if (rx_since_last_check_ || !write_queue_.isEmpty())
+        if (rx_since_last_check_ || !io_->write_queue.isEmpty())
         {
             scheduleKeepAlivePing();
             return;
@@ -877,10 +877,10 @@ void TcpChannelNG::scheduleKeepAlivePongTimeout()
 {
     keep_alive_timer_.expires_after(kKeepAliveTimeout);
 
-    auto guard = alive_guard_;
-    keep_alive_timer_.async_wait([this, guard](const std::error_code& error_code)
+    auto io = io_;
+    keep_alive_timer_.async_wait([this, io](const std::error_code& error_code)
     {
-        if (!*guard || error_code)
+        if (!io->alive || error_code)
             return;
 
         // No PONG arrived within the specified period. Forcibly terminate the connection.

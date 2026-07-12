@@ -70,7 +70,7 @@ PendingSession::~PendingSession()
 {
     // Mark guard before releasing resources so that any pending ASIO handlers
     // (already completed but not yet dispatched) will see the object is gone.
-    *alive_guard_ = false;
+    io_->alive = false;
 
     std::error_code ignored_code;
     socket_.cancel(ignored_code);
@@ -142,12 +142,12 @@ quint32 PendingSession::keyId() const
 // static
 void PendingSession::doReadMessage(PendingSession* session)
 {
-    auto guard = session->alive_guard_;
+    auto io = session->io_;
     asio::async_read(session->socket_,
-        asio::buffer(&session->buffer_size_, sizeof(quint32)),
-        [session, guard](const std::error_code& error_code, size_t bytes_transferred)
+        asio::buffer(&session->io_->buffer_size, sizeof(quint32)),
+        [session, io](const std::error_code& error_code, size_t bytes_transferred)
     {
-        if (!*guard)
+        if (!io->alive)
             return;
 
         if (error_code)
@@ -163,20 +163,20 @@ void PendingSession::doReadMessage(PendingSession* session)
             return;
         }
 
-        session->buffer_size_ = qFromBigEndian(session->buffer_size_);
-        if (!session->buffer_size_ || session->buffer_size_ > kMaxMessageSize)
+        session->io_->buffer_size = qFromBigEndian(session->io_->buffer_size);
+        if (!session->io_->buffer_size || session->io_->buffer_size > kMaxMessageSize)
         {
             session->onErrorOccurred(FROM_HERE, std::error_code());
             return;
         }
 
-        session->buffer_.resize(session->buffer_size_);
+        session->io_->buffer.resize(session->io_->buffer_size);
 
         asio::async_read(session->socket_,
-            asio::buffer(session->buffer_.data(), session->buffer_.size()),
-            [session, guard](const std::error_code& error_code, size_t bytes_transferred)
+            asio::buffer(session->io_->buffer.data(), session->io_->buffer.size()),
+            [session, io](const std::error_code& error_code, size_t bytes_transferred)
         {
-            if (!*guard)
+            if (!io->alive)
                 return;
 
             if (error_code)
@@ -186,7 +186,7 @@ void PendingSession::doReadMessage(PendingSession* session)
                 return;
             }
 
-            if (bytes_transferred != session->buffer_.size())
+            if (bytes_transferred != session->io_->buffer.size())
             {
                 session->onErrorOccurred(FROM_HERE, std::error_code());
                 return;
@@ -208,7 +208,7 @@ void PendingSession::onErrorOccurred(const Location& location, const std::error_
 void PendingSession::onMessage()
 {
     proto::relay::PeerToRelay message;
-    if (!message.ParseFromArray(buffer_.data(), static_cast<int>(buffer_.size())))
+    if (!message.ParseFromArray(io_->buffer.data(), static_cast<int>(io_->buffer.size())))
     {
         onErrorOccurred(FROM_HERE, std::error_code());
         return;
