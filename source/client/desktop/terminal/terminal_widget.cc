@@ -32,6 +32,7 @@
 #include <QShowEvent>
 #include <QTimer>
 #include <QWheelEvent>
+#include <QWindow>
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
@@ -649,17 +650,28 @@ bool TerminalWidget::nativeEventFilter(
     if (event_type == "windows_generic_MSG")
     {
         const MSG* msg = static_cast<const MSG*>(message);
-        if (window() && msg->hwnd == reinterpret_cast<HWND>(window()->winId()))
+        if (msg->message == WM_ENTERSIZEMOVE || msg->message == WM_EXITSIZEMOVE)
         {
-            if (msg->message == WM_ENTERSIZEMOVE)
+            // Compare only against an already created native handle. Forcing winId() here would
+            // create the native window from inside the message loop; while the tab is being
+            // detached (reparented) that re-enters this filter and recurses until the stack
+            // overflows.
+            QWidget* top = window();
+            QWindow* top_handle = top ? top->windowHandle() : nullptr;
+
+            if (top_handle && top_handle->handle() &&
+                msg->hwnd == reinterpret_cast<HWND>(top_handle->winId()))
             {
-                in_size_move_ = true;
-            }
-            else if (msg->message == WM_EXITSIZEMOVE)
-            {
-                in_size_move_ = false;
-                if (resizing_)
-                    finishResize();
+                if (msg->message == WM_ENTERSIZEMOVE)
+                {
+                    in_size_move_ = true;
+                }
+                else
+                {
+                    in_size_move_ = false;
+                    if (resizing_)
+                        finishResize();
+                }
             }
         }
     }
