@@ -109,22 +109,30 @@ EventMonitor::EventMonitor()
 //--------------------------------------------------------------------------------------------------
 EventMonitor::~EventMonitor()
 {
+    // Detach both notification sources from the queue first, then drain it synchronously: a
+    // callback already enqueued finishes with a valid |this| before the barrier returns, and
+    // nothing new is scheduled after it, so the releases below cannot race with a callback.
     if (session_store_)
-    {
         SCDynamicStoreSetDispatchQueue(session_store_, nullptr);
-        CFRelease(session_store_);
+
+    if (power_notify_port_)
+        IONotificationPortSetDispatchQueue(power_notify_port_, nullptr);
+
+    if (queue_)
+    {
+        dispatch_sync_f(queue_, nullptr, [](void* /* context */) {});
+        dispatch_release(queue_);
     }
+
+    if (session_store_)
+        CFRelease(session_store_);
 
     if (power_notify_port_)
     {
-        IONotificationPortSetDispatchQueue(power_notify_port_, nullptr);
         IODeregisterForSystemPower(&power_notifier_);
         IOServiceClose(power_root_port_);
         IONotificationPortDestroy(power_notify_port_);
     }
-
-    if (queue_)
-        dispatch_release(queue_);
 }
 
 //--------------------------------------------------------------------------------------------------
