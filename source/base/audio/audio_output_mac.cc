@@ -43,10 +43,15 @@ AudioOutputMac::~AudioOutputMac()
     stop();
     terminate();
 
-    kern_return_t kern_err = semaphore_destroy(mach_task_self(), semaphore_);
-    if (kern_err != KERN_SUCCESS)
+    // The semaphore is not created if initDevice() failed early; destroying a garbage port name
+    // could hit an unrelated port of the process.
+    if (semaphore_ != MACH_PORT_NULL)
     {
-        LOG(ERROR) << "semaphore_destroy() error: " << kern_err;
+        kern_return_t kern_err = semaphore_destroy(mach_task_self(), semaphore_);
+        if (kern_err != KERN_SUCCESS)
+        {
+            LOG(ERROR) << "semaphore_destroy() error: " << kern_err;
+        }
     }
 }
 
@@ -120,6 +125,7 @@ void AudioOutputMac::stop()
     }
 
     AudioConverterDispose(converter_);
+    converter_ = nullptr;
 
     // Remove listeners.
     AudioObjectPropertyAddress property_address =
@@ -160,11 +166,14 @@ bool AudioOutputMac::initDevice()
         }
     }
 
-    kern_return_t kern_err = semaphore_create(mach_task_self(), &semaphore_, SYNC_POLICY_FIFO, 0);
-    if (kern_err != KERN_SUCCESS)
+    if (semaphore_ == MACH_PORT_NULL)
     {
-        LOG(ERROR) << "semaphore_create failed:" << kern_err;
-        return false;
+        kern_return_t kern_err = semaphore_create(mach_task_self(), &semaphore_, SYNC_POLICY_FIFO, 0);
+        if (kern_err != KERN_SUCCESS)
+        {
+            LOG(ERROR) << "semaphore_create failed:" << kern_err;
+            return false;
+        }
     }
 
     // Setting RunLoop to NULL here instructs HAL to manage its own thread for notifications. This
@@ -310,6 +319,8 @@ bool AudioOutputMac::initPlayout()
     if (err != noErr)
     {
         LOG(ERROR) << "AudioObjectAddPropertyListener failed";
+        AudioConverterDispose(converter_);
+        converter_ = nullptr;
         return false;
     }
 
@@ -317,6 +328,12 @@ bool AudioOutputMac::initPlayout()
     if (err != noErr)
     {
         LOG(ERROR) << "AudioDeviceCreateIOProcID failed";
+        // stop() is not reachable with |playout_initialized_| still false, so unregister here -
+        // otherwise the HAL would keep calling into a destroyed object.
+        AudioObjectRemovePropertyListener(
+            output_device_id_, &property_address, &objectListenerProc, this);
+        AudioConverterDispose(converter_);
+        converter_ = nullptr;
         return false;
     }
 
@@ -398,6 +415,14 @@ bool AudioOutputMac::setDesiredFormat()
     desired_format_.mFormatFlags |= kLinearPCMFormatFlagIsBigEndian;
 #endif
     desired_format_.mFormatID = kAudioFormatLinearPCM;
+
+    // A converter may already exist after a stream format change; release it before creating the
+    // replacement.
+    if (converter_)
+    {
+        AudioConverterDispose(converter_);
+        converter_ = nullptr;
+    }
 
     OSStatus err = AudioConverterNew(&desired_format_, &stream_format_, &converter_);
     if (err != noErr)

@@ -98,13 +98,13 @@ private:
     AudioStreamBasicDescription stream_format_;
     AudioStreamBasicDescription desired_format_;
 
-    AudioConverterRef converter_;
+    AudioConverterRef converter_ = nullptr;
     SInt16 convert_data_[kPlayBufferSizeInSamples];
 
     std::vector<SInt16> render_buffer_data_;
     std::unique_ptr<PaUtilRingBuffer> pa_render_buffer_;
     int32_t render_delay_offset_samples_ = 0;
-    semaphore_t semaphore_;
+    semaphore_t semaphore_ = MACH_PORT_NULL;
 
     Q_DISABLE_COPY(AudioOutputMac)
 };
