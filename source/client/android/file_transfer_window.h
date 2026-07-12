@@ -66,6 +66,8 @@ signals:
     void sig_createDirectoryRequest(FileTask::Target target, const QString& path);
     void sig_removeRequest(FileRemover* remover);
     void sig_transferRequest(FileTransfer* transfer);
+    void sig_transferAction(FileTransfer::Error::Type error_type, FileTransfer::Error::Action action);
+    void sig_removeAction(FileRemover::Action action);
 
 protected:
     // QWidget implementation.

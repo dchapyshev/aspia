@@ -398,17 +398,15 @@ void FileTransferWindow::sendItems(FilePanelWidget* sender, const QList<FileTran
     }, Qt::QueuedConnection);
     connect(transfer, &FileTransfer::sig_currentSpeedChanged, progress,
             &FileProgressSheet::setSpeed, Qt::QueuedConnection);
-    connect(transfer, &FileTransfer::sig_errorOccurred, this, [transfer](const FileTransfer::Error& error)
+    connect(this, &FileTransferWindow::sig_transferAction, transfer, &FileTransfer::setAction,
+            Qt::QueuedConnection);
+    connect(transfer, &FileTransfer::sig_errorOccurred, this, [this](const FileTransfer::Error& error)
     {
         // MVP: overwrite on conflict, skip other errors, to keep the queue moving without prompting.
         const FileTransfer::Error::Action action =
             (error.type() == FileTransfer::Error::Type::ALREADY_EXISTS) ?
                 FileTransfer::Error::ACTION_REPLACE_ALL : FileTransfer::Error::ACTION_SKIP_ALL;
-        const FileTransfer::Error::Type type = error.type();
-        QMetaObject::invokeMethod(transfer, [transfer, type, action]()
-        {
-            transfer->setAction(type, action);
-        }, Qt::QueuedConnection);
+        emit sig_transferAction(error.type(), action);
     }, Qt::QueuedConnection);
     // The sheet is WA_DeleteOnClose and the user can dismiss it before the transfer finishes, so
     // it must be closed via its own connection (auto-broken on delete), not a captured pointer.
@@ -440,15 +438,14 @@ void FileTransferWindow::removeItems(FilePanelWidget* sender, const FileRemover:
         progress->setCurrentItem(name);
         progress->setProgress(percentage);
     }, Qt::QueuedConnection);
+    connect(this, &FileTransferWindow::sig_removeAction, remover, &FileRemover::setAction,
+            Qt::QueuedConnection);
     connect(remover, &FileRemover::sig_errorOccurred, this,
-            [remover](const QString& /* path */, proto::file_transfer::ErrorCode /* error_code */,
-                      quint32 /* available_actions */)
+            [this](const QString& /* path */, proto::file_transfer::ErrorCode /* error_code */,
+                   quint32 /* available_actions */)
     {
         // MVP: skip on error so a single failure does not stall the queue.
-        QMetaObject::invokeMethod(remover, [remover]()
-        {
-            remover->setAction(FileRemover::ACTION_SKIP_ALL);
-        }, Qt::QueuedConnection);
+        emit sig_removeAction(FileRemover::ACTION_SKIP_ALL);
     }, Qt::QueuedConnection);
     // The sheet is WA_DeleteOnClose and the user can dismiss it before the removal finishes, so
     // it must be closed via its own connection (auto-broken on delete), not a captured pointer.
