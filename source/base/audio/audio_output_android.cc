@@ -30,7 +30,8 @@ const qint32 kFramesPer10ms = AudioOutput::kSampleRate * 10 / 1000;
 
 //--------------------------------------------------------------------------------------------------
 AudioOutputAndroid::AudioOutputAndroid(const NeedMoreDataCB& need_more_data_cb)
-    : AudioOutput(need_more_data_cb)
+    : AudioOutput(need_more_data_cb),
+      bridge_(std::make_shared<CallbackBridge>(this))
 {
     // Nothing
 }
@@ -39,6 +40,10 @@ AudioOutputAndroid::AudioOutputAndroid(const NeedMoreDataCB& need_more_data_cb)
 AudioOutputAndroid::~AudioOutputAndroid()
 {
     stop();
+
+    // A disconnect notification may still arrive on an internal Oboe thread. The bridge outlives
+    // this object (Oboe holds its own reference) and drops the notification once detached.
+    bridge_->detach();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -67,20 +72,32 @@ void AudioOutputAndroid::stop()
 }
 
 //--------------------------------------------------------------------------------------------------
-oboe::DataCallbackResult AudioOutputAndroid::onAudioReady(
+void AudioOutputAndroid::CallbackBridge::detach()
+{
+    QMutexLocker locker(&mutex_);
+    owner_ = nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+oboe::DataCallbackResult AudioOutputAndroid::CallbackBridge::onAudioReady(
     oboe::AudioStream* /* stream */, void* audio_data, int32_t num_frames)
 {
-    onDataRequest(static_cast<qint16*>(audio_data), static_cast<size_t>(num_frames) * kChannels);
+    // Deliberately lock-free (real-time thread). Data callbacks stop before the owner detaches:
+    // its destructor first closes the stream via stop(), and close() waits for the in-flight
+    // callback to return.
+    owner_->onDataRequest(static_cast<qint16*>(audio_data),
+                          static_cast<size_t>(num_frames) * kChannels);
     return oboe::DataCallbackResult::Continue;
 }
 
 //--------------------------------------------------------------------------------------------------
-void AudioOutputAndroid::onErrorAfterClose(oboe::AudioStream* stream, oboe::Result error)
+void AudioOutputAndroid::CallbackBridge::onErrorAfterClose(
+    oboe::AudioStream* stream, oboe::Result error)
 {
     // AAudio does not reroute a playback stream on its own: when the output device changes
     // (headphones plugged in or out, a Bluetooth headset connects), the stream is disconnected and
-    // Oboe closes it before invoking this callback on an internal thread. Reopening here picks up
-    // the new default route, mirroring the restart the Windows backend does on device invalidation.
+    // Oboe closes it before invoking this callback on an internal thread. Reopening picks up the
+    // new default route, mirroring the restart the Windows backend does on device invalidation.
     if (error != oboe::Result::ErrorDisconnected)
     {
         LOG(ERROR) << "Audio stream error:" << oboe::convertToText(error);
@@ -89,6 +106,15 @@ void AudioOutputAndroid::onErrorAfterClose(oboe::AudioStream* stream, oboe::Resu
 
     LOG(INFO) << "Audio stream disconnected, reopening on the current device";
 
+    // The owner is guaranteed alive while the mutex is held: its destructor blocks on detach().
+    QMutexLocker locker(&mutex_);
+    if (owner_)
+        owner_->onStreamDisconnected(stream);
+}
+
+//--------------------------------------------------------------------------------------------------
+void AudioOutputAndroid::onStreamDisconnected(oboe::AudioStream* stream)
+{
     QMutexLocker locker(&mutex_);
 
     // A stale notification: stop() already released the stream, or it was already replaced.
@@ -112,8 +138,8 @@ bool AudioOutputAndroid::openStream()
            ->setSampleRate(static_cast<int>(kSampleRate))
            ->setFramesPerDataCallback(kFramesPer10ms)
            ->setUsage(oboe::Usage::Media)
-           ->setDataCallback(this)
-           ->setErrorCallback(this);
+           ->setDataCallback(bridge_)
+           ->setErrorCallback(bridge_);
 
     oboe::Result result = builder.openStream(stream_);
     if (result != oboe::Result::OK)
