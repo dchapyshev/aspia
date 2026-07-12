@@ -304,11 +304,23 @@ bool fillRenderEndpointBufferWithSilence(IAudioClient* client, IAudioRenderClien
 //--------------------------------------------------------------------------------------------------
 bool isMMCSSSupported()
 {
-    static const wchar_t* const kAvrtDLL = L"%WINDIR%\\system32\\Avrt.dll";
-    wchar_t path[MAX_PATH] = { 0 };
+    // Probe once per process; each LoadLibraryExW call would otherwise add a module reference
+    // that is never released.
+    static const bool supported = []()
+    {
+        static const wchar_t* const kAvrtDLL = L"%WINDIR%\\system32\\Avrt.dll";
+        wchar_t path[MAX_PATH] = { 0 };
 
-    ExpandEnvironmentStringsW(kAvrtDLL, path, static_cast<DWORD>(std::size(path)));
-    return (LoadLibraryExW(path, nullptr, LOAD_WITH_ALTERED_SEARCH_PATH) != nullptr);
+        ExpandEnvironmentStringsW(kAvrtDLL, path, static_cast<DWORD>(std::size(path)));
+        HMODULE library = LoadLibraryExW(path, nullptr, LOAD_WITH_ALTERED_SEARCH_PATH);
+        if (!library)
+            return false;
+
+        FreeLibrary(library);
+        return true;
+    }();
+
+    return supported;
 }
 
 //--------------------------------------------------------------------------------------------------

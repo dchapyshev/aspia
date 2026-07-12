@@ -116,7 +116,7 @@ private:
 
     QMenu tray_menu_;
     QPointer<NotifierWindow> notifier_;
-    ChatWidget* chat_widget_ = nullptr;
+    ScopedQPointer<ChatWidget> chat_widget_;
 
 #if defined(Q_OS_MACOS)
     // The macOS privacy-permission dialog. Shown modeless so it never blocks the event loop - the app

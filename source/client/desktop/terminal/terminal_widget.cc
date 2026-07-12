@@ -90,6 +90,26 @@ int vtermMouseButton(Qt::MouseButton button)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
+// Registers the bundled font once per process and returns its family name. Repeated
+// addApplicationFont() calls would keep piling copies of the font data into QFontDatabase.
+QString terminalFontFamily()
+{
+    static const QString family = []()
+    {
+        const int font_id = QFontDatabase::addApplicationFont(kFontResource);
+        if (font_id != -1)
+        {
+            const QStringList families = QFontDatabase::applicationFontFamilies(font_id);
+            if (!families.isEmpty())
+                return families.front();
+        }
+        return "monospace";
+    }();
+
+    return family;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -101,16 +121,7 @@ TerminalWidget::TerminalWidget(QWidget* parent)
     selection_bg_ = palette().color(QPalette::Highlight);
     selection_fg_ = palette().color(QPalette::HighlightedText);
 
-    int font_id = QFontDatabase::addApplicationFont(kFontResource);
-    QString family = "monospace";
-    if (font_id != -1)
-    {
-        const QStringList families = QFontDatabase::applicationFontFamilies(font_id);
-        if (!families.isEmpty())
-            family = families.front();
-    }
-
-    font_ = QFont(family, kFontPointSize);
+    font_ = QFont(terminalFontFamily(), kFontPointSize);
     font_.setStyleHint(QFont::Monospace);
     font_.setFixedPitch(true);
 
