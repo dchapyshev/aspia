@@ -386,13 +386,15 @@ void UdpChannel::send(quint8 channel_id, const QByteArray& buffer, bool reliable
         self->releasePacket(packet);
     };
 
-    if (enet_peer_send(peer_.get(), channel_id, packet.release()) != 0)
+    if (enet_peer_send(peer_.get(), channel_id, packet.get()) != 0)
     {
         CLOG(ERROR) << "enet_peer_send failed";
         onErrorOccurred(FROM_HERE);
+        packet.reset();
         return;
     }
 
+    packet.release();
     enet_host_flush(host_.get());
 }
 
