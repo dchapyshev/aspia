@@ -39,6 +39,7 @@ const int kXkbKeycodeOffset = 8;
 
 // Discrete wheel axes used by NotifyPointerAxisDiscrete.
 const quint32 kAxisVertical = 0;
+const quint32 kAxisHorizontal = 1;
 
 } // namespace
 
@@ -172,6 +173,12 @@ void InputInjectorWayland::injectMouseEvent(const proto::input::MouseEvent& even
         source_->notifyPointerAxisDiscrete(kAxisVertical, -1);
     else if (event.mask() & proto::input::MouseEvent::WHEEL_DOWN)
         source_->notifyPointerAxisDiscrete(kAxisVertical, 1);
+
+    // A positive horizontal step scrolls right.
+    if (event.mask() & proto::input::MouseEvent::WHEEL_RIGHT)
+        source_->notifyPointerAxisDiscrete(kAxisHorizontal, 1);
+    else if (event.mask() & proto::input::MouseEvent::WHEEL_LEFT)
+        source_->notifyPointerAxisDiscrete(kAxisHorizontal, -1);
 }
 
 //--------------------------------------------------------------------------------------------------

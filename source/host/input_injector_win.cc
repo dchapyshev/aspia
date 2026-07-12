@@ -428,6 +428,25 @@ void InputInjectorWin::injectMouseEvent(const proto::input::MouseEvent& event)
         PLOG(ERROR) << "SendInput failed";
     }
 
+    // The horizontal wheel is a separate event: its delta also travels in mouseData, which cannot be
+    // shared with the vertical wheel or the X buttons in a single INPUT. A positive value scrolls
+    // right (per MOUSEEVENTF_HWHEEL).
+    if (mask & (proto::input::MouseEvent::WHEEL_LEFT | proto::input::MouseEvent::WHEEL_RIGHT))
+    {
+        INPUT hwheel;
+        memset(&hwheel, 0, sizeof(hwheel));
+
+        hwheel.type = INPUT_MOUSE;
+        hwheel.mi.dwFlags = MOUSEEVENTF_HWHEEL;
+        hwheel.mi.mouseData = (mask & proto::input::MouseEvent::WHEEL_RIGHT)
+            ? static_cast<DWORD>(WHEEL_DELTA) : static_cast<DWORD>(-WHEEL_DELTA);
+
+        if (!SendInput(1, &hwheel, sizeof(hwheel)))
+        {
+            PLOG(ERROR) << "SendInput (hwheel) failed";
+        }
+    }
+
     last_mouse_mask_ = mask;
 }
 

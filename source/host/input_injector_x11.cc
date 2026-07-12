@@ -278,6 +278,31 @@ void InputInjectorX11::injectMouseEvent(const proto::input::MouseEvent& event)
         }
     }
 
+    int hwheel_movement = 0;
+
+    if (event.mask() & proto::input::MouseEvent::WHEEL_RIGHT)
+        hwheel_movement = 120;
+    else if (event.mask() & proto::input::MouseEvent::WHEEL_LEFT)
+        hwheel_movement = -120;
+
+    if (hwheel_movement != 0)
+    {
+        int wheel_ticks = std::abs(hwheel_movement) * kWheelTicksPerPixel;
+        int wheel_button;
+
+        // X button 7 scrolls right, X button 6 scrolls left.
+        if (hwheel_movement > 0)
+            wheel_button = pointer_button_map_[6];
+        else
+            wheel_button = pointer_button_map_[5];
+
+        for (int i = 0; i < wheel_ticks; ++i)
+        {
+            XTestFakeButtonEvent(display_, wheel_button, true, CurrentTime);
+            XTestFakeButtonEvent(display_, wheel_button, false, CurrentTime);
+        }
+    }
+
     XFlush(display_);
 }
 

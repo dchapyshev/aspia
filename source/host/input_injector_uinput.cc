@@ -169,9 +169,10 @@ bool InputInjectorUinput::init()
     ioctl(fd_, UI_SET_ABSBIT, ABS_X);
     ioctl(fd_, UI_SET_ABSBIT, ABS_Y);
 
-    // Wheel.
+    // Wheel (vertical and horizontal).
     ioctl(fd_, UI_SET_EVBIT, EV_REL);
     ioctl(fd_, UI_SET_RELBIT, REL_WHEEL);
+    ioctl(fd_, UI_SET_RELBIT, REL_HWHEEL);
 
     ioctl(fd_, UI_SET_EVBIT, EV_SYN);
 
@@ -340,6 +341,12 @@ void InputInjectorUinput::injectMouseEvent(const proto::input::MouseEvent& event
         emitEvent(EV_REL, REL_WHEEL, 1);
     else if (event.mask() & proto::input::MouseEvent::WHEEL_DOWN)
         emitEvent(EV_REL, REL_WHEEL, -1);
+
+    // A positive REL_HWHEEL value scrolls right.
+    if (event.mask() & proto::input::MouseEvent::WHEEL_RIGHT)
+        emitEvent(EV_REL, REL_HWHEEL, 1);
+    else if (event.mask() & proto::input::MouseEvent::WHEEL_LEFT)
+        emitEvent(EV_REL, REL_HWHEEL, -1);
 
     emitEvent(EV_SYN, SYN_REPORT, 0);
 }

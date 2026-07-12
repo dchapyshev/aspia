@@ -36,10 +36,13 @@ namespace {
 //--------------------------------------------------------------------------------------------------
 void postMouseEvent(CGPoint position, quint32 mask)
 {
-    CGPostMouseEvent(position, true, 3,
+    // CGPostMouseEvent button order: left, right, middle, then the extra buttons (back, forward).
+    CGPostMouseEvent(position, true, 5,
                      (mask & proto::input::MouseEvent::LEFT_BUTTON) != 0,
                      (mask & proto::input::MouseEvent::RIGHT_BUTTON) != 0,
-                     (mask & proto::input::MouseEvent::MIDDLE_BUTTON) != 0);
+                     (mask & proto::input::MouseEvent::MIDDLE_BUTTON) != 0,
+                     (mask & proto::input::MouseEvent::BACK_BUTTON) != 0,
+                     (mask & proto::input::MouseEvent::FORWARD_BUTTON) != 0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -59,6 +62,13 @@ void postCharEvent(CGCharCode character)
 void postScrollEvent(int32_t lines)
 {
     CGPostScrollWheelEvent(1, lines);
+}
+
+//--------------------------------------------------------------------------------------------------
+void postHScrollEvent(int32_t lines)
+{
+    // The second wheel axis is horizontal; a positive value scrolls left.
+    CGPostScrollWheelEvent(2, 0, lines);
 }
 
 #pragma clang diagnostic pop
@@ -172,6 +182,11 @@ void InputInjectorMac::injectMouseEvent(const proto::input::MouseEvent& event)
         postScrollEvent(1);
     else if (mask & proto::input::MouseEvent::WHEEL_DOWN)
         postScrollEvent(-1);
+
+    if (mask & proto::input::MouseEvent::WHEEL_LEFT)
+        postHScrollEvent(1);
+    else if (mask & proto::input::MouseEvent::WHEEL_RIGHT)
+        postHScrollEvent(-1);
 
     last_mouse_mask_ = mask;
 }

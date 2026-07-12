@@ -44,7 +44,8 @@
 namespace {
 
 constexpr quint32 kWheelMask =
-    proto::input::MouseEvent::WHEEL_DOWN | proto::input::MouseEvent::WHEEL_UP;
+    proto::input::MouseEvent::WHEEL_DOWN | proto::input::MouseEvent::WHEEL_UP |
+    proto::input::MouseEvent::WHEEL_LEFT | proto::input::MouseEvent::WHEEL_RIGHT;
 
 QSet<quint32> g_local_pressed_keys;
 
@@ -322,15 +323,33 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
 
     if (event_type == QEvent::Wheel)
     {
-        if (delta.y() < 0)
+        // Vertical takes priority over horizontal when a single event carries both axes.
+        if (delta.y() != 0)
         {
-            mask |= proto::input::MouseEvent::WHEEL_DOWN;
-            wheel_steps = -delta.y() / QWheelEvent::DefaultDeltasPerStep;
+            if (delta.y() < 0)
+            {
+                mask |= proto::input::MouseEvent::WHEEL_DOWN;
+                wheel_steps = -delta.y() / QWheelEvent::DefaultDeltasPerStep;
+            }
+            else
+            {
+                mask |= proto::input::MouseEvent::WHEEL_UP;
+                wheel_steps = delta.y() / QWheelEvent::DefaultDeltasPerStep;
+            }
         }
-        else
+        else if (delta.x() != 0)
         {
-            mask |= proto::input::MouseEvent::WHEEL_UP;
-            wheel_steps = delta.y() / QWheelEvent::DefaultDeltasPerStep;
+            // Qt reports a positive x delta for a scroll to the left.
+            if (delta.x() < 0)
+            {
+                mask |= proto::input::MouseEvent::WHEEL_RIGHT;
+                wheel_steps = -delta.x() / QWheelEvent::DefaultDeltasPerStep;
+            }
+            else
+            {
+                mask |= proto::input::MouseEvent::WHEEL_LEFT;
+                wheel_steps = delta.x() / QWheelEvent::DefaultDeltasPerStep;
+            }
         }
 
         if (!wheel_steps)

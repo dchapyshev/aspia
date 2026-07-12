@@ -614,19 +614,26 @@ bool DesktopWindow::eventFilter(QObject* object, QEvent* event)
             QWheelEvent* wheel_event = static_cast<QWheelEvent*>(event);
 
             // High-resolution mice or touchpads may generate small mouse wheel angles (eg 2
-            // degrees). We accumulate the rotation angle until it becomes 120 degrees.
+            // degrees). We accumulate the rotation angle until it becomes 120 degrees. Each axis is
+            // accumulated and flushed independently so a diagonal scroll produces separate vertical
+            // and horizontal events.
             wheel_angle_ += wheel_event->angleDelta();
 
-            if (wheel_angle_.y() >= QWheelEvent::DefaultDeltasPerStep ||
-                wheel_angle_.y() <= -QWheelEvent::DefaultDeltasPerStep)
-            {
-                QPoint pos = desktop_->mapFromGlobal(wheel_event->globalPosition().toPoint());
+            const int step = QWheelEvent::DefaultDeltasPerStep;
+            const QPoint pos = desktop_->mapFromGlobal(wheel_event->globalPosition().toPoint());
 
-                desktop_->doMouseEvent(wheel_event->type(),
-                                       wheel_event->buttons(),
-                                       pos,
-                                       wheel_angle_);
-                wheel_angle_ = QPoint(0, 0);
+            if (wheel_angle_.y() >= step || wheel_angle_.y() <= -step)
+            {
+                desktop_->doMouseEvent(wheel_event->type(), wheel_event->buttons(), pos,
+                                       QPoint(0, wheel_angle_.y()));
+                wheel_angle_.setY(0);
+            }
+
+            if (wheel_angle_.x() >= step || wheel_angle_.x() <= -step)
+            {
+                desktop_->doMouseEvent(wheel_event->type(), wheel_event->buttons(), pos,
+                                       QPoint(wheel_angle_.x(), 0));
+                wheel_angle_.setX(0);
             }
             return true;
         }

@@ -54,6 +54,8 @@ message MouseEvent
         WHEEL_DOWN     = 16;
         BACK_BUTTON    = 32;
         FORWARD_BUTTON = 64;
+        WHEEL_LEFT     = 128;
+        WHEEL_RIGHT    = 256;
     }
 
     uint32 mask = 1; // Button mask.
