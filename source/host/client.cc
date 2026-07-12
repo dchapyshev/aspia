@@ -30,8 +30,16 @@
 
 namespace {
 
-const qint64 kProbeIntervalMs = 5000;       // Check every 5 seconds.
-const qint64 kIdleThresholdMs = 5000;       // Consider idle after 5 seconds of no sends.
+// Probe train cadence. Trains run on this fixed schedule regardless of session activity: they are
+// cheap, they measure the bottleneck correctly under load (the probes travel back to back through
+// the same queue as the traffic), and they are the only signal that can RAISE the estimate while
+// the session is busy - arrival-rate feedback never exceeds the production rate, which the estimate
+// itself caps.
+const qint64 kProbeIntervalMs = 10000;
+
+// A train sent within this window of session traffic counts as sent under load; its result is
+// trusted only upward (see the ack handlers).
+const qint64 kIdleThresholdMs = 5000;
 const int kUdpInitialDelayMs = 7000;        // Delay before the first UDP negotiation (let key frames flush).
 const int kUdpReconnectDelayMs = 5000;      // 5 seconds before attempting UDP reconnection.
 
@@ -148,8 +156,10 @@ Client::Client(TcpChannel* tcp_channel, QObject* parent)
         expireProbe(tcp_probe_);
         expireProbe(udp_probe_);
 
-        auto idle_duration = std::chrono::duration_cast<Milliseconds>(current_time - last_send_time_);
-        if (idle_duration.count() < kIdleThresholdMs)
+        // Do not add probe bytes to a queue that is already backed up - it would only add to the
+        // lag the queue represents, and the saturation feedback is measuring the capacity there
+        // anyway.
+        if (pendingBytes() > kSaturatedPendingBytes)
             return;
 
         if (udp_state_ == UdpState::READY)
@@ -548,9 +558,12 @@ void Client::sendTcpBandwidthProbe(const TimePoint& time)
     if (tcp_probe_.pending)
         return;
 
+    auto idle = std::chrono::duration_cast<Milliseconds>(time - last_send_time_);
+
     tcp_probe_.train_id = ++next_train_id_;
     tcp_probe_.send_time = time;
     tcp_probe_.pending = true;
+    tcp_probe_.under_load = idle.count() < kIdleThresholdMs;
 
     // The probes must go out back to back - the receiver measures their arrival spacing.
     for (int i = 0; i < kProbeTrainLength; ++i)
@@ -566,9 +579,12 @@ void Client::sendUdpBandwidthProbe(const TimePoint& time)
     if (!udp_channel_ || udp_state_ == UdpState::DISCONNECTED || udp_probe_.pending)
         return;
 
+    auto idle = std::chrono::duration_cast<Milliseconds>(time - last_send_time_);
+
     udp_probe_.train_id = ++next_train_id_;
     udp_probe_.send_time = time;
     udp_probe_.pending = true;
+    udp_probe_.under_load = idle.count() < kIdleThresholdMs;
 
     for (int i = 0; i < kProbeTrainLength; ++i)
     {
@@ -589,6 +605,13 @@ void Client::onTcpBandwidthProbeAck(const proto::peer::BandwidthProbeAck& ack)
     if (!bandwidth)
         return;
 
+    // A train sent while traffic was flowing can come out skewed low (retransmissions, scheduling
+    // jitter at the receiver), so under load it is trusted only upward; degradation is detected by
+    // the saturation and RTT signals instead. An idle train is a clean measurement and applies both
+    // ways.
+    if (tcp_probe_.under_load && bandwidth <= tcp_probe_.bandwidth)
+        return;
+
     tcp_probe_.bandwidth = bandwidth;
 
     CLOG(INFO) << "TCP probe train:" << ack.delta_us() << "us bandwidth:"
@@ -606,6 +629,10 @@ void Client::onUdpBandwidthProbeAck(const proto::peer::BandwidthProbeAck& ack)
 
     const qint64 bandwidth = bandwidthFromTrainAck(ack);
     if (!bandwidth)
+        return;
+
+    // See onTcpBandwidthProbeAck: an under-load train is trusted only upward.
+    if (udp_probe_.under_load && bandwidth <= udp_probe_.bandwidth)
         return;
 
     udp_probe_.bandwidth = bandwidth;

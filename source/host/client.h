@@ -148,7 +148,8 @@ private:
     {
         TimePoint send_time;
         bool pending = false;
-        quint32 train_id = 0; // Id of the in-flight probe train.
+        bool under_load = false; // Sent while session traffic was flowing (see the ack handlers).
+        quint32 train_id = 0;    // Id of the in-flight probe train.
         qint64 bandwidth = 0;
     };
 
