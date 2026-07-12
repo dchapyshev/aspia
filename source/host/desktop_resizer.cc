@@ -28,6 +28,10 @@
 #include "host/desktop_resizer_x11.h"
 #endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 
+#if defined(Q_OS_MACOS)
+#include "host/desktop_resizer_mac.h"
+#endif // defined(Q_OS_MACOS)
+
 //--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<DesktopResizer> DesktopResizer::create()
@@ -36,6 +40,8 @@ std::unique_ptr<DesktopResizer> DesktopResizer::create()
     return std::make_unique<DesktopResizerWin>();
 #elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     return std::make_unique<DesktopResizerX11>();
+#elif defined(Q_OS_MACOS)
+    return std::make_unique<DesktopResizerMac>();
 #else
     NOTIMPLEMENTED();
     return nullptr;

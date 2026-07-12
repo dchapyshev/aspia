@@ -196,6 +196,8 @@ if (APPLE)
     list(APPEND SOURCE_HOST
         desktop_environment_mac.mm
         desktop_environment_mac.h
+        desktop_resizer_mac.mm
+        desktop_resizer_mac.h
         input_injector_mac.mm
         input_injector_mac.h
         process_monitor_mac.mm
