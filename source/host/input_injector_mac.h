@@ -41,11 +41,6 @@ public:
     void injectTouchEvent(const proto::input::TouchEvent& event) final;
 
 private:
-    // Combined Quartz modifier flags (CGEventFlags) for the modifier keys currently held, plus the
-    // Caps Lock flag when |caps_lock| is set. Returned as quint64 to keep CoreGraphics types out of
-    // the header.
-    quint64 currentModifierFlags(bool caps_lock) const;
-
     // Global display coordinates (top-left of the main display is the origin) the capturer/client
     // coordinates map into.
     QPoint screen_offset_;
@@ -56,13 +51,8 @@ private:
     // Previous button mask, used to detect press/release transitions.
     quint32 last_mouse_mask_ = 0;
 
-    // USB HID codes of the keys currently held, so the destructor can release them and modifier
-    // flags can be recomputed for each event.
+    // USB HID codes of the keys currently held, so the destructor can release them.
     QSet<quint32> pressed_keys_;
-
-    // The login window rejects CGEventPost, so the login-window agent falls back to the deprecated
-    // CGPost* injection APIs, which still work there.
-    bool use_legacy_ = false;
 
     Q_DISABLE_COPY(InputInjectorMac)
 };
