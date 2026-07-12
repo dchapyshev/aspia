@@ -273,6 +273,8 @@ void ScreenWorker::onConfigure(
         sendCurrentScreenList();
     }
 
+    if (!desktop_environment_)
+        desktop_environment_ = DesktopEnvironment::create(this);
     if (desktop_environment_)
     {
         desktop_environment_->setWallpaper(config.wallpaper());
@@ -297,6 +299,7 @@ void ScreenWorker::onStopCapture()
     input_injector_.reset();
     screen_capturer_.reset();
     screen_resizer_.reset();
+    desktop_environment_.reset();
     screen_count_ = 0;
 
     published_capture_type_ = ScreenCapturer::Type::UNKNOWN;
@@ -515,7 +518,6 @@ void ScreenWorker::onStart()
     min_fps_ = minCaptureFps();
     max_fps_ = maxCaptureFps();
 
-    desktop_environment_ = DesktopEnvironment::create(this);
     scale_reducer_ = std::make_unique<ScaleReducer>(ScaleReducer::Quality::HIGH);
 
     capture_timer_ = new QTimer(this);
