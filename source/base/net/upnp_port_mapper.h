@@ -22,8 +22,8 @@
 #include <QObject>
 
 #include <memory>
+#include <mutex>
 #include <string>
-#include <thread>
 
 class UpnpPortMapper final : public QObject
 {
@@ -52,13 +52,21 @@ private:
         std::string service_type;
     };
 
+    // Shared between the mapper and its detached worker thread. The worker posts the result while
+    // holding |mutex|; the destructor nulls |owner| under the same mutex, so the worker never
+    // touches a destroyed mapper.
+    struct WorkerContext
+    {
+        std::mutex mutex;
+        UpnpPortMapper* owner = nullptr;
+    };
+
     static Result doMapping(quint16 internal_port);
     static void doRemoveMapping(
         const std::string& control_url, const std::string& service_type, quint16 external_port);
     void onMappingFinished(const Result& result);
 
-    std::thread worker_;
-    std::shared_ptr<bool> alive_;
+    std::shared_ptr<WorkerContext> worker_context_;
 
     bool mapped_ = false;
     quint16 external_port_ = 0;

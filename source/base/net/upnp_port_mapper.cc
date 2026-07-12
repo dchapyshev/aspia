@@ -18,13 +18,12 @@
 
 #include "base/net/upnp_port_mapper.h"
 
-#include <QCoreApplication>
-
 #include <miniupnpc/miniupnpc.h>
 #include <miniupnpc/upnpcommands.h>
 #include <miniupnpc/upnperrors.h>
 
 #include <string>
+#include <thread>
 
 #include "base/logging.h"
 #include "base/net/net_utils.h"
@@ -71,11 +70,14 @@ UpnpPortMapper::UpnpPortMapper(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 UpnpPortMapper::~UpnpPortMapper()
 {
-    // Do not block the owning thread: the worker never touches |this| directly (it delivers via the
-    // application object guarded by |alive_|), so detaching is safe. |alive_| is released right after,
-    // so a late worker result is dropped.
-    if (worker_.joinable())
-        worker_.detach();
+    if (worker_context_)
+    {
+        // The worker posts its result only while |owner| is non-null under this mutex, so after
+        // this point it never touches the destroyed mapper. The thread itself is detached and
+        // finishes on its own.
+        std::scoped_lock lock(worker_context_->mutex);
+        worker_context_->owner = nullptr;
+    }
 
     if (mapped_)
     {
@@ -88,29 +90,35 @@ UpnpPortMapper::~UpnpPortMapper()
 //--------------------------------------------------------------------------------------------------
 void UpnpPortMapper::addUdpMapping(quint16 internal_port)
 {
-    if (worker_.joinable())
+    if (worker_context_)
     {
         LOG(ERROR) << "UPnP mapping is already in progress";
         return;
     }
 
-    alive_ = std::make_shared<bool>(true);
-    std::weak_ptr<bool> guard = alive_;
+    worker_context_ = std::make_shared<WorkerContext>();
+    worker_context_->owner = this;
 
-    worker_ = std::thread([this, guard, internal_port]()
+    // The thread is detached: the destructor must not block on a discovery that takes seconds.
+    // Posting under the context mutex guarantees the mapper is alive during the call (the
+    // destructor blocks on the same mutex before nulling |owner|); the mapper as the context
+    // object delivers the call on its own thread and Qt drops the posted call if the mapper dies
+    // before delivery.
+    std::thread([context = worker_context_, internal_port]()
     {
         Result result = doMapping(internal_port);
 
-        // Deliver on the owning thread via the always-alive application object, so the worker never
-        // touches |this| directly. The guard, checked on that thread, drops the result if the mapper
-        // was destroyed meanwhile.
-        QMetaObject::invokeMethod(qApp, [this, guard, result]()
+        std::scoped_lock lock(context->mutex);
+
+        UpnpPortMapper* owner = context->owner;
+        if (!owner)
+            return;
+
+        QMetaObject::invokeMethod(owner, [owner, result]()
         {
-            if (guard.expired())
-                return;
-            onMappingFinished(result);
+            owner->onMappingFinished(result);
         }, Qt::QueuedConnection);
-    });
+    }).detach();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -192,8 +200,9 @@ void UpnpPortMapper::doRemoveMapping(
 //--------------------------------------------------------------------------------------------------
 void UpnpPortMapper::onMappingFinished(const Result& result)
 {
-    if (worker_.joinable())
-        worker_.join();
+    // The worker has finished; allow a new mapping request (its context copy keeps the shared
+    // state alive until the thread exits).
+    worker_context_.reset();
 
     if (!result.success)
     {
