@@ -61,6 +61,14 @@ const qint64 kSaturatedPendingBytes = 256 * 1024;
 const int kPublishUpThresholdPercent = 25;
 const int kPublishDownThresholdPercent = 10;
 
+// Queuing-delay detection on the UDP path. The peer RTT rising this much above the lowest RTT seen
+// on the channel means buffers are filling somewhere along the path - congestion that neither the
+// send queue nor the arrival rate can show yet. The estimate is cut by the given percent after the
+// growth persists for this many consecutive receive-rate reports (roughly seconds).
+const int kQueuingDelayThresholdMs = 150;
+const int kQueuingDelaySamples = 3;
+const int kQueuingDelayCutPercent = 15;
+
 //--------------------------------------------------------------------------------------------------
 quint32 nextRequestId()
 {
@@ -424,6 +432,10 @@ void Client::selectAttempt(UdpAttempt* attempt, qint64 bandwidth)
     udp_probe_.pending = false;
     udp_probe_.bandwidth = std::max(bandwidth, tcp_probe_.bandwidth);
 
+    // The RTT baseline belongs to a specific path; a fresh channel measures its own.
+    udp_base_rtt_ms_ = 0;
+    udp_high_rtt_count_ = 0;
+
     setUdpState(FROM_HERE, UdpState::CONNECTED);
     sendUdpBandwidthProbe(Clock::now());
     checkBandwidth();
@@ -474,6 +486,8 @@ void Client::onUdpErrorOccurred()
     udp_probe_.send_time = TimePoint();
     udp_probe_.bandwidth = 0;
     udp_probe_.pending = false;
+    udp_base_rtt_ms_ = 0;
+    udp_high_rtt_count_ = 0;
 
     if (was_ready)
     {
@@ -618,6 +632,40 @@ void Client::onReceiveRate(const proto::peer::ReceiveRate& rate)
     // are half-steps toward the sample rather than jumps: a single interval can be skewed by
     // buffering bursts, and repeated genuine readings still converge within a couple of seconds.
     BandwidthProbe& probe = (udp_state_ == UdpState::READY) ? udp_probe_ : tcp_probe_;
+
+    // Early congestion detection on the UDP path: ENet measures the peer RTT continuously with its
+    // own acks and pings. Sustained growth over the channel's lowest RTT is queuing delay - buffers
+    // filling somewhere along the path - and warrants cutting the estimate before packet loss or a
+    // visible lag spike would force it. (The TCP path needs none of this: kernel backpressure
+    // surfaces in the send queue, which the saturation logic below already watches.)
+    if (udp_state_ == UdpState::READY && udp_channel_ && probe.bandwidth > 0)
+    {
+        const int rtt_ms = udp_channel_->roundTripTimeMs();
+        if (rtt_ms > 0)
+        {
+            if (!udp_base_rtt_ms_ || rtt_ms < udp_base_rtt_ms_)
+                udp_base_rtt_ms_ = rtt_ms;
+
+            if (rtt_ms - udp_base_rtt_ms_ > kQueuingDelayThresholdMs)
+                ++udp_high_rtt_count_;
+            else
+                udp_high_rtt_count_ = 0;
+
+            if (udp_high_rtt_count_ >= kQueuingDelaySamples)
+            {
+                udp_high_rtt_count_ = 0;
+                probe.bandwidth = std::max(kMinBandwidthEstimate,
+                                           probe.bandwidth * (100 - kQueuingDelayCutPercent) / 100);
+
+                CLOG(INFO) << "Sustained UDP RTT growth (" << rtt_ms << "ms over base"
+                           << udp_base_rtt_ms_ << "ms) - reducing estimate to"
+                           << (probe.bandwidth / 1024) << "kB/s";
+
+                publishBandwidth(probe.bandwidth);
+                return;
+            }
+        }
+    }
 
     const qint64 pending = pendingBytes();
     const bool saturated = pending > kSaturatedPendingBytes ||

@@ -90,6 +90,10 @@ public:
 
     qint64 pendingBytes() const;
 
+    // Smoothed round-trip time of the peer, measured continuously by ENet with its own acks and
+    // pings (even while the session is idle). Returns 0 when not connected.
+    int roundTripTimeMs() const;
+
     Mode mode() const { return mode_; }
     UdpMethod method() const { return method_; }
     void setMethod(UdpMethod method) { method_ = method; }

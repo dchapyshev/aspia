@@ -434,6 +434,15 @@ qint64 UdpChannel::pendingBytes() const
 }
 
 //--------------------------------------------------------------------------------------------------
+int UdpChannel::roundTripTimeMs() const
+{
+    if (!peer_ || !connected_)
+        return 0;
+
+    return static_cast<int>(peer_->roundTripTime);
+}
+
+//--------------------------------------------------------------------------------------------------
 int UdpChannel::speedRx()
 {
     TimePoint current_time = Clock::now();
