@@ -20,6 +20,8 @@
 
 #include <QTimer>
 
+#include <algorithm>
+
 #include "base/location.h"
 #include "base/serialization.h"
 #include "base/net/udp_channel.h"
@@ -30,11 +32,28 @@ namespace {
 
 const qint64 kProbeIntervalMs = 5000;       // Check every 5 seconds.
 const qint64 kIdleThresholdMs = 5000;       // Consider idle after 5 seconds of no sends.
-const qint64 kMinProbeDataSize = 4 * 1024;  // 4 KB - first probe and floor for slow links.
-const qint64 kMaxProbeDataSize = 64 * 1024; // 64 KB - ceiling for fast links.
-const qint64 kProbeTargetMs = 100;          // Each probe is sized to take ~this long to transfer.
 const int kUdpInitialDelayMs = 7000;        // Delay before the first UDP negotiation (let key frames flush).
 const int kUdpReconnectDelayMs = 5000;      // 5 seconds before attempting UDP reconnection.
+
+// A probe train: several probes sent back to back. The receiver measures the arrival spacing, which
+// reflects the bottleneck rate of the path independently of the RTT (a single request/response probe
+// measures the RTT instead and grossly lowballs fast links). The total size is kept small on purpose:
+// the link may be very slow, and flooding it with a large probe would hurt the session.
+const int kProbeTrainLength = 4;
+const qint64 kProbePayloadSize = 4 * 1024; // 4 KB per probe, 16 KB per train.
+
+// Estimates are clamped: the ceiling caps the "arrived faster than the clock can measure" case on
+// fast local links, the floor keeps a pathological measurement from stalling the session entirely.
+const qint64 kMaxBandwidthEstimate = 64 * 1024 * 1024; // 64 MB/s
+const qint64 kMinBandwidthEstimate = 8 * 1024;         // 8 KB/s
+
+// A send queue above this is treated as saturated: the path is the limiting factor, so the receive
+// rate reported by the client equals the path capacity.
+const qint64 kSaturatedPendingBytes = 64 * 1024;
+
+// Estimate changes below this fraction are not propagated to consumers - the quality tiers are
+// coarse, and re-publishing every small fluctuation would make them flap at band boundaries.
+const int kPublishThresholdPercent = 20;
 
 //--------------------------------------------------------------------------------------------------
 quint32 nextRequestId()
@@ -44,38 +63,37 @@ quint32 nextRequestId()
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray makeBandwidthProbeData(qint64 size)
+QByteArray makeBandwidthProbeData(quint32 train_id, quint32 index, quint32 count)
 {
     std::string payload;
-    payload.resize(size);
+    payload.resize(kProbePayloadSize);
     for (size_t i = 0; i < payload.size(); ++i)
         payload[i] = static_cast<char>(i & 0xFF);
 
     proto::peer::HostToClient message;
-    message.mutable_bandwidth_probe()->set_payload(std::move(payload));
+    proto::peer::BandwidthProbe* probe = message.mutable_bandwidth_probe();
+    probe->set_train_id(train_id);
+    probe->set_index(index);
+    probe->set_count(count);
+    probe->set_payload(std::move(payload));
     return serialize(message);
 }
 
 //--------------------------------------------------------------------------------------------------
-qint64 bandwidthFromRttMs(qint64 size, qint64 rtt_ms)
+// Bottleneck bandwidth from a train ack: the bytes that arrived after the first probe over the time
+// they took to arrive. A zero interval means the train arrived faster than the clock resolution
+// (a fast local link) - treated as the measurable maximum.
+qint64 bandwidthFromTrainAck(const proto::peer::BandwidthProbeAck& ack)
 {
-    if (rtt_ms <= 0)
-        rtt_ms = 1;
-    return (size * 1000) / rtt_ms;
-}
+    if (!ack.bytes())
+        return 0;
 
-//--------------------------------------------------------------------------------------------------
-// Size of the next probe based on the last measured bandwidth: aim for ~kProbeTargetMs of transfer,
-// clamped to [kMinProbeDataSize, kMaxProbeDataSize]. With no prior measurement (0) this yields the
-// minimum. Small probes on slow links, large probes on fast links keep measurements accurate.
-qint64 nextProbeSize(qint64 last_bandwidth)
-{
-    qint64 size = (last_bandwidth * kProbeTargetMs) / 1000;
-    if (size < kMinProbeDataSize)
-        return kMinProbeDataSize;
-    if (size > kMaxProbeDataSize)
-        return kMaxProbeDataSize;
-    return size;
+    if (!ack.delta_us())
+        return kMaxBandwidthEstimate;
+
+    const qint64 bandwidth =
+        static_cast<qint64>(ack.bytes() * 1'000'000 / ack.delta_us());
+    return std::clamp(bandwidth, kMinBandwidthEstimate, kMaxBandwidthEstimate);
 }
 
 } // namespace
@@ -101,6 +119,20 @@ Client::Client(TcpChannel* tcp_channel, QObject* parent)
     connect(probe_timer_, &QTimer::timeout, this, [this]()
     {
         TimePoint current_time = Clock::now();
+
+        // A train whose ack never came (lost probes on UDP, a client that went away mid-measurement)
+        // must not block probing forever.
+        auto expireProbe = [&current_time](BandwidthProbe& probe)
+        {
+            if (!probe.pending)
+                return;
+
+            auto age = std::chrono::duration_cast<Milliseconds>(current_time - probe.send_time);
+            if (age.count() >= kProbeIntervalMs)
+                probe.pending = false;
+        };
+        expireProbe(tcp_probe_);
+        expireProbe(udp_probe_);
 
         auto idle_duration = std::chrono::duration_cast<Milliseconds>(current_time - last_send_time_);
         if (idle_duration.count() < kIdleThresholdMs)
@@ -279,7 +311,9 @@ void Client::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffe
     if (message.has_udp_reply())
         readUdpReply(message.udp_reply());
     else if (message.has_bandwidth_probe_ack())
-        onTcpBandwidthProbeAck();
+        onTcpBandwidthProbeAck(message.bandwidth_probe_ack());
+    else if (message.has_receive_rate())
+        onReceiveRate(message.receive_rate());
     else
         CLOG(WARNING) << "Unhandled control message";
 }
@@ -377,13 +411,15 @@ void Client::selectAttempt(UdpAttempt* attempt, qint64 bandwidth)
 
     udp_channel_->setPaused(false);
 
-    // The attempt's probe round-trip already confirmed the channel and measured its initial
-    // bandwidth, so no probe is sent here; further measurements come from the periodic probe timer.
+    // The attempt's round-trip only proves the path works; the bandwidth it implies is RTT-bound and
+    // grossly lowballs fast links. Same physical link as TCP, so carry the TCP estimate over as the
+    // starting point, and measure the UDP path for real with an immediate probe train.
     udp_probe_.send_time = TimePoint();
     udp_probe_.pending = false;
-    udp_probe_.bandwidth = bandwidth;
+    udp_probe_.bandwidth = std::max(bandwidth, tcp_probe_.bandwidth);
 
     setUdpState(FROM_HERE, UdpState::CONNECTED);
+    sendUdpBandwidthProbe(Clock::now());
     checkBandwidth();
 }
 
@@ -412,7 +448,7 @@ void Client::onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer)
     }
 
     if (message.has_bandwidth_probe_ack())
-        onUdpBandwidthProbeAck();
+        onUdpBandwidthProbeAck(message.bandwidth_probe_ack());
     else
         CLOG(WARNING) << "Unhandled control message";
 }
@@ -492,11 +528,16 @@ void Client::sendTcpBandwidthProbe(const TimePoint& time)
     if (tcp_probe_.pending)
         return;
 
-    tcp_probe_.size = nextProbeSize(tcp_probe_.bandwidth);
+    tcp_probe_.train_id = ++next_train_id_;
     tcp_probe_.send_time = time;
     tcp_probe_.pending = true;
 
-    tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, makeBandwidthProbeData(tcp_probe_.size));
+    // The probes must go out back to back - the receiver measures their arrival spacing.
+    for (int i = 0; i < kProbeTrainLength; ++i)
+    {
+        tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL,
+                           makeBandwidthProbeData(tcp_probe_.train_id, i, kProbeTrainLength));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -505,39 +546,80 @@ void Client::sendUdpBandwidthProbe(const TimePoint& time)
     if (!udp_channel_ || udp_state_ == UdpState::DISCONNECTED || udp_probe_.pending)
         return;
 
-    udp_probe_.size = nextProbeSize(udp_probe_.bandwidth);
+    udp_probe_.train_id = ++next_train_id_;
     udp_probe_.send_time = time;
     udp_probe_.pending = true;
 
-    udp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, makeBandwidthProbeData(udp_probe_.size), true);
+    for (int i = 0; i < kProbeTrainLength; ++i)
+    {
+        udp_channel_->send(proto::peer::CHANNEL_ID_CONTROL,
+                           makeBandwidthProbeData(udp_probe_.train_id, i, kProbeTrainLength), true);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onTcpBandwidthProbeAck()
+void Client::onTcpBandwidthProbeAck(const proto::peer::BandwidthProbeAck& ack)
 {
-    if (!tcp_probe_.pending)
+    if (!tcp_probe_.pending || tcp_probe_.train_id != ack.train_id())
         return;
 
-    auto rtt = std::chrono::duration_cast<Milliseconds>(Clock::now() - tcp_probe_.send_time);
-    tcp_probe_.bandwidth = bandwidthFromRttMs(tcp_probe_.size, rtt.count());
     tcp_probe_.pending = false;
 
-    CLOG(INFO) << "TCP RTT:" << rtt.count() << "ms bandwidth:" << (tcp_probe_.bandwidth / 1024) << "kB/s";
+    const qint64 bandwidth = bandwidthFromTrainAck(ack);
+    if (!bandwidth)
+        return;
+
+    tcp_probe_.bandwidth = bandwidth;
+
+    CLOG(INFO) << "TCP probe train:" << ack.delta_us() << "us bandwidth:"
+               << (bandwidth / 1024) << "kB/s";
     checkBandwidth();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onUdpBandwidthProbeAck()
+void Client::onUdpBandwidthProbeAck(const proto::peer::BandwidthProbeAck& ack)
 {
-    if (!udp_probe_.pending)
+    if (!udp_probe_.pending || udp_probe_.train_id != ack.train_id())
         return;
 
-    auto rtt = std::chrono::duration_cast<Milliseconds>(Clock::now() - udp_probe_.send_time);
-    udp_probe_.bandwidth = bandwidthFromRttMs(udp_probe_.size, rtt.count());
     udp_probe_.pending = false;
 
-    CLOG(INFO) << "UDP RTT:" << rtt.count() << "ms bandwidth:" << (udp_probe_.bandwidth / 1024) << "kB/s";
+    const qint64 bandwidth = bandwidthFromTrainAck(ack);
+    if (!bandwidth)
+        return;
+
+    udp_probe_.bandwidth = bandwidth;
+
+    CLOG(INFO) << "UDP probe train:" << ack.delta_us() << "us bandwidth:"
+               << (bandwidth / 1024) << "kB/s";
     checkBandwidth();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::onReceiveRate(const proto::peer::ReceiveRate& rate)
+{
+    if (!rate.bytes() || !rate.interval_ms())
+        return;
+
+    const qint64 arrival_rate = std::clamp(
+        static_cast<qint64>(rate.bytes() * 1000 / rate.interval_ms()),
+        kMinBandwidthEstimate, kMaxBandwidthEstimate);
+
+    // The client reports how fast the session traffic actually arrived. With a backed-up send queue
+    // the path itself was the limiting factor, so the arrival rate IS the path capacity - including
+    // when the path degraded mid-session. With an empty queue the path was not saturated and the
+    // arrival rate is only a lower bound: it can raise the estimate but never lower it.
+    const bool saturated = pendingBytes() > kSaturatedPendingBytes;
+
+    BandwidthProbe& probe = (udp_state_ == UdpState::READY) ? udp_probe_ : tcp_probe_;
+    if (saturated)
+        probe.bandwidth = arrival_rate;
+    else if (arrival_rate > probe.bandwidth)
+        probe.bandwidth = arrival_rate;
+    else
+        return;
+
+    publishBandwidth(probe.bandwidth);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -551,7 +633,7 @@ void Client::checkBandwidth()
 
     if (udp_probe_.bandwidth == 0)
     {
-        onBandwidthChanged(tcp_probe_.bandwidth);
+        publishBandwidth(tcp_probe_.bandwidth);
         return;
     }
 
@@ -563,7 +645,23 @@ void Client::checkBandwidth()
         emit sig_channelChanged();
     }
 
-    onBandwidthChanged(udp_probe_.bandwidth);
+    publishBandwidth(udp_probe_.bandwidth);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::publishBandwidth(qint64 bandwidth)
+{
+    // Consumers map the estimate onto coarse quality tiers; propagating every fluctuation would make
+    // the tiers flap at band boundaries (and the Windows H264 encoder re-creates itself on every
+    // change). Only meaningful moves go through.
+    const qint64 threshold = published_bandwidth_ * kPublishThresholdPercent / 100;
+    if (published_bandwidth_ != 0 && qAbs(bandwidth - published_bandwidth_) < threshold)
+        return;
+
+    CLOG(INFO) << "Publishing bandwidth estimate:" << (bandwidth / 1024) << "kB/s";
+
+    published_bandwidth_ = bandwidth;
+    onBandwidthChanged(bandwidth);
 }
 
 //--------------------------------------------------------------------------------------------------

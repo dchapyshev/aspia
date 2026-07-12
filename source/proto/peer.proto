@@ -105,14 +105,33 @@ message UdpReply
     uint32 port       = 6;
 }
 
+// One probe of a packet train. The train members are sent back to back, so the spacing of their
+// arrivals at the receiver reflects the bottleneck rate of the path (independent of the RTT, which
+// a single request/response probe would measure instead).
 message BandwidthProbe
 {
-    bytes payload = 1;
+    uint32 train_id = 1; // Identifies the train this probe belongs to.
+    uint32 index    = 2; // 0-based position within the train.
+    uint32 count    = 3; // Total number of probes in the train.
+    bytes payload   = 4;
 }
 
+// The receiver's report for a probe train: how long the train took to arrive and how much of it
+// arrived after the first probe. Bottleneck bandwidth = bytes / delta.
 message BandwidthProbeAck
 {
-    int64 dummy = 1; // Always set to 1.
+    uint32 train_id = 1;
+    uint64 delta_us = 2; // Time between the arrival of the first and the last received probe.
+    uint64 bytes    = 3; // Payload bytes received after the first probe.
+}
+
+// Periodic receive-rate report: how many bytes of session traffic actually arrived at the client
+// over the last interval. When the host's send queue is backed up this is a direct measurement of
+// the path capacity under real load; when the queue is empty it is a lower bound.
+message ReceiveRate
+{
+    uint64 bytes       = 1;
+    uint32 interval_ms = 2;
 }
 
 // Use CHANNEL_ID_CONTROL to send.
@@ -120,6 +139,7 @@ message ClientToHost
 {
     UdpReply udp_reply                    = 1;
     BandwidthProbeAck bandwidth_probe_ack = 2;
+    ReceiveRate receive_rate              = 3;
 }
 
 // Use CHANNEL_ID_CONTROL to send.

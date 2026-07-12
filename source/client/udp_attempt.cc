@@ -155,9 +155,10 @@ void UdpAttempt::onChannelMessage(quint8 channel_id, const QByteArray& buffer)
     }
 
     // The host probes the channel it selected: this attempt wins. Acknowledge the probe and report
-    // success; the owner then takes the channel.
+    // success; the owner then takes the channel. This ack only confirms the round-trip - no arrival
+    // measurement is made here, real bandwidth comes from the probe trains on the live channel.
     proto::peer::ClientToHost ack;
-    ack.mutable_bandwidth_probe_ack()->set_dummy(1);
+    ack.mutable_bandwidth_probe_ack()->set_train_id(message.bandwidth_probe().train_id());
     channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(ack), true);
 
     connected_ = true;

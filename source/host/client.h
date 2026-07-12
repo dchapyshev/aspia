@@ -32,6 +32,8 @@
 
 namespace proto::peer {
 enum SessionType : int;
+class BandwidthProbeAck;
+class ReceiveRate;
 class UdpReply;
 } // namespace proto::peer
 
@@ -124,9 +126,11 @@ private:
     void startBandwidthProbing();
     void sendTcpBandwidthProbe(const TimePoint& time);
     void sendUdpBandwidthProbe(const TimePoint& time);
-    void onTcpBandwidthProbeAck();
-    void onUdpBandwidthProbeAck();
+    void onTcpBandwidthProbeAck(const proto::peer::BandwidthProbeAck& ack);
+    void onUdpBandwidthProbeAck(const proto::peer::BandwidthProbeAck& ack);
+    void onReceiveRate(const proto::peer::ReceiveRate& rate);
     void checkBandwidth();
+    void publishBandwidth(qint64 bandwidth);
     void setUdpState(const Location& location, UdpState state);
 
     bool finished_emitted_ = false;
@@ -144,14 +148,16 @@ private:
     {
         TimePoint send_time;
         bool pending = false;
+        quint32 train_id = 0; // Id of the in-flight probe train.
         qint64 bandwidth = 0;
-        qint64 size = 0; // Payload size of the in-flight probe (for the bandwidth calculation).
     };
 
     QTimer* probe_timer_ = nullptr;
     TimePoint last_send_time_;
     BandwidthProbe tcp_probe_;
     BandwidthProbe udp_probe_;
+    quint32 next_train_id_ = 0;
+    qint64 published_bandwidth_ = 0; // Last estimate handed to onBandwidthChanged().
 
     Q_DISABLE_COPY_MOVE(Client)
 };

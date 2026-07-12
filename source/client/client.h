@@ -19,6 +19,7 @@
 #ifndef CLIENT_CLIENT_H
 #define CLIENT_CLIENT_H
 
+#include <QElapsedTimer>
 #include <QObject>
 #include <QStringList>
 #include <QVariant>
@@ -32,12 +33,14 @@
 #include "base/scoped_qpointer.h"
 #include "client/session_state.h"
 
+class QTimer;
 class RelayPeer;
 class SessionKeeper;
 class UdpAttempt;
 class UdpChannel;
 
 namespace proto::peer {
+class BandwidthProbe;
 class DirectUdpRequest;
 class StunUdpRequest;
 class GatewayUdpRequest;
@@ -119,6 +122,8 @@ private slots:
 
 private:
     void tcpChannelReady();
+    void readBandwidthProbe(const proto::peer::BandwidthProbe& probe, bool via_udp);
+    void onReceiveRateReport();
     void readDirectUdpRequest(const proto::peer::DirectUdpRequest& request);
     void readStunUdpRequest(const proto::peer::StunUdpRequest& request);
     void readGatewayUdpRequest(const proto::peer::GatewayUdpRequest& request);
@@ -144,6 +149,22 @@ private:
 
     bool udp_ready_ = false;
     const quint32 udp_methods_;
+
+    // Arrival state of the probe train currently being received (see readBandwidthProbe). A train
+    // that never completes (UDP loss) is simply superseded by the next one.
+    struct ProbeTrain
+    {
+        quint32 id = 0;
+        bool active = false;
+        QElapsedTimer first_arrival; // Started when the first probe of the train arrives.
+        quint64 bytes = 0;           // Payload bytes received after the first probe.
+    };
+    ProbeTrain probe_train_;
+
+    // Receive-rate reporting (see onReceiveRateReport).
+    QTimer* receive_rate_timer_ = nullptr;
+    QElapsedTimer receive_rate_interval_;
+    qint64 receive_rate_last_total_ = 0;
 };
 
 Q_DECLARE_METATYPE(Client::Status)

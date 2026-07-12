@@ -18,6 +18,8 @@
 
 #include "client/client.h"
 
+#include <QTimer>
+
 #include "base/version_constants.h"
 #include "base/serialization.h"
 #include "base/net/tcp_channel_ng.h"
@@ -43,6 +45,7 @@ namespace {
 auto g_statusType = qRegisterMetaType<Client::Status>();
 static const int kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
 static const int kWriteBufferSize = 2 * 1024 * 1024; // 2 Mb.
+static const int kReceiveRateIntervalMs = 1000;
 
 } // namespace
 
@@ -368,11 +371,7 @@ void Client::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
         }
         else if (message.has_bandwidth_probe())
         {
-            proto::peer::ClientToHost message;
-            proto::peer::BandwidthProbeAck* ask = message.mutable_bandwidth_probe_ack();
-            ask->set_dummy(1);
-
-            tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(message));
+            readBandwidthProbe(message.bandwidth_probe(), /* via_udp= */ false);
         }
         else
         {
@@ -503,9 +502,7 @@ void Client::onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 
     if (message.has_bandwidth_probe())
     {
-        proto::peer::ClientToHost ack;
-        ack.mutable_bandwidth_probe_ack()->set_dummy(1);
-        udp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(ack), true);
+        readBandwidthProbe(message.bandwidth_probe(), /* via_udp= */ true);
     }
     else
     {
@@ -598,6 +595,74 @@ void Client::tcpChannelReady()
     tcp_channel_->setReadBufferSize(kReadBufferSize);
     tcp_channel_->setWriteBufferSize(kWriteBufferSize);
     tcp_channel_->setPaused(false);
+
+    // Report the actual arrival rate of session traffic to the host; it drives the host's bandwidth
+    // estimation under real load (probes only run while the link is idle).
+    if (!receive_rate_timer_)
+    {
+        receive_rate_timer_ = new QTimer(this);
+        connect(receive_rate_timer_, &QTimer::timeout, this, &Client::onReceiveRateReport);
+    }
+    receive_rate_last_total_ = totalTcpRx() + totalUdpRx();
+    receive_rate_interval_.start();
+    receive_rate_timer_->start(kReceiveRateIntervalMs);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::readBandwidthProbe(const proto::peer::BandwidthProbe& probe, bool via_udp)
+{
+    // First probe of a new train (an unfinished previous train - lost probes on UDP - is simply
+    // superseded).
+    if (!probe_train_.active || probe_train_.id != probe.train_id())
+    {
+        probe_train_.id = probe.train_id();
+        probe_train_.active = true;
+        probe_train_.bytes = 0;
+        probe_train_.first_arrival.start();
+        return;
+    }
+
+    probe_train_.bytes += probe.payload().size();
+
+    // The last probe of the train completes the measurement: report how long the train took to
+    // arrive and how much of it arrived after the first probe. The probes are sent back to back, so
+    // this reflects the bottleneck rate of the path, not the RTT.
+    if (probe.index() + 1 >= probe.count())
+    {
+        proto::peer::ClientToHost message;
+        proto::peer::BandwidthProbeAck* ack = message.mutable_bandwidth_probe_ack();
+        ack->set_train_id(probe_train_.id);
+        ack->set_delta_us(static_cast<quint64>(probe_train_.first_arrival.nsecsElapsed() / 1000));
+        ack->set_bytes(probe_train_.bytes);
+
+        probe_train_.active = false;
+
+        if (via_udp)
+            udp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(message), true);
+        else
+            tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(message));
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::onReceiveRateReport()
+{
+    const qint64 total = totalTcpRx() + totalUdpRx();
+    const qint64 bytes = total - receive_rate_last_total_;
+    const qint64 interval_ms = receive_rate_interval_.restart();
+
+    receive_rate_last_total_ = total;
+
+    // An idle interval carries no information about the path capacity.
+    if (bytes <= 0 || interval_ms <= 0 || !tcp_channel_)
+        return;
+
+    proto::peer::ClientToHost message;
+    proto::peer::ReceiveRate* rate = message.mutable_receive_rate();
+    rate->set_bytes(static_cast<quint64>(bytes));
+    rate->set_interval_ms(static_cast<quint32>(interval_ms));
+
+    tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
