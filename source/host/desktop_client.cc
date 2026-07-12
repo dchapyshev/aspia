@@ -378,16 +378,36 @@ void DesktopClient::onIpcDisconnected()
 //--------------------------------------------------------------------------------------------------
 void DesktopClient::onOverflowCheck()
 {
+    // Byte thresholds: an absolute backstop that fires regardless of the bandwidth estimate. They
+    // bound the damage when the estimate is too optimistic - an overestimated link would otherwise
+    // be allowed to queue tens of megabytes before the drain-time brake below trips.
     static const qint64 kCriticalPendingBytes = 1 * 1024 * 1024; // 1 MB
     static const qint64 kWarningPendingBytes = 512 * 1024; // 512 kB
 
+    // Drain-time thresholds: how long the queued data would take to go out at the estimated link
+    // rate. They trip much earlier than the byte backstop on slow links, where a fixed byte count
+    // would mean seconds of added latency before any throttling starts.
+    static const qint64 kCriticalDrainTimeMs = 1000;
+    static const qint64 kWarningDrainTimeMs = 300;
+
     proto::desktop::Overflow::State state = proto::desktop::Overflow::STATE_NONE;
     qint64 pending = pendingBytes();
+    const qint64 estimated_bandwidth = bandwidth();
 
     if (pending > kCriticalPendingBytes)
         state = proto::desktop::Overflow::STATE_CRITICAL;
     else if (pending > kWarningPendingBytes)
         state = proto::desktop::Overflow::STATE_WARNING;
+
+    if (estimated_bandwidth > 0 && state != proto::desktop::Overflow::STATE_CRITICAL)
+    {
+        const qint64 drain_time_ms = pending * 1000 / estimated_bandwidth;
+
+        if (drain_time_ms > kCriticalDrainTimeMs)
+            state = proto::desktop::Overflow::STATE_CRITICAL;
+        else if (drain_time_ms > kWarningDrainTimeMs && state == proto::desktop::Overflow::STATE_NONE)
+            state = proto::desktop::Overflow::STATE_WARNING;
+    }
 
     if (state != last_state_)
     {

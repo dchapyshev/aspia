@@ -47,13 +47,19 @@ const qint64 kProbePayloadSize = 4 * 1024; // 4 KB per probe, 16 KB per train.
 const qint64 kMaxBandwidthEstimate = 64 * 1024 * 1024; // 64 MB/s
 const qint64 kMinBandwidthEstimate = 8 * 1024;         // 8 KB/s
 
-// A send queue above this is treated as saturated: the path is the limiting factor, so the receive
-// rate reported by the client equals the path capacity.
-const qint64 kSaturatedPendingBytes = 64 * 1024;
+// The send queue is treated as saturated - the path is the limiting factor, so the receive rate
+// reported by the client equals the path capacity - when the queued data is worth more than this
+// much transfer time at the current estimate, or exceeds the absolute cap (which also catches an
+// overestimated link, whose relative threshold would be unreachably high).
+const qint64 kSaturatedDrainTimeMs = 125;
+const qint64 kSaturatedPendingBytes = 256 * 1024;
 
-// Estimate changes below this fraction are not propagated to consumers - the quality tiers are
-// coarse, and re-publishing every small fluctuation would make them flap at band boundaries.
-const int kPublishThresholdPercent = 20;
+// Estimate changes below these fractions are not propagated to consumers - the quality tiers are
+// coarse, and re-publishing every small fluctuation would make them flap at band boundaries. The
+// thresholds are asymmetric on purpose: reacting to a degrading link quickly matters (queued frames
+// turn into visible lag), while an improvement can wait until it is substantial.
+const int kPublishUpThresholdPercent = 25;
+const int kPublishDownThresholdPercent = 10;
 
 //--------------------------------------------------------------------------------------------------
 quint32 nextRequestId()
@@ -608,14 +614,20 @@ void Client::onReceiveRate(const proto::peer::ReceiveRate& rate)
     // The client reports how fast the session traffic actually arrived. With a backed-up send queue
     // the path itself was the limiting factor, so the arrival rate IS the path capacity - including
     // when the path degraded mid-session. With an empty queue the path was not saturated and the
-    // arrival rate is only a lower bound: it can raise the estimate but never lower it.
-    const bool saturated = pendingBytes() > kSaturatedPendingBytes;
-
+    // arrival rate is only a lower bound: it can raise the estimate but never lower it. Both moves
+    // are half-steps toward the sample rather than jumps: a single interval can be skewed by
+    // buffering bursts, and repeated genuine readings still converge within a couple of seconds.
     BandwidthProbe& probe = (udp_state_ == UdpState::READY) ? udp_probe_ : tcp_probe_;
-    if (saturated)
-        probe.bandwidth = arrival_rate;
+
+    const qint64 pending = pendingBytes();
+    const bool saturated = pending > kSaturatedPendingBytes ||
+        (probe.bandwidth > 0 && pending * 1000 / probe.bandwidth > kSaturatedDrainTimeMs);
+    if (!probe.bandwidth)
+        probe.bandwidth = arrival_rate; // First sample of the path - take it as is.
+    else if (saturated)
+        probe.bandwidth = (probe.bandwidth + arrival_rate) / 2;
     else if (arrival_rate > probe.bandwidth)
-        probe.bandwidth = arrival_rate;
+        probe.bandwidth += (arrival_rate - probe.bandwidth) / 2;
     else
         return;
 
@@ -653,10 +665,16 @@ void Client::publishBandwidth(qint64 bandwidth)
 {
     // Consumers map the estimate onto coarse quality tiers; propagating every fluctuation would make
     // the tiers flap at band boundaries (and the Windows H264 encoder re-creates itself on every
-    // change). Only meaningful moves go through.
-    const qint64 threshold = published_bandwidth_ * kPublishThresholdPercent / 100;
-    if (published_bandwidth_ != 0 && qAbs(bandwidth - published_bandwidth_) < threshold)
-        return;
+    // change). Only meaningful moves go through - see the threshold constants for the asymmetry.
+    if (published_bandwidth_ != 0)
+    {
+        const qint64 delta = bandwidth - published_bandwidth_;
+
+        if (delta >= 0 && delta < published_bandwidth_ * kPublishUpThresholdPercent / 100)
+            return;
+        if (delta < 0 && -delta < published_bandwidth_ * kPublishDownThresholdPercent / 100)
+            return;
+    }
 
     CLOG(INFO) << "Publishing bandwidth estimate:" << (bandwidth / 1024) << "kB/s";
 
