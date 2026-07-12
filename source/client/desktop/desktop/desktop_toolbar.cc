@@ -351,7 +351,7 @@ void DesktopToolBar::setScreenList(const proto::screen::ScreenList& screen_list)
             QSize resolution =
                 QSize(screen_list.resolution(i).width(), screen_list.resolution(i).height());
 
-            QAction* resolution_action = new QAction();
+            QAction* resolution_action = new QAction(resolutions_menu_);
             resolution_action->setText(
                 QString("%1x%2").arg(resolution.width()).arg(resolution.height()));
             resolution_action->setData(resolution);
