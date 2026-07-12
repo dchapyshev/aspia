@@ -20,6 +20,7 @@
 #define BASE_CODEC_VIDEO_ENCODER_H264_VT_H
 
 #include "base/codec/video_encoder.h"
+#include "base/desktop/region.h"
 
 #include <QSize>
 
@@ -74,6 +75,11 @@ private:
 
     QSize last_size_;
     quint64 frame_counter_ = 0;
+
+    // Dirty area of frames the encoder dropped and has not yet re-advertised. Merged into the dirty
+    // rectangles of the next delivered frame so the client re-blits the region a dropped frame would
+    // otherwise have left stale; cleared once a frame is delivered.
+    Region pending_region_;
 
     // Bandwidth-tuned codec parameters. Defaults match a "5 Mbps, decent quality" tier and are
     // shifted by setBandwidth(); applyRateControl() pushes them into the session.

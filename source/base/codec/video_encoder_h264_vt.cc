@@ -151,51 +151,55 @@ VideoEncoder::Result VideoEncoderH264VT::encode(const Frame* frame, proto::video
 
     bool is_key_frame = isKeyFrameRequired();
 
-    if (last_size_ != frame->size())
+    // H264 is YUV 4:2:0, so both dimensions must be even. The captured logical size can be odd (a
+    // Retina "looks like" resolution such as 1728x1117), which VideoToolbox mishandles - the odd
+    // bottom chroma row shows up as a green bar. Round down to even; the dropped one-pixel edge is
+    // imperceptible. (VP8/VP9 pad and crop internally, which is why they are unaffected.)
+    const QSize target_size(frame->size().width() & ~1, frame->size().height() & ~1);
+
+    if (last_size_ != target_size)
     {
-        const QSize new_size = frame->size();
-
         proto::video::Rect* video_rect = packet->mutable_format()->mutable_video_rect();
-        video_rect->set_width(new_size.width());
-        video_rect->set_height(new_size.height());
+        video_rect->set_width(target_size.width());
+        video_rect->set_height(target_size.height());
 
-        if (!createSession(new_size))
+        if (!createSession(target_size))
         {
             // The hardware encoder refuses frame sizes outside its supported profile/level. This
             // is the signal for the caller to fall back to a software codec.
-            LOG(ERROR) << "Unable to create H264 encoder for" << new_size;
+            LOG(ERROR) << "Unable to create H264 encoder for" << target_size;
             return Result::PERMANENT_ERROR;
         }
 
-        last_size_ = new_size;
+        last_size_ = target_size;
         is_key_frame = true;
     }
 
     QRect image_rect(QPoint(0, 0), last_size_);
 
+    // The dirty region advertised to the client. A key frame refreshes the whole image; otherwise it
+    // is this frame's own updated area plus any area carried over from earlier dropped frames.
+    Region frame_region;
+
     if (is_key_frame)
     {
-        proto::video::Rect* dirty_rect = packet->add_dirty_rect();
-        dirty_rect->set_x(0);
-        dirty_rect->set_y(0);
-        dirty_rect->set_width(last_size_.width());
-        dirty_rect->set_height(last_size_.height());
+        frame_region += image_rect;
     }
     else
     {
-        Region updated_region;
         for (const auto& rect : frame->constUpdatedRegion())
-            updated_region += alignRect(rect);
-        updated_region.intersect(image_rect);
+            frame_region += alignRect(rect);
+        frame_region.intersect(image_rect);
+        frame_region += pending_region_;
+    }
 
-        for (const auto& rect : updated_region)
-        {
-            proto::video::Rect* dirty_rect = packet->add_dirty_rect();
-            dirty_rect->set_x(rect.x());
-            dirty_rect->set_y(rect.y());
-            dirty_rect->set_width(rect.width());
-            dirty_rect->set_height(rect.height());
-        }
+    for (const auto& rect : frame_region)
+    {
+        proto::video::Rect* dirty_rect = packet->add_dirty_rect();
+        dirty_rect->set_x(rect.x());
+        dirty_rect->set_y(rect.y());
+        dirty_rect->set_width(rect.width());
+        dirty_rect->set_height(rect.height());
     }
 
     CVPixelBufferPoolRef pool = VTCompressionSessionGetPixelBufferPool(session_);
@@ -268,7 +272,15 @@ VideoEncoder::Result VideoEncoderH264VT::encode(const Frame* frame, proto::video
         if (sample)
             CFRelease(sample);
 
-        LOG(ERROR) << "Encoding failed:" << output_status_;
+        // No output with a success status means VideoToolbox dropped the frame under rate-control
+        // pressure (kVTEncodeInfo_FrameDropped, common in the burst right after connect). The dropped
+        // frame's dirty rectangles are lost with it, so start carrying the undelivered area here (it
+        // already contains any earlier carried-over area) - it is merged into the next delivered
+        // frame's dirty rectangles, whose pixels the encoder re-encodes as a diff against the last
+        // delivered reference frame.
+        pending_region_ = frame_region;
+
+        LOG(WARNING) << "Frame dropped by encoder; carrying its region into the next frame";
         return Result::TEMPORARY_ERROR;
     }
 
@@ -292,6 +304,9 @@ VideoEncoder::Result VideoEncoderH264VT::encode(const Frame* frame, proto::video
 
     if (is_key_frame || output_is_key)
         packet->set_flags(proto::video::PACKET_FLAG_IS_KEY_FRAME);
+
+    // Delivered: the carried-over area (if any) has now been re-advertised in this packet.
+    pending_region_.clear();
 
     ++frame_counter_;
     setKeyFrameRequired(false);
@@ -490,8 +505,10 @@ bool VideoEncoderH264VT::copyFrameToPixelBuffer(const Frame* frame, CVPixelBuffe
     const QSize frame_size = frame->size();
     bool result = false;
 
-    if (dst && static_cast<int>(width) == frame_size.width() &&
-        static_cast<int>(height) == frame_size.height())
+    // The buffer is rounded down to even, so it may be one pixel shorter/narrower than the frame; it
+    // must never be larger (that would read past the frame).
+    if (dst && static_cast<int>(width) <= frame_size.width() &&
+        static_cast<int>(height) <= frame_size.height())
     {
         const quint8* src = frame->frameData();
         const size_t src_stride = static_cast<size_t>(frame->stride());
@@ -505,7 +522,7 @@ bool VideoEncoderH264VT::copyFrameToPixelBuffer(const Frame* frame, CVPixelBuffe
     }
     else
     {
-        LOG(ERROR) << "Pixel buffer size mismatch:" << width << "x" << height
+        LOG(ERROR) << "Pixel buffer larger than frame:" << width << "x" << height
                    << "vs" << frame_size;
     }
 
