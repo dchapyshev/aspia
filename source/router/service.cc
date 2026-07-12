@@ -543,7 +543,10 @@ void Service::onNotificationFlush()
         client_payload = serialize(message);
     }
 
-    for (Client* client : std::as_const(clients_))
+    // A snapshot: sendMessage() can synchronously finish a failed session, which removes it from
+    // |clients_| and would invalidate the iterator.
+    const QList<Client*> client_sessions = clients_;
+    for (Client* client : client_sessions)
     {
         if (!client->isTwoFactorCompleted())
             continue;
