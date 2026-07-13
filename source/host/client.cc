@@ -162,7 +162,7 @@ Client::Client(TcpChannel* tcp_channel, QObject* parent)
         // Do not add probe bytes to a queue that is already backed up - it would only add to the
         // lag the queue represents, and the saturation feedback is measuring the capacity there
         // anyway.
-        if (pendingBytes() > kSaturatedPendingBytes)
+        if (excessPendingBytes() > kSaturatedPendingBytes)
             return;
 
         if (udp_state_ == UdpState::READY)
@@ -287,6 +287,22 @@ qint64 Client::pendingBytes() const
         result += udp_channel_->pendingBytes();
 
     return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+qint64 Client::excessPendingBytes() const
+{
+    qint64 pending = pendingBytes();
+
+    // The queuing-free baseline RTT and the estimated rate bound the bytes that are legitimately
+    // in flight; anything above that is a real standing queue.
+    if (udp_state_ == UdpState::READY && udp_probe_.bandwidth > 0 && udp_base_rtt_ms_ > 0)
+    {
+        const qint64 expected_in_flight = udp_probe_.bandwidth * udp_base_rtt_ms_ / 1000;
+        pending = std::max<qint64>(0, pending - expected_in_flight);
+    }
+
+    return pending;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -708,7 +724,7 @@ void Client::onReceiveRate(const proto::peer::ReceiveRate& rate)
         }
     }
 
-    const qint64 pending = pendingBytes();
+    const qint64 pending = excessPendingBytes();
     const bool saturated = pending > kSaturatedPendingBytes ||
         (probe.bandwidth > 0 && pending * 1000 / probe.bandwidth > kSaturatedDrainTimeMs);
     if (!probe.bandwidth)

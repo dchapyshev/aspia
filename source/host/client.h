@@ -76,6 +76,8 @@ public:
     QString architecture() const;
     QString userName() const;
     qint64 pendingBytes() const;
+    qint64 excessPendingBytes() const;
+
     qint64 bandwidth() const;
 
     enum class UdpState
