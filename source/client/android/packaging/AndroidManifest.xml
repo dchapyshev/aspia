@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.aspia.client"
     android:installLocation="auto"
     android:versionCode="1"
     android:versionName="1.0">

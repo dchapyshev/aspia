@@ -194,7 +194,8 @@
       }
     },
     {
-      "name": "ci-android",
+      "name": "ci-android-base",
+      "hidden": true,
       "inherits": [
         "android-base"
       ],
@@ -206,6 +207,21 @@
         "QT_HOST_PATH": "$penv{QT_HOST_PATH}",
         "ANDROID_SDK_ROOT": "$penv{ANDROID_SDK_ROOT}",
         "ANDROID_NDK_ROOT": "$penv{ANDROID_NDK_ROOT}"
+      }
+    },
+    {
+      "name": "ci-android-release",
+      "inherits": [
+        "ci-android-base"
+      ]
+    },
+    {
+      "name": "ci-android-debug",
+      "inherits": [
+        "ci-android-base"
+      ],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
       }
     }
   ],
@@ -222,16 +238,14 @@
     },
     {
       "name": "ci-android-apk-release",
-      "configurePreset": "ci-android",
-      "configuration": "Release",
+      "configurePreset": "ci-android-release",
       "targets": [
         "apk"
       ]
     },
     {
       "name": "ci-android-apk-debug",
-      "configurePreset": "ci-android",
-      "configuration": "Debug",
+      "configurePreset": "ci-android-debug",
       "targets": [
         "apk"
       ]

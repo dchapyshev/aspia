@@ -65,8 +65,10 @@ jobs:
           New-Item -ItemType Directory -Force -Path $env:VCPKG_DEFAULT_BINARY_CACHE | Out-Null
           New-Item -ItemType Directory -Force -Path $env:VCPKG_DOWNLOADS | Out-Null
 
-          # Build vcpkg dependencies (arm64-android target, x64-windows-static host)
-          cmake --preset ci-android
+          # Build vcpkg dependencies (arm64-android target, x64-windows-static host).
+          # The Android build uses a single-config generator, so each build type has
+          # its own configure preset (and build directory).
+          cmake --preset ci-android-${{ matrix.build_type }}
 
           # Build the APK (aggregate target: aspia_client + aspia_host)
           cmake --build --preset ci-android-apk-${{ matrix.build_type }}
@@ -77,7 +79,7 @@ jobs:
         with:
           name: aspia-android-arm64-${{ matrix.build_type }}
           path: |
-            ${{ github.workspace }}/builds/ci-android/source/client/android-build/build/outputs/apk/${{ matrix.build_type }}/*.apk
-            ${{ github.workspace }}/builds/ci-android/source/host/android-build/build/outputs/apk/${{ matrix.build_type }}/*.apk
+            ${{ github.workspace }}/builds/ci-android-${{ matrix.build_type }}/source/client/android-build/build/outputs/apk/${{ matrix.build_type }}/*.apk
+            ${{ github.workspace }}/builds/ci-android-${{ matrix.build_type }}/source/host/android-build/build/outputs/apk/${{ matrix.build_type }}/*.apk
           if-no-files-found: error
           retention-days: 7
