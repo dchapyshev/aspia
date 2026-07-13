@@ -95,9 +95,8 @@ signals:
     // The last client disconnected: capture must stop.
     void sig_stopCapture();
 
-    // Aggregated network feedback (worst overflow state, smallest measured bandwidth), driving the
-    // screen worker's FPS and encoding selection.
-    void sig_overflowStateChanged(proto::desktop::Overflow::State state, qint64 bandwidth);
+    void sig_overflowStateChanged(proto::desktop::Overflow::State state);
+    void sig_bandwidthChanged(qint64 bandwidth);
 
 protected:
     // Worker implementation.
@@ -109,15 +108,16 @@ private slots:
     void onIpcDisconnected();
     void onIpcErrorOccurred();
     void onIpcMessageReceived(quint32 ipc_channel_id, const QByteArray& buffer, bool reliable);
-
     void onClientConfigured();
     void onClientFinished();
     void onPreferredSizeChanged();
     void onOverflowCheck();
+    void onClientBandwidthChanged();
 
 private:
     void startClient(const QString& ipc_channel_name);
     void connectToService();
+    qint64 minimalBandwidth() const;
 
     ScopedQPointer<IpcChannel> ipc_channel_;
     QList<DesktopAgentClient*> clients_;

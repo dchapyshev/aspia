@@ -312,6 +312,7 @@ void IpcWorker::onClientFinished()
     {
         onClientConfigured();
         onPreferredSizeChanged();
+        onClientBandwidthChanged();
         return;
     }
 
@@ -347,23 +348,20 @@ void IpcWorker::onPreferredSizeChanged()
 void IpcWorker::onOverflowCheck()
 {
     proto::desktop::Overflow::State state = proto::desktop::Overflow::STATE_NONE;
-    qint64 minimal_bandwidth = std::numeric_limits<qint64>::max();
 
     for (auto* client : std::as_const(clients_))
     {
         if (client->overflowState() > state)
             state = client->overflowState();
-
-        qint64 bandwidth = client->bandwidth();
-        if (bandwidth != 0 && bandwidth < minimal_bandwidth)
-            minimal_bandwidth = bandwidth;
     }
 
-    qint64 bandwidth = 0;
-    if (minimal_bandwidth != std::numeric_limits<qint64>::max())
-        bandwidth = minimal_bandwidth;
+    emit sig_overflowStateChanged(state);
+}
 
-    emit sig_overflowStateChanged(state, bandwidth);
+//--------------------------------------------------------------------------------------------------
+void IpcWorker::onClientBandwidthChanged()
+{
+    emit sig_bandwidthChanged(minimalBandwidth());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -380,6 +378,7 @@ void IpcWorker::startClient(const QString& ipc_channel_name)
     connect(client, &DesktopAgentClient::sig_clipboardEvent, this, &IpcWorker::sig_clipboardEvent);
     connect(client, &DesktopAgentClient::sig_preferredSizeChanged, this, &IpcWorker::onPreferredSizeChanged);
     connect(client, &DesktopAgentClient::sig_keyFrameRequested, this, &IpcWorker::sig_keyFrameRequested);
+    connect(client, &DesktopAgentClient::sig_bandwidthChanged, this, &IpcWorker::onClientBandwidthChanged);
     connect(client, &DesktopAgentClient::sig_configured, this, &IpcWorker::onClientConfigured);
     connect(client, &DesktopAgentClient::sig_finished, this, &IpcWorker::onClientFinished);
 
@@ -397,4 +396,19 @@ void IpcWorker::connectToService()
     connect(ipc_channel_, &IpcChannel::sig_messageReceived, this, &IpcWorker::onIpcMessageReceived);
 
     ipc_channel_->connectTo(kDesktopAgentChannelId);
+}
+
+//--------------------------------------------------------------------------------------------------
+qint64 IpcWorker::minimalBandwidth() const
+{
+    qint64 minimal_bandwidth = std::numeric_limits<qint64>::max();
+
+    for (auto* client : std::as_const(clients_))
+    {
+        qint64 bandwidth = client->bandwidth();
+        if (bandwidth != 0 && bandwidth < minimal_bandwidth)
+            minimal_bandwidth = bandwidth;
+    }
+
+    return minimal_bandwidth != std::numeric_limits<qint64>::max() ? minimal_bandwidth : 0;
 }

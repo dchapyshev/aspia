@@ -92,9 +92,8 @@ public slots:
     void onSelectScreen(const proto::screen::Screen& screen);
     void onClipboardEvent(const proto::clipboard::Event& event);
     void onKeyFrameRequested();
-
-    // Aggregated network feedback from the clients; drives the FPS and encoding selection.
-    void onOverflowStateChanged(proto::desktop::Overflow::State state, qint64 bandwidth);
+    void onOverflowStateChanged(proto::desktop::Overflow::State state);
+    void onBandwidthChanged(qint64 bandwidth);
 
 signals:
     // Serialized messages ready to be sent to clients.

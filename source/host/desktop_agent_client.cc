@@ -174,6 +174,7 @@ void DesktopAgentClient::onIpcMessageReceived(
         {
             bandwidth_ = message.bandwidth_change().bandwidth();
             CLOG(INFO) << "Bandwidth changed:" << bandwidth_;
+            emit sig_bandwidthChanged();
         }
         else
         {

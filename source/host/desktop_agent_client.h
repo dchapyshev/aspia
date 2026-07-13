@@ -91,6 +91,7 @@ signals:
     void sig_clipboardEvent(const proto::clipboard::Event& event);
     void sig_preferredSizeChanged(const QSize& size);
     void sig_keyFrameRequested();
+    void sig_bandwidthChanged();
     void sig_configured();
     void sig_finished();
 

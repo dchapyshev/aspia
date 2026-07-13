@@ -357,24 +357,25 @@ void ScreenWorker::onKeyFrameRequested()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ScreenWorker::onOverflowStateChanged(proto::desktop::Overflow::State state, qint64 bandwidth)
+void ScreenWorker::onOverflowStateChanged(proto::desktop::Overflow::State state)
 {
-    // When bandwidth is unknown, use a conservative limit.
+    // The bandwidth estimate arrives separately (onBandwidthChanged); here it only caps the frame
+    // rate. When it is not measured yet, use a conservative limit.
     int bandwidth_fps_limit = 20;
-    if (bandwidth > 0)
+    if (last_bandwidth_ > 0)
     {
         // Calculate FPS limit based on measured bandwidth.
-        if (bandwidth < 70 * 1024)         // < 70 KB/s
+        if (last_bandwidth_ < 70 * 1024)         // < 70 KB/s
             bandwidth_fps_limit = min_fps_;
-        else if (bandwidth < 150 * 1024)   // < 150 KB/s
+        else if (last_bandwidth_ < 150 * 1024)   // < 150 KB/s
             bandwidth_fps_limit = 14;
-        else if (bandwidth < 300 * 1024)   // < 300 KB/s
+        else if (last_bandwidth_ < 300 * 1024)   // < 300 KB/s
             bandwidth_fps_limit = 16;
-        else if (bandwidth < 500 * 1024)   // < 500 KB/s
+        else if (last_bandwidth_ < 500 * 1024)   // < 500 KB/s
             bandwidth_fps_limit = 18;
-        else if (bandwidth < 1024 * 1024)  // < 1 MB/s
+        else if (last_bandwidth_ < 1024 * 1024)  // < 1 MB/s
             bandwidth_fps_limit = 20;
-        else if (bandwidth < 2048 * 1024)  // < 2 MB/s
+        else if (last_bandwidth_ < 2048 * 1024)  // < 2 MB/s
             bandwidth_fps_limit = 24;
         else
             bandwidth_fps_limit = max_fps_;
@@ -432,9 +433,16 @@ void ScreenWorker::onOverflowStateChanged(proto::desktop::Overflow::State state,
 
     if (current_fps != next_fps)
         capture_scheduler_.setFps(next_fps);
+}
 
-    if (bandwidth <= 0) // Not measured yet.
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::onBandwidthChanged(qint64 bandwidth)
+{
+    if (bandwidth <= 0 || bandwidth == last_bandwidth_)
         return;
+
+    // Also read by the FPS governor in onOverflowStateChanged.
+    last_bandwidth_ = bandwidth;
 
     proto::video::Encoding desired_encoding = video_encoding_;
     const qint64 kVp9SwitchingThreshold = 1.5 * 1024 * 1024; // 1.5 MB/s
@@ -457,14 +465,14 @@ void ScreenWorker::onOverflowStateChanged(proto::desktop::Overflow::State state,
     {
         LOG(INFO) << "Switching video encoding:" << video_encoding_ << "->" << desired_encoding;
         video_encoding_ = desired_encoding;
+
+        // The fresh encoder picks the new bandwidth up from |last_bandwidth_| in createVideoEncoder().
         createVideoEncoder();
+        return;
     }
 
-    if (last_bandwidth_ != bandwidth && video_encoder_)
-    {
-        last_bandwidth_ = bandwidth;
+    if (video_encoder_)
         video_encoder_->setBandwidth(bandwidth);
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -486,6 +494,8 @@ void ScreenWorker::onStart()
         connect(ipc_worker_, &IpcWorker::sig_configure, this, &ScreenWorker::onConfigure,
                 Qt::QueuedConnection);
         connect(ipc_worker_, &IpcWorker::sig_overflowStateChanged, this, &ScreenWorker::onOverflowStateChanged,
+                Qt::QueuedConnection);
+        connect(ipc_worker_, &IpcWorker::sig_bandwidthChanged, this, &ScreenWorker::onBandwidthChanged,
                 Qt::QueuedConnection);
         connect(ipc_worker_, &IpcWorker::sig_stopCapture, this, &ScreenWorker::onStopCapture,
                 Qt::QueuedConnection);

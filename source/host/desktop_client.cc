@@ -390,8 +390,10 @@ void DesktopClient::onOverflowCheck()
     static const qint64 kCriticalDrainTimeMs = 1000;
     static const qint64 kWarningDrainTimeMs = 300;
 
+    // The excess over the path's normal in-flight window; a healthy long-RTT UDP link would trip
+    // the thresholds constantly on the raw value.
     proto::desktop::Overflow::State state = proto::desktop::Overflow::STATE_NONE;
-    qint64 pending = pendingBytes();
+    qint64 pending = excessPendingBytes();
     const qint64 estimated_bandwidth = bandwidth();
 
     if (pending > kCriticalPendingBytes)
