@@ -77,8 +77,7 @@ PULSE_AUDIO_SYMBOLS_LIST
 #undef X
 LATE_BINDING_SYMBOL_TABLE_DECLARE_END(PulseAudioSymbolTable)
 
-// The process-wide symbol table shared by the PulseAudio output and capturer (defined in
-// audio_output_pulse.cc).
+// The process-wide symbol table shared by the PulseAudio output (client) and capturer (host).
 PulseAudioSymbolTable* pulseSymbolTable();
 
 #endif // BASE_LINUX_PULSEAUDIO_SYMBOL_TABLE_H

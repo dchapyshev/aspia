@@ -23,3 +23,10 @@ LATE_BINDING_SYMBOL_TABLE_DEFINE_BEGIN(PulseAudioSymbolTable, "libpulse.so.0")
 PULSE_AUDIO_SYMBOLS_LIST
 #undef X
 LATE_BINDING_SYMBOL_TABLE_DEFINE_END(PulseAudioSymbolTable)
+
+//--------------------------------------------------------------------------------------------------
+PulseAudioSymbolTable* pulseSymbolTable()
+{
+    static PulseAudioSymbolTable* pulse_symbol_table = new PulseAudioSymbolTable();
+    return pulse_symbol_table;
+}
