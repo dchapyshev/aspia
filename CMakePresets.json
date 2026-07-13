@@ -221,8 +221,17 @@
       "configuration": "Debug"
     },
     {
-      "name": "ci-android-apk",
+      "name": "ci-android-apk-release",
       "configurePreset": "ci-android",
+      "configuration": "Release",
+      "targets": [
+        "apk"
+      ]
+    },
+    {
+      "name": "ci-android-apk-debug",
+      "configurePreset": "ci-android",
+      "configuration": "Debug",
       "targets": [
         "apk"
       ]

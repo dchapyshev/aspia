@@ -19,9 +19,13 @@ env:
 
 jobs:
   build-android:
-    name: android-arm64-release
+    name: android-arm64-${{ matrix.build_type }}
     runs-on: win11
     if: github.event_name == 'push'
+    strategy:
+      fail-fast: true
+      matrix:
+        build_type: [release, debug]
 
     steps:
       # Step 1
@@ -64,16 +68,16 @@ jobs:
           # Build vcpkg dependencies (arm64-android target, x64-windows-static host)
           cmake --preset ci-android
 
-          # Build the signed/unsigned APK
-          cmake --build --preset ci-android-apk
+          # Build the APK (aggregate target: aspia_client + aspia_host)
+          cmake --build --preset ci-android-apk-${{ matrix.build_type }}
 
       # Step 4
       - name: Upload Artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: aspia-android-arm64
+          name: aspia-android-arm64-${{ matrix.build_type }}
           path: |
-            ${{ github.workspace }}/builds/ci-android/source/client/android-build/aspia_client.apk
-            ${{ github.workspace }}/builds/ci-android/source/host/android-build/aspia_host.apk
+            ${{ github.workspace }}/builds/ci-android/source/client/android-build/build/outputs/apk/${{ matrix.build_type }}/*.apk
+            ${{ github.workspace }}/builds/ci-android/source/host/android-build/build/outputs/apk/${{ matrix.build_type }}/*.apk
           if-no-files-found: error
           retention-days: 7
