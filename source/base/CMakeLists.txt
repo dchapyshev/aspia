@@ -130,7 +130,6 @@ list(APPEND SOURCE_BASE_TESTS
     xml_settings_unittest.cc
     tests_main.cc)
 
-include(audio/sources.cmake)
 include(codec/sources.cmake)
 include(crypto/sources.cmake)
 include(desktop/sources.cmake)
@@ -142,12 +141,10 @@ include(sql/sources.cmake)
 include(threading/sources.cmake)
 
 if (WIN32)
-    include(audio/win/sources.cmake)
     include(win/sources.cmake)
 endif()
 
 if (LINUX)
-    include(audio/linux/sources.cmake)
     include(linux/sources.cmake)
 endif()
 
@@ -156,7 +153,6 @@ if (APPLE)
 endif()
 
 source_group("" FILES ${SOURCE_BASE} ${SOURCE_BASE_TESTS})
-source_group(audio FILES ${SOURCE_BASE_AUDIO})
 source_group(codec FILES ${SOURCE_BASE_CODEC} ${SOURCE_BASE_CODEC_TESTS})
 source_group(crypto FILES ${SOURCE_BASE_CRYPTO} ${SOURCE_BASE_CRYPTO_TESTS})
 source_group(desktop FILES ${SOURCE_BASE_DESKTOP} ${SOURCE_BASE_DESKTOP_TESTS})
@@ -168,12 +164,10 @@ source_group(sql FILES ${SOURCE_BASE_SQL} ${SOURCE_BASE_SQL_TESTS})
 source_group(threading FILES ${SOURCE_BASE_THREADING} ${SOURCE_BASE_THREADING_TESTS})
 
 if (WIN32)
-    source_group(audio\\win FILES ${SOURCE_BASE_AUDIO_WIN})
     source_group(win FILES ${SOURCE_BASE_WIN} ${SOURCE_BASE_WIN_TESTS})
 endif()
 
 if (LINUX)
-    source_group(audio\\linux FILES ${SOURCE_BASE_AUDIO_LINUX})
     source_group(linux FILES ${SOURCE_BASE_LINUX})
 endif()
 
@@ -183,9 +177,6 @@ endif()
 
 add_library(aspia_base STATIC
     ${SOURCE_BASE}
-    ${SOURCE_BASE_AUDIO}
-    ${SOURCE_BASE_AUDIO_LINUX}
-    ${SOURCE_BASE_AUDIO_WIN}
     ${SOURCE_BASE_CODEC}
     ${SOURCE_BASE_CRYPTO}
     ${SOURCE_BASE_DESKTOP}

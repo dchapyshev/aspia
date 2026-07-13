@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/audio/win/default_audio_device_change_detector.h"
+#include "host/win/default_audio_device_change_detector.h"
 
 #include "base/logging.h"
 

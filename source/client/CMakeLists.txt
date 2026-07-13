@@ -21,6 +21,10 @@ list(APPEND SOURCE_CLIENT_CORE
     aab_importer.h
     application.cc
     application.h
+    audio_output.cc
+    audio_output.h
+    audio_player.cc
+    audio_player.h
     database.cc
     database.h
     client.cc
@@ -64,7 +68,28 @@ list(APPEND SOURCE_CLIENT_CORE
     udp_attempt.h)
 
 if (WIN32)
-    list(APPEND SOURCE_CLIENT_CORE client.rc)
+    list(APPEND SOURCE_CLIENT_CORE
+        audio_output_win.cc
+        audio_output_win.h
+        client.rc)
+endif()
+
+if (LINUX)
+    list(APPEND SOURCE_CLIENT_CORE
+        audio_output_pulse.cc
+        audio_output_pulse.h)
+endif()
+
+if (APPLE)
+    list(APPEND SOURCE_CLIENT_CORE
+        audio_output_mac.cc
+        audio_output_mac.h)
+endif()
+
+if (ANDROID)
+    list(APPEND SOURCE_CLIENT_CORE
+        audio_output_android.cc
+        audio_output_android.h)
 endif()
 
 include(android/sources.cmake)
@@ -77,6 +102,10 @@ include(desktop/chat/sources.cmake)
 include(desktop/hosts/sources.cmake)
 include(desktop/terminal/sources.cmake)
 
+if (WIN32)
+    include(win/sources.cmake)
+endif()
+
 source_group("" FILES ${SOURCE_CLIENT_CORE})
 source_group(android FILES ${SOURCE_CLIENT_ANDROID})
 source_group(online_checker FILES ${SOURCE_CLIENT_CORE_ONLINE_CHECKER})
@@ -87,6 +116,7 @@ source_group(desktop\\sys_info FILES ${SOURCE_CLIENT_CORE_DESKTOP_SYS_INFO})
 source_group(desktop\\chat FILES ${SOURCE_CLIENT_CORE_DESKTOP_CHAT})
 source_group(desktop\\terminal FILES ${SOURCE_CLIENT_CORE_DESKTOP_TERMINAL})
 source_group(desktop\\hosts FILES ${SOURCE_CLIENT_CORE_DESKTOP_HOSTS_TAB})
+source_group(win FILES ${SOURCE_CLIENT_WIN})
 
 if (WIN32)
     set(CLIENT_PLATFORM_LIBS
@@ -125,7 +155,8 @@ else()
         ${SOURCE_CLIENT_CORE_DESKTOP_SYS_INFO}
         ${SOURCE_CLIENT_CORE_DESKTOP_CHAT}
         ${SOURCE_CLIENT_CORE_DESKTOP_TERMINAL}
-        ${SOURCE_CLIENT_CORE_DESKTOP_HOSTS_TAB})
+        ${SOURCE_CLIENT_CORE_DESKTOP_HOSTS_TAB}
+        ${SOURCE_CLIENT_WIN})
 endif()
 
 target_link_libraries(aspia_client PRIVATE

@@ -16,18 +16,18 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/audio/audio_output.h"
+#include "client/audio_output.h"
 
 #include "base/logging.h"
 
 #if defined(Q_OS_WINDOWS)
-#include "base/audio/audio_output_win.h"
+#include "client/audio_output_win.h"
 #elif defined(Q_OS_MACOS)
-#include "base/audio/audio_output_mac.h"
+#include "client/audio_output_mac.h"
 #elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
-#include "base/audio/audio_output_pulse.h"
+#include "client/audio_output_pulse.h"
 #elif defined(Q_OS_ANDROID)
-#include "base/audio/audio_output_android.h"
+#include "client/audio_output_android.h"
 #endif
 
 #include <cstring>

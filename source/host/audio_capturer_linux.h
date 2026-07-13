@@ -19,9 +19,9 @@
 #ifndef HOST_AUDIO_CAPTURER_LINUX_H
 #define HOST_AUDIO_CAPTURER_LINUX_H
 
+#include "base/linux/pulseaudio_symbol_table.h"
 #include "host/audio_capturer.h"
 #include "host/audio_silence_detector.h"
-#include "base/audio/linux/pulseaudio_symbol_table.h"
 
 #include <pulse/pulseaudio.h>
 

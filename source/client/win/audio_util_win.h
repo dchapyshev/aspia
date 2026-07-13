@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_AUDIO_WIN_AUDIO_UTIL_WIN_H
-#define BASE_AUDIO_WIN_AUDIO_UTIL_WIN_H
+#ifndef CLIENT_WIN_AUDIO_UTIL_WIN_H
+#define CLIENT_WIN_AUDIO_UTIL_WIN_H
 
 #include <QtTypes>
 
@@ -48,4 +48,4 @@ bool fillRenderEndpointBufferWithSilence(IAudioClient* client, IAudioRenderClien
 bool isMMCSSSupported();
 bool isDeviceActive(IMMDevice* device);
 
-#endif // BASE_AUDIO_WIN_AUDIO_UTIL_WIN_H
+#endif // CLIENT_WIN_AUDIO_UTIL_WIN_H

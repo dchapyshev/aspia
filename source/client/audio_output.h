@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_AUDIO_AUDIO_OUTPUT_H
-#define BASE_AUDIO_AUDIO_OUTPUT_H
+#ifndef CLIENT_AUDIO_OUTPUT_H
+#define CLIENT_AUDIO_OUTPUT_H
 
 #include <QObject>
 
@@ -51,4 +51,4 @@ private:
     NeedMoreDataCB need_more_data_cb_;
 };
 
-#endif // BASE_AUDIO_AUDIO_OUTPUT_H
+#endif // CLIENT_AUDIO_OUTPUT_H

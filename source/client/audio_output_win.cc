@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/audio/audio_output_win.h"
+#include "client/audio_output_win.h"
 
 #include <comdef.h>
 
 #include "base/logging.h"
-#include "base/audio/win/audio_util_win.h"
-#include "base/audio/win/scoped_mmcss_registration.h"
 #include "base/win/scoped_com_initializer.h"
+#include "client/win/audio_util_win.h"
+#include "client/win/scoped_mmcss_registration.h"
 
 namespace {
 

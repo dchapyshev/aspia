@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_AUDIO_WIN_DEFAULT_AUDIO_DEVICE_CHANGE_DETECTOR_H
-#define BASE_AUDIO_WIN_DEFAULT_AUDIO_DEVICE_CHANGE_DETECTOR_H
+#ifndef HOST_WIN_DEFAULT_AUDIO_DEVICE_CHANGE_DETECTOR_H
+#define HOST_WIN_DEFAULT_AUDIO_DEVICE_CHANGE_DETECTOR_H
 
 #include <mutex>
 
@@ -58,4 +58,4 @@ private:
     std::mutex lock_;
 };
 
-#endif // BASE_AUDIO_WIN_DEFAULT_AUDIO_DEVICE_CHANGE_DETECTOR_H
+#endif // HOST_WIN_DEFAULT_AUDIO_DEVICE_CHANGE_DETECTOR_H

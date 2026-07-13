@@ -32,9 +32,9 @@
 #include <cstring>
 
 #include "base/logging.h"
-#include "base/audio/linux/late_binding_symbol_table.h"
 #include "base/desktop/frame.h"
 #include "base/desktop/region.h"
+#include "base/linux/late_binding_symbol_table.h"
 #include "proto/desktop_video.h"
 
 namespace {

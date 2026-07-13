@@ -16,10 +16,23 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/audio/linux/pulseaudio_symbol_table.h"
+#ifndef CLIENT_WIN_SCOPED_MMCSS_REGISTRATION_H
+#define CLIENT_WIN_SCOPED_MMCSS_REGISTRATION_H
 
-LATE_BINDING_SYMBOL_TABLE_DEFINE_BEGIN(PulseAudioSymbolTable, "libpulse.so.0")
-#define X(sym) LATE_BINDING_SYMBOL_TABLE_DEFINE_ENTRY(PulseAudioSymbolTable, sym)
-PULSE_AUDIO_SYMBOLS_LIST
-#undef X
-LATE_BINDING_SYMBOL_TABLE_DEFINE_END(PulseAudioSymbolTable)
+#include <QtClassHelperMacros>
+#include <qt_windows.h>
+
+class ScopedMMCSSRegistration
+{
+public:
+    explicit ScopedMMCSSRegistration(const wchar_t* task_name);
+    ~ScopedMMCSSRegistration();
+
+    bool isSucceeded() const;
+
+private:
+    HANDLE mmcss_handle_ = nullptr;
+    Q_DISABLE_COPY_MOVE(ScopedMMCSSRegistration)
+};
+
+#endif // CLIENT_WIN_SCOPED_MMCSS_REGISTRATION_H

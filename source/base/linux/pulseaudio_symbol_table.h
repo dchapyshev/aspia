@@ -16,10 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_AUDIO_LINUX_PULSEAUDIO_SYMBOL_TABLE_H
-#define BASE_AUDIO_LINUX_PULSEAUDIO_SYMBOL_TABLE_H
+#ifndef BASE_LINUX_PULSEAUDIO_SYMBOL_TABLE_H
+#define BASE_LINUX_PULSEAUDIO_SYMBOL_TABLE_H
 
-#include "base/audio/linux/late_binding_symbol_table.h"
+#include "base/linux/late_binding_symbol_table.h"
 
 // The PulseAudio symbols we need, as an X-Macro list.
 #define PULSE_AUDIO_SYMBOLS_LIST           \
@@ -81,4 +81,4 @@ LATE_BINDING_SYMBOL_TABLE_DECLARE_END(PulseAudioSymbolTable)
 // audio_output_pulse.cc).
 PulseAudioSymbolTable* pulseSymbolTable();
 
-#endif // BASE_AUDIO_LINUX_PULSEAUDIO_SYMBOL_TABLE_H
+#endif // BASE_LINUX_PULSEAUDIO_SYMBOL_TABLE_H

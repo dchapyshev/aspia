@@ -27,7 +27,17 @@
 #include <deque>
 #include <vector>
 
+// VTermScreenCellAttrs declares a bit-field named |small|. On Windows <rpcndr.h> (pulled in by COM
+// headers elsewhere in the same moc translation unit) defines |small| as a macro, which breaks that
+// declaration. Neutralize the macro around the vterm.h include.
+#if defined(Q_OS_WINDOWS)
+#pragma push_macro("small")
+#undef small
+#endif // defined(Q_OS_WINDOWS)
 #include <vterm.h>
+#if defined(Q_OS_WINDOWS)
+#pragma pop_macro("small")
+#endif // defined(Q_OS_WINDOWS)
 
 class QMouseEvent;
 class QPainter;

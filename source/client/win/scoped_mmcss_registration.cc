@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/audio/win/scoped_mmcss_registration.h"
+#include "client/win/scoped_mmcss_registration.h"
 
 #include "base/logging.h"
 

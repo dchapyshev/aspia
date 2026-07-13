@@ -16,23 +16,43 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_AUDIO_WIN_SCOPED_MMCSS_REGISTRATION_H
-#define BASE_AUDIO_WIN_SCOPED_MMCSS_REGISTRATION_H
+#ifndef CLIENT_AUDIO_PLAYER_H
+#define CLIENT_AUDIO_PLAYER_H
 
 #include <QtClassHelperMacros>
-#include <qt_windows.h>
 
-class ScopedMMCSSRegistration
+#include <memory>
+#include <mutex>
+#include <queue>
+
+namespace proto::audio {
+class Packet;
+} // namespace proto::audio
+
+class AudioOutput;
+
+class AudioPlayer
 {
 public:
-    explicit ScopedMMCSSRegistration(const wchar_t* task_name);
-    ~ScopedMMCSSRegistration();
+    ~AudioPlayer();
 
-    bool isSucceeded() const;
+    static std::unique_ptr<AudioPlayer> create();
+    void addPacket(std::unique_ptr<proto::audio::Packet> packet);
 
 private:
-    HANDLE mmcss_handle_ = nullptr;
-    Q_DISABLE_COPY_MOVE(ScopedMMCSSRegistration)
+    AudioPlayer();
+    bool init();
+    size_t onMoreDataRequired(void* data, size_t size);
+
+    std::unique_ptr<AudioOutput> output_;
+
+    std::queue<std::unique_ptr<proto::audio::Packet>> incoming_queue_;
+    std::mutex incoming_queue_lock_;
+
+    std::queue<std::unique_ptr<proto::audio::Packet>> work_queue_;
+    size_t source_pos_ = 0;
+
+    Q_DISABLE_COPY_MOVE(AudioPlayer)
 };
 
-#endif // BASE_AUDIO_WIN_SCOPED_MMCSS_REGISTRATION_H
+#endif // CLIENT_AUDIO_PLAYER_H

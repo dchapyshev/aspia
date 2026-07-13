@@ -21,6 +21,8 @@ collect_sources(SOURCE_HOST_WIN
     audio_volume_filter.h
     d3d_device.cc
     d3d_device.h
+    default_audio_device_change_detector.cc
+    default_audio_device_change_detector.h
     dxgi_adapter_duplicator.cc
     dxgi_adapter_duplicator.h
     dxgi_context.cc

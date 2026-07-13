@@ -16,10 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/audio/audio_player.h"
+#include "client/audio_player.h"
 
 #include "base/logging.h"
-#include "base/audio/audio_output.h"
+#include "client/audio_output.h"
 #include "proto/desktop_audio.h"
 
 //--------------------------------------------------------------------------------------------------

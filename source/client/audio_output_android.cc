@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/audio/audio_output_android.h"
+#include "client/audio_output_android.h"
 
 #include "base/logging.h"
 

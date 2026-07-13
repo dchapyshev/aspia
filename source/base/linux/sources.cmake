@@ -17,8 +17,12 @@
 #
 
 collect_sources(SOURCE_BASE_LINUX
+    late_binding_symbol_table.cc
+    late_binding_symbol_table.h
     libsystemd.cc
     libsystemd.h
+    pulseaudio_symbol_table.cc
+    pulseaudio_symbol_table.h
     scoped_user_credentials.cc
     scoped_user_credentials.h
     session_dbus.cc

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_AUDIO_LINUX_LATE_BINDING_SYMBOL_TABLE_H
-#define BASE_AUDIO_LINUX_LATE_BINDING_SYMBOL_TABLE_H
+#ifndef BASE_LINUX_LATE_BINDING_SYMBOL_TABLE_H
+#define BASE_LINUX_LATE_BINDING_SYMBOL_TABLE_H
 
 #include <QtClassHelperMacros>
 
@@ -155,4 +155,4 @@ private:
 #define LATESYM_GET(ClassName, inst, sym) \
     (*reinterpret_cast<__typeof__(&sym)>((inst)->symbol(LATESYM_INDEXOF(ClassName, sym))))
 
-#endif // BASE_AUDIO_LINUX_LATE_BINDING_SYMBOL_TABLE_H
+#endif // BASE_LINUX_LATE_BINDING_SYMBOL_TABLE_H

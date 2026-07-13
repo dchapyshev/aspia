@@ -16,10 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_AUDIO_AUDIO_OUTPUT_MAC_H
-#define BASE_AUDIO_AUDIO_OUTPUT_MAC_H
+#ifndef CLIENT_AUDIO_OUTPUT_MAC_H
+#define CLIENT_AUDIO_OUTPUT_MAC_H
 
-#include "base/audio/audio_output.h"
+#include "client/audio_output.h"
 
 #include <condition_variable>
 #include <mutex>
@@ -109,4 +109,4 @@ private:
     Q_DISABLE_COPY(AudioOutputMac)
 };
 
-#endif // BASE_AUDIO_AUDIO_OUTPUT_MAC_H
+#endif // CLIENT_AUDIO_OUTPUT_MAC_H

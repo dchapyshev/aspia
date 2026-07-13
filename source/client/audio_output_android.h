@@ -16,10 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_AUDIO_AUDIO_OUTPUT_ANDROID_H
-#define BASE_AUDIO_AUDIO_OUTPUT_ANDROID_H
+#ifndef CLIENT_AUDIO_OUTPUT_ANDROID_H
+#define CLIENT_AUDIO_OUTPUT_ANDROID_H
 
-#include "base/audio/audio_output.h"
+#include "client/audio_output.h"
 
 #include <QMutex>
 
@@ -84,4 +84,4 @@ private:
     Q_DISABLE_COPY(AudioOutputAndroid)
 };
 
-#endif // BASE_AUDIO_AUDIO_OUTPUT_ANDROID_H
+#endif // CLIENT_AUDIO_OUTPUT_ANDROID_H

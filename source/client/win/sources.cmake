@@ -16,10 +16,8 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-collect_sources(SOURCE_BASE_AUDIO_WIN
+collect_sources(SOURCE_CLIENT_WIN
     audio_util_win.cc
     audio_util_win.h
-    default_audio_device_change_detector.cc
-    default_audio_device_change_detector.h
     scoped_mmcss_registration.cc
     scoped_mmcss_registration.h)

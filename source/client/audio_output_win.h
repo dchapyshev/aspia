@@ -16,12 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_AUDIO_AUDIO_OUTPUT_WIN_H
-#define BASE_AUDIO_AUDIO_OUTPUT_WIN_H
+#ifndef CLIENT_AUDIO_OUTPUT_WIN_H
+#define CLIENT_AUDIO_OUTPUT_WIN_H
 
 #include <QThread>
 
-#include "base/audio/audio_output.h"
+#include "client/audio_output.h"
 #include "base/win/scoped_object.h"
 
 #include <atomic>
@@ -121,4 +121,4 @@ private:
     Q_DISABLE_COPY_MOVE(AudioOutputWin)
 };
 
-#endif // BASE_AUDIO_AUDIO_OUTPUT_WIN_H
+#endif // CLIENT_AUDIO_OUTPUT_WIN_H

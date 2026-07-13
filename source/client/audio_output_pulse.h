@@ -16,13 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_AUDIO_AUDIO_OUTPUT_PULSE_H
-#define BASE_AUDIO_AUDIO_OUTPUT_PULSE_H
+#ifndef CLIENT_AUDIO_OUTPUT_PULSE_H
+#define CLIENT_AUDIO_OUTPUT_PULSE_H
 
 #include <QTimer>
 
-#include "base/audio/audio_output.h"
-#include "base/audio/linux/pulseaudio_symbol_table.h"
+#include "base/linux/pulseaudio_symbol_table.h"
+#include "client/audio_output.h"
 
 #include <mutex>
 
@@ -84,4 +84,4 @@ private:
     Q_DISABLE_COPY(AudioOutputPulse)
 };
 
-#endif // BASE_AUDIO_AUDIO_OUTPUT_PULSE_H
+#endif // CLIENT_AUDIO_OUTPUT_PULSE_H

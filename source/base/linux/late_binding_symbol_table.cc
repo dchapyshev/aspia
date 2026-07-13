@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/audio/linux/late_binding_symbol_table.h"
+#include "base/linux/late_binding_symbol_table.h"
 
 #include "base/logging.h"
 
