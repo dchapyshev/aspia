@@ -16,12 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_AUDIO_AUDIO_CAPTURER_WIN_H
-#define BASE_AUDIO_AUDIO_CAPTURER_WIN_H
+#ifndef HOST_AUDIO_CAPTURER_WIN_H
+#define HOST_AUDIO_CAPTURER_WIN_H
 
 #include "base/win/scoped_co_mem.h"
-#include "base/audio/audio_capturer.h"
-#include "base/audio/audio_volume_filter_win.h"
+#include "host/audio_capturer.h"
+#include "host/win/audio_volume_filter.h"
 #include "proto/desktop_audio.h"
 
 #include <Audioclient.h>
@@ -71,7 +71,7 @@ private:
     proto::audio::Packet::SamplingRate sampling_rate_;
     QTimer* capture_timer_ = nullptr;
     std::chrono::milliseconds audio_device_period_;
-    AudioVolumeFilterWin volume_filter_;
+    AudioVolumeFilter volume_filter_;
 
     ScopedCoMem<WAVEFORMATEX> wave_format_ex_;
     Microsoft::WRL::ComPtr<IAudioCaptureClient> audio_capture_client_;
@@ -84,4 +84,4 @@ private:
     Q_DISABLE_COPY_MOVE(AudioCapturerWin)
 };
 
-#endif // BASE_AUDIO_AUDIO_CAPTURER_WIN_H
+#endif // HOST_AUDIO_CAPTURER_WIN_H

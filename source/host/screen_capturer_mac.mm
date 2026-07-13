@@ -33,11 +33,11 @@
 #include <vector>
 
 #include "base/logging.h"
-#include "base/audio/audio_silence_detector.h"
 #include "base/desktop/frame.h"
 #include "base/desktop/frame_aligned.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/region.h"
+#include "host/audio_silence_detector.h"
 #include "proto/desktop_audio.h"
 
 // The project is built without ARC (manual retain/release), so Objective-C objects kept beyond a

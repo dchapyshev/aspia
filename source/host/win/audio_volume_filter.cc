@@ -16,24 +16,24 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/audio/audio_volume_filter_win.h"
+#include "host/win/audio_volume_filter.h"
 
 #include <comdef.h>
 
 #include "base/logging.h"
 
 //--------------------------------------------------------------------------------------------------
-AudioVolumeFilterWin::AudioVolumeFilterWin(int silence_threshold)
-    : AudioVolumeFilter(silence_threshold)
+AudioVolumeFilter::AudioVolumeFilter(int silence_threshold)
+    : silence_detector_(silence_threshold)
 {
     // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
-AudioVolumeFilterWin::~AudioVolumeFilterWin() = default;
+AudioVolumeFilter::~AudioVolumeFilter() = default;
 
 //--------------------------------------------------------------------------------------------------
-bool AudioVolumeFilterWin::activateBy(IMMDevice* mm_device)
+bool AudioVolumeFilter::activateBy(IMMDevice* mm_device)
 {
     DCHECK(mm_device);
     audio_volume_.Reset();
@@ -49,7 +49,40 @@ bool AudioVolumeFilterWin::activateBy(IMMDevice* mm_device)
 }
 
 //--------------------------------------------------------------------------------------------------
-float AudioVolumeFilterWin::audioLevel()
+void AudioVolumeFilter::initialize(int sampling_rate, int channels)
+{
+    silence_detector_.reset(sampling_rate, channels);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool AudioVolumeFilter::apply(qint16* data, size_t frames)
+{
+    if (frames == 0)
+        return false;
+
+    if (silence_detector_.isSilence(data, frames))
+        return false;
+
+    float level = audioLevel();
+    if (level == 0)
+        return false;
+
+    if (level == 1)
+        return true;
+
+    const int sample_count = static_cast<int>(frames) * silence_detector_.channels();
+    const qint32 level_int = static_cast<qint32>(level * 65536);
+
+    for (int i = 0; i < sample_count; i++)
+    {
+        data[i] = (static_cast<qint32>(data[i]) * level_int) >> 16;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+float AudioVolumeFilter::audioLevel()
 {
     if (!audio_volume_)
         return 1;

@@ -16,17 +16,17 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/audio/audio_capturer.h"
+#include "host/audio_capturer.h"
 
 #include "base/logging.h"
 #include "proto/desktop_audio.h"
 
 #if defined(Q_OS_WINDOWS)
-#include "base/audio/audio_capturer_win.h"
+#include "host/audio_capturer_win.h"
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
-#include "base/audio/audio_capturer_linux.h"
+#include "host/audio_capturer_linux.h"
 #endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 
 //--------------------------------------------------------------------------------------------------

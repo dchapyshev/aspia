@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_AUDIO_AUDIO_SILENCE_DETECTOR_H
-#define BASE_AUDIO_AUDIO_SILENCE_DETECTOR_H
+#ifndef HOST_AUDIO_SILENCE_DETECTOR_H
+#define HOST_AUDIO_SILENCE_DETECTOR_H
 
 #include <QtTypes>
 
@@ -54,4 +54,4 @@ private:
     int channels_;
 };
 
-#endif // BASE_AUDIO_AUDIO_SILENCE_DETECTOR_H
+#endif // HOST_AUDIO_SILENCE_DETECTOR_H

@@ -17,6 +17,8 @@
 #
 
 collect_sources(SOURCE_HOST_WIN
+    audio_volume_filter.cc
+    audio_volume_filter.h
     d3d_device.cc
     d3d_device.h
     dxgi_adapter_duplicator.cc

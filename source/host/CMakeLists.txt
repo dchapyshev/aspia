@@ -71,6 +71,10 @@ if (ANDROID)
 endif()
 
 list(APPEND SOURCE_HOST
+    audio_capturer.cc
+    audio_capturer.h
+    audio_silence_detector.cc
+    audio_silence_detector.h
     capture_scheduler.cc
     capture_scheduler.h
     chat_client.cc
@@ -140,6 +144,8 @@ list(APPEND SOURCE_HOST
 
 if (WIN32)
     list(APPEND SOURCE_HOST
+        audio_capturer_win.cc
+        audio_capturer_win.h
         desktop_environment_win.cc
         desktop_environment_win.h
         desktop_resizer_win.cc
@@ -160,6 +166,8 @@ endif()
 
 if (LINUX)
     list(APPEND SOURCE_HOST
+        audio_capturer_linux.cc
+        audio_capturer_linux.h
         desktop_environment_linux.cc
         desktop_environment_linux.h
         desktop_resizer_vt.cc

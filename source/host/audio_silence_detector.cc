@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/audio/audio_silence_detector.h"
+#include "host/audio_silence_detector.h"
 
 #include "base/logging.h"
 

@@ -19,9 +19,9 @@
 #include "host/workers/audio_worker.h"
 
 #include "base/logging.h"
-#include "base/audio/audio_capturer.h"
 #include "base/codec/audio_encoder.h"
 #include "base/threading/worker_manager.h"
+#include "host/audio_capturer.h"
 #include "host/workers/ipc_worker.h"
 
 //--------------------------------------------------------------------------------------------------

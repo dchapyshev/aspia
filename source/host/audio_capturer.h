@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_AUDIO_AUDIO_CAPTURER_H
-#define BASE_AUDIO_AUDIO_CAPTURER_H
+#ifndef HOST_AUDIO_CAPTURER_H
+#define HOST_AUDIO_CAPTURER_H
 
 #include <QObject>
 
@@ -54,4 +54,4 @@ public:
     virtual bool start(const PacketCapturedCallback& callback) = 0;
 };
 
-#endif // BASE_AUDIO_AUDIO_CAPTURER_H
+#endif // HOST_AUDIO_CAPTURER_H

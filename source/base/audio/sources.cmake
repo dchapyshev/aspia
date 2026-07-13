@@ -17,31 +17,19 @@
 #
 
 collect_sources(SOURCE_BASE_AUDIO
-    audio_capturer.cc
-    audio_capturer.h
     audio_output.cc
     audio_output.h
     audio_player.cc
-    audio_player.h
-    audio_silence_detector.cc
-    audio_silence_detector.h
-    audio_volume_filter.cc
-    audio_volume_filter.h)
+    audio_player.h)
 
 if (WIN32)
     collect_sources(SOURCE_BASE_AUDIO
-        audio_capturer_win.cc
-        audio_capturer_win.h
         audio_output_win.cc
-        audio_output_win.h
-        audio_volume_filter_win.cc
-        audio_volume_filter_win.h)
+        audio_output_win.h)
 endif()
 
 if (LINUX)
     collect_sources(SOURCE_BASE_AUDIO
-        audio_capturer_linux.cc
-        audio_capturer_linux.h
         audio_output_pulse.cc
         audio_output_pulse.h)
 endif()

@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_AUDIO_AUDIO_CAPTURER_LINUX_H
-#define BASE_AUDIO_AUDIO_CAPTURER_LINUX_H
+#ifndef HOST_AUDIO_CAPTURER_LINUX_H
+#define HOST_AUDIO_CAPTURER_LINUX_H
 
-#include "base/audio/audio_capturer.h"
-#include "base/audio/audio_silence_detector.h"
+#include "host/audio_capturer.h"
+#include "host/audio_silence_detector.h"
 #include "base/audio/linux/pulseaudio_symbol_table.h"
 
 #include <pulse/pulseaudio.h>
@@ -81,4 +81,4 @@ private:
     Q_DISABLE_COPY(AudioCapturerLinux)
 };
 
-#endif // BASE_AUDIO_AUDIO_CAPTURER_LINUX_H
+#endif // HOST_AUDIO_CAPTURER_LINUX_H
