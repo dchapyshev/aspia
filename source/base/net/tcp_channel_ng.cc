@@ -547,7 +547,8 @@ void TcpChannelNG::onMessageReceived()
         return;
     }
 
-    if (io_->read_buffer.size() > kMaxMessageSize || io_->read_buffer.size() != io_->read_header.length)
+    if (io_->read_buffer.size() > kMaxMessageSize ||
+        io_->read_buffer.size() != qsizetype(io_->read_header.length))
     {
         CLOG(INFO) << "Invalid message length:" << io_->read_header.length;
         onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);

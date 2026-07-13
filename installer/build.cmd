@@ -90,7 +90,7 @@ echo "Creating MSI packages for Aspia %PRODUCT%"
 
 for %%L in (%LOCALES%) do (
     for /f "tokens=1,2 delims=:" %%A in ("%%L") do (
-        "%WIX%\bin\light" -sval -out "%ASPIA_BIN_DIR%\aspia-%PRODUCT%-%%A.msi" -cultures:%%A -ext WixUtilExtension -ext WixUIExtension -ext WixFirewallExtension -loc translations\%PRODUCT%.%%A.wxl "%ASPIA_BIN_DIR%\%PRODUCT%.wixobj"
+        "%WIX%\bin\light" -sval -out "%ASPIA_BIN_DIR%\aspia-%PRODUCT%-%%A.msi" -cultures:%%A;en-us -ext WixUtilExtension -ext WixUIExtension -ext WixFirewallExtension -loc translations\%PRODUCT%.%%A.wxl -loc translations\%PRODUCT%.en-us.wxl "%ASPIA_BIN_DIR%\%PRODUCT%.wixobj"
     )
 )
 
