@@ -37,13 +37,14 @@ class InputInjector : public QObject
 public:
     enum class Type
     {
-        UNKNOWN = 0,
-        WINDOWS = 1,
-        MAC     = 2,
-        X11     = 3,
-        UINPUT  = 4,
-        VT      = 5,
-        WAYLAND = 6
+        UNKNOWN    = 0,
+        WINDOWS    = 1,
+        MAC        = 2,
+        X11        = 3,
+        UINPUT     = 4,
+        VT         = 5,
+        WAYLAND    = 6,
+        ANDROID_OS = 7
     };
     Q_ENUM(Type)
 

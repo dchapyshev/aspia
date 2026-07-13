@@ -207,7 +207,7 @@ int usbToAndroidKeycode(quint32 usb_keycode)
 
 //--------------------------------------------------------------------------------------------------
 InputInjectorAndroid::InputInjectorAndroid(QObject* parent)
-    : InputInjector(parent)
+    : InputInjector(Type::ANDROID_OS, parent)
 {
     LOG(INFO) << "Ctor";
 }

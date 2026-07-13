@@ -1,0 +1,79 @@
+name: android
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE.md'
+      - 'CONTRIBUTING.md'
+      - 'CODE_OF_CONDUCT.md'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  VCPKG_BINARY_SOURCES: 'default,readwrite'
+
+jobs:
+  build-android:
+    name: android-arm64-release
+    runs-on: win11
+    if: github.event_name == 'push'
+
+    steps:
+      # Step 1
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          submodules: true
+
+      # Step 2
+      # Host tooling (qtprotoc_host ExternalProject, arm64-android vcpkg host ports)
+      # is compiled with MSVC, so the Developer Command Prompt must be set up. This
+      # also puts the bundled Ninja on PATH, which the Ninja generator requires.
+      - name: Set MSVC parameters
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: amd64
+          toolset: 14.44
+
+      # Step 3
+      - name: Configure and build APK
+        env:
+          # Android toolchain (installed on the self-hosted runner).
+          # Paths use forward slashes: CMake treats a backslash sequence like
+          # "\Q" as an invalid escape when these land in cache variables.
+          QT_ANDROID_PATH: C:/Qt/6.11.1/android_arm64_v8a
+          QT_HOST_PATH: C:/Qt/6.11.1/mingw_64
+          ANDROID_SDK_ROOT: C:/Android/sdk
+          ANDROID_NDK_ROOT: C:/Android/sdk/ndk/27.2.12479018
+          ANDROID_NDK_HOME: C:/Android/sdk/ndk/27.2.12479018
+          JAVA_HOME: C:/Program Files/Eclipse Adoptium/jdk-21.0.11.10-hotspot
+          # The APK target drives Gradle; the daemon inherits the stdout handle and
+          # keeps the build from returning, so run it without a daemon.
+          GRADLE_OPTS: -Dorg.gradle.daemon=false
+          VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg\bincache-arm64-android
+          VCPKG_DOWNLOADS: C:\vcpkg\downloads
+        run: |
+          New-Item -ItemType Directory -Force -Path $env:VCPKG_DEFAULT_BINARY_CACHE | Out-Null
+          New-Item -ItemType Directory -Force -Path $env:VCPKG_DOWNLOADS | Out-Null
+
+          # Build vcpkg dependencies (arm64-android target, x64-windows-static host)
+          cmake --preset ci-android
+
+          # Build the signed/unsigned APK
+          cmake --build --preset ci-android-apk
+
+      # Step 4
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: aspia-android-arm64
+          path: |
+            ${{ github.workspace }}/builds/ci-android/source/client/android-build/aspia_client.apk
+            ${{ github.workspace }}/builds/ci-android/source/host/android-build/aspia_host.apk
+          if-no-files-found: error
+          retention-days: 7
