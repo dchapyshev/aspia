@@ -21,14 +21,13 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QProcess>
 #include <QTimer>
 
 #include <grp.h>
 #include <pwd.h>
-#include <sys/wait.h>
 #include <unistd.h>
 
-#include <cstdlib>
 #include <string>
 #include <vector>
 
@@ -41,6 +40,26 @@ const char kBackgroundSchema[] = "org.gnome.desktop.background";
 const char kInterfaceSchema[] = "org.gnome.desktop.interface";
 const char kPictureOptions[] = "picture-options";
 const char kEnableAnimations[] = "enable-animations";
+
+//--------------------------------------------------------------------------------------------------
+// Computes the supplementary group list for |user| (with primary group |gid|) in the parent, because
+// initgroups()/getgrouplist() are not async-signal-safe. The child applies it with setgroups().
+std::vector<gid_t> groupsForUser(const char* user, gid_t gid)
+{
+    int count = 32;
+    std::vector<gid_t> groups(static_cast<size_t>(count));
+
+    if (getgrouplist(user, gid, groups.data(), &count) < 0)
+    {
+        // The buffer was too small; |count| now holds the required size.
+        groups.resize(static_cast<size_t>(count > 0 ? count : 1));
+        if (getgrouplist(user, gid, groups.data(), &count) < 0)
+            return std::vector<gid_t>();
+    }
+
+    groups.resize(static_cast<size_t>(count > 0 ? count : 0));
+    return groups;
+}
 
 } // namespace
 
@@ -124,94 +143,48 @@ bool DesktopEnvironmentLinux::runAsUser(
     if (uid_ == 0)
         return false;
 
-    // Prepare everything the child needs before forking (no allocations after fork).
-    const std::string user = user_name_.toStdString();
-    const std::string home = home_dir_.toStdString();
-    const std::string runtime_dir = "/run/user/" + std::to_string(uid_);
-    const std::string dbus_address = "unix:path=" + runtime_dir + "/bus";
+    // Run the command with QProcess (it handles PATH lookup, argv, pipes and waiting). It also builds
+    // the child's environment for us, so gsettings/dbus-send reach the target user's session bus.
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    env.insert("HOME", home_dir_);
+    env.insert("USER", user_name_);
+    env.insert("LOGNAME", user_name_);
+    env.insert("XDG_RUNTIME_DIR", QString("/run/user/%1").arg(uid_));
+    env.insert("DBUS_SESSION_BUS_ADDRESS", QString("unix:path=/run/user/%1/bus").arg(uid_));
 
-    std::vector<std::string> argv_storage;
-    argv_storage.push_back(program.toStdString());
-    for (const QString& argument : arguments)
-        argv_storage.push_back(argument.toStdString());
-
-    std::vector<char*> argv;
-    argv.reserve(argv_storage.size() + 1);
-    for (std::string& argument : argv_storage)
-        argv.push_back(argument.data());
-    argv.push_back(nullptr);
-
-    int pipe_fd[2] = { -1, -1 };
-    if (output && pipe(pipe_fd) != 0)
+    // Privileges are dropped in the child via setChildProcessModifier(), which runs after fork() and
+    // before exec. There only async-signal-safe calls are allowed, so the supplementary group list is
+    // computed here (getgrouplist() is not async-signal-safe) and applied there with setgroups().
+    const std::vector<gid_t> groups = groupsForUser(user_name_.toStdString().c_str(), gid_);
+    if (groups.empty())
     {
-        PLOG(ERROR) << "pipe failed";
+        LOG(ERROR) << "Unable to build group list for user:" << user_name_;
         return false;
     }
 
-    pid_t pid = fork();
-    if (pid < 0)
+    QProcess process;
+    process.setProcessEnvironment(env);
+    process.setChildProcessModifier([groups, gid = gid_, uid = uid_]()
     {
-        PLOG(ERROR) << "fork failed";
-        if (output)
-        {
-            ::close(pipe_fd[0]);
-            ::close(pipe_fd[1]);
-        }
+        // Drop to the session user: supplementary groups first, then gid, then uid, all while still
+        // privileged. All of these are async-signal-safe.
+        if (setgroups(groups.size(), groups.data()) != 0 || setgid(gid) != 0 || setuid(uid) != 0)
+            _exit(127);
+    });
+
+    process.start(program, arguments);
+    if (!process.waitForFinished(5000))
+    {
+        LOG(ERROR) << "Timed out running:" << program;
+        process.kill();
+        process.waitForFinished(1000);
         return false;
     }
 
-    if (pid == 0)
-    {
-        // Child: redirect stdout to the pipe, drop to the session user, exec on the user bus.
-        if (output)
-        {
-            dup2(pipe_fd[1], STDOUT_FILENO);
-            ::close(pipe_fd[0]);
-            ::close(pipe_fd[1]);
-        }
-
-        if (setsid() == -1)
-            _exit(127);
-        if (initgroups(user.c_str(), gid_) != 0)
-            _exit(127);
-        if (setgid(gid_) != 0)
-            _exit(127);
-        if (setuid(uid_) != 0)
-            _exit(127);
-
-        setenv("HOME", home.c_str(), 1);
-        setenv("USER", user.c_str(), 1);
-        setenv("LOGNAME", user.c_str(), 1);
-        setenv("XDG_RUNTIME_DIR", runtime_dir.c_str(), 1);
-        setenv("DBUS_SESSION_BUS_ADDRESS", dbus_address.c_str(), 1);
-
-        execvp(argv[0], argv.data());
-        _exit(127);
-    }
-
-    // Parent.
     if (output)
-    {
-        ::close(pipe_fd[1]);
+        *output = QString::fromUtf8(process.readAllStandardOutput()).trimmed();
 
-        QByteArray data;
-        char buffer[4096];
-        ssize_t count;
-        while ((count = ::read(pipe_fd[0], buffer, sizeof(buffer))) > 0)
-            data.append(buffer, count);
-        ::close(pipe_fd[0]);
-
-        *output = QString::fromUtf8(data).trimmed();
-    }
-
-    int status = 0;
-    if (waitpid(pid, &status, 0) < 0)
-    {
-        PLOG(ERROR) << "waitpid failed";
-        return false;
-    }
-
-    return WIFEXITED(status) && WEXITSTATUS(status) == 0;
+    return process.exitStatus() == QProcess::NormalExit && process.exitCode() == 0;
 }
 
 //--------------------------------------------------------------------------------------------------
