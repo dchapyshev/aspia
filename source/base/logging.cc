@@ -261,18 +261,21 @@ QString applicationFilePath()
 
 #if defined(Q_OS_WINDOWS)
     wchar_t buffer[MAX_PATH] = { 0 };
-    GetModuleFileNameExW(GetCurrentProcess(), nullptr, buffer, static_cast<DWORD>(std::size(buffer)));
-    file_path = QString::fromWCharArray(buffer);
+    const DWORD length = GetModuleFileNameExW(
+        GetCurrentProcess(), nullptr, buffer, static_cast<DWORD>(std::size(buffer)));
+    file_path = QString::fromWCharArray(buffer, static_cast<int>(length));
 #elif defined(Q_OS_LINUX)
     char buffer[PATH_MAX] = { 0 };
-    if (readlink("/proc/self/exe", buffer, std::size(buffer)) == -1)
+    const ssize_t length = readlink("/proc/self/exe", buffer, std::size(buffer));
+    if (length <= 0)
         return QString();
-    file_path = buffer;
+    file_path = QString::fromUtf8(buffer, static_cast<int>(length));
 #elif defined(Q_OS_MACOS)
     char buffer[PATH_MAX] = { 0 };
     quint32 buffer_size = std::size(buffer);
-    _NSGetExecutablePath(buffer, &buffer_size);
-    file_path = buffer;
+    if (_NSGetExecutablePath(buffer, &buffer_size) != 0)
+        return QString();
+    file_path = QString::fromUtf8(buffer);
 #else
 #error Not implemented
 #endif

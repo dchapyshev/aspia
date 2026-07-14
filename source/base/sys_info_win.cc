@@ -279,8 +279,9 @@ QString deviceProperty(HDEVINFO device_info, SP_DEVINFO_DATA* device_info_data, 
 {
     wchar_t buffer[MAX_PATH] = { 0 };
 
+    // SetupDiGetDeviceRegistryPropertyW takes the buffer size in BYTES, not in elements.
     if (!SetupDiGetDeviceRegistryPropertyW(device_info, device_info_data, property, nullptr,
-        reinterpret_cast<PBYTE>(buffer), ARRAYSIZE(buffer), nullptr))
+        reinterpret_cast<PBYTE>(buffer), sizeof(buffer), nullptr))
     {
         return QString();
     }
