@@ -21,6 +21,7 @@
 #include <asio/ip/address.hpp>
 
 #include "base/logging.h"
+#include "base/scoped_qpointer.h"
 #include "base/net/flood_guard.h"
 #include "base/net/net_utils.h"
 #include "base/net/tcp_channel_ng.h"
@@ -259,7 +260,7 @@ void TcpServer::doAccept()
                 }
             }
 
-            QPointer<ServerAuthenticator> authenticator = new ServerAuthenticator();
+            ScopedQPointer<ServerAuthenticator> authenticator(new ServerAuthenticator());
             authenticator->setUserList(user_list_);
 
             if (!private_key_.isEmpty())
@@ -267,22 +268,24 @@ void TcpServer::doAccept()
                 if (!authenticator->setPrivateKey(private_key_))
                 {
                     LOG(ERROR) << "Failed to set private key for authenticator";
-                    delete authenticator;
+                    doAccept();
                     return;
                 }
 
                 if (!authenticator->setAnonymousAccess(anonymous_access_, anonymous_session_types_))
                 {
                     LOG(ERROR) << "Failed to set anonymous access settings";
-                    delete authenticator;
+                    doAccept();
                     return;
                 }
             }
 
-            TcpChannel* channel = new TcpChannelNG(
-                TcpChannel::Type::DIRECT, std::move(socket), authenticator, this);
+            QPointer<ServerAuthenticator> weak_authenticator = authenticator.get();
 
-            connect(channel, &TcpChannel::sig_authenticated, this, [this, channel, authenticator]()
+            TcpChannel* channel = new TcpChannelNG(
+                TcpChannel::Type::DIRECT, std::move(socket), authenticator.release(), this);
+
+            connect(channel, &TcpChannel::sig_authenticated, this, [this, channel, weak_authenticator]()
             {
                 removePendingChannel(channel);
 
@@ -293,7 +296,7 @@ void TcpServer::doAccept()
                 // The channel emits sig_authenticated before calling authenticator_.reset(), so
                 // the authenticator is guaranteed alive while this slot runs. The captured
                 // QPointer is still used as a defensive guard in case that ordering ever changes.
-                if (authenticator && authenticator->isProbe())
+                if (weak_authenticator && weak_authenticator->isProbe())
                 {
                     channel->deleteLater();
                     return;
