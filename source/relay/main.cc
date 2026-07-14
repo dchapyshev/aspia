@@ -25,6 +25,7 @@
 #include "base/files/base_paths.h"
 #include "base/threading/asio_event_dispatcher.h"
 #include "build/version.h"
+#include "relay/migration_utils.h"
 #include "relay/service.h"
 #include "relay/settings.h"
 
@@ -73,12 +74,8 @@ int stopService(QTextStream& out)
 //--------------------------------------------------------------------------------------------------
 int installService(QTextStream& out)
 {
-    // The service is never installed without a configuration. On a clean system there is none yet,
-    // so this is a no-op (the package install must not fail); the user creates the configuration
-    // first and runs --install afterwards. On an upgrade the existing configuration is present, so
-    // the service is reinstalled and its parameters refreshed.
     Settings settings;
-    if (settings.isEmpty())
+    if (settings.isEmpty() && !isMigrationNeeded())
     {
         out << "Configuration does not exist; the service was not installed. Create it with "
                "--create-config, then run --install." << Qt::endl;
