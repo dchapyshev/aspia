@@ -45,5 +45,6 @@ endif()
 collect_sources(SOURCE_BASE_DESKTOP_TESTS
     diff_block_32bpp_c_unittest.cc
     diff_block_32bpp_sse2_unittest.cc
+    frame_rotation_unittest.cc
     frame_unittest.cc
     region_unittest.cc)

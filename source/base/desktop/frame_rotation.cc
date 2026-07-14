@@ -91,18 +91,25 @@ QSize rotateSize(const QSize& size, Rotation rotation)
 //--------------------------------------------------------------------------------------------------
 QRect rotateRect(const QRect& rect, const QSize& size, Rotation rotation)
 {
+    // The rotation math is expressed in exclusive-edge coordinates (right = x + width,
+    // bottom = y + height), matching the WebRTC original this was ported from. QRect::right()/bottom()
+    // are INCLUSIVE (x + width - 1), so the exclusive edges are computed explicitly here; using
+    // right()/bottom() directly would shift every rotated rect by one pixel (OOB read at the edge).
+    const int right = rect.x() + rect.width();
+    const int bottom = rect.y() + rect.height();
+
     switch (rotation)
     {
         case Rotation::CLOCK_WISE_0:
             return rect;
         case Rotation::CLOCK_WISE_90:
-            return QRect(QPoint(size.height() - rect.bottom(), rect.left()),
+            return QRect(QPoint(size.height() - bottom, rect.left()),
                          QSize(rect.height(), rect.width()));
         case Rotation::CLOCK_WISE_180:
-            return QRect(QPoint(size.width() - rect.right(), size.height() - rect.bottom()),
+            return QRect(QPoint(size.width() - right, size.height() - bottom),
                          QSize(rect.width(), rect.height()));
         case Rotation::CLOCK_WISE_270:
-            return QRect(QPoint(rect.top(), size.width() - rect.right()),
+            return QRect(QPoint(rect.top(), size.width() - right),
                          QSize(rect.height(), rect.width()));
     }
 
