@@ -458,6 +458,12 @@ void ClientGatewayUdpAttempt::start()
 //--------------------------------------------------------------------------------------------------
 void ClientGatewayUdpAttempt::onReply(const proto::peer::UdpReply& reply)
 {
+    if (channel_)
+    {
+        CLOG(WARNING) << "Ignoring duplicate reply for client gateway attempt" << request_id_;
+        return;
+    }
+
     QString client_address = QString::fromStdString(reply.address());
     quint16 client_port = static_cast<quint16>(reply.port());
     if (client_address.isEmpty() || !client_port)
