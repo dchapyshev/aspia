@@ -48,6 +48,8 @@ protected:
 
     bool doRelease() final;
 
+    bool remapLastFrame() final;
+
 private:
     // Initializes stage_ from a CPU inaccessible IDXGIResource. Returns false if it failed to
     // execute Windows APIs, or the size of the texture is not consistent with desktop_rect.

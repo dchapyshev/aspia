@@ -149,3 +149,24 @@ bool DxgiTextureStaging::doRelease()
     // This will happen during next CopyFrom call. So this function always returns true.
     return true;
 }
+
+//--------------------------------------------------------------------------------------------------
+bool DxgiTextureStaging::remapLastFrame()
+{
+    // The staging ID3D11Texture2D keeps the pixels of the last CopyResource() even after Unmap(), so
+    // the surface can be mapped again to read the previous frame without acquiring a new one.
+    if (!surface_)
+        return false;
+
+    *rect() = { 0 };
+
+    _com_error error = surface_->Map(rect(), DXGI_MAP_READ);
+    if (error.Error() != S_OK)
+    {
+        *rect() = { 0 };
+        LOG(ERROR) << "Failed to remap the IDXGISurface to a bitmap:" << error;
+        return false;
+    }
+
+    return true;
+}

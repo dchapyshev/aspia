@@ -161,11 +161,10 @@ bool ScreenCapturerDxgi::selectScreen(ScreenId screen_id)
 {
     LOG(INFO) << "Select screen with ID:" << screen_id;
 
-    // Drop the cached frame so the next capture rebuilds it from scratch. Reusing it across a screen
-    // change makes the duplicator apply only an (empty) diff to a stale/black buffer, so the first
-    // frame of the new screen - which becomes the keyframe - comes out black.
-    frame_.reset();
-
+    // The frame is not dropped here: each monitor keeps its own retained frame in |frames_|, so
+    // switching to a monitor reuses the content captured last time it was shown. The client is sent a
+    // key frame on every screen switch (see ScreenWorker::onSelectScreen), so a complete frame is
+    // encoded regardless of the (possibly empty) diff the duplicator produces for a static screen.
     QStringList device_names;
     if (!controller_->deviceNames(&device_names))
     {
@@ -182,6 +181,9 @@ bool ScreenCapturerDxgi::selectScreen(ScreenId screen_id)
 
     current_screen_index_ = index;
     current_screen_id_ = screen_id;
+
+    // Force the next captured frame to report the whole monitor as updated (see |force_full_update_|).
+    force_full_update_ = true;
     return true;
 }
 
@@ -190,11 +192,12 @@ const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
 {
     DCHECK(error);
 
-    if (!frame_)
-        frame_ = std::make_unique<DxgiFrame>(controller_);
+    std::unique_ptr<DxgiFrame>& frame = frames_[current_screen_id_];
+    if (!frame)
+        frame = std::make_unique<DxgiFrame>(controller_);
 
     DxgiDuplicatorController::Result result =
-        controller_->duplicateMonitor(frame_.get(), current_screen_index_);
+        controller_->duplicateMonitor(frame.get(), current_screen_index_);
 
     using DuplicateResult = DxgiDuplicatorController::Result;
 
@@ -210,7 +213,18 @@ const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
         {
             temporary_error_count_ = 0;
             *error = Error::SUCCEEDED;
-            return frame_->frame().get();
+
+            Frame* captured = frame->frame().get();
+            if (force_full_update_ && captured)
+            {
+                // First frame after a screen switch: the retained frame holds the correct pixels but
+                // the duplicator only reported the diff (empty for a static screen). Mark the whole
+                // frame updated so the scaler/encoder rebuilds from it for the forced key frame.
+                *captured->updatedRegion() += QRect(QPoint(0, 0), captured->size());
+                force_full_update_ = false;
+            }
+
+            return captured;
         }
 
         case DuplicateResult::UNSUPPORTED_SESSION:
@@ -276,5 +290,5 @@ const QRect& ScreenCapturerDxgi::currentScreenRect() const
 void ScreenCapturerDxgi::reset()
 {
     ScreenCapturerWin::reset();
-    frame_.reset();
+    frames_.clear();
 }

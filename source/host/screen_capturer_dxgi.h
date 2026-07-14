@@ -23,6 +23,9 @@
 #include "host/win/dxgi_duplicator_controller.h"
 #include "host/win/dxgi_frame.h"
 
+#include <map>
+#include <memory>
+
 class ScreenCapturerDxgi final : public ScreenCapturerWin
 {
     Q_OBJECT
@@ -57,7 +60,19 @@ private:
     std::shared_ptr<DxgiDuplicatorController> controller_;
 
     int current_screen_index_ = 0;
-    std::unique_ptr<DxgiFrame> frame_;
+
+    // One retained frame per monitor, keyed by the stable screen id (not the index, which shifts when
+    // a monitor is (un)plugged). Keeping each monitor's last frame instead of dropping it on every
+    // screen switch means switching back to a monitor reuses its content directly, so a static screen
+    // is not shown black and the duplicator does not have to reconstruct a full frame.
+    std::map<ScreenId, std::unique_ptr<DxgiFrame>> frames_;
+
+    // Set on a screen switch, consumed by the next captured frame. The retained frame already holds
+    // the monitor pixels, but the duplicator reports only what changed since the last capture (nothing
+    // for a static screen). The whole frame must be marked updated so the downstream scaler/encoder
+    // refreshes from these pixels for the key frame forced on the switch.
+    bool force_full_update_ = false;
+
     int temporary_error_count_ = 0;
 
     Q_DISABLE_COPY_MOVE(ScreenCapturerDxgi)

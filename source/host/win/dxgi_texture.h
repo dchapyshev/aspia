@@ -56,6 +56,12 @@ public:
     // only. And it should not outlive its DxgiTexture instance.
     const Frame& asDesktopFrame();
 
+    // Re-exposes the pixels of the last successful copyFrom() through bits() / asDesktopFrame()
+    // after a release(), without acquiring a new frame. Returns true on success. Only the staging
+    // texture supports this (its CPU-accessible copy survives release()); the base implementation
+    // returns false. On success it must be paired with a release() once the pixels are consumed.
+    virtual bool remapLastFrame() { return false; }
+
 protected:
     DXGI_MAPPED_RECT* rect();
 

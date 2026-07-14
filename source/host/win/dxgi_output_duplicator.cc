@@ -243,11 +243,9 @@ bool DxgiOutputDuplicator::duplicate(Context* context, const QPoint& offset, Sha
     Region updated_region;
     updated_region.swap(context->updated_region);
 
-    // Copies |region| (relative to (0, 0)) from the cached texture into |target| at |offset|.
-    auto copyRegionToTarget = [&](const Region& region)
+    // Copies |region| (relative to (0, 0)) from |source| into |target| at |offset|.
+    auto copyRegionToTarget = [&](const Frame& source, const Region& region)
     {
-        const Frame& source = texture_->asDesktopFrame();
-
         if (rotation_ != Rotation::CLOCK_WISE_0)
         {
             for (const auto& rect : region)
@@ -283,7 +281,7 @@ bool DxgiOutputDuplicator::duplicate(Context* context, const QPoint& offset, Sha
 
         updated_region += context->updated_region;
 
-        copyRegionToTarget(updated_region);
+        copyRegionToTarget(texture_->asDesktopFrame(), updated_region);
 
         updated_region.translate(offset.x(), offset.y());
         *target->updatedRegion() += updated_region;
@@ -293,18 +291,30 @@ bool DxgiOutputDuplicator::duplicate(Context* context, const QPoint& offset, Sha
         return texture_->release() && releaseFrame();
     }
 
-    // No new frame was produced (a static screen, typical right after a screen switch). The full
-    // monitor that setup() queued for this fresh context would otherwise be dropped, leaving the
-    // target black until something changes on screen. Copy it from the last captured texture so the
-    // current content is delivered immediately.
+    // No new frame was produced for a fresh context (a static screen right after a screen switch, when
+    // ScreenCapturerDxgi has no retained frame for this monitor yet - the very first view). Deliver the
+    // last captured pixels so a still-black target is not shown until the screen changes. Only the
+    // staging texture can re-expose them without a new frame (its CPU copy survives release()); reading
+    // the texture directly here would be a use-after-free, and the mapping texture cannot re-map, so it
+    // just keeps the request pending and retries. On a screen re-switch the retained frame already
+    // holds the monitor content, so require_full_copy is false and this branch is not entered.
     if (context->require_full_copy && num_frames_captured_ > 0 && !updated_region.isEmpty())
     {
-        copyRegionToTarget(updated_region);
+        if (texture_->remapLastFrame())
+        {
+            copyRegionToTarget(texture_->asDesktopFrame(), updated_region);
+            texture_->release();
 
-        updated_region.translate(offset.x(), offset.y());
-        *target->updatedRegion() += updated_region;
-        context->require_full_copy = false;
+            updated_region.translate(offset.x(), offset.y());
+            *target->updatedRegion() += updated_region;
+            context->require_full_copy = false;
 
+            return error.Error() == DXGI_ERROR_WAIT_TIMEOUT || releaseFrame();
+        }
+
+        // Mapping-mode texture cannot re-map: keep the full-copy request pending so the next call
+        // retries instead of reading released memory.
+        context->updated_region.swap(updated_region);
         return error.Error() == DXGI_ERROR_WAIT_TIMEOUT || releaseFrame();
     }
 
