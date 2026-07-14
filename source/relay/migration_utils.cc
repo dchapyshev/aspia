@@ -140,19 +140,21 @@ void doConfigMigrate(const QJsonDocument& doc)
 bool isMigrationNeeded()
 {
     QString old_config_file = oldConfigFilePath();
-    bool has_old_config_file = false;
 
-    if (QFileInfo::exists(old_config_file))
-    {
-        LOG(INFO) << "Old configuration file exists:" << old_config_file;
-        has_old_config_file = true;
-    }
-    else
+    if (!QFileInfo::exists(old_config_file))
     {
         LOG(INFO) << "Old configuration file does NOT exist:" << old_config_file;
+        return false;
     }
 
-    return has_old_config_file;
+    if (!Settings().isEmpty())
+    {
+        LOG(INFO) << "New config already present; skipping legacy migration:" << old_config_file;
+        return false;
+    }
+
+    LOG(INFO) << "Old configuration file exists and requires migration:" << old_config_file;
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -185,6 +187,9 @@ void doMigration()
                 doConfigMigrate(doc);
 
                 QString new_file_name = old_config_file + ".bak";
+
+                if (QFileInfo::exists(new_file_name) && !QFile::remove(new_file_name))
+                    LOG(ERROR) << "Unable to remove stale backup file:" << new_file_name;
 
                 if (QFile::rename(old_config_file, new_file_name))
                 {
