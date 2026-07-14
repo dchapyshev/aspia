@@ -185,8 +185,11 @@ void InputInjectorVt::injectMouseEvent(const proto::input::MouseEvent& event)
 
     int cols = 0;
     int rows = 0;
-    if (!session->consoleSize(&cols, &rows) || screen_size_.width() <= 0 || screen_size_.height() <= 0)
+    if (!session->consoleSize(&cols, &rows) || cols <= 0 || rows <= 0 ||
+        screen_size_.width() <= 0 || screen_size_.height() <= 0)
+    {
         return;
+    }
 
     // The client coordinates are untrusted; compute in 64-bit so the intermediate multiply cannot
     // overflow a signed int before the clamp.

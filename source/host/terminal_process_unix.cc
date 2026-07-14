@@ -18,8 +18,10 @@
 
 #include "host/terminal_process_unix.h"
 
+#include <cerrno>
 #include <cstdlib>
 #include <cstring>
+#include <ctime>
 #include <memory>
 #include <string>
 
@@ -178,9 +180,37 @@ void TerminalProcessUnix::stop()
 
     if (child_pid_ > 0)
     {
-        // Closing the master descriptor sends SIGHUP to the shell.
+        // Closing the master descriptor above already sent SIGHUP to the foreground process group;
+        // send it explicitly too in case the shell is not the group leader.
         ::kill(child_pid_, SIGHUP);
-        ::waitpid(child_pid_, nullptr, 0);
+
+        // Reap the shell, but do not block teardown indefinitely: a shell that ignores SIGHUP would
+        // otherwise hang here forever (this runs from the destructor). Poll for a bounded period, then
+        // escalate to SIGKILL, which cannot be caught or ignored.
+        constexpr int kGracefulWaitMs = 2000;
+        constexpr int kStepMs = 10;
+
+        bool reaped = false;
+        for (int elapsed_ms = 0; elapsed_ms < kGracefulWaitMs; elapsed_ms += kStepMs)
+        {
+            const pid_t result = ::waitpid(child_pid_, nullptr, WNOHANG);
+            if (result == child_pid_ || (result == -1 && errno != EINTR))
+            {
+                // Child reaped, or already gone (ECHILD). |result| == 0 means still running.
+                reaped = true;
+                break;
+            }
+
+            const struct timespec delay = { 0, kStepMs * 1000 * 1000 };
+            ::nanosleep(&delay, nullptr);
+        }
+
+        if (!reaped)
+        {
+            ::kill(child_pid_, SIGKILL);
+            ::waitpid(child_pid_, nullptr, 0);
+        }
+
         child_pid_ = -1;
     }
 }
