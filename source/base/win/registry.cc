@@ -331,15 +331,27 @@ LONG RegKey::readValue(const QString& name, QString* out_value) const
     LONG result = readValue(name, raw_value, &size, &type);
     if (result == ERROR_SUCCESS)
     {
+        // A registry string may be stored without a terminating null (and a value that exactly fills
+        // |raw_value| leaves no room for one), so bound the length to the bytes actually read rather
+        // than scanning for a terminator, which could read past the buffer.
+        size_t length = size / sizeof(wchar_t);
+        if (length > kMaxStringLength)
+            length = kMaxStringLength;
+        if (length > 0 && raw_value[length - 1] == L'\0')
+            --length;
+
         if (type == REG_SZ)
         {
-            *out_value = QString::fromWCharArray(raw_value);
+            *out_value = QString::fromWCharArray(raw_value, static_cast<int>(length));
         }
         else if (type == REG_EXPAND_SZ)
         {
+            // ExpandEnvironmentStringsW() expects a null-terminated input, so give it a bounded copy.
+            const std::wstring unexpanded(raw_value, length);
+
             wchar_t expanded[kMaxStringLength];
 
-            size = ExpandEnvironmentStringsW(raw_value, expanded, kMaxStringLength);
+            size = ExpandEnvironmentStringsW(unexpanded.c_str(), expanded, kMaxStringLength);
 
             //
             // Success: returns the number of wchar_t's copied
@@ -378,15 +390,27 @@ LONG RegKey::readValue(const QString& name, std::wstring* out_value) const
     LONG result = readValue(name, raw_value, &size, &type);
     if (result == ERROR_SUCCESS)
     {
+        // A registry string may be stored without a terminating null (and a value that exactly fills
+        // |raw_value| leaves no room for one), so bound the length to the bytes actually read rather
+        // than scanning for a terminator, which could read past the buffer.
+        size_t length = size / sizeof(wchar_t);
+        if (length > kMaxStringLength)
+            length = kMaxStringLength;
+        if (length > 0 && raw_value[length - 1] == L'\0')
+            --length;
+
         if (type == REG_SZ)
         {
-            *out_value = raw_value;
+            *out_value = std::wstring(raw_value, length);
         }
         else if (type == REG_EXPAND_SZ)
         {
+            // ExpandEnvironmentStringsW() expects a null-terminated input, so give it a bounded copy.
+            const std::wstring unexpanded(raw_value, length);
+
             wchar_t expanded[kMaxStringLength];
 
-            size = ExpandEnvironmentStringsW(raw_value, expanded, kMaxStringLength);
+            size = ExpandEnvironmentStringsW(unexpanded.c_str(), expanded, kMaxStringLength);
 
             //
             // Success: returns the number of wchar_t's copied

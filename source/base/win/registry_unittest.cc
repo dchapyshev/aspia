@@ -21,6 +21,7 @@
 #include <gtest/gtest.h>
 
 #include <cstring>
+#include <string>
 #include <vector>
 
 namespace {
@@ -348,6 +349,80 @@ TEST_F(RegistryTest, OpenSubKey)
     ASSERT_EQ(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, foo_key, KEY_READ));
     ASSERT_EQ(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, kRootKey, KEY_WRITE));
     ASSERT_EQ(ERROR_SUCCESS, key.deleteKey("foo"));
+}
+
+// A short REG_SZ value stored without a NUL must still be read back exactly (bounded by its length).
+TEST_F(RegistryTest, ShortNonTerminatedStringValue)
+{
+    RegKey key;
+    QString foo_key(kRootKey);
+    foo_key += "\\Foo";
+    ASSERT_EQ(ERROR_SUCCESS, key.create(HKEY_CURRENT_USER, foo_key, KEY_READ));
+    ASSERT_EQ(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, foo_key, KEY_READ | KEY_SET_VALUE));
+    ASSERT_TRUE(key.isValid());
+
+    const char kName[] = "ShortNonTerminated";
+    const wchar_t kData[] = { L'H', L'e', L'l', L'l', L'o' }; // No NUL.
+
+    ASSERT_EQ(ERROR_SUCCESS,
+        key.writeValue(kName, kData, static_cast<DWORD>(sizeof(kData)), REG_SZ));
+
+    QString string_value;
+    ASSERT_EQ(ERROR_SUCCESS, key.readValue(kName, &string_value));
+    EXPECT_EQ(string_value, QString("Hello"));
+}
+
+// REG_EXPAND_SZ values are read through ExpandEnvironmentStringsW(), which is now fed a bounded,
+// null-terminated copy of the raw value. Confirm normal expansion still works.
+TEST_F(RegistryTest, ExpandStringValue)
+{
+    RegKey key;
+    QString foo_key(kRootKey);
+    foo_key += "\\Foo";
+    ASSERT_EQ(ERROR_SUCCESS, key.create(HKEY_CURRENT_USER, foo_key, KEY_READ));
+    ASSERT_EQ(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, foo_key, KEY_READ | KEY_SET_VALUE));
+    ASSERT_TRUE(key.isValid());
+
+    const char kName[] = "ExpandValue";
+    const wchar_t kUnexpanded[] = L"%SystemRoot%\\test"; // Includes the terminating NUL.
+
+    ASSERT_EQ(ERROR_SUCCESS,
+        key.writeValue(kName, kUnexpanded, static_cast<DWORD>(sizeof(kUnexpanded)), REG_EXPAND_SZ));
+
+    QString value;
+    ASSERT_EQ(ERROR_SUCCESS, key.readValue(kName, &value));
+    EXPECT_FALSE(value.contains('%'));      // The environment variable was expanded.
+    EXPECT_TRUE(value.endsWith("\\test"));
+}
+
+// A REG_SZ value stored with an embedded NUL and no trailing terminator must be read back in full
+// (bounded by its stored length), not truncated at the embedded NUL by an unbounded string scan.
+TEST_F(RegistryTest, StringValueWithEmbeddedNul)
+{
+    RegKey key;
+    QString foo_key(kRootKey);
+    foo_key += "\\Foo";
+    ASSERT_EQ(ERROR_SUCCESS, key.create(HKEY_CURRENT_USER, foo_key, KEY_READ));
+    ASSERT_EQ(ERROR_SUCCESS, key.open(HKEY_CURRENT_USER, foo_key, KEY_READ | KEY_SET_VALUE));
+    ASSERT_TRUE(key.isValid());
+
+    const char kName[] = "EmbeddedNul";
+    const wchar_t kData[] = { L'A', L'B', L'\0', L'C', L'D' }; // No trailing NUL.
+
+    ASSERT_EQ(ERROR_SUCCESS,
+        key.writeValue(kName, kData, static_cast<DWORD>(sizeof(kData)), REG_SZ));
+
+    QString string_value;
+    ASSERT_EQ(ERROR_SUCCESS, key.readValue(kName, &string_value));
+    ASSERT_EQ(string_value.size(), 5);
+    EXPECT_EQ(string_value.at(0), QChar('A'));
+    EXPECT_EQ(string_value.at(2), QChar(0));
+    EXPECT_EQ(string_value.at(4), QChar('D'));
+
+    std::wstring wstring_value;
+    ASSERT_EQ(ERROR_SUCCESS, key.readValue(kName, &wstring_value));
+    ASSERT_EQ(wstring_value.size(), 5u);
+    EXPECT_EQ(wstring_value[4], L'D');
 }
 
 } // namespace
