@@ -76,6 +76,13 @@ bool AudioSilenceDetector::isSilence(const qint16* samples, size_t frames)
     }
 
     silence_length_ += samples_count;
+
+    // Cap the accumulator once it is past the threshold: its exact value no longer matters, and
+    // letting it grow through a long silence would eventually overflow the counter (wrapping it
+    // negative and briefly reporting the stream as non-silent).
+    if (silence_length_ > silence_length_max_)
+        silence_length_ = silence_length_max_ + 1;
+
     return silence_length_ > silence_length_max_;
 }
 

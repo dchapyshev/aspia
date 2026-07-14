@@ -345,7 +345,10 @@ void ScreenWorker::onClipboardEvent(const proto::clipboard::Event& event)
         return;
 
     if (event.mime_type() == "text/plain; charset=UTF-8")
-        qobject_cast<InputInjectorVt*>(input_injector_)->setClipboard(QString::fromStdString(event.data()));
+    {
+        if (auto* vt_injector = qobject_cast<InputInjectorVt*>(input_injector_))
+            vt_injector->setClipboard(QString::fromStdString(event.data()));
+    }
 #endif // defined(Q_OS_LINUX)
 }
 

@@ -331,6 +331,9 @@ void IpcWorker::onClientFinished()
 //--------------------------------------------------------------------------------------------------
 void IpcWorker::onPreferredSizeChanged()
 {
+    if (clients_.isEmpty())
+        return;
+
     QList<QSize> sizes;
 
     for (auto* client : std::as_const(clients_))
