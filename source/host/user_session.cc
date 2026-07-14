@@ -626,25 +626,41 @@ void UserSession::onIpcMessageReceived(quint32 channel_id, const QByteArray& buf
 
         if (command_name == "stop_client")
         {
-            CHECK(control.has_unsigned_integer());
+            if (!control.has_unsigned_integer())
+            {
+                LOG(ERROR) << "Malformed stop_client command";
+                return;
+            }
             LOG(INFO) << "stop_client" << control.unsigned_integer();
             emit sig_stopClient(static_cast<quint32>(control.unsigned_integer()));
         }
         else if (command_name == "pause")
         {
-            CHECK(control.has_boolean());
+            if (!control.has_boolean())
+            {
+                LOG(ERROR) << "Malformed pause command";
+                return;
+            }
             LOG(INFO) << "pause" << control.boolean();
             emit sig_pauseChanged(control.boolean());
         }
         else if (command_name == "lock_mouse")
         {
-            CHECK(control.has_boolean());
+            if (!control.has_boolean())
+            {
+                LOG(ERROR) << "Malformed lock_mouse command";
+                return;
+            }
             LOG(INFO) << "lock_mouse" << control.boolean();
             emit sig_lockMouseChanged(control.boolean());
         }
         else if (command_name == "lock_keyboard")
         {
-            CHECK(control.has_boolean());
+            if (!control.has_boolean())
+            {
+                LOG(ERROR) << "Malformed lock_keyboard command";
+                return;
+            }
             LOG(INFO) << "lock_keyboard" << control.boolean();
             emit sig_lockKeyboardChanged(control.boolean());
         }
