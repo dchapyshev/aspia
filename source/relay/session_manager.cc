@@ -34,6 +34,7 @@ namespace {
 
 const std::chrono::minutes kIdleTimerInterval { 1 };
 constexpr std::chrono::hours kMaxSessionDuration{ 24 };
+constexpr std::chrono::seconds kAcceptRetryDelay{ 1 };
 
 // Caps for the relay role. The relay routes already-paired peers, so concurrent unfinished
 // handshakes are usually few; a tight pending cap protects relay resources without rejecting
@@ -421,6 +422,13 @@ void SessionManager::doAccept(SessionManager* self)
                 return;
 
             LOG(ERROR) << "Error while accepting connection:" << error_code;
+
+            QTimer::singleShot(kAcceptRetryDelay, self, [self, guard]()
+            {
+                if (*guard)
+                    SessionManager::doAccept(self);
+            });
+            return;
         }
 
         // Waiting for the next connection.
