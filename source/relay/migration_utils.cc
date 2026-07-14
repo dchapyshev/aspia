@@ -23,6 +23,8 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
+#include <algorithm>
+
 #include "base/logging.h"
 #include "base/files/base_paths.h"
 #include "build/build_config.h"
@@ -107,7 +109,7 @@ void doConfigMigrate(const QJsonDocument& doc)
 
     if (root_object.contains("PeerIdleTimeout"))
     {
-        qint64 value = root_object["PeerIdleTimeout"].toString().toLongLong();
+        qint64 value = std::clamp<qint64>(root_object["PeerIdleTimeout"].toString().toLongLong(), 1, 60);
         LOG(INFO) << "PeerIdleTimeout:" << value;
         settings.setPeerIdleTimeout(std::chrono::minutes(value));
     }
@@ -115,6 +117,9 @@ void doConfigMigrate(const QJsonDocument& doc)
     if (root_object.contains("MaxPeerCount"))
     {
         quint32 value = root_object["MaxPeerCount"].toString().toULong();
+
+        if (value == 0)
+            value = 100;
         LOG(INFO) << "MaxPeerCount:" << value;
         settings.setMaxPeerCount(value);
     }
@@ -128,7 +133,7 @@ void doConfigMigrate(const QJsonDocument& doc)
 
     if (root_object.contains("StatisticsInterval"))
     {
-        qint64 value = root_object["StatisticsInterval"].toString().toLongLong();
+        qint64 value = std::clamp<qint64>(root_object["StatisticsInterval"].toString().toLongLong(), 1, 3600);
         LOG(INFO) << "StatisticsInterval:" << value;
         settings.setStatisticsInterval(std::chrono::seconds(value));
     }
