@@ -25,6 +25,7 @@
 
 #include "base/logging.h"
 #include "base/files/base_paths.h"
+#include "build/build_config.h"
 #include "relay/settings.h"
 
 namespace {
@@ -61,7 +62,18 @@ void doConfigMigrate(const QJsonDocument& doc)
     if (root_object.contains("RouterPort"))
     {
         quint16 value = root_object["RouterPort"].toString().toUShort();
-        LOG(INFO) << "RouterPort:" << value;
+
+        if (value == DEFAULT_ROUTER_LEGACY_TCP_PORT)
+        {
+            LOG(INFO) << "Legacy RouterPort" << value << "remapped to relay port"
+                      << DEFAULT_ROUTER_RELAY_TCP_PORT;
+            value = DEFAULT_ROUTER_RELAY_TCP_PORT;
+        }
+        else
+        {
+            LOG(INFO) << "RouterPort:" << value;
+        }
+
         settings.setRouterPort(value);
     }
 
