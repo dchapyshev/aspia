@@ -30,6 +30,7 @@
 namespace {
 
 const size_t kHostKeySize = 512;
+constexpr qsizetype kMaxHostIdsPerSession = 32;
 
 } // namespace
 
@@ -98,6 +99,13 @@ void HostLegacy::onSessionMessage(quint8 /* channel_id */, const QByteArray& buf
 //--------------------------------------------------------------------------------------------------
 void HostLegacy::readHostIdRequest(const proto::router::legacy::HostIdRequest& host_id_request)
 {
+    if (host_id_list_.size() >= kMaxHostIdsPerSession)
+    {
+        CLOG(ERROR) << "Rejecting host id request: per-session limit of" << kMaxHostIdsPerSession
+                    << "reached";
+        return;
+    }
+
     Database& database = Database::instance();
     if (!database.isValid())
     {
