@@ -24,6 +24,20 @@
 
 #include <asio/write.hpp>
 
+namespace {
+
+constexpr int kMaxIdentityFieldLength = 255;
+
+//--------------------------------------------------------------------------------------------------
+QString identityField(const std::string& value)
+{
+    if (value.size() <= static_cast<size_t>(kMaxIdentityFieldLength))
+        return QString::fromStdString(value);
+    return QString::fromUtf8(value.data(), kMaxIdentityFieldLength);
+}
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 Session::Session(std::pair<asio::ip::tcp::socket, asio::ip::tcp::socket>&& sockets,
                  const QByteArray& secret, QObject* parent)
@@ -37,9 +51,9 @@ Session::Session(std::pair<asio::ip::tcp::socket, asio::ip::tcp::socket>&& socke
     proto::relay::PeerToRelay::Secret secret_message;
     if (parse(secret, &secret_message))
     {
-        client_address_ = QString::fromStdString(secret_message.client_address());
-        client_user_name_ = QString::fromStdString(secret_message.client_user_name());
-        host_address_ = QString::fromStdString(secret_message.host_address());
+        client_address_ = identityField(secret_message.client_address());
+        client_user_name_ = identityField(secret_message.client_user_name());
+        host_address_ = identityField(secret_message.host_address());
         host_id_ = secret_message.host_id();
     }
 
