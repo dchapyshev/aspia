@@ -399,7 +399,7 @@ void IpcChannel::doWriteHeader()
             return;
         }
 
-        CDCHECK_EQ(bytes_transferred, sizeof(io_->write_header.message_size));
+        CDCHECK_EQ(bytes_transferred, sizeof(io_->write_header));
         doWriteData();
     });
 }

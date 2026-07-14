@@ -20,46 +20,25 @@
 
 #include "base/logging.h"
 
+static_assert(Q_BYTE_ORDER == Q_LITTLE_ENDIAN, "Only little-endian platforms are supported");
+
 //--------------------------------------------------------------------------------------------------
 void largeNumberIncrement(quint8* buffer, size_t buffer_size)
 {
     DCHECK(buffer);
     DCHECK(buffer_size);
 
-    const union
-    {
-        long one;
-        char little;
-    } is_endian = { 1 };
+    size_t n = buffer_size;
+    quint32 c = 1;
 
-    if (is_endian.little || (reinterpret_cast<size_t>(buffer) % sizeof(size_t)) != 0)
+    do
     {
-        quint32 n = static_cast<quint32>(buffer_size);
-        quint32 c = 1;
-
-        do
-        {
-            --n;
-            c += buffer[n];
-            buffer[n] = static_cast<quint8>(c);
-            c >>= 8;
-        }
-        while (n);
+        --n;
+        c += buffer[n];
+        buffer[n] = static_cast<quint8>(c);
+        c >>= 8;
     }
-    else
-    {
-        size_t* data = reinterpret_cast<size_t*>(buffer);
-        size_t n = buffer_size / sizeof(size_t);
-        size_t c = 1;
-
-        do
-        {
-            --n;
-            size_t d = data[n] += c;
-            c = ((d - c) & ~d) >> (sizeof(size_t) * 8 - 1);
-        }
-        while (n);
-    }
+    while (n);
 }
 
 //--------------------------------------------------------------------------------------------------
