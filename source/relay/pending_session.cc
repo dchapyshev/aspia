@@ -28,8 +28,14 @@
 
 namespace {
 
-constexpr std::chrono::seconds kTimeout{ 30 };
-constexpr quint32 kMaxMessageSize = 1 * 1024 * 1024; // 1 MB
+// Deadline for a freshly-accepted peer to send its handshake.
+constexpr std::chrono::seconds kHandshakeTimeout{ 5 };
+
+// Absolute cap on how long a pending session may occupy a slot, measured from connect.
+constexpr std::chrono::seconds kTotalTimeout{ 30 };
+
+// Hard cap on the handshake message size.
+constexpr quint32 kMaxMessageSize = 16 * 1024; // 16 KB
 
 } // namespace
 
@@ -91,7 +97,7 @@ void PendingSession::start()
     if (error_code)
         CLOG(ERROR) << "Failed to disable Nagle's algorithm:" << error_code;
 
-    timer_->start(kTimeout);
+    timer_->start(kHandshakeTimeout);
     PendingSession::doReadMessage(this);
 }
 
@@ -214,5 +220,18 @@ void PendingSession::onMessage()
         return;
     }
 
+    // Handshake received: the peer has presented its credentials and may now legitimately wait for
+    // its partner. Move the deadline to the REMAINING lifetime budget (measured from connect), not a
+    // fresh window, so total slot occupancy never exceeds kTotalTimeout.
+    const auto remaining = std::chrono::duration_cast<std::chrono::milliseconds>(
+        kTotalTimeout - (Clock::now() - start_time_));
+    if (remaining <= std::chrono::milliseconds(0))
+    {
+        // The lifetime budget is already spent.
+        onErrorOccurred(FROM_HERE, std::error_code());
+        return;
+    }
+
+    timer_->start(remaining);
     emit sig_ready(message);
 }
