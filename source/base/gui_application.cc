@@ -496,7 +496,11 @@ void GuiApplication::onNewConnection()
             return;
         if (socket->bytesAvailable() >= static_cast<int>(sizeof(quint32)))
             break;
-        socket->waitForReadyRead();
+        if (!socket->waitForReadyRead(kReadTimeoutMs))
+        {
+            LOG(ERROR) << "Timed out waiting for the message header";
+            return;
+        }
     }
 
     QDataStream stream(socket.get());
@@ -528,6 +532,12 @@ void GuiApplication::onNewConnection()
         remaining -= static_cast<quint32>(read_bytes);
     }
     while (remaining && socket->waitForReadyRead(kReadTimeoutMs));
+
+    if (remaining)
+    {
+        LOG(ERROR) << "Incomplete message:" << remaining << "byte(s) not received";
+        return;
+    }
 
     socket->write(kOkMessage, strlen(kOkMessage));
     socket->waitForBytesWritten(kWriteTimeoutMs);

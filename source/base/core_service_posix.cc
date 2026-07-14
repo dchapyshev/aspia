@@ -19,15 +19,21 @@
 #include "base/core_service.h"
 
 #include <QCoreApplication>
+#include <QSocketNotifier>
 #include <QTimer>
 
+#include <cerrno>
+#include <fcntl.h>
+#include <memory>
 #include <signal.h>
+#include <sys/socket.h>
+#include <unistd.h>
 
 #include "base/logging.h"
 
 namespace {
 
-CoreService* g_self = nullptr;
+volatile sig_atomic_t g_signal_write_fd = -1;
 
 //--------------------------------------------------------------------------------------------------
 QString sigToString(int sig)
@@ -60,14 +66,12 @@ CoreService::CoreService(const QString& name, QObject* parent)
     : name_(name)
 {
     LOG(INFO) << "Ctor";
-    g_self = this;
 }
 
 //--------------------------------------------------------------------------------------------------
 CoreService::~CoreService()
 {
     LOG(INFO) << "Dtor";
-    g_self = nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -75,65 +79,128 @@ int CoreService::exec(CoreApplication& application)
 {
     LOG(INFO) << "Begin";
 
-    if (signal(SIGKILL, signalHandler) == SIG_ERR)
-        LOG(ERROR) << "Unable to install signal handler for SIGKILL";
+    std::unique_ptr<QSocketNotifier> signal_notifier;
 
-    if (signal(SIGTERM, signalHandler) == SIG_ERR)
-        LOG(ERROR) << "Unable to install signal handler for SIGTERM";
+    // A signal handler may run at any moment, so it must be async-signal-safe. It only writes the
+    // signal number to this self-pipe; the actual handling happens in onSignalActivated() on the
+    // event loop thread.
+    if (::socketpair(AF_UNIX, SOCK_STREAM, 0, signal_fd_) != 0)
+    {
+        PLOG(ERROR) << "socketpair failed";
+    }
+    else
+    {
+        // Non-blocking so the handler never blocks; close-on-exec so the descriptors do not leak
+        // into child processes.
+        for (int fd : signal_fd_)
+        {
+            ::fcntl(fd, F_SETFL, ::fcntl(fd, F_GETFL, 0) | O_NONBLOCK);
+            ::fcntl(fd, F_SETFD, ::fcntl(fd, F_GETFD, 0) | FD_CLOEXEC);
+        }
 
-    if (signal(SIGHUP, signalHandler) == SIG_ERR)
-        LOG(ERROR) << "Unable to install signal handler for SIGHUP";
+        g_signal_write_fd = signal_fd_[0];
 
-    if (signal(SIGQUIT, signalHandler) == SIG_ERR)
-        LOG(ERROR) << "Unable to install signal handler for SIGQUIT";
+        signal_notifier = std::make_unique<QSocketNotifier>(signal_fd_[1], QSocketNotifier::Read);
+        connect(signal_notifier.get(), &QSocketNotifier::activated, this, &CoreService::onSignalActivated);
 
-    if (signal(SIGINT, signalHandler) == SIG_ERR)
-        LOG(ERROR) << "Unable to install signal handler for SIGQUIT";
+        // Install the handlers only when the self-pipe exists. Otherwise the default disposition is
+        // kept, so the process can still be terminated by SIGTERM/SIGINT/SIGQUIT instead of trapping
+        // them in a handler that can no longer do anything.
+        if (signal(SIGKILL, signalHandler) == SIG_ERR)
+            LOG(ERROR) << "Unable to install signal handler for SIGKILL";
 
-    if (signal(SIGSTOP, signalHandler) == SIG_ERR)
-        LOG(ERROR) << "Unable to install signal handler for SIGSTOP";
+        if (signal(SIGTERM, signalHandler) == SIG_ERR)
+            LOG(ERROR) << "Unable to install signal handler for SIGTERM";
 
-    if (signal(SIGABRT, signalHandler) == SIG_ERR)
-        LOG(ERROR) << "Unable to install signal handler for SIGABRT";
+        if (signal(SIGHUP, signalHandler) == SIG_ERR)
+            LOG(ERROR) << "Unable to install signal handler for SIGHUP";
+
+        if (signal(SIGQUIT, signalHandler) == SIG_ERR)
+            LOG(ERROR) << "Unable to install signal handler for SIGQUIT";
+
+        if (signal(SIGINT, signalHandler) == SIG_ERR)
+            LOG(ERROR) << "Unable to install signal handler for SIGINT";
+
+        if (signal(SIGSTOP, signalHandler) == SIG_ERR)
+            LOG(ERROR) << "Unable to install signal handler for SIGSTOP";
+
+        if (signal(SIGABRT, signalHandler) == SIG_ERR)
+            LOG(ERROR) << "Unable to install signal handler for SIGABRT";
+    }
 
     QTimer::singleShot(0, this, &CoreService::onStart);
 
     LOG(INFO) << "Run message loop";
     int ret = application.exec();
 
+    // Stop routing signals through the pipe and release the descriptors.
+    g_signal_write_fd = -1;
+
+    // Destroy the notifier before closing the descriptor it watches.
+    signal_notifier.reset();
+
+    if (signal_fd_[0] != -1)
+    {
+        ::close(signal_fd_[0]);
+        signal_fd_[0] = -1;
+    }
+
+    if (signal_fd_[1] != -1)
+    {
+        ::close(signal_fd_[1]);
+        signal_fd_[1] = -1;
+    }
+
     LOG(INFO) << "End";
     return ret;
 }
 
 //--------------------------------------------------------------------------------------------------
-void CoreService::stopHandlerImpl()
+void CoreService::onSignalActivated()
 {
-    QTimer::singleShot(0, this, [this]()
+    bool stop_requested = false;
+    unsigned char buffer[32];
+    ssize_t count;
+
+    // Drain the pipe: several signals may have been coalesced into it.
+    while ((count = ::read(signal_fd_[1], buffer, sizeof(buffer))) > 0)
+    {
+        for (ssize_t i = 0; i < count; ++i)
+        {
+            int sig = static_cast<int>(buffer[i]);
+            LOG(INFO) << "Signal received: " << sigToString(sig) << " (" << sig << ")";
+
+            if (sig == SIGTERM || sig == SIGINT || sig == SIGQUIT)
+                stop_requested = true;
+        }
+    }
+
+    if (stop_requested)
     {
         // A message loop termination command was received.
         onStop();
         QCoreApplication::quit();
-    });
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
 void CoreService::signalHandler(int sig)
 {
-    LOG(INFO) << "Signal received: " << sigToString(sig) << " (" << sig << ")";
+    // Async-signal-safe: forward the signal number through the self-pipe and return. Anything heavier
+    // (logging, memory allocation, Qt calls) would be unsafe in this context.
+    if (g_signal_write_fd == -1)
+        return;
 
-    switch (sig)
+    const int saved_errno = errno;
+    const unsigned char byte = static_cast<unsigned char>(sig);
+
+    ssize_t rv;
+    do
     {
-        case SIGTERM:
-        case SIGINT:
-        case SIGQUIT:
-        {
-            if (g_self)
-                g_self->stopHandlerImpl();
-        }
-        break;
-
-        default:
-            break;
+        rv = ::write(g_signal_write_fd, &byte, 1);
     }
+    while (rv == -1 && errno == EINTR);
+
+    errno = saved_errno;
 }

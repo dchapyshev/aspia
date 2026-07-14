@@ -51,8 +51,10 @@ protected:
 
 private:
 #if defined(Q_OS_UNIX)
-    void stopHandlerImpl();
+    void onSignalActivated();
     static void signalHandler(int sig);
+
+    int signal_fd_[2] = { -1, -1 };
 #endif // defined(Q_OS_UNIX)
 
     QString name_;
