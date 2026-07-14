@@ -31,8 +31,10 @@ public:
     QString filePath();
 
     bool isEmpty() const;
+    bool hasError() const;
+
     void reset();
-    void sync();
+    bool sync();
 
     void setRouterAddress(const QString& address);
     QString routerAddress() const;

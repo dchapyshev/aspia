@@ -75,7 +75,16 @@ int stopService(QTextStream& out)
 int installService(QTextStream& out)
 {
     Settings settings;
-    if (settings.isEmpty() && !isMigrationNeeded())
+    const bool empty = settings.isEmpty();
+
+    if (empty && settings.hasError())
+    {
+        out << "Configuration exists but cannot be read (corrupt or access denied). "
+               "Fix it before installing the service." << Qt::endl;
+        return 1;
+    }
+
+    if (empty && !isMigrationNeeded())
     {
         out << "Configuration does not exist; the service was not installed. Create it with "
                "--create-config, then run --install." << Qt::endl;
@@ -138,9 +147,21 @@ int createConfig(QTextStream& out)
         return 1;
     }
 
+    if (settings.hasError())
+    {
+        out << "Existing configuration cannot be read (corrupt or access denied). Not modifying it."
+            << Qt::endl;
+        return 1;
+    }
+
     // Save the configuration file.
     settings.reset();
-    settings.sync();
+    if (!settings.sync())
+    {
+        out << "Failed to write the configuration (check permissions on the config directory)."
+            << Qt::endl;
+        return 1;
+    }
 
     out << "Configuration successfully created." << Qt::endl;
     return 0;
