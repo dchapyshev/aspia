@@ -624,10 +624,35 @@ bool VideoDecoderH264MF::mapSampleToFrame(IMFSample* sample, const QSize& size)
     D3D11_TEXTURE2D_DESC src_desc;
     nv12_texture->GetDesc(&src_desc);
 
+    // |size| is the frame size declared in the (untrusted) packet, while |src_desc| is the size
+    // actually decoded from the H.264 bitstream. If the declared size is larger, the NV12 planes set
+    // below would be read for more rows/columns than the staging copy holds - an out-of-bounds read.
+    // Reject such frames, matching the guard the SW/VT/MC decoders already enforce.
+    if (src_desc.Width < static_cast<UINT>(size.width()) ||
+        src_desc.Height < static_cast<UINT>(size.height()))
+    {
+        LOG(ERROR) << "Decoded texture (" << src_desc.Width << "x" << src_desc.Height
+                   << ") is smaller than the declared frame size" << size;
+        return false;
+    }
+
     // Release the previous frame's mapping before the GPU writes the staging texture again.
     unmapStaging();
 
-    if (!nv12_staging_)
+    // (Re)create the staging copy whenever its size does not match the decoder's output texture. The
+    // output size can change mid-stream (MF_E_TRANSFORM_STREAM_CHANGE), and the UV plane offset below is
+    // computed from |src_desc|, so the staging must always match it - otherwise the copy and the UV
+    // offset would run past the staging buffer.
+    bool staging_matches = false;
+    if (nv12_staging_)
+    {
+        D3D11_TEXTURE2D_DESC staging_desc;
+        nv12_staging_->GetDesc(&staging_desc);
+        staging_matches =
+            staging_desc.Width == src_desc.Width && staging_desc.Height == src_desc.Height;
+    }
+
+    if (!staging_matches)
     {
         nv12_staging_ = d3d_->createStagingNv12Texture(
             static_cast<int>(src_desc.Width), static_cast<int>(src_desc.Height));
