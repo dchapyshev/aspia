@@ -84,7 +84,6 @@ private:
 
     SharedPointer<bool> alive_guard_ { new bool(true) };
     asio::ip::tcp::acceptor acceptor_;
-    int accept_error_count_ = 0;
 
     SharedPointer<UserList> user_list_;
     SecureByteArray private_key_;

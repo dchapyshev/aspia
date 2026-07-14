@@ -18,6 +18,8 @@
 
 #include "base/net/tcp_server.h"
 
+#include <QTimer>
+
 #include <asio/ip/address.hpp>
 
 #include "base/logging.h"
@@ -221,20 +223,15 @@ void TcpServer::doAccept()
 
             LOG(ERROR) << "Error while accepting connection:" << error_code;
 
-            static const int kMaxErrorCount = 50;
-
-            ++accept_error_count_;
-            if (accept_error_count_ > kMaxErrorCount)
+            QTimer::singleShot(std::chrono::seconds(1), this, [this, guard]()
             {
-                LOG(ERROR) << "WARNING! Too many errors when trying to accept a connection. "
-                           << "New connections will not be accepted";
-                return;
-            }
+                if (*guard)
+                    doAccept();
+            });
+            return;
         }
         else
         {
-            accept_error_count_ = 0;
-
             if (!flood_guard_->check(socket, pending_.size()))
             {
                 LOG(TRACE) << "Connection rejected by flood guard";
@@ -281,12 +278,14 @@ void TcpServer::doAccept()
             }
 
             QPointer<ServerAuthenticator> weak_authenticator = authenticator.get();
-
-            TcpChannel* channel = new TcpChannelNG(
+            QPointer<TcpChannel> channel = new TcpChannelNG(
                 TcpChannel::Type::DIRECT, std::move(socket), authenticator.release(), this);
 
             connect(channel, &TcpChannel::sig_authenticated, this, [this, channel, weak_authenticator]()
             {
+                if (!channel)
+                    return;
+
                 removePendingChannel(channel);
 
                 // Probe connections (e.g. OnlineCheckerDirect) only need a successful auth to
@@ -309,6 +308,9 @@ void TcpServer::doAccept()
             connect(channel, &TcpChannel::sig_errorOccurred,
                     this, [this, channel](TcpChannel::ErrorCode error_code)
             {
+                if (!channel)
+                    return;
+
                 removePendingChannel(channel);
                 emit sig_errorOccurred(QString::fromStdString(channel->peerAddress()),
                                        QString::fromStdString(channel->peerUserName()));

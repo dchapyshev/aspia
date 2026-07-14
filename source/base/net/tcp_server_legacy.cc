@@ -18,6 +18,8 @@
 
 #include "base/net/tcp_server_legacy.h"
 
+#include <QTimer>
+
 #include <asio/ip/address.hpp>
 
 #include "base/logging.h"
@@ -220,20 +222,15 @@ void TcpServerLegacy::doAccept()
 
             LOG(ERROR) << "Error while accepting connection:" << error_code;
 
-            static const int kMaxErrorCount = 50;
-
-            ++accept_error_count_;
-            if (accept_error_count_ > kMaxErrorCount)
+            QTimer::singleShot(std::chrono::seconds(1), this, [this, guard]()
             {
-                LOG(ERROR) << "WARNING! Too many errors when trying to accept a connection. "
-                           << "New connections will not be accepted";
-                return;
-            }
+                if (*guard)
+                    doAccept();
+            });
+            return;
         }
         else
         {
-            accept_error_count_ = 0;
-
             if (!flood_guard_->check(socket, pending_.size()))
             {
                 // socket goes out of scope here - asio's destructor closes the descriptor.
@@ -258,7 +255,7 @@ void TcpServerLegacy::doAccept()
                 }
             }
 
-            ServerAuthenticatorLegacy* authenticator = new ServerAuthenticatorLegacy();
+            ScopedQPointer<ServerAuthenticatorLegacy> authenticator(new ServerAuthenticatorLegacy());
             authenticator->setUserList(user_list_);
 
             if (!private_key_.isEmpty())
@@ -266,23 +263,26 @@ void TcpServerLegacy::doAccept()
                 if (!authenticator->setPrivateKey(private_key_))
                 {
                     LOG(ERROR) << "Failed to set private key for authenticator";
-                    delete authenticator;
+                    doAccept();
                     return;
                 }
 
                 if (!authenticator->setAnonymousAccess(anonymous_access_, anonymous_session_types_))
                 {
                     LOG(ERROR) << "Failed to set anonymous access settings";
-                    delete authenticator;
+                    doAccept();
                     return;
                 }
             }
 
-            TcpChannel* channel = new TcpChannelLegacy(
-                TcpChannel::Type::DIRECT, std::move(socket), authenticator, this);
+            QPointer<TcpChannel> channel = new TcpChannelLegacy(
+                TcpChannel::Type::DIRECT, std::move(socket), authenticator.release(), this);
 
             connect(channel, &TcpChannel::sig_authenticated, this, [this, channel]()
             {
+                if (!channel)
+                    return;
+
                 removePendingChannel(channel);
                 ready_.append(channel);
                 emit sig_newConnection();
@@ -291,6 +291,9 @@ void TcpServerLegacy::doAccept()
             connect(channel, &TcpChannel::sig_errorOccurred,
                     this, [this, channel](TcpChannel::ErrorCode error_code)
             {
+                if (!channel)
+                    return;
+
                 removePendingChannel(channel);
                 channel->deleteLater();
             });
