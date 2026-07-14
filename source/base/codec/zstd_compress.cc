@@ -38,7 +38,13 @@ T compressT(const T& source, int compress_level)
         return T();
     }
 
-    ScopedZstdCStream stream;
+    ScopedZstdCStream stream(ZSTD_createCStream());
+    if (!stream)
+    {
+        LOG(ERROR) << "ZSTD_createCStream failed";
+        return T();
+    }
+
     size_t ret = ZSTD_initCStream(stream.get(), compress_level);
     if (ZSTD_isError(ret))
     {
@@ -103,7 +109,13 @@ T decompressT(const T& source)
     T target;
     target.resize(target_data_size);
 
-    ScopedZstdDStream stream;
+    ScopedZstdDStream stream(ZSTD_createDStream());
+    if (!stream)
+    {
+        LOG(ERROR) << "ZSTD_createDStream failed";
+        return T();
+    }
+
     size_t ret = ZSTD_initDStream(stream.get());
     if (ZSTD_isError(ret))
     {
@@ -116,6 +128,9 @@ T decompressT(const T& source)
 
     while (input.pos < input.size)
     {
+        const size_t prev_in_pos = input.pos;
+        const size_t prev_out_pos = output.pos;
+
         ret = ZSTD_decompressStream(stream.get(), &output, &input);
         if (ZSTD_isError(ret))
         {
@@ -123,6 +138,27 @@ T decompressT(const T& source)
                        << "(" << ret << ")";
             return T();
         }
+
+        // The frame has been fully decoded.
+        if (ret == 0)
+            break;
+
+        // The output buffer is sized to exactly the declared decompressed size. If a call made no
+        // progress while input remains, the stream expands beyond that size; stop instead of looping
+        // forever (a corrupt or malicious stream must not hang the process).
+        if (input.pos == prev_in_pos && output.pos == prev_out_pos)
+        {
+            LOG(ERROR) << "Compressed stream expands beyond the declared size:" << target_data_size;
+            return T();
+        }
+    }
+
+    // The produced data must match the declared size exactly - reject truncated or oversized streams.
+    if (output.pos != static_cast<size_t>(target.size()))
+    {
+        LOG(ERROR) << "Decompressed size mismatch: produced" << output.pos
+                   << "declared" << target.size();
+        return T();
     }
 
     return target;

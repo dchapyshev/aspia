@@ -133,6 +133,9 @@ QByteArray CursorDecoder::decompressCursor(const proto::cursor::Shape& cursor_sh
 
     while (input.pos < input.size)
     {
+        const size_t prev_in_pos = input.pos;
+        const size_t prev_out_pos = output.pos;
+
         ret = ZSTD_decompressStream(stream_.get(), &output, &input);
         if (ZSTD_isError(ret))
         {
@@ -140,6 +143,26 @@ QByteArray CursorDecoder::decompressCursor(const proto::cursor::Shape& cursor_sh
                        << "(" << ret << ")";
             return QByteArray();
         }
+
+        // The frame has been fully decoded.
+        if (ret == 0)
+            break;
+
+        // The output buffer is exactly the cursor image size. If a call made no progress while input
+        // remains, a malicious host sent data that expands beyond it; stop instead of looping forever.
+        if (input.pos == prev_in_pos && output.pos == prev_out_pos)
+        {
+            LOG(ERROR) << "Cursor data expands beyond the expected image size";
+            return QByteArray();
+        }
+    }
+
+    // The decompressed data must fill the whole cursor image exactly.
+    if (output.pos != static_cast<size_t>(image.size()))
+    {
+        LOG(ERROR) << "Cursor decompressed size mismatch: produced" << output.pos
+                   << "expected" << image.size();
+        return QByteArray();
     }
 
     return image;

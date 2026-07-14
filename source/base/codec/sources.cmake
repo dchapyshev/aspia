@@ -94,4 +94,6 @@ if (ANDROID)
 endif()
 
 collect_sources(SOURCE_BASE_CODEC_TESTS
-    scale_reducer_unittest.cc)
+    cursor_codec_unittest.cc
+    scale_reducer_unittest.cc
+    zstd_compress_unittest.cc)
