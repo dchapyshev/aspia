@@ -33,6 +33,7 @@
 namespace {
 
 const std::chrono::minutes kIdleTimerInterval { 1 };
+constexpr std::chrono::hours kMaxSessionDuration{ 24 };
 
 // Caps for the relay role. The relay routes already-paired peers, so concurrent unfinished
 // handshakes are usually few; a tight pending cap protects relay resources without rejecting
@@ -437,7 +438,10 @@ void SessionManager::onIdleTimeout()
     {
         Session* session = *it;
 
-        if (session->idleTime(current_time) >= idle_timeout_)
+        const bool idle_expired = session->idleTime(current_time) >= idle_timeout_;
+        const bool duration_expired = session->duration(current_time) >= kMaxSessionDuration;
+
+        if (idle_expired || duration_expired)
         {
             session->disconnect();
             session->deleteLater();
