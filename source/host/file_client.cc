@@ -304,10 +304,7 @@ void FileClient::onIpcNewConnection()
         return;
     }
 
-#if defined(Q_OS_WINDOWS)
-    // Verify the connecting peer is a process we spawned (parent PID == us).
-    // On UNIX the agent is launched via sh/sudo chain plus '&' backgrounding, so its parent
-    // PID is not us; the check would reject legitimate agents and is disabled.
+    // Verify the connecting peer is the agent process we spawned (parent PID == us).
     if (ProcessUtil::parentProcessId(client_pid) != ProcessUtil::currentProcessId())
     {
         CLOG(ERROR) << "IPC client is not our child (pid:" << client_pid << ")";
@@ -315,7 +312,6 @@ void FileClient::onIpcNewConnection()
         onError(FROM_HERE);
         return;
     }
-#endif
 
     ipc_server_->disconnect(this);
     ipc_server_.reset();

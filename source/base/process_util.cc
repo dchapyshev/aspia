@@ -97,9 +97,9 @@ quint32 ProcessUtil::parentProcessId(quint32 pid)
         return 0;
     }
 
-    while (!file.atEnd())
+    QByteArray line;
+    while (!(line = file.readLine()).isEmpty())
     {
-        QByteArray line = file.readLine();
         if (!line.startsWith("PPid:"))
             continue;
 
