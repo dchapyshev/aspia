@@ -59,6 +59,8 @@ public:
     using Keys = QList<proto::router::RelayKey>;
 
     static Service* instance();
+    static void notifyChanged(quint32 flags);
+    static void removeKeysForRelay(qint64 session_id);
 
     const QList<Host*>& hosts();
     bool stopHost(qint64 session_id);
@@ -85,11 +87,8 @@ public:
         NOTIFY_GROUPS     = 1u << 5,
     };
 
-    void notifyChanged(quint32 flags);
-
     void addKey(qint64 session_id, const proto::router::RelayKey& key);
     std::optional<Credentials> takeCredentials();
-    void removeKeysForRelay(qint64 session_id);
     void clearKeyPool();
     size_t keyCountForRelay(qint64 session_id) const;
     size_t keyCount() const;

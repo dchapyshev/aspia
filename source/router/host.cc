@@ -49,7 +49,7 @@ Host::Host(TcpChannel* channel, QObject* parent)
 //--------------------------------------------------------------------------------------------------
 Host::~Host()
 {
-    Service::instance()->notifyChanged(Service::NOTIFY_HOSTS);
+    Service::notifyChanged(Service::NOTIFY_HOSTS);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -60,7 +60,7 @@ void Host::start()
     tcp_channel_->setPaused(false);
     emit sig_started(session_id_);
 
-    Service::instance()->notifyChanged(Service::NOTIFY_HOSTS);
+    Service::notifyChanged(Service::NOTIFY_HOSTS);
 }
 
 //--------------------------------------------------------------------------------------------------

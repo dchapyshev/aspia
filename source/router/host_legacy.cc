@@ -62,7 +62,7 @@ bool HostLegacy::removeHostId(HostId host_id)
         {
             CLOG(INFO) << "Host ID" << host_id << "removed from legacy session list";
             host_id_list_.erase(it);
-            Service::instance()->notifyChanged(Service::NOTIFY_HOSTS);
+            Service::notifyChanged(Service::NOTIFY_HOSTS);
             return true;
         }
     }
@@ -158,7 +158,7 @@ void HostLegacy::readHostIdRequest(const proto::router::legacy::HostIdRequest& h
             if (database.finalizeHostRemoval(host_id))
             {
                 host_id_response->set_error_code(proto::router::legacy::HostIdResponse::NO_HOST_FOUND);
-                Service::instance()->notifyChanged(Service::NOTIFY_HOSTS);
+                Service::notifyChanged(Service::NOTIFY_HOSTS);
             }
             else
             {
@@ -177,7 +177,7 @@ void HostLegacy::readHostIdRequest(const proto::router::legacy::HostIdRequest& h
         {
             host_id_list_.emplace_back(host_id);
             emit sig_hostIdAssigned(host_id);
-            Service::instance()->notifyChanged(Service::NOTIFY_HOSTS);
+            Service::notifyChanged(Service::NOTIFY_HOSTS);
         }
     }
     else if (error_code == proto::router::kErrorNotFound)

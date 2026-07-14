@@ -270,7 +270,7 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
                     CLOG(INFO) << "OTP cleared for user" << user_id << "by" << userName();
                     result->set_error_code(proto::router::kErrorOk);
                 }
-                Service::instance()->notifyChanged(Service::NOTIFY_USERS);
+                Service::notifyChanged(Service::NOTIFY_USERS);
             }
         }
     }
@@ -305,7 +305,7 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
                     CLOG(INFO) << "All device tokens of user" << user_id
                                << "revoked by" << userName();
                     result->set_error_code(proto::router::kErrorOk);
-                    Service::instance()->notifyChanged(Service::NOTIFY_USERS);
+                    Service::notifyChanged(Service::NOTIFY_USERS);
                 }
             }
             else
@@ -337,7 +337,7 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
                                    << "revoked by" << userName();
                         revoked_tokens_user_id = user_id;
                         revoked_token_ids = token_ids;
-                        Service::instance()->notifyChanged(Service::NOTIFY_USERS);
+                        Service::notifyChanged(Service::NOTIFY_USERS);
                     }
                 }
                 result->set_error_code(code);
@@ -487,7 +487,7 @@ void ClientAdmin::doHostRequest(const proto::router::HostRequest& request)
             CLOG(INFO) << "Host" << host_id << "removal scheduled by" << userName()
                        << "(online:" << (host != nullptr) << ")";
             host_result->set_error_code(error_code);
-            Service::instance()->notifyChanged(Service::NOTIFY_HOSTS);
+            Service::notifyChanged(Service::NOTIFY_HOSTS);
         }
     }
     else if (request.command_name() == proto::router::kCommandHostUpdate)
@@ -726,7 +726,7 @@ void ClientAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& requ
             if (error_code == proto::router::kErrorOk)
             {
                 result->set_entry_id(new_id);
-                Service::instance()->notifyChanged(Service::NOTIFY_WORKSPACES);
+                Service::notifyChanged(Service::NOTIFY_WORKSPACES);
                 if (!desired_host_ids.empty())
                 {
                     error_code = database.setWorkspaceHosts(new_id, desired_host_ids);
@@ -738,7 +738,7 @@ void ClientAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& requ
                     }
                     else
                     {
-                        Service::instance()->notifyChanged(Service::NOTIFY_HOSTS);
+                        Service::notifyChanged(Service::NOTIFY_HOSTS);
                     }
                 }
             }
@@ -777,7 +777,7 @@ void ClientAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& requ
             result->set_error_code(error_code);
             if (error_code == proto::router::kErrorOk)
             {
-                Service::instance()->notifyChanged(Service::NOTIFY_WORKSPACES);
+                Service::notifyChanged(Service::NOTIFY_WORKSPACES);
                 error_code = database.setWorkspaceHosts(entry_id, desired_host_ids);
                 if (error_code != proto::router::kErrorOk)
                 {
@@ -787,7 +787,7 @@ void ClientAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& requ
                 }
                 else
                 {
-                    Service::instance()->notifyChanged(Service::NOTIFY_HOSTS);
+                    Service::notifyChanged(Service::NOTIFY_HOSTS);
                 }
             }
         }
@@ -801,7 +801,7 @@ void ClientAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& requ
         {
             // Workspace deletion also releases its hosts to workspace_id=0; signal both so
             // clients refetch both lists with updated workspace_id columns.
-            Service::instance()->notifyChanged(Service::NOTIFY_WORKSPACES | Service::NOTIFY_HOSTS);
+            Service::notifyChanged(Service::NOTIFY_WORKSPACES | Service::NOTIFY_HOSTS);
         }
     }
     else
@@ -841,7 +841,7 @@ std::string ClientAdmin::addUser(const proto::router::User& user)
     if (!database.addUser(new_user))
         return proto::router::kErrorInternalError;
 
-    Service::instance()->notifyChanged(Service::NOTIFY_USERS);
+    Service::notifyChanged(Service::NOTIFY_USERS);
     return proto::router::kErrorOk;
 }
 
@@ -903,7 +903,7 @@ std::string ClientAdmin::modifyUser(const proto::router::User& user, qint64* pas
     if (password_changed)
         *password_changed_user_id = new_user.entry_id;
 
-    Service::instance()->notifyChanged(Service::NOTIFY_USERS);
+    Service::notifyChanged(Service::NOTIFY_USERS);
     return proto::router::kErrorOk;
 }
 
@@ -928,6 +928,6 @@ std::string ClientAdmin::deleteUser(const proto::router::User& user)
         return std::string(error_code);
     }
 
-    Service::instance()->notifyChanged(Service::NOTIFY_USERS);
+    Service::notifyChanged(Service::NOTIFY_USERS);
     return proto::router::kErrorOk;
 }

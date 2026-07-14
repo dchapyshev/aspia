@@ -98,7 +98,7 @@ Client::Client(TcpChannel* channel, QObject* parent)
 Client::~Client()
 {
     CLOG(INFO) << "Dtor";
-    Service::instance()->notifyChanged(Service::NOTIFY_CLIENTS);
+    Service::notifyChanged(Service::NOTIFY_CLIENTS);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -109,7 +109,7 @@ void Client::start()
     tcp_channel_->setPaused(false);
     emit sig_started(session_id_);
 
-    Service::instance()->notifyChanged(Service::NOTIFY_CLIENTS);
+    Service::notifyChanged(Service::NOTIFY_CLIENTS);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -780,7 +780,7 @@ void Client::readChangePasswordRequest(const proto::router::ChangePasswordReques
     result->set_error_code(proto::router::kErrorOk);
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 
-    Service::instance()->notifyChanged(Service::NOTIFY_USERS);
+    Service::notifyChanged(Service::NOTIFY_USERS);
 
     // This request always rotates the password (tokens are revoked in the transaction). Drop the
     // user's other live sessions but keep this one.

@@ -70,7 +70,7 @@ Service::~Service()
 {
     LOG(INFO) << "Dtor";
 
-    // Sessions can access the |instance_|, so we delete them all before zeroing the |instance_|.
+    // Sessions can access |instance_|, so we delete the tracked ones before zeroing it.
     for (auto* host : std::as_const(hosts_))
         delete host;
 
@@ -88,6 +88,32 @@ Service::~Service()
 Service* Service::instance()
 {
     return instance_;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void Service::notifyChanged(quint32 flags)
+{
+    if (!instance_)
+        return;
+
+    instance_->dirty_mask_ |= flags;
+    if (!instance_->notification_timer_->isActive())
+        instance_->notification_timer_->start();
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void Service::removeKeysForRelay(qint64 session_id)
+{
+    if (!instance_)
+        return;
+
+    if (!instance_->key_pool_.contains(session_id))
+        return;
+
+    LOG(INFO) << "All keys for relay" << session_id << "removed";
+    instance_->key_pool_.remove(session_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -208,14 +234,6 @@ bool Service::stopRelay(qint64 relay_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::notifyChanged(quint32 flags)
-{
-    dirty_mask_ |= flags;
-    if (!notification_timer_->isActive())
-        notification_timer_->start();
-}
-
-//--------------------------------------------------------------------------------------------------
 void Service::addKey(qint64 session_id, const proto::router::RelayKey& key)
 {
     auto relay = key_pool_.find(session_id);
@@ -313,16 +331,6 @@ std::optional<Service::Credentials> Service::takeCredentials()
     relay_session->sendKeyUsed(credentials.key.key_id());
 
     return std::move(credentials);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Service::removeKeysForRelay(qint64 session_id)
-{
-    if (!key_pool_.contains(session_id))
-        return;
-
-    LOG(INFO) << "All keys for relay" << session_id << "removed";
-    key_pool_.remove(session_id);
 }
 
 //--------------------------------------------------------------------------------------------------

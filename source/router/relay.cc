@@ -51,8 +51,8 @@ Relay::Relay(TcpChannel* channel, QObject* parent)
 Relay::~Relay()
 {
     CLOG(INFO) << "Dtor";
-    Service::instance()->removeKeysForRelay(sessionId());
-    Service::instance()->notifyChanged(Service::NOTIFY_RELAYS);
+    Service::removeKeysForRelay(sessionId());
+    Service::notifyChanged(Service::NOTIFY_RELAYS);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -63,7 +63,7 @@ void Relay::start()
     tcp_channel_->setPaused(false);
     emit sig_started(session_id_);
 
-    Service::instance()->notifyChanged(Service::NOTIFY_RELAYS);
+    Service::notifyChanged(Service::NOTIFY_RELAYS);
 }
 
 //--------------------------------------------------------------------------------------------------

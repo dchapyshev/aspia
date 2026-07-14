@@ -144,7 +144,7 @@ void ClientManager::doHostRequest(const proto::router::HostRequest& request)
     }
 
     reply(proto::router::kErrorOk);
-    Service::instance()->notifyChanged(Service::NOTIFY_HOSTS);
+    Service::notifyChanged(Service::NOTIFY_HOSTS);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -202,7 +202,7 @@ void ClientManager::doGroupRequest(const proto::router::GroupRequest& request)
         if (error_code == proto::router::kErrorOk)
         {
             result->set_entry_id(new_id);
-            Service::instance()->notifyChanged(Service::NOTIFY_GROUPS);
+            Service::notifyChanged(Service::NOTIFY_GROUPS);
         }
     }
     else if (request.command_name() == proto::router::kCommandGroupModify)
@@ -215,7 +215,7 @@ void ClientManager::doGroupRequest(const proto::router::GroupRequest& request)
             database.modifyGroup(workspace_id, entry_id, parent_id, name, comment);
         result->set_error_code(error_code);
         if (error_code == proto::router::kErrorOk)
-            Service::instance()->notifyChanged(Service::NOTIFY_GROUPS);
+            Service::notifyChanged(Service::NOTIFY_GROUPS);
     }
     else if (request.command_name() == proto::router::kCommandGroupDelete)
     {
@@ -228,7 +228,7 @@ void ClientManager::doGroupRequest(const proto::router::GroupRequest& request)
         {
             // Deleting a group detaches hosts that pointed into its subtree to the workspace
             // root, so signal both lists to refresh.
-            Service::instance()->notifyChanged(Service::NOTIFY_GROUPS | Service::NOTIFY_HOSTS);
+            Service::notifyChanged(Service::NOTIFY_GROUPS | Service::NOTIFY_HOSTS);
         }
     }
     else

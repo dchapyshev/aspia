@@ -177,7 +177,7 @@ void HostNG::readHostIdRequest(const proto::router::HostIdRequest& host_id_reque
     {
         host_id_response->set_host_id(host_id_);
         emit sig_hostIdAssigned(host_id_);
-        Service::instance()->notifyChanged(Service::NOTIFY_HOSTS);
+        Service::notifyChanged(Service::NOTIFY_HOSTS);
     }
 
     sendMessage(0, serialize(message));
