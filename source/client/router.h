@@ -26,12 +26,14 @@
 #include <QVersionNumber>
 
 #include <functional>
+#include <typeinfo>
 #include <unordered_map>
 
 #include <google/protobuf/message_lite.h>
 
 #include "base/crypto/data_cryptor.h"
 #include "base/crypto/secure_byte_array.h"
+#include "base/logging.h"
 #include "base/net/tcp_channel.h"
 #include "base/peer/host_id.h"
 #include "base/peer/router_user.h"
@@ -329,6 +331,7 @@ private:
     struct Pending
     {
         QPointer<QObject> receiver;
+        const std::type_info* response_type = nullptr;
         std::function<void(const void* response)> invoke;
     };
 
@@ -386,6 +389,7 @@ private:
     {
         pending_.emplace(request->request_id(),
             QPointer<QObject>(receiver),
+            &typeid(ResponseT),
             [receiver, handler = std::move(handler)](const void* parsed)
         {
             invokeHandler(receiver, handler, *static_cast<const ResponseT*>(parsed));
@@ -402,6 +406,7 @@ private:
     {
         pending_.emplace(request->request_id(),
             QPointer<QObject>(receiver),
+            &typeid(RawT),
             [receiver, handler = std::move(handler), decoder = std::move(decoder)](const void* parsed)
         {
             invokeHandler(receiver, handler, decoder(*static_cast<const RawT*>(parsed)));
@@ -416,6 +421,13 @@ private:
         Pending pending = pending_.take(request_id);
         if (pending.receiver.isNull())
             return;
+
+        if (!pending.response_type || *pending.response_type != typeid(ResponseT))
+        {
+            LOG(ERROR) << "Router response type mismatch for request" << request_id;
+            return;
+        }
+
         pending.invoke(&response);
     }
 
