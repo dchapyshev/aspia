@@ -186,9 +186,9 @@ void SysInfoWidgetMonitors::setSystemInfo(const proto::system_info::SystemInfo& 
 
             // Calculate the monitor diagonal by the Pythagorean theorem and translate from
             // centimeters to inches.
-            double diagonal_size =
-                sqrt((monitor.max_horizontal_image_size() * monitor.max_horizontal_image_size()) +
-                (monitor.max_vertical_image_size() * monitor.max_vertical_image_size())) / 2.54;
+            const double h_size = monitor.max_horizontal_image_size();
+            const double v_size = monitor.max_vertical_image_size();
+            double diagonal_size = sqrt(h_size * h_size + v_size * v_size) / 2.54;
 
             group << mk(tr("Diagonal Size"), QString("%1\"").arg(diagonal_size, 2, 'f', 1));
         }
