@@ -44,6 +44,9 @@ const char kLoginPath[] = "/bin/login";
 const int kDefaultCols = 128;
 const int kDefaultRows = 36;
 
+// Maximum number of bytes a single Unicode code point occupies when encoded as UTF-8.
+const size_t kMaxUtf8BytesPerChar = 4;
+
 //--------------------------------------------------------------------------------------------------
 VTermModifier modifiers(bool shift, bool ctrl, bool alt)
 {
@@ -425,7 +428,9 @@ std::string VtSession::selectionText(int start_col, int start_row, int end_col, 
     end_col = std::clamp(end_col, 0, cols - 1);
 
     std::string result;
-    std::vector<char> buffer(static_cast<size_t>(cols) * 4 + 1);
+
+    const size_t max_cell_bytes = static_cast<size_t>(VTERM_MAX_CHARS_PER_CELL) * kMaxUtf8BytesPerChar;
+    std::vector<char> buffer(static_cast<size_t>(cols) * max_cell_bytes + 1);
 
     for (int row = start_row; row <= end_row; ++row)
     {
@@ -438,7 +443,8 @@ std::string VtSession::selectionText(int start_col, int start_row, int end_col, 
         rect.start_col = from;
         rect.end_col = to + 1;
 
-        const size_t count = vterm_screen_get_text(screen_, buffer.data(), buffer.size() - 1, rect);
+        const size_t count = std::min(
+            vterm_screen_get_text(screen_, buffer.data(), buffer.size() - 1, rect), buffer.size() - 1);
 
         std::string line(buffer.data(), count);
         const size_t last = line.find_last_not_of(' ');
