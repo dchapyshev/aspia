@@ -44,27 +44,6 @@ void copyTextToClipboard(const QString& text)
     clipboard->setText(text);
 }
 
-//--------------------------------------------------------------------------------------------------
-QString encodeUrl(const QString& str)
-{
-    if (str.isEmpty())
-        return QString();
-
-    QString result;
-
-    for (const auto ch : str)
-    {
-        if (ch.isDigit() || ch.isLetter() || ch == '-' || ch == '_' || ch == '.' || ch == '~')
-            result += ch;
-        else if (ch == ' ')
-            result += '+';
-        else
-            result += '%' + QString::number(ch.unicode(), 16);
-    }
-
-    return result;
-}
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -139,7 +118,8 @@ void SysInfoWidget::copyRow(QTreeWidgetItem* item)
 // static
 void SysInfoWidget::searchInGoogle(const QString& request)
 {
-    QUrl find_url(QString("https://www.google.com/search?q=%1").arg(encodeUrl(request)));
+    QUrl find_url("https://www.google.com/search?q=" +
+                  QString::fromLatin1(QUrl::toPercentEncoding(request)));
     QDesktopServices::openUrl(find_url);
 }
 

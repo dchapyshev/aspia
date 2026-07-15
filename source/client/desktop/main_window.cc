@@ -57,6 +57,18 @@
 #include "proto/peer.h"
 #include "ui_main_window.h"
 
+namespace {
+
+//--------------------------------------------------------------------------------------------------
+QString escapeTabTitle(const QString& title)
+{
+    QString result = title;
+    result.replace('&', "&&");
+    return result;
+}
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent),
@@ -660,7 +672,7 @@ void MainWindow::onAlwaysOnTop(bool checked)
 //--------------------------------------------------------------------------------------------------
 void MainWindow::addTab(Tab* tab, const QString& title, const QIcon& icon)
 {
-    int index = ui->tabs->addTab(tab, icon, title);
+    int index = ui->tabs->addTab(tab, icon, escapeTabTitle(title));
 
     if (!tab->isClosable())
         hideCloseButtonForTab(index);
@@ -672,7 +684,7 @@ void MainWindow::addTab(Tab* tab, const QString& title, const QIcon& icon)
     {
         int tab_index = ui->tabs->indexOf(tab);
         if (tab_index != -1)
-            ui->tabs->setTabText(tab_index, new_title);
+            ui->tabs->setTabText(tab_index, escapeTabTitle(new_title));
     });
 
     connect(tab, &Tab::sig_closeRequested, this, [this, tab]()
