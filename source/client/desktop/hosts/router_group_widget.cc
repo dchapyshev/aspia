@@ -112,7 +112,7 @@ public:
             QCollator collator;
             collator.setCaseSensitivity(Qt::CaseInsensitive);
             collator.setNumericMode(true);
-            return collator.compare(text(COLUMN_DISPLAY_NAME), other.text(COLUMN_DISPLAY_NAME)) <= 0;
+            return collator.compare(text(COLUMN_DISPLAY_NAME), other.text(COLUMN_DISPLAY_NAME)) < 0;
         }
         return QTreeWidgetItem::operator<(other);
     }

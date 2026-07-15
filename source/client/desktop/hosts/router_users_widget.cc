@@ -74,7 +74,7 @@ public:
             collator.setCaseSensitivity(Qt::CaseInsensitive);
             collator.setNumericMode(true);
 
-            return collator.compare(text(0), other.text(0)) <= 0;
+            return collator.compare(text(0), other.text(0)) < 0;
         }
         else
         {

@@ -138,7 +138,7 @@ public:
             collator.setNumericMode(true);
 
             return collator.compare(text(HOST_COLUMN_DISPLAY_NAME),
-                                    other.text(HOST_COLUMN_DISPLAY_NAME)) <= 0;
+                                    other.text(HOST_COLUMN_DISPLAY_NAME)) < 0;
         }
 
         return QTreeWidgetItem::operator<(other);
