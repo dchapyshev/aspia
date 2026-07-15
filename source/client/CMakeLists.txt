@@ -134,7 +134,9 @@ if (APPLE)
         ${COREAUDIO_LIB} ${AUDIOTOOLBOX_LIB} portaudio
         ${VIDEOTOOLBOX_LIB} ${COREMEDIA_LIB} ${COREVIDEO_LIB})
     set(aspia_client_ICON ${PROJECT_SOURCE_DIR}/source/common/resources/aspia.icns)
-    set(aspia_client_PLIST ${PROJECT_SOURCE_DIR}/source/client/Info.plist)
+    configure_file(${PROJECT_SOURCE_DIR}/source/client/Info.plist.in
+        ${CMAKE_CURRENT_BINARY_DIR}/Info.plist @ONLY)
+    set(aspia_client_PLIST ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
 
     set_source_files_properties(${aspia_client_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 endif()
