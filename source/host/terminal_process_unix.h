@@ -21,6 +21,9 @@
 
 #include "host/terminal_process.h"
 
+#include <QByteArray>
+#include <QQueue>
+
 #include <array>
 
 #include <asio/posix/stream_descriptor.hpp>
@@ -41,10 +44,17 @@ public:
     void resize(int columns, int rows) final;
 
 private:
-    void doRead();
-    void stop();
+    struct IoState
+    {
+        bool alive = true;
+        std::array<char, 4096> read_buffer;
+        QQueue<QByteArray> write_queue;
+    };
 
-    std::array<char, 4096> read_buffer_;
+    void doRead();
+    void doWrite();
+
+    SharedPointer<IoState> io_ { new IoState() };
     asio::posix::stream_descriptor pty_;
     int child_pid_ = -1;
 

@@ -22,7 +22,6 @@
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
-#include <memory>
 #include <string>
 
 #include <csignal>
@@ -55,7 +54,45 @@ TerminalProcessUnix::TerminalProcessUnix(QObject* parent)
 TerminalProcessUnix::~TerminalProcessUnix()
 {
     LOG(INFO) << "Dtor";
-    stop();
+
+    io_->alive = false;
+
+    std::error_code error_code;
+    pty_.close(error_code);
+
+    if (child_pid_ > 0)
+    {
+        // Closing the master descriptor above already sent SIGHUP to the foreground process group;
+        // send it explicitly too in case the shell is not the group leader.
+        ::kill(child_pid_, SIGHUP);
+
+        // Reap the shell, but do not block teardown indefinitely: a shell that ignores SIGHUP would
+        // otherwise hang the destructor forever. Poll for a bounded period, then escalate to SIGKILL,
+        // which cannot be caught or ignored.
+        constexpr int kGracefulWaitMs = 2000;
+        constexpr int kStepMs = 10;
+
+        bool reaped = false;
+        for (int elapsed_ms = 0; elapsed_ms < kGracefulWaitMs; elapsed_ms += kStepMs)
+        {
+            const pid_t result = ::waitpid(child_pid_, nullptr, WNOHANG);
+            if (result == child_pid_ || (result == -1 && errno != EINTR))
+            {
+                // Child reaped, or already gone (ECHILD). |result| == 0 means still running.
+                reaped = true;
+                break;
+            }
+
+            const struct timespec delay = { 0, kStepMs * 1000 * 1000 };
+            ::nanosleep(&delay, nullptr);
+        }
+
+        if (!reaped)
+        {
+            ::kill(child_pid_, SIGKILL);
+            ::waitpid(child_pid_, nullptr, 0);
+        }
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -126,9 +163,11 @@ void TerminalProcessUnix::writeInput(const QByteArray& data)
     if (!pty_.is_open())
         return;
 
-    auto buffer = std::make_shared<QByteArray>(data);
-    asio::async_write(pty_, asio::buffer(buffer->constData(), buffer->size()),
-                      [buffer](const std::error_code&, size_t) {});
+    const bool write_in_progress = !io_->write_queue.isEmpty();
+    io_->write_queue.emplace_back(data);
+
+    if (!write_in_progress)
+        doWrite();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -148,11 +187,11 @@ void TerminalProcessUnix::resize(int columns, int rows)
 //--------------------------------------------------------------------------------------------------
 void TerminalProcessUnix::doRead()
 {
-    auto guard = alive_guard_;
-    pty_.async_read_some(asio::buffer(read_buffer_),
-        [this, guard](const std::error_code& error_code, size_t bytes_transferred)
+    auto io = io_;
+    pty_.async_read_some(asio::buffer(io_->read_buffer),
+        [this, io](const std::error_code& error_code, size_t bytes_transferred)
     {
-        if (!*guard)
+        if (!io->alive)
             return;
 
         if (error_code)
@@ -164,53 +203,36 @@ void TerminalProcessUnix::doRead()
             return;
         }
 
-        emit sig_output(QByteArray(read_buffer_.data(), static_cast<int>(bytes_transferred)));
+        emit sig_output(QByteArray(io->read_buffer.data(), static_cast<int>(bytes_transferred)));
         doRead();
     });
 }
 
 //--------------------------------------------------------------------------------------------------
-void TerminalProcessUnix::stop()
+void TerminalProcessUnix::doWrite()
 {
-    // Prevent any already-queued read handler from touching this object.
-    *alive_guard_ = false;
+    const QByteArray& buffer = io_->write_queue.front();
 
-    std::error_code error_code;
-    pty_.close(error_code);
-
-    if (child_pid_ > 0)
+    auto io = io_;
+    asio::async_write(pty_, asio::buffer(buffer.constData(), buffer.size()),
+        [this, io](const std::error_code& error_code, size_t /* bytes_transferred */)
     {
-        // Closing the master descriptor above already sent SIGHUP to the foreground process group;
-        // send it explicitly too in case the shell is not the group leader.
-        ::kill(child_pid_, SIGHUP);
+        if (!io->alive)
+            return;
 
-        // Reap the shell, but do not block teardown indefinitely: a shell that ignores SIGHUP would
-        // otherwise hang here forever (this runs from the destructor). Poll for a bounded period, then
-        // escalate to SIGKILL, which cannot be caught or ignored.
-        constexpr int kGracefulWaitMs = 2000;
-        constexpr int kStepMs = 10;
-
-        bool reaped = false;
-        for (int elapsed_ms = 0; elapsed_ms < kGracefulWaitMs; elapsed_ms += kStepMs)
+        if (error_code)
         {
-            const pid_t result = ::waitpid(child_pid_, nullptr, WNOHANG);
-            if (result == child_pid_ || (result == -1 && errno != EINTR))
-            {
-                // Child reaped, or already gone (ECHILD). |result| == 0 means still running.
-                reaped = true;
-                break;
-            }
+            if (error_code == asio::error::operation_aborted)
+                return;
 
-            const struct timespec delay = { 0, kStepMs * 1000 * 1000 };
-            ::nanosleep(&delay, nullptr);
+            io_->write_queue.clear();
+            return;
         }
 
-        if (!reaped)
-        {
-            ::kill(child_pid_, SIGKILL);
-            ::waitpid(child_pid_, nullptr, 0);
-        }
+        DCHECK(!io_->write_queue.isEmpty());
 
-        child_pid_ = -1;
-    }
+        io_->write_queue.pop_front();
+        if (!io_->write_queue.isEmpty())
+            doWrite();
+    });
 }
