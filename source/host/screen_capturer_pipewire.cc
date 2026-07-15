@@ -977,40 +977,57 @@ void ScreenCapturerPipeWire::handleProcess()
 
     // The cursor arrives as separate metadata: a position on every buffer and a bitmap only when the
     // shape changes.
-    spa_meta_cursor* cursor_meta = static_cast<spa_meta_cursor*>(
-        spa_buffer_find_meta_data(spa_buffer, SPA_META_Cursor, sizeof(spa_meta_cursor)));
+    spa_meta* cursor_area = spa_buffer_find_meta(spa_buffer, SPA_META_Cursor);
+    spa_meta_cursor* cursor_meta =
+        (cursor_area && cursor_area->size >= sizeof(spa_meta_cursor)) ?
+            static_cast<spa_meta_cursor*>(cursor_area->data) : nullptr;
     if (cursor_meta && spa_meta_cursor_is_valid(cursor_meta))
     {
         QMutexLocker locker(&frame_mutex_);
 
         cursor_position_ = QPoint(cursor_meta->position.x, cursor_meta->position.y);
 
-        if (cursor_meta->bitmap_offset)
+        const quint64 meta_size = cursor_area->size;
+
+        if (cursor_meta->bitmap_offset &&
+            static_cast<quint64>(cursor_meta->bitmap_offset) + sizeof(spa_meta_bitmap) <= meta_size)
         {
             const spa_meta_bitmap* bitmap = reinterpret_cast<const spa_meta_bitmap*>(
                 reinterpret_cast<const quint8*>(cursor_meta) + cursor_meta->bitmap_offset);
 
-            if (bitmap->format && bitmap->offset && bitmap->size.width > 0 && bitmap->size.height > 0)
+            const quint32 cursor_width = bitmap->size.width;
+            const quint32 cursor_height = bitmap->size.height;
+            const qint32 src_stride = bitmap->stride;
+
+            // Absolute offset and byte extent of the pixel data inside the meta area.
+            const quint64 pixels_offset =
+                static_cast<quint64>(cursor_meta->bitmap_offset) + bitmap->offset;
+            const quint64 pixels_extent =
+                static_cast<quint64>(cursor_height) * (src_stride > 0 ? static_cast<quint64>(src_stride) : 0);
+
+            if (bitmap->format && bitmap->offset &&
+                cursor_width > 0 && cursor_width <= static_cast<quint32>(kMaxCursorSide) &&
+                cursor_height > 0 && cursor_height <= static_cast<quint32>(kMaxCursorSide) &&
+                src_stride >= static_cast<qint32>(cursor_width * kBytesPerPixel) &&
+                pixels_offset + pixels_extent <= meta_size)
             {
-                const int cursor_width = static_cast<int>(bitmap->size.width);
-                const int cursor_height = static_cast<int>(bitmap->size.height);
-                const int src_stride = bitmap->stride;
-                const quint8* src_bitmap =
-                    reinterpret_cast<const quint8*>(bitmap) + bitmap->offset;
+                const int width = static_cast<int>(cursor_width);
+                const int height = static_cast<int>(cursor_height);
+                const quint8* src_bitmap = reinterpret_cast<const quint8*>(bitmap) + bitmap->offset;
 
                 const bool swap = (bitmap->format == SPA_VIDEO_FORMAT_RGBx ||
                                    bitmap->format == SPA_VIDEO_FORMAT_RGBA);
 
-                cursor_data_.resize(cursor_width * cursor_height * kBytesPerPixel);
+                cursor_data_.resize(width * height * kBytesPerPixel);
                 quint8* dst = reinterpret_cast<quint8*>(cursor_data_.data());
-                const int dst_stride = cursor_width * kBytesPerPixel;
+                const int dst_stride = width * kBytesPerPixel;
 
                 if (swap)
-                    libyuv::ABGRToARGB(src_bitmap, src_stride, dst, dst_stride, cursor_width, cursor_height);
+                    libyuv::ABGRToARGB(src_bitmap, src_stride, dst, dst_stride, width, height);
                 else
-                    libyuv::ARGBCopy(src_bitmap, src_stride, dst, dst_stride, cursor_width, cursor_height);
+                    libyuv::ARGBCopy(src_bitmap, src_stride, dst, dst_stride, width, height);
 
-                cursor_size_ = QSize(cursor_width, cursor_height);
+                cursor_size_ = QSize(width, height);
                 cursor_hotspot_ = QPoint(cursor_meta->hotspot.x, cursor_meta->hotspot.y);
                 cursor_changed_ = true;
             }
