@@ -46,7 +46,7 @@ private slots:
     void onTaskDone(const FileTask& task);
 
 private:
-    void addPendingTask(const QString& source_dir,
+    bool addPendingTask(const QString& source_dir,
                         const QString& target_dir,
                         const QString& item_name,
                         bool is_directory,

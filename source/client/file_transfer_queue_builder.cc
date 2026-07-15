@@ -19,6 +19,7 @@
 #include "client/file_transfer_queue_builder.h"
 
 #include "base/logging.h"
+#include "common/file_platform_util.h"
 #include "common/file_task_factory.h"
 
 namespace {
@@ -59,7 +60,13 @@ void FileTransferQueueBuilder::start(const QString& source_path,
     LOG(INFO) << "Start file transfer queue builder";
 
     for (const auto& item : items)
-        addPendingTask(source_path, target_path, item.name, item.is_directory, item.size);
+    {
+        if (!addPendingTask(source_path, target_path, item.name, item.is_directory, item.size))
+        {
+            onAborted(proto::file_transfer::ERROR_CODE_INVALID_PATH_NAME);
+            return;
+        }
+    }
 
     doPendingTasks();
 }
@@ -104,29 +111,40 @@ void FileTransferQueueBuilder::onTaskDone(const FileTask& task)
     {
         const proto::file_transfer::List::Item& item = reply.file_list().item(i);
 
-        addPendingTask(last_task.sourcePath(),
-                       last_task.targetPath(),
-                       QString::fromStdString(item.name()),
-                       item.is_directory(),
-                       static_cast<qint64>(item.size()));
+        if (!addPendingTask(last_task.sourcePath(),
+                            last_task.targetPath(),
+                            QString::fromStdString(item.name()),
+                            item.is_directory(),
+                            static_cast<qint64>(item.size())))
+        {
+            onAborted(proto::file_transfer::ERROR_CODE_INVALID_PATH_NAME);
+            return;
+        }
     }
 
     doPendingTasks();
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileTransferQueueBuilder::addPendingTask(const QString& source_dir,
+bool FileTransferQueueBuilder::addPendingTask(const QString& source_dir,
                                               const QString& target_dir,
                                               const QString& item_name,
                                               bool is_directory,
                                               qint64 size)
 {
+    if (!FilePlatformUtil::isValidFileName(item_name))
+    {
+        LOG(ERROR) << "Rejecting item with invalid name:" << item_name;
+        return false;
+    }
+
     total_size_ += size;
 
     QString source_path = joinPath(source_dir, item_name);
     QString target_path = joinPath(target_dir, item_name);
 
     pending_tasks_.emplace_back(std::move(source_path), std::move(target_path), is_directory, size);
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
