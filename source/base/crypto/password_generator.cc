@@ -18,10 +18,29 @@
 
 #include "base/crypto/password_generator.h"
 
+#include "base/crypto/random.h"
 #include "base/crypto/secure_string.h"
 
 #include <algorithm>
+#include <limits>
 #include <random>
+
+namespace {
+
+//--------------------------------------------------------------------------------------------------
+// A UniformRandomBitGenerator backed by the cryptographic RNG (OpenSSL RAND_bytes).
+class SecureRandomGenerator
+{
+public:
+    using result_type = quint32;
+
+    static constexpr result_type min() { return 0; }
+    static constexpr result_type max() { return std::numeric_limits<result_type>::max(); }
+
+    result_type operator()() { return Random::number32(); }
+};
+
+} // namespace
 
 const quint32 PasswordGenerator::kDefaultCharacters = UPPER_CASE | LOWER_CASE | DIGITS;
 const qsizetype PasswordGenerator::kDefaultLength = 8;
@@ -70,10 +89,9 @@ SecureString PasswordGenerator::result() const
     if (characters_ & DIGITS)
         table.append(digits);
 
-    std::random_device random_device;
-    std::mt19937 engine(random_device());
+    SecureRandomGenerator generator;
 
-    std::shuffle(table.begin(), table.end(), engine);
+    std::shuffle(table.begin(), table.end(), generator);
 
     std::uniform_int_distribution<> uniform_distance(0, static_cast<int>(table.size() - 1));
 
@@ -81,7 +99,7 @@ SecureString PasswordGenerator::result() const
     result.resize(length_);
 
     for (qsizetype i = 0; i < length_; ++i)
-        result[i] = table[static_cast<size_t>(uniform_distance(engine))];
+        result[i] = table[static_cast<size_t>(uniform_distance(generator))];
 
     return SecureString(std::move(result));
 }
