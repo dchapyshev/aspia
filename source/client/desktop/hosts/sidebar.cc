@@ -364,11 +364,17 @@ void Sidebar::setRouterHostGroups(qint64 router_id, qint64 workspace_id, const Q
     sweep(workspace_item);
 
     Settings settings;
+    QSet<qint64> visited;
     std::function<void(qint64, QTreeWidgetItem*)> apply = [&](qint64 parent_id,
                                                               QTreeWidgetItem* tree_parent)
     {
         for (const Router::Group* group : std::as_const(children_of[parent_id]))
         {
+            // Guard against cycles and duplicate entry_ids in the untrusted group list.
+            if (visited.contains(group->entry_id))
+                continue;
+            visited.insert(group->entry_id);
+
             SidebarRouterGroup* item = existing.value(group->entry_id);
             if (!item)
             {
