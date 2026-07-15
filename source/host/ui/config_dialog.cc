@@ -561,7 +561,6 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
             return;
         }
 
-        db.setRouterEnabled(ui->checkbox_enable_router->isChecked());
         if (ui->checkbox_enable_router->isChecked())
         {
             Address router_address = Address::fromString(
@@ -584,8 +583,13 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
                 return;
             }
 
+            db.setRouterEnabled(true);
             db.setRouterAddress(router_address);
             db.setRouterPublicKey(router_public_key);
+        }
+        else
+        {
+            db.setRouterEnabled(false);
         }
 
         // Update the parameters.

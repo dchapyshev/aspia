@@ -431,7 +431,7 @@ void HostUtils::doMigrate()
 
     if (QFileInfo::exists(host_ipc_file))
     {
-        LOG(INFO) << "Start migration for" << host_key_file;
+        LOG(INFO) << "Start migration for" << host_ipc_file;
 
         QString new_file_name = host_ipc_file + ".bak";
 
