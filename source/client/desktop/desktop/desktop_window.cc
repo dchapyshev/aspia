@@ -364,8 +364,8 @@ void DesktopWindow::onCursorPositionChanged(const proto::cursor::Position& posit
 
     const QSize frame_size = desktop_->frameSize();
 
-    int pos_x = int(double(desktop_->width() * position.x()) / double(frame_size.width()));
-    int pos_y = int(double(desktop_->height() * position.y()) / double(frame_size.height()));
+    int pos_x = int(double(desktop_->width()) * double(position.x()) / double(frame_size.width()));
+    int pos_y = int(double(desktop_->height()) * double(position.y()) / double(frame_size.height()));
 
     desktop_->setCursorPosition(QPoint(pos_x, pos_y));
     desktop_->update();
