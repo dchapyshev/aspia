@@ -923,17 +923,36 @@ void ScreenCapturerPipeWire::handleProcess()
                 if (src_stride <= 0)
                     src_stride = format_size_.width() * kBytesPerPixel;
 
-                const quint8* src = static_cast<const quint8*>(data->data) +
-                    data->chunk->offset + crop_y * src_stride + crop_x * kBytesPerPixel;
+                // The crop region and stride are producer-supplied. Validate that the source rectangle
+                // stays within both the negotiated format and the mapped buffer before indexing, or
+                // libyuv would read out of bounds. Compute in 64-bit and drop the frame on any mismatch.
+                const qint64 crop_w = frame_size.width();
+                const qint64 crop_h = frame_size.height();
+                const qint64 end_offset = static_cast<qint64>(data->chunk->offset) +
+                    (static_cast<qint64>(crop_y) + crop_h - 1) * src_stride +
+                    (static_cast<qint64>(crop_x) + crop_w) * kBytesPerPixel;
 
-                if (swap_red_blue_)
-                    libyuv::ABGRToARGB(src, src_stride, dst, dst_stride,
-                                       frame_size.width(), frame_size.height());
+                if (crop_x < 0 || crop_y < 0 ||
+                    crop_x + crop_w > format_size_.width() ||
+                    crop_y + crop_h > format_size_.height() ||
+                    end_offset > static_cast<qint64>(data->maxsize))
+                {
+                    LOG(ERROR) << "Invalid video crop region, dropping frame";
+                }
                 else
-                    libyuv::ARGBCopy(src, src_stride, dst, dst_stride,
-                                     frame_size.width(), frame_size.height());
+                {
+                    const quint8* src = static_cast<const quint8*>(data->data) +
+                        data->chunk->offset + crop_y * src_stride + crop_x * kBytesPerPixel;
 
-                wrote = true;
+                    if (swap_red_blue_)
+                        libyuv::ABGRToARGB(src, src_stride, dst, dst_stride,
+                                           frame_size.width(), frame_size.height());
+                    else
+                        libyuv::ARGBCopy(src, src_stride, dst, dst_stride,
+                                         frame_size.width(), frame_size.height());
+
+                    wrote = true;
+                }
             }
 
             if (wrote)
