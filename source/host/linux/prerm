@@ -5,3 +5,8 @@ set -e
 if [ "$1" = "remove" ] && [ -d /run/systemd/system ]; then
     systemctl disable --now aspia-host-service.service >/dev/null 2>&1 || true
 fi
+
+# Remove the PAM policy installed by postinst (it is not part of the package file list).
+if [ "$1" = "remove" ]; then
+    rm -f /etc/pam.d/aspia-terminal
+fi

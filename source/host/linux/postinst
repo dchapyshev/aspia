@@ -1,6 +1,11 @@
 #!/bin/sh
 set -e
 
+# Install the Debian/Ubuntu PAM policy (common-auth/common-account) for terminal sessions.
+if [ "$1" = "configure" ]; then
+    install -m 0644 /usr/share/aspia/aspia-terminal.pam /etc/pam.d/aspia-terminal
+fi
+
 # Enable and (re)start the host service directly. Unlike the router/relay the host needs no prior
 # configuration to run, so the service is started right away; restart also refreshes it on upgrade.
 if [ "$1" = "configure" ] && [ -d /run/systemd/system ]; then

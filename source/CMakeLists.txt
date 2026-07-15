@@ -280,18 +280,11 @@ if (LINUX)
         # PAM policy used to validate operating system credentials for terminal sessions. The policy
         # pulls in the distribution's aggregate auth/account stack, which is named differently across
         # families: Debian/Ubuntu use common-auth/common-account, while RHEL/Fedora and SUSE use
-        # system-auth. Pick the matching file for the distribution being built for (DEB is built on
-        # Debian/Ubuntu, RPM on RHEL/Alma).
-        set(ASPIA_PAM_POLICY "host/linux/aspia-terminal.pam")
-        if (EXISTS "/etc/os-release")
-            file(READ "/etc/os-release" ASPIA_OS_RELEASE)
-            if (ASPIA_OS_RELEASE MATCHES "(rhel|fedora|centos|almalinux|rocky|suse|opensuse)")
-                set(ASPIA_PAM_POLICY "host/linux/aspia-terminal-rhel.pam")
-            endif()
-        endif()
-
-        install(FILES ${ASPIA_PAM_POLICY}
-            DESTINATION /etc/pam.d RENAME aspia-terminal COMPONENT host)
+        # system-auth. Ship both variants; each package's maintainer script (postinst/rpm_post) installs
+        # the matching one to /etc/pam.d/aspia-terminal. This picks the policy per package rather than by
+        # the build host's distribution, so both packages can be built on a single machine.
+        install(FILES host/linux/aspia-terminal.pam host/linux/aspia-terminal-rhel.pam
+            DESTINATION share/aspia COMPONENT host)
 
         # The host runs without prior configuration, so the maintainer scripts enable and start the
         # systemd service directly (and restart it on upgrade) rather than via --install.

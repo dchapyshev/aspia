@@ -1,3 +1,8 @@
+# Remove the PAM policy installed by %post (it is not part of the package file list) on final removal.
+if [ "$1" = "0" ]; then
+    rm -f /etc/pam.d/aspia-terminal
+fi
+
 # Stop and disable the service only on final removal ($1=0), not on upgrade ($1=1).
 if [ "$1" = "0" ] && [ -d /run/systemd/system ]; then
     systemctl disable --now aspia-host-service.service >/dev/null 2>&1 || true
