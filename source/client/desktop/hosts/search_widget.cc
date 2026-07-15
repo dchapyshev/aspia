@@ -151,7 +151,7 @@ SearchWidget::RouterItem::RouterItem(qint64 router_id, const Router::Host& host,
     setText(kColumnGroup, source_label);
     setToolTip(kColumnGroup, source_label);
     setText(kColumnComment, single_line_comment);
-    setToolTip(kColumnComment, host.comment);
+    setToolTip(kColumnComment, host.comment.toHtmlEscaped());
 }
 
 class SearchWidget::HighlightDelegate final : public QStyledItemDelegate

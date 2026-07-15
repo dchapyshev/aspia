@@ -74,6 +74,7 @@ public:
         if (!outgoing && !source.isEmpty())
         {
             QLabel* name = new QLabel(source, this);
+            name->setTextFormat(Qt::PlainText);
             QFont name_font = font();
             name_font.setWeight(QFont::Medium);
             name->setFont(name_font);
@@ -86,6 +87,7 @@ public:
         }
 
         QLabel* body = new QLabel(text, this);
+        body->setTextFormat(Qt::PlainText);
         body->setWordWrap(true);
 
         QPalette body_palette = body->palette();
@@ -232,6 +234,7 @@ ChatView::ChatView(QWidget* parent)
     input_row->addWidget(input_bar);
 
     status_ = new Label(QString(), Label::Role::CAPTION, this);
+    status_->setTextFormat(Qt::PlainText);
     status_->setAlignment(Qt::AlignCenter);
     // Reserve one line so the status text appears and disappears without shifting the messages.
     status_->setMinimumHeight(QFontMetrics(status_->font()).height());
@@ -285,6 +288,7 @@ void ChatView::addMessage(const QString& source, const QString& text, bool outgo
 void ChatView::addStatus(const QString& text)
 {
     Label* status = new Label(text, Label::Role::CAPTION);
+    status->setTextFormat(Qt::PlainText);
     status->setAlignment(Qt::AlignCenter);
     status->setWordWrap(true);
 

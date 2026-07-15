@@ -29,6 +29,7 @@ ChatStatusMessage::ChatStatusMessage(QWidget* parent)
       ui(std::make_unique<Ui::ChatStatusMessage>())
 {
     ui->setupUi(this);
+    ui->label_message->setTextFormat(Qt::PlainText);
 }
 
 //--------------------------------------------------------------------------------------------------

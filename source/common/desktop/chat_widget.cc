@@ -138,6 +138,8 @@ ChatWidget::ChatWidget(QWidget* parent)
     LOG(INFO) << "Ctor";
 
     ui->setupUi(this);
+
+    ui->label_status->setTextFormat(Qt::PlainText);
     ui->edit_message->document()->setDocumentMargin(2);
     ui->edit_message->setFixedHeight(kEditMessageMinHeight);
     ui->edit_message->installEventFilter(this);
