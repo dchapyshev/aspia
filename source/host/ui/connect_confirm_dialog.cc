@@ -54,8 +54,10 @@ ConnectConfirmDialog::ConnectConfirmDialog(
         time_seconds_ = 60;
     }
 
-    QString user_name = "<b>" + QString::fromStdString(request.user_name()) + "</b>";
-    QString computer_name = "<b>" + QString::fromStdString(request.computer_name()) + "</b>";
+    QString user_name =
+        "<b>" + QString::fromStdString(request.user_name()).toHtmlEscaped() + "</b>";
+    QString computer_name =
+        "<b>" + QString::fromStdString(request.computer_name()).toHtmlEscaped() + "</b>";
     QString session_name = "<b>" + sessionName(request.session_type()) + "</b>";
 
     message_ = tr("User %1 (%2) is trying to connect to your computer with %3 session type.")
