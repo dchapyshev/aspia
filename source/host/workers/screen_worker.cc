@@ -710,6 +710,7 @@ void ScreenWorker::onCaptureScreen()
     // did not come up, poll at a low rate like the creation path does.
     if (!screen_capturer_)
     {
+        capture_scheduler_.nextCaptureDelay();
         capture_timer_->start(250);
         return;
     }

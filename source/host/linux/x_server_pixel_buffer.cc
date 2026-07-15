@@ -428,12 +428,10 @@ void XServerPixelBuffer::synchronize()
 //--------------------------------------------------------------------------------------------------
 bool XServerPixelBuffer::captureRect(const QRect& rect, Frame* frame)
 {
-    if (rect.left() < 0 || rect.top() < 0 ||
-        rect.right() >= window_rect_.width() || rect.bottom() >= window_rect_.height())
-    {
-        LOG(WARNING) << "Rect" << rect << "exceeds window buffer" << window_rect_.size();
-        return false;
-    }
+    const QRect capture_rect =
+        rect.intersected(QRect(0, 0, window_rect_.width(), window_rect_.height()));
+    if (capture_rect.isEmpty())
+        return true;
 
     XImage* image;
     quint8* data;
@@ -442,14 +440,14 @@ bool XServerPixelBuffer::captureRect(const QRect& rect, Frame* frame)
     {
         if (shm_pixmap_)
         {
-            XCopyArea(display_, window_, shm_pixmap_, shm_gc_, rect.left(), rect.top(),
-                      rect.width(), rect.height(), rect.left(), rect.top());
+            XCopyArea(display_, window_, shm_pixmap_, shm_gc_, capture_rect.left(), capture_rect.top(),
+                      capture_rect.width(), capture_rect.height(), capture_rect.left(), capture_rect.top());
             XSync(display_, X11_False);
         }
 
         image = x_shm_image_;
-        data = reinterpret_cast<uint8_t*>(image->data) + rect.top() * image->bytes_per_line +
-            rect.left() * image->bits_per_pixel / 8;
+        data = reinterpret_cast<uint8_t*>(image->data) + capture_rect.top() * image->bytes_per_line +
+            capture_rect.left() * image->bits_per_pixel / 8;
 
     }
     else
@@ -457,8 +455,8 @@ bool XServerPixelBuffer::captureRect(const QRect& rect, Frame* frame)
         if (x_image_)
         XDestroyImage(x_image_);
 
-        x_image_ = XGetImage(display_, window_, rect.left(), rect.top(), rect.width(), rect.height(),
-                             AllPlanes, ZPixmap);
+        x_image_ = XGetImage(display_, window_, capture_rect.left(), capture_rect.top(),
+                             capture_rect.width(), capture_rect.height(), AllPlanes, ZPixmap);
         if (!x_image_)
             return false;
 
@@ -468,11 +466,11 @@ bool XServerPixelBuffer::captureRect(const QRect& rect, Frame* frame)
 
     if (isXImageRGBFormat(image))
     {
-        fastBlit(image, data, rect, frame);
+        fastBlit(image, data, capture_rect, frame);
     }
     else
     {
-        slowBlit(image, data, rect, frame);
+        slowBlit(image, data, capture_rect, frame);
     }
 
     return true;
