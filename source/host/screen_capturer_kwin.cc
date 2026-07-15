@@ -844,8 +844,7 @@ bool ScreenCapturerKwin::findCursorPlane(quint32* fb_id, QSize* size, QPoint* po
                 if (size)
                     *size = QSize(static_cast<int>(fb->width), static_cast<int>(fb->height));
                 if (position)
-                    *position = QPoint(static_cast<int>(plane->crtc_x),
-                                       static_cast<int>(plane->crtc_y));
+                    *position = QPoint(static_cast<int>(plane->crtc_x), static_cast<int>(plane->crtc_y));
                 if (crtc_width)
                 {
                     // Physical resolution of the cursor's CRTC, to derive the output scale.
@@ -883,7 +882,10 @@ bool ScreenCapturerKwin::findCursorPlane(quint32* fb_id, QSize* size, QPoint* po
                 found = true;
             }
             if (fb)
+            {
+                closeFbHandles(drm_fd_, fb);
                 LibDrm::modeFreeFB2(fb);
+            }
         }
 
         LibDrm::modeFreePlane(plane);
