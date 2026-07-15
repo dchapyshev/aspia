@@ -24,6 +24,13 @@
 #include "proto/peer.h"
 #include "proto/terminal.h"
 
+namespace {
+
+// Upper bound on the decompressed size of a single terminal-output message.
+const qint64 kMaxTerminalOutputSize = 32 * 1024 * 1024; // 32 MB.
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 ClientTerminal::ClientTerminal(QObject* parent)
     : Client(parent),
@@ -84,7 +91,10 @@ void ClientTerminal::onMessageReceived(quint8 /* channel_id */, const QByteArray
     }
 
     if (message.has_data())
-        emit sig_outputReceived(output_decompressor_->decompress(message.data().data()));
+    {
+        emit sig_outputReceived(
+            output_decompressor_->decompress(message.data().data(), kMaxTerminalOutputSize));
+    }
 
     if (message.has_result())
         emit sig_resultReceived(message.result().code());

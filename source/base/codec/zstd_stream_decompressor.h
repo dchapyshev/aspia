@@ -32,7 +32,7 @@ public:
     ZstdStreamDecompressor();
     ~ZstdStreamDecompressor();
 
-    QByteArray decompress(std::string_view source);
+    QByteArray decompress(std::string_view source, qint64 max_output_size = 0);
 
 private:
     ScopedZstdDStream stream_;

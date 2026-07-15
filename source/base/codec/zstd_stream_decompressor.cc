@@ -32,7 +32,7 @@ ZstdStreamDecompressor::ZstdStreamDecompressor()
 ZstdStreamDecompressor::~ZstdStreamDecompressor() = default;
 
 //--------------------------------------------------------------------------------------------------
-QByteArray ZstdStreamDecompressor::decompress(std::string_view source)
+QByteArray ZstdStreamDecompressor::decompress(std::string_view source, qint64 max_output_size)
 {
     ZSTD_inBuffer input;
     input.src = source.data();
@@ -56,6 +56,13 @@ QByteArray ZstdStreamDecompressor::decompress(std::string_view source)
         }
 
         result.append(buffer_.data(), static_cast<int>(output.pos));
+
+        if (max_output_size != 0 && result.size() > max_output_size)
+        {
+            LOG(ERROR) << "Decompressed output exceeds the limit of" << max_output_size
+                       << "bytes, aborting";
+            return QByteArray();
+        }
     }
 
     return result;
