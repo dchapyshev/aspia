@@ -643,6 +643,14 @@ OSStatus AudioOutputMac::implOutConverterProc(UInt32* number_data_packets, Audio
 {
     DCHECK(data->mNumberBuffers == 1);
 
+    const UInt32 channels = desired_format_.mChannelsPerFrame;
+    if (channels != 0)
+    {
+        const UInt32 max_packets = kPlayBufferSizeInSamples / channels;
+        if (*number_data_packets > max_packets)
+            *number_data_packets = max_packets;
+    }
+
     PaRingBufferSize num_samples = *number_data_packets * desired_format_.mChannelsPerFrame;
 
     data->mBuffers->mNumberChannels = desired_format_.mChannelsPerFrame;
