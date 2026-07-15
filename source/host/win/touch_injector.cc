@@ -189,6 +189,12 @@ void TouchInjector::addNewTouchPoints(const proto::input::TouchEvent& event)
 
     for (const proto::input::TouchEventPoint& touch_point : event.touch_points())
     {
+        if (!touches_in_contact_.contains(touch_point.id()) &&
+            touches_in_contact_.size() >= static_cast<int>(kMaxSimultaneousTouchCount))
+        {
+            continue;
+        }
+
         OWN_POINTER_TOUCH_INFO pointer_touch_info;
         memset(&pointer_touch_info, 0, sizeof(pointer_touch_info));
 
@@ -216,7 +222,11 @@ void TouchInjector::moveTouchPoints(const proto::input::TouchEvent& event)
 
     for (const proto::input::TouchEventPoint& touch_point : event.touch_points())
     {
-        OWN_POINTER_TOUCH_INFO* pointer_touch_info = &touches_in_contact_[touch_point.id()];
+        auto it = touches_in_contact_.find(touch_point.id());
+        if (it == touches_in_contact_.end())
+            continue;
+
+        OWN_POINTER_TOUCH_INFO* pointer_touch_info = &it.value();
         memset(pointer_touch_info, 0, sizeof(*pointer_touch_info));
 
         pointer_touch_info->pointerInfo.pointerFlags =
