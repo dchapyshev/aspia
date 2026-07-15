@@ -71,7 +71,8 @@ void AudioOutput::onDataRequest(qint16* audio_samples, size_t audio_samples_coun
         size_t num_bytes = need_more_data_cb_(audio_samples + (i * kSamplesPer10ms), kBytesPer10ms);
         if (!num_bytes)
         {
-            memset(audio_samples, 0, audio_samples_count * sizeof(qint16));
+            memset(audio_samples + (i * kSamplesPer10ms), 0,
+                   (audio_samples_count - i * kSamplesPer10ms) * sizeof(qint16));
             return;
         }
 
