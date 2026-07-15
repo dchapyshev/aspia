@@ -301,6 +301,8 @@ void Client::onTcpConnected()
 //--------------------------------------------------------------------------------------------------
 void Client::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
 {
+    clearAttempts();
+
     // Remove this after support for versions below 3.0.0 ends.
     if (kMinimumSupportedVersion < kVersion_3_0_0)
     {
@@ -398,7 +400,8 @@ void Client::addAndStart(UdpAttempt* attempt)
     connect(attempt, &UdpAttempt::sig_failed, this, &Client::onAttemptError);
     connect(attempt, &UdpAttempt::sig_message, this, [this](const QByteArray& buffer)
     {
-        tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, buffer);
+        if (tcp_channel_)
+            tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, buffer);
     });
 
     attempts_.emplace_back(attempt);
