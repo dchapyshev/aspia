@@ -30,6 +30,12 @@
 #include "proto/desktop_screen.h"
 #include "proto/desktop_video.h"
 
+namespace {
+
+const int kMaxScreenSize = std::numeric_limits<qint16>::max();
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 DesktopClient::DesktopClient(TcpChannel* tcp_channel, QObject* parent)
     : Client(tcp_channel, parent)
@@ -154,7 +160,8 @@ void DesktopClient::handleControl(const QByteArray& buffer)
 
         // The initial preferred size arrives in the config; later PreferredSize messages take over.
         if (preferred_size_.isEmpty() && config.has_preferred_size() &&
-            config.preferred_size().width() > 0 && config.preferred_size().height() > 0)
+            config.preferred_size().width() > 0 && config.preferred_size().width() <= kMaxScreenSize &&
+            config.preferred_size().height() > 0 && config.preferred_size().height() <= kMaxScreenSize)
         {
             preferred_size_.setWidth(config.preferred_size().width());
             preferred_size_.setHeight(config.preferred_size().height());
@@ -184,7 +191,6 @@ void DesktopClient::handleVideoControl(const QByteArray& buffer)
     {
         const proto::video::PreferredSize& size = message.preferred_size();
 
-        static const int kMaxScreenSize = std::numeric_limits<qint16>::max();
         if (size.width() < 0 || size.width() > kMaxScreenSize ||
             size.height() < 0 || size.height() > kMaxScreenSize)
         {
