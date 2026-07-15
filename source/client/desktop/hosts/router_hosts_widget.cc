@@ -51,6 +51,9 @@
 
 namespace {
 
+// Upper sanity bound on the router-reported host count, used only for pagination.
+const qint64 kMaxHostCount = 500000;
+
 enum HostColumn
 {
     HOST_COLUMN_HOST_ID = 0,
@@ -571,7 +574,7 @@ void RouterHostsWidget::onHostListReceived(const Router::HostList& list)
         target->setWorkspaceName(workspaceNameById(host.workspace_id));
     }
 
-    hosts_total_count_ = list.total_count;
+    hosts_total_count_ = qMin(list.total_count, kMaxHostCount);
     updateHostsPagination();
 
     emit sig_currentChanged();
