@@ -52,11 +52,6 @@
      </column>
      <column>
       <property name="text">
-       <string>CPU</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
        <string>Memory</string>
       </property>
      </column>

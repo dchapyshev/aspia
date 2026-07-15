@@ -22,8 +22,6 @@
 #include <QProcessEnvironment>
 #include <QStorageInfo>
 
-#include <thread>
-
 #include "base/edid.h"
 #include "base/event_enumerator.h"
 #include "base/license_reader.h"
@@ -888,10 +886,7 @@ void fillProcessesInfo(proto::system_info::SystemInfo* system_info)
     if (!process_monitor)
         return;
 
-    process_monitor->processes(true);
-    std::this_thread::sleep_for(std::chrono::milliseconds(500));
-
-    ProcessMonitor::ProcessMap map = process_monitor->processes(false);
+    const ProcessMonitor::ProcessMap& map = process_monitor->processes(true);
     for (auto it = map.cbegin(), it_end = map.cend(); it != it_end; ++it)
     {
         proto::system_info::Processes::Process* process_item =
@@ -903,7 +898,6 @@ void fillProcessesInfo(proto::system_info::SystemInfo* system_info)
         process_item->set_sid(process.session_id);
         process_item->set_user(process.user_name.toStdString());
         process_item->set_path(process.file_path.toStdString());
-        process_item->set_cpu(process.cpu_ratio);
         process_item->set_memory(process.mem_private_working_set);
     }
 }

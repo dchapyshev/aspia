@@ -50,15 +50,9 @@ public:
         {
             const ProcessTreeItem* other_item =
                 static_cast<const ProcessTreeItem*>(&other);
-            return process_.cpu() < other_item->process_.cpu();
-        }
-        else if (column == 3)
-        {
-            const ProcessTreeItem* other_item =
-                static_cast<const ProcessTreeItem*>(&other);
             return process_.memory() < other_item->process_.memory();
         }
-        else if (column == 4)
+        else if (column == 3)
         {
             const ProcessTreeItem* other_item =
                 static_cast<const ProcessTreeItem*>(&other);
@@ -108,10 +102,9 @@ SysInfoWidgetProcesses::SysInfoWidgetProcesses(QWidget* parent)
 
     ui->tree->setColumnWidth(0, 150);
     ui->tree->setColumnWidth(1, 50);
-    ui->tree->setColumnWidth(2, 40);
-    ui->tree->setColumnWidth(3, 70);
-    ui->tree->setColumnWidth(4, 60);
-    ui->tree->setColumnWidth(5, 110);
+    ui->tree->setColumnWidth(2, 70);
+    ui->tree->setColumnWidth(3, 60);
+    ui->tree->setColumnWidth(4, 110);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -165,11 +158,10 @@ void SysInfoWidgetProcesses::setSystemInfo(const proto::system_info::SystemInfo&
 
         item->setText(0, process_name);
         item->setText(1, QString::number(process.pid()));
-        item->setText(2, QString("%1%").arg(process.cpu()));
-        item->setText(3, Formatter::sizeToString(process.memory()));
-        item->setText(4, QString::number(process.sid()));
-        item->setText(5, user_name);
-        item->setText(6, QString::fromStdString(process.path()));
+        item->setText(2, Formatter::sizeToString(process.memory()));
+        item->setText(3, QString::number(process.sid()));
+        item->setText(4, user_name);
+        item->setText(5, QString::fromStdString(process.path()));
 
         ui->tree->addTopLevelItem(item);
     }

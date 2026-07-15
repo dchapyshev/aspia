@@ -543,8 +543,7 @@ message Processes
         uint32 sid   = 3;
         string user  = 4;
         string path  = 5;
-        int32 cpu    = 6;
-        int64 memory = 7;
+        int64 memory = 6;
     }
 
     repeated Process process = 1;
