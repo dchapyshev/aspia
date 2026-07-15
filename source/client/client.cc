@@ -46,6 +46,7 @@ auto g_statusType = qRegisterMetaType<Client::Status>();
 static const int kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
 static const int kWriteBufferSize = 2 * 1024 * 1024; // 2 Mb.
 static const int kReceiveRateIntervalMs = 1000;
+static const size_t kMaxUdpAttempts = 16;
 
 } // namespace
 
@@ -392,6 +393,14 @@ void Client::addAndStart(UdpAttempt* attempt)
     if (!attempt->isValid())
     {
         CLOG(ERROR) << "Failed to create UDP attempt";
+        attempt->deleteLater();
+        return;
+    }
+
+    if (findAttempt(attempt->requestId()) || attempts_.size() >= kMaxUdpAttempts)
+    {
+        CLOG(WARNING) << "Ignoring UDP attempt" << attempt->requestId()
+                      << "(duplicate request id or attempt limit reached)";
         attempt->deleteLater();
         return;
     }
