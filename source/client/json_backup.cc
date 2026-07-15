@@ -25,6 +25,7 @@
 #include <QJsonObject>
 #include <QJsonParseError>
 #include <QSaveFile>
+#include <QSet>
 
 #include <memory>
 #include <optional>
@@ -232,7 +233,11 @@ void importGroups(const QJsonArray& groups_array,
 
     group_id_map->insert(0, 0);
 
-    // BFS from root so a child group is never imported before its parent.
+    // BFS from root so a child group is never imported before its parent. |visited_ids| guards
+    // against cycles and duplicate ids in the untrusted backup.
+    QSet<qint64> visited_ids;
+    visited_ids.insert(0);
+
     QList<qint64> queue;
     queue.append(0);
 
@@ -248,6 +253,10 @@ void importGroups(const QJsonArray& groups_array,
             qint64 old_parent_id = 0;
             if (!readGroupIds(group_object, &old_id, &old_parent_id))
                 continue;
+
+            if (visited_ids.contains(old_id))
+                continue;
+            visited_ids.insert(old_id);
 
             std::optional<QString> name_decrypted = decryptFromHex(cryptor, group_object.value("name"));
             std::optional<QString> comment = decryptFromHex(cryptor, group_object.value("comment"));
