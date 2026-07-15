@@ -428,8 +428,12 @@ void XServerPixelBuffer::synchronize()
 //--------------------------------------------------------------------------------------------------
 bool XServerPixelBuffer::captureRect(const QRect& rect, Frame* frame)
 {
-    DCHECK_LE(rect.right(), window_rect_.width());
-    DCHECK_LE(rect.bottom(), window_rect_.height());
+    if (rect.left() < 0 || rect.top() < 0 ||
+        rect.right() >= window_rect_.width() || rect.bottom() >= window_rect_.height())
+    {
+        LOG(WARNING) << "Rect" << rect << "exceeds window buffer" << window_rect_.size();
+        return false;
+    }
 
     XImage* image;
     quint8* data;
