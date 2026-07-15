@@ -30,7 +30,7 @@
 
 namespace {
 
-const quint32 kMaxMessageSize = 7 * 1024 * 1024; // 7 MB
+const quint32 kMaxMessageSize = 5 * 1024 * 1024; // 5 MB
 const int kUpdateIntervalMs = 10;
 const int kMaxPeers = 1;
 const int kChannelCount = 255;

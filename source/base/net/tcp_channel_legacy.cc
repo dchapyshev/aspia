@@ -831,9 +831,10 @@ void TcpChannelLegacy::doReadSize()
         {
             size_t message_size = *size;
 
-            if (message_size > kMaxMessageSize)
+            const size_t max_size = authenticated_ ? kMaxMessageSize : kMaxAuthMessageSize;
+            if (message_size > max_size)
             {
-                CLOG(ERROR) << "Too big incoming message:" << message_size;
+                CLOG(ERROR) << "Too big incoming message:" << message_size << "(limit:" << max_size << ")";
                 onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
                 return;
             }
@@ -933,9 +934,11 @@ void TcpChannelLegacy::doReadServiceHeader()
         addRxBytes(bytes_transferred);
 
         ServiceHeader* header = reinterpret_cast<ServiceHeader*>(io_->read_buffer.data());
-        if (header->length > kMaxMessageSize)
+
+        const size_t max_size = authenticated_ ? kMaxMessageSize : kMaxAuthMessageSize;
+        if (header->length > max_size)
         {
-            CLOG(INFO) << "Too big service message:" << header->length;
+            CLOG(INFO) << "Too big service message:" << header->length << "(limit:" << max_size << ")";
             onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
             return;
         }
