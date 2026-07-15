@@ -19,7 +19,7 @@
 #ifndef HOST_SERVICE_H
 #define HOST_SERVICE_H
 
-#include <QTime>
+#include <QElapsedTimer>
 
 #include "base/scoped_qpointer.h"
 #include "base/core_service.h"
@@ -87,7 +87,7 @@ private:
     struct PendingConfirmation
     {
         TcpChannel* tcp_channel = nullptr;
-        QTime start_time;
+        QElapsedTimer start_time;
         QString stun_host;
         quint16 stun_port = 0;
     };

@@ -396,7 +396,7 @@ void Service::onNewDirectConnection()
     {
         PendingConfirmation pending;
         pending.tcp_channel = tcp_server_->nextReadyConnection();
-        pending.start_time = QTime::currentTime();
+        pending.start_time.start();
         startConfirmation(pending);
     }
 }
@@ -415,7 +415,7 @@ void Service::onNewRelayConnection()
 
         PendingConfirmation pending;
         pending.tcp_channel = connection->tcp_channel;
-        pending.start_time = QTime::currentTime();
+        pending.start_time.start();
         pending.stun_host = connection->stun_host;
         pending.stun_port = connection->stun_port;
         startConfirmation(pending);
@@ -566,15 +566,11 @@ void Service::onFileDownloaderProgress(int percentage)
 //--------------------------------------------------------------------------------------------------
 void Service::onRepeatedTasks()
 {
-    QTime current_time = QTime::currentTime();
+    constexpr qint64 kConfirmationTimeoutMs = 60 * 1000;
 
-    // Check if there are any sessions that have not been confirmed for more than 60 seconds and
-    // delete them.
     for (auto it = pending_confirmation_.begin(); it != pending_confirmation_.end();)
     {
-        QTime time = it->start_time;
-
-        if (time.secsTo(current_time) > 60)
+        if (it->start_time.hasExpired(kConfirmationTimeoutMs))
         {
             TcpChannel* tcp_channel = it->tcp_channel;
             tcp_channel->deleteLater();
