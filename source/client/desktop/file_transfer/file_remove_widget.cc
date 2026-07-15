@@ -38,6 +38,8 @@ FileRemoveWidget::FileRemoveWidget(QWidget* parent)
     LOG(INFO) << "Ctor";
 
     ui->setupUi(this);
+    ui->label_task->setTextFormat(Qt::PlainText);
+    ui->label_current_item->setTextFormat(Qt::PlainText);
 
     connect(ui->button_cancel, &QPushButton::clicked, this, &FileRemoveWidget::requestStop);
 
@@ -170,6 +172,7 @@ void FileRemoveWidget::errorOccurred(const QString& path,
 
     dialog->setWindowTitle(tr("Warning"));
     dialog->setIcon(MsgBox::Warning);
+    dialog->setTextFormat(Qt::PlainText);
     dialog->setText(message);
 
     QAbstractButton* skip_button = nullptr;

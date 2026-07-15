@@ -38,6 +38,10 @@ FileTransferWidget::FileTransferWidget(QWidget* parent)
 
     ui->setupUi(this);
 
+    ui->label_task->setTextFormat(Qt::PlainText);
+    ui->label_source->setTextFormat(Qt::PlainText);
+    ui->label_target->setTextFormat(Qt::PlainText);
+    ui->label_speed->setTextFormat(Qt::PlainText);
     ui->progress_total->setRange(0, 0);
     ui->progress_current->setRange(0, 0);
 
@@ -186,6 +190,7 @@ void FileTransferWidget::errorOccurred(const FileTransfer::Error& error)
 
     dialog->setWindowTitle(tr("Warning"));
     dialog->setIcon(MsgBox::Warning);
+    dialog->setTextFormat(Qt::PlainText);
     dialog->setText(errorToMessage(error));
 
     QAbstractButton* skip_button = nullptr;
