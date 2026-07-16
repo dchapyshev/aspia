@@ -47,6 +47,7 @@
 #include "client/desktop/hosts/router_hosts_widget.h"
 #include "client/desktop/hosts/router_relays_widget.h"
 #include "client/desktop/hosts/router_status_widget.h"
+#include "client/desktop/hosts/router_temp_hosts_widget.h"
 #include "client/desktop/hosts/router_users_widget.h"
 #include "client/desktop/hosts/router_workspace_dialog.h"
 #include "client/desktop/hosts/search_widget.h"
@@ -120,6 +121,7 @@ HostsTab::HostsTab(QWidget* parent)
     local_group_widget_ = new LocalGroupWidget(this);
     router_group_widget_ = new RouterGroupWidget(this);
     router_hosts_widget_ = new RouterHostsWidget(this);
+    router_temp_hosts_widget_ = new RouterTempHostsWidget(this);
     router_users_widget_ = new RouterUsersWidget(this);
     router_clients_widget_ = new RouterClientsWidget(this);
     router_relays_widget_ = new RouterRelaysWidget(this);
@@ -129,6 +131,7 @@ HostsTab::HostsTab(QWidget* parent)
     ui->content_stack->addWidget(local_group_widget_);
     ui->content_stack->addWidget(router_group_widget_);
     ui->content_stack->addWidget(router_hosts_widget_);
+    ui->content_stack->addWidget(router_temp_hosts_widget_);
     ui->content_stack->addWidget(router_users_widget_);
     ui->content_stack->addWidget(router_clients_widget_);
     ui->content_stack->addWidget(router_relays_widget_);
@@ -142,6 +145,9 @@ HostsTab::HostsTab(QWidget* parent)
             this, &HostsTab::updateActionsState);
     connect(router_hosts_widget_, &RouterHostsWidget::sig_contextMenu,
             this, &HostsTab::onHostContextMenu);
+
+    connect(router_temp_hosts_widget_, &RouterTempHostsWidget::sig_currentChanged,
+            this, &HostsTab::updateActionsState);
 
     connect(router_users_widget_, &RouterUsersWidget::sig_currentChanged,
             this, &HostsTab::updateActionsState);
@@ -509,6 +515,18 @@ void HostsTab::onSwitchContent(SidebarItem::Type type)
             auto* hosts_item = static_cast<SidebarRouterHosts*>(sidebar_item);
             switchContent(router_hosts_widget_);
             router_hosts_widget_->showRouter(hosts_item->routerId());
+        }
+        break;
+
+        case SidebarItem::ROUTER_TEMP_HOSTS:
+        {
+            SidebarItem* sidebar_item = ui->sidebar->currentItem();
+            if (!sidebar_item || sidebar_item->itemType() != SidebarItem::ROUTER_TEMP_HOSTS)
+                break;
+
+            auto* temp_hosts_item = static_cast<SidebarRouterTempHosts*>(sidebar_item);
+            switchContent(router_temp_hosts_widget_);
+            router_temp_hosts_widget_->showRouter(temp_hosts_item->routerId());
         }
         break;
 

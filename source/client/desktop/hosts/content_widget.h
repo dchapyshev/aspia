@@ -38,7 +38,8 @@ public:
         ROUTER_USERS,
         ROUTER_CLIENTS,
         ROUTER_RELAYS,
-        ROUTER_HOSTS
+        ROUTER_HOSTS,
+        ROUTER_TEMP_HOSTS
     };
 
     // Checkable action that carries a tree-view column index. Content widgets use it to build

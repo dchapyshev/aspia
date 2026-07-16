@@ -53,6 +53,8 @@ collect_sources(SOURCE_CLIENT_CORE_DESKTOP_HOSTS_TAB
     router_status_widget.cc
     router_status_widget.h
     router_status_widget.ui
+    router_temp_hosts_widget.cc
+    router_temp_hosts_widget.h
     router_user_dialog.cc
     router_user_dialog.h
     router_user_dialog.ui
