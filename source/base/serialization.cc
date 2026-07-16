@@ -30,6 +30,9 @@ QByteArray serialize(const google::protobuf::MessageLite& message)
     if (!size)
         return QByteArray();
 
+    if (size > static_cast<size_t>(std::numeric_limits<qsizetype>::max()))
+        return QByteArray();
+
     QByteArray buffer(static_cast<qsizetype>(size), Qt::Uninitialized);
     message.SerializeWithCachedSizesToArray(reinterpret_cast<quint8*>(buffer.data()));
     return buffer;

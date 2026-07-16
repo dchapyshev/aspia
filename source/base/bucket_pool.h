@@ -20,6 +20,7 @@
 #define BASE_BUCKET_POOL_H
 
 #include <array>
+#include <cstdint>
 #include <cstdlib>
 
 // Bucket descriptor for BucketPool. Pairs up a bucket size with its cache cap. |size| is the
@@ -79,6 +80,10 @@ public:
 
     void* allocate(size_t user_size)
     {
+        // Guard against size_t overflow before adding the header size.
+        if (user_size > SIZE_MAX - sizeof(AllocHeader))
+            return nullptr;
+
         const size_t total = sizeof(AllocHeader) + user_size;
         const size_t bucket = findBucket(total);
 

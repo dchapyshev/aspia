@@ -25,6 +25,7 @@
 
 #include <google/protobuf/message_lite.h>
 
+#include <limits>
 #include <tuple>
 
 namespace proto::peer {
@@ -68,20 +69,22 @@ public:
 
     const QByteArray& serialize(const google::protobuf::MessageLite& message) const
     {
-        const int size = static_cast<int>(message.ByteSizeLong());
-        if (!size)
+        const size_t size = message.ByteSizeLong();
+        if (!size || size > static_cast<size_t>(std::numeric_limits<qsizetype>::max()))
         {
             static QByteArray kEmptyBuffer;
             return kEmptyBuffer;
         }
 
+        const qsizetype target_size = static_cast<qsizetype>(size);
+
         QByteArray& buffer = buffers_[buffer_index_];
         buffer_index_ = (buffer_index_ + 1) % kBufferCount;
 
-        if (buffer.capacity() < size)
-            buffer.reserve(size);
+        if (buffer.capacity() < target_size)
+            buffer.reserve(target_size);
 
-        buffer.resize(size);
+        buffer.resize(target_size);
         message.SerializeWithCachedSizesToArray(reinterpret_cast<quint8*>(buffer.data()));
 
         return buffer;
