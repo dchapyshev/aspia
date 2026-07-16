@@ -21,6 +21,9 @@
 
 #include <QByteArray>
 
+#include <limits>
+#include <type_traits>
+
 class Random
 {
 public:
@@ -35,6 +38,29 @@ public:
     // Generates a random number.
     static quint32 number32();
     static quint64 number64();
+
+    // A UniformRandomBitGenerator backed by the cryptographic RNG, usable with std distributions
+    // and algorithms (std::shuffle, std::uniform_int_distribution). |T| is the unsigned integer
+    // type produced per invocation.
+    template <typename T>
+    class Generator
+    {
+    public:
+        using result_type = T;
+
+        static_assert(std::is_unsigned_v<result_type>,
+                      "Random::Generator result_type must be an unsigned integer type");
+
+        static constexpr result_type min() { return 0; }
+        static constexpr result_type max() { return std::numeric_limits<result_type>::max(); }
+
+        result_type operator()()
+        {
+            result_type value = 0;
+            Random::fillBuffer(&value, sizeof(value));
+            return value;
+        }
+    };
 
 private:
     Q_DISABLE_COPY_MOVE(Random)

@@ -22,25 +22,7 @@
 #include "base/crypto/secure_string.h"
 
 #include <algorithm>
-#include <limits>
 #include <random>
-
-namespace {
-
-//--------------------------------------------------------------------------------------------------
-// A UniformRandomBitGenerator backed by the cryptographic RNG (OpenSSL RAND_bytes).
-class SecureRandomGenerator
-{
-public:
-    using result_type = quint32;
-
-    static constexpr result_type min() { return 0; }
-    static constexpr result_type max() { return std::numeric_limits<result_type>::max(); }
-
-    result_type operator()() { return Random::number32(); }
-};
-
-} // namespace
 
 const quint32 PasswordGenerator::kDefaultCharacters = UPPER_CASE | LOWER_CASE | DIGITS;
 const qsizetype PasswordGenerator::kDefaultLength = 8;
@@ -89,7 +71,7 @@ SecureString PasswordGenerator::result() const
     if (characters_ & DIGITS)
         table.append(digits);
 
-    SecureRandomGenerator generator;
+    Random::Generator<quint32> generator;
 
     std::shuffle(table.begin(), table.end(), generator);
 
