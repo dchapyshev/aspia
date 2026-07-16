@@ -21,7 +21,6 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/crypto/generic_hash.h"
-#include "base/crypto/random.h"
 #include "proto/router_constants.h"
 #include "proto/router_legacy_host.h"
 #include "router/database.h"
@@ -29,7 +28,6 @@
 
 namespace {
 
-const size_t kHostKeySize = 512;
 constexpr qsizetype kMaxHostIdsPerSession = 32;
 
 } // namespace
@@ -115,34 +113,19 @@ void HostLegacy::readHostIdRequest(const proto::router::legacy::HostIdRequest& h
 
     proto::router::legacy::RouterToPeer message;
     proto::router::legacy::HostIdResponse* host_id_response = message.mutable_host_id_response();
-    QByteArray key_hash;
 
-    if (host_id_request.type() == proto::router::legacy::HostIdRequest::NEW_ID)
+    // Legacy hosts are no longer issued new ids; they may only present an existing one. Reject a
+    // NEW_ID (or any non-existing) request so no host row is ever created for a legacy peer.
+    if (host_id_request.type() != proto::router::legacy::HostIdRequest::EXISTING_ID)
     {
-        // Generate new key.
-        std::string key = Random::string(kHostKeySize);
-
-        // Calculate hash for key.
-        key_hash = GenericHash::hash(GenericHash::Type::BLAKE2b512, key);
-
-        if (!database.addHost(key_hash))
-        {
-            CLOG(ERROR) << "Unable to add host";
-            return;
-        }
-
-        host_id_response->set_key(std::move(key));
-    }
-    else if (host_id_request.type() == proto::router::legacy::HostIdRequest::EXISTING_ID)
-    {
-        // Using existing key.
-        key_hash = GenericHash::hash(GenericHash::Type::BLAKE2b512, host_id_request.key());
-    }
-    else
-    {
-        CLOG(ERROR) << "Unknown request type:" << host_id_request.type();
+        CLOG(ERROR) << "Rejecting host id request from legacy host (type:"
+                    << host_id_request.type() << "); only existing ids are allowed";
+        host_id_response->set_error_code(proto::router::legacy::HostIdResponse::UNKNOWN);
+        sendMessage(0, serialize(message));
         return;
     }
+
+    const QByteArray key_hash = GenericHash::hash(GenericHash::Type::BLAKE2b512, host_id_request.key());
 
     HostId host_id = kInvalidHostId;
     std::string_view error_code = database.hostId(key_hash, &host_id);
