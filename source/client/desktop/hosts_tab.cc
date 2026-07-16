@@ -302,6 +302,7 @@ QByteArray HostsTab::saveState()
         stream << local_group_widget_->saveState();
         stream << router_group_widget_->saveState();
         stream << router_hosts_widget_->saveState();
+        stream << router_temp_hosts_widget_->saveState();
         stream << router_users_widget_->saveState();
         stream << router_clients_widget_->saveState();
         stream << router_relays_widget_->saveState();
@@ -322,6 +323,7 @@ void HostsTab::restoreState(const QByteArray& state)
     QByteArray local_group_state;
     QByteArray router_group_state;
     QByteArray router_hosts_state;
+    QByteArray router_temp_hosts_state;
     QByteArray router_users_state;
     QByteArray router_clients_state;
     QByteArray router_relays_state;
@@ -332,6 +334,7 @@ void HostsTab::restoreState(const QByteArray& state)
     stream >> local_group_state;
     stream >> router_group_state;
     stream >> router_hosts_state;
+    stream >> router_temp_hosts_state;
     stream >> router_users_state;
     stream >> router_clients_state;
     stream >> router_relays_state;
@@ -347,6 +350,9 @@ void HostsTab::restoreState(const QByteArray& state)
 
     if (!router_hosts_state.isEmpty())
         router_hosts_widget_->restoreState(router_hosts_state);
+
+    if (!router_temp_hosts_state.isEmpty())
+        router_temp_hosts_widget_->restoreState(router_temp_hosts_state);
 
     if (!router_users_state.isEmpty())
         router_users_widget_->restoreState(router_users_state);

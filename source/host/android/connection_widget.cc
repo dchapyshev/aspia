@@ -49,6 +49,24 @@ const char kShowComputerNameProperty[] = "aspia_show_computer_name";
 const char kNameLabelProperty[] = "aspia_name_label";
 
 //--------------------------------------------------------------------------------------------------
+// Groups the digits of the ID in threes ("902 969 984") so it is easier to read and dictate.
+// Non-numeric values (the "-" placeholder) are returned as is. Only the visible label is
+// formatted; the shared text keeps the raw ID so it stays paste-able on the client side.
+QString formatHostId(const QString& host_id)
+{
+    for (QChar c : host_id)
+    {
+        if (!c.isDigit())
+            return host_id;
+    }
+
+    QString id = host_id;
+    for (int i = id.size() - 3; i > 0; i -= 3)
+        id.insert(i, ' ');
+    return id;
+}
+
+//--------------------------------------------------------------------------------------------------
 // Opens the system share sheet with |text| as plain text (ACTION_SEND).
 void shareText(const QString& text)
 {
@@ -106,7 +124,7 @@ ConnectionWidget::ConnectionWidget(QWidget* parent)
     // ID card.
     Card* id_card = new Card(content);
     id_caption_ = new Label(QString(), Label::Role::CAPTION, id_card);
-    id_value_ = new Label(host_id_, Label::Role::TITLE, id_card);
+    id_value_ = new Label(formatHostId(host_id_), Label::Role::TITLE, id_card);
     id_value_->setTextInteractionFlags(Qt::TextSelectableByMouse);
     id_card->contentLayout()->addWidget(id_caption_);
     id_card->contentLayout()->addWidget(id_value_);
@@ -217,7 +235,7 @@ ConnectionWidget::~ConnectionWidget() = default;
 void ConnectionWidget::setHostId(const QString& host_id)
 {
     host_id_ = host_id;
-    id_value_->setText(host_id_);
+    id_value_->setText(formatHostId(host_id_));
 }
 
 //--------------------------------------------------------------------------------------------------

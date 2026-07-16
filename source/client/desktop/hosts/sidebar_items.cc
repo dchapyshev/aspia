@@ -147,7 +147,7 @@ SidebarRouterHosts::SidebarRouterHosts(qint64 router_id, QTreeWidgetItem* parent
     : SidebarItem(ROUTER_HOSTS, /*group_id=*/-1, parent),
       router_id_(router_id)
 {
-    setText(0, tr("All Hosts"));
+    setText(0, tr("Approved Hosts"));
     setIcon(0, QIcon(":/img/computer.svg"));
 }
 

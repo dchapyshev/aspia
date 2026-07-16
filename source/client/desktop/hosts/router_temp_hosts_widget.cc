@@ -51,6 +51,7 @@ public:
     void updateItem(const Router::TempHost& updated)
     {
         info = updated;
+        setIcon(TEMP_HOST_COLUMN_ID, QIcon(":/img/computer.svg"));
         setText(TEMP_HOST_COLUMN_ID, QString::number(info.temp_id));
         setText(TEMP_HOST_COLUMN_COMPUTER_NAME, info.computer_name);
         setText(TEMP_HOST_COLUMN_OS, info.os_name);

@@ -561,7 +561,7 @@ void RemoteWidget::fetchTempHosts()
         {
             QTreeWidgetItem* item = new QTreeWidgetItem(
                 temp_host_tree_, { host.computer_name, QString("ID %1").arg(host.temp_id) });
-            item->setIcon(0, GuiApplication::svgIcon(":/img/computer-online.svg"));
+            item->setIcon(0, GuiApplication::svgIcon(":/img/computer.svg"));
             item->setData(0, kHostIdRole, QVariant::fromValue(host.temp_id));
         }
     });

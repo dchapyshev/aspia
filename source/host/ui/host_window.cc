@@ -63,6 +63,16 @@ namespace {
 // XEmbed-only tray does not report availability but can still host the icon).
 constexpr int kTrayWaitMaxAttempts = 30;
 
+//--------------------------------------------------------------------------------------------------
+// Groups the digits of the ID in threes ("902 969 984") so it is easier to read and dictate.
+QString formatHostId(HostId host_id)
+{
+    QString id = QString::number(host_id);
+    for (int i = id.size() - 3; i > 0; i -= 3)
+        id.insert(i, ' ');
+    return id;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -433,7 +443,7 @@ void HostWindow::onCredentialsChanged(const proto::user::Credentials& credential
     bool has_id = credentials.host_id() != kInvalidHostId;
 
     ui->edit_id->setEnabled(has_id);
-    ui->edit_id->setText(has_id ? QString::number(credentials.host_id()) : tr("Not available"));
+    ui->edit_id->setText(has_id ? formatHostId(credentials.host_id()) : tr("Not available"));
 
     bool has_password = !credentials.password().empty();
 
