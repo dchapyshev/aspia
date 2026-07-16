@@ -128,6 +128,21 @@ public:
         QList<Host> hosts;
     };
 
+    struct TempHost
+    {
+        HostId temp_id = kInvalidHostId;
+        QString computer_name;
+        QString version;
+        QString os_name;
+        QString address;
+    };
+
+    struct TempHostList
+    {
+        QString error_code;
+        QList<TempHost> hosts;
+    };
+
     // Plain (decrypted) host group record.
     struct Group
     {
@@ -216,6 +231,9 @@ public:
     void removeHost(HostId host_id, QObject* receiver, HandlerT handler);
 
     template<typename HandlerT>
+    void approveHost(HostId host_id, QObject* receiver, HandlerT handler);
+
+    template<typename HandlerT>
     void checkHostUpdates(HostId host_id, QObject* receiver, HandlerT handler);
 
     template<typename HandlerT>
@@ -289,6 +307,11 @@ public:
     template<typename HandlerT>
     void searchHosts(const QString& query, QObject* receiver, HandlerT handler);
 
+    // List the temporary (unapproved) hosts currently online. Available to every session type;
+    // |address| in each entry is populated only for admin sessions.
+    template<typename HandlerT>
+    void listTempHosts(QObject* receiver, HandlerT handler);
+
     // Ask the router whether a host is currently online.
     template<typename HandlerT>
     void checkHostStatus(HostId host_id, QObject* receiver, HandlerT handler);
@@ -311,8 +334,9 @@ signals:
 
     // Push notifications: server signals that a particular list has changed and subscribers
     // should refetch via the corresponding list* RPC. Fired at most once per ~5 seconds per
-    // resource. Regular client sessions only receive sig_hostsChanged / sig_workspacesChanged
-    // / sig_groupsChanged.
+    // resource. Regular client sessions only receive sig_tempHostsChanged / sig_hostsChanged /
+    // sig_workspacesChanged / sig_groupsChanged.
+    void sig_tempHostsChanged(qint64 router_id);
     void sig_hostsChanged(qint64 router_id);
     void sig_relaysChanged(qint64 router_id);
     void sig_clientsChanged(qint64 router_id);
@@ -448,6 +472,7 @@ private:
     Router::Host decodeHost(const proto::router::Host& src);
     Router::HostList decodeHostList(const proto::router::HostList& list);
     Router::HostList decodeHostSearchResult(const proto::router::HostSearchResult& result);
+    Router::TempHostList decodeTempHostList(const proto::router::TempHostList& list);
     Router::GroupList decodeGroupList(const proto::router::GroupList& list);
     SecureByteArray unwrapGroupKey(const QByteArray& wrapped_gk) const;
     void resealGroupKeys(const QByteArray& new_public_key, proto::router::User* user);
@@ -495,6 +520,8 @@ Q_DECLARE_METATYPE(Router::Workspace)
 Q_DECLARE_METATYPE(Router::WorkspaceList)
 Q_DECLARE_METATYPE(Router::Host)
 Q_DECLARE_METATYPE(Router::HostList)
+Q_DECLARE_METATYPE(Router::TempHost)
+Q_DECLARE_METATYPE(Router::TempHostList)
 Q_DECLARE_METATYPE(Router::Group)
 Q_DECLARE_METATYPE(Router::GroupList)
 
@@ -622,6 +649,19 @@ void Router::removeHost(HostId host_id, QObject* receiver, HandlerT handler)
     auto* request = message.mutable_host_request();
     request->set_request_id(nextRequestId());
     request->set_command_name(proto::router::kCommandHostRemove);
+    request->mutable_host()->set_host_id(host_id);
+    registerPending<proto::router::HostResult>(request, receiver, std::move(handler));
+    emitSend(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+template<typename HandlerT>
+void Router::approveHost(HostId host_id, QObject* receiver, HandlerT handler)
+{
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_host_request();
+    request->set_request_id(nextRequestId());
+    request->set_command_name(proto::router::kCommandHostApprove);
     request->mutable_host()->set_host_id(host_id);
     registerPending<proto::router::HostResult>(request, receiver, std::move(handler));
     emitSend(proto::router::CHANNEL_ID_ADMIN, message);
@@ -892,6 +932,21 @@ void Router::searchHosts(const QString& query, QObject* receiver, HandlerT handl
         [this](const proto::router::HostSearchResult& raw)
     {
         return decodeHostSearchResult(raw);
+    });
+    emitSend(proto::router::CHANNEL_ID_CLIENT, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+template<typename HandlerT>
+void Router::listTempHosts(QObject* receiver, HandlerT handler)
+{
+    proto::router::ClientToRouter message;
+    auto* request = message.mutable_temp_host_list_request();
+    request->set_request_id(nextRequestId());
+    registerPending<proto::router::TempHostList>(request, receiver, std::move(handler),
+        [this](const proto::router::TempHostList& raw)
+    {
+        return decodeTempHostList(raw);
     });
     emitSend(proto::router::CHANNEL_ID_CLIENT, message);
 }

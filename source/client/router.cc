@@ -48,6 +48,8 @@ struct Registrator
         qRegisterMetaType<Router::WorkspaceList>("Router::WorkspaceList");
         qRegisterMetaType<Router::Host>("Router::Host");
         qRegisterMetaType<Router::HostList>("Router::HostList");
+        qRegisterMetaType<Router::TempHost>("Router::TempHost");
+        qRegisterMetaType<Router::TempHostList>("Router::TempHostList");
         qRegisterMetaType<Router::Group>("Router::Group");
         qRegisterMetaType<Router::GroupList>("Router::GroupList");
     }
@@ -292,6 +294,8 @@ void Router::onTcpMessageReceived(quint8 channel_id, const QByteArray& bytes)
             dispatch(message.host_list().request_id(), message.host_list());
         else if (message.has_host_search_result())
             dispatch(message.host_search_result().request_id(), message.host_search_result());
+        else if (message.has_temp_host_list())
+            dispatch(message.temp_host_list().request_id(), message.temp_host_list());
         else if (message.has_workspace_list())
             dispatch(message.workspace_list().request_id(), message.workspace_list());
         else if (message.has_group_list())
@@ -655,6 +659,8 @@ void Router::emitNotificationSignals(const proto::router::Notification& notifica
 {
     const qint64 router_id = config_.routerId();
 
+    if (notification.temp_hosts_dirty())
+        emit sig_tempHostsChanged(router_id);
     if (notification.hosts_dirty())
         emit sig_hostsChanged(router_id);
     if (notification.relays_dirty())
@@ -772,6 +778,28 @@ Router::HostList Router::decodeHostSearchResult(const proto::router::HostSearchR
 
     for (int i = 0; i < result.host_size(); ++i)
         decoded.hosts.append(decodeHost(result.host(i)));
+
+    return decoded;
+}
+
+//--------------------------------------------------------------------------------------------------
+Router::TempHostList Router::decodeTempHostList(const proto::router::TempHostList& list)
+{
+    Router::TempHostList decoded;
+    decoded.error_code = QString::fromStdString(list.error_code());
+    decoded.hosts.reserve(list.host_size());
+
+    for (int i = 0; i < list.host_size(); ++i)
+    {
+        const proto::router::TempHost& src = list.host(i);
+
+        Router::TempHost& dst = decoded.hosts.emplaceBack();
+        dst.temp_id       = src.temp_id();
+        dst.computer_name = QString::fromStdString(src.computer_name());
+        dst.version       = QString::fromStdString(src.version());
+        dst.os_name       = QString::fromStdString(src.os_name());
+        dst.address       = QString::fromStdString(src.address());
+    }
 
     return decoded;
 }
