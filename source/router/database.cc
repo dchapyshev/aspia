@@ -1025,6 +1025,18 @@ bool Database::addHost(std::string_view key_hash)
         return false;
     }
 
+    // Permanent host IDs are produced by AUTOINCREMENT and must never enter the temporary host ID range.
+    HostId next_id = 1;
+    SqlQuery seq_query(db_, "SELECT seq FROM sqlite_sequence WHERE name='hosts'");
+    if (seq_query.next())
+        next_id = static_cast<HostId>(seq_query.columnInt64(0)) + 1;
+
+    if (next_id >= kMinTempHostId)
+    {
+        LOG(ERROR) << "Permanent host id space is exhausted";
+        return false;
+    }
+
     SqlQuery query(db_, "INSERT INTO hosts (id, key) VALUES (NULL, ?)");
     query.addBlob(key_hash);
 
