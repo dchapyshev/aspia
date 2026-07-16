@@ -100,6 +100,7 @@ public:
         QWinEventNotifier* watcher = new QWinEventNotifier(this);
         connect(watcher, &QWinEventNotifier::activated, this, [watcher, on_finished](HANDLE process)
         {
+            watcher->setEnabled(false);
             watcher->deleteLater();
             // SEE_MASK_NOCLOSEPROCESS hands the process handle to the caller.
             CloseHandle(process);
