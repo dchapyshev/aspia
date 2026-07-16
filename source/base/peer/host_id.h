@@ -32,6 +32,9 @@ extern const HostId kMaxTempHostId;
 // Checks if a host ID falls within the temporary host ID range.
 bool isTempHostId(HostId host_id);
 
+// Returns a random host ID from the temporary host ID range.
+HostId createTempHostId();
+
 // Checks if a string is a host ID.
 bool isHostId(const QString& str);
 
