@@ -204,6 +204,27 @@ message HostSearchResult
     repeated Host host = 3;
 }
 
+message TempHost
+{
+    uint64 temp_id       = 1;
+    string computer_name = 2;
+    string version       = 3;
+    string os_name       = 4;
+    string address       = 5;
+}
+
+message TempHostListRequest
+{
+    int64 request_id = 1;
+}
+
+message TempHostList
+{
+    int64 request_id       = 1;
+    string error_code      = 2; // "ok"
+    repeated TempHost host = 3;
+}
+
 // Push notification from router to client/admin sessions: a coarse-grained signal that the
 // indicated resource lists have changed since the last notification (or session start). The
 // client refetches the affected lists via the existing list* RPCs. Notifications are batched
@@ -300,8 +321,9 @@ message RouterToClient
     HostStatus host_status                        = 7;
     HostList host_list                            = 8;
     HostSearchResult host_search_result           = 9;
-    WorkspaceList workspace_list                  = 10;
-    GroupList group_list                          = 11;
+    TempHostList temp_host_list                   = 10;
+    WorkspaceList workspace_list                  = 11;
+    GroupList group_list                          = 12;
 }
 
 message ClientToRouter
@@ -312,6 +334,7 @@ message ClientToRouter
     CheckHostStatus check_host_status             = 4;
     HostListRequest host_list_request             = 5;
     HostSearchRequest host_search_request         = 6;
-    WorkspaceListRequest workspace_list_request   = 7;
-    GroupListRequest group_list_request           = 8;
+    TempHostListRequest temp_host_list_request    = 7;
+    WorkspaceListRequest workspace_list_request   = 8;
+    GroupListRequest group_list_request           = 9;
 }

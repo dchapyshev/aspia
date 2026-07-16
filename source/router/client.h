@@ -33,6 +33,7 @@ class ConnectionRequest;
 class GroupListRequest;
 class HostListRequest;
 class HostSearchRequest;
+class TempHostListRequest;
 class TwoFactorResponse;
 class WorkspaceListRequest;
 enum SessionType : int;
@@ -95,6 +96,7 @@ private:
     void readCheckHostStatus(const proto::router::CheckHostStatus& check_host_status);
     void readHostListRequest(const proto::router::HostListRequest& request);
     void readHostSearchRequest(const proto::router::HostSearchRequest& request);
+    void readTempHostListRequest(const proto::router::TempHostListRequest& request);
     void readWorkspaceListRequest(const proto::router::WorkspaceListRequest& request);
     void readGroupListRequest(const proto::router::GroupListRequest& request);
     void readChangePasswordRequest(const proto::router::ChangePasswordRequest& request);

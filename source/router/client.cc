@@ -204,6 +204,10 @@ void Client::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
     {
         readHostSearchRequest(message.host_search_request());
     }
+    else if (message.has_temp_host_list_request())
+    {
+        readTempHostListRequest(message.temp_host_list_request());
+    }
     else if (message.has_workspace_list_request())
     {
         readWorkspaceListRequest(message.workspace_list_request());
@@ -641,6 +645,36 @@ void Client::readHostSearchRequest(const proto::router::HostSearchRequest& reque
     const QSet<HostId> online_host_ids = onlineHostIds();
     for (proto::router::Host& host : *result->mutable_host())
         host.set_online(online_host_ids.contains(host.host_id()));
+
+    sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::readTempHostListRequest(const proto::router::TempHostListRequest& request)
+{
+    const bool is_admin = sessionType() == proto::router::SESSION_TYPE_ADMIN;
+
+    proto::router::RouterToClient message;
+    proto::router::TempHostList* result = message.mutable_temp_host_list();
+    result->set_request_id(request.request_id());
+    result->set_error_code(proto::router::kErrorOk);
+
+    const QList<Host*>& hosts = Service::instance()->hosts();
+    for (Host* host : std::as_const(hosts))
+    {
+        HostNG* host_ng = dynamic_cast<HostNG*>(host);
+        if (!host_ng || !isTempHostId(host_ng->hostId()))
+            continue;
+
+        proto::router::TempHost* temp_host = result->add_host();
+        temp_host->set_temp_id(host_ng->hostId());
+        temp_host->set_computer_name(host_ng->computerName());
+        temp_host->set_version(host_ng->version().toString().toStdString());
+        temp_host->set_os_name(host_ng->osName());
+
+        if (is_admin)
+            temp_host->set_address(host_ng->address());
+    }
 
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 }
