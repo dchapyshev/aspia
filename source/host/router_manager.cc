@@ -229,19 +229,19 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
             return;
         }
 
-        HostStorage host_key_storage;
+        HostStorage host_storage;
 
         QByteArray host_key = QByteArray::fromStdString(host_id_response.key());
         if (!host_key.isEmpty())
         {
             LOG(INFO) << "New host key received";
-            host_key_storage.setHostKey(host_key);
+            host_storage.setHostKey(host_key);
         }
 
         LOG(INFO) << "Host ID received:" << host_id_;
 
-        if (host_key_storage.lastHostId() != host_id_)
-            host_key_storage.setLastHostId(host_id_);
+        if (host_storage.lastHostId() != host_id_)
+            host_storage.setLastHostId(host_id_);
 
         emit sig_credentialsChanged(host_id_, one_time_password_);
     }

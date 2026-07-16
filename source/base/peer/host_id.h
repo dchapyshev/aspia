@@ -26,6 +26,11 @@ using HostId = unsigned long long;
 
 extern const HostId kInvalidHostId;
 extern const HostId kAllHostsId;
+extern const HostId kMinTempHostId;
+extern const HostId kMaxTempHostId;
+
+// Checks if a host ID falls within the temporary host ID range.
+bool isTempHostId(HostId host_id);
 
 // Checks if a string is a host ID.
 bool isHostId(const QString& str);

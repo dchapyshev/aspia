@@ -22,8 +22,16 @@
 
 const HostId kInvalidHostId = 0;
 const HostId kAllHostsId = std::numeric_limits<HostId>::max();
+const HostId kMinTempHostId = 900000000;
+const HostId kMaxTempHostId = 999999999;
 
 static_assert(sizeof(HostId) == 8);
+
+//--------------------------------------------------------------------------------------------------
+bool isTempHostId(HostId host_id)
+{
+    return host_id >= kMinTempHostId && host_id <= kMaxTempHostId;
+}
 
 //--------------------------------------------------------------------------------------------------
 bool isHostId(const QString& str)
