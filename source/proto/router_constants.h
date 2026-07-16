@@ -26,6 +26,7 @@ extern const char* const kCommandHostDisconnect;
 extern const char* const kCommandHostRemove;
 extern const char* const kCommandHostModify;
 extern const char* const kCommandHostUpdate;
+extern const char* const kCommandHostApprove;
 
 // Command names for RelayRequest.
 extern const char* const kCommandRelayDisconnect;

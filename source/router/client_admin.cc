@@ -508,6 +508,42 @@ void ClientAdmin::doHostRequest(const proto::router::HostRequest& request)
             host_result->set_error_code(proto::router::kErrorOk);
         }
     }
+    else if (request.command_name() == proto::router::kCommandHostApprove)
+    {
+        const HostId host_id = request.host().host_id();
+
+        HostNG* host = dynamic_cast<HostNG*>(find_host(host_id));
+        if (!isTempHostId(host_id) || !host)
+        {
+            CLOG(ERROR) << "No live temporary session for host_id:" << host_id;
+            host_result->set_error_code(proto::router::kErrorInvalidEntryId);
+        }
+        else
+        {
+            Database& database = Database::instance();
+            if (!database.isValid())
+            {
+                CLOG(ERROR) << "Failed to connect to database";
+                host_result->set_error_code(proto::router::kErrorInternalError);
+            }
+            else if (!database.addHost(host->keyHash()))
+            {
+                CLOG(ERROR) << "Failed to persist approved host_id:" << host_id;
+                host_result->set_error_code(proto::router::kErrorInternalError);
+            }
+            else
+            {
+                // The key is now persistent. Drop the temporary session so the host reconnects and
+                // receives its permanent id via EXISTING_ID. Persist first, then drop: dropping
+                // before the row exists would make the reconnect ask for a new temporary id.
+                Service::instance()->stopHost(host->sessionId());
+
+                CLOG(INFO) << "Temporary host" << host_id << "approved by" << userName();
+                host_result->set_error_code(proto::router::kErrorOk);
+                Service::notifyChanged(Service::NOTIFY_HOSTS | Service::NOTIFY_TEMP_HOSTS);
+            }
+        }
+    }
     else
     {
         CLOG(ERROR) << "Unknown host request command:" << request.command_name();
