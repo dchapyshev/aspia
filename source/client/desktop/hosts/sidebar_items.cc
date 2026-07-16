@@ -177,3 +177,12 @@ SidebarRouterRelays::SidebarRouterRelays(qint64 router_id, QTreeWidgetItem* pare
     setText(0, tr("Relays"));
     setIcon(0, QIcon(":/img/stack.svg"));
 }
+
+//--------------------------------------------------------------------------------------------------
+SidebarRouterTempHosts::SidebarRouterTempHosts(qint64 router_id, QTreeWidgetItem* parent)
+    : SidebarItem(ROUTER_TEMP_HOSTS, /*group_id=*/-1, parent),
+      router_id_(router_id)
+{
+    setText(0, tr("Unapproved Hosts"));
+    setIcon(0, QIcon(":/img/computer.svg"));
+}

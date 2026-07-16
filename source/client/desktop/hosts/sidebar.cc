@@ -1043,24 +1043,27 @@ void Sidebar::buildRouterSections(qint64 router_id)
     if (!router)
         return;
 
-    // Administrative sections are only meaningful for an administrator session.
-    Router* instance = routers_.value(router_id);
-    if (!instance || instance->config().sessionType() != proto::router::SESSION_TYPE_ADMIN)
-        return;
-
     removeRouterSections(router_id);
 
-    // Sections live above the workspace subtree. Insert each at the top in reverse display order
-    // so the final order stays Hosts -> Clients -> Relays -> Users.
+    // Sections live above the workspace subtree. Insert each at the top in reverse display order.
     auto move_to_top = [router](QTreeWidgetItem* item)
     {
         router->insertChild(0, router->takeChild(router->indexOfChild(item)));
     };
 
-    move_to_top(new SidebarRouterUsers(router_id, router));
-    move_to_top(new SidebarRouterHosts(router_id, router));
-    move_to_top(new SidebarRouterClients(router_id, router));
-    move_to_top(new SidebarRouterRelays(router_id, router));
+    // Administrative sections are only meaningful for an administrator session.
+    Router* instance = routers_.value(router_id);
+    if (instance && instance->config().sessionType() == proto::router::SESSION_TYPE_ADMIN)
+    {
+        move_to_top(new SidebarRouterUsers(router_id, router));
+        move_to_top(new SidebarRouterRelays(router_id, router));
+        move_to_top(new SidebarRouterClients(router_id, router));
+        move_to_top(new SidebarRouterHosts(router_id, router));
+    }
+
+    // The unapproved (temporary) hosts section is shown to every session type; it sits just above
+    // the hosts section.
+    move_to_top(new SidebarRouterTempHosts(router_id, router));
 
     router->setExpanded(true);
 }
@@ -1077,7 +1080,8 @@ void Sidebar::removeRouterSections(qint64 router_id)
         SidebarItem* child = static_cast<SidebarItem*>(router->child(i));
         const SidebarItem::Type type = child->itemType();
         if (type == SidebarItem::ROUTER_HOSTS || type == SidebarItem::ROUTER_USERS ||
-            type == SidebarItem::ROUTER_CLIENTS || type == SidebarItem::ROUTER_RELAYS)
+            type == SidebarItem::ROUTER_CLIENTS || type == SidebarItem::ROUTER_RELAYS ||
+            type == SidebarItem::ROUTER_TEMP_HOSTS)
         {
             delete router->takeChild(i);
         }

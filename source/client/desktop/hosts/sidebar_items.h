@@ -36,6 +36,7 @@ public:
         ROUTER,
         ROUTER_WORKSPACE,
         ROUTER_GROUP,
+        ROUTER_TEMP_HOSTS,
         ROUTER_HOSTS,
         ROUTER_USERS,
         ROUTER_CLIENTS,
@@ -180,6 +181,20 @@ class SidebarRouterRelays final : public SidebarItem
 
 public:
     SidebarRouterRelays(qint64 router_id, QTreeWidgetItem* parent);
+
+    qint64 routerId() const { return router_id_; }
+
+private:
+    const qint64 router_id_;
+};
+
+//--------------------------------------------------------------------------------------------------
+class SidebarRouterTempHosts final : public SidebarItem
+{
+    Q_DECLARE_TR_FUNCTIONS(SidebarRouterTempHosts)
+
+public:
+    SidebarRouterTempHosts(qint64 router_id, QTreeWidgetItem* parent);
 
     qint64 routerId() const { return router_id_; }
 
