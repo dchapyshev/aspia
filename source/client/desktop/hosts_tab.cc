@@ -148,6 +148,10 @@ HostsTab::HostsTab(QWidget* parent)
 
     connect(router_temp_hosts_widget_, &RouterTempHostsWidget::sig_currentChanged,
             this, &HostsTab::updateActionsState);
+    connect(router_temp_hosts_widget_, &RouterTempHostsWidget::sig_connectRequested,
+            this, &HostsTab::onTempHostConnect);
+    connect(router_temp_hosts_widget_, &RouterTempHostsWidget::sig_contextMenu,
+            this, &HostsTab::onTempHostContextMenu);
 
     connect(router_users_widget_, &RouterUsersWidget::sig_currentChanged,
             this, &HostsTab::updateActionsState);
@@ -230,6 +234,7 @@ HostsTab::HostsTab(QWidget* parent)
     connect(ui->action_disconnect, &QAction::triggered, this, &HostsTab::onDisconnectAction);
     connect(ui->action_disconnect_all, &QAction::triggered, this, &HostsTab::onDisconnectAllAction);
     connect(ui->action_host_remove, &QAction::triggered, this, &HostsTab::onRemoveHostAction);
+    connect(ui->action_host_approve, &QAction::triggered, this, &HostsTab::onApproveHostAction);
     connect(ui->action_host_check_updates, &QAction::triggered, this, &HostsTab::onCheckHostUpdatesAction);
     connect(ui->action_online_check, &QAction::toggled, this, &HostsTab::onOnlineCheckToggled);
     connect(session_connect_group, &QActionGroup::triggered, this, &HostsTab::onConnectAction);
@@ -256,8 +261,8 @@ HostsTab::HostsTab(QWidget* parent)
     addActions(ActionRole::EDIT,
     {
         ui->action_add_host, ui->action_edit_host, ui->action_copy_host, ui->action_delete_host,
-        ui->action_host_check_updates, ui->action_host_remove, ui->action_disconnect,
-        ui->action_disconnect_all
+        ui->action_host_check_updates, ui->action_host_approve, ui->action_host_remove,
+        ui->action_disconnect, ui->action_disconnect_all
     });
     addActions(ActionRole::ACTION,
     {
@@ -726,6 +731,14 @@ void HostsTab::onConnectAction(QAction* action)
         if (!validateHostForConnect(host))
             return;
     }
+    else if (current_content_ == router_temp_hosts_widget_)
+    {
+        if (!router_temp_hosts_widget_->hasSelectedHost())
+            return;
+        host = router_temp_hosts_widget_->selectedHostConfig();
+        if (!validateHostForConnect(host))
+            return;
+    }
     else
     {
         return;
@@ -757,6 +770,17 @@ void HostsTab::onRouterGroupConnect()
     if (!router_group_widget_->hasSelectedHost())
         return;
     HostConfig host = router_group_widget_->selectedHostConfig();
+    if (!validateHostForConnect(host))
+        return;
+    emit sig_connectRequested(host, defaultSessionType());
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::onTempHostConnect()
+{
+    if (!router_temp_hosts_widget_->hasSelectedHost())
+        return;
+    HostConfig host = router_temp_hosts_widget_->selectedHostConfig();
     if (!validateHostForConnect(host))
         return;
     emit sig_connectRequested(host, defaultSessionType());
@@ -1043,6 +1067,24 @@ void HostsTab::onHostContextMenu(const QPoint& pos, int column)
         router_hosts_widget_->copyCurrentHostRow();
     else if (action == copy_col)
         router_hosts_widget_->copyCurrentHostColumn(column);
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::onTempHostContextMenu(const QPoint& pos)
+{
+    if (!router_temp_hosts_widget_->hasSelectedHost())
+        return;
+
+    QMenu menu;
+    menu.addAction(ui->action_host_approve);
+    menu.addSeparator();
+    menu.addAction(ui->action_desktop_connect);
+    menu.addAction(ui->action_terminal_connect);
+    menu.addAction(ui->action_file_transfer_connect);
+    menu.addAction(ui->action_chat_connect);
+    menu.addAction(ui->action_system_info_connect);
+
+    menu.exec(pos);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1572,6 +1614,13 @@ void HostsTab::onRemoveHostAction()
 }
 
 //--------------------------------------------------------------------------------------------------
+void HostsTab::onApproveHostAction()
+{
+    if (current_content_ == router_temp_hosts_widget_)
+        router_temp_hosts_widget_->onApproveHost();
+}
+
+//--------------------------------------------------------------------------------------------------
 void HostsTab::onCheckHostUpdatesAction()
 {
     if (current_content_ == router_hosts_widget_)
@@ -1642,6 +1691,7 @@ void HostsTab::updateActionsState()
     ui->action_disconnect->setVisible(false);
     ui->action_disconnect_all->setVisible(false);
     ui->action_host_remove->setVisible(false);
+    ui->action_host_approve->setVisible(false);
     ui->action_host_check_updates->setVisible(false);
     ui->action_online_check->setVisible(false);
     ui->action_desktop_connect->setVisible(false);
@@ -1748,6 +1798,22 @@ void HostsTab::updateActionsState()
         ui->action_chat_connect->setVisible(can_connect);
         ui->action_system_info_connect->setVisible(can_connect);
         ui->action_terminal_connect->setVisible(can_connect);
+    }
+    else if (sidebar_item && sidebar_item->itemType() == SidebarItem::ROUTER_TEMP_HOSTS)
+    {
+        const bool has_host = router_temp_hosts_widget_->hasSelectedHost();
+
+        proto::router::SessionType session_type = proto::router::SESSION_TYPE_CLIENT;
+        if (Router* router = Router::instance(router_temp_hosts_widget_->routerId()))
+            session_type = router->config().sessionType();
+
+        ui->action_host_approve->setVisible(
+            has_host && session_type == proto::router::SESSION_TYPE_ADMIN);
+        ui->action_desktop_connect->setVisible(has_host);
+        ui->action_file_transfer_connect->setVisible(has_host);
+        ui->action_chat_connect->setVisible(has_host);
+        ui->action_system_info_connect->setVisible(has_host);
+        ui->action_terminal_connect->setVisible(has_host);
     }
 
     if (sidebar_item && sidebar_item->itemType() == SidebarItem::ROUTER)

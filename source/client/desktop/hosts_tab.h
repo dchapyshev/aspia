@@ -73,6 +73,7 @@ private slots:
     void onConnectAction(QAction* action);
     void onLocalConnect(qint64 entry_id);
     void onRouterGroupConnect();
+    void onTempHostConnect();
     void onSearchConnect();
     void onLocalHostContextMenu(qint64 entry_id, const QPoint& pos);
     void onSearchContextMenu(const QPoint& pos);
@@ -82,6 +83,7 @@ private slots:
     void onRemoveHost();
     void onUserContextMenu(const User& user, const QPoint& pos);
     void onHostContextMenu(const QPoint& pos, int column);
+    void onTempHostContextMenu(const QPoint& pos);
     void onClientContextMenu(const QPoint& pos, int column);
     void onRelayContextMenu(const QPoint& pos, int column);
     void onRouterGroupContextMenu(const QPoint& pos);
@@ -104,6 +106,7 @@ private slots:
     void onDisconnectAction();
     void onDisconnectAllAction();
     void onRemoveHostAction();
+    void onApproveHostAction();
     void onCheckHostUpdatesAction();
     void onOnlineCheckToggled(bool checked);
 

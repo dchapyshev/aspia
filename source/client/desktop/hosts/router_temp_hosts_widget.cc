@@ -88,6 +88,10 @@ RouterTempHostsWidget::RouterTempHostsWidget(QWidget* parent)
             this, &RouterTempHostsWidget::sig_currentChanged);
     connect(tree_, &QTreeWidget::itemActivated,
             this, [this](QTreeWidgetItem*, int) { emit sig_connectRequested(); });
+
+    tree_->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(tree_, &QTreeWidget::customContextMenuRequested,
+            this, &RouterTempHostsWidget::onContextMenu);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -217,4 +221,17 @@ bool RouterTempHostsWidget::isAdmin() const
 {
     Router* router = Router::instance(router_id_);
     return router && router->config().sessionType() == proto::router::SESSION_TYPE_ADMIN;
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterTempHostsWidget::onContextMenu(const QPoint& pos)
+{
+    QTreeWidgetItem* item = tree_->itemAt(pos);
+    if (item)
+        tree_->setCurrentItem(item);
+
+    if (!hasSelectedHost())
+        return;
+
+    emit sig_contextMenu(tree_->viewport()->mapToGlobal(pos));
 }

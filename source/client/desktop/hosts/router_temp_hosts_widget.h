@@ -54,10 +54,12 @@ public slots:
 signals:
     void sig_currentChanged();
     void sig_connectRequested();
+    void sig_contextMenu(const QPoint& global_pos);
 
 private slots:
     void onTempHostListReceived(const Router::TempHostList& list);
     void onHostResultReceived(const proto::router::HostResult& result);
+    void onContextMenu(const QPoint& pos);
 
 private:
     void fetchTempHosts();

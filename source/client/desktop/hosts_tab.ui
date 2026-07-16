@@ -356,6 +356,15 @@
     <string>Check for Updates</string>
    </property>
   </action>
+  <action name="action_host_approve">
+   <property name="icon">
+    <iconset resource="../../common/resources/common.qrc">
+     <normaloff>:/img/computer-approve.svg</normaloff>:/img/computer-approve.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Approve</string>
+   </property>
+  </action>
   <action name="action_save">
    <property name="icon">
     <iconset resource="../../common/resources/common.qrc">
