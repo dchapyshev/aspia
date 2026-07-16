@@ -19,6 +19,8 @@
 #ifndef ROUTER_HOST_NG_H
 #define ROUTER_HOST_NG_H
 
+#include <QByteArray>
+
 #include "base/peer/host_id.h"
 #include "router/host.h"
 
@@ -36,6 +38,7 @@ public:
     ~HostNG() final;
 
     HostId hostId() const { return host_id_; }
+    const QByteArray& keyHash() const { return key_hash_; }
 
     void sendConnectionOffer(const proto::router::ConnectionOffer& offer);
     // Sends the "remove" host command and marks the session so that on disconnect the
@@ -56,6 +59,7 @@ private:
     void readHostIdRequest(const proto::router::HostIdRequest& host_id_request);
 
     HostId host_id_ = kInvalidHostId;
+    QByteArray key_hash_;
     bool remove_command_sent_ = false;
 
     Q_DISABLE_COPY_MOVE(HostNG)

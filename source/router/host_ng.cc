@@ -18,6 +18,8 @@
 
 #include "router/host_ng.h"
 
+#include <set>
+
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/crypto/generic_hash.h"
@@ -32,6 +34,28 @@ namespace {
 
 const size_t kHostKeySize = 512;
 
+thread_local std::set<HostId> g_assigned_temp_host_ids;
+
+//--------------------------------------------------------------------------------------------------
+HostId reserveTempHostId()
+{
+    HostId host_id = kInvalidHostId;
+    do
+    {
+        host_id = createTempHostId();
+    }
+    while (g_assigned_temp_host_ids.contains(host_id));
+
+    g_assigned_temp_host_ids.insert(host_id);
+    return host_id;
+}
+
+//--------------------------------------------------------------------------------------------------
+void releaseTempHostId(HostId host_id)
+{
+    g_assigned_temp_host_ids.erase(host_id);
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -45,6 +69,8 @@ HostNG::HostNG(TcpChannel* channel, QObject* parent)
 HostNG::~HostNG()
 {
     CLOG(INFO) << "Dtor";
+
+    releaseTempHostId(host_id_);
 
     // If a remove command was sent during this session, the host has either processed it (and
     // disconnected/uninstalled) or got dropped before it could; either way the host_id will not
@@ -132,6 +158,36 @@ void HostNG::readHostIdRequest(const proto::router::HostIdRequest& host_id_reque
         return;
     }
 
+    proto::router::RouterToHost message;
+    proto::router::HostIdResponse* host_id_response = message.mutable_host_id_response();
+
+    if (host_id_request.type() == proto::router::HostIdRequest::NEW_ID)
+    {
+        // A new host is not persisted until an administrator approves it. Issue a temporary id and
+        // hand the host its freshly generated key, but write nothing to the database. The key hash
+        // is retained so approval can persist it later. If the host reconnects before approval, its
+        // key is not found and it simply requests a new id again.
+        std::string key = Random::string(kHostKeySize);
+        key_hash_ = GenericHash::hash(GenericHash::Type::BLAKE2b512, key);
+        host_id_ = reserveTempHostId();
+
+        host_id_response->set_error_code(proto::router::kErrorOk);
+        host_id_response->set_host_id(host_id_);
+        host_id_response->set_key(std::move(key));
+
+        emit sig_hostIdAssigned(host_id_);
+        Service::notifyChanged(Service::NOTIFY_TEMP_HOSTS);
+
+        sendMessage(0, serialize(message));
+        return;
+    }
+
+    if (host_id_request.type() != proto::router::HostIdRequest::EXISTING_ID)
+    {
+        CLOG(ERROR) << "Unknown request type:" << host_id_request.type();
+        return;
+    }
+
     Database& database = Database::instance();
     if (!database.isValid())
     {
@@ -139,36 +195,7 @@ void HostNG::readHostIdRequest(const proto::router::HostIdRequest& host_id_reque
         return;
     }
 
-    proto::router::RouterToHost message;
-    proto::router::HostIdResponse* host_id_response = message.mutable_host_id_response();
-    QByteArray key_hash;
-
-    if (host_id_request.type() == proto::router::HostIdRequest::NEW_ID)
-    {
-        // Generate new key.
-        std::string key = Random::string(kHostKeySize);
-
-        // Calculate hash for key.
-        key_hash = GenericHash::hash(GenericHash::Type::BLAKE2b512, key);
-
-        if (!database.addHost(key_hash))
-        {
-            CLOG(ERROR) << "Unable to add host";
-            return;
-        }
-
-        host_id_response->set_key(std::move(key));
-    }
-    else if (host_id_request.type() == proto::router::HostIdRequest::EXISTING_ID)
-    {
-        // Using existing key.
-        key_hash = GenericHash::hash(GenericHash::Type::BLAKE2b512, host_id_request.key());
-    }
-    else
-    {
-        CLOG(ERROR) << "Unknown request type:" << host_id_request.type();
-        return;
-    }
+    QByteArray key_hash = GenericHash::hash(GenericHash::Type::BLAKE2b512, host_id_request.key());
 
     std::string_view error_code = database.hostId(key_hash, &host_id_);
     host_id_response->set_error_code(error_code);

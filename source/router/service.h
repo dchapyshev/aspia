@@ -79,12 +79,13 @@ public:
 
     enum : quint32
     {
-        NOTIFY_HOSTS      = 1u << 0,
-        NOTIFY_RELAYS     = 1u << 1,
-        NOTIFY_CLIENTS    = 1u << 2,
-        NOTIFY_USERS      = 1u << 3,
-        NOTIFY_WORKSPACES = 1u << 4,
-        NOTIFY_GROUPS     = 1u << 5,
+        NOTIFY_TEMP_HOSTS = 1u << 0,
+        NOTIFY_HOSTS      = 1u << 1,
+        NOTIFY_RELAYS     = 1u << 2,
+        NOTIFY_CLIENTS    = 1u << 3,
+        NOTIFY_USERS      = 1u << 4,
+        NOTIFY_WORKSPACES = 1u << 5,
+        NOTIFY_GROUPS     = 1u << 6,
     };
 
     void addKey(qint64 session_id, const proto::router::RelayKey& key);
