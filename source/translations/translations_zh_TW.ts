@@ -261,98 +261,98 @@ Routers added: %4</source>
 <context>
     <name>AddressBarModel</name>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="79"/>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="462"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="82"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="469"/>
         <source>Home Folder</source>
         <translation type="unfinished">家目錄</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="83"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="86"/>
         <source>Desktop</source>
         <translation type="unfinished">桌面</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="87"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="90"/>
         <source>Downloads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="91"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="94"/>
         <source>Documents</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="95"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="98"/>
         <source>Pictures</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="298"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="302"/>
         <source>Computer</source>
         <translation type="unfinished">電腦</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="410"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="417"/>
         <source>Name</source>
         <translation type="unfinished">名稱</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="413"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="420"/>
         <source>Type</source>
         <translation type="unfinished">類型</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="447"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="454"/>
         <source>Optical Drive</source>
         <translation type="unfinished">光碟機</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="450"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="457"/>
         <source>Removable Drive</source>
         <translation type="unfinished">可移除式磁碟機</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="453"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="460"/>
         <source>Fixed Drive</source>
         <translation type="unfinished">固定式磁碟機</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="456"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="463"/>
         <source>Network Drive</source>
         <translation type="unfinished">網路磁碟機</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="459"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="466"/>
         <source>RAM Drive</source>
         <translation type="unfinished">記憶體</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="465"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="472"/>
         <source>Desktop Folder</source>
         <translation type="unfinished">桌面資料夾</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="468"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="475"/>
         <source>Downloads Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="471"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="478"/>
         <source>Documents Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="474"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="481"/>
         <source>Pictures Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="477"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="484"/>
         <source>Root Directory</source>
         <translation type="unfinished">根目錄</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="480"/>
+        <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="487"/>
         <source>Unknown Drive</source>
         <translation type="unfinished">未知磁碟機</translation>
     </message>
@@ -384,39 +384,46 @@ Routers added: %4</source>
         <location filename="../client/android/main_window.cc" line="139"/>
         <location filename="../client/android/main_window.cc" line="225"/>
         <location filename="../client/android/main_window.cc" line="323"/>
-        <location filename="../host/android/main_window.cc" line="78"/>
-        <location filename="../host/android/main_window.cc" line="94"/>
-        <location filename="../host/android/main_window.cc" line="381"/>
+        <location filename="../host/android/main_window.cc" line="79"/>
+        <location filename="../host/android/main_window.cc" line="95"/>
+        <location filename="../host/android/main_window.cc" line="456"/>
         <source>Settings</source>
         <translation type="unfinished">設定</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="77"/>
-        <location filename="../host/android/main_window.cc" line="93"/>
-        <location filename="../host/android/main_window.cc" line="379"/>
+        <location filename="../host/android/main_window.cc" line="78"/>
+        <location filename="../host/android/main_window.cc" line="94"/>
+        <location filename="../host/android/main_window.cc" line="454"/>
         <source>Connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="301"/>
-        <location filename="../host/android/main_window.cc" line="337"/>
+        <location filename="../host/android/main_window.cc" line="328"/>
+        <location filename="../host/android/main_window.cc" line="363"/>
+        <location filename="../host/android/main_window.cc" line="395"/>
         <source>Permissions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="302"/>
+        <location filename="../host/android/main_window.cc" line="329"/>
         <source>Enable the accessibility service to allow remote keyboard and mouse control.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="303"/>
-        <location filename="../host/android/main_window.cc" line="339"/>
+        <location filename="../host/android/main_window.cc" line="330"/>
+        <location filename="../host/android/main_window.cc" line="365"/>
+        <location filename="../host/android/main_window.cc" line="398"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="338"/>
+        <location filename="../host/android/main_window.cc" line="364"/>
         <source>Allow display over other apps to show the on-screen action button during a session.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/android/main_window.cc" line="396"/>
+        <source>Allow access to all files so the connected user can browse and transfer files on this device.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -529,7 +536,7 @@ Routers added: %4</source>
 <context>
     <name>ChatView</name>
     <message>
-        <location filename="../client/android/chat_view.cc" line="197"/>
+        <location filename="../client/android/chat_view.cc" line="199"/>
         <source>Message</source>
         <translation type="unfinished"></translation>
     </message>
@@ -558,65 +565,70 @@ Routers added: %4</source>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="133"/>
-        <location filename="../common/desktop/chat_widget.cc" line="303"/>
+        <location filename="../common/desktop/chat_widget.cc" line="305"/>
         <source>Save chat...</source>
         <translation type="unfinished">儲存聊天...</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="134"/>
-        <location filename="../common/desktop/chat_widget.cc" line="304"/>
+        <location filename="../common/desktop/chat_widget.cc" line="306"/>
         <source>Clear chat</source>
         <translation type="unfinished">清除聊天</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="201"/>
+        <location filename="../common/desktop/chat_widget.cc" line="203"/>
         <source>%1 is typing...</source>
         <translation type="unfinished">%1 正在輸入...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="204"/>
+        <location filename="../common/desktop/chat_widget.cc" line="206"/>
         <source>User %1 has joined the chat (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="207"/>
+        <location filename="../common/desktop/chat_widget.cc" line="209"/>
         <source>User %1 has left the chat (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="210"/>
+        <location filename="../common/desktop/chat_widget.cc" line="212"/>
         <source>User %1 is logged in (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="213"/>
+        <location filename="../common/desktop/chat_widget.cc" line="215"/>
         <source>User %1 is not logged in (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="216"/>
+        <location filename="../common/desktop/chat_widget.cc" line="218"/>
         <source>There are no connected users (%1)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../common/desktop/chat_widget.cc" line="427"/>
+        <source>Unable to write file.</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message numerus="yes">
-        <location filename="../common/desktop/chat_widget.cc" line="434"/>
+        <location filename="../common/desktop/chat_widget.cc" line="443"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
         <translation type="unfinished">
             <numerusform>訊息太長。最大訊息長度為 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="364"/>
+        <location filename="../common/desktop/chat_widget.cc" line="366"/>
         <source>Save File</source>
         <translation type="unfinished">儲存檔案</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="364"/>
+        <location filename="../common/desktop/chat_widget.cc" line="366"/>
         <source>TXT files (*.txt)</source>
         <translation type="unfinished">TXT 檔案 (*.txt)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="377"/>
+        <location filename="../common/desktop/chat_widget.cc" line="379"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished">無法開啟檔案進行寫入。</translation>
     </message>
@@ -875,7 +887,7 @@ Routers added: %4</source>
         <translation>Aspia Client</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="566"/>
+        <location filename="../client/client.cc" line="575"/>
         <source>Failed to connect to the relay server</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1173,164 +1185,164 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="107"/>
+        <location filename="../host/ui/config_dialog.cc" line="114"/>
         <source>Once a day</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="108"/>
+        <location filename="../host/ui/config_dialog.cc" line="115"/>
         <source>Once a week</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="109"/>
+        <location filename="../host/ui/config_dialog.cc" line="116"/>
         <source>Once a month</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="145"/>
+        <location filename="../host/ui/config_dialog.cc" line="152"/>
         <source>Default</source>
         <translation type="unfinished">預設</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="186"/>
+        <location filename="../host/ui/config_dialog.cc" line="193"/>
         <source>On reboot</source>
         <translation type="unfinished">重開機時</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="187"/>
+        <location filename="../host/ui/config_dialog.cc" line="194"/>
         <source>Every 5 minutes</source>
         <translation type="unfinished">每 5 分鐘</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="188"/>
+        <location filename="../host/ui/config_dialog.cc" line="195"/>
         <source>Every 30 minutes</source>
         <translation type="unfinished">每 30 分鐘</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="189"/>
+        <location filename="../host/ui/config_dialog.cc" line="196"/>
         <source>Every 1 hour</source>
         <translation type="unfinished">每 1 小時</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="190"/>
+        <location filename="../host/ui/config_dialog.cc" line="197"/>
         <source>Every 6 hours</source>
         <translation type="unfinished">每 6 小時</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="191"/>
+        <location filename="../host/ui/config_dialog.cc" line="198"/>
         <source>Every 12 hours</source>
         <translation type="unfinished">每 12 小時</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="192"/>
+        <location filename="../host/ui/config_dialog.cc" line="199"/>
         <source>Every 24 hours</source>
         <translation type="unfinished">每 24 小時</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="200"/>
+        <location filename="../host/ui/config_dialog.cc" line="207"/>
         <source>Letters and digits</source>
         <translation type="unfinished">字母及數字</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="203"/>
+        <location filename="../host/ui/config_dialog.cc" line="210"/>
         <source>Letters</source>
         <translation type="unfinished">字母</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="205"/>
+        <location filename="../host/ui/config_dialog.cc" line="212"/>
         <source>Digits</source>
         <translation type="unfinished">數字</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="222"/>
+        <location filename="../host/ui/config_dialog.cc" line="229"/>
         <source>Never</source>
         <translation type="unfinished">永不</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="223"/>
+        <location filename="../host/ui/config_dialog.cc" line="230"/>
         <source>15 seconds</source>
         <translation type="unfinished">15 秒</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="224"/>
+        <location filename="../host/ui/config_dialog.cc" line="231"/>
         <source>30 seconds</source>
         <translation type="unfinished">30 秒</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="225"/>
+        <location filename="../host/ui/config_dialog.cc" line="232"/>
         <source>45 seconds</source>
         <translation type="unfinished">45 秒</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="226"/>
+        <location filename="../host/ui/config_dialog.cc" line="233"/>
         <source>60 seconds</source>
         <translation type="unfinished">60 秒</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="234"/>
+        <location filename="../host/ui/config_dialog.cc" line="241"/>
         <source>Accept connection</source>
         <translation type="unfinished">接受連線</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="235"/>
+        <location filename="../host/ui/config_dialog.cc" line="242"/>
         <source>Reject connection</source>
         <translation type="unfinished">拒絕連線</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="398"/>
+        <location filename="../host/ui/config_dialog.cc" line="441"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation type="unfinished">您確定要刪除使用者 &quot;%1&quot; 嗎？</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="425"/>
-        <location filename="../host/ui/config_dialog.cc" line="458"/>
+        <location filename="../host/ui/config_dialog.cc" line="468"/>
+        <location filename="../host/ui/config_dialog.cc" line="501"/>
         <source>An error occurred while processing the password.</source>
         <translation type="unfinished">處理密碼時發生錯誤。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="442"/>
+        <location filename="../host/ui/config_dialog.cc" line="485"/>
         <source>Settings storage is unavailable.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="472"/>
+        <location filename="../host/ui/config_dialog.cc" line="515"/>
         <source>Import</source>
         <translation type="unfinished">匯入</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="472"/>
-        <location filename="../host/ui/config_dialog.cc" line="489"/>
+        <location filename="../host/ui/config_dialog.cc" line="515"/>
+        <location filename="../host/ui/config_dialog.cc" line="532"/>
         <source>JSON-files (*.json)</source>
         <translation type="unfinished">JSON-檔案 (*.json)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="489"/>
+        <location filename="../host/ui/config_dialog.cc" line="532"/>
         <source>Export</source>
         <translation type="unfinished">匯出</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="514"/>
+        <location filename="../host/ui/config_dialog.cc" line="557"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation type="unfinished">無法寫入配置。請確認您有足夠的寫入權限。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="528"/>
+        <location filename="../host/ui/config_dialog.cc" line="570"/>
         <source>Incorrect router address entered.</source>
         <translation type="unfinished">輸入了不正確的路由器位址。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="538"/>
+        <location filename="../host/ui/config_dialog.cc" line="580"/>
         <source>Incorrect router public key entered.</source>
         <translation type="unfinished">輸入了不正確的公開金鑰。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="690"/>
+        <location filename="../host/ui/config_dialog.cc" line="737"/>
         <source>Install</source>
         <translation type="unfinished">安裝</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="695"/>
+        <location filename="../host/ui/config_dialog.cc" line="742"/>
         <source>Remove</source>
         <translation type="unfinished">移除</translation>
     </message>
@@ -1343,24 +1355,24 @@ Routers added: %4</source>
         <translation>連線確認</translation>
     </message>
     <message>
-        <location filename="../host/ui/connect_confirm_dialog.cc" line="61"/>
+        <location filename="../host/ui/connect_confirm_dialog.cc" line="63"/>
         <source>User %1 (%2) is trying to connect to your computer with %3 session type.</source>
         <translation type="unfinished">使用者 %1 (%2) 想要連線到您的電腦建立一個「%3」工作階段。</translation>
     </message>
     <message>
-        <location filename="../host/ui/connect_confirm_dialog.cc" line="63"/>
+        <location filename="../host/ui/connect_confirm_dialog.cc" line="65"/>
         <source>Allow the connection?</source>
         <translation type="unfinished">要允許連線嗎？</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/connect_confirm_dialog.cc" line="138"/>
+        <location filename="../host/ui/connect_confirm_dialog.cc" line="140"/>
         <source>The connection will be automatically accepted after %n seconds.</source>
         <translation type="unfinished">
             <numerusform>此連線將在 %n 秒後自動被接受。</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/connect_confirm_dialog.cc" line="143"/>
+        <location filename="../host/ui/connect_confirm_dialog.cc" line="145"/>
         <source>The connection will be automatically rejected after %n seconds.</source>
         <translation type="unfinished">
             <numerusform>此連線將在 %n 秒後自動被拒絕。</numerusform>
@@ -1370,57 +1382,63 @@ Routers added: %4</source>
 <context>
     <name>ConnectionWidget</name>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="136"/>
+        <location filename="../host/android/connection_widget.cc" line="205"/>
         <source>Your ID</source>
         <translation type="unfinished">您的 ID</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="137"/>
+        <location filename="../host/android/connection_widget.cc" line="206"/>
         <source>One-time password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="138"/>
+        <location filename="../host/android/connection_widget.cc" line="207"/>
         <source>Access</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="139"/>
+        <location filename="../host/android/connection_widget.cc" line="208"/>
         <source>Desktop</source>
         <translation type="unfinished">桌面</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="140"/>
+        <location filename="../host/android/connection_widget.cc" line="209"/>
         <source>File Transfer</source>
         <translation type="unfinished">檔案傳輸</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="220"/>
+        <location filename="../host/android/connection_widget.cc" line="329"/>
+        <source>Aspia ID: %1
+Password: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/android/connection_widget.cc" line="372"/>
         <source>Router is disabled</source>
         <translation type="unfinished">已停用路由器</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="223"/>
+        <location filename="../host/android/connection_widget.cc" line="375"/>
         <source>Connecting to router...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="224"/>
+        <location filename="../host/android/connection_widget.cc" line="376"/>
         <source>Connecting to router %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="227"/>
+        <location filename="../host/android/connection_widget.cc" line="379"/>
         <source>Connected to router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="228"/>
+        <location filename="../host/android/connection_widget.cc" line="380"/>
         <source>Connected to router %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="231"/>
+        <location filename="../host/android/connection_widget.cc" line="383"/>
         <source>Failed to connect to router</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1535,7 +1553,7 @@ Routers added: %4</source>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="232"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="828"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="819"/>
         <source>Scale</source>
         <translation type="unfinished">縮放</translation>
     </message>
@@ -1571,129 +1589,129 @@ Routers added: %4</source>
         <translation type="unfinished">系統訊息</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="288"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="285"/>
         <source>Close</source>
         <translation type="unfinished">關閉</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="291"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="288"/>
         <source>Close session</source>
         <translation type="unfinished">關閉工作階段</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="350"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="347"/>
         <source>Fit window</source>
         <translation type="unfinished">符合視窗大小</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="359"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="356"/>
         <source>Minimize</source>
         <translation type="unfinished">最小化</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="362"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="359"/>
         <source>Minimize window</source>
         <translation type="unfinished">最小化視窗</translation>
     </message>
     <message>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="364"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="367"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="370"/>
         <source>Statistics</source>
         <translation type="unfinished">統計</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="378"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="375"/>
         <source>Reboot (Safe mode)</source>
         <translation type="unfinished">重新啟動（安全模式）</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="381"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="378"/>
         <source>Reboot in safe mode</source>
         <translation type="unfinished">重新啟動至安全模式</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="393"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="390"/>
         <source>Paste clipboard as keystrokes</source>
         <translation type="unfinished">將剪貼簿作為按鍵動作貼上</translation>
     </message>
     <message>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="399"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="402"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="405"/>
         <source>Text Chat</source>
         <translation type="unfinished">文字聊天</translation>
     </message>
     <message>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="414"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="417"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="420"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="431"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="422"/>
         <source>Start recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="426"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="429"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="432"/>
         <source>Task Manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="444"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="441"/>
         <source>Switch Session</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="329"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="320"/>
         <source>Resolution selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1003"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="994"/>
         <source>Session %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1003"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="994"/>
         <source>Session %1 (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="426"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="417"/>
         <source>Stop recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="657"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="648"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation type="unfinished">您是否確定要關閉遠端電腦？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="672"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="698"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="663"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="689"/>
         <source>Confirmation</source>
         <translation type="unfinished">確認</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="673"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="664"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation type="unfinished">您是否確定要重新啟動遠端電腦？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="678"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="704"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="669"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="695"/>
         <source>Wait for host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="699"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="690"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation type="unfinished">您是否確定要重新啟動遠端電腦至安全模式？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="724"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="715"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation type="unfinished">您是否確定要結束遠端電腦的使用者工作階段？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="739"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="730"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation type="unfinished">您是否確定要鎖定遠端電腦的使用者工作階段？</translation>
     </message>
@@ -1701,22 +1719,22 @@ Routers added: %4</source>
 <context>
     <name>DesktopWidget</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="576"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="595"/>
         <source>The session was paused by a remote user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="579"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="598"/>
         <source>The session is temporarily unavailable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="582"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="601"/>
         <source>The session is permanently unavailable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="585"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="604"/>
         <source>Error while receiving video stream: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1724,17 +1742,17 @@ Routers added: %4</source>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="880"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="882"/>
         <source>Save File</source>
         <translation type="unfinished">儲存檔案</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="882"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="884"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished">PNG 影像 (*.png);;BMP 影像 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="913"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="915"/>
         <source>Could not save image</source>
         <translation type="unfinished">無法儲存影像</translation>
     </message>
@@ -1745,12 +1763,12 @@ Routers added: %4</source>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="163"/>
-        <location filename="../client/android/desktop_window.cc" line="329"/>
+        <location filename="../client/android/desktop_window.cc" line="326"/>
         <source>The specified router is unavailable.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="333"/>
+        <location filename="../client/android/desktop_window.cc" line="330"/>
         <source>The specified router is offline.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1795,123 +1813,123 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="308"/>
+        <location filename="../client/android/desktop_window.cc" line="305"/>
         <source>Connecting to host %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="314"/>
+        <location filename="../client/android/desktop_window.cc" line="311"/>
         <source>Connection established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="319"/>
+        <location filename="../client/android/desktop_window.cc" line="316"/>
         <source>The connection to the host has been lost.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="337"/>
+        <location filename="../client/android/desktop_window.cc" line="334"/>
         <source>Error requesting connection via router: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="341"/>
+        <location filename="../client/android/desktop_window.cc" line="338"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="423"/>
+        <location filename="../client/android/desktop_window.cc" line="420"/>
         <source>Monitor %1</source>
         <translation type="unfinished">顯示器 %1</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="431"/>
+        <location filename="../client/android/desktop_window.cc" line="428"/>
         <source>Power</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="435"/>
+        <location filename="../client/android/desktop_window.cc" line="432"/>
         <source>Keyboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="440"/>
+        <location filename="../client/android/desktop_window.cc" line="437"/>
         <source>Ctrl+Alt+Del</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="447"/>
+        <location filename="../client/android/desktop_window.cc" line="444"/>
         <source>Users</source>
         <translation type="unfinished">使用者</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="452"/>
+        <location filename="../client/android/desktop_window.cc" line="449"/>
         <source>Disconnect</source>
         <translation type="unfinished">中斷連線</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="515"/>
-        <location filename="../client/android/desktop_window.cc" line="569"/>
+        <location filename="../client/android/desktop_window.cc" line="512"/>
+        <location filename="../client/android/desktop_window.cc" line="566"/>
         <source>Back</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="516"/>
+        <location filename="../client/android/desktop_window.cc" line="513"/>
         <source>Shutdown</source>
         <translation type="unfinished">關機</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="517"/>
+        <location filename="../client/android/desktop_window.cc" line="514"/>
         <source>Reboot</source>
         <translation type="unfinished">重新開機</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="519"/>
+        <location filename="../client/android/desktop_window.cc" line="516"/>
         <source>Safe Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="520"/>
+        <location filename="../client/android/desktop_window.cc" line="517"/>
         <source>Logoff</source>
         <translation type="unfinished">登出</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="521"/>
+        <location filename="../client/android/desktop_window.cc" line="518"/>
         <source>Lock</source>
         <translation type="unfinished">鎖定</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="537"/>
+        <location filename="../client/android/desktop_window.cc" line="534"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation type="unfinished">您是否確定要關閉遠端電腦？</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="541"/>
+        <location filename="../client/android/desktop_window.cc" line="538"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation type="unfinished">您是否確定要重新啟動遠端電腦？</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="545"/>
+        <location filename="../client/android/desktop_window.cc" line="542"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation type="unfinished">您是否確定要重新啟動遠端電腦至安全模式？</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="549"/>
+        <location filename="../client/android/desktop_window.cc" line="546"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation type="unfinished">您是否確定要結束遠端電腦的使用者工作階段？</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="553"/>
+        <location filename="../client/android/desktop_window.cc" line="550"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation type="unfinished">您是否確定要鎖定遠端電腦的使用者工作階段？</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="608"/>
+        <location filename="../client/android/desktop_window.cc" line="605"/>
         <source>Confirmation</source>
         <translation type="unfinished">確認</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="608"/>
+        <location filename="../client/android/desktop_window.cc" line="605"/>
         <source>Yes</source>
         <translation type="unfinished">是</translation>
     </message>
@@ -2390,7 +2408,7 @@ Routers added: %4</source>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="56"/>
-        <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="70"/>
+        <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="72"/>
         <source>Creating a list of files to delete...</source>
         <translation type="unfinished">建立要刪除的檔案清單...</translation>
     </message>
@@ -2410,42 +2428,42 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="93"/>
+        <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="95"/>
         <source>Cancel removal of files.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="132"/>
+        <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="134"/>
         <source>Deleting items.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="159"/>
+        <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="161"/>
         <source>An error occurred while retrieving the list of files: %1</source>
         <translation type="unfinished">檢索檔案清單時發生錯誤：%1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="164"/>
+        <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="166"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
         <translation type="unfinished">無法刪除 &quot;%1&quot;：%2.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="171"/>
+        <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="173"/>
         <source>Warning</source>
         <translation type="unfinished">警告</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="179"/>
+        <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="182"/>
         <source>Skip</source>
         <translation type="unfinished">略過</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="182"/>
+        <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="185"/>
         <source>Skip All</source>
         <translation type="unfinished">全部略過</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="185"/>
+        <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="188"/>
         <source>Abort</source>
         <translation type="unfinished">中止</translation>
     </message>
@@ -2464,7 +2482,7 @@ Routers added: %4</source>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="56"/>
-        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="74"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="78"/>
         <source>Creating a list of files to copy...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2506,77 +2524,77 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="104"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="108"/>
         <source>Cancel transfer of files.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="140"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="144"/>
         <source>Copying items.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="187"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="191"/>
         <source>Warning</source>
         <translation type="unfinished">警告</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="199"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="204"/>
         <source>Skip</source>
         <translation type="unfinished">略過</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="202"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="207"/>
         <source>Skip All</source>
         <translation type="unfinished">全部略過</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="205"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="210"/>
         <source>Replace</source>
         <translation type="unfinished">取代</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="208"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="213"/>
         <source>Replace All</source>
         <translation type="unfinished">全部取代</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="211"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="216"/>
         <source>Abort</source>
         <translation type="unfinished">中止</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="267"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="272"/>
         <source>An error occurred while building the file queue for copying</source>
         <translation type="unfinished">建立用於複製的檔案佇列時出錯</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="272"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="277"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
         <translation type="unfinished">無法建立資料夾 &quot;%1&quot;：%2</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="279"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="284"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
         <translation type="unfinished">無法建立檔案 &quot;%1&quot;：%2</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="285"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="290"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation type="unfinished">無法開啟檔案 &quot;%1&quot;：%2</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="291"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="296"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation type="unfinished">無法寫入檔案 &quot;%1&quot;：%2</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="297"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="302"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation type="unfinished">無法讀取檔案 &quot;%1&quot;：%2</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="303"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="308"/>
         <source>Unknown error type while copying files</source>
         <translation type="unfinished">複製檔案時出現未知錯誤類型</translation>
     </message>
@@ -2681,7 +2699,7 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="431"/>
+        <location filename="../client/android/file_transfer_window.cc" line="432"/>
         <source>Deleting</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2819,18 +2837,16 @@ Routers added: %4</source>
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host/ui/host_main.cc" line="249"/>
         <source>Application integrity check failed. Components are missing or damaged.</source>
-        <translation>應用程式完整性檢查失敗。組件有缺少或損壞。</translation>
+        <translation type="vanished">應用程式完整性檢查失敗。組件有缺少或損壞。</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_main.cc" line="263"/>
         <source>Export and import parameters can not be specified together.</source>
-        <translation>不能同時指定匯出和匯入參數。</translation>
+        <translation type="vanished">不能同時指定匯出和匯入參數。</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_main.cc" line="315"/>
-        <location filename="../host/ui/host_main.cc" line="350"/>
+        <location filename="../host/main.cc" line="566"/>
+        <location filename="../host/main.cc" line="601"/>
         <source>Settings storage is unavailable.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2838,37 +2854,37 @@ Routers added: %4</source>
 <context>
     <name>HostMain</name>
     <message>
-        <location filename="../host/ui/host_main.cc" line="217"/>
+        <location filename="../host/main.cc" line="492"/>
         <source>Launch the application hidden.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_main.cc" line="219"/>
+        <location filename="../host/main.cc" line="494"/>
         <source>Export parameters to file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_main.cc" line="221"/>
+        <location filename="../host/main.cc" line="496"/>
         <source>Import parameters from file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_main.cc" line="223"/>
+        <location filename="../host/main.cc" line="498"/>
         <source>Do not display any messages during import and export.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_main.cc" line="225"/>
+        <location filename="../host/main.cc" line="500"/>
         <source>Calling the update check dialog.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_main.cc" line="227"/>
+        <location filename="../host/main.cc" line="502"/>
         <source>Calling the settings dialog.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_main.cc" line="229"/>
+        <location filename="../host/main.cc" line="504"/>
         <source>Calling the security log dialog.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2877,13 +2893,13 @@ Routers added: %4</source>
     <name>HostTreeItem</name>
     <message>
         <location filename="../client/desktop/hosts/router_group_widget.cc" line="95"/>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="111"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="114"/>
         <source>Online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client/desktop/hosts/router_group_widget.cc" line="95"/>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="111"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="114"/>
         <source>Offline</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2892,9 +2908,9 @@ Routers added: %4</source>
     <name>HostWindow</name>
     <message>
         <location filename="../host/ui/host_window.ui" line="26"/>
-        <location filename="../host/ui/host_window.cc" line="487"/>
-        <location filename="../host/ui/host_window.cc" line="703"/>
-        <location filename="../host/ui/host_window.cc" line="955"/>
+        <location filename="../host/ui/host_window.cc" line="543"/>
+        <location filename="../host/ui/host_window.cc" line="759"/>
+        <location filename="../host/ui/host_window.cc" line="1021"/>
         <source>Aspia Host</source>
         <translation type="unfinished">Aspia Host</translation>
     </message>
@@ -2910,8 +2926,8 @@ Routers added: %4</source>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="204"/>
-        <location filename="../host/ui/host_window.cc" line="430"/>
-        <location filename="../host/ui/host_window.cc" line="865"/>
+        <location filename="../host/ui/host_window.cc" line="486"/>
+        <location filename="../host/ui/host_window.cc" line="931"/>
         <source>Router is disabled</source>
         <translation type="unfinished">已停用路由器</translation>
     </message>
@@ -2972,7 +2988,7 @@ Routers added: %4</source>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="320"/>
-        <location filename="../host/ui/host_window.cc" line="687"/>
+        <location filename="../host/ui/host_window.cc" line="743"/>
         <source>Hide</source>
         <translation type="unfinished">隱藏</translation>
     </message>
@@ -3012,73 +3028,73 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="251"/>
-        <location filename="../host/ui/host_window.cc" line="682"/>
+        <location filename="../host/ui/host_window.cc" line="263"/>
+        <location filename="../host/ui/host_window.cc" line="738"/>
         <source>Show</source>
         <translation type="unfinished">顯示</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="380"/>
+        <location filename="../host/ui/host_window.cc" line="436"/>
         <source>Not available</source>
         <translation type="unfinished">無法使用</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="434"/>
+        <location filename="../host/ui/host_window.cc" line="490"/>
         <source>Connecting to router %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="438"/>
+        <location filename="../host/ui/host_window.cc" line="494"/>
         <source>Connected to router %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="442"/>
+        <location filename="../host/ui/host_window.cc" line="498"/>
         <source>Failed to connect to router %1</source>
         <translation type="unfinished">無法連線到路由器 %1</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="482"/>
+        <location filename="../host/ui/host_window.cc" line="538"/>
         <source>Screen recording has started.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="484"/>
+        <location filename="../host/ui/host_window.cc" line="540"/>
         <source>Screen recording stopped.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="671"/>
+        <location filename="../host/ui/host_window.cc" line="727"/>
         <source>Settings storage is unavailable.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="720"/>
+        <location filename="../host/ui/host_window.cc" line="776"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation type="unfinished">如果您離開 Aspia，在您再次手動開啟電腦或 Aspia 之前，將無法連線到此電腦。您真的要離開應用程式嗎？</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="870"/>
+        <location filename="../host/ui/host_window.cc" line="936"/>
         <source>Connecting to router...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="875"/>
+        <location filename="../host/ui/host_window.cc" line="941"/>
         <source>Connected to router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="880"/>
+        <location filename="../host/ui/host_window.cc" line="946"/>
         <source>Connection error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="952"/>
+        <location filename="../host/ui/host_window.cc" line="1018"/>
         <source>IP addresses:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="956"/>
+        <location filename="../host/ui/host_window.cc" line="1022"/>
         <source>ID: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3229,41 +3245,46 @@ Routers added: %4</source>
     </message>
     <message>
         <location filename="../client/desktop/hosts_tab.ui" line="365"/>
+        <source>Approve</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/hosts_tab.ui" line="374"/>
         <source>Save...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="368"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="377"/>
         <source>Ctrl+S</source>
         <translation type="unfinished">Ctrl+S</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="377"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="386"/>
         <source>Reload</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="380"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="389"/>
         <source>F5</source>
         <translation type="unfinished">F5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="389"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="398"/>
         <source>Import Old Address Book...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="398"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="407"/>
         <source>Export Address Book...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="407"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="416"/>
         <source>Import Address Book...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="415"/>
+        <location filename="../client/desktop/hosts_tab.ui" line="424"/>
         <source>Auto-refresh Status</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3272,115 +3293,115 @@ Routers added: %4</source>
         <translation type="obsolete">主機</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="909"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="957"/>
         <source>(copy)</source>
         <translation type="unfinished">(複製)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="654"/>
         <location filename="../client/desktop/hosts_tab.cc" line="683"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="725"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="874"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="905"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="948"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="712"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="762"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="922"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="953"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="996"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="913"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="961"/>
         <source>Failed to add the host to the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="952"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1000"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="962"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1010"/>
         <source>Unable to remove host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1017"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="1042"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="1067"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1065"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1108"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1133"/>
         <source>Copy Row</source>
         <translation type="unfinished">複製列</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1018"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="1043"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="1068"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1066"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1109"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1134"/>
         <source>Copy Value</source>
         <translation type="unfinished">複製值</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1168"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1234"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1278"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1344"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1340"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1406"/>
         <source>Import Old Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1342"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1408"/>
         <source>Address Book (*.aab);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1365"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="1382"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1431"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1448"/>
         <source>Export Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1367"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="1438"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1433"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1504"/>
         <source>Address Book (*.json);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1377"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1443"/>
         <source>Address book database is not available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1384"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1450"/>
         <source>Enter a password to encrypt the address book.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1389"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1455"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation type="unfinished">您輸入的密碼不符合安全要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts_tab.cc" line="1390"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1456"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform>密碼必須包含小寫和大寫字符、數字，並且不得少於 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1393"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1459"/>
         <source>Do you want to enter a different password?</source>
         <translation type="unfinished">您想輸入其他密碼嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1410"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1476"/>
         <source>Failed to export the address book.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1415"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1481"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -3388,42 +3409,42 @@ Hosts exported: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1436"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1502"/>
         <source>Import Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1447"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1513"/>
         <source>Unlock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1449"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1515"/>
         <source>Address book is encrypted. To open, you must enter a password.</source>
         <translation type="unfinished">通訊錄已加密。您必須輸入密碼才能開啟。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1464"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1530"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1468"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1534"/>
         <source>Unsupported file format version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1472"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1538"/>
         <source>Nothing was imported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1476"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1542"/>
         <source>The file is not a valid address book.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1481"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1547"/>
         <source>Import completed successfully.
 Routers added: %1
 Routers skipped: %2
@@ -3434,17 +3455,17 @@ Hosts skipped: %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1810"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1900"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1817"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1907"/>
         <source>The host has an invalid host ID.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1826"/>
+        <location filename="../client/desktop/hosts_tab.cc" line="1916"/>
         <source>The host has an incorrect address.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3557,48 +3578,48 @@ Hosts skipped: %6</source>
 <context>
     <name>LocalGroupEditor</name>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="49"/>
+        <location filename="../client/android/local_group_editor.cc" line="50"/>
         <source>Name</source>
         <translation type="unfinished">名稱</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="50"/>
+        <location filename="../client/android/local_group_editor.cc" line="51"/>
         <source>Comment</source>
         <translation type="unfinished">註解</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="58"/>
+        <location filename="../client/android/local_group_editor.cc" line="59"/>
         <source>Save</source>
         <translation type="unfinished">儲存</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="61"/>
-        <location filename="../client/android/local_group_editor.cc" line="155"/>
+        <location filename="../client/android/local_group_editor.cc" line="62"/>
+        <location filename="../client/android/local_group_editor.cc" line="160"/>
         <source>Delete</source>
         <translation type="unfinished">刪除</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="129"/>
+        <location filename="../client/android/local_group_editor.cc" line="134"/>
         <source>Name cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="144"/>
+        <location filename="../client/android/local_group_editor.cc" line="149"/>
         <source>Failed to save the group.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="154"/>
+        <location filename="../client/android/local_group_editor.cc" line="159"/>
         <source>Delete Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="155"/>
+        <location filename="../client/android/local_group_editor.cc" line="160"/>
         <source>Delete the group &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="162"/>
+        <location filename="../client/android/local_group_editor.cc" line="167"/>
         <source>Failed to delete the group.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3811,94 +3832,94 @@ Hosts skipped: %6</source>
 <context>
     <name>LocalHostEditor</name>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="59"/>
+        <location filename="../client/android/local_host_editor.cc" line="60"/>
         <source>Name</source>
         <translation type="unfinished">名稱</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="60"/>
+        <location filename="../client/android/local_host_editor.cc" line="61"/>
         <source>Router</source>
         <translation type="unfinished">路由器</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="61"/>
-        <location filename="../client/android/local_host_editor.cc" line="171"/>
+        <location filename="../client/android/local_host_editor.cc" line="62"/>
+        <location filename="../client/android/local_host_editor.cc" line="176"/>
         <source>Address</source>
         <translation type="unfinished">位址</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="62"/>
+        <location filename="../client/android/local_host_editor.cc" line="63"/>
         <source>User Name</source>
         <translation type="unfinished">使用者名稱</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="63"/>
+        <location filename="../client/android/local_host_editor.cc" line="64"/>
         <source>Password</source>
         <translation type="unfinished">密碼</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="65"/>
+        <location filename="../client/android/local_host_editor.cc" line="66"/>
         <source>Comment</source>
         <translation type="unfinished">註解</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="73"/>
+        <location filename="../client/android/local_host_editor.cc" line="74"/>
         <source>Save</source>
         <translation type="unfinished">儲存</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="76"/>
-        <location filename="../client/android/local_host_editor.cc" line="241"/>
+        <location filename="../client/android/local_host_editor.cc" line="77"/>
+        <location filename="../client/android/local_host_editor.cc" line="246"/>
         <source>Delete</source>
         <translation type="unfinished">刪除</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="158"/>
+        <location filename="../client/android/local_host_editor.cc" line="163"/>
         <source>Without Router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="171"/>
+        <location filename="../client/android/local_host_editor.cc" line="176"/>
         <source>ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="180"/>
+        <location filename="../client/android/local_host_editor.cc" line="185"/>
         <source>Name cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="192"/>
+        <location filename="../client/android/local_host_editor.cc" line="197"/>
         <source>An invalid host address was entered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="200"/>
+        <location filename="../client/android/local_host_editor.cc" line="205"/>
         <source>An invalid host ID was entered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="209"/>
+        <location filename="../client/android/local_host_editor.cc" line="214"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="230"/>
+        <location filename="../client/android/local_host_editor.cc" line="235"/>
         <source>Failed to save the host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="240"/>
+        <location filename="../client/android/local_host_editor.cc" line="245"/>
         <source>Delete Host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="241"/>
+        <location filename="../client/android/local_host_editor.cc" line="246"/>
         <source>Delete the host &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="248"/>
+        <location filename="../client/android/local_host_editor.cc" line="253"/>
         <source>Failed to delete the host.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4006,27 +4027,27 @@ Hosts skipped: %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="441"/>
+        <location filename="../client/android/local_widget.cc" line="443"/>
         <source>Edit Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="450"/>
+        <location filename="../client/android/local_widget.cc" line="454"/>
         <source>Edit Host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="538"/>
+        <location filename="../client/android/local_widget.cc" line="542"/>
         <source>Desktop</source>
         <translation type="unfinished">桌面</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="540"/>
+        <location filename="../client/android/local_widget.cc" line="544"/>
         <source>File Transfer</source>
         <translation type="unfinished">檔案傳輸</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="542"/>
+        <location filename="../client/android/local_widget.cc" line="546"/>
         <source>Chat</source>
         <translation type="unfinished">聊天</translation>
     </message>
@@ -4066,7 +4087,7 @@ Hosts skipped: %6</source>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="286"/>
+        <location filename="../client/desktop/main_window.cc" line="298"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Aspia Client</translation>
     </message>
@@ -4126,22 +4147,22 @@ Hosts skipped: %6</source>
         <translation>設定...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="79"/>
+        <location filename="../client/desktop/main_window.cc" line="91"/>
         <source>Search...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="162"/>
+        <location filename="../client/desktop/main_window.cc" line="174"/>
         <source>Hosts</source>
         <translation type="unfinished">主機</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="272"/>
+        <location filename="../client/desktop/main_window.cc" line="284"/>
         <source>Settings</source>
         <translation type="unfinished">設定</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="384"/>
+        <location filename="../client/desktop/main_window.cc" line="396"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4245,13 +4266,13 @@ Hosts skipped: %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="194"/>
-        <location filename="../client/android/master_password_dialog.cc" line="202"/>
+        <location filename="../client/android/master_password_dialog.cc" line="198"/>
+        <location filename="../client/android/master_password_dialog.cc" line="206"/>
         <source>Biometric unlock failed. Enter the master password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="198"/>
+        <location filename="../client/android/master_password_dialog.cc" line="202"/>
         <source>Biometrics changed. Enter the master password to continue.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4368,19 +4389,19 @@ Hosts skipped: %6</source>
     <name>NotifierWindow</name>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="293"/>
-        <location filename="../host/ui/notifier_window.cc" line="289"/>
+        <location filename="../host/ui/notifier_window.cc" line="302"/>
         <source>Lock mouse</source>
         <translation>鎖定滑鼠</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="319"/>
-        <location filename="../host/ui/notifier_window.cc" line="297"/>
+        <location filename="../host/ui/notifier_window.cc" line="310"/>
         <source>Lock keyboard</source>
         <translation>鎖定鍵盤</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="345"/>
-        <location filename="../host/ui/notifier_window.cc" line="305"/>
+        <location filename="../host/ui/notifier_window.cc" line="318"/>
         <source>Pause</source>
         <translation>暫停</translation>
     </message>
@@ -4390,27 +4411,27 @@ Hosts skipped: %6</source>
         <translation>中斷全部連線</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="259"/>
+        <location filename="../host/ui/notifier_window.cc" line="269"/>
         <source>Disconnect</source>
         <translation type="unfinished">中斷連線</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="289"/>
+        <location filename="../host/ui/notifier_window.cc" line="302"/>
         <source>Unlock mouse</source>
         <translation type="unfinished">解鎖滑鼠</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="297"/>
+        <location filename="../host/ui/notifier_window.cc" line="310"/>
         <source>Unlock keyboard</source>
         <translation type="unfinished">解鎖鍵盤</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="305"/>
+        <location filename="../host/ui/notifier_window.cc" line="318"/>
         <source>Resume</source>
         <translation type="unfinished">繼續</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="530"/>
+        <location filename="../host/ui/notifier_window.cc" line="543"/>
         <source>Aspia Host</source>
         <translation type="unfinished">Aspia Host</translation>
     </message>
@@ -4501,6 +4522,80 @@ Hosts skipped: %6</source>
     </message>
 </context>
 <context>
+    <name>PermissionDialog</name>
+    <message>
+        <location filename="../host/ui/permission_dialog.cc" line="38"/>
+        <source>Review System Access</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/permission_dialog.cc" line="43"/>
+        <source>Aspia Host requires your permission to access system capabilities.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/permission_dialog.cc" line="49"/>
+        <source>Review the permissions below and grant the ones that are missing.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/permission_dialog.cc" line="62"/>
+        <source>Screen Recording</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/permission_dialog.cc" line="63"/>
+        <source>Required so a remote user can see this screen.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/permission_dialog.cc" line="63"/>
+        <location filename="../host/ui/permission_dialog.cc" line="65"/>
+        <source>Request Access...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/permission_dialog.cc" line="64"/>
+        <source>Accessibility</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/permission_dialog.cc" line="65"/>
+        <source>Required so a remote user can control the mouse and keyboard.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/permission_dialog.cc" line="66"/>
+        <source>Full Disk Access</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/permission_dialog.cc" line="67"/>
+        <source>Required to transfer files from protected folders.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/permission_dialog.cc" line="67"/>
+        <source>Open Preferences...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/permission_dialog.cc" line="120"/>
+        <source>Open Settings...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/permission_dialog.cc" line="140"/>
+        <source>Granted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/permission_dialog.cc" line="140"/>
+        <source>Denied</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ProcessItem</name>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="87"/>
@@ -4529,17 +4624,22 @@ Hosts skipped: %6</source>
 <context>
     <name>RemoteWidget</name>
     <message>
-        <location filename="../client/android/remote_widget.cc" line="530"/>
+        <location filename="../client/android/remote_widget.cc" line="469"/>
+        <source>Unapproved Hosts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/remote_widget.cc" line="635"/>
         <source>Desktop</source>
         <translation type="unfinished">桌面</translation>
     </message>
     <message>
-        <location filename="../client/android/remote_widget.cc" line="532"/>
+        <location filename="../client/android/remote_widget.cc" line="637"/>
         <source>File Transfer</source>
         <translation type="unfinished">檔案傳輸</translation>
     </message>
     <message>
-        <location filename="../client/android/remote_widget.cc" line="534"/>
+        <location filename="../client/android/remote_widget.cc" line="639"/>
         <source>Chat</source>
         <translation type="unfinished">聊天</translation>
     </message>
@@ -4747,68 +4847,68 @@ Hosts skipped: %6</source>
 <context>
     <name>RouterEditor</name>
     <message>
-        <location filename="../client/android/router_editor.cc" line="55"/>
+        <location filename="../client/android/router_editor.cc" line="56"/>
         <source>Name</source>
         <translation type="unfinished">名稱</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="56"/>
+        <location filename="../client/android/router_editor.cc" line="57"/>
         <source>Address</source>
         <translation type="unfinished">位址</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="57"/>
+        <location filename="../client/android/router_editor.cc" line="58"/>
         <source>User Name</source>
         <translation type="unfinished">使用者名稱</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="58"/>
+        <location filename="../client/android/router_editor.cc" line="59"/>
         <source>Password</source>
         <translation type="unfinished">密碼</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="67"/>
+        <location filename="../client/android/router_editor.cc" line="68"/>
         <source>Save</source>
         <translation type="unfinished">儲存</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="70"/>
-        <location filename="../client/android/router_editor.cc" line="194"/>
+        <location filename="../client/android/router_editor.cc" line="71"/>
+        <location filename="../client/android/router_editor.cc" line="199"/>
         <source>Delete</source>
         <translation type="unfinished">刪除</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="145"/>
+        <location filename="../client/android/router_editor.cc" line="150"/>
         <source>An invalid router address was entered.</source>
         <translation type="unfinished">輸入的路由器位址無效。</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="154"/>
+        <location filename="../client/android/router_editor.cc" line="159"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="164"/>
+        <location filename="../client/android/router_editor.cc" line="169"/>
         <source>Password cannot be empty.</source>
         <translation type="unfinished">密碼不能為空。</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="183"/>
+        <location filename="../client/android/router_editor.cc" line="188"/>
         <source>Failed to save the router.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="193"/>
+        <location filename="../client/android/router_editor.cc" line="198"/>
         <source>Delete Router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="194"/>
+        <location filename="../client/android/router_editor.cc" line="199"/>
         <source>Delete the router &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="201"/>
+        <location filename="../client/android/router_editor.cc" line="206"/>
         <source>Failed to delete the router.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4851,38 +4951,38 @@ Hosts skipped: %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_dialog.cc" line="116"/>
+        <location filename="../client/desktop/hosts/router_group_dialog.cc" line="123"/>
         <source>Invalid group request.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_dialog.cc" line="118"/>
-        <location filename="../client/desktop/hosts/router_group_dialog.cc" line="164"/>
+        <location filename="../client/desktop/hosts/router_group_dialog.cc" line="125"/>
+        <location filename="../client/desktop/hosts/router_group_dialog.cc" line="171"/>
         <source>Unknown internal error.</source>
         <translation type="unfinished">未知的內部錯誤。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_dialog.cc" line="120"/>
+        <location filename="../client/desktop/hosts/router_group_dialog.cc" line="127"/>
         <source>Invalid data was passed.</source>
         <translation type="unfinished">傳入了無效資料。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_dialog.cc" line="122"/>
+        <location filename="../client/desktop/hosts/router_group_dialog.cc" line="129"/>
         <source>Access denied.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_dialog.cc" line="124"/>
+        <location filename="../client/desktop/hosts/router_group_dialog.cc" line="131"/>
         <source>Group not found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_dialog.cc" line="126"/>
+        <location filename="../client/desktop/hosts/router_group_dialog.cc" line="133"/>
         <source>Unknown error type.</source>
         <translation type="unfinished">未知錯誤類型。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_dialog.cc" line="149"/>
+        <location filename="../client/desktop/hosts/router_group_dialog.cc" line="156"/>
         <source>Group name cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5115,74 +5215,74 @@ Hosts skipped: %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="396"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="399"/>
         <source>The host is not assigned to any workspace.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="416"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="419"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="441"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="444"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation type="unfinished">您確定要中斷所有主機的連線嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="466"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="469"/>
         <source>Confirmation</source>
         <translation type="unfinished">確認</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="467"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="470"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="590"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="593"/>
         <source>Invalid host request.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="592"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="595"/>
         <source>Unknown internal error.</source>
         <translation type="unfinished">未知的內部錯誤。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="594"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="597"/>
         <source>Invalid entry id.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="596"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="599"/>
         <source>Unknown error type.</source>
         <translation type="unfinished">未知錯誤類型。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="749"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="752"/>
         <source>%n host(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="778"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="781"/>
         <source>Save File</source>
         <translation type="unfinished">儲存檔案</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="778"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="781"/>
         <source>JSON files (*.json)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="789"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="792"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished">無法開啟檔案進行寫入。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="838"/>
+        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="841"/>
         <source>Unable to write file.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5372,6 +5472,39 @@ Hosts skipped: %6</source>
     </message>
 </context>
 <context>
+    <name>RouterTempHostsWidget</name>
+    <message>
+        <location filename="../client/desktop/hosts/router_temp_hosts_widget.cc" line="82"/>
+        <source>ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/hosts/router_temp_hosts_widget.cc" line="82"/>
+        <source>Computer Name</source>
+        <translation type="unfinished">電腦名稱</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/hosts/router_temp_hosts_widget.cc" line="82"/>
+        <source>Operating System</source>
+        <translation type="unfinished">作業系統</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/hosts/router_temp_hosts_widget.cc" line="83"/>
+        <source>Version</source>
+        <translation type="unfinished">版本</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/hosts/router_temp_hosts_widget.cc" line="83"/>
+        <source>Address</source>
+        <translation type="unfinished">位址</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/hosts/router_temp_hosts_widget.cc" line="206"/>
+        <source>Failed to approve the host.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>RouterUserDialog</name>
     <message>
         <location filename="../client/desktop/hosts/router_user_dialog.ui" line="14"/>
@@ -5454,8 +5587,8 @@ Hosts skipped: %6</source>
     </message>
     <message>
         <location filename="../client/desktop/hosts/router_user_dialog.cc" line="184"/>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="238"/>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="337"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="240"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="339"/>
         <source>Unknown internal error.</source>
         <translation type="unfinished">未知的內部錯誤。</translation>
     </message>
@@ -5471,105 +5604,110 @@ Hosts skipped: %6</source>
     </message>
     <message>
         <location filename="../client/desktop/hosts/router_user_dialog.cc" line="190"/>
+        <source>User not found. The list may be out of date.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="192"/>
         <source>Unknown error type.</source>
         <translation type="unfinished">未知錯誤類型。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="203"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="205"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="252"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="254"/>
         <source>Are you sure you want to sign this user out of this session?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="279"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="281"/>
         <source>Are you sure you want to sign this user out of all sessions?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="333"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="335"/>
         <source>Session not found. The list may be out of date.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="335"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="337"/>
         <source>Invalid sign-out request.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="368"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="370"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
         <translation type="unfinished">使用者名稱不能為空，只能包含字母字元、數字和_、-、.、@ 字元。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="380"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="382"/>
         <source>The username you entered already exists.</source>
         <translation type="unfinished">您輸入的使用者名稱已存在。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="392"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="394"/>
         <source>The passwords you entered do not match.</source>
         <translation type="unfinished">您輸入的密碼不符。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="401"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="403"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation type="unfinished">
             <numerusform>密碼不能為空且不應超過 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="411"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="413"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation type="unfinished">您輸入的密碼不符合安全要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="412"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="414"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform>密碼必須包含小寫和大寫字符、數字，並且不得少於 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="416"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="418"/>
         <source>Do you want to enter a different password?</source>
         <translation type="unfinished">您想輸入其他密碼嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="419"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="421"/>
         <source>Warning</source>
         <translation type="unfinished">警告</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="439"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="441"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation type="unfinished">建立或修改使用者時出現未知的內部錯誤。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="491"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="493"/>
         <source>Double-click to change</source>
         <translation type="unfinished">點選兩次以修改</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="562"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="564"/>
         <source>Administrator</source>
         <translation type="unfinished">管理員</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="566"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="568"/>
         <source>Manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="570"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="572"/>
         <source>Client</source>
         <translation type="unfinished">客戶端</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="588"/>
+        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="590"/>
         <source>Never</source>
         <translation type="unfinished">永不</translation>
     </message>
@@ -5630,11 +5768,16 @@ Hosts skipped: %6</source>
     </message>
     <message>
         <location filename="../client/desktop/hosts/router_users_widget.cc" line="382"/>
+        <source>User not found. The list may be out of date.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/hosts/router_users_widget.cc" line="384"/>
         <source>Unknown error type.</source>
         <translation type="unfinished">未知錯誤類型。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts/router_users_widget.cc" line="440"/>
+        <location filename="../client/desktop/hosts/router_users_widget.cc" line="442"/>
         <source>%n user(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -5924,42 +6067,42 @@ Are you sure you want to continue?</source>
 <context>
     <name>RoutersWidget</name>
     <message>
-        <location filename="../client/android/routers_widget.cc" line="122"/>
+        <location filename="../client/android/routers_widget.cc" line="123"/>
         <source>No routers added</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/routers_widget.cc" line="197"/>
+        <location filename="../client/android/routers_widget.cc" line="198"/>
         <source>Add Router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/routers_widget.cc" line="232"/>
+        <location filename="../client/android/routers_widget.cc" line="235"/>
         <source>Edit Router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/routers_widget.cc" line="327"/>
+        <location filename="../client/android/routers_widget.cc" line="330"/>
         <source>Connecting to router %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/routers_widget.cc" line="332"/>
+        <location filename="../client/android/routers_widget.cc" line="335"/>
         <source>Connection to router %1 established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/routers_widget.cc" line="337"/>
+        <location filename="../client/android/routers_widget.cc" line="340"/>
         <source>Disconnected from router %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/routers_widget.cc" line="353"/>
+        <location filename="../client/android/routers_widget.cc" line="356"/>
         <source>Network error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/routers_widget.cc" line="370"/>
+        <location filename="../client/android/routers_widget.cc" line="373"/>
         <source>The router requires a password change, which is not supported here yet.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6144,34 +6287,6 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="221"/>
         <source>System Start</source>
         <translation type="unfinished">系統初始化期間啟動 (System Start)</translation>
-    </message>
-</context>
-<context>
-    <name>ServiceMain</name>
-    <message>
-        <location filename="../host/service_main.cc" line="128"/>
-        <source>Install service.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../host/service_main.cc" line="130"/>
-        <source>Remove service.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../host/service_main.cc" line="132"/>
-        <source>Start service.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../host/service_main.cc" line="134"/>
-        <source>Stop service.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../host/service_main.cc" line="136"/>
-        <source>Get current host id.</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6439,59 +6554,74 @@ Are you sure you want to continue?</source>
 <context>
     <name>SettingsUtil</name>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="269"/>
+        <location filename="../host/settings_util.cc" line="272"/>
         <source>The configuration was successfully imported.</source>
         <translation>配置已成功匯入。</translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="325"/>
+        <location filename="../host/settings_util.cc" line="321"/>
         <source>The configuration was successfully exported.</source>
         <translation>配置已成功匯出。</translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="246"/>
-        <location filename="../host/ui/settings_util.cc" line="291"/>
+        <location filename="../host/settings_util.cc" line="331"/>
+        <location filename="../host/settings_util.cc" line="335"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="217"/>
+        <location filename="../host/settings_util.cc" line="229"/>
         <source>Source settings file does not exist.</source>
         <translation>原始設定檔案不存在。</translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="226"/>
+        <location filename="../host/settings_util.cc" line="238"/>
         <source>Unable to open the source file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="238"/>
+        <location filename="../host/settings_util.cc" line="250"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
         <translation>無法讀取原始檔：檔案已損壞或使用未知格式。</translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="247"/>
-        <location filename="../host/ui/settings_util.cc" line="292"/>
+        <location filename="../host/settings_util.cc" line="332"/>
+        <location filename="../host/settings_util.cc" line="336"/>
         <source>The existing settings will be overwritten. Continue?</source>
         <translation>目前的設定將被覆蓋，是否繼續？</translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="264"/>
+        <location filename="../host/settings_util.cc" line="332"/>
+        <source>Continue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/settings_util.cc" line="348"/>
+        <source>Error</source>
+        <translation type="unfinished">錯誤</translation>
+    </message>
+    <message>
+        <location filename="../host/settings_util.cc" line="359"/>
+        <source>Aspia</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/settings_util.cc" line="267"/>
         <source>Unable to write the secure database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="284"/>
+        <location filename="../host/settings_util.cc" line="287"/>
         <source>Unable to read the secure database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="312"/>
+        <location filename="../host/settings_util.cc" line="308"/>
         <source>Unable to open the target file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="320"/>
+        <location filename="../host/settings_util.cc" line="316"/>
         <source>Unable to write the target file.</source>
         <translation>無法寫入到目標檔案。</translation>
     </message>
@@ -6500,13 +6630,13 @@ Are you sure you want to continue?</source>
     <name>SettingsWidget</name>
     <message>
         <location filename="../client/android/settings_widget.cc" line="107"/>
-        <location filename="../host/android/settings_widget.cc" line="138"/>
+        <location filename="../host/android/settings_widget.cc" line="144"/>
         <source>About</source>
         <translation type="unfinished">關於</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="158"/>
-        <location filename="../host/android/settings_widget.cc" line="208"/>
+        <location filename="../host/android/settings_widget.cc" line="214"/>
         <source>Interface</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6516,7 +6646,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="161"/>
-        <location filename="../host/android/settings_widget.cc" line="213"/>
+        <location filename="../host/android/settings_widget.cc" line="219"/>
         <source>Theme</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6527,7 +6657,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="186"/>
-        <location filename="../host/android/settings_widget.cc" line="229"/>
+        <location filename="../host/android/settings_widget.cc" line="235"/>
         <source>Security</source>
         <translation type="unfinished">安全性</translation>
     </message>
@@ -6641,17 +6771,17 @@ Are you sure you want to continue?</source>
         <translation type="obsolete">發送按鍵組合</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="147"/>
+        <location filename="../host/android/settings_widget.cc" line="153"/>
         <source>Users</source>
         <translation type="unfinished">使用者</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="156"/>
+        <location filename="../host/android/settings_widget.cc" line="162"/>
         <source>Edit User</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="156"/>
+        <location filename="../host/android/settings_widget.cc" line="162"/>
         <source>Add User</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6664,61 +6794,71 @@ Are you sure you want to continue?</source>
         <translation type="obsolete">檔案傳輸</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="231"/>
+        <location filename="../host/android/settings_widget.cc" line="237"/>
         <source>Manage users</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="239"/>
+        <location filename="../host/android/settings_widget.cc" line="245"/>
         <source>Change password</source>
         <translation type="unfinished">變更密碼</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="243"/>
+        <location filename="../host/android/settings_widget.cc" line="249"/>
         <source>Disable password protection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="252"/>
+        <location filename="../host/android/settings_widget.cc" line="258"/>
         <source>Enable password protection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="267"/>
+        <location filename="../host/android/settings_widget.cc" line="273"/>
         <source>Router</source>
         <translation type="unfinished">路由器</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="272"/>
+        <location filename="../host/android/settings_widget.cc" line="278"/>
         <source>Enable the use of a router</source>
         <translation type="unfinished">啟用路由器的使用</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="277"/>
+        <location filename="../host/android/settings_widget.cc" line="283"/>
         <source>Address</source>
         <translation type="unfinished">位址</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="283"/>
+        <location filename="../host/android/settings_widget.cc" line="289"/>
         <source>Public Key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="288"/>
+        <location filename="../host/android/settings_widget.cc" line="294"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation type="unfinished">當無法直接連線（繞過 NAT）到電腦時，就需要透過路由器進行連接。Aspia 不提供公共路由，但您可以自行搭建。您可從&lt;a href=&quot;https://aspia.org&quot;&gt;官網&lt;/a&gt;下載路由器。</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="354"/>
-        <location filename="../host/android/settings_widget.cc" line="374"/>
+        <location filename="../host/android/settings_widget.cc" line="360"/>
+        <location filename="../host/android/settings_widget.cc" line="380"/>
         <source>Error</source>
         <translation type="unfinished">錯誤</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="354"/>
-        <location filename="../host/android/settings_widget.cc" line="374"/>
+        <location filename="../host/android/settings_widget.cc" line="360"/>
+        <location filename="../host/android/settings_widget.cc" line="380"/>
         <source>An error occurred while processing the password.</source>
         <translation type="unfinished">處理密碼時發生錯誤。</translation>
+    </message>
+    <message>
+        <location filename="../host/android/settings_widget.cc" line="401"/>
+        <source>Import</source>
+        <translation type="unfinished">匯入</translation>
+    </message>
+    <message>
+        <location filename="../host/android/settings_widget.cc" line="401"/>
+        <source>JSON files (*.json)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6729,123 +6869,123 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="914"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="920"/>
         <source>Connecting to router %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="918"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="924"/>
         <source>Connection to router %1 established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="922"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="928"/>
         <source>Disconnected from router %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="966"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="972"/>
         <source>To complete the migration from a previous version, you need to change your password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="468"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="474"/>
         <source>Change Password</source>
         <translation type="unfinished">變更密碼</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts/sidebar.cc" line="475"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="481"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation type="unfinished">
             <numerusform>密碼不能為空且不應超過 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="482"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="488"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation type="unfinished">您輸入的密碼不符合安全要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts/sidebar.cc" line="483"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="489"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform>密碼必須包含小寫和大寫字符、數字，並且不得少於 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="486"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="492"/>
         <source>Do you want to enter a different password?</source>
         <translation type="unfinished">您想輸入其他密碼嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="508"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="514"/>
         <source>Password updated. Waiting for new encryption keys...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="514"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="520"/>
         <source>Invalid password change request.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="516"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="522"/>
         <source>Unknown internal error.</source>
         <translation type="unfinished">未知的內部錯誤。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="518"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="524"/>
         <source>Invalid data was passed.</source>
         <translation type="unfinished">傳入了無效資料。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="520"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="526"/>
         <source>Unknown error type.</source>
         <translation type="unfinished">未知錯誤類型。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="536"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="542"/>
         <source>Event history cleared.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="657"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="663"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="670"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="676"/>
         <source>Unable to remove group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="734"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="740"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="958"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="964"/>
         <source>Network error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="1412"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="1422"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="1421"/>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="1583"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="1431"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="1593"/>
         <source>Failed to move the group.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="1474"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="1484"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="1492"/>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="1660"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="1502"/>
+        <location filename="../client/desktop/hosts/sidebar.cc" line="1670"/>
         <source>Failed to move the host to the selected group.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6862,7 +7002,7 @@ Are you sure you want to continue?</source>
     <name>SidebarRouterHosts</name>
     <message>
         <location filename="../client/desktop/hosts/sidebar_items.cc" line="150"/>
-        <source>All Hosts</source>
+        <source>Approved Hosts</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6871,6 +7011,14 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/hosts/sidebar_items.cc" line="177"/>
         <source>Relays</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SidebarRouterTempHosts</name>
+    <message>
+        <location filename="../client/desktop/hosts/sidebar_items.cc" line="186"/>
+        <source>Unapproved Hosts</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6886,7 +7034,7 @@ Are you sure you want to continue?</source>
     <name>StatisticsDialog</name>
     <message>
         <location filename="../client/desktop/desktop/statistics_dialog.ui" line="14"/>
-        <location filename="../client/android/statistics_dialog.cc" line="176"/>
+        <location filename="../client/android/statistics_dialog.cc" line="177"/>
         <source>Statistics</source>
         <translation>統計</translation>
     </message>
@@ -6901,7 +7049,7 @@ Are you sure you want to continue?</source>
         <translation>值</translation>
     </message>
     <message>
-        <location filename="../client/android/statistics_dialog.cc" line="209"/>
+        <location filename="../client/android/statistics_dialog.cc" line="210"/>
         <source>Close</source>
         <translation type="unfinished">關閉</translation>
     </message>
@@ -7444,41 +7592,36 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <location filename="../client/desktop/sys_info/sys_info_widget_processes.ui" line="55"/>
-        <source>CPU</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_processes.ui" line="60"/>
         <source>Memory</source>
         <translation type="unfinished">記憶體</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_processes.ui" line="65"/>
+        <location filename="../client/desktop/sys_info/sys_info_widget_processes.ui" line="60"/>
         <source>Session ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_processes.ui" line="70"/>
+        <location filename="../client/desktop/sys_info/sys_info_widget_processes.ui" line="65"/>
         <source>User Name</source>
         <translation type="unfinished">使用者名稱</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_processes.ui" line="75"/>
+        <location filename="../client/desktop/sys_info/sys_info_widget_processes.ui" line="70"/>
         <source>Path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_processes.ui" line="83"/>
+        <location filename="../client/desktop/sys_info/sys_info_widget_processes.ui" line="78"/>
         <source>Copy Row</source>
         <translation type="unfinished">複製列</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_processes.ui" line="88"/>
+        <location filename="../client/desktop/sys_info/sys_info_widget_processes.ui" line="83"/>
         <source>Copy Name</source>
         <translation type="unfinished">複製名稱</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_processes.ui" line="93"/>
+        <location filename="../client/desktop/sys_info/sys_info_widget_processes.ui" line="88"/>
         <source>Copy Value</source>
         <translation type="unfinished">複製值</translation>
     </message>
@@ -8314,12 +8457,12 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoWidgetProcesses</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_processes.cc" line="151"/>
+        <location filename="../client/desktop/sys_info/sys_info_widget_processes.cc" line="144"/>
         <source>System Idle Process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_processes.cc" line="153"/>
+        <location filename="../client/desktop/sys_info/sys_info_widget_processes.cc" line="146"/>
         <source>Unknown Process</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9098,38 +9241,38 @@ Are you sure you want to continue?</source>
 <context>
     <name>TerminalWidget</name>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="232"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="244"/>
         <source>Authentication failed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="233"/>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1116"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="245"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1139"/>
         <source>User name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1060"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1083"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1063"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1086"/>
         <source>Paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1066"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1089"/>
         <source>Select All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1114"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1137"/>
         <source>Enter your user name and password to authenticate on the remote computer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1128"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1151"/>
         <source>Password</source>
         <translation type="unfinished">密碼</translation>
     </message>
