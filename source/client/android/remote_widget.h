@@ -78,11 +78,16 @@ private:
     void connectRouters();
     void fetchRouter(qint64 router_id, Router::CachePolicy policy);
     void fetchHosts(Router::CachePolicy policy);
+    void fetchTempHosts();
     void showTree();
 
     // Builds the connection config for a host row from the cached host list. Returns false if the
     // host is no longer present.
     bool hostConfigForItem(QTreeWidgetItem* item, HostConfig* config) const;
+
+    // Builds the connection config for a temporary host row. Returns false if the host is no longer
+    // present.
+    bool tempHostConfigForItem(QTreeWidgetItem* item, HostConfig* config) const;
 
     // Opens the session-type bottom sheet (Desktop / File Transfer) for the given router host.
     void showSessionMenu(const HostConfig& host);
@@ -105,6 +110,7 @@ private:
     QStackedWidget* stack_ = nullptr;
     TreeWidget* tree_ = nullptr;
     TreeWidget* host_tree_ = nullptr;
+    TreeWidget* temp_host_tree_ = nullptr;
     SearchWidget* search_page_ = nullptr;
     IconButton* search_button_ = nullptr;
     IconButton* refresh_button_ = nullptr;
@@ -115,6 +121,9 @@ private:
 
     // The hosts currently shown on the host page, kept to build a connection config on tap.
     QList<Router::Host> hosts_;
+
+    // The temporary hosts currently shown on the temp-host page, kept to build a config on tap.
+    QList<Router::TempHost> temp_hosts_;
 
     // The active search query and its accumulated matches from every online router.
     QString search_query_;

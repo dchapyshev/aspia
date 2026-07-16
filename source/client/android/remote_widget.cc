@@ -42,12 +42,14 @@ namespace {
 constexpr int kPageTree = 0;
 constexpr int kPageHosts = 1;
 constexpr int kPageSearch = 2;
+constexpr int kPageTempHosts = 3;
 
-// Item data roles. A router row is marked by a workspace id of -1.
+// Item data roles. A router row is marked by a workspace id of -1, the unapproved-hosts row by -2.
 constexpr int kRouterIdRole = Qt::UserRole;
 constexpr int kWorkspaceIdRole = Qt::UserRole + 1;
 constexpr int kGroupIdRole = Qt::UserRole + 2;
 constexpr qint64 kRouterMarker = -1;
+constexpr qint64 kTempHostsMarker = -2;
 
 // Item data role for the host rows on the host page.
 constexpr int kHostIdRole = Qt::UserRole;
@@ -106,6 +108,7 @@ RemoteWidget::RemoteWidget(QWidget* parent)
       stack_(new QStackedWidget(this)),
       tree_(new TreeWidget(this)),
       host_tree_(new TreeWidget(this)),
+      temp_host_tree_(new TreeWidget(this)),
       search_page_(new SearchWidget(this)),
       search_button_(new IconButton(":/img/material/search.svg", this)),
       refresh_button_(new IconButton(":/img/material/refresh.svg", this))
@@ -136,9 +139,24 @@ RemoteWidget::RemoteWidget(QWidget* parent)
 
     host_layout->addWidget(host_tree_, 1);
 
+    // Temporary hosts page: the same two-column layout as the host page, fed by the temp-host list.
+    QWidget* temp_host_page = new QWidget(stack_);
+    QVBoxLayout* temp_host_layout = new QVBoxLayout(temp_host_page);
+    temp_host_layout->setContentsMargins(0, 0, 0, 0);
+    temp_host_layout->setSpacing(0);
+
+    temp_host_tree_->setRootIsDecorated(false);
+    temp_host_tree_->setColumnCount(2);
+    temp_host_tree_->header()->setStretchLastSection(false);
+    temp_host_tree_->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    temp_host_tree_->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+
+    temp_host_layout->addWidget(temp_host_tree_, 1);
+
     stack_->addWidget(tree_page);
     stack_->addWidget(host_page);
     stack_->addWidget(search_page_);
+    stack_->addWidget(temp_host_page);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -152,6 +170,14 @@ RemoteWidget::RemoteWidget(QWidget* parent)
     {
         HostConfig config;
         if (hostConfigForItem(item, &config))
+            showSessionMenu(config);
+    });
+
+    // A tap on a temporary host opens the same session-type chooser.
+    connect(temp_host_tree_, &QTreeWidget::itemClicked, this, [this](QTreeWidgetItem* item, int)
+    {
+        HostConfig config;
+        if (tempHostConfigForItem(item, &config))
             showSessionMenu(config);
     });
     connect(refresh_button_, &IconButton::clicked, this, &RemoteWidget::onRefreshClicked);
@@ -318,6 +344,20 @@ void RemoteWidget::onItemActivated(QTreeWidgetItem* item, int /* column */)
         return;
     }
 
+    if (workspace_id == kTempHostsMarker)
+    {
+        host_router_id_ = item->data(0, kRouterIdRole).toLongLong();
+
+        // Clear at once so a previous router's temporary hosts are not left on screen while the
+        // request is in flight.
+        temp_host_tree_->clear();
+        stack_->setCurrentIndex(kPageTempHosts);
+        emit sig_titleChanged(item->text(0), true);
+
+        fetchTempHosts();
+        return;
+    }
+
     host_router_id_ = item->data(0, kRouterIdRole).toLongLong();
     host_workspace_id_ = workspace_id;
     host_group_id_ = item->data(0, kGroupIdRole).toLongLong();
@@ -344,6 +384,8 @@ void RemoteWidget::onRefreshClicked()
 
     if (stack_->currentIndex() == kPageHosts)
         fetchHosts(Router::CachePolicy::RELOAD);
+    else if (stack_->currentIndex() == kPageTempHosts)
+        fetchTempHosts();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -381,9 +423,11 @@ void RemoteWidget::connectRouters()
             {
                 fetchRouter(id, Router::CachePolicy::RELOAD);
             }
-            else if (stack_->currentIndex() == kPageHosts && id == host_router_id_)
+            else if ((stack_->currentIndex() == kPageHosts ||
+                      stack_->currentIndex() == kPageTempHosts) && id == host_router_id_)
             {
-                // The open host list belongs to a router that just dropped; return to the tree root.
+                // The open host or temporary-host list belongs to a router that just dropped; return
+                // to the tree root.
                 showTree();
             }
         });
@@ -391,6 +435,11 @@ void RemoteWidget::connectRouters()
                 [this](qint64 id) { fetchRouter(id, Router::CachePolicy::RELOAD); });
         connect(router, &Router::sig_groupsChanged, this,
                 [this](qint64 id) { fetchRouter(id, Router::CachePolicy::RELOAD); });
+        connect(router, &Router::sig_tempHostsChanged, this, [this](qint64 id)
+        {
+            if (stack_->currentIndex() == kPageTempHosts && id == host_router_id_)
+                fetchTempHosts();
+        });
         connect(router, &Router::sig_hostsChanged, this, [this](qint64 id)
         {
             if (stack_->currentIndex() == kPageHosts && id == host_router_id_)
@@ -415,6 +464,12 @@ void RemoteWidget::fetchRouter(qint64 router_id, Router::CachePolicy policy)
             return;
 
         qDeleteAll(router_item->takeChildren());
+
+        // The unapproved-hosts entry sits above the workspaces; a tap opens the temporary host list.
+        QTreeWidgetItem* temp_item = new QTreeWidgetItem(router_item, { tr("Unapproved Hosts") });
+        temp_item->setIcon(0, GuiApplication::svgIcon(":/img/computer.svg"));
+        temp_item->setData(0, kRouterIdRole, router_id);
+        temp_item->setData(0, kWorkspaceIdRole, kTempHostsMarker);
 
         const QIcon icon = GuiApplication::svgIcon(":/img/workspace.svg");
         Router* session = Router::instance(router_id);
@@ -485,6 +540,34 @@ void RemoteWidget::fetchHosts(Router::CachePolicy policy)
 }
 
 //--------------------------------------------------------------------------------------------------
+void RemoteWidget::fetchTempHosts()
+{
+    Router* router = Router::instance(host_router_id_);
+    if (!router || router->status() != Router::Status::ONLINE)
+        return;
+
+    const qint64 router_id = host_router_id_;
+
+    router->listTempHosts(this, [this, router_id](const Router::TempHostList& list)
+    {
+        // Ignore the result if the selection changed while the request was in flight.
+        if (stack_->currentIndex() != kPageTempHosts || router_id != host_router_id_)
+            return;
+
+        temp_host_tree_->clear();
+        temp_hosts_ = list.hosts;
+
+        for (const Router::TempHost& host : list.hosts)
+        {
+            QTreeWidgetItem* item = new QTreeWidgetItem(
+                temp_host_tree_, { host.computer_name, QString("ID %1").arg(host.temp_id) });
+            item->setIcon(0, GuiApplication::svgIcon(":/img/computer-online.svg"));
+            item->setData(0, kHostIdRole, QVariant::fromValue(host.temp_id));
+        }
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
 void RemoteWidget::showTree()
 {
     stack_->setCurrentIndex(kPageTree);
@@ -511,6 +594,28 @@ bool RemoteWidget::hostConfigForItem(QTreeWidgetItem* item, HostConfig* config) 
         config->setName(name);
         config->setUsername(host.user_name);
         config->setPassword(host.password);
+        return true;
+    }
+
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool RemoteWidget::tempHostConfigForItem(QTreeWidgetItem* item, HostConfig* config) const
+{
+    if (!item || !item->data(0, kHostIdRole).isValid())
+        return false;
+
+    const HostId temp_id = item->data(0, kHostIdRole).value<HostId>();
+
+    for (const Router::TempHost& host : std::as_const(temp_hosts_))
+    {
+        if (host.temp_id != temp_id)
+            continue;
+
+        config->setRouterId(host_router_id_);
+        config->setAddress(hostIdToString(host.temp_id));
+        config->setName(host.computer_name);
         return true;
     }
 
