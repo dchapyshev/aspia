@@ -18,7 +18,7 @@
 
 #include "client/desktop/sys_info/tree_to_html.h"
 
-#include <QFile>
+#include <QSaveFile>
 #include <QTreeWidget>
 #include <QXmlStreamWriter>
 
@@ -149,7 +149,7 @@ QString treeToHtmlString(const QTreeWidget* tree)
 //--------------------------------------------------------------------------------------------------
 bool treeToHtmlFile(const QTreeWidget* tree, const QString& file_path, QString* error_string)
 {
-    QFile file(file_path);
+    QSaveFile file(file_path);
 
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
@@ -164,5 +164,13 @@ bool treeToHtmlFile(const QTreeWidget* tree, const QString& file_path, QString* 
     writer.setDevice(&file);
 
     treeToHtml(tree, &writer);
+
+    if (!file.commit())
+    {
+        if (error_string)
+            *error_string = file.errorString();
+        return false;
+    }
+
     return true;
 }

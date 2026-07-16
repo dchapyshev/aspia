@@ -43,7 +43,7 @@ Frame::Frame(const QSize& size, int stride, quint8* data)
 //--------------------------------------------------------------------------------------------------
 bool Frame::contains(int x, int y) const
 {
-    return (x >= 0 && x <= size_.width() && y >= 0 && y <= size_.height());
+    return (x >= 0 && x < size_.width() && y >= 0 && y < size_.height());
 }
 
 //--------------------------------------------------------------------------------------------------

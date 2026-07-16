@@ -372,7 +372,7 @@ void ChatWidget::onSaveChat()
 
     LOG(INFO) << "Selected file path:" << file_path;
 
-    QFile file(file_path);
+    QSaveFile file(file_path);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         LOG(ERROR) << "Unable to open file:" << file.errorString();
@@ -418,6 +418,13 @@ void ChatWidget::onSaveChat()
             stream << status_message_widget->messageText() << Qt::endl;
             stream << Qt::endl;
         }
+    }
+
+    stream.flush();
+    if (!file.commit())
+    {
+        LOG(ERROR) << "Unable to write file:" << file.errorString();
+        MsgBox::warning(this, tr("Unable to write file."));
     }
 }
 

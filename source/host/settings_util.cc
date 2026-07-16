@@ -23,6 +23,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QSaveFile>
 
 #include "base/logging.h"
 #include "base/net/address.h"
@@ -297,8 +298,10 @@ bool SettingsUtil::exportToFile(const QString& path, bool silent, QWidget* paren
     root[kSystem] = exportSystemSettings();
     root[kDatabase] = exportDatabase();
 
-    QFile file(path);
-    if (!file.open(QFile::WriteOnly | QFile::Truncate))
+    const QByteArray json = QJsonDocument(root).toJson(QJsonDocument::Indented);
+
+    QSaveFile file(path);
+    if (!file.open(QFile::WriteOnly))
     {
         LOG(ERROR) << "Unable to open target file:" << file.errorString();
         if (!silent)
@@ -306,7 +309,7 @@ bool SettingsUtil::exportToFile(const QString& path, bool silent, QWidget* paren
         return false;
     }
 
-    if (file.write(QJsonDocument(root).toJson(QJsonDocument::Indented)) == -1)
+    if (file.write(json) != json.size() || !file.commit())
     {
         LOG(ERROR) << "Failed to write target file:" << file.errorString();
         if (!silent)

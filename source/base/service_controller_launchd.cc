@@ -22,6 +22,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QProcess>
+#include <QSaveFile>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 
@@ -168,14 +169,14 @@ QByteArray generatePlist(const QString& label, const QString& file_path,
 //--------------------------------------------------------------------------------------------------
 bool writePlist(const QString& path, const QByteArray& content)
 {
-    QFile file(path);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+    QSaveFile file(path);
+    if (!file.open(QIODevice::WriteOnly))
     {
         LOG(ERROR) << "Failed to open plist for writing:" << path << file.errorString();
         return false;
     }
 
-    if (file.write(content) != content.size())
+    if (file.write(content) != content.size() || !file.commit())
     {
         LOG(ERROR) << "Failed to write plist:" << path << file.errorString();
         return false;

@@ -19,6 +19,7 @@
 #include "base/files/file_util.h"
 
 #include <QFile>
+#include <QSaveFile>
 
 namespace {
 
@@ -41,7 +42,13 @@ bool readFileT(const QString& filename, Container* buffer)
 
     buffer->resize(static_cast<Container::size_type>(size));
 
-    return file.read(reinterpret_cast<char*>(buffer->data()), buffer->size()) != -1;
+    if (file.read(reinterpret_cast<char*>(buffer->data()), buffer->size()) != static_cast<qint64>(size))
+    {
+        buffer->clear();
+        return false;
+    }
+
+    return true;
 }
 
 } // namespace
@@ -52,11 +59,14 @@ bool writeFile(const QString& filename, const void* data, size_t size)
     if (!data)
         return false;
 
-    QFile file(filename);
-    if (!file.open(QFile::ReadWrite | QFile::Truncate))
+    QSaveFile file(filename);
+    if (!file.open(QFile::WriteOnly))
         return false;
 
-    return file.write(reinterpret_cast<const char*>(data), size) != -1;
+    if (file.write(reinterpret_cast<const char*>(data), size) != static_cast<qint64>(size))
+        return false;
+
+    return file.commit();
 }
 
 //--------------------------------------------------------------------------------------------------

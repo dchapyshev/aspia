@@ -24,7 +24,6 @@
 #include <QDataStream>
 #include <QDateTime>
 #include <QEvent>
-#include <QFile>
 #include <QFileDialog>
 #include <QHeaderView>
 #include <QIODevice>
@@ -33,6 +32,7 @@
 #include <QJsonObject>
 #include <QLabel>
 #include <QMenu>
+#include <QSaveFile>
 #include <QStatusBar>
 
 #include "base/logging.h"
@@ -260,7 +260,7 @@ void RouterClientsWidget::save()
         return;
     }
 
-    QFile file(file_path);
+    QSaveFile file(file_path);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         LOG(INFO) << "Unable to open file:" << file.errorString();
@@ -296,8 +296,8 @@ void RouterClientsWidget::save()
     QJsonObject root_object;
     root_object.insert("clients", root_array);
 
-    qint64 written = file.write(QJsonDocument(root_object).toJson());
-    if (written <= 0)
+    const QByteArray json = QJsonDocument(root_object).toJson();
+    if (file.write(json) != json.size() || !file.commit())
     {
         LOG(INFO) << "Unable to write file:" << file.errorString();
         MsgBox::warning(this, tr("Unable to write file."));
