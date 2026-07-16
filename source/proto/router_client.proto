@@ -232,12 +232,13 @@ message TempHostList
 // events within the window.
 message Notification
 {
-    bool hosts_dirty      = 1;
-    bool relays_dirty     = 2;
-    bool clients_dirty    = 3;
-    bool users_dirty      = 4;
-    bool workspaces_dirty = 5;
-    bool groups_dirty     = 6;
+    bool temp_hosts_dirty = 1;
+    bool hosts_dirty      = 2;
+    bool relays_dirty     = 3;
+    bool clients_dirty    = 4;
+    bool users_dirty      = 5;
+    bool workspaces_dirty = 6;
+    bool groups_dirty     = 7;
 }
 
 // 2FA stage that runs between successful SRP authentication and the first UserKeys delivery.

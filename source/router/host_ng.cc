@@ -70,7 +70,11 @@ HostNG::~HostNG()
 {
     CLOG(INFO) << "Dtor";
 
-    releaseTempHostId(host_id_);
+    if (isTempHostId(host_id_))
+    {
+        releaseTempHostId(host_id_);
+        Service::notifyChanged(Service::NOTIFY_TEMP_HOSTS);
+    }
 
     // If a remove command was sent during this session, the host has either processed it (and
     // disconnected/uninstalled) or got dropped before it could; either way the host_id will not
