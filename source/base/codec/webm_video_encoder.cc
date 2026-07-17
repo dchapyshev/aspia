@@ -21,6 +21,7 @@
 #include <QThread>
 
 #include "base/logging.h"
+#include "base/desktop/frame.h"
 #include "proto/desktop_video.h"
 
 #include <libyuv/convert.h>
@@ -84,7 +85,7 @@ WebmVideoEncoder::~WebmVideoEncoder()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool WebmVideoEncoder::encode(const VideoDecoder::YuvView& frame, proto::video::Packet* packet)
+bool WebmVideoEncoder::encode(const Frame& frame, proto::video::Packet* packet)
 {
     DCHECK(packet);
 
@@ -95,8 +96,7 @@ bool WebmVideoEncoder::encode(const VideoDecoder::YuvView& frame, proto::video::
         LOG(INFO) << "Frame size changed from" << last_frame_size_ << "to" << frame.size();
         last_frame_size_ = frame.size();
 
-        // The owned buffer is only used to convert NV12 input; recreate it lazily when needed.
-        image_.reset();
+        createImage();
 
         if (!createCodec())
         {
@@ -109,53 +109,24 @@ bool WebmVideoEncoder::encode(const VideoDecoder::YuvView& frame, proto::video::
         video_rect->set_height(last_frame_size_.height());
     }
 
-    if (frame.format() == VideoDecoder::YuvFormat::NV12 && !image_)
-        createImage();
+    const int y_stride = image_->stride[0];
+    const int uv_stride = image_->stride[1];
+    quint8* y_data = image_->planes[0];
+    quint8* u_data = image_->planes[1];
+    quint8* v_data = image_->planes[2];
 
-    const int width = last_frame_size_.width();
-    const int height = last_frame_size_.height();
-
-    vpx_image_t source_image;
-    const vpx_image_t* encode_image = nullptr;
-
-    switch (frame.format())
-    {
-        case VideoDecoder::YuvFormat::I420:
-        {
-            memset(&source_image, 0, sizeof(source_image));
-            source_image.fmt = VPX_IMG_FMT_I420;
-            source_image.w = source_image.d_w = static_cast<unsigned int>(width);
-            source_image.h = source_image.d_h = static_cast<unsigned int>(height);
-            source_image.x_chroma_shift = 1;
-            source_image.y_chroma_shift = 1;
-            source_image.planes[0] = const_cast<quint8*>(frame.planeData(0));
-            source_image.planes[1] = const_cast<quint8*>(frame.planeData(1));
-            source_image.planes[2] = const_cast<quint8*>(frame.planeData(2));
-            source_image.stride[0] = frame.planeStride(0);
-            source_image.stride[1] = frame.planeStride(1);
-            source_image.stride[2] = frame.planeStride(2);
-            encode_image = &source_image;
-        }
-        break;
-
-        case VideoDecoder::YuvFormat::NV12:
-            libyuv::NV12ToI420(frame.planeData(0), frame.planeStride(0),
-                               frame.planeData(1), frame.planeStride(1),
-                               image_->planes[0], image_->stride[0],
-                               image_->planes[1], image_->stride[1],
-                               image_->planes[2], image_->stride[2],
-                               width, height);
-            encode_image = image_.get();
-            break;
-    }
-
-    if (!encode_image)
-        return false;
+    libyuv::ARGBToI420(frame.frameData(),
+                       frame.stride(),
+                       y_data, y_stride,
+                       u_data, uv_stride,
+                       v_data, uv_stride,
+                       last_frame_size_.width(),
+                       last_frame_size_.height());
 
     // Do the actual encoding.
     vpx_codec_err_t ret = vpx_codec_encode(
         codec_.get(),
-        encode_image,
+        image_.get(),
         0, // pts
         static_cast<unsigned long>(std::chrono::microseconds(kTargetFrameInterval).count()),
         0, // flags
