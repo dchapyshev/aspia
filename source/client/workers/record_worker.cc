@@ -25,6 +25,7 @@
 #include "base/codec/webm_file_writer.h"
 #include "base/codec/webm_video_encoder.h"
 #include "base/desktop/frame_aligned.h"
+#include "base/threading/worker_manager.h"
 #include "client/workers/network_worker.h"
 #include "client/workers/video_worker.h"
 #include "proto/desktop_audio.h"

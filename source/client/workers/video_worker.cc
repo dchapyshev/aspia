@@ -25,6 +25,7 @@
 #include "base/codec/cursor_decoder.h"
 #include "base/codec/video_decoder.h"
 #include "base/desktop/mouse_cursor.h"
+#include "base/threading/worker_manager.h"
 #include "client/workers/network_worker.h"
 #include "proto/desktop_control.h"
 

@@ -22,13 +22,12 @@
 
 #include "base/gui_application.h"
 #include "base/logging.h"
-#include "client/client_file_transfer.h"
 #include "client/file_error_code.h"
 #include "client/desktop/file_transfer/address_bar_model.h"
 #include "client/desktop/file_transfer/file_mime_data.h"
 #include "client/desktop/file_transfer/file_remove_widget.h"
 #include "client/desktop/file_transfer/file_transfer_widget.h"
-
+#include "client/workers/file_worker.h"
 #include "common/desktop/msg_box.h"
 #include "proto/peer.h"
 #include "ui_file_transfer_window.h"
@@ -59,42 +58,6 @@ FileTransferWindow::FileTransferWindow(QWidget* parent)
 FileTransferWindow::~FileTransferWindow()
 {
     LOG(INFO) << "Dtor";
-}
-
-//--------------------------------------------------------------------------------------------------
-Client* FileTransferWindow::createClient()
-{
-    LOG(INFO) << "Create client";
-
-    ClientFileTransfer* client = new ClientFileTransfer();
-
-    connect(client, &ClientFileTransfer::sig_showSessionWindow, this, &FileTransferWindow::onShowWindow,
-            Qt::QueuedConnection);
-    connect(client, &ClientFileTransfer::sig_errorOccurred, this, &FileTransferWindow::onErrorOccurred,
-            Qt::QueuedConnection);
-    connect(client, &ClientFileTransfer::sig_driveListReply, this, &FileTransferWindow::onDriveList,
-            Qt::QueuedConnection);
-    connect(client, &ClientFileTransfer::sig_fileListReply, this, &FileTransferWindow::onFileList,
-            Qt::QueuedConnection);
-    connect(client, &ClientFileTransfer::sig_createDirectoryReply, this, &FileTransferWindow::onCreateDirectory,
-            Qt::QueuedConnection);
-    connect(client, &ClientFileTransfer::sig_renameReply, this, &FileTransferWindow::onRename,
-            Qt::QueuedConnection);
-
-    connect(this, &FileTransferWindow::sig_driveListRequest, client, &ClientFileTransfer::onDriveListRequest,
-            Qt::QueuedConnection);
-    connect(this, &FileTransferWindow::sig_fileListRequest, client, &ClientFileTransfer::onFileListRequest,
-            Qt::QueuedConnection);
-    connect(this, &FileTransferWindow::sig_createDirectoryRequest, client, &ClientFileTransfer::onCreateDirectoryRequest,
-            Qt::QueuedConnection);
-    connect(this, &FileTransferWindow::sig_renameRequest, client, &ClientFileTransfer::onRenameRequest,
-            Qt::QueuedConnection);
-    connect(this, &FileTransferWindow::sig_removeRequest, client, &ClientFileTransfer::onRemoveRequest,
-            Qt::QueuedConnection);
-    connect(this, &FileTransferWindow::sig_transferRequest, client, &ClientFileTransfer::onTransferRequest,
-            Qt::QueuedConnection);
-
-    return client;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -136,12 +99,81 @@ void FileTransferWindow::restoreState(const QByteArray& state)
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileTransferWindow::onShowWindow()
+void FileTransferWindow::refresh()
 {
-    LOG(INFO) << "Show window";
+    ui->local_panel->refresh();
+    ui->remote_panel->refresh();
+}
+
+//--------------------------------------------------------------------------------------------------
+void FileTransferWindow::onInternalReset()
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+void FileTransferWindow::onRegisterWorkers()
+{
+    LOG(INFO) << "Register workers";
+
+    std::unique_ptr<FileWorker> file_worker = std::make_unique<FileWorker>();
+    file_worker_ = file_worker.get();
+    addWorker(std::move(file_worker));
+
+    // Replies from the session update the panels; errors close the window.
+    connect(file_worker_, &FileWorker::sig_errorOccurred,
+            this, &FileTransferWindow::onErrorOccurred, Qt::QueuedConnection);
+    connect(file_worker_, &FileWorker::sig_driveListReply,
+            this, &FileTransferWindow::onDriveList, Qt::QueuedConnection);
+    connect(file_worker_, &FileWorker::sig_fileListReply,
+            this, &FileTransferWindow::onFileList, Qt::QueuedConnection);
+    connect(file_worker_, &FileWorker::sig_createDirectoryReply,
+            this, &FileTransferWindow::onCreateDirectory, Qt::QueuedConnection);
+    connect(file_worker_, &FileWorker::sig_renameReply,
+            this, &FileTransferWindow::onRename, Qt::QueuedConnection);
+
+    // The panels drive the session through these requests.
+    connect(this, &FileTransferWindow::sig_driveListRequest,
+            file_worker_, &FileWorker::onDriveListRequest, Qt::QueuedConnection);
+    connect(this, &FileTransferWindow::sig_fileListRequest,
+            file_worker_, &FileWorker::onFileListRequest, Qt::QueuedConnection);
+    connect(this, &FileTransferWindow::sig_createDirectoryRequest,
+            file_worker_, &FileWorker::onCreateDirectoryRequest, Qt::QueuedConnection);
+    connect(this, &FileTransferWindow::sig_renameRequest,
+            file_worker_, &FileWorker::onRenameRequest, Qt::QueuedConnection);
+    connect(this, &FileTransferWindow::sig_removeRequest,
+            file_worker_, &FileWorker::onRemoveRequest, Qt::QueuedConnection);
+    connect(this, &FileTransferWindow::sig_transferRequest,
+            file_worker_, &FileWorker::onTransferRequest, Qt::QueuedConnection);
+}
+
+//--------------------------------------------------------------------------------------------------
+void FileTransferWindow::onSessionStarted()
+{
+    LOG(INFO) << "File transfer session started";
     show();
     activateWindow();
     refresh();
+}
+
+//--------------------------------------------------------------------------------------------------
+void FileTransferWindow::closeEvent(QCloseEvent* event)
+{
+    LOG(INFO) << "Close event detected";
+
+    if (ui->transfer_widget->isVisible())
+    {
+        LOG(INFO) << "Stopping transfer widget";
+        ui->transfer_widget->requestStop();
+    }
+
+    if (ui->remove_widget->isVisible())
+    {
+        LOG(INFO) << "Stopping remove widget";
+        ui->remove_widget->requestStop();
+    }
+
+    ClientWindow::closeEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -213,39 +245,6 @@ void FileTransferWindow::onRename(
         DCHECK_EQ(target, FileTask::Target::REMOTE);
         ui->remote_panel->onRename(error_code);
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void FileTransferWindow::refresh()
-{
-    ui->local_panel->refresh();
-    ui->remote_panel->refresh();
-}
-
-//--------------------------------------------------------------------------------------------------
-void FileTransferWindow::onInternalReset()
-{
-    // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
-void FileTransferWindow::closeEvent(QCloseEvent* event)
-{
-    LOG(INFO) << "Close event detected";
-
-    if (ui->transfer_widget->isVisible())
-    {
-        LOG(INFO) << "Stopping transfer widget";
-        ui->transfer_widget->requestStop();
-    }
-
-    if (ui->remove_widget->isVisible())
-    {
-        LOG(INFO) << "Stopping remove widget";
-        ui->remove_widget->requestStop();
-    }
-
-    ClientWindow::closeEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------

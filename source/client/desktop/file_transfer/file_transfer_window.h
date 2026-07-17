@@ -19,6 +19,8 @@
 #ifndef CLIENT_DESKTOP_FILE_TRANSFER_FILE_TRANSFER_WINDOW_H
 #define CLIENT_DESKTOP_FILE_TRANSFER_FILE_TRANSFER_WINDOW_H
 
+#include <QPointer>
+
 #include <memory>
 
 #include "client/file_remover.h"
@@ -30,6 +32,7 @@ class FileTransferWindow;
 } // namespace Ui
 
 class FilePanel;
+class FileWorker;
 
 class FileTransferWindow final : public ClientWindow
 {
@@ -40,21 +43,8 @@ public:
     ~FileTransferWindow() final;
 
     // ClientWindow implementation.
-    Client* createClient() final;
     QByteArray saveState() const final;
     void restoreState(const QByteArray& state) final;
-
-public slots:
-    void onShowWindow();
-    void onErrorOccurred(proto::file_transfer::ErrorCode error_code);
-    void onDriveList(FileTask::Target target,
-                     proto::file_transfer::ErrorCode error_code,
-                     const proto::file_transfer::DriveList& drive_list);
-    void onFileList(FileTask::Target target,
-                    proto::file_transfer::ErrorCode error_code,
-                    const proto::file_transfer::List& file_list);
-    void onCreateDirectory(FileTask::Target target, proto::file_transfer::ErrorCode error_code);
-    void onRename(FileTask::Target target, proto::file_transfer::ErrorCode error_code);
 
     void refresh();
 
@@ -69,11 +59,22 @@ signals:
 protected:
     // ClientWindow implementation.
     void onInternalReset() final;
+    void onRegisterWorkers() final;
+    void onSessionStarted() final;
 
     // QWidget implementation.
     void closeEvent(QCloseEvent* event) final;
 
 private slots:
+    void onErrorOccurred(proto::file_transfer::ErrorCode error_code);
+    void onDriveList(FileTask::Target target,
+                     proto::file_transfer::ErrorCode error_code,
+                     const proto::file_transfer::DriveList& drive_list);
+    void onFileList(FileTask::Target target,
+                    proto::file_transfer::ErrorCode error_code,
+                    const proto::file_transfer::List& file_list);
+    void onCreateDirectory(FileTask::Target target, proto::file_transfer::ErrorCode error_code);
+    void onRename(FileTask::Target target, proto::file_transfer::ErrorCode error_code);
     void removeItems(FilePanel* sender, const FileRemover::TaskList& items);
     void sendItems(FilePanel* sender, const QList<FileTransfer::Item>& items);
     void receiveItems(FilePanel* sender,
@@ -97,6 +98,7 @@ private:
     void setFilePanelsEnabled(bool enabled);
 
     std::unique_ptr<Ui::FileTransferWindow> ui;
+    QPointer<FileWorker> file_worker_;
 
     Q_DISABLE_COPY_MOVE(FileTransferWindow)
 };
