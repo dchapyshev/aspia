@@ -19,6 +19,8 @@
 collect_sources(SOURCE_CLIENT_WORKERS
     audio_worker.cc
     audio_worker.h
+    file_worker.cc
+    file_worker.h
     network_worker.cc
     network_worker.h
     record_worker.cc
