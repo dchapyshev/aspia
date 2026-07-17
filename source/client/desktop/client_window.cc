@@ -25,11 +25,13 @@
 #include <QMoveEvent>
 #include <QTimer>
 
-#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/version_constants.h"
+#include "base/threading/worker_manager.h"
 #include "client/router.h"
+#include "client/session_keeper.h"
 #include "client/desktop/authorization_dialog.h"
+#include "client/workers/network_worker.h"
 #include "common/desktop/session_type.h"
 #include "common/desktop/status_dialog.h"
 #include "proto/peer.h"
@@ -67,7 +69,7 @@ ClientWindow::ClientWindow(proto::peer::SessionType session_type, QWidget* paren
     {
         session_state_->setReconnecting(false);
         session_state_->setAutoReconnect(false);
-        onStatusChanged(Client::Status::WAIT_FOR_HOST_TIMEOUT, QVariant());
+        onErrorOccurred(tr("Timeout waiting for reconnection to host."));
     });
 
     createSessionConnectActions();
@@ -77,6 +79,9 @@ ClientWindow::ClientWindow(proto::peer::SessionType session_type, QWidget* paren
 ClientWindow::~ClientWindow()
 {
     LOG(INFO) << "Dtor";
+
+    if (session_keeper_)
+        session_keeper_->release();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -120,12 +125,12 @@ bool ClientWindow::connectToHost(HostConfig host, const QString& display_name)
     LOG(INFO) << "Start client";
     if (session_state_->isConnectionByHostId())
     {
-        // Relay path: fetch the ConnectionOffer first; Client will be created once we have it.
+        // Relay path: fetch the ConnectionOffer first; the session starts once we have it.
         fetchConnectionOffer();
     }
     else
     {
-        startNewClient();
+        startNewSession();
     }
     return true;
 }
@@ -186,11 +191,35 @@ void ClientWindow::restoreState(const QByteArray& /* state */)
 }
 
 //--------------------------------------------------------------------------------------------------
+void ClientWindow::addWorker(std::unique_ptr<Worker> worker)
+{
+    worker_manager_->add(std::move(worker));
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientWindow::sendMessage(quint8 channel_id, const QByteArray& buffer)
+{
+    emit sig_sendMessage(channel_id, buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
+NetworkWorker* ClientWindow::networkWorker() const
+{
+    return network_worker_;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ClientWindow::isLegacy() const
+{
+    return is_legacy_mode_;
+}
+
+//--------------------------------------------------------------------------------------------------
 void ClientWindow::closeEvent(QCloseEvent* /* event */)
 {
     LOG(INFO) << "Close event";
     drag_poll_timer_->stop();
-    client_.reset();
+    worker_manager_.reset();
     emit sig_stop();
 }
 
@@ -215,33 +244,21 @@ void ClientWindow::moveEvent(QMoveEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::onStatusChanged(Client::Status status, const QVariant& data)
+void ClientWindow::onStatusChanged(NetworkWorker::Status status, const QVariant& data)
 {
     LOG(INFO) << "Client status changed:" << status;
 
     switch (status)
     {
-        case Client::Status::STARTED:
+        case NetworkWorker::Status::STARTED:
             status_dialog_->addMessageAndActivate(tr("Session started."));
             break;
 
-        case Client::Status::STOPPED:
-            status_dialog_->close();
+        case NetworkWorker::Status::RELAY_ERROR:
+            onErrorOccurred(data.toString());
             break;
 
-        case Client::Status::ROUTER_ERROR:
-            onErrorOccurred(tr("Error requesting connection via router: %1.").arg(data.toString()));
-            break;
-
-        case Client::Status::NO_ROUTER:
-            onErrorOccurred(tr("The specified router is unavailable."));
-            break;
-
-        case Client::Status::ROUTER_OFFLINE:
-            onErrorOccurred(tr("The specified router is offline."));
-            break;
-
-        case Client::Status::HOST_CONNECTING:
+        case NetworkWorker::Status::HOST_CONNECTING:
         {
             if (session_state_->isConnectionByHostId())
             {
@@ -256,7 +273,7 @@ void ClientWindow::onStatusChanged(Client::Status status, const QVariant& data)
         }
         break;
 
-        case Client::Status::HOST_CONNECTED:
+        case NetworkWorker::Status::HOST_CONNECTED:
         {
             if (session_state_->isConnectionByHostId())
             {
@@ -275,7 +292,7 @@ void ClientWindow::onStatusChanged(Client::Status status, const QVariant& data)
         }
         break;
 
-        case Client::Status::HOST_DISCONNECTED:
+        case NetworkWorker::Status::HOST_DISCONNECTED:
         {
             if (data.canConvert<TcpChannel::ErrorCode>())
             {
@@ -289,7 +306,7 @@ void ClientWindow::onStatusChanged(Client::Status status, const QVariant& data)
         }
         break;
 
-        case Client::Status::WAIT_FOR_HOST:
+        case NetworkWorker::Status::WAIT_FOR_HOST:
             onErrorOccurred(tr("Host is unavailable yet. Waiting to reconnect..."));
             if (!session_state_->isAutoReconnect())
                 break;
@@ -297,19 +314,15 @@ void ClientWindow::onStatusChanged(Client::Status status, const QVariant& data)
             // WAIT_FOR_HOST signals during the same cycle keep the deadline rolling.
             if (!reconnect_timeout_timer_->isActive())
                 reconnect_timeout_timer_->start(kReconnectBudget);
-            // Relay path fetches a fresh ConnectionOffer (which then triggers startNewClient).
-            // Direct path doesn't need an offer - just rebuild the Client after the same delay.
+            // Relay path fetches a fresh ConnectionOffer (which then starts the session).
+            // Direct path doesn't need an offer - just rebuild the session after the same delay.
             if (session_state_->isConnectionByHostId())
                 QTimer::singleShot(kReconnectRetryDelay, this, &ClientWindow::fetchConnectionOffer);
             else
-                QTimer::singleShot(kReconnectRetryDelay, this, &ClientWindow::startNewClient);
+                QTimer::singleShot(kReconnectRetryDelay, this, &ClientWindow::startNewSession);
             break;
 
-        case Client::Status::WAIT_FOR_HOST_TIMEOUT:
-            onErrorOccurred(tr("Timeout waiting for reconnection to host."));
-            break;
-
-        case Client::Status::VERSION_MISMATCH:
+        case NetworkWorker::Status::VERSION_MISMATCH:
         {
             QString host_version = session_state_->hostVersion().toString();
             QString client_version = kCurrentVersion.toString();
@@ -319,7 +332,7 @@ void ClientWindow::onStatusChanged(Client::Status status, const QVariant& data)
         }
         break;
 
-        case Client::Status::LEGACY_HOST:
+        case NetworkWorker::Status::LEGACY_HOST:
             onErrorOccurred(tr("Attempting to connect in compatibility mode..."));
             break;
 
@@ -369,13 +382,13 @@ void ClientWindow::fetchConnectionOffer()
     Router* router = Router::instance(session_state_->routerId());
     if (!router)
     {
-        onStatusChanged(Client::Status::NO_ROUTER, QVariant());
+        onErrorOccurred(tr("The specified router is unavailable."));
         return;
     }
 
     if (router->status() != Router::Status::ONLINE)
     {
-        onStatusChanged(Client::Status::ROUTER_OFFLINE, QVariant());
+        onErrorOccurred(tr("The specified router is offline."));
         return;
     }
 
@@ -393,7 +406,7 @@ void ClientWindow::fetchConnectionOffer()
                 status_dialog_->addMessageAndActivate(tr("Connection offer received."));
 
             session_state_->setConnectionOffer(offer);
-            startNewClient();
+            startNewSession();
             return;
         }
 
@@ -423,18 +436,68 @@ void ClientWindow::fetchConnectionOffer()
                 error = tr("Unknown error");
                 break;
         }
-        onStatusChanged(Client::Status::ROUTER_ERROR, error);
+        onErrorOccurred(tr("Error requesting connection via router: %1.").arg(error));
     });
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::startNewClient()
+void ClientWindow::startNewSession()
 {
-    client_ = createClient();
-    client_->moveToThread(GuiApplication::ioThread());
-    client_->setSessionState(session_state_);
+    if (!session_keeper_)
+        session_keeper_ = SessionKeeper::create(this);
 
-    connect(client_, &Client::sig_statusChanged, this, &ClientWindow::onStatusChanged, Qt::QueuedConnection);
+    worker_manager_.reset();
+    worker_manager_ = std::make_unique<WorkerManager>();
 
-    QMetaObject::invokeMethod(client_, &Client::start, Qt::QueuedConnection);
+    std::unique_ptr<NetworkWorker> network_worker = std::make_unique<NetworkWorker>();
+    network_worker_ = network_worker.get();
+    worker_manager_->add(std::move(network_worker));
+
+    onRegisterWorkers();
+
+    connect(this, &ClientWindow::sig_startConnection, network_worker_, &NetworkWorker::onStartConnection,
+            Qt::QueuedConnection);
+    connect(this, &ClientWindow::sig_sessionReady, network_worker_, &NetworkWorker::onSessionReady,
+            Qt::QueuedConnection);
+    connect(this, &ClientWindow::sig_sendMessage, network_worker_, &NetworkWorker::onSendMessage,
+            Qt::QueuedConnection);
+
+    connect(network_worker_, &NetworkWorker::sig_statusChanged, this, &ClientWindow::onNetworkStatusChanged,
+            Qt::QueuedConnection);
+
+    worker_manager_->start();
+
+    emit sig_startConnection(session_state_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientWindow::onNetworkStatusChanged(NetworkWorker::Status status, const QVariant& data)
+{
+    if (status == NetworkWorker::Status::LEGACY_HOST)
+    {
+        is_legacy_mode_ = true;
+    }
+    else if (status == NetworkWorker::Status::HOST_DISCONNECTED)
+    {
+        if (session_keeper_)
+            session_keeper_->release();
+    }
+
+    onStatusChanged(status, data);
+
+    if (status == NetworkWorker::Status::HOST_CONNECTED)
+        onNetworkConnected();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientWindow::onNetworkConnected()
+{
+    if (session_keeper_)
+        session_keeper_->acquire();
+
+    // Set up the session and show the window.
+    onSessionStarted();
+
+    // Now the session will receive incoming messages.
+    emit sig_sessionReady();
 }

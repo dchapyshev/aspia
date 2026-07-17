@@ -19,12 +19,12 @@
 #ifndef CLIENT_DESKTOP_CLIENT_WINDOW_H
 #define CLIENT_DESKTOP_CLIENT_WINDOW_H
 
-#include "base/scoped_qpointer.h"
-#include "client/client.h"
 #include "client/config.h"
 #include "client/session_state.h"
 #include "client/desktop/tab.h"
+#include "client/workers/network_worker.h"
 
+#include <QPointer>
 #include <QWidget>
 
 namespace proto::peer {
@@ -33,7 +33,10 @@ enum SessionType : int;
 
 class QAction;
 class QTimer;
+class SessionKeeper;
 class StatusDialog;
+class Worker;
+class WorkerManager;
 
 class ClientWindow : public QWidget
 {
@@ -73,6 +76,9 @@ public:
 
 signals:
     void sig_stop();
+    void sig_startConnection(std::shared_ptr<SessionState> session_state);
+    void sig_sessionReady();
+    void sig_sendMessage(quint8 channel_id, const QByteArray& buffer);
 
     // Emitted when the connection to the host has been successfully established. The container
     // uses this to create the session tab, so that during connection only the status dialog is
@@ -110,8 +116,24 @@ signals:
     void sig_connectRequested(const HostConfig& host, proto::peer::SessionType session_type);
 
 protected:
-    virtual Client* createClient() = 0;
     virtual void onInternalReset() = 0;
+
+    // Called for every connection attempt before the workers are started. The session registers
+    // its workers here through addWorker() and connects to the network worker channel signals.
+    virtual void onRegisterWorkers() = 0;
+
+    // Connection established, authentication passed. Set up the session and show the window;
+    // incoming messages start arriving after this call returns.
+    virtual void onSessionStarted() = 0;
+
+    // Registers a worker. May be called only from onRegisterWorkers().
+    void addWorker(std::unique_ptr<Worker> worker);
+
+    // Sends outgoing session message.
+    void sendMessage(quint8 channel_id, const QByteArray& buffer);
+
+    NetworkWorker* networkWorker() const;
+    bool isLegacy() const;
 
     // Returns actions that launch every session type except this window's own, targeting the
     // current host, in a fixed order. Built once on construction. The default tabActionGroups()
@@ -124,10 +146,12 @@ protected:
     void moveEvent(QMoveEvent* event) override;
 
 public slots:
-    void onStatusChanged(Client::Status status, const QVariant& data);
+    void onStatusChanged(NetworkWorker::Status status, const QVariant& data);
 
 private slots:
     void onDragPoll();
+    void onNetworkStatusChanged(NetworkWorker::Status status, const QVariant& data);
+    void onNetworkConnected();
 
 private:
     void setClientTitle(const HostConfig& host, proto::peer::SessionType session_type);
@@ -136,21 +160,22 @@ private:
     // handles the response inline. Called both for the initial connect and for every reconnect
     // attempt after host disconnects.
     void fetchConnectionOffer();
-    // Destroys the current Client (if any) and creates a fresh one bound to session_state_.
-    // Called on the initial start and on every reconnect (a Client is single-use - reconnects
-    // discard the old instance and build a new one).
-    void startNewClient();
+    void startNewSession();
 
     // Builds session_connect_actions_ for every session type except session_type_.
     void createSessionConnectActions();
 
     const proto::peer::SessionType session_type_;
     std::shared_ptr<SessionState> session_state_;
-    ScopedQPointer<Client> client_;
     StatusDialog* status_dialog_ = nullptr;
     QTimer* drag_poll_timer_ = nullptr;
     QTimer* reconnect_timeout_timer_ = nullptr;
     QList<QAction*> session_connect_actions_;
+
+    std::unique_ptr<WorkerManager> worker_manager_;
+    QPointer<NetworkWorker> network_worker_;
+    SessionKeeper* session_keeper_ = nullptr;
+    bool is_legacy_mode_ = false;
 };
 
 #endif // CLIENT_DESKTOP_CLIENT_WINDOW_H
