@@ -25,6 +25,7 @@
 #include <thread>
 #include <unordered_map>
 
+#include "base/logging.h"
 #include "base/threading/worker.h"
 
 class WorkerManager
@@ -32,8 +33,6 @@ class WorkerManager
 public:
     WorkerManager();
     ~WorkerManager();
-
-    static WorkerManager& instance();
 
     qint64 add(std::unique_ptr<Worker> worker);
     void start();
@@ -71,10 +70,19 @@ private:
     std::mutex lock_;
     size_t running_ = 0;
     bool started_ = false;
+    qint64 next_worker_id_ = 0;
 
     std::unordered_map<qint64, std::unique_ptr<Worker>> workers_;
 
     Q_DISABLE_COPY_MOVE(WorkerManager)
 };
+
+// Defined here because it needs the complete WorkerManager type.
+template <typename T>
+T* Worker::findWorker() const
+{
+    CHECK(manager_);
+    return manager_->find<T>();
+}
 
 #endif // BASE_THREADING_WORKER_MANAGER_H

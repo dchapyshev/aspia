@@ -39,6 +39,12 @@ protected:
     void start(WorkerManager* manager);
     void stopSoon();
 
+    // Finds a sibling worker registered in the same manager. Safe to call from the worker thread
+    // once the worker has been started (the worker set does not change after that). Defined in
+    // worker_manager.h.
+    template <typename T>
+    T* findWorker() const;
+
     // Runs inside the worker thread before its event loop starts. Create here every
     // object that must live in the worker thread.
     virtual void onStart() = 0;

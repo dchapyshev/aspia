@@ -200,7 +200,7 @@ void InputWorker::onStart()
 {
     LOG(INFO) << "Input worker started";
 
-    screen_worker_ = WorkerManager::instance().find<ScreenWorker>();
+    screen_worker_ = findWorker<ScreenWorker>();
     if (screen_worker_)
     {
         connect(screen_worker_, &ScreenWorker::sig_scaleFactorChanged,
@@ -214,7 +214,7 @@ void InputWorker::onStart()
     }
 
     // Subscribe to the client input and gating commands forwarded by the IPC worker.
-    ipc_worker_ = WorkerManager::instance().find<IpcWorker>();
+    ipc_worker_ = findWorker<IpcWorker>();
     if (ipc_worker_)
     {
         connect(ipc_worker_, &IpcWorker::sig_injectKeyEvent, this, &InputWorker::onInjectKeyEvent,

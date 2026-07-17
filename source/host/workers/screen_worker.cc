@@ -483,7 +483,7 @@ void ScreenWorker::onStart()
 {
     LOG(INFO) << "Screen worker started";
 
-    ipc_worker_ = WorkerManager::instance().find<IpcWorker>();
+    ipc_worker_ = findWorker<IpcWorker>();
     if (ipc_worker_)
     {
         connect(ipc_worker_, &IpcWorker::sig_selectScreen, this, &ScreenWorker::onSelectScreen,
@@ -1092,7 +1092,7 @@ void ScreenWorker::selectCapturer(ScreenCapturer::Error last_error)
 #elif defined(Q_OS_MACOS)
     screen_capturer_ = ScreenCapturerMac::create(this);
 
-    AudioWorker* audio_worker = WorkerManager::instance().find<AudioWorker>();
+    AudioWorker* audio_worker = findWorker<AudioWorker>();
     if (screen_capturer_ && audio_worker)
     {
         connect(screen_capturer_, &ScreenCapturer::sig_audioCaptured,

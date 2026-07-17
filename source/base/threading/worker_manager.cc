@@ -20,18 +20,11 @@
 
 #include "base/logging.h"
 
-namespace {
-
-WorkerManager* g_instance = nullptr;
-
-} // namespace
-
 //--------------------------------------------------------------------------------------------------
 WorkerManager::WorkerManager()
     : thread_id_(std::this_thread::get_id())
 {
-    CHECK(!g_instance);
-    g_instance = this;
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -51,17 +44,8 @@ WorkerManager::~WorkerManager()
     }
 
     workers_.clear();
-    g_instance = nullptr;
 
     LOG(INFO) << "All workers stopped";
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-WorkerManager& WorkerManager::instance()
-{
-    CHECK(g_instance);
-    return *g_instance;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -72,11 +56,10 @@ qint64 WorkerManager::add(std::unique_ptr<Worker> worker)
     CHECK(worker);
     CHECK(!worker->parent());
 
-    static qint64 counter = 0;
-    ++counter;
+    ++next_worker_id_;
 
-    workers_.emplace(counter, std::move(worker));
-    return counter;
+    workers_.emplace(next_worker_id_, std::move(worker));
+    return next_worker_id_;
 }
 
 //--------------------------------------------------------------------------------------------------

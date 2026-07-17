@@ -102,7 +102,7 @@ void AudioWorker::onStart()
 
     // All AudioWorker<->IpcWorker wiring lives here: the IPC worker toggles the pipeline through the
     // merged configuration, and the encoded audio produced here is fanned out through it.
-    ipc_worker_ = WorkerManager::instance().find<IpcWorker>();
+    ipc_worker_ = findWorker<IpcWorker>();
     if (ipc_worker_)
     {
         connect(ipc_worker_, &IpcWorker::sig_audioEnabled, this, &AudioWorker::onSetEnabled,
