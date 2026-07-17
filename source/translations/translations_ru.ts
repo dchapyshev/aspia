@@ -423,7 +423,7 @@ Routers added: %4</source>
     <message>
         <location filename="../host/android/main_window.cc" line="329"/>
         <source>Enable the accessibility service to allow remote keyboard and mouse control.</source>
-        <translation>Включите службу специальных возможностей, чтобы разрешить удалённое управление клавиатурой и мышью.</translation>
+        <translation>Включите службу специальных возможностей, чтобы разрешить удаленное управление клавиатурой и мышью.</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="330"/>
@@ -440,7 +440,7 @@ Routers added: %4</source>
     <message>
         <location filename="../host/android/main_window.cc" line="396"/>
         <source>Allow access to all files so the connected user can browse and transfer files on this device.</source>
-        <translation>Разрешите доступ ко всем файлам, чтобы подключённый пользователь мог просматривать и передавать файлы на этом устройстве.</translation>
+        <translation>Разрешите доступ ко всем файлам, чтобы подключенный пользователь мог просматривать и передавать файлы на этом устройстве.</translation>
     </message>
 </context>
 <context>
@@ -726,17 +726,17 @@ Routers added: %4</source>
     <message>
         <location filename="../client/android/chat_window.cc" line="106"/>
         <source>User %1 is logged in</source>
-        <translation>Пользователь %1 вошёл в систему</translation>
+        <translation>Пользователь %1 вошел в систему</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="109"/>
         <source>User %1 is not logged in</source>
-        <translation>Пользователь %1 не вошёл в систему</translation>
+        <translation>Пользователь %1 не вошел в систему</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="112"/>
         <source>There are no connected users</source>
-        <translation>Нет подключённых пользователей</translation>
+        <translation>Нет подключенных пользователей</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="139"/>
@@ -3413,7 +3413,7 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/hosts_tab.cc" line="1344"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
-        <translation>Вы уверены, что хотите удалить группу &quot;%1&quot;? Хосты, назначенные этой группе или её подгруппам, будут перемещены в корень рабочего пространства.</translation>
+        <translation>Вы уверены, что хотите удалить группу &quot;%1&quot;? Хосты, назначенные этой группе или ее подгруппам, будут перемещены в корень рабочего пространства.</translation>
     </message>
     <message>
         <location filename="../client/desktop/hosts_tab.cc" line="1406"/>
@@ -4734,7 +4734,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="63"/>
         <source>Required so a remote user can see this screen.</source>
-        <translation>Требуется, чтобы удалённый пользователь мог видеть этот экран.</translation>
+        <translation>Требуется, чтобы удаленный пользователь мог видеть этот экран.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="63"/>
@@ -4750,7 +4750,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="65"/>
         <source>Required so a remote user can control the mouse and keyboard.</source>
-        <translation>Требуется, чтобы удалённый пользователь мог управлять мышью и клавиатурой.</translation>
+        <translation>Требуется, чтобы удаленный пользователь мог управлять мышью и клавиатурой.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="66"/>
@@ -4760,7 +4760,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="67"/>
         <source>Required to transfer files from protected folders.</source>
-        <translation>Требуется для передачи файлов из защищённых папок.</translation>
+        <translation>Требуется для передачи файлов из защищенных папок.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="67"/>
@@ -4814,7 +4814,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/android/remote_widget.cc" line="469"/>
         <source>Unapproved Hosts</source>
-        <translation>Неподтверждённые хосты</translation>
+        <translation>Неподтвержденные хосты</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="635"/>
@@ -5460,7 +5460,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="470"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
-        <translation>Удаление хоста приведёт к удалению всей его конфигурации для подключения к роутеру, а приложение на хосте будет удалено. Это действие необратимо. Вы уверены, что хотите продолжить?</translation>
+        <translation>Удаление хоста приведет к удалению всей его конфигурации для подключения к роутеру, а приложение на хосте будет удалено. Это действие необратимо. Вы уверены, что хотите продолжить?</translation>
     </message>
     <message>
         <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="593"/>
@@ -5855,7 +5855,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/hosts/router_user_dialog.cc" line="205"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
-        <translation>Сброс двухфакторной аутентификации приведёт к выходу пользователя из всех сеансов и потребует повторной настройки при следующем входе. Продолжить?</translation>
+        <translation>Сброс двухфакторной аутентификации приведет к выходу пользователя из всех сеансов и потребует повторной настройки при следующем входе. Продолжить?</translation>
     </message>
     <message>
         <location filename="../client/desktop/hosts/router_user_dialog.cc" line="254"/>
@@ -6246,7 +6246,7 @@ Hosts skipped: %6</source>
     </message>
     <message>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
-        <translation type="vanished">Удаление хоста приведёт к удалению всей его конфигурации для подключения к роутеру, а приложение на хосте будет удалено. Это действие необратимо. Вы уверены, что хотите продолжить?</translation>
+        <translation type="vanished">Удаление хоста приведет к удалению всей его конфигурации для подключения к роутеру, а приложение на хосте будет удалено. Это действие необратимо. Вы уверены, что хотите продолжить?</translation>
     </message>
     <message>
         <source>Are you sure you want to disconnect client &quot;%1&quot;?</source>
@@ -6527,7 +6527,7 @@ Hosts skipped: %6</source>
         <source>Removing the host from the workspace will permanently clear its encrypted fields (comment, user name and password). This action cannot be undone.
 
 Are you sure you want to continue?</source>
-        <translation>Удаление хоста из рабочего пространства приведёт к безвозвратной очистке его зашифрованных полей (комментария, имени пользователя и пароля). Это действие нельзя отменить.
+        <translation>Удаление хоста из рабочего пространства приведет к безвозвратной очистке его зашифрованных полей (комментария, имени пользователя и пароля). Это действие нельзя отменить.
 
 Вы уверены, что хотите продолжить?</translation>
     </message>
@@ -7020,7 +7020,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="342"/>
         <source>The new language will be applied after the application is restarted.</source>
-        <translation>Новый язык будет применён после перезапуска приложения.</translation>
+        <translation>Новый язык будет применен после перезапуска приложения.</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="411"/>
@@ -7542,7 +7542,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/hosts/sidebar_items.cc" line="150"/>
         <source>Approved Hosts</source>
-        <translation>Подтверждённые хосты</translation>
+        <translation>Подтвержденные хосты</translation>
     </message>
 </context>
 <context>
@@ -7562,7 +7562,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/hosts/sidebar_items.cc" line="186"/>
         <source>Unapproved Hosts</source>
-        <translation>Неподтверждённые хосты</translation>
+        <translation>Неподтвержденные хосты</translation>
     </message>
 </context>
 <context>
@@ -9909,7 +9909,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.ui" line="20"/>
         <source>Open a TOTP authenticator app (Google Authenticator, Microsoft Authenticator or any compatible alternative) and add a new account by scanning the QR code below. If QR scanning is unavailable, type the setup key into the app instead.</source>
-        <translation>Откройте приложение для TOTP-аутентификации (Google Authenticator, Microsoft Authenticator или любое совместимое приложение) и добавьте новую учётную запись, отсканировав QR-код ниже. Если сканирование QR-кода недоступно, введите в приложение ключ настройки вручную.</translation>
+        <translation>Откройте приложение для TOTP-аутентификации (Google Authenticator, Microsoft Authenticator или любое совместимое приложение) и добавьте новую учетную запись, отсканировав QR-код ниже. Если сканирование QR-кода недоступно, введите в приложение ключ настройки вручную.</translation>
     </message>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.ui" line="43"/>
