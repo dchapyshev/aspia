@@ -99,108 +99,82 @@ StatisticsDialog::~StatisticsDialog()
 }
 
 //--------------------------------------------------------------------------------------------------
-void StatisticsDialog::setMetrics(const ClientDesktop::Metrics& metrics)
+void StatisticsDialog::onNetworkMetrics(const NetworkWorker::Metrics& metrics)
 {
-    for (int i = 0; i < ui->tree->topLevelItemCount(); ++i)
-    {
-        QTreeWidgetItem* item = ui->tree->topLevelItem(i);
+    setValue(1, Formatter::sizeToString(metrics.total_tcp_rx) + " / " +
+        Formatter::sizeToString(metrics.total_tcp_tx));
+    setValue(2, Formatter::transferSpeedToString(metrics.speed_tcp_rx) + " / " +
+        Formatter::transferSpeedToString(metrics.speed_tcp_tx));
+    setValue(3, Formatter::sizeToString(metrics.total_udp_rx) + " / " +
+        Formatter::sizeToString(metrics.total_udp_tx));
+    setValue(4, Formatter::transferSpeedToString(metrics.speed_udp_rx) + " / " +
+        Formatter::transferSpeedToString(metrics.speed_udp_tx));
+    setValue(5, udpMethodToString(metrics.udp_method));
+}
 
-        switch (i)
-        {
-            case 0:
-                item->setText(1, duration_.addSecs(
-                    static_cast<int>(metrics.duration.count())).toString());
-                break;
-            case 1:
-                item->setText(1, Formatter::sizeToString(metrics.total_tcp_rx) + " / " + Formatter::sizeToString(metrics.total_tcp_tx));
-                break;
-            case 2:
-                item->setText(1, Formatter::transferSpeedToString(metrics.speed_tcp_rx) + " / " + Formatter::transferSpeedToString(metrics.speed_tcp_tx));
-                break;
-            case 3:
-                item->setText(1, Formatter::sizeToString(metrics.total_udp_rx) + " / " + Formatter::sizeToString(metrics.total_udp_tx));
-                break;
-            case 4:
-                item->setText(1, Formatter::transferSpeedToString(metrics.speed_udp_rx) + " / " + Formatter::transferSpeedToString(metrics.speed_udp_tx));
-                break;
-            case 5:
-                item->setText(1, udpMethodToString(metrics.udp_method));
-                break;
-            case 6:
-                item->setText(1, QString::number(metrics.video_packet_count));
-                break;
-            case 7:
-                item->setText(1, Formatter::sizeToString(metrics.min_video_packet) + " / " +
-                    Formatter::sizeToString(metrics.max_video_packet) + " / " + Formatter::sizeToString(metrics.avg_video_packet));
-                break;
-            case 8:
-                item->setText(1, QString::number(metrics.audio_packet_count));
-                break;
-            case 9:
-                item->setText(1, Formatter::sizeToString(metrics.min_audio_packet) + " / " +
-                    Formatter::sizeToString(metrics.max_audio_packet) + " / " + Formatter::sizeToString(metrics.avg_audio_packet));
-                break;
-            case 10:
-                item->setText(1, capturerToString(metrics.video_capturer_type) + " / " +
-                    encoderToString(metrics.video_encoder_type, metrics.video_decoder_hardware));
-                break;
-            case 11:
-                item->setText(1, QString::number(metrics.fps));
-                break;
-            // Rows 12-14 (mouse/key/text) are owned by DesktopWindow and updated via their own
-            // setters (setMouseMetrics/setKeyMetrics/setTextMetrics).
-            case 15:
-                item->setText(1, QString::number(metrics.read_clipboard) + " / " +
-                    QString::number(metrics.send_clipboard));
-                break;
-            case 16:
-                item->setText(1, QString::number(metrics.cursor_shape_count) + " / " +
-                    QString::number(metrics.cursor_taken_from_cache));
-                break;
-            case 17:
-                item->setText(1, QString::number(metrics.cursor_cached));
-                break;
-            case 18:
-                item->setText(1, QString::number(metrics.cursor_pos_count));
-                break;
-        }
-    }
+//--------------------------------------------------------------------------------------------------
+void StatisticsDialog::onVideoMetrics(const VideoWorker::Metrics& metrics)
+{
+    setValue(6, QString::number(metrics.packet_count));
+    setValue(7, Formatter::sizeToString(metrics.min_packet) + " / " +
+        Formatter::sizeToString(metrics.max_packet) + " / " + Formatter::sizeToString(metrics.avg_packet));
+    setValue(10, capturerToString(metrics.capturer_type) + " / " +
+        encoderToString(metrics.encoder_type, metrics.hardware_decoder));
+    setValue(11, QString::number(metrics.fps));
+    setValue(16, QString::number(metrics.cursor_shape_count) + " / " +
+        QString::number(metrics.cursor_taken_from_cache));
+    setValue(17, QString::number(metrics.cursor_cached));
+    setValue(18, QString::number(metrics.cursor_pos_count));
+}
+
+//--------------------------------------------------------------------------------------------------
+void StatisticsDialog::onAudioMetrics(const AudioWorker::Metrics& metrics)
+{
+    setValue(8, QString::number(metrics.packet_count));
+    setValue(9, Formatter::sizeToString(metrics.min_packet) + " / " +
+        Formatter::sizeToString(metrics.max_packet) + " / " + Formatter::sizeToString(metrics.avg_packet));
+}
+
+//--------------------------------------------------------------------------------------------------
+void StatisticsDialog::setDuration(std::chrono::seconds duration)
+{
+    setValue(0, duration_.addSecs(static_cast<int>(duration.count())).toString());
+}
+
+//--------------------------------------------------------------------------------------------------
+void StatisticsDialog::setClipboardMetrics(int read_clipboard, int send_clipboard)
+{
+    setValue(15, QString::number(read_clipboard) + " / " + QString::number(send_clipboard));
 }
 
 //--------------------------------------------------------------------------------------------------
 void StatisticsDialog::setMouseMetrics(int send_mouse, int drop_mouse)
 {
-    QTreeWidgetItem* item = ui->tree->topLevelItem(12);
-    if (!item)
-        return;
-
     int total_mouse = send_mouse + drop_mouse;
     int percentage = 0;
 
     if (total_mouse != 0)
         percentage = (drop_mouse * 100) / total_mouse;
 
-    item->setText(1, QString::number(send_mouse) + " / " +
+    setValue(12, QString::number(send_mouse) + " / " +
         QString("%1 (%2 %)").arg(drop_mouse).arg(percentage));
 }
 
 //--------------------------------------------------------------------------------------------------
 void StatisticsDialog::setKeyMetrics(int send_key)
 {
-    QTreeWidgetItem* item = ui->tree->topLevelItem(13);
-    if (!item)
-        return;
-
-    item->setText(1, QString::number(send_key));
+    setValue(13, QString::number(send_key));
 }
 
 //--------------------------------------------------------------------------------------------------
 void StatisticsDialog::setTextMetrics(int send_text)
 {
-    QTreeWidgetItem* item = ui->tree->topLevelItem(14);
-    if (!item)
-        return;
+    setValue(14, QString::number(send_text));
+}
 
-    item->setText(1, QString::number(send_text));
+//--------------------------------------------------------------------------------------------------
+void StatisticsDialog::setValue(int row, const QString& value)
+{
+    ui->tree->topLevelItem(row)->setText(1, value);
 }
 

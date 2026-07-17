@@ -22,9 +22,12 @@
 #include <QDialog>
 #include <QTime>
 
+#include <chrono>
 #include <memory>
 
-#include "client/client_desktop.h"
+#include "client/workers/audio_worker.h"
+#include "client/workers/network_worker.h"
+#include "client/workers/video_worker.h"
 
 namespace Ui {
 class StatisticsDialog;
@@ -38,15 +41,24 @@ public:
     explicit StatisticsDialog(QWidget* parent = nullptr);
     ~StatisticsDialog() final;
 
-    void setMetrics(const ClientDesktop::Metrics& metrics);
+    void setDuration(std::chrono::seconds duration);
+    void setClipboardMetrics(int read_clipboard, int send_clipboard);
     void setMouseMetrics(int send_mouse, int drop_mouse);
     void setKeyMetrics(int send_key);
     void setTextMetrics(int send_text);
+
+public slots:
+    void onNetworkMetrics(const NetworkWorker::Metrics& metrics);
+    void onVideoMetrics(const VideoWorker::Metrics& metrics);
+    void onAudioMetrics(const AudioWorker::Metrics& metrics);
 
 signals:
     void sig_metricsRequired();
 
 private:
+    // Sets the value column of the given top-level row.
+    void setValue(int row, const QString& value);
+
     std::unique_ptr<Ui::StatisticsDialog> ui;
     QTimer* update_timer_ = nullptr;
     QTime duration_;
