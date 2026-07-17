@@ -372,30 +372,30 @@ Routers added: %4</source>
         <translation type="vanished">Рабочие пространства</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="136"/>
-        <location filename="../client/android/main_window.cc" line="213"/>
-        <location filename="../client/android/main_window.cc" line="293"/>
+        <location filename="../client/android/main_window.cc" line="137"/>
+        <location filename="../client/android/main_window.cc" line="214"/>
+        <location filename="../client/android/main_window.cc" line="294"/>
         <source>Local</source>
         <translation>Локальные</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="137"/>
-        <location filename="../client/android/main_window.cc" line="217"/>
-        <location filename="../client/android/main_window.cc" line="313"/>
+        <location filename="../client/android/main_window.cc" line="138"/>
+        <location filename="../client/android/main_window.cc" line="218"/>
+        <location filename="../client/android/main_window.cc" line="314"/>
         <source>Remote</source>
         <translation>Удаленные</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="138"/>
-        <location filename="../client/android/main_window.cc" line="221"/>
-        <location filename="../client/android/main_window.cc" line="303"/>
+        <location filename="../client/android/main_window.cc" line="139"/>
+        <location filename="../client/android/main_window.cc" line="222"/>
+        <location filename="../client/android/main_window.cc" line="304"/>
         <source>Routers</source>
         <translation>Маршутизаторы</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="139"/>
-        <location filename="../client/android/main_window.cc" line="225"/>
-        <location filename="../client/android/main_window.cc" line="323"/>
+        <location filename="../client/android/main_window.cc" line="140"/>
+        <location filename="../client/android/main_window.cc" line="226"/>
+        <location filename="../client/android/main_window.cc" line="324"/>
         <location filename="../host/android/main_window.cc" line="79"/>
         <location filename="../host/android/main_window.cc" line="95"/>
         <location filename="../host/android/main_window.cc" line="456"/>
@@ -455,6 +455,7 @@ Routers added: %4</source>
     <name>AuthorizationDialog</name>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="14"/>
+        <location filename="../client/android/authorization_dialog.cc" line="36"/>
         <source>Authorization</source>
         <translation>Авторизация</translation>
     </message>
@@ -465,6 +466,7 @@ Routers added: %4</source>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="46"/>
+        <location filename="../client/android/authorization_dialog.cc" line="45"/>
         <source>Password</source>
         <translation>Пароль</translation>
     </message>
@@ -474,11 +476,38 @@ Routers added: %4</source>
         <translation>Подключение по одноразовому паролю</translation>
     </message>
     <message>
+        <location filename="../client/android/authorization_dialog.cc" line="37"/>
+        <source>Enter the credentials to connect to the host.</source>
+        <translation>Введите учётные данные для подключения к хосту.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_dialog.cc" line="43"/>
+        <source>Username</source>
+        <translation>Имя пользователя</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_dialog.cc" line="52"/>
+        <source>One-time password</source>
+        <translation>Одноразовый пароль</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_dialog.cc" line="65"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_dialog.cc" line="66"/>
+        <source>Connect</source>
+        <translation>Подключение</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_dialog.cc" line="106"/>
         <location filename="../client/desktop/authorization_dialog.cc" line="146"/>
         <source>Username cannot be empty.</source>
         <translation>Имя пользователя не может быть пустым.</translation>
     </message>
     <message>
+        <location filename="../client/android/authorization_dialog.cc" line="113"/>
         <location filename="../client/desktop/authorization_dialog.cc" line="154"/>
         <source>Password cannot be empty.</source>
         <translation>Пароль не может быть пустым.</translation>
@@ -1406,64 +1435,64 @@ Routers added: %4</source>
 <context>
     <name>ConnectionWidget</name>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="205"/>
+        <location filename="../host/android/connection_widget.cc" line="223"/>
         <source>Your ID</source>
         <translation>Ваш ID</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="206"/>
+        <location filename="../host/android/connection_widget.cc" line="224"/>
         <source>One-time password</source>
         <translation>Одноразовый пароль</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="207"/>
+        <location filename="../host/android/connection_widget.cc" line="225"/>
         <source>Access</source>
         <translation>Доступ</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="208"/>
+        <location filename="../host/android/connection_widget.cc" line="226"/>
         <source>Desktop</source>
         <translation>Рабочий стол</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="209"/>
+        <location filename="../host/android/connection_widget.cc" line="227"/>
         <source>File Transfer</source>
         <translation>Передача файлов</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="329"/>
+        <location filename="../host/android/connection_widget.cc" line="347"/>
         <source>Aspia ID: %1
 Password: %2</source>
         <translation>Aspia ID: %1
 Пароль: %2</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="372"/>
+        <location filename="../host/android/connection_widget.cc" line="390"/>
         <source>Router is disabled</source>
         <translation>Маршрутизатор отключен</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="375"/>
+        <location filename="../host/android/connection_widget.cc" line="393"/>
         <source>Connecting to router...</source>
         <translation>Подключение к маршрутизатору...</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="376"/>
+        <location filename="../host/android/connection_widget.cc" line="394"/>
         <source>Connecting to router %1...</source>
         <translation>Подключение к маршрутизатору %1...</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="379"/>
+        <location filename="../host/android/connection_widget.cc" line="397"/>
         <source>Connected to router</source>
         <translation>Подключено к маршрутизатору</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="380"/>
+        <location filename="../host/android/connection_widget.cc" line="398"/>
         <source>Connected to router %1</source>
         <translation>Подключено к маршрутизатору %1</translation>
     </message>
     <message>
-        <location filename="../host/android/connection_widget.cc" line="383"/>
+        <location filename="../host/android/connection_widget.cc" line="401"/>
         <source>Failed to connect to router</source>
         <translation>Не удалось подключиться к маршрутизатору</translation>
     </message>
@@ -2965,9 +2994,9 @@ Password: %2</source>
     <name>HostWindow</name>
     <message>
         <location filename="../host/ui/host_window.ui" line="26"/>
-        <location filename="../host/ui/host_window.cc" line="543"/>
-        <location filename="../host/ui/host_window.cc" line="759"/>
-        <location filename="../host/ui/host_window.cc" line="1021"/>
+        <location filename="../host/ui/host_window.cc" line="553"/>
+        <location filename="../host/ui/host_window.cc" line="769"/>
+        <location filename="../host/ui/host_window.cc" line="1031"/>
         <source>Aspia Host</source>
         <translation>Хост Aspia</translation>
     </message>
@@ -2983,8 +3012,8 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="204"/>
-        <location filename="../host/ui/host_window.cc" line="486"/>
-        <location filename="../host/ui/host_window.cc" line="931"/>
+        <location filename="../host/ui/host_window.cc" line="496"/>
+        <location filename="../host/ui/host_window.cc" line="941"/>
         <source>Router is disabled</source>
         <translation>Маршрутизатор отключен</translation>
     </message>
@@ -3045,7 +3074,7 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="320"/>
-        <location filename="../host/ui/host_window.cc" line="743"/>
+        <location filename="../host/ui/host_window.cc" line="753"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
@@ -3089,73 +3118,73 @@ Password: %2</source>
         <translation>Показать чат</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="263"/>
-        <location filename="../host/ui/host_window.cc" line="738"/>
+        <location filename="../host/ui/host_window.cc" line="273"/>
+        <location filename="../host/ui/host_window.cc" line="748"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="436"/>
+        <location filename="../host/ui/host_window.cc" line="446"/>
         <source>Not available</source>
         <translation>Недоступен</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="490"/>
+        <location filename="../host/ui/host_window.cc" line="500"/>
         <source>Connecting to router %1...</source>
         <translation>Подключение к маршрутизатору %1...</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="494"/>
+        <location filename="../host/ui/host_window.cc" line="504"/>
         <source>Connected to router %1</source>
         <translation>Подключено к маршрутизатору %1</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="498"/>
+        <location filename="../host/ui/host_window.cc" line="508"/>
         <source>Failed to connect to router %1</source>
         <translation>Не удалось подключиться к маршрутизатору %1</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="538"/>
+        <location filename="../host/ui/host_window.cc" line="548"/>
         <source>Screen recording has started.</source>
         <translation>Запись экрана запущена.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="540"/>
+        <location filename="../host/ui/host_window.cc" line="550"/>
         <source>Screen recording stopped.</source>
         <translation>Запись экрана остановлена.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="727"/>
+        <location filename="../host/ui/host_window.cc" line="737"/>
         <source>Settings storage is unavailable.</source>
         <translation>Хранилище настроек недоступно.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="776"/>
+        <location filename="../host/ui/host_window.cc" line="786"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Если вы выйдите из Aspia, то вы не сможете подключиться к этому компьютеру пока вы снова не включите компьютер или Aspia вручную. Вы действительно хотите выйти из приложения?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="936"/>
+        <location filename="../host/ui/host_window.cc" line="946"/>
         <source>Connecting to router...</source>
         <translation>Подключение к маршрутизатору...</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="941"/>
+        <location filename="../host/ui/host_window.cc" line="951"/>
         <source>Connected to router</source>
         <translation>Подключено к маршрутизатору</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="946"/>
+        <location filename="../host/ui/host_window.cc" line="956"/>
         <source>Connection error</source>
         <translation>Ошибка подключения</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1018"/>
+        <location filename="../host/ui/host_window.cc" line="1028"/>
         <source>IP addresses:</source>
         <translation>IP адреса:</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1022"/>
+        <location filename="../host/ui/host_window.cc" line="1032"/>
         <source>ID: %1</source>
         <translation></translation>
     </message>
@@ -5714,32 +5743,32 @@ Hosts skipped: %6</source>
 <context>
     <name>RouterTempHostsWidget</name>
     <message>
-        <location filename="../client/desktop/hosts/router_temp_hosts_widget.cc" line="82"/>
+        <location filename="../client/desktop/hosts/router_temp_hosts_widget.cc" line="81"/>
         <source>ID</source>
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_temp_hosts_widget.cc" line="82"/>
+        <location filename="../client/desktop/hosts/router_temp_hosts_widget.cc" line="81"/>
         <source>Computer Name</source>
         <translation>Имя компьютера</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_temp_hosts_widget.cc" line="82"/>
+        <location filename="../client/desktop/hosts/router_temp_hosts_widget.cc" line="81"/>
         <source>Operating System</source>
         <translation>Операционная система</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_temp_hosts_widget.cc" line="83"/>
+        <location filename="../client/desktop/hosts/router_temp_hosts_widget.cc" line="82"/>
         <source>Version</source>
         <translation>Версия</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_temp_hosts_widget.cc" line="83"/>
+        <location filename="../client/desktop/hosts/router_temp_hosts_widget.cc" line="82"/>
         <source>Address</source>
         <translation>Адрес</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_temp_hosts_widget.cc" line="206"/>
+        <location filename="../client/desktop/hosts/router_temp_hosts_widget.cc" line="205"/>
         <source>Failed to approve the host.</source>
         <translation>Не удалось подтвердить хост.</translation>
     </message>
