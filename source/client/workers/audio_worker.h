@@ -19,13 +19,16 @@
 #ifndef CLIENT_WORKERS_AUDIO_WORKER_H
 #define CLIENT_WORKERS_AUDIO_WORKER_H
 
+#include <limits>
 #include <memory>
 
+#include "base/serialization.h"
 #include "base/threading/worker.h"
 #include "proto/desktop_audio.h"
 
 class AudioDecoder;
 class AudioPlayer;
+class QTimer;
 
 class AudioWorker final : public Worker
 {
@@ -35,20 +38,48 @@ public:
     AudioWorker();
     ~AudioWorker() final;
 
+    struct Metrics
+    {
+        qint64 packet_count = 0;
+        size_t min_packet = 0;
+        size_t max_packet = 0;
+        size_t avg_packet = 0;
+    };
+
 public slots:
+    void onAudioMessage(const QByteArray& buffer);
     void onAudioPacket(std::shared_ptr<proto::audio::Packet> packet);
+
+signals:
+    // Emitted once a second with the current audio statistics.
+    void sig_metrics(const AudioWorker::Metrics& metrics);
 
 protected:
     // Worker implementation.
     void onStart() final;
     void onStop() final;
 
+private slots:
+    void onMetricsTimer();
+
 private:
+    void decodePacket(const proto::audio::Packet& packet);
+
+    Parser<proto::audio::HostToClient> incoming_message_;
+
     std::unique_ptr<AudioDecoder> decoder_;
     std::unique_ptr<AudioPlayer> player_;
     proto::audio::Encoding encoding_ = proto::audio::ENCODING_UNKNOWN;
 
+    QTimer* metrics_timer_ = nullptr;
+    qint64 packet_count_ = 0;
+    size_t min_packet_ = std::numeric_limits<size_t>::max();
+    size_t max_packet_ = 0;
+    size_t avg_packet_ = 0;
+
     Q_DISABLE_COPY_MOVE(AudioWorker)
 };
+
+Q_DECLARE_METATYPE(AudioWorker::Metrics)
 
 #endif // CLIENT_WORKERS_AUDIO_WORKER_H

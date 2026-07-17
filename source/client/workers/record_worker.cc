@@ -25,7 +25,6 @@
 #include "base/codec/webm_file_writer.h"
 #include "base/codec/webm_video_encoder.h"
 #include "base/desktop/frame_aligned.h"
-#include "base/threading/worker_manager.h"
 #include "client/workers/network_worker.h"
 #include "client/workers/video_worker.h"
 #include "proto/desktop_audio.h"
@@ -103,35 +102,6 @@ void RecordWorker::onFrameChanged(const QSize& screen_size, SharedFrame frame)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RecordWorker::encodeFrame()
-{
-    if (!writer_ || !encoder_ || !last_frame_.isValid())
-        return;
-
-    const QSize size = last_frame_.size();
-    if (!record_frame_ || record_frame_->size() != size)
-    {
-        record_frame_ = FrameAligned::create(size, kArgbAlignment);
-        if (!record_frame_)
-        {
-            LOG(ERROR) << "Unable to create recording frame";
-            return;
-        }
-    }
-
-    // Copy the pixels out under the frame lock and encode from the private copy, so the encode does
-    // not hold the lock while the video worker needs it to write the next frame.
-    {
-        SharedFrame::ReadAccess access = last_frame_.read();
-        record_frame_->copyPixelsFrom(access.get(), QPoint(0, 0), QRect(QPoint(0, 0), size));
-    }
-
-    proto::video::Packet packet;
-    if (encoder_->encode(*record_frame_, &packet))
-        writer_->addVideoPacket(packet);
-}
-
-//--------------------------------------------------------------------------------------------------
 void RecordWorker::onStart()
 {
     LOG(INFO) << "Record worker started";
@@ -162,7 +132,7 @@ void RecordWorker::onStart()
 
     encode_timer_ = new QTimer(this);
     encode_timer_->setInterval(std::chrono::milliseconds(60));
-    connect(encode_timer_, &QTimer::timeout, this, &RecordWorker::encodeFrame);
+    connect(encode_timer_, &QTimer::timeout, this, &RecordWorker::onEncodeTimer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -177,4 +147,33 @@ void RecordWorker::onStop()
     writer_.reset();
     record_frame_.reset();
     last_frame_ = SharedFrame();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RecordWorker::onEncodeTimer()
+{
+    if (!writer_ || !encoder_ || !last_frame_.isValid())
+        return;
+
+    const QSize size = last_frame_.size();
+    if (!record_frame_ || record_frame_->size() != size)
+    {
+        record_frame_ = FrameAligned::create(size, kArgbAlignment);
+        if (!record_frame_)
+        {
+            LOG(ERROR) << "Unable to create recording frame";
+            return;
+        }
+    }
+
+    // Copy the pixels out under the frame lock and encode from the private copy, so the encode does
+    // not hold the lock while the video worker needs it to write the next frame.
+    {
+        SharedFrame::ReadAccess access = last_frame_.read();
+        record_frame_->copyPixelsFrom(access.get(), QPoint(0, 0), QRect(QPoint(0, 0), size));
+    }
+
+    proto::video::Packet packet;
+    if (encoder_->encode(*record_frame_, &packet))
+        writer_->addVideoPacket(packet);
 }

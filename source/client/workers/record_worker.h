@@ -61,9 +61,10 @@ protected:
     void onStart() final;
     void onStop() final;
 
-private:
-    void encodeFrame();
+private slots:
+    void onEncodeTimer();
 
+private:
     Parser<proto::audio::HostToClient> incoming_message_;
     std::unique_ptr<WebmFileWriter> writer_;
 
