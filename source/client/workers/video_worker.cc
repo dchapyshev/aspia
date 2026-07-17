@@ -22,8 +22,35 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "base/codec/cursor_decoder.h"
 #include "base/codec/video_decoder.h"
-#include "base/codec/webm_video_encoder.h"
+#include "base/desktop/mouse_cursor.h"
+#include "base/threading/worker_manager.h"
+#include "client/workers/network_worker.h"
+#include "proto/desktop_control.h"
+
+namespace {
+
+//--------------------------------------------------------------------------------------------------
+int calculateFps(int last_fps, const std::chrono::milliseconds& duration, qint64 count)
+{
+    static const double kAlpha = 0.1;
+    const qint64 ms = duration.count();
+    if (ms <= 0)
+        return last_fps;
+    return int((kAlpha * ((1000.0 / double(ms)) * double(count))) + ((1.0 - kAlpha) * double(last_fps)));
+}
+
+//--------------------------------------------------------------------------------------------------
+size_t calculateAvgSize(size_t last_avg_size, size_t bytes)
+{
+    static const double kAlpha = 0.1;
+    return static_cast<size_t>(
+        (kAlpha * static_cast<double>(bytes)) +
+        ((1.0 - kAlpha) * static_cast<double>(last_avg_size)));
+}
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 VideoWorker::VideoWorker()
@@ -38,12 +65,154 @@ VideoWorker::~VideoWorker()
 }
 
 //--------------------------------------------------------------------------------------------------
+void VideoWorker::onVideoMessage(const QByteArray& buffer)
+{
+    legacy_ = false;
+
+    proto::video::HostToClient* message = incoming_message_.parse<proto::video::HostToClient>(buffer);
+    if (!message)
+    {
+        LOG(ERROR) << "Unable to parse video message";
+        return;
+    }
+
+    if (message->has_packet())
+        decodePacket(message->packet());
+}
+
+//--------------------------------------------------------------------------------------------------
 void VideoWorker::onVideoPacket(std::shared_ptr<proto::video::Packet> packet)
 {
-    if (!packet)
-        return;
+    legacy_ = true;
 
-    proto::video::ErrorCode error_code = packet->error_code();
+    if (packet)
+        decodePacket(*packet);
+}
+
+//--------------------------------------------------------------------------------------------------
+void VideoWorker::onCursorMessage(const QByteArray& buffer)
+{
+    proto::cursor::HostToClient* message =
+        incoming_message_.parse<proto::cursor::HostToClient>(buffer);
+    if (!message)
+    {
+        LOG(ERROR) << "Unable to parse cursor message";
+        return;
+    }
+
+    if (message->has_shape())
+        readCursorShape(message->shape());
+    else if (message->has_position())
+        readCursorPosition(message->position());
+}
+
+//--------------------------------------------------------------------------------------------------
+void VideoWorker::onCursorConfig(bool shape_enabled, bool position_enabled)
+{
+    cursor_shape_enabled_ = shape_enabled;
+    cursor_position_enabled_ = position_enabled;
+
+    if (!cursor_shape_enabled_)
+    {
+        LOG(INFO) << "Cursor shape disabled";
+        cursor_decoder_.reset();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void VideoWorker::onStart()
+{
+    LOG(INFO) << "Video worker started";
+
+    NetworkWorker* network_worker = findWorker<NetworkWorker>();
+    if (network_worker)
+    {
+        // Video and cursor channels (CHANNEL_ID_VIDEO == 3, CHANNEL_ID_CURSOR == 4).
+        connect(network_worker, &NetworkWorker::sig_channel_3, this, &VideoWorker::onVideoMessage,
+                Qt::QueuedConnection);
+        connect(network_worker, &NetworkWorker::sig_channel_4, this, &VideoWorker::onCursorMessage,
+                Qt::QueuedConnection);
+        connect(this, &VideoWorker::sig_sendMessage, network_worker, &NetworkWorker::onSendMessage,
+                Qt::QueuedConnection);
+    }
+    else
+    {
+        LOG(ERROR) << "Network worker not found";
+    }
+
+    metrics_timer_ = new QTimer(this);
+    metrics_timer_->setInterval(std::chrono::seconds(1));
+    connect(metrics_timer_, &QTimer::timeout, this, &VideoWorker::onMetricsTimer);
+    metrics_timer_->start();
+}
+
+//--------------------------------------------------------------------------------------------------
+void VideoWorker::onStop()
+{
+    LOG(INFO) << "Video worker stopped";
+
+    delete metrics_timer_;
+    metrics_timer_ = nullptr;
+
+    decoder_.reset();
+    cursor_decoder_.reset();
+}
+
+//--------------------------------------------------------------------------------------------------
+void VideoWorker::onMetricsTimer()
+{
+    // The 1-second timer also winds down the force-reliable hold window; once it elapses, back the
+    // transport off reliable mode (at most twice per session).
+    if (force_reliable_active_ && reliable_hold_seconds_ > 0)
+    {
+        --reliable_hold_seconds_;
+        if (reliable_hold_seconds_ == 0 && reliable_disable_count_ < 2)
+        {
+            ++reliable_disable_count_;
+            LOG(INFO) << "Disabling force reliable (disable count:" << reliable_disable_count_ << ")";
+            force_reliable_active_ = false;
+            sendForceReliable(false);
+        }
+    }
+
+    const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+
+    if (fps_time_ != std::chrono::steady_clock::time_point())
+    {
+        const std::chrono::milliseconds duration =
+            std::chrono::duration_cast<std::chrono::milliseconds>(now - fps_time_);
+        fps_ = calculateFps(fps_, duration, fps_frame_count_);
+    }
+    else
+    {
+        fps_ = 0;
+    }
+
+    fps_time_ = now;
+    fps_frame_count_ = 0;
+
+    Metrics metrics;
+    metrics.packet_count = packet_count_;
+    if (min_packet_ != std::numeric_limits<size_t>::max())
+        metrics.min_packet = min_packet_;
+    metrics.max_packet = max_packet_;
+    metrics.avg_packet = avg_packet_;
+    metrics.fps = fps_;
+    metrics.capturer_type = capturer_type_;
+    metrics.encoder_type = encoder_type_;
+    metrics.hardware_decoder = hardware_decoder_;
+    metrics.cursor_shape_count = cursor_shape_count_;
+    metrics.cursor_pos_count = cursor_pos_count_;
+    metrics.cursor_cached = cursor_cached_;
+    metrics.cursor_taken_from_cache = cursor_taken_from_cache_;
+
+    emit sig_metrics(metrics);
+}
+
+//--------------------------------------------------------------------------------------------------
+void VideoWorker::decodePacket(const proto::video::Packet& packet)
+{
+    proto::video::ErrorCode error_code = packet.error_code();
     if (error_code != proto::video::ERROR_CODE_OK)
     {
         LOG(ERROR) << "Video error detected:" << error_code;
@@ -51,11 +220,11 @@ void VideoWorker::onVideoPacket(std::shared_ptr<proto::video::Packet> packet)
         return;
     }
 
-    if (encoding_ != packet->encoding())
+    if (encoding_ != packet.encoding())
     {
-        LOG(INFO) << "Video encoding changed from" << encoding_ << "to" << packet->encoding();
-        decoder_ = VideoDecoder::create(packet->encoding(), h264_hw_enabled_);
-        encoding_ = packet->encoding();
+        LOG(INFO) << "Video encoding changed from" << encoding_ << "to" << packet.encoding();
+        decoder_ = VideoDecoder::create(packet.encoding(), h264_hw_enabled_);
+        encoding_ = packet.encoding();
         key_frame_received_ = false;
     }
 
@@ -65,9 +234,9 @@ void VideoWorker::onVideoPacket(std::shared_ptr<proto::video::Packet> packet)
         return;
     }
 
-    if (packet->has_format())
+    if (packet.has_format())
     {
-        const proto::video::PacketFormat& format = packet->format();
+        const proto::video::PacketFormat& format = packet.format();
 
         LOG(INFO) << "Video packet has format:" << format;
         key_frame_received_ = true;
@@ -99,11 +268,11 @@ void VideoWorker::onVideoPacket(std::shared_ptr<proto::video::Packet> packet)
         capturer_type_ = static_cast<quint32>(format.capturer_type());
         screen_size_ = screen_size;
 
-        emit sig_videoInfoChanged(capturer_type_, static_cast<quint32>(encoding_),
-                                  decoder_->isHardwareAccelerated());
+        encoder_type_ = static_cast<quint32>(encoding_);
+        hardware_decoder_ = decoder_->isHardwareAccelerated();
     }
 
-    if (packet->flags() & proto::video::PACKET_FLAG_IS_KEY_FRAME)
+    if (packet.flags() & proto::video::PACKET_FLAG_IS_KEY_FRAME)
         key_frame_received_ = true;
 
     if (!key_frame_received_)
@@ -113,7 +282,7 @@ void VideoWorker::onVideoPacket(std::shared_ptr<proto::video::Packet> packet)
         return;
     }
 
-    const VideoDecoder::Result decode_result = decoder_->decode(*packet);
+    const VideoDecoder::Result decode_result = decoder_->decode(packet);
     if (decode_result == VideoDecoder::Result::PERMANENT_ERROR)
     {
         if (encoding_ != proto::video::ENCODING_H264)
@@ -128,9 +297,9 @@ void VideoWorker::onVideoPacket(std::shared_ptr<proto::video::Packet> packet)
             decoder_ = VideoDecoder::create(encoding_, false);
             key_frame_received_ = false;
 
-            emit sig_videoInfoChanged(capturer_type_, static_cast<quint32>(encoding_),
-                                      decoder_ && decoder_->isHardwareAccelerated());
-            emit sig_keyFrameRequired();
+            encoder_type_ = static_cast<quint32>(encoding_);
+            hardware_decoder_ = decoder_ && decoder_->isHardwareAccelerated();
+            sendKeyFrameRequest();
         }
         else if (h264_sw_enabled_)
         {
@@ -151,17 +320,18 @@ void VideoWorker::onVideoPacket(std::shared_ptr<proto::video::Packet> packet)
         LOG(ERROR) << "Unable to decode video packet";
         key_frame_received_ = false;
 
-        emit sig_temporaryError();
+        sendKeyFrameRequest();
+        enableForceReliable();
         return;
     }
 
-    const int rect_count = packet->dirty_rect_size();
+    const int rect_count = packet.dirty_rect_size();
     if (dirty_rects_.capacity() < rect_count)
         dirty_rects_.reserve(rect_count);
 
     dirty_rects_.resize(rect_count);
     for (int i = 0; i < rect_count; ++i)
-        dirty_rects_[i] = parse(packet->dirty_rect(i));
+        dirty_rects_[i] = parse(packet.dirty_rect(i));
 
     const YuvConverter::Result convert_result =
         yuv_converter_.convert(decoder_->frame(), dirty_rects_);
@@ -174,54 +344,86 @@ void VideoWorker::onVideoPacket(std::shared_ptr<proto::video::Packet> packet)
     if (convert_result == YuvConverter::Result::NEW_FRAME)
         emit sig_frameChanged(screen_size_, yuv_converter_.frame());
 
-    emit sig_drawFrame(dirty_rects_, packet->ByteSizeLong());
+    ++packet_count_;
+    ++fps_frame_count_;
+
+    const size_t packet_size = packet.ByteSizeLong();
+    avg_packet_ = calculateAvgSize(avg_packet_, packet_size);
+    min_packet_ = std::min(min_packet_, packet_size);
+    max_packet_ = std::max(max_packet_, packet_size);
+
+    emit sig_drawFrame(dirty_rects_);
 }
 
 //--------------------------------------------------------------------------------------------------
-void VideoWorker::onSetRecording(bool enable)
+void VideoWorker::sendKeyFrameRequest()
 {
-    if (enable)
+    // The legacy protocol has no keyframe request; the host sends keyframes on its own schedule.
+    if (legacy_)
+        return;
+
+    proto::video::ClientToHost message;
+    message.mutable_key_frame()->set_dummy(1);
+    emit sig_sendMessage(proto::desktop::CHANNEL_ID_VIDEO, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void VideoWorker::enableForceReliable()
+{
+    if (!force_reliable_active_ && reliable_disable_count_ < 2)
     {
-        LOG(INFO) << "Video recording is enabled";
-        recording_encoder_ = std::make_unique<WebmVideoEncoder>();
-        recording_timer_->start();
+        LOG(INFO) << "Enabling force reliable (disable count:" << reliable_disable_count_ << ")";
+        force_reliable_active_ = true;
+        sendForceReliable(true);
     }
-    else
+    reliable_hold_seconds_ = 60;
+}
+
+//--------------------------------------------------------------------------------------------------
+void VideoWorker::sendForceReliable(bool enable)
+{
+    // The legacy protocol has no such feedback command.
+    if (legacy_)
+        return;
+
+    proto::control::ClientToHost message;
+    proto::control::Feedback* feedback = message.mutable_feedback();
+    feedback->set_command_name("reliable");
+    feedback->set_boolean(enable);
+    emit sig_sendMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void VideoWorker::readCursorShape(const proto::cursor::Shape& shape)
+{
+    if (!cursor_shape_enabled_)
     {
-        LOG(INFO) << "Video recording is disabled";
-        recording_timer_->stop();
-        recording_encoder_.reset();
+        LOG(ERROR) << "Cursor shape received not disabled in client";
+        return;
     }
-}
 
-//--------------------------------------------------------------------------------------------------
-void VideoWorker::onStart()
-{
-    LOG(INFO) << "Video worker started";
+    ++cursor_shape_count_;
 
-    recording_timer_ = new QTimer(this);
-    recording_timer_->setInterval(std::chrono::milliseconds(60));
-
-    connect(recording_timer_, &QTimer::timeout, this, [this]()
+    if (!cursor_decoder_)
     {
-        if (!recording_encoder_ || !decoder_ || !decoder_->frame().isValid())
-            return;
+        LOG(INFO) << "Cursor decoder initialization";
+        cursor_decoder_ = std::make_unique<CursorDecoder>();
+    }
 
-        std::shared_ptr<proto::video::Packet> packet = std::make_shared<proto::video::Packet>();
+    std::shared_ptr<MouseCursor> mouse_cursor = cursor_decoder_->decode(shape);
+    if (mouse_cursor)
+        emit sig_mouseCursorChanged(std::move(mouse_cursor));
 
-        if (recording_encoder_->encode(decoder_->frame(), packet.get()))
-            emit sig_recordingVideoPacket(std::move(packet));
-    });
+    cursor_cached_ = cursor_decoder_->cachedCursors();
+    cursor_taken_from_cache_ = cursor_decoder_->takenCursorsFromCache();
 }
 
 //--------------------------------------------------------------------------------------------------
-void VideoWorker::onStop()
+void VideoWorker::readCursorPosition(const proto::cursor::Position& position)
 {
-    LOG(INFO) << "Video worker stopped";
+    if (!cursor_position_enabled_)
+        return;
 
-    delete recording_timer_;
-    recording_timer_ = nullptr;
-
-    recording_encoder_.reset();
-    decoder_.reset();
+    ++cursor_pos_count_;
+    emit sig_cursorPositionChanged(position);
 }

@@ -23,16 +23,22 @@
 #include <QRect>
 #include <QSize>
 
+#include <chrono>
+#include <limits>
 #include <memory>
 
+#include "base/serialization.h"
 #include "base/codec/yuv_converter.h"
 #include "base/desktop/shared_frame.h"
 #include "base/threading/worker.h"
+#include "proto/desktop_channel.h"
+#include "proto/desktop_cursor.h"
 #include "proto/desktop_video.h"
 
+class CursorDecoder;
+class MouseCursor;
 class QTimer;
 class VideoDecoder;
-class WebmVideoEncoder;
 
 class VideoWorker final : public Worker
 {
@@ -42,42 +48,93 @@ public:
     VideoWorker();
     ~VideoWorker() final;
 
-public slots:
-    // Decodes one video packet and converts it for rendering. Runs in the worker thread; invoke it
-    // through a queued connection.
-    void onVideoPacket(std::shared_ptr<proto::video::Packet> packet);
+    struct Metrics
+    {
+        qint64 packet_count = 0;
+        size_t min_packet = 0;
+        size_t max_packet = 0;
+        size_t avg_packet = 0;
+        int fps = 0;
+        quint32 capturer_type = 0;
+        quint32 encoder_type = 0;
+        bool hardware_decoder = false;
+        int cursor_shape_count = 0;
+        int cursor_pos_count = 0;
+        int cursor_cached = 0;
+        int cursor_taken_from_cache = 0;
+    };
 
-    // Starts or stops encoding of decoded frames for the session recording.
-    void onSetRecording(bool enable);
+public slots:
+    void onVideoMessage(const QByteArray& buffer);
+    void onVideoPacket(std::shared_ptr<proto::video::Packet> packet);
+    void onCursorMessage(const QByteArray& buffer);
+    void onCursorConfig(bool shape_enabled, bool position_enabled);
 
 signals:
+    void sig_sendMessage(quint8 channel_id, const QByteArray& buffer);
     void sig_frameError(proto::video::ErrorCode error_code);
     void sig_frameChanged(const QSize& screen_size, SharedFrame frame);
-    // One packet decoded and converted; |packet_size| is the encoded packet size for statistics.
-    void sig_drawFrame(const QList<QRect>& dirty_rects, size_t packet_size);
-    void sig_videoInfoChanged(quint32 capturer_type, quint32 encoder_type, bool hardware_decoder);
-    void sig_keyFrameRequired();
-    void sig_temporaryError();
+    void sig_drawFrame(const QList<QRect>& dirty_rects);
     void sig_h264Disabled();
-    void sig_recordingVideoPacket(std::shared_ptr<proto::video::Packet> packet);
+    void sig_mouseCursorChanged(std::shared_ptr<MouseCursor> mouse_cursor);
+    void sig_cursorPositionChanged(const proto::cursor::Position& position);
+    void sig_metrics(const VideoWorker::Metrics& metrics);
 
 protected:
     // Worker implementation.
     void onStart() final;
     void onStop() final;
 
+private slots:
+    // Fires once a second: winds down the force-reliable window and emits the statistics snapshot.
+    void onMetricsTimer();
+
 private:
+    void decodePacket(const proto::video::Packet& packet);
+    void sendKeyFrameRequest();
+    // Transport adaptation: on a temporary decode failure (packet loss over UDP) ask the host to
+    // switch to reliable transport for a hold window; the metrics timer winds it back off after the
+    // window, at most twice per session.
+    void enableForceReliable();
+    void sendForceReliable(bool enable);
+    void readCursorShape(const proto::cursor::Shape& shape);
+    void readCursorPosition(const proto::cursor::Position& position);
+
+    Parser<proto::video::HostToClient, proto::cursor::HostToClient> incoming_message_;
+
     std::unique_ptr<VideoDecoder> decoder_;
     proto::video::Encoding encoding_ = proto::video::ENCODING_UNKNOWN;
     bool key_frame_received_ = false;
+
+    // Set from the packet source: NG packets arrive on the video channel (onVideoMessage), legacy
+    // packets through the multiplexed channel (onVideoPacket). Keyframe requests are only sent in
+    // the NG mode, as the legacy protocol has no such request.
+    bool legacy_ = false;
+
+    std::unique_ptr<CursorDecoder> cursor_decoder_;
+    bool cursor_shape_enabled_ = false;
+    bool cursor_position_enabled_ = false;
+    int cursor_shape_count_ = 0;
+    int cursor_pos_count_ = 0;
+    int cursor_cached_ = 0;
+    int cursor_taken_from_cache_ = 0;
 
     YuvConverter yuv_converter_;
     QSize screen_size_;
     QList<QRect> dirty_rects_;
     quint32 capturer_type_ = 0;
+    quint32 encoder_type_ = 0;
+    bool hardware_decoder_ = false;
 
-    QTimer* recording_timer_ = nullptr;
-    std::unique_ptr<WebmVideoEncoder> recording_encoder_;
+    // Statistics, emitted once a second through sig_metrics.
+    QTimer* metrics_timer_ = nullptr;
+    qint64 packet_count_ = 0;
+    size_t min_packet_ = std::numeric_limits<size_t>::max();
+    size_t max_packet_ = 0;
+    size_t avg_packet_ = 0;
+    int fps_ = 0;
+    qint64 fps_frame_count_ = 0;
+    std::chrono::steady_clock::time_point fps_time_;
 
     // Set once a hardware H264 decoder reports a permanent failure; sticks for the rest of the
     // session so the software backend is picked on every subsequent VideoDecoder::create() call.
@@ -86,7 +143,15 @@ private:
     // level limits). The client drops H264 from its capabilities so the host switches to VP.
     bool h264_sw_enabled_ = true;
 
+    // Force-reliable transport state, driven by temporary decode failures. reliable_hold_seconds_
+    // counts down on the metrics timer; the switch is applied at most twice per session.
+    bool force_reliable_active_ = false;
+    int reliable_disable_count_ = 0;
+    int reliable_hold_seconds_ = 0;
+
     Q_DISABLE_COPY_MOVE(VideoWorker)
 };
+
+Q_DECLARE_METATYPE(VideoWorker::Metrics)
 
 #endif // CLIENT_WORKERS_VIDEO_WORKER_H
