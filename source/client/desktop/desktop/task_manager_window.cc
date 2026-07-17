@@ -25,8 +25,10 @@
 #include <QTimer>
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "client/desktop/desktop/task_manager_settings.h"
 #include "common/desktop/msg_box.h"
+#include "proto/desktop_channel.h"
 #include "ui_task_manager_window.h"
 
 namespace {
@@ -496,16 +498,16 @@ TaskManagerWindow::~TaskManagerWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TaskManagerWindow::readMessage(const proto::task_manager::HostToClient& message)
+void TaskManagerWindow::onNetworkMessage(const QByteArray& buffer)
 {
-    if (message.has_process_list())
-        readProcessList(message.process_list());
-    else if (message.has_service_list())
-        readServiceList(message.service_list());
-    else if (message.has_user_list())
-        readUserList(message.user_list());
-    else
-        LOG(ERROR) << "Unhandled task manager message";
+    proto::task_manager::HostToClient message;
+    if (!parse(buffer, &message))
+    {
+        LOG(ERROR) << "Unable to parse task manager data";
+        return;
+    }
+
+    readMessage(message);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -735,11 +737,30 @@ void TaskManagerWindow::onLogoffUser()
 }
 
 //--------------------------------------------------------------------------------------------------
+void TaskManagerWindow::readMessage(const proto::task_manager::HostToClient& message)
+{
+    if (message.has_process_list())
+        readProcessList(message.process_list());
+    else if (message.has_service_list())
+        readServiceList(message.service_list());
+    else if (message.has_user_list())
+        readUserList(message.user_list());
+    else
+        LOG(ERROR) << "Unhandled task manager message";
+}
+
+//--------------------------------------------------------------------------------------------------
+void TaskManagerWindow::sendRequest(const proto::task_manager::ClientToHost& message)
+{
+    emit sig_sendMessage(proto::desktop::CHANNEL_ID_TASK_MANAGER, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::sendProcessListRequest(quint32 flags)
 {
     proto::task_manager::ClientToHost message;
     message.mutable_process_list_request()->set_flags(flags);
-    emit sig_sendMessage(message);
+    sendRequest(message);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -747,7 +768,7 @@ void TaskManagerWindow::sendEndProcessRequest(quint64 process_id)
 {
     proto::task_manager::ClientToHost message;
     message.mutable_end_process_request()->set_pid(process_id);
-    emit sig_sendMessage(message);
+    sendRequest(message);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -755,7 +776,7 @@ void TaskManagerWindow::sendServiceListRequest()
 {
     proto::task_manager::ClientToHost message;
     message.mutable_service_list_request()->set_dummy(1);
-    emit sig_sendMessage(message);
+    sendRequest(message);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -768,7 +789,7 @@ void TaskManagerWindow::sendServiceRequest(
     service_request->set_name(name);
     service_request->set_command(command);
 
-    emit sig_sendMessage(message);
+    sendRequest(message);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -776,7 +797,7 @@ void TaskManagerWindow::sendUserListRequest()
 {
     proto::task_manager::ClientToHost message;
     message.mutable_user_list_request()->set_dummy(1);
-    emit sig_sendMessage(message);
+    sendRequest(message);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -789,7 +810,7 @@ void TaskManagerWindow::sendUserRequest(
     user_request->set_session_id(session_id);
     user_request->set_command(command);
 
-    emit sig_sendMessage(message);
+    sendRequest(message);
 }
 
 //--------------------------------------------------------------------------------------------------

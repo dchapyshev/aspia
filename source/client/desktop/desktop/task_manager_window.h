@@ -19,6 +19,7 @@
 #ifndef CLIENT_DESKTOP_DESKTOP_TASK_MANAGER_WINDOW_H
 #define CLIENT_DESKTOP_DESKTOP_TASK_MANAGER_WINDOW_H
 
+#include <QByteArray>
 #include <QMainWindow>
 #include <QTreeWidget>
 
@@ -40,10 +41,11 @@ public:
     explicit TaskManagerWindow(QWidget* parent = nullptr);
     ~TaskManagerWindow() final;
 
-    void readMessage(const proto::task_manager::HostToClient& message);
+public slots:
+    void onNetworkMessage(const QByteArray& buffer);
 
 signals:
-    void sig_sendMessage(const proto::task_manager::ClientToHost& request);
+    void sig_sendMessage(quint8 channel_id, const QByteArray& buffer);
 
 protected:
     // QMainWindow implementation.
@@ -63,6 +65,8 @@ private slots:
     void onLogoffUser();
 
 private:
+    void readMessage(const proto::task_manager::HostToClient& message);
+    void sendRequest(const proto::task_manager::ClientToHost& message);
     void sendProcessListRequest(quint32 flags);
     void sendEndProcessRequest(quint64 process_id);
     void sendServiceListRequest();
