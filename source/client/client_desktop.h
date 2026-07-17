@@ -20,6 +20,7 @@
 #define CLIENT_CLIENT_DESKTOP_H
 
 #include <QList>
+#include <QPointer>
 #include <QRect>
 #include <QSize>
 
@@ -68,14 +69,14 @@ class ClientToHost;
 class HostToClient;
 } // namespace proto::task_manager
 
-class AudioDecoder;
-class AudioPlayer;
+class AudioWorker;
 class CursorDecoder;
 class MouseCursor;
 class QTimer;
 class VideoDecoder;
 class WebmFileWriter;
 class WebmVideoEncoder;
+class WorkerManager;
 
 class ClientDesktop final : public Client
 {
@@ -147,6 +148,7 @@ signals:
     void sig_drawFrame(const QList<QRect>& dirty_rects);
     void sig_mouseCursorChanged(std::shared_ptr<MouseCursor> mouse_cursor);
     void sig_sessionListChanged(const proto::control::SessionList& sessions);
+    void sig_audioPacket(std::shared_ptr<proto::audio::Packet> packet);
 
 protected:
     // Client implementation.
@@ -190,13 +192,13 @@ private:
     Serializer<proto::input::ClientToHost> outgoing_message_;
 
     proto::video::Encoding video_encoding_ = proto::video::ENCODING_UNKNOWN;
-    proto::audio::Encoding audio_encoding_ = proto::audio::ENCODING_UNKNOWN;
 
     std::unique_ptr<VideoDecoder> video_decoder_;
     std::unique_ptr<CursorDecoder> cursor_decoder_;
-    std::unique_ptr<AudioDecoder> audio_decoder_;
-    std::unique_ptr<AudioPlayer> audio_player_;
     ClipboardFileTransfer* clipboard_file_transfer_ = nullptr;
+
+    std::unique_ptr<WorkerManager> worker_manager_;
+    QPointer<AudioWorker> audio_worker_;
 
     ScopedQPointer<QTimer> webm_video_encode_timer_;
     std::unique_ptr<WebmVideoEncoder> webm_video_encoder_;

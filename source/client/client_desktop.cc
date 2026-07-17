@@ -22,14 +22,14 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/codec/audio_decoder.h"
 #include "base/codec/cursor_decoder.h"
 #include "base/codec/video_decoder.h"
 #include "base/codec/webm_file_writer.h"
 #include "base/codec/webm_video_encoder.h"
 #include "base/desktop/frame.h"
 #include "base/desktop/mouse_cursor.h"
-#include "client/audio_player.h"
+#include "base/threading/worker_manager.h"
+#include "client/workers/audio_worker.h"
 #include "common/desktop_session_constants.h"
 #include "proto/desktop_audio.h"
 #include "proto/desktop_channel.h"
@@ -107,7 +107,16 @@ void ClientDesktop::onStarted()
     connect(clipboard_file_transfer_, &ClipboardFileTransfer::sig_fileDataChunk,
             this, &ClientDesktop::sig_clipboardFileData);
 
-    audio_player_ = AudioPlayer::create();
+    worker_manager_ = std::make_unique<WorkerManager>();
+
+    std::unique_ptr<AudioWorker> audio_worker = std::make_unique<AudioWorker>();
+    audio_worker_ = audio_worker.get();
+    worker_manager_->add(std::move(audio_worker));
+
+    connect(this, &ClientDesktop::sig_audioPacket, audio_worker_, &AudioWorker::onAudioPacket,
+            Qt::QueuedConnection);
+
+    worker_manager_->start();
 
     if (isLegacy())
         return;
@@ -854,31 +863,6 @@ void ClientDesktop::readAudioPacket(const proto::audio::Packet& packet)
     if (webm_file_writer_)
         webm_file_writer_->addAudioPacket(packet);
 
-    if (!audio_player_)
-    {
-        CLOG(ERROR) << "Audio packet received but audio player not initialized";
-        return;
-    }
-
-    if (packet.encoding() != audio_encoding_)
-    {
-        if (packet.encoding() != proto::audio::ENCODING_OPUS)
-        {
-            CLOG(WARNING) << "Unsupported audio encoding:" << packet.encoding();
-            return;
-        }
-        audio_decoder_ = std::make_unique<AudioDecoder>();
-        audio_encoding_ = packet.encoding();
-
-        CLOG(INFO) << "Audio encoding changed to:" << audio_encoding_;
-    }
-
-    if (!audio_decoder_)
-    {
-        CLOG(INFO) << "Audio decoder not initialized now";
-        return;
-    }
-
     size_t packet_size = packet.ByteSizeLong();
 
     avg_audio_packet_ = calculateAvgSize(avg_audio_packet_, packet_size);
@@ -887,9 +871,8 @@ void ClientDesktop::readAudioPacket(const proto::audio::Packet& packet)
 
     ++audio_packet_count_;
 
-    std::unique_ptr<proto::audio::Packet> decoded_packet = audio_decoder_->decode(packet);
-    if (decoded_packet)
-        audio_player_->addPacket(std::move(decoded_packet));
+    // Decoding and playback happen in the audio worker.
+    emit sig_audioPacket(std::make_shared<proto::audio::Packet>(packet));
 }
 
 //--------------------------------------------------------------------------------------------------

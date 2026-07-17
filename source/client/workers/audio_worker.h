@@ -19,7 +19,13 @@
 #ifndef CLIENT_WORKERS_AUDIO_WORKER_H
 #define CLIENT_WORKERS_AUDIO_WORKER_H
 
+#include <memory>
+
 #include "base/threading/worker.h"
+#include "proto/desktop_audio.h"
+
+class AudioDecoder;
+class AudioPlayer;
 
 class AudioWorker final : public Worker
 {
@@ -29,12 +35,19 @@ public:
     AudioWorker();
     ~AudioWorker() final;
 
+public slots:
+    void onAudioPacket(std::shared_ptr<proto::audio::Packet> packet);
+
 protected:
     // Worker implementation.
     void onStart() final;
     void onStop() final;
 
 private:
+    std::unique_ptr<AudioDecoder> decoder_;
+    std::unique_ptr<AudioPlayer> player_;
+    proto::audio::Encoding encoding_ = proto::audio::ENCODING_UNKNOWN;
+
     Q_DISABLE_COPY_MOVE(AudioWorker)
 };
 

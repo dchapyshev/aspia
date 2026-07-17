@@ -19,6 +19,8 @@
 #include "client/workers/audio_worker.h"
 
 #include "base/logging.h"
+#include "base/codec/audio_decoder.h"
+#include "client/audio_player.h"
 
 //--------------------------------------------------------------------------------------------------
 AudioWorker::AudioWorker()
@@ -33,13 +35,57 @@ AudioWorker::~AudioWorker()
 }
 
 //--------------------------------------------------------------------------------------------------
+void AudioWorker::onAudioPacket(std::shared_ptr<proto::audio::Packet> packet)
+{
+    if (!packet)
+        return;
+
+    if (!player_)
+    {
+        LOG(ERROR) << "Audio packet received but audio player not initialized";
+        return;
+    }
+
+    if (packet->encoding() != encoding_)
+    {
+        if (packet->encoding() != proto::audio::ENCODING_OPUS)
+        {
+            LOG(WARNING) << "Unsupported audio encoding:" << packet->encoding();
+            return;
+        }
+
+        decoder_ = std::make_unique<AudioDecoder>();
+        encoding_ = packet->encoding();
+
+        LOG(INFO) << "Audio encoding changed to:" << encoding_;
+    }
+
+    if (!decoder_)
+    {
+        LOG(INFO) << "Audio decoder not initialized now";
+        return;
+    }
+
+    std::unique_ptr<proto::audio::Packet> decoded_packet = decoder_->decode(*packet);
+    if (decoded_packet)
+        player_->addPacket(std::move(decoded_packet));
+}
+
+//--------------------------------------------------------------------------------------------------
 void AudioWorker::onStart()
 {
     LOG(INFO) << "Audio worker started";
+
+    player_ = AudioPlayer::create();
+    if (!player_)
+        LOG(ERROR) << "Unable to create audio player";
 }
 
 //--------------------------------------------------------------------------------------------------
 void AudioWorker::onStop()
 {
     LOG(INFO) << "Audio worker stopped";
+
+    player_.reset();
+    decoder_.reset();
 }
