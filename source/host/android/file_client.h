@@ -21,7 +21,7 @@
 
 #include "host/client.h"
 
-class FileWorker;
+class FileRequestHandler;
 
 class FileClient final : public Client
 {
@@ -37,7 +37,7 @@ protected:
     void onMessage(quint8 channel_id, const QByteArray& buffer) final;
 
 private:
-    FileWorker* worker_;
+    FileRequestHandler* handler_;
 
     Q_DISABLE_COPY_MOVE(FileClient)
 };

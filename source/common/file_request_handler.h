@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON_FILE_WORKER_H
-#define COMMON_FILE_WORKER_H
+#ifndef COMMON_FILE_REQUEST_HANDLER_H
+#define COMMON_FILE_REQUEST_HANDLER_H
 
 #include <QObject>
 #include <memory>
@@ -39,13 +39,13 @@ class Request;
 class UploadRequest;
 } // namespace proto::file_transfer
 
-class FileWorker final : public QObject
+class FileRequestHandler final : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit FileWorker(QObject* parent = nullptr);
-    ~FileWorker();
+    explicit FileRequestHandler(QObject* parent = nullptr);
+    ~FileRequestHandler();
 
     void doRequest(const FileTask& task);
     void doRequest(const proto::file_transfer::Request& request, proto::file_transfer::Reply* reply);
@@ -64,7 +64,7 @@ private:
     std::unique_ptr<FileDepacketizer> depacketizer_;
     std::unique_ptr<FilePacketizer> packetizer_;
 
-    Q_DISABLE_COPY_MOVE(FileWorker)
+    Q_DISABLE_COPY_MOVE(FileRequestHandler)
 };
 
-#endif // COMMON_FILE_WORKER_IMPL_H
+#endif // COMMON_FILE_REQUEST_HANDLER_H

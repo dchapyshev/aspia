@@ -23,12 +23,12 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/ipc/ipc_channel.h"
-#include "common/file_worker.h"
+#include "common/file_request_handler.h"
 
 //--------------------------------------------------------------------------------------------------
 FileAgent::FileAgent(QObject* parent)
     : QObject(parent),
-      worker_(new FileWorker(this))
+      handler_(new FileRequestHandler(this))
 {
     LOG(INFO) << "Ctor";
 }
@@ -84,7 +84,7 @@ void FileAgent::onIpcMessageReceived(
         return;
     }
 
-    worker_->doRequest(request_.message<proto::file_transfer::Request>(),
-                       &reply_.newMessage<proto::file_transfer::Reply>());
+    handler_->doRequest(request_.message<proto::file_transfer::Request>(),
+                        &reply_.newMessage<proto::file_transfer::Reply>());
     ipc_channel_->send(0, reply_.serialize<proto::file_transfer::Reply>());
 }

@@ -25,7 +25,7 @@
 #include "base/serialization.h"
 #include "proto/file_transfer.h"
 
-class FileWorker;
+class FileRequestHandler;
 class IpcChannel;
 
 class FileAgent final : public QObject
@@ -46,7 +46,7 @@ private slots:
 
 private:
     IpcChannel* ipc_channel_ = nullptr;
-    FileWorker* worker_ = nullptr;
+    FileRequestHandler* handler_ = nullptr;
 
     PowerSaveBlocker power_save_blocker_;
 

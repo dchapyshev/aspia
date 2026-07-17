@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "common/file_worker.h"
+#include "common/file_request_handler.h"
 
 #include <QDateTime>
 #include <QDir>
@@ -242,20 +242,20 @@ void addDesktopDrives(proto::file_transfer::DriveList* drive_list)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-FileWorker::FileWorker(QObject* parent)
+FileRequestHandler::FileRequestHandler(QObject* parent)
     : QObject(parent)
 {
     LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-FileWorker::~FileWorker()
+FileRequestHandler::~FileRequestHandler()
 {
     LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorker::doRequest(const FileTask& task)
+void FileRequestHandler::doRequest(const FileTask& task)
 {
     FileTask localTask(task);
 
@@ -266,7 +266,7 @@ void FileWorker::doRequest(const FileTask& task)
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorker::doRequest(
+void FileRequestHandler::doRequest(
     const proto::file_transfer::Request& request, proto::file_transfer::Reply* reply)
 {
     // The reply always mirrors the request id back to the sender.
@@ -315,7 +315,7 @@ void FileWorker::doRequest(
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorker::doDriveListRequest(proto::file_transfer::Reply* reply)
+void FileRequestHandler::doDriveListRequest(proto::file_transfer::Reply* reply)
 {
     proto::file_transfer::DriveList* drive_list = reply->mutable_drive_list();
 
@@ -332,7 +332,7 @@ void FileWorker::doDriveListRequest(proto::file_transfer::Reply* reply)
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorker::doFileListRequest(
+void FileRequestHandler::doFileListRequest(
     const proto::file_transfer::ListRequest& request, proto::file_transfer::Reply* reply)
 {
     QString path = QString::fromStdString(request.path());
@@ -367,7 +367,7 @@ void FileWorker::doFileListRequest(
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorker::doCreateDirectoryRequest(
+void FileRequestHandler::doCreateDirectoryRequest(
     const proto::file_transfer::CreateDirectoryRequest& request, proto::file_transfer::Reply* reply)
 {
     QString directory_path = QString::fromStdString(request.path());
@@ -390,7 +390,7 @@ void FileWorker::doCreateDirectoryRequest(
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorker::doRenameRequest(
+void FileRequestHandler::doRenameRequest(
     const proto::file_transfer::RenameRequest& request, proto::file_transfer::Reply* reply)
 {
     QString old_name = QString::fromStdString(request.old_name());
@@ -429,7 +429,7 @@ void FileWorker::doRenameRequest(
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorker::doRemoveRequest(
+void FileRequestHandler::doRemoveRequest(
     const proto::file_transfer::RemoveRequest& request, proto::file_transfer::Reply* reply)
 {
     QString path = QString::fromStdString(request.path());
@@ -470,7 +470,7 @@ void FileWorker::doRemoveRequest(
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorker::doDownloadRequest(
+void FileRequestHandler::doDownloadRequest(
     const proto::file_transfer::DownloadRequest& request, proto::file_transfer::Reply* reply)
 {
     packetizer_ = FilePacketizer::create(QString::fromStdString(request.path()));
@@ -486,7 +486,7 @@ void FileWorker::doDownloadRequest(
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorker::doUploadRequest(
+void FileRequestHandler::doUploadRequest(
     const proto::file_transfer::UploadRequest& request, proto::file_transfer::Reply* reply)
 {
     QString file_path = QString::fromStdString(request.path());
@@ -517,7 +517,7 @@ void FileWorker::doUploadRequest(
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorker::doPacketRequest(
+void FileRequestHandler::doPacketRequest(
     const proto::file_transfer::PacketRequest& request, proto::file_transfer::Reply* reply)
 {
     if (!packetizer_)
@@ -546,7 +546,7 @@ void FileWorker::doPacketRequest(
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorker::doPacket(
+void FileRequestHandler::doPacket(
     const proto::file_transfer::Packet& packet, proto::file_transfer::Reply* reply)
 {
     if (!depacketizer_)

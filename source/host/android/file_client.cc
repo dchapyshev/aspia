@@ -20,14 +20,14 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "common/file_worker.h"
+#include "common/file_request_handler.h"
 #include "proto/file_transfer.h"
 #include "proto/peer.h"
 
 //--------------------------------------------------------------------------------------------------
 FileClient::FileClient(TcpChannel* tcp_channel, QObject* parent)
     : Client(tcp_channel, parent),
-      worker_(new FileWorker(this))
+      handler_(new FileRequestHandler(this))
 {
     LOG(INFO) << "Ctor";
 }
@@ -62,6 +62,6 @@ void FileClient::onMessage(quint8 channel_id, const QByteArray& buffer)
     }
 
     proto::file_transfer::Reply reply;
-    worker_->doRequest(request, &reply);
+    handler_->doRequest(request, &reply);
     send(proto::peer::CHANNEL_ID_0, serialize(reply), true);
 }

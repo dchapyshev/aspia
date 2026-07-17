@@ -29,12 +29,12 @@ list(APPEND SOURCE_COMMON
     file_packetizer.cc
     file_packetizer.h
     file_platform_util.h
+    file_request_handler.cc
+    file_request_handler.h
     file_task.cc
     file_task.h
     file_task_factory.cc
     file_task_factory.h
-    file_worker.cc
-    file_worker.h
     http_file_downloader.cc
     http_file_downloader.h
     keycode_converter.cc
