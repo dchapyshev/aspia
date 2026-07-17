@@ -19,9 +19,12 @@
 #ifndef CLIENT_DESKTOP_TERMINAL_TERMINAL_WINDOW_H
 #define CLIENT_DESKTOP_TERMINAL_TERMINAL_WINDOW_H
 
+#include <memory>
+
 #include "client/desktop/client_window.h"
 
 class TerminalWidget;
+class ZstdStreamDecompressor;
 
 class TerminalWindow final : public ClientWindow
 {
@@ -33,11 +36,20 @@ public:
 
 protected:
     // ClientWindow implementation.
-    Client* createClient() final;
     void onInternalReset() final;
+    void onRegisterWorkers() final;
+    void onSessionStarted() final;
+
+private slots:
+    void onChannelMessage(const QByteArray& buffer);
+    void onCredentials(const QString& user_name, const QString& password);
+    void onInput(const QByteArray& data);
+    void onResize(int columns, int rows);
 
 private:
     TerminalWidget* terminal_widget_ = nullptr;
+
+    std::unique_ptr<ZstdStreamDecompressor> output_decompressor_;
 
     Q_DISABLE_COPY_MOVE(TerminalWindow)
 };
