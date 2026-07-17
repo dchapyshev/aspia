@@ -71,7 +71,9 @@ endif()
 if (APPLE)
     list(APPEND SOURCE_CLIENT_CORE
         audio_output_mac.cc
-        audio_output_mac.h)
+        audio_output_mac.h
+        session_keeper_mac.cc
+        session_keeper_mac.h)
 endif()
 
 if (ANDROID)
