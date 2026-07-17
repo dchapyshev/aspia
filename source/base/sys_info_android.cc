@@ -18,7 +18,11 @@
 
 #include "base/sys_info.h"
 
+#include <QCoreApplication>
+#include <QJniObject>
+
 #include "base/logging.h"
+#include "base/crypto/generic_hash.h"
 
 #include <sys/sysinfo.h>
 #include <sys/system_properties.h>
@@ -148,4 +152,36 @@ QByteArray SysInfo::smbiosDump()
 {
     NOTIMPLEMENTED();
     return QByteArray();
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QByteArray SysInfo::hardwareId()
+{
+    // Android exposes no hardware serial to applications; ANDROID_ID is a per-device value
+    // that survives application reinstallation and changes only on factory reset.
+    QJniObject context = QNativeInterface::QAndroidApplication::context();
+    if (!context.isValid())
+        return QByteArray();
+
+    QJniObject resolver =
+        context.callObjectMethod("getContentResolver", "()Landroid/content/ContentResolver;");
+    if (!resolver.isValid())
+        return QByteArray();
+
+    QJniObject android_id = QJniObject::getStaticObjectField<jstring>(
+        "android/provider/Settings$Secure", "ANDROID_ID");
+    QJniObject value = QJniObject::callStaticObjectMethod(
+        "android/provider/Settings$Secure", "getString",
+        "(Landroid/content/ContentResolver;Ljava/lang/String;)Ljava/lang/String;",
+        resolver.object(), android_id.object<jstring>());
+    if (!value.isValid())
+        return QByteArray();
+
+    const QByteArray id = value.toString().toUtf8();
+    if (id.isEmpty())
+        return QByteArray();
+
+    // The source data is hashed to hide its format and to fix the length of the identifier.
+    return GenericHash::hash(GenericHash::SHA256, id);
 }

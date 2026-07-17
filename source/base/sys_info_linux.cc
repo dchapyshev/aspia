@@ -35,6 +35,7 @@
 
 #include "base/logging.h"
 #include "base/smbios.h"
+#include "base/crypto/generic_hash.h"
 
 #include <drm/drm.h>
 #include <fcntl.h>
@@ -882,6 +883,36 @@ QByteArray SysInfo::smbiosDump()
     result.append(table);
 
     return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QByteArray SysInfo::hardwareId()
+{
+    auto readFirstLine = [](const char* path) -> QByteArray
+    {
+        QFile file(QString::fromLatin1(path));
+        if (!file.open(QIODevice::ReadOnly))
+            return QByteArray();
+
+        return file.readLine(256).trimmed();
+    };
+
+    // The SMBIOS system UUID comes from the firmware and survives OS reinstallation. The sysfs
+    // node is readable only by root.
+    QByteArray id = readFirstLine("/sys/class/dmi/id/product_uuid");
+
+    // Unprivileged processes (and machines without DMI) fall back to the machine id generated
+    // at OS installation time.
+    if (id.isEmpty())
+        id = readFirstLine("/etc/machine-id");
+    if (id.isEmpty())
+        id = readFirstLine("/var/lib/dbus/machine-id");
+    if (id.isEmpty())
+        return QByteArray();
+
+    // The source data is hashed to hide its format and to fix the length of the identifier.
+    return GenericHash::hash(GenericHash::SHA256, id);
 }
 
 //--------------------------------------------------------------------------------------------------

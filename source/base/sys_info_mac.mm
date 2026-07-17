@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/smbios.h"
+#include "base/crypto/generic_hash.h"
 
 #include <QHash>
 #include <QProcess>
@@ -37,6 +38,7 @@
 #include <utmpx.h>
 
 #import <Foundation/Foundation.h>
+#import <IOKit/IOKitKeys.h>
 #import <IOKit/IOKitLib.h>
 #import <IOKit/ps/IOPSKeys.h>
 #import <IOKit/ps/IOPowerSources.h>
@@ -337,6 +339,30 @@ QByteArray SysInfo::smbiosDump()
     result.append(table);
 
     return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QByteArray SysInfo::hardwareId()
+{
+    // The platform UUID is provided by the hardware on both Intel and Apple Silicon Macs and
+    // survives OS reinstallation.
+    io_service_t service = IOServiceGetMatchingService(
+        kIOMainPortDefault, IOServiceMatching("IOPlatformExpertDevice"));
+    if (!service)
+    {
+        LOG(ERROR) << "IOPlatformExpertDevice not found";
+        return QByteArray();
+    }
+
+    QByteArray uuid = stringProperty(service, CFSTR(kIOPlatformUUIDKey)).toUtf8();
+    IOObjectRelease(service);
+
+    if (uuid.isEmpty())
+        return QByteArray();
+
+    // The source data is hashed to hide its format and to fix the length of the identifier.
+    return GenericHash::hash(GenericHash::SHA256, uuid);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -205,6 +205,7 @@ public:
     static int processorThreads();
 
     static QByteArray smbiosDump();
+    static QByteArray hardwareId();
 
     static QList<User> users();
     static QList<UserGroup> userGroups();
