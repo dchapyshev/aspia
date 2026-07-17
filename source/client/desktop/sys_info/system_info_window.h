@@ -45,24 +45,19 @@ public:
     ~SystemInfoWindow() final;
 
     // ClientWindow implementation.
-    Client* createClient() final;
     void setTabbedMode(bool tabbed) final;
     QList<QPair<Tab::ActionRole, QList<QAction*>>> tabActionGroups() const final;
     QByteArray saveState() const final;
     void restoreState(const QByteArray& state) final;
 
-public slots:
-    void onShowWindow();
-    void onSystemInfoChanged(const proto::system_info::SystemInfo& system_info);
-
-signals:
-    void sig_systemInfoRequired(const proto::system_info::SystemInfoRequest& request);
-
 protected:
     // ClientWindow implementation.
     void onInternalReset() final;
+    void onRegisterWorkers() final;
+    void onSessionStarted() final;
 
 private slots:
+    void onChannelMessage(const QByteArray& buffer);
     void onCategoryItemClicked(QTreeWidgetItem* item, int column);
     void onRefresh();
 

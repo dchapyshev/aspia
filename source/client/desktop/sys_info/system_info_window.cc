@@ -29,8 +29,8 @@
 #include <QTreeWidgetItemIterator>
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/version_constants.h"
-#include "client/client_system_info.h"
 #include "client/desktop/sys_info/sys_info_widget_applications.h"
 #include "client/desktop/sys_info/sys_info_widget_connections.h"
 #include "client/desktop/sys_info/sys_info_widget_devices.h"
@@ -52,6 +52,7 @@
 #include "client/desktop/sys_info/sys_info_widget_summary.h"
 #include "client/desktop/sys_info/sys_info_widget_video_adapters.h"
 #include "client/desktop/sys_info/tree_to_html.h"
+#include "client/workers/network_worker.h"
 #include "common/system_info_constants.h"
 #include "common/desktop/msg_box.h"
 #include "proto/peer.h"
@@ -127,8 +128,11 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
         if (i != 0)
             sys_info_widgets_[i]->hide();
 
-        connect(sys_info_widgets_[i], &SysInfoWidget::sig_systemInfoRequest,
-                this, &SystemInfoWindow::sig_systemInfoRequired);
+        connect(sys_info_widgets_[i], &SysInfoWidget::sig_systemInfoRequest, this,
+                [this](const proto::system_info::SystemInfoRequest& request)
+        {
+            sendMessage(proto::peer::CHANNEL_ID_0, serialize(request));
+        });
     }
 
     buildCategoryTree();
@@ -181,23 +185,6 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
 SystemInfoWindow::~SystemInfoWindow()
 {
     LOG(INFO) << "Dtor";
-}
-
-//--------------------------------------------------------------------------------------------------
-Client* SystemInfoWindow::createClient()
-{
-    LOG(INFO) << "Create client";
-
-    ClientSystemInfo* client = new ClientSystemInfo();
-
-    connect(this, &SystemInfoWindow::sig_systemInfoRequired, client, &ClientSystemInfo::onSystemInfoRequest,
-            Qt::QueuedConnection);
-    connect(client, &ClientSystemInfo::sig_showSessionWindow, this, &SystemInfoWindow::onShowWindow,
-            Qt::QueuedConnection);
-    connect(client, &ClientSystemInfo::sig_systemInfo, this, &SystemInfoWindow::onSystemInfoChanged,
-            Qt::QueuedConnection);
-
-    return std::move(client);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -300,9 +287,22 @@ void SystemInfoWindow::restoreState(const QByteArray& state)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SystemInfoWindow::onShowWindow()
+void SystemInfoWindow::onInternalReset()
 {
-    LOG(INFO) << "Show window";
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+void SystemInfoWindow::onRegisterWorkers()
+{
+    connect(networkWorker(), &NetworkWorker::sig_channel_0,
+            this, &SystemInfoWindow::onChannelMessage, Qt::QueuedConnection);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SystemInfoWindow::onSessionStarted()
+{
+    LOG(INFO) << "System info session started";
 
     for (int i = 0; i < sys_info_widgets_.size(); ++i)
     {
@@ -323,8 +323,15 @@ void SystemInfoWindow::onShowWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SystemInfoWindow::onSystemInfoChanged(const proto::system_info::SystemInfo& system_info)
+void SystemInfoWindow::onChannelMessage(const QByteArray& buffer)
 {
+    proto::system_info::SystemInfo system_info;
+    if (!parse(buffer, &system_info))
+    {
+        LOG(ERROR) << "Unable to parse system info";
+        return;
+    }
+
     for (int i = 0; i < sys_info_widgets_.count(); ++i)
     {
         SysInfoWidget* widget = sys_info_widgets_[i];
@@ -344,12 +351,6 @@ void SystemInfoWindow::onSystemInfoChanged(const proto::system_info::SystemInfo&
         ui->action_save->setEnabled(true);
         ui->action_print->setEnabled(true);
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void SystemInfoWindow::onInternalReset()
-{
-    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -402,7 +403,7 @@ void SystemInfoWindow::onRefresh()
     for (int i = 0; i < sys_info_widgets_.count(); ++i)
     {
         proto::system_info::SystemInfoRequest request = sys_info_widgets_[i]->request();
-        emit sig_systemInfoRequired(request);
+        sendMessage(proto::peer::CHANNEL_ID_0, serialize(request));
     }
 }
 
