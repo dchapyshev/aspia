@@ -27,21 +27,9 @@ list(APPEND SOURCE_CLIENT_CORE
     audio_player.h
     database.cc
     database.h
-    client.cc
-    client.h
     config.cc
     config.h
-    client_desktop.cc
-    client_desktop.h
-    client_file_transfer.cc
-    client_file_transfer.h
     main.cc
-    client_system_info.cc
-    client_system_info.h
-    client_terminal.cc
-    client_terminal.h
-    client_text_chat.cc
-    client_text_chat.h
     file_error_code.cc
     file_error_code.h
     file_remove_queue_builder.cc
