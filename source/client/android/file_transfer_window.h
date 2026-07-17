@@ -19,16 +19,15 @@
 #ifndef CLIENT_ANDROID_FILE_TRANSFER_WINDOW_H
 #define CLIENT_ANDROID_FILE_TRANSFER_WINDOW_H
 
+#include <QPointer>
 #include <QWidget>
 
 #include <memory>
 
-#include "base/scoped_qpointer.h"
-#include "client/client.h"
 #include "client/config.h"
 #include "client/file_remover.h"
 #include "client/file_transfer.h"
-#include "common/file_task.h"
+#include "client/workers/network_worker.h"
 
 namespace proto::file_transfer {
 enum ErrorCode : int;
@@ -37,18 +36,20 @@ class List;
 } // namespace proto::file_transfer
 
 class AppBar;
-class ClientFileTransfer;
 class FilePanelWidget;
+class FileWorker;
 class Label;
 class Router;
+class SessionKeeper;
 class SessionState;
 class TabBar;
+class WorkerManager;
 class QHBoxLayout;
 class QWidget;
 
 // File transfer session screen for the Android client: a top app bar and two file panels (this
 // device and the remote host). Opened as a non-full-screen page in the main window's root stack and
-// driven by a ClientFileTransfer running on the I/O thread.
+// driven directly over the network worker.
 class FileTransferWindow final : public QWidget
 {
     Q_OBJECT
@@ -59,8 +60,9 @@ public:
 
 signals:
     void sig_closed();
-
-    // Routed to the client (queued).
+    void sig_startConnection(std::shared_ptr<SessionState> session_state);
+    void sig_sessionReady();
+    void sig_sendMessage(quint8 channel_id, const QByteArray& buffer);
     void sig_driveListRequest(FileTask::Target target);
     void sig_fileListRequest(FileTask::Target target, const QString& path);
     void sig_createDirectoryRequest(FileTask::Target target, const QString& path);
@@ -74,7 +76,9 @@ protected:
     void resizeEvent(QResizeEvent* event) final;
 
 private slots:
-    void onStatusChanged(Client::Status status, const QVariant& data);
+    void onNetworkStatusChanged(NetworkWorker::Status status, const QVariant& data);
+    void onNetworkConnected();
+    void onStatusChanged(NetworkWorker::Status status, const QVariant& data);
     void onErrorOccurred(proto::file_transfer::ErrorCode error_code);
     void onDriveList(FileTask::Target target, proto::file_transfer::ErrorCode error_code,
                      const proto::file_transfer::DriveList& drive_list);
@@ -89,7 +93,8 @@ private:
     void start();
     void fetchConnectionOffer();
     void requestConnectionOffer(Router* router);
-    void startNewClient();
+    void startNewSession();
+
     void initPanel(FilePanelWidget* panel, FileTask::Target target);
     void sendItems(FilePanelWidget* sender, const QList<FileTransfer::Item>& items);
     void removeItems(FilePanelWidget* sender, const FileRemover::TaskList& items);
@@ -99,7 +104,11 @@ private:
 
     HostConfig host_;
     std::shared_ptr<SessionState> session_state_;
-    ScopedQPointer<ClientFileTransfer> client_;
+
+    std::unique_ptr<WorkerManager> worker_manager_;
+    QPointer<NetworkWorker> network_worker_;
+    QPointer<FileWorker> file_worker_;
+    SessionKeeper* session_keeper_ = nullptr;
 
     AppBar* app_bar_ = nullptr;
     Label* status_ = nullptr;

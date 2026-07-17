@@ -23,10 +23,14 @@
 #include <QVBoxLayout>
 
 #include "base/gui_application.h"
-#include "client/client_file_transfer.h"
+#include "base/logging.h"
+#include "base/threading/worker_manager.h"
 #include "client/database.h"
 #include "client/router.h"
+#include "client/session_keeper.h"
 #include "client/session_state.h"
+#include "client/workers/file_worker.h"
+#include "client/workers/network_worker.h"
 #include "client/android/file_panel_widget.h"
 #include "client/android/file_progress_sheet.h"
 #include "common/android/app_bar.h"
@@ -99,43 +103,6 @@ FileTransferWindow::FileTransferWindow(const HostConfig& host, QWidget* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileTransferWindow::ensureStoragePermission()
-{
-#if defined(Q_OS_ANDROID)
-    if (QJniObject::callStaticMethod<jboolean>(
-            "android/os/Environment", "isExternalStorageManager", "()Z"))
-    {
-        return;
-    }
-
-    if (!MessageDialog::confirm(this, tr("File Transfer"),
-            tr("To browse files on this device, allow access to all files on the next screen."),
-            tr("Allow")))
-    {
-        return;
-    }
-
-    QJniObject context = QNativeInterface::QAndroidApplication::context();
-    if (!context.isValid())
-        return;
-
-    const QString package = context.callObjectMethod(
-        "getPackageName", "()Ljava/lang/String;").toString();
-    QJniObject uri = QJniObject::callStaticObjectMethod(
-        "android/net/Uri", "parse", "(Ljava/lang/String;)Landroid/net/Uri;",
-        QJniObject::fromString("package:" + package).object<jstring>());
-
-    QJniObject intent("android/content/Intent", "(Ljava/lang/String;Landroid/net/Uri;)V",
-        QJniObject::fromString("android.settings.MANAGE_APP_ALL_FILES_ACCESS_PERMISSION").object<jstring>(),
-        uri.object());
-
-    // FLAG_ACTIVITY_NEW_TASK, required to start an activity from a non-activity context.
-    intent.callObjectMethod("addFlags", "(I)Landroid/content/Intent;", 0x10000000);
-    context.callMethod<void>("startActivity", "(Landroid/content/Intent;)V", intent.object());
-#endif // defined(Q_OS_ANDROID)
-}
-
-//--------------------------------------------------------------------------------------------------
 FileTransferWindow::~FileTransferWindow() = default;
 
 //--------------------------------------------------------------------------------------------------
@@ -146,38 +113,52 @@ void FileTransferWindow::resizeEvent(QResizeEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileTransferWindow::onStatusChanged(Client::Status status, const QVariant& /* data */)
+void FileTransferWindow::onNetworkStatusChanged(NetworkWorker::Status status, const QVariant& data)
+{
+    if (status == NetworkWorker::Status::HOST_DISCONNECTED && session_keeper_)
+        session_keeper_->release();
+
+    onStatusChanged(status, data);
+
+    if (status == NetworkWorker::Status::HOST_CONNECTED)
+        onNetworkConnected();
+}
+
+//--------------------------------------------------------------------------------------------------
+void FileTransferWindow::onNetworkConnected()
+{
+    if (session_keeper_)
+        session_keeper_->acquire();
+
+    // Now the session can receive incoming messages.
+    emit sig_sessionReady();
+}
+
+//--------------------------------------------------------------------------------------------------
+void FileTransferWindow::onStatusChanged(NetworkWorker::Status status, const QVariant& data)
 {
     switch (status)
     {
-        case Client::Status::HOST_CONNECTING:
+        case NetworkWorker::Status::HOST_CONNECTING:
             setStatusText(tr("Connecting to host %1...").arg(session_state_->hostAddress()));
             break;
 
-        case Client::Status::HOST_CONNECTED:
+        case NetworkWorker::Status::HOST_CONNECTED:
             connected_ = true;
             status_->setVisible(false);
             local_panel_->refresh();
             remote_panel_->refresh();
             break;
 
-        case Client::Status::HOST_DISCONNECTED:
+        case NetworkWorker::Status::HOST_DISCONNECTED:
             setStatusText(tr("The connection to the host has been lost."));
             break;
 
-        case Client::Status::NO_ROUTER:
-            setStatusText(tr("The specified router is unavailable."));
+        case NetworkWorker::Status::RELAY_ERROR:
+            setStatusText(data.toString());
             break;
 
-        case Client::Status::ROUTER_OFFLINE:
-            setStatusText(tr("The specified router is offline."));
-            break;
-
-        case Client::Status::ROUTER_ERROR:
-            setStatusText(tr("Error requesting connection via router."));
-            break;
-
-        case Client::Status::VERSION_MISMATCH:
+        case NetworkWorker::Status::VERSION_MISMATCH:
             setStatusText(tr("The host version is newer than the client. Please update the application."));
             break;
 
@@ -227,6 +208,43 @@ void FileTransferWindow::onCreateDirectory(
 }
 
 //--------------------------------------------------------------------------------------------------
+void FileTransferWindow::ensureStoragePermission()
+{
+#if defined(Q_OS_ANDROID)
+    if (QJniObject::callStaticMethod<jboolean>(
+            "android/os/Environment", "isExternalStorageManager", "()Z"))
+    {
+        return;
+    }
+
+    if (!MessageDialog::confirm(this, tr("File Transfer"),
+            tr("To browse files on this device, allow access to all files on the next screen."),
+            tr("Allow")))
+    {
+        return;
+    }
+
+    QJniObject context = QNativeInterface::QAndroidApplication::context();
+    if (!context.isValid())
+        return;
+
+    const QString package = context.callObjectMethod(
+        "getPackageName", "()Ljava/lang/String;").toString();
+    QJniObject uri = QJniObject::callStaticObjectMethod(
+        "android/net/Uri", "parse", "(Ljava/lang/String;)Landroid/net/Uri;",
+        QJniObject::fromString("package:" + package).object<jstring>());
+
+    QJniObject intent("android/content/Intent", "(Ljava/lang/String;Landroid/net/Uri;)V",
+        QJniObject::fromString("android.settings.MANAGE_APP_ALL_FILES_ACCESS_PERMISSION").object<jstring>(),
+        uri.object());
+
+    // FLAG_ACTIVITY_NEW_TASK, required to start an activity from a non-activity context.
+    intent.callObjectMethod("addFlags", "(I)Landroid/content/Intent;", 0x10000000);
+    context.callMethod<void>("startActivity", "(Landroid/content/Intent;)V", intent.object());
+#endif // defined(Q_OS_ANDROID)
+}
+
+//--------------------------------------------------------------------------------------------------
 void FileTransferWindow::start()
 {
     // An empty user name means a connection by ID with a one-time password (#host_id).
@@ -241,7 +259,7 @@ void FileTransferWindow::start()
     if (session_state_->isConnectionByHostId())
         fetchConnectionOffer();
     else
-        startNewClient();
+        startNewSession();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -294,7 +312,7 @@ void FileTransferWindow::requestConnectionOffer(Router* router)
         if (offer.error_code() == proto::router::ConnectionOffer::SUCCESS)
         {
             session_state_->setConnectionOffer(offer);
-            startNewClient();
+            startNewSession();
             return;
         }
 
@@ -303,37 +321,52 @@ void FileTransferWindow::requestConnectionOffer(Router* router)
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileTransferWindow::startNewClient()
+void FileTransferWindow::startNewSession()
 {
-    ClientFileTransfer* client = new ClientFileTransfer();
+    if (!session_keeper_)
+        session_keeper_ = SessionKeeper::create(this);
 
-    connect(client, &Client::sig_statusChanged,
-            this, &FileTransferWindow::onStatusChanged, Qt::QueuedConnection);
-    connect(client, &ClientFileTransfer::sig_errorOccurred,
-            this, &FileTransferWindow::onErrorOccurred, Qt::QueuedConnection);
-    connect(client, &ClientFileTransfer::sig_driveListReply,
-            this, &FileTransferWindow::onDriveList, Qt::QueuedConnection);
-    connect(client, &ClientFileTransfer::sig_fileListReply,
-            this, &FileTransferWindow::onFileList, Qt::QueuedConnection);
-    connect(client, &ClientFileTransfer::sig_createDirectoryReply,
-            this, &FileTransferWindow::onCreateDirectory, Qt::QueuedConnection);
+    worker_manager_.reset();
+    worker_manager_ = std::make_unique<WorkerManager>();
 
-    connect(this, &FileTransferWindow::sig_driveListRequest,
-            client, &ClientFileTransfer::onDriveListRequest, Qt::QueuedConnection);
-    connect(this, &FileTransferWindow::sig_fileListRequest,
-            client, &ClientFileTransfer::onFileListRequest, Qt::QueuedConnection);
-    connect(this, &FileTransferWindow::sig_createDirectoryRequest,
-            client, &ClientFileTransfer::onCreateDirectoryRequest, Qt::QueuedConnection);
-    connect(this, &FileTransferWindow::sig_removeRequest,
-            client, &ClientFileTransfer::onRemoveRequest, Qt::QueuedConnection);
-    connect(this, &FileTransferWindow::sig_transferRequest,
-            client, &ClientFileTransfer::onTransferRequest, Qt::QueuedConnection);
+    std::unique_ptr<NetworkWorker> network_worker = std::make_unique<NetworkWorker>();
+    network_worker_ = network_worker.get();
+    worker_manager_->add(std::move(network_worker));
 
-    client->moveToThread(GuiApplication::ioThread());
-    client->setSessionState(session_state_);
-    client_ = client;
+    std::unique_ptr<FileWorker> file_worker = std::make_unique<FileWorker>();
+    file_worker_ = file_worker.get();
+    worker_manager_->add(std::move(file_worker));
 
-    QMetaObject::invokeMethod(client, &Client::start, Qt::QueuedConnection);
+    connect(this, &FileTransferWindow::sig_startConnection, network_worker_, &NetworkWorker::onStartConnection,
+            Qt::QueuedConnection);
+    connect(this, &FileTransferWindow::sig_sessionReady, network_worker_, &NetworkWorker::onSessionReady,
+            Qt::QueuedConnection);
+    connect(this, &FileTransferWindow::sig_sendMessage, network_worker_, &NetworkWorker::onSendMessage,
+            Qt::QueuedConnection);
+    connect(network_worker_, &NetworkWorker::sig_statusChanged, this, &FileTransferWindow::onNetworkStatusChanged,
+            Qt::QueuedConnection);
+    connect(file_worker_, &FileWorker::sig_errorOccurred, this, &FileTransferWindow::onErrorOccurred,
+            Qt::QueuedConnection);
+    connect(file_worker_, &FileWorker::sig_driveListReply, this, &FileTransferWindow::onDriveList,
+            Qt::QueuedConnection);
+    connect(file_worker_, &FileWorker::sig_fileListReply, this, &FileTransferWindow::onFileList,
+            Qt::QueuedConnection);
+    connect(file_worker_, &FileWorker::sig_createDirectoryReply, this, &FileTransferWindow::onCreateDirectory,
+            Qt::QueuedConnection);
+    connect(this, &FileTransferWindow::sig_driveListRequest, file_worker_, &FileWorker::onDriveListRequest,
+            Qt::QueuedConnection);
+    connect(this, &FileTransferWindow::sig_fileListRequest, file_worker_, &FileWorker::onFileListRequest,
+            Qt::QueuedConnection);
+    connect(this, &FileTransferWindow::sig_createDirectoryRequest, file_worker_, &FileWorker::onCreateDirectoryRequest,
+            Qt::QueuedConnection);
+    connect(this, &FileTransferWindow::sig_removeRequest, file_worker_, &FileWorker::onRemoveRequest,
+            Qt::QueuedConnection);
+    connect(this, &FileTransferWindow::sig_transferRequest, file_worker_, &FileWorker::onTransferRequest,
+            Qt::QueuedConnection);
+
+    worker_manager_->start();
+
+    emit sig_startConnection(session_state_);
 }
 
 //--------------------------------------------------------------------------------------------------
