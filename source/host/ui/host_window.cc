@@ -63,6 +63,9 @@ namespace {
 // XEmbed-only tray does not report availability but can still host the icon).
 constexpr int kTrayWaitMaxAttempts = 30;
 
+// Em dash shown in the ID and password fields while the value is unknown.
+const QChar kUnknownValue(0x2014);
+
 //--------------------------------------------------------------------------------------------------
 // Groups the digits of the ID in threes ("902 969 984") so it is easier to read and dictate.
 QString formatHostId(HostId host_id)
@@ -95,8 +98,8 @@ HostWindow::HostWindow(QWidget* parent)
     menuBar()->setNativeMenuBar(false);
 #endif // defined(Q_OS_MACOS)
 
-    ui->edit_id->setText("-");
-    ui->edit_password->setText("-");
+    ui->edit_id->setText(kUnknownValue);
+    ui->edit_password->setText(kUnknownValue);
 
     tray_menu_.addAction(ui->action_show_chat);
     tray_menu_.addAction(ui->action_security_log);
@@ -480,8 +483,8 @@ void HostWindow::onRouterStateChanged(const proto::user::RouterState& state)
     {
         ui->button_new_password->setEnabled(false);
 
-        ui->edit_id->setText("-");
-        ui->edit_password->setText("-");
+        ui->edit_id->setText(kUnknownValue);
+        ui->edit_password->setText(kUnknownValue);
     }
     else
     {

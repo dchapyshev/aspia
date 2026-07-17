@@ -45,6 +45,9 @@
 
 namespace {
 
+// Em dash shown in the ID and password cards while the value is unknown.
+const QChar kUnknownValue(0x2014);
+
 // Order of the pages in the stacked content and of the bottom navigation items.
 enum Section
 {
@@ -240,8 +243,8 @@ void AndroidMainWindow::onCredentialsChanged(const QString& host_id, const QStri
     // The one-time password is only meaningful once the router has assigned an ID.
     const bool has_id = !host_id.isEmpty();
 
-    connection_->setHostId(has_id ? host_id : QString("-"));
-    connection_->setPassword((has_id && !password.isEmpty()) ? password : QString("-"));
+    connection_->setHostId(has_id ? host_id : QString(kUnknownValue));
+    connection_->setPassword((has_id && !password.isEmpty()) ? password : QString(kUnknownValue));
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -181,6 +181,11 @@ void RouterManager::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
         tcp_channel_.reset();
     }
 
+    // The host is not reachable by the assigned ID until the connection is restored and the router
+    // re-assigns it, so report the credentials as unavailable.
+    host_id_ = kInvalidHostId;
+    emit sig_credentialsChanged(host_id_, one_time_password_);
+
     routerStateChanged(proto::user::RouterState::FAILED);
     delayedConnectToRouter();
 }
@@ -245,6 +250,11 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
 
         if (host_storage.lastHostId() != host_id_)
             host_storage.setLastHostId(host_id_);
+
+        // The one-time user name is derived from the host ID ("#<id>"), so the user can only be
+        // registered now that the ID is known; before this point (first connect or reconnect after
+        // a connection loss) it was created invalid.
+        user_list_->setOneTimeUser(createOneTimeUser());
 
         emit sig_credentialsChanged(host_id_, one_time_password_);
     }

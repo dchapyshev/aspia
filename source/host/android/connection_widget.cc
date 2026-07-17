@@ -50,7 +50,7 @@ const char kNameLabelProperty[] = "aspia_name_label";
 
 //--------------------------------------------------------------------------------------------------
 // Groups the digits of the ID in threes ("902 969 984") so it is easier to read and dictate.
-// Non-numeric values (the "-" placeholder) are returned as is. Only the visible label is
+// Non-numeric values (the em dash placeholder) are returned as is. Only the visible label is
 // formatted; the shared text keeps the raw ID so it stays paste-able on the client side.
 QString formatHostId(const QString& host_id)
 {

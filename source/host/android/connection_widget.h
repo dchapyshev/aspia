@@ -91,8 +91,9 @@ private:
     QLabel* router_icon_ = nullptr;
     Label* router_text_ = nullptr;
 
-    QString host_id_ = "-";
-    QString password_ = "-";
+    // Em dash placeholders until the first credentials update arrives.
+    QString host_id_ = QChar(0x2014);
+    QString password_ = QChar(0x2014);
     RouterState router_state_ = RouterState::DISABLED;
     QString router_;
 
