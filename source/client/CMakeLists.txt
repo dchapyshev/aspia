@@ -101,6 +101,7 @@ include(desktop/sys_info/sources.cmake)
 include(desktop/chat/sources.cmake)
 include(desktop/hosts/sources.cmake)
 include(desktop/terminal/sources.cmake)
+include(workers/sources.cmake)
 
 if (WIN32)
     include(win/sources.cmake)
@@ -117,6 +118,7 @@ source_group(desktop\\chat FILES ${SOURCE_CLIENT_CORE_DESKTOP_CHAT})
 source_group(desktop\\terminal FILES ${SOURCE_CLIENT_CORE_DESKTOP_TERMINAL})
 source_group(desktop\\hosts FILES ${SOURCE_CLIENT_CORE_DESKTOP_HOSTS_TAB})
 source_group(win FILES ${SOURCE_CLIENT_WIN})
+source_group(workers FILES ${SOURCE_CLIENT_WORKERS})
 
 if (WIN32)
     set(CLIENT_PLATFORM_LIBS
@@ -145,7 +147,8 @@ if (ANDROID)
     qt_add_executable(aspia_client
         ${SOURCE_CLIENT_CORE}
         ${SOURCE_CLIENT_ANDROID}
-        ${SOURCE_CLIENT_CORE_ONLINE_CHECKER})
+        ${SOURCE_CLIENT_CORE_ONLINE_CHECKER}
+        ${SOURCE_CLIENT_WORKERS})
 else()
     add_executable(aspia_client MACOSX_BUNDLE
         ${aspia_client_ICON}
@@ -158,7 +161,8 @@ else()
         ${SOURCE_CLIENT_CORE_DESKTOP_CHAT}
         ${SOURCE_CLIENT_CORE_DESKTOP_TERMINAL}
         ${SOURCE_CLIENT_CORE_DESKTOP_HOSTS_TAB}
-        ${SOURCE_CLIENT_WIN})
+        ${SOURCE_CLIENT_WIN}
+        ${SOURCE_CLIENT_WORKERS})
 endif()
 
 target_link_libraries(aspia_client PRIVATE
