@@ -162,6 +162,14 @@ void HostNG::readHostIdRequest(const proto::router::HostIdRequest& host_id_reque
         return;
     }
 
+    hw_id_ = QByteArray::fromStdString(host_id_request.hw_id());
+    if (hw_id_.isEmpty())
+    {
+        CLOG(ERROR) << "Host did not report a hardware id; disconnecting";
+        emit sig_finished(sessionId());
+        return;
+    }
+
     proto::router::RouterToHost message;
     proto::router::HostIdResponse* host_id_response = message.mutable_host_id_response();
 

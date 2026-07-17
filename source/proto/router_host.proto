@@ -33,8 +33,9 @@ message HostIdRequest
         EXISTING_ID = 2;
     }
 
-    Type type = 1;
-    bytes key = 2;
+    Type type   = 1;
+    bytes key   = 2;
+    bytes hw_id = 3;
 }
 
 message HostIdResponse

@@ -22,6 +22,7 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "base/sys_info.h"
 #include "base/crypto/password_generator.h"
 #include "base/net/tcp_channel_ng.h"
 #include "base/peer/client_authenticator.h"
@@ -209,7 +210,9 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
             LOG(INFO) << "Host is not in the router's database. Reset ID";
 
             proto::router::HostToRouter out_message;
-            out_message.mutable_host_id_request()->set_type(proto::router::HostIdRequest::NEW_ID);
+            proto::router::HostIdRequest* host_id_request = out_message.mutable_host_id_request();
+            host_id_request->set_type(proto::router::HostIdRequest::NEW_ID);
+            host_id_request->set_hw_id(SysInfo::hardwareId().toStdString());
 
             // Send host ID request.
             LOG(INFO) << "Send ID request to router";
@@ -392,6 +395,7 @@ void RouterManager::hostIdRequest()
 
     proto::router::HostToRouter message;
     proto::router::HostIdRequest* host_id_request = message.mutable_host_id_request();
+    host_id_request->set_hw_id(SysInfo::hardwareId().toStdString());
 
     if (host_key.isEmpty())
     {

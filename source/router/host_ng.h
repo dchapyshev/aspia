@@ -39,6 +39,7 @@ public:
 
     HostId hostId() const { return host_id_; }
     const QByteArray& keyHash() const { return key_hash_; }
+    const QByteArray& hardwareId() const { return hw_id_; }
 
     void sendConnectionOffer(const proto::router::ConnectionOffer& offer);
     // Sends the "remove" host command and marks the session so that on disconnect the
@@ -60,6 +61,7 @@ private:
 
     HostId host_id_ = kInvalidHostId;
     QByteArray key_hash_;
+    QByteArray hw_id_;
     bool remove_command_sent_ = false;
 
     Q_DISABLE_COPY_MOVE(HostNG)
