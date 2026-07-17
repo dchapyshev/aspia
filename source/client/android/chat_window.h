@@ -20,13 +20,13 @@
 #define CLIENT_ANDROID_CHAT_WINDOW_H
 
 #include <QList>
+#include <QPointer>
 #include <QWidget>
 
 #include <memory>
 
-#include "base/scoped_qpointer.h"
-#include "client/client.h"
 #include "client/config.h"
+#include "client/workers/network_worker.h"
 
 namespace proto::chat {
 class Chat;
@@ -34,11 +34,12 @@ class Chat;
 
 class AppBar;
 class ChatView;
-class ClientChat;
 class IconButton;
 class QTimer;
 class Router;
+class SessionKeeper;
 class SessionState;
+class WorkerManager;
 
 class ChatWindow final : public QWidget
 {
@@ -50,16 +51,19 @@ public:
 
 signals:
     void sig_closed();
-
-    // Routed to the client (queued).
-    void sig_chatMessage(const proto::chat::Chat& chat);
+    void sig_startConnection(std::shared_ptr<SessionState> session_state);
+    void sig_sessionReady();
+    void sig_sendMessage(quint8 channel_id, const QByteArray& buffer);
 
 protected:
     // QWidget implementation.
     void resizeEvent(QResizeEvent* event) final;
 
 private slots:
-    void onStatusChanged(Client::Status status, const QVariant& data);
+    void onNetworkStatusChanged(NetworkWorker::Status status, const QVariant& data);
+    void onNetworkConnected();
+    void onChannelMessage(const QByteArray& buffer);
+    void onStatusChanged(NetworkWorker::Status status, const QVariant& data);
     void onChatMessage(const proto::chat::Chat& chat);
 
     // Lifts the content by however much the on-screen keyboard overlaps the window. Android's
@@ -88,7 +92,8 @@ private:
     void start();
     void fetchConnectionOffer();
     void requestConnectionOffer(Router* router);
-    void startNewClient();
+    void startNewSession();
+    void sendChatMessage(const proto::chat::Chat& chat);
     void onSendText(const QString& text);
     void setStatusText(const QString& text);
 
@@ -101,7 +106,10 @@ private:
     QString history_id_;
     QList<HistoryMessage> history_messages_;
     std::shared_ptr<SessionState> session_state_;
-    ScopedQPointer<ClientChat> client_;
+
+    std::unique_ptr<WorkerManager> worker_manager_;
+    QPointer<NetworkWorker> network_worker_;
+    SessionKeeper* session_keeper_ = nullptr;
 
     AppBar* app_bar_ = nullptr;
     ChatView* view_ = nullptr;

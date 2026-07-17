@@ -36,13 +36,15 @@
 
 #include "base/crypto/generic_hash.h"
 #include "base/files/base_paths.h"
-#include "base/gui_application.h"
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/sys_info.h"
-#include "client/client_text_chat.h"
+#include "base/threading/worker_manager.h"
 #include "client/database.h"
 #include "client/router.h"
+#include "client/session_keeper.h"
 #include "client/session_state.h"
+#include "client/workers/network_worker.h"
 #include "client/android/chat_view.h"
 #include "common/android/app_bar.h"
 #include "common/android/icon_button.h"
@@ -191,37 +193,29 @@ void ChatWindow::updateKeyboardInset()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ChatWindow::onStatusChanged(Client::Status status, const QVariant& /* data */)
+void ChatWindow::onStatusChanged(NetworkWorker::Status status, const QVariant& data)
 {
     switch (status)
     {
-        case Client::Status::HOST_CONNECTING:
+        case NetworkWorker::Status::HOST_CONNECTING:
             setStatusText(tr("Connecting to host %1...").arg(session_state_->hostAddress()));
             break;
 
-        case Client::Status::HOST_CONNECTED:
+        case NetworkWorker::Status::HOST_CONNECTED:
             view_->setStatusText(QString());
             view_->setInputEnabled(true);
             break;
 
-        case Client::Status::HOST_DISCONNECTED:
+        case NetworkWorker::Status::HOST_DISCONNECTED:
             setStatusText(tr("The connection to the host has been lost."));
             view_->setInputEnabled(false);
             break;
 
-        case Client::Status::NO_ROUTER:
-            setStatusText(tr("The specified router is unavailable."));
+        case NetworkWorker::Status::RELAY_ERROR:
+            setStatusText(data.toString());
             break;
 
-        case Client::Status::ROUTER_OFFLINE:
-            setStatusText(tr("The specified router is offline."));
-            break;
-
-        case Client::Status::ROUTER_ERROR:
-            setStatusText(tr("Error requesting connection via router."));
-            break;
-
-        case Client::Status::VERSION_MISMATCH:
+        case NetworkWorker::Status::VERSION_MISMATCH:
             setStatusText(tr("The host version is newer than the client. Please update the application."));
             break;
 
@@ -279,7 +273,7 @@ void ChatWindow::onSendText(const QString& text)
     view_->addMessage(display_name_, text, true, timestamp);
     appendHistory({ timestamp, display_name_, text, true, false });
 
-    emit sig_chatMessage(chat);
+    sendChatMessage(chat);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -300,7 +294,7 @@ void ChatWindow::start()
     if (session_state_->isConnectionByHostId())
         fetchConnectionOffer();
     else
-        startNewClient();
+        startNewSession();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -353,7 +347,7 @@ void ChatWindow::requestConnectionOffer(Router* router)
         if (offer.error_code() == proto::router::ConnectionOffer::SUCCESS)
         {
             session_state_->setConnectionOffer(offer);
-            startNewClient();
+            startNewSession();
             return;
         }
 
@@ -362,22 +356,76 @@ void ChatWindow::requestConnectionOffer(Router* router)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ChatWindow::startNewClient()
+void ChatWindow::startNewSession()
 {
-    ClientChat* client = new ClientChat();
+    if (!session_keeper_)
+        session_keeper_ = SessionKeeper::create(this);
 
-    connect(client, &Client::sig_statusChanged,
-            this, &ChatWindow::onStatusChanged, Qt::QueuedConnection);
-    connect(client, &ClientChat::sig_chatMessage,
-            this, &ChatWindow::onChatMessage, Qt::QueuedConnection);
-    connect(this, &ChatWindow::sig_chatMessage,
-            client, &ClientChat::onChatMessage, Qt::QueuedConnection);
+    worker_manager_.reset();
+    worker_manager_ = std::make_unique<WorkerManager>();
 
-    client->moveToThread(GuiApplication::ioThread());
-    client->setSessionState(session_state_);
-    client_ = client;
+    std::unique_ptr<NetworkWorker> network_worker = std::make_unique<NetworkWorker>();
+    network_worker_ = network_worker.get();
+    worker_manager_->add(std::move(network_worker));
 
-    QMetaObject::invokeMethod(client, &Client::start, Qt::QueuedConnection);
+    connect(this, &ChatWindow::sig_startConnection, network_worker_, &NetworkWorker::onStartConnection,
+            Qt::QueuedConnection);
+    connect(this, &ChatWindow::sig_sessionReady, network_worker_, &NetworkWorker::onSessionReady,
+            Qt::QueuedConnection);
+    connect(this, &ChatWindow::sig_sendMessage, network_worker_, &NetworkWorker::onSendMessage,
+            Qt::QueuedConnection);
+    connect(network_worker_, &NetworkWorker::sig_statusChanged, this, &ChatWindow::onNetworkStatusChanged,
+            Qt::QueuedConnection);
+
+    // The text chat runs over a single session channel.
+    connect(network_worker_, &NetworkWorker::sig_channel_0, this, &ChatWindow::onChannelMessage,
+            Qt::QueuedConnection);
+
+    worker_manager_->start();
+
+    emit sig_startConnection(session_state_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWindow::onNetworkStatusChanged(NetworkWorker::Status status, const QVariant& data)
+{
+    if (status == NetworkWorker::Status::HOST_DISCONNECTED && session_keeper_)
+        session_keeper_->release();
+
+    onStatusChanged(status, data);
+
+    // HOST_CONNECTED means the handshake passed and the (still paused) channel is ready.
+    if (status == NetworkWorker::Status::HOST_CONNECTED)
+        onNetworkConnected();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWindow::onNetworkConnected()
+{
+    if (session_keeper_)
+        session_keeper_->acquire();
+
+    // Now the session can receive incoming messages.
+    emit sig_sessionReady();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWindow::onChannelMessage(const QByteArray& buffer)
+{
+    proto::chat::Chat chat;
+    if (!parse(buffer, &chat))
+    {
+        LOG(ERROR) << "Unable to parse text chat message";
+        return;
+    }
+
+    onChatMessage(chat);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWindow::sendChatMessage(const proto::chat::Chat& chat)
+{
+    emit sig_sendMessage(proto::peer::CHANNEL_ID_0, serialize(chat));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -545,7 +593,7 @@ void ChatWindow::onTyping()
     status->set_source(display_name_.toStdString());
     status->set_code(proto::chat::Status::CODE_TYPING);
 
-    emit sig_chatMessage(chat);
+    sendChatMessage(chat);
 
     typing_throttle_->start(kTypingThrottleMs);
 }
