@@ -21,7 +21,11 @@
 
 #include <QList>
 
-#include "client/client_desktop.h"
+#include <chrono>
+
+#include "client/workers/audio_worker.h"
+#include "client/workers/network_worker.h"
+#include "client/workers/video_worker.h"
 #include "common/android/dialog.h"
 
 class QTreeWidgetItem;
@@ -35,10 +39,16 @@ public:
     explicit StatisticsDialog(QWidget* parent = nullptr);
     ~StatisticsDialog() final;
 
-    void setMetrics(const ClientDesktop::Metrics& metrics);
+    void setDuration(std::chrono::seconds duration);
+    void setClipboardMetrics(int read_clipboard, int send_clipboard);
+
+public slots:
+    void onNetworkMetrics(const NetworkWorker::Metrics& metrics);
+    void onVideoMetrics(const VideoWorker::Metrics& metrics);
+    void onAudioMetrics(const AudioWorker::Metrics& metrics);
 
 signals:
-    // Emitted once a second to ask the owner to refresh the metrics.
+    // Emitted once a second to ask the owner to refresh the session-level metrics.
     void sig_metricsRequired();
 
 private:

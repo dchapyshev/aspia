@@ -228,11 +228,10 @@ QTreeWidgetItem* StatisticsDialog::addRow(const QString& name)
 }
 
 //--------------------------------------------------------------------------------------------------
-void StatisticsDialog::setMetrics(const ClientDesktop::Metrics& metrics)
+void StatisticsDialog::onNetworkMetrics(const NetworkWorker::Metrics& metrics)
 {
     auto set = [this](int row, const QString& value) { rows_[row]->setData(0, kValueRole, value); };
 
-    set(ROW_DURATION, QTime(0, 0, 0).addSecs(static_cast<int>(metrics.duration.count())).toString());
     set(ROW_TOTAL_TCP, Formatter::sizeToString(metrics.total_tcp_rx) + " / " +
         Formatter::sizeToString(metrics.total_tcp_tx));
     set(ROW_SPEED_TCP, Formatter::transferSpeedToString(metrics.speed_tcp_rx) + " / " +
@@ -242,21 +241,47 @@ void StatisticsDialog::setMetrics(const ClientDesktop::Metrics& metrics)
     set(ROW_SPEED_UDP, Formatter::transferSpeedToString(metrics.speed_udp_rx) + " / " +
         Formatter::transferSpeedToString(metrics.speed_udp_tx));
     set(ROW_UDP, udpMethodToString(metrics.udp_method));
-    set(ROW_VIDEO_PACKET_COUNT, QString::number(metrics.video_packet_count));
-    set(ROW_VIDEO_PACKET_STATS, Formatter::sizeToString(metrics.min_video_packet) + " / " +
-        Formatter::sizeToString(metrics.max_video_packet) + " / " +
-        Formatter::sizeToString(metrics.avg_video_packet));
-    set(ROW_AUDIO_PACKET_COUNT, QString::number(metrics.audio_packet_count));
-    set(ROW_AUDIO_PACKET_STATS, Formatter::sizeToString(metrics.min_audio_packet) + " / " +
-        Formatter::sizeToString(metrics.max_audio_packet) + " / " +
-        Formatter::sizeToString(metrics.avg_audio_packet));
-    set(ROW_VIDEO_CODEC, capturerToString(metrics.video_capturer_type) + " / " +
-        encoderToString(metrics.video_encoder_type, metrics.video_decoder_hardware));
+}
+
+//--------------------------------------------------------------------------------------------------
+void StatisticsDialog::onVideoMetrics(const VideoWorker::Metrics& metrics)
+{
+    auto set = [this](int row, const QString& value) { rows_[row]->setData(0, kValueRole, value); };
+
+    set(ROW_VIDEO_PACKET_COUNT, QString::number(metrics.packet_count));
+    set(ROW_VIDEO_PACKET_STATS, Formatter::sizeToString(metrics.min_packet) + " / " +
+        Formatter::sizeToString(metrics.max_packet) + " / " +
+        Formatter::sizeToString(metrics.avg_packet));
+    set(ROW_VIDEO_CODEC, capturerToString(metrics.capturer_type) + " / " +
+        encoderToString(metrics.encoder_type, metrics.hardware_decoder));
     set(ROW_FPS, QString::number(metrics.fps));
-    set(ROW_CLIPBOARD, QString::number(metrics.read_clipboard) + " / " +
-        QString::number(metrics.send_clipboard));
     set(ROW_CURSOR_SHAPE, QString::number(metrics.cursor_shape_count) + " / " +
         QString::number(metrics.cursor_taken_from_cache));
     set(ROW_CURSOR_CACHE_SIZE, QString::number(metrics.cursor_cached));
     set(ROW_CURSOR_POS, QString::number(metrics.cursor_pos_count));
+}
+
+//--------------------------------------------------------------------------------------------------
+void StatisticsDialog::onAudioMetrics(const AudioWorker::Metrics& metrics)
+{
+    auto set = [this](int row, const QString& value) { rows_[row]->setData(0, kValueRole, value); };
+
+    set(ROW_AUDIO_PACKET_COUNT, QString::number(metrics.packet_count));
+    set(ROW_AUDIO_PACKET_STATS, Formatter::sizeToString(metrics.min_packet) + " / " +
+        Formatter::sizeToString(metrics.max_packet) + " / " +
+        Formatter::sizeToString(metrics.avg_packet));
+}
+
+//--------------------------------------------------------------------------------------------------
+void StatisticsDialog::setDuration(std::chrono::seconds duration)
+{
+    rows_[ROW_DURATION]->setData(
+        0, kValueRole, QTime(0, 0, 0).addSecs(static_cast<int>(duration.count())).toString());
+}
+
+//--------------------------------------------------------------------------------------------------
+void StatisticsDialog::setClipboardMetrics(int read_clipboard, int send_clipboard)
+{
+    rows_[ROW_CLIPBOARD]->setData(
+        0, kValueRole, QString::number(read_clipboard) + " / " + QString::number(send_clipboard));
 }
