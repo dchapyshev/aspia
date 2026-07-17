@@ -157,9 +157,10 @@ public:
     //----------------------------------------------------------------------------------------------
 
     // Identity and telemetry. The hosts table is the durable identity table; rows are
-    // never deleted by cascade.
+    // never deleted by cascade. A row is created at approval time with the key hash and the
+    // hardware id reported by the host; both are mandatory.
     std::string_view hostId(std::string_view key_hash, HostId* host_id) const;
-    bool addHost(std::string_view key_hash);
+    bool addHost(std::string_view key_hash, std::string_view hwid);
 
     // Called on every host connection to refresh the host's last-seen metadata.
     bool updateHostInfo(HostId host_id, std::string_view computer_name, std::string_view cpu_arch,

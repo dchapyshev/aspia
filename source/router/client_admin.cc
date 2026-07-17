@@ -526,7 +526,7 @@ void ClientAdmin::doHostRequest(const proto::router::HostRequest& request)
                 CLOG(ERROR) << "Failed to connect to database";
                 host_result->set_error_code(proto::router::kErrorInternalError);
             }
-            else if (!database.addHost(host->keyHash()))
+            else if (!database.addHost(host->keyHash(), host->hardwareId()))
             {
                 CLOG(ERROR) << "Failed to persist approved host_id:" << host_id;
                 host_result->set_error_code(proto::router::kErrorInternalError);

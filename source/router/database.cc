@@ -150,6 +150,7 @@ bool ensureSchema(SqlDatabase& db)
     if (!run("CREATE TABLE IF NOT EXISTS \"hosts\" ("
              "\"id\" INTEGER UNIQUE,"
              "\"key\" BLOB NOT NULL UNIQUE,"
+             "\"hwid\" BLOB NOT NULL DEFAULT X'',"
              "\"workspace_id\" INTEGER NOT NULL DEFAULT 0,"
              "\"group_id\" INTEGER NOT NULL DEFAULT 0,"
              "\"display_name\" TEXT NOT NULL DEFAULT '',"
@@ -292,9 +293,11 @@ bool ensureSchema(SqlDatabase& db)
         return false;
     }
 
-    // hosts used to be a thin (id, key) table; everything below moved in from the now-gone
-    // computers table. Backfill any column that's missing on upgraded databases.
+    // hosts used to be a thin (id, key) table; the columns below were added later (most moved
+    // in from the now-gone computers table). Backfill any column that's missing on upgraded
+    // databases.
     static const struct { const char* name; const char* definition; } kHostColumns[] = {
+        { "hwid",          "BLOB NOT NULL DEFAULT X''"   },
         { "workspace_id",  "INTEGER NOT NULL DEFAULT 0"  },
         { "group_id",      "INTEGER NOT NULL DEFAULT 0"  },
         { "display_name",  "TEXT NOT NULL DEFAULT ''"    },
@@ -1011,7 +1014,7 @@ std::string_view Database::hostId(std::string_view key_hash, HostId* host_id) co
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::addHost(std::string_view key_hash)
+bool Database::addHost(std::string_view key_hash, std::string_view hwid)
 {
     if (!isValid())
     {
@@ -1019,7 +1022,7 @@ bool Database::addHost(std::string_view key_hash)
         return false;
     }
 
-    if (key_hash.empty())
+    if (key_hash.empty() || hwid.empty())
     {
         LOG(ERROR) << "Invalid parameters";
         return false;
@@ -1037,8 +1040,9 @@ bool Database::addHost(std::string_view key_hash)
         return false;
     }
 
-    SqlQuery query(db_, "INSERT INTO hosts (id, key) VALUES (NULL, ?)");
+    SqlQuery query(db_, "INSERT INTO hosts (id, key, hwid) VALUES (NULL, ?, ?)");
     query.addBlob(key_hash);
+    query.addBlob(hwid);
 
     if (!query.exec())
     {
