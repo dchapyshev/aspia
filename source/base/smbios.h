@@ -36,6 +36,7 @@ struct SmbiosDump
 enum SmbiosTableType : quint8
 {
     SMBIOS_TABLE_TYPE_BIOS          = 0x00,
+    SMBIOS_TABLE_TYPE_SYSTEM        = 0x01,
     SMBIOS_TABLE_TYPE_BASEBOARD     = 0x02,
     SMBIOS_TABLE_TYPE_MEMORY_DEVICE = 0x11,
     SMBIOS_TABLE_TYPE_END_OF_TABLE  = 0x7F
@@ -70,6 +71,23 @@ struct SmbiosBiosTable : public SmbiosTable
 
     // 3.1+
     quint16 ext_rom_size;      // 18h
+};
+
+struct SmbiosSystemTable : public SmbiosTable
+{
+    // 2.0+
+    quint8 manufacturer;  // 04h
+    quint8 product_name;  // 05h
+    quint8 version;       // 06h
+    quint8 serial_number; // 07h
+
+    // 2.1+
+    quint8 uuid[16];      // 08h-17h
+    quint8 wakeup_type;   // 18h
+
+    // 2.4+
+    quint8 sku_number;    // 19h
+    quint8 family;        // 1Ah
 };
 
 struct SmbiosBaseboardTable : public SmbiosTable

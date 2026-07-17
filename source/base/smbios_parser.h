@@ -69,6 +69,19 @@ private:
     Q_DISABLE_COPY_MOVE(SmbiosBios)
 };
 
+class SmbiosSystem
+{
+public:
+    explicit SmbiosSystem(const SmbiosTable* table);
+
+    bool isValid() const;
+    QByteArray uuid() const;
+
+private:
+    const SmbiosSystemTable* table_;
+    Q_DISABLE_COPY_MOVE(SmbiosSystem)
+};
+
 class SmbiosBaseboard
 {
 public:

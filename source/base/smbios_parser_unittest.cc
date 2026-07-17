@@ -272,6 +272,65 @@ TEST(SmbiosParserTest, LyingHeaderLengthIsContained)
 }
 
 //--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, SystemUuid)
+{
+    // A full SMBIOS 2.1 system table: 4 string fields, the UUID and the wakeup type.
+    QByteArray formatted(0x19 - 4, '\0');
+    for (int i = 0; i < 16; ++i)
+        formatted[4 + i] = static_cast<char>(i + 1);
+
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_SYSTEM, formatted, {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+    ASSERT_EQ(enumerator.table()->type, SMBIOS_TABLE_TYPE_SYSTEM);
+
+    SmbiosSystem system(enumerator.table());
+    ASSERT_TRUE(system.isValid());
+
+    const QByteArray uuid = system.uuid();
+    ASSERT_EQ(uuid.size(), 16);
+    for (int i = 0; i < 16; ++i)
+        EXPECT_EQ(static_cast<quint8>(uuid[i]), i + 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, SystemUuidUnsetOrUnknown)
+{
+    // All 0x00 (not set) and all 0xFF (set but unknown) UUIDs are both reported as absent.
+    for (char filler : { '\x00', '\xFF' })
+    {
+        QByteArray formatted(0x19 - 4, '\0');
+        for (int i = 0; i < 16; ++i)
+            formatted[4 + i] = filler;
+
+        const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_SYSTEM, formatted, {}));
+
+        SmbiosTableEnumerator enumerator(dump);
+        ASSERT_FALSE(enumerator.isAtEnd());
+
+        SmbiosSystem system(enumerator.table());
+        ASSERT_TRUE(system.isValid());
+        EXPECT_TRUE(system.uuid().isEmpty());
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, SystemUuidMissingOnShortTable)
+{
+    // An SMBIOS 2.0 system table (length 0x08) predates the UUID field.
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_SYSTEM, QByteArray(0x08 - 4, '\0'), {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosSystem system(enumerator.table());
+    ASSERT_TRUE(system.isValid());
+    EXPECT_TRUE(system.uuid().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST(SmbiosParserTest, BaseboardStrings)
 {
     QByteArray formatted(0x0F - 4, '\0');

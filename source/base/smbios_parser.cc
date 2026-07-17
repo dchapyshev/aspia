@@ -184,6 +184,45 @@ QString SmbiosBios::releaseDate() const
 }
 
 //--------------------------------------------------------------------------------------------------
+SmbiosSystem::SmbiosSystem(const SmbiosTable* table)
+    : table_(static_cast<const SmbiosSystemTable*>(table))
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosSystem::isValid() const
+{
+    // 08h is the minimum length of the system information table since SMBIOS 2.0.
+    return table_->length >= 0x08;
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray SmbiosSystem::uuid() const
+{
+    // The UUID field appeared in SMBIOS 2.1.
+    if (table_->length < 0x19)
+        return QByteArray();
+
+    // All 0x00 means the ID is not set; all 0xFF means it is set but unknown.
+    bool all_zeros = true;
+    bool all_ones = true;
+
+    for (size_t i = 0; i < sizeof(table_->uuid); ++i)
+    {
+        if (table_->uuid[i] != 0x00)
+            all_zeros = false;
+        if (table_->uuid[i] != 0xFF)
+            all_ones = false;
+    }
+
+    if (all_zeros || all_ones)
+        return QByteArray();
+
+    return QByteArray(reinterpret_cast<const char*>(table_->uuid), sizeof(table_->uuid));
+}
+
+//--------------------------------------------------------------------------------------------------
 SmbiosBaseboard::SmbiosBaseboard(const SmbiosTable* table)
     : table_(static_cast<const SmbiosBaseboardTable*>(table))
 {
