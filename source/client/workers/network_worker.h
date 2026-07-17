@@ -29,7 +29,6 @@
 #include "base/net/tcp_channel.h"
 #include "base/scoped_qpointer.h"
 #include "base/threading/worker.h"
-#include "client/client.h"
 #include "client/session_state.h"
 
 class QTimer;
@@ -54,6 +53,19 @@ public:
     NetworkWorker();
     ~NetworkWorker() final;
 
+    enum class Status
+    {
+        STARTED,
+        HOST_CONNECTING,
+        HOST_CONNECTED,
+        HOST_DISCONNECTED,
+        WAIT_FOR_HOST,
+        VERSION_MISMATCH,
+        LEGACY_HOST, // Remove this after support for versions below 3.0.0 ends.
+        RELAY_ERROR
+    };
+    Q_ENUM(Status)
+
     struct Metrics
     {
         qint64 total_tcp_rx = 0;
@@ -68,27 +80,29 @@ public:
     };
 
 public slots:
-    // Starts a direct or relay connection according to the session state. Runs in the worker
-    // thread; invoke it through a queued connection (as all other slots).
+    // Starts a direct or relay connection according to the session state.
     void onStartConnection(std::shared_ptr<SessionState> session_state);
 
-    // Called when the session is set up and ready to receive incoming messages. Unpauses the
-    // channel and starts the receive-rate reporting.
+    // Called when the session is set up and ready to receive incoming messages.
     void onSessionReady();
 
     // Sends outgoing session message.
     void onSendMessage(quint8 channel_id, const QByteArray& buffer);
 
-    // Emits sig_metrics with the current network metrics.
-    void onMetricsRequest();
-
 signals:
-    void sig_statusChanged(Client::Status status, const QVariant& data = QVariant());
-    // Connection established, authentication passed and versions are compatible. The session can
-    // be started; call onSessionReady() to begin receiving messages.
-    void sig_connected();
-    // Incoming session message (the peer control channel is handled internally).
-    void sig_messageReceived(quint8 channel_id, const QByteArray& buffer);
+    void sig_statusChanged(NetworkWorker::Status status, const QVariant& data = QVariant());
+    void sig_channel_0(const QByteArray& buffer);
+    void sig_channel_1(const QByteArray& buffer);
+    void sig_channel_2(const QByteArray& buffer);
+    void sig_channel_3(const QByteArray& buffer);
+    void sig_channel_4(const QByteArray& buffer);
+    void sig_channel_5(const QByteArray& buffer);
+    void sig_channel_6(const QByteArray& buffer);
+    void sig_channel_7(const QByteArray& buffer);
+    void sig_channel_8(const QByteArray& buffer);
+    void sig_channel_9(const QByteArray& buffer);
+    void sig_channel_10(const QByteArray& buffer);
+    void sig_channel_11(const QByteArray& buffer);
     void sig_metrics(const NetworkWorker::Metrics& metrics);
 
 protected:
@@ -110,6 +124,7 @@ private slots:
 
 private:
     void startConnection();
+    void routeMessage(quint8 channel_id, const QByteArray& buffer);
     void tcpChannelReady();
     void readBandwidthProbe(const proto::peer::BandwidthProbe& probe, bool via_udp);
     void readDirectUdpRequest(const proto::peer::DirectUdpRequest& request);
@@ -154,5 +169,6 @@ private:
 };
 
 Q_DECLARE_METATYPE(NetworkWorker::Metrics)
+Q_DECLARE_METATYPE(NetworkWorker::Status)
 
 #endif // CLIENT_WORKERS_NETWORK_WORKER_H

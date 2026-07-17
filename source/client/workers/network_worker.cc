@@ -36,6 +36,9 @@
 #include "proto/router_client.h"
 #include "proto/router_peer.h"
 
+// Registers NetworkWorker::Status so it can cross threads through the queued sig_statusChanged.
+static auto g_statusType = qRegisterMetaType<NetworkWorker::Status>();
+
 namespace {
 
 static const int kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
@@ -123,35 +126,6 @@ void NetworkWorker::onSendMessage(quint8 channel_id, const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void NetworkWorker::onMetricsRequest()
-{
-    Metrics metrics;
-
-    if (tcp_channel_)
-    {
-        metrics.total_tcp_rx = tcp_channel_->totalRx();
-        metrics.total_tcp_tx = tcp_channel_->totalTx();
-        metrics.speed_tcp_rx = tcp_channel_->speedRx();
-        metrics.speed_tcp_tx = tcp_channel_->speedTx();
-    }
-
-    if (udp_channel_)
-    {
-        metrics.total_udp_rx = udp_channel_->totalRx();
-        metrics.total_udp_tx = udp_channel_->totalTx();
-        metrics.speed_udp_rx = udp_channel_->speedRx();
-        metrics.speed_udp_tx = udp_channel_->speedTx();
-        metrics.udp_method = udp_channel_->method();
-    }
-    else
-    {
-        metrics.udp_method = UdpMethod::DISABLED;
-    }
-
-    emit sig_metrics(metrics);
-}
-
-//--------------------------------------------------------------------------------------------------
 void NetworkWorker::onStart()
 {
     LOG(INFO) << "Network worker started";
@@ -212,7 +186,7 @@ void NetworkWorker::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
             !session_state_->isConnectionByHostId() && !tcp_channel_->isAuthenticated())
         {
             LOG(INFO) << "Host may be out of date. Trying to connect in legacy mode";
-            emit sig_statusChanged(Client::Status::LEGACY_HOST);
+            emit sig_statusChanged(Status::LEGACY_HOST);
 
             tcp_channel_->disconnect();
             tcp_channel_.reset();
@@ -226,7 +200,7 @@ void NetworkWorker::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
     LOG(INFO) << "Connection terminated:" << error_code;
 
     // Show an error to the user.
-    emit sig_statusChanged(Client::Status::HOST_DISCONNECTED, QVariant::fromValue(error_code));
+    emit sig_statusChanged(Status::HOST_DISCONNECTED, QVariant::fromValue(error_code));
 
     if (tcp_channel_)
     {
@@ -242,46 +216,35 @@ void NetworkWorker::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
 
     // Both relay and direct paths are handled the same way: the owner (ClientWindow)
     // observes WAIT_FOR_HOST, destroys this Client, and builds a fresh one when ready.
-    emit sig_statusChanged(Client::Status::WAIT_FOR_HOST);
+    emit sig_statusChanged(Status::WAIT_FOR_HOST);
 }
 
 //--------------------------------------------------------------------------------------------------
 void NetworkWorker::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
-    if (channel_id == proto::peer::CHANNEL_ID_CONTROL)
+    if (channel_id != proto::peer::CHANNEL_ID_CONTROL)
     {
-        proto::peer::HostToClient message;
-        if (!parse(buffer, &message))
-        {
-            LOG(ERROR) << "Unable to parse control message";
-            return;
-        }
+        routeMessage(channel_id, buffer);
+        return;
+    }
 
-        if (message.has_direct_udp_request())
-        {
-            readDirectUdpRequest(message.direct_udp_request());
-        }
-        else if (message.has_stun_udp_request())
-        {
-            readStunUdpRequest(message.stun_udp_request());
-        }
-        else if (message.has_gateway_udp_request())
-        {
-            readGatewayUdpRequest(message.gateway_udp_request());
-        }
-        else if (message.has_bandwidth_probe())
-        {
-            readBandwidthProbe(message.bandwidth_probe(), /* via_udp= */ false);
-        }
-        else
-        {
-            LOG(WARNING) << "Unhandled control message";
-        }
-    }
-    else
+    proto::peer::HostToClient message;
+    if (!parse(buffer, &message))
     {
-        emit sig_messageReceived(channel_id, buffer);
+        LOG(ERROR) << "Unable to parse control message";
+        return;
     }
+
+    if (message.has_direct_udp_request())
+        readDirectUdpRequest(message.direct_udp_request());
+    else if (message.has_stun_udp_request())
+        readStunUdpRequest(message.stun_udp_request());
+    else if (message.has_gateway_udp_request())
+        readGatewayUdpRequest(message.gateway_udp_request());
+    else if (message.has_bandwidth_probe())
+        readBandwidthProbe(message.bandwidth_probe(), /* via_udp= */ false);
+    else
+        LOG(WARNING) << "Unhandled control message";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -289,7 +252,7 @@ void NetworkWorker::onUdpMessageReceived(quint8 channel_id, const QByteArray& bu
 {
     if (channel_id != proto::peer::CHANNEL_ID_CONTROL)
     {
-        emit sig_messageReceived(channel_id, buffer);
+        routeMessage(channel_id, buffer);
         return;
     }
 
@@ -301,13 +264,9 @@ void NetworkWorker::onUdpMessageReceived(quint8 channel_id, const QByteArray& bu
     }
 
     if (message.has_bandwidth_probe())
-    {
         readBandwidthProbe(message.bandwidth_probe(), /* via_udp= */ true);
-    }
     else
-    {
         LOG(WARNING) << "Unhandled UDP control message";
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -355,13 +314,12 @@ void NetworkWorker::onRelayConnectionError(std::optional<TcpChannel::ErrorCode> 
         // The relay transport was established, but the peer authentication failed. This is a
         // host-level error (e.g. wrong user name or password), so report it the same way as the
         // direct connection path instead of a misleading "failed to connect to the relay".
-        emit sig_statusChanged(Client::Status::HOST_DISCONNECTED, QVariant::fromValue(*error_code));
+        emit sig_statusChanged(Status::HOST_DISCONNECTED, QVariant::fromValue(*error_code));
     }
     else
     {
         // RelayPeer could not reach the relay server itself.
-        emit sig_statusChanged(Client::Status::ROUTER_ERROR,
-                               tr("Failed to connect to the relay server"));
+        emit sig_statusChanged(Status::RELAY_ERROR, tr("Failed to connect to the relay server"));
     }
 }
 
@@ -386,6 +344,32 @@ void NetworkWorker::onAttemptError(quint32 request_id)
 //--------------------------------------------------------------------------------------------------
 void NetworkWorker::onReceiveRateReport()
 {
+    // The timer also drives the periodic metrics snapshot for the session.
+    Metrics metrics;
+
+    if (tcp_channel_)
+    {
+        metrics.total_tcp_rx = tcp_channel_->totalRx();
+        metrics.total_tcp_tx = tcp_channel_->totalTx();
+        metrics.speed_tcp_rx = tcp_channel_->speedRx();
+        metrics.speed_tcp_tx = tcp_channel_->speedTx();
+    }
+
+    if (udp_channel_)
+    {
+        metrics.total_udp_rx = udp_channel_->totalRx();
+        metrics.total_udp_tx = udp_channel_->totalTx();
+        metrics.speed_udp_rx = udp_channel_->speedRx();
+        metrics.speed_udp_tx = udp_channel_->speedTx();
+        metrics.udp_method = udp_channel_->method();
+    }
+    else
+    {
+        metrics.udp_method = UdpMethod::DISABLED;
+    }
+
+    emit sig_metrics(metrics);
+
     const qint64 total = totalTcpRx() + totalUdpRx();
     const qint64 bytes = total - receive_rate_last_total_;
     const qint64 interval_ms = receive_rate_interval_.restart();
@@ -402,6 +386,29 @@ void NetworkWorker::onReceiveRateReport()
     rate->set_interval_ms(static_cast<quint32>(interval_ms));
 
     tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void NetworkWorker::routeMessage(quint8 channel_id, const QByteArray& buffer)
+{
+    switch (channel_id)
+    {
+        case 0:  emit sig_channel_0(buffer);  break;
+        case 1:  emit sig_channel_1(buffer);  break;
+        case 2:  emit sig_channel_2(buffer);  break;
+        case 3:  emit sig_channel_3(buffer);  break;
+        case 4:  emit sig_channel_4(buffer);  break;
+        case 5:  emit sig_channel_5(buffer);  break;
+        case 6:  emit sig_channel_6(buffer);  break;
+        case 7:  emit sig_channel_7(buffer);  break;
+        case 8:  emit sig_channel_8(buffer);  break;
+        case 9:  emit sig_channel_9(buffer);  break;
+        case 10: emit sig_channel_10(buffer); break;
+        case 11: emit sig_channel_11(buffer); break;
+        default:
+            LOG(WARNING) << "Message for unhandled channel" << channel_id;
+            break;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -436,7 +443,7 @@ void NetworkWorker::startConnection()
         if (!session_state_->isReconnecting())
         {
             // Show the status window.
-            emit sig_statusChanged(Client::Status::STARTED);
+            emit sig_statusChanged(Status::STARTED);
         }
 
         // For relay path the channel type (Legacy/NG) is decided later from the connection
@@ -461,7 +468,7 @@ void NetworkWorker::startConnection()
         if (!session_state_->isReconnecting())
         {
             // Show the status window.
-            emit sig_statusChanged(Client::Status::STARTED);
+            emit sig_statusChanged(Status::STARTED);
         }
 
         // Remove this after support for versions below 3.0.0 ends.
@@ -492,7 +499,7 @@ void NetworkWorker::startConnection()
         connect(tcp_channel_, &TcpChannel::sig_messageReceived, this, &NetworkWorker::onTcpMessageReceived);
 
         // Now connect to the host.
-        emit sig_statusChanged(Client::Status::HOST_CONNECTING);
+        emit sig_statusChanged(Status::HOST_CONNECTING);
         tcp_channel_->connectTo(session_state_->hostAddress(), session_state_->hostPort());
     }
 }
@@ -509,15 +516,13 @@ void NetworkWorker::tcpChannelReady()
     if (host_version > client_version)
     {
         LOG(ERROR) << "Version mismatch. Host:" << host_version << "Client:" << client_version;
-        emit sig_statusChanged(Client::Status::VERSION_MISMATCH);
+        emit sig_statusChanged(Status::VERSION_MISMATCH);
         return;
     }
 
-    emit sig_statusChanged(Client::Status::HOST_CONNECTED);
-
-    // Signal that everything is ready to start the session (connection established,
-    // authentication passed). The channel stays paused until onSessionReady() is called.
-    emit sig_connected();
+    // The handshake passed (connection established, authentication done, versions compatible). The
+    // session sets itself up on this status and calls onSessionReady() to unpause the channel.
+    emit sig_statusChanged(Status::HOST_CONNECTED);
 }
 
 //--------------------------------------------------------------------------------------------------
