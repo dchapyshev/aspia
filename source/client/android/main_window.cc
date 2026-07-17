@@ -28,6 +28,7 @@
 #include <optional>
 
 #include "base/gui_application.h"
+#include "client/android/authorization_dialog.h"
 #include "client/android/chat_window.h"
 #include "client/android/desktop_window.h"
 #include "client/android/file_transfer_window.h"
@@ -379,11 +380,23 @@ void AndroidMainWindow::onConnectRouterHost(const HostConfig& host, proto::peer:
 }
 
 //--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::openSession(const HostConfig& host, proto::peer::SessionType session_type)
+void AndroidMainWindow::openSession(HostConfig host, proto::peer::SessionType session_type)
 {
     // Only a single session is supported at a time.
     if (desktop_ || file_transfer_ || chat_)
         return;
+
+    if (host.username().isEmpty() || host.password().isEmpty())
+    {
+        AuthorizationDialog dialog(host.routerId() > 0, this);
+        dialog.setUserName(host.username());
+
+        if (dialog.exec() != QDialog::Accepted)
+            return;
+
+        host.setUsername(dialog.userName());
+        host.setPassword(dialog.password());
+    }
 
     switch (session_type)
     {

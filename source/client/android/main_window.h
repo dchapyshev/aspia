@@ -80,7 +80,7 @@ private:
 
     // Routes a connection request to the matching session window. Only a single session is supported
     // at a time.
-    void openSession(const HostConfig& host, proto::peer::SessionType session_type);
+    void openSession(HostConfig host, proto::peer::SessionType session_type);
 
     // Replaces the address book with a full-screen desktop view for the given host.
     void openDesktop(const HostConfig& host);
