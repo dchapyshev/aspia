@@ -25,7 +25,6 @@
 #include <QSize>
 
 #include "base/serialization.h"
-#include "base/codec/yuv_converter.h"
 #include "base/desktop/shared_frame.h"
 #include "client/client.h"
 #include "common/clipboard.h"
@@ -73,9 +72,8 @@ class AudioWorker;
 class CursorDecoder;
 class MouseCursor;
 class QTimer;
-class VideoDecoder;
+class VideoWorker;
 class WebmFileWriter;
-class WebmVideoEncoder;
 class WorkerManager;
 
 class ClientDesktop final : public Client
@@ -149,6 +147,8 @@ signals:
     void sig_mouseCursorChanged(std::shared_ptr<MouseCursor> mouse_cursor);
     void sig_sessionListChanged(const proto::control::SessionList& sessions);
     void sig_audioPacket(std::shared_ptr<proto::audio::Packet> packet);
+    void sig_videoPacket(std::shared_ptr<proto::video::Packet> packet);
+    void sig_videoRecording(bool enable);
 
 protected:
     // Client implementation.
@@ -157,6 +157,12 @@ protected:
 
 private slots:
     void onRepeatedTimer();
+    void onVideoDrawFrame(const QList<QRect>& dirty_rects, size_t packet_size);
+    void onVideoInfoChanged(quint32 capturer_type, quint32 encoder_type, bool hardware_decoder);
+    void onVideoKeyFrameRequired();
+    void onVideoTemporaryError();
+    void onVideoH264Disabled();
+    void onRecordingVideoPacket(std::shared_ptr<proto::video::Packet> packet);
 
 private:
     void readLegacyCapabilities(const proto::legacy::Capabilities& capabilities);
@@ -176,11 +182,6 @@ private:
     QTimer* repeated_timer_ = nullptr;
 
     bool started_ = false;
-    bool key_frame_received_ = false;
-
-    YuvConverter yuv_converter_;
-    QSize screen_size_;
-    QList<QRect> dirty_rects_;
 
     proto::control::Config desktop_config_;
 
@@ -191,17 +192,13 @@ private:
 
     Serializer<proto::input::ClientToHost> outgoing_message_;
 
-    proto::video::Encoding video_encoding_ = proto::video::ENCODING_UNKNOWN;
-
-    std::unique_ptr<VideoDecoder> video_decoder_;
     std::unique_ptr<CursorDecoder> cursor_decoder_;
     ClipboardFileTransfer* clipboard_file_transfer_ = nullptr;
 
     std::unique_ptr<WorkerManager> worker_manager_;
     QPointer<AudioWorker> audio_worker_;
+    QPointer<VideoWorker> video_worker_;
 
-    ScopedQPointer<QTimer> webm_video_encode_timer_;
-    std::unique_ptr<WebmVideoEncoder> webm_video_encoder_;
     std::unique_ptr<WebmFileWriter> webm_file_writer_;
 
     using Clock = std::chrono::steady_clock;
@@ -212,6 +209,8 @@ private:
     int read_clipboard_count_ = 0;
     int send_clipboard_count_ = 0;
     quint32 video_capturer_type_ = 0;
+    quint32 video_encoder_type_ = 0;
+    bool video_decoder_hardware_ = false;
     TimePoint start_time_;
     TimePoint fps_time_;
     qint64 fps_frame_count_ = 0;
@@ -230,11 +229,8 @@ private:
     int reliable_hold_seconds_ = 0;
     int reliable_disable_count_ = 0;
 
-    // Set once a hardware H264 decoder reports a permanent failure; sticks for the rest of the
-    // session so the software backend is picked on every subsequent VideoDecoder::create() call.
-    bool h264_hw_enabled_ = true;
-    // Set after both HW and SW H264 decoders failed permanently (e.g. resolution exceeds H264
-    // level limits). sendCapabilities() drops kFlagVideoH264 so the host switches to VP.
+    // Cleared when the video worker reports a permanent H264 failure. sendCapabilities() drops
+    // kFlagVideoH264 so the host switches to VP.
     bool h264_sw_enabled_ = true;
 
     Q_DISABLE_COPY_MOVE(ClientDesktop)

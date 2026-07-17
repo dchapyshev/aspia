@@ -23,13 +23,12 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/codec/cursor_decoder.h"
-#include "base/codec/video_decoder.h"
 #include "base/codec/webm_file_writer.h"
-#include "base/codec/webm_video_encoder.h"
 #include "base/desktop/frame.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/threading/worker_manager.h"
 #include "client/workers/audio_worker.h"
+#include "client/workers/video_worker.h"
 #include "common/desktop_session_constants.h"
 #include "proto/desktop_audio.h"
 #include "proto/desktop_channel.h"
@@ -89,7 +88,6 @@ void ClientDesktop::onStarted()
     CLOG(INFO) << "Desktop session started";
 
     start_time_ = Clock::now();
-    key_frame_received_ = false;
     started_ = true;
 
     repeated_timer_->start();
@@ -113,7 +111,32 @@ void ClientDesktop::onStarted()
     audio_worker_ = audio_worker.get();
     worker_manager_->add(std::move(audio_worker));
 
+    std::unique_ptr<VideoWorker> video_worker = std::make_unique<VideoWorker>();
+    video_worker_ = video_worker.get();
+    worker_manager_->add(std::move(video_worker));
+
     connect(this, &ClientDesktop::sig_audioPacket, audio_worker_, &AudioWorker::onAudioPacket,
+            Qt::QueuedConnection);
+    connect(this, &ClientDesktop::sig_videoPacket, video_worker_, &VideoWorker::onVideoPacket,
+            Qt::QueuedConnection);
+    connect(this, &ClientDesktop::sig_videoRecording, video_worker_, &VideoWorker::onSetRecording,
+            Qt::QueuedConnection);
+
+    connect(video_worker_, &VideoWorker::sig_frameError, this, &ClientDesktop::sig_frameError,
+            Qt::QueuedConnection);
+    connect(video_worker_, &VideoWorker::sig_frameChanged, this, &ClientDesktop::sig_frameChanged,
+            Qt::QueuedConnection);
+    connect(video_worker_, &VideoWorker::sig_drawFrame, this, &ClientDesktop::onVideoDrawFrame,
+            Qt::QueuedConnection);
+    connect(video_worker_, &VideoWorker::sig_videoInfoChanged, this, &ClientDesktop::onVideoInfoChanged,
+            Qt::QueuedConnection);
+    connect(video_worker_, &VideoWorker::sig_keyFrameRequired, this, &ClientDesktop::onVideoKeyFrameRequired,
+            Qt::QueuedConnection);
+    connect(video_worker_, &VideoWorker::sig_temporaryError, this, &ClientDesktop::onVideoTemporaryError,
+            Qt::QueuedConnection);
+    connect(video_worker_, &VideoWorker::sig_h264Disabled, this, &ClientDesktop::onVideoH264Disabled,
+            Qt::QueuedConnection);
+    connect(video_worker_, &VideoWorker::sig_recordingVideoPacket, this, &ClientDesktop::onRecordingVideoPacket,
             Qt::QueuedConnection);
 
     worker_manager_->start();
@@ -340,25 +363,6 @@ void ClientDesktop::onRecordingChanged(bool enable, const QString& file_path)
         video_recording->set_action(proto::user::VideoRecording::ACTION_STARTED);
 
         webm_file_writer_ = std::make_unique<WebmFileWriter>(file_path, sessionState()->computerName());
-        webm_video_encoder_ = std::make_unique<WebmVideoEncoder>();
-
-        webm_video_encode_timer_ = new QTimer(this);
-
-        connect(webm_video_encode_timer_, &QTimer::timeout, this, [this]()
-        {
-            if (!webm_video_encoder_ || !webm_file_writer_ || !video_decoder_ ||
-                !video_decoder_->frame().isValid())
-            {
-                return;
-            }
-
-            proto::video::Packet packet;
-
-            if (webm_video_encoder_->encode(video_decoder_->frame(), &packet))
-                webm_file_writer_->addVideoPacket(packet);
-        });
-
-        webm_video_encode_timer_->start(std::chrono::milliseconds(60));
     }
     else
     {
@@ -366,10 +370,12 @@ void ClientDesktop::onRecordingChanged(bool enable, const QString& file_path)
 
         video_recording->set_action(proto::user::VideoRecording::ACTION_STOPPED);
 
-        webm_video_encode_timer_.reset();
-        webm_video_encoder_.reset();
         webm_file_writer_.reset();
     }
+
+    // Frames for the recording are encoded in the video worker and delivered back through
+    // sig_recordingVideoPacket.
+    emit sig_videoRecording(enable);
 
     if (isLegacy())
         return;
@@ -519,8 +525,8 @@ void ClientDesktop::onMetricsRequest()
     metrics.audio_packet_count = audio_packet_count_;
 
     metrics.video_capturer_type = video_capturer_type_;
-    metrics.video_encoder_type = video_encoding_;
-    metrics.video_decoder_hardware = video_decoder_ && video_decoder_->isHardwareAccelerated();
+    metrics.video_encoder_type = video_encoder_type_;
+    metrics.video_decoder_hardware = video_decoder_hardware_;
     metrics.fps = fps_;
     metrics.read_clipboard = read_clipboard_count_;
     metrics.send_clipboard = send_clipboard_count_;
@@ -604,6 +610,61 @@ void ClientDesktop::onRepeatedTimer()
             force_reliable_active_ = false;
         }
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientDesktop::onVideoDrawFrame(const QList<QRect>& dirty_rects, size_t packet_size)
+{
+    ++video_packet_count_;
+    ++fps_frame_count_;
+
+    avg_video_packet_ = calculateAvgSize(avg_video_packet_, packet_size);
+    min_video_packet_ = std::min(min_video_packet_, packet_size);
+    max_video_packet_ = std::max(max_video_packet_, packet_size);
+
+    emit sig_drawFrame(dirty_rects);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientDesktop::onVideoInfoChanged(quint32 capturer_type, quint32 encoder_type, bool hardware_decoder)
+{
+    video_capturer_type_ = capturer_type;
+    video_encoder_type_ = encoder_type;
+    video_decoder_hardware_ = hardware_decoder;
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientDesktop::onVideoKeyFrameRequired()
+{
+    sendKeyFrameRequest();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientDesktop::onVideoTemporaryError()
+{
+    sendKeyFrameRequest();
+
+    if (!force_reliable_active_ && reliable_disable_count_ < 2)
+    {
+        CLOG(INFO) << "Enabling force reliable (disable count:" << reliable_disable_count_ << ")";
+        setForceReliable(true);
+        force_reliable_active_ = true;
+    }
+    reliable_hold_seconds_ = 60;
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientDesktop::onVideoH264Disabled()
+{
+    h264_sw_enabled_ = false;
+    sendCapabilities();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientDesktop::onRecordingVideoPacket(std::shared_ptr<proto::video::Packet> packet)
+{
+    if (webm_file_writer_ && packet)
+        webm_file_writer_->addVideoPacket(*packet);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -713,148 +774,8 @@ void ClientDesktop::readCapabilities(const proto::control::Capabilities& capabil
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::readVideoPacket(const proto::video::Packet& packet)
 {
-    proto::video::ErrorCode error_code = packet.error_code();
-    if (error_code != proto::video::ERROR_CODE_OK)
-    {
-        CLOG(ERROR) << "Video error detected:" << error_code;
-        emit sig_frameError(error_code);
-        return;
-    }
-
-    if (video_encoding_ != packet.encoding())
-    {
-        CLOG(INFO) << "Video encoding changed from" << video_encoding_ << "to" << packet.encoding();
-        video_decoder_ = VideoDecoder::create(packet.encoding(), h264_hw_enabled_);
-        video_encoding_ = packet.encoding();
-        key_frame_received_ = false;
-    }
-
-    if (!video_decoder_)
-    {
-        CLOG(ERROR) << "Video decoder is not initialized";
-        return;
-    }
-
-    if (packet.has_format())
-    {
-        const proto::video::PacketFormat& format = packet.format();
-
-        CLOG(INFO) << "Video packet has format:" << format;
-        key_frame_received_ = true;
-
-        QSize video_size = QSize(format.video_rect().width(), format.video_rect().height());
-        QSize screen_size = video_size;
-
-        static const int kMaxValue = std::numeric_limits<quint16>::max();
-
-        if (video_size.width()  <= 0 || video_size.width()  >= kMaxValue ||
-            video_size.height() <= 0 || video_size.height() >= kMaxValue)
-        {
-            CLOG(ERROR) << "Wrong video frame size:" << video_size;
-            return;
-        }
-
-        if (format.has_screen_size())
-        {
-            screen_size = QSize(format.screen_size().width(), format.screen_size().height());
-
-            if (screen_size.width() <= 0 || screen_size.width() >= kMaxValue ||
-                screen_size.height() <= 0 || screen_size.height() >= kMaxValue)
-            {
-                CLOG(ERROR) << "Wrong screen size:" << screen_size;
-                return;
-            }
-        }
-
-        video_capturer_type_ = static_cast<quint32>(format.capturer_type());
-        screen_size_ = screen_size;
-    }
-
-    if (packet.flags() & proto::video::PACKET_FLAG_IS_KEY_FRAME)
-        key_frame_received_ = true;
-
-    if (!key_frame_received_)
-    {
-        // Until a keyframe is not received, we drop all video packets.
-        CLOG(INFO) << "Video packet is dropped";
-        return;
-    }
-
-    const VideoDecoder::Result decode_result = video_decoder_->decode(packet);
-    if (decode_result == VideoDecoder::Result::PERMANENT_ERROR)
-    {
-        if (video_encoding_ != proto::video::ENCODING_H264)
-            return;
-
-        if (h264_hw_enabled_)
-        {
-            // First permanent failure - HW decoder cannot proceed. Swap in OpenH264 SW decoder
-            // and ask the host for a keyframe so the new decoder starts from a known state.
-            CLOG(WARNING) << "Permanent HW H264 decoder failure. Falling back to SW H264";
-            h264_hw_enabled_ = false;
-            video_decoder_ = VideoDecoder::create(video_encoding_, false);
-            key_frame_received_ = false;
-            sendKeyFrameRequest();
-        }
-        else if (h264_sw_enabled_)
-        {
-            // SW decoder also failed - H264 just cannot handle this stream (resolution above the
-            // level limits is the typical reason). Drop H264 from capabilities and re-negotiate;
-            // host will pick VP8 and the decoder gets recreated when readVideoPacket sees the
-            // encoding change.
-            CLOG(WARNING) << "Permanent SW H264 decoder failure. Disabling H264";
-            h264_sw_enabled_ = false;
-            video_decoder_.reset();
-            sendCapabilities();
-        }
-        return;
-    }
-
-    if (decode_result == VideoDecoder::Result::TEMPORARY_ERROR)
-    {
-        CLOG(ERROR) << "Unable to decode video packet";
-        key_frame_received_ = false;
-        sendKeyFrameRequest();
-
-        if (!force_reliable_active_ && reliable_disable_count_ < 2)
-        {
-            CLOG(INFO) << "Enabling force reliable (disable count:" << reliable_disable_count_ << ")";
-            setForceReliable(true);
-            force_reliable_active_ = true;
-        }
-        reliable_hold_seconds_ = 60;
-        return;
-    }
-
-    const int rect_count = packet.dirty_rect_size();
-    if (dirty_rects_.capacity() < rect_count)
-        dirty_rects_.reserve(rect_count);
-
-    dirty_rects_.resize(rect_count);
-    for (int i = 0; i < rect_count; ++i)
-        dirty_rects_[i] = parse(packet.dirty_rect(i));
-
-    const YuvConverter::Result convert_result =
-        yuv_converter_.convert(video_decoder_->frame(), dirty_rects_);
-    if (convert_result == YuvConverter::Result::FAILED)
-    {
-        LOG(ERROR) << "Unable to convert frame";
-        return;
-    }
-
-    if (convert_result == YuvConverter::Result::NEW_FRAME)
-        emit sig_frameChanged(screen_size_, yuv_converter_.frame());
-
-    ++video_packet_count_;
-    ++fps_frame_count_;
-
-    size_t packet_size = packet.ByteSizeLong();
-
-    avg_video_packet_ = calculateAvgSize(avg_video_packet_, packet_size);
-    min_video_packet_ = std::min(min_video_packet_, packet_size);
-    max_video_packet_ = std::max(max_video_packet_, packet_size);
-
-    emit sig_drawFrame(dirty_rects_);
+    // Decoding, YUV conversion and decoder error handling happen in the video worker.
+    emit sig_videoPacket(std::make_shared<proto::video::Packet>(packet));
 }
 
 //--------------------------------------------------------------------------------------------------
