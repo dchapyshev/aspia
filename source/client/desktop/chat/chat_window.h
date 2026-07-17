@@ -29,10 +29,6 @@ namespace Ui {
 class ChatWindow;
 } // namespace Ui
 
-namespace proto::chat {
-class Chat;
-} // namespace proto::chat
-
 class ChatWindow final : public ClientWindow
 {
     Q_OBJECT
@@ -42,20 +38,17 @@ public:
     ~ChatWindow() final;
 
     // ClientWindow implementation.
-    Client* createClient() final;
     void setTabbedMode(bool tabbed) final;
     QList<QPair<Tab::ActionRole, QList<QAction*>>> tabActionGroups() const final;
-
-public slots:
-    void onShowWindow();
-    void onChatMessage(const proto::chat::Chat& chat);
-
-signals:
-    void sig_chatMessage(const proto::chat::Chat& chat);
 
 protected:
     // ClientWindow implementation.
     void onInternalReset() final;
+    void onRegisterWorkers() final;
+    void onSessionStarted() final;
+
+private slots:
+    void onChannelMessage(const QByteArray& buffer);
 
 private:
     std::unique_ptr<Ui::ChatWindow> ui;

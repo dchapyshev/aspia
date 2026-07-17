@@ -19,8 +19,9 @@
 #include "client/desktop/chat/chat_window.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/crypto/generic_hash.h"
-#include "client/client_text_chat.h"
+#include "client/workers/network_worker.h"
 #include "common/desktop/chat_widget.h"
 #include "proto/chat.h"
 #include "proto/peer.h"
@@ -54,7 +55,7 @@ ChatWindow::ChatWindow(QWidget* parent)
     {
         proto::chat::Chat chat;
         chat.mutable_chat_message()->CopyFrom(message);
-        emit sig_chatMessage(chat);
+        sendMessage(proto::peer::CHANNEL_ID_0, serialize(chat));
     });
 
     connect(ui->text_chat_widget, &ChatWidget::sig_sendStatus,
@@ -62,7 +63,7 @@ ChatWindow::ChatWindow(QWidget* parent)
     {
         proto::chat::Chat chat;
         chat.mutable_chat_status()->CopyFrom(status);
-        emit sig_chatMessage(chat);
+        sendMessage(proto::peer::CHANNEL_ID_0, serialize(chat));
     });
 }
 
@@ -70,22 +71,6 @@ ChatWindow::ChatWindow(QWidget* parent)
 ChatWindow::~ChatWindow()
 {
     LOG(INFO) << "Dtor";
-}
-
-//--------------------------------------------------------------------------------------------------
-Client* ChatWindow::createClient()
-{
-    LOG(INFO) << "Create client";
-
-    ui->text_chat_widget->setHistoryId(chatHistoryId(*sessionState()));
-
-    ClientChat* client = new ClientChat();
-
-    connect(this, &ChatWindow::sig_chatMessage, client, &ClientChat::onChatMessage, Qt::QueuedConnection);
-    connect(client, &ClientChat::sig_showSessionWindow, this, &ChatWindow::onShowWindow, Qt::QueuedConnection);
-    connect(client, &ClientChat::sig_chatMessage, this, &ChatWindow::onChatMessage, Qt::QueuedConnection);
-
-    return client;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -105,9 +90,24 @@ QList<QPair<Tab::ActionRole, QList<QAction*>>> ChatWindow::tabActionGroups() con
 }
 
 //--------------------------------------------------------------------------------------------------
-void ChatWindow::onShowWindow()
+void ChatWindow::onInternalReset()
 {
-    LOG(INFO) << "Show window";
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWindow::onRegisterWorkers()
+{
+    ui->text_chat_widget->setHistoryId(chatHistoryId(*sessionState()));
+
+    connect(networkWorker(), &NetworkWorker::sig_channel_0,
+            this, &ChatWindow::onChannelMessage, Qt::QueuedConnection);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWindow::onSessionStarted()
+{
+    LOG(INFO) << "Chat session started";
 
     ui->text_chat_widget->setDisplayName(sessionState()->displayName());
 
@@ -116,8 +116,15 @@ void ChatWindow::onShowWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ChatWindow::onChatMessage(const proto::chat::Chat& chat)
+void ChatWindow::onChannelMessage(const QByteArray& buffer)
 {
+    proto::chat::Chat chat;
+    if (!parse(buffer, &chat))
+    {
+        LOG(ERROR) << "Unable to parse text chat message";
+        return;
+    }
+
     if (chat.has_chat_message())
     {
         ui->text_chat_widget->readMessage(chat.chat_message());
@@ -136,10 +143,4 @@ void ChatWindow::onChatMessage(const proto::chat::Chat& chat)
     {
         LOG(ERROR) << "Unhandled text chat message";
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void ChatWindow::onInternalReset()
-{
-    // Nothing
 }
