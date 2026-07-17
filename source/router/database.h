@@ -163,8 +163,9 @@ public:
     bool addHost(std::string_view key_hash, std::string_view hwid);
 
     // Called on every host connection to refresh the host's last-seen metadata.
-    bool updateHostInfo(HostId host_id, std::string_view computer_name, std::string_view cpu_arch,
-        const QString& version, std::string_view os_name, std::string_view address);
+    bool updateHostInfo(HostId host_id, std::string_view hwid, std::string_view computer_name,
+        std::string_view cpu_arch, const QString& version, std::string_view os_name,
+        std::string_view address);
 
     // Returns the workspace_id of the given host, or 0 if the host is not assigned to a
     // workspace. Returns -1 if the host_id is unknown. Used to validate user access before

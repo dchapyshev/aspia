@@ -1054,8 +1054,9 @@ bool Database::addHost(std::string_view key_hash, std::string_view hwid)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::updateHostInfo(HostId host_id, std::string_view computer_name, std::string_view cpu_arch,
-    const QString& version, std::string_view os_name, std::string_view address)
+bool Database::updateHostInfo(HostId host_id, std::string_view hwid, std::string_view computer_name,
+    std::string_view cpu_arch, const QString& version, std::string_view os_name,
+    std::string_view address)
 {
     if (!isValid())
     {
@@ -1077,9 +1078,11 @@ bool Database::updateHostInfo(HostId host_id, std::string_view computer_name, st
     const char kSql[] =
         "UPDATE hosts SET "
         "display_name = CASE WHEN display_name='' THEN ? ELSE display_name END, "
-        "computer_name=?, cpu_arch=?, version=?, os_name=?, address=?, last_connect=? WHERE id=?";
+        "hwid=?, computer_name=?, cpu_arch=?, version=?, os_name=?, address=?, last_connect=? "
+        "WHERE id=?";
     SqlQuery query(db_, kSql);
     query.addText(computer_name);
+    query.addBlob(hwid);
     query.addText(computer_name);
     query.addText(cpu_arch);
     query.addText(version);
