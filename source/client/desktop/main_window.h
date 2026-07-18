@@ -36,7 +36,7 @@ enum SessionType : int;
 } // namespace proto::peer
 
 class Tab;
-class HostsTab;
+class ManagementTab;
 class SearchDialog;
 class QLineEdit;
 class UpdateChecker;
@@ -81,7 +81,7 @@ private:
     bool tabBarHitTest(const QPoint& global_pos) const;
     void hideCloseButtonForTab(int index);
     Tab* tabAt(int index);
-    HostsTab* hostsTab() const;
+    ManagementTab* managementTab() const;
     void showSearchDialog();
     void syncSearchField();
     void updateStatusBarVisibility();

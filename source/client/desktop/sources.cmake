@@ -24,9 +24,9 @@ collect_sources(SOURCE_CLIENT_CORE_DESKTOP
     client_tab.h
     client_window.cc
     client_window.h
-    hosts_tab.cc
-    hosts_tab.h
-    hosts_tab.ui
+    management_tab.cc
+    management_tab.h
+    management_tab.ui
     main_window.cc
     main_window.h
     main_window.ui

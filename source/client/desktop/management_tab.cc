@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/desktop/hosts_tab.h"
+#include "client/desktop/management_tab.h"
 
 #include <QActionGroup>
 #include <QDateTime>
@@ -56,12 +56,12 @@
 #include "proto/peer.h"
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
-#include "ui_hosts_tab.h"
+#include "ui_management_tab.h"
 
 //--------------------------------------------------------------------------------------------------
-HostsTab::HostsTab(QWidget* parent)
+ManagementTab::ManagementTab(QWidget* parent)
     : Tab(Type::HOSTS, "hosts", parent),
-      ui(std::make_unique<Ui::HostsTab>())
+      ui(std::make_unique<Ui::ManagementTab>())
 {
     LOG(INFO) << "Ctor";
 
@@ -142,102 +142,102 @@ HostsTab::HostsTab(QWidget* parent)
             router_status_widget_, &RouterStatusWidget::onEvent);
 
     connect(router_hosts_widget_, &RouterHostsWidget::sig_currentChanged,
-            this, &HostsTab::updateActionsState);
+            this, &ManagementTab::updateActionsState);
     connect(router_hosts_widget_, &RouterHostsWidget::sig_contextMenu,
-            this, &HostsTab::onHostContextMenu);
+            this, &ManagementTab::onHostContextMenu);
 
     connect(router_temp_hosts_widget_, &RouterTempHostsWidget::sig_currentChanged,
-            this, &HostsTab::updateActionsState);
+            this, &ManagementTab::updateActionsState);
     connect(router_temp_hosts_widget_, &RouterTempHostsWidget::sig_connectRequested,
-            this, &HostsTab::onTempHostConnect);
+            this, &ManagementTab::onTempHostConnect);
     connect(router_temp_hosts_widget_, &RouterTempHostsWidget::sig_contextMenu,
-            this, &HostsTab::onTempHostContextMenu);
+            this, &ManagementTab::onTempHostContextMenu);
 
     connect(router_users_widget_, &RouterUsersWidget::sig_currentChanged,
-            this, &HostsTab::updateActionsState);
+            this, &ManagementTab::updateActionsState);
     connect(router_users_widget_, &RouterUsersWidget::sig_userContextMenu,
-            this, &HostsTab::onUserContextMenu);
+            this, &ManagementTab::onUserContextMenu);
 
     connect(router_clients_widget_, &RouterClientsWidget::sig_currentChanged,
-            this, &HostsTab::updateActionsState);
+            this, &ManagementTab::updateActionsState);
     connect(router_clients_widget_, &RouterClientsWidget::sig_contextMenu,
-            this, &HostsTab::onClientContextMenu);
+            this, &ManagementTab::onClientContextMenu);
 
     connect(router_relays_widget_, &RouterRelaysWidget::sig_currentChanged,
-            this, &HostsTab::updateActionsState);
+            this, &ManagementTab::updateActionsState);
     connect(router_relays_widget_, &RouterRelaysWidget::sig_contextMenu,
-            this, &HostsTab::onRelayContextMenu);
+            this, &ManagementTab::onRelayContextMenu);
 
     // Setup drag-and-drop: pass the host mime types from the source widgets to Sidebar.
     ui->sidebar->setLocalHostMimeType(local_group_widget_->mimeType());
     ui->sidebar->setRouterHostMimeType(router_group_widget_->mimeType());
 
     // Connect signals.
-    connect(ui->sidebar, &Sidebar::sig_switchContent, this, &HostsTab::onSwitchContent);
-    connect(ui->sidebar, &Sidebar::sig_contextMenu, this, &HostsTab::onSidebarContextMenu);
-    connect(ui->sidebar, &Sidebar::sig_addGroup, this, &HostsTab::onAddGroupAction);
-    connect(ui->sidebar, &Sidebar::sig_removeGroup, this, &HostsTab::onDeleteGroupAction);
-    connect(ui->sidebar, &Sidebar::sig_editGroup, this, &HostsTab::onEditGroupAction);
+    connect(ui->sidebar, &Sidebar::sig_switchContent, this, &ManagementTab::onSwitchContent);
+    connect(ui->sidebar, &Sidebar::sig_contextMenu, this, &ManagementTab::onSidebarContextMenu);
+    connect(ui->sidebar, &Sidebar::sig_addGroup, this, &ManagementTab::onAddGroupAction);
+    connect(ui->sidebar, &Sidebar::sig_removeGroup, this, &ManagementTab::onDeleteGroupAction);
+    connect(ui->sidebar, &Sidebar::sig_editGroup, this, &ManagementTab::onEditGroupAction);
     connect(ui->sidebar, &Sidebar::sig_itemDropped, this, [this]()
     {
         local_group_widget_->showGroup(ui->sidebar->currentGroupId());
         updateActionsState();
     });
-    connect(local_group_widget_, &LocalGroupWidget::sig_currentChanged, this, &HostsTab::onCurrentHostChanged);
-    connect(local_group_widget_, &LocalGroupWidget::sig_activated, this, &HostsTab::onLocalConnect);
-    connect(local_group_widget_, &LocalGroupWidget::sig_contextMenu, this, &HostsTab::onLocalHostContextMenu);
-    connect(local_group_widget_, &LocalGroupWidget::sig_addHost, this, &HostsTab::onAddHost);
-    connect(local_group_widget_, &LocalGroupWidget::sig_deleteHost, this, &HostsTab::onRemoveHost);
-    connect(local_group_widget_, &LocalGroupWidget::sig_editHost, this, &HostsTab::onEditHost);
-    connect(router_group_widget_, &RouterGroupWidget::sig_currentChanged, this, &HostsTab::updateActionsState);
-    connect(router_group_widget_, &RouterGroupWidget::sig_contextMenu, this, &HostsTab::onRouterGroupContextMenu);
-    connect(router_group_widget_, &RouterGroupWidget::sig_activated, this, &HostsTab::onRouterGroupConnect);
-    connect(this, &HostsTab::sig_connectRequested, local_group_widget_,
+    connect(local_group_widget_, &LocalGroupWidget::sig_currentChanged, this, &ManagementTab::onCurrentHostChanged);
+    connect(local_group_widget_, &LocalGroupWidget::sig_activated, this, &ManagementTab::onLocalConnect);
+    connect(local_group_widget_, &LocalGroupWidget::sig_contextMenu, this, &ManagementTab::onLocalHostContextMenu);
+    connect(local_group_widget_, &LocalGroupWidget::sig_addHost, this, &ManagementTab::onAddHost);
+    connect(local_group_widget_, &LocalGroupWidget::sig_deleteHost, this, &ManagementTab::onRemoveHost);
+    connect(local_group_widget_, &LocalGroupWidget::sig_editHost, this, &ManagementTab::onEditHost);
+    connect(router_group_widget_, &RouterGroupWidget::sig_currentChanged, this, &ManagementTab::updateActionsState);
+    connect(router_group_widget_, &RouterGroupWidget::sig_contextMenu, this, &ManagementTab::onRouterGroupContextMenu);
+    connect(router_group_widget_, &RouterGroupWidget::sig_activated, this, &ManagementTab::onRouterGroupConnect);
+    connect(this, &ManagementTab::sig_connectRequested, local_group_widget_,
             [this](const HostConfig& host, proto::peer::SessionType /* session_type */)
     {
         if (host.id() != -1)
             local_group_widget_->setConnectTime(host.id(), QDateTime::currentSecsSinceEpoch());
     });
-    connect(ui->action_add_host, &QAction::triggered, this, &HostsTab::onAddHost);
-    connect(ui->action_edit_host, &QAction::triggered, this, &HostsTab::onEditHost);
-    connect(ui->action_copy_host, &QAction::triggered, this, &HostsTab::onCopyHost);
-    connect(ui->action_delete_host, &QAction::triggered, this, &HostsTab::onRemoveHost);
-    connect(search_widget_, &SearchWidget::sig_currentChanged, this, &HostsTab::updateActionsState);
-    connect(search_widget_, &SearchWidget::sig_activated, this, &HostsTab::onSearchConnect);
-    connect(search_widget_, &SearchWidget::sig_contextMenu, this, &HostsTab::onSearchContextMenu);
-    connect(ui->action_add_group, &QAction::triggered, this, &HostsTab::onAddGroupAction);
-    connect(ui->action_edit_group, &QAction::triggered, this, &HostsTab::onEditGroupAction);
-    connect(ui->action_delete_group, &QAction::triggered, this, &HostsTab::onDeleteGroupAction);
+    connect(ui->action_add_host, &QAction::triggered, this, &ManagementTab::onAddHost);
+    connect(ui->action_edit_host, &QAction::triggered, this, &ManagementTab::onEditHost);
+    connect(ui->action_copy_host, &QAction::triggered, this, &ManagementTab::onCopyHost);
+    connect(ui->action_delete_host, &QAction::triggered, this, &ManagementTab::onRemoveHost);
+    connect(search_widget_, &SearchWidget::sig_currentChanged, this, &ManagementTab::updateActionsState);
+    connect(search_widget_, &SearchWidget::sig_activated, this, &ManagementTab::onSearchConnect);
+    connect(search_widget_, &SearchWidget::sig_contextMenu, this, &ManagementTab::onSearchContextMenu);
+    connect(ui->action_add_group, &QAction::triggered, this, &ManagementTab::onAddGroupAction);
+    connect(ui->action_edit_group, &QAction::triggered, this, &ManagementTab::onEditGroupAction);
+    connect(ui->action_delete_group, &QAction::triggered, this, &ManagementTab::onDeleteGroupAction);
     connect(ui->action_add_router, &QAction::triggered, ui->sidebar, &Sidebar::onAddRouter);
     connect(ui->action_edit_router, &QAction::triggered, ui->sidebar, &Sidebar::onEditRouter);
     connect(ui->action_delete_router, &QAction::triggered, ui->sidebar, &Sidebar::onRemoveRouter);
-    connect(ui->action_change_router_password, &QAction::triggered, this, &HostsTab::onChangeRouterPassword);
-    connect(ui->action_clear_router_events, &QAction::triggered, this, &HostsTab::onClearRouterEvents);
-    connect(ui->sidebar, &Sidebar::sig_routersChanged, this, &HostsTab::reloadRouters);
+    connect(ui->action_change_router_password, &QAction::triggered, this, &ManagementTab::onChangeRouterPassword);
+    connect(ui->action_clear_router_events, &QAction::triggered, this, &ManagementTab::onClearRouterEvents);
+    connect(ui->sidebar, &Sidebar::sig_routersChanged, this, &ManagementTab::reloadRouters);
     connect(ui->sidebar, &Sidebar::sig_routerHostMoved, this, [this](qint64 /* router_id */)
     {
         if (current_content_ == router_group_widget_)
             router_group_widget_->reload();
     });
     connect(ui->sidebar, &Sidebar::sig_routerGroupMoved, ui->sidebar, &Sidebar::onRefreshHostGroups);
-    connect(ui->action_add_user, &QAction::triggered, this, &HostsTab::onAddUserAction);
-    connect(ui->action_edit_user, &QAction::triggered, this, &HostsTab::onEditUserAction);
-    connect(ui->action_delete_user, &QAction::triggered, this, &HostsTab::onDeleteUserAction);
-    connect(ui->action_add_workspace, &QAction::triggered, this, &HostsTab::onAddWorkspaceAction);
-    connect(ui->action_edit_workspace, &QAction::triggered, this, &HostsTab::onEditWorkspaceAction);
-    connect(ui->action_delete_workspace, &QAction::triggered, this, &HostsTab::onDeleteWorkspaceAction);
-    connect(ui->action_reload, &QAction::triggered, this, &HostsTab::onReloadAction);
-    connect(ui->action_save, &QAction::triggered, this, &HostsTab::onSaveAction);
-    connect(ui->action_import_old_book, &QAction::triggered, this, &HostsTab::onImportOldBookAction);
-    connect(ui->action_export_book, &QAction::triggered, this, &HostsTab::onExportBookAction);
-    connect(ui->action_import_book, &QAction::triggered, this, &HostsTab::onImportBookAction);
-    connect(ui->action_disconnect, &QAction::triggered, this, &HostsTab::onDisconnectAction);
-    connect(ui->action_disconnect_all, &QAction::triggered, this, &HostsTab::onDisconnectAllAction);
-    connect(ui->action_host_remove, &QAction::triggered, this, &HostsTab::onRemoveHostAction);
-    connect(ui->action_host_approve, &QAction::triggered, this, &HostsTab::onApproveHostAction);
-    connect(ui->action_host_check_updates, &QAction::triggered, this, &HostsTab::onCheckHostUpdatesAction);
-    connect(ui->action_online_check, &QAction::toggled, this, &HostsTab::onOnlineCheckToggled);
-    connect(session_connect_group, &QActionGroup::triggered, this, &HostsTab::onConnectAction);
+    connect(ui->action_add_user, &QAction::triggered, this, &ManagementTab::onAddUserAction);
+    connect(ui->action_edit_user, &QAction::triggered, this, &ManagementTab::onEditUserAction);
+    connect(ui->action_delete_user, &QAction::triggered, this, &ManagementTab::onDeleteUserAction);
+    connect(ui->action_add_workspace, &QAction::triggered, this, &ManagementTab::onAddWorkspaceAction);
+    connect(ui->action_edit_workspace, &QAction::triggered, this, &ManagementTab::onEditWorkspaceAction);
+    connect(ui->action_delete_workspace, &QAction::triggered, this, &ManagementTab::onDeleteWorkspaceAction);
+    connect(ui->action_reload, &QAction::triggered, this, &ManagementTab::onReloadAction);
+    connect(ui->action_save, &QAction::triggered, this, &ManagementTab::onSaveAction);
+    connect(ui->action_import_old_book, &QAction::triggered, this, &ManagementTab::onImportOldBookAction);
+    connect(ui->action_export_book, &QAction::triggered, this, &ManagementTab::onExportBookAction);
+    connect(ui->action_import_book, &QAction::triggered, this, &ManagementTab::onImportBookAction);
+    connect(ui->action_disconnect, &QAction::triggered, this, &ManagementTab::onDisconnectAction);
+    connect(ui->action_disconnect_all, &QAction::triggered, this, &ManagementTab::onDisconnectAllAction);
+    connect(ui->action_host_remove, &QAction::triggered, this, &ManagementTab::onRemoveHostAction);
+    connect(ui->action_host_approve, &QAction::triggered, this, &ManagementTab::onApproveHostAction);
+    connect(ui->action_host_check_updates, &QAction::triggered, this, &ManagementTab::onCheckHostUpdatesAction);
+    connect(ui->action_online_check, &QAction::toggled, this, &ManagementTab::onOnlineCheckToggled);
+    connect(session_connect_group, &QActionGroup::triggered, this, &ManagementTab::onConnectAction);
 
     // Register actions for toolbar and menus.
     addActions(ActionRole::FILE,
@@ -283,7 +283,7 @@ HostsTab::HostsTab(QWidget* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-HostsTab::~HostsTab()
+ManagementTab::~ManagementTab()
 {
     LOG(INFO) << "Dtor";
     Settings settings;
@@ -291,7 +291,7 @@ HostsTab::~HostsTab()
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray HostsTab::saveState()
+QByteArray ManagementTab::saveState()
 {
     QByteArray buffer;
 
@@ -315,7 +315,7 @@ QByteArray HostsTab::saveState()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::restoreState(const QByteArray& state)
+void ManagementTab::restoreState(const QByteArray& state)
 {
     QDataStream stream(state);
     stream.setVersion(QDataStream::Qt_6_10);
@@ -383,7 +383,7 @@ void HostsTab::restoreState(const QByteArray& state)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::activate(QStatusBar* statusbar)
+void ManagementTab::activate(QStatusBar* statusbar)
 {
     statusbar_ = statusbar;
     if (current_content_ && statusbar_)
@@ -391,7 +391,7 @@ void HostsTab::activate(QStatusBar* statusbar)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::deactivate(QStatusBar* /* statusbar */)
+void ManagementTab::deactivate(QStatusBar* /* statusbar */)
 {
     if (current_content_ && statusbar_)
         current_content_->deactivate(statusbar_);
@@ -399,13 +399,13 @@ void HostsTab::deactivate(QStatusBar* /* statusbar */)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString HostsTab::searchText() const
+QString ManagementTab::searchText() const
 {
     return search_widget_->currentQuery();
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::searchTextChanged(const QString& text)
+void ManagementTab::searchTextChanged(const QString& text)
 {
     if (text.isEmpty())
     {
@@ -432,13 +432,13 @@ void HostsTab::searchTextChanged(const QString& text)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::reloadRouters()
+void ManagementTab::reloadRouters()
 {
     ui->sidebar->reloadRouters();
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onSwitchContent(SidebarItem::Type type)
+void ManagementTab::onSwitchContent(SidebarItem::Type type)
 {
     switch (type)
     {
@@ -553,7 +553,7 @@ void HostsTab::onSwitchContent(SidebarItem::Type type)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onSidebarContextMenu(SidebarItem::Type type, const QPoint& pos)
+void ManagementTab::onSidebarContextMenu(SidebarItem::Type type, const QPoint& pos)
 {
     QMenu menu;
 
@@ -645,13 +645,13 @@ void HostsTab::onSidebarContextMenu(SidebarItem::Type type, const QPoint& pos)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onCurrentHostChanged(qint64 /* entry_id */)
+void ManagementTab::onCurrentHostChanged(qint64 /* entry_id */)
 {
     updateActionsState();
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onConnectAction(QAction* action)
+void ManagementTab::onConnectAction(QAction* action)
 {
     proto::peer::SessionType session_type;
 
@@ -754,7 +754,7 @@ void HostsTab::onConnectAction(QAction* action)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onLocalConnect(qint64 entry_id)
+void ManagementTab::onLocalConnect(qint64 entry_id)
 {
     std::optional<HostConfig> host = Database::instance().findHost(entry_id);
     if (!host.has_value())
@@ -771,7 +771,7 @@ void HostsTab::onLocalConnect(qint64 entry_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onRouterGroupConnect()
+void ManagementTab::onRouterGroupConnect()
 {
     if (!router_group_widget_->hasSelectedHost())
         return;
@@ -782,7 +782,7 @@ void HostsTab::onRouterGroupConnect()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onTempHostConnect()
+void ManagementTab::onTempHostConnect()
 {
     if (!router_temp_hosts_widget_->hasSelectedHost())
         return;
@@ -793,7 +793,7 @@ void HostsTab::onTempHostConnect()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onSearchConnect()
+void ManagementTab::onSearchConnect()
 {
     SearchWidget::Item* item = search_widget_->currentItem();
     if (!item)
@@ -813,7 +813,7 @@ void HostsTab::onSearchConnect()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onLocalHostContextMenu(qint64 entry_id, const QPoint& pos)
+void ManagementTab::onLocalHostContextMenu(qint64 entry_id, const QPoint& pos)
 {
     QMenu menu;
 
@@ -843,7 +843,7 @@ void HostsTab::onLocalHostContextMenu(qint64 entry_id, const QPoint& pos)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onSearchContextMenu(const QPoint& pos)
+void ManagementTab::onSearchContextMenu(const QPoint& pos)
 {
     SearchWidget::Item* item = search_widget_->currentItem();
     if (!item)
@@ -869,7 +869,7 @@ void HostsTab::onSearchContextMenu(const QPoint& pos)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onAddHost()
+void ManagementTab::onAddHost()
 {
     LOG(INFO) << "[ACTION] Add host";
 
@@ -893,7 +893,7 @@ void HostsTab::onAddHost()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onEditHost()
+void ManagementTab::onEditHost()
 {
     LOG(INFO) << "[ACTION] Edit host";
 
@@ -934,7 +934,7 @@ void HostsTab::onEditHost()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onCopyHost()
+void ManagementTab::onCopyHost()
 {
     LOG(INFO) << "[ACTION] Copy host";
 
@@ -979,7 +979,7 @@ void HostsTab::onCopyHost()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onRemoveHost()
+void ManagementTab::onRemoveHost()
 {
     LOG(INFO) << "[ACTION] Delete host";
 
@@ -1016,7 +1016,7 @@ void HostsTab::onRemoveHost()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onUserContextMenu(const User& user, const QPoint& pos)
+void ManagementTab::onUserContextMenu(const User& user, const QPoint& pos)
 {
     QMenu menu;
     if (user.isValid())
@@ -1032,7 +1032,7 @@ void HostsTab::onUserContextMenu(const User& user, const QPoint& pos)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onHostContextMenu(const QPoint& pos, int column)
+void ManagementTab::onHostContextMenu(const QPoint& pos, int column)
 {
     if (!router_hosts_widget_->hasSelectedHost())
         return;
@@ -1076,7 +1076,7 @@ void HostsTab::onHostContextMenu(const QPoint& pos, int column)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onTempHostContextMenu(const QPoint& pos)
+void ManagementTab::onTempHostContextMenu(const QPoint& pos)
 {
     if (!router_temp_hosts_widget_->hasSelectedHost())
         return;
@@ -1094,7 +1094,7 @@ void HostsTab::onTempHostContextMenu(const QPoint& pos)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onClientContextMenu(const QPoint& pos, int column)
+void ManagementTab::onClientContextMenu(const QPoint& pos, int column)
 {
     if (!router_clients_widget_->hasSelectedClient())
         return;
@@ -1119,7 +1119,7 @@ void HostsTab::onClientContextMenu(const QPoint& pos, int column)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onRelayContextMenu(const QPoint& pos, int column)
+void ManagementTab::onRelayContextMenu(const QPoint& pos, int column)
 {
     if (!router_relays_widget_->hasSelectedRelay())
         return;
@@ -1144,7 +1144,7 @@ void HostsTab::onRelayContextMenu(const QPoint& pos, int column)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onRouterGroupContextMenu(const QPoint& pos)
+void ManagementTab::onRouterGroupContextMenu(const QPoint& pos)
 {
     if (!router_group_widget_->hasSelectedHost())
         return;
@@ -1171,28 +1171,28 @@ void HostsTab::onRouterGroupContextMenu(const QPoint& pos)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onAddUserAction()
+void ManagementTab::onAddUserAction()
 {
     if (current_content_ == router_users_widget_)
         router_users_widget_->onAddUser();
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onEditUserAction()
+void ManagementTab::onEditUserAction()
 {
     if (current_content_ == router_users_widget_)
         router_users_widget_->onModifyUser();
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onDeleteUserAction()
+void ManagementTab::onDeleteUserAction()
 {
     if (current_content_ == router_users_widget_)
         router_users_widget_->onDeleteUser();
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onAddWorkspaceAction()
+void ManagementTab::onAddWorkspaceAction()
 {
     SidebarItem* sidebar_item = ui->sidebar->currentItem();
     if (!sidebar_item || sidebar_item->itemType() != SidebarItem::ROUTER)
@@ -1206,7 +1206,7 @@ void HostsTab::onAddWorkspaceAction()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onEditWorkspaceAction()
+void ManagementTab::onEditWorkspaceAction()
 {
     SidebarItem* sidebar_item = ui->sidebar->currentItem();
     if (!sidebar_item || sidebar_item->itemType() != SidebarItem::ROUTER_WORKSPACE)
@@ -1221,7 +1221,7 @@ void HostsTab::onEditWorkspaceAction()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onDeleteWorkspaceAction()
+void ManagementTab::onDeleteWorkspaceAction()
 {
     SidebarItem* sidebar_item = ui->sidebar->currentItem();
     if (!sidebar_item || sidebar_item->itemType() != SidebarItem::ROUTER_WORKSPACE)
@@ -1253,7 +1253,7 @@ void HostsTab::onDeleteWorkspaceAction()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onAddGroupAction()
+void ManagementTab::onAddGroupAction()
 {
     SidebarItem* item = ui->sidebar->currentItem();
     if (!item)
@@ -1299,7 +1299,7 @@ void HostsTab::onAddGroupAction()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onEditGroupAction()
+void ManagementTab::onEditGroupAction()
 {
     SidebarItem* item = ui->sidebar->currentItem();
     if (!item)
@@ -1324,7 +1324,7 @@ void HostsTab::onEditGroupAction()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onDeleteGroupAction()
+void ManagementTab::onDeleteGroupAction()
 {
     SidebarItem* item = ui->sidebar->currentItem();
     if (!item)
@@ -1365,7 +1365,7 @@ void HostsTab::onDeleteGroupAction()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onChangeRouterPassword()
+void ManagementTab::onChangeRouterPassword()
 {
     SidebarItem* sidebar_item = ui->sidebar->currentItem();
     if (!sidebar_item || sidebar_item->itemType() != SidebarItem::ROUTER)
@@ -1378,7 +1378,7 @@ void HostsTab::onChangeRouterPassword()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onClearRouterEvents()
+void ManagementTab::onClearRouterEvents()
 {
     SidebarItem* sidebar_item = ui->sidebar->currentItem();
     if (!sidebar_item || sidebar_item->itemType() != SidebarItem::ROUTER)
@@ -1390,7 +1390,7 @@ void HostsTab::onClearRouterEvents()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onImportOldBookAction()
+void ManagementTab::onImportOldBookAction()
 {
     LOG(INFO) << "[ACTION] Import address book";
 
@@ -1422,7 +1422,7 @@ void HostsTab::onImportOldBookAction()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onExportBookAction()
+void ManagementTab::onExportBookAction()
 {
     LOG(INFO) << "[ACTION] Export address book";
 
@@ -1486,7 +1486,7 @@ void HostsTab::onExportBookAction()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onImportBookAction()
+void ManagementTab::onImportBookAction()
 {
     LOG(INFO) << "[ACTION] Import address book (json)";
 
@@ -1561,21 +1561,21 @@ void HostsTab::onImportBookAction()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onReloadAction()
+void ManagementTab::onReloadAction()
 {
     if (current_content_ && current_content_->canReload())
         current_content_->reload();
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onSaveAction()
+void ManagementTab::onSaveAction()
 {
     if (current_content_ && current_content_->canSave())
         current_content_->save();
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onDisconnectAction()
+void ManagementTab::onDisconnectAction()
 {
     if (current_content_ == router_clients_widget_)
     {
@@ -1594,7 +1594,7 @@ void HostsTab::onDisconnectAction()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onDisconnectAllAction()
+void ManagementTab::onDisconnectAllAction()
 {
     if (current_content_ == router_clients_widget_)
     {
@@ -1613,28 +1613,28 @@ void HostsTab::onDisconnectAllAction()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onRemoveHostAction()
+void ManagementTab::onRemoveHostAction()
 {
     if (current_content_ == router_hosts_widget_)
         router_hosts_widget_->onRemoveHost();
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onApproveHostAction()
+void ManagementTab::onApproveHostAction()
 {
     if (current_content_ == router_temp_hosts_widget_)
         router_temp_hosts_widget_->onApproveHost();
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onCheckHostUpdatesAction()
+void ManagementTab::onCheckHostUpdatesAction()
 {
     if (current_content_ == router_hosts_widget_)
         router_hosts_widget_->onCheckHostUpdates();
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onOnlineCheckToggled(bool checked)
+void ManagementTab::onOnlineCheckToggled(bool checked)
 {
     Settings settings;
     settings.setOnlineCheckEnabled(checked);
@@ -1642,7 +1642,7 @@ void HostsTab::onOnlineCheckToggled(bool checked)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::switchContent(ContentWidget* new_widget)
+void ManagementTab::switchContent(ContentWidget* new_widget)
 {
     if (!new_widget || new_widget == current_content_)
         return;
@@ -1658,7 +1658,7 @@ void HostsTab::switchContent(ContentWidget* new_widget)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::updateActionsState()
+void ManagementTab::updateActionsState()
 {
     ui->action_add_group->setVisible(false);
     ui->action_delete_group->setVisible(false);
@@ -1873,7 +1873,7 @@ void HostsTab::updateActionsState()
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::peer::SessionType HostsTab::defaultSessionType() const
+proto::peer::SessionType ManagementTab::defaultSessionType() const
 {
     if (ui->action_desktop->isChecked())
         return proto::peer::SESSION_TYPE_DESKTOP;
@@ -1890,7 +1890,7 @@ proto::peer::SessionType HostsTab::defaultSessionType() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool HostsTab::validateHostForConnect(const HostConfig& host)
+bool ManagementTab::validateHostForConnect(const HostConfig& host)
 {
     if (host.routerId() != 0)
     {
@@ -1922,7 +1922,7 @@ bool HostsTab::validateHostForConnect(const HostConfig& host)
 }
 
 //--------------------------------------------------------------------------------------------------
-qint64 HostsTab::currentHostEntryId() const
+qint64 ManagementTab::currentHostEntryId() const
 {
     if (current_content_ == local_group_widget_)
     {
@@ -1940,7 +1940,7 @@ qint64 HostsTab::currentHostEntryId() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::refreshItem(qint64 entry_id)
+void ManagementTab::refreshItem(qint64 entry_id)
 {
     if (current_content_ == local_group_widget_)
         local_group_widget_->refreshItem(entry_id);
@@ -1949,7 +1949,7 @@ void HostsTab::refreshItem(qint64 entry_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::removeItem(qint64 entry_id)
+void ManagementTab::removeItem(qint64 entry_id)
 {
     if (current_content_ == local_group_widget_)
         local_group_widget_->removeItem(entry_id);

@@ -38,7 +38,7 @@
 #include "client/settings.h"
 #include "client/desktop/client_tab.h"
 #include "client/desktop/client_window.h"
-#include "client/desktop/hosts_tab.h"
+#include "client/desktop/management_tab.h"
 #include "client/desktop/settings_tab.h"
 #include "client/desktop/tab_bar.h"
 #include "client/desktop/tab_widget.h"
@@ -171,7 +171,7 @@ MainWindow::MainWindow(QWidget* parent)
     ui->menu_action->menuAction()->setVisible(false);
 
     // Create default tabs.
-    addTab(new HostsTab(this), tr("Management"), QIcon(":/img/computer.svg"));
+    addTab(new ManagementTab(this), tr("Management"), QIcon(":/img/computer.svg"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -352,17 +352,17 @@ void MainWindow::onCloseTab(int index)
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onSearchTextChanged(const QString& text)
 {
-    HostsTab* hosts_tab = hostsTab();
-    if (!hosts_tab)
+    ManagementTab* management_tab = managementTab();
+    if (!management_tab)
         return;
 
     // Always route the search to the hosts tab.
-    hosts_tab->searchTextChanged(text);
+    management_tab->searchTextChanged(text);
 
     // Switch to the hosts tab when the user starts searching from another tab.
-    if (active_tab_ != hosts_tab && !text.isEmpty())
+    if (active_tab_ != management_tab && !text.isEmpty())
     {
-        int index = ui->tabs->indexOf(hosts_tab);
+        int index = ui->tabs->indexOf(management_tab);
         if (index != -1)
             ui->tabs->setCurrentIndex(index);
     }
@@ -371,7 +371,7 @@ void MainWindow::onSearchTextChanged(const QString& text)
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onFindAction()
 {
-    if (!hostsTab())
+    if (!managementTab())
         return;
 
     if (ui->action_search_field->isChecked())
@@ -400,7 +400,7 @@ void MainWindow::onConnect(const HostConfig& host, proto::peer::SessionType sess
     }
 
     // For sessions launched from another session (e.g. file transfer started from a desktop
-    // session), inherit the tabbed/detached mode of the parent tab. Otherwise (HostsTab or
+    // session), inherit the tabbed/detached mode of the parent tab. Otherwise (ManagementTab or
     // direct call) fall back to the global "open sessions in tabs" setting.
     Tab* parent_tab = qobject_cast<Tab*>(sender());
     bool detached = (parent_tab && parent_tab->tabType() == Tab::Type::SESSION) ?
@@ -751,11 +751,11 @@ Tab* MainWindow::tabAt(int index)
 }
 
 //--------------------------------------------------------------------------------------------------
-HostsTab* MainWindow::hostsTab() const
+ManagementTab* MainWindow::managementTab() const
 {
     for (int i = 0; i < ui->tabs->count(); ++i)
     {
-        HostsTab* tab = dynamic_cast<HostsTab*>(ui->tabs->widget(i));
+        ManagementTab* tab = dynamic_cast<ManagementTab*>(ui->tabs->widget(i));
         if (tab)
             return tab;
     }
@@ -779,9 +779,9 @@ void MainWindow::showSearchDialog()
         });
     }
 
-    HostsTab* hosts_tab = hostsTab();
-    if (hosts_tab)
-        search_dialog_->setSearchText(hosts_tab->searchText());
+    ManagementTab* management_tab = managementTab();
+    if (management_tab)
+        search_dialog_->setSearchText(management_tab->searchText());
 
     search_dialog_->show();
     search_dialog_->raise();
@@ -791,11 +791,11 @@ void MainWindow::showSearchDialog()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::syncSearchField()
 {
-    HostsTab* hosts_tab = hostsTab();
-    if (!hosts_tab)
+    ManagementTab* management_tab = managementTab();
+    if (!management_tab)
         return;
 
-    QString text = hosts_tab->searchText();
+    QString text = management_tab->searchText();
     if (search_field_->text() != text)
     {
         QSignalBlocker blocker(search_field_);

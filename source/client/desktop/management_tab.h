@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_DESKTOP_HOSTS_HOSTS_TAB_H
-#define CLIENT_DESKTOP_HOSTS_HOSTS_TAB_H
+#ifndef CLIENT_DESKTOP_MANAGEMENT_TAB_H
+#define CLIENT_DESKTOP_MANAGEMENT_TAB_H
 
 #include <QHash>
 
@@ -29,7 +29,7 @@
 #include "client/desktop/management/sidebar.h"
 
 namespace Ui {
-class HostsTab;
+class ManagementTab;
 } // namespace Ui
 
 namespace proto::peer {
@@ -48,13 +48,13 @@ class RouterUsersWidget;
 class SearchWidget;
 class User;
 
-class HostsTab final : public Tab
+class ManagementTab final : public Tab
 {
     Q_OBJECT
 
 public:
-    explicit HostsTab(QWidget* parent = nullptr);
-    ~HostsTab() final;
+    explicit ManagementTab(QWidget* parent = nullptr);
+    ~ManagementTab() final;
 
     // Tab implementation.
     QByteArray saveState() final;
@@ -120,7 +120,7 @@ private:
     void refreshItem(qint64 entry_id);
     void removeItem(qint64 entry_id);
 
-    std::unique_ptr<Ui::HostsTab> ui;
+    std::unique_ptr<Ui::ManagementTab> ui;
     ContentWidget* current_content_ = nullptr;
     ContentWidget* previous_content_ = nullptr;
 
@@ -136,7 +136,7 @@ private:
     RouterStatusWidget* router_status_widget_ = nullptr;
     SearchWidget* search_widget_ = nullptr;
 
-    Q_DISABLE_COPY_MOVE(HostsTab)
+    Q_DISABLE_COPY_MOVE(ManagementTab)
 };
 
-#endif // CLIENT_DESKTOP_HOSTS_HOSTS_TAB_H
+#endif // CLIENT_DESKTOP_MANAGEMENT_TAB_H
