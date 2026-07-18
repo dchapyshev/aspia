@@ -43,10 +43,6 @@ public:
         size_t avg_packet = 0;
     };
 
-public slots:
-    void onAudioMessage(const QByteArray& buffer);
-    void onLegacyMessage(const QByteArray& buffer);
-
 signals:
     // Emitted once a second with the current audio statistics.
     void sig_metrics(const AudioWorker::Metrics& metrics);
@@ -56,6 +52,10 @@ protected:
     void onStart() final;
     void onStop() final;
     void onTimer() final;
+
+private slots:
+    void onAudioMessage(const QByteArray& buffer);
+    void onLegacyMessage(const QByteArray& buffer);
 
 private:
     void decodePacket(const proto::audio::Packet& packet);

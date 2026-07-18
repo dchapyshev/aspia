@@ -66,13 +66,6 @@ public:
     };
 
 public slots:
-    // Incoming channel data.
-    void onVideoMessage(const QByteArray& buffer);
-    void onLegacyMessage(const QByteArray& buffer);
-    void onCursorMessage(const QByteArray& buffer);
-    void onAudioMessage(const QByteArray& buffer);
-
-    // Configuration.
     void onCursorConfig(bool shape_enabled, bool position_enabled);
     void onSetRecording(bool enable, const QString& file_path, const QString& computer_name);
 
@@ -93,6 +86,10 @@ protected:
     void onTimer() final;
 
 private slots:
+    void onVideoMessage(const QByteArray& buffer);
+    void onLegacyMessage(const QByteArray& buffer);
+    void onCursorMessage(const QByteArray& buffer);
+    void onAudioMessage(const QByteArray& buffer);
     void onEncodeTimer();
 
 private:

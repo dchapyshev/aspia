@@ -68,78 +68,6 @@ VideoWorker::~VideoWorker()
 }
 
 //--------------------------------------------------------------------------------------------------
-void VideoWorker::onVideoMessage(const QByteArray& buffer)
-{
-    legacy_ = false;
-
-    proto::video::HostToClient* message = incoming_message_.parse<proto::video::HostToClient>(buffer);
-    if (!message)
-    {
-        LOG(ERROR) << "Unable to parse video message";
-        return;
-    }
-
-    if (message->has_packet())
-        decodePacket(message->packet());
-}
-
-//--------------------------------------------------------------------------------------------------
-void VideoWorker::onLegacyMessage(const QByteArray& buffer)
-{
-    legacy_ = true;
-
-    proto::legacy::SessionToClient* message =
-        incoming_message_.parse<proto::legacy::SessionToClient>(buffer);
-    if (!message)
-    {
-        LOG(ERROR) << "Unable to parse legacy message";
-        return;
-    }
-
-    if (message->has_video_packet())
-        decodePacket(message->video_packet());
-    if (message->has_cursor_shape())
-        readCursorShape(message->cursor_shape());
-    if (message->has_cursor_position())
-        readCursorPosition(message->cursor_position());
-    if (writer_ && message->has_audio_packet())
-        writer_->addAudioPacket(message->audio_packet());
-}
-
-//--------------------------------------------------------------------------------------------------
-void VideoWorker::onCursorMessage(const QByteArray& buffer)
-{
-    proto::cursor::HostToClient* message =
-        incoming_message_.parse<proto::cursor::HostToClient>(buffer);
-    if (!message)
-    {
-        LOG(ERROR) << "Unable to parse cursor message";
-        return;
-    }
-
-    if (message->has_shape())
-        readCursorShape(message->shape());
-    else if (message->has_position())
-        readCursorPosition(message->position());
-}
-
-//--------------------------------------------------------------------------------------------------
-void VideoWorker::onAudioMessage(const QByteArray& buffer)
-{
-    if (!writer_)
-        return;
-
-    proto::audio::HostToClient* message = incoming_message_.parse<proto::audio::HostToClient>(buffer);
-    if (!message)
-    {
-        LOG(ERROR) << "Unable to parse audio message";
-        return;
-    }
-
-    writer_->addAudioPacket(message->packet());
-}
-
-//--------------------------------------------------------------------------------------------------
 void VideoWorker::onCursorConfig(bool shape_enabled, bool position_enabled)
 {
     cursor_shape_enabled_ = shape_enabled;
@@ -250,6 +178,78 @@ void VideoWorker::onTimer()
     fps_frame_count_ = 0;
 
     emit sig_metrics(metrics_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void VideoWorker::onVideoMessage(const QByteArray& buffer)
+{
+    legacy_ = false;
+
+    proto::video::HostToClient* message = incoming_message_.parse<proto::video::HostToClient>(buffer);
+    if (!message)
+    {
+        LOG(ERROR) << "Unable to parse video message";
+        return;
+    }
+
+    if (message->has_packet())
+        decodePacket(message->packet());
+}
+
+//--------------------------------------------------------------------------------------------------
+void VideoWorker::onLegacyMessage(const QByteArray& buffer)
+{
+    legacy_ = true;
+
+    proto::legacy::SessionToClient* message =
+        incoming_message_.parse<proto::legacy::SessionToClient>(buffer);
+    if (!message)
+    {
+        LOG(ERROR) << "Unable to parse legacy message";
+        return;
+    }
+
+    if (message->has_video_packet())
+        decodePacket(message->video_packet());
+    if (message->has_cursor_shape())
+        readCursorShape(message->cursor_shape());
+    if (message->has_cursor_position())
+        readCursorPosition(message->cursor_position());
+    if (writer_ && message->has_audio_packet())
+        writer_->addAudioPacket(message->audio_packet());
+}
+
+//--------------------------------------------------------------------------------------------------
+void VideoWorker::onCursorMessage(const QByteArray& buffer)
+{
+    proto::cursor::HostToClient* message =
+        incoming_message_.parse<proto::cursor::HostToClient>(buffer);
+    if (!message)
+    {
+        LOG(ERROR) << "Unable to parse cursor message";
+        return;
+    }
+
+    if (message->has_shape())
+        readCursorShape(message->shape());
+    else if (message->has_position())
+        readCursorPosition(message->position());
+}
+
+//--------------------------------------------------------------------------------------------------
+void VideoWorker::onAudioMessage(const QByteArray& buffer)
+{
+    if (!writer_)
+        return;
+
+    proto::audio::HostToClient* message = incoming_message_.parse<proto::audio::HostToClient>(buffer);
+    if (!message)
+    {
+        LOG(ERROR) << "Unable to parse audio message";
+        return;
+    }
+
+    writer_->addAudioPacket(message->packet());
 }
 
 //--------------------------------------------------------------------------------------------------

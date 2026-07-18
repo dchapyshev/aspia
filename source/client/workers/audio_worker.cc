@@ -49,34 +49,6 @@ AudioWorker::~AudioWorker()
 }
 
 //--------------------------------------------------------------------------------------------------
-void AudioWorker::onAudioMessage(const QByteArray& buffer)
-{
-    proto::audio::HostToClient* message = incoming_message_.parse<proto::audio::HostToClient>(buffer);
-    if (!message)
-    {
-        LOG(ERROR) << "Unable to parse audio message";
-        return;
-    }
-
-    decodePacket(message->packet());
-}
-
-//--------------------------------------------------------------------------------------------------
-void AudioWorker::onLegacyMessage(const QByteArray& buffer)
-{
-    proto::legacy::SessionToClient* message =
-        incoming_message_.parse<proto::legacy::SessionToClient>(buffer);
-    if (!message)
-    {
-        LOG(ERROR) << "Unable to parse legacy message";
-        return;
-    }
-
-    if (message->has_audio_packet())
-        decodePacket(message->audio_packet());
-}
-
-//--------------------------------------------------------------------------------------------------
 void AudioWorker::onStart()
 {
     LOG(INFO) << "Audio worker started";
@@ -114,6 +86,34 @@ void AudioWorker::onStop()
 void AudioWorker::onTimer()
 {
     emit sig_metrics(metrics_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void AudioWorker::onAudioMessage(const QByteArray& buffer)
+{
+    proto::audio::HostToClient* message = incoming_message_.parse<proto::audio::HostToClient>(buffer);
+    if (!message)
+    {
+        LOG(ERROR) << "Unable to parse audio message";
+        return;
+    }
+
+    decodePacket(message->packet());
+}
+
+//--------------------------------------------------------------------------------------------------
+void AudioWorker::onLegacyMessage(const QByteArray& buffer)
+{
+    proto::legacy::SessionToClient* message =
+        incoming_message_.parse<proto::legacy::SessionToClient>(buffer);
+    if (!message)
+    {
+        LOG(ERROR) << "Unable to parse legacy message";
+        return;
+    }
+
+    if (message->has_audio_packet())
+        decodePacket(message->audio_packet());
 }
 
 //--------------------------------------------------------------------------------------------------
