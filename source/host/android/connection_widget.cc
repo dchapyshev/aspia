@@ -254,7 +254,7 @@ void ConnectionWidget::setRouterState(RouterState state, const QString& router)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ConnectionWidget::setConnectedClients(const QList<Server::ClientInfo>& clients)
+void ConnectionWidget::setConnectedClients(const QList<ServerWorker::ClientInfo>& clients)
 {
     // Drop the previous rows.
     while (QLayoutItem* item = clients_layout_->takeAt(0))
@@ -266,7 +266,7 @@ void ConnectionWidget::setConnectedClients(const QList<Server::ClientInfo>& clie
     // The card is shown only while at least one client is connected.
     clients_card_->setVisible(!clients.isEmpty());
 
-    for (const Server::ClientInfo& client : clients)
+    for (const ServerWorker::ClientInfo& client : clients)
     {
         QWidget* row = new QWidget(clients_card_);
 

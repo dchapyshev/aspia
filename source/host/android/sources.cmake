@@ -40,8 +40,8 @@ collect_sources(SOURCE_HOST_ANDROID
     password_dialog.h
     screen_capturer_android.cc
     screen_capturer_android.h
-    server.cc
-    server.h
+    server_worker.cc
+    server_worker.h
     settings_widget.cc
     settings_widget.h
     user_editor_widget.cc

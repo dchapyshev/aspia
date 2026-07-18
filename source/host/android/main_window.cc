@@ -39,7 +39,7 @@
 #include "host/database.h"
 #include "host/android/connection_widget.h"
 #include "host/android/password_dialog.h"
-#include "host/android/server.h"
+#include "host/android/server_worker.h"
 #include "host/android/settings_widget.h"
 #include "proto/user.h"
 
@@ -98,17 +98,19 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
     navigation_->setItemText(SECTION_SETTINGS, tr("Settings"));
     onSectionChanged(navigation_->currentIndex());
 
-    // Run the host server on the application I/O thread. Its credentials/router-state signals are
-    // delivered here queued (cross-thread) and shown on the connection screen.
-    server_ = new Server();
-    connect(server_, &Server::sig_credentialsChanged,
-            this, &AndroidMainWindow::onCredentialsChanged);
-    connect(server_, &Server::sig_routerStateChanged,
-            this, &AndroidMainWindow::onRouterStateChanged);
-    connect(server_, &Server::sig_connectedClientsChanged,
-            this, &AndroidMainWindow::onConnectedClientsChanged);
-    server_->moveToThread(GuiApplication::ioThread());
-    QMetaObject::invokeMethod(server_, &Server::start, Qt::QueuedConnection);
+    server_ = GuiApplication::findWorker<ServerWorker>();
+    if (!server_)
+    {
+        LOG(FATAL) << "Server worker not found";
+        return;
+    }
+
+    connect(server_, &ServerWorker::sig_credentialsChanged,
+            this, &AndroidMainWindow::onCredentialsChanged, Qt::QueuedConnection);
+    connect(server_, &ServerWorker::sig_routerStateChanged,
+            this, &AndroidMainWindow::onRouterStateChanged, Qt::QueuedConnection);
+    connect(server_, &ServerWorker::sig_connectedClientsChanged,
+            this, &AndroidMainWindow::onConnectedClientsChanged, Qt::QueuedConnection);
 
     // Prompt for the runtime permissions the host needs, once the window is shown.
     QMetaObject::invokeMethod(this, &AndroidMainWindow::checkPermissions, Qt::QueuedConnection);
@@ -119,9 +121,9 @@ AndroidMainWindow::~AndroidMainWindow()
 {
     LOG(INFO) << "Dtor";
 
-    // Server lives on the I/O thread and may still emit queued signals targeting this window while it
-    // is torn down. ScopedQPointer::reset() (member destruction below) schedules deleteLater() but does
-    // not disconnect, so sever the connections to this receiver here first. See scoped_qpointer.h.
+    // The server worker runs on its own thread and may still emit queued signals targeting this window
+    // while it is torn down. It outlives the window (owned by the worker manager), so sever the
+    // connections to this receiver here first.
     if (server_)
         server_->disconnect(this);
 }
@@ -275,7 +277,7 @@ void AndroidMainWindow::onRouterStateChanged(int state, const QString& router)
 }
 
 //--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::onConnectedClientsChanged(const QList<Server::ClientInfo>& clients)
+void AndroidMainWindow::onConnectedClientsChanged(const QList<ServerWorker::ClientInfo>& clients)
 {
     connection_->setConnectedClients(clients);
 }

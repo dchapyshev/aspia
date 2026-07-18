@@ -16,15 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_ANDROID_SERVER_H
-#define HOST_ANDROID_SERVER_H
+#ifndef HOST_ANDROID_SERVER_WORKER_H
+#define HOST_ANDROID_SERVER_WORKER_H
 
 #include <QList>
-#include <QObject>
 #include <QString>
 
 #include "base/peer/host_id.h"
 #include "base/scoped_qpointer.h"
+#include "base/threading/worker.h"
 
 namespace proto::peer {
 enum SessionType : int;
@@ -41,16 +41,16 @@ class SecureString;
 class TcpChannel;
 class TcpServer;
 
-// Host server for Android, the in-process analog of the desktop Service. It is moved to the
-// application I/O thread and driven from there: start()/stop() and the network objects it owns run on
-// that thread. For now it only starts the TCP server that accepts incoming direct connections.
-class Server final : public QObject
+// Host server for Android, the in-process analog of the desktop Service. It is an application-lifetime
+// worker: the network objects it owns are created on and driven from its own worker thread. For now it
+// only starts the TCP server that accepts incoming direct connections.
+class ServerWorker final : public Worker
 {
     Q_OBJECT
 
 public:
-    explicit Server(QObject* parent = nullptr);
-    ~Server() final;
+    ServerWorker();
+    ~ServerWorker() final;
 
     struct ClientInfo
     {
@@ -60,15 +60,15 @@ public:
         proto::peer::SessionType session_type = {};
     };
 
-public slots:
-    // Both run on the I/O thread (invoke queued after moveToThread).
-    void start();
-    void stop();
-
 signals:
     void sig_credentialsChanged(const QString& host_id, const QString& password);
     void sig_routerStateChanged(int state, const QString& router);
     void sig_connectedClientsChanged(const QList<ClientInfo>& clients);
+
+protected:
+    // Worker implementation.
+    void onStart() final;
+    void onStop() final;
 
 private slots:
     void onNewConnection();
@@ -98,9 +98,9 @@ private:
     bool app_active_ = true;
     bool screen_on_ = true;
 
-    Q_DISABLE_COPY_MOVE(Server)
+    Q_DISABLE_COPY_MOVE(ServerWorker)
 };
 
-Q_DECLARE_METATYPE(Server::ClientInfo)
+Q_DECLARE_METATYPE(ServerWorker::ClientInfo)
 
-#endif // HOST_ANDROID_SERVER_H
+#endif // HOST_ANDROID_SERVER_WORKER_H

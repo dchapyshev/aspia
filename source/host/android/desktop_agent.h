@@ -52,7 +52,7 @@ class ScreenCapturer;
 class VideoEncoder;
 
 // Shared desktop capture/encode engine for the Android host, the in-process analog of the desktop
-// DesktopAgent. A single instance (owned by Server) serves every connected desktop client: it owns the
+// DesktopAgent. A single instance (owned by ServerWorker) serves every connected desktop client: it owns the
 // one screen capturer and video encoder, captures and encodes each frame once, and broadcasts the
 // encoded video to all clients. The per-connection protocol lives in DesktopClient.
 class DesktopAgent final : public QObject
@@ -111,7 +111,7 @@ private:
     // Bridge to the floating clipboard button (the only way to reach the clipboard while backgrounded).
     FloatingMenuBridge* floating_menu_bridge_ = nullptr;
 
-    // Connected desktop clients (owned by Server). Encoded frames are broadcast to all of them.
+    // Connected desktop clients (owned by ServerWorker). Encoded frames are broadcast to all of them.
     QList<DesktopClient*> clients_;
 
     proto::video::Encoding video_encoding_;

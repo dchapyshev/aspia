@@ -24,6 +24,7 @@
 #include "build/build_config.h"
 #include "build/version.h"
 #include "host/user_settings.h"
+#include "host/android/server_worker.h"
 
 //--------------------------------------------------------------------------------------------------
 Application::Application(int& argc, char* argv[])
@@ -43,6 +44,8 @@ Application::Application(int& argc, char* argv[])
 
     setLocale(settings.locale());
     setTheme(settings.theme());
+
+    addWorker(std::make_unique<ServerWorker>());
 }
 
 //--------------------------------------------------------------------------------------------------

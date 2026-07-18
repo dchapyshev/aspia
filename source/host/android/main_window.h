@@ -20,10 +20,10 @@
 #define HOST_ANDROID_MAIN_WINDOW_H
 
 #include <QList>
+#include <QPointer>
 #include <QWidget>
 
-#include "base/scoped_qpointer.h"
-#include "host/android/server.h"
+#include "host/android/server_worker.h"
 
 class AppBar;
 class BottomNavigationBar;
@@ -60,7 +60,7 @@ private slots:
     // Forwarded from the host server (queued from the I/O thread) to the connection screen.
     void onCredentialsChanged(const QString& host_id, const QString& password);
     void onRouterStateChanged(int state, const QString& router);
-    void onConnectedClientsChanged(const QList<Server::ClientInfo>& clients);
+    void onConnectedClientsChanged(const QList<ServerWorker::ClientInfo>& clients);
 
 private:
     void scrollFocusIntoView();
@@ -76,8 +76,7 @@ private:
     BottomNavigationBar* navigation_ = nullptr;
     ConnectionWidget* connection_ = nullptr;
 
-    // Host server, moved to and driven from the application I/O thread.
-    ScopedQPointer<Server> server_;
+    QPointer<ServerWorker> server_;
 
     // Cached bottom inset applied for the on-screen keyboard; -1 forces the first update to apply.
     int keyboard_inset_ = -1;

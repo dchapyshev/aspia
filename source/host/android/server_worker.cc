@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/android/server.h"
+#include "host/android/server_worker.h"
 
 #include <QGuiApplication>
 #include <QJniEnvironment>
@@ -58,10 +58,10 @@ constexpr int kMaxConnectionsPerMinute = 30;
 constexpr int kReadBufferSize = 2 * 1024 * 1024; // 2 MB.
 constexpr int kWriteBufferSize = 2 * 1024 * 1024; // 2 MB.
 
-// Guards the single Server instance against the screen-state JNI callback, delivered on the Android
+// Guards the single ServerWorker instance against the screen-state JNI callback, delivered on the Android
 // main thread. At most one server exists, so a bare pointer is enough.
 QMutex g_mutex;
-Server* g_instance = nullptr;
+ServerWorker* g_instance = nullptr;
 
 //--------------------------------------------------------------------------------------------------
 // Called by ScreenMonitor when the display turns on or off. Hops to the server's I/O thread.
@@ -78,8 +78,8 @@ void screenInteractiveChanged(JNIEnv* /* env */, jclass /* clazz */, jboolean in
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Server::Server(QObject* parent)
-    : QObject(parent)
+ServerWorker::ServerWorker()
+    : Worker(Thread::AsioDispatcher)
 {
     LOG(INFO) << "Ctor";
     qRegisterMetaType<QList<ClientInfo>>();
@@ -104,10 +104,9 @@ Server::Server(QObject* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-Server::~Server()
+ServerWorker::~ServerWorker()
 {
     LOG(INFO) << "Dtor";
-    stop();
 
     QMutexLocker locker(&g_mutex);
     if (g_instance == this)
@@ -115,7 +114,7 @@ Server::~Server()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::start()
+void ServerWorker::onStart()
 {
     if (tcp_server_)
     {
@@ -127,7 +126,7 @@ void Server::start()
 
     // Created here (on the I/O thread) so its asio acceptor binds to this thread's io_context.
     tcp_server_ = new TcpServer(this);
-    connect(tcp_server_, &TcpServer::sig_newConnection, this, &Server::onNewConnection);
+    connect(tcp_server_, &TcpServer::sig_newConnection, this, &ServerWorker::onNewConnection);
 
     tcp_server_->setMaxPendingConnections(kMaxPendingConnections);
     tcp_server_->setMaxConnectionsPerMinute(kMaxConnectionsPerMinute);
@@ -147,7 +146,7 @@ void Server::start()
     // in place, so seed the flag with the live value instead of assuming an active start.
     app_active_ = (qGuiApp->applicationState() == Qt::ApplicationActive);
     connect(qGuiApp, &QGuiApplication::applicationStateChanged,
-            this, &Server::onApplicationStateChanged, Qt::QueuedConnection);
+            this, &ServerWorker::onApplicationStateChanged, Qt::QueuedConnection);
 
     QNativeInterface::QAndroidApplication::runOnAndroidMainThread([]() -> QVariant
     {
@@ -164,7 +163,7 @@ void Server::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::stop()
+void ServerWorker::onStop()
 {
     if (!tcp_server_)
         return;
@@ -188,7 +187,7 @@ void Server::stop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::onNewConnection()
+void ServerWorker::onNewConnection()
 {
     while (tcp_server_ && tcp_server_->hasReadyConnections())
     {
@@ -201,7 +200,7 @@ void Server::onNewConnection()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::onNewRelayConnection()
+void ServerWorker::onNewRelayConnection()
 {
     if (!router_manager_)
         return;
@@ -218,7 +217,7 @@ void Server::onNewRelayConnection()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::onClientStarted()
+void ServerWorker::onClientStarted()
 {
     Client* client = dynamic_cast<Client*>(sender());
     if (!client)
@@ -237,7 +236,7 @@ void Server::onClientStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::onClientFinished()
+void ServerWorker::onClientFinished()
 {
     Client* client = dynamic_cast<Client*>(sender());
     if (!client)
@@ -260,7 +259,7 @@ void Server::onClientFinished()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::onRouterStateChanged(const proto::user::RouterState& state)
+void ServerWorker::onRouterStateChanged(const proto::user::RouterState& state)
 {
     QString router;
 
@@ -276,20 +275,20 @@ void Server::onRouterStateChanged(const proto::user::RouterState& state)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::onCredentialsChanged(HostId host_id, const SecureString& password)
+void ServerWorker::onCredentialsChanged(HostId host_id, const SecureString& password)
 {
     emit sig_credentialsChanged(hostIdToString(host_id), password.toString());
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::onApplicationStateChanged(Qt::ApplicationState state)
+void ServerWorker::onApplicationStateChanged(Qt::ApplicationState state)
 {
     app_active_ = (state == Qt::ApplicationActive);
     updateRouterConnection();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::onScreenInteractiveChanged(bool interactive)
+void ServerWorker::onScreenInteractiveChanged(bool interactive)
 {
     // Locking the screen does not change the Qt application state, so this is a separate signal.
     screen_on_ = interactive;
@@ -297,7 +296,7 @@ void Server::onScreenInteractiveChanged(bool interactive)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::connectToRouter()
+void ServerWorker::connectToRouter()
 {
     if (router_manager_)
         return;
@@ -305,11 +304,11 @@ void Server::connectToRouter()
     router_manager_ = new RouterManager(this);
 
     connect(router_manager_, &RouterManager::sig_clientConnected,
-            this, &Server::onNewRelayConnection);
+            this, &ServerWorker::onNewRelayConnection);
     connect(router_manager_, &RouterManager::sig_routerStateChanged,
-            this, &Server::onRouterStateChanged);
+            this, &ServerWorker::onRouterStateChanged);
     connect(router_manager_, &RouterManager::sig_credentialsChanged,
-            this, &Server::onCredentialsChanged);
+            this, &ServerWorker::onCredentialsChanged);
 
     router_manager_->start();
 
@@ -319,7 +318,7 @@ void Server::connectToRouter()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::disconnectFromRouter()
+void ServerWorker::disconnectFromRouter()
 {
     if (!router_manager_)
         return;
@@ -338,7 +337,7 @@ void Server::disconnectFromRouter()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::updateRouterConnection()
+void ServerWorker::updateRouterConnection()
 {
     // The window may already be gone (server stopped); nothing to manage then.
     if (!tcp_server_)
@@ -363,7 +362,7 @@ void Server::updateRouterConnection()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::startClient(TcpChannel* tcp_channel, const QString& stun_host, quint16 stun_port)
+void ServerWorker::startClient(TcpChannel* tcp_channel, const QString& stun_host, quint16 stun_port)
 {
     tcp_channel->setParent(this);
     tcp_channel->setReadBufferSize(kReadBufferSize);
@@ -379,8 +378,8 @@ void Server::startClient(TcpChannel* tcp_channel, const QString& stun_host, quin
         desktop_client->setFeature(Client::FEATURE_BANDWIDTH, true);
 
         // Track the client for the connected-clients list; the agent owns and deletes it.
-        connect(desktop_client, &Client::sig_started, this, &Server::onClientStarted);
-        connect(desktop_client, &Client::sig_finished, this, &Server::onClientFinished);
+        connect(desktop_client, &Client::sig_started, this, &ServerWorker::onClientStarted);
+        connect(desktop_client, &Client::sig_finished, this, &ServerWorker::onClientFinished);
 
         desktop_agent_->addClient(desktop_client);
         desktop_client->start(stun_host, stun_port);
@@ -397,8 +396,8 @@ void Server::startClient(TcpChannel* tcp_channel, const QString& stun_host, quin
     FileClient* file_client = new FileClient(tcp_channel, this);
     file_client->setFeature(Client::FEATURE_UDP, true);
 
-    connect(file_client, &Client::sig_started, this, &Server::onClientStarted);
-    connect(file_client, &Client::sig_finished, this, &Server::onClientFinished);
+    connect(file_client, &Client::sig_started, this, &ServerWorker::onClientStarted);
+    connect(file_client, &Client::sig_finished, this, &ServerWorker::onClientFinished);
 
     file_clients_.append(file_client);
 

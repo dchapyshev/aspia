@@ -23,7 +23,7 @@
 #include <QString>
 #include <QWidget>
 
-#include "host/android/server.h"
+#include "host/android/server_worker.h"
 
 class Card;
 class IconButton;
@@ -54,7 +54,7 @@ public:
     void setHostId(const QString& host_id);
     void setPassword(const QString& password);
     void setRouterState(RouterState state, const QString& router = QString());
-    void setConnectedClients(const QList<Server::ClientInfo>& clients);
+    void setConnectedClients(const QList<ServerWorker::ClientInfo>& clients);
 
     // The app bar action for this section (shares the host ID and one-time password).
     QList<QWidget*> appBarActions() const;
