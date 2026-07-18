@@ -45,8 +45,8 @@
 #include "host/ui/host_window.h"
 #include "host/ui/security_log_dialog.h"
 #include "host/workers/audio_worker.h"
+#include "host/workers/desktop_ipc_worker.h"
 #include "host/workers/input_worker.h"
-#include "host/workers/ipc_worker.h"
 #include "host/workers/screen_worker.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -158,7 +158,7 @@ int runAgent(int& argc, char* argv[], const char* agent_type)
             HostUtils::INCLUDE_VIDEO_ADAPTERS | HostUtils::INCLUDE_WINDOW_STATIONS);
 
         WorkerManager worker_manager;
-        worker_manager.add(std::make_unique<IpcWorker>());
+        worker_manager.add(std::make_unique<DesktopIpcWorker>());
         worker_manager.add(std::make_unique<ScreenWorker>());
         worker_manager.add(std::make_unique<InputWorker>());
         worker_manager.add(std::make_unique<AudioWorker>());

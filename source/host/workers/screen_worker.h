@@ -51,7 +51,7 @@ class CursorEncoder;
 class DesktopEnvironment;
 class DesktopResizer;
 class InputInjector;
-class IpcWorker;
+class DesktopIpcWorker;
 class PowerSaveBlocker;
 class QTimer;
 class ScaleReducer;
@@ -156,7 +156,7 @@ private:
     void createVideoEncoder();
     void updateInjectorScreenInfo(const Frame* frame);
 
-    QPointer<IpcWorker> ipc_worker_;
+    QPointer<DesktopIpcWorker> ipc_worker_;
     ScopedQPointer<InputInjector> input_injector_;
     ScopedQPointer<ScreenCapturer> screen_capturer_;
 

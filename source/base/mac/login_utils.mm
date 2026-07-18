@@ -69,7 +69,7 @@ bool LoginUtils::installAgent(const QString& app_path)
     // what lets capture follow the login screen and user sessions without the service spawning anything
     // itself. It rendezvous with the service on the fixed, compiled-in channel (so no channel name is
     // passed here), retrying until the service serves it (the retry is keyed off the macOS platform in
-    // IpcWorker, not passed here).
+    // DesktopIpcWorker, not passed here).
     NSDictionary* plist = @{
         @"Label" : @(kAgentLabel),
         @"LimitLoadToSessionType" : @[ @"Aqua", @"LoginWindow" ],

@@ -21,7 +21,7 @@ collect_sources(SOURCE_HOST_WORKERS
     audio_worker.h
     input_worker.cc
     input_worker.h
-    ipc_worker.cc
-    ipc_worker.h
+    desktop_ipc_worker.cc
+    desktop_ipc_worker.h
     screen_worker.cc
     screen_worker.h)

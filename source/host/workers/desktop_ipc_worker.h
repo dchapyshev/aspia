@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_WORKERS_IPC_WORKER_H
-#define HOST_WORKERS_IPC_WORKER_H
+#ifndef HOST_WORKERS_DESKTOP_IPC_WORKER_H
+#define HOST_WORKERS_DESKTOP_IPC_WORKER_H
 
 #include <QList>
 #include <QPointer>
@@ -45,13 +45,13 @@ class IpcChannel;
 // coming from the clients are forwarded to the media/input workers through signals; the serialized
 // media they produce is fanned out to the clients through the on*Data slots. Owns nothing that
 // captures or injects - only the wire.
-class IpcWorker final : public Worker
+class DesktopIpcWorker final : public Worker
 {
     Q_OBJECT
 
 public:
-    IpcWorker();
-    ~IpcWorker() final;
+    DesktopIpcWorker();
+    ~DesktopIpcWorker() final;
 
 public slots:
     // Serialized messages produced by the media/input workers, fanned out to every client.
@@ -123,7 +123,7 @@ private:
 
     bool is_lock_at_disconnect_ = false;
 
-    Q_DISABLE_COPY_MOVE(IpcWorker)
+    Q_DISABLE_COPY_MOVE(DesktopIpcWorker)
 };
 
-#endif // HOST_WORKERS_IPC_WORKER_H
+#endif // HOST_WORKERS_DESKTOP_IPC_WORKER_H

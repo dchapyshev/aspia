@@ -22,7 +22,7 @@
 #include "base/codec/audio_encoder.h"
 #include "base/threading/worker_manager.h"
 #include "host/audio_capturer.h"
-#include "host/workers/ipc_worker.h"
+#include "host/workers/desktop_ipc_worker.h"
 
 //--------------------------------------------------------------------------------------------------
 // On macOS the Qt dispatcher backs the thread with a CFRunLoop (via
@@ -100,14 +100,14 @@ void AudioWorker::onStart()
 {
     LOG(INFO) << "Audio worker started";
 
-    // All AudioWorker<->IpcWorker wiring lives here: the IPC worker toggles the pipeline through the
+    // All AudioWorker<->DesktopIpcWorker wiring lives here: the IPC worker toggles the pipeline through the
     // merged configuration, and the encoded audio produced here is fanned out through it.
-    ipc_worker_ = findWorker<IpcWorker>();
+    ipc_worker_ = findWorker<DesktopIpcWorker>();
     if (ipc_worker_)
     {
-        connect(ipc_worker_, &IpcWorker::sig_audioEnabled, this, &AudioWorker::onSetEnabled,
+        connect(ipc_worker_, &DesktopIpcWorker::sig_audioEnabled, this, &AudioWorker::onSetEnabled,
                 Qt::QueuedConnection);
-        connect(this, &AudioWorker::sig_audioData, ipc_worker_, &IpcWorker::onAudioData,
+        connect(this, &AudioWorker::sig_audioData, ipc_worker_, &DesktopIpcWorker::onAudioData,
                 Qt::QueuedConnection);
     }
     else

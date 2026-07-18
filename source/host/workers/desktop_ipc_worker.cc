@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/workers/ipc_worker.h"
+#include "host/workers/desktop_ipc_worker.h"
 
 #include <QTimer>
 
@@ -30,76 +30,76 @@
 #include "host/host_constants.h"
 
 //--------------------------------------------------------------------------------------------------
-IpcWorker::IpcWorker()
+DesktopIpcWorker::DesktopIpcWorker()
     : Worker(Thread::AsioDispatcher, Seconds(1))
 {
     LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-IpcWorker::~IpcWorker()
+DesktopIpcWorker::~DesktopIpcWorker()
 {
     LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcWorker::onVideoData(const QByteArray& buffer, bool is_key_frame)
+void DesktopIpcWorker::onVideoData(const QByteArray& buffer, bool is_key_frame)
 {
     for (auto* client : std::as_const(clients_))
         client->onVideoData(buffer, is_key_frame);
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcWorker::onCursorShapeData(const QByteArray& buffer)
+void DesktopIpcWorker::onCursorShapeData(const QByteArray& buffer)
 {
     for (auto* client : std::as_const(clients_))
         client->onCursorShapeData(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcWorker::onCursorPositionData(const QByteArray& buffer)
+void DesktopIpcWorker::onCursorPositionData(const QByteArray& buffer)
 {
     for (auto* client : std::as_const(clients_))
         client->onCursorPositionData(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcWorker::onScreenListData(const QByteArray& buffer)
+void DesktopIpcWorker::onScreenListData(const QByteArray& buffer)
 {
     for (auto* client : std::as_const(clients_))
         client->onScreenListData(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcWorker::onScreenTypeData(const QByteArray& buffer)
+void DesktopIpcWorker::onScreenTypeData(const QByteArray& buffer)
 {
     for (auto* client : std::as_const(clients_))
         client->onScreenTypeData(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcWorker::onClipboardData(const QByteArray& buffer)
+void DesktopIpcWorker::onClipboardData(const QByteArray& buffer)
 {
     for (auto* client : std::as_const(clients_))
         client->onClipboardData(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcWorker::onAudioData(const QByteArray& buffer)
+void DesktopIpcWorker::onAudioData(const QByteArray& buffer)
 {
     for (auto* client : std::as_const(clients_))
         client->onAudioData(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcWorker::onStart()
+void DesktopIpcWorker::onStart()
 {
     LOG(INFO) << "IPC worker started";
     connectToService();
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcWorker::onStop()
+void DesktopIpcWorker::onStop()
 {
     LOG(INFO) << "IPC worker stopped";
 
@@ -114,7 +114,7 @@ void IpcWorker::onStop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcWorker::onTimer()
+void DesktopIpcWorker::onTimer()
 {
     if (clients_.isEmpty())
         return;
@@ -131,13 +131,13 @@ void IpcWorker::onTimer()
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcWorker::onIpcConnected()
+void DesktopIpcWorker::onIpcConnected()
 {
     ipc_channel_->setPaused(false);
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcWorker::onIpcDisconnected()
+void DesktopIpcWorker::onIpcDisconnected()
 {
 #if defined(Q_OS_MACOS)
     // The macOS desktop agent is a persistent launchd agent: the service opens and closes the control
@@ -170,7 +170,7 @@ void IpcWorker::onIpcDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcWorker::onIpcErrorOccurred()
+void DesktopIpcWorker::onIpcErrorOccurred()
 {
 #if defined(Q_OS_MACOS)
     // The macOS desktop agent is launched by launchd, possibly before the service opens the control
@@ -189,7 +189,7 @@ void IpcWorker::onIpcErrorOccurred()
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcWorker::onIpcMessageReceived(
+void DesktopIpcWorker::onIpcMessageReceived(
     quint32 /* ipc_channel_id */, const QByteArray& buffer, bool /* reliable */)
 {
     proto::desktop::ServiceToAgent message;
@@ -244,7 +244,7 @@ void IpcWorker::onIpcMessageReceived(
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcWorker::onClientConfigured()
+void DesktopIpcWorker::onClientConfigured()
 {
     proto::control::Config merged_config;
     merged_config.set_effects(true);
@@ -308,7 +308,7 @@ void IpcWorker::onClientConfigured()
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcWorker::onClientFinished()
+void DesktopIpcWorker::onClientFinished()
 {
     DesktopAgentClient* client = dynamic_cast<DesktopAgentClient*>(sender());
     CHECK(client);
@@ -338,7 +338,7 @@ void IpcWorker::onClientFinished()
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcWorker::onPreferredSizeChanged()
+void DesktopIpcWorker::onPreferredSizeChanged()
 {
     if (clients_.isEmpty())
         return;
@@ -357,47 +357,47 @@ void IpcWorker::onPreferredSizeChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcWorker::onClientBandwidthChanged()
+void DesktopIpcWorker::onClientBandwidthChanged()
 {
     emit sig_bandwidthChanged(minimalBandwidth());
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcWorker::startClient(const QString& ipc_channel_name)
+void DesktopIpcWorker::startClient(const QString& ipc_channel_name)
 {
     DesktopAgentClient* client = new DesktopAgentClient(this);
     clients_.append(client);
 
-    connect(client, &DesktopAgentClient::sig_injectMouseEvent, this, &IpcWorker::sig_injectMouseEvent);
-    connect(client, &DesktopAgentClient::sig_injectKeyEvent, this, &IpcWorker::sig_injectKeyEvent);
-    connect(client, &DesktopAgentClient::sig_injectTextEvent, this, &IpcWorker::sig_injectTextEvent);
-    connect(client, &DesktopAgentClient::sig_injectTouchEvent, this, &IpcWorker::sig_injectTouchEvent);
-    connect(client, &DesktopAgentClient::sig_selectScreen, this, &IpcWorker::sig_selectScreen);
-    connect(client, &DesktopAgentClient::sig_clipboardEvent, this, &IpcWorker::sig_clipboardEvent);
-    connect(client, &DesktopAgentClient::sig_preferredSizeChanged, this, &IpcWorker::onPreferredSizeChanged);
-    connect(client, &DesktopAgentClient::sig_keyFrameRequested, this, &IpcWorker::sig_keyFrameRequested);
-    connect(client, &DesktopAgentClient::sig_bandwidthChanged, this, &IpcWorker::onClientBandwidthChanged);
-    connect(client, &DesktopAgentClient::sig_configured, this, &IpcWorker::onClientConfigured);
-    connect(client, &DesktopAgentClient::sig_finished, this, &IpcWorker::onClientFinished);
+    connect(client, &DesktopAgentClient::sig_injectMouseEvent, this, &DesktopIpcWorker::sig_injectMouseEvent);
+    connect(client, &DesktopAgentClient::sig_injectKeyEvent, this, &DesktopIpcWorker::sig_injectKeyEvent);
+    connect(client, &DesktopAgentClient::sig_injectTextEvent, this, &DesktopIpcWorker::sig_injectTextEvent);
+    connect(client, &DesktopAgentClient::sig_injectTouchEvent, this, &DesktopIpcWorker::sig_injectTouchEvent);
+    connect(client, &DesktopAgentClient::sig_selectScreen, this, &DesktopIpcWorker::sig_selectScreen);
+    connect(client, &DesktopAgentClient::sig_clipboardEvent, this, &DesktopIpcWorker::sig_clipboardEvent);
+    connect(client, &DesktopAgentClient::sig_preferredSizeChanged, this, &DesktopIpcWorker::onPreferredSizeChanged);
+    connect(client, &DesktopAgentClient::sig_keyFrameRequested, this, &DesktopIpcWorker::sig_keyFrameRequested);
+    connect(client, &DesktopAgentClient::sig_bandwidthChanged, this, &DesktopIpcWorker::onClientBandwidthChanged);
+    connect(client, &DesktopAgentClient::sig_configured, this, &DesktopIpcWorker::onClientConfigured);
+    connect(client, &DesktopAgentClient::sig_finished, this, &DesktopIpcWorker::onClientFinished);
 
     LOG(INFO) << "Starting client...";
     client->start(ipc_channel_name);
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcWorker::connectToService()
+void DesktopIpcWorker::connectToService()
 {
     ipc_channel_ = new IpcChannel(this);
-    connect(ipc_channel_, &IpcChannel::sig_connected, this, &IpcWorker::onIpcConnected);
-    connect(ipc_channel_, &IpcChannel::sig_disconnected, this, &IpcWorker::onIpcDisconnected);
-    connect(ipc_channel_, &IpcChannel::sig_errorOccurred, this, &IpcWorker::onIpcErrorOccurred);
-    connect(ipc_channel_, &IpcChannel::sig_messageReceived, this, &IpcWorker::onIpcMessageReceived);
+    connect(ipc_channel_, &IpcChannel::sig_connected, this, &DesktopIpcWorker::onIpcConnected);
+    connect(ipc_channel_, &IpcChannel::sig_disconnected, this, &DesktopIpcWorker::onIpcDisconnected);
+    connect(ipc_channel_, &IpcChannel::sig_errorOccurred, this, &DesktopIpcWorker::onIpcErrorOccurred);
+    connect(ipc_channel_, &IpcChannel::sig_messageReceived, this, &DesktopIpcWorker::onIpcMessageReceived);
 
     ipc_channel_->connectTo(kDesktopAgentChannelId);
 }
 
 //--------------------------------------------------------------------------------------------------
-qint64 IpcWorker::minimalBandwidth() const
+qint64 DesktopIpcWorker::minimalBandwidth() const
 {
     qint64 minimal_bandwidth = std::numeric_limits<qint64>::max();
 

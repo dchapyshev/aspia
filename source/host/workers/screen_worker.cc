@@ -34,7 +34,7 @@
 #include "host/desktop_resizer.h"
 #include "host/input_injector.h"
 #include "host/system_settings.h"
-#include "host/workers/ipc_worker.h"
+#include "host/workers/desktop_ipc_worker.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "host/screen_capturer_win.h"
@@ -483,39 +483,39 @@ void ScreenWorker::onStart()
 {
     LOG(INFO) << "Screen worker started";
 
-    ipc_worker_ = findWorker<IpcWorker>();
+    ipc_worker_ = findWorker<DesktopIpcWorker>();
     if (ipc_worker_)
     {
-        connect(ipc_worker_, &IpcWorker::sig_selectScreen, this, &ScreenWorker::onSelectScreen,
+        connect(ipc_worker_, &DesktopIpcWorker::sig_selectScreen, this, &ScreenWorker::onSelectScreen,
                 Qt::QueuedConnection);
-        connect(ipc_worker_, &IpcWorker::sig_clipboardEvent, this, &ScreenWorker::onClipboardEvent,
+        connect(ipc_worker_, &DesktopIpcWorker::sig_clipboardEvent, this, &ScreenWorker::onClipboardEvent,
                 Qt::QueuedConnection);
-        connect(ipc_worker_, &IpcWorker::sig_keyFrameRequested, this, &ScreenWorker::onKeyFrameRequested,
+        connect(ipc_worker_, &DesktopIpcWorker::sig_keyFrameRequested, this, &ScreenWorker::onKeyFrameRequested,
                 Qt::QueuedConnection);
-        connect(ipc_worker_, &IpcWorker::sig_preferredSizeChanged, this, &ScreenWorker::onSetPreferredSize,
+        connect(ipc_worker_, &DesktopIpcWorker::sig_preferredSizeChanged, this, &ScreenWorker::onSetPreferredSize,
                 Qt::QueuedConnection);
-        connect(ipc_worker_, &IpcWorker::sig_configure, this, &ScreenWorker::onConfigure,
+        connect(ipc_worker_, &DesktopIpcWorker::sig_configure, this, &ScreenWorker::onConfigure,
                 Qt::QueuedConnection);
-        connect(ipc_worker_, &IpcWorker::sig_overflowStateChanged, this, &ScreenWorker::onOverflowStateChanged,
+        connect(ipc_worker_, &DesktopIpcWorker::sig_overflowStateChanged, this, &ScreenWorker::onOverflowStateChanged,
                 Qt::QueuedConnection);
-        connect(ipc_worker_, &IpcWorker::sig_bandwidthChanged, this, &ScreenWorker::onBandwidthChanged,
+        connect(ipc_worker_, &DesktopIpcWorker::sig_bandwidthChanged, this, &ScreenWorker::onBandwidthChanged,
                 Qt::QueuedConnection);
-        connect(ipc_worker_, &IpcWorker::sig_stopCapture, this, &ScreenWorker::onStopCapture,
+        connect(ipc_worker_, &DesktopIpcWorker::sig_stopCapture, this, &ScreenWorker::onStopCapture,
                 Qt::QueuedConnection);
-        connect(ipc_worker_, &IpcWorker::sig_paused, this, &ScreenWorker::onSetPaused,
+        connect(ipc_worker_, &DesktopIpcWorker::sig_paused, this, &ScreenWorker::onSetPaused,
                 Qt::QueuedConnection);
 
-        connect(this, &ScreenWorker::sig_videoData, ipc_worker_, &IpcWorker::onVideoData,
+        connect(this, &ScreenWorker::sig_videoData, ipc_worker_, &DesktopIpcWorker::onVideoData,
                 Qt::QueuedConnection);
-        connect(this, &ScreenWorker::sig_cursorShapeData, ipc_worker_, &IpcWorker::onCursorShapeData,
+        connect(this, &ScreenWorker::sig_cursorShapeData, ipc_worker_, &DesktopIpcWorker::onCursorShapeData,
                 Qt::QueuedConnection);
-        connect(this, &ScreenWorker::sig_cursorPositionData, ipc_worker_, &IpcWorker::onCursorPositionData,
+        connect(this, &ScreenWorker::sig_cursorPositionData, ipc_worker_, &DesktopIpcWorker::onCursorPositionData,
                 Qt::QueuedConnection);
-        connect(this, &ScreenWorker::sig_screenListData, ipc_worker_, &IpcWorker::onScreenListData,
+        connect(this, &ScreenWorker::sig_screenListData, ipc_worker_, &DesktopIpcWorker::onScreenListData,
                 Qt::QueuedConnection);
-        connect(this, &ScreenWorker::sig_screenTypeData, ipc_worker_, &IpcWorker::onScreenTypeData,
+        connect(this, &ScreenWorker::sig_screenTypeData, ipc_worker_, &DesktopIpcWorker::onScreenTypeData,
                 Qt::QueuedConnection);
-        connect(this, &ScreenWorker::sig_clipboardData, ipc_worker_, &IpcWorker::onClipboardData,
+        connect(this, &ScreenWorker::sig_clipboardData, ipc_worker_, &DesktopIpcWorker::onClipboardData,
                 Qt::QueuedConnection);
     }
     else

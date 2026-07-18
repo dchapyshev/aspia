@@ -23,7 +23,7 @@
 #include "base/logging.h"
 #include "base/threading/worker_manager.h"
 #include "host/input_injector.h"
-#include "host/workers/ipc_worker.h"
+#include "host/workers/desktop_ipc_worker.h"
 #include "host/workers/screen_worker.h"
 #include "proto/desktop_input.h"
 
@@ -214,24 +214,24 @@ void InputWorker::onStart()
     }
 
     // Subscribe to the client input and gating commands forwarded by the IPC worker.
-    ipc_worker_ = findWorker<IpcWorker>();
+    ipc_worker_ = findWorker<DesktopIpcWorker>();
     if (ipc_worker_)
     {
-        connect(ipc_worker_, &IpcWorker::sig_injectKeyEvent, this, &InputWorker::onInjectKeyEvent,
+        connect(ipc_worker_, &DesktopIpcWorker::sig_injectKeyEvent, this, &InputWorker::onInjectKeyEvent,
                 Qt::QueuedConnection);
-        connect(ipc_worker_, &IpcWorker::sig_injectTextEvent, this, &InputWorker::onInjectTextEvent,
+        connect(ipc_worker_, &DesktopIpcWorker::sig_injectTextEvent, this, &InputWorker::onInjectTextEvent,
                 Qt::QueuedConnection);
-        connect(ipc_worker_, &IpcWorker::sig_injectMouseEvent, this, &InputWorker::onInjectMouseEvent,
+        connect(ipc_worker_, &DesktopIpcWorker::sig_injectMouseEvent, this, &InputWorker::onInjectMouseEvent,
                 Qt::QueuedConnection);
-        connect(ipc_worker_, &IpcWorker::sig_injectTouchEvent, this, &InputWorker::onInjectTouchEvent,
+        connect(ipc_worker_, &DesktopIpcWorker::sig_injectTouchEvent, this, &InputWorker::onInjectTouchEvent,
                 Qt::QueuedConnection);
-        connect(ipc_worker_, &IpcWorker::sig_paused, this, &InputWorker::onSetPaused,
+        connect(ipc_worker_, &DesktopIpcWorker::sig_paused, this, &InputWorker::onSetPaused,
                 Qt::QueuedConnection);
-        connect(ipc_worker_, &IpcWorker::sig_mouseLocked, this, &InputWorker::onSetMouseLocked,
+        connect(ipc_worker_, &DesktopIpcWorker::sig_mouseLocked, this, &InputWorker::onSetMouseLocked,
                 Qt::QueuedConnection);
-        connect(ipc_worker_, &IpcWorker::sig_keyboardLocked, this, &InputWorker::onSetKeyboardLocked,
+        connect(ipc_worker_, &DesktopIpcWorker::sig_keyboardLocked, this, &InputWorker::onSetKeyboardLocked,
                 Qt::QueuedConnection);
-        connect(ipc_worker_, &IpcWorker::sig_blockInput, this, &InputWorker::onSetBlockInput,
+        connect(ipc_worker_, &DesktopIpcWorker::sig_blockInput, this, &InputWorker::onSetBlockInput,
                 Qt::QueuedConnection);
     }
     else
