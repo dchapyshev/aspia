@@ -171,7 +171,7 @@ MainWindow::MainWindow(QWidget* parent)
     ui->menu_action->menuAction()->setVisible(false);
 
     // Create default tabs.
-    addTab(new HostsTab(this), tr("Hosts"), QIcon(":/img/computer.svg"));
+    addTab(new HostsTab(this), tr("Management"), QIcon(":/img/computer.svg"));
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -4366,8 +4366,8 @@ Hosts skipped: %6</source>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="174"/>
-        <source>Hosts</source>
-        <translation>Хосты</translation>
+        <source>Management</source>
+        <translation>Управление</translation>
     </message>
     <message>
         <source>Workspaces</source>
