@@ -24,7 +24,6 @@
 #include <QProxyStyle>
 
 #include "base/translations.h"
-#include "base/threading/thread.h"
 #include "base/threading/worker_manager.h"
 
 class QLocalServer;
@@ -45,7 +44,6 @@ public:
     int exec();
 
     static GuiApplication* instance();
-    static QThread* ioThread();
 
     template <typename T>
     static T* findWorker()
@@ -100,7 +98,6 @@ private:
     QLockFile* lock_file_ = nullptr;
     QLocalServer* server_ = nullptr;
 
-    Thread io_thread_;
     std::unique_ptr<WorkerManager> worker_manager_;
     std::unique_ptr<Translations> translations_;
 

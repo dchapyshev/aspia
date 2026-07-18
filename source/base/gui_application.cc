@@ -90,8 +90,7 @@ private:
 
 //--------------------------------------------------------------------------------------------------
 GuiApplication::GuiApplication(int& argc, char* argv[])
-    : QApplication(argc, argv),
-      io_thread_(Thread::AsioDispatcher, nullptr)
+    : QApplication(argc, argv)
 {
     LOG(INFO) << "Ctor";
 
@@ -119,8 +118,6 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
     server_name_ = QString::fromLatin1(app_path_hash.toHex()) + session_id;
     lock_file_name_ = temp_path + '/' + server_name_ + ".lock";
     lock_file_ = new QLockFile(lock_file_name_);
-
-    io_thread_.start();
 
     worker_manager_ = std::make_unique<WorkerManager>();
     translations_ = std::make_unique<Translations>();
@@ -205,8 +202,6 @@ GuiApplication::~GuiApplication()
 
     worker_manager_.reset();
 
-    io_thread_.stop();
-
     bool is_locked = lock_file_->isLocked();
 
     if (is_locked)
@@ -232,20 +227,6 @@ int GuiApplication::exec()
 GuiApplication* GuiApplication::instance()
 {
     return static_cast<GuiApplication*>(QApplication::instance());
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-QThread* GuiApplication::ioThread()
-{
-    GuiApplication* application = instance();
-    if (!application)
-    {
-        LOG(ERROR) << "Invalid application instance";
-        return nullptr;
-    }
-
-    return &application->io_thread_;
 }
 
 //--------------------------------------------------------------------------------------------------
