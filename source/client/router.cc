@@ -18,8 +18,6 @@
 
 #include "client/router.h"
 
-#include <QTimer>
-
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/serialization.h"
@@ -27,17 +25,13 @@
 #include "base/crypto/private_key_cryptor.h"
 #include "base/crypto/random.h"
 #include "base/crypto/sealed_box.h"
-#include "base/net/address.h"
-#include "base/net/tcp_channel_ng.h"
-#include "base/peer/client_authenticator.h"
 #include "build/build_config.h"
 #include "client/database.h"
-#include "proto/key_exchange.h"
+#include "client/workers/router_worker.h"
 
 namespace {
 
 constexpr int kGroupKeySize = 32;
-const std::chrono::milliseconds kReconnectTimeout { 2500 };
 
 //--------------------------------------------------------------------------------------------------
 struct Registrator
@@ -124,24 +118,32 @@ void resealWorkspaceKeys(const std::unordered_map<qint64, DataCryptor>& cryptors
 //--------------------------------------------------------------------------------------------------
 Router::Router(const RouterConfig& config, QObject* parent)
     : QObject(parent),
-      config_(config),
-      reconnect_timer_(new QTimer(this))
+      config_(config)
 {
     LOG(INFO) << "Ctor";
 
     instances().insert(config_.routerId(), this);
 
-    reconnect_timer_->setSingleShot(true);
-    connect(reconnect_timer_, &QTimer::timeout, this, &Router::onReconnectTimeout);
+    router_worker_ = GuiApplication::findWorker<RouterWorker>();
+    if (!router_worker_)
+    {
+        LOG(FATAL) << "Router worker not found";
+        return;
+    }
 
-    connect(GuiApplication::instance(), &QGuiApplication::applicationStateChanged,
-            this, &Router::onApplicationStateChanged);
+    connect(router_worker_, &RouterWorker::sig_authenticated, this, &Router::onTcpAuthenticated,
+            Qt::QueuedConnection);
+    connect(router_worker_, &RouterWorker::sig_errorOccurred, this, &Router::onTcpErrorOccurred,
+            Qt::QueuedConnection);
+    connect(router_worker_, &RouterWorker::sig_messageReceived, this, &Router::onTcpMessageReceived,
+            Qt::QueuedConnection);
 }
 
 //--------------------------------------------------------------------------------------------------
 Router::~Router()
 {
     LOG(INFO) << "Dtor";
+    disconnectWorker();
     instances().remove(config_.routerId());
 }
 
@@ -156,14 +158,14 @@ Router* Router::instance(qint64 router_id)
 void Router::connectToRouter()
 {
     setStatus(Status::CONNECTING);
-    setupChannel();
+    connectWorker();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Router::disconnectFromRouter()
 {
-    reconnect_timer_->stop();
-    destroyChannel();
+    disconnectWorker();
+    clearSessionState();
     setStatus(Status::OFFLINE);
 }
 
@@ -175,9 +177,10 @@ void Router::updateConfig(const RouterConfig& config)
 
     if (need_reconnect && status_ != Status::OFFLINE)
     {
-        destroyChannel();
+        disconnectWorker();
+        clearSessionState();
         setStatus(Status::CONNECTING);
-        setupChannel();
+        connectWorker();
     }
 }
 
@@ -191,40 +194,38 @@ void Router::submitTwoFactorCode(const QString& totp_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::onTcpAuthenticated()
+void Router::onTcpAuthenticated(qint64 router_id, const QVersionNumber& peer_version)
 {
-    if (!tcp_channel_)
+    if (router_id != config_.routerId())
         return;
 
     LOG(INFO) << "Connected to router" << config_.address();
-    reconnect_timer_->stop();
-    version_ = tcp_channel_->peerVersion();
-
-    QMetaObject::invokeMethod(tcp_channel_, &TcpChannel::setPaused, Qt::QueuedConnection, false);
-    // Stay in CONNECTING; transition to ONLINE happens when UserKeys arrives.
+    version_ = peer_version;
+    // The worker already unpaused the channel. Stay in CONNECTING; the transition to ONLINE happens
+    // when UserKeys arrives.
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
+void Router::onTcpErrorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code)
 {
+    if (router_id != config_.routerId())
+        return;
+
     LOG(INFO) << "Router connection error:" << error_code;
+    clearSessionState();
 
-    destroyChannel();
-
-    // Schedule auto-reconnect unless the user has explicitly torn the session down.
     if (status_ != Status::OFFLINE)
-    {
         setStatus(Status::CONNECTING);
-        LOG(INFO) << "Reconnect scheduled in" << kReconnectTimeout.count() << "ms";
-        reconnect_timer_->start(kReconnectTimeout);
-    }
 
     emit sig_errorOccurred(config_.routerId(), error_code);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::onTcpMessageReceived(quint8 channel_id, const QByteArray& bytes)
+void Router::onTcpMessageReceived(qint64 router_id, quint8 channel_id, const QByteArray& bytes)
 {
+    if (router_id != config_.routerId())
+        return;
+
     if (channel_id == proto::router::CHANNEL_ID_ADMIN)
     {
         proto::router::RouterToAdmin message;
@@ -311,31 +312,6 @@ void Router::onTcpMessageReceived(quint8 channel_id, const QByteArray& bytes)
     {
         LOG(WARNING) << "Unexpected message from channel" << channel_id;
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void Router::onReconnectTimeout()
-{
-    if (status_ == Status::OFFLINE)
-        return;
-    LOG(INFO) << "Reconnecting to router" << config_.address();
-    setupChannel();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Router::onApplicationStateChanged(Qt::ApplicationState state)
-{
-#if defined(Q_OS_ANDROID)
-    // On Android the OS freezes the process in the background and the connection is dropped.
-    if (state == Qt::ApplicationActive && status_ == Status::CONNECTING && !tcp_channel_)
-    {
-        LOG(INFO) << "Reconnecting to router on returning to foreground";
-        reconnect_timer_->stop();
-        setupChannel();
-    }
-#else
-    Q_UNUSED(state)
-#endif
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -456,71 +432,43 @@ bool Router::buildGroup(qint64 workspace_id, const Router::Group& group, proto::
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::setupChannel()
+void Router::connectWorker()
 {
-    if (tcp_channel_)
+    if (!router_worker_)
         return;
 
-    LOG(INFO) << "Connecting to router" << config_.address();
-
-    Address address = Address::fromString(config_.address(), DEFAULT_ROUTER_CLIENT_TCP_PORT);
-
-    // TcpChannelNG (and its underlying socket) must be constructed in the thread where it
-    // will live. Hop into the IO thread via a scratch QObject, build everything there, and
-    // block until the channel pointer is ready - construction is microseconds, connectTo()
-    // only initiates the async connect. The scratch object is cleaned up via deleteLater()
-    // by ScopedQPointer when it goes out of scope.
-    ScopedQPointer<QObject> io_bridge(new QObject());
-    io_bridge->moveToThread(GuiApplication::ioThread());
-
-    TcpChannel* channel = nullptr;
-    QMetaObject::invokeMethod(io_bridge, [this, &channel, host = address.host(), port = address.port()]()
-    {
-        auto* authenticator = new ClientAuthenticator();
-        authenticator->setIdentify(proto::key_exchange::IDENTIFY_SRP);
-        authenticator->setSessionType(config_.sessionType());
-        authenticator->setUserName(config_.username());
-        authenticator->setPassword(config_.password());
-
-        TcpChannel* tcp_channel = new TcpChannelNG(authenticator, nullptr);
-        authenticator->setParent(tcp_channel);
-
-        connect(tcp_channel, &TcpChannel::sig_authenticated,
-                this, &Router::onTcpAuthenticated, Qt::QueuedConnection);
-        connect(tcp_channel, &TcpChannel::sig_errorOccurred,
-                this, &Router::onTcpErrorOccurred, Qt::QueuedConnection);
-        connect(tcp_channel, &TcpChannel::sig_messageReceived,
-                this, &Router::onTcpMessageReceived, Qt::QueuedConnection);
-
-        tcp_channel->connectTo(host, port);
-        channel = tcp_channel;
-    }, Qt::BlockingQueuedConnection);
-
-    tcp_channel_ = channel;
+    QMetaObject::invokeMethod(router_worker_, &RouterWorker::onConnect, Qt::QueuedConnection,
+                              config_.routerId());
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::destroyChannel()
+void Router::disconnectWorker()
+{
+    if (!router_worker_)
+        return;
+
+    QMetaObject::invokeMethod(router_worker_, &RouterWorker::onDisconnect, Qt::QueuedConnection,
+                              config_.routerId());
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::clearSessionState()
 {
     user_id_ = 0;
     user_private_key_.clear();
     workspace_cryptors_.clear();
     pending_.clear();
     version_ = QVersionNumber();
-    tcp_channel_.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Router::emitSend(quint8 channel_id, const google::protobuf::MessageLite& message)
 {
-    if (!tcp_channel_)
-    {
-        LOG(WARNING) << "Dropping outgoing message, channel not ready";
+    if (!router_worker_)
         return;
-    }
 
-    QMetaObject::invokeMethod(tcp_channel_, &TcpChannel::send, Qt::QueuedConnection,
-                              channel_id, serialize(message));
+    QMetaObject::invokeMethod(router_worker_, &RouterWorker::onSendMessage, Qt::QueuedConnection,
+                              config_.routerId(), channel_id, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -34,11 +34,11 @@ public:
     ~RouterWorker() final;
 
 public slots:
-    // Opens the connection to |router_id| (its config is read from the database) and authenticates.
-    // A no-op if it already exists.
+    // Starts (and keeps reconnecting) the connection to |router_id|. Its config is read from the
+    // database. A no-op if it is already active.
     void onConnect(qint64 router_id);
 
-    // Closes the connection to |router_id|.
+    // Stops the connection to |router_id| and cancels its reconnect.
     void onDisconnect(qint64 router_id);
 
     // Sends an outgoing message on the given channel of |router_id|.
@@ -53,14 +53,23 @@ protected:
     // Worker implementation.
     void onStart() final;
     void onStop() final;
+    void onTimer() final;
 
 private:
+    // One router's connection state. |channel| is null while waiting to reconnect;
+    // |reconnect_countdown| is the number of one-second ticks left before the next attempt.
+    struct Connection
+    {
+        TcpChannel* channel = nullptr;
+        int reconnect_countdown = 0;
+    };
+
+    void startConnection(qint64 router_id);
     void onChannelAuthenticated(qint64 router_id);
     void onChannelErrorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code);
 
-    // Active connections keyed by router_id. Each channel owns its authenticator and is parented to
-    // this worker.
-    QHash<qint64, TcpChannel*> channels_;
+    // Wanted connections keyed by router_id; a present key means the router should stay connected.
+    QHash<qint64, Connection> connections_;
 
     Q_DISABLE_COPY_MOVE(RouterWorker)
 };

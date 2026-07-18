@@ -23,5 +23,7 @@ collect_sources(SOURCE_CLIENT_WORKERS
     file_worker.h
     network_worker.cc
     network_worker.h
+    router_worker.cc
+    router_worker.h
     video_worker.cc
     video_worker.h)

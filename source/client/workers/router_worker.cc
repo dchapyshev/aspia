@@ -29,8 +29,16 @@
 #include "client/database.h"
 #include "proto/key_exchange.h"
 
+namespace {
+
+// Number of one-second timer ticks to wait before retrying a dropped connection.
+const int kReconnectTicks = 3;
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 RouterWorker::RouterWorker()
+    : Worker(Thread::AsioDispatcher, Seconds(1))
 {
     LOG(INFO) << "Ctor";
 }
@@ -44,7 +52,84 @@ RouterWorker::~RouterWorker()
 //--------------------------------------------------------------------------------------------------
 void RouterWorker::onConnect(qint64 router_id)
 {
-    if (channels_.contains(router_id))
+    if (connections_.contains(router_id))
+        return;
+
+    connections_.insert(router_id, Connection());
+    startConnection(router_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWorker::onDisconnect(qint64 router_id)
+{
+    auto it = connections_.find(router_id);
+    if (it == connections_.end())
+        return;
+
+    if (it->channel)
+    {
+        it->channel->disconnect();
+        it->channel->deleteLater();
+    }
+
+    connections_.erase(it);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWorker::onSendMessage(qint64 router_id, quint8 channel_id, const QByteArray& buffer)
+{
+    auto it = connections_.find(router_id);
+    if (it == connections_.end() || !it->channel)
+    {
+        LOG(WARNING) << "Dropping outgoing message, channel not ready for router" << router_id;
+        return;
+    }
+
+    it->channel->send(channel_id, buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWorker::onStart()
+{
+    LOG(INFO) << "Router worker started";
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWorker::onStop()
+{
+    LOG(INFO) << "Router worker stopped";
+
+    for (const Connection& connection : std::as_const(connections_))
+    {
+        if (connection.channel)
+        {
+            connection.channel->disconnect();
+            connection.channel->deleteLater();
+        }
+    }
+
+    connections_.clear();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWorker::onTimer()
+{
+    // One-second tick: retry every dropped connection whose countdown has elapsed.
+    for (auto it = connections_.begin(); it != connections_.end(); ++it)
+    {
+        if (it->channel || it->reconnect_countdown == 0)
+            continue;
+
+        if (--it->reconnect_countdown == 0)
+            startConnection(it.key());
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWorker::startConnection(qint64 router_id)
+{
+    auto it = connections_.find(router_id);
+    if (it == connections_.end() || it->channel)
         return;
 
     // The worker owns the connection, so it reads the credentials from the database itself (thread-
@@ -53,6 +138,7 @@ void RouterWorker::onConnect(qint64 router_id)
     if (!config)
     {
         LOG(ERROR) << "No config for router" << router_id;
+        it->reconnect_countdown = kReconnectTicks;
         return;
     }
 
@@ -68,7 +154,7 @@ void RouterWorker::onConnect(qint64 router_id)
 
     // The channel takes ownership of the authenticator and lives on this worker thread.
     TcpChannel* channel = new TcpChannelNG(authenticator, this);
-    channels_.insert(router_id, channel);
+    it->channel = channel;
 
     connect(channel, &TcpChannel::sig_authenticated, this, [this, router_id]()
     {
@@ -88,69 +174,33 @@ void RouterWorker::onConnect(qint64 router_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWorker::onDisconnect(qint64 router_id)
-{
-    TcpChannel* channel = channels_.take(router_id);
-    if (!channel)
-        return;
-
-    channel->disconnect();
-    channel->deleteLater();
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterWorker::onSendMessage(qint64 router_id, quint8 channel_id, const QByteArray& buffer)
-{
-    TcpChannel* channel = channels_.value(router_id);
-    if (!channel)
-    {
-        LOG(WARNING) << "Dropping outgoing message, channel not ready for router" << router_id;
-        return;
-    }
-
-    channel->send(channel_id, buffer);
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterWorker::onStart()
-{
-    LOG(INFO) << "Router worker started";
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterWorker::onStop()
-{
-    LOG(INFO) << "Router worker stopped";
-
-    for (TcpChannel* channel : std::as_const(channels_))
-    {
-        channel->disconnect();
-        channel->deleteLater();
-    }
-    channels_.clear();
-}
-
-//--------------------------------------------------------------------------------------------------
 void RouterWorker::onChannelAuthenticated(qint64 router_id)
 {
-    TcpChannel* channel = channels_.value(router_id);
-    if (!channel)
+    auto it = connections_.find(router_id);
+    if (it == connections_.end() || !it->channel)
         return;
 
     // Authentication passed; let the router replies flow and hand the peer version to Router.
-    channel->setPaused(false);
-    emit sig_authenticated(router_id, channel->peerVersion());
+    it->channel->setPaused(false);
+    emit sig_authenticated(router_id, it->channel->peerVersion());
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterWorker::onChannelErrorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code)
 {
-    TcpChannel* channel = channels_.take(router_id);
-    if (channel)
+    auto it = connections_.find(router_id);
+    if (it == connections_.end())
+        return;
+
+    if (it->channel)
     {
-        channel->disconnect();
-        channel->deleteLater();
+        it->channel->disconnect();
+        it->channel->deleteLater();
+        it->channel = nullptr;
     }
+
+    // The one-second timer retries once the countdown elapses.
+    it->reconnect_countdown = kReconnectTicks;
 
     emit sig_errorOccurred(router_id, error_code);
 }

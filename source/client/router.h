@@ -37,18 +37,14 @@
 #include "base/net/tcp_channel.h"
 #include "base/peer/host_id.h"
 #include "base/peer/router_user.h"
-#include "base/scoped_qpointer.h"
 #include "client/config.h"
 #include "proto/router_admin.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
 #include "proto/router_manager.h"
 
-class QTimer;
+class RouterWorker;
 
-// Application-level RPC facade. Owns the TCP channel to the router (on the IO thread, driven
-// through queued signals/slots), manages session status (OFFLINE/CONNECTING/ONLINE), holds the
-// crypto state derived from UserKeys, and exposes a typed RPC API to GUI consumers.
 class Router final : public QObject
 {
     Q_OBJECT
@@ -345,11 +341,9 @@ signals:
     void sig_groupsChanged(qint64 router_id);
 
 private slots:
-    void onTcpAuthenticated();
-    void onTcpErrorOccurred(TcpChannel::ErrorCode error_code);
-    void onTcpMessageReceived(quint8 channel_id, const QByteArray& bytes);
-    void onReconnectTimeout();
-    void onApplicationStateChanged(Qt::ApplicationState state);
+    void onTcpAuthenticated(qint64 router_id, const QVersionNumber& peer_version);
+    void onTcpErrorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code);
+    void onTcpMessageReceived(qint64 router_id, quint8 channel_id, const QByteArray& bytes);
 
 private:
     struct Pending
@@ -460,8 +454,9 @@ private:
     bool buildWorkspace(const Router::Workspace& workspace, proto::router::Workspace* out);
     bool buildHost(const Router::Host& host, proto::router::Host* out);
     bool buildGroup(qint64 workspace_id, const Router::Group& group, proto::router::Group* out);
-    void setupChannel();
-    void destroyChannel();
+    void connectWorker();
+    void disconnectWorker();
+    void clearSessionState();
     void emitSend(quint8 channel_id, const google::protobuf::MessageLite& message);
     void readUserKeys(const proto::router::UserKeys& user_keys);
     void readTwoFactorChallenge(const proto::router::TwoFactorChallenge& challenge);
@@ -479,8 +474,7 @@ private:
     void resealGroupKeys(const QByteArray& new_public_key, proto::router::ChangePasswordRequest* request);
 
     RouterConfig config_;
-    ScopedQPointer<TcpChannel> tcp_channel_;
-    QTimer* reconnect_timer_ = nullptr;
+    QPointer<RouterWorker> router_worker_;
     QVersionNumber version_;
     Status status_ = Status::OFFLINE;
 
