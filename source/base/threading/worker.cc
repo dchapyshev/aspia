@@ -18,7 +18,7 @@
 
 #include "base/threading/worker.h"
 
-#include <QTimer>
+#include <QTimerEvent>
 
 #include "base/threading/worker_manager.h"
 
@@ -52,17 +52,19 @@ void Worker::stopSoon()
 }
 
 //--------------------------------------------------------------------------------------------------
+void Worker::timerEvent(QTimerEvent* event)
+{
+    if (event->timerId() == timer_id_)
+        onTimer();
+}
+
+//--------------------------------------------------------------------------------------------------
 void Worker::onThreadStarted()
 {
     onStart();
 
     if (timer_interval_ > Milliseconds::zero())
-    {
-        timer_ = new QTimer(this);
-        timer_->setInterval(timer_interval_);
-        connect(timer_, &QTimer::timeout, this, &Worker::onTimer);
-        timer_->start();
-    }
+        timer_id_ = startTimer(timer_interval_);
 
     std::lock_guard lock(manager_->lock_);
     ++manager_->running_;
@@ -72,8 +74,11 @@ void Worker::onThreadStarted()
 //--------------------------------------------------------------------------------------------------
 void Worker::onThreadFinished()
 {
-    delete timer_;
-    timer_ = nullptr;
+    if (timer_id_ != 0)
+    {
+        killTimer(timer_id_);
+        timer_id_ = 0;
+    }
 
     onStop();
 

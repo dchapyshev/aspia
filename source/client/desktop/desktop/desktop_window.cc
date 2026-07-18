@@ -42,7 +42,6 @@
 #include "client/desktop/desktop/task_manager_window.h"
 #include "client/workers/audio_worker.h"
 #include "client/workers/network_worker.h"
-#include "client/workers/record_worker.h"
 #include "client/workers/video_worker.h"
 #include "common/clipboard.h"
 #include "common/desktop_session_constants.h"
@@ -228,10 +227,6 @@ void DesktopWindow::onRegisterWorkers()
     std::unique_ptr<VideoWorker> video_worker = std::make_unique<VideoWorker>();
     video_worker_ = video_worker.get();
     addWorker(std::move(video_worker));
-
-    std::unique_ptr<RecordWorker> record_worker = std::make_unique<RecordWorker>();
-    record_worker_ = record_worker.get();
-    addWorker(std::move(record_worker));
 
     NetworkWorker* network_worker = networkWorker();
 
@@ -1260,11 +1255,11 @@ void DesktopWindow::onRecordingChanged(bool enable, const QString& file_path)
         video_recording->set_action(proto::user::VideoRecording::ACTION_STOPPED);
     }
 
-    // The record worker owns the output file and re-encodes the rendered frames it receives from the
-    // video worker while recording is on.
+    // The video worker owns the output file and re-encodes decoded frames straight from their YUV
+    // form while recording is on.
     const QString computer_name = sessionState()->computerName();
-    QMetaObject::invokeMethod(record_worker_,
-        [worker = record_worker_, enable, file_path, computer_name]()
+    QMetaObject::invokeMethod(video_worker_,
+        [worker = video_worker_, enable, file_path, computer_name]()
     {
         worker->onSetRecording(enable, file_path, computer_name);
     }, Qt::QueuedConnection);

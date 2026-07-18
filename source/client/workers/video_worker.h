@@ -26,7 +26,9 @@
 #include "base/serialization.h"
 #include "base/codec/yuv_converter.h"
 #include "base/desktop/shared_frame.h"
+#include "base/scoped_qpointer.h"
 #include "base/threading/worker.h"
+#include "proto/desktop_audio.h"
 #include "proto/desktop_channel.h"
 #include "proto/desktop_cursor.h"
 #include "proto/desktop_legacy.h"
@@ -34,7 +36,10 @@
 
 class CursorDecoder;
 class MouseCursor;
+class QTimer;
 class VideoDecoder;
+class WebmFileWriter;
+class WebmVideoEncoder;
 
 class VideoWorker final : public Worker
 {
@@ -61,10 +66,15 @@ public:
     };
 
 public slots:
+    // Incoming channel data.
     void onVideoMessage(const QByteArray& buffer);
     void onLegacyMessage(const QByteArray& buffer);
     void onCursorMessage(const QByteArray& buffer);
+    void onAudioMessage(const QByteArray& buffer);
+
+    // Configuration.
     void onCursorConfig(bool shape_enabled, bool position_enabled);
+    void onSetRecording(bool enable, const QString& file_path, const QString& computer_name);
 
 signals:
     void sig_sendMessage(quint8 channel_id, const QByteArray& buffer);
@@ -82,6 +92,9 @@ protected:
     void onStop() final;
     void onTimer() final;
 
+private slots:
+    void onEncodeTimer();
+
 private:
     void decodePacket(const proto::video::Packet& packet);
     void sendKeyFrameRequest();
@@ -95,6 +108,7 @@ private:
 
     Parser<proto::video::HostToClient,
            proto::cursor::HostToClient,
+           proto::audio::HostToClient,
            proto::legacy::SessionToClient> incoming_message_;
 
     std::unique_ptr<VideoDecoder> decoder_;
@@ -131,6 +145,13 @@ private:
     bool force_reliable_active_ = false;
     int reliable_disable_count_ = 0;
     int reliable_hold_seconds_ = 0;
+
+    // Recording state. The writer owns the output file and muxes the encoded video and audio; the
+    // encoder re-encodes decoded frames to VP8. Both are created only while recording is on and the
+    // timer samples the latest decoded frame at a fixed cadence.
+    std::unique_ptr<WebmFileWriter> writer_;
+    std::unique_ptr<WebmVideoEncoder> encoder_;
+    ScopedQPointer<QTimer> encode_timer_;
 
     Q_DISABLE_COPY_MOVE(VideoWorker)
 };

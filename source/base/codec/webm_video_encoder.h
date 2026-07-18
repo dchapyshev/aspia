@@ -23,6 +23,7 @@
 #include <QSize>
 
 #include "base/codec/scoped_vpx_codec.h"
+#include "base/codec/video_decoder.h"
 
 #define VPX_CODEC_DISABLE_COMPAT 1
 #include <vpx/vpx_encoder.h>
@@ -32,21 +33,20 @@ namespace proto::video {
 class Packet;
 } // namespace proto::video
 
-class Frame;
-
 class WebmVideoEncoder
 {
 public:
     WebmVideoEncoder();
     ~WebmVideoEncoder();
 
-    bool encode(const Frame& frame, proto::video::Packet* packet);
+    bool encode(const VideoDecoder::YuvView& frame, proto::video::Packet* packet);
 
 private:
     void createImage();
     bool createCodec();
 
     QSize last_frame_size_;
+    VideoDecoder::YuvFormat last_frame_format_ = VideoDecoder::YuvFormat::I420;
 
     // VPX image and buffer to hold the actual YUV planes.
     std::unique_ptr<vpx_image_t> image_;

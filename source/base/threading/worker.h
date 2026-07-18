@@ -25,7 +25,7 @@
 
 #include "base/threading/thread.h"
 
-class QTimer;
+class QTimerEvent;
 class WorkerManager;
 
 class Worker : public QObject
@@ -68,6 +68,9 @@ protected:
     // non-zero). The default does nothing.
     virtual void onTimer() { /* Nothing */ }
 
+    // QObject implementation.
+    void timerEvent(QTimerEvent* event) final;
+
 private slots:
     void onThreadStarted();
     void onThreadFinished();
@@ -77,7 +80,7 @@ private:
     Thread thread_;
 
     const Milliseconds timer_interval_;
-    QTimer* timer_ = nullptr;
+    int timer_id_ = 0;
 
     Q_DISABLE_COPY_MOVE(Worker)
 };

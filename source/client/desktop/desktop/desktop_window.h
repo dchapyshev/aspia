@@ -59,7 +59,6 @@ class MouseCursor;
 class QHBoxLayout;
 class QScrollArea;
 class QTimer;
-class RecordWorker;
 
 class DesktopToolBar;
 class DesktopWidget;
@@ -163,7 +162,6 @@ private:
 
     QPointer<AudioWorker> audio_worker_;
     QPointer<VideoWorker> video_worker_;
-    QPointer<RecordWorker> record_worker_;
     ClipboardFileTransfer* clipboard_file_transfer_ = nullptr;
 
     Serializer<proto::input::ClientToHost> outgoing_message_;

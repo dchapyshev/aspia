@@ -18,12 +18,16 @@
 
 #include "client/workers/video_worker.h"
 
+#include <QTimer>
+
 #include <limits>
 
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/codec/cursor_decoder.h"
 #include "base/codec/video_decoder.h"
+#include "base/codec/webm_file_writer.h"
+#include "base/codec/webm_video_encoder.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/threading/worker_manager.h"
 #include "client/workers/network_worker.h"
@@ -98,6 +102,8 @@ void VideoWorker::onLegacyMessage(const QByteArray& buffer)
         readCursorShape(message->cursor_shape());
     if (message->has_cursor_position())
         readCursorPosition(message->cursor_position());
+    if (writer_ && message->has_audio_packet())
+        writer_->addAudioPacket(message->audio_packet());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -118,6 +124,22 @@ void VideoWorker::onCursorMessage(const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
+void VideoWorker::onAudioMessage(const QByteArray& buffer)
+{
+    if (!writer_)
+        return;
+
+    proto::audio::HostToClient* message = incoming_message_.parse<proto::audio::HostToClient>(buffer);
+    if (!message)
+    {
+        LOG(ERROR) << "Unable to parse audio message";
+        return;
+    }
+
+    writer_->addAudioPacket(message->packet());
+}
+
+//--------------------------------------------------------------------------------------------------
 void VideoWorker::onCursorConfig(bool shape_enabled, bool position_enabled)
 {
     cursor_shape_enabled_ = shape_enabled;
@@ -127,6 +149,25 @@ void VideoWorker::onCursorConfig(bool shape_enabled, bool position_enabled)
     {
         LOG(INFO) << "Cursor shape disabled";
         cursor_decoder_.reset();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void VideoWorker::onSetRecording(bool enable, const QString& file_path, const QString& computer_name)
+{
+    if (enable)
+    {
+        LOG(INFO) << "Recording enabled:" << file_path;
+        writer_ = std::make_unique<WebmFileWriter>(file_path, computer_name);
+        encoder_ = std::make_unique<WebmVideoEncoder>();
+        encode_timer_->start();
+    }
+    else
+    {
+        LOG(INFO) << "Recording disabled";
+        encode_timer_->stop();
+        encoder_.reset();
+        writer_.reset();
     }
 }
 
@@ -143,8 +184,11 @@ void VideoWorker::onStart()
                 Qt::QueuedConnection);
         connect(network_worker, &NetworkWorker::sig_channel_4, this, &VideoWorker::onCursorMessage,
                 Qt::QueuedConnection);
-        // Legacy channel (CHANNEL_ID_LEGACY == 0), where old hosts multiplex video and cursor.
+        // Legacy channel (CHANNEL_ID_LEGACY == 0), where old hosts multiplex video, cursor and audio.
         connect(network_worker, &NetworkWorker::sig_channel_0, this, &VideoWorker::onLegacyMessage,
+                Qt::QueuedConnection);
+        // Audio channel (CHANNEL_ID_AUDIO == 7); parsed only while recording, to mux into the file.
+        connect(network_worker, &NetworkWorker::sig_channel_7, this, &VideoWorker::onAudioMessage,
                 Qt::QueuedConnection);
         connect(this, &VideoWorker::sig_sendMessage, network_worker, &NetworkWorker::onSendMessage,
                 Qt::QueuedConnection);
@@ -153,6 +197,10 @@ void VideoWorker::onStart()
     {
         LOG(ERROR) << "Network worker not found";
     }
+
+    encode_timer_ = new QTimer(this);
+    encode_timer_->setInterval(Milliseconds(60));
+    connect(encode_timer_, &QTimer::timeout, this, &VideoWorker::onEncodeTimer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -160,6 +208,11 @@ void VideoWorker::onStop()
 {
     LOG(INFO) << "Video worker stopped";
 
+    encode_timer_->stop();
+    encode_timer_.reset();
+
+    encoder_.reset();
+    writer_.reset();
     decoder_.reset();
     cursor_decoder_.reset();
 }
@@ -197,6 +250,19 @@ void VideoWorker::onTimer()
     fps_frame_count_ = 0;
 
     emit sig_metrics(metrics_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void VideoWorker::onEncodeTimer()
+{
+    // Re-encode the latest decoded frame directly from its YUV form. The decoder holds the frame
+    // until the next decode(); both run on this thread, so the view is valid here without a copy.
+    if (!writer_ || !encoder_ || !decoder_ || !decoder_->frame().isValid())
+        return;
+
+    proto::video::Packet packet;
+    if (encoder_->encode(decoder_->frame(), &packet))
+        writer_->addVideoPacket(packet);
 }
 
 //--------------------------------------------------------------------------------------------------

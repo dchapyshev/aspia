@@ -21,7 +21,6 @@
 #include <QThread>
 
 #include "base/logging.h"
-#include "base/desktop/frame.h"
 #include "proto/desktop_video.h"
 
 #include <libyuv/convert.h>
@@ -85,18 +84,23 @@ WebmVideoEncoder::~WebmVideoEncoder()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool WebmVideoEncoder::encode(const Frame& frame, proto::video::Packet* packet)
+bool WebmVideoEncoder::encode(const VideoDecoder::YuvView& frame, proto::video::Packet* packet)
 {
     DCHECK(packet);
 
     packet->set_encoding(proto::video::ENCODING_VP8);
 
-    if (last_frame_size_ != frame.size())
+    const bool size_changed = (last_frame_size_ != frame.size());
+    if (size_changed || last_frame_format_ != frame.format())
     {
-        LOG(INFO) << "Frame size changed from" << last_frame_size_ << "to" << frame.size();
         last_frame_size_ = frame.size();
-
+        last_frame_format_ = frame.format();
         createImage();
+    }
+
+    if (size_changed)
+    {
+        LOG(INFO) << "Frame size changed to" << frame.size();
 
         if (!createCodec())
         {
@@ -109,19 +113,26 @@ bool WebmVideoEncoder::encode(const Frame& frame, proto::video::Packet* packet)
         video_rect->set_height(last_frame_size_.height());
     }
 
-    const int y_stride = image_->stride[0];
-    const int uv_stride = image_->stride[1];
-    quint8* y_data = image_->planes[0];
-    quint8* u_data = image_->planes[1];
-    quint8* v_data = image_->planes[2];
-
-    libyuv::ARGBToI420(frame.frameData(),
-                       frame.stride(),
-                       y_data, y_stride,
-                       u_data, uv_stride,
-                       v_data, uv_stride,
-                       last_frame_size_.width(),
-                       last_frame_size_.height());
+    if (last_frame_format_ == VideoDecoder::YuvFormat::NV12)
+    {
+        // VP8 needs planar I420, so split the interleaved chroma into the owned image buffer.
+        libyuv::NV12ToI420(frame.planeData(0), frame.planeStride(0),
+                           frame.planeData(1), frame.planeStride(1),
+                           image_->planes[0], image_->stride[0],
+                           image_->planes[1], image_->stride[1],
+                           image_->planes[2], image_->stride[2],
+                           last_frame_size_.width(),
+                           last_frame_size_.height());
+    }
+    else
+    {
+        image_->planes[0] = const_cast<quint8*>(frame.planeData(0));
+        image_->planes[1] = const_cast<quint8*>(frame.planeData(1));
+        image_->planes[2] = const_cast<quint8*>(frame.planeData(2));
+        image_->stride[0] = frame.planeStride(0);
+        image_->stride[1] = frame.planeStride(1);
+        image_->stride[2] = frame.planeStride(2);
+    }
 
     // Do the actual encoding.
     vpx_codec_err_t ret = vpx_codec_encode(
@@ -169,6 +180,11 @@ void WebmVideoEncoder::createImage()
     image_->fmt = VPX_IMG_FMT_YV12;
     image_->x_chroma_shift = 1;
     image_->y_chroma_shift = 1;
+
+    // An I420 frame is fed to the encoder straight from the decoder's planes (set per encode), so no
+    // buffer is needed here. NV12 is converted into this owned, macroblock-padded I420 buffer.
+    if (last_frame_format_ != VideoDecoder::YuvFormat::NV12)
+        return;
 
     // libyuv's fast-path requires 16-byte aligned pointers and strides, so pad the Y, U and V
     // planes' strides to multiples of 16 bytes.
