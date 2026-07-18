@@ -39,6 +39,7 @@
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
+#include "base/win/windows_version.h"
 #endif // defined(Q_OS_WINDOWS)
 
 namespace {
@@ -267,9 +268,9 @@ void NotifierWindow::onClientListChanged(const UserIpcWorker::ClientList& client
 
             QToolButton* stop_button =
                 createSessionButton(ui->tree, ":/img/stop.svg", tr("Disconnect"));
-#if defined(Q_OS_MACOS)
+#if defined(Q_OS_MACOS) || defined(Q_OS_WINDOWS)
             stop_button->setStyleSheet(buttonStyleSheet());
-#endif // defined(Q_OS_MACOS)
+#endif // defined(Q_OS_MACOS) || defined(Q_OS_WINDOWS)
             quint32 tree_item_id = tree_item->clientId();
 
             connect(stop_button, &QToolButton::clicked, this, [this, tree_item_id]()
@@ -543,7 +544,7 @@ void NotifierWindow::onThemeChanged()
             .arg(tr("Aspia Host")));
     ui->label_title->setStyleSheet("padding: 3px;");
 
-#if defined(Q_OS_MACOS)
+#if defined(Q_OS_MACOS) || defined(Q_OS_WINDOWS)
     const QString button_style = buttonStyleSheet();
     ui->button_show->setStyleSheet(button_style);
     ui->button_hide->setStyleSheet(button_style);
@@ -558,7 +559,7 @@ void NotifierWindow::onThemeChanged()
         if (QWidget* button = ui->tree->itemWidget(ui->tree->topLevelItem(i), 1))
             button->setStyleSheet(button_style);
     }
-#endif // defined(Q_OS_MACOS)
+#endif // defined(Q_OS_MACOS) || defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -615,7 +616,13 @@ void NotifierWindow::updateTreeColumns()
 //--------------------------------------------------------------------------------------------------
 QString NotifierWindow::buttonStyleSheet() const
 {
-#if defined(Q_OS_MACOS)
+#if defined(Q_OS_MACOS) || defined(Q_OS_WINDOWS)
+#if defined(Q_OS_WINDOWS)
+    // Windows 11 draws rounded buttons natively; older versions need the custom style.
+    if (windowsVersion() >= VERSION_WIN11)
+        return QString();
+#endif // defined(Q_OS_WINDOWS)
+
     const QPalette palette = GuiApplication::palette();
     const QString background = palette.color(QPalette::Button).name(QColor::HexRgb);
     const QString border = palette.color(QPalette::Mid).name(QColor::HexRgb);
@@ -635,5 +642,5 @@ QString NotifierWindow::buttonStyleSheet() const
         .arg(border, background, hover, pressed, checked);
 #else
     return QString();
-#endif // defined(Q_OS_MACOS)
+#endif // defined(Q_OS_MACOS) || defined(Q_OS_WINDOWS)
 }
