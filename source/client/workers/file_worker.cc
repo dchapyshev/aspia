@@ -68,7 +68,7 @@ void FileWorker::onRemoveRequest(FileRemover* remover)
     DCHECK(!remover_);
     remover_ = remover;
 
-    connect(remover_, &FileRemover::sig_doTask, this, &FileWorker::onTask);
+    connect(remover_, &FileRemover::sig_doTask, this, &FileWorker::onTask, Qt::QueuedConnection);
     connect(remover_, &FileRemover::sig_finished, remover_, &FileRemover::deleteLater);
 
     QMetaObject::invokeMethod(remover_, &FileRemover::start, Qt::QueuedConnection);
@@ -80,7 +80,7 @@ void FileWorker::onTransferRequest(FileTransfer* transfer)
     DCHECK(!transfer_);
     transfer_ = transfer;
 
-    connect(transfer_, &FileTransfer::sig_doTask, this, &FileWorker::onTask);
+    connect(transfer_, &FileTransfer::sig_doTask, this, &FileWorker::onTask, Qt::QueuedConnection);
     connect(transfer_, &FileTransfer::sig_finished, transfer_, &FileTransfer::deleteLater);
 
     QMetaObject::invokeMethod(transfer_, &FileTransfer::start, Qt::QueuedConnection);

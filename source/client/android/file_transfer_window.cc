@@ -22,7 +22,6 @@
 #include <QResizeEvent>
 #include <QVBoxLayout>
 
-#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/threading/worker_manager.h"
 #include "client/database.h"
@@ -417,7 +416,7 @@ void FileTransferWindow::sendItems(FilePanelWidget* sender, const QList<FileTran
         FileTransfer::Type::UPLOADER : FileTransfer::Type::DOWNLOADER;
 
     FileTransfer* transfer = new FileTransfer(type, sender->currentPath(), target_path, items);
-    transfer->moveToThread(GuiApplication::ioThread());
+    transfer->moveToThread(file_worker_->thread());
 
     FileProgressSheet* progress = new FileProgressSheet(tr("File Transfer"), this);
     progress->setAttribute(Qt::WA_DeleteOnClose);
@@ -460,7 +459,7 @@ void FileTransferWindow::sendItems(FilePanelWidget* sender, const QList<FileTran
 void FileTransferWindow::removeItems(FilePanelWidget* sender, const FileRemover::TaskList& items)
 {
     FileRemover* remover = new FileRemover(sender->target(), items);
-    remover->moveToThread(GuiApplication::ioThread());
+    remover->moveToThread(file_worker_->thread());
 
     FileProgressSheet* progress = new FileProgressSheet(tr("Deleting"), this);
     progress->setAttribute(Qt::WA_DeleteOnClose);

@@ -20,7 +20,6 @@
 
 #include <QIODevice>
 
-#include "base/gui_application.h"
 #include "base/logging.h"
 #include "client/file_error_code.h"
 #include "client/desktop/file_transfer/address_bar_model.h"
@@ -268,7 +267,7 @@ void FileTransferWindow::removeItems(FilePanel* sender, const FileRemover::TaskL
     setFilePanelsEnabled(false);
 
     FileRemover* remover = new FileRemover(target, items);
-    remover->moveToThread(GuiApplication::ioThread());
+    remover->moveToThread(file_worker_->thread());
 
     connect(remover, &FileRemover::sig_started, ui->remove_widget, &FileRemoveWidget::start,
             Qt::QueuedConnection);
@@ -378,7 +377,7 @@ void FileTransferWindow::transferItems(
     setFilePanelsEnabled(false);
 
     FileTransfer* transfer = new FileTransfer(type, source_path, target_path, items);
-    transfer->moveToThread(GuiApplication::ioThread());
+    transfer->moveToThread(file_worker_->thread());
 
     connect(transfer, &FileTransfer::sig_started, ui->transfer_widget, &FileTransferWidget::start,
             Qt::QueuedConnection);
