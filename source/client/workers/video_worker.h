@@ -23,10 +23,6 @@
 #include <QRect>
 #include <QSize>
 
-#include <chrono>
-#include <limits>
-#include <memory>
-
 #include "base/serialization.h"
 #include "base/codec/yuv_converter.h"
 #include "base/desktop/shared_frame.h"
@@ -37,7 +33,6 @@
 
 class CursorDecoder;
 class MouseCursor;
-class QTimer;
 class VideoDecoder;
 
 class VideoWorker final : public Worker
@@ -84,10 +79,7 @@ protected:
     // Worker implementation.
     void onStart() final;
     void onStop() final;
-
-private slots:
-    // Fires once a second: winds down the force-reliable window and emits the statistics snapshot.
-    void onMetricsTimer();
+    void onTimer() final;
 
 private:
     void decodePacket(const proto::video::Packet& packet);
@@ -114,27 +106,15 @@ private:
     std::unique_ptr<CursorDecoder> cursor_decoder_;
     bool cursor_shape_enabled_ = false;
     bool cursor_position_enabled_ = false;
-    int cursor_shape_count_ = 0;
-    int cursor_pos_count_ = 0;
-    int cursor_cached_ = 0;
-    int cursor_taken_from_cache_ = 0;
 
     YuvConverter yuv_converter_;
     QSize screen_size_;
     QList<QRect> dirty_rects_;
-    quint32 capturer_type_ = 0;
-    quint32 encoder_type_ = 0;
-    bool hardware_decoder_ = false;
 
     // Statistics, emitted once a second through sig_metrics.
-    QTimer* metrics_timer_ = nullptr;
-    qint64 packet_count_ = 0;
-    size_t min_packet_ = std::numeric_limits<size_t>::max();
-    size_t max_packet_ = 0;
-    size_t avg_packet_ = 0;
-    int fps_ = 0;
+    Metrics metrics_;
     qint64 fps_frame_count_ = 0;
-    std::chrono::steady_clock::time_point fps_time_;
+    TimePoint fps_time_;
 
     // Set once a hardware H264 decoder reports a permanent failure; sticks for the rest of the
     // session so the software backend is picked on every subsequent VideoDecoder::create() call.

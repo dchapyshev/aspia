@@ -19,16 +19,12 @@
 #ifndef CLIENT_WORKERS_AUDIO_WORKER_H
 #define CLIENT_WORKERS_AUDIO_WORKER_H
 
-#include <limits>
-#include <memory>
-
 #include "base/serialization.h"
 #include "base/threading/worker.h"
 #include "proto/desktop_audio.h"
 
 class AudioDecoder;
 class AudioPlayer;
-class QTimer;
 
 class AudioWorker final : public Worker
 {
@@ -58,9 +54,7 @@ protected:
     // Worker implementation.
     void onStart() final;
     void onStop() final;
-
-private slots:
-    void onMetricsTimer();
+    void onTimer() final;
 
 private:
     void decodePacket(const proto::audio::Packet& packet);
@@ -71,11 +65,7 @@ private:
     std::unique_ptr<AudioPlayer> player_;
     proto::audio::Encoding encoding_ = proto::audio::ENCODING_UNKNOWN;
 
-    QTimer* metrics_timer_ = nullptr;
-    qint64 packet_count_ = 0;
-    size_t min_packet_ = std::numeric_limits<size_t>::max();
-    size_t max_packet_ = 0;
-    size_t avg_packet_ = 0;
+    Metrics metrics_;
 
     Q_DISABLE_COPY_MOVE(AudioWorker)
 };

@@ -18,8 +18,6 @@
 
 #include "client/workers/audio_worker.h"
 
-#include <QTimer>
-
 #include "base/logging.h"
 #include "base/codec/audio_decoder.h"
 #include "base/threading/worker_manager.h"
@@ -39,6 +37,7 @@ size_t calculateAvgSize(size_t last_avg_size, size_t bytes)
 
 //--------------------------------------------------------------------------------------------------
 AudioWorker::AudioWorker()
+    : Worker(Thread::AsioDispatcher, Seconds(1))
 {
     LOG(INFO) << "Ctor";
 }
@@ -89,11 +88,6 @@ void AudioWorker::onStart()
     player_ = AudioPlayer::create();
     if (!player_)
         LOG(ERROR) << "Unable to create audio player";
-
-    metrics_timer_ = new QTimer(this);
-    metrics_timer_->setInterval(std::chrono::seconds(1));
-    connect(metrics_timer_, &QTimer::timeout, this, &AudioWorker::onMetricsTimer);
-    metrics_timer_->start();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -101,34 +95,27 @@ void AudioWorker::onStop()
 {
     LOG(INFO) << "Audio worker stopped";
 
-    delete metrics_timer_;
-    metrics_timer_ = nullptr;
-
     player_.reset();
     decoder_.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
-void AudioWorker::onMetricsTimer()
+void AudioWorker::onTimer()
 {
-    Metrics metrics;
-    metrics.packet_count = packet_count_;
-    if (min_packet_ != std::numeric_limits<size_t>::max())
-        metrics.min_packet = min_packet_;
-    metrics.max_packet = max_packet_;
-    metrics.avg_packet = avg_packet_;
-
-    emit sig_metrics(metrics);
+    emit sig_metrics(metrics_);
 }
 
 //--------------------------------------------------------------------------------------------------
 void AudioWorker::decodePacket(const proto::audio::Packet& packet)
 {
     const size_t packet_size = packet.ByteSizeLong();
-    ++packet_count_;
-    avg_packet_ = calculateAvgSize(avg_packet_, packet_size);
-    min_packet_ = std::min(min_packet_, packet_size);
-    max_packet_ = std::max(max_packet_, packet_size);
+
+    // Before the first packet min stays 0; from the first packet on it tracks the real minimum.
+    metrics_.min_packet = (metrics_.packet_count == 0) ?
+        packet_size : std::min(metrics_.min_packet, packet_size);
+    metrics_.max_packet = std::max(metrics_.max_packet, packet_size);
+    metrics_.avg_packet = calculateAvgSize(metrics_.avg_packet, packet_size);
+    ++metrics_.packet_count;
 
     if (!player_)
     {

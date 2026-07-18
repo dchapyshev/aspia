@@ -18,8 +18,6 @@
 
 #include "client/workers/network_worker.h"
 
-#include <QTimer>
-
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/version_constants.h"
@@ -50,7 +48,8 @@ static const size_t kMaxUdpAttempts = 16;
 
 //--------------------------------------------------------------------------------------------------
 NetworkWorker::NetworkWorker()
-    : udp_methods_(Settings().udpMethods())
+    : Worker(Thread::AsioDispatcher, Milliseconds(kReceiveRateIntervalMs)),
+      udp_methods_(Settings().udpMethods())
 {
     LOG(INFO) << "Ctor";
 }
@@ -96,9 +95,10 @@ void NetworkWorker::onSessionReady()
 
     // Report the actual arrival rate of session traffic to the host; it drives the host's bandwidth
     // estimation under real load (probes only run while the link is idle).
-    receive_rate_last_total_ = totalTcpRx() + totalUdpRx();
+    receive_rate_last_total_ = (tcp_channel_ ? tcp_channel_->totalRx() : 0) +
+                               (udp_channel_ ? udp_channel_->totalRx() : 0);
     receive_rate_interval_.start();
-    receive_rate_timer_->start(kReceiveRateIntervalMs);
+    session_ready_ = true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -129,18 +129,12 @@ void NetworkWorker::onSendMessage(quint8 channel_id, const QByteArray& buffer)
 void NetworkWorker::onStart()
 {
     LOG(INFO) << "Network worker started";
-
-    receive_rate_timer_ = new QTimer(this);
-    connect(receive_rate_timer_, &QTimer::timeout, this, &NetworkWorker::onReceiveRateReport);
 }
 
 //--------------------------------------------------------------------------------------------------
 void NetworkWorker::onStop()
 {
     LOG(INFO) << "Network worker stopped";
-
-    delete receive_rate_timer_;
-    receive_rate_timer_ = nullptr;
 
     clearAttempts();
 
@@ -165,6 +159,56 @@ void NetworkWorker::onStop()
     }
 
     session_state_.reset();
+}
+
+//--------------------------------------------------------------------------------------------------
+void NetworkWorker::onTimer()
+{
+    if (!session_ready_)
+        return;
+
+    Metrics metrics;
+
+    if (tcp_channel_)
+    {
+        metrics.total_tcp_rx = tcp_channel_->totalRx();
+        metrics.total_tcp_tx = tcp_channel_->totalTx();
+        metrics.speed_tcp_rx = tcp_channel_->speedRx();
+        metrics.speed_tcp_tx = tcp_channel_->speedTx();
+    }
+
+    if (udp_channel_)
+    {
+        metrics.total_udp_rx = udp_channel_->totalRx();
+        metrics.total_udp_tx = udp_channel_->totalTx();
+        metrics.speed_udp_rx = udp_channel_->speedRx();
+        metrics.speed_udp_tx = udp_channel_->speedTx();
+        metrics.udp_method = udp_channel_->method();
+    }
+    else
+    {
+        metrics.udp_method = UdpMethod::DISABLED;
+    }
+
+    emit sig_metrics(metrics);
+
+    const qint64 total = (tcp_channel_ ? tcp_channel_->totalRx() : 0) +
+                         (udp_channel_ ? udp_channel_->totalRx() : 0);
+    const qint64 bytes = total - receive_rate_last_total_;
+    const qint64 interval_ms = receive_rate_interval_.restart();
+
+    receive_rate_last_total_ = total;
+
+    // An idle interval carries no information about the path capacity.
+    if (bytes <= 0 || interval_ms <= 0 || !tcp_channel_)
+        return;
+
+    proto::peer::ClientToHost message;
+    proto::peer::ReceiveRate* rate = message.mutable_receive_rate();
+    rate->set_bytes(static_cast<quint64>(bytes));
+    rate->set_interval_ms(static_cast<quint32>(interval_ms));
+
+    tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -339,53 +383,6 @@ void NetworkWorker::onAttemptError(quint32 request_id)
 {
     LOG(INFO) << "UDP attempt" << request_id << "failed";
     eraseAttempt(request_id);
-}
-
-//--------------------------------------------------------------------------------------------------
-void NetworkWorker::onReceiveRateReport()
-{
-    // The timer also drives the periodic metrics snapshot for the session.
-    Metrics metrics;
-
-    if (tcp_channel_)
-    {
-        metrics.total_tcp_rx = tcp_channel_->totalRx();
-        metrics.total_tcp_tx = tcp_channel_->totalTx();
-        metrics.speed_tcp_rx = tcp_channel_->speedRx();
-        metrics.speed_tcp_tx = tcp_channel_->speedTx();
-    }
-
-    if (udp_channel_)
-    {
-        metrics.total_udp_rx = udp_channel_->totalRx();
-        metrics.total_udp_tx = udp_channel_->totalTx();
-        metrics.speed_udp_rx = udp_channel_->speedRx();
-        metrics.speed_udp_tx = udp_channel_->speedTx();
-        metrics.udp_method = udp_channel_->method();
-    }
-    else
-    {
-        metrics.udp_method = UdpMethod::DISABLED;
-    }
-
-    emit sig_metrics(metrics);
-
-    const qint64 total = totalTcpRx() + totalUdpRx();
-    const qint64 bytes = total - receive_rate_last_total_;
-    const qint64 interval_ms = receive_rate_interval_.restart();
-
-    receive_rate_last_total_ = total;
-
-    // An idle interval carries no information about the path capacity.
-    if (bytes <= 0 || interval_ms <= 0 || !tcp_channel_)
-        return;
-
-    proto::peer::ClientToHost message;
-    proto::peer::ReceiveRate* rate = message.mutable_receive_rate();
-    rate->set_bytes(static_cast<quint64>(bytes));
-    rate->set_interval_ms(static_cast<quint32>(interval_ms));
-
-    tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -695,20 +692,4 @@ void NetworkWorker::selectAttempt(UdpAttempt* attempt)
     connect(udp_channel_, &UdpChannel::sig_errorOccurred, this, &NetworkWorker::onUdpErrorOccurred);
 
     udp_ready_ = true;
-}
-
-//--------------------------------------------------------------------------------------------------
-qint64 NetworkWorker::totalTcpRx() const
-{
-    if (!tcp_channel_)
-        return 0;
-    return tcp_channel_->totalRx();
-}
-
-//--------------------------------------------------------------------------------------------------
-qint64 NetworkWorker::totalUdpRx() const
-{
-    if (!udp_channel_)
-        return 0;
-    return udp_channel_->totalRx();
 }

@@ -31,7 +31,6 @@
 #include "base/threading/worker.h"
 #include "client/session_state.h"
 
-class QTimer;
 class RelayPeer;
 class UdpAttempt;
 class UdpChannel;
@@ -109,6 +108,7 @@ protected:
     // Worker implementation.
     void onStart() final;
     void onStop() final;
+    void onTimer() final;
 
 private slots:
     void onTcpConnected();
@@ -120,7 +120,6 @@ private slots:
     void onRelayConnectionError(std::optional<TcpChannel::ErrorCode> error_code);
     void onAttemptConnected(quint32 request_id);
     void onAttemptError(quint32 request_id);
-    void onReceiveRateReport();
 
 private:
     void startConnection();
@@ -135,8 +134,6 @@ private:
     void eraseAttempt(quint32 request_id);
     void clearAttempts();
     void selectAttempt(UdpAttempt* attempt);
-    qint64 totalTcpRx() const;
-    qint64 totalUdpRx() const;
 
     bool is_legacy_mode_ = false;
     ScopedQPointer<TcpChannel> tcp_channel_;
@@ -160,8 +157,10 @@ private:
     };
     ProbeTrain probe_train_;
 
-    // Receive-rate reporting (see onReceiveRateReport).
-    QTimer* receive_rate_timer_ = nullptr;
+    // Set once the session is ready; gates the periodic work in onTimer().
+    bool session_ready_ = false;
+
+    // Receive-rate reporting (see onTimer).
     QElapsedTimer receive_rate_interval_;
     qint64 receive_rate_last_total_ = 0;
 

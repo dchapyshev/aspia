@@ -18,7 +18,7 @@
 
 #include "client/workers/video_worker.h"
 
-#include <QTimer>
+#include <limits>
 
 #include "base/logging.h"
 #include "base/serialization.h"
@@ -32,7 +32,7 @@
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-int calculateFps(int last_fps, const std::chrono::milliseconds& duration, qint64 count)
+int calculateFps(int last_fps, const Worker::Milliseconds& duration, qint64 count)
 {
     static const double kAlpha = 0.1;
     const qint64 ms = duration.count();
@@ -45,15 +45,14 @@ int calculateFps(int last_fps, const std::chrono::milliseconds& duration, qint64
 size_t calculateAvgSize(size_t last_avg_size, size_t bytes)
 {
     static const double kAlpha = 0.1;
-    return static_cast<size_t>(
-        (kAlpha * static_cast<double>(bytes)) +
-        ((1.0 - kAlpha) * static_cast<double>(last_avg_size)));
+    return size_t((kAlpha * double(bytes)) + ((1.0 - kAlpha) * double(last_avg_size)));
 }
 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 VideoWorker::VideoWorker()
+    : Worker(Thread::AsioDispatcher, Seconds(1))
 {
     LOG(INFO) << "Ctor";
 }
@@ -139,11 +138,6 @@ void VideoWorker::onStart()
     {
         LOG(ERROR) << "Network worker not found";
     }
-
-    metrics_timer_ = new QTimer(this);
-    metrics_timer_->setInterval(std::chrono::seconds(1));
-    connect(metrics_timer_, &QTimer::timeout, this, &VideoWorker::onMetricsTimer);
-    metrics_timer_->start();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -151,15 +145,12 @@ void VideoWorker::onStop()
 {
     LOG(INFO) << "Video worker stopped";
 
-    delete metrics_timer_;
-    metrics_timer_ = nullptr;
-
     decoder_.reset();
     cursor_decoder_.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
-void VideoWorker::onMetricsTimer()
+void VideoWorker::onTimer()
 {
     // The 1-second timer also winds down the force-reliable hold window; once it elapses, back the
     // transport off reliable mode (at most twice per session).
@@ -175,38 +166,22 @@ void VideoWorker::onMetricsTimer()
         }
     }
 
-    const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+    const TimePoint now = Clock::now();
 
-    if (fps_time_ != std::chrono::steady_clock::time_point())
+    if (fps_time_ != TimePoint())
     {
-        const std::chrono::milliseconds duration =
-            std::chrono::duration_cast<std::chrono::milliseconds>(now - fps_time_);
-        fps_ = calculateFps(fps_, duration, fps_frame_count_);
+        const Milliseconds duration = std::chrono::duration_cast<Milliseconds>(now - fps_time_);
+        metrics_.fps = calculateFps(metrics_.fps, duration, fps_frame_count_);
     }
     else
     {
-        fps_ = 0;
+        metrics_.fps = 0;
     }
 
     fps_time_ = now;
     fps_frame_count_ = 0;
 
-    Metrics metrics;
-    metrics.packet_count = packet_count_;
-    if (min_packet_ != std::numeric_limits<size_t>::max())
-        metrics.min_packet = min_packet_;
-    metrics.max_packet = max_packet_;
-    metrics.avg_packet = avg_packet_;
-    metrics.fps = fps_;
-    metrics.capturer_type = capturer_type_;
-    metrics.encoder_type = encoder_type_;
-    metrics.hardware_decoder = hardware_decoder_;
-    metrics.cursor_shape_count = cursor_shape_count_;
-    metrics.cursor_pos_count = cursor_pos_count_;
-    metrics.cursor_cached = cursor_cached_;
-    metrics.cursor_taken_from_cache = cursor_taken_from_cache_;
-
-    emit sig_metrics(metrics);
+    emit sig_metrics(metrics_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -265,11 +240,11 @@ void VideoWorker::decodePacket(const proto::video::Packet& packet)
             }
         }
 
-        capturer_type_ = static_cast<quint32>(format.capturer_type());
+        metrics_.capturer_type = static_cast<quint32>(format.capturer_type());
         screen_size_ = screen_size;
 
-        encoder_type_ = static_cast<quint32>(encoding_);
-        hardware_decoder_ = decoder_->isHardwareAccelerated();
+        metrics_.encoder_type = static_cast<quint32>(encoding_);
+        metrics_.hardware_decoder = decoder_->isHardwareAccelerated();
     }
 
     if (packet.flags() & proto::video::PACKET_FLAG_IS_KEY_FRAME)
@@ -297,8 +272,8 @@ void VideoWorker::decodePacket(const proto::video::Packet& packet)
             decoder_ = VideoDecoder::create(encoding_, false);
             key_frame_received_ = false;
 
-            encoder_type_ = static_cast<quint32>(encoding_);
-            hardware_decoder_ = decoder_ && decoder_->isHardwareAccelerated();
+            metrics_.encoder_type = static_cast<quint32>(encoding_);
+            metrics_.hardware_decoder = decoder_ && decoder_->isHardwareAccelerated();
             sendKeyFrameRequest();
         }
         else if (h264_sw_enabled_)
@@ -344,13 +319,16 @@ void VideoWorker::decodePacket(const proto::video::Packet& packet)
     if (convert_result == YuvConverter::Result::NEW_FRAME)
         emit sig_frameChanged(screen_size_, yuv_converter_.frame());
 
-    ++packet_count_;
     ++fps_frame_count_;
 
     const size_t packet_size = packet.ByteSizeLong();
-    avg_packet_ = calculateAvgSize(avg_packet_, packet_size);
-    min_packet_ = std::min(min_packet_, packet_size);
-    max_packet_ = std::max(max_packet_, packet_size);
+
+    // Before the first packet min stays 0; from the first packet on it tracks the real minimum.
+    metrics_.min_packet = (metrics_.packet_count == 0) ?
+        packet_size : std::min(metrics_.min_packet, packet_size);
+    metrics_.max_packet = std::max(metrics_.max_packet, packet_size);
+    metrics_.avg_packet = calculateAvgSize(metrics_.avg_packet, packet_size);
+    ++metrics_.packet_count;
 
     emit sig_drawFrame(dirty_rects_);
 }
@@ -402,7 +380,7 @@ void VideoWorker::readCursorShape(const proto::cursor::Shape& shape)
         return;
     }
 
-    ++cursor_shape_count_;
+    ++metrics_.cursor_shape_count;
 
     if (!cursor_decoder_)
     {
@@ -414,8 +392,8 @@ void VideoWorker::readCursorShape(const proto::cursor::Shape& shape)
     if (mouse_cursor)
         emit sig_mouseCursorChanged(std::move(mouse_cursor));
 
-    cursor_cached_ = cursor_decoder_->cachedCursors();
-    cursor_taken_from_cache_ = cursor_decoder_->takenCursorsFromCache();
+    metrics_.cursor_cached = cursor_decoder_->cachedCursors();
+    metrics_.cursor_taken_from_cache = cursor_decoder_->takenCursorsFromCache();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -424,6 +402,6 @@ void VideoWorker::readCursorPosition(const proto::cursor::Position& position)
     if (!cursor_position_enabled_)
         return;
 
-    ++cursor_pos_count_;
+    ++metrics_.cursor_pos_count;
     emit sig_cursorPositionChanged(position);
 }
