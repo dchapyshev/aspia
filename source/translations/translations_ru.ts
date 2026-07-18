@@ -396,9 +396,9 @@ Routers added: %4</source>
         <location filename="../client/android/main_window.cc" line="140"/>
         <location filename="../client/android/main_window.cc" line="226"/>
         <location filename="../client/android/main_window.cc" line="324"/>
-        <location filename="../host/android/main_window.cc" line="79"/>
-        <location filename="../host/android/main_window.cc" line="95"/>
-        <location filename="../host/android/main_window.cc" line="456"/>
+        <location filename="../host/android/main_window.cc" line="82"/>
+        <location filename="../host/android/main_window.cc" line="98"/>
+        <location filename="../host/android/main_window.cc" line="461"/>
         <source>Settings</source>
         <translation>Параметры</translation>
     </message>
@@ -407,38 +407,38 @@ Routers added: %4</source>
         <translation type="vanished">Домой</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="78"/>
-        <location filename="../host/android/main_window.cc" line="94"/>
-        <location filename="../host/android/main_window.cc" line="454"/>
+        <location filename="../host/android/main_window.cc" line="81"/>
+        <location filename="../host/android/main_window.cc" line="97"/>
+        <location filename="../host/android/main_window.cc" line="459"/>
         <source>Connection</source>
         <translation>Подключение</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="328"/>
-        <location filename="../host/android/main_window.cc" line="363"/>
-        <location filename="../host/android/main_window.cc" line="395"/>
+        <location filename="../host/android/main_window.cc" line="333"/>
+        <location filename="../host/android/main_window.cc" line="368"/>
+        <location filename="../host/android/main_window.cc" line="400"/>
         <source>Permissions</source>
         <translation>Разрешения</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="329"/>
+        <location filename="../host/android/main_window.cc" line="334"/>
         <source>Enable the accessibility service to allow remote keyboard and mouse control.</source>
         <translation>Включите службу специальных возможностей, чтобы разрешить удаленное управление клавиатурой и мышью.</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="330"/>
-        <location filename="../host/android/main_window.cc" line="365"/>
-        <location filename="../host/android/main_window.cc" line="398"/>
+        <location filename="../host/android/main_window.cc" line="335"/>
+        <location filename="../host/android/main_window.cc" line="370"/>
+        <location filename="../host/android/main_window.cc" line="403"/>
         <source>Open</source>
         <translation>Открыть</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="364"/>
+        <location filename="../host/android/main_window.cc" line="369"/>
         <source>Allow display over other apps to show the on-screen action button during a session.</source>
         <translation>Разрешите отображение поверх других приложений, чтобы показывать экранную кнопку действий во время сеанса.</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="396"/>
+        <location filename="../host/android/main_window.cc" line="401"/>
         <source>Allow access to all files so the connected user can browse and transfer files on this device.</source>
         <translation>Разрешите доступ ко всем файлам, чтобы подключенный пользователь мог просматривать и передавать файлы на этом устройстве.</translation>
     </message>
@@ -743,115 +743,112 @@ Routers added: %4</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="100"/>
+        <location filename="../client/android/chat_window.cc" line="102"/>
         <source>User %1 has joined the chat</source>
         <translation>Пользователь %1 присоединился к чату</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="103"/>
+        <location filename="../client/android/chat_window.cc" line="105"/>
         <source>User %1 has left the chat</source>
         <translation>Пользователь %1 покинул чат</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="106"/>
+        <location filename="../client/android/chat_window.cc" line="108"/>
         <source>User %1 is logged in</source>
         <translation>Пользователь %1 вошел в систему</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="109"/>
+        <location filename="../client/android/chat_window.cc" line="111"/>
         <source>User %1 is not logged in</source>
         <translation>Пользователь %1 не вошел в систему</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="112"/>
+        <location filename="../client/android/chat_window.cc" line="114"/>
         <source>There are no connected users</source>
         <translation>Нет подключенных пользователей</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="139"/>
-        <location filename="../client/android/chat_window.cc" line="504"/>
+        <location filename="../client/android/chat_window.cc" line="141"/>
+        <location filename="../client/android/chat_window.cc" line="552"/>
         <source>Chat</source>
         <translation>Чат</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="199"/>
+        <location filename="../client/android/chat_window.cc" line="201"/>
         <source>Connecting to host %1...</source>
         <translation>Подключение к хосту %1...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="208"/>
+        <location filename="../client/android/chat_window.cc" line="210"/>
         <source>The connection to the host has been lost.</source>
         <translation>Соединение с хостом потеряно.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="213"/>
-        <location filename="../client/android/chat_window.cc" line="312"/>
+        <location filename="../client/android/chat_window.cc" line="306"/>
         <source>The specified router is unavailable.</source>
         <translation>Указанный маршрутизатор недоступен.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="217"/>
         <source>The specified router is offline.</source>
-        <translation>Указанный маршрутизатор не в сети.</translation>
+        <translation type="vanished">Указанный маршрутизатор не в сети.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="221"/>
-        <location filename="../client/android/chat_window.cc" line="360"/>
+        <location filename="../client/android/chat_window.cc" line="354"/>
         <source>Error requesting connection via router.</source>
         <translation>Ошибка при запросе соединения через маршрутизатор.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="225"/>
+        <location filename="../client/android/chat_window.cc" line="219"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>Версия хоста новее клиента. Обновите приложение.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="253"/>
+        <location filename="../client/android/chat_window.cc" line="247"/>
         <source>%1 is typing...</source>
         <translation>%1 печатает...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="298"/>
+        <location filename="../client/android/chat_window.cc" line="292"/>
         <source>Connecting...</source>
         <translation>Подключение...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="323"/>
+        <location filename="../client/android/chat_window.cc" line="317"/>
         <source>Connecting to router...</source>
         <translation>Подключение к маршрутизатору...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="348"/>
+        <location filename="../client/android/chat_window.cc" line="342"/>
         <source>Requesting connection to the host...</source>
         <translation>Запрашивается подключение к хосту...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="497"/>
+        <location filename="../client/android/chat_window.cc" line="545"/>
         <source>Save Chat</source>
         <translation>Сохранить чат</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="497"/>
+        <location filename="../client/android/chat_window.cc" line="545"/>
         <source>Text files (*.txt)</source>
         <translation>Текстовые файлы (*.txt)</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="504"/>
+        <location filename="../client/android/chat_window.cc" line="552"/>
         <source>Could not open the file for writing.</source>
         <translation>Не удалось открыть файл для записи.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="527"/>
+        <location filename="../client/android/chat_window.cc" line="575"/>
         <source>Clear Chat</source>
         <translation>Очистить чат</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="527"/>
+        <location filename="../client/android/chat_window.cc" line="575"/>
         <source>Clear the chat history?</source>
         <translation>Очистить историю чата?</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="527"/>
+        <location filename="../client/android/chat_window.cc" line="575"/>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
@@ -936,100 +933,99 @@ Routers added: %4</source>
         <translation>Клиент Aspia</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="575"/>
         <source>Failed to connect to the relay server</source>
-        <translation>не удалось подключиться к ретранслятору</translation>
+        <translation type="vanished">не удалось подключиться к ретранслятору</translation>
     </message>
 </context>
 <context>
     <name>ClientWindow</name>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="225"/>
+        <location filename="../client/desktop/client_window.cc" line="254"/>
         <source>Session started.</source>
         <translation>Сессия запущена.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="233"/>
+        <location filename="../client/desktop/client_window.cc" line="439"/>
         <source>Error requesting connection via router: %1.</source>
         <translation>Ошибка при запросе соединения через маршрутизатор: %1.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="237"/>
+        <location filename="../client/desktop/client_window.cc" line="385"/>
         <source>The specified router is unavailable.</source>
         <translation>Указанный маршрутизатор недоступен.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="241"/>
+        <location filename="../client/desktop/client_window.cc" line="391"/>
         <source>The specified router is offline.</source>
         <translation>Указанный маршрутизатор не в сети.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="249"/>
+        <location filename="../client/desktop/client_window.cc" line="266"/>
         <source>Connecting to host %1...</source>
         <translation>Подключение к хосту %1...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="253"/>
+        <location filename="../client/desktop/client_window.cc" line="270"/>
         <source>Connecting to host %1:%2...</source>
         <translation>Подключение к хосту %1:%2...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="264"/>
+        <location filename="../client/desktop/client_window.cc" line="281"/>
         <source>Connection to host %1 established.</source>
         <translation>Подключение к хосту %1 установлено.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="268"/>
+        <location filename="../client/desktop/client_window.cc" line="285"/>
         <source>Connection to host %1:%2 established.</source>
         <translation>Подключение к хосту %1:%2 установлено.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="293"/>
+        <location filename="../client/desktop/client_window.cc" line="310"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation>Хост недоступен. Ожидание переподключения...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="309"/>
+        <location filename="../client/desktop/client_window.cc" line="72"/>
         <source>Timeout waiting for reconnection to host.</source>
         <translation>Превышено время ожидания при попытке повторного подключения к хосту.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="317"/>
+        <location filename="../client/desktop/client_window.cc" line="330"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation>Версия Хоста новее версии Клиента (%1 &gt; %2). Пожалуйста, обновите приложение.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="323"/>
+        <location filename="../client/desktop/client_window.cc" line="336"/>
         <source>Attempting to connect in compatibility mode...</source>
         <translation>Попытка подключения в режиме совместимости...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="385"/>
+        <location filename="../client/desktop/client_window.cc" line="398"/>
         <source>Requesting connection to the host...</source>
         <translation>Запрашивается подключение к хосту...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="393"/>
+        <location filename="../client/desktop/client_window.cc" line="406"/>
         <source>Connection offer received.</source>
         <translation>Получено предложение на подключение.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="414"/>
+        <location filename="../client/desktop/client_window.cc" line="427"/>
         <source>The host with the specified ID is not online</source>
         <translation>хост с указанным ID не в сети</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="417"/>
+        <location filename="../client/desktop/client_window.cc" line="430"/>
         <source>Access is denied</source>
         <translation>доступ запрещен</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="420"/>
+        <location filename="../client/desktop/client_window.cc" line="433"/>
         <source>There are no relays available or the key pool is empty</source>
         <translation>нет доступных ретрансляторов или пул ключей пуст</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="423"/>
+        <location filename="../client/desktop/client_window.cc" line="436"/>
         <source>Unknown error</source>
         <translation>неизвестная ошибка</translation>
     </message>
@@ -1796,194 +1792,196 @@ Password: %2</source>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="882"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="928"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="884"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="930"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="915"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="961"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="149"/>
+        <location filename="../client/android/desktop_window.cc" line="168"/>
         <source>Connecting...</source>
         <translation>Подключение...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="163"/>
-        <location filename="../client/android/desktop_window.cc" line="326"/>
+        <location filename="../client/android/desktop_window.cc" line="182"/>
         <source>The specified router is unavailable.</source>
         <translation>Указанный маршрутизатор недоступен.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="330"/>
         <source>The specified router is offline.</source>
-        <translation>Указанный маршрутизатор не в сети.</translation>
+        <translation type="vanished">Указанный маршрутизатор не в сети.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="200"/>
+        <location filename="../client/android/desktop_window.cc" line="219"/>
         <source>Requesting connection to the host...</source>
         <translation>Запрашивается подключение к хосту...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="70"/>
+        <location filename="../client/android/desktop_window.cc" line="79"/>
         <source>Session %1</source>
         <translation>Сессия %1</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="71"/>
+        <location filename="../client/android/desktop_window.cc" line="80"/>
         <source>Session %1 (%2)</source>
         <translation>Сессия %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="174"/>
+        <location filename="../client/android/desktop_window.cc" line="193"/>
         <source>Connecting to router...</source>
         <translation>Подключение к маршрутизатору...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="216"/>
+        <location filename="../client/android/desktop_window.cc" line="235"/>
         <source>The host with the specified ID is not online.</source>
         <translation>Хост с указанным ID не в сети.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="219"/>
+        <location filename="../client/android/desktop_window.cc" line="238"/>
         <source>Access is denied.</source>
         <translation>Доступ запрещен.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="222"/>
+        <location filename="../client/android/desktop_window.cc" line="241"/>
         <source>There are no relays available or the key pool is empty.</source>
         <translation>Нет доступных релеев или пул ключей пуст.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="225"/>
+        <location filename="../client/android/desktop_window.cc" line="244"/>
         <source>Error requesting connection via router.</source>
         <translation>Ошибка при запросе соединения через маршрутизатор.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="305"/>
+        <location filename="../client/android/desktop_window.cc" line="358"/>
         <source>Connecting to host %1...</source>
         <translation>Подключение к хосту %1...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="311"/>
+        <location filename="../client/android/desktop_window.cc" line="364"/>
         <source>Connection established.</source>
         <translation>Соединение установлено.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="316"/>
+        <location filename="../client/android/desktop_window.cc" line="369"/>
         <source>The connection to the host has been lost.</source>
         <translation>Соединение с хостом потеряно.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="334"/>
         <source>Error requesting connection via router: %1.</source>
-        <translation>Ошибка при запросе соединения через маршрутизатор: %1.</translation>
+        <translation type="vanished">Ошибка при запросе соединения через маршрутизатор: %1.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="338"/>
+        <location filename="../client/android/desktop_window.cc" line="383"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>Версия хоста новее клиента. Обновите приложение.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="420"/>
+        <location filename="../client/android/desktop_window.cc" line="387"/>
+        <source>Legacy hosts are not supported.</source>
+        <translation>Устаревшие хосты не поддерживаются.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/desktop_window.cc" line="470"/>
         <source>Monitor %1</source>
         <translation>Монитор %1</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="428"/>
+        <location filename="../client/android/desktop_window.cc" line="478"/>
         <source>Power</source>
         <translation>Питание</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="432"/>
+        <location filename="../client/android/desktop_window.cc" line="482"/>
         <source>Keyboard</source>
         <translation>Клавиатура</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="437"/>
+        <location filename="../client/android/desktop_window.cc" line="487"/>
         <source>Ctrl+Alt+Del</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="444"/>
+        <location filename="../client/android/desktop_window.cc" line="494"/>
         <source>Users</source>
         <translation>Пользователи</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="449"/>
+        <location filename="../client/android/desktop_window.cc" line="499"/>
         <source>Disconnect</source>
         <translation>Отключить</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="512"/>
-        <location filename="../client/android/desktop_window.cc" line="566"/>
+        <location filename="../client/android/desktop_window.cc" line="558"/>
+        <location filename="../client/android/desktop_window.cc" line="612"/>
         <source>Back</source>
         <translation>Назад</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="513"/>
+        <location filename="../client/android/desktop_window.cc" line="559"/>
         <source>Shutdown</source>
         <translation>Выключение</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="514"/>
+        <location filename="../client/android/desktop_window.cc" line="560"/>
         <source>Reboot</source>
         <translation>Перезагрузка</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="516"/>
+        <location filename="../client/android/desktop_window.cc" line="562"/>
         <source>Safe Mode</source>
         <translation>Безопасный режим</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="517"/>
+        <location filename="../client/android/desktop_window.cc" line="563"/>
         <source>Logoff</source>
         <translation>Выход из системы</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="518"/>
+        <location filename="../client/android/desktop_window.cc" line="564"/>
         <source>Lock</source>
         <translation>Блокировка</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="534"/>
+        <location filename="../client/android/desktop_window.cc" line="580"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Вы действительно хотите выключить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="538"/>
+        <location filename="../client/android/desktop_window.cc" line="584"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Вы действительно хотите перезагрузить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="542"/>
+        <location filename="../client/android/desktop_window.cc" line="588"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Вы действительно хотите перезагрузить удаленный компьютер в безопасном режиме?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="546"/>
+        <location filename="../client/android/desktop_window.cc" line="592"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Вы действительно хотите завершить сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="550"/>
+        <location filename="../client/android/desktop_window.cc" line="596"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Вы действительно хотите заблокировать сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="605"/>
+        <location filename="../client/android/desktop_window.cc" line="651"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="605"/>
+        <location filename="../client/android/desktop_window.cc" line="651"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
@@ -2656,104 +2654,101 @@ Password: %2</source>
 <context>
     <name>FileTransferWindow</name>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="47"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="45"/>
         <source>Local Computer</source>
         <translation>Локальный компьютер</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="48"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="46"/>
         <source>Remote Computer</source>
         <translation>Удаленный компьютер</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="152"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="183"/>
         <source>Session error: %1</source>
         <translation>Ошибка сессии: %1</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="55"/>
-        <location filename="../client/android/file_transfer_window.cc" line="111"/>
-        <location filename="../client/android/file_transfer_window.cc" line="192"/>
-        <location filename="../client/android/file_transfer_window.cc" line="378"/>
-        <location filename="../client/android/file_transfer_window.cc" line="389"/>
+        <location filename="../client/android/file_transfer_window.cc" line="58"/>
+        <location filename="../client/android/file_transfer_window.cc" line="172"/>
+        <location filename="../client/android/file_transfer_window.cc" line="219"/>
+        <location filename="../client/android/file_transfer_window.cc" line="410"/>
+        <location filename="../client/android/file_transfer_window.cc" line="421"/>
         <source>File Transfer</source>
         <translation>Передача файлов</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="60"/>
-        <location filename="../client/android/file_transfer_window.cc" line="73"/>
+        <location filename="../client/android/file_transfer_window.cc" line="63"/>
+        <location filename="../client/android/file_transfer_window.cc" line="76"/>
         <source>This Device</source>
         <translation>Это устройство</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="112"/>
+        <location filename="../client/android/file_transfer_window.cc" line="220"/>
         <source>To browse files on this device, allow access to all files on the next screen.</source>
         <translation>Чтобы просматривать файлы на этом устройстве, разрешите доступ ко всем файлам на следующем экране.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="113"/>
+        <location filename="../client/android/file_transfer_window.cc" line="221"/>
         <source>Allow</source>
         <translation>Разрешить</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="154"/>
+        <location filename="../client/android/file_transfer_window.cc" line="142"/>
         <source>Connecting to host %1...</source>
         <translation>Подключение к хосту %1...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="165"/>
+        <location filename="../client/android/file_transfer_window.cc" line="153"/>
         <source>The connection to the host has been lost.</source>
         <translation>Соединение с хостом потеряно.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="169"/>
-        <location filename="../client/android/file_transfer_window.cc" line="253"/>
+        <location filename="../client/android/file_transfer_window.cc" line="270"/>
         <source>The specified router is unavailable.</source>
         <translation>Указанный маршрутизатор недоступен.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="173"/>
         <source>The specified router is offline.</source>
-        <translation>Указанный маршрутизатор не в сети.</translation>
+        <translation type="vanished">Указанный маршрутизатор не в сети.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="177"/>
-        <location filename="../client/android/file_transfer_window.cc" line="301"/>
+        <location filename="../client/android/file_transfer_window.cc" line="318"/>
         <source>Error requesting connection via router.</source>
         <translation>Ошибка при запросе соединения через маршрутизатор.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="181"/>
+        <location filename="../client/android/file_transfer_window.cc" line="161"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>Версия хоста новее клиента. Обновите приложение.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="193"/>
+        <location filename="../client/android/file_transfer_window.cc" line="173"/>
         <source>There is no logged in user on the host. The session is unavailable.</source>
         <translation>На хосте нет вошедшего в систему пользователя. Сеанс недоступен.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="239"/>
+        <location filename="../client/android/file_transfer_window.cc" line="256"/>
         <source>Connecting...</source>
         <translation>Подключение...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="264"/>
+        <location filename="../client/android/file_transfer_window.cc" line="281"/>
         <source>Connecting to router...</source>
         <translation>Подключение к маршрутизатору...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="289"/>
+        <location filename="../client/android/file_transfer_window.cc" line="306"/>
         <source>Requesting connection to the host...</source>
         <translation>Запрашивается подключение к хосту...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="379"/>
+        <location filename="../client/android/file_transfer_window.cc" line="411"/>
         <source>Open a destination folder on the other side first.</source>
         <translation>Сначала откройте папку назначения на другой стороне.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="432"/>
+        <location filename="../client/android/file_transfer_window.cc" line="464"/>
         <source>Deleting</source>
         <translation>Удаление</translation>
     </message>
@@ -2870,17 +2865,17 @@ Password: %2</source>
 <context>
     <name>GuiApplication</name>
     <message>
-        <location filename="../base/gui_application.cc" line="416"/>
+        <location filename="../base/gui_application.cc" line="415"/>
         <source>Dark</source>
         <translation>Темная</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="418"/>
+        <location filename="../base/gui_application.cc" line="417"/>
         <source>Light</source>
         <translation>Светлая</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="419"/>
+        <location filename="../base/gui_application.cc" line="418"/>
         <source>Auto</source>
         <translation>Автоматически</translation>
     </message>
@@ -2978,14 +2973,14 @@ Password: %2</source>
 <context>
     <name>HostTreeItem</name>
     <message>
-        <location filename="../client/desktop/hosts/router_group_widget.cc" line="95"/>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="114"/>
+        <location filename="../client/desktop/management/router_group_widget.cc" line="95"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="114"/>
         <source>Online</source>
         <translation>В сети</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_widget.cc" line="95"/>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="114"/>
+        <location filename="../client/desktop/management/router_group_widget.cc" line="95"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="114"/>
         <source>Offline</source>
         <translation>Не в сети</translation>
     </message>
@@ -2994,9 +2989,9 @@ Password: %2</source>
     <name>HostWindow</name>
     <message>
         <location filename="../host/ui/host_window.ui" line="26"/>
-        <location filename="../host/ui/host_window.cc" line="553"/>
-        <location filename="../host/ui/host_window.cc" line="769"/>
-        <location filename="../host/ui/host_window.cc" line="1031"/>
+        <location filename="../host/ui/host_window.cc" line="567"/>
+        <location filename="../host/ui/host_window.cc" line="787"/>
+        <location filename="../host/ui/host_window.cc" line="1057"/>
         <source>Aspia Host</source>
         <translation>Хост Aspia</translation>
     </message>
@@ -3012,8 +3007,8 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="204"/>
-        <location filename="../host/ui/host_window.cc" line="496"/>
-        <location filename="../host/ui/host_window.cc" line="941"/>
+        <location filename="../host/ui/host_window.cc" line="505"/>
+        <location filename="../host/ui/host_window.cc" line="967"/>
         <source>Router is disabled</source>
         <translation>Маршрутизатор отключен</translation>
     </message>
@@ -3074,7 +3069,7 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="320"/>
-        <location filename="../host/ui/host_window.cc" line="753"/>
+        <location filename="../host/ui/host_window.cc" line="771"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
@@ -3118,465 +3113,75 @@ Password: %2</source>
         <translation>Показать чат</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="273"/>
-        <location filename="../host/ui/host_window.cc" line="748"/>
+        <location filename="../host/ui/host_window.cc" line="276"/>
+        <location filename="../host/ui/host_window.cc" line="766"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="446"/>
+        <location filename="../host/ui/host_window.cc" line="455"/>
         <source>Not available</source>
         <translation>Недоступен</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="500"/>
+        <location filename="../host/ui/host_window.cc" line="509"/>
         <source>Connecting to router %1...</source>
         <translation>Подключение к маршрутизатору %1...</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="504"/>
+        <location filename="../host/ui/host_window.cc" line="513"/>
         <source>Connected to router %1</source>
         <translation>Подключено к маршрутизатору %1</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="508"/>
+        <location filename="../host/ui/host_window.cc" line="517"/>
         <source>Failed to connect to router %1</source>
         <translation>Не удалось подключиться к маршрутизатору %1</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="548"/>
+        <location filename="../host/ui/host_window.cc" line="562"/>
         <source>Screen recording has started.</source>
         <translation>Запись экрана запущена.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="550"/>
+        <location filename="../host/ui/host_window.cc" line="564"/>
         <source>Screen recording stopped.</source>
         <translation>Запись экрана остановлена.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="737"/>
+        <location filename="../host/ui/host_window.cc" line="755"/>
         <source>Settings storage is unavailable.</source>
         <translation>Хранилище настроек недоступно.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="786"/>
+        <location filename="../host/ui/host_window.cc" line="804"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Если вы выйдите из Aspia, то вы не сможете подключиться к этому компьютеру пока вы снова не включите компьютер или Aspia вручную. Вы действительно хотите выйти из приложения?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="946"/>
+        <location filename="../host/ui/host_window.cc" line="972"/>
         <source>Connecting to router...</source>
         <translation>Подключение к маршрутизатору...</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="951"/>
+        <location filename="../host/ui/host_window.cc" line="977"/>
         <source>Connected to router</source>
         <translation>Подключено к маршрутизатору</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="956"/>
+        <location filename="../host/ui/host_window.cc" line="982"/>
         <source>Connection error</source>
         <translation>Ошибка подключения</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1028"/>
+        <location filename="../host/ui/host_window.cc" line="1054"/>
         <source>IP addresses:</source>
         <translation>IP адреса:</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1032"/>
+        <location filename="../host/ui/host_window.cc" line="1058"/>
         <source>ID: %1</source>
         <translation></translation>
-    </message>
-</context>
-<context>
-    <name>HostsTab</name>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="56"/>
-        <source>Add Group</source>
-        <translation>Добавить группу</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="65"/>
-        <source>Delete Group</source>
-        <translation>Удалить группу</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="74"/>
-        <source>Edit Group</source>
-        <translation>Изменить группу</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="83"/>
-        <source>Add Router</source>
-        <translation>Добавить маршрутизатор</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="92"/>
-        <source>Edit Router</source>
-        <translation>Изменить маршрутизатор</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="101"/>
-        <source>Delete Router</source>
-        <translation>Удалить маршрутизатор</translation>
-    </message>
-    <message>
-        <source>Router Status</source>
-        <translation type="vanished">Состояние маршрутизатора</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="110"/>
-        <source>Change Password</source>
-        <translation>Изменить пароль</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="119"/>
-        <source>Clear Events</source>
-        <translation>Очистить события</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="128"/>
-        <source>Add Host</source>
-        <translation>Добавить хост</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="137"/>
-        <source>Delete Host</source>
-        <translation>Удалить хост</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="146"/>
-        <source>Edit Host</source>
-        <translation>Изменить хост</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="155"/>
-        <source>Copy Host</source>
-        <translation>Копировать хост</translation>
-    </message>
-    <message>
-        <source>Desktop Management</source>
-        <translation type="vanished">Управление рабочим столом</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="167"/>
-        <location filename="../client/desktop/hosts_tab.ui" line="170"/>
-        <location filename="../client/desktop/hosts_tab.ui" line="215"/>
-        <location filename="../client/desktop/hosts_tab.ui" line="218"/>
-        <source>Desktop</source>
-        <translation>Рабочий стол</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="182"/>
-        <location filename="../client/desktop/hosts_tab.ui" line="227"/>
-        <source>File Transfer</source>
-        <translation>Передача файлов</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="194"/>
-        <location filename="../client/desktop/hosts_tab.ui" line="236"/>
-        <source>Chat</source>
-        <translation>Чат</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="206"/>
-        <location filename="../client/desktop/hosts_tab.ui" line="245"/>
-        <source>System Information</source>
-        <translation>Информация о системе</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="257"/>
-        <location filename="../client/desktop/hosts_tab.ui" line="266"/>
-        <source>Terminal</source>
-        <translation>Терминал</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="275"/>
-        <source>Add Workspace</source>
-        <translation>Добавить рабочее пространство</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="284"/>
-        <source>Edit Workspace</source>
-        <translation>Изменить рабочее пространство</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="293"/>
-        <source>Delete Workspace</source>
-        <translation>Удалить рабочее пространство</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="302"/>
-        <source>Add User</source>
-        <translation>Добавить пользователя</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="311"/>
-        <source>Edit User</source>
-        <translation>Изменить пользователя</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="320"/>
-        <source>Delete User</source>
-        <translation>Удалить пользователя</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="329"/>
-        <source>Disconnect</source>
-        <translation>Отключить</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="338"/>
-        <source>Disconnect All</source>
-        <translation>Отключить всех</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="347"/>
-        <source>Remove</source>
-        <translation>Удалить</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="356"/>
-        <source>Check for Updates</source>
-        <translation>Проверка обновлений</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="365"/>
-        <source>Approve</source>
-        <translation>Подтвердить</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="374"/>
-        <source>Save...</source>
-        <translation>Сохранить...</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="377"/>
-        <source>Ctrl+S</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="386"/>
-        <source>Reload</source>
-        <translation>Обновить</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="389"/>
-        <source>F5</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="398"/>
-        <source>Import Old Address Book...</source>
-        <translation>Импорт старой адресной книги...</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="407"/>
-        <source>Export Address Book...</source>
-        <translation>Экспорт адресной книги...</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="416"/>
-        <source>Import Address Book...</source>
-        <translation>Импорт адресной книги...</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.ui" line="424"/>
-        <source>Auto-refresh Status</source>
-        <translation>Автообновление состояния</translation>
-    </message>
-    <message>
-        <source>Hosts</source>
-        <translation type="vanished">Хосты</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="683"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="712"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="762"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="922"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="953"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="996"/>
-        <source>Failed to retrieve host information from the local database.</source>
-        <translation>Не удалось получить информацию о хосте из локальной базы данных.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="957"/>
-        <source>(copy)</source>
-        <translation>(копия)</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="961"/>
-        <source>Failed to add the host to the local database.</source>
-        <translation>Не удалось добавить хост в локальную базу данных.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1000"/>
-        <source>Are you sure you want to delete host &quot;%1&quot;?</source>
-        <translation>Вы уверены, что хотите удалить хост &quot;%1&quot;?</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1010"/>
-        <source>Unable to remove host</source>
-        <translation>Не удалось удалить хост</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1065"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="1108"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="1133"/>
-        <source>Copy Row</source>
-        <translation>Копировать строку</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1066"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="1109"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="1134"/>
-        <source>Copy Value</source>
-        <translation>Копировать значение</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1234"/>
-        <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
-        <translation>Вы уверены, что хотите удалить рабочее пространство &quot;%1&quot;?</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1344"/>
-        <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
-        <translation>Вы уверены, что хотите удалить группу &quot;%1&quot;? Хосты, назначенные этой группе или ее подгруппам, будут перемещены в корень рабочего пространства.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1406"/>
-        <source>Import Old Address Book</source>
-        <translation>Импорт старой адресной книги</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1408"/>
-        <source>Address Book (*.aab);;All files (*)</source>
-        <translation>Адресная книга (*.aab);;Все файлы (*)</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1431"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="1448"/>
-        <source>Export Address Book</source>
-        <translation>Экспорт адресной книги</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1433"/>
-        <location filename="../client/desktop/hosts_tab.cc" line="1504"/>
-        <source>Address Book (*.json);;All files (*)</source>
-        <translation>Адресная книга (*.json);;Все файлы (*)</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1443"/>
-        <source>Address book database is not available.</source>
-        <translation>База данных адресной книги недоступна.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1450"/>
-        <source>Enter a password to encrypt the address book.</source>
-        <translation>Введите пароль для шифрования адресной книги.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1455"/>
-        <source>Password you entered does not meet the security requirements!</source>
-        <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../client/desktop/hosts_tab.cc" line="1456"/>
-        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation>
-            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
-            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.</numerusform>
-            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1459"/>
-        <source>Do you want to enter a different password?</source>
-        <translation>Вы хотите ввести другой пароль?</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1476"/>
-        <source>Failed to export the address book.</source>
-        <translation>Не удалось экспортировать адресную книгу.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1481"/>
-        <source>Export completed successfully.
-Routers exported: %1
-Groups exported: %2
-Hosts exported: %3</source>
-        <translation>Экспорт успешно завершен.
-Роутеров экспортировано: %1
-Групп экспортировано: %2
-Хостов экспортировано: %3</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1502"/>
-        <source>Import Address Book</source>
-        <translation>Импорт адресной книги</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1513"/>
-        <source>Unlock</source>
-        <translation>Разблокировка</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1515"/>
-        <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation>Адресная книга зашифрована. Для открытия вы должны ввести пароль.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1530"/>
-        <source>Unable to decrypt the file with the specified password.</source>
-        <translation>Не удается расшифровать файл с помощью указанного пароля.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1534"/>
-        <source>Unsupported file format version.</source>
-        <translation>Неподдерживаемая версия формата файла.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1538"/>
-        <source>Nothing was imported.</source>
-        <translation>Ничего не было импортировано.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1542"/>
-        <source>The file is not a valid address book.</source>
-        <translation>Файл не является допустимой адресной книгой.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1547"/>
-        <source>Import completed successfully.
-Routers added: %1
-Routers skipped: %2
-Groups added: %3
-Groups skipped: %4
-Hosts added: %5
-Hosts skipped: %6</source>
-        <translation>Импорт успешно завершен.
-Роутеров добавлено: %1
-Роутеров пропущено: %2
-Групп добавлено: %3
-Групп пропущено: %4
-Хостов добавлено: %5
-Хостов пропущено: %6</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1900"/>
-        <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
-        <translation>Роутер, связанный с этим хостом, был удален. Измените хост, чтобы выбрать другой роутер, или переключитесь на прямое подключение.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1907"/>
-        <source>The host has an invalid host ID.</source>
-        <translation>Хост имеет недопустимый ID.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/hosts_tab.cc" line="1916"/>
-        <source>The host has an incorrect address.</source>
-        <translation>Хост имеет недопустимый адрес.</translation>
     </message>
 </context>
 <context>
@@ -3694,52 +3299,52 @@ Hosts skipped: %6</source>
 <context>
     <name>LocalGroupDialog</name>
     <message>
-        <location filename="../client/desktop/hosts/local_group_dialog.ui" line="14"/>
+        <location filename="../client/desktop/management/local_group_dialog.ui" line="14"/>
         <source>Group</source>
         <translation>Группа</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_group_dialog.ui" line="25"/>
+        <location filename="../client/desktop/management/local_group_dialog.ui" line="25"/>
         <source>Parent Group:</source>
         <translation>Родительская группа:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_group_dialog.ui" line="35"/>
+        <location filename="../client/desktop/management/local_group_dialog.ui" line="35"/>
         <source>Name:</source>
         <translation>Имя:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_group_dialog.ui" line="42"/>
+        <location filename="../client/desktop/management/local_group_dialog.ui" line="42"/>
         <source>Display name</source>
         <translation>Отображаемое имя</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_group_dialog.ui" line="53"/>
+        <location filename="../client/desktop/management/local_group_dialog.ui" line="53"/>
         <source>Comment:</source>
         <translation>Комментарий:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_group_dialog.cc" line="51"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="51"/>
         <source>Edit Group</source>
         <translation>Изменить группу</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_group_dialog.cc" line="67"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="67"/>
         <source>Add Group</source>
         <translation>Добавить группу</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_group_dialog.cc" line="84"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="84"/>
         <source>Local</source>
         <translation>Локальные</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_group_dialog.cc" line="109"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="109"/>
         <source>Name cannot be empty.</source>
         <translation>Имя не может быть пустым.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts/local_group_dialog.cc" line="117"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="117"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
@@ -3748,7 +3353,7 @@ Hosts skipped: %6</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts/local_group_dialog.cc" line="128"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="128"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
@@ -3757,17 +3362,17 @@ Hosts skipped: %6</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_group_dialog.cc" line="143"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="143"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>Группа с таким именем уже существует в выбранной родительской группе.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_group_dialog.cc" line="161"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="161"/>
         <source>Unable to add group</source>
         <translation>Не удалось добавить группу</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_group_dialog.cc" line="170"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="170"/>
         <source>Unable to modify group</source>
         <translation>Не удалось изменить группу</translation>
     </message>
@@ -3824,47 +3429,47 @@ Hosts skipped: %6</source>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <location filename="../client/desktop/hosts/local_group_widget.ui" line="45"/>
+        <location filename="../client/desktop/management/local_group_widget.ui" line="45"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_group_widget.ui" line="50"/>
+        <location filename="../client/desktop/management/local_group_widget.ui" line="50"/>
         <source>Address / ID</source>
         <translation>Адрес / ID</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_group_widget.ui" line="60"/>
+        <location filename="../client/desktop/management/local_group_widget.ui" line="60"/>
         <source>Created</source>
         <translation>Создан</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_group_widget.ui" line="65"/>
+        <location filename="../client/desktop/management/local_group_widget.ui" line="65"/>
         <source>Modified</source>
         <translation>Изменен</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_group_widget.ui" line="70"/>
+        <location filename="../client/desktop/management/local_group_widget.ui" line="70"/>
         <source>Last Connect</source>
         <translation>Последнее подключение</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_group_widget.ui" line="75"/>
+        <location filename="../client/desktop/management/local_group_widget.ui" line="75"/>
         <source>Status</source>
         <translation>Состояние</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_group_widget.ui" line="55"/>
+        <location filename="../client/desktop/management/local_group_widget.ui" line="55"/>
         <source>Comment</source>
         <translation>Комментарий</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_group_widget.cc" line="70"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="70"/>
         <source>Status update...</source>
         <translation>Обновление состояния...</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts/local_group_widget.cc" line="423"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="423"/>
         <source>%n child group(s)</source>
         <translation>
             <numerusform>%n дочерняя группа</numerusform>
@@ -3873,7 +3478,7 @@ Hosts skipped: %6</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts/local_group_widget.cc" line="425"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="425"/>
         <source>%n child host(s)</source>
         <translation>
             <numerusform>%n дочерний хост</numerusform>
@@ -3882,12 +3487,12 @@ Hosts skipped: %6</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_group_widget.cc" line="496"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="496"/>
         <source>Online</source>
         <translation>В сети</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_group_widget.cc" line="496"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="496"/>
         <source>Offline</source>
         <translation>Не в сети</translation>
     </message>
@@ -3895,83 +3500,83 @@ Hosts skipped: %6</source>
 <context>
     <name>LocalHostDialog</name>
     <message>
-        <location filename="../client/desktop/hosts/local_host_dialog.ui" line="14"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="14"/>
         <source>Host</source>
         <translation>Хост</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_host_dialog.ui" line="25"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="25"/>
         <source>Group:</source>
         <translation>Группа:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_host_dialog.ui" line="35"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="35"/>
         <source>Name:</source>
         <translation>Имя:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_host_dialog.ui" line="42"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="42"/>
         <source>Display name</source>
         <translation>Отображаемое имя</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_host_dialog.ui" line="49"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="49"/>
         <source>Router:</source>
         <translation>Маршрутизатор:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_host_dialog.ui" line="59"/>
-        <location filename="../client/desktop/hosts/local_host_dialog.cc" line="270"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="59"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="270"/>
         <source>Address:</source>
         <translation>Адрес:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_host_dialog.ui" line="69"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="69"/>
         <source>Username:</source>
         <translation>Имя пользователя:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_host_dialog.ui" line="79"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="79"/>
         <source>Password:</source>
         <translation>Пароль:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_host_dialog.ui" line="93"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="93"/>
         <source>Comment:</source>
         <translation>Комментарий:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_host_dialog.cc" line="55"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="55"/>
         <source>Without Router</source>
         <translation>Без маршрутизатора</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_host_dialog.cc" line="67"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="67"/>
         <source>Edit Host</source>
         <translation>Изменить хост</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_host_dialog.cc" line="87"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="87"/>
         <source>Add Host</source>
         <translation>Добавить хост</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_host_dialog.cc" line="97"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="97"/>
         <source>&lt;deleted router&gt;</source>
         <translation>&lt;маршрутизатор удален&gt;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_host_dialog.cc" line="119"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="119"/>
         <source>Local</source>
         <translation>Локальные</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_host_dialog.cc" line="154"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="154"/>
         <source>Name cannot be empty.</source>
         <translation>Имя не может быть пустым.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts/local_host_dialog.cc" line="162"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="162"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
@@ -3980,22 +3585,22 @@ Hosts skipped: %6</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_host_dialog.cc" line="177"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="177"/>
         <source>An invalid host address was entered.</source>
         <translation>Был введен недопустимый адрес хоста.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_host_dialog.cc" line="187"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="187"/>
         <source>An invalid host ID was entered.</source>
         <translation>Введен недопустимый ID хоста.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_host_dialog.cc" line="198"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="198"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>Имя пользователя не может быть пустым и может содержать только буквы, цифры и символы &quot;_&quot;, &quot;-&quot;, &quot;.&quot; .</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts/local_host_dialog.cc" line="209"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="209"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
@@ -4004,32 +3609,32 @@ Hosts skipped: %6</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_host_dialog.cc" line="224"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="224"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Хост с таким именем уже существует в выбранной группе.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_host_dialog.cc" line="246"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="246"/>
         <source>Unable to add host</source>
         <translation>Не удалось добавить хост</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_host_dialog.cc" line="256"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="256"/>
         <source>Unable to modify host</source>
         <translation>Не удалось изменить хост</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_host_dialog.cc" line="271"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="271"/>
         <source>Host name or IP address</source>
         <translation>Имя хоста или IP-адрес</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_host_dialog.cc" line="275"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="275"/>
         <source>ID:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/local_host_dialog.cc" line="276"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="276"/>
         <source>Host ID</source>
         <translation>ID хоста</translation>
     </message>
@@ -4385,6 +3990,396 @@ Hosts skipped: %6</source>
     </message>
 </context>
 <context>
+    <name>ManagementTab</name>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="56"/>
+        <source>Add Group</source>
+        <translation>Добавить группу</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="65"/>
+        <source>Delete Group</source>
+        <translation>Удалить группу</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="74"/>
+        <source>Edit Group</source>
+        <translation>Изменить группу</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="83"/>
+        <source>Add Router</source>
+        <translation>Добавить маршрутизатор</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="92"/>
+        <source>Edit Router</source>
+        <translation>Изменить маршрутизатор</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="101"/>
+        <source>Delete Router</source>
+        <translation>Удалить маршрутизатор</translation>
+    </message>
+    <message>
+        <source>Router Status</source>
+        <translation type="vanished">Состояние маршрутизатора</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="110"/>
+        <source>Change Password</source>
+        <translation>Изменить пароль</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="119"/>
+        <source>Clear Events</source>
+        <translation>Очистить события</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="128"/>
+        <source>Add Host</source>
+        <translation>Добавить хост</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="137"/>
+        <source>Delete Host</source>
+        <translation>Удалить хост</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="146"/>
+        <source>Edit Host</source>
+        <translation>Изменить хост</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="155"/>
+        <source>Copy Host</source>
+        <translation>Копировать хост</translation>
+    </message>
+    <message>
+        <source>Desktop Management</source>
+        <translation type="vanished">Управление рабочим столом</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="167"/>
+        <location filename="../client/desktop/management_tab.ui" line="170"/>
+        <location filename="../client/desktop/management_tab.ui" line="215"/>
+        <location filename="../client/desktop/management_tab.ui" line="218"/>
+        <source>Desktop</source>
+        <translation>Рабочий стол</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="182"/>
+        <location filename="../client/desktop/management_tab.ui" line="227"/>
+        <source>File Transfer</source>
+        <translation>Передача файлов</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="194"/>
+        <location filename="../client/desktop/management_tab.ui" line="236"/>
+        <source>Chat</source>
+        <translation>Чат</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="206"/>
+        <location filename="../client/desktop/management_tab.ui" line="245"/>
+        <source>System Information</source>
+        <translation>Информация о системе</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="257"/>
+        <location filename="../client/desktop/management_tab.ui" line="266"/>
+        <source>Terminal</source>
+        <translation>Терминал</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="275"/>
+        <source>Add Workspace</source>
+        <translation>Добавить рабочее пространство</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="284"/>
+        <source>Edit Workspace</source>
+        <translation>Изменить рабочее пространство</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="293"/>
+        <source>Delete Workspace</source>
+        <translation>Удалить рабочее пространство</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="302"/>
+        <source>Add User</source>
+        <translation>Добавить пользователя</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="311"/>
+        <source>Edit User</source>
+        <translation>Изменить пользователя</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="320"/>
+        <source>Delete User</source>
+        <translation>Удалить пользователя</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="329"/>
+        <source>Disconnect</source>
+        <translation>Отключить</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="338"/>
+        <source>Disconnect All</source>
+        <translation>Отключить всех</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="347"/>
+        <source>Remove</source>
+        <translation>Удалить</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="356"/>
+        <source>Check for Updates</source>
+        <translation>Проверка обновлений</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="365"/>
+        <source>Approve</source>
+        <translation>Подтвердить</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="374"/>
+        <source>Save...</source>
+        <translation>Сохранить...</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="377"/>
+        <source>Ctrl+S</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="386"/>
+        <source>Reload</source>
+        <translation>Обновить</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="389"/>
+        <source>F5</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="398"/>
+        <source>Import Old Address Book...</source>
+        <translation>Импорт старой адресной книги...</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="407"/>
+        <source>Export Address Book...</source>
+        <translation>Экспорт адресной книги...</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="416"/>
+        <source>Import Address Book...</source>
+        <translation>Импорт адресной книги...</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.ui" line="424"/>
+        <source>Auto-refresh Status</source>
+        <translation>Автообновление состояния</translation>
+    </message>
+    <message>
+        <source>Hosts</source>
+        <translation type="vanished">Хосты</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="683"/>
+        <location filename="../client/desktop/management_tab.cc" line="712"/>
+        <location filename="../client/desktop/management_tab.cc" line="762"/>
+        <location filename="../client/desktop/management_tab.cc" line="922"/>
+        <location filename="../client/desktop/management_tab.cc" line="953"/>
+        <location filename="../client/desktop/management_tab.cc" line="996"/>
+        <source>Failed to retrieve host information from the local database.</source>
+        <translation>Не удалось получить информацию о хосте из локальной базы данных.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="957"/>
+        <source>(copy)</source>
+        <translation>(копия)</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="961"/>
+        <source>Failed to add the host to the local database.</source>
+        <translation>Не удалось добавить хост в локальную базу данных.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1000"/>
+        <source>Are you sure you want to delete host &quot;%1&quot;?</source>
+        <translation>Вы уверены, что хотите удалить хост &quot;%1&quot;?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1010"/>
+        <source>Unable to remove host</source>
+        <translation>Не удалось удалить хост</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1065"/>
+        <location filename="../client/desktop/management_tab.cc" line="1108"/>
+        <location filename="../client/desktop/management_tab.cc" line="1133"/>
+        <source>Copy Row</source>
+        <translation>Копировать строку</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1066"/>
+        <location filename="../client/desktop/management_tab.cc" line="1109"/>
+        <location filename="../client/desktop/management_tab.cc" line="1134"/>
+        <source>Copy Value</source>
+        <translation>Копировать значение</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1234"/>
+        <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
+        <translation>Вы уверены, что хотите удалить рабочее пространство &quot;%1&quot;?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1344"/>
+        <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
+        <translation>Вы уверены, что хотите удалить группу &quot;%1&quot;? Хосты, назначенные этой группе или ее подгруппам, будут перемещены в корень рабочего пространства.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1406"/>
+        <source>Import Old Address Book</source>
+        <translation>Импорт старой адресной книги</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1408"/>
+        <source>Address Book (*.aab);;All files (*)</source>
+        <translation>Адресная книга (*.aab);;Все файлы (*)</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1431"/>
+        <location filename="../client/desktop/management_tab.cc" line="1448"/>
+        <source>Export Address Book</source>
+        <translation>Экспорт адресной книги</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1433"/>
+        <location filename="../client/desktop/management_tab.cc" line="1504"/>
+        <source>Address Book (*.json);;All files (*)</source>
+        <translation>Адресная книга (*.json);;Все файлы (*)</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1443"/>
+        <source>Address book database is not available.</source>
+        <translation>База данных адресной книги недоступна.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1450"/>
+        <source>Enter a password to encrypt the address book.</source>
+        <translation>Введите пароль для шифрования адресной книги.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1455"/>
+        <source>Password you entered does not meet the security requirements!</source>
+        <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/desktop/management_tab.cc" line="1456"/>
+        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
+            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.</numerusform>
+            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1459"/>
+        <source>Do you want to enter a different password?</source>
+        <translation>Вы хотите ввести другой пароль?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1476"/>
+        <source>Failed to export the address book.</source>
+        <translation>Не удалось экспортировать адресную книгу.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1481"/>
+        <source>Export completed successfully.
+Routers exported: %1
+Groups exported: %2
+Hosts exported: %3</source>
+        <translation>Экспорт успешно завершен.
+Роутеров экспортировано: %1
+Групп экспортировано: %2
+Хостов экспортировано: %3</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1502"/>
+        <source>Import Address Book</source>
+        <translation>Импорт адресной книги</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1513"/>
+        <source>Unlock</source>
+        <translation>Разблокировка</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1515"/>
+        <source>Address book is encrypted. To open, you must enter a password.</source>
+        <translation>Адресная книга зашифрована. Для открытия вы должны ввести пароль.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1530"/>
+        <source>Unable to decrypt the file with the specified password.</source>
+        <translation>Не удается расшифровать файл с помощью указанного пароля.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1534"/>
+        <source>Unsupported file format version.</source>
+        <translation>Неподдерживаемая версия формата файла.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1538"/>
+        <source>Nothing was imported.</source>
+        <translation>Ничего не было импортировано.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1542"/>
+        <source>The file is not a valid address book.</source>
+        <translation>Файл не является допустимой адресной книгой.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1547"/>
+        <source>Import completed successfully.
+Routers added: %1
+Routers skipped: %2
+Groups added: %3
+Groups skipped: %4
+Hosts added: %5
+Hosts skipped: %6</source>
+        <translation>Импорт успешно завершен.
+Роутеров добавлено: %1
+Роутеров пропущено: %2
+Групп добавлено: %3
+Групп пропущено: %4
+Хостов добавлено: %5
+Хостов пропущено: %6</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1900"/>
+        <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
+        <translation>Роутер, связанный с этим хостом, был удален. Измените хост, чтобы выбрать другой роутер, или переключитесь на прямое подключение.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1907"/>
+        <source>The host has an invalid host ID.</source>
+        <translation>Хост имеет недопустимый ID.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1916"/>
+        <source>The host has an incorrect address.</source>
+        <translation>Хост имеет недопустимый адрес.</translation>
+    </message>
+</context>
+<context>
     <name>MasterPasswordDialog</name>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="48"/>
@@ -4603,22 +4598,30 @@ Hosts skipped: %6</source>
     </message>
 </context>
 <context>
+    <name>NetworkWorker</name>
+    <message>
+        <location filename="../client/workers/network_worker.cc" line="366"/>
+        <source>Failed to connect to the relay server</source>
+        <translation>не удалось подключиться к ретранслятору</translation>
+    </message>
+</context>
+<context>
     <name>NotifierWindow</name>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="293"/>
-        <location filename="../host/ui/notifier_window.cc" line="302"/>
+        <location filename="../host/ui/notifier_window.cc" line="303"/>
         <source>Lock mouse</source>
         <translation>Блокировать мышь</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="319"/>
-        <location filename="../host/ui/notifier_window.cc" line="310"/>
+        <location filename="../host/ui/notifier_window.cc" line="311"/>
         <source>Lock keyboard</source>
         <translation>Блокировать клавиатуру</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="345"/>
-        <location filename="../host/ui/notifier_window.cc" line="318"/>
+        <location filename="../host/ui/notifier_window.cc" line="319"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
@@ -4628,27 +4631,27 @@ Hosts skipped: %6</source>
         <translation>Отключить всех</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="269"/>
+        <location filename="../host/ui/notifier_window.cc" line="270"/>
         <source>Disconnect</source>
         <translation>Отключить</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="302"/>
+        <location filename="../host/ui/notifier_window.cc" line="303"/>
         <source>Unlock mouse</source>
         <translation>Разблокировать мышь</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="310"/>
+        <location filename="../host/ui/notifier_window.cc" line="311"/>
         <source>Unlock keyboard</source>
         <translation>Разблокировать клавиатуру</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="318"/>
+        <location filename="../host/ui/notifier_window.cc" line="319"/>
         <source>Resume</source>
         <translation>Возобновить</translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="543"/>
+        <location filename="../host/ui/notifier_window.cc" line="544"/>
         <source>Aspia Host</source>
         <translation>Хост Aspia</translation>
     </message>
@@ -4815,12 +4818,12 @@ Hosts skipped: %6</source>
 <context>
     <name>ProcessItem</name>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="87"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="89"/>
         <source>System Idle Process</source>
         <translation>Бездействие системы</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="89"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="91"/>
         <source>Unknown Process</source>
         <translation>Неизвестный процесс</translation>
     </message>
@@ -4871,87 +4874,87 @@ Hosts skipped: %6</source>
 <context>
     <name>RouterClientsWidget</name>
     <message>
-        <location filename="../client/desktop/hosts/router_clients_widget.ui" line="48"/>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="48"/>
         <source>Computer Name</source>
         <translation>Имя компьютера</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_clients_widget.ui" line="53"/>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="53"/>
         <source>IP Address</source>
         <translation>IP адрес</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_clients_widget.ui" line="58"/>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="58"/>
         <source>Connect Time</source>
         <translation>Время подключения</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_clients_widget.ui" line="63"/>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="63"/>
         <source>Version</source>
         <translation>Версия</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_clients_widget.ui" line="68"/>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="68"/>
         <source>Architecture</source>
         <translation>Архитектура</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_clients_widget.ui" line="73"/>
+        <location filename="../client/desktop/management/router_clients_widget.ui" line="73"/>
         <source>Operating System</source>
         <translation>Операционная система</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_clients_widget.cc" line="256"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="256"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_clients_widget.cc" line="256"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="256"/>
         <source>JSON files (*.json)</source>
         <translation>JSON-файлы (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_clients_widget.cc" line="267"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="267"/>
         <source>Could not open file for writing.</source>
         <translation>Не удалось открыть файл для записи.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_clients_widget.cc" line="303"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="303"/>
         <source>Unable to write file.</source>
         <translation>Не удалось записать файл.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_clients_widget.cc" line="340"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="340"/>
         <source>Are you sure you want to disconnect client &quot;%1&quot;?</source>
         <translation>Вы уверены, что хотите отключить клиента &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_clients_widget.cc" line="365"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="365"/>
         <source>Are you sure you want to disconnect all clients?</source>
         <translation>Вы уверены, что хотите отключить всех клиентов?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_clients_widget.cc" line="436"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="436"/>
         <source>Invalid client request.</source>
         <translation>Некорректный запрос клиента.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_clients_widget.cc" line="438"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="438"/>
         <source>Unknown internal error.</source>
         <translation>Неизвестная внутренняя ошибка.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_clients_widget.cc" line="440"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="440"/>
         <source>Invalid entry id.</source>
         <translation>Неверный идентификатор записи.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_clients_widget.cc" line="442"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="442"/>
         <source>Unknown error type.</source>
         <translation>Неизвестный тип ошибки.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts/router_clients_widget.cc" line="497"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="497"/>
         <source>%n client(s)</source>
         <translation>
             <numerusform>%n клиент</numerusform>
@@ -5166,73 +5169,73 @@ Hosts skipped: %6</source>
 <context>
     <name>RouterGroupDialog</name>
     <message>
-        <location filename="../client/desktop/hosts/router_group_dialog.ui" line="14"/>
+        <location filename="../client/desktop/management/router_group_dialog.ui" line="14"/>
         <source>Group</source>
         <translation>Группа</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_dialog.ui" line="25"/>
+        <location filename="../client/desktop/management/router_group_dialog.ui" line="25"/>
         <source>Parent Group:</source>
         <translation>Родительская группа:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_dialog.ui" line="35"/>
+        <location filename="../client/desktop/management/router_group_dialog.ui" line="35"/>
         <source>Name:</source>
         <translation>Имя:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_dialog.ui" line="42"/>
+        <location filename="../client/desktop/management/router_group_dialog.ui" line="42"/>
         <source>Display name</source>
         <translation>Отображаемое имя</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_dialog.ui" line="53"/>
+        <location filename="../client/desktop/management/router_group_dialog.ui" line="53"/>
         <source>Comment:</source>
         <translation>Комментарий:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_dialog.cc" line="50"/>
+        <location filename="../client/desktop/management/router_group_dialog.cc" line="50"/>
         <source>Edit Group</source>
         <translation>Изменить группу</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_dialog.cc" line="50"/>
+        <location filename="../client/desktop/management/router_group_dialog.cc" line="50"/>
         <source>Add Group</source>
         <translation>Добавить группу</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_dialog.cc" line="123"/>
+        <location filename="../client/desktop/management/router_group_dialog.cc" line="123"/>
         <source>Invalid group request.</source>
         <translation>Недопустимый запрос группы.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_dialog.cc" line="125"/>
-        <location filename="../client/desktop/hosts/router_group_dialog.cc" line="171"/>
+        <location filename="../client/desktop/management/router_group_dialog.cc" line="125"/>
+        <location filename="../client/desktop/management/router_group_dialog.cc" line="171"/>
         <source>Unknown internal error.</source>
         <translation>Неизвестная внутренняя ошибка.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_dialog.cc" line="127"/>
+        <location filename="../client/desktop/management/router_group_dialog.cc" line="127"/>
         <source>Invalid data was passed.</source>
         <translation>Переданы некорректные данные.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_dialog.cc" line="129"/>
+        <location filename="../client/desktop/management/router_group_dialog.cc" line="129"/>
         <source>Access denied.</source>
         <translation>Доступ запрещен.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_dialog.cc" line="131"/>
+        <location filename="../client/desktop/management/router_group_dialog.cc" line="131"/>
         <source>Group not found.</source>
         <translation>Группа не найдена.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_dialog.cc" line="133"/>
+        <location filename="../client/desktop/management/router_group_dialog.cc" line="133"/>
         <source>Unknown error type.</source>
         <translation>Неизвестный тип ошибки.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_dialog.cc" line="156"/>
+        <location filename="../client/desktop/management/router_group_dialog.cc" line="156"/>
         <source>Group name cannot be empty.</source>
         <translation>Имя группы не может быть пустым.</translation>
     </message>
@@ -5240,67 +5243,67 @@ Hosts skipped: %6</source>
 <context>
     <name>RouterGroupWidget</name>
     <message>
-        <location filename="../client/desktop/hosts/router_group_widget.ui" line="45"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="45"/>
         <source>Display Name</source>
         <translation>Отображаемое имя</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_widget.ui" line="50"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="50"/>
         <source>Host ID</source>
         <translation>ID хоста</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_widget.ui" line="55"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="55"/>
         <source>Computer Name</source>
         <translation>Имя компьютера</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_widget.ui" line="60"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="60"/>
         <source>Address</source>
         <translation>Адрес</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_widget.ui" line="65"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="65"/>
         <source>User Name</source>
         <translation>Имя пользователя</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_widget.ui" line="70"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="70"/>
         <source>Comment</source>
         <translation>Комментарий</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_widget.ui" line="75"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="75"/>
         <source>Operating System</source>
         <translation>Операционная система</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_widget.ui" line="80"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="80"/>
         <source>Version</source>
         <translation>Версия</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_widget.ui" line="85"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="85"/>
         <source>Architecture</source>
         <translation>Архитектура</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_widget.ui" line="90"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="90"/>
         <source>Last Connect</source>
         <translation>Последнее подключение</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_widget.ui" line="95"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="95"/>
         <source>Last Modify</source>
         <translation>Последнее изменение</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_group_widget.ui" line="100"/>
+        <location filename="../client/desktop/management/router_group_widget.ui" line="100"/>
         <source>Status</source>
         <translation>Состояние</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts/router_group_widget.cc" line="441"/>
+        <location filename="../client/desktop/management/router_group_widget.cc" line="441"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n хост</numerusform>
@@ -5312,57 +5315,57 @@ Hosts skipped: %6</source>
 <context>
     <name>RouterHostDialog</name>
     <message>
-        <location filename="../client/desktop/hosts/router_host_dialog.ui" line="14"/>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="14"/>
         <source>Host Properties</source>
         <translation>Свойства хоста</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_host_dialog.ui" line="25"/>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="25"/>
         <source>Group:</source>
         <translation>Группа:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_host_dialog.ui" line="35"/>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="35"/>
         <source>Display Name:</source>
         <translation>Отображаемое имя:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_host_dialog.ui" line="45"/>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="45"/>
         <source>User Name:</source>
         <translation>Имя пользователя:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_host_dialog.ui" line="55"/>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="55"/>
         <source>Password:</source>
         <translation>Пароль:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_host_dialog.ui" line="67"/>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="67"/>
         <source>Comment:</source>
         <translation>Комментарий:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_host_dialog.cc" line="106"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="106"/>
         <source>Access denied.</source>
         <translation>Доступ запрещен.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_host_dialog.cc" line="108"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="108"/>
         <source>Host not found.</source>
         <translation>Хост не найден.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_host_dialog.cc" line="110"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="110"/>
         <source>Invalid data was passed.</source>
         <translation>Переданы некорректные данные.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_host_dialog.cc" line="112"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="112"/>
         <source>Unknown internal error.</source>
         <translation>Неизвестная внутренняя ошибка.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_host_dialog.cc" line="114"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="114"/>
         <source>Unknown error type.</source>
         <translation>Неизвестный тип ошибки.</translation>
     </message>
@@ -5377,142 +5380,142 @@ Hosts skipped: %6</source>
 <context>
     <name>RouterHostsWidget</name>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.ui" line="48"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="48"/>
         <source>Host ID</source>
         <translation>ID хоста</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.ui" line="53"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="53"/>
         <source>Display Name</source>
         <translation>Отображаемое имя</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.ui" line="58"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="58"/>
         <source>Computer Name</source>
         <translation>Имя компьютера</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.ui" line="63"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="63"/>
         <source>Address</source>
         <translation>Адрес</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.ui" line="68"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="68"/>
         <source>User Name</source>
         <translation>Имя пользователя</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.ui" line="73"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="73"/>
         <source>Comment</source>
         <translation>Комментарий</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.ui" line="78"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="78"/>
         <source>Workspace</source>
         <translation>Рабочее пространство</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.ui" line="83"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="83"/>
         <source>Operating System</source>
         <translation>Операционная система</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.ui" line="88"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="88"/>
         <source>Version</source>
         <translation>Версия</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.ui" line="93"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="93"/>
         <source>Architecture</source>
         <translation>Архитектура</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.ui" line="98"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="98"/>
         <source>Last Connect</source>
         <translation>Последнее подключение</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.ui" line="103"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="103"/>
         <source>Last Modify</source>
         <translation>Последнее изменение</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.ui" line="108"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="108"/>
         <source>Status</source>
         <translation>Состояние</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.ui" line="118"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="118"/>
         <source>Previous page</source>
         <translation>Предыдущая страница</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.ui" line="121"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="121"/>
         <source>Previous</source>
         <translation>Назад</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.ui" line="135"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="135"/>
         <source>Next page</source>
         <translation>Следующая страница</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.ui" line="138"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="138"/>
         <source>Next</source>
         <translation>Вперед</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.ui" line="149"/>
+        <location filename="../client/desktop/management/router_hosts_widget.ui" line="149"/>
         <source>Items per page:</source>
         <translation>Элементов на страницу:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="399"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="399"/>
         <source>The host is not assigned to any workspace.</source>
         <translation>Хост не назначен ни в одно рабочее пространство.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="419"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="419"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>Вы уверены, что хотите отключить хост &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="444"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="444"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation>Вы действительно хотите отключить все хосты?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="469"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="469"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="470"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="470"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>Удаление хоста приведет к удалению всей его конфигурации для подключения к роутеру, а приложение на хосте будет удалено. Это действие необратимо. Вы уверены, что хотите продолжить?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="593"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="593"/>
         <source>Invalid host request.</source>
         <translation>Неверный запрос к хосту.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="595"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="595"/>
         <source>Unknown internal error.</source>
         <translation>Неизвестная внутренняя ошибка.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="597"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="597"/>
         <source>Invalid entry id.</source>
         <translation>Неверный идентификатор записи.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="599"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="599"/>
         <source>Unknown error type.</source>
         <translation>Неизвестный тип ошибки.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="752"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="752"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n хост</numerusform>
@@ -5521,22 +5524,22 @@ Hosts skipped: %6</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="781"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="781"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="781"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="781"/>
         <source>JSON files (*.json)</source>
         <translation>JSON-файлы (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="792"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="792"/>
         <source>Could not open file for writing.</source>
         <translation>Не удалось открыть файл для записи.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_hosts_widget.cc" line="841"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="841"/>
         <source>Unable to write file.</source>
         <translation>Не удалось записать файл.</translation>
     </message>
@@ -5551,154 +5554,154 @@ Hosts skipped: %6</source>
 <context>
     <name>RouterRelaysWidget</name>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.ui" line="58"/>
+        <location filename="../client/desktop/management/router_relays_widget.ui" line="58"/>
         <source>Address</source>
         <translation>Адрес</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.ui" line="63"/>
+        <location filename="../client/desktop/management/router_relays_widget.ui" line="63"/>
         <source>Connect Time</source>
         <translation>Время подключения</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.ui" line="68"/>
+        <location filename="../client/desktop/management/router_relays_widget.ui" line="68"/>
         <source>Pool Size</source>
         <translation>Размер пула</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.ui" line="73"/>
+        <location filename="../client/desktop/management/router_relays_widget.ui" line="73"/>
         <source>Version</source>
         <translation>Версия</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.ui" line="78"/>
+        <location filename="../client/desktop/management/router_relays_widget.ui" line="78"/>
         <source>Computer Name</source>
         <translation>Имя компьютера</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.ui" line="83"/>
+        <location filename="../client/desktop/management/router_relays_widget.ui" line="83"/>
         <source>Architecture</source>
         <translation>Архитектура</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.ui" line="88"/>
+        <location filename="../client/desktop/management/router_relays_widget.ui" line="88"/>
         <source>Operating System</source>
         <translation>Операционная система</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.ui" line="113"/>
+        <location filename="../client/desktop/management/router_relays_widget.ui" line="113"/>
         <source>User Name</source>
         <translation>Имя пользователя</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.ui" line="118"/>
+        <location filename="../client/desktop/management/router_relays_widget.ui" line="118"/>
         <source>Host ID</source>
         <translation>ID хоста</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.ui" line="123"/>
+        <location filename="../client/desktop/management/router_relays_widget.ui" line="123"/>
         <source>Host Address</source>
         <translation>Адрес хоста</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.ui" line="128"/>
+        <location filename="../client/desktop/management/router_relays_widget.ui" line="128"/>
         <source>Client Address</source>
         <translation>Адрес клиента</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.ui" line="133"/>
+        <location filename="../client/desktop/management/router_relays_widget.ui" line="133"/>
         <source>Transferred</source>
         <translation>Передано</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.ui" line="138"/>
+        <location filename="../client/desktop/management/router_relays_widget.ui" line="138"/>
         <source>Duration</source>
         <translation>Продолжительность</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.ui" line="143"/>
+        <location filename="../client/desktop/management/router_relays_widget.ui" line="143"/>
         <source>Idle</source>
         <translation>Простой</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.cc" line="340"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="340"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.cc" line="340"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="340"/>
         <source>JSON files (*.json)</source>
         <translation>JSON-файлы (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.cc" line="351"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="351"/>
         <source>Could not open file for writing.</source>
         <translation>Не удалось открыть файл для записи.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.cc" line="414"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="414"/>
         <source>Unable to write file.</source>
         <translation>Не удалось записать файл.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.cc" line="451"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="451"/>
         <source>Are you sure you want to disconnect relay &quot;%1&quot;?</source>
         <translation>Вы уверены, что хотите отключить ретранслятор &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.cc" line="476"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="476"/>
         <source>Are you sure you want to disconnect all relays?</source>
         <translation>Вы действительно хотите отключить все маршрутизаторы?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.cc" line="527"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="527"/>
         <source>Disconnect</source>
         <translation>Отключить</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.cc" line="529"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="529"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.cc" line="530"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="530"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.cc" line="539"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="539"/>
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
         <translation>Вы уверены, что хотите отключить узел &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.cc" line="661"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="661"/>
         <source>Invalid relay request.</source>
         <translation>Неверный запрос ретранслятора.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.cc" line="663"/>
-        <location filename="../client/desktop/hosts/router_relays_widget.cc" line="686"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="663"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="686"/>
         <source>Unknown internal error.</source>
         <translation>Неизвестная внутренняя ошибка.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.cc" line="665"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="665"/>
         <source>Invalid entry id.</source>
         <translation>Неверный идентификатор записи.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.cc" line="667"/>
-        <location filename="../client/desktop/hosts/router_relays_widget.cc" line="688"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="667"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="688"/>
         <source>Unknown error type.</source>
         <translation>Неизвестный тип ошибки.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_relays_widget.cc" line="684"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="684"/>
         <source>Relay session not found.</source>
         <translation>Сеанс ретранслятора не найден.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts/router_relays_widget.cc" line="768"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="768"/>
         <source>%n relay(s)</source>
         <translation>
             <numerusform>%n ретранслятор</numerusform>
@@ -5721,17 +5724,17 @@ Hosts skipped: %6</source>
 <context>
     <name>RouterStatusWidget</name>
     <message>
-        <location filename="../client/desktop/hosts/router_status_widget.ui" line="48"/>
+        <location filename="../client/desktop/management/router_status_widget.ui" line="48"/>
         <source>Date and time</source>
         <translation>Дата и время</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_status_widget.ui" line="53"/>
+        <location filename="../client/desktop/management/router_status_widget.ui" line="53"/>
         <source>Event</source>
         <translation>Событие</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts/router_status_widget.cc" line="155"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="155"/>
         <source>%n event(s)</source>
         <translation>
             <numerusform>%n событие</numerusform>
@@ -5743,32 +5746,32 @@ Hosts skipped: %6</source>
 <context>
     <name>RouterTempHostsWidget</name>
     <message>
-        <location filename="../client/desktop/hosts/router_temp_hosts_widget.cc" line="81"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="81"/>
         <source>ID</source>
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_temp_hosts_widget.cc" line="81"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="81"/>
         <source>Computer Name</source>
         <translation>Имя компьютера</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_temp_hosts_widget.cc" line="81"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="81"/>
         <source>Operating System</source>
         <translation>Операционная система</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_temp_hosts_widget.cc" line="82"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="82"/>
         <source>Version</source>
         <translation>Версия</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_temp_hosts_widget.cc" line="82"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="82"/>
         <source>Address</source>
         <translation>Адрес</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_temp_hosts_widget.cc" line="205"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="205"/>
         <source>Failed to approve the host.</source>
         <translation>Не удалось подтвердить хост.</translation>
     </message>
@@ -5776,37 +5779,37 @@ Hosts skipped: %6</source>
 <context>
     <name>RouterUserDialog</name>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="14"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="14"/>
         <source>User Properties</source>
         <translation>Свойства пользователя</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="27"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="27"/>
         <source>General</source>
         <translation>Основные</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="37"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="37"/>
         <source>Name:</source>
         <translation>Имя:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="44"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="44"/>
         <source>Password:</source>
         <translation>Пароль:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="51"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="51"/>
         <source>Password (retry):</source>
         <translation>Пароль (повторить):</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="58"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="58"/>
         <source>Access Level:</source>
         <translation>Уровень доступа:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="85"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="85"/>
         <source>Disable User Account</source>
         <translation>Отключить пользователя</translation>
     </message>
@@ -5815,114 +5818,114 @@ Hosts skipped: %6</source>
         <translation type="vanished">Разрешенные типы сессий:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="95"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="95"/>
         <source>Reset two-factor authentication</source>
         <translation>Сбросить двухфакторную аутентификацию</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="103"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="103"/>
         <source>Sessions</source>
         <translation>Сессии</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="119"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="119"/>
         <source>Signed in</source>
         <translation>Выполнен вход</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="124"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="124"/>
         <source>Last activity</source>
         <translation>Последняя активность</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="129"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="129"/>
         <source>Address</source>
         <translation>Адрес</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="152"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="152"/>
         <source>Sign out</source>
         <translation>Завершить сеанс</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.ui" line="159"/>
+        <location filename="../client/desktop/management/router_user_dialog.ui" line="159"/>
         <source>Sign out all</source>
         <translation>Завершить все сеансы</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="182"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="182"/>
         <source>Invalid user request.</source>
         <translation>Неверный запрос пользователя.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="184"/>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="240"/>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="339"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="184"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="240"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="339"/>
         <source>Unknown internal error.</source>
         <translation>Неизвестная внутренняя ошибка.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="186"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="186"/>
         <source>Invalid data was passed.</source>
         <translation>Переданы некорректные данные.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="188"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="188"/>
         <source>A user with the specified name already exists.</source>
         <translation>Пользователь с указанным именем уже существует.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="190"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="190"/>
         <source>User not found. The list may be out of date.</source>
         <translation>Пользователь не найден. Возможно, список устарел.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="192"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="192"/>
         <source>Unknown error type.</source>
         <translation>Неизвестный тип ошибки.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="205"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="205"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
         <translation>Сброс двухфакторной аутентификации приведет к выходу пользователя из всех сеансов и потребует повторной настройки при следующем входе. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="254"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="254"/>
         <source>Are you sure you want to sign this user out of this session?</source>
         <translation>Вы уверены, что хотите завершить этот сеанс пользователя?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="281"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="281"/>
         <source>Are you sure you want to sign this user out of all sessions?</source>
         <translation>Вы уверены, что хотите завершить все сеансы этого пользователя?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="335"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="335"/>
         <source>Session not found. The list may be out of date.</source>
         <translation>Сеанс не найден. Возможно, список устарел.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="337"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="337"/>
         <source>Invalid sign-out request.</source>
         <translation>Недопустимый запрос на завершение сеанса.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="370"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="370"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
         <translation>Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="382"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="382"/>
         <source>The username you entered already exists.</source>
         <translation>Введенное вами имя пользователя уже существует.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="394"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="394"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введенные пароли не совпадают.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="403"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="403"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Пароль не может быть пустой и не должен превышать %n символ.</numerusform>
@@ -5931,12 +5934,12 @@ Hosts skipped: %6</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="413"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="413"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="414"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="414"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
@@ -5945,42 +5948,42 @@ Hosts skipped: %6</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="418"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="418"/>
         <source>Do you want to enter a different password?</source>
         <translation>Вы хотите ввести другой пароль?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="421"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="421"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="441"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="441"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Неизвестная внутренняя ошибка при создании или изменении пользователя.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="493"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="493"/>
         <source>Double-click to change</source>
         <translation>Двойной щелчок для изменения</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="564"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="564"/>
         <source>Administrator</source>
         <translation>Администратор</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="568"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="568"/>
         <source>Manager</source>
         <translation>Менеджер</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="572"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="572"/>
         <source>Client</source>
         <translation>Клиент</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_user_dialog.cc" line="590"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="590"/>
         <source>Never</source>
         <translation>Никогда</translation>
     </message>
@@ -5995,62 +5998,62 @@ Hosts skipped: %6</source>
 <context>
     <name>RouterUsersWidget</name>
     <message>
-        <location filename="../client/desktop/hosts/router_users_widget.ui" line="51"/>
+        <location filename="../client/desktop/management/router_users_widget.ui" line="51"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_users_widget.ui" line="56"/>
+        <location filename="../client/desktop/management/router_users_widget.ui" line="56"/>
         <source>Enabled</source>
         <translation>Включен</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_users_widget.ui" line="61"/>
+        <location filename="../client/desktop/management/router_users_widget.ui" line="61"/>
         <source>Session Types</source>
         <translation>Типы сессий</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_users_widget.cc" line="270"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="270"/>
         <source>You cannot delete a built-in user.</source>
         <translation>Вы не можете удалить встроенного пользователя.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_users_widget.cc" line="275"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="275"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Вы действительно хотите удалить пользователя &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_users_widget.cc" line="374"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="374"/>
         <source>Invalid user request.</source>
         <translation>Неверный запрос пользователя.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_users_widget.cc" line="376"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="376"/>
         <source>Unknown internal error.</source>
         <translation>Неизвестная внутренняя ошибка.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_users_widget.cc" line="378"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="378"/>
         <source>Invalid data was passed.</source>
         <translation>Переданы некорректные данные.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_users_widget.cc" line="380"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="380"/>
         <source>A user with the specified name already exists.</source>
         <translation>Пользователь с указанным именем уже существует.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_users_widget.cc" line="382"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="382"/>
         <source>User not found. The list may be out of date.</source>
         <translation>Пользователь не найден. Возможно, список устарел.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_users_widget.cc" line="384"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="384"/>
         <source>Unknown error type.</source>
         <translation>Неизвестный тип ошибки.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts/router_users_widget.cc" line="442"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="442"/>
         <source>%n user(s)</source>
         <translation>
             <numerusform>%n пользователь</numerusform>
@@ -6429,130 +6432,130 @@ Hosts skipped: %6</source>
 <context>
     <name>RouterWorkspaceDialog</name>
     <message>
-        <location filename="../client/desktop/hosts/router_workspace_dialog.ui" line="14"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="14"/>
         <source>Workspace Properties</source>
         <translation>Свойства рабочего пространства</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_workspace_dialog.ui" line="27"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="27"/>
         <source>General</source>
         <translation>Основные</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_workspace_dialog.ui" line="35"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="35"/>
         <source>Name:</source>
         <translation>Имя:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_workspace_dialog.ui" line="47"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="47"/>
         <source>Comment:</source>
         <translation>Комментарий:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_workspace_dialog.ui" line="58"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="58"/>
         <source>Access</source>
         <translation>Доступ</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_workspace_dialog.ui" line="66"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="66"/>
         <source>Users with access</source>
         <translation>Пользователи с доступом</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_workspace_dialog.ui" line="87"/>
-        <location filename="../client/desktop/hosts/router_workspace_dialog.ui" line="160"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="87"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="160"/>
         <source>&lt; Add</source>
         <translation>&lt; Добавить</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_workspace_dialog.ui" line="90"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="90"/>
         <source>Grant access to the selected user</source>
         <translation>Предоставить доступ выбранному пользователю</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_workspace_dialog.ui" line="97"/>
-        <location filename="../client/desktop/hosts/router_workspace_dialog.ui" line="170"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="97"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="170"/>
         <source>Remove &gt;</source>
         <translation>Удалить &gt;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_workspace_dialog.ui" line="100"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="100"/>
         <source>Revoke access from the selected user</source>
         <translation>Отозвать доступ у выбранного пользователя</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_workspace_dialog.ui" line="118"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="118"/>
         <source>Available users</source>
         <translation>Доступные пользователи</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_workspace_dialog.ui" line="131"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="131"/>
         <source>Hosts</source>
         <translation>Хосты</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_workspace_dialog.ui" line="139"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="139"/>
         <source>Hosts in workspace</source>
         <translation>Хосты в рабочем пространстве</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_workspace_dialog.ui" line="163"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="163"/>
         <source>Move the selected host into the workspace</source>
         <translation>Переместить выбранный хост в рабочее пространство</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_workspace_dialog.ui" line="173"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="173"/>
         <source>Remove the selected host from the workspace</source>
         <translation>Удалить выбранный хост из рабочего пространства</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_workspace_dialog.ui" line="191"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.ui" line="191"/>
         <source>Unassigned hosts</source>
         <translation>Неназначенные хосты</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_workspace_dialog.cc" line="214"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="214"/>
         <source>Workspace name cannot be empty.</source>
         <translation>Имя рабочего пространства не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_workspace_dialog.cc" line="224"/>
-        <location filename="../client/desktop/hosts/router_workspace_dialog.cc" line="298"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="224"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="298"/>
         <source>A workspace with the specified name already exists.</source>
         <translation>Рабочее пространство с указанным именем уже существует.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_workspace_dialog.cc" line="292"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="292"/>
         <source>Invalid workspace request.</source>
         <translation>Недопустимый запрос рабочего пространства.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_workspace_dialog.cc" line="294"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="294"/>
         <source>Unknown internal error.</source>
         <translation>Неизвестная внутренняя ошибка.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_workspace_dialog.cc" line="296"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="296"/>
         <source>Invalid data was passed.</source>
         <translation>Переданы некорректные данные.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_workspace_dialog.cc" line="300"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="300"/>
         <source>Workspace not found.</source>
         <translation>Рабочее пространство не найдено.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_workspace_dialog.cc" line="302"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="302"/>
         <source>Unknown error type.</source>
         <translation>Неизвестный тип ошибки.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_workspace_dialog.cc" line="332"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="332"/>
         <source>Administrators cannot be removed from the workspace access list.</source>
         <translation>Администраторы не могут быть удалены из списка доступа к рабочему пространству.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_workspace_dialog.cc" line="367"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="367"/>
         <source>Removing the host from the workspace will permanently clear its encrypted fields (comment, user name and password). This action cannot be undone.
 
 Are you sure you want to continue?</source>
@@ -6611,12 +6614,12 @@ Are you sure you want to continue?</source>
 <context>
     <name>SearchDialog</name>
     <message>
-        <location filename="../client/desktop/hosts/search_dialog.ui" line="14"/>
+        <location filename="../client/desktop/management/search_dialog.ui" line="14"/>
         <source>Search</source>
         <translation>Поиск</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/search_dialog.ui" line="20"/>
+        <location filename="../client/desktop/management/search_dialog.ui" line="20"/>
         <source>Search...</source>
         <translation>Поиск...</translation>
     </message>
@@ -6624,27 +6627,27 @@ Are you sure you want to continue?</source>
 <context>
     <name>SearchWidget</name>
     <message>
-        <location filename="../client/desktop/hosts/search_widget.cc" line="248"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="248"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/search_widget.cc" line="248"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="248"/>
         <source>Address / ID</source>
         <translation>Адрес / ID</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/search_widget.cc" line="248"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="248"/>
         <source>Comment</source>
         <translation>Комментарий</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/search_widget.cc" line="248"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="248"/>
         <source>Group</source>
         <translation>Группа</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts/search_widget.cc" line="530"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="530"/>
         <source>%n result(s)</source>
         <translation>
             <numerusform>%n результат</numerusform>
@@ -6726,68 +6729,68 @@ Are you sure you want to continue?</source>
 <context>
     <name>ServiceItem</name>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="189"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="191"/>
         <source>Continue Pending</source>
         <translation>Возобновление</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="191"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="193"/>
         <source>Pause Pending</source>
         <translation>Приостановка</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="193"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="195"/>
         <source>Paused</source>
         <translation>Простановлено</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="195"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="197"/>
         <source>Running</source>
         <translation>Запущено</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="197"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="199"/>
         <source>Start Pending</source>
         <translation>Запуск</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="199"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="201"/>
         <source>Stop Pending</source>
         <translation>Остановка</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="201"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="203"/>
         <source>Stopped</source>
         <translation>Остановлено</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="203"/>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="223"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="205"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="225"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="213"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="215"/>
         <source>Auto Start</source>
         <translation>Автоматически</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="215"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="217"/>
         <source>Demand Start</source>
         <translation>По требованию</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="217"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="219"/>
         <source>Disabled</source>
         <translation>Отключено</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="219"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="221"/>
         <source>Boot Start</source>
         <translation>При загрузке</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="221"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="223"/>
         <source>System Start</source>
         <translation>При старте системы</translation>
     </message>
@@ -7416,22 +7419,22 @@ Are you sure you want to continue?</source>
 <context>
     <name>Sidebar</name>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="74"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="74"/>
         <source>Local</source>
         <translation>Локальные</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="920"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="920"/>
         <source>Connecting to router %1...</source>
         <translation>Подключение к маршрутизатору %1...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="924"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="924"/>
         <source>Connection to router %1 established.</source>
         <translation>Соединение с маршрутизатором %1 установлено.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="928"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="928"/>
         <source>Disconnected from router %1.</source>
         <translation>Отключено от маршрутизатора %1.</translation>
     </message>
@@ -7440,17 +7443,17 @@ Are you sure you want to continue?</source>
         <translation type="vanished">Сетевая ошибка: %1.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="972"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="972"/>
         <source>To complete the migration from a previous version, you need to change your password.</source>
         <translation>Для завершения миграции с предыдущей версии необходимо изменить ваш пароль.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="474"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="474"/>
         <source>Change Password</source>
         <translation>Изменение пароля</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts/sidebar.cc" line="481"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="481"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Пароль не может быть пустой и не должен превышать %n символ.</numerusform>
@@ -7459,12 +7462,12 @@ Are you sure you want to continue?</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="488"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="488"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/hosts/sidebar.cc" line="489"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="489"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
@@ -7473,79 +7476,79 @@ Are you sure you want to continue?</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="492"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="492"/>
         <source>Do you want to enter a different password?</source>
         <translation>Вы хотите ввести другой пароль?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="514"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="514"/>
         <source>Password updated. Waiting for new encryption keys...</source>
         <translation>Пароль обновлен. Ожидание новых ключей шифрования...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="542"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="542"/>
         <source>Event history cleared.</source>
         <translation>История событий очищена.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="520"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="520"/>
         <source>Invalid password change request.</source>
         <translation>Недопустимый запрос на изменение пароля.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="522"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="522"/>
         <source>Unknown internal error.</source>
         <translation>Неизвестная внутренняя ошибка.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="524"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="524"/>
         <source>Invalid data was passed.</source>
         <translation>Переданы некорректные данные.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="526"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="526"/>
         <source>Unknown error type.</source>
         <translation>Неизвестный тип ошибки.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="663"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="663"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation>Вы уверены, что хотите удалить группу &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="676"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="676"/>
         <source>Unable to remove group</source>
         <translation>Не удалось удалить группу</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="740"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="740"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>Вы уверены, что хотите удалить маршрутизатор &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="964"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="964"/>
         <source>Network error: %1</source>
         <translation>Сетевая ошибка: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="1422"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1422"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>Группа с таким именем уже существует в выбранной родительской группе.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="1431"/>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="1593"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1431"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1593"/>
         <source>Failed to move the group.</source>
         <translation>Не удалось переместить группу.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="1484"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1484"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Хост с таким именем уже существует в выбранной группе.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="1502"/>
-        <location filename="../client/desktop/hosts/sidebar.cc" line="1670"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1502"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1670"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>Не удалось переместить хост в выбранную группу.</translation>
     </message>
@@ -7557,7 +7560,7 @@ Are you sure you want to continue?</source>
         <translation type="vanished">Активные клиенты</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar_items.cc" line="168"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="168"/>
         <source>Clients</source>
         <translation>Клиенты</translation>
     </message>
@@ -7569,7 +7572,7 @@ Are you sure you want to continue?</source>
         <translation type="vanished">Все хосты</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/sidebar_items.cc" line="150"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="150"/>
         <source>Approved Hosts</source>
         <translation>Подтвержденные хосты</translation>
     </message>
@@ -7577,7 +7580,7 @@ Are you sure you want to continue?</source>
 <context>
     <name>SidebarRouterRelays</name>
     <message>
-        <location filename="../client/desktop/hosts/sidebar_items.cc" line="177"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="177"/>
         <source>Relays</source>
         <translation>Ретрансляторы</translation>
     </message>
@@ -7589,7 +7592,7 @@ Are you sure you want to continue?</source>
 <context>
     <name>SidebarRouterTempHosts</name>
     <message>
-        <location filename="../client/desktop/hosts/sidebar_items.cc" line="186"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="186"/>
         <source>Unapproved Hosts</source>
         <translation>Неподтвержденные хосты</translation>
     </message>
@@ -7597,7 +7600,7 @@ Are you sure you want to continue?</source>
 <context>
     <name>SidebarRouterUsers</name>
     <message>
-        <location filename="../client/desktop/hosts/sidebar_items.cc" line="159"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="159"/>
         <source>Users</source>
         <translation>Пользователи</translation>
     </message>
@@ -7606,7 +7609,7 @@ Are you sure you want to continue?</source>
     <name>StatisticsDialog</name>
     <message>
         <location filename="../client/desktop/desktop/statistics_dialog.ui" line="14"/>
-        <location filename="../client/android/statistics_dialog.cc" line="177"/>
+        <location filename="../client/android/statistics_dialog.cc" line="176"/>
         <source>Statistics</source>
         <translation>Статистика</translation>
     </message>
@@ -7621,7 +7624,7 @@ Are you sure you want to continue?</source>
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="../client/android/statistics_dialog.cc" line="210"/>
+        <location filename="../client/android/statistics_dialog.cc" line="209"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -9432,137 +9435,137 @@ Are you sure you want to continue?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="413"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="414"/>
         <source>Summary</source>
         <translation>Сводка</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="420"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="421"/>
         <source>Hardware</source>
         <translation>Оборудование</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="423"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="424"/>
         <source>Devices</source>
         <translation>Устройства</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="426"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="427"/>
         <source>Video Adapters</source>
         <translation>Видеоадаптеры</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="429"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="430"/>
         <source>Monitors</source>
         <translation>Мониторы</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="432"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="433"/>
         <source>Printers</source>
         <translation>Принтеры</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="435"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="436"/>
         <source>Power Options</source>
         <translation>Параметры питания</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="448"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="449"/>
         <source>Software</source>
         <translation>Программное обеспечение</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="451"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="452"/>
         <source>Applications</source>
         <translation>Приложения</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="454"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="455"/>
         <source>Drivers</source>
         <translation>Драйверы</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="457"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="458"/>
         <source>Services</source>
         <translation>Службы</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="460"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="461"/>
         <source>Processes</source>
         <translation>Процессы</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="463"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="464"/>
         <source>Licenses</source>
         <translation>Лицензии</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="476"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="477"/>
         <source>Network</source>
         <translation>Сеть</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="479"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="480"/>
         <source>Network Adapters</source>
         <translation>Сетевые адаптеры</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="482"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="483"/>
         <source>Routes</source>
         <translation>Маршруты</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="485"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="486"/>
         <source>Connections</source>
         <translation>Подключения</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="488"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="489"/>
         <source>Network Shares</source>
         <translation>Сетевые ресурсы</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="491"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="492"/>
         <source>Open Files</source>
         <translation>Открытые файлы</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="504"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="505"/>
         <source>Operating System</source>
         <translation>Операционная система</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="507"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="508"/>
         <source>Environment Variables</source>
         <translation>Переменные окружения</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="510"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="511"/>
         <source>Event Logs</source>
         <translation>Журнал событий</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="513"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="514"/>
         <source>Users</source>
         <translation>Пользователи</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="516"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="517"/>
         <source>User Groups</source>
         <translation>Группы пользователей</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="139"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="143"/>
         <source>HTML File</source>
         <translation>HTML-файл</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="139"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="143"/>
         <source>HTML File (*.html)</source>
         <translation>HTML-файл (*.html)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="150"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="154"/>
         <source>Failed to save file: %1</source>
         <translation>Не удалось сохранить файл: %1</translation>
     </message>
@@ -9735,37 +9738,37 @@ Are you sure you want to continue?</source>
         <translation>Отключить</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="650"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="652"/>
         <source>Do you really want to end &quot;%1&quot; process?</source>
         <translation>Вы действительно хотите завершить процесс &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="700"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="702"/>
         <source>Do you really want to disconnect user &quot;%1&quot; session?</source>
         <translation>Вы действительно хотите отключить сессию пользователя &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="723"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="725"/>
         <source>Do you really want to end user &quot;%1&quot; session?</source>
         <translation>Вы действительно хотите завершить сессию пользователя &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="923"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="944"/>
         <source>Processes: %1</source>
         <translation>Процессов: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="929"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="950"/>
         <source>CPU loading: %1%</source>
         <translation>Загрузка ЦП: %1%</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="935"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="956"/>
         <source>Physical memory: %1%</source>
         <translation>Физическая память: %1%</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="941"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="962"/>
         <source>Update Speed</source>
         <translation>Скорость обновления</translation>
     </message>
@@ -10262,62 +10265,62 @@ Are you sure you want to continue?</source>
 <context>
     <name>UserItem</name>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="251"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="253"/>
         <source>&lt;no user&gt;</source>
         <translation>&lt;нет&gt;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="286"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="288"/>
         <source>Active</source>
         <translation>Активен</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="288"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="290"/>
         <source>Connected</source>
         <translation>Подключен</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="290"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="292"/>
         <source>Connect Query</source>
         <translation>Подключение</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="292"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="294"/>
         <source>Shadow</source>
         <translation>Теневой</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="294"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="296"/>
         <source>Disconnected</source>
         <translation>Отключен</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="296"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="298"/>
         <source>Idle</source>
         <translation>Простой</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="298"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="300"/>
         <source>Listen</source>
         <translation>Прослушивание</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="300"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="302"/>
         <source>Reset</source>
         <translation>Сброс</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="302"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="304"/>
         <source>Down</source>
         <translation>Неактивен</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="304"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="306"/>
         <source>Init</source>
         <translation>Инициализация</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/task_manager_window.cc" line="306"/>
+        <location filename="../client/desktop/desktop/task_manager_window.cc" line="308"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
@@ -10325,27 +10328,27 @@ Are you sure you want to continue?</source>
 <context>
     <name>UserTreeItem</name>
     <message>
-        <location filename="../client/desktop/hosts/router_users_widget.cc" line="58"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="58"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_users_widget.cc" line="58"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="58"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_users_widget.cc" line="90"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="90"/>
         <source>Administrator</source>
         <translation>Администратор</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_users_widget.cc" line="94"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="94"/>
         <source>Client</source>
         <translation>Клиент</translation>
     </message>
     <message>
-        <location filename="../client/desktop/hosts/router_users_widget.cc" line="92"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="92"/>
         <source>Manager</source>
         <translation>Менеджер</translation>
     </message>
