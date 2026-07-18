@@ -25,8 +25,8 @@
 
 #include "client/config.h"
 #include "client/router.h"
-#include "client/desktop/hosts/sidebar.h"
 #include "client/desktop/tab.h"
+#include "client/desktop/management/sidebar.h"
 
 namespace Ui {
 class HostsTab;

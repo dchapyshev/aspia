@@ -45,7 +45,7 @@
 #include "client/desktop/chat/chat_window.h"
 #include "client/desktop/desktop/desktop_window.h"
 #include "client/desktop/file_transfer/file_transfer_window.h"
-#include "client/desktop/hosts/search_dialog.h"
+#include "client/desktop/management/search_dialog.h"
 #include "client/desktop/sys_info/system_info_window.h"
 #include "client/desktop/terminal/terminal_window.h"
 #include "common/update_checker.h"

@@ -89,7 +89,7 @@ include(desktop/desktop/sources.cmake)
 include(desktop/file_transfer/sources.cmake)
 include(desktop/sys_info/sources.cmake)
 include(desktop/chat/sources.cmake)
-include(desktop/hosts/sources.cmake)
+include(desktop/management/sources.cmake)
 include(desktop/terminal/sources.cmake)
 include(workers/sources.cmake)
 
@@ -106,7 +106,7 @@ source_group(desktop\\file_transfer FILES ${SOURCE_CLIENT_CORE_DESKTOP_FILE_TRAN
 source_group(desktop\\sys_info FILES ${SOURCE_CLIENT_CORE_DESKTOP_SYS_INFO})
 source_group(desktop\\chat FILES ${SOURCE_CLIENT_CORE_DESKTOP_CHAT})
 source_group(desktop\\terminal FILES ${SOURCE_CLIENT_CORE_DESKTOP_TERMINAL})
-source_group(desktop\\hosts FILES ${SOURCE_CLIENT_CORE_DESKTOP_HOSTS_TAB})
+source_group(desktop\\management FILES ${SOURCE_CLIENT_CORE_DESKTOP_MANAGEMENT_TAB})
 source_group(win FILES ${SOURCE_CLIENT_WIN})
 source_group(workers FILES ${SOURCE_CLIENT_WORKERS})
 
@@ -150,7 +150,7 @@ else()
         ${SOURCE_CLIENT_CORE_DESKTOP_SYS_INFO}
         ${SOURCE_CLIENT_CORE_DESKTOP_CHAT}
         ${SOURCE_CLIENT_CORE_DESKTOP_TERMINAL}
-        ${SOURCE_CLIENT_CORE_DESKTOP_HOSTS_TAB}
+        ${SOURCE_CLIENT_CORE_DESKTOP_MANAGEMENT_TAB}
         ${SOURCE_CLIENT_WIN}
         ${SOURCE_CLIENT_WORKERS})
 endif()

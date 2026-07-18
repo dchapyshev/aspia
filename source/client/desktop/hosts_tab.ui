@@ -429,7 +429,7 @@
   <customwidget>
    <class>Sidebar</class>
    <extends>QWidget</extends>
-   <header>client/desktop/hosts/sidebar.h</header>
+   <header>client/desktop/management/sidebar.h</header>
   </customwidget>
  </customwidgets>
  <resources>
