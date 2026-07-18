@@ -28,6 +28,7 @@
 
 class QLocalServer;
 class QLockFile;
+class WorkerManager;
 
 #if defined(Q_OS_WINDOWS)
 class MessageWindow;
@@ -43,6 +44,9 @@ public:
 
     static GuiApplication* instance();
     static QThread* ioThread();
+
+    // Global worker manager for app-lifetime workers.
+    static WorkerManager* workerManager();
 
     bool isRunning();
 
@@ -88,6 +92,7 @@ private:
     QLocalServer* server_ = nullptr;
 
     Thread io_thread_;
+    std::unique_ptr<WorkerManager> worker_manager_;
     std::unique_ptr<Translations> translations_;
 
     bool is_native_style_ = false;

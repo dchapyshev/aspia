@@ -34,6 +34,7 @@
 #include <QSvgRenderer>
 
 #include "base/logging.h"
+#include "base/threading/worker_manager.h"
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
@@ -122,6 +123,7 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
 
     io_thread_.start();
 
+    worker_manager_ = std::make_unique<WorkerManager>();
     translations_ = std::make_unique<Translations>();
 
     small_icon_size_ = kDefaultSmallIconSize;
@@ -202,6 +204,8 @@ GuiApplication::~GuiApplication()
     }
 #endif // defined(Q_OS_WINDOWS)
 
+    worker_manager_.reset();
+
     io_thread_.stop();
 
     bool is_locked = lock_file_->isLocked();
@@ -234,6 +238,20 @@ QThread* GuiApplication::ioThread()
     }
 
     return &application->io_thread_;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+WorkerManager* GuiApplication::workerManager()
+{
+    GuiApplication* application = instance();
+    if (!application)
+    {
+        LOG(ERROR) << "Invalid application instance";
+        return nullptr;
+    }
+
+    return application->worker_manager_.get();
 }
 
 //--------------------------------------------------------------------------------------------------
