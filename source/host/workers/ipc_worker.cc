@@ -31,7 +31,7 @@
 
 //--------------------------------------------------------------------------------------------------
 IpcWorker::IpcWorker()
-    : Worker(Thread::AsioDispatcher)
+    : Worker(Thread::AsioDispatcher, Seconds(1))
 {
     LOG(INFO) << "Ctor";
 }
@@ -95,11 +95,6 @@ void IpcWorker::onAudioData(const QByteArray& buffer)
 void IpcWorker::onStart()
 {
     LOG(INFO) << "IPC worker started";
-
-    overflow_timer_ = new QTimer(this);
-    overflow_timer_->setInterval(std::chrono::milliseconds(1000));
-    connect(overflow_timer_, &QTimer::timeout, this, &IpcWorker::onOverflowCheck);
-
     connectToService();
 }
 
@@ -115,14 +110,29 @@ void IpcWorker::onStop()
     }
     clients_.clear();
 
-    overflow_timer_.reset();
     ipc_channel_.reset();
+}
+
+//--------------------------------------------------------------------------------------------------
+void IpcWorker::onTimer()
+{
+    if (clients_.isEmpty())
+        return;
+
+    proto::desktop::Overflow::State state = proto::desktop::Overflow::STATE_NONE;
+
+    for (auto* client : std::as_const(clients_))
+    {
+        if (client->overflowState() > state)
+            state = client->overflowState();
+    }
+
+    emit sig_overflowStateChanged(state);
 }
 
 //--------------------------------------------------------------------------------------------------
 void IpcWorker::onIpcConnected()
 {
-    overflow_timer_->start();
     ipc_channel_->setPaused(false);
 }
 
@@ -144,10 +154,9 @@ void IpcWorker::onIpcDisconnected()
     }
     clients_.clear();
 
-    overflow_timer_->stop();
     emit sig_stopCapture();
 
-    QTimer::singleShot(std::chrono::seconds(1), this, [this]()
+    QTimer::singleShot(Seconds(1), this, [this]()
     {
         ipc_channel_.reset();
         connectToService();
@@ -168,7 +177,7 @@ void IpcWorker::onIpcErrorOccurred()
     // channel. Recreate the channel and retry (deferred, so the errored channel is not deleted
     // mid-signal) until the service is serving.
     LOG(INFO) << "IPC server not available yet, will retry";
-    QTimer::singleShot(std::chrono::seconds(1), this, [this]()
+    QTimer::singleShot(Seconds(1), this, [this]()
     {
         ipc_channel_.reset();
         connectToService();
@@ -345,20 +354,6 @@ void IpcWorker::onPreferredSizeChanged()
     });
 
     emit sig_preferredSizeChanged(max_size);
-}
-
-//--------------------------------------------------------------------------------------------------
-void IpcWorker::onOverflowCheck()
-{
-    proto::desktop::Overflow::State state = proto::desktop::Overflow::STATE_NONE;
-
-    for (auto* client : std::as_const(clients_))
-    {
-        if (client->overflowState() > state)
-            state = client->overflowState();
-    }
-
-    emit sig_overflowStateChanged(state);
 }
 
 //--------------------------------------------------------------------------------------------------

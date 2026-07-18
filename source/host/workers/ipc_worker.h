@@ -39,7 +39,6 @@ class Screen;
 
 class DesktopAgentClient;
 class IpcChannel;
-class QTimer;
 
 // Runs the I/O side of the desktop agent: the control IPC channel to the service and the connected
 // clients (protocol state, capability negotiation, config merge, overflow aggregation). Messages
@@ -102,6 +101,7 @@ protected:
     // Worker implementation.
     void onStart() final;
     void onStop() final;
+    void onTimer() final;
 
 private slots:
     void onIpcConnected();
@@ -111,7 +111,6 @@ private slots:
     void onClientConfigured();
     void onClientFinished();
     void onPreferredSizeChanged();
-    void onOverflowCheck();
     void onClientBandwidthChanged();
 
 private:
@@ -121,7 +120,6 @@ private:
 
     ScopedQPointer<IpcChannel> ipc_channel_;
     QList<DesktopAgentClient*> clients_;
-    ScopedQPointer<QTimer> overflow_timer_;
 
     bool is_lock_at_disconnect_ = false;
 
