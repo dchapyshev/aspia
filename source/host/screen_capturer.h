@@ -41,18 +41,17 @@ public:
     enum class Type
     {
         UNKNOWN       = 0,
-        DEFAULT       = 1,
-        FAKE          = 2,
-        WIN_GDI       = 3,
-        WIN_DXGI      = 4,
-        LINUX_X11     = 5,
-        LINUX_WAYLAND = 6,
-        LINUX_KMS     = 7,
-        LINUX_KWIN    = 8,
-        LINUX_WLR     = 9,
-        LINUX_VT      = 10,
-        MACOSX        = 11,
-        ANDROID_MEDIA = 12
+        FAKE          = 1,
+        WIN_GDI       = 2,
+        WIN_DXGI      = 3,
+        LINUX_X11     = 4,
+        LINUX_WAYLAND = 5,
+        LINUX_KMS     = 6,
+        LINUX_KWIN    = 7,
+        LINUX_WLR     = 8,
+        LINUX_VT      = 9,
+        MACOSX        = 10,
+        ANDROID_MEDIA = 11
     };
     Q_ENUM(Type)
 

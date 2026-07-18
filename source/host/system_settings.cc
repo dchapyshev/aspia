@@ -89,7 +89,7 @@ void SystemSettings::setUpdateServer(const QString& server)
 quint32 SystemSettings::preferredVideoCapturer() const
 {
     return settings_.value(
-        kPreferredVideoCapturer, static_cast<quint32>(ScreenCapturer::Type::DEFAULT)).toUInt();
+        kPreferredVideoCapturer, static_cast<quint32>(ScreenCapturer::Type::UNKNOWN)).toUInt();
 }
 
 //--------------------------------------------------------------------------------------------------

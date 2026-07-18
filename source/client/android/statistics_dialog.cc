@@ -126,7 +126,6 @@ QString capturerToString(quint32 type)
 {
     switch (static_cast<proto::video::ScreenCapturerType>(type))
     {
-        case proto::video::SCREEN_CAPTURER_TYPE_DEFAULT: return "DEFAULT";
         case proto::video::SCREEN_CAPTURER_TYPE_FAKE: return "FAKE";
         case proto::video::SCREEN_CAPTURER_TYPE_WIN_GDI: return "WIN_GDI";
         case proto::video::SCREEN_CAPTURER_TYPE_WIN_DXGI: return "WIN_DXGI";

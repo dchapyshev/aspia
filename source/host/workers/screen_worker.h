@@ -181,7 +181,7 @@ private:
     // Keeps the display and the system awake for the lifetime of the capture session.
     ScopedQPointer<PowerSaveBlocker> power_save_blocker_;
 
-    ScreenCapturer::Type preferred_capturer_ = ScreenCapturer::Type::DEFAULT;
+    ScreenCapturer::Type preferred_capturer_ = ScreenCapturer::Type::UNKNOWN;
     ScreenCapturer::ScreenId last_screen_id_ = ScreenCapturer::kInvalidScreenId;
 
     bool vp8_supported_ = false;
@@ -217,7 +217,7 @@ private:
     // Last values published to InputWorker (sig_scaleFactorChanged / sig_screenInfoChanged).
     double published_scale_x_ = 0.0;
     double published_scale_y_ = 0.0;
-    ScreenCapturer::Type published_capture_type_ = ScreenCapturer::Type::DEFAULT;
+    ScreenCapturer::Type published_capture_type_ = ScreenCapturer::Type::UNKNOWN;
     QSize published_screen_size_;
     QPoint published_screen_offset_;
 

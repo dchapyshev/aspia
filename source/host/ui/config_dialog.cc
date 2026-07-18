@@ -149,7 +149,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     });
 
     ui->combo_video_capturer->addItem(
-        tr("Default"), static_cast<quint32>(ScreenCapturer::Type::DEFAULT));
+        tr("Default"), static_cast<quint32>(ScreenCapturer::Type::UNKNOWN));
 
 #if defined(Q_OS_WINDOWS)
     ui->combo_video_capturer->addItem(

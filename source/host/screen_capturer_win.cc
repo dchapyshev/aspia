@@ -288,7 +288,7 @@ ScreenCapturer* ScreenCapturerWin::create(Type preferred_type, Error last_error,
         LOG(INFO) << "Permanent error. Reset to GDI capturer";
     }
     else if (preferred_type == ScreenCapturer::Type::WIN_DXGI ||
-             preferred_type == ScreenCapturer::Type::DEFAULT)
+             preferred_type == ScreenCapturer::Type::UNKNOWN)
     {
         if (windowsVersion() >= VERSION_WIN8)
         {
