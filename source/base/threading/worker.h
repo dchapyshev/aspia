@@ -21,8 +21,11 @@
 
 #include <QObject>
 
+#include <chrono>
+
 #include "base/threading/thread.h"
 
+class QTimer;
 class WorkerManager;
 
 class Worker : public QObject
@@ -30,7 +33,15 @@ class Worker : public QObject
     Q_OBJECT
 
 public:
-    explicit Worker(Thread::EventDispatcher dispatcher = Thread::AsioDispatcher);
+    using Clock = std::chrono::steady_clock;
+    using TimePoint = Clock::time_point;
+    using Milliseconds = std::chrono::milliseconds;
+    using Seconds = std::chrono::seconds;
+
+    // If timer_interval is non-zero, the worker gets a repeating timer that fires onTimer() from its
+    // own thread at that interval; the timer lives and dies with the worker thread.
+    explicit Worker(Thread::EventDispatcher dispatcher = Thread::AsioDispatcher,
+                    Milliseconds timer_interval = Milliseconds::zero());
     ~Worker() override;
 
 protected:
@@ -53,6 +64,10 @@ protected:
     // created in onStart().
     virtual void onStop() = 0;
 
+    // Called on the worker thread at the interval passed to the constructor (only if it was
+    // non-zero). The default does nothing.
+    virtual void onTimer() { /* Nothing */ }
+
 private slots:
     void onThreadStarted();
     void onThreadFinished();
@@ -60,6 +75,9 @@ private slots:
 private:
     WorkerManager* manager_ = nullptr;
     Thread thread_;
+
+    const Milliseconds timer_interval_;
+    QTimer* timer_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(Worker)
 };

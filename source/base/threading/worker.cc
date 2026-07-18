@@ -18,11 +18,14 @@
 
 #include "base/threading/worker.h"
 
+#include <QTimer>
+
 #include "base/threading/worker_manager.h"
 
 //--------------------------------------------------------------------------------------------------
-Worker::Worker(Thread::EventDispatcher dispatcher)
-    : thread_(dispatcher)
+Worker::Worker(Thread::EventDispatcher dispatcher, Milliseconds timer_interval)
+    : thread_(dispatcher),
+      timer_interval_(timer_interval)
 {
     moveToThread(&thread_);
     connect(&thread_, &Thread::sig_beforeRunning, this, &Worker::onThreadStarted, Qt::DirectConnection);
@@ -53,6 +56,14 @@ void Worker::onThreadStarted()
 {
     onStart();
 
+    if (timer_interval_ > Milliseconds::zero())
+    {
+        timer_ = new QTimer(this);
+        timer_->setInterval(timer_interval_);
+        connect(timer_, &QTimer::timeout, this, &Worker::onTimer);
+        timer_->start();
+    }
+
     std::lock_guard lock(manager_->lock_);
     ++manager_->running_;
     manager_->condition_.notify_all();
@@ -61,6 +72,9 @@ void Worker::onThreadStarted()
 //--------------------------------------------------------------------------------------------------
 void Worker::onThreadFinished()
 {
+    delete timer_;
+    timer_ = nullptr;
+
     onStop();
 
     std::lock_guard lock(manager_->lock_);
