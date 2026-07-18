@@ -88,10 +88,21 @@ void RecordWorker::onAudioMessage(const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RecordWorker::onAudioPacket(std::shared_ptr<proto::audio::Packet> packet)
+void RecordWorker::onLegacyMessage(const QByteArray& buffer)
 {
-    if (writer_ && packet)
-        writer_->addAudioPacket(*packet);
+    if (!writer_)
+        return;
+
+    proto::legacy::SessionToClient* message =
+        incoming_message_.parse<proto::legacy::SessionToClient>(buffer);
+    if (!message)
+    {
+        LOG(ERROR) << "Unable to parse legacy message";
+        return;
+    }
+
+    if (message->has_audio_packet())
+        writer_->addAudioPacket(message->audio_packet());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -112,6 +123,9 @@ void RecordWorker::onStart()
     {
         // Audio channel (CHANNEL_ID_AUDIO == 7); parsed only while recording.
         connect(network_worker, &NetworkWorker::sig_channel_7, this, &RecordWorker::onAudioMessage,
+                Qt::QueuedConnection);
+        // Legacy channel (CHANNEL_ID_LEGACY == 0), where old hosts multiplex audio.
+        connect(network_worker, &NetworkWorker::sig_channel_0, this, &RecordWorker::onLegacyMessage,
                 Qt::QueuedConnection);
     }
     else

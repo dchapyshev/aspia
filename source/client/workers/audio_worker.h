@@ -22,6 +22,7 @@
 #include "base/serialization.h"
 #include "base/threading/worker.h"
 #include "proto/desktop_audio.h"
+#include "proto/desktop_legacy.h"
 
 class AudioDecoder;
 class AudioPlayer;
@@ -44,7 +45,7 @@ public:
 
 public slots:
     void onAudioMessage(const QByteArray& buffer);
-    void onAudioPacket(std::shared_ptr<proto::audio::Packet> packet);
+    void onLegacyMessage(const QByteArray& buffer);
 
 signals:
     // Emitted once a second with the current audio statistics.
@@ -59,7 +60,7 @@ protected:
 private:
     void decodePacket(const proto::audio::Packet& packet);
 
-    Parser<proto::audio::HostToClient> incoming_message_;
+    Parser<proto::audio::HostToClient, proto::legacy::SessionToClient> incoming_message_;
 
     std::unique_ptr<AudioDecoder> decoder_;
     std::unique_ptr<AudioPlayer> player_;

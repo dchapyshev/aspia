@@ -29,6 +29,7 @@
 #include "base/threading/worker.h"
 #include "proto/desktop_channel.h"
 #include "proto/desktop_cursor.h"
+#include "proto/desktop_legacy.h"
 #include "proto/desktop_video.h"
 
 class CursorDecoder;
@@ -61,7 +62,7 @@ public:
 
 public slots:
     void onVideoMessage(const QByteArray& buffer);
-    void onVideoPacket(std::shared_ptr<proto::video::Packet> packet);
+    void onLegacyMessage(const QByteArray& buffer);
     void onCursorMessage(const QByteArray& buffer);
     void onCursorConfig(bool shape_enabled, bool position_enabled);
 
@@ -92,14 +93,16 @@ private:
     void readCursorShape(const proto::cursor::Shape& shape);
     void readCursorPosition(const proto::cursor::Position& position);
 
-    Parser<proto::video::HostToClient, proto::cursor::HostToClient> incoming_message_;
+    Parser<proto::video::HostToClient,
+           proto::cursor::HostToClient,
+           proto::legacy::SessionToClient> incoming_message_;
 
     std::unique_ptr<VideoDecoder> decoder_;
     proto::video::Encoding encoding_ = proto::video::ENCODING_UNKNOWN;
     bool key_frame_received_ = false;
 
     // Set from the packet source: NG packets arrive on the video channel (onVideoMessage), legacy
-    // packets through the multiplexed channel (onVideoPacket). Keyframe requests are only sent in
+    // packets through the multiplexed channel (onLegacyMessage). Keyframe requests are only sent in
     // the NG mode, as the legacy protocol has no such request.
     bool legacy_ = false;
 

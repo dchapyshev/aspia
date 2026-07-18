@@ -25,10 +25,7 @@
 #include "base/desktop/shared_frame.h"
 #include "base/threading/worker.h"
 #include "proto/desktop_audio.h"
-
-namespace proto::audio {
-class Packet;
-} // namespace proto::audio
+#include "proto/desktop_legacy.h"
 
 class FrameAligned;
 class QTimer;
@@ -50,8 +47,8 @@ public slots:
     // Parses one audio channel message and appends its packet to the recording.
     void onAudioMessage(const QByteArray& buffer);
 
-    // Appends one packet to the recording. A no-op while recording is off.
-    void onAudioPacket(std::shared_ptr<proto::audio::Packet> packet);
+    // Parses one legacy channel message and appends its audio packet to the recording.
+    void onLegacyMessage(const QByteArray& buffer);
 
     // Keeps the handle to the current rendered ARGB frame (the same one shown in the GUI).
     void onFrameChanged(const QSize& screen_size, SharedFrame frame);
@@ -65,7 +62,7 @@ private slots:
     void onEncodeTimer();
 
 private:
-    Parser<proto::audio::HostToClient> incoming_message_;
+    Parser<proto::audio::HostToClient, proto::legacy::SessionToClient> incoming_message_;
     std::unique_ptr<WebmFileWriter> writer_;
 
     QTimer* encode_timer_ = nullptr;

@@ -80,12 +80,24 @@ void VideoWorker::onVideoMessage(const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void VideoWorker::onVideoPacket(std::shared_ptr<proto::video::Packet> packet)
+void VideoWorker::onLegacyMessage(const QByteArray& buffer)
 {
     legacy_ = true;
 
-    if (packet)
-        decodePacket(*packet);
+    proto::legacy::SessionToClient* message =
+        incoming_message_.parse<proto::legacy::SessionToClient>(buffer);
+    if (!message)
+    {
+        LOG(ERROR) << "Unable to parse legacy message";
+        return;
+    }
+
+    if (message->has_video_packet())
+        decodePacket(message->video_packet());
+    if (message->has_cursor_shape())
+        readCursorShape(message->cursor_shape());
+    if (message->has_cursor_position())
+        readCursorPosition(message->cursor_position());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -130,6 +142,9 @@ void VideoWorker::onStart()
         connect(network_worker, &NetworkWorker::sig_channel_3, this, &VideoWorker::onVideoMessage,
                 Qt::QueuedConnection);
         connect(network_worker, &NetworkWorker::sig_channel_4, this, &VideoWorker::onCursorMessage,
+                Qt::QueuedConnection);
+        // Legacy channel (CHANNEL_ID_LEGACY == 0), where old hosts multiplex video and cursor.
+        connect(network_worker, &NetworkWorker::sig_channel_0, this, &VideoWorker::onLegacyMessage,
                 Qt::QueuedConnection);
         connect(this, &VideoWorker::sig_sendMessage, network_worker, &NetworkWorker::onSendMessage,
                 Qt::QueuedConnection);
