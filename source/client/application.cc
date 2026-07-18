@@ -22,6 +22,7 @@
 #include "build/build_config.h"
 #include "build/version.h"
 #include "client/settings.h"
+#include "client/workers/router_worker.h"
 
 #include <QIcon>
 
@@ -64,6 +65,8 @@ Application::Application(int& argc, char* argv[])
 
     setLocale(settings.locale());
     setTheme(settings.theme());
+
+    addWorker(std::make_unique<RouterWorker>());
 }
 
 //--------------------------------------------------------------------------------------------------

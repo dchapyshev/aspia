@@ -25,10 +25,10 @@
 
 #include "base/translations.h"
 #include "base/threading/thread.h"
+#include "base/threading/worker_manager.h"
 
 class QLocalServer;
 class QLockFile;
-class WorkerManager;
 
 #if defined(Q_OS_WINDOWS)
 class MessageWindow;
@@ -42,11 +42,17 @@ public:
     GuiApplication(int& argc, char* argv[]);
     virtual ~GuiApplication() override;
 
+    int exec();
+
     static GuiApplication* instance();
     static QThread* ioThread();
 
-    // Global worker manager for app-lifetime workers.
-    static WorkerManager* workerManager();
+    template <typename T>
+    static T* findWorker()
+    {
+        GuiApplication* application = instance();
+        return application ? application->worker_manager_->find<T>() : nullptr;
+    }
 
     bool isRunning();
 
@@ -76,6 +82,9 @@ signals:
     void sig_powerEvent(quint32 event);
 
 protected:
+    qint64 addWorker(std::unique_ptr<Worker> worker);
+
+    // QApplication implementation.
     bool event(QEvent* event) override;
 
 private slots:

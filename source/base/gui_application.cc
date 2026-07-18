@@ -34,7 +34,6 @@
 #include <QSvgRenderer>
 
 #include "base/logging.h"
-#include "base/threading/worker_manager.h"
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
@@ -220,6 +219,15 @@ GuiApplication::~GuiApplication()
 }
 
 //--------------------------------------------------------------------------------------------------
+int GuiApplication::exec()
+{
+    worker_manager_->start();
+    const int result = QApplication::exec();
+    worker_manager_.reset();
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
 // static
 GuiApplication* GuiApplication::instance()
 {
@@ -241,17 +249,9 @@ QThread* GuiApplication::ioThread()
 }
 
 //--------------------------------------------------------------------------------------------------
-// static
-WorkerManager* GuiApplication::workerManager()
+qint64 GuiApplication::addWorker(std::unique_ptr<Worker> worker)
 {
-    GuiApplication* application = instance();
-    if (!application)
-    {
-        LOG(ERROR) << "Invalid application instance";
-        return nullptr;
-    }
-
-    return application->worker_manager_.get();
+    return worker_manager_->add(std::move(worker));
 }
 
 //--------------------------------------------------------------------------------------------------
