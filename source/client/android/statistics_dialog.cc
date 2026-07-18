@@ -283,5 +283,5 @@ void StatisticsDialog::setDuration(std::chrono::seconds duration)
 void StatisticsDialog::setClipboardMetrics(int read_clipboard, int send_clipboard)
 {
     rows_[ROW_CLIPBOARD]->setData(
-        0, kValueRole, QString::number(read_clipboard) + " / " + QString::number(send_clipboard));
+        0, kValueRole, QString(QString::number(read_clipboard) + " / " + QString::number(send_clipboard)));
 }
