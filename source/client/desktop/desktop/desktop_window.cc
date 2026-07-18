@@ -33,20 +33,32 @@
 #include <QWindow>
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/desktop/mouse_cursor.h"
 #include "client/settings.h"
 #include "client/desktop/desktop/desktop_toolbar.h"
 #include "client/desktop/desktop/desktop_widget.h"
 #include "client/desktop/desktop/statistics_dialog.h"
 #include "client/desktop/desktop/task_manager_window.h"
+#include "client/workers/audio_worker.h"
+#include "client/workers/network_worker.h"
+#include "client/workers/record_worker.h"
+#include "client/workers/video_worker.h"
 #include "common/clipboard.h"
 #include "common/desktop_session_constants.h"
 #include "common/desktop/msg_box.h"
+#include "proto/desktop_audio.h"
+#include "proto/desktop_channel.h"
 #include "proto/desktop_clipboard.h"
 #include "proto/desktop_control.h"
 #include "proto/desktop_cursor.h"
 #include "proto/desktop_input.h"
+#include "proto/desktop_legacy.h"
+#include "proto/desktop_screen.h"
+#include "proto/desktop_user.h"
+#include "proto/desktop_video.h"
 #include "proto/peer.h"
+#include "proto/task_manager.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/windows_version.h"
@@ -67,8 +79,8 @@ QSize scaledSize(const QSize& source_size, int scale)
     if (scale == -1)
         return source_size;
 
-    int width = static_cast<int>(static_cast<double>(source_size.width() * scale) / 100.0);
-    int height = static_cast<int>(static_cast<double>(source_size.height() * scale) / 100.0);
+    int width = int(double(source_size.width() * scale) / 100.0);
+    int height = int(double(source_size.height() * scale) / 100.0);
 
     return QSize(width, height);
 }
@@ -129,7 +141,7 @@ DesktopWindow::DesktopWindow(const proto::control::Config& desktop_config, QWidg
     connect(toolbar_, &DesktopToolBar::sig_closeSession, this, &DesktopWindow::close);
     connect(toolbar_, &DesktopToolBar::sig_showHidePanel, this, &DesktopWindow::onShowHidePanel);
 
-    connect(toolbar_, &DesktopToolBar::sig_screenSelected, this, &DesktopWindow::sig_screenSelected);
+    connect(toolbar_, &DesktopToolBar::sig_screenSelected, this, &DesktopWindow::onCurrentScreenChanged);
     connect(toolbar_, &DesktopToolBar::sig_powerControl,
             this, [this](proto::power::Control::Action action, bool wait)
     {
@@ -144,7 +156,7 @@ DesktopWindow::DesktopWindow(const proto::control::Config& desktop_config, QWidg
                 break;
         }
 
-        emit sig_powerControl(action);
+        onPowerControl(action);
     });
 
     connect(toolbar_, &DesktopToolBar::sig_startTaskManager, this, [this]()
@@ -154,15 +166,19 @@ DesktopWindow::DesktopWindow(const proto::control::Config& desktop_config, QWidg
             task_manager_ = new TaskManagerWindow();
             task_manager_->setAttribute(Qt::WA_DeleteOnClose);
 
-            connect(task_manager_, &TaskManagerWindow::sig_sendMessage,
-                    this, &DesktopWindow::sig_taskManager);
+            // The task manager talks to the host directly over its own channel
+            // (CHANNEL_ID_TASK_MANAGER == 11) via the network worker.
+            connect(networkWorker(), &NetworkWorker::sig_channel_11, task_manager_,
+                    &TaskManagerWindow::onNetworkMessage, Qt::QueuedConnection);
+            connect(task_manager_, &TaskManagerWindow::sig_sendMessage, networkWorker(),
+                    &NetworkWorker::onSendMessage, Qt::QueuedConnection);
         }
 
         task_manager_->show();
         task_manager_->activateWindow();
     });
 
-    connect(toolbar_, &DesktopToolBar::sig_startStatistics, this, &DesktopWindow::sig_metricsRequested);
+    connect(toolbar_, &DesktopToolBar::sig_startStatistics, this, &DesktopWindow::onMetricsRequest);
     connect(toolbar_, &DesktopToolBar::sig_pasteAsKeystrokes, this, &DesktopWindow::onPasteKeystrokes);
     connect(toolbar_, &DesktopToolBar::sig_switchToFullscreen, this, &DesktopWindow::sig_fullscreenRequested);
     connect(toolbar_, &DesktopToolBar::sig_actionsChanged, this, &DesktopWindow::sig_actionsChanged);
@@ -185,7 +201,7 @@ DesktopWindow::DesktopWindow(const proto::control::Config& desktop_config, QWidg
             file_path = settings.recordingPath();
         }
 
-        emit sig_videoRecording(enable, file_path);
+        onRecordingChanged(enable, file_path);
     });
 
     connect(desktop_, &DesktopWidget::sig_mouseEvent, this, &DesktopWindow::onMouseEvent);
@@ -201,78 +217,101 @@ DesktopWindow::~DesktopWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
-Client* DesktopWindow::createClient()
+void DesktopWindow::onRegisterWorkers()
 {
-    LOG(INFO) << "Create client";
+    LOG(INFO) << "Register workers";
 
-    ClientDesktop* client = new ClientDesktop(desktop_config_);
+    std::unique_ptr<AudioWorker> audio_worker = std::make_unique<AudioWorker>();
+    audio_worker_ = audio_worker.get();
+    addWorker(std::move(audio_worker));
 
-    connect(client, &ClientDesktop::sig_showSessionWindow, this, &DesktopWindow::onShowWindow,
-            Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_capabilities, this, &DesktopWindow::onCapabilitiesChanged,
-            Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_screenListChanged, this, &DesktopWindow::onScreenListChanged,
-            Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_cursorPositionChanged, this, &DesktopWindow::onCursorPositionChanged,
-            Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_taskManager, this, &DesktopWindow::onTaskManagerChanged,
-            Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_metrics, this, &DesktopWindow::onMetricsChanged,
-            Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_frameError, this, &DesktopWindow::onFrameError,
-            Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_frameChanged, this, &DesktopWindow::onFrameChanged,
-            Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_drawFrame, this, &DesktopWindow::onDrawFrame,
-            Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_mouseCursorChanged, this, &DesktopWindow::onMouseCursorChanged,
-            Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_sessionListChanged, this, &DesktopWindow::onSessionListChanged,
-            Qt::QueuedConnection);
+    std::unique_ptr<VideoWorker> video_worker = std::make_unique<VideoWorker>();
+    video_worker_ = video_worker.get();
+    addWorker(std::move(video_worker));
 
-    connect(this, &DesktopWindow::sig_desktopConfigChanged, client, &ClientDesktop::onDesktopConfigChanged,
+    std::unique_ptr<RecordWorker> record_worker = std::make_unique<RecordWorker>();
+    record_worker_ = record_worker.get();
+    addWorker(std::move(record_worker));
+
+    NetworkWorker* network_worker = networkWorker();
+
+    connect(network_worker, &NetworkWorker::sig_channel_2, this, &DesktopWindow::onScreenMessage,
             Qt::QueuedConnection);
-    connect(this, &DesktopWindow::sig_screenSelected, client, &ClientDesktop::onCurrentScreenChanged,
+    connect(network_worker, &NetworkWorker::sig_channel_1, this, &DesktopWindow::onControlMessage,
             Qt::QueuedConnection);
-    connect(this, &DesktopWindow::sig_preferredSizeChanged, client, &ClientDesktop::onPreferredSizeChanged,
+    connect(network_worker, &NetworkWorker::sig_channel_6, this, &DesktopWindow::onClipboardMessage,
             Qt::QueuedConnection);
-    connect(this, &DesktopWindow::sig_videoRecording, client, &ClientDesktop::onRecordingChanged,
+    connect(network_worker, &NetworkWorker::sig_channel_10, this, &DesktopWindow::onFileMessage,
             Qt::QueuedConnection);
-    connect(this, &DesktopWindow::sig_keyEvent, client, &ClientDesktop::onKeyEvent,
-            Qt::QueuedConnection);
-    connect(this, &DesktopWindow::sig_textEvent, client, &ClientDesktop::onTextEvent,
-            Qt::QueuedConnection);
-    connect(this, &DesktopWindow::sig_mouseEvent, client, &ClientDesktop::onMouseEvent,
-            Qt::QueuedConnection);
-    connect(this, &DesktopWindow::sig_powerControl, client, &ClientDesktop::onPowerControl,
-            Qt::QueuedConnection);
-    connect(this, &DesktopWindow::sig_taskManager, client, &ClientDesktop::onTaskManager,
-            Qt::QueuedConnection);
-    connect(this, &DesktopWindow::sig_metricsRequested, client, &ClientDesktop::onMetricsRequest,
+    connect(network_worker, &NetworkWorker::sig_channel_0, this, &DesktopWindow::onLegacyMessage,
             Qt::QueuedConnection);
 
-    connect(toolbar_, &DesktopToolBar::sig_switchSession, client, &ClientDesktop::onSwitchSession,
+    connect(this, &DesktopWindow::sig_cursorConfig, video_worker_, &VideoWorker::onCursorConfig,
             Qt::QueuedConnection);
 
-    // The clipboard lives here on the GUI thread; the client runs on the I/O thread, so the
-    // connections are queued. Created only when enabled to avoid monitoring the local clipboard.
+    connect(video_worker_, &VideoWorker::sig_frameError, this, &DesktopWindow::onFrameError,
+            Qt::QueuedConnection);
+    connect(video_worker_, &VideoWorker::sig_frameChanged, this, &DesktopWindow::onFrameChanged,
+            Qt::QueuedConnection);
+    connect(video_worker_, &VideoWorker::sig_drawFrame, this, &DesktopWindow::onDrawFrame,
+            Qt::QueuedConnection);
+    connect(video_worker_, &VideoWorker::sig_mouseCursorChanged, this, &DesktopWindow::onMouseCursorChanged,
+            Qt::QueuedConnection);
+    connect(video_worker_, &VideoWorker::sig_cursorPositionChanged, this, &DesktopWindow::onCursorPositionChanged,
+            Qt::QueuedConnection);
+    connect(video_worker_, &VideoWorker::sig_h264Disabled, this, &DesktopWindow::onVideoH264Disabled,
+            Qt::QueuedConnection);
+
+    connect(toolbar_, &DesktopToolBar::sig_switchSession, this, &DesktopWindow::onSwitchSession,
+            Qt::UniqueConnection);
+
+    // Push the initial cursor configuration; refreshed later on every onDesktopConfigChanged.
+    emit sig_cursorConfig(desktop_config_.cursor_shape(), desktop_config_.cursor_position());
+
+    // Created only when enabled to avoid monitoring the local clipboard.
     clipboard_.reset(desktop_config_.clipboard() ? Clipboard::create(this) : nullptr);
     if (clipboard_)
     {
-        connect(clipboard_, &Clipboard::sig_clipboardEvent,
-                client, &ClientDesktop::onClipboardEvent, Qt::QueuedConnection);
+        connect(clipboard_, &Clipboard::sig_clipboardEvent, this, &DesktopWindow::onClipboardEvent);
         connect(clipboard_, &Clipboard::sig_localFileListChanged,
-                client, &ClientDesktop::onClipboardLocalFileListChanged, Qt::QueuedConnection);
+                this, &DesktopWindow::onClipboardLocalFileListChanged);
         connect(clipboard_, &Clipboard::sig_fileDataRequest,
-                client, &ClientDesktop::onClipboardFileDataRequest, Qt::QueuedConnection);
-        connect(client, &ClientDesktop::sig_injectClipboardEvent,
-                clipboard_, &Clipboard::injectClipboardEvent, Qt::QueuedConnection);
-        connect(client, &ClientDesktop::sig_clipboardFileData,
-                clipboard_, &Clipboard::addFileData, Qt::QueuedConnection);
+                this, &DesktopWindow::onClipboardFileDataRequest);
         clipboard_->start();
     }
+}
 
-    return client;
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onSessionStarted()
+{
+    LOG(INFO) << "Desktop session started";
+
+    start_time_ = Clock::now();
+
+    // The window outlives a single connection; drop the previous session's transfer before the new
+    // one (a reconnect goes through onRegisterWorkers/onSessionStarted again).
+    delete clipboard_file_transfer_;
+    clipboard_file_transfer_ = new ClipboardFileTransfer(this);
+
+    connect(clipboard_file_transfer_, &ClipboardFileTransfer::sig_sendMessage,
+            this, [this](const QByteArray& buffer)
+    {
+        sendMessage(proto::desktop::CHANNEL_ID_FILE, buffer);
+    });
+
+    if (clipboard_)
+    {
+        connect(clipboard_file_transfer_, &ClipboardFileTransfer::sig_fileDataChunk,
+                clipboard_, &Clipboard::addFileData);
+    }
+
+    emit sig_showRequested();
+    toolbar_->enableTextChat(true);
+
+    if (isLegacy())
+        return;
+
+    sendCapabilities();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -296,7 +335,7 @@ void DesktopWindow::applySettings()
     Settings settings;
 
     desktop_config_ = settings.desktopConfig();
-    emit sig_desktopConfigChanged(desktop_config_);
+    onDesktopConfigChanged(desktop_config_);
 
     desktop_->enableRemoteCursorPosition(desktop_config_.cursor_position());
     if (!desktop_config_.cursor_shape())
@@ -315,14 +354,6 @@ QByteArray DesktopWindow::saveState() const
 void DesktopWindow::restoreState(const QByteArray& state)
 {
     toolbar_->restoreState(state);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::onShowWindow()
-{
-    LOG(INFO) << "Show window";
-    emit sig_showRequested();
-    toolbar_->enableTextChat(true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -372,14 +403,7 @@ void DesktopWindow::onCursorPositionChanged(const proto::cursor::Position& posit
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWindow::onTaskManagerChanged(const proto::task_manager::HostToClient& message)
-{
-    if (task_manager_)
-        task_manager_->readMessage(message);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::onMetricsChanged(const ClientDesktop::Metrics& metrics)
+void DesktopWindow::onMetricsRequest()
 {
     if (!statistics_dialog_)
     {
@@ -396,13 +420,27 @@ void DesktopWindow::onMetricsChanged(const ClientDesktop::Metrics& metrics)
             statistics_dialog_->windowTitle() + " - " + computer_name);
 
         connect(statistics_dialog_, &StatisticsDialog::sig_metricsRequired,
-                this, &DesktopWindow::sig_metricsRequested);
+                this, &DesktopWindow::onMetricsRequest);
+
+        // Each worker is the source of its own metrics; feed them straight to the dialog slots.
+        connect(networkWorker(), &NetworkWorker::sig_metrics,
+                statistics_dialog_, &StatisticsDialog::onNetworkMetrics);
+        connect(video_worker_, &VideoWorker::sig_metrics,
+                statistics_dialog_, &StatisticsDialog::onVideoMetrics);
+        connect(audio_worker_, &AudioWorker::sig_metrics,
+                statistics_dialog_, &StatisticsDialog::onAudioMetrics);
 
         statistics_dialog_->show();
         statistics_dialog_->activateWindow();
     }
 
-    statistics_dialog_->setMetrics(metrics);
+    // The network, video and audio rows are fed to the dialog directly by the workers; here we push
+    // only the session-level counters that no worker owns.
+    const std::chrono::seconds duration =
+        std::chrono::duration_cast<std::chrono::seconds>(Clock::now() - start_time_);
+
+    statistics_dialog_->setDuration(duration);
+    statistics_dialog_->setClipboardMetrics(read_clipboard_count_, send_clipboard_count_);
     statistics_dialog_->setMouseMetrics(send_mouse_count_, drop_mouse_count_);
     statistics_dialog_->setKeyMetrics(send_key_count_);
     statistics_dialog_->setTextMetrics(send_text_count_);
@@ -830,7 +868,20 @@ void DesktopWindow::onMouseFlushTimer()
 void DesktopWindow::onKeyEvent(const proto::input::KeyEvent& event)
 {
     ++send_key_count_;
-    emit sig_keyEvent(event);
+
+    if (isLegacy())
+    {
+        proto::legacy::ClientToSession message;
+        message.mutable_key_event()->CopyFrom(event);
+        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, serialize(message));
+    }
+    else
+    {
+        proto::input::ClientToHost& message = outgoing_message_.newMessage<proto::input::ClientToHost>();
+        message.mutable_key()->CopyFrom(event);
+        sendMessage(proto::desktop::CHANNEL_ID_INPUT,
+                    outgoing_message_.serialize<proto::input::ClientToHost>());
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -965,7 +1016,15 @@ void DesktopWindow::onResizeTimer()
 
     LOG(INFO) << "Resize timer timeout (desktop_size=" << desktop_size << ")";
 
-    emit sig_preferredSizeChanged(desktop_size.width(), desktop_size.height());
+    if (!isLegacy())
+    {
+        proto::video::ClientToHost message;
+        proto::video::PreferredSize* preferred_size = message.mutable_preferred_size();
+        preferred_size->set_width(desktop_size.width());
+        preferred_size->set_height(desktop_size.height());
+        sendMessage(proto::desktop::CHANNEL_ID_VIDEO, serialize(message));
+    }
+
     resize_timer_->stop();
 }
 
@@ -1008,11 +1067,22 @@ void DesktopWindow::onPasteKeystrokes()
             return;
         }
 
-        proto::input::TextEvent event;
-        event.set_text(text.toStdString());
-
         ++send_text_count_;
-        emit sig_textEvent(event);
+
+        if (isLegacy())
+        {
+            proto::legacy::ClientToSession message;
+            message.mutable_text_event()->set_text(text.toStdString());
+            sendMessage(proto::desktop::CHANNEL_ID_LEGACY, serialize(message));
+        }
+        else
+        {
+            proto::input::ClientToHost& message =
+                outgoing_message_.newMessage<proto::input::ClientToHost>();
+            message.mutable_text()->set_text(text.toStdString());
+            sendMessage(proto::desktop::CHANNEL_ID_INPUT,
+                        outgoing_message_.serialize<proto::input::ClientToHost>());
+        }
     }
     else
     {
@@ -1045,5 +1115,466 @@ void DesktopWindow::sendMouseEvent(const proto::input::MouseEvent& event)
 
     ++send_mouse_count_;
 
-    emit sig_mouseEvent(event);
+    if (isLegacy())
+    {
+        proto::legacy::ClientToSession message;
+        message.mutable_mouse_event()->CopyFrom(event);
+        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, serialize(message));
+    }
+    else
+    {
+        proto::input::ClientToHost& message = outgoing_message_.newMessage<proto::input::ClientToHost>();
+        message.mutable_mouse()->CopyFrom(event);
+        sendMessage(proto::desktop::CHANNEL_ID_INPUT,
+                    outgoing_message_.serialize<proto::input::ClientToHost>());
+    }
 }
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onScreenMessage(const QByteArray& buffer)
+{
+    proto::screen::HostToClient message;
+    if (!parse(buffer, &message))
+    {
+        LOG(ERROR) << "Unable to parse screen message";
+        return;
+    }
+
+    if (message.has_screen_list())
+        onScreenListChanged(message.screen_list());
+    else
+        LOG(WARNING) << "Unhandled screen message";
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onControlMessage(const QByteArray& buffer)
+{
+    proto::control::HostToClient message;
+    if (!parse(buffer, &message))
+    {
+        LOG(ERROR) << "Unable to parse control message";
+        return;
+    }
+
+    if (message.has_capabilities())
+    {
+        readCapabilities(message.capabilities());
+    }
+    else if (message.has_session_list())
+    {
+        LOG(INFO) << "Received:" << message.session_list();
+        onSessionListChanged(message.session_list());
+    }
+    else
+    {
+        LOG(ERROR) << "Unhandled service message from host";
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onClipboardMessage(const QByteArray& buffer)
+{
+    proto::clipboard::HostToClient message;
+    if (!parse(buffer, &message))
+    {
+        LOG(ERROR) << "Unable to parse clipboard message";
+        return;
+    }
+
+    if (message.has_event())
+        readClipboardEvent(message.event());
+    else
+        LOG(ERROR) << "Unhandled clipboard message from host";
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onFileMessage(const QByteArray& buffer)
+{
+    if (clipboard_file_transfer_)
+        clipboard_file_transfer_->onIncomingMessage(buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onLegacyMessage(const QByteArray& buffer)
+{
+    // The media workers pick out video, audio and cursor updates from this channel themselves; the
+    // GUI thread handles only clipboard, capabilities and extensions.
+    proto::legacy::SessionToClient message;
+    if (!parse(buffer, &message))
+    {
+        LOG(ERROR) << "Invalid session message from host";
+        return;
+    }
+
+    if (message.has_clipboard_event())
+        readClipboardEvent(message.clipboard_event());
+    else if (message.has_capabilities())
+        readLegacyCapabilities(message.capabilities());
+    else if (message.has_extension())
+        readExtension(message.extension());
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onDesktopConfigChanged(const proto::control::Config& config)
+{
+    desktop_config_ = config;
+    emit sig_cursorConfig(desktop_config_.cursor_shape(), desktop_config_.cursor_position());
+    sendConfig(desktop_config_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onCurrentScreenChanged(const proto::screen::Screen& screen)
+{
+    LOG(INFO) << "Current screen changed:" << screen.id();
+
+    if (isLegacy())
+    {
+        proto::legacy::ClientToSession message;
+        proto::legacy::Extension* extension = message.mutable_extension();
+        extension->set_name(kSelectScreenExtension);
+        extension->set_data(screen.SerializeAsString());
+        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, serialize(message));
+    }
+    else
+    {
+        proto::screen::ClientToHost message;
+        message.mutable_screen()->CopyFrom(screen);
+        sendMessage(proto::desktop::CHANNEL_ID_SCREEN, serialize(message));
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onRecordingChanged(bool enable, const QString& file_path)
+{
+    proto::user::ClientToHost message;
+    proto::user::VideoRecording* video_recording = message.mutable_video_recording();
+
+    if (enable)
+    {
+        LOG(INFO) << "Video recording is enabled:" << file_path;
+        video_recording->set_action(proto::user::VideoRecording::ACTION_STARTED);
+    }
+    else
+    {
+        LOG(INFO) << "Video recording is disabled";
+        video_recording->set_action(proto::user::VideoRecording::ACTION_STOPPED);
+    }
+
+    // The record worker owns the output file and re-encodes the rendered frames it receives from the
+    // video worker while recording is on.
+    const QString computer_name = sessionState()->computerName();
+    QMetaObject::invokeMethod(record_worker_,
+        [worker = record_worker_, enable, file_path, computer_name]()
+    {
+        worker->onSetRecording(enable, file_path, computer_name);
+    }, Qt::QueuedConnection);
+
+    if (isLegacy())
+        return;
+
+    sendMessage(proto::desktop::CHANNEL_ID_USER, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onPowerControl(proto::power::Control::Action action)
+{
+    if (isLegacy())
+    {
+        proto::legacy::ClientToSession message;
+        proto::legacy::Extension* extension = message.mutable_extension();
+        proto::power::Control power_control;
+        power_control.set_action(action);
+        extension->set_name(kPowerControlExtension);
+        extension->set_data(power_control.SerializeAsString());
+        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, serialize(message));
+    }
+    else
+    {
+        proto::power::ClientToHost message;
+        message.mutable_power_control()->set_action(action);
+        sendMessage(proto::desktop::CHANNEL_ID_POWER, serialize(message));
+    }
+}
+
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onSwitchSession(quint32 session_id)
+{
+    proto::control::ClientToHost message;
+    proto::control::SwitchSession* switch_session = message.mutable_switch_session();
+    switch_session->set_session_id(session_id);
+
+    LOG(INFO) << "Send:" << *switch_session;
+    sendMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onClipboardEvent(const proto::clipboard::Event& event)
+{
+    if (!desktop_config_.clipboard())
+        return;
+
+    ++send_clipboard_count_;
+
+    if (event.mime_type() == Clipboard::kMimeTypeFileList.toStdString() &&
+        !file_clipboard_supported_)
+    {
+        LOG(WARNING) << "File clipboard is not supported by remote side, skipping file list";
+        return;
+    }
+
+    if (isLegacy())
+    {
+        proto::legacy::ClientToSession message;
+        message.mutable_clipboard_event()->CopyFrom(event);
+        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, serialize(message));
+    }
+    else
+    {
+        proto::clipboard::ClientToHost message;
+        message.mutable_event()->CopyFrom(event);
+        sendMessage(proto::desktop::CHANNEL_ID_CLIPBOARD, serialize(message));
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onClipboardLocalFileListChanged(const QVector<LocalFileEntry>& files)
+{
+    if (clipboard_file_transfer_)
+        clipboard_file_transfer_->setLocalFileList(files);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onClipboardFileDataRequest(int file_index)
+{
+    if (clipboard_file_transfer_)
+        clipboard_file_transfer_->requestFileData(file_index);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onVideoH264Disabled()
+{
+    h264_sw_enabled_ = false;
+    sendCapabilities();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::readCapabilities(const proto::control::Capabilities& capabilities)
+{
+    LOG(INFO) << "Received:" << capabilities;
+
+    for (int i = 0; i < capabilities.flag_size(); ++i)
+    {
+        const proto::control::Capabilities::Flag& flag = capabilities.flag(i);
+        if (flag.name() == kFlagFileClipboard)
+        {
+            file_clipboard_supported_ = flag.value();
+            break;
+        }
+    }
+
+    onCapabilitiesChanged(capabilities);
+    sendConfig(desktop_config_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::readLegacyCapabilities(const proto::legacy::Capabilities& legacy_capabilities)
+{
+    LOG(INFO) << "Received:" << legacy_capabilities;
+
+    proto::control::Capabilities capabilities;
+
+    auto add_flag = [&capabilities](const char* name, bool value)
+    {
+        proto::control::Capabilities::Flag* flag = capabilities.add_flag();
+        flag->set_name(name);
+        flag->set_value(value);
+    };
+
+    if (legacy_capabilities.os_type() == proto::legacy::Capabilities::OS_TYPE_WINDOWS)
+        add_flag(kFlagOSWindows, true);
+
+    quint32 video_encodings = legacy_capabilities.video_encodings();
+    if (video_encodings & proto::video::ENCODING_VP8)
+        add_flag(kFlagVideoVP8, true);
+    if (video_encodings & proto::video::ENCODING_VP9)
+        add_flag(kFlagVideoVP9, true);
+
+    quint32 audio_encodings = legacy_capabilities.audio_encodings();
+    if (audio_encodings & proto::audio::ENCODING_OPUS)
+        add_flag(kFlagAudioOpus, true);
+
+    // Convert legacy "disable_*" flags (inverted logic) to new positive flags.
+    // If a disable flag is absent in the legacy message, the feature is considered enabled.
+    bool paste_as_keystrokes = true;
+    bool clipboard = true;
+    bool cursor_shape = true;
+    bool cursor_position = true;
+    bool desktop_effects = true;
+    bool desktop_wallpaper = true;
+    bool lock_at_disconnect = true;
+    bool block_input = true;
+
+    for (int i = 0; i < legacy_capabilities.flag_size(); ++i)
+    {
+        const proto::legacy::Capabilities::Flag& flag = legacy_capabilities.flag(i);
+        const std::string& name = flag.name();
+        bool value = flag.value();
+
+        if (name == kFlagDisablePasteAsKeystrokes)
+            paste_as_keystrokes = !value;
+        else if (name == kFlagDisableClipboard)
+            clipboard = !value;
+        else if (name == kFlagDisableCursorShape)
+            cursor_shape = !value;
+        else if (name == kFlagDisableCursorPosition)
+            cursor_position = !value;
+        else if (name == kFlagDisableDesktopEffects)
+            desktop_effects = !value;
+        else if (name == kFlagDisableDesktopWallpaper)
+            desktop_wallpaper = !value;
+        else if (name == kFlagDisableLockAtDisconnect)
+            lock_at_disconnect = !value;
+        else if (name == kFlagDisableBlockInput)
+            block_input = !value;
+    }
+
+    add_flag(kFlagPasteAsKeystrokes, paste_as_keystrokes);
+    add_flag(kFlagClipboard, clipboard);
+    add_flag(kFlagCursorShape, cursor_shape);
+    add_flag(kFlagCursorPosition, cursor_position);
+    add_flag(kFlagDesktopEffects, desktop_effects);
+    add_flag(kFlagDesktopWallpaper, desktop_wallpaper);
+    add_flag(kFlagLockAtDisconnect, lock_at_disconnect);
+    add_flag(kFlagBlockInput, block_input);
+
+    // Convert legacy extensions string (semicolon-separated) to new flags.
+    QString extensions = QString::fromStdString(legacy_capabilities.extensions());
+    QStringList extension_list = extensions.split(';', Qt::SkipEmptyParts);
+
+    add_flag(kFlagSelectScreen, extension_list.contains(kSelectScreenExtension));
+    add_flag(kFlagPowerControl, extension_list.contains(kPowerControlExtension));
+
+    LOG(INFO) << "Converted:" << capabilities;
+    onCapabilitiesChanged(capabilities);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::readExtension(const proto::legacy::Extension& extension)
+{
+    if (!isLegacy())
+        return;
+
+    if (extension.name() == kSelectScreenExtension)
+    {
+        proto::screen::ScreenList screen_list;
+        if (!screen_list.ParseFromString(extension.data()))
+        {
+            LOG(ERROR) << "Unable to parse select screen extension data";
+            return;
+        }
+
+        LOG(INFO) << "Screen list receive:" << screen_list;
+        onScreenListChanged(screen_list);
+    }
+    else
+    {
+        LOG(ERROR) << "Unknown extension:" << extension.name();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::readClipboardEvent(const proto::clipboard::Event& event)
+{
+    if (event.mime_type() == Clipboard::kMimeTypeFileList.toStdString() &&
+        !file_clipboard_supported_)
+    {
+        LOG(WARNING) << "File clipboard is not supported by remote side, ignoring file list";
+        return;
+    }
+
+    if (desktop_config_.clipboard())
+    {
+        ++read_clipboard_count_;
+        if (clipboard_)
+            clipboard_->injectClipboardEvent(event);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::sendSessionListRequest()
+{
+    proto::control::ClientToHost message;
+    proto::control::SessionsRequest* request = message.mutable_sessions_request();
+    request->set_dummy(1);
+    sendMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::sendConfig(const proto::control::Config& config)
+{
+    LOG(INFO) << "Send:" << config;
+
+    if (isLegacy())
+    {
+        proto::legacy::ClientToSession message;
+        proto::legacy::Config* legacy_config = message.mutable_config();
+
+        quint32 flags = proto::legacy::NO_FLAGS;
+        if (config.cursor_shape())
+            flags |= proto::legacy::ENABLE_CURSOR_SHAPE;
+        if (config.clipboard())
+            flags |= proto::legacy::ENABLE_CLIPBOARD;
+        if (!config.effects())
+            flags |= proto::legacy::DISABLE_EFFECTS;
+        if (!config.wallpaper())
+            flags |= proto::legacy::DISABLE_WALLPAPER;
+        if (config.block_input())
+            flags |= proto::legacy::BLOCK_REMOTE_INPUT;
+        if (config.lock_at_disconnect())
+            flags |= proto::legacy::LOCK_AT_DISCONNECT;
+        if (config.cursor_position())
+            flags |= proto::legacy::CURSOR_POSITION;
+
+        legacy_config->set_flags(flags);
+        legacy_config->set_video_encoding(proto::video::ENCODING_VP8);
+        legacy_config->set_audio_encoding(
+            config.audio() ? proto::audio::ENCODING_OPUS : proto::audio::ENCODING_UNKNOWN);
+
+        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, serialize(message));
+    }
+    else
+    {
+        proto::control::ClientToHost message;
+        message.mutable_config()->CopyFrom(desktop_config_);
+        sendMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
+        sendSessionListRequest();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::sendCapabilities()
+{
+    proto::control::ClientToHost message;
+    proto::control::Capabilities* capabilities = message.mutable_capabilities();
+
+    auto add_flag = [capabilities](const char* name, bool value)
+    {
+        proto::control::Capabilities::Flag* flag = capabilities->add_flag();
+        flag->set_name(name);
+        flag->set_value(value);
+    };
+
+    add_flag(kFlagVideoVP8, true);
+    add_flag(kFlagVideoVP9, true);
+    if (h264_sw_enabled_)
+        add_flag(kFlagVideoH264, true);
+    add_flag(kFlagAudioOpus, true);
+
+#if defined(Q_OS_WINDOWS) || defined(Q_OS_MACOS)
+    add_flag(kFlagFileClipboard, true);
+#endif
+
+    sendMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
+}
+

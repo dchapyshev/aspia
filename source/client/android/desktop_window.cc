@@ -20,30 +20,39 @@
 
 #include <QGridLayout>
 #include <QPointF>
+#include <QTimer>
 
 #include "base/gui_application.h"
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/net/tcp_channel.h"
-#include "client/client_desktop.h"
+#include "base/threading/worker_manager.h"
 #include "client/config.h"
 #include "client/database.h"
 #include "client/router.h"
+#include "client/session_keeper.h"
 #include "client/session_state.h"
 #include "client/settings.h"
 #include "client/android/desktop_view.h"
 #include "client/android/key_bar.h"
 #include "client/android/statistics_dialog.h"
+#include "client/workers/audio_worker.h"
+#include "client/workers/network_worker.h"
+#include "client/workers/video_worker.h"
 #include "common/android/bottom_sheet.h"
 #include "common/android/floating_action_button.h"
 #include "common/android/label.h"
 #include "common/android/message_dialog.h"
 #include "common/clipboard.h"
 #include "common/desktop_session_constants.h"
+#include "proto/desktop_audio.h"
+#include "proto/desktop_channel.h"
 #include "proto/desktop_clipboard.h"
 #include "proto/desktop_control.h"
 #include "proto/desktop_cursor.h"
 #include "proto/desktop_input.h"
-#include "proto/desktop_power.h"
+#include "proto/desktop_screen.h"
+#include "proto/desktop_video.h"
 #include "proto/peer.h"
 #include "proto/router_client.h"
 
@@ -111,13 +120,23 @@ DesktopWindow::DesktopWindow(const HostConfig& host, QWidget* parent)
     connect(GuiApplication::instance(), &QGuiApplication::applicationStateChanged,
             this, &DesktopWindow::onApplicationStateChanged);
 
+    connect(view_, &DesktopView::sig_mouseEvent, this, &DesktopWindow::onMouseEvent);
+    connect(view_, &DesktopView::sig_keyEvent, this, &DesktopWindow::onKeyEvent);
+    connect(view_, &DesktopView::sig_textEvent, this, &DesktopWindow::onTextEvent);
+    connect(this, &DesktopWindow::sig_screenSelected, this, &DesktopWindow::onCurrentScreenChanged);
+    connect(this, &DesktopWindow::sig_powerControl, this, &DesktopWindow::onPowerControl);
+    connect(this, &DesktopWindow::sig_switchSession, this, &DesktopWindow::onSwitchSession);
+
     start();
 }
 
 //--------------------------------------------------------------------------------------------------
 DesktopWindow::~DesktopWindow()
 {
-    client_.reset();
+    if (session_keeper_)
+        session_keeper_->release();
+
+    worker_manager_.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -151,7 +170,7 @@ void DesktopWindow::start()
     if (session_state_->isConnectionByHostId())
         fetchConnectionOffer();
     else
-        startNewClient();
+        startNewSession();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -205,7 +224,7 @@ void DesktopWindow::requestConnectionOffer(Router* router)
         if (offer.error_code() == proto::router::ConnectionOffer::SUCCESS)
         {
             session_state_->setConnectionOffer(offer);
-            startNewClient();
+            startNewSession();
             return;
         }
 
@@ -230,88 +249,122 @@ void DesktopWindow::requestConnectionOffer(Router* router)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWindow::startNewClient()
+void DesktopWindow::startNewSession()
 {
-    const proto::control::Config config = Settings().desktopConfig();
-    ClientDesktop* client = new ClientDesktop(config);
+    desktop_config_ = Settings().desktopConfig();
 
-    // The clipboard lives here on the GUI thread; the client runs on the I/O thread, so the
-    // connections are queued. Created only when enabled to avoid monitoring the local clipboard.
-    clipboard_.reset(config.clipboard() ? Clipboard::create(this) : nullptr);
+    if (!session_keeper_)
+        session_keeper_ = SessionKeeper::create(this);
+
+    worker_manager_.reset();
+    worker_manager_ = std::make_unique<WorkerManager>();
+
+    std::unique_ptr<NetworkWorker> network_worker = std::make_unique<NetworkWorker>();
+    network_worker_ = network_worker.get();
+    worker_manager_->add(std::move(network_worker));
+
+    std::unique_ptr<AudioWorker> audio_worker = std::make_unique<AudioWorker>();
+    audio_worker_ = audio_worker.get();
+    worker_manager_->add(std::move(audio_worker));
+
+    std::unique_ptr<VideoWorker> video_worker = std::make_unique<VideoWorker>();
+    video_worker_ = video_worker.get();
+    worker_manager_->add(std::move(video_worker));
+
+    connect(this, &DesktopWindow::sig_startConnection, network_worker_, &NetworkWorker::onStartConnection,
+            Qt::QueuedConnection);
+    connect(this, &DesktopWindow::sig_sessionReady, network_worker_, &NetworkWorker::onSessionReady,
+            Qt::QueuedConnection);
+    connect(this, &DesktopWindow::sig_sendMessage, network_worker_, &NetworkWorker::onSendMessage,
+            Qt::QueuedConnection);
+    connect(network_worker_, &NetworkWorker::sig_statusChanged, this, &DesktopWindow::onNetworkStatusChanged,
+            Qt::QueuedConnection);
+    connect(network_worker_, &NetworkWorker::sig_channel_2, this, &DesktopWindow::onScreenMessage,
+            Qt::QueuedConnection);
+    connect(network_worker_, &NetworkWorker::sig_channel_1, this, &DesktopWindow::onControlMessage,
+            Qt::QueuedConnection);
+    connect(network_worker_, &NetworkWorker::sig_channel_6, this, &DesktopWindow::onClipboardMessage,
+            Qt::QueuedConnection);
+
+    connect(this, &DesktopWindow::sig_cursorConfig, video_worker_, &VideoWorker::onCursorConfig,
+            Qt::QueuedConnection);
+
+    connect(video_worker_, &VideoWorker::sig_frameChanged,
+            this, &DesktopWindow::onFrameChanged, Qt::QueuedConnection);
+    connect(video_worker_, &VideoWorker::sig_drawFrame,
+            view_, &DesktopView::refresh, Qt::QueuedConnection);
+    connect(video_worker_, &VideoWorker::sig_mouseCursorChanged,
+            view_, &DesktopView::setCursorShape, Qt::QueuedConnection);
+    connect(video_worker_, &VideoWorker::sig_cursorPositionChanged,
+            this, &DesktopWindow::onCursorPositionChanged, Qt::QueuedConnection);
+    connect(video_worker_, &VideoWorker::sig_h264Disabled,
+            this, &DesktopWindow::onVideoH264Disabled, Qt::QueuedConnection);
+
+    emit sig_cursorConfig(desktop_config_.cursor_shape(), desktop_config_.cursor_position());
+
+    clipboard_.reset(desktop_config_.clipboard() ? Clipboard::create(this) : nullptr);
     if (clipboard_)
     {
-        connect(clipboard_, &Clipboard::sig_clipboardEvent,
-                client, &ClientDesktop::onClipboardEvent, Qt::QueuedConnection);
-        connect(clipboard_, &Clipboard::sig_localFileListChanged,
-                client, &ClientDesktop::onClipboardLocalFileListChanged, Qt::QueuedConnection);
-        connect(clipboard_, &Clipboard::sig_fileDataRequest,
-                client, &ClientDesktop::onClipboardFileDataRequest, Qt::QueuedConnection);
-        connect(client, &ClientDesktop::sig_injectClipboardEvent,
-                clipboard_, &Clipboard::injectClipboardEvent, Qt::QueuedConnection);
-        connect(client, &ClientDesktop::sig_clipboardFileData,
-                clipboard_, &Clipboard::addFileData, Qt::QueuedConnection);
+        connect(clipboard_, &Clipboard::sig_clipboardEvent, this, &DesktopWindow::onClipboardEvent);
         clipboard_->start();
     }
 
-    connect(client, &ClientDesktop::sig_frameChanged,
-            this, &DesktopWindow::onFrameChanged, Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_drawFrame, view_, &DesktopView::refresh, Qt::QueuedConnection);
-    connect(client, &Client::sig_statusChanged,
-            this, &DesktopWindow::onStatusChanged, Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_mouseCursorChanged,
-            view_, &DesktopView::setCursorShape, Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_cursorPositionChanged,
-            this, &DesktopWindow::onCursorPositionChanged, Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_screenListChanged,
-            this, &DesktopWindow::onScreenListChanged, Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_sessionListChanged,
-            this, &DesktopWindow::onSessionListChanged, Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_capabilities,
-            this, &DesktopWindow::onCapabilitiesChanged, Qt::QueuedConnection);
-    connect(view_, &DesktopView::sig_mouseEvent,
-            client, &ClientDesktop::onMouseEvent, Qt::QueuedConnection);
-    connect(view_, &DesktopView::sig_keyEvent,
-            client, &ClientDesktop::onKeyEvent, Qt::QueuedConnection);
-    connect(view_, &DesktopView::sig_textEvent,
-            client, &ClientDesktop::onTextEvent, Qt::QueuedConnection);
-    connect(this, &DesktopWindow::sig_screenSelected,
-            client, &ClientDesktop::onCurrentScreenChanged, Qt::QueuedConnection);
-    connect(this, &DesktopWindow::sig_powerControl,
-            client, &ClientDesktop::onPowerControl, Qt::QueuedConnection);
-    connect(this, &DesktopWindow::sig_switchSession,
-            client, &ClientDesktop::onSwitchSession, Qt::QueuedConnection);
+    worker_manager_->start();
 
-    client->moveToThread(GuiApplication::ioThread());
-    client->setSessionState(session_state_);
-    client_ = client;
-
-    QMetaObject::invokeMethod(client, &Client::start, Qt::QueuedConnection);
+    emit sig_startConnection(session_state_);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopWindow::reconnect()
 {
     LOG(INFO) << "Reconnecting after returning to foreground";
-    client_.reset();
+    worker_manager_.reset();
     start();
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWindow::onStatusChanged(Client::Status status, const QVariant& data)
+void DesktopWindow::onNetworkStatusChanged(NetworkWorker::Status status, const QVariant& data)
+{
+    if (status == NetworkWorker::Status::HOST_DISCONNECTED)
+    {
+        if (session_keeper_)
+            session_keeper_->release();
+    }
+
+    onStatusChanged(status, data);
+    if (status == NetworkWorker::Status::HOST_CONNECTED)
+        onNetworkConnected();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onNetworkConnected()
+{
+    if (session_keeper_)
+        session_keeper_->acquire();
+
+    start_time_ = Clock::now();
+
+    // Now the session can receive incoming messages.
+    emit sig_sessionReady();
+    sendCapabilities();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onStatusChanged(NetworkWorker::Status status, const QVariant& data)
 {
     switch (status)
     {
-        case Client::Status::HOST_CONNECTING:
+        case NetworkWorker::Status::HOST_CONNECTING:
             setStatusText(tr("Connecting to host %1...").arg(session_state_->hostAddress()));
             break;
 
-        case Client::Status::HOST_CONNECTED:
+        case NetworkWorker::Status::HOST_CONNECTED:
             connected_ = true;
             was_connected_ = true;
             setStatusText(tr("Connection established."));
             break;
 
-        case Client::Status::HOST_DISCONNECTED:
+        case NetworkWorker::Status::HOST_DISCONNECTED:
         {
             QString message = tr("The connection to the host has been lost.");
             if (data.canConvert<TcpChannel::ErrorCode>())
@@ -322,20 +375,17 @@ void DesktopWindow::onStatusChanged(Client::Status status, const QVariant& data)
         }
         break;
 
-        case Client::Status::NO_ROUTER:
-            setStatusText(tr("The specified router is unavailable."));
+        case NetworkWorker::Status::RELAY_ERROR:
+            setStatusText(data.toString());
             break;
 
-        case Client::Status::ROUTER_OFFLINE:
-            setStatusText(tr("The specified router is offline."));
-            break;
-
-        case Client::Status::ROUTER_ERROR:
-            setStatusText(tr("Error requesting connection via router: %1.").arg(data.toString()));
-            break;
-
-        case Client::Status::VERSION_MISMATCH:
+        case NetworkWorker::Status::VERSION_MISMATCH:
             setStatusText(tr("The host version is newer than the client. Please update the application."));
+            break;
+
+        case NetworkWorker::Status::LEGACY_HOST:
+            setStatusText(tr("Legacy hosts are not supported."));
+            connected_ = false;
             break;
 
         default:
@@ -473,8 +523,7 @@ void DesktopWindow::onShowActions()
 //--------------------------------------------------------------------------------------------------
 void DesktopWindow::onShowStatistics()
 {
-    ClientDesktop* client = client_.get();
-    if (!client)
+    if (!connected_)
         return;
 
     // Tapping the handle closes the action sheet so the statistics dialog is shown on its own.
@@ -491,15 +540,12 @@ void DesktopWindow::onShowStatistics()
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     statistics_dialog_ = dialog;
 
-    // The client lives on the I/O thread, so metric requests and updates cross threads.
-    connect(dialog, &StatisticsDialog::sig_metricsRequired,
-            client, &ClientDesktop::onMetricsRequest, Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_metrics,
-            dialog, &StatisticsDialog::setMetrics, Qt::QueuedConnection);
+    connect(dialog, &StatisticsDialog::sig_metricsRequired, this, &DesktopWindow::onMetricsRequest);
+    connect(network_worker_, &NetworkWorker::sig_metrics, dialog, &StatisticsDialog::onNetworkMetrics);
+    connect(video_worker_, &VideoWorker::sig_metrics, dialog, &StatisticsDialog::onVideoMetrics);
+    connect(audio_worker_, &AudioWorker::sig_metrics, dialog, &StatisticsDialog::onAudioMetrics);
 
-    // Populate immediately instead of waiting for the first one-second refresh.
-    QMetaObject::invokeMethod(client, &ClientDesktop::onMetricsRequest, Qt::QueuedConnection);
-
+    onMetricsRequest();
     dialog->show();
 }
 
@@ -636,3 +682,214 @@ void DesktopWindow::setStatusText(const QString& text)
     status_->setText(text);
     status_->setVisible(true);
 }
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::sendMessage(quint8 channel_id, const QByteArray& buffer)
+{
+    emit sig_sendMessage(channel_id, buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onScreenMessage(const QByteArray& buffer)
+{
+    proto::screen::HostToClient message;
+    if (!parse(buffer, &message))
+    {
+        LOG(ERROR) << "Unable to parse screen message";
+        return;
+    }
+
+    if (message.has_screen_list())
+        onScreenListChanged(message.screen_list());
+    else
+        LOG(WARNING) << "Unhandled screen message";
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onControlMessage(const QByteArray& buffer)
+{
+    proto::control::HostToClient message;
+    if (!parse(buffer, &message))
+    {
+        LOG(ERROR) << "Unable to parse control message";
+        return;
+    }
+
+    if (message.has_capabilities())
+        readCapabilities(message.capabilities());
+    else if (message.has_session_list())
+        onSessionListChanged(message.session_list());
+    else
+        LOG(ERROR) << "Unhandled service message from host";
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onClipboardMessage(const QByteArray& buffer)
+{
+    proto::clipboard::HostToClient message;
+    if (!parse(buffer, &message))
+    {
+        LOG(ERROR) << "Unable to parse clipboard message";
+        return;
+    }
+
+    if (message.has_event())
+        readClipboardEvent(message.event());
+    else
+        LOG(ERROR) << "Unhandled clipboard message from host";
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onCurrentScreenChanged(const proto::screen::Screen& screen)
+{
+    LOG(INFO) << "Current screen changed:" << screen.id();
+
+    proto::screen::ClientToHost message;
+    message.mutable_screen()->CopyFrom(screen);
+    sendMessage(proto::desktop::CHANNEL_ID_SCREEN, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onPowerControl(proto::power::Control::Action action)
+{
+    proto::power::ClientToHost message;
+    message.mutable_power_control()->set_action(action);
+    sendMessage(proto::desktop::CHANNEL_ID_POWER, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onSwitchSession(quint32 session_id)
+{
+    proto::control::ClientToHost message;
+    proto::control::SwitchSession* switch_session = message.mutable_switch_session();
+    switch_session->set_session_id(session_id);
+
+    LOG(INFO) << "Send:" << *switch_session;
+    sendMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onMouseEvent(const proto::input::MouseEvent& event)
+{
+    proto::input::ClientToHost& message = outgoing_message_.newMessage<proto::input::ClientToHost>();
+    message.mutable_mouse()->CopyFrom(event);
+    sendMessage(proto::desktop::CHANNEL_ID_INPUT,
+                outgoing_message_.serialize<proto::input::ClientToHost>());
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onKeyEvent(const proto::input::KeyEvent& event)
+{
+    proto::input::ClientToHost& message = outgoing_message_.newMessage<proto::input::ClientToHost>();
+    message.mutable_key()->CopyFrom(event);
+    sendMessage(proto::desktop::CHANNEL_ID_INPUT,
+                outgoing_message_.serialize<proto::input::ClientToHost>());
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onTextEvent(const proto::input::TextEvent& event)
+{
+    proto::input::ClientToHost& message = outgoing_message_.newMessage<proto::input::ClientToHost>();
+    message.mutable_text()->CopyFrom(event);
+    sendMessage(proto::desktop::CHANNEL_ID_INPUT,
+                outgoing_message_.serialize<proto::input::ClientToHost>());
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onClipboardEvent(const proto::clipboard::Event& event)
+{
+    if (!desktop_config_.clipboard())
+        return;
+
+    ++send_clipboard_count_;
+
+    proto::clipboard::ClientToHost message;
+    message.mutable_event()->CopyFrom(event);
+    sendMessage(proto::desktop::CHANNEL_ID_CLIPBOARD, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onVideoH264Disabled()
+{
+    h264_sw_enabled_ = false;
+    sendCapabilities();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onMetricsRequest()
+{
+    if (!statistics_dialog_)
+        return;
+
+    // The network, video and audio rows are fed to the dialog directly by the workers; here we push
+    // only the session-level counters that no worker owns.
+    const std::chrono::seconds duration =
+        std::chrono::duration_cast<std::chrono::seconds>(Clock::now() - start_time_);
+
+    statistics_dialog_->setDuration(duration);
+    statistics_dialog_->setClipboardMetrics(read_clipboard_count_, send_clipboard_count_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::readCapabilities(const proto::control::Capabilities& capabilities)
+{
+    LOG(INFO) << "Received:" << capabilities;
+
+    onCapabilitiesChanged(capabilities);
+    sendConfig(desktop_config_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::readClipboardEvent(const proto::clipboard::Event& event)
+{
+    if (desktop_config_.clipboard())
+    {
+        ++read_clipboard_count_;
+        if (clipboard_)
+            clipboard_->injectClipboardEvent(event);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::sendSessionListRequest()
+{
+    proto::control::ClientToHost message;
+    proto::control::SessionsRequest* request = message.mutable_sessions_request();
+    request->set_dummy(1);
+    sendMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::sendConfig(const proto::control::Config& config)
+{
+    LOG(INFO) << "Send:" << config;
+
+    proto::control::ClientToHost message;
+    message.mutable_config()->CopyFrom(desktop_config_);
+    sendMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
+    sendSessionListRequest();
+}
+
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::sendCapabilities()
+{
+    proto::control::ClientToHost message;
+    proto::control::Capabilities* capabilities = message.mutable_capabilities();
+
+    auto add_flag = [capabilities](const char* name, bool value)
+    {
+        proto::control::Capabilities::Flag* flag = capabilities->add_flag();
+        flag->set_name(name);
+        flag->set_value(value);
+    };
+
+    add_flag(kFlagVideoVP8, true);
+    add_flag(kFlagVideoVP9, true);
+    if (h264_sw_enabled_)
+        add_flag(kFlagVideoH264, true);
+    add_flag(kFlagAudioOpus, true);
+
+    sendMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
+}
+

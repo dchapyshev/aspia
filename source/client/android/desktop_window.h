@@ -24,34 +24,42 @@
 #include <QString>
 #include <QWidget>
 
+#include <chrono>
 #include <memory>
 
 #include "base/desktop/shared_frame.h"
 #include "base/scoped_qpointer.h"
-#include "client/client.h"
+#include "base/serialization.h"
 #include "client/config.h"
+#include "client/workers/audio_worker.h"
+#include "client/workers/network_worker.h"
+#include "client/workers/video_worker.h"
+#include "common/clipboard.h"
 #include "proto/desktop_control.h"
+#include "proto/desktop_cursor.h"
+#include "proto/desktop_input.h"
 #include "proto/desktop_power.h"
 #include "proto/desktop_screen.h"
+
+namespace proto::clipboard {
+class Event;
+} // namespace proto::clipboard
 
 namespace proto::control {
 class Capabilities;
 } // namespace proto::control
 
-namespace proto::cursor {
-class Position;
-} // namespace proto::cursor
-
 class BottomSheet;
-class ClientDesktop;
-class Clipboard;
+class Database;
 class DesktopView;
 class FloatingActionButton;
 class KeyBar;
 class Label;
 class Router;
+class SessionKeeper;
 class SessionState;
 class StatisticsDialog;
+class WorkerManager;
 
 class DesktopWindow final : public QWidget
 {
@@ -67,17 +75,40 @@ signals:
     void sig_powerControl(proto::power::Control::Action action);
     void sig_switchSession(quint32 session_id);
 
+    // Session control fed to the network worker.
+    void sig_startConnection(std::shared_ptr<SessionState> session_state);
+    void sig_sessionReady();
+    void sig_sendMessage(quint8 channel_id, const QByteArray& buffer);
+
+    // Pushes the cursor configuration to the video worker.
+    void sig_cursorConfig(bool shape_enabled, bool position_enabled);
+
 protected:
     // QWidget implementation.
     void resizeEvent(QResizeEvent* event) final;
 
 private slots:
-    void onStatusChanged(Client::Status status, const QVariant& data);
+    void onNetworkStatusChanged(NetworkWorker::Status status, const QVariant& data);
+    void onNetworkConnected();
+
+    // Incoming session channels (video/audio/cursor are parsed by the workers).
+    void onScreenMessage(const QByteArray& buffer);
+    void onControlMessage(const QByteArray& buffer);
+    void onClipboardMessage(const QByteArray& buffer);
+
     void onFrameChanged(const QSize& screen_size, SharedFrame frame);
-    void onScreenListChanged(const proto::screen::ScreenList& screen_list);
-    void onSessionListChanged(const proto::control::SessionList& session_list);
-    void onCapabilitiesChanged(const proto::control::Capabilities& capabilities);
     void onCursorPositionChanged(const proto::cursor::Position& position);
+    void onVideoH264Disabled();
+
+    void onMouseEvent(const proto::input::MouseEvent& event);
+    void onKeyEvent(const proto::input::KeyEvent& event);
+    void onTextEvent(const proto::input::TextEvent& event);
+    void onCurrentScreenChanged(const proto::screen::Screen& screen);
+    void onPowerControl(proto::power::Control::Action action);
+    void onSwitchSession(quint32 session_id);
+    void onClipboardEvent(const proto::clipboard::Event& event);
+    void onMetricsRequest();
+
     void onShowActions();
     void onShowStatistics();
     void onKeyboardInsetChanged(int inset);
@@ -87,17 +118,46 @@ private:
     void start();
     void fetchConnectionOffer();
     void requestConnectionOffer(Router* router);
-    void startNewClient();
+    void startNewSession();
     void reconnect();
     void showPowerActions();
     void showSessionActions();
     void triggerPowerAction(proto::power::Control::Action action, const QString& confirm_text);
     void setStatusText(const QString& text);
 
+    void onStatusChanged(NetworkWorker::Status status, const QVariant& data);
+    void onScreenListChanged(const proto::screen::ScreenList& screen_list);
+    void onSessionListChanged(const proto::control::SessionList& session_list);
+    void onCapabilitiesChanged(const proto::control::Capabilities& capabilities);
+
+    void sendConfig(const proto::control::Config& config);
+    void sendCapabilities();
+    void sendSessionListRequest();
+    void sendMessage(quint8 channel_id, const QByteArray& buffer);
+    void readCapabilities(const proto::control::Capabilities& capabilities);
+    void readClipboardEvent(const proto::clipboard::Event& event);
+
     HostConfig host_;
     std::shared_ptr<SessionState> session_state_;
-    ScopedQPointer<ClientDesktop> client_;
     ScopedQPointer<Clipboard> clipboard_;
+
+    std::unique_ptr<WorkerManager> worker_manager_;
+    QPointer<NetworkWorker> network_worker_;
+    QPointer<AudioWorker> audio_worker_;
+    QPointer<VideoWorker> video_worker_;
+    SessionKeeper* session_keeper_ = nullptr;
+
+    proto::control::Config desktop_config_;
+    Serializer<proto::input::ClientToHost> outgoing_message_;
+
+    using Clock = std::chrono::steady_clock;
+    using TimePoint = std::chrono::time_point<Clock>;
+    TimePoint start_time_;
+
+    int read_clipboard_count_ = 0;
+    int send_clipboard_count_ = 0;
+
+    bool h264_sw_enabled_ = true;
 
     proto::screen::ScreenList screen_list_;
     proto::control::SessionList session_list_;

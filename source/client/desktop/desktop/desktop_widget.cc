@@ -525,8 +525,8 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
         if (!frame_image_.isNull())
         {
             {
-                // The IO thread writes this buffer in place; the read access holds the lock so we
-                // never paint a half-written frame.
+                // The video worker thread writes this buffer in place; the read access holds the
+                // lock so we never paint a half-written frame.
                 const SharedFrame::ReadAccess lock = frame_.read();
                 painter.drawImage(rect(), frame_image_);
             }
