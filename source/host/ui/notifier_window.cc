@@ -53,7 +53,7 @@ const Qt::WindowFlags kWindowFlags = Qt::FramelessWindowHint | Qt::Tool | Qt::Wi
 class SessionTreeItem : public QTreeWidgetItem
 {
 public:
-    SessionTreeItem(const UserSessionAgent::Client& client)
+    SessionTreeItem(const UserIpcWorker::Client& client)
         : session_type_(client.session_type),
           client_id_(client.client_id),
           display_name_(client.display_name),
@@ -242,7 +242,7 @@ QList<quint32> NotifierWindow::sessions(proto::peer::SessionType session_type)
 }
 
 //--------------------------------------------------------------------------------------------------
-void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& clients)
+void NotifierWindow::onClientListChanged(const UserIpcWorker::ClientList& clients)
 {
     LOG(INFO) << "Client list changed:" << clients.size();
 

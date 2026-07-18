@@ -19,9 +19,11 @@
 collect_sources(SOURCE_HOST_WORKERS
     audio_worker.cc
     audio_worker.h
-    input_worker.cc
-    input_worker.h
     desktop_ipc_worker.cc
     desktop_ipc_worker.h
+    input_worker.cc
+    input_worker.h
     screen_worker.cc
-    screen_worker.h)
+    screen_worker.h
+    user_ipc_worker.cc
+    user_ipc_worker.h)

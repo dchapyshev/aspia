@@ -27,6 +27,7 @@
 #include "build/build_config.h"
 #include "build/version.h"
 #include "host/user_settings.h"
+#include "host/workers/user_ipc_worker.h"
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
@@ -130,6 +131,8 @@ Application::Application(int& argc, char* argv[])
 
     setTheme(user_settings.theme());
     setLocale(locale);
+
+    addWorker(std::make_unique<UserIpcWorker>());
 }
 
 //--------------------------------------------------------------------------------------------------

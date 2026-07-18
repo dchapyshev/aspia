@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_USER_SESSION_AGENT_H
-#define HOST_USER_SESSION_AGENT_H
+#ifndef HOST_WORKERS_USER_IPC_WORKER_H
+#define HOST_WORKERS_USER_IPC_WORKER_H
 
-#include <QObject>
 #include <QVector>
 
 #include "base/scoped_qpointer.h"
 #include "base/serialization.h"
+#include "base/threading/worker.h"
 #include "common/clipboard.h"
 #include "proto/user.h"
 
@@ -34,7 +34,7 @@ namespace proto::clipboard {
 class Event;
 } // namespace proto::clipboard
 
-class UserSessionAgent final : public QObject
+class UserIpcWorker final : public Worker
 {
     Q_OBJECT
 
@@ -66,8 +66,8 @@ public:
 
     using ClientList = QVector<Client>;
 
-    explicit UserSessionAgent(QObject* parent = nullptr);
-    ~UserSessionAgent() final;
+    UserIpcWorker();
+    ~UserIpcWorker() final;
 
 public slots:
     void onConnectToService();
@@ -84,8 +84,8 @@ public slots:
     void onClipboardFileDataRequest(int file_index);
 
 signals:
-    void sig_statusChanged(UserSessionAgent::Status status);
-    void sig_clientListChanged(const UserSessionAgent::ClientList& clients);
+    void sig_statusChanged(UserIpcWorker::Status status);
+    void sig_clientListChanged(const UserIpcWorker::ClientList& clients);
     void sig_credentialsChanged(const proto::user::Credentials& credentials);
     void sig_routerStateChanged(const proto::user::RouterState& state);
     void sig_confirmationRequest(const proto::user::ConfirmationRequest& request);
@@ -93,6 +93,11 @@ signals:
     void sig_chat(const proto::chat::Chat& chat);
     void sig_injectClipboardEvent(const proto::clipboard::Event& event);
     void sig_clipboardFileData(int file_index, const QByteArray& data, bool is_last);
+
+protected:
+    // Worker implementation.
+    void onStart() final;
+    void onStop() final;
 
 private slots:
     void onIpcConnected();
@@ -114,10 +119,10 @@ private:
 
     ClientList clients_;
 
-    Q_DISABLE_COPY_MOVE(UserSessionAgent)
+    Q_DISABLE_COPY_MOVE(UserIpcWorker)
 };
 
-Q_DECLARE_METATYPE(UserSessionAgent::Status)
-Q_DECLARE_METATYPE(UserSessionAgent::ClientList)
+Q_DECLARE_METATYPE(UserIpcWorker::Status)
+Q_DECLARE_METATYPE(UserIpcWorker::ClientList)
 
-#endif // HOST_USER_SESSION_AGENT_H
+#endif // HOST_WORKERS_USER_IPC_WORKER_H

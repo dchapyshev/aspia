@@ -23,7 +23,7 @@
 
 #include <memory>
 
-#include "host/user_session_agent.h"
+#include "host/workers/user_ipc_worker.h"
 
 namespace Ui {
 class NotifierWindow;
@@ -40,7 +40,7 @@ public:
     QList<quint32> sessions(proto::peer::SessionType session_type);
 
 public slots:
-    void onClientListChanged(const UserSessionAgent::ClientList& clients);
+    void onClientListChanged(const UserIpcWorker::ClientList& clients);
     void onLockMouse(bool value);
     void onLockKeyboard(bool value);
     void onPause(bool value);

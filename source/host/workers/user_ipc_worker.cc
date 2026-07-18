@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/user_session_agent.h"
+#include "host/workers/user_ipc_worker.h"
 
 #include "base/logging.h"
 #include "base/numeric_utils.h"
@@ -29,14 +29,14 @@
 
 namespace {
 
-auto g_statusType = qRegisterMetaType<UserSessionAgent::Status>();
-auto g_clientListType = qRegisterMetaType<UserSessionAgent::ClientList>();
+auto g_statusType = qRegisterMetaType<UserIpcWorker::Status>();
+auto g_clientListType = qRegisterMetaType<UserIpcWorker::ClientList>();
 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-UserSessionAgent::UserSessionAgent(QObject* parent)
-    : QObject(parent)
+UserIpcWorker::UserIpcWorker()
+    : Worker(Thread::AsioDispatcher)
 {
     LOG(INFO) << "Ctor";
 #if defined(Q_OS_WINDOWS)
@@ -47,28 +47,28 @@ UserSessionAgent::UserSessionAgent(QObject* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-UserSessionAgent::~UserSessionAgent()
+UserIpcWorker::~UserIpcWorker()
 {
     LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onConnectToService()
+void UserIpcWorker::onConnectToService()
 {
     LOG(INFO) << "Starting user session agent (channel:" << kHostUiChannelId << ")";
 
     ipc_channel_ = new IpcChannel(this);
 
-    connect(ipc_channel_, &IpcChannel::sig_connected, this, &UserSessionAgent::onIpcConnected);
-    connect(ipc_channel_, &IpcChannel::sig_disconnected, this, &UserSessionAgent::onIpcDisconnected);
-    connect(ipc_channel_, &IpcChannel::sig_errorOccurred, this, &UserSessionAgent::onIpcErrorOccurred);
-    connect(ipc_channel_, &IpcChannel::sig_messageReceived, this, &UserSessionAgent::onIpcMessageReceived);
+    connect(ipc_channel_, &IpcChannel::sig_connected, this, &UserIpcWorker::onIpcConnected);
+    connect(ipc_channel_, &IpcChannel::sig_disconnected, this, &UserIpcWorker::onIpcDisconnected);
+    connect(ipc_channel_, &IpcChannel::sig_errorOccurred, this, &UserIpcWorker::onIpcErrorOccurred);
+    connect(ipc_channel_, &IpcChannel::sig_messageReceived, this, &UserIpcWorker::onIpcMessageReceived);
 
     ipc_channel_->connectTo(kHostUiChannelId);
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onUpdateCredentials(proto::user::CredentialsRequest_Type type)
+void UserIpcWorker::onUpdateCredentials(proto::user::CredentialsRequest_Type type)
 {
     LOG(INFO) << "Update credentials request:" << type;
     proto::user::CredentialsRequest* request =
@@ -78,7 +78,7 @@ void UserSessionAgent::onUpdateCredentials(proto::user::CredentialsRequest_Type 
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onOneTimeSessions(quint32 sessions)
+void UserIpcWorker::onOneTimeSessions(quint32 sessions)
 {
     LOG(INFO) << "One-time sessions changed:" << sessions;
     proto::user::OneTimeSessions* one_time_sessions =
@@ -88,7 +88,7 @@ void UserSessionAgent::onOneTimeSessions(quint32 sessions)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onStopClient(quint32 client_id)
+void UserIpcWorker::onStopClient(quint32 client_id)
 {
     LOG(INFO) << "Stop client request:" << client_id;
     proto::user::ServiceControl* control =
@@ -99,7 +99,7 @@ void UserSessionAgent::onStopClient(quint32 client_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onConnectConfirmation(quint32 id, bool accept)
+void UserIpcWorker::onConnectConfirmation(quint32 id, bool accept)
 {
     LOG(INFO) << "Connect confirmation (id:" << id << "accept:" << accept << ")";
     proto::user::ConfirmationReply* confirmation =
@@ -110,7 +110,7 @@ void UserSessionAgent::onConnectConfirmation(quint32 id, bool accept)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onMouseLock(bool enable)
+void UserIpcWorker::onMouseLock(bool enable)
 {
     LOG(INFO) << "Mouse lock:" << enable;
     proto::user::ServiceControl* control =
@@ -121,7 +121,7 @@ void UserSessionAgent::onMouseLock(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onKeyboardLock(bool enable)
+void UserIpcWorker::onKeyboardLock(bool enable)
 {
     LOG(INFO) << "Keyboard lock:" << enable;
     proto::user::ServiceControl* control =
@@ -132,7 +132,7 @@ void UserSessionAgent::onKeyboardLock(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onPause(bool enable)
+void UserIpcWorker::onPause(bool enable)
 {
     LOG(INFO) << "Pause:" << enable;
     proto::user::ServiceControl* control =
@@ -143,7 +143,7 @@ void UserSessionAgent::onPause(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onChat(const proto::chat::Chat& chat)
+void UserIpcWorker::onChat(const proto::chat::Chat& chat)
 {
     LOG(INFO) << "Text chat message";
     outgoing_message_.newMessage<proto::user::UserToService>().mutable_chat()->CopyFrom(chat);
@@ -151,7 +151,54 @@ void UserSessionAgent::onChat(const proto::chat::Chat& chat)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onIpcConnected()
+void UserIpcWorker::onClipboardEvent(const proto::clipboard::Event& event)
+{
+    if (!ipc_channel_)
+        return;
+
+    proto::clipboard::HostToClient message;
+    message.mutable_event()->CopyFrom(event);
+    sendNetworkMessage(proto::desktop::CHANNEL_ID_CLIPBOARD, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserIpcWorker::onClipboardLocalFileListChanged(const QVector<LocalFileEntry>& files)
+{
+    if (clipboard_file_transfer_)
+        clipboard_file_transfer_->setLocalFileList(files);
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserIpcWorker::onClipboardFileDataRequest(int file_index)
+{
+    if (clipboard_file_transfer_)
+        clipboard_file_transfer_->requestFileData(file_index);
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserIpcWorker::onStart()
+{
+    LOG(INFO) << "User IPC worker started";
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserIpcWorker::onStop()
+{
+    LOG(INFO) << "User IPC worker stopped";
+
+    clipboard_file_transfer_.reset();
+
+    if (ipc_channel_)
+    {
+        ipc_channel_->disconnect(this);
+        ipc_channel_.reset();
+    }
+
+    clients_.clear();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserIpcWorker::onIpcConnected()
 {
     LOG(INFO) << "IPC channel connected";
     emit sig_statusChanged(Status::CONNECTED_TO_SERVICE);
@@ -159,7 +206,7 @@ void UserSessionAgent::onIpcConnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onIpcDisconnected()
+void UserIpcWorker::onIpcDisconnected()
 {
     LOG(INFO) << "IPC channel disconncted";
 
@@ -173,7 +220,7 @@ void UserSessionAgent::onIpcDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onIpcErrorOccurred()
+void UserIpcWorker::onIpcErrorOccurred()
 {
     LOG(INFO) << "Unable to connect to IPC server";
 
@@ -187,7 +234,7 @@ void UserSessionAgent::onIpcErrorOccurred()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer, bool /* reliable */)
+void UserIpcWorker::onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer, bool /* reliable */)
 {
     quint16 net_channel_id = lowWord(channel_id);
     quint16 ipc_channel_id = highWord(channel_id);
@@ -285,7 +332,7 @@ void UserSessionAgent::onIpcMessageReceived(quint32 channel_id, const QByteArray
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onConnectEvent(const proto::user::ConnectEvent& event)
+void UserIpcWorker::onConnectEvent(const proto::user::ConnectEvent& event)
 {
     LOG(INFO) << "Connect event received";
     clients_.emplace_back(event);
@@ -303,14 +350,14 @@ void UserSessionAgent::onConnectEvent(const proto::user::ConnectEvent& event)
         });
 
         connect(clipboard_file_transfer_, &ClipboardFileTransfer::sig_fileDataChunk,
-                this, &UserSessionAgent::sig_clipboardFileData);
+                this, &UserIpcWorker::sig_clipboardFileData);
     }
 
     emit sig_clientListChanged(clients_);
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onDisconnectEvent(const proto::user::DisconnectEvent& event)
+void UserIpcWorker::onDisconnectEvent(const proto::user::DisconnectEvent& event)
 {
     LOG(INFO) << "Disconnect event received";
 
@@ -342,32 +389,7 @@ void UserSessionAgent::onDisconnectEvent(const proto::user::DisconnectEvent& eve
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onClipboardEvent(const proto::clipboard::Event& event)
-{
-    if (!ipc_channel_)
-        return;
-
-    proto::clipboard::HostToClient message;
-    message.mutable_event()->CopyFrom(event);
-    sendNetworkMessage(proto::desktop::CHANNEL_ID_CLIPBOARD, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onClipboardLocalFileListChanged(const QVector<LocalFileEntry>& files)
-{
-    if (clipboard_file_transfer_)
-        clipboard_file_transfer_->setLocalFileList(files);
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onClipboardFileDataRequest(int file_index)
-{
-    if (clipboard_file_transfer_)
-        clipboard_file_transfer_->requestFileData(file_index);
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSessionAgent::sendServiceMessage()
+void UserIpcWorker::sendServiceMessage()
 {
     if (!ipc_channel_)
         return;
@@ -377,7 +399,7 @@ void UserSessionAgent::sendServiceMessage()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::sendNetworkMessage(quint8 net_channel_id, const QByteArray& buffer)
+void UserIpcWorker::sendNetworkMessage(quint8 net_channel_id, const QByteArray& buffer)
 {
     if (!ipc_channel_)
         return;

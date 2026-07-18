@@ -27,7 +27,7 @@
 #include <memory>
 
 #include "base/scoped_qpointer.h"
-#include "host/user_session_agent.h"
+#include "host/workers/user_ipc_worker.h"
 
 namespace Ui {
 class HostWindow;
@@ -54,25 +54,14 @@ public slots:
     void activateHost(bool hidden);
     void hideToTray();
 
-signals:
-    void sig_connectToService();
-    void sig_updateCredentials(proto::user::CredentialsRequest_Type type);
-    void sig_oneTimeSessions(quint32 sessions);
-    void sig_killClient(quint32 id);
-    void sig_connectConfirmation(quint32 id, bool accept);
-    void sig_mouseLock(bool enable);
-    void sig_keyboardLock(bool enable);
-    void sig_pause(bool enable);
-    void sig_chat(const proto::chat::Chat& chat);
-
 protected:
     // QMainWindow implementation.
     void closeEvent(QCloseEvent* event) final;
     void showEvent(QShowEvent* event) final;
 
 private slots:
-    void onStatusChanged(UserSessionAgent::Status status);
-    void onClientListChanged(const UserSessionAgent::ClientList& clients);
+    void onStatusChanged(UserIpcWorker::Status status);
+    void onClientListChanged(const UserIpcWorker::ClientList& clients);
     void onCredentialsChanged(const proto::user::Credentials& credentials);
     void onRouterStateChanged(const proto::user::RouterState& state);
     void onConfirmationRequest(const proto::user::ConfirmationRequest& request);
@@ -126,7 +115,7 @@ private:
 
     StatusDialog* status_dialog_ = nullptr;
 
-    ScopedQPointer<UserSessionAgent> agent_;
+    QPointer<UserIpcWorker> ipc_worker_;
     ScopedQPointer<Clipboard> clipboard_;
     proto::user::RouterState::State last_state_ = proto::user::RouterState::DISABLED;
 

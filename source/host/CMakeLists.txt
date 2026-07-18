@@ -135,8 +135,6 @@ list(APPEND SOURCE_HOST
     terminal_process.h
     udp_attempt.cc
     udp_attempt.h
-    user_session_agent.cc
-    user_session_agent.h
     user_session.cc
     user_session.h
     user_settings.cc

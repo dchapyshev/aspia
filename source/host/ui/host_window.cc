@@ -158,8 +158,12 @@ HostWindow::HostWindow(QWidget* parent)
 
     connect(ui->button_new_password, &QPushButton::clicked, this, [this]()
     {
+        if (!ipc_worker_)
+            return;
+
         LOG(INFO) << "[ACTION] New password";
-        emit sig_updateCredentials(proto::user::CredentialsRequest::NEW_PASSWORD);
+        QMetaObject::invokeMethod(ipc_worker_, &UserIpcWorker::onUpdateCredentials,
+            Qt::QueuedConnection, proto::user::CredentialsRequest::NEW_PASSWORD);
     });
 
     chat_widget_ = new ChatWidget();
@@ -170,18 +174,46 @@ HostWindow::HostWindow(QWidget* parent)
     connect(chat_widget_, &ChatWidget::sig_sendMessage,
             this, [this](const proto::chat::Message& message)
     {
+        if (!ipc_worker_)
+            return;
+
         proto::chat::Chat chat;
         chat.mutable_chat_message()->CopyFrom(message);
-        emit sig_chat(chat);
+        QMetaObject::invokeMethod(ipc_worker_, &UserIpcWorker::onChat, Qt::QueuedConnection, chat);
     });
 
     connect(chat_widget_, &ChatWidget::sig_sendStatus,
             this, [this](const proto::chat::Status& status)
     {
+        if (!ipc_worker_)
+            return;
+
         proto::chat::Chat chat;
         chat.mutable_chat_status()->CopyFrom(status);
-        emit sig_chat(chat);
+        QMetaObject::invokeMethod(ipc_worker_, &UserIpcWorker::onChat, Qt::QueuedConnection, chat);
     });
+
+    ipc_worker_ = GuiApplication::findWorker<UserIpcWorker>();
+    if (!ipc_worker_)
+    {
+        LOG(FATAL) << "User IPC worker not found";
+        return;
+    }
+
+    connect(ipc_worker_, &UserIpcWorker::sig_statusChanged, this, &HostWindow::onStatusChanged,
+            Qt::QueuedConnection);
+    connect(ipc_worker_, &UserIpcWorker::sig_clientListChanged, this, &HostWindow::onClientListChanged,
+            Qt::QueuedConnection);
+    connect(ipc_worker_, &UserIpcWorker::sig_credentialsChanged, this, &HostWindow::onCredentialsChanged,
+            Qt::QueuedConnection);
+    connect(ipc_worker_, &UserIpcWorker::sig_routerStateChanged, this, &HostWindow::onRouterStateChanged,
+            Qt::QueuedConnection);
+    connect(ipc_worker_, &UserIpcWorker::sig_confirmationRequest, this, &HostWindow::onConfirmationRequest,
+            Qt::QueuedConnection);
+    connect(ipc_worker_, &UserIpcWorker::sig_recordingStateChanged, this, &HostWindow::onRecordingStateChanged,
+            Qt::QueuedConnection);
+    connect(ipc_worker_, &UserIpcWorker::sig_chat, this, &HostWindow::onChat,
+            Qt::QueuedConnection);
 
     connect(GuiApplication::instance(), &GuiApplication::sig_themeChanged,
             this, &HostWindow::onAfterThemeChanged);
@@ -198,56 +230,24 @@ HostWindow::~HostWindow()
 //--------------------------------------------------------------------------------------------------
 void HostWindow::connectToService()
 {
+    if (!ipc_worker_)
+        return;
+
     if (connected_to_service_)
     {
         LOG(INFO) << "Already connected to service";
-        emit sig_oneTimeSessions(calcOneTimeSessions());
-        emit sig_updateCredentials(proto::user::CredentialsRequest::REFRESH);
+        QMetaObject::invokeMethod(ipc_worker_, &UserIpcWorker::onOneTimeSessions,
+            Qt::QueuedConnection, calcOneTimeSessions());
+        QMetaObject::invokeMethod(ipc_worker_, &UserIpcWorker::onUpdateCredentials,
+            Qt::QueuedConnection, proto::user::CredentialsRequest::REFRESH);
         return;
     }
 
-    // Drop any clipboard left over from a previous agent before wiring up a new one.
+    // Drop any clipboard left over from a previous connection before reconnecting.
     clipboard_.reset();
 
-    agent_ = new UserSessionAgent();
-    agent_->moveToThread(GuiApplication::ioThread());
-
-    connect(agent_, &UserSessionAgent::sig_statusChanged, this, &HostWindow::onStatusChanged,
-            Qt::QueuedConnection);
-    connect(agent_, &UserSessionAgent::sig_clientListChanged, this, &HostWindow::onClientListChanged,
-            Qt::QueuedConnection);
-    connect(agent_, &UserSessionAgent::sig_credentialsChanged, this, &HostWindow::onCredentialsChanged,
-            Qt::QueuedConnection);
-    connect(agent_, &UserSessionAgent::sig_routerStateChanged, this, &HostWindow::onRouterStateChanged,
-            Qt::QueuedConnection);
-    connect(agent_, &UserSessionAgent::sig_confirmationRequest, this, &HostWindow::onConfirmationRequest,
-            Qt::QueuedConnection);
-    connect(agent_, &UserSessionAgent::sig_recordingStateChanged, this, &HostWindow::onRecordingStateChanged,
-            Qt::QueuedConnection);
-    connect(agent_, &UserSessionAgent::sig_chat, this, &HostWindow::onChat,
-            Qt::QueuedConnection);
-
-    connect(this, &HostWindow::sig_connectToService, agent_, &UserSessionAgent::onConnectToService,
-            Qt::QueuedConnection);
-    connect(this, &HostWindow::sig_updateCredentials, agent_, &UserSessionAgent::onUpdateCredentials,
-            Qt::QueuedConnection);
-    connect(this, &HostWindow::sig_oneTimeSessions, agent_, &UserSessionAgent::onOneTimeSessions,
-            Qt::QueuedConnection);
-    connect(this, &HostWindow::sig_killClient, agent_, &UserSessionAgent::onStopClient,
-            Qt::QueuedConnection);
-    connect(this, &HostWindow::sig_connectConfirmation, agent_, &UserSessionAgent::onConnectConfirmation,
-            Qt::QueuedConnection);
-    connect(this, &HostWindow::sig_mouseLock, agent_, &UserSessionAgent::onMouseLock,
-            Qt::QueuedConnection);
-    connect(this, &HostWindow::sig_keyboardLock, agent_, &UserSessionAgent::onKeyboardLock,
-            Qt::QueuedConnection);
-    connect(this, &HostWindow::sig_pause, agent_, &UserSessionAgent::onPause,
-            Qt::QueuedConnection);
-    connect(this, &HostWindow::sig_chat, agent_, &UserSessionAgent::onChat,
-            Qt::QueuedConnection);
-
     LOG(INFO) << "Connecting to service";
-    emit sig_connectToService();
+    QMetaObject::invokeMethod(ipc_worker_, &UserIpcWorker::onConnectToService, Qt::QueuedConnection);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -345,27 +345,30 @@ void HostWindow::showEvent(QShowEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostWindow::onStatusChanged(UserSessionAgent::Status status)
+void HostWindow::onStatusChanged(UserIpcWorker::Status status)
 {
-    if (status == UserSessionAgent::Status::CONNECTED_TO_SERVICE)
+    if (status == UserIpcWorker::Status::CONNECTED_TO_SERVICE)
     {
+        if (!ipc_worker_)
+            return;
+
         LOG(INFO) << "The connection to the service was successfully established.";
         connected_to_service_ = true;
-        emit sig_oneTimeSessions(calcOneTimeSessions());
+
+        QMetaObject::invokeMethod(ipc_worker_, &UserIpcWorker::onOneTimeSessions,
+            Qt::QueuedConnection, calcOneTimeSessions());
     }
-    else if (status == UserSessionAgent::Status::DISCONNECTED_FROM_SERVICE)
+    else if (status == UserIpcWorker::Status::DISCONNECTED_FROM_SERVICE)
     {
         LOG(INFO) << "The connection to the service is lost. The application will be closed.";
         connected_to_service_ = false;
-        agent_.reset();
         realClose();
     }
-    else if (status == UserSessionAgent::Status::SERVICE_NOT_AVAILABLE)
+    else if (status == UserIpcWorker::Status::SERVICE_NOT_AVAILABLE)
     {
         LOG(INFO) << "The connection to the service has not been established. "
                      "The application works offline.";
         connected_to_service_ = false;
-        agent_.reset();
     }
     else
     {
@@ -376,7 +379,7 @@ void HostWindow::onStatusChanged(UserSessionAgent::Status status)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostWindow::onClientListChanged(const UserSessionAgent::ClientList& clients)
+void HostWindow::onClientListChanged(const UserIpcWorker::ClientList& clients)
 {
     if (!notifier_)
     {
@@ -384,9 +387,12 @@ void HostWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
         notifier_ = new NotifierWindow();
 
         connect(notifier_, &NotifierWindow::sig_killSession, this, &HostWindow::onKillSession);
-        connect(notifier_, &NotifierWindow::sig_lockMouse, this, &HostWindow::sig_mouseLock);
-        connect(notifier_, &NotifierWindow::sig_lockKeyboard, this, &HostWindow::sig_keyboardLock);
-        connect(notifier_, &NotifierWindow::sig_pause, this, &HostWindow::sig_pause);
+        connect(notifier_, &NotifierWindow::sig_lockMouse,
+                ipc_worker_, &UserIpcWorker::onMouseLock, Qt::QueuedConnection);
+        connect(notifier_, &NotifierWindow::sig_lockKeyboard,
+                ipc_worker_, &UserIpcWorker::onKeyboardLock, Qt::QueuedConnection);
+        connect(notifier_, &NotifierWindow::sig_pause,
+                ipc_worker_, &UserIpcWorker::onPause, Qt::QueuedConnection);
 
         notifier_->setAttribute(Qt::WA_DeleteOnClose);
         notifier_->show();
@@ -415,7 +421,7 @@ void HostWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
         return;
     }
 
-    if (clipboard_ || !agent_)
+    if (clipboard_ || !ipc_worker_)
         return;
 
     clipboard_ = Clipboard::create(this);
@@ -423,14 +429,14 @@ void HostWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
         return;
 
     connect(clipboard_, &Clipboard::sig_clipboardEvent,
-            agent_, &UserSessionAgent::onClipboardEvent, Qt::QueuedConnection);
+            ipc_worker_, &UserIpcWorker::onClipboardEvent, Qt::QueuedConnection);
     connect(clipboard_, &Clipboard::sig_localFileListChanged,
-            agent_, &UserSessionAgent::onClipboardLocalFileListChanged, Qt::QueuedConnection);
+            ipc_worker_, &UserIpcWorker::onClipboardLocalFileListChanged, Qt::QueuedConnection);
     connect(clipboard_, &Clipboard::sig_fileDataRequest,
-            agent_, &UserSessionAgent::onClipboardFileDataRequest, Qt::QueuedConnection);
-    connect(agent_, &UserSessionAgent::sig_injectClipboardEvent,
+            ipc_worker_, &UserIpcWorker::onClipboardFileDataRequest, Qt::QueuedConnection);
+    connect(ipc_worker_, &UserIpcWorker::sig_injectClipboardEvent,
             clipboard_, &Clipboard::injectClipboardEvent, Qt::QueuedConnection);
-    connect(agent_, &UserSessionAgent::sig_clipboardFileData,
+    connect(ipc_worker_, &UserIpcWorker::sig_clipboardFileData,
             clipboard_, &Clipboard::addFileData, Qt::QueuedConnection);
 
     clipboard_->start();
@@ -538,7 +544,12 @@ void HostWindow::onConfirmationRequest(const proto::user::ConfirmationRequest& r
     bool accept = dialog.exec() == ConnectConfirmDialog::Accepted;
 
     LOG(INFO) << "[ACTION] User" << (accept ? "ACCEPT" : "REJECT") << "connection request";
-    emit sig_connectConfirmation(request.id(), accept);
+
+    if (!ipc_worker_)
+        return;
+
+    QMetaObject::invokeMethod(ipc_worker_, &UserIpcWorker::onConnectConfirmation,
+        Qt::QueuedConnection, request.id(), accept);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -580,7 +591,6 @@ void HostWindow::realClose()
 {
     LOG(INFO) << "realClose called";
 
-    agent_.reset();
     should_be_quit_ = true;
     close();
 }
@@ -614,7 +624,12 @@ void HostWindow::onLanguageChanged(QAction* action)
         status_dialog_->retranslateUi();
 
     updateStatusBar();
-    emit sig_updateCredentials(proto::user::CredentialsRequest::REFRESH);
+
+    if (!ipc_worker_)
+        return;
+
+    QMetaObject::invokeMethod(ipc_worker_, &UserIpcWorker::onUpdateCredentials,
+        Qt::QueuedConnection, proto::user::CredentialsRequest::REFRESH);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -821,7 +836,11 @@ void HostWindow::onSettingsChanged()
 void HostWindow::onKillSession(quint32 session_id)
 {
     LOG(INFO) << "Killing session with ID:" << session_id;
-    emit sig_killClient(session_id);
+
+    if (!ipc_worker_)
+        return;
+
+    QMetaObject::invokeMethod(ipc_worker_, &UserIpcWorker::onStopClient, Qt::QueuedConnection, session_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -834,7 +853,11 @@ void HostWindow::onOneTimeSessionsChanged()
     UserSettings user_settings;
     user_settings.setOneTimeSessions(sessions);
 
-    emit sig_oneTimeSessions(sessions);
+    if (!ipc_worker_)
+        return;
+
+    QMetaObject::invokeMethod(ipc_worker_, &UserIpcWorker::onOneTimeSessions,
+        Qt::QueuedConnection, sessions);
 }
 
 //--------------------------------------------------------------------------------------------------
