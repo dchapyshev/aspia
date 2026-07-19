@@ -34,7 +34,7 @@
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
 #include "router/database.h"
-#include "router/service.h"
+#include "router/workers/client_worker.h"
 #include "router/workers/host_worker.h"
 #include "router/workers/relay_worker.h"
 
@@ -72,7 +72,6 @@ Client::Client(TcpChannel* channel, QObject* parent)
 Client::~Client()
 {
     CLOG(INFO) << "Dtor";
-    Service::notifyChanged(Service::NOTIFY_CLIENTS);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -82,8 +81,7 @@ void Client::start()
     start_time_ = std::chrono::system_clock::to_time_t(time_point);
     tcp_channel_->setPaused(false);
     emit sig_started(session_id_);
-
-    Service::notifyChanged(Service::NOTIFY_CLIENTS);
+    emit sig_notifyChanged(ClientWorker::NOTIFY_CLIENTS);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -812,11 +810,11 @@ void Client::readChangePasswordRequest(const proto::router::ChangePasswordReques
     result->set_error_code(proto::router::kErrorOk);
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 
-    Service::notifyChanged(Service::NOTIFY_USERS);
+    emit sig_notifyChanged(ClientWorker::NOTIFY_USERS);
 
     // This request always rotates the password (tokens are revoked in the transaction). Drop the
     // user's other live sessions but keep this one.
-    Service::instance()->stopClients(userId(), {}, sessionId());
+    emit sig_stopClients(userId(), {}, sessionId());
 
     // The rotation revoked every device token, including this session's. Re-run the 2FA stage
     // exactly as on a fresh connection: clear the completion flag and re-challenge. The client

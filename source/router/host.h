@@ -29,14 +29,12 @@ namespace proto::router {
 enum SessionType : int;
 } // namespace proto::router
 
-class HostWorker;
-
 class Host : public QObject
 {
     Q_OBJECT
 
 public:
-    Host(TcpChannel* channel, HostWorker* worker);
+    Host(TcpChannel* channel, QObject* parent);
     virtual ~Host() override;
 
     void start();
@@ -55,11 +53,10 @@ public:
 signals:
     void sig_started(qint64 session_id);
     void sig_finished(qint64 session_id);
+    void sig_notifyChanged(quint32 flags);
 
 protected:
     LOG_DECLARE_CONTEXT(Host);
-
-    HostWorker* worker() const { return worker_; }
 
     virtual void onSessionMessage(quint8 channel_id, const QByteArray& buffer) = 0;
 
@@ -71,7 +68,6 @@ private:
     const qint64 session_id_;
     time_t start_time_ = 0;
     TcpChannel* tcp_channel_ = nullptr;
-    HostWorker* worker_ = nullptr;
 };
 
 #endif // ROUTER_HOST_H

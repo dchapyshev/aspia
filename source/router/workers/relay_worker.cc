@@ -80,39 +80,6 @@ void RelayWorker::disconnectPeerSession(qint64 relay_id, const proto::router::Pe
 }
 
 //--------------------------------------------------------------------------------------------------
-void RelayWorker::addKey(qint64 session_id, const proto::router::RelayKey& key)
-{
-    auto relay = key_pool_.find(session_id);
-
-    if (relay != key_pool_.end() && relay.value().size() >= kMaxRelayKeysPerSession)
-    {
-        LOG(WARNING) << "Relay key limit reached for session" << session_id
-                     << "key id" << key.key_id() << "will be dropped";
-        return;
-    }
-
-    qsizetype key_count = 0;
-    for (const auto& keys : std::as_const(key_pool_))
-        key_count += keys.size();
-
-    if (key_count >= kMaxRelayKeysTotal)
-    {
-        LOG(WARNING) << "Global relay key limit reached. Key id" << key.key_id()
-                     << "from session" << session_id << "will be dropped";
-        return;
-    }
-
-    if (relay == key_pool_.end())
-    {
-        LOG(INFO) << "Relay not found in key pool. It will be added";
-        relay = key_pool_.insert(session_id, Keys());
-    }
-
-    LOG(INFO) << "Added key with id" << key.key_id() << "for relay" << session_id;
-    relay.value().append(key);
-}
-
-//--------------------------------------------------------------------------------------------------
 void RelayWorker::onStart()
 {
     Settings settings;
@@ -192,9 +159,11 @@ void RelayWorker::onNewRelayConnection()
 
         Relay* relay = new Relay(channel, this);
         relays_.emplace_back(relay);
-        connect(relay, &Relay::sig_finished, this, &RelayWorker::onRelayFinished);
-        relay->start();
 
+        connect(relay, &Relay::sig_finished, this, &RelayWorker::onRelayFinished);
+        connect(relay, &Relay::sig_keyReceived, this, &RelayWorker::onKeyReceived);
+
+        relay->start();
         emit sig_relaysChanged();
     }
 }
@@ -205,6 +174,39 @@ void RelayWorker::onRelayFinished()
     Relay* relay = static_cast<Relay*>(sender());
     CHECK(relay);
     removeRelay(relay);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RelayWorker::onKeyReceived(qint64 session_id, const proto::router::RelayKey& key)
+{
+    auto relay = key_pool_.find(session_id);
+
+    if (relay != key_pool_.end() && relay.value().size() >= kMaxRelayKeysPerSession)
+    {
+        LOG(WARNING) << "Relay key limit reached for session" << session_id
+                     << "key id" << key.key_id() << "will be dropped";
+        return;
+    }
+
+    qsizetype key_count = 0;
+    for (const auto& keys : std::as_const(key_pool_))
+        key_count += keys.size();
+
+    if (key_count >= kMaxRelayKeysTotal)
+    {
+        LOG(WARNING) << "Global relay key limit reached. Key id" << key.key_id()
+                     << "from session" << session_id << "will be dropped";
+        return;
+    }
+
+    if (relay == key_pool_.end())
+    {
+        LOG(INFO) << "Relay not found in key pool. It will be added";
+        relay = key_pool_.insert(session_id, Keys());
+    }
+
+    LOG(INFO) << "Added key with id" << key.key_id() << "for relay" << session_id;
+    relay.value().append(key);
 }
 
 //--------------------------------------------------------------------------------------------------

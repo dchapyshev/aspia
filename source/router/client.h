@@ -74,6 +74,8 @@ public:
 signals:
     void sig_started(qint64 session_id);
     void sig_finished(qint64 session_id);
+    void sig_notifyChanged(quint32 flags);
+    void sig_stopClients(qint64 user_id, const QList<qint64>& token_ids, qint64 except_client_id);
 
 protected:
     LOG_DECLARE_CONTEXT(Client);

@@ -34,8 +34,10 @@
 #include "base/threading/asio_event_dispatcher.h"
 #include "build/version.h"
 #include "router/database.h"
+#include "router/migration_utils.h"
 #include "router/service.h"
 #include "router/settings.h"
+#include "router/workers/client_worker.h"
 #include "router/workers/host_worker.h"
 #include "router/workers/relay_worker.h"
 #include "router/workers/stun_worker.h"
@@ -396,6 +398,12 @@ int main(int argc, char* argv[])
     else if (parser.isSet(stop_option))
         return stopService(out);
 
+    // The workers read the configuration and touch the database as soon as they start, so any
+    // pending migration must complete before them.
+    if (isMigrationNeeded())
+        doMigration();
+
+    application.addWorker(std::make_unique<ClientWorker>());
     application.addWorker(std::make_unique<HostWorker>());
     application.addWorker(std::make_unique<RelayWorker>());
     application.addWorker(std::make_unique<StunWorker>());

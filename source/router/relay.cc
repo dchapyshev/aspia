@@ -18,8 +18,6 @@
 
 #include "router/relay.h"
 
-#include "router/workers/relay_worker.h"
-
 namespace {
 
 //--------------------------------------------------------------------------------------------------
@@ -33,14 +31,12 @@ qint64 createRelayId()
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Relay::Relay(TcpChannel* channel, RelayWorker* worker)
-    : QObject(worker),
+Relay::Relay(TcpChannel* channel, QObject* parent)
+    : QObject(parent),
       session_id_(createRelayId()),
-      tcp_channel_(channel),
-      worker_(worker)
+      tcp_channel_(channel)
 {
     CDCHECK(tcp_channel_);
-    CDCHECK(worker_);
     tcp_channel_->setParent(this);
 
     connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &Relay::onTcpErrorOccurred);
@@ -160,5 +156,5 @@ void Relay::readKeyPool(const proto::router::RelayKeyPool& key_pool)
     peer_data_.emplace(std::make_pair(peer_host, static_cast<quint16>(peer_port)));
 
     for (int i = 0; i < key_pool.key_size(); ++i)
-        worker_->addKey(session_id_, key_pool.key(i));
+        emit sig_keyReceived(session_id_, key_pool.key(i));
 }

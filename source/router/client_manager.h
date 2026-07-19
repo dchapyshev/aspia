@@ -31,7 +31,7 @@ class ClientManager : public Client
     Q_OBJECT
 
 public:
-    explicit ClientManager(TcpChannel* channel, QObject* parent = nullptr);
+    ClientManager(TcpChannel* channel, QObject* parent);
     ~ClientManager() override;
 
 protected:

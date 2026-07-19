@@ -75,9 +75,6 @@ public:
     void disconnectPeerSession(qint64 relay_id, const proto::router::PeerRequest& request,
                                QObject* context, ResultCallback callback);
 
-    // Called by relay sessions from the worker thread.
-    void addKey(qint64 session_id, const proto::router::RelayKey& key);
-
 signals:
     // Emitted from the worker thread when the set of connected relays changes.
     void sig_relaysChanged();
@@ -90,6 +87,7 @@ protected:
 private slots:
     void onNewRelayConnection();
     void onRelayFinished();
+    void onKeyReceived(qint64 session_id, const proto::router::RelayKey& key);
 
 private:
     void removeRelay(Relay* relay);

@@ -31,7 +31,7 @@
 #include "proto/router_constants.h"
 #include "proto/router_host.h"
 #include "router/client.h"
-#include "router/service.h"
+#include "router/workers/client_worker.h"
 #include "router/workers/host_worker.h"
 #include "router/workers/relay_worker.h"
 
@@ -77,9 +77,9 @@ void ClientAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
     else if (message.has_relay_request())
         doRelayRequest(message.relay_request());
     else if (message.has_client_list_request())
-        doClientListRequest(message.client_list_request());
+        emit sig_clientListRequest(message.client_list_request());
     else if (message.has_client_request())
-        doClientRequest(message.client_request());
+        emit sig_clientRequest(message.client_request());
     else if (message.has_user_list_request())
         doUserListRequest(message.user_list_request());
     else if (message.has_user_request())
@@ -110,32 +110,6 @@ void ClientAdmin::doRelayListRequest(const proto::router::RelayListRequest& requ
 
         sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
     });
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientAdmin::doClientListRequest(const proto::router::ClientListRequest& request)
-{
-    const QList<Client*>& clients = Service::instance()->clients();
-
-    proto::router::RouterToAdmin message;
-    proto::router::ClientList* result = message.mutable_client_list();
-    result->set_request_id(request.request_id());
-    result->set_error_code(proto::router::kErrorOk);
-
-    for (const auto& client : clients)
-    {
-        proto::router::ClientInfo* item = result->add_client();
-
-        item->set_entry_id(client->sessionId());
-        item->set_timepoint(client->startTime());
-        item->set_ip_address(client->address());
-        item->mutable_version()->CopyFrom(serialize(client->version()));
-        item->set_os_name(client->osName());
-        item->set_computer_name(client->computerName());
-        item->set_architecture(client->architecture());
-    }
-
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -252,7 +226,7 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
                     CLOG(INFO) << "OTP cleared for user" << user_id << "by" << userName();
                     result->set_error_code(proto::router::kErrorOk);
                 }
-                Service::notifyChanged(Service::NOTIFY_USERS);
+                emit sig_notifyChanged(ClientWorker::NOTIFY_USERS);
             }
         }
     }
@@ -287,7 +261,7 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
                     CLOG(INFO) << "All device tokens of user" << user_id
                                << "revoked by" << userName();
                     result->set_error_code(proto::router::kErrorOk);
-                    Service::notifyChanged(Service::NOTIFY_USERS);
+                    emit sig_notifyChanged(ClientWorker::NOTIFY_USERS);
                 }
             }
             else
@@ -319,7 +293,7 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
                                    << "revoked by" << userName();
                         revoked_tokens_user_id = user_id;
                         revoked_token_ids = token_ids;
-                        Service::notifyChanged(Service::NOTIFY_USERS);
+                        emit sig_notifyChanged(ClientWorker::NOTIFY_USERS);
                     }
                 }
                 result->set_error_code(code);
@@ -335,16 +309,16 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
     sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
 
     if (reset_otp_user_id > 0)
-        Service::instance()->stopClients(reset_otp_user_id);
+        emit sig_stopClients(reset_otp_user_id, {}, 0);
 
     if (revoked_tokens_user_id > 0)
-        Service::instance()->stopClients(revoked_tokens_user_id, revoked_token_ids);
+        emit sig_stopClients(revoked_tokens_user_id, revoked_token_ids, 0);
 
     if (password_changed_user_id > 0)
-        Service::instance()->stopClients(password_changed_user_id);
+        emit sig_stopClients(password_changed_user_id, {}, 0);
 
     if (deleted_user_id > 0)
-        Service::instance()->stopClients(deleted_user_id);
+        emit sig_stopClients(deleted_user_id, {}, 0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -503,69 +477,6 @@ void ClientAdmin::doRelayRequest(const proto::router::RelayRequest& request)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientAdmin::doClientRequest(const proto::router::ClientRequest& request)
-{
-    proto::router::RouterToAdmin message;
-    proto::router::ClientResult* client_result = message.mutable_client_result();
-    client_result->set_request_id(request.request_id());
-    client_result->set_command_name(request.command_name());
-
-    if (request.command_name() == proto::router::kCommandClientDisconnect)
-    {
-        qint64 entry_id = request.entry_id();
-
-        if (entry_id == -1)
-        {
-            const QList<Client*>& clients = Service::instance()->clients();
-            QList<qint64> client_ids;
-
-            for (const auto& client : clients)
-                client_ids.append(client->sessionId());
-
-            bool all_ok = true;
-            for (qint64 id : client_ids)
-            {
-                if (!Service::instance()->stopClient(id))
-                {
-                    CLOG(ERROR) << "Failed to stop client session:" << id;
-                    all_ok = false;
-                }
-            }
-
-            if (all_ok)
-            {
-                CLOG(INFO) << "All client sessions disconnected by" << userName();
-                client_result->set_error_code(proto::router::kErrorOk);
-            }
-            else
-            {
-                client_result->set_error_code(proto::router::kErrorInternalError);
-            }
-        }
-        else
-        {
-            if (!Service::instance()->stopClient(entry_id))
-            {
-                CLOG(ERROR) << "Session not found:" << entry_id;
-                client_result->set_error_code(proto::router::kErrorInvalidEntryId);
-            }
-            else
-            {
-                CLOG(INFO) << "Client session" << entry_id << "disconnected by" << userName();
-                client_result->set_error_code(proto::router::kErrorOk);
-            }
-        }
-    }
-    else
-    {
-        CLOG(ERROR) << "Unknown client request command:" << request.command_name();
-        client_result->set_error_code(proto::router::kErrorInvalidRequest);
-    }
-
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
 void ClientAdmin::doPeerRequest(const proto::router::PeerRequest& request)
 {
     RelayWorker* relay_worker = CoreApplication::findWorker<RelayWorker>();
@@ -657,7 +568,7 @@ void ClientAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& requ
             if (error_code == proto::router::kErrorOk)
             {
                 result->set_entry_id(new_id);
-                Service::notifyChanged(Service::NOTIFY_WORKSPACES);
+                emit sig_notifyChanged(ClientWorker::NOTIFY_WORKSPACES);
                 if (!desired_host_ids.empty())
                 {
                     error_code = database.setWorkspaceHosts(new_id, desired_host_ids);
@@ -669,7 +580,7 @@ void ClientAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& requ
                     }
                     else
                     {
-                        Service::notifyChanged(Service::NOTIFY_HOSTS);
+                        emit sig_notifyChanged(ClientWorker::NOTIFY_HOSTS);
                     }
                 }
             }
@@ -708,7 +619,7 @@ void ClientAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& requ
             result->set_error_code(error_code);
             if (error_code == proto::router::kErrorOk)
             {
-                Service::notifyChanged(Service::NOTIFY_WORKSPACES);
+                emit sig_notifyChanged(ClientWorker::NOTIFY_WORKSPACES);
                 error_code = database.setWorkspaceHosts(entry_id, desired_host_ids);
                 if (error_code != proto::router::kErrorOk)
                 {
@@ -718,7 +629,7 @@ void ClientAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& requ
                 }
                 else
                 {
-                    Service::notifyChanged(Service::NOTIFY_HOSTS);
+                    emit sig_notifyChanged(ClientWorker::NOTIFY_HOSTS);
                 }
             }
         }
@@ -732,7 +643,7 @@ void ClientAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& requ
         {
             // Workspace deletion also releases its hosts to workspace_id=0; signal both so
             // clients refetch both lists with updated workspace_id columns.
-            Service::notifyChanged(Service::NOTIFY_WORKSPACES | Service::NOTIFY_HOSTS);
+            emit sig_notifyChanged(ClientWorker::NOTIFY_WORKSPACES | ClientWorker::NOTIFY_HOSTS);
         }
     }
     else
@@ -772,7 +683,7 @@ std::string ClientAdmin::addUser(const proto::router::User& user)
     if (!database.addUser(new_user))
         return proto::router::kErrorInternalError;
 
-    Service::notifyChanged(Service::NOTIFY_USERS);
+    emit sig_notifyChanged(ClientWorker::NOTIFY_USERS);
     return proto::router::kErrorOk;
 }
 
@@ -834,7 +745,7 @@ std::string ClientAdmin::modifyUser(const proto::router::User& user, qint64* pas
     if (password_changed)
         *password_changed_user_id = new_user.entry_id;
 
-    Service::notifyChanged(Service::NOTIFY_USERS);
+    emit sig_notifyChanged(ClientWorker::NOTIFY_USERS);
     return proto::router::kErrorOk;
 }
 
@@ -859,6 +770,6 @@ std::string ClientAdmin::deleteUser(const proto::router::User& user)
         return std::string(error_code);
     }
 
-    Service::notifyChanged(Service::NOTIFY_USERS);
+    emit sig_notifyChanged(ClientWorker::NOTIFY_USERS);
     return proto::router::kErrorOk;
 }

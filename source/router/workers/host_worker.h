@@ -100,11 +100,8 @@ public:
     // legacy hosts). Fire-and-forget: if the host has disconnected, the offer is dropped.
     void sendConnectionOffer(HostId host_id, const proto::router::ConnectionOffer& offer);
 
-    // Called by host sessions from the worker thread. |flags| are Service NOTIFY_* bits.
-    void notifyChanged(quint32 flags);
-
 signals:
-    // Emitted from the worker thread when host state changes; |flags| are Service NOTIFY_* bits.
+    // Emitted from the worker thread when host state changes; |flags| are ClientWorker NOTIFY_* bits.
     void sig_notify(quint32 flags);
 
 protected:

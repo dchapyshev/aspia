@@ -24,8 +24,7 @@
 #include "proto/router_constants.h"
 #include "proto/router_legacy_host.h"
 #include "router/database.h"
-#include "router/service.h"
-#include "router/workers/host_worker.h"
+#include "router/workers/client_worker.h"
 
 namespace {
 
@@ -34,8 +33,8 @@ constexpr qsizetype kMaxHostIdsPerSession = 32;
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-HostLegacy::HostLegacy(TcpChannel* channel, HostWorker* worker)
-    : Host(channel, worker)
+HostLegacy::HostLegacy(TcpChannel* channel, QObject* parent)
+    : Host(channel, parent)
 {
     CLOG(INFO) << "Ctor";
 }
@@ -61,7 +60,7 @@ bool HostLegacy::removeHostId(HostId host_id)
         {
             CLOG(INFO) << "Host ID" << host_id << "removed from legacy session list";
             host_id_list_.erase(it);
-            worker()->notifyChanged(Service::NOTIFY_HOSTS);
+            emit sig_notifyChanged(ClientWorker::NOTIFY_HOSTS);
             return true;
         }
     }
@@ -142,7 +141,7 @@ void HostLegacy::readHostIdRequest(const proto::router::legacy::HostIdRequest& h
             if (database.finalizeHostRemoval(host_id))
             {
                 host_id_response->set_error_code(proto::router::legacy::HostIdResponse::NO_HOST_FOUND);
-                worker()->notifyChanged(Service::NOTIFY_HOSTS);
+                emit sig_notifyChanged(ClientWorker::NOTIFY_HOSTS);
             }
             else
             {
@@ -161,7 +160,7 @@ void HostLegacy::readHostIdRequest(const proto::router::legacy::HostIdRequest& h
         {
             host_id_list_.emplace_back(host_id);
             emit sig_hostIdAssigned(host_id);
-            worker()->notifyChanged(Service::NOTIFY_HOSTS);
+            emit sig_notifyChanged(ClientWorker::NOTIFY_HOSTS);
         }
     }
     else if (error_code == proto::router::kErrorNotFound)

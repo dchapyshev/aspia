@@ -39,8 +39,12 @@ class ClientAdmin final : public ClientManager
     Q_OBJECT
 
 public:
-    explicit ClientAdmin(TcpChannel* channel, QObject* parent = nullptr);
+    ClientAdmin(TcpChannel* channel, QObject* parent);
     ~ClientAdmin() final;
+
+signals:
+    void sig_clientListRequest(const proto::router::ClientListRequest& request);
+    void sig_clientRequest(const proto::router::ClientRequest& request);
 
 protected:
     // Client implementation.
@@ -48,12 +52,10 @@ protected:
 
 private:
     void doRelayListRequest(const proto::router::RelayListRequest& request);
-    void doClientListRequest(const proto::router::ClientListRequest& request);
     void doUserListRequest(const proto::router::UserListRequest& request);
     void doUserRequest(const proto::router::UserRequest& request);
     void doHostRequest(const proto::router::HostRequest& request);
     void doRelayRequest(const proto::router::RelayRequest& request);
-    void doClientRequest(const proto::router::ClientRequest& request);
     void doPeerRequest(const proto::router::PeerRequest& request);
     void doWorkspaceRequest(const proto::router::WorkspaceRequest& request);
 

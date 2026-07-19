@@ -29,8 +29,8 @@
 #include "router/database.h"
 #include "router/host_ng.h"
 #include "router/host_legacy.h"
-#include "router/service.h"
 #include "router/settings.h"
+#include "router/workers/client_worker.h"
 
 //--------------------------------------------------------------------------------------------------
 HostWorker::HostWorker()
@@ -114,12 +114,6 @@ void HostWorker::sendConnectionOffer(HostId host_id, const proto::router::Connec
 
         host_legacy->sendConnectionOffer(legacy_offer);
     });
-}
-
-//--------------------------------------------------------------------------------------------------
-void HostWorker::notifyChanged(quint32 flags)
-{
-    emit sig_notify(flags);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -227,6 +221,7 @@ void HostWorker::onNewHostConnection()
         hosts_.emplace_back(host);
         connect(host, &HostNG::sig_hostIdAssigned, this, &HostWorker::onHostIdAssigned);
         connect(host, &Host::sig_finished, this, &HostWorker::onHostFinished);
+        connect(host, &Host::sig_notifyChanged, this, &HostWorker::sig_notify);
         host->start();
     }
 }
@@ -244,6 +239,7 @@ void HostWorker::onNewLegacyHostConnection()
         hosts_.emplace_back(host);
         connect(host, &HostLegacy::sig_hostIdAssigned, this, &HostWorker::onHostIdAssigned);
         connect(host, &Host::sig_finished, this, &HostWorker::onHostFinished);
+        connect(host, &Host::sig_notifyChanged, this, &HostWorker::sig_notify);
         host->start();
     }
 }
@@ -298,9 +294,17 @@ void HostWorker::onHostIdAssigned(HostId host_id)
 //--------------------------------------------------------------------------------------------------
 void HostWorker::removeHostSession(Host* host)
 {
+    quint32 flags = ClientWorker::NOTIFY_HOSTS;
+
+    HostNG* host_ng = dynamic_cast<HostNG*>(host);
+    if (host_ng && isTempHostId(host_ng->hostId()))
+        flags |= ClientWorker::NOTIFY_TEMP_HOSTS;
+
     host->disconnect();
     host->deleteLater();
     hosts_.removeOne(host);
+
+    emit sig_notify(flags);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -447,7 +451,7 @@ HostWorker::RemoveHostResult HostWorker::doRemoveHost(HostId host_id)
         }
     }
 
-    notifyChanged(Service::NOTIFY_HOSTS);
+    emit sig_notify(ClientWorker::NOTIFY_HOSTS);
     return result;
 }
 
@@ -487,6 +491,6 @@ std::string_view HostWorker::doApproveHost(HostId host_id)
     // would make the reconnect ask for a new temporary id.
     removeHostSession(host);
 
-    notifyChanged(Service::NOTIFY_HOSTS | Service::NOTIFY_TEMP_HOSTS);
+    emit sig_notify(ClientWorker::NOTIFY_HOSTS | ClientWorker::NOTIFY_TEMP_HOSTS);
     return proto::router::kErrorOk;
 }
