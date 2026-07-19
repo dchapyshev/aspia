@@ -16,38 +16,52 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/service.h"
-
-#include "base/logging.h"
+#include "router/shared_hosts.h"
 
 //--------------------------------------------------------------------------------------------------
 // static
-const char Service::kFileName[] = "aspia_router.exe";
-const char Service::kName[] = "aspia-router";
-const char Service::kDisplayName[] = "Aspia Router Service";
-const char Service::kDescription[] = "Assigns identifiers to peers and routes traffic to bypass NAT.";
-
-//--------------------------------------------------------------------------------------------------
-Service::Service(QObject* parent)
-    : CoreService(Service::kName, parent)
+SharedHosts& SharedHosts::instance()
 {
-    LOG(INFO) << "Ctor";
+    static SharedHosts instance;
+    return instance;
 }
 
 //--------------------------------------------------------------------------------------------------
-Service::~Service()
+bool SharedHosts::contains(HostId host_id) const
 {
-    LOG(INFO) << "Dtor";
+    std::shared_lock lock(lock_);
+    return hosts_.contains(host_id);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onStart()
+std::optional<SharedHosts::Host> SharedHosts::find(HostId host_id) const
 {
-    LOG(INFO) << "Service started";
+    std::shared_lock lock(lock_);
+
+    auto it = hosts_.find(host_id);
+    if (it == hosts_.end())
+        return std::nullopt;
+
+    return it->second;
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onStop()
+void SharedHosts::add(HostId host_id, const QVersionNumber& version, const std::string& address)
 {
-    LOG(INFO) << "Service stopping";
+    std::unique_lock lock(lock_);
+    hosts_.insert_or_assign(host_id, Host{version, address});
+}
+
+//--------------------------------------------------------------------------------------------------
+void SharedHosts::remove(HostId host_id)
+{
+    std::unique_lock lock(lock_);
+    hosts_.erase(host_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SharedHosts::clear()
+{
+    std::unique_lock lock(lock_);
+    hosts_.clear();
 }

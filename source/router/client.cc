@@ -19,7 +19,6 @@
 #include "router/client.h"
 
 #include <QDateTime>
-#include <QSet>
 
 #include <set>
 #include <unordered_map>
@@ -34,6 +33,7 @@
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
 #include "router/database.h"
+#include "router/shared_hosts.h"
 #include "router/workers/client_worker.h"
 #include "router/workers/host_worker.h"
 #include "router/workers/relay_worker.h"
@@ -416,127 +416,113 @@ void Client::readConnectionRequest(const proto::router::ConnectionRequest& reque
 {
     CLOG(INFO) << "New connection request (host_id:" << request.host_id() << ")";
 
-    HostWorker* host_worker = CoreApplication::findWorker<HostWorker>();
-    CHECK(host_worker);
-
     const auto request_id = request.request_id();
     const HostId host_id = request.host_id();
 
-    host_worker->requestHostInfo(host_id, this,
-        [this, request_id, host_id](std::optional<HostWorker::HostInfo>&& host_info)
+    std::optional<SharedHosts::Host> host_info = SharedHosts::instance().find(host_id);
+    if (!host_info.has_value())
     {
-        if (!host_info.has_value())
-        {
-            CLOG(ERROR) << "Host with id" << host_id << "NOT found!";
+        CLOG(ERROR) << "Host with id" << host_id << "NOT found!";
 
-            proto::router::RouterToClient message;
-            proto::router::ConnectionOffer* offer = message.mutable_connection_offer();
-            offer->set_request_id(request_id);
-            offer->set_error_code(proto::router::ConnectionOffer::PEER_NOT_FOUND);
+        proto::router::RouterToClient message;
+        proto::router::ConnectionOffer* offer = message.mutable_connection_offer();
+        offer->set_request_id(request_id);
+        offer->set_error_code(proto::router::ConnectionOffer::PEER_NOT_FOUND);
+        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+        return;
+    }
+
+    CLOG(INFO) << "Host with id" << host_id << "found";
+
+    RelayWorker* relay_worker = CoreApplication::findWorker<RelayWorker>();
+    CHECK(relay_worker);
+
+    relay_worker->takeCredentials(this,
+        [this, request_id, host_id, host_info = std::move(*host_info)](
+            std::optional<RelayWorker::Credentials>&& credentials)
+    {
+        proto::router::RouterToClient message;
+        proto::router::ConnectionOffer* offer = message.mutable_connection_offer();
+        offer->set_request_id(request_id);
+
+        if (!credentials.has_value())
+        {
+            CLOG(ERROR) << "Empty key pool";
+            offer->set_error_code(proto::router::ConnectionOffer::KEY_POOL_EMPTY);
             sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
             return;
         }
 
-        CLOG(INFO) << "Host with id" << host_id << "found";
+        offer->set_error_code(proto::router::ConnectionOffer::SUCCESS);
 
-        RelayWorker* relay_worker = CoreApplication::findWorker<RelayWorker>();
-        CHECK(relay_worker);
+        proto::router::PeerInfo* peer_info = offer->mutable_peer_info();
+        peer_info->set_is_legacy(host_info.version < kVersion_3_0_0);
 
-        relay_worker->takeCredentials(this,
-            [this, request_id, host_id, host_info = std::move(*host_info)](
-                std::optional<RelayWorker::Credentials>&& credentials)
+        if (stun_port_)
         {
-            proto::router::RouterToClient message;
-            proto::router::ConnectionOffer* offer = message.mutable_connection_offer();
-            offer->set_request_id(request_id);
+            // An empty host string means that the client should use the router's address
+            // as the server's host address. This is done to allow for future expansion,
+            // but is not currently used.
+            proto::router::StunServerInfo* stun_info = offer->mutable_stun_info();
+            stun_info->set_version(1);
+            stun_info->set_host("");
+            stun_info->set_port(stun_port_);
+        }
 
-            if (!credentials.has_value())
-            {
-                CLOG(ERROR) << "Empty key pool";
-                offer->set_error_code(proto::router::ConnectionOffer::KEY_POOL_EMPTY);
-                sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-                return;
-            }
+        proto::router::RelayCredentials* offer_credentials = offer->mutable_relay();
+        offer_credentials->set_host(credentials->peer_host);
+        offer_credentials->set_port(credentials->peer_port);
+        offer_credentials->mutable_key()->Swap(&credentials->key);
 
-            offer->set_error_code(proto::router::ConnectionOffer::SUCCESS);
+        // AES-256-GCM is used only when both peers support it; legacy peers (and their relay code) only
+        // understand ChaCha20-Poly1305. The key material itself is algorithm-agnostic.
+        const bool aes = host_info.version >= kVersion_3_0_0 && version() >= kVersion_3_0_0;
+        offer_credentials->mutable_key()->set_encryption(aes ?
+            proto::router::RelayKey::ENCRYPTION_AES256_GCM : proto::router::RelayKey::ENCRYPTION_CHACHA20_POLY1305);
 
-            proto::router::PeerInfo* peer_info = offer->mutable_peer_info();
-            peer_info->set_is_legacy(host_info.version < kVersion_3_0_0);
+        proto::relay::PeerToRelay::Secret secret;
+        secret.set_random_data(Random::string(16));
+        secret.set_client_address(address());
+        secret.set_client_user_name(userName());
+        secret.set_host_address(host_info.address);
+        secret.set_host_id(host_id);
 
-            if (stun_port_)
-            {
-                // An empty host string means that the client should use the router's address
-                // as the server's host address. This is done to allow for future expansion,
-                // but is not currently used.
-                proto::router::StunServerInfo* stun_info = offer->mutable_stun_info();
-                stun_info->set_version(1);
-                stun_info->set_host("");
-                stun_info->set_port(stun_port_);
-            }
+        offer_credentials->set_secret(secret.SerializeAsString());
 
-            proto::router::RelayCredentials* offer_credentials = offer->mutable_relay();
-            offer_credentials->set_host(credentials->peer_host);
-            offer_credentials->set_port(credentials->peer_port);
-            offer_credentials->mutable_key()->Swap(&credentials->key);
+        // The host could disconnect while the key was being taken in the relay worker; the
+        // offer is then dropped in the host worker and the consumed one-time key is lost,
+        // which is acceptable - relays replenish the pool continuously.
+        HostWorker* host_worker = CoreApplication::findWorker<HostWorker>();
+        CHECK(host_worker);
 
-            // AES-256-GCM is used only when both peers support it; legacy peers (and their relay code) only
-            // understand ChaCha20-Poly1305. The key material itself is algorithm-agnostic.
-            const bool aes = host_info.version >= kVersion_3_0_0 && version() >= kVersion_3_0_0;
-            offer_credentials->mutable_key()->set_encryption(aes ?
-                proto::router::RelayKey::ENCRYPTION_AES256_GCM : proto::router::RelayKey::ENCRYPTION_CHACHA20_POLY1305);
+        CLOG(INFO) << "Sending connection offer to host";
+        host_worker->sendConnectionOffer(host_id, *offer);
 
-            proto::relay::PeerToRelay::Secret secret;
-            secret.set_random_data(Random::string(16));
-            secret.set_client_address(address());
-            secret.set_client_user_name(userName());
-            secret.set_host_address(host_info.address);
-            secret.set_host_id(host_id);
-
-            offer_credentials->set_secret(secret.SerializeAsString());
-
-            // The host could disconnect while the key was being taken in the relay worker; the
-            // offer is then dropped in the host worker and the consumed one-time key is lost,
-            // which is acceptable - relays replenish the pool continuously.
-            HostWorker* host_worker = CoreApplication::findWorker<HostWorker>();
-            CHECK(host_worker);
-
-            CLOG(INFO) << "Sending connection offer to host";
-            host_worker->sendConnectionOffer(host_id, *offer);
-
-            CLOG(INFO) << "Sending connection offer to client";
-            sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-        });
+        CLOG(INFO) << "Sending connection offer to client";
+        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
     });
 }
 
 //--------------------------------------------------------------------------------------------------
 void Client::readCheckHostStatus(const proto::router::CheckHostStatus& check_host_status)
 {
-    HostWorker* host_worker = CoreApplication::findWorker<HostWorker>();
-    CHECK(host_worker);
+    proto::router::RouterToClient message;
+    proto::router::HostStatus* host_status = message.mutable_host_status();
+    host_status->set_request_id(check_host_status.request_id());
 
-    const auto request_id = check_host_status.request_id();
-
-    host_worker->requestHostInfo(check_host_status.host_id(), this,
-        [this, request_id](std::optional<HostWorker::HostInfo>&& host_info)
+    std::optional<SharedHosts::Host> host_info = SharedHosts::instance().find(check_host_status.host_id());
+    if (host_info.has_value())
     {
-        proto::router::RouterToClient message;
-        proto::router::HostStatus* host_status = message.mutable_host_status();
-        host_status->set_request_id(request_id);
+        host_status->set_status(proto::router::HostStatus::STATUS_ONLINE);
+        host_status->mutable_version()->CopyFrom(serialize(host_info->version));
+    }
+    else
+    {
+        host_status->set_status(proto::router::HostStatus::STATUS_OFFLINE);
+    }
 
-        if (host_info.has_value())
-        {
-            host_status->set_status(proto::router::HostStatus::STATUS_ONLINE);
-            host_status->mutable_version()->CopyFrom(serialize(host_info->version));
-        }
-        else
-        {
-            host_status->set_status(proto::router::HostStatus::STATUS_OFFLINE);
-        }
-
-        CLOG(INFO) << "Sending host status:" << *host_status;
-        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-    });
+    CLOG(INFO) << "Sending host status:" << *host_status;
+    sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -601,19 +587,11 @@ void Client::readHostListRequest(const proto::router::HostListRequest& request)
         database.hosts(workspace_id, group_id, start_item, end_item, result);
     }
 
-    HostWorker* host_worker = CoreApplication::findWorker<HostWorker>();
-    CHECK(host_worker);
-
     // Mark currently connected hosts as online.
-    host_worker->requestOnlineHostIds(this,
-        [this, message = std::move(message)](QSet<HostId>&& online_host_ids) mutable
-    {
-        proto::router::HostList* result = message.mutable_host_list();
-        for (proto::router::Host& host : *result->mutable_host())
-            host.set_online(online_host_ids.contains(host.host_id()));
+    for (proto::router::Host& host : *result->mutable_host())
+        host.set_online(SharedHosts::instance().contains(host.host_id()));
 
-        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-    });
+    sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -638,19 +616,11 @@ void Client::readHostSearchRequest(const proto::router::HostSearchRequest& reque
 
     database.searchHosts(QString::fromStdString(request.query()), workspace_ids, result);
 
-    HostWorker* host_worker = CoreApplication::findWorker<HostWorker>();
-    CHECK(host_worker);
-
     // Mark currently connected hosts as online.
-    host_worker->requestOnlineHostIds(this,
-        [this, message = std::move(message)](QSet<HostId>&& online_host_ids) mutable
-    {
-        proto::router::HostSearchResult* result = message.mutable_host_search_result();
-        for (proto::router::Host& host : *result->mutable_host())
-            host.set_online(online_host_ids.contains(host.host_id()));
+    for (proto::router::Host& host : *result->mutable_host())
+        host.set_online(SharedHosts::instance().contains(host.host_id()));
 
-        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-    });
+    sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

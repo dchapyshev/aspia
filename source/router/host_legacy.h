@@ -44,6 +44,7 @@ public:
 
 signals:
     void sig_hostIdAssigned(HostId host_id);
+    void sig_hostIdRemoved(HostId host_id);
 
 protected:
     // Host implementation.

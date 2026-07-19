@@ -20,12 +20,8 @@
 #define ROUTER_WORKERS_HOST_WORKER_H
 
 #include <QList>
-#include <QSet>
-#include <QVersionNumber>
 
 #include <functional>
-#include <optional>
-#include <string>
 #include <string_view>
 
 #include "base/scoped_qpointer.h"
@@ -46,12 +42,6 @@ public:
     HostWorker();
     ~HostWorker() final;
 
-    struct HostInfo
-    {
-        QVersionNumber version;
-        std::string address;
-    };
-
     struct RemoveHostResult
     {
         std::string_view error_code;
@@ -59,8 +49,6 @@ public:
         bool online = false;
     };
 
-    using HostInfoCallback = std::function<void(std::optional<HostInfo>&&)>;
-    using OnlineHostIdsCallback = std::function<void(QSet<HostId>&&)>;
     using TempHostListCallback = std::function<void(proto::router::TempHostList&&)>;
     using ResultCallback = std::function<void(bool)>;
     using RemoveHostCallback = std::function<void(RemoveHostResult&&)>;
@@ -69,12 +57,6 @@ public:
     // Asynchronous request-response API. May be called from any thread: the request is processed
     // in the worker thread and |callback| runs in the caller thread. The callback is dropped if
     // |context| is destroyed before the response arrives.
-
-    // Reports version and address of the online host |host_id|, or nullopt if it is offline.
-    void requestHostInfo(HostId host_id, QObject* context, HostInfoCallback callback);
-
-    // Reports the host ids served by the connected host sessions.
-    void requestOnlineHostIds(QObject* context, OnlineHostIdsCallback callback);
 
     // Builds the list of connected temporary hosts. |with_address| adds host addresses (admin
     // sessions only).
@@ -114,12 +96,12 @@ private slots:
     void onNewLegacyHostConnection();
     void onHostFinished();
     void onHostIdAssigned(HostId host_id);
+    void onHostIdRemoved(HostId host_id);
 
 private:
     void removeHostSession(Host* host);
     Host* hostByHostId(HostId host_id);
-    std::optional<HostInfo> doHostInfo(HostId host_id);
-    QSet<HostId> doOnlineHostIds() const;
+    void publishHostState(HostId host_id);
     proto::router::TempHostList doTempHostList(bool with_address) const;
     bool doDisconnectHost(HostId host_id);
     RemoveHostResult doRemoveHost(HostId host_id);

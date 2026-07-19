@@ -60,6 +60,7 @@ bool HostLegacy::removeHostId(HostId host_id)
         {
             CLOG(INFO) << "Host ID" << host_id << "removed from legacy session list";
             host_id_list_.erase(it);
+            emit sig_hostIdRemoved(host_id);
             emit sig_notifyChanged(ClientWorker::NOTIFY_HOSTS);
             return true;
         }

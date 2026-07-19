@@ -42,6 +42,8 @@ list(APPEND SOURCE_ROUTER
     service.h
     settings.cc
     settings.h
+    shared_hosts.cc
+    shared_hosts.h
     workspace.cc
     workspace.h)
 

@@ -30,6 +30,7 @@
 #include "router/host_ng.h"
 #include "router/host_legacy.h"
 #include "router/settings.h"
+#include "router/shared_hosts.h"
 #include "router/workers/client_worker.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -42,18 +43,6 @@ HostWorker::HostWorker()
 HostWorker::~HostWorker()
 {
     LOG(INFO) << "Dtor";
-}
-
-//--------------------------------------------------------------------------------------------------
-void HostWorker::requestHostInfo(HostId host_id, QObject* context, HostInfoCallback callback)
-{
-    request(context, [this, host_id]() { return doHostInfo(host_id); }, std::move(callback));
-}
-
-//--------------------------------------------------------------------------------------------------
-void HostWorker::requestOnlineHostIds(QObject* context, OnlineHostIdsCallback callback)
-{
-    request(context, [this]() { return doOnlineHostIds(); }, std::move(callback));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -206,6 +195,7 @@ void HostWorker::onStop()
     }
 
     hosts_.clear();
+    SharedHosts::instance().clear();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -238,6 +228,7 @@ void HostWorker::onNewLegacyHostConnection()
         HostLegacy* host = new HostLegacy(channel, this);
         hosts_.emplace_back(host);
         connect(host, &HostLegacy::sig_hostIdAssigned, this, &HostWorker::onHostIdAssigned);
+        connect(host, &HostLegacy::sig_hostIdRemoved, this, &HostWorker::onHostIdRemoved);
         connect(host, &Host::sig_finished, this, &HostWorker::onHostFinished);
         connect(host, &Host::sig_notifyChanged, this, &HostWorker::sig_notify);
         host->start();
@@ -275,34 +266,55 @@ void HostWorker::onHostIdAssigned(HostId host_id)
         }
     }
 
-    if (matched_hosts.size() <= 1)
-        return;
-
-    Host* oldest_host = matched_hosts.first();
-    for (int i = 1; i < matched_hosts.size(); ++i)
+    if (matched_hosts.size() > 1)
     {
-        if (matched_hosts[i]->startTime() < oldest_host->startTime())
-            oldest_host = matched_hosts[i];
+        Host* oldest_host = matched_hosts.first();
+        for (int i = 1; i < matched_hosts.size(); ++i)
+        {
+            if (matched_hosts[i]->startTime() < oldest_host->startTime())
+                oldest_host = matched_hosts[i];
+        }
+
+        LOG(INFO) << "Duplicate host ID" << host_id << "detected. Disconnecting older session (id"
+                  << oldest_host->sessionId() << ")";
+
+        removeHostSession(oldest_host);
     }
 
-    LOG(INFO) << "Duplicate host ID" << host_id << "detected. Disconnecting older session (id"
-              << oldest_host->sessionId() << ")";
+    publishHostState(host_id);
+}
 
-    removeHostSession(oldest_host);
+//--------------------------------------------------------------------------------------------------
+void HostWorker::onHostIdRemoved(HostId host_id)
+{
+    publishHostState(host_id);
 }
 
 //--------------------------------------------------------------------------------------------------
 void HostWorker::removeHostSession(Host* host)
 {
     quint32 flags = ClientWorker::NOTIFY_HOSTS;
+    QList<HostId> host_ids;
 
-    HostNG* host_ng = dynamic_cast<HostNG*>(host);
-    if (host_ng && isTempHostId(host_ng->hostId()))
-        flags |= ClientWorker::NOTIFY_TEMP_HOSTS;
+    if (HostNG* host_ng = dynamic_cast<HostNG*>(host))
+    {
+        if (host_ng->hostId() != kInvalidHostId)
+            host_ids.append(host_ng->hostId());
+
+        if (isTempHostId(host_ng->hostId()))
+            flags |= ClientWorker::NOTIFY_TEMP_HOSTS;
+    }
+    else if (HostLegacy* host_legacy = dynamic_cast<HostLegacy*>(host))
+    {
+        host_ids = host_legacy->hostIdList();
+    }
 
     host->disconnect();
     host->deleteLater();
     hosts_.removeOne(host);
+
+    for (HostId host_id : std::as_const(host_ids))
+        publishHostState(host_id);
 
     emit sig_notify(flags);
 }
@@ -325,41 +337,12 @@ Host* HostWorker::hostByHostId(HostId host_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<HostWorker::HostInfo> HostWorker::doHostInfo(HostId host_id)
+void HostWorker::publishHostState(HostId host_id)
 {
-    Host* host = hostByHostId(host_id);
-    if (!host)
-        return std::nullopt;
-
-    HostInfo info;
-    info.version = host->version();
-    info.address = host->address();
-    return info;
-}
-
-//--------------------------------------------------------------------------------------------------
-QSet<HostId> HostWorker::doOnlineHostIds() const
-{
-    QSet<HostId> online_host_ids;
-
-    for (Host* host : std::as_const(hosts_))
-    {
-        HostNG* host_ng = dynamic_cast<HostNG*>(host);
-        if (host_ng)
-        {
-            online_host_ids.insert(host_ng->hostId());
-            continue;
-        }
-
-        HostLegacy* host_legacy = dynamic_cast<HostLegacy*>(host);
-        if (host_legacy)
-        {
-            for (HostId host_id : host_legacy->hostIdList())
-                online_host_ids.insert(host_id);
-        }
-    }
-
-    return online_host_ids;
+    if (Host* host = hostByHostId(host_id))
+        SharedHosts::instance().add(host_id, host->version(), host->address());
+    else
+        SharedHosts::instance().remove(host_id);
 }
 
 //--------------------------------------------------------------------------------------------------
