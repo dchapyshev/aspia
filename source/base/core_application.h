@@ -24,6 +24,7 @@
 #include <memory>
 
 #include "base/scoped_qpointer.h"
+#include "base/threading/worker_manager.h"
 
 class QSocketNotifier;
 class MessageWindow;
@@ -40,7 +41,18 @@ public:
     CoreApplication(int& argc, char* argv[]);
     ~CoreApplication() final;
 
+    int exec();
+
     static CoreApplication* instance();
+
+    template <typename T>
+    static T* findWorker()
+    {
+        CoreApplication* application = instance();
+        return application ? application->worker_manager_->find<T>() : nullptr;
+    }
+
+    qint64 addWorker(std::unique_ptr<Worker> worker);
 
 signals:
     void sig_queryEndSession();
@@ -48,6 +60,8 @@ signals:
     void sig_powerEvent(quint32 event);
 
 private:
+    std::unique_ptr<WorkerManager> worker_manager_;
+
 #if defined(Q_OS_WINDOWS)
     std::unique_ptr<Thread> ui_thread_;
     std::unique_ptr<MessageWindow> message_window_;
