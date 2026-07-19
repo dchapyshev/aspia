@@ -25,7 +25,6 @@
 #include "base/crypto/random.h"
 #include "base/crypto/secure_byte_array.h"
 #include "base/net/tcp_channel.h"
-#include "base/peer/stun_server.h"
 #include "proto/router_client.h"
 #include "router/client.h"
 #include "router/client_admin.h"
@@ -752,14 +751,7 @@ bool Service::start()
     }
 
     if (settings.isStunEnabled())
-    {
-        stun_server_ = new StunServer(this);
-        if (!stun_server_->start(settings.stunPort()))
-        {
-            LOG(ERROR) << "Unable to start STUN listener";
-            return false;
-        }
-    }
+        stun_port_ = settings.stunPort();
 
     LOG(INFO) << "Server started";
     return true;
@@ -827,8 +819,8 @@ void Service::addClient(TcpChannel* channel)
         return;
     }
 
-    if (stun_server_)
-        client->setStunInfo(stun_server_->port());
+    if (stun_port_)
+        client->setStunInfo(stun_port_);
 
     clients_.emplace_back(client);
     connect(client, &Client::sig_finished, this, &Service::onClientSessionFinished);

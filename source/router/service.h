@@ -33,7 +33,6 @@
 class Client;
 class QTimer;
 class Relay;
-class StunServer;
 
 class Service final : public CoreService
 {
@@ -121,7 +120,7 @@ private:
     TcpServer* client_server_ = nullptr;
     TcpServer* relay_server_ = nullptr;
     TcpServerLegacy* host_legacy_server_ = nullptr;
-    StunServer* stun_server_ = nullptr;
+    quint16 stun_port_ = 0;
     QTimer* notification_timer_ = nullptr;
     quint32 dirty_mask_ = 0;
 

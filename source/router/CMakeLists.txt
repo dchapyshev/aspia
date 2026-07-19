@@ -45,11 +45,14 @@ list(APPEND SOURCE_ROUTER
     workspace.cc
     workspace.h)
 
+include(workers/sources.cmake)
+
 if (WIN32)
     list(APPEND SOURCE_ROUTER_WIN win/router.rc)
 endif()
 
 source_group("" FILES ${SOURCE_ROUTER})
+source_group(workers FILES ${SOURCE_ROUTER_WORKERS})
 
 if (WIN32)
     source_group(win FILES ${SOURCE_ROUTER_WIN})
@@ -64,7 +67,7 @@ if (APPLE)
     set(ROUTER_PLATFORM_LIBS ${FOUNDATION_LIB})
 endif()
 
-add_executable(aspia_router ${SOURCE_ROUTER} ${SOURCE_ROUTER_WIN})
+add_executable(aspia_router ${SOURCE_ROUTER} ${SOURCE_ROUTER_WORKERS} ${SOURCE_ROUTER_WIN})
 
 if (WIN32)
     set_target_properties(aspia_router PROPERTIES LINK_FLAGS "/MANIFEST:NO")

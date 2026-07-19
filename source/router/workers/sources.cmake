@@ -16,32 +16,6 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-collect_sources(SOURCE_BASE_PEER
-    authenticator.cc
-    authenticator.h
-    client_authenticator.cc
-    client_authenticator.h
-    client_authenticator_legacy.cc
-    client_authenticator_legacy.h
-    host_id.cc
-    host_id.h
-    relay_peer.cc
-    relay_peer.h
-    relay_peer_manager.cc
-    relay_peer_manager.h
-    router_user.cc
-    router_user.h
-    server_authenticator.cc
-    server_authenticator.h
-    server_authenticator_legacy.cc
-    server_authenticator_legacy.h
-    stun_peer.cc
-    stun_peer.h
-    user.cc
-    user.h
-    user_list.h)
-
-collect_sources(SOURCE_BASE_PEER_TESTS
-    host_id_unittest.cc
-    router_user_unittest.cc
-    user_unittest.cc)
+collect_sources(SOURCE_ROUTER_WORKERS
+    stun_worker.cc
+    stun_worker.h)

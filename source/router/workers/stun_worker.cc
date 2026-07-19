@@ -16,64 +16,82 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/peer/stun_server.h"
+#include "router/workers/stun_worker.h"
 
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/threading/asio_event_dispatcher.h"
 #include "proto/stun.h"
+#include "router/settings.h"
 
 //--------------------------------------------------------------------------------------------------
-StunServer::StunServer(QObject* parent)
-    : QObject(parent),
-      udp_socket_(AsioEventDispatcher::ioContext())
+StunWorker::StunWorker()
 {
     LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-StunServer::~StunServer()
+StunWorker::~StunWorker()
 {
     LOG(INFO) << "Dtor";
-
-    // Mark guard before releasing resources so that any pending ASIO handlers
-    // (already completed but not yet dispatched) will see the object is gone.
-    io_->alive = false;
-
-    std::error_code ignored_error;
-    udp_socket_.cancel(ignored_error);
-    udp_socket_.close(ignored_error);
 }
 
 //--------------------------------------------------------------------------------------------------
-bool StunServer::start(quint16 port)
+void StunWorker::onStart()
+{
+    Settings settings;
+    if (!settings.isStunEnabled())
+    {
+        LOG(INFO) << "STUN server is disabled";
+        return;
+    }
+
+    if (!startServer(settings.stunPort()))
+        LOG(ERROR) << "Unable to start STUN listener";
+}
+
+//--------------------------------------------------------------------------------------------------
+void StunWorker::onStop()
+{
+    if (!udp_socket_)
+        return;
+
+    // Mark guard before releasing resources so that any pending ASIO handlers
+    // (already completed but not yet dispatched) will see the socket is gone.
+    io_->alive = false;
+
+    std::error_code ignored_error;
+    udp_socket_->cancel(ignored_error);
+    udp_socket_->close(ignored_error);
+    udp_socket_.reset();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool StunWorker::startServer(quint16 port)
 {
     asio::ip::udp::endpoint endpoint(asio::ip::udp::v4(), port);
-    port_ = port;
+
+    io_ = SharedPointer<IoState>(new IoState());
+    udp_socket_ = std::make_unique<asio::ip::udp::socket>(AsioEventDispatcher::ioContext());
 
     std::error_code error_code;
 
-    if (udp_socket_.is_open())
-    {
-        udp_socket_.cancel(error_code);
-        udp_socket_.close(error_code);
-        error_code.clear();
-    }
-
-    udp_socket_.open(endpoint.protocol(), error_code);
+    udp_socket_->open(endpoint.protocol(), error_code);
     if (error_code)
     {
         LOG(ERROR) << "Unable to open socket:" << error_code;
+        udp_socket_.reset();
         return false;
     }
 
-    udp_socket_.bind(endpoint, error_code);
+    udp_socket_->bind(endpoint, error_code);
     if (error_code)
     {
         LOG(ERROR) << "Unable to bind socket:" << error_code;
 
         std::error_code ignored_error;
-        udp_socket_.close(ignored_error);
+        udp_socket_->close(ignored_error);
+        udp_socket_.reset();
         return false;
     }
 
@@ -82,10 +100,10 @@ bool StunServer::start(quint16 port)
 }
 
 //--------------------------------------------------------------------------------------------------
-void StunServer::doReceiveRequest()
+void StunWorker::doReceiveRequest()
 {
     auto io = io_;
-    udp_socket_.async_receive_from(
+    udp_socket_->async_receive_from(
         asio::buffer(io_->read_buffer.data(), io_->read_buffer.size()), io_->remote_endpoint,
         [this, io](const std::error_code& error_code, size_t bytes_transferred)
     {
@@ -122,9 +140,9 @@ void StunServer::doReceiveRequest()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool StunServer::doSendAddressReply(quint32 transaction_id, const asio::ip::udp::endpoint& remote_endpoint)
+bool StunWorker::doSendAddressReply(quint32 transaction_id, const asio::ip::udp::endpoint& remote_endpoint)
 {
-    if (!udp_socket_.is_open())
+    if (!udp_socket_ || !udp_socket_->is_open())
     {
         LOG(ERROR) << "UDP socket is not open";
         return false;
@@ -144,7 +162,7 @@ bool StunServer::doSendAddressReply(quint32 transaction_id, const asio::ip::udp:
         return false;
     }
 
-    udp_socket_.async_send_to(asio::buffer(reply.constData(), reply.size()), remote_endpoint,
+    udp_socket_->async_send_to(asio::buffer(reply.constData(), reply.size()), remote_endpoint,
         [reply](const std::error_code& error_code, size_t /* bytes_transferred */)
     {
         if (error_code)

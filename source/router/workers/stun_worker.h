@@ -16,29 +16,32 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_PEER_STUN_SERVER_H
-#define BASE_PEER_STUN_SERVER_H
-
-#include <QObject>
-#include <array>
+#ifndef ROUTER_WORKERS_STUN_WORKER_H
+#define ROUTER_WORKERS_STUN_WORKER_H
 
 #include <asio/ip/udp.hpp>
 
-#include "base/shared_pointer.h"
+#include <array>
+#include <memory>
 
-class StunServer final : public QObject
+#include "base/shared_pointer.h"
+#include "base/threading/worker.h"
+
+class StunWorker final : public Worker
 {
     Q_OBJECT
 
 public:
-    explicit StunServer(QObject* parent = nullptr);
-    ~StunServer();
+    StunWorker();
+    ~StunWorker() final;
 
-    bool start(quint16 port);
-
-    quint16 port() const { return port_; }
+protected:
+    // Worker implementation.
+    void onStart() final;
+    void onStop() final;
 
 private:
+    bool startServer(quint16 port);
     void doReceiveRequest();
     bool doSendAddressReply(quint32 transaction_id, const asio::ip::udp::endpoint& remote_endpoint);
 
@@ -49,11 +52,12 @@ private:
         std::array<quint8, 1024> read_buffer;
     };
 
-    SharedPointer<IoState> io_ { new IoState() };
-    quint16 port_ = 0;
-    asio::ip::udp::socket udp_socket_;
+    SharedPointer<IoState> io_;
 
-    Q_DISABLE_COPY_MOVE(StunServer)
+    // Created in the worker thread so the socket binds to its io_context.
+    std::unique_ptr<asio::ip::udp::socket> udp_socket_;
+
+    Q_DISABLE_COPY_MOVE(StunWorker)
 };
 
-#endif // BASE_PEER_STUN_SERVER_H
+#endif // ROUTER_WORKERS_STUN_WORKER_H
