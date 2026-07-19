@@ -36,6 +36,7 @@
 #include "router/database.h"
 #include "router/service.h"
 #include "router/settings.h"
+#include "router/workers/host_worker.h"
 #include "router/workers/relay_worker.h"
 #include "router/workers/stun_worker.h"
 
@@ -395,6 +396,7 @@ int main(int argc, char* argv[])
     else if (parser.isSet(stop_option))
         return stopService(out);
 
+    application.addWorker(std::make_unique<HostWorker>());
     application.addWorker(std::make_unique<RelayWorker>());
     application.addWorker(std::make_unique<StunWorker>());
 

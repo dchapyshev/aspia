@@ -34,7 +34,7 @@ class HostNG final : public Host
     Q_OBJECT
 
 public:
-    explicit HostNG(TcpChannel* channel, QObject* parent = nullptr);
+    HostNG(TcpChannel* channel, HostWorker* worker);
     ~HostNG() final;
 
     HostId hostId() const { return host_id_; }

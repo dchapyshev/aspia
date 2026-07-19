@@ -22,10 +22,7 @@
 #include <QList>
 
 #include "base/core_service.h"
-#include "base/peer/host_id.h"
 #include "base/net/tcp_server.h"
-#include "base/net/tcp_server_legacy.h"
-#include "router/host.h"
 
 class Client;
 class QTimer;
@@ -45,9 +42,6 @@ public:
 
     static Service* instance();
     static void notifyChanged(quint32 flags);
-
-    const QList<Host*>& hosts();
-    bool stopHost(qint64 session_id);
 
     const QList<Client*>& clients();
     bool stopClient(qint64 client_id);
@@ -74,31 +68,22 @@ protected:
     void onStop() final;
 
 private slots:
-    void onNewHostConnection();
-    void onNewLegacyHostConnection();
     void onNewClientConnection();
-    void onHostFinished();
     void onClientSessionFinished();
-    void onHostIdAssigned(HostId host_id);
     void onNotificationFlush();
 
 private:
     bool start();
-    void addHost(TcpChannel* channel, bool is_legacy);
     void addClient(TcpChannel* channel);
 
-    TcpServer* host_server_ = nullptr;
     TcpServer* client_server_ = nullptr;
-    TcpServerLegacy* host_legacy_server_ = nullptr;
     quint16 stun_port_ = 0;
     QTimer* notification_timer_ = nullptr;
     quint32 dirty_mask_ = 0;
 
-    QList<Host*> hosts_;
     QList<Client*> clients_;
 
     QStringList client_white_list_;
-    QStringList host_white_list_;
 
     static Service* instance_;
 

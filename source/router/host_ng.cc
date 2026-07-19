@@ -29,6 +29,7 @@
 #include "proto/router_peer.h"
 #include "router/database.h"
 #include "router/service.h"
+#include "router/workers/host_worker.h"
 
 namespace {
 
@@ -59,8 +60,8 @@ void releaseTempHostId(HostId host_id)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-HostNG::HostNG(TcpChannel* channel, QObject* parent)
-    : Host(channel, parent)
+HostNG::HostNG(TcpChannel* channel, HostWorker* worker)
+    : Host(channel, worker)
 {
     CLOG(INFO) << "Ctor";
 }
@@ -73,7 +74,7 @@ HostNG::~HostNG()
     if (isTempHostId(host_id_))
     {
         releaseTempHostId(host_id_);
-        Service::notifyChanged(Service::NOTIFY_TEMP_HOSTS);
+        worker()->notifyChanged(Service::NOTIFY_TEMP_HOSTS);
     }
 
     // If a remove command was sent during this session, the host has either processed it (and
@@ -188,7 +189,7 @@ void HostNG::readHostIdRequest(const proto::router::HostIdRequest& host_id_reque
         host_id_response->set_key(std::move(key));
 
         emit sig_hostIdAssigned(host_id_);
-        Service::notifyChanged(Service::NOTIFY_TEMP_HOSTS);
+        worker()->notifyChanged(Service::NOTIFY_TEMP_HOSTS);
 
         sendMessage(0, serialize(message));
         return;
@@ -216,7 +217,7 @@ void HostNG::readHostIdRequest(const proto::router::HostIdRequest& host_id_reque
     {
         host_id_response->set_host_id(host_id_);
         emit sig_hostIdAssigned(host_id_);
-        Service::notifyChanged(Service::NOTIFY_HOSTS);
+        worker()->notifyChanged(Service::NOTIFY_HOSTS);
     }
 
     sendMessage(0, serialize(message));

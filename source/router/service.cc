@@ -24,7 +24,6 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/crypto/random.h"
-#include "base/crypto/secure_byte_array.h"
 #include "base/net/tcp_channel.h"
 #include "proto/router.h"
 #include "proto/router_client.h"
@@ -32,10 +31,9 @@
 #include "router/client_admin.h"
 #include "router/client_manager.h"
 #include "router/migration_utils.h"
-#include "router/host_ng.h"
-#include "router/host_legacy.h"
 #include "router/settings.h"
 #include "router/router_user_list.h"
+#include "router/workers/host_worker.h"
 #include "router/workers/relay_worker.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -65,9 +63,6 @@ Service::~Service()
     LOG(INFO) << "Dtor";
 
     // Sessions can access |instance_|, so we delete the tracked ones before zeroing it.
-    for (auto* host : std::as_const(hosts_))
-        delete host;
-
     for (auto* client : std::as_const(clients_))
         delete client;
 
@@ -91,31 +86,6 @@ void Service::notifyChanged(quint32 flags)
     instance_->dirty_mask_ |= flags;
     if (!instance_->notification_timer_->isActive())
         instance_->notification_timer_->start();
-}
-
-//--------------------------------------------------------------------------------------------------
-const QList<Host*>& Service::hosts()
-{
-    return hosts_;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Service::stopHost(qint64 session_id)
-{
-    for (auto it = hosts_.begin(), it_end = hosts_.end(); it != it_end; ++it)
-    {
-        Host* session = *it;
-
-        if (session->sessionId() == session_id)
-        {
-            session->disconnect();
-            session->deleteLater();
-            hosts_.erase(it);
-            return true;
-        }
-    }
-
-    return false;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -197,30 +167,6 @@ void Service::onStop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onNewHostConnection()
-{
-    CHECK(host_server_);
-    while (host_server_->hasReadyConnections())
-    {
-        TcpChannel* channel = host_server_->nextReadyConnection();
-        LOG(INFO) << "New connection:" << channel->peerAddress();
-        addHost(channel, false);
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void Service::onNewLegacyHostConnection()
-{
-    CHECK(host_legacy_server_);
-    while (host_legacy_server_->hasReadyConnections())
-    {
-        TcpChannel* channel = host_legacy_server_->nextReadyConnection();
-        LOG(INFO) << "New legacy connection:" << channel->peerAddress();
-        addHost(channel, true);
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void Service::onNewClientConnection()
 {
     CHECK(client_server_);
@@ -233,16 +179,6 @@ void Service::onNewClientConnection()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onHostFinished()
-{
-    Host* host = dynamic_cast<Host*>(sender());
-    CHECK(host);
-    host->disconnect();
-    host->deleteLater();
-    hosts_.removeOne(host);
-}
-
-//--------------------------------------------------------------------------------------------------
 void Service::onClientSessionFinished()
 {
     Client* client = static_cast<Client*>(sender());
@@ -250,47 +186,6 @@ void Service::onClientSessionFinished()
     client->disconnect();
     client->deleteLater();
     clients_.removeOne(client);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Service::onHostIdAssigned(HostId host_id)
-{
-    QList<Host*> matched_hosts;
-
-    for (Host* host : std::as_const(hosts_))
-    {
-        HostNG* host_ng = dynamic_cast<HostNG*>(host);
-        if (host_ng)
-        {
-            if (host_ng->hostId() == host_id)
-                matched_hosts.append(host);
-            continue;
-        }
-
-        HostLegacy* host_legacy = dynamic_cast<HostLegacy*>(host);
-        if (host_legacy)
-        {
-            if (host_legacy->hasHostId(host_id))
-                matched_hosts.append(host);
-        }
-    }
-
-    if (matched_hosts.size() <= 1)
-        return;
-
-    Host* oldest_host = matched_hosts.first();
-    for (int i = 1; i < matched_hosts.size(); ++i)
-    {
-        if (matched_hosts[i]->startTime() < oldest_host->startTime())
-            oldest_host = matched_hosts[i];
-    }
-
-    LOG(INFO) << "Duplicate host ID" << host_id << "detected. Disconnecting older session (id"
-              << oldest_host->sessionId() << ")";
-
-    oldest_host->disconnect();
-    oldest_host->deleteLater();
-    hosts_.removeOne(oldest_host);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -366,7 +261,7 @@ void Service::onNotificationFlush()
 //--------------------------------------------------------------------------------------------------
 bool Service::start()
 {
-    if (host_server_)
+    if (client_server_)
     {
         LOG(ERROR) << "Server already is started";
         return false;
@@ -374,31 +269,10 @@ bool Service::start()
 
     Settings settings;
 
-    SecureByteArray host_private_key(settings.hostPrivateKey());
-    if (host_private_key.isEmpty())
-    {
-        LOG(INFO) << "The host private key is not specified in the configuration file";
-        return false;
-    }
-
     QString listen_interface = settings.listenInterface();
     if (!TcpServer::isValidListenInterface(listen_interface))
     {
         LOG(ERROR) << "Invalid listen interface address";
-        return false;
-    }
-
-    quint16 port = settings.port();
-    if (!port)
-    {
-        LOG(ERROR) << "Invalid port specified in configuration file";
-        return false;
-    }
-
-    quint16 legacy_port = settings.legacyPort();
-    if (!legacy_port)
-    {
-        LOG(ERROR) << "Invalid legacy port specified in configuration file";
         return false;
     }
 
@@ -414,12 +288,6 @@ bool Service::start()
         LOG(INFO) << "Connections from all clients will be allowed";
     else
         LOG(INFO) << "Allowed clients:" << client_white_list_;
-
-    host_white_list_ = settings.hostWhiteList();
-    if (host_white_list_.isEmpty())
-        LOG(INFO) << "Connections from all hosts will be allowed";
-    else
-        LOG(INFO) << "Allowed hosts:" << host_white_list_;
 
     QByteArray seed_key = settings.seedKey();
     if (seed_key.isEmpty())
@@ -438,46 +306,11 @@ bool Service::start()
 
     user_list->setSeedKey(seed_key);
 
-    // Hosts are the largest population and reconnect in storms after a network blip (e.g. hundreds
-    // of hosts behind one corporate NAT coming back at once), so they get the most generous caps.
-    //
     // Clients (admins/managers/clients) are interactive operators: bursty but human-bounded, and
-    // each connection runs the heavier SRP + 2FA handshake, so the caps sit in between hosts and
-    // relays.
-    static constexpr int kHostMaxPendingConnections = 100;
-    static constexpr int kHostMaxConnectionsPerMinute = 300;
+    // each connection runs the heavier SRP + 2FA handshake, so the caps sit in between the host
+    // and relay listeners of the workers.
     static constexpr int kClientMaxPendingConnections = 30;
     static constexpr int kClientMaxConnectionsPerMinute = 60;
-
-    host_server_ = new TcpServer(this);
-    connect(host_server_, &TcpServer::sig_newConnection, this, &Service::onNewHostConnection);
-
-    host_server_->setPrivateKey(host_private_key);
-    host_server_->setAnonymousAccess(
-        ServerAuthenticator::AnonymousAccess::ENABLE, proto::router::SESSION_TYPE_HOST);
-    host_server_->setMaxPendingConnections(kHostMaxPendingConnections);
-    host_server_->setMaxConnectionsPerMinute(kHostMaxConnectionsPerMinute);
-    host_server_->setWhiteList(host_white_list_);
-    if (!host_server_->start(port, listen_interface))
-    {
-        LOG(ERROR) << "Unable to start host listener";
-        return false;
-    }
-
-    host_legacy_server_ = new TcpServerLegacy(this);
-    connect(host_legacy_server_, &TcpServerLegacy::sig_newConnection, this, &Service::onNewLegacyHostConnection);
-
-    host_legacy_server_->setPrivateKey(host_private_key);
-    host_legacy_server_->setAnonymousAccess(
-        ServerAuthenticatorLegacy::AnonymousAccess::ENABLE, proto::router::SESSION_TYPE_HOST);
-    host_legacy_server_->setMaxPendingConnections(kHostMaxPendingConnections);
-    host_legacy_server_->setMaxConnectionsPerMinute(kHostMaxConnectionsPerMinute);
-    host_legacy_server_->setWhiteList(host_white_list_);
-    if (!host_legacy_server_->start(legacy_port, listen_interface))
-    {
-        LOG(ERROR) << "Unable to start legacy host listener";
-        return false;
-    }
 
     // Client listener accepts admin/manager/client sessions only. These session types always
     // authenticate, so anonymous access stays disabled here.
@@ -497,6 +330,11 @@ bool Service::start()
     if (settings.isStunEnabled())
         stun_port_ = settings.stunPort();
 
+    HostWorker* host_worker = CoreApplication::findWorker<HostWorker>();
+    CHECK(host_worker);
+    connect(host_worker, &HostWorker::sig_notify, this,
+            [](quint32 flags) { notifyChanged(flags); }, Qt::QueuedConnection);
+
     RelayWorker* relay_worker = CoreApplication::findWorker<RelayWorker>();
     CHECK(relay_worker);
     connect(relay_worker, &RelayWorker::sig_relaysChanged, this, []()
@@ -506,32 +344,6 @@ bool Service::start()
 
     LOG(INFO) << "Server started";
     return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void Service::addHost(TcpChannel* channel, bool is_legacy)
-{
-    QString address = QString::fromStdString(channel->peerAddress());
-
-    LOG(INFO) << "New session:" << address;
-
-    Host* host = nullptr;
-    if (!is_legacy)
-    {
-        HostNG* host_ng = new HostNG(channel, this);
-        connect(host_ng, &HostNG::sig_hostIdAssigned, this, &Service::onHostIdAssigned);
-        host = host_ng;
-    }
-    else
-    {
-        HostLegacy* host_legacy = new HostLegacy(channel, this);
-        connect(host_legacy, &HostLegacy::sig_hostIdAssigned, this, &Service::onHostIdAssigned);
-        host = host_legacy;
-    }
-
-    hosts_.emplace_back(host);
-    connect(host, &Host::sig_finished, this, &Service::onHostFinished);
-    host->start();
 }
 
 //--------------------------------------------------------------------------------------------------

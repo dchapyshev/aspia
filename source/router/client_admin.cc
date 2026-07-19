@@ -32,8 +32,7 @@
 #include "proto/router_host.h"
 #include "router/client.h"
 #include "router/service.h"
-#include "router/host_legacy.h"
-#include "router/host_ng.h"
+#include "router/workers/host_worker.h"
 #include "router/workers/relay_worker.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -351,189 +350,98 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
 //--------------------------------------------------------------------------------------------------
 void ClientAdmin::doHostRequest(const proto::router::HostRequest& request)
 {
-    auto find_host = [](HostId host_id) -> Host*
-    {
-        const QList<Host*>& hosts = Service::instance()->hosts();
-        for (Host* host : std::as_const(hosts))
-        {
-            HostNG* host_ng = dynamic_cast<HostNG*>(host);
-            if (host_ng && host_ng->hostId() == host_id)
-                return host_ng;
+    HostWorker* host_worker = CoreApplication::findWorker<HostWorker>();
+    CHECK(host_worker);
 
-            HostLegacy* host_legacy = dynamic_cast<HostLegacy*>(host);
-            if (host_legacy && host_legacy->hasHostId(host_id))
-                return host_legacy;
-        }
-        return nullptr;
+    const auto request_id = request.request_id();
+    const std::string command_name = request.command_name();
+    const HostId host_id = request.host().host_id();
+
+    auto send_result = [this, request_id, command_name](std::string_view error_code)
+    {
+        proto::router::RouterToAdmin message;
+        proto::router::HostResult* host_result = message.mutable_host_result();
+        host_result->set_request_id(request_id);
+        host_result->set_command_name(command_name);
+        host_result->set_error_code(error_code);
+        sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
     };
 
-    proto::router::RouterToAdmin message;
-    proto::router::HostResult* host_result = message.mutable_host_result();
-    host_result->set_request_id(request.request_id());
-    host_result->set_command_name(request.command_name());
-
-    if (request.command_name() == proto::router::kCommandHostDisconnect)
+    if (command_name == proto::router::kCommandHostDisconnect)
     {
-        const HostId host_id = request.host().host_id();
-
-        if (host_id == kAllHostsId)
+        host_worker->disconnectHost(host_id, this, [this, host_id, send_result](bool result)
         {
-            const QList<Host*>& hosts = Service::instance()->hosts();
-            QList<qint64> host_ids;
-
-            for (const auto& host : hosts)
-                host_ids.append(host->sessionId());
-
-            bool all_ok = true;
-            for (qint64 id : host_ids)
-            {
-                if (!Service::instance()->stopHost(id))
-                {
-                    CLOG(ERROR) << "Failed to stop host session:" << id;
-                    all_ok = false;
-                }
-            }
-
-            if (all_ok)
+            if (host_id == kAllHostsId)
             {
                 CLOG(INFO) << "All host sessions disconnected by" << userName();
-                host_result->set_error_code(proto::router::kErrorOk);
+                send_result(proto::router::kErrorOk);
             }
-            else
-            {
-                host_result->set_error_code(proto::router::kErrorInternalError);
-            }
-        }
-        else
-        {
-            Host* host = find_host(host_id);
-            if (!host)
+            else if (!result)
             {
                 CLOG(ERROR) << "No live session for host_id:" << host_id;
-                host_result->set_error_code(proto::router::kErrorInvalidEntryId);
-            }
-            else if (!Service::instance()->stopHost(host->sessionId()))
-            {
-                CLOG(ERROR) << "Failed to stop session for host_id:" << host_id;
-                host_result->set_error_code(proto::router::kErrorInternalError);
+                send_result(proto::router::kErrorInvalidEntryId);
             }
             else
             {
                 CLOG(INFO) << "Host" << host_id << "disconnected by" << userName();
-                host_result->set_error_code(proto::router::kErrorOk);
+                send_result(proto::router::kErrorOk);
             }
-        }
+        });
     }
-    else if (request.command_name() == proto::router::kCommandHostRemove)
+    else if (command_name == proto::router::kCommandHostRemove)
     {
-        const HostId host_id = request.host().host_id();
-
-        Database& database = Database::instance();
-        if (!database.isValid())
+        host_worker->removeHost(host_id, this,
+            [this, host_id, send_result](HostWorker::RemoveHostResult&& result)
         {
-            CLOG(ERROR) << "Failed to connect to database";
-            host_result->set_error_code(proto::router::kErrorInternalError);
-        }
-        else if (!database.scheduleHostRemoval(host_id))
-        {
-            CLOG(ERROR) << "Failed to schedule host removal for host_id:" << host_id;
-            host_result->set_error_code(proto::router::kErrorInternalError);
-        }
-        else
-        {
-            // The hosts row is now in hosts_remove; if the host is online send it the remove
-            // command and let HostNG finalize the hosts_remove row on disconnect. Legacy hosts
-            // have no router->host remove command, so remove the id from the live legacy session
-            // and finalize the pending row immediately. Offline legacy hosts are handled on the
-            // next HostIdRequest.
-            Host* host = find_host(host_id);
-            std::string_view error_code = proto::router::kErrorOk;
-            if (HostNG* host_ng = dynamic_cast<HostNG*>(host))
+            if (result.scheduled)
             {
-                host_ng->sendRemoveCommand();
-            }
-            else if (HostLegacy* host_legacy = dynamic_cast<HostLegacy*>(host))
-            {
-                if (host_legacy->removeHostId(host_id))
-                {
-                    if (!database.finalizeHostRemoval(host_id))
-                    {
-                        CLOG(ERROR) << "Failed to finalize removal for legacy host_id:" << host_id;
-                        error_code = proto::router::kErrorInternalError;
-                    }
-
-                    if (host_legacy->hostIdList().isEmpty())
-                        Service::instance()->stopHost(host_legacy->sessionId());
-                }
+                CLOG(INFO) << "Host" << host_id << "removal scheduled by" << userName()
+                           << "(online:" << result.online << ")";
             }
 
-            CLOG(INFO) << "Host" << host_id << "removal scheduled by" << userName()
-                       << "(online:" << (host != nullptr) << ")";
-            host_result->set_error_code(error_code);
-            Service::notifyChanged(Service::NOTIFY_HOSTS);
-        }
+            send_result(result.error_code);
+        });
     }
-    else if (request.command_name() == proto::router::kCommandHostUpdate)
+    else if (command_name == proto::router::kCommandHostUpdate)
     {
-        const HostId host_id = request.host().host_id();
-
-        HostNG* host = dynamic_cast<HostNG*>(find_host(host_id));
-        if (!host)
+        host_worker->updateHost(host_id, this, [this, host_id, send_result](bool result)
         {
-            CLOG(ERROR) << "No live session for host_id:" << host_id;
-            host_result->set_error_code(proto::router::kErrorInvalidEntryId);
-        }
-        else
-        {
-            host->sendUpdateCommand();
-
-            CLOG(INFO) << "Host" << host_id << "update check requested by" << userName();
-            host_result->set_error_code(proto::router::kErrorOk);
-        }
-    }
-    else if (request.command_name() == proto::router::kCommandHostApprove)
-    {
-        const HostId host_id = request.host().host_id();
-
-        HostNG* host = dynamic_cast<HostNG*>(find_host(host_id));
-        if (!isTempHostId(host_id) || !host)
-        {
-            CLOG(ERROR) << "No live temporary session for host_id:" << host_id;
-            host_result->set_error_code(proto::router::kErrorInvalidEntryId);
-        }
-        else
-        {
-            Database& database = Database::instance();
-            if (!database.isValid())
+            if (!result)
             {
-                CLOG(ERROR) << "Failed to connect to database";
-                host_result->set_error_code(proto::router::kErrorInternalError);
-            }
-            else if (!database.addHost(host->keyHash(), host->hardwareId()))
-            {
-                CLOG(ERROR) << "Failed to persist approved host_id:" << host_id;
-                host_result->set_error_code(proto::router::kErrorInternalError);
+                CLOG(ERROR) << "No live session for host_id:" << host_id;
+                send_result(proto::router::kErrorInvalidEntryId);
             }
             else
             {
-                // The key is now persistent. Drop the temporary session so the host reconnects and
-                // receives its permanent id via EXISTING_ID. Persist first, then drop: dropping
-                // before the row exists would make the reconnect ask for a new temporary id.
-                Service::instance()->stopHost(host->sessionId());
-
-                CLOG(INFO) << "Temporary host" << host_id << "approved by" << userName();
-                host_result->set_error_code(proto::router::kErrorOk);
-                Service::notifyChanged(Service::NOTIFY_HOSTS | Service::NOTIFY_TEMP_HOSTS);
+                CLOG(INFO) << "Host" << host_id << "update check requested by" << userName();
+                send_result(proto::router::kErrorOk);
             }
+        });
+    }
+    else if (command_name == proto::router::kCommandHostApprove)
+    {
+        if (!isTempHostId(host_id))
+        {
+            CLOG(ERROR) << "No live temporary session for host_id:" << host_id;
+            send_result(proto::router::kErrorInvalidEntryId);
+            return;
         }
+
+        host_worker->approveHost(host_id, this, [this, host_id, send_result](std::string_view error_code)
+        {
+            if (error_code == proto::router::kErrorInvalidEntryId)
+                CLOG(ERROR) << "No live temporary session for host_id:" << host_id;
+            else if (error_code == proto::router::kErrorOk)
+                CLOG(INFO) << "Temporary host" << host_id << "approved by" << userName();
+
+            send_result(error_code);
+        });
     }
     else
     {
-        CLOG(ERROR) << "Unknown host request command:" << request.command_name();
-        host_result->set_error_code(proto::router::kErrorInvalidRequest);
+        CLOG(ERROR) << "Unknown host request command:" << command_name;
+        send_result(proto::router::kErrorInvalidRequest);
     }
-
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

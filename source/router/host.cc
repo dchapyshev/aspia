@@ -20,6 +20,7 @@
 
 #include "base/net/tcp_channel.h"
 #include "router/service.h"
+#include "router/workers/host_worker.h"
 
 namespace {
 
@@ -34,12 +35,14 @@ qint64 createHostId()
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Host::Host(TcpChannel* channel, QObject* parent)
-    : QObject(parent),
+Host::Host(TcpChannel* channel, HostWorker* worker)
+    : QObject(worker),
       session_id_(createHostId()),
-      tcp_channel_(channel)
+      tcp_channel_(channel),
+      worker_(worker)
 {
     CDCHECK(tcp_channel_);
+    CDCHECK(worker_);
     tcp_channel_->setParent(this);
 
     connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &Host::onTcpErrorOccurred);
@@ -49,7 +52,7 @@ Host::Host(TcpChannel* channel, QObject* parent)
 //--------------------------------------------------------------------------------------------------
 Host::~Host()
 {
-    Service::notifyChanged(Service::NOTIFY_HOSTS);
+    worker_->notifyChanged(Service::NOTIFY_HOSTS);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -60,7 +63,7 @@ void Host::start()
     tcp_channel_->setPaused(false);
     emit sig_started(session_id_);
 
-    Service::notifyChanged(Service::NOTIFY_HOSTS);
+    worker_->notifyChanged(Service::NOTIFY_HOSTS);
 }
 
 //--------------------------------------------------------------------------------------------------

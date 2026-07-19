@@ -33,7 +33,7 @@ class HostLegacy final : public Host
     Q_OBJECT
 
 public:
-    explicit HostLegacy(TcpChannel* channel, QObject* parent = nullptr);
+    HostLegacy(TcpChannel* channel, HostWorker* worker);
     ~HostLegacy() final;
 
     const QList<HostId>& hostIdList() const { return host_id_list_; }
