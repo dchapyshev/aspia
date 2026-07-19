@@ -23,6 +23,10 @@
 #include "base/threading/worker_manager.h"
 
 //--------------------------------------------------------------------------------------------------
+// static
+thread_local Worker* Worker::current_worker_ = nullptr;
+
+//--------------------------------------------------------------------------------------------------
 Worker::Worker(Thread::EventDispatcher dispatcher, Milliseconds timer_interval)
     : thread_(dispatcher),
       timer_interval_(timer_interval)
@@ -67,6 +71,8 @@ void Worker::timerEvent(QTimerEvent* event)
 //--------------------------------------------------------------------------------------------------
 void Worker::onThreadStarted()
 {
+    current_worker_ = this;
+
     onStart();
 
     if (timer_interval_ > Milliseconds::zero())
@@ -87,6 +93,8 @@ void Worker::onThreadFinished()
     }
 
     onStop();
+
+    current_worker_ = nullptr;
 
     std::lock_guard lock(manager_->lock_);
     --manager_->running_;

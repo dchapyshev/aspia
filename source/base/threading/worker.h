@@ -25,6 +25,7 @@
 #include <chrono>
 #include <functional>
 
+#include "base/logging.h"
 #include "base/threading/thread.h"
 
 class QTimerEvent;
@@ -50,24 +51,25 @@ public:
     void post(std::function<void()> work);
 
     // Request-response: executes |request| in the worker thread and delivers its return value to
-    // the thread of |context| through |reply|. The reply is dropped if |context| is destroyed
-    // before it arrives. |request| must return a value (use post() for fire-and-forget work).
-    // May be called from any thread.
+    // the calling thread through |reply|. The reply is dropped if |context| is destroyed before
+    // it arrives. |request| must return a value (use post() for fire-and-forget work). Must be
+    // called from a worker thread.
     template <typename Request, typename Reply>
     void request(QObject* context, Request request, Reply reply)
     {
+        // The reply is never posted to |context| directly: an object owned by another thread can
+        // die at any moment, making the post a use-after-free.
+        Worker* caller = current_worker_;
+        CHECK(caller);
+
         QPointer<QObject> ctx(context);
-        post([ctx, request = std::move(request), reply = std::move(reply)]() mutable
+        post([caller, ctx, request = std::move(request), reply = std::move(reply)]() mutable
         {
-            auto result = request();
-
-            if (!ctx)
-                return;
-
-            QMetaObject::invokeMethod(ctx.data(),
-                [reply = std::move(reply), result = std::move(result)]() mutable
+            QMetaObject::invokeMethod(caller,
+                [ctx, reply = std::move(reply), result = request()]() mutable
             {
-                reply(std::move(result));
+                if (ctx)
+                    reply(std::move(result));
             },
             Qt::QueuedConnection);
         });
@@ -110,6 +112,8 @@ private:
 
     const Milliseconds timer_interval_;
     int timer_id_ = 0;
+
+    static thread_local Worker* current_worker_;
 
     Q_DISABLE_COPY_MOVE(Worker)
 };
