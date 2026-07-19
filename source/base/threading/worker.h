@@ -20,8 +20,10 @@
 #define BASE_THREADING_WORKER_H
 
 #include <QObject>
+#include <QPointer>
 
 #include <chrono>
+#include <functional>
 
 #include "base/threading/thread.h"
 
@@ -43,6 +45,33 @@ public:
     explicit Worker(Thread::EventDispatcher dispatcher = Thread::AsioDispatcher,
                     Milliseconds timer_interval = Milliseconds::zero());
     ~Worker() override;
+
+    // Executes |work| asynchronously in the worker thread. May be called from any thread.
+    void post(std::function<void()> work);
+
+    // Request-response: executes |request| in the worker thread and delivers its return value to
+    // the thread of |context| through |reply|. The reply is dropped if |context| is destroyed
+    // before it arrives. |request| must return a value (use post() for fire-and-forget work).
+    // May be called from any thread.
+    template <typename Request, typename Reply>
+    void request(QObject* context, Request request, Reply reply)
+    {
+        QPointer<QObject> ctx(context);
+        post([ctx, request = std::move(request), reply = std::move(reply)]() mutable
+        {
+            auto result = request();
+
+            if (!ctx)
+                return;
+
+            QMetaObject::invokeMethod(ctx.data(),
+                [reply = std::move(reply), result = std::move(result)]() mutable
+            {
+                reply(std::move(result));
+            },
+            Qt::QueuedConnection);
+        });
+    }
 
 protected:
     friend class WorkerManager;

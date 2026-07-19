@@ -39,6 +39,12 @@ Worker::~Worker()
 }
 
 //--------------------------------------------------------------------------------------------------
+void Worker::post(std::function<void()> work)
+{
+    QMetaObject::invokeMethod(this, std::move(work), Qt::QueuedConnection);
+}
+
+//--------------------------------------------------------------------------------------------------
 void Worker::start(WorkerManager* manager)
 {
     manager_ = manager;
