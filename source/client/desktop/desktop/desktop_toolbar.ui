@@ -248,21 +248,37 @@
    </property>
   </action>
   <action name="action_shutdown">
+   <property name="icon">
+    <iconset resource="../../../common/resources/common.qrc">
+     <normaloff>:/img/shutdown.svg</normaloff>:/img/shutdown.svg</iconset>
+   </property>
    <property name="text">
     <string>Shutdown</string>
    </property>
   </action>
   <action name="action_reboot">
+   <property name="icon">
+    <iconset resource="../../../common/resources/common.qrc">
+     <normaloff>:/img/restart.svg</normaloff>:/img/restart.svg</iconset>
+   </property>
    <property name="text">
     <string>Reboot</string>
    </property>
   </action>
   <action name="action_logoff">
+   <property name="icon">
+    <iconset resource="../../../common/resources/common.qrc">
+     <normaloff>:/img/logoff.svg</normaloff>:/img/logoff.svg</iconset>
+   </property>
    <property name="text">
     <string>Logoff</string>
    </property>
   </action>
   <action name="action_lock">
+   <property name="icon">
+    <iconset resource="../../../common/resources/common.qrc">
+     <normaloff>:/img/lock.svg</normaloff>:/img/lock.svg</iconset>
+   </property>
    <property name="text">
     <string>Lock</string>
    </property>
@@ -370,6 +386,10 @@
   <action name="action_reboot_safe_mode">
    <property name="enabled">
     <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../../common/resources/common.qrc">
+     <normaloff>:/img/restart.svg</normaloff>:/img/restart.svg</iconset>
    </property>
    <property name="text">
     <string>Reboot (Safe mode)</string>
