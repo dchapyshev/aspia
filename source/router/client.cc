@@ -34,6 +34,7 @@
 #include "proto/router_constants.h"
 #include "router/database.h"
 #include "router/shared_hosts.h"
+#include "router/shared_key_pool.h"
 #include "router/workers/client_worker.h"
 #include "router/workers/host_worker.h"
 #include "router/workers/relay_worker.h"
@@ -416,17 +417,16 @@ void Client::readConnectionRequest(const proto::router::ConnectionRequest& reque
 {
     CLOG(INFO) << "New connection request (host_id:" << request.host_id() << ")";
 
-    const auto request_id = request.request_id();
     const HostId host_id = request.host_id();
+
+    proto::router::RouterToClient message;
+    proto::router::ConnectionOffer* offer = message.mutable_connection_offer();
+    offer->set_request_id(request.request_id());
 
     std::optional<SharedHosts::Host> host_info = SharedHosts::instance().find(host_id);
     if (!host_info.has_value())
     {
         CLOG(ERROR) << "Host with id" << host_id << "NOT found!";
-
-        proto::router::RouterToClient message;
-        proto::router::ConnectionOffer* offer = message.mutable_connection_offer();
-        offer->set_request_id(request_id);
         offer->set_error_code(proto::router::ConnectionOffer::PEER_NOT_FOUND);
         sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
         return;
@@ -434,73 +434,66 @@ void Client::readConnectionRequest(const proto::router::ConnectionRequest& reque
 
     CLOG(INFO) << "Host with id" << host_id << "found";
 
+    std::optional<SharedKeyPool::Credentials> credentials = SharedKeyPool::instance().take();
+    if (!credentials.has_value())
+    {
+        CLOG(ERROR) << "Empty key pool";
+        offer->set_error_code(proto::router::ConnectionOffer::KEY_POOL_EMPTY);
+        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+        return;
+    }
+
     RelayWorker* relay_worker = CoreApplication::findWorker<RelayWorker>();
     CHECK(relay_worker);
+    relay_worker->notifyKeyUsed(credentials->session_id, credentials->key.key_id());
 
-    relay_worker->takeCredentials(this,
-        [this, request_id, host_id, host_info = std::move(*host_info)](
-            std::optional<RelayWorker::Credentials>&& credentials)
+    offer->set_error_code(proto::router::ConnectionOffer::SUCCESS);
+
+    proto::router::PeerInfo* peer_info = offer->mutable_peer_info();
+    peer_info->set_is_legacy(host_info->version < kVersion_3_0_0);
+
+    if (stun_port_)
     {
-        proto::router::RouterToClient message;
-        proto::router::ConnectionOffer* offer = message.mutable_connection_offer();
-        offer->set_request_id(request_id);
+        // An empty host string means that the client should use the router's address
+        // as the server's host address. This is done to allow for future expansion,
+        // but is not currently used.
+        proto::router::StunServerInfo* stun_info = offer->mutable_stun_info();
+        stun_info->set_version(1);
+        stun_info->set_host("");
+        stun_info->set_port(stun_port_);
+    }
 
-        if (!credentials.has_value())
-        {
-            CLOG(ERROR) << "Empty key pool";
-            offer->set_error_code(proto::router::ConnectionOffer::KEY_POOL_EMPTY);
-            sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-            return;
-        }
+    proto::router::RelayCredentials* offer_credentials = offer->mutable_relay();
+    offer_credentials->set_host(credentials->peer_host);
+    offer_credentials->set_port(credentials->peer_port);
+    offer_credentials->mutable_key()->Swap(&credentials->key);
 
-        offer->set_error_code(proto::router::ConnectionOffer::SUCCESS);
+    // AES-256-GCM is used only when both peers support it; legacy peers (and their relay code) only
+    // understand ChaCha20-Poly1305. The key material itself is algorithm-agnostic.
+    const bool aes = host_info->version >= kVersion_3_0_0 && version() >= kVersion_3_0_0;
+    offer_credentials->mutable_key()->set_encryption(aes ?
+        proto::router::RelayKey::ENCRYPTION_AES256_GCM : proto::router::RelayKey::ENCRYPTION_CHACHA20_POLY1305);
 
-        proto::router::PeerInfo* peer_info = offer->mutable_peer_info();
-        peer_info->set_is_legacy(host_info.version < kVersion_3_0_0);
+    proto::relay::PeerToRelay::Secret secret;
+    secret.set_random_data(Random::string(16));
+    secret.set_client_address(address());
+    secret.set_client_user_name(userName());
+    secret.set_host_address(host_info->address);
+    secret.set_host_id(host_id);
 
-        if (stun_port_)
-        {
-            // An empty host string means that the client should use the router's address
-            // as the server's host address. This is done to allow for future expansion,
-            // but is not currently used.
-            proto::router::StunServerInfo* stun_info = offer->mutable_stun_info();
-            stun_info->set_version(1);
-            stun_info->set_host("");
-            stun_info->set_port(stun_port_);
-        }
+    offer_credentials->set_secret(secret.SerializeAsString());
 
-        proto::router::RelayCredentials* offer_credentials = offer->mutable_relay();
-        offer_credentials->set_host(credentials->peer_host);
-        offer_credentials->set_port(credentials->peer_port);
-        offer_credentials->mutable_key()->Swap(&credentials->key);
+    // The host could disconnect before the offer reaches its worker; the offer is then dropped
+    // there and the consumed one-time key is lost, which is acceptable - relays replenish the
+    // pool continuously.
+    HostWorker* host_worker = CoreApplication::findWorker<HostWorker>();
+    CHECK(host_worker);
 
-        // AES-256-GCM is used only when both peers support it; legacy peers (and their relay code) only
-        // understand ChaCha20-Poly1305. The key material itself is algorithm-agnostic.
-        const bool aes = host_info.version >= kVersion_3_0_0 && version() >= kVersion_3_0_0;
-        offer_credentials->mutable_key()->set_encryption(aes ?
-            proto::router::RelayKey::ENCRYPTION_AES256_GCM : proto::router::RelayKey::ENCRYPTION_CHACHA20_POLY1305);
+    CLOG(INFO) << "Sending connection offer to host";
+    host_worker->sendConnectionOffer(host_id, *offer);
 
-        proto::relay::PeerToRelay::Secret secret;
-        secret.set_random_data(Random::string(16));
-        secret.set_client_address(address());
-        secret.set_client_user_name(userName());
-        secret.set_host_address(host_info.address);
-        secret.set_host_id(host_id);
-
-        offer_credentials->set_secret(secret.SerializeAsString());
-
-        // The host could disconnect while the key was being taken in the relay worker; the
-        // offer is then dropped in the host worker and the consumed one-time key is lost,
-        // which is acceptable - relays replenish the pool continuously.
-        HostWorker* host_worker = CoreApplication::findWorker<HostWorker>();
-        CHECK(host_worker);
-
-        CLOG(INFO) << "Sending connection offer to host";
-        host_worker->sendConnectionOffer(host_id, *offer);
-
-        CLOG(INFO) << "Sending connection offer to client";
-        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-    });
+    CLOG(INFO) << "Sending connection offer to client";
+    sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

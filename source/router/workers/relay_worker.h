@@ -20,17 +20,13 @@
 #define ROUTER_WORKERS_RELAY_WORKER_H
 
 #include <QList>
-#include <QMap>
 
 #include <functional>
-#include <optional>
-#include <string>
 
 #include "base/scoped_qpointer.h"
 #include "base/threading/worker.h"
 #include "proto/router.h"
 #include "proto/router_admin.h"
-#include "proto/router_relay.h"
 
 class Relay;
 class TcpServer;
@@ -43,26 +39,12 @@ public:
     RelayWorker();
     ~RelayWorker() final;
 
-    struct Credentials
-    {
-        qint64 session_id;
-        proto::router::RelayKey key;
-        std::string peer_host;
-        quint16 peer_port;
-    };
-
-    using Keys = QList<proto::router::RelayKey>;
-
-    using CredentialsCallback = std::function<void(std::optional<Credentials>&&)>;
     using RelayListCallback = std::function<void(proto::router::RelayList&&)>;
     using ResultCallback = std::function<void(bool)>;
 
     // Asynchronous request-response API. May be called from any thread: the request is processed
     // in the worker thread and |callback| runs in the service thread. The callback is dropped if
     // |context| is destroyed before the response arrives.
-
-    // Takes a one-time key from the relay with the largest pool and reports it to the relay.
-    void takeCredentials(QObject* context, CredentialsCallback callback);
 
     void requestRelayList(QObject* context, RelayListCallback callback);
 
@@ -74,6 +56,10 @@ public:
     // false if the relay session is not known.
     void disconnectPeerSession(qint64 relay_id, const proto::router::PeerRequest& request,
                                QObject* context, ResultCallback callback);
+
+    // Reports a key taken from SharedKeyPool to the relay session that issued it.
+    // Fire-and-forget: if the relay has disconnected, the notification is dropped.
+    void notifyKeyUsed(qint64 session_id, quint32 key_id);
 
 signals:
     // Emitted from the worker thread when the set of connected relays changes.
@@ -87,18 +73,15 @@ protected:
 private slots:
     void onNewRelayConnection();
     void onRelayFinished();
-    void onKeyReceived(qint64 session_id, const proto::router::RelayKey& key);
 
 private:
     void removeRelay(Relay* relay);
     Relay* relayById(qint64 session_id);
     proto::router::RelayList doRelayList() const;
     bool doStopRelay(qint64 relay_id);
-    std::optional<Credentials> doTakeCredentials();
 
     ScopedQPointer<TcpServer> server_;
     QList<Relay*> relays_;
-    QMap<qint64, Keys> key_pool_;
 
     Q_DISABLE_COPY_MOVE(RelayWorker)
 };

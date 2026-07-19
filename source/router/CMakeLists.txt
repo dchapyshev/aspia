@@ -44,6 +44,8 @@ list(APPEND SOURCE_ROUTER
     settings.h
     shared_hosts.cc
     shared_hosts.h
+    shared_key_pool.cc
+    shared_key_pool.h
     workspace.cc
     workspace.h)
 

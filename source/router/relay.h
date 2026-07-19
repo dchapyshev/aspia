@@ -39,8 +39,6 @@ public:
     Relay(TcpChannel* channel, QObject* parent);
     ~Relay() final;
 
-    using PeerData = std::pair<std::string, quint16>;
-
     void start();
 
     QVersionNumber version() const;
@@ -54,7 +52,6 @@ public:
 
     void sendMessage(quint8 channel_id, const QByteArray& message);
 
-    const std::optional<PeerData>& peerData() const { return peer_data_; }
     const std::optional<proto::router::RelayStatistics>& statistics() const { return statistics_; }
     void sendKeyUsed(quint32 key_id);
     void disconnectPeerSession(const proto::router::PeerRequest& request);
@@ -62,7 +59,6 @@ public:
 signals:
     void sig_started(qint64 session_id);
     void sig_finished(qint64 session_id);
-    void sig_keyReceived(qint64 session_id, const proto::router::RelayKey& key);
 
 private slots:
     void onTcpErrorOccurred(TcpChannel::ErrorCode error_code);
@@ -76,7 +72,6 @@ private:
 
     TcpChannel* tcp_channel_ = nullptr;
 
-    std::optional<PeerData> peer_data_;
     std::optional<proto::router::RelayStatistics> statistics_;
 
     Parser<proto::router::RelayToRouter> incoming_message_;

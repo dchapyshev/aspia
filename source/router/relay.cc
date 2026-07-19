@@ -18,6 +18,8 @@
 
 #include "router/relay.h"
 
+#include "router/shared_key_pool.h"
+
 namespace {
 
 //--------------------------------------------------------------------------------------------------
@@ -153,8 +155,9 @@ void Relay::readKeyPool(const proto::router::RelayKeyPool& key_pool)
         return;
     }
 
-    peer_data_.emplace(std::make_pair(peer_host, static_cast<quint16>(peer_port)));
-
     for (int i = 0; i < key_pool.key_size(); ++i)
-        emit sig_keyReceived(session_id_, key_pool.key(i));
+    {
+        SharedKeyPool::instance().add(
+            session_id_, peer_host, static_cast<quint16>(peer_port), key_pool.key(i));
+    }
 }
