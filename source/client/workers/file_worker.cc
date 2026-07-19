@@ -19,7 +19,7 @@
 #include "client/workers/file_worker.h"
 
 #include "base/logging.h"
-#include "base/threading/worker_manager.h"
+#include "base/threading/worker.h"
 #include "client/workers/network_worker.h"
 #include "common/file_request_handler.h"
 #include "proto/peer.h"

@@ -39,7 +39,7 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/sys_info.h"
-#include "base/threading/worker_manager.h"
+#include "base/threading/worker.h"
 #include "client/database.h"
 #include "client/router.h"
 #include "client/session_keeper.h"

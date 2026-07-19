@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "base/codec/audio_encoder.h"
-#include "base/threading/worker_manager.h"
+#include "base/threading/worker.h"
 #include "host/audio_capturer.h"
 #include "host/workers/desktop_ipc_worker.h"
 

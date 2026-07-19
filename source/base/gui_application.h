@@ -24,7 +24,7 @@
 #include <QProxyStyle>
 
 #include "base/translations.h"
-#include "base/threading/worker_manager.h"
+#include "base/threading/worker.h"
 
 class QLocalServer;
 class QLockFile;

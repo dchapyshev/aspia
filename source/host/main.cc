@@ -28,7 +28,7 @@
 #include "base/service_controller.h"
 #include "base/ipc/ipc_server.h"
 #include "base/threading/asio_event_dispatcher.h"
-#include "base/threading/worker_manager.h"
+#include "base/threading/worker.h"
 #include "build/version.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/update_dialog.h"

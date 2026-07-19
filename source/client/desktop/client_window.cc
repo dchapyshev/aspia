@@ -27,7 +27,7 @@
 
 #include "base/logging.h"
 #include "base/version_constants.h"
-#include "base/threading/worker_manager.h"
+#include "base/threading/worker.h"
 #include "client/router.h"
 #include "client/session_keeper.h"
 #include "client/desktop/authorization_dialog.h"

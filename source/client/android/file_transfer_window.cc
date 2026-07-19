@@ -23,7 +23,7 @@
 #include <QVBoxLayout>
 
 #include "base/logging.h"
-#include "base/threading/worker_manager.h"
+#include "base/threading/worker.h"
 #include "client/database.h"
 #include "client/router.h"
 #include "client/session_keeper.h"

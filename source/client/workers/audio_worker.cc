@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "base/codec/audio_decoder.h"
-#include "base/threading/worker_manager.h"
+#include "base/threading/worker.h"
 #include "client/audio_player.h"
 #include "client/workers/network_worker.h"
 

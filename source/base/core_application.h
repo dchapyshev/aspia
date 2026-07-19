@@ -24,7 +24,7 @@
 #include <memory>
 
 #include "base/scoped_qpointer.h"
-#include "base/threading/worker_manager.h"
+#include "base/threading/worker.h"
 
 class QSocketNotifier;
 class MessageWindow;

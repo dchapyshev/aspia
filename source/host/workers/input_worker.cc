@@ -21,7 +21,7 @@
 #include <climits>
 
 #include "base/logging.h"
-#include "base/threading/worker_manager.h"
+#include "base/threading/worker.h"
 #include "host/input_injector.h"
 #include "host/workers/desktop_ipc_worker.h"
 #include "host/workers/screen_worker.h"

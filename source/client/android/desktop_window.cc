@@ -26,7 +26,7 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/net/tcp_channel.h"
-#include "base/threading/worker_manager.h"
+#include "base/threading/worker.h"
 #include "client/config.h"
 #include "client/database.h"
 #include "client/router.h"

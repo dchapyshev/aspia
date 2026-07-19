@@ -29,7 +29,7 @@
 #include "base/codec/video_encoder.h"
 #include "base/desktop/frame.h"
 #include "base/desktop/mouse_cursor.h"
-#include "base/threading/worker_manager.h"
+#include "base/threading/worker.h"
 #include "host/desktop_environment.h"
 #include "host/desktop_resizer.h"
 #include "host/input_injector.h"

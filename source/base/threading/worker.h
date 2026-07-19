@@ -23,7 +23,12 @@
 #include <QPointer>
 
 #include <chrono>
+#include <condition_variable>
 #include <functional>
+#include <memory>
+#include <mutex>
+#include <thread>
+#include <unordered_map>
 
 #include "base/logging.h"
 #include "base/threading/thread.h"
@@ -82,8 +87,8 @@ protected:
     void stopSoon();
 
     // Finds a sibling worker registered in the same manager. Safe to call from the worker thread
-    // once the worker has been started (the worker set does not change after that). Defined in
-    // worker_manager.h.
+    // once the worker has been started (the worker set does not change after that). Defined below
+    // the WorkerManager class.
     template <typename T>
     T* findWorker() const;
 
@@ -117,5 +122,62 @@ private:
 
     Q_DISABLE_COPY_MOVE(Worker)
 };
+
+class WorkerManager
+{
+public:
+    WorkerManager();
+    ~WorkerManager();
+
+    qint64 add(std::unique_ptr<Worker> worker);
+    void start();
+
+    template <typename T>
+    T* find(qint64 worker_id)
+    {
+        auto it = workers_.find(worker_id);
+        if (it == workers_.end())
+            return nullptr;
+
+        return dynamic_cast<T*>(it->second.get());
+    }
+
+    // Finds a worker by its type. Safe to call from any worker thread once the manager has started
+    // (the worker set does not change afterwards).
+    template <typename T>
+    T* find()
+    {
+        for (const auto& worker : workers_)
+        {
+            if (T* result = dynamic_cast<T*>(worker.second.get()))
+                return result;
+        }
+
+        return nullptr;
+    }
+
+private:
+    friend class Worker;
+
+    const std::thread::id thread_id_;
+
+    std::condition_variable condition_;
+    std::mutex lock_;
+    size_t running_ = 0;
+    bool started_ = false;
+    qint64 next_worker_id_ = 0;
+
+    std::unordered_map<qint64, std::unique_ptr<Worker>> workers_;
+
+    Q_DISABLE_COPY_MOVE(WorkerManager)
+};
+
+// Defined here because it needs the complete WorkerManager type.
+template <typename T>
+T* Worker::findWorker() const
+{
+    CHECK(manager_);
+    return manager_->find<T>();
+}
 
 #endif // BASE_THREADING_WORKER_H

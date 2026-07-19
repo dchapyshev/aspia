@@ -22,9 +22,7 @@ collect_sources(SOURCE_BASE_THREADING
     thread.cc
     thread.h
     worker.cc
-    worker.h
-    worker_manager.cc
-    worker_manager.h)
+    worker.h)
 
 collect_sources(SOURCE_BASE_THREADING_TESTS
     asio_event_dispatcher_unittest.cc)

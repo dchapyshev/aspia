@@ -23,7 +23,7 @@
 #include "base/crypto/random.h"
 #include "base/net/tcp_channel.h"
 #include "base/net/tcp_server.h"
-#include "base/threading/worker_manager.h"
+#include "base/threading/worker.h"
 #include "proto/router.h"
 #include "proto/router_admin.h"
 #include "proto/router_client.h"

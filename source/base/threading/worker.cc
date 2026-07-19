@@ -20,8 +20,6 @@
 
 #include <QTimerEvent>
 
-#include "base/threading/worker_manager.h"
-
 //--------------------------------------------------------------------------------------------------
 // static
 thread_local Worker* Worker::current_worker_ = nullptr;
@@ -99,4 +97,67 @@ void Worker::onThreadFinished()
     std::lock_guard lock(manager_->lock_);
     --manager_->running_;
     manager_->condition_.notify_all();
+}
+
+//--------------------------------------------------------------------------------------------------
+WorkerManager::WorkerManager()
+    : thread_id_(std::this_thread::get_id())
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+WorkerManager::~WorkerManager()
+{
+    CHECK(std::this_thread::get_id() == thread_id_);
+
+    LOG(INFO) << "Stopping workers...";
+
+    for (const auto& worker : workers_)
+        worker.second->stopSoon();
+
+    {
+        std::unique_lock lock(lock_);
+        while (running_ != 0)
+            condition_.wait(lock);
+    }
+
+    workers_.clear();
+
+    LOG(INFO) << "All workers stopped";
+}
+
+//--------------------------------------------------------------------------------------------------
+qint64 WorkerManager::add(std::unique_ptr<Worker> worker)
+{
+    CHECK(std::this_thread::get_id() == thread_id_);
+    CHECK(!started_);
+    CHECK(worker);
+    CHECK(!worker->parent());
+
+    ++next_worker_id_;
+
+    workers_.emplace(next_worker_id_, std::move(worker));
+    return next_worker_id_;
+}
+
+//--------------------------------------------------------------------------------------------------
+void WorkerManager::start()
+{
+    CHECK(std::this_thread::get_id() == thread_id_);
+    CHECK(!started_);
+
+    LOG(INFO) << "Starting workers...";
+
+    for (const auto& worker : workers_)
+        worker.second->start(this);
+
+    {
+        std::unique_lock lock(lock_);
+        while (running_ < workers_.size())
+            condition_.wait(lock);
+    }
+
+    LOG(INFO) << "All workers started";
+    started_ = true;
 }
