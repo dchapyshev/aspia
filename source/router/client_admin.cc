@@ -21,6 +21,7 @@
 #include <set>
 #include <unordered_map>
 
+#include "base/core_application.h"
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/string_util.h"
@@ -30,10 +31,10 @@
 #include "proto/router_constants.h"
 #include "proto/router_host.h"
 #include "router/client.h"
-#include "router/relay.h"
 #include "router/service.h"
 #include "router/host_legacy.h"
 #include "router/host_ng.h"
+#include "router/workers/relay_worker.h"
 
 //--------------------------------------------------------------------------------------------------
 ClientAdmin::ClientAdmin(TcpChannel* channel, QObject* parent)
@@ -95,39 +96,21 @@ void ClientAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void ClientAdmin::doRelayListRequest(const proto::router::RelayListRequest& request)
 {
-    const QList<Relay*>& relays = Service::instance()->relays();
+    RelayWorker* relay_worker = CoreApplication::findWorker<RelayWorker>();
+    CHECK(relay_worker);
 
-    proto::router::RouterToAdmin message;
-    proto::router::RelayList* result = message.mutable_relay_list();
-    result->set_request_id(request.request_id());
-    result->set_error_code(proto::router::kErrorOk);
+    const auto request_id = request.request_id();
 
-    for (const auto& relay : relays)
+    relay_worker->requestRelayList(this, [this, request_id](proto::router::RelayList&& relay_list)
     {
-        proto::router::RelayInfo* item = result->add_relay();
+        relay_list.set_request_id(request_id);
+        relay_list.set_error_code(proto::router::kErrorOk);
 
-        // Generic session info.
-        item->set_entry_id(relay->sessionId());
-        item->set_timepoint(relay->startTime());
-        item->set_ip_address(relay->address());
-        item->mutable_version()->CopyFrom(serialize(relay->version()));
-        item->set_os_name(relay->osName());
-        item->set_computer_name(relay->computerName());
-        item->set_architecture(relay->architecture());
+        proto::router::RouterToAdmin message;
+        message.mutable_relay_list()->Swap(&relay_list);
 
-        // Statistics info.
-        const std::optional<proto::router::RelayStatistics>& statistics = relay->statistics();
-        if (statistics.has_value())
-        {
-            item->mutable_statistics()->mutable_peer()->CopyFrom(statistics->peer());
-            item->mutable_statistics()->set_uptime(statistics->uptime());
-        }
-
-        // Other info.
-        item->set_pool_size(Service::instance()->keyCountForRelay(relay->sessionId()));
-    }
-
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+        sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -556,34 +539,37 @@ void ClientAdmin::doHostRequest(const proto::router::HostRequest& request)
 //--------------------------------------------------------------------------------------------------
 void ClientAdmin::doRelayRequest(const proto::router::RelayRequest& request)
 {
-    proto::router::RouterToAdmin message;
-    proto::router::RelayResult* relay_result = message.mutable_relay_result();
-    relay_result->set_request_id(request.request_id());
-    relay_result->set_command_name(request.command_name());
+    const auto request_id = request.request_id();
+    const std::string command_name = request.command_name();
 
-    if (request.command_name() == proto::router::kCommandRelayDisconnect)
+    if (command_name != proto::router::kCommandRelayDisconnect)
     {
-        qint64 entry_id = request.entry_id();
+        CLOG(ERROR) << "Unknown relay request command:" << command_name;
+
+        proto::router::RouterToAdmin message;
+        proto::router::RelayResult* relay_result = message.mutable_relay_result();
+        relay_result->set_request_id(request_id);
+        relay_result->set_command_name(command_name);
+        relay_result->set_error_code(proto::router::kErrorInvalidRequest);
+        sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+        return;
+    }
+
+    RelayWorker* relay_worker = CoreApplication::findWorker<RelayWorker>();
+    CHECK(relay_worker);
+
+    const qint64 entry_id = request.entry_id();
+
+    relay_worker->stopRelay(entry_id, this, [this, request_id, command_name, entry_id](bool result)
+    {
+        proto::router::RouterToAdmin message;
+        proto::router::RelayResult* relay_result = message.mutable_relay_result();
+        relay_result->set_request_id(request_id);
+        relay_result->set_command_name(command_name);
 
         if (entry_id == -1)
         {
-            const QList<Relay*>& relays = Service::instance()->relays();
-            QList<qint64> relay_ids;
-
-            for (const auto& relay : relays)
-                relay_ids.append(relay->sessionId());
-
-            bool all_ok = true;
-            for (qint64 id : relay_ids)
-            {
-                if (!Service::instance()->stopRelay(id))
-                {
-                    CLOG(ERROR) << "Failed to stop relay session:" << id;
-                    all_ok = false;
-                }
-            }
-
-            if (all_ok)
+            if (result)
             {
                 CLOG(INFO) << "All relay sessions disconnected by" << userName();
                 relay_result->set_error_code(proto::router::kErrorOk);
@@ -593,27 +579,19 @@ void ClientAdmin::doRelayRequest(const proto::router::RelayRequest& request)
                 relay_result->set_error_code(proto::router::kErrorInternalError);
             }
         }
+        else if (!result)
+        {
+            CLOG(ERROR) << "Session not found:" << entry_id;
+            relay_result->set_error_code(proto::router::kErrorInvalidEntryId);
+        }
         else
         {
-            if (!Service::instance()->stopRelay(entry_id))
-            {
-                CLOG(ERROR) << "Session not found:" << entry_id;
-                relay_result->set_error_code(proto::router::kErrorInvalidEntryId);
-            }
-            else
-            {
-                CLOG(INFO) << "Relay session '" << entry_id << "' disconnected by" << userName();
-                relay_result->set_error_code(proto::router::kErrorOk);
-            }
+            CLOG(INFO) << "Relay session '" << entry_id << "' disconnected by" << userName();
+            relay_result->set_error_code(proto::router::kErrorOk);
         }
-    }
-    else
-    {
-        CLOG(ERROR) << "Unknown relay request command:" << request.command_name();
-        relay_result->set_error_code(proto::router::kErrorInvalidRequest);
-    }
 
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+        sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -682,24 +660,33 @@ void ClientAdmin::doClientRequest(const proto::router::ClientRequest& request)
 //--------------------------------------------------------------------------------------------------
 void ClientAdmin::doPeerRequest(const proto::router::PeerRequest& request)
 {
-    proto::router::RouterToAdmin message;
-    proto::router::PeerResult* result = message.mutable_peer_result();
-    result->set_request_id(request.request_id());
-    result->set_command_name(request.command_name());
+    RelayWorker* relay_worker = CoreApplication::findWorker<RelayWorker>();
+    CHECK(relay_worker);
 
-    Relay* relay_session = Service::instance()->relay(request.relay_id());
-    if (!relay_session)
-    {
-        CLOG(ERROR) << "Relay with id" << request.relay_id() << "is not found";
-        result->set_error_code(proto::router::kErrorNotFound);
-    }
-    else
-    {
-        relay_session->disconnectPeerSession(request);
-        result->set_error_code(proto::router::kErrorOk);
-    }
+    const auto request_id = request.request_id();
+    const std::string command_name = request.command_name();
+    const qint64 relay_id = request.relay_id();
 
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+    relay_worker->disconnectPeerSession(relay_id, request, this,
+        [this, request_id, command_name, relay_id](bool result)
+    {
+        proto::router::RouterToAdmin message;
+        proto::router::PeerResult* peer_result = message.mutable_peer_result();
+        peer_result->set_request_id(request_id);
+        peer_result->set_command_name(command_name);
+
+        if (!result)
+        {
+            CLOG(ERROR) << "Relay with id" << relay_id << "is not found";
+            peer_result->set_error_code(proto::router::kErrorNotFound);
+        }
+        else
+        {
+            peer_result->set_error_code(proto::router::kErrorOk);
+        }
+
+        sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+    });
 }
 
 //--------------------------------------------------------------------------------------------------

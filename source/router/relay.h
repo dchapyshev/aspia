@@ -31,12 +31,14 @@ namespace proto::router {
 class PeerRequest;
 } // namespace proto::router
 
+class RelayWorker;
+
 class Relay final : public QObject
 {
     Q_OBJECT
 
 public:
-    Relay(TcpChannel* channel, QObject* parent);
+    Relay(TcpChannel* channel, RelayWorker* worker);
     ~Relay() final;
 
     using PeerData = std::pair<std::string, quint16>;
@@ -74,6 +76,7 @@ private:
     time_t start_time_ = 0;
 
     TcpChannel* tcp_channel_ = nullptr;
+    RelayWorker* worker_ = nullptr;
 
     std::optional<PeerData> peer_data_;
     std::optional<proto::router::RelayStatistics> statistics_;

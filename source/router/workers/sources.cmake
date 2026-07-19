@@ -17,5 +17,7 @@
 #
 
 collect_sources(SOURCE_ROUTER_WORKERS
+    relay_worker.cc
+    relay_worker.h
     stun_worker.cc
     stun_worker.h)

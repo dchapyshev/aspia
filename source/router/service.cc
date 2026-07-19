@@ -20,28 +20,23 @@
 
 #include <QTimer>
 
+#include "base/core_application.h"
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_byte_array.h"
 #include "base/net/tcp_channel.h"
+#include "proto/router.h"
 #include "proto/router_client.h"
 #include "router/client.h"
 #include "router/client_admin.h"
 #include "router/client_manager.h"
 #include "router/migration_utils.h"
-#include "router/relay.h"
 #include "router/host_ng.h"
 #include "router/host_legacy.h"
 #include "router/settings.h"
 #include "router/router_user_list.h"
-
-namespace {
-
-constexpr qsizetype kMaxRelayKeysPerSession = 1000;
-constexpr qsizetype kMaxRelayKeysTotal = 10000;
-
-} // namespace
+#include "router/workers/relay_worker.h"
 
 //--------------------------------------------------------------------------------------------------
 // static
@@ -76,9 +71,6 @@ Service::~Service()
     for (auto* client : std::as_const(clients_))
         delete client;
 
-    for (auto* relay : std::as_const(relays_))
-        delete relay;
-
     instance_ = nullptr;
 }
 
@@ -99,20 +91,6 @@ void Service::notifyChanged(quint32 flags)
     instance_->dirty_mask_ |= flags;
     if (!instance_->notification_timer_->isActive())
         instance_->notification_timer_->start();
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-void Service::removeKeysForRelay(qint64 session_id)
-{
-    if (!instance_)
-        return;
-
-    if (!instance_->key_pool_.contains(session_id))
-        return;
-
-    LOG(INFO) << "All keys for relay" << session_id << "removed";
-    instance_->key_pool_.remove(session_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -195,177 +173,6 @@ int Service::stopClients(qint64 user_id, const QList<qint64>& token_ids, qint64 
 }
 
 //--------------------------------------------------------------------------------------------------
-const QList<Relay*>& Service::relays()
-{
-    return relays_;
-}
-
-//--------------------------------------------------------------------------------------------------
-Relay* Service::relay(qint64 relay_id)
-{
-    for (auto* relay : std::as_const(relays_))
-    {
-        if (relay->sessionId() == relay_id)
-            return relay;
-    }
-
-    return nullptr;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Service::stopRelay(qint64 relay_id)
-{
-    for (auto it = relays_.begin(), it_end = relays_.end(); it != it_end; ++it)
-    {
-        Relay* relay = *it;
-
-        if (relay->sessionId() == relay_id)
-        {
-            removeKeysForRelay(relay_id);
-            relay->disconnect();
-            relay->deleteLater();
-            relays_.erase(it);
-            return true;
-        }
-    }
-
-    return false;
-}
-
-//--------------------------------------------------------------------------------------------------
-void Service::addKey(qint64 session_id, const proto::router::RelayKey& key)
-{
-    auto relay = key_pool_.find(session_id);
-
-    if (relay != key_pool_.end() && relay.value().size() >= kMaxRelayKeysPerSession)
-    {
-        LOG(WARNING) << "Relay key limit reached for session" << session_id
-                     << "key id" << key.key_id() << "will be dropped";
-        return;
-    }
-
-    qsizetype key_count = 0;
-    for (const auto& keys : std::as_const(key_pool_))
-        key_count += keys.size();
-
-    if (key_count >= kMaxRelayKeysTotal)
-    {
-        LOG(WARNING) << "Global relay key limit reached. Key id" << key.key_id()
-                     << "from session" << session_id << "will be dropped";
-        return;
-    }
-
-    if (relay == key_pool_.end())
-    {
-        LOG(INFO) << "Host not found in key pool. It will be added";
-        relay = key_pool_.insert(session_id, Keys());
-    }
-
-    LOG(INFO) << "Added key with id" << key.key_id() << "for host" << session_id;
-    relay.value().append(key);
-}
-
-//--------------------------------------------------------------------------------------------------
-std::optional<Service::Credentials> Service::takeCredentials()
-{
-    if (key_pool_.isEmpty())
-    {
-        LOG(ERROR) << "Empty key pool";
-        return std::nullopt;
-    }
-
-    auto preffered_relay = key_pool_.end();
-    int max_count = 0;
-
-    for (auto it = key_pool_.begin(), it_end = key_pool_.end(); it != it_end; ++it)
-    {
-        int count = it.value().size();
-        if (count > max_count)
-        {
-            preffered_relay = it;
-            max_count = count;
-        }
-    }
-
-    if (preffered_relay == key_pool_.end())
-    {
-        LOG(ERROR) << "Empty key pool";
-        return std::nullopt;
-    }
-
-    LOG(INFO) << "Preffered relay:" << preffered_relay.key();
-
-    QList<proto::router::RelayKey>& keys = preffered_relay.value();
-    if (keys.isEmpty())
-    {
-        LOG(ERROR) << "Empty key pool for relay";
-        return std::nullopt;
-    }
-
-    // Resolve the relay before consuming a key: a one-time key must not leave the pool unless we
-    // can actually build an offer from it. On the single-threaded event loop the relay stays valid
-    // until this returns, so the caller never faces a missing relay after the key was taken.
-    Relay* relay_session = relay(preffered_relay.key());
-    if (!relay_session || !relay_session->peerData().has_value())
-    {
-        LOG(ERROR) << "Preferred relay" << preffered_relay.key() << "is not usable";
-        return std::nullopt;
-    }
-
-    Credentials credentials;
-    credentials.session_id = preffered_relay.key();
-    credentials.peer_host = relay_session->peerData()->first;
-    credentials.peer_port = relay_session->peerData()->second;
-    credentials.key = std::move(keys.back());
-
-    // Removing the key from the pool.
-    keys.pop_back();
-
-    if (keys.isEmpty())
-    {
-        LOG(INFO) << "Last key in the pool for relay. The relay will be removed from the pool";
-        key_pool_.remove(preffered_relay.key());
-    }
-
-    relay_session->sendKeyUsed(credentials.key.key_id());
-
-    return std::move(credentials);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Service::clearKeyPool()
-{
-    LOG(INFO) << "Key pool cleared";
-    key_pool_.clear();
-}
-
-//--------------------------------------------------------------------------------------------------
-size_t Service::keyCountForRelay(qint64 session_id) const
-{
-    auto result = key_pool_.find(session_id);
-    if (result == key_pool_.end())
-        return 0;
-    return result.value().size();
-}
-
-//--------------------------------------------------------------------------------------------------
-size_t Service::keyCount() const
-{
-    size_t result = 0;
-
-    for (const auto& relay : std::as_const(key_pool_))
-        result += relay.size();
-
-    return result;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Service::isKeyPoolEmpty() const
-{
-    return key_pool_.isEmpty();
-}
-
-//--------------------------------------------------------------------------------------------------
 void Service::onStart()
 {
     LOG(INFO) << "Service start...";
@@ -426,18 +233,6 @@ void Service::onNewClientConnection()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onNewRelayConnection()
-{
-    CHECK(relay_server_);
-    while (relay_server_->hasReadyConnections())
-    {
-        TcpChannel* channel = relay_server_->nextReadyConnection();
-        LOG(INFO) << "New relay connection:" << channel->peerAddress();
-        addRelay(channel);
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void Service::onHostFinished()
 {
     Host* host = dynamic_cast<Host*>(sender());
@@ -455,17 +250,6 @@ void Service::onClientSessionFinished()
     client->disconnect();
     client->deleteLater();
     clients_.removeOne(client);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Service::onRelayFinished()
-{
-    Relay* relay = static_cast<Relay*>(sender());
-    CHECK(relay);
-    removeKeysForRelay(relay->sessionId());
-    relay->disconnect();
-    relay->deleteLater();
-    relays_.removeOne(relay);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -597,13 +381,6 @@ bool Service::start()
         return false;
     }
 
-    SecureByteArray relay_private_key(settings.relayPrivateKey());
-    if (relay_private_key.isEmpty())
-    {
-        LOG(INFO) << "The relay private key is not specified in the configuration file";
-        return false;
-    }
-
     QString listen_interface = settings.listenInterface();
     if (!TcpServer::isValidListenInterface(listen_interface))
     {
@@ -632,13 +409,6 @@ bool Service::start()
         return false;
     }
 
-    quint16 relay_port = settings.relayPort();
-    if (!relay_port)
-    {
-        LOG(ERROR) << "Invalid relay port specified in configuration file";
-        return false;
-    }
-
     client_white_list_ = settings.clientWhiteList();
     if (client_white_list_.isEmpty())
         LOG(INFO) << "Connections from all clients will be allowed";
@@ -650,12 +420,6 @@ bool Service::start()
         LOG(INFO) << "Connections from all hosts will be allowed";
     else
         LOG(INFO) << "Allowed hosts:" << host_white_list_;
-
-    relay_white_list_ = settings.relayWhiteList();
-    if (relay_white_list_.isEmpty())
-        LOG(INFO) << "Connections from all relays will be allowed";
-    else
-        LOG(INFO) << "Allowed relays:" << relay_white_list_;
 
     QByteArray seed_key = settings.seedKey();
     if (seed_key.isEmpty())
@@ -677,15 +441,11 @@ bool Service::start()
     // Hosts are the largest population and reconnect in storms after a network blip (e.g. hundreds
     // of hosts behind one corporate NAT coming back at once), so they get the most generous caps.
     //
-    // Relays are a small, stable set of infrastructure servers - a handful at most - so a few
-    // slots are plenty and tight caps make a misbehaving or spoofed relay obvious.
-    //
     // Clients (admins/managers/clients) are interactive operators: bursty but human-bounded, and
-    // each connection runs the heavier SRP + 2FA handshake, so the caps sit in between.
+    // each connection runs the heavier SRP + 2FA handshake, so the caps sit in between hosts and
+    // relays.
     static constexpr int kHostMaxPendingConnections = 100;
     static constexpr int kHostMaxConnectionsPerMinute = 300;
-    static constexpr int kRelayMaxPendingConnections = 10;
-    static constexpr int kRelayMaxConnectionsPerMinute = 30;
     static constexpr int kClientMaxPendingConnections = 30;
     static constexpr int kClientMaxConnectionsPerMinute = 60;
 
@@ -719,22 +479,6 @@ bool Service::start()
         return false;
     }
 
-    // Relay listener accepts relay sessions only (anonymous access).
-    relay_server_ = new TcpServer(this);
-    connect(relay_server_, &TcpServer::sig_newConnection, this, &Service::onNewRelayConnection);
-
-    relay_server_->setPrivateKey(relay_private_key);
-    relay_server_->setAnonymousAccess(
-        ServerAuthenticator::AnonymousAccess::ENABLE, proto::router::SESSION_TYPE_RELAY);
-    relay_server_->setMaxPendingConnections(kRelayMaxPendingConnections);
-    relay_server_->setMaxConnectionsPerMinute(kRelayMaxConnectionsPerMinute);
-    relay_server_->setWhiteList(relay_white_list_);
-    if (!relay_server_->start(relay_port, listen_interface))
-    {
-        LOG(ERROR) << "Unable to start relay listener";
-        return false;
-    }
-
     // Client listener accepts admin/manager/client sessions only. These session types always
     // authenticate, so anonymous access stays disabled here.
     client_server_ = new TcpServer(this);
@@ -752,6 +496,13 @@ bool Service::start()
 
     if (settings.isStunEnabled())
         stun_port_ = settings.stunPort();
+
+    RelayWorker* relay_worker = CoreApplication::findWorker<RelayWorker>();
+    CHECK(relay_worker);
+    connect(relay_worker, &RelayWorker::sig_relaysChanged, this, []()
+    {
+        notifyChanged(NOTIFY_RELAYS);
+    }, Qt::QueuedConnection);
 
     LOG(INFO) << "Server started";
     return true;
@@ -825,19 +576,6 @@ void Service::addClient(TcpChannel* channel)
     clients_.emplace_back(client);
     connect(client, &Client::sig_finished, this, &Service::onClientSessionFinished);
     client->start();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Service::addRelay(TcpChannel* channel)
-{
-    QString address = QString::fromStdString(channel->peerAddress());
-
-    LOG(INFO) << "New relay session:" << address;
-
-    Relay* relay = new Relay(channel, this);
-    relays_.emplace_back(relay);
-    connect(relay, &Relay::sig_finished, this, &Service::onRelayFinished);
-    relay->start();
 }
 
 //--------------------------------------------------------------------------------------------------

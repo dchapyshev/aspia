@@ -21,18 +21,14 @@
 
 #include <QList>
 
-#include <string>
-
 #include "base/core_service.h"
 #include "base/peer/host_id.h"
 #include "base/net/tcp_server.h"
 #include "base/net/tcp_server_legacy.h"
-#include "proto/router.h"
 #include "router/host.h"
 
 class Client;
 class QTimer;
-class Relay;
 
 class Service final : public CoreService
 {
@@ -47,19 +43,8 @@ public:
     static const char kDisplayName[];
     static const char kDescription[];
 
-    struct Credentials
-    {
-        qint64 session_id;
-        proto::router::RelayKey key;
-        std::string peer_host;
-        quint16 peer_port;
-    };
-
-    using Keys = QList<proto::router::RelayKey>;
-
     static Service* instance();
     static void notifyChanged(quint32 flags);
-    static void removeKeysForRelay(qint64 session_id);
 
     const QList<Host*>& hosts();
     bool stopHost(qint64 session_id);
@@ -72,10 +57,6 @@ public:
     // is left running (0 keeps all). Returns the number of sessions stopped.
     int stopClients(qint64 user_id, const QList<qint64>& token_ids = {}, qint64 except_client_id = 0);
 
-    const QList<Relay*>& relays();
-    Relay* relay(qint64 relay_id);
-    bool stopRelay(qint64 relay_id);
-
     enum : quint32
     {
         NOTIFY_TEMP_HOSTS = 1u << 0,
@@ -87,13 +68,6 @@ public:
         NOTIFY_GROUPS     = 1u << 6,
     };
 
-    void addKey(qint64 session_id, const proto::router::RelayKey& key);
-    std::optional<Credentials> takeCredentials();
-    void clearKeyPool();
-    size_t keyCountForRelay(qint64 session_id) const;
-    size_t keyCount() const;
-    bool isKeyPoolEmpty() const;
-
 protected:
     // Service implementation.
     void onStart() final;
@@ -103,10 +77,8 @@ private slots:
     void onNewHostConnection();
     void onNewLegacyHostConnection();
     void onNewClientConnection();
-    void onNewRelayConnection();
     void onHostFinished();
     void onClientSessionFinished();
-    void onRelayFinished();
     void onHostIdAssigned(HostId host_id);
     void onNotificationFlush();
 
@@ -114,24 +86,19 @@ private:
     bool start();
     void addHost(TcpChannel* channel, bool is_legacy);
     void addClient(TcpChannel* channel);
-    void addRelay(TcpChannel* channel);
 
     TcpServer* host_server_ = nullptr;
     TcpServer* client_server_ = nullptr;
-    TcpServer* relay_server_ = nullptr;
     TcpServerLegacy* host_legacy_server_ = nullptr;
     quint16 stun_port_ = 0;
     QTimer* notification_timer_ = nullptr;
     quint32 dirty_mask_ = 0;
 
-    QMap<qint64, Keys> key_pool_;
     QList<Host*> hosts_;
     QList<Client*> clients_;
-    QList<Relay*> relays_;
 
     QStringList client_white_list_;
     QStringList host_white_list_;
-    QStringList relay_white_list_;
 
     static Service* instance_;
 

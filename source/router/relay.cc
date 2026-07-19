@@ -18,7 +18,7 @@
 
 #include "router/relay.h"
 
-#include "router/service.h"
+#include "router/workers/relay_worker.h"
 
 namespace {
 
@@ -33,12 +33,14 @@ qint64 createRelayId()
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Relay::Relay(TcpChannel* channel, QObject* parent)
-    : QObject(parent),
+Relay::Relay(TcpChannel* channel, RelayWorker* worker)
+    : QObject(worker),
       session_id_(createRelayId()),
-      tcp_channel_(channel)
+      tcp_channel_(channel),
+      worker_(worker)
 {
     CDCHECK(tcp_channel_);
+    CDCHECK(worker_);
     tcp_channel_->setParent(this);
 
     connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &Relay::onTcpErrorOccurred);
@@ -51,8 +53,6 @@ Relay::Relay(TcpChannel* channel, QObject* parent)
 Relay::~Relay()
 {
     CLOG(INFO) << "Dtor";
-    Service::removeKeysForRelay(sessionId());
-    Service::notifyChanged(Service::NOTIFY_RELAYS);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -62,8 +62,6 @@ void Relay::start()
     start_time_ = std::chrono::system_clock::to_time_t(time_point);
     tcp_channel_->setPaused(false);
     emit sig_started(session_id_);
-
-    Service::notifyChanged(Service::NOTIFY_RELAYS);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -145,8 +143,6 @@ void Relay::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buff
 //--------------------------------------------------------------------------------------------------
 void Relay::readKeyPool(const proto::router::RelayKeyPool& key_pool)
 {
-    Service* service = Service::instance();
-
     CLOG(INFO) << "Received key pool:" << key_pool.key_size() << "(" << address() << ")";
 
     const std::string& peer_host = key_pool.peer_host();
@@ -164,5 +160,5 @@ void Relay::readKeyPool(const proto::router::RelayKeyPool& key_pool)
     peer_data_.emplace(std::make_pair(peer_host, static_cast<quint16>(peer_port)));
 
     for (int i = 0; i < key_pool.key_size(); ++i)
-        service->addKey(sessionId(), key_pool.key(i));
+        worker_->addKey(session_id_, key_pool.key(i));
 }
