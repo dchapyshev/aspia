@@ -63,7 +63,10 @@ void Worker::stopSoon()
 void Worker::timerEvent(QTimerEvent* event)
 {
     if (event->timerId() == timer_id_)
+    {
         onTimer();
+        emit sig_tick(Clock::now());
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

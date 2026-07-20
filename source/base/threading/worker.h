@@ -54,6 +54,9 @@ public:
                     Milliseconds timer_interval = Milliseconds::zero());
     ~Worker() override;
 
+    // Returns the worker owning the calling thread, or nullptr if the thread is not a worker.
+    static Worker* current() { return current_worker_; }
+
     // Executes |work| asynchronously in the worker thread. May be called from any thread.
     void post(std::function<void()> work);
 
@@ -81,6 +84,10 @@ public:
             Qt::QueuedConnection);
         });
     }
+
+signals:
+    // Per-thread clock: emitted from the worker thread on every built-in timer tick.
+    void sig_tick(const TimePoint& now);
 
 protected:
     friend class WorkerManager;
