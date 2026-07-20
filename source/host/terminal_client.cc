@@ -21,7 +21,6 @@
 #include <QCoreApplication>
 #include <QDir>
 #include <QFileInfo>
-#include <QTimer>
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_object.h"
@@ -362,17 +361,9 @@ bool startProcessWithToken(HANDLE token, const QString& command_line, const QStr
 
 //--------------------------------------------------------------------------------------------------
 TerminalClient::TerminalClient(TcpChannel* tcp_channel, QObject* parent)
-    : Client(tcp_channel, parent),
-      attach_timer_(new QTimer(this))
+    : Client(tcp_channel, parent)
 {
     CLOG(INFO) << "Ctor";
-
-    attach_timer_->setSingleShot(true);
-    connect(attach_timer_, &QTimer::timeout, this, [this]()
-    {
-        CLOG(ERROR) << "Timeout at the start of the agent process";
-        onError(FROM_HERE);
-    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -425,7 +416,7 @@ void TerminalClient::onIpcNewConnection()
     connect(ipc_channel_, &IpcChannel::sig_disconnected, this, &TerminalClient::onIpcDisconnected);
     connect(ipc_channel_, &IpcChannel::sig_messageReceived, this, &TerminalClient::onIpcMessageReceived);
 
-    attach_timer_->stop();
+    attach_deadline_ = TimePoint();
     ipc_channel_->setPaused(false);
 
     sendResult(proto::terminal::Result::CODE_SUCCESS);
@@ -509,7 +500,7 @@ void TerminalClient::onMessage(quint8 /* tcp_channel_id */, const QByteArray& bu
         agent_launched_ = true;
 
         CLOG(INFO) << "Wait for starting agent process";
-        attach_timer_->start(std::chrono::seconds(10));
+        attach_deadline_ = Clock::now() + std::chrono::seconds(10);
         return;
     }
 
@@ -521,6 +512,18 @@ void TerminalClient::onMessage(quint8 /* tcp_channel_id */, const QByteArray& bu
     }
 
     ipc_channel_->send(0, buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalClient::onTimer(const TimePoint& now)
+{
+    Client::onTimer(now);
+
+    if (attach_deadline_ != TimePoint() && now >= attach_deadline_)
+    {
+        CLOG(ERROR) << "Timeout at the start of the agent process";
+        onError(FROM_HERE);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -650,7 +653,7 @@ void TerminalClient::onError(const Location& location)
 
     CLOG(ERROR) << "Error occurred (" << location << ")";
 
-    attach_timer_->stop();
+    attach_deadline_ = TimePoint();
 
     if (ipc_server_)
         ipc_server_->disconnect(this);

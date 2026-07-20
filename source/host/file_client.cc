@@ -21,7 +21,6 @@
 #include <QCoreApplication>
 #include <QDir>
 #include <QFileInfo>
-#include <QTimer>
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_object.h"
@@ -247,17 +246,9 @@ bool startProcessWithToken(HANDLE token, const QString& command_line, const QStr
 //--------------------------------------------------------------------------------------------------
 FileClient::FileClient(TcpChannel* tcp_channel, SessionId session_id, QObject* parent)
     : Client(tcp_channel, parent),
-      session_id_(session_id),
-      attach_timer_(new QTimer(this))
+      session_id_(session_id)
 {
     CLOG(INFO) << "Ctor";
-
-    attach_timer_->setSingleShot(true);
-    connect(attach_timer_, &QTimer::timeout, this, [this]()
-    {
-        CLOG(ERROR) << "Timeout at the start of the session process";
-        onError(FROM_HERE);
-    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -490,7 +481,7 @@ void FileClient::onStart()
 #endif
 
     CLOG(INFO) << "Wait for starting agent process";
-    attach_timer_->start(std::chrono::seconds(10));
+    attach_deadline_ = Clock::now() + std::chrono::seconds(10);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -521,6 +512,18 @@ void FileClient::onMessage(quint8 tcp_channel_id, const QByteArray& buffer)
     }
 
     ipc_channel_->send(0, buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
+void FileClient::onTimer(const TimePoint& now)
+{
+    Client::onTimer(now);
+
+    if (attach_deadline_ != TimePoint() && now >= attach_deadline_)
+    {
+        CLOG(ERROR) << "Timeout at the start of the session process";
+        onError(FROM_HERE);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -560,7 +563,7 @@ void FileClient::onStarted(const Location& location, bool has_user)
     CLOG(INFO) << "File client is started (has user:" << has_user << location << ")";
     has_logged_on_user_ = has_user;
 
-    attach_timer_->stop();
+    attach_deadline_ = TimePoint();
 
     if (has_user)
     {
@@ -579,7 +582,7 @@ void FileClient::onError(const Location& location)
 
     CLOG(ERROR) << "Error occurred (" << location << ")";
 
-    attach_timer_->stop();
+    attach_deadline_ = TimePoint();
 
     if (ipc_server_)
         ipc_server_->disconnect(this);

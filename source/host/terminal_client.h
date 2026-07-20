@@ -29,7 +29,6 @@
 class IpcChannel;
 class IpcServer;
 class Location;
-class QTimer;
 
 // Host side of a Terminal session. Waits for the operating system credentials supplied by the client,
 // validates them, launches the terminal agent process under that account and then bridges the client
@@ -52,6 +51,7 @@ protected:
     // Client implementation.
     void onStart() final;
     void onMessage(quint8 channel_id, const QByteArray& buffer) final;
+    void onTimer(const TimePoint& now) final;
 
 private:
     bool startIpcServer(const QString& ipc_channel_name, const QString& target_user_sid);
@@ -62,7 +62,7 @@ private:
     ScopedQPointer<IpcServer> ipc_server_;
     ScopedQPointer<IpcChannel> ipc_channel_;
 
-    QTimer* attach_timer_ = nullptr;
+    TimePoint attach_deadline_;
     bool agent_launched_ = false;
     int auth_failure_count_ = 0;
 

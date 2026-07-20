@@ -26,7 +26,6 @@
 class IpcChannel;
 class IpcServer;
 class Location;
-class QTimer;
 
 class FileClient final : public Client
 {
@@ -46,6 +45,7 @@ private slots:
 protected:
     void onStart() final;
     void onMessage(quint8 channel_id, const QByteArray& buffer) final;
+    void onTimer(const TimePoint& now) final;
 
 private:
     bool startIpcServer(const QString& ipc_channel_name, const QString& target_user_sid);
@@ -56,7 +56,7 @@ private:
     ScopedQPointer<IpcChannel> ipc_channel_;
 
     const SessionId session_id_;
-    QTimer* attach_timer_ = nullptr;
+    TimePoint attach_deadline_;
     bool has_logged_on_user_ = false;
 
     Q_DISABLE_COPY_MOVE(FileClient)
