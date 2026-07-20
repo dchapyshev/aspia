@@ -109,6 +109,7 @@ public:
     virtual bool setReadBufferSize(int size) = 0;
     virtual bool setWriteBufferSize(int size) = 0;
     virtual qint64 pendingBytes() const = 0;
+    virtual void tick(const TimePoint& now) = 0;
 
     quint32 instanceId() const { return instance_id_; }
     Type type() const { return type_; }

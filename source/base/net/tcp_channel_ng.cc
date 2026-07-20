@@ -23,6 +23,7 @@
 #include <asio/connect.hpp>
 #include <asio/ip/address.hpp>
 #include <asio/read.hpp>
+#include <asio/steady_timer.hpp>
 #include <asio/write.hpp>
 
 #include "base/location.h"
@@ -78,7 +79,6 @@ TcpChannelNG::TcpChannelNG(Authenticator* authenticator, QObject* parent)
       io_context_(AsioEventDispatcher::ioContext()),
       socket_(io_context_),
       resolver_(std::make_unique<asio::ip::tcp::resolver>(io_context_)),
-      keep_alive_timer_(io_context_),
       authenticator_(authenticator)
 {
     init();
@@ -90,7 +90,6 @@ TcpChannelNG::TcpChannelNG(
     : TcpChannel(type, parent),
       io_context_(AsioEventDispatcher::ioContext()),
       socket_(std::move(socket)),
-      keep_alive_timer_(io_context_),
       authenticator_(authenticator)
 {
     CDCHECK(socket_.is_open());
@@ -245,7 +244,7 @@ void TcpChannelNG::setPaused(bool enable)
     paused_ = enable;
     if (paused_)
     {
-        keep_alive_timer_.cancel();
+        keep_alive_state_ = KeepAliveState::INACTIVE;
         return;
     }
 
@@ -253,7 +252,7 @@ void TcpChannelNG::setPaused(bool enable)
     // is set, |encryptor_| may not be ready, and a KEEP_ALIVE frame would be sent
     // unencrypted, which the peer would treat as a protocol violation.
     if (authenticated_)
-        scheduleKeepAlivePing();
+        startKeepAliveInterval();
 
     // We already have an incomplete read operation.
     if (state_ == ReadState::READ_HEADER || state_ == ReadState::READ_DATA)
@@ -325,6 +324,34 @@ qint64 TcpChannelNG::pendingBytes() const
         result += buffer.size();
 
     return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpChannelNG::tick(const TimePoint& now)
+{
+    if (keep_alive_state_ == KeepAliveState::INACTIVE || now < keep_alive_deadline_)
+        return;
+
+    if (keep_alive_state_ == KeepAliveState::WAIT_INTERVAL)
+    {
+        // Incoming traffic since last check or pending outgoing data both prove the
+        // connection is alive. Skip the PING and wait out the next interval.
+        if (rx_since_last_check_ || !io_->write_queue.isEmpty())
+        {
+            startKeepAliveInterval();
+            return;
+        }
+
+        // Channel is idle. Send a PING and require a PONG within kKeepAliveTimeout.
+        keep_alive_state_ = KeepAliveState::WAIT_PONG;
+        keep_alive_deadline_ = now + kKeepAliveTimeout;
+        addWriteTask(KEEP_ALIVE, KEEP_ALIVE_PING, keep_alive_counter_, true);
+    }
+    else
+    {
+        // No PONG arrived within the specified period. Forcibly terminate the connection.
+        onErrorOccurred(FROM_HERE, ErrorCode::SOCKET_TIMEOUT);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -428,7 +455,7 @@ void TcpChannelNG::setConnected(bool connected)
             socket_.close(ignored_code);
         }
 
-        keep_alive_timer_.cancel();
+        keep_alive_state_ = KeepAliveState::INACTIVE;
         return;
     }
 
@@ -641,8 +668,8 @@ void TcpChannelNG::onMessageReceived()
         // Increase the counter of sent packets.
         largeNumberIncrement(&keep_alive_counter_);
 
-        // PONG received - cancel the pong-timeout and switch back to the interval cycle.
-        scheduleKeepAlivePing();
+        // PONG received - switch back to the interval cycle.
+        startKeepAliveInterval();
     }
     else
     {
@@ -848,43 +875,9 @@ void TcpChannelNG::doReadData()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannelNG::scheduleKeepAlivePing()
+void TcpChannelNG::startKeepAliveInterval()
 {
     rx_since_last_check_ = false;
-    keep_alive_timer_.expires_after(kKeepAliveInterval);
-
-    auto io = io_;
-    keep_alive_timer_.async_wait([this, io](const std::error_code& error_code)
-    {
-        if (!io->alive || error_code)
-            return;
-
-        // Incoming traffic since last check or pending outgoing data both prove the
-        // connection is alive. Skip the PING and reschedule the next interval.
-        if (rx_since_last_check_ || !io_->write_queue.isEmpty())
-        {
-            scheduleKeepAlivePing();
-            return;
-        }
-
-        // Channel is idle. Send a PING and require a PONG within kKeepAliveTimeout.
-        addWriteTask(KEEP_ALIVE, KEEP_ALIVE_PING, keep_alive_counter_, true);
-        scheduleKeepAlivePongTimeout();
-    });
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannelNG::scheduleKeepAlivePongTimeout()
-{
-    keep_alive_timer_.expires_after(kKeepAliveTimeout);
-
-    auto io = io_;
-    keep_alive_timer_.async_wait([this, io](const std::error_code& error_code)
-    {
-        if (!io->alive || error_code)
-            return;
-
-        // No PONG arrived within the specified period. Forcibly terminate the connection.
-        onErrorOccurred(FROM_HERE, ErrorCode::SOCKET_TIMEOUT);
-    });
+    keep_alive_state_ = KeepAliveState::WAIT_INTERVAL;
+    keep_alive_deadline_ = Clock::now() + kKeepAliveInterval;
 }

@@ -339,6 +339,28 @@ qint64 TcpChannelLegacy::pendingBytes() const
 }
 
 //--------------------------------------------------------------------------------------------------
+void TcpChannelLegacy::tick(const TimePoint& now)
+{
+    if (keep_alive_state_ == KeepAliveState::INACTIVE || now < keep_alive_deadline_)
+        return;
+
+    if (keep_alive_state_ == KeepAliveState::WAIT_INTERVAL)
+    {
+        // If a response is not received within the specified interval, the connection will be terminated.
+        keep_alive_state_ = KeepAliveState::WAIT_PONG;
+        keep_alive_deadline_ = now + kKeepAliveTimeout;
+
+        // Send ping.
+        sendKeepAlive(KEEP_ALIVE_PING, keep_alive_counter_.data(), keep_alive_counter_.size());
+    }
+    else
+    {
+        // No response came within the specified period of time. We forcibly terminate the connection.
+        onErrorOccurred(FROM_HERE, ErrorCode::SOCKET_TIMEOUT);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void TcpChannelLegacy::disconnectFrom()
 {
     setConnected(false);
@@ -356,18 +378,13 @@ void TcpChannelLegacy::disconnectFrom()
         socket_.close(ignored_code);
     }
 
-    keep_alive_timer_->stop();
+    keep_alive_state_ = KeepAliveState::INACTIVE;
 }
 
 //--------------------------------------------------------------------------------------------------
 void TcpChannelLegacy::init()
 {
     write_queue_.reserve(kWriteQueueReservedSize);
-
-    keep_alive_timer_ = new QTimer(this);
-    keep_alive_timer_->setSingleShot(true);
-
-    connect(keep_alive_timer_, &QTimer::timeout, this, &TcpChannelLegacy::onKeepAliveTimer);
 
     if (authenticator_)
     {
@@ -412,10 +429,10 @@ void TcpChannelLegacy::setConnected(bool connected)
     keep_alive_counter_.resize(sizeof(quint32));
     memset(keep_alive_counter_.data(), 0, keep_alive_counter_.size());
 
-    CLOG(INFO) << "Starting keep alive timer";
+    CLOG(INFO) << "Starting keep alive";
 
-    keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
-    keep_alive_timer_->start(kKeepAliveInterval);
+    keep_alive_state_ = KeepAliveState::WAIT_INTERVAL;
+    keep_alive_deadline_ = Clock::now() + kKeepAliveInterval;
 
     try
     {
@@ -1035,17 +1052,18 @@ void TcpChannelLegacy::doReadServiceData(size_t length)
                     return;
                 }
 
-                // The user can disable keep alive. Restart the timer only if keep alive is enabled.
-                if (keep_alive_timer_->isActive())
+                // Keep alive is disabled when the channel is disconnected. Restart the interval
+                // cycle only if keep alive is enabled.
+                if (keep_alive_state_ != KeepAliveState::INACTIVE)
                 {
                     CDCHECK(!keep_alive_counter_.isEmpty());
 
                     // Increase the counter of sent packets.
                     largeNumberIncrement(&keep_alive_counter_);
 
-                    // Restart keep alive timer.
-                    keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
-                    keep_alive_timer_->start(kKeepAliveInterval);
+                    // PONG received: switch back to the interval cycle.
+                    keep_alive_state_ = KeepAliveState::WAIT_INTERVAL;
+                    keep_alive_deadline_ = Clock::now() + kKeepAliveInterval;
                 }
             }
         }
@@ -1057,27 +1075,6 @@ void TcpChannelLegacy::doReadServiceData(size_t length)
 
         doReadSize();
     });
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannelLegacy::onKeepAliveTimer()
-{
-    if (keep_alive_timer_type_ == KEEP_ALIVE_INTERVAL)
-    {
-        // Send ping.
-        sendKeepAlive(KEEP_ALIVE_PING, keep_alive_counter_.data(), keep_alive_counter_.size());
-
-        // If a response is not received within the specified interval, the connection will be terminated.
-        keep_alive_timer_type_ = KEEP_ALIVE_TIMEOUT;
-        keep_alive_timer_->start(kKeepAliveTimeout);
-    }
-    else
-    {
-        CDCHECK_EQ(keep_alive_timer_type_, KEEP_ALIVE_TIMEOUT);
-
-        // No response came within the specified period of time. We forcibly terminate the connection.
-        onErrorOccurred(FROM_HERE, ErrorCode::SOCKET_TIMEOUT);
-    }
 }
 
 //--------------------------------------------------------------------------------------------------

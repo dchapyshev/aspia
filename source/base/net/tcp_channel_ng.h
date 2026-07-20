@@ -22,7 +22,6 @@
 #include <QQueue>
 
 #include <asio/ip/tcp.hpp>
-#include <asio/steady_timer.hpp>
 
 #include "base/scoped_qpointer.h"
 #include "base/shared_pointer.h"
@@ -70,6 +69,9 @@ public:
 
     qint64 pendingBytes() const final;
 
+    // Called by the channel owner about once per second.
+    void tick(const TimePoint& now) final;
+
 protected:
     friend class TcpServer;
     friend class RelayPeer;
@@ -103,6 +105,14 @@ private:
         KEEP_ALIVE_PING = 1
     };
 
+    // Keep-alive state machine driven by the owner through tick().
+    enum class KeepAliveState
+    {
+        INACTIVE,      // Channel is paused or not authenticated yet.
+        WAIT_INTERVAL, // Waiting for the idle interval to elapse before sending a PING.
+        WAIT_PONG      // PING sent; the PONG must arrive before the deadline.
+    };
+
     struct Header
     {
         quint8 type;
@@ -129,20 +139,19 @@ private:
     void doWrite();
     void doReadHeader();
     void doReadData();
-    void scheduleKeepAlivePing();
-    void scheduleKeepAlivePongTimeout();
+    void startKeepAliveInterval();
 
     SharedPointer<IoState> io_ { new IoState() };
     asio::io_context& io_context_;
     asio::ip::tcp::socket socket_;
     std::unique_ptr<asio::ip::tcp::resolver> resolver_;
 
-    asio::steady_timer keep_alive_timer_;
+    KeepAliveState keep_alive_state_ = KeepAliveState::INACTIVE;
+    TimePoint keep_alive_deadline_;
     QByteArray keep_alive_counter_;
-    // Set to true on any successfully received message; checked and cleared by the
-    // keep-alive timer callbacks. Lets us avoid sending PINGs / firing PONG timeouts when
-    // the peer is obviously alive due to incoming traffic, without rescheduling the
-    // timer on every message.
+    // Set to true on any successfully received message; checked and cleared when the
+    // idle interval elapses. Lets us avoid sending PINGs when the peer is obviously
+    // alive due to incoming traffic, without touching the deadline on every message.
     bool rx_since_last_check_ = false;
 
     bool connected_ = false;

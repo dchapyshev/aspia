@@ -21,7 +21,6 @@
 
 #include <QByteArray>
 #include <QQueue>
-#include <QTimer>
 
 #include <asio/ip/tcp.hpp>
 
@@ -70,6 +69,9 @@ public:
     bool setWriteBufferSize(int size) final;
 
     qint64 pendingBytes() const final;
+
+    // Called by the channel owner about once per second.
+    void tick(const TimePoint& now) final;
 
 protected:
     friend class TcpServerLegacy;
@@ -174,10 +176,12 @@ private:
         KEEP_ALIVE_PING = 1
     };
 
-    enum KeepAliveTimerType
+    // Keep-alive state machine driven by the owner through tick().
+    enum class KeepAliveState
     {
-        KEEP_ALIVE_TIMEOUT = 0,
-        KEEP_ALIVE_INTERVAL = 1
+        INACTIVE,      // Channel is not connected.
+        WAIT_INTERVAL, // Waiting for the interval to elapse before sending a PING.
+        WAIT_PONG      // PING sent; the PONG must arrive before the deadline.
     };
 
     struct ServiceHeader
@@ -217,7 +221,6 @@ private:
     void doReadServiceHeader();
     void doReadServiceData(size_t length);
 
-    void onKeepAliveTimer();
     void sendKeepAlive(quint8 flags, const void* data, size_t size);
 
     SharedPointer<IoState> io_ { new IoState() };
@@ -225,8 +228,8 @@ private:
     asio::ip::tcp::socket socket_;
     std::unique_ptr<asio::ip::tcp::resolver> resolver_;
 
-    QTimer* keep_alive_timer_ = nullptr;
-    KeepAliveTimerType keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
+    KeepAliveState keep_alive_state_ = KeepAliveState::INACTIVE;
+    TimePoint keep_alive_deadline_;
     QByteArray keep_alive_counter_;
 
     bool connected_ = false;
