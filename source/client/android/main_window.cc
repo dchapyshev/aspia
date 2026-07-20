@@ -28,6 +28,11 @@
 #include <optional>
 
 #include "base/gui_application.h"
+#include "base/logging.h"
+#include "base/peer/host_id.h"
+#include "client/application.h"
+#include "client/host_url.h"
+#include "client/router.h"
 #include "client/android/authorization_dialog.h"
 #include "client/android/chat_window.h"
 #include "client/android/desktop_window.h"
@@ -42,6 +47,7 @@
 #include "client/master_password.h"
 #include "common/android/app_bar.h"
 #include "common/android/bottom_navigation_bar.h"
+#include "common/android/message_dialog.h"
 #include "proto/peer.h"
 
 namespace {
@@ -49,6 +55,9 @@ namespace {
 // android.view.WindowManager.LayoutParams display cutout modes.
 constexpr int kCutoutModeDefault = 0;
 constexpr int kCutoutModeShortEdges = 1;
+
+// android.content.Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY.
+constexpr int kFlagActivityLaunchedFromHistory = 0x00100000;
 
 // Re-lock the app once it has spent at least this long in the background.
 constexpr int kLockTimeoutSec = 3 * 60;
@@ -90,6 +99,30 @@ void setDrawIntoCutout(bool enable)
                                 params.object());
         return QVariant();
     });
+}
+
+//--------------------------------------------------------------------------------------------------
+// Returns the aspia:// link the activity was launched with, if any. A relaunch from the recents
+// screen re-delivers the original intent - it must not restart the connection.
+QString startUrlFromIntent()
+{
+    QJniObject activity = QNativeInterface::QAndroidApplication::context();
+    if (!activity.isValid())
+        return QString();
+
+    QJniObject intent = activity.callObjectMethod("getIntent", "()Landroid/content/Intent;");
+    if (!intent.isValid())
+        return QString();
+
+    if (intent.callMethod<jint>("getFlags") & kFlagActivityLaunchedFromHistory)
+        return QString();
+
+    QJniObject data = intent.callObjectMethod("getDataString", "()Ljava/lang/String;");
+    if (!data.isValid())
+        return QString();
+
+    QString url = data.toString();
+    return HostUrl::isHostUrl(url) ? url : QString();
 }
 
 } // namespace
@@ -163,6 +196,8 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
 
     connect(GuiApplication::instance(), &QGuiApplication::applicationStateChanged,
             this, &AndroidMainWindow::onApplicationStateChanged);
+    connect(Application::instance(), &Application::sig_urlOpened,
+            this, &AndroidMainWindow::onUrlOpened);
 
     // The gate runs once the event loop is active so the window is laid out and the dialog scrim
     // covers it.
@@ -501,6 +536,97 @@ void AndroidMainWindow::onChatClosed()
 }
 
 //--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::connectToUrl(const QString& url)
+{
+    LOG(INFO) << "Connect to URL:" << url;
+
+    HostUrl host_url = HostUrl::fromString(url);
+    if (!host_url.isValid())
+    {
+        MessageDialog::info(this, tr("Connection by link"), tr("Invalid link."));
+        return;
+    }
+
+    // Only a single session is supported at a time.
+    if (desktop_ || file_transfer_ || chat_)
+    {
+        MessageDialog::info(this, tr("Connection by link"),
+                            tr("Another session is active. Close it and open the link again."));
+        return;
+    }
+
+    proto::peer::SessionType session_type = host_url.sessionType();
+    if (session_type != proto::peer::SESSION_TYPE_DESKTOP &&
+        session_type != proto::peer::SESSION_TYPE_FILE_TRANSFER &&
+        session_type != proto::peer::SESSION_TYPE_CHAT)
+    {
+        MessageDialog::info(this, tr("Connection by link"),
+                            tr("The session type from the link is not supported on this device."));
+        return;
+    }
+
+    if (host_url.isRouterHost())
+    {
+        if (!Database::instance().findRouter(host_url.routerId()).has_value())
+        {
+            MessageDialog::info(this, tr("Connection by link"),
+                tr("The router referenced by the link was not found in the address book."));
+            return;
+        }
+
+        // The credentials of a router host live in its address book record on the router, so
+        // fetch the record before connecting. If the router is not connected, connect right away
+        // and let the authorization dialog ask for the credentials.
+        Router* router = Router::instance(host_url.routerId());
+        if (router && router->status() == Router::Status::ONLINE)
+        {
+            qint64 router_id = host_url.routerId();
+            HostId host_id = host_url.hostId();
+
+            router->searchHosts(hostIdToString(host_id), this,
+                [this, router_id, host_id, session_type](const Router::HostList& list)
+            {
+                HostConfig host;
+                host.setRouterId(router_id);
+                host.setAddress(hostIdToString(host_id));
+
+                for (const Router::Host& entry : std::as_const(list.hosts))
+                {
+                    if (entry.host_id != host_id)
+                        continue;
+
+                    host.setName(entry.display_name.isEmpty() ? entry.computer_name :
+                                                                entry.display_name);
+                    host.setUsername(entry.user_name);
+                    host.setPassword(entry.password);
+                    break;
+                }
+
+                openSession(host, session_type);
+            });
+            return;
+        }
+
+        HostConfig host;
+        host.setRouterId(host_url.routerId());
+        host.setAddress(hostIdToString(host_url.hostId()));
+        openSession(host, session_type);
+    }
+    else
+    {
+        std::optional<HostConfig> host = Database::instance().findHost(host_url.entryId());
+        if (!host.has_value())
+        {
+            MessageDialog::info(this, tr("Connection by link"),
+                tr("The host referenced by the link was not found in the address book."));
+            return;
+        }
+
+        openSession(*host, session_type);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onApplicationStateChanged(Qt::ApplicationState state)
 {
     if (state == Qt::ApplicationActive)
@@ -520,6 +646,18 @@ void AndroidMainWindow::onApplicationStateChanged(Qt::ApplicationState state)
         // Leaving the foreground: remember when, ignoring the transitions caused by the lock prompt.
         background_since_ = QDateTime::currentDateTime();
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onUrlOpened(const QString& url)
+{
+    if (!unlocked_)
+    {
+        pending_url_ = url;
+        return;
+    }
+
+    connectToUrl(url);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -555,6 +693,14 @@ void AndroidMainWindow::onUnlocked()
 
     if (RemoteWidget* remote = qobject_cast<RemoteWidget*>(content_->widget(SECTION_REMOTE)))
         remote->reload();
+
+    unlocked_ = true;
+
+    // Open the link that started the application or arrived while the gate was on the screen.
+    QString url = pending_url_.isEmpty() ? startUrlFromIntent() : pending_url_;
+    pending_url_.clear();
+    if (!url.isEmpty())
+        connectToUrl(url);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -36,10 +36,27 @@
 #include <QFileOpenEvent>
 #endif // defined(Q_OS_MACOS)
 
+#if defined(Q_OS_ANDROID)
+#include <QJniEnvironment>
+#include <QJniObject>
+#endif // defined(Q_OS_ANDROID)
+
 namespace {
 
 const char kActivateWindow[] = "activate_window";
 const char kOpenUrl[] = "open_url:";
+
+#if defined(Q_OS_ANDROID)
+//--------------------------------------------------------------------------------------------------
+// Called by ClientActivity.onNewIntent on the Android UI thread when the running application is
+// asked to open an aspia:// link.
+void onNativeUrlOpened(JNIEnv* /* env */, jclass /* clazz */, jstring url)
+{
+    QString url_string = QJniObject(url).toString();
+    QMetaObject::invokeMethod(Application::instance(), "sig_urlOpened", Qt::QueuedConnection,
+                              Q_ARG(QString, url_string));
+}
+#endif // defined(Q_OS_ANDROID)
 
 } // namespace
 
@@ -86,6 +103,14 @@ Application::Application(int& argc, char* argv[])
 #if defined(Q_OS_WINDOWS)
     registerUrlHandler();
 #endif // defined(Q_OS_WINDOWS)
+
+#if defined(Q_OS_ANDROID)
+    QJniEnvironment jni;
+    const JNINativeMethod methods[] = {
+        { "nativeUrlOpened", "(Ljava/lang/String;)V", reinterpret_cast<void*>(onNativeUrlOpened) }};
+    if (!jni.registerNativeMethods("org/aspia/client/ClientActivity", methods, 1))
+        LOG(ERROR) << "Unable to register ClientActivity native methods";
+#endif // defined(Q_OS_ANDROID)
 }
 
 //--------------------------------------------------------------------------------------------------
