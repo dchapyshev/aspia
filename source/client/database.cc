@@ -78,6 +78,7 @@ RouterConfig readRouter(const SqlQuery& query)
     router.setEncryptedUsername(query.columnBlob(4));
     router.setEncryptedPassword(query.columnBlob(5));
     router.setEncryptedDeviceToken(query.columnBlob(6));
+    router.setGuid(query.columnText(7));
     return router;
 }
 
@@ -121,6 +122,7 @@ bool createTables(SqlDatabase& db)
                  "\"username\" BLOB DEFAULT X'',"
                  "\"password\" BLOB DEFAULT X'',"
                  "\"device_token\" BLOB DEFAULT X'',"
+                 "\"guid\" TEXT NOT NULL DEFAULT '',"
                  "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         LOG(ERROR) << "Unable to create routers table:" << db.lastError();
@@ -532,7 +534,7 @@ QList<RouterConfig> Database::routerList() const
     }
 
     SqlQuery query(db_, "SELECT id, name, address, session_type, username, password, "
-                        "device_token FROM routers");
+                        "device_token, guid FROM routers");
 
     QList<RouterConfig> routers;
     while (query.next())
@@ -557,14 +559,15 @@ bool Database::addRouter(RouterConfig& router)
     }
 
     SqlQuery query(db_, "INSERT INTO routers (id, name, address, session_type, username, password, "
-                        "device_token) "
-                        "VALUES (NULL, ?, ?, ?, ?, ?, ?)");
+                        "device_token, guid) "
+                        "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)");
     query.addBlob(router.encryptedDisplayName());
     query.addBlob(router.encryptedAddress());
     query.addInt64(static_cast<quint32>(router.sessionType()));
     query.addBlob(router.encryptedUsername());
     query.addBlob(router.encryptedPassword());
     query.addBlob(router.encryptedDeviceToken());
+    query.addText(router.guid());
 
     if (!query.exec())
     {
@@ -586,13 +589,14 @@ bool Database::modifyRouter(const RouterConfig& router)
     }
 
     SqlQuery query(db_, "UPDATE routers SET name=?, address=?, session_type=?, username=?, "
-                        "password=?, device_token=? WHERE id=?");
+                        "password=?, device_token=?, guid=? WHERE id=?");
     query.addBlob(router.encryptedDisplayName());
     query.addBlob(router.encryptedAddress());
     query.addInt64(static_cast<quint32>(router.sessionType()));
     query.addBlob(router.encryptedUsername());
     query.addBlob(router.encryptedPassword());
     query.addBlob(router.encryptedDeviceToken());
+    query.addText(router.guid());
     query.addInt64(router.routerId());
 
     if (!query.exec())
@@ -634,8 +638,8 @@ std::optional<RouterConfig> Database::findRouter(qint64 router_id) const
         return std::nullopt;
     }
 
-    SqlQuery query(db_, "SELECT id, name, address, session_type, username, password, device_token "
-                        "FROM routers WHERE id=?");
+    SqlQuery query(db_, "SELECT id, name, address, session_type, username, password, device_token, "
+                        "guid FROM routers WHERE id=?");
     query.addInt64(router_id);
 
     if (!query.next())

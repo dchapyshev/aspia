@@ -20,6 +20,7 @@
 
 #include <QUrl>
 #include <QUrlQuery>
+#include <QUuid>
 
 #include "proto/peer.h"
 
@@ -120,7 +121,7 @@ HostUrl HostUrl::fromString(const QString& str)
         return result;
 
     qint64 entry_id = -1;
-    qint64 router_id = -1;
+    QString router_guid;
     HostId host_id = kInvalidHostId;
 
     if (!entry.isEmpty())
@@ -131,9 +132,11 @@ HostUrl HostUrl::fromString(const QString& str)
     }
     else
     {
-        router_id = parseId(router);
-        if (router_id <= 0 || !isHostId(host))
+        // Canonicalize the GUID so it always compares equal to the cached form.
+        QUuid guid = QUuid::fromString(router);
+        if (guid.isNull() || !isHostId(host))
             return result;
+        router_guid = guid.toString(QUuid::WithoutBraces);
 
         host_id = stringToHostId(host);
         if (host_id == kInvalidHostId)
@@ -154,7 +157,7 @@ HostUrl HostUrl::fromString(const QString& str)
 
     result.valid_ = true;
     result.entry_id_ = entry_id;
-    result.router_id_ = router_id;
+    result.router_guid_ = router_guid;
     result.host_id_ = host_id;
     result.session_type_ = session_type;
     return result;
@@ -176,13 +179,13 @@ QString HostUrl::stringForEntry(qint64 entry_id, proto::peer::SessionType sessio
 
 //--------------------------------------------------------------------------------------------------
 // static
-QString HostUrl::stringForRouterHost(qint64 router_id, HostId host_id, proto::peer::SessionType session_type)
+QString HostUrl::stringForRouterHost(const QString& router_guid, HostId host_id, proto::peer::SessionType session_type)
 {
-    if (router_id <= 0 || host_id == kInvalidHostId)
+    if (router_guid.isEmpty() || host_id == kInvalidHostId)
         return QString();
 
     QUrlQuery query;
-    query.addQueryItem(kRouterParam, QString::number(router_id));
+    query.addQueryItem(kRouterParam, router_guid);
     query.addQueryItem(kHostParam, hostIdToString(host_id));
     query.addQueryItem(kSessionParam, QString::number(session_type));
 

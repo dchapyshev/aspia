@@ -29,12 +29,13 @@ enum SessionType : int;
 
 // Link to an address book record that can be opened from outside the application. The link
 // carries only record references, never addresses or credentials, so it is useless outside
-// the machine (or the router account) it was created on:
+// the machines where the referenced records exist:
 //   aspia://connect?d=ZT00MiZzPTE
-// The payload is a base64url-encoded query string ("e=42&s=1" or "r=3&h=123456789&s=1"),
-// where |e| is a local address book entry ID, |r| is a router record ID in the local
-// database, |h| is the record key in that router's address book and |s| is a
-// proto::peer::SessionType value.
+// The payload is a base64url-encoded query string ("e=42&s=1" or
+// "r=<router GUID>&h=123456789&s=1"), where |e| is a local address book entry ID, |r| is
+// the persistent router GUID (portable between machines, resolved against the GUIDs cached
+// in the local router records), |h| is the record key in that router's address book and |s|
+// is a proto::peer::SessionType value.
 class HostUrl final
 {
 public:
@@ -51,16 +52,16 @@ public:
     static QString stringForEntry(qint64 entry_id, proto::peer::SessionType session_type);
 
     // Builds a link to a host from a router address book.
-    static QString stringForRouterHost(qint64 router_id, HostId host_id, proto::peer::SessionType session_type);
+    static QString stringForRouterHost(const QString& router_guid, HostId host_id, proto::peer::SessionType session_type);
 
     bool isValid() const { return valid_; }
-    bool isRouterHost() const { return router_id_ > 0; }
+    bool isRouterHost() const { return !router_guid_.isEmpty(); }
 
     // Local address book entry ID. -1 for router links.
     qint64 entryId() const { return entry_id_; }
 
-    // Router record ID and host record key. -1 / kInvalidHostId for local links.
-    qint64 routerId() const { return router_id_; }
+    // Router GUID and host record key. Empty / kInvalidHostId for local links.
+    const QString& routerGuid() const { return router_guid_; }
     HostId hostId() const { return host_id_; }
 
     proto::peer::SessionType sessionType() const { return session_type_; }
@@ -68,7 +69,7 @@ public:
 private:
     bool valid_ = false;
     qint64 entry_id_ = -1;
-    qint64 router_id_ = -1;
+    QString router_guid_;
     HostId host_id_;
     proto::peer::SessionType session_type_;
 };

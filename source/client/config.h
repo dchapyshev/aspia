@@ -52,6 +52,9 @@ public:
     proto::router::SessionType sessionType() const { return session_type_; }
     void setSessionType(proto::router::SessionType type) { session_type_ = type; }
 
+    const QString& guid() const { return guid_; }
+    void setGuid(const QString& value) { guid_ = value; }
+
     QString displayName() const;
     void setDisplayName(const QString& value);
 
@@ -96,6 +99,7 @@ public:
 private:
     qint64 router_id_ = -1;
     proto::router::SessionType session_type_;
+    QString guid_;
     QByteArray encrypted_display_name_;
     QByteArray encrypted_address_;
     QByteArray encrypted_username_;

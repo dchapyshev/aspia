@@ -214,7 +214,18 @@ void MainWindow::connectToUrl(const QString& url)
 
     if (host_url.isRouterHost())
     {
-        if (!db.findRouter(host_url.routerId()).has_value())
+        qint64 router_id = -1;
+        QList<RouterConfig> routers = db.routerList();
+        for (const RouterConfig& router_config : std::as_const(routers))
+        {
+            if (router_config.guid() == host_url.routerGuid())
+            {
+                router_id = router_config.routerId();
+                break;
+            }
+        }
+
+        if (router_id <= 0)
         {
             MsgBox::warning(this,
                 tr("The router referenced by the link was not found in the address book."));
@@ -224,10 +235,9 @@ void MainWindow::connectToUrl(const QString& url)
         // The credentials of a router host live in its address book record on the router, so
         // fetch the record before connecting. If the router is not connected, connect right
         // away and let the authorization dialog ask for the credentials.
-        Router* router = Router::instance(host_url.routerId());
+        Router* router = Router::instance(router_id);
         if (router && router->status() == Router::Status::ONLINE)
         {
-            qint64 router_id = host_url.routerId();
             HostId host_id = host_url.hostId();
             proto::peer::SessionType session_type = host_url.sessionType();
 
@@ -255,7 +265,7 @@ void MainWindow::connectToUrl(const QString& url)
             return;
         }
 
-        host.setRouterId(host_url.routerId());
+        host.setRouterId(router_id);
         host.setAddress(hostIdToString(host_url.hostId()));
     }
     else

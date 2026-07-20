@@ -511,6 +511,14 @@ void Router::readUserKeys(const proto::router::UserKeys& user_keys)
         workspace_cryptors_.emplace(wk.workspace_id(), DataCryptor(CipherType::AES256_GCM, std::move(gk)));
     }
 
+    const QString router_guid = QString::fromStdString(user_keys.router_guid());
+    if (!router_guid.isEmpty() && router_guid != config_.guid())
+    {
+        config_.setGuid(router_guid);
+        if (!Database::instance().modifyRouter(config_))
+            LOG(WARNING) << "Failed to persist GUID for router" << config_.routerId();
+    }
+
     setStatus(Status::ONLINE);
 }
 

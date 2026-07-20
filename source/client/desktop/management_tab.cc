@@ -1936,9 +1936,15 @@ void ManagementTab::addCopyLinkMenu(QMenu& menu, const HostConfig& host)
         {
             QString url;
             if (host.id() > 0)
+            {
                 url = HostUrl::stringForEntry(host.id(), session_type);
+            }
             else if (host.routerId() > 0)
-                url = HostUrl::stringForRouterHost(host.routerId(), stringToHostId(host.address()), session_type);
+            {
+                std::optional<RouterConfig> router = Database::instance().findRouter(host.routerId());
+                if (router.has_value())
+                    url = HostUrl::stringForRouterHost(router->guid(), stringToHostId(host.address()), session_type);
+            }
 
             if (url.isEmpty())
             {
