@@ -28,6 +28,7 @@
 #include "base/version_constants.h"
 #include "base/crypto/random.h"
 #include "base/crypto/totp.h"
+#include "base/threading/worker.h"
 #include "proto/relay_peer.h"
 #include "proto/router.h"
 #include "proto/router_client.h"
@@ -65,6 +66,7 @@ Client::Client(TcpChannel* channel, QObject* parent)
     connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &Client::onTcpErrorOccurred);
     connect(tcp_channel_, &TcpChannel::sig_messageReceived, this, &Client::onTcpMessageReceived);
     connect(this, &Client::sig_started, this, &Client::onStarted);
+    connect(Worker::current(), &Worker::sig_tick, tcp_channel_, &TcpChannel::tick);
 
     CLOG(INFO) << "Ctor";
 }

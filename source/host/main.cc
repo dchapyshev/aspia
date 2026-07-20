@@ -296,6 +296,7 @@ int runService(int& argc, char* argv[])
     CoreApplication::setApplicationVersion(ASPIA_VERSION_STRING);
 
     CoreApplication application(argc, argv);
+    application.setTimerInterval(CoreApplication::Seconds(1));
 
     HostUtils::printDebugInfo();
 

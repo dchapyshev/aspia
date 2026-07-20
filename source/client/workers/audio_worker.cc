@@ -83,7 +83,7 @@ void AudioWorker::onStop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void AudioWorker::onTimer()
+void AudioWorker::onTimer(const TimePoint& /* now */)
 {
     emit sig_metrics(metrics_);
 }

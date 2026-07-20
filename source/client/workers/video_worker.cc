@@ -146,7 +146,7 @@ void VideoWorker::onStop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void VideoWorker::onTimer()
+void VideoWorker::onTimer(const TimePoint& now)
 {
     // The 1-second timer also winds down the force-reliable hold window; once it elapses, back the
     // transport off reliable mode (at most twice per session).
@@ -161,8 +161,6 @@ void VideoWorker::onTimer()
             sendForceReliable(false);
         }
     }
-
-    const TimePoint now = Clock::now();
 
     if (fps_time_ != TimePoint())
     {

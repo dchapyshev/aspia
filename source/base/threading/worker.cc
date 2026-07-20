@@ -64,8 +64,9 @@ void Worker::timerEvent(QTimerEvent* event)
 {
     if (event->timerId() == timer_id_)
     {
-        onTimer();
-        emit sig_tick(Clock::now());
+        const TimePoint now = Clock::now();
+        onTimer(now);
+        emit sig_tick(now);
     }
 }
 

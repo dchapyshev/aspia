@@ -112,15 +112,17 @@ void RouterWorker::onStop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWorker::onTimer()
+void RouterWorker::onTimer(const TimePoint& now)
 {
-    // One-second tick: retry every dropped connection whose countdown has elapsed.
     for (auto it = connections_.begin(); it != connections_.end(); ++it)
     {
-        if (it->channel || it->reconnect_countdown == 0)
+        if (it->channel)
+        {
+            it->channel->tick(now);
             continue;
+        }
 
-        if (--it->reconnect_countdown == 0)
+        if (it->reconnect_countdown != 0 && --it->reconnect_countdown == 0)
             startConnection(it.key());
     }
 }

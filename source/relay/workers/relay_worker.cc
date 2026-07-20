@@ -290,10 +290,8 @@ void RelayWorker::onStop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RelayWorker::onTimer()
+void RelayWorker::onTimer(const TimePoint& now)
 {
-    TimePoint now = Clock::now();
-
     if (now >= next_idle_check_)
     {
         next_idle_check_ = now + kIdleCheckInterval;

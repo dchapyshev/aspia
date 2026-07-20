@@ -19,6 +19,7 @@
 #include "router/host.h"
 
 #include "base/net/tcp_channel.h"
+#include "base/threading/worker.h"
 #include "router/workers/client_worker.h"
 
 namespace {
@@ -44,6 +45,7 @@ Host::Host(TcpChannel* channel, QObject* parent)
 
     connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &Host::onTcpErrorOccurred);
     connect(tcp_channel_, &TcpChannel::sig_messageReceived, this, &Host::onTcpMessageReceived);
+    connect(Worker::current(), &Worker::sig_tick, tcp_channel_, &TcpChannel::tick);
 }
 
 //--------------------------------------------------------------------------------------------------

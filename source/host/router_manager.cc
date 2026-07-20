@@ -20,6 +20,7 @@
 
 #include <QTimer>
 
+#include "base/core_application.h"
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/sys_info.h"
@@ -28,6 +29,7 @@
 #include "base/peer/client_authenticator.h"
 #include "base/peer/relay_peer_manager.h"
 #include "base/peer/server_authenticator.h"
+#include "base/threading/worker.h"
 #include "host/database.h"
 #include "host/host_storage.h"
 #include "proto/key_exchange.h"
@@ -365,6 +367,13 @@ void RouterManager::connectToRouter()
     connect(tcp_channel_, &TcpChannel::sig_authenticated, this, &RouterManager::onTcpReady);
     connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &RouterManager::onTcpErrorOccurred);
     connect(tcp_channel_, &TcpChannel::sig_messageReceived, this, &RouterManager::onTcpMessageReceived);
+
+    // The channel has no internal timers. Its keep-alive machinery is driven by the worker clock
+    // (mobile host) or by the application clock (desktop host service).
+    if (Worker* worker = Worker::current())
+        connect(worker, &Worker::sig_tick, tcp_channel_, &TcpChannel::tick);
+    else
+        connect(CoreApplication::instance(), &CoreApplication::sig_tick, tcp_channel_, &TcpChannel::tick);
 
     routerStateChanged(proto::user::RouterState::CONNECTING);
     tcp_channel_->connectTo(router_address_.host(), router_address_.port());

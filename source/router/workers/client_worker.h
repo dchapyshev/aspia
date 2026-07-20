@@ -55,7 +55,7 @@ protected:
     // Worker implementation.
     void onStart() final;
     void onStop() final;
-    void onTimer() final;
+    void onTimer(const TimePoint& now) final;
 
 private slots:
     void onNewConnection();
@@ -80,6 +80,7 @@ private:
 
     ScopedQPointer<TcpServer> server_;
     quint32 dirty_mask_ = 0;
+    TimePoint next_notify_time_;
     quint16 stun_port_ = 0;
 
     QList<Client*> clients_;

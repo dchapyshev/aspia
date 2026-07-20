@@ -79,7 +79,7 @@ void screenInteractiveChanged(JNIEnv* /* env */, jclass /* clazz */, jboolean in
 
 //--------------------------------------------------------------------------------------------------
 ServerWorker::ServerWorker()
-    : Worker(Thread::AsioDispatcher)
+    : Worker(Thread::AsioDispatcher, Seconds(1))
 {
     LOG(INFO) << "Ctor";
     qRegisterMetaType<QList<ClientInfo>>();

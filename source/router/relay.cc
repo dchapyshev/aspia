@@ -18,6 +18,7 @@
 
 #include "router/relay.h"
 
+#include "base/threading/worker.h"
 #include "router/shared_key_pool.h"
 
 namespace {
@@ -43,6 +44,7 @@ Relay::Relay(TcpChannel* channel, QObject* parent)
 
     connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &Relay::onTcpErrorOccurred);
     connect(tcp_channel_, &TcpChannel::sig_messageReceived, this, &Relay::onTcpMessageReceived);
+    connect(Worker::current(), &Worker::sig_tick, tcp_channel_, &TcpChannel::tick);
 
     CLOG(INFO) << "Ctor";
 }

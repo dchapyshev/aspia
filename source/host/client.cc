@@ -22,9 +22,11 @@
 
 #include <algorithm>
 
+#include "base/core_application.h"
 #include "base/location.h"
 #include "base/serialization.h"
 #include "base/net/udp_channel.h"
+#include "base/threading/worker.h"
 #include "host/udp_attempt.h"
 #include "proto/peer.h"
 
@@ -137,6 +139,13 @@ Client::Client(TcpChannel* tcp_channel, QObject* parent)
     {
         tcp_channel_->setPaused(false);
     });
+
+    // The channel has no internal timers. Its keep-alive machinery is driven by the worker clock
+    // (mobile host) or by the application clock (desktop host service).
+    if (Worker* worker = Worker::current())
+        connect(worker, &Worker::sig_tick, tcp_channel_, &TcpChannel::tick);
+    else
+        connect(CoreApplication::instance(), &CoreApplication::sig_tick, tcp_channel_, &TcpChannel::tick);
 
     connect(probe_timer_, &QTimer::timeout, this, [this]()
     {

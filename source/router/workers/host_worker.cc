@@ -35,6 +35,7 @@
 
 //--------------------------------------------------------------------------------------------------
 HostWorker::HostWorker()
+    : Worker(Thread::AsioDispatcher, Seconds(1))
 {
     LOG(INFO) << "Ctor";
 }

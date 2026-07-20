@@ -29,6 +29,7 @@
 
 //--------------------------------------------------------------------------------------------------
 RelayWorker::RelayWorker()
+    : Worker(Thread::AsioDispatcher, Seconds(1))
 {
     LOG(INFO) << "Ctor";
 }

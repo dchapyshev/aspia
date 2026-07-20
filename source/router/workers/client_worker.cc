@@ -36,9 +36,16 @@
 #include "router/workers/host_worker.h"
 #include "router/workers/relay_worker.h"
 
+namespace {
+
+// Accumulated NOTIFY_* bits are flushed to the connected sessions at this interval.
+const Worker::Seconds kNotifyInterval{ 5 };
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 ClientWorker::ClientWorker()
-    : Worker(Thread::AsioDispatcher, Seconds(5))
+    : Worker(Thread::AsioDispatcher, Seconds(1))
 {
     LOG(INFO) << "Ctor";
 }
@@ -141,8 +148,12 @@ void ClientWorker::onStop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWorker::onTimer()
+void ClientWorker::onTimer(const TimePoint& now)
 {
+    if (now < next_notify_time_)
+        return;
+    next_notify_time_ = now + kNotifyInterval;
+
     if (dirty_mask_ == 0)
         return;
 

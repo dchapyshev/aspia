@@ -162,8 +162,11 @@ void NetworkWorker::onStop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void NetworkWorker::onTimer()
+void NetworkWorker::onTimer(const TimePoint& now)
 {
+    if (tcp_channel_)
+        tcp_channel_->tick(now);
+
     if (!session_ready_)
         return;
 

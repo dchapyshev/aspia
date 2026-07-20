@@ -44,6 +44,7 @@ constexpr quint32 kMaxPeerCount = 1000;
 
 //--------------------------------------------------------------------------------------------------
 RouterWorker::RouterWorker()
+    : Worker(Thread::AsioDispatcher, Seconds(1))
 {
     LOG(INFO) << "Ctor";
 }
@@ -146,6 +147,13 @@ void RouterWorker::onStart()
 void RouterWorker::onStop()
 {
     tcp_channel_.reset();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWorker::onTimer(const TimePoint& now)
+{
+    if (tcp_channel_)
+        tcp_channel_->tick(now);
 }
 
 //--------------------------------------------------------------------------------------------------

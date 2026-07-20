@@ -110,8 +110,9 @@ protected:
     virtual void onStop() = 0;
 
     // Called on the worker thread at the interval passed to the constructor (only if it was
-    // non-zero). The default does nothing.
-    virtual void onTimer() { /* Nothing */ }
+    // non-zero). |now| is the current tick timepoint, shared with sig_tick(). The default does
+    // nothing.
+    virtual void onTimer(const TimePoint& /* now */) { /* Nothing */ }
 
     // QObject implementation.
     void timerEvent(QTimerEvent* event) final;
