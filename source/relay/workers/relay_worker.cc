@@ -292,6 +292,25 @@ void RelayWorker::onStop()
 //--------------------------------------------------------------------------------------------------
 void RelayWorker::onTimer(const TimePoint& now)
 {
+    // Pending sessions have a short handshake deadline (seconds), so sweep them on every tick rather
+    // than on the coarse idle-check interval used for active sessions below.
+    for (auto it = pending_sessions_.begin(); it != pending_sessions_.end();)
+    {
+        PendingSession* session = *it;
+        if (session->isExpired(now))
+        {
+            LOG(INFO) << "Pending session timed out:" << session->address();
+            session->disconnect();
+            session->deleteLater();
+
+            it = pending_sessions_.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+
     if (now >= next_idle_check_)
     {
         next_idle_check_ = now + kIdleCheckInterval;

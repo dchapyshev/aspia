@@ -19,7 +19,6 @@
 #include "relay/pending_session.h"
 
 #include <QtEndian>
-#include <QTimer>
 
 #include <asio/read.hpp>
 
@@ -42,15 +41,8 @@ constexpr quint32 kMaxMessageSize = 16 * 1024; // 16 KB
 //--------------------------------------------------------------------------------------------------
 PendingSession::PendingSession(asio::ip::tcp::socket&& socket, QObject* parent)
     : QObject(parent),
-      timer_(new QTimer(this)),
       socket_(std::move(socket))
 {
-    timer_->setSingleShot(true);
-    connect(timer_, &QTimer::timeout, this, [this]()
-    {
-        onErrorOccurred(FROM_HERE, std::error_code());
-    });
-
     try
     {
         std::error_code error_code;
@@ -81,7 +73,6 @@ PendingSession::~PendingSession()
     std::error_code ignored_code;
     socket_.cancel(ignored_code);
     socket_.close(ignored_code);
-    timer_->stop();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -97,7 +88,7 @@ void PendingSession::start()
     if (error_code)
         CLOG(ERROR) << "Failed to disable Nagle's algorithm:" << error_code;
 
-    timer_->start(kHandshakeTimeout);
+    deadline_ = start_time_ + kHandshakeTimeout;
     PendingSession::doReadMessage(this);
 }
 
@@ -142,6 +133,12 @@ std::chrono::seconds PendingSession::duration(const TimePoint& now) const
 quint32 PendingSession::keyId() const
 {
     return key_id_;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool PendingSession::isExpired(const TimePoint& now) const
+{
+    return now >= deadline_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -221,17 +218,16 @@ void PendingSession::onMessage()
     }
 
     // Handshake received: the peer has presented its credentials and may now legitimately wait for
-    // its partner. Move the deadline to the REMAINING lifetime budget (measured from connect), not a
+    // its partner. Move the deadline to the total lifetime budget (measured from connect), not a
     // fresh window, so total slot occupancy never exceeds kTotalTimeout.
-    const auto remaining = std::chrono::duration_cast<std::chrono::milliseconds>(
-        kTotalTimeout - (Clock::now() - start_time_));
-    if (remaining <= std::chrono::milliseconds(0))
+    deadline_ = start_time_ + kTotalTimeout;
+
+    if (Clock::now() >= deadline_)
     {
         // The lifetime budget is already spent.
         onErrorOccurred(FROM_HERE, std::error_code());
         return;
     }
 
-    timer_->start(remaining);
     emit sig_ready(message);
 }

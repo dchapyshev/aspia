@@ -28,7 +28,6 @@
 #include "base/shared_pointer.h"
 
 class Location;
-class QTimer;
 
 namespace proto::relay {
 class PeerToRelay;
@@ -63,6 +62,10 @@ public:
     std::chrono::seconds duration(const TimePoint& now) const;
     quint32 keyId() const;
 
+    // Returns true if the session has passed its deadline (handshake or total-lifetime budget). The
+    // session has no internal timer; the owner drives the check from its clock.
+    bool isExpired(const TimePoint& now) const;
+
 signals:
     // Called when received authentication data from a peer.
     void sig_ready(const proto::relay::PeerToRelay& message);
@@ -86,7 +89,11 @@ private:
 
     QString address_;
     TimePoint start_time_;
-    QTimer* timer_ = nullptr;
+
+    // Absolute deadline for the current phase: start_time_ + handshake timeout before the handshake,
+    // extended to start_time_ + total-lifetime budget once it arrives.
+    TimePoint deadline_;
+
     asio::ip::tcp::socket socket_;
 
     QByteArray secret_;
