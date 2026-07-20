@@ -38,7 +38,6 @@ class UdpReply;
 } // namespace proto::peer
 
 class Location;
-class QTimer;
 class UdpAttempt;
 class UdpChannel;
 
@@ -105,15 +104,16 @@ protected:
 
     bool isFinished() const { return finished_emitted_; }
 
-private slots:
-    void onTcpErrorOccurred(TcpChannel::ErrorCode error_code);
-    void onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer);
-
-private:
     using Clock = std::chrono::steady_clock;
     using TimePoint = std::chrono::time_point<Clock>;
     using Milliseconds = std::chrono::milliseconds;
 
+private slots:
+    void onTcpErrorOccurred(TcpChannel::ErrorCode error_code);
+    void onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer);
+    void onTick(const TimePoint& now);
+
+private:
     void connectToUdp();
     void addAndStart(UdpAttempt* attempt);
     UdpAttempt* findAttempt(quint32 request_id);
@@ -155,7 +155,8 @@ private:
         qint64 bandwidth = 0;
     };
 
-    QTimer* probe_timer_ = nullptr;
+    // Deadline of the next bandwidth probe train; probing is inactive while unset (see onTick()).
+    TimePoint next_probe_time_;
     TimePoint last_send_time_;
 
     // Set when the peer's first message arrives; no probe train is sent before that (see

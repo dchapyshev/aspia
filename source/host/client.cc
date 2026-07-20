@@ -125,8 +125,7 @@ qint64 bandwidthFromTrainAck(const proto::peer::BandwidthProbeAck& ack)
 //--------------------------------------------------------------------------------------------------
 Client::Client(TcpChannel* tcp_channel, QObject* parent)
     : QObject(parent),
-      tcp_channel_(tcp_channel),
-      probe_timer_(new QTimer(this))
+      tcp_channel_(tcp_channel)
 {
     CLOG(INFO) << "Ctor";
     CCHECK(tcp_channel_);
@@ -140,48 +139,12 @@ Client::Client(TcpChannel* tcp_channel, QObject* parent)
         tcp_channel_->setPaused(false);
     });
 
-    // The channel has no internal timers. Its keep-alive machinery is driven by the worker clock
-    // (mobile host) or by the application clock (desktop host service).
+    // Single per-thread clock: the worker clock (mobile host) or the application clock (desktop
+    // host service) drives the channel keep-alive and the bandwidth probing (see onTick()).
     if (Worker* worker = Worker::current())
-        connect(worker, &Worker::sig_tick, tcp_channel_, &TcpChannel::tick);
+        connect(worker, &Worker::sig_tick, this, &Client::onTick);
     else
-        connect(CoreApplication::instance(), &CoreApplication::sig_tick, tcp_channel_, &TcpChannel::tick);
-
-    connect(probe_timer_, &QTimer::timeout, this, [this]()
-    {
-        if (!peer_ready_)
-            return;
-
-        TimePoint current_time = Clock::now();
-
-        // A train whose ack never came (lost probes on UDP, a client that went away mid-measurement)
-        // must not block probing forever.
-        auto expireProbe = [&current_time](BandwidthProbe& probe)
-        {
-            if (!probe.pending)
-                return;
-
-            auto age = std::chrono::duration_cast<Milliseconds>(current_time - probe.send_time);
-            if (age.count() >= kProbeIntervalMs)
-                probe.pending = false;
-        };
-        expireProbe(tcp_probe_);
-        expireProbe(udp_probe_);
-
-        // Do not add probe bytes to a queue that is already backed up - it would only add to the
-        // lag the queue represents, and the saturation feedback is measuring the capacity there
-        // anyway.
-        if (excessPendingBytes() > kSaturatedPendingBytes)
-            return;
-
-        if (udp_state_ == UdpState::READY)
-        {
-            sendUdpBandwidthProbe(current_time);
-            return;
-        }
-
-        sendTcpBandwidthProbe(current_time);
-    });
+        connect(CoreApplication::instance(), &CoreApplication::sig_tick, this, &Client::onTick);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -379,6 +342,48 @@ void Client::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffe
         onReceiveRate(message.receive_rate());
     else
         CLOG(WARNING) << "Unhandled control message";
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::onTick(const TimePoint& now)
+{
+    tcp_channel_->tick(now);
+
+    // Bandwidth probing is inactive until startBandwidthProbing() arms the deadline.
+    if (next_probe_time_ == TimePoint() || now < next_probe_time_)
+        return;
+    next_probe_time_ = now + Milliseconds(kProbeIntervalMs);
+
+    if (!peer_ready_)
+        return;
+
+    // A train whose ack never came (lost probes on UDP, a client that went away mid-measurement)
+    // must not block probing forever.
+    auto expireProbe = [&now](BandwidthProbe& probe)
+    {
+        if (!probe.pending)
+            return;
+
+        auto age = std::chrono::duration_cast<Milliseconds>(now - probe.send_time);
+        if (age.count() >= kProbeIntervalMs)
+            probe.pending = false;
+    };
+    expireProbe(tcp_probe_);
+    expireProbe(udp_probe_);
+
+    // Do not add probe bytes to a queue that is already backed up - it would only add to the
+    // lag the queue represents, and the saturation feedback is measuring the capacity there
+    // anyway.
+    if (excessPendingBytes() > kSaturatedPendingBytes)
+        return;
+
+    if (udp_state_ == UdpState::READY)
+    {
+        sendUdpBandwidthProbe(now);
+        return;
+    }
+
+    sendTcpBandwidthProbe(now);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -588,7 +593,7 @@ void Client::readUdpReply(const proto::peer::UdpReply& reply)
 void Client::startBandwidthProbing()
 {
     last_send_time_ = TimePoint();
-    probe_timer_->start(kProbeIntervalMs);
+    next_probe_time_ = Clock::now() + Milliseconds(kProbeIntervalMs);
 }
 
 //--------------------------------------------------------------------------------------------------
