@@ -19,7 +19,6 @@
 #include "host/desktop_client.h"
 
 #include <QFileInfo>
-#include <QTimer>
 
 #include "base/core_application.h"
 #include "base/logging.h"
@@ -47,8 +46,7 @@
 //--------------------------------------------------------------------------------------------------
 DesktopClient::DesktopClient(TcpChannel* tcp_channel, QObject* parent)
     : Client(tcp_channel, parent),
-      dettach_time_(QTime::currentTime()),
-      fake_capture_timer_(new QTimer(this))
+      dettach_time_(QTime::currentTime())
 {
     CLOG(INFO) << "Ctor";
 
@@ -57,34 +55,6 @@ DesktopClient::DesktopClient(TcpChannel* tcp_channel, QObject* parent)
             this, &DesktopClient::sendSessionList, Qt::QueuedConnection);
 #endif // defined(Q_OS_WINDOWS)
 
-    connect(fake_capture_timer_, &QTimer::timeout, this, [this]()
-    {
-        if (dettach_time_.secsTo(QTime::currentTime()) > 15)
-        {
-            CLOG(WARNING) << "Timeout when desktop client starting";
-            finish();
-            return;
-        }
-
-        proto::video::HostToClient message;
-        proto::video::Packet* packet = message.mutable_packet();
-        packet->set_error_code(proto::video::ERROR_CODE_TEMPORARY);
-        send(proto::desktop::CHANNEL_ID_VIDEO, serialize(message));
-    });
-
-    fake_capture_timer_->setInterval(std::chrono::milliseconds(30));
-    fake_capture_timer_->start();
-
-    // Once the client is finished it must not keep working: the object lives until the deferred
-    // delete runs, and continued work could call finish() again (now a no-op but still wasteful)
-    // for a client already removed from the service list. The overflow check (onTimer) guards on
-    // isFinished(); the fake-capture timer is stopped here.
-    connect(this, &Client::sig_finished, this, [this]()
-    {
-        fake_capture_timer_->stop();
-    });
-
-    // The overflow check runs on the shared clock via onTimer() instead of a dedicated timer.
     overflow_detection_enabled_ = !qEnvironmentVariableIsSet("ASPIA_NO_OVERFLOW_DETECTION");
     if (overflow_detection_enabled_)
         CLOG(INFO) << "Overflow detection enabled";
@@ -154,7 +124,6 @@ void DesktopClient::dettach()
     }
 
     dettach_time_ = QTime::currentTime();
-    fake_capture_timer_->start();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -284,7 +253,25 @@ void DesktopClient::onTimer(const TimePoint& now)
 {
     Client::onTimer(now);
 
-    if (isFinished() || !overflow_detection_enabled_)
+    if (isFinished())
+        return;
+
+    if (!ipc_channel_)
+    {
+        if (dettach_time_.secsTo(QTime::currentTime()) > 15)
+        {
+            CLOG(WARNING) << "Timeout when desktop client starting";
+            finish();
+            return;
+        }
+
+        proto::video::HostToClient message;
+        proto::video::Packet* packet = message.mutable_packet();
+        packet->set_error_code(proto::video::ERROR_CODE_TEMPORARY);
+        send(proto::desktop::CHANNEL_ID_VIDEO, serialize(message));
+    }
+
+    if (!overflow_detection_enabled_)
         return;
 
     // Byte thresholds: an absolute backstop that fires regardless of the bandwidth estimate. They
@@ -389,7 +376,6 @@ void DesktopClient::onIpcNewConnection()
         sendIpcSessionMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
     }
 
-    fake_capture_timer_->stop();
     ipc_channel_->setPaused(false);
 }
 

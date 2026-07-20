@@ -41,7 +41,6 @@ class HostToClient;
 
 class IpcChannel;
 class IpcServer;
-class QTimer;
 class TaskManager;
 
 class DesktopClient final : public Client
@@ -87,7 +86,6 @@ private:
     QTime dettach_time_;
     ScopedQPointer<IpcServer> ipc_server_;
     ScopedQPointer<IpcChannel> ipc_channel_;
-    QTimer* fake_capture_timer_ = nullptr;
 
     bool overflow_detection_enabled_ = false;
     proto::desktop::Overflow::State last_state_ = proto::desktop::Overflow::STATE_NONE;
