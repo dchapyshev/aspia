@@ -140,11 +140,11 @@ Client::Client(TcpChannel* tcp_channel, QObject* parent)
     });
 
     // Single per-thread clock: the worker clock (mobile host) or the application clock (desktop
-    // host service) drives the channel keep-alive and the bandwidth probing (see onTick()).
+    // host service) drives the periodic work (see onTimer()).
     if (Worker* worker = Worker::current())
-        connect(worker, &Worker::sig_tick, this, &Client::onTick);
+        connect(worker, &Worker::sig_tick, this, &Client::onTimer);
     else
-        connect(CoreApplication::instance(), &CoreApplication::sig_tick, this, &Client::onTick);
+        connect(CoreApplication::instance(), &CoreApplication::sig_tick, this, &Client::onTimer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -298,6 +298,48 @@ void Client::send(quint8 channel_id, const QByteArray& buffer, bool reliable)
 }
 
 //--------------------------------------------------------------------------------------------------
+void Client::onTimer(const TimePoint& now)
+{
+    tcp_channel_->tick(now);
+
+    // Bandwidth probing is inactive until startBandwidthProbing() arms the deadline.
+    if (next_probe_time_ == TimePoint() || now < next_probe_time_)
+        return;
+    next_probe_time_ = now + Milliseconds(kProbeIntervalMs);
+
+    if (!peer_ready_)
+        return;
+
+    // A train whose ack never came (lost probes on UDP, a client that went away mid-measurement)
+    // must not block probing forever.
+    auto expireProbe = [&now](BandwidthProbe& probe)
+    {
+        if (!probe.pending)
+            return;
+
+        auto age = std::chrono::duration_cast<Milliseconds>(now - probe.send_time);
+        if (age.count() >= kProbeIntervalMs)
+            probe.pending = false;
+    };
+    expireProbe(tcp_probe_);
+    expireProbe(udp_probe_);
+
+    // Do not add probe bytes to a queue that is already backed up - it would only add to the
+    // lag the queue represents, and the saturation feedback is measuring the capacity there
+    // anyway.
+    if (excessPendingBytes() > kSaturatedPendingBytes)
+        return;
+
+    if (udp_state_ == UdpState::READY)
+    {
+        sendUdpBandwidthProbe(now);
+        return;
+    }
+
+    sendTcpBandwidthProbe(now);
+}
+
+//--------------------------------------------------------------------------------------------------
 void Client::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
 {
     CLOG(ERROR) << "TCP error:" << error_code;
@@ -342,48 +384,6 @@ void Client::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffe
         onReceiveRate(message.receive_rate());
     else
         CLOG(WARNING) << "Unhandled control message";
-}
-
-//--------------------------------------------------------------------------------------------------
-void Client::onTick(const TimePoint& now)
-{
-    tcp_channel_->tick(now);
-
-    // Bandwidth probing is inactive until startBandwidthProbing() arms the deadline.
-    if (next_probe_time_ == TimePoint() || now < next_probe_time_)
-        return;
-    next_probe_time_ = now + Milliseconds(kProbeIntervalMs);
-
-    if (!peer_ready_)
-        return;
-
-    // A train whose ack never came (lost probes on UDP, a client that went away mid-measurement)
-    // must not block probing forever.
-    auto expireProbe = [&now](BandwidthProbe& probe)
-    {
-        if (!probe.pending)
-            return;
-
-        auto age = std::chrono::duration_cast<Milliseconds>(now - probe.send_time);
-        if (age.count() >= kProbeIntervalMs)
-            probe.pending = false;
-    };
-    expireProbe(tcp_probe_);
-    expireProbe(udp_probe_);
-
-    // Do not add probe bytes to a queue that is already backed up - it would only add to the
-    // lag the queue represents, and the saturation feedback is measuring the capacity there
-    // anyway.
-    if (excessPendingBytes() > kSaturatedPendingBytes)
-        return;
-
-    if (udp_state_ == UdpState::READY)
-    {
-        sendUdpBandwidthProbe(now);
-        return;
-    }
-
-    sendTcpBandwidthProbe(now);
 }
 
 //--------------------------------------------------------------------------------------------------

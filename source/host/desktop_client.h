@@ -67,13 +67,13 @@ protected:
     void onStart() final;
     void onMessage(quint8 channel_id, const QByteArray& buffer) final;
     void onBandwidthChanged(qint64 bandwidth) final;
+    void onTimer(const TimePoint& now) final;
 
 private slots:
     void onIpcNewConnection();
     void onIpcErrorOccurred();
     void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer, bool reliable);
     void onIpcDisconnected();
-    void onOverflowCheck();
     void onTaskManagerMessage(const proto::task_manager::HostToClient& message);
 
 private:
@@ -88,8 +88,8 @@ private:
     ScopedQPointer<IpcServer> ipc_server_;
     ScopedQPointer<IpcChannel> ipc_channel_;
     QTimer* fake_capture_timer_ = nullptr;
-    QTimer* overflow_timer_ = nullptr;
 
+    bool overflow_detection_enabled_ = false;
     proto::desktop::Overflow::State last_state_ = proto::desktop::Overflow::STATE_NONE;
     std::optional<proto::control::Capabilities> capabilities_;
     std::optional<proto::control::Config> config_;

@@ -96,22 +96,22 @@ signals:
 protected:
     LOG_DECLARE_CONTEXT(Client);
 
+    using Clock = std::chrono::steady_clock;
+    using TimePoint = std::chrono::time_point<Clock>;
+    using Milliseconds = std::chrono::milliseconds;
+
     void send(quint8 channel_id, const QByteArray& buffer, bool reliable = true);
 
     virtual void onStart() = 0;
     virtual void onMessage(quint8 channel_id, const QByteArray& buffer) = 0;
     virtual void onBandwidthChanged(qint64 bandwidth) { /* Nothing */ };
+    virtual void onTimer(const TimePoint& now);
 
     bool isFinished() const { return finished_emitted_; }
-
-    using Clock = std::chrono::steady_clock;
-    using TimePoint = std::chrono::time_point<Clock>;
-    using Milliseconds = std::chrono::milliseconds;
 
 private slots:
     void onTcpErrorOccurred(TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer);
-    void onTick(const TimePoint& now);
 
 private:
     void connectToUdp();

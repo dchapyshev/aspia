@@ -48,8 +48,7 @@
 DesktopClient::DesktopClient(TcpChannel* tcp_channel, QObject* parent)
     : Client(tcp_channel, parent),
       dettach_time_(QTime::currentTime()),
-      fake_capture_timer_(new QTimer(this)),
-      overflow_timer_(new QTimer(this))
+      fake_capture_timer_(new QTimer(this))
 {
     CLOG(INFO) << "Ctor";
 
@@ -76,23 +75,19 @@ DesktopClient::DesktopClient(TcpChannel* tcp_channel, QObject* parent)
     fake_capture_timer_->setInterval(std::chrono::milliseconds(30));
     fake_capture_timer_->start();
 
-    // Once the client is finished it must not tick its timers again: the object lives until the deferred
-    // delete runs, and a live timer could keep doing work (or call finish() again, which is now a no-op
-    // but still wasteful) for a client already removed from the service list.
+    // Once the client is finished it must not keep working: the object lives until the deferred
+    // delete runs, and continued work could call finish() again (now a no-op but still wasteful)
+    // for a client already removed from the service list. The overflow check (onTimer) guards on
+    // isFinished(); the fake-capture timer is stopped here.
     connect(this, &Client::sig_finished, this, [this]()
     {
         fake_capture_timer_->stop();
-        overflow_timer_->stop();
     });
 
-    connect(overflow_timer_, &QTimer::timeout, this, &DesktopClient::onOverflowCheck);
-    overflow_timer_->setInterval(std::chrono::milliseconds(1000));
-
-    if (!qEnvironmentVariableIsSet("ASPIA_NO_OVERFLOW_DETECTION"))
-    {
+    // The overflow check runs on the shared clock via onTimer() instead of a dedicated timer.
+    overflow_detection_enabled_ = !qEnvironmentVariableIsSet("ASPIA_NO_OVERFLOW_DETECTION");
+    if (overflow_detection_enabled_)
         CLOG(INFO) << "Overflow detection enabled";
-        overflow_timer_->start();
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -285,6 +280,59 @@ void DesktopClient::onBandwidthChanged(qint64 bandwidth)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopClient::onTimer(const TimePoint& now)
+{
+    Client::onTimer(now);
+
+    if (isFinished() || !overflow_detection_enabled_)
+        return;
+
+    // Byte thresholds: an absolute backstop that fires regardless of the bandwidth estimate. They
+    // bound the damage when the estimate is too optimistic - an overestimated link would otherwise
+    // be allowed to queue tens of megabytes before the drain-time brake below trips.
+    static const qint64 kCriticalPendingBytes = 1 * 1024 * 1024; // 1 MB
+    static const qint64 kWarningPendingBytes = 512 * 1024; // 512 kB
+
+    // Drain-time thresholds: how long the queued data would take to go out at the estimated link
+    // rate. They trip much earlier than the byte backstop on slow links, where a fixed byte count
+    // would mean seconds of added latency before any throttling starts.
+    static const qint64 kCriticalDrainTimeMs = 1000;
+    static const qint64 kWarningDrainTimeMs = 300;
+
+    // The excess over the path's normal in-flight window; a healthy long-RTT UDP link would trip
+    // the thresholds constantly on the raw value.
+    proto::desktop::Overflow::State state = proto::desktop::Overflow::STATE_NONE;
+    qint64 pending = excessPendingBytes();
+    const qint64 estimated_bandwidth = bandwidth();
+
+    if (pending > kCriticalPendingBytes)
+        state = proto::desktop::Overflow::STATE_CRITICAL;
+    else if (pending > kWarningPendingBytes)
+        state = proto::desktop::Overflow::STATE_WARNING;
+
+    if (estimated_bandwidth > 0 && state != proto::desktop::Overflow::STATE_CRITICAL)
+    {
+        const qint64 drain_time_ms = pending * 1000 / estimated_bandwidth;
+
+        if (drain_time_ms > kCriticalDrainTimeMs)
+            state = proto::desktop::Overflow::STATE_CRITICAL;
+        else if (drain_time_ms > kWarningDrainTimeMs && state == proto::desktop::Overflow::STATE_NONE)
+            state = proto::desktop::Overflow::STATE_WARNING;
+    }
+
+    if (state != last_state_)
+    {
+        CLOG(INFO) << "Overflow state:" << state << "pending:" << pending;
+        last_state_ = state;
+    }
+
+    proto::desktop::ServiceToAgentClient message;
+    proto::desktop::Overflow* overflow = message.mutable_overflow();
+    overflow->set_state(state);
+    sendIpcServiceMessage(serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopClient::onIpcNewConnection()
 {
     CCHECK(ipc_server_);
@@ -373,54 +421,6 @@ void DesktopClient::onIpcDisconnected()
 
     CLOG(INFO) << "IPC channel disconnected";
     dettach();
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopClient::onOverflowCheck()
-{
-    // Byte thresholds: an absolute backstop that fires regardless of the bandwidth estimate. They
-    // bound the damage when the estimate is too optimistic - an overestimated link would otherwise
-    // be allowed to queue tens of megabytes before the drain-time brake below trips.
-    static const qint64 kCriticalPendingBytes = 1 * 1024 * 1024; // 1 MB
-    static const qint64 kWarningPendingBytes = 512 * 1024; // 512 kB
-
-    // Drain-time thresholds: how long the queued data would take to go out at the estimated link
-    // rate. They trip much earlier than the byte backstop on slow links, where a fixed byte count
-    // would mean seconds of added latency before any throttling starts.
-    static const qint64 kCriticalDrainTimeMs = 1000;
-    static const qint64 kWarningDrainTimeMs = 300;
-
-    // The excess over the path's normal in-flight window; a healthy long-RTT UDP link would trip
-    // the thresholds constantly on the raw value.
-    proto::desktop::Overflow::State state = proto::desktop::Overflow::STATE_NONE;
-    qint64 pending = excessPendingBytes();
-    const qint64 estimated_bandwidth = bandwidth();
-
-    if (pending > kCriticalPendingBytes)
-        state = proto::desktop::Overflow::STATE_CRITICAL;
-    else if (pending > kWarningPendingBytes)
-        state = proto::desktop::Overflow::STATE_WARNING;
-
-    if (estimated_bandwidth > 0 && state != proto::desktop::Overflow::STATE_CRITICAL)
-    {
-        const qint64 drain_time_ms = pending * 1000 / estimated_bandwidth;
-
-        if (drain_time_ms > kCriticalDrainTimeMs)
-            state = proto::desktop::Overflow::STATE_CRITICAL;
-        else if (drain_time_ms > kWarningDrainTimeMs && state == proto::desktop::Overflow::STATE_NONE)
-            state = proto::desktop::Overflow::STATE_WARNING;
-    }
-
-    if (state != last_state_)
-    {
-        CLOG(INFO) << "Overflow state:" << state << "pending:" << pending;
-        last_state_ = state;
-    }
-
-    proto::desktop::ServiceToAgentClient message;
-    proto::desktop::Overflow* overflow = message.mutable_overflow();
-    overflow->set_state(state);
-    sendIpcServiceMessage(serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
