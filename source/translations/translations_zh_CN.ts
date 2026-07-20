@@ -857,54 +857,59 @@ Routers added: %4</source>
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client/main.cc" line="159"/>
+        <location filename="../client/main.cc" line="185"/>
         <source>Set Master Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="161"/>
+        <location filename="../client/main.cc" line="187"/>
         <source>Set a master password required to unlock the application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="169"/>
+        <location filename="../client/main.cc" line="195"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation type="unfinished">您输入的密码不符合安全要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="171"/>
+        <location filename="../client/main.cc" line="197"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform>密码必须包含大小写字符、数字，并且不得少于 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="175"/>
+        <location filename="../client/main.cc" line="201"/>
         <source>Do you want to enter a different password?</source>
         <translation type="unfinished">您想输入其他密码吗？</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="185"/>
+        <location filename="../client/main.cc" line="211"/>
         <source>Unable to set master password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="133"/>
+        <location filename="../client/main.cc" line="159"/>
         <source>Unlock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="135"/>
+        <location filename="../client/main.cc" line="120"/>
+        <source>An aspia:// link to connect to a host.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="161"/>
         <source>Enter the master password to unlock the application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="151"/>
+        <location filename="../client/main.cc" line="177"/>
         <source>Invalid master password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="114"/>
+        <location filename="../client/main.cc" line="116"/>
         <source>Aspia Client</source>
         <translation>Aspia 客户端</translation>
     </message>
@@ -1581,97 +1586,97 @@ Password: %2</source>
         <translation type="unfinished">电源控制</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="252"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="256"/>
         <source>Shutdown</source>
         <translation type="unfinished">关机</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="257"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="265"/>
         <source>Reboot</source>
         <translation type="unfinished">重启</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="262"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="274"/>
         <source>Logoff</source>
         <translation type="unfinished">注销</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="267"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="283"/>
         <source>Lock</source>
         <translation type="unfinished">锁定</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="276"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="292"/>
         <source>System Information</source>
         <translation type="unfinished">系统信息</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="285"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="301"/>
         <source>Close</source>
         <translation type="unfinished">关闭</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="288"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="304"/>
         <source>Close session</source>
         <translation type="unfinished">关闭会话</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="347"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="363"/>
         <source>Fit window</source>
         <translation type="unfinished">安装窗口</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="356"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="372"/>
         <source>Minimize</source>
         <translation type="unfinished">最小化</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="359"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="375"/>
         <source>Minimize window</source>
         <translation type="unfinished">最小化窗口</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="364"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="367"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="380"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="383"/>
         <source>Statistics</source>
         <translation type="unfinished">统计</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="375"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="395"/>
         <source>Reboot (Safe mode)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="378"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="398"/>
         <source>Reboot in safe mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="390"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="410"/>
         <source>Paste clipboard as keystrokes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="399"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="402"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="419"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="422"/>
         <source>Text Chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="414"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="417"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="434"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="437"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="422"/>
         <source>Start recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="426"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="429"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="446"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="449"/>
         <source>Task Manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="441"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="461"/>
         <source>Switch Session</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2849,8 +2854,8 @@ Password: %2</source>
         <translation type="vanished">不能同时指定导出和导入参数。</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="566"/>
-        <location filename="../host/main.cc" line="601"/>
+        <location filename="../host/main.cc" line="567"/>
+        <location filename="../host/main.cc" line="602"/>
         <source>Settings storage is unavailable.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2858,37 +2863,37 @@ Password: %2</source>
 <context>
     <name>HostMain</name>
     <message>
-        <location filename="../host/main.cc" line="492"/>
+        <location filename="../host/main.cc" line="493"/>
         <source>Launch the application hidden.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="494"/>
+        <location filename="../host/main.cc" line="495"/>
         <source>Export parameters to file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="496"/>
+        <location filename="../host/main.cc" line="497"/>
         <source>Import parameters from file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="498"/>
+        <location filename="../host/main.cc" line="499"/>
         <source>Do not display any messages during import and export.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="500"/>
+        <location filename="../host/main.cc" line="501"/>
         <source>Calling the update check dialog.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="502"/>
+        <location filename="../host/main.cc" line="503"/>
         <source>Calling the settings dialog.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="504"/>
+        <location filename="../host/main.cc" line="505"/>
         <source>Calling the security log dialog.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3720,7 +3725,7 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="298"/>
+        <location filename="../client/desktop/main_window.cc" line="391"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Aspia 客户端</translation>
     </message>
@@ -3780,7 +3785,7 @@ Password: %2</source>
         <translation>设置...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="91"/>
+        <location filename="../client/desktop/main_window.cc" line="96"/>
         <source>Search...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3789,17 +3794,37 @@ Password: %2</source>
         <translation type="obsolete">主机</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="174"/>
+        <location filename="../client/desktop/main_window.cc" line="179"/>
         <source>Management</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="284"/>
+        <location filename="../client/desktop/main_window.cc" line="208"/>
+        <source>Invalid link &quot;%1&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="220"/>
+        <source>The router referenced by the link was not found in the address book.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="267"/>
+        <source>The host referenced by the link was not found in the address book.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="275"/>
+        <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="377"/>
         <source>Settings</source>
         <translation type="unfinished">设置</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="396"/>
+        <location filename="../client/desktop/main_window.cc" line="489"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3998,115 +4023,115 @@ Password: %2</source>
         <translation type="obsolete">主机</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="957"/>
+        <location filename="../client/desktop/management_tab.cc" line="981"/>
         <source>(copy)</source>
         <translation type="unfinished">(copy)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="683"/>
-        <location filename="../client/desktop/management_tab.cc" line="712"/>
-        <location filename="../client/desktop/management_tab.cc" line="762"/>
-        <location filename="../client/desktop/management_tab.cc" line="922"/>
-        <location filename="../client/desktop/management_tab.cc" line="953"/>
-        <location filename="../client/desktop/management_tab.cc" line="996"/>
+        <location filename="../client/desktop/management_tab.cc" line="687"/>
+        <location filename="../client/desktop/management_tab.cc" line="716"/>
+        <location filename="../client/desktop/management_tab.cc" line="766"/>
+        <location filename="../client/desktop/management_tab.cc" line="946"/>
+        <location filename="../client/desktop/management_tab.cc" line="977"/>
+        <location filename="../client/desktop/management_tab.cc" line="1020"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="961"/>
+        <location filename="../client/desktop/management_tab.cc" line="985"/>
         <source>Failed to add the host to the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1000"/>
+        <location filename="../client/desktop/management_tab.cc" line="1024"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1010"/>
+        <location filename="../client/desktop/management_tab.cc" line="1034"/>
         <source>Unable to remove host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1065"/>
-        <location filename="../client/desktop/management_tab.cc" line="1108"/>
-        <location filename="../client/desktop/management_tab.cc" line="1133"/>
+        <location filename="../client/desktop/management_tab.cc" line="1091"/>
+        <location filename="../client/desktop/management_tab.cc" line="1134"/>
+        <location filename="../client/desktop/management_tab.cc" line="1159"/>
         <source>Copy Row</source>
         <translation type="unfinished">复制行</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1066"/>
-        <location filename="../client/desktop/management_tab.cc" line="1109"/>
-        <location filename="../client/desktop/management_tab.cc" line="1134"/>
+        <location filename="../client/desktop/management_tab.cc" line="1092"/>
+        <location filename="../client/desktop/management_tab.cc" line="1135"/>
+        <location filename="../client/desktop/management_tab.cc" line="1160"/>
         <source>Copy Value</source>
         <translation type="unfinished">复制值</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1234"/>
+        <location filename="../client/desktop/management_tab.cc" line="1260"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1344"/>
+        <location filename="../client/desktop/management_tab.cc" line="1370"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1406"/>
+        <location filename="../client/desktop/management_tab.cc" line="1432"/>
         <source>Import Old Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1408"/>
+        <location filename="../client/desktop/management_tab.cc" line="1434"/>
         <source>Address Book (*.aab);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1431"/>
-        <location filename="../client/desktop/management_tab.cc" line="1448"/>
+        <location filename="../client/desktop/management_tab.cc" line="1457"/>
+        <location filename="../client/desktop/management_tab.cc" line="1474"/>
         <source>Export Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1433"/>
-        <location filename="../client/desktop/management_tab.cc" line="1504"/>
+        <location filename="../client/desktop/management_tab.cc" line="1459"/>
+        <location filename="../client/desktop/management_tab.cc" line="1530"/>
         <source>Address Book (*.json);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1443"/>
+        <location filename="../client/desktop/management_tab.cc" line="1469"/>
         <source>Address book database is not available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1450"/>
+        <location filename="../client/desktop/management_tab.cc" line="1476"/>
         <source>Enter a password to encrypt the address book.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1455"/>
+        <location filename="../client/desktop/management_tab.cc" line="1481"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation type="unfinished">您输入的密码不符合安全要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management_tab.cc" line="1456"/>
+        <location filename="../client/desktop/management_tab.cc" line="1482"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform>密码必须包含大小写字符、数字，并且不得少于 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1459"/>
+        <location filename="../client/desktop/management_tab.cc" line="1485"/>
         <source>Do you want to enter a different password?</source>
         <translation type="unfinished">您想输入其他密码吗？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1476"/>
+        <location filename="../client/desktop/management_tab.cc" line="1502"/>
         <source>Failed to export the address book.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1481"/>
+        <location filename="../client/desktop/management_tab.cc" line="1507"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -4114,42 +4139,42 @@ Hosts exported: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1502"/>
+        <location filename="../client/desktop/management_tab.cc" line="1528"/>
         <source>Import Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1513"/>
+        <location filename="../client/desktop/management_tab.cc" line="1539"/>
         <source>Unlock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1515"/>
+        <location filename="../client/desktop/management_tab.cc" line="1541"/>
         <source>Address book is encrypted. To open, you must enter a password.</source>
         <translation type="unfinished">通讯录已加密。要打开，必须输入密码。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1530"/>
+        <location filename="../client/desktop/management_tab.cc" line="1556"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1534"/>
+        <location filename="../client/desktop/management_tab.cc" line="1560"/>
         <source>Unsupported file format version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1538"/>
+        <location filename="../client/desktop/management_tab.cc" line="1564"/>
         <source>Nothing was imported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1542"/>
+        <location filename="../client/desktop/management_tab.cc" line="1568"/>
         <source>The file is not a valid address book.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1547"/>
+        <location filename="../client/desktop/management_tab.cc" line="1573"/>
         <source>Import completed successfully.
 Routers added: %1
 Routers skipped: %2
@@ -4160,17 +4185,27 @@ Hosts skipped: %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1900"/>
+        <location filename="../client/desktop/management_tab.cc" line="1921"/>
+        <source>Copy Link</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1945"/>
+        <source>Unable to create a link for this host.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1962"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1907"/>
+        <location filename="../client/desktop/management_tab.cc" line="1969"/>
         <source>The host has an invalid host ID.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1916"/>
+        <location filename="../client/desktop/management_tab.cc" line="1978"/>
         <source>The host has an incorrect address.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4396,7 +4431,7 @@ Hosts skipped: %6</source>
 <context>
     <name>NetworkWorker</name>
     <message>
-        <location filename="../client/workers/network_worker.cc" line="366"/>
+        <location filename="../client/workers/network_worker.cc" line="369"/>
         <source>Failed to connect to the relay server</source>
         <translation type="unfinished"></translation>
     </message>
