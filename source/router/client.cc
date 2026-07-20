@@ -397,6 +397,7 @@ void Client::sendUserKeys()
 
     proto::router::RouterToClient message;
     proto::router::UserKeys* user_keys = message.mutable_user_keys();
+    user_keys->set_router_guid(router_guid_);
     user_keys->set_user_id(user.entry_id);
     user_keys->set_name(user.name.toStdString());
     user_keys->set_public_key(user.public_key.toStdString());

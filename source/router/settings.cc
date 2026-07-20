@@ -211,6 +211,18 @@ QByteArray Settings::seedKey() const
 }
 
 //--------------------------------------------------------------------------------------------------
+void Settings::setRouterGuid(const QString& guid)
+{
+    impl_.setValue("router_guid", guid);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString Settings::routerGuid() const
+{
+    return impl_.value("router_guid").toString();
+}
+
+//--------------------------------------------------------------------------------------------------
 void Settings::setEnableStun(bool enable)
 {
     impl_.setValue("stun", enable);

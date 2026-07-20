@@ -82,6 +82,7 @@ private:
     quint32 dirty_mask_ = 0;
     TimePoint next_notify_time_;
     quint16 stun_port_ = 0;
+    QString router_guid_;
 
     QList<Client*> clients_;
 

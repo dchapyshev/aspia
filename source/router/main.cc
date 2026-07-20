@@ -21,6 +21,7 @@
 #include <QFileInfo>
 #include <QSysInfo>
 #include <QStandardPaths>
+#include <QUuid>
 
 #include "base/logging.h"
 #include "base/service_controller.h"
@@ -98,6 +99,21 @@ int installService(QTextStream& out)
                "--create-config, then run --install." << Qt::endl;
         return 0;
     }
+
+    // This entry point runs elevated on every upgrade, while the service account has no write
+    // access to the configuration file - so values missing from older configurations are
+    // generated here.
+    if (settings.seedKey().isEmpty())
+    {
+        out << "Seed key is missing, generating a new one." << Qt::endl;
+        settings.setSeedKey(Random::byteArray(64));
+    }
+    if (settings.routerGuid().isEmpty())
+    {
+        out << "Router GUID is missing, generating a new one." << Qt::endl;
+        settings.setRouterGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
+    }
+    settings.sync();
 
     std::unique_ptr<ServiceController> controller = ServiceController::install(
         Service::kName, Service::kDisplayName, QCoreApplication::applicationFilePath());
@@ -330,6 +346,7 @@ int createConfig(QTextStream& out)
     settings.setHostPrivateKey(host_private_key);
     settings.setRelayPrivateKey(relay_private_key);
     settings.setSeedKey(seed_key);
+    settings.setRouterGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
     settings.sync();
 
     out << "Configuration successfully created. Don't forget to change your password!" << Qt::endl;

@@ -64,6 +64,7 @@ public:
     void sendMessage(quint8 channel_id, const QByteArray& message);
 
     void setStunInfo(quint16 port);
+    void setRouterGuid(const std::string& guid) { router_guid_ = guid; }
 
     bool isTwoFactorCompleted() const { return two_factor_completed_; }
 
@@ -106,6 +107,7 @@ private:
 
     TcpChannel* tcp_channel_ = nullptr;
     quint16 stun_port_ = 0;
+    std::string router_guid_;
 
     bool two_factor_completed_ = false;
     qint64 token_id_ = 0;

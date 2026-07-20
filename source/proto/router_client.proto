@@ -36,12 +36,13 @@ message UserKeys
         bytes wrapped_gk   = 2;
     }
 
-    int64 user_id                       = 1;
-    string name                         = 2;
-    bytes public_key                    = 3;
-    bytes wrap_private_key              = 4;
-    bytes wrap_salt                     = 5;
-    repeated WorkspaceKey workspace_key = 6;
+    string router_guid                  = 1;
+    int64 user_id                       = 2;
+    string name                         = 3;
+    bytes public_key                    = 4;
+    bytes wrap_private_key              = 5;
+    bytes wrap_salt                     = 6;
+    repeated WorkspaceKey workspace_key = 7;
 }
 
 message WorkspaceAccess

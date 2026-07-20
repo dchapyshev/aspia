@@ -22,10 +22,12 @@
 #include <QFileInfo>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QUuid>
 
 #include <utility>
 
 #include "base/logging.h"
+#include "base/crypto/random.h"
 #include "base/crypto/secure_byte_array.h"
 #include "base/files/base_paths.h"
 #include "router/settings.h"
@@ -133,6 +135,11 @@ void doConfigMigrate(const QJsonDocument& doc)
         LOG(INFO) << "ListenInterface:" << value;
         settings.setListenInterface(value);
     }
+
+    // Values the old configuration may lack; issue them while write access is available.
+    if (settings.seedKey().isEmpty())
+        settings.setSeedKey(Random::byteArray(64));
+    settings.setRouterGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
 }
 
 } // namespace

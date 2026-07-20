@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/crypto/random.h"
 #include "base/net/tcp_channel.h"
 #include "base/net/tcp_server.h"
 #include "base/threading/worker.h"
@@ -94,9 +93,15 @@ void ClientWorker::onStart()
     QByteArray seed_key = settings.seedKey();
     if (seed_key.isEmpty())
     {
-        LOG(INFO) << "Empty seed key. New key is generated";
-        seed_key = Random::byteArray(64);
-        settings.setSeedKey(seed_key);
+        LOG(ERROR) << "Seed key is not set in the configuration";
+        return;
+    }
+
+    router_guid_ = settings.routerGuid();
+    if (router_guid_.isEmpty())
+    {
+        LOG(ERROR) << "Router GUID is not set in the configuration";
+        return;
     }
 
     SharedPointer<UserList> user_list = RouterUserList::open();
@@ -270,6 +275,7 @@ void ClientWorker::onNewConnection()
 
         if (stun_port_)
             client->setStunInfo(stun_port_);
+        client->setRouterGuid(router_guid_.toStdString());
 
         clients_.emplace_back(client);
         connect(client, &Client::sig_finished, this, &ClientWorker::onSessionFinished);
