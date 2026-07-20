@@ -45,6 +45,8 @@ public:
     using TimePoint = Clock::time_point;
     using Milliseconds = std::chrono::milliseconds;
     using Seconds = std::chrono::seconds;
+    using Minutes = std::chrono::minutes;
+    using Hours = std::chrono::hours;
 
     // If timer_interval is non-zero, the worker gets a repeating timer that fires onTimer() from its
     // own thread at that interval; the timer lives and dies with the worker thread.
