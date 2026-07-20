@@ -28,6 +28,8 @@
 #include "relay/migration_utils.h"
 #include "relay/service.h"
 #include "relay/settings.h"
+#include "relay/workers/relay_worker.h"
+#include "relay/workers/router_worker.h"
 
 namespace {
 
@@ -219,6 +221,14 @@ int main(int argc, char* argv[])
         return startService(out);
     else if (parser.isSet(stop_option))
         return stopService(out);
+
+    // The workers read the configuration as soon as they start, so any pending migration must
+    // complete before them.
+    if (isMigrationNeeded())
+        doMigration();
+
+    application.addWorker(std::make_unique<RouterWorker>());
+    application.addWorker(std::make_unique<RelayWorker>());
 
     return Service().exec(application);
 }

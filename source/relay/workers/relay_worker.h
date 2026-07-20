@@ -16,58 +16,54 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef RELAY_SESSION_MANAGER_H
-#define RELAY_SESSION_MANAGER_H
+#ifndef RELAY_WORKERS_RELAY_WORKER_H
+#define RELAY_WORKERS_RELAY_WORKER_H
 
-#include <QObject>
+#include <QList>
 
 #include <asio/ip/tcp.hpp>
-#include <asio/steady_timer.hpp>
-
-#include "base/crypto/secure_byte_array.h"
-#include "base/shared_pointer.h"
-#include "relay/session_key.h"
 
 #include <memory>
 
+#include "base/shared_pointer.h"
+#include "base/threading/worker.h"
+#include "proto/router_relay.h"
+
 class FloodGuard;
 class PendingSession;
-class QTimer;
 class Session;
 
 namespace proto::relay {
 class PeerToRelay;
 } // namespace proto::relay
 
-namespace proto::router {
-class RelayStatistics;
-} // namespace proto::router
-
-class SessionManager final : public QObject
+class RelayWorker final : public Worker
 {
     Q_OBJECT
 
 public:
-    explicit SessionManager(QObject* parent = nullptr);
-    ~SessionManager() final;
-
-    using Key = std::pair<SecureByteArray, QByteArray>;
-
-    bool start();
-    quint32 addKey(SessionKey&& session_key);
-    bool removeKey(quint32 key_id);
-    void setKeyExpired(quint32 key_id);
-    std::optional<Key> keyFromPool(quint32 key_id, const std::string& peer_public_key) const;
-    void clearKeys();
+    RelayWorker();
+    ~RelayWorker() final;
 
 public slots:
+    // Disconnects the peer session |session_id|.
     void onDisconnectSession(qint64 session_id);
 
 signals:
-    void sig_started();
+    // Emitted from the worker thread when a pair of peers has been connected.
+    void sig_sessionStarted();
+
+    // Emitted from the worker thread when an active peer session has finished.
+    void sig_sessionFinished();
+
+    // Emitted from the worker thread at the configured interval with session statistics.
     void sig_statistics(const proto::router::RelayStatistics& statistics);
-    void sig_keyExpired(quint32 key_id);
-    void sig_finished();
+
+protected:
+    // Worker implementation.
+    void onStart() final;
+    void onStop() final;
+    void onTimer() final;
 
 private slots:
     void onPendingSessionReady(const proto::relay::PeerToRelay& message);
@@ -75,34 +71,30 @@ private slots:
     void onSessionFinished();
 
 private:
-    static void doAccept(SessionManager* self);
-    void onIdleTimeout();
-    void onStatTimeout();
-
-    void removePendingSession(PendingSession* sessions);
+    static void doAccept(RelayWorker* self);
+    void removePendingSession(PendingSession* session);
     void removeSession(Session* session);
 
-    std::unordered_map<quint32, SessionKey> key_pool_;
-    quint32 key_counter_ = 0;
+    Minutes idle_timeout_;
 
     SharedPointer<bool> alive_guard_ { new bool(true) };
-    asio::ip::tcp::acceptor acceptor_;
+
+    // Created in the worker thread so the socket binds to its io_context.
+    std::unique_ptr<asio::ip::tcp::acceptor> acceptor_;
+
     QList<PendingSession*> pending_sessions_;
     QList<Session*> active_sessions_;
 
-    std::chrono::minutes idle_timeout_;
-    QTimer* idle_timer_ = nullptr;
-    QTimer* stat_timer_ = nullptr;
-
-    using Clock = std::chrono::steady_clock;
-    using TimePoint = std::chrono::time_point<Clock>;
-
+    // Statistics are disabled while |stat_interval_| is zero.
+    Seconds stat_interval_ { Seconds::zero() };
+    TimePoint next_idle_check_;
+    TimePoint next_stat_time_;
     TimePoint start_time_;
 
     // Anti-flood gate: per-address rate limit + global pending cap + rate-limited logging.
     std::unique_ptr<FloodGuard> flood_guard_;
 
-    Q_DISABLE_COPY_MOVE(SessionManager)
+    Q_DISABLE_COPY_MOVE(RelayWorker)
 };
 
-#endif // RELAY_SESSION_MANAGER_H
+#endif // RELAY_WORKERS_RELAY_WORKER_H

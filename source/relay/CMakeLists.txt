@@ -28,16 +28,19 @@ list(APPEND SOURCE_RELAY
     session.h
     session_key.cc
     session_key.h
-    session_manager.cc
-    session_manager.h
     settings.cc
-    settings.h)
+    settings.h
+    shared_key_pool.cc
+    shared_key_pool.h)
+
+include(workers/sources.cmake)
 
 if (WIN32)
     list(APPEND SOURCE_RELAY_WIN win/relay.rc)
 endif()
 
 source_group("" FILES ${SOURCE_RELAY})
+source_group(workers FILES ${SOURCE_RELAY_WORKERS})
 
 if (WIN32)
     source_group(win FILES ${SOURCE_RELAY_WIN})
@@ -52,7 +55,7 @@ if (APPLE)
     set(RELAY_PLATFORM_LIBS ${FOUNDATION_LIB})
 endif()
 
-add_executable(aspia_relay ${SOURCE_RELAY} ${SOURCE_RELAY_WIN})
+add_executable(aspia_relay ${SOURCE_RELAY} ${SOURCE_RELAY_WORKERS} ${SOURCE_RELAY_WIN})
 
 if (WIN32)
     set_target_properties(aspia_relay PROPERTIES LINK_FLAGS "/MANIFEST:NO")

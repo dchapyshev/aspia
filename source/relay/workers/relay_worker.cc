@@ -1,4 +1,4 @@
-﻿//
+//
 // Aspia Project
 // Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
 //
@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "relay/session_manager.h"
+#include "relay/workers/relay_worker.h"
 
 #include <QTimer>
 
@@ -25,16 +25,17 @@
 #include "base/net/flood_guard.h"
 #include "base/threading/asio_event_dispatcher.h"
 #include "proto/relay_peer.h"
-#include "proto/router_relay.h"
 #include "relay/pending_session.h"
 #include "relay/session.h"
 #include "relay/settings.h"
+#include "relay/shared_key_pool.h"
 
 namespace {
 
-const std::chrono::minutes kIdleTimerInterval { 1 };
-constexpr std::chrono::hours kMaxSessionDuration{ 24 };
-constexpr std::chrono::seconds kAcceptRetryDelay{ 1 };
+const Worker::Seconds kTimerInterval{ 1 };
+const Worker::Minutes kIdleCheckInterval{ 1 };
+constexpr Worker::Hours kMaxSessionDuration{ 24 };
+constexpr Worker::Seconds kAcceptRetryDelay{ 1 };
 
 // Caps for the relay role. The relay routes already-paired peers, so concurrent unfinished
 // handshakes are usually few; a tight pending cap protects relay resources without rejecting
@@ -49,8 +50,8 @@ constexpr int kMaxPendingSessions = 60;
 constexpr qsizetype kAeadTagSize = 16;
 
 //--------------------------------------------------------------------------------------------------
-// Decrypts an encrypted pair of peer identifiers using key |session_key|.
-QByteArray decryptSecret(const proto::relay::PeerToRelay& message, const SessionManager::Key& key)
+// Decrypts an encrypted pair of peer identifiers using key |key|.
+QByteArray decryptSecret(const proto::relay::PeerToRelay& message, const SharedKeyPool::Key& key)
 {
     if (key.first.isEmpty() || key.second.isEmpty())
     {
@@ -118,182 +119,20 @@ QString peerAddress(const asio::ip::tcp::socket& socket)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-SessionManager::SessionManager(QObject* parent)
-    : QObject(parent),
-      acceptor_(AsioEventDispatcher::ioContext()),
-      idle_timer_(new QTimer(this)),
-      stat_timer_(new QTimer(this)),
-      flood_guard_(std::make_unique<FloodGuard>())
+RelayWorker::RelayWorker()
+    : Worker(Thread::AsioDispatcher, kTimerInterval)
 {
     LOG(INFO) << "Ctor";
-    flood_guard_->setRateLimit(kPerAddressWindow, kPerAddressMax);
-    flood_guard_->setMaxPending(kMaxPendingSessions);
-    connect(idle_timer_, &QTimer::timeout, this, &SessionManager::onIdleTimeout);
-    connect(stat_timer_, &QTimer::timeout, this, &SessionManager::onStatTimeout);
 }
 
 //--------------------------------------------------------------------------------------------------
-SessionManager::~SessionManager()
+RelayWorker::~RelayWorker()
 {
     LOG(INFO) << "Dtor";
-
-    // Mark guard before releasing resources so that any pending ASIO handlers
-    // (already completed but not yet dispatched) will see the object is gone.
-    *alive_guard_ = false;
-
-    std::error_code ignored_code;
-    acceptor_.cancel(ignored_code);
-    acceptor_.close(ignored_code);
 }
 
 //--------------------------------------------------------------------------------------------------
-bool SessionManager::start()
-{
-    LOG(INFO) << "Starting session manager";
-
-    Settings settings;
-
-    idle_timeout_ = settings.peerIdleTimeout();
-    if (idle_timeout_ < std::chrono::minutes(1) || idle_timeout_ > std::chrono::minutes(60))
-    {
-        LOG(ERROR) << "Invalid peer idle specified";
-        return false;
-    }
-
-    if (settings.isStatisticsEnabled())
-    {
-        std::chrono::seconds interval = settings.statisticsInterval();
-        if (interval < std::chrono::seconds(1) || interval > std::chrono::minutes(60))
-        {
-            LOG(ERROR) << "Invalid statistics interval";
-            return false;
-        }
-    }
-
-    LOG(INFO) << "Peer idle timeout:" << idle_timeout_.count();
-    LOG(INFO) << "Statistics enabled:" << settings.isStatisticsEnabled();
-    LOG(INFO) << "Statistics interval:" << settings.statisticsInterval().count();
-
-    quint16 port = settings.peerPort();
-    if (port == 0)
-    {
-        LOG(ERROR) << "Invalid peer port";
-        return false;
-    }
-
-    QString iface = settings.listenInterface();
-    asio::ip::address address;
-    if (!iface.isEmpty())
-    {
-        std::error_code error_code;
-        address = asio::ip::make_address(iface.toLocal8Bit().toStdString(), error_code);
-        if (error_code)
-        {
-            LOG(ERROR) << "Unable to get listen address:" << error_code;
-            return false;
-        }
-    }
-    else
-    {
-        address = asio::ip::address_v6::any();
-    }
-
-    LOG(INFO) << "Listen interface:" << (iface.isEmpty() ? "ANY" : iface) << ":" << port;
-
-    asio::ip::tcp::endpoint endpoint(address, port);
-
-    std::error_code error_code;
-    acceptor_.open(endpoint.protocol(), error_code);
-    if (error_code)
-    {
-        LOG(ERROR) << "open failed:" << error_code;
-        return false;
-    }
-
-    acceptor_.set_option(asio::ip::tcp::acceptor::reuse_address(true), error_code);
-    if (error_code)
-    {
-        LOG(ERROR) << "set_option failed:" << error_code;
-        return false;
-    }
-
-    acceptor_.bind(endpoint, error_code);
-    if (error_code)
-    {
-        LOG(ERROR) << "bind failed:" << error_code;
-        return false;
-    }
-
-    acceptor_.listen(asio::ip::tcp::socket::max_listen_connections, error_code);
-    if (error_code)
-    {
-        LOG(ERROR) << "listen failed:" << error_code;
-        return false;
-    }
-
-    start_time_ = Clock::now();
-    idle_timer_->start(kIdleTimerInterval);
-
-    if (settings.isStatisticsEnabled())
-        stat_timer_->start(settings.statisticsInterval());
-
-    SessionManager::doAccept(this);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-quint32 SessionManager::addKey(SessionKey&& session_key)
-{
-    quint32 key_id = key_counter_++;
-    key_pool_.try_emplace(key_id, std::move(session_key));
-
-    LOG(INFO) << "Key with id" << key_id << "added to pool";
-    return key_id;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool SessionManager::removeKey(quint32 key_id)
-{
-    auto result = key_pool_.find(key_id);
-    if (result == key_pool_.end())
-        return false;
-
-    key_pool_.erase(result);
-    LOG(INFO) << "Key with id" << key_id << "removed from pool";
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionManager::setKeyExpired(quint32 key_id)
-{
-    if (!removeKey(key_id))
-        return;
-
-    LOG(INFO) << "Key with ID" << key_id << "expired. It has been removed";
-    emit sig_keyExpired(key_id);
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionManager::clearKeys()
-{
-    LOG(INFO) << "Key pool cleared";
-    key_pool_.clear();
-}
-
-//--------------------------------------------------------------------------------------------------
-std::optional<SessionManager::Key> SessionManager::keyFromPool(
-    quint32 key_id, const std::string& peer_public_key) const
-{
-    auto result = key_pool_.find(key_id);
-    if (result == key_pool_.end())
-        return std::nullopt;
-
-    const SessionKey& session_key = result->second;
-    return std::make_pair(session_key.sessionKey(peer_public_key), session_key.iv());
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionManager::onDisconnectSession(qint64 session_id)
+void RelayWorker::onDisconnectSession(qint64 session_id)
 {
     LOG(INFO) << "Disconnect session by session id:" << session_id;
 
@@ -310,7 +149,208 @@ void SessionManager::onDisconnectSession(qint64 session_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionManager::onPendingSessionReady(const proto::relay::PeerToRelay& message)
+void RelayWorker::onStart()
+{
+    Settings settings;
+
+    quint16 peer_port = settings.peerPort();
+    Minutes idle_timeout = settings.peerIdleTimeout();
+
+    LOG(INFO) << "Peer port:" << peer_port;
+    LOG(INFO) << "Peer idle timeout:" << idle_timeout.count();
+    LOG(INFO) << "Statistics enabled:" << settings.isStatisticsEnabled();
+    LOG(INFO) << "Statistics interval:" << settings.statisticsInterval().count();
+
+    if (peer_port == 0)
+    {
+        LOG(ERROR) << "Invalid peer port";
+        return;
+    }
+
+    if (idle_timeout < Minutes(1) || idle_timeout > Minutes(60))
+    {
+        LOG(ERROR) << "Invalid peer idle specified";
+        return;
+    }
+
+    if (settings.isStatisticsEnabled())
+    {
+        Seconds interval = settings.statisticsInterval();
+        if (interval < Seconds(1) || interval > Minutes(60))
+        {
+            LOG(ERROR) << "Invalid statistics interval";
+            return;
+        }
+    }
+
+    QString iface = settings.listenInterface();
+    asio::ip::address address;
+    if (!iface.isEmpty())
+    {
+        std::error_code error_code;
+        address = asio::ip::make_address(iface.toLocal8Bit().toStdString(), error_code);
+        if (error_code)
+        {
+            LOG(ERROR) << "Unable to get listen address:" << error_code;
+            return;
+        }
+    }
+    else
+    {
+        address = asio::ip::address_v6::any();
+    }
+
+    LOG(INFO) << "Listen interface:" << (iface.isEmpty() ? "ANY" : iface) << ":" << peer_port;
+
+    acceptor_ = std::make_unique<asio::ip::tcp::acceptor>(AsioEventDispatcher::ioContext());
+
+    asio::ip::tcp::endpoint endpoint(address, peer_port);
+
+    std::error_code error_code;
+    acceptor_->open(endpoint.protocol(), error_code);
+    if (error_code)
+    {
+        LOG(ERROR) << "open failed:" << error_code;
+        acceptor_.reset();
+        return;
+    }
+
+    acceptor_->set_option(asio::ip::tcp::acceptor::reuse_address(true), error_code);
+    if (error_code)
+    {
+        LOG(ERROR) << "set_option failed:" << error_code;
+        acceptor_.reset();
+        return;
+    }
+
+    acceptor_->bind(endpoint, error_code);
+    if (error_code)
+    {
+        LOG(ERROR) << "bind failed:" << error_code;
+        acceptor_.reset();
+        return;
+    }
+
+    acceptor_->listen(asio::ip::tcp::socket::max_listen_connections, error_code);
+    if (error_code)
+    {
+        LOG(ERROR) << "listen failed:" << error_code;
+        acceptor_.reset();
+        return;
+    }
+
+    idle_timeout_ = idle_timeout;
+
+    flood_guard_ = std::make_unique<FloodGuard>();
+    flood_guard_->setRateLimit(kPerAddressWindow, kPerAddressMax);
+    flood_guard_->setMaxPending(kMaxPendingSessions);
+
+    start_time_ = Clock::now();
+    next_idle_check_ = start_time_ + kIdleCheckInterval;
+
+    if (settings.isStatisticsEnabled())
+    {
+        stat_interval_ = settings.statisticsInterval();
+        next_stat_time_ = start_time_ + stat_interval_;
+    }
+
+    RelayWorker::doAccept(this);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RelayWorker::onStop()
+{
+    // Mark guard before releasing resources so that any pending ASIO handlers
+    // (already completed but not yet dispatched) will see the object is gone.
+    *alive_guard_ = false;
+
+    if (acceptor_)
+    {
+        std::error_code ignored_code;
+        acceptor_->cancel(ignored_code);
+        acceptor_->close(ignored_code);
+        acceptor_.reset();
+    }
+
+    for (auto* session : std::as_const(pending_sessions_))
+    {
+        session->disconnect();
+        delete session;
+    }
+    pending_sessions_.clear();
+
+    for (auto* session : std::as_const(active_sessions_))
+    {
+        session->disconnect();
+        delete session;
+    }
+    active_sessions_.clear();
+
+    SharedKeyPool::instance().clear();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RelayWorker::onTimer()
+{
+    TimePoint now = Clock::now();
+
+    if (now >= next_idle_check_)
+    {
+        next_idle_check_ = now + kIdleCheckInterval;
+
+        int count = 0;
+        for (auto it = active_sessions_.begin(); it != active_sessions_.end();)
+        {
+            Session* session = *it;
+
+            const bool idle_expired = session->idleTime(now) >= idle_timeout_;
+            const bool duration_expired = session->duration(now) >= kMaxSessionDuration;
+
+            if (idle_expired || duration_expired)
+            {
+                session->disconnect();
+                session->deleteLater();
+
+                it = active_sessions_.erase(it);
+                ++count;
+                emit sig_sessionFinished();
+            }
+            else
+            {
+                ++it;
+            }
+        }
+
+        LOG(INFO) << "Sessions ended by timeout:" << count;
+    }
+
+    if (stat_interval_ > Seconds::zero() && now >= next_stat_time_)
+    {
+        next_stat_time_ = now + stat_interval_;
+
+        proto::router::RelayStatistics statistics;
+        statistics.set_uptime(std::chrono::duration_cast<Seconds>(now - start_time_).count());
+
+        for (const auto& session : std::as_const(active_sessions_))
+        {
+            proto::router::Peer* peer = statistics.add_peer();
+            peer->set_peer_id(session->sessionId());
+            peer->set_status(proto::router::Peer::STATUS_ACTIVE);
+            peer->set_client_address(session->clientAddress().toStdString());
+            peer->set_client_user_name(session->clientUserName().toStdString());
+            peer->set_host_address(session->hostAddress().toStdString());
+            peer->set_host_id(session->hostId());
+            peer->set_bytes_transferred(session->bytesTransferred());
+            peer->set_idle_time(session->idleTime(now).count());
+            peer->set_duration(session->duration(now).count());
+        }
+
+        emit sig_statistics(statistics);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void RelayWorker::onPendingSessionReady(const proto::relay::PeerToRelay& message)
 {
     LOG(INFO) << "Pending session ready for key_id:" << message.key_id();
 
@@ -318,7 +358,8 @@ void SessionManager::onPendingSessionReady(const proto::relay::PeerToRelay& mess
     CHECK(pending_session);
 
     // Looking for a key with the specified identifier.
-    std::optional<Key> key = keyFromPool(message.key_id(), message.public_key());
+    std::optional<SharedKeyPool::Key> key =
+        SharedKeyPool::instance().find(message.key_id(), message.public_key());
     if (!key.has_value())
     {
         LOG(ERROR) << "Key with id" << message.key_id() << "is NOT found!";
@@ -347,18 +388,18 @@ void SessionManager::onPendingSessionReady(const proto::relay::PeerToRelay& mess
         LOG(INFO) << "Both peers are connected with key" << message.key_id();
 
         // Delete the key from the pool. It can no longer be used.
-        removeKey(message.key_id());
+        SharedKeyPool::instance().remove(message.key_id());
 
         Session* session = new Session(
             std::make_pair(pending_session->takeSocket(), other_pending_session->takeSocket()),
             secret, this);
         active_sessions_.emplace_back(session);
 
-        connect(session, &Session::sig_finished, this, &SessionManager::onSessionFinished);
+        connect(session, &Session::sig_finished, this, &RelayWorker::onSessionFinished);
 
         // Now the opposite peer is found, start the data transfer between them.
         session->start();
-        emit sig_started();
+        emit sig_sessionStarted();
 
         // Pending sessions are no longer needed, remove them.
         removePendingSession(other_pending_session);
@@ -370,7 +411,7 @@ void SessionManager::onPendingSessionReady(const proto::relay::PeerToRelay& mess
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionManager::onPendingSessionFailed()
+void RelayWorker::onPendingSessionFailed()
 {
     PendingSession* session = dynamic_cast<PendingSession*>(sender());
     CHECK(session);
@@ -378,7 +419,7 @@ void SessionManager::onPendingSessionFailed()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionManager::onSessionFinished()
+void RelayWorker::onSessionFinished()
 {
     Session* session = dynamic_cast<Session*>(sender());
     CHECK(session);
@@ -387,10 +428,10 @@ void SessionManager::onSessionFinished()
 
 //--------------------------------------------------------------------------------------------------
 // static
-void SessionManager::doAccept(SessionManager* self)
+void RelayWorker::doAccept(RelayWorker* self)
 {
     auto guard = self->alive_guard_;
-    self->acceptor_.async_accept([self, guard](const std::error_code& error_code, asio::ip::tcp::socket socket)
+    self->acceptor_->async_accept([self, guard](const std::error_code& error_code, asio::ip::tcp::socket socket)
     {
         if (!*guard)
             return;
@@ -409,8 +450,8 @@ void SessionManager::doAccept(SessionManager* self)
                 PendingSession* session = new PendingSession(std::move(socket), self);
                 self->pending_sessions_.emplace_back(session);
 
-                connect(session, &PendingSession::sig_ready, self, &SessionManager::onPendingSessionReady);
-                connect(session, &PendingSession::sig_failed, self, &SessionManager::onPendingSessionFailed);
+                connect(session, &PendingSession::sig_ready, self, &RelayWorker::onPendingSessionReady);
+                connect(session, &PendingSession::sig_failed, self, &RelayWorker::onPendingSessionFailed);
 
                 // A new peer is connected. Create and start the pending session.
                 session->start();
@@ -426,78 +467,18 @@ void SessionManager::doAccept(SessionManager* self)
             QTimer::singleShot(kAcceptRetryDelay, self, [self, guard]()
             {
                 if (*guard)
-                    SessionManager::doAccept(self);
+                    RelayWorker::doAccept(self);
             });
             return;
         }
 
         // Waiting for the next connection.
-        SessionManager::doAccept(self);
+        RelayWorker::doAccept(self);
     });
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionManager::onIdleTimeout()
-{
-    auto current_time = Session::Clock::now();
-    int count = 0;
-
-    for (auto it = active_sessions_.begin(); it != active_sessions_.end();)
-    {
-        Session* session = *it;
-
-        const bool idle_expired = session->idleTime(current_time) >= idle_timeout_;
-        const bool duration_expired = session->duration(current_time) >= kMaxSessionDuration;
-
-        if (idle_expired || duration_expired)
-        {
-            session->disconnect();
-            session->deleteLater();
-
-            it = active_sessions_.erase(it);
-            ++count;
-        }
-        else
-        {
-            ++it;
-        }
-    }
-
-    // Emit only after the loop finishes: sig_finished is delivered synchronously, and a connected
-    // slot must not mutate active_sessions_ while it is still being iterated here.
-    for (int i = 0; i < count; ++i)
-        emit sig_finished();
-
-    LOG(INFO) << "Sessions ended by timeout:" << count;
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionManager::onStatTimeout()
-{
-    Session::TimePoint now = Session::Clock::now();
-
-    proto::router::RelayStatistics statistics;
-    statistics.set_uptime(std::chrono::duration_cast<std::chrono::seconds>(now - start_time_).count());
-
-    for (const auto& session : std::as_const(active_sessions_))
-    {
-        proto::router::Peer* peer = statistics.add_peer();
-        peer->set_peer_id(session->sessionId());
-        peer->set_status(proto::router::Peer::STATUS_ACTIVE);
-        peer->set_client_address(session->clientAddress().toStdString());
-        peer->set_client_user_name(session->clientUserName().toStdString());
-        peer->set_host_address(session->hostAddress().toStdString());
-        peer->set_host_id(session->hostId());
-        peer->set_bytes_transferred(session->bytesTransferred());
-        peer->set_idle_time(session->idleTime(now).count());
-        peer->set_duration(session->duration(now).count());
-    }
-
-    emit sig_statistics(statistics);
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionManager::removePendingSession(PendingSession* session)
+void RelayWorker::removePendingSession(PendingSession* session)
 {
     session->disconnect();
     session->deleteLater();
@@ -505,10 +486,10 @@ void SessionManager::removePendingSession(PendingSession* session)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionManager::removeSession(Session* session)
+void RelayWorker::removeSession(Session* session)
 {
     session->disconnect();
     session->deleteLater();
     active_sessions_.removeOne(session);
-    emit sig_finished();
+    emit sig_sessionFinished();
 }
