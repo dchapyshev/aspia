@@ -38,6 +38,7 @@ enum SessionType : int;
 
 class ContentWidget;
 class LocalGroupWidget;
+class QMenu;
 class RouterClientsWidget;
 class RouterGroupWidget;
 class RouterHostsWidget;
@@ -114,6 +115,7 @@ private:
     void switchContent(ContentWidget* new_widget);
     void updateActionsState();
     proto::peer::SessionType defaultSessionType() const;
+    void addCopyLinkMenu(QMenu& menu, const HostConfig& host);
 
     bool validateHostForConnect(const HostConfig& host);
     qint64 currentHostEntryId() const;

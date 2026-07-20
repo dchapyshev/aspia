@@ -21,14 +21,25 @@
 #include "base/logging.h"
 #include "build/build_config.h"
 #include "build/version.h"
+#include "client/host_url.h"
 #include "client/settings.h"
 #include "client/workers/router_worker.h"
 
 #include <QIcon>
 
+#if defined(Q_OS_WINDOWS)
+#include <QDir>
+#include <QSettings>
+#endif // defined(Q_OS_WINDOWS)
+
+#if defined(Q_OS_MACOS)
+#include <QFileOpenEvent>
+#endif // defined(Q_OS_MACOS)
+
 namespace {
 
 const char kActivateWindow[] = "activate_window";
+const char kOpenUrl[] = "open_url:";
 
 } // namespace
 
@@ -49,6 +60,10 @@ Application::Application(int& argc, char* argv[])
         {
             emit sig_windowActivated();
         }
+        else if (message.startsWith(kOpenUrl))
+        {
+            emit sig_urlOpened(QString::fromUtf8(message.mid(static_cast<qsizetype>(qstrlen(kOpenUrl)))));
+        }
         else
         {
             LOG(ERROR) << "Unhandled message";
@@ -67,6 +82,10 @@ Application::Application(int& argc, char* argv[])
     setTheme(settings.theme());
 
     addWorker(std::make_unique<RouterWorker>());
+
+#if defined(Q_OS_WINDOWS)
+    registerUrlHandler();
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -87,3 +106,51 @@ void Application::activateWindow()
 {
     sendMessage(kActivateWindow);
 }
+
+//--------------------------------------------------------------------------------------------------
+void Application::openUrl(const QString& url)
+{
+    sendMessage(kOpenUrl + url.toUtf8());
+}
+
+#if defined(Q_OS_MACOS)
+//--------------------------------------------------------------------------------------------------
+bool Application::event(QEvent* event)
+{
+    // macOS delivers clicked aspia:// links to the running instance as FileOpen events
+    // (CFBundleURLTypes in Info.plist), not through the command line.
+    if (event->type() == QEvent::FileOpen)
+    {
+        QString url = static_cast<QFileOpenEvent*>(event)->url().toString();
+        if (HostUrl::isHostUrl(url))
+        {
+            LOG(INFO) << "URL open event:" << url;
+            emit sig_urlOpened(url);
+            return true;
+        }
+    }
+
+    return GuiApplication::event(event);
+}
+#endif // defined(Q_OS_MACOS)
+
+#if defined(Q_OS_WINDOWS)
+//--------------------------------------------------------------------------------------------------
+// static
+void Application::registerUrlHandler()
+{
+    // Register the aspia:// scheme for the current user so links work even without the
+    // installer (the MSI additionally registers the scheme machine-wide).
+    QString executable = QDir::toNativeSeparators(applicationFilePath());
+    QString command = QString("\"%1\" \"%2\"").arg(executable, "%1");
+
+    QSettings settings("HKEY_CURRENT_USER\\Software\\Classes\\aspia", QSettings::NativeFormat);
+    if (settings.value("shell/open/command/Default").toString() == command)
+        return;
+
+    settings.setValue("Default", "URL:Aspia Protocol");
+    settings.setValue("URL Protocol", "");
+    settings.setValue("DefaultIcon/Default", QString("\"%1\",0").arg(executable));
+    settings.setValue("shell/open/command/Default", command);
+}
+#endif // defined(Q_OS_WINDOWS)

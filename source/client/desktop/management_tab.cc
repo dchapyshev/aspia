@@ -19,6 +19,8 @@
 #include "client/desktop/management_tab.h"
 
 #include <QActionGroup>
+#include <QApplication>
+#include <QClipboard>
 #include <QDateTime>
 #include <QEvent>
 #include <QFileDialog>
@@ -35,6 +37,7 @@
 #include "build/build_config.h"
 #include "client/aab_importer.h"
 #include "client/database.h"
+#include "client/host_url.h"
 #include "client/json_backup.h"
 #include "client/master_password.h"
 #include "client/settings.h"
@@ -53,6 +56,7 @@
 #include "client/desktop/management/search_widget.h"
 #include "common/desktop/credentials_dialog.h"
 #include "common/desktop/msg_box.h"
+#include "common/desktop/session_type.h"
 #include "proto/peer.h"
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
@@ -830,6 +834,14 @@ void ManagementTab::onLocalHostContextMenu(qint64 entry_id, const QPoint& pos)
         addProxy(ui->action_chat_connect);
         addProxy(ui->action_system_info_connect);
         menu.addSeparator();
+
+        std::optional<HostConfig> host = Database::instance().findHost(entry_id);
+        if (host.has_value())
+        {
+            addCopyLinkMenu(menu, *host);
+            menu.addSeparator();
+        }
+
         menu.addAction(ui->action_edit_host);
         menu.addAction(ui->action_copy_host);
         menu.addAction(ui->action_delete_host);
@@ -855,6 +867,18 @@ void ManagementTab::onSearchContextMenu(const QPoint& pos)
     menu.addAction(ui->action_file_transfer_connect);
     menu.addAction(ui->action_chat_connect);
     menu.addAction(ui->action_system_info_connect);
+
+    std::optional<HostConfig> host;
+    if (item->type() == SearchWidget::Item::Type::ROUTER)
+        host = item->hostConfig();
+    else
+        host = Database::instance().findHost(item->entryId());
+
+    if (host.has_value())
+    {
+        menu.addSeparator();
+        addCopyLinkMenu(menu, *host);
+    }
 
     // Router hosts have no address-book record to edit, copy or delete.
     if (item->type() == SearchWidget::Item::Type::LOCAL)
@@ -1061,6 +1085,8 @@ void ManagementTab::onHostContextMenu(const QPoint& pos, int column)
     }
     menu.addSeparator();
 
+    addCopyLinkMenu(menu, router_hosts_widget_->selectedHostConfig());
+
     const QIcon copy_icon(":/img/copy.svg");
     QAction* copy_row = menu.addAction(copy_icon, tr("Copy Row"));
     QAction* copy_col = menu.addAction(copy_icon, tr("Copy Value"));
@@ -1162,11 +1188,11 @@ void ManagementTab::onRouterGroupContextMenu(const QPoint& pos)
     addProxy(ui->action_file_transfer_connect);
     addProxy(ui->action_chat_connect);
     addProxy(ui->action_system_info_connect);
+    menu.addSeparator();
     if (ui->action_edit_host->isVisible())
-    {
-        menu.addSeparator();
         menu.addAction(ui->action_edit_host);
-    }
+
+    addCopyLinkMenu(menu, router_group_widget_->selectedHostConfig());
     menu.exec(pos);
 }
 
@@ -1887,6 +1913,42 @@ proto::peer::SessionType ManagementTab::defaultSessionType() const
         return proto::peer::SESSION_TYPE_TERMINAL;
     else
         return proto::peer::SESSION_TYPE_UNKNOWN;
+}
+
+//--------------------------------------------------------------------------------------------------
+void ManagementTab::addCopyLinkMenu(QMenu& menu, const HostConfig& host)
+{
+    QMenu* link_menu = menu.addMenu(QIcon(":/img/copy.svg"), tr("Copy Link"));
+
+    const proto::peer::SessionType session_types[] =
+    {
+        proto::peer::SESSION_TYPE_DESKTOP,
+        proto::peer::SESSION_TYPE_TERMINAL,
+        proto::peer::SESSION_TYPE_FILE_TRANSFER,
+        proto::peer::SESSION_TYPE_CHAT,
+        proto::peer::SESSION_TYPE_SYSTEM_INFO
+    };
+
+    for (proto::peer::SessionType session_type : session_types)
+    {
+        link_menu->addAction(sessionIcon(session_type), sessionName(session_type), this,
+                             [this, host, session_type]()
+        {
+            QString url;
+            if (host.id() > 0)
+                url = HostUrl::stringForEntry(host.id(), session_type);
+            else if (host.routerId() > 0)
+                url = HostUrl::stringForRouterHost(host.routerId(), stringToHostId(host.address()), session_type);
+
+            if (url.isEmpty())
+            {
+                MsgBox::warning(this, tr("Unable to create a link for this host."));
+                return;
+            }
+
+            QApplication::clipboard()->setText(url);
+        });
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

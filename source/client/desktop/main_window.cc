@@ -18,6 +18,7 @@
 
 #include "client/desktop/main_window.h"
 
+#include <QDateTime>
 #include <QDesktopServices>
 #include <QLineEdit>
 #include <QScreen>
@@ -30,11 +31,15 @@
 #include <QUrl>
 #include <QWindow>
 
+#include <optional>
+
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/version_constants.h"
 #include "base/peer/host_id.h"
 #include "client/database.h"
+#include "client/host_url.h"
+#include "client/router.h"
 #include "client/settings.h"
 #include "client/desktop/client_tab.h"
 #include "client/desktop/client_window.h"
@@ -189,6 +194,94 @@ void MainWindow::showAndActivate()
     raise();
     activateWindow();
     setFocus();
+}
+
+//--------------------------------------------------------------------------------------------------
+void MainWindow::connectToUrl(const QString& url)
+{
+    LOG(INFO) << "Connect to URL:" << url;
+    showAndActivate();
+
+    HostUrl host_url = HostUrl::fromString(url);
+    if (!host_url.isValid())
+    {
+        MsgBox::warning(this, tr("Invalid link \"%1\".").arg(url));
+        return;
+    }
+
+    Database& db = Database::instance();
+    HostConfig host;
+
+    if (host_url.isRouterHost())
+    {
+        if (!db.findRouter(host_url.routerId()).has_value())
+        {
+            MsgBox::warning(this,
+                tr("The router referenced by the link was not found in the address book."));
+            return;
+        }
+
+        // The credentials of a router host live in its address book record on the router, so
+        // fetch the record before connecting. If the router is not connected, connect right
+        // away and let the authorization dialog ask for the credentials.
+        Router* router = Router::instance(host_url.routerId());
+        if (router && router->status() == Router::Status::ONLINE)
+        {
+            qint64 router_id = host_url.routerId();
+            HostId host_id = host_url.hostId();
+            proto::peer::SessionType session_type = host_url.sessionType();
+
+            router->searchHosts(hostIdToString(host_id), this,
+                [this, router_id, host_id, session_type](const Router::HostList& list)
+            {
+                HostConfig host;
+                host.setRouterId(router_id);
+                host.setAddress(hostIdToString(host_id));
+
+                for (const Router::Host& entry : std::as_const(list.hosts))
+                {
+                    if (entry.host_id != host_id)
+                        continue;
+
+                    host.setName(entry.display_name.isEmpty() ? entry.computer_name :
+                                                                entry.display_name);
+                    host.setUsername(entry.user_name);
+                    host.setPassword(entry.password);
+                    break;
+                }
+
+                onConnect(host, session_type);
+            });
+            return;
+        }
+
+        host.setRouterId(host_url.routerId());
+        host.setAddress(hostIdToString(host_url.hostId()));
+    }
+    else
+    {
+        std::optional<HostConfig> entry = db.findHost(host_url.entryId());
+        if (!entry.has_value())
+        {
+            MsgBox::warning(this,
+                tr("The host referenced by the link was not found in the address book."));
+            return;
+        }
+
+        host = *entry;
+
+        if (host.routerId() != 0 && !db.findRouter(host.routerId()).has_value())
+        {
+            MsgBox::warning(this, tr("The router associated with this host has been deleted. "
+                                     "Edit the host to select another router or switch to "
+                                     "direct connection."));
+            return;
+        }
+
+        db.setConnectTime(host.id(), QDateTime::currentSecsSinceEpoch());
+    }
+
+    onConnect(host, host_url.sessionType());
 }
 
 //--------------------------------------------------------------------------------------------------

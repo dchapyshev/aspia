@@ -64,11 +64,25 @@
                                         Scope="any" Protocol="udp" IgnoreFailure="yes" />
             </File>
         </Component>
+        <!-- aspia:// URL scheme registration -->
+        <Component Id="UrlProtocol" Guid="{ED58DA54-908A-4465-AF1D-71C0492E3971}">
+            <RegistryKey Root="HKCR" Key="aspia">
+                <RegistryValue Type="string" Value="URL:Aspia Protocol" KeyPath="yes" />
+                <RegistryValue Type="string" Name="URL Protocol" Value="" />
+                <RegistryKey Key="DefaultIcon">
+                    <RegistryValue Type="string" Value="&quot;[INSTALLLOCATION]$(var.Executable)&quot;,0" />
+                </RegistryKey>
+                <RegistryKey Key="shell\open\command">
+                    <RegistryValue Type="string" Value="&quot;[INSTALLLOCATION]$(var.Executable)&quot; &quot;%1&quot;" />
+                </RegistryKey>
+            </RegistryKey>
+        </Component>
     </DirectoryRef>
 
     <!-- Product features -->
     <Feature Id="FeatureProduct" Title="$(var.ProductName)" InstallDefault="local" ConfigurableDirectory="INSTALLLOCATION" Level="1">
         <ComponentRef Id="Applications" />
+        <ComponentRef Id="UrlProtocol" />
         <ComponentRef Id="ProgramMenuShortcut" />
         <ComponentRef Id="DesktopShortcut" />
     </Feature>

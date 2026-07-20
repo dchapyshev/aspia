@@ -33,11 +33,23 @@ public:
 
 public slots:
     void activateWindow();
+    void openUrl(const QString& url);
 
 signals:
     void sig_windowActivated();
+    void sig_urlOpened(const QString& url);
+
+#if defined(Q_OS_MACOS)
+protected:
+    // GuiApplication implementation.
+    bool event(QEvent* event) final;
+#endif // defined(Q_OS_MACOS)
 
 private:
+#if defined(Q_OS_WINDOWS)
+    static void registerUrlHandler();
+#endif // defined(Q_OS_WINDOWS)
+
     Q_DISABLE_COPY_MOVE(Application)
 };
 

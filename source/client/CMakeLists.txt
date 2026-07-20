@@ -40,6 +40,8 @@ list(APPEND SOURCE_CLIENT_CORE
     file_transfer.h
     file_transfer_queue_builder.cc
     file_transfer_queue_builder.h
+    host_url.cc
+    host_url.h
     json_backup.cc
     json_backup.h
     master_password.cc

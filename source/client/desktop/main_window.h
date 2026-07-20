@@ -52,6 +52,7 @@ public:
 
 public slots:
     void showAndActivate();
+    void connectToUrl(const QString& url);
 
 protected:
     // QMainWindow implementation.
