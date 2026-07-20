@@ -42,45 +42,20 @@ const char kHostParam[] = "host";
 const char kSessionParam[] = "session";
 
 //--------------------------------------------------------------------------------------------------
-const char* sessionTypeToName(proto::peer::SessionType session_type)
+bool isValidSessionType(int value)
 {
-    switch (session_type)
+    switch (value)
     {
         case proto::peer::SESSION_TYPE_DESKTOP:
-            return "desktop";
-
         case proto::peer::SESSION_TYPE_FILE_TRANSFER:
-            return "file-transfer";
-
         case proto::peer::SESSION_TYPE_SYSTEM_INFO:
-            return "system-info";
-
         case proto::peer::SESSION_TYPE_CHAT:
-            return "chat";
-
         case proto::peer::SESSION_TYPE_TERMINAL:
-            return "terminal";
+            return true;
 
         default:
-            return "";
+            return false;
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-proto::peer::SessionType sessionTypeFromName(const QString& name)
-{
-    if (name == "desktop")
-        return proto::peer::SESSION_TYPE_DESKTOP;
-    else if (name == "file-transfer")
-        return proto::peer::SESSION_TYPE_FILE_TRANSFER;
-    else if (name == "system-info")
-        return proto::peer::SESSION_TYPE_SYSTEM_INFO;
-    else if (name == "chat")
-        return proto::peer::SESSION_TYPE_CHAT;
-    else if (name == "terminal")
-        return proto::peer::SESSION_TYPE_TERMINAL;
-    else
-        return proto::peer::SESSION_TYPE_UNKNOWN;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -166,12 +141,15 @@ HostUrl HostUrl::fromString(const QString& str)
     }
 
     proto::peer::SessionType session_type = proto::peer::SESSION_TYPE_DESKTOP;
-    QString session_name = query.queryItemValue(kSessionParam);
-    if (!session_name.isEmpty())
+    QString session = query.queryItemValue(kSessionParam);
+    if (!session.isEmpty())
     {
-        session_type = sessionTypeFromName(session_name);
-        if (session_type == proto::peer::SESSION_TYPE_UNKNOWN)
+        bool ok = false;
+        int value = session.toInt(&ok);
+        if (!ok || !isValidSessionType(value))
             return result;
+
+        session_type = static_cast<proto::peer::SessionType>(value);
     }
 
     result.valid_ = true;
@@ -191,7 +169,7 @@ QString HostUrl::stringForEntry(qint64 entry_id, proto::peer::SessionType sessio
 
     QUrlQuery query;
     query.addQueryItem(kEntryParam, QString::number(entry_id));
-    query.addQueryItem(kSessionParam, sessionTypeToName(session_type));
+    query.addQueryItem(kSessionParam, QString::number(session_type));
 
     return makeUrl(query);
 }
@@ -206,7 +184,7 @@ QString HostUrl::stringForRouterHost(qint64 router_id, HostId host_id, proto::pe
     QUrlQuery query;
     query.addQueryItem(kRouterParam, QString::number(router_id));
     query.addQueryItem(kHostParam, hostIdToString(host_id));
-    query.addQueryItem(kSessionParam, sessionTypeToName(session_type));
+    query.addQueryItem(kSessionParam, QString::number(session_type));
 
     return makeUrl(query);
 }
