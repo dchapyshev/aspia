@@ -36,10 +36,10 @@ const char kConnectAuthority[] = "connect";
 
 const char kDataParam[] = "d";
 
-const char kEntryParam[] = "entry";
-const char kRouterParam[] = "router";
-const char kHostParam[] = "host";
-const char kSessionParam[] = "session";
+const char kEntryParam[] = "e";
+const char kRouterParam[] = "r";
+const char kHostParam[] = "h";
+const char kSessionParam[] = "s";
 
 //--------------------------------------------------------------------------------------------------
 bool isValidSessionType(int value)

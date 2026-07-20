@@ -30,11 +30,11 @@ enum SessionType : int;
 // Link to an address book record that can be opened from outside the application. The link
 // carries only record references, never addresses or credentials, so it is useless outside
 // the machine (or the router account) it was created on:
-//   aspia://connect?d=ZW50cnk9NDImc2Vzc2lvbj0x
-// The payload is a base64url-encoded query string ("entry=42&session=1" or
-// "router=3&host=123456789&session=1"), where |entry| is a local address book entry ID,
-// |router| is a router record ID in the local database, |host| is the record key in that
-// router's address book and |session| is a proto::peer::SessionType value.
+//   aspia://connect?d=ZT00MiZzPTE
+// The payload is a base64url-encoded query string ("e=42&s=1" or "r=3&h=123456789&s=1"),
+// where |e| is a local address book entry ID, |r| is a router record ID in the local
+// database, |h| is the record key in that router's address book and |s| is a
+// proto::peer::SessionType value.
 class HostUrl final
 {
 public:
