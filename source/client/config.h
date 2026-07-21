@@ -121,6 +121,9 @@ public:
     qint64 routerId() const { return router_id_; }
     void setRouterId(qint64 id) { router_id_ = id; }
 
+    const QString& guid() const { return guid_; }
+    void setGuid(const QString& value) { guid_ = value; }
+
     qint64 createTime() const { return create_time_; }
     void setCreateTime(qint64 value) { create_time_ = value; }
 
@@ -165,6 +168,7 @@ private:
     qint64 id_ = -1;
     qint64 group_id_ = 0;
     qint64 router_id_ = 0;
+    QString guid_;
     qint64 create_time_ = 0;
     qint64 modify_time_ = 0;
     qint64 connect_time_ = 0;

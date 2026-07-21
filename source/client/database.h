@@ -44,6 +44,7 @@ public:
     bool removeHost(qint64 entry_id);
     bool setConnectTime(qint64 entry_id, qint64 connect_time);
     std::optional<HostConfig> findHost(qint64 entry_id) const;
+    std::optional<HostConfig> findHostByGuid(const QString& guid) const;
 
     // Search.
     QList<HostConfig> searchHosts(const QString& query) const;

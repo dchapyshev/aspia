@@ -27,6 +27,7 @@
 #include <QDateTime>
 #include <QDir>
 #include <QFileInfo>
+#include <QUuid>
 
 namespace {
 
@@ -53,6 +54,7 @@ HostConfig readHost(const SqlQuery& query)
     host.setCreateTime(query.columnInt64(8));
     host.setModifyTime(query.columnInt64(9));
     host.setConnectTime(query.columnInt64(10));
+    host.setGuid(query.columnText(11));
     return host;
 }
 
@@ -108,6 +110,7 @@ bool createTables(SqlDatabase& db)
                  "\"create_time\" INTEGER NOT NULL DEFAULT 0,"
                  "\"modify_time\" INTEGER NOT NULL DEFAULT 0,"
                  "\"connect_time\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"guid\" TEXT NOT NULL DEFAULT '',"
                  "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         LOG(ERROR) << "Unable to create hosts table:" << db.lastError();
@@ -135,6 +138,33 @@ bool createTables(SqlDatabase& db)
     {
         LOG(ERROR) << "Unable to create settings table:" << db.lastError();
         return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Host entries created before the GUID column existed get one on the first open.
+bool backfillHostGuids(SqlDatabase& db)
+{
+    QList<qint64> ids;
+    {
+        SqlQuery query(db, "SELECT id FROM hosts WHERE guid=''");
+        while (query.next())
+            ids.append(query.columnInt64(0));
+    }
+
+    for (qint64 id : std::as_const(ids))
+    {
+        SqlQuery query(db, "UPDATE hosts SET guid=? WHERE id=?");
+        query.addText(QUuid::createUuid().toString(QUuid::WithoutBraces));
+        query.addInt64(id);
+
+        if (!query.exec())
+        {
+            LOG(ERROR) << "Unable to assign GUID to host" << id << ":" << db.lastError();
+            return false;
+        }
     }
 
     return true;
@@ -181,7 +211,7 @@ QList<HostConfig> Database::hostList(qint64 group_id) const
     }
 
     SqlQuery query(db_, "SELECT id, group_id, router_id, name, comment, address, username, password, "
-                        "create_time, modify_time, connect_time "
+                        "create_time, modify_time, connect_time, guid "
                         "FROM hosts WHERE group_id=?");
     query.addInt64(group_id);
 
@@ -202,7 +232,7 @@ QList<HostConfig> Database::allHosts() const
     }
 
     SqlQuery query(db_, "SELECT id, group_id, router_id, name, comment, address, username, password, "
-                        "create_time, modify_time, connect_time "
+                        "create_time, modify_time, connect_time, guid "
                         "FROM hosts");
 
     QList<HostConfig> hosts;
@@ -232,9 +262,12 @@ bool Database::addHost(HostConfig& host)
     host.setModifyTime(current_time);
     host.setConnectTime(0);
 
+    if (host.guid().isEmpty())
+        host.setGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
+
     SqlQuery query(db_, "INSERT INTO hosts (id, group_id, router_id, name, comment, address, "
-                        "username, password, create_time, modify_time, connect_time) "
-                        "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                        "username, password, create_time, modify_time, connect_time, guid) "
+                        "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     query.addInt64(host.groupId());
     query.addInt64(host.routerId());
     query.addBlob(host.encryptedName());
@@ -245,6 +278,7 @@ bool Database::addHost(HostConfig& host)
     query.addInt64(host.createTime());
     query.addInt64(host.modifyTime());
     query.addInt64(host.connectTime());
+    query.addText(host.guid());
 
     if (!query.exec())
     {
@@ -341,9 +375,32 @@ std::optional<HostConfig> Database::findHost(qint64 entry_id) const
     }
 
     SqlQuery query(db_, "SELECT id, group_id, router_id, name, comment, address, username, password, "
-                        "create_time, modify_time, connect_time "
+                        "create_time, modify_time, connect_time, guid "
                         "FROM hosts WHERE id=?");
     query.addInt64(entry_id);
+
+    if (!query.next())
+        return std::nullopt;
+
+    return readHost(query);
+}
+
+//--------------------------------------------------------------------------------------------------
+std::optional<HostConfig> Database::findHostByGuid(const QString& guid) const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return std::nullopt;
+    }
+
+    if (guid.isEmpty())
+        return std::nullopt;
+
+    SqlQuery query(db_, "SELECT id, group_id, router_id, name, comment, address, username, password, "
+                        "create_time, modify_time, connect_time, guid "
+                        "FROM hosts WHERE guid=?");
+    query.addText(guid);
 
     if (!query.next())
         return std::nullopt;
@@ -361,7 +418,7 @@ QList<HostConfig> Database::searchHosts(const QString& query_text) const
     }
 
     SqlQuery query(db_, "SELECT id, group_id, router_id, name, comment, address, username, password, "
-                        "create_time, modify_time, connect_time FROM hosts");
+                        "create_time, modify_time, connect_time, guid FROM hosts");
 
     QList<HostConfig> hosts;
     while (query.next())
@@ -863,7 +920,7 @@ bool Database::openDatabase()
         }
     }
 
-    if (!createTables(db_))
+    if (!createTables(db_) || !backfillHostGuids(db_))
     {
         db_.close();
         return false;
