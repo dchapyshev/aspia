@@ -1202,7 +1202,7 @@ void DesktopWindow::onLegacyMessage(const QByteArray& buffer)
     }
 
     if (message.has_clipboard_event())
-        readClipboardEvent(message.clipboard_event());
+        readLegacyClipboardEvent(message.clipboard_event());
     else if (message.has_capabilities())
         readLegacyCapabilities(message.capabilities());
     else if (message.has_extension())
@@ -1311,8 +1311,7 @@ void DesktopWindow::onClipboardEvent(const proto::clipboard::Event& event)
 
     ++send_clipboard_count_;
 
-    if (event.mime_type() == Clipboard::kMimeTypeFileList.toStdString() &&
-        !file_clipboard_supported_)
+    if (Clipboard::findFormat(event, Clipboard::kMimeTypeFileList) && !file_clipboard_supported_)
     {
         LOG(WARNING) << "File clipboard is not supported by remote side, skipping file list";
         return;
@@ -1320,8 +1319,16 @@ void DesktopWindow::onClipboardEvent(const proto::clipboard::Event& event)
 
     if (isLegacy())
     {
+        // Legacy hosts support only the text clipboard.
+        const proto::clipboard::Event::Format* text_format =
+            Clipboard::findFormat(event, Clipboard::kMimeTypeTextUtf8);
+        if (!text_format)
+            return;
+
         proto::legacy::ClientToSession message;
-        message.mutable_clipboard_event()->CopyFrom(event);
+        proto::legacy::ClipboardEvent* clipboard_event = message.mutable_clipboard_event();
+        clipboard_event->set_mime_type(text_format->mime_type());
+        clipboard_event->set_data(text_format->data());
         sendMessage(proto::desktop::CHANNEL_ID_LEGACY, serialize(message));
     }
     else
@@ -1481,8 +1488,7 @@ void DesktopWindow::readExtension(const proto::legacy::Extension& extension)
 //--------------------------------------------------------------------------------------------------
 void DesktopWindow::readClipboardEvent(const proto::clipboard::Event& event)
 {
-    if (event.mime_type() == Clipboard::kMimeTypeFileList.toStdString() &&
-        !file_clipboard_supported_)
+    if (Clipboard::findFormat(event, Clipboard::kMimeTypeFileList) && !file_clipboard_supported_)
     {
         LOG(WARNING) << "File clipboard is not supported by remote side, ignoring file list";
         return;
@@ -1494,6 +1500,14 @@ void DesktopWindow::readClipboardEvent(const proto::clipboard::Event& event)
         if (clipboard_)
             clipboard_->injectClipboardEvent(event);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::readLegacyClipboardEvent(const proto::legacy::ClipboardEvent& clipboard_event)
+{
+    proto::clipboard::Event event;
+    Clipboard::addFormat(&event, clipboard_event.mime_type(), clipboard_event.data());
+    readClipboardEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -21,7 +21,6 @@ syntax = "proto3";
 option optimize_for = LITE_RUNTIME;
 
 import "desktop_audio.proto";
-import "desktop_clipboard.proto";
 import "desktop_cursor.proto";
 import "desktop_input.proto";
 import "desktop_video.proto";
@@ -32,6 +31,12 @@ message Extension
 {
     string name = 1;
     bytes data  = 2;
+}
+
+message ClipboardEvent
+{
+    string mime_type = 1;
+    bytes data       = 2;
 }
 
 message Capabilities
@@ -87,7 +92,7 @@ message SessionToClient
     video.Packet video_packet       = 1;
     audio.Packet audio_packet       = 2;
     cursor.Shape cursor_shape       = 3;
-    clipboard.Event clipboard_event = 4;
+    ClipboardEvent clipboard_event  = 4;
     Extension extension             = 5;
     Capabilities capabilities       = 6;
     cursor.Position cursor_position = 7;
@@ -100,7 +105,7 @@ message ClientToSession
     input.KeyEvent key_event        = 2;
     input.TouchEvent touch_event    = 3;
     input.TextEvent text_event      = 4;
-    clipboard.Event clipboard_event = 5;
+    ClipboardEvent clipboard_event  = 5;
     Extension extension             = 6;
     Config config                   = 7;
     audio.Packet audio_packet       = 8;

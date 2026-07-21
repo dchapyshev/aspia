@@ -41,10 +41,6 @@
 #include "proto/desktop_power.h"
 #include "proto/desktop_screen.h"
 
-namespace proto::clipboard {
-class Event;
-} // namespace proto::clipboard
-
 namespace proto::control {
 class Capabilities;
 } // namespace proto::control

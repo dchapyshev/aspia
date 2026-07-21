@@ -23,9 +23,9 @@
 #include <QObject>
 #include <QVector>
 
-namespace proto::clipboard {
-class Event;
-} // namespace proto::clipboard
+#include <string_view>
+
+#include "proto/desktop_clipboard.h"
 
 struct LocalFileEntry
 {
@@ -50,8 +50,23 @@ public:
     // Creates the clipboard implementation for the current platform (nullptr if unsupported).
     static Clipboard* create(QObject* parent = nullptr);
 
-    static const QString kMimeTypeTextUtf8;
-    static const QString kMimeTypeFileList;
+    // Returns the format with the given mime type or nullptr if the event does not contain it.
+    static const proto::clipboard::Event::Format* findFormat(
+        const proto::clipboard::Event& event, std::string_view mime_type);
+
+    // Appends a format to |event|; empty data is skipped.
+    static void addFormat(
+        proto::clipboard::Event* event, std::string_view mime_type, std::string_view data);
+    static void addFormat(
+        proto::clipboard::Event* event, std::string_view mime_type, const QByteArray& data);
+
+    static const char kMimeTypeTextUtf8[];
+    static const char kMimeTypeTextHtml[];
+    static const char kMimeTypeTextRtf[];
+    static const char kMimeTypeTextCsv[];
+    static const char kMimeTypeImagePng[];
+    static const char kMimeTypeImageSvg[];
+    static const char kMimeTypeFileList[];
 
 public slots:
     void start();
@@ -67,11 +82,8 @@ signals:
 
 protected:
     virtual void init() = 0;
-    virtual void setData(const QString& mime_type, const QByteArray& data) = 0;
-    void onData(const QString& mime_type, const QByteArray& data);
-
-private:
-    QByteArray last_data_;
+    virtual void setData(const proto::clipboard::Event& event) = 0;
+    void onData(proto::clipboard::Event&& event);
 };
 
 #endif // COMMON_CLIPBOARD_H

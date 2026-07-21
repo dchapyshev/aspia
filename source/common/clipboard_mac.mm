@@ -164,7 +164,7 @@ ClipboardMac::ClipboardMac(QObject* parent)
       timer_(new QTimer(this))
 {
     LOG(INFO) << "Ctor";
-    connect(timer_, &QTimer::timeout, this, &ClipboardMac::checkForChanges);
+    connect(timer_, &QTimer::timeout, this, &ClipboardMac::onPollTimer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -188,6 +188,25 @@ ClipboardMac::~ClipboardMac()
 }
 
 //--------------------------------------------------------------------------------------------------
+void ClipboardMac::addFileData(int file_index, const QByteArray& data, bool is_last)
+{
+    std::scoped_lock lock(writers_mutex_);
+
+    auto it = active_writers_.find(file_index);
+    if (it == active_writers_.end())
+    {
+        LOG(ERROR) << "No active writer for file_index:" << file_index;
+        return;
+    }
+
+    FilePromiseWriter* writer = it.value();
+    writer->addData(data, is_last);
+
+    if (is_last)
+        active_writers_.erase(it);
+}
+
+//--------------------------------------------------------------------------------------------------
 void ClipboardMac::init()
 {
     current_change_count_ = [[NSPasteboard generalPasteboard] changeCount];
@@ -195,38 +214,37 @@ void ClipboardMac::init()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClipboardMac::setData(const QString& mime_type, const QByteArray& data)
+void ClipboardMac::setData(const proto::clipboard::Event& event)
 {
-    // Guard: prevent checkForChanges() from reading our own pasteboard writes.
+    // Guard: prevent onPollTimer() from reading our own pasteboard writes.
     // NSPasteboard IPC calls (writeObjects:, clearContents) may pump the run loop
     // internally, causing the QTimer to fire mid-write and trigger a re-read
     // that would call provideDataForType: prematurely.
     is_setting_data_ = true;
 
-    if (mime_type == kMimeTypeTextUtf8)
+    // A file list cannot be combined with other formats in the pasteboard, so it takes priority.
+    const proto::clipboard::Event::Format* file_format = findFormat(event, kMimeTypeFileList);
+
+    if (file_format)
     {
-        setDataText(data);
+        setDataFiles(QByteArray::fromStdString(file_format->data()));
     }
-    else if (mime_type == kMimeTypeFileList)
+    else if (!event.format_size())
     {
-        setDataFiles(data);
+        NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
+        [pasteboard clearContents];
+        current_change_count_ = [pasteboard changeCount];
     }
     else
     {
-        LOG(WARNING) << "Unhandled mime type:" << mime_type;
+        setDataContent(event);
     }
 
     is_setting_data_ = false;
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClipboardMac::startTimer()
-{
-    timer_->start(std::chrono::milliseconds(1000));
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClipboardMac::checkForChanges()
+void ClipboardMac::onPollTimer()
 {
     // Skip if we are currently writing to the pasteboard (see setData guard).
     if (is_setting_data_)
@@ -247,22 +265,72 @@ void ClipboardMac::checkForChanges()
         return;
     }
 
-    NSArray* objects = [pasteboard readObjectsForClasses:@[ [NSString class] ] options:nil];
-    if ([objects count])
-        onClipboardText();
+    onClipboardData();
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClipboardMac::onClipboardText()
+void ClipboardMac::startTimer()
+{
+    timer_->start(std::chrono::milliseconds(1000));
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClipboardMac::onClipboardData()
 {
     NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
-    NSArray* objects = [pasteboard readObjectsForClasses:@[ [NSString class] ] options:nil];
-    if (![objects count])
-        return;
+    proto::clipboard::Event event;
 
-    QString data = QString::fromNSString([objects lastObject]);
-    if (!data.isEmpty())
-        onData(kMimeTypeTextUtf8, data.toUtf8());
+    auto add_string = [&event, pasteboard](const char* mime_type, NSPasteboardType type)
+    {
+        NSString* value = [pasteboard stringForType:type];
+        if (value)
+            addFormat(&event, mime_type, QString::fromNSString(value).toUtf8());
+    };
+
+    auto add_bytes = [&event, pasteboard](const char* mime_type, NSPasteboardType type)
+    {
+        NSData* value = [pasteboard dataForType:type];
+        if (value)
+            addFormat(&event, mime_type, QByteArray::fromNSData(value));
+    };
+
+    // stringForType reads only the first pasteboard item; fall back to AppKit's object reading,
+    // which materializes a string from any item or bridgeable flavor (multi-item pasteboards may
+    // keep the text in a later item).
+    NSString* text = [pasteboard stringForType:NSPasteboardTypeString];
+    if (!text)
+    {
+        NSArray* objects = [pasteboard readObjectsForClasses:@[ [NSString class] ] options:nil];
+        if ([objects count])
+            text = [objects lastObject];
+    }
+
+    if (text)
+        addFormat(&event, kMimeTypeTextUtf8, QString::fromNSString(text).toUtf8());
+
+    add_string(kMimeTypeTextHtml, NSPasteboardTypeHTML);
+    add_bytes(kMimeTypeTextRtf, NSPasteboardTypeRTF);
+    add_string(kMimeTypeTextCsv, @"public.comma-separated-values-text");
+
+    // PNG is passed through as is; a TIFF-only pasteboard (screenshots, some editors) is recoded.
+    NSData* png = [pasteboard dataForType:NSPasteboardTypePNG];
+    if (!png)
+    {
+        NSData* tiff = [pasteboard dataForType:NSPasteboardTypeTIFF];
+        if (tiff)
+        {
+            NSBitmapImageRep* rep = [NSBitmapImageRep imageRepWithData:tiff];
+            if (rep)
+                png = [rep representationUsingType:NSBitmapImageFileTypePNG properties:@{}];
+        }
+    }
+
+    if (png)
+        addFormat(&event, kMimeTypeImagePng, QByteArray::fromNSData(png));
+
+    add_bytes(kMimeTypeImageSvg, @"public.svg-image");
+
+    onData(std::move(event));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -332,18 +400,74 @@ void ClipboardMac::onClipboardFiles()
         file->set_modify_time(entry.modify_time);
     }
 
-    onData(kMimeTypeFileList, serialize(file_list));
+    proto::clipboard::Event event;
+    addFormat(&event, kMimeTypeFileList, serialize(file_list));
+    onData(std::move(event));
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClipboardMac::setDataText(const QByteArray& data)
+void ClipboardMac::setDataContent(const proto::clipboard::Event& event)
 {
-    NSString* text = QString::fromUtf8(data).toNSString();
     NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
-    [pasteboard clearContents];
-    [pasteboard writeObjects:@[ text ]];
 
-    current_change_count_ = [[NSPasteboard generalPasteboard] changeCount];
+    // All formats describe one clipboard change and are published in a single pasteboard item.
+    // The pasteboard is cleared only after at least one format is known to be usable: only an
+    // empty event is a clear command.
+    NSPasteboardItem* item = [[[NSPasteboardItem alloc] init] autorelease];
+    bool has_content = false;
+
+    auto set_string = [item, &has_content, &event](const char* mime_type, NSPasteboardType type)
+    {
+        const proto::clipboard::Event::Format* format = findFormat(event, mime_type);
+        if (!format || format->data().empty())
+            return;
+
+        [item setString:QString::fromStdString(format->data()).toNSString() forType:type];
+        has_content = true;
+    };
+
+    auto set_bytes = [item, &has_content, &event](const char* mime_type, NSPasteboardType type)
+    {
+        const proto::clipboard::Event::Format* format = findFormat(event, mime_type);
+        if (!format || format->data().empty())
+            return;
+
+        [item setData:QByteArray::fromStdString(format->data()).toNSData() forType:type];
+        has_content = true;
+    };
+
+    set_string(kMimeTypeTextUtf8, NSPasteboardTypeString);
+    set_string(kMimeTypeTextHtml, NSPasteboardTypeHTML);
+    set_bytes(kMimeTypeTextRtf, NSPasteboardTypeRTF);
+    set_string(kMimeTypeTextCsv, @"public.comma-separated-values-text");
+    set_bytes(kMimeTypeImageSvg, @"public.svg-image");
+
+    const proto::clipboard::Event::Format* png_format = findFormat(event, kMimeTypeImagePng);
+    if (png_format && !png_format->data().empty())
+    {
+        NSData* png_data = QByteArray::fromStdString(png_format->data()).toNSData();
+        [item setData:png_data forType:NSPasteboardTypePNG];
+        has_content = true;
+
+        // A TIFF representation is published alongside for applications that do not accept PNG.
+        NSBitmapImageRep* rep = [NSBitmapImageRep imageRepWithData:png_data];
+        if (rep)
+        {
+            NSData* tiff = [rep TIFFRepresentation];
+            if (tiff)
+                [item setData:tiff forType:NSPasteboardTypeTIFF];
+        }
+    }
+
+    if (!has_content)
+    {
+        LOG(WARNING) << "No usable payload in clipboard event";
+        return;
+    }
+
+    [pasteboard clearContents];
+    [pasteboard writeObjects:@[ item ]];
+    current_change_count_ = [pasteboard changeCount];
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -399,7 +523,7 @@ void ClipboardMac::setDataFiles(const QByteArray& data)
     }
 
     // writeToPasteboard creates empty temp files, registers NSFilePresenters, and
-    // writes file URLs to the pasteboard. This is instant — no network transfer.
+    // writes file URLs to the pasteboard. This is instant - no network transfer.
     // Data is downloaded on-demand when the user actually pastes in Finder
     // (via relinquishPresentedItemToReader:).
     file_data_provider_->writeToPasteboard();
@@ -442,24 +566,5 @@ void ClipboardMac::onFileDataFinished(int file_index, FilePromiseWriter* writer)
 
     auto it = active_writers_.find(file_index);
     if (it != active_writers_.end() && it.value() == writer)
-        active_writers_.erase(it);
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClipboardMac::addFileData(int file_index, const QByteArray& data, bool is_last)
-{
-    std::scoped_lock lock(writers_mutex_);
-
-    auto it = active_writers_.find(file_index);
-    if (it == active_writers_.end())
-    {
-        LOG(ERROR) << "No active writer for file_index:" << file_index;
-        return;
-    }
-
-    FilePromiseWriter* writer = it.value();
-    writer->addData(data, is_last);
-
-    if (is_last)
         active_writers_.erase(it);
 }

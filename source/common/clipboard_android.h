@@ -32,12 +32,16 @@ public:
 protected:
     // Clipboard implementation.
     void init() final;
-    void setData(const QString& mime_type, const QByteArray& data) final;
+    void setData(const proto::clipboard::Event& event) final;
 
 private slots:
     void onDataChanged();
 
 private:
+    QString injected_text_;
+    QString injected_html_;
+    bool has_injected_data_ = false;
+
     Q_DISABLE_COPY_MOVE(ClipboardAndroid)
 };
 

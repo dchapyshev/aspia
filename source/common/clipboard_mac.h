@@ -19,10 +19,10 @@
 #ifndef COMMON_CLIPBOARD_MAC_H
 #define COMMON_CLIPBOARD_MAC_H
 
-#include <mutex>
-
 #include <QMap>
 #include <QTimer>
+
+#include <mutex>
 
 #include "common/clipboard.h"
 
@@ -35,7 +35,7 @@ class ClipboardMac final : public Clipboard
 
 public:
     explicit ClipboardMac(QObject* parent = nullptr);
-    ~ClipboardMac();
+    ~ClipboardMac() final;
 
     // Clipboard implementation.
     void addFileData(int file_index, const QByteArray& data, bool is_last) final;
@@ -43,14 +43,16 @@ public:
 protected:
     // Clipboard implementation.
     void init() final;
-    void setData(const QString& mime_type, const QByteArray& data) final;
+    void setData(const proto::clipboard::Event& event) final;
+
+private slots:
+    void onPollTimer();
 
 private:
     void startTimer();
-    void checkForChanges();
-    void onClipboardText();
+    void onClipboardData();
     void onClipboardFiles();
-    void setDataText(const QByteArray& data);
+    void setDataContent(const proto::clipboard::Event& event);
     void setDataFiles(const QByteArray& data);
     void onFileDataRequested(int file_index, FilePromiseWriter* writer);
     void onFileDataFinished(int file_index, FilePromiseWriter* writer);

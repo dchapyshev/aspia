@@ -244,6 +244,9 @@ void HostWindow::connectToService()
     }
 
     // Drop any clipboard left over from a previous connection before reconnecting.
+    if (clipboard_)
+        clipboard_->clearClipboard();
+
     clipboard_.reset();
 
     LOG(INFO) << "Connecting to service";
@@ -417,6 +420,10 @@ void HostWindow::onClientListChanged(const UserIpcWorker::ClientList& clients)
 
     if (!has_desktop)
     {
+        // Content injected by remote clients must not outlive their sessions.
+        if (clipboard_)
+            clipboard_->clearClipboard();
+
         clipboard_.reset();
         return;
     }

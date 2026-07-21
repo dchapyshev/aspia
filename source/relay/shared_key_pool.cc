@@ -18,6 +18,8 @@
 
 #include "relay/shared_key_pool.h"
 
+#include <mutex>
+
 #include "base/logging.h"
 
 //--------------------------------------------------------------------------------------------------

@@ -42,12 +42,9 @@ namespace proto::audio {
 class Packet;
 } // namespace proto::audio
 
-namespace proto::clipboard {
-class Event;
-} // namespace proto::clipboard
-
 namespace proto::legacy {
 class Capabilities;
+class ClipboardEvent;
 class Extension;
 } // namespace proto::legacy
 
@@ -145,6 +142,7 @@ private:
     void readLegacyCapabilities(const proto::legacy::Capabilities& capabilities);
     void readExtension(const proto::legacy::Extension& extension);
     void readClipboardEvent(const proto::clipboard::Event& event);
+    void readLegacyClipboardEvent(const proto::legacy::ClipboardEvent& clipboard_event);
     void onCapabilitiesChanged(const proto::control::Capabilities& capabilities);
     void onScreenListChanged(const proto::screen::ScreenList& screen_list);
     void onSessionListChanged(const proto::control::SessionList& sessions);

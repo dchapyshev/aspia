@@ -43,15 +43,16 @@ public:
 protected:
     // Clipboard implementation.
     void init() final;
-    void setData(const QString& mime_type, const QByteArray& data) final;
+    void setData(const proto::clipboard::Event& event) final;
 
 private:
     void onClipboardUpdate();
-    void onClipboardText();
+    void onClipboardData();
     void onClipboardFiles();
-    void setDataText(const QByteArray& data);
+    void setDataContent(const proto::clipboard::Event& event);
     void setDataFiles(const QByteArray& data);
     void clearClipboardContent();
+    void releaseFileTransferState();
     void onFileDataRequested(int file_index, FileStream* stream);
 
     // Handles messages received by |window_|.

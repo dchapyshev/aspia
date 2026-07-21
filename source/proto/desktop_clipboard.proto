@@ -39,8 +39,13 @@ message Event
         repeated File file = 1;
     }
 
-    string mime_type = 1;
-    bytes data = 2;
+    message Format
+    {
+        string mime_type = 1;
+        bytes data       = 2;
+    }
+
+    repeated Format format = 1;
 }
 
 // Client -> Host (channel 6).

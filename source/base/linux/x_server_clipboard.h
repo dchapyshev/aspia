@@ -22,9 +22,13 @@
 #include <QtClassHelperMacros>
 
 #include <chrono>
+#include <deque>
 #include <functional>
+#include <map>
+#include <memory>
 #include <set>
 #include <string>
+#include <vector>
 
 #include "base/linux/x11_headers.h"
 
@@ -34,15 +38,29 @@ public:
     XServerClipboard();
     ~XServerClipboard();
 
-    using ClipboardChangedCallback =
-        std::function<void(const std::string& data)>;
+    // Clipboard content as a set of representations keyed by X target name (e.g. "UTF8_STRING",
+    // "text/html", "image/png").
+    using FormatMap = std::map<std::string, std::string>;
 
-    void init(Display* display, const ClipboardChangedCallback& callback);
-    void setClipboard(const std::string& data);
+    using ClipboardChangedCallback = std::function<void(FormatMap&& formats)>;
+
+    // |targets| lists the X target names to capture from other applications and to serve to them.
+    // "STRING" is captured only when "UTF8_STRING" is not offered, and is served with the
+    // "UTF8_STRING" payload.
+    void init(Display* display, const std::vector<std::string>& targets,
+              const ClipboardChangedCallback& callback);
+
+    void setClipboard(FormatMap formats);
 
     // Process |event| if it is an X selection notification. The caller should invoke this for every
     // event it receives from |display|.
     void processXEvent(XEvent* event);
+
+    // Periodic maintenance driven by the owner's clock (about one call per second): cancels a
+    // capture session whose owner stopped responding and drops outgoing transfers whose requestor
+    // died. Event-driven recovery is not enough - the dedicated clipboard connection may carry no
+    // traffic at all while a session is stuck.
+    void onTick();
 
 private:
     // Handlers called by processXEvent() for each event type.
@@ -55,39 +73,35 @@ private:
     // Used by onSelectionRequest() to respond to requests for details of our clipboard content.
     // This is done by changing the property |property| of the |requestor| window (these values come
     // from the XSelectionRequestEvent).
-    // |target| must be a string type (STRING or UTF8_STRING).
     void sendTargetsResponse(Window requestor, Atom property);
     void sendTimestampResponse(Window requestor, Atom property);
-    void sendStringResponse(Window requestor, Atom property, Atom target);
 
-    // Called by onSelectionNotify() when the selection owner has replied to a request for
-    // information about a selection.
-    // |event| is the raw X event from the notification.
-    // |type|, |format| etc are the results from XGetWindowProperty(), or 0 if there is no associated data.
-    void handleSelectionNotify(XSelectionEvent* event,
-                               Atom type,
-                               int format,
-                               int item_count,
-                               void* data);
+    // Responds with the data for |target|, starting an incremental (INCR) transfer when the payload
+    // exceeds the chunk size. Returns false if there is no data for |target|.
+    bool sendDataResponse(Window requestor, Atom property, Atom target);
 
-    // These methods return true if selection processing is complete, false otherwise. They are
-    // called from handleSelectionNotify(), and take the same arguments.
-    bool handleSelectionTargetsEvent(XSelectionEvent* event,
-                                     int format,
-                                     int item_count,
-                                     void* data);
-    bool handleSelectionStringEvent(XSelectionEvent* event,
-                                    int format,
-                                    int item_count,
-                                    void* data);
+    // Continues the outgoing INCR transfer for |requestor|/|property| after the requestor has
+    // consumed (deleted) the previous chunk.
+    void continueOutgoingTransfer(Window requestor, Atom property);
 
-    // Notify the registered callback of new clipboard text.
-    void notifyClipboardText(const std::string& text);
+    // Stops watching |requestor| unless another outgoing transfer to the same window is active.
+    void unwatchRequestor(Window requestor);
 
-    // These methods trigger the X server or selection owner to send back an event containing the
-    // requested information.
-    void requestSelectionTargets(Atom selection);
-    void requestSelectionString(Atom selection, Atom target);
+    // Drops outgoing transfers whose requestor has stopped consuming chunks.
+    void purgeStaleTransfers();
+
+    // Capture side: TARGETS reply handling and sequential retrieval of the offered formats.
+    void startCapture(Time timestamp);
+    void replayPendingCapture();
+    void handleTargetsNotify(XSelectionEvent* event);
+    void requestNextTarget();
+    void finishCurrentTarget();
+    void finishCapture(bool abandoned);
+    void cancelCapture();
+    void resetCaptureState();
+
+    // The property the current capture session receives selection data into.
+    Atom selectionDataProperty() const { return selection_data_atoms_[selection_data_index_]; }
 
     // Assert ownership of the specified |selection|.
     void assertSelectionOwnership(Atom selection);
@@ -106,28 +120,69 @@ private:
 
     // Cached atoms for various strings, initialized during init().
     Atom clipboard_atom_ = X11_None;
-    Atom large_selection_atom_ = X11_None;
-    Atom selection_string_atom_ = X11_None;
+    Atom incr_atom_ = X11_None;
     Atom targets_atom_ = X11_None;
     Atom timestamp_atom_ = X11_None;
     Atom utf8_string_atom_ = X11_None;
+
+    // Properties for receiving selection data. Capture sessions rotate over the pool, so that
+    // INCR chunks from a stalled previous owner keep landing in an old property and cannot mix
+    // into the current session (PropertyNotify carries no sender identity).
+    Atom selection_data_atoms_[4] = { X11_None, X11_None, X11_None, X11_None };
+    size_t selection_data_index_ = 0;
+
+    // X server time of the capture session start, used to stamp the session's requests. Late
+    // replies of a cancelled session are filtered by the session data property; the timestamp
+    // echo is required only for refusals, which carry no property to match.
+    Time capture_time_ = CurrentTime;
+
+    // Ownership-change timestamp of a copy made while a capture session was still running, to be
+    // captured when the session ends. CurrentTime when there is no pending copy.
+    Time pending_capture_time_ = CurrentTime;
+
+    // Targets supplied to init(), in the preferred capture order, and the atom <-> name mapping.
+    std::vector<Atom> interesting_targets_;
+    std::map<Atom, std::string> target_names_;
+    std::map<std::string, Atom> target_atoms_;
 
     // The set of X selections owned by |clipboard_window_| (can be Primary or Clipboard or both).
     std::set<Atom> selections_owned_;
 
     // Clipboard content to return to other applications when |clipboard_window_| owns a selection.
-    std::string data_;
+    std::map<std::string, std::shared_ptr<const std::string>> data_;
 
-    // Stores the property to use for large transfers, or None if a large transfer is not currently
-    // in-progress.
-    Atom large_selection_property_ = X11_None;
+    // Capture state: the queue of targets left to retrieve from the current selection owner, the
+    // target being retrieved and the representations collected so far.
+    std::deque<Atom> pending_targets_;
+    Atom current_target_ = X11_None;
+    FormatMap captured_formats_;
 
-    // Remembers the start time of selection processing, and is set to null when processing is
-    // complete. This is used to decide whether to begin processing a new selection or continue with
-    // the current selection.
+    // Incoming INCR transfer state for |current_target_|.
+    bool incr_capture_active_ = false;
+    bool incr_capture_overflow_ = false;
+    std::string incr_capture_data_;
+
     using Clock = std::chrono::high_resolution_clock;
     using TimePoint = std::chrono::time_point<Clock>;
-    TimePoint get_selections_time_;
+
+    // An outgoing INCR transfer: a requestor consumes |data| in chunks by deleting |property|
+    // after reading each part.
+    struct OutgoingTransfer
+    {
+        Window requestor;
+        Atom property;
+        Atom target;
+        std::shared_ptr<const std::string> data;
+        size_t offset = 0;
+        TimePoint start_time;
+    };
+
+    std::vector<OutgoingTransfer> outgoing_transfers_;
+
+    // Time of the last reply or INCR chunk accepted by the capture session, null when no session
+    // is active. A session whose owner stopped responding is cancelled by onTick() after
+    // kCaptureStallTimeout without progress.
+    TimePoint capture_progress_time_;
 
     // |callback| argument supplied to init().
     ClipboardChangedCallback callback_;

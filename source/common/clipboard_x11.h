@@ -19,10 +19,11 @@
 #ifndef COMMON_CLIPBOARD_X11_H
 #define COMMON_CLIPBOARD_X11_H
 
+#include "base/linux/x_server_clipboard.h"
 #include "common/clipboard.h"
 
 class QSocketNotifier;
-class XServerClipboard;
+class QTimer;
 struct _XDisplay;
 
 class ClipboardX11 final : public Clipboard
@@ -31,15 +32,15 @@ class ClipboardX11 final : public Clipboard
 
 public:
     explicit ClipboardX11(QObject* parent = nullptr);
-    ~ClipboardX11();
+    ~ClipboardX11() final;
 
 protected:
     // Clipboard implementation.
     void init() final;
-    void setData(const QString& mime_type, const QByteArray& data) final;
+    void setData(const proto::clipboard::Event& event) final;
 
 private:
-    void onTextData(const std::string& text);
+    void onClipboardChanged(XServerClipboard::FormatMap&& formats);
     void pumpXEvents();
 
     // Underlying X11 clipboard implementation.
@@ -47,6 +48,10 @@ private:
 
     // Watcher used to handle X11 events from |display_|.
     QSocketNotifier* x_connection_notifier_ = nullptr;
+
+    // Drives XServerClipboard::onTick(): stalled-session and dead-requestor recovery cannot be
+    // event-driven, the dedicated X connection may carry no traffic at all.
+    QTimer* tick_timer_ = nullptr;
 
     // Connection to the X server, used by |x_server_clipboard_|. This is created and owned by
     // this class.

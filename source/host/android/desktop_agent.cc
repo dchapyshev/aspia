@@ -319,19 +319,20 @@ void DesktopAgent::onInjectTouchEvent(const proto::input::TouchEvent& event)
 void DesktopAgent::onInjectClipboardEvent(const proto::clipboard::Event& event)
 {
     // Only plain text is supported; queue it for the overlay button to apply on the next tap.
-    if (event.mime_type() == Clipboard::kMimeTypeTextUtf8.toStdString() && floating_menu_bridge_)
-        floating_menu_bridge_->setIncomingText(QString::fromStdString(event.data()));
+    const proto::clipboard::Event::Format* format =
+        Clipboard::findFormat(event, Clipboard::kMimeTypeTextUtf8);
+    if (format && floating_menu_bridge_)
+        floating_menu_bridge_->setIncomingText(QString::fromStdString(format->data()));
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgent::onClipboardTextChanged(const QString& text)
 {
-    proto::clipboard::Event event;
-    event.set_mime_type(Clipboard::kMimeTypeTextUtf8.toStdString());
-    event.set_data(text.toStdString());
+    if (text.isEmpty())
+        return;
 
     proto::clipboard::HostToClient message;
-    message.mutable_event()->CopyFrom(event);
+    Clipboard::addFormat(message.mutable_event(), Clipboard::kMimeTypeTextUtf8, text.toUtf8());
 
     const QByteArray buffer = serialize(message);
     for (auto* client : std::as_const(clients_))

@@ -18,6 +18,8 @@
 
 #include "router/shared_key_pool.h"
 
+#include <mutex>
+
 #include "base/logging.h"
 
 namespace {

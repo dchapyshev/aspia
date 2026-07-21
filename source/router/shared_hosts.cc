@@ -18,6 +18,8 @@
 
 #include "router/shared_hosts.h"
 
+#include <mutex>
+
 //--------------------------------------------------------------------------------------------------
 // static
 SharedHosts& SharedHosts::instance()

@@ -30,6 +30,7 @@
 #include "base/desktop/frame.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/threading/worker.h"
+#include "common/clipboard.h"
 #include "host/desktop_environment.h"
 #include "host/desktop_resizer.h"
 #include "host/input_injector.h"
@@ -344,10 +345,12 @@ void ScreenWorker::onClipboardEvent(const proto::clipboard::Event& event)
     if (capture_mode_ != CaptureMode::VT || !input_injector_)
         return;
 
-    if (event.mime_type() == "text/plain; charset=UTF-8")
+    const proto::clipboard::Event::Format* format =
+        Clipboard::findFormat(event, Clipboard::kMimeTypeTextUtf8);
+    if (format)
     {
         if (auto* vt_injector = qobject_cast<InputInjectorVt*>(input_injector_))
-            vt_injector->setClipboard(QString::fromStdString(event.data()));
+            vt_injector->setClipboard(QString::fromStdString(format->data()));
     }
 #endif // defined(Q_OS_LINUX)
 }
@@ -1052,10 +1055,12 @@ void ScreenWorker::fallbackToKms()
 //--------------------------------------------------------------------------------------------------
 void ScreenWorker::sendClipboardText(const std::string& text)
 {
-    proto::clipboard::Event* event =
-        serializer_.newMessage<proto::clipboard::HostToClient>().mutable_event();
-    event->set_mime_type("text/plain; charset=UTF-8");
-    event->set_data(text);
+    if (text.empty())
+        return;
+
+    Clipboard::addFormat(
+        serializer_.newMessage<proto::clipboard::HostToClient>().mutable_event(),
+        Clipboard::kMimeTypeTextUtf8, text);
 
     emit sig_clipboardData(serializer_.serialize<proto::clipboard::HostToClient>());
 }
