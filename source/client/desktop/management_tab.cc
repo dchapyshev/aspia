@@ -979,6 +979,7 @@ void ManagementTab::onCopyHost()
     }
 
     host->setName(host->name() + " " + tr("(copy)"));
+    host->setGuid(QString());
 
     if (!db.addHost(*host))
     {
@@ -1937,7 +1938,7 @@ void ManagementTab::addCopyLinkMenu(QMenu& menu, const HostConfig& host)
             QString url;
             if (host.id() > 0)
             {
-                url = HostUrl::stringForEntry(host.id(), session_type);
+                url = HostUrl::stringForEntry(host.guid(), session_type);
             }
             else if (host.routerId() > 0)
             {

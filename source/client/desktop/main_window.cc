@@ -270,7 +270,7 @@ void MainWindow::connectToUrl(const QString& url)
     }
     else
     {
-        std::optional<HostConfig> entry = db.findHost(host_url.entryId());
+        std::optional<HostConfig> entry = db.findHostByGuid(host_url.hostGuid());
         if (!entry.has_value())
         {
             MsgBox::warning(this,

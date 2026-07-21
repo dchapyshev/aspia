@@ -60,11 +60,12 @@ bool isValidSessionType(int value)
 }
 
 //--------------------------------------------------------------------------------------------------
-qint64 parseId(const QString& str)
+// Canonicalizes a GUID so it always compares equal to the stored form. Returns an empty
+// string for anything that is not a valid GUID.
+QString parseGuid(const QString& str)
 {
-    bool ok = false;
-    qint64 id = str.toLongLong(&ok);
-    return (ok && id > 0) ? id : -1;
+    QUuid guid = QUuid::fromString(str);
+    return guid.isNull() ? QString() : guid.toString(QUuid::WithoutBraces);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -120,23 +121,21 @@ HostUrl HostUrl::fromString(const QString& str)
     if (entry.isEmpty() == (router.isEmpty() && host.isEmpty()))
         return result;
 
-    qint64 entry_id = -1;
+    QString host_guid;
     QString router_guid;
     HostId host_id = kInvalidHostId;
 
     if (!entry.isEmpty())
     {
-        entry_id = parseId(entry);
-        if (entry_id <= 0)
+        host_guid = parseGuid(entry);
+        if (host_guid.isEmpty())
             return result;
     }
     else
     {
-        // Canonicalize the GUID so it always compares equal to the cached form.
-        QUuid guid = QUuid::fromString(router);
-        if (guid.isNull() || !isHostId(host))
+        router_guid = parseGuid(router);
+        if (router_guid.isEmpty() || !isHostId(host))
             return result;
-        router_guid = guid.toString(QUuid::WithoutBraces);
 
         host_id = stringToHostId(host);
         if (host_id == kInvalidHostId)
@@ -156,7 +155,7 @@ HostUrl HostUrl::fromString(const QString& str)
     }
 
     result.valid_ = true;
-    result.entry_id_ = entry_id;
+    result.host_guid_ = host_guid;
     result.router_guid_ = router_guid;
     result.host_id_ = host_id;
     result.session_type_ = session_type;
@@ -165,13 +164,13 @@ HostUrl HostUrl::fromString(const QString& str)
 
 //--------------------------------------------------------------------------------------------------
 // static
-QString HostUrl::stringForEntry(qint64 entry_id, proto::peer::SessionType session_type)
+QString HostUrl::stringForEntry(const QString& host_guid, proto::peer::SessionType session_type)
 {
-    if (entry_id <= 0)
+    if (host_guid.isEmpty())
         return QString();
 
     QUrlQuery query;
-    query.addQueryItem(kEntryParam, QString::number(entry_id));
+    query.addQueryItem(kEntryParam, host_guid);
     query.addQueryItem(kSessionParam, QString::number(session_type));
 
     return makeUrl(query);

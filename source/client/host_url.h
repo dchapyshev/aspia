@@ -31,11 +31,12 @@ enum SessionType : int;
 // carries only record references, never addresses or credentials, so it is useless outside
 // the machines where the referenced records exist:
 //   aspia://connect?d=ZT00MiZzPTE
-// The payload is a base64url-encoded query string ("e=42&s=1" or
-// "r=<router GUID>&h=123456789&s=1"), where |e| is a local address book entry ID, |r| is
-// the persistent router GUID (portable between machines, resolved against the GUIDs cached
-// in the local router records), |h| is the record key in that router's address book and |s|
-// is a proto::peer::SessionType value.
+// The payload is a base64url-encoded query string ("e=<host GUID>&s=1" or
+// "r=<router GUID>&h=123456789&s=1"), where |e| is the host GUID of a local address book
+// entry (portable between databases: preserved by export/import, unlike the autoincrement
+// record ID), |r| is the persistent router GUID (resolved against the GUIDs cached in the
+// local router records), |h| is the record key in that router's address book and |s| is a
+// proto::peer::SessionType value.
 class HostUrl final
 {
 public:
@@ -49,7 +50,7 @@ public:
     static HostUrl fromString(const QString& str);
 
     // Builds a link to a local address book entry.
-    static QString stringForEntry(qint64 entry_id, proto::peer::SessionType session_type);
+    static QString stringForEntry(const QString& host_guid, proto::peer::SessionType session_type);
 
     // Builds a link to a host from a router address book.
     static QString stringForRouterHost(const QString& router_guid, HostId host_id, proto::peer::SessionType session_type);
@@ -57,8 +58,8 @@ public:
     bool isValid() const { return valid_; }
     bool isRouterHost() const { return !router_guid_.isEmpty(); }
 
-    // Local address book entry ID. -1 for router links.
-    qint64 entryId() const { return entry_id_; }
+    // Host GUID of a local address book entry. Empty for router links.
+    const QString& hostGuid() const { return host_guid_; }
 
     // Router GUID and host record key. Empty / kInvalidHostId for local links.
     const QString& routerGuid() const { return router_guid_; }
@@ -68,7 +69,7 @@ public:
 
 private:
     bool valid_ = false;
-    qint64 entry_id_ = -1;
+    QString host_guid_;
     QString router_guid_;
     HostId host_id_;
     proto::peer::SessionType session_type_;

@@ -26,6 +26,7 @@
 #include <QJsonParseError>
 #include <QSaveFile>
 #include <QSet>
+#include <QUuid>
 
 #include <memory>
 #include <optional>
@@ -138,6 +139,7 @@ QJsonObject buildHost(const HostConfig& host, const DataCryptor& cryptor)
     object.insert("id", static_cast<qint64>(host.id()));
     object.insert("group_id", static_cast<qint64>(host.groupId()));
     object.insert("router_id", static_cast<qint64>(host.routerId()));
+    object.insert("guid", host.guid());
     object.insert("name", encryptToHex(cryptor, host.name()));
     object.insert("comment", encryptToHex(cryptor, host.comment()));
     object.insert("address", encryptToHex(cryptor, host.address()));
@@ -345,6 +347,14 @@ void importHosts(const QJsonArray& hosts_array,
         config.setAddress(*address);
         config.setUsername(*username);
         config.setPassword(SecureString(*password));
+
+        QUuid guid = QUuid::fromString(object.value("guid").toString());
+        if (!guid.isNull())
+        {
+            QString guid_string = guid.toString(QUuid::WithoutBraces);
+            if (!db.findHostByGuid(guid_string).has_value())
+                config.setGuid(guid_string);
+        }
 
         if (!db.addHost(config))
         {

@@ -624,7 +624,7 @@ void AndroidMainWindow::connectToUrl(const QString& url)
     }
     else
     {
-        std::optional<HostConfig> host = Database::instance().findHost(host_url.entryId());
+        std::optional<HostConfig> host = Database::instance().findHostByGuid(host_url.hostGuid());
         if (!host.has_value())
         {
             MessageDialog::info(this, tr("Connection by link"),
