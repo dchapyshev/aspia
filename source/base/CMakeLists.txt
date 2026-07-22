@@ -71,8 +71,6 @@ list(APPEND SOURCE_BASE
     sys_info.h
     system_error.cc
     system_error.h
-    translations.cc
-    translations.h
     version_constants.cc
     version_constants.h
     xml_settings.cc

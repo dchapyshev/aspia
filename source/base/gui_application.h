@@ -20,14 +20,19 @@
 #define BASE_GUI_APPLICATION_H
 
 #include <QApplication>
+#include <QHash>
+#include <QList>
 #include <QPalette>
 #include <QProxyStyle>
+#include <QStringList>
 
-#include "base/translations.h"
+#include <utility>
+
 #include "base/threading/worker.h"
 
 class QLocalServer;
 class QLockFile;
+class QTranslator;
 
 #if defined(Q_OS_WINDOWS)
 class MessageWindow;
@@ -54,8 +59,8 @@ public:
 
     bool isRunning();
 
-    using Locale = Translations::Locale;
-    using LocaleList = Translations::LocaleList;
+    using Locale = std::pair<QString, QString>;
+    using LocaleList = QList<Locale>;
 
     LocaleList localeList() const;
     void setLocale(const QString& locale);
@@ -89,6 +94,7 @@ private slots:
     void onNewConnection();
 
 private:
+    void removeTranslators();
     QStyle* createBaseStyle(bool is_dark);
     static QPalette createDarkPalette();
 
@@ -99,7 +105,9 @@ private:
     QLocalServer* server_ = nullptr;
 
     std::unique_ptr<WorkerManager> worker_manager_;
-    std::unique_ptr<Translations> translations_;
+
+    QHash<QString, QStringList> locale_list_;
+    QList<QTranslator*> translator_list_;
 
     bool is_native_style_ = false;
     int small_icon_size_ = 20;

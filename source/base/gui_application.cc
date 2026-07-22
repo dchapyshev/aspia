@@ -26,12 +26,14 @@
 #include <QImage>
 #include <QLocalServer>
 #include <QLocalSocket>
+#include <QLocale>
 #include <QOperatingSystemVersion>
 #include <QLockFile>
 #include <QPainter>
 #include <QStyleFactory>
 #include <QStyleHints>
 #include <QSvgRenderer>
+#include <QTranslator>
 
 #include "base/logging.h"
 
@@ -62,6 +64,8 @@ const int kWriteTimeoutMs = 1500;
 const int kMaxMessageSize = 1024 * 1024 * 1;
 
 const char kOkMessage[] = "OK";
+
+const QString kTranslationsDir = ":/tr/";
 
 class CustomStyle final : public QProxyStyle
 {
@@ -120,7 +124,32 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
     lock_file_ = new QLockFile(lock_file_name_);
 
     worker_manager_ = std::make_unique<WorkerManager>();
-    translations_ = std::make_unique<Translations>();
+
+    const QStringList qm_file_list =
+        QDir(kTranslationsDir).entryList(QStringList("*.qm"), QDir::Files);
+
+    for (const auto& qm_file : qm_file_list)
+    {
+        QString locale_name = qm_file.chopped(3); // Remove file extension (*.qm).
+
+        if (locale_name.right(2).isUpper())
+        {
+            // xx_XX (language / country).
+            locale_name = locale_name.right(5);
+        }
+        else
+        {
+            // xx (language only).
+            locale_name = locale_name.right(2);
+        }
+
+        LOG(TRACE) << "Added:" << qm_file << locale_name;
+
+        if (locale_list_.contains(locale_name))
+            locale_list_[locale_name].emplace_back(qm_file);
+        else
+            locale_list_.insert(locale_name, QStringList(qm_file));
+    }
 
     small_icon_size_ = kDefaultSmallIconSize;
 
@@ -211,6 +240,8 @@ GuiApplication::~GuiApplication()
 
     if (is_locked)
         QFile::remove(lock_file_name_);
+
+    removeTranslators();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -265,19 +296,66 @@ bool GuiApplication::isRunning()
 //--------------------------------------------------------------------------------------------------
 GuiApplication::LocaleList GuiApplication::localeList() const
 {
-    return translations_->localeList();
+    LocaleList list;
+
+    auto add_locale = [&](const QString& locale_code)
+    {
+        QLocale locale(locale_code);
+        QString name;
+
+        if (locale_code.length() == 2)
+        {
+            name = QLocale::languageToString(locale.language());
+        }
+        else
+        {
+            name = QLocale::languageToString(locale.language())
+                + " (" + QLocale::territoryToString(locale.territory()) + ")";
+        }
+
+        list.emplace_back(locale_code, name);
+    };
+
+    add_locale("en");
+
+    for (auto it = locale_list_.cbegin(), it_end = locale_list_.cend(); it != it_end; ++it)
+        add_locale(it.key());
+
+    std::sort(list.begin(), list.end(), [](const Locale& a, const Locale& b)
+    {
+        return QString::compare(a.second, b.second, Qt::CaseInsensitive) < 0;
+    });
+
+    return list;
 }
 
 //--------------------------------------------------------------------------------------------------
 void GuiApplication::setLocale(const QString& locale)
 {
-    translations_->installTranslators(locale);
+    removeTranslators();
+
+    LOG(INFO) << "Install translators for:" << locale;
+
+    auto file_list = locale_list_.constFind(locale);
+    if (file_list == locale_list_.constEnd())
+        return;
+
+    for (const auto& file : file_list.value())
+    {
+        std::unique_ptr<QTranslator> translator = std::make_unique<QTranslator>();
+
+        if (translator->load(file, kTranslationsDir))
+        {
+            if (QCoreApplication::installTranslator(translator.get()))
+                translator_list_.emplace_back(translator.release());
+        }
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
 bool GuiApplication::hasLocale(const QString& locale)
 {
-    return translations_->contains(locale);
+    return locale_list_.contains(locale);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -543,6 +621,20 @@ void GuiApplication::onNewConnection()
     socket->waitForDisconnected(kDisconnectTimeoutMs);
 
     emit sig_messageReceived(message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void GuiApplication::removeTranslators()
+{
+    LOG(INFO) << "Cleanup translators";
+
+    for (auto it = translator_list_.begin(), it_end = translator_list_.end(); it != it_end; ++it)
+    {
+        QCoreApplication::removeTranslator(*it);
+        delete *it;
+    }
+
+    translator_list_.clear();
 }
 
 //--------------------------------------------------------------------------------------------------
