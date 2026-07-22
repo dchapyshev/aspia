@@ -152,8 +152,6 @@ ManagementTab::ManagementTab(QWidget* parent)
 
     connect(router_temp_hosts_widget_, &RouterTempHostsWidget::sig_currentChanged,
             this, &ManagementTab::updateActionsState);
-    connect(router_temp_hosts_widget_, &RouterTempHostsWidget::sig_connectRequested,
-            this, &ManagementTab::onTempHostConnect);
     connect(router_temp_hosts_widget_, &RouterTempHostsWidget::sig_contextMenu,
             this, &ManagementTab::onTempHostContextMenu);
 
@@ -780,17 +778,6 @@ void ManagementTab::onRouterGroupConnect()
     if (!router_group_widget_->hasSelectedHost())
         return;
     HostConfig host = router_group_widget_->selectedHostConfig();
-    if (!validateHostForConnect(host))
-        return;
-    emit sig_connectRequested(host, defaultSessionType());
-}
-
-//--------------------------------------------------------------------------------------------------
-void ManagementTab::onTempHostConnect()
-{
-    if (!router_temp_hosts_widget_->hasSelectedHost())
-        return;
-    HostConfig host = router_temp_hosts_widget_->selectedHostConfig();
     if (!validateHostForConnect(host))
         return;
     emit sig_connectRequested(host, defaultSessionType());

@@ -87,8 +87,6 @@ RouterTempHostsWidget::RouterTempHostsWidget(QWidget* parent)
 
     connect(tree_, &QTreeWidget::itemSelectionChanged,
             this, &RouterTempHostsWidget::sig_currentChanged);
-    connect(tree_, &QTreeWidget::itemActivated,
-            this, [this](QTreeWidgetItem*, int) { emit sig_connectRequested(); });
 
     tree_->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(tree_, &QTreeWidget::customContextMenuRequested,

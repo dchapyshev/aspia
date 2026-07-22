@@ -53,7 +53,6 @@ public slots:
 
 signals:
     void sig_currentChanged();
-    void sig_connectRequested();
     void sig_contextMenu(const QPoint& global_pos);
 
 private slots:
