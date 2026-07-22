@@ -46,7 +46,7 @@
 //--------------------------------------------------------------------------------------------------
 DesktopClient::DesktopClient(TcpChannel* tcp_channel, QObject* parent)
     : Client(tcp_channel, parent),
-      dettach_time_(QTime::currentTime())
+      attach_deadline_(Clock::now() + std::chrono::seconds(15))
 {
     CLOG(INFO) << "Ctor";
 
@@ -123,7 +123,7 @@ void DesktopClient::dettach()
         ipc_channel_.reset();
     }
 
-    dettach_time_ = QTime::currentTime();
+    attach_deadline_ = Clock::now() + std::chrono::seconds(15);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -258,7 +258,7 @@ void DesktopClient::onTimer(const TimePoint& now)
 
     if (!ipc_channel_)
     {
-        if (dettach_time_.secsTo(QTime::currentTime()) > 15)
+        if (now >= attach_deadline_)
         {
             CLOG(WARNING) << "Timeout when desktop client starting";
             finish();

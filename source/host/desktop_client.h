@@ -20,7 +20,6 @@
 #define HOST_DESKTOP_CLIENT_H
 
 #include <QObject>
-#include <QTime>
 
 #include <optional>
 
@@ -83,7 +82,7 @@ private:
     void readPowerControl(const proto::power::Control& control);
     void readTaskManager(const proto::task_manager::ClientToHost& message);
 
-    QTime dettach_time_;
+    TimePoint attach_deadline_;
     ScopedQPointer<IpcServer> ipc_server_;
     ScopedQPointer<IpcChannel> ipc_channel_;
 
