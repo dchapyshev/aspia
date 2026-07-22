@@ -206,7 +206,7 @@ void HostWorker::onNewHostConnection()
     while (server_->hasReadyConnections())
     {
         TcpChannel* channel = server_->nextReadyConnection();
-        LOG(INFO) << "New host session:" << channel->peerAddress();
+        LOG(INFO) << "New host:" << channel->peerAddress();
 
         HostNG* host = new HostNG(channel, this);
         hosts_.emplace_back(host);
@@ -224,7 +224,7 @@ void HostWorker::onNewLegacyHostConnection()
     while (legacy_server_->hasReadyConnections())
     {
         TcpChannel* channel = legacy_server_->nextReadyConnection();
-        LOG(INFO) << "New legacy host session:" << channel->peerAddress();
+        LOG(INFO) << "New legacy host:" << channel->peerAddress();
 
         HostLegacy* host = new HostLegacy(channel, this);
         hosts_.emplace_back(host);
@@ -310,9 +310,12 @@ void HostWorker::removeHostSession(Host* host)
         host_ids = host_legacy->hostIdList();
     }
 
-    host->disconnect();
-    host->deleteLater();
-    hosts_.removeOne(host);
+    if (host)
+    {
+        host->disconnect();
+        host->deleteLater();
+        hosts_.removeOne(host);
+    }
 
     for (HostId host_id : std::as_const(host_ids))
         publishHostState(host_id);

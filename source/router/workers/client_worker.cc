@@ -18,8 +18,11 @@
 
 #include "router/workers/client_worker.h"
 
+#include <QUuid>
+
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "base/crypto/random.h"
 #include "base/net/tcp_channel.h"
 #include "base/net/tcp_server.h"
 #include "base/threading/worker.h"
@@ -91,18 +94,37 @@ void ClientWorker::onStart()
         LOG(INFO) << "Allowed clients:" << white_list;
 
     QByteArray seed_key = settings.seedKey();
-    if (seed_key.isEmpty())
+    QString router_guid = settings.routerGuid();
+
+    if (seed_key.isEmpty() || router_guid.isEmpty())
     {
-        LOG(ERROR) << "Seed key is not set in the configuration";
-        return;
+        if (seed_key.isEmpty())
+        {
+            LOG(INFO) << "Seed key is not set; generating a new one";
+            settings.setSeedKey(Random::byteArray(64));
+        }
+
+        if (router_guid.isEmpty())
+        {
+            LOG(INFO) << "Router GUID is not set; generating a new one";
+            settings.setRouterGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
+        }
+
+        settings.sync();
+
+        // Re-read from disk to confirm the values were actually persisted.
+        Settings written;
+        seed_key = written.seedKey();
+        router_guid = written.routerGuid();
+
+        if (seed_key.isEmpty() || router_guid.isEmpty())
+        {
+            LOG(ERROR) << "Unable to write the seed key / router GUID to the configuration";
+            return;
+        }
     }
 
-    router_guid_ = settings.routerGuid();
-    if (router_guid_.isEmpty())
-    {
-        LOG(ERROR) << "Router GUID is not set in the configuration";
-        return;
-    }
+    router_guid_ = router_guid;
 
     SharedPointer<UserList> user_list = RouterUserList::open();
     if (!user_list)

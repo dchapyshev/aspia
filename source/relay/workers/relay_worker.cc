@@ -338,7 +338,8 @@ void RelayWorker::onTimer(const TimePoint& now)
             }
         }
 
-        LOG(INFO) << "Sessions ended by timeout:" << count;
+        if (count > 0)
+            LOG(INFO) << "Sessions ended by timeout:" << count;
     }
 
     if (stat_interval_ > Seconds::zero() && now >= next_stat_time_)

@@ -62,13 +62,13 @@ void releaseTempHostId(HostId host_id)
 HostNG::HostNG(TcpChannel* channel, QObject* parent)
     : Host(channel, parent)
 {
-    CLOG(INFO) << "Ctor";
+    CLOG(TRACE) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 HostNG::~HostNG()
 {
-    CLOG(INFO) << "Dtor";
+    CLOG(TRACE) << "Dtor";
 
     if (isTempHostId(host_id_))
         releaseTempHostId(host_id_);
