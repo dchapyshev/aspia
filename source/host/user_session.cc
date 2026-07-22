@@ -21,7 +21,6 @@
 #include <QCoreApplication>
 #include <QDir>
 #include <QFileInfo>
-#include <QTimer>
 
 #include "base/core_application.h"
 #include "base/location.h"
@@ -32,6 +31,7 @@
 #include "base/crypto/secure_string.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
+#include "base/threading/worker.h"
 #include "host/client.h"
 #include "host/database.h"
 #include "host/host_constants.h"
@@ -55,6 +55,10 @@
 #endif // defined(Q_OS_MACOS)
 
 namespace {
+
+const std::chrono::seconds kAttachTimeout{ 15 };
+const std::chrono::seconds kDettachTimeout{ 15 };
+const std::chrono::seconds kStartupCheckInterval{ 1 };
 
 #if defined(Q_OS_UNIX)
 const char kExecutableNameForUi[] = "aspia_host";
@@ -131,37 +135,13 @@ bool createProcessWithToken(HANDLE token, const QString& command_line)
 
 //--------------------------------------------------------------------------------------------------
 UserSession::UserSession(QObject* parent)
-    : QObject(parent),
-      attach_timer_(new QTimer(this)),
-      dettach_timer_(new QTimer(this)),
-      startup_timer_(new QTimer(this))
+    : QObject(parent)
 {
     LOG(INFO) << "Ctor";
 
-    attach_timer_->setSingleShot(true);
-    attach_timer_->setInterval(std::chrono::seconds(15));
-
-    dettach_timer_->setSingleShot(true);
-    dettach_timer_->setInterval(std::chrono::seconds(15));
-
-    startup_timer_->setSingleShot(true);
-    startup_timer_->setInterval(std::chrono::seconds(1));
-
-    connect(attach_timer_, &QTimer::timeout, this, [this]()
-    {
-        LOG(INFO) << "UI process did not attach in time";
-        dettach(FROM_HERE);
-#if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
-        // The GUI may have been launched during an unstable moment (e.g. a login or user switch, where
-        // the active session briefly changes). Keep retrying so it reliably comes back once the session
-        // settles, instead of giving up after one failed launch.
-        startup_timer_->start();
-#endif // defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
-    });
-    connect(dettach_timer_, &QTimer::timeout, this, &UserSession::onDettachTimeout);
-    connect(startup_timer_, &QTimer::timeout, this, &UserSession::onStartupUserCheck);
     connect(CoreApplication::instance(), &CoreApplication::sig_sessionEvent,
             this, &UserSession::onUserSessionEvent);
+    connect(Worker::current(), &Worker::sig_tick, this, &UserSession::onTimer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -272,7 +252,7 @@ void UserSession::onClientConfirmation(const proto::user::ConfirmationRequest& r
     // No GUI process is attached (the login screen, or the grace period right after the GUI dropped),
     // so the request cannot be shown to anyone. Decide it here instead of sending it to a GUI that is
     // not there, where it would hang until the client times out.
-    if (state_ == State::DETTACHED || dettach_timer_->isActive())
+    if (state_ == State::DETTACHED || dettach_deadline_ != TimePoint::max())
     {
         LOG(INFO) << "No active GUI process";
 
@@ -465,7 +445,7 @@ void UserSession::onUserSessionEvent(quint32 status, quint32 session_id)
 
     dettach(FROM_HERE);
     startup_attempts_ = 0;
-    startup_timer_->start();
+    startup_check_time_ = Clock::now() + kStartupCheckInterval;
 #endif // defined(Q_OS_WINDOWS)
 }
 
@@ -529,8 +509,8 @@ void UserSession::onIpcNewConnection()
     connect(ipc_channel_, &IpcChannel::sig_disconnected, this, &UserSession::onIpcDisconnected);
     connect(ipc_channel_, &IpcChannel::sig_messageReceived, this, &UserSession::onIpcMessageReceived);
 
-    dettach_timer_->stop();
-    attach_timer_->stop();
+    dettach_deadline_ = TimePoint::max();
+    attach_deadline_ = TimePoint::max();
     ipc_channel_->setPaused(false);
 
     LOG(INFO) << "Start user session (IPC channel" << ipc_channel_->channelName() << ")";
@@ -557,7 +537,7 @@ void UserSession::onIpcDisconnected()
             // Start a timer, after which all connected clients will be disconnected.
 
             LOG(WARNING) << "GUI process terminated during an active user session";
-            dettach_timer_->start();
+            dettach_deadline_ = Clock::now() + kDettachTimeout;
             ipc_channel_.reset();
         }
     }
@@ -566,7 +546,7 @@ void UserSession::onIpcDisconnected()
     // after a permission change). The host is controlled through the GUI, so remote access becomes
     // unavailable: drop the connected clients after the grace period. The GUI is intentionally NOT
     // relaunched - exiting it is how the user turns the host off.
-    dettach_timer_->start();
+    dettach_deadline_ = Clock::now() + kDettachTimeout;
     ipc_channel_.reset();
 #endif // defined(Q_OS_WINDOWS)
 }
@@ -681,15 +661,40 @@ void UserSession::onIpcMessageReceived(quint32 channel_id, const QByteArray& buf
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onDettachTimeout()
+void UserSession::onTimer(const TimePoint& now)
 {
-    LOG(INFO) << "Stop all clients";
-    dettach(FROM_HERE);
-    emit sig_stopClient(0);
+    if (now >= attach_deadline_)
+    {
+        attach_deadline_ = TimePoint::max();
+
+        LOG(INFO) << "UI process did not attach in time";
+        dettach(FROM_HERE);
+#if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
+        // The GUI may have been launched during an unstable moment (e.g. a login or user switch, where
+        // the active session briefly changes). Keep retrying so it reliably comes back once the session
+        // settles, instead of giving up after one failed launch.
+        startup_check_time_ = now + kStartupCheckInterval;
+#endif // defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
+    }
+
+    if (now >= dettach_deadline_)
+    {
+        dettach_deadline_ = TimePoint::max();
+
+        LOG(INFO) << "Stop all clients";
+        dettach(FROM_HERE);
+        emit sig_stopClient(0);
+    }
+
+    if (now >= startup_check_time_)
+    {
+        startup_check_time_ = TimePoint::max();
+        startupUserCheck();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onStartupUserCheck()
+void UserSession::startupUserCheck()
 {
 #if defined(Q_OS_WINDOWS)
     // Windows can automatically restore login (ARSO, Automatic Restart Sign On) when rebooting
@@ -708,7 +713,7 @@ void UserSession::onStartupUserCheck()
     }
 
     if (startup_attempts_++ <= 60)
-        startup_timer_->start();
+        startup_check_time_ = Clock::now() + kStartupCheckInterval;
 #elif defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
     // Retry attaching to the active console session for the first minute after the service starts - the
     // session's graphical environment becomes usable a moment after it turns active (Linux: the display
@@ -739,9 +744,9 @@ void UserSession::attach(const Location& location, AttachReason reason, SessionI
     is_console_ = session_id == activeConsoleSessionId();
     session_id_ = session_id;
 
-    startup_timer_->stop();
-    dettach_timer_->stop();
-    attach_timer_->start();
+    startup_check_time_ = TimePoint::max();
+    dettach_deadline_ = TimePoint::max();
+    attach_deadline_ = Clock::now() + kAttachTimeout;
 
 #if defined(Q_OS_WINDOWS)
     if (session_id == kInvalidSessionId)
@@ -787,7 +792,7 @@ void UserSession::attach(const Location& location, AttachReason reason, SessionI
         dettach(FROM_HERE);
 
         if (reason == AttachReason::STARTUP)
-            startup_timer_->start();
+            startup_check_time_ = Clock::now() + kStartupCheckInterval;
         return;
     }
 
@@ -840,7 +845,7 @@ void UserSession::attach(const Location& location, AttachReason reason, SessionI
         LOG(INFO) << "Graphical environment for" << user_name << "is not ready yet; will retry";
         dettach(FROM_HERE);
         if (reason == AttachReason::STARTUP)
-            startup_timer_->start();
+            startup_check_time_ = Clock::now() + kStartupCheckInterval;
         return;
     }
 
@@ -893,7 +898,7 @@ void UserSession::attach(const Location& location, AttachReason reason, SessionI
         LOG(INFO) << "No active console user; the GUI is not started";
         dettach(FROM_HERE);
         if (reason == AttachReason::STARTUP)
-            startup_timer_->start();
+            startup_check_time_ = Clock::now() + kStartupCheckInterval;
         return;
     }
 
@@ -951,7 +956,7 @@ void UserSession::dettach(const Location& location)
         ipc_channel_.reset();
     }
 
-    startup_timer_->stop();
+    startup_check_time_ = TimePoint::max();
     session_id_ = kInvalidSessionId;
     is_console_ = true;
 

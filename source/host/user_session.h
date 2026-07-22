@@ -22,6 +22,8 @@
 #include <QObject>
 #include <QList>
 
+#include <chrono>
+
 #include "base/scoped_qpointer.h"
 #include "base/serialization.h"
 #include "base/session_id.h"
@@ -31,7 +33,6 @@
 class IpcChannel;
 class IpcServer;
 class Location;
-class QTimer;
 class SecureString;
 
 class UserSession final : public QObject
@@ -41,6 +42,9 @@ class UserSession final : public QObject
 public:
     explicit UserSession(QObject* parent = nullptr);
     ~UserSession() final;
+
+    using Clock = std::chrono::steady_clock;
+    using TimePoint = std::chrono::time_point<Clock>;
 
     enum class State
     {
@@ -94,19 +98,19 @@ private slots:
     void onIpcNewConnection();
     void onIpcDisconnected();
     void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer, bool reliable);
-    void onDettachTimeout();
-    void onStartupUserCheck();
+    void onTimer(const TimePoint& now);
 
 private:
+    void startupUserCheck();
     void attach(const Location& location, AttachReason reason, SessionId session_id);
     void dettach(const Location& location);
     void sendMessage();
 
     IpcServer* ipc_server_ = nullptr;
     ScopedQPointer<IpcChannel> ipc_channel_;
-    QTimer* attach_timer_ = nullptr;
-    QTimer* dettach_timer_ = nullptr;
-    QTimer* startup_timer_ = nullptr;
+    TimePoint attach_deadline_ = TimePoint::max();
+    TimePoint dettach_deadline_ = TimePoint::max();
+    TimePoint startup_check_time_ = TimePoint::max();
 
     State state_ = State::DETTACHED;
     SessionId session_id_ = kInvalidSessionId;
