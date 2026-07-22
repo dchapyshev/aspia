@@ -147,6 +147,13 @@ bool createTables(SqlDatabase& db)
 // Host entries created before the GUID column existed get one on the first open.
 bool backfillHostGuids(SqlDatabase& db)
 {
+    SqlTransaction transaction(db);
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
+    {
+        LOG(ERROR) << "Unable to start transaction:" << db.lastError();
+        return false;
+    }
+
     QList<qint64> ids;
     {
         SqlQuery query(db, "SELECT id FROM hosts WHERE guid=''");
@@ -167,7 +174,7 @@ bool backfillHostGuids(SqlDatabase& db)
         }
     }
 
-    return true;
+    return transaction.commit();
 }
 
 } // namespace
@@ -750,15 +757,14 @@ bool Database::setUpdateServer(const QString& server)
 //--------------------------------------------------------------------------------------------------
 bool Database::isMasterPasswordSet() const
 {
-    return !readSetting(kSettingSalt).isEmpty() && !readSetting(kSettingVerifier).isEmpty();
-}
+    SqlTransaction transaction(db_);
+    if (!transaction.begin())
+    {
+        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
+        return false;
+    }
 
-//--------------------------------------------------------------------------------------------------
-bool Database::setMasterPassword(const QByteArray& salt, const QByteArray& verifier, quint32 version)
-{
-    return writeSetting(kSettingSalt, QString::fromLatin1(salt.toBase64())) &&
-           writeSetting(kSettingVerifier, QString::fromLatin1(verifier.toBase64())) &&
-           writeSetting(kSettingVersion, QString::number(version));
+    return !readSetting(kSettingSalt).isEmpty() && !readSetting(kSettingVerifier).isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -927,6 +933,14 @@ bool Database::openDatabase()
     }
 
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setMasterPassword(const QByteArray& salt, const QByteArray& verifier, quint32 version)
+{
+    return writeSetting(kSettingSalt, QString::fromLatin1(salt.toBase64())) &&
+           writeSetting(kSettingVerifier, QString::fromLatin1(verifier.toBase64())) &&
+           writeSetting(kSettingVersion, QString::number(version));
 }
 
 //--------------------------------------------------------------------------------------------------

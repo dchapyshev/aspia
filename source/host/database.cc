@@ -534,6 +534,13 @@ Database::PasswordProtection Database::passwordProtectionState() const
     if (!isValid())
         return PasswordProtection::UNAVAILABLE;
 
+    SqlTransaction transaction(db_);
+    if (!transaction.begin())
+    {
+        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
+        return PasswordProtection::UNAVAILABLE;
+    }
+
     return (!passwordHash().isEmpty() && !passwordHashSalt().isEmpty()) ?
         PasswordProtection::ENABLED : PasswordProtection::DISABLED;
 }
@@ -552,15 +559,37 @@ bool Database::setPassword(const SecureString& password)
     if (hash.isEmpty())
         return false;
 
-    return writeSetting(kSettingPasswordHash, QString::fromLatin1(hash.toHex())) &&
-           writeSetting(kSettingPasswordHashSalt, QString::fromLatin1(salt.toHex()));
+    SqlTransaction transaction(db_);
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
+    {
+        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
+        return false;
+    }
+
+    if (!writeSetting(kSettingPasswordHash, QString::fromLatin1(hash.toHex())) ||
+        !writeSetting(kSettingPasswordHashSalt, QString::fromLatin1(salt.toHex())))
+        return false;
+
+    return transaction.commit();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Database::clearPassword()
 {
-    writeSetting(kSettingPasswordHash, QString());
-    writeSetting(kSettingPasswordHashSalt, QString());
+    SqlTransaction transaction(db_);
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
+    {
+        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
+        return;
+    }
+
+    // Commit only if both settings were cleared; a partial clear rolls back so the hash and the
+    // salt never go out of sync.
+    if (writeSetting(kSettingPasswordHash, QString()) &&
+        writeSetting(kSettingPasswordHashSalt, QString()))
+    {
+        transaction.commit();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -569,8 +598,20 @@ bool Database::verifyPassword(const SecureString& password) const
     if (password.isEmpty())
         return false;
 
-    QByteArray salt = passwordHashSalt();
-    QByteArray hash = passwordHash();
+    QByteArray salt;
+    QByteArray hash;
+
+    {
+        SqlTransaction transaction(db_);
+        if (!transaction.begin())
+        {
+            LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
+            return false;
+        }
+
+        salt = passwordHashSalt();
+        hash = passwordHash();
+    }
 
     if (salt.isEmpty() || hash.isEmpty())
         return false;

@@ -77,7 +77,6 @@ public:
 
     // Master password.
     bool isMasterPasswordSet() const;
-    bool setMasterPassword(const QByteArray& salt, const QByteArray& verifier, quint32 version);
 
     // Atomically rewrites every stored record with fields already re-encrypted under the new key and
     // updates the master password verifier. Either all changes are applied or none of them are, so
@@ -102,6 +101,7 @@ private:
     Database() = default;
 
     bool openDatabase();
+    bool setMasterPassword(const QByteArray& salt, const QByteArray& verifier, quint32 version);
 
     QString readSetting(const QString& name) const;
     bool writeSetting(const QString& name, const QString& value);

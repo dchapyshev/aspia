@@ -679,6 +679,13 @@ std::string_view Database::clearUserOtp(qint64 user_id)
         return proto::router::kErrorInvalidData;
     }
 
+    SqlTransaction transaction(db_);
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
+    {
+        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
     // COUNT(*) always yields exactly one row, so a failed next() is a database error and not
     // a missing user.
     SqlQuery exists(db_, "SELECT COUNT(*) FROM users WHERE id=?");
@@ -701,6 +708,13 @@ std::string_view Database::clearUserOtp(qint64 user_id)
         LOG(ERROR) << "Unable to clear user OTP:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
+
+    if (!transaction.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
     return proto::router::kErrorOk;
 }
 
@@ -791,6 +805,13 @@ bool Database::findClientDeviceToken(std::string_view token, qint64* user_id, qi
 
     const QByteArray token_hash = GenericHash::hash(GenericHash::SHA256, token);
 
+    SqlTransaction transaction(db_);
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
+    {
+        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
+        return false;
+    }
+
     const char kSql[] =
         "SELECT user_id, last_used_at, token_id FROM client_device_tokens WHERE token_hash=?";
     SqlQuery query(db_, kSql);
@@ -809,6 +830,8 @@ bool Database::findClientDeviceToken(std::string_view token, qint64* user_id, qi
         prune.addBlob(token_hash);
         if (!prune.exec())
             LOG(WARNING) << "Unable to prune expired client device token:" << db_.lastError();
+        else if (!transaction.commit())
+            LOG(WARNING) << "Unable to commit transaction:" << db_.lastError();
         return false;
     }
 
@@ -906,6 +929,13 @@ std::string_view Database::revokeUserClientDeviceTokens(qint64 user_id)
         return proto::router::kErrorInvalidData;
     }
 
+    SqlTransaction transaction(db_);
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
+    {
+        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
     // COUNT(*) always yields exactly one row, so a failed next() is a database error and not
     // a missing user.
     SqlQuery exists(db_, "SELECT COUNT(*) FROM users WHERE id=?");
@@ -928,6 +958,13 @@ std::string_view Database::revokeUserClientDeviceTokens(qint64 user_id)
         LOG(ERROR) << "Unable to revoke client device tokens:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
+
+    if (!transaction.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
     return proto::router::kErrorOk;
 }
 
@@ -979,6 +1016,13 @@ std::string_view Database::hostId(std::string_view key_hash, HostId* host_id) co
         return proto::router::kErrorInvalidData;
     }
 
+    SqlTransaction transaction(db_);
+    if (!transaction.begin())
+    {
+        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
     SqlQuery query(db_, "SELECT id FROM hosts WHERE key=?");
     query.addBlob(key_hash);
 
@@ -1028,6 +1072,13 @@ bool Database::addHost(std::string_view key_hash, std::string_view hwid)
         return false;
     }
 
+    SqlTransaction transaction(db_);
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
+    {
+        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
+        return false;
+    }
+
     // Permanent host IDs are produced by AUTOINCREMENT and must never enter the temporary host ID range.
     HostId next_id = 1;
     SqlQuery seq_query(db_, "SELECT seq FROM sqlite_sequence WHERE name='hosts'");
@@ -1047,6 +1098,12 @@ bool Database::addHost(std::string_view key_hash, std::string_view hwid)
     if (!query.exec())
     {
         LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return false;
+    }
+
+    if (!transaction.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction:" << db_.lastError();
         return false;
     }
 
@@ -1517,6 +1574,14 @@ void Database::workspaceListWithAllAccess(qint64 user_id, qint64 workspace_id,
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
+        out->set_error_code(proto::router::kErrorInternalError);
+        return;
+    }
+
+    SqlTransaction transaction(db_);
+    if (!transaction.begin())
+    {
+        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
         out->set_error_code(proto::router::kErrorInternalError);
         return;
     }
