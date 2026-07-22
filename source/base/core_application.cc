@@ -18,8 +18,6 @@
 
 #include "base/core_application.h"
 
-#include <QTimerEvent>
-
 #include "base/logging.h"
 #include "base/session_id.h"
 
@@ -369,19 +367,10 @@ CoreApplication::~CoreApplication()
 //--------------------------------------------------------------------------------------------------
 int CoreApplication::exec()
 {
-    if (timer_interval_ > Milliseconds::zero())
-        timer_id_ = startTimer(timer_interval_);
-
     worker_manager_->start();
     const int result = QCoreApplication::exec();
     worker_manager_.reset();
     return result;
-}
-
-//--------------------------------------------------------------------------------------------------
-void CoreApplication::setTimerInterval(Milliseconds timer_interval)
-{
-    timer_interval_ = timer_interval;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -395,11 +384,4 @@ CoreApplication* CoreApplication::instance()
 qint64 CoreApplication::addWorker(std::unique_ptr<Worker> worker)
 {
     return worker_manager_->add(std::move(worker));
-}
-
-//--------------------------------------------------------------------------------------------------
-void CoreApplication::timerEvent(QTimerEvent* event)
-{
-    if (event->timerId() == timer_id_)
-        emit sig_tick(Clock::now());
 }

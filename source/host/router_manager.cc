@@ -18,9 +18,6 @@
 
 #include "host/router_manager.h"
 
-#include <QTimer>
-
-#include "base/core_application.h"
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/sys_info.h"
@@ -46,19 +43,13 @@ const std::chrono::seconds kReconnectTimeout{ 10 };
 RouterManager::RouterManager(QObject* parent)
     : QObject(parent),
       peer_manager_(new RelayPeerManager(this)),
-      reconnect_timer_(new QTimer(this)),
-      password_expire_timer_(new QTimer(this)),
       user_list_(new HostUserList())
 {
     LOG(INFO) << "Ctor";
 
     connect(peer_manager_, &RelayPeerManager::sig_newPeerConnected,
             this, &RouterManager::onNewPeerConnected);
-
-    reconnect_timer_->setSingleShot(true);
-    connect(reconnect_timer_, &QTimer::timeout, this, &RouterManager::connectToRouter);
-
-    connect(password_expire_timer_, &QTimer::timeout, this, &RouterManager::onSettingsChanged);
+    connect(Worker::current(), &Worker::sig_tick, this, &RouterManager::onTimer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -117,7 +108,7 @@ void RouterManager::onSettingsChanged()
     if (!db.oneTimePassword())
     {
         LOG(INFO) << "One-time password is disabled";
-        password_expire_timer_->stop();
+        password_expire_time_ = TimePoint::max();
         one_time_sessions_ = 0;
         one_time_password_.clear();
         user_list_->setOneTimeUser(User());
@@ -134,9 +125,9 @@ void RouterManager::onSettingsChanged()
 
         std::chrono::milliseconds expire_interval = db.oneTimePasswordExpire();
         if (expire_interval > std::chrono::milliseconds(0))
-            password_expire_timer_->start(expire_interval);
+            password_expire_time_ = Clock::now() + expire_interval;
         else
-            password_expire_timer_->stop();
+            password_expire_time_ = TimePoint::max();
 
         user_list_->setOneTimeUser(createOneTimeUser());
     }
@@ -167,7 +158,7 @@ void RouterManager::onTcpReady()
     routerStateChanged(proto::user::RouterState::CONNECTED);
 
     // Now the session will receive incoming messages.
-    reconnect_timer_->stop();
+    reconnect_time_ = TimePoint::max();
     tcp_channel_->setPaused(false);
     hostIdRequest();
 }
@@ -346,6 +337,22 @@ void RouterManager::onNewPeerConnected()
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterManager::onTimer(const TimePoint& now)
+{
+    if (tcp_channel_)
+        tcp_channel_->tick(now);
+
+    if (now >= password_expire_time_)
+        onSettingsChanged();
+
+    if (now >= reconnect_time_)
+    {
+        reconnect_time_ = TimePoint::max();
+        connectToRouter();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterManager::connectToRouter()
 {
     LOG(INFO) << "Connecting to router...";
@@ -368,13 +375,6 @@ void RouterManager::connectToRouter()
     connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &RouterManager::onTcpErrorOccurred);
     connect(tcp_channel_, &TcpChannel::sig_messageReceived, this, &RouterManager::onTcpMessageReceived);
 
-    // The channel has no internal timers. Its keep-alive machinery is driven by the worker clock
-    // (mobile host) or by the application clock (desktop host service).
-    if (Worker* worker = Worker::current())
-        connect(worker, &Worker::sig_tick, tcp_channel_, &TcpChannel::tick);
-    else
-        connect(CoreApplication::instance(), &CoreApplication::sig_tick, tcp_channel_, &TcpChannel::tick);
-
     routerStateChanged(proto::user::RouterState::CONNECTING);
     tcp_channel_->connectTo(router_address_.host(), router_address_.port());
 }
@@ -383,7 +383,7 @@ void RouterManager::connectToRouter()
 void RouterManager::delayedConnectToRouter()
 {
     LOG(INFO) << "Reconnect after" << kReconnectTimeout.count() << "seconds";
-    reconnect_timer_->start(kReconnectTimeout);
+    reconnect_time_ = Clock::now() + kReconnectTimeout;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -22,7 +22,6 @@
 
 #include <algorithm>
 
-#include "base/core_application.h"
 #include "base/location.h"
 #include "base/serialization.h"
 #include "base/net/udp_channel.h"
@@ -139,12 +138,7 @@ Client::Client(TcpChannel* tcp_channel, QObject* parent)
         tcp_channel_->setPaused(false);
     });
 
-    // Single per-thread clock: the worker clock (mobile host) or the application clock (desktop
-    // host service) drives the periodic work (see onTimer()).
-    if (Worker* worker = Worker::current())
-        connect(worker, &Worker::sig_tick, this, &Client::onTimer);
-    else
-        connect(CoreApplication::instance(), &CoreApplication::sig_tick, this, &Client::onTimer);
+    connect(Worker::current(), &Worker::sig_tick, this, &Client::onTimer);
 }
 
 //--------------------------------------------------------------------------------------------------

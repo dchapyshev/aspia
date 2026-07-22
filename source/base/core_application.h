@@ -21,14 +21,12 @@
 
 #include <QCoreApplication>
 
-#include <chrono>
 #include <memory>
 
 #include "base/scoped_qpointer.h"
 #include "base/threading/worker.h"
 
 class QSocketNotifier;
-class QTimerEvent;
 class MessageWindow;
 class Thread;
 class EventMonitor;
@@ -40,19 +38,10 @@ class CoreApplication final : public QCoreApplication
     Q_OBJECT
 
 public:
-    using Clock = std::chrono::steady_clock;
-    using TimePoint = Clock::time_point;
-    using Milliseconds = std::chrono::milliseconds;
-    using Seconds = std::chrono::seconds;
-
     CoreApplication(int& argc, char* argv[]);
     ~CoreApplication() final;
 
     int exec();
-
-    // If |timer_interval| is non-zero, the application gets a repeating timer that emits sig_tick()
-    // from the main thread at that interval. Must be called before exec().
-    void setTimerInterval(Milliseconds timer_interval);
 
     static CoreApplication* instance();
 
@@ -66,21 +55,11 @@ public:
     qint64 addWorker(std::unique_ptr<Worker> worker);
 
 signals:
-    // Per-thread clock: emitted from the main thread on every built-in timer tick.
-    void sig_tick(const TimePoint& now);
-
     void sig_queryEndSession();
     void sig_sessionEvent(quint32 event, quint32 session_id);
     void sig_powerEvent(quint32 event);
 
-protected:
-    // QObject implementation.
-    void timerEvent(QTimerEvent* event) final;
-
 private:
-    Milliseconds timer_interval_ = Milliseconds::zero();
-    int timer_id_ = 0;
-
     std::unique_ptr<WorkerManager> worker_manager_;
 
 #if defined(Q_OS_WINDOWS)

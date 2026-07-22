@@ -20,7 +20,6 @@
 
 #include <QCoreApplication>
 #include <QSocketNotifier>
-#include <QTimer>
 
 #include <cerrno>
 #include <fcntl.h>
@@ -128,10 +127,9 @@ int CoreService::exec(CoreApplication& application)
             LOG(ERROR) << "Unable to install signal handler for SIGABRT";
     }
 
-    QTimer::singleShot(0, this, &CoreService::onStart);
-
-    LOG(INFO) << "Run message loop";
+    onStart();
     int ret = application.exec();
+    onStop();
 
     // Stop routing signals through the pipe and release the descriptors.
     g_signal_write_fd = -1;
@@ -178,7 +176,6 @@ void CoreService::onSignalActivated()
     if (stop_requested)
     {
         // A message loop termination command was received.
-        onStop();
         QCoreApplication::quit();
     }
 }

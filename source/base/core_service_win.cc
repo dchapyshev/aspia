@@ -18,7 +18,6 @@
 
 #include "base/core_service.h"
 
-#include <QTimer>
 #include <QThread>
 
 #include "base/core_application.h"
@@ -115,10 +114,7 @@ public:
     ServiceThread(CoreService* service);
     ~ServiceThread();
 
-    using EventCallback = std::function<void()>;
-
     void setStatus(DWORD status);
-    void doEvent(EventCallback callback, bool quit = false);
 
     static ServiceThread* self;
 
@@ -128,6 +124,7 @@ public:
         ERROR_OCCURRED,
         SERVICE_MAIN_CALLED,
         MESSAGE_LOOP_CREATED,
+        SERVICE_STARTED,
         RUNNING_AS_CONSOLE,
         RUNNING_AS_SERVICE
     };
@@ -135,10 +132,6 @@ public:
     std::condition_variable startup_condition;
     std::mutex startup_lock;
     State startup_state = State::NOT_STARTED;
-
-    std::condition_variable event_condition;
-    std::mutex event_lock;
-    bool event_processed = false;
 
 protected:
     // QThread implementation.
@@ -220,36 +213,6 @@ void ServiceThread::setStatus(DWORD status)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ServiceThread::doEvent(EventCallback callback, bool quit)
-{
-    std::unique_lock lock(event_lock);
-    event_processed = false;
-
-    QTimer::singleShot(0, QCoreApplication::instance(), [callback, quit]()
-    {
-        std::scoped_lock lock(self->event_lock);
-
-        callback();
-
-        if (quit)
-        {
-            // A message loop termination command was received.
-            QCoreApplication::quit();
-        }
-
-        // Set the event flag is processed.
-        self->event_processed = true;
-
-        // Notify waiting thread for the end of processing.
-        self->event_condition.notify_all();
-    });
-
-    // Wait for the event to be processed by the application.
-    while (!event_processed)
-        event_condition.wait(lock);
-}
-
-//--------------------------------------------------------------------------------------------------
 void ServiceThread::run()
 {
     SERVICE_TABLE_ENTRYW service_table[2];
@@ -296,14 +259,13 @@ void WINAPI ServiceThread::serviceMain(DWORD /* argc */, LPWSTR* /* argv */)
         self->startup_condition.notify_all();
     }
 
-    // Waiting for the completion of the creation.
+    // Waiting for the completion of the creation. The main thread may have already advanced past
+    // MESSAGE_LOOP_CREATED to SERVICE_STARTED, so wait for leaving SERVICE_MAIN_CALLED.
     {
         std::unique_lock lock(self->startup_lock);
 
-        while (self->startup_state != State::MESSAGE_LOOP_CREATED)
+        while (self->startup_state == State::SERVICE_MAIN_CALLED)
             self->startup_condition.wait(lock);
-
-        self->startup_state = State::RUNNING_AS_SERVICE;
     }
 
     self->status_handle_ = RegisterServiceCtrlHandlerExW(
@@ -316,7 +278,17 @@ void WINAPI ServiceThread::serviceMain(DWORD /* argc */, LPWSTR* /* argv */)
     }
 
     self->setStatus(SERVICE_START_PENDING);
-    self->doEvent(std::bind(&CoreService::onStart, self->service_));
+
+    // Wait until onStart() has completed in CoreService::exec.
+    {
+        std::unique_lock lock(self->startup_lock);
+
+        while (self->startup_state != State::SERVICE_STARTED)
+            self->startup_condition.wait(lock);
+
+        self->startup_state = State::RUNNING_AS_SERVICE;
+    }
+
     self->setStatus(SERVICE_RUNNING);
 }
 
@@ -338,12 +310,9 @@ DWORD WINAPI ServiceThread::serviceControlHandler(
             quint32 session_id =
                 reinterpret_cast<WTSSESSION_NOTIFICATION*>(event_data)->dwSessionId;
 
-            self->doEvent([event_type, session_id]()
-            {
-                LOG(INFO) << "User session event (event:" << sessionStatusToString(event_type)
-                          << "session id:" << session_id << ")";
-                emit self->service_->sig_sessionEvent(event_type, session_id);
-            });
+            LOG(INFO) << "User session event (event:" << sessionStatusToString(event_type)
+                      << "session id:" << session_id << ")";
+            emit self->service_->sig_sessionEvent(event_type, session_id);
         }
         return NO_ERROR;
 
@@ -352,11 +321,8 @@ DWORD WINAPI ServiceThread::serviceControlHandler(
             if (!self)
                 return NO_ERROR;
 
-            self->doEvent([event_type]()
-            {
-                LOG(INFO) << "Power event detected:" << powerEventToString(event_type);
-                self->service_->sig_powerEvent(event_type);
-            });
+            LOG(INFO) << "Power event detected:" << powerEventToString(event_type);
+            emit self->service_->sig_powerEvent(event_type);
         }
         return NO_ERROR;
 
@@ -369,7 +335,8 @@ DWORD WINAPI ServiceThread::serviceControlHandler(
             if (control_code == SERVICE_CONTROL_STOP)
                 self->setStatus(SERVICE_STOP_PENDING);
 
-            self->doEvent(std::bind(&CoreService::onStop, self->service_), true);
+            QMetaObject::invokeMethod(
+                QCoreApplication::instance(), &QCoreApplication::quit, Qt::QueuedConnection);
         }
         return NO_ERROR;
 
@@ -431,7 +398,17 @@ int CoreService::exec(CoreApplication& application)
     connect(this, &CoreService::sig_powerEvent, &application, &CoreApplication::sig_powerEvent);
     connect(this, &CoreService::sig_sessionEvent, &application, &CoreApplication::sig_sessionEvent);
 
+    onStart();
+
+    {
+        std::scoped_lock lock(service_thread->startup_lock);
+        service_thread->startup_state = ServiceThread::State::SERVICE_STARTED;
+        service_thread->startup_condition.notify_all();
+    }
+
     int ret = application.exec();
+    onStop();
+
     service_thread.reset();
 
     LOG(INFO) << "End";

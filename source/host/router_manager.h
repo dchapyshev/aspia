@@ -21,6 +21,7 @@
 
 #include <QQueue>
 
+#include <chrono>
 #include <optional>
 
 #include "base/scoped_qpointer.h"
@@ -33,7 +34,6 @@
 #include "host/host_user_list.h"
 #include "proto/user.h"
 
-class QTimer;
 class RelayPeerManager;
 
 class RouterManager final : public QObject
@@ -43,6 +43,9 @@ class RouterManager final : public QObject
 public:
     explicit RouterManager(QObject* parent = nullptr);
     ~RouterManager() final;
+
+    using Clock = std::chrono::steady_clock;
+    using TimePoint = std::chrono::time_point<Clock>;
 
     const Address& routerAddress() const { return router_address_; }
     const QByteArray& routerPublicKey() const { return public_key_; }
@@ -75,6 +78,7 @@ private slots:
     void onTcpErrorOccurred(TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
     void onNewPeerConnected();
+    void onTimer(const TimePoint& now);
 
 private:
     void connectToRouter();
@@ -85,12 +89,12 @@ private:
 
     ScopedQPointer<TcpChannel> tcp_channel_;
     RelayPeerManager* peer_manager_ = nullptr;
-    QTimer* reconnect_timer_ = nullptr;
+    TimePoint reconnect_time_ = TimePoint::max();
 
     Address router_address_ { DEFAULT_ROUTER_TCP_PORT };
     QByteArray public_key_;
 
-    QTimer* password_expire_timer_ = nullptr;
+    TimePoint password_expire_time_ = TimePoint::max();
     SecureString one_time_password_;
     quint32 one_time_sessions_ = 0;
 

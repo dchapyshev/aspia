@@ -48,6 +48,7 @@
 #include "host/workers/desktop_ipc_worker.h"
 #include "host/workers/input_worker.h"
 #include "host/workers/screen_worker.h"
+#include "host/workers/service_worker.h"
 #include "host/workers/update_worker.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -297,10 +298,10 @@ int runService(int& argc, char* argv[])
     CoreApplication::setApplicationVersion(ASPIA_VERSION_STRING);
 
     CoreApplication application(argc, argv);
-    application.setTimerInterval(CoreApplication::Seconds(1));
 
     HostUtils::printDebugInfo();
 
+    application.addWorker(std::make_unique<ServiceWorker>());
     application.addWorker(std::make_unique<UpdateWorker>());
 
     return Service().exec(application);

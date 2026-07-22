@@ -19,26 +19,7 @@
 #ifndef HOST_SERVICE_H
 #define HOST_SERVICE_H
 
-#include <QElapsedTimer>
-
-#include "base/scoped_qpointer.h"
 #include "base/core_service.h"
-#include "host/system_settings.h"
-
-class Location;
-class QFileSystemWatcher;
-class QTimer;
-class TcpChannel;
-class TcpServer;
-
-namespace proto::chat {
-class Chat;
-} // namespace proto::chat
-
-class Client;
-class DesktopManager;
-class RouterManager;
-class UserSession;
 
 class Service final : public CoreService
 {
@@ -58,53 +39,9 @@ protected:
     void onStart() final;
     void onStop() final;
 
-private slots:
-    void onPowerEvent(quint32 power_event);
-    void onNewDirectConnection();
-    void onNewRelayConnection();
-    void onConfirmationReply(quint32 request_id, bool accept);
-    void onRepeatedTasks();
-    void onUserSessionAttached();
-    void onUserSessionDettached();
-    void onStopClient(quint32 client_id);
-    void onDesktopManagerAttached();
-    void onClientFinished();
-    void onChatClientStarted();
-    void onChatClientFinished();
-    void onChatClientMessage(const proto::chat::Chat& chat);
-    void onUserChatMessage(const proto::chat::Chat& chat);
-    void onSettingsChanged(const QString& path);
-    void onRemoveHost();
-
 private:
-    struct PendingConfirmation
-    {
-        TcpChannel* tcp_channel = nullptr;
-        QElapsedTimer start_time;
-        QString stun_host;
-        quint16 stun_port = 0;
-    };
-
-    void startConfirmation(PendingConfirmation& pending);
-    void startClient(const PendingConfirmation& pending);
     void addFirewallRules();
     void deleteFirewallRules();
-    void connectToRouter(const Location& location);
-    void disconnectFromRouter(const Location& location);
-
-    QTimer* repeated_timer_ = nullptr;
-
-    QFileSystemWatcher* settings_watcher_ = nullptr;
-    SystemSettings settings_;
-
-    ScopedQPointer<RouterManager> router_manager_;
-    TcpServer* tcp_server_ = nullptr;
-
-    DesktopManager* desktop_manager_ = nullptr;
-    UserSession* user_session_ = nullptr;
-
-    QList<PendingConfirmation> pending_confirmation_;
-    QList<Client*> clients_;
 
     Q_DISABLE_COPY_MOVE(Service)
 };
