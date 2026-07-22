@@ -119,7 +119,7 @@ HostWindow::HostWindow(QWidget* parent)
     else
     {
         LOG(INFO) << "System tray is not available yet; waiting";
-        tray_wait_timer_ = new QTimer(this);
+        tray_wait_timer_.reset(new QTimer(this));
         connect(tray_wait_timer_, &QTimer::timeout, this, &HostWindow::onTrayAvailabilityCheck);
         tray_wait_timer_->start(std::chrono::seconds(1));
     }
@@ -880,8 +880,7 @@ void HostWindow::onTrayAvailabilityCheck()
         LOG(INFO) << "System tray became available on attempt" << tray_wait_attempts_;
 
     tray_wait_timer_->stop();
-    tray_wait_timer_->deleteLater();
-    tray_wait_timer_ = nullptr;
+    tray_wait_timer_.reset();
 
     createTrayIcon();
 }

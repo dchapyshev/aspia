@@ -100,7 +100,7 @@ private:
 
     // Created only when the shell's tray is available (see createTrayIcon()).
     ScopedQPointer<QSystemTrayIcon> tray_icon_;
-    QTimer* tray_wait_timer_ = nullptr;
+    ScopedQPointer<QTimer> tray_wait_timer_;
     int tray_wait_attempts_ = 0;
 
     QMenu tray_menu_;

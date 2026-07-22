@@ -213,7 +213,7 @@ NotifierWindow::NotifierWindow(QWidget* parent)
     timer->setSingleShot(true);
 #endif // defined(Q_OS_MACOS)
 
-    timer->start(std::chrono::milliseconds(500));
+    timer->start(std::chrono::milliseconds(1000));
 
     ui->show_panel->setVisible(false);
     onThemeChanged();
