@@ -31,11 +31,10 @@
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
 #include "host/desktop_manager.h"
-#include "host/task_manager.h"
+#include "host/workers/task_mgr_worker.h"
 #include "proto/desktop_channel.h"
 #include "proto/desktop_power.h"
 #include "proto/desktop_video.h"
-#include "proto/task_manager.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/safe_mode_util.h"
@@ -46,9 +45,11 @@
 //--------------------------------------------------------------------------------------------------
 DesktopClient::DesktopClient(TcpChannel* tcp_channel, QObject* parent)
     : Client(tcp_channel, parent),
-      attach_deadline_(Clock::now() + std::chrono::seconds(15))
+      attach_deadline_(Clock::now() + std::chrono::seconds(15)),
+      task_mgr_worker_(CoreApplication::findWorker<TaskMgrWorker>())
 {
     CLOG(INFO) << "Ctor";
+    CCHECK(task_mgr_worker_);
 
 #if defined(Q_OS_WINDOWS)
     connect(CoreApplication::instance(), &CoreApplication::sig_sessionEvent,
@@ -222,14 +223,17 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
     }
     else if (net_channel_id == proto::desktop::CHANNEL_ID_TASK_MANAGER)
     {
-        proto::task_manager::ClientToHost message;
-        if (!parse(buffer, &message))
+        if (!task_mgr_worker_)
         {
-            CLOG(ERROR) << "Unable to parse task manager message";
+            CLOG(ERROR) << "Task manager worker is not available";
             return;
         }
 
-        readTaskManager(message);
+        task_mgr_worker_->query(this, buffer, [this](QByteArray result)
+        {
+            if (!result.isEmpty())
+                send(proto::desktop::CHANNEL_ID_TASK_MANAGER, result, true);
+        });
     }
     else
     {
@@ -410,12 +414,6 @@ void DesktopClient::onIpcDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopClient::onTaskManagerMessage(const proto::task_manager::HostToClient& message)
-{
-    send(proto::desktop::CHANNEL_ID_TASK_MANAGER, serialize(message), true);
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopClient::sendIpcSessionMessage(quint8 net_channel_id, const QByteArray& buffer)
 {
     quint32 channel_id = makeUint32(proto::desktop::IPC_CHANNEL_ID_SESSION, net_channel_id);
@@ -547,14 +545,3 @@ void DesktopClient::readPowerControl(const proto::power::Control& control)
     }
 }
 
-//--------------------------------------------------------------------------------------------------
-void DesktopClient::readTaskManager(const proto::task_manager::ClientToHost& message)
-{
-    if (!task_manager_)
-    {
-        task_manager_ = new TaskManager(this);
-        connect(task_manager_, &TaskManager::sig_taskManagerMessage,
-                this, &DesktopClient::onTaskManagerMessage);
-    }
-    task_manager_->readMessage(message);
-}

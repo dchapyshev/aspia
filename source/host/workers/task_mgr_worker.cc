@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/task_manager.h"
+#include "host/workers/task_mgr_worker.h"
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
@@ -28,6 +28,7 @@
 #endif
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/service_controller.h"
 #include "base/session_id.h"
 #include "base/sys_info.h"
@@ -35,25 +36,55 @@
 #include "proto/task_manager.h"
 
 //--------------------------------------------------------------------------------------------------
-TaskManager::TaskManager(QObject* parent)
-    : QObject(parent),
-      process_monitor_(ProcessMonitor::create())
+TaskMgrWorker::TaskMgrWorker()
+    : Worker(Thread::AsioDispatcher)
 {
     LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-TaskManager::~TaskManager()
+TaskMgrWorker::~TaskMgrWorker()
 {
     LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
+void TaskMgrWorker::query(QObject* context, const QByteArray& buffer, std::function<void(QByteArray)> reply)
+{
+    Worker::request(context, [this, buffer]()
+    {
+        proto::task_manager::ClientToHost message;
+        if (!parse(buffer, &message))
+        {
+            LOG(ERROR) << "Unable to parse task manager request";
+            return QByteArray();
+        }
+
+        return readMessage(message);
+    },
+    std::move(reply));
+}
+
+//--------------------------------------------------------------------------------------------------
+void TaskMgrWorker::onStart()
+{
+    LOG(INFO) << "Task manager worker started";
+    process_monitor_ = ProcessMonitor::create();
+}
+
+//--------------------------------------------------------------------------------------------------
+void TaskMgrWorker::onStop()
+{
+    LOG(INFO) << "Task manager worker stopped";
+    process_monitor_.reset();
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray TaskMgrWorker::readMessage(const proto::task_manager::ClientToHost& message)
 {
     if (message.has_process_list_request())
     {
-        sendProcessList(message.process_list_request().flags());
+        return processList(message.process_list_request().flags());
     }
     else if (message.has_end_process_request())
     {
@@ -65,14 +96,14 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
     }
     else if (message.has_service_list_request())
     {
-        sendServiceList();
+        return serviceList();
     }
     else if (message.has_service_request())
     {
         if (message.service_request().name().empty())
         {
             LOG(ERROR) << "Service name not specified";
-            return;
+            return QByteArray();
         }
 
         switch (message.service_request().command())
@@ -84,18 +115,17 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
                 if (!controller)
                 {
                     LOG(ERROR) << "Unable to open service:" << message.service_request().name();
-                    return;
+                    return QByteArray();
                 }
 
                 if (!controller->start())
                 {
                     LOG(ERROR) << "Unable to start service:" << message.service_request().name();
-                    return;
+                    return QByteArray();
                 }
 
-                sendServiceList();
+                return serviceList();
             }
-            break;
 
             case proto::task_manager::ServiceRequest::COMMAND_STOP:
             {
@@ -104,18 +134,17 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
                 if (!controller)
                 {
                     LOG(ERROR) << "Unable to open service:" << message.service_request().name();
-                    return;
+                    return QByteArray();
                 }
 
                 if (!controller->stop())
                 {
                     LOG(ERROR) << "Unable to stop service:" << message.service_request().name();
-                    return;
+                    return QByteArray();
                 }
 
-                sendServiceList();
+                return serviceList();
             }
-            break;
 
             default:
             {
@@ -127,14 +156,14 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
     }
     else if (message.has_user_list_request())
     {
-        sendUserList();
+        return userList();
     }
     else if (message.has_user_request())
     {
         if (message.user_request().session_id() == kInvalidSessionId)
         {
             LOG(ERROR) << "Invalid session id";
-            return;
+            return QByteArray();
         }
 
         SessionId session_id = message.user_request().session_id();
@@ -145,13 +174,9 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
             {
 #if defined(Q_OS_WINDOWS)
                 if (!WTSDisconnectSession(WTS_CURRENT_SERVER_HANDLE, session_id, FALSE))
-                {
                     PLOG(ERROR) << "WTSDisconnectSession failed";
-                    return;
-                }
 #else
                 LOG(ERROR) << "Disconnecting a session is not supported on this platform";
-                return;
 #endif
             }
             break;
@@ -160,10 +185,7 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
             {
 #if defined(Q_OS_WINDOWS)
                 if (!WTSLogoffSession(WTS_CURRENT_SERVER_HANDLE, session_id, FALSE))
-                {
                     PLOG(ERROR) << "WTSLogoffSession failed";
-                    return;
-                }
 #elif defined(Q_OS_LINUX)
                 QDBusMessage call = QDBusMessage::createMethodCall(
                     "org.freedesktop.login1", "/org/freedesktop/login1",
@@ -172,10 +194,7 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
 
                 const QDBusMessage reply = QDBusConnection::systemBus().call(call);
                 if (reply.type() == QDBusMessage::ErrorMessage)
-                {
                     LOG(ERROR) << "TerminateSession failed:" << reply.errorMessage();
-                    return;
-                }
 #endif
             }
             break;
@@ -191,15 +210,17 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
     {
         LOG(ERROR) << "Unhandled task manager request";
     }
+
+    return QByteArray();
 }
 
 //--------------------------------------------------------------------------------------------------
-void TaskManager::sendProcessList(quint32 flags)
+QByteArray TaskMgrWorker::processList(quint32 flags)
 {
     if (!process_monitor_)
     {
         LOG(ERROR) << "Process monitor is not available on this platform";
-        return;
+        return QByteArray();
     }
 
     proto::task_manager::HostToClient message;
@@ -239,11 +260,11 @@ void TaskManager::sendProcessList(quint32 flags)
         item->set_thread_count(process_info.thread_count);
     }
 
-    emit sig_taskManagerMessage(message);
+    return serialize(message);
 }
 
 //--------------------------------------------------------------------------------------------------
-void TaskManager::sendServiceList()
+QByteArray TaskMgrWorker::serviceList()
 {
     proto::task_manager::HostToClient message;
     proto::task_manager::ServiceList* service_list = message.mutable_service_list();
@@ -320,11 +341,11 @@ void TaskManager::sendServiceList()
         }
     }
 
-    emit sig_taskManagerMessage(message);
+    return serialize(message);
 }
 
 //--------------------------------------------------------------------------------------------------
-void TaskManager::sendUserList()
+QByteArray TaskMgrWorker::userList()
 {
     proto::task_manager::HostToClient message;
     proto::task_manager::UserList* user_list = message.mutable_user_list();
@@ -387,5 +408,5 @@ void TaskManager::sendUserList()
         }
     }
 
-    emit sig_taskManagerMessage(message);
+    return serialize(message);
 }

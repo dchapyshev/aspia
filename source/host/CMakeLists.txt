@@ -119,14 +119,10 @@ list(APPEND SOURCE_HOST
     service.h
     settings_util.cc
     settings_util.h
-    system_info.cc
-    system_info.h
     system_info_client.cc
     system_info_client.h
     system_settings.cc
     system_settings.h
-    task_manager.cc
-    task_manager.h
     terminal_agent.cc
     terminal_agent.h
     terminal_client.cc

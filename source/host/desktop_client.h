@@ -20,6 +20,7 @@
 #define HOST_DESKTOP_CLIENT_H
 
 #include <QObject>
+#include <QPointer>
 
 #include <optional>
 
@@ -33,14 +34,9 @@ namespace proto::power {
 class Control;
 } // namespace proto::power
 
-namespace proto::task_manager {
-class ClientToHost;
-class HostToClient;
-} // namespace proto::task_manager
-
 class IpcChannel;
 class IpcServer;
-class TaskManager;
+class TaskMgrWorker;
 
 class DesktopClient final : public Client
 {
@@ -72,7 +68,6 @@ private slots:
     void onIpcErrorOccurred();
     void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer, bool reliable);
     void onIpcDisconnected();
-    void onTaskManagerMessage(const proto::task_manager::HostToClient& message);
 
 private:
     void sendIpcSessionMessage(quint8 net_channel_id, const QByteArray& buffer);
@@ -80,7 +75,6 @@ private:
     void sendSessionList();
     void readFeedback(const proto::control::Feedback& feedback);
     void readPowerControl(const proto::power::Control& control);
-    void readTaskManager(const proto::task_manager::ClientToHost& message);
 
     TimePoint attach_deadline_;
     ScopedQPointer<IpcServer> ipc_server_;
@@ -93,7 +87,7 @@ private:
 
     bool force_reliable_ = false;
 
-    TaskManager* task_manager_ = nullptr;
+    QPointer<TaskMgrWorker> task_mgr_worker_;
 
     Q_DISABLE_COPY_MOVE(DesktopClient)
 };
