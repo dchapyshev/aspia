@@ -35,7 +35,6 @@
 
 #include "base/gui_application.h"
 #include "base/logging.h"
-#include "base/version_constants.h"
 #include "base/peer/host_id.h"
 #include "client/database.h"
 #include "client/host_url.h"
@@ -53,7 +52,7 @@
 #include "client/desktop/management/search_dialog.h"
 #include "client/desktop/sys_info/system_info_window.h"
 #include "client/desktop/terminal/terminal_window.h"
-#include "common/update_checker.h"
+#include "client/workers/update_worker.h"
 #include "common/update_info.h"
 #include "common/desktop/about_dialog.h"
 #include "common/desktop/msg_box.h"
@@ -151,20 +150,11 @@ MainWindow::MainWindow(QWidget* parent)
     QShortcut* find_shortcut = new QShortcut(QKeySequence::Find, this);
     connect(find_shortcut, &QShortcut::activated, this, &MainWindow::onFindAction);
 
-#if defined(Q_OS_WINDOWS)
-    Database& db = Database::instance();
-    if (db.isCheckUpdatesEnabled())
+    connect(GuiApplication::findWorker<UpdateWorker>(), &UpdateWorker::sig_updateAvailable,
+            this, [this](const UpdateInfo& update_info)
     {
-        QString update_server = db.updateServer();
-        update_checker_ = std::make_unique<UpdateChecker>(update_server, "client");
-
-        connect(update_checker_.get(), &UpdateChecker::sig_checkedFinished,
-                this, &MainWindow::onUpdateCheckedFinished);
-
-        LOG(INFO) << "Start update checker";
-        update_checker_->start();
-    }
-#endif
+        UpdateDialog(update_info, this).exec();
+    }, Qt::QueuedConnection);
 
     connect(GuiApplication::instance(), &GuiApplication::sig_themeChanged,
             this, &MainWindow::onAfterThemeChanged);
@@ -317,40 +307,6 @@ void MainWindow::closeEvent(QCloseEvent* /* event */)
     }
 
     QApplication::quit();
-}
-
-//--------------------------------------------------------------------------------------------------
-void MainWindow::onUpdateCheckedFinished(const QByteArray& result)
-{
-    if (result.isEmpty())
-    {
-        LOG(ERROR) << "Error while retrieving update information";
-    }
-    else
-    {
-        UpdateInfo update_info = UpdateInfo::fromXml(result);
-        if (!update_info.isValid())
-        {
-            LOG(INFO) << "No updates available";
-        }
-        else
-        {
-            const QVersionNumber& current_version = kCurrentVersion;
-            const QVersionNumber& update_version = update_info.version();
-
-            if (update_version > current_version)
-            {
-                LOG(INFO) << "New version available:" << update_version.toString();
-                UpdateDialog(update_info, this).exec();
-            }
-        }
-    }
-
-    QTimer::singleShot(0, this, [this]()
-    {
-        LOG(INFO) << "Destroy update checker";
-        update_checker_.reset();
-    });
 }
 
 //--------------------------------------------------------------------------------------------------

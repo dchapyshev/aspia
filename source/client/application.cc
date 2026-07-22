@@ -24,6 +24,7 @@
 #include "client/host_url.h"
 #include "client/settings.h"
 #include "client/workers/router_worker.h"
+#include "client/workers/update_worker.h"
 
 #include <QIcon>
 
@@ -99,6 +100,7 @@ Application::Application(int& argc, char* argv[])
     setTheme(settings.theme());
 
     addWorker(std::make_unique<RouterWorker>());
+    addWorker(std::make_unique<UpdateWorker>());
 
 #if defined(Q_OS_WINDOWS)
     registerUrlHandler();

@@ -20,6 +20,7 @@
 #define COMMON_UPDATE_INFO_H
 
 #include <QByteArray>
+#include <QMetaType>
 #include <QString>
 #include <QVersionNumber>
 
@@ -44,5 +45,7 @@ private:
     QString description_;
     QString url_;
 };
+
+Q_DECLARE_METATYPE(UpdateInfo)
 
 #endif // COMMON_UPDATE_INFO_H

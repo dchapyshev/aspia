@@ -28,6 +28,8 @@ static const int kMaxDescriptionLength = 4096;
 static const int kMinUrlLength = 10;
 static const int kMaxUrlLength = 256;
 
+volatile auto g_updateInfoType = qRegisterMetaType<UpdateInfo>();
+
 //--------------------------------------------------------------------------------------------------
 QString parseElement(QXmlStreamReader& xml)
 {

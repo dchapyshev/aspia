@@ -39,7 +39,6 @@ class Tab;
 class ManagementTab;
 class SearchDialog;
 class QLineEdit;
-class UpdateChecker;
 class HostConfig;
 
 class MainWindow final : public QMainWindow
@@ -59,7 +58,6 @@ protected:
     void closeEvent(QCloseEvent* event) final;
 
 private slots:
-    void onUpdateCheckedFinished(const QByteArray& result);
     void onAfterThemeChanged();
     void onSettings();
     void onHelp();
@@ -92,7 +90,6 @@ private:
     QMenu* menuForActionGroup(Tab::ActionRole group) const;
 
     std::unique_ptr<Ui::MainWindow> ui;
-    std::unique_ptr<UpdateChecker> update_checker_;
 
     QLineEdit* search_field_ = nullptr;
     QAction* search_action_ = nullptr;
