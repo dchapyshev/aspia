@@ -20,7 +20,6 @@
 
 #include <QDir>
 #include <QFileInfo>
-#include <QTimer>
 
 #include "base/core_application.h"
 #include "base/location.h"
@@ -29,6 +28,7 @@
 #include "base/serialization.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
+#include "base/threading/worker.h"
 #include "host/desktop_client.h"
 #include "host/host_constants.h"
 #include "proto/desktop_internal.h"
@@ -232,23 +232,13 @@ SessionId activeTargetSessionId()
 
 //--------------------------------------------------------------------------------------------------
 DesktopManager::DesktopManager(QObject* parent)
-    : QObject(parent),
-      restart_timer_(new QTimer(this)),
-      attach_timer_(new QTimer(this))
+    : QObject(parent)
 {
     LOG(INFO) << "Ctor";
 
     connect(CoreApplication::instance(), &CoreApplication::sig_sessionEvent,
             this, &DesktopManager::onUserSessionEvent);
-
-    restart_timer_->setInterval(kRestartTimeout);
-    restart_timer_->setSingleShot(true);
-
-    attach_timer_->setInterval(kAttachTimeout);
-    attach_timer_->setSingleShot(true);
-
-    connect(restart_timer_, &QTimer::timeout, this, &DesktopManager::onRestartTimeout);
-    connect(attach_timer_, &QTimer::timeout, this, &DesktopManager::onAttachTimeout);
+    connect(Worker::current(), &Worker::sig_tick, this, &DesktopManager::onTimer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -396,7 +386,7 @@ void DesktopManager::onUserSessionEvent(quint32 event_type, quint32 session_id)
 {
 #if defined(Q_OS_WINDOWS)
     LOG(INFO) << "State (session_id:" << session_id_ << "console:" << is_console_ << "restarting:"
-              << restart_timer_->isActive() << "state:" << state_ << ")";
+              << (restart_time_ != TimePoint::max()) << "state:" << state_ << ")";
 
     switch (event_type)
     {
@@ -444,25 +434,31 @@ void DesktopManager::onUserSessionEvent(quint32 event_type, quint32 session_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopManager::onRestartTimeout()
+void DesktopManager::onTimer(const TimePoint& now)
 {
-    LOG(INFO) << "Restarting...";
-#if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
-    // Always re-attach to the current active console session: the previous session id may have been
-    // cleared by a failed attach, and the active session can change while we retry.
-    SessionId session_id = activeTargetSessionId();
-#else
-    SessionId session_id = session_id_;
-#endif
-    dettach(FROM_HERE);
-    attach(FROM_HERE, session_id);
-}
+    if (now >= attach_deadline_)
+    {
+        attach_deadline_ = TimePoint::max();
 
-//--------------------------------------------------------------------------------------------------
-void DesktopManager::onAttachTimeout()
-{
-    LOG(INFO) << "Attach timeout. Restarting after" << kRestartTimeout.count() << "ms";
-    restart_timer_->start();
+        LOG(INFO) << "Attach timeout. Restarting after" << kRestartTimeout.count() << "ms";
+        restart_time_ = now + kRestartTimeout;
+    }
+
+    if (now >= restart_time_)
+    {
+        restart_time_ = TimePoint::max();
+
+        LOG(INFO) << "Restarting...";
+#if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
+        // Always re-attach to the current active console session: the previous session id may have been
+        // cleared by a failed attach, and the active session can change while we retry.
+        SessionId session_id = activeTargetSessionId();
+#else
+        SessionId session_id = session_id_;
+#endif
+        dettach(FROM_HERE);
+        attach(FROM_HERE, session_id);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -520,7 +516,7 @@ void DesktopManager::onIpcNewConnection()
     connect(ipc_channel_, &IpcChannel::sig_disconnected, this, &DesktopManager::onIpcDisconnected);
     connect(ipc_channel_, &IpcChannel::sig_messageReceived, this, &DesktopManager::onIpcMessageReceived);
 
-    attach_timer_->stop();
+    attach_deadline_ = TimePoint::max();
     ipc_channel_->setPaused(false);
 
     state_ = State::ATTACHED;
@@ -531,7 +527,7 @@ void DesktopManager::onIpcNewConnection()
 void DesktopManager::onIpcErrorOccurred()
 {
     dettach(FROM_HERE);
-    restart_timer_->start();
+    restart_time_ = Clock::now() + kRestartTimeout;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -563,7 +559,7 @@ void DesktopManager::attach(const Location& location, SessionId session_id)
     // A pending restart (scheduled by an earlier failed attach) is superseded by this attach; left
     // running it would fire mid-attach and spawn a duplicate agent racing the first one for the
     // capture device.
-    restart_timer_->stop();
+    restart_time_ = TimePoint::max();
 
     state_ = State::ATTACHING;
     session_id_ = session_id;
@@ -571,7 +567,7 @@ void DesktopManager::attach(const Location& location, SessionId session_id)
 
     LOG(INFO) << "Spawn desktop agent for session" << session_id << "from" << location;
 
-    attach_timer_->start();
+    attach_deadline_ = Clock::now() + kAttachTimeout;
 
 #if defined(Q_OS_LINUX)
     // An agent from a previous attach attempt may still be alive: probing the capture path can outlast
@@ -595,7 +591,7 @@ void DesktopManager::attach(const Location& location, SessionId session_id)
     if (!startProcess())
     {
         dettach(FROM_HERE);
-        restart_timer_->start();
+        restart_time_ = Clock::now() + kRestartTimeout;
         return;
     }
 
@@ -622,8 +618,8 @@ void DesktopManager::dettach(const Location& location)
     session_id_ = kInvalidSessionId;
     is_console_ = true;
 
-    restart_timer_->stop();
-    attach_timer_->stop();
+    restart_time_ = TimePoint::max();
+    attach_deadline_ = TimePoint::max();
     state_ = State::DETTACHED;
 }
 

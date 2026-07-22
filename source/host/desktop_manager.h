@@ -21,13 +21,14 @@
 
 #include <QObject>
 
+#include <chrono>
+
 #include "base/scoped_qpointer.h"
 #include "base/session_id.h"
 
 class IpcChannel;
 class IpcServer;
 class Location;
-class QTimer;
 
 class DesktopManager final : public QObject
 {
@@ -36,6 +37,9 @@ class DesktopManager final : public QObject
 public:
     explicit DesktopManager(QObject* parent = nullptr);
     ~DesktopManager() final;
+
+    using Clock = std::chrono::steady_clock;
+    using TimePoint = std::chrono::time_point<Clock>;
 
     enum class State
     {
@@ -66,8 +70,7 @@ signals:
 
 private slots:
     void onUserSessionEvent(quint32 event_type, quint32 session_id);
-    void onRestartTimeout();
-    void onAttachTimeout();
+    void onTimer(const TimePoint& now);
 
     // Slots for IpcServer.
     void onIpcNewConnection();
@@ -90,8 +93,8 @@ private:
     ScopedQPointer<IpcServer> ipc_server_;
     ScopedQPointer<IpcChannel> ipc_channel_;
 
-    QTimer* restart_timer_ = nullptr;
-    QTimer* attach_timer_ = nullptr;
+    TimePoint restart_time_ = TimePoint::max();
+    TimePoint attach_deadline_ = TimePoint::max();
 
     int client_count_ = 0;
 
