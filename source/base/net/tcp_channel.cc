@@ -23,7 +23,7 @@ namespace {
 volatile auto g_errorCodeType = qRegisterMetaType<TcpChannel::ErrorCode>();
 
 //--------------------------------------------------------------------------------------------------
-int calculateSpeed(int last_speed, const TcpChannel::Milliseconds& duration, qint64 bytes)
+int calculateSpeed(int last_speed, Milliseconds duration, qint64 bytes)
 {
     static const double kAlpha = 0.1;
     const qint64 ms = duration.count();
@@ -131,7 +131,7 @@ QString TcpChannel::errorToString(ErrorCode error_code)
 int TcpChannel::speedRx()
 {
     TimePoint current_time = Clock::now();
-    Milliseconds duration = std::chrono::duration_cast<Milliseconds>(current_time - begin_time_rx_);
+    Milliseconds duration = DurationCast<Milliseconds>(current_time - begin_time_rx_);
 
     speed_rx_ = calculateSpeed(speed_rx_, duration, bytes_rx_);
     begin_time_rx_ = current_time;
@@ -144,7 +144,7 @@ int TcpChannel::speedRx()
 int TcpChannel::speedTx()
 {
     TimePoint current_time = Clock::now();
-    Milliseconds duration = std::chrono::duration_cast<Milliseconds>(current_time - begin_time_tx_);
+    Milliseconds duration = DurationCast<Milliseconds>(current_time - begin_time_tx_);
 
     speed_tx_ = calculateSpeed(speed_tx_, duration, bytes_tx_);
     begin_time_tx_ = current_time;

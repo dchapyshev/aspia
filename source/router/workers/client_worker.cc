@@ -41,7 +41,7 @@
 namespace {
 
 // Accumulated NOTIFY_* bits are flushed to the connected sessions at this interval.
-const Worker::Seconds kNotifyInterval{ 5 };
+const Seconds kNotifyInterval{ 5 };
 
 } // namespace
 
@@ -175,7 +175,7 @@ void ClientWorker::onStop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWorker::onTimer(const TimePoint& now)
+void ClientWorker::onTimer(TimePoint now)
 {
     if (now < next_notify_time_)
         return;

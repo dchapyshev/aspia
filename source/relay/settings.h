@@ -20,7 +20,8 @@
 #define RELAY_SETTINGS_H
 
 #include <QSettings>
-#include <chrono>
+
+#include "base/time_types.h"
 
 class Settings
 {
@@ -54,8 +55,8 @@ public:
     void setPeerPort(quint16 port);
     quint16 peerPort() const;
 
-    void setPeerIdleTimeout(const std::chrono::minutes& timeout);
-    std::chrono::minutes peerIdleTimeout() const;
+    void setPeerIdleTimeout(Minutes timeout);
+    Minutes peerIdleTimeout() const;
 
     void setMaxPeerCount(quint32 count);
     quint32 maxPeerCount() const;
@@ -63,8 +64,8 @@ public:
     void setStatisticsEnabled(bool enable);
     bool isStatisticsEnabled() const;
 
-    void setStatisticsInterval(const std::chrono::seconds& interval);
-    std::chrono::seconds statisticsInterval() const;
+    void setStatisticsInterval(Seconds interval);
+    Seconds statisticsInterval() const;
 
 private:
     QSettings impl_;

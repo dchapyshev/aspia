@@ -32,13 +32,12 @@ class FloodGuardTestPeer
 public:
     static int maxTracked() { return FloodGuard::kMaxTracked; }
 
-    static bool checkAddress(FloodGuard& guard, FloodGuard::TimePoint now,
-                             const asio::ip::address& address)
+    static bool checkAddress(FloodGuard& guard, TimePoint now, const asio::ip::address& address)
     {
         return guard.checkAddress(now, address);
     }
 
-    static bool checkPending(FloodGuard& guard, FloodGuard::TimePoint now, int current_pending)
+    static bool checkPending(FloodGuard& guard, TimePoint now, int current_pending)
     {
         return guard.checkPending(now, current_pending);
     }
@@ -61,12 +60,12 @@ TEST(flood_guard_test, burst_then_reject)
 
     for (int i = 0; i < 5; ++i)
     {
-        EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, FloodGuard::Clock::now(), addr))
+        EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, Clock::now(), addr))
             << "attempt " << i;
     }
 
-    EXPECT_FALSE(FloodGuardTestPeer::checkAddress(guard, FloodGuard::Clock::now(), addr));
-    EXPECT_FALSE(FloodGuardTestPeer::checkAddress(guard, FloodGuard::Clock::now(), addr));
+    EXPECT_FALSE(FloodGuardTestPeer::checkAddress(guard, Clock::now(), addr));
+    EXPECT_FALSE(FloodGuardTestPeer::checkAddress(guard, Clock::now(), addr));
 }
 
 TEST(flood_guard_test, refill_after_window)
@@ -75,16 +74,16 @@ TEST(flood_guard_test, refill_after_window)
     guard.setRateLimit(1s, 2);
     const auto addr = ipv4("203.0.113.2");
 
-    EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, FloodGuard::Clock::now(), addr));
-    EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, FloodGuard::Clock::now(), addr));
-    EXPECT_FALSE(FloodGuardTestPeer::checkAddress(guard, FloodGuard::Clock::now(), addr));
+    EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, Clock::now(), addr));
+    EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, Clock::now(), addr));
+    EXPECT_FALSE(FloodGuardTestPeer::checkAddress(guard, Clock::now(), addr));
 
     // Wait for full refill (window) + small margin.
     std::this_thread::sleep_for(1100ms);
 
-    EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, FloodGuard::Clock::now(), addr));
-    EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, FloodGuard::Clock::now(), addr));
-    EXPECT_FALSE(FloodGuardTestPeer::checkAddress(guard, FloodGuard::Clock::now(), addr));
+    EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, Clock::now(), addr));
+    EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, Clock::now(), addr));
+    EXPECT_FALSE(FloodGuardTestPeer::checkAddress(guard, Clock::now(), addr));
 }
 
 TEST(flood_guard_test, addresses_independent)
@@ -94,14 +93,14 @@ TEST(flood_guard_test, addresses_independent)
     const auto a = ipv4("203.0.113.10");
     const auto b = ipv4("203.0.113.11");
 
-    EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, FloodGuard::Clock::now(), a));
-    EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, FloodGuard::Clock::now(), a));
-    EXPECT_FALSE(FloodGuardTestPeer::checkAddress(guard, FloodGuard::Clock::now(), a));
+    EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, Clock::now(), a));
+    EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, Clock::now(), a));
+    EXPECT_FALSE(FloodGuardTestPeer::checkAddress(guard, Clock::now(), a));
 
     // |b| has its own budget, untouched by |a|'s usage.
-    EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, FloodGuard::Clock::now(), b));
-    EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, FloodGuard::Clock::now(), b));
-    EXPECT_FALSE(FloodGuardTestPeer::checkAddress(guard, FloodGuard::Clock::now(), b));
+    EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, Clock::now(), b));
+    EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, Clock::now(), b));
+    EXPECT_FALSE(FloodGuardTestPeer::checkAddress(guard, Clock::now(), b));
 }
 
 TEST(flood_guard_test, ipv4_and_ipv6_independent)
@@ -111,11 +110,11 @@ TEST(flood_guard_test, ipv4_and_ipv6_independent)
     const auto v4 = ipv4("203.0.113.20");
     const auto v6 = asio::ip::make_address("2001:db8::1");
 
-    EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, FloodGuard::Clock::now(), v4));
-    EXPECT_FALSE(FloodGuardTestPeer::checkAddress(guard, FloodGuard::Clock::now(), v4));
+    EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, Clock::now(), v4));
+    EXPECT_FALSE(FloodGuardTestPeer::checkAddress(guard, Clock::now(), v4));
 
-    EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, FloodGuard::Clock::now(), v6));
-    EXPECT_FALSE(FloodGuardTestPeer::checkAddress(guard, FloodGuard::Clock::now(), v6));
+    EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, Clock::now(), v6));
+    EXPECT_FALSE(FloodGuardTestPeer::checkAddress(guard, Clock::now(), v6));
 }
 
 TEST(flood_guard_test, check_pending)
@@ -123,11 +122,11 @@ TEST(flood_guard_test, check_pending)
     FloodGuard guard;
     guard.setMaxPending(4);
 
-    EXPECT_TRUE(FloodGuardTestPeer::checkPending(guard, FloodGuard::Clock::now(), 0));
-    EXPECT_TRUE(FloodGuardTestPeer::checkPending(guard, FloodGuard::Clock::now(), 3));
-    EXPECT_FALSE(FloodGuardTestPeer::checkPending(guard, FloodGuard::Clock::now(), 4));
-    EXPECT_FALSE(FloodGuardTestPeer::checkPending(guard, FloodGuard::Clock::now(), 5));
-    EXPECT_FALSE(FloodGuardTestPeer::checkPending(guard, FloodGuard::Clock::now(), 100));
+    EXPECT_TRUE(FloodGuardTestPeer::checkPending(guard, Clock::now(), 0));
+    EXPECT_TRUE(FloodGuardTestPeer::checkPending(guard, Clock::now(), 3));
+    EXPECT_FALSE(FloodGuardTestPeer::checkPending(guard, Clock::now(), 4));
+    EXPECT_FALSE(FloodGuardTestPeer::checkPending(guard, Clock::now(), 5));
+    EXPECT_FALSE(FloodGuardTestPeer::checkPending(guard, Clock::now(), 100));
 }
 
 TEST(flood_guard_test, eviction_under_pressure)
@@ -143,7 +142,7 @@ TEST(flood_guard_test, eviction_under_pressure)
     for (int i = 0; i < max_tracked; ++i)
     {
         const asio::ip::address addr = asio::ip::address_v4(0x0a000000u + i);
-        EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, FloodGuard::Clock::now(), addr));
+        EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, Clock::now(), addr));
     }
 
     // Wait for those entries to fully refill (TAT <= now).
@@ -152,5 +151,5 @@ TEST(flood_guard_test, eviction_under_pressure)
     // A new address arrives: the map is full but every existing entry is at capacity, so the
     // sweep evicts them and the new entry is admitted.
     const asio::ip::address fresh = asio::ip::make_address("192.168.0.1");
-    EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, FloodGuard::Clock::now(), fresh));
+    EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, Clock::now(), fresh));
 }

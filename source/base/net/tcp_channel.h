@@ -22,9 +22,8 @@
 #include <QObject>
 #include <QVersionNumber>
 
-#include <chrono>
-
 #include "base/logging.h"
+#include "base/time_types.h"
 
 class RelayPeer;
 
@@ -95,12 +94,7 @@ public:
 
     static QString errorToString(ErrorCode error_code);
 
-    using Clock = std::chrono::steady_clock;
-    using TimePoint = std::chrono::time_point<Clock>;
-    using Milliseconds = std::chrono::milliseconds;
-    using Seconds = std::chrono::seconds;
-
-    virtual void connectTo(const QString& address, quint16 port, const Seconds& timeout = Seconds(30)) = 0;
+    virtual void connectTo(const QString& address, quint16 port, Seconds timeout = Seconds(30)) = 0;
     virtual bool isConnected() const = 0;
     virtual bool isAuthenticated() const = 0;
     virtual bool isPaused() const = 0;
@@ -109,7 +103,7 @@ public:
     virtual bool setReadBufferSize(int size) = 0;
     virtual bool setWriteBufferSize(int size) = 0;
     virtual qint64 pendingBytes() const = 0;
-    virtual void tick(const TimePoint& now) = 0;
+    virtual void tick(TimePoint now) = 0;
 
     quint32 instanceId() const { return instance_id_; }
     Type type() const { return type_; }

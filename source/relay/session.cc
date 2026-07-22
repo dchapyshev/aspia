@@ -92,15 +92,15 @@ void Session::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::chrono::seconds Session::idleTime(const TimePoint& current_time) const
+Seconds Session::idleTime(TimePoint current_time) const
 {
-    return std::chrono::duration_cast<std::chrono::seconds>(current_time - start_idle_time_);
+    return DurationCast<Seconds>(current_time - start_idle_time_);
 }
 
 //--------------------------------------------------------------------------------------------------
-std::chrono::seconds Session::duration(const TimePoint& current_time) const
+Seconds Session::duration(TimePoint current_time) const
 {
-    return std::chrono::duration_cast<std::chrono::seconds>(current_time - start_time_);
+    return DurationCast<Seconds>(current_time - start_time_);
 }
 
 //--------------------------------------------------------------------------------------------------

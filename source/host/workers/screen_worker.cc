@@ -75,13 +75,13 @@ constexpr int kMaxScreenCaptureFpsLowEnd = 20;
 // Right after login the compositor needs a moment to register its screen-cast interface, so every
 // Wayland probe can fail transiently. Retry the probe chain within this window before committing to
 // the VT console fallback; bounded well under the client's start timeout.
-constexpr std::chrono::milliseconds kWaylandProbeTimeout { 5000 };
-constexpr std::chrono::milliseconds kWaylandProbeRetryDelay { 250 };
+constexpr Milliseconds kWaylandProbeTimeout { 5000 };
+constexpr Milliseconds kWaylandProbeRetryDelay { 250 };
 
 // A backend committed during the login transition can pass its trial capture on the outgoing
 // compositor's buffer and then fail on every real frame once the session settles; after this long
 // without a single frame the capture path selection is re-run (see reselectLinuxCapture()).
-constexpr std::chrono::milliseconds kCaptureErrorReprobeDelay { 3000 };
+constexpr Milliseconds kCaptureErrorReprobeDelay { 3000 };
 #endif // defined(Q_OS_LINUX)
 
 //--------------------------------------------------------------------------------------------------

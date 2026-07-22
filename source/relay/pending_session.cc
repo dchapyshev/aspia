@@ -28,10 +28,10 @@
 namespace {
 
 // Deadline for a freshly-accepted peer to send its handshake.
-constexpr std::chrono::seconds kHandshakeTimeout{ 5 };
+constexpr Seconds kHandshakeTimeout{ 5 };
 
 // Absolute cap on how long a pending session may occupy a slot, measured from connect.
-constexpr std::chrono::seconds kTotalTimeout{ 30 };
+constexpr Seconds kTotalTimeout{ 30 };
 
 // Hard cap on the handshake message size.
 constexpr quint32 kMaxMessageSize = 16 * 1024; // 16 KB
@@ -124,9 +124,9 @@ const QString& PendingSession::address() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::chrono::seconds PendingSession::duration(const TimePoint& now) const
+Seconds PendingSession::duration(TimePoint now) const
 {
-    return std::chrono::duration_cast<std::chrono::seconds>(now - start_time_);
+    return DurationCast<Seconds>(now - start_time_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -136,7 +136,7 @@ quint32 PendingSession::keyId() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool PendingSession::isExpired(const TimePoint& now) const
+bool PendingSession::isExpired(TimePoint now) const
 {
     return now >= deadline_;
 }

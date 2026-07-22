@@ -22,13 +22,14 @@
 
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/time_types.h"
 #include "base/peer/host_id.h"
 #include "client/router.h"
 #include "proto/router_client.h"
 
 namespace {
 
-const std::chrono::seconds kTimeout { 30 };
+const Seconds kTimeout { 30 };
 
 } // namespace
 

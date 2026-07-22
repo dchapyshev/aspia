@@ -44,7 +44,7 @@ public:
     ~TcpChannelNG() final;
 
     // Connects to a host at the specified address and port.
-    void connectTo(const QString& address, quint16 port, const Seconds& timeout) final;
+    void connectTo(const QString& address, quint16 port, Seconds timeout) final;
 
     // Returns true if the channel is connected and false if not connected.
     bool isConnected() const final { return connected_; }
@@ -70,7 +70,7 @@ public:
     qint64 pendingBytes() const final;
 
     // Called by the channel owner about once per second.
-    void tick(const TimePoint& now) final;
+    void tick(TimePoint now) final;
 
 protected:
     friend class TcpServer;

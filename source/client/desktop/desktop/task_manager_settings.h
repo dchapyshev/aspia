@@ -20,7 +20,8 @@
 #define CLIENT_DESKTOP_DESKTOP_TASK_MANAGER_SETTINGS_H
 
 #include <QSettings>
-#include <chrono>
+
+#include "base/time_types.h"
 
 class TaskManagerSettings
 {
@@ -39,8 +40,8 @@ public:
     QByteArray userColumnState() const;
     void setUserColumnState(const QByteArray& state);
 
-    std::chrono::milliseconds updateSpeed() const;
-    void setUpdateSpeed(const std::chrono::milliseconds& speed);
+    Milliseconds updateSpeed() const;
+    void setUpdateSpeed(Milliseconds speed);
 
 private:
     QSettings settings_;

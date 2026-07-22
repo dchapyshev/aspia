@@ -18,20 +18,21 @@
 
 #include "base/codec/video_encoder_vpx.h"
 
-#include "base/logging.h"
-#include "base/desktop/frame.h"
-#include "proto/desktop_video.h"
+#include <QThread>
 
 #include <libyuv/convert.h>
 #include <libyuv/cpu_id.h>
 
-#include <QThread>
-
 #include <algorithm>
+
+#include "base/logging.h"
+#include "base/time_types.h"
+#include "base/desktop/frame.h"
+#include "proto/desktop_video.h"
 
 namespace {
 
-const std::chrono::milliseconds kTargetFrameInterval{ 80 };
+const Milliseconds kTargetFrameInterval{ 80 };
 
 // Defines the dimension of a macro block. This is used to compute the active map for the encoder.
 const int kMacroBlockSize = 16;
@@ -47,8 +48,7 @@ void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const QSize& size)
 {
     // Use millisecond granularity time base.
     config->g_timebase.num = 1;
-    config->g_timebase.den = static_cast<int>(
-        std::chrono::microseconds(std::chrono::seconds(1)).count());
+    config->g_timebase.den = static_cast<int>(Microseconds(Seconds(1)).count());
 
     config->g_w = static_cast<unsigned int>(size.width());
     config->g_h = static_cast<unsigned int>(size.height());
@@ -228,8 +228,7 @@ VideoEncoder::Result VideoEncoderVpx::encode(const Frame* frame, proto::video::P
     ret = vpx_codec_encode(codec_.get(),
                            image_.get(),
                            0, // pts
-                           static_cast<unsigned long>(
-                               std::chrono::microseconds(kTargetFrameInterval).count()),
+                           static_cast<unsigned long>(Microseconds(kTargetFrameInterval).count()),
                            flags,
                            VPX_DL_REALTIME);
     if (ret != VPX_CODEC_OK)

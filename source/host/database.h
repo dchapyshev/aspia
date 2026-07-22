@@ -19,16 +19,15 @@
 #ifndef HOST_DATABASE_H
 #define HOST_DATABASE_H
 
-#include "base/net/address.h"
-#include "base/peer/user.h"
-#include "base/sql/sql_database.h"
-
 #include <QByteArray>
 #include <QObject>
 #include <QString>
 #include <QVector>
 
-#include <chrono>
+#include "base/time_types.h"
+#include "base/net/address.h"
+#include "base/peer/user.h"
+#include "base/sql/sql_database.h"
 
 class SecureString;
 
@@ -97,14 +96,14 @@ public:
     NoUserAction noUserAction() const;
     bool setNoUserAction(NoUserAction action);
 
-    std::chrono::milliseconds autoConfirmationInterval() const;
-    bool setAutoConfirmationInterval(const std::chrono::milliseconds& interval);
+    Milliseconds autoConfirmationInterval() const;
+    bool setAutoConfirmationInterval(Milliseconds interval);
 
     bool oneTimePassword() const;
     bool setOneTimePassword(bool enable);
 
-    std::chrono::milliseconds oneTimePasswordExpire() const;
-    bool setOneTimePasswordExpire(const std::chrono::milliseconds& interval);
+    Milliseconds oneTimePasswordExpire() const;
+    bool setOneTimePasswordExpire(Milliseconds interval);
 
     int oneTimePasswordLength() const;
     bool setOneTimePasswordLength(int length);

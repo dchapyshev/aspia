@@ -28,6 +28,7 @@
 
 #include "base/gui_application.h"
 #include "base/logging.h"
+#include "base/time_types.h"
 #include "base/desktop/frame.h"
 #include "common/keycode_converter.h"
 #include "proto/desktop_input.h"
@@ -212,7 +213,7 @@ void DesktopWidget::setDesktopFrameError(proto::video::ErrorCode error_code)
     LOG(INFO) << "Video error detected:" << error_code;
     last_error_code_ = error_code;
 
-    error_timer_->start(std::chrono::milliseconds(1500));
+    error_timer_->start(Milliseconds(1500));
 }
 
 //--------------------------------------------------------------------------------------------------

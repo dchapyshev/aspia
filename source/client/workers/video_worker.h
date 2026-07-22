@@ -83,7 +83,7 @@ protected:
     // Worker implementation.
     void onStart() final;
     void onStop() final;
-    void onTimer(const TimePoint& now) final;
+    void onTimer(TimePoint now) final;
 
 private slots:
     void onVideoMessage(const QByteArray& buffer);

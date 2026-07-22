@@ -21,11 +21,11 @@
 
 #include <QQueue>
 
-#include <chrono>
 #include <optional>
 
 #include "base/scoped_qpointer.h"
 #include "base/shared_pointer.h"
+#include "base/time_types.h"
 #include "base/crypto/secure_string.h"
 #include "base/net/address.h"
 #include "base/net/tcp_channel.h"
@@ -43,9 +43,6 @@ class RouterManager final : public QObject
 public:
     explicit RouterManager(QObject* parent = nullptr);
     ~RouterManager() final;
-
-    using Clock = std::chrono::steady_clock;
-    using TimePoint = std::chrono::time_point<Clock>;
 
     const Address& routerAddress() const { return router_address_; }
     const QByteArray& routerPublicKey() const { return public_key_; }
@@ -78,7 +75,7 @@ private slots:
     void onTcpErrorOccurred(TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
     void onNewPeerConnected();
-    void onTimer(const TimePoint& now);
+    void onTimer(TimePoint now);
 
 private:
     void connectToRouter();

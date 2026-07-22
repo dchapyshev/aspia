@@ -26,6 +26,7 @@
 
 #include "base/logging.h"
 #include "base/shared_pointer.h"
+#include "base/time_types.h"
 
 class Location;
 
@@ -38,9 +39,6 @@ class PendingSession final : public QObject
     Q_OBJECT
 
 public:
-    using Clock = std::chrono::steady_clock;
-    using TimePoint = std::chrono::time_point<Clock>;
-
     PendingSession(asio::ip::tcp::socket&& socket, QObject* parent = nullptr);
     ~PendingSession();
 
@@ -59,12 +57,12 @@ public:
     asio::ip::tcp::socket takeSocket();
 
     const QString& address() const;
-    std::chrono::seconds duration(const TimePoint& now) const;
+    Seconds duration(TimePoint now) const;
     quint32 keyId() const;
 
     // Returns true if the session has passed its deadline (handshake or total-lifetime budget). The
     // session has no internal timer; the owner drives the check from its clock.
-    bool isExpired(const TimePoint& now) const;
+    bool isExpired(TimePoint now) const;
 
 signals:
     // Called when received authentication data from a peer.

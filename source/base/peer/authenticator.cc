@@ -23,12 +23,13 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "base/time_types.h"
 #include "base/crypto/secure_byte_array.h"
 #include "proto/key_exchange.h"
 
 namespace {
 
-constexpr std::chrono::minutes kTimeout{ 1 };
+constexpr Minutes kTimeout{ 1 };
 
 volatile auto g_errorCodeType = qRegisterMetaType<Authenticator::ErrorCode>();
 

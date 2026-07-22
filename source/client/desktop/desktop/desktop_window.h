@@ -21,11 +21,11 @@
 
 #include <QPointer>
 
-#include <chrono>
 #include <optional>
 
 #include "base/scoped_qpointer.h"
 #include "base/serialization.h"
+#include "base/time_types.h"
 #include "base/desktop/shared_frame.h"
 #include "client/desktop/client_window.h"
 #include "client/workers/audio_worker.h"
@@ -164,8 +164,6 @@ private:
 
     Serializer<proto::input::ClientToHost> outgoing_message_;
 
-    using Clock = std::chrono::steady_clock;
-    using TimePoint = std::chrono::time_point<Clock>;
     TimePoint start_time_;
 
     QTimer* resize_timer_ = nullptr;

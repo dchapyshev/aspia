@@ -96,7 +96,7 @@ void UpdateWorker::onStop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UpdateWorker::onTimer(const TimePoint& /* now */)
+void UpdateWorker::onTimer(TimePoint /* now */)
 {
     checkForUpdates();
 }

@@ -40,8 +40,8 @@
 namespace {
 
 constexpr int kDragPollIntervalMs = 50;
-const std::chrono::seconds kReconnectRetryDelay { 5 };
-const std::chrono::minutes kReconnectBudget { 5 };
+const Seconds kReconnectRetryDelay { 5 };
+const Minutes kReconnectBudget { 5 };
 
 } // namespace
 

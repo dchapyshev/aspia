@@ -36,8 +36,8 @@
 namespace {
 
 const int kWriteQueueReservedSize = 128;
-const TcpChannelLegacy::Seconds kKeepAliveInterval { 30 };
-const TcpChannelLegacy::Seconds kKeepAliveTimeout { 30 };
+const Seconds kKeepAliveInterval { 30 };
+const Seconds kKeepAliveTimeout { 30 };
 
 //--------------------------------------------------------------------------------------------------
 QStringList endpointsToString(const asio::ip::tcp::resolver::results_type& endpoints)
@@ -121,7 +121,7 @@ void TcpChannelLegacy::doAuthentication()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannelLegacy::connectTo(const QString& address, quint16 port, const Seconds& /* timeout */)
+void TcpChannelLegacy::connectTo(const QString& address, quint16 port, Seconds /* timeout */)
 {
     if (isConnected() || !resolver_)
         return;
@@ -339,7 +339,7 @@ qint64 TcpChannelLegacy::pendingBytes() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannelLegacy::tick(const TimePoint& now)
+void TcpChannelLegacy::tick(TimePoint now)
 {
     if (keep_alive_state_ == KeepAliveState::INACTIVE || now < keep_alive_deadline_)
         return;

@@ -92,7 +92,7 @@ void TcpServerLegacy::setMaxConnectionsPerMinute(int max_per_minute)
         return;
     }
 
-    flood_guard_->setRateLimit(FloodGuard::Seconds{60}, max_per_minute);
+    flood_guard_->setRateLimit(Seconds{60}, max_per_minute);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -222,7 +222,7 @@ void TcpServerLegacy::doAccept()
 
             LOG(ERROR) << "Error while accepting connection:" << error_code;
 
-            QTimer::singleShot(std::chrono::seconds(1), this, [this, guard]()
+            QTimer::singleShot(Seconds(1), this, [this, guard]()
             {
                 if (*guard)
                     doAccept();

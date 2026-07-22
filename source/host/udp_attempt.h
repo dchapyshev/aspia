@@ -21,10 +21,10 @@
 
 #include <QObject>
 
-#include <chrono>
 #include <memory>
 
 #include "base/logging.h"
+#include "base/time_types.h"
 #include "base/crypto/key_pair.h"
 #include "base/scoped_qpointer.h"
 #include "proto/key_exchange.h"
@@ -112,7 +112,7 @@ private:
     bool enet_ready_ = false;
     bool crypto_ready_ = false;
     bool probe_sent_ = false;
-    std::chrono::steady_clock::time_point probe_send_time_;
+    TimePoint probe_send_time_;
 
     Q_DISABLE_COPY_MOVE(UdpAttempt)
 };

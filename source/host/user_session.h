@@ -22,11 +22,10 @@
 #include <QObject>
 #include <QList>
 
-#include <chrono>
-
 #include "base/scoped_qpointer.h"
 #include "base/serialization.h"
 #include "base/session_id.h"
+#include "base/time_types.h"
 #include "base/peer/host_id.h"
 #include "proto/user.h"
 
@@ -42,9 +41,6 @@ class UserSession final : public QObject
 public:
     explicit UserSession(QObject* parent = nullptr);
     ~UserSession() final;
-
-    using Clock = std::chrono::steady_clock;
-    using TimePoint = std::chrono::time_point<Clock>;
 
     enum class State
     {
@@ -98,7 +94,7 @@ private slots:
     void onIpcNewConnection();
     void onIpcDisconnected();
     void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer, bool reliable);
-    void onTimer(const TimePoint& now);
+    void onTimer(TimePoint now);
 
 private:
     void startupUserCheck();

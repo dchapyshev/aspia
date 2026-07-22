@@ -481,7 +481,7 @@ void FileClient::onStart()
 #endif
 
     CLOG(INFO) << "Wait for starting agent process";
-    attach_deadline_ = Clock::now() + std::chrono::seconds(10);
+    attach_deadline_ = Clock::now() + Seconds(10);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -515,7 +515,7 @@ void FileClient::onMessage(quint8 tcp_channel_id, const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileClient::onTimer(const TimePoint& now)
+void FileClient::onTimer(TimePoint now)
 {
     Client::onTimer(now);
 

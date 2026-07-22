@@ -112,7 +112,7 @@ void RouterWorker::onStop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWorker::onTimer(const TimePoint& now)
+void RouterWorker::onTimer(TimePoint now)
 {
     for (auto it = connections_.begin(); it != connections_.end(); ++it)
     {

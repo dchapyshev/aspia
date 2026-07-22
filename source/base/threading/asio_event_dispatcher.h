@@ -34,6 +34,8 @@
 #include <atomic>
 #include <unordered_map>
 
+#include "base/time_types.h"
+
 class AsioEventDispatcher final : public QAbstractEventDispatcher
 {
     Q_OBJECT
@@ -59,11 +61,6 @@ public:
     static asio::io_context& ioContext();
 
 private:
-    using Clock = std::chrono::steady_clock;
-    using TimePoint = Clock::time_point;
-    using Milliseconds = std::chrono::milliseconds;
-    using Seconds = std::chrono::seconds;
-
 #if defined(Q_OS_WINDOWS)
     struct MultimediaTimer
     {
@@ -133,11 +130,11 @@ private:
     using Timers = std::unordered_map<int, Timer>;
     using Sockets = std::unordered_map<qintptr, SocketData>;
 
-    void asyncWaitTimer(asio::steady_timer& handle, const TimePoint& end_time, int timer_id);
+    void asyncWaitTimer(asio::steady_timer& handle, TimePoint end_time, int timer_id);
 
 #if defined(Q_OS_WINDOWS)
     bool tryRegisterMultimediaTimer(
-        int timer_id, Milliseconds interval, const TimePoint& end_time, QObject* object);
+        int timer_id, Milliseconds interval, TimePoint end_time, QObject* object);
     void asyncWaitMultimediaTimer(asio::windows::object_handle& handle, int timer_id);
     void asyncWaitSocket(SocketHandle& handle, qintptr socket);
 #else

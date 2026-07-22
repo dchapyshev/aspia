@@ -80,7 +80,7 @@ struct ActionsMap
 };
 
 //--------------------------------------------------------------------------------------------------
-qint64 calculateSpeed(qint64 last_speed, const FileTransfer::Milliseconds& duration, qint64 bytes)
+qint64 calculateSpeed(qint64 last_speed, Milliseconds duration, qint64 bytes)
 {
     static const double kAlpha = 0.9;
     const qint64 ms = duration.count();
@@ -202,7 +202,7 @@ void FileTransfer::stop()
     else
     {
         is_canceled_ = true;
-        cancel_timer_->start(std::chrono::seconds(5));
+        cancel_timer_->start(Seconds(5));
     }
 }
 
@@ -470,7 +470,7 @@ void FileTransfer::doNextTask()
 void FileTransfer::doUpdateSpeed()
 {
     TimePoint current_time = Clock::now();
-    Milliseconds duration = std::chrono::duration_cast<Milliseconds>(current_time - begin_time_);
+    Milliseconds duration = DurationCast<Milliseconds>(current_time - begin_time_);
 
     speed_ = calculateSpeed(speed_, duration, bytes_per_time_);
 

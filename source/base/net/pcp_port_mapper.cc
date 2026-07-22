@@ -20,11 +20,11 @@
 
 #include <QHostAddress>
 
-#include <chrono>
 #include <cstring>
 
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/time_types.h"
 #include "base/crypto/random.h"
 #include "base/net/net_utils.h"
 #include "base/net/udp_channel.h"
@@ -236,7 +236,7 @@ void PcpPortMapper::sendRequest()
 //--------------------------------------------------------------------------------------------------
 void PcpPortMapper::startRetransmitTimer()
 {
-    retransmit_timer_.expires_after(std::chrono::milliseconds(kInitialTimeoutMs << tries_));
+    retransmit_timer_.expires_after(Milliseconds(kInitialTimeoutMs << tries_));
 
     auto io = io_;
     retransmit_timer_.async_wait([this, io](const std::error_code& error_code)

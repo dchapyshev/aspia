@@ -16,35 +16,24 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_CAPTURE_SCHEDULER_H
-#define HOST_CAPTURE_SCHEDULER_H
+#ifndef BASE_TIME_TYPES_H
+#define BASE_TIME_TYPES_H
 
-#include <QtClassHelperMacros>
+#include <chrono>
 
-#include "base/time_types.h"
+using Clock = std::chrono::steady_clock;
+using TimePoint = Clock::time_point;
+using Nanoseconds = std::chrono::nanoseconds;
+using Microseconds = std::chrono::microseconds;
+using Milliseconds = std::chrono::milliseconds;
+using Seconds = std::chrono::seconds;
+using Minutes = std::chrono::minutes;
+using Hours = std::chrono::hours;
 
-class CaptureScheduler
+template <typename To, typename Rep, typename Period>
+constexpr To DurationCast(const std::chrono::duration<Rep, Period>& duration)
 {
-public:
-    CaptureScheduler() = default;
-    ~CaptureScheduler() = default;
+    return std::chrono::duration_cast<To>(duration);
+}
 
-    Milliseconds updateInterval() const;
-
-    void setFps(int value);
-    int fps() const;
-
-    void onBeginCapture();
-    bool isInProgress() const { return in_progress_; }
-
-    Milliseconds nextCaptureDelay();
-
-private:
-    Milliseconds update_interval_ { 40 };
-    TimePoint begin_time_;
-    bool in_progress_ = false;
-
-    Q_DISABLE_COPY_MOVE(CaptureScheduler)
-};
-
-#endif // HOST_CAPTURE_SCHEDULER_H
+#endif // BASE_TIME_TYPES_H

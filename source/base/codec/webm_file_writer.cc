@@ -106,16 +106,16 @@ void WebmFileWriter::addVideoPacket(const proto::video::Packet& packet)
     DCHECK(muxer_->hasAudioTrack());
 
     TimePoint current = Clock::now();
-    NanoSeconds timestamp;
+    Nanoseconds timestamp;
 
     if (video_start_time_.has_value())
     {
-        timestamp = std::chrono::duration_cast<NanoSeconds>(current - *video_start_time_);
+        timestamp = DurationCast<Nanoseconds>(current - *video_start_time_);
     }
     else
     {
         video_start_time_.emplace(current);
-        timestamp = NanoSeconds(0);
+        timestamp = Nanoseconds(0);
     }
 
     muxer_->writeVideoFrame(packet.data(), timestamp, is_key_frame);
@@ -138,17 +138,16 @@ void WebmFileWriter::addAudioPacket(const proto::audio::Packet& packet)
     for (int i = 0; i < packet.data_size(); ++i)
     {
         TimePoint current = Clock::now();
-        NanoSeconds timestamp;
+        Nanoseconds timestamp;
 
         if (video_start_time_.has_value())
         {
-            timestamp = std::chrono::duration_cast<NanoSeconds>(
-                current - *video_start_time_);
+            timestamp = DurationCast<Nanoseconds>(current - *video_start_time_);
         }
         else
         {
             video_start_time_.emplace(current);
-            timestamp = NanoSeconds(0);
+            timestamp = Nanoseconds(0);
         }
 
         muxer_->writeAudioFrame(packet.data(i), timestamp);

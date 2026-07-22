@@ -22,8 +22,9 @@
 #include <asio/ip/address.hpp>
 #include <asio/ip/tcp.hpp>
 
-#include <chrono>
 #include <unordered_map>
+
+#include "base/time_types.h"
 
 // Two-pronged anti-flood gate for an accept loop. Exposes a single public entry point check()
 // that runs both gates against the same time sample:
@@ -54,11 +55,6 @@
 class FloodGuard
 {
 public:
-    using Clock = std::chrono::steady_clock;
-    using TimePoint = Clock::time_point;
-    using Seconds = std::chrono::seconds;
-    using Nanoseconds = std::chrono::nanoseconds;
-
     // Constructs with conservative defaults: 60 connections/min per address, pending cap 32.
     // Callers tune the limits to their role via setRateLimit() and setMaxPending() before the
     // accept loop starts.

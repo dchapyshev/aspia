@@ -21,9 +21,10 @@
 
 #include <QString>
 
-#include <chrono>
 #include <memory>
 #include <optional>
+
+#include "base/time_types.h"
 
 class WebmFileMuxer;
 
@@ -53,10 +54,6 @@ private:
     QString name_;
     int file_counter_ = 0;
     FILE* file_ = nullptr;
-
-    using Clock = std::chrono::steady_clock;
-    using TimePoint = std::chrono::time_point<Clock>;
-    using NanoSeconds = std::chrono::nanoseconds;
 
     std::unique_ptr<WebmFileMuxer> muxer_;
     std::optional<TimePoint> video_start_time_;

@@ -45,7 +45,7 @@
 //--------------------------------------------------------------------------------------------------
 DesktopClient::DesktopClient(TcpChannel* tcp_channel, QObject* parent)
     : Client(tcp_channel, parent),
-      attach_deadline_(Clock::now() + std::chrono::seconds(15)),
+      attach_deadline_(Clock::now() + Seconds(15)),
       task_mgr_worker_(CoreApplication::findWorker<TaskMgrWorker>())
 {
     CLOG(INFO) << "Ctor";
@@ -124,7 +124,7 @@ void DesktopClient::dettach()
         ipc_channel_.reset();
     }
 
-    attach_deadline_ = Clock::now() + std::chrono::seconds(15);
+    attach_deadline_ = Clock::now() + Seconds(15);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -253,7 +253,7 @@ void DesktopClient::onBandwidthChanged(qint64 bandwidth)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopClient::onTimer(const TimePoint& now)
+void DesktopClient::onTimer(TimePoint now)
 {
     Client::onTimer(now);
 

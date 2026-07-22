@@ -45,7 +45,7 @@ private slots:
 protected:
     void onStart() final;
     void onMessage(quint8 channel_id, const QByteArray& buffer) final;
-    void onTimer(const TimePoint& now) final;
+    void onTimer(TimePoint now) final;
 
 private:
     bool startIpcServer(const QString& ipc_channel_name, const QString& target_user_sid);

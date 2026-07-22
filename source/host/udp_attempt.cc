@@ -198,8 +198,7 @@ void UdpAttempt::onChannelMessage(quint8 channel_id, const QByteArray& buffer)
 
     // The peer acked our probe: the channel is confirmed and timed. Report the bandwidth implied by
     // the round-trip of the known-size probe.
-    auto rtt = std::chrono::duration_cast<std::chrono::milliseconds>(
-        std::chrono::steady_clock::now() - probe_send_time_);
+    auto rtt = DurationCast<Milliseconds>(Clock::now() - probe_send_time_);
     qint64 rtt_ms = rtt.count() > 0 ? rtt.count() : 1;
 
     connected_ = true;
@@ -216,7 +215,7 @@ void UdpAttempt::sendProbeIfReady()
         return;
     probe_sent_ = true;
 
-    probe_send_time_ = std::chrono::steady_clock::now();
+    probe_send_time_ = Clock::now();
     channel_->send(proto::peer::CHANNEL_ID_CONTROL, makeBandwidthProbeData(), true);
 
     CLOG(INFO) << "UDP attempt" << request_id_ << "sent probe, waiting for ack";

@@ -21,7 +21,7 @@
 
 #include <QString>
 
-#include <chrono>
+#include "base/time_types.h"
 
 struct sqlite3;
 struct sqlite3_context;
@@ -33,8 +33,6 @@ struct sqlite3_value;
 class SqlDatabase final
 {
 public:
-    using Milliseconds = std::chrono::milliseconds;
-
     SqlDatabase() = default;
     ~SqlDatabase();
 

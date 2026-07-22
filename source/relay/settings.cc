@@ -58,10 +58,10 @@ void Settings::reset()
     setRouterPublicKey(QByteArray());
     setPeerAddress(QString());
     setPeerPort(DEFAULT_RELAY_PEER_TCP_PORT);
-    setPeerIdleTimeout(std::chrono::minutes(5));
+    setPeerIdleTimeout(Minutes(5));
     setMaxPeerCount(100);
     setStatisticsEnabled(false);
-    setStatisticsInterval(std::chrono::seconds(5));
+    setStatisticsInterval(Seconds(5));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -144,15 +144,15 @@ quint16 Settings::peerPort() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setPeerIdleTimeout(const std::chrono::minutes& timeout)
+void Settings::setPeerIdleTimeout(Minutes timeout)
 {
     impl_.setValue("peer_idle_timeout", static_cast<qint64>(timeout.count()));
 }
 
 //--------------------------------------------------------------------------------------------------
-std::chrono::minutes Settings::peerIdleTimeout() const
+Minutes Settings::peerIdleTimeout() const
 {
-    return std::chrono::minutes(impl_.value("peer_idle_timeout", 5).toInt());
+    return Minutes(impl_.value("peer_idle_timeout", 5).toInt());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -180,13 +180,13 @@ bool Settings::isStatisticsEnabled() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setStatisticsInterval(const std::chrono::seconds& interval)
+void Settings::setStatisticsInterval(Seconds interval)
 {
     impl_.setValue("statistics_interval", static_cast<int>(interval.count()));
 }
 
 //--------------------------------------------------------------------------------------------------
-std::chrono::seconds Settings::statisticsInterval() const
+Seconds Settings::statisticsInterval() const
 {
-    return std::chrono::seconds(impl_.value("statistics_interval", 5).toInt());
+    return Seconds(impl_.value("statistics_interval", 5).toInt());
 }

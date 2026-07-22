@@ -601,14 +601,14 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         settings.setPreferredVideoCapturer(ui->combo_video_capturer->currentData().toUInt());
 
         db.setOneTimePassword(ui->checkbox_onetime_password->isChecked());
-        db.setOneTimePasswordExpire(std::chrono::minutes(
+        db.setOneTimePasswordExpire(Minutes(
             ui->combobox_onetime_pass_change->currentData().toInt()));
         db.setOneTimePasswordCharacters(
             ui->combobox_onetime_pass_chars->currentData().toUInt());
         db.setOneTimePasswordLength(ui->spinbox_onetime_pass_char_count->value());
 
         db.setConnectConfirmation(ui->checkbox_conn_confirm_require->isChecked());
-        db.setAutoConfirmationInterval(std::chrono::seconds(
+        db.setAutoConfirmationInterval(Seconds(
             ui->combobox_conn_confirm_auto->currentData().toInt()));
         db.setNoUserAction(static_cast<Database::NoUserAction>(
             ui->combobox_no_user_action->currentData().toInt()));
@@ -679,8 +679,8 @@ void ConfigDialog::reloadAll()
     ui->checkbox_onetime_password->setChecked(enable_one_time_pass);
     onOneTimeStateChanged(enable_one_time_pass ? Qt::Checked : Qt::Unchecked);
 
-    std::chrono::minutes onetime_pass_change =
-        std::chrono::duration_cast<std::chrono::minutes>(db.oneTimePasswordExpire());
+    Minutes onetime_pass_change =
+        DurationCast<Minutes>(db.oneTimePasswordExpire());
     item_index = ui->combobox_onetime_pass_change->findData(static_cast<int>(onetime_pass_change.count()));
     if (item_index != -1)
         ui->combobox_onetime_pass_change->setCurrentIndex(item_index);
@@ -696,8 +696,8 @@ void ConfigDialog::reloadAll()
     ui->checkbox_conn_confirm_require->setChecked(conn_confirm);
     onConnConfirmStateChanged(conn_confirm ? Qt::Checked : Qt::Unchecked);
 
-    std::chrono::seconds auto_conn_confirm =
-        std::chrono::duration_cast<std::chrono::seconds>(db.autoConfirmationInterval());
+    Seconds auto_conn_confirm =
+        DurationCast<Seconds>(db.autoConfirmationInterval());
     item_index = ui->combobox_conn_confirm_auto->findData(static_cast<int>(auto_conn_confirm.count()));
     if (item_index != -1)
         ui->combobox_conn_confirm_auto->setCurrentIndex(item_index);

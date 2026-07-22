@@ -36,7 +36,7 @@
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-int calculateFps(int last_fps, const Worker::Milliseconds& duration, qint64 count)
+int calculateFps(int last_fps, Milliseconds duration, qint64 count)
 {
     static const double kAlpha = 0.1;
     const qint64 ms = duration.count();
@@ -146,7 +146,7 @@ void VideoWorker::onStop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void VideoWorker::onTimer(const TimePoint& now)
+void VideoWorker::onTimer(TimePoint now)
 {
     // The 1-second timer also winds down the force-reliable hold window; once it elapses, back the
     // transport off reliable mode (at most twice per session).
@@ -164,7 +164,7 @@ void VideoWorker::onTimer(const TimePoint& now)
 
     if (fps_time_ != TimePoint())
     {
-        const Milliseconds duration = std::chrono::duration_cast<Milliseconds>(now - fps_time_);
+        const Milliseconds duration = DurationCast<Milliseconds>(now - fps_time_);
         metrics_.fps = calculateFps(metrics_.fps, duration, fps_frame_count_);
     }
     else

@@ -26,6 +26,7 @@
 
 #include "base/logging.h"
 #include "base/shared_pointer.h"
+#include "base/time_types.h"
 #include "base/peer/host_id.h"
 
 class Location;
@@ -39,9 +40,6 @@ public:
             const QByteArray& secret, QObject* parent = nullptr);
     ~Session();
 
-    using Clock = std::chrono::steady_clock;
-    using TimePoint = std::chrono::time_point<Clock>;
-
     void start();
 
     qint64 sessionId() const { return session_id_; }
@@ -49,8 +47,8 @@ public:
     const QString& clientUserName() const { return client_user_name_; }
     const QString& hostAddress() const { return host_address_; }
     HostId hostId() const { return host_id_; }
-    std::chrono::seconds idleTime(const TimePoint& current_time) const;
-    std::chrono::seconds duration(const TimePoint& current_time) const;
+    Seconds idleTime(TimePoint current_time) const;
+    Seconds duration(TimePoint current_time) const;
     qint64 bytesTransferred() const { return bytes_transferred_; }
 
 signals:

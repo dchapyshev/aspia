@@ -22,11 +22,12 @@
 #include <QtClassHelperMacros>
 #include <QtTypes>
 
-#include <chrono>
 #include <memory>
 
 #include <mkvmuxer/mkvmuxer.h>
 #include <mkvmuxer/mkvwriter.h>
+
+#include "base/time_types.h"
 
 class WebmFileMuxer
 {
@@ -53,12 +54,10 @@ public:
     bool finalize();
 
     // Writes |data| to the audio Track.
-    bool writeAudioFrame(std::string_view frame, const std::chrono::nanoseconds& timestamp);
+    bool writeAudioFrame(std::string_view frame, Nanoseconds timestamp);
 
     // Writes |data| to the video Track.
-    bool writeVideoFrame(std::string_view frame,
-                         const std::chrono::nanoseconds& timestamp,
-                         bool is_key);
+    bool writeVideoFrame(std::string_view frame, Nanoseconds timestamp, bool is_key);
 
     // Accessors.
     bool initialized() const { return initialized_; }
@@ -67,9 +66,7 @@ private:
     // Writes |data| to the muxer. |size| is the size in bytes of |data|. |timestamp| is the
     // timestamp of the frame in nanoseconds. |track_num| is the Track number to add the frame.
     // |is_key| flag telling if the frame is a key frame.
-    bool writeFrame(std::string_view frame,
-                    const std::chrono::nanoseconds& timestamp,
-                    quint64 track_num, bool is_key);
+    bool writeFrame(std::string_view frame, Nanoseconds timestamp, quint64 track_num, bool is_key);
 
     std::unique_ptr<mkvmuxer::MkvWriter> writer_;
     std::unique_ptr<mkvmuxer::Segment> segment_;

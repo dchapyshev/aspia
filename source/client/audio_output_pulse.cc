@@ -19,6 +19,7 @@
 #include "client/audio_output_pulse.h"
 
 #include "base/logging.h"
+#include "base/time_types.h"
 
 // Accesses Pulse functions through our late-binding symbol table instead of directly. This way we
 // don't have to link to libpulse, which means our binary will work on systems that don't have it.
@@ -76,7 +77,7 @@ bool AudioOutputPulse::start()
     if (playing_)
         return true;
 
-    timer_->setInterval(std::chrono::milliseconds(period_time_));
+    timer_->setInterval(Milliseconds(period_time_));
     timer_->start();
 
     LOG(INFO) << "Audio playout started";

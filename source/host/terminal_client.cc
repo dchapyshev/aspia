@@ -500,7 +500,7 @@ void TerminalClient::onMessage(quint8 /* tcp_channel_id */, const QByteArray& bu
         agent_launched_ = true;
 
         CLOG(INFO) << "Wait for starting agent process";
-        attach_deadline_ = Clock::now() + std::chrono::seconds(10);
+        attach_deadline_ = Clock::now() + Seconds(10);
         return;
     }
 
@@ -515,7 +515,7 @@ void TerminalClient::onMessage(quint8 /* tcp_channel_id */, const QByteArray& bu
 }
 
 //--------------------------------------------------------------------------------------------------
-void TerminalClient::onTimer(const TimePoint& now)
+void TerminalClient::onTimer(TimePoint now)
 {
     Client::onTimer(now);
 

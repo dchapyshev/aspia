@@ -55,11 +55,11 @@ namespace {
 #if defined(Q_OS_LINUX)
 // The session's X server may still be starting up right after a user logs in or switches; retry
 // quickly so capture begins as soon as the display is available, within the client's start timeout.
-constexpr std::chrono::milliseconds kRestartTimeout { 1000 };
+constexpr Milliseconds kRestartTimeout { 1000 };
 #else
-constexpr std::chrono::milliseconds kRestartTimeout { 5000 };
+constexpr Milliseconds kRestartTimeout { 5000 };
 #endif
-constexpr std::chrono::milliseconds kAttachTimeout { 15000 };
+constexpr Milliseconds kAttachTimeout { 15000 };
 
 #if defined(Q_OS_WINDOWS)
 // Name of the default session desktop.
@@ -434,7 +434,7 @@ void DesktopManager::onUserSessionEvent(quint32 event_type, quint32 session_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopManager::onTimer(const TimePoint& now)
+void DesktopManager::onTimer(TimePoint now)
 {
     if (now >= attach_deadline_)
     {

@@ -431,8 +431,7 @@ void DesktopWindow::onMetricsRequest()
 
     // The network, video and audio rows are fed to the dialog directly by the workers; here we push
     // only the session-level counters that no worker owns.
-    const std::chrono::seconds duration =
-        std::chrono::duration_cast<std::chrono::seconds>(Clock::now() - start_time_);
+    const Seconds duration = DurationCast<Seconds>(Clock::now() - start_time_);
 
     statistics_dialog_->setDuration(duration);
     statistics_dialog_->setClipboardMetrics(read_clipboard_count_, send_clipboard_count_);
@@ -778,7 +777,7 @@ void DesktopWindow::onMouseEvent(const proto::input::MouseEvent& event)
         if (!scroll_delta_.isNull())
         {
             if (!scroll_timer_->isActive())
-                scroll_timer_->start(std::chrono::milliseconds(15));
+                scroll_timer_->start(Milliseconds(15));
         }
         else if (scroll_timer_->isActive())
         {
@@ -997,7 +996,7 @@ void DesktopWindow::onScaleDesktop()
 
     LOG(INFO) << "Starting resize timer (scale=" << scale << "size=" << size()
               << "target_size=" << target_size << ")";
-    resize_timer_->start(std::chrono::milliseconds(500));
+    resize_timer_->start(Milliseconds(500));
 }
 
 //--------------------------------------------------------------------------------------------------

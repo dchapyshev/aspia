@@ -211,7 +211,7 @@ StatisticsDialog::StatisticsDialog(QWidget* parent)
 
     QTimer* update_timer = new QTimer(this);
     connect(update_timer, &QTimer::timeout, this, &StatisticsDialog::sig_metricsRequired);
-    update_timer->start(std::chrono::seconds(1));
+    update_timer->start(Seconds(1));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -272,7 +272,7 @@ void StatisticsDialog::onAudioMetrics(const AudioWorker::Metrics& metrics)
 }
 
 //--------------------------------------------------------------------------------------------------
-void StatisticsDialog::setDuration(std::chrono::seconds duration)
+void StatisticsDialog::setDuration(Seconds duration)
 {
     rows_[ROW_DURATION]->setData(
         0, kValueRole, QTime(0, 0, 0).addSecs(static_cast<int>(duration.count())).toString());

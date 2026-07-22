@@ -26,6 +26,7 @@
 #include <QTimer>
 
 #include "base/scoped_qpointer.h"
+#include "base/time_types.h"
 #include "common/file_task_factory.h"
 #include "proto/file_transfer.h"
 
@@ -153,9 +154,6 @@ public:
     };
 
     using TaskList = QQueue<Task>;
-    using Clock = std::chrono::steady_clock;
-    using TimePoint = std::chrono::time_point<Clock>;
-    using Milliseconds = std::chrono::milliseconds;
 
     FileTransfer(Type type,
                  const QString& source_path,

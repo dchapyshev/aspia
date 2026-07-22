@@ -40,9 +40,9 @@
 
 #include <gtest/gtest.h>
 
-#include <chrono>
 #include <limits>
 
+#include "base/time_types.h"
 #include "base/threading/thread.h"
 
 namespace {
@@ -983,8 +983,7 @@ TEST(TimersTest, HugeIntervalClamped)
 
     // An interval that does not fit into int milliseconds (more than ~24.8 days) must be clamped
     // to INT_MAX in the reporting interfaces instead of overflowing into a negative value.
-    const std::chrono::milliseconds huge_interval(
-        static_cast<qint64>(std::numeric_limits<int>::max()) + 1000000);
+    const Milliseconds huge_interval(static_cast<qint64>(std::numeric_limits<int>::max()) + 1000000);
     const int timer_id = owner.startTimer(huge_interval, Qt::CoarseTimer);
     ASSERT_GT(timer_id, 0);
 

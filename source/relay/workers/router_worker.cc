@@ -32,11 +32,11 @@
 
 namespace {
 
-const std::chrono::seconds kReconnectTimeout{ 15 };
+const Seconds kReconnectTimeout{ 15 };
 
 // The router gave the key to the peers. They are required to use it within this time; otherwise
 // the key is removed from the pool.
-constexpr std::chrono::seconds kKeyUseTimeout{ 30 };
+constexpr Seconds kKeyUseTimeout{ 30 };
 
 constexpr quint32 kMaxPeerCount = 1000;
 
@@ -150,7 +150,7 @@ void RouterWorker::onStop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWorker::onTimer(const TimePoint& now)
+void RouterWorker::onTimer(TimePoint now)
 {
     if (tcp_channel_)
         tcp_channel_->tick(now);

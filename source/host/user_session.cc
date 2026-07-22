@@ -56,9 +56,9 @@
 
 namespace {
 
-const std::chrono::seconds kAttachTimeout{ 15 };
-const std::chrono::seconds kDettachTimeout{ 15 };
-const std::chrono::seconds kStartupCheckInterval{ 1 };
+const Seconds kAttachTimeout{ 15 };
+const Seconds kDettachTimeout{ 15 };
+const Seconds kStartupCheckInterval{ 1 };
 
 #if defined(Q_OS_UNIX)
 const char kExecutableNameForUi[] = "aspia_host";
@@ -661,7 +661,7 @@ void UserSession::onIpcMessageReceived(quint32 channel_id, const QByteArray& buf
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onTimer(const TimePoint& now)
+void UserSession::onTimer(TimePoint now)
 {
     if (now >= attach_deadline_)
     {

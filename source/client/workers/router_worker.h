@@ -53,7 +53,7 @@ protected:
     // Worker implementation.
     void onStart() final;
     void onStop() final;
-    void onTimer(const TimePoint& now) final;
+    void onTimer(TimePoint now) final;
 
 private:
     // One router's connection state. |channel| is null while waiting to reconnect;

@@ -20,10 +20,11 @@
 
 #include <gtest/gtest.h>
 
-#include <chrono>
 #include <cstring>
 #include <iostream>
 #include <vector>
+
+#include "base/time_types.h"
 
 namespace {
 
@@ -232,7 +233,7 @@ TEST(bucket_pool_benchmark, malloc_vs_pool)
 
     // --- std::malloc / std::free ---
     {
-        auto start = std::chrono::steady_clock::now();
+        auto start = Clock::now();
 
         for (size_t i = 0; i < kIterations; ++i)
         {
@@ -240,7 +241,7 @@ TEST(bucket_pool_benchmark, malloc_vs_pool)
             std::free(p);
         }
 
-        auto end = std::chrono::steady_clock::now();
+        auto end = Clock::now();
         double ms = std::chrono::duration<double, std::milli>(end - start).count();
 
         BenchmarkResult r;
@@ -255,7 +256,7 @@ TEST(bucket_pool_benchmark, malloc_vs_pool)
     {
         TestPool pool(kBuckets);
 
-        auto start = std::chrono::steady_clock::now();
+        auto start = Clock::now();
 
         for (size_t i = 0; i < kIterations; ++i)
         {
@@ -263,7 +264,7 @@ TEST(bucket_pool_benchmark, malloc_vs_pool)
             pool.deallocate(p);
         }
 
-        auto end = std::chrono::steady_clock::now();
+        auto end = Clock::now();
         double ms = std::chrono::duration<double, std::milli>(end - start).count();
 
         BenchmarkResult r;
@@ -287,7 +288,7 @@ TEST(bucket_pool_benchmark, malloc_vs_pool)
     {
         std::vector<void*> ptrs(kBatchSize);
 
-        auto start = std::chrono::steady_clock::now();
+        auto start = Clock::now();
 
         for (size_t batch = 0; batch < kBatchIterations; ++batch)
         {
@@ -297,7 +298,7 @@ TEST(bucket_pool_benchmark, malloc_vs_pool)
                 std::free(ptrs[i]);
         }
 
-        auto end = std::chrono::steady_clock::now();
+        auto end = Clock::now();
         double ms = std::chrono::duration<double, std::milli>(end - start).count();
 
         BenchmarkResult r;
@@ -313,7 +314,7 @@ TEST(bucket_pool_benchmark, malloc_vs_pool)
         TestPool pool(kBuckets);
         std::vector<void*> ptrs(kBatchSize);
 
-        auto start = std::chrono::steady_clock::now();
+        auto start = Clock::now();
 
         for (size_t batch = 0; batch < kBatchIterations; ++batch)
         {
@@ -323,7 +324,7 @@ TEST(bucket_pool_benchmark, malloc_vs_pool)
                 pool.deallocate(ptrs[i]);
         }
 
-        auto end = std::chrono::steady_clock::now();
+        auto end = Clock::now();
         double ms = std::chrono::duration<double, std::milli>(end - start).count();
 
         BenchmarkResult r;
@@ -346,7 +347,7 @@ TEST(bucket_pool_benchmark, malloc_vs_pool)
 
     // std::malloc mixed
     {
-        auto start = std::chrono::steady_clock::now();
+        auto start = Clock::now();
 
         for (size_t round = 0; round < kMixedIterations; ++round)
         {
@@ -357,7 +358,7 @@ TEST(bucket_pool_benchmark, malloc_vs_pool)
             }
         }
 
-        auto end = std::chrono::steady_clock::now();
+        auto end = Clock::now();
         double ms = std::chrono::duration<double, std::milli>(end - start).count();
 
         BenchmarkResult r;
@@ -372,7 +373,7 @@ TEST(bucket_pool_benchmark, malloc_vs_pool)
     {
         TestPool pool(kBuckets);
 
-        auto start = std::chrono::steady_clock::now();
+        auto start = Clock::now();
 
         for (size_t round = 0; round < kMixedIterations; ++round)
         {
@@ -383,7 +384,7 @@ TEST(bucket_pool_benchmark, malloc_vs_pool)
             }
         }
 
-        auto end = std::chrono::steady_clock::now();
+        auto end = Clock::now();
         double ms = std::chrono::duration<double, std::milli>(end - start).count();
 
         BenchmarkResult r;

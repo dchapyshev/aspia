@@ -156,8 +156,7 @@ NotifierWindow::NotifierWindow(QWidget* parent)
     {
         LOG(INFO) << "Screen geometry changed";
         // The taskbar does not move instantly.
-        QTimer::singleShot(
-            std::chrono::milliseconds(500), this, &NotifierWindow::onUpdateWindowPosition);
+        QTimer::singleShot(Milliseconds(500), this, &NotifierWindow::onUpdateWindowPosition);
     });
 
     // The display scale can be applied a moment after the session starts (and the window may have been
@@ -213,12 +212,12 @@ NotifierWindow::NotifierWindow(QWidget* parent)
     timer->setSingleShot(true);
 #endif // defined(Q_OS_MACOS)
 
-    timer->start(std::chrono::milliseconds(1000));
+    timer->start(Milliseconds(1000));
 
     ui->show_panel->setVisible(false);
     onThemeChanged();
 
-    QTimer::singleShot(std::chrono::milliseconds(15), this, &NotifierWindow::onUpdateWindowPosition);
+    QTimer::singleShot(Milliseconds(15), this, &NotifierWindow::onUpdateWindowPosition);
 }
 
 //--------------------------------------------------------------------------------------------------

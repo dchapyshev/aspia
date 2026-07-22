@@ -121,14 +121,14 @@ HostWindow::HostWindow(QWidget* parent)
         LOG(INFO) << "System tray is not available yet; waiting";
         tray_wait_timer_.reset(new QTimer(this));
         connect(tray_wait_timer_, &QTimer::timeout, this, &HostWindow::onTrayAvailabilityCheck);
-        tray_wait_timer_->start(std::chrono::seconds(1));
+        tray_wait_timer_->start(Seconds(1));
     }
 
     QTimer* tray_tooltip_timer = new QTimer(this);
 
     connect(tray_tooltip_timer, &QTimer::timeout, this, &HostWindow::updateTrayIconTooltip);
 
-    tray_tooltip_timer->setInterval(std::chrono::seconds(30));
+    tray_tooltip_timer->setInterval(Seconds(30));
     tray_tooltip_timer->start();
 
     quint32 one_time_sessions = user_settings.oneTimeSessions();

@@ -114,7 +114,7 @@ void DesktopIpcWorker::onStop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopIpcWorker::onTimer(const TimePoint& /* now */)
+void DesktopIpcWorker::onTimer(TimePoint /* now */)
 {
     if (clients_.isEmpty())
         return;

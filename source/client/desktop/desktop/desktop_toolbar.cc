@@ -27,6 +27,7 @@
 #include <QToolButton>
 
 #include "base/logging.h"
+#include "base/time_types.h"
 #include "client/desktop/desktop/select_screen_action.h"
 #include "common/desktop/msg_box.h"
 #include "proto/desktop_control.h"
@@ -787,7 +788,7 @@ void DesktopToolBar::onMenuHide()
 {
     allow_hide_ = true;
 
-    QTimer::singleShot(std::chrono::milliseconds(500), this, [this]()
+    QTimer::singleShot(Milliseconds(500), this, [this]()
     {
         if (!allow_hide_)
             return;
@@ -984,7 +985,7 @@ void DesktopToolBar::updateSize()
 void DesktopToolBar::delayedHide()
 {
     if (!ui->action_pin->isChecked() && !hide_timer_->isActive())
-        hide_timer_->start(std::chrono::seconds(1));
+        hide_timer_->start(Seconds(1));
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -18,13 +18,14 @@
 
 #include "base/codec/audio_encoder.h"
 
+#include <opus.h>
+
 #include "base/logging.h"
+#include "base/time_types.h"
 #include "base/codec/audio_bus.h"
 #include "base/codec/audio_sample_types.h"
 #include "base/codec/multi_channel_resampler.h"
 #include "base/codec/sinc_resampler.h"
-
-#include <opus.h>
 
 namespace {
 
@@ -34,11 +35,11 @@ const proto::audio::Packet::SamplingRate kOpusSamplingRate =
 
 // Opus supports frame sizes of 2.5, 5, 10, 20, 40 and 60 ms. We use 20 ms
 // frames to balance latency and efficiency.
-const std::chrono::milliseconds kFrameSizeMs { 20 };
+const Milliseconds kFrameSizeMs { 20 };
 
 // Number of samples per frame when using default sampling rate.
 const int kFrameSamples = static_cast<const int>(
-    kOpusSamplingRate * kFrameSizeMs / std::chrono::milliseconds(1000));
+    kOpusSamplingRate * kFrameSizeMs / Milliseconds(1000));
 
 const proto::audio::Packet::BytesPerSample kBytesPerSample =
     proto::audio::Packet::BYTES_PER_SAMPLE_2;
@@ -75,7 +76,7 @@ void AudioEncoder::initEncoder()
 
     opus_encoder_ctl(encoder_, OPUS_SET_BITRATE(bitrate_));
 
-    frame_size_ = int(sampling_rate_ * kFrameSizeMs / std::chrono::milliseconds(1000));
+    frame_size_ = int(sampling_rate_ * kFrameSizeMs / Milliseconds(1000));
 
     if (sampling_rate_ != kOpusSamplingRate)
     {

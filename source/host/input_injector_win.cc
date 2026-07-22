@@ -24,6 +24,7 @@
 #include <sas.h>
 
 #include "base/logging.h"
+#include "base/time_types.h"
 #include "base/win/registry.h"
 #include "common/keycode_converter.h"
 #include "proto/desktop_input.h"
@@ -200,7 +201,7 @@ InputInjectorWin::InputInjectorWin(QObject* parent)
         BlockInput(!!block_input_);
     });
 
-    repeated_timer->setInterval(std::chrono::seconds(5));
+    repeated_timer->setInterval(Seconds(5));
     repeated_timer->setTimerType(Qt::CoarseTimer);
     repeated_timer->start();
 }

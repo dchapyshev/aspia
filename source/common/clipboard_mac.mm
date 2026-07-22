@@ -22,6 +22,7 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "base/time_types.h"
 #include "common/mac/file_data_provider.h"
 #include "common/mac/file_promise_writer.h"
 
@@ -271,7 +272,7 @@ void ClipboardMac::onPollTimer()
 //--------------------------------------------------------------------------------------------------
 void ClipboardMac::startTimer()
 {
-    timer_->start(std::chrono::milliseconds(1000));
+    timer_->start(Milliseconds(1000));
 }
 
 //--------------------------------------------------------------------------------------------------

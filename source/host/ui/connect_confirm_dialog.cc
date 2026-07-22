@@ -24,6 +24,7 @@
 #include <QTimer>
 
 #include "base/logging.h"
+#include "base/time_types.h"
 #include "common/desktop/session_type.h"
 #include "proto/user.h"
 #include "ui_connect_confirm_dialog.h"
@@ -66,7 +67,7 @@ ConnectConfirmDialog::ConnectConfirmDialog(
 
     updateMessage();
 
-    timer_->start(std::chrono::seconds(1));
+    timer_->start(Seconds(1));
 
     QTimer::singleShot(0, this, [this]()
     {

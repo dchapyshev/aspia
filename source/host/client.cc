@@ -292,7 +292,7 @@ void Client::send(quint8 channel_id, const QByteArray& buffer, bool reliable)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onTimer(const TimePoint& now)
+void Client::onTimer(TimePoint now)
 {
     tcp_channel_->tick(now);
 
@@ -311,7 +311,7 @@ void Client::onTimer(const TimePoint& now)
         if (!probe.pending)
             return;
 
-        auto age = std::chrono::duration_cast<Milliseconds>(now - probe.send_time);
+        auto age = DurationCast<Milliseconds>(now - probe.send_time);
         if (age.count() >= kProbeIntervalMs)
             probe.pending = false;
     };
@@ -591,12 +591,12 @@ void Client::startBandwidthProbing()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::sendTcpBandwidthProbe(const TimePoint& time)
+void Client::sendTcpBandwidthProbe(TimePoint time)
 {
     if (tcp_probe_.pending)
         return;
 
-    auto idle = std::chrono::duration_cast<Milliseconds>(time - last_send_time_);
+    auto idle = DurationCast<Milliseconds>(time - last_send_time_);
 
     tcp_probe_.train_id = ++next_train_id_;
     tcp_probe_.send_time = time;
@@ -612,12 +612,12 @@ void Client::sendTcpBandwidthProbe(const TimePoint& time)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::sendUdpBandwidthProbe(const TimePoint& time)
+void Client::sendUdpBandwidthProbe(TimePoint time)
 {
     if (!udp_channel_ || udp_state_ == UdpState::DISCONNECTED || udp_probe_.pending)
         return;
 
-    auto idle = std::chrono::duration_cast<Milliseconds>(time - last_send_time_);
+    auto idle = DurationCast<Milliseconds>(time - last_send_time_);
 
     udp_probe_.train_id = ++next_train_id_;
     udp_probe_.send_time = time;

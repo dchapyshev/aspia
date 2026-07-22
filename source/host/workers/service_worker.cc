@@ -191,7 +191,7 @@ void ServiceWorker::onStop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ServiceWorker::onTimer(const TimePoint& /* now */)
+void ServiceWorker::onTimer(TimePoint /* now */)
 {
     constexpr qint64 kConfirmationTimeoutMs = 60 * 1000;
 

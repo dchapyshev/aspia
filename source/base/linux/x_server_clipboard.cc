@@ -35,13 +35,13 @@ constexpr size_t kIncrChunkSize = 256 * 1024;
 constexpr size_t kMaxIncrDataSize = 16 * 1024 * 1024;
 
 // An outgoing INCR transfer whose requestor has not consumed a chunk for this long is dropped.
-constexpr std::chrono::seconds kOutgoingTransferTimeout(30);
+constexpr Seconds kOutgoingTransferTimeout(30);
 
 // A capture session whose selection owner has not produced a reply or an INCR chunk for this long
 // is finished with whatever it collected by onTick(): an owner that stops responding would
 // otherwise hold the capture state (and the guard in onSetSelectionOwnerNotify()) forever. Kept
 // generous so that an owner doing a slow lazy conversion of a large selection is not cut off.
-constexpr std::chrono::seconds kCaptureStallTimeout(10);
+constexpr Seconds kCaptureStallTimeout(10);
 
 // The clipboard displays whose X errors are ignored (the client runs one clipboard instance per
 // session window, so there can be several), and the handler installed before ours.

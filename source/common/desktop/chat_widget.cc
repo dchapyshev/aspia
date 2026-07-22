@@ -37,6 +37,7 @@
 #include <QTimer>
 
 #include "base/logging.h"
+#include "base/time_types.h"
 #include "base/files/base_paths.h"
 #include "common/desktop/chat_incoming_message.h"
 #include "common/desktop/chat_outgoing_message.h"
@@ -228,7 +229,7 @@ void ChatWidget::readStatus(const proto::chat::Status& status)
         appendHistoryStatus(message);
     }
 
-    status_clear_timer_->start(std::chrono::seconds(1));
+    status_clear_timer_->start(Seconds(1));
 }
 
 //--------------------------------------------------------------------------------------------------

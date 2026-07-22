@@ -22,6 +22,7 @@
 
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/time_types.h"
 #include "base/net/address.h"
 #include "base/net/tcp_channel_ng.h"
 #include "base/peer/client_authenticator.h"
@@ -32,7 +33,7 @@
 namespace {
 
 const qsizetype kNumberOfParallelTasks = 30;
-const std::chrono::seconds kTimeout { 15 };
+const Seconds kTimeout { 15 };
 
 } // namespace
 
@@ -102,7 +103,7 @@ void OnlineCheckerDirect::Instance::start()
     connect(tcp_channel_, &TcpChannel::sig_authenticated, this, &Instance::onTcpAuthenticated);
     connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &Instance::onTcpErrorOccurred);
 
-    tcp_channel_->connectTo(address.host(), address.port(), TcpChannel::Seconds(10));
+    tcp_channel_->connectTo(address.host(), address.port(), Seconds(10));
 }
 
 //--------------------------------------------------------------------------------------------------

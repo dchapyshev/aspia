@@ -32,16 +32,16 @@
 
 namespace {
 
-const Worker::Seconds kTimerInterval{ 1 };
-const Worker::Minutes kIdleCheckInterval{ 1 };
-constexpr Worker::Hours kMaxSessionDuration{ 24 };
-constexpr Worker::Seconds kAcceptRetryDelay{ 1 };
+const Seconds kTimerInterval{ 1 };
+const Minutes kIdleCheckInterval{ 1 };
+constexpr Hours kMaxSessionDuration{ 24 };
+constexpr Seconds kAcceptRetryDelay{ 1 };
 
 // Caps for the relay role. The relay routes already-paired peers, so concurrent unfinished
 // handshakes are usually few; a tight pending cap protects relay resources without rejecting
 // normal traffic. The per-address rate matches the FloodGuard default but is set explicitly so
 // the policy is visible at the use site.
-constexpr FloodGuard::Seconds kPerAddressWindow{ 60 };
+constexpr Seconds kPerAddressWindow{ 60 };
 constexpr int kPerAddressMax = 60;
 constexpr int kMaxPendingSessions = 60;
 
@@ -290,7 +290,7 @@ void RelayWorker::onStop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RelayWorker::onTimer(const TimePoint& now)
+void RelayWorker::onTimer(TimePoint now)
 {
     // Pending sessions have a short handshake deadline (seconds), so sweep them on every tick rather
     // than on the coarse idle-check interval used for active sessions below.
@@ -347,7 +347,7 @@ void RelayWorker::onTimer(const TimePoint& now)
         next_stat_time_ = now + stat_interval_;
 
         proto::router::RelayStatistics statistics;
-        statistics.set_uptime(std::chrono::duration_cast<Seconds>(now - start_time_).count());
+        statistics.set_uptime(DurationCast<Seconds>(now - start_time_).count());
 
         for (const auto& session : std::as_const(active_sessions_))
         {

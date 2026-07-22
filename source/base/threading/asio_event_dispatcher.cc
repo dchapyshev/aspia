@@ -423,8 +423,7 @@ int AsioEventDispatcher::remainingTime(int timer_id)
         if (now >= it->second.end_time)
             return 0;
 
-        const Milliseconds remaining =
-            std::chrono::duration_cast<Milliseconds>(it->second.end_time - now);
+        const Milliseconds remaining = DurationCast<Milliseconds>(it->second.end_time - now);
 
         return static_cast<int>(std::min<qint64>(remaining.count(), std::numeric_limits<int>::max()));
     };
@@ -473,8 +472,7 @@ asio::io_context& AsioEventDispatcher::ioContext()
 }
 
 //--------------------------------------------------------------------------------------------------
-void AsioEventDispatcher::asyncWaitTimer(
-    asio::steady_timer& handle, const TimePoint& end_time, int timer_id)
+void AsioEventDispatcher::asyncWaitTimer(asio::steady_timer& handle, TimePoint end_time, int timer_id)
 {
     handle.expires_at(end_time);
     handle.async_wait([this, timer_id](const std::error_code& error_code) noexcept
@@ -522,7 +520,7 @@ void AsioEventDispatcher::asyncWaitTimer(
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 bool AsioEventDispatcher::tryRegisterMultimediaTimer(
-    int timer_id, Milliseconds interval, const TimePoint& end_time, QObject* object)
+    int timer_id, Milliseconds interval, TimePoint end_time, QObject* object)
 {
     // Multimedia timers are a limited system-wide resource, so no more than the quantity
     // specified in kReservedSizeForMultimediaTimers is created.

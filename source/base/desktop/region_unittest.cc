@@ -23,12 +23,13 @@
 #include <QRegion>
 
 #include <algorithm>
-#include <chrono>
 #include <iomanip>
 #include <iostream>
 #include <random>
 #include <string>
 #include <vector>
+
+#include "base/time_types.h"
 
 namespace {
 
@@ -706,8 +707,6 @@ TEST(RegionFuzz, ContainsAgainstQRegion) { runContains<Region>(0xC0FFEE); }
 
 namespace {
 
-using Clock = std::chrono::high_resolution_clock;
-
 // Runs |body| in a calibrated loop: the iteration count is doubled until a batch runs for at least
 // 40 ms, then the average time of that batch is returned in microseconds. |body| receives the
 // iteration index and must return a value that depends on the work so the optimizer cannot elide
@@ -734,9 +733,7 @@ double timePerOpUs(Body&& body)
         volatile qint64 keep = sink;
         (void)keep;
 
-        const double ns =
-            static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(
-                end - start).count());
+        const double ns = static_cast<double>(DurationCast<Nanoseconds>(end - start).count());
 
         if (ns >= kMinBatchNs || iterations >= kMaxIterations)
             return ns / iterations / 1000.0;

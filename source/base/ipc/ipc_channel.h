@@ -32,6 +32,7 @@
 #include "base/logging.h"
 #include "base/session_id.h"
 #include "base/shared_pointer.h"
+#include "base/time_types.h"
 
 class IpcServer;
 class Location;
@@ -78,7 +79,7 @@ private:
     static QString channelPath(const QString& channel_name);
 
     bool connectAttempt();
-    void scheduleConnectAttempt(const std::chrono::milliseconds& delay, int count);
+    void scheduleConnectAttempt(Milliseconds delay, int count);
     void disconnectFrom();
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
     void onMessageReceived();

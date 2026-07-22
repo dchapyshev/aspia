@@ -19,14 +19,15 @@
 #ifndef HOST_AUDIO_CAPTURER_WIN_H
 #define HOST_AUDIO_CAPTURER_WIN_H
 
+#include <Audioclient.h>
+#include <mmdeviceapi.h>
+#include <wrl/client.h>
+
+#include "base/time_types.h"
 #include "base/win/scoped_co_mem.h"
 #include "host/audio_capturer.h"
 #include "host/win/audio_volume_filter.h"
 #include "proto/desktop_audio.h"
-
-#include <Audioclient.h>
-#include <mmdeviceapi.h>
-#include <wrl/client.h>
 
 class DefaultAudioDeviceChangeDetector;
 class QTimer;
@@ -70,7 +71,7 @@ private:
 
     proto::audio::Packet::SamplingRate sampling_rate_;
     QTimer* capture_timer_ = nullptr;
-    std::chrono::milliseconds audio_device_period_;
+    Milliseconds audio_device_period_;
     AudioVolumeFilter volume_filter_;
 
     ScopedCoMem<WAVEFORMATEX> wave_format_ex_;

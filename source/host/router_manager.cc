@@ -35,7 +35,7 @@
 
 namespace {
 
-const std::chrono::seconds kReconnectTimeout{ 10 };
+const Seconds kReconnectTimeout{ 10 };
 
 } // namespace
 
@@ -123,8 +123,8 @@ void RouterManager::onSettingsChanged()
 
         one_time_password_ = generator.result();
 
-        std::chrono::milliseconds expire_interval = db.oneTimePasswordExpire();
-        if (expire_interval > std::chrono::milliseconds(0))
+        Milliseconds expire_interval = db.oneTimePasswordExpire();
+        if (expire_interval > Milliseconds(0))
             password_expire_time_ = Clock::now() + expire_interval;
         else
             password_expire_time_ = TimePoint::max();
@@ -337,7 +337,7 @@ void RouterManager::onNewPeerConnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManager::onTimer(const TimePoint& now)
+void RouterManager::onTimer(TimePoint now)
 {
     if (tcp_channel_)
         tcp_channel_->tick(now);

@@ -38,8 +38,8 @@ namespace {
 
 const qint64 kWriteQueueReservedSize = 128;
 const qint64 kWritePoolReservedSize = 32;
-const TcpChannelNG::Seconds kKeepAliveInterval { 30 };
-const TcpChannelNG::Seconds kKeepAliveTimeout { 30 };
+const Seconds kKeepAliveInterval { 30 };
+const Seconds kKeepAliveTimeout { 30 };
 
 //--------------------------------------------------------------------------------------------------
 QStringList endpointsToString(const asio::ip::tcp::resolver::results_type& endpoints)
@@ -121,7 +121,7 @@ void TcpChannelNG::doAuthentication()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannelNG::connectTo(const QString& address, quint16 port, const Seconds& timeout)
+void TcpChannelNG::connectTo(const QString& address, quint16 port, Seconds timeout)
 {
     if (isConnected() || !resolver_)
         return;
@@ -327,7 +327,7 @@ qint64 TcpChannelNG::pendingBytes() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannelNG::tick(const TimePoint& now)
+void TcpChannelNG::tick(TimePoint now)
 {
     if (keep_alive_state_ == KeepAliveState::INACTIVE || now < keep_alive_deadline_)
         return;

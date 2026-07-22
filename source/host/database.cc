@@ -405,18 +405,18 @@ bool Database::setNoUserAction(NoUserAction action)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::chrono::milliseconds Database::autoConfirmationInterval() const
+Milliseconds Database::autoConfirmationInterval() const
 {
-    static const std::chrono::milliseconds kDefaultValue { 0 };
-    static const std::chrono::milliseconds kMinValue { 0 };
-    static const std::chrono::milliseconds kMaxValue { 60 * 1000 }; // 60 seconds.
+    static const Milliseconds kDefaultValue { 0 };
+    static const Milliseconds kMinValue { 0 };
+    static const Milliseconds kMaxValue { 60 * 1000 }; // 60 seconds.
 
     bool ok = false;
     qint64 value = readSetting(kSettingAutoConfirmationInterval).toLongLong(&ok);
     if (!ok)
         return kDefaultValue;
 
-    std::chrono::milliseconds result(value);
+    Milliseconds result(value);
     if (result < kMinValue)
         result = kMinValue;
     else if (result > kMaxValue)
@@ -426,7 +426,7 @@ std::chrono::milliseconds Database::autoConfirmationInterval() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::setAutoConfirmationInterval(const std::chrono::milliseconds& interval)
+bool Database::setAutoConfirmationInterval(Milliseconds interval)
 {
     return writeSetting(kSettingAutoConfirmationInterval,
                         QString::number(static_cast<qint64>(interval.count())));
@@ -448,18 +448,18 @@ bool Database::setOneTimePassword(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::chrono::milliseconds Database::oneTimePasswordExpire() const
+Milliseconds Database::oneTimePasswordExpire() const
 {
-    static const std::chrono::milliseconds kDefaultValue { 5 * 60 * 1000 }; // 5 minutes.
-    static const std::chrono::milliseconds kMinValue { 0 };
-    static const std::chrono::milliseconds kMaxValue { 24 * 60 * 60 * 1000 }; // 24 hours.
+    static const Milliseconds kDefaultValue { 5 * 60 * 1000 }; // 5 minutes.
+    static const Milliseconds kMinValue { 0 };
+    static const Milliseconds kMaxValue { 24 * 60 * 60 * 1000 }; // 24 hours.
 
     bool ok = false;
     qint64 value = readSetting(kSettingOneTimePasswordExpire).toLongLong(&ok);
     if (!ok)
         return kDefaultValue;
 
-    std::chrono::milliseconds result(value);
+    Milliseconds result(value);
     if (result < kMinValue)
         result = kMinValue;
     else if (result > kMaxValue)
@@ -469,7 +469,7 @@ std::chrono::milliseconds Database::oneTimePasswordExpire() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::setOneTimePasswordExpire(const std::chrono::milliseconds& interval)
+bool Database::setOneTimePasswordExpire(Milliseconds interval)
 {
     return writeSetting(kSettingOneTimePasswordExpire,
                         QString::number(static_cast<qint64>(interval.count())));

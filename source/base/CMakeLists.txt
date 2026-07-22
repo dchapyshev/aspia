@@ -71,6 +71,7 @@ list(APPEND SOURCE_BASE
     sys_info.h
     system_error.cc
     system_error.h
+    time_types.h
     version_constants.cc
     version_constants.h
     xml_settings.cc

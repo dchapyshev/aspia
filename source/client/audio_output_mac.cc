@@ -18,12 +18,13 @@
 
 #include "client/audio_output_mac.h"
 
-#include "base/logging.h"
-#include "third_party/portaudio/pa_ringbuffer.h"
-
 #include <mach/mach.h>
 #include <pthread.h>
 #include <sched.h>
+
+#include "base/logging.h"
+#include "base/time_types.h"
+#include "third_party/portaudio/pa_ringbuffer.h"
 
 //--------------------------------------------------------------------------------------------------
 AudioOutputMac::AudioOutputMac(const NeedMoreDataCB& need_more_data_cb)
@@ -95,7 +96,7 @@ void AudioOutputMac::stop()
         do_stop_ = true; // Signal to io proc to stop audio device.
         while (do_stop_)
         {
-            if (stop_event_.wait_for(lock, std::chrono::seconds(2)) == std::cv_status::timeout)
+            if (stop_event_.wait_for(lock, Seconds(2)) == std::cv_status::timeout)
             {
                 LOG(ERROR) << "Timed out stopping the render IOProc."
                               "We may have failed to detect a device removal.";

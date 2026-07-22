@@ -184,7 +184,7 @@ IpcChannel::~IpcChannel()
 void IpcChannel::connectTo(const QString& channel_name)
 {
     channel_name_ = channel_name;
-    scheduleConnectAttempt(std::chrono::milliseconds(0), 0);
+    scheduleConnectAttempt(Milliseconds(0), 0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -316,7 +316,7 @@ bool IpcChannel::connectAttempt()
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcChannel::scheduleConnectAttempt(const std::chrono::milliseconds& delay, int count)
+void IpcChannel::scheduleConnectAttempt(Milliseconds delay, int count)
 {
     if (count > 30)
     {
@@ -334,7 +334,7 @@ void IpcChannel::scheduleConnectAttempt(const std::chrono::milliseconds& delay, 
             return;
         }
 
-        scheduleConnectAttempt(std::chrono::milliseconds(100), count + 1);
+        scheduleConnectAttempt(Milliseconds(100), count + 1);
     });
 }
 

@@ -25,6 +25,7 @@
 #include <memory>
 
 #include "base/logging.h"
+#include "base/time_types.h"
 #include "base/net/anti_replay_window.h"
 
 class QSocketNotifier;
@@ -118,11 +119,6 @@ private:
     using ScopedENetHost = std::unique_ptr<ENetHost, ENetHostDeleter>;
     using ScopedENetPeer = std::unique_ptr<ENetPeer, ENetPeerDeleter>;
     using ScopedENetPacket = std::unique_ptr<ENetPacket, ENetPacketDeleter>;
-
-    using Clock = std::chrono::steady_clock;
-    using TimePoint = std::chrono::time_point<Clock>;
-    using Milliseconds = std::chrono::milliseconds;
-    using Seconds = std::chrono::seconds;
 
 #pragma pack(push, 1)
     struct Header

@@ -26,6 +26,7 @@
 
 #include "base/location.h"
 #include "base/serialization.h"
+#include "base/time_types.h"
 #include "base/crypto/random.h"
 #include "base/net/net_utils.h"
 #include "proto/stun.h"
@@ -94,7 +95,7 @@ void StunPeer::doStart()
     CLOG(INFO) << "Stun peer starting (" << stun_host_ << ":" << stun_port_
                << ", attempt" << number_of_attempts_ << ")";
 
-    timer_->start(std::chrono::seconds(3));
+    timer_->start(Seconds(3));
 
     // Fast path for IP addresses. If the STUN host is already a numeric IPv4 literal, skip the
     // asynchronous DNS lookup and send the request right away.

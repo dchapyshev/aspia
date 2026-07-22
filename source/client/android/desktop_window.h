@@ -24,11 +24,11 @@
 #include <QString>
 #include <QWidget>
 
-#include <chrono>
 #include <memory>
 
 #include "base/desktop/shared_frame.h"
 #include "base/scoped_qpointer.h"
+#include "base/time_types.h"
 #include "base/serialization.h"
 #include "client/config.h"
 #include "client/workers/audio_worker.h"
@@ -146,8 +146,6 @@ private:
     proto::control::Config desktop_config_;
     Serializer<proto::input::ClientToHost> outgoing_message_;
 
-    using Clock = std::chrono::steady_clock;
-    using TimePoint = std::chrono::time_point<Clock>;
     TimePoint start_time_;
 
     int read_clipboard_count_ = 0;

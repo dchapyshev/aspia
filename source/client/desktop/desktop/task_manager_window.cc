@@ -460,14 +460,14 @@ TaskManagerWindow::TaskManagerWindow(QWidget* parent)
         sendUserListRequest();
     });
 
-    std::chrono::milliseconds update_speed = settings.updateSpeed();
-    if (update_speed == std::chrono::milliseconds(500))
+    Milliseconds update_speed = settings.updateSpeed();
+    if (update_speed == Milliseconds(500))
         ui->action_high_speed->setChecked(true);
-    else if (update_speed == std::chrono::milliseconds(1000))
+    else if (update_speed == Milliseconds(1000))
         ui->action_medium_speed->setChecked(true);
-    else if (update_speed == std::chrono::milliseconds(3000))
+    else if (update_speed == Milliseconds(3000))
         ui->action_low_speed->setChecked(true);
-    else if (update_speed == std::chrono::milliseconds(0))
+    else if (update_speed == Milliseconds(0))
         ui->action_disable_update->setChecked(true);
 
     update_timer_->start(update_speed);
@@ -492,9 +492,9 @@ TaskManagerWindow::~TaskManagerWindow()
     settings.setUserColumnState(ui->tree_users->header()->saveState());
 
     if (!update_timer_->isActive())
-        settings.setUpdateSpeed(std::chrono::milliseconds(0));
+        settings.setUpdateSpeed(Milliseconds(0));
     else
-        settings.setUpdateSpeed(std::chrono::milliseconds(update_timer_->interval()));
+        settings.setUpdateSpeed(Milliseconds(update_timer_->interval()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -970,11 +970,11 @@ void TaskManagerWindow::addUpdateItems(QMenu* parent_menu)
     connect(update_group, &QActionGroup::triggered, this, [this](QAction* action)
     {
         if (action == ui->action_high_speed)
-            update_timer_->start(std::chrono::milliseconds(500));
+            update_timer_->start(Milliseconds(500));
         else if (action == ui->action_medium_speed)
-            update_timer_->start(std::chrono::milliseconds(1000));
+            update_timer_->start(Milliseconds(1000));
         else if (action == ui->action_low_speed)
-            update_timer_->start(std::chrono::milliseconds(3000));
+            update_timer_->start(Milliseconds(3000));
         else if (action == ui->action_disable_update)
             update_timer_->stop();
     });

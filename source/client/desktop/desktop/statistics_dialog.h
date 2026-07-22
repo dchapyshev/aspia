@@ -22,9 +22,9 @@
 #include <QDialog>
 #include <QTime>
 
-#include <chrono>
 #include <memory>
 
+#include "base/time_types.h"
 #include "client/workers/audio_worker.h"
 #include "client/workers/network_worker.h"
 #include "client/workers/video_worker.h"
@@ -41,7 +41,7 @@ public:
     explicit StatisticsDialog(QWidget* parent = nullptr);
     ~StatisticsDialog() final;
 
-    void setDuration(std::chrono::seconds duration);
+    void setDuration(Seconds duration);
     void setClipboardMetrics(int read_clipboard, int send_clipboard);
     void setMouseMetrics(int send_mouse, int drop_mouse);
     void setKeyMetrics(int send_key);

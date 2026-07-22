@@ -823,8 +823,7 @@ void DesktopWindow::onMetricsRequest()
 
     // The network, video and audio rows are fed to the dialog directly by the workers; here we push
     // only the session-level counters that no worker owns.
-    const std::chrono::seconds duration =
-        std::chrono::duration_cast<std::chrono::seconds>(Clock::now() - start_time_);
+    const Seconds duration = DurationCast<Seconds>(Clock::now() - start_time_);
 
     statistics_dialog_->setDuration(duration);
     statistics_dialog_->setClipboardMetrics(read_clipboard_count_, send_clipboard_count_);

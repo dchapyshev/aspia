@@ -18,13 +18,13 @@
 
 #include "host/win/dxgi_duplicator_controller.h"
 
+#include <thread>
+
 #include "base/logging.h"
+#include "base/time_types.h"
 #include "base/desktop/frame_aligned.h"
 #include "host/win/dxgi_frame.h"
 #include "host/win/screen_capture_utils.h"
-
-#include <chrono>
-#include <thread>
 
 //--------------------------------------------------------------------------------------------------
 // static
@@ -448,10 +448,6 @@ QSize DxgiDuplicatorController::selectedDesktopSize(int monitor_id) const
 //--------------------------------------------------------------------------------------------------
 bool DxgiDuplicatorController::ensureFrameCaptured(Context* context, SharedPointer<Frame>& target)
 {
-    using Clock = std::chrono::steady_clock;
-    using TimePoint = std::chrono::time_point<Clock>;
-    using Milliseconds = std::chrono::milliseconds;
-
     // On a modern system, the FPS / monitor refresh rate is usually larger than
     // or equal to 60. So 17 milliseconds is enough to capture at least one frame.
     const Milliseconds ms_per_frame(17);

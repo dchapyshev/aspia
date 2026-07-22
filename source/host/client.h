@@ -22,10 +22,10 @@
 #include <QObject>
 #include <QVersionNumber>
 
-#include <chrono>
 #include <list>
 
 #include "base/logging.h"
+#include "base/time_types.h"
 #include "base/crypto/key_pair.h"
 #include "base/net/tcp_channel.h"
 #include "base/scoped_qpointer.h"
@@ -96,16 +96,12 @@ signals:
 protected:
     LOG_DECLARE_CONTEXT(Client);
 
-    using Clock = std::chrono::steady_clock;
-    using TimePoint = std::chrono::time_point<Clock>;
-    using Milliseconds = std::chrono::milliseconds;
-
     void send(quint8 channel_id, const QByteArray& buffer, bool reliable = true);
 
     virtual void onStart() = 0;
     virtual void onMessage(quint8 channel_id, const QByteArray& buffer) = 0;
     virtual void onBandwidthChanged(qint64 bandwidth) { /* Nothing */ };
-    virtual void onTimer(const TimePoint& now);
+    virtual void onTimer(TimePoint now);
 
     bool isFinished() const { return finished_emitted_; }
 
@@ -126,8 +122,8 @@ private:
     void onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer);
     void onUdpErrorOccurred();
     void startBandwidthProbing();
-    void sendTcpBandwidthProbe(const TimePoint& time);
-    void sendUdpBandwidthProbe(const TimePoint& time);
+    void sendTcpBandwidthProbe(TimePoint time);
+    void sendUdpBandwidthProbe(TimePoint time);
     void onTcpBandwidthProbeAck(const proto::peer::BandwidthProbeAck& ack);
     void onUdpBandwidthProbeAck(const proto::peer::BandwidthProbeAck& ack);
     void onReceiveRate(const proto::peer::ReceiveRate& rate);

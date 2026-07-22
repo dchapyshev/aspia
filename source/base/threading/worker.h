@@ -22,7 +22,6 @@
 #include <QObject>
 #include <QPointer>
 
-#include <chrono>
 #include <condition_variable>
 #include <functional>
 #include <memory>
@@ -31,6 +30,7 @@
 #include <unordered_map>
 
 #include "base/logging.h"
+#include "base/time_types.h"
 #include "base/threading/thread.h"
 
 class QTimerEvent;
@@ -41,13 +41,6 @@ class Worker : public QObject
     Q_OBJECT
 
 public:
-    using Clock = std::chrono::steady_clock;
-    using TimePoint = Clock::time_point;
-    using Milliseconds = std::chrono::milliseconds;
-    using Seconds = std::chrono::seconds;
-    using Minutes = std::chrono::minutes;
-    using Hours = std::chrono::hours;
-
     // If timer_interval is non-zero, the worker gets a repeating timer that fires onTimer() from its
     // own thread at that interval; the timer lives and dies with the worker thread.
     explicit Worker(Thread::EventDispatcher dispatcher = Thread::AsioDispatcher,
@@ -87,7 +80,7 @@ public:
 
 signals:
     // Per-thread clock: emitted from the worker thread on every built-in timer tick.
-    void sig_tick(const TimePoint& now);
+    void sig_tick(TimePoint now);
 
 protected:
     friend class WorkerManager;
@@ -112,7 +105,7 @@ protected:
     // Called on the worker thread at the interval passed to the constructor (only if it was
     // non-zero). |now| is the current tick timepoint, shared with sig_tick(). The default does
     // nothing.
-    virtual void onTimer(const TimePoint& /* now */) { /* Nothing */ }
+    virtual void onTimer(TimePoint /* now */) { /* Nothing */ }
 
     // QObject implementation.
     void timerEvent(QTimerEvent* event) final;

@@ -21,7 +21,6 @@
 
 #include <QtClassHelperMacros>
 
-#include <chrono>
 #include <deque>
 #include <functional>
 #include <map>
@@ -30,6 +29,7 @@
 #include <string>
 #include <vector>
 
+#include "base/time_types.h"
 #include "base/linux/x11_headers.h"
 
 class XServerClipboard
@@ -161,9 +161,6 @@ private:
     bool incr_capture_active_ = false;
     bool incr_capture_overflow_ = false;
     std::string incr_capture_data_;
-
-    using Clock = std::chrono::high_resolution_clock;
-    using TimePoint = std::chrono::time_point<Clock>;
 
     // An outgoing INCR transfer: a requestor consumes |data| in chunks by deleting |property|
     // after reading each part.

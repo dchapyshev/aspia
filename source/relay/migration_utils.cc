@@ -111,7 +111,7 @@ void doConfigMigrate(const QJsonDocument& doc)
     {
         qint64 value = std::clamp<qint64>(root_object["PeerIdleTimeout"].toString().toLongLong(), 1, 60);
         LOG(INFO) << "PeerIdleTimeout:" << value;
-        settings.setPeerIdleTimeout(std::chrono::minutes(value));
+        settings.setPeerIdleTimeout(Minutes(value));
     }
 
     if (root_object.contains("MaxPeerCount"))
@@ -135,7 +135,7 @@ void doConfigMigrate(const QJsonDocument& doc)
     {
         qint64 value = std::clamp<qint64>(root_object["StatisticsInterval"].toString().toLongLong(), 1, 3600);
         LOG(INFO) << "StatisticsInterval:" << value;
-        settings.setStatisticsInterval(std::chrono::seconds(value));
+        settings.setStatisticsInterval(Seconds(value));
     }
 }
 
