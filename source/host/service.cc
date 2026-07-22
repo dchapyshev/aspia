@@ -40,6 +40,7 @@
 
 #if defined(Q_OS_UNIX)
 #include <sys/stat.h>
+#include <unistd.h>
 #endif
 
 namespace {
