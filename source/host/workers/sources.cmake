@@ -27,6 +27,8 @@ collect_sources(SOURCE_HOST_WORKERS
     screen_worker.h
     service_worker.cc
     service_worker.h
+    sys_info_worker.cc
+    sys_info_worker.h
     update_worker.cc
     update_worker.h
     user_ipc_worker.cc

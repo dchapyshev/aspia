@@ -16,48 +16,53 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/system_info_client.h"
-
-#include "base/core_application.h"
-#include "base/logging.h"
 #include "host/workers/sys_info_worker.h"
-#include "proto/peer.h"
+
+#include "base/logging.h"
+#include "base/serialization.h"
+#include "host/system_info.h"
+#include "proto/system_info.h"
 
 //--------------------------------------------------------------------------------------------------
-SystemInfoClient::SystemInfoClient(TcpChannel* tcp_channel, QObject* parent)
-    : Client(tcp_channel, parent),
-      sys_info_worker_(CoreApplication::findWorker<SysInfoWorker>())
+SysInfoWorker::SysInfoWorker()
+    : Worker(Thread::AsioDispatcher)
 {
-    CLOG(INFO) << "Ctor";
-    CCHECK(sys_info_worker_);
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-SystemInfoClient::~SystemInfoClient()
+SysInfoWorker::~SysInfoWorker()
 {
-    CLOG(INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void SystemInfoClient::onStart()
+void SysInfoWorker::query(QObject* context, const QByteArray& buffer, std::function<void(QByteArray)> reply)
 {
-    emit sig_started();
-}
-
-//--------------------------------------------------------------------------------------------------
-void SystemInfoClient::onMessage(quint8 /* channel_id */, const QByteArray& buffer)
-{
-    if (!sys_info_worker_)
+    Worker::request(context, [buffer]()
     {
-        CLOG(ERROR) << "Sys info worker is not available";
-        return;
-    }
+        proto::system_info::SystemInfoRequest request;
+        if (!parse(buffer, &request))
+        {
+            LOG(ERROR) << "Unable to parse system info request";
+            return QByteArray();
+        }
 
-    // Building the report can take a while; offload it to the dedicated worker and send the
-    // result once it is ready.
-    sys_info_worker_->query(this, buffer, [this](QByteArray result)
-    {
-        if (!result.isEmpty())
-            send(proto::peer::CHANNEL_ID_0, result);
-    });
+        proto::system_info::SystemInfo system_info;
+        createSystemInfo(request, &system_info);
+        return serialize(system_info);
+    },
+    std::move(reply));
+}
+
+//--------------------------------------------------------------------------------------------------
+void SysInfoWorker::onStart()
+{
+    LOG(INFO) << "Sys info worker started";
+}
+
+//--------------------------------------------------------------------------------------------------
+void SysInfoWorker::onStop()
+{
+    LOG(INFO) << "Sys info worker stopped";
 }

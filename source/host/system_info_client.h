@@ -20,8 +20,11 @@
 #define HOST_SYSTEM_INFO_CLIENT_H
 
 #include <QObject>
+#include <QPointer>
 
 #include "host/client.h"
+
+class SysInfoWorker;
 
 class SystemInfoClient final : public Client
 {
@@ -36,6 +39,8 @@ protected:
     void onMessage(quint8 channel_id, const QByteArray& buffer);
 
 private:
+    QPointer<SysInfoWorker> sys_info_worker_;
+
     Q_DISABLE_COPY_MOVE(SystemInfoClient)
 };
 
