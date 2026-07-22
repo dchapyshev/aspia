@@ -35,7 +35,7 @@
 #include "proto/router_peer.h"
 
 // Registers NetworkWorker::Status so it can cross threads through the queued sig_statusChanged.
-static auto g_statusType = qRegisterMetaType<NetworkWorker::Status>();
+static volatile auto g_statusType = qRegisterMetaType<NetworkWorker::Status>();
 
 namespace {
 

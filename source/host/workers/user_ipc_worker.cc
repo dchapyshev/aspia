@@ -29,8 +29,8 @@
 
 namespace {
 
-auto g_statusType = qRegisterMetaType<UserIpcWorker::Status>();
-auto g_clientListType = qRegisterMetaType<UserIpcWorker::ClientList>();
+volatile auto g_statusType = qRegisterMetaType<UserIpcWorker::Status>();
+volatile auto g_clientListType = qRegisterMetaType<UserIpcWorker::ClientList>();
 
 } // namespace
 

@@ -30,7 +30,7 @@ namespace {
 
 constexpr std::chrono::minutes kTimeout{ 1 };
 
-auto g_errorCodeType = qRegisterMetaType<Authenticator::ErrorCode>();
+volatile auto g_errorCodeType = qRegisterMetaType<Authenticator::ErrorCode>();
 
 } // namespace
 

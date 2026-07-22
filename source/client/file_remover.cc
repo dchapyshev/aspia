@@ -26,7 +26,7 @@
 
 namespace {
 
-auto g_actionType = qRegisterMetaType<FileRemover::Action>();
+volatile auto g_actionType = qRegisterMetaType<FileRemover::Action>();
 
 } // namespace
 

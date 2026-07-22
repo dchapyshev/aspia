@@ -25,8 +25,8 @@
 
 namespace {
 
-auto g_errorType = qRegisterMetaType<FileTransfer::Error::Type>();
-auto g_actionType = qRegisterMetaType<FileTransfer::Error::Action>();
+volatile auto g_errorType = qRegisterMetaType<FileTransfer::Error::Type>();
+volatile auto g_actionType = qRegisterMetaType<FileTransfer::Error::Action>();
 
 struct ActionsMap
 {

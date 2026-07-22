@@ -20,7 +20,7 @@
 
 namespace {
 
-auto g_errorCodeType = qRegisterMetaType<TcpChannel::ErrorCode>();
+volatile auto g_errorCodeType = qRegisterMetaType<TcpChannel::ErrorCode>();
 
 //--------------------------------------------------------------------------------------------------
 int calculateSpeed(int last_speed, const TcpChannel::Milliseconds& duration, qint64 bytes)
