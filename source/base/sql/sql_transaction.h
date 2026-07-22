@@ -16,9 +16,7 @@
 #ifndef BASE_SQL_SQL_TRANSACTION_H
 #define BASE_SQL_SQL_TRANSACTION_H
 
-#include <QtGlobal>
-
-class SqlDatabase;
+#include "base/sql/sql_database.h"
 
 // Scopes a database transaction to a C++ block. begin() opens it; commit() finalizes it. If the
 // object is destroyed after a successful begin() without a commit() - an early return, a failed
@@ -27,10 +25,12 @@ class SqlDatabase;
 class SqlTransaction final
 {
 public:
+    using Mode = SqlDatabase::TransactionMode;
+
     explicit SqlTransaction(SqlDatabase& db);
     ~SqlTransaction();
 
-    bool begin();
+    bool begin(Mode mode = Mode::DEFERRED);
     bool commit();
 
     bool isActive() const { return active_; }

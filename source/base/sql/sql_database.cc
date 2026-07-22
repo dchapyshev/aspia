@@ -129,7 +129,7 @@ SqlDatabase::~SqlDatabase()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool SqlDatabase::open(const QString& file_path)
+bool SqlDatabase::open(const QString& file_path, Milliseconds busy_timeout)
 {
     if (db_)
     {
@@ -150,6 +150,10 @@ bool SqlDatabase::open(const QString& file_path)
         close();
         return false;
     }
+
+    const int timeout_result = sqlite3_busy_timeout(db_, static_cast<int>(busy_timeout.count()));
+    if (timeout_result != SQLITE_OK)
+        LOG(WARNING) << "Unable to set busy timeout:" << sqlite3_errstr(timeout_result);
 
     // Register a Unicode-aware casefold() so case-insensitive search works for non-ASCII text.
     // The stock sqlite LIKE folds ASCII only; casefold() folds via the platform Unicode API and
@@ -202,9 +206,9 @@ bool SqlDatabase::exec(const char* sql)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool SqlDatabase::beginTransaction()
+bool SqlDatabase::beginTransaction(TransactionMode mode)
 {
-    return exec("BEGIN");
+    return exec(mode == TransactionMode::IMMEDIATE ? "BEGIN IMMEDIATE" : "BEGIN");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -217,25 +221,6 @@ bool SqlDatabase::commitTransaction()
 bool SqlDatabase::rollbackTransaction()
 {
     return exec("ROLLBACK");
-}
-
-//--------------------------------------------------------------------------------------------------
-bool SqlDatabase::setBusyTimeout(int ms)
-{
-    if (!db_)
-    {
-        LOG(ERROR) << "Database is not open";
-        return false;
-    }
-
-    const int result = sqlite3_busy_timeout(db_, ms);
-    if (result != SQLITE_OK)
-    {
-        LOG(ERROR) << "Unable to set busy timeout:" << sqlite3_errstr(result);
-        return false;
-    }
-
-    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

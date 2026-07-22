@@ -776,7 +776,7 @@ bool Database::reencryptAll(const QList<HostConfig>& hosts,
     }
 
     SqlTransaction transaction(db_);
-    if (!transaction.begin())
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
         LOG(ERROR) << "Unable to begin transaction";
         return false;

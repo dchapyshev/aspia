@@ -109,7 +109,7 @@ bool hasColumn(SqlDatabase& db, const QString& table, const QString& column)
 bool ensureSchema(SqlDatabase& db)
 {
     SqlTransaction transaction(db);
-    if (!transaction.begin())
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
         LOG(ERROR) << "Unable to start transaction:" << db.lastError();
         return false;
@@ -448,7 +448,7 @@ std::string_view Database::modifyUser(
         *password_changed = false;
 
     SqlTransaction transaction(db_);
-    if (!transaction.begin())
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
         LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
         return proto::router::kErrorInternalError;
@@ -857,7 +857,7 @@ std::string_view Database::revokeClientDeviceTokens(qint64 user_id, const QList<
         return proto::router::kErrorOk;
 
     SqlTransaction transaction(db_);
-    if (!transaction.begin())
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
         LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
         return proto::router::kErrorInternalError;
@@ -1405,7 +1405,7 @@ bool Database::scheduleHostRemoval(HostId host_id)
     }
 
     SqlTransaction transaction(db_);
-    if (!transaction.begin())
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
         LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
         return false;
@@ -1703,7 +1703,7 @@ std::string_view Database::addWorkspace(std::string_view name, std::string_view 
     }
 
     SqlTransaction transaction(db_);
-    if (!transaction.begin())
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
         LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
         return proto::router::kErrorInternalError;
@@ -1802,7 +1802,7 @@ std::string_view Database::modifyWorkspace(qint64 entry_id, std::string_view nam
     }
 
     SqlTransaction transaction(db_);
-    if (!transaction.begin())
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
         LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
         return proto::router::kErrorInternalError;
@@ -1928,7 +1928,7 @@ std::string_view Database::removeWorkspace(qint64 entry_id)
     }
 
     SqlTransaction transaction(db_);
-    if (!transaction.begin())
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
         LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
         return proto::router::kErrorInternalError;
@@ -2002,7 +2002,7 @@ std::string_view Database::setWorkspaceHosts(qint64 entry_id, const std::set<Hos
     }
 
     SqlTransaction transaction(db_);
-    if (!transaction.begin())
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
         LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
         return proto::router::kErrorInternalError;
@@ -2326,7 +2326,7 @@ std::string_view Database::addGroup(qint64 workspace_id, qint64 parent_id, std::
     }
 
     SqlTransaction transaction(db_);
-    if (!transaction.begin())
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
         LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
         return proto::router::kErrorInternalError;
@@ -2403,7 +2403,7 @@ std::string_view Database::modifyGroup(qint64 workspace_id, qint64 entry_id, qin
     }
 
     SqlTransaction transaction(db_);
-    if (!transaction.begin())
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
         LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
         return proto::router::kErrorInternalError;
@@ -2509,7 +2509,7 @@ std::string_view Database::removeGroup(qint64 workspace_id, qint64 entry_id)
     }
 
     SqlTransaction transaction(db_);
-    if (!transaction.begin())
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
         LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
         return proto::router::kErrorInternalError;

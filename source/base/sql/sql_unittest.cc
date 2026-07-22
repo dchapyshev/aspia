@@ -216,12 +216,13 @@ TEST(SqliteTest, FailedCommitDoesNotWedgeConnection)
     QTemporaryDir temp_dir;
     ASSERT_TRUE(temp_dir.isValid());
 
+    // Zero busy timeout: the test expects the lock collision to fail instantly, not after a wait.
     SqlDatabase writer;
-    ASSERT_TRUE(writer.open(temp_dir.filePath("test.db")));
+    ASSERT_TRUE(writer.open(temp_dir.filePath("test.db"), SqlDatabase::Milliseconds(0)));
     ASSERT_TRUE(createSchema(writer));
 
     SqlDatabase reader;
-    ASSERT_TRUE(reader.open(temp_dir.filePath("test.db")));
+    ASSERT_TRUE(reader.open(temp_dir.filePath("test.db"), SqlDatabase::Milliseconds(0)));
 
     // The reader holds a shared lock for the duration of its transaction, so the writer's COMMIT
     // (which needs an exclusive lock) fails with SQLITE_BUSY and leaves the transaction open.
@@ -249,6 +250,33 @@ TEST(SqliteTest, FailedCommitDoesNotWedgeConnection)
     SqlTransaction transaction(writer);
     EXPECT_TRUE(transaction.begin());
     EXPECT_TRUE(transaction.commit());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SqliteTest, ImmediateTransactionTakesWriteLock)
+{
+    QTemporaryDir temp_dir;
+    ASSERT_TRUE(temp_dir.isValid());
+
+    // Zero busy timeout: the test expects the lock collision to fail instantly, not after a wait.
+    SqlDatabase first;
+    ASSERT_TRUE(first.open(temp_dir.filePath("test.db"), SqlDatabase::Milliseconds(0)));
+    ASSERT_TRUE(createSchema(first));
+
+    SqlDatabase second;
+    ASSERT_TRUE(second.open(temp_dir.filePath("test.db"), SqlDatabase::Milliseconds(0)));
+
+    // IMMEDIATE takes the write lock at BEGIN, so a competing immediate begin fails up front
+    // instead of at the first write statement.
+    SqlTransaction holder(first);
+    ASSERT_TRUE(holder.begin(SqlTransaction::Mode::IMMEDIATE));
+
+    SqlTransaction competitor(second);
+    EXPECT_FALSE(competitor.begin(SqlTransaction::Mode::IMMEDIATE));
+
+    ASSERT_TRUE(holder.commit());
+    EXPECT_TRUE(competitor.begin(SqlTransaction::Mode::IMMEDIATE));
+    EXPECT_TRUE(competitor.commit());
 }
 
 //--------------------------------------------------------------------------------------------------

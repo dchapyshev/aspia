@@ -21,6 +21,8 @@
 
 #include <QString>
 
+#include <chrono>
+
 struct sqlite3;
 struct sqlite3_context;
 struct sqlite3_value;
@@ -31,12 +33,16 @@ struct sqlite3_value;
 class SqlDatabase final
 {
 public:
+    using Milliseconds = std::chrono::milliseconds;
+
     SqlDatabase() = default;
     ~SqlDatabase();
 
-    // Opens (creating it if absent) the database at |file_path|. Returns false and leaves the
-    // object closed on failure.
-    bool open(const QString& file_path);
+    // Opens (creating it if absent) the database at |file_path|. |busy_timeout| sets how long
+    // a call blocked on another connection's lock waits before failing with SQLITE_BUSY; zero
+    // disables waiting so collisions fail instantly. Returns false and leaves the object closed
+    // on failure.
+    bool open(const QString& file_path, Milliseconds busy_timeout = Milliseconds(5000));
 
     bool isOpen() const { return db_ != nullptr; }
     void close();
@@ -45,12 +51,15 @@ public:
     // statements that need binding or produce rows use an SqlQuery.
     bool exec(const char* sql);
 
-    bool beginTransaction();
+    enum class TransactionMode
+    {
+        DEFERRED = 0,
+        IMMEDIATE = 1
+    };
+
+    bool beginTransaction(TransactionMode mode = TransactionMode::DEFERRED);
     bool commitTransaction();
     bool rollbackTransaction();
-
-    // Sets how long a blocked writer waits for a lock before giving up (WAL contention).
-    bool setBusyTimeout(int ms);
 
     // Signature of a custom scalar SQL function: reads its arguments from |argv| and reports the
     // result through |context| using the sqlite3_result_* family.

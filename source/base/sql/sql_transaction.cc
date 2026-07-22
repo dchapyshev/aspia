@@ -18,8 +18,6 @@
 
 #include "base/sql/sql_transaction.h"
 
-#include "base/sql/sql_database.h"
-
 //--------------------------------------------------------------------------------------------------
 SqlTransaction::SqlTransaction(SqlDatabase& db)
     : db_(db)
@@ -35,12 +33,12 @@ SqlTransaction::~SqlTransaction()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool SqlTransaction::begin()
+bool SqlTransaction::begin(Mode mode)
 {
     if (active_)
         return false;
 
-    active_ = db_.beginTransaction();
+    active_ = db_.beginTransaction(mode);
     return active_;
 }
 
