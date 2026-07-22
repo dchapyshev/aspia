@@ -25,13 +25,11 @@
 #include "base/core_service.h"
 #include "host/system_settings.h"
 
-class HttpFileDownloader;
 class Location;
 class QFileSystemWatcher;
 class QTimer;
 class TcpChannel;
 class TcpServer;
-class UpdateChecker;
 
 namespace proto::chat {
 class Chat;
@@ -65,10 +63,6 @@ private slots:
     void onNewDirectConnection();
     void onNewRelayConnection();
     void onConfirmationReply(quint32 request_id, bool accept);
-    void onUpdateCheckedFinished(const QByteArray& result);
-    void onFileDownloaderError(int error_code);
-    void onFileDownloaderCompleted();
-    void onFileDownloaderProgress(int percentage);
     void onRepeatedTasks();
     void onUserSessionAttached();
     void onUserSessionDettached();
@@ -81,7 +75,6 @@ private slots:
     void onUserChatMessage(const proto::chat::Chat& chat);
     void onSettingsChanged(const QString& path);
     void onRemoveHost();
-    void onCheckUpdates();
 
 private:
     struct PendingConfirmation
@@ -98,8 +91,6 @@ private:
     void deleteFirewallRules();
     void connectToRouter(const Location& location);
     void disconnectFromRouter(const Location& location);
-    void checkForUpdates();
-    void startUpdateCheck();
 
     QTimer* repeated_timer_ = nullptr;
 
@@ -114,9 +105,6 @@ private:
 
     QList<PendingConfirmation> pending_confirmation_;
     QList<Client*> clients_;
-
-    ScopedQPointer<UpdateChecker> update_checker_;
-    ScopedQPointer<HttpFileDownloader> update_downloader_;
 
     Q_DISABLE_COPY_MOVE(Service)
 };

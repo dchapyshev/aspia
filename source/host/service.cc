@@ -24,22 +24,17 @@
 #include <QFileInfo>
 #include <QFile>
 #include <QFileSystemWatcher>
-#include <QStandardPaths>
 #include <QTimer>
 
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/security_log.h"
 #include "base/version_constants.h"
-#include "base/crypto/random.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/net/address.h"
 #include "base/net/tcp_channel.h"
 #include "base/net/tcp_server.h"
 #include "build/build_config.h"
-#include "common/http_file_downloader.h"
-#include "common/update_checker.h"
-#include "common/update_info.h"
 #include "host/database.h"
 #include "host/desktop_client.h"
 #include "host/desktop_manager.h"
@@ -48,22 +43,19 @@
 #include "host/host_user_list.h"
 #include "host/host_utils.h"
 #include "host/router_manager.h"
-#include "host/service.h"
 #include "host/system_info_client.h"
 #include "host/chat_client.h"
 #include "host/terminal_client.h"
 #include "host/user_session.h"
+#include "host/workers/update_worker.h"
 #include "proto/chat.h"
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
 #include <aclapi.h>
-#include "base/files/file_util.h"
 #include "base/net/firewall_manager.h"
-#include "base/process_util.h"
 #include "base/win/safe_mode_util.h"
 #include "base/win/security_helpers.h"
-#include "host/host_utils.h"
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_UNIX)
@@ -447,123 +439,6 @@ void Service::onConfirmationReply(quint32 request_id, bool accept)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onUpdateCheckedFinished(const QByteArray& result)
-{
-    CHECK(update_checker_);
-
-    do
-    {
-        if (result.isEmpty())
-        {
-            LOG(ERROR) << "Error while retrieving update information";
-            break;
-        }
-
-        UpdateInfo update_info = UpdateInfo::fromXml(result);
-        if (!update_info.isValid())
-        {
-            LOG(INFO) << "No updates available";
-            break;
-        }
-
-        const QVersionNumber& current_version = kCurrentVersion;
-        const QVersionNumber& update_version = update_info.version();
-
-        if (update_version <= current_version)
-        {
-            LOG(INFO) << "No available updates";
-            break;
-        }
-
-        LOG(INFO) << "New version available:" << update_version.toString();
-
-        update_downloader_ = new HttpFileDownloader(update_info.url(), this);
-
-        connect(update_downloader_, &HttpFileDownloader::sig_downloadError,
-                this, &Service::onFileDownloaderError);
-        connect(update_downloader_, &HttpFileDownloader::sig_downloadCompleted,
-                this, &Service::onFileDownloaderCompleted);
-        connect(update_downloader_, &HttpFileDownloader::sig_downloadProgress,
-                this, &Service::onFileDownloaderProgress);
-
-        update_downloader_->start();
-    }
-    while (false);
-
-    update_checker_->disconnect(this);
-    update_checker_.reset();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Service::onFileDownloaderError(int error_code)
-{
-    LOG(ERROR) << "Unable to download update:" << error_code;
-    CHECK(update_downloader_);
-
-    update_downloader_->disconnect(this);
-    update_downloader_.reset();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Service::onFileDownloaderCompleted()
-{
-    CHECK(update_downloader_);
-
-#if defined(Q_OS_WINDOWS)
-    do
-    {
-        QString file_path = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
-        if (file_path.isEmpty())
-        {
-            LOG(ERROR) << "Unable to get temp directory";
-            break;
-        }
-
-        QDir().mkpath(file_path);
-
-        QString file_name =
-            "/aspia_host_" + QString::fromLatin1(Random::byteArray(16).toHex()) + ".msi";
-
-        file_path = QDir::toNativeSeparators(file_path.append(file_name));
-
-        if (!writeFile(file_path, update_downloader_->data()))
-        {
-            LOG(ERROR) << "Unable to write file" << file_path;
-            break;
-        }
-
-        QString arguments;
-
-        arguments += "/i "; // Normal install.
-        arguments += file_path; // MSI package file.
-        arguments += " /qn"; // No UI during the installation process.
-
-        if (!ProcessUtil::createProcess("msiexec", arguments, ProcessUtil::ExecuteMode::ELEVATE))
-        {
-            LOG(ERROR) << "Unable to create update process (cmd:" << arguments << ")";
-
-            // If the update fails, delete the temporary file.
-            if (!QFile::remove(file_path))
-                LOG(ERROR) << "Unable to remove installer file";
-            break;
-        }
-
-        LOG(INFO) << "Update process started (cmd:" << arguments << ")";
-    }
-    while (false);
-#endif // defined(Q_OS_WINDOWS)
-
-    update_downloader_->disconnect(this);
-    update_downloader_.reset();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Service::onFileDownloaderProgress(int percentage)
-{
-    LOG(INFO) << "Update downloading progress:" << percentage << "%";
-}
-
-//--------------------------------------------------------------------------------------------------
 void Service::onRepeatedTasks()
 {
     constexpr qint64 kConfirmationTimeoutMs = 60 * 1000;
@@ -581,8 +456,6 @@ void Service::onRepeatedTasks()
             ++it;
         }
     }
-
-    checkForUpdates();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -867,13 +740,6 @@ void Service::onRemoveHost()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onCheckUpdates()
-{
-    LOG(INFO) << "Received command to check for updates";
-    startUpdateCheck();
-}
-
-//--------------------------------------------------------------------------------------------------
 void Service::startConfirmation(PendingConfirmation& pending)
 {
     LOG(INFO) << "TCP channel is ready";
@@ -1064,7 +930,11 @@ void Service::connectToRouter(const Location& location)
     connect(router_manager_, &RouterManager::sig_credentialsChanged, user_session_, &UserSession::onUpdateCredentials);
     connect(router_manager_, &RouterManager::sig_clientConnected, this, &Service::onNewRelayConnection);
     connect(router_manager_, &RouterManager::sig_removeHost, this, &Service::onRemoveHost);
-    connect(router_manager_, &RouterManager::sig_checkUpdates, this, &Service::onCheckUpdates);
+
+    UpdateWorker* update_worker = CoreApplication::findWorker<UpdateWorker>();
+    CHECK(update_worker);
+    connect(router_manager_, &RouterManager::sig_checkUpdates,
+            update_worker, &UpdateWorker::onCheckUpdates, Qt::QueuedConnection);
 
     connect(user_session_, &UserSession::sig_changeOneTimeSessions, router_manager_, &RouterManager::onOneTimeSessionsChanged);
     connect(user_session_, &UserSession::sig_changeOneTimePassword, router_manager_, &RouterManager::onSettingsChanged);
@@ -1085,60 +955,4 @@ void Service::disconnectFromRouter(const Location& location)
     LOG(INFO) << "Disconnected from router from" << location;
     router_manager_->disconnect(this);
     router_manager_.reset();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Service::checkForUpdates()
-{
-#if defined(Q_OS_WINDOWS)
-    if (!settings_.isAutoUpdateEnabled())
-        return;
-
-    HostStorage storage;
-
-    qint64 last_timepoint = storage.lastUpdateCheck();
-    qint64 current_timepoint = std::time(nullptr);
-
-    qint64 time_diff = current_timepoint - last_timepoint;
-    if (time_diff <= 0)
-    {
-        storage.setLastUpdateCheck(current_timepoint);
-        return;
-    }
-
-    static const qint64 kSecondsPerMinute = 60;
-    static const qint64 kMinutesPerHour = 60;
-    static const qint64 kHoursPerDay = 24;
-
-    qint64 days = time_diff / kSecondsPerMinute / kMinutesPerHour / kHoursPerDay;
-    if (days < 1)
-        return;
-
-    if (days < settings_.updateCheckFrequency())
-        return;
-
-    storage.setLastUpdateCheck(current_timepoint);
-
-    startUpdateCheck();
-#endif // defined(Q_OS_WINDOWS)
-}
-
-//--------------------------------------------------------------------------------------------------
-void Service::startUpdateCheck()
-{
-#if defined(Q_OS_WINDOWS)
-    if (update_checker_)
-    {
-        LOG(INFO) << "Update check already in progress";
-        return;
-    }
-
-    update_checker_ = new UpdateChecker(settings_.updateServer(), "host", this);
-
-    connect(update_checker_, &UpdateChecker::sig_checkedFinished,
-            this, &Service::onUpdateCheckedFinished);
-
-    LOG(INFO) << "Start checking for updates";
-    update_checker_->start();
-#endif // defined(Q_OS_WINDOWS)
 }

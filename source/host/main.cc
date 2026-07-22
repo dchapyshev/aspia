@@ -48,6 +48,7 @@
 #include "host/workers/desktop_ipc_worker.h"
 #include "host/workers/input_worker.h"
 #include "host/workers/screen_worker.h"
+#include "host/workers/update_worker.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/process_util.h"
@@ -299,6 +300,8 @@ int runService(int& argc, char* argv[])
     application.setTimerInterval(CoreApplication::Seconds(1));
 
     HostUtils::printDebugInfo();
+
+    application.addWorker(std::make_unique<UpdateWorker>());
 
     return Service().exec(application);
 }

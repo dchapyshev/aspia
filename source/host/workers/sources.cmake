@@ -25,5 +25,7 @@ collect_sources(SOURCE_HOST_WORKERS
     input_worker.h
     screen_worker.cc
     screen_worker.h
+    update_worker.cc
+    update_worker.h
     user_ipc_worker.cc
     user_ipc_worker.h)
