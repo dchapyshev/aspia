@@ -39,6 +39,8 @@ collect_sources(SOURCE_HOST_WIN
     dxgi_texture_mapping.h
     dxgi_texture_staging.cc
     dxgi_texture_staging.h
+    safe_mode_util.cc
+    safe_mode_util.h
     screen_capture_utils.cc
     screen_capture_utils.h
     swdevice_defines.h

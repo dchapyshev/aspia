@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/win/safe_mode_util.h"
+#include "host/win/safe_mode_util.h"
 
 #include "base/logging.h"
 #include "base/win/registry.h"

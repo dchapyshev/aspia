@@ -37,9 +37,9 @@
 #include "proto/desktop_video.h"
 
 #if defined(Q_OS_WINDOWS)
-#include "base/win/safe_mode_util.h"
 #include "host/host_storage.h"
 #include "host/service.h"
+#include "host/win/safe_mode_util.h"
 #endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------

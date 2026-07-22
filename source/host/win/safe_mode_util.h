@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_WIN_SAFE_MODE_UTIL_H
-#define BASE_WIN_SAFE_MODE_UTIL_H
+#ifndef HOST_WIN_SAFE_MODE_UTIL_H
+#define HOST_WIN_SAFE_MODE_UTIL_H
 
 #include <QString>
 
@@ -31,4 +31,4 @@ private:
     Q_DISABLE_COPY_MOVE(SafeModeUtil)
 };
 
-#endif // BASE_WIN_SAFE_MODE_UTIL_H
+#endif // HOST_WIN_SAFE_MODE_UTIL_H

@@ -29,8 +29,6 @@ collect_sources(SOURCE_BASE_WIN
     registry.h
     resource_util.cc
     resource_util.h
-    safe_mode_util.cc
-    safe_mode_util.h
     scoped_clipboard.cc
     scoped_clipboard.h
     scoped_co_mem.h

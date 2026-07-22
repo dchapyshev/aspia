@@ -32,10 +32,10 @@
 #include <qt_windows.h>
 #include <aclapi.h>
 #include "base/net/firewall_manager.h"
-#include "base/win/safe_mode_util.h"
 #include "base/win/security_helpers.h"
 #include "host/host_storage.h"
 #include "host/host_utils.h"
+#include "host/win/safe_mode_util.h"
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_UNIX)
