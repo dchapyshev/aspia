@@ -29,7 +29,10 @@ class Label;
 
 // Modal dialog adapted for touch screens: a scrim dims the parent window and a rounded card in
 // the center holds the title, the message, custom content and the action buttons. A tap on the
-// scrim dismisses the dialog.
+// scrim dismisses the dialog. Like Menu and BottomSheet, the dialog is an overlay child widget
+// covering the parent window rather than a separate native window: on Android creating a window
+// while the surface of a just closed one is still being torn down aborts inside the platform
+// plugin.
 class Dialog : public QDialog
 {
     Q_OBJECT
@@ -51,6 +54,9 @@ public:
     void done(int result) final;
 
 protected:
+    // QObject implementation.
+    bool eventFilter(QObject* object, QEvent* event) final;
+
     // QDialog implementation.
     void mousePressEvent(QMouseEvent* event) final;
     void paintEvent(QPaintEvent* event) final;

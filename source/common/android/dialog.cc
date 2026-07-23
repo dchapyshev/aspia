@@ -63,15 +63,18 @@ protected:
 
 //--------------------------------------------------------------------------------------------------
 Dialog::Dialog(QWidget* parent)
-    : QDialog(parent),
+    : QDialog(parent ? parent->window() : nullptr),
       card_(new Card(this)),
       title_label_(new Label(QString(), Label::Role::TITLE, card_)),
       text_label_(new Label(QString(), Label::Role::BODY, card_)),
       content_layout_(new QVBoxLayout()),
       button_row_(new QHBoxLayout())
 {
-    setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
-    setAttribute(Qt::WA_TranslucentBackground);
+    setWindowFlags(Qt::Widget);
+
+    // The window does not lay out this overlay; its size is followed manually (rotation).
+    if (parentWidget())
+        parentWidget()->installEventFilter(this);
 
     title_label_->setWordWrap(true);
     title_label_->setVisible(false);
@@ -141,6 +144,18 @@ void Dialog::done(int result)
 }
 
 //--------------------------------------------------------------------------------------------------
+bool Dialog::eventFilter(QObject* object, QEvent* event)
+{
+    if (object == parentWidget() && event->type() == QEvent::Resize && isVisible())
+    {
+        setGeometry(parentWidget()->rect());
+        updateCardWidth();
+    }
+
+    return QDialog::eventFilter(object, event);
+}
+
+//--------------------------------------------------------------------------------------------------
 void Dialog::mousePressEvent(QMouseEvent* event)
 {
     QDialog::mousePressEvent(event);
@@ -171,7 +186,10 @@ void Dialog::showEvent(QShowEvent* event)
 
     // The dialog covers the whole parent window, so the scrim dims everything behind the card.
     if (parentWidget())
-        setGeometry(parentWidget()->window()->geometry());
+    {
+        setGeometry(parentWidget()->rect());
+        raise();
+    }
 
     // Constrain the card to the final geometry: setGeometry above does not always trigger a resize
     // event, which would otherwise leave the card at its content width and overflow a narrow screen.
@@ -181,11 +199,5 @@ void Dialog::showEvent(QShowEvent* event)
 //--------------------------------------------------------------------------------------------------
 void Dialog::updateCardWidth()
 {
-    // The dialog is a native window on Android whose own width may be sized to its content, so the
-    // card is capped against the parent window (the actual screen) instead.
-    int available = width();
-    if (parentWidget() && parentWidget()->window())
-        available = parentWidget()->window()->width();
-
-    card_->setFixedWidth(qMin(kMaxCardWidth, available - kScreenMargin * 2));
+    card_->setFixedWidth(qMin(kMaxCardWidth, width() - kScreenMargin * 2));
 }
