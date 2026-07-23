@@ -78,8 +78,7 @@ QString udpMethodToString(UdpMethod method)
 //--------------------------------------------------------------------------------------------------
 StatisticsDialog::StatisticsDialog(QWidget* parent)
     : QDialog(parent),
-      ui(std::make_unique<Ui::StatisticsDialog>()),
-      duration_(0, 0)
+      ui(std::make_unique<Ui::StatisticsDialog>())
 {
     LOG(INFO) << "Ctor";
 
@@ -137,7 +136,7 @@ void StatisticsDialog::onAudioMetrics(const AudioWorker::Metrics& metrics)
 //--------------------------------------------------------------------------------------------------
 void StatisticsDialog::setDuration(Seconds duration)
 {
-    setValue(0, duration_.addSecs(static_cast<int>(duration.count())).toString());
+    setValue(0, Formatter::durationToString(duration));
 }
 
 //--------------------------------------------------------------------------------------------------

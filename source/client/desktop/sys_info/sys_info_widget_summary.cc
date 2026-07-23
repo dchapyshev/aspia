@@ -142,7 +142,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
             items << mk(tr("Workgroup"), computer.workgroup());
 
         if (computer.uptime())
-            items << mk(tr("Uptime"), Formatter::delayToString(computer.uptime()));
+            items << mk(tr("Uptime"), Formatter::delayToString(Seconds(computer.uptime())));
 
         if (!items.isEmpty())
             ui->tree->addTopLevelItem(new Item(":/img/computer.svg", tr("Computer"), items));

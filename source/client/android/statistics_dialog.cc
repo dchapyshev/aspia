@@ -23,7 +23,6 @@
 #include <QPainter>
 #include <QScreen>
 #include <QStyledItemDelegate>
-#include <QTime>
 #include <QTimer>
 #include <QTreeWidget>
 #include <QVBoxLayout>
@@ -274,8 +273,7 @@ void StatisticsDialog::onAudioMetrics(const AudioWorker::Metrics& metrics)
 //--------------------------------------------------------------------------------------------------
 void StatisticsDialog::setDuration(Seconds duration)
 {
-    rows_[ROW_DURATION]->setData(
-        0, kValueRole, QTime(0, 0, 0).addSecs(static_cast<int>(duration.count())).toString());
+    rows_[ROW_DURATION]->setData(0, kValueRole, Formatter::durationToString(duration));
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -19,7 +19,6 @@
 #include "common/desktop/chat_status_message.h"
 
 #include <QLocale>
-#include <QTime>
 
 #include "ui_chat_status_message.h"
 

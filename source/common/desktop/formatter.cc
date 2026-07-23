@@ -32,10 +32,6 @@ constexpr quint64 kDecimalKbps = 1000ULL;
 constexpr quint64 kDecimalMbps = kDecimalKbps * 1000ULL;
 constexpr quint64 kDecimalGbps = kDecimalMbps * 1000ULL;
 
-constexpr quint64 kSecondsInMinute = 60;
-constexpr quint64 kSecondsInHour = 60 * kSecondsInMinute;
-constexpr quint64 kSecondsInDay = 24 * kSecondsInHour;
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -63,12 +59,13 @@ QString Formatter::sizeToString(qint64 size)
 
 //--------------------------------------------------------------------------------------------------
 // static
-QString Formatter::delayToString(quint64 delay)
+QString Formatter::delayToString(Seconds delay)
 {
-    quint64 days = delay / kSecondsInDay;
-    quint64 hours = (delay % kSecondsInDay) / kSecondsInHour;
-    quint64 minutes = (delay % kSecondsInHour) / kSecondsInMinute;
-    quint64 seconds = delay % kSecondsInMinute;
+    const Hours total_hours = DurationCast<Hours>(delay);
+    const qint64 days = total_hours.count() / 24;
+    const qint64 hours = total_hours.count() % 24;
+    const qint64 minutes = DurationCast<Minutes>(delay % Hours(1)).count();
+    const qint64 seconds = (delay % Minutes(1)).count();
 
     QString seconds_string = tr("%n seconds", "", static_cast<int>(seconds));
     QString minutes_string = tr("%n minutes", "", static_cast<int>(minutes));
@@ -87,6 +84,17 @@ QString Formatter::delayToString(quint64 delay)
         return minutes_string + ' ' + seconds_string;
 
     return seconds_string;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QString Formatter::durationToString(Seconds duration)
+{
+    const qint64 hours = DurationCast<Hours>(duration).count();
+    const qint64 minutes = DurationCast<Minutes>(duration % Hours(1)).count();
+    const qint64 seconds = (duration % Minutes(1)).count();
+
+    return QString::asprintf("%02lld:%02lld:%02lld", hours, minutes, seconds);
 }
 
 //--------------------------------------------------------------------------------------------------

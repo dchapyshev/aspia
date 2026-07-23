@@ -110,8 +110,8 @@ public:
     {
         conn = connection;
         setText(4, Formatter::sizeToString(conn.bytes_transferred()));
-        setText(5, Formatter::delayToString(conn.duration()));
-        setText(6, Formatter::delayToString(conn.idle_time()));
+        setText(5, Formatter::delayToString(Seconds(conn.duration())));
+        setText(6, Formatter::delayToString(Seconds(conn.idle_time())));
     }
 
     // QTreeWidgetItem implementation.

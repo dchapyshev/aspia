@@ -24,6 +24,8 @@
 
 #include <ctime>
 
+#include "base/time_types.h"
+
 class Formatter
 {
     Q_DECLARE_TR_FUNCTIONS(Formatter)
@@ -32,9 +34,12 @@ public:
     // Formats a byte count as a localized "<value> <unit>" string using binary units (B/kB/MB/GB/TB).
     static QString sizeToString(qint64 size);
 
-    // Formats a duration (in seconds) as a localized "<n days> <n hours> <n minutes> <n seconds>"
-    // string, omitting the leading zero components.
-    static QString delayToString(quint64 delay);
+    // Formats a duration as a localized "<n days> <n hours> <n minutes> <n seconds>" string,
+    // omitting the leading zero components.
+    static QString delayToString(Seconds delay);
+
+    // Formats a duration as "HH:mm:ss"; hours keep growing past 24 instead of wrapping.
+    static QString durationToString(Seconds duration);
 
     // Formats a transfer rate measured in bytes per second using binary units (B/s, kB/s, ...).
     static QString transferSpeedToString(qint64 speed);

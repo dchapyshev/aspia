@@ -158,14 +158,14 @@ void SysInfoWidgetPowerOptions::setSystemInfo(const proto::system_info::SystemIn
         {
             ui->tree->addTopLevelItem(new Item(item_icon,
                 tr("Full Battery Life Time"),
-                Formatter::delayToString(power_options.full_battery_life_time())));
+                Formatter::delayToString(Seconds(power_options.full_battery_life_time()))));
         }
 
         if (power_options.remaining_battery_life_time() != 0)
         {
             ui->tree->addTopLevelItem(new Item(item_icon,
                 tr("Remaining Battery Life Time"),
-                Formatter::delayToString(power_options.remaining_battery_life_time())));
+                Formatter::delayToString(Seconds(power_options.remaining_battery_life_time()))));
         }
     }
 

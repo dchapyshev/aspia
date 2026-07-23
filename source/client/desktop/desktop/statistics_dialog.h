@@ -20,7 +20,6 @@
 #define CLIENT_DESKTOP_DESKTOP_STATISTICS_DIALOG_H
 
 #include <QDialog>
-#include <QTime>
 
 #include <memory>
 
@@ -61,7 +60,6 @@ private:
 
     std::unique_ptr<Ui::StatisticsDialog> ui;
     QTimer* update_timer_ = nullptr;
-    QTime duration_;
 
     Q_DISABLE_COPY_MOVE(StatisticsDialog)
 };
