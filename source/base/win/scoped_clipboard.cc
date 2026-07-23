@@ -18,7 +18,10 @@
 
 #include "base/win/scoped_clipboard.h"
 
+#include <QThread>
+
 #include "base/logging.h"
+#include "base/time_types.h"
 
 //--------------------------------------------------------------------------------------------------
 ScopedClipboard::~ScopedClipboard()
@@ -41,7 +44,7 @@ ScopedClipboard::~ScopedClipboard()
 bool ScopedClipboard::init(HWND owner)
 {
     const int kMaxAttemptsToOpenClipboard = 5;
-    const DWORD kSleepTimeBetweenAttempts = 5;
+    const Milliseconds kSleepTimeBetweenAttempts{ 5 };
 
     if (opened_)
     {
@@ -54,7 +57,7 @@ bool ScopedClipboard::init(HWND owner)
     {
         if (attempt > 0)
         {
-            Sleep(kSleepTimeBetweenAttempts);
+            QThread::sleep(kSleepTimeBetweenAttempts);
         }
 
         if (OpenClipboard(owner))

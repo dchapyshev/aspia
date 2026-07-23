@@ -22,8 +22,6 @@
 
 #include <thread>
 
-using namespace std::chrono_literals;
-
 // Test-only adapter exposing the underlying per-address and per-pending checks, plus the
 // internal map-size constant needed to drive the eviction-path test. Production callers reach
 // FloodGuard via the single check() entry point that bundles both gates.
@@ -55,7 +53,7 @@ asio::ip::address ipv4(const char* s)
 TEST(flood_guard_test, burst_then_reject)
 {
     FloodGuard guard;
-    guard.setRateLimit(1s, 5);
+    guard.setRateLimit(Seconds(1), 5);
     const auto addr = ipv4("203.0.113.1");
 
     for (int i = 0; i < 5; ++i)
@@ -71,7 +69,7 @@ TEST(flood_guard_test, burst_then_reject)
 TEST(flood_guard_test, refill_after_window)
 {
     FloodGuard guard;
-    guard.setRateLimit(1s, 2);
+    guard.setRateLimit(Seconds(1), 2);
     const auto addr = ipv4("203.0.113.2");
 
     EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, Clock::now(), addr));
@@ -79,7 +77,7 @@ TEST(flood_guard_test, refill_after_window)
     EXPECT_FALSE(FloodGuardTestPeer::checkAddress(guard, Clock::now(), addr));
 
     // Wait for full refill (window) + small margin.
-    std::this_thread::sleep_for(1100ms);
+    std::this_thread::sleep_for(Milliseconds(1100));
 
     EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, Clock::now(), addr));
     EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, Clock::now(), addr));
@@ -89,7 +87,7 @@ TEST(flood_guard_test, refill_after_window)
 TEST(flood_guard_test, addresses_independent)
 {
     FloodGuard guard;
-    guard.setRateLimit(1s, 2);
+    guard.setRateLimit(Seconds(1), 2);
     const auto a = ipv4("203.0.113.10");
     const auto b = ipv4("203.0.113.11");
 
@@ -106,7 +104,7 @@ TEST(flood_guard_test, addresses_independent)
 TEST(flood_guard_test, ipv4_and_ipv6_independent)
 {
     FloodGuard guard;
-    guard.setRateLimit(1s, 1);
+    guard.setRateLimit(Seconds(1), 1);
     const auto v4 = ipv4("203.0.113.20");
     const auto v6 = asio::ip::make_address("2001:db8::1");
 
@@ -134,7 +132,7 @@ TEST(flood_guard_test, eviction_under_pressure)
     // Short window so the populating addresses fully refill during the sleep below and become
     // evictable on the next insert attempt.
     FloodGuard guard;
-    guard.setRateLimit(1s, 2);
+    guard.setRateLimit(Seconds(1), 2);
 
     const int max_tracked = FloodGuardTestPeer::maxTracked();
 
@@ -146,7 +144,7 @@ TEST(flood_guard_test, eviction_under_pressure)
     }
 
     // Wait for those entries to fully refill (TAT <= now).
-    std::this_thread::sleep_for(1100ms);
+    std::this_thread::sleep_for(Milliseconds(1100));
 
     // A new address arrives: the map is full but every existing entry is at capacity, so the
     // sweep evicts them and the new entry is admitted.

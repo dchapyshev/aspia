@@ -137,7 +137,7 @@ void pumpFor(int duration_ms)
     while (msSince(start_time) < duration_ms)
     {
         QCoreApplication::processEvents(QEventLoop::AllEvents, 10);
-        QThread::msleep(1);
+        QThread::sleep(Milliseconds(1));
     }
 }
 
@@ -148,7 +148,7 @@ bool pumpUntil(Predicate condition, int timeout_ms)
     while (!condition() && msSince(start_time) < timeout_ms)
     {
         QCoreApplication::processEvents(QEventLoop::AllEvents, 10);
-        QThread::msleep(1);
+        QThread::sleep(Milliseconds(1));
     }
     return condition();
 }
@@ -206,7 +206,7 @@ TEST(DispatcherTests, PostEvent_DeliversAll)
     while (obj.received < N && msSince(wait_start) < 2000)
     {
         QCoreApplication::processEvents(QEventLoop::AllEvents, 10);
-        QThread::msleep(1);
+        QThread::sleep(Milliseconds(1));
     }
 
     EXPECT_EQ(obj.received, N);
@@ -222,7 +222,7 @@ TEST(DispatcherTests, CrossThread_Post_WakeupLatency_Soft)
     obj.clk = Clock::now();
 
     constexpr int N = 24;
-    constexpr int gapMs = 5;
+    constexpr Milliseconds gap{ 5 };
 
     std::atomic<int> posted{0};
     std::thread worker([&]()
@@ -232,7 +232,7 @@ TEST(DispatcherTests, CrossThread_Post_WakeupLatency_Soft)
             QCoreApplication::postEvent(&obj,
                 new QEvent(static_cast<QEvent::Type>(ED_TestObject::customType())));
             ++posted;
-            QThread::msleep(gapMs);
+            QThread::sleep(gap);
         }
     });
 
@@ -240,7 +240,7 @@ TEST(DispatcherTests, CrossThread_Post_WakeupLatency_Soft)
     while ((obj.received < N || posted.load() < N) && msSince(wait_start) < 4000)
     {
         QCoreApplication::processEvents(QEventLoop::AllEvents, 5);
-        QThread::msleep(1);
+        QThread::sleep(Milliseconds(1));
     }
     worker.join();
 
@@ -274,7 +274,7 @@ TEST(DispatcherTests, CrossThread_Post_WakesBlockedLoop)
     for (int i = 0; i < 20; ++i)
     {
         // Give the loop time to park in the blocking wait again.
-        QThread::msleep(10);
+        QThread::sleep(Milliseconds(10));
 
         const TimePoint latency_start = Clock::now();
 
@@ -302,7 +302,7 @@ TEST(DispatcherTests, CrossThread_Quit_WakesBlockedLoop)
     ASSERT_TRUE(started.tryAcquire(1, 5000));
 
     // Let the loop park in the blocking wait with no pending work.
-    QThread::msleep(100);
+    QThread::sleep(Milliseconds(100));
 
     const TimePoint latency_start = Clock::now();
 
@@ -333,7 +333,7 @@ TEST(DispatcherTests, NestedEventLoops_NoDeadlock)
     while (!finished && msSince(wait_start) < 2000)
     {
         QCoreApplication::processEvents(QEventLoop::AllEvents, 10);
-        QThread::msleep(1);
+        QThread::sleep(Milliseconds(1));
     }
 
     EXPECT_TRUE(entered);
@@ -878,7 +878,7 @@ TEST(TimersTest, RemainingTime)
     const int expired_id = owner.startTimer(Milliseconds(10), Qt::CoarseTimer);
     ASSERT_GT(expired_id, 0);
 
-    QThread::msleep(50);
+    QThread::sleep(Milliseconds(50));
     EXPECT_EQ(disp->remainingTime(expired_id), 0);
 
     // A killed timer is reported as unknown.

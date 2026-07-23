@@ -33,7 +33,6 @@
 #include <vector>
 
 #include "base/logging.h"
-#include "base/time_types.h"
 #include "base/desktop/frame.h"
 #include "base/desktop/frame_aligned.h"
 #include "base/desktop/mouse_cursor.h"
@@ -815,7 +814,7 @@ const Frame* ScreenCapturerMac::captureFrame(Error* error)
         // pending. If the WindowServer stalls it beyond any reasonable time (login/logout
         // transitions), report a permanent one so the agent recreates the capturer against the
         // settled session.
-        if (start_deadline_.hasExpired())
+        if (Clock::now() >= start_deadline_)
         {
             LOG(ERROR) << "Capture stream start timed out";
             *error = Error::PERMANENT;
@@ -1092,7 +1091,7 @@ bool ScreenCapturerMac::startStream()
         impl_->stream_state.store(StreamState::STARTING, std::memory_order_relaxed);
     }
 
-    start_deadline_.setRemainingTime(kStreamStartTimeout);
+    start_deadline_ = Clock::now() + kStreamStartTimeout;
 
     // The shareable-content fetch, the stream creation and the capture start all happen
     // asynchronously on ScreenCaptureKit's queues (as WebRTC does): any of them can stall while a

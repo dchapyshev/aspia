@@ -18,21 +18,23 @@
 
 #include "host/win/dxgi_output_duplicator.h"
 
-#include "base/logging.h"
-#include "base/time_types.h"
-#include "base/desktop/frame.h"
-#include "host/win/dxgi_texture_mapping.h"
-#include "host/win/dxgi_texture_staging.h"
+#include <QThread>
 
 #include <libyuv/convert_argb.h>
-
-#include <algorithm>
-#include <cstring>
 
 #include <comdef.h>
 #include <dxgi.h>
 #include <dxgiformat.h>
 #include <qt_windows.h>
+
+#include <algorithm>
+#include <cstring>
+
+#include "base/logging.h"
+#include "base/time_types.h"
+#include "base/desktop/frame.h"
+#include "host/win/dxgi_texture_mapping.h"
+#include "host/win/dxgi_texture_staging.h"
 
 using Microsoft::WRL::ComPtr;
 
@@ -149,7 +151,7 @@ bool DxgiOutputDuplicator::duplicateOutput()
                 if (desktop_.isValid())
                     desktop_.setThreadDesktop();
 
-                Sleep(100);
+                QThread::sleep(Milliseconds(100));
                 continue;
             }
 

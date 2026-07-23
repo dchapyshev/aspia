@@ -929,7 +929,7 @@ void ScreenWorker::setupLinuxCapture()
                 break;
 
             LOG(INFO) << "No Wayland capture path available yet; retrying";
-            QThread::msleep(kWaylandProbeRetryDelay.count());
+            QThread::sleep(kWaylandProbeRetryDelay);
         }
     }
     else
@@ -954,7 +954,7 @@ void ScreenWorker::setupLinuxCapture()
                 break;
 
             LOG(INFO) << "Greeter compositor not ready yet; retrying";
-            QThread::msleep(kWaylandProbeRetryDelay.count());
+            QThread::sleep(kWaylandProbeRetryDelay);
         }
 
         // No usable compositor screen-cast: capture below the compositor with DRM/KMS (uinput input is
