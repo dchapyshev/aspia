@@ -40,8 +40,8 @@ public:
     QByteArray userColumnState() const;
     void setUserColumnState(const QByteArray& state);
 
-    Milliseconds updateSpeed() const;
-    void setUpdateSpeed(Milliseconds speed);
+    MilliSeconds updateSpeed() const;
+    void setUpdateSpeed(MilliSeconds speed);
 
 private:
     QSettings settings_;

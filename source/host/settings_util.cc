@@ -166,11 +166,11 @@ bool importDatabase(const QJsonObject& obj)
     if (obj.contains(kNoUserAction))
         db.setNoUserAction(static_cast<Database::NoUserAction>(obj[kNoUserAction].toInt()));
     if (obj.contains(kAutoConfirmationInterval))
-        db.setAutoConfirmationInterval(Milliseconds(obj[kAutoConfirmationInterval].toInteger()));
+        db.setAutoConfirmationInterval(MilliSeconds(obj[kAutoConfirmationInterval].toInteger()));
     if (obj.contains(kOneTimePassword))
         db.setOneTimePassword(obj[kOneTimePassword].toBool());
     if (obj.contains(kOneTimePasswordExpire))
-        db.setOneTimePasswordExpire(Milliseconds(obj[kOneTimePasswordExpire].toInteger()));
+        db.setOneTimePasswordExpire(MilliSeconds(obj[kOneTimePasswordExpire].toInteger()));
     if (obj.contains(kOneTimePasswordLength))
         db.setOneTimePasswordLength(obj[kOneTimePasswordLength].toInt());
     if (obj.contains(kOneTimePasswordCharacters))

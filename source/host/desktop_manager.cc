@@ -55,11 +55,11 @@ namespace {
 #if defined(Q_OS_LINUX)
 // The session's X server may still be starting up right after a user logs in or switches; retry
 // quickly so capture begins as soon as the display is available, within the client's start timeout.
-constexpr Milliseconds kRestartTimeout { 1000 };
+constexpr MilliSeconds kRestartTimeout { 1000 };
 #else
-constexpr Milliseconds kRestartTimeout { 5000 };
+constexpr MilliSeconds kRestartTimeout { 5000 };
 #endif
-constexpr Milliseconds kAttachTimeout { 15000 };
+constexpr MilliSeconds kAttachTimeout { 15000 };
 
 #if defined(Q_OS_WINDOWS)
 // Name of the default session desktop.

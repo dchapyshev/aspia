@@ -302,8 +302,8 @@ void VtSession::restartLogin()
 //--------------------------------------------------------------------------------------------------
 void VtSession::scheduleRestart()
 {
-    const Milliseconds elapsed = DurationCast<Milliseconds>(Clock::now() - spawn_time_);
-    const Milliseconds delay = (elapsed >= Seconds(1)) ? Milliseconds::zero() : Seconds(1) - elapsed;
+    const MilliSeconds elapsed = DurationCast<MilliSeconds>(Clock::now() - spawn_time_);
+    const MilliSeconds delay = (elapsed >= Seconds(1)) ? MilliSeconds::zero() : Seconds(1) - elapsed;
 
     QTimer::singleShot(delay, this, [this]() { restartLogin(); });
 }

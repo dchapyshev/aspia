@@ -203,7 +203,7 @@ bool ServiceControllerWin::remove(const QString& name)
     sc_manager.reset();
 
     static const int kMaxAttempts = 15;
-    static const Milliseconds kAttemptInterval{ 100 };
+    static const MilliSeconds kAttemptInterval{ 100 };
 
     for (int i = 0; i < kMaxAttempts; ++i)
     {
@@ -480,7 +480,7 @@ bool ServiceControllerWin::start()
 
         while (!is_started && number_of_attempts < 15)
         {
-            QThread::sleep(Milliseconds(250));
+            QThread::sleep(MilliSeconds(250));
 
             if (!QueryServiceStatus(service_, &status))
                 break;
@@ -509,7 +509,7 @@ bool ServiceControllerWin::stop()
 
     while (!is_stopped && number_of_attempts < 15)
     {
-        QThread::sleep(Milliseconds(250));
+        QThread::sleep(MilliSeconds(250));
 
         if (!QueryServiceStatus(service_, &status))
             break;

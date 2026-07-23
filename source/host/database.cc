@@ -405,18 +405,18 @@ bool Database::setNoUserAction(NoUserAction action)
 }
 
 //--------------------------------------------------------------------------------------------------
-Milliseconds Database::autoConfirmationInterval() const
+MilliSeconds Database::autoConfirmationInterval() const
 {
-    static const Milliseconds kDefaultValue { 0 };
-    static const Milliseconds kMinValue { 0 };
-    static const Milliseconds kMaxValue { 60 * 1000 }; // 60 seconds.
+    static const MilliSeconds kDefaultValue { 0 };
+    static const MilliSeconds kMinValue { 0 };
+    static const MilliSeconds kMaxValue { 60 * 1000 }; // 60 seconds.
 
     bool ok = false;
     qint64 value = readSetting(kSettingAutoConfirmationInterval).toLongLong(&ok);
     if (!ok)
         return kDefaultValue;
 
-    Milliseconds result(value);
+    MilliSeconds result(value);
     if (result < kMinValue)
         result = kMinValue;
     else if (result > kMaxValue)
@@ -426,7 +426,7 @@ Milliseconds Database::autoConfirmationInterval() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::setAutoConfirmationInterval(Milliseconds interval)
+bool Database::setAutoConfirmationInterval(MilliSeconds interval)
 {
     return writeSetting(kSettingAutoConfirmationInterval,
                         QString::number(static_cast<qint64>(interval.count())));
@@ -448,18 +448,18 @@ bool Database::setOneTimePassword(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-Milliseconds Database::oneTimePasswordExpire() const
+MilliSeconds Database::oneTimePasswordExpire() const
 {
-    static const Milliseconds kDefaultValue { 5 * 60 * 1000 }; // 5 minutes.
-    static const Milliseconds kMinValue { 0 };
-    static const Milliseconds kMaxValue { 24 * 60 * 60 * 1000 }; // 24 hours.
+    static const MilliSeconds kDefaultValue { 5 * 60 * 1000 }; // 5 minutes.
+    static const MilliSeconds kMinValue { 0 };
+    static const MilliSeconds kMaxValue { 24 * 60 * 60 * 1000 }; // 24 hours.
 
     bool ok = false;
     qint64 value = readSetting(kSettingOneTimePasswordExpire).toLongLong(&ok);
     if (!ok)
         return kDefaultValue;
 
-    Milliseconds result(value);
+    MilliSeconds result(value);
     if (result < kMinValue)
         result = kMinValue;
     else if (result > kMaxValue)
@@ -469,7 +469,7 @@ Milliseconds Database::oneTimePasswordExpire() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::setOneTimePasswordExpire(Milliseconds interval)
+bool Database::setOneTimePasswordExpire(MilliSeconds interval)
 {
     return writeSetting(kSettingOneTimePasswordExpire,
                         QString::number(static_cast<qint64>(interval.count())));

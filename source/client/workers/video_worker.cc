@@ -36,7 +36,7 @@
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-int calculateFps(int last_fps, Milliseconds duration, qint64 count)
+int calculateFps(int last_fps, MilliSeconds duration, qint64 count)
 {
     static const double kAlpha = 0.1;
     const qint64 ms = duration.count();
@@ -127,7 +127,7 @@ void VideoWorker::onStart()
     }
 
     encode_timer_ = new QTimer(this);
-    encode_timer_->setInterval(Milliseconds(60));
+    encode_timer_->setInterval(MilliSeconds(60));
     connect(encode_timer_, &QTimer::timeout, this, &VideoWorker::onEncodeTimer);
 }
 
@@ -164,7 +164,7 @@ void VideoWorker::onTimer(TimePoint now)
 
     if (fps_time_ != TimePoint())
     {
-        const Milliseconds duration = DurationCast<Milliseconds>(now - fps_time_);
+        const MilliSeconds duration = DurationCast<MilliSeconds>(now - fps_time_);
         metrics_.fps = calculateFps(metrics_.fps, duration, fps_frame_count_);
     }
     else

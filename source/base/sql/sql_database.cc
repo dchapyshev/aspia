@@ -129,7 +129,7 @@ SqlDatabase::~SqlDatabase()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool SqlDatabase::open(const QString& file_path, Milliseconds busy_timeout)
+bool SqlDatabase::open(const QString& file_path, MilliSeconds busy_timeout)
 {
     if (db_)
     {

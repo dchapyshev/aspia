@@ -300,7 +300,7 @@ void AsioEventDispatcher::registerTimer(
         type = Qt::CoarseTimer;
     }
 
-    Milliseconds interval(interval_ms);
+    MilliSeconds interval(interval_ms);
     TimePoint start_time = Clock::now();
 
     if (type == Qt::VeryCoarseTimer)
@@ -387,7 +387,7 @@ QList<QAbstractEventDispatcher::TimerInfo> AsioEventDispatcher::registeredTimers
 {
     QList<TimerInfo> list;
 
-    auto add_timer = [&list](int id, Milliseconds interval, Qt::TimerType type) noexcept
+    auto add_timer = [&list](int id, MilliSeconds interval, Qt::TimerType type) noexcept
     {
         const qint64 interval_ms =
             std::min<qint64>(interval.count(), std::numeric_limits<int>::max());
@@ -423,7 +423,7 @@ int AsioEventDispatcher::remainingTime(int timer_id)
         if (now >= it->second.end_time)
             return 0;
 
-        const Milliseconds remaining = DurationCast<Milliseconds>(it->second.end_time - now);
+        const MilliSeconds remaining = DurationCast<MilliSeconds>(it->second.end_time - now);
 
         return static_cast<int>(std::min<qint64>(remaining.count(), std::numeric_limits<int>::max()));
     };
@@ -520,7 +520,7 @@ void AsioEventDispatcher::asyncWaitTimer(asio::steady_timer& handle, TimePoint e
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 bool AsioEventDispatcher::tryRegisterMultimediaTimer(
-    int timer_id, Milliseconds interval, TimePoint end_time, QObject* object)
+    int timer_id, MilliSeconds interval, TimePoint end_time, QObject* object)
 {
     // Multimedia timers are a limited system-wide resource, so no more than the quantity
     // specified in kReservedSizeForMultimediaTimers is created.

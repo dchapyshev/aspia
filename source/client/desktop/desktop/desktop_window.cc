@@ -70,7 +70,7 @@ const quint32 kWheelMask =
 
 // Mouse move events are coalesced and flushed at this fixed rate to cap the outgoing event stream
 // from high-polling-rate mice. Button and wheel events bypass coalescing and are sent immediately.
-const Milliseconds kMouseFlushInterval{ 20 }; // 50Hz
+const MilliSeconds kMouseFlushInterval{ 20 }; // 50Hz
 
 //--------------------------------------------------------------------------------------------------
 QSize scaledSize(const QSize& source_size, int scale)
@@ -777,7 +777,7 @@ void DesktopWindow::onMouseEvent(const proto::input::MouseEvent& event)
         if (!scroll_delta_.isNull())
         {
             if (!scroll_timer_->isActive())
-                scroll_timer_->start(Milliseconds(15));
+                scroll_timer_->start(MilliSeconds(15));
         }
         else if (scroll_timer_->isActive())
         {
@@ -996,7 +996,7 @@ void DesktopWindow::onScaleDesktop()
 
     LOG(INFO) << "Starting resize timer (scale=" << scale << "size=" << size()
               << "target_size=" << target_size << ")";
-    resize_timer_->start(Milliseconds(500));
+    resize_timer_->start(MilliSeconds(500));
 }
 
 //--------------------------------------------------------------------------------------------------

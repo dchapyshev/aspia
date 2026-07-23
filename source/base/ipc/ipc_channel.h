@@ -79,7 +79,7 @@ private:
     static QString channelPath(const QString& channel_name);
 
     bool connectAttempt();
-    void scheduleConnectAttempt(Milliseconds delay, int count);
+    void scheduleConnectAttempt(MilliSeconds delay, int count);
     void disconnectFrom();
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
     void onMessageReceived();

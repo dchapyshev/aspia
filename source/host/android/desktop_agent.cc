@@ -42,7 +42,7 @@ namespace {
 
 // Target capture cadence. A fixed interval is enough for the Android host; the desktop's adaptive
 // scheduler is not ported here.
-const Milliseconds kCaptureInterval{ 33 };
+const MilliSeconds kCaptureInterval{ 33 };
 
 } // namespace
 
@@ -161,7 +161,7 @@ void DesktopAgent::onClientConfigured()
     if (floating_menu_bridge_)
         floating_menu_bridge_->showButton();
 
-    capture_timer_->start(Milliseconds(0));
+    capture_timer_->start(MilliSeconds(0));
 }
 
 //--------------------------------------------------------------------------------------------------

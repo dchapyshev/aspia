@@ -69,11 +69,11 @@ TerminalProcessUnix::~TerminalProcessUnix()
         // Reap the shell, but do not block teardown indefinitely: a shell that ignores SIGHUP would
         // otherwise hang the destructor forever. Poll for a bounded period, then escalate to SIGKILL,
         // which cannot be caught or ignored.
-        constexpr Milliseconds kGracefulWait{ 2000 };
-        constexpr Milliseconds kStep{ 10 };
+        constexpr MilliSeconds kGracefulWait{ 2000 };
+        constexpr MilliSeconds kStep{ 10 };
 
         bool reaped = false;
-        for (Milliseconds elapsed{ 0 }; elapsed < kGracefulWait; elapsed += kStep)
+        for (MilliSeconds elapsed{ 0 }; elapsed < kGracefulWait; elapsed += kStep)
         {
             const pid_t result = ::waitpid(child_pid_, nullptr, WNOHANG);
             if (result == child_pid_ || (result == -1 && errno != EINTR))
@@ -83,7 +83,7 @@ TerminalProcessUnix::~TerminalProcessUnix()
                 break;
             }
 
-            const struct timespec delay = { 0, static_cast<long>(Nanoseconds(kStep).count()) };
+            const struct timespec delay = { 0, static_cast<long>(NanoSeconds(kStep).count()) };
             ::nanosleep(&delay, nullptr);
         }
 

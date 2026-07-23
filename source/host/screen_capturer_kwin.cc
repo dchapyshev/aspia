@@ -186,7 +186,7 @@ double measureThroughputMpps(QDBusInterface& screenshot)
     }
     ::close(fds[0]);
 
-    const qint64 elapsed_us = DurationCast<Microseconds>(Clock::now() - start_time).count();
+    const qint64 elapsed_us = DurationCast<MicroSeconds>(Clock::now() - start_time).count();
     if (received != total || elapsed_us <= 0)
         return 0.0;
 

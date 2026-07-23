@@ -144,7 +144,7 @@ bool WebmFileMuxer::finalize()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool WebmFileMuxer::writeAudioFrame(std::string_view frame, Nanoseconds timestamp)
+bool WebmFileMuxer::writeAudioFrame(std::string_view frame, NanoSeconds timestamp)
 {
     if (audio_track_num_ == 0)
     {
@@ -156,7 +156,7 @@ bool WebmFileMuxer::writeAudioFrame(std::string_view frame, Nanoseconds timestam
 }
 
 //--------------------------------------------------------------------------------------------------
-bool WebmFileMuxer::writeVideoFrame(std::string_view frame, Nanoseconds timestamp, bool is_key)
+bool WebmFileMuxer::writeVideoFrame(std::string_view frame, NanoSeconds timestamp, bool is_key)
 {
     if (video_track_num_ == 0)
     {
@@ -169,7 +169,7 @@ bool WebmFileMuxer::writeVideoFrame(std::string_view frame, Nanoseconds timestam
 
 //--------------------------------------------------------------------------------------------------
 bool WebmFileMuxer::writeFrame(
-    std::string_view frame, Nanoseconds timestamp, quint64 track_num, bool is_key)
+    std::string_view frame, NanoSeconds timestamp, quint64 track_num, bool is_key)
 {
     if (!segment_->AddFrame(reinterpret_cast<const quint8*>(frame.data()), frame.size(),
                             track_num, static_cast<quint64>(timestamp.count()), is_key))

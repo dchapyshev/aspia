@@ -75,13 +75,13 @@ constexpr int kMaxScreenCaptureFpsLowEnd = 20;
 // Right after login the compositor needs a moment to register its screen-cast interface, so every
 // Wayland probe can fail transiently. Retry the probe chain within this window before committing to
 // the VT console fallback; bounded well under the client's start timeout.
-constexpr Milliseconds kWaylandProbeTimeout { 5000 };
-constexpr Milliseconds kWaylandProbeRetryDelay { 250 };
+constexpr MilliSeconds kWaylandProbeTimeout { 5000 };
+constexpr MilliSeconds kWaylandProbeRetryDelay { 250 };
 
 // A backend committed during the login transition can pass its trial capture on the outgoing
 // compositor's buffer and then fail on every real frame once the session settles; after this long
 // without a single frame the capture path selection is re-run (see reselectLinuxCapture()).
-constexpr Milliseconds kCaptureErrorReprobeDelay { 3000 };
+constexpr MilliSeconds kCaptureErrorReprobeDelay { 3000 };
 #endif // defined(Q_OS_LINUX)
 
 //--------------------------------------------------------------------------------------------------
@@ -287,7 +287,7 @@ void ScreenWorker::onConfigure(
     if (!power_save_blocker_)
         power_save_blocker_ = new PowerSaveBlocker(this);
 
-    capture_timer_->start(Milliseconds(0));
+    capture_timer_->start(MilliSeconds(0));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -598,7 +598,7 @@ void ScreenWorker::onCaptureScreen()
         // The capturer is created asynchronously (on Wayland only after the desktop portal session is
         // granted). Until then poll at a low rate instead of busy-looping on the zero-delay timer and
         // flooding the log - the flood blocks the event loop and starves the portal's reply.
-        capture_timer_->start(Milliseconds(250));
+        capture_timer_->start(MilliSeconds(250));
         return;
     }
 
@@ -676,7 +676,7 @@ void ScreenWorker::onCaptureScreen()
             {
                 error_code = proto::video::ERROR_CODE_PERMANENT;
 
-                QTimer::singleShot(Milliseconds(0), this, [this]()
+                QTimer::singleShot(MilliSeconds(0), this, [this]()
                 {
                     selectCapturer(ScreenCapturer::Error::PERMANENT);
                 });
@@ -714,7 +714,7 @@ void ScreenWorker::onCaptureScreen()
     if (!screen_capturer_)
     {
         capture_scheduler_.nextCaptureDelay();
-        capture_timer_->start(Milliseconds(250));
+        capture_timer_->start(MilliSeconds(250));
         return;
     }
 #endif
@@ -811,7 +811,7 @@ void ScreenWorker::onCompositorSourceStarted(bool success)
 
     // Resume capture if a client connected while the source was negotiating.
     if (capture_timer_ && capture_timer_->isActive())
-        capture_timer_->start(Milliseconds(0));
+        capture_timer_->start(MilliSeconds(0));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1047,7 +1047,7 @@ void ScreenWorker::fallbackToKms()
     selectCapturer(ScreenCapturer::Error::SUCCEEDED);
 
     if (capture_timer_ && capture_timer_->isActive())
-        capture_timer_->start(Milliseconds(0));
+        capture_timer_->start(MilliSeconds(0));
 }
 
 //--------------------------------------------------------------------------------------------------

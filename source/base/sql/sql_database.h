@@ -40,7 +40,7 @@ public:
     // a call blocked on another connection's lock waits before failing with SQLITE_BUSY; zero
     // disables waiting so collisions fail instantly. Returns false and leaves the object closed
     // on failure.
-    bool open(const QString& file_path, Milliseconds busy_timeout = Milliseconds(5000));
+    bool open(const QString& file_path, MilliSeconds busy_timeout = MilliSeconds(5000));
 
     bool isOpen() const { return db_ != nullptr; }
     void close();

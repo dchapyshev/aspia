@@ -40,7 +40,7 @@ CheckPasswordDialog::CheckPasswordDialog(QWidget* parent)
     connect(ui->button_box, &QDialogButtonBox::clicked,
             this, &CheckPasswordDialog::onButtonBoxClicked);
 
-    QTimer::singleShot(Milliseconds(0), this, [this]()
+    QTimer::singleShot(MilliSeconds(0), this, [this]()
     {
         setFixedHeight(sizeHint().height());
     });

@@ -43,7 +43,7 @@ namespace {
 // Timeout for AcquireNextFrame() call.
 // DxgiDuplicatorController leverages external components to do the capture scheduling. So here
 // DxgiOutputDuplicator does not need to actively wait for a new frame.
-const Milliseconds kAcquireTimeout{ 0 };
+const MilliSeconds kAcquireTimeout{ 0 };
 
 //--------------------------------------------------------------------------------------------------
 QRect RECTToDesktopRect(const RECT& rect)
@@ -151,7 +151,7 @@ bool DxgiOutputDuplicator::duplicateOutput()
                 if (desktop_.isValid())
                     desktop_.setThreadDesktop();
 
-                QThread::sleep(Milliseconds(100));
+                QThread::sleep(MilliSeconds(100));
                 continue;
             }
 

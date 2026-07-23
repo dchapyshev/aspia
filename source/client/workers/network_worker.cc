@@ -198,13 +198,13 @@ void NetworkWorker::onTimer(TimePoint now)
     const qint64 total = (tcp_channel_ ? tcp_channel_->totalRx() : 0) +
                          (udp_channel_ ? udp_channel_->totalRx() : 0);
     const qint64 bytes = total - receive_rate_last_total_;
-    const Milliseconds interval = DurationCast<Milliseconds>(now - receive_rate_time_);
+    const MilliSeconds interval = DurationCast<MilliSeconds>(now - receive_rate_time_);
     receive_rate_time_ = now;
 
     receive_rate_last_total_ = total;
 
     // An idle interval carries no information about the path capacity.
-    if (bytes <= 0 || interval <= Milliseconds::zero() || !tcp_channel_)
+    if (bytes <= 0 || interval <= MilliSeconds::zero() || !tcp_channel_)
         return;
 
     proto::peer::ClientToHost message;
@@ -551,7 +551,7 @@ void NetworkWorker::readBandwidthProbe(const proto::peer::BandwidthProbe& probe,
         proto::peer::BandwidthProbeAck* ack = message.mutable_bandwidth_probe_ack();
         ack->set_train_id(probe_train_.id);
         ack->set_delta_us(static_cast<quint64>(
-            DurationCast<Microseconds>(Clock::now() - probe_train_.first_arrival).count()));
+            DurationCast<MicroSeconds>(Clock::now() - probe_train_.first_arrival).count()));
         ack->set_bytes(probe_train_.bytes);
 
         probe_train_.active = false;

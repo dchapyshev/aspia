@@ -96,14 +96,14 @@ public:
     NoUserAction noUserAction() const;
     bool setNoUserAction(NoUserAction action);
 
-    Milliseconds autoConfirmationInterval() const;
-    bool setAutoConfirmationInterval(Milliseconds interval);
+    MilliSeconds autoConfirmationInterval() const;
+    bool setAutoConfirmationInterval(MilliSeconds interval);
 
     bool oneTimePassword() const;
     bool setOneTimePassword(bool enable);
 
-    Milliseconds oneTimePasswordExpire() const;
-    bool setOneTimePasswordExpire(Milliseconds interval);
+    MilliSeconds oneTimePasswordExpire() const;
+    bool setOneTimePasswordExpire(MilliSeconds interval);
 
     int oneTimePasswordLength() const;
     bool setOneTimePasswordLength(int length);

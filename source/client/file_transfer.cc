@@ -80,7 +80,7 @@ struct ActionsMap
 };
 
 //--------------------------------------------------------------------------------------------------
-qint64 calculateSpeed(qint64 last_speed, Milliseconds duration, qint64 bytes)
+qint64 calculateSpeed(qint64 last_speed, MilliSeconds duration, qint64 bytes)
 {
     static const double kAlpha = 0.9;
     const qint64 ms = duration.count();
@@ -183,7 +183,7 @@ void FileTransfer::start()
         queue_builder_.reset();
     });
 
-    speed_update_timer_->start(Milliseconds(1000));
+    speed_update_timer_->start(MilliSeconds(1000));
 
     // Start building a list of objects for transfer.
     queue_builder_->start(source_path_, target_path_, items_);
@@ -470,7 +470,7 @@ void FileTransfer::doNextTask()
 void FileTransfer::doUpdateSpeed()
 {
     TimePoint current_time = Clock::now();
-    Milliseconds duration = DurationCast<Milliseconds>(current_time - begin_time_);
+    MilliSeconds duration = DurationCast<MilliSeconds>(current_time - begin_time_);
 
     speed_ = calculateSpeed(speed_, duration, bytes_per_time_);
 

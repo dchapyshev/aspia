@@ -156,7 +156,7 @@ NotifierWindow::NotifierWindow(QWidget* parent)
     {
         LOG(INFO) << "Screen geometry changed";
         // The taskbar does not move instantly.
-        QTimer::singleShot(Milliseconds(500), this, &NotifierWindow::onUpdateWindowPosition);
+        QTimer::singleShot(MilliSeconds(500), this, &NotifierWindow::onUpdateWindowPosition);
     });
 
     // The display scale can be applied a moment after the session starts (and the window may have been
@@ -212,12 +212,12 @@ NotifierWindow::NotifierWindow(QWidget* parent)
     timer->setSingleShot(true);
 #endif // defined(Q_OS_MACOS)
 
-    timer->start(Milliseconds(1000));
+    timer->start(MilliSeconds(1000));
 
     ui->show_panel->setVisible(false);
     onThemeChanged();
 
-    QTimer::singleShot(Milliseconds(15), this, &NotifierWindow::onUpdateWindowPosition);
+    QTimer::singleShot(MilliSeconds(15), this, &NotifierWindow::onUpdateWindowPosition);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -502,7 +502,7 @@ void NotifierWindow::onHideNotifier()
 
     setFixedSize(minimumSizeHint());
 
-    QTimer::singleShot(Milliseconds(0), this, [this]()
+    QTimer::singleShot(MilliSeconds(0), this, [this]()
     {
         QRect screen_rect = currentAvailableRect();
         QPoint window_pos(screen_rect.x() + screen_rect.width() - width() - kRightPadding, pos().y());

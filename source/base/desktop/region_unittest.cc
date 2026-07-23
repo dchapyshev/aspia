@@ -733,7 +733,7 @@ double timePerOpUs(Body&& body)
         volatile qint64 keep = sink;
         (void)keep;
 
-        const double ns = static_cast<double>(DurationCast<Nanoseconds>(end - start).count());
+        const double ns = static_cast<double>(DurationCast<NanoSeconds>(end - start).count());
 
         if (ns >= kMinBatchNs || iterations >= kMaxIterations)
             return ns / iterations / 1000.0;

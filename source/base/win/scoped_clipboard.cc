@@ -44,7 +44,7 @@ ScopedClipboard::~ScopedClipboard()
 bool ScopedClipboard::init(HWND owner)
 {
     const int kMaxAttemptsToOpenClipboard = 5;
-    const Milliseconds kSleepTimeBetweenAttempts{ 5 };
+    const MilliSeconds kSleepTimeBetweenAttempts{ 5 };
 
     if (opened_)
     {

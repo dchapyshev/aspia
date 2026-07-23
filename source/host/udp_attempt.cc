@@ -198,7 +198,7 @@ void UdpAttempt::onChannelMessage(quint8 channel_id, const QByteArray& buffer)
 
     // The peer acked our probe: the channel is confirmed and timed. Report the bandwidth implied by
     // the round-trip of the known-size probe.
-    auto rtt = DurationCast<Milliseconds>(Clock::now() - probe_send_time_);
+    auto rtt = DurationCast<MilliSeconds>(Clock::now() - probe_send_time_);
     qint64 rtt_ms = rtt.count() > 0 ? rtt.count() : 1;
 
     connected_ = true;

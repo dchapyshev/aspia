@@ -128,7 +128,7 @@ void closeNativeSocket(NativeSocket sock)
 
 qint64 msSince(TimePoint since)
 {
-    return DurationCast<Milliseconds>(Clock::now() - since).count();
+    return DurationCast<MilliSeconds>(Clock::now() - since).count();
 }
 
 void pumpFor(int duration_ms)
@@ -137,7 +137,7 @@ void pumpFor(int duration_ms)
     while (msSince(start_time) < duration_ms)
     {
         QCoreApplication::processEvents(QEventLoop::AllEvents, 10);
-        QThread::sleep(Milliseconds(1));
+        QThread::sleep(MilliSeconds(1));
     }
 }
 
@@ -148,7 +148,7 @@ bool pumpUntil(Predicate condition, int timeout_ms)
     while (!condition() && msSince(start_time) < timeout_ms)
     {
         QCoreApplication::processEvents(QEventLoop::AllEvents, 10);
-        QThread::sleep(Milliseconds(1));
+        QThread::sleep(MilliSeconds(1));
     }
     return condition();
 }
@@ -206,7 +206,7 @@ TEST(DispatcherTests, PostEvent_DeliversAll)
     while (obj.received < N && msSince(wait_start) < 2000)
     {
         QCoreApplication::processEvents(QEventLoop::AllEvents, 10);
-        QThread::sleep(Milliseconds(1));
+        QThread::sleep(MilliSeconds(1));
     }
 
     EXPECT_EQ(obj.received, N);
@@ -222,7 +222,7 @@ TEST(DispatcherTests, CrossThread_Post_WakeupLatency_Soft)
     obj.clk = Clock::now();
 
     constexpr int N = 24;
-    constexpr Milliseconds gap{ 5 };
+    constexpr MilliSeconds gap{ 5 };
 
     std::atomic<int> posted{0};
     std::thread worker([&]()
@@ -240,7 +240,7 @@ TEST(DispatcherTests, CrossThread_Post_WakeupLatency_Soft)
     while ((obj.received < N || posted.load() < N) && msSince(wait_start) < 4000)
     {
         QCoreApplication::processEvents(QEventLoop::AllEvents, 5);
-        QThread::sleep(Milliseconds(1));
+        QThread::sleep(MilliSeconds(1));
     }
     worker.join();
 
@@ -274,7 +274,7 @@ TEST(DispatcherTests, CrossThread_Post_WakesBlockedLoop)
     for (int i = 0; i < 20; ++i)
     {
         // Give the loop time to park in the blocking wait again.
-        QThread::sleep(Milliseconds(10));
+        QThread::sleep(MilliSeconds(10));
 
         const TimePoint latency_start = Clock::now();
 
@@ -302,7 +302,7 @@ TEST(DispatcherTests, CrossThread_Quit_WakesBlockedLoop)
     ASSERT_TRUE(started.tryAcquire(1, 5000));
 
     // Let the loop park in the blocking wait with no pending work.
-    QThread::sleep(Milliseconds(100));
+    QThread::sleep(MilliSeconds(100));
 
     const TimePoint latency_start = Clock::now();
 
@@ -320,11 +320,11 @@ TEST(DispatcherTests, NestedEventLoops_NoDeadlock)
     bool entered = false;
     bool finished = false;
 
-    QTimer::singleShot(Milliseconds(5), [&]()
+    QTimer::singleShot(MilliSeconds(5), [&]()
     {
         entered = true;
         QEventLoop inner;
-        QTimer::singleShot(Milliseconds(30), &inner, [&](){ inner.quit(); });
+        QTimer::singleShot(MilliSeconds(30), &inner, [&](){ inner.quit(); });
         inner.exec();
         finished = true;
     });
@@ -333,7 +333,7 @@ TEST(DispatcherTests, NestedEventLoops_NoDeadlock)
     while (!finished && msSince(wait_start) < 2000)
     {
         QCoreApplication::processEvents(QEventLoop::AllEvents, 10);
-        QThread::sleep(Milliseconds(1));
+        QThread::sleep(MilliSeconds(1));
     }
 
     EXPECT_TRUE(entered);
@@ -350,7 +350,7 @@ TEST(TimersTest, PreciseTimerRegistrationSpeed)
     {
         QTimer *t = new QTimer();
         t->setTimerType(Qt::PreciseTimer);
-        t->setInterval(Milliseconds(100));
+        t->setInterval(MilliSeconds(100));
         t->start();
         timers.push_back(t);
     }
@@ -369,7 +369,7 @@ TEST(TimersTest, CoarseTimerRegistrationSpeed)
     {
         QTimer *t = new QTimer();
         t->setTimerType(Qt::CoarseTimer);
-        t->setInterval(Milliseconds(1000000));
+        t->setInterval(MilliSeconds(1000000));
         t->start();
         timers.push_back(t);
     }
@@ -388,7 +388,7 @@ TEST(TimersTest, VeryCoarseTimerRegistrationSpeed)
     {
         QTimer *t = new QTimer();
         t->setTimerType(Qt::VeryCoarseTimer);
-        t->setInterval(Milliseconds(1000000));
+        t->setInterval(MilliSeconds(1000000));
         t->start();
         timers.push_back(t);
     }
@@ -400,7 +400,7 @@ TEST(TimersTest, VeryCoarseTimerRegistrationSpeed)
 TEST(TimersTest, ManyPreciseTimersTriggering)
 {
     constexpr int timerCount = 7000;
-    constexpr Milliseconds interval{ 10 };
+    constexpr MilliSeconds interval{ 10 };
 
     int triggeredCount = 0;
 
@@ -439,7 +439,7 @@ TEST(TimersTest, ManyPreciseTimersTriggering)
 TEST(TimersTest, ManyCoarseTimersTriggering)
 {
     constexpr int timerCount = 7000;
-    constexpr Milliseconds interval{ 100 };
+    constexpr MilliSeconds interval{ 100 };
 
     int triggeredCount = 0;
 
@@ -478,7 +478,7 @@ TEST(TimersTest, ManyCoarseTimersTriggering)
 TEST(TimersTest, ManyVeryCoarseTimersTriggering)
 {
     constexpr int timerCount = 7000;
-    constexpr Milliseconds interval{ 100 };
+    constexpr MilliSeconds interval{ 100 };
 
     int triggeredCount = 0;
 
@@ -516,7 +516,7 @@ TEST(TimersTest, ManyVeryCoarseTimersTriggering)
 
 TEST(TimersTest, DISABLED_OnePreciseTimerRepeats)
 {
-    constexpr Milliseconds requested{ 10 };
+    constexpr MilliSeconds requested{ 10 };
     constexpr int repeats = 50;
 
 #if defined(NDEBUG)
@@ -579,7 +579,7 @@ TEST(TimersTest, DISABLED_OnePreciseTimerRepeats)
 
 TEST(TimersTest, DISABLED_OneCoarseTimerRepeats)
 {
-    constexpr Milliseconds requested{ 100 };
+    constexpr MilliSeconds requested{ 100 };
     constexpr int repeats = 50;
 
 #if defined(NDEBUG)
@@ -642,7 +642,7 @@ TEST(TimersTest, DISABLED_OneCoarseTimerRepeats)
 
 TEST(TimersTest, DISABLED_OneVeryCoarseTimerRepeats)
 {
-    constexpr Milliseconds requested{ 100 };
+    constexpr MilliSeconds requested{ 100 };
     constexpr int repeats = 10;
 
 #if defined(NDEBUG)
@@ -711,7 +711,7 @@ TEST(TimersTest, DISABLED_OneVeryCoarseTimerRepeats)
 
 TEST(TimersTest, ManyCoarseAndOneTimerRepeats)
 {
-    constexpr Milliseconds requested{ 30 };
+    constexpr MilliSeconds requested{ 30 };
     constexpr int repeats = 1000;
 
     QEventLoop loop;
@@ -723,7 +723,7 @@ TEST(TimersTest, ManyCoarseAndOneTimerRepeats)
     {
         auto* timer = new QTimer(&owner);
         timer->setTimerType(Qt::CoarseTimer);
-        timer->setInterval(Milliseconds(15000));
+        timer->setInterval(MilliSeconds(15000));
         timer->setSingleShot(false);
         timer->start();
     }
@@ -766,7 +766,7 @@ TEST(TimersTest, ZeroSingleShotTriggering)
 
     for (int i = 0; i < timerCount; ++i)
     {
-        QTimer::singleShot(Milliseconds(0), [&]()
+        QTimer::singleShot(MilliSeconds(0), [&]()
         {
             ++triggeredCount;
             if (triggeredCount == timerCount)
@@ -785,7 +785,7 @@ TEST(TimersTest, ZeroSingleShotTriggering)
 // missed periods are expected to be coalesced into one, like Qt native dispatchers do.
 static void runTimerStallTest(Qt::TimerType type)
 {
-    constexpr Milliseconds interval{ 50 };
+    constexpr MilliSeconds interval{ 50 };
     constexpr int totalTicks = 8;
 
     QEventLoop loop;
@@ -819,7 +819,7 @@ static void runTimerStallTest(Qt::TimerType type)
     timer.start();
 
     // Failsafe: generous to avoid CI flakiness
-    QTimer::singleShot(Milliseconds(10000), &loop, [&]() { loop.quit(); });
+    QTimer::singleShot(MilliSeconds(10000), &loop, [&]() { loop.quit(); });
     loop.exec();
 
     ASSERT_GE(stamps.size(), totalTicks);
@@ -857,7 +857,7 @@ TEST(TimersTest, RemainingTime)
     QObject owner;
 
     // An active timer reports the time left until the first firing.
-    const int coarse_id = owner.startTimer(Milliseconds(60000), Qt::CoarseTimer);
+    const int coarse_id = owner.startTimer(MilliSeconds(60000), Qt::CoarseTimer);
     ASSERT_GT(coarse_id, 0);
 
     const int coarse_remaining = disp->remainingTime(coarse_id);
@@ -866,7 +866,7 @@ TEST(TimersTest, RemainingTime)
 
     // Short precise timers may be backed by a separate native timer mechanism, they must be
     // visible through the same interface.
-    const int precise_id = owner.startTimer(Milliseconds(50), Qt::PreciseTimer);
+    const int precise_id = owner.startTimer(MilliSeconds(50), Qt::PreciseTimer);
     ASSERT_GT(precise_id, 0);
 
     const int precise_remaining = disp->remainingTime(precise_id);
@@ -875,10 +875,10 @@ TEST(TimersTest, RemainingTime)
 
     // A timer whose deadline has passed but which has not fired yet (the loop is not pumped)
     // reports zero, not a negative value.
-    const int expired_id = owner.startTimer(Milliseconds(10), Qt::CoarseTimer);
+    const int expired_id = owner.startTimer(MilliSeconds(10), Qt::CoarseTimer);
     ASSERT_GT(expired_id, 0);
 
-    QThread::sleep(Milliseconds(50));
+    QThread::sleep(MilliSeconds(50));
     EXPECT_EQ(disp->remainingTime(expired_id), 0);
 
     // A killed timer is reported as unknown.
@@ -900,11 +900,11 @@ TEST(TimersTest, RegisteredTimersReportEffectiveType)
     // Zero-interval and long-interval precise timers are downgraded to coarse by the dispatcher.
     // The effective type must be reported so that a timer moved to another thread is
     // re-registered with the same behavior.
-    const int zero_id = owner.startTimer(Milliseconds(0), Qt::PreciseTimer);
-    const int long_precise_id = owner.startTimer(Milliseconds(500), Qt::PreciseTimer);
-    const int precise_id = owner.startTimer(Milliseconds(50), Qt::PreciseTimer);
-    const int coarse_id = owner.startTimer(Milliseconds(200), Qt::CoarseTimer);
-    const int very_coarse_id = owner.startTimer(Milliseconds(1500), Qt::VeryCoarseTimer);
+    const int zero_id = owner.startTimer(MilliSeconds(0), Qt::PreciseTimer);
+    const int long_precise_id = owner.startTimer(MilliSeconds(500), Qt::PreciseTimer);
+    const int precise_id = owner.startTimer(MilliSeconds(50), Qt::PreciseTimer);
+    const int coarse_id = owner.startTimer(MilliSeconds(200), Qt::CoarseTimer);
+    const int very_coarse_id = owner.startTimer(MilliSeconds(1500), Qt::VeryCoarseTimer);
 
     const QList<QAbstractEventDispatcher::TimerInfo> timers = disp->registeredTimers(&owner);
     ASSERT_EQ(timers.size(), 5);
@@ -966,7 +966,7 @@ TEST(TimersTest, HugeIntervalClamped)
 
     // An interval that does not fit into int milliseconds (more than ~24.8 days) must be clamped
     // to INT_MAX in the reporting interfaces instead of overflowing into a negative value.
-    const Milliseconds huge_interval(static_cast<qint64>(std::numeric_limits<int>::max()) + 1000000);
+    const MilliSeconds huge_interval(static_cast<qint64>(std::numeric_limits<int>::max()) + 1000000);
     const int timer_id = owner.startTimer(huge_interval, Qt::CoarseTimer);
     ASSERT_GT(timer_id, 0);
 
@@ -984,7 +984,7 @@ TEST(TimersTest, HugeIntervalClamped)
 class ED_TimerIdReuseObject : public QObject
 {
 public:
-    static constexpr Milliseconds kInterval{ 100 };
+    static constexpr MilliSeconds kInterval{ 100 };
 
     QEventLoop* loop = nullptr;
 
@@ -1051,7 +1051,7 @@ TEST(TimersTest, TimerIdReuseInsideTimerEvent)
     ASSERT_GT(obj.first_id, 0);
 
     // Failsafe: generous to avoid CI flakiness
-    QTimer::singleShot(Milliseconds(10000), &loop, [&]() { loop.quit(); });
+    QTimer::singleShot(MilliSeconds(10000), &loop, [&]() { loop.quit(); });
     loop.exec();
 
     GTEST_LOG_(INFO) << "timer id was " << (obj.id_reused ? "reused" : "not reused");
@@ -1065,7 +1065,7 @@ TEST(TimersTest, TimerIdReuseInsideTimerEvent)
     ASSERT_NE(obj.second_started_time, TimePoint());
     ASSERT_NE(obj.second_first_fire_time, TimePoint());
     EXPECT_LT(obj.second_first_fire_time - obj.second_started_time,
-              ED_TimerIdReuseObject::kInterval * 2 - Milliseconds(10));
+              ED_TimerIdReuseObject::kInterval * 2 - MilliSeconds(10));
 }
 
 TEST(SocketTest, EchoClientServer)
@@ -1095,7 +1095,7 @@ TEST(SocketTest, EchoClientServer)
             GTEST_FAIL() << "Iteration timed out at " << currentIteration;
             loop.quit();
         });
-        watchdog->start(Milliseconds(1000)); // 1 second per iteration max
+        watchdog->start(MilliSeconds(1000)); // 1 second per iteration max
 
         // Server accepts new connection
         QObject::connect(server, &QTcpServer::newConnection, [=]()
@@ -1123,7 +1123,7 @@ TEST(SocketTest, EchoClientServer)
         // Client logic
         QObject::connect(client, &QTcpSocket::connected, [=]()
         {
-            QTimer::singleShot(Milliseconds(0), [=]()
+            QTimer::singleShot(MilliSeconds(0), [=]()
             {
                 //GTEST_LOG_(INFO) << "Client: sending message";
                 client->write(testMessage);
@@ -1158,7 +1158,7 @@ TEST(SocketTest, EchoClientServer)
                     }
                     else
                     {
-                        QTimer::singleShot(Milliseconds(0), runIteration);
+                        QTimer::singleShot(MilliSeconds(0), runIteration);
                     }
                 }
                 else

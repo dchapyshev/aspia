@@ -35,10 +35,10 @@ const char kInputServiceClass[] = "org/aspia/host/InputService";
 const qreal kTapMovementThreshold = 16.0;
 
 // Gesture durations, in milliseconds.
-const Milliseconds kTapDuration{ 1 };
-const Milliseconds kLongPressDuration{ 600 };
-const Milliseconds kSwipeDuration{ 120 };
-const Milliseconds kScrollDuration{ 120 };
+const MilliSeconds kTapDuration{ 1 };
+const MilliSeconds kLongPressDuration{ 600 };
+const MilliSeconds kSwipeDuration{ 120 };
+const MilliSeconds kScrollDuration{ 120 };
 
 // Vertical travel of a single wheel-notch scroll gesture, in pixels.
 const float kScrollDistance = 300.0f;
@@ -94,14 +94,14 @@ bool serviceRunning()
 }
 
 //--------------------------------------------------------------------------------------------------
-void tap(const QPointF& pos, Milliseconds duration)
+void tap(const QPointF& pos, MilliSeconds duration)
 {
     QJniObject::callStaticMethod<void>(kInputServiceClass, "tap", "(FFI)V",
         static_cast<jfloat>(pos.x()), static_cast<jfloat>(pos.y()), static_cast<jint>(duration.count()));
 }
 
 //--------------------------------------------------------------------------------------------------
-void swipe(const QPointF& from, const QPointF& to, Milliseconds duration)
+void swipe(const QPointF& from, const QPointF& to, MilliSeconds duration)
 {
     QJniObject::callStaticMethod<void>(kInputServiceClass, "swipe", "(FFFFI)V",
         static_cast<jfloat>(from.x()), static_cast<jfloat>(from.y()),

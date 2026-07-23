@@ -106,7 +106,7 @@ TwoFactorEnrollDialog::TwoFactorEnrollDialog(const QString& otpauth_uri, QWidget
     connect(ui->buttonbox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(ui->buttonbox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
-    QTimer::singleShot(Milliseconds(0), this, [this]() { setFixedSize(sizeHint()); });
+    QTimer::singleShot(MilliSeconds(0), this, [this]() { setFixedSize(sizeHint()); });
 }
 
 //--------------------------------------------------------------------------------------------------

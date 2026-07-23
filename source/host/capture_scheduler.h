@@ -29,7 +29,7 @@ public:
     CaptureScheduler() = default;
     ~CaptureScheduler() = default;
 
-    Milliseconds updateInterval() const;
+    MilliSeconds updateInterval() const;
 
     void setFps(int value);
     int fps() const;
@@ -37,10 +37,10 @@ public:
     void onBeginCapture();
     bool isInProgress() const { return in_progress_; }
 
-    Milliseconds nextCaptureDelay();
+    MilliSeconds nextCaptureDelay();
 
 private:
-    Milliseconds update_interval_ { 40 };
+    MilliSeconds update_interval_ { 40 };
     TimePoint begin_time_;
     bool in_progress_ = false;
 

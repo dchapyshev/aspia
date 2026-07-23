@@ -460,19 +460,19 @@ TaskManagerWindow::TaskManagerWindow(QWidget* parent)
         sendUserListRequest();
     });
 
-    Milliseconds update_speed = settings.updateSpeed();
-    if (update_speed == Milliseconds(500))
+    MilliSeconds update_speed = settings.updateSpeed();
+    if (update_speed == MilliSeconds(500))
         ui->action_high_speed->setChecked(true);
-    else if (update_speed == Milliseconds(1000))
+    else if (update_speed == MilliSeconds(1000))
         ui->action_medium_speed->setChecked(true);
-    else if (update_speed == Milliseconds(3000))
+    else if (update_speed == MilliSeconds(3000))
         ui->action_low_speed->setChecked(true);
-    else if (update_speed == Milliseconds(0))
+    else if (update_speed == MilliSeconds(0))
         ui->action_disable_update->setChecked(true);
 
     update_timer_->start(update_speed);
 
-    QTimer::singleShot(Milliseconds(0), this, [this]()
+    QTimer::singleShot(MilliSeconds(0), this, [this]()
     {
         sendProcessListRequest(proto::task_manager::ProcessListRequest::RESET_CACHE);
         sendServiceListRequest();
@@ -492,9 +492,9 @@ TaskManagerWindow::~TaskManagerWindow()
     settings.setUserColumnState(ui->tree_users->header()->saveState());
 
     if (!update_timer_->isActive())
-        settings.setUpdateSpeed(Milliseconds(0));
+        settings.setUpdateSpeed(MilliSeconds(0));
     else
-        settings.setUpdateSpeed(Milliseconds(update_timer_->interval()));
+        settings.setUpdateSpeed(MilliSeconds(update_timer_->interval()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -970,11 +970,11 @@ void TaskManagerWindow::addUpdateItems(QMenu* parent_menu)
     connect(update_group, &QActionGroup::triggered, this, [this](QAction* action)
     {
         if (action == ui->action_high_speed)
-            update_timer_->start(Milliseconds(500));
+            update_timer_->start(MilliSeconds(500));
         else if (action == ui->action_medium_speed)
-            update_timer_->start(Milliseconds(1000));
+            update_timer_->start(MilliSeconds(1000));
         else if (action == ui->action_low_speed)
-            update_timer_->start(Milliseconds(3000));
+            update_timer_->start(MilliSeconds(3000));
         else if (action == ui->action_disable_update)
             update_timer_->stop();
     });

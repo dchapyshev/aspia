@@ -58,7 +58,7 @@ private slots:
 private:
     int pressed_tab_index_ = -1;
     int drop_target_index_ = -1;
-    Milliseconds pulse_phase_{ 0 };
+    MilliSeconds pulse_phase_{ 0 };
     QTimer* pulse_timer_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(TabBar)

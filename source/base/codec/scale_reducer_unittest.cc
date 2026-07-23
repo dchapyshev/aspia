@@ -421,7 +421,7 @@ TEST(scale_reducer_test, benchmark_quality_comparison)
             reducer.scaleFrame(frame.get(), target_size);
         }
 
-        const qint64 elapsed = DurationCast<Milliseconds>(Clock::now() - start_time).count();
+        const qint64 elapsed = DurationCast<MilliSeconds>(Clock::now() - start_time).count();
         double ms_per_frame = static_cast<double>(elapsed) / kIterations;
         double fps = 1000.0 / ms_per_frame;
 
@@ -463,7 +463,7 @@ TEST(scale_reducer_test, benchmark_quality_comparison_4k)
             reducer.scaleFrame(frame.get(), target_size);
         }
 
-        const qint64 elapsed = DurationCast<Milliseconds>(Clock::now() - start_time).count();
+        const qint64 elapsed = DurationCast<MilliSeconds>(Clock::now() - start_time).count();
         double ms_per_frame = static_cast<double>(elapsed) / kIterations;
         double fps = 1000.0 / ms_per_frame;
 
@@ -505,7 +505,7 @@ TEST(scale_reducer_test, benchmark_quality_comparison_quarter)
             reducer.scaleFrame(frame.get(), target_size);
         }
 
-        const qint64 elapsed = DurationCast<Milliseconds>(Clock::now() - start_time).count();
+        const qint64 elapsed = DurationCast<MilliSeconds>(Clock::now() - start_time).count();
         double ms_per_frame = static_cast<double>(elapsed) / kIterations;
         double fps = 1000.0 / ms_per_frame;
 
@@ -549,7 +549,7 @@ TEST(scale_reducer_test, benchmark_partial_update_small)
             reducer.scaleFrame(frame.get(), target_size);
         }
 
-        const qint64 elapsed = DurationCast<Milliseconds>(Clock::now() - start_time).count();
+        const qint64 elapsed = DurationCast<MilliSeconds>(Clock::now() - start_time).count();
         double ms_per_frame = static_cast<double>(elapsed) / kIterations;
         double fps = 1000.0 / ms_per_frame;
 
@@ -592,7 +592,7 @@ TEST(scale_reducer_test, benchmark_partial_update_medium)
             reducer.scaleFrame(frame.get(), target_size);
         }
 
-        const qint64 elapsed = DurationCast<Milliseconds>(Clock::now() - start_time).count();
+        const qint64 elapsed = DurationCast<MilliSeconds>(Clock::now() - start_time).count();
         double ms_per_frame = static_cast<double>(elapsed) / kIterations;
         double fps = 1000.0 / ms_per_frame;
 
@@ -638,7 +638,7 @@ TEST(scale_reducer_test, benchmark_partial_update_multi_rect)
             reducer.scaleFrame(frame.get(), target_size);
         }
 
-        const qint64 elapsed = DurationCast<Milliseconds>(Clock::now() - start_time).count();
+        const qint64 elapsed = DurationCast<MilliSeconds>(Clock::now() - start_time).count();
         double ms_per_frame = static_cast<double>(elapsed) / kIterations;
         double fps = 1000.0 / ms_per_frame;
 

@@ -450,7 +450,7 @@ bool DxgiDuplicatorController::ensureFrameCaptured(Context* context, SharedPoint
 {
     // On a modern system, the FPS / monitor refresh rate is usually larger than
     // or equal to 60. So 17 milliseconds is enough to capture at least one frame.
-    const Milliseconds ms_per_frame(17);
+    const MilliSeconds ms_per_frame(17);
 
     // Skips the first frame to ensure a full frame refresh has happened before
     // this function returns.
@@ -461,7 +461,7 @@ bool DxgiDuplicatorController::ensureFrameCaptured(Context* context, SharedPoint
     // the DXGI components to be reinitialized. This usually should not happen
     // unless the system is switching display mode when this function is being
     // called. 500 milliseconds should be enough for ~30 frames.
-    const Milliseconds timeout_ms(500);
+    const MilliSeconds timeout_ms(500);
 
     if (numFramesCaptured() >= frames_to_skip)
         return true;

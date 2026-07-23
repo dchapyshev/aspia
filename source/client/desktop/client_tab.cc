@@ -198,7 +198,7 @@ void ClientTab::scheduleRepaint()
     // Using QWidget::repaint() bypasses Qt's update batching which sometimes misses native child
     // viewports (header views, etc).
     QPointer<ClientWindow> guarded(client_window_.get());
-    QTimer::singleShot(Milliseconds(0), guarded, [guarded]()
+    QTimer::singleShot(MilliSeconds(0), guarded, [guarded]()
     {
         if (!guarded)
             return;

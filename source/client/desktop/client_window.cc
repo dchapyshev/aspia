@@ -39,7 +39,7 @@
 
 namespace {
 
-constexpr Milliseconds kDragPollInterval{ 50 };
+constexpr MilliSeconds kDragPollInterval{ 50 };
 const Seconds kReconnectRetryDelay { 5 };
 const Minutes kReconnectBudget { 5 };
 

@@ -233,7 +233,7 @@ void UpdateDialog::onUpdateCheckedFinished(const QByteArray& result)
         }
     }
 
-    QTimer::singleShot(Milliseconds(0), this, [this]()
+    QTimer::singleShot(MilliSeconds(0), this, [this]()
     {
         LOG(INFO) << "Destroy update checker";
         checker_.reset();

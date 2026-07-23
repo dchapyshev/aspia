@@ -31,7 +31,7 @@
 namespace {
 
 const quint32 kMaxMessageSize = 5 * 1024 * 1024; // 5 MB
-const Milliseconds kUpdateInterval{ 10 };
+const MilliSeconds kUpdateInterval{ 10 };
 const int kMaxPeers = 1;
 const int kChannelCount = 255;
 const int kPoolReservedSize = 64;
@@ -77,7 +77,7 @@ using ENetPool = BucketPool<std::size(kENetBuckets)>;
 thread_local ENetPool tls_enet_pool(kENetBuckets);
 
 //--------------------------------------------------------------------------------------------------
-int calculateSpeed(int last_speed, Milliseconds duration, qint64 bytes)
+int calculateSpeed(int last_speed, MilliSeconds duration, qint64 bytes)
 {
     static const double kAlpha = 0.1;
     const qint64 ms = duration.count();
@@ -434,19 +434,19 @@ qint64 UdpChannel::pendingBytes() const
 }
 
 //--------------------------------------------------------------------------------------------------
-Milliseconds UdpChannel::roundTripTime() const
+MilliSeconds UdpChannel::roundTripTime() const
 {
     if (!peer_ || !connected_)
-        return Milliseconds::zero();
+        return MilliSeconds::zero();
 
-    return Milliseconds(peer_->roundTripTime);
+    return MilliSeconds(peer_->roundTripTime);
 }
 
 //--------------------------------------------------------------------------------------------------
 int UdpChannel::speedRx()
 {
     TimePoint current_time = Clock::now();
-    Milliseconds duration = DurationCast<Milliseconds>(current_time - begin_time_rx_);
+    MilliSeconds duration = DurationCast<MilliSeconds>(current_time - begin_time_rx_);
 
     speed_rx_ = calculateSpeed(speed_rx_, duration, bytes_rx_);
     begin_time_rx_ = current_time;
@@ -459,7 +459,7 @@ int UdpChannel::speedRx()
 int UdpChannel::speedTx()
 {
     TimePoint current_time = Clock::now();
-    Milliseconds duration = DurationCast<Milliseconds>(current_time - begin_time_tx_);
+    MilliSeconds duration = DurationCast<MilliSeconds>(current_time - begin_time_tx_);
 
     speed_tx_ = calculateSpeed(speed_tx_, duration, bytes_tx_);
     begin_time_tx_ = current_time;

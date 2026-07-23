@@ -97,7 +97,7 @@ void doHostMigrate(const QJsonDocument& doc)
     {
         qint64 value = root_object["AutoConnConfirmInterval"].toString().toLongLong();
         LOG(INFO) << "AutoConnConfirmInterval:" << value;
-        db.setAutoConfirmationInterval(Milliseconds(value));
+        db.setAutoConfirmationInterval(MilliSeconds(value));
     }
 
     if (root_object.contains("AutoUpdateEnabled"))
@@ -139,7 +139,7 @@ void doHostMigrate(const QJsonDocument& doc)
     {
         qint64 value = root_object["OneTimePasswordExpire"].toString().toLongLong();
         LOG(INFO) << "OneTimePasswordExpire:" << value;
-        db.setOneTimePasswordExpire(Milliseconds(value));
+        db.setOneTimePasswordExpire(MilliSeconds(value));
     }
 
     if (root_object.contains("OneTimePasswordLength"))

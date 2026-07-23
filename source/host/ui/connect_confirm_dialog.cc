@@ -47,7 +47,7 @@ ConnectConfirmDialog::ConnectConfirmDialog(
 
     if (auto_accept_)
     {
-        time_left_ = DurationCast<Seconds>(Milliseconds(request.timeout()));
+        time_left_ = DurationCast<Seconds>(MilliSeconds(request.timeout()));
     }
     else
     {
@@ -68,7 +68,7 @@ ConnectConfirmDialog::ConnectConfirmDialog(
 
     timer_->start(Seconds(1));
 
-    QTimer::singleShot(Milliseconds(0), this, [this]()
+    QTimer::singleShot(MilliSeconds(0), this, [this]()
     {
         QRect screen_rect = QApplication::primaryScreen()->geometry();
 

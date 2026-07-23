@@ -54,7 +54,7 @@ const int kMaxScrollback = 5000;
 
 // Idle delay after the last resize event before the grid is recomputed and the host is told the new
 // size. While dragging the content is just stretched to follow the window.
-const Milliseconds kResizeFinishDelay{ 150 };
+const MilliSeconds kResizeFinishDelay{ 150 };
 
 //--------------------------------------------------------------------------------------------------
 VTermModifier vtermModifiers(Qt::KeyboardModifiers modifiers)
@@ -146,7 +146,7 @@ TerminalWidget::TerminalWidget(QWidget* parent)
     });
 
     blink_timer_ = new QTimer(this);
-    blink_timer_->setInterval(Milliseconds(530));
+    blink_timer_->setInterval(MilliSeconds(530));
     connect(blink_timer_, &QTimer::timeout, this, [this]
     {
         blink_visible_ = !blink_visible_;
@@ -155,7 +155,7 @@ TerminalWidget::TerminalWidget(QWidget* parent)
 
     bell_timer_ = new QTimer(this);
     bell_timer_->setSingleShot(true);
-    bell_timer_->setInterval(Milliseconds(120));
+    bell_timer_->setInterval(MilliSeconds(120));
     connect(bell_timer_, &QTimer::timeout, this, [this]
     {
         bell_flash_ = false;
@@ -788,7 +788,7 @@ void TerminalWidget::mousePressEvent(QMouseEvent* event)
 
         // A press shortly after a double-click is a triple-click: select the whole line.
         if (Clock::now() - last_double_click_time_ <
-            Milliseconds(QApplication::doubleClickInterval()))
+            MilliSeconds(QApplication::doubleClickInterval()))
         {
             selectLineAt(position.line);
         }

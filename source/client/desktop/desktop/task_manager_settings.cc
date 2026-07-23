@@ -86,13 +86,13 @@ void TaskManagerSettings::setUserColumnState(const QByteArray& state)
 }
 
 //--------------------------------------------------------------------------------------------------
-Milliseconds TaskManagerSettings::updateSpeed() const
+MilliSeconds TaskManagerSettings::updateSpeed() const
 {
-    return Milliseconds(settings_.value(kUpdateSpeedParam, 1000).toInt());
+    return MilliSeconds(settings_.value(kUpdateSpeedParam, 1000).toInt());
 }
 
 //--------------------------------------------------------------------------------------------------
-void TaskManagerSettings::setUpdateSpeed(Milliseconds speed)
+void TaskManagerSettings::setUpdateSpeed(MilliSeconds speed)
 {
     settings_.setValue(kUpdateSpeedParam, static_cast<int>(speed.count()));
 }

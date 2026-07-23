@@ -250,8 +250,8 @@ bool AudioOutputPulse::initPlayout()
     LATE(pa_stream_set_state_callback)(play_stream_, paStreamStateCallback, this);
     LATE(pa_stream_set_write_callback)(play_stream_, paStreamWriteCallback, this);
 
-    const Milliseconds kBufferTime{ 10 };
-    const Milliseconds kBufferDuration{ 40 };
+    const MilliSeconds kBufferTime{ 10 };
+    const MilliSeconds kBufferDuration{ 40 };
     const int kBytesPerSecond = kSampleRate * kChannels * kBytesPerSample;
     const int kBufferSize = kBytesPerSecond * kBufferDuration.count() / 1000LL;
 
@@ -294,7 +294,7 @@ bool AudioOutputPulse::initPlayout()
 
     const struct pa_buffer_attr* buffer = LATE(pa_stream_get_buffer_attr)(play_stream_);
     period_time_ = kBufferTime;
-    period_size_ = LATE(pa_usec_to_bytes)(Microseconds(period_time_).count(), &spec);
+    period_size_ = LATE(pa_usec_to_bytes)(MicroSeconds(period_time_).count(), &spec);
     buffer_size_ = buffer->tlength;
     max_buffer_size_ = buffer->maxlength;
 

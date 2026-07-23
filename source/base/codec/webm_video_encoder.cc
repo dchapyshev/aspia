@@ -31,14 +31,14 @@ namespace {
 // Defines the dimension of a macro block.
 const int kMacroBlockSize = 16;
 
-const Milliseconds kTargetFrameInterval{ 80 };
+const MilliSeconds kTargetFrameInterval{ 80 };
 
 //--------------------------------------------------------------------------------------------------
 void setCodecParameters(vpx_codec_enc_cfg_t* config, const QSize& size)
 {
     // Use millisecond granularity time base.
     config->g_timebase.num = 1;
-    config->g_timebase.den = static_cast<int>(Microseconds(Seconds(1)).count());
+    config->g_timebase.den = static_cast<int>(MicroSeconds(Seconds(1)).count());
 
     config->g_w = static_cast<unsigned int>(size.width());
     config->g_h = static_cast<unsigned int>(size.height());
@@ -139,7 +139,7 @@ bool WebmVideoEncoder::encode(const VideoDecoder::YuvView& frame, proto::video::
         codec_.get(),
         image_.get(),
         0, // pts
-        static_cast<unsigned long>(Microseconds(kTargetFrameInterval).count()),
+        static_cast<unsigned long>(MicroSeconds(kTargetFrameInterval).count()),
         0, // flags
         VPX_DL_REALTIME);
     if (ret != VPX_CODEC_OK)

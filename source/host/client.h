@@ -167,7 +167,7 @@ private:
     // Queuing-delay detection on the UDP path (see onReceiveRate): the lowest peer RTT seen on the
     // current UDP channel (the queuing-free baseline) and how many consecutive receive-rate reports
     // arrived with the RTT substantially above it.
-    Milliseconds udp_base_rtt_{ 0 };
+    MilliSeconds udp_base_rtt_{ 0 };
     int udp_high_rtt_count_ = 0;
 
     Q_DISABLE_COPY_MOVE(Client)

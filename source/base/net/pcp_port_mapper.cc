@@ -35,7 +35,7 @@ namespace {
 const quint16 kGatewayPort = 5351;
 const quint32 kLeaseSeconds = 3600;
 
-const Milliseconds kInitialTimeout{ 250 };
+const MilliSeconds kInitialTimeout{ 250 };
 const int kMaxTries = 4;
 
 const quint8 kNatPmpVersion = 0;

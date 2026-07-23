@@ -27,7 +27,7 @@
 namespace {
 
 // Maximum size of an Opus frame in milliseconds.
-const Milliseconds kMaxFrameSizeMs { 120 };
+const MilliSeconds kMaxFrameSizeMs { 120 };
 
 // Hosts will never generate more than 100 frames in a single packet.
 const int kMaxFramesPerPacket = 100;
@@ -119,7 +119,7 @@ std::unique_ptr<proto::audio::Packet> AudioDecoder::decode(const proto::audio::P
     decoded_packet->set_channels(packet.channels());
 
     int max_frame_samples = static_cast<int>(
-        kMaxFrameSizeMs * kSamplingRate / Milliseconds(1000));
+        kMaxFrameSizeMs * kSamplingRate / MilliSeconds(1000));
     int max_frame_bytes = max_frame_samples * channels_ * decoded_packet->bytes_per_sample();
 
     std::string* decoded_data = decoded_packet->add_data();

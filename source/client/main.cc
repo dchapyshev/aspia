@@ -239,7 +239,7 @@ int main(int argc, char* argv[])
     if (!start_url.isEmpty())
     {
         // Start the connection once the event loop is up and the window is shown.
-        QTimer::singleShot(Milliseconds(0), main_window.get(), [window = main_window.get(), start_url]()
+        QTimer::singleShot(MilliSeconds(0), main_window.get(), [window = main_window.get(), start_url]()
         {
             window->connectToUrl(start_url);
         });

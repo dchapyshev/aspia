@@ -34,7 +34,7 @@ namespace {
 constexpr int kHeaderHeight = 56;
 constexpr int kHeaderHMargin = 13;
 constexpr int kHeaderSpacing = 12;
-constexpr Milliseconds kLongPressTimeout{ 500 };
+constexpr MilliSeconds kLongPressTimeout{ 500 };
 constexpr int kLongPressMoveThreshold = 16;
 
 } // namespace

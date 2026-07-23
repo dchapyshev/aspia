@@ -704,7 +704,7 @@ ScreenCapturerMac* ScreenCapturerMac::create(QObject* parent)
 bool ScreenCapturerMac::waitForDisplays()
 {
     static const int kRetryCount = 20;
-    static const Milliseconds kRetryDelay{ 250 };
+    static const MilliSeconds kRetryDelay{ 250 };
 
     for (int i = 0; i < kRetryCount; ++i)
     {

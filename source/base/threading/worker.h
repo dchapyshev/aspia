@@ -44,7 +44,7 @@ public:
     // If timer_interval is non-zero, the worker gets a repeating timer that fires onTimer() from its
     // own thread at that interval; the timer lives and dies with the worker thread.
     explicit Worker(Thread::EventDispatcher dispatcher = Thread::AsioDispatcher,
-                    Milliseconds timer_interval = Milliseconds::zero());
+                    MilliSeconds timer_interval = MilliSeconds::zero());
     ~Worker() override;
 
     // Returns the worker owning the calling thread, or nullptr if the thread is not a worker.
@@ -118,7 +118,7 @@ private:
     WorkerManager* manager_ = nullptr;
     Thread thread_;
 
-    const Milliseconds timer_interval_;
+    const MilliSeconds timer_interval_;
     int timer_id_ = 0;
 
     static thread_local Worker* current_worker_;

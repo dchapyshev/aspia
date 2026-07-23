@@ -23,7 +23,7 @@
 #include "base/logging.h"
 
 //--------------------------------------------------------------------------------------------------
-Milliseconds CaptureScheduler::updateInterval() const
+MilliSeconds CaptureScheduler::updateInterval() const
 {
     return update_interval_;
 }
@@ -33,7 +33,7 @@ void CaptureScheduler::setFps(int value)
 {
     CHECK_GT(value, 0);
     LOG(INFO) << "FPS changed from" << fps() << "to" << value;
-    update_interval_ = Milliseconds(std::max(1, 1000 / value));
+    update_interval_ = MilliSeconds(std::max(1, 1000 / value));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -50,9 +50,9 @@ void CaptureScheduler::onBeginCapture()
 }
 
 //--------------------------------------------------------------------------------------------------
-Milliseconds CaptureScheduler::nextCaptureDelay()
+MilliSeconds CaptureScheduler::nextCaptureDelay()
 {
-    Milliseconds diff_time = DurationCast<Milliseconds>(Clock::now() - begin_time_);
+    MilliSeconds diff_time = DurationCast<MilliSeconds>(Clock::now() - begin_time_);
     in_progress_ = false;
 
     if (diff_time > update_interval_)

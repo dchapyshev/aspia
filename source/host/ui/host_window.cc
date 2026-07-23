@@ -328,7 +328,7 @@ void HostWindow::showEvent(QShowEvent* event)
     // for the privacy permissions the host needs if any are still missing. The dialog is modeless so it
     // never blocks the event loop - the app must stay able to quit (e.g. macOS "Quit & Reopen" restarts
     // it so a fresh process re-reads the just-granted Screen Recording permission).
-    QTimer::singleShot(Milliseconds(0), this, [this]()
+    QTimer::singleShot(MilliSeconds(0), this, [this]()
     {
         if (!isVisible() || !PermissionDialog::hasMissingPermissions())
             return;
@@ -658,7 +658,7 @@ void HostWindow::onThemeChanged(QAction* action)
 //--------------------------------------------------------------------------------------------------
 void HostWindow::onAfterThemeChanged()
 {
-    QTimer::singleShot(Milliseconds(100), this, [this]()
+    QTimer::singleShot(MilliSeconds(100), this, [this]()
     {
         auto set_edit_colors = [](QLineEdit* edit, const QString& color)
         {

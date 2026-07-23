@@ -218,7 +218,7 @@ ScreenCapturerWin::ScreenCapturerWin(Type type, QObject* parent)
     memset(&curr_cursor_info_, 0, sizeof(curr_cursor_info_));
     memset(&prev_cursor_info_, 0, sizeof(prev_cursor_info_));
 
-    QTimer::singleShot(Milliseconds(0), this, [this]()
+    QTimer::singleShot(MilliSeconds(0), this, [this]()
     {
         switchToInputDesktop();
 

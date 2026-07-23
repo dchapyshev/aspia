@@ -213,7 +213,7 @@ void DesktopWidget::setDesktopFrameError(proto::video::ErrorCode error_code)
     LOG(INFO) << "Video error detected:" << error_code;
     last_error_code_ = error_code;
 
-    error_timer_->start(Milliseconds(1500));
+    error_timer_->start(MilliSeconds(1500));
 }
 
 //--------------------------------------------------------------------------------------------------

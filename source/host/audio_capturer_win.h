@@ -71,7 +71,7 @@ private:
 
     proto::audio::Packet::SamplingRate sampling_rate_;
     QTimer* capture_timer_ = nullptr;
-    Milliseconds audio_device_period_;
+    MilliSeconds audio_device_period_;
     AudioVolumeFilter volume_filter_;
 
     ScopedCoMem<WAVEFORMATEX> wave_format_ex_;

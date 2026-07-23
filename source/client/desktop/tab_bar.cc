@@ -34,8 +34,8 @@ namespace {
 constexpr int kDetachThresholdPx = 30;
 
 // Drop-target pulsing animation parameters.
-constexpr Milliseconds kPulseTick{ 33 };
-constexpr Milliseconds kPulsePeriod{ 800 };
+constexpr MilliSeconds kPulseTick{ 33 };
+constexpr MilliSeconds kPulsePeriod{ 800 };
 constexpr int kPulseMaxAlpha = 220;
 constexpr int kPulseFrameWidthPx = 2;
 
@@ -63,7 +63,7 @@ void TabBar::setDropTarget(int index)
 
     if (index >= 0)
     {
-        pulse_phase_ = Milliseconds::zero();
+        pulse_phase_ = MilliSeconds::zero();
         if (!pulse_timer_->isActive())
             pulse_timer_->start();
     }

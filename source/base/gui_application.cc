@@ -55,12 +55,12 @@ const int kMinSmallIconSize = 16;
 const int kMaxSmallIconSize = 48;
 
 const int kMaxPendingConnections = 25;
-const Milliseconds kConnectTimeout{ 1000 };
-const Milliseconds kDisconnectTimeout{ 1000 };
-const Milliseconds kReconnectInterval{ 500 };
+const MilliSeconds kConnectTimeout{ 1000 };
+const MilliSeconds kDisconnectTimeout{ 1000 };
+const MilliSeconds kReconnectInterval{ 500 };
 const int kReconnectTryCount = 3;
-const Milliseconds kReadTimeout{ 1500 };
-const Milliseconds kWriteTimeout{ 1500 };
+const MilliSeconds kReadTimeout{ 1500 };
+const MilliSeconds kWriteTimeout{ 1500 };
 const int kMaxMessageSize = 1024 * 1024 * 1;
 
 const char kOkMessage[] = "OK";

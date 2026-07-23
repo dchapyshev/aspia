@@ -28,7 +28,7 @@
 
 namespace {
 
-constexpr Milliseconds kAnimationDuration{ 150 };
+constexpr MilliSeconds kAnimationDuration{ 150 };
 
 // Minimum contrast ratio between the accent and the background, matching the WCAG AA threshold for
 // normal text so accent labels stay legible.

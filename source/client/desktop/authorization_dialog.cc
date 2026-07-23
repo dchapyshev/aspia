@@ -170,7 +170,7 @@ void AuthorizationDialog::onButtonBoxClicked(QAbstractButton* button)
 //--------------------------------------------------------------------------------------------------
 void AuthorizationDialog::fitSize()
 {
-    QTimer::singleShot(Milliseconds(0), this, [this]()
+    QTimer::singleShot(MilliSeconds(0), this, [this]()
     {
         setFixedHeight(sizeHint().height());
     });

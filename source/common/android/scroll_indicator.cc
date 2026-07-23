@@ -31,8 +31,8 @@ namespace {
 
 constexpr int kWidth = 4;
 constexpr int kMinHandle = 24;
-constexpr Milliseconds kVisibleTime{ 900 };
-constexpr Milliseconds kFadeTime{ 300 };
+constexpr MilliSeconds kVisibleTime{ 900 };
+constexpr MilliSeconds kFadeTime{ 300 };
 constexpr int kRadius = 2;
 constexpr double kOpacity = 0.4;
 

@@ -102,7 +102,7 @@ MasterPasswordDialog::MasterPasswordDialog(Mode mode, QWidget* parent)
         Database::instance().isBiometricUnlockEnabled() &&
         BiometricGate::status() == BiometricGate::Status::AVAILABLE;
     if (biometric_available)
-        QTimer::singleShot(Milliseconds(0), this, &MasterPasswordDialog::tryBiometricUnlock);
+        QTimer::singleShot(MilliSeconds(0), this, &MasterPasswordDialog::tryBiometricUnlock);
 }
 
 //--------------------------------------------------------------------------------------------------

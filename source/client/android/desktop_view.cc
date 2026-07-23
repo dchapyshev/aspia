@@ -43,15 +43,15 @@ constexpr qreal kMaxZoom = 5.0;
 constexpr qreal kMoveThreshold = 8.0;
 
 // A second finger-down within this interval after a tap starts a drag with the left button held.
-constexpr Milliseconds kDoubleTapInterval{ 500 };
+constexpr MilliSeconds kDoubleTapInterval{ 500 };
 
 // Holding a single finger still for this long also starts a left-button drag.
-constexpr Milliseconds kLongPressTimeout{ 400 };
+constexpr MilliSeconds kLongPressTimeout{ 400 };
 
 // Edge band (widget pixels) where a held drag keeps auto-scrolling, the tick rate, and the maximum
 // cursor advance per tick.
 constexpr qreal kEdgeMargin = 80.0;
-constexpr Milliseconds kEdgeScrollInterval{ 16 };
+constexpr MilliSeconds kEdgeScrollInterval{ 16 };
 constexpr qreal kEdgeMaxSpeed = 18.0;
 
 // Two-finger movement (widget pixels) needed to lock into zoom or scroll, and the finger travel per

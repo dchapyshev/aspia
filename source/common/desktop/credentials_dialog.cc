@@ -217,5 +217,5 @@ bool CredentialsDialog::defaultValidate()
 //--------------------------------------------------------------------------------------------------
 void CredentialsDialog::fitHeight()
 {
-    QTimer::singleShot(Milliseconds(0), this, [this]() { setFixedHeight(sizeHint().height()); });
+    QTimer::singleShot(MilliSeconds(0), this, [this]() { setFixedHeight(sizeHint().height()); });
 }

@@ -48,7 +48,7 @@ const int k100nsPerMillisecond = 10000;
 const int kSilenceThreshold = 2;
 
 // Lower bound for timer intervals, in milliseconds.
-const Milliseconds kMinTimerInterval { 30 };
+const MilliSeconds kMinTimerInterval { 30 };
 
 // Upper bound for the timer precision error, in milliseconds.
 // Timers are supposed to be accurate to 20ms, so we use 30ms to be safe.
@@ -168,7 +168,7 @@ bool AudioCapturerWin::initialize()
     }
 
     // We round up, if |device_period| / |k100nsPerMillisecond| is not a whole number.
-    Milliseconds device_period_in_milliseconds(1 + ((device_period - 1) / k100nsPerMillisecond));
+    MilliSeconds device_period_in_milliseconds(1 + ((device_period - 1) / k100nsPerMillisecond));
 
     audio_device_period_ = std::max(device_period_in_milliseconds, kMinTimerInterval);
 

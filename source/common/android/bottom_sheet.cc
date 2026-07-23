@@ -60,7 +60,7 @@ constexpr int kDragThreshold = 12;
 
 // Hidden gesture: this many taps on the handle strip, no slower than this apart, reveal the statistics.
 constexpr int kSecretTapCount = 5;
-constexpr Milliseconds kSecretTapReset{ 2000 };
+constexpr MilliSeconds kSecretTapReset{ 2000 };
 
 } // namespace
 

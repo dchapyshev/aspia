@@ -43,7 +43,7 @@ constexpr int kIndentation = 16;
 constexpr double kSelectedLayerOpacity = 0.12;
 constexpr double kHoverLayerOpacity = 0.08;
 constexpr double kChevronOpacity = 0.6;
-constexpr Milliseconds kLongPressTimeout{ 500 };
+constexpr MilliSeconds kLongPressTimeout{ 500 };
 constexpr int kLongPressMoveThreshold = 16;
 
 //--------------------------------------------------------------------------------------------------

@@ -33,7 +33,7 @@ namespace {
 
 const char kMappingDescription[] = "Aspia Remote Desktop";
 const int kLeaseDurationSeconds = 3600;
-const Milliseconds kDiscoverDelay{ 2000 };
+const MilliSeconds kDiscoverDelay{ 2000 };
 
 //--------------------------------------------------------------------------------------------------
 struct UpnpDevListDeleter

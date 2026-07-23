@@ -69,7 +69,7 @@ private:
         quint64 unique_id;
         asio::windows::object_handle handle;
         quint32 native_id;
-        Milliseconds interval;
+        MilliSeconds interval;
         TimePoint end_time;
         QObject* object;
     };
@@ -85,7 +85,7 @@ private:
 
         quint64 unique_id;
         asio::steady_timer handle;
-        Milliseconds interval;
+        MilliSeconds interval;
         TimePoint end_time;
         QObject* object;
         Qt::TimerType type;
@@ -134,7 +134,7 @@ private:
 
 #if defined(Q_OS_WINDOWS)
     bool tryRegisterMultimediaTimer(
-        int timer_id, Milliseconds interval, TimePoint end_time, QObject* object);
+        int timer_id, MilliSeconds interval, TimePoint end_time, QObject* object);
     void asyncWaitMultimediaTimer(asio::windows::object_handle& handle, int timer_id);
     void asyncWaitSocket(SocketHandle& handle, qintptr socket);
 #else

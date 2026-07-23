@@ -123,8 +123,8 @@ void RouterManager::onSettingsChanged()
 
         one_time_password_ = generator.result();
 
-        Milliseconds expire_interval = db.oneTimePasswordExpire();
-        if (expire_interval > Milliseconds(0))
+        MilliSeconds expire_interval = db.oneTimePasswordExpire();
+        if (expire_interval > MilliSeconds(0))
             password_expire_time_ = Clock::now() + expire_interval;
         else
             password_expire_time_ = TimePoint::max();

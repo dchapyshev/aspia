@@ -218,11 +218,11 @@ TEST(SqliteTest, FailedCommitDoesNotWedgeConnection)
 
     // Zero busy timeout: the test expects the lock collision to fail instantly, not after a wait.
     SqlDatabase writer;
-    ASSERT_TRUE(writer.open(temp_dir.filePath("test.db"), Milliseconds(0)));
+    ASSERT_TRUE(writer.open(temp_dir.filePath("test.db"), MilliSeconds(0)));
     ASSERT_TRUE(createSchema(writer));
 
     SqlDatabase reader;
-    ASSERT_TRUE(reader.open(temp_dir.filePath("test.db"), Milliseconds(0)));
+    ASSERT_TRUE(reader.open(temp_dir.filePath("test.db"), MilliSeconds(0)));
 
     // The reader holds a shared lock for the duration of its transaction, so the writer's COMMIT
     // (which needs an exclusive lock) fails with SQLITE_BUSY and leaves the transaction open.
@@ -260,11 +260,11 @@ TEST(SqliteTest, ImmediateTransactionTakesWriteLock)
 
     // Zero busy timeout: the test expects the lock collision to fail instantly, not after a wait.
     SqlDatabase first;
-    ASSERT_TRUE(first.open(temp_dir.filePath("test.db"), Milliseconds(0)));
+    ASSERT_TRUE(first.open(temp_dir.filePath("test.db"), MilliSeconds(0)));
     ASSERT_TRUE(createSchema(first));
 
     SqlDatabase second;
-    ASSERT_TRUE(second.open(temp_dir.filePath("test.db"), Milliseconds(0)));
+    ASSERT_TRUE(second.open(temp_dir.filePath("test.db"), MilliSeconds(0)));
 
     // IMMEDIATE takes the write lock at BEGIN, so a competing immediate begin fails up front
     // instead of at the first write statement.

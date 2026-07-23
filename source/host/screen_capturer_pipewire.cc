@@ -67,7 +67,7 @@ const int kMaxDamageRegions = 16;
 // How long the compositor stream may stay paused before capture falls back to KMS. A normal pause
 // (renegotiation) lasts a fraction of a second; a much longer one means the session is locked and the
 // compositor will not resume until it unlocks, so the lock screen is only reachable below it.
-const Milliseconds kPausedFallback{ 1500 };
+const MilliSeconds kPausedFallback{ 1500 };
 
 // 32-bit packed RGB formats offered to the compositor.
 const quint32 kVideoFormats[] = {

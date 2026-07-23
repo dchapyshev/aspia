@@ -100,7 +100,7 @@ void OnlineCheckerRouter::checkNextHost()
         emit sig_checkerResult(host.id(), false);
         hosts_.pop_front();
 
-        QTimer::singleShot(Milliseconds(0), this, &OnlineCheckerRouter::checkNextHost);
+        QTimer::singleShot(MilliSeconds(0), this, &OnlineCheckerRouter::checkNextHost);
         return;
     }
 

@@ -380,7 +380,7 @@ bool waitForValidInputDesktop()
 #else
         break;
 #endif // defined(Q_OS_WINDOWS)
-        QThread::sleep(Milliseconds(100));
+        QThread::sleep(MilliSeconds(100));
     }
     while (--max_attempt_count > 0);
 

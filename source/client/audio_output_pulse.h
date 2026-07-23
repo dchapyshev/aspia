@@ -75,7 +75,7 @@ private:
     pa_stream* play_stream_ = nullptr;
     QTimer* timer_ = nullptr;
 
-    Milliseconds period_time_{ 0 };
+    MilliSeconds period_time_{ 0 };
     int period_size_ = 0;
     int buffer_size_ = 0;
     int max_buffer_size_ = 0;

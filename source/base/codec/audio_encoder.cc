@@ -35,11 +35,11 @@ const proto::audio::Packet::SamplingRate kOpusSamplingRate =
 
 // Opus supports frame sizes of 2.5, 5, 10, 20, 40 and 60 ms. We use 20 ms
 // frames to balance latency and efficiency.
-const Milliseconds kFrameSizeMs { 20 };
+const MilliSeconds kFrameSizeMs { 20 };
 
 // Number of samples per frame when using default sampling rate.
 const int kFrameSamples = static_cast<const int>(
-    kOpusSamplingRate * kFrameSizeMs / Milliseconds(1000));
+    kOpusSamplingRate * kFrameSizeMs / MilliSeconds(1000));
 
 const proto::audio::Packet::BytesPerSample kBytesPerSample =
     proto::audio::Packet::BYTES_PER_SAMPLE_2;
@@ -76,7 +76,7 @@ void AudioEncoder::initEncoder()
 
     opus_encoder_ctl(encoder_, OPUS_SET_BITRATE(bitrate_));
 
-    frame_size_ = int(sampling_rate_ * kFrameSizeMs / Milliseconds(1000));
+    frame_size_ = int(sampling_rate_ * kFrameSizeMs / MilliSeconds(1000));
 
     if (sampling_rate_ != kOpusSamplingRate)
     {

@@ -77,7 +77,7 @@ TEST(flood_guard_test, refill_after_window)
     EXPECT_FALSE(FloodGuardTestPeer::checkAddress(guard, Clock::now(), addr));
 
     // Wait for full refill (window) + small margin.
-    std::this_thread::sleep_for(Milliseconds(1100));
+    std::this_thread::sleep_for(MilliSeconds(1100));
 
     EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, Clock::now(), addr));
     EXPECT_TRUE(FloodGuardTestPeer::checkAddress(guard, Clock::now(), addr));
@@ -144,7 +144,7 @@ TEST(flood_guard_test, eviction_under_pressure)
     }
 
     // Wait for those entries to fully refill (TAT <= now).
-    std::this_thread::sleep_for(Milliseconds(1100));
+    std::this_thread::sleep_for(MilliSeconds(1100));
 
     // A new address arrives: the map is full but every existing entry is at capacity, so the
     // sweep evicts them and the new entry is admitted.

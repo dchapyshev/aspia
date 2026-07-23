@@ -45,7 +45,7 @@ void FloodGuard::setRateLimit(Seconds window, int max_per_window)
     CHECK_GT(window.count(), 0);
     CHECK_GT(max_per_window, 0);
 
-    slot_ = Nanoseconds(window) / max_per_window;
+    slot_ = NanoSeconds(window) / max_per_window;
     burst_ = window;
 }
 

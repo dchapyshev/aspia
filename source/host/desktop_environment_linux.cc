@@ -217,7 +217,7 @@ void DesktopEnvironmentLinux::scheduleApply()
         return;
 
     apply_scheduled_ = true;
-    QTimer::singleShot(Milliseconds(0), this, [this]()
+    QTimer::singleShot(MilliSeconds(0), this, [this]()
     {
         apply_scheduled_ = false;
         applyDesired();
