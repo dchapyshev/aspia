@@ -37,7 +37,6 @@
 #include <utility>
 
 #include "base/logging.h"
-#include "base/time_types.h"
 #include "base/desktop/frame_aligned.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/region.h"
@@ -333,10 +332,10 @@ const Frame* ScreenCapturerPipeWire::captureFrame(Error* error)
     // capturer - does not run on captureFrame()'s stack.
     if (stream_paused_.load(std::memory_order_relaxed))
     {
-        if (!paused_since_.isValid())
-            paused_since_.start();
+        if (paused_since_ == TimePoint())
+            paused_since_ = Clock::now();
 
-        if (!fallback_requested_ && paused_since_.hasExpired(kPausedFallback.count()))
+        if (!fallback_requested_ && Clock::now() - paused_since_ >= kPausedFallback)
         {
             fallback_requested_ = true;
             LOG(INFO) << "Compositor stream paused for" << kPausedFallback.count()
@@ -347,7 +346,7 @@ const Frame* ScreenCapturerPipeWire::captureFrame(Error* error)
     }
     else
     {
-        paused_since_.invalidate();
+        paused_since_ = TimePoint();
         fallback_requested_ = false;
     }
 

@@ -19,8 +19,6 @@
 #ifndef HOST_WORKERS_SERVICE_WORKER_H
 #define HOST_WORKERS_SERVICE_WORKER_H
 
-#include <QElapsedTimer>
-
 #include "base/scoped_qpointer.h"
 #include "base/threading/worker.h"
 #include "host/system_settings.h"
@@ -74,7 +72,7 @@ private:
     struct PendingConfirmation
     {
         TcpChannel* tcp_channel = nullptr;
-        QElapsedTimer start_time;
+        TimePoint start_time;
         QString stun_host;
         quint16 stun_port = 0;
     };

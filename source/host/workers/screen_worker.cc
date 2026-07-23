@@ -704,7 +704,7 @@ void ScreenWorker::onCaptureScreen()
         encodeScreen(frame);
 
 #if defined(Q_OS_LINUX)
-        capture_error_time_.invalidate();
+        capture_error_time_ = TimePoint();
 #endif
     }
 
@@ -918,15 +918,14 @@ void ScreenWorker::setupLinuxCapture()
         // Right after login every probe below can fail transiently (the compositor registers its
         // screen-cast interface a moment after the display environment appears), so retry the chain
         // briefly instead of committing to the VT console fallback right away.
-        QElapsedTimer probe_time;
-        probe_time.start();
+        const TimePoint probe_start = Clock::now();
 
         for (;;)
         {
             if (probeUserWaylandCapture(uid))
                 return;
 
-            if (probe_time.elapsed() >= kWaylandProbeTimeout.count())
+            if (Clock::now() - probe_start >= kWaylandProbeTimeout)
                 break;
 
             LOG(INFO) << "No Wayland capture path available yet; retrying";
@@ -940,8 +939,7 @@ void ScreenWorker::setupLinuxCapture()
         // The greeter registers that interface a moment after it comes up (e.g. right after logout); in
         // that window the scan-out can briefly be a buffer KMS reads but that breaks once the compositor
         // renders through the GPU, so wait for the compositor before committing to KMS.
-        QElapsedTimer probe_time;
-        probe_time.start();
+        const TimePoint probe_start = Clock::now();
 
         for (;;)
         {
@@ -952,7 +950,7 @@ void ScreenWorker::setupLinuxCapture()
                 return;
             }
 
-            if (probe_time.elapsed() >= kWaylandProbeTimeout.count())
+            if (Clock::now() - probe_start >= kWaylandProbeTimeout)
                 break;
 
             LOG(INFO) << "Greeter compositor not ready yet; retrying";
@@ -1027,16 +1025,16 @@ void ScreenWorker::registerCaptureFailure()
         capture_mode_ != CaptureMode::WLR)
         return;
 
-    if (!capture_error_time_.isValid())
+    if (capture_error_time_ == TimePoint())
     {
-        capture_error_time_.start();
+        capture_error_time_ = Clock::now();
         return;
     }
 
-    if (capture_error_time_.elapsed() < kCaptureErrorReprobeDelay.count())
+    if (Clock::now() - capture_error_time_ < kCaptureErrorReprobeDelay)
         return;
 
-    capture_error_time_.invalidate();
+    capture_error_time_ = TimePoint();
     reselectLinuxCapture();
 }
 

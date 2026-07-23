@@ -369,11 +369,11 @@ void BottomSheet::mouseReleaseEvent(QMouseEvent* event)
     // A tap on the handle strip (no item there) drives the hidden statistics gesture.
     if (handleHitRect().contains(pos))
     {
-        if (handle_tap_timer_.isValid() && handle_tap_timer_.elapsed() > kSecretTapReset.count())
+        if (handle_tap_time_ != TimePoint() && Clock::now() - handle_tap_time_ > kSecretTapReset)
             handle_taps_ = 0;
 
         ++handle_taps_;
-        handle_tap_timer_.restart();
+        handle_tap_time_ = Clock::now();
 
         if (handle_taps_ >= kSecretTapCount)
         {

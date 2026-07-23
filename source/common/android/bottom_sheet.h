@@ -19,11 +19,12 @@
 #ifndef COMMON_ANDROID_BOTTOM_SHEET_H
 #define COMMON_ANDROID_BOTTOM_SHEET_H
 
-#include <QElapsedTimer>
 #include <QList>
 #include <QPoint>
 #include <QString>
 #include <QWidget>
+
+#include "base/time_types.h"
 
 class QVariantAnimation;
 
@@ -128,7 +129,7 @@ private:
 
     // Consecutive taps on the handle strip; reset when too slow (see handle tap constants in the .cc).
     int handle_taps_ = 0;
-    QElapsedTimer handle_tap_timer_;
+    TimePoint handle_tap_time_;
 
     Q_DISABLE_COPY_MOVE(BottomSheet)
 };

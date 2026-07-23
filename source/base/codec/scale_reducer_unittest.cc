@@ -18,13 +18,12 @@
 
 #include "base/codec/scale_reducer.h"
 
-#include "base/desktop/frame_aligned.h"
-
 #include <gtest/gtest.h>
 
-#include <QElapsedTimer>
-
 #include <iostream>
+
+#include "base/time_types.h"
+#include "base/desktop/frame_aligned.h"
 
 namespace {
 
@@ -413,8 +412,7 @@ TEST(scale_reducer_test, benchmark_quality_comparison)
         // Warm up.
         reducer.scaleFrame(frame.get(), target_size);
 
-        QElapsedTimer timer;
-        timer.start();
+        const TimePoint start_time = Clock::now();
 
         for (int i = 0; i < kIterations; ++i)
         {
@@ -423,7 +421,7 @@ TEST(scale_reducer_test, benchmark_quality_comparison)
             reducer.scaleFrame(frame.get(), target_size);
         }
 
-        qint64 elapsed = timer.elapsed();
+        const qint64 elapsed = DurationCast<Milliseconds>(Clock::now() - start_time).count();
         double ms_per_frame = static_cast<double>(elapsed) / kIterations;
         double fps = 1000.0 / ms_per_frame;
 
@@ -456,8 +454,7 @@ TEST(scale_reducer_test, benchmark_quality_comparison_4k)
 
         reducer.scaleFrame(frame.get(), target_size);
 
-        QElapsedTimer timer;
-        timer.start();
+        const TimePoint start_time = Clock::now();
 
         for (int i = 0; i < kIterations; ++i)
         {
@@ -466,7 +463,7 @@ TEST(scale_reducer_test, benchmark_quality_comparison_4k)
             reducer.scaleFrame(frame.get(), target_size);
         }
 
-        qint64 elapsed = timer.elapsed();
+        const qint64 elapsed = DurationCast<Milliseconds>(Clock::now() - start_time).count();
         double ms_per_frame = static_cast<double>(elapsed) / kIterations;
         double fps = 1000.0 / ms_per_frame;
 
@@ -499,8 +496,7 @@ TEST(scale_reducer_test, benchmark_quality_comparison_quarter)
 
         reducer.scaleFrame(frame.get(), target_size);
 
-        QElapsedTimer timer;
-        timer.start();
+        const TimePoint start_time = Clock::now();
 
         for (int i = 0; i < kIterations; ++i)
         {
@@ -509,7 +505,7 @@ TEST(scale_reducer_test, benchmark_quality_comparison_quarter)
             reducer.scaleFrame(frame.get(), target_size);
         }
 
-        qint64 elapsed = timer.elapsed();
+        const qint64 elapsed = DurationCast<Milliseconds>(Clock::now() - start_time).count();
         double ms_per_frame = static_cast<double>(elapsed) / kIterations;
         double fps = 1000.0 / ms_per_frame;
 
@@ -543,8 +539,7 @@ TEST(scale_reducer_test, benchmark_partial_update_small)
         // First call - full frame.
         reducer.scaleFrame(frame.get(), target_size);
 
-        QElapsedTimer timer;
-        timer.start();
+        const TimePoint start_time = Clock::now();
 
         for (int i = 0; i < kIterations; ++i)
         {
@@ -554,7 +549,7 @@ TEST(scale_reducer_test, benchmark_partial_update_small)
             reducer.scaleFrame(frame.get(), target_size);
         }
 
-        qint64 elapsed = timer.elapsed();
+        const qint64 elapsed = DurationCast<Milliseconds>(Clock::now() - start_time).count();
         double ms_per_frame = static_cast<double>(elapsed) / kIterations;
         double fps = 1000.0 / ms_per_frame;
 
@@ -587,8 +582,7 @@ TEST(scale_reducer_test, benchmark_partial_update_medium)
 
         reducer.scaleFrame(frame.get(), target_size);
 
-        QElapsedTimer timer;
-        timer.start();
+        const TimePoint start_time = Clock::now();
 
         for (int i = 0; i < kIterations; ++i)
         {
@@ -598,7 +592,7 @@ TEST(scale_reducer_test, benchmark_partial_update_medium)
             reducer.scaleFrame(frame.get(), target_size);
         }
 
-        qint64 elapsed = timer.elapsed();
+        const qint64 elapsed = DurationCast<Milliseconds>(Clock::now() - start_time).count();
         double ms_per_frame = static_cast<double>(elapsed) / kIterations;
         double fps = 1000.0 / ms_per_frame;
 
@@ -631,8 +625,7 @@ TEST(scale_reducer_test, benchmark_partial_update_multi_rect)
 
         reducer.scaleFrame(frame.get(), target_size);
 
-        QElapsedTimer timer;
-        timer.start();
+        const TimePoint start_time = Clock::now();
 
         for (int i = 0; i < kIterations; ++i)
         {
@@ -645,7 +638,7 @@ TEST(scale_reducer_test, benchmark_partial_update_multi_rect)
             reducer.scaleFrame(frame.get(), target_size);
         }
 
-        qint64 elapsed = timer.elapsed();
+        const qint64 elapsed = DurationCast<Milliseconds>(Clock::now() - start_time).count();
         double ms_per_frame = static_cast<double>(elapsed) / kIterations;
         double fps = 1000.0 / ms_per_frame;
 

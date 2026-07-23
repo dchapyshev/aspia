@@ -18,7 +18,6 @@
 
 #include <QAbstractEventDispatcher>
 #include <QCoreApplication>
-#include <QElapsedTimer>
 #include <QHostInfo>
 #include <QSemaphore>
 #include <QSocketNotifier>
@@ -127,11 +126,15 @@ void closeNativeSocket(NativeSocket sock)
 #endif
 }
 
+qint64 msSince(TimePoint since)
+{
+    return DurationCast<Milliseconds>(Clock::now() - since).count();
+}
+
 void pumpFor(int duration_ms)
 {
-    QElapsedTimer timer;
-    timer.start();
-    while (timer.elapsed() < duration_ms)
+    const TimePoint start_time = Clock::now();
+    while (msSince(start_time) < duration_ms)
     {
         QCoreApplication::processEvents(QEventLoop::AllEvents, 10);
         QThread::msleep(1);
@@ -141,9 +144,8 @@ void pumpFor(int duration_ms)
 template <typename Predicate>
 bool pumpUntil(Predicate condition, int timeout_ms)
 {
-    QElapsedTimer timer;
-    timer.start();
-    while (!condition() && timer.elapsed() < timeout_ms)
+    const TimePoint start_time = Clock::now();
+    while (!condition() && msSince(start_time) < timeout_ms)
     {
         QCoreApplication::processEvents(QEventLoop::AllEvents, 10);
         QThread::msleep(1);
@@ -165,7 +167,7 @@ public:
     int received = 0;
     QVector<qint64> deltas;
     qint64 lastMs = -1;
-    QElapsedTimer clk;
+    TimePoint clk;
 
 protected:
     void customEvent(QEvent* ev) override
@@ -173,7 +175,7 @@ protected:
         if (ev->type() == customType())
         {
             ++received;
-            qint64 now = clk.elapsed();
+            qint64 now = msSince(clk);
             if (lastMs >= 0) deltas.append(now - lastMs);
             lastMs = now;
         }
@@ -189,7 +191,7 @@ TEST(DispatcherTests, PostEvent_DeliversAll)
 
     ED_TestObject obj;
     obj.moveToThread(QThread::currentThread());
-    obj.clk.start();
+    obj.clk = Clock::now();
 
     // Post a bunch of custom events
     constexpr int N = 64;
@@ -200,8 +202,8 @@ TEST(DispatcherTests, PostEvent_DeliversAll)
     }
 
     // Pump the loop until all are processed or timeout
-    QElapsedTimer wait; wait.start();
-    while (obj.received < N && wait.elapsed() < 2000)
+    const TimePoint wait_start = Clock::now();
+    while (obj.received < N && msSince(wait_start) < 2000)
     {
         QCoreApplication::processEvents(QEventLoop::AllEvents, 10);
         QThread::msleep(1);
@@ -217,7 +219,7 @@ TEST(DispatcherTests, CrossThread_Post_WakeupLatency_Soft)
     ASSERT_NE(disp, nullptr);
 
     ED_TestObject obj;
-    obj.clk.start();
+    obj.clk = Clock::now();
 
     constexpr int N = 24;
     constexpr int gapMs = 5;
@@ -234,8 +236,8 @@ TEST(DispatcherTests, CrossThread_Post_WakeupLatency_Soft)
         }
     });
 
-    QElapsedTimer wait; wait.start();
-    while ((obj.received < N || posted.load() < N) && wait.elapsed() < 4000)
+    const TimePoint wait_start = Clock::now();
+    while ((obj.received < N || posted.load() < N) && msSince(wait_start) < 4000)
     {
         QCoreApplication::processEvents(QEventLoop::AllEvents, 5);
         QThread::msleep(1);
@@ -274,12 +276,11 @@ TEST(DispatcherTests, CrossThread_Post_WakesBlockedLoop)
         // Give the loop time to park in the blocking wait again.
         QThread::msleep(10);
 
-        QElapsedTimer latency;
-        latency.start();
+        const TimePoint latency_start = Clock::now();
 
         QMetaObject::invokeMethod(&probe, [&]() { processed.release(); }, Qt::QueuedConnection);
         ASSERT_TRUE(processed.tryAcquire(1, 5000));
-        EXPECT_LT(latency.elapsed(), 1000);
+        EXPECT_LT(msSince(latency_start), 1000);
     }
 
     thread.stop();
@@ -303,12 +304,11 @@ TEST(DispatcherTests, CrossThread_Quit_WakesBlockedLoop)
     // Let the loop park in the blocking wait with no pending work.
     QThread::msleep(100);
 
-    QElapsedTimer latency;
-    latency.start();
+    const TimePoint latency_start = Clock::now();
 
     thread.quit();
     ASSERT_TRUE(thread.wait(5000));
-    EXPECT_LT(latency.elapsed(), 1000);
+    EXPECT_LT(msSince(latency_start), 1000);
 }
 
 // Nested event loops
@@ -329,8 +329,8 @@ TEST(DispatcherTests, NestedEventLoops_NoDeadlock)
         finished = true;
     });
 
-    QElapsedTimer wait; wait.start();
-    while (!finished && wait.elapsed() < 2000)
+    const TimePoint wait_start = Clock::now();
+    while (!finished && msSince(wait_start) < 2000)
     {
         QCoreApplication::processEvents(QEventLoop::AllEvents, 10);
         QThread::msleep(1);
@@ -345,9 +345,6 @@ TEST(TimersTest, PreciseTimerRegistrationSpeed)
     constexpr int timerCount = 10000;
     QVector<QTimer*> timers;
     timers.reserve(timerCount);
-
-    QElapsedTimer timer;
-    timer.start();
 
     for (int i = 0; i < timerCount; ++i)
     {
@@ -368,9 +365,6 @@ TEST(TimersTest, CoarseTimerRegistrationSpeed)
     QVector<QTimer*> timers;
     timers.reserve(timerCount);
 
-    QElapsedTimer timer;
-    timer.start();
-
     for (int i = 0; i < timerCount; ++i)
     {
         QTimer *t = new QTimer();
@@ -390,9 +384,6 @@ TEST(TimersTest, VeryCoarseTimerRegistrationSpeed)
     QVector<QTimer*> timers;
     timers.reserve(timerCount);
 
-    QElapsedTimer timer;
-    timer.start();
-
     for (int i = 0; i < timerCount; ++i)
     {
         QTimer *t = new QTimer();
@@ -411,13 +402,12 @@ TEST(TimersTest, ManyPreciseTimersTriggering)
     constexpr int timerCount = 7000;
     constexpr Milliseconds interval{ 10 };
 
-    QElapsedTimer elapsed;
     int triggeredCount = 0;
 
     QEventLoop loop;
     QList<QTimer*> timers;
 
-    elapsed.start();
+    const TimePoint start_time = Clock::now();
 
     for (int i = 0; i < timerCount; ++i)
     {
@@ -437,13 +427,13 @@ TEST(TimersTest, ManyPreciseTimersTriggering)
     }
 
     loop.exec();
-    qint64 elapsedMs = elapsed.elapsed();
+    const qint64 elapsed_ms = msSince(start_time);
 
     for (QTimer* t : timers)
         delete t;
 
     ASSERT_EQ(triggeredCount, timerCount);
-    ASSERT_LT(elapsedMs, 5000);
+    ASSERT_LT(elapsed_ms, 5000);
 }
 
 TEST(TimersTest, ManyCoarseTimersTriggering)
@@ -451,13 +441,12 @@ TEST(TimersTest, ManyCoarseTimersTriggering)
     constexpr int timerCount = 7000;
     constexpr Milliseconds interval{ 100 };
 
-    QElapsedTimer elapsed;
     int triggeredCount = 0;
 
     QEventLoop loop;
     QList<QTimer*> timers;
 
-    elapsed.start();
+    const TimePoint start_time = Clock::now();
 
     for (int i = 0; i < timerCount; ++i)
     {
@@ -477,13 +466,13 @@ TEST(TimersTest, ManyCoarseTimersTriggering)
     }
 
     loop.exec();
-    qint64 elapsedMs = elapsed.elapsed();
+    const qint64 elapsed_ms = msSince(start_time);
 
     for (QTimer* t : timers)
         delete t;
 
     ASSERT_EQ(triggeredCount, timerCount);
-    ASSERT_LT(elapsedMs, 5000);
+    ASSERT_LT(elapsed_ms, 5000);
 }
 
 TEST(TimersTest, ManyVeryCoarseTimersTriggering)
@@ -491,13 +480,12 @@ TEST(TimersTest, ManyVeryCoarseTimersTriggering)
     constexpr int timerCount = 7000;
     constexpr Milliseconds interval{ 100 };
 
-    QElapsedTimer elapsed;
     int triggeredCount = 0;
 
     QEventLoop loop;
     QList<QTimer*> timers;
 
-    elapsed.start();
+    const TimePoint start_time = Clock::now();
 
     for (int i = 0; i < timerCount; ++i)
     {
@@ -517,13 +505,13 @@ TEST(TimersTest, ManyVeryCoarseTimersTriggering)
     }
 
     loop.exec();
-    qint64 elapsedMs = elapsed.elapsed();
+    const qint64 elapsed_ms = msSince(start_time);
 
     for (QTimer* t : timers)
         delete t;
 
     ASSERT_EQ(triggeredCount, timerCount);
-    ASSERT_LT(elapsedMs, 5000);
+    ASSERT_LT(elapsed_ms, 5000);
 }
 
 TEST(TimersTest, DISABLED_OnePreciseTimerRepeats)
@@ -540,12 +528,11 @@ TEST(TimersTest, DISABLED_OnePreciseTimerRepeats)
     QVector<qint64> intervals;
     intervals.reserve(repeats);
 
-    QElapsedTimer clock;
-    clock.start();
+    const TimePoint clock_start = Clock::now();
 
     QEventLoop loop;
     int count = 0;
-    qint64 prev = clock.elapsed();
+    qint64 prev = msSince(clock_start);
 
     auto* timer = new QTimer();
     timer->setTimerType(Qt::PreciseTimer);
@@ -554,7 +541,7 @@ TEST(TimersTest, DISABLED_OnePreciseTimerRepeats)
 
     QObject::connect(timer, &QTimer::timeout, [&]()
     {
-        const qint64 now = clock.elapsed();
+        const qint64 now = msSince(clock_start);
         intervals.append(now - prev); // measure inter-fire interval
         prev = now;
 
@@ -604,12 +591,11 @@ TEST(TimersTest, DISABLED_OneCoarseTimerRepeats)
     QVector<qint64> intervals;
     intervals.reserve(repeats);
 
-    QElapsedTimer clock;
-    clock.start();
+    const TimePoint clock_start = Clock::now();
 
     QEventLoop loop;
     int count = 0;
-    qint64 prev = clock.elapsed();
+    qint64 prev = msSince(clock_start);
 
     auto* timer = new QTimer();
     timer->setTimerType(Qt::CoarseTimer);
@@ -618,7 +604,7 @@ TEST(TimersTest, DISABLED_OneCoarseTimerRepeats)
 
     QObject::connect(timer, &QTimer::timeout, [&]()
     {
-        const qint64 now = clock.elapsed();
+        const qint64 now = msSince(clock_start);
         intervals.append(now - prev); // measure inter-fire interval
         prev = now;
 
@@ -668,12 +654,11 @@ TEST(TimersTest, DISABLED_OneVeryCoarseTimerRepeats)
     QVector<qint64> intervals;
     intervals.reserve(repeats);
 
-    QElapsedTimer clock;
-    clock.start();
+    const TimePoint clock_start = Clock::now();
 
     QEventLoop loop;
     int count = 0;
-    qint64 prev = clock.elapsed();
+    qint64 prev = msSince(clock_start);
 
     auto* timer = new QTimer();
     timer->setTimerType(Qt::VeryCoarseTimer);
@@ -682,7 +667,7 @@ TEST(TimersTest, DISABLED_OneVeryCoarseTimerRepeats)
 
     QObject::connect(timer, &QTimer::timeout, [&]()
     {
-        const qint64 now = clock.elapsed();
+        const qint64 now = msSince(clock_start);
         intervals.append(now - prev); // measure inter-fire interval
         prev = now;
 
@@ -777,8 +762,7 @@ TEST(TimersTest, ZeroSingleShotTriggering)
 
     QEventLoop loop;
 
-    QElapsedTimer elapsed;
-    elapsed.start();
+    const TimePoint start_time = Clock::now();
 
     for (int i = 0; i < timerCount; ++i)
     {
@@ -791,10 +775,10 @@ TEST(TimersTest, ZeroSingleShotTriggering)
     }
 
     loop.exec();
-    qint64 elapsedMs = elapsed.elapsed();
+    const qint64 elapsed_ms = msSince(start_time);
 
     ASSERT_EQ(triggeredCount, timerCount);
-    ASSERT_LT(elapsedMs, 5000);
+    ASSERT_LT(elapsed_ms, 5000);
 }
 
 // A thread stall longer than the timer interval must not cause a burst of catch-up firings:
@@ -805,8 +789,7 @@ static void runTimerStallTest(Qt::TimerType type)
     constexpr int totalTicks = 8;
 
     QEventLoop loop;
-    QElapsedTimer clock;
-    clock.start();
+    const TimePoint clock_start = Clock::now();
 
     QVector<qint64> stamps;
     bool stalled = false;
@@ -817,7 +800,7 @@ static void runTimerStallTest(Qt::TimerType type)
 
     QObject::connect(&timer, &QTimer::timeout, [&]()
     {
-        stamps.append(clock.elapsed());
+        stamps.append(msSince(clock_start));
 
         // Simulate a stall of several timer periods right after the first tick.
         if (!stalled)
@@ -1004,7 +987,7 @@ public:
     static constexpr Milliseconds kInterval{ 100 };
 
     QEventLoop* loop = nullptr;
-    QElapsedTimer clock;
+    TimePoint start_time;
 
     int first_id = -1;
     int second_id = -1;
@@ -1030,7 +1013,7 @@ protected:
             first_id = -1;
             killTimer(old_id);
 
-            second_started_ms = clock.elapsed();
+            second_started_ms = msSince(start_time);
 
             int id = startTimer(kInterval, Qt::CoarseTimer);
             for (int i = 0; i < 512 && id != old_id; ++i)
@@ -1045,7 +1028,7 @@ protected:
         else if (event->timerId() == second_id)
         {
             if (second_fires == 0)
-                second_first_fire_ms = clock.elapsed();
+                second_first_fire_ms = msSince(start_time);
 
             if (++second_fires >= 3)
             {
@@ -1064,7 +1047,7 @@ TEST(TimersTest, TimerIdReuseInsideTimerEvent)
 
     ED_TimerIdReuseObject obj;
     obj.loop = &loop;
-    obj.clock.start();
+    obj.start_time = Clock::now();
 
     obj.first_id = obj.startTimer(ED_TimerIdReuseObject::kInterval, Qt::CoarseTimer);
     ASSERT_GT(obj.first_id, 0);

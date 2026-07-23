@@ -22,7 +22,6 @@
 #include <sys/types.h>
 
 #include <QByteArray>
-#include <QElapsedTimer>
 #include <QObject>
 #include <QSocketNotifier>
 
@@ -30,6 +29,7 @@
 #include <vector>
 
 #include "base/scoped_qpointer.h"
+#include "base/time_types.h"
 
 struct VTerm;
 struct VTermScreen;
@@ -155,7 +155,7 @@ private:
 
     bool mouse_active_ = false;
     quint64 generation_ = 0;
-    QElapsedTimer spawn_timer_; // measures time since the last login spawn, for throttling respawns
+    TimePoint spawn_time_; // time of the last login spawn, for throttling respawns
 
     // Highlighted text selection in cell coordinates (ordered in reading order).
     bool has_selection_ = false;

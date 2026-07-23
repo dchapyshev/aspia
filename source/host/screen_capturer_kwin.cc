@@ -28,7 +28,6 @@
 #include <QDBusMessage>
 #include <QDBusUnixFileDescriptor>
 #include <QDir>
-#include <QElapsedTimer>
 #include <QFile>
 #include <QFileInfo>
 #include <QVariant>
@@ -146,8 +145,7 @@ double measureThroughputMpps(QDBusInterface& screenshot)
     QVariantMap options;
     options.insert("include-cursor", false);
 
-    QElapsedTimer timer;
-    timer.start();
+    const TimePoint start_time = Clock::now();
 
     QDBusMessage reply;
     {
@@ -188,7 +186,7 @@ double measureThroughputMpps(QDBusInterface& screenshot)
     }
     ::close(fds[0]);
 
-    const qint64 elapsed_us = timer.nsecsElapsed() / 1000;
+    const qint64 elapsed_us = DurationCast<Microseconds>(Clock::now() - start_time).count();
     if (received != total || elapsed_us <= 0)
         return 0.0;
 
@@ -582,7 +580,7 @@ bool ScreenCapturerKwin::capture()
 //--------------------------------------------------------------------------------------------------
 void ScreenCapturerKwin::refreshOutputs()
 {
-    outputs_age_.restart();
+    outputs_time_ = Clock::now();
 
     QString socket_path;
     for (const char* name : { "wayland-0", "wayland-1" })
@@ -607,7 +605,7 @@ int ScreenCapturerKwin::screenCount()
 {
     // Called once per captured frame; re-read the layout on a throttle rather than on every call, since
     // querying Wayland opens a fresh socket connection each time.
-    if (!outputs_age_.isValid() || outputs_age_.elapsed() > 2000)
+    if (outputs_time_ == TimePoint() || Clock::now() - outputs_time_ > Seconds(2))
         refreshOutputs();
 
     return outputs_.isEmpty() ? 1 : static_cast<int>(outputs_.size());

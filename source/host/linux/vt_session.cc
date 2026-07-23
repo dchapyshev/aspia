@@ -257,7 +257,7 @@ bool VtSession::spawnLogin()
     write_notifier_->setEnabled(false);
     connect(write_notifier_.get(), &QSocketNotifier::activated, this, &VtSession::onWritable);
 
-    spawn_timer_.start();
+    spawn_time_ = Clock::now();
     LOG(INFO) << "VT login prompt started (pid" << child_pid_ << ")";
     return true;
 }
@@ -302,8 +302,8 @@ void VtSession::restartLogin()
 //--------------------------------------------------------------------------------------------------
 void VtSession::scheduleRestart()
 {
-    const qint64 elapsed = spawn_timer_.elapsed();
-    const int delay = (elapsed >= 1000) ? 0 : static_cast<int>(1000 - elapsed);
+    const Milliseconds elapsed = DurationCast<Milliseconds>(Clock::now() - spawn_time_);
+    const Milliseconds delay = (elapsed >= Seconds(1)) ? Milliseconds::zero() : Seconds(1) - elapsed;
 
     QTimer::singleShot(delay, this, [this]() { restartLogin(); });
 }

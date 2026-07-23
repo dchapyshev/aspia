@@ -197,7 +197,7 @@ void ServiceWorker::onTimer(TimePoint /* now */)
 
     for (auto it = pending_confirmation_.begin(); it != pending_confirmation_.end();)
     {
-        if (it->start_time.hasExpired(DurationCast<Milliseconds>(kConfirmationTimeout).count()))
+        if (Clock::now() - it->start_time >= kConfirmationTimeout)
         {
             TcpChannel* tcp_channel = it->tcp_channel;
             tcp_channel->deleteLater();
@@ -248,7 +248,7 @@ void ServiceWorker::onNewDirectConnection()
     {
         PendingConfirmation pending;
         pending.tcp_channel = tcp_server_->nextReadyConnection();
-        pending.start_time.start();
+        pending.start_time = Clock::now();
         startConfirmation(pending);
     }
 }
@@ -267,7 +267,7 @@ void ServiceWorker::onNewRelayConnection()
 
         PendingConfirmation pending;
         pending.tcp_channel = connection->tcp_channel;
-        pending.start_time.start();
+        pending.start_time = Clock::now();
         pending.stun_host = connection->stun_host;
         pending.stun_port = connection->stun_port;
         startConfirmation(pending);

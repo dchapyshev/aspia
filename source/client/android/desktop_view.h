@@ -19,7 +19,6 @@
 #ifndef CLIENT_ANDROID_DESKTOP_VIEW_H
 #define CLIENT_ANDROID_DESKTOP_VIEW_H
 
-#include <QElapsedTimer>
 #include <QImage>
 #include <QList>
 #include <QPoint>
@@ -31,6 +30,7 @@
 
 #include <memory>
 
+#include "base/time_types.h"
 #include "base/desktop/shared_frame.h"
 
 namespace proto::input {
@@ -165,8 +165,7 @@ private:
     quint32 button_mask_ = 0;
     bool armed_drag_ = false;
     bool dragging_ = false;
-    QElapsedTimer gesture_timer_;
-    qint64 last_tap_time_ = -10000;
+    TimePoint last_tap_time_;
     QTimer* long_press_timer_ = nullptr;
     QTimer* edge_scroll_timer_ = nullptr;
     QPointF edge_velocity_;

@@ -21,7 +21,6 @@
 
 #include <QByteArray>
 #include <QDBusConnection>
-#include <QElapsedTimer>
 #include <QRect>
 #include <QString>
 
@@ -29,6 +28,7 @@
 
 #include <sys/types.h>
 
+#include "base/time_types.h"
 #include "base/desktop/frame.h"
 #include "host/screen_capturer.h"
 #include "host/linux/wayland_output_layout.h"
@@ -109,7 +109,7 @@ private:
     // compositor output layout backs the screen list and is refreshed on a throttle in screenCount().
     QString selected_output_;
     QList<WaylandOutputLayout::Output> outputs_;
-    QElapsedTimer outputs_age_;
+    TimePoint outputs_time_;
     // Reused staging buffer for the raw pixels read from the pipe (KWin's stride may differ from the
     // frame's, so a straight copy into the frame is not possible).
     QByteArray read_buffer_;

@@ -19,7 +19,6 @@
 #ifndef CLIENT_WORKERS_NETWORK_WORKER_H
 #define CLIENT_WORKERS_NETWORK_WORKER_H
 
-#include <QElapsedTimer>
 #include <QVariant>
 
 #include <list>
@@ -152,7 +151,7 @@ private:
     {
         quint32 id = 0;
         bool active = false;
-        QElapsedTimer first_arrival; // Started when the first probe of the train arrives.
+        TimePoint first_arrival; // Set when the first probe of the train arrives.
         quint64 bytes = 0;           // Payload bytes received after the first probe.
     };
     ProbeTrain probe_train_;
@@ -161,7 +160,7 @@ private:
     bool session_ready_ = false;
 
     // Receive-rate reporting (see onTimer).
-    QElapsedTimer receive_rate_interval_;
+    TimePoint receive_rate_time_;
     qint64 receive_rate_last_total_ = 0;
 
     Q_DISABLE_COPY_MOVE(NetworkWorker)

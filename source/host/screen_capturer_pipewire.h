@@ -20,7 +20,6 @@
 #define HOST_SCREEN_CAPTURER_PIPEWIRE_H
 
 #include <QByteArray>
-#include <QElapsedTimer>
 #include <QMutex>
 #include <QPoint>
 #include <QPointer>
@@ -33,6 +32,7 @@
 #include <memory>
 
 #include "base/scoped_qpointer.h"
+#include "base/time_types.h"
 #include "base/desktop/frame.h"
 #include "base/desktop/region.h"
 #include "host/screen_capturer.h"
@@ -144,7 +144,7 @@ private:
     // prolonged pause means the lock screen is only reachable below the compositor. |fallback_requested_|
     // makes that fire once.
     std::atomic<bool> stream_paused_ = false;
-    QElapsedTimer paused_since_;
+    TimePoint paused_since_;
     bool fallback_requested_ = false;
 
     // Imports DMA-BUF frames via EGL/GBM when the compositor delivers them.

@@ -28,7 +28,6 @@
 
 #include <utility>
 
-#include "base/time_types.h"
 #include "base/desktop/frame.h"
 #include "base/desktop/mouse_cursor.h"
 #include "common/keycode_converter.h"
@@ -83,7 +82,6 @@ DesktopView::DesktopView(QWidget* parent)
     setFocusPolicy(Qt::StrongFocus);
     setAttribute(Qt::WA_InputMethodEnabled, true);
 
-    gesture_timer_.start();
 
     long_press_timer_ = new QTimer(this);
     long_press_timer_->setSingleShot(true);
@@ -447,7 +445,7 @@ void DesktopView::handleTouch(QTouchEvent* event)
         last_point_ = down[0];
 
         // A finger-down soon after a tap arms a drag: if it moves, the left button is held.
-        armed_drag_ = (gesture_timer_.elapsed() - last_tap_time_) <= kDoubleTapInterval.count();
+        armed_drag_ = (Clock::now() - last_tap_time_) <= kDoubleTapInterval;
         dragging_ = false;
         button_mask_ = 0;
 
@@ -538,7 +536,7 @@ void DesktopView::handleTouch(QTouchEvent* event)
         if (!dragging_ && !moved_)
         {
             sendClick(proto::input::MouseEvent::LEFT_BUTTON);
-            last_tap_time_ = gesture_timer_.elapsed();
+            last_tap_time_ = Clock::now();
         }
         gesture_ = Gesture::NONE;
     }

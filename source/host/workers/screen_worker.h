@@ -19,7 +19,6 @@
 #ifndef HOST_WORKERS_SCREEN_WORKER_H
 #define HOST_WORKERS_SCREEN_WORKER_H
 
-#include <QElapsedTimer>
 #include <QPoint>
 #include <QPointer>
 #include <QSize>
@@ -172,7 +171,7 @@ private:
     uid_t session_uid_ = 0;
 
     // Runs while capture attempts fail without a single frame (see registerCaptureFailure()).
-    QElapsedTimer capture_error_time_;
+    TimePoint capture_error_time_;
 #endif // defined(Q_OS_LINUX)
 
     ScopedQPointer<DesktopEnvironment> desktop_environment_;

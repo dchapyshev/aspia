@@ -97,7 +97,7 @@ void NetworkWorker::onSessionReady()
     // estimation under real load (probes only run while the link is idle).
     receive_rate_last_total_ = (tcp_channel_ ? tcp_channel_->totalRx() : 0) +
                                (udp_channel_ ? udp_channel_->totalRx() : 0);
-    receive_rate_interval_.start();
+    receive_rate_time_ = Clock::now();
     session_ready_ = true;
 }
 
@@ -198,18 +198,19 @@ void NetworkWorker::onTimer(TimePoint now)
     const qint64 total = (tcp_channel_ ? tcp_channel_->totalRx() : 0) +
                          (udp_channel_ ? udp_channel_->totalRx() : 0);
     const qint64 bytes = total - receive_rate_last_total_;
-    const qint64 interval_ms = receive_rate_interval_.restart();
+    const Milliseconds interval = DurationCast<Milliseconds>(now - receive_rate_time_);
+    receive_rate_time_ = now;
 
     receive_rate_last_total_ = total;
 
     // An idle interval carries no information about the path capacity.
-    if (bytes <= 0 || interval_ms <= 0 || !tcp_channel_)
+    if (bytes <= 0 || interval <= Milliseconds::zero() || !tcp_channel_)
         return;
 
     proto::peer::ClientToHost message;
     proto::peer::ReceiveRate* rate = message.mutable_receive_rate();
     rate->set_bytes(static_cast<quint64>(bytes));
-    rate->set_interval_ms(static_cast<quint32>(interval_ms));
+    rate->set_interval_ms(static_cast<quint32>(interval.count()));
 
     tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, serialize(message));
 }
@@ -535,7 +536,7 @@ void NetworkWorker::readBandwidthProbe(const proto::peer::BandwidthProbe& probe,
         probe_train_.id = probe.train_id();
         probe_train_.active = true;
         probe_train_.bytes = 0;
-        probe_train_.first_arrival.start();
+        probe_train_.first_arrival = Clock::now();
         return;
     }
 
@@ -549,7 +550,8 @@ void NetworkWorker::readBandwidthProbe(const proto::peer::BandwidthProbe& probe,
         proto::peer::ClientToHost message;
         proto::peer::BandwidthProbeAck* ack = message.mutable_bandwidth_probe_ack();
         ack->set_train_id(probe_train_.id);
-        ack->set_delta_us(static_cast<quint64>(probe_train_.first_arrival.nsecsElapsed() / 1000));
+        ack->set_delta_us(static_cast<quint64>(
+            DurationCast<Microseconds>(Clock::now() - probe_train_.first_arrival).count()));
         ack->set_bytes(probe_train_.bytes);
 
         probe_train_.active = false;
