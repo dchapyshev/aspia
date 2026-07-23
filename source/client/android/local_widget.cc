@@ -486,6 +486,9 @@ void LocalWidget::populateGroups(qint64 parent_id, QTreeWidgetItem* parent)
                                        : new QTreeWidgetItem(tree_, { group.name() });
         item->setIcon(0, icon);
         item->setData(0, kGroupIdRole, group.id());
+        // A group row has no trailing address; spanning it across both columns keeps the accordion
+        // chevron at the row edge instead of the column boundary.
+        item->setFirstColumnSpanned(true);
         item->setExpanded(true);
 
         populateGroups(group.id(), item);
