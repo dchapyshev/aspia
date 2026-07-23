@@ -42,7 +42,7 @@ TwoFactorCodeDialog::TwoFactorCodeDialog(QWidget* parent)
 
     // Pin the height to the layout's preferred size so the user cannot drag the dialog into
     // an awkward tall shape. Defer to the next event loop tick so the layout has settled.
-    QTimer::singleShot(0, this, [this]() { setFixedHeight(sizeHint().height()); });
+    QTimer::singleShot(Milliseconds(0), this, [this]() { setFixedHeight(sizeHint().height()); });
 }
 
 //--------------------------------------------------------------------------------------------------

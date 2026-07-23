@@ -70,7 +70,7 @@ const quint32 kWheelMask =
 
 // Mouse move events are coalesced and flushed at this fixed rate to cap the outgoing event stream
 // from high-polling-rate mice. Button and wheel events bypass coalescing and are sent immediately.
-const int kMouseFlushIntervalMs = 20; // 50Hz
+const Milliseconds kMouseFlushInterval{ 20 }; // 50Hz
 
 //--------------------------------------------------------------------------------------------------
 QSize scaledSize(const QSize& source_size, int scale)
@@ -119,7 +119,7 @@ DesktopWindow::DesktopWindow(const proto::control::Config& desktop_config, QWidg
     // Keeps running while the mouse moves (no per-tick restart) and stops itself once there is
     // nothing left to flush (see onMouseFlushTimer).
     mouse_timer_ = new QTimer(this);
-    mouse_timer_->setInterval(kMouseFlushIntervalMs);
+    mouse_timer_->setInterval(kMouseFlushInterval);
     mouse_timer_->setTimerType(Qt::PreciseTimer);
     connect(mouse_timer_, &QTimer::timeout, this, &DesktopWindow::onMouseFlushTimer);
 

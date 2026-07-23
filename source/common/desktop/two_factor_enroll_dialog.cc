@@ -30,6 +30,7 @@
 
 #include <qrcodegen.hpp>
 
+#include "base/time_types.h"
 #include "ui_two_factor_enroll_dialog.h"
 
 namespace {
@@ -105,7 +106,7 @@ TwoFactorEnrollDialog::TwoFactorEnrollDialog(const QString& otpauth_uri, QWidget
     connect(ui->buttonbox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(ui->buttonbox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
-    QTimer::singleShot(0, this, [this]() { setFixedSize(sizeHint()); });
+    QTimer::singleShot(Milliseconds(0), this, [this]() { setFixedSize(sizeHint()); });
 }
 
 //--------------------------------------------------------------------------------------------------

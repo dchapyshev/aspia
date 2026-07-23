@@ -21,6 +21,7 @@
 #include <QTimer>
 #include <QVBoxLayout>
 
+#include "base/time_types.h"
 #include "base/crypto/secure_string.h"
 #include "client/database.h"
 #include "client/master_password.h"
@@ -101,7 +102,7 @@ MasterPasswordDialog::MasterPasswordDialog(Mode mode, QWidget* parent)
         Database::instance().isBiometricUnlockEnabled() &&
         BiometricGate::status() == BiometricGate::Status::AVAILABLE;
     if (biometric_available)
-        QTimer::singleShot(0, this, &MasterPasswordDialog::tryBiometricUnlock);
+        QTimer::singleShot(Milliseconds(0), this, &MasterPasswordDialog::tryBiometricUnlock);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -33,6 +33,7 @@
 #include <vector>
 
 #include "base/logging.h"
+#include "base/time_types.h"
 #include "base/desktop/frame.h"
 #include "base/desktop/frame_aligned.h"
 #include "base/desktop/mouse_cursor.h"
@@ -585,7 +586,7 @@ namespace {
 // How long an asynchronous stream start may stay pending before captureFrame() reports a permanent
 // error. Generous: right after a login/logout transition ScreenCaptureKit can take seconds to
 // respond while the WindowServer settles.
-const qint64 kStreamStartTimeoutMs = 10000;
+const Seconds kStreamStartTimeout{ 10 };
 
 //--------------------------------------------------------------------------------------------------
 QRect cgRectToQRect(CGRect rect)
@@ -704,7 +705,7 @@ ScreenCapturerMac* ScreenCapturerMac::create(QObject* parent)
 bool ScreenCapturerMac::waitForDisplays()
 {
     static const int kRetryCount = 20;
-    static const int kRetryDelayMs = 250;
+    static const Milliseconds kRetryDelay{ 250 };
 
     for (int i = 0; i < kRetryCount; ++i)
     {
@@ -713,7 +714,7 @@ bool ScreenCapturerMac::waitForDisplays()
         if (CGGetOnlineDisplayList(1, &display, &count) == kCGErrorSuccess && count > 0)
             return true;
 
-        QThread::msleep(kRetryDelayMs);
+        QThread::sleep(kRetryDelay);
     }
 
     return false;
@@ -1091,7 +1092,7 @@ bool ScreenCapturerMac::startStream()
         impl_->stream_state.store(StreamState::STARTING, std::memory_order_relaxed);
     }
 
-    start_deadline_.setRemainingTime(kStreamStartTimeoutMs);
+    start_deadline_.setRemainingTime(kStreamStartTimeout);
 
     // The shareable-content fetch, the stream creation and the capture start all happen
     // asynchronously on ScreenCaptureKit's queues (as WebRTC does): any of them can stall while a

@@ -39,7 +39,7 @@
 
 namespace {
 
-constexpr int kDragPollIntervalMs = 50;
+constexpr Milliseconds kDragPollInterval{ 50 };
 const Seconds kReconnectRetryDelay { 5 };
 const Minutes kReconnectBudget { 5 };
 
@@ -61,7 +61,7 @@ ClientWindow::ClientWindow(proto::peer::SessionType session_type, QWidget* paren
     // After closing the status dialog, close the session window.
     connect(status_dialog_, &StatusDialog::finished, this, &ClientWindow::close);
 
-    drag_poll_timer_->setInterval(kDragPollIntervalMs);
+    drag_poll_timer_->setInterval(kDragPollInterval);
     connect(drag_poll_timer_, &QTimer::timeout, this, &ClientWindow::onDragPoll);
 
     reconnect_timeout_timer_->setSingleShot(true);

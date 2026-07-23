@@ -148,7 +148,7 @@ DesktopToolBar::DesktopToolBar(QWidget* parent)
     });
 
     // Default state matches the .ui defaults: pin off, toolbar hidden, frame visible.
-    hide_timer_->start(0);
+    hide_timer_->start(Milliseconds(0));
 
 #if defined(Q_OS_MACOS)
     // MacOS has its own button to maximize the window to full screen.
@@ -454,7 +454,7 @@ void DesktopToolBar::setTabbedMode(bool tabbed)
         show();
 
         if (!is_pinned)
-            hide_timer_->start(0);
+            hide_timer_->start(Milliseconds(0));
     }
 }
 
@@ -538,7 +538,7 @@ void DesktopToolBar::restoreState(const QByteArray& state)
     }
     else if (!hide_timer_->isActive())
     {
-        hide_timer_->start(0);
+        hide_timer_->start(Milliseconds(0));
     }
 
     if (scale_menu_)

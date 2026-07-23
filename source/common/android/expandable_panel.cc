@@ -26,6 +26,7 @@
 #include <QVBoxLayout>
 #include <QVariantAnimation>
 
+#include "base/time_types.h"
 #include "common/android/controls.h"
 
 namespace {
@@ -33,7 +34,7 @@ namespace {
 constexpr int kHeaderHeight = 56;
 constexpr int kHeaderHMargin = 13;
 constexpr int kHeaderSpacing = 12;
-constexpr int kLongPressTimeout = 500;
+constexpr Milliseconds kLongPressTimeout{ 500 };
 constexpr int kLongPressMoveThreshold = 16;
 
 } // namespace

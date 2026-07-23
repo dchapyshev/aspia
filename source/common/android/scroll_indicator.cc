@@ -25,12 +25,14 @@
 #include <QTimer>
 #include <QVariantAnimation>
 
+#include "base/time_types.h"
+
 namespace {
 
 constexpr int kWidth = 4;
 constexpr int kMinHandle = 24;
-constexpr int kVisibleMs = 900;
-constexpr int kFadeMs = 300;
+constexpr Milliseconds kVisibleTime{ 900 };
+constexpr Milliseconds kFadeTime{ 300 };
 constexpr int kRadius = 2;
 constexpr double kOpacity = 0.4;
 
@@ -47,7 +49,7 @@ ScrollIndicator::ScrollIndicator(QAbstractScrollArea* area, int margin)
 {
     setAttribute(Qt::WA_TransparentForMouseEvents);
 
-    fade_->setDuration(kFadeMs);
+    fade_->setDuration(static_cast<int>(kFadeTime.count()));
     fade_->setStartValue(1.0);
     fade_->setEndValue(0.0);
     connect(fade_, &QVariantAnimation::valueChanged, this, [this](const QVariant& value)
@@ -57,7 +59,7 @@ ScrollIndicator::ScrollIndicator(QAbstractScrollArea* area, int margin)
     });
 
     hide_timer_->setSingleShot(true);
-    hide_timer_->setInterval(kVisibleMs);
+    hide_timer_->setInterval(kVisibleTime);
     connect(hide_timer_, &QTimer::timeout, fade_, [this]() { fade_->start(); });
 
     connect(area_->verticalScrollBar(), &QScrollBar::valueChanged, this,

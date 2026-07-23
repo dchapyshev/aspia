@@ -55,12 +55,12 @@ const int kMinSmallIconSize = 16;
 const int kMaxSmallIconSize = 48;
 
 const int kMaxPendingConnections = 25;
-const int kConnectTimeoutMs = 1000;
-const int kDisconnectTimeoutMs = 1000;
-const int kReconnectIntervalMs = 500;
+const Milliseconds kConnectTimeout{ 1000 };
+const Milliseconds kDisconnectTimeout{ 1000 };
+const Milliseconds kReconnectInterval{ 500 };
 const int kReconnectTryCount = 3;
-const int kReadTimeoutMs = 1500;
-const int kWriteTimeoutMs = 1500;
+const Milliseconds kReadTimeout{ 1500 };
+const Milliseconds kWriteTimeout{ 1500 };
 const int kMaxMessageSize = 1024 * 1024 * 1;
 
 const char kOkMessage[] = "OK";
@@ -510,12 +510,12 @@ void GuiApplication::sendMessage(const QByteArray& message)
     for (int i = 0; i < kReconnectTryCount; ++i)
     {
         socket.connectToServer(server_name_);
-        if (socket.waitForConnected(kConnectTimeoutMs))
+        if (socket.waitForConnected(static_cast<int>(kConnectTimeout.count())))
             break;
 
         if (i == kReconnectTryCount - 1)
             break;
-        QThread::msleep(kReconnectIntervalMs);
+        QThread::sleep(kReconnectInterval);
     }
 
     if (socket.state() != QLocalSocket::LocalSocketState::ConnectedState)
@@ -527,13 +527,13 @@ void GuiApplication::sendMessage(const QByteArray& message)
     QDataStream stream(&socket);
     stream.writeBytes(message.constData(), static_cast<uint>(message.size()));
 
-    if (!socket.waitForBytesWritten(kWriteTimeoutMs))
+    if (!socket.waitForBytesWritten(static_cast<int>(kWriteTimeout.count())))
     {
         LOG(ERROR) << "Timeout when sending a message";
         return;
     }
 
-    if (!socket.waitForReadyRead(kReadTimeoutMs))
+    if (!socket.waitForReadyRead(static_cast<int>(kReadTimeout.count())))
     {
         LOG(ERROR) << "Timeout when reading a message";
         return;
@@ -573,7 +573,7 @@ void GuiApplication::onNewConnection()
             return;
         if (socket->bytesAvailable() >= static_cast<int>(sizeof(quint32)))
             break;
-        if (!socket->waitForReadyRead(kReadTimeoutMs))
+        if (!socket->waitForReadyRead(static_cast<int>(kReadTimeout.count())))
         {
             LOG(ERROR) << "Timed out waiting for the message header";
             return;
@@ -608,7 +608,7 @@ void GuiApplication::onNewConnection()
         buffer += read_bytes;
         remaining -= static_cast<quint32>(read_bytes);
     }
-    while (remaining && socket->waitForReadyRead(kReadTimeoutMs));
+    while (remaining && socket->waitForReadyRead(static_cast<int>(kReadTimeout.count())));
 
     if (remaining)
     {
@@ -617,8 +617,8 @@ void GuiApplication::onNewConnection()
     }
 
     socket->write(kOkMessage, strlen(kOkMessage));
-    socket->waitForBytesWritten(kWriteTimeoutMs);
-    socket->waitForDisconnected(kDisconnectTimeoutMs);
+    socket->waitForBytesWritten(static_cast<int>(kWriteTimeout.count()));
+    socket->waitForDisconnected(static_cast<int>(kDisconnectTimeout.count()));
 
     emit sig_messageReceived(message);
 }

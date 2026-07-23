@@ -21,6 +21,7 @@
 #include <QTimer>
 
 #include "base/logging.h"
+#include "base/time_types.h"
 #include "base/crypto/secure_string.h"
 #include "client/settings.h"
 #include "common/desktop/msg_box.h"
@@ -169,7 +170,7 @@ void AuthorizationDialog::onButtonBoxClicked(QAbstractButton* button)
 //--------------------------------------------------------------------------------------------------
 void AuthorizationDialog::fitSize()
 {
-    QTimer::singleShot(0, this, [this]()
+    QTimer::singleShot(Milliseconds(0), this, [this]()
     {
         setFixedHeight(sizeHint().height());
     });

@@ -60,7 +60,7 @@ constexpr int kDragThreshold = 12;
 
 // Hidden gesture: this many taps on the handle strip, no slower than this apart, reveal the statistics.
 constexpr int kSecretTapCount = 5;
-constexpr int kSecretTapResetMs = 2000;
+constexpr Milliseconds kSecretTapReset{ 2000 };
 
 } // namespace
 
@@ -369,7 +369,7 @@ void BottomSheet::mouseReleaseEvent(QMouseEvent* event)
     // A tap on the handle strip (no item there) drives the hidden statistics gesture.
     if (handleHitRect().contains(pos))
     {
-        if (handle_tap_timer_.isValid() && handle_tap_timer_.elapsed() > kSecretTapResetMs)
+        if (handle_tap_timer_.isValid() && handle_tap_timer_.elapsed() > kSecretTapReset.count())
             handle_taps_ = 0;
 
         ++handle_taps_;

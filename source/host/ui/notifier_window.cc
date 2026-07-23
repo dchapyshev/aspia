@@ -502,7 +502,7 @@ void NotifierWindow::onHideNotifier()
 
     setFixedSize(minimumSizeHint());
 
-    QTimer::singleShot(0, this, [this]()
+    QTimer::singleShot(Milliseconds(0), this, [this]()
     {
         QRect screen_rect = currentAvailableRect();
         QPoint window_pos(screen_rect.x() + screen_rect.width() - width() - kRightPadding, pos().y());

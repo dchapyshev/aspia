@@ -328,7 +328,7 @@ void ChatWidget::resizeEvent(QResizeEvent* /* event */)
 void ChatWidget::showEvent(QShowEvent* event)
 {
     QWidget::showEvent(event);
-    QTimer::singleShot(0, this, &ChatWidget::onUpdateSize);
+    QTimer::singleShot(Milliseconds(0), this, &ChatWidget::onUpdateSize);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -345,7 +345,7 @@ void ChatWidget::onMessageTextChanged()
     edit->setFixedHeight(std::clamp(desired, kEditMessageMinHeight, kEditMessageMaxHeight));
 
     if (was_at_bottom)
-        QTimer::singleShot(0, ui->list_messages, &QListWidget::scrollToBottom);
+        QTimer::singleShot(Milliseconds(0), ui->list_messages, &QListWidget::scrollToBottom);
 }
 
 //--------------------------------------------------------------------------------------------------

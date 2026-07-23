@@ -35,7 +35,7 @@ namespace {
 const quint16 kGatewayPort = 5351;
 const quint32 kLeaseSeconds = 3600;
 
-const int kInitialTimeoutMs = 250;
+const Milliseconds kInitialTimeout{ 250 };
 const int kMaxTries = 4;
 
 const quint8 kNatPmpVersion = 0;
@@ -236,7 +236,7 @@ void PcpPortMapper::sendRequest()
 //--------------------------------------------------------------------------------------------------
 void PcpPortMapper::startRetransmitTimer()
 {
-    retransmit_timer_.expires_after(Milliseconds(kInitialTimeoutMs << tries_));
+    retransmit_timer_.expires_after(kInitialTimeout * (1 << tries_));
 
     auto io = io_;
     retransmit_timer_.async_wait([this, io](const std::error_code& error_code)

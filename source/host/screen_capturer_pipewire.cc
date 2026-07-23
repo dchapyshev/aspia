@@ -37,6 +37,7 @@
 #include <utility>
 
 #include "base/logging.h"
+#include "base/time_types.h"
 #include "base/desktop/frame_aligned.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/region.h"
@@ -67,7 +68,7 @@ const int kMaxDamageRegions = 16;
 // How long the compositor stream may stay paused before capture falls back to KMS. A normal pause
 // (renegotiation) lasts a fraction of a second; a much longer one means the session is locked and the
 // compositor will not resume until it unlocks, so the lock screen is only reachable below it.
-const int kPausedFallbackMs = 1500;
+const Milliseconds kPausedFallback{ 1500 };
 
 // 32-bit packed RGB formats offered to the compositor.
 const quint32 kVideoFormats[] = {
@@ -335,10 +336,10 @@ const Frame* ScreenCapturerPipeWire::captureFrame(Error* error)
         if (!paused_since_.isValid())
             paused_since_.start();
 
-        if (!fallback_requested_ && paused_since_.hasExpired(kPausedFallbackMs))
+        if (!fallback_requested_ && paused_since_.hasExpired(kPausedFallback.count()))
         {
             fallback_requested_ = true;
-            LOG(INFO) << "Compositor stream paused for" << kPausedFallbackMs
+            LOG(INFO) << "Compositor stream paused for" << kPausedFallback.count()
                       << "ms (session likely locked); falling back to KMS";
             QMetaObject::invokeMethod(parent(), [this]() { emit sig_started(false); },
                                       Qt::QueuedConnection);

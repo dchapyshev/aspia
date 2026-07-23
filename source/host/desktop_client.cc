@@ -287,8 +287,8 @@ void DesktopClient::onTimer(TimePoint now)
     // Drain-time thresholds: how long the queued data would take to go out at the estimated link
     // rate. They trip much earlier than the byte backstop on slow links, where a fixed byte count
     // would mean seconds of added latency before any throttling starts.
-    static const qint64 kCriticalDrainTimeMs = 1000;
-    static const qint64 kWarningDrainTimeMs = 300;
+    static const Milliseconds kCriticalDrainTime{ 1000 };
+    static const Milliseconds kWarningDrainTime{ 300 };
 
     // The excess over the path's normal in-flight window; a healthy long-RTT UDP link would trip
     // the thresholds constantly on the raw value.
@@ -303,11 +303,11 @@ void DesktopClient::onTimer(TimePoint now)
 
     if (estimated_bandwidth > 0 && state != proto::desktop::Overflow::STATE_CRITICAL)
     {
-        const qint64 drain_time_ms = pending * 1000 / estimated_bandwidth;
+        const Milliseconds drain_time{ pending * 1000 / estimated_bandwidth };
 
-        if (drain_time_ms > kCriticalDrainTimeMs)
+        if (drain_time > kCriticalDrainTime)
             state = proto::desktop::Overflow::STATE_CRITICAL;
-        else if (drain_time_ms > kWarningDrainTimeMs && state == proto::desktop::Overflow::STATE_NONE)
+        else if (drain_time > kWarningDrainTime && state == proto::desktop::Overflow::STATE_NONE)
             state = proto::desktop::Overflow::STATE_WARNING;
     }
 

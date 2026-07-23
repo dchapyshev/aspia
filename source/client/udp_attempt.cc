@@ -35,7 +35,7 @@
 
 namespace {
 
-const int kAttemptTimeoutMs = 15000; // Max time for one attempt to win before it is dropped.
+const Seconds kAttemptTimeout{ 15 }; // Max time for one attempt to win before it is dropped.
 
 //--------------------------------------------------------------------------------------------------
 template <class Request>
@@ -189,7 +189,7 @@ void UdpAttempt::startTimeout()
 {
     // If this attempt has not won by the deadline it is dropped. A won attempt is deleted by the
     // owner before the deadline, which cancels this timer.
-    QTimer::singleShot(kAttemptTimeoutMs, this, [this]()
+    QTimer::singleShot(kAttemptTimeout, this, [this]()
     {
         if (connected_)
             return;

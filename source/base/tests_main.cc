@@ -84,7 +84,7 @@ int main(int argc, char **argv)
         QCoreApplication app(argc, argv);
         ::testing::InitGoogleTest(&argc, argv);
 
-        QTimer::singleShot(0, []()
+        QTimer::singleShot(Milliseconds(0), []()
         {
             int result = RUN_ALL_TESTS();
             QCoreApplication::exit(result);

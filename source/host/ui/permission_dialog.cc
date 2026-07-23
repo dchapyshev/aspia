@@ -25,9 +25,11 @@
 #include <QTimer>
 #include <QVBoxLayout>
 
+#include "base/time_types.h"
+
 namespace {
 
-const int kRefreshIntervalMs = 1000;
+const Seconds kRefreshInterval{ 1 };
 
 } // namespace
 
@@ -74,7 +76,7 @@ PermissionDialog::PermissionDialog(QWidget* parent)
 
     QTimer* refresh_timer = new QTimer(this);
     connect(refresh_timer, &QTimer::timeout, this, &PermissionDialog::refresh);
-    refresh_timer->start(kRefreshIntervalMs);
+    refresh_timer->start(kRefreshInterval);
 
     refresh();
 }

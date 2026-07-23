@@ -21,6 +21,7 @@
 #include <QTimer>
 
 #include "base/logging.h"
+#include "base/time_types.h"
 #include "base/codec/scale_reducer.h"
 #include "base/codec/video_encoder.h"
 #include "base/desktop/frame.h"
@@ -41,7 +42,7 @@ namespace {
 
 // Target capture cadence. A fixed interval is enough for the Android host; the desktop's adaptive
 // scheduler is not ported here.
-const int kCaptureIntervalMs = 33;
+const Milliseconds kCaptureInterval{ 33 };
 
 } // namespace
 
@@ -160,7 +161,7 @@ void DesktopAgent::onClientConfigured()
     if (floating_menu_bridge_)
         floating_menu_bridge_->showButton();
 
-    capture_timer_->start(0);
+    capture_timer_->start(Milliseconds(0));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -253,7 +254,7 @@ void DesktopAgent::onCaptureScreen()
         // loop instead of resending the error every tick. A temporary one just waits for the first
         // frame (the projection is still being granted).
         if (!permanent)
-            capture_timer_->start(kCaptureIntervalMs);
+            capture_timer_->start(kCaptureInterval);
         return;
     }
 
@@ -271,7 +272,7 @@ void DesktopAgent::onCaptureScreen()
     }
 
     encodeScreen(frame);
-    capture_timer_->start(kCaptureIntervalMs);
+    capture_timer_->start(kCaptureInterval);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -36,13 +36,13 @@ namespace {
 // the same queue as the traffic), and they are the only signal that can RAISE the estimate while
 // the session is busy - arrival-rate feedback never exceeds the production rate, which the estimate
 // itself caps.
-const qint64 kProbeIntervalMs = 10000;
+const Seconds kProbeInterval{ 10 };
 
 // A train sent within this window of session traffic counts as sent under load; its result is
 // trusted only upward (see the ack handlers).
-const qint64 kIdleThresholdMs = 5000;
-const int kUdpInitialDelayMs = 7000;        // Delay before the first UDP negotiation (let key frames flush).
-const int kUdpReconnectDelayMs = 5000;      // 5 seconds before attempting UDP reconnection.
+const Seconds kIdleThreshold{ 5 };
+const Seconds kUdpInitialDelay{ 7 };        // Delay before the first UDP negotiation (let key frames flush).
+const Seconds kUdpReconnectDelay{ 5 };      // 5 seconds before attempting UDP reconnection.
 
 // A probe train: several probes sent back to back. The receiver measures the arrival spacing, which
 // reflects the bottleneck rate of the path independently of the RTT (a single request/response probe
@@ -60,7 +60,7 @@ const qint64 kMinBandwidthEstimate = 8 * 1024;         // 8 KB/s
 // reported by the client equals the path capacity - when the queued data is worth more than this
 // much transfer time at the current estimate, or exceeds the absolute cap (which also catches an
 // overestimated link, whose relative threshold would be unreachably high).
-const qint64 kSaturatedDrainTimeMs = 125;
+const Milliseconds kSaturatedDrainTime{ 125 };
 const qint64 kSaturatedPendingBytes = 256 * 1024;
 
 // Estimate changes below these fractions are not propagated to consumers - the quality tiers are
@@ -74,7 +74,7 @@ const int kPublishDownThresholdPercent = 10;
 // on the channel means buffers are filling somewhere along the path - congestion that neither the
 // send queue nor the arrival rate can show yet. The estimate is cut by the given percent after the
 // growth persists for this many consecutive receive-rate reports (roughly seconds).
-const int kQueuingDelayThresholdMs = 150;
+const Milliseconds kQueuingDelayThreshold{ 150 };
 const int kQueuingDelaySamples = 3;
 const int kQueuingDelayCutPercent = 15;
 
@@ -165,7 +165,7 @@ void Client::start(const QString& stun_host, quint16 stun_port)
 
     // Delay UDP negotiation so the initial burst of key frames flushes over TCP first.
     if (features_ & FEATURE_UDP)
-        QTimer::singleShot(kUdpInitialDelayMs, this, &Client::connectToUdp);
+        QTimer::singleShot(kUdpInitialDelay, this, &Client::connectToUdp);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -299,7 +299,7 @@ void Client::onTimer(TimePoint now)
     // Bandwidth probing is inactive until startBandwidthProbing() arms the deadline.
     if (next_probe_time_ == TimePoint() || now < next_probe_time_)
         return;
-    next_probe_time_ = now + Milliseconds(kProbeIntervalMs);
+    next_probe_time_ = now + kProbeInterval;
 
     if (!peer_ready_)
         return;
@@ -312,7 +312,7 @@ void Client::onTimer(TimePoint now)
             return;
 
         auto age = DurationCast<Milliseconds>(now - probe.send_time);
-        if (age.count() >= kProbeIntervalMs)
+        if (age >= kProbeInterval)
             probe.pending = false;
     };
     expireProbe(tcp_probe_);
@@ -543,7 +543,7 @@ void Client::onUdpErrorOccurred()
         CLOG(INFO) << "UDP channel dropped, switching to TCP and scheduling reconnect";
         clearAttempts();
         emit sig_channelChanged();
-        QTimer::singleShot(kUdpReconnectDelayMs, this, &Client::connectToUdp);
+        QTimer::singleShot(kUdpReconnectDelay, this, &Client::connectToUdp);
         return;
     }
 }
@@ -587,7 +587,7 @@ void Client::readUdpReply(const proto::peer::UdpReply& reply)
 void Client::startBandwidthProbing()
 {
     last_send_time_ = TimePoint();
-    next_probe_time_ = Clock::now() + Milliseconds(kProbeIntervalMs);
+    next_probe_time_ = Clock::now() + kProbeInterval;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -601,7 +601,7 @@ void Client::sendTcpBandwidthProbe(TimePoint time)
     tcp_probe_.train_id = ++next_train_id_;
     tcp_probe_.send_time = time;
     tcp_probe_.pending = true;
-    tcp_probe_.under_load = idle.count() < kIdleThresholdMs;
+    tcp_probe_.under_load = idle < kIdleThreshold;
 
     // The probes must go out back to back - the receiver measures their arrival spacing.
     for (int i = 0; i < kProbeTrainLength; ++i)
@@ -622,7 +622,7 @@ void Client::sendUdpBandwidthProbe(TimePoint time)
     udp_probe_.train_id = ++next_train_id_;
     udp_probe_.send_time = time;
     udp_probe_.pending = true;
-    udp_probe_.under_load = idle.count() < kIdleThresholdMs;
+    udp_probe_.under_load = idle < kIdleThreshold;
 
     for (int i = 0; i < kProbeTrainLength; ++i)
     {
@@ -711,7 +711,7 @@ void Client::onReceiveRate(const proto::peer::ReceiveRate& rate)
             if (!udp_base_rtt_ms_ || rtt_ms < udp_base_rtt_ms_)
                 udp_base_rtt_ms_ = rtt_ms;
 
-            if (rtt_ms - udp_base_rtt_ms_ > kQueuingDelayThresholdMs)
+            if (Milliseconds(rtt_ms - udp_base_rtt_ms_) > kQueuingDelayThreshold)
                 ++udp_high_rtt_count_;
             else
                 udp_high_rtt_count_ = 0;
@@ -734,7 +734,7 @@ void Client::onReceiveRate(const proto::peer::ReceiveRate& rate)
 
     const qint64 pending = excessPendingBytes();
     const bool saturated = pending > kSaturatedPendingBytes ||
-        (probe.bandwidth > 0 && pending * 1000 / probe.bandwidth > kSaturatedDrainTimeMs);
+        (probe.bandwidth > 0 && Milliseconds(pending * 1000 / probe.bandwidth) > kSaturatedDrainTime);
     if (!probe.bandwidth)
         probe.bandwidth = arrival_rate; // First sample of the path - take it as is.
     else if (saturated)

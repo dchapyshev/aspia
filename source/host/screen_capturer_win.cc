@@ -23,6 +23,7 @@
 #include <array>
 
 #include "base/logging.h"
+#include "base/time_types.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/win/scoped_gdi_object.h"
 #include "base/win/session_info.h"
@@ -217,7 +218,7 @@ ScreenCapturerWin::ScreenCapturerWin(Type type, QObject* parent)
     memset(&curr_cursor_info_, 0, sizeof(curr_cursor_info_));
     memset(&prev_cursor_info_, 0, sizeof(prev_cursor_info_));
 
-    QTimer::singleShot(0, this, [this]()
+    QTimer::singleShot(Milliseconds(0), this, [this]()
     {
         switchToInputDesktop();
 

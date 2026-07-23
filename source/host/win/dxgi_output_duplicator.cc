@@ -19,6 +19,7 @@
 #include "host/win/dxgi_output_duplicator.h"
 
 #include "base/logging.h"
+#include "base/time_types.h"
 #include "base/desktop/frame.h"
 #include "host/win/dxgi_texture_mapping.h"
 #include "host/win/dxgi_texture_staging.h"
@@ -40,7 +41,7 @@ namespace {
 // Timeout for AcquireNextFrame() call.
 // DxgiDuplicatorController leverages external components to do the capture scheduling. So here
 // DxgiOutputDuplicator does not need to actively wait for a new frame.
-const int kAcquireTimeoutMs = 0;
+const Milliseconds kAcquireTimeout{ 0 };
 
 //--------------------------------------------------------------------------------------------------
 QRect RECTToDesktopRect(const RECT& rect)
@@ -228,7 +229,7 @@ bool DxgiOutputDuplicator::duplicate(Context* context, const QPoint& offset, Sha
 
     ComPtr<IDXGIResource> resource;
 
-    _com_error error = duplication_->AcquireNextFrame(kAcquireTimeoutMs,
+    _com_error error = duplication_->AcquireNextFrame(static_cast<UINT>(kAcquireTimeout.count()),
                                                       &frame_info,
                                                       resource.GetAddressOf());
     if (error.Error() != S_OK && error.Error() != DXGI_ERROR_WAIT_TIMEOUT)

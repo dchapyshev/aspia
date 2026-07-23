@@ -31,7 +31,7 @@
 namespace {
 
 const quint32 kMaxMessageSize = 5 * 1024 * 1024; // 5 MB
-const int kUpdateIntervalMs = 10;
+const Milliseconds kUpdateInterval{ 10 };
 const int kMaxPeers = 1;
 const int kChannelCount = 255;
 const int kPoolReservedSize = 64;
@@ -478,7 +478,7 @@ void UdpChannel::timerEvent(QTimerEvent* event)
 //--------------------------------------------------------------------------------------------------
 void UdpChannel::start()
 {
-    update_timer_id_ = startTimer(kUpdateIntervalMs, Qt::PreciseTimer);
+    update_timer_id_ = startTimer(kUpdateInterval, Qt::PreciseTimer);
     notifier_->setSocket(host_->socket);
     notifier_->setEnabled(true);
 }

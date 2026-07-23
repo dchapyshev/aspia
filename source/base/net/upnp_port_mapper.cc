@@ -26,13 +26,14 @@
 #include <thread>
 
 #include "base/logging.h"
+#include "base/time_types.h"
 #include "base/net/net_utils.h"
 
 namespace {
 
 const char kMappingDescription[] = "Aspia Remote Desktop";
 const int kLeaseDurationSeconds = 3600;
-const int kDiscoverDelayMs = 2000;
+const Milliseconds kDiscoverDelay{ 2000 };
 
 //--------------------------------------------------------------------------------------------------
 struct UpnpDevListDeleter
@@ -128,7 +129,7 @@ UpnpPortMapper::Result UpnpPortMapper::doMapping(quint16 internal_port)
     Result result;
 
     int error = 0;
-    ScopedUpnpDevList device_list(upnpDiscover(kDiscoverDelayMs, nullptr, nullptr, 0, 0, 2, &error));
+    ScopedUpnpDevList device_list(upnpDiscover(static_cast<int>(kDiscoverDelay.count()), nullptr, nullptr, 0, 0, 2, &error));
     if (!device_list)
     {
         LOG(INFO) << "No UPnP devices discovered (error:" << error << ")";

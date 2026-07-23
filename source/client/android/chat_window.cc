@@ -59,10 +59,10 @@ const int kMaxStoredMessages = 30;
 const char kHistoryDirName[] = "chat";
 
 // How often our own typing status is re-sent while the user keeps typing.
-const int kTypingThrottleMs = 3000;
+const Seconds kTypingThrottle{ 3 };
 
 // How long an incoming "is typing" line stays before it is cleared.
-const int kTypingClearMs = 5000;
+const Seconds kTypingClear{ 5 };
 
 //--------------------------------------------------------------------------------------------------
 // A stable identifier for the chat with a host, derived from its address and credentials.
@@ -245,7 +245,7 @@ void ChatWindow::onChatMessage(const proto::chat::Chat& chat)
         {
             const QString user = QString::fromStdString(chat_status.source());
             view_->setStatusText(tr("%1 is typing...").arg(user));
-            typing_clear_timer_->start(kTypingClearMs);
+            typing_clear_timer_->start(kTypingClear);
             return;
         }
 
@@ -595,7 +595,7 @@ void ChatWindow::onTyping()
 
     sendChatMessage(chat);
 
-    typing_throttle_->start(kTypingThrottleMs);
+    typing_throttle_->start(kTypingThrottle);
 }
 
 //--------------------------------------------------------------------------------------------------

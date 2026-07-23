@@ -28,7 +28,7 @@
 
 namespace {
 
-constexpr int kAnimationDurationMs = 150;
+constexpr Milliseconds kAnimationDuration{ 150 };
 
 // Minimum contrast ratio between the accent and the background, matching the WCAG AA threshold for
 // normal text so accent labels stay legible.
@@ -61,7 +61,7 @@ double contrastRatio(const QColor& first, const QColor& second)
 QVariantAnimation* Controls::createAnimation(QObject* parent)
 {
     QVariantAnimation* animation = new QVariantAnimation(parent);
-    animation->setDuration(kAnimationDurationMs);
+    animation->setDuration(static_cast<int>(kAnimationDuration.count()));
     animation->setEasingCurve(QEasingCurve::InOutCubic);
     return animation;
 }

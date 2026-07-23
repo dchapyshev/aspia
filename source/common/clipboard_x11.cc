@@ -23,6 +23,7 @@
 #include <QTimer>
 
 #include "base/logging.h"
+#include "base/time_types.h"
 #include "base/linux/x11_headers.h"
 
 namespace {
@@ -92,7 +93,7 @@ void ClipboardX11::init()
         pumpXEvents();
         x_server_clipboard_->onTick();
     });
-    tick_timer_->start(1000);
+    tick_timer_->start(Seconds(1));
 
     pumpXEvents();
 }

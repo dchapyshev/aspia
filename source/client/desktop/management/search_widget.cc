@@ -287,7 +287,7 @@ SearchWidget::SearchWidget(QWidget* parent)
     // every keystroke. Local results are shown immediately by search().
     router_search_timer_ = new QTimer(this);
     router_search_timer_->setSingleShot(true);
-    router_search_timer_->setInterval(300);
+    router_search_timer_->setInterval(Milliseconds(300));
     connect(router_search_timer_, &QTimer::timeout, this, &SearchWidget::dispatchRouterSearch);
 
     layout->addWidget(tree_host_);

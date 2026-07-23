@@ -34,7 +34,7 @@
 
 namespace {
 
-const int kAttemptTimeoutMs = 15000;           // Max time for one attempt to connect before it is dropped.
+const Seconds kAttemptTimeout{ 15 };           // Max time for one attempt to connect before it is dropped.
 const qint64 kInitialProbeDataSize = 4 * 1024; // 4 KB - smallest probe, used for the initial measurement.
 
 //--------------------------------------------------------------------------------------------------
@@ -122,7 +122,7 @@ void UdpAttempt::sendMessage(const proto::peer::HostToClient& message)
 //--------------------------------------------------------------------------------------------------
 void UdpAttempt::startTimeout()
 {
-    QTimer::singleShot(kAttemptTimeoutMs, this, [this]()
+    QTimer::singleShot(kAttemptTimeout, this, [this]()
     {
         if (connected_)
             return;

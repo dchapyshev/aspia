@@ -69,7 +69,7 @@ ConnectConfirmDialog::ConnectConfirmDialog(
 
     timer_->start(Seconds(1));
 
-    QTimer::singleShot(0, this, [this]()
+    QTimer::singleShot(Milliseconds(0), this, [this]()
     {
         QRect screen_rect = QApplication::primaryScreen()->geometry();
 

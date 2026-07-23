@@ -23,6 +23,7 @@
 #include <QString>
 
 #include "base/logging.h"
+#include "base/time_types.h"
 #include "proto/desktop_input.h"
 
 namespace {
@@ -34,10 +35,10 @@ const char kInputServiceClass[] = "org/aspia/host/InputService";
 const qreal kTapMovementThreshold = 16.0;
 
 // Gesture durations, in milliseconds.
-const int kTapDurationMs = 1;
-const int kLongPressDurationMs = 600;
-const int kSwipeDurationMs = 120;
-const int kScrollDurationMs = 120;
+const Milliseconds kTapDuration{ 1 };
+const Milliseconds kLongPressDuration{ 600 };
+const Milliseconds kSwipeDuration{ 120 };
+const Milliseconds kScrollDuration{ 120 };
 
 // Vertical travel of a single wheel-notch scroll gesture, in pixels.
 const float kScrollDistance = 300.0f;
@@ -93,18 +94,18 @@ bool serviceRunning()
 }
 
 //--------------------------------------------------------------------------------------------------
-void tap(const QPointF& pos, int duration_ms)
+void tap(const QPointF& pos, Milliseconds duration)
 {
     QJniObject::callStaticMethod<void>(kInputServiceClass, "tap", "(FFI)V",
-        static_cast<jfloat>(pos.x()), static_cast<jfloat>(pos.y()), static_cast<jint>(duration_ms));
+        static_cast<jfloat>(pos.x()), static_cast<jfloat>(pos.y()), static_cast<jint>(duration.count()));
 }
 
 //--------------------------------------------------------------------------------------------------
-void swipe(const QPointF& from, const QPointF& to, int duration_ms)
+void swipe(const QPointF& from, const QPointF& to, Milliseconds duration)
 {
     QJniObject::callStaticMethod<void>(kInputServiceClass, "swipe", "(FFFFI)V",
         static_cast<jfloat>(from.x()), static_cast<jfloat>(from.y()),
-        static_cast<jfloat>(to.x()), static_cast<jfloat>(to.y()), static_cast<jint>(duration_ms));
+        static_cast<jfloat>(to.x()), static_cast<jfloat>(to.y()), static_cast<jint>(duration.count()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -323,12 +324,12 @@ void InputInjectorAndroid::injectMouseEvent(const proto::input::MouseEvent& even
     // follows the finger, so a wheel-up (scroll toward the top) is a swipe downward, and vice versa.
     if (mask & proto::input::MouseEvent::WHEEL_UP)
     {
-        swipe(pos, QPointF(pos.x(), pos.y() + kScrollDistance), kScrollDurationMs);
+        swipe(pos, QPointF(pos.x(), pos.y() + kScrollDistance), kScrollDuration);
         return;
     }
     if (mask & proto::input::MouseEvent::WHEEL_DOWN)
     {
-        swipe(pos, QPointF(pos.x(), pos.y() - kScrollDistance), kScrollDurationMs);
+        swipe(pos, QPointF(pos.x(), pos.y() - kScrollDistance), kScrollDuration);
         return;
     }
 
@@ -346,9 +347,9 @@ void InputInjectorAndroid::injectMouseEvent(const proto::input::MouseEvent& even
         left_pressed_ = false;
 
         if (!left_moved_ && QLineF(left_down_pos_, pos).length() < kTapMovementThreshold)
-            tap(pos, kTapDurationMs);
+            tap(pos, kTapDuration);
         else
-            swipe(left_down_pos_, pos, kSwipeDurationMs);
+            swipe(left_down_pos_, pos, kSwipeDuration);
     }
     else if (left && left_pressed_)
     {
@@ -365,7 +366,7 @@ void InputInjectorAndroid::injectMouseEvent(const proto::input::MouseEvent& even
     else if (!right && right_pressed_)
     {
         right_pressed_ = false;
-        tap(pos, kLongPressDurationMs);
+        tap(pos, kLongPressDuration);
     }
 }
 

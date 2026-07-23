@@ -34,8 +34,8 @@ namespace {
 constexpr int kDetachThresholdPx = 30;
 
 // Drop-target pulsing animation parameters.
-constexpr int kPulseTickMs = 33;
-constexpr int kPulsePeriodMs = 800;
+constexpr Milliseconds kPulseTick{ 33 };
+constexpr Milliseconds kPulsePeriod{ 800 };
 constexpr int kPulseMaxAlpha = 220;
 constexpr int kPulseFrameWidthPx = 2;
 
@@ -46,7 +46,7 @@ TabBar::TabBar(QWidget* parent)
     : QTabBar(parent),
       pulse_timer_(new QTimer(this))
 {
-    pulse_timer_->setInterval(kPulseTickMs);
+    pulse_timer_->setInterval(kPulseTick);
     connect(pulse_timer_, &QTimer::timeout, this, &TabBar::onPulseTick);
 }
 
@@ -63,7 +63,7 @@ void TabBar::setDropTarget(int index)
 
     if (index >= 0)
     {
-        pulse_phase_ms_ = 0;
+        pulse_phase_ = Milliseconds::zero();
         if (!pulse_timer_->isActive())
             pulse_timer_->start();
     }
@@ -134,8 +134,8 @@ void TabBar::paintEvent(QPaintEvent* event)
     if (rect.isEmpty())
         return;
 
-    // Triangle wave: 0 -> max -> 0 over kPulsePeriodMs.
-    double t = static_cast<double>(pulse_phase_ms_) / kPulsePeriodMs;
+    // Triangle wave: 0 -> max -> 0 over kPulsePeriod.
+    double t = static_cast<double>(pulse_phase_.count()) / kPulsePeriod.count();
     double wave = (t < 0.5) ? (t * 2.0) : ((1.0 - t) * 2.0);
     int alpha = static_cast<int>(wave * kPulseMaxAlpha);
 
@@ -191,6 +191,6 @@ void TabBar::tabInserted(int index)
 //--------------------------------------------------------------------------------------------------
 void TabBar::onPulseTick()
 {
-    pulse_phase_ms_ = (pulse_phase_ms_ + kPulseTickMs) % kPulsePeriodMs;
+    pulse_phase_ = (pulse_phase_ + kPulseTick) % kPulsePeriod;
     update();
 }

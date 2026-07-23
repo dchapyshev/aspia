@@ -472,7 +472,7 @@ TaskManagerWindow::TaskManagerWindow(QWidget* parent)
 
     update_timer_->start(update_speed);
 
-    QTimer::singleShot(0, this, [this]()
+    QTimer::singleShot(Milliseconds(0), this, [this]()
     {
         sendProcessListRequest(proto::task_manager::ProcessListRequest::RESET_CACHE);
         sendServiceListRequest();

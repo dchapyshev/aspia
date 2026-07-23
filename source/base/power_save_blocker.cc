@@ -31,6 +31,7 @@
 #endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 
 #include "base/logging.h"
+#include "base/time_types.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_thread_desktop.h"
@@ -45,11 +46,11 @@ namespace {
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 // Delay before the first nudge, to let the compositor's input stack enumerate the new uinput device
 // (via udev/logind) - a nudge emitted before anyone reads the device is lost.
-const int kInitialWakeDelayMs = 1000;
+const Seconds kInitialWakeDelay{ 1 };
 
 // Interval of the repeating keep-awake nudge, used only where the screen-saver inhibit is unavailable
 // (e.g. GNOME). Shorter than any practical blank timeout so the display never idles off.
-const int kWakeIntervalMs = 30000;
+const Seconds kWakeInterval{ 30 };
 
 //--------------------------------------------------------------------------------------------------
 // Creates a persistent virtual pointer via uinput. Returns its fd, or -1 on failure. The device must
@@ -222,13 +223,13 @@ PowerSaveBlocker::PowerSaveBlocker(QObject* parent)
     {
         // Keep the display awake for the whole session with a periodic nudge.
         wake_timer_ = new QTimer(this);
-        wake_timer_->setInterval(kWakeIntervalMs);
+        wake_timer_->setInterval(kWakeInterval);
         connect(wake_timer_, &QTimer::timeout, this, &PowerSaveBlocker::onWakeUp);
         wake_timer_->start();
 
         // Wake it now (if already off) once the compositor's input stack has had time to enumerate the
         // device - a nudge sent before that is read by no one and lost.
-        QTimer::singleShot(kInitialWakeDelayMs, this, &PowerSaveBlocker::onWakeUp);
+        QTimer::singleShot(kInitialWakeDelay, this, &PowerSaveBlocker::onWakeUp);
     }
 #elif defined(Q_OS_MACOS)
     const CFStringRef reason = CFSTR("Aspia session is active");

@@ -32,6 +32,7 @@
 #include <vector>
 
 #include "base/logging.h"
+#include "base/time_types.h"
 #include "base/linux/session_util.h"
 
 namespace {
@@ -216,7 +217,7 @@ void DesktopEnvironmentLinux::scheduleApply()
         return;
 
     apply_scheduled_ = true;
-    QTimer::singleShot(0, this, [this]()
+    QTimer::singleShot(Milliseconds(0), this, [this]()
     {
         apply_scheduled_ = false;
         applyDesired();

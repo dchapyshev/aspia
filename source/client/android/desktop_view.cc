@@ -28,6 +28,7 @@
 
 #include <utility>
 
+#include "base/time_types.h"
 #include "base/desktop/frame.h"
 #include "base/desktop/mouse_cursor.h"
 #include "common/keycode_converter.h"
@@ -43,15 +44,15 @@ constexpr qreal kMaxZoom = 5.0;
 constexpr qreal kMoveThreshold = 8.0;
 
 // A second finger-down within this interval after a tap starts a drag with the left button held.
-constexpr qint64 kDoubleTapIntervalMs = 500;
+constexpr Milliseconds kDoubleTapInterval{ 500 };
 
 // Holding a single finger still for this long also starts a left-button drag.
-constexpr int kLongPressMs = 400;
+constexpr Milliseconds kLongPressTimeout{ 400 };
 
 // Edge band (widget pixels) where a held drag keeps auto-scrolling, the tick rate, and the maximum
 // cursor advance per tick.
 constexpr qreal kEdgeMargin = 80.0;
-constexpr int kEdgeScrollIntervalMs = 16;
+constexpr Milliseconds kEdgeScrollInterval{ 16 };
 constexpr qreal kEdgeMaxSpeed = 18.0;
 
 // Two-finger movement (widget pixels) needed to lock into zoom or scroll, and the finger travel per
@@ -86,11 +87,11 @@ DesktopView::DesktopView(QWidget* parent)
 
     long_press_timer_ = new QTimer(this);
     long_press_timer_->setSingleShot(true);
-    long_press_timer_->setInterval(kLongPressMs);
+    long_press_timer_->setInterval(kLongPressTimeout);
     connect(long_press_timer_, &QTimer::timeout, this, &DesktopView::onLongPress);
 
     edge_scroll_timer_ = new QTimer(this);
-    edge_scroll_timer_->setInterval(kEdgeScrollIntervalMs);
+    edge_scroll_timer_->setInterval(kEdgeScrollInterval);
     connect(edge_scroll_timer_, &QTimer::timeout, this, &DesktopView::onEdgeScroll);
 
     QInputMethod* input_method = QGuiApplication::inputMethod();
@@ -446,7 +447,7 @@ void DesktopView::handleTouch(QTouchEvent* event)
         last_point_ = down[0];
 
         // A finger-down soon after a tap arms a drag: if it moves, the left button is held.
-        armed_drag_ = (gesture_timer_.elapsed() - last_tap_time_) <= kDoubleTapIntervalMs;
+        armed_drag_ = (gesture_timer_.elapsed() - last_tap_time_) <= kDoubleTapInterval.count();
         dragging_ = false;
         button_mask_ = 0;
 

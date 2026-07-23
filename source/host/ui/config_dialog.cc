@@ -333,7 +333,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     reloadAll();
 
-    QTimer::singleShot(0, this, &ConfigDialog::adjustSize);
+    QTimer::singleShot(Milliseconds(0), this, &ConfigDialog::adjustSize);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -487,7 +487,7 @@ void ConfigDialog::onPassProtectClicked()
         }
     }
 
-    QTimer::singleShot(0, this, &ConfigDialog::reloadAll);
+    QTimer::singleShot(Milliseconds(0), this, &ConfigDialog::reloadAll);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -503,7 +503,7 @@ void ConfigDialog::onChangePassClicked()
         }
     }
 
-    QTimer::singleShot(0, this, &ConfigDialog::reloadAll);
+    QTimer::singleShot(Milliseconds(0), this, &ConfigDialog::reloadAll);
 }
 
 //--------------------------------------------------------------------------------------------------

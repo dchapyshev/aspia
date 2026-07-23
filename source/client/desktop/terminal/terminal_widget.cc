@@ -40,6 +40,7 @@
 
 #include <algorithm>
 
+#include "base/time_types.h"
 #include "proto/terminal.h"
 
 namespace {
@@ -55,7 +56,7 @@ const int kMaxScrollback = 5000;
 
 // Idle delay after the last resize event before the grid is recomputed and the host is told the new
 // size. While dragging the content is just stretched to follow the window.
-const int kResizeFinishMs = 150;
+const Milliseconds kResizeFinishDelay{ 150 };
 
 //--------------------------------------------------------------------------------------------------
 VTermModifier vtermModifiers(Qt::KeyboardModifiers modifiers)
@@ -147,7 +148,7 @@ TerminalWidget::TerminalWidget(QWidget* parent)
     });
 
     blink_timer_ = new QTimer(this);
-    blink_timer_->setInterval(530);
+    blink_timer_->setInterval(Milliseconds(530));
     connect(blink_timer_, &QTimer::timeout, this, [this]
     {
         blink_visible_ = !blink_visible_;
@@ -156,7 +157,7 @@ TerminalWidget::TerminalWidget(QWidget* parent)
 
     bell_timer_ = new QTimer(this);
     bell_timer_->setSingleShot(true);
-    bell_timer_->setInterval(120);
+    bell_timer_->setInterval(Milliseconds(120));
     connect(bell_timer_, &QTimer::timeout, this, [this]
     {
         bell_flash_ = false;
@@ -171,7 +172,7 @@ TerminalWidget::TerminalWidget(QWidget* parent)
         // fallback: while the drag is still in progress, keep waiting.
         if (in_size_move_)
         {
-            resize_timer_->start(kResizeFinishMs);
+            resize_timer_->start(kResizeFinishDelay);
             return;
         }
         finishResize();
@@ -620,7 +621,7 @@ void TerminalWidget::resizeEvent(QResizeEvent* /* event */)
     // WM_EXITSIZEMOVE). Other resizes (tab layout, maximize) do not stretch. Either way the grid change
     // is applied once the size settles (finishResize), so brief transients never reach the host.
     resizing_ = (mode_ == Mode::CONNECTED && in_size_move_);
-    resize_timer_->start(kResizeFinishMs);
+    resize_timer_->start(kResizeFinishDelay);
     update();
 }
 

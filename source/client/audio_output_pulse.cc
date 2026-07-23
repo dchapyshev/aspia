@@ -19,7 +19,6 @@
 #include "client/audio_output_pulse.h"
 
 #include "base/logging.h"
-#include "base/time_types.h"
 
 // Accesses Pulse functions through our late-binding symbol table instead of directly. This way we
 // don't have to link to libpulse, which means our binary will work on systems that don't have it.
@@ -77,7 +76,7 @@ bool AudioOutputPulse::start()
     if (playing_)
         return true;
 
-    timer_->setInterval(Milliseconds(period_time_));
+    timer_->setInterval(period_time_);
     timer_->start();
 
     LOG(INFO) << "Audio playout started";
@@ -251,10 +250,10 @@ bool AudioOutputPulse::initPlayout()
     LATE(pa_stream_set_state_callback)(play_stream_, paStreamStateCallback, this);
     LATE(pa_stream_set_write_callback)(play_stream_, paStreamWriteCallback, this);
 
-    const int kBufferTimeMs = 10;
-    const int kBufferSizeMs = 40;
+    const Milliseconds kBufferTime{ 10 };
+    const Milliseconds kBufferDuration{ 40 };
     const int kBytesPerSecond = kSampleRate * kChannels * kBytesPerSample;
-    const int kBufferSize = kBytesPerSecond * kBufferSizeMs / 1000LL;
+    const int kBufferSize = kBytesPerSecond * kBufferDuration.count() / 1000LL;
 
     pa_buffer_attr pa_buffer_attr;
     pa_buffer_attr.fragsize = -1;
@@ -294,8 +293,8 @@ bool AudioOutputPulse::initPlayout()
     }
 
     const struct pa_buffer_attr* buffer = LATE(pa_stream_get_buffer_attr)(play_stream_);
-    period_time_ = kBufferTimeMs;
-    period_size_ = LATE(pa_usec_to_bytes)(period_time_ * 1000, &spec);
+    period_time_ = kBufferTime;
+    period_size_ = LATE(pa_usec_to_bytes)(Microseconds(period_time_).count(), &spec);
     buffer_size_ = buffer->tlength;
     max_buffer_size_ = buffer->maxlength;
 

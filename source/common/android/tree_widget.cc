@@ -26,6 +26,7 @@
 #include <QStyledItemDelegate>
 #include <QTimer>
 
+#include "base/time_types.h"
 #include "common/android/controls.h"
 #include "common/android/scroll_indicator.h"
 
@@ -42,7 +43,7 @@ constexpr int kIndentation = 16;
 constexpr double kSelectedLayerOpacity = 0.12;
 constexpr double kHoverLayerOpacity = 0.08;
 constexpr double kChevronOpacity = 0.6;
-constexpr int kLongPressTimeout = 500;
+constexpr Milliseconds kLongPressTimeout{ 500 };
 constexpr int kLongPressMoveThreshold = 16;
 
 //--------------------------------------------------------------------------------------------------

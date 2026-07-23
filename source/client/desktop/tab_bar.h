@@ -21,6 +21,8 @@
 
 #include <QTabBar>
 
+#include "base/time_types.h"
+
 class QTimer;
 
 class TabBar final : public QTabBar
@@ -56,7 +58,7 @@ private slots:
 private:
     int pressed_tab_index_ = -1;
     int drop_target_index_ = -1;
-    int pulse_phase_ms_ = 0;
+    Milliseconds pulse_phase_{ 0 };
     QTimer* pulse_timer_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(TabBar)

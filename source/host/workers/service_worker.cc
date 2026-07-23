@@ -193,11 +193,11 @@ void ServiceWorker::onStop()
 //--------------------------------------------------------------------------------------------------
 void ServiceWorker::onTimer(TimePoint /* now */)
 {
-    constexpr qint64 kConfirmationTimeoutMs = 60 * 1000;
+    constexpr Minutes kConfirmationTimeout{ 1 };
 
     for (auto it = pending_confirmation_.begin(); it != pending_confirmation_.end();)
     {
-        if (it->start_time.hasExpired(kConfirmationTimeoutMs))
+        if (it->start_time.hasExpired(DurationCast<Milliseconds>(kConfirmationTimeout).count()))
         {
             TcpChannel* tcp_channel = it->tcp_channel;
             tcp_channel->deleteLater();

@@ -41,14 +41,14 @@ namespace {
 
 static const int kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
 static const int kWriteBufferSize = 2 * 1024 * 1024; // 2 Mb.
-static const int kReceiveRateIntervalMs = 1000;
+static const Seconds kReceiveRateInterval{ 1 };
 static const size_t kMaxUdpAttempts = 16;
 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 NetworkWorker::NetworkWorker()
-    : Worker(Thread::AsioDispatcher, Milliseconds(kReceiveRateIntervalMs)),
+    : Worker(Thread::AsioDispatcher, kReceiveRateInterval),
       udp_methods_(Settings().udpMethods())
 {
     LOG(INFO) << "Ctor";

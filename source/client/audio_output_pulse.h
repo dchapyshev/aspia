@@ -21,6 +21,7 @@
 
 #include <QTimer>
 
+#include "base/time_types.h"
 #include "base/linux/pulseaudio_symbol_table.h"
 #include "client/audio_output.h"
 
@@ -74,7 +75,7 @@ private:
     pa_stream* play_stream_ = nullptr;
     QTimer* timer_ = nullptr;
 
-    int period_time_ = 0;
+    Milliseconds period_time_{ 0 };
     int period_size_ = 0;
     int buffer_size_ = 0;
     int max_buffer_size_ = 0;
