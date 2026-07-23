@@ -137,11 +137,11 @@ private:
     // level limits). The client drops H264 from its capabilities so the host switches to VP.
     bool h264_sw_enabled_ = true;
 
-    // Force-reliable transport state, driven by temporary decode failures. reliable_hold_seconds_
+    // Force-reliable transport state, driven by temporary decode failures. |reliable_hold_|
     // counts down on the metrics timer; the switch is applied at most twice per session.
     bool force_reliable_active_ = false;
     int reliable_disable_count_ = 0;
-    int reliable_hold_seconds_ = 0;
+    Seconds reliable_hold_{ 0 };
 
     // Recording state. The writer owns the output file and muxes the encoded video and audio; the
     // encoder re-encodes decoded frames to VP8. Both are created only while recording is on and the

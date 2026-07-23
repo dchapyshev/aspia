@@ -27,6 +27,8 @@
 #include <deque>
 #include <vector>
 
+#include "base/time_types.h"
+
 // VTermScreenCellAttrs declares a bit-field named |small|. On Windows <rpcndr.h> (pulled in by COM
 // headers elsewhere in the same moc translation unit) defines |small| as a macro, which breaks that
 // declaration. Neutralize the macro around the vterm.h include.
@@ -175,7 +177,7 @@ private:
     bool has_selection_ = false;
     Position selection_anchor_;
     Position selection_point_;
-    qint64 last_double_click_ms_ = 0;
+    TimePoint last_double_click_time_;
 
     QColor default_fg_;
     QColor default_bg_;

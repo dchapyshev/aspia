@@ -150,10 +150,10 @@ void VideoWorker::onTimer(TimePoint now)
 {
     // The 1-second timer also winds down the force-reliable hold window; once it elapses, back the
     // transport off reliable mode (at most twice per session).
-    if (force_reliable_active_ && reliable_hold_seconds_ > 0)
+    if (force_reliable_active_ && reliable_hold_ > Seconds::zero())
     {
-        --reliable_hold_seconds_;
-        if (reliable_hold_seconds_ == 0 && reliable_disable_count_ < 2)
+        --reliable_hold_;
+        if (reliable_hold_ == Seconds::zero() && reliable_disable_count_ < 2)
         {
             ++reliable_disable_count_;
             LOG(INFO) << "Disabling force reliable (disable count:" << reliable_disable_count_ << ")";
@@ -433,7 +433,7 @@ void VideoWorker::enableForceReliable()
         force_reliable_active_ = true;
         sendForceReliable(true);
     }
-    reliable_hold_seconds_ = 60;
+    reliable_hold_ = Seconds(60);
 }
 
 //--------------------------------------------------------------------------------------------------

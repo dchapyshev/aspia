@@ -21,7 +21,6 @@
 #include <QAction>
 #include <QApplication>
 #include <QClipboard>
-#include <QDateTime>
 #include <QFontDatabase>
 #include <QIcon>
 #include <QKeyEvent>
@@ -40,7 +39,6 @@
 
 #include <algorithm>
 
-#include "base/time_types.h"
 #include "proto/terminal.h"
 
 namespace {
@@ -789,8 +787,8 @@ void TerminalWidget::mousePressEvent(QMouseEvent* event)
         const Position position = positionAt(event->position().toPoint());
 
         // A press shortly after a double-click is a triple-click: select the whole line.
-        if (QDateTime::currentMSecsSinceEpoch() - last_double_click_ms_ <
-            QApplication::doubleClickInterval())
+        if (Clock::now() - last_double_click_time_ <
+            Milliseconds(QApplication::doubleClickInterval()))
         {
             selectLineAt(position.line);
         }
@@ -884,7 +882,7 @@ void TerminalWidget::mouseDoubleClickEvent(QMouseEvent* event)
     if (event->button() == Qt::LeftButton && (!mouseReportingActive() || shift))
     {
         selectWordAt(positionAt(event->position().toPoint()));
-        last_double_click_ms_ = QDateTime::currentMSecsSinceEpoch();
+        last_double_click_time_ = Clock::now();
         selecting_ = false;
         event->accept();
         return;

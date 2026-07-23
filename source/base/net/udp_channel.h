@@ -93,7 +93,7 @@ public:
 
     // Smoothed round-trip time of the peer, measured continuously by ENet with its own acks and
     // pings (even while the session is idle). Returns 0 when not connected.
-    int roundTripTimeMs() const;
+    Milliseconds roundTripTime() const;
 
     Mode mode() const { return mode_; }
     UdpMethod method() const { return method_; }

@@ -262,9 +262,9 @@ qint64 Client::excessPendingBytes() const
 
     // The queuing-free baseline RTT and the estimated rate bound the bytes that are legitimately
     // in flight; anything above that is a real standing queue.
-    if (udp_state_ == UdpState::READY && udp_probe_.bandwidth > 0 && udp_base_rtt_ms_ > 0)
+    if (udp_state_ == UdpState::READY && udp_probe_.bandwidth > 0 && udp_base_rtt_ > Milliseconds::zero())
     {
-        const qint64 expected_in_flight = udp_probe_.bandwidth * udp_base_rtt_ms_ / 1000;
+        const qint64 expected_in_flight = udp_probe_.bandwidth * udp_base_rtt_.count() / 1000;
         pending = std::max<qint64>(0, pending - expected_in_flight);
     }
 
@@ -481,7 +481,7 @@ void Client::selectAttempt(UdpAttempt* attempt, qint64 bandwidth)
     udp_probe_.bandwidth = std::max(bandwidth, tcp_probe_.bandwidth);
 
     // The RTT baseline belongs to a specific path; a fresh channel measures its own.
-    udp_base_rtt_ms_ = 0;
+    udp_base_rtt_ = Milliseconds::zero();
     udp_high_rtt_count_ = 0;
 
     setUdpState(FROM_HERE, UdpState::CONNECTED);
@@ -534,7 +534,7 @@ void Client::onUdpErrorOccurred()
     udp_probe_.send_time = TimePoint();
     udp_probe_.bandwidth = 0;
     udp_probe_.pending = false;
-    udp_base_rtt_ms_ = 0;
+    udp_base_rtt_ = Milliseconds::zero();
     udp_high_rtt_count_ = 0;
 
     if (was_ready)
@@ -705,13 +705,13 @@ void Client::onReceiveRate(const proto::peer::ReceiveRate& rate)
     // surfaces in the send queue, which the saturation logic below already watches.)
     if (udp_state_ == UdpState::READY && udp_channel_ && probe.bandwidth > 0)
     {
-        const int rtt_ms = udp_channel_->roundTripTimeMs();
-        if (rtt_ms > 0)
+        const Milliseconds rtt = udp_channel_->roundTripTime();
+        if (rtt > Milliseconds::zero())
         {
-            if (!udp_base_rtt_ms_ || rtt_ms < udp_base_rtt_ms_)
-                udp_base_rtt_ms_ = rtt_ms;
+            if (udp_base_rtt_ == Milliseconds::zero() || rtt < udp_base_rtt_)
+                udp_base_rtt_ = rtt;
 
-            if (Milliseconds(rtt_ms - udp_base_rtt_ms_) > kQueuingDelayThreshold)
+            if (rtt - udp_base_rtt_ > kQueuingDelayThreshold)
                 ++udp_high_rtt_count_;
             else
                 udp_high_rtt_count_ = 0;
@@ -722,8 +722,8 @@ void Client::onReceiveRate(const proto::peer::ReceiveRate& rate)
                 probe.bandwidth = std::max(kMinBandwidthEstimate,
                                            probe.bandwidth * (100 - kQueuingDelayCutPercent) / 100);
 
-                CLOG(INFO) << "Sustained UDP RTT growth (" << rtt_ms << "ms over base"
-                           << udp_base_rtt_ms_ << "ms) - reducing estimate to"
+                CLOG(INFO) << "Sustained UDP RTT growth (" << rtt.count() << "ms over base"
+                           << udp_base_rtt_.count() << "ms) - reducing estimate to"
                            << (probe.bandwidth / 1024) << "kB/s";
 
                 publishBandwidth(probe.bandwidth);

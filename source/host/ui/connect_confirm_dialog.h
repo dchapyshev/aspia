@@ -23,6 +23,8 @@
 
 #include <memory>
 
+#include "base/time_types.h"
+
 class QAbstractButton;
 class QTimer;
 
@@ -57,7 +59,7 @@ private:
     QString question_;
 
     bool auto_accept_ = false;
-    int time_seconds_ = 0;
+    Seconds time_left_{ 0 };
 };
 
 #endif // HOST_UI_CONNECT_CONFIRM_DIALOG_H

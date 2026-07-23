@@ -987,15 +987,14 @@ public:
     static constexpr Milliseconds kInterval{ 100 };
 
     QEventLoop* loop = nullptr;
-    TimePoint start_time;
 
     int first_id = -1;
     int second_id = -1;
     int first_fires = 0;
     int second_fires = 0;
     bool id_reused = false;
-    qint64 second_started_ms = -1;
-    qint64 second_first_fire_ms = -1;
+    TimePoint second_started_time;
+    TimePoint second_first_fire_time;
 
 protected:
     void timerEvent(QTimerEvent* event) override
@@ -1013,7 +1012,7 @@ protected:
             first_id = -1;
             killTimer(old_id);
 
-            second_started_ms = msSince(start_time);
+            second_started_time = Clock::now();
 
             int id = startTimer(kInterval, Qt::CoarseTimer);
             for (int i = 0; i < 512 && id != old_id; ++i)
@@ -1028,7 +1027,7 @@ protected:
         else if (event->timerId() == second_id)
         {
             if (second_fires == 0)
-                second_first_fire_ms = msSince(start_time);
+                second_first_fire_time = Clock::now();
 
             if (++second_fires >= 3)
             {
@@ -1047,7 +1046,6 @@ TEST(TimersTest, TimerIdReuseInsideTimerEvent)
 
     ED_TimerIdReuseObject obj;
     obj.loop = &loop;
-    obj.start_time = Clock::now();
 
     obj.first_id = obj.startTimer(ED_TimerIdReuseObject::kInterval, Qt::CoarseTimer);
     ASSERT_GT(obj.first_id, 0);
@@ -1064,10 +1062,10 @@ TEST(TimersTest, TimerIdReuseInsideTimerEvent)
     // If the dispatcher confused the new timer with the killed one, the first firing of the new
     // timer is delayed by an extra interval (or lost entirely). The margin is wide enough for a
     // loaded CI, but catches the one-interval shift.
-    ASSERT_GE(obj.second_started_ms, 0);
-    ASSERT_GE(obj.second_first_fire_ms, 0);
-    EXPECT_LT(obj.second_first_fire_ms - obj.second_started_ms,
-              ED_TimerIdReuseObject::kInterval.count() * 2 - 10);
+    ASSERT_NE(obj.second_started_time, TimePoint());
+    ASSERT_NE(obj.second_first_fire_time, TimePoint());
+    EXPECT_LT(obj.second_first_fire_time - obj.second_started_time,
+              ED_TimerIdReuseObject::kInterval * 2 - Milliseconds(10));
 }
 
 TEST(SocketTest, EchoClientServer)

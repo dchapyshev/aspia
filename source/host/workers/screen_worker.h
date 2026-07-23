@@ -221,8 +221,8 @@ private:
     QPoint published_screen_offset_;
 
     int pressure_score_ = 0; // 0..100
-    int stable_seconds_ = 0;
-    int cooldown_seconds_ = 0;
+    Seconds stable_time_{ 0 };
+    Seconds cooldown_time_{ 0 };
 
     int default_fps_ = 0;
     int min_fps_ = 0;

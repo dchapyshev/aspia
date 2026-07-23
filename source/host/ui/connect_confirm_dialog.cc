@@ -24,7 +24,6 @@
 #include <QTimer>
 
 #include "base/logging.h"
-#include "base/time_types.h"
 #include "common/desktop/session_type.h"
 #include "proto/user.h"
 #include "ui_connect_confirm_dialog.h"
@@ -48,11 +47,11 @@ ConnectConfirmDialog::ConnectConfirmDialog(
 
     if (auto_accept_)
     {
-        time_seconds_ = static_cast<int>(request.timeout() / 1000);
+        time_left_ = DurationCast<Seconds>(Milliseconds(request.timeout()));
     }
     else
     {
-        time_seconds_ = 60;
+        time_left_ = Seconds(60);
     }
 
     QString user_name =
@@ -107,9 +106,9 @@ void ConnectConfirmDialog::onButtonBoxClicked(QAbstractButton* button)
 //--------------------------------------------------------------------------------------------------
 void ConnectConfirmDialog::onTimeout()
 {
-    time_seconds_ -= 1;
+    time_left_ -= Seconds(1);
 
-    if (time_seconds_ <= 0)
+    if (time_left_ <= Seconds::zero())
     {
         if (auto_accept_)
         {
@@ -138,12 +137,12 @@ void ConnectConfirmDialog::updateMessage()
     if (auto_accept_)
     {
         timeout_string =
-            tr("The connection will be automatically accepted after %n seconds.", "", time_seconds_);
+            tr("The connection will be automatically accepted after %n seconds.", "", static_cast<int>(time_left_.count()));
     }
     else
     {
         timeout_string =
-            tr("The connection will be automatically rejected after %n seconds.", "", time_seconds_);
+            tr("The connection will be automatically rejected after %n seconds.", "", static_cast<int>(time_left_.count()));
     }
 
     ui->label_msg->setText(message_ + "<br/>" + timeout_string + "<br/><b>" + question_ + "</b>");

@@ -434,12 +434,12 @@ qint64 UdpChannel::pendingBytes() const
 }
 
 //--------------------------------------------------------------------------------------------------
-int UdpChannel::roundTripTimeMs() const
+Milliseconds UdpChannel::roundTripTime() const
 {
     if (!peer_ || !connected_)
-        return 0;
+        return Milliseconds::zero();
 
-    return static_cast<int>(peer_->roundTripTime);
+    return Milliseconds(peer_->roundTripTime);
 }
 
 //--------------------------------------------------------------------------------------------------

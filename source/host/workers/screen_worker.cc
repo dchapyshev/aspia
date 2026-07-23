@@ -400,26 +400,26 @@ void ScreenWorker::onOverflowStateChanged(proto::desktop::Overflow::State state)
     else if (state == proto::desktop::Overflow::STATE_CRITICAL)
     {
         pressure_score_ = std::min(100, pressure_score_ + 20);
-        stable_seconds_ = 0;
-        cooldown_seconds_ = 15;
+        stable_time_ = Seconds::zero();
+        cooldown_time_ = Seconds(15);
 
         next_fps = std::max(min_fps_, std::min(current_fps - 3, default_fps_));
     }
     else if (state == proto::desktop::Overflow::STATE_WARNING)
     {
         pressure_score_ = std::min(100, pressure_score_ + 8);
-        stable_seconds_ = 0;
+        stable_time_ = Seconds::zero();
 
         next_fps = std::max(min_fps_, std::min(current_fps - 2, default_fps_));
     }
     else
     {
         pressure_score_ = std::max(0, pressure_score_ - 3);
-        ++stable_seconds_;
-        if (cooldown_seconds_ > 0)
-            --cooldown_seconds_;
+        ++stable_time_;
+        if (cooldown_time_ > Seconds::zero())
+            --cooldown_time_;
 
-        if (stable_seconds_ >= 15 && cooldown_seconds_ == 0)
+        if (stable_time_ >= Seconds(15) && cooldown_time_ == Seconds::zero())
         {
             int max_fps = effective_max_fps;
 
