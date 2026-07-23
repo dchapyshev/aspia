@@ -60,7 +60,7 @@ constexpr int kCutoutModeShortEdges = 1;
 constexpr int kFlagActivityLaunchedFromHistory = 0x00100000;
 
 // Re-lock the app once it has spent at least this long in the background.
-constexpr int kLockTimeoutSec = 3 * 60;
+constexpr Minutes kLockTimeout{ 3 };
 
 // Order of the pages in the stacked content and of the bottom navigation items.
 enum Section
@@ -642,19 +642,19 @@ void AndroidMainWindow::onApplicationStateChanged(Qt::ApplicationState state)
     if (state == Qt::ApplicationActive)
     {
         // Back in the foreground: re-lock if the background timeout has elapsed.
-        if (relocking_ || !MasterPassword::isSet() || !background_since_.isValid())
+        if (relocking_ || !MasterPassword::isSet() || background_since_ == TimePoint())
             return;
 
-        const qint64 elapsed = background_since_.secsTo(QDateTime::currentDateTime());
-        background_since_ = QDateTime();
+        const TimePoint since = background_since_;
+        background_since_ = TimePoint();
 
-        if (elapsed >= kLockTimeoutSec)
+        if (Clock::now() - since >= kLockTimeout)
             relock();
     }
-    else if (!relocking_ && !background_since_.isValid())
+    else if (!relocking_ && background_since_ == TimePoint())
     {
         // Leaving the foreground: remember when, ignoring the transitions caused by the lock prompt.
-        background_since_ = QDateTime::currentDateTime();
+        background_since_ = Clock::now();
     }
 }
 

@@ -24,7 +24,7 @@
 
 namespace {
 
-constexpr qint64 kCacheSeconds = 3 * 60; // 3 minutes.
+constexpr Minutes kCacheTime{ 3 };
 
 } // namespace
 
@@ -138,7 +138,7 @@ void OnlineChecker::invalidate(const QList<qint64>& entry_ids)
 //--------------------------------------------------------------------------------------------------
 void OnlineChecker::onDirectCheckerResult(qint64 entry_id, bool online)
 {
-    cache_.insert(entry_id, CacheEntry{online, QDateTime::currentDateTime()});
+    cache_.insert(entry_id, CacheEntry{online, Clock::now()});
     emit sig_checkerResult(entry_id, online);
 }
 
@@ -153,7 +153,7 @@ void OnlineChecker::onDirectCheckerFinished()
 //--------------------------------------------------------------------------------------------------
 void OnlineChecker::onRouterCheckerResult(qint64 entry_id, bool online)
 {
-    cache_.insert(entry_id, CacheEntry{online, QDateTime::currentDateTime()});
+    cache_.insert(entry_id, CacheEntry{online, Clock::now()});
     emit sig_checkerResult(entry_id, online);
 }
 
@@ -180,9 +180,9 @@ void OnlineChecker::emitPendingCached()
 //--------------------------------------------------------------------------------------------------
 bool OnlineChecker::isCacheFresh(const CacheEntry& entry) const
 {
-    if (!entry.checked_at.isValid())
+    if (entry.checked_at == TimePoint())
         return false;
-    return entry.checked_at.secsTo(QDateTime::currentDateTime()) < kCacheSeconds;
+    return Clock::now() - entry.checked_at < kCacheTime;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -19,8 +19,9 @@
 #ifndef CLIENT_ANDROID_MAIN_WINDOW_H
 #define CLIENT_ANDROID_MAIN_WINDOW_H
 
-#include <QDateTime>
 #include <QWidget>
+
+#include "base/time_types.h"
 
 namespace proto::peer {
 enum SessionType : int;
@@ -110,7 +111,7 @@ private:
 
     // When the app went to the background (invalid while in the foreground), and a guard against
     // re-entering the lock prompt while it is already shown.
-    QDateTime background_since_;
+    TimePoint background_since_;
     bool relocking_ = false;
 
     // A link that arrived before the master password gate was passed, and whether the gate has

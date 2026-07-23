@@ -19,12 +19,12 @@
 #ifndef CLIENT_ONLINE_CHECKER_ONLINE_CHECKER_H
 #define CLIENT_ONLINE_CHECKER_ONLINE_CHECKER_H
 
-#include <QDateTime>
 #include <QHash>
 #include <QList>
 #include <QObject>
 
 #include "base/scoped_qpointer.h"
+#include "base/time_types.h"
 #include "base/threading/thread.h"
 #include "client/config.h"
 #include "client/online_checker/online_checker_direct.h"
@@ -70,7 +70,7 @@ private:
     struct CacheEntry
     {
         bool online = false;
-        QDateTime checked_at;
+        TimePoint checked_at;
     };
 
     bool isCacheFresh(const CacheEntry& entry) const;
