@@ -8737,7 +8737,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="336"/>
         <source>Media Type</source>
-        <translation>Media Type</translation>
+        <translation>Тип накопителя</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="336"/>

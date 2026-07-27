@@ -113,6 +113,8 @@ if (APPLE)
         core_service_posix.cc
         event_enumerator_mac.h
         event_enumerator_mac.mm
+        physical_drive_reader_mac.h
+        physical_drive_reader_mac.mm
         service_controller_launchd.cc
         service_controller_launchd.h
         sys_info_mac.mm)

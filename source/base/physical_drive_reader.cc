@@ -24,6 +24,8 @@
 #include "base/physical_drive_reader_win.h"
 #elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 #include "base/physical_drive_reader_linux.h"
+#elif defined(Q_OS_MACOS)
+#include "base/physical_drive_reader_mac.h"
 #endif
 
 //--------------------------------------------------------------------------------------------------
@@ -34,6 +36,8 @@ QStringList PhysicalDriveReader::devicePaths()
     return PhysicalDriveReaderWin::devicePaths();
 #elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     return PhysicalDriveReaderLinux::devicePaths();
+#elif defined(Q_OS_MACOS)
+    return PhysicalDriveReaderMac::devicePaths();
 #else
     NOTIMPLEMENTED();
     return QStringList();
@@ -50,6 +54,8 @@ std::unique_ptr<PhysicalDriveReader> PhysicalDriveReader::create(const QString& 
     reader = std::make_unique<PhysicalDriveReaderWin>();
 #elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     reader = std::make_unique<PhysicalDriveReaderLinux>();
+#elif defined(Q_OS_MACOS)
+    reader = std::make_unique<PhysicalDriveReaderMac>();
 #endif
 
     if (!reader)
