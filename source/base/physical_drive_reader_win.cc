@@ -45,9 +45,8 @@ constexpr quint8 kSectorNumber = 1;
 // Drive/head register value selecting the device the handle was opened for.
 constexpr quint8 kDriveHeadRegister = 0xA0;
 
-// Operation code of the ATA PASS-THROUGH (12) command and the protocols it can carry.
+// Operation code of the ATA PASS-THROUGH (12) command and the protocol it carries here.
 constexpr quint8 kAtaPassThrough12 = 0xA1;
-constexpr quint8 kAtaProtocolNonData = 3;
 constexpr quint8 kAtaProtocolPioDataIn = 4;
 
 // Time a translating controller is given to answer a pass-through command.
@@ -181,6 +180,10 @@ PhysicalDriveReader::BusType PhysicalDriveReaderWin::busType() const
         case BusTypeVirtual:            return BusType::VIRTUAL;
         case BusTypeFileBackedVirtual:  return BusType::FILE_BACKED_VIRTUAL;
         case BusTypeNvme:               return BusType::NVME;
+        case BusTypeSpaces:             return BusType::SPACES;
+        case BusTypeSCM:                return BusType::SCM;
+        case BusTypeUfs:                return BusType::UFS;
+        case BusTypeNvmeof:             return BusType::NVME_OF;
         default:                        return BusType::UNKNOWN;
     }
 }
@@ -262,14 +265,16 @@ QByteArray PhysicalDriveReaderWin::nvmeHealthLog()
     }
 
     // The driver decides where inside the descriptor it puts the log, so the position it reports is
-    // validated against the buffer that was handed to it.
+    // validated against the buffer that was handed to it and against the part of that buffer the
+    // driver actually filled: everything past it is the zero fill of the request.
     const STORAGE_PROTOCOL_SPECIFIC_DATA& reply = descriptor->ProtocolSpecificData;
     const qsizetype log_offset =
         offsetof(STORAGE_PROTOCOL_DATA_DESCRIPTOR, ProtocolSpecificData) + reply.ProtocolDataOffset;
+    const qsizetype log_end = log_offset + NvmeSmart::kHealthLogSize;
 
     if (reply.ProtocolDataOffset < sizeof(STORAGE_PROTOCOL_SPECIFIC_DATA) ||
         reply.ProtocolDataLength < NvmeSmart::kHealthLogSize ||
-        log_offset + NvmeSmart::kHealthLogSize > buffer.size())
+        log_end > buffer.size() || log_end > static_cast<qsizetype>(bytes_returned))
     {
         LOG(ERROR) << "Protocol data outside of the reply buffer:" << reply.ProtocolDataOffset
                    << reply.ProtocolDataLength;

@@ -114,6 +114,10 @@ message PhysicalDrives
             BUS_TYPE_VIRTUAL             = 14;
             BUS_TYPE_FILE_BACKED_VIRTUAL = 15;
             BUS_TYPE_NVME                = 16;
+            BUS_TYPE_SPACES              = 17;
+            BUS_TYPE_SCM                 = 18;
+            BUS_TYPE_UFS                 = 19;
+            BUS_TYPE_NVME_OF             = 20;
         }
 
         // Health data of an ATA drive. The meaning of an attribute depends on its id and on the

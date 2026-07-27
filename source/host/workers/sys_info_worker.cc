@@ -746,6 +746,10 @@ proto::system_info::PhysicalDrives::Drive::BusType busType(PhysicalDriveReader::
         case PhysicalDriveReader::BusType::MMC:     return ProtoDrive::BUS_TYPE_MMC;
         case PhysicalDriveReader::BusType::VIRTUAL: return ProtoDrive::BUS_TYPE_VIRTUAL;
         case PhysicalDriveReader::BusType::NVME:    return ProtoDrive::BUS_TYPE_NVME;
+        case PhysicalDriveReader::BusType::SPACES:  return ProtoDrive::BUS_TYPE_SPACES;
+        case PhysicalDriveReader::BusType::SCM:     return ProtoDrive::BUS_TYPE_SCM;
+        case PhysicalDriveReader::BusType::UFS:     return ProtoDrive::BUS_TYPE_UFS;
+        case PhysicalDriveReader::BusType::NVME_OF: return ProtoDrive::BUS_TYPE_NVME_OF;
 
         case PhysicalDriveReader::BusType::FILE_BACKED_VIRTUAL:
             return ProtoDrive::BUS_TYPE_FILE_BACKED_VIRTUAL;

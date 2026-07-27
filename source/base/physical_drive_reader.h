@@ -51,7 +51,11 @@ public:
         MMC                 = 13,
         VIRTUAL             = 14,
         FILE_BACKED_VIRTUAL = 15,
-        NVME                = 16
+        NVME                = 16,
+        SPACES              = 17,
+        SCM                 = 18,
+        UFS                 = 19,
+        NVME_OF             = 20
     };
 
     // Paths of the physical drives present in the system. The shape of a path is specific to the

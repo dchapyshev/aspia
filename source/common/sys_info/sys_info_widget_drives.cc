@@ -134,6 +134,10 @@ QString busTypeToString(proto::system_info::PhysicalDrives::Drive::BusType bus_t
         case Drive::BUS_TYPE_VIRTUAL:             return "Virtual";
         case Drive::BUS_TYPE_FILE_BACKED_VIRTUAL: return "File Backed Virtual";
         case Drive::BUS_TYPE_NVME:                return "NVMe";
+        case Drive::BUS_TYPE_SPACES:              return "Storage Spaces";
+        case Drive::BUS_TYPE_SCM:                 return "SCM";
+        case Drive::BUS_TYPE_UFS:                 return "UFS";
+        case Drive::BUS_TYPE_NVME_OF:             return "NVMe-oF";
         default:                                  return QString();
     }
 }
