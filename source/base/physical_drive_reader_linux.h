@@ -51,6 +51,7 @@ private:
     // Contents of the sysfs attribute |name| of the drive. Empty when the driver does not have the
     // attribute or refused to answer.
     QString sysAttribute(const QString& name) const;
+    QByteArray sysAttributeData(const QString& name) const;
 
     void readIdentity();
     void readBusType();

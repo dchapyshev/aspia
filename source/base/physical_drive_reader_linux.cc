@@ -77,6 +77,11 @@ constexpr quint8 kAtaProtocolPioDataIn = 4;
 constexpr quint8 kNvmeGetLogPage = 0x02;
 constexpr quint32 kNvmeNamespaceAll = 0xFFFFFFFF;
 
+// Page code of the Unit Serial Number vital product data page and the size of the header every such
+// page starts with.
+constexpr quint8 kUnitSerialNumberPage = 0x80;
+constexpr qsizetype kVpdHeaderSize = 4;
+
 //--------------------------------------------------------------------------------------------------
 // Directory the kernel keeps the attributes of the block device |name| in.
 QString sysBlockPath(const QString& name)
@@ -85,14 +90,43 @@ QString sysBlockPath(const QString& name)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString readSysFile(const QString& path)
+QByteArray readSysFileData(const QString& path)
 {
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly))
-        return QString();
+        return QByteArray();
 
     // Files under /sys report a size of 0, so QFile::size() cannot be used to reserve the buffer.
-    return QString::fromLatin1(file.readAll()).trimmed();
+    return file.readAll();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString readSysFile(const QString& path)
+{
+    return QString::fromLatin1(readSysFileData(path)).trimmed();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Serial number carried by the vital product |page| the SCSI stack read from the drive. The page
+// starts with a header the page code and the length of the number are taken from.
+QString serialNumberFromVpd(const QByteArray& page)
+{
+    if (page.size() < kVpdHeaderSize)
+        return QString();
+
+    const auto* header = reinterpret_cast<const quint8*>(page.constData());
+    if (header[1] != kUnitSerialNumberPage)
+        return QString();
+
+    // A page that named more of the number than it carries is cut to what arrived.
+    QByteArray serial = page.mid(kVpdHeaderSize, (header[2] << 8) | header[3]);
+
+    // The specification asks for spaces, but a padding of zero bytes is met as well.
+    const qsizetype end = serial.indexOf('\0');
+    if (end >= 0)
+        serial.truncate(end);
+
+    return QString::fromLatin1(serial).trimmed();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -263,6 +297,12 @@ QString PhysicalDriveReaderLinux::sysAttribute(const QString& name) const
 }
 
 //--------------------------------------------------------------------------------------------------
+QByteArray PhysicalDriveReaderLinux::sysAttributeData(const QString& name) const
+{
+    return readSysFileData(QString("%1/%2").arg(sysBlockPath(device_name_), name));
+}
+
+//--------------------------------------------------------------------------------------------------
 void PhysicalDriveReaderLinux::readIdentity()
 {
     const QString vendor = sysAttribute("device/vendor");
@@ -278,6 +318,12 @@ void PhysicalDriveReaderLinux::readIdentity()
         model_ = vendor + " " + model;
 
     serial_number_ = sysAttribute("device/serial");
+
+    // Only the NVMe stack keeps an attribute for the serial number. The SCSI stack, which serves ATA
+    // drives as well, keeps the page it read the number from instead. It is the only source left for
+    // a process not privileged enough to ask the drive itself.
+    if (serial_number_.isEmpty())
+        serial_number_ = serialNumberFromVpd(sysAttributeData("device/vpd_pg80"));
 
     // The drivers name the same information differently: the SCSI stack has "rev", the NVMe stack
     // "firmware_rev".
@@ -378,8 +424,8 @@ QByteArray PhysicalDriveReaderLinux::readAtaSector(
 }
 
 //--------------------------------------------------------------------------------------------------
-bool PhysicalDriveReaderLinux::ataPassThrough(quint8 features, quint8 cyl_low, quint8 cyl_high,
-                                         quint8 command, int cdb_size, char* sector)
+bool PhysicalDriveReaderLinux::ataPassThrough(
+    quint8 features, quint8 cyl_low, quint8 cyl_high, quint8 command, int cdb_size, char* sector)
 {
     quint8 cdb[kCdbSize16];
     memset(cdb, 0, sizeof(cdb));
@@ -460,6 +506,12 @@ bool PhysicalDriveReaderLinux::enableAtaSmart()
         return false;
 
     smart_enable_attempted_ = true;
+
+    // Only a drive on an ATA controller is asked to turn the feature on. The command changes a
+    // persistent setting of the drive, and a controller that refused to read the attributes is
+    // unlikely to pass it through either.
+    if (bus_type_ != BusType::ATA && bus_type_ != BusType::SATA)
+        return false;
 
     return ataPassThrough(kSmartEnableOperations, kSmartCylLow, kSmartCylHigh, kAtaSmart,
                           kCdbSize16, nullptr) ||
