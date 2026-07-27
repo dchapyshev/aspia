@@ -147,6 +147,9 @@ public:
     quint32 coreEnabled() const;
     quint32 threadCount() const;
     quint32 threadEnabled() const;
+    quint16 l1CacheHandle() const;
+    quint16 l2CacheHandle() const;
+    quint16 l3CacheHandle() const;
     bool is64Bit() const;
     bool isMultiCore() const;
     bool isHardwareThread() const;
@@ -159,6 +162,69 @@ private:
 
     const SmbiosProcessorTable* table_;
     Q_DISABLE_COPY_MOVE(SmbiosProcessor)
+};
+
+class SmbiosCache
+{
+public:
+    explicit SmbiosCache(const SmbiosTable* table);
+
+    bool isValid() const;
+    bool isEnabled() const;
+    bool isSocketed() const;
+    QString designation() const;
+    QString location() const;
+    QString mode() const;
+    QString type() const;
+    QString errorCorrectionType() const;
+    QString associativity() const;
+    QString currentSramType() const;
+    quint8 level() const;
+    quint64 maxSize() const;
+    quint64 currentSize() const;
+    quint32 speed() const;
+    bool supportsNonBurst() const;
+    bool supportsBurst() const;
+    bool supportsPipelineBurst() const;
+    bool supportsSynchronous() const;
+    bool supportsAsynchronous() const;
+
+private:
+    const SmbiosCacheTable* table_;
+    Q_DISABLE_COPY_MOVE(SmbiosCache)
+};
+
+class SmbiosSystemSlot
+{
+public:
+    explicit SmbiosSystemSlot(const SmbiosTable* table);
+
+    bool isValid() const;
+    QString designation() const;
+    QString type() const;
+    QString dataBusWidth() const;
+    QString usage() const;
+    QString length() const;
+    quint16 id() const;
+    bool hasBusAddress() const;
+    quint16 segmentGroupNumber() const;
+    quint8 busNumber() const;
+    quint8 deviceNumber() const;
+    quint8 functionNumber() const;
+    bool provides5Volts() const;
+    bool provides3Volts() const;
+    bool isShared() const;
+    bool supportsPme() const;
+    bool supportsHotPlug() const;
+    bool supportsSmbus() const;
+    bool supportsBifurcation() const;
+
+private:
+    quint8 characteristics1() const;
+    quint8 characteristics2() const;
+
+    const SmbiosSystemSlotTable* table_;
+    Q_DISABLE_COPY_MOVE(SmbiosSystemSlot)
 };
 
 class SmbiosMemoryDevice

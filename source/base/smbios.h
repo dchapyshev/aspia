@@ -40,6 +40,8 @@ enum SmbiosTableType : quint8
     SMBIOS_TABLE_TYPE_BASEBOARD     = 0x02,
     SMBIOS_TABLE_TYPE_CHASSIS       = 0x03,
     SMBIOS_TABLE_TYPE_PROCESSOR     = 0x04,
+    SMBIOS_TABLE_TYPE_CACHE         = 0x07,
+    SMBIOS_TABLE_TYPE_SYSTEM_SLOT   = 0x09,
     SMBIOS_TABLE_TYPE_MEMORY_DEVICE = 0x11,
     SMBIOS_TABLE_TYPE_END_OF_TABLE  = 0x7F
 };
@@ -174,6 +176,47 @@ struct SmbiosProcessorTable : public SmbiosTable
 
     // 3.6+
     quint16 thread_enabled;    // 30h-31h
+};
+
+struct SmbiosCacheTable : public SmbiosTable
+{
+    // 2.0+
+    quint8 socket_designation;    // 04h
+    quint16 configuration;        // 05h-06h
+    quint16 max_size;             // 07h-08h
+    quint16 current_size;         // 09h-0Ah
+    quint16 supported_sram_type;  // 0Bh-0Ch
+    quint16 current_sram_type;    // 0Dh-0Eh
+
+    // 2.1+
+    quint8 speed;                 // 0Fh
+    quint8 error_correction_type; // 10h
+    quint8 type;                  // 11h
+    quint8 associativity;         // 12h
+
+    // 3.1+
+    quint32 max_size2;            // 13h-16h
+    quint32 current_size2;        // 17h-1Ah
+};
+
+struct SmbiosSystemSlotTable : public SmbiosTable
+{
+    // 2.0+
+    quint8 designation;      // 04h
+    quint8 type;             // 05h
+    quint8 data_bus_width;   // 06h
+    quint8 usage;            // 07h
+    quint8 slot_length;      // 08h, the length of the slot, not of the table
+    quint16 id;              // 09h-0Ah
+    quint8 characteristics1; // 0Bh
+
+    // 2.1+
+    quint8 characteristics2; // 0Ch
+
+    // 2.6+
+    quint16 segment_group;   // 0Dh-0Eh
+    quint8 bus_number;       // 0Fh
+    quint8 device_function;  // 10h
 };
 
 struct SmbiosMemoryDeviceTable : public SmbiosTable

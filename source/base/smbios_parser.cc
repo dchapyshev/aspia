@@ -43,6 +43,26 @@ QString chassisState(quint8 state)
     return QString();
 }
 
+//--------------------------------------------------------------------------------------------------
+// Converts a 16-bit cache size field to bytes. Bit 15 selects the granularity.
+quint64 cacheSize(quint16 size)
+{
+    if (size & 0x8000)
+        return static_cast<quint64>(size & 0x7FFF) * 64ULL * 1024ULL;
+
+    return static_cast<quint64>(size) * 1024ULL;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Converts a 32-bit cache size field (3.1+) to bytes. Bit 31 selects the granularity.
+quint64 cacheSize2(quint32 size)
+{
+    if (size & 0x80000000)
+        return static_cast<quint64>(size & 0x7FFFFFFF) * 64ULL * 1024ULL;
+
+    return static_cast<quint64>(size) * 1024ULL;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -1015,6 +1035,34 @@ quint32 SmbiosProcessor::threadEnabled() const
 }
 
 //--------------------------------------------------------------------------------------------------
+quint16 SmbiosProcessor::l1CacheHandle() const
+{
+    // The cache handles appeared in SMBIOS 2.1. FFFFh means the cache is not provided.
+    if (table_->length < 0x1C)
+        return 0xFFFF;
+
+    return table_->l1_cache_handle;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint16 SmbiosProcessor::l2CacheHandle() const
+{
+    if (table_->length < 0x1E)
+        return 0xFFFF;
+
+    return table_->l2_cache_handle;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint16 SmbiosProcessor::l3CacheHandle() const
+{
+    if (table_->length < 0x20)
+        return 0xFFFF;
+
+    return table_->l3_cache_handle;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool SmbiosProcessor::is64Bit() const
 {
     return (characteristics() & 0x0004) != 0;
@@ -1059,6 +1107,551 @@ quint16 SmbiosProcessor::characteristics() const
         return 0;
 
     return table_->characteristics;
+}
+
+//--------------------------------------------------------------------------------------------------
+SmbiosCache::SmbiosCache(const SmbiosTable* table)
+    : table_(static_cast<const SmbiosCacheTable*>(table))
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosCache::isValid() const
+{
+    // 0Fh is the minimum length of the cache information table since SMBIOS 2.0.
+    return table_->length >= 0x0F;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosCache::isEnabled() const
+{
+    // Bit 7 of the configuration tells whether the cache is enabled at boot time.
+    return (table_->configuration & 0x0080) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosCache::isSocketed() const
+{
+    return (table_->configuration & 0x0008) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosCache::designation() const
+{
+    return smbiosString(table_, table_->socket_designation);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosCache::location() const
+{
+    static const char* kLocation[] =
+    {
+        "Internal", // 0b00
+        "External",
+        "Reserved",
+        "Unknown" // 0b11
+    };
+
+    // Bits 6:5 of the configuration carry the location relative to the CPU module.
+    return kLocation[(table_->configuration >> 5) & 0x03];
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosCache::mode() const
+{
+    static const char* kMode[] =
+    {
+        "Write Through", // 0b00
+        "Write Back",
+        "Varies With Memory Address",
+        "Unknown" // 0b11
+    };
+
+    // Bits 9:8 of the configuration carry the operational mode.
+    return kMode[(table_->configuration >> 8) & 0x03];
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosCache::type() const
+{
+    static const char* kType[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "Instruction",
+        "Data",
+        "Unified" // 0x05
+    };
+
+    // The field appeared in SMBIOS 2.1.
+    if (table_->length < 0x12)
+        return QString();
+
+    if (table_->type >= 0x01 && table_->type <= 0x05)
+        return kType[table_->type - 0x01];
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosCache::errorCorrectionType() const
+{
+    static const char* kType[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "None",
+        "Parity",
+        "Single-bit ECC",
+        "Multi-bit ECC" // 0x06
+    };
+
+    // The field appeared in SMBIOS 2.1.
+    if (table_->length < 0x11)
+        return QString();
+
+    if (table_->error_correction_type >= 0x01 && table_->error_correction_type <= 0x06)
+        return kType[table_->error_correction_type - 0x01];
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosCache::associativity() const
+{
+    static const char* kAssociativity[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "Direct Mapped",
+        "2-way Set-Associative",
+        "4-way Set-Associative",
+        "Fully Associative",
+        "8-way Set-Associative",
+        "16-way Set-Associative",
+        "12-way Set-Associative",
+        "24-way Set-Associative",
+        "32-way Set-Associative",
+        "48-way Set-Associative",
+        "64-way Set-Associative",
+        "20-way Set-Associative" // 0x0E
+    };
+
+    // The field appeared in SMBIOS 2.1.
+    if (table_->length < 0x13)
+        return QString();
+
+    if (table_->associativity >= 0x01 && table_->associativity <= 0x0E)
+        return kAssociativity[table_->associativity - 0x01];
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosCache::currentSramType() const
+{
+    static const char* kType[] =
+    {
+        "Other", // bit 0
+        "Unknown",
+        "Non-Burst",
+        "Burst",
+        "Pipeline Burst",
+        "Synchronous",
+        "Asynchronous" // bit 6
+    };
+
+    // The field is a bit mask, but a cache runs on one type at a time.
+    for (size_t i = 0; i < std::size(kType); ++i)
+    {
+        if (table_->current_sram_type & (1 << i))
+            return kType[i];
+    }
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+quint8 SmbiosCache::level() const
+{
+    // Bits 2:0 of the configuration carry the level with L1 encoded as zero.
+    return (table_->configuration & 0x07) + 1;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint64 SmbiosCache::maxSize() const
+{
+    // FFFFh means the size does not fit the field and is stored in the wider one (3.1+).
+    if (table_->max_size == 0xFFFF)
+    {
+        if (table_->length < 0x17)
+            return 0;
+
+        return cacheSize2(table_->max_size2);
+    }
+
+    return cacheSize(table_->max_size);
+}
+
+//--------------------------------------------------------------------------------------------------
+quint64 SmbiosCache::currentSize() const
+{
+    // FFFFh means the size does not fit the field and is stored in the wider one (3.1+).
+    if (table_->current_size == 0xFFFF)
+    {
+        if (table_->length < 0x1B)
+            return 0;
+
+        return cacheSize2(table_->current_size2);
+    }
+
+    return cacheSize(table_->current_size);
+}
+
+//--------------------------------------------------------------------------------------------------
+quint32 SmbiosCache::speed() const
+{
+    // The speed is measured in nanoseconds. The field appeared in SMBIOS 2.1, zero means the
+    // speed is unknown.
+    if (table_->length < 0x10)
+        return 0;
+
+    return table_->speed;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosCache::supportsNonBurst() const
+{
+    return (table_->supported_sram_type & 0x0004) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosCache::supportsBurst() const
+{
+    return (table_->supported_sram_type & 0x0008) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosCache::supportsPipelineBurst() const
+{
+    return (table_->supported_sram_type & 0x0010) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosCache::supportsSynchronous() const
+{
+    return (table_->supported_sram_type & 0x0020) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosCache::supportsAsynchronous() const
+{
+    return (table_->supported_sram_type & 0x0040) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+SmbiosSystemSlot::SmbiosSystemSlot(const SmbiosTable* table)
+    : table_(static_cast<const SmbiosSystemSlotTable*>(table))
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosSystemSlot::isValid() const
+{
+    // 0Ch is the minimum length of the system slot table since SMBIOS 2.0.
+    return table_->length >= 0x0C;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosSystemSlot::designation() const
+{
+    return smbiosString(table_, table_->designation);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosSystemSlot::type() const
+{
+    static const char* kType[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "ISA",
+        "MCA",
+        "EISA",
+        "PCI",
+        "PC Card (PCMCIA)",
+        "VL-VESA",
+        "Proprietary",
+        "Processor Card Slot",
+        "Proprietary Memory Card Slot",
+        "I/O Riser Card Slot",
+        "NuBus",
+        "PCI - 66MHz Capable",
+        "AGP",
+        "AGP 2X",
+        "AGP 4X",
+        "PC-98/C20",
+        "PC-98/C24",
+        "PC-98/E",
+        "PC-98/Local Bus",
+        "PC-98/Card",
+        "PCI Express",
+        "PCI Express x1",
+        "PCI Express x2",
+        "PCI Express x4",
+        "PCI Express x8",
+        "PCI Express x16",
+        "PCI Express Gen 2",
+        "PCI Express Gen 2 x1",
+        "PCI Express Gen 2 x2",
+        "PCI Express Gen 2 x4",
+        "PCI Express Gen 2 x8",
+        "PCI Express Gen 2 x16",
+        "PCI Express Gen 3",
+        "PCI Express Gen 3 x1",
+        "PCI Express Gen 3 x2",
+        "PCI Express Gen 3 x4",
+        "PCI Express Gen 3 x8",
+        "PCI Express Gen 3 x16",
+        "Reserved",
+        "PCI Express Mini 52-pin With Bottom-side Keep-outs",
+        "PCI Express Mini 52-pin Without Bottom-side Keep-outs",
+        "PCI Express Mini 76-pin",
+        "PCI Express Gen 4",
+        "PCI Express Gen 4 x1",
+        "PCI Express Gen 4 x2",
+        "PCI Express Gen 4 x4",
+        "PCI Express Gen 4 x8",
+        "PCI Express Gen 4 x16",
+        "PCI Express Gen 5",
+        "PCI Express Gen 5 x1",
+        "PCI Express Gen 5 x2",
+        "PCI Express Gen 5 x4",
+        "PCI Express Gen 5 x8",
+        "PCI Express Gen 5 x16",
+        "PCI Express Gen 6 and Beyond",
+        "EDSFF E1 Form Factor",
+        "EDSFF E3 Form Factor" // 0x3B
+    };
+
+    // The types PC-98 and PCI Express also have a legacy range, still used by some firmware.
+    static const char* kLegacyType[] =
+    {
+        "PC-98/C20", // 0xA0
+        "PC-98/C24",
+        "PC-98/E",
+        "PC-98/Local Bus",
+        "PC-98/Card",
+        "PCI Express",
+        "PCI Express x1",
+        "PCI Express x2",
+        "PCI Express x4",
+        "PCI Express x8",
+        "PCI Express x16",
+        "PCI Express Gen 2",
+        "PCI Express Gen 2 x1",
+        "PCI Express Gen 2 x2",
+        "PCI Express Gen 2 x4",
+        "PCI Express Gen 2 x8",
+        "PCI Express Gen 2 x16",
+        "PCI Express Gen 3",
+        "PCI Express Gen 3 x1",
+        "PCI Express Gen 3 x2",
+        "PCI Express Gen 3 x4",
+        "PCI Express Gen 3 x8",
+        "PCI Express Gen 3 x16" // 0xB6
+    };
+
+    if (table_->type >= 0x01 && table_->type <= 0x3B)
+        return kType[table_->type - 0x01];
+
+    if (table_->type >= 0xA0 && table_->type <= 0xB6)
+        return kLegacyType[table_->type - 0xA0];
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosSystemSlot::dataBusWidth() const
+{
+    static const char* kWidth[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "8 bit",
+        "16 bit",
+        "32 bit",
+        "64 bit",
+        "128 bit",
+        "x1",
+        "x2",
+        "x4",
+        "x8",
+        "x12",
+        "x16",
+        "x32" // 0x0E
+    };
+
+    if (table_->data_bus_width >= 0x01 && table_->data_bus_width <= 0x0E)
+        return kWidth[table_->data_bus_width - 0x01];
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosSystemSlot::usage() const
+{
+    static const char* kUsage[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "Available",
+        "In Use",
+        "Unavailable" // 0x05
+    };
+
+    if (table_->usage >= 0x01 && table_->usage <= 0x05)
+        return kUsage[table_->usage - 0x01];
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosSystemSlot::length() const
+{
+    static const char* kLength[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "Short Length",
+        "Long Length",
+        "2.5\" Drive Form Factor",
+        "3.5\" Drive Form Factor" // 0x06
+    };
+
+    if (table_->slot_length >= 0x01 && table_->slot_length <= 0x06)
+        return kLength[table_->slot_length - 0x01];
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+quint16 SmbiosSystemSlot::id() const
+{
+    return table_->id;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosSystemSlot::hasBusAddress() const
+{
+    // The bus address appeared in SMBIOS 2.6. Slots outside a PCI bus report it as all ones.
+    if (table_->length < 0x11)
+        return false;
+
+    return table_->segment_group != 0xFFFF || table_->bus_number != 0xFF ||
+           table_->device_function != 0xFF;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint16 SmbiosSystemSlot::segmentGroupNumber() const
+{
+    if (!hasBusAddress())
+        return 0;
+
+    return table_->segment_group;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint8 SmbiosSystemSlot::busNumber() const
+{
+    if (!hasBusAddress())
+        return 0;
+
+    return table_->bus_number;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint8 SmbiosSystemSlot::deviceNumber() const
+{
+    if (!hasBusAddress())
+        return 0;
+
+    // Bits 7:3 of the field carry the device number.
+    return (table_->device_function >> 3) & 0x1F;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint8 SmbiosSystemSlot::functionNumber() const
+{
+    if (!hasBusAddress())
+        return 0;
+
+    // Bits 2:0 of the field carry the function number.
+    return table_->device_function & 0x07;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosSystemSlot::provides5Volts() const
+{
+    return (characteristics1() & 0x02) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosSystemSlot::provides3Volts() const
+{
+    return (characteristics1() & 0x04) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosSystemSlot::isShared() const
+{
+    return (characteristics1() & 0x08) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosSystemSlot::supportsPme() const
+{
+    return (characteristics2() & 0x01) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosSystemSlot::supportsHotPlug() const
+{
+    return (characteristics2() & 0x02) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosSystemSlot::supportsSmbus() const
+{
+    return (characteristics2() & 0x04) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosSystemSlot::supportsBifurcation() const
+{
+    return (characteristics2() & 0x08) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint8 SmbiosSystemSlot::characteristics1() const
+{
+    // Bit 0 marks the characteristics as unknown, which makes the remaining bits meaningless.
+    if (table_->characteristics1 & 0x01)
+        return 0;
+
+    return table_->characteristics1;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint8 SmbiosSystemSlot::characteristics2() const
+{
+    // The field appeared in SMBIOS 2.1 and shares the 'unknown' marker with the first one.
+    if (table_->length < 0x0D || (table_->characteristics1 & 0x01))
+        return 0;
+
+    return table_->characteristics2;
 }
 
 //--------------------------------------------------------------------------------------------------

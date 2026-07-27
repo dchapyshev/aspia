@@ -493,6 +493,9 @@ TEST(SmbiosParserTest, ProcessorFields)
     formatted[0x17 - 4] = static_cast<char>(0x0E);
     formatted[0x18 - 4] = static_cast<char>(0x41); // status: populated and enabled
     formatted[0x19 - 4] = static_cast<char>(0x32); // upgrade: socket LGA1151
+    formatted[0x1A - 4] = static_cast<char>(0x11); // l1_cache_handle
+    formatted[0x1C - 4] = static_cast<char>(0x12); // l2_cache_handle
+    formatted[0x1E - 4] = static_cast<char>(0x13); // l3_cache_handle
     formatted[0x20 - 4] = 4;                       // serial_number: string #4
     formatted[0x21 - 4] = 5;                       // asset_tag: string #5
     formatted[0x22 - 4] = 6;                       // part_number: string #6
@@ -529,6 +532,9 @@ TEST(SmbiosParserTest, ProcessorFields)
     EXPECT_EQ(processor.coreEnabled(), 8u);
     EXPECT_EQ(processor.threadCount(), 16u);
     EXPECT_EQ(processor.threadEnabled(), 0u); // The table is too short to carry the field.
+    EXPECT_EQ(processor.l1CacheHandle(), 0x0011);
+    EXPECT_EQ(processor.l2CacheHandle(), 0x0012);
+    EXPECT_EQ(processor.l3CacheHandle(), 0x0013);
     EXPECT_TRUE(processor.is64Bit());
     EXPECT_TRUE(processor.isMultiCore());
     EXPECT_FALSE(processor.isHardwareThread());
@@ -633,6 +639,9 @@ TEST(SmbiosParserTest, ProcessorShortTableOmitsLateFields)
     EXPECT_EQ(processor.coreEnabled(), 0u);
     EXPECT_EQ(processor.threadCount(), 0u);
     EXPECT_EQ(processor.threadEnabled(), 0u);
+    EXPECT_EQ(processor.l1CacheHandle(), 0xFFFF); // The cache handles appeared in SMBIOS 2.1.
+    EXPECT_EQ(processor.l2CacheHandle(), 0xFFFF);
+    EXPECT_EQ(processor.l3CacheHandle(), 0xFFFF);
     EXPECT_FALSE(processor.is64Bit());
 }
 
@@ -661,6 +670,254 @@ TEST(SmbiosParserTest, TruncatedProcessorIsInvalid)
     ASSERT_FALSE(enumerator.isAtEnd());
 
     EXPECT_FALSE(SmbiosProcessor(enumerator.table()).isValid());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, CacheFields)
+{
+    QByteArray formatted(0x13 - 4, '\0');
+    formatted[0x04 - 4] = 1;                       // socket_designation: string #1
+    formatted[0x05 - 4] = static_cast<char>(0x89); // configuration: L2, socketed, enabled
+    formatted[0x06 - 4] = static_cast<char>(0x01); // configuration: write back mode
+    formatted[0x07 - 4] = static_cast<char>(0x00); // max_size: 512 KB with 1K granularity
+    formatted[0x08 - 4] = static_cast<char>(0x02);
+    formatted[0x09 - 4] = static_cast<char>(0x00); // current_size: 512 KB
+    formatted[0x0A - 4] = static_cast<char>(0x02);
+    formatted[0x0B - 4] = static_cast<char>(0x30); // supported_sram_type: pipeline burst, sync
+    formatted[0x0D - 4] = static_cast<char>(0x20); // current_sram_type: synchronous
+    formatted[0x0F - 4] = 10;                      // speed: 10 ns
+    formatted[0x10 - 4] = 5;                       // error_correction_type: single-bit ECC
+    formatted[0x11 - 4] = 5;                       // type: unified
+    formatted[0x12 - 4] = 7;                       // associativity: 8-way set-associative
+
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_CACHE, formatted, { "L2 Cache" }));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosCache cache(enumerator.table());
+    ASSERT_TRUE(cache.isValid());
+    EXPECT_TRUE(cache.isEnabled());
+    EXPECT_TRUE(cache.isSocketed());
+    EXPECT_EQ(cache.designation(), QString("L2 Cache"));
+    EXPECT_EQ(cache.location(), QString("Internal"));
+    EXPECT_EQ(cache.mode(), QString("Write Back"));
+    EXPECT_EQ(cache.type(), QString("Unified"));
+    EXPECT_EQ(cache.errorCorrectionType(), QString("Single-bit ECC"));
+    EXPECT_EQ(cache.associativity(), QString("8-way Set-Associative"));
+    EXPECT_EQ(cache.currentSramType(), QString("Synchronous"));
+    EXPECT_EQ(cache.level(), 2);
+    EXPECT_EQ(cache.maxSize(), 512ULL * 1024ULL);
+    EXPECT_EQ(cache.currentSize(), 512ULL * 1024ULL);
+    EXPECT_EQ(cache.speed(), 10u);
+    EXPECT_FALSE(cache.supportsNonBurst());
+    EXPECT_FALSE(cache.supportsBurst());
+    EXPECT_TRUE(cache.supportsPipelineBurst());
+    EXPECT_TRUE(cache.supportsSynchronous());
+    EXPECT_FALSE(cache.supportsAsynchronous());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, CacheExtendedSize)
+{
+    auto makeCache = [](quint8 length) -> QByteArray
+    {
+        QByteArray formatted(length - 4, '\0');
+        formatted[0x07 - 4] = static_cast<char>(0xFF); // max_size: see the max_size2 field
+        formatted[0x08 - 4] = static_cast<char>(0xFF);
+        formatted[0x09 - 4] = static_cast<char>(0xFF); // current_size: see current_size2
+        formatted[0x0A - 4] = static_cast<char>(0xFF);
+
+        if (length >= 0x1B)
+        {
+            // 1024 units of 64K each: 64 MB.
+            formatted[0x14 - 4] = static_cast<char>(0x04); // max_size2
+            formatted[0x16 - 4] = static_cast<char>(0x80);
+            formatted[0x18 - 4] = static_cast<char>(0x04); // current_size2
+            formatted[0x1A - 4] = static_cast<char>(0x80);
+        }
+
+        return makeTable(SMBIOS_TABLE_TYPE_CACHE, formatted, {});
+    };
+
+    const QByteArray extended = makeDump(makeCache(0x1B));
+
+    SmbiosTableEnumerator extended_enumerator(extended);
+    ASSERT_FALSE(extended_enumerator.isAtEnd());
+
+    SmbiosCache extended_cache(extended_enumerator.table());
+    EXPECT_EQ(extended_cache.maxSize(), 64ULL * 1024ULL * 1024ULL);
+    EXPECT_EQ(extended_cache.currentSize(), 64ULL * 1024ULL * 1024ULL);
+
+    // An SMBIOS 2.1 table cannot tell the size the 16-bit fields overflowed on.
+    const QByteArray legacy = makeDump(makeCache(0x13));
+
+    SmbiosTableEnumerator legacy_enumerator(legacy);
+    ASSERT_FALSE(legacy_enumerator.isAtEnd());
+
+    SmbiosCache legacy_cache(legacy_enumerator.table());
+    EXPECT_EQ(legacy_cache.maxSize(), 0ULL);
+    EXPECT_EQ(legacy_cache.currentSize(), 0ULL);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, CacheShortTableOmitsLateFields)
+{
+    // An SMBIOS 2.0 cache table (length 0Fh) carries neither the speed nor the type fields.
+    QByteArray formatted(0x0F - 4, '\0');
+    formatted[0x05 - 4] = static_cast<char>(0x22); // configuration: L3, external location
+    formatted[0x07 - 4] = static_cast<char>(0x80); // max_size: 128 units of 64K each, 8 MB
+    formatted[0x08 - 4] = static_cast<char>(0x80);
+
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_CACHE, formatted, {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosCache cache(enumerator.table());
+    ASSERT_TRUE(cache.isValid());
+    EXPECT_EQ(cache.level(), 3);
+    EXPECT_EQ(cache.location(), QString("External"));
+    EXPECT_FALSE(cache.isEnabled());
+    EXPECT_EQ(cache.maxSize(), 8ULL * 1024ULL * 1024ULL);
+    EXPECT_EQ(cache.currentSize(), 0ULL);
+    EXPECT_EQ(cache.speed(), 0u);
+    EXPECT_TRUE(cache.type().isEmpty());
+    EXPECT_TRUE(cache.errorCorrectionType().isEmpty());
+    EXPECT_TRUE(cache.associativity().isEmpty());
+    EXPECT_TRUE(cache.currentSramType().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, TruncatedCacheIsInvalid)
+{
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_CACHE, QByteArray(0x0E - 4, '\0'), {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    EXPECT_FALSE(SmbiosCache(enumerator.table()).isValid());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, SystemSlotFields)
+{
+    QByteArray formatted(0x11 - 4, '\0');
+    formatted[0x04 - 4] = 1;                       // designation: string #1
+    formatted[0x05 - 4] = static_cast<char>(0x1C); // type: PCI Express x16
+    formatted[0x06 - 4] = static_cast<char>(0x0D); // data_bus_width: x16
+    formatted[0x07 - 4] = 3;                       // usage: available
+    formatted[0x08 - 4] = 4;                       // slot_length: long
+    formatted[0x09 - 4] = 5;                       // id
+    formatted[0x0B - 4] = static_cast<char>(0x0C); // characteristics1: 3.3 V, shared
+    formatted[0x0C - 4] = static_cast<char>(0x0A); // characteristics2: hot-plug, bifurcation
+    formatted[0x0F - 4] = 3;                       // bus_number
+    formatted[0x10 - 4] = static_cast<char>(0x08); // device_function: device 1, function 0
+
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_SYSTEM_SLOT, formatted, { "PCIEX16_1" }));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosSystemSlot slot(enumerator.table());
+    ASSERT_TRUE(slot.isValid());
+    EXPECT_EQ(slot.designation(), QString("PCIEX16_1"));
+    EXPECT_EQ(slot.type(), QString("PCI Express x16"));
+    EXPECT_EQ(slot.dataBusWidth(), QString("x16"));
+    EXPECT_EQ(slot.usage(), QString("Available"));
+    EXPECT_EQ(slot.length(), QString("Long Length"));
+    EXPECT_EQ(slot.id(), 5);
+    EXPECT_TRUE(slot.hasBusAddress());
+    EXPECT_EQ(slot.segmentGroupNumber(), 0);
+    EXPECT_EQ(slot.busNumber(), 3);
+    EXPECT_EQ(slot.deviceNumber(), 1);
+    EXPECT_EQ(slot.functionNumber(), 0);
+    EXPECT_FALSE(slot.provides5Volts());
+    EXPECT_TRUE(slot.provides3Volts());
+    EXPECT_TRUE(slot.isShared());
+    EXPECT_FALSE(slot.supportsPme());
+    EXPECT_TRUE(slot.supportsHotPlug());
+    EXPECT_FALSE(slot.supportsSmbus());
+    EXPECT_TRUE(slot.supportsBifurcation());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, SystemSlotLegacyTypeRange)
+{
+    // Some firmware still reports PCI Express slots in the legacy A0h-B6h range.
+    QByteArray formatted(0x0C - 4, '\0');
+    formatted[0x05 - 4] = static_cast<char>(0xA5); // type: PCI Express
+
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_SYSTEM_SLOT, formatted, {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    EXPECT_EQ(SmbiosSystemSlot(enumerator.table()).type(), QString("PCI Express"));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, SystemSlotUnknownCharacteristics)
+{
+    // Bit 0 marks the characteristics as unknown, and the bus address is not applicable.
+    QByteArray formatted(0x11 - 4, '\0');
+    formatted[0x0B - 4] = static_cast<char>(0x03); // characteristics1: unknown, but 5 V set
+    formatted[0x0C - 4] = static_cast<char>(0x02); // characteristics2: hot-plug
+    formatted[0x0D - 4] = static_cast<char>(0xFF); // segment_group
+    formatted[0x0E - 4] = static_cast<char>(0xFF);
+    formatted[0x0F - 4] = static_cast<char>(0xFF); // bus_number
+    formatted[0x10 - 4] = static_cast<char>(0xFF); // device_function
+
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_SYSTEM_SLOT, formatted, {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosSystemSlot slot(enumerator.table());
+    ASSERT_TRUE(slot.isValid());
+    EXPECT_FALSE(slot.provides5Volts());
+    EXPECT_FALSE(slot.supportsHotPlug());
+    EXPECT_FALSE(slot.hasBusAddress());
+    EXPECT_EQ(slot.busNumber(), 0);
+    EXPECT_EQ(slot.deviceNumber(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, SystemSlotShortTableOmitsLateFields)
+{
+    // An SMBIOS 2.0 slot table (length 0Ch) carries neither the second characteristics byte nor
+    // the bus address.
+    QByteArray formatted(0x0C - 4, '\0');
+    formatted[0x0B - 4] = static_cast<char>(0x02); // characteristics1: 5 V
+
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_SYSTEM_SLOT, formatted, {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosSystemSlot slot(enumerator.table());
+    ASSERT_TRUE(slot.isValid());
+    EXPECT_TRUE(slot.provides5Volts());
+    EXPECT_FALSE(slot.supportsPme());
+    EXPECT_FALSE(slot.supportsHotPlug());
+    EXPECT_FALSE(slot.supportsSmbus());
+    EXPECT_FALSE(slot.supportsBifurcation());
+    EXPECT_FALSE(slot.hasBusAddress());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, TruncatedSystemSlotIsInvalid)
+{
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_SYSTEM_SLOT, QByteArray(0x0B - 4, '\0'), {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    EXPECT_FALSE(SmbiosSystemSlot(enumerator.table()).isValid());
 }
 
 //--------------------------------------------------------------------------------------------------
