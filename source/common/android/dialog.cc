@@ -20,6 +20,7 @@
 
 #include <QGuiApplication>
 #include <QHBoxLayout>
+#include <QInputMethod>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QVBoxLayout>
@@ -119,6 +120,10 @@ Dialog::Dialog(QWidget* parent)
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(kScreenMargin, kScreenMargin, kScreenMargin, kScreenMargin);
     layout->addWidget(card_, 0, Qt::AlignCenter);
+
+    QInputMethod* input = QGuiApplication::inputMethod();
+    connect(input, &QInputMethod::keyboardRectangleChanged, this, &Dialog::onKeyboardChanged);
+    connect(input, &QInputMethod::visibleChanged, this, &Dialog::onKeyboardChanged);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -244,6 +249,31 @@ void Dialog::showEvent(QShowEvent* event)
     // Constrain the card to the final geometry: setGeometry above does not always trigger a resize
     // event, which would otherwise leave the card at its content width and overflow a narrow screen.
     updateCardWidth();
+
+    // The keyboard may already be open (the dialog was invoked from a focused field).
+    onKeyboardChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Dialog::onKeyboardChanged()
+{
+    if (!isVisible())
+        return;
+
+    // The keyboard rectangle is in window coordinates and the dialog covers the window, so the
+    // covered strip is everything below the keyboard top. The extra bottom margin recenters the
+    // card in the space that stays visible.
+    const QInputMethod* input = QGuiApplication::inputMethod();
+    const QRect keyboard = input->keyboardRectangle().toRect();
+
+    // On Android the keyboard rectangle arrives in native pixels (the plugin passes the raw window
+    // insets through), while the widget geometry is in logical ones.
+    int inset = 0;
+    if (input->isVisible() && !keyboard.isEmpty())
+        inset = qMax(0, height() - qRound(keyboard.top() / devicePixelRatio()));
+
+    layout()->setContentsMargins(kScreenMargin, kScreenMargin, kScreenMargin,
+                                 kScreenMargin + inset);
 }
 
 //--------------------------------------------------------------------------------------------------

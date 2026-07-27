@@ -73,6 +73,9 @@ protected:
     void resizeEvent(QResizeEvent* event) final;
     void showEvent(QShowEvent* event) final;
 
+private slots:
+    void onKeyboardChanged();
+
 private:
     // Caps the card width to the screen so long content does not overflow a narrow display.
     void updateCardWidth();

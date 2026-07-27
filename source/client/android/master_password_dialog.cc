@@ -105,7 +105,15 @@ MasterPasswordDialog::MasterPasswordDialog(Mode mode, QWidget* parent)
         Database::instance().isBiometricUnlockEnabled() &&
         BiometricGate::status() == BiometricGate::Status::AVAILABLE;
     if (biometric_available)
+    {
         QTimer::singleShot(MilliSeconds(0), this, &MasterPasswordDialog::tryBiometricUnlock);
+    }
+    else
+    {
+        // Typing can start right away. With the biometric prompt the focus stays away so the
+        // keyboard does not pop under the system sheet.
+        (change ? current_ : password_)->setFocus();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -214,6 +222,9 @@ void MasterPasswordDialog::tryBiometricUnlock()
             // The user chose to enter the password instead; stay silent.
             break;
     }
+
+    // Every path past the switch falls back to manual entry.
+    password_->setFocus();
 }
 
 //--------------------------------------------------------------------------------------------------
