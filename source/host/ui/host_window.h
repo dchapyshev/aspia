@@ -77,6 +77,7 @@ private slots:
     void onSettings();
     void onShowHide();
     void onHelp();
+    void onAboutSystem();
     void onAbout();
     void onExit();
     void onSettingsChanged();

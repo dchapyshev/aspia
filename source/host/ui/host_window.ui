@@ -253,6 +253,7 @@ border-radius: 2px;
     </property>
     <addaction name="action_help"/>
     <addaction name="separator"/>
+    <addaction name="action_about_system"/>
     <addaction name="action_about"/>
    </widget>
    <widget class="QMenu" name="menu_access">
@@ -298,6 +299,11 @@ border-radius: 2px;
    </property>
    <property name="shortcut">
     <string>F1</string>
+   </property>
+  </action>
+  <action name="action_about_system">
+   <property name="text">
+    <string>About System</string>
    </property>
   </action>
   <action name="action_about">

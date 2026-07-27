@@ -20,10 +20,12 @@
 
 #include <QActionGroup>
 #include <QCloseEvent>
+#include <QCoreApplication>
 #include <QCursor>
 #include <QDesktopServices>
 #include <QMenuBar>
 #include <QNetworkInterface>
+#include <QProcess>
 #include <QShowEvent>
 #include <QTimer>
 #include <QUrl>
@@ -154,6 +156,7 @@ HostWindow::HostWindow(QWidget* parent)
     connect(ui->action_show_hide, &QAction::triggered, this, &HostWindow::onShowHide);
     connect(ui->action_exit, &QAction::triggered, this, &HostWindow::onExit);
     connect(ui->action_help, &QAction::triggered, this, &HostWindow::onHelp);
+    connect(ui->action_about_system, &QAction::triggered, this, &HostWindow::onAboutSystem);
     connect(ui->action_about, &QAction::triggered, this, &HostWindow::onAbout);
 
     connect(ui->button_new_password, &QPushButton::clicked, this, [this]()
@@ -785,6 +788,27 @@ void HostWindow::onHelp()
 {
     LOG(INFO) << "[ACTION] Help";
     QDesktopServices::openUrl(QUrl("https://aspia.org/help"));
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostWindow::onAboutSystem()
+{
+    LOG(INFO) << "[ACTION] About System";
+
+    // Reading the health of a drive is a privileged operation, so the report is built by a process
+    // that has the rights for it.
+    if (elevate_util_ && elevate_util_->runElevated("--sys-info", winId(), [this]()
+    {
+        ui->action_about_system->setEnabled(true);
+    }))
+    {
+        ui->action_about_system->setEnabled(false);
+        return;
+    }
+
+    // The report is built by a worker this process does not have, so the window lives in a process of
+    // its own even where there is nothing to elevate.
+    QProcess::startDetached(QCoreApplication::applicationFilePath(), QStringList() << "--sys-info");
 }
 
 //--------------------------------------------------------------------------------------------------
