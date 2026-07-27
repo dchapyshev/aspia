@@ -49,7 +49,9 @@ enum SmbiosTableType : quint8
     SMBIOS_TABLE_TYPE_MEMORY_ARRAY_ADDRESS = 0x13,
     SMBIOS_TABLE_TYPE_POINTING_DEVICE      = 0x15,
     SMBIOS_TABLE_TYPE_PORTABLE_BATTERY     = 0x16,
+    SMBIOS_TABLE_TYPE_POWER_SUPPLY         = 0x27,
     SMBIOS_TABLE_TYPE_ONBOARD_DEVICE_EXT   = 0x29,
+    SMBIOS_TABLE_TYPE_TPM_DEVICE           = 0x2B,
     SMBIOS_TABLE_TYPE_END_OF_TABLE         = 0x7F
 };
 
@@ -335,6 +337,23 @@ struct SmbiosPortableBatteryTable : public SmbiosTable
     quint32 oem_specific;          // 16h-19h
 };
 
+struct SmbiosPowerSupplyTable : public SmbiosTable
+{
+    quint8 unit_group;             // 04h
+    quint8 location;               // 05h
+    quint8 device_name;            // 06h
+    quint8 manufacturer;           // 07h
+    quint8 serial_number;          // 08h
+    quint8 asset_tag;              // 09h
+    quint8 model_part_number;      // 0Ah
+    quint8 revision_level;         // 0Bh
+    quint16 max_power_capacity;    // 0Ch-0Dh, in milliwatts
+    quint16 characteristics;       // 0Eh-0Fh
+    quint16 voltage_probe_handle;  // 10h-11h
+    quint16 cooling_device_handle; // 12h-13h
+    quint16 current_probe_handle;  // 14h-15h
+};
+
 struct SmbiosOnBoardDeviceExtTable : public SmbiosTable
 {
     quint8 designation;     // 04h
@@ -343,6 +362,18 @@ struct SmbiosOnBoardDeviceExtTable : public SmbiosTable
     quint16 segment_group;  // 07h-08h
     quint8 bus_number;      // 09h
     quint8 device_function; // 0Ah
+};
+
+struct SmbiosTpmDeviceTable : public SmbiosTable
+{
+    quint8 vendor_id[4];        // 04h-07h
+    quint8 major_version;       // 08h
+    quint8 minor_version;       // 09h
+    quint32 firmware_version1;  // 0Ah-0Dh
+    quint32 firmware_version2;  // 0Eh-11h
+    quint8 description;         // 12h
+    quint64 characteristics;    // 13h-1Ah
+    quint32 oem_defined;        // 1Bh-1Eh
 };
 
 #pragma pack(pop)

@@ -358,6 +358,35 @@ private:
     Q_DISABLE_COPY_MOVE(SmbiosPortableBattery)
 };
 
+class SmbiosPowerSupply
+{
+public:
+    explicit SmbiosPowerSupply(const SmbiosTable* table);
+
+    bool isValid() const;
+    bool isPresent() const;
+    bool isUnplugged() const;
+    bool isHotReplaceable() const;
+    quint8 unitGroup() const;
+    QString location() const;
+    QString deviceName() const;
+    QString manufacturer() const;
+    QString serialNumber() const;
+    QString assetTag() const;
+    QString modelPartNumber() const;
+    QString revisionLevel() const;
+    QString type() const;
+    QString status() const;
+    QString inputVoltageRangeSwitching() const;
+
+    // The maximum sustained power output, in milliwatts. Zero when unknown.
+    quint32 maxPowerCapacity() const;
+
+private:
+    const SmbiosPowerSupplyTable* table_;
+    Q_DISABLE_COPY_MOVE(SmbiosPowerSupply)
+};
+
 class SmbiosOnBoardDeviceExt
 {
 public:
@@ -377,6 +406,27 @@ public:
 private:
     const SmbiosOnBoardDeviceExtTable* table_;
     Q_DISABLE_COPY_MOVE(SmbiosOnBoardDeviceExt)
+};
+
+class SmbiosTpmDevice
+{
+public:
+    explicit SmbiosTpmDevice(const SmbiosTable* table);
+
+    bool isValid() const;
+    QString vendorId() const;
+    QString specVersion() const;
+    QString firmwareVersion() const;
+    QString description() const;
+    bool isFamilyConfigurableByFirmware() const;
+    bool isFamilyConfigurableBySoftware() const;
+    bool isFamilyConfigurableByOem() const;
+
+private:
+    quint64 characteristics() const;
+
+    const SmbiosTpmDeviceTable* table_;
+    Q_DISABLE_COPY_MOVE(SmbiosTpmDevice)
 };
 
 #endif // BASE_SMBIOS_PARSER_H

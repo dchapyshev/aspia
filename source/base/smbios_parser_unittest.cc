@@ -1418,6 +1418,83 @@ TEST(SmbiosParserTest, TruncatedPortableBatteryIsInvalid)
 }
 
 //--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, PowerSupplyFields)
+{
+    QByteArray formatted(0x16 - 4, '\0');
+    formatted[0x04 - 4] = 1;                       // unit_group
+    formatted[0x05 - 4] = 1;                       // location: string #1
+    formatted[0x06 - 4] = 2;                       // device_name: string #2
+    formatted[0x07 - 4] = 3;                       // manufacturer: string #3
+    formatted[0x08 - 4] = 4;                       // serial_number: string #4
+    formatted[0x09 - 4] = 5;                       // asset_tag: string #5
+    formatted[0x0A - 4] = 6;                       // model_part_number: string #6
+    formatted[0x0B - 4] = 7;                       // revision_level: string #7
+    formatted[0x0C - 4] = static_cast<char>(0xE8); // max_power_capacity: 65000 mW
+    formatted[0x0D - 4] = static_cast<char>(0xFD);
+    formatted[0x0E - 4] = static_cast<char>(0xA3); // characteristics: switching, OK, auto-switch,
+    formatted[0x0F - 4] = static_cast<char>(0x11); // present, hot-replaceable
+
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_POWER_SUPPLY, formatted,
+        { "Internal", "PSU1", "Delta", "SN-77", "AT-88", "DPS-500", "1.1" }));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosPowerSupply supply(enumerator.table());
+    ASSERT_TRUE(supply.isValid());
+    EXPECT_TRUE(supply.isPresent());
+    EXPECT_FALSE(supply.isUnplugged());
+    EXPECT_TRUE(supply.isHotReplaceable());
+    EXPECT_EQ(supply.unitGroup(), 1);
+    EXPECT_EQ(supply.location(), QString("Internal"));
+    EXPECT_EQ(supply.deviceName(), QString("PSU1"));
+    EXPECT_EQ(supply.manufacturer(), QString("Delta"));
+    EXPECT_EQ(supply.serialNumber(), QString("SN-77"));
+    EXPECT_EQ(supply.assetTag(), QString("AT-88"));
+    EXPECT_EQ(supply.modelPartNumber(), QString("DPS-500"));
+    EXPECT_EQ(supply.revisionLevel(), QString("1.1"));
+    EXPECT_EQ(supply.type(), QString("Switching"));
+    EXPECT_EQ(supply.status(), QString("OK"));
+    EXPECT_EQ(supply.inputVoltageRangeSwitching(), QString("Auto-switch"));
+    EXPECT_EQ(supply.maxPowerCapacity(), 65000u);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, PowerSupplyUnknownFields)
+{
+    // A supply with the capacity reported as unknown and an empty characteristics word.
+    QByteArray formatted(0x16 - 4, '\0');
+    formatted[0x0D - 4] = static_cast<char>(0x80); // max_power_capacity: unknown
+
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_POWER_SUPPLY, formatted, {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosPowerSupply supply(enumerator.table());
+    ASSERT_TRUE(supply.isValid());
+    EXPECT_EQ(supply.maxPowerCapacity(), 0u);
+    EXPECT_TRUE(supply.type().isEmpty());
+    EXPECT_TRUE(supply.status().isEmpty());
+    EXPECT_TRUE(supply.inputVoltageRangeSwitching().isEmpty());
+    EXPECT_FALSE(supply.isPresent());
+    EXPECT_FALSE(supply.isUnplugged());
+    EXPECT_FALSE(supply.isHotReplaceable());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, TruncatedPowerSupplyIsInvalid)
+{
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_POWER_SUPPLY, QByteArray(0x15 - 4, '\0'), {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    EXPECT_FALSE(SmbiosPowerSupply(enumerator.table()).isValid());
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST(SmbiosParserTest, OnBoardDeviceExtFields)
 {
     QByteArray formatted(0x0B - 4, '\0');
@@ -1483,4 +1560,98 @@ TEST(SmbiosParserTest, TruncatedOnBoardDeviceExtIsInvalid)
     ASSERT_FALSE(enumerator.isAtEnd());
 
     EXPECT_FALSE(SmbiosOnBoardDeviceExt(enumerator.table()).isValid());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, TpmDeviceFields)
+{
+    QByteArray formatted(0x1F - 4, '\0');
+    formatted[0x04 - 4] = 'M';                     // vendor_id
+    formatted[0x05 - 4] = 'S';
+    formatted[0x06 - 4] = 'F';
+    formatted[0x07 - 4] = 'T';
+    formatted[0x08 - 4] = 2;                       // major_version
+    formatted[0x09 - 4] = 0;                       // minor_version
+    formatted[0x0A - 4] = 2;                       // firmware_version1: 7.2 packed in halves
+    formatted[0x0C - 4] = 7;
+    formatted[0x12 - 4] = 1;                       // description: string #1
+    formatted[0x13 - 4] = static_cast<char>(0x18); // characteristics: firmware and software
+
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_TPM_DEVICE, formatted, { "INTC TPM 2.0" }));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosTpmDevice tpm(enumerator.table());
+    ASSERT_TRUE(tpm.isValid());
+    EXPECT_EQ(tpm.vendorId(), QString("MSFT"));
+    EXPECT_EQ(tpm.specVersion(), QString("2.0"));
+    EXPECT_EQ(tpm.firmwareVersion(), QString("7.2"));
+    EXPECT_EQ(tpm.description(), QString("INTC TPM 2.0"));
+    EXPECT_TRUE(tpm.isFamilyConfigurableByFirmware());
+    EXPECT_TRUE(tpm.isFamilyConfigurableBySoftware());
+    EXPECT_FALSE(tpm.isFamilyConfigurableByOem());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, TpmDeviceLegacySpecVersion)
+{
+    // A TPM 1.2 device packs the firmware version differently and pads the vendor id with zeros.
+    QByteArray formatted(0x1F - 4, '\0');
+    formatted[0x04 - 4] = 'I'; // vendor_id
+    formatted[0x05 - 4] = 'F';
+    formatted[0x06 - 4] = 'X';
+    formatted[0x08 - 4] = 1;   // major_version
+    formatted[0x09 - 4] = 2;   // minor_version
+    formatted[0x0B - 4] = 3;   // firmware_version1: 3.19 packed in bytes
+    formatted[0x0C - 4] = 19;
+
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_TPM_DEVICE, formatted, {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosTpmDevice tpm(enumerator.table());
+    EXPECT_EQ(tpm.vendorId(), QString("IFX"));
+    EXPECT_EQ(tpm.specVersion(), QString("1.2"));
+    EXPECT_EQ(tpm.firmwareVersion(), QString("3.19"));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, TpmDeviceUnsupportedCharacteristics)
+{
+    // Bit 2 marks the characteristics as not supported, and a numeric vendor id has nothing to
+    // show as text.
+    QByteArray formatted(0x1F - 4, '\0');
+    formatted[0x04 - 4] = 1;                       // vendor_id
+    formatted[0x05 - 4] = 2;
+    formatted[0x06 - 4] = 3;
+    formatted[0x07 - 4] = 4;
+    formatted[0x13 - 4] = static_cast<char>(0x0C); // characteristics: not supported, firmware
+
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_TPM_DEVICE, formatted, {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosTpmDevice tpm(enumerator.table());
+    EXPECT_TRUE(tpm.vendorId().isEmpty());
+    EXPECT_TRUE(tpm.specVersion().isEmpty());
+    EXPECT_TRUE(tpm.firmwareVersion().isEmpty());
+    EXPECT_FALSE(tpm.isFamilyConfigurableByFirmware());
+    EXPECT_FALSE(tpm.isFamilyConfigurableBySoftware());
+    EXPECT_FALSE(tpm.isFamilyConfigurableByOem());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, TruncatedTpmDeviceIsInvalid)
+{
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_TPM_DEVICE, QByteArray(0x1E - 4, '\0'), {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    EXPECT_FALSE(SmbiosTpmDevice(enumerator.table()).isValid());
 }

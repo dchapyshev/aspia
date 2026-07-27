@@ -2516,6 +2516,166 @@ int SmbiosPortableBattery::maxError() const
 }
 
 //--------------------------------------------------------------------------------------------------
+SmbiosPowerSupply::SmbiosPowerSupply(const SmbiosTable* table)
+    : table_(static_cast<const SmbiosPowerSupplyTable*>(table))
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosPowerSupply::isValid() const
+{
+    // 16h is the length of the system power supply table in every SMBIOS version.
+    return table_->length >= 0x16;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosPowerSupply::isPresent() const
+{
+    return (table_->characteristics & 0x0002) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosPowerSupply::isUnplugged() const
+{
+    return (table_->characteristics & 0x0004) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosPowerSupply::isHotReplaceable() const
+{
+    return (table_->characteristics & 0x0001) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint8 SmbiosPowerSupply::unitGroup() const
+{
+    // Supplies sharing the group form a redundant set, a value of 1 means the supply is on its
+    // own.
+    return table_->unit_group;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosPowerSupply::location() const
+{
+    return smbiosString(table_, table_->location);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosPowerSupply::deviceName() const
+{
+    return smbiosString(table_, table_->device_name);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosPowerSupply::manufacturer() const
+{
+    return smbiosString(table_, table_->manufacturer);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosPowerSupply::serialNumber() const
+{
+    return smbiosString(table_, table_->serial_number);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosPowerSupply::assetTag() const
+{
+    return smbiosString(table_, table_->asset_tag);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosPowerSupply::modelPartNumber() const
+{
+    return smbiosString(table_, table_->model_part_number);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosPowerSupply::revisionLevel() const
+{
+    return smbiosString(table_, table_->revision_level);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosPowerSupply::type() const
+{
+    static const char* kType[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "Linear",
+        "Switching",
+        "Battery",
+        "UPS",
+        "Converter",
+        "Regulator" // 0x08
+    };
+
+    // Bits 13:10 of the characteristics carry the type.
+    const quint16 type = (table_->characteristics >> 10) & 0x0F;
+
+    if (type >= 0x01 && type <= 0x08)
+        return kType[type - 0x01];
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosPowerSupply::status() const
+{
+    static const char* kStatus[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "OK",
+        "Non-critical",
+        "Critical" // 0x05
+    };
+
+    // Bits 9:7 of the characteristics carry the status.
+    const quint16 status = (table_->characteristics >> 7) & 0x07;
+
+    if (status >= 0x01 && status <= 0x05)
+        return kStatus[status - 0x01];
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosPowerSupply::inputVoltageRangeSwitching() const
+{
+    static const char* kSwitching[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "Manual",
+        "Auto-switch",
+        "Wide Range",
+        "Not Applicable" // 0x06
+    };
+
+    // Bits 6:3 of the characteristics carry the switching capability.
+    const quint16 switching = (table_->characteristics >> 3) & 0x0F;
+
+    if (switching >= 0x01 && switching <= 0x06)
+        return kSwitching[switching - 0x01];
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+quint32 SmbiosPowerSupply::maxPowerCapacity() const
+{
+    // 8000h means the capacity is unknown. Note that the field is measured in milliwatts, which
+    // leaves no room for the output of a modern supply - such firmware reports it as unknown.
+    if (table_->max_power_capacity == 0x8000)
+        return 0;
+
+    return table_->max_power_capacity;
+}
+
+//--------------------------------------------------------------------------------------------------
 SmbiosOnBoardDeviceExt::SmbiosOnBoardDeviceExt(const SmbiosTable* table)
     : table_(static_cast<const SmbiosOnBoardDeviceExtTable*>(table))
 {
@@ -2598,4 +2758,104 @@ quint8 SmbiosOnBoardDeviceExt::functionNumber() const
 
     // Bits 2:0 of the field carry the function number.
     return table_->device_function & 0x07;
+}
+
+//--------------------------------------------------------------------------------------------------
+SmbiosTpmDevice::SmbiosTpmDevice(const SmbiosTable* table)
+    : table_(static_cast<const SmbiosTpmDeviceTable*>(table))
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosTpmDevice::isValid() const
+{
+    // 1Fh is the length of the TPM device table in every SMBIOS version.
+    return table_->length >= 0x1F;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosTpmDevice::vendorId() const
+{
+    // The vendor id assigned by the Trusted Computing Group is four bytes of ASCII padded with
+    // zeros. Firmware sometimes puts a numeric id there instead, so unprintable bytes are
+    // dropped rather than shown as garbage.
+    QString result;
+
+    for (size_t i = 0; i < sizeof(table_->vendor_id); ++i)
+    {
+        const quint8 symbol = table_->vendor_id[i];
+        if (!symbol)
+            break;
+
+        if (symbol >= 32 && symbol < 127)
+            result += QChar::fromLatin1(static_cast<char>(symbol));
+    }
+
+    return result.trimmed();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosTpmDevice::specVersion() const
+{
+    if (!table_->major_version)
+        return QString();
+
+    return QString("%1.%2").arg(table_->major_version).arg(table_->minor_version);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosTpmDevice::firmwareVersion() const
+{
+    // The layout of the field depends on the specification the device follows.
+    if (table_->major_version == 0x01)
+    {
+        // TPM 1.2 keeps the numbers in the second and the third byte of the field.
+        return QString("%1.%2").arg((table_->firmware_version1 >> 8) & 0xFF)
+                               .arg((table_->firmware_version1 >> 16) & 0xFF);
+    }
+
+    if (table_->major_version == 0x02)
+    {
+        // TPM 2.0 splits the field in halves.
+        return QString("%1.%2").arg(table_->firmware_version1 >> 16)
+                               .arg(table_->firmware_version1 & 0xFFFF);
+    }
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosTpmDevice::description() const
+{
+    return smbiosString(table_, table_->description);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosTpmDevice::isFamilyConfigurableByFirmware() const
+{
+    return (characteristics() & 0x0008) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosTpmDevice::isFamilyConfigurableBySoftware() const
+{
+    return (characteristics() & 0x0010) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosTpmDevice::isFamilyConfigurableByOem() const
+{
+    return (characteristics() & 0x0020) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint64 SmbiosTpmDevice::characteristics() const
+{
+    // Bit 2 marks the characteristics as not supported, which makes the remaining bits
+    // meaningless.
+    if (table_->characteristics & 0x0004)
+        return 0;
+
+    return table_->characteristics;
 }
