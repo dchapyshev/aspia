@@ -18,6 +18,8 @@
 
 #include "common/android/line_edit.h"
 
+#include <QGuiApplication>
+#include <QInputMethod>
 #include <QPainter>
 
 #include "common/android/animation.h"
@@ -52,11 +54,6 @@ LineEdit::LineEdit(QWidget* parent)
     QPalette transparent_base;
     transparent_base.setColor(QPalette::Base, Qt::transparent);
     setPalette(transparent_base);
-
-    // Android draws draggable text handles (the teardrop under the cursor) in a separate popup
-    // window that frequently lingers on screen after the field or its dialog is gone. Suppress the
-    // handles - tapping still positions the cursor.
-    setInputMethodHints(inputMethodHints() | Qt::ImhNoTextHandles);
 
     setFont(Controls::scaledFont(font(), Controls::kFontScale));
 
@@ -191,6 +188,11 @@ void LineEdit::focusInEvent(QFocusEvent* event)
 void LineEdit::focusOutEvent(QFocusEvent* event)
 {
     QLineEdit::focusOutEvent(event);
+
+    // Android draws the draggable text handles in popup windows owned by the activity, not by this
+    // widget, so they outlive it unless the platform plugin is told to hide them. Resetting the
+    // input method does that, whichever way the focus was lost (a closing dialog, a page switch).
+    QGuiApplication::inputMethod()->reset();
 
     focus_animation_->stop();
     focus_animation_->setStartValue(focus_progress_);

@@ -20,7 +20,9 @@
 
 #include <QDateTime>
 #include <QFontMetrics>
+#include <QGuiApplication>
 #include <QHBoxLayout>
+#include <QInputMethod>
 #include <QKeyEvent>
 #include <QLabel>
 #include <QPainter>
@@ -197,8 +199,6 @@ ChatView::ChatView(QWidget* parent)
     input_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     input_->setAcceptRichText(false);
     input_->setPlaceholderText(tr("Message"));
-    // Suppress the draggable teardrop text handles Android draws under the cursor.
-    input_->setInputMethodHints(input_->inputMethodHints() | Qt::ImhNoTextHandles);
     // A symmetric document margin pads the field to a comfortable touch height and keeps a single
     // line vertically centered (top margin equals bottom margin).
     input_->document()->setDocumentMargin(kInputDocumentMargin);
@@ -342,6 +342,11 @@ bool ChatView::eventFilter(QObject* watched, QEvent* event)
             return true;
         }
     }
+
+    // Hides the Android text handles, which live in activity-owned popup windows and would
+    // otherwise outlive the field; see LineEdit::focusOutEvent().
+    if (watched == input_ && event->type() == QEvent::FocusOut)
+        QGuiApplication::inputMethod()->reset();
 
     // When the viewport shrinks (the keyboard opens), keep following the bottom if we were there;
     // the resize changes the scroll range, and the rangeChanged handler then scrolls to it.

@@ -19,6 +19,8 @@
 #include "common/android/text_area.h"
 
 #include <QEvent>
+#include <QGuiApplication>
+#include <QInputMethod>
 #include <QPainter>
 #include <QPlainTextEdit>
 #include <QVBoxLayout>
@@ -210,6 +212,10 @@ bool TextArea::eventFilter(QObject* watched, QEvent* event)
         }
         else if (event->type() == QEvent::FocusOut)
         {
+            // Hides the Android text handles, which live in activity-owned popup windows; see
+            // LineEdit::focusOutEvent().
+            QGuiApplication::inputMethod()->reset();
+
             animateFocus(false);
             updateFloatState();
         }
