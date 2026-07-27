@@ -44,12 +44,12 @@ protected:
     // QCheckBox implementation.
     void paintEvent(QPaintEvent* event) final;
     bool hitButton(const QPoint& pos) const final;
-
-private slots:
-    void onToggled(bool checked);
+    void checkStateSet() final;
+    void nextCheckState() final;
 
 private:
     QRectF trackRect() const;
+    void syncAnimation();
 
     QVariantAnimation* animation_;
     double progress_;

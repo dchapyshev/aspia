@@ -61,7 +61,6 @@ Switch::Switch(const QString& text, QWidget* parent)
         progress_ = value.toDouble();
         update();
     });
-    connect(this, &QCheckBox::toggled, this, &Switch::onToggled);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -182,6 +181,20 @@ bool Switch::hitButton(const QPoint& pos) const
 }
 
 //--------------------------------------------------------------------------------------------------
+void Switch::checkStateSet()
+{
+    QCheckBox::checkStateSet();
+    syncAnimation();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Switch::nextCheckState()
+{
+    QCheckBox::nextCheckState();
+    syncAnimation();
+}
+
+//--------------------------------------------------------------------------------------------------
 QRectF Switch::trackRect() const
 {
     QRectF track(0, 0, kTrackWidth, kTrackHeight);
@@ -194,10 +207,12 @@ QRectF Switch::trackRect() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Switch::onToggled(bool checked)
+void Switch::syncAnimation()
 {
+    // Driven from the checkStateSet()/nextCheckState() hooks rather than from toggled(): a caller
+    // that reverts the switch with the signals blocked must still get the thumb animated back.
     animation_->stop();
     animation_->setStartValue(progress_);
-    animation_->setEndValue(checked ? 1.0 : 0.0);
+    animation_->setEndValue(isChecked() ? 1.0 : 0.0);
     animation_->start();
 }
