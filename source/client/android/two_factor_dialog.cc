@@ -83,9 +83,10 @@ TwoFactorDialog::TwoFactorDialog(const QString& otpauth_uri, QWidget* parent)
     code_->setValidator(new QRegularExpressionValidator(QRegularExpression("\\d*"), code_));
     content->addWidget(code_);
 
-    addButton(tr("Cancel"), Button::Role::TEXT);
+    Button* cancel = addButton(tr("Cancel"), Button::Role::TEXT);
     Button* ok = addButton(tr("OK"), Button::Role::FILLED);
 
+    connect(cancel, &Button::clicked, this, &TwoFactorDialog::reject);
     connect(ok, &Button::clicked, this, &TwoFactorDialog::accept);
 }
 

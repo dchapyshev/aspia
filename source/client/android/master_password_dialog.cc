@@ -91,9 +91,10 @@ MasterPasswordDialog::MasterPasswordDialog(Mode mode, QWidget* parent)
         content->addWidget(confirm_);
     }
 
-    addButton(tr("Cancel"), Button::Role::TEXT);
+    Button* cancel = addButton(tr("Cancel"), Button::Role::TEXT);
     Button* accept = addButton(change ? tr("Change") : tr("OK"), Button::Role::FILLED);
 
+    connect(cancel, &Button::clicked, this, &MasterPasswordDialog::reject);
     connect(accept, &Button::clicked, this, &MasterPasswordDialog::onAccept);
 
     // The system already shows a biometric prompt automatically when unlock is available; the
