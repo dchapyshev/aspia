@@ -32,7 +32,7 @@ class Formatter
 
 public:
     // Formats a byte count as a localized "<value> <unit>" string using binary units (B/kB/MB/GB/TB).
-    static QString sizeToString(qint64 size);
+    static QString sizeToString(quint64 size);
 
     // Formats a duration as a localized "<n days> <n hours> <n minutes> <n seconds>" string,
     // omitting the leading zero components.

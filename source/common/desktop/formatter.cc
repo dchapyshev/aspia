@@ -23,10 +23,10 @@
 
 namespace {
 
-constexpr qint64 kBinaryKB = 1024LL;
-constexpr qint64 kBinaryMB = kBinaryKB * 1024LL;
-constexpr qint64 kBinaryGB = kBinaryMB * 1024LL;
-constexpr qint64 kBinaryTB = kBinaryGB * 1024LL;
+constexpr quint64 kBinaryKB = 1024ULL;
+constexpr quint64 kBinaryMB = kBinaryKB * 1024ULL;
+constexpr quint64 kBinaryGB = kBinaryMB * 1024ULL;
+constexpr quint64 kBinaryTB = kBinaryGB * 1024ULL;
 
 constexpr quint64 kDecimalKbps = 1000ULL;
 constexpr quint64 kDecimalMbps = kDecimalKbps * 1000ULL;
@@ -36,10 +36,10 @@ constexpr quint64 kDecimalGbps = kDecimalMbps * 1000ULL;
 
 //--------------------------------------------------------------------------------------------------
 // static
-QString Formatter::sizeToString(qint64 size)
+QString Formatter::sizeToString(quint64 size)
 {
     QString units;
-    qint64 divider;
+    quint64 divider;
 
     if (size >= kBinaryTB)
         units = tr("TB"), divider = kBinaryTB;

@@ -331,7 +331,7 @@ void SysInfoWidgetDrives::setSystemInfo(const proto::system_info::SystemInfo& sy
             group << mk(tr("Bus Type"), bus_type);
 
         if (drive.size())
-            group << mk(tr("Size"), Formatter::sizeToString(static_cast<qint64>(drive.size())));
+            group << mk(tr("Size"), Formatter::sizeToString(drive.size()));
 
         group << mk(tr("Media Type"), drive.solid_state() ? tr("Solid State") : tr("Rotating"));
 
@@ -341,7 +341,7 @@ void SysInfoWidgetDrives::setSystemInfo(const proto::system_info::SystemInfo& sy
         if (drive.buffer_size())
         {
             group << mk(tr("Cache Size"),
-                        Formatter::sizeToString(static_cast<qint64>(drive.buffer_size())));
+                        Formatter::sizeToString(drive.buffer_size()));
         }
 
         group << mk(tr("Removable"), drive.removable() ? tr("Yes") : tr("No"));
@@ -541,12 +541,12 @@ void SysInfoWidgetDrives::setNvmeHealth(int drive_index)
     rows << mkCounter(tr("Percentage Used"), tr("%1%").arg(health.percentage_used()),
                       rawToString(health.percentage_used(), kNvmeRawDigits));
 
-    rows << mkCounter(tr("Data Read"), Formatter::sizeToString(
-        static_cast<qint64>(health.data_units_read() * kNvmeDataUnitSize)),
-        rawToString(health.data_units_read(), kNvmeRawDigits));
-    rows << mkCounter(tr("Data Written"), Formatter::sizeToString(
-        static_cast<qint64>(health.data_units_written() * kNvmeDataUnitSize)),
-        rawToString(health.data_units_written(), kNvmeRawDigits));
+    rows << mkCounter(tr("Data Read"),
+                      Formatter::sizeToString(health.data_units_read() * kNvmeDataUnitSize),
+                      rawToString(health.data_units_read(), kNvmeRawDigits));
+    rows << mkCounter(tr("Data Written"),
+                      Formatter::sizeToString(health.data_units_written() * kNvmeDataUnitSize),
+                      rawToString(health.data_units_written(), kNvmeRawDigits));
 
     rows << mkCounter(tr("Host Read Commands"), QString::number(health.host_read_commands()),
                       rawToString(health.host_read_commands(), kNvmeRawDigits));
