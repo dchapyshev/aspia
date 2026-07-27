@@ -58,8 +58,8 @@ public:
     // Hides the built-in tool bar for an owner that shows the actions somewhere else.
     void setToolBarVisible(bool visible);
 
-    // Versions shown on the summary page. Only a remote session knows them, so a local report leaves
-    // them unset.
+    // Versions shown on the summary page. Only a remote session knows them all; the page leaves out
+    // the ones left unset.
     void setVersions(const QVersionNumber& client_version,
                      const QVersionNumber& host_version,
                      const QVersionNumber& router_version);

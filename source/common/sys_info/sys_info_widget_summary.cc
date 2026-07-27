@@ -151,11 +151,21 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
     {
         QList<QTreeWidgetItem*> items;
 
-        items << mk(tr("Host Version"), host_version_);
-        items << mk(tr("Client Version"), client_version_);
-        items << mk(tr("Router Version"), router_version_);
+        if (!host_version_.isEmpty())
+            items << mk(tr("Host Version"), host_version_);
 
-        ui->tree->addTopLevelItem(new Item(":/img/info.svg", tr("Aspia Information"), items));
+        if (!client_version_.isEmpty())
+            items << mk(tr("Client Version"), client_version_);
+
+        // Which router the session went through is only a question where there is a session at all,
+        // and the client is the only side that names itself.
+        if (!router_version_.isEmpty())
+            items << mk(tr("Router Version"), router_version_);
+        else if (!client_version_.isEmpty())
+            items << mk(tr("Router Version"), tr("No"));
+
+        if (!items.isEmpty())
+            ui->tree->addTopLevelItem(new Item(":/img/info.svg", tr("Aspia Information"), items));
     }
 
     if (system_info.has_operating_system())
@@ -351,10 +361,7 @@ QTreeWidget* SysInfoWidgetSummary::treeWidget()
 //--------------------------------------------------------------------------------------------------
 void SysInfoWidgetSummary::setRouterVersion(const QVersionNumber& router_version)
 {
-    if (!router_version.isNull())
-        router_version_ = router_version.toString();
-    else
-        router_version_ = tr("No");
+    router_version_ = router_version.toString();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -23,6 +23,7 @@
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "base/version_constants.h"
 #include "common/sys_info/sys_info_view.h"
 #include "host/workers/sys_info_worker.h"
 #include "proto/system_info.h"
@@ -53,6 +54,8 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
     connect(sys_info_worker, &SysInfoWorker::sig_systemInfo,
             this, &SystemInfoWindow::onSystemInfo, Qt::QueuedConnection);
 
+    // A report that never left the machine has no client and no router to name.
+    view_->setVersions(QVersionNumber(), kCurrentVersion, QVersionNumber());
     view_->onRefresh();
 }
 
