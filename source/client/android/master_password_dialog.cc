@@ -43,6 +43,8 @@ MasterPasswordDialog::MasterPasswordDialog(Mode mode, QWidget* parent)
     const bool create = (mode_ == Mode::CREATE);
     const bool change = (mode_ == Mode::CHANGE);
 
+    setBlurBehind(true);
+
     switch (mode_)
     {
         case Mode::CREATE:

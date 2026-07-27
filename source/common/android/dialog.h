@@ -20,6 +20,8 @@
 #define COMMON_ANDROID_DIALOG_H
 
 #include <QDialog>
+#include <QPixmap>
+#include <QPointer>
 
 #include "common/android/button.h"
 
@@ -50,6 +52,14 @@ public:
     // Adds an action button to the trailing edge of the button row.
     Button* addButton(const QString& text, Button::Role role = Button::Role::TEXT);
 
+    // Blurs the widget the dialog was created on (the constructor parent) while the dialog is
+    // open, hiding sensitive data under the card (the master password prompt). The rest of the
+    // window (the app bar, the navigation bar) is only dimmed by the scrim.
+    void setBlurBehind(bool enable);
+
+    // QWidget implementation.
+    void setVisible(bool visible) final;
+
     // QDialog implementation.
     void done(int result) final;
 
@@ -72,6 +82,13 @@ private:
     Label* text_label_;
     QVBoxLayout* content_layout_;
     QHBoxLayout* button_row_;
+
+    // The widget whose content is blurred under the scrim: the original constructor parent, which
+    // may be deeper in the window than parentWidget() after the reparenting to the window.
+    QPointer<QWidget> blur_source_;
+    QPixmap blur_pixmap_;
+    QRect blur_rect_;
+    bool blur_behind_ = false;
 
     Q_DISABLE_COPY_MOVE(Dialog)
 };

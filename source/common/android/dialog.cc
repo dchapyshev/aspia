@@ -35,6 +35,25 @@ constexpr int kCardPadding = 24;
 constexpr int kCardSpacing = 16;
 constexpr int kButtonSpacing = 8;
 constexpr int kScrimAlpha = 82;
+constexpr int kBlurDownscale = 24;
+constexpr int kBlurUpscaleStep = 6;
+
+//--------------------------------------------------------------------------------------------------
+// Frosted blur on the cheap: heavy downscaling with smooth filtering and back. The intermediate
+// steps stack several bilinear passes, approximating a wide gaussian without the cost of a real
+// convolution over a screen-sized grab.
+QPixmap blurred(const QPixmap& source)
+{
+    if (source.isNull())
+        return source;
+
+    const QSize size = source.size();
+    return source
+        .scaled(size / kBlurUpscaleStep, Qt::IgnoreAspectRatio, Qt::SmoothTransformation)
+        .scaled(size / kBlurDownscale, Qt::IgnoreAspectRatio, Qt::SmoothTransformation)
+        .scaled(size / kBlurUpscaleStep, Qt::IgnoreAspectRatio, Qt::SmoothTransformation)
+        .scaled(size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+}
 
 // Rounded surface holding the dialog content.
 class Card final : public QWidget
@@ -68,7 +87,8 @@ Dialog::Dialog(QWidget* parent)
       title_label_(new Label(QString(), Label::Role::TITLE, card_)),
       text_label_(new Label(QString(), Label::Role::BODY, card_)),
       content_layout_(new QVBoxLayout()),
-      button_row_(new QHBoxLayout())
+      button_row_(new QHBoxLayout()),
+      blur_source_(parent)
 {
     setWindowFlags(Qt::Widget);
 
@@ -134,6 +154,30 @@ Button* Dialog::addButton(const QString& text, Button::Role role)
 }
 
 //--------------------------------------------------------------------------------------------------
+void Dialog::setBlurBehind(bool enable)
+{
+    blur_behind_ = enable;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Dialog::setVisible(bool visible)
+{
+    // The snapshot is taken while the dialog is still hidden, so the grab does not include it.
+    if (visible && blur_behind_ && !isVisible() && blur_source_ && parentWidget())
+    {
+        blur_pixmap_ = blurred(blur_source_->grab());
+        blur_rect_ = QRect(blur_source_->mapTo(parentWidget(), QPoint(0, 0)),
+                           blur_source_->size());
+    }
+    else if (!visible)
+    {
+        blur_pixmap_ = QPixmap();
+    }
+
+    QDialog::setVisible(visible);
+}
+
+//--------------------------------------------------------------------------------------------------
 void Dialog::done(int result)
 {
     if (QWidget* focus = focusWidget())
@@ -169,6 +213,12 @@ void Dialog::mousePressEvent(QMouseEvent* event)
 void Dialog::paintEvent(QPaintEvent* /* event */)
 {
     QPainter painter(this);
+
+    // On a rotation the stale snapshot is merely stretched; distortion is not noticeable on an
+    // image this blurred, and the dialog is short-lived anyway.
+    if (!blur_pixmap_.isNull())
+        painter.drawPixmap(blur_rect_, blur_pixmap_);
+
     painter.fillRect(rect(), QColor(0, 0, 0, kScrimAlpha));
 }
 

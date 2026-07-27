@@ -680,8 +680,9 @@ void AndroidMainWindow::runMasterPasswordGate()
     // against the timer treating that as a real background trip.
     relocking_ = true;
 
-    // The data cryptor is invalid until the dialog unlocks it, so quit if the user cancels.
-    MasterPasswordDialog dialog(mode, this);
+    // The data cryptor is invalid until the dialog unlocks it, so quit if the user cancels. The
+    // dialog is anchored to the content stack so only it is blurred, not the bars.
+    MasterPasswordDialog dialog(mode, content_);
     if (dialog.exec() != QDialog::Accepted)
     {
         QCoreApplication::quit();
@@ -719,7 +720,7 @@ void AndroidMainWindow::relock()
     relocking_ = true;
 
     // The data cryptor stays open; this only re-verifies the user (password or fingerprint).
-    MasterPasswordDialog dialog(MasterPasswordDialog::Mode::UNLOCK, this);
+    MasterPasswordDialog dialog(MasterPasswordDialog::Mode::UNLOCK, content_);
     if (dialog.exec() != QDialog::Accepted)
     {
         QCoreApplication::quit();
