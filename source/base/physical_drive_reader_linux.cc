@@ -150,9 +150,18 @@ QStringList PhysicalDriveReaderLinux::devicePaths()
         if (result.count() >= kMaxDrives)
             break;
 
+        // A namespace of a multipath drive is listed once per controller it can be reached over and
+        // once for the drive itself. The kernel hides the per controller entries and gives them no
+        // device node, so only the entry that stands for the drive is left.
+        if (readSysFile(sysBlockPath(name) + "/hidden") == "1")
+            continue;
+
         // Loop, device mapper and software raid devices are listed as block devices, but have no
-        // drive behind them. The kernel keeps all of them under /sys/devices/virtual.
-        if (QFileInfo(sysBlockPath(name)).symLinkTarget().contains("/devices/virtual/"))
+        // drive behind them. The kernel keeps all of them under /sys/devices/virtual. The multipath
+        // entry of an NVMe drive lives there as well, because the kernel parents it to the class
+        // device of the subsystem instead of to a controller, and behind that one there is a drive.
+        const QString target = QFileInfo(sysBlockPath(name)).symLinkTarget();
+        if (target.contains("/devices/virtual/") && !target.contains("/nvme-subsystem/"))
             continue;
 
         // Optical and floppy drives sit on a real bus, but have no health information to report.
