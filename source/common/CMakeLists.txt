@@ -78,6 +78,10 @@ endif()
 
 include(desktop/sources.cmake)
 
+if (NOT ANDROID)
+    include(sys_info/sources.cmake)
+endif()
+
 if (WIN32)
     include(win/sources.cmake)
 endif()
@@ -90,6 +94,7 @@ list(APPEND SOURCE_COMMON_RESOURCES resources/common.qrc)
 
 source_group("" FILES ${SOURCE_COMMON})
 source_group(desktop FILES ${SOURCE_COMMON_DESKTOP})
+source_group(sys_info FILES ${SOURCE_COMMON_SYS_INFO})
 source_group(resources FILES ${SOURCE_COMMON_RESOURCES})
 
 if (WIN32)
@@ -108,6 +113,7 @@ add_library(aspia_common STATIC
     ${SOURCE_COMMON}
     ${SOURCE_COMMON_ANDROID}
     ${SOURCE_COMMON_DESKTOP}
+    ${SOURCE_COMMON_SYS_INFO}
     ${SOURCE_COMMON_WIN}
     ${SOURCE_COMMON_MAC}
     ${SOURCE_COMMON_RESOURCES})
