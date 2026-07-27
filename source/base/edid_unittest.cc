@@ -349,6 +349,50 @@ TEST(edid_test, manufacturer_name)
     EXPECT_EQ(edid.manufacturerName(), "Dell");
 }
 
+TEST(edid_test, manufacturer_name_panel_vendor)
+{
+    QByteArray data = createValidEdidBlock();
+    quint8* raw = reinterpret_cast<quint8*>(data.data());
+
+    // Built-in displays of notebooks report the panel vendor: "LGD" (LG Display).
+    // L=12, G=7, D=4 => (12 << 10) | (7 << 5) | 4 = 0x30E4
+    // Big-endian: raw[8] = 0x30, raw[9] = 0xE4
+    raw[8] = 0x30;
+    raw[9] = 0xE4;
+
+    // Recompute checksum.
+    quint8 sum = 0;
+    for (int i = 0; i < 127; ++i)
+        sum += raw[i];
+    raw[127] = static_cast<quint8>(0x100 - sum);
+
+    Edid edid(data);
+    ASSERT_TRUE(edid.isValid());
+    EXPECT_EQ(edid.manufacturerName(), "LG Display");
+}
+
+TEST(edid_test, manufacturer_name_apple)
+{
+    QByteArray data = createValidEdidBlock();
+    quint8* raw = reinterpret_cast<quint8*>(data.data());
+
+    // Set manufacturer to "APP" (Apple).
+    // A=1, P=16 => (1 << 10) | (16 << 5) | 16 = 0x0610
+    // Big-endian: raw[8] = 0x06, raw[9] = 0x10
+    raw[8] = 0x06;
+    raw[9] = 0x10;
+
+    // Recompute checksum.
+    quint8 sum = 0;
+    for (int i = 0; i < 127; ++i)
+        sum += raw[i];
+    raw[127] = static_cast<quint8>(0x100 - sum);
+
+    Edid edid(data);
+    ASSERT_TRUE(edid.isValid());
+    EXPECT_EQ(edid.manufacturerName(), "Apple");
+}
+
 TEST(edid_test, monitor_name)
 {
     QByteArray data = createValidEdidBlock();
