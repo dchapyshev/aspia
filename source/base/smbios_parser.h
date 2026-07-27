@@ -244,6 +244,24 @@ private:
     Q_DISABLE_COPY_MOVE(SmbiosSystemSlot)
 };
 
+class SmbiosOnBoardDevices
+{
+public:
+    explicit SmbiosOnBoardDevices(const SmbiosTable* table);
+
+    bool isValid() const;
+    int count() const;
+    QString description(int index) const;
+    QString type(int index) const;
+    bool isEnabled(int index) const;
+
+private:
+    const quint8* device(int index) const;
+
+    const SmbiosOnBoardDeviceTable* table_;
+    Q_DISABLE_COPY_MOVE(SmbiosOnBoardDevices)
+};
+
 class SmbiosMemoryArray
 {
 public:
@@ -280,6 +298,51 @@ public:
 private:
     const SmbiosMemoryDeviceTable* table_;
     Q_DISABLE_COPY_MOVE(SmbiosMemoryDevice)
+};
+
+class SmbiosPortableBattery
+{
+public:
+    explicit SmbiosPortableBattery(const SmbiosTable* table);
+
+    bool isValid() const;
+    QString location() const;
+    QString manufacturer() const;
+    QString manufactureDate() const;
+    QString serialNumber() const;
+    QString deviceName() const;
+    QString chemistry() const;
+    QString sbdsVersion() const;
+    quint32 designCapacity() const;
+    quint32 designVoltage() const;
+
+    // The maximum error in the battery data, in percent. Negative when unknown.
+    int maxError() const;
+
+private:
+    const SmbiosPortableBatteryTable* table_;
+    Q_DISABLE_COPY_MOVE(SmbiosPortableBattery)
+};
+
+class SmbiosOnBoardDeviceExt
+{
+public:
+    explicit SmbiosOnBoardDeviceExt(const SmbiosTable* table);
+
+    bool isValid() const;
+    bool isEnabled() const;
+    QString designation() const;
+    QString type() const;
+    quint8 typeInstance() const;
+    bool hasBusAddress() const;
+    quint16 segmentGroupNumber() const;
+    quint8 busNumber() const;
+    quint8 deviceNumber() const;
+    quint8 functionNumber() const;
+
+private:
+    const SmbiosOnBoardDeviceExtTable* table_;
+    Q_DISABLE_COPY_MOVE(SmbiosOnBoardDeviceExt)
 };
 
 #endif // BASE_SMBIOS_PARSER_H

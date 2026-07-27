@@ -979,6 +979,55 @@ TEST(SmbiosParserTest, TruncatedSystemSlotIsInvalid)
 }
 
 //--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, OnBoardDevicesFields)
+{
+    // Two devices in a single table: an enabled video adapter and a disabled sound controller.
+    QByteArray formatted(0x08 - 4, '\0');
+    formatted[0x04 - 4] = static_cast<char>(0x83); // device_type: video, enabled
+    formatted[0x05 - 4] = 1;                       // description: string #1
+    formatted[0x06 - 4] = static_cast<char>(0x07); // device_type: sound, disabled
+    formatted[0x07 - 4] = 2;                       // description: string #2
+
+    const QByteArray dump = makeDump(makeTable(
+        SMBIOS_TABLE_TYPE_ONBOARD_DEVICE, formatted, { "Intel UHD 630", "Realtek ALC1220" }));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosOnBoardDevices devices(enumerator.table());
+    ASSERT_TRUE(devices.isValid());
+    ASSERT_EQ(devices.count(), 2);
+    EXPECT_EQ(devices.type(0), QString("Video"));
+    EXPECT_EQ(devices.description(0), QString("Intel UHD 630"));
+    EXPECT_TRUE(devices.isEnabled(0));
+    EXPECT_EQ(devices.type(1), QString("Sound"));
+    EXPECT_EQ(devices.description(1), QString("Realtek ALC1220"));
+    EXPECT_FALSE(devices.isEnabled(1));
+
+    // Indexes outside the table must not reach the memory behind it.
+    EXPECT_TRUE(devices.type(2).isEmpty());
+    EXPECT_TRUE(devices.description(2).isEmpty());
+    EXPECT_FALSE(devices.isEnabled(2));
+    EXPECT_TRUE(devices.type(-1).isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, TruncatedOnBoardDevicesIsInvalid)
+{
+    // A table without a single complete device pair.
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_ONBOARD_DEVICE, QByteArray(1, '\0'), {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosOnBoardDevices devices(enumerator.table());
+    EXPECT_FALSE(devices.isValid());
+    EXPECT_EQ(devices.count(), 0);
+    EXPECT_TRUE(devices.type(0).isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST(SmbiosParserTest, MemoryArrayFields)
 {
     QByteArray formatted(0x0F - 4, '\0');
@@ -1129,4 +1178,172 @@ TEST(SmbiosParserTest, MemoryDeviceSizeVariants)
     // Extended size: 32768 MB with zero low bits selects the GB branch (32 GB).
     EXPECT_EQ(sizeOf(makeDump(makeDevice(0x7FFF, 32768, 0x20))),
               32ULL * 1024ULL * 1024ULL * 1024ULL);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, PortableBatteryFields)
+{
+    QByteArray formatted(0x1A - 4, '\0');
+    formatted[0x04 - 4] = 1;                       // location: string #1
+    formatted[0x05 - 4] = 2;                       // manufacturer: string #2
+    formatted[0x06 - 4] = 3;                       // manufacture_date: string #3
+    formatted[0x07 - 4] = 4;                       // serial_number: string #4
+    formatted[0x08 - 4] = 5;                       // device_name: string #5
+    formatted[0x09 - 4] = 6;                       // device_chemistry: lithium-ion
+    formatted[0x0A - 4] = static_cast<char>(0xA0); // design_capacity: 4000 units
+    formatted[0x0B - 4] = static_cast<char>(0x0F);
+    formatted[0x0C - 4] = static_cast<char>(0x88); // design_voltage: 11400 mV
+    formatted[0x0D - 4] = static_cast<char>(0x2C);
+    formatted[0x0E - 4] = 6;                       // sbds_version: string #6
+    formatted[0x0F - 4] = 3;                       // max_error: 3 percent
+    formatted[0x15 - 4] = 10;                      // capacity_multiplier
+
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_PORTABLE_BATTERY, formatted,
+        { "Rear", "Sony", "03/15/2020", "SN-1234", "DELL ABC123", "1.0" }));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosPortableBattery battery(enumerator.table());
+    ASSERT_TRUE(battery.isValid());
+    EXPECT_EQ(battery.location(), QString("Rear"));
+    EXPECT_EQ(battery.manufacturer(), QString("Sony"));
+    EXPECT_EQ(battery.manufactureDate(), QString("03/15/2020"));
+    EXPECT_EQ(battery.serialNumber(), QString("SN-1234"));
+    EXPECT_EQ(battery.deviceName(), QString("DELL ABC123"));
+    EXPECT_EQ(battery.chemistry(), QString("Lithium-ion"));
+    EXPECT_EQ(battery.sbdsVersion(), QString("1.0"));
+    EXPECT_EQ(battery.designCapacity(), 40000u); // Scaled by the multiplier.
+    EXPECT_EQ(battery.designVoltage(), 11400u);
+    EXPECT_EQ(battery.maxError(), 3);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, PortableBatterySbdsFields)
+{
+    // A battery following the Smart Battery Data Specification: the date, the serial number and
+    // the chemistry come from the SBDS fields instead of the usual ones.
+    QByteArray formatted(0x1A - 4, '\0');
+    formatted[0x09 - 4] = 2;                       // device_chemistry: unknown
+    formatted[0x10 - 4] = static_cast<char>(0x2B); // sbds_serial_number: 1A2B
+    formatted[0x11 - 4] = static_cast<char>(0x1A);
+    formatted[0x12 - 4] = static_cast<char>(0xCF); // sbds_manufacture_date: 2021-06-15
+    formatted[0x13 - 4] = static_cast<char>(0x52);
+    formatted[0x14 - 4] = 1;                       // sbds_device_chemistry: string #1
+
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_PORTABLE_BATTERY, formatted, { "LION" }));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosPortableBattery battery(enumerator.table());
+    ASSERT_TRUE(battery.isValid());
+    EXPECT_EQ(battery.manufactureDate(), QString("2021-06-15"));
+    EXPECT_EQ(battery.serialNumber(), QString("1A2B"));
+    EXPECT_EQ(battery.chemistry(), QString("LION"));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, PortableBatteryShortTableOmitsLateFields)
+{
+    // An SMBIOS 2.1 battery table (length 10h) carries none of the SBDS fields.
+    QByteArray formatted(0x10 - 4, '\0');
+    formatted[0x09 - 4] = 2;                       // device_chemistry: unknown
+    formatted[0x0A - 4] = static_cast<char>(0xA0); // design_capacity: 4000 mWh
+    formatted[0x0B - 4] = static_cast<char>(0x0F);
+    formatted[0x0F - 4] = static_cast<char>(0xFF); // max_error: unknown
+
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_PORTABLE_BATTERY, formatted, {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosPortableBattery battery(enumerator.table());
+    ASSERT_TRUE(battery.isValid());
+    EXPECT_TRUE(battery.manufactureDate().isEmpty());
+    EXPECT_TRUE(battery.serialNumber().isEmpty());
+    EXPECT_EQ(battery.chemistry(), QString("Unknown"));
+    EXPECT_EQ(battery.designCapacity(), 4000u); // No multiplier to scale by.
+    EXPECT_EQ(battery.maxError(), -1);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, TruncatedPortableBatteryIsInvalid)
+{
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_PORTABLE_BATTERY, QByteArray(0x0F - 4, '\0'), {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    EXPECT_FALSE(SmbiosPortableBattery(enumerator.table()).isValid());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, OnBoardDeviceExtFields)
+{
+    QByteArray formatted(0x0B - 4, '\0');
+    formatted[0x04 - 4] = 1;                       // designation: string #1
+    formatted[0x05 - 4] = static_cast<char>(0x85); // device_type: ethernet, enabled
+    formatted[0x06 - 4] = 1;                       // type_instance
+    formatted[0x09 - 4] = 2;                       // bus_number
+    formatted[0x0A - 4] = static_cast<char>(0x10); // device_function: device 2, function 0
+
+    const QByteArray dump = makeDump(
+        makeTable(SMBIOS_TABLE_TYPE_ONBOARD_DEVICE_EXT, formatted, { "Onboard LAN" }));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosOnBoardDeviceExt device(enumerator.table());
+    ASSERT_TRUE(device.isValid());
+    EXPECT_TRUE(device.isEnabled());
+    EXPECT_EQ(device.designation(), QString("Onboard LAN"));
+    EXPECT_EQ(device.type(), QString("Ethernet"));
+    EXPECT_EQ(device.typeInstance(), 1);
+    EXPECT_TRUE(device.hasBusAddress());
+    EXPECT_EQ(device.segmentGroupNumber(), 0);
+    EXPECT_EQ(device.busNumber(), 2);
+    EXPECT_EQ(device.deviceNumber(), 2);
+    EXPECT_EQ(device.functionNumber(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, OnBoardDeviceExtWithoutBusAddress)
+{
+    // A disabled device outside a PCI bus: the address fields are all ones.
+    QByteArray formatted(0x0B - 4, '\0');
+    formatted[0x05 - 4] = static_cast<char>(0x0B); // device_type: wireless LAN, disabled
+    formatted[0x07 - 4] = static_cast<char>(0xFF); // segment_group
+    formatted[0x08 - 4] = static_cast<char>(0xFF);
+    formatted[0x09 - 4] = static_cast<char>(0xFF); // bus_number
+    formatted[0x0A - 4] = static_cast<char>(0xFF); // device_function
+
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_ONBOARD_DEVICE_EXT, formatted, {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosOnBoardDeviceExt device(enumerator.table());
+    ASSERT_TRUE(device.isValid());
+    EXPECT_FALSE(device.isEnabled());
+    EXPECT_EQ(device.type(), QString("Wireless LAN"));
+    EXPECT_FALSE(device.hasBusAddress());
+    EXPECT_EQ(device.busNumber(), 0);
+    EXPECT_EQ(device.deviceNumber(), 0);
+    EXPECT_EQ(device.functionNumber(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, TruncatedOnBoardDeviceExtIsInvalid)
+{
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_ONBOARD_DEVICE_EXT, QByteArray(0x0A - 4, '\0'), {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    EXPECT_FALSE(SmbiosOnBoardDeviceExt(enumerator.table()).isValid());
 }

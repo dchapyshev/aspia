@@ -18,6 +18,8 @@
 
 #include "base/smbios_parser.h"
 
+#include <QDate>
+
 #include <cstddef>
 #include <cstring>
 
@@ -124,6 +126,39 @@ QString connectorType(quint8 type)
 
     if (type == 0xFF)
         return "Other";
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+// The legacy and the extended on board devices tables share the same device type list.
+QString onBoardDeviceType(quint8 type)
+{
+    static const char* kType[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "Video",
+        "SCSI Controller",
+        "Ethernet",
+        "Token Ring",
+        "Sound",
+        "PATA Controller",
+        "SATA Controller",
+        "SAS Controller",
+        "Wireless LAN",
+        "Bluetooth",
+        "WWAN",
+        "eMMC",
+        "NVMe Controller",
+        "UFS Controller" // 0x10
+    };
+
+    // Bit 7 carries the enabled flag, the type itself is in the remaining bits.
+    const quint8 device_type = type & 0x7F;
+
+    if (device_type >= 0x01 && device_type <= 0x10)
+        return kType[device_type - 0x01];
 
     return QString();
 }
@@ -1819,6 +1854,69 @@ quint8 SmbiosSystemSlot::characteristics2() const
 }
 
 //--------------------------------------------------------------------------------------------------
+SmbiosOnBoardDevices::SmbiosOnBoardDevices(const SmbiosTable* table)
+    : table_(static_cast<const SmbiosOnBoardDeviceTable*>(table))
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosOnBoardDevices::isValid() const
+{
+    // 06h is the length of the table with a single device, the smallest one that makes sense.
+    return table_->length >= 0x06;
+}
+
+//--------------------------------------------------------------------------------------------------
+int SmbiosOnBoardDevices::count() const
+{
+    if (!isValid())
+        return 0;
+
+    // Every device takes a pair of bytes behind the table header.
+    return (table_->length - static_cast<int>(sizeof(SmbiosTable))) / 2;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosOnBoardDevices::description(int index) const
+{
+    const quint8* device_data = device(index);
+    if (!device_data)
+        return QString();
+
+    return smbiosString(table_, device_data[1]);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosOnBoardDevices::type(int index) const
+{
+    const quint8* device_data = device(index);
+    if (!device_data)
+        return QString();
+
+    return onBoardDeviceType(device_data[0]);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosOnBoardDevices::isEnabled(int index) const
+{
+    const quint8* device_data = device(index);
+    if (!device_data)
+        return false;
+
+    return (device_data[0] & 0x80) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+const quint8* SmbiosOnBoardDevices::device(int index) const
+{
+    if (index < 0 || index >= count())
+        return nullptr;
+
+    return reinterpret_cast<const quint8*>(table_) + sizeof(SmbiosTable) + index * 2;
+}
+
+//--------------------------------------------------------------------------------------------------
 SmbiosMemoryArray::SmbiosMemoryArray(const SmbiosTable* table)
     : table_(static_cast<const SmbiosMemoryArrayTable*>(table))
 {
@@ -2130,4 +2228,222 @@ quint16 SmbiosMemoryDevice::arrayHandle() const
 {
     // The handle of the physical memory array the device belongs to.
     return table_->memory_array_handle;
+}
+
+//--------------------------------------------------------------------------------------------------
+SmbiosPortableBattery::SmbiosPortableBattery(const SmbiosTable* table)
+    : table_(static_cast<const SmbiosPortableBatteryTable*>(table))
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosPortableBattery::isValid() const
+{
+    // 10h is the minimum length of the portable battery table since SMBIOS 2.1.
+    return table_->length >= 0x10;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosPortableBattery::location() const
+{
+    return smbiosString(table_, table_->location);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosPortableBattery::manufacturer() const
+{
+    return smbiosString(table_, table_->manufacturer);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosPortableBattery::manufactureDate() const
+{
+    QString result = smbiosString(table_, table_->manufacture_date);
+    if (!result.isEmpty())
+        return result;
+
+    // Batteries following the Smart Battery Data Specification leave the string empty and pack
+    // the date into a word (2.2+): bits 15:9 hold the year biased by 1980, bits 8:5 the month
+    // and bits 4:0 the day.
+    if (table_->length < 0x14 || !table_->sbds_manufacture_date)
+        return QString();
+
+    const int year = 1980 + (table_->sbds_manufacture_date >> 9);
+    const int month = (table_->sbds_manufacture_date >> 5) & 0x0F;
+    const int day = table_->sbds_manufacture_date & 0x1F;
+
+    return QDate(year, month, day).toString(Qt::ISODate);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosPortableBattery::serialNumber() const
+{
+    QString result = smbiosString(table_, table_->serial_number);
+    if (!result.isEmpty())
+        return result;
+
+    // Batteries following the Smart Battery Data Specification report the serial number as a
+    // word instead of a string (2.2+).
+    if (table_->length < 0x12 || !table_->sbds_serial_number)
+        return QString();
+
+    return QString("%1").arg(table_->sbds_serial_number, 4, 16, QChar('0')).toUpper();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosPortableBattery::deviceName() const
+{
+    return smbiosString(table_, table_->device_name);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosPortableBattery::chemistry() const
+{
+    static const char* kChemistry[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "Lead Acid",
+        "Nickel Cadmium",
+        "Nickel Metal Hydride",
+        "Lithium-ion",
+        "Zinc Air",
+        "Lithium Polymer" // 0x08
+    };
+
+    // Batteries following the Smart Battery Data Specification report the chemistry as a string
+    // and leave the enumerated field unknown (2.2+).
+    if (table_->device_chemistry == 0x02 && table_->length >= 0x15)
+    {
+        QString result = smbiosString(table_, table_->sbds_device_chemistry);
+        if (!result.isEmpty())
+            return result;
+    }
+
+    if (table_->device_chemistry >= 0x01 && table_->device_chemistry <= 0x08)
+        return kChemistry[table_->device_chemistry - 0x01];
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosPortableBattery::sbdsVersion() const
+{
+    return smbiosString(table_, table_->sbds_version);
+}
+
+//--------------------------------------------------------------------------------------------------
+quint32 SmbiosPortableBattery::designCapacity() const
+{
+    // The capacity is measured in milliwatt-hours. Zero means it is unknown.
+    if (!table_->design_capacity)
+        return 0;
+
+    // Since SMBIOS 2.2 the stored value is scaled down by the multiplier.
+    if (table_->length >= 0x16 && table_->capacity_multiplier)
+        return static_cast<quint32>(table_->design_capacity) * table_->capacity_multiplier;
+
+    return table_->design_capacity;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint32 SmbiosPortableBattery::designVoltage() const
+{
+    // The voltage is measured in millivolts. Zero means it is unknown.
+    return table_->design_voltage;
+}
+
+//--------------------------------------------------------------------------------------------------
+int SmbiosPortableBattery::maxError() const
+{
+    if (table_->max_error == 0xFF)
+        return -1;
+
+    return table_->max_error;
+}
+
+//--------------------------------------------------------------------------------------------------
+SmbiosOnBoardDeviceExt::SmbiosOnBoardDeviceExt(const SmbiosTable* table)
+    : table_(static_cast<const SmbiosOnBoardDeviceExtTable*>(table))
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosOnBoardDeviceExt::isValid() const
+{
+    // 0Bh is the length of the extended on board device table in every SMBIOS version.
+    return table_->length >= 0x0B;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosOnBoardDeviceExt::isEnabled() const
+{
+    return (table_->device_type & 0x80) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosOnBoardDeviceExt::designation() const
+{
+    return smbiosString(table_, table_->designation);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosOnBoardDeviceExt::type() const
+{
+    return onBoardDeviceType(table_->device_type);
+}
+
+//--------------------------------------------------------------------------------------------------
+quint8 SmbiosOnBoardDeviceExt::typeInstance() const
+{
+    // The number of the device among the ones of the same type on the board.
+    return table_->type_instance;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosOnBoardDeviceExt::hasBusAddress() const
+{
+    // Devices outside a PCI bus report the address as all ones.
+    return table_->segment_group != 0xFFFF || table_->bus_number != 0xFF ||
+           table_->device_function != 0xFF;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint16 SmbiosOnBoardDeviceExt::segmentGroupNumber() const
+{
+    if (!hasBusAddress())
+        return 0;
+
+    return table_->segment_group;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint8 SmbiosOnBoardDeviceExt::busNumber() const
+{
+    if (!hasBusAddress())
+        return 0;
+
+    return table_->bus_number;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint8 SmbiosOnBoardDeviceExt::deviceNumber() const
+{
+    if (!hasBusAddress())
+        return 0;
+
+    // Bits 7:3 of the field carry the device number.
+    return (table_->device_function >> 3) & 0x1F;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint8 SmbiosOnBoardDeviceExt::functionNumber() const
+{
+    if (!hasBusAddress())
+        return 0;
+
+    // Bits 2:0 of the field carry the function number.
+    return table_->device_function & 0x07;
 }
