@@ -194,6 +194,23 @@ private:
     Q_DISABLE_COPY_MOVE(SmbiosCache)
 };
 
+class SmbiosPortConnector
+{
+public:
+    explicit SmbiosPortConnector(const SmbiosTable* table);
+
+    bool isValid() const;
+    QString internalDesignator() const;
+    QString internalConnectorType() const;
+    QString externalDesignator() const;
+    QString externalConnectorType() const;
+    QString type() const;
+
+private:
+    const SmbiosPortConnectorTable* table_;
+    Q_DISABLE_COPY_MOVE(SmbiosPortConnector)
+};
+
 class SmbiosSystemSlot
 {
 public:
@@ -227,6 +244,23 @@ private:
     Q_DISABLE_COPY_MOVE(SmbiosSystemSlot)
 };
 
+class SmbiosMemoryArray
+{
+public:
+    explicit SmbiosMemoryArray(const SmbiosTable* table);
+
+    bool isValid() const;
+    QString location() const;
+    QString use() const;
+    QString errorCorrection() const;
+    quint64 maxCapacity() const;
+    quint16 deviceCount() const;
+
+private:
+    const SmbiosMemoryArrayTable* table_;
+    Q_DISABLE_COPY_MOVE(SmbiosMemoryArray)
+};
+
 class SmbiosMemoryDevice
 {
 public:
@@ -241,6 +275,7 @@ public:
     QString formFactor() const;
     QString partNumber() const;
     quint32 speed() const;
+    quint16 arrayHandle() const;
 
 private:
     const SmbiosMemoryDeviceTable* table_;

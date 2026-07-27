@@ -802,6 +802,64 @@ TEST(SmbiosParserTest, TruncatedCacheIsInvalid)
 }
 
 //--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, PortConnectorFields)
+{
+    QByteArray formatted(0x09 - 4, '\0');
+    formatted[0x04 - 4] = 1;                       // internal_designator: string #1
+    formatted[0x05 - 4] = static_cast<char>(0x16); // internal_connector: on board IDE
+    formatted[0x06 - 4] = 2;                       // external_designator: string #2
+    formatted[0x07 - 4] = static_cast<char>(0x12); // external_connector: access bus (USB)
+    formatted[0x08 - 4] = static_cast<char>(0x10); // type: USB
+
+    const QByteArray dump = makeDump(
+        makeTable(SMBIOS_TABLE_TYPE_PORT_CONNECTOR, formatted, { "J1A1", "USB1" }));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosPortConnector port(enumerator.table());
+    ASSERT_TRUE(port.isValid());
+    EXPECT_EQ(port.internalDesignator(), QString("J1A1"));
+    EXPECT_EQ(port.internalConnectorType(), QString("On Board IDE"));
+    EXPECT_EQ(port.externalDesignator(), QString("USB1"));
+    EXPECT_EQ(port.externalConnectorType(), QString("Access Bus (USB)"));
+    EXPECT_EQ(port.type(), QString("USB"));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, PortConnectorOutOfRangeValues)
+{
+    // FFh means 'other' for both the connectors and the port type, while the ranges above A0h
+    // hold the legacy PC-98 and 8251 values.
+    QByteArray formatted(0x09 - 4, '\0');
+    formatted[0x05 - 4] = static_cast<char>(0xFF); // internal_connector: other
+    formatted[0x07 - 4] = static_cast<char>(0xA0); // external_connector: PC-98
+    formatted[0x08 - 4] = static_cast<char>(0xA1); // type: 8251 FIFO compatible
+
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_PORT_CONNECTOR, formatted, {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosPortConnector port(enumerator.table());
+    EXPECT_EQ(port.internalConnectorType(), QString("Other"));
+    EXPECT_EQ(port.externalConnectorType(), QString("PC-98"));
+    EXPECT_EQ(port.type(), QString("8251 FIFO Compatible"));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, TruncatedPortConnectorIsInvalid)
+{
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_PORT_CONNECTOR, QByteArray(0x08 - 4, '\0'), {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    EXPECT_FALSE(SmbiosPortConnector(enumerator.table()).isValid());
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST(SmbiosParserTest, SystemSlotFields)
 {
     QByteArray formatted(0x11 - 4, '\0');
@@ -921,9 +979,82 @@ TEST(SmbiosParserTest, TruncatedSystemSlotIsInvalid)
 }
 
 //--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, MemoryArrayFields)
+{
+    QByteArray formatted(0x0F - 4, '\0');
+    formatted[0x04 - 4] = 3;                       // location: system board
+    formatted[0x05 - 4] = 3;                       // use: system memory
+    formatted[0x06 - 4] = 3;                       // error_correction: none
+    formatted[0x0A - 4] = static_cast<char>(0x02); // max_capacity: 32 GB in kilobytes
+    formatted[0x0D - 4] = 4;                       // device_count
+
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_MEMORY_ARRAY, formatted, {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosMemoryArray array(enumerator.table());
+    ASSERT_TRUE(array.isValid());
+    EXPECT_EQ(array.location(), QString("System Board Or Motherboard"));
+    EXPECT_EQ(array.use(), QString("System Memory"));
+    EXPECT_EQ(array.errorCorrection(), QString("None"));
+    EXPECT_EQ(array.maxCapacity(), 32ULL * 1024ULL * 1024ULL * 1024ULL);
+    EXPECT_EQ(array.deviceCount(), 4);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, MemoryArrayExtendedCapacity)
+{
+    auto makeArray = [](quint8 length) -> QByteArray
+    {
+        QByteArray formatted(length - 4, '\0');
+
+        // max_capacity: the capacity does not fit the field.
+        formatted[0x0A - 4] = static_cast<char>(0x80);
+
+        if (length >= 0x17)
+        {
+            // ext_max_capacity: 4 TB in bytes.
+            formatted[0x14 - 4] = static_cast<char>(0x04);
+        }
+
+        return makeTable(SMBIOS_TABLE_TYPE_MEMORY_ARRAY, formatted, {});
+    };
+
+    const QByteArray extended = makeDump(makeArray(0x17));
+
+    SmbiosTableEnumerator extended_enumerator(extended);
+    ASSERT_FALSE(extended_enumerator.isAtEnd());
+
+    EXPECT_EQ(SmbiosMemoryArray(extended_enumerator.table()).maxCapacity(),
+              4ULL * 1024ULL * 1024ULL * 1024ULL * 1024ULL);
+
+    // An SMBIOS 2.1 table cannot tell the capacity the 32-bit field overflowed on.
+    const QByteArray legacy = makeDump(makeArray(0x0F));
+
+    SmbiosTableEnumerator legacy_enumerator(legacy);
+    ASSERT_FALSE(legacy_enumerator.isAtEnd());
+
+    EXPECT_EQ(SmbiosMemoryArray(legacy_enumerator.table()).maxCapacity(), 0ULL);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, TruncatedMemoryArrayIsInvalid)
+{
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_MEMORY_ARRAY, QByteArray(0x0E - 4, '\0'), {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    EXPECT_FALSE(SmbiosMemoryArray(enumerator.table()).isValid());
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST(SmbiosParserTest, MemoryDeviceFields)
 {
     QByteArray formatted(0x15 - 4, '\0');
+    formatted[0x04 - 4] = static_cast<char>(0x21); // memory_array_handle
     formatted[0x0C - 4] = static_cast<char>(0x00); // module_size low byte: 2048 MB
     formatted[0x0D - 4] = static_cast<char>(0x08); // module_size high byte
     formatted[0x0E - 4] = static_cast<char>(0x09); // form_factor: DIMM
@@ -944,6 +1075,7 @@ TEST(SmbiosParserTest, MemoryDeviceFields)
     EXPECT_EQ(device.type(), QString("DDR4"));
     EXPECT_EQ(device.formFactor(), QString("DIMM"));
     EXPECT_EQ(device.speed(), 0u); // The table is too short to carry the speed field.
+    EXPECT_EQ(device.arrayHandle(), 0x0021);
 }
 
 //--------------------------------------------------------------------------------------------------

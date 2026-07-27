@@ -63,6 +63,71 @@ quint64 cacheSize2(quint32 size)
     return static_cast<quint64>(size) * 1024ULL;
 }
 
+//--------------------------------------------------------------------------------------------------
+// The internal and the external connector of a port share the same value list.
+QString connectorType(quint8 type)
+{
+    static const char* kType[] =
+    {
+        "None", // 0x00
+        "Centronics",
+        "Mini Centronics",
+        "Proprietary",
+        "DB-25 Pin Male",
+        "DB-25 Pin Female",
+        "DB-15 Pin Male",
+        "DB-15 Pin Female",
+        "DB-9 Pin Male",
+        "DB-9 Pin Female",
+        "RJ-11",
+        "RJ-45",
+        "50-pin MiniSCSI",
+        "Mini-DIN",
+        "Micro-DIN",
+        "PS/2",
+        "Infrared",
+        "HP-HIL",
+        "Access Bus (USB)",
+        "SSA SCSI",
+        "Circular DIN-8 Male",
+        "Circular DIN-8 Female",
+        "On Board IDE",
+        "On Board Floppy",
+        "9-pin Dual Inline (pin 10 cut)",
+        "25-pin Dual Inline (pin 26 cut)",
+        "50-pin Dual Inline",
+        "68-pin Dual Inline",
+        "On Board Sound Input From CD-ROM",
+        "Mini-Centronics Type-14",
+        "Mini-Centronics Type-26",
+        "Mini-jack (headphones)",
+        "BNC",
+        "1394",
+        "SAS/SATA Plug Receptacle",
+        "USB Type-C Receptacle" // 0x23
+    };
+
+    static const char* kPc98Type[] =
+    {
+        "PC-98", // 0xA0
+        "PC-98Hireso",
+        "PC-H98",
+        "PC-98Note",
+        "PC-98Full" // 0xA4
+    };
+
+    if (type <= 0x23)
+        return kType[type];
+
+    if (type >= 0xA0 && type <= 0xA4)
+        return kPc98Type[type - 0xA0];
+
+    if (type == 0xFF)
+        return "Other";
+
+    return QString();
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -1351,6 +1416,105 @@ bool SmbiosCache::supportsAsynchronous() const
 }
 
 //--------------------------------------------------------------------------------------------------
+SmbiosPortConnector::SmbiosPortConnector(const SmbiosTable* table)
+    : table_(static_cast<const SmbiosPortConnectorTable*>(table))
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosPortConnector::isValid() const
+{
+    // 09h is the length of the port connector table in every SMBIOS version.
+    return table_->length >= 0x09;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosPortConnector::internalDesignator() const
+{
+    return smbiosString(table_, table_->internal_designator);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosPortConnector::internalConnectorType() const
+{
+    return connectorType(table_->internal_connector);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosPortConnector::externalDesignator() const
+{
+    return smbiosString(table_, table_->external_designator);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosPortConnector::externalConnectorType() const
+{
+    return connectorType(table_->external_connector);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosPortConnector::type() const
+{
+    static const char* kType[] =
+    {
+        "None", // 0x00
+        "Parallel Port XT/AT Compatible",
+        "Parallel Port PS/2",
+        "Parallel Port ECP",
+        "Parallel Port EPP",
+        "Parallel Port ECP/EPP",
+        "Serial Port XT/AT Compatible",
+        "Serial Port 16450 Compatible",
+        "Serial Port 16550 Compatible",
+        "Serial Port 16550A Compatible",
+        "SCSI Port",
+        "MIDI Port",
+        "Joy Stick Port",
+        "Keyboard Port",
+        "Mouse Port",
+        "SSA SCSI",
+        "USB",
+        "FireWire (IEEE P1394)",
+        "PCMCIA Type I",
+        "PCMCIA Type II",
+        "PCMCIA Type III",
+        "Cardbus",
+        "Access Bus Port",
+        "SCSI II",
+        "SCSI Wide",
+        "PC-98",
+        "PC-98-Hireso",
+        "PC-H98",
+        "Video Port",
+        "Audio Port",
+        "Modem Port",
+        "Network Port",
+        "SATA",
+        "SAS",
+        "MFDP (Multi-Function Display Port)",
+        "Thunderbolt" // 0x23
+    };
+
+    static const char* k8251Type[] =
+    {
+        "8251 Compatible", // 0xA0
+        "8251 FIFO Compatible" // 0xA1
+    };
+
+    if (table_->type <= 0x23)
+        return kType[table_->type];
+
+    if (table_->type >= 0xA0 && table_->type <= 0xA1)
+        return k8251Type[table_->type - 0xA0];
+
+    if (table_->type == 0xFF)
+        return "Other";
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
 SmbiosSystemSlot::SmbiosSystemSlot(const SmbiosTable* table)
     : table_(static_cast<const SmbiosSystemSlotTable*>(table))
 {
@@ -1655,6 +1819,117 @@ quint8 SmbiosSystemSlot::characteristics2() const
 }
 
 //--------------------------------------------------------------------------------------------------
+SmbiosMemoryArray::SmbiosMemoryArray(const SmbiosTable* table)
+    : table_(static_cast<const SmbiosMemoryArrayTable*>(table))
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosMemoryArray::isValid() const
+{
+    // 0Fh is the minimum length of the physical memory array table since SMBIOS 2.1.
+    return table_->length >= 0x0F;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosMemoryArray::location() const
+{
+    static const char* kLocation[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "System Board Or Motherboard",
+        "ISA Add-on Card",
+        "EISA Add-on Card",
+        "PCI Add-on Card",
+        "MCA Add-on Card",
+        "PCMCIA Add-on Card",
+        "Proprietary Add-on Card",
+        "NuBus" // 0x0A
+    };
+
+    static const char* kPc98Location[] =
+    {
+        "PC-98/C20 Add-on Card", // 0xA0
+        "PC-98/C24 Add-on Card",
+        "PC-98/E Add-on Card",
+        "PC-98/Local Bus Add-on Card",
+        "CXL Add-on Card" // 0xA4
+    };
+
+    if (table_->location >= 0x01 && table_->location <= 0x0A)
+        return kLocation[table_->location - 0x01];
+
+    if (table_->location >= 0xA0 && table_->location <= 0xA4)
+        return kPc98Location[table_->location - 0xA0];
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosMemoryArray::use() const
+{
+    static const char* kUse[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "System Memory",
+        "Video Memory",
+        "Flash Memory",
+        "Non-volatile RAM",
+        "Cache Memory" // 0x07
+    };
+
+    if (table_->use >= 0x01 && table_->use <= 0x07)
+        return kUse[table_->use - 0x01];
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosMemoryArray::errorCorrection() const
+{
+    static const char* kCorrection[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "None",
+        "Parity",
+        "Single-bit ECC",
+        "Multi-bit ECC",
+        "CRC" // 0x07
+    };
+
+    if (table_->error_correction >= 0x01 && table_->error_correction <= 0x07)
+        return kCorrection[table_->error_correction - 0x01];
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+quint64 SmbiosMemoryArray::maxCapacity() const
+{
+    // 80000000h means the capacity does not fit the field and is stored in the extended one
+    // (2.7+), which is measured in bytes instead of kilobytes.
+    if (table_->max_capacity == 0x80000000)
+    {
+        if (table_->length < 0x17)
+            return 0;
+
+        return table_->ext_max_capacity;
+    }
+
+    return static_cast<quint64>(table_->max_capacity) * 1024ULL;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint16 SmbiosMemoryArray::deviceCount() const
+{
+    return table_->device_count;
+}
+
+//--------------------------------------------------------------------------------------------------
 SmbiosMemoryDevice::SmbiosMemoryDevice(const SmbiosTable* table)
     : table_(static_cast<const SmbiosMemoryDeviceTable*>(table))
 {
@@ -1848,4 +2123,11 @@ quint32 SmbiosMemoryDevice::speed() const
         return 0;
 
     return table_->speed;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint16 SmbiosMemoryDevice::arrayHandle() const
+{
+    // The handle of the physical memory array the device belongs to.
+    return table_->memory_array_handle;
 }

@@ -35,15 +35,17 @@ struct SmbiosDump
 
 enum SmbiosTableType : quint8
 {
-    SMBIOS_TABLE_TYPE_BIOS          = 0x00,
-    SMBIOS_TABLE_TYPE_SYSTEM        = 0x01,
-    SMBIOS_TABLE_TYPE_BASEBOARD     = 0x02,
-    SMBIOS_TABLE_TYPE_CHASSIS       = 0x03,
-    SMBIOS_TABLE_TYPE_PROCESSOR     = 0x04,
-    SMBIOS_TABLE_TYPE_CACHE         = 0x07,
-    SMBIOS_TABLE_TYPE_SYSTEM_SLOT   = 0x09,
-    SMBIOS_TABLE_TYPE_MEMORY_DEVICE = 0x11,
-    SMBIOS_TABLE_TYPE_END_OF_TABLE  = 0x7F
+    SMBIOS_TABLE_TYPE_BIOS           = 0x00,
+    SMBIOS_TABLE_TYPE_SYSTEM         = 0x01,
+    SMBIOS_TABLE_TYPE_BASEBOARD      = 0x02,
+    SMBIOS_TABLE_TYPE_CHASSIS        = 0x03,
+    SMBIOS_TABLE_TYPE_PROCESSOR      = 0x04,
+    SMBIOS_TABLE_TYPE_CACHE          = 0x07,
+    SMBIOS_TABLE_TYPE_PORT_CONNECTOR = 0x08,
+    SMBIOS_TABLE_TYPE_SYSTEM_SLOT    = 0x09,
+    SMBIOS_TABLE_TYPE_MEMORY_ARRAY   = 0x10,
+    SMBIOS_TABLE_TYPE_MEMORY_DEVICE  = 0x11,
+    SMBIOS_TABLE_TYPE_END_OF_TABLE   = 0x7F
 };
 
 #pragma pack(push, 1)
@@ -199,6 +201,15 @@ struct SmbiosCacheTable : public SmbiosTable
     quint32 current_size2;        // 17h-1Ah
 };
 
+struct SmbiosPortConnectorTable : public SmbiosTable
+{
+    quint8 internal_designator; // 04h
+    quint8 internal_connector;  // 05h
+    quint8 external_designator; // 06h
+    quint8 external_connector;  // 07h
+    quint8 type;                // 08h
+};
+
 struct SmbiosSystemSlotTable : public SmbiosTable
 {
     // 2.0+
@@ -217,6 +228,20 @@ struct SmbiosSystemSlotTable : public SmbiosTable
     quint16 segment_group;   // 0Dh-0Eh
     quint8 bus_number;       // 0Fh
     quint8 device_function;  // 10h
+};
+
+struct SmbiosMemoryArrayTable : public SmbiosTable
+{
+    // 2.1+
+    quint8 location;           // 04h
+    quint8 use;                // 05h
+    quint8 error_correction;   // 06h
+    quint32 max_capacity;      // 07h-0Ah, in kilobytes
+    quint16 error_info_handle; // 0Bh-0Ch
+    quint16 device_count;      // 0Dh-0Eh
+
+    // 2.7+
+    quint64 ext_max_capacity;  // 0Fh-16h, in bytes
 };
 
 struct SmbiosMemoryDeviceTable : public SmbiosTable
