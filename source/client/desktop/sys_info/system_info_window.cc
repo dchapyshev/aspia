@@ -35,6 +35,7 @@
 #include "client/desktop/sys_info/sys_info_widget_connections.h"
 #include "client/desktop/sys_info/sys_info_widget_devices.h"
 #include "client/desktop/sys_info/sys_info_widget_drivers.h"
+#include "client/desktop/sys_info/sys_info_widget_drives.h"
 #include "client/desktop/sys_info/sys_info_widget_env_vars.h"
 #include "client/desktop/sys_info/sys_info_widget_event_logs.h"
 #include "client/desktop/sys_info/sys_info_widget_licenses.h"
@@ -104,6 +105,7 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
 
     sys_info_widgets_.append(new SysInfoWidgetSummary(this));
     sys_info_widgets_.append(new SysInfoWidgetDevices(this));
+    sys_info_widgets_.append(new SysInfoWidgetDrives(this));
     sys_info_widgets_.append(new SysInfoWidgetVideoAdapters(this));
     sys_info_widgets_.append(new SysInfoWidgetMonitors(this));
     sys_info_widgets_.append(new SysInfoWidgetNetAdapters(this));
@@ -423,6 +425,9 @@ void SystemInfoWindow::buildCategoryTree()
     CategoryItem* devices = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
         ":/img/network-card.svg", tr("Devices"), kSystemInfo_Devices);
 
+    CategoryItem* drives = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/hdd.svg", tr("Drives"), kSystemInfo_Drives);
+
     CategoryItem* video_adapters = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
         ":/img/video-card.svg", tr("Video Adapters"), kSystemInfo_VideoAdapters);
 
@@ -436,6 +441,7 @@ void SystemInfoWindow::buildCategoryTree()
         ":/img/electrical.svg", tr("Power Options"), kSystemInfo_PowerOptions);
 
     hardware_category->addChild(devices);
+    hardware_category->addChild(drives);
     hardware_category->addChild(video_adapters);
     hardware_category->addChild(monitors);
     hardware_category->addChild(printers);

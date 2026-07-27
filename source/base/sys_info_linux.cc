@@ -1496,3 +1496,11 @@ SysInfo::PowerOptions SysInfo::powerOptions()
 
     return result;
 }
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<SysInfo::PhysicalDrive> SysInfo::physicalDrives()
+{
+    NOTIMPLEMENTED();
+    return QList<PhysicalDrive>();
+}

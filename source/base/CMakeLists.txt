@@ -29,6 +29,8 @@ list(APPEND SOURCE_BASE
     crash_handler.h
     debug.cc
     debug.h
+    drive_smart.cc
+    drive_smart.h
     edid.cc
     edid.h
     event_enumerator.cc
@@ -119,6 +121,7 @@ list(APPEND SOURCE_BASE_TESTS
     aligned_memory_unittest.cc
     bitset_unittest.cc
     bucket_pool_unittest.cc
+    drive_smart_unittest.cc
     edid_unittest.cc
     numeric_utils_unittest.cc
     scoped_clear_last_error_unittest.cc

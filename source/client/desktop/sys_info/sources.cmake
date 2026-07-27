@@ -31,6 +31,9 @@ collect_sources(SOURCE_CLIENT_CORE_DESKTOP_SYS_INFO
     sys_info_widget_drivers.cc
     sys_info_widget_drivers.h
     sys_info_widget_drivers.ui
+    sys_info_widget_drives.cc
+    sys_info_widget_drives.h
+    sys_info_widget_drives.ui
     sys_info_widget_env_vars.cc
     sys_info_widget_env_vars.h
     sys_info_widget_env_vars.ui

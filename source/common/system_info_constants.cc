@@ -20,6 +20,7 @@
 
 const char kSystemInfo_Summary[] = "D9FE7CED-175C-4069-AB80-9B4F897EB376";
 const char kSystemInfo_Devices[] = "1451B77D-276E-47BB-989B-D8B61A468F8B";
+const char kSystemInfo_Drives[] = "F46D7E01-D42D-45E8-9CF7-DDAD5630D568";
 const char kSystemInfo_VideoAdapters[] = "D2867BED-1408-467C-8ABE-6BD8B32DE17B";
 const char kSystemInfo_Monitors[] = "344E1796-EFF2-4F4D-B48B-3A10CEA834B8";
 const char kSystemInfo_Printers[] = "19193E9A-D2A6-44F8-83D2-A6B0F8651DAC";

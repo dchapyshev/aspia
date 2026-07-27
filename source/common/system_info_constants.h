@@ -21,6 +21,7 @@
 
 extern const char kSystemInfo_Summary[];
 extern const char kSystemInfo_Devices[];
+extern const char kSystemInfo_Drives[];
 extern const char kSystemInfo_VideoAdapters[];
 extern const char kSystemInfo_Monitors[];
 extern const char kSystemInfo_Printers[];

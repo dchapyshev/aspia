@@ -23,6 +23,10 @@
 #include <QList>
 #include <QString>
 
+#include <optional>
+
+#include "base/drive_smart.h"
+
 class SysInfo
 {
 public:
@@ -185,6 +189,55 @@ public:
         QList<Battery> batteries;
     };
 
+    struct PhysicalDrive
+    {
+        enum class BusType
+        {
+            UNKNOWN             = 0,
+            SCSI                = 1,
+            ATAPI               = 2,
+            ATA                 = 3,
+            IEEE1394            = 4,
+            SSA                 = 5,
+            FIBRE               = 6,
+            USB                 = 7,
+            RAID                = 8,
+            ISCSI               = 9,
+            SAS                 = 10,
+            SATA                = 11,
+            SD                  = 12,
+            MMC                 = 13,
+            VIRTUAL             = 14,
+            FILE_BACKED_VIRTUAL = 15,
+            NVME                = 16
+        };
+
+        // Path the drive is addressed by. Its shape is specific to the operating system.
+        QString path;
+
+        QString model;
+        QString serial_number;
+        QString firmware_revision;
+        BusType bus_type = BusType::UNKNOWN;
+        quint64 size = 0;
+
+        // Nominal media rotation rate in RPM. 0 when the drive does not report it.
+        quint32 rotation_rate = 0;
+
+        // Size of the drive cache in bytes. 0 when not reported.
+        quint32 buffer_size = 0;
+
+        bool removable = false;
+        bool solid_state = false;
+
+        // Health data of an ATA drive. Empty when the drive has no S.M.A.R.T. support or the
+        // controller it sits behind does not pass the request through.
+        QList<AtaSmart::Attribute> ata_smart;
+
+        // Health data of an NVMe drive.
+        std::optional<NvmeSmart::HealthInfo> nvme_smart;
+    };
+
     static QString operatingSystemName();
     static QString operatingSystemVersion();
     static QString operatingSystemArchitecture();
@@ -221,6 +274,7 @@ public:
     static QList<Printer> printers();
     static QList<Application> applications();
     static PowerOptions powerOptions();
+    static QList<PhysicalDrive> physicalDrives();
 
 private:
     Q_DISABLE_COPY_MOVE(SysInfo)

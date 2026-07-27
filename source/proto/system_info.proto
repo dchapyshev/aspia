@@ -91,6 +91,85 @@ message LogicalDrives
     repeated Drive drive = 1;
 }
 
+message PhysicalDrives
+{
+    message Drive
+    {
+        enum BusType
+        {
+            BUS_TYPE_UNKNOWN             = 0;
+            BUS_TYPE_SCSI                = 1;
+            BUS_TYPE_ATAPI               = 2;
+            BUS_TYPE_ATA                 = 3;
+            BUS_TYPE_IEEE1394            = 4;
+            BUS_TYPE_SSA                 = 5;
+            BUS_TYPE_FIBRE               = 6;
+            BUS_TYPE_USB                 = 7;
+            BUS_TYPE_RAID                = 8;
+            BUS_TYPE_ISCSI               = 9;
+            BUS_TYPE_SAS                 = 10;
+            BUS_TYPE_SATA                = 11;
+            BUS_TYPE_SD                  = 12;
+            BUS_TYPE_MMC                 = 13;
+            BUS_TYPE_VIRTUAL             = 14;
+            BUS_TYPE_FILE_BACKED_VIRTUAL = 15;
+            BUS_TYPE_NVME                = 16;
+        }
+
+        // Health data of an ATA drive. The meaning of an attribute depends on its id and on the
+        // drive model, so the names are resolved on the client side.
+        message SmartAttribute
+        {
+            uint32 id           = 1;
+            uint32 status_flags = 2;
+            uint32 value        = 3;
+            uint32 worst_value  = 4;
+            uint32 threshold    = 5;
+            uint64 raw          = 6;
+        }
+
+        // Health data of an NVMe drive. Temperatures are in Kelvin, times in minutes and a data
+        // unit is 1000 blocks of 512 bytes.
+        message NvmeHealth
+        {
+            uint32 critical_warning            = 1;
+            uint32 composite_temperature       = 2;
+            repeated uint32 temperature_sensor = 3;
+            uint32 available_spare             = 4;
+            uint32 available_spare_threshold   = 5;
+            uint32 percentage_used             = 6;
+            uint64 data_units_read             = 7;
+            uint64 data_units_written          = 8;
+            uint64 host_read_commands          = 9;
+            uint64 host_write_commands         = 10;
+            uint64 controller_busy_time        = 11;
+            uint64 power_cycles                = 12;
+            uint64 power_on_hours              = 13;
+            uint64 unsafe_shutdowns            = 14;
+            uint64 media_errors                = 15;
+            uint64 error_log_entries           = 16;
+            uint32 warning_temperature_time    = 17;
+            uint32 critical_temperature_time   = 18;
+        }
+
+        string path              = 1;
+        string model             = 2;
+        string serial_number     = 3;
+        string firmware_revision = 4;
+        BusType bus_type         = 5;
+        uint64 size              = 6;
+        uint32 rotation_rate     = 7;
+        uint32 buffer_size       = 8;
+        bool removable           = 9;
+        bool solid_state         = 10;
+
+        repeated SmartAttribute smart_attribute = 11;
+        NvmeHealth nvme_health                  = 12;
+    }
+
+    repeated Drive drive = 1;
+}
+
 message Printers
 {
     message Printer
@@ -589,5 +668,6 @@ message SystemInfo
     LocalUsers local_users            = 24;
     LocalUserGroups local_user_groups = 25;
     Processes processes               = 26;
+    PhysicalDrives physical_drives    = 27;
     SystemInfoFooter footer           = 128000;
 }

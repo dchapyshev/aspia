@@ -722,6 +722,102 @@ void fillDrives(proto::system_info::SystemInfo* system_info)
 }
 
 //--------------------------------------------------------------------------------------------------
+proto::system_info::PhysicalDrives::Drive::BusType busType(SysInfo::PhysicalDrive::BusType bus_type)
+{
+    using ProtoDrive = proto::system_info::PhysicalDrives::Drive;
+
+    switch (bus_type)
+    {
+        case SysInfo::PhysicalDrive::BusType::SCSI:     return ProtoDrive::BUS_TYPE_SCSI;
+        case SysInfo::PhysicalDrive::BusType::ATAPI:    return ProtoDrive::BUS_TYPE_ATAPI;
+        case SysInfo::PhysicalDrive::BusType::ATA:      return ProtoDrive::BUS_TYPE_ATA;
+        case SysInfo::PhysicalDrive::BusType::IEEE1394: return ProtoDrive::BUS_TYPE_IEEE1394;
+        case SysInfo::PhysicalDrive::BusType::SSA:      return ProtoDrive::BUS_TYPE_SSA;
+        case SysInfo::PhysicalDrive::BusType::FIBRE:    return ProtoDrive::BUS_TYPE_FIBRE;
+        case SysInfo::PhysicalDrive::BusType::USB:      return ProtoDrive::BUS_TYPE_USB;
+        case SysInfo::PhysicalDrive::BusType::RAID:     return ProtoDrive::BUS_TYPE_RAID;
+        case SysInfo::PhysicalDrive::BusType::ISCSI:    return ProtoDrive::BUS_TYPE_ISCSI;
+        case SysInfo::PhysicalDrive::BusType::SAS:      return ProtoDrive::BUS_TYPE_SAS;
+        case SysInfo::PhysicalDrive::BusType::SATA:     return ProtoDrive::BUS_TYPE_SATA;
+        case SysInfo::PhysicalDrive::BusType::SD:       return ProtoDrive::BUS_TYPE_SD;
+        case SysInfo::PhysicalDrive::BusType::MMC:      return ProtoDrive::BUS_TYPE_MMC;
+        case SysInfo::PhysicalDrive::BusType::VIRTUAL:  return ProtoDrive::BUS_TYPE_VIRTUAL;
+        case SysInfo::PhysicalDrive::BusType::NVME:     return ProtoDrive::BUS_TYPE_NVME;
+
+        case SysInfo::PhysicalDrive::BusType::FILE_BACKED_VIRTUAL:
+            return ProtoDrive::BUS_TYPE_FILE_BACKED_VIRTUAL;
+
+        default:
+            return ProtoDrive::BUS_TYPE_UNKNOWN;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void fillPhysicalDrives(proto::system_info::SystemInfo* system_info)
+{
+    const QList<SysInfo::PhysicalDrive> drives = SysInfo::physicalDrives();
+
+    for (const SysInfo::PhysicalDrive& item : std::as_const(drives))
+    {
+        proto::system_info::PhysicalDrives::Drive* drive =
+            system_info->mutable_physical_drives()->add_drive();
+
+        drive->set_path(item.path.toStdString());
+        drive->set_model(item.model.toStdString());
+        drive->set_serial_number(item.serial_number.toStdString());
+        drive->set_firmware_revision(item.firmware_revision.toStdString());
+        drive->set_bus_type(busType(item.bus_type));
+        drive->set_size(item.size);
+        drive->set_rotation_rate(item.rotation_rate);
+        drive->set_buffer_size(item.buffer_size);
+        drive->set_removable(item.removable);
+        drive->set_solid_state(item.solid_state);
+
+        for (const AtaSmart::Attribute& attribute : std::as_const(item.ata_smart))
+        {
+            proto::system_info::PhysicalDrives::Drive::SmartAttribute* smart =
+                drive->add_smart_attribute();
+
+            smart->set_id(attribute.id);
+            smart->set_status_flags(attribute.status_flags);
+            smart->set_value(attribute.value);
+            smart->set_worst_value(attribute.worst_value);
+            smart->set_threshold(attribute.threshold);
+            smart->set_raw(attribute.raw);
+        }
+
+        if (!item.nvme_smart.has_value())
+            continue;
+
+        const NvmeSmart::HealthInfo& info = item.nvme_smart.value();
+        proto::system_info::PhysicalDrives::Drive::NvmeHealth* health = drive->mutable_nvme_health();
+
+        health->set_critical_warning(info.critical_warning);
+        health->set_composite_temperature(info.composite_temperature);
+
+        // Sent in full so that the position of a sensor stays its number.
+        for (int i = 0; i < NvmeSmart::kTemperatureSensorCount; ++i)
+            health->add_temperature_sensor(info.temperature_sensor[i]);
+
+        health->set_available_spare(info.available_spare);
+        health->set_available_spare_threshold(info.available_spare_threshold);
+        health->set_percentage_used(info.percentage_used);
+        health->set_data_units_read(info.data_units_read);
+        health->set_data_units_written(info.data_units_written);
+        health->set_host_read_commands(info.host_read_commands);
+        health->set_host_write_commands(info.host_write_commands);
+        health->set_controller_busy_time(info.controller_busy_time);
+        health->set_power_cycles(info.power_cycles);
+        health->set_power_on_hours(info.power_on_hours);
+        health->set_unsafe_shutdowns(info.unsafe_shutdowns);
+        health->set_media_errors(info.media_errors);
+        health->set_error_log_entries(info.error_log_entries);
+        health->set_warning_temperature_time(info.warning_temperature_time);
+        health->set_critical_temperature_time(info.critical_temperature_time);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void fillEventLogs(proto::system_info::SystemInfo* system_info,
                    const proto::system_info::EventLogsData& data)
 {
@@ -938,6 +1034,10 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
     else if (category == kSystemInfo_Devices)
     {
         fillDevices(system_info);
+    }
+    else if (category == kSystemInfo_Drives)
+    {
+        fillPhysicalDrives(system_info);
     }
     else if (category == kSystemInfo_VideoAdapters)
     {
