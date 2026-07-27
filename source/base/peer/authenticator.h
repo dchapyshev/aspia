@@ -129,11 +129,12 @@ protected:
     void setSessionKeyReady();
 
     void finish(const Location& location, ErrorCode error_code);
-    void setPeerVersion(const proto::peer::Version& version);
-    void setPeerOsName(std::string_view name);
-    void setPeerComputerName(std::string_view name);
-    void setPeerArch(std::string_view arch);
-    void setPeerDisplayName(std::string_view display_name);
+
+    [[nodiscard]] bool setPeerVersion(const proto::peer::Version& version);
+    [[nodiscard]] bool setPeerOsName(std::string_view name);
+    [[nodiscard]] bool setPeerComputerName(std::string_view name);
+    [[nodiscard]] bool setPeerArch(std::string_view arch);
+    [[nodiscard]] bool setPeerDisplayName(std::string_view display_name);
 
     proto::key_exchange::Encryption encryption_;
     proto::key_exchange::Identify identify_;

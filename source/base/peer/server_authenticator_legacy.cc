@@ -537,11 +537,16 @@ void ServerAuthenticatorLegacy::onSessionResponse(const QByteArray& buffer)
         return;
     }
 
-    setPeerOsName(response.os_name());
-    setPeerComputerName(response.computer_name());
-    setPeerArch(response.arch());
-    setPeerDisplayName(response.display_name());
-    setPeerVersion(response.version());
+    if (!setPeerOsName(response.os_name()) ||
+        !setPeerComputerName(response.computer_name()) ||
+        !setPeerArch(response.arch()) ||
+        !setPeerDisplayName(response.display_name()) ||
+        !setPeerVersion(response.version()))
+    {
+        finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
+        return;
+    }
+
     is_probe_ = response.probe();
 
     CLOG(TRACE) << "Client (session_type:" << response.session_type()

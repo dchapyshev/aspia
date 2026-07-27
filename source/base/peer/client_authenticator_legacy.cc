@@ -424,11 +424,15 @@ bool ClientAuthenticatorLegacy::readSessionChallenge(const QByteArray& buffer)
         return false;
     }
 
-    setPeerOsName(challenge.os_name());
-    setPeerComputerName(challenge.computer_name());
-    setPeerArch(challenge.arch());
-    setPeerDisplayName(challenge.display_name());
-    setPeerVersion(challenge.version());
+    if (!setPeerOsName(challenge.os_name()) ||
+        !setPeerComputerName(challenge.computer_name()) ||
+        !setPeerArch(challenge.arch()) ||
+        !setPeerDisplayName(challenge.display_name()) ||
+        !setPeerVersion(challenge.version()))
+    {
+        finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
+        return false;
+    }
 
     CLOG(TRACE) << "Server (version:" << peerVersion().toString() << "name:" << peerComputerName()
                 << "os:" << peerOsName() << "cores:" << challenge.cpu_cores()
