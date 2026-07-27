@@ -22,7 +22,7 @@
 #include <QCheckBox>
 #include <QRectF>
 
-class QVariantAnimation;
+class Animation;
 
 // On/off switch adapted for touch screens: a track with a sliding animated thumb, a press state
 // layer and a large tap target. Keeps the QCheckBox API, so it is used the same way.
@@ -51,7 +51,7 @@ private:
     QRectF trackRect() const;
     void syncAnimation();
 
-    QVariantAnimation* animation_;
+    Animation* animation_;
     double progress_;
 
     Q_DISABLE_COPY_MOVE(Switch)

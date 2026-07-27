@@ -25,7 +25,7 @@
 class QHBoxLayout;
 class QTimer;
 class QVBoxLayout;
-class QVariantAnimation;
+class Animation;
 
 // A touch list item with a fixed-height header bar and a panel below it that slides open and shut.
 class ExpandablePanel : public QWidget
@@ -71,7 +71,7 @@ private:
     QWidget* content_ = nullptr;
     QHBoxLayout* header_layout_ = nullptr;
     QVBoxLayout* content_layout_ = nullptr;
-    QVariantAnimation* animation_ = nullptr;
+    Animation* animation_ = nullptr;
     QTimer* long_press_timer_ = nullptr;
     QPoint press_pos_;
     bool expanded_ = false;

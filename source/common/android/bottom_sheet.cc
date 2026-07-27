@@ -24,9 +24,9 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPixmap>
-#include <QVariantAnimation>
 
 #include "base/gui_application.h"
+#include "common/android/animation.h"
 #include "common/android/controls.h"
 
 namespace {
@@ -73,12 +73,12 @@ BottomSheet::BottomSheet(QWidget* parent)
     setFont(Controls::scaledFont(font(), Controls::kFontScale));
 
     offset_animation_ = Controls::createAnimation(this);
-    connect(offset_animation_, &QVariantAnimation::valueChanged, this, [this](const QVariant& value)
+    connect(offset_animation_, &Animation::sig_valueChanged, this, [this](double value)
     {
-        offset_ = value.toInt();
+        offset_ = qRound(value);
         update();
     });
-    connect(offset_animation_, &QVariantAnimation::finished, this, [this]()
+    connect(offset_animation_, &Animation::sig_finished, this, [this]()
     {
         if (close_on_finish_)
             close();

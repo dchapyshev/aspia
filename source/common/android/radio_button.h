@@ -21,7 +21,7 @@
 
 #include <QRadioButton>
 
-class QVariantAnimation;
+class Animation;
 
 // Radio button adapted for touch screens: an outlined ring with an animated inner dot, a press
 // state layer and a large tap target. Keeps the QRadioButton API, so it is used the same way.
@@ -48,7 +48,7 @@ private slots:
     void onToggled(bool checked);
 
 private:
-    QVariantAnimation* animation_;
+    Animation* animation_;
     double progress_;
 
     Q_DISABLE_COPY_MOVE(RadioButton)

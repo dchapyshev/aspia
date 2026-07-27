@@ -21,7 +21,7 @@
 
 #include <QLineEdit>
 
-class QVariantAnimation;
+class Animation;
 
 // QLineEdit adapted for touch screens: a taller field with a rounded outline that highlights on
 // focus and a floating label that moves from inside the field onto the outline.
@@ -53,8 +53,8 @@ private:
     int labelOverflow() const;
     void updateFloatState();
 
-    QVariantAnimation* float_animation_;
-    QVariantAnimation* focus_animation_;
+    Animation* float_animation_;
+    Animation* focus_animation_;
     double float_progress_;
     double focus_progress_;
     QString label_;

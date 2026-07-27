@@ -22,7 +22,7 @@
 #include <QComboBox>
 #include <QIcon>
 
-class QVariantAnimation;
+class Animation;
 
 // QComboBox adapted for touch screens: a taller field with a rounded outline that highlights on
 // focus, a label resting on the outline and a drop-down indicator. Keeps the QComboBox API, so it
@@ -60,7 +60,7 @@ protected:
 private:
     int labelOverflow() const;
 
-    QVariantAnimation* focus_animation_;
+    Animation* focus_animation_;
     double focus_progress_;
     QString label_;
     QString field_text_;

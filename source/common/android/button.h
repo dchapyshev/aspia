@@ -22,7 +22,7 @@
 #include <QColor>
 #include <QPushButton>
 
-class QVariantAnimation;
+class Animation;
 
 // QPushButton adapted for touch screens: a pill-shaped button with an animated press state layer
 // and a large tap target. Keeps the QPushButton API, so it is used the same way.
@@ -62,7 +62,7 @@ private slots:
     void onReleased();
 
 private:
-    QVariantAnimation* animation_;
+    Animation* animation_;
     double press_progress_;
     Role role_;
     QColor accent_color_;

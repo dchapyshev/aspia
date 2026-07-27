@@ -24,8 +24,8 @@
 #include <QPixmap>
 #include <QString>
 
+class Animation;
 class QObject;
-class QVariantAnimation;
 
 class Controls
 {
@@ -38,7 +38,7 @@ public:
 
     // Returns a new state transition animation with the duration and easing shared by the touch
     // controls. The animation is owned by |parent|.
-    static QVariantAnimation* createAnimation(QObject* parent);
+    static Animation* createAnimation(QObject* parent);
 
     // Returns |font| with the size multiplied by |scale|. Handles fonts defined in points as well
     // as in pixels (the Android platform theme provides fonts with a pixel size only).

@@ -19,8 +19,8 @@
 #include "common/android/line_edit.h"
 
 #include <QPainter>
-#include <QVariantAnimation>
 
+#include "common/android/animation.h"
 #include "common/android/controls.h"
 
 namespace {
@@ -64,14 +64,14 @@ LineEdit::LineEdit(QWidget* parent)
     // the floating label overflow area.
     setTextMargins(kHorizontalPadding, labelOverflow(), kHorizontalPadding, 0);
 
-    connect(float_animation_, &QVariantAnimation::valueChanged, this, [this](const QVariant& value)
+    connect(float_animation_, &Animation::sig_valueChanged, this, [this](double value)
     {
-        float_progress_ = value.toDouble();
+        float_progress_ = value;
         update();
     });
-    connect(focus_animation_, &QVariantAnimation::valueChanged, this, [this](const QVariant& value)
+    connect(focus_animation_, &Animation::sig_valueChanged, this, [this](double value)
     {
-        focus_progress_ = value.toDouble();
+        focus_progress_ = value;
         update();
     });
     connect(this, &QLineEdit::textChanged, this, &LineEdit::onTextChanged);
@@ -107,8 +107,7 @@ void LineEdit::paintEvent(QPaintEvent* event)
 {
     // Focus transitions delivered before the widget is shown leave the animations at a stale
     // position, so the resting state is snapped to the actual one.
-    if (float_animation_->state() != QAbstractAnimation::Running &&
-        focus_animation_->state() != QAbstractAnimation::Running)
+    if (!float_animation_->isRunning() && !focus_animation_->isRunning())
     {
         float_progress_ = (hasFocus() || !text().isEmpty()) ? 1.0 : 0.0;
         focus_progress_ = hasFocus() ? 1.0 : 0.0;

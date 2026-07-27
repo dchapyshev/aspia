@@ -28,8 +28,8 @@
 #include <QScroller>
 #include <QScrollerProperties>
 #include <QStyledItemDelegate>
-#include <QVariantAnimation>
 
+#include "common/android/animation.h"
 #include "common/android/controls.h"
 #include "common/android/scroll_indicator.h"
 
@@ -267,9 +267,9 @@ ComboBox::ComboBox(QWidget* parent)
         container->setAttribute(Qt::WA_TranslucentBackground);
     }
 
-    connect(focus_animation_, &QVariantAnimation::valueChanged, this, [this](const QVariant& value)
+    connect(focus_animation_, &Animation::sig_valueChanged, this, [this](double value)
     {
-        focus_progress_ = value.toDouble();
+        focus_progress_ = value;
         update();
     });
 }

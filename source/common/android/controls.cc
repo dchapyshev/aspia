@@ -20,11 +20,11 @@
 
 #include <QApplication>
 #include <QPainter>
-#include <QVariantAnimation>
 
 #include <cmath>
 
 #include "base/gui_application.h"
+#include "common/android/animation.h"
 
 namespace {
 
@@ -58,10 +58,10 @@ double contrastRatio(const QColor& first, const QColor& second)
 
 //--------------------------------------------------------------------------------------------------
 // static
-QVariantAnimation* Controls::createAnimation(QObject* parent)
+Animation* Controls::createAnimation(QObject* parent)
 {
-    QVariantAnimation* animation = new QVariantAnimation(parent);
-    animation->setDuration(static_cast<int>(kAnimationDuration.count()));
+    Animation* animation = new Animation(parent);
+    animation->setDuration(kAnimationDuration);
     animation->setEasingCurve(QEasingCurve::InOutCubic);
     return animation;
 }

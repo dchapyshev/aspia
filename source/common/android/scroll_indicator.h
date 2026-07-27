@@ -23,7 +23,7 @@
 
 class QAbstractScrollArea;
 class QTimer;
-class QVariantAnimation;
+class Animation;
 
 // Thin overlay scroll position indicator for touch scroll areas: a handle along the trailing edge
 // that appears while scrolling and fades out afterwards. It does not reserve layout space and is
@@ -50,7 +50,7 @@ private:
     void updatePlacement();
 
     QAbstractScrollArea* area_;
-    QVariantAnimation* fade_;
+    Animation* fade_;
     QTimer* hide_timer_;
     int margin_;
     double opacity_;

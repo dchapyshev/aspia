@@ -19,8 +19,8 @@
 #include "common/android/radio_button.h"
 
 #include <QPainter>
-#include <QVariantAnimation>
 
+#include "common/android/animation.h"
 #include "common/android/controls.h"
 
 namespace {
@@ -55,9 +55,9 @@ RadioButton::RadioButton(const QString& text, QWidget* parent)
     policy.setHeightForWidth(true);
     setSizePolicy(policy);
 
-    connect(animation_, &QVariantAnimation::valueChanged, this, [this](const QVariant& value)
+    connect(animation_, &Animation::sig_valueChanged, this, [this](double value)
     {
-        progress_ = value.toDouble();
+        progress_ = value;
         update();
     });
     connect(this, &QRadioButton::toggled, this, &RadioButton::onToggled);

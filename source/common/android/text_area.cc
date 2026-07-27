@@ -22,8 +22,8 @@
 #include <QPainter>
 #include <QPlainTextEdit>
 #include <QVBoxLayout>
-#include <QVariantAnimation>
 
+#include "common/android/animation.h"
 #include "common/android/controls.h"
 
 namespace {
@@ -62,14 +62,14 @@ TextArea::TextArea(QWidget* parent)
                                kHorizontalPadding, kInnerVPadding);
     layout->addWidget(edit_);
 
-    connect(float_animation_, &QVariantAnimation::valueChanged, this, [this](const QVariant& value)
+    connect(float_animation_, &Animation::sig_valueChanged, this, [this](double value)
     {
-        float_progress_ = value.toDouble();
+        float_progress_ = value;
         update();
     });
-    connect(focus_animation_, &QVariantAnimation::valueChanged, this, [this](const QVariant& value)
+    connect(focus_animation_, &Animation::sig_valueChanged, this, [this](double value)
     {
-        focus_progress_ = value.toDouble();
+        focus_progress_ = value;
         update();
     });
     connect(edit_, &QPlainTextEdit::textChanged, this, &TextArea::onTextChanged);
@@ -131,8 +131,7 @@ void TextArea::paintEvent(QPaintEvent* /* event */)
 {
     // Focus transitions delivered before the widget is shown leave the animations at a stale
     // position, so the resting state is snapped to the actual one.
-    if (float_animation_->state() != QAbstractAnimation::Running &&
-        focus_animation_->state() != QAbstractAnimation::Running)
+    if (!float_animation_->isRunning() && !focus_animation_->isRunning())
     {
         float_progress_ = (edit_->hasFocus() || !edit_->toPlainText().isEmpty()) ? 1.0 : 0.0;
         focus_progress_ = edit_->hasFocus() ? 1.0 : 0.0;

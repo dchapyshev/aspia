@@ -23,9 +23,9 @@
 #include <QPainter>
 #include <QScrollBar>
 #include <QTimer>
-#include <QVariantAnimation>
 
 #include "base/time_types.h"
+#include "common/android/animation.h"
 
 namespace {
 
@@ -42,19 +42,19 @@ constexpr double kOpacity = 0.4;
 ScrollIndicator::ScrollIndicator(QAbstractScrollArea* area, int margin)
     : QWidget(area),
       area_(area),
-      fade_(new QVariantAnimation(this)),
+      fade_(new Animation(this)),
       hide_timer_(new QTimer(this)),
       margin_(margin),
       opacity_(0.0)
 {
     setAttribute(Qt::WA_TransparentForMouseEvents);
 
-    fade_->setDuration(static_cast<int>(kFadeTime.count()));
+    fade_->setDuration(kFadeTime);
     fade_->setStartValue(1.0);
     fade_->setEndValue(0.0);
-    connect(fade_, &QVariantAnimation::valueChanged, this, [this](const QVariant& value)
+    connect(fade_, &Animation::sig_valueChanged, this, [this](double value)
     {
-        opacity_ = value.toDouble();
+        opacity_ = value;
         update();
     });
 

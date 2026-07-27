@@ -19,8 +19,8 @@
 #include "common/android/button.h"
 
 #include <QPainter>
-#include <QVariantAnimation>
 
+#include "common/android/animation.h"
 #include "common/android/controls.h"
 
 namespace {
@@ -57,9 +57,9 @@ Button::Button(const QString& text, Role role, QWidget* parent)
 {
     setFont(Controls::scaledFont(font(), Controls::kFontScale));
 
-    connect(animation_, &QVariantAnimation::valueChanged, this, [this](const QVariant& value)
+    connect(animation_, &Animation::sig_valueChanged, this, [this](double value)
     {
-        press_progress_ = value.toDouble();
+        press_progress_ = value;
         update();
     });
     connect(this, &QPushButton::pressed, this, &Button::onPressed);

@@ -24,9 +24,9 @@
 #include <QResizeEvent>
 #include <QTimer>
 #include <QVBoxLayout>
-#include <QVariantAnimation>
 
 #include "base/time_types.h"
+#include "common/android/animation.h"
 #include "common/android/controls.h"
 
 namespace {
@@ -70,13 +70,13 @@ ExpandablePanel::ExpandablePanel(QWidget* parent)
     // Collapsed: the widget is only as tall as its header.
     setFixedHeight(kHeaderHeight);
 
-    connect(animation_, &QVariantAnimation::valueChanged, this, [this](const QVariant& value)
+    connect(animation_, &Animation::sig_valueChanged, this, [this](double value)
     {
         // The height is driven frame by frame; resizeEvent() keeps the header pinned and gives the
         // rest to the panel, so only the panel area grows or shrinks.
-        setFixedHeight(value.toInt());
+        setFixedHeight(qRound(value));
     });
-    connect(animation_, &QVariantAnimation::finished, this, [this]()
+    connect(animation_, &Animation::sig_finished, this, [this]()
     {
         if (expanded_)
         {
@@ -124,7 +124,7 @@ void ExpandablePanel::contentChanged()
 {
     // While collapsed there is nothing to resize, and while animating the running animation already
     // drives the height to its final value.
-    if (!expanded_ || animation_->state() == QAbstractAnimation::Running)
+    if (!expanded_ || animation_->isRunning())
         return;
 
     setFixedHeight(kHeaderHeight + contentHeight());

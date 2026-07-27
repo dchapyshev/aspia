@@ -26,7 +26,7 @@
 
 #include "base/time_types.h"
 
-class QVariantAnimation;
+class Animation;
 
 // Modal action sheet anchored to the bottom edge over the whole window: an optional title and a list
 // of actions. The actions are laid out as a vertical list in portrait orientation and as a wrapping
@@ -125,7 +125,7 @@ private:
     bool pressed_ = false;
     bool dragging_ = false;
     bool close_on_finish_ = false;
-    QVariantAnimation* offset_animation_ = nullptr;
+    Animation* offset_animation_ = nullptr;
 
     // Consecutive taps on the handle strip; reset when too slow (see handle tap constants in the .cc).
     int handle_taps_ = 0;

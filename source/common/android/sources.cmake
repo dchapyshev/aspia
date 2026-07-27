@@ -19,6 +19,8 @@
 collect_sources(SOURCE_COMMON_ANDROID
     about_widget.cc
     about_widget.h
+    animation.cc
+    animation.h
     app_bar.cc
     app_bar.h
     bottom_navigation_bar.cc

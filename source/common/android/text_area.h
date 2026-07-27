@@ -23,7 +23,7 @@
 #include <QWidget>
 
 class QPlainTextEdit;
-class QVariantAnimation;
+class Animation;
 
 // Multi-line text input.
 class TextArea final : public QWidget
@@ -61,8 +61,8 @@ private:
     void animateFocus(bool focused);
 
     QPlainTextEdit* edit_ = nullptr;
-    QVariantAnimation* float_animation_ = nullptr;
-    QVariantAnimation* focus_animation_ = nullptr;
+    Animation* float_animation_ = nullptr;
+    Animation* focus_animation_ = nullptr;
     double float_progress_ = 0.0;
     double focus_progress_ = 0.0;
     QString label_;
