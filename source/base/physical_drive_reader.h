@@ -58,6 +58,14 @@ public:
         NVME_OF             = 20
     };
 
+    // What the drive stores the data on.
+    enum class MediaType
+    {
+        UNKNOWN     = 0,
+        ROTATING    = 1,
+        SOLID_STATE = 2
+    };
+
     // Paths of the physical drives present in the system. The shape of a path is specific to the
     // operating system.
     static QStringList devicePaths();
@@ -73,9 +81,9 @@ public:
     virtual quint64 size() const = 0;
     virtual bool isRemovable() const = 0;
 
-    // True when the operating system reports the drive as having non-rotating media. Unlike the
-    // rotation rate of the ATA identification data, this is also known for NVMe drives.
-    virtual bool isSolidState() const = 0;
+    // Media the operating system reports the drive as having. Unlike the rotation rate of the ATA
+    // identification data, this is also known for NVMe drives.
+    virtual MediaType mediaType() const = 0;
 
     // Raw data blocks. Empty when the drive, or the bus it sits on, does not support the request.
     virtual QByteArray ataIdentifyData() = 0;

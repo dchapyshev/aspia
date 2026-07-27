@@ -24,6 +24,7 @@
 #include <IOKit/IOBSD.h>
 #include <IOKit/storage/IOBlockStorageDevice.h>
 #include <IOKit/storage/IOBlockStorageDriver.h>
+#include <IOKit/storage/IOCDBlockStorageDevice.h>
 #include <IOKit/storage/IOMedia.h>
 #include <IOKit/storage/IOStorageDeviceCharacteristics.h>
 #include <IOKit/storage/IOStorageProtocolCharacteristics.h>
@@ -226,8 +227,11 @@ QStringList PhysicalDriveReaderMac::devicePaths()
                     characteristic(device, CFSTR(kIOPropertyProtocolCharacteristicsKey),
                                    CFSTR(kIOPropertyPhysicalInterconnectTypeKey));
 
-                // A mounted disk image is a block storage device with no drive behind it.
-                if (busTypeFromInterconnect(interconnect) != BusType::VIRTUAL)
+                // A mounted disk image is a block storage device with no drive behind it. An optical
+                // drive is one with no health information to report, and the classes of the DVD and
+                // the Blu-ray drives both descend from the one the CD drives are named by.
+                if (busTypeFromInterconnect(interconnect) != BusType::VIRTUAL &&
+                    !IOObjectConformsTo(device, kIOCDBlockStorageDeviceClass))
                 {
                     const QString bsd_name = stringProperty(media, CFSTR(kIOBSDNameKey));
                     if (!bsd_name.isEmpty())
@@ -387,9 +391,13 @@ void PhysicalDriveReaderMac::readIdentity(io_service_t device)
     firmware_revision_ = characteristic(device, CFSTR(kIOPropertyDeviceCharacteristicsKey),
                                         CFSTR(kIOPropertyProductRevisionLevelKey));
 
+    // A driver that knows nothing about the media leaves the characteristic out.
     const QString medium = characteristic(device, CFSTR(kIOPropertyDeviceCharacteristicsKey),
                                           CFSTR(kIOPropertyMediumTypeKey));
-    solid_state_ = medium == kIOPropertyMediumTypeSolidStateKey;
+    if (medium == kIOPropertyMediumTypeSolidStateKey)
+        media_type_ = MediaType::SOLID_STATE;
+    else if (medium == kIOPropertyMediumTypeRotationalKey)
+        media_type_ = MediaType::ROTATING;
 
     bus_type_ = busTypeFromInterconnect(
         characteristic(device, CFSTR(kIOPropertyProtocolCharacteristicsKey),

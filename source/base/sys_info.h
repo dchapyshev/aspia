@@ -208,7 +208,7 @@ public:
         quint32 buffer_size = 0;
 
         bool removable = false;
-        bool solid_state = false;
+        PhysicalDriveReader::MediaType media_type = PhysicalDriveReader::MediaType::UNKNOWN;
 
         // Health data of an ATA drive. Empty when the drive has no S.M.A.R.T. support or the
         // controller it sits behind does not pass the request through.

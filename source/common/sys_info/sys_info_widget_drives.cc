@@ -313,9 +313,11 @@ void SysInfoWidgetDrives::setSystemInfo(const proto::system_info::SystemInfo& sy
 
     drives_ = std::make_unique<proto::system_info::PhysicalDrives>(system_info.physical_drives());
 
+    using ProtoDrive = proto::system_info::PhysicalDrives::Drive;
+
     for (int i = 0; i < drives_->drive_size(); ++i)
     {
-        const proto::system_info::PhysicalDrives::Drive& drive = drives_->drive(i);
+        const ProtoDrive& drive = drives_->drive(i);
         QList<QTreeWidgetItem*> group;
 
         if (!drive.path().empty())
@@ -337,7 +339,13 @@ void SysInfoWidgetDrives::setSystemInfo(const proto::system_info::SystemInfo& sy
         if (drive.size())
             group << mk(tr("Size"), Formatter::sizeToString(drive.size()));
 
-        group << mk(tr("Media Type"), drive.solid_state() ? tr("Solid State") : tr("Rotating"));
+        // Neither the operating system nor the drive itself is obliged to name the media.
+        if (drive.media_type() != ProtoDrive::MEDIA_TYPE_UNKNOWN)
+        {
+            group << mk(tr("Media Type"),
+                        drive.media_type() == ProtoDrive::MEDIA_TYPE_SOLID_STATE ?
+                            tr("Solid State") : tr("Rotating"));
+        }
 
         if (drive.rotation_rate())
             group << mk(tr("Rotation Rate"), tr("%1 RPM").arg(drive.rotation_rate()));

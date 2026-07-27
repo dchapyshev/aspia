@@ -159,7 +159,7 @@ QList<SysInfo::PhysicalDrive> SysInfo::physicalDrives()
         drive.bus_type = reader->busType();
         drive.size = reader->size();
         drive.removable = reader->isRemovable();
-        drive.solid_state = reader->isSolidState();
+        drive.media_type = reader->mediaType();
 
         const AtaIdentify identify(reader->ataIdentifyData());
         if (identify.isValid())
@@ -178,7 +178,9 @@ QList<SysInfo::PhysicalDrive> SysInfo::physicalDrives()
                 drive.firmware_revision = identify.firmwareRevision();
 
             if (identify.isSolidState())
-                drive.solid_state = true;
+                drive.media_type = PhysicalDriveReader::MediaType::SOLID_STATE;
+            else if (identify.rotationRate())
+                drive.media_type = PhysicalDriveReader::MediaType::ROTATING;
         }
 
         // The attributes are read first: a drive with the feature turned off only starts answering

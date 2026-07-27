@@ -332,7 +332,13 @@ void PhysicalDriveReaderLinux::readIdentity()
         firmware_revision_ = sysAttribute("device/rev");
 
     removable_ = sysAttribute("removable") == "1";
-    solid_state_ = sysAttribute("queue/rotational") == "0";
+
+    // A driver that knows nothing about the media leaves the attribute out.
+    const QString rotational = sysAttribute("queue/rotational");
+    if (rotational == "0")
+        media_type_ = MediaType::SOLID_STATE;
+    else if (rotational == "1")
+        media_type_ = MediaType::ROTATING;
 }
 
 //--------------------------------------------------------------------------------------------------

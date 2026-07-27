@@ -389,7 +389,7 @@ bool PhysicalDriveReaderWin::readSeekPenalty()
         return false;
     }
 
-    solid_state_ = !descriptor.IncursSeekPenalty;
+    media_type_ = descriptor.IncursSeekPenalty ? MediaType::ROTATING : MediaType::SOLID_STATE;
     return true;
 }
 

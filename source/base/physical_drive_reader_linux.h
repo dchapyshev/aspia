@@ -37,7 +37,7 @@ public:
     BusType busType() const final { return bus_type_; }
     quint64 size() const final { return size_; }
     bool isRemovable() const final { return removable_; }
-    bool isSolidState() const final { return solid_state_; }
+    MediaType mediaType() const final { return media_type_; }
     QByteArray ataIdentifyData() final;
     QByteArray ataSmartAttributes() final;
     QByteArray ataSmartThresholds() final;
@@ -77,7 +77,7 @@ private:
     QString firmware_revision_;
     quint64 size_ = 0;
     bool removable_ = false;
-    bool solid_state_ = false;
+    MediaType media_type_ = MediaType::UNKNOWN;
 
     // Enabling S.M.A.R.T. is only ever attempted once per drive.
     bool smart_enable_attempted_ = false;

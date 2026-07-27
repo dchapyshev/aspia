@@ -120,6 +120,13 @@ message PhysicalDrives
             BUS_TYPE_NVME_OF             = 20;
         }
 
+        enum MediaType
+        {
+            MEDIA_TYPE_UNKNOWN     = 0;
+            MEDIA_TYPE_ROTATING    = 1;
+            MEDIA_TYPE_SOLID_STATE = 2;
+        }
+
         // Health data of an ATA drive. The meaning of an attribute depends on its id and on the
         // drive model, so the names are resolved on the client side.
         message SmartAttribute
@@ -165,7 +172,7 @@ message PhysicalDrives
         uint32 rotation_rate     = 7;
         uint32 buffer_size       = 8;
         bool removable           = 9;
-        bool solid_state         = 10;
+        MediaType media_type     = 10;
 
         repeated SmartAttribute smart_attribute = 11;
         NvmeHealth nvme_health                  = 12;

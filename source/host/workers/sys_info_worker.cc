@@ -760,6 +760,20 @@ proto::system_info::PhysicalDrives::Drive::BusType busType(PhysicalDriveReader::
 }
 
 //--------------------------------------------------------------------------------------------------
+proto::system_info::PhysicalDrives::Drive::MediaType mediaType(
+    PhysicalDriveReader::MediaType media_type)
+{
+    using ProtoDrive = proto::system_info::PhysicalDrives::Drive;
+
+    switch (media_type)
+    {
+        case PhysicalDriveReader::MediaType::ROTATING:    return ProtoDrive::MEDIA_TYPE_ROTATING;
+        case PhysicalDriveReader::MediaType::SOLID_STATE: return ProtoDrive::MEDIA_TYPE_SOLID_STATE;
+        default:                                          return ProtoDrive::MEDIA_TYPE_UNKNOWN;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void fillPhysicalDrives(proto::system_info::SystemInfo* system_info)
 {
     const QList<SysInfo::PhysicalDrive> drives = SysInfo::physicalDrives();
@@ -778,7 +792,7 @@ void fillPhysicalDrives(proto::system_info::SystemInfo* system_info)
         drive->set_rotation_rate(item.rotation_rate);
         drive->set_buffer_size(item.buffer_size);
         drive->set_removable(item.removable);
-        drive->set_solid_state(item.solid_state);
+        drive->set_media_type(mediaType(item.media_type));
 
         for (const AtaSmart::Attribute& attribute : std::as_const(item.ata_smart))
         {
