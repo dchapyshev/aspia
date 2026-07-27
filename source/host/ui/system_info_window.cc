@@ -30,6 +30,7 @@
 //--------------------------------------------------------------------------------------------------
 SystemInfoWindow::SystemInfoWindow(QWidget* parent)
     : QWidget(parent),
+      consumer_id_(SysInfoWorker::createConsumerId()),
       view_(new SysInfoView(this))
 {
     LOG(INFO) << "Ctor";
@@ -64,12 +65,15 @@ SystemInfoWindow::~SystemInfoWindow()
 //--------------------------------------------------------------------------------------------------
 void SystemInfoWindow::onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request)
 {
-    emit sig_query(serialize(request));
+    emit sig_query(consumer_id_, serialize(request));
 }
 
 //--------------------------------------------------------------------------------------------------
-void SystemInfoWindow::onSystemInfo(const QByteArray& buffer)
+void SystemInfoWindow::onSystemInfo(quint32 consumer_id, const QByteArray& buffer)
 {
+    if (consumer_id != consumer_id_)
+        return;
+
     proto::system_info::SystemInfo system_info;
     if (!parse(buffer, &system_info))
     {

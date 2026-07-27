@@ -25,7 +25,8 @@
 
 //--------------------------------------------------------------------------------------------------
 SystemInfoClient::SystemInfoClient(TcpChannel* tcp_channel, QObject* parent)
-    : Client(tcp_channel, parent)
+    : Client(tcp_channel, parent),
+      consumer_id_(SysInfoWorker::createConsumerId())
 {
     CLOG(INFO) << "Ctor";
 
@@ -55,11 +56,14 @@ void SystemInfoClient::onMessage(quint8 /* channel_id */, const QByteArray& buff
 {
     // Building the report can take a while; offload it to the dedicated worker and send the
     // result once it arrives with sig_systemInfo.
-    emit sig_query(buffer);
+    emit sig_query(consumer_id_, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
-void SystemInfoClient::onSystemInfo(const QByteArray& buffer)
+void SystemInfoClient::onSystemInfo(quint32 consumer_id, const QByteArray& buffer)
 {
+    if (consumer_id != consumer_id_)
+        return;
+
     send(proto::peer::CHANNEL_ID_0, buffer);
 }

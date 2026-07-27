@@ -31,15 +31,18 @@ public:
     SysInfoWorker();
     ~SysInfoWorker() final;
 
+    static quint32 createConsumerId();
+
 public slots:
     // Parses the serialized SystemInfoRequest in |buffer|, builds the report and announces it with
     // sig_systemInfo. Connect to it with Qt::QueuedConnection: building the report takes seconds and
     // has to happen in the thread of the worker.
-    void onQuery(const QByteArray& buffer);
+    void onQuery(quint32 consumer_id, const QByteArray& buffer);
 
 signals:
     // Emitted from the worker thread with the serialized SystemInfo built for an onQuery() call.
-    void sig_systemInfo(const QByteArray& buffer);
+    // |consumer_id| is the one that came with that call.
+    void sig_systemInfo(quint32 consumer_id, const QByteArray& buffer);
 
 protected:
     // Worker implementation.

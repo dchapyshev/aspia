@@ -38,13 +38,16 @@ public:
     ~SystemInfoWindow() final;
 
 signals:
-    void sig_query(const QByteArray& buffer);
+    void sig_query(quint32 consumer_id, const QByteArray& buffer);
 
 private slots:
     void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request);
-    void onSystemInfo(const QByteArray& buffer);
+    void onSystemInfo(quint32 consumer_id, const QByteArray& buffer);
 
 private:
+    // Identifies the queries of this window in the worker.
+    const quint32 consumer_id_;
+
     SysInfoView* view_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(SystemInfoWindow)

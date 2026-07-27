@@ -32,16 +32,18 @@ public:
     ~SystemInfoClient() final;
 
 signals:
-    void sig_query(const QByteArray& buffer);
+    void sig_query(quint32 consumer_id, const QByteArray& buffer);
 
 protected:
     void onStart() final;
     void onMessage(quint8 channel_id, const QByteArray& buffer);
 
 private slots:
-    void onSystemInfo(const QByteArray& buffer);
+    void onSystemInfo(quint32 consumer_id, const QByteArray& buffer);
 
 private:
+    const quint32 consumer_id_;
+
     Q_DISABLE_COPY_MOVE(SystemInfoClient)
 };
 

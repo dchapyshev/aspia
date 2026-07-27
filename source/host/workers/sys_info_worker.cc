@@ -22,6 +22,8 @@
 #include <QProcessEnvironment>
 #include <QStorageInfo>
 
+#include <atomic>
+
 #include "base/edid.h"
 #include "base/event_enumerator.h"
 #include "base/license_reader.h"
@@ -1134,7 +1136,15 @@ SysInfoWorker::~SysInfoWorker()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SysInfoWorker::onQuery(const QByteArray& buffer)
+// static
+quint32 SysInfoWorker::createConsumerId()
+{
+    static std::atomic<quint32> last_id { 0 };
+    return ++last_id;
+}
+
+//--------------------------------------------------------------------------------------------------
+void SysInfoWorker::onQuery(quint32 consumer_id, const QByteArray& buffer)
 {
     proto::system_info::SystemInfoRequest request;
     if (!parse(buffer, &request))
@@ -1146,7 +1156,7 @@ void SysInfoWorker::onQuery(const QByteArray& buffer)
     proto::system_info::SystemInfo system_info;
     createSystemInfo(request, &system_info);
 
-    emit sig_systemInfo(serialize(system_info));
+    emit sig_systemInfo(consumer_id, serialize(system_info));
 }
 
 //--------------------------------------------------------------------------------------------------
