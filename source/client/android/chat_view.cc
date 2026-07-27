@@ -246,10 +246,6 @@ ChatView::ChatView(QWidget* parent)
     layout->addWidget(status_);
     layout->addLayout(input_row);
 
-    // The button must not take focus from the field: otherwise the first tap only moves focus and
-    // hides the keyboard instead of sending.
-    send_button_->setFocusPolicy(Qt::NoFocus);
-
     connect(send_button_, &IconButton::clicked, this, &ChatView::onSend);
 
     updateInputHeight();

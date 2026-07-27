@@ -45,6 +45,7 @@ IconButton::IconButton(const QString& icon_file_path, QWidget* parent)
       icon_file_path_(icon_file_path)
 {
     setCursor(Qt::PointingHandCursor);
+    setFocusPolicy(Qt::NoFocus);
 }
 
 //--------------------------------------------------------------------------------------------------

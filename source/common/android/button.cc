@@ -57,6 +57,11 @@ Button::Button(const QString& text, Role role, QWidget* parent)
 {
     setFont(Controls::scaledFont(font(), Controls::kFontScale));
 
+    // Taking the focus on a press would move it away from the field being edited, which closes the
+    // software keyboard: the layout then reflows under the finger and the release misses the
+    // button, so the first tap would be swallowed.
+    setFocusPolicy(Qt::NoFocus);
+
     connect(animation_, &Animation::sig_valueChanged, this, [this](double value)
     {
         press_progress_ = value;
