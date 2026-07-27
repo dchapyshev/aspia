@@ -182,12 +182,16 @@ QList<SysInfo::PhysicalDrive> SysInfo::physicalDrives()
         }
 
         // The attributes are read first: a drive with the feature turned off only starts answering
-        // after the read of the attributes turned it on.
+        // after the read of the attributes turned it on. A drive that answered nothing is not asked
+        // for the thresholds at all, because a threshold is only of use next to its attribute.
         const QByteArray smart_attributes = reader->ataSmartAttributes();
 
-        const AtaSmart ata_smart(smart_attributes, reader->ataSmartThresholds());
-        if (ata_smart.isValid())
-            drive.ata_smart = ata_smart.attributes();
+        if (!smart_attributes.isEmpty())
+        {
+            const AtaSmart ata_smart(smart_attributes, reader->ataSmartThresholds());
+            if (ata_smart.isValid())
+                drive.ata_smart = ata_smart.attributes();
+        }
 
         const NvmeSmart nvme_smart(reader->nvmeHealthLog());
         if (nvme_smart.isValid())
