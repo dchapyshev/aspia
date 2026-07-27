@@ -1181,6 +1181,143 @@ TEST(SmbiosParserTest, MemoryDeviceSizeVariants)
 }
 
 //--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, MemoryArrayAddressFields)
+{
+    QByteArray formatted(0x0F - 4, '\0');
+    formatted[0x08 - 4] = static_cast<char>(0xFF); // end_address: the 1048575th kilobyte
+    formatted[0x09 - 4] = static_cast<char>(0xFF);
+    formatted[0x0A - 4] = static_cast<char>(0x0F);
+    formatted[0x0D - 4] = static_cast<char>(0x10); // array_handle
+    formatted[0x0E - 4] = 2;                       // partition_width
+
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_MEMORY_ARRAY_ADDRESS, formatted, {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosMemoryArrayAddress address(enumerator.table());
+    ASSERT_TRUE(address.isValid());
+    EXPECT_EQ(address.startAddress(), 0ULL);
+    EXPECT_EQ(address.endAddress(), 1024ULL * 1024ULL * 1024ULL - 1ULL);
+    EXPECT_EQ(address.size(), 1024ULL * 1024ULL * 1024ULL);
+    EXPECT_EQ(address.arrayHandle(), 0x1000);
+    EXPECT_EQ(address.partitionWidth(), 2);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, MemoryArrayAddressExtended)
+{
+    auto makeAddress = [](quint8 length) -> QByteArray
+    {
+        QByteArray formatted(length - 4, '\0');
+
+        // start_address: the address does not fit the field.
+        for (int i = 0; i < 4; ++i)
+            formatted[0x04 - 4 + i] = static_cast<char>(0xFF);
+
+        formatted[0x0E - 4] = static_cast<char>(0xFF); // partition_width: unknown
+
+        if (length >= 0x1F)
+        {
+            formatted[0x13 - 4] = static_cast<char>(0x01); // ext_start_address: 4 GB
+
+            for (int i = 0; i < 4; ++i)
+                formatted[0x17 - 4 + i] = static_cast<char>(0xFF); // ext_end_address: 8 GB - 1
+            formatted[0x1B - 4] = static_cast<char>(0x01);
+        }
+
+        return makeTable(SMBIOS_TABLE_TYPE_MEMORY_ARRAY_ADDRESS, formatted, {});
+    };
+
+    const QByteArray extended = makeDump(makeAddress(0x1F));
+
+    SmbiosTableEnumerator extended_enumerator(extended);
+    ASSERT_FALSE(extended_enumerator.isAtEnd());
+
+    SmbiosMemoryArrayAddress extended_address(extended_enumerator.table());
+    EXPECT_EQ(extended_address.startAddress(), 4ULL * 1024ULL * 1024ULL * 1024ULL);
+    EXPECT_EQ(extended_address.endAddress(), 8ULL * 1024ULL * 1024ULL * 1024ULL - 1ULL);
+    EXPECT_EQ(extended_address.size(), 4ULL * 1024ULL * 1024ULL * 1024ULL);
+    EXPECT_EQ(extended_address.partitionWidth(), 0);
+
+    // An SMBIOS 2.1 table cannot tell the addresses the 32-bit fields overflowed on.
+    const QByteArray legacy = makeDump(makeAddress(0x0F));
+
+    SmbiosTableEnumerator legacy_enumerator(legacy);
+    ASSERT_FALSE(legacy_enumerator.isAtEnd());
+
+    SmbiosMemoryArrayAddress legacy_address(legacy_enumerator.table());
+    EXPECT_EQ(legacy_address.startAddress(), 0ULL);
+    EXPECT_EQ(legacy_address.endAddress(), 0ULL);
+    EXPECT_EQ(legacy_address.size(), 0ULL);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, TruncatedMemoryArrayAddressIsInvalid)
+{
+    const QByteArray dump = makeDump(
+        makeTable(SMBIOS_TABLE_TYPE_MEMORY_ARRAY_ADDRESS, QByteArray(0x0E - 4, '\0'), {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    EXPECT_FALSE(SmbiosMemoryArrayAddress(enumerator.table()).isValid());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, PointingDeviceFields)
+{
+    QByteArray formatted(0x07 - 4, '\0');
+    formatted[0x04 - 4] = 3; // type: mouse
+    formatted[0x05 - 4] = 4; // interface_type: PS/2
+    formatted[0x06 - 4] = 3; // button_count
+
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_POINTING_DEVICE, formatted, {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosPointingDevice device(enumerator.table());
+    ASSERT_TRUE(device.isValid());
+    EXPECT_EQ(device.type(), QString("Mouse"));
+    EXPECT_EQ(device.interfaceType(), QString("PS/2"));
+    EXPECT_EQ(device.buttonCount(), 3);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, PointingDeviceBusInterfaceRange)
+{
+    // The interfaces above A0h form a separate range of values.
+    QByteArray formatted(0x07 - 4, '\0');
+    formatted[0x04 - 4] = 7;                       // type: touch pad
+    formatted[0x05 - 4] = static_cast<char>(0xA2); // interface_type: USB
+    formatted[0x06 - 4] = 2;                       // button_count
+
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_POINTING_DEVICE, formatted, {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosPointingDevice device(enumerator.table());
+    EXPECT_EQ(device.type(), QString("Touch Pad"));
+    EXPECT_EQ(device.interfaceType(), QString("USB"));
+    EXPECT_EQ(device.buttonCount(), 2);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, TruncatedPointingDeviceIsInvalid)
+{
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_POINTING_DEVICE, QByteArray(0x06 - 4, '\0'), {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    EXPECT_FALSE(SmbiosPointingDevice(enumerator.table()).isValid());
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST(SmbiosParserTest, PortableBatteryFields)
 {
     QByteArray formatted(0x1A - 4, '\0');

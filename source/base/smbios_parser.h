@@ -300,6 +300,40 @@ private:
     Q_DISABLE_COPY_MOVE(SmbiosMemoryDevice)
 };
 
+class SmbiosMemoryArrayAddress
+{
+public:
+    explicit SmbiosMemoryArrayAddress(const SmbiosTable* table);
+
+    bool isValid() const;
+    quint64 startAddress() const;
+    quint64 endAddress() const;
+    quint64 size() const;
+    quint16 arrayHandle() const;
+    quint8 partitionWidth() const;
+
+private:
+    bool isExtended() const;
+
+    const SmbiosMemoryArrayAddressTable* table_;
+    Q_DISABLE_COPY_MOVE(SmbiosMemoryArrayAddress)
+};
+
+class SmbiosPointingDevice
+{
+public:
+    explicit SmbiosPointingDevice(const SmbiosTable* table);
+
+    bool isValid() const;
+    QString type() const;
+    QString interfaceType() const;
+    quint8 buttonCount() const;
+
+private:
+    const SmbiosPointingDeviceTable* table_;
+    Q_DISABLE_COPY_MOVE(SmbiosPointingDevice)
+};
+
 class SmbiosPortableBattery
 {
 public:

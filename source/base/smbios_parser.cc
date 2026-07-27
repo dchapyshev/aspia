@@ -2231,6 +2231,158 @@ quint16 SmbiosMemoryDevice::arrayHandle() const
 }
 
 //--------------------------------------------------------------------------------------------------
+SmbiosMemoryArrayAddress::SmbiosMemoryArrayAddress(const SmbiosTable* table)
+    : table_(static_cast<const SmbiosMemoryArrayAddressTable*>(table))
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosMemoryArrayAddress::isValid() const
+{
+    // 0Fh is the minimum length of the memory array mapped address table since SMBIOS 2.1.
+    return table_->length >= 0x0F;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint64 SmbiosMemoryArrayAddress::startAddress() const
+{
+    if (isExtended())
+        return table_->ext_start_address;
+
+    if (table_->start_address == 0xFFFFFFFF)
+        return 0;
+
+    return static_cast<quint64>(table_->start_address) * 1024ULL;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint64 SmbiosMemoryArrayAddress::endAddress() const
+{
+    if (isExtended())
+        return table_->ext_end_address;
+
+    if (table_->start_address == 0xFFFFFFFF)
+        return 0;
+
+    // The field holds the last kilobyte of the range, so the last byte of it belongs to the
+    // kilobyte behind.
+    return (static_cast<quint64>(table_->end_address) + 1ULL) * 1024ULL - 1ULL;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint64 SmbiosMemoryArrayAddress::size() const
+{
+    const quint64 start = startAddress();
+    const quint64 end = endAddress();
+
+    // Equal addresses mean the range is not filled in rather than a single byte of memory.
+    if (end <= start)
+        return 0;
+
+    return end - start + 1ULL;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint16 SmbiosMemoryArrayAddress::arrayHandle() const
+{
+    return table_->array_handle;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint8 SmbiosMemoryArrayAddress::partitionWidth() const
+{
+    // The number of memory devices forming a single row. FFh means it is unknown.
+    if (table_->partition_width == 0xFF)
+        return 0;
+
+    return table_->partition_width;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosMemoryArrayAddress::isExtended() const
+{
+    // FFFFFFFFh in the starting address means both addresses come from the extended fields
+    // (2.7+), which are measured in bytes instead of kilobytes.
+    return table_->start_address == 0xFFFFFFFF && table_->length >= 0x1F;
+}
+
+//--------------------------------------------------------------------------------------------------
+SmbiosPointingDevice::SmbiosPointingDevice(const SmbiosTable* table)
+    : table_(static_cast<const SmbiosPointingDeviceTable*>(table))
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosPointingDevice::isValid() const
+{
+    // 07h is the length of the built-in pointing device table in every SMBIOS version.
+    return table_->length >= 0x07;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosPointingDevice::type() const
+{
+    static const char* kType[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "Mouse",
+        "Track Ball",
+        "Track Point",
+        "Glide Point",
+        "Touch Pad",
+        "Touch Screen",
+        "Optical Sensor" // 0x09
+    };
+
+    if (table_->type >= 0x01 && table_->type <= 0x09)
+        return kType[table_->type - 0x01];
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosPointingDevice::interfaceType() const
+{
+    static const char* kInterface[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "Serial",
+        "PS/2",
+        "Infrared",
+        "HP-HIL",
+        "Bus Mouse",
+        "ADB (Apple Desktop Bus)" // 0x08
+    };
+
+    static const char* kBusInterface[] =
+    {
+        "Bus Mouse DB-9", // 0xA0
+        "Bus Mouse Micro-DIN",
+        "USB",
+        "I2C",
+        "SPI" // 0xA4
+    };
+
+    if (table_->interface_type >= 0x01 && table_->interface_type <= 0x08)
+        return kInterface[table_->interface_type - 0x01];
+
+    if (table_->interface_type >= 0xA0 && table_->interface_type <= 0xA4)
+        return kBusInterface[table_->interface_type - 0xA0];
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+quint8 SmbiosPointingDevice::buttonCount() const
+{
+    return table_->button_count;
+}
+
+//--------------------------------------------------------------------------------------------------
 SmbiosPortableBattery::SmbiosPortableBattery(const SmbiosTable* table)
     : table_(static_cast<const SmbiosPortableBatteryTable*>(table))
 {
