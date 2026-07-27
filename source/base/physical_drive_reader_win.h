@@ -16,49 +16,40 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_WIN_PHYSICAL_DRIVE_READER_H
-#define BASE_WIN_PHYSICAL_DRIVE_READER_H
-
-#include <QByteArray>
-#include <QStringList>
+#ifndef BASE_PHYSICAL_DRIVE_READER_WIN_H
+#define BASE_PHYSICAL_DRIVE_READER_WIN_H
 
 #include <qt_windows.h>
 #include <winioctl.h>
 
+#include "base/physical_drive_reader.h"
 #include "base/win/device.h"
 
-// Reads the identification and the raw S.M.A.R.T. data of a single physical drive. The data blocks
-// are returned exactly as the drive produced them and are meant to be handed to the platform
-// independent parsers (AtaIdentify, AtaSmart, NvmeSmart).
-class PhysicalDriveReader
+class PhysicalDriveReaderWin final : public PhysicalDriveReader
 {
 public:
-    PhysicalDriveReader() = default;
-    ~PhysicalDriveReader() = default;
+    PhysicalDriveReaderWin() = default;
+    ~PhysicalDriveReaderWin() final = default;
 
     // Paths of the physical drives present in the system.
     static QStringList devicePaths();
 
-    // Opens the drive at |device_path| and reads the identification that the storage stack keeps for
-    // every bus type. Returns false when the drive cannot be opened.
-    bool open(const QString& device_path);
+    // PhysicalDriveReader implementation.
+    QString model() const final { return model_; }
+    QString serialNumber() const final { return serial_number_; }
+    QString firmwareRevision() const final { return firmware_revision_; }
+    BusType busType() const final;
+    quint64 size() const final { return size_; }
+    bool isRemovable() const final { return removable_; }
+    bool isSolidState() const final { return solid_state_; }
+    QByteArray ataIdentifyData() final;
+    QByteArray ataSmartAttributes() final;
+    QByteArray ataSmartThresholds() final;
+    QByteArray nvmeHealthLog() final;
 
-    QString model() const { return model_; }
-    QString serialNumber() const { return serial_number_; }
-    QString firmwareRevision() const { return firmware_revision_; }
-    STORAGE_BUS_TYPE busType() const { return bus_type_; }
-    quint64 size() const { return size_; }
-    bool isRemovable() const { return removable_; }
-
-    // True when the storage stack reports the drive as having no seek penalty. Unlike the rotation
-    // rate of the ATA identification data, this is also known for NVMe drives.
-    bool isSolidState() const { return solid_state_; }
-
-    // Raw data blocks. Empty when the drive, or the bus it sits on, does not support the request.
-    QByteArray ataIdentifyData();
-    QByteArray ataSmartAttributes();
-    QByteArray ataSmartThresholds();
-    QByteArray nvmeHealthLog();
+protected:
+    // PhysicalDriveReader implementation.
+    bool open(const QString& device_path) final;
 
 private:
     bool readDeviceDescriptor();
@@ -85,7 +76,7 @@ private:
     // Enabling S.M.A.R.T. is only ever attempted once per drive.
     bool smart_enable_attempted_ = false;
 
-    Q_DISABLE_COPY_MOVE(PhysicalDriveReader)
+    Q_DISABLE_COPY_MOVE(PhysicalDriveReaderWin)
 };
 
-#endif // BASE_WIN_PHYSICAL_DRIVE_READER_H
+#endif // BASE_PHYSICAL_DRIVE_READER_WIN_H

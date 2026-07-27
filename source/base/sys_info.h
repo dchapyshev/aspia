@@ -26,6 +26,7 @@
 #include <optional>
 
 #include "base/drive_smart.h"
+#include "base/physical_drive_reader.h"
 
 class SysInfo
 {
@@ -191,34 +192,13 @@ public:
 
     struct PhysicalDrive
     {
-        enum class BusType
-        {
-            UNKNOWN             = 0,
-            SCSI                = 1,
-            ATAPI               = 2,
-            ATA                 = 3,
-            IEEE1394            = 4,
-            SSA                 = 5,
-            FIBRE               = 6,
-            USB                 = 7,
-            RAID                = 8,
-            ISCSI               = 9,
-            SAS                 = 10,
-            SATA                = 11,
-            SD                  = 12,
-            MMC                 = 13,
-            VIRTUAL             = 14,
-            FILE_BACKED_VIRTUAL = 15,
-            NVME                = 16
-        };
-
         // Path the drive is addressed by. Its shape is specific to the operating system.
         QString path;
 
         QString model;
         QString serial_number;
         QString firmware_revision;
-        BusType bus_type = BusType::UNKNOWN;
+        PhysicalDriveReader::BusType bus_type = PhysicalDriveReader::BusType::UNKNOWN;
         quint64 size = 0;
 
         // Nominal media rotation rate in RPM. 0 when the drive does not report it.

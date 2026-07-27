@@ -26,6 +26,7 @@
 #include "base/event_enumerator.h"
 #include "base/license_reader.h"
 #include "base/logging.h"
+#include "base/physical_drive_reader.h"
 #include "base/serialization.h"
 #include "base/smbios_parser.h"
 #include "base/sys_info.h"
@@ -722,29 +723,29 @@ void fillDrives(proto::system_info::SystemInfo* system_info)
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::system_info::PhysicalDrives::Drive::BusType busType(SysInfo::PhysicalDrive::BusType bus_type)
+proto::system_info::PhysicalDrives::Drive::BusType busType(PhysicalDriveReader::BusType bus_type)
 {
     using ProtoDrive = proto::system_info::PhysicalDrives::Drive;
 
     switch (bus_type)
     {
-        case SysInfo::PhysicalDrive::BusType::SCSI:     return ProtoDrive::BUS_TYPE_SCSI;
-        case SysInfo::PhysicalDrive::BusType::ATAPI:    return ProtoDrive::BUS_TYPE_ATAPI;
-        case SysInfo::PhysicalDrive::BusType::ATA:      return ProtoDrive::BUS_TYPE_ATA;
-        case SysInfo::PhysicalDrive::BusType::IEEE1394: return ProtoDrive::BUS_TYPE_IEEE1394;
-        case SysInfo::PhysicalDrive::BusType::SSA:      return ProtoDrive::BUS_TYPE_SSA;
-        case SysInfo::PhysicalDrive::BusType::FIBRE:    return ProtoDrive::BUS_TYPE_FIBRE;
-        case SysInfo::PhysicalDrive::BusType::USB:      return ProtoDrive::BUS_TYPE_USB;
-        case SysInfo::PhysicalDrive::BusType::RAID:     return ProtoDrive::BUS_TYPE_RAID;
-        case SysInfo::PhysicalDrive::BusType::ISCSI:    return ProtoDrive::BUS_TYPE_ISCSI;
-        case SysInfo::PhysicalDrive::BusType::SAS:      return ProtoDrive::BUS_TYPE_SAS;
-        case SysInfo::PhysicalDrive::BusType::SATA:     return ProtoDrive::BUS_TYPE_SATA;
-        case SysInfo::PhysicalDrive::BusType::SD:       return ProtoDrive::BUS_TYPE_SD;
-        case SysInfo::PhysicalDrive::BusType::MMC:      return ProtoDrive::BUS_TYPE_MMC;
-        case SysInfo::PhysicalDrive::BusType::VIRTUAL:  return ProtoDrive::BUS_TYPE_VIRTUAL;
-        case SysInfo::PhysicalDrive::BusType::NVME:     return ProtoDrive::BUS_TYPE_NVME;
+        case PhysicalDriveReader::BusType::SCSI:    return ProtoDrive::BUS_TYPE_SCSI;
+        case PhysicalDriveReader::BusType::ATAPI:   return ProtoDrive::BUS_TYPE_ATAPI;
+        case PhysicalDriveReader::BusType::ATA:     return ProtoDrive::BUS_TYPE_ATA;
+        case PhysicalDriveReader::BusType::IEEE1394: return ProtoDrive::BUS_TYPE_IEEE1394;
+        case PhysicalDriveReader::BusType::SSA:     return ProtoDrive::BUS_TYPE_SSA;
+        case PhysicalDriveReader::BusType::FIBRE:   return ProtoDrive::BUS_TYPE_FIBRE;
+        case PhysicalDriveReader::BusType::USB:     return ProtoDrive::BUS_TYPE_USB;
+        case PhysicalDriveReader::BusType::RAID:    return ProtoDrive::BUS_TYPE_RAID;
+        case PhysicalDriveReader::BusType::ISCSI:   return ProtoDrive::BUS_TYPE_ISCSI;
+        case PhysicalDriveReader::BusType::SAS:     return ProtoDrive::BUS_TYPE_SAS;
+        case PhysicalDriveReader::BusType::SATA:    return ProtoDrive::BUS_TYPE_SATA;
+        case PhysicalDriveReader::BusType::SD:      return ProtoDrive::BUS_TYPE_SD;
+        case PhysicalDriveReader::BusType::MMC:     return ProtoDrive::BUS_TYPE_MMC;
+        case PhysicalDriveReader::BusType::VIRTUAL: return ProtoDrive::BUS_TYPE_VIRTUAL;
+        case PhysicalDriveReader::BusType::NVME:    return ProtoDrive::BUS_TYPE_NVME;
 
-        case SysInfo::PhysicalDrive::BusType::FILE_BACKED_VIRTUAL:
+        case PhysicalDriveReader::BusType::FILE_BACKED_VIRTUAL:
             return ProtoDrive::BUS_TYPE_FILE_BACKED_VIRTUAL;
 
         default:

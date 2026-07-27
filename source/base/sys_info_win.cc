@@ -34,7 +34,6 @@
 #include "base/system_error.h"
 #include "base/crypto/generic_hash.h"
 #include "base/win/device.h"
-#include "base/win/physical_drive_reader.h"
 #include "base/win/registry.h"
 #include "base/win/scoped_device_info.h"
 #include "base/win/scoped_object.h"
@@ -511,31 +510,6 @@ void addApplication(
         application.publisher = value;
 
     result->append(std::move(application));
-}
-
-//--------------------------------------------------------------------------------------------------
-SysInfo::PhysicalDrive::BusType driveBusType(STORAGE_BUS_TYPE bus_type)
-{
-    switch (bus_type)
-    {
-        case BusTypeScsi:               return SysInfo::PhysicalDrive::BusType::SCSI;
-        case BusTypeAtapi:              return SysInfo::PhysicalDrive::BusType::ATAPI;
-        case BusTypeAta:                return SysInfo::PhysicalDrive::BusType::ATA;
-        case BusType1394:               return SysInfo::PhysicalDrive::BusType::IEEE1394;
-        case BusTypeSsa:                return SysInfo::PhysicalDrive::BusType::SSA;
-        case BusTypeFibre:              return SysInfo::PhysicalDrive::BusType::FIBRE;
-        case BusTypeUsb:                return SysInfo::PhysicalDrive::BusType::USB;
-        case BusTypeRAID:               return SysInfo::PhysicalDrive::BusType::RAID;
-        case BusTypeiScsi:              return SysInfo::PhysicalDrive::BusType::ISCSI;
-        case BusTypeSas:                return SysInfo::PhysicalDrive::BusType::SAS;
-        case BusTypeSata:               return SysInfo::PhysicalDrive::BusType::SATA;
-        case BusTypeSd:                 return SysInfo::PhysicalDrive::BusType::SD;
-        case BusTypeMmc:                return SysInfo::PhysicalDrive::BusType::MMC;
-        case BusTypeVirtual:            return SysInfo::PhysicalDrive::BusType::VIRTUAL;
-        case BusTypeFileBackedVirtual:  return SysInfo::PhysicalDrive::BusType::FILE_BACKED_VIRTUAL;
-        case BusTypeNvme:               return SysInfo::PhysicalDrive::BusType::NVME;
-        default:                        return SysInfo::PhysicalDrive::BusType::UNKNOWN;
-    }
 }
 
 } // namespace
@@ -1384,65 +1358,3 @@ SysInfo::PowerOptions SysInfo::powerOptions()
     return result;
 }
 
-//--------------------------------------------------------------------------------------------------
-// static
-QList<SysInfo::PhysicalDrive> SysInfo::physicalDrives()
-{
-    QList<PhysicalDrive> result;
-
-    const QStringList device_paths = PhysicalDriveReader::devicePaths();
-
-    for (const QString& device_path : std::as_const(device_paths))
-    {
-        PhysicalDriveReader reader;
-        if (!reader.open(device_path))
-            continue;
-
-        PhysicalDrive drive;
-
-        drive.path = device_path;
-        drive.model = reader.model();
-        drive.serial_number = reader.serialNumber();
-        drive.firmware_revision = reader.firmwareRevision();
-        drive.bus_type = driveBusType(reader.busType());
-        drive.size = reader.size();
-        drive.removable = reader.isRemovable();
-        drive.solid_state = reader.isSolidState();
-
-        const AtaIdentify identify(reader.ataIdentifyData());
-        if (identify.isValid())
-        {
-            // The drive itself knows more about the media than the storage stack does, so what it
-            // reports wins over the identification collected from the driver.
-            drive.model = identify.model();
-            drive.rotation_rate = identify.rotationRate();
-            drive.buffer_size = identify.bufferSize();
-
-            // Not every drive fills in all of the identification fields.
-            if (!identify.serialNumber().isEmpty())
-                drive.serial_number = identify.serialNumber();
-
-            if (!identify.firmwareRevision().isEmpty())
-                drive.firmware_revision = identify.firmwareRevision();
-
-            if (identify.isSolidState())
-                drive.solid_state = true;
-        }
-
-        // The attributes are read first: a drive with the feature turned off only starts answering
-        // after the read of the attributes turned it on.
-        const QByteArray smart_attributes = reader.ataSmartAttributes();
-
-        const AtaSmart ata_smart(smart_attributes, reader.ataSmartThresholds());
-        if (ata_smart.isValid())
-            drive.ata_smart = ata_smart.attributes();
-
-        const NvmeSmart nvme_smart(reader.nvmeHealthLog());
-        if (nvme_smart.isValid())
-            drive.nvme_smart = nvme_smart.healthInfo();
-
-        result.append(std::move(drive));
-    }
-
-    return result;
-}

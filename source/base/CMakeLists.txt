@@ -46,6 +46,8 @@ list(APPEND SOURCE_BASE
     logging_file.cc
     logging_file.h
     numeric_utils.h
+    physical_drive_reader.cc
+    physical_drive_reader.h
     power_controller.cc
     power_controller.h
     power_save_blocker.cc
@@ -85,6 +87,8 @@ if (WIN32)
         core_service_win.cc
         event_enumerator_win.cc
         event_enumerator_win.h
+        physical_drive_reader_win.cc
+        physical_drive_reader_win.h
         service_controller_win.cc
         service_controller_win.h
         sys_info_win.cc)
@@ -96,6 +100,8 @@ if (LINUX)
         core_service_posix.cc
         event_enumerator_linux.cc
         event_enumerator_linux.h
+        physical_drive_reader_linux.cc
+        physical_drive_reader_linux.h
         service_controller_systemd.cc
         service_controller_systemd.h
         sys_info_linux.cc)

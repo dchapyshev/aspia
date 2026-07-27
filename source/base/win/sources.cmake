@@ -25,8 +25,6 @@ collect_sources(SOURCE_BASE_WIN
     file_version_info.h
     message_window.cc
     message_window.h
-    physical_drive_reader.cc
-    physical_drive_reader.h
     registry.cc
     registry.h
     resource_util.cc

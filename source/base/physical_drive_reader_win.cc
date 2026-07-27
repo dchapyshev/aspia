@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/win/physical_drive_reader.h"
+#include "base/physical_drive_reader_win.h"
 
 #include <SetupAPI.h>
 #include <ntddscsi.h>
@@ -24,8 +24,8 @@
 #include <cstddef>
 #include <memory>
 
-#include "base/logging.h"
 #include "base/drive_smart.h"
+#include "base/logging.h"
 #include "base/win/scoped_device_info.h"
 
 namespace {
@@ -99,12 +99,12 @@ bool driveNumber(Device& device, DWORD* device_number)
 
 //--------------------------------------------------------------------------------------------------
 // static
-QStringList PhysicalDriveReader::devicePaths()
+QStringList PhysicalDriveReaderWin::devicePaths()
 {
     QStringList result;
 
-    ScopedDeviceInfo device_info(SetupDiGetClassDevsW(
-        &kDiskInterfaceGuid, nullptr, nullptr, DIGCF_PROFILE | DIGCF_PRESENT | DIGCF_DEVICEINTERFACE));
+    ScopedDeviceInfo device_info(SetupDiGetClassDevsW(&kDiskInterfaceGuid, nullptr, nullptr,
+        DIGCF_PROFILE | DIGCF_PRESENT | DIGCF_DEVICEINTERFACE));
     if (!device_info.isValid())
     {
         PLOG(ERROR) << "SetupDiGetClassDevsW failed";
@@ -160,44 +160,40 @@ QStringList PhysicalDriveReader::devicePaths()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool PhysicalDriveReader::open(const QString& device_path)
+// Maps the bus of the storage stack to the one the report is built from.
+PhysicalDriveReader::BusType PhysicalDriveReaderWin::busType() const
 {
-    // The ATA pass-through ioctls need write access while the property queries need no access at
-    // all, so a drive that refuses to be opened for writing still reports its identification.
-    if (!device_.open(device_path, GENERIC_READ | GENERIC_WRITE,
-                      FILE_SHARE_READ | FILE_SHARE_WRITE) &&
-        !device_.open(device_path, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE) &&
-        !device_.open(device_path, 0, FILE_SHARE_READ | FILE_SHARE_WRITE))
+    switch (bus_type_)
     {
-        PLOG(ERROR) << "Unable to open drive:" << device_path;
-        return false;
+        case BusTypeScsi:               return BusType::SCSI;
+        case BusTypeAtapi:              return BusType::ATAPI;
+        case BusTypeAta:                return BusType::ATA;
+        case BusType1394:               return BusType::IEEE1394;
+        case BusTypeSsa:                return BusType::SSA;
+        case BusTypeFibre:              return BusType::FIBRE;
+        case BusTypeUsb:                return BusType::USB;
+        case BusTypeRAID:               return BusType::RAID;
+        case BusTypeiScsi:              return BusType::ISCSI;
+        case BusTypeSas:                return BusType::SAS;
+        case BusTypeSata:               return BusType::SATA;
+        case BusTypeSd:                 return BusType::SD;
+        case BusTypeMmc:                return BusType::MMC;
+        case BusTypeVirtual:            return BusType::VIRTUAL;
+        case BusTypeFileBackedVirtual:  return BusType::FILE_BACKED_VIRTUAL;
+        case BusTypeNvme:               return BusType::NVME;
+        default:                        return BusType::UNKNOWN;
     }
-
-    DWORD device_number = 0;
-    if (!driveNumber(device_, &device_number))
-    {
-        PLOG(ERROR) << "Unable to get number of drive:" << device_path;
-        return false;
-    }
-
-    device_number_ = static_cast<quint8>(device_number);
-
-    readDeviceDescriptor();
-    readSeekPenalty();
-    readSize();
-
-    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray PhysicalDriveReader::ataIdentifyData()
+QByteArray PhysicalDriveReaderWin::ataIdentifyData()
 {
     // IDENTIFY DEVICE leaves the cylinder registers at zero.
     return readAtaSector(0, 0, 0, ID_CMD);
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray PhysicalDriveReader::ataSmartAttributes()
+QByteArray PhysicalDriveReaderWin::ataSmartAttributes()
 {
     QByteArray result = readAtaSector(READ_ATTRIBUTES, SMART_CYL_LOW, SMART_CYL_HI, SMART_CMD);
     if (!result.isEmpty())
@@ -212,13 +208,13 @@ QByteArray PhysicalDriveReader::ataSmartAttributes()
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray PhysicalDriveReader::ataSmartThresholds()
+QByteArray PhysicalDriveReaderWin::ataSmartThresholds()
 {
     return readAtaSector(READ_THRESHOLDS, SMART_CYL_LOW, SMART_CYL_HI, SMART_CMD);
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray PhysicalDriveReader::nvmeHealthLog()
+QByteArray PhysicalDriveReaderWin::nvmeHealthLog()
 {
     if (bus_type_ != BusTypeNvme)
         return QByteArray();
@@ -284,7 +280,37 @@ QByteArray PhysicalDriveReader::nvmeHealthLog()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool PhysicalDriveReader::readDeviceDescriptor()
+bool PhysicalDriveReaderWin::open(const QString& device_path)
+{
+    // The ATA pass-through ioctls need write access while the property queries need no access at
+    // all, so a drive that refuses to be opened for writing still reports its identification.
+    if (!device_.open(device_path, GENERIC_READ | GENERIC_WRITE,
+                      FILE_SHARE_READ | FILE_SHARE_WRITE) &&
+        !device_.open(device_path, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE) &&
+        !device_.open(device_path, 0, FILE_SHARE_READ | FILE_SHARE_WRITE))
+    {
+        PLOG(ERROR) << "Unable to open drive:" << device_path;
+        return false;
+    }
+
+    DWORD device_number = 0;
+    if (!driveNumber(device_, &device_number))
+    {
+        PLOG(ERROR) << "Unable to get number of drive:" << device_path;
+        return false;
+    }
+
+    device_number_ = static_cast<quint8>(device_number);
+
+    readDeviceDescriptor();
+    readSeekPenalty();
+    readSize();
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool PhysicalDriveReaderWin::readDeviceDescriptor()
 {
     STORAGE_PROPERTY_QUERY query;
     memset(&query, 0, sizeof(query));
@@ -338,7 +364,7 @@ bool PhysicalDriveReader::readDeviceDescriptor()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool PhysicalDriveReader::readSeekPenalty()
+bool PhysicalDriveReaderWin::readSeekPenalty()
 {
     STORAGE_PROPERTY_QUERY query;
     memset(&query, 0, sizeof(query));
@@ -363,7 +389,7 @@ bool PhysicalDriveReader::readSeekPenalty()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool PhysicalDriveReader::readSize()
+bool PhysicalDriveReaderWin::readSize()
 {
     GET_LENGTH_INFORMATION length;
     memset(&length, 0, sizeof(length));
@@ -382,7 +408,7 @@ bool PhysicalDriveReader::readSize()
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray PhysicalDriveReader::readAtaSector(
+QByteArray PhysicalDriveReaderWin::readAtaSector(
     quint8 features, quint8 cyl_low, quint8 cyl_high, quint8 command)
 {
     // NVMe drives do not speak ATA.
@@ -402,7 +428,7 @@ QByteArray PhysicalDriveReader::readAtaSector(
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray PhysicalDriveReader::readAtaSectorDirect(
+QByteArray PhysicalDriveReaderWin::readAtaSectorDirect(
     quint8 features, quint8 cyl_low, quint8 cyl_high, quint8 command)
 {
     SENDCMDINPARAMS request;
@@ -439,7 +465,7 @@ QByteArray PhysicalDriveReader::readAtaSectorDirect(
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray PhysicalDriveReader::readAtaSectorScsi(
+QByteArray PhysicalDriveReaderWin::readAtaSectorScsi(
     quint8 features, quint8 cyl_low, quint8 cyl_high, quint8 command)
 {
     struct Request
@@ -491,7 +517,7 @@ QByteArray PhysicalDriveReader::readAtaSectorScsi(
 }
 
 //--------------------------------------------------------------------------------------------------
-bool PhysicalDriveReader::enableAtaSmart()
+bool PhysicalDriveReaderWin::enableAtaSmart()
 {
     if (smart_enable_attempted_)
         return false;
