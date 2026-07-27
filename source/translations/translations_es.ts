@@ -360,34 +360,68 @@ Routers added: %4</source>
 <context>
     <name>AndroidMainWindow</name>
     <message>
-        <location filename="../client/android/main_window.cc" line="137"/>
-        <location filename="../client/android/main_window.cc" line="214"/>
-        <location filename="../client/android/main_window.cc" line="294"/>
+        <location filename="../client/android/main_window.cc" line="170"/>
+        <location filename="../client/android/main_window.cc" line="249"/>
+        <location filename="../client/android/main_window.cc" line="329"/>
         <source>Local</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="138"/>
-        <location filename="../client/android/main_window.cc" line="218"/>
-        <location filename="../client/android/main_window.cc" line="314"/>
+        <location filename="../client/android/main_window.cc" line="171"/>
+        <location filename="../client/android/main_window.cc" line="253"/>
+        <location filename="../client/android/main_window.cc" line="349"/>
         <source>Remote</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="139"/>
-        <location filename="../client/android/main_window.cc" line="222"/>
-        <location filename="../client/android/main_window.cc" line="304"/>
+        <location filename="../client/android/main_window.cc" line="172"/>
+        <location filename="../client/android/main_window.cc" line="257"/>
+        <location filename="../client/android/main_window.cc" line="339"/>
         <source>Routers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="140"/>
-        <location filename="../client/android/main_window.cc" line="226"/>
-        <location filename="../client/android/main_window.cc" line="324"/>
+        <location filename="../client/android/main_window.cc" line="173"/>
+        <location filename="../client/android/main_window.cc" line="261"/>
+        <location filename="../client/android/main_window.cc" line="359"/>
         <location filename="../host/android/main_window.cc" line="82"/>
         <location filename="../host/android/main_window.cc" line="98"/>
         <location filename="../host/android/main_window.cc" line="461"/>
         <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="546"/>
+        <location filename="../client/android/main_window.cc" line="553"/>
+        <location filename="../client/android/main_window.cc" line="563"/>
+        <location filename="../client/android/main_window.cc" line="583"/>
+        <location filename="../client/android/main_window.cc" line="630"/>
+        <source>Connection by link</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="546"/>
+        <source>Invalid link.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="554"/>
+        <source>Another session is active. Close it and open the link again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="564"/>
+        <source>The session type from the link is not supported on this device.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="584"/>
+        <source>The router referenced by the link was not found in the address book.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="631"/>
+        <source>The host referenced by the link was not found in the address book.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -486,13 +520,13 @@ Routers added: %4</source>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="106"/>
-        <location filename="../client/desktop/authorization_dialog.cc" line="146"/>
+        <location filename="../client/desktop/authorization_dialog.cc" line="147"/>
         <source>Username cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="113"/>
-        <location filename="../client/desktop/authorization_dialog.cc" line="154"/>
+        <location filename="../client/desktop/authorization_dialog.cc" line="155"/>
         <source>Password cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -565,7 +599,7 @@ Routers added: %4</source>
 <context>
     <name>ChatView</name>
     <message>
-        <location filename="../client/android/chat_view.cc" line="199"/>
+        <location filename="../client/android/chat_view.cc" line="201"/>
         <source>Message</source>
         <translation type="unfinished"></translation>
     </message>
@@ -593,54 +627,54 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="133"/>
-        <location filename="../common/desktop/chat_widget.cc" line="305"/>
+        <location filename="../common/desktop/chat_widget.cc" line="134"/>
+        <location filename="../common/desktop/chat_widget.cc" line="306"/>
         <source>Save chat...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="134"/>
-        <location filename="../common/desktop/chat_widget.cc" line="306"/>
+        <location filename="../common/desktop/chat_widget.cc" line="135"/>
+        <location filename="../common/desktop/chat_widget.cc" line="307"/>
         <source>Clear chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="203"/>
+        <location filename="../common/desktop/chat_widget.cc" line="204"/>
         <source>%1 is typing...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="206"/>
+        <location filename="../common/desktop/chat_widget.cc" line="207"/>
         <source>User %1 has joined the chat (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="209"/>
+        <location filename="../common/desktop/chat_widget.cc" line="210"/>
         <source>User %1 has left the chat (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="212"/>
+        <location filename="../common/desktop/chat_widget.cc" line="213"/>
         <source>User %1 is logged in (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="215"/>
+        <location filename="../common/desktop/chat_widget.cc" line="216"/>
         <source>User %1 is not logged in (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="218"/>
+        <location filename="../common/desktop/chat_widget.cc" line="219"/>
         <source>There are no connected users (%1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="427"/>
+        <location filename="../common/desktop/chat_widget.cc" line="428"/>
         <source>Unable to write file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../common/desktop/chat_widget.cc" line="443"/>
+        <location filename="../common/desktop/chat_widget.cc" line="444"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -648,17 +682,17 @@ Routers added: %4</source>
         </translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="366"/>
+        <location filename="../common/desktop/chat_widget.cc" line="367"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="366"/>
+        <location filename="../common/desktop/chat_widget.cc" line="367"/>
         <source>TXT files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="379"/>
+        <location filename="../common/desktop/chat_widget.cc" line="380"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1579,7 +1613,7 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="232"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="819"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="820"/>
         <source>Scale</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1669,7 +1703,7 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="434"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="437"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="422"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="423"/>
         <source>Start recording</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1685,59 +1719,59 @@ Password: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="320"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="321"/>
         <source>Resolution selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="994"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="995"/>
         <source>Session %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="994"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="995"/>
         <source>Session %1 (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="417"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="418"/>
         <source>Stop recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="648"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="649"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="663"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="689"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="664"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="690"/>
         <source>Confirmation</source>
         <translation type="unfinished">Confirmación</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="664"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="665"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="669"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="695"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="670"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="696"/>
         <source>Wait for host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="690"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="691"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="715"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="716"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="730"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="731"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1745,22 +1779,22 @@ Password: %2</source>
 <context>
     <name>DesktopWidget</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="595"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="596"/>
         <source>The session was paused by a remote user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="598"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="599"/>
         <source>The session is temporarily unavailable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="601"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="602"/>
         <source>The session is permanently unavailable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_widget.cc" line="604"/>
+        <location filename="../client/desktop/desktop/desktop_widget.cc" line="605"/>
         <source>Error while receiving video stream: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1768,17 +1802,17 @@ Password: %2</source>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="928"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="927"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="930"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="929"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="961"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="960"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2720,32 +2754,32 @@ Password: %2</source>
 <context>
     <name>Formatter</name>
     <message>
-        <location filename="../common/desktop/formatter.cc" line="49"/>
+        <location filename="../common/desktop/formatter.cc" line="45"/>
         <source>TB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/desktop/formatter.cc" line="51"/>
+        <location filename="../common/desktop/formatter.cc" line="47"/>
         <source>GB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/desktop/formatter.cc" line="53"/>
+        <location filename="../common/desktop/formatter.cc" line="49"/>
         <source>MB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/desktop/formatter.cc" line="55"/>
+        <location filename="../common/desktop/formatter.cc" line="51"/>
         <source>kB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/desktop/formatter.cc" line="57"/>
+        <location filename="../common/desktop/formatter.cc" line="53"/>
         <source>B</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../common/desktop/formatter.cc" line="73"/>
+        <location filename="../common/desktop/formatter.cc" line="70"/>
         <source>%n seconds</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -2753,7 +2787,7 @@ Password: %2</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../common/desktop/formatter.cc" line="74"/>
+        <location filename="../common/desktop/formatter.cc" line="71"/>
         <source>%n minutes</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -2761,7 +2795,7 @@ Password: %2</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../common/desktop/formatter.cc" line="75"/>
+        <location filename="../common/desktop/formatter.cc" line="72"/>
         <source>%n hours</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -2769,7 +2803,7 @@ Password: %2</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../common/desktop/formatter.cc" line="79"/>
+        <location filename="../common/desktop/formatter.cc" line="76"/>
         <source>%n days</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -2777,47 +2811,47 @@ Password: %2</source>
         </translation>
     </message>
     <message>
-        <location filename="../common/desktop/formatter.cc" line="100"/>
+        <location filename="../common/desktop/formatter.cc" line="108"/>
         <source>TB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/desktop/formatter.cc" line="102"/>
+        <location filename="../common/desktop/formatter.cc" line="110"/>
         <source>GB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/desktop/formatter.cc" line="104"/>
+        <location filename="../common/desktop/formatter.cc" line="112"/>
         <source>MB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/desktop/formatter.cc" line="106"/>
+        <location filename="../common/desktop/formatter.cc" line="114"/>
         <source>kB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/desktop/formatter.cc" line="108"/>
+        <location filename="../common/desktop/formatter.cc" line="116"/>
         <source>B/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/desktop/formatter.cc" line="123"/>
+        <location filename="../common/desktop/formatter.cc" line="131"/>
         <source>Gbps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/desktop/formatter.cc" line="125"/>
+        <location filename="../common/desktop/formatter.cc" line="133"/>
         <source>Mbps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/desktop/formatter.cc" line="127"/>
+        <location filename="../common/desktop/formatter.cc" line="135"/>
         <source>Kbps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/desktop/formatter.cc" line="129"/>
+        <location filename="../common/desktop/formatter.cc" line="137"/>
         <source>bps</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2825,17 +2859,17 @@ Password: %2</source>
 <context>
     <name>GuiApplication</name>
     <message>
-        <location filename="../base/gui_application.cc" line="415"/>
+        <location filename="../base/gui_application.cc" line="493"/>
         <source>Dark</source>
         <translation type="unfinished">Oscuro</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="417"/>
+        <location filename="../base/gui_application.cc" line="495"/>
         <source>Light</source>
         <translation type="unfinished">Claro</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="418"/>
+        <location filename="../base/gui_application.cc" line="496"/>
         <source>Auto</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2843,8 +2877,8 @@ Password: %2</source>
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host/main.cc" line="567"/>
-        <location filename="../host/main.cc" line="602"/>
+        <location filename="../host/main.cc" line="607"/>
+        <location filename="../host/main.cc" line="642"/>
         <source>Settings storage is unavailable.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2852,37 +2886,37 @@ Password: %2</source>
 <context>
     <name>HostMain</name>
     <message>
-        <location filename="../host/main.cc" line="493"/>
+        <location filename="../host/main.cc" line="533"/>
         <source>Launch the application hidden.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="495"/>
+        <location filename="../host/main.cc" line="535"/>
         <source>Export parameters to file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="497"/>
+        <location filename="../host/main.cc" line="537"/>
         <source>Import parameters from file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="499"/>
+        <location filename="../host/main.cc" line="539"/>
         <source>Do not display any messages during import and export.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="501"/>
+        <location filename="../host/main.cc" line="541"/>
         <source>Calling the update check dialog.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="503"/>
+        <location filename="../host/main.cc" line="543"/>
         <source>Calling the settings dialog.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="505"/>
+        <location filename="../host/main.cc" line="545"/>
         <source>Calling the security log dialog.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2906,9 +2940,9 @@ Password: %2</source>
     <name>HostWindow</name>
     <message>
         <location filename="../host/ui/host_window.ui" line="26"/>
-        <location filename="../host/ui/host_window.cc" line="567"/>
-        <location filename="../host/ui/host_window.cc" line="787"/>
-        <location filename="../host/ui/host_window.cc" line="1057"/>
+        <location filename="../host/ui/host_window.cc" line="574"/>
+        <location filename="../host/ui/host_window.cc" line="794"/>
+        <location filename="../host/ui/host_window.cc" line="1063"/>
         <source>Aspia Host</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2924,8 +2958,8 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="204"/>
-        <location filename="../host/ui/host_window.cc" line="505"/>
-        <location filename="../host/ui/host_window.cc" line="967"/>
+        <location filename="../host/ui/host_window.cc" line="512"/>
+        <location filename="../host/ui/host_window.cc" line="973"/>
         <source>Router is disabled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2986,7 +3020,7 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="320"/>
-        <location filename="../host/ui/host_window.cc" line="771"/>
+        <location filename="../host/ui/host_window.cc" line="778"/>
         <source>Hide</source>
         <translation type="unfinished">Ocultar</translation>
     </message>
@@ -3026,73 +3060,73 @@ Password: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="276"/>
-        <location filename="../host/ui/host_window.cc" line="766"/>
+        <location filename="../host/ui/host_window.cc" line="279"/>
+        <location filename="../host/ui/host_window.cc" line="773"/>
         <source>Show</source>
         <translation type="unfinished">Mostrar</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="455"/>
+        <location filename="../host/ui/host_window.cc" line="462"/>
         <source>Not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="509"/>
+        <location filename="../host/ui/host_window.cc" line="516"/>
         <source>Connecting to router %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="513"/>
+        <location filename="../host/ui/host_window.cc" line="520"/>
         <source>Connected to router %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="517"/>
+        <location filename="../host/ui/host_window.cc" line="524"/>
         <source>Failed to connect to router %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="562"/>
+        <location filename="../host/ui/host_window.cc" line="569"/>
         <source>Screen recording has started.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="564"/>
+        <location filename="../host/ui/host_window.cc" line="571"/>
         <source>Screen recording stopped.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="755"/>
+        <location filename="../host/ui/host_window.cc" line="762"/>
         <source>Settings storage is unavailable.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="804"/>
+        <location filename="../host/ui/host_window.cc" line="811"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="972"/>
+        <location filename="../host/ui/host_window.cc" line="978"/>
         <source>Connecting to router...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="977"/>
+        <location filename="../host/ui/host_window.cc" line="983"/>
         <source>Connected to router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="982"/>
+        <location filename="../host/ui/host_window.cc" line="988"/>
         <source>Connection error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1054"/>
+        <location filename="../host/ui/host_window.cc" line="1060"/>
         <source>IP addresses:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1058"/>
+        <location filename="../host/ui/host_window.cc" line="1064"/>
         <source>ID: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3664,17 +3698,17 @@ Password: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="542"/>
+        <location filename="../client/android/local_widget.cc" line="545"/>
         <source>Desktop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="544"/>
+        <location filename="../client/android/local_widget.cc" line="547"/>
         <source>File Transfer</source>
         <translation type="unfinished">Transferir Archivos</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="546"/>
+        <location filename="../client/android/local_widget.cc" line="549"/>
         <source>Chat</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3709,7 +3743,7 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="391"/>
+        <location filename="../client/desktop/main_window.cc" line="357"/>
         <source>Aspia Client</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3774,22 +3808,22 @@ Password: %2</source>
         <translation type="unfinished">Ver</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="96"/>
+        <location filename="../client/desktop/main_window.cc" line="95"/>
         <source>Search...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="179"/>
+        <location filename="../client/desktop/main_window.cc" line="169"/>
         <source>Management</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="208"/>
+        <location filename="../client/desktop/main_window.cc" line="198"/>
         <source>Invalid link &quot;%1&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="220"/>
+        <location filename="../client/desktop/main_window.cc" line="221"/>
         <source>The router referenced by the link was not found in the address book.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3804,12 +3838,12 @@ Password: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="377"/>
+        <location filename="../client/desktop/main_window.cc" line="343"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="489"/>
+        <location filename="../client/desktop/main_window.cc" line="455"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4004,98 +4038,98 @@ Password: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="981"/>
+        <location filename="../client/desktop/management_tab.cc" line="968"/>
         <source>(copy)</source>
         <translation type="unfinished">(copiar)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="687"/>
-        <location filename="../client/desktop/management_tab.cc" line="716"/>
-        <location filename="../client/desktop/management_tab.cc" line="766"/>
-        <location filename="../client/desktop/management_tab.cc" line="946"/>
-        <location filename="../client/desktop/management_tab.cc" line="977"/>
-        <location filename="../client/desktop/management_tab.cc" line="1020"/>
+        <location filename="../client/desktop/management_tab.cc" line="685"/>
+        <location filename="../client/desktop/management_tab.cc" line="714"/>
+        <location filename="../client/desktop/management_tab.cc" line="764"/>
+        <location filename="../client/desktop/management_tab.cc" line="933"/>
+        <location filename="../client/desktop/management_tab.cc" line="964"/>
+        <location filename="../client/desktop/management_tab.cc" line="1008"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="985"/>
+        <location filename="../client/desktop/management_tab.cc" line="973"/>
         <source>Failed to add the host to the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1024"/>
+        <location filename="../client/desktop/management_tab.cc" line="1012"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1034"/>
+        <location filename="../client/desktop/management_tab.cc" line="1022"/>
         <source>Unable to remove host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1091"/>
-        <location filename="../client/desktop/management_tab.cc" line="1134"/>
-        <location filename="../client/desktop/management_tab.cc" line="1159"/>
+        <location filename="../client/desktop/management_tab.cc" line="1079"/>
+        <location filename="../client/desktop/management_tab.cc" line="1122"/>
+        <location filename="../client/desktop/management_tab.cc" line="1147"/>
         <source>Copy Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1092"/>
-        <location filename="../client/desktop/management_tab.cc" line="1135"/>
-        <location filename="../client/desktop/management_tab.cc" line="1160"/>
+        <location filename="../client/desktop/management_tab.cc" line="1080"/>
+        <location filename="../client/desktop/management_tab.cc" line="1123"/>
+        <location filename="../client/desktop/management_tab.cc" line="1148"/>
         <source>Copy Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1260"/>
+        <location filename="../client/desktop/management_tab.cc" line="1248"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1370"/>
+        <location filename="../client/desktop/management_tab.cc" line="1358"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1432"/>
+        <location filename="../client/desktop/management_tab.cc" line="1420"/>
         <source>Import Old Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1434"/>
+        <location filename="../client/desktop/management_tab.cc" line="1422"/>
         <source>Address Book (*.aab);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1457"/>
-        <location filename="../client/desktop/management_tab.cc" line="1474"/>
+        <location filename="../client/desktop/management_tab.cc" line="1445"/>
+        <location filename="../client/desktop/management_tab.cc" line="1462"/>
         <source>Export Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1459"/>
-        <location filename="../client/desktop/management_tab.cc" line="1530"/>
+        <location filename="../client/desktop/management_tab.cc" line="1447"/>
+        <location filename="../client/desktop/management_tab.cc" line="1518"/>
         <source>Address Book (*.json);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1469"/>
+        <location filename="../client/desktop/management_tab.cc" line="1457"/>
         <source>Address book database is not available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1476"/>
+        <location filename="../client/desktop/management_tab.cc" line="1464"/>
         <source>Enter a password to encrypt the address book.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1481"/>
+        <location filename="../client/desktop/management_tab.cc" line="1469"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation type="unfinished">¡La contraseña que ingresó no cumple con los requisitos de seguridad!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management_tab.cc" line="1482"/>
+        <location filename="../client/desktop/management_tab.cc" line="1470"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform>La contraseña debe contener caracteres en minúsculas, mayúsculas, números y no debe tener menos de %n caracter.</numerusform>
@@ -4103,17 +4137,17 @@ Password: %2</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1485"/>
+        <location filename="../client/desktop/management_tab.cc" line="1473"/>
         <source>Do you want to enter a different password?</source>
         <translation type="unfinished">¿Quieres ingresar una contraseña diferente?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1502"/>
+        <location filename="../client/desktop/management_tab.cc" line="1490"/>
         <source>Failed to export the address book.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1507"/>
+        <location filename="../client/desktop/management_tab.cc" line="1495"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -4121,42 +4155,42 @@ Hosts exported: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1528"/>
+        <location filename="../client/desktop/management_tab.cc" line="1516"/>
         <source>Import Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1539"/>
+        <location filename="../client/desktop/management_tab.cc" line="1527"/>
         <source>Unlock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1541"/>
+        <location filename="../client/desktop/management_tab.cc" line="1529"/>
         <source>Address book is encrypted. To open, you must enter a password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1556"/>
+        <location filename="../client/desktop/management_tab.cc" line="1544"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1560"/>
+        <location filename="../client/desktop/management_tab.cc" line="1548"/>
         <source>Unsupported file format version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1564"/>
+        <location filename="../client/desktop/management_tab.cc" line="1552"/>
         <source>Nothing was imported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1568"/>
+        <location filename="../client/desktop/management_tab.cc" line="1556"/>
         <source>The file is not a valid address book.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1573"/>
+        <location filename="../client/desktop/management_tab.cc" line="1561"/>
         <source>Import completed successfully.
 Routers added: %1
 Routers skipped: %2
@@ -4167,27 +4201,27 @@ Hosts skipped: %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1921"/>
+        <location filename="../client/desktop/management_tab.cc" line="1909"/>
         <source>Copy Link</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1945"/>
+        <location filename="../client/desktop/management_tab.cc" line="1939"/>
         <source>Unable to create a link for this host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1962"/>
+        <location filename="../client/desktop/management_tab.cc" line="1956"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1969"/>
+        <location filename="../client/desktop/management_tab.cc" line="1963"/>
         <source>The host has an invalid host ID.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1978"/>
+        <location filename="../client/desktop/management_tab.cc" line="1972"/>
         <source>The host has an incorrect address.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4195,109 +4229,109 @@ Hosts skipped: %6</source>
 <context>
     <name>MasterPasswordDialog</name>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="48"/>
+        <location filename="../client/android/master_password_dialog.cc" line="51"/>
         <source>Set Master Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="49"/>
+        <location filename="../client/android/master_password_dialog.cc" line="52"/>
         <source>Set a master password required to unlock the application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="53"/>
-        <location filename="../client/android/master_password_dialog.cc" line="180"/>
+        <location filename="../client/android/master_password_dialog.cc" line="56"/>
+        <location filename="../client/android/master_password_dialog.cc" line="192"/>
         <source>Unlock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="54"/>
+        <location filename="../client/android/master_password_dialog.cc" line="57"/>
         <source>Enter the master password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="58"/>
+        <location filename="../client/android/master_password_dialog.cc" line="61"/>
         <source>Change Master Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="59"/>
+        <location filename="../client/android/master_password_dialog.cc" line="62"/>
         <source>Enter your current password and choose a new one.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="63"/>
+        <location filename="../client/android/master_password_dialog.cc" line="66"/>
         <source>New Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="63"/>
+        <location filename="../client/android/master_password_dialog.cc" line="66"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="78"/>
+        <location filename="../client/android/master_password_dialog.cc" line="81"/>
         <source>Current Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="88"/>
+        <location filename="../client/android/master_password_dialog.cc" line="91"/>
         <source>Confirm Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="93"/>
+        <location filename="../client/android/master_password_dialog.cc" line="96"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="94"/>
+        <location filename="../client/android/master_password_dialog.cc" line="97"/>
         <source>Change</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="94"/>
+        <location filename="../client/android/master_password_dialog.cc" line="97"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="117"/>
+        <location filename="../client/android/master_password_dialog.cc" line="129"/>
         <source>Invalid master password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="130"/>
+        <location filename="../client/android/master_password_dialog.cc" line="142"/>
         <source>Password cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="137"/>
+        <location filename="../client/android/master_password_dialog.cc" line="149"/>
         <source>The entered passwords do not match.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="147"/>
+        <location filename="../client/android/master_password_dialog.cc" line="159"/>
         <source>Unable to set master password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="156"/>
+        <location filename="../client/android/master_password_dialog.cc" line="168"/>
         <source>Invalid current password or unable to change it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="181"/>
+        <location filename="../client/android/master_password_dialog.cc" line="193"/>
         <source>Use password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="198"/>
-        <location filename="../client/android/master_password_dialog.cc" line="206"/>
+        <location filename="../client/android/master_password_dialog.cc" line="210"/>
+        <location filename="../client/android/master_password_dialog.cc" line="218"/>
         <source>Biometric unlock failed. Enter the master password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="202"/>
+        <location filename="../client/android/master_password_dialog.cc" line="214"/>
         <source>Biometrics changed. Enter the master password to continue.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4413,7 +4447,7 @@ Hosts skipped: %6</source>
 <context>
     <name>NetworkWorker</name>
     <message>
-        <location filename="../client/workers/network_worker.cc" line="369"/>
+        <location filename="../client/workers/network_worker.cc" line="370"/>
         <source>Failed to connect to the relay server</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4422,7 +4456,7 @@ Hosts skipped: %6</source>
     <name>NotifierWindow</name>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="345"/>
-        <location filename="../host/ui/notifier_window.cc" line="319"/>
+        <location filename="../host/ui/notifier_window.cc" line="318"/>
         <source>Pause</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4433,38 +4467,38 @@ Hosts skipped: %6</source>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="293"/>
-        <location filename="../host/ui/notifier_window.cc" line="303"/>
+        <location filename="../host/ui/notifier_window.cc" line="302"/>
         <source>Lock mouse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="319"/>
-        <location filename="../host/ui/notifier_window.cc" line="311"/>
+        <location filename="../host/ui/notifier_window.cc" line="310"/>
         <source>Lock keyboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="270"/>
+        <location filename="../host/ui/notifier_window.cc" line="269"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="303"/>
+        <location filename="../host/ui/notifier_window.cc" line="302"/>
         <source>Unlock mouse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="311"/>
+        <location filename="../host/ui/notifier_window.cc" line="310"/>
         <source>Unlock keyboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="319"/>
+        <location filename="../host/ui/notifier_window.cc" line="318"/>
         <source>Resume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/notifier_window.cc" line="544"/>
+        <location filename="../host/ui/notifier_window.cc" line="543"/>
         <source>Aspia Host</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4557,73 +4591,73 @@ Hosts skipped: %6</source>
 <context>
     <name>PermissionDialog</name>
     <message>
-        <location filename="../host/ui/permission_dialog.cc" line="38"/>
+        <location filename="../host/ui/permission_dialog.cc" line="40"/>
         <source>Review System Access</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/permission_dialog.cc" line="43"/>
+        <location filename="../host/ui/permission_dialog.cc" line="45"/>
         <source>Aspia Host requires your permission to access system capabilities.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/permission_dialog.cc" line="49"/>
+        <location filename="../host/ui/permission_dialog.cc" line="51"/>
         <source>Review the permissions below and grant the ones that are missing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/permission_dialog.cc" line="62"/>
+        <location filename="../host/ui/permission_dialog.cc" line="64"/>
         <source>Screen Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/permission_dialog.cc" line="63"/>
+        <location filename="../host/ui/permission_dialog.cc" line="65"/>
         <source>Required so a remote user can see this screen.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/permission_dialog.cc" line="63"/>
         <location filename="../host/ui/permission_dialog.cc" line="65"/>
+        <location filename="../host/ui/permission_dialog.cc" line="67"/>
         <source>Request Access...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/permission_dialog.cc" line="64"/>
+        <location filename="../host/ui/permission_dialog.cc" line="66"/>
         <source>Accessibility</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/permission_dialog.cc" line="65"/>
+        <location filename="../host/ui/permission_dialog.cc" line="67"/>
         <source>Required so a remote user can control the mouse and keyboard.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/permission_dialog.cc" line="66"/>
+        <location filename="../host/ui/permission_dialog.cc" line="68"/>
         <source>Full Disk Access</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/permission_dialog.cc" line="67"/>
+        <location filename="../host/ui/permission_dialog.cc" line="69"/>
         <source>Required to transfer files from protected folders.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/permission_dialog.cc" line="67"/>
+        <location filename="../host/ui/permission_dialog.cc" line="69"/>
         <source>Open Preferences...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/permission_dialog.cc" line="120"/>
+        <location filename="../host/ui/permission_dialog.cc" line="122"/>
         <source>Open Settings...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/permission_dialog.cc" line="140"/>
+        <location filename="../host/ui/permission_dialog.cc" line="142"/>
         <source>Granted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/permission_dialog.cc" line="140"/>
+        <location filename="../host/ui/permission_dialog.cc" line="142"/>
         <source>Denied</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5506,7 +5540,7 @@ Hosts skipped: %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="205"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="203"/>
         <source>Failed to approve the host.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6903,7 +6937,7 @@ Are you sure you want to continue?</source>
     <name>StatisticsDialog</name>
     <message>
         <location filename="../client/desktop/desktop/statistics_dialog.ui" line="14"/>
-        <location filename="../client/android/statistics_dialog.cc" line="176"/>
+        <location filename="../client/android/statistics_dialog.cc" line="175"/>
         <source>Statistics</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6918,7 +6952,7 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/android/statistics_dialog.cc" line="209"/>
+        <location filename="../client/android/statistics_dialog.cc" line="208"/>
         <source>Close</source>
         <translation type="unfinished">Fechar</translation>
     </message>
@@ -6934,32 +6968,32 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoApplications</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_applications.ui" line="48"/>
+        <location filename="../common/sys_info/sys_info_widget_applications.ui" line="48"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_applications.ui" line="53"/>
+        <location filename="../common/sys_info/sys_info_widget_applications.ui" line="53"/>
         <source>Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_applications.ui" line="58"/>
+        <location filename="../common/sys_info/sys_info_widget_applications.ui" line="58"/>
         <source>Publisher</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_applications.ui" line="66"/>
+        <location filename="../common/sys_info/sys_info_widget_applications.ui" line="66"/>
         <source>Copy Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_applications.ui" line="71"/>
+        <location filename="../common/sys_info/sys_info_widget_applications.ui" line="71"/>
         <source>Copy Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_applications.ui" line="76"/>
+        <location filename="../common/sys_info/sys_info_widget_applications.ui" line="76"/>
         <source>Search in Google</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6967,47 +7001,47 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoConnections</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_connections.ui" line="48"/>
+        <location filename="../common/sys_info/sys_info_widget_connections.ui" line="48"/>
         <source>Process Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_connections.ui" line="53"/>
+        <location filename="../common/sys_info/sys_info_widget_connections.ui" line="53"/>
         <source>Protocol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_connections.ui" line="58"/>
+        <location filename="../common/sys_info/sys_info_widget_connections.ui" line="58"/>
         <source>Local Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_connections.ui" line="63"/>
+        <location filename="../common/sys_info/sys_info_widget_connections.ui" line="63"/>
         <source>Local Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_connections.ui" line="68"/>
+        <location filename="../common/sys_info/sys_info_widget_connections.ui" line="68"/>
         <source>Remote Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_connections.ui" line="73"/>
+        <location filename="../common/sys_info/sys_info_widget_connections.ui" line="73"/>
         <source>Remote Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_connections.ui" line="78"/>
+        <location filename="../common/sys_info/sys_info_widget_connections.ui" line="78"/>
         <source>State</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_connections.ui" line="86"/>
+        <location filename="../common/sys_info/sys_info_widget_connections.ui" line="86"/>
         <source>Copy Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_connections.ui" line="91"/>
+        <location filename="../common/sys_info/sys_info_widget_connections.ui" line="91"/>
         <source>Copy Value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7015,32 +7049,32 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoDevices</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_devices.ui" line="48"/>
+        <location filename="../common/sys_info/sys_info_widget_devices.ui" line="48"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_devices.ui" line="53"/>
+        <location filename="../common/sys_info/sys_info_widget_devices.ui" line="53"/>
         <source>Driver Vendor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_devices.ui" line="58"/>
+        <location filename="../common/sys_info/sys_info_widget_devices.ui" line="58"/>
         <source>Device ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_devices.ui" line="66"/>
+        <location filename="../common/sys_info/sys_info_widget_devices.ui" line="66"/>
         <source>Copy Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_devices.ui" line="71"/>
+        <location filename="../common/sys_info/sys_info_widget_devices.ui" line="71"/>
         <source>Copy Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_devices.ui" line="76"/>
+        <location filename="../common/sys_info/sys_info_widget_devices.ui" line="76"/>
         <source>Search in Google</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7048,42 +7082,72 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoDrivers</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_drivers.ui" line="48"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="48"/>
         <source>Display Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_drivers.ui" line="53"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="53"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_drivers.ui" line="58"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="58"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_drivers.ui" line="63"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="63"/>
         <source>Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_drivers.ui" line="68"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="68"/>
         <source>Startup Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_drivers.ui" line="73"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="73"/>
         <source>Executable File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_drivers.ui" line="81"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="81"/>
         <source>Copy Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_drivers.ui" line="86"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="86"/>
+        <source>Copy Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoDrives</name>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.ui" line="43"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.ui" line="64"/>
+        <source>Parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.ui" line="48"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.ui" line="69"/>
+        <source>Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.ui" line="78"/>
+        <source>Copy Row</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.ui" line="83"/>
+        <source>Copy Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.ui" line="88"/>
         <source>Copy Value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7091,27 +7155,27 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoEnvVars</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_env_vars.ui" line="45"/>
+        <location filename="../common/sys_info/sys_info_widget_env_vars.ui" line="45"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_env_vars.ui" line="50"/>
+        <location filename="../common/sys_info/sys_info_widget_env_vars.ui" line="50"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_env_vars.ui" line="58"/>
+        <location filename="../common/sys_info/sys_info_widget_env_vars.ui" line="58"/>
         <source>Copy Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_env_vars.ui" line="63"/>
+        <location filename="../common/sys_info/sys_info_widget_env_vars.ui" line="63"/>
         <source>Copy Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_env_vars.ui" line="68"/>
+        <location filename="../common/sys_info/sys_info_widget_env_vars.ui" line="68"/>
         <source>Copy Value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7119,63 +7183,63 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoEventLogs</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_event_logs.ui" line="135"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="135"/>
         <source>Level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_event_logs.ui" line="130"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="130"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_event_logs.ui" line="53"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="53"/>
         <source>First</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_event_logs.ui" line="60"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="60"/>
         <source>Previous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_event_logs.ui" line="67"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="67"/>
         <source>Next</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_event_logs.ui" line="74"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="74"/>
         <source>Last</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_event_logs.ui" line="94"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="94"/>
         <source>Events type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_event_logs.ui" line="140"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="140"/>
         <source>Event ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_event_logs.ui" line="145"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="145"/>
         <source>Source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_event_logs.ui" line="150"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_event_logs.ui" line="177"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="150"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="177"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_event_logs.ui" line="195"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="195"/>
         <source>Copy Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_event_logs.ui" line="200"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="200"/>
         <source>Copy Value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7183,27 +7247,27 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoLicenses</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_licenses.ui" line="39"/>
+        <location filename="../common/sys_info/sys_info_widget_licenses.ui" line="39"/>
         <source>Parameter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_licenses.ui" line="44"/>
+        <location filename="../common/sys_info/sys_info_widget_licenses.ui" line="44"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_licenses.ui" line="52"/>
+        <location filename="../common/sys_info/sys_info_widget_licenses.ui" line="52"/>
         <source>Copy Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_licenses.ui" line="57"/>
+        <location filename="../common/sys_info/sys_info_widget_licenses.ui" line="57"/>
         <source>Copy Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_licenses.ui" line="62"/>
+        <location filename="../common/sys_info/sys_info_widget_licenses.ui" line="62"/>
         <source>Copy Value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7211,22 +7275,22 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoLocalUserGroups</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_local_user_groups.ui" line="42"/>
+        <location filename="../common/sys_info/sys_info_widget_local_user_groups.ui" line="42"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_local_user_groups.ui" line="50"/>
+        <location filename="../common/sys_info/sys_info_widget_local_user_groups.ui" line="50"/>
         <source>Copy Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_local_user_groups.ui" line="55"/>
+        <location filename="../common/sys_info/sys_info_widget_local_user_groups.ui" line="55"/>
         <source>Copy Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_local_user_groups.ui" line="60"/>
+        <location filename="../common/sys_info/sys_info_widget_local_user_groups.ui" line="60"/>
         <source>Copy Value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7234,27 +7298,27 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoLocalUsers</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_local_users.ui" line="39"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="39"/>
         <source>Parameter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_local_users.ui" line="44"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="44"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_local_users.ui" line="52"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="52"/>
         <source>Copy Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_local_users.ui" line="57"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="57"/>
         <source>Copy Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_local_users.ui" line="62"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="62"/>
         <source>Copy Value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7262,27 +7326,27 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoMonitors</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.ui" line="39"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.ui" line="39"/>
         <source>Parameter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.ui" line="44"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.ui" line="44"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.ui" line="52"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.ui" line="52"/>
         <source>Copy Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.ui" line="57"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.ui" line="57"/>
         <source>Copy Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.ui" line="62"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.ui" line="62"/>
         <source>Copy Value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7290,27 +7354,27 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoNetAdapters</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_adapters.ui" line="39"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.ui" line="39"/>
         <source>Parameter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_adapters.ui" line="44"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.ui" line="44"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_adapters.ui" line="52"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.ui" line="52"/>
         <source>Copy Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_adapters.ui" line="57"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.ui" line="57"/>
         <source>Copy Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_adapters.ui" line="62"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.ui" line="62"/>
         <source>Copy Value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7318,27 +7382,27 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoNetShares</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_shares.ui" line="39"/>
+        <location filename="../common/sys_info/sys_info_widget_net_shares.ui" line="39"/>
         <source>Parameter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_shares.ui" line="44"/>
+        <location filename="../common/sys_info/sys_info_widget_net_shares.ui" line="44"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_shares.ui" line="52"/>
+        <location filename="../common/sys_info/sys_info_widget_net_shares.ui" line="52"/>
         <source>Copy Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_shares.ui" line="57"/>
+        <location filename="../common/sys_info/sys_info_widget_net_shares.ui" line="57"/>
         <source>Copy Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_shares.ui" line="62"/>
+        <location filename="../common/sys_info/sys_info_widget_net_shares.ui" line="62"/>
         <source>Copy Value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7346,27 +7410,27 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoOpenFiles</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_open_files.ui" line="53"/>
+        <location filename="../common/sys_info/sys_info_widget_open_files.ui" line="53"/>
         <source>User Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_open_files.ui" line="58"/>
+        <location filename="../common/sys_info/sys_info_widget_open_files.ui" line="58"/>
         <source>Lock Count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_open_files.ui" line="48"/>
+        <location filename="../common/sys_info/sys_info_widget_open_files.ui" line="48"/>
         <source>File Path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_open_files.ui" line="66"/>
+        <location filename="../common/sys_info/sys_info_widget_open_files.ui" line="66"/>
         <source>Copy Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_open_files.ui" line="71"/>
+        <location filename="../common/sys_info/sys_info_widget_open_files.ui" line="71"/>
         <source>Copy Value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7374,27 +7438,27 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoPowerOptions</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.ui" line="42"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.ui" line="42"/>
         <source>Parameter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.ui" line="47"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.ui" line="47"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.ui" line="55"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.ui" line="55"/>
         <source>Copy Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.ui" line="60"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.ui" line="60"/>
         <source>Copy Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.ui" line="65"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.ui" line="65"/>
         <source>Copy Value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7402,27 +7466,27 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoPrinters</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_printers.ui" line="39"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.ui" line="39"/>
         <source>Parameter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_printers.ui" line="44"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.ui" line="44"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_printers.ui" line="52"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.ui" line="52"/>
         <source>Copy Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_printers.ui" line="57"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.ui" line="57"/>
         <source>Copy Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_printers.ui" line="62"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.ui" line="62"/>
         <source>Copy Value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7430,47 +7494,47 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoProcesses</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_processes.ui" line="45"/>
+        <location filename="../common/sys_info/sys_info_widget_processes.ui" line="45"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_processes.ui" line="50"/>
+        <location filename="../common/sys_info/sys_info_widget_processes.ui" line="50"/>
         <source>ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_processes.ui" line="55"/>
+        <location filename="../common/sys_info/sys_info_widget_processes.ui" line="55"/>
         <source>Memory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_processes.ui" line="60"/>
+        <location filename="../common/sys_info/sys_info_widget_processes.ui" line="60"/>
         <source>Session ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_processes.ui" line="65"/>
+        <location filename="../common/sys_info/sys_info_widget_processes.ui" line="65"/>
         <source>User Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_processes.ui" line="70"/>
+        <location filename="../common/sys_info/sys_info_widget_processes.ui" line="70"/>
         <source>Path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_processes.ui" line="78"/>
+        <location filename="../common/sys_info/sys_info_widget_processes.ui" line="78"/>
         <source>Copy Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_processes.ui" line="83"/>
+        <location filename="../common/sys_info/sys_info_widget_processes.ui" line="83"/>
         <source>Copy Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_processes.ui" line="88"/>
+        <location filename="../common/sys_info/sys_info_widget_processes.ui" line="88"/>
         <source>Copy Value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7478,32 +7542,32 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoRoutes</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_routes.ui" line="48"/>
+        <location filename="../common/sys_info/sys_info_widget_routes.ui" line="48"/>
         <source>Destonation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_routes.ui" line="53"/>
+        <location filename="../common/sys_info/sys_info_widget_routes.ui" line="53"/>
         <source>Mask</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_routes.ui" line="58"/>
+        <location filename="../common/sys_info/sys_info_widget_routes.ui" line="58"/>
         <source>Gateway</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_routes.ui" line="63"/>
+        <location filename="../common/sys_info/sys_info_widget_routes.ui" line="63"/>
         <source>Metric</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_routes.ui" line="71"/>
+        <location filename="../common/sys_info/sys_info_widget_routes.ui" line="71"/>
         <source>Copy Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_routes.ui" line="76"/>
+        <location filename="../common/sys_info/sys_info_widget_routes.ui" line="76"/>
         <source>Copy Value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7511,47 +7575,47 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoServices</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_services.ui" line="48"/>
+        <location filename="../common/sys_info/sys_info_widget_services.ui" line="48"/>
         <source>Display Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_services.ui" line="53"/>
+        <location filename="../common/sys_info/sys_info_widget_services.ui" line="53"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_services.ui" line="58"/>
+        <location filename="../common/sys_info/sys_info_widget_services.ui" line="58"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_services.ui" line="63"/>
+        <location filename="../common/sys_info/sys_info_widget_services.ui" line="63"/>
         <source>Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_services.ui" line="68"/>
+        <location filename="../common/sys_info/sys_info_widget_services.ui" line="68"/>
         <source>Startup Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_services.ui" line="73"/>
+        <location filename="../common/sys_info/sys_info_widget_services.ui" line="73"/>
         <source>Account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_services.ui" line="78"/>
+        <location filename="../common/sys_info/sys_info_widget_services.ui" line="78"/>
         <source>Executable File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_services.ui" line="86"/>
+        <location filename="../common/sys_info/sys_info_widget_services.ui" line="86"/>
         <source>Copy Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_services.ui" line="91"/>
+        <location filename="../common/sys_info/sys_info_widget_services.ui" line="91"/>
         <source>Copy Value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7559,27 +7623,27 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoSummary</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.ui" line="39"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.ui" line="39"/>
         <source>Parameter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.ui" line="44"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.ui" line="44"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.ui" line="52"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.ui" line="52"/>
         <source>Copy Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.ui" line="57"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.ui" line="57"/>
         <source>Copy Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.ui" line="62"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.ui" line="62"/>
         <source>Copy Value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7587,144 +7651,622 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoVideoAdapters</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_video_adapters.ui" line="39"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.ui" line="39"/>
         <source>Parameter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_video_adapters.ui" line="44"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.ui" line="44"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_video_adapters.ui" line="52"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.ui" line="52"/>
         <source>Copy Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_video_adapters.ui" line="57"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.ui" line="57"/>
         <source>Copy Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_video_adapters.ui" line="62"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.ui" line="62"/>
         <source>Copy Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoView</name>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.ui" line="102"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.ui" line="105"/>
+        <source>Save (Ctrl+S)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.ui" line="108"/>
+        <source>Ctrl+S</source>
+        <translation type="unfinished">Ctrl+S</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.ui" line="117"/>
+        <source>Print</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.ui" line="120"/>
+        <source>Print (Ctrl+P)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.ui" line="123"/>
+        <source>Ctrl+P</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.ui" line="132"/>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.ui" line="135"/>
+        <source>Refresh (F5)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.ui" line="138"/>
+        <source>F5</source>
+        <translation type="unfinished">F5</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="330"/>
+        <source>HTML File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="330"/>
+        <source>HTML File (*.html)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="337"/>
+        <source>Failed to save file: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="361"/>
+        <source>Summary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="368"/>
+        <source>Hardware</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="371"/>
+        <source>Devices</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="374"/>
+        <source>Drives</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="377"/>
+        <source>Video Adapters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="380"/>
+        <source>Monitors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="383"/>
+        <source>Printers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="386"/>
+        <source>Power Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="400"/>
+        <source>Software</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="403"/>
+        <source>Applications</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="406"/>
+        <source>Drivers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="409"/>
+        <source>Services</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="412"/>
+        <source>Processes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="415"/>
+        <source>Licenses</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="428"/>
+        <source>Network</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="431"/>
+        <source>Network Adapters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="434"/>
+        <source>Routes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="437"/>
+        <source>Connections</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="440"/>
+        <source>Network Shares</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="443"/>
+        <source>Open Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="456"/>
+        <source>Operating System</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="459"/>
+        <source>Environment Variables</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="462"/>
+        <source>Event Logs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="465"/>
+        <source>Users</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="468"/>
+        <source>User Groups</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>SysInfoWidgetDrivers</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_drivers.cc" line="132"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="132"/>
         <source>Continue Pending</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_drivers.cc" line="134"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="134"/>
         <source>Pause Pending</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_drivers.cc" line="136"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="136"/>
         <source>Paused</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_drivers.cc" line="138"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="138"/>
         <source>Running</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_drivers.cc" line="140"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="140"/>
         <source>Start Pending</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_drivers.cc" line="142"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="142"/>
         <source>Stop Pending</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_drivers.cc" line="144"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="144"/>
         <source>Stopped</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_drivers.cc" line="146"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_drivers.cc" line="168"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="146"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="168"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_drivers.cc" line="158"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="158"/>
         <source>Auto Start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_drivers.cc" line="160"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="160"/>
         <source>Demand Start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_drivers.cc" line="162"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="162"/>
         <source>Disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_drivers.cc" line="164"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="164"/>
         <source>Boot Start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_drivers.cc" line="166"/>
+        <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="166"/>
         <source>System Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoWidgetDrives</name>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="318"/>
+        <source>Path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="321"/>
+        <source>Model</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="324"/>
+        <source>Serial Number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="327"/>
+        <source>Firmware Revision</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="331"/>
+        <source>Bus Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="334"/>
+        <source>Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="336"/>
+        <source>Media Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="336"/>
+        <source>Solid State</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="336"/>
+        <source>Rotating</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="339"/>
+        <source>Rotation Rate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="339"/>
+        <source>%1 RPM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="343"/>
+        <source>Cache Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="347"/>
+        <source>Removable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="347"/>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="347"/>
+        <source>No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="416"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="491"/>
+        <source>Parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="416"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="451"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="491"/>
+        <source>Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="417"/>
+        <source>Health Data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="417"/>
+        <source>Not available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="451"/>
+        <source>Attribute</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="451"/>
+        <source>Worst</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="451"/>
+        <source>Threshold</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="452"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="491"/>
+        <source>Raw</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="452"/>
+        <source>Status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="463"/>
+        <source>OK. Always passed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="465"/>
+        <source>OK. Value is normal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="467"/>
+        <source>Warning. Value is pre-failure</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="469"/>
+        <source>Warning. Value is not normal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="476"/>
+        <source>Unknown Attribute</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="500"/>
+        <source>Spare capacity is below the threshold</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="502"/>
+        <source>Temperature is outside of the operating range</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="504"/>
+        <source>Reliability is degraded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="506"/>
+        <source>Media is in read-only mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="508"/>
+        <source>Volatile memory backup device failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="510"/>
+        <source>Persistent memory region is unreliable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="514"/>
+        <source>Critical Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="515"/>
+        <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="520"/>
+        <source>Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="521"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="532"/>
+        <source>%1 C</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="531"/>
+        <source>Temperature Sensor %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="536"/>
+        <source>Available Spare</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="536"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="539"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="541"/>
+        <source>%1%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="538"/>
+        <source>Available Spare Threshold</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="541"/>
+        <source>Percentage Used</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="544"/>
+        <source>Data Read</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="547"/>
+        <source>Data Written</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="551"/>
+        <source>Host Read Commands</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="553"/>
+        <source>Host Write Commands</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="555"/>
+        <source>Controller Busy Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="558"/>
+        <source>Power Cycles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="560"/>
+        <source>Power-On Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="563"/>
+        <source>Unsafe Shutdowns</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="565"/>
+        <source>Media Errors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="567"/>
+        <source>Error Log Entries</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="570"/>
+        <source>Warning Temperature Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="573"/>
+        <source>Critical Temperature Time</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>SysInfoWidgetEventLogs</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_event_logs.cc" line="68"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="68"/>
         <source>Application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_event_logs.cc" line="70"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="70"/>
         <source>Security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_event_logs.cc" line="72"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="72"/>
         <source>System</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_event_logs.cc" line="305"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="305"/>
         <source>Information</source>
         <translation type="unfinished">Información</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_event_logs.cc" line="307"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="307"/>
         <source>Warning</source>
         <translation type="unfinished">Advertencia</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_event_logs.cc" line="309"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="309"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_event_logs.cc" line="311"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="311"/>
         <source>Audit Success</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_event_logs.cc" line="313"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="313"/>
         <source>Audit Failure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_event_logs.cc" line="315"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="315"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7732,37 +8274,37 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoWidgetLicenses</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_licenses.cc" line="138"/>
+        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="138"/>
         <source>License Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_licenses.cc" line="141"/>
+        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="141"/>
         <source>License Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_licenses.cc" line="144"/>
+        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="144"/>
         <source>Organization</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_licenses.cc" line="147"/>
+        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="147"/>
         <source>Owner</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_licenses.cc" line="150"/>
+        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="150"/>
         <source>Product ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_licenses.cc" line="153"/>
+        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="153"/>
         <source>Product Key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_licenses.cc" line="156"/>
+        <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="156"/>
         <source>Unknown Field</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7770,56 +8312,56 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoWidgetLocalUsers</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_local_users.cc" line="147"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="147"/>
         <source>Full Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_local_users.cc" line="150"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="150"/>
         <source>Home Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_local_users.cc" line="152"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="152"/>
         <source>Disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_local_users.cc" line="152"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_local_users.cc" line="153"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_local_users.cc" line="154"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="152"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="153"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="154"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_local_users.cc" line="152"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_local_users.cc" line="153"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_local_users.cc" line="154"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="152"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="153"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="154"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_local_users.cc" line="153"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="153"/>
         <source>Password Expired</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_local_users.cc" line="154"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="154"/>
         <source>Don&apos;t Expire Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_local_users.cc" line="158"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="158"/>
         <source>Never</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_local_users.cc" line="162"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="162"/>
         <source>Last Logon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_local_users.cc" line="174"/>
+        <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="174"/>
         <source>Groups</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7827,153 +8369,153 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoWidgetMonitors</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="154"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="154"/>
         <source>Monitor Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="157"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="157"/>
         <source>Manufacturer Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="160"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="160"/>
         <source>Monitor ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="163"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="163"/>
         <source>Serial Number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="167"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="167"/>
         <source>EDID Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="173"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="173"/>
         <source>Date Of Manufacture</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="174"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="174"/>
         <source>Week %1 / %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="179"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="179"/>
         <source>Gamma</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="183"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="183"/>
         <source>Image Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="184"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="184"/>
         <source>%1x%2 cm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="193"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="193"/>
         <source>Diagonal Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="198"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="198"/>
         <source>Resolution</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="205"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="205"/>
         <source>Horizontal Frequency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="206"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="206"/>
         <source>%1 - %2 kHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="212"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="212"/>
         <source>Vertical Frequency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="213"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="213"/>
         <source>%1 - %2 Hz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="218"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="218"/>
         <source>Pixel Clock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="218"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="221"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="218"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="221"/>
         <source>%1 MHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="221"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="221"/>
         <source>Maximum Pixel Clock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="223"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="223"/>
         <source>Input Signal Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="226"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="227"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="228"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="229"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="230"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="231"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="226"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="227"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="228"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="229"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="230"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="231"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="226"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="227"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="228"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="229"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="230"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="231"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="226"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="227"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="228"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="229"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="230"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="231"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="234"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="234"/>
         <source>Supported Features</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="243"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="243"/>
         <source>%1 Hz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="247"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="247"/>
         <source>Supported Video Modes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="294"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="294"/>
         <source>Digital</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="296"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="296"/>
         <source>Analog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_monitors.cc" line="298"/>
+        <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="298"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7981,67 +8523,67 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoWidgetNetAdapters</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_adapters.cc" line="140"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="140"/>
         <source>Adapter Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_adapters.cc" line="143"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="143"/>
         <source>Interface Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_adapters.cc" line="146"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="146"/>
         <source>Connection Speed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_adapters.cc" line="149"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="149"/>
         <source>MAC Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_adapters.cc" line="151"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="151"/>
         <source>DHCP Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_adapters.cc" line="151"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="151"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_adapters.cc" line="151"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="151"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_adapters.cc" line="156"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="156"/>
         <source>DHCP Server #%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_adapters.cc" line="156"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="156"/>
         <source>DHCP Server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_adapters.cc" line="168"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="168"/>
         <source>Address #%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_adapters.cc" line="168"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="168"/>
         <source>Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_adapters.cc" line="176"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="176"/>
         <source>Gateway #%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_adapters.cc" line="176"/>
+        <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="176"/>
         <source>Gateway</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8049,32 +8591,32 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoWidgetNetShares</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_shares.cc" line="133"/>
+        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="133"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_shares.cc" line="136"/>
+        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="136"/>
         <source>Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_shares.cc" line="139"/>
+        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="139"/>
         <source>Local Path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_shares.cc" line="141"/>
+        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="141"/>
         <source>Current Uses</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_shares.cc" line="144"/>
+        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="144"/>
         <source>Not limited</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_net_shares.cc" line="145"/>
+        <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="145"/>
         <source>Maximum Uses</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8082,170 +8624,170 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoWidgetPowerOptions</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="146"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="146"/>
         <source>Power Source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="148"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="148"/>
         <source>Battery Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="154"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="154"/>
         <source>Battery Life Percent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="160"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="160"/>
         <source>Full Battery Life Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="167"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="167"/>
         <source>Remaining Battery Life Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="183"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="183"/>
         <source>Device Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="186"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="186"/>
         <source>Manufacturer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="189"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="189"/>
         <source>Manufacture Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="192"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="192"/>
         <source>Unique Id</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="195"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="195"/>
         <source>Serial Number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="198"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="198"/>
         <source>Tempareture</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="201"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="201"/>
         <source>Design Capacity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="201"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="207"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="213"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="201"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="207"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="213"/>
         <source>%1 mWh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="204"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="204"/>
         <source>Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="207"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="207"/>
         <source>Full Charged Capacity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="210"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="210"/>
         <source>Depreciation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="213"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="213"/>
         <source>Current Capacity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="216"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="216"/>
         <source>Voltage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="216"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="216"/>
         <source>%1 mV</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="222"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="306"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="222"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="306"/>
         <source>Charging</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="222"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="225"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="228"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="231"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="222"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="225"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="228"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="231"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="225"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="304"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="225"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="304"/>
         <source>Critical</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="228"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="228"/>
         <source>Discharging</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="231"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="231"/>
         <source>Power OnLine</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="235"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="235"/>
         <source>State</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="240"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="240"/>
         <source>Battery #%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="282"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="282"/>
         <source>DC Battery</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="285"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="285"/>
         <source>AC Line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="288"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="310"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="288"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="310"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="300"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="300"/>
         <source>High</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="302"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="302"/>
         <source>Low</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_power_options.cc" line="308"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="308"/>
         <source>No Battery</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8253,44 +8795,44 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoWidgetPrinters</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_printers.cc" line="138"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="138"/>
         <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_printers.cc" line="138"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_printers.cc" line="146"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="138"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="146"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_printers.cc" line="138"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_printers.cc" line="146"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="138"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="146"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_printers.cc" line="141"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="141"/>
         <source>Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_printers.cc" line="144"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="144"/>
         <source>Driver</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_printers.cc" line="146"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="146"/>
         <source>Shared</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_printers.cc" line="149"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="149"/>
         <source>Share Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_printers.cc" line="151"/>
+        <location filename="../common/sys_info/sys_info_widget_printers.cc" line="151"/>
         <source>Jobs Count</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8298,12 +8840,12 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoWidgetProcesses</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_processes.cc" line="144"/>
+        <location filename="../common/sys_info/sys_info_widget_processes.cc" line="144"/>
         <source>System Idle Process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_processes.cc" line="146"/>
+        <location filename="../common/sys_info/sys_info_widget_processes.cc" line="146"/>
         <source>Unknown Process</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8311,68 +8853,68 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoWidgetServices</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_services.cc" line="138"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="138"/>
         <source>Continue Pending</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_services.cc" line="140"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="140"/>
         <source>Pause Pending</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_services.cc" line="142"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="142"/>
         <source>Paused</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_services.cc" line="144"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="144"/>
         <source>Running</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_services.cc" line="146"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="146"/>
         <source>Start Pending</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_services.cc" line="148"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="148"/>
         <source>Stop Pending</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_services.cc" line="150"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="150"/>
         <source>Stopped</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_services.cc" line="152"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_services.cc" line="174"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="152"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="174"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_services.cc" line="164"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="164"/>
         <source>Auto Start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_services.cc" line="166"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="166"/>
         <source>Demand Start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_services.cc" line="168"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="168"/>
         <source>Disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_services.cc" line="170"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="170"/>
         <source>Boot Start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_services.cc" line="172"/>
+        <location filename="../common/sys_info/sys_info_widget_services.cc" line="172"/>
         <source>System Start</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8380,178 +8922,178 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoWidgetSummary</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="136"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="167"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="136"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="167"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="139"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="139"/>
         <source>Domain</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="142"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="142"/>
         <source>Workgroup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="145"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="145"/>
         <source>Uptime</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="148"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="148"/>
         <source>Computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="154"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="154"/>
         <source>Host Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="155"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="155"/>
         <source>Client Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="156"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="156"/>
         <source>Router Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="158"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="158"/>
         <source>Aspia Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="170"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="242"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="170"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="242"/>
         <source>Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="173"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="173"/>
         <source>Architecture</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="176"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="176"/>
         <source>License Key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="179"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="179"/>
         <source>Install Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="184"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="184"/>
         <source>Operating System</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="194"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="266"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="194"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="266"/>
         <source>Manufacturer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="197"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="212"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="197"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="212"/>
         <source>Model</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="202"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="202"/>
         <source>Motherboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="215"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="239"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="215"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="239"/>
         <source>Vendor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="218"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="218"/>
         <source>Packages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="221"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="221"/>
         <source>Cores</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="224"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="224"/>
         <source>Threads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="229"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="229"/>
         <source>Processor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="245"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="245"/>
         <source>Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="269"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="269"/>
         <source>Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="272"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="272"/>
         <source>Speed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="272"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="272"/>
         <source>%1 MHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="275"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="275"/>
         <source>Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="278"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="278"/>
         <source>Form Factor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="281"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="281"/>
         <source>Part Number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="285"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="285"/>
         <source>Installed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="285"/>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="357"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="285"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="357"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="295"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="295"/>
         <source>Memory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="324"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="324"/>
         <source>%1 (%2 free)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_summary.cc" line="334"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="334"/>
         <source>Logical Drives</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8559,52 +9101,52 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoWidgetVideoAdapters</name>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_video_adapters.cc" line="131"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="131"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_video_adapters.cc" line="134"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="134"/>
         <source>Adapter String</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_video_adapters.cc" line="137"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="137"/>
         <source>BIOS String</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_video_adapters.cc" line="140"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="140"/>
         <source>Chip Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_video_adapters.cc" line="143"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="143"/>
         <source>DAC Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_video_adapters.cc" line="146"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="146"/>
         <source>Memory Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_video_adapters.cc" line="146"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="146"/>
         <source>%1 bytes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_video_adapters.cc" line="149"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="149"/>
         <source>Driver Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_video_adapters.cc" line="152"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="152"/>
         <source>Driver Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/sys_info_widget_video_adapters.cc" line="155"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="155"/>
         <source>Driver Provider</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8612,204 +9154,18 @@ Are you sure you want to continue?</source>
 <context>
     <name>SystemInfoWindow</name>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.ui" line="14"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="40"/>
+        <location filename="../host/ui/system_info_window.cc" line="40"/>
         <source>System Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.ui" line="102"/>
-        <source>Save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.ui" line="105"/>
-        <source>Save (Ctrl+S)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.ui" line="108"/>
         <source>Ctrl+S</source>
-        <translation type="unfinished">Ctrl+S</translation>
+        <translation type="obsolete">Ctrl+S</translation>
     </message>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.ui" line="117"/>
-        <source>Print</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.ui" line="120"/>
-        <source>Print (Ctrl+P)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.ui" line="123"/>
-        <source>Ctrl+P</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.ui" line="128"/>
-        <source>Copy Row</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.ui" line="133"/>
-        <source>Copy Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.ui" line="138"/>
-        <source>Copy Value</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.ui" line="147"/>
-        <source>Refresh</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.ui" line="150"/>
-        <source>Refresh (F5)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.ui" line="153"/>
         <source>F5</source>
-        <translation type="unfinished">F5</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="414"/>
-        <source>Summary</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="421"/>
-        <source>Hardware</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="424"/>
-        <source>Devices</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="427"/>
-        <source>Video Adapters</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="430"/>
-        <source>Monitors</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="433"/>
-        <source>Printers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="436"/>
-        <source>Power Options</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="449"/>
-        <source>Software</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="452"/>
-        <source>Applications</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="455"/>
-        <source>Drivers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="458"/>
-        <source>Services</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="461"/>
-        <source>Processes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="464"/>
-        <source>Licenses</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="477"/>
-        <source>Network</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="480"/>
-        <source>Network Adapters</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="483"/>
-        <source>Routes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="486"/>
-        <source>Connections</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="489"/>
-        <source>Network Shares</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="492"/>
-        <source>Open Files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="505"/>
-        <source>Operating System</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="508"/>
-        <source>Environment Variables</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="511"/>
-        <source>Event Logs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="514"/>
-        <source>Users</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="517"/>
-        <source>User Groups</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="143"/>
-        <source>HTML File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="143"/>
-        <source>HTML File (*.html)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="154"/>
-        <source>Failed to save file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">F5</translation>
     </message>
 </context>
 <context>
@@ -9082,38 +9438,38 @@ Are you sure you want to continue?</source>
 <context>
     <name>TerminalWidget</name>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="244"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="243"/>
         <source>Authentication failed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="245"/>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1139"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="244"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1138"/>
         <source>User name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1083"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1082"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1086"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1085"/>
         <source>Paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1089"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1088"/>
         <source>Select All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1137"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1136"/>
         <source>Enter your user name and password to authenticate on the remote computer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1151"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1150"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
