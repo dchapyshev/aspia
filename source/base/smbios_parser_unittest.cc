@@ -362,6 +362,308 @@ TEST(SmbiosParserTest, TruncatedBaseboardIsInvalid)
 }
 
 //--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, ChassisFields)
+{
+    QByteArray formatted(0x15 - 4, '\0');
+    formatted[0x04 - 4] = 1;                       // manufacturer: string #1
+    formatted[0x05 - 4] = static_cast<char>(0x83); // type: desktop with the lock present
+    formatted[0x06 - 4] = 2;                       // version: string #2
+    formatted[0x07 - 4] = 3;                       // serial_number: string #3
+    formatted[0x08 - 4] = 4;                       // asset_tag: string #4
+    formatted[0x09 - 4] = 3;                       // boot_up_state: safe
+    formatted[0x0A - 4] = 3;                       // power_supply_state: safe
+    formatted[0x0B - 4] = 4;                       // thermal_state: warning
+    formatted[0x0C - 4] = 3;                       // security_status: none
+    formatted[0x11 - 4] = 2;                       // height: 2U
+    formatted[0x12 - 4] = 1;                       // power_cords
+
+    const QByteArray dump = makeDump(makeTable(
+        SMBIOS_TABLE_TYPE_CHASSIS, formatted, { "Dell Inc.", "1.0", "SN123", "AT456" }));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosChassis chassis(enumerator.table());
+    ASSERT_TRUE(chassis.isValid());
+    EXPECT_EQ(chassis.manufacturer(), QString("Dell Inc."));
+    EXPECT_EQ(chassis.version(), QString("1.0"));
+    EXPECT_EQ(chassis.serialNumber(), QString("SN123"));
+    EXPECT_EQ(chassis.assetTag(), QString("AT456"));
+    EXPECT_EQ(chassis.type(), QString("Desktop"));
+    EXPECT_TRUE(chassis.isLockPresent());
+    EXPECT_EQ(chassis.bootUpState(), QString("Safe"));
+    EXPECT_EQ(chassis.powerSupplyState(), QString("Safe"));
+    EXPECT_EQ(chassis.thermalState(), QString("Warning"));
+    EXPECT_EQ(chassis.securityStatus(), QString("None"));
+    EXPECT_EQ(chassis.height(), 2u);
+    EXPECT_EQ(chassis.powerCords(), 1u);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, ChassisSkuNumber)
+{
+    // Two contained elements of three bytes each sit between the fixed fields and the SKU number.
+    QByteArray formatted(0x1C - 4, '\0');
+    formatted[0x13 - 4] = 2; // element_count
+    formatted[0x14 - 4] = 3; // element_length
+    formatted[0x1B - 4] = 1; // sku_number: string #1
+
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_CHASSIS, formatted, { "SKU-42" }));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    EXPECT_EQ(SmbiosChassis(enumerator.table()).skuNumber(), QString("SKU-42"));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, ChassisSkuNumberBehindTable)
+{
+    // The declared contained elements push the SKU number past the end of the table: reading it
+    // would leave the formatted area.
+    QByteArray formatted(0x1C - 4, '\0');
+    formatted[0x13 - 4] = static_cast<char>(0xFF); // element_count
+    formatted[0x14 - 4] = static_cast<char>(0xFF); // element_length
+
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_CHASSIS, formatted, { "SKU-42" }));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    EXPECT_TRUE(SmbiosChassis(enumerator.table()).skuNumber().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, ChassisShortTableOmitsLateFields)
+{
+    // An SMBIOS 2.0 chassis table (length 09h) carries neither the states nor the height.
+    QByteArray formatted(0x09 - 4, '\0');
+    formatted[0x05 - 4] = 3; // type: desktop
+
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_CHASSIS, formatted, {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosChassis chassis(enumerator.table());
+    ASSERT_TRUE(chassis.isValid());
+    EXPECT_EQ(chassis.type(), QString("Desktop"));
+    EXPECT_FALSE(chassis.isLockPresent());
+    EXPECT_TRUE(chassis.bootUpState().isEmpty());
+    EXPECT_TRUE(chassis.powerSupplyState().isEmpty());
+    EXPECT_TRUE(chassis.thermalState().isEmpty());
+    EXPECT_TRUE(chassis.securityStatus().isEmpty());
+    EXPECT_TRUE(chassis.skuNumber().isEmpty());
+    EXPECT_EQ(chassis.height(), 0u);
+    EXPECT_EQ(chassis.powerCords(), 0u);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, TruncatedChassisIsInvalid)
+{
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_CHASSIS, QByteArray(0x08 - 4, '\0'), {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    EXPECT_FALSE(SmbiosChassis(enumerator.table()).isValid());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, ProcessorFields)
+{
+    QByteArray formatted(0x28 - 4, '\0');
+    formatted[0x04 - 4] = 1;                       // socket_designation: string #1
+    formatted[0x05 - 4] = 3;                       // type: central processor
+    formatted[0x06 - 4] = static_cast<char>(0xC6); // family: Intel Core i7
+    formatted[0x07 - 4] = 2;                       // manufacturer: string #2
+
+    for (int i = 0; i < 8; ++i)
+        formatted[0x08 - 4 + i] = static_cast<char>(i + 1); // id
+
+    formatted[0x10 - 4] = 3;                       // version: string #3
+    formatted[0x11 - 4] = static_cast<char>(0x8D); // voltage: 1.3 V
+    formatted[0x12 - 4] = 100;                     // external_clock: 100 MHz
+    formatted[0x14 - 4] = static_cast<char>(0x30); // max_speed: 4400 MHz
+    formatted[0x15 - 4] = static_cast<char>(0x11);
+    formatted[0x16 - 4] = static_cast<char>(0x10); // current_speed: 3600 MHz
+    formatted[0x17 - 4] = static_cast<char>(0x0E);
+    formatted[0x18 - 4] = static_cast<char>(0x41); // status: populated and enabled
+    formatted[0x19 - 4] = static_cast<char>(0x32); // upgrade: socket LGA1151
+    formatted[0x20 - 4] = 4;                       // serial_number: string #4
+    formatted[0x21 - 4] = 5;                       // asset_tag: string #5
+    formatted[0x22 - 4] = 6;                       // part_number: string #6
+    formatted[0x23 - 4] = 8;                       // core_count
+    formatted[0x24 - 4] = 8;                       // core_enabled
+    formatted[0x25 - 4] = 16;                      // thread_count
+    formatted[0x26 - 4] = static_cast<char>(0x0C); // characteristics: 64-bit and multi-core
+
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_PROCESSOR, formatted,
+        { "CPU0", "Intel", "Core i7-9700K", "SN789", "AT321", "PN654" }));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosProcessor processor(enumerator.table());
+    ASSERT_TRUE(processor.isValid());
+    EXPECT_TRUE(processor.isPopulated());
+    EXPECT_EQ(processor.manufacturer(), QString("Intel"));
+    EXPECT_EQ(processor.version(), QString("Core i7-9700K"));
+    EXPECT_EQ(processor.serialNumber(), QString("SN789"));
+    EXPECT_EQ(processor.assetTag(), QString("AT321"));
+    EXPECT_EQ(processor.partNumber(), QString("PN654"));
+    EXPECT_EQ(processor.socketDesignation(), QString("CPU0"));
+    EXPECT_EQ(processor.type(), QString("Central Processor"));
+    EXPECT_EQ(processor.family(), QString("Intel Core i7"));
+    EXPECT_EQ(processor.status(), QString("Enabled"));
+    EXPECT_EQ(processor.upgrade(), QString("Socket LGA1151"));
+    EXPECT_EQ(processor.id(), 0x0807060504030201ULL);
+    EXPECT_DOUBLE_EQ(processor.voltage(), 1.3);
+    EXPECT_EQ(processor.externalClock(), 100u);
+    EXPECT_EQ(processor.maxSpeed(), 4400u);
+    EXPECT_EQ(processor.currentSpeed(), 3600u);
+    EXPECT_EQ(processor.coreCount(), 8u);
+    EXPECT_EQ(processor.coreEnabled(), 8u);
+    EXPECT_EQ(processor.threadCount(), 16u);
+    EXPECT_EQ(processor.threadEnabled(), 0u); // The table is too short to carry the field.
+    EXPECT_TRUE(processor.is64Bit());
+    EXPECT_TRUE(processor.isMultiCore());
+    EXPECT_FALSE(processor.isHardwareThread());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, ProcessorFamilyFromSecondField)
+{
+    auto makeProcessor = [](quint8 length) -> QByteArray
+    {
+        QByteArray formatted(length - 4, '\0');
+        formatted[0x06 - 4] = static_cast<char>(0xFE); // family: take the family2 field
+
+        if (length >= 0x2A)
+        {
+            formatted[0x28 - 4] = static_cast<char>(0x01); // family2: ARMv8 (0x0101)
+            formatted[0x29 - 4] = static_cast<char>(0x01);
+        }
+
+        return makeTable(SMBIOS_TABLE_TYPE_PROCESSOR, formatted, {});
+    };
+
+    auto familyOf = [](const QByteArray& dump) -> QString
+    {
+        SmbiosTableEnumerator enumerator(dump);
+        if (enumerator.isAtEnd())
+            return QString("<no table>");
+        return SmbiosProcessor(enumerator.table()).family();
+    };
+
+    EXPECT_EQ(familyOf(makeDump(makeProcessor(0x2A))), QString("ARMv8"));
+
+    // The table is too short to carry the family2 field.
+    EXPECT_TRUE(familyOf(makeDump(makeProcessor(0x28))).isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, ProcessorExtendedCoreCounts)
+{
+    auto makeProcessor = [](quint8 length) -> QByteArray
+    {
+        QByteArray formatted(length - 4, '\0');
+        formatted[0x23 - 4] = static_cast<char>(0xFF); // core_count: take the core_count2 field
+        formatted[0x24 - 4] = static_cast<char>(0xFF); // core_enabled: take core_enabled2
+        formatted[0x25 - 4] = static_cast<char>(0xFF); // thread_count: take thread_count2
+
+        if (length >= 0x30)
+        {
+            formatted[0x2A - 4] = static_cast<char>(0x90); // core_count2: 400
+            formatted[0x2B - 4] = static_cast<char>(0x01);
+            formatted[0x2C - 4] = static_cast<char>(0x90); // core_enabled2: 400
+            formatted[0x2D - 4] = static_cast<char>(0x01);
+            formatted[0x2E - 4] = static_cast<char>(0x20); // thread_count2: 800
+            formatted[0x2F - 4] = static_cast<char>(0x03);
+        }
+
+        return makeTable(SMBIOS_TABLE_TYPE_PROCESSOR, formatted, {});
+    };
+
+    const QByteArray extended = makeDump(makeProcessor(0x30));
+
+    SmbiosTableEnumerator extended_enumerator(extended);
+    ASSERT_FALSE(extended_enumerator.isAtEnd());
+
+    SmbiosProcessor extended_processor(extended_enumerator.table());
+    EXPECT_EQ(extended_processor.coreCount(), 400u);
+    EXPECT_EQ(extended_processor.coreEnabled(), 400u);
+    EXPECT_EQ(extended_processor.threadCount(), 800u);
+
+    // An SMBIOS 2.5 table cannot tell the counts the byte-sized fields overflowed on.
+    const QByteArray legacy = makeDump(makeProcessor(0x28));
+
+    SmbiosTableEnumerator legacy_enumerator(legacy);
+    ASSERT_FALSE(legacy_enumerator.isAtEnd());
+
+    SmbiosProcessor legacy_processor(legacy_enumerator.table());
+    EXPECT_EQ(legacy_processor.coreCount(), 0u);
+    EXPECT_EQ(legacy_processor.coreEnabled(), 0u);
+    EXPECT_EQ(legacy_processor.threadCount(), 0u);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, ProcessorShortTableOmitsLateFields)
+{
+    // An SMBIOS 2.0 processor table (length 1Ah) with the legacy voltage encoding, which lists
+    // the supported voltages instead of the one in use.
+    QByteArray formatted(0x1A - 4, '\0');
+    formatted[0x11 - 4] = 0x03; // voltage: 5.0 V and 3.3 V capable
+
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_PROCESSOR, formatted, {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosProcessor processor(enumerator.table());
+    ASSERT_TRUE(processor.isValid());
+    EXPECT_DOUBLE_EQ(processor.voltage(), 0.0);
+    EXPECT_TRUE(processor.serialNumber().isEmpty());
+    EXPECT_TRUE(processor.assetTag().isEmpty());
+    EXPECT_TRUE(processor.partNumber().isEmpty());
+    EXPECT_EQ(processor.coreCount(), 0u);
+    EXPECT_EQ(processor.coreEnabled(), 0u);
+    EXPECT_EQ(processor.threadCount(), 0u);
+    EXPECT_EQ(processor.threadEnabled(), 0u);
+    EXPECT_FALSE(processor.is64Bit());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, ProcessorUnknownCharacteristics)
+{
+    // Bit 1 marks the characteristics as unknown: the remaining bits must not be reported.
+    QByteArray formatted(0x28 - 4, '\0');
+    formatted[0x26 - 4] = static_cast<char>(0x06); // characteristics: unknown, but 64-bit set
+
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_PROCESSOR, formatted, {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    EXPECT_FALSE(SmbiosProcessor(enumerator.table()).is64Bit());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, TruncatedProcessorIsInvalid)
+{
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_PROCESSOR, QByteArray(0x19 - 4, '\0'), {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    EXPECT_FALSE(SmbiosProcessor(enumerator.table()).isValid());
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST(SmbiosParserTest, MemoryDeviceFields)
 {
     QByteArray formatted(0x15 - 4, '\0');

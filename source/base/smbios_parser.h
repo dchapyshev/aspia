@@ -96,6 +96,71 @@ private:
     Q_DISABLE_COPY_MOVE(SmbiosBaseboard)
 };
 
+class SmbiosChassis
+{
+public:
+    explicit SmbiosChassis(const SmbiosTable* table);
+
+    bool isValid() const;
+    QString manufacturer() const;
+    QString version() const;
+    QString serialNumber() const;
+    QString assetTag() const;
+    QString skuNumber() const;
+    QString type() const;
+    bool isLockPresent() const;
+    QString bootUpState() const;
+    QString powerSupplyState() const;
+    QString thermalState() const;
+    QString securityStatus() const;
+    quint32 height() const;
+    quint32 powerCords() const;
+
+private:
+    const SmbiosChassisTable* table_;
+    Q_DISABLE_COPY_MOVE(SmbiosChassis)
+};
+
+class SmbiosProcessor
+{
+public:
+    explicit SmbiosProcessor(const SmbiosTable* table);
+
+    bool isValid() const;
+    bool isPopulated() const;
+    QString manufacturer() const;
+    QString version() const;
+    QString serialNumber() const;
+    QString assetTag() const;
+    QString partNumber() const;
+    QString socketDesignation() const;
+    QString type() const;
+    QString family() const;
+    QString status() const;
+    QString upgrade() const;
+    quint64 id() const;
+    double voltage() const;
+    quint32 externalClock() const;
+    quint32 maxSpeed() const;
+    quint32 currentSpeed() const;
+    quint32 coreCount() const;
+    quint32 coreEnabled() const;
+    quint32 threadCount() const;
+    quint32 threadEnabled() const;
+    bool is64Bit() const;
+    bool isMultiCore() const;
+    bool isHardwareThread() const;
+    bool isExecuteProtection() const;
+    bool isEnhancedVirtualization() const;
+    bool isPowerPerformanceControl() const;
+
+private:
+    quint16 characteristics() const;
+
+    const SmbiosProcessorTable* table_;
+    Q_DISABLE_COPY_MOVE(SmbiosProcessor)
+};
+
 class SmbiosMemoryDevice
 {
 public:
