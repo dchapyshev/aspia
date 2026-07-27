@@ -24,11 +24,13 @@
 #include <QThread>
 
 #include "base/core_application.h"
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/service_controller.h"
 #include "base/ipc/ipc_server.h"
 #include "base/threading/asio_event_dispatcher.h"
 #include "base/threading/worker.h"
+#include "build/build_config.h"
 #include "build/version.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/update_dialog.h"
@@ -39,11 +41,13 @@
 #include "host/settings_util.h"
 #include "host/system_settings.h"
 #include "host/terminal_agent.h"
+#include "host/user_settings.h"
 #include "host/ui/application.h"
 #include "host/ui/check_password_dialog.h"
 #include "host/ui/config_dialog.h"
 #include "host/ui/host_window.h"
 #include "host/ui/security_log_dialog.h"
+#include "host/ui/system_info_window.h"
 #include "host/workers/audio_worker.h"
 #include "host/workers/desktop_ipc_worker.h"
 #include "host/workers/input_worker.h"
@@ -292,6 +296,32 @@ int runServiceCommand(int& argc, char* argv[], int (*command)(QTextStream& out))
 }
 
 //--------------------------------------------------------------------------------------------------
+int runSysInfo(int& argc, char* argv[])
+{
+    GuiApplication::setApplicationVersion(ASPIA_VERSION_STRING);
+    GuiApplication::setHighDpiScaleFactorRoundingPolicy(
+        Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+
+    GuiApplication application(argc, argv);
+
+    UserSettings user_settings;
+
+    QString locale = user_settings.locale();
+    if (!application.hasLocale(locale))
+        locale = DEFAULT_LOCALE;
+
+    application.setTheme(user_settings.theme());
+    application.setLocale(locale);
+    application.addWorker(std::make_unique<SysInfoWorker>());
+
+    SystemInfoWindow window;
+    window.show();
+    window.activateWindow();
+
+    return application.exec();
+}
+
+//--------------------------------------------------------------------------------------------------
 // Runs the host as the background service ("--service" - what the OS service registration points at).
 // Relies on the caller's ScopedLogging.
 int runService(int& argc, char* argv[])
@@ -450,6 +480,8 @@ int main(int argc, char* argv[])
             return runServiceCommand(argc, argv, stopService);
         if (qstrcmp(argv[i], "--agent") == 0 && i + 1 < argc)
             return runAgent(argc, argv, argv[i + 1]);
+        if (qstrcmp(argv[i], "--sys-info") == 0)
+            return runSysInfo(argc, argv);
     }
 
     for (int i = 0; i < argc; ++i)

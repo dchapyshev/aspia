@@ -17,6 +17,9 @@
 #
 
 collect_sources(SOURCE_COMMON_SYS_INFO
+    sys_info_view.cc
+    sys_info_view.h
+    sys_info_view.ui
     sys_info_widget.cc
     sys_info_widget.h
     sys_info_widget_applications.cc

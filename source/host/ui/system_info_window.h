@@ -16,10 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_DESKTOP_SYS_INFO_SYSTEM_INFO_WINDOW_H
-#define CLIENT_DESKTOP_SYS_INFO_SYSTEM_INFO_WINDOW_H
+#ifndef HOST_UI_SYSTEM_INFO_WINDOW_H
+#define HOST_UI_SYSTEM_INFO_WINDOW_H
 
-#include "client/desktop/client_window.h"
+#include <QWidget>
 
 namespace proto::system_info {
 class SystemInfoRequest;
@@ -27,7 +27,9 @@ class SystemInfoRequest;
 
 class SysInfoView;
 
-class SystemInfoWindow final : public ClientWindow
+// Shows the information about the computer the host runs on. Unlike the client, which asks a remote
+// host over the network, the report is built in this process.
+class SystemInfoWindow final : public QWidget
 {
     Q_OBJECT
 
@@ -35,21 +37,12 @@ public:
     explicit SystemInfoWindow(QWidget* parent = nullptr);
     ~SystemInfoWindow() final;
 
-    // ClientWindow implementation.
-    void setTabbedMode(bool tabbed) final;
-    QList<QPair<Tab::ActionRole, QList<QAction*>>> tabActionGroups() const final;
-    QByteArray saveState() const final;
-    void restoreState(const QByteArray& state) final;
-
-protected:
-    // ClientWindow implementation.
-    void onInternalReset() final;
-    void onRegisterWorkers() final;
-    void onSessionStarted() final;
+signals:
+    void sig_query(const QByteArray& buffer);
 
 private slots:
-    void onChannelMessage(const QByteArray& buffer);
     void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request);
+    void onSystemInfo(const QByteArray& buffer);
 
 private:
     SysInfoView* view_ = nullptr;
@@ -57,4 +50,4 @@ private:
     Q_DISABLE_COPY_MOVE(SystemInfoWindow)
 };
 
-#endif // CLIENT_DESKTOP_SYS_INFO_SYSTEM_INFO_WINDOW_H
+#endif // HOST_UI_SYSTEM_INFO_WINDOW_H

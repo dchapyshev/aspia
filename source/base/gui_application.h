@@ -57,6 +57,8 @@ public:
         return application ? application->worker_manager_->find<T>() : nullptr;
     }
 
+    qint64 addWorker(std::unique_ptr<Worker> worker);
+
     bool isRunning();
 
     using Locale = std::pair<QString, QString>;
@@ -85,8 +87,6 @@ signals:
     void sig_powerEvent(quint32 event);
 
 protected:
-    qint64 addWorker(std::unique_ptr<Worker> worker);
-
     // QApplication implementation.
     bool event(QEvent* event) override;
 

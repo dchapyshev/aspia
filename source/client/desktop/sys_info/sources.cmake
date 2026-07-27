@@ -18,5 +18,4 @@
 
 collect_sources(SOURCE_CLIENT_CORE_DESKTOP_SYS_INFO
     system_info_window.cc
-    system_info_window.h
-    system_info_window.ui)
+    system_info_window.h)

@@ -21,8 +21,6 @@
 
 #include <QByteArray>
 
-#include <functional>
-
 #include "base/threading/worker.h"
 
 class SysInfoWorker final : public Worker
@@ -33,11 +31,15 @@ public:
     SysInfoWorker();
     ~SysInfoWorker() final;
 
-    // Parses the serialized SystemInfoRequest in |buffer|, builds the report in the worker thread
-    // and delivers the serialized reply (empty on a malformed request) to |reply| in the calling
-    // worker's thread. The reply is dropped if |context| is destroyed before the report is ready.
-    // May be called from any worker thread.
-    void query(QObject* context, const QByteArray& buffer, std::function<void(QByteArray)> reply);
+public slots:
+    // Parses the serialized SystemInfoRequest in |buffer|, builds the report and announces it with
+    // sig_systemInfo. Connect to it with Qt::QueuedConnection: building the report takes seconds and
+    // has to happen in the thread of the worker.
+    void onQuery(const QByteArray& buffer);
+
+signals:
+    // Emitted from the worker thread with the serialized SystemInfo built for an onQuery() call.
+    void sig_systemInfo(const QByteArray& buffer);
 
 protected:
     // Worker implementation.

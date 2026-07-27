@@ -25,11 +25,17 @@
 
 //--------------------------------------------------------------------------------------------------
 SystemInfoClient::SystemInfoClient(TcpChannel* tcp_channel, QObject* parent)
-    : Client(tcp_channel, parent),
-      sys_info_worker_(CoreApplication::findWorker<SysInfoWorker>())
+    : Client(tcp_channel, parent)
 {
     CLOG(INFO) << "Ctor";
-    CCHECK(sys_info_worker_);
+
+    SysInfoWorker* sys_info_worker = CoreApplication::findWorker<SysInfoWorker>();
+    CCHECK(sys_info_worker);
+
+    connect(this, &SystemInfoClient::sig_query,
+            sys_info_worker, &SysInfoWorker::onQuery, Qt::QueuedConnection);
+    connect(sys_info_worker, &SysInfoWorker::sig_systemInfo,
+            this, &SystemInfoClient::onSystemInfo, Qt::QueuedConnection);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -47,17 +53,13 @@ void SystemInfoClient::onStart()
 //--------------------------------------------------------------------------------------------------
 void SystemInfoClient::onMessage(quint8 /* channel_id */, const QByteArray& buffer)
 {
-    if (!sys_info_worker_)
-    {
-        CLOG(ERROR) << "Sys info worker is not available";
-        return;
-    }
-
     // Building the report can take a while; offload it to the dedicated worker and send the
-    // result once it is ready.
-    sys_info_worker_->query(this, buffer, [this](QByteArray result)
-    {
-        if (!result.isEmpty())
-            send(proto::peer::CHANNEL_ID_0, result);
-    });
+    // result once it arrives with sig_systemInfo.
+    emit sig_query(buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SystemInfoClient::onSystemInfo(const QByteArray& buffer)
+{
+    send(proto::peer::CHANNEL_ID_0, buffer);
 }

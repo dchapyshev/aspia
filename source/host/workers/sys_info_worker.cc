@@ -1133,22 +1133,19 @@ SysInfoWorker::~SysInfoWorker()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SysInfoWorker::query(QObject* context, const QByteArray& buffer, std::function<void(QByteArray)> reply)
+void SysInfoWorker::onQuery(const QByteArray& buffer)
 {
-    Worker::request(context, [buffer]()
+    proto::system_info::SystemInfoRequest request;
+    if (!parse(buffer, &request))
     {
-        proto::system_info::SystemInfoRequest request;
-        if (!parse(buffer, &request))
-        {
-            LOG(ERROR) << "Unable to parse system info request";
-            return QByteArray();
-        }
+        LOG(ERROR) << "Unable to parse system info request";
+        return;
+    }
 
-        proto::system_info::SystemInfo system_info;
-        createSystemInfo(request, &system_info);
-        return serialize(system_info);
-    },
-    std::move(reply));
+    proto::system_info::SystemInfo system_info;
+    createSystemInfo(request, &system_info);
+
+    emit sig_systemInfo(serialize(system_info));
 }
 
 //--------------------------------------------------------------------------------------------------
