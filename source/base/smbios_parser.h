@@ -96,8 +96,20 @@ public:
     bool isValid() const;
     QString manufacturer() const;
     QString product() const;
+    QString version() const;
+    QString serialNumber() const;
+    QString assetTag() const;
+    QString location() const;
+    QString type() const;
+    bool isHostingBoard() const;
+    bool requiresDaughterBoard() const;
+    bool isRemovable() const;
+    bool isReplaceable() const;
+    bool isHotSwappable() const;
 
 private:
+    quint8 featureFlags() const;
+
     const SmbiosBaseboardTable* table_;
     Q_DISABLE_COPY_MOVE(SmbiosBaseboard)
 };

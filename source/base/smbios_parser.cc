@@ -538,13 +538,111 @@ bool SmbiosBaseboard::isValid() const
 //--------------------------------------------------------------------------------------------------
 QString SmbiosBaseboard::manufacturer() const
 {
-    return smbiosString(table_, table_->manufactorer);
+    return smbiosString(table_, table_->manufacturer);
 }
 
 //--------------------------------------------------------------------------------------------------
 QString SmbiosBaseboard::product() const
 {
     return smbiosString(table_, table_->product);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosBaseboard::version() const
+{
+    return smbiosString(table_, table_->version);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosBaseboard::serialNumber() const
+{
+    return smbiosString(table_, table_->serial_number);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosBaseboard::assetTag() const
+{
+    if (table_->length < 0x09)
+        return QString();
+
+    return smbiosString(table_, table_->asset_tag);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosBaseboard::location() const
+{
+    if (table_->length < 0x0B)
+        return QString();
+
+    return smbiosString(table_, table_->location);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosBaseboard::type() const
+{
+    static const char* kType[] =
+    {
+        "Unknown", // 0x01
+        "Other",
+        "Server Blade",
+        "Connectivity Switch",
+        "System Management Module",
+        "Processor Module",
+        "I/O Module",
+        "Memory Module",
+        "Daughter Board",
+        "Motherboard",
+        "Processor/Memory Module",
+        "Processor/IO Module",
+        "Interconnect Board" // 0x0D
+    };
+
+    if (table_->length < 0x0E)
+        return QString();
+
+    if (table_->board_type >= 0x01 && table_->board_type <= 0x0D)
+        return kType[table_->board_type - 0x01];
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosBaseboard::isHostingBoard() const
+{
+    return (featureFlags() & 0x01) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosBaseboard::requiresDaughterBoard() const
+{
+    return (featureFlags() & 0x02) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosBaseboard::isRemovable() const
+{
+    return (featureFlags() & 0x04) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosBaseboard::isReplaceable() const
+{
+    return (featureFlags() & 0x08) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosBaseboard::isHotSwappable() const
+{
+    return (featureFlags() & 0x10) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint8 SmbiosBaseboard::featureFlags() const
+{
+    if (table_->length < 0x0A)
+        return 0;
+
+    return table_->feature_flags;
 }
 
 //--------------------------------------------------------------------------------------------------

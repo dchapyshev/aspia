@@ -500,14 +500,20 @@ TEST(SmbiosParserTest, SystemUuidMissingOnShortTable)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(SmbiosParserTest, BaseboardStrings)
+TEST(SmbiosParserTest, BaseboardFields)
 {
     QByteArray formatted(0x0F - 4, '\0');
-    formatted[0] = 1; // manufacturer: string #1
-    formatted[1] = 2; // product: string #2
+    formatted[0] = 1;                       // manufacturer: string #1
+    formatted[1] = 2;                       // product: string #2
+    formatted[2] = 3;                       // version: string #3
+    formatted[3] = 4;                       // serial_number: string #4
+    formatted[4] = 5;                       // asset_tag: string #5
+    formatted[5] = static_cast<char>(0x09); // feature_flags: hosting board, replaceable
+    formatted[6] = 6;                       // location: string #6
+    formatted[9] = static_cast<char>(0x0A); // board_type: motherboard
 
-    const QByteArray dump = makeDump(
-        makeTable(SMBIOS_TABLE_TYPE_BASEBOARD, formatted, { "ASUS", "PRIME B550" }));
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_BASEBOARD, formatted,
+        { "ASUS", "PRIME B550", "Rev X.0x", "SN-1", "Tag-1", "Base Board" }));
 
     SmbiosTableEnumerator enumerator(dump);
     ASSERT_FALSE(enumerator.isAtEnd());
@@ -516,6 +522,39 @@ TEST(SmbiosParserTest, BaseboardStrings)
     ASSERT_TRUE(baseboard.isValid());
     EXPECT_EQ(baseboard.manufacturer(), QString("ASUS"));
     EXPECT_EQ(baseboard.product(), QString("PRIME B550"));
+    EXPECT_EQ(baseboard.version(), QString("Rev X.0x"));
+    EXPECT_EQ(baseboard.serialNumber(), QString("SN-1"));
+    EXPECT_EQ(baseboard.assetTag(), QString("Tag-1"));
+    EXPECT_EQ(baseboard.location(), QString("Base Board"));
+    EXPECT_EQ(baseboard.type(), QString("Motherboard"));
+    EXPECT_TRUE(baseboard.isHostingBoard());
+    EXPECT_TRUE(baseboard.isReplaceable());
+    EXPECT_FALSE(baseboard.requiresDaughterBoard());
+    EXPECT_FALSE(baseboard.isRemovable());
+    EXPECT_FALSE(baseboard.isHotSwappable());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, BaseboardWithoutOptionalFields)
+{
+    // A table that ends right after the serial number: the string area sits where the remaining
+    // fields would be and must not be read as them.
+    QByteArray formatted(0x08 - 4, '\0');
+    formatted[0] = 1; // manufacturer: string #1
+
+    const QByteArray dump = makeDump(
+        makeTable(SMBIOS_TABLE_TYPE_BASEBOARD, formatted, { "ASUS" }) + endOfTable());
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosBaseboard baseboard(enumerator.table());
+    ASSERT_TRUE(baseboard.isValid());
+    EXPECT_EQ(baseboard.manufacturer(), QString("ASUS"));
+    EXPECT_TRUE(baseboard.assetTag().isEmpty());
+    EXPECT_TRUE(baseboard.location().isEmpty());
+    EXPECT_TRUE(baseboard.type().isEmpty());
+    EXPECT_FALSE(baseboard.isHostingBoard());
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -626,8 +626,35 @@ message Dmi
 
     message Baseboard
     {
-        string manufacturer = 1;
-        string product      = 2;
+        string manufacturer          = 1;
+        string product               = 2;
+        string version               = 3;
+        string serial_number         = 4;
+        string asset_tag             = 5;
+        string location              = 6;
+        string type                  = 7;
+        bool hosting_board           = 8;
+        bool requires_daughter_board = 9;
+        bool removable               = 10;
+        bool replaceable             = 11;
+        bool hot_swappable           = 12;
+    }
+
+    message Chassis
+    {
+        string manufacturer       = 1;
+        string version            = 2;
+        string serial_number      = 3;
+        string asset_tag          = 4;
+        string sku_number         = 5;
+        string type               = 6;
+        string boot_up_state      = 7;
+        string power_supply_state = 8;
+        string thermal_state      = 9;
+        string security_status    = 10;
+        bool lock_present         = 11;
+        uint32 height             = 12;
+        uint32 power_cords        = 13;
     }
 
     message Processor
@@ -688,8 +715,9 @@ message Dmi
 
     repeated Bios bios                  = 1;
     repeated Baseboard baseboard        = 2;
-    repeated Processor processor        = 3;
-    repeated MemoryDevice memory_device = 4;
+    repeated Chassis chassis            = 3;
+    repeated Processor processor        = 4;
+    repeated MemoryDevice memory_device = 5;
 }
 
 message SystemInfoRequest

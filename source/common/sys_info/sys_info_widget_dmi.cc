@@ -28,6 +28,8 @@
 namespace {
 
 const char kBiosIcon[] = ":/img/processor.svg";
+const char kBaseboardIcon[] = ":/img/motherboard.svg";
+const char kChassisIcon[] = ":/img/computer-case.svg";
 const char kProcessorIcon[] = ":/img/microchip.svg";
 
 // Group of tables a item of the upper pane belongs to.
@@ -39,6 +41,8 @@ constexpr int kIndexRole = Qt::UserRole + 1;
 enum Group
 {
     GROUP_BIOS = 0,
+    GROUP_BASEBOARD,
+    GROUP_CHASSIS,
     GROUP_PROCESSORS
 };
 
@@ -145,6 +149,7 @@ std::string SysInfoWidgetDmi::category() const
 void SysInfoWidgetDmi::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     ui->tree->clear();
+    ui->tree->setRootIsDecorated(false);
     ui->tree_params->clear();
     dmi_.reset();
 
@@ -160,38 +165,33 @@ void SysInfoWidgetDmi::setSystemInfo(const proto::system_info::SystemInfo& syste
 
     dmi_ = std::make_unique<proto::system_info::Dmi>(system_info.dmi());
 
-    if (dmi_->bios_size())
-    {
-        // The specification allows a single BIOS table, so the group has nothing to enumerate.
-        QTreeWidgetItem* group = new Item(kBiosIcon, tr("BIOS"), {});
-        group->setData(0, kGroupRole, GROUP_BIOS);
-        group->setData(0, kIndexRole, -1);
+    QStringList bios;
+    for (int i = 0; i < dmi_->bios_size(); ++i)
+        bios << biosTitle(i);
 
-        ui->tree->addTopLevelItem(group);
-    }
+    if (!bios.isEmpty())
+        addGroup(GROUP_BIOS, kBiosIcon, tr("BIOS"), bios);
 
-    if (dmi_->processor_size())
-    {
-        QList<QTreeWidgetItem*> childs;
+    QStringList baseboards;
+    for (int i = 0; i < dmi_->baseboard_size(); ++i)
+        baseboards << baseboardTitle(i);
 
-        for (int i = 0; i < dmi_->processor_size(); ++i)
-        {
-            QTreeWidgetItem* child = new QTreeWidgetItem();
+    if (!baseboards.isEmpty())
+        addGroup(GROUP_BASEBOARD, kBaseboardIcon, tr("Motherboard"), baseboards);
 
-            child->setText(0, processorTitle(i));
-            child->setData(0, kGroupRole, GROUP_PROCESSORS);
-            child->setData(0, kIndexRole, i);
+    QStringList chassis;
+    for (int i = 0; i < dmi_->chassis_size(); ++i)
+        chassis << chassisTitle(i);
 
-            childs << child;
-        }
+    if (!chassis.isEmpty())
+        addGroup(GROUP_CHASSIS, kChassisIcon, tr("Chassis"), chassis);
 
-        QTreeWidgetItem* group = new Item(kProcessorIcon, tr("Processors"), childs);
-        group->setData(0, kGroupRole, GROUP_PROCESSORS);
-        group->setData(0, kIndexRole, -1);
+    QStringList processors;
+    for (int i = 0; i < dmi_->processor_size(); ++i)
+        processors << processorTitle(i);
 
-        ui->tree->addTopLevelItem(group);
-        group->setExpanded(true);
-    }
+    if (!processors.isEmpty())
+        addGroup(GROUP_PROCESSORS, kProcessorIcon, tr("Processors"), processors);
 
     if (!isStateRestored())
         ui->tree->resizeColumnToContents(0);
@@ -233,19 +233,42 @@ void SysInfoWidgetDmi::onCurrentTableChanged()
 
     QList<QTreeWidgetItem*> items;
 
+    // The item of a group shows every entry it holds, the item of an entry only the parameters of
+    // that entry.
     switch (group)
     {
         case GROUP_BIOS:
         {
-            for (int i = 0; i < dmi_->bios_size(); ++i)
+            const int first = index < 0 ? 0 : index;
+            const int last = index < 0 ? dmi_->bios_size() - 1 : index;
+
+            for (int i = first; i <= last && i < dmi_->bios_size(); ++i)
                 items << new Item(kBiosIcon, biosTitle(i), biosParameters(i));
+        }
+        break;
+
+        case GROUP_BASEBOARD:
+        {
+            const int first = index < 0 ? 0 : index;
+            const int last = index < 0 ? dmi_->baseboard_size() - 1 : index;
+
+            for (int i = first; i <= last && i < dmi_->baseboard_size(); ++i)
+                items << new Item(kBaseboardIcon, baseboardTitle(i), baseboardParameters(i));
+        }
+        break;
+
+        case GROUP_CHASSIS:
+        {
+            const int first = index < 0 ? 0 : index;
+            const int last = index < 0 ? dmi_->chassis_size() - 1 : index;
+
+            for (int i = first; i <= last && i < dmi_->chassis_size(); ++i)
+                items << new Item(kChassisIcon, chassisTitle(i), chassisParameters(i));
         }
         break;
 
         case GROUP_PROCESSORS:
         {
-            // The item of the group shows every entry it holds, the item of an entry only the
-            // parameters of that entry.
             const int first = index < 0 ? 0 : index;
             const int last = index < 0 ? dmi_->processor_size() - 1 : index;
 
@@ -265,6 +288,39 @@ void SysInfoWidgetDmi::onCurrentTableChanged()
 
     for (int i = 0; i < ui->tree_params->columnCount(); ++i)
         ui->tree_params->resizeColumnToContents(i);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SysInfoWidgetDmi::addGroup(int group, const QString& icon_path, const QString& title,
+                                const QStringList& entries)
+{
+    QList<QTreeWidgetItem*> childs;
+
+    // A group of a single table has nothing to choose from and stays a leaf.
+    if (entries.size() > 1)
+    {
+        for (int i = 0; i < entries.size(); ++i)
+        {
+            QTreeWidgetItem* child = new QTreeWidgetItem();
+
+            child->setText(0, entries[i]);
+            child->setData(0, kGroupRole, group);
+            child->setData(0, kIndexRole, i);
+
+            childs << child;
+        }
+    }
+
+    QTreeWidgetItem* item = new Item(icon_path, title, childs);
+    item->setData(0, kGroupRole, group);
+    item->setData(0, kIndexRole, -1);
+
+    // The space of the branch indicator is only worth taking when there is something to expand.
+    if (!childs.isEmpty())
+        ui->tree->setRootIsDecorated(true);
+
+    ui->tree->addTopLevelItem(item);
+    item->setExpanded(true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -336,6 +392,126 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::biosParameters(int index) const
 
     if (!characteristics.isEmpty())
         items << new Item(tr("Characteristics"), characteristics);
+
+    return items;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SysInfoWidgetDmi::baseboardTitle(int index) const
+{
+    const proto::system_info::Dmi::Baseboard& baseboard = dmi_->baseboard(index);
+
+    if (!baseboard.product().empty())
+        return QString::fromStdString(baseboard.product());
+
+    if (!baseboard.manufacturer().empty())
+        return QString::fromStdString(baseboard.manufacturer());
+
+    return tr("Board %1").arg(index + 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<QTreeWidgetItem*> SysInfoWidgetDmi::baseboardParameters(int index) const
+{
+    const proto::system_info::Dmi::Baseboard& baseboard = dmi_->baseboard(index);
+    QList<QTreeWidgetItem*> items;
+
+    if (!baseboard.manufacturer().empty())
+        items << mk(tr("Manufacturer"), QString::fromStdString(baseboard.manufacturer()));
+
+    if (!baseboard.product().empty())
+        items << mk(tr("Product"), QString::fromStdString(baseboard.product()));
+
+    if (!baseboard.version().empty())
+        items << mk(tr("Version"), QString::fromStdString(baseboard.version()));
+
+    if (!baseboard.serial_number().empty())
+        items << mk(tr("Serial Number"), QString::fromStdString(baseboard.serial_number()));
+
+    if (!baseboard.asset_tag().empty())
+        items << mk(tr("Asset Tag"), QString::fromStdString(baseboard.asset_tag()));
+
+    if (!baseboard.location().empty())
+        items << mk(tr("Location in Chassis"), QString::fromStdString(baseboard.location()));
+
+    if (!baseboard.type().empty())
+        items << mk(tr("Type"), QString::fromStdString(baseboard.type()));
+
+    QList<QTreeWidgetItem*> features;
+
+    features << mk(tr("Hosting Board"), baseboard.hosting_board() ? tr("Yes") : tr("No"));
+    features << mk(tr("Requires Daughter Board"),
+                   baseboard.requires_daughter_board() ? tr("Yes") : tr("No"));
+    features << mk(tr("Removable"), baseboard.removable() ? tr("Yes") : tr("No"));
+    features << mk(tr("Replaceable"), baseboard.replaceable() ? tr("Yes") : tr("No"));
+    features << mk(tr("Hot Swappable"), baseboard.hot_swappable() ? tr("Yes") : tr("No"));
+
+    items << new Item(tr("Features"), features);
+
+    return items;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SysInfoWidgetDmi::chassisTitle(int index) const
+{
+    const proto::system_info::Dmi::Chassis& chassis = dmi_->chassis(index);
+
+    if (!chassis.type().empty())
+        return QString::fromStdString(chassis.type());
+
+    if (!chassis.manufacturer().empty())
+        return QString::fromStdString(chassis.manufacturer());
+
+    return tr("Chassis %1").arg(index + 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<QTreeWidgetItem*> SysInfoWidgetDmi::chassisParameters(int index) const
+{
+    const proto::system_info::Dmi::Chassis& chassis = dmi_->chassis(index);
+    QList<QTreeWidgetItem*> items;
+
+    if (!chassis.manufacturer().empty())
+        items << mk(tr("Manufacturer"), QString::fromStdString(chassis.manufacturer()));
+
+    if (!chassis.type().empty())
+        items << mk(tr("Type"), QString::fromStdString(chassis.type()));
+
+    items << mk(tr("Lock Present"), chassis.lock_present() ? tr("Yes") : tr("No"));
+
+    if (!chassis.version().empty())
+        items << mk(tr("Version"), QString::fromStdString(chassis.version()));
+
+    if (!chassis.serial_number().empty())
+        items << mk(tr("Serial Number"), QString::fromStdString(chassis.serial_number()));
+
+    if (!chassis.asset_tag().empty())
+        items << mk(tr("Asset Tag"), QString::fromStdString(chassis.asset_tag()));
+
+    if (!chassis.sku_number().empty())
+        items << mk(tr("SKU Number"), QString::fromStdString(chassis.sku_number()));
+
+    if (!chassis.boot_up_state().empty())
+        items << mk(tr("Boot-up State"), QString::fromStdString(chassis.boot_up_state()));
+
+    if (!chassis.power_supply_state().empty())
+    {
+        items << mk(tr("Power Supply State"),
+                    QString::fromStdString(chassis.power_supply_state()));
+    }
+
+    if (!chassis.thermal_state().empty())
+        items << mk(tr("Thermal State"), QString::fromStdString(chassis.thermal_state()));
+
+    if (!chassis.security_status().empty())
+        items << mk(tr("Security Status"), QString::fromStdString(chassis.security_status()));
+
+    // Both the height and the number of power cords are unspecified when zero.
+    if (chassis.height())
+        items << mk(tr("Height"), tr("%1 U").arg(chassis.height()));
+
+    if (chassis.power_cords())
+        items << mk(tr("Power Cords"), QString::number(chassis.power_cords()));
 
     return items;
 }

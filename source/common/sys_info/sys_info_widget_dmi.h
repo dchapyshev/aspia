@@ -19,6 +19,8 @@
 #ifndef COMMON_SYS_INFO_SYS_INFO_WIDGET_DMI_H
 #define COMMON_SYS_INFO_SYS_INFO_WIDGET_DMI_H
 
+#include <QStringList>
+
 #include <memory>
 
 #include "common/sys_info/sys_info_widget.h"
@@ -54,10 +56,21 @@ private slots:
     void onCurrentTableChanged();
 
 private:
+    // Adds a group of tables to the upper pane. A group of several tables gets an item per entry
+    // of |entries|, a group of a single table stays a leaf.
+    void addGroup(int group, const QString& icon_path, const QString& title,
+                  const QStringList& entries);
+
     void showContextMenu(QTreeWidget* tree, const QPoint& point);
 
     QString biosTitle(int index) const;
     QList<QTreeWidgetItem*> biosParameters(int index) const;
+
+    QString baseboardTitle(int index) const;
+    QList<QTreeWidgetItem*> baseboardParameters(int index) const;
+
+    QString chassisTitle(int index) const;
+    QList<QTreeWidgetItem*> chassisParameters(int index) const;
 
     QString processorTitle(int index) const;
     QList<QTreeWidgetItem*> processorParameters(int index) const;

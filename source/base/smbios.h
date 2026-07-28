@@ -105,7 +105,7 @@ struct SmbiosSystemTable : public SmbiosTable
 
 struct SmbiosBaseboardTable : public SmbiosTable
 {
-    quint8 manufactorer;    // 04h
+    quint8 manufacturer;    // 04h
     quint8 product;         // 05h
     quint8 version;         // 06h
     quint8 serial_number;   // 07h

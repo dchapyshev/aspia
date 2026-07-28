@@ -672,6 +672,40 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
 
                 baseboard->set_manufacturer(baseboard_table.manufacturer().toStdString());
                 baseboard->set_product(baseboard_table.product().toStdString());
+                baseboard->set_version(baseboard_table.version().toStdString());
+                baseboard->set_serial_number(baseboard_table.serialNumber().toStdString());
+                baseboard->set_asset_tag(baseboard_table.assetTag().toStdString());
+                baseboard->set_location(baseboard_table.location().toStdString());
+                baseboard->set_type(baseboard_table.type().toStdString());
+                baseboard->set_hosting_board(baseboard_table.isHostingBoard());
+                baseboard->set_requires_daughter_board(baseboard_table.requiresDaughterBoard());
+                baseboard->set_removable(baseboard_table.isRemovable());
+                baseboard->set_replaceable(baseboard_table.isReplaceable());
+                baseboard->set_hot_swappable(baseboard_table.isHotSwappable());
+            }
+            break;
+
+            case SMBIOS_TABLE_TYPE_CHASSIS:
+            {
+                SmbiosChassis chassis_table(table);
+                if (!chassis_table.isValid())
+                    continue;
+
+                proto::system_info::Dmi::Chassis* chassis = dmi->add_chassis();
+
+                chassis->set_manufacturer(chassis_table.manufacturer().toStdString());
+                chassis->set_version(chassis_table.version().toStdString());
+                chassis->set_serial_number(chassis_table.serialNumber().toStdString());
+                chassis->set_asset_tag(chassis_table.assetTag().toStdString());
+                chassis->set_sku_number(chassis_table.skuNumber().toStdString());
+                chassis->set_type(chassis_table.type().toStdString());
+                chassis->set_boot_up_state(chassis_table.bootUpState().toStdString());
+                chassis->set_power_supply_state(chassis_table.powerSupplyState().toStdString());
+                chassis->set_thermal_state(chassis_table.thermalState().toStdString());
+                chassis->set_security_status(chassis_table.securityStatus().toStdString());
+                chassis->set_lock_present(chassis_table.isLockPresent());
+                chassis->set_height(chassis_table.height());
+                chassis->set_power_cords(chassis_table.powerCords());
             }
             break;
 
