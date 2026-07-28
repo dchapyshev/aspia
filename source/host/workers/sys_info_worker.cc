@@ -647,9 +647,10 @@ QString busAddress(const T& table)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Names of the tables other tables point at by handle: the locator of a memory device and the use
-// of a memory array. A table may come before the one it points at, so the names are collected
-// before the tables are read. Handles are unique within the whole set of tables.
+// Names of the tables other tables point at by handle: the BIOS, the version of a processor, the
+// use of a memory array and the locator of a memory device. A table may come before the one it
+// points at, so the names are collected before the tables are read. Handles are unique within the
+// whole set of tables.
 QHash<quint16, QString> referencedTableNames(const QByteArray& dump)
 {
     QHash<quint16, QString> result;
@@ -660,6 +661,23 @@ QHash<quint16, QString> referencedTableNames(const QByteArray& dump)
 
         switch (table->type)
         {
+            case SMBIOS_TABLE_TYPE_BIOS:
+                result.insert(table->handle, "BIOS");
+                break;
+
+            case SMBIOS_TABLE_TYPE_PROCESSOR:
+            {
+                SmbiosProcessor processor(table);
+                if (processor.isValid())
+                {
+                    const QString name = processor.version().isEmpty() ?
+                        processor.socketDesignation() : processor.version();
+
+                    result.insert(table->handle, name);
+                }
+            }
+            break;
+
             case SMBIOS_TABLE_TYPE_MEMORY_ARRAY:
             {
                 SmbiosMemoryArray memory_array(table);
@@ -1115,6 +1133,74 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
                 memory_device->set_volatile_size(memory_device_table.volatileSize());
                 memory_device->set_cache_size(memory_device_table.cacheSize());
                 memory_device->set_logical_size(memory_device_table.logicalSize());
+            }
+            break;
+
+            case SMBIOS_TABLE_TYPE_ADDITIONAL_INFO:
+            {
+                SmbiosAdditionalInfo info_table(table);
+                if (!info_table.isValid())
+                    continue;
+
+                for (int i = 0; i < info_table.count(); ++i)
+                {
+                    proto::system_info::Dmi::AdditionalInfo* info = dmi->add_additional_info();
+
+                    info->set_text(info_table.string(i).toStdString());
+                    info->set_value(info_table.value(i).toStdString());
+                    info->set_referenced_handle(info_table.referencedHandle(i));
+                    info->set_referenced_offset(info_table.referencedOffset(i));
+                }
+            }
+            break;
+
+            case SMBIOS_TABLE_TYPE_PROCESSOR_INFO_EXT:
+            {
+                SmbiosProcessorInfoExt info_table(table);
+                if (!info_table.isValid())
+                    continue;
+
+                proto::system_info::Dmi::ProcessorInfoExt* info = dmi->add_processor_info_ext();
+
+                info->set_processor(
+                    table_names.value(info_table.processorHandle()).toStdString());
+                info->set_architecture(info_table.architecture().toStdString());
+            }
+            break;
+
+            case SMBIOS_TABLE_TYPE_FIRMWARE_INVENTORY:
+            {
+                SmbiosFirmwareInventory inventory_table(table);
+                if (!inventory_table.isValid())
+                    continue;
+
+                proto::system_info::Dmi::FirmwareInventory* inventory =
+                    dmi->add_firmware_inventory();
+
+                inventory->set_name(inventory_table.name().toStdString());
+                inventory->set_version(inventory_table.version().toStdString());
+                inventory->set_version_format(inventory_table.versionFormat().toStdString());
+                inventory->set_id(inventory_table.id().toStdString());
+                inventory->set_id_format(inventory_table.idFormat().toStdString());
+                inventory->set_release_date(inventory_table.releaseDate().toStdString());
+                inventory->set_manufacturer(inventory_table.manufacturer().toStdString());
+                inventory->set_lowest_version(inventory_table.lowestVersion().toStdString());
+                inventory->set_state(inventory_table.state().toStdString());
+                inventory->set_image_size(inventory_table.imageSize());
+                inventory->set_updatable(inventory_table.isUpdatable());
+                inventory->set_write_protected(inventory_table.isWriteProtected());
+
+                for (int i = 0; i < inventory_table.componentCount(); ++i)
+                {
+                    const quint16 handle = inventory_table.componentHandle(i);
+                    const QString name = table_names.value(handle);
+
+                    // A component of a table that has no name to give is left as the handle
+                    // itself: it still tells the components apart.
+                    inventory->add_component(name.isEmpty() ?
+                        QString("0x%1").arg(handle, 4, 16, QChar('0')).toStdString() :
+                        name.toStdString());
+                }
             }
             break;
 

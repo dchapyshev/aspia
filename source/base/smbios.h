@@ -59,8 +59,11 @@ enum SmbiosTableType : quint8
     SMBIOS_TABLE_TYPE_CURRENT_PROBE        = 0x1D,
     SMBIOS_TABLE_TYPE_SYSTEM_BOOT          = 0x20,
     SMBIOS_TABLE_TYPE_POWER_SUPPLY         = 0x27,
+    SMBIOS_TABLE_TYPE_ADDITIONAL_INFO      = 0x28,
     SMBIOS_TABLE_TYPE_ONBOARD_DEVICE_EXT   = 0x29,
     SMBIOS_TABLE_TYPE_TPM_DEVICE           = 0x2B,
+    SMBIOS_TABLE_TYPE_PROCESSOR_INFO_EXT   = 0x2C,
+    SMBIOS_TABLE_TYPE_FIRMWARE_INVENTORY   = 0x2D,
     SMBIOS_TABLE_TYPE_END_OF_TABLE         = 0x7F
 };
 
@@ -457,6 +460,18 @@ struct SmbiosPowerSupplyTable : public SmbiosTable
     quint16 current_probe_handle;  // 14h-15h
 };
 
+struct SmbiosAdditionalInfoTable : public SmbiosTable
+{
+    quint8 count; // 04h
+
+    // 05h and on, |count| entries of a variable length each:
+    //   00h      the length of the entry, including this byte
+    //   01h-02h  the handle of the table the entry adds to
+    //   03h      the offset in that table the entry adds to
+    //   04h      the string number of the entry
+    //   05h..    the value, of the length the entry length leaves
+};
+
 struct SmbiosOnBoardDeviceExtTable : public SmbiosTable
 {
     quint8 designation;     // 04h
@@ -477,6 +492,33 @@ struct SmbiosTpmDeviceTable : public SmbiosTable
     quint8 description;         // 12h
     quint64 characteristics;    // 13h-1Ah
     quint32 oem_defined;        // 1Bh-1Eh
+};
+
+struct SmbiosProcessorInfoExtTable : public SmbiosTable
+{
+    quint16 processor_handle; // 04h-05h
+    quint8 block_length;      // 06h, the length of the data behind the processor type
+    quint8 processor_type;    // 07h
+
+    // 08h and on, data specific to the architecture of the processor.
+};
+
+struct SmbiosFirmwareInventoryTable : public SmbiosTable
+{
+    quint8 name;             // 04h
+    quint8 version;          // 05h
+    quint8 version_format;   // 06h
+    quint8 id;               // 07h
+    quint8 id_format;        // 08h
+    quint8 release_date;     // 09h
+    quint8 manufacturer;     // 0Ah
+    quint8 lowest_version;   // 0Bh
+    quint64 image_size;      // 0Ch-13h
+    quint16 characteristics; // 14h-15h
+    quint8 state;            // 16h
+    quint8 component_count;  // 17h
+
+    // 18h and on, |component_count| handles of the components the firmware belongs to.
 };
 
 #pragma pack(pop)

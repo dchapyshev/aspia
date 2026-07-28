@@ -113,8 +113,17 @@ private:
     QString memoryDeviceAddressTitle(int index) const;
     QList<QTreeWidgetItem*> memoryDeviceAddressParameters(int index) const;
 
+    QString additionalInfoTitle(int index) const;
+    QList<QTreeWidgetItem*> additionalInfoParameters(int index) const;
+
     QString tpmDeviceTitle(int index) const;
     QList<QTreeWidgetItem*> tpmDeviceParameters(int index) const;
+
+    QString processorInfoExtTitle(int index) const;
+    QList<QTreeWidgetItem*> processorInfoExtParameters(int index) const;
+
+    QString firmwareInventoryTitle(int index) const;
+    QList<QTreeWidgetItem*> firmwareInventoryParameters(int index) const;
 
     QList<QTreeWidgetItem*> miscParameters() const;
 

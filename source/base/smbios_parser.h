@@ -548,6 +548,25 @@ private:
     Q_DISABLE_COPY_MOVE(SmbiosPowerSupply)
 };
 
+class SmbiosAdditionalInfo
+{
+public:
+    explicit SmbiosAdditionalInfo(const SmbiosTable* table);
+
+    bool isValid() const;
+    int count() const;
+    quint16 referencedHandle(int index) const;
+    quint8 referencedOffset(int index) const;
+    QString string(int index) const;
+    QString value(int index) const;
+
+private:
+    const quint8* entry(int index) const;
+
+    const SmbiosAdditionalInfoTable* table_;
+    Q_DISABLE_COPY_MOVE(SmbiosAdditionalInfo)
+};
+
 class SmbiosOnBoardDeviceExt
 {
 public:
@@ -588,6 +607,50 @@ private:
 
     const SmbiosTpmDeviceTable* table_;
     Q_DISABLE_COPY_MOVE(SmbiosTpmDevice)
+};
+
+class SmbiosFirmwareInventory
+{
+public:
+    explicit SmbiosFirmwareInventory(const SmbiosTable* table);
+
+    bool isValid() const;
+    QString name() const;
+    QString version() const;
+    QString versionFormat() const;
+    QString id() const;
+    QString idFormat() const;
+    QString releaseDate() const;
+    QString manufacturer() const;
+    QString lowestVersion() const;
+    QString state() const;
+    bool isUpdatable() const;
+    bool isWriteProtected() const;
+
+    // The size of the firmware image, in bytes. Zero when the firmware does not report it.
+    quint64 imageSize() const;
+
+    // Tables of the components the firmware belongs to.
+    int componentCount() const;
+    quint16 componentHandle(int index) const;
+
+private:
+    const SmbiosFirmwareInventoryTable* table_;
+    Q_DISABLE_COPY_MOVE(SmbiosFirmwareInventory)
+};
+
+class SmbiosProcessorInfoExt
+{
+public:
+    explicit SmbiosProcessorInfoExt(const SmbiosTable* table);
+
+    bool isValid() const;
+    quint16 processorHandle() const;
+    QString architecture() const;
+
+private:
+    const SmbiosProcessorInfoExtTable* table_;
+    Q_DISABLE_COPY_MOVE(SmbiosProcessorInfoExt)
 };
 
 #endif // BASE_SMBIOS_PARSER_H

@@ -197,6 +197,13 @@ QString probeLocation(quint8 location, quint8 last_site)
 }
 
 //--------------------------------------------------------------------------------------------------
+// A hexadecimal value of a fixed width, in the notation the specification itself uses.
+QString hexValue(quint32 value, int digits)
+{
+    return QString("0x%1").arg(QString("%1").arg(value, digits, 16, QChar('0')).toUpper());
+}
+
+//--------------------------------------------------------------------------------------------------
 // Both probe tables report their values as signed words, with 8000h standing for a value the
 // firmware does not know. A negative value is real: a probe of a negative supply rail reports one.
 // Zero is returned for an unknown value, which a probe reporting a real zero is indistinguishable
@@ -3696,6 +3703,108 @@ quint32 SmbiosPowerSupply::maxPowerCapacity() const
 }
 
 //--------------------------------------------------------------------------------------------------
+SmbiosAdditionalInfo::SmbiosAdditionalInfo(const SmbiosTable* table)
+    : table_(static_cast<const SmbiosAdditionalInfoTable*>(table))
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosAdditionalInfo::isValid() const
+{
+    // 05h is the length of the table with no entries in it.
+    return table_->length >= 0x05;
+}
+
+//--------------------------------------------------------------------------------------------------
+int SmbiosAdditionalInfo::count() const
+{
+    return table_->count;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint16 SmbiosAdditionalInfo::referencedHandle(int index) const
+{
+    const quint8* data = entry(index);
+    if (!data)
+        return 0;
+
+    return static_cast<quint16>(data[1]) | (static_cast<quint16>(data[2]) << 8);
+}
+
+//--------------------------------------------------------------------------------------------------
+quint8 SmbiosAdditionalInfo::referencedOffset(int index) const
+{
+    const quint8* data = entry(index);
+    if (!data)
+        return 0;
+
+    return data[3];
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosAdditionalInfo::string(int index) const
+{
+    const quint8* data = entry(index);
+    if (!data)
+        return QString();
+
+    return smbiosString(table_, data[4]);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosAdditionalInfo::value(int index) const
+{
+    const quint8* data = entry(index);
+    if (!data)
+        return QString();
+
+    // Whatever the entry leaves behind its fixed part is the value. The specification gives it no
+    // meaning of its own and only the widths below are defined for it.
+    const quint32 width = data[0] - 0x05;
+    if (width != 1 && width != 2 && width != 4)
+        return QString();
+
+    quint32 value = 0;
+
+    for (quint32 i = 0; i < width; ++i)
+        value |= static_cast<quint32>(data[5 + i]) << (i * 8);
+
+    return hexValue(value, static_cast<int>(width) * 2);
+}
+
+//--------------------------------------------------------------------------------------------------
+const quint8* SmbiosAdditionalInfo::entry(int index) const
+{
+    if (index < 0 || index >= count())
+        return nullptr;
+
+    const quint8* start = reinterpret_cast<const quint8*>(table_);
+    quint32 offset = 0x05;
+
+    // The entries are of a variable length, so the way to the one asked for leads through all the
+    // entries before it.
+    for (int i = 0; i <= index; ++i)
+    {
+        // The fixed part of an entry is five bytes long, the length itself being the first of
+        // them.
+        if (offset + 0x05 > table_->length)
+            return nullptr;
+
+        const quint32 length = start[offset];
+        if (length < 0x05 || offset + length > table_->length)
+            return nullptr;
+
+        if (i == index)
+            return start + offset;
+
+        offset += length;
+    }
+
+    return nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
 SmbiosOnBoardDeviceExt::SmbiosOnBoardDeviceExt(const SmbiosTable* table)
     : table_(static_cast<const SmbiosOnBoardDeviceExtTable*>(table))
 {
@@ -3878,4 +3987,204 @@ quint64 SmbiosTpmDevice::characteristics() const
         return 0;
 
     return table_->characteristics;
+}
+
+//--------------------------------------------------------------------------------------------------
+SmbiosFirmwareInventory::SmbiosFirmwareInventory(const SmbiosTable* table)
+    : table_(static_cast<const SmbiosFirmwareInventoryTable*>(table))
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosFirmwareInventory::isValid() const
+{
+    // 18h is the length of the table with no components listed behind it.
+    return table_->length >= 0x18;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosFirmwareInventory::name() const
+{
+    return smbiosString(table_, table_->name);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosFirmwareInventory::version() const
+{
+    return smbiosString(table_, table_->version);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosFirmwareInventory::versionFormat() const
+{
+    static const char* kFormat[] =
+    {
+        "Free-form", // 0x00
+        "Major/Minor",
+        "32-bit ID",
+        "64-bit ID" // 0x03
+    };
+
+    if (table_->version_format <= 0x03)
+        return kFormat[table_->version_format];
+
+    if (table_->version_format >= 0x80)
+        return "OEM-specific";
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosFirmwareInventory::id() const
+{
+    return smbiosString(table_, table_->id);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosFirmwareInventory::idFormat() const
+{
+    static const char* kFormat[] =
+    {
+        "Free-form", // 0x00
+        "UEFI GUID" // 0x01
+    };
+
+    if (table_->id_format <= 0x01)
+        return kFormat[table_->id_format];
+
+    if (table_->id_format >= 0x80)
+        return "OEM-specific";
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosFirmwareInventory::releaseDate() const
+{
+    return smbiosString(table_, table_->release_date);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosFirmwareInventory::manufacturer() const
+{
+    return smbiosString(table_, table_->manufacturer);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosFirmwareInventory::lowestVersion() const
+{
+    return smbiosString(table_, table_->lowest_version);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosFirmwareInventory::state() const
+{
+    static const char* kState[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "Disabled",
+        "Enabled",
+        "Absent",
+        "Standby Offline",
+        "Standby Spare",
+        "Unavailable Offline" // 0x08
+    };
+
+    if (table_->state >= 0x01 && table_->state <= 0x08)
+        return kState[table_->state - 0x01];
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosFirmwareInventory::isUpdatable() const
+{
+    return (table_->characteristics & 0x0001) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosFirmwareInventory::isWriteProtected() const
+{
+    return (table_->characteristics & 0x0002) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint64 SmbiosFirmwareInventory::imageSize() const
+{
+    // All ones mean the size of the image is unknown.
+    if (table_->image_size == 0xFFFFFFFFFFFFFFFF)
+        return 0;
+
+    return table_->image_size;
+}
+
+//--------------------------------------------------------------------------------------------------
+int SmbiosFirmwareInventory::componentCount() const
+{
+    return table_->component_count;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint16 SmbiosFirmwareInventory::componentHandle(int index) const
+{
+    if (index < 0 || index >= componentCount())
+        return 0;
+
+    // The handles are a list of words behind the fixed part of the table.
+    const quint32 offset = 0x18 + static_cast<quint32>(index) * 2;
+    if (offset + 2 > table_->length)
+        return 0;
+
+    const quint8* data = reinterpret_cast<const quint8*>(table_) + offset;
+
+    return static_cast<quint16>(data[0]) | (static_cast<quint16>(data[1]) << 8);
+}
+
+//--------------------------------------------------------------------------------------------------
+SmbiosProcessorInfoExt::SmbiosProcessorInfoExt(const SmbiosTable* table)
+    : table_(static_cast<const SmbiosProcessorInfoExtTable*>(table))
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosProcessorInfoExt::isValid() const
+{
+    // 06h is the length of the table with an empty processor-specific block.
+    return table_->length >= 0x06;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint16 SmbiosProcessorInfoExt::processorHandle() const
+{
+    return table_->processor_handle;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosProcessorInfoExt::architecture() const
+{
+    static const char* kArchitecture[] =
+    {
+        "IA32 (x86)", // 0x01
+        "x64 (x86-64, Intel64, AMD64)",
+        "Intel Itanium",
+        "32-bit ARM (Aarch32)",
+        "64-bit ARM (Aarch64)",
+        "32-bit RISC-V (RV32)",
+        "64-bit RISC-V (RV64)",
+        "128-bit RISC-V (RV128)",
+        "32-bit LoongArch (LoongArch32)",
+        "64-bit LoongArch (LoongArch64)" // 0x0A
+    };
+
+    // The type sits in the processor-specific block, behind the length of the data in it.
+    if (table_->length < 0x08)
+        return QString();
+
+    if (table_->processor_type >= 0x01 && table_->processor_type <= 0x0A)
+        return kArchitecture[table_->processor_type - 0x01];
+
+    return QString();
 }

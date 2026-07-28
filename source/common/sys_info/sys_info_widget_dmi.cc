@@ -45,7 +45,10 @@ const char kMemoryDeviceIcon[] = ":/img/memory-slot.svg";
 const char kMemoryErrorIcon[] = ":/img/memory-slot.svg";
 const char kMemoryArrayAddressIcon[] = ":/img/memory-slot.svg";
 const char kMemoryDeviceAddressIcon[] = ":/img/memory-slot.svg";
+const char kAdditionalInfoIcon[] = ":/img/file-document.svg";
 const char kTpmDeviceIcon[] = ":/img/certificate.svg";
+const char kProcessorInfoExtIcon[] = ":/img/microchip.svg";
+const char kFirmwareInventoryIcon[] = ":/img/processor.svg";
 const char kMiscIcon[] = ":/img/info.svg";
 
 // Group of tables a item of the upper pane belongs to.
@@ -76,7 +79,10 @@ enum Group
     GROUP_TEMPERATURE_PROBES,
     GROUP_CURRENT_PROBES,
     GROUP_SYSTEM_BOOT,
+    GROUP_ADDITIONAL_INFO,
     GROUP_TPM_DEVICES,
+    GROUP_PROCESSOR_INFO_EXT,
+    GROUP_FIRMWARE_INVENTORY,
     GROUP_MISC
 };
 
@@ -366,12 +372,42 @@ void SysInfoWidgetDmi::setSystemInfo(const proto::system_info::SystemInfo& syste
     if (!dmi_->boot_status().empty())
         addGroup(GROUP_SYSTEM_BOOT, kSystemBootIcon, tr("System Boot"), { tr("System Boot") });
 
+    QStringList additional_info;
+    for (int i = 0; i < dmi_->additional_info_size(); ++i)
+        additional_info << additionalInfoTitle(i);
+
+    if (!additional_info.isEmpty())
+    {
+        addGroup(GROUP_ADDITIONAL_INFO, kAdditionalInfoIcon, tr("Additional Information"),
+                 additional_info);
+    }
+
     QStringList tpm_devices;
     for (int i = 0; i < dmi_->tpm_device_size(); ++i)
         tpm_devices << tpmDeviceTitle(i);
 
     if (!tpm_devices.isEmpty())
         addGroup(GROUP_TPM_DEVICES, kTpmDeviceIcon, tr("TPM Device"), tpm_devices);
+
+    QStringList processor_info_ext;
+    for (int i = 0; i < dmi_->processor_info_ext_size(); ++i)
+        processor_info_ext << processorInfoExtTitle(i);
+
+    if (!processor_info_ext.isEmpty())
+    {
+        addGroup(GROUP_PROCESSOR_INFO_EXT, kProcessorInfoExtIcon,
+                 tr("Processor Additional Information"), processor_info_ext);
+    }
+
+    QStringList firmware_inventory;
+    for (int i = 0; i < dmi_->firmware_inventory_size(); ++i)
+        firmware_inventory << firmwareInventoryTitle(i);
+
+    if (!firmware_inventory.isEmpty())
+    {
+        addGroup(GROUP_FIRMWARE_INVENTORY, kFirmwareInventoryIcon, tr("Firmware Inventory"),
+                 firmware_inventory);
+    }
 
     if (dmi_->has_misc())
         addGroup(GROUP_MISC, kMiscIcon, tr("Misc"), { tr("DMI Properties") });
@@ -532,6 +568,32 @@ void SysInfoWidgetDmi::onCurrentTableChanged()
         }
         break;
 
+        case GROUP_ADDITIONAL_INFO:
+        {
+            const int first = index < 0 ? 0 : index;
+            const int last = index < 0 ? dmi_->additional_info_size() - 1 : index;
+
+            for (int i = first; i <= last && i < dmi_->additional_info_size(); ++i)
+            {
+                items << new Item(kAdditionalInfoIcon, additionalInfoTitle(i),
+                                  additionalInfoParameters(i));
+            }
+        }
+        break;
+
+        case GROUP_PROCESSOR_INFO_EXT:
+        {
+            const int first = index < 0 ? 0 : index;
+            const int last = index < 0 ? dmi_->processor_info_ext_size() - 1 : index;
+
+            for (int i = first; i <= last && i < dmi_->processor_info_ext_size(); ++i)
+            {
+                items << new Item(kProcessorInfoExtIcon, processorInfoExtTitle(i),
+                                  processorInfoExtParameters(i));
+            }
+        }
+        break;
+
         case GROUP_TPM_DEVICES:
         {
             const int first = index < 0 ? 0 : index;
@@ -644,6 +706,19 @@ void SysInfoWidgetDmi::onCurrentTableChanged()
         case GROUP_SYSTEM_BOOT:
             items << new Item(kSystemBootIcon, tr("System Boot"), systemBootParameters());
             break;
+
+        case GROUP_FIRMWARE_INVENTORY:
+        {
+            const int first = index < 0 ? 0 : index;
+            const int last = index < 0 ? dmi_->firmware_inventory_size() - 1 : index;
+
+            for (int i = first; i <= last && i < dmi_->firmware_inventory_size(); ++i)
+            {
+                items << new Item(kFirmwareInventoryIcon, firmwareInventoryTitle(i),
+                                  firmwareInventoryParameters(i));
+            }
+        }
+        break;
 
         case GROUP_MISC:
             items << new Item(kMiscIcon, tr("DMI Properties"), miscParameters());
@@ -1656,6 +1731,69 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::memoryDeviceAddressParameters(int inde
 }
 
 //--------------------------------------------------------------------------------------------------
+QString SysInfoWidgetDmi::additionalInfoTitle(int index) const
+{
+    const proto::system_info::Dmi::AdditionalInfo& info = dmi_->additional_info(index);
+
+    if (!info.text().empty())
+        return QString::fromStdString(info.text());
+
+    return tr("Entry %1").arg(index + 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<QTreeWidgetItem*> SysInfoWidgetDmi::additionalInfoParameters(int index) const
+{
+    const proto::system_info::Dmi::AdditionalInfo& info = dmi_->additional_info(index);
+    QList<QTreeWidgetItem*> items;
+
+    if (!info.text().empty())
+        items << mk(tr("String"), QString::fromStdString(info.text()));
+
+    if (!info.value().empty())
+        items << mk(tr("Value"), QString::fromStdString(info.value()));
+
+    // The entry adds to a field of another table, and the pair below is what addresses it.
+    items << mk(tr("Referenced Handle"),
+                QString("0x%1").arg(info.referenced_handle(), 4, 16, QChar('0')));
+    items << mk(tr("Referenced Offset"),
+                QString("0x%1").arg(info.referenced_offset(), 2, 16, QChar('0')));
+
+    return items;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SysInfoWidgetDmi::processorInfoExtTitle(int index) const
+{
+    const proto::system_info::Dmi::ProcessorInfoExt& info = dmi_->processor_info_ext(index);
+
+    if (!info.processor().empty())
+        return QString::fromStdString(info.processor());
+
+    if (!info.architecture().empty())
+        return QString::fromStdString(info.architecture());
+
+    return tr("Entry %1").arg(index + 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<QTreeWidgetItem*> SysInfoWidgetDmi::processorInfoExtParameters(int index) const
+{
+    const proto::system_info::Dmi::ProcessorInfoExt& info = dmi_->processor_info_ext(index);
+    QList<QTreeWidgetItem*> items;
+
+    // Firmware leaves a table with no processor to point at behind, and then there is nothing to
+    // resolve its handle to.
+    if (!info.processor().empty())
+        items << mk(tr("Processor"), QString::fromStdString(info.processor()));
+
+    if (!info.architecture().empty())
+        items << mk(tr("Architecture"), QString::fromStdString(info.architecture()));
+
+    return items;
+}
+
+//--------------------------------------------------------------------------------------------------
 QString SysInfoWidgetDmi::tpmDeviceTitle(int index) const
 {
     const proto::system_info::Dmi::TpmDevice& tpm = dmi_->tpm_device(index);
@@ -1697,6 +1835,73 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::tpmDeviceParameters(int index) const
                           tpm.configurable_by_oem() ? tr("Yes") : tr("No"));
 
     items << new Item(tr("Characteristics"), characteristics);
+
+    return items;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SysInfoWidgetDmi::firmwareInventoryTitle(int index) const
+{
+    const proto::system_info::Dmi::FirmwareInventory& inventory = dmi_->firmware_inventory(index);
+
+    if (!inventory.name().empty())
+        return QString::fromStdString(inventory.name());
+
+    return tr("Firmware %1").arg(index + 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<QTreeWidgetItem*> SysInfoWidgetDmi::firmwareInventoryParameters(int index) const
+{
+    const proto::system_info::Dmi::FirmwareInventory& inventory = dmi_->firmware_inventory(index);
+    QList<QTreeWidgetItem*> items;
+
+    if (!inventory.name().empty())
+        items << mk(tr("Name"), QString::fromStdString(inventory.name()));
+
+    if (!inventory.manufacturer().empty())
+        items << mk(tr("Manufacturer"), QString::fromStdString(inventory.manufacturer()));
+
+    if (!inventory.version().empty())
+        items << mk(tr("Version"), QString::fromStdString(inventory.version()));
+
+    if (!inventory.version_format().empty())
+        items << mk(tr("Version Format"), QString::fromStdString(inventory.version_format()));
+
+    if (!inventory.lowest_version().empty())
+    {
+        items << mk(tr("Lowest Supported Version"),
+                    QString::fromStdString(inventory.lowest_version()));
+    }
+
+    if (!inventory.release_date().empty())
+        items << mk(tr("Release Date"), QString::fromStdString(inventory.release_date()));
+
+    if (!inventory.id().empty())
+        items << mk(tr("ID"), QString::fromStdString(inventory.id()));
+
+    if (!inventory.id_format().empty())
+        items << mk(tr("ID Format"), QString::fromStdString(inventory.id_format()));
+
+    if (!inventory.state().empty())
+        items << mk(tr("State"), QString::fromStdString(inventory.state()));
+
+    if (inventory.image_size())
+        items << mk(tr("Image Size"), Formatter::sizeToString(inventory.image_size()));
+
+    items << mk(tr("Updatable"), inventory.updatable() ? tr("Yes") : tr("No"));
+    items << mk(tr("Write-protected"), inventory.write_protected() ? tr("Yes") : tr("No"));
+
+    QList<QTreeWidgetItem*> components;
+
+    for (int i = 0; i < inventory.component_size(); ++i)
+    {
+        components << mk(tr("Component %1").arg(i + 1),
+                         QString::fromStdString(inventory.component(i)));
+    }
+
+    if (!components.isEmpty())
+        items << new Item(tr("Associated Components"), components);
 
     return items;
 }

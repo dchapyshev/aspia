@@ -833,6 +833,38 @@ message Dmi
         uint32 nominal_speed = 5;
     }
 
+    message AdditionalInfo
+    {
+        string text              = 1;
+        string value             = 2;
+        uint32 referenced_handle = 3;
+        uint32 referenced_offset = 4;
+    }
+
+    message ProcessorInfoExt
+    {
+        string processor    = 1;
+        string architecture = 2;
+    }
+
+    message FirmwareInventory
+    {
+        string name           = 1;
+        string version        = 2;
+        string version_format = 3;
+        string id             = 4;
+        string id_format      = 5;
+        string release_date   = 6;
+        string manufacturer   = 7;
+        string lowest_version = 8;
+        string state          = 9;
+        uint64 image_size     = 10;
+        bool updatable        = 11;
+        bool write_protected  = 12;
+
+        repeated string component = 13;
+    }
+
     message Misc
     {
         string smbios_version  = 1;
@@ -871,8 +903,11 @@ message Dmi
     repeated Probe temperature_probe                   = 18;
     repeated Probe current_probe                       = 19;
     string boot_status                                 = 20;
-    repeated TpmDevice tpm_device                      = 21;
-    Misc misc                                          = 22;
+    repeated AdditionalInfo additional_info            = 21;
+    repeated TpmDevice tpm_device                      = 22;
+    repeated ProcessorInfoExt processor_info_ext       = 23;
+    repeated FirmwareInventory firmware_inventory      = 24;
+    Misc misc                                          = 25;
 }
 
 message SystemInfoRequest

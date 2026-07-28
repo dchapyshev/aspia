@@ -2397,6 +2397,230 @@ TEST(SmbiosParserTest, TruncatedOnBoardDeviceExtIsInvalid)
 }
 
 //--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, AdditionalInfoEntries)
+{
+    QByteArray formatted;
+    formatted.append(static_cast<char>(2)); // count: two entries
+
+    // The first entry: a four-byte value and a string.
+    formatted.append(static_cast<char>(0x09)); // length of the entry
+    formatted.append(static_cast<char>(0x34)); // referenced_handle: 1234h
+    formatted.append(static_cast<char>(0x12));
+    formatted.append(static_cast<char>(0x05)); // referenced_offset
+    formatted.append(static_cast<char>(1));    // string #1
+    formatted.append(static_cast<char>(0x78)); // value: 12345678h
+    formatted.append(static_cast<char>(0x56));
+    formatted.append(static_cast<char>(0x34));
+    formatted.append(static_cast<char>(0x12));
+
+    // The second entry: a single byte of value and no string.
+    formatted.append(static_cast<char>(0x06)); // length of the entry
+    formatted.append(static_cast<char>(0x02)); // referenced_handle: 0002h
+    formatted.append(static_cast<char>(0x00));
+    formatted.append(static_cast<char>(0x0A)); // referenced_offset
+    formatted.append(static_cast<char>(0));    // no string
+    formatted.append(static_cast<char>(0xAB)); // value: ABh
+
+    const QByteArray dump = makeDump(
+        makeTable(SMBIOS_TABLE_TYPE_ADDITIONAL_INFO, formatted, { "AGESA 1.2.0.3c" }));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosAdditionalInfo info(enumerator.table());
+    ASSERT_TRUE(info.isValid());
+    ASSERT_EQ(info.count(), 2);
+
+    EXPECT_EQ(info.referencedHandle(0), 0x1234);
+    EXPECT_EQ(info.referencedOffset(0), 0x05);
+    EXPECT_EQ(info.string(0), QString("AGESA 1.2.0.3c"));
+    EXPECT_EQ(info.value(0), QString("0x12345678"));
+
+    EXPECT_EQ(info.referencedHandle(1), 0x0002);
+    EXPECT_EQ(info.referencedOffset(1), 0x0A);
+    EXPECT_TRUE(info.string(1).isEmpty());
+    EXPECT_EQ(info.value(1), QString("0xAB"));
+
+    // Indexes outside the declared count give nothing.
+    EXPECT_EQ(info.referencedHandle(2), 0);
+    EXPECT_TRUE(info.value(-1).isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, AdditionalInfoEntryBehindTable)
+{
+    // The table declares three entries but ends in the middle of the second one: the entries
+    // behind the data must not be exposed, and walking them must not leave the table.
+    QByteArray formatted;
+    formatted.append(static_cast<char>(3)); // count: three entries
+
+    formatted.append(static_cast<char>(0x06)); // the only whole entry
+    formatted.append(static_cast<char>(0x01));
+    formatted.append(static_cast<char>(0x00));
+    formatted.append(static_cast<char>(0x04));
+    formatted.append(static_cast<char>(0));
+    formatted.append(static_cast<char>(0x11));
+
+    formatted.append(static_cast<char>(0x09)); // an entry longer than the data left
+    formatted.append(static_cast<char>(0x02));
+
+    const QByteArray dump = makeDump(
+        makeTable(SMBIOS_TABLE_TYPE_ADDITIONAL_INFO, formatted, { "Ghost" }) + endOfTable());
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosAdditionalInfo info(enumerator.table());
+    ASSERT_TRUE(info.isValid());
+    EXPECT_EQ(info.count(), 3);
+
+    EXPECT_EQ(info.value(0), QString("0x11"));
+    EXPECT_TRUE(info.value(1).isEmpty());
+    EXPECT_TRUE(info.value(2).isEmpty());
+    EXPECT_EQ(info.referencedHandle(1), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, TruncatedAdditionalInfoIsInvalid)
+{
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_ADDITIONAL_INFO, QByteArray(), {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    EXPECT_FALSE(SmbiosAdditionalInfo(enumerator.table()).isValid());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, FirmwareInventoryFields)
+{
+    QByteArray formatted(0x1C - 4, '\0');
+    formatted[0x04 - 4] = 1;                       // name: string #1
+    formatted[0x05 - 4] = 2;                       // version: string #2
+    formatted[0x06 - 4] = static_cast<char>(0x01); // version_format: major/minor
+    formatted[0x07 - 4] = 3;                       // id: string #3
+    formatted[0x08 - 4] = static_cast<char>(0x01); // id_format: UEFI GUID
+    formatted[0x09 - 4] = 4;                       // release_date: string #4
+    formatted[0x0A - 4] = 5;                       // manufacturer: string #5
+    formatted[0x0B - 4] = 6;                       // lowest_version: string #6
+    formatted[0x0E - 4] = static_cast<char>(0x10); // image_size: 1 MB
+    formatted[0x14 - 4] = static_cast<char>(0x03); // characteristics: updatable, write-protected
+    formatted[0x16 - 4] = static_cast<char>(0x04); // state: enabled
+    formatted[0x17 - 4] = 2;                       // two components
+    formatted[0x18 - 4] = static_cast<char>(0x0D); // the first handle: 000Dh
+    formatted[0x1A - 4] = static_cast<char>(0x11); // the second handle: 0011h
+
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_FIRMWARE_INVENTORY, formatted,
+        { "TPM Firmware", "60020.6", "ID-1", "2021-05-15T00:00:00Z", "AMD", "1.0" }));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosFirmwareInventory inventory(enumerator.table());
+    ASSERT_TRUE(inventory.isValid());
+    EXPECT_EQ(inventory.name(), QString("TPM Firmware"));
+    EXPECT_EQ(inventory.version(), QString("60020.6"));
+    EXPECT_EQ(inventory.versionFormat(), QString("Major/Minor"));
+    EXPECT_EQ(inventory.id(), QString("ID-1"));
+    EXPECT_EQ(inventory.idFormat(), QString("UEFI GUID"));
+    EXPECT_EQ(inventory.releaseDate(), QString("2021-05-15T00:00:00Z"));
+    EXPECT_EQ(inventory.manufacturer(), QString("AMD"));
+    EXPECT_EQ(inventory.lowestVersion(), QString("1.0"));
+    EXPECT_EQ(inventory.state(), QString("Enabled"));
+    EXPECT_TRUE(inventory.isUpdatable());
+    EXPECT_TRUE(inventory.isWriteProtected());
+    EXPECT_EQ(inventory.imageSize(), 1024ULL * 1024ULL);
+    EXPECT_EQ(inventory.componentCount(), 2);
+    EXPECT_EQ(inventory.componentHandle(0), 0x000D);
+    EXPECT_EQ(inventory.componentHandle(1), 0x0011);
+
+    // Indexes outside the declared count give nothing.
+    EXPECT_EQ(inventory.componentHandle(2), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, FirmwareInventoryHandlesBehindTable)
+{
+    // The table declares two components but ends behind the first handle, and the string area sits
+    // where the second one would be.
+    QByteArray formatted(0x1A - 4, '\0');
+    formatted[0x14 - 4] = static_cast<char>(0x00); // characteristics: none of them
+    formatted[0x16 - 4] = static_cast<char>(0x02); // state: unknown
+    formatted[0x17 - 4] = 2;                       // two components
+    formatted[0x18 - 4] = static_cast<char>(0x0D); // the only handle that fits
+
+    // image_size: all ones stand for a size the firmware does not know.
+    for (int i = 0; i < 8; ++i)
+        formatted[0x0C - 4 + i] = static_cast<char>(0xFF);
+
+    const QByteArray dump = makeDump(
+        makeTable(SMBIOS_TABLE_TYPE_FIRMWARE_INVENTORY, formatted, { "Ghost" }) + endOfTable());
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosFirmwareInventory inventory(enumerator.table());
+    ASSERT_TRUE(inventory.isValid());
+    EXPECT_EQ(inventory.imageSize(), 0ULL);
+    EXPECT_EQ(inventory.state(), QString("Unknown"));
+    EXPECT_FALSE(inventory.isUpdatable());
+    EXPECT_EQ(inventory.componentCount(), 2);
+    EXPECT_EQ(inventory.componentHandle(0), 0x000D);
+    EXPECT_EQ(inventory.componentHandle(1), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, TruncatedFirmwareInventoryIsInvalid)
+{
+    const QByteArray dump = makeDump(
+        makeTable(SMBIOS_TABLE_TYPE_FIRMWARE_INVENTORY, QByteArray(0x17 - 4, '\0'), {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    EXPECT_FALSE(SmbiosFirmwareInventory(enumerator.table()).isValid());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, ProcessorInfoExtFields)
+{
+    QByteArray formatted(0x09 - 4, '\0');
+    formatted[0x04 - 4] = static_cast<char>(0x0D); // processor_handle: 000Dh
+    formatted[0x06 - 4] = static_cast<char>(0x01); // block_length
+    formatted[0x07 - 4] = static_cast<char>(0x02); // processor_type: x64
+
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_PROCESSOR_INFO_EXT, formatted, {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosProcessorInfoExt info(enumerator.table());
+    ASSERT_TRUE(info.isValid());
+    EXPECT_EQ(info.processorHandle(), 0x000D);
+    EXPECT_EQ(info.architecture(), QString("x64 (x86-64, Intel64, AMD64)"));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, ProcessorInfoExtWithoutBlock)
+{
+    // A table with an empty processor-specific block has no architecture to tell, and the string
+    // area sits where the type would be.
+    QByteArray formatted(0x06 - 4, '\0');
+
+    const QByteArray dump = makeDump(
+        makeTable(SMBIOS_TABLE_TYPE_PROCESSOR_INFO_EXT, formatted, { "Ghost" }) + endOfTable());
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosProcessorInfoExt info(enumerator.table());
+    ASSERT_TRUE(info.isValid());
+    EXPECT_TRUE(info.architecture().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST(SmbiosParserTest, TpmDeviceFields)
 {
     QByteArray formatted(0x1F - 4, '\0');
