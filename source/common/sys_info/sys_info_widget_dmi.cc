@@ -22,6 +22,7 @@
 
 #include "common/system_info_constants.h"
 #include "common/desktop/formatter.h"
+#include "common/sys_info/sys_info_report.h"
 #include "proto/system_info.h"
 #include "ui_sys_info_widget_dmi.h"
 
@@ -427,6 +428,29 @@ QTreeWidget* SysInfoWidgetDmi::treeWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
+void SysInfoWidgetDmi::buildReport(SysInfoReport* report)
+{
+    if (!dmi_)
+        return;
+
+    const QStringList header = parametersHeader();
+
+    // A table per group with every entry it holds: the list of the tables says nothing without the
+    // fields behind it, and there is nothing to select on paper.
+    for (int i = 0; i < ui->tree->topLevelItemCount(); ++i)
+    {
+        QTreeWidgetItem* group_item = ui->tree->topLevelItem(i);
+        const QList<QTreeWidgetItem*> items =
+            tableItems(group_item->data(0, kGroupRole).toInt(), -1);
+
+        report->addItems(group_item->text(0), header, items);
+
+        // The entries were built for the report alone: no tree took them.
+        qDeleteAll(items);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetDmi::onContextMenu(const QPoint& point)
 {
     showContextMenu(ui->tree, point);
@@ -447,13 +471,23 @@ void SysInfoWidgetDmi::onCurrentTableChanged()
     if (!current || !dmi_)
         return;
 
-    const int group = current->data(0, kGroupRole).toInt();
-    const int index = current->data(0, kIndexRole).toInt();
+    ui->tree_params->addTopLevelItems(
+        tableItems(current->data(0, kGroupRole).toInt(), current->data(0, kIndexRole).toInt()));
 
+    // Groups of parameters are nested, and there is nothing to hide behind a collapsed item.
+    ui->tree_params->expandAll();
+
+    for (int i = 0; i < ui->tree_params->columnCount(); ++i)
+        ui->tree_params->resizeColumnToContents(i);
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<QTreeWidgetItem*> SysInfoWidgetDmi::tableItems(int group, int index) const
+{
     QList<QTreeWidgetItem*> items;
 
-    // The item of a group shows every entry it holds, the item of an entry only the parameters of
-    // that entry.
+    // An index of an entry takes the parameters of that entry, an index of a group every entry it
+    // holds.
     switch (group)
     {
         case GROUP_BIOS:
@@ -728,13 +762,22 @@ void SysInfoWidgetDmi::onCurrentTableChanged()
             break;
     }
 
-    ui->tree_params->addTopLevelItems(items);
+    return items;
+}
 
-    // Groups of parameters are nested, and there is nothing to hide behind a collapsed item.
-    ui->tree_params->expandAll();
+//--------------------------------------------------------------------------------------------------
+QStringList SysInfoWidgetDmi::parametersHeader() const
+{
+    QStringList header;
 
-    for (int i = 0; i < ui->tree_params->columnCount(); ++i)
-        ui->tree_params->resizeColumnToContents(i);
+    QTreeWidgetItem* header_item = ui->tree_params->headerItem();
+    if (header_item)
+    {
+        for (int i = 0; i < ui->tree_params->columnCount(); ++i)
+            header << header_item->text(i);
+    }
+
+    return header;
 }
 
 //--------------------------------------------------------------------------------------------------

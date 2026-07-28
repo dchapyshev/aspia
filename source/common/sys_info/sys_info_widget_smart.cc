@@ -26,6 +26,7 @@
 #include "base/time_types.h"
 #include "common/system_info_constants.h"
 #include "common/desktop/formatter.h"
+#include "common/sys_info/sys_info_report.h"
 #include "proto/system_info.h"
 #include "ui_sys_info_widget_smart.h"
 
@@ -265,16 +266,10 @@ void SysInfoWidgetSmart::setSystemInfo(const proto::system_info::SystemInfo& sys
 
     for (int i = 0; i < drives_->drive_size(); ++i)
     {
-        const proto::system_info::PhysicalDrives::Drive& drive = drives_->drive(i);
-
-        const QString title = drive.model().empty() ?
-            QString::fromStdString(drive.path()) :
-            QString::fromStdString(drive.model());
-
         QTreeWidgetItem* item = new QTreeWidgetItem();
 
         item->setIcon(0, icon);
-        item->setText(0, title);
+        item->setText(0, driveTitle(i));
         item->setData(0, kDriveIndexRole, i);
 
         ui->tree->addTopLevelItem(item);
@@ -291,6 +286,25 @@ void SysInfoWidgetSmart::setSystemInfo(const proto::system_info::SystemInfo& sys
 QTreeWidget* SysInfoWidgetSmart::treeWidget()
 {
     return ui->tree_health;
+}
+
+//--------------------------------------------------------------------------------------------------
+void SysInfoWidgetSmart::buildReport(SysInfoReport* report)
+{
+    if (!drives_)
+        return;
+
+    // A table per drive: the health data alone does not name the drive it belongs to, and a report
+    // that holds the data of a single drive is not a report of the category.
+    for (int i = 0; i < drives_->drive_size(); ++i)
+    {
+        const QList<QTreeWidgetItem*> items = healthItems(i);
+
+        report->addItems(driveTitle(i), healthHeader(i), items);
+
+        // The rows were built for the report alone: no tree took them.
+        qDeleteAll(items);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -318,22 +332,11 @@ void SysInfoWidgetSmart::onCurrentDriveChanged()
     if (drive_index < 0 || drive_index >= drives_->drive_size())
         return;
 
-    const proto::system_info::PhysicalDrives::Drive& drive = drives_->drive(drive_index);
+    const QStringList header = healthHeader(drive_index);
 
-    if (drive.smart_attribute_size())
-    {
-        setAtaHealth(drive_index);
-    }
-    else if (drive.has_nvme_health())
-    {
-        setNvmeHealth(drive_index);
-    }
-    else
-    {
-        ui->tree_health->setColumnCount(2);
-        ui->tree_health->setHeaderLabels({ tr("Parameter"), tr("Value") });
-        ui->tree_health->addTopLevelItem(mk(tr("Health Data"), tr("Not available")));
-    }
+    ui->tree_health->setColumnCount(header.count());
+    ui->tree_health->setHeaderLabels(header);
+    ui->tree_health->addTopLevelItems(healthItems(drive_index));
 
     const QIcon icon(kDriveIcon);
 
@@ -368,13 +371,51 @@ void SysInfoWidgetSmart::showContextMenu(QTreeWidget* tree, const QPoint& point)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SysInfoWidgetSmart::setAtaHealth(int drive_index)
+QString SysInfoWidgetSmart::driveTitle(int drive_index) const
 {
-    ui->tree_health->setColumnCount(6);
-    ui->tree_health->setHeaderLabels({ tr("Attribute"), tr("Value"), tr("Worst"), tr("Threshold"),
-                                       tr("Raw"), tr("Status") });
-
     const proto::system_info::PhysicalDrives::Drive& drive = drives_->drive(drive_index);
+
+    return drive.model().empty() ?
+        QString::fromStdString(drive.path()) : QString::fromStdString(drive.model());
+}
+
+//--------------------------------------------------------------------------------------------------
+QStringList SysInfoWidgetSmart::healthHeader(int drive_index) const
+{
+    const proto::system_info::PhysicalDrives::Drive& drive = drives_->drive(drive_index);
+
+    if (drive.smart_attribute_size())
+    {
+        return { tr("Attribute"), tr("Value"), tr("Worst"), tr("Threshold"), tr("Raw"),
+                 tr("Status") };
+    }
+
+    if (drive.has_nvme_health())
+        return { tr("Parameter"), tr("Value"), tr("Raw") };
+
+    return { tr("Parameter"), tr("Value") };
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<QTreeWidgetItem*> SysInfoWidgetSmart::healthItems(int drive_index) const
+{
+    const proto::system_info::PhysicalDrives::Drive& drive = drives_->drive(drive_index);
+
+    if (drive.smart_attribute_size())
+        return ataHealth(drive_index);
+
+    if (drive.has_nvme_health())
+        return nvmeHealth(drive_index);
+
+    return { mk(tr("Health Data"), tr("Not available")) };
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<QTreeWidgetItem*> SysInfoWidgetSmart::ataHealth(int drive_index) const
+{
+    const proto::system_info::PhysicalDrives::Drive& drive = drives_->drive(drive_index);
+
+    QList<QTreeWidgetItem*> rows;
 
     for (int i = 0; i < drive.smart_attribute_size(); ++i)
     {
@@ -403,16 +444,15 @@ void SysInfoWidgetSmart::setAtaHealth(int drive_index)
         item->setText(4, rawToString(attribute.raw(), kAtaRawDigits));
         item->setText(5, status);
 
-        ui->tree_health->addTopLevelItem(item);
+        rows << item;
     }
+
+    return rows;
 }
 
 //--------------------------------------------------------------------------------------------------
-void SysInfoWidgetSmart::setNvmeHealth(int drive_index)
+QList<QTreeWidgetItem*> SysInfoWidgetSmart::nvmeHealth(int drive_index) const
 {
-    ui->tree_health->setColumnCount(3);
-    ui->tree_health->setHeaderLabels({ tr("Parameter"), tr("Value"), tr("Raw") });
-
     const proto::system_info::PhysicalDrives::Drive::NvmeHealth& health =
         drives_->drive(drive_index).nvme_health();
 
@@ -502,5 +542,5 @@ void SysInfoWidgetSmart::setNvmeHealth(int drive_index)
                       Formatter::delayToString(Minutes(health.critical_temperature_time())),
                       rawToString(health.critical_temperature_time(), kNvmeRawDigits));
 
-    ui->tree_health->addTopLevelItems(rows);
+    return rows;
 }

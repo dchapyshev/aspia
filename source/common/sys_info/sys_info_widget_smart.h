@@ -19,6 +19,8 @@
 #ifndef COMMON_SYS_INFO_SYS_INFO_WIDGET_SMART_H
 #define COMMON_SYS_INFO_SYS_INFO_WIDGET_SMART_H
 
+#include <QStringList>
+
 #include <memory>
 
 #include "common/sys_info/sys_info_widget.h"
@@ -32,6 +34,7 @@ class PhysicalDrives;
 } // namespace proto::system_info
 
 class QTreeWidget;
+class QTreeWidgetItem;
 
 class SysInfoWidgetSmart final : public SysInfoWidget
 {
@@ -46,6 +49,9 @@ public:
     void setSystemInfo(const proto::system_info::SystemInfo& system_info) final;
     QTreeWidget* treeWidget() final;
 
+    // The pane shows the health of one drive at a time, the report holds the health of all of them.
+    void buildReport(SysInfoReport* report) final;
+
 private slots:
     void onContextMenu(const QPoint& point);
     void onHealthContextMenu(const QPoint& point);
@@ -56,10 +62,17 @@ private slots:
 private:
     void showContextMenu(QTreeWidget* tree, const QPoint& point);
 
-    // Column sets of the lower pane. An ATA drive reports a table of normalized attributes, an NVMe
-    // drive a set of named counters, so each gets the columns that fit it.
-    void setAtaHealth(int drive_index);
-    void setNvmeHealth(int drive_index);
+    // Name the drive is listed under.
+    QString driveTitle(int drive_index) const;
+
+    // Health data of a drive. An ATA drive reports a table of normalized attributes, an NVMe drive
+    // a set of named counters, and a drive that reports neither has a single row saying so, so each
+    // of them comes with the columns that fit it.
+    QStringList healthHeader(int drive_index) const;
+    QList<QTreeWidgetItem*> healthItems(int drive_index) const;
+
+    QList<QTreeWidgetItem*> ataHealth(int drive_index) const;
+    QList<QTreeWidgetItem*> nvmeHealth(int drive_index) const;
 
     std::unique_ptr<Ui::SysInfoSmart> ui;
 

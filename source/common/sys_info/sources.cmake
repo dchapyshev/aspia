@@ -17,6 +17,8 @@
 #
 
 collect_sources(SOURCE_COMMON_SYS_INFO
+    sys_info_report.cc
+    sys_info_report.h
     sys_info_view.cc
     sys_info_view.h
     sys_info_view.ui
@@ -90,6 +92,4 @@ collect_sources(SOURCE_COMMON_SYS_INFO
     sys_info_widget_summary.ui
     sys_info_widget_video_adapters.cc
     sys_info_widget_video_adapters.h
-    sys_info_widget_video_adapters.ui
-    tree_to_html.cc
-    tree_to_html.h)
+    sys_info_widget_video_adapters.ui)

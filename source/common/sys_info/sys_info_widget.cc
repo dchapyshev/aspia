@@ -18,6 +18,7 @@
 
 #include "common/sys_info/sys_info_widget.h"
 
+#include "common/sys_info/sys_info_report.h"
 #include "proto/system_info.h"
 
 #include <QApplication>
@@ -59,6 +60,12 @@ proto::system_info::SystemInfoRequest SysInfoWidget::request() const
     proto::system_info::SystemInfoRequest system_info_request;
     system_info_request.set_category(category());
     return system_info_request;
+}
+
+//--------------------------------------------------------------------------------------------------
+void SysInfoWidget::buildReport(SysInfoReport* report)
+{
+    report->addTree(QString(), treeWidget());
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -28,6 +28,7 @@ class SystemInfoRequest;
 
 class QTreeWidget;
 class QTreeWidgetItem;
+class SysInfoReport;
 
 class SysInfoWidget : public QWidget
 {
@@ -40,6 +41,8 @@ public:
     virtual proto::system_info::SystemInfoRequest request() const;
     virtual void setSystemInfo(const proto::system_info::SystemInfo& system_info) = 0;
     virtual QTreeWidget* treeWidget() = 0;
+    virtual void buildReport(SysInfoReport* report);
+
     virtual QByteArray saveState() const;
     virtual void restoreState(const QByteArray& state);
 

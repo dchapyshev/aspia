@@ -35,6 +35,7 @@
 
 #include "base/logging.h"
 #include "common/desktop/msg_box.h"
+#include "common/sys_info/sys_info_report.h"
 #include "common/sys_info/sys_info_widget_applications.h"
 #include "common/sys_info/sys_info_widget_connections.h"
 #include "common/sys_info/sys_info_widget_devices.h"
@@ -58,7 +59,6 @@
 #include "common/sys_info/sys_info_widget_smart.h"
 #include "common/sys_info/sys_info_widget_summary.h"
 #include "common/sys_info/sys_info_widget_video_adapters.h"
-#include "common/sys_info/tree_to_html.h"
 #include "proto/system_info.h"
 #include "ui_sys_info_view.h"
 
@@ -334,19 +334,23 @@ void SysInfoView::onSave()
     if (file_path.isEmpty())
         return;
 
+    SysInfoReport report;
+    sys_info_widgets_[current_widget_]->buildReport(&report);
+
     QString error_string;
 
-    if (!treeToHtmlFile(sys_info_widgets_[current_widget_]->treeWidget(), file_path, &error_string))
+    if (!report.save(file_path, &error_string))
         MsgBox::warning(this, tr("Failed to save file: %1").arg(error_string));
 }
 
 //--------------------------------------------------------------------------------------------------
 void SysInfoView::onPrint()
 {
-    QString html = treeToHtmlString(sys_info_widgets_[current_widget_]->treeWidget());
+    SysInfoReport report;
+    sys_info_widgets_[current_widget_]->buildReport(&report);
 
     QTextDocument document;
-    document.setHtml(html);
+    document.setHtml(report.toString());
 
     QPrinter printer;
 
@@ -514,7 +518,8 @@ void SysInfoView::buildCategoryTree()
 //--------------------------------------------------------------------------------------------------
 void SysInfoView::updateExportActions()
 {
-    const bool has_data = sys_info_widgets_[current_widget_]->treeWidget()->topLevelItemCount() != 0;
+    const QTreeWidget* tree = sys_info_widgets_[current_widget_]->treeWidget();
+    const bool has_data = tree && tree->topLevelItemCount();
 
     ui->action_save->setEnabled(has_data);
     ui->action_print->setEnabled(has_data);

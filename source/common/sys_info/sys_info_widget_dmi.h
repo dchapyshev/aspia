@@ -48,6 +48,10 @@ public:
     void setSystemInfo(const proto::system_info::SystemInfo& system_info) final;
     QTreeWidget* treeWidget() final;
 
+    // The pane shows the tables of one group at a time, the report holds every table of the
+    // firmware.
+    void buildReport(SysInfoReport* report) final;
+
 private slots:
     void onContextMenu(const QPoint& point);
     void onParametersContextMenu(const QPoint& point);
@@ -56,6 +60,12 @@ private slots:
     void onCurrentTableChanged();
 
 private:
+    // Entries of |group| with their parameters. |index| picks a single entry, -1 takes them all.
+    QList<QTreeWidgetItem*> tableItems(int group, int index) const;
+
+    // Header the parameters are shown under.
+    QStringList parametersHeader() const;
+
     // Adds a group of tables to the upper pane. A group of several tables gets an item per entry
     // of |entries|, a group of a single table stays a leaf.
     void addGroup(int group, const QString& icon_path, const QString& title,
