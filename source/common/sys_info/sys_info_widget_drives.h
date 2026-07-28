@@ -27,10 +27,6 @@ namespace Ui {
 class SysInfoDrives;
 } // namespace Ui
 
-namespace proto::system_info {
-class PhysicalDrives;
-} // namespace proto::system_info
-
 class QTreeWidget;
 
 class SysInfoWidgetDrives final : public SysInfoWidget
@@ -48,26 +44,9 @@ public:
 
 private slots:
     void onContextMenu(const QPoint& point);
-    void onHealthContextMenu(const QPoint& point);
-
-    // Fills the lower pane with the health data of the drive the upper pane has selected.
-    void onCurrentDriveChanged();
 
 private:
-    void showContextMenu(QTreeWidget* tree, const QPoint& point);
-
-    // Column sets of the lower pane. An ATA drive reports a table of normalized attributes, an NVMe
-    // drive a set of named counters, so each gets the columns that fit it.
-    void setAtaHealth(int drive_index);
-    void setNvmeHealth(int drive_index);
-
     std::unique_ptr<Ui::SysInfoDrives> ui;
-
-    // Drives of the last report. Kept because the lower pane is rebuilt on every selection change.
-    std::unique_ptr<proto::system_info::PhysicalDrives> drives_;
-
-    // Tree the context menu was opened on, so that the copy actions know what to copy.
-    QTreeWidget* context_tree_ = nullptr;
 };
 
 #endif // COMMON_SYS_INFO_SYS_INFO_WIDGET_DRIVES_H

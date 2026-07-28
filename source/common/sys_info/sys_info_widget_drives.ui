@@ -27,49 +27,23 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QSplitter" name="splitter">
-     <property name="orientation">
-      <enum>Qt::Orientation::Vertical</enum>
+    <widget class="QTreeWidget" name="tree">
+     <property name="contextMenuPolicy">
+      <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
      </property>
-     <widget class="QTreeWidget" name="tree">
-      <property name="contextMenuPolicy">
-       <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
+     <property name="showDropIndicator" stdset="0">
+      <bool>false</bool>
+     </property>
+     <column>
+      <property name="text">
+       <string>Parameter</string>
       </property>
-      <property name="showDropIndicator" stdset="0">
-       <bool>false</bool>
+     </column>
+     <column>
+      <property name="text">
+       <string>Value</string>
       </property>
-      <column>
-       <property name="text">
-        <string>Parameter</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Value</string>
-       </property>
-      </column>
-     </widget>
-     <widget class="QTreeWidget" name="tree_health">
-      <property name="contextMenuPolicy">
-       <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
-      </property>
-      <property name="showDropIndicator" stdset="0">
-       <bool>false</bool>
-      </property>
-      <property name="rootIsDecorated">
-       <bool>false</bool>
-      </property>
-      <column>
-       <property name="text">
-        <string>Parameter</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Value</string>
-       </property>
-      </column>
-     </widget>
+     </column>
     </widget>
    </item>
   </layout>

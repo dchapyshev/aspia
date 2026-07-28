@@ -21,7 +21,6 @@
 #include <QDataStream>
 #include <QDir>
 #include <QFileDialog>
-#include <QHash>
 #include <QHBoxLayout>
 #include <QIODevice>
 #include <QPrinter>
@@ -31,8 +30,10 @@
 #include <QTreeWidgetItemIterator>
 #include <QVersionNumber>
 
+#include <algorithm>
+#include <set>
+
 #include "base/logging.h"
-#include "common/system_info_constants.h"
 #include "common/desktop/msg_box.h"
 #include "common/sys_info/sys_info_widget_applications.h"
 #include "common/sys_info/sys_info_widget_connections.h"
@@ -54,6 +55,7 @@
 #include "common/sys_info/sys_info_widget_processes.h"
 #include "common/sys_info/sys_info_widget_routes.h"
 #include "common/sys_info/sys_info_widget_services.h"
+#include "common/sys_info/sys_info_widget_smart.h"
 #include "common/sys_info/sys_info_widget_summary.h"
 #include "common/sys_info/sys_info_widget_video_adapters.h"
 #include "common/sys_info/tree_to_html.h"
@@ -74,22 +76,24 @@ class CategoryItem final : public QTreeWidgetItem
 public:
     enum class Type { ROOT_ITEM, CATEGORY_ITEM };
 
-    CategoryItem(Type type, const QString& icon_path, const QString& text, const char* category = nullptr)
-        : type_(type)
+    CategoryItem(Type type, const QString& icon_path, const QString& text,
+                 SysInfoWidget* page = nullptr)
+        : type_(type),
+          page_(page)
     {
         setIcon(0, QIcon(icon_path));
         setText(0, text);
-
-        if (category)
-            category_ = category;
     }
 
     Type type() const { return type_; }
-    const std::string& category() const { return category_; }
+
+    // Page the item shows. The same report is shown by more than one page, so the item names the
+    // page itself and not the category of the report.
+    SysInfoWidget* page() const { return page_; }
 
 private:
     Type type_;
-    std::string category_;
+    SysInfoWidget* page_;
 
     Q_DISABLE_COPY_MOVE(CategoryItem)
 };
@@ -113,6 +117,7 @@ SysInfoView::SysInfoView(QWidget* parent)
     sys_info_widgets_.append(summary_widget_);
     sys_info_widgets_.append(new SysInfoWidgetDevices(this));
     sys_info_widgets_.append(new SysInfoWidgetDrives(this));
+    sys_info_widgets_.append(new SysInfoWidgetSmart(this));
     sys_info_widgets_.append(new SysInfoWidgetVideoAdapters(this));
     sys_info_widgets_.append(new SysInfoWidgetMonitors(this));
     sys_info_widgets_.append(new SysInfoWidgetNetAdapters(this));
@@ -206,13 +211,11 @@ QByteArray SysInfoView::saveState() const
             QDataStream widgets_stream(&widgets_buffer, QIODevice::WriteOnly);
             widgets_stream.setVersion(QDataStream::Qt_6_10);
 
+            // The state of a page is stored by its position: more than one page is built from the
+            // same report, so the category names no single page.
             widgets_stream << quint32(sys_info_widgets_.size());
             for (int i = 0; i < sys_info_widgets_.size(); ++i)
-            {
-                SysInfoWidget* widget = sys_info_widgets_[i];
-                widgets_stream << QByteArray::fromStdString(widget->category());
-                widgets_stream << widget->saveState();
-            }
+                widgets_stream << sys_info_widgets_[i]->saveState();
         }
         stream << widgets_buffer;
     }
@@ -244,27 +247,18 @@ void SysInfoView::restoreState(const QByteArray& state)
     quint32 count = 0;
     widgets_stream >> count;
 
-    QHash<QByteArray, QByteArray> states;
+    count = std::min(count, quint32(sys_info_widgets_.size()));
+
     for (quint32 i = 0; i < count; ++i)
     {
-        QByteArray category;
         QByteArray widget_state;
-
-        widgets_stream >> category;
         widgets_stream >> widget_state;
 
         if (widgets_stream.status() != QDataStream::Ok)
             break;
 
-        states.insert(category, widget_state);
-    }
-
-    for (int i = 0; i < sys_info_widgets_.size(); ++i)
-    {
-        SysInfoWidget* widget = sys_info_widgets_[i];
-        QByteArray widget_state = states.value(QByteArray::fromStdString(widget->category()));
         if (!widget_state.isEmpty())
-            widget->restoreState(widget_state);
+            sys_info_widgets_[i]->restoreState(widget_state);
     }
 }
 
@@ -291,8 +285,16 @@ void SysInfoView::onSystemInfo(const proto::system_info::SystemInfo& system_info
 //--------------------------------------------------------------------------------------------------
 void SysInfoView::onRefresh()
 {
+    // The pages built from the same report ask the other side for it once.
+    std::set<std::string> requested;
+
     for (int i = 0; i < sys_info_widgets_.count(); ++i)
-        emit sig_systemInfoRequest(sys_info_widgets_[i]->request());
+    {
+        SysInfoWidget* widget = sys_info_widgets_[i];
+
+        if (requested.insert(widget->category()).second)
+            emit sig_systemInfoRequest(widget->request());
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -305,26 +307,21 @@ void SysInfoView::onCategoryItemChanged(QTreeWidgetItem* current, QTreeWidgetIte
     if (category_item->type() == CategoryItem::Type::ROOT_ITEM)
         return;
 
-    const std::string& category = category_item->category();
+    const int index = sys_info_widgets_.indexOf(category_item->page());
+    if (index < 0)
+        return;
 
     layout_->removeWidget(sys_info_widgets_[current_widget_]);
     sys_info_widgets_[current_widget_]->setVisible(false);
 
-    for (int i = 0; i < sys_info_widgets_.count(); ++i)
-    {
-        SysInfoWidget* widget = sys_info_widgets_[i];
+    current_widget_ = index;
 
-        if (widget->category() == category)
-        {
-            current_widget_ = i;
+    SysInfoWidget* widget = sys_info_widgets_[index];
 
-            LOG(INFO) << "Current category changed:" << category << "(" << i << ")";
+    LOG(INFO) << "Current category changed:" << widget->category() << "(" << index << ")";
 
-            layout_->addWidget(widget);
-            widget->setVisible(true);
-            break;
-        }
-    }
+    layout_->addWidget(widget);
+    widget->setVisible(true);
 
     updateExportActions();
 }
@@ -364,7 +361,7 @@ void SysInfoView::onPrint()
 void SysInfoView::buildCategoryTree()
 {
     CategoryItem* summary_category = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/computer.svg", tr("Summary"), kSystemInfo_Summary);
+        ":/img/computer.svg", tr("Summary"), findChild<SysInfoWidgetSummary*>());
 
     //----------------------------------------------------------------------------------------------
     // HARDWARE
@@ -374,28 +371,32 @@ void SysInfoView::buildCategoryTree()
         CategoryItem::Type::ROOT_ITEM, ":/img/folder.svg", tr("Hardware"));
 
     CategoryItem* devices = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/network-card.svg", tr("Devices"), kSystemInfo_Devices);
+        ":/img/network-card.svg", tr("Devices"), findChild<SysInfoWidgetDevices*>());
 
     CategoryItem* drives = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/hdd.svg", tr("Drives"), kSystemInfo_Drives);
+        ":/img/hdd.svg", tr("Drives"), findChild<SysInfoWidgetDrives*>());
+
+    CategoryItem* smart = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/hdd.svg", tr("S.M.A.R.T."), findChild<SysInfoWidgetSmart*>());
 
     CategoryItem* video_adapters = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/video-card.svg", tr("Video Adapters"), kSystemInfo_VideoAdapters);
+        ":/img/video-card.svg", tr("Video Adapters"), findChild<SysInfoWidgetVideoAdapters*>());
 
     CategoryItem* monitors = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/imac.svg", tr("Monitors"), kSystemInfo_Monitors);
+        ":/img/imac.svg", tr("Monitors"), findChild<SysInfoWidgetMonitors*>());
 
     CategoryItem* printers = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/printer.svg", tr("Printers"), kSystemInfo_Printers);
+        ":/img/printer.svg", tr("Printers"), findChild<SysInfoWidgetPrinters*>());
 
     CategoryItem* power_options = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/electrical.svg", tr("Power Options"), kSystemInfo_PowerOptions);
+        ":/img/electrical.svg", tr("Power Options"), findChild<SysInfoWidgetPowerOptions*>());
 
     CategoryItem* dmi = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/motherboard.svg", tr("DMI"), kSystemInfo_Dmi);
+        ":/img/motherboard.svg", tr("DMI"), findChild<SysInfoWidgetDmi*>());
 
     hardware_category->addChild(devices);
     hardware_category->addChild(drives);
+    hardware_category->addChild(smart);
     hardware_category->addChild(video_adapters);
     hardware_category->addChild(monitors);
     hardware_category->addChild(printers);
@@ -410,19 +411,19 @@ void SysInfoView::buildCategoryTree()
         CategoryItem::Type::ROOT_ITEM, ":/img/folder.svg", tr("Software"));
 
     CategoryItem* applications = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/software.svg", tr("Applications"), kSystemInfo_Applications);
+        ":/img/software.svg", tr("Applications"), findChild<SysInfoWidgetApplications*>());
 
     CategoryItem* drivers = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/network-card.svg", tr("Drivers"), kSystemInfo_Drivers);
+        ":/img/network-card.svg", tr("Drivers"), findChild<SysInfoWidgetDrivers*>());
 
     CategoryItem* services = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/gear.svg", tr("Services"), kSystemInfo_Services);
+        ":/img/gear.svg", tr("Services"), findChild<SysInfoWidgetServices*>());
 
     CategoryItem* processes = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/heart-monitor.svg", tr("Processes"), kSystemInfo_Processes);
+        ":/img/heart-monitor.svg", tr("Processes"), findChild<SysInfoWidgetProcesses*>());
 
     CategoryItem* licenses = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/certificate.svg", tr("Licenses"), kSystemInfo_Licenses);
+        ":/img/certificate.svg", tr("Licenses"), findChild<SysInfoWidgetLicenses*>());
 
     software_category->addChild(applications);
     software_category->addChild(drivers);
@@ -438,19 +439,19 @@ void SysInfoView::buildCategoryTree()
         CategoryItem::Type::ROOT_ITEM, ":/img/folder.svg", tr("Network"));
 
     CategoryItem* network_adapters = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/network-card.svg", tr("Network Adapters"), kSystemInfo_NetworkAdapters);
+        ":/img/network-card.svg", tr("Network Adapters"), findChild<SysInfoWidgetNetAdapters*>());
 
     CategoryItem* routes = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/flow-chart.svg", tr("Routes"), kSystemInfo_Routes);
+        ":/img/flow-chart.svg", tr("Routes"), findChild<SysInfoWidgetRoutes*>());
 
     CategoryItem* connections = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/connected.svg", tr("Connections"), kSystemInfo_Connections);
+        ":/img/connected.svg", tr("Connections"), findChild<SysInfoWidgetConnections*>());
 
     CategoryItem* network_shares = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/nas.svg", tr("Network Shares"), kSystemInfo_NetworkShares);
+        ":/img/nas.svg", tr("Network Shares"), findChild<SysInfoWidgetNetShares*>());
 
     CategoryItem* open_files = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/nas.svg", tr("Open Files"), kSystemInfo_OpenFiles);
+        ":/img/nas.svg", tr("Open Files"), findChild<SysInfoWidgetOpenFiles*>());
 
     network_category->addChild(network_adapters);
     network_category->addChild(routes);
@@ -466,16 +467,16 @@ void SysInfoView::buildCategoryTree()
         CategoryItem::Type::ROOT_ITEM, ":/img/folder.svg", tr("Operating System"));
 
     CategoryItem* env_vars = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/day-view.svg", tr("Environment Variables"), kSystemInfo_EnvironmentVariables);
+        ":/img/day-view.svg", tr("Environment Variables"), findChild<SysInfoWidgetEnvVars*>());
 
     CategoryItem* event_logs = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/log.svg", tr("Event Logs"), kSystemInfo_EventLogs);
+        ":/img/log.svg", tr("Event Logs"), findChild<SysInfoWidgetEventLogs*>());
 
     CategoryItem* local_users = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/user.svg", tr("Users"), kSystemInfo_LocalUsers);
+        ":/img/user.svg", tr("Users"), findChild<SysInfoWidgetLocalUsers*>());
 
     CategoryItem* local_user_groups = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/user-account.svg", tr("User Groups"), kSystemInfo_LocalUserGroups);
+        ":/img/user-account.svg", tr("User Groups"), findChild<SysInfoWidgetLocalUserGroups*>());
 
     os_category->addChild(env_vars);
     os_category->addChild(event_logs);
@@ -496,12 +497,12 @@ void SysInfoView::buildCategoryTree()
         ui->tree_category->expandItem(ui->tree_category->topLevelItem(i));
 
     // Restore selection: pick the category that matches the currently shown widget.
-    const std::string& current_category = sys_info_widgets_[current_widget_]->category();
+    SysInfoWidget* current_page = sys_info_widgets_[current_widget_];
     QTreeWidgetItemIterator it(ui->tree_category);
     while (*it)
     {
         CategoryItem* item = static_cast<CategoryItem*>(*it);
-        if (item->type() == CategoryItem::Type::CATEGORY_ITEM && item->category() == current_category)
+        if (item->page() == current_page)
         {
             ui->tree_category->setCurrentItem(item);
             break;

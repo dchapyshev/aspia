@@ -82,6 +82,9 @@ collect_sources(SOURCE_COMMON_SYS_INFO
     sys_info_widget_services.cc
     sys_info_widget_services.h
     sys_info_widget_services.ui
+    sys_info_widget_smart.cc
+    sys_info_widget_smart.h
+    sys_info_widget_smart.ui
     sys_info_widget_summary.cc
     sys_info_widget_summary.h
     sys_info_widget_summary.ui
