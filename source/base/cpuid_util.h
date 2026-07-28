@@ -19,6 +19,7 @@
 #ifndef BASE_CPUID_UTIL_H
 #define BASE_CPUID_UTIL_H
 
+#include <QList>
 #include <QtCompilerDetection>
 #include <QtProcessorDetection>
 #include <QtTypes>
@@ -46,6 +47,17 @@ public:
     quint32 ecx() const { return ecx_; }
     quint32 edx() const { return edx_; }
 
+    struct Leaf
+    {
+        quint32 leaf = 0;
+        quint32 subleaf = 0;
+        quint32 eax = 0;
+        quint32 ebx = 0;
+        quint32 ecx = 0;
+        quint32 edx = 0;
+    };
+
+    static QList<Leaf> dump();
     static bool hasAesNi();
 
 private:

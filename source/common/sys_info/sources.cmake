@@ -30,6 +30,9 @@ collect_sources(SOURCE_COMMON_SYS_INFO
     sys_info_widget_connections.cc
     sys_info_widget_connections.h
     sys_info_widget_connections.ui
+    sys_info_widget_cpu.cc
+    sys_info_widget_cpu.h
+    sys_info_widget_cpu.ui
     sys_info_widget_devices.cc
     sys_info_widget_devices.h
     sys_info_widget_devices.ui

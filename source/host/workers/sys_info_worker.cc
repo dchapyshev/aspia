@@ -26,6 +26,7 @@
 
 #include <atomic>
 
+#include "base/cpuid_util.h"
 #include "base/edid.h"
 #include "base/event_enumerator.h"
 #include "base/license_reader.h"
@@ -610,6 +611,21 @@ void fillProcessor(proto::system_info::SystemInfo* system_info)
     processor->set_packages(static_cast<quint32>(SysInfo::processorPackages()));
     processor->set_cores(static_cast<quint32>(SysInfo::processorCores()));
     processor->set_threads(static_cast<quint32>(SysInfo::processorThreads()));
+
+#if defined(Q_PROCESSOR_X86)
+    const QList<CpuidUtil::Leaf> leafs = CpuidUtil::dump();
+    for (const CpuidUtil::Leaf& item : leafs)
+    {
+        proto::system_info::Processor::Cpuid* cpuid = processor->add_cpuid();
+
+        cpuid->set_leaf(item.leaf);
+        cpuid->set_subleaf(item.subleaf);
+        cpuid->set_eax(item.eax);
+        cpuid->set_ebx(item.ebx);
+        cpuid->set_ecx(item.ecx);
+        cpuid->set_edx(item.edx);
+    }
+#endif // defined(Q_PROCESSOR_X86)
 }
 
 //--------------------------------------------------------------------------------------------------

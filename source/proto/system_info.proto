@@ -41,11 +41,23 @@ message OperatingSystem
 
 message Processor
 {
+    message Cpuid
+    {
+        uint32 leaf    = 1;
+        uint32 subleaf = 2;
+        uint32 eax     = 3;
+        uint32 ebx     = 4;
+        uint32 ecx     = 5;
+        uint32 edx     = 6;
+    }
+
     string vendor   = 1;
     string model    = 2;
     uint32 packages = 3;
     uint32 cores    = 4;
     uint32 threads  = 5;
+
+    repeated Cpuid cpuid = 6;
 }
 
 message LogicalDrives

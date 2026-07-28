@@ -38,6 +38,7 @@
 #include "common/sys_info/sys_info_report.h"
 #include "common/sys_info/sys_info_widget_applications.h"
 #include "common/sys_info/sys_info_widget_connections.h"
+#include "common/sys_info/sys_info_widget_cpu.h"
 #include "common/sys_info/sys_info_widget_devices.h"
 #include "common/sys_info/sys_info_widget_dmi.h"
 #include "common/sys_info/sys_info_widget_drivers.h"
@@ -115,6 +116,7 @@ SysInfoView::SysInfoView(QWidget* parent)
     summary_widget_ = new SysInfoWidgetSummary(this);
 
     sys_info_widgets_.append(summary_widget_);
+    sys_info_widgets_.append(new SysInfoWidgetCpu(this));
     sys_info_widgets_.append(new SysInfoWidgetDevices(this));
     sys_info_widgets_.append(new SysInfoWidgetDrives(this));
     sys_info_widgets_.append(new SysInfoWidgetSmart(this));
@@ -377,6 +379,9 @@ void SysInfoView::buildCategoryTree()
     CategoryItem* dmi = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
         ":/img/motherboard.svg", tr("DMI"), findChild<SysInfoWidgetDmi*>());
 
+    CategoryItem* cpu = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/microchip.svg", tr("Processor"), findChild<SysInfoWidgetCpu*>());
+
     CategoryItem* devices = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
         ":/img/network-card.svg", tr("Devices"), findChild<SysInfoWidgetDevices*>());
 
@@ -399,6 +404,7 @@ void SysInfoView::buildCategoryTree()
         ":/img/electrical.svg", tr("Power Options"), findChild<SysInfoWidgetPowerOptions*>());
 
     hardware_category->addChild(dmi);
+    hardware_category->addChild(cpu);
     hardware_category->addChild(devices);
     hardware_category->addChild(drives);
     hardware_category->addChild(smart);
