@@ -80,7 +80,7 @@ public slots:
     void onRefresh();
 
 private slots:
-    void onCategoryItemClicked(QTreeWidgetItem* item, int column);
+    void onCategoryItemChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
     void onSave();
     void onPrint();
 

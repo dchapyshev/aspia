@@ -146,12 +146,16 @@ SysInfoView::SysInfoView(QWidget* parent)
     connect(ui->action_print, &QAction::triggered, this, &SysInfoView::onPrint);
     connect(ui->action_refresh, &QAction::triggered, this, &SysInfoView::onRefresh);
 
-    connect(ui->tree_category, &QTreeWidget::itemClicked,
-            this, &SysInfoView::onCategoryItemClicked);
+    // The category follows the current item, so the keyboard changes the page as the mouse does.
+    connect(ui->tree_category, &QTreeWidget::currentItemChanged,
+            this, &SysInfoView::onCategoryItemChanged);
 
     layout_ = new QHBoxLayout(ui->widget);
     layout_->setContentsMargins(0, 0, 0, 0);
     layout_->addWidget(sys_info_widgets_[current_widget_]);
+
+    // The page stays empty until the first report arrives.
+    updateExportActions();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -290,9 +294,9 @@ void SysInfoView::onRefresh()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SysInfoView::onCategoryItemClicked(QTreeWidgetItem* item, int /* column */)
+void SysInfoView::onCategoryItemChanged(QTreeWidgetItem* current, QTreeWidgetItem* /* previous */)
 {
-    CategoryItem* category_item = static_cast<CategoryItem*>(item);
+    CategoryItem* category_item = static_cast<CategoryItem*>(current);
     if (!category_item)
         return;
 
@@ -326,8 +330,8 @@ void SysInfoView::onCategoryItemClicked(QTreeWidgetItem* item, int /* column */)
 //--------------------------------------------------------------------------------------------------
 void SysInfoView::onSave()
 {
-    QString file_path =
-        QFileDialog::getSaveFileName(this, tr("HTML File"), QDir::homePath(), tr("HTML File (*.html)"));
+    QString file_path = QFileDialog::getSaveFileName(
+        this, tr("HTML File"), QDir::homePath(), tr("HTML File (*.html)"));
     if (file_path.isEmpty())
         return;
 

@@ -65,14 +65,27 @@ message Memory
 {
     message Module
     {
-        bool present         = 1;
-        string location      = 2;
-        string manufacturer  = 3;
-        uint64 size          = 4;
-        string type          = 5;
-        string form_factor   = 6;
-        string part_number   = 7;
-        uint32 speed         = 8;
+        bool present             = 1;
+        string location          = 2;
+        string manufacturer      = 3;
+        uint64 size              = 4;
+        string type              = 5;
+        string form_factor       = 6;
+        string part_number       = 7;
+        uint32 speed             = 8;
+        string bank              = 9;
+        string serial_number     = 10;
+        string asset_tag         = 11;
+        string type_detail       = 12;
+        string technology        = 13;
+        string firmware_version  = 14;
+        uint32 configured_speed  = 15;
+        uint32 total_width       = 16;
+        uint32 data_width        = 17;
+        uint32 rank              = 18;
+        uint32 voltage           = 19;
+        uint64 non_volatile_size = 20;
+        uint64 volatile_size     = 21;
     }
 
     repeated Module module = 1;

@@ -21,6 +21,7 @@
 #include <QByteArray>
 #include <QProcessEnvironment>
 #include <QStorageInfo>
+#include <QStringList>
 
 #include <atomic>
 
@@ -472,7 +473,7 @@ void fillEnvironmentVariables(proto::system_info::SystemInfo* system_info)
 {
     const QStringList list = QProcessEnvironment::systemEnvironment().toStringList();
 
-    for (const auto& item : std::as_const(list))
+    for (const auto& item : list)
     {
         // Split on the first '=' only so values may contain '='; skip entries with no name.
         const qsizetype pos = item.indexOf('=');
@@ -668,6 +669,23 @@ void fillMotherboard(proto::system_info::SystemInfo* system_info)
 }
 
 //--------------------------------------------------------------------------------------------------
+QString memoryTypeDetail(const SmbiosMemoryDevice& memory_device)
+{
+    QStringList detail;
+
+    if (memory_device.isRegistered())
+        detail << "Registered";
+    if (memory_device.isUnbuffered())
+        detail << "Unbuffered";
+    if (memory_device.isLrDimm())
+        detail << "LRDIMM";
+    if (memory_device.isNonVolatile())
+        detail << "Non-volatile";
+
+    return detail.join(", ");
+}
+
+//--------------------------------------------------------------------------------------------------
 void fillMemory(proto::system_info::SystemInfo* system_info)
 {
     for (SmbiosTableEnumerator enumerator(SysInfo::smbiosDump());
@@ -697,6 +715,20 @@ void fillMemory(proto::system_info::SystemInfo* system_info)
                     module->set_form_factor(memory_device_table.formFactor().toStdString());
                     module->set_part_number(memory_device_table.partNumber().toStdString());
                     module->set_speed(memory_device_table.speed());
+                    module->set_bank(memory_device_table.bankLocator().toStdString());
+                    module->set_serial_number(memory_device_table.serialNumber().toStdString());
+                    module->set_asset_tag(memory_device_table.assetTag().toStdString());
+                    module->set_type_detail(memoryTypeDetail(memory_device_table).toStdString());
+                    module->set_technology(memory_device_table.technology().toStdString());
+                    module->set_firmware_version(
+                        memory_device_table.firmwareVersion().toStdString());
+                    module->set_configured_speed(memory_device_table.configuredSpeed());
+                    module->set_total_width(memory_device_table.totalWidth());
+                    module->set_data_width(memory_device_table.dataWidth());
+                    module->set_rank(memory_device_table.rank());
+                    module->set_voltage(memory_device_table.configuredVoltage());
+                    module->set_non_volatile_size(memory_device_table.nonVolatileSize());
+                    module->set_volatile_size(memory_device_table.volatileSize());
                 }
             }
             break;
@@ -778,7 +810,7 @@ void fillPhysicalDrives(proto::system_info::SystemInfo* system_info)
 {
     const QList<SysInfo::PhysicalDrive> drives = SysInfo::physicalDrives();
 
-    for (const SysInfo::PhysicalDrive& item : std::as_const(drives))
+    for (const SysInfo::PhysicalDrive& item : drives)
     {
         proto::system_info::PhysicalDrives::Drive* drive =
             system_info->mutable_physical_drives()->add_drive();
@@ -794,7 +826,7 @@ void fillPhysicalDrives(proto::system_info::SystemInfo* system_info)
         drive->set_removable(item.removable);
         drive->set_media_type(mediaType(item.media_type));
 
-        for (const AtaSmart::Attribute& attribute : std::as_const(item.ata_smart))
+        for (const AtaSmart::Attribute& attribute : item.ata_smart)
         {
             proto::system_info::PhysicalDrives::Drive::SmartAttribute* smart =
                 drive->add_smart_attribute();
@@ -811,7 +843,8 @@ void fillPhysicalDrives(proto::system_info::SystemInfo* system_info)
             continue;
 
         const NvmeSmart::HealthInfo& info = item.nvme_smart.value();
-        proto::system_info::PhysicalDrives::Drive::NvmeHealth* health = drive->mutable_nvme_health();
+        proto::system_info::PhysicalDrives::Drive::NvmeHealth* health =
+            drive->mutable_nvme_health();
 
         health->set_critical_warning(info.critical_warning);
         health->set_composite_temperature(info.composite_temperature);

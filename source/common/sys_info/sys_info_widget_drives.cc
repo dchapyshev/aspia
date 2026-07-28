@@ -20,6 +20,8 @@
 
 #include <QMenu>
 
+#include <algorithm>
+
 #include "base/drive_smart.h"
 #include "base/time_types.h"
 #include "common/system_info_constants.h"
@@ -37,8 +39,8 @@ constexpr int kDriveIndexRole = Qt::UserRole;
 // One data unit an NVMe drive reports is 1000 blocks of 512 bytes.
 constexpr quint64 kNvmeDataUnitSize = 1000 * 512;
 
-// A drive reports its temperature in Kelvin. Values outside of this range are not believable and are
-// treated as the drive not reporting a temperature at all.
+// A drive reports its temperature in Kelvin. Values outside of this range are not believable and
+// are treated as the drive not reporting a temperature at all.
 constexpr quint32 kMinTemperature = 173; // -100 degrees Celsius.
 constexpr quint32 kMaxTemperature = 473; // 200 degrees Celsius.
 
@@ -304,12 +306,15 @@ void SysInfoWidgetDrives::setSystemInfo(const proto::system_info::SystemInfo& sy
     ui->tree_health->clear();
     drives_.reset();
 
-    if (!system_info.has_physical_drives())
-    {
-        ui->tree->setEnabled(false);
-        ui->tree_health->setEnabled(false);
+    // A report arrives without the drives when the enumeration found none, and one that found none
+    // was possibly just not allowed to look. The next report may still bring them.
+    const bool has_drives = system_info.has_physical_drives();
+
+    ui->tree->setEnabled(has_drives);
+    ui->tree_health->setEnabled(has_drives);
+
+    if (!has_drives)
         return;
-    }
 
     drives_ = std::make_unique<proto::system_info::PhysicalDrives>(system_info.physical_drives());
 
@@ -534,7 +539,12 @@ void SysInfoWidgetDrives::setNvmeHealth(int drive_index)
                           rawToString(health.composite_temperature(), kNvmeRawDigits));
     }
 
-    for (int i = 0; i < health.temperature_sensor_size(); ++i)
+    // The health log of a drive has room for a fixed number of sensors. The count arrives over the
+    // network, so it is not trusted to stay within it.
+    const int sensor_count =
+        std::min(health.temperature_sensor_size(), NvmeSmart::kTemperatureSensorCount);
+
+    for (int i = 0; i < sensor_count; ++i)
     {
         const quint32 temperature = health.temperature_sensor(i);
         if (!isTemperatureReported(temperature))

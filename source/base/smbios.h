@@ -185,6 +185,9 @@ struct SmbiosProcessorTable : public SmbiosTable
 
     // 3.6+
     quint16 thread_enabled;    // 30h-31h
+
+    // 3.8+
+    quint8 socket_type;        // 32h
 };
 
 struct SmbiosCacheTable : public SmbiosTable
@@ -275,24 +278,46 @@ struct SmbiosMemoryDeviceTable : public SmbiosTable
     quint16 type_detail;            // 13h-14h
 
     // 2.3+
-    quint16 speed;                  // 15h-16h
+    quint16 speed;                  // 15h-16h, in MT/s
     quint8 manufacturer;            // 17h
     quint8 serial_number;           // 18h
     quint8 asset_tag;               // 19h
     quint8 part_number;             // 1Ah
 
     // 2.6+
-    quint8 attributes;              // 1Bh
+    quint8 attributes;              // 1Bh, bits 3:0 carry the rank
 
     // 2.7+
-    quint32 ext_size;               // 1Ch-1Fh
-    quint16 configured_clock_speed; // 20h-21h
+    quint32 ext_size;               // 1Ch-1Fh, in megabytes
+    quint16 configured_speed;       // 20h-21h, in MT/s
 
     // 2.8+
-    quint16 min_voltage;            // 22h-23h
+    quint16 min_voltage;            // 22h-23h, in millivolts
     quint16 max_voltage;            // 24h-25h
     quint16 configured_voltage;     // 26h-27h
 
+    // 3.2+
+    quint8 technology;              // 28h
+    quint16 operating_mode;         // 29h-2Ah
+    quint8 firmware_version;        // 2Bh
+    quint16 module_manufacturer_id; // 2Ch-2Dh
+    quint16 module_product_id;      // 2Eh-2Fh
+    quint16 controller_vendor_id;   // 30h-31h
+    quint16 controller_product_id;  // 32h-33h
+    quint64 non_volatile_size;      // 34h-3Bh, in bytes
+    quint64 volatile_size;          // 3Ch-43h, in bytes
+    quint64 cache_size;             // 44h-4Bh, in bytes
+    quint64 logical_size;           // 4Ch-53h, in bytes
+
+    // 3.3+
+    quint32 ext_speed;              // 54h-57h, in MT/s
+    quint32 ext_configured_speed;   // 58h-5Bh, in MT/s
+
+    // 3.7+
+    quint16 pmic0_manufacturer_id;  // 5Ch-5Dh
+    quint16 pmic0_revision;         // 5Eh-5Fh
+    quint16 rcd_manufacturer_id;    // 60h-61h
+    quint16 rcd_revision;           // 62h-63h
 };
 
 struct SmbiosMemoryArrayAddressTable : public SmbiosTable

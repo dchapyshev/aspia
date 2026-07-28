@@ -572,6 +572,31 @@ TEST(SmbiosParserTest, ProcessorFamilyFromSecondField)
 }
 
 //--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, ProcessorModernFields)
+{
+    // A full SMBIOS 3.8 table: a current Intel part sits in the family2 range added by the
+    // later versions of the specification, and the socket also comes as a string.
+    QByteArray formatted(0x33 - 4, '\0');
+    formatted[0x06 - 4] = static_cast<char>(0xFE); // family: take the family2 field
+    formatted[0x19 - 4] = static_cast<char>(0x55); // upgrade: socket LGA1851
+    formatted[0x28 - 4] = static_cast<char>(0x06); // family2: Intel Core Ultra 7 (0x0306)
+    formatted[0x29 - 4] = static_cast<char>(0x03);
+    formatted[0x32 - 4] = 1;                       // socket_type: string #1
+
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_PROCESSOR, formatted, { "LGA1851" }));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosProcessor processor(enumerator.table());
+    ASSERT_TRUE(processor.isValid());
+    EXPECT_EQ(processor.family(), QString("Intel Core Ultra 7"));
+    EXPECT_EQ(processor.upgrade(), QString("Socket LGA1851"));
+    EXPECT_EQ(processor.socketType(), QString("LGA1851"));
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST(SmbiosParserTest, ProcessorExtendedCoreCounts)
 {
     auto makeProcessor = [](quint8 length) -> QByteArray
@@ -864,7 +889,7 @@ TEST(SmbiosParserTest, SystemSlotFields)
 {
     QByteArray formatted(0x11 - 4, '\0');
     formatted[0x04 - 4] = 1;                       // designation: string #1
-    formatted[0x05 - 4] = static_cast<char>(0x1C); // type: PCI Express x16
+    formatted[0x05 - 4] = static_cast<char>(0xBD); // type: PCI Express Gen 4 x16
     formatted[0x06 - 4] = static_cast<char>(0x0D); // data_bus_width: x16
     formatted[0x07 - 4] = 3;                       // usage: available
     formatted[0x08 - 4] = 4;                       // slot_length: long
@@ -883,7 +908,7 @@ TEST(SmbiosParserTest, SystemSlotFields)
     SmbiosSystemSlot slot(enumerator.table());
     ASSERT_TRUE(slot.isValid());
     EXPECT_EQ(slot.designation(), QString("PCIEX16_1"));
-    EXPECT_EQ(slot.type(), QString("PCI Express x16"));
+    EXPECT_EQ(slot.type(), QString("PCI Express Gen 4 x16"));
     EXPECT_EQ(slot.dataBusWidth(), QString("x16"));
     EXPECT_EQ(slot.usage(), QString("Available"));
     EXPECT_EQ(slot.length(), QString("Long Length"));
@@ -903,18 +928,37 @@ TEST(SmbiosParserTest, SystemSlotFields)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(SmbiosParserTest, SystemSlotLegacyTypeRange)
+TEST(SmbiosParserTest, SystemSlotTypeRanges)
 {
-    // Some firmware still reports PCI Express slots in the legacy A0h-B6h range.
-    QByteArray formatted(0x0C - 4, '\0');
-    formatted[0x05 - 4] = static_cast<char>(0xA5); // type: PCI Express
+    // The slot types are scattered over four ranges with gaps between them.
+    auto typeOf = [](quint8 type) -> QString
+    {
+        QByteArray formatted(0x0C - 4, '\0');
+        formatted[0x05 - 4] = static_cast<char>(type);
 
-    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_SYSTEM_SLOT, formatted, {}));
+        const QByteArray dump =
+            makeDump(makeTable(SMBIOS_TABLE_TYPE_SYSTEM_SLOT, formatted, {}));
 
-    SmbiosTableEnumerator enumerator(dump);
-    ASSERT_FALSE(enumerator.isAtEnd());
+        SmbiosTableEnumerator enumerator(dump);
+        if (enumerator.isAtEnd())
+            return QString("<no table>");
+        return SmbiosSystemSlot(enumerator.table()).type();
+    };
 
-    EXPECT_EQ(SmbiosSystemSlot(enumerator.table()).type(), QString("PCI Express"));
+    EXPECT_EQ(typeOf(0x12), QString("PCI-X"));
+    EXPECT_EQ(typeOf(0x17), QString("M.2 Socket 3"));
+    EXPECT_EQ(typeOf(0x28), QString("OCP NIC Prior to 3.0"));
+    EXPECT_EQ(typeOf(0x30), QString("CXL Flexbus 1.0"));
+    EXPECT_EQ(typeOf(0xA5), QString("PCI Express"));
+    EXPECT_EQ(typeOf(0xB6), QString("PCI Express Gen 3 x16"));
+    EXPECT_EQ(typeOf(0xBE), QString("PCI Express Gen 5"));
+    EXPECT_EQ(typeOf(0xC6), QString("EDSFF E3 Form Factor"));
+
+    // The gaps between the ranges hold no type.
+    EXPECT_TRUE(typeOf(0x29).isEmpty());
+    EXPECT_TRUE(typeOf(0x9F).isEmpty());
+    EXPECT_TRUE(typeOf(0xB7).isEmpty());
+    EXPECT_TRUE(typeOf(0xC7).isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1104,14 +1148,17 @@ TEST(SmbiosParserTest, MemoryDeviceFields)
 {
     QByteArray formatted(0x15 - 4, '\0');
     formatted[0x04 - 4] = static_cast<char>(0x21); // memory_array_handle
+    formatted[0x08 - 4] = static_cast<char>(0x48); // total_width: 72 bits
+    formatted[0x0A - 4] = static_cast<char>(0x40); // data_width: 64 bits
     formatted[0x0C - 4] = static_cast<char>(0x00); // module_size low byte: 2048 MB
     formatted[0x0D - 4] = static_cast<char>(0x08); // module_size high byte
     formatted[0x0E - 4] = static_cast<char>(0x09); // form_factor: DIMM
     formatted[0x10 - 4] = 1;                       // device_location: string #1
+    formatted[0x11 - 4] = 2;                       // bank_locator: string #2
     formatted[0x12 - 4] = static_cast<char>(0x1A); // memory_type: DDR4
 
-    const QByteArray dump =
-        makeDump(makeTable(SMBIOS_TABLE_TYPE_MEMORY_DEVICE, formatted, { "DIMM_A1" }));
+    const QByteArray dump = makeDump(
+        makeTable(SMBIOS_TABLE_TYPE_MEMORY_DEVICE, formatted, { "DIMM_A1", "BANK 0" }));
 
     SmbiosTableEnumerator enumerator(dump);
     ASSERT_FALSE(enumerator.isAtEnd());
@@ -1121,10 +1168,120 @@ TEST(SmbiosParserTest, MemoryDeviceFields)
     EXPECT_TRUE(device.isPresent());
     EXPECT_EQ(device.size(), 2048ULL * 1024ULL * 1024ULL);
     EXPECT_EQ(device.location(), QString("DIMM_A1"));
+    EXPECT_EQ(device.bankLocator(), QString("BANK 0"));
     EXPECT_EQ(device.type(), QString("DDR4"));
     EXPECT_EQ(device.formFactor(), QString("DIMM"));
-    EXPECT_EQ(device.speed(), 0u); // The table is too short to carry the speed field.
+    EXPECT_EQ(device.totalWidth(), 72);
+    EXPECT_EQ(device.dataWidth(), 64);
     EXPECT_EQ(device.arrayHandle(), 0x0021);
+
+    // The table is too short to carry any of the fields below.
+    EXPECT_EQ(device.speed(), 0u);
+    EXPECT_EQ(device.configuredSpeed(), 0u);
+    EXPECT_EQ(device.rank(), 0);
+    EXPECT_EQ(device.configuredVoltage(), 0u);
+    EXPECT_TRUE(device.serialNumber().isEmpty());
+    EXPECT_TRUE(device.assetTag().isEmpty());
+    EXPECT_TRUE(device.technology().isEmpty());
+    EXPECT_TRUE(device.firmwareVersion().isEmpty());
+    EXPECT_EQ(device.nonVolatileSize(), 0ULL);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, MemoryDeviceModernFields)
+{
+    // A full SMBIOS 3.7 table (length 64h) with the fields the later versions brought in.
+    QByteArray formatted(0x64 - 4, '\0');
+    formatted[0x0C - 4] = static_cast<char>(0xFF); // module_size: see the extended field
+    formatted[0x0D - 4] = static_cast<char>(0x7F);
+    formatted[0x0E - 4] = static_cast<char>(0x12); // form_factor: CUDIMM
+    formatted[0x10 - 4] = 1;                       // device_location: string #1
+    formatted[0x11 - 4] = 2;                       // bank_locator: string #2
+    formatted[0x12 - 4] = static_cast<char>(0x25); // memory_type: MRDIMM
+    formatted[0x14 - 4] = static_cast<char>(0x20); // type_detail: registered
+    formatted[0x15 - 4] = static_cast<char>(0xFF); // speed: see the extended field
+    formatted[0x16 - 4] = static_cast<char>(0xFF);
+    formatted[0x17 - 4] = 3;                       // manufacturer: string #3
+    formatted[0x18 - 4] = 4;                       // serial_number: string #4
+    formatted[0x19 - 4] = 5;                       // asset_tag: string #5
+    formatted[0x1A - 4] = 6;                       // part_number: string #6
+    formatted[0x1B - 4] = 2;                       // attributes: rank 2
+    formatted[0x1C - 4] = static_cast<char>(0x00); // ext_size: 32768 MB
+    formatted[0x1D - 4] = static_cast<char>(0x80);
+    formatted[0x20 - 4] = static_cast<char>(0xFF); // configured_speed: see the extended field
+    formatted[0x21 - 4] = static_cast<char>(0xFF);
+    formatted[0x22 - 4] = static_cast<char>(0x4C); // min_voltage: 1100 mV
+    formatted[0x23 - 4] = static_cast<char>(0x04);
+    formatted[0x24 - 4] = static_cast<char>(0x4C); // max_voltage: 1100 mV
+    formatted[0x25 - 4] = static_cast<char>(0x04);
+    formatted[0x26 - 4] = static_cast<char>(0x4C); // configured_voltage: 1100 mV
+    formatted[0x27 - 4] = static_cast<char>(0x04);
+    formatted[0x28 - 4] = 4;                       // technology: NVDIMM-N
+    formatted[0x2B - 4] = 7;                       // firmware_version: string #7
+    formatted[0x38 - 4] = static_cast<char>(0x20); // non_volatile_size: 128 GB
+    formatted[0x40 - 4] = static_cast<char>(0x04); // volatile_size: 16 GB
+
+    for (int i = 0; i < 8; ++i)
+        formatted[0x44 - 4 + i] = static_cast<char>(0xFF); // cache_size: unknown
+
+    formatted[0x54 - 4] = static_cast<char>(0x00); // ext_speed: 12800 MT/s
+    formatted[0x55 - 4] = static_cast<char>(0x32);
+    formatted[0x58 - 4] = static_cast<char>(0xE0); // ext_configured_speed: 12000 MT/s
+    formatted[0x59 - 4] = static_cast<char>(0x2E);
+
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_MEMORY_DEVICE, formatted,
+        { "DIMM_A1", "BANK 0", "Micron", "SN123", "AT1", "PN-XYZ", "FW-1.2" }));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosMemoryDevice device(enumerator.table());
+    ASSERT_TRUE(device.isValid());
+    EXPECT_EQ(device.size(), 32ULL * 1024ULL * 1024ULL * 1024ULL);
+    EXPECT_EQ(device.formFactor(), QString("CUDIMM"));
+    EXPECT_EQ(device.type(), QString("MRDIMM"));
+    EXPECT_EQ(device.technology(), QString("NVDIMM-N"));
+    EXPECT_EQ(device.manufacturer(), QString("Micron"));
+    EXPECT_EQ(device.serialNumber(), QString("SN123"));
+    EXPECT_EQ(device.assetTag(), QString("AT1"));
+    EXPECT_EQ(device.partNumber(), QString("PN-XYZ"));
+    EXPECT_EQ(device.firmwareVersion(), QString("FW-1.2"));
+    EXPECT_EQ(device.speed(), 12800u);
+    EXPECT_EQ(device.configuredSpeed(), 12000u);
+    EXPECT_EQ(device.rank(), 2);
+    EXPECT_EQ(device.minVoltage(), 1100u);
+    EXPECT_EQ(device.maxVoltage(), 1100u);
+    EXPECT_EQ(device.configuredVoltage(), 1100u);
+    EXPECT_EQ(device.nonVolatileSize(), 128ULL * 1024ULL * 1024ULL * 1024ULL);
+    EXPECT_EQ(device.volatileSize(), 16ULL * 1024ULL * 1024ULL * 1024ULL);
+    EXPECT_EQ(device.cacheSize(), 0ULL); // All ones mean the size is unknown.
+    EXPECT_EQ(device.logicalSize(), 0ULL);
+    EXPECT_TRUE(device.isRegistered());
+    EXPECT_FALSE(device.isUnbuffered());
+    EXPECT_FALSE(device.isLrDimm());
+    EXPECT_FALSE(device.isNonVolatile());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, MemoryDeviceSpeedWithoutExtendedFields)
+{
+    // An SMBIOS 2.8 table (length 28h) whose speeds overflowed the 16-bit fields, but which is
+    // too short to carry the extended ones.
+    QByteArray formatted(0x28 - 4, '\0');
+    formatted[0x15 - 4] = static_cast<char>(0xFF); // speed
+    formatted[0x16 - 4] = static_cast<char>(0xFF);
+    formatted[0x20 - 4] = static_cast<char>(0xFF); // configured_speed
+    formatted[0x21 - 4] = static_cast<char>(0xFF);
+
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_MEMORY_DEVICE, formatted, {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosMemoryDevice device(enumerator.table());
+    ASSERT_TRUE(device.isValid());
+    EXPECT_EQ(device.speed(), 0u);
+    EXPECT_EQ(device.configuredSpeed(), 0u);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1175,7 +1332,7 @@ TEST(SmbiosParserTest, MemoryDeviceSizeVariants)
     // 0x7FFF points to the extended size field, but the table is too short to carry it.
     EXPECT_EQ(sizeOf(makeDump(makeDevice(0x7FFF, 0, 0x15))), 0ULL);
 
-    // Extended size: 32768 MB with zero low bits selects the GB branch (32 GB).
+    // Extended size: the field counts megabytes, so 32768 of them make 32 GB.
     EXPECT_EQ(sizeOf(makeDump(makeDevice(0x7FFF, 32768, 0x20))),
               32ULL * 1024ULL * 1024ULL * 1024ULL);
 }

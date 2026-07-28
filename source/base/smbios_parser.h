@@ -138,6 +138,7 @@ public:
     QString family() const;
     QString status() const;
     QString upgrade() const;
+    QString socketType() const;
     quint64 id() const;
     double voltage() const;
     quint32 externalClock() const;
@@ -287,12 +288,35 @@ public:
     bool isValid() const;
     bool isPresent() const;
     QString location() const;
+    QString bankLocator() const;
     QString manufacturer() const;
+    QString serialNumber() const;
+    QString assetTag() const;
     quint64 size() const;
     QString type() const;
     QString formFactor() const;
+    QString technology() const;
     QString partNumber() const;
+    QString firmwareVersion() const;
+
+    // The speed and the configured speed of the device, in MT/s. Zero when unknown.
     quint32 speed() const;
+    quint32 configuredSpeed() const;
+
+    quint16 totalWidth() const;
+    quint16 dataWidth() const;
+    quint8 rank() const;
+    quint32 minVoltage() const;
+    quint32 maxVoltage() const;
+    quint32 configuredVoltage() const;
+    quint64 nonVolatileSize() const;
+    quint64 volatileSize() const;
+    quint64 cacheSize() const;
+    quint64 logicalSize() const;
+    bool isRegistered() const;
+    bool isUnbuffered() const;
+    bool isLrDimm() const;
+    bool isNonVolatile() const;
     quint16 arrayHandle() const;
 
 private:

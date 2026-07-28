@@ -898,7 +898,15 @@ QString SmbiosProcessor::family() const
         { 0x026E, "Quad-Core Loongson 3B 5xxx Series" },
         { 0x026F, "Multi-Core Loongson 3B 5xxx Series" },
         { 0x0270, "Multi-Core Loongson 3C 5xxx Series" },
-        { 0x0271, "Multi-Core Loongson 3D 5xxx Series" }
+        { 0x0271, "Multi-Core Loongson 3D 5xxx Series" },
+        { 0x0300, "Intel Core 3" },
+        { 0x0301, "Intel Core 5" },
+        { 0x0302, "Intel Core 7" },
+        { 0x0303, "Intel Core 9" },
+        { 0x0304, "Intel Core Ultra 3" },
+        { 0x0305, "Intel Core Ultra 5" },
+        { 0x0306, "Intel Core Ultra 7" },
+        { 0x0307, "Intel Core Ultra 9" }
     };
 
     quint16 family = table_->family;
@@ -1023,13 +1031,36 @@ QString SmbiosProcessor::upgrade() const
         "Socket BGA5773",
         "Socket AM5",
         "Socket SP5",
-        "Socket SP6" // 0x4B
+        "Socket SP6",
+        "Socket BGA883",
+        "Socket BGA1190",
+        "Socket BGA4129",
+        "Socket LGA4710",
+        "Socket LGA7529",
+        "Socket BGA1964",
+        "Socket BGA1792",
+        "Socket BGA2049",
+        "Socket BGA2551",
+        "Socket LGA1851",
+        "Socket BGA2114",
+        "Socket BGA2833" // 0x57
     };
 
-    if (table_->upgrade >= 0x01 && table_->upgrade <= 0x4B)
+    if (table_->upgrade >= 0x01 && table_->upgrade <= 0x57)
         return kUpgrade[table_->upgrade - 0x01];
 
     return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosProcessor::socketType() const
+{
+    // The socket named as a string, for the sockets the enumerated upgrade value has no code
+    // for. The field appeared in SMBIOS 3.8.
+    if (table_->length < 0x33)
+        return QString();
+
+    return smbiosString(table_, table_->socket_type);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1591,51 +1622,33 @@ QString SmbiosSystemSlot::type() const
         "AGP",
         "AGP 2X",
         "AGP 4X",
-        "PC-98/C20",
-        "PC-98/C24",
-        "PC-98/E",
-        "PC-98/Local Bus",
-        "PC-98/Card",
-        "PCI Express",
-        "PCI Express x1",
-        "PCI Express x2",
-        "PCI Express x4",
-        "PCI Express x8",
-        "PCI Express x16",
-        "PCI Express Gen 2",
-        "PCI Express Gen 2 x1",
-        "PCI Express Gen 2 x2",
-        "PCI Express Gen 2 x4",
-        "PCI Express Gen 2 x8",
-        "PCI Express Gen 2 x16",
-        "PCI Express Gen 3",
-        "PCI Express Gen 3 x1",
-        "PCI Express Gen 3 x2",
-        "PCI Express Gen 3 x4",
-        "PCI Express Gen 3 x8",
-        "PCI Express Gen 3 x16",
-        "Reserved",
+        "PCI-X",
+        "AGP 8X",
+        "M.2 Socket 1-DP",
+        "M.2 Socket 1-SD",
+        "M.2 Socket 2",
+        "M.2 Socket 3",
+        "MXM Type I",
+        "MXM Type II",
+        "MXM Type III",
+        "MXM Type III-HE",
+        "MXM Type IV",
+        "MXM 3.0 Type A",
+        "MXM 3.0 Type B",
+        "PCI Express Gen 2 SFF-8639 (U.2)",
+        "PCI Express Gen 3 SFF-8639 (U.2)",
         "PCI Express Mini 52-pin With Bottom-side Keep-outs",
         "PCI Express Mini 52-pin Without Bottom-side Keep-outs",
         "PCI Express Mini 76-pin",
-        "PCI Express Gen 4",
-        "PCI Express Gen 4 x1",
-        "PCI Express Gen 4 x2",
-        "PCI Express Gen 4 x4",
-        "PCI Express Gen 4 x8",
-        "PCI Express Gen 4 x16",
-        "PCI Express Gen 5",
-        "PCI Express Gen 5 x1",
-        "PCI Express Gen 5 x2",
-        "PCI Express Gen 5 x4",
-        "PCI Express Gen 5 x8",
-        "PCI Express Gen 5 x16",
-        "PCI Express Gen 6 and Beyond",
-        "EDSFF E1 Form Factor",
-        "EDSFF E3 Form Factor" // 0x3B
+        "PCI Express Gen 4 SFF-8639 (U.2)",
+        "PCI Express Gen 5 SFF-8639 (U.2)",
+        "OCP NIC 3.0 Small Form Factor (SFF)",
+        "OCP NIC 3.0 Large Form Factor (LFF)",
+        "OCP NIC Prior to 3.0" // 0x28
     };
 
-    // The types PC-98 and PCI Express also have a legacy range, still used by some firmware.
+    // The PC-98 slots and the PCI Express ones up to the third generation live in their own
+    // range of values.
     static const char* kLegacyType[] =
     {
         "PC-98/C20", // 0xA0
@@ -1663,11 +1676,37 @@ QString SmbiosSystemSlot::type() const
         "PCI Express Gen 3 x16" // 0xB6
     };
 
-    if (table_->type >= 0x01 && table_->type <= 0x3B)
+    // The generations above the third continue behind a gap at B7h.
+    static const char* kExpressType[] =
+    {
+        "PCI Express Gen 4", // 0xB8
+        "PCI Express Gen 4 x1",
+        "PCI Express Gen 4 x2",
+        "PCI Express Gen 4 x4",
+        "PCI Express Gen 4 x8",
+        "PCI Express Gen 4 x16",
+        "PCI Express Gen 5",
+        "PCI Express Gen 5 x1",
+        "PCI Express Gen 5 x2",
+        "PCI Express Gen 5 x4",
+        "PCI Express Gen 5 x8",
+        "PCI Express Gen 5 x16",
+        "PCI Express Gen 6 and Beyond",
+        "EDSFF E1 Form Factor",
+        "EDSFF E3 Form Factor" // 0xC6
+    };
+
+    if (table_->type >= 0x01 && table_->type <= 0x28)
         return kType[table_->type - 0x01];
+
+    if (table_->type == 0x30)
+        return "CXL Flexbus 1.0";
 
     if (table_->type >= 0xA0 && table_->type <= 0xB6)
         return kLegacyType[table_->type - 0xA0];
+
+    if (table_->type >= 0xB8 && table_->type <= 0xC6)
+        return kExpressType[table_->type - 0xB8];
 
     return QString();
 }
@@ -2055,9 +2094,15 @@ QString SmbiosMemoryDevice::location() const
 }
 
 //--------------------------------------------------------------------------------------------------
+QString SmbiosMemoryDevice::bankLocator() const
+{
+    return smbiosString(table_, table_->bank_locator);
+}
+
+//--------------------------------------------------------------------------------------------------
 QString SmbiosMemoryDevice::manufacturer() const
 {
-    if (table_->length < 0x1B)
+    if (table_->length < 0x18)
         return QString();
 
     static const char* kBlackList[] = { "0000" };
@@ -2074,32 +2119,34 @@ QString SmbiosMemoryDevice::manufacturer() const
 }
 
 //--------------------------------------------------------------------------------------------------
+QString SmbiosMemoryDevice::serialNumber() const
+{
+    if (table_->length < 0x19)
+        return QString();
+
+    return smbiosString(table_, table_->serial_number);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosMemoryDevice::assetTag() const
+{
+    if (table_->length < 0x1A)
+        return QString();
+
+    return smbiosString(table_, table_->asset_tag);
+}
+
+//--------------------------------------------------------------------------------------------------
 quint64 SmbiosMemoryDevice::size() const
 {
     if (table_->module_size == 0x7FFF)
     {
-        // The actual size is stored in the extended field (2.7+). A table too short to carry
-        // the field cannot tell the size.
+        // The actual size is stored in the extended field (2.7+), which counts megabytes with
+        // bit 31 reserved. A table too short to carry the field cannot tell the size.
         if (table_->length < 0x20)
             return 0;
 
-        quint32 ext_size = table_->ext_size & 0x7FFFFFFFUL;
-
-        if (ext_size & 0x3FFUL)
-        {
-            // Size in MB. Convert to bytes and return.
-            return static_cast<quint64>(ext_size) * 1024ULL * 1024ULL;
-        }
-        else if (ext_size & 0xFFC00UL)
-        {
-            // Size in GB. Convert to bytes and return.
-            return static_cast<quint64>(ext_size >> 10) * 1024ULL * 1024ULL * 1024ULL;
-        }
-        else
-        {
-            // Size in TB. Convert to bytes and return.
-            return static_cast<quint64>(ext_size >> 20) * 1024ULL * 1024ULL * 1024ULL * 1024ULL;
-        }
+        return static_cast<quint64>(table_->ext_size & 0x7FFFFFFFUL) * 1024ULL * 1024ULL;
     }
 
     if (table_->module_size == 0xFFFF)
@@ -2158,10 +2205,11 @@ QString SmbiosMemoryDevice::type() const
         "HBM2 (High Bandwidth Memory Generation 2)",
         "DDR5",
         "LPDDR5",
-        "HBM3 (High Bandwidth Memory Generation 3)" // 0x24
+        "HBM3 (High Bandwidth Memory Generation 3)",
+        "MRDIMM" // 0x25
     };
 
-    if (table_->memory_type >= 0x01 && table_->memory_type <= 0x24)
+    if (table_->memory_type >= 0x01 && table_->memory_type <= 0x25)
         return kType[table_->memory_type - 0x01];
 
     return QString();
@@ -2186,11 +2234,40 @@ QString SmbiosMemoryDevice::formFactor() const
         "RIMM",
         "SODIMM",
         "SRIMM",
-        "FB-DIMM" // 0x0F
+        "FB-DIMM",
+        "Die",
+        "CAMM",
+        "CUDIMM",
+        "CSODIMM" // 0x13
     };
 
-    if (table_->form_factor >= 0x01 && table_->form_factor <= 0x0F)
+    if (table_->form_factor >= 0x01 && table_->form_factor <= 0x13)
         return kFormFactor[table_->form_factor - 0x01];
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosMemoryDevice::technology() const
+{
+    static const char* kTechnology[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "DRAM",
+        "NVDIMM-N",
+        "NVDIMM-F",
+        "NVDIMM-P",
+        "Intel Optane Persistent Memory",
+        "MRDIMM" // 0x08
+    };
+
+    // The field appeared in SMBIOS 3.2.
+    if (table_->length < 0x29)
+        return QString();
+
+    if (table_->technology >= 0x01 && table_->technology <= 0x08)
+        return kTechnology[table_->technology - 0x01];
 
     return QString();
 }
@@ -2215,12 +2292,176 @@ QString SmbiosMemoryDevice::partNumber() const
 }
 
 //--------------------------------------------------------------------------------------------------
+QString SmbiosMemoryDevice::firmwareVersion() const
+{
+    // The field appeared in SMBIOS 3.2.
+    if (table_->length < 0x2C)
+        return QString();
+
+    return smbiosString(table_, table_->firmware_version);
+}
+
+//--------------------------------------------------------------------------------------------------
 quint32 SmbiosMemoryDevice::speed() const
 {
+    // The field appeared in SMBIOS 2.3. Zero means the speed is unknown.
     if (table_->length < 0x17)
         return 0;
 
+    // FFFFh means the speed is 65535 MT/s or more and the real value sits in the extended
+    // field (3.3+).
+    if (table_->speed == 0xFFFF)
+    {
+        if (table_->length < 0x58)
+            return 0;
+
+        return table_->ext_speed & 0x7FFFFFFFUL;
+    }
+
     return table_->speed;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint32 SmbiosMemoryDevice::configuredSpeed() const
+{
+    // The speed the device runs at, which may be lower than the one it supports. The field
+    // appeared in SMBIOS 2.7, zero means it is unknown.
+    if (table_->length < 0x22)
+        return 0;
+
+    // FFFFh means the speed is 65535 MT/s or more and the real value sits in the extended
+    // field (3.3+).
+    if (table_->configured_speed == 0xFFFF)
+    {
+        if (table_->length < 0x5C)
+            return 0;
+
+        return table_->ext_configured_speed & 0x7FFFFFFFUL;
+    }
+
+    return table_->configured_speed;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint16 SmbiosMemoryDevice::totalWidth() const
+{
+    // The width in bits, including the bits used for error correction. FFFFh means it is
+    // unknown.
+    if (table_->total_width == 0xFFFF)
+        return 0;
+
+    return table_->total_width;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint16 SmbiosMemoryDevice::dataWidth() const
+{
+    // The width in bits without the ones used for error correction. FFFFh means it is unknown.
+    if (table_->data_width == 0xFFFF)
+        return 0;
+
+    return table_->data_width;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint8 SmbiosMemoryDevice::rank() const
+{
+    // Bits 3:0 of the attributes carry the rank (2.6+). Zero means it is unknown.
+    if (table_->length < 0x1C)
+        return 0;
+
+    return table_->attributes & 0x0F;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint32 SmbiosMemoryDevice::minVoltage() const
+{
+    // The voltages are measured in millivolts and appeared in SMBIOS 2.8. Zero means the value
+    // is unknown.
+    if (table_->length < 0x24)
+        return 0;
+
+    return table_->min_voltage;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint32 SmbiosMemoryDevice::maxVoltage() const
+{
+    if (table_->length < 0x26)
+        return 0;
+
+    return table_->max_voltage;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint32 SmbiosMemoryDevice::configuredVoltage() const
+{
+    if (table_->length < 0x28)
+        return 0;
+
+    return table_->configured_voltage;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint64 SmbiosMemoryDevice::nonVolatileSize() const
+{
+    // The sizes of the regions appeared in SMBIOS 3.2. All ones mean the size is unknown, zero
+    // means the device has no region of the kind.
+    if (table_->length < 0x3C || table_->non_volatile_size == 0xFFFFFFFFFFFFFFFFULL)
+        return 0;
+
+    return table_->non_volatile_size;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint64 SmbiosMemoryDevice::volatileSize() const
+{
+    if (table_->length < 0x44 || table_->volatile_size == 0xFFFFFFFFFFFFFFFFULL)
+        return 0;
+
+    return table_->volatile_size;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint64 SmbiosMemoryDevice::cacheSize() const
+{
+    if (table_->length < 0x4C || table_->cache_size == 0xFFFFFFFFFFFFFFFFULL)
+        return 0;
+
+    return table_->cache_size;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint64 SmbiosMemoryDevice::logicalSize() const
+{
+    if (table_->length < 0x54 || table_->logical_size == 0xFFFFFFFFFFFFFFFFULL)
+        return 0;
+
+    return table_->logical_size;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosMemoryDevice::isRegistered() const
+{
+    return (table_->type_detail & 0x2000) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosMemoryDevice::isUnbuffered() const
+{
+    return (table_->type_detail & 0x4000) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosMemoryDevice::isLrDimm() const
+{
+    return (table_->type_detail & 0x8000) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosMemoryDevice::isNonVolatile() const
+{
+    return (table_->type_detail & 0x1000) != 0;
 }
 
 //--------------------------------------------------------------------------------------------------
