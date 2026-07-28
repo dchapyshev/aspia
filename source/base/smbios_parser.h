@@ -281,6 +281,22 @@ private:
     Q_DISABLE_COPY_MOVE(SmbiosOnBoardDevices)
 };
 
+// Reads the OEM strings (Type 11) as well as the system configuration options (Type 12): the two
+// tables differ only in the meaning of the strings they hold.
+class SmbiosStringList
+{
+public:
+    explicit SmbiosStringList(const SmbiosTable* table);
+
+    bool isValid() const;
+    int count() const;
+    QString string(int index) const;
+
+private:
+    const SmbiosStringListTable* table_;
+    Q_DISABLE_COPY_MOVE(SmbiosStringList)
+};
+
 class SmbiosMemoryArray
 {
 public:
@@ -339,6 +355,25 @@ private:
     Q_DISABLE_COPY_MOVE(SmbiosMemoryDevice)
 };
 
+class SmbiosMemoryError
+{
+public:
+    explicit SmbiosMemoryError(const SmbiosTable* table);
+
+    bool isValid() const;
+    QString type() const;
+    QString granularity() const;
+    QString operation() const;
+    quint32 vendorSyndrome() const;
+    quint64 arrayErrorAddress() const;
+    quint64 deviceErrorAddress() const;
+    quint64 errorResolution() const;
+
+private:
+    const SmbiosMemoryErrorTable* table_;
+    Q_DISABLE_COPY_MOVE(SmbiosMemoryError)
+};
+
 class SmbiosMemoryArrayAddress
 {
 public:
@@ -356,6 +391,28 @@ private:
 
     const SmbiosMemoryArrayAddressTable* table_;
     Q_DISABLE_COPY_MOVE(SmbiosMemoryArrayAddress)
+};
+
+class SmbiosMemoryDeviceAddress
+{
+public:
+    explicit SmbiosMemoryDeviceAddress(const SmbiosTable* table);
+
+    bool isValid() const;
+    quint64 startAddress() const;
+    quint64 endAddress() const;
+    quint64 size() const;
+    quint16 deviceHandle() const;
+    quint16 arrayAddressHandle() const;
+    quint8 rowPosition() const;
+    quint8 interleavePosition() const;
+    quint8 interleaveDepth() const;
+
+private:
+    bool isExtended() const;
+
+    const SmbiosMemoryDeviceAddressTable* table_;
+    Q_DISABLE_COPY_MOVE(SmbiosMemoryDeviceAddress)
 };
 
 class SmbiosPointingDevice
@@ -395,6 +452,19 @@ public:
 private:
     const SmbiosPortableBatteryTable* table_;
     Q_DISABLE_COPY_MOVE(SmbiosPortableBattery)
+};
+
+class SmbiosSystemBoot
+{
+public:
+    explicit SmbiosSystemBoot(const SmbiosTable* table);
+
+    bool isValid() const;
+    QString status() const;
+
+private:
+    const SmbiosSystemBootTable* table_;
+    Q_DISABLE_COPY_MOVE(SmbiosSystemBoot)
 };
 
 class SmbiosPowerSupply

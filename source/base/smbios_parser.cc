@@ -2210,6 +2210,37 @@ const quint8* SmbiosOnBoardDevices::device(int index) const
 }
 
 //--------------------------------------------------------------------------------------------------
+SmbiosStringList::SmbiosStringList(const SmbiosTable* table)
+    : table_(static_cast<const SmbiosStringListTable*>(table))
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosStringList::isValid() const
+{
+    // 05h is the length of both tables in every SMBIOS version.
+    return table_->length >= 0x05;
+}
+
+//--------------------------------------------------------------------------------------------------
+int SmbiosStringList::count() const
+{
+    return table_->count;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosStringList::string(int index) const
+{
+    if (index < 0 || index >= count())
+        return QString();
+
+    // The string area numbers its strings starting at one. Firmware that declares more strings
+    // than it stores leaves the last ones empty.
+    return smbiosString(table_, static_cast<quint8>(index + 1));
+}
+
+//--------------------------------------------------------------------------------------------------
 SmbiosMemoryArray::SmbiosMemoryArray(const SmbiosTable* table)
     : table_(static_cast<const SmbiosMemoryArrayTable*>(table))
 {
@@ -2736,6 +2767,118 @@ quint16 SmbiosMemoryDevice::arrayHandle() const
 }
 
 //--------------------------------------------------------------------------------------------------
+SmbiosMemoryError::SmbiosMemoryError(const SmbiosTable* table)
+    : table_(static_cast<const SmbiosMemoryErrorTable*>(table))
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosMemoryError::isValid() const
+{
+    // 17h is the length of the memory error information table in every SMBIOS version.
+    return table_->length >= 0x17;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosMemoryError::type() const
+{
+    static const char* kType[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "OK",
+        "Bad Read",
+        "Parity Error",
+        "Single-bit Error",
+        "Double-bit Error",
+        "Multi-bit Error",
+        "Nibble Error",
+        "Checksum Error",
+        "CRC Error",
+        "Corrected Single-bit Error",
+        "Corrected Error",
+        "Uncorrectable Error" // 0x0E
+    };
+
+    if (table_->error_type >= 0x01 && table_->error_type <= 0x0E)
+        return kType[table_->error_type - 0x01];
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosMemoryError::granularity() const
+{
+    static const char* kGranularity[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "Device Level",
+        "Memory Partition Level" // 0x04
+    };
+
+    if (table_->granularity >= 0x01 && table_->granularity <= 0x04)
+        return kGranularity[table_->granularity - 0x01];
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosMemoryError::operation() const
+{
+    static const char* kOperation[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "Read",
+        "Write",
+        "Partial Write" // 0x05
+    };
+
+    if (table_->operation >= 0x01 && table_->operation <= 0x05)
+        return kOperation[table_->operation - 0x01];
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+quint32 SmbiosMemoryError::vendorSyndrome() const
+{
+    // Zero means the vendor-specific data is not filled in.
+    return table_->vendor_syndrome;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint64 SmbiosMemoryError::arrayErrorAddress() const
+{
+    // 80000000h means the address is unknown.
+    if (table_->array_address == 0x80000000)
+        return 0;
+
+    return table_->array_address;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint64 SmbiosMemoryError::deviceErrorAddress() const
+{
+    if (table_->device_address == 0x80000000)
+        return 0;
+
+    return table_->device_address;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint64 SmbiosMemoryError::errorResolution() const
+{
+    // The range the error address is known within, in bytes. 80000000h means it is unknown.
+    if (table_->resolution == 0x80000000)
+        return 0;
+
+    return table_->resolution;
+}
+
+//--------------------------------------------------------------------------------------------------
 SmbiosMemoryArrayAddress::SmbiosMemoryArrayAddress(const SmbiosTable* table)
     : table_(static_cast<const SmbiosMemoryArrayAddressTable*>(table))
 {
@@ -2810,6 +2953,109 @@ bool SmbiosMemoryArrayAddress::isExtended() const
     // FFFFFFFFh in the starting address means both addresses come from the extended fields
     // (2.7+), which are measured in bytes instead of kilobytes.
     return table_->start_address == 0xFFFFFFFF && table_->length >= 0x1F;
+}
+
+//--------------------------------------------------------------------------------------------------
+SmbiosMemoryDeviceAddress::SmbiosMemoryDeviceAddress(const SmbiosTable* table)
+    : table_(static_cast<const SmbiosMemoryDeviceAddressTable*>(table))
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosMemoryDeviceAddress::isValid() const
+{
+    // 13h is the minimum length of the memory device mapped address table since SMBIOS 2.1.
+    return table_->length >= 0x13;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint64 SmbiosMemoryDeviceAddress::startAddress() const
+{
+    if (isExtended())
+        return table_->ext_start_address;
+
+    if (table_->start_address == 0xFFFFFFFF)
+        return 0;
+
+    return static_cast<quint64>(table_->start_address) * 1024ULL;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint64 SmbiosMemoryDeviceAddress::endAddress() const
+{
+    if (isExtended())
+        return table_->ext_end_address;
+
+    if (table_->start_address == 0xFFFFFFFF)
+        return 0;
+
+    // The field holds the last kilobyte of the range, so the last byte of it belongs to the
+    // kilobyte behind.
+    return (static_cast<quint64>(table_->end_address) + 1ULL) * 1024ULL - 1ULL;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint64 SmbiosMemoryDeviceAddress::size() const
+{
+    const quint64 start = startAddress();
+    const quint64 end = endAddress();
+
+    // Equal addresses mean the range is not filled in rather than a single byte of memory.
+    if (end <= start)
+        return 0;
+
+    return end - start + 1ULL;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint16 SmbiosMemoryDeviceAddress::deviceHandle() const
+{
+    return table_->device_handle;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint16 SmbiosMemoryDeviceAddress::arrayAddressHandle() const
+{
+    return table_->array_address_handle;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint8 SmbiosMemoryDeviceAddress::rowPosition() const
+{
+    // The position of the device in a row of the partition. FFh means it is unknown and zero is
+    // reserved by the specification.
+    if (table_->row_position == 0xFF)
+        return 0;
+
+    return table_->row_position;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint8 SmbiosMemoryDeviceAddress::interleavePosition() const
+{
+    // Zero tells the device is not interleaved, FFh that the position is unknown.
+    if (table_->interleave_position == 0xFF)
+        return 0;
+
+    return table_->interleave_position;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint8 SmbiosMemoryDeviceAddress::interleaveDepth() const
+{
+    if (table_->interleave_depth == 0xFF)
+        return 0;
+
+    return table_->interleave_depth;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosMemoryDeviceAddress::isExtended() const
+{
+    // FFFFFFFFh in the starting address means both addresses come from the extended fields
+    // (2.7+), which are measured in bytes instead of kilobytes.
+    return table_->start_address == 0xFFFFFFFF && table_->length >= 0x23;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -3018,6 +3264,49 @@ int SmbiosPortableBattery::maxError() const
         return -1;
 
     return table_->max_error;
+}
+
+//--------------------------------------------------------------------------------------------------
+SmbiosSystemBoot::SmbiosSystemBoot(const SmbiosTable* table)
+    : table_(static_cast<const SmbiosSystemBootTable*>(table))
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosSystemBoot::isValid() const
+{
+    // 0Bh is enough to carry the first byte of the boot status, which is the only one the meaning
+    // of which does not depend on the status itself.
+    return table_->length >= 0x0B;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosSystemBoot::status() const
+{
+    static const char* kStatus[] =
+    {
+        "No Errors Detected", // 0x00
+        "No Bootable Media",
+        "Operating System Failed To Load",
+        "Firmware-detected Hardware Failure",
+        "Operating System-detected Hardware Failure",
+        "User-requested Boot",
+        "System Security Violation",
+        "Previously-requested Image",
+        "System Watchdog Timer Expired" // 0x08
+    };
+
+    if (table_->status <= 0x08)
+        return kStatus[table_->status];
+
+    if (table_->status >= 0x80 && table_->status <= 0xBF)
+        return "OEM-specific";
+
+    if (table_->status >= 0xC0)
+        return "Product-specific";
+
+    return QString();
 }
 
 //--------------------------------------------------------------------------------------------------

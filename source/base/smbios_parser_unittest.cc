@@ -1280,6 +1280,100 @@ TEST(SmbiosParserTest, TruncatedOnBoardDevicesIsInvalid)
 }
 
 //--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, StringListFields)
+{
+    QByteArray formatted(0x05 - 4, '\0');
+    formatted[0] = 3; // count: three strings
+
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_OEM_STRINGS, formatted,
+        { "First", "Second", "Third" }));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosStringList strings(enumerator.table());
+    ASSERT_TRUE(strings.isValid());
+    EXPECT_EQ(strings.count(), 3);
+    EXPECT_EQ(strings.string(0), QString("First"));
+    EXPECT_EQ(strings.string(1), QString("Second"));
+    EXPECT_EQ(strings.string(2), QString("Third"));
+
+    // Indexes outside the declared count give nothing.
+    EXPECT_TRUE(strings.string(-1).isEmpty());
+    EXPECT_TRUE(strings.string(3).isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, StringListCountAboveStoredStrings)
+{
+    // Firmware that declares more strings than it stores: the missing ones must come back empty
+    // instead of walking out of the string area.
+    QByteArray formatted(0x05 - 4, '\0');
+    formatted[0] = 4; // count: four strings, only one of them stored
+
+    const QByteArray dump = makeDump(
+        makeTable(SMBIOS_TABLE_TYPE_CONFIGURATION_OPTION, formatted, { "Only" }) + endOfTable());
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosStringList strings(enumerator.table());
+    ASSERT_TRUE(strings.isValid());
+    EXPECT_EQ(strings.count(), 4);
+    EXPECT_EQ(strings.string(0), QString("Only"));
+    EXPECT_TRUE(strings.string(1).isEmpty());
+    EXPECT_TRUE(strings.string(3).isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, TruncatedStringListIsInvalid)
+{
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_OEM_STRINGS, QByteArray(), {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    EXPECT_FALSE(SmbiosStringList(enumerator.table()).isValid());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, SystemBootStatus)
+{
+    auto statusOf = [](quint8 status, int length)
+    {
+        QByteArray formatted(length - 4, '\0');
+        if (formatted.size() > 6)
+            formatted[6] = static_cast<char>(status);
+
+        const QByteArray dump =
+            makeDump(makeTable(SMBIOS_TABLE_TYPE_SYSTEM_BOOT, formatted, {}));
+
+        SmbiosTableEnumerator enumerator(dump);
+        if (enumerator.isAtEnd())
+            return QString();
+
+        SmbiosSystemBoot boot(enumerator.table());
+        if (!boot.isValid())
+            return QString();
+
+        return boot.status();
+    };
+
+    EXPECT_EQ(statusOf(0x00, 0x14), QString("No Errors Detected"));
+    EXPECT_EQ(statusOf(0x05, 0x14), QString("User-requested Boot"));
+    EXPECT_EQ(statusOf(0x08, 0x14), QString("System Watchdog Timer Expired"));
+    EXPECT_EQ(statusOf(0x80, 0x14), QString("OEM-specific"));
+    EXPECT_EQ(statusOf(0xC8, 0x14), QString("Product-specific"));
+
+    // Values between the known ones and the OEM range are reserved.
+    EXPECT_TRUE(statusOf(0x40, 0x14).isEmpty());
+
+    // A table that ends before the status byte.
+    EXPECT_TRUE(statusOf(0x05, 0x0A).isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST(SmbiosParserTest, MemoryArrayFields)
 {
     QByteArray formatted(0x0F - 4, '\0');
@@ -1544,6 +1638,172 @@ TEST(SmbiosParserTest, MemoryDeviceSizeVariants)
     // Extended size: the field counts megabytes, so 32768 of them make 32 GB.
     EXPECT_EQ(sizeOf(makeDump(makeDevice(0x7FFF, 32768, 0x20))),
               32ULL * 1024ULL * 1024ULL * 1024ULL);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, MemoryErrorFields)
+{
+    QByteArray formatted(0x17 - 4, '\0');
+    formatted[0x04 - 4] = static_cast<char>(0x06); // error_type: single-bit error
+    formatted[0x05 - 4] = static_cast<char>(0x03); // granularity: device level
+    formatted[0x06 - 4] = static_cast<char>(0x03); // operation: read
+    formatted[0x07 - 4] = static_cast<char>(0x21); // vendor_syndrome: 4321h
+    formatted[0x08 - 4] = static_cast<char>(0x43);
+    formatted[0x0C - 4] = static_cast<char>(0x10); // array_address: 1000h
+    formatted[0x0F - 4] = static_cast<char>(0x20); // device_address: 20h
+    formatted[0x13 - 4] = static_cast<char>(0x40); // resolution: 40h
+
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_MEMORY_ERROR, formatted, {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosMemoryError error(enumerator.table());
+    ASSERT_TRUE(error.isValid());
+    EXPECT_EQ(error.type(), QString("Single-bit Error"));
+    EXPECT_EQ(error.granularity(), QString("Device Level"));
+    EXPECT_EQ(error.operation(), QString("Read"));
+    EXPECT_EQ(error.vendorSyndrome(), 0x4321u);
+    EXPECT_EQ(error.arrayErrorAddress(), 0x1000ULL);
+    EXPECT_EQ(error.deviceErrorAddress(), 0x20ULL);
+    EXPECT_EQ(error.errorResolution(), 0x40ULL);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, MemoryErrorUnknownAddresses)
+{
+    QByteArray formatted(0x17 - 4, '\0');
+    formatted[0x04 - 4] = static_cast<char>(0x03); // error_type: OK
+
+    // 80000000h in each of the three address fields means the value is unknown.
+    formatted[0x0E - 4] = static_cast<char>(0x80);
+    formatted[0x12 - 4] = static_cast<char>(0x80);
+    formatted[0x16 - 4] = static_cast<char>(0x80);
+
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_MEMORY_ERROR, formatted, {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosMemoryError error(enumerator.table());
+    ASSERT_TRUE(error.isValid());
+    EXPECT_EQ(error.type(), QString("OK"));
+    EXPECT_EQ(error.vendorSyndrome(), 0u);
+    EXPECT_EQ(error.arrayErrorAddress(), 0ULL);
+    EXPECT_EQ(error.deviceErrorAddress(), 0ULL);
+    EXPECT_EQ(error.errorResolution(), 0ULL);
+
+    // Values outside the lists give nothing rather than a wrong name.
+    EXPECT_TRUE(error.granularity().isEmpty());
+    EXPECT_TRUE(error.operation().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, TruncatedMemoryErrorIsInvalid)
+{
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_MEMORY_ERROR, QByteArray(0x16 - 4, '\0'), {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    EXPECT_FALSE(SmbiosMemoryError(enumerator.table()).isValid());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, MemoryDeviceAddressFields)
+{
+    QByteArray formatted(0x13 - 4, '\0');
+    formatted[0x08 - 4] = static_cast<char>(0xFF); // end_address: the 1048575th kilobyte
+    formatted[0x09 - 4] = static_cast<char>(0xFF);
+    formatted[0x0A - 4] = static_cast<char>(0x0F);
+    formatted[0x0D - 4] = static_cast<char>(0x10); // device_handle
+    formatted[0x0F - 4] = static_cast<char>(0x11); // array_address_handle
+    formatted[0x10 - 4] = 1;                       // row_position
+    formatted[0x11 - 4] = 2;                       // interleave_position
+    formatted[0x12 - 4] = 4;                       // interleave_depth
+
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_MEMORY_DEVICE_ADDR, formatted, {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosMemoryDeviceAddress address(enumerator.table());
+    ASSERT_TRUE(address.isValid());
+    EXPECT_EQ(address.startAddress(), 0ULL);
+    EXPECT_EQ(address.endAddress(), 1024ULL * 1024ULL * 1024ULL - 1ULL);
+    EXPECT_EQ(address.size(), 1024ULL * 1024ULL * 1024ULL);
+    EXPECT_EQ(address.deviceHandle(), 0x1000);
+    EXPECT_EQ(address.arrayAddressHandle(), 0x1100);
+    EXPECT_EQ(address.rowPosition(), 1);
+    EXPECT_EQ(address.interleavePosition(), 2);
+    EXPECT_EQ(address.interleaveDepth(), 4);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, MemoryDeviceAddressExtended)
+{
+    auto makeAddress = [](quint8 length) -> QByteArray
+    {
+        QByteArray formatted(length - 4, '\0');
+
+        // start_address: the address does not fit the field.
+        for (int i = 0; i < 4; ++i)
+            formatted[0x04 - 4 + i] = static_cast<char>(0xFF);
+
+        // The positions of the device are unknown.
+        formatted[0x10 - 4] = static_cast<char>(0xFF);
+        formatted[0x11 - 4] = static_cast<char>(0xFF);
+        formatted[0x12 - 4] = static_cast<char>(0xFF);
+
+        if (length >= 0x23)
+        {
+            formatted[0x17 - 4] = static_cast<char>(0x01); // ext_start_address: 4 GB
+
+            for (int i = 0; i < 4; ++i)
+                formatted[0x1B - 4 + i] = static_cast<char>(0xFF); // ext_end_address: 8 GB - 1
+            formatted[0x1F - 4] = static_cast<char>(0x01);
+        }
+
+        return makeTable(SMBIOS_TABLE_TYPE_MEMORY_DEVICE_ADDR, formatted, {});
+    };
+
+    const QByteArray extended = makeDump(makeAddress(0x23));
+
+    SmbiosTableEnumerator extended_enumerator(extended);
+    ASSERT_FALSE(extended_enumerator.isAtEnd());
+
+    SmbiosMemoryDeviceAddress extended_address(extended_enumerator.table());
+    EXPECT_EQ(extended_address.startAddress(), 4ULL * 1024ULL * 1024ULL * 1024ULL);
+    EXPECT_EQ(extended_address.endAddress(), 8ULL * 1024ULL * 1024ULL * 1024ULL - 1ULL);
+    EXPECT_EQ(extended_address.size(), 4ULL * 1024ULL * 1024ULL * 1024ULL);
+    EXPECT_EQ(extended_address.rowPosition(), 0);
+    EXPECT_EQ(extended_address.interleavePosition(), 0);
+    EXPECT_EQ(extended_address.interleaveDepth(), 0);
+
+    // An SMBIOS 2.1 table has no extended fields to fall back to.
+    const QByteArray legacy = makeDump(makeAddress(0x13));
+
+    SmbiosTableEnumerator legacy_enumerator(legacy);
+    ASSERT_FALSE(legacy_enumerator.isAtEnd());
+
+    SmbiosMemoryDeviceAddress legacy_address(legacy_enumerator.table());
+    EXPECT_EQ(legacy_address.startAddress(), 0ULL);
+    EXPECT_EQ(legacy_address.endAddress(), 0ULL);
+    EXPECT_EQ(legacy_address.size(), 0ULL);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, TruncatedMemoryDeviceAddressIsInvalid)
+{
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_MEMORY_DEVICE_ADDR, QByteArray(0x12 - 4, '\0'), {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    EXPECT_FALSE(SmbiosMemoryDeviceAddress(enumerator.table()).isValid());
 }
 
 //--------------------------------------------------------------------------------------------------

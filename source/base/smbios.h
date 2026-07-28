@@ -44,11 +44,16 @@ enum SmbiosTableType : quint8
     SMBIOS_TABLE_TYPE_PORT_CONNECTOR       = 0x08,
     SMBIOS_TABLE_TYPE_SYSTEM_SLOT          = 0x09,
     SMBIOS_TABLE_TYPE_ONBOARD_DEVICE       = 0x0A,
+    SMBIOS_TABLE_TYPE_OEM_STRINGS          = 0x0B,
+    SMBIOS_TABLE_TYPE_CONFIGURATION_OPTION = 0x0C,
     SMBIOS_TABLE_TYPE_MEMORY_ARRAY         = 0x10,
     SMBIOS_TABLE_TYPE_MEMORY_DEVICE        = 0x11,
+    SMBIOS_TABLE_TYPE_MEMORY_ERROR         = 0x12,
     SMBIOS_TABLE_TYPE_MEMORY_ARRAY_ADDRESS = 0x13,
+    SMBIOS_TABLE_TYPE_MEMORY_DEVICE_ADDR   = 0x14,
     SMBIOS_TABLE_TYPE_POINTING_DEVICE      = 0x15,
     SMBIOS_TABLE_TYPE_PORTABLE_BATTERY     = 0x16,
+    SMBIOS_TABLE_TYPE_SYSTEM_BOOT          = 0x20,
     SMBIOS_TABLE_TYPE_POWER_SUPPLY         = 0x27,
     SMBIOS_TABLE_TYPE_ONBOARD_DEVICE_EXT   = 0x29,
     SMBIOS_TABLE_TYPE_TPM_DEVICE           = 0x2B,
@@ -248,6 +253,13 @@ struct SmbiosOnBoardDeviceTable : public SmbiosTable
     quint8 description; // 05h
 };
 
+// The layout of both the OEM strings (Type 11) and the system configuration options (Type 12):
+// the strings themselves live in the string area of the table.
+struct SmbiosStringListTable : public SmbiosTable
+{
+    quint8 count; // 04h
+};
+
 struct SmbiosMemoryArrayTable : public SmbiosTable
 {
     // 2.1+
@@ -320,6 +332,17 @@ struct SmbiosMemoryDeviceTable : public SmbiosTable
     quint16 rcd_revision;           // 62h-63h
 };
 
+struct SmbiosMemoryErrorTable : public SmbiosTable
+{
+    quint8 error_type;       // 04h
+    quint8 granularity;      // 05h
+    quint8 operation;        // 06h
+    quint32 vendor_syndrome; // 07h-0Ah
+    quint32 array_address;   // 0Bh-0Eh
+    quint32 device_address;  // 0Fh-12h
+    quint32 resolution;      // 13h-16h
+};
+
 struct SmbiosMemoryArrayAddressTable : public SmbiosTable
 {
     // 2.1+
@@ -331,6 +354,22 @@ struct SmbiosMemoryArrayAddressTable : public SmbiosTable
     // 2.7+
     quint64 ext_start_address; // 0Fh-16h, in bytes
     quint64 ext_end_address;   // 17h-1Eh, the last byte of the range
+};
+
+struct SmbiosMemoryDeviceAddressTable : public SmbiosTable
+{
+    // 2.1+
+    quint32 start_address;        // 04h-07h, in kilobytes
+    quint32 end_address;          // 08h-0Bh, the last kilobyte of the range
+    quint16 device_handle;        // 0Ch-0Dh
+    quint16 array_address_handle; // 0Eh-0Fh
+    quint8 row_position;          // 10h
+    quint8 interleave_position;   // 11h
+    quint8 interleave_depth;      // 12h
+
+    // 2.7+
+    quint64 ext_start_address;    // 13h-1Ah, in bytes
+    quint64 ext_end_address;      // 1Bh-22h, the last byte of the range
 };
 
 struct SmbiosPointingDeviceTable : public SmbiosTable
@@ -360,6 +399,14 @@ struct SmbiosPortableBatteryTable : public SmbiosTable
     quint8 sbds_device_chemistry;  // 14h
     quint8 capacity_multiplier;    // 15h
     quint32 oem_specific;          // 16h-19h
+};
+
+struct SmbiosSystemBootTable : public SmbiosTable
+{
+    quint8 reserved[6]; // 04h-09h
+    quint8 status;      // 0Ah, the first byte of the boot status field
+
+    // 0Bh-13h, the rest of the boot status field: data whose meaning depends on the status.
 };
 
 struct SmbiosPowerSupplyTable : public SmbiosTable

@@ -87,14 +87,29 @@ private:
     QString onBoardDeviceTitle(int index) const;
     QList<QTreeWidgetItem*> onBoardDeviceParameters(int index) const;
 
+    QList<QTreeWidgetItem*> oemStringsParameters() const;
+    QList<QTreeWidgetItem*> configurationOptionParameters() const;
+    QList<QTreeWidgetItem*> systemBootParameters() const;
+
     QString memoryArrayTitle(int index) const;
     QList<QTreeWidgetItem*> memoryArrayParameters(int index) const;
 
     QString memoryDeviceTitle(int index) const;
     QList<QTreeWidgetItem*> memoryDeviceParameters(int index) const;
 
+    QString memoryErrorTitle(int index) const;
+    QList<QTreeWidgetItem*> memoryErrorParameters(int index) const;
+
+    QString memoryArrayAddressTitle(int index) const;
+    QList<QTreeWidgetItem*> memoryArrayAddressParameters(int index) const;
+
+    QString memoryDeviceAddressTitle(int index) const;
+    QList<QTreeWidgetItem*> memoryDeviceAddressParameters(int index) const;
+
     QString tpmDeviceTitle(int index) const;
     QList<QTreeWidgetItem*> tpmDeviceParameters(int index) const;
+
+    QList<QTreeWidgetItem*> miscParameters() const;
 
     std::unique_ptr<Ui::SysInfoDmi> ui;
 

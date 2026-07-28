@@ -780,6 +780,44 @@ message Dmi
         uint64 logical_size       = 25;
     }
 
+    message MemoryError
+    {
+        string type           = 1;
+        string granularity    = 2;
+        string operation      = 3;
+        uint32 syndrome       = 4;
+        uint64 array_address  = 5;
+        uint64 device_address = 6;
+        uint64 resolution     = 7;
+    }
+
+    message MemoryArrayAddress
+    {
+        string array           = 1;
+        uint64 start_address   = 2;
+        uint64 end_address     = 3;
+        uint64 size            = 4;
+        uint32 partition_width = 5;
+    }
+
+    message MemoryDeviceAddress
+    {
+        string device              = 1;
+        uint64 start_address       = 2;
+        uint64 end_address         = 3;
+        uint64 size                = 4;
+        uint32 row_position        = 5;
+        uint32 interleave_position = 6;
+        uint32 interleave_depth    = 7;
+    }
+
+    message Misc
+    {
+        string smbios_version  = 1;
+        uint32 structure_count = 2;
+        uint32 structure_size  = 3;
+    }
+
     message TpmDevice
     {
         string vendor_id              = 1;
@@ -791,17 +829,24 @@ message Dmi
         bool configurable_by_oem      = 7;
     }
 
-    repeated Bios bios                     = 1;
-    repeated Baseboard baseboard           = 2;
-    repeated Chassis chassis               = 3;
-    repeated Processor processor           = 4;
-    repeated Cache cache                   = 5;
-    repeated PortConnector port_connector  = 6;
-    repeated SystemSlot system_slot        = 7;
-    repeated OnBoardDevice on_board_device = 8;
-    repeated MemoryArray memory_array      = 9;
-    repeated MemoryDevice memory_device    = 10;
-    repeated TpmDevice tpm_device          = 11;
+    repeated Bios bios                                 = 1;
+    repeated Baseboard baseboard                       = 2;
+    repeated Chassis chassis                           = 3;
+    repeated Processor processor                       = 4;
+    repeated Cache cache                               = 5;
+    repeated PortConnector port_connector              = 6;
+    repeated SystemSlot system_slot                    = 7;
+    repeated OnBoardDevice on_board_device             = 8;
+    repeated string oem_string                         = 9;
+    repeated string configuration_option               = 10;
+    repeated MemoryArray memory_array                  = 11;
+    repeated MemoryDevice memory_device                = 12;
+    repeated MemoryError memory_error                  = 13;
+    repeated MemoryArrayAddress memory_array_address   = 14;
+    repeated MemoryDeviceAddress memory_device_address = 15;
+    string boot_status                                 = 16;
+    repeated TpmDevice tpm_device                      = 17;
+    Misc misc                                          = 18;
 }
 
 message SystemInfoRequest

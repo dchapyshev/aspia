@@ -19,6 +19,7 @@
 #include "host/workers/sys_info_worker.h"
 
 #include <QByteArray>
+#include <QHash>
 #include <QProcessEnvironment>
 #include <QStorageInfo>
 #include <QStringList>
@@ -646,14 +647,56 @@ QString busAddress(const T& table)
 }
 
 //--------------------------------------------------------------------------------------------------
+// Names of the tables other tables point at by handle: the locator of a memory device and the use
+// of a memory array. A table may come before the one it points at, so the names are collected
+// before the tables are read. Handles are unique within the whole set of tables.
+QHash<quint16, QString> referencedTableNames(const QByteArray& dump)
+{
+    QHash<quint16, QString> result;
+
+    for (SmbiosTableEnumerator enumerator(dump); !enumerator.isAtEnd(); enumerator.advance())
+    {
+        const SmbiosTable* table = enumerator.table();
+
+        switch (table->type)
+        {
+            case SMBIOS_TABLE_TYPE_MEMORY_ARRAY:
+            {
+                SmbiosMemoryArray memory_array(table);
+                if (memory_array.isValid())
+                    result.insert(table->handle, memory_array.use());
+            }
+            break;
+
+            case SMBIOS_TABLE_TYPE_MEMORY_DEVICE:
+            {
+                SmbiosMemoryDevice memory_device(table);
+                if (memory_device.isValid())
+                    result.insert(table->handle, memory_device.location());
+            }
+            break;
+
+            default:
+                break;
+        }
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
 void fillDmi(proto::system_info::SystemInfo* system_info)
 {
     proto::system_info::Dmi* dmi = system_info->mutable_dmi();
+    const QByteArray dump = SysInfo::smbiosDump();
+    const QHash<quint16, QString> table_names = referencedTableNames(dump);
+    SmbiosTableEnumerator enumerator(dump);
+    quint32 structure_count = 0;
 
-    for (SmbiosTableEnumerator enumerator(SysInfo::smbiosDump());
-         !enumerator.isAtEnd(); enumerator.advance())
+    for (; !enumerator.isAtEnd(); enumerator.advance())
     {
         const SmbiosTable* table = enumerator.table();
+        ++structure_count;
 
         switch (table->type)
         {
@@ -870,6 +913,95 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
             }
             break;
 
+            case SMBIOS_TABLE_TYPE_OEM_STRINGS:
+            case SMBIOS_TABLE_TYPE_CONFIGURATION_OPTION:
+            {
+                SmbiosStringList strings_table(table);
+                if (!strings_table.isValid())
+                    continue;
+
+                // Firmware often declares strings it does not store, so the empty ones are
+                // dropped instead of showing up as blank rows.
+                for (int i = 0; i < strings_table.count(); ++i)
+                {
+                    const QString string = strings_table.string(i);
+                    if (string.isEmpty())
+                        continue;
+
+                    if (table->type == SMBIOS_TABLE_TYPE_OEM_STRINGS)
+                        dmi->add_oem_string(string.toStdString());
+                    else
+                        dmi->add_configuration_option(string.toStdString());
+                }
+            }
+            break;
+
+            case SMBIOS_TABLE_TYPE_MEMORY_ERROR:
+            {
+                SmbiosMemoryError error_table(table);
+                if (!error_table.isValid())
+                    continue;
+
+                proto::system_info::Dmi::MemoryError* error = dmi->add_memory_error();
+
+                error->set_type(error_table.type().toStdString());
+                error->set_granularity(error_table.granularity().toStdString());
+                error->set_operation(error_table.operation().toStdString());
+                error->set_syndrome(error_table.vendorSyndrome());
+                error->set_array_address(error_table.arrayErrorAddress());
+                error->set_device_address(error_table.deviceErrorAddress());
+                error->set_resolution(error_table.errorResolution());
+            }
+            break;
+
+            case SMBIOS_TABLE_TYPE_MEMORY_ARRAY_ADDRESS:
+            {
+                SmbiosMemoryArrayAddress array_address_table(table);
+                if (!array_address_table.isValid())
+                    continue;
+
+                proto::system_info::Dmi::MemoryArrayAddress* array_address =
+                    dmi->add_memory_array_address();
+
+                array_address->set_array(
+                    table_names.value(array_address_table.arrayHandle()).toStdString());
+                array_address->set_start_address(array_address_table.startAddress());
+                array_address->set_end_address(array_address_table.endAddress());
+                array_address->set_size(array_address_table.size());
+                array_address->set_partition_width(array_address_table.partitionWidth());
+            }
+            break;
+
+            case SMBIOS_TABLE_TYPE_MEMORY_DEVICE_ADDR:
+            {
+                SmbiosMemoryDeviceAddress address_table(table);
+                if (!address_table.isValid())
+                    continue;
+
+                proto::system_info::Dmi::MemoryDeviceAddress* address =
+                    dmi->add_memory_device_address();
+
+                address->set_device(
+                    table_names.value(address_table.deviceHandle()).toStdString());
+                address->set_start_address(address_table.startAddress());
+                address->set_end_address(address_table.endAddress());
+                address->set_size(address_table.size());
+                address->set_row_position(address_table.rowPosition());
+                address->set_interleave_position(address_table.interleavePosition());
+                address->set_interleave_depth(address_table.interleaveDepth());
+            }
+            break;
+
+            case SMBIOS_TABLE_TYPE_SYSTEM_BOOT:
+            {
+                SmbiosSystemBoot boot_table(table);
+                if (!boot_table.isValid())
+                    continue;
+
+                dmi->set_boot_status(boot_table.status().toStdString());
+            }
+            break;
+
             case SMBIOS_TABLE_TYPE_MEMORY_ARRAY:
             {
                 SmbiosMemoryArray memory_array_table(table);
@@ -953,6 +1085,17 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
                 break;
         }
     }
+
+    // Firmware without the tables at all leaves nothing to tell about them either.
+    if (!structure_count)
+        return;
+
+    proto::system_info::Dmi::Misc* misc = dmi->mutable_misc();
+
+    misc->set_smbios_version(QString("%1.%2").arg(enumerator.majorVersion())
+                                             .arg(enumerator.minorVersion()).toStdString());
+    misc->set_structure_count(structure_count);
+    misc->set_structure_size(enumerator.length());
 }
 
 //--------------------------------------------------------------------------------------------------

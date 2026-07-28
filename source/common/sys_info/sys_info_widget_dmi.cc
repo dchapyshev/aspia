@@ -35,9 +35,16 @@ const char kCacheIcon[] = ":/img/microchip.svg";
 const char kPortConnectorIcon[] = ":/img/ps-2-male.svg";
 const char kSystemSlotIcon[] = ":/img/ps-2-male.svg";
 const char kOnBoardDeviceIcon[] = ":/img/network-card.svg";
+const char kOemStringsIcon[] = ":/img/file-document.svg";
+const char kConfigurationOptionIcon[] = ":/img/gear.svg";
+const char kSystemBootIcon[] = ":/img/restart.svg";
 const char kMemoryArrayIcon[] = ":/img/memory-slot.svg";
 const char kMemoryDeviceIcon[] = ":/img/memory-slot.svg";
+const char kMemoryErrorIcon[] = ":/img/memory-slot.svg";
+const char kMemoryArrayAddressIcon[] = ":/img/memory-slot.svg";
+const char kMemoryDeviceAddressIcon[] = ":/img/memory-slot.svg";
 const char kTpmDeviceIcon[] = ":/img/certificate.svg";
+const char kMiscIcon[] = ":/img/info.svg";
 
 // Group of tables a item of the upper pane belongs to.
 constexpr int kGroupRole = Qt::UserRole;
@@ -55,9 +62,16 @@ enum Group
     GROUP_PORT_CONNECTORS,
     GROUP_SYSTEM_SLOTS,
     GROUP_ON_BOARD_DEVICES,
+    GROUP_OEM_STRINGS,
+    GROUP_CONFIGURATION_OPTIONS,
     GROUP_MEMORY_ARRAYS,
     GROUP_MEMORY_DEVICES,
-    GROUP_TPM_DEVICES
+    GROUP_MEMORY_ERRORS,
+    GROUP_MEMORY_ARRAY_ADDRESSES,
+    GROUP_MEMORY_DEVICE_ADDRESSES,
+    GROUP_SYSTEM_BOOT,
+    GROUP_TPM_DEVICES,
+    GROUP_MISC
 };
 
 class Item : public QTreeWidgetItem
@@ -241,6 +255,15 @@ void SysInfoWidgetDmi::setSystemInfo(const proto::system_info::SystemInfo& syste
                  on_board_devices);
     }
 
+    if (dmi_->oem_string_size())
+        addGroup(GROUP_OEM_STRINGS, kOemStringsIcon, tr("OEM Strings"), { tr("OEM Strings") });
+
+    if (dmi_->configuration_option_size())
+    {
+        addGroup(GROUP_CONFIGURATION_OPTIONS, kConfigurationOptionIcon,
+                 tr("Configuration Options"), { tr("Configuration Options") });
+    }
+
     QStringList memory_arrays;
     for (int i = 0; i < dmi_->memory_array_size(); ++i)
         memory_arrays << memoryArrayTitle(i);
@@ -258,12 +281,45 @@ void SysInfoWidgetDmi::setSystemInfo(const proto::system_info::SystemInfo& syste
                  memory_devices);
     }
 
+    QStringList memory_errors;
+    for (int i = 0; i < dmi_->memory_error_size(); ++i)
+        memory_errors << memoryErrorTitle(i);
+
+    if (!memory_errors.isEmpty())
+        addGroup(GROUP_MEMORY_ERRORS, kMemoryErrorIcon, tr("Memory Errors"), memory_errors);
+
+    QStringList memory_array_addresses;
+    for (int i = 0; i < dmi_->memory_array_address_size(); ++i)
+        memory_array_addresses << memoryArrayAddressTitle(i);
+
+    if (!memory_array_addresses.isEmpty())
+    {
+        addGroup(GROUP_MEMORY_ARRAY_ADDRESSES, kMemoryArrayAddressIcon,
+                 tr("Memory Array Addresses"), memory_array_addresses);
+    }
+
+    QStringList memory_device_addresses;
+    for (int i = 0; i < dmi_->memory_device_address_size(); ++i)
+        memory_device_addresses << memoryDeviceAddressTitle(i);
+
+    if (!memory_device_addresses.isEmpty())
+    {
+        addGroup(GROUP_MEMORY_DEVICE_ADDRESSES, kMemoryDeviceAddressIcon,
+                 tr("Memory Device Addresses"), memory_device_addresses);
+    }
+
+    if (!dmi_->boot_status().empty())
+        addGroup(GROUP_SYSTEM_BOOT, kSystemBootIcon, tr("System Boot"), { tr("System Boot") });
+
     QStringList tpm_devices;
     for (int i = 0; i < dmi_->tpm_device_size(); ++i)
         tpm_devices << tpmDeviceTitle(i);
 
     if (!tpm_devices.isEmpty())
         addGroup(GROUP_TPM_DEVICES, kTpmDeviceIcon, tr("TPM Device"), tpm_devices);
+
+    if (dmi_->has_misc())
+        addGroup(GROUP_MISC, kMiscIcon, tr("Misc"), { tr("DMI Properties") });
 
     if (!isStateRestored())
         ui->tree->resizeColumnToContents(0);
@@ -430,6 +486,61 @@ void SysInfoWidgetDmi::onCurrentTableChanged()
                 items << new Item(kTpmDeviceIcon, tpmDeviceTitle(i), tpmDeviceParameters(i));
         }
         break;
+
+        case GROUP_OEM_STRINGS:
+            items << new Item(kOemStringsIcon, tr("OEM Strings"), oemStringsParameters());
+            break;
+
+        case GROUP_CONFIGURATION_OPTIONS:
+        {
+            items << new Item(kConfigurationOptionIcon, tr("Configuration Options"),
+                              configurationOptionParameters());
+        }
+        break;
+
+        case GROUP_MEMORY_ERRORS:
+        {
+            const int first = index < 0 ? 0 : index;
+            const int last = index < 0 ? dmi_->memory_error_size() - 1 : index;
+
+            for (int i = first; i <= last && i < dmi_->memory_error_size(); ++i)
+                items << new Item(kMemoryErrorIcon, memoryErrorTitle(i), memoryErrorParameters(i));
+        }
+        break;
+
+        case GROUP_MEMORY_ARRAY_ADDRESSES:
+        {
+            const int first = index < 0 ? 0 : index;
+            const int last = index < 0 ? dmi_->memory_array_address_size() - 1 : index;
+
+            for (int i = first; i <= last && i < dmi_->memory_array_address_size(); ++i)
+            {
+                items << new Item(kMemoryArrayAddressIcon, memoryArrayAddressTitle(i),
+                                  memoryArrayAddressParameters(i));
+            }
+        }
+        break;
+
+        case GROUP_MEMORY_DEVICE_ADDRESSES:
+        {
+            const int first = index < 0 ? 0 : index;
+            const int last = index < 0 ? dmi_->memory_device_address_size() - 1 : index;
+
+            for (int i = first; i <= last && i < dmi_->memory_device_address_size(); ++i)
+            {
+                items << new Item(kMemoryDeviceAddressIcon, memoryDeviceAddressTitle(i),
+                                  memoryDeviceAddressParameters(i));
+            }
+        }
+        break;
+
+        case GROUP_SYSTEM_BOOT:
+            items << new Item(kSystemBootIcon, tr("System Boot"), systemBootParameters());
+            break;
+
+        case GROUP_MISC:
+            items << new Item(kMiscIcon, tr("DMI Properties"), miscParameters());
+            break;
 
         default:
             break;
@@ -986,6 +1097,44 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::onBoardDeviceParameters(int index) con
 }
 
 //--------------------------------------------------------------------------------------------------
+QList<QTreeWidgetItem*> SysInfoWidgetDmi::oemStringsParameters() const
+{
+    QList<QTreeWidgetItem*> items;
+
+    for (int i = 0; i < dmi_->oem_string_size(); ++i)
+    {
+        items << mk(tr("String %1").arg(i + 1),
+                    QString::fromStdString(dmi_->oem_string(i)));
+    }
+
+    return items;
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<QTreeWidgetItem*> SysInfoWidgetDmi::configurationOptionParameters() const
+{
+    QList<QTreeWidgetItem*> items;
+
+    for (int i = 0; i < dmi_->configuration_option_size(); ++i)
+    {
+        items << mk(tr("Option %1").arg(i + 1),
+                    QString::fromStdString(dmi_->configuration_option(i)));
+    }
+
+    return items;
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<QTreeWidgetItem*> SysInfoWidgetDmi::systemBootParameters() const
+{
+    QList<QTreeWidgetItem*> items;
+
+    items << mk(tr("Boot Status"), QString::fromStdString(dmi_->boot_status()));
+
+    return items;
+}
+
+//--------------------------------------------------------------------------------------------------
 QString SysInfoWidgetDmi::memoryArrayTitle(int index) const
 {
     const proto::system_info::Dmi::MemoryArray& memory_array = dmi_->memory_array(index);
@@ -1146,6 +1295,141 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::memoryDeviceParameters(int index) cons
 }
 
 //--------------------------------------------------------------------------------------------------
+QString SysInfoWidgetDmi::memoryErrorTitle(int index) const
+{
+    // Nothing but the position tells the records apart: the tables that point at them are the ones
+    // that give them a meaning.
+    return tr("Record %1").arg(index + 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<QTreeWidgetItem*> SysInfoWidgetDmi::memoryErrorParameters(int index) const
+{
+    const proto::system_info::Dmi::MemoryError& error = dmi_->memory_error(index);
+    QList<QTreeWidgetItem*> items;
+
+    if (!error.type().empty())
+        items << mk(tr("Type"), QString::fromStdString(error.type()));
+
+    if (!error.granularity().empty())
+        items << mk(tr("Granularity"), QString::fromStdString(error.granularity()));
+
+    if (!error.operation().empty())
+        items << mk(tr("Operation"), QString::fromStdString(error.operation()));
+
+    // Everything below is left out by the firmware unless it has an error to report.
+    if (error.syndrome())
+    {
+        items << mk(tr("Vendor Syndrome"),
+                    QString("0x%1").arg(QString::number(error.syndrome(), 16).toUpper()));
+    }
+
+    if (error.array_address())
+    {
+        items << mk(tr("Memory Array Address"),
+                    QString("0x%1").arg(QString::number(error.array_address(), 16).toUpper()));
+    }
+
+    if (error.device_address())
+    {
+        items << mk(tr("Device Address"),
+                    QString("0x%1").arg(QString::number(error.device_address(), 16).toUpper()));
+    }
+
+    if (error.resolution())
+        items << mk(tr("Resolution"), tr("%1 bytes").arg(error.resolution()));
+
+    return items;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SysInfoWidgetDmi::memoryArrayAddressTitle(int index) const
+{
+    const proto::system_info::Dmi::MemoryArrayAddress& address = dmi_->memory_array_address(index);
+
+    if (!address.array().empty())
+        return QString::fromStdString(address.array());
+
+    return tr("Range %1").arg(index + 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<QTreeWidgetItem*> SysInfoWidgetDmi::memoryArrayAddressParameters(int index) const
+{
+    const proto::system_info::Dmi::MemoryArrayAddress& address = dmi_->memory_array_address(index);
+    QList<QTreeWidgetItem*> items;
+
+    if (!address.array().empty())
+        items << mk(tr("Array"), QString::fromStdString(address.array()));
+
+    // A range of no size means the firmware left the addresses out.
+    if (address.size())
+    {
+        items << mk(tr("Starting Address"),
+                    QString("0x%1").arg(QString::number(address.start_address(), 16).toUpper()));
+        items << mk(tr("Ending Address"),
+                    QString("0x%1").arg(QString::number(address.end_address(), 16).toUpper()));
+        items << mk(tr("Size"), Formatter::sizeToString(address.size()));
+    }
+
+    // The number of devices forming a single row, zero when the firmware does not report it.
+    if (address.partition_width())
+        items << mk(tr("Partition Width"), QString::number(address.partition_width()));
+
+    return items;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SysInfoWidgetDmi::memoryDeviceAddressTitle(int index) const
+{
+    const proto::system_info::Dmi::MemoryDeviceAddress& address =
+        dmi_->memory_device_address(index);
+
+    if (!address.device().empty())
+        return QString::fromStdString(address.device());
+
+    return tr("Range %1").arg(index + 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<QTreeWidgetItem*> SysInfoWidgetDmi::memoryDeviceAddressParameters(int index) const
+{
+    const proto::system_info::Dmi::MemoryDeviceAddress& address =
+        dmi_->memory_device_address(index);
+    QList<QTreeWidgetItem*> items;
+
+    if (!address.device().empty())
+        items << mk(tr("Device"), QString::fromStdString(address.device()));
+
+    // A range of no size means the firmware left the addresses out.
+    if (address.size())
+    {
+        items << mk(tr("Starting Address"),
+                    QString("0x%1").arg(QString::number(address.start_address(), 16).toUpper()));
+        items << mk(tr("Ending Address"),
+                    QString("0x%1").arg(QString::number(address.end_address(), 16).toUpper()));
+        items << mk(tr("Size"), Formatter::sizeToString(address.size()));
+    }
+
+    if (address.row_position())
+        items << mk(tr("Partition Row Position"), QString::number(address.row_position()));
+
+    if (address.interleave_position())
+    {
+        items << mk(tr("Interleave Position"),
+                    QString::number(address.interleave_position()));
+    }
+
+    if (address.interleave_depth())
+    {
+        items << mk(tr("Interleaved Data Depth"),
+                    QString::number(address.interleave_depth()));
+    }
+
+    return items;
+}
+
+//--------------------------------------------------------------------------------------------------
 QString SysInfoWidgetDmi::tpmDeviceTitle(int index) const
 {
     const proto::system_info::Dmi::TpmDevice& tpm = dmi_->tpm_device(index);
@@ -1187,6 +1471,24 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::tpmDeviceParameters(int index) const
                           tpm.configurable_by_oem() ? tr("Yes") : tr("No"));
 
     items << new Item(tr("Characteristics"), characteristics);
+
+    return items;
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<QTreeWidgetItem*> SysInfoWidgetDmi::miscParameters() const
+{
+    const proto::system_info::Dmi::Misc& misc = dmi_->misc();
+    QList<QTreeWidgetItem*> items;
+
+    if (!misc.smbios_version().empty())
+        items << mk(tr("SMBIOS Version"), QString::fromStdString(misc.smbios_version()));
+
+    if (misc.structure_count())
+        items << mk(tr("Structures"), QString::number(misc.structure_count()));
+
+    if (misc.structure_size())
+        items << mk(tr("Structures Size"), tr("%1 bytes").arg(misc.structure_size()));
 
     return items;
 }
