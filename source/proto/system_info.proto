@@ -39,19 +39,6 @@ message OperatingSystem
     int64 install_date = 5;
 }
 
-message Motherboard
-{
-    string manufacturer = 1;
-    string model        = 2;
-}
-
-message Bios
-{
-    string vendor  = 1;
-    string version = 2;
-    string date    = 3;
-}
-
 message Processor
 {
     string vendor   = 1;
@@ -59,36 +46,6 @@ message Processor
     uint32 packages = 3;
     uint32 cores    = 4;
     uint32 threads  = 5;
-}
-
-message Memory
-{
-    message Module
-    {
-        bool present             = 1;
-        string location          = 2;
-        string manufacturer      = 3;
-        uint64 size              = 4;
-        string type              = 5;
-        string form_factor       = 6;
-        string part_number       = 7;
-        uint32 speed             = 8;
-        string bank              = 9;
-        string serial_number     = 10;
-        string asset_tag         = 11;
-        string type_detail       = 12;
-        string technology        = 13;
-        string firmware_version  = 14;
-        uint32 configured_speed  = 15;
-        uint32 total_width       = 16;
-        uint32 data_width        = 17;
-        uint32 rank              = 18;
-        uint32 voltage           = 19;
-        uint64 non_volatile_size = 20;
-        uint64 volatile_size     = 21;
-    }
-
-    repeated Module module = 1;
 }
 
 message LogicalDrives
@@ -652,6 +609,83 @@ message Processes
     repeated Process process = 1;
 }
 
+message Dmi
+{
+    message Bios
+    {
+        string vendor       = 1;
+        string version      = 2;
+        string release_date = 3;
+    }
+
+    message Baseboard
+    {
+        string manufacturer = 1;
+        string product      = 2;
+    }
+
+    message Processor
+    {
+        bool populated                       = 1;
+        string manufacturer                  = 2;
+        string version                       = 3;
+        string family                        = 4;
+        string type                          = 5;
+        string status                        = 6;
+        string socket_designation            = 7;
+        string socket                        = 8;
+        string socket_type                   = 9;
+        string serial_number                 = 10;
+        string asset_tag                     = 11;
+        string part_number                   = 12;
+        uint64 id                            = 13;
+        double voltage                       = 14;
+        uint32 external_clock                = 15;
+        uint32 max_speed                     = 16;
+        uint32 current_speed                 = 17;
+        uint32 core_count                    = 18;
+        uint32 core_enabled                  = 19;
+        uint32 thread_count                  = 20;
+        uint32 thread_enabled                = 21;
+        bool support_64bit                   = 22;
+        bool support_multi_core              = 23;
+        bool support_hardware_thread         = 24;
+        bool support_execute_protection      = 25;
+        bool support_enhanced_virtualization = 26;
+        bool support_power_control           = 27;
+    }
+
+    message MemoryDevice
+    {
+        bool present             = 1;
+        string location          = 2;
+        string bank              = 3;
+        string manufacturer      = 4;
+        string serial_number     = 5;
+        string asset_tag         = 6;
+        string part_number       = 7;
+        string firmware_version  = 8;
+        uint64 size              = 9;
+        string type              = 10;
+        string type_detail       = 11;
+        string form_factor       = 12;
+        string technology        = 13;
+        uint32 speed             = 14;
+        uint32 configured_speed  = 15;
+        uint32 total_width       = 16;
+        uint32 data_width        = 17;
+        uint32 rank              = 18;
+        uint32 voltage           = 19;
+        uint64 non_volatile_size = 20;
+        uint64 volatile_size     = 21;
+    }
+
+    repeated Bios bios                  = 1;
+    repeated Baseboard baseboard        = 2;
+    repeated Processor processor        = 3;
+    repeated MemoryDevice memory_device = 4;
+}
+
 message SystemInfoRequest
 {
     string category = 1;
@@ -659,39 +693,37 @@ message SystemInfoRequest
     EventLogsData event_logs_data = 11;
 }
 
-message SystemInfoFooter
+message SystemInfoHeader
 {
     string category = 1;
 }
 
 message SystemInfo
 {
-    Computer computer                 = 1;
-    OperatingSystem operating_system  = 2;
-    Motherboard motherboard           = 3;
-    Bios bios                         = 4;
-    Processor processor               = 5;
-    Memory memory                     = 6;
-    LogicalDrives logical_drives      = 7;
-    Printers printers                 = 8;
-    NetworkAdapters network_adapters  = 9;
-    NetworkShares network_shares      = 10;
-    WindowsDevices windows_devices    = 11;
-    VideoAdapters video_adapters      = 12;
-    Monitors monitors                 = 13;
-    PowerOptions power_options        = 14;
-    Drivers drivers                   = 15;
-    Services services                 = 16;
-    EnvironmentVariables env_vars     = 17;
-    EventLogs event_logs              = 18;
-    Routes routes                     = 19;
-    Connections connections           = 20;
-    Licenses licenses                 = 21;
-    Applications applications         = 22;
-    OpenFiles open_files              = 23;
-    LocalUsers local_users            = 24;
-    LocalUserGroups local_user_groups = 25;
-    Processes processes               = 26;
-    PhysicalDrives physical_drives    = 27;
-    SystemInfoFooter footer           = 128000;
+    SystemInfoHeader header           = 1;
+    Computer computer                 = 2;
+    OperatingSystem operating_system  = 3;
+    Processor processor               = 4;
+    LogicalDrives logical_drives      = 5;
+    Printers printers                 = 6;
+    NetworkAdapters network_adapters  = 7;
+    NetworkShares network_shares      = 8;
+    WindowsDevices windows_devices    = 9;
+    VideoAdapters video_adapters      = 10;
+    Monitors monitors                 = 11;
+    PowerOptions power_options        = 12;
+    Drivers drivers                   = 13;
+    Services services                 = 14;
+    EnvironmentVariables env_vars     = 15;
+    EventLogs event_logs              = 16;
+    Routes routes                     = 17;
+    Connections connections           = 18;
+    Licenses licenses                 = 19;
+    Applications applications         = 20;
+    OpenFiles open_files              = 21;
+    LocalUsers local_users            = 22;
+    LocalUserGroups local_user_groups = 23;
+    Processes processes               = 24;
+    PhysicalDrives physical_drives    = 25;
+    Dmi dmi                           = 26;
 }

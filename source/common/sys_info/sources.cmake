@@ -31,6 +31,9 @@ collect_sources(SOURCE_COMMON_SYS_INFO
     sys_info_widget_devices.cc
     sys_info_widget_devices.h
     sys_info_widget_devices.ui
+    sys_info_widget_dmi.cc
+    sys_info_widget_dmi.h
+    sys_info_widget_dmi.ui
     sys_info_widget_drivers.cc
     sys_info_widget_drivers.h
     sys_info_widget_drivers.ui

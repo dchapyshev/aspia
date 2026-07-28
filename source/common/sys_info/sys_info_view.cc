@@ -37,6 +37,7 @@
 #include "common/sys_info/sys_info_widget_applications.h"
 #include "common/sys_info/sys_info_widget_connections.h"
 #include "common/sys_info/sys_info_widget_devices.h"
+#include "common/sys_info/sys_info_widget_dmi.h"
 #include "common/sys_info/sys_info_widget_drivers.h"
 #include "common/sys_info/sys_info_widget_drives.h"
 #include "common/sys_info/sys_info_widget_env_vars.h"
@@ -117,6 +118,7 @@ SysInfoView::SysInfoView(QWidget* parent)
     sys_info_widgets_.append(new SysInfoWidgetNetAdapters(this));
     sys_info_widgets_.append(new SysInfoWidgetNetShares(this));
     sys_info_widgets_.append(new SysInfoWidgetPowerOptions(this));
+    sys_info_widgets_.append(new SysInfoWidgetDmi(this));
     sys_info_widgets_.append(new SysInfoWidgetPrinters(this));
     sys_info_widgets_.append(new SysInfoWidgetDrivers(this));
     sys_info_widgets_.append(new SysInfoWidgetServices(this));
@@ -279,7 +281,7 @@ void SysInfoView::onSystemInfo(const proto::system_info::SystemInfo& system_info
     {
         SysInfoWidget* widget = sys_info_widgets_[i];
 
-        if (widget->category() == system_info.footer().category())
+        if (widget->category() == system_info.header().category())
             widget->setSystemInfo(system_info);
     }
 
@@ -389,12 +391,16 @@ void SysInfoView::buildCategoryTree()
     CategoryItem* power_options = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
         ":/img/electrical.svg", tr("Power Options"), kSystemInfo_PowerOptions);
 
+    CategoryItem* dmi = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/motherboard.svg", tr("DMI"), kSystemInfo_Dmi);
+
     hardware_category->addChild(devices);
     hardware_category->addChild(drives);
     hardware_category->addChild(video_adapters);
     hardware_category->addChild(monitors);
     hardware_category->addChild(printers);
     hardware_category->addChild(power_options);
+    hardware_category->addChild(dmi);
 
     //----------------------------------------------------------------------------------------------
     // SOFTWARE

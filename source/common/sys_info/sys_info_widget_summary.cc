@@ -195,16 +195,18 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
         }
     }
 
-    if (system_info.has_motherboard())
+    const proto::system_info::Dmi& dmi = system_info.dmi();
+
+    if (dmi.baseboard_size())
     {
-        const proto::system_info::Motherboard& motherboard = system_info.motherboard();
+        const proto::system_info::Dmi::Baseboard& baseboard = dmi.baseboard(0);
         QList<QTreeWidgetItem*> items;
 
-        if (!motherboard.manufacturer().empty())
-            items << mk(tr("Manufacturer"), motherboard.manufacturer());
+        if (!baseboard.manufacturer().empty())
+            items << mk(tr("Manufacturer"), baseboard.manufacturer());
 
-        if (!motherboard.model().empty())
-            items << mk(tr("Model"), motherboard.model());
+        if (!baseboard.product().empty())
+            items << mk(tr("Model"), baseboard.product());
 
         if (!items.isEmpty())
         {
@@ -240,9 +242,9 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
         }
     }
 
-    if (system_info.has_bios())
+    if (dmi.bios_size())
     {
-        const proto::system_info::Bios& bios = system_info.bios();
+        const proto::system_info::Dmi::Bios& bios = dmi.bios(0);
         QList<QTreeWidgetItem*> items;
 
         if (!bios.vendor().empty())
@@ -251,8 +253,8 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
         if (!bios.version().empty())
             items << mk(tr("Version"), bios.version());
 
-        if (!bios.date().empty())
-            items << mk(tr("Date"), bios.date());
+        if (!bios.release_date().empty())
+            items << mk(tr("Date"), bios.release_date());
 
         if (!items.isEmpty())
         {
@@ -260,14 +262,13 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
         }
     }
 
-    if (system_info.has_memory())
+    if (dmi.memory_device_size())
     {
-        const proto::system_info::Memory& memory = system_info.memory();
         QList<QTreeWidgetItem*> items;
 
-        for (int i = 0; i < memory.module_size(); ++i)
+        for (int i = 0; i < dmi.memory_device_size(); ++i)
         {
-            const proto::system_info::Memory::Module& module = memory.module(i);
+            const proto::system_info::Dmi::MemoryDevice& module = dmi.memory_device(i);
             QList<QTreeWidgetItem*> group;
 
             if (module.present())

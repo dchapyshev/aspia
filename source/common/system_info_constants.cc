@@ -25,6 +25,7 @@ const char kSystemInfo_VideoAdapters[] = "D2867BED-1408-467C-8ABE-6BD8B32DE17B";
 const char kSystemInfo_Monitors[] = "344E1796-EFF2-4F4D-B48B-3A10CEA834B8";
 const char kSystemInfo_Printers[] = "19193E9A-D2A6-44F8-83D2-A6B0F8651DAC";
 const char kSystemInfo_PowerOptions[] = "838C76EA-D13F-4718-8C7E-D483221ECF99";
+const char kSystemInfo_Dmi[] = "3B7D95C4-1F0A-4E62-9A55-7C8E4D2B61F3";
 const char kSystemInfo_Drivers[] = "82E18359-39CC-41FA-A8DA-70077F1340FB";
 const char kSystemInfo_Services[] = "F56D910E-9A08-4459-8F11-F0F42817F0CD";
 const char kSystemInfo_EnvironmentVariables[] = "F06EA182-23FB-4347-9C9E-F66582C9EF71";

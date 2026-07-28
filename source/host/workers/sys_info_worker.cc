@@ -612,63 +612,6 @@ void fillProcessor(proto::system_info::SystemInfo* system_info)
 }
 
 //--------------------------------------------------------------------------------------------------
-void fillBios(proto::system_info::SystemInfo* system_info)
-{
-    for (SmbiosTableEnumerator enumerator(SysInfo::smbiosDump());
-         !enumerator.isAtEnd(); enumerator.advance())
-    {
-        const SmbiosTable* table = enumerator.table();
-
-        switch (table->type)
-        {
-            case SMBIOS_TABLE_TYPE_BIOS:
-            {
-                SmbiosBios bios_table(table);
-                if (!bios_table.isValid())
-                    continue;
-
-                proto::system_info::Bios* bios = system_info->mutable_bios();
-                bios->set_vendor(bios_table.vendor().toStdString());
-                bios->set_version(bios_table.version().toStdString());
-                bios->set_date(bios_table.releaseDate().toStdString());
-            }
-            break;
-
-            default:
-                break;
-        }
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void fillMotherboard(proto::system_info::SystemInfo* system_info)
-{
-    for (SmbiosTableEnumerator enumerator(SysInfo::smbiosDump());
-         !enumerator.isAtEnd(); enumerator.advance())
-    {
-        const SmbiosTable* table = enumerator.table();
-
-        switch (table->type)
-        {
-            case SMBIOS_TABLE_TYPE_BASEBOARD:
-            {
-                SmbiosBaseboard baseboard_table(table);
-                if (!baseboard_table.isValid())
-                    continue;
-
-                proto::system_info::Motherboard* motherboard = system_info->mutable_motherboard();
-                motherboard->set_manufacturer(baseboard_table.manufacturer().toStdString());
-                motherboard->set_model(baseboard_table.product().toStdString());
-            }
-            break;
-
-            default:
-                break;
-        }
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 QString memoryTypeDetail(const SmbiosMemoryDevice& memory_device)
 {
     QStringList detail;
@@ -686,8 +629,10 @@ QString memoryTypeDetail(const SmbiosMemoryDevice& memory_device)
 }
 
 //--------------------------------------------------------------------------------------------------
-void fillMemory(proto::system_info::SystemInfo* system_info)
+void fillDmi(proto::system_info::SystemInfo* system_info)
 {
+    proto::system_info::Dmi* dmi = system_info->mutable_dmi();
+
     for (SmbiosTableEnumerator enumerator(SysInfo::smbiosDump());
          !enumerator.isAtEnd(); enumerator.advance())
     {
@@ -695,41 +640,111 @@ void fillMemory(proto::system_info::SystemInfo* system_info)
 
         switch (table->type)
         {
+            case SMBIOS_TABLE_TYPE_BIOS:
+            {
+                SmbiosBios bios_table(table);
+                if (!bios_table.isValid())
+                    continue;
+
+                proto::system_info::Dmi::Bios* bios = dmi->add_bios();
+
+                bios->set_vendor(bios_table.vendor().toStdString());
+                bios->set_version(bios_table.version().toStdString());
+                bios->set_release_date(bios_table.releaseDate().toStdString());
+            }
+            break;
+
+            case SMBIOS_TABLE_TYPE_BASEBOARD:
+            {
+                SmbiosBaseboard baseboard_table(table);
+                if (!baseboard_table.isValid())
+                    continue;
+
+                proto::system_info::Dmi::Baseboard* baseboard = dmi->add_baseboard();
+
+                baseboard->set_manufacturer(baseboard_table.manufacturer().toStdString());
+                baseboard->set_product(baseboard_table.product().toStdString());
+            }
+            break;
+
+            case SMBIOS_TABLE_TYPE_PROCESSOR:
+            {
+                SmbiosProcessor processor_table(table);
+                if (!processor_table.isValid())
+                    continue;
+
+                proto::system_info::Dmi::Processor* processor = dmi->add_processor();
+
+                processor->set_populated(processor_table.isPopulated());
+                processor->set_manufacturer(processor_table.manufacturer().toStdString());
+                processor->set_version(processor_table.version().toStdString());
+                processor->set_family(processor_table.family().toStdString());
+                processor->set_type(processor_table.type().toStdString());
+                processor->set_status(processor_table.status().toStdString());
+                processor->set_socket_designation(
+                    processor_table.socketDesignation().toStdString());
+                processor->set_socket(processor_table.upgrade().toStdString());
+                processor->set_socket_type(processor_table.socketType().toStdString());
+                processor->set_serial_number(processor_table.serialNumber().toStdString());
+                processor->set_asset_tag(processor_table.assetTag().toStdString());
+                processor->set_part_number(processor_table.partNumber().toStdString());
+                processor->set_id(processor_table.id());
+                processor->set_voltage(processor_table.voltage());
+                processor->set_external_clock(processor_table.externalClock());
+                processor->set_max_speed(processor_table.maxSpeed());
+                processor->set_current_speed(processor_table.currentSpeed());
+                processor->set_core_count(processor_table.coreCount());
+                processor->set_core_enabled(processor_table.coreEnabled());
+                processor->set_thread_count(processor_table.threadCount());
+                processor->set_thread_enabled(processor_table.threadEnabled());
+                processor->set_support_64bit(processor_table.is64Bit());
+                processor->set_support_multi_core(processor_table.isMultiCore());
+                processor->set_support_hardware_thread(processor_table.isHardwareThread());
+                processor->set_support_execute_protection(processor_table.isExecuteProtection());
+                processor->set_support_enhanced_virtualization(
+                    processor_table.isEnhancedVirtualization());
+                processor->set_support_power_control(
+                    processor_table.isPowerPerformanceControl());
+            }
+            break;
+
             case SMBIOS_TABLE_TYPE_MEMORY_DEVICE:
             {
                 SmbiosMemoryDevice memory_device_table(table);
                 if (!memory_device_table.isValid())
                     continue;
 
-                proto::system_info::Memory::Module* module =
-                    system_info->mutable_memory()->add_module();
+                proto::system_info::Dmi::MemoryDevice* memory_device = dmi->add_memory_device();
 
-                module->set_present(memory_device_table.isPresent());
-                module->set_location(memory_device_table.location().toStdString());
+                memory_device->set_present(memory_device_table.isPresent());
+                memory_device->set_location(memory_device_table.location().toStdString());
 
-                if (memory_device_table.isPresent())
-                {
-                    module->set_manufacturer(memory_device_table.manufacturer().toStdString());
-                    module->set_size(memory_device_table.size());
-                    module->set_type(memory_device_table.type().toStdString());
-                    module->set_form_factor(memory_device_table.formFactor().toStdString());
-                    module->set_part_number(memory_device_table.partNumber().toStdString());
-                    module->set_speed(memory_device_table.speed());
-                    module->set_bank(memory_device_table.bankLocator().toStdString());
-                    module->set_serial_number(memory_device_table.serialNumber().toStdString());
-                    module->set_asset_tag(memory_device_table.assetTag().toStdString());
-                    module->set_type_detail(memoryTypeDetail(memory_device_table).toStdString());
-                    module->set_technology(memory_device_table.technology().toStdString());
-                    module->set_firmware_version(
-                        memory_device_table.firmwareVersion().toStdString());
-                    module->set_configured_speed(memory_device_table.configuredSpeed());
-                    module->set_total_width(memory_device_table.totalWidth());
-                    module->set_data_width(memory_device_table.dataWidth());
-                    module->set_rank(memory_device_table.rank());
-                    module->set_voltage(memory_device_table.configuredVoltage());
-                    module->set_non_volatile_size(memory_device_table.nonVolatileSize());
-                    module->set_volatile_size(memory_device_table.volatileSize());
-                }
+                if (!memory_device_table.isPresent())
+                    continue;
+
+                memory_device->set_bank(memory_device_table.bankLocator().toStdString());
+                memory_device->set_manufacturer(
+                    memory_device_table.manufacturer().toStdString());
+                memory_device->set_serial_number(
+                    memory_device_table.serialNumber().toStdString());
+                memory_device->set_asset_tag(memory_device_table.assetTag().toStdString());
+                memory_device->set_part_number(memory_device_table.partNumber().toStdString());
+                memory_device->set_firmware_version(
+                    memory_device_table.firmwareVersion().toStdString());
+                memory_device->set_size(memory_device_table.size());
+                memory_device->set_type(memory_device_table.type().toStdString());
+                memory_device->set_type_detail(
+                    memoryTypeDetail(memory_device_table).toStdString());
+                memory_device->set_form_factor(memory_device_table.formFactor().toStdString());
+                memory_device->set_technology(memory_device_table.technology().toStdString());
+                memory_device->set_speed(memory_device_table.speed());
+                memory_device->set_configured_speed(memory_device_table.configuredSpeed());
+                memory_device->set_total_width(memory_device_table.totalWidth());
+                memory_device->set_data_width(memory_device_table.dataWidth());
+                memory_device->set_rank(memory_device_table.rank());
+                memory_device->set_voltage(memory_device_table.configuredVoltage());
+                memory_device->set_non_volatile_size(memory_device_table.nonVolatileSize());
+                memory_device->set_volatile_size(memory_device_table.volatileSize());
             }
             break;
 
@@ -1059,9 +1074,7 @@ void fillSummaryInfo(proto::system_info::SystemInfo* system_info)
     fillComputer(system_info);
     fillOperatingSystem(system_info);
     fillProcessor(system_info);
-    fillBios(system_info);
-    fillMotherboard(system_info);
-    fillMemory(system_info);
+    fillDmi(system_info);
     fillDrives(system_info);
 }
 
@@ -1079,7 +1092,7 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
 
     LOG(INFO) << "Requested system info category:" << category;
 
-    system_info->mutable_footer()->set_category(category);
+    system_info->mutable_header()->set_category(category);
 
     if (category == kSystemInfo_Summary)
     {
@@ -1108,6 +1121,10 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
     else if (category == kSystemInfo_PowerOptions)
     {
         fillPowerOptions(system_info);
+    }
+    else if (category == kSystemInfo_Dmi)
+    {
+        fillDmi(system_info);
     }
     else if (category == kSystemInfo_Drivers)
     {
