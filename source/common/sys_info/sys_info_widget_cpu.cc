@@ -20,9 +20,7 @@
 
 #include <QHash>
 #include <QMenu>
-
-#include <algorithm>
-#include <iterator>
+#include <QStringList>
 
 #include "common/system_info_constants.h"
 #include "common/desktop/formatter.h"
@@ -131,6 +129,7 @@ constexpr FeatureBit kFeatures[] =
       0x00000007, 1, REG_EAX, 4 },
     { GROUP_INSTRUCTION_SET, "AVX-NE-CONVERT", 0x00000007, 1, REG_EDX, 5 },
     { GROUP_INSTRUCTION_SET, "AVX-VNNI-INT8", 0x00000007, 1, REG_EDX, 4 },
+    { GROUP_INSTRUCTION_SET, "AVX-VNNI-INT16", 0x00000007, 1, REG_EDX, 10 },
     { GROUP_INSTRUCTION_SET, "AVX10", 0x00000007, 1, REG_EDX, 19 },
     { GROUP_INSTRUCTION_SET, "Advanced Matrix Extensions (AMX-TILE)", 0x00000007, 0, REG_EDX, 24 },
     { GROUP_INSTRUCTION_SET, "AMX Computation on 8-bit Integers (AMX-INT8)",
@@ -196,7 +195,10 @@ constexpr FeatureBit kFeatures[] =
     { GROUP_INSTRUCTION_SET, "RDTSCP Instruction", 0x80000001, 0, REG_EDX, 27 },
     { GROUP_INSTRUCTION_SET, "SERIALIZE Instruction", 0x00000007, 0, REG_EDX, 14 },
     { GROUP_INSTRUCTION_SET, "SHA Extensions (SHA)", 0x00000007, 0, REG_EBX, 29 },
+    { GROUP_INSTRUCTION_SET, "SHA-512 Extensions (SHA512)", 0x00000007, 1, REG_EAX, 0 },
     { GROUP_INSTRUCTION_SET, "SKINIT / STGI Instruction", 0x80000001, 0, REG_ECX, 12 },
+    { GROUP_INSTRUCTION_SET, "SM3 Hash Instructions (SM3)", 0x00000007, 1, REG_EAX, 1 },
+    { GROUP_INSTRUCTION_SET, "SM4 Cipher Instructions (SM4)", 0x00000007, 1, REG_EAX, 2 },
     { GROUP_INSTRUCTION_SET, "Streaming SIMD Extension (SSE)", 0x00000001, 0, REG_EDX, 25 },
     { GROUP_INSTRUCTION_SET, "Streaming SIMD Extension 2 (SSE2)", 0x00000001, 0, REG_EDX, 26 },
     { GROUP_INSTRUCTION_SET, "Streaming SIMD Extension 3 (SSE3)", 0x00000001, 0, REG_ECX, 0 },
@@ -220,9 +222,15 @@ constexpr FeatureBit kFeatures[] =
     { GROUP_SECURITY, "Control-flow Enforcement Shadow Stack (CET_SS)",
       0x00000007, 0, REG_ECX, 7 },
     { GROUP_SECURITY, "Execution Disable Bit (NX, XD)", 0x80000001, 0, REG_EDX, 20 },
+    // The speculation controls are enumerated by each vendor in a leaf of its own: Intel in leaf 7
+    // (IBRS and IBPB share a bit there), AMD in leaf 80000008h with a bit per control. Rows under
+    // the same name are one feature with a source per vendor.
     { GROUP_SECURITY, "Indirect Branch Prediction Barrier (IBPB)", 0x80000008, 0, REG_EBX, 12 },
+    { GROUP_SECURITY, "Indirect Branch Prediction Barrier (IBPB)", 0x00000007, 0, REG_EDX, 26 },
     { GROUP_SECURITY, "Indirect Branch Restricted Speculation (IBRS)",
       0x00000007, 0, REG_EDX, 26 },
+    { GROUP_SECURITY, "Indirect Branch Restricted Speculation (IBRS)",
+      0x80000008, 0, REG_EBX, 14 },
     { GROUP_SECURITY, "Key Locker (KL)", 0x00000007, 0, REG_ECX, 23 },
     { GROUP_SECURITY, "L1 Data Cache Flush (L1D_FLUSH)", 0x00000007, 0, REG_EDX, 28 },
     { GROUP_SECURITY, "Linear Address Masking (LAM)", 0x00000007, 1, REG_EAX, 26 },
@@ -239,8 +247,11 @@ constexpr FeatureBit kFeatures[] =
     { GROUP_SECURITY, "SGX Launch Configuration", 0x00000007, 0, REG_ECX, 30 },
     { GROUP_SECURITY, "Single Thread Indirect Branch Predictors (STIBP)",
       0x00000007, 0, REG_EDX, 27 },
+    { GROUP_SECURITY, "Single Thread Indirect Branch Predictors (STIBP)",
+      0x80000008, 0, REG_EBX, 15 },
     { GROUP_SECURITY, "Software Guard Extensions (SGX)", 0x00000007, 0, REG_EBX, 2 },
     { GROUP_SECURITY, "Speculative Store Bypass Disable (SSBD)", 0x00000007, 0, REG_EDX, 31 },
+    { GROUP_SECURITY, "Speculative Store Bypass Disable (SSBD)", 0x80000008, 0, REG_EBX, 24 },
     { GROUP_SECURITY, "Supervisor Mode Access Prevention (SMAP)", 0x00000007, 0, REG_EBX, 20 },
     { GROUP_SECURITY, "Supervisor-Mode Execution Prevention (SMEP)", 0x00000007, 0, REG_EBX, 7 },
     { GROUP_SECURITY, "Total Memory Encryption (TME)", 0x00000007, 0, REG_ECX, 13 },
@@ -775,9 +786,8 @@ QList<QTreeWidgetItem*> SysInfoWidgetCpu::cacheParameters(
         params << mk(tr("Size"),
                      Formatter::sizeToString(quint64(ways) * partitions * line_size * sets));
 
-        // A cache that holds every line in a single set reports all ones instead of a number of
-        // ways.
-        params << mk(tr("Associativity"), ((ebx >> 22) & 0x3FF) == 0x3FF ?
+        // A fully associative cache says so with a flag of its own instead of a number of ways.
+        params << mk(tr("Associativity"), (eax & (1u << 9)) ?
             tr("Fully associative") : tr("%1-way").arg(ways));
 
         params << mk(tr("Line Size"), tr("%1 bytes").arg(line_size));
@@ -796,7 +806,9 @@ QList<QTreeWidgetItem*> SysInfoWidgetCpu::featureParameters(
 {
     const Leafs leafs(cpu);
 
-    QList<const FeatureBit*> features;
+    // A feature listed with more than one source is there when any of its bits is set.
+    QStringList names;
+    QHash<QString, bool> supported;
 
     for (const FeatureBit& feature : kFeatures)
     {
@@ -807,28 +819,28 @@ QList<QTreeWidgetItem*> SysInfoWidgetCpu::featureParameters(
         if (!leafs.contains(feature.leaf, feature.subleaf))
             continue;
 
-        features << &feature;
+        const QString name = QString::fromLatin1(feature.name);
+
+        if (!supported.contains(name))
+            names << name;
+
+        supported[name] = supported.value(name) || leafs.bit(feature);
     }
 
     // A feature is looked up by its name, and the order the vendors put the bits in is not one.
-    std::sort(features.begin(), features.end(),
-              [](const FeatureBit* first, const FeatureBit* second)
-    {
-        return qstricmp(first->name, second->name) < 0;
-    });
+    names.sort(Qt::CaseInsensitive);
 
     const QIcon supported_icon(kSupportedIcon);
     const QIcon unsupported_icon(kUnsupportedIcon);
 
     QList<QTreeWidgetItem*> items;
 
-    for (const FeatureBit* feature : std::as_const(features))
+    for (const QString& name : std::as_const(names))
     {
-        const bool supported = leafs.bit(*feature);
+        const bool is_supported = supported.value(name);
 
-        QTreeWidgetItem* item =
-            mk(QString::fromLatin1(feature->name), supported ? tr("Yes") : tr("No"));
-        item->setIcon(0, supported ? supported_icon : unsupported_icon);
+        QTreeWidgetItem* item = mk(name, is_supported ? tr("Yes") : tr("No"));
+        item->setIcon(0, is_supported ? supported_icon : unsupported_icon);
 
         items << item;
     }
