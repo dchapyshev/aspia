@@ -613,9 +613,15 @@ message Dmi
 {
     message Bios
     {
-        string vendor       = 1;
-        string version      = 2;
-        string release_date = 3;
+        string vendor            = 1;
+        string version           = 2;
+        string release_date      = 3;
+        uint32 address           = 4;
+        uint64 rom_size          = 5;
+        string revision          = 6;
+        string firmware_revision = 7;
+
+        repeated string characteristic = 8;
     }
 
     message Baseboard

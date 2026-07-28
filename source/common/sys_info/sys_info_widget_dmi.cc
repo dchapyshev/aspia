@@ -21,11 +21,13 @@
 #include <QMenu>
 
 #include "common/system_info_constants.h"
+#include "common/desktop/formatter.h"
 #include "proto/system_info.h"
 #include "ui_sys_info_widget_dmi.h"
 
 namespace {
 
+const char kBiosIcon[] = ":/img/processor.svg";
 const char kProcessorIcon[] = ":/img/microchip.svg";
 
 // Group of tables a item of the upper pane belongs to.
@@ -36,7 +38,8 @@ constexpr int kIndexRole = Qt::UserRole + 1;
 
 enum Group
 {
-    GROUP_PROCESSORS = 0
+    GROUP_BIOS = 0,
+    GROUP_PROCESSORS
 };
 
 class Item : public QTreeWidgetItem
@@ -50,9 +53,21 @@ public:
         setText(0, text);
 
         for (const auto& child : childs)
+        {
             child->setIcon(0, icon);
 
+            for (int i = 0; i < child->childCount(); ++i)
+                child->child(i)->setIcon(0, icon);
+        }
+
         addChildren(childs);
+    }
+
+    // Group of parameters inside the parameters of a single table.
+    Item(const QString& text, const QList<QTreeWidgetItem*>& params)
+    {
+        setText(0, text);
+        addChildren(params);
     }
 
 private:
@@ -145,6 +160,16 @@ void SysInfoWidgetDmi::setSystemInfo(const proto::system_info::SystemInfo& syste
 
     dmi_ = std::make_unique<proto::system_info::Dmi>(system_info.dmi());
 
+    if (dmi_->bios_size())
+    {
+        // The specification allows a single BIOS table, so the group has nothing to enumerate.
+        QTreeWidgetItem* group = new Item(kBiosIcon, tr("BIOS"), {});
+        group->setData(0, kGroupRole, GROUP_BIOS);
+        group->setData(0, kIndexRole, -1);
+
+        ui->tree->addTopLevelItem(group);
+    }
+
     if (dmi_->processor_size())
     {
         QList<QTreeWidgetItem*> childs;
@@ -210,6 +235,13 @@ void SysInfoWidgetDmi::onCurrentTableChanged()
 
     switch (group)
     {
+        case GROUP_BIOS:
+        {
+            for (int i = 0; i < dmi_->bios_size(); ++i)
+                items << new Item(kBiosIcon, biosTitle(i), biosParameters(i));
+        }
+        break;
+
         case GROUP_PROCESSORS:
         {
             // The item of the group shows every entry it holds, the item of an entry only the
@@ -228,8 +260,8 @@ void SysInfoWidgetDmi::onCurrentTableChanged()
 
     ui->tree_params->addTopLevelItems(items);
 
-    for (QTreeWidgetItem* item : std::as_const(items))
-        item->setExpanded(true);
+    // Groups of parameters are nested, and there is nothing to hide behind a collapsed item.
+    ui->tree_params->expandAll();
 
     for (int i = 0; i < ui->tree_params->columnCount(); ++i)
         ui->tree_params->resizeColumnToContents(i);
@@ -251,6 +283,61 @@ void SysInfoWidgetDmi::showContextMenu(QTreeWidget* tree, const QPoint& point)
     menu.addAction(ui->action_copy_value);
 
     menu.exec(tree->viewport()->mapToGlobal(point));
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SysInfoWidgetDmi::biosTitle(int index) const
+{
+    const proto::system_info::Dmi::Bios& bios = dmi_->bios(index);
+
+    if (!bios.vendor().empty())
+        return QString::fromStdString(bios.vendor());
+
+    return tr("BIOS");
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<QTreeWidgetItem*> SysInfoWidgetDmi::biosParameters(int index) const
+{
+    const proto::system_info::Dmi::Bios& bios = dmi_->bios(index);
+    QList<QTreeWidgetItem*> items;
+
+    if (!bios.vendor().empty())
+        items << mk(tr("Vendor"), QString::fromStdString(bios.vendor()));
+
+    if (!bios.version().empty())
+        items << mk(tr("Version"), QString::fromStdString(bios.version()));
+
+    if (!bios.release_date().empty())
+        items << mk(tr("Release Date"), QString::fromStdString(bios.release_date()));
+
+    if (bios.address())
+    {
+        items << mk(tr("Address"),
+                    QString("0x%1").arg(QString::number(bios.address(), 16).toUpper()));
+    }
+
+    if (bios.rom_size())
+        items << mk(tr("ROM Size"), Formatter::sizeToString(bios.rom_size()));
+
+    if (!bios.revision().empty())
+        items << mk(tr("Revision"), QString::fromStdString(bios.revision()));
+
+    if (!bios.firmware_revision().empty())
+    {
+        items << mk(tr("Firmware Revision"),
+                    QString::fromStdString(bios.firmware_revision()));
+    }
+
+    QList<QTreeWidgetItem*> characteristics;
+
+    for (int i = 0; i < bios.characteristic_size(); ++i)
+        characteristics << mk(QString::fromStdString(bios.characteristic(i)), QString());
+
+    if (!characteristics.isEmpty())
+        items << new Item(tr("Characteristics"), characteristics);
+
+    return items;
 }
 
 //--------------------------------------------------------------------------------------------------

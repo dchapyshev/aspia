@@ -328,6 +328,162 @@ QString SmbiosBios::releaseDate() const
 }
 
 //--------------------------------------------------------------------------------------------------
+quint32 SmbiosBios::address() const
+{
+    // The field holds the segment of the address in real mode addressing.
+    return static_cast<quint32>(table_->address_segment) << 4;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint64 SmbiosBios::romSize() const
+{
+    // The field counts blocks of 64K, one less than there really are.
+    if (table_->rom_size != 0xFF)
+        return (static_cast<quint64>(table_->rom_size) + 1) * 64 * 1024;
+
+    // FFh means the size does not fit the byte and is reported by the extended field of SMBIOS
+    // 3.1. Firmware of an earlier version leaves the real size unknown.
+    if (table_->length < 0x1A)
+        return 0;
+
+    const quint64 size = table_->ext_rom_size & 0x3FFF;
+
+    // The two upper bits carry the unit of the size.
+    switch (table_->ext_rom_size >> 14)
+    {
+        case 0x00:
+            return size * 1024 * 1024;
+
+        case 0x01:
+            return size * 1024 * 1024 * 1024;
+
+        default:
+            return 0;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosBios::revision() const
+{
+    // The pair of bytes appeared in SMBIOS 2.4, FFh in either of them means the release is not
+    // reported.
+    if (table_->length < 0x16 || table_->major_release == 0xFF ||
+        table_->minor_release == 0xFF)
+    {
+        return QString();
+    }
+
+    return QString("%1.%2").arg(table_->major_release).arg(table_->minor_release);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosBios::firmwareRevision() const
+{
+    // FFh means the system has no embedded controller.
+    if (table_->length < 0x18 || table_->ctrl_major_release == 0xFF ||
+        table_->ctrl_minor_release == 0xFF)
+    {
+        return QString();
+    }
+
+    return QString("%1.%2").arg(table_->ctrl_major_release).arg(table_->ctrl_minor_release);
+}
+
+//--------------------------------------------------------------------------------------------------
+QStringList SmbiosBios::characteristics() const
+{
+    // The names start at bit 4: the bits below it do not name a feature.
+    static const char* kCharacteristics[] =
+    {
+        "ISA is supported", // Bit 4
+        "MCA is supported",
+        "EISA is supported",
+        "PCI is supported",
+        "PC Card (PCMCIA) is supported",
+        "Plug and Play is supported",
+        "APM is supported",
+        "BIOS is upgradeable",
+        "BIOS shadowing is allowed",
+        "VL-VESA is supported",
+        "ESCD support is available",
+        "Boot from CD is supported",
+        "Selectable boot is supported",
+        "BIOS ROM is socketed",
+        "Boot from PC Card (PCMCIA) is supported",
+        "EDD specification is supported",
+        "Japanese floppy for NEC 9800 1.2 MB is supported (int 13h)",
+        "Japanese floppy for Toshiba 1.2 MB is supported (int 13h)",
+        "5.25\"/360 kB floppy services are supported (int 13h)",
+        "5.25\"/1.2 MB floppy services are supported (int 13h)",
+        "3.5\"/720 kB floppy services are supported (int 13h)",
+        "3.5\"/2.88 MB floppy services are supported (int 13h)",
+        "Print screen service is supported (int 5h)",
+        "8042 keyboard services are supported (int 9h)",
+        "Serial services are supported (int 14h)",
+        "Printer services are supported (int 17h)",
+        "CGA/mono video services are supported (int 10h)",
+        "NEC PC-98" // Bit 31
+    };
+
+    // Bits of the first extension byte (2.4+).
+    static const char* kExtCharacteristics1[] =
+    {
+        "ACPI is supported", // Bit 0
+        "USB legacy is supported",
+        "AGP is supported",
+        "I2O boot is supported",
+        "LS-120 SuperDisk boot is supported",
+        "ATAPI ZIP drive boot is supported",
+        "IEEE 1394 boot is supported",
+        "Smart battery is supported" // Bit 7
+    };
+
+    // Bits of the second extension byte (2.4+), the last two of them added by SMBIOS 3.5.
+    static const char* kExtCharacteristics2[] =
+    {
+        "BIOS boot specification is supported", // Bit 0
+        "Function key-initiated network boot is supported",
+        "Targeted content distribution is supported",
+        "UEFI specification is supported",
+        "The system is a virtual machine",
+        "Manufacturing mode is supported",
+        "Manufacturing mode is enabled" // Bit 6
+    };
+
+    QStringList result;
+
+    // Bit 3 tells that the firmware fills none of the bits above it.
+    if (!(table_->characters & 0x08))
+    {
+        for (size_t i = 0; i < std::size(kCharacteristics); ++i)
+        {
+            if (table_->characters & (1ULL << (i + 4)))
+                result << kCharacteristics[i];
+        }
+    }
+
+    if (table_->length >= 0x13)
+    {
+        for (size_t i = 0; i < std::size(kExtCharacteristics1); ++i)
+        {
+            if (table_->ext_characters1 & (1 << i))
+                result << kExtCharacteristics1[i];
+        }
+    }
+
+    if (table_->length >= 0x14)
+    {
+        for (size_t i = 0; i < std::size(kExtCharacteristics2); ++i)
+        {
+            if (table_->ext_characters2 & (1 << i))
+                result << kExtCharacteristics2[i];
+        }
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
 SmbiosSystem::SmbiosSystem(const SmbiosTable* table)
     : table_(static_cast<const SmbiosSystemTable*>(table))
 {

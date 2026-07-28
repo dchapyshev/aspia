@@ -651,6 +651,14 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
                 bios->set_vendor(bios_table.vendor().toStdString());
                 bios->set_version(bios_table.version().toStdString());
                 bios->set_release_date(bios_table.releaseDate().toStdString());
+                bios->set_address(bios_table.address());
+                bios->set_rom_size(bios_table.romSize());
+                bios->set_revision(bios_table.revision().toStdString());
+                bios->set_firmware_revision(bios_table.firmwareRevision().toStdString());
+
+                const QStringList characteristics = bios_table.characteristics();
+                for (const QString& characteristic : characteristics)
+                    bios->add_characteristic(characteristic.toStdString());
             }
             break;
 

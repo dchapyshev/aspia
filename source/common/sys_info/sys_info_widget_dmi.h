@@ -56,6 +56,9 @@ private slots:
 private:
     void showContextMenu(QTreeWidget* tree, const QPoint& point);
 
+    QString biosTitle(int index) const;
+    QList<QTreeWidgetItem*> biosParameters(int index) const;
+
     QString processorTitle(int index) const;
     QList<QTreeWidgetItem*> processorParameters(int index) const;
 

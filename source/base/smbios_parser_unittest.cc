@@ -184,6 +184,175 @@ TEST(SmbiosParserTest, TruncatedBiosIsInvalid)
 }
 
 //--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, BiosAddressAndRomSize)
+{
+    QByteArray formatted(0x12 - 4, '\0');
+    formatted[2] = static_cast<char>(0x00); // address_segment: E800h
+    formatted[3] = static_cast<char>(0xE8);
+    formatted[5] = static_cast<char>(0x0F); // rom_size: 16 blocks of 64K
+
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_BIOS, formatted, {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosBios bios(enumerator.table());
+    ASSERT_TRUE(bios.isValid());
+    EXPECT_EQ(bios.address(), 0xE8000u);
+    EXPECT_EQ(bios.romSize(), 1024ull * 1024);
+
+    // The releases appeared in SMBIOS 2.4 and a 2.0 table carries none of them.
+    EXPECT_TRUE(bios.revision().isEmpty());
+    EXPECT_TRUE(bios.firmwareRevision().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, BiosRomSizeExtended)
+{
+    auto makeBios = [](int length, quint16 ext_rom_size)
+    {
+        QByteArray formatted(length - 4, '\0');
+        formatted[5] = static_cast<char>(0xFF); // rom_size: does not fit the byte
+
+        if (formatted.size() > 21)
+        {
+            formatted[20] = static_cast<char>(ext_rom_size & 0xFF);
+            formatted[21] = static_cast<char>(ext_rom_size >> 8);
+        }
+
+        return makeDump(makeTable(SMBIOS_TABLE_TYPE_BIOS, formatted, {}));
+    };
+
+    auto romSizeOf = [](const QByteArray& dump)
+    {
+        SmbiosTableEnumerator enumerator(dump);
+        if (enumerator.isAtEnd())
+            return quint64(0);
+
+        return SmbiosBios(enumerator.table()).romSize();
+    };
+
+    // The two upper bits of the extended field carry the unit of the size.
+    EXPECT_EQ(romSizeOf(makeBios(0x1A, 32)), 32ull * 1024 * 1024);
+    EXPECT_EQ(romSizeOf(makeBios(0x1A, 0x4000 | 4)), 4ull * 1024 * 1024 * 1024);
+
+    // A reserved unit leaves the size unknown.
+    EXPECT_EQ(romSizeOf(makeBios(0x1A, 0x8000 | 8)), 0ull);
+
+    // Firmware older than SMBIOS 3.1 has no extended field to read.
+    EXPECT_EQ(romSizeOf(makeBios(0x18, 32)), 0ull);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, BiosRevisions)
+{
+    auto makeBios = [](int length, quint8 ctrl_major_release)
+    {
+        QByteArray formatted(length - 4, '\0');
+        formatted[16] = static_cast<char>(5);  // major_release
+        formatted[17] = static_cast<char>(13); // minor_release
+
+        if (formatted.size() > 19)
+        {
+            formatted[18] = static_cast<char>(ctrl_major_release);
+            formatted[19] = static_cast<char>(2); // ctrl_minor_release
+        }
+
+        return makeDump(makeTable(SMBIOS_TABLE_TYPE_BIOS, formatted, {}));
+    };
+
+    const QByteArray with_controller = makeBios(0x18, 1);
+    SmbiosTableEnumerator with_controller_enumerator(with_controller);
+    ASSERT_FALSE(with_controller_enumerator.isAtEnd());
+
+    SmbiosBios with_controller_bios(with_controller_enumerator.table());
+    EXPECT_EQ(with_controller_bios.revision(), QString("5.13"));
+    EXPECT_EQ(with_controller_bios.firmwareRevision(), QString("1.2"));
+
+    // FFh in the major byte means the system has no embedded controller.
+    const QByteArray without_controller = makeBios(0x18, 0xFF);
+    SmbiosTableEnumerator without_controller_enumerator(without_controller);
+    ASSERT_FALSE(without_controller_enumerator.isAtEnd());
+
+    SmbiosBios without_controller_bios(without_controller_enumerator.table());
+    EXPECT_EQ(without_controller_bios.revision(), QString("5.13"));
+    EXPECT_TRUE(without_controller_bios.firmwareRevision().isEmpty());
+
+    // A table that ends before the bytes of the controller.
+    const QByteArray truncated = makeBios(0x16, 1);
+    SmbiosTableEnumerator truncated_enumerator(truncated);
+    ASSERT_FALSE(truncated_enumerator.isAtEnd());
+
+    SmbiosBios truncated_bios(truncated_enumerator.table());
+    EXPECT_EQ(truncated_bios.revision(), QString("5.13"));
+    EXPECT_TRUE(truncated_bios.firmwareRevision().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, BiosCharacteristics)
+{
+    QByteArray formatted(0x14 - 4, '\0');
+    formatted[6] = static_cast<char>(0x80);  // characters bits 0-7: PCI (bit 7)
+    formatted[7] = static_cast<char>(0x88);  // bits 8-15: upgradeable (11), boot from CD (15)
+    formatted[14] = static_cast<char>(0x01); // extension byte 1: ACPI
+    formatted[15] = static_cast<char>(0x08); // extension byte 2: UEFI
+
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_BIOS, formatted, {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    const QStringList characteristics = SmbiosBios(enumerator.table()).characteristics();
+
+    ASSERT_EQ(characteristics.size(), 5);
+    EXPECT_TRUE(characteristics.contains("PCI is supported"));
+    EXPECT_TRUE(characteristics.contains("BIOS is upgradeable"));
+    EXPECT_TRUE(characteristics.contains("Boot from CD is supported"));
+    EXPECT_TRUE(characteristics.contains("ACPI is supported"));
+    EXPECT_TRUE(characteristics.contains("UEFI specification is supported"));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, BiosCharacteristicsNotSupported)
+{
+    QByteArray formatted(0x14 - 4, '\0');
+
+    // Bit 3 tells that the firmware fills none of the bits above it, bit 7 is set anyway.
+    formatted[6] = static_cast<char>(0x88);
+    formatted[15] = static_cast<char>(0x10); // extension byte 2: the system is a virtual machine
+
+    const QByteArray dump = makeDump(makeTable(SMBIOS_TABLE_TYPE_BIOS, formatted, {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    // The bits of the main field are dropped, the extension bytes still count.
+    const QStringList characteristics = SmbiosBios(enumerator.table()).characteristics();
+
+    ASSERT_EQ(characteristics.size(), 1);
+    EXPECT_EQ(characteristics[0], QString("The system is a virtual machine"));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, BiosCharacteristicsWithoutExtensionBytes)
+{
+    // A 2.0 table has no extension bytes: the string area sits where they would be and must not
+    // be read as features.
+    QByteArray formatted(0x12 - 4, '\0');
+    formatted[0] = 1; // vendor: string #1
+
+    const QByteArray dump = makeDump(
+        makeTable(SMBIOS_TABLE_TYPE_BIOS, formatted, { "AMI" }) + endOfTable());
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosBios bios(enumerator.table());
+    ASSERT_EQ(bios.vendor(), QString("AMI"));
+    EXPECT_TRUE(bios.characteristics().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST(SmbiosParserTest, StringNumberOutOfRange)
 {
     const QByteArray dump =

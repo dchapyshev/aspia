@@ -21,6 +21,7 @@
 
 #include <QByteArray>
 #include <QString>
+#include <QStringList>
 
 #include "base/smbios.h"
 
@@ -63,6 +64,11 @@ public:
     QString vendor() const;
     QString version() const;
     QString releaseDate() const;
+    quint32 address() const;
+    quint64 romSize() const;
+    QString revision() const;
+    QString firmwareRevision() const;
+    QStringList characteristics() const;
 
 private:
     const SmbiosBiosTable* table_;
