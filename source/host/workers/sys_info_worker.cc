@@ -629,6 +629,25 @@ QString memoryTypeDetail(const SmbiosMemoryDevice& memory_device)
 }
 
 //--------------------------------------------------------------------------------------------------
+QString cacheSupportedSram(const SmbiosCache& cache)
+{
+    QStringList types;
+
+    if (cache.supportsNonBurst())
+        types << "Non-Burst";
+    if (cache.supportsBurst())
+        types << "Burst";
+    if (cache.supportsPipelineBurst())
+        types << "Pipeline Burst";
+    if (cache.supportsSynchronous())
+        types << "Synchronous";
+    if (cache.supportsAsynchronous())
+        types << "Asynchronous";
+
+    return types.join(", ");
+}
+
+//--------------------------------------------------------------------------------------------------
 void fillDmi(proto::system_info::SystemInfo* system_info)
 {
     proto::system_info::Dmi* dmi = system_info->mutable_dmi();
@@ -747,6 +766,49 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
                     processor_table.isEnhancedVirtualization());
                 processor->set_support_power_control(
                     processor_table.isPowerPerformanceControl());
+            }
+            break;
+
+            case SMBIOS_TABLE_TYPE_CACHE:
+            {
+                SmbiosCache cache_table(table);
+                if (!cache_table.isValid())
+                    continue;
+
+                proto::system_info::Dmi::Cache* cache = dmi->add_cache();
+
+                cache->set_designation(cache_table.designation().toStdString());
+                cache->set_location(cache_table.location().toStdString());
+                cache->set_mode(cache_table.mode().toStdString());
+                cache->set_type(cache_table.type().toStdString());
+                cache->set_sram_type(cache_table.currentSramType().toStdString());
+                cache->set_supported_sram_type(cacheSupportedSram(cache_table).toStdString());
+                cache->set_error_correction_type(
+                    cache_table.errorCorrectionType().toStdString());
+                cache->set_associativity(cache_table.associativity().toStdString());
+                cache->set_level(cache_table.level());
+                cache->set_max_size(cache_table.maxSize());
+                cache->set_current_size(cache_table.currentSize());
+                cache->set_speed(cache_table.speed());
+                cache->set_enabled(cache_table.isEnabled());
+                cache->set_socketed(cache_table.isSocketed());
+            }
+            break;
+
+            case SMBIOS_TABLE_TYPE_MEMORY_ARRAY:
+            {
+                SmbiosMemoryArray memory_array_table(table);
+                if (!memory_array_table.isValid())
+                    continue;
+
+                proto::system_info::Dmi::MemoryArray* memory_array = dmi->add_memory_array();
+
+                memory_array->set_location(memory_array_table.location().toStdString());
+                memory_array->set_use(memory_array_table.use().toStdString());
+                memory_array->set_error_correction(
+                    memory_array_table.errorCorrection().toStdString());
+                memory_array->set_max_capacity(memory_array_table.maxCapacity());
+                memory_array->set_device_count(memory_array_table.deviceCount());
             }
             break;
 

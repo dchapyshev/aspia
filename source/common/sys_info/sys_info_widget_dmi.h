@@ -75,6 +75,12 @@ private:
     QString processorTitle(int index) const;
     QList<QTreeWidgetItem*> processorParameters(int index) const;
 
+    QString cacheTitle(int index) const;
+    QList<QTreeWidgetItem*> cacheParameters(int index) const;
+
+    QString memoryArrayTitle(int index) const;
+    QList<QTreeWidgetItem*> memoryArrayParameters(int index) const;
+
     std::unique_ptr<Ui::SysInfoDmi> ui;
 
     // Tables of the last report. Kept because the lower pane is rebuilt on every selection change.

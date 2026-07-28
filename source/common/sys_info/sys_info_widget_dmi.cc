@@ -31,6 +31,8 @@ const char kBiosIcon[] = ":/img/processor.svg";
 const char kBaseboardIcon[] = ":/img/motherboard.svg";
 const char kChassisIcon[] = ":/img/computer-case.svg";
 const char kProcessorIcon[] = ":/img/microchip.svg";
+const char kCacheIcon[] = ":/img/microchip.svg";
+const char kMemoryArrayIcon[] = ":/img/memory-slot.svg";
 
 // Group of tables a item of the upper pane belongs to.
 constexpr int kGroupRole = Qt::UserRole;
@@ -43,7 +45,9 @@ enum Group
     GROUP_BIOS = 0,
     GROUP_BASEBOARD,
     GROUP_CHASSIS,
-    GROUP_PROCESSORS
+    GROUP_PROCESSORS,
+    GROUP_CACHES,
+    GROUP_MEMORY_ARRAYS
 };
 
 class Item : public QTreeWidgetItem
@@ -193,6 +197,20 @@ void SysInfoWidgetDmi::setSystemInfo(const proto::system_info::SystemInfo& syste
     if (!processors.isEmpty())
         addGroup(GROUP_PROCESSORS, kProcessorIcon, tr("Processors"), processors);
 
+    QStringList caches;
+    for (int i = 0; i < dmi_->cache_size(); ++i)
+        caches << cacheTitle(i);
+
+    if (!caches.isEmpty())
+        addGroup(GROUP_CACHES, kCacheIcon, tr("Caches"), caches);
+
+    QStringList memory_arrays;
+    for (int i = 0; i < dmi_->memory_array_size(); ++i)
+        memory_arrays << memoryArrayTitle(i);
+
+    if (!memory_arrays.isEmpty())
+        addGroup(GROUP_MEMORY_ARRAYS, kMemoryArrayIcon, tr("Memory Arrays"), memory_arrays);
+
     if (!isStateRestored())
         ui->tree->resizeColumnToContents(0);
 
@@ -274,6 +292,29 @@ void SysInfoWidgetDmi::onCurrentTableChanged()
 
             for (int i = first; i <= last && i < dmi_->processor_size(); ++i)
                 items << new Item(kProcessorIcon, processorTitle(i), processorParameters(i));
+        }
+        break;
+
+        case GROUP_CACHES:
+        {
+            const int first = index < 0 ? 0 : index;
+            const int last = index < 0 ? dmi_->cache_size() - 1 : index;
+
+            for (int i = first; i <= last && i < dmi_->cache_size(); ++i)
+                items << new Item(kCacheIcon, cacheTitle(i), cacheParameters(i));
+        }
+        break;
+
+        case GROUP_MEMORY_ARRAYS:
+        {
+            const int first = index < 0 ? 0 : index;
+            const int last = index < 0 ? dmi_->memory_array_size() - 1 : index;
+
+            for (int i = first; i <= last && i < dmi_->memory_array_size(); ++i)
+            {
+                items << new Item(kMemoryArrayIcon, memoryArrayTitle(i),
+                                  memoryArrayParameters(i));
+            }
         }
         break;
 
@@ -615,6 +656,114 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::processorParameters(int index) const
                 processor.support_enhanced_virtualization() ? tr("Yes") : tr("No"));
     items << mk(tr("Power/Performance Control"),
                 processor.support_power_control() ? tr("Yes") : tr("No"));
+
+    return items;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SysInfoWidgetDmi::cacheTitle(int index) const
+{
+    const proto::system_info::Dmi::Cache& cache = dmi_->cache(index);
+
+    if (!cache.designation().empty())
+        return QString::fromStdString(cache.designation());
+
+    return tr("L%1 Cache").arg(cache.level());
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<QTreeWidgetItem*> SysInfoWidgetDmi::cacheParameters(int index) const
+{
+    const proto::system_info::Dmi::Cache& cache = dmi_->cache(index);
+    QList<QTreeWidgetItem*> items;
+
+    if (!cache.designation().empty())
+        items << mk(tr("Socket Designation"), QString::fromStdString(cache.designation()));
+
+    items << mk(tr("Level"), QString::number(cache.level()));
+
+    if (!cache.type().empty())
+        items << mk(tr("Type"), QString::fromStdString(cache.type()));
+
+    if (cache.current_size())
+        items << mk(tr("Installed Size"), Formatter::sizeToString(cache.current_size()));
+
+    if (cache.max_size())
+        items << mk(tr("Maximum Size"), Formatter::sizeToString(cache.max_size()));
+
+    if (!cache.location().empty())
+        items << mk(tr("Location"), QString::fromStdString(cache.location()));
+
+    if (!cache.mode().empty())
+        items << mk(tr("Operational Mode"), QString::fromStdString(cache.mode()));
+
+    if (!cache.sram_type().empty())
+        items << mk(tr("SRAM Type"), QString::fromStdString(cache.sram_type()));
+
+    if (!cache.supported_sram_type().empty())
+    {
+        items << mk(tr("Supported SRAM Types"),
+                    QString::fromStdString(cache.supported_sram_type()));
+    }
+
+    if (!cache.error_correction_type().empty())
+    {
+        items << mk(tr("Error Correction Type"),
+                    QString::fromStdString(cache.error_correction_type()));
+    }
+
+    if (!cache.associativity().empty())
+        items << mk(tr("Associativity"), QString::fromStdString(cache.associativity()));
+
+    // Zero means the speed is unknown.
+    if (cache.speed())
+        items << mk(tr("Speed"), tr("%1 ns").arg(cache.speed()));
+
+    items << mk(tr("Enabled"), cache.enabled() ? tr("Yes") : tr("No"));
+    items << mk(tr("Socketed"), cache.socketed() ? tr("Yes") : tr("No"));
+
+    return items;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SysInfoWidgetDmi::memoryArrayTitle(int index) const
+{
+    const proto::system_info::Dmi::MemoryArray& memory_array = dmi_->memory_array(index);
+
+    if (!memory_array.use().empty())
+        return QString::fromStdString(memory_array.use());
+
+    if (!memory_array.location().empty())
+        return QString::fromStdString(memory_array.location());
+
+    return tr("Array %1").arg(index + 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<QTreeWidgetItem*> SysInfoWidgetDmi::memoryArrayParameters(int index) const
+{
+    const proto::system_info::Dmi::MemoryArray& memory_array = dmi_->memory_array(index);
+    QList<QTreeWidgetItem*> items;
+
+    if (!memory_array.location().empty())
+        items << mk(tr("Location"), QString::fromStdString(memory_array.location()));
+
+    if (!memory_array.use().empty())
+        items << mk(tr("Use"), QString::fromStdString(memory_array.use()));
+
+    if (!memory_array.error_correction().empty())
+    {
+        items << mk(tr("Error Correction"),
+                    QString::fromStdString(memory_array.error_correction()));
+    }
+
+    if (memory_array.max_capacity())
+    {
+        items << mk(tr("Maximum Capacity"),
+                    Formatter::sizeToString(memory_array.max_capacity()));
+    }
+
+    items << mk(tr("Number of Devices"), QString::number(memory_array.device_count()));
 
     return items;
 }

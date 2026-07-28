@@ -688,6 +688,33 @@ message Dmi
         bool support_power_control           = 27;
     }
 
+    message Cache
+    {
+        string designation           = 1;
+        string location              = 2;
+        string mode                  = 3;
+        string type                  = 4;
+        string sram_type             = 5;
+        string supported_sram_type   = 6;
+        string error_correction_type = 7;
+        string associativity         = 8;
+        uint32 level                 = 9;
+        uint64 max_size              = 10;
+        uint64 current_size          = 11;
+        uint32 speed                 = 12;
+        bool enabled                 = 13;
+        bool socketed                = 14;
+    }
+
+    message MemoryArray
+    {
+        string location         = 1;
+        string use              = 2;
+        string error_correction = 3;
+        uint64 max_capacity     = 4;
+        uint32 device_count     = 5;
+    }
+
     message MemoryDevice
     {
         bool present             = 1;
@@ -717,7 +744,9 @@ message Dmi
     repeated Baseboard baseboard        = 2;
     repeated Chassis chassis            = 3;
     repeated Processor processor        = 4;
-    repeated MemoryDevice memory_device = 5;
+    repeated Cache cache                = 5;
+    repeated MemoryArray memory_array   = 6;
+    repeated MemoryDevice memory_device = 7;
 }
 
 message SystemInfoRequest
