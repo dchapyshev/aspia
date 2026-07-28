@@ -370,6 +370,9 @@ void SysInfoView::buildCategoryTree()
     CategoryItem* hardware_category = new CategoryItem(
         CategoryItem::Type::ROOT_ITEM, ":/img/folder.svg", tr("Hardware"));
 
+    CategoryItem* dmi = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/motherboard.svg", tr("DMI"), findChild<SysInfoWidgetDmi*>());
+
     CategoryItem* devices = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
         ":/img/network-card.svg", tr("Devices"), findChild<SysInfoWidgetDevices*>());
 
@@ -391,9 +394,7 @@ void SysInfoView::buildCategoryTree()
     CategoryItem* power_options = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
         ":/img/electrical.svg", tr("Power Options"), findChild<SysInfoWidgetPowerOptions*>());
 
-    CategoryItem* dmi = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/motherboard.svg", tr("DMI"), findChild<SysInfoWidgetDmi*>());
-
+    hardware_category->addChild(dmi);
     hardware_category->addChild(devices);
     hardware_category->addChild(drives);
     hardware_category->addChild(smart);
@@ -401,7 +402,6 @@ void SysInfoView::buildCategoryTree()
     hardware_category->addChild(monitors);
     hardware_category->addChild(printers);
     hardware_category->addChild(power_options);
-    hardware_category->addChild(dmi);
 
     //----------------------------------------------------------------------------------------------
     // SOFTWARE

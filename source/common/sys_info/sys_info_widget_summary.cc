@@ -271,6 +271,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
             const proto::system_info::Dmi::MemoryDevice& module = dmi.memory_device(i);
             QList<QTreeWidgetItem*> group;
 
+            // The summary names the module, the whole of what it reports is on the DMI page.
             if (module.present())
             {
                 if (!module.manufacturer().empty())
@@ -279,65 +280,11 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
                 if (module.size())
                     group << mk(tr("Size"), Formatter::sizeToString(module.size()));
 
-                if (module.speed())
-                    group << mk(tr("Speed"), tr("%1 MT/s").arg(module.speed()));
-
-                if (module.configured_speed())
-                {
-                    group << mk(tr("Configured Speed"),
-                                tr("%1 MT/s").arg(module.configured_speed()));
-                }
-
                 if (!module.type().empty())
                     group << mk(tr("Type"), module.type());
 
-                if (!module.type_detail().empty())
-                    group << mk(tr("Type Detail"), module.type_detail());
-
-                if (!module.technology().empty())
-                    group << mk(tr("Technology"), module.technology());
-
-                if (!module.form_factor().empty())
-                    group << mk(tr("Form Factor"), module.form_factor());
-
-                if (!module.part_number().empty())
-                    group << mk(tr("Part Number"), module.part_number());
-
-                if (!module.serial_number().empty())
-                    group << mk(tr("Serial Number"), module.serial_number());
-
-                if (!module.asset_tag().empty())
-                    group << mk(tr("Asset Tag"), module.asset_tag());
-
-                if (!module.bank().empty())
-                    group << mk(tr("Bank"), module.bank());
-
-                if (module.rank())
-                    group << mk(tr("Rank"), QString::number(module.rank()));
-
-                if (module.total_width())
-                    group << mk(tr("Total Width"), tr("%1 bit").arg(module.total_width()));
-
-                if (module.data_width())
-                    group << mk(tr("Data Width"), tr("%1 bit").arg(module.data_width()));
-
-                if (module.configured_voltage())
-                    group << mk(tr("Voltage"), tr("%1 mV").arg(module.configured_voltage()));
-
-                if (!module.firmware_version().empty())
-                    group << mk(tr("Firmware Version"), module.firmware_version());
-
-                if (module.non_volatile_size())
-                {
-                    group << mk(tr("Non-volatile Size"),
-                                Formatter::sizeToString(module.non_volatile_size()));
-                }
-
-                if (module.volatile_size())
-                {
-                    group << mk(tr("Volatile Size"),
-                                Formatter::sizeToString(module.volatile_size()));
-                }
+                if (module.speed())
+                    group << mk(tr("Speed"), tr("%1 MT/s").arg(module.speed()));
             }
             else
             {
