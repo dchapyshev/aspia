@@ -78,8 +78,23 @@ private:
     QString cacheTitle(int index) const;
     QList<QTreeWidgetItem*> cacheParameters(int index) const;
 
+    QString portConnectorTitle(int index) const;
+    QList<QTreeWidgetItem*> portConnectorParameters(int index) const;
+
+    QString systemSlotTitle(int index) const;
+    QList<QTreeWidgetItem*> systemSlotParameters(int index) const;
+
+    QString onBoardDeviceTitle(int index) const;
+    QList<QTreeWidgetItem*> onBoardDeviceParameters(int index) const;
+
     QString memoryArrayTitle(int index) const;
     QList<QTreeWidgetItem*> memoryArrayParameters(int index) const;
+
+    QString memoryDeviceTitle(int index) const;
+    QList<QTreeWidgetItem*> memoryDeviceParameters(int index) const;
+
+    QString tpmDeviceTitle(int index) const;
+    QList<QTreeWidgetItem*> tpmDeviceParameters(int index) const;
 
     std::unique_ptr<Ui::SysInfoDmi> ui;
 

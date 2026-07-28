@@ -2695,27 +2695,37 @@ quint64 SmbiosMemoryDevice::logicalSize() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool SmbiosMemoryDevice::isRegistered() const
+QStringList SmbiosMemoryDevice::typeDetail() const
 {
-    return (table_->type_detail & 0x2000) != 0;
-}
+    // The names start at bit 1: bit 0 does not name a property.
+    static const char* kDetail[] =
+    {
+        "Other", // Bit 1
+        "Unknown",
+        "Fast-paged",
+        "Static Column",
+        "Pseudo-static",
+        "RAMBUS",
+        "Synchronous",
+        "CMOS",
+        "EDO",
+        "Window DRAM",
+        "Cache DRAM",
+        "Non-volatile",
+        "Registered (Buffered)",
+        "Unbuffered (Unregistered)",
+        "LRDIMM" // Bit 15
+    };
 
-//--------------------------------------------------------------------------------------------------
-bool SmbiosMemoryDevice::isUnbuffered() const
-{
-    return (table_->type_detail & 0x4000) != 0;
-}
+    QStringList result;
 
-//--------------------------------------------------------------------------------------------------
-bool SmbiosMemoryDevice::isLrDimm() const
-{
-    return (table_->type_detail & 0x8000) != 0;
-}
+    for (size_t i = 0; i < std::size(kDetail); ++i)
+    {
+        if (table_->type_detail & (1 << (i + 1)))
+            result << kDetail[i];
+    }
 
-//--------------------------------------------------------------------------------------------------
-bool SmbiosMemoryDevice::isNonVolatile() const
-{
-    return (table_->type_detail & 0x1000) != 0;
+    return result;
 }
 
 //--------------------------------------------------------------------------------------------------

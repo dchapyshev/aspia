@@ -331,10 +331,7 @@ public:
     quint64 volatileSize() const;
     quint64 cacheSize() const;
     quint64 logicalSize() const;
-    bool isRegistered() const;
-    bool isUnbuffered() const;
-    bool isLrDimm() const;
-    bool isNonVolatile() const;
+    QStringList typeDetail() const;
     quint16 arrayHandle() const;
 
 private:

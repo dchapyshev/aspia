@@ -32,7 +32,12 @@ const char kBaseboardIcon[] = ":/img/motherboard.svg";
 const char kChassisIcon[] = ":/img/computer-case.svg";
 const char kProcessorIcon[] = ":/img/microchip.svg";
 const char kCacheIcon[] = ":/img/microchip.svg";
+const char kPortConnectorIcon[] = ":/img/ps-2-male.svg";
+const char kSystemSlotIcon[] = ":/img/ps-2-male.svg";
+const char kOnBoardDeviceIcon[] = ":/img/network-card.svg";
 const char kMemoryArrayIcon[] = ":/img/memory-slot.svg";
+const char kMemoryDeviceIcon[] = ":/img/memory-slot.svg";
+const char kTpmDeviceIcon[] = ":/img/certificate.svg";
 
 // Group of tables a item of the upper pane belongs to.
 constexpr int kGroupRole = Qt::UserRole;
@@ -47,7 +52,12 @@ enum Group
     GROUP_CHASSIS,
     GROUP_PROCESSORS,
     GROUP_CACHES,
-    GROUP_MEMORY_ARRAYS
+    GROUP_PORT_CONNECTORS,
+    GROUP_SYSTEM_SLOTS,
+    GROUP_ON_BOARD_DEVICES,
+    GROUP_MEMORY_ARRAYS,
+    GROUP_MEMORY_DEVICES,
+    GROUP_TPM_DEVICES
 };
 
 class Item : public QTreeWidgetItem
@@ -204,12 +214,56 @@ void SysInfoWidgetDmi::setSystemInfo(const proto::system_info::SystemInfo& syste
     if (!caches.isEmpty())
         addGroup(GROUP_CACHES, kCacheIcon, tr("Caches"), caches);
 
+    QStringList port_connectors;
+    for (int i = 0; i < dmi_->port_connector_size(); ++i)
+        port_connectors << portConnectorTitle(i);
+
+    if (!port_connectors.isEmpty())
+    {
+        addGroup(GROUP_PORT_CONNECTORS, kPortConnectorIcon, tr("Port Connectors"),
+                 port_connectors);
+    }
+
+    QStringList system_slots;
+    for (int i = 0; i < dmi_->system_slot_size(); ++i)
+        system_slots << systemSlotTitle(i);
+
+    if (!system_slots.isEmpty())
+        addGroup(GROUP_SYSTEM_SLOTS, kSystemSlotIcon, tr("System Slots"), system_slots);
+
+    QStringList on_board_devices;
+    for (int i = 0; i < dmi_->on_board_device_size(); ++i)
+        on_board_devices << onBoardDeviceTitle(i);
+
+    if (!on_board_devices.isEmpty())
+    {
+        addGroup(GROUP_ON_BOARD_DEVICES, kOnBoardDeviceIcon, tr("On-board Devices"),
+                 on_board_devices);
+    }
+
     QStringList memory_arrays;
     for (int i = 0; i < dmi_->memory_array_size(); ++i)
         memory_arrays << memoryArrayTitle(i);
 
     if (!memory_arrays.isEmpty())
         addGroup(GROUP_MEMORY_ARRAYS, kMemoryArrayIcon, tr("Memory Arrays"), memory_arrays);
+
+    QStringList memory_devices;
+    for (int i = 0; i < dmi_->memory_device_size(); ++i)
+        memory_devices << memoryDeviceTitle(i);
+
+    if (!memory_devices.isEmpty())
+    {
+        addGroup(GROUP_MEMORY_DEVICES, kMemoryDeviceIcon, tr("Memory Devices"),
+                 memory_devices);
+    }
+
+    QStringList tpm_devices;
+    for (int i = 0; i < dmi_->tpm_device_size(); ++i)
+        tpm_devices << tpmDeviceTitle(i);
+
+    if (!tpm_devices.isEmpty())
+        addGroup(GROUP_TPM_DEVICES, kTpmDeviceIcon, tr("TPM Device"), tpm_devices);
 
     if (!isStateRestored())
         ui->tree->resizeColumnToContents(0);
@@ -305,6 +359,42 @@ void SysInfoWidgetDmi::onCurrentTableChanged()
         }
         break;
 
+        case GROUP_PORT_CONNECTORS:
+        {
+            const int first = index < 0 ? 0 : index;
+            const int last = index < 0 ? dmi_->port_connector_size() - 1 : index;
+
+            for (int i = first; i <= last && i < dmi_->port_connector_size(); ++i)
+            {
+                items << new Item(kPortConnectorIcon, portConnectorTitle(i),
+                                  portConnectorParameters(i));
+            }
+        }
+        break;
+
+        case GROUP_SYSTEM_SLOTS:
+        {
+            const int first = index < 0 ? 0 : index;
+            const int last = index < 0 ? dmi_->system_slot_size() - 1 : index;
+
+            for (int i = first; i <= last && i < dmi_->system_slot_size(); ++i)
+                items << new Item(kSystemSlotIcon, systemSlotTitle(i), systemSlotParameters(i));
+        }
+        break;
+
+        case GROUP_ON_BOARD_DEVICES:
+        {
+            const int first = index < 0 ? 0 : index;
+            const int last = index < 0 ? dmi_->on_board_device_size() - 1 : index;
+
+            for (int i = first; i <= last && i < dmi_->on_board_device_size(); ++i)
+            {
+                items << new Item(kOnBoardDeviceIcon, onBoardDeviceTitle(i),
+                                  onBoardDeviceParameters(i));
+            }
+        }
+        break;
+
         case GROUP_MEMORY_ARRAYS:
         {
             const int first = index < 0 ? 0 : index;
@@ -315,6 +405,29 @@ void SysInfoWidgetDmi::onCurrentTableChanged()
                 items << new Item(kMemoryArrayIcon, memoryArrayTitle(i),
                                   memoryArrayParameters(i));
             }
+        }
+        break;
+
+        case GROUP_MEMORY_DEVICES:
+        {
+            const int first = index < 0 ? 0 : index;
+            const int last = index < 0 ? dmi_->memory_device_size() - 1 : index;
+
+            for (int i = first; i <= last && i < dmi_->memory_device_size(); ++i)
+            {
+                items << new Item(kMemoryDeviceIcon, memoryDeviceTitle(i),
+                                  memoryDeviceParameters(i));
+            }
+        }
+        break;
+
+        case GROUP_TPM_DEVICES:
+        {
+            const int first = index < 0 ? 0 : index;
+            const int last = index < 0 ? dmi_->tpm_device_size() - 1 : index;
+
+            for (int i = first; i <= last && i < dmi_->tpm_device_size(); ++i)
+                items << new Item(kTpmDeviceIcon, tpmDeviceTitle(i), tpmDeviceParameters(i));
         }
         break;
 
@@ -360,8 +473,9 @@ void SysInfoWidgetDmi::addGroup(int group, const QString& icon_path, const QStri
     if (!childs.isEmpty())
         ui->tree->setRootIsDecorated(true);
 
+    // The group stays collapsed: the list of tables is a table of contents, and its entries are
+    // only needed when the user goes after one of them.
     ui->tree->addTopLevelItem(item);
-    item->setExpanded(true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -726,6 +840,152 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::cacheParameters(int index) const
 }
 
 //--------------------------------------------------------------------------------------------------
+QString SysInfoWidgetDmi::portConnectorTitle(int index) const
+{
+    const proto::system_info::Dmi::PortConnector& port = dmi_->port_connector(index);
+
+    if (!port.external_designator().empty())
+        return QString::fromStdString(port.external_designator());
+
+    if (!port.internal_designator().empty())
+        return QString::fromStdString(port.internal_designator());
+
+    if (!port.type().empty())
+        return QString::fromStdString(port.type());
+
+    return tr("Port %1").arg(index + 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<QTreeWidgetItem*> SysInfoWidgetDmi::portConnectorParameters(int index) const
+{
+    const proto::system_info::Dmi::PortConnector& port = dmi_->port_connector(index);
+    QList<QTreeWidgetItem*> items;
+
+    if (!port.type().empty())
+        items << mk(tr("Port Type"), QString::fromStdString(port.type()));
+
+    if (!port.internal_designator().empty())
+    {
+        items << mk(tr("Internal Designator"),
+                    QString::fromStdString(port.internal_designator()));
+    }
+
+    if (!port.internal_connector_type().empty())
+    {
+        items << mk(tr("Internal Connector Type"),
+                    QString::fromStdString(port.internal_connector_type()));
+    }
+
+    if (!port.external_designator().empty())
+    {
+        items << mk(tr("External Designator"),
+                    QString::fromStdString(port.external_designator()));
+    }
+
+    if (!port.external_connector_type().empty())
+    {
+        items << mk(tr("External Connector Type"),
+                    QString::fromStdString(port.external_connector_type()));
+    }
+
+    return items;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SysInfoWidgetDmi::systemSlotTitle(int index) const
+{
+    const proto::system_info::Dmi::SystemSlot& slot = dmi_->system_slot(index);
+
+    if (!slot.designation().empty())
+        return QString::fromStdString(slot.designation());
+
+    if (!slot.type().empty())
+        return QString::fromStdString(slot.type());
+
+    return tr("Slot %1").arg(index + 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<QTreeWidgetItem*> SysInfoWidgetDmi::systemSlotParameters(int index) const
+{
+    const proto::system_info::Dmi::SystemSlot& slot = dmi_->system_slot(index);
+    QList<QTreeWidgetItem*> items;
+
+    if (!slot.designation().empty())
+        items << mk(tr("Designation"), QString::fromStdString(slot.designation()));
+
+    if (!slot.type().empty())
+        items << mk(tr("Type"), QString::fromStdString(slot.type()));
+
+    if (!slot.data_bus_width().empty())
+        items << mk(tr("Data Bus Width"), QString::fromStdString(slot.data_bus_width()));
+
+    if (!slot.usage().empty())
+        items << mk(tr("Current Usage"), QString::fromStdString(slot.usage()));
+
+    if (!slot.length().empty())
+        items << mk(tr("Length"), QString::fromStdString(slot.length()));
+
+    if (!slot.bus_address().empty())
+        items << mk(tr("Bus Address"), QString::fromStdString(slot.bus_address()));
+
+    items << mk(tr("ID"), QString::number(slot.id()));
+
+    QList<QTreeWidgetItem*> characteristics;
+
+    characteristics << mk(tr("5 V Provided"), slot.provides_5_volts() ? tr("Yes") : tr("No"));
+    characteristics << mk(tr("3.3 V Provided"), slot.provides_3_volts() ? tr("Yes") : tr("No"));
+    characteristics << mk(tr("Shared"), slot.shared() ? tr("Yes") : tr("No"));
+    characteristics << mk(tr("PME Signal"), slot.supports_pme() ? tr("Yes") : tr("No"));
+    characteristics << mk(tr("Hot Plug"), slot.supports_hot_plug() ? tr("Yes") : tr("No"));
+    characteristics << mk(tr("SMBus Signal"), slot.supports_smbus() ? tr("Yes") : tr("No"));
+    characteristics << mk(tr("Bifurcation"), slot.supports_bifurcation() ? tr("Yes") : tr("No"));
+
+    items << new Item(tr("Characteristics"), characteristics);
+
+    return items;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SysInfoWidgetDmi::onBoardDeviceTitle(int index) const
+{
+    const proto::system_info::Dmi::OnBoardDevice& device = dmi_->on_board_device(index);
+
+    if (!device.description().empty())
+        return QString::fromStdString(device.description());
+
+    if (!device.type().empty())
+        return QString::fromStdString(device.type());
+
+    return tr("Device %1").arg(index + 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<QTreeWidgetItem*> SysInfoWidgetDmi::onBoardDeviceParameters(int index) const
+{
+    const proto::system_info::Dmi::OnBoardDevice& device = dmi_->on_board_device(index);
+    QList<QTreeWidgetItem*> items;
+
+    if (!device.description().empty())
+        items << mk(tr("Description"), QString::fromStdString(device.description()));
+
+    if (!device.type().empty())
+        items << mk(tr("Type"), QString::fromStdString(device.type()));
+
+    // The legacy table reports no instance, which starts at one in the extended one.
+    if (device.instance())
+        items << mk(tr("Type Instance"), QString::number(device.instance()));
+
+    if (!device.bus_address().empty())
+        items << mk(tr("Bus Address"), QString::fromStdString(device.bus_address()));
+
+    items << mk(tr("Enabled"), device.enabled() ? tr("Yes") : tr("No"));
+
+    return items;
+}
+
+//--------------------------------------------------------------------------------------------------
 QString SysInfoWidgetDmi::memoryArrayTitle(int index) const
 {
     const proto::system_info::Dmi::MemoryArray& memory_array = dmi_->memory_array(index);
@@ -764,6 +1024,169 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::memoryArrayParameters(int index) const
     }
 
     items << mk(tr("Number of Devices"), QString::number(memory_array.device_count()));
+
+    return items;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SysInfoWidgetDmi::memoryDeviceTitle(int index) const
+{
+    const proto::system_info::Dmi::MemoryDevice& memory_device = dmi_->memory_device(index);
+
+    if (!memory_device.location().empty())
+        return QString::fromStdString(memory_device.location());
+
+    if (!memory_device.bank().empty())
+        return QString::fromStdString(memory_device.bank());
+
+    return tr("Device %1").arg(index + 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<QTreeWidgetItem*> SysInfoWidgetDmi::memoryDeviceParameters(int index) const
+{
+    const proto::system_info::Dmi::MemoryDevice& memory_device = dmi_->memory_device(index);
+    QList<QTreeWidgetItem*> items;
+
+    if (!memory_device.location().empty())
+        items << mk(tr("Location"), QString::fromStdString(memory_device.location()));
+
+    if (!memory_device.bank().empty())
+        items << mk(tr("Bank"), QString::fromStdString(memory_device.bank()));
+
+    // An empty slot has nothing but its location to show.
+    if (!memory_device.present())
+    {
+        items << mk(tr("Installed"), tr("No"));
+        return items;
+    }
+
+    if (!memory_device.manufacturer().empty())
+        items << mk(tr("Manufacturer"), QString::fromStdString(memory_device.manufacturer()));
+
+    if (memory_device.size())
+        items << mk(tr("Size"), Formatter::sizeToString(memory_device.size()));
+
+    if (!memory_device.type().empty())
+        items << mk(tr("Type"), QString::fromStdString(memory_device.type()));
+
+    if (!memory_device.type_detail().empty())
+        items << mk(tr("Type Detail"), QString::fromStdString(memory_device.type_detail()));
+
+    if (!memory_device.form_factor().empty())
+        items << mk(tr("Form Factor"), QString::fromStdString(memory_device.form_factor()));
+
+    if (!memory_device.technology().empty())
+        items << mk(tr("Technology"), QString::fromStdString(memory_device.technology()));
+
+    if (memory_device.speed())
+        items << mk(tr("Speed"), tr("%1 MT/s").arg(memory_device.speed()));
+
+    if (memory_device.configured_speed())
+    {
+        items << mk(tr("Configured Speed"),
+                    tr("%1 MT/s").arg(memory_device.configured_speed()));
+    }
+
+    if (memory_device.total_width())
+        items << mk(tr("Total Width"), tr("%1 bit").arg(memory_device.total_width()));
+
+    if (memory_device.data_width())
+        items << mk(tr("Data Width"), tr("%1 bit").arg(memory_device.data_width()));
+
+    if (memory_device.rank())
+        items << mk(tr("Rank"), QString::number(memory_device.rank()));
+
+    if (memory_device.min_voltage())
+        items << mk(tr("Minimum Voltage"), tr("%1 mV").arg(memory_device.min_voltage()));
+
+    if (memory_device.max_voltage())
+        items << mk(tr("Maximum Voltage"), tr("%1 mV").arg(memory_device.max_voltage()));
+
+    if (memory_device.configured_voltage())
+    {
+        items << mk(tr("Configured Voltage"),
+                    tr("%1 mV").arg(memory_device.configured_voltage()));
+    }
+
+    if (!memory_device.part_number().empty())
+        items << mk(tr("Part Number"), QString::fromStdString(memory_device.part_number()));
+
+    if (!memory_device.serial_number().empty())
+        items << mk(tr("Serial Number"), QString::fromStdString(memory_device.serial_number()));
+
+    if (!memory_device.asset_tag().empty())
+        items << mk(tr("Asset Tag"), QString::fromStdString(memory_device.asset_tag()));
+
+    if (!memory_device.firmware_version().empty())
+    {
+        items << mk(tr("Firmware Version"),
+                    QString::fromStdString(memory_device.firmware_version()));
+    }
+
+    if (memory_device.non_volatile_size())
+    {
+        items << mk(tr("Non-volatile Size"),
+                    Formatter::sizeToString(memory_device.non_volatile_size()));
+    }
+
+    if (memory_device.volatile_size())
+    {
+        items << mk(tr("Volatile Size"),
+                    Formatter::sizeToString(memory_device.volatile_size()));
+    }
+
+    if (memory_device.cache_size())
+        items << mk(tr("Cache Size"), Formatter::sizeToString(memory_device.cache_size()));
+
+    if (memory_device.logical_size())
+        items << mk(tr("Logical Size"), Formatter::sizeToString(memory_device.logical_size()));
+
+    return items;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SysInfoWidgetDmi::tpmDeviceTitle(int index) const
+{
+    const proto::system_info::Dmi::TpmDevice& tpm = dmi_->tpm_device(index);
+
+    if (!tpm.description().empty())
+        return QString::fromStdString(tpm.description());
+
+    if (!tpm.vendor_id().empty())
+        return QString::fromStdString(tpm.vendor_id());
+
+    return tr("Device %1").arg(index + 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<QTreeWidgetItem*> SysInfoWidgetDmi::tpmDeviceParameters(int index) const
+{
+    const proto::system_info::Dmi::TpmDevice& tpm = dmi_->tpm_device(index);
+    QList<QTreeWidgetItem*> items;
+
+    if (!tpm.description().empty())
+        items << mk(tr("Description"), QString::fromStdString(tpm.description()));
+
+    if (!tpm.vendor_id().empty())
+        items << mk(tr("Vendor ID"), QString::fromStdString(tpm.vendor_id()));
+
+    if (!tpm.spec_version().empty())
+        items << mk(tr("Specification Version"), QString::fromStdString(tpm.spec_version()));
+
+    if (!tpm.firmware_version().empty())
+        items << mk(tr("Firmware Version"), QString::fromStdString(tpm.firmware_version()));
+
+    QList<QTreeWidgetItem*> characteristics;
+
+    characteristics << mk(tr("Configurable by Firmware"),
+                          tpm.configurable_by_firmware() ? tr("Yes") : tr("No"));
+    characteristics << mk(tr("Configurable by Software"),
+                          tpm.configurable_by_software() ? tr("Yes") : tr("No"));
+    characteristics << mk(tr("Configurable by OEM"),
+                          tpm.configurable_by_oem() ? tr("Yes") : tr("No"));
+
+    items << new Item(tr("Characteristics"), characteristics);
 
     return items;
 }

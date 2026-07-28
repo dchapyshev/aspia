@@ -321,8 +321,8 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
                 if (module.data_width())
                     group << mk(tr("Data Width"), tr("%1 bit").arg(module.data_width()));
 
-                if (module.voltage())
-                    group << mk(tr("Voltage"), tr("%1 mV").arg(module.voltage()));
+                if (module.configured_voltage())
+                    group << mk(tr("Voltage"), tr("%1 mV").arg(module.configured_voltage()));
 
                 if (!module.firmware_version().empty())
                     group << mk(tr("Firmware Version"), module.firmware_version());

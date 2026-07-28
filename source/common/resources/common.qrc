@@ -181,6 +181,7 @@
         <file>computer-update.svg</file>
         <file>computer-approve.svg</file>
         <file>computer-case.svg</file>
+        <file>ps-2-male.svg</file>
     </qresource>
     <qresource prefix="/fonts">
         <file alias="JetBrainsMono-Regular.ttf">fonts/JetBrainsMono-Regular.ttf</file>

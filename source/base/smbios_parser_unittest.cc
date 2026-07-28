@@ -1464,10 +1464,11 @@ TEST(SmbiosParserTest, MemoryDeviceModernFields)
     EXPECT_EQ(device.volatileSize(), 16ULL * 1024ULL * 1024ULL * 1024ULL);
     EXPECT_EQ(device.cacheSize(), 0ULL); // All ones mean the size is unknown.
     EXPECT_EQ(device.logicalSize(), 0ULL);
-    EXPECT_TRUE(device.isRegistered());
-    EXPECT_FALSE(device.isUnbuffered());
-    EXPECT_FALSE(device.isLrDimm());
-    EXPECT_FALSE(device.isNonVolatile());
+
+    // Bit 13 of the type detail stands for a registered module.
+    const QStringList detail = device.typeDetail();
+    ASSERT_EQ(detail.size(), 1);
+    EXPECT_EQ(detail[0], QString("Registered (Buffered)"));
 }
 
 //--------------------------------------------------------------------------------------------------

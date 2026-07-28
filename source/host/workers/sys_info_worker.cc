@@ -612,23 +612,6 @@ void fillProcessor(proto::system_info::SystemInfo* system_info)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString memoryTypeDetail(const SmbiosMemoryDevice& memory_device)
-{
-    QStringList detail;
-
-    if (memory_device.isRegistered())
-        detail << "Registered";
-    if (memory_device.isUnbuffered())
-        detail << "Unbuffered";
-    if (memory_device.isLrDimm())
-        detail << "LRDIMM";
-    if (memory_device.isNonVolatile())
-        detail << "Non-volatile";
-
-    return detail.join(", ");
-}
-
-//--------------------------------------------------------------------------------------------------
 QString cacheSupportedSram(const SmbiosCache& cache)
 {
     QStringList types;
@@ -645,6 +628,21 @@ QString cacheSupportedSram(const SmbiosCache& cache)
         types << "Asynchronous";
 
     return types.join(", ");
+}
+
+//--------------------------------------------------------------------------------------------------
+// The address of a device on the PCI bus, in the notation the operating systems use. The system
+// slot and the on-board device report it the same way.
+template <class T>
+QString busAddress(const T& table)
+{
+    if (!table.hasBusAddress())
+        return QString();
+
+    return QString("%1:%2:%3.%4").arg(table.segmentGroupNumber(), 4, 16, QChar('0'))
+                                 .arg(table.busNumber(), 2, 16, QChar('0'))
+                                 .arg(table.deviceNumber(), 2, 16, QChar('0'))
+                                 .arg(table.functionNumber());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -795,6 +793,83 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
             }
             break;
 
+            case SMBIOS_TABLE_TYPE_PORT_CONNECTOR:
+            {
+                SmbiosPortConnector port_table(table);
+                if (!port_table.isValid())
+                    continue;
+
+                proto::system_info::Dmi::PortConnector* port = dmi->add_port_connector();
+
+                port->set_internal_designator(port_table.internalDesignator().toStdString());
+                port->set_internal_connector_type(
+                    port_table.internalConnectorType().toStdString());
+                port->set_external_designator(port_table.externalDesignator().toStdString());
+                port->set_external_connector_type(
+                    port_table.externalConnectorType().toStdString());
+                port->set_type(port_table.type().toStdString());
+            }
+            break;
+
+            case SMBIOS_TABLE_TYPE_SYSTEM_SLOT:
+            {
+                SmbiosSystemSlot slot_table(table);
+                if (!slot_table.isValid())
+                    continue;
+
+                proto::system_info::Dmi::SystemSlot* slot = dmi->add_system_slot();
+
+                slot->set_designation(slot_table.designation().toStdString());
+                slot->set_type(slot_table.type().toStdString());
+                slot->set_data_bus_width(slot_table.dataBusWidth().toStdString());
+                slot->set_usage(slot_table.usage().toStdString());
+                slot->set_length(slot_table.length().toStdString());
+                slot->set_bus_address(busAddress(slot_table).toStdString());
+                slot->set_id(slot_table.id());
+                slot->set_provides_5_volts(slot_table.provides5Volts());
+                slot->set_provides_3_volts(slot_table.provides3Volts());
+                slot->set_shared(slot_table.isShared());
+                slot->set_supports_pme(slot_table.supportsPme());
+                slot->set_supports_hot_plug(slot_table.supportsHotPlug());
+                slot->set_supports_smbus(slot_table.supportsSmbus());
+                slot->set_supports_bifurcation(slot_table.supportsBifurcation());
+            }
+            break;
+
+            case SMBIOS_TABLE_TYPE_ONBOARD_DEVICE:
+            {
+                SmbiosOnBoardDevices devices_table(table);
+                if (!devices_table.isValid())
+                    continue;
+
+                // The legacy table keeps a list of devices, all of them without an address.
+                for (int i = 0; i < devices_table.count(); ++i)
+                {
+                    proto::system_info::Dmi::OnBoardDevice* device = dmi->add_on_board_device();
+
+                    device->set_description(devices_table.description(i).toStdString());
+                    device->set_type(devices_table.type(i).toStdString());
+                    device->set_enabled(devices_table.isEnabled(i));
+                }
+            }
+            break;
+
+            case SMBIOS_TABLE_TYPE_ONBOARD_DEVICE_EXT:
+            {
+                SmbiosOnBoardDeviceExt device_table(table);
+                if (!device_table.isValid())
+                    continue;
+
+                proto::system_info::Dmi::OnBoardDevice* device = dmi->add_on_board_device();
+
+                device->set_description(device_table.designation().toStdString());
+                device->set_type(device_table.type().toStdString());
+                device->set_bus_address(busAddress(device_table).toStdString());
+                device->set_instance(device_table.typeInstance());
+                device->set_enabled(device_table.isEnabled());
+            }
+            break;
+
             case SMBIOS_TABLE_TYPE_MEMORY_ARRAY:
             {
                 SmbiosMemoryArray memory_array_table(table);
@@ -838,7 +913,7 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
                 memory_device->set_size(memory_device_table.size());
                 memory_device->set_type(memory_device_table.type().toStdString());
                 memory_device->set_type_detail(
-                    memoryTypeDetail(memory_device_table).toStdString());
+                    memory_device_table.typeDetail().join(", ").toStdString());
                 memory_device->set_form_factor(memory_device_table.formFactor().toStdString());
                 memory_device->set_technology(memory_device_table.technology().toStdString());
                 memory_device->set_speed(memory_device_table.speed());
@@ -846,9 +921,31 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
                 memory_device->set_total_width(memory_device_table.totalWidth());
                 memory_device->set_data_width(memory_device_table.dataWidth());
                 memory_device->set_rank(memory_device_table.rank());
-                memory_device->set_voltage(memory_device_table.configuredVoltage());
+                memory_device->set_min_voltage(memory_device_table.minVoltage());
+                memory_device->set_max_voltage(memory_device_table.maxVoltage());
+                memory_device->set_configured_voltage(memory_device_table.configuredVoltage());
                 memory_device->set_non_volatile_size(memory_device_table.nonVolatileSize());
                 memory_device->set_volatile_size(memory_device_table.volatileSize());
+                memory_device->set_cache_size(memory_device_table.cacheSize());
+                memory_device->set_logical_size(memory_device_table.logicalSize());
+            }
+            break;
+
+            case SMBIOS_TABLE_TYPE_TPM_DEVICE:
+            {
+                SmbiosTpmDevice tpm_table(table);
+                if (!tpm_table.isValid())
+                    continue;
+
+                proto::system_info::Dmi::TpmDevice* tpm = dmi->add_tpm_device();
+
+                tpm->set_vendor_id(tpm_table.vendorId().toStdString());
+                tpm->set_spec_version(tpm_table.specVersion().toStdString());
+                tpm->set_firmware_version(tpm_table.firmwareVersion().toStdString());
+                tpm->set_description(tpm_table.description().toStdString());
+                tpm->set_configurable_by_firmware(tpm_table.isFamilyConfigurableByFirmware());
+                tpm->set_configurable_by_software(tpm_table.isFamilyConfigurableBySoftware());
+                tpm->set_configurable_by_oem(tpm_table.isFamilyConfigurableByOem());
             }
             break;
 

@@ -706,6 +706,42 @@ message Dmi
         bool socketed                = 14;
     }
 
+    message PortConnector
+    {
+        string internal_designator     = 1;
+        string internal_connector_type = 2;
+        string external_designator     = 3;
+        string external_connector_type = 4;
+        string type                    = 5;
+    }
+
+    message SystemSlot
+    {
+        string designation        = 1;
+        string type               = 2;
+        string data_bus_width     = 3;
+        string usage              = 4;
+        string length             = 5;
+        string bus_address        = 6;
+        uint32 id                 = 7;
+        bool provides_5_volts     = 8;
+        bool provides_3_volts     = 9;
+        bool shared               = 10;
+        bool supports_pme         = 11;
+        bool supports_hot_plug    = 12;
+        bool supports_smbus       = 13;
+        bool supports_bifurcation = 14;
+    }
+
+    message OnBoardDevice
+    {
+        string description = 1;
+        string type        = 2;
+        string bus_address = 3;
+        uint32 instance    = 4;
+        bool enabled       = 5;
+    }
+
     message MemoryArray
     {
         string location         = 1;
@@ -717,36 +753,55 @@ message Dmi
 
     message MemoryDevice
     {
-        bool present             = 1;
-        string location          = 2;
-        string bank              = 3;
-        string manufacturer      = 4;
-        string serial_number     = 5;
-        string asset_tag         = 6;
-        string part_number       = 7;
-        string firmware_version  = 8;
-        uint64 size              = 9;
-        string type              = 10;
-        string type_detail       = 11;
-        string form_factor       = 12;
-        string technology        = 13;
-        uint32 speed             = 14;
-        uint32 configured_speed  = 15;
-        uint32 total_width       = 16;
-        uint32 data_width        = 17;
-        uint32 rank              = 18;
-        uint32 voltage           = 19;
-        uint64 non_volatile_size = 20;
-        uint64 volatile_size     = 21;
+        bool present              = 1;
+        string location           = 2;
+        string bank               = 3;
+        string manufacturer       = 4;
+        string serial_number      = 5;
+        string asset_tag          = 6;
+        string part_number        = 7;
+        string firmware_version   = 8;
+        uint64 size               = 9;
+        string type               = 10;
+        string type_detail        = 11;
+        string form_factor        = 12;
+        string technology         = 13;
+        uint32 speed              = 14;
+        uint32 configured_speed   = 15;
+        uint32 total_width        = 16;
+        uint32 data_width         = 17;
+        uint32 rank               = 18;
+        uint32 min_voltage        = 19;
+        uint32 max_voltage        = 20;
+        uint32 configured_voltage = 21;
+        uint64 non_volatile_size  = 22;
+        uint64 volatile_size      = 23;
+        uint64 cache_size         = 24;
+        uint64 logical_size       = 25;
     }
 
-    repeated Bios bios                  = 1;
-    repeated Baseboard baseboard        = 2;
-    repeated Chassis chassis            = 3;
-    repeated Processor processor        = 4;
-    repeated Cache cache                = 5;
-    repeated MemoryArray memory_array   = 6;
-    repeated MemoryDevice memory_device = 7;
+    message TpmDevice
+    {
+        string vendor_id              = 1;
+        string spec_version           = 2;
+        string firmware_version       = 3;
+        string description            = 4;
+        bool configurable_by_firmware = 5;
+        bool configurable_by_software = 6;
+        bool configurable_by_oem      = 7;
+    }
+
+    repeated Bios bios                     = 1;
+    repeated Baseboard baseboard           = 2;
+    repeated Chassis chassis               = 3;
+    repeated Processor processor           = 4;
+    repeated Cache cache                   = 5;
+    repeated PortConnector port_connector  = 6;
+    repeated SystemSlot system_slot        = 7;
+    repeated OnBoardDevice on_board_device = 8;
+    repeated MemoryArray memory_array      = 9;
+    repeated MemoryDevice memory_device    = 10;
+    repeated TpmDevice tpm_device          = 11;
 }
 
 message SystemInfoRequest
