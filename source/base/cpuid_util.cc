@@ -37,6 +37,7 @@ namespace {
 constexpr quint32 kMaxBasicLeaf = 0x40;
 constexpr quint32 kMaxHypervisorLeaf = 0x40000010;
 constexpr quint32 kMaxExtendedLeaf = 0x80000040;
+constexpr quint32 kMaxCentaurLeaf = 0xC0000010;
 
 // Leaves with subleaves are asked until they say there is nothing more, and this is where the
 // asking stops in any case.
@@ -235,6 +236,12 @@ QList<CpuidUtil::Leaf> CpuidUtil::dump()
     const quint32 max_extended = CpuidUtil(static_cast<int>(0x80000000)).eax();
     if (max_extended > 0x80000000)
         addLeafs(&leafs, 0x80000000, std::min(max_extended, kMaxExtendedLeaf));
+
+    // Centaur processors answer in a range of their own. No other processor places its maximum
+    // leaf there, so a value out of the range means there is no range.
+    const quint32 max_centaur = CpuidUtil(static_cast<int>(0xC0000000)).eax();
+    if (max_centaur > 0xC0000000 && max_centaur < 0xC0001000)
+        addLeafs(&leafs, 0xC0000000, std::min(max_centaur, kMaxCentaurLeaf));
 
     return leafs;
 }
