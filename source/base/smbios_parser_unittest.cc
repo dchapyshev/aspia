@@ -1338,6 +1338,214 @@ TEST(SmbiosParserTest, TruncatedStringListIsInvalid)
 }
 
 //--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, ProbeFields)
+{
+    QByteArray formatted(0x16 - 4, '\0');
+    formatted[0x04 - 4] = 1; // description: string #1
+
+    // location: motherboard (bits 4:0), status OK (bits 7:5).
+    formatted[0x05 - 4] = static_cast<char>(0x07 | (0x03 << 5));
+
+    formatted[0x06 - 4] = static_cast<char>(0x20); // max_value: 12320
+    formatted[0x07 - 4] = static_cast<char>(0x30);
+    formatted[0x08 - 4] = static_cast<char>(0xE0); // min_value: 11744
+    formatted[0x09 - 4] = static_cast<char>(0x2D);
+    formatted[0x0A - 4] = static_cast<char>(0x0A); // resolution: ten tenths
+    formatted[0x0C - 4] = static_cast<char>(0x64); // tolerance: 100
+    formatted[0x0E - 4] = static_cast<char>(0x32); // accuracy: 50 hundredths of a percent
+    formatted[0x14 - 4] = static_cast<char>(0xE0); // nominal_value: 12000
+    formatted[0x15 - 4] = static_cast<char>(0x2E);
+
+    const QByteArray dump = makeDump(
+        makeTable(SMBIOS_TABLE_TYPE_VOLTAGE_PROBE, formatted, { "+12V Rail" }));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosProbe probe(enumerator.table());
+    ASSERT_TRUE(probe.isValid());
+    EXPECT_EQ(probe.description(), QString("+12V Rail"));
+    EXPECT_EQ(probe.location(), QString("Motherboard"));
+    EXPECT_EQ(probe.status(), QString("OK"));
+    EXPECT_EQ(probe.maxValue(), 12320);
+    EXPECT_EQ(probe.minValue(), 11744);
+    EXPECT_EQ(probe.nominalValue(), 12000);
+    EXPECT_EQ(probe.resolution(), 10);
+    EXPECT_EQ(probe.tolerance(), 100);
+    EXPECT_EQ(probe.accuracy(), 50);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, ProbeUnknownAndNegativeValues)
+{
+    QByteArray formatted(0x14 - 4, '\0');
+
+    // Every value of the table is unknown except the minimum one, which reports a negative rail.
+    formatted[0x06 - 4] = static_cast<char>(0x00);
+    formatted[0x07 - 4] = static_cast<char>(0x80);
+    formatted[0x08 - 4] = static_cast<char>(0x20); // min_value: -12000
+    formatted[0x09 - 4] = static_cast<char>(0xD1);
+    formatted[0x0A - 4] = static_cast<char>(0x00);
+    formatted[0x0B - 4] = static_cast<char>(0x80);
+    formatted[0x0C - 4] = static_cast<char>(0x00);
+    formatted[0x0D - 4] = static_cast<char>(0x80);
+    formatted[0x0E - 4] = static_cast<char>(0x00);
+    formatted[0x0F - 4] = static_cast<char>(0x80);
+
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_CURRENT_PROBE, formatted, {}) + endOfTable());
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosProbe probe(enumerator.table());
+    ASSERT_TRUE(probe.isValid());
+    EXPECT_EQ(probe.maxValue(), 0);
+    EXPECT_EQ(probe.minValue(), -12000);
+    EXPECT_EQ(probe.resolution(), 0);
+    EXPECT_EQ(probe.tolerance(), 0);
+    EXPECT_EQ(probe.accuracy(), 0);
+
+    // A table of 14h has no nominal value, and the string area sits where it would be.
+    EXPECT_EQ(probe.nominalValue(), 0);
+
+    // Zeroed location and status are outside the lists.
+    EXPECT_TRUE(probe.location().isEmpty());
+    EXPECT_TRUE(probe.status().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, TemperatureProbeLocations)
+{
+    auto locationOf = [](quint8 type, quint8 site)
+    {
+        QByteArray formatted(0x14 - 4, '\0');
+        formatted[0x05 - 4] = static_cast<char>(site);
+
+        const QByteArray dump = makeDump(makeTable(type, formatted, {}));
+
+        SmbiosTableEnumerator enumerator(dump);
+        if (enumerator.isAtEnd())
+            return QString();
+
+        return SmbiosProbe(enumerator.table()).location();
+    };
+
+    // The four locations behind 0Bh belong to the temperature probe alone.
+    EXPECT_EQ(locationOf(SMBIOS_TABLE_TYPE_TEMPERATURE_PROBE, 0x0C),
+              QString("Front Panel Board"));
+    EXPECT_EQ(locationOf(SMBIOS_TABLE_TYPE_TEMPERATURE_PROBE, 0x0F),
+              QString("Drive Back Plane"));
+    EXPECT_TRUE(locationOf(SMBIOS_TABLE_TYPE_TEMPERATURE_PROBE, 0x10).isEmpty());
+
+    EXPECT_EQ(locationOf(SMBIOS_TABLE_TYPE_VOLTAGE_PROBE, 0x0B), QString("Add-in Card"));
+    EXPECT_TRUE(locationOf(SMBIOS_TABLE_TYPE_VOLTAGE_PROBE, 0x0C).isEmpty());
+    EXPECT_TRUE(locationOf(SMBIOS_TABLE_TYPE_CURRENT_PROBE, 0x0C).isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, TruncatedProbeIsInvalid)
+{
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_VOLTAGE_PROBE, QByteArray(0x13 - 4, '\0'), {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    EXPECT_FALSE(SmbiosProbe(enumerator.table()).isValid());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, CoolingDeviceFields)
+{
+    QByteArray formatted(0x0F - 4, '\0');
+
+    // device_type: power supply fan (bits 4:0), status OK (bits 7:5).
+    formatted[0x06 - 4] = static_cast<char>(0x07 | (0x03 << 5));
+
+    formatted[0x07 - 4] = 1;                       // unit_group
+    formatted[0x0C - 4] = static_cast<char>(0xB8); // nominal_speed: 1720 rpm
+    formatted[0x0D - 4] = static_cast<char>(0x06);
+    formatted[0x0E - 4] = 1;                       // description: string #1
+
+    const QByteArray dump = makeDump(
+        makeTable(SMBIOS_TABLE_TYPE_COOLING_DEVICE, formatted, { "CPU Fan" }));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosCoolingDevice device(enumerator.table());
+    ASSERT_TRUE(device.isValid());
+    EXPECT_EQ(device.description(), QString("CPU Fan"));
+    EXPECT_EQ(device.type(), QString("Power Supply Fan"));
+    EXPECT_EQ(device.status(), QString("OK"));
+    EXPECT_EQ(device.unitGroup(), 1);
+    EXPECT_EQ(device.nominalSpeed(), 1720u);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, CoolingDeviceTypeRanges)
+{
+    auto typeOf = [](quint8 device_type)
+    {
+        QByteArray formatted(0x0F - 4, '\0');
+        formatted[0x06 - 4] = static_cast<char>(device_type);
+
+        const QByteArray dump =
+            makeDump(makeTable(SMBIOS_TABLE_TYPE_COOLING_DEVICE, formatted, {}));
+
+        SmbiosTableEnumerator enumerator(dump);
+        if (enumerator.isAtEnd())
+            return QString();
+
+        return SmbiosCoolingDevice(enumerator.table()).type();
+    };
+
+    EXPECT_EQ(typeOf(0x03), QString("Fan"));
+    EXPECT_EQ(typeOf(0x09), QString("Integrated Refrigeration"));
+
+    // The specification reserves the values between the two ranges.
+    EXPECT_TRUE(typeOf(0x0A).isEmpty());
+    EXPECT_TRUE(typeOf(0x0F).isEmpty());
+
+    EXPECT_EQ(typeOf(0x10), QString("Active Cooling"));
+    EXPECT_EQ(typeOf(0x11), QString("Passive Cooling"));
+    EXPECT_TRUE(typeOf(0x12).isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, CoolingDeviceShortTableOmitsLateFields)
+{
+    // An SMBIOS 2.2 table (length 0Ch) predates both the speed and the description.
+    QByteArray formatted(0x0C - 4, '\0');
+    formatted[0x06 - 4] = static_cast<char>(0x03); // device_type: fan
+
+    const QByteArray dump = makeDump(
+        makeTable(SMBIOS_TABLE_TYPE_COOLING_DEVICE, formatted, { "Ghost" }) + endOfTable());
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    SmbiosCoolingDevice device(enumerator.table());
+    ASSERT_TRUE(device.isValid());
+    EXPECT_EQ(device.type(), QString("Fan"));
+    EXPECT_EQ(device.nominalSpeed(), 0u);
+    EXPECT_TRUE(device.description().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, TruncatedCoolingDeviceIsInvalid)
+{
+    const QByteArray dump =
+        makeDump(makeTable(SMBIOS_TABLE_TYPE_COOLING_DEVICE, QByteArray(0x0B - 4, '\0'), {}));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    EXPECT_FALSE(SmbiosCoolingDevice(enumerator.table()).isValid());
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST(SmbiosParserTest, SystemBootStatus)
 {
     auto statusOf = [](quint8 status, int length)

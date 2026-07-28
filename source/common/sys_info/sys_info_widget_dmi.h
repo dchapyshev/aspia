@@ -89,6 +89,13 @@ private:
 
     QList<QTreeWidgetItem*> oemStringsParameters() const;
     QList<QTreeWidgetItem*> configurationOptionParameters() const;
+
+    QString probeTitle(int group, int index) const;
+    QList<QTreeWidgetItem*> probeParameters(int group, int index) const;
+
+    QString coolingDeviceTitle(int index) const;
+    QList<QTreeWidgetItem*> coolingDeviceParameters(int index) const;
+
     QList<QTreeWidgetItem*> systemBootParameters() const;
 
     QString memoryArrayTitle(int index) const;

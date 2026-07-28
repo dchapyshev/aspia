@@ -811,6 +811,28 @@ message Dmi
         uint32 interleave_depth    = 7;
     }
 
+    message Probe
+    {
+        string description  = 1;
+        string location     = 2;
+        string status       = 3;
+        int32 max_value     = 4;
+        int32 min_value     = 5;
+        int32 nominal_value = 6;
+        int32 tolerance     = 7;
+        int32 resolution    = 8;
+        int32 accuracy      = 9;
+    }
+
+    message CoolingDevice
+    {
+        string description   = 1;
+        string type          = 2;
+        string status        = 3;
+        uint32 unit_group    = 4;
+        uint32 nominal_speed = 5;
+    }
+
     message Misc
     {
         string smbios_version  = 1;
@@ -844,9 +866,13 @@ message Dmi
     repeated MemoryError memory_error                  = 13;
     repeated MemoryArrayAddress memory_array_address   = 14;
     repeated MemoryDeviceAddress memory_device_address = 15;
-    string boot_status                                 = 16;
-    repeated TpmDevice tpm_device                      = 17;
-    Misc misc                                          = 18;
+    repeated Probe voltage_probe                       = 16;
+    repeated CoolingDevice cooling_device              = 17;
+    repeated Probe temperature_probe                   = 18;
+    repeated Probe current_probe                       = 19;
+    string boot_status                                 = 20;
+    repeated TpmDevice tpm_device                      = 21;
+    Misc misc                                          = 22;
 }
 
 message SystemInfoRequest

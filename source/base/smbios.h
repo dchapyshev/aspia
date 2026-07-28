@@ -53,6 +53,10 @@ enum SmbiosTableType : quint8
     SMBIOS_TABLE_TYPE_MEMORY_DEVICE_ADDR   = 0x14,
     SMBIOS_TABLE_TYPE_POINTING_DEVICE      = 0x15,
     SMBIOS_TABLE_TYPE_PORTABLE_BATTERY     = 0x16,
+    SMBIOS_TABLE_TYPE_VOLTAGE_PROBE        = 0x1A,
+    SMBIOS_TABLE_TYPE_COOLING_DEVICE       = 0x1B,
+    SMBIOS_TABLE_TYPE_TEMPERATURE_PROBE    = 0x1C,
+    SMBIOS_TABLE_TYPE_CURRENT_PROBE        = 0x1D,
     SMBIOS_TABLE_TYPE_SYSTEM_BOOT          = 0x20,
     SMBIOS_TABLE_TYPE_POWER_SUPPLY         = 0x27,
     SMBIOS_TABLE_TYPE_ONBOARD_DEVICE_EXT   = 0x29,
@@ -399,6 +403,33 @@ struct SmbiosPortableBatteryTable : public SmbiosTable
     quint8 sbds_device_chemistry;  // 14h
     quint8 capacity_multiplier;    // 15h
     quint32 oem_specific;          // 16h-19h
+};
+
+// The layout of the voltage probe (Type 26), the temperature probe (Type 28) and the electrical
+// current probe (Type 29): the tables differ only in the unit of the values they report.
+struct SmbiosProbeTable : public SmbiosTable
+{
+    quint8 description;    // 04h
+    quint8 location;       // 05h, bits 4:0 the location, bits 7:5 the status
+    quint16 max_value;     // 06h-07h
+    quint16 min_value;     // 08h-09h
+    quint16 resolution;    // 0Ah-0Bh, in tenths of the unit of the values
+    quint16 tolerance;     // 0Ch-0Dh
+    quint16 accuracy;      // 0Eh-0Fh, in hundredths of a percent
+    quint32 oem_defined;   // 10h-13h
+    quint16 nominal_value; // 14h-15h
+};
+
+struct SmbiosCoolingDeviceTable : public SmbiosTable
+{
+    quint16 probe_handle;  // 04h-05h, the temperature probe of the device
+    quint8 device_type;    // 06h, bits 4:0 the type, bits 7:5 the status
+    quint8 unit_group;     // 07h
+    quint32 oem_defined;   // 08h-0Bh
+
+    // 2.7+
+    quint16 nominal_speed; // 0Ch-0Dh, in revolutions per minute
+    quint8 description;    // 0Eh
 };
 
 struct SmbiosSystemBootTable : public SmbiosTable

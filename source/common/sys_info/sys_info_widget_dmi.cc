@@ -37,6 +37,8 @@ const char kSystemSlotIcon[] = ":/img/ps-2-male.svg";
 const char kOnBoardDeviceIcon[] = ":/img/network-card.svg";
 const char kOemStringsIcon[] = ":/img/file-document.svg";
 const char kConfigurationOptionIcon[] = ":/img/gear.svg";
+const char kProbeIcon[] = ":/img/electrical.svg";
+const char kCoolingDeviceIcon[] = ":/img/heart-monitor.svg";
 const char kSystemBootIcon[] = ":/img/restart.svg";
 const char kMemoryArrayIcon[] = ":/img/memory-slot.svg";
 const char kMemoryDeviceIcon[] = ":/img/memory-slot.svg";
@@ -69,6 +71,10 @@ enum Group
     GROUP_MEMORY_ERRORS,
     GROUP_MEMORY_ARRAY_ADDRESSES,
     GROUP_MEMORY_DEVICE_ADDRESSES,
+    GROUP_VOLTAGE_PROBES,
+    GROUP_COOLING_DEVICES,
+    GROUP_TEMPERATURE_PROBES,
+    GROUP_CURRENT_PROBES,
     GROUP_SYSTEM_BOOT,
     GROUP_TPM_DEVICES,
     GROUP_MISC
@@ -105,6 +111,21 @@ public:
 private:
     Q_DISABLE_COPY_MOVE(Item)
 };
+
+//--------------------------------------------------------------------------------------------------
+// The three probe tables land in three fields of the same type, and the group tells which of them
+// the entry comes from.
+const proto::system_info::Dmi::Probe& probeAt(const proto::system_info::Dmi& dmi, int group,
+                                              int index)
+{
+    if (group == GROUP_VOLTAGE_PROBES)
+        return dmi.voltage_probe(index);
+
+    if (group == GROUP_TEMPERATURE_PROBES)
+        return dmi.temperature_probe(index);
+
+    return dmi.current_probe(index);
+}
 
 //--------------------------------------------------------------------------------------------------
 QTreeWidgetItem* mk(const QString& param, const QString& value)
@@ -307,6 +328,40 @@ void SysInfoWidgetDmi::setSystemInfo(const proto::system_info::SystemInfo& syste
         addGroup(GROUP_MEMORY_DEVICE_ADDRESSES, kMemoryDeviceAddressIcon,
                  tr("Memory Device Addresses"), memory_device_addresses);
     }
+
+    QStringList voltage_probes;
+    for (int i = 0; i < dmi_->voltage_probe_size(); ++i)
+        voltage_probes << probeTitle(GROUP_VOLTAGE_PROBES, i);
+
+    if (!voltage_probes.isEmpty())
+        addGroup(GROUP_VOLTAGE_PROBES, kProbeIcon, tr("Voltage Probes"), voltage_probes);
+
+    QStringList cooling_devices;
+    for (int i = 0; i < dmi_->cooling_device_size(); ++i)
+        cooling_devices << coolingDeviceTitle(i);
+
+    if (!cooling_devices.isEmpty())
+    {
+        addGroup(GROUP_COOLING_DEVICES, kCoolingDeviceIcon, tr("Cooling Devices"),
+                 cooling_devices);
+    }
+
+    QStringList temperature_probes;
+    for (int i = 0; i < dmi_->temperature_probe_size(); ++i)
+        temperature_probes << probeTitle(GROUP_TEMPERATURE_PROBES, i);
+
+    if (!temperature_probes.isEmpty())
+    {
+        addGroup(GROUP_TEMPERATURE_PROBES, kProbeIcon, tr("Temperature Probes"),
+                 temperature_probes);
+    }
+
+    QStringList current_probes;
+    for (int i = 0; i < dmi_->current_probe_size(); ++i)
+        current_probes << probeTitle(GROUP_CURRENT_PROBES, i);
+
+    if (!current_probes.isEmpty())
+        addGroup(GROUP_CURRENT_PROBES, kProbeIcon, tr("Current Probes"), current_probes);
 
     if (!dmi_->boot_status().empty())
         addGroup(GROUP_SYSTEM_BOOT, kSystemBootIcon, tr("System Boot"), { tr("System Boot") });
@@ -530,6 +585,58 @@ void SysInfoWidgetDmi::onCurrentTableChanged()
             {
                 items << new Item(kMemoryDeviceAddressIcon, memoryDeviceAddressTitle(i),
                                   memoryDeviceAddressParameters(i));
+            }
+        }
+        break;
+
+        case GROUP_VOLTAGE_PROBES:
+        {
+            const int first = index < 0 ? 0 : index;
+            const int last = index < 0 ? dmi_->voltage_probe_size() - 1 : index;
+
+            for (int i = first; i <= last && i < dmi_->voltage_probe_size(); ++i)
+            {
+                items << new Item(kProbeIcon, probeTitle(GROUP_VOLTAGE_PROBES, i),
+                                  probeParameters(GROUP_VOLTAGE_PROBES, i));
+            }
+        }
+        break;
+
+        case GROUP_COOLING_DEVICES:
+        {
+            const int first = index < 0 ? 0 : index;
+            const int last = index < 0 ? dmi_->cooling_device_size() - 1 : index;
+
+            for (int i = first; i <= last && i < dmi_->cooling_device_size(); ++i)
+            {
+                items << new Item(kCoolingDeviceIcon, coolingDeviceTitle(i),
+                                  coolingDeviceParameters(i));
+            }
+        }
+        break;
+
+        case GROUP_TEMPERATURE_PROBES:
+        {
+            const int first = index < 0 ? 0 : index;
+            const int last = index < 0 ? dmi_->temperature_probe_size() - 1 : index;
+
+            for (int i = first; i <= last && i < dmi_->temperature_probe_size(); ++i)
+            {
+                items << new Item(kProbeIcon, probeTitle(GROUP_TEMPERATURE_PROBES, i),
+                                  probeParameters(GROUP_TEMPERATURE_PROBES, i));
+            }
+        }
+        break;
+
+        case GROUP_CURRENT_PROBES:
+        {
+            const int first = index < 0 ? 0 : index;
+            const int last = index < 0 ? dmi_->current_probe_size() - 1 : index;
+
+            for (int i = first; i <= last && i < dmi_->current_probe_size(); ++i)
+            {
+                items << new Item(kProbeIcon, probeTitle(GROUP_CURRENT_PROBES, i),
+                                  probeParameters(GROUP_CURRENT_PROBES, i));
             }
         }
         break;
@@ -1120,6 +1227,125 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::configurationOptionParameters() const
         items << mk(tr("Option %1").arg(i + 1),
                     QString::fromStdString(dmi_->configuration_option(i)));
     }
+
+    return items;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SysInfoWidgetDmi::probeTitle(int group, int index) const
+{
+    const proto::system_info::Dmi::Probe& probe = probeAt(*dmi_, group, index);
+
+    if (!probe.description().empty())
+        return QString::fromStdString(probe.description());
+
+    if (!probe.location().empty())
+        return QString::fromStdString(probe.location());
+
+    return tr("Probe %1").arg(index + 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<QTreeWidgetItem*> SysInfoWidgetDmi::probeParameters(int group, int index) const
+{
+    const proto::system_info::Dmi::Probe& probe = probeAt(*dmi_, group, index);
+    const bool temperature = group == GROUP_TEMPERATURE_PROBES;
+
+    QString unit;
+    if (group == GROUP_VOLTAGE_PROBES)
+        unit = tr("mV");
+    else if (temperature)
+        unit = tr("C");
+    else
+        unit = tr("mA");
+
+    // A temperature probe reports tenths of a degree where the other two report whole millivolts
+    // or milliamps, and thousandths of a degree where they report tenths of their unit.
+    auto value = [&](qint32 raw)
+    {
+        if (temperature)
+            return QString("%1 %2").arg(raw / 10.0, 0, 'f', 1).arg(unit);
+
+        return QString("%1 %2").arg(raw).arg(unit);
+    };
+
+    auto resolution = [&](qint32 raw)
+    {
+        if (temperature)
+            return QString("%1 %2").arg(raw / 1000.0, 0, 'f', 3).arg(unit);
+
+        return QString("%1 %2").arg(raw / 10.0, 0, 'f', 1).arg(unit);
+    };
+
+    QList<QTreeWidgetItem*> items;
+
+    if (!probe.description().empty())
+        items << mk(tr("Description"), QString::fromStdString(probe.description()));
+
+    if (!probe.location().empty())
+        items << mk(tr("Location"), QString::fromStdString(probe.location()));
+
+    if (!probe.status().empty())
+        items << mk(tr("Status"), QString::fromStdString(probe.status()));
+
+    if (probe.nominal_value())
+        items << mk(tr("Nominal Value"), value(probe.nominal_value()));
+
+    if (probe.max_value())
+        items << mk(tr("Maximum Value"), value(probe.max_value()));
+
+    if (probe.min_value())
+        items << mk(tr("Minimum Value"), value(probe.min_value()));
+
+    if (probe.tolerance())
+        items << mk(tr("Tolerance"), value(probe.tolerance()));
+
+    if (probe.resolution())
+        items << mk(tr("Resolution"), resolution(probe.resolution()));
+
+    // The accuracy comes in hundredths of a percent.
+    if (probe.accuracy())
+        items << mk(tr("Accuracy"), QString("%1%").arg(probe.accuracy() / 100.0, 0, 'f', 2));
+
+    return items;
+}
+
+
+//--------------------------------------------------------------------------------------------------
+QString SysInfoWidgetDmi::coolingDeviceTitle(int index) const
+{
+    const proto::system_info::Dmi::CoolingDevice& device = dmi_->cooling_device(index);
+
+    if (!device.description().empty())
+        return QString::fromStdString(device.description());
+
+    if (!device.type().empty())
+        return QString::fromStdString(device.type());
+
+    return tr("Device %1").arg(index + 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<QTreeWidgetItem*> SysInfoWidgetDmi::coolingDeviceParameters(int index) const
+{
+    const proto::system_info::Dmi::CoolingDevice& device = dmi_->cooling_device(index);
+    QList<QTreeWidgetItem*> items;
+
+    if (!device.description().empty())
+        items << mk(tr("Description"), QString::fromStdString(device.description()));
+
+    if (!device.type().empty())
+        items << mk(tr("Type"), QString::fromStdString(device.type()));
+
+    if (!device.status().empty())
+        items << mk(tr("Status"), QString::fromStdString(device.status()));
+
+    // Zero means the device belongs to no cooling unit.
+    if (device.unit_group())
+        items << mk(tr("Cooling Unit Group"), QString::number(device.unit_group()));
+
+    if (device.nominal_speed())
+        items << mk(tr("Nominal Speed"), tr("%1 rpm").arg(device.nominal_speed()));
 
     return items;
 }

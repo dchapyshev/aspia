@@ -992,6 +992,61 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
             }
             break;
 
+            case SMBIOS_TABLE_TYPE_VOLTAGE_PROBE:
+            case SMBIOS_TABLE_TYPE_TEMPERATURE_PROBE:
+            case SMBIOS_TABLE_TYPE_CURRENT_PROBE:
+            {
+                SmbiosProbe probe_table(table);
+                if (!probe_table.isValid())
+                    continue;
+
+                proto::system_info::Dmi::Probe* probe = nullptr;
+
+                // The three tables share their layout, the unit of their values is what the field
+                // the message lands in tells.
+                switch (table->type)
+                {
+                    case SMBIOS_TABLE_TYPE_VOLTAGE_PROBE:
+                        probe = dmi->add_voltage_probe();
+                        break;
+
+                    case SMBIOS_TABLE_TYPE_TEMPERATURE_PROBE:
+                        probe = dmi->add_temperature_probe();
+                        break;
+
+                    default:
+                        probe = dmi->add_current_probe();
+                        break;
+                }
+
+                probe->set_description(probe_table.description().toStdString());
+                probe->set_location(probe_table.location().toStdString());
+                probe->set_status(probe_table.status().toStdString());
+                probe->set_max_value(probe_table.maxValue());
+                probe->set_min_value(probe_table.minValue());
+                probe->set_nominal_value(probe_table.nominalValue());
+                probe->set_tolerance(probe_table.tolerance());
+                probe->set_resolution(probe_table.resolution());
+                probe->set_accuracy(probe_table.accuracy());
+            }
+            break;
+
+            case SMBIOS_TABLE_TYPE_COOLING_DEVICE:
+            {
+                SmbiosCoolingDevice cooling_table(table);
+                if (!cooling_table.isValid())
+                    continue;
+
+                proto::system_info::Dmi::CoolingDevice* cooling = dmi->add_cooling_device();
+
+                cooling->set_description(cooling_table.description().toStdString());
+                cooling->set_type(cooling_table.type().toStdString());
+                cooling->set_status(cooling_table.status().toStdString());
+                cooling->set_unit_group(cooling_table.unitGroup());
+                cooling->set_nominal_speed(cooling_table.nominalSpeed());
+            }
+            break;
+
             case SMBIOS_TABLE_TYPE_SYSTEM_BOOT:
             {
                 SmbiosSystemBoot boot_table(table);

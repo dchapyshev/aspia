@@ -163,6 +163,75 @@ QString onBoardDeviceType(quint8 type)
     return QString();
 }
 
+//--------------------------------------------------------------------------------------------------
+// The probes share the same location list, of which only the temperature probe uses the last four
+// values: |last_site| tells where the list ends for the caller. The field also carries the status
+// of the probe in its upper bits.
+QString probeLocation(quint8 location, quint8 last_site)
+{
+    static const char* kLocation[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "Processor",
+        "Disk",
+        "Peripheral Bay",
+        "System Management Module",
+        "Motherboard",
+        "Memory Module",
+        "Processor Module",
+        "Power Unit",
+        "Add-in Card", // 0x0B, the last one a voltage or a current probe knows
+        "Front Panel Board",
+        "Back Panel Board",
+        "Power System Board",
+        "Drive Back Plane" // 0x0F
+    };
+
+    const quint8 site = location & 0x1F;
+
+    if (site >= 0x01 && site <= last_site)
+        return kLocation[site - 0x01];
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Both probe tables report their values as signed words, with 8000h standing for a value the
+// firmware does not know. A negative value is real: a probe of a negative supply rail reports one.
+// Zero is returned for an unknown value, which a probe reporting a real zero is indistinguishable
+// from.
+qint32 probeValue(quint16 value)
+{
+    if (value == 0x8000)
+        return 0;
+
+    return static_cast<qint16>(value);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The status of a probe and of a cooling device comes from the same list and sits in bits 7:5 of
+// the field the location or the type is in.
+QString probeStatus(quint8 location)
+{
+    static const char* kStatus[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "OK",
+        "Non-critical",
+        "Critical",
+        "Non-recoverable" // 0x06
+    };
+
+    const quint8 status = (location >> 5) & 0x07;
+
+    if (status >= 0x01 && status <= 0x06)
+        return kStatus[status - 0x01];
+
+    return QString();
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -3264,6 +3333,163 @@ int SmbiosPortableBattery::maxError() const
         return -1;
 
     return table_->max_error;
+}
+
+//--------------------------------------------------------------------------------------------------
+SmbiosProbe::SmbiosProbe(const SmbiosTable* table)
+    : table_(static_cast<const SmbiosProbeTable*>(table))
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosProbe::isValid() const
+{
+    // 14h is the minimum length of both probe tables in every SMBIOS version.
+    return table_->length >= 0x14;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosProbe::description() const
+{
+    return smbiosString(table_, table_->description);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosProbe::location() const
+{
+    // Only the temperature probe knows the four locations behind 0Bh.
+    const quint8 last_site =
+        table_->type == SMBIOS_TABLE_TYPE_TEMPERATURE_PROBE ? 0x0F : 0x0B;
+
+    return probeLocation(table_->location, last_site);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosProbe::status() const
+{
+    return probeStatus(table_->location);
+}
+
+//--------------------------------------------------------------------------------------------------
+qint32 SmbiosProbe::maxValue() const
+{
+    return probeValue(table_->max_value);
+}
+
+//--------------------------------------------------------------------------------------------------
+qint32 SmbiosProbe::minValue() const
+{
+    return probeValue(table_->min_value);
+}
+
+//--------------------------------------------------------------------------------------------------
+qint32 SmbiosProbe::nominalValue() const
+{
+    // The specification puts the field behind the OEM-defined one and calls it present only when
+    // the table is longer than 14h.
+    if (table_->length < 0x16)
+        return 0;
+
+    return probeValue(table_->nominal_value);
+}
+
+//--------------------------------------------------------------------------------------------------
+qint32 SmbiosProbe::tolerance() const
+{
+    return probeValue(table_->tolerance);
+}
+
+//--------------------------------------------------------------------------------------------------
+qint32 SmbiosProbe::resolution() const
+{
+    return probeValue(table_->resolution);
+}
+
+//--------------------------------------------------------------------------------------------------
+qint32 SmbiosProbe::accuracy() const
+{
+    return probeValue(table_->accuracy);
+}
+
+//--------------------------------------------------------------------------------------------------
+SmbiosCoolingDevice::SmbiosCoolingDevice(const SmbiosTable* table)
+    : table_(static_cast<const SmbiosCoolingDeviceTable*>(table))
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SmbiosCoolingDevice::isValid() const
+{
+    // 0Ch is the minimum length of the cooling device table since SMBIOS 2.2.
+    return table_->length >= 0x0C;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosCoolingDevice::description() const
+{
+    // The description appeared in SMBIOS 2.7.
+    if (table_->length < 0x0F)
+        return QString();
+
+    return smbiosString(table_, table_->description);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosCoolingDevice::type() const
+{
+    static const char* kType[] =
+    {
+        "Other", // 0x01
+        "Unknown",
+        "Fan",
+        "Centrifugal Blower",
+        "Chip Fan",
+        "Cabinet Fan",
+        "Power Supply Fan",
+        "Heat Pipe",
+        "Integrated Refrigeration" // 0x09
+    };
+
+    // The two values behind the range reserved by the specification.
+    static const char* kCoolingType[] =
+    {
+        "Active Cooling", // 0x10
+        "Passive Cooling" // 0x11
+    };
+
+    const quint8 device_type = table_->device_type & 0x1F;
+
+    if (device_type >= 0x01 && device_type <= 0x09)
+        return kType[device_type - 0x01];
+
+    if (device_type >= 0x10 && device_type <= 0x11)
+        return kCoolingType[device_type - 0x10];
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SmbiosCoolingDevice::status() const
+{
+    return probeStatus(table_->device_type);
+}
+
+//--------------------------------------------------------------------------------------------------
+quint8 SmbiosCoolingDevice::unitGroup() const
+{
+    return table_->unit_group;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint32 SmbiosCoolingDevice::nominalSpeed() const
+{
+    // The field appeared in SMBIOS 2.7, 8000h means the speed is unknown.
+    if (table_->length < 0x0E || table_->nominal_speed == 0x8000)
+        return 0;
+
+    return table_->nominal_speed;
 }
 
 //--------------------------------------------------------------------------------------------------

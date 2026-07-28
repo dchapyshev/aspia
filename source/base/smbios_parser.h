@@ -454,6 +454,58 @@ private:
     Q_DISABLE_COPY_MOVE(SmbiosPortableBattery)
 };
 
+// Reads the voltage probe (Type 26), the temperature probe (Type 28) and the electrical current
+// probe (Type 29): the three tables share their layout, only the unit of the values differs.
+class SmbiosProbe
+{
+public:
+    explicit SmbiosProbe(const SmbiosTable* table);
+
+    bool isValid() const;
+    QString description() const;
+    QString location() const;
+    QString status() const;
+
+    // Millivolts for a voltage probe, milliamps for a current probe and tenths of a degree Celsius
+    // for a temperature probe. Zero when the firmware does not report the value.
+    qint32 maxValue() const;
+    qint32 minValue() const;
+    qint32 nominalValue() const;
+    qint32 tolerance() const;
+
+    // Tenths of the unit of the values above, and thousandths of a degree Celsius for a
+    // temperature probe. Zero when unknown.
+    qint32 resolution() const;
+
+    // Hundredths of a percent. Zero when unknown.
+    qint32 accuracy() const;
+
+private:
+    const SmbiosProbeTable* table_;
+    Q_DISABLE_COPY_MOVE(SmbiosProbe)
+};
+
+class SmbiosCoolingDevice
+{
+public:
+    explicit SmbiosCoolingDevice(const SmbiosTable* table);
+
+    bool isValid() const;
+    QString description() const;
+    QString type() const;
+    QString status() const;
+
+    // The group of the cooling unit the device belongs to. Zero when it belongs to none.
+    quint8 unitGroup() const;
+
+    // Revolutions per minute. Zero when the firmware does not report the speed.
+    quint32 nominalSpeed() const;
+
+private:
+    const SmbiosCoolingDeviceTable* table_;
+    Q_DISABLE_COPY_MOVE(SmbiosCoolingDevice)
+};
+
 class SmbiosSystemBoot
 {
 public:
