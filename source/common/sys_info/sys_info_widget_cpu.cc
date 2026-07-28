@@ -32,6 +32,14 @@
 namespace {
 
 const char kCpuIcon[] = ":/img/microchip.svg";
+const char kCacheIcon[] = ":/img/processor.svg";
+const char kInstructionSetIcon[] = ":/img/integrated-circuit.svg";
+const char kSecurityIcon[] = ":/img/lock.svg";
+const char kPowerIcon[] = ":/img/electrical.svg";
+const char kVirtualizationIcon[] = ":/img/virtual-machine.svg";
+const char kFeatureIcon[] = ":/img/feature.svg";
+const char kSupportedIcon[] = ":/img/check.svg";
+const char kUnsupportedIcon[] = ":/img/cancel.svg";
 
 enum Register
 {
@@ -438,12 +446,17 @@ public:
         setIcon(0, icon);
         setText(0, text);
 
+        // A child that came with an icon of its own keeps it.
         for (const auto& child : childs)
         {
-            child->setIcon(0, icon);
+            if (child->icon(0).isNull())
+                child->setIcon(0, icon);
 
             for (int i = 0; i < child->childCount(); ++i)
-                child->child(i)->setIcon(0, icon);
+            {
+                if (child->child(i)->icon(0).isNull())
+                    child->child(i)->setIcon(0, icon);
+            }
         }
 
         addChildren(childs);
@@ -546,9 +559,8 @@ void SysInfoWidgetCpu::setSystemInfo(const proto::system_info::SystemInfo& syste
 
     const QList<QTreeWidgetItem*> caches = cacheParameters(cpu);
     if (!caches.isEmpty())
-        groups << new Item(kCpuIcon, tr("Caches"), caches);
+        groups << new Item(kCacheIcon, tr("Caches"), caches);
 
-    // A group is only shown when the leaves it is built from are there at all.
     const QString group_names[GROUP_COUNT] =
     {
         tr("Instruction Set"),
@@ -558,13 +570,23 @@ void SysInfoWidgetCpu::setSystemInfo(const proto::system_info::SystemInfo& syste
         tr("CPUID Features")
     };
 
+    const char* group_icons[GROUP_COUNT] =
+    {
+        kInstructionSetIcon,
+        kSecurityIcon,
+        kPowerIcon,
+        kVirtualizationIcon,
+        kFeatureIcon
+    };
+
+    // A group is only shown when the leaves it is built from are there at all.
     for (int group = 0; group < GROUP_COUNT; ++group)
     {
         const QList<QTreeWidgetItem*> features = featureParameters(cpu, group);
         if (features.isEmpty())
             continue;
 
-        groups << new Item(kCpuIcon, group_names[group], features);
+        groups << new Item(group_icons[group], group_names[group], features);
     }
 
     ui->tree->addTopLevelItems(groups);
@@ -795,10 +817,21 @@ QList<QTreeWidgetItem*> SysInfoWidgetCpu::featureParameters(
         return qstricmp(first->name, second->name) < 0;
     });
 
+    const QIcon supported_icon(kSupportedIcon);
+    const QIcon unsupported_icon(kUnsupportedIcon);
+
     QList<QTreeWidgetItem*> items;
 
     for (const FeatureBit* feature : std::as_const(features))
-        items << mk(QString::fromLatin1(feature->name), leafs.bit(*feature) ? tr("Yes") : tr("No"));
+    {
+        const bool supported = leafs.bit(*feature);
+
+        QTreeWidgetItem* item =
+            mk(QString::fromLatin1(feature->name), supported ? tr("Yes") : tr("No"));
+        item->setIcon(0, supported ? supported_icon : unsupported_icon);
+
+        items << item;
+    }
 
     return items;
 }

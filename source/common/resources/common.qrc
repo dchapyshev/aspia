@@ -143,6 +143,10 @@
         <file>flow-chart.svg</file>
         <file>check-all.svg</file>
         <file>uncheck-all.svg</file>
+        <file>check.svg</file>
+        <file>feature.svg</file>
+        <file>integrated-circuit.svg</file>
+        <file>virtual-machine.svg</file>
         <file>software.svg</file>
         <file>flash-on.svg</file>
         <file>move.svg</file>
