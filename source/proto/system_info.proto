@@ -41,14 +41,36 @@ message OperatingSystem
 
 message Processor
 {
-    message Cpuid
+    message Identity
     {
-        uint32 leaf    = 1;
-        uint32 subleaf = 2;
-        uint32 eax     = 3;
-        uint32 ebx     = 4;
-        uint32 ecx     = 5;
-        uint32 edx     = 6;
+        string name  = 1;
+        string value = 2;
+    }
+
+    message Feature
+    {
+        string name    = 1;
+        bool supported = 2;
+    }
+
+    message Cache
+    {
+        enum Type
+        {
+            TYPE_UNKNOWN     = 0;
+            TYPE_UNIFIED     = 1;
+            TYPE_DATA        = 2;
+            TYPE_INSTRUCTION = 3;
+        }
+
+        Type type              = 1;
+        uint32 level           = 2;
+        uint64 size            = 3;
+        uint32 ways            = 4;
+        uint32 line_size       = 5;
+        uint32 sets            = 6;
+        uint32 threads         = 7;
+        bool fully_associative = 8;
     }
 
     string vendor   = 1;
@@ -57,7 +79,14 @@ message Processor
     uint32 cores    = 4;
     uint32 threads  = 5;
 
-    repeated Cpuid cpuid = 6;
+    repeated Identity identity = 6;
+    repeated Cache cache       = 7;
+
+    repeated Feature instruction_set  = 8;
+    repeated Feature security         = 9;
+    repeated Feature power_management = 10;
+    repeated Feature virtualization   = 11;
+    repeated Feature other            = 12;
 }
 
 message LogicalDrives

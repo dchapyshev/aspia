@@ -51,8 +51,8 @@ private slots:
     void onContextMenu(const QPoint& point);
 
 private:
-    // Groups of the tree, each built from the leaves the processor answered.
-    QList<QTreeWidgetItem*> cpuidProperties(const proto::system_info::Processor& cpu) const;
+    // Groups of the tree, each built from what the host reported about the processor.
+    QList<QTreeWidgetItem*> identityParameters(const proto::system_info::Processor& cpu) const;
     QList<QTreeWidgetItem*> cacheParameters(const proto::system_info::Processor& cpu) const;
     QList<QTreeWidgetItem*> featureParameters(const proto::system_info::Processor& cpu, int group) const;
 
