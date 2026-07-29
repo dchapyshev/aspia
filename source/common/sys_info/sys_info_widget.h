@@ -21,6 +21,9 @@
 
 #include <QWidget>
 
+#include <string>
+#include <vector>
+
 namespace proto::system_info {
 class SystemInfo;
 class SystemInfoRequest;
@@ -38,7 +41,8 @@ public:
     ~SysInfoWidget() override = default;
 
     virtual std::string category() const = 0;
-    virtual proto::system_info::SystemInfoRequest request() const;
+
+    virtual std::vector<proto::system_info::SystemInfoRequest> requests() const;
     virtual void setSystemInfo(const proto::system_info::SystemInfo& system_info) = 0;
     virtual QTreeWidget* treeWidget() = 0;
     virtual void buildReport(SysInfoReport* report);

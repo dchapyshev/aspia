@@ -20,6 +20,8 @@
 
 #include <QMenu>
 
+#include <iterator>
+
 #include "common/system_info_constants.h"
 #include "common/desktop/formatter.h"
 #include "proto/system_info.h"
@@ -119,7 +121,24 @@ SysInfoWidgetSummary::~SysInfoWidgetSummary() = default;
 //--------------------------------------------------------------------------------------------------
 std::string SysInfoWidgetSummary::category() const
 {
-    return kSystemInfo_Summary;
+    return std::string();
+}
+
+//--------------------------------------------------------------------------------------------------
+std::vector<proto::system_info::SystemInfoRequest> SysInfoWidgetSummary::requests() const
+{
+    static const char* const kCategories[] =
+    {
+        kSystemInfo_Computer, kSystemInfo_OperatingSystem, kSystemInfo_LogicalDrives
+    };
+
+    std::vector<proto::system_info::SystemInfoRequest> result;
+    result.reserve(std::size(kCategories));
+
+    for (const char* category : kCategories)
+        result.emplace_back().set_category(category);
+
+    return result;
 }
 
 //--------------------------------------------------------------------------------------------------

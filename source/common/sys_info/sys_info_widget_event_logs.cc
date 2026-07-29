@@ -117,28 +117,28 @@ SysInfoWidgetEventLogs::SysInfoWidgetEventLogs(QWidget* parent)
     {
         pending_cursor_ = last_cursor_;
         pending_direction_ = proto::system_info::EventLogsData::DIRECTION_OLDER;
-        emit sig_systemInfoRequest(request());
+        emit sig_systemInfoRequest(requests().front());
     });
 
     connect(ui->button_prev, &QPushButton::clicked, this, [this]()
     {
         pending_cursor_ = first_cursor_;
         pending_direction_ = proto::system_info::EventLogsData::DIRECTION_NEWER;
-        emit sig_systemInfoRequest(request());
+        emit sig_systemInfoRequest(requests().front());
     });
 
     connect(ui->button_first, &QPushButton::clicked, this, [this]()
     {
         pending_cursor_ = QByteArray();
         pending_direction_ = proto::system_info::EventLogsData::DIRECTION_OLDER;
-        emit sig_systemInfoRequest(request());
+        emit sig_systemInfoRequest(requests().front());
     });
 
     connect(ui->button_last, &QPushButton::clicked, this, [this]()
     {
         pending_cursor_ = QByteArray();
         pending_direction_ = proto::system_info::EventLogsData::DIRECTION_NEWER;
-        emit sig_systemInfoRequest(request());
+        emit sig_systemInfoRequest(requests().front());
     });
 
     connect(ui->combobox_type, QOverload<int>::of(&QComboBox::activated), this, [this](int index)
@@ -166,12 +166,15 @@ std::string SysInfoWidgetEventLogs::category() const
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::system_info::SystemInfoRequest SysInfoWidgetEventLogs::request() const
+std::vector<proto::system_info::SystemInfoRequest> SysInfoWidgetEventLogs::requests() const
 {
     proto::system_info::EventLogs::Event::Type type =
         static_cast<proto::system_info::EventLogs::Event::Type>(
             ui->combobox_type->currentData().toInt());
-    return createRequest(type, pending_cursor_, pending_direction_);
+
+    std::vector<proto::system_info::SystemInfoRequest> result;
+    result.emplace_back(createRequest(type, pending_cursor_, pending_direction_));
+    return result;
 }
 
 //--------------------------------------------------------------------------------------------------

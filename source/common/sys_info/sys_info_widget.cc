@@ -55,11 +55,15 @@ SysInfoWidget::SysInfoWidget(QWidget* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::system_info::SystemInfoRequest SysInfoWidget::request() const
+std::vector<proto::system_info::SystemInfoRequest> SysInfoWidget::requests() const
 {
-    proto::system_info::SystemInfoRequest system_info_request;
-    system_info_request.set_category(category());
-    return system_info_request;
+    std::string page_category = category();
+    if (page_category.empty())
+        return {};
+
+    std::vector<proto::system_info::SystemInfoRequest> result;
+    result.emplace_back().set_category(std::move(page_category));
+    return result;
 }
 
 //--------------------------------------------------------------------------------------------------

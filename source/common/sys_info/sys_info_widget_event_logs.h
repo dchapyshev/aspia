@@ -40,7 +40,7 @@ public:
 
     // SysInfo implementation.
     std::string category() const final;
-    proto::system_info::SystemInfoRequest request() const final;
+    std::vector<proto::system_info::SystemInfoRequest> requests() const final;
     void setSystemInfo(const proto::system_info::SystemInfo& system_info) final;
     QTreeWidget* treeWidget() final;
 

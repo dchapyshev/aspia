@@ -18,10 +18,12 @@
 
 #include "common/system_info_constants.h"
 
-const char kSystemInfo_Summary[] = "D9FE7CED-175C-4069-AB80-9B4F897EB376";
+const char kSystemInfo_Computer[] = "B8D4F27A-6E13-4C95-9F80-2A5E7B31C6D9";
+const char kSystemInfo_OperatingSystem[] = "D9FE7CED-175C-4069-AB80-9B4F897EB376";
 const char kSystemInfo_Devices[] = "1451B77D-276E-47BB-989B-D8B61A468F8B";
 const char kSystemInfo_Processor[] = "5C1A9F3E-6B84-4D27-A0E9-2F7C3D815B4A";
 const char kSystemInfo_Drives[] = "F46D7E01-D42D-45E8-9CF7-DDAD5630D568";
+const char kSystemInfo_LogicalDrives[] = "7A4E2C91-38DB-4F60-B5C3-1E9D0A67F284";
 const char kSystemInfo_VideoAdapters[] = "D2867BED-1408-467C-8ABE-6BD8B32DE17B";
 const char kSystemInfo_Monitors[] = "344E1796-EFF2-4F4D-B48B-3A10CEA834B8";
 const char kSystemInfo_Printers[] = "19193E9A-D2A6-44F8-83D2-A6B0F8651DAC";

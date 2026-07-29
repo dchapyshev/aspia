@@ -19,10 +19,12 @@
 #ifndef COMMON_SYSTEM_INFO_CONSTANTS_H
 #define COMMON_SYSTEM_INFO_CONSTANTS_H
 
-extern const char kSystemInfo_Summary[];
+extern const char kSystemInfo_Computer[];
+extern const char kSystemInfo_OperatingSystem[];
 extern const char kSystemInfo_Devices[];
 extern const char kSystemInfo_Processor[];
 extern const char kSystemInfo_Drives[];
+extern const char kSystemInfo_LogicalDrives[];
 extern const char kSystemInfo_VideoAdapters[];
 extern const char kSystemInfo_Monitors[];
 extern const char kSystemInfo_Printers[];

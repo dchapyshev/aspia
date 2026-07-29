@@ -294,10 +294,14 @@ void SysInfoView::onRefresh()
 
     for (int i = 0; i < sys_info_widgets_.count(); ++i)
     {
-        SysInfoWidget* widget = sys_info_widgets_[i];
+        const std::vector<proto::system_info::SystemInfoRequest> requests =
+            sys_info_widgets_[i]->requests();
 
-        if (requested.insert(widget->category()).second)
-            emit sig_systemInfoRequest(widget->request());
+        for (const proto::system_info::SystemInfoRequest& request : requests)
+        {
+            if (requested.insert(request.category()).second)
+                emit sig_systemInfoRequest(request);
+        }
     }
 }
 

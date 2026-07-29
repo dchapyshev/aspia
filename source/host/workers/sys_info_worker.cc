@@ -1231,7 +1231,7 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
 }
 
 //--------------------------------------------------------------------------------------------------
-void fillDrives(proto::system_info::SystemInfo* system_info)
+void fillLogicalDrives(proto::system_info::SystemInfo* system_info)
 {
     QList<QStorageInfo> volumes = QStorageInfo::mountedVolumes();
 
@@ -1545,32 +1545,26 @@ void fillProcessesInfo(proto::system_info::SystemInfo* system_info)
 }
 
 //--------------------------------------------------------------------------------------------------
-void fillSummaryInfo(proto::system_info::SystemInfo* system_info)
-{
-    fillComputer(system_info);
-    fillOperatingSystem(system_info);
-    fillDrives(system_info);
-}
-
-//--------------------------------------------------------------------------------------------------
 void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
                       proto::system_info::SystemInfo* system_info)
 {
-    if (request.category().empty())
-    {
-        fillSummaryInfo(system_info);
-        return;
-    }
-
     const std::string& category = request.category();
 
     LOG(INFO) << "Requested system info category:" << category;
 
     system_info->mutable_header()->set_category(category);
 
-    if (category == kSystemInfo_Summary)
+    if (category == kSystemInfo_Computer)
     {
-        fillSummaryInfo(system_info);
+        fillComputer(system_info);
+    }
+    else if (category == kSystemInfo_OperatingSystem)
+    {
+        fillOperatingSystem(system_info);
+    }
+    else if (category == kSystemInfo_LogicalDrives)
+    {
+        fillLogicalDrives(system_info);
     }
     else if (category == kSystemInfo_Devices)
     {
