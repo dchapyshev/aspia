@@ -265,15 +265,28 @@ message VideoAdapters
 {
     message Adapter
     {
-        string description     = 1;
-        string adapter_string  = 2;
-        string bios_string     = 3;
-        string chip_type       = 4;
-        string dac_type        = 5;
-        string driver_date     = 6;
-        string driver_version  = 7;
-        string driver_provider = 8;
-        uint64 memory_size     = 9;
+        string description        = 1;
+        string adapter_string     = 2;
+        string bios_string        = 3;
+        string chip_type          = 4;
+        string dac_type           = 5;
+        string driver_date        = 6;
+        string driver_version     = 7;
+        string driver_provider    = 8;
+        uint64 memory_size        = 9;
+        uint64 memory_used        = 10;
+        uint64 shared_memory_size = 11;
+        uint64 shared_memory_used = 12;
+        int32 bus_number          = 13;
+        int32 device_number       = 14;
+        int32 function_number     = 15;
+        uint32 driver_model       = 16;
+        uint32 temperature        = 17;
+        uint32 temperature_max    = 18;
+        uint32 fan_rpm            = 19;
+        uint32 fan_rpm_max        = 20;
+        uint32 power              = 21;
+        uint64 memory_frequency   = 22;
     }
 
     repeated Adapter adapter = 1;

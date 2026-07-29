@@ -19,6 +19,7 @@
 collect_sources(SOURCE_BASE_WIN
     desktop.cc
     desktop.h
+    d3dkmt_defines.h
     device.cc
     device.h
     file_version_info.cc

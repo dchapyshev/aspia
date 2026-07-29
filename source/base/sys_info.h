@@ -125,6 +125,19 @@ public:
         QString driver_version;
         QString driver_provider;
         quint64 memory_size = 0;
+        quint64 memory_used = 0;
+        quint64 shared_memory_size = 0;
+        quint64 shared_memory_used = 0;
+        qint32 bus_number = -1;
+        qint32 device_number = -1;
+        qint32 function_number = -1;
+        quint32 driver_model = 0;
+        quint32 temperature = 0;
+        quint32 temperature_max = 0;
+        quint32 fan_rpm = 0;
+        quint32 fan_rpm_max = 0;
+        quint32 power = 0;
+        quint64 memory_frequency = 0;
     };
 
     struct Device

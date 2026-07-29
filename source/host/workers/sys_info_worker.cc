@@ -510,6 +510,19 @@ void fillVideoAdapters(proto::system_info::SystemInfo* system_info)
         adapter->set_driver_version(item.driver_version.toStdString());
         adapter->set_driver_provider(item.driver_provider.toStdString());
         adapter->set_memory_size(item.memory_size);
+        adapter->set_memory_used(item.memory_used);
+        adapter->set_shared_memory_size(item.shared_memory_size);
+        adapter->set_shared_memory_used(item.shared_memory_used);
+        adapter->set_bus_number(item.bus_number);
+        adapter->set_device_number(item.device_number);
+        adapter->set_function_number(item.function_number);
+        adapter->set_driver_model(item.driver_model);
+        adapter->set_temperature(item.temperature);
+        adapter->set_temperature_max(item.temperature_max);
+        adapter->set_fan_rpm(item.fan_rpm);
+        adapter->set_fan_rpm_max(item.fan_rpm_max);
+        adapter->set_power(item.power);
+        adapter->set_memory_frequency(item.memory_frequency);
     }
 }
 

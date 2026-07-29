@@ -20,11 +20,15 @@
 
 #include <qt_windows.h>
 
+#include <QHash>
+
 #include <LM.h>
 #include <devguid.h>
 #include <winioctl.h>
 #include <batclass.h>
 #include <winspool.h>
+#include <pdh.h>
+#include <pdhmsg.h>
 
 #include <memory>
 
@@ -33,6 +37,7 @@
 #include "base/smbios_parser.h"
 #include "base/system_error.h"
 #include "base/crypto/generic_hash.h"
+#include "base/win/d3dkmt_defines.h"
 #include "base/win/device.h"
 #include "base/win/registry.h"
 #include "base/win/scoped_device_info.h"
@@ -48,6 +53,63 @@ const char kDriverVersionKey[] = "DriverVersion";
 const char kDriverDateKey[] = "DriverDate";
 const char kProviderNameKey[] = "ProviderName";
 const char kUninstallKeyPath[] = "Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall";
+
+// GUID_DISPLAY_DEVICE_ARRIVAL. Defined locally to keep the file free of a link time dependency on
+// the system GUID library. It is the interface the kernel thunk opens adapters by, the one of the
+// display device class is rejected.
+const GUID kDisplayAdapterInterfaceGuid =
+    { 0x1ca05180, 0xa699, 0x450a, { 0x9a, 0x0c, 0xde, 0x4f, 0xbe, 0x3d, 0xdd, 0x89 } };
+
+constexpr LONG kStatusSuccess = 0;
+
+// Counters holding how much memory of an adapter is in use. Every adapter is an instance of them.
+const wchar_t kDedicatedMemoryCounter[] = L"\\GPU Adapter Memory(*)\\Dedicated Usage";
+const wchar_t kSharedMemoryCounter[] = L"\\GPU Adapter Memory(*)\\Shared Usage";
+
+D3DKMTOpenAdapterFromDeviceNameFunc open_adapter_func = nullptr;
+D3DKMTCloseAdapterFunc close_adapter_func = nullptr;
+D3DKMTQueryAdapterInfoFunc query_adapter_info_func = nullptr;
+
+class PdhQueryObjectTraits
+{
+public:
+    // Closes the query.
+    static void close(PDH_HQUERY object)
+    {
+        if (isValid(object))
+            PdhCloseQuery(object);
+    }
+
+    static bool isValid(PDH_HQUERY object)
+    {
+        return object != nullptr;
+    }
+};
+
+using ScopedPdhQuery = ScopedObject<PDH_HQUERY, PdhQueryObjectTraits>;
+
+// How much memory of an adapter is in use.
+struct VideoAdapterMemoryUsage
+{
+    quint64 dedicated = 0;
+    quint64 shared = 0;
+};
+
+// Values a display driver reports for an adapter.
+struct VideoAdapterDetails
+{
+    quint64 memory_size = 0;
+    quint64 memory_used = 0;
+    quint64 shared_memory_size = 0;
+    quint64 shared_memory_used = 0;
+    quint32 driver_model = 0;
+    quint32 temperature = 0;
+    quint32 temperature_max = 0;
+    quint32 fan_rpm = 0;
+    quint32 fan_rpm_max = 0;
+    quint32 power = 0;
+    quint64 memory_frequency = 0;
+};
 
 //--------------------------------------------------------------------------------------------------
 SysInfo::Service::Status serviceStatus(DWORD state)
@@ -292,6 +354,22 @@ QString deviceProperty(HDEVINFO device_info, SP_DEVINFO_DATA* device_info_data, 
 }
 
 //--------------------------------------------------------------------------------------------------
+bool deviceDwordProperty(HDEVINFO device_info, SP_DEVINFO_DATA* device_info_data, DWORD property,
+                         DWORD* value)
+{
+    DWORD buffer = 0;
+
+    if (!SetupDiGetDeviceRegistryPropertyW(device_info, device_info_data, property, nullptr,
+        reinterpret_cast<PBYTE>(&buffer), sizeof(buffer), nullptr))
+    {
+        return false;
+    }
+
+    *value = buffer;
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
 QString deviceInstanceId(HDEVINFO device_info, SP_DEVINFO_DATA* device_info_data)
 {
     wchar_t device_id[MAX_PATH] = { 0 };
@@ -354,6 +432,279 @@ DWORD driverRegistryDW(HDEVINFO device_info, SP_DEVINFO_DATA* device_info_data,
         return 0;
 
     return value;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint64 driverRegistryQW(HDEVINFO device_info, SP_DEVINFO_DATA* device_info_data,
+                         const QString& value_name)
+{
+    QString key_path = driverKeyPath(device_info, device_info_data);
+    if (key_path.isEmpty())
+        return 0;
+
+    RegKey key(HKEY_LOCAL_MACHINE, key_path, KEY_READ);
+    if (!key.isValid())
+        return 0;
+
+    quint64 value = 0;
+    DWORD value_size = sizeof(value);
+    DWORD value_type = 0;
+
+    if (key.readValue(value_name, &value, &value_size, &value_type) != ERROR_SUCCESS)
+        return 0;
+
+    if (value_type != REG_QWORD || value_size != sizeof(value))
+        return 0;
+
+    return value;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Reads one counter of a collected query into |values|, keyed by the name of the instance the value
+// belongs to.
+void readCounterValues(PDH_HCOUNTER counter, QHash<QString, quint64>* values)
+{
+    DWORD buffer_size = 0;
+    DWORD item_count = 0;
+
+    if (PdhGetFormattedCounterArrayW(counter, PDH_FMT_LARGE, &buffer_size, &item_count, nullptr) !=
+        PDH_MORE_DATA)
+    {
+        return;
+    }
+
+    std::unique_ptr<quint8[]> buffer = std::make_unique<quint8[]>(buffer_size);
+    auto* items = reinterpret_cast<PDH_FMT_COUNTERVALUE_ITEM_W*>(buffer.get());
+
+    if (PdhGetFormattedCounterArrayW(counter, PDH_FMT_LARGE, &buffer_size, &item_count, items) !=
+        ERROR_SUCCESS)
+    {
+        return;
+    }
+
+    for (DWORD i = 0; i < item_count; ++i)
+    {
+        if (items[i].FmtValue.CStatus != ERROR_SUCCESS)
+            continue;
+
+        values->insert(QString::fromWCharArray(items[i].szName).toUpper(),
+                       static_cast<quint64>(items[i].FmtValue.largeValue));
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Reads how much memory every adapter has in use, keyed by the name of its counter instance. The
+// counters appeared in Windows 10 1709, before that the query fails and the map stays empty.
+QHash<QString, VideoAdapterMemoryUsage> videoAdapterMemoryUsage()
+{
+    QHash<QString, VideoAdapterMemoryUsage> result;
+
+    ScopedPdhQuery query;
+    if (PdhOpenQueryW(nullptr, 0, query.recieve()) != ERROR_SUCCESS)
+    {
+        LOG(ERROR) << "PdhOpenQueryW failed";
+        return result;
+    }
+
+    PDH_HCOUNTER dedicated_counter = nullptr;
+    PDH_HCOUNTER shared_counter = nullptr;
+
+    // The counters are added by their English names, the ones the system uses are localized.
+    if (PdhAddEnglishCounterW(query, kDedicatedMemoryCounter, 0, &dedicated_counter) !=
+            ERROR_SUCCESS ||
+        PdhAddEnglishCounterW(query, kSharedMemoryCounter, 0, &shared_counter) != ERROR_SUCCESS)
+    {
+        LOG(INFO) << "Adapter memory counters are not available";
+        return result;
+    }
+
+    if (PdhCollectQueryData(query) != ERROR_SUCCESS)
+    {
+        LOG(ERROR) << "PdhCollectQueryData failed";
+        return result;
+    }
+
+    QHash<QString, quint64> dedicated;
+    QHash<QString, quint64> shared;
+
+    readCounterValues(dedicated_counter, &dedicated);
+    readCounterValues(shared_counter, &shared);
+
+    for (auto it = dedicated.constBegin(); it != dedicated.constEnd(); ++it)
+        result[it.key()].dedicated = it.value();
+
+    for (auto it = shared.constBegin(); it != shared.constEnd(); ++it)
+        result[it.key()].shared = it.value();
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Name the counters give the instance of the adapter |luid| belongs to. Only the first physical
+// adapter is looked at, links of more than one are rare enough not to be worth the noise.
+QString counterInstanceName(const LUID& luid)
+{
+    const QString high = QString("%1").arg(static_cast<quint32>(luid.HighPart), 8, 16, QChar('0'));
+    const QString low = QString("%1").arg(luid.LowPart, 8, 16, QChar('0'));
+
+    return QString("luid_0x%1_0x%2_phys_0").arg(high, low).toUpper();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool queryAdapterInfo(D3DKMT_HANDLE adapter, KMTQUERYADAPTERINFOTYPE type, void* data, UINT size)
+{
+    D3DKMT_QUERYADAPTERINFO query;
+    memset(&query, 0, sizeof(query));
+    query.hAdapter = adapter;
+    query.Type = type;
+    query.pPrivateDriverData = data;
+    query.PrivateDriverDataSize = size;
+
+    return query_adapter_info_func(&query) == kStatusSuccess;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Reads the values display drivers report through the kernel thunk interface, keyed by device
+// instance id. Memory sizes come from all of them, the sensor readings only from WDDM 2.4 and
+// later, and integrated adapters usually report no sensors at all.
+QHash<QString, VideoAdapterDetails> videoAdapterDetails()
+{
+    static const bool functions_resolved = []()
+    {
+        // A process without a user interface may not have the library loaded yet.
+        HMODULE module = LoadLibraryW(L"gdi32.dll");
+        if (!module)
+        {
+            PLOG(ERROR) << "LoadLibraryW failed";
+            return false;
+        }
+
+        open_adapter_func = reinterpret_cast<D3DKMTOpenAdapterFromDeviceNameFunc>(
+            GetProcAddress(module, "D3DKMTOpenAdapterFromDeviceName"));
+        close_adapter_func = reinterpret_cast<D3DKMTCloseAdapterFunc>(
+            GetProcAddress(module, "D3DKMTCloseAdapter"));
+        query_adapter_info_func = reinterpret_cast<D3DKMTQueryAdapterInfoFunc>(
+            GetProcAddress(module, "D3DKMTQueryAdapterInfo"));
+
+        return open_adapter_func && close_adapter_func && query_adapter_info_func;
+    }();
+
+    QHash<QString, VideoAdapterDetails> result;
+
+    if (!functions_resolved)
+    {
+        LOG(INFO) << "Display kernel thunk interface is not available";
+        return result;
+    }
+
+    const QHash<QString, VideoAdapterMemoryUsage> memory_usage = videoAdapterMemoryUsage();
+
+    ScopedDeviceInfo device_info(SetupDiGetClassDevsW(&kDisplayAdapterInterfaceGuid, nullptr,
+        nullptr, DIGCF_PROFILE | DIGCF_PRESENT | DIGCF_DEVICEINTERFACE));
+    if (!device_info.isValid())
+    {
+        PLOG(ERROR) << "SetupDiGetClassDevsW failed";
+        return result;
+    }
+
+    HDEVINFO info = device_info.get();
+
+    SP_DEVICE_INTERFACE_DATA interface_data;
+    memset(&interface_data, 0, sizeof(interface_data));
+    interface_data.cbSize = sizeof(interface_data);
+
+    for (DWORD index = 0; SetupDiEnumDeviceInterfaces(
+             info, nullptr, &kDisplayAdapterInterfaceGuid, index, &interface_data); ++index)
+    {
+        DWORD required_size = 0;
+        if (SetupDiGetDeviceInterfaceDetailW(info, &interface_data, nullptr, 0, &required_size,
+                                             nullptr) ||
+            GetLastError() != ERROR_INSUFFICIENT_BUFFER)
+        {
+            continue;
+        }
+
+        std::unique_ptr<quint8[]> buffer = std::make_unique<quint8[]>(required_size);
+        auto* detail = reinterpret_cast<PSP_DEVICE_INTERFACE_DETAIL_DATA_W>(buffer.get());
+        detail->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA_W);
+
+        SP_DEVINFO_DATA device_data;
+        memset(&device_data, 0, sizeof(device_data));
+        device_data.cbSize = sizeof(device_data);
+
+        if (!SetupDiGetDeviceInterfaceDetailW(info, &interface_data, detail, required_size,
+                                              &required_size, &device_data))
+        {
+            continue;
+        }
+
+        D3DKMT_OPENADAPTERFROMDEVICENAME open_adapter;
+        memset(&open_adapter, 0, sizeof(open_adapter));
+        open_adapter.pDeviceName = detail->DevicePath;
+
+        if (open_adapter_func(&open_adapter) != kStatusSuccess)
+            continue;
+
+        VideoAdapterDetails details;
+
+        D3DKMT_SEGMENTSIZEINFO segment_size;
+        memset(&segment_size, 0, sizeof(segment_size));
+
+        if (queryAdapterInfo(open_adapter.hAdapter, KMTQAITYPE_GETSEGMENTSIZE, &segment_size,
+                             sizeof(segment_size)))
+        {
+            details.memory_size = segment_size.DedicatedVideoMemorySize;
+            details.shared_memory_size = segment_size.SharedSystemMemorySize;
+        }
+
+        D3DKMT_DRIVERVERSION driver_model = 0;
+        if (queryAdapterInfo(open_adapter.hAdapter, KMTQAITYPE_DRIVERVERSION, &driver_model,
+                             sizeof(driver_model)))
+        {
+            details.driver_model = driver_model;
+        }
+
+        // The index a physical adapter is selected by stays zero for the same reason the counter
+        // instance name does.
+        D3DKMT_ADAPTER_PERFDATA perf_data;
+        memset(&perf_data, 0, sizeof(perf_data));
+
+        if (queryAdapterInfo(open_adapter.hAdapter, KMTQAITYPE_ADAPTERPERFDATA, &perf_data,
+                             sizeof(perf_data)))
+        {
+            details.temperature = perf_data.Temperature;
+            details.fan_rpm = perf_data.FanRPM;
+            details.power = perf_data.Power;
+            details.memory_frequency = perf_data.MemoryFrequency;
+        }
+
+        D3DKMT_ADAPTER_PERFDATACAPS perf_data_caps;
+        memset(&perf_data_caps, 0, sizeof(perf_data_caps));
+
+        if (queryAdapterInfo(open_adapter.hAdapter, KMTQAITYPE_ADAPTERPERFDATACAPS, &perf_data_caps,
+                             sizeof(perf_data_caps)))
+        {
+            details.temperature_max = perf_data_caps.TemperatureMax;
+            details.fan_rpm_max = perf_data_caps.MaxFanRPM;
+        }
+
+        D3DKMT_CLOSEADAPTER close_adapter;
+        close_adapter.hAdapter = open_adapter.hAdapter;
+        close_adapter_func(&close_adapter);
+
+        const VideoAdapterMemoryUsage usage =
+            memory_usage.value(counterInstanceName(open_adapter.AdapterLuid));
+        details.memory_used = usage.dedicated;
+        details.shared_memory_used = usage.shared;
+
+        QString instance_id = deviceInstanceId(info, &device_data);
+        if (instance_id.isEmpty())
+            continue;
+
+        result.insert(instance_id.toUpper(), details);
+    }
+
+    return result;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1128,6 +1479,7 @@ QList<SysInfo::VideoAdapter> SysInfo::videoAdapters()
         return result;
     }
 
+    const QHash<QString, VideoAdapterDetails> adapter_details = videoAdapterDetails();
     HDEVINFO info = device_info.get();
 
     SP_DEVINFO_DATA data;
@@ -1145,7 +1497,47 @@ QList<SysInfo::VideoAdapter> SysInfo::videoAdapters()
         adapter.driver_date = driverRegistryString(info, &data, kDriverDateKey);
         adapter.driver_version = driverRegistryString(info, &data, kDriverVersionKey);
         adapter.driver_provider = driverRegistryString(info, &data, kProviderNameKey);
-        adapter.memory_size = driverRegistryDW(info, &data, "HardwareInformation.MemorySize");
+
+        auto details = adapter_details.constFind(deviceInstanceId(info, &data).toUpper());
+        if (details != adapter_details.constEnd())
+        {
+            adapter.memory_size = details->memory_size;
+            adapter.memory_used = details->memory_used;
+            adapter.shared_memory_size = details->shared_memory_size;
+            adapter.shared_memory_used = details->shared_memory_used;
+            adapter.driver_model = details->driver_model;
+            adapter.temperature = details->temperature;
+            adapter.temperature_max = details->temperature_max;
+            adapter.fan_rpm = details->fan_rpm;
+            adapter.fan_rpm_max = details->fan_rpm_max;
+            adapter.power = details->power;
+            adapter.memory_frequency = details->memory_frequency;
+        }
+
+        if (adapter.memory_size == 0)
+        {
+            // The driver writes the size to the registry as well, but the value the older name
+            // holds is truncated to 32 bits, so it is only read as a last resort.
+            adapter.memory_size = driverRegistryQW(info, &data, "HardwareInformation.qwMemorySize");
+            if (adapter.memory_size == 0)
+            {
+                adapter.memory_size =
+                    driverRegistryDW(info, &data, "HardwareInformation.MemorySize");
+            }
+        }
+
+        DWORD bus_number = 0;
+        if (deviceDwordProperty(info, &data, SPDRP_BUSNUMBER, &bus_number))
+            adapter.bus_number = static_cast<qint32>(bus_number);
+
+        // The address of a device on the PCI bus holds its number in the high word and the number
+        // of the function in the low one.
+        DWORD address = 0;
+        if (deviceDwordProperty(info, &data, SPDRP_ADDRESS, &address))
+        {
+            adapter.device_number = static_cast<qint32>(HIWORD(address));
+            adapter.function_number = static_cast<qint32>(LOWORD(address));
+        }
 
         result.append(std::move(adapter));
     }

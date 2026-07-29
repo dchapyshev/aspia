@@ -21,6 +21,7 @@
 #include <QMenu>
 
 #include "common/system_info_constants.h"
+#include "common/desktop/formatter.h"
 #include "proto/system_info.h"
 #include "ui_sys_info_widget_video_adapters.h"
 
@@ -64,6 +65,13 @@ QTreeWidgetItem* mk(const QString& param, const QString& value)
     item->setText(1, value);
 
     return item;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString temperatureToString(quint32 temperature)
+{
+    return SysInfoWidgetVideoAdapters::tr("%1 C")
+        .arg(QString::number(temperature / 10.0, 'f', 1));
 }
 
 } // namespace
@@ -142,8 +150,38 @@ void SysInfoWidgetVideoAdapters::setSystemInfo(const proto::system_info::SystemI
         if (!adapter.dac_type().empty())
             group << mk(tr("DAC Type"), QString::fromStdString(adapter.dac_type()));
 
+        if (adapter.bus_number() >= 0 && adapter.device_number() >= 0 &&
+            adapter.function_number() >= 0)
+        {
+            group << mk(tr("Location"), tr("Bus %1, device %2, function %3")
+                        .arg(adapter.bus_number())
+                        .arg(adapter.device_number())
+                        .arg(adapter.function_number()));
+        }
+
         if (adapter.memory_size() != 0)
-            group << mk(tr("Memory Size"), tr("%1 bytes").arg(adapter.memory_size()));
+            group << mk(tr("Memory Size"), Formatter::sizeToString(adapter.memory_size()));
+
+        if (adapter.memory_used() != 0)
+            group << mk(tr("Memory Used"), Formatter::sizeToString(adapter.memory_used()));
+
+        if (adapter.shared_memory_size() != 0)
+        {
+            group << mk(tr("Shared Memory Size"),
+                        Formatter::sizeToString(adapter.shared_memory_size()));
+        }
+
+        if (adapter.shared_memory_used() != 0)
+        {
+            group << mk(tr("Shared Memory Used"),
+                        Formatter::sizeToString(adapter.shared_memory_used()));
+        }
+
+        if (adapter.memory_frequency() != 0)
+        {
+            group << mk(tr("Memory Frequency"),
+                        tr("%1 MHz").arg(adapter.memory_frequency() / 1000000));
+        }
 
         if (!adapter.driver_date().empty())
             group << mk(tr("Driver Date"), QString::fromStdString(adapter.driver_date()));
@@ -153,6 +191,34 @@ void SysInfoWidgetVideoAdapters::setSystemInfo(const proto::system_info::SystemI
 
         if (!adapter.driver_provider().empty())
             group << mk(tr("Driver Provider"), QString::fromStdString(adapter.driver_provider()));
+
+        if (adapter.driver_model() != 0)
+        {
+            group << mk(tr("Driver Model"), tr("WDDM %1.%2")
+                        .arg(adapter.driver_model() / 1000)
+                        .arg((adapter.driver_model() % 1000) / 100));
+        }
+
+        if (adapter.temperature() != 0)
+            group << mk(tr("Temperature"), temperatureToString(adapter.temperature()));
+
+        if (adapter.temperature_max() != 0)
+        {
+            group << mk(tr("Maximum Temperature"),
+                        temperatureToString(adapter.temperature_max()));
+        }
+
+        if (adapter.fan_rpm() != 0)
+            group << mk(tr("Fan Speed"), tr("%1 RPM").arg(adapter.fan_rpm()));
+
+        if (adapter.fan_rpm_max() != 0)
+            group << mk(tr("Maximum Fan Speed"), tr("%1 RPM").arg(adapter.fan_rpm_max()));
+
+        if (adapter.power() != 0)
+        {
+            group << mk(tr("Power Usage"),
+                        tr("%1%").arg(QString::number(adapter.power() / 10.0, 'f', 1)));
+        }
 
         if (!group.isEmpty())
         {
