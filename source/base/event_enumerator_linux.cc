@@ -42,7 +42,7 @@ EventEnumerator::Type typeFromPriority(int priority)
 //--------------------------------------------------------------------------------------------------
 // Restricts the journal to the entries that approximate the requested Windows-style log. The
 // "Application" log keeps the whole journal. Matches on the same field are OR-ed by journald.
-void addLogMatches(sd_journal* journal, const QString& log_name)
+void addLogMatches(sd_journal* journal, std::string_view log_name)
 {
     if (log_name == "Security")
     {
@@ -60,31 +60,32 @@ void addLogMatches(sd_journal* journal, const QString& log_name)
 
 //--------------------------------------------------------------------------------------------------
 // Reads a journal field of the current entry without the "FIELD=" prefix.
-QString readField(sd_journal* journal, const char* field)
+// The journal stores its fields as UTF-8, which is what they travel as: nothing is converted.
+std::string readField(sd_journal* journal, const char* field)
 {
     const void* data = nullptr;
     size_t length = 0;
     if (LibSystemd::journalGetData(journal, field, &data, &length) < 0)
-        return QString();
+        return std::string();
 
     const char* chars = static_cast<const char*>(data);
     const char* separator = static_cast<const char*>(memchr(chars, '=', length));
     if (!separator)
-        return QString();
+        return std::string();
 
-    const qsizetype offset = (separator - chars) + 1;
-    return QString::fromUtf8(chars + offset, static_cast<qsizetype>(length) - offset);
+    const size_t offset = static_cast<size_t>(separator - chars) + 1;
+    return std::string(chars + offset, length - offset);
 }
 
 //--------------------------------------------------------------------------------------------------
 // Returns the opaque cursor of the current entry.
-QByteArray currentCursor(sd_journal* journal)
+std::string currentCursor(sd_journal* journal)
 {
     char* cursor = nullptr;
     if (LibSystemd::journalGetCursor(journal, &cursor) < 0 || !cursor)
-        return QByteArray();
+        return std::string();
 
-    QByteArray result(cursor);
+    std::string result(cursor);
     free(cursor);
     return result;
 }
@@ -92,7 +93,7 @@ QByteArray currentCursor(sd_journal* journal)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-EventEnumeratorLinux::EventEnumeratorLinux(const QString& log_name, const QByteArray& cursor,
+EventEnumeratorLinux::EventEnumeratorLinux(std::string_view log_name, std::string_view cursor,
                                            Direction direction, quint32 count)
 {
     if (!count)
@@ -113,9 +114,14 @@ EventEnumeratorLinux::EventEnumeratorLinux(const QString& log_name, const QByteA
     // page (from the tail), NEWER is the oldest page (from the head).
     const bool read_forward = (direction == Direction::NEWER);
 
+    // The journal takes the cursor as a null terminated string, which a view does not promise to be,
+    // so the one the caller gave is copied once here.
+    const std::string cursor_string(cursor);
+
     // Position at the first entry of the page.
     bool positioned = false;
-    if (cursor.isEmpty())
+
+    if (cursor.empty())
     {
         if (read_forward)
         {
@@ -133,10 +139,10 @@ EventEnumeratorLinux::EventEnumeratorLinux(const QString& log_name, const QByteA
     else if (read_forward)
     {
         // Skip to the first entry strictly newer than the cursor.
-        if (LibSystemd::journalSeekCursor(journal, cursor.constData()) >= 0 &&
+        if (LibSystemd::journalSeekCursor(journal, cursor_string.c_str()) >= 0 &&
             LibSystemd::journalNext(journal) > 0)
         {
-            if (LibSystemd::journalTestCursor(journal, cursor.constData()) > 0)
+            if (LibSystemd::journalTestCursor(journal, cursor_string.c_str()) > 0)
                 positioned = LibSystemd::journalNext(journal) > 0;
             else
                 positioned = true;
@@ -145,10 +151,10 @@ EventEnumeratorLinux::EventEnumeratorLinux(const QString& log_name, const QByteA
     else
     {
         // Skip to the first entry strictly older than the cursor.
-        if (LibSystemd::journalSeekCursor(journal, cursor.constData()) >= 0 &&
+        if (LibSystemd::journalSeekCursor(journal, cursor_string.c_str()) >= 0 &&
             LibSystemd::journalPrevious(journal) > 0)
         {
-            if (LibSystemd::journalTestCursor(journal, cursor.constData()) > 0)
+            if (LibSystemd::journalTestCursor(journal, cursor_string.c_str()) > 0)
                 positioned = LibSystemd::journalPrevious(journal) > 0;
             else
                 positioned = true;
@@ -157,28 +163,29 @@ EventEnumeratorLinux::EventEnumeratorLinux(const QString& log_name, const QByteA
 
     if (positioned)
     {
-        QByteArray first_read;
-        QByteArray last_read;
+        std::string first_read;
+        std::string last_read;
         bool more = true;
 
         for (quint32 i = 0; i < count; ++i)
         {
-            const QByteArray current = currentCursor(journal);
+            const std::string current = currentCursor(journal);
             if (i == 0)
                 first_read = current;
             last_read = current;
 
             Record record;
 
-            const QString priority = readField(journal, "PRIORITY");
-            record.type = priority.isEmpty() ? Type::INFO : typeFromPriority(priority.toInt());
+            const std::string priority = readField(journal, "PRIORITY");
+            record.type = priority.empty() ?
+                Type::INFO : typeFromPriority(std::atoi(priority.c_str()));
 
             uint64_t usec = 0;
             if (LibSystemd::journalGetRealtimeUsec(journal, &usec) >= 0)
                 record.time = static_cast<qint64>(usec / 1000000ULL);
 
             record.source = readField(journal, "SYSLOG_IDENTIFIER");
-            if (record.source.isEmpty())
+            if (record.source.empty())
                 record.source = readField(journal, "_COMM");
 
             record.description = readField(journal, "MESSAGE");
@@ -255,31 +262,31 @@ quint32 EventEnumeratorLinux::eventId() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString EventEnumeratorLinux::source() const
+std::string EventEnumeratorLinux::source() const
 {
     if (index_ < 0 || index_ >= records_.size())
-        return QString();
+        return std::string();
 
     return records_[index_].source;
 }
 
 //--------------------------------------------------------------------------------------------------
-QString EventEnumeratorLinux::description() const
+std::string EventEnumeratorLinux::description() const
 {
     if (index_ < 0 || index_ >= records_.size())
-        return QString();
+        return std::string();
 
     return records_[index_].description;
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray EventEnumeratorLinux::firstCursor() const
+std::string EventEnumeratorLinux::firstCursor() const
 {
     return first_cursor_;
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray EventEnumeratorLinux::lastCursor() const
+std::string EventEnumeratorLinux::lastCursor() const
 {
     return last_cursor_;
 }

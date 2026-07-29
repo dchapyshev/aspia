@@ -18,13 +18,13 @@
 
 #include "base/event_enumerator_win.h"
 
-#include <QStringList>
-
 #include <winmeta.h>
 
-#include <string>
+#include <charconv>
+#include <vector>
 
 #include "base/logging.h"
+#include "base/string_util.h"
 
 namespace {
 
@@ -44,20 +44,75 @@ EVT_VARIANT* systemValues(const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The API answers in UTF-16, the rest of the code works in UTF-8. A length of -1 leaves finding the
+// end of the string to the conversion, which walks it anyway; the count it answers with then counts
+// the terminator, which the result does not keep.
+std::string utf8FromWide(const wchar_t* string)
+{
+    if (!string || !*string)
+        return std::string();
+
+    const int size = WideCharToMultiByte(CP_UTF8, 0, string, -1, nullptr, 0, nullptr, nullptr);
+    if (size <= 0)
+    {
+        PLOG(ERROR) << "WideCharToMultiByte failed";
+        return std::string();
+    }
+
+    std::string result(static_cast<size_t>(size), '\0');
+
+    // The measured size is what the conversion has to write: anything else is a failure, and the
+    // buffer is then left holding whatever part of the string was converted.
+    if (WideCharToMultiByte(CP_UTF8, 0, string, -1, result.data(), size, nullptr, nullptr) != size)
+    {
+        PLOG(ERROR) << "WideCharToMultiByte failed";
+        return std::string();
+    }
+
+    result.resize(static_cast<size_t>(size) - 1);
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+std::wstring wideFromUtf8(std::string_view string)
+{
+    const int length = static_cast<int>(string.size());
+    if (!length)
+        return std::wstring();
+
+    const int size = MultiByteToWideChar(CP_UTF8, 0, string.data(), length, nullptr, 0);
+    if (size <= 0)
+    {
+        PLOG(ERROR) << "MultiByteToWideChar failed";
+        return std::wstring();
+    }
+
+    std::wstring result(static_cast<size_t>(size), L'\0');
+
+    if (MultiByteToWideChar(CP_UTF8, 0, string.data(), length, result.data(), size) != size)
+    {
+        PLOG(ERROR) << "MultiByteToWideChar failed";
+        return std::wstring();
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool hasValue(const EVT_VARIANT& value)
 {
     return (value.Type & EVT_VARIANT_TYPE_MASK) != EvtVarTypeNull;
 }
 
 //--------------------------------------------------------------------------------------------------
-QString formatEventMessage(EVT_HANDLE metadata, EVT_HANDLE event, EVT_FORMAT_MESSAGE_FLAGS flag)
+std::string formatEventMessage(EVT_HANDLE metadata, EVT_HANDLE event, EVT_FORMAT_MESSAGE_FLAGS flag)
 {
     DWORD buffer_used = 0;
 
     // First call to determine the required buffer size.
     EvtFormatMessage(metadata, event, 0, 0, nullptr, flag, 0, nullptr, &buffer_used);
     if (GetLastError() != ERROR_INSUFFICIENT_BUFFER || buffer_used == 0)
-        return QString();
+        return std::string();
 
     std::wstring buffer;
     buffer.resize(buffer_used);
@@ -71,18 +126,18 @@ QString formatEventMessage(EVT_HANDLE metadata, EVT_HANDLE event, EVT_FORMAT_MES
             error_code != ERROR_EVT_UNRESOLVED_PARAMETER_INSERT &&
             error_code != ERROR_EVT_MAX_INSERTS_REACHED)
         {
-            return QString();
+            return std::string();
         }
     }
 
-    return QString::fromWCharArray(buffer.c_str());
+    return utf8FromWide(buffer.c_str());
 }
 
 //--------------------------------------------------------------------------------------------------
 // Returns the total number of records in the log via an O(1) metadata query.
-quint32 logRecordCount(const QString& log_name)
+quint32 logRecordCount(const std::wstring& log_name)
 {
-    ScopedEvtHandle log(EvtOpenLog(nullptr, qUtf16Printable(log_name), EvtOpenChannelPath));
+    ScopedEvtHandle log(EvtOpenLog(nullptr, log_name.c_str(), EvtOpenChannelPath));
     if (!log.isValid())
     {
         PLOG(ERROR) << "EvtOpenLog failed";
@@ -104,18 +159,19 @@ quint32 logRecordCount(const QString& log_name)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-EventEnumeratorWin::EventEnumeratorWin(const QString& log_name, const QByteArray& cursor,
+EventEnumeratorWin::EventEnumeratorWin(std::string_view log_name, std::string_view cursor,
                                        Direction direction, quint32 count)
-    : log_name_(log_name),
+    : log_name_(wideFromUtf8(log_name)),
       count_(count)
 {
     if (!count)
         return;
 
     // The opaque cursor carries the record offset of the page boundary; compute this page's start.
-    if (!cursor.isEmpty())
+    if (!cursor.empty())
     {
-        const quint32 offset = cursor.toUInt();
+        quint32 offset = 0;
+        std::from_chars(cursor.data(), cursor.data() + cursor.size(), offset);
         if (direction == Direction::OLDER)
             start_ = offset + 1;
         else if (offset > count)
@@ -139,7 +195,7 @@ EventEnumeratorWin::EventEnumeratorWin(const QString& log_name, const QByteArray
     }
 
     // Reverse direction makes the newest records come first in the result set.
-    query_.reset(EvtQuery(nullptr, qUtf16Printable(log_name_), nullptr,
+    query_.reset(EvtQuery(nullptr, log_name_.c_str(), nullptr,
                           EvtQueryChannelPath | EvtQueryReverseDirection));
     if (!query_.isValid())
     {
@@ -182,21 +238,21 @@ void EventEnumeratorWin::advance()
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray EventEnumeratorWin::firstCursor() const
+std::string EventEnumeratorWin::firstCursor() const
 {
     if (read_count_ == 0)
-        return QByteArray();
+        return std::string();
 
-    return QByteArray::number(start_);
+    return std::to_string(start_);
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray EventEnumeratorWin::lastCursor() const
+std::string EventEnumeratorWin::lastCursor() const
 {
     if (read_count_ == 0)
-        return QByteArray();
+        return std::string();
 
-    return QByteArray::number(start_ + read_count_ - 1);
+    return std::to_string(start_ + read_count_ - 1);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -266,20 +322,20 @@ quint32 EventEnumeratorWin::eventId() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString EventEnumeratorWin::source() const
+std::string EventEnumeratorWin::source() const
 {
     EVT_VARIANT* values = systemValues(values_buffer_);
     if (!hasValue(values[EvtSystemProviderName]) || !values[EvtSystemProviderName].StringVal)
-        return QString();
+        return std::string();
 
-    return QString::fromWCharArray(values[EvtSystemProviderName].StringVal);
+    return utf8FromWide(values[EvtSystemProviderName].StringVal);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString EventEnumeratorWin::description() const
+std::string EventEnumeratorWin::description() const
 {
     if (!event_ready_)
-        return QString();
+        return std::string();
 
     EVT_VARIANT* values = systemValues(values_buffer_);
     const wchar_t* provider = hasValue(values[EvtSystemProviderName]) ?
@@ -287,8 +343,8 @@ QString EventEnumeratorWin::description() const
 
     ScopedEvtHandle metadata(EvtOpenPublisherMetadata(nullptr, provider, nullptr, 0, 0));
 
-    QString message = formatEventMessage(metadata.get(), event_.get(), EvtFormatMessageEvent);
-    if (!message.isEmpty())
+    std::string message = formatEventMessage(metadata.get(), event_.get(), EvtFormatMessageEvent);
+    if (!message.empty())
         return message;
 
     // No message template available, fall back to the raw event data strings.
@@ -351,18 +407,18 @@ bool EventEnumeratorWin::renderSystem() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString EventEnumeratorWin::eventDataString() const
+std::string EventEnumeratorWin::eventDataString() const
 {
     ScopedEvtHandle context(EvtCreateRenderContext(0, nullptr, EvtRenderContextUser));
     if (!context.isValid())
-        return QString();
+        return std::string();
 
     DWORD buffer_used = 0;
     DWORD property_count = 0;
 
     EvtRender(context.get(), event_.get(), EvtRenderEventValues, 0, nullptr, &buffer_used, &property_count);
     if (buffer_used == 0)
-        return QString();
+        return std::string();
 
     QByteArray buffer;
     resizeBuffer(&buffer, buffer_used);
@@ -371,17 +427,17 @@ QString EventEnumeratorWin::eventDataString() const
                    static_cast<DWORD>(buffer.size()), buffer.data(),
                    &buffer_used, &property_count))
     {
-        return QString();
+        return std::string();
     }
 
     EVT_VARIANT* values = systemValues(buffer);
 
-    QStringList strings;
+    std::vector<std::string> strings;
     for (DWORD i = 0; i < property_count; ++i)
     {
         if ((values[i].Type & EVT_VARIANT_TYPE_MASK) == EvtVarTypeString && values[i].StringVal)
-            strings.append(QString::fromWCharArray(values[i].StringVal));
+            strings.emplace_back(utf8FromWide(values[i].StringVal));
     }
 
-    return strings.join("; ");
+    return strJoin(strings, "; ");
 }

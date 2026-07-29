@@ -29,6 +29,13 @@
 namespace {
 
 //--------------------------------------------------------------------------------------------------
+std::string stringFromNSString(NSString* string)
+{
+    const char* utf8 = string.UTF8String;
+    return utf8 ? std::string(utf8) : std::string();
+}
+
+//--------------------------------------------------------------------------------------------------
 EventEnumerator::Type typeFromLevel(OSLogEntryLogLevel level)
 {
     // The unified log has no dedicated "warning" level; map the two failure levels to an error and
@@ -48,7 +55,7 @@ EventEnumerator::Type typeFromLevel(OSLogEntryLogLevel level)
 // Approximates the requested Windows-style log with a predicate over the unified log. The unified log
 // has no matching split, so only "Security" (authentication/authorization processes) is narrowed; the
 // other logs return the whole store.
-NSPredicate* predicateForLog(const QString& log_name)
+NSPredicate* predicateForLog(std::string_view log_name)
 {
     if (log_name == "Security")
     {
@@ -61,27 +68,27 @@ NSPredicate* predicateForLog(const QString& log_name)
 
 //--------------------------------------------------------------------------------------------------
 // The opaque cursor is the entry's Unix time (seconds, fractional) serialized as a raw double.
-QByteArray cursorFromTime(double time)
+std::string cursorFromTime(double time)
 {
-    QByteArray cursor;
+    std::string cursor;
     cursor.resize(sizeof(double));
     memcpy(cursor.data(), &time, sizeof(double));
     return cursor;
 }
 
 //--------------------------------------------------------------------------------------------------
-double timeFromCursor(const QByteArray& cursor)
+double timeFromCursor(std::string_view cursor)
 {
     double time = 0;
-    if (cursor.size() == static_cast<qsizetype>(sizeof(double)))
-        memcpy(&time, cursor.constData(), sizeof(double));
+    if (cursor.size() == sizeof(double))
+        memcpy(&time, cursor.data(), sizeof(double));
     return time;
 }
 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-EventEnumeratorMac::EventEnumeratorMac(const QString& log_name, const QByteArray& cursor,
+EventEnumeratorMac::EventEnumeratorMac(std::string_view log_name, std::string_view cursor,
                                        Direction direction, quint32 count)
 {
     if (!count)
@@ -105,7 +112,7 @@ EventEnumeratorMac::EventEnumeratorMac(const QString& log_name, const QByteArray
         // in reverse (newest-first). An empty cursor jumps to an end of the log: OLDER is the newest
         // page (from the tail), NEWER is the oldest page (from the head).
         const bool read_forward = (direction == Direction::NEWER);
-        const bool has_cursor = !cursor.isEmpty();
+        const bool has_cursor = !cursor.empty();
         const double cursor_time = timeFromCursor(cursor);
 
         OSLogPosition* position = nil;
@@ -141,8 +148,8 @@ EventEnumeratorMac::EventEnumeratorMac(const QString& log_name, const QByteArray
             return;
         }
 
-        QByteArray first_read;
-        QByteArray last_read;
+        std::string first_read;
+        std::string last_read;
         bool hit_boundary = true;
 
         for (OSLogEntry* entry in enumerator)
@@ -169,11 +176,11 @@ EventEnumeratorMac::EventEnumeratorMac(const QString& log_name, const QByteArray
             Record record;
             record.type = typeFromLevel(log_entry.level);
             record.time = static_cast<qint64>(entry_time);
-            record.source = QString::fromUtf8(log_entry.process.UTF8String);
-            record.description = QString::fromUtf8(log_entry.composedMessage.UTF8String);
+            record.source = stringFromNSString(log_entry.process);
+            record.description = stringFromNSString(log_entry.composedMessage);
             records_.append(std::move(record));
 
-            const QByteArray current = cursorFromTime(entry_time);
+            const std::string current = cursorFromTime(entry_time);
             if (records_.size() == 1)
                 first_read = current;
             last_read = current;
@@ -242,31 +249,31 @@ quint32 EventEnumeratorMac::eventId() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString EventEnumeratorMac::source() const
+std::string EventEnumeratorMac::source() const
 {
     if (index_ < 0 || index_ >= records_.size())
-        return QString();
+        return std::string();
 
     return records_[index_].source;
 }
 
 //--------------------------------------------------------------------------------------------------
-QString EventEnumeratorMac::description() const
+std::string EventEnumeratorMac::description() const
 {
     if (index_ < 0 || index_ >= records_.size())
-        return QString();
+        return std::string();
 
     return records_[index_].description;
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray EventEnumeratorMac::firstCursor() const
+std::string EventEnumeratorMac::firstCursor() const
 {
     return first_cursor_;
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray EventEnumeratorMac::lastCursor() const
+std::string EventEnumeratorMac::lastCursor() const
 {
     return last_cursor_;
 }

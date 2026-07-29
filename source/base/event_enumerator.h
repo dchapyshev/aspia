@@ -19,11 +19,11 @@
 #ifndef BASE_EVENT_ENUMERATOR_H
 #define BASE_EVENT_ENUMERATOR_H
 
-#include <QByteArray>
 #include <QObject>
-#include <QString>
 
 #include <memory>
+#include <string>
+#include <string_view>
 
 class EventEnumerator
 {
@@ -39,7 +39,7 @@ public:
     enum class Direction { OLDER, NEWER };
 
     static std::unique_ptr<EventEnumerator> create(
-        const QString& log_name, const QByteArray& cursor, Direction direction, quint32 count);
+        std::string_view log_name, std::string_view cursor, Direction direction, quint32 count);
 
     virtual bool isAtEnd() const = 0;
     virtual void advance() = 0;
@@ -47,12 +47,12 @@ public:
     virtual Type type() const = 0;
     virtual qint64 time() const = 0;
     virtual quint32 eventId() const = 0;
-    virtual QString source() const = 0;
-    virtual QString description() const = 0;
+    virtual std::string source() const = 0;
+    virtual std::string description() const = 0;
 
     // Cursors of the newest and oldest entry of the returned page; used by the client to page.
-    virtual QByteArray firstCursor() const = 0;
-    virtual QByteArray lastCursor() const = 0;
+    virtual std::string firstCursor() const = 0;
+    virtual std::string lastCursor() const = 0;
 
     // True when the page reaches the newest/oldest end of the log.
     virtual bool atNewest() const = 0;

@@ -26,7 +26,7 @@
 class EventEnumeratorLinux final : public EventEnumerator
 {
 public:
-    EventEnumeratorLinux(const QString& log_name, const QByteArray& cursor, Direction direction,
+    EventEnumeratorLinux(std::string_view log_name, std::string_view cursor, Direction direction,
                          quint32 count);
     ~EventEnumeratorLinux() final;
 
@@ -36,10 +36,10 @@ public:
     Type type() const final;
     qint64 time() const final;
     quint32 eventId() const final;
-    QString source() const final;
-    QString description() const final;
-    QByteArray firstCursor() const final;
-    QByteArray lastCursor() const final;
+    std::string source() const final;
+    std::string description() const final;
+    std::string firstCursor() const final;
+    std::string lastCursor() const final;
     bool atNewest() const final;
     bool atOldest() const final;
 
@@ -48,16 +48,16 @@ private:
     {
         Type type = Type::INFO;
         qint64 time = 0;
-        QString source;
-        QString description;
+        std::string source;
+        std::string description;
     };
 
     // The page is read into memory in the constructor (a NEWER page is read oldest-first and then
     // reversed), so the journal handle does not outlive the constructor.
     QList<Record> records_;
     qsizetype index_ = 0;
-    QByteArray first_cursor_;
-    QByteArray last_cursor_;
+    std::string first_cursor_;
+    std::string last_cursor_;
     bool at_newest_ = false;
     bool at_oldest_ = false;
 

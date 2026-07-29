@@ -28,7 +28,7 @@
 class EventEnumeratorWin final : public EventEnumerator
 {
 public:
-    EventEnumeratorWin(const QString& log_name, const QByteArray& cursor, Direction direction,
+    EventEnumeratorWin(std::string_view log_name, std::string_view cursor, Direction direction,
                        quint32 count);
     ~EventEnumeratorWin() final;
 
@@ -38,19 +38,19 @@ public:
     Type type() const final;
     qint64 time() const final;
     quint32 eventId() const final;
-    QString source() const final;
-    QString description() const final;
-    QByteArray firstCursor() const final;
-    QByteArray lastCursor() const final;
+    std::string source() const final;
+    std::string description() const final;
+    std::string firstCursor() const final;
+    std::string lastCursor() const final;
     bool atNewest() const final;
     bool atOldest() const final;
 
 private:
     bool fetchNext() const;
     bool renderSystem() const;
-    QString eventDataString() const;
+    std::string eventDataString() const;
 
-    QString log_name_;
+    std::wstring log_name_;
     ScopedEvtHandle query_;
     ScopedEvtHandle render_context_;
 

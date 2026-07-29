@@ -29,7 +29,7 @@
 //--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<EventEnumerator> EventEnumerator::create(
-    const QString& log_name, const QByteArray& cursor, Direction direction, quint32 count)
+    std::string_view log_name, std::string_view cursor, Direction direction, quint32 count)
 {
 #if defined(Q_OS_WINDOWS)
     return std::make_unique<EventEnumeratorWin>(log_name, cursor, direction, count);
