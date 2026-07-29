@@ -73,3 +73,51 @@ TEST(StringUtilTest, TrimmedKeepsMultiByteUtf8)
     const std::string_view name = "  \xD0\x9F\xD1\x80\xD0\xB8\xD0\xB2\xD0\xB5\xD1\x82  ";
     EXPECT_EQ(strTrimmed(name), std::string_view("\xD0\x9F\xD1\x80\xD0\xB8\xD0\xB2\xD0\xB5\xD1\x82"));
 }
+
+//--------------------------------------------------------------------------------------------------
+TEST(StringUtilTest, Hex)
+{
+    EXPECT_EQ(strHex(0, 4), std::string("0000"));
+    EXPECT_EQ(strHex(0x1F, 2), std::string("1F"));
+    EXPECT_EQ(strHex(0x1234, 4), std::string("1234"));
+    EXPECT_EQ(strHex(0xABCDEF, 8), std::string("00ABCDEF"));
+    EXPECT_EQ(strHex(0xFFFFFFFFFFFFFFFFull, 16), std::string("FFFFFFFFFFFFFFFF"));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(StringUtilTest, HexLowerCase)
+{
+    EXPECT_EQ(strHex(0, 2, HexCase::LOWER), std::string("00"));
+    EXPECT_EQ(strHex(0x1F, 2, HexCase::LOWER), std::string("1f"));
+    EXPECT_EQ(strHex(0xABCD, 4, HexCase::LOWER), std::string("abcd"));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(StringUtilTest, HexWidthIsAMinimum)
+{
+    // A value too large for the width keeps all of its digits.
+    EXPECT_EQ(strHex(0x12345, 4), std::string("12345"));
+    EXPECT_EQ(strHex(0xFF, 0), std::string("FF"));
+    EXPECT_EQ(strHex(0xFF, -1), std::string("FF"));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(StringUtilTest, Join)
+{
+    EXPECT_EQ(strJoin({}, ", "), std::string());
+
+    const std::vector<std::string> one = {"Burst"};
+    EXPECT_EQ(strJoin(one, ", "), std::string("Burst"));
+
+    const std::vector<std::string> many = {"Non-Burst", "Burst", "Pipeline Burst"};
+    EXPECT_EQ(strJoin(many, ", "), std::string("Non-Burst, Burst, Pipeline Burst"));
+    EXPECT_EQ(strJoin(many, ""), std::string("Non-BurstBurstPipeline Burst"));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(StringUtilTest, JoinKeepsEmptyParts)
+{
+    // An empty part is a part: it keeps the separators around it.
+    const std::vector<std::string> parts = {"", "b", "", "d"};
+    EXPECT_EQ(strJoin(parts, ","), std::string(",b,,d"));
+}

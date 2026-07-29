@@ -51,6 +51,30 @@ std::string strCat(std::initializer_list<std::string_view> parts)
 }
 
 //--------------------------------------------------------------------------------------------------
+std::string strJoin(std::span<const std::string> parts, std::string_view separator)
+{
+    size_t total = 0;
+    for (const std::string& part : parts)
+        total += part.size();
+
+    if (!parts.empty())
+        total += separator.size() * (parts.size() - 1);
+
+    std::string result;
+    result.reserve(total);
+
+    for (size_t i = 0; i < parts.size(); ++i)
+    {
+        if (i)
+            result.append(separator);
+
+        result.append(parts[i]);
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
 std::string_view strTrimmed(std::string_view str)
 {
     size_t begin = 0;
@@ -63,4 +87,29 @@ std::string_view strTrimmed(std::string_view str)
         --end;
 
     return str.substr(begin, end - begin);
+}
+
+//--------------------------------------------------------------------------------------------------
+std::string strHex(uint64_t value, int digits, HexCase hex_case)
+{
+    const char* alphabet = hex_case == HexCase::UPPER ? "0123456789ABCDEF" : "0123456789abcdef";
+    char buffer[16];
+    int length = 0;
+
+    do
+    {
+        buffer[length++] = alphabet[value & 0x0F];
+        value >>= 4;
+    }
+    while (value);
+
+    std::string result;
+
+    if (digits > length)
+        result.append(static_cast<size_t>(digits - length), '0');
+
+    while (length > 0)
+        result += buffer[--length];
+
+    return result;
 }

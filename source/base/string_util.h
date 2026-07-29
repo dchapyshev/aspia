@@ -19,6 +19,7 @@
 #ifndef BASE_STRING_UTIL_H
 #define BASE_STRING_UTIL_H
 
+#include <cstdint>
 #include <initializer_list>
 #include <span>
 #include <string>
@@ -32,9 +33,20 @@ std::string strCat(std::span<const std::string_view> parts);
 // Convenience overload for a braced list of parts: strCat({"a", b, "c"}).
 std::string strCat(std::initializer_list<std::string_view> parts);
 
+// Concatenates all |parts| into one string with |separator| between them, with a single
+// allocation. An empty part keeps its place, the same as any other.
+std::string strJoin(std::span<const std::string> parts, std::string_view separator);
+
 // Returns |str| with leading and trailing ASCII whitespace stripped. The result is a view into
 // |str| (no allocation) and stays valid only while |str|'s buffer lives. Bytes above 0x7F are
 // left untouched, so multi-byte UTF-8 sequences pass through unharmed.
 std::string_view strTrimmed(std::string_view str);
+
+// Case of the letters in a hexadecimal number.
+enum class HexCase { UPPER, LOWER };
+
+// Returns |value| in hexadecimal, padded with zeros to |digits|. A value too large for the width
+// is written in full: the width is the minimum the value is shown in, not a limit.
+std::string strHex(uint64_t value, int digits, HexCase hex_case = HexCase::UPPER);
 
 #endif // BASE_STRING_UTIL_H

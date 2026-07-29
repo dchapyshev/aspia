@@ -20,8 +20,9 @@
 #define BASE_SMBIOS_PARSER_H
 
 #include <QByteArray>
-#include <QString>
-#include <QStringList>
+
+#include <string>
+#include <vector>
 
 #include "base/smbios.h"
 
@@ -53,7 +54,7 @@ private:
     Q_DISABLE_COPY_MOVE(SmbiosTableEnumerator)
 };
 
-QString smbiosString(const SmbiosTable* table, quint8 number);
+std::string smbiosString(const SmbiosTable* table, quint8 number);
 
 class SmbiosBios
 {
@@ -61,14 +62,14 @@ public:
     explicit SmbiosBios(const SmbiosTable* table);
 
     bool isValid() const;
-    QString vendor() const;
-    QString version() const;
-    QString releaseDate() const;
+    std::string vendor() const;
+    std::string version() const;
+    std::string releaseDate() const;
     quint32 address() const;
     quint64 romSize() const;
-    QString revision() const;
-    QString firmwareRevision() const;
-    QStringList characteristics() const;
+    std::string revision() const;
+    std::string firmwareRevision() const;
+    std::vector<std::string> characteristics() const;
 
 private:
     const SmbiosBiosTable* table_;
@@ -94,13 +95,13 @@ public:
     explicit SmbiosBaseboard(const SmbiosTable* table);
 
     bool isValid() const;
-    QString manufacturer() const;
-    QString product() const;
-    QString version() const;
-    QString serialNumber() const;
-    QString assetTag() const;
-    QString location() const;
-    QString type() const;
+    std::string manufacturer() const;
+    std::string product() const;
+    std::string version() const;
+    std::string serialNumber() const;
+    std::string assetTag() const;
+    std::string location() const;
+    std::string type() const;
     bool isHostingBoard() const;
     bool requiresDaughterBoard() const;
     bool isRemovable() const;
@@ -120,17 +121,17 @@ public:
     explicit SmbiosChassis(const SmbiosTable* table);
 
     bool isValid() const;
-    QString manufacturer() const;
-    QString version() const;
-    QString serialNumber() const;
-    QString assetTag() const;
-    QString skuNumber() const;
-    QString type() const;
+    std::string manufacturer() const;
+    std::string version() const;
+    std::string serialNumber() const;
+    std::string assetTag() const;
+    std::string skuNumber() const;
+    std::string type() const;
     bool isLockPresent() const;
-    QString bootUpState() const;
-    QString powerSupplyState() const;
-    QString thermalState() const;
-    QString securityStatus() const;
+    std::string bootUpState() const;
+    std::string powerSupplyState() const;
+    std::string thermalState() const;
+    std::string securityStatus() const;
     quint32 height() const;
     quint32 powerCords() const;
 
@@ -146,17 +147,17 @@ public:
 
     bool isValid() const;
     bool isPopulated() const;
-    QString manufacturer() const;
-    QString version() const;
-    QString serialNumber() const;
-    QString assetTag() const;
-    QString partNumber() const;
-    QString socketDesignation() const;
-    QString type() const;
-    QString family() const;
-    QString status() const;
-    QString upgrade() const;
-    QString socketType() const;
+    std::string manufacturer() const;
+    std::string version() const;
+    std::string serialNumber() const;
+    std::string assetTag() const;
+    std::string partNumber() const;
+    std::string socketDesignation() const;
+    std::string type() const;
+    std::string family() const;
+    std::string status() const;
+    std::string upgrade() const;
+    std::string socketType() const;
     quint64 id() const;
     double voltage() const;
     quint32 externalClock() const;
@@ -191,13 +192,13 @@ public:
     bool isValid() const;
     bool isEnabled() const;
     bool isSocketed() const;
-    QString designation() const;
-    QString location() const;
-    QString mode() const;
-    QString type() const;
-    QString errorCorrectionType() const;
-    QString associativity() const;
-    QString currentSramType() const;
+    std::string designation() const;
+    std::string location() const;
+    std::string mode() const;
+    std::string type() const;
+    std::string errorCorrectionType() const;
+    std::string associativity() const;
+    std::string currentSramType() const;
     quint8 level() const;
     quint64 maxSize() const;
     quint64 currentSize() const;
@@ -219,11 +220,11 @@ public:
     explicit SmbiosPortConnector(const SmbiosTable* table);
 
     bool isValid() const;
-    QString internalDesignator() const;
-    QString internalConnectorType() const;
-    QString externalDesignator() const;
-    QString externalConnectorType() const;
-    QString type() const;
+    std::string internalDesignator() const;
+    std::string internalConnectorType() const;
+    std::string externalDesignator() const;
+    std::string externalConnectorType() const;
+    std::string type() const;
 
 private:
     const SmbiosPortConnectorTable* table_;
@@ -236,11 +237,11 @@ public:
     explicit SmbiosSystemSlot(const SmbiosTable* table);
 
     bool isValid() const;
-    QString designation() const;
-    QString type() const;
-    QString dataBusWidth() const;
-    QString usage() const;
-    QString length() const;
+    std::string designation() const;
+    std::string type() const;
+    std::string dataBusWidth() const;
+    std::string usage() const;
+    std::string length() const;
     quint16 id() const;
     bool hasBusAddress() const;
     quint16 segmentGroupNumber() const;
@@ -270,8 +271,8 @@ public:
 
     bool isValid() const;
     int count() const;
-    QString description(int index) const;
-    QString type(int index) const;
+    std::string description(int index) const;
+    std::string type(int index) const;
     bool isEnabled(int index) const;
 
 private:
@@ -290,7 +291,7 @@ public:
 
     bool isValid() const;
     int count() const;
-    QString string(int index) const;
+    std::string string(int index) const;
 
 private:
     const SmbiosStringListTable* table_;
@@ -303,9 +304,9 @@ public:
     explicit SmbiosMemoryArray(const SmbiosTable* table);
 
     bool isValid() const;
-    QString location() const;
-    QString use() const;
-    QString errorCorrection() const;
+    std::string location() const;
+    std::string use() const;
+    std::string errorCorrection() const;
     quint64 maxCapacity() const;
     quint16 deviceCount() const;
 
@@ -321,17 +322,17 @@ public:
 
     bool isValid() const;
     bool isPresent() const;
-    QString location() const;
-    QString bankLocator() const;
-    QString manufacturer() const;
-    QString serialNumber() const;
-    QString assetTag() const;
+    std::string location() const;
+    std::string bankLocator() const;
+    std::string manufacturer() const;
+    std::string serialNumber() const;
+    std::string assetTag() const;
     quint64 size() const;
-    QString type() const;
-    QString formFactor() const;
-    QString technology() const;
-    QString partNumber() const;
-    QString firmwareVersion() const;
+    std::string type() const;
+    std::string formFactor() const;
+    std::string technology() const;
+    std::string partNumber() const;
+    std::string firmwareVersion() const;
 
     // The speed and the configured speed of the device, in MT/s. Zero when unknown.
     quint32 speed() const;
@@ -347,7 +348,7 @@ public:
     quint64 volatileSize() const;
     quint64 cacheSize() const;
     quint64 logicalSize() const;
-    QStringList typeDetail() const;
+    std::vector<std::string> typeDetail() const;
     quint16 arrayHandle() const;
 
 private:
@@ -361,9 +362,9 @@ public:
     explicit SmbiosMemoryError(const SmbiosTable* table);
 
     bool isValid() const;
-    QString type() const;
-    QString granularity() const;
-    QString operation() const;
+    std::string type() const;
+    std::string granularity() const;
+    std::string operation() const;
     quint32 vendorSyndrome() const;
     quint64 arrayErrorAddress() const;
     quint64 deviceErrorAddress() const;
@@ -421,8 +422,8 @@ public:
     explicit SmbiosPointingDevice(const SmbiosTable* table);
 
     bool isValid() const;
-    QString type() const;
-    QString interfaceType() const;
+    std::string type() const;
+    std::string interfaceType() const;
     quint8 buttonCount() const;
 
 private:
@@ -436,13 +437,13 @@ public:
     explicit SmbiosPortableBattery(const SmbiosTable* table);
 
     bool isValid() const;
-    QString location() const;
-    QString manufacturer() const;
-    QString manufactureDate() const;
-    QString serialNumber() const;
-    QString deviceName() const;
-    QString chemistry() const;
-    QString sbdsVersion() const;
+    std::string location() const;
+    std::string manufacturer() const;
+    std::string manufactureDate() const;
+    std::string serialNumber() const;
+    std::string deviceName() const;
+    std::string chemistry() const;
+    std::string sbdsVersion() const;
     quint32 designCapacity() const;
     quint32 designVoltage() const;
 
@@ -462,9 +463,9 @@ public:
     explicit SmbiosProbe(const SmbiosTable* table);
 
     bool isValid() const;
-    QString description() const;
-    QString location() const;
-    QString status() const;
+    std::string description() const;
+    std::string location() const;
+    std::string status() const;
 
     // Millivolts for a voltage probe, milliamps for a current probe and tenths of a degree Celsius
     // for a temperature probe. Zero when the firmware does not report the value.
@@ -491,9 +492,9 @@ public:
     explicit SmbiosCoolingDevice(const SmbiosTable* table);
 
     bool isValid() const;
-    QString description() const;
-    QString type() const;
-    QString status() const;
+    std::string description() const;
+    std::string type() const;
+    std::string status() const;
 
     // The group of the cooling unit the device belongs to. Zero when it belongs to none.
     quint8 unitGroup() const;
@@ -512,7 +513,7 @@ public:
     explicit SmbiosSystemBoot(const SmbiosTable* table);
 
     bool isValid() const;
-    QString status() const;
+    std::string status() const;
 
 private:
     const SmbiosSystemBootTable* table_;
@@ -529,16 +530,16 @@ public:
     bool isUnplugged() const;
     bool isHotReplaceable() const;
     quint8 unitGroup() const;
-    QString location() const;
-    QString deviceName() const;
-    QString manufacturer() const;
-    QString serialNumber() const;
-    QString assetTag() const;
-    QString modelPartNumber() const;
-    QString revisionLevel() const;
-    QString type() const;
-    QString status() const;
-    QString inputVoltageRangeSwitching() const;
+    std::string location() const;
+    std::string deviceName() const;
+    std::string manufacturer() const;
+    std::string serialNumber() const;
+    std::string assetTag() const;
+    std::string modelPartNumber() const;
+    std::string revisionLevel() const;
+    std::string type() const;
+    std::string status() const;
+    std::string inputVoltageRangeSwitching() const;
 
     // The maximum sustained power output, in milliwatts. Zero when unknown.
     quint32 maxPowerCapacity() const;
@@ -557,8 +558,8 @@ public:
     int count() const;
     quint16 referencedHandle(int index) const;
     quint8 referencedOffset(int index) const;
-    QString string(int index) const;
-    QString value(int index) const;
+    std::string string(int index) const;
+    std::string value(int index) const;
 
 private:
     const quint8* entry(int index) const;
@@ -574,8 +575,8 @@ public:
 
     bool isValid() const;
     bool isEnabled() const;
-    QString designation() const;
-    QString type() const;
+    std::string designation() const;
+    std::string type() const;
     quint8 typeInstance() const;
     bool hasBusAddress() const;
     quint16 segmentGroupNumber() const;
@@ -594,10 +595,10 @@ public:
     explicit SmbiosTpmDevice(const SmbiosTable* table);
 
     bool isValid() const;
-    QString vendorId() const;
-    QString specVersion() const;
-    QString firmwareVersion() const;
-    QString description() const;
+    std::string vendorId() const;
+    std::string specVersion() const;
+    std::string firmwareVersion() const;
+    std::string description() const;
     bool isFamilyConfigurableByFirmware() const;
     bool isFamilyConfigurableBySoftware() const;
     bool isFamilyConfigurableByOem() const;
@@ -615,15 +616,15 @@ public:
     explicit SmbiosFirmwareInventory(const SmbiosTable* table);
 
     bool isValid() const;
-    QString name() const;
-    QString version() const;
-    QString versionFormat() const;
-    QString id() const;
-    QString idFormat() const;
-    QString releaseDate() const;
-    QString manufacturer() const;
-    QString lowestVersion() const;
-    QString state() const;
+    std::string name() const;
+    std::string version() const;
+    std::string versionFormat() const;
+    std::string id() const;
+    std::string idFormat() const;
+    std::string releaseDate() const;
+    std::string manufacturer() const;
+    std::string lowestVersion() const;
+    std::string state() const;
     bool isUpdatable() const;
     bool isWriteProtected() const;
 
@@ -646,7 +647,7 @@ public:
 
     bool isValid() const;
     quint16 processorHandle() const;
-    QString architecture() const;
+    std::string architecture() const;
 
 private:
     const SmbiosProcessorInfoExtTable* table_;

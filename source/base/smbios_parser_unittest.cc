@@ -23,7 +23,18 @@
 #include <QByteArray>
 #include <QList>
 
+#include <algorithm>
+#include <string>
+#include <string_view>
+#include <vector>
+
 namespace {
+
+//--------------------------------------------------------------------------------------------------
+bool contains(const std::vector<std::string>& strings, std::string_view value)
+{
+    return std::ranges::find(strings, value) != strings.end();
+}
 
 //--------------------------------------------------------------------------------------------------
 // Wraps raw structure-table data into the SmbiosDump layout: an 8-byte header followed by the
@@ -165,9 +176,9 @@ TEST(SmbiosParserTest, BiosStrings)
 
     SmbiosBios bios(enumerator.table());
     ASSERT_TRUE(bios.isValid());
-    EXPECT_EQ(bios.vendor(), QString("AMI"));
-    EXPECT_EQ(bios.version(), QString("1.2.3"));
-    EXPECT_EQ(bios.releaseDate(), QString("01/01/2020"));
+    EXPECT_EQ(bios.vendor(), std::string("AMI"));
+    EXPECT_EQ(bios.version(), std::string("1.2.3"));
+    EXPECT_EQ(bios.releaseDate(), std::string("01/01/2020"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -202,8 +213,8 @@ TEST(SmbiosParserTest, BiosAddressAndRomSize)
     EXPECT_EQ(bios.romSize(), 1024ull * 1024);
 
     // The releases appeared in SMBIOS 2.4 and a 2.0 table carries none of them.
-    EXPECT_TRUE(bios.revision().isEmpty());
-    EXPECT_TRUE(bios.firmwareRevision().isEmpty());
+    EXPECT_TRUE(bios.revision().empty());
+    EXPECT_TRUE(bios.firmwareRevision().empty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -266,8 +277,8 @@ TEST(SmbiosParserTest, BiosRevisions)
     ASSERT_FALSE(with_controller_enumerator.isAtEnd());
 
     SmbiosBios with_controller_bios(with_controller_enumerator.table());
-    EXPECT_EQ(with_controller_bios.revision(), QString("5.13"));
-    EXPECT_EQ(with_controller_bios.firmwareRevision(), QString("1.2"));
+    EXPECT_EQ(with_controller_bios.revision(), std::string("5.13"));
+    EXPECT_EQ(with_controller_bios.firmwareRevision(), std::string("1.2"));
 
     // FFh in the major byte means the system has no embedded controller.
     const QByteArray without_controller = makeBios(0x18, 0xFF);
@@ -275,8 +286,8 @@ TEST(SmbiosParserTest, BiosRevisions)
     ASSERT_FALSE(without_controller_enumerator.isAtEnd());
 
     SmbiosBios without_controller_bios(without_controller_enumerator.table());
-    EXPECT_EQ(without_controller_bios.revision(), QString("5.13"));
-    EXPECT_TRUE(without_controller_bios.firmwareRevision().isEmpty());
+    EXPECT_EQ(without_controller_bios.revision(), std::string("5.13"));
+    EXPECT_TRUE(without_controller_bios.firmwareRevision().empty());
 
     // A table that ends before the bytes of the controller.
     const QByteArray truncated = makeBios(0x16, 1);
@@ -284,8 +295,8 @@ TEST(SmbiosParserTest, BiosRevisions)
     ASSERT_FALSE(truncated_enumerator.isAtEnd());
 
     SmbiosBios truncated_bios(truncated_enumerator.table());
-    EXPECT_EQ(truncated_bios.revision(), QString("5.13"));
-    EXPECT_TRUE(truncated_bios.firmwareRevision().isEmpty());
+    EXPECT_EQ(truncated_bios.revision(), std::string("5.13"));
+    EXPECT_TRUE(truncated_bios.firmwareRevision().empty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -302,14 +313,14 @@ TEST(SmbiosParserTest, BiosCharacteristics)
     SmbiosTableEnumerator enumerator(dump);
     ASSERT_FALSE(enumerator.isAtEnd());
 
-    const QStringList characteristics = SmbiosBios(enumerator.table()).characteristics();
+    const std::vector<std::string> characteristics = SmbiosBios(enumerator.table()).characteristics();
 
-    ASSERT_EQ(characteristics.size(), 5);
-    EXPECT_TRUE(characteristics.contains("PCI is supported"));
-    EXPECT_TRUE(characteristics.contains("BIOS is upgradeable"));
-    EXPECT_TRUE(characteristics.contains("Boot from CD is supported"));
-    EXPECT_TRUE(characteristics.contains("ACPI is supported"));
-    EXPECT_TRUE(characteristics.contains("UEFI specification is supported"));
+    ASSERT_EQ(characteristics.size(), 5u);
+    EXPECT_TRUE(contains(characteristics, "PCI is supported"));
+    EXPECT_TRUE(contains(characteristics, "BIOS is upgradeable"));
+    EXPECT_TRUE(contains(characteristics, "Boot from CD is supported"));
+    EXPECT_TRUE(contains(characteristics, "ACPI is supported"));
+    EXPECT_TRUE(contains(characteristics, "UEFI specification is supported"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -327,10 +338,10 @@ TEST(SmbiosParserTest, BiosCharacteristicsNotSupported)
     ASSERT_FALSE(enumerator.isAtEnd());
 
     // The bits of the main field are dropped, the extension bytes still count.
-    const QStringList characteristics = SmbiosBios(enumerator.table()).characteristics();
+    const std::vector<std::string> characteristics = SmbiosBios(enumerator.table()).characteristics();
 
-    ASSERT_EQ(characteristics.size(), 1);
-    EXPECT_EQ(characteristics[0], QString("The system is a virtual machine"));
+    ASSERT_EQ(characteristics.size(), 1u);
+    EXPECT_EQ(characteristics[0], std::string("The system is a virtual machine"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -348,8 +359,8 @@ TEST(SmbiosParserTest, BiosCharacteristicsWithoutExtensionBytes)
     ASSERT_FALSE(enumerator.isAtEnd());
 
     SmbiosBios bios(enumerator.table());
-    ASSERT_EQ(bios.vendor(), QString("AMI"));
-    EXPECT_TRUE(bios.characteristics().isEmpty());
+    ASSERT_EQ(bios.vendor(), std::string("AMI"));
+    EXPECT_TRUE(bios.characteristics().empty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -362,9 +373,36 @@ TEST(SmbiosParserTest, StringNumberOutOfRange)
     ASSERT_FALSE(enumerator.isAtEnd());
 
     const SmbiosTable* table = enumerator.table();
-    EXPECT_TRUE(smbiosString(table, 0).isEmpty());
-    EXPECT_EQ(smbiosString(table, 1), QString("Only"));
-    EXPECT_TRUE(smbiosString(table, 5).isEmpty());
+    EXPECT_TRUE(smbiosString(table, 0).empty());
+    EXPECT_EQ(smbiosString(table, 1), std::string("Only"));
+    EXPECT_TRUE(smbiosString(table, 5).empty());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, StringWithByteAboveAsciiIsReencoded)
+{
+    // The specification allows only printable ASCII, and firmware that does not keep to it must
+    // not leak a byte that is not UTF-8 into what the parser returns.
+    const QByteArray dump = makeDump(makeTable(
+        SMBIOS_TABLE_TYPE_BIOS, QByteArray(0x12 - 4, '\0'), { QByteArray("\xE9t\xE9", 3) }));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    // E9h is 'e' with an acute accent in Latin-1, two bytes in UTF-8.
+    EXPECT_EQ(smbiosString(enumerator.table(), 1), std::string("\xC3\xA9t\xC3\xA9"));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SmbiosParserTest, StringIsTrimmed)
+{
+    const QByteArray dump = makeDump(makeTable(
+        SMBIOS_TABLE_TYPE_BIOS, QByteArray(0x12 - 4, '\0'), { "  Padded Out \t" }));
+
+    SmbiosTableEnumerator enumerator(dump);
+    ASSERT_FALSE(enumerator.isAtEnd());
+
+    EXPECT_EQ(smbiosString(enumerator.table(), 1), std::string("Padded Out"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -520,13 +558,13 @@ TEST(SmbiosParserTest, BaseboardFields)
 
     SmbiosBaseboard baseboard(enumerator.table());
     ASSERT_TRUE(baseboard.isValid());
-    EXPECT_EQ(baseboard.manufacturer(), QString("ASUS"));
-    EXPECT_EQ(baseboard.product(), QString("PRIME B550"));
-    EXPECT_EQ(baseboard.version(), QString("Rev X.0x"));
-    EXPECT_EQ(baseboard.serialNumber(), QString("SN-1"));
-    EXPECT_EQ(baseboard.assetTag(), QString("Tag-1"));
-    EXPECT_EQ(baseboard.location(), QString("Base Board"));
-    EXPECT_EQ(baseboard.type(), QString("Motherboard"));
+    EXPECT_EQ(baseboard.manufacturer(), std::string("ASUS"));
+    EXPECT_EQ(baseboard.product(), std::string("PRIME B550"));
+    EXPECT_EQ(baseboard.version(), std::string("Rev X.0x"));
+    EXPECT_EQ(baseboard.serialNumber(), std::string("SN-1"));
+    EXPECT_EQ(baseboard.assetTag(), std::string("Tag-1"));
+    EXPECT_EQ(baseboard.location(), std::string("Base Board"));
+    EXPECT_EQ(baseboard.type(), std::string("Motherboard"));
     EXPECT_TRUE(baseboard.isHostingBoard());
     EXPECT_TRUE(baseboard.isReplaceable());
     EXPECT_FALSE(baseboard.requiresDaughterBoard());
@@ -550,10 +588,10 @@ TEST(SmbiosParserTest, BaseboardWithoutOptionalFields)
 
     SmbiosBaseboard baseboard(enumerator.table());
     ASSERT_TRUE(baseboard.isValid());
-    EXPECT_EQ(baseboard.manufacturer(), QString("ASUS"));
-    EXPECT_TRUE(baseboard.assetTag().isEmpty());
-    EXPECT_TRUE(baseboard.location().isEmpty());
-    EXPECT_TRUE(baseboard.type().isEmpty());
+    EXPECT_EQ(baseboard.manufacturer(), std::string("ASUS"));
+    EXPECT_TRUE(baseboard.assetTag().empty());
+    EXPECT_TRUE(baseboard.location().empty());
+    EXPECT_TRUE(baseboard.type().empty());
     EXPECT_FALSE(baseboard.isHostingBoard());
 }
 
@@ -593,16 +631,16 @@ TEST(SmbiosParserTest, ChassisFields)
 
     SmbiosChassis chassis(enumerator.table());
     ASSERT_TRUE(chassis.isValid());
-    EXPECT_EQ(chassis.manufacturer(), QString("Dell Inc."));
-    EXPECT_EQ(chassis.version(), QString("1.0"));
-    EXPECT_EQ(chassis.serialNumber(), QString("SN123"));
-    EXPECT_EQ(chassis.assetTag(), QString("AT456"));
-    EXPECT_EQ(chassis.type(), QString("Desktop"));
+    EXPECT_EQ(chassis.manufacturer(), std::string("Dell Inc."));
+    EXPECT_EQ(chassis.version(), std::string("1.0"));
+    EXPECT_EQ(chassis.serialNumber(), std::string("SN123"));
+    EXPECT_EQ(chassis.assetTag(), std::string("AT456"));
+    EXPECT_EQ(chassis.type(), std::string("Desktop"));
     EXPECT_TRUE(chassis.isLockPresent());
-    EXPECT_EQ(chassis.bootUpState(), QString("Safe"));
-    EXPECT_EQ(chassis.powerSupplyState(), QString("Safe"));
-    EXPECT_EQ(chassis.thermalState(), QString("Warning"));
-    EXPECT_EQ(chassis.securityStatus(), QString("None"));
+    EXPECT_EQ(chassis.bootUpState(), std::string("Safe"));
+    EXPECT_EQ(chassis.powerSupplyState(), std::string("Safe"));
+    EXPECT_EQ(chassis.thermalState(), std::string("Warning"));
+    EXPECT_EQ(chassis.securityStatus(), std::string("None"));
     EXPECT_EQ(chassis.height(), 2u);
     EXPECT_EQ(chassis.powerCords(), 1u);
 }
@@ -622,7 +660,7 @@ TEST(SmbiosParserTest, ChassisSkuNumber)
     SmbiosTableEnumerator enumerator(dump);
     ASSERT_FALSE(enumerator.isAtEnd());
 
-    EXPECT_EQ(SmbiosChassis(enumerator.table()).skuNumber(), QString("SKU-42"));
+    EXPECT_EQ(SmbiosChassis(enumerator.table()).skuNumber(), std::string("SKU-42"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -640,7 +678,7 @@ TEST(SmbiosParserTest, ChassisSkuNumberBehindTable)
     SmbiosTableEnumerator enumerator(dump);
     ASSERT_FALSE(enumerator.isAtEnd());
 
-    EXPECT_TRUE(SmbiosChassis(enumerator.table()).skuNumber().isEmpty());
+    EXPECT_TRUE(SmbiosChassis(enumerator.table()).skuNumber().empty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -657,13 +695,13 @@ TEST(SmbiosParserTest, ChassisShortTableOmitsLateFields)
 
     SmbiosChassis chassis(enumerator.table());
     ASSERT_TRUE(chassis.isValid());
-    EXPECT_EQ(chassis.type(), QString("Desktop"));
+    EXPECT_EQ(chassis.type(), std::string("Desktop"));
     EXPECT_FALSE(chassis.isLockPresent());
-    EXPECT_TRUE(chassis.bootUpState().isEmpty());
-    EXPECT_TRUE(chassis.powerSupplyState().isEmpty());
-    EXPECT_TRUE(chassis.thermalState().isEmpty());
-    EXPECT_TRUE(chassis.securityStatus().isEmpty());
-    EXPECT_TRUE(chassis.skuNumber().isEmpty());
+    EXPECT_TRUE(chassis.bootUpState().empty());
+    EXPECT_TRUE(chassis.powerSupplyState().empty());
+    EXPECT_TRUE(chassis.thermalState().empty());
+    EXPECT_TRUE(chassis.securityStatus().empty());
+    EXPECT_TRUE(chassis.skuNumber().empty());
     EXPECT_EQ(chassis.height(), 0u);
     EXPECT_EQ(chassis.powerCords(), 0u);
 }
@@ -721,16 +759,16 @@ TEST(SmbiosParserTest, ProcessorFields)
     SmbiosProcessor processor(enumerator.table());
     ASSERT_TRUE(processor.isValid());
     EXPECT_TRUE(processor.isPopulated());
-    EXPECT_EQ(processor.manufacturer(), QString("Intel"));
-    EXPECT_EQ(processor.version(), QString("Core i7-9700K"));
-    EXPECT_EQ(processor.serialNumber(), QString("SN789"));
-    EXPECT_EQ(processor.assetTag(), QString("AT321"));
-    EXPECT_EQ(processor.partNumber(), QString("PN654"));
-    EXPECT_EQ(processor.socketDesignation(), QString("CPU0"));
-    EXPECT_EQ(processor.type(), QString("Central Processor"));
-    EXPECT_EQ(processor.family(), QString("Intel Core i7"));
-    EXPECT_EQ(processor.status(), QString("Enabled"));
-    EXPECT_EQ(processor.upgrade(), QString("Socket LGA1151"));
+    EXPECT_EQ(processor.manufacturer(), std::string("Intel"));
+    EXPECT_EQ(processor.version(), std::string("Core i7-9700K"));
+    EXPECT_EQ(processor.serialNumber(), std::string("SN789"));
+    EXPECT_EQ(processor.assetTag(), std::string("AT321"));
+    EXPECT_EQ(processor.partNumber(), std::string("PN654"));
+    EXPECT_EQ(processor.socketDesignation(), std::string("CPU0"));
+    EXPECT_EQ(processor.type(), std::string("Central Processor"));
+    EXPECT_EQ(processor.family(), std::string("Intel Core i7"));
+    EXPECT_EQ(processor.status(), std::string("Enabled"));
+    EXPECT_EQ(processor.upgrade(), std::string("Socket LGA1151"));
     EXPECT_EQ(processor.id(), 0x0807060504030201ULL);
     EXPECT_DOUBLE_EQ(processor.voltage(), 1.3);
     EXPECT_EQ(processor.externalClock(), 100u);
@@ -765,18 +803,18 @@ TEST(SmbiosParserTest, ProcessorFamilyFromSecondField)
         return makeTable(SMBIOS_TABLE_TYPE_PROCESSOR, formatted, {});
     };
 
-    auto familyOf = [](const QByteArray& dump) -> QString
+    auto familyOf = [](const QByteArray& dump) -> std::string
     {
         SmbiosTableEnumerator enumerator(dump);
         if (enumerator.isAtEnd())
-            return QString("<no table>");
+            return std::string("<no table>");
         return SmbiosProcessor(enumerator.table()).family();
     };
 
-    EXPECT_EQ(familyOf(makeDump(makeProcessor(0x2A))), QString("ARMv8"));
+    EXPECT_EQ(familyOf(makeDump(makeProcessor(0x2A))), std::string("ARMv8"));
 
     // The table is too short to carry the family2 field.
-    EXPECT_TRUE(familyOf(makeDump(makeProcessor(0x28))).isEmpty());
+    EXPECT_TRUE(familyOf(makeDump(makeProcessor(0x28))).empty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -799,9 +837,9 @@ TEST(SmbiosParserTest, ProcessorModernFields)
 
     SmbiosProcessor processor(enumerator.table());
     ASSERT_TRUE(processor.isValid());
-    EXPECT_EQ(processor.family(), QString("Intel Core Ultra 7"));
-    EXPECT_EQ(processor.upgrade(), QString("Socket LGA1851"));
-    EXPECT_EQ(processor.socketType(), QString("LGA1851"));
+    EXPECT_EQ(processor.family(), std::string("Intel Core Ultra 7"));
+    EXPECT_EQ(processor.upgrade(), std::string("Socket LGA1851"));
+    EXPECT_EQ(processor.socketType(), std::string("LGA1851"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -865,9 +903,9 @@ TEST(SmbiosParserTest, ProcessorShortTableOmitsLateFields)
     SmbiosProcessor processor(enumerator.table());
     ASSERT_TRUE(processor.isValid());
     EXPECT_DOUBLE_EQ(processor.voltage(), 0.0);
-    EXPECT_TRUE(processor.serialNumber().isEmpty());
-    EXPECT_TRUE(processor.assetTag().isEmpty());
-    EXPECT_TRUE(processor.partNumber().isEmpty());
+    EXPECT_TRUE(processor.serialNumber().empty());
+    EXPECT_TRUE(processor.assetTag().empty());
+    EXPECT_TRUE(processor.partNumber().empty());
     EXPECT_EQ(processor.coreCount(), 0u);
     EXPECT_EQ(processor.coreEnabled(), 0u);
     EXPECT_EQ(processor.threadCount(), 0u);
@@ -933,13 +971,13 @@ TEST(SmbiosParserTest, CacheFields)
     ASSERT_TRUE(cache.isValid());
     EXPECT_TRUE(cache.isEnabled());
     EXPECT_TRUE(cache.isSocketed());
-    EXPECT_EQ(cache.designation(), QString("L2 Cache"));
-    EXPECT_EQ(cache.location(), QString("Internal"));
-    EXPECT_EQ(cache.mode(), QString("Write Back"));
-    EXPECT_EQ(cache.type(), QString("Unified"));
-    EXPECT_EQ(cache.errorCorrectionType(), QString("Single-bit ECC"));
-    EXPECT_EQ(cache.associativity(), QString("8-way Set-Associative"));
-    EXPECT_EQ(cache.currentSramType(), QString("Synchronous"));
+    EXPECT_EQ(cache.designation(), std::string("L2 Cache"));
+    EXPECT_EQ(cache.location(), std::string("Internal"));
+    EXPECT_EQ(cache.mode(), std::string("Write Back"));
+    EXPECT_EQ(cache.type(), std::string("Unified"));
+    EXPECT_EQ(cache.errorCorrectionType(), std::string("Single-bit ECC"));
+    EXPECT_EQ(cache.associativity(), std::string("8-way Set-Associative"));
+    EXPECT_EQ(cache.currentSramType(), std::string("Synchronous"));
     EXPECT_EQ(cache.level(), 2);
     EXPECT_EQ(cache.maxSize(), 512ULL * 1024ULL);
     EXPECT_EQ(cache.currentSize(), 512ULL * 1024ULL);
@@ -1011,15 +1049,15 @@ TEST(SmbiosParserTest, CacheShortTableOmitsLateFields)
     SmbiosCache cache(enumerator.table());
     ASSERT_TRUE(cache.isValid());
     EXPECT_EQ(cache.level(), 3);
-    EXPECT_EQ(cache.location(), QString("External"));
+    EXPECT_EQ(cache.location(), std::string("External"));
     EXPECT_FALSE(cache.isEnabled());
     EXPECT_EQ(cache.maxSize(), 8ULL * 1024ULL * 1024ULL);
     EXPECT_EQ(cache.currentSize(), 0ULL);
     EXPECT_EQ(cache.speed(), 0u);
-    EXPECT_TRUE(cache.type().isEmpty());
-    EXPECT_TRUE(cache.errorCorrectionType().isEmpty());
-    EXPECT_TRUE(cache.associativity().isEmpty());
-    EXPECT_TRUE(cache.currentSramType().isEmpty());
+    EXPECT_TRUE(cache.type().empty());
+    EXPECT_TRUE(cache.errorCorrectionType().empty());
+    EXPECT_TRUE(cache.associativity().empty());
+    EXPECT_TRUE(cache.currentSramType().empty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1052,11 +1090,11 @@ TEST(SmbiosParserTest, PortConnectorFields)
 
     SmbiosPortConnector port(enumerator.table());
     ASSERT_TRUE(port.isValid());
-    EXPECT_EQ(port.internalDesignator(), QString("J1A1"));
-    EXPECT_EQ(port.internalConnectorType(), QString("On Board IDE"));
-    EXPECT_EQ(port.externalDesignator(), QString("USB1"));
-    EXPECT_EQ(port.externalConnectorType(), QString("Access Bus (USB)"));
-    EXPECT_EQ(port.type(), QString("USB"));
+    EXPECT_EQ(port.internalDesignator(), std::string("J1A1"));
+    EXPECT_EQ(port.internalConnectorType(), std::string("On Board IDE"));
+    EXPECT_EQ(port.externalDesignator(), std::string("USB1"));
+    EXPECT_EQ(port.externalConnectorType(), std::string("Access Bus (USB)"));
+    EXPECT_EQ(port.type(), std::string("USB"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1075,9 +1113,9 @@ TEST(SmbiosParserTest, PortConnectorOutOfRangeValues)
     ASSERT_FALSE(enumerator.isAtEnd());
 
     SmbiosPortConnector port(enumerator.table());
-    EXPECT_EQ(port.internalConnectorType(), QString("Other"));
-    EXPECT_EQ(port.externalConnectorType(), QString("PC-98"));
-    EXPECT_EQ(port.type(), QString("8251 FIFO Compatible"));
+    EXPECT_EQ(port.internalConnectorType(), std::string("Other"));
+    EXPECT_EQ(port.externalConnectorType(), std::string("PC-98"));
+    EXPECT_EQ(port.type(), std::string("8251 FIFO Compatible"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1115,11 +1153,11 @@ TEST(SmbiosParserTest, SystemSlotFields)
 
     SmbiosSystemSlot slot(enumerator.table());
     ASSERT_TRUE(slot.isValid());
-    EXPECT_EQ(slot.designation(), QString("PCIEX16_1"));
-    EXPECT_EQ(slot.type(), QString("PCI Express Gen 4 x16"));
-    EXPECT_EQ(slot.dataBusWidth(), QString("x16"));
-    EXPECT_EQ(slot.usage(), QString("Available"));
-    EXPECT_EQ(slot.length(), QString("Long Length"));
+    EXPECT_EQ(slot.designation(), std::string("PCIEX16_1"));
+    EXPECT_EQ(slot.type(), std::string("PCI Express Gen 4 x16"));
+    EXPECT_EQ(slot.dataBusWidth(), std::string("x16"));
+    EXPECT_EQ(slot.usage(), std::string("Available"));
+    EXPECT_EQ(slot.length(), std::string("Long Length"));
     EXPECT_EQ(slot.id(), 5);
     EXPECT_TRUE(slot.hasBusAddress());
     EXPECT_EQ(slot.segmentGroupNumber(), 0);
@@ -1139,7 +1177,7 @@ TEST(SmbiosParserTest, SystemSlotFields)
 TEST(SmbiosParserTest, SystemSlotTypeRanges)
 {
     // The slot types are scattered over four ranges with gaps between them.
-    auto typeOf = [](quint8 type) -> QString
+    auto typeOf = [](quint8 type) -> std::string
     {
         QByteArray formatted(0x0C - 4, '\0');
         formatted[0x05 - 4] = static_cast<char>(type);
@@ -1149,24 +1187,24 @@ TEST(SmbiosParserTest, SystemSlotTypeRanges)
 
         SmbiosTableEnumerator enumerator(dump);
         if (enumerator.isAtEnd())
-            return QString("<no table>");
+            return std::string("<no table>");
         return SmbiosSystemSlot(enumerator.table()).type();
     };
 
-    EXPECT_EQ(typeOf(0x12), QString("PCI-X"));
-    EXPECT_EQ(typeOf(0x17), QString("M.2 Socket 3"));
-    EXPECT_EQ(typeOf(0x28), QString("OCP NIC Prior to 3.0"));
-    EXPECT_EQ(typeOf(0x30), QString("CXL Flexbus 1.0"));
-    EXPECT_EQ(typeOf(0xA5), QString("PCI Express"));
-    EXPECT_EQ(typeOf(0xB6), QString("PCI Express Gen 3 x16"));
-    EXPECT_EQ(typeOf(0xBE), QString("PCI Express Gen 5"));
-    EXPECT_EQ(typeOf(0xC6), QString("EDSFF E3 Form Factor"));
+    EXPECT_EQ(typeOf(0x12), std::string("PCI-X"));
+    EXPECT_EQ(typeOf(0x17), std::string("M.2 Socket 3"));
+    EXPECT_EQ(typeOf(0x28), std::string("OCP NIC Prior to 3.0"));
+    EXPECT_EQ(typeOf(0x30), std::string("CXL Flexbus 1.0"));
+    EXPECT_EQ(typeOf(0xA5), std::string("PCI Express"));
+    EXPECT_EQ(typeOf(0xB6), std::string("PCI Express Gen 3 x16"));
+    EXPECT_EQ(typeOf(0xBE), std::string("PCI Express Gen 5"));
+    EXPECT_EQ(typeOf(0xC6), std::string("EDSFF E3 Form Factor"));
 
     // The gaps between the ranges hold no type.
-    EXPECT_TRUE(typeOf(0x29).isEmpty());
-    EXPECT_TRUE(typeOf(0x9F).isEmpty());
-    EXPECT_TRUE(typeOf(0xB7).isEmpty());
-    EXPECT_TRUE(typeOf(0xC7).isEmpty());
+    EXPECT_TRUE(typeOf(0x29).empty());
+    EXPECT_TRUE(typeOf(0x9F).empty());
+    EXPECT_TRUE(typeOf(0xB7).empty());
+    EXPECT_TRUE(typeOf(0xC7).empty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1249,18 +1287,18 @@ TEST(SmbiosParserTest, OnBoardDevicesFields)
     SmbiosOnBoardDevices devices(enumerator.table());
     ASSERT_TRUE(devices.isValid());
     ASSERT_EQ(devices.count(), 2);
-    EXPECT_EQ(devices.type(0), QString("Video"));
-    EXPECT_EQ(devices.description(0), QString("Intel UHD 630"));
+    EXPECT_EQ(devices.type(0), std::string("Video"));
+    EXPECT_EQ(devices.description(0), std::string("Intel UHD 630"));
     EXPECT_TRUE(devices.isEnabled(0));
-    EXPECT_EQ(devices.type(1), QString("Sound"));
-    EXPECT_EQ(devices.description(1), QString("Realtek ALC1220"));
+    EXPECT_EQ(devices.type(1), std::string("Sound"));
+    EXPECT_EQ(devices.description(1), std::string("Realtek ALC1220"));
     EXPECT_FALSE(devices.isEnabled(1));
 
     // Indexes outside the table must not reach the memory behind it.
-    EXPECT_TRUE(devices.type(2).isEmpty());
-    EXPECT_TRUE(devices.description(2).isEmpty());
+    EXPECT_TRUE(devices.type(2).empty());
+    EXPECT_TRUE(devices.description(2).empty());
     EXPECT_FALSE(devices.isEnabled(2));
-    EXPECT_TRUE(devices.type(-1).isEmpty());
+    EXPECT_TRUE(devices.type(-1).empty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1276,7 +1314,7 @@ TEST(SmbiosParserTest, TruncatedOnBoardDevicesIsInvalid)
     SmbiosOnBoardDevices devices(enumerator.table());
     EXPECT_FALSE(devices.isValid());
     EXPECT_EQ(devices.count(), 0);
-    EXPECT_TRUE(devices.type(0).isEmpty());
+    EXPECT_TRUE(devices.type(0).empty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1294,13 +1332,13 @@ TEST(SmbiosParserTest, StringListFields)
     SmbiosStringList strings(enumerator.table());
     ASSERT_TRUE(strings.isValid());
     EXPECT_EQ(strings.count(), 3);
-    EXPECT_EQ(strings.string(0), QString("First"));
-    EXPECT_EQ(strings.string(1), QString("Second"));
-    EXPECT_EQ(strings.string(2), QString("Third"));
+    EXPECT_EQ(strings.string(0), std::string("First"));
+    EXPECT_EQ(strings.string(1), std::string("Second"));
+    EXPECT_EQ(strings.string(2), std::string("Third"));
 
     // Indexes outside the declared count give nothing.
-    EXPECT_TRUE(strings.string(-1).isEmpty());
-    EXPECT_TRUE(strings.string(3).isEmpty());
+    EXPECT_TRUE(strings.string(-1).empty());
+    EXPECT_TRUE(strings.string(3).empty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1320,9 +1358,9 @@ TEST(SmbiosParserTest, StringListCountAboveStoredStrings)
     SmbiosStringList strings(enumerator.table());
     ASSERT_TRUE(strings.isValid());
     EXPECT_EQ(strings.count(), 4);
-    EXPECT_EQ(strings.string(0), QString("Only"));
-    EXPECT_TRUE(strings.string(1).isEmpty());
-    EXPECT_TRUE(strings.string(3).isEmpty());
+    EXPECT_EQ(strings.string(0), std::string("Only"));
+    EXPECT_TRUE(strings.string(1).empty());
+    EXPECT_TRUE(strings.string(3).empty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1364,9 +1402,9 @@ TEST(SmbiosParserTest, ProbeFields)
 
     SmbiosProbe probe(enumerator.table());
     ASSERT_TRUE(probe.isValid());
-    EXPECT_EQ(probe.description(), QString("+12V Rail"));
-    EXPECT_EQ(probe.location(), QString("Motherboard"));
-    EXPECT_EQ(probe.status(), QString("OK"));
+    EXPECT_EQ(probe.description(), std::string("+12V Rail"));
+    EXPECT_EQ(probe.location(), std::string("Motherboard"));
+    EXPECT_EQ(probe.status(), std::string("OK"));
     EXPECT_EQ(probe.maxValue(), 12320);
     EXPECT_EQ(probe.minValue(), 11744);
     EXPECT_EQ(probe.nominalValue(), 12000);
@@ -1410,8 +1448,8 @@ TEST(SmbiosParserTest, ProbeUnknownAndNegativeValues)
     EXPECT_EQ(probe.nominalValue(), 0);
 
     // Zeroed location and status are outside the lists.
-    EXPECT_TRUE(probe.location().isEmpty());
-    EXPECT_TRUE(probe.status().isEmpty());
+    EXPECT_TRUE(probe.location().empty());
+    EXPECT_TRUE(probe.status().empty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1426,21 +1464,21 @@ TEST(SmbiosParserTest, TemperatureProbeLocations)
 
         SmbiosTableEnumerator enumerator(dump);
         if (enumerator.isAtEnd())
-            return QString();
+            return std::string();
 
         return SmbiosProbe(enumerator.table()).location();
     };
 
     // The four locations behind 0Bh belong to the temperature probe alone.
     EXPECT_EQ(locationOf(SMBIOS_TABLE_TYPE_TEMPERATURE_PROBE, 0x0C),
-              QString("Front Panel Board"));
+              std::string("Front Panel Board"));
     EXPECT_EQ(locationOf(SMBIOS_TABLE_TYPE_TEMPERATURE_PROBE, 0x0F),
-              QString("Drive Back Plane"));
-    EXPECT_TRUE(locationOf(SMBIOS_TABLE_TYPE_TEMPERATURE_PROBE, 0x10).isEmpty());
+              std::string("Drive Back Plane"));
+    EXPECT_TRUE(locationOf(SMBIOS_TABLE_TYPE_TEMPERATURE_PROBE, 0x10).empty());
 
-    EXPECT_EQ(locationOf(SMBIOS_TABLE_TYPE_VOLTAGE_PROBE, 0x0B), QString("Add-in Card"));
-    EXPECT_TRUE(locationOf(SMBIOS_TABLE_TYPE_VOLTAGE_PROBE, 0x0C).isEmpty());
-    EXPECT_TRUE(locationOf(SMBIOS_TABLE_TYPE_CURRENT_PROBE, 0x0C).isEmpty());
+    EXPECT_EQ(locationOf(SMBIOS_TABLE_TYPE_VOLTAGE_PROBE, 0x0B), std::string("Add-in Card"));
+    EXPECT_TRUE(locationOf(SMBIOS_TABLE_TYPE_VOLTAGE_PROBE, 0x0C).empty());
+    EXPECT_TRUE(locationOf(SMBIOS_TABLE_TYPE_CURRENT_PROBE, 0x0C).empty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1476,9 +1514,9 @@ TEST(SmbiosParserTest, CoolingDeviceFields)
 
     SmbiosCoolingDevice device(enumerator.table());
     ASSERT_TRUE(device.isValid());
-    EXPECT_EQ(device.description(), QString("CPU Fan"));
-    EXPECT_EQ(device.type(), QString("Power Supply Fan"));
-    EXPECT_EQ(device.status(), QString("OK"));
+    EXPECT_EQ(device.description(), std::string("CPU Fan"));
+    EXPECT_EQ(device.type(), std::string("Power Supply Fan"));
+    EXPECT_EQ(device.status(), std::string("OK"));
     EXPECT_EQ(device.unitGroup(), 1);
     EXPECT_EQ(device.nominalSpeed(), 1720u);
 }
@@ -1496,21 +1534,21 @@ TEST(SmbiosParserTest, CoolingDeviceTypeRanges)
 
         SmbiosTableEnumerator enumerator(dump);
         if (enumerator.isAtEnd())
-            return QString();
+            return std::string();
 
         return SmbiosCoolingDevice(enumerator.table()).type();
     };
 
-    EXPECT_EQ(typeOf(0x03), QString("Fan"));
-    EXPECT_EQ(typeOf(0x09), QString("Integrated Refrigeration"));
+    EXPECT_EQ(typeOf(0x03), std::string("Fan"));
+    EXPECT_EQ(typeOf(0x09), std::string("Integrated Refrigeration"));
 
     // The specification reserves the values between the two ranges.
-    EXPECT_TRUE(typeOf(0x0A).isEmpty());
-    EXPECT_TRUE(typeOf(0x0F).isEmpty());
+    EXPECT_TRUE(typeOf(0x0A).empty());
+    EXPECT_TRUE(typeOf(0x0F).empty());
 
-    EXPECT_EQ(typeOf(0x10), QString("Active Cooling"));
-    EXPECT_EQ(typeOf(0x11), QString("Passive Cooling"));
-    EXPECT_TRUE(typeOf(0x12).isEmpty());
+    EXPECT_EQ(typeOf(0x10), std::string("Active Cooling"));
+    EXPECT_EQ(typeOf(0x11), std::string("Passive Cooling"));
+    EXPECT_TRUE(typeOf(0x12).empty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1528,9 +1566,9 @@ TEST(SmbiosParserTest, CoolingDeviceShortTableOmitsLateFields)
 
     SmbiosCoolingDevice device(enumerator.table());
     ASSERT_TRUE(device.isValid());
-    EXPECT_EQ(device.type(), QString("Fan"));
+    EXPECT_EQ(device.type(), std::string("Fan"));
     EXPECT_EQ(device.nominalSpeed(), 0u);
-    EXPECT_TRUE(device.description().isEmpty());
+    EXPECT_TRUE(device.description().empty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1559,26 +1597,26 @@ TEST(SmbiosParserTest, SystemBootStatus)
 
         SmbiosTableEnumerator enumerator(dump);
         if (enumerator.isAtEnd())
-            return QString();
+            return std::string();
 
         SmbiosSystemBoot boot(enumerator.table());
         if (!boot.isValid())
-            return QString();
+            return std::string();
 
         return boot.status();
     };
 
-    EXPECT_EQ(statusOf(0x00, 0x14), QString("No Errors Detected"));
-    EXPECT_EQ(statusOf(0x05, 0x14), QString("User-requested Boot"));
-    EXPECT_EQ(statusOf(0x08, 0x14), QString("System Watchdog Timer Expired"));
-    EXPECT_EQ(statusOf(0x80, 0x14), QString("OEM-specific"));
-    EXPECT_EQ(statusOf(0xC8, 0x14), QString("Product-specific"));
+    EXPECT_EQ(statusOf(0x00, 0x14), std::string("No Errors Detected"));
+    EXPECT_EQ(statusOf(0x05, 0x14), std::string("User-requested Boot"));
+    EXPECT_EQ(statusOf(0x08, 0x14), std::string("System Watchdog Timer Expired"));
+    EXPECT_EQ(statusOf(0x80, 0x14), std::string("OEM-specific"));
+    EXPECT_EQ(statusOf(0xC8, 0x14), std::string("Product-specific"));
 
     // Values between the known ones and the OEM range are reserved.
-    EXPECT_TRUE(statusOf(0x40, 0x14).isEmpty());
+    EXPECT_TRUE(statusOf(0x40, 0x14).empty());
 
     // A table that ends before the status byte.
-    EXPECT_TRUE(statusOf(0x05, 0x0A).isEmpty());
+    EXPECT_TRUE(statusOf(0x05, 0x0A).empty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1598,9 +1636,9 @@ TEST(SmbiosParserTest, MemoryArrayFields)
 
     SmbiosMemoryArray array(enumerator.table());
     ASSERT_TRUE(array.isValid());
-    EXPECT_EQ(array.location(), QString("System Board Or Motherboard"));
-    EXPECT_EQ(array.use(), QString("System Memory"));
-    EXPECT_EQ(array.errorCorrection(), QString("None"));
+    EXPECT_EQ(array.location(), std::string("System Board Or Motherboard"));
+    EXPECT_EQ(array.use(), std::string("System Memory"));
+    EXPECT_EQ(array.errorCorrection(), std::string("None"));
     EXPECT_EQ(array.maxCapacity(), 32ULL * 1024ULL * 1024ULL * 1024ULL);
     EXPECT_EQ(array.deviceCount(), 4);
 }
@@ -1677,10 +1715,10 @@ TEST(SmbiosParserTest, MemoryDeviceFields)
     ASSERT_TRUE(device.isValid());
     EXPECT_TRUE(device.isPresent());
     EXPECT_EQ(device.size(), 2048ULL * 1024ULL * 1024ULL);
-    EXPECT_EQ(device.location(), QString("DIMM_A1"));
-    EXPECT_EQ(device.bankLocator(), QString("BANK 0"));
-    EXPECT_EQ(device.type(), QString("DDR4"));
-    EXPECT_EQ(device.formFactor(), QString("DIMM"));
+    EXPECT_EQ(device.location(), std::string("DIMM_A1"));
+    EXPECT_EQ(device.bankLocator(), std::string("BANK 0"));
+    EXPECT_EQ(device.type(), std::string("DDR4"));
+    EXPECT_EQ(device.formFactor(), std::string("DIMM"));
     EXPECT_EQ(device.totalWidth(), 72);
     EXPECT_EQ(device.dataWidth(), 64);
     EXPECT_EQ(device.arrayHandle(), 0x0021);
@@ -1690,10 +1728,10 @@ TEST(SmbiosParserTest, MemoryDeviceFields)
     EXPECT_EQ(device.configuredSpeed(), 0u);
     EXPECT_EQ(device.rank(), 0);
     EXPECT_EQ(device.configuredVoltage(), 0u);
-    EXPECT_TRUE(device.serialNumber().isEmpty());
-    EXPECT_TRUE(device.assetTag().isEmpty());
-    EXPECT_TRUE(device.technology().isEmpty());
-    EXPECT_TRUE(device.firmwareVersion().isEmpty());
+    EXPECT_TRUE(device.serialNumber().empty());
+    EXPECT_TRUE(device.assetTag().empty());
+    EXPECT_TRUE(device.technology().empty());
+    EXPECT_TRUE(device.firmwareVersion().empty());
     EXPECT_EQ(device.nonVolatileSize(), 0ULL);
 }
 
@@ -1748,14 +1786,14 @@ TEST(SmbiosParserTest, MemoryDeviceModernFields)
     SmbiosMemoryDevice device(enumerator.table());
     ASSERT_TRUE(device.isValid());
     EXPECT_EQ(device.size(), 32ULL * 1024ULL * 1024ULL * 1024ULL);
-    EXPECT_EQ(device.formFactor(), QString("CUDIMM"));
-    EXPECT_EQ(device.type(), QString("MRDIMM"));
-    EXPECT_EQ(device.technology(), QString("NVDIMM-N"));
-    EXPECT_EQ(device.manufacturer(), QString("Micron"));
-    EXPECT_EQ(device.serialNumber(), QString("SN123"));
-    EXPECT_EQ(device.assetTag(), QString("AT1"));
-    EXPECT_EQ(device.partNumber(), QString("PN-XYZ"));
-    EXPECT_EQ(device.firmwareVersion(), QString("FW-1.2"));
+    EXPECT_EQ(device.formFactor(), std::string("CUDIMM"));
+    EXPECT_EQ(device.type(), std::string("MRDIMM"));
+    EXPECT_EQ(device.technology(), std::string("NVDIMM-N"));
+    EXPECT_EQ(device.manufacturer(), std::string("Micron"));
+    EXPECT_EQ(device.serialNumber(), std::string("SN123"));
+    EXPECT_EQ(device.assetTag(), std::string("AT1"));
+    EXPECT_EQ(device.partNumber(), std::string("PN-XYZ"));
+    EXPECT_EQ(device.firmwareVersion(), std::string("FW-1.2"));
     EXPECT_EQ(device.speed(), 12800u);
     EXPECT_EQ(device.configuredSpeed(), 12000u);
     EXPECT_EQ(device.rank(), 2);
@@ -1768,9 +1806,9 @@ TEST(SmbiosParserTest, MemoryDeviceModernFields)
     EXPECT_EQ(device.logicalSize(), 0ULL);
 
     // Bit 13 of the type detail stands for a registered module.
-    const QStringList detail = device.typeDetail();
-    ASSERT_EQ(detail.size(), 1);
-    EXPECT_EQ(detail[0], QString("Registered (Buffered)"));
+    const std::vector<std::string> detail = device.typeDetail();
+    ASSERT_EQ(detail.size(), 1u);
+    EXPECT_EQ(detail[0], std::string("Registered (Buffered)"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1868,9 +1906,9 @@ TEST(SmbiosParserTest, MemoryErrorFields)
 
     SmbiosMemoryError error(enumerator.table());
     ASSERT_TRUE(error.isValid());
-    EXPECT_EQ(error.type(), QString("Single-bit Error"));
-    EXPECT_EQ(error.granularity(), QString("Device Level"));
-    EXPECT_EQ(error.operation(), QString("Read"));
+    EXPECT_EQ(error.type(), std::string("Single-bit Error"));
+    EXPECT_EQ(error.granularity(), std::string("Device Level"));
+    EXPECT_EQ(error.operation(), std::string("Read"));
     EXPECT_EQ(error.vendorSyndrome(), 0x4321u);
     EXPECT_EQ(error.arrayErrorAddress(), 0x1000ULL);
     EXPECT_EQ(error.deviceErrorAddress(), 0x20ULL);
@@ -1895,15 +1933,15 @@ TEST(SmbiosParserTest, MemoryErrorUnknownAddresses)
 
     SmbiosMemoryError error(enumerator.table());
     ASSERT_TRUE(error.isValid());
-    EXPECT_EQ(error.type(), QString("OK"));
+    EXPECT_EQ(error.type(), std::string("OK"));
     EXPECT_EQ(error.vendorSyndrome(), 0u);
     EXPECT_EQ(error.arrayErrorAddress(), 0ULL);
     EXPECT_EQ(error.deviceErrorAddress(), 0ULL);
     EXPECT_EQ(error.errorResolution(), 0ULL);
 
     // Values outside the lists give nothing rather than a wrong name.
-    EXPECT_TRUE(error.granularity().isEmpty());
-    EXPECT_TRUE(error.operation().isEmpty());
+    EXPECT_TRUE(error.granularity().empty());
+    EXPECT_TRUE(error.operation().empty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2114,8 +2152,8 @@ TEST(SmbiosParserTest, PointingDeviceFields)
 
     SmbiosPointingDevice device(enumerator.table());
     ASSERT_TRUE(device.isValid());
-    EXPECT_EQ(device.type(), QString("Mouse"));
-    EXPECT_EQ(device.interfaceType(), QString("PS/2"));
+    EXPECT_EQ(device.type(), std::string("Mouse"));
+    EXPECT_EQ(device.interfaceType(), std::string("PS/2"));
     EXPECT_EQ(device.buttonCount(), 3);
 }
 
@@ -2134,8 +2172,8 @@ TEST(SmbiosParserTest, PointingDeviceBusInterfaceRange)
     ASSERT_FALSE(enumerator.isAtEnd());
 
     SmbiosPointingDevice device(enumerator.table());
-    EXPECT_EQ(device.type(), QString("Touch Pad"));
-    EXPECT_EQ(device.interfaceType(), QString("USB"));
+    EXPECT_EQ(device.type(), std::string("Touch Pad"));
+    EXPECT_EQ(device.interfaceType(), std::string("USB"));
     EXPECT_EQ(device.buttonCount(), 2);
 }
 
@@ -2177,13 +2215,13 @@ TEST(SmbiosParserTest, PortableBatteryFields)
 
     SmbiosPortableBattery battery(enumerator.table());
     ASSERT_TRUE(battery.isValid());
-    EXPECT_EQ(battery.location(), QString("Rear"));
-    EXPECT_EQ(battery.manufacturer(), QString("Sony"));
-    EXPECT_EQ(battery.manufactureDate(), QString("03/15/2020"));
-    EXPECT_EQ(battery.serialNumber(), QString("SN-1234"));
-    EXPECT_EQ(battery.deviceName(), QString("DELL ABC123"));
-    EXPECT_EQ(battery.chemistry(), QString("Lithium-ion"));
-    EXPECT_EQ(battery.sbdsVersion(), QString("1.0"));
+    EXPECT_EQ(battery.location(), std::string("Rear"));
+    EXPECT_EQ(battery.manufacturer(), std::string("Sony"));
+    EXPECT_EQ(battery.manufactureDate(), std::string("03/15/2020"));
+    EXPECT_EQ(battery.serialNumber(), std::string("SN-1234"));
+    EXPECT_EQ(battery.deviceName(), std::string("DELL ABC123"));
+    EXPECT_EQ(battery.chemistry(), std::string("Lithium-ion"));
+    EXPECT_EQ(battery.sbdsVersion(), std::string("1.0"));
     EXPECT_EQ(battery.designCapacity(), 40000u); // Scaled by the multiplier.
     EXPECT_EQ(battery.designVoltage(), 11400u);
     EXPECT_EQ(battery.maxError(), 3);
@@ -2210,9 +2248,9 @@ TEST(SmbiosParserTest, PortableBatterySbdsFields)
 
     SmbiosPortableBattery battery(enumerator.table());
     ASSERT_TRUE(battery.isValid());
-    EXPECT_EQ(battery.manufactureDate(), QString("2021-06-15"));
-    EXPECT_EQ(battery.serialNumber(), QString("1A2B"));
-    EXPECT_EQ(battery.chemistry(), QString("LION"));
+    EXPECT_EQ(battery.manufactureDate(), std::string("2021-06-15"));
+    EXPECT_EQ(battery.serialNumber(), std::string("1A2B"));
+    EXPECT_EQ(battery.chemistry(), std::string("LION"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2232,9 +2270,9 @@ TEST(SmbiosParserTest, PortableBatteryShortTableOmitsLateFields)
 
     SmbiosPortableBattery battery(enumerator.table());
     ASSERT_TRUE(battery.isValid());
-    EXPECT_TRUE(battery.manufactureDate().isEmpty());
-    EXPECT_TRUE(battery.serialNumber().isEmpty());
-    EXPECT_EQ(battery.chemistry(), QString("Unknown"));
+    EXPECT_TRUE(battery.manufactureDate().empty());
+    EXPECT_TRUE(battery.serialNumber().empty());
+    EXPECT_EQ(battery.chemistry(), std::string("Unknown"));
     EXPECT_EQ(battery.designCapacity(), 4000u); // No multiplier to scale by.
     EXPECT_EQ(battery.maxError(), -1);
 }
@@ -2280,16 +2318,16 @@ TEST(SmbiosParserTest, PowerSupplyFields)
     EXPECT_FALSE(supply.isUnplugged());
     EXPECT_TRUE(supply.isHotReplaceable());
     EXPECT_EQ(supply.unitGroup(), 1);
-    EXPECT_EQ(supply.location(), QString("Internal"));
-    EXPECT_EQ(supply.deviceName(), QString("PSU1"));
-    EXPECT_EQ(supply.manufacturer(), QString("Delta"));
-    EXPECT_EQ(supply.serialNumber(), QString("SN-77"));
-    EXPECT_EQ(supply.assetTag(), QString("AT-88"));
-    EXPECT_EQ(supply.modelPartNumber(), QString("DPS-500"));
-    EXPECT_EQ(supply.revisionLevel(), QString("1.1"));
-    EXPECT_EQ(supply.type(), QString("Switching"));
-    EXPECT_EQ(supply.status(), QString("OK"));
-    EXPECT_EQ(supply.inputVoltageRangeSwitching(), QString("Auto-switch"));
+    EXPECT_EQ(supply.location(), std::string("Internal"));
+    EXPECT_EQ(supply.deviceName(), std::string("PSU1"));
+    EXPECT_EQ(supply.manufacturer(), std::string("Delta"));
+    EXPECT_EQ(supply.serialNumber(), std::string("SN-77"));
+    EXPECT_EQ(supply.assetTag(), std::string("AT-88"));
+    EXPECT_EQ(supply.modelPartNumber(), std::string("DPS-500"));
+    EXPECT_EQ(supply.revisionLevel(), std::string("1.1"));
+    EXPECT_EQ(supply.type(), std::string("Switching"));
+    EXPECT_EQ(supply.status(), std::string("OK"));
+    EXPECT_EQ(supply.inputVoltageRangeSwitching(), std::string("Auto-switch"));
     EXPECT_EQ(supply.maxPowerCapacity(), 65000u);
 }
 
@@ -2308,9 +2346,9 @@ TEST(SmbiosParserTest, PowerSupplyUnknownFields)
     SmbiosPowerSupply supply(enumerator.table());
     ASSERT_TRUE(supply.isValid());
     EXPECT_EQ(supply.maxPowerCapacity(), 0u);
-    EXPECT_TRUE(supply.type().isEmpty());
-    EXPECT_TRUE(supply.status().isEmpty());
-    EXPECT_TRUE(supply.inputVoltageRangeSwitching().isEmpty());
+    EXPECT_TRUE(supply.type().empty());
+    EXPECT_TRUE(supply.status().empty());
+    EXPECT_TRUE(supply.inputVoltageRangeSwitching().empty());
     EXPECT_FALSE(supply.isPresent());
     EXPECT_FALSE(supply.isUnplugged());
     EXPECT_FALSE(supply.isHotReplaceable());
@@ -2347,8 +2385,8 @@ TEST(SmbiosParserTest, OnBoardDeviceExtFields)
     SmbiosOnBoardDeviceExt device(enumerator.table());
     ASSERT_TRUE(device.isValid());
     EXPECT_TRUE(device.isEnabled());
-    EXPECT_EQ(device.designation(), QString("Onboard LAN"));
-    EXPECT_EQ(device.type(), QString("Ethernet"));
+    EXPECT_EQ(device.designation(), std::string("Onboard LAN"));
+    EXPECT_EQ(device.type(), std::string("Ethernet"));
     EXPECT_EQ(device.typeInstance(), 1);
     EXPECT_TRUE(device.hasBusAddress());
     EXPECT_EQ(device.segmentGroupNumber(), 0);
@@ -2377,7 +2415,7 @@ TEST(SmbiosParserTest, OnBoardDeviceExtWithoutBusAddress)
     SmbiosOnBoardDeviceExt device(enumerator.table());
     ASSERT_TRUE(device.isValid());
     EXPECT_FALSE(device.isEnabled());
-    EXPECT_EQ(device.type(), QString("Wireless LAN"));
+    EXPECT_EQ(device.type(), std::string("Wireless LAN"));
     EXPECT_FALSE(device.hasBusAddress());
     EXPECT_EQ(device.busNumber(), 0);
     EXPECT_EQ(device.deviceNumber(), 0);
@@ -2433,17 +2471,17 @@ TEST(SmbiosParserTest, AdditionalInfoEntries)
 
     EXPECT_EQ(info.referencedHandle(0), 0x1234);
     EXPECT_EQ(info.referencedOffset(0), 0x05);
-    EXPECT_EQ(info.string(0), QString("AGESA 1.2.0.3c"));
-    EXPECT_EQ(info.value(0), QString("0x12345678"));
+    EXPECT_EQ(info.string(0), std::string("AGESA 1.2.0.3c"));
+    EXPECT_EQ(info.value(0), std::string("0x12345678"));
 
     EXPECT_EQ(info.referencedHandle(1), 0x0002);
     EXPECT_EQ(info.referencedOffset(1), 0x0A);
-    EXPECT_TRUE(info.string(1).isEmpty());
-    EXPECT_EQ(info.value(1), QString("0xAB"));
+    EXPECT_TRUE(info.string(1).empty());
+    EXPECT_EQ(info.value(1), std::string("0xAB"));
 
     // Indexes outside the declared count give nothing.
     EXPECT_EQ(info.referencedHandle(2), 0);
-    EXPECT_TRUE(info.value(-1).isEmpty());
+    EXPECT_TRUE(info.value(-1).empty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2474,9 +2512,9 @@ TEST(SmbiosParserTest, AdditionalInfoEntryBehindTable)
     ASSERT_TRUE(info.isValid());
     EXPECT_EQ(info.count(), 3);
 
-    EXPECT_EQ(info.value(0), QString("0x11"));
-    EXPECT_TRUE(info.value(1).isEmpty());
-    EXPECT_TRUE(info.value(2).isEmpty());
+    EXPECT_EQ(info.value(0), std::string("0x11"));
+    EXPECT_TRUE(info.value(1).empty());
+    EXPECT_TRUE(info.value(2).empty());
     EXPECT_EQ(info.referencedHandle(1), 0);
 }
 
@@ -2519,15 +2557,15 @@ TEST(SmbiosParserTest, FirmwareInventoryFields)
 
     SmbiosFirmwareInventory inventory(enumerator.table());
     ASSERT_TRUE(inventory.isValid());
-    EXPECT_EQ(inventory.name(), QString("TPM Firmware"));
-    EXPECT_EQ(inventory.version(), QString("60020.6"));
-    EXPECT_EQ(inventory.versionFormat(), QString("Major/Minor"));
-    EXPECT_EQ(inventory.id(), QString("ID-1"));
-    EXPECT_EQ(inventory.idFormat(), QString("UEFI GUID"));
-    EXPECT_EQ(inventory.releaseDate(), QString("2021-05-15T00:00:00Z"));
-    EXPECT_EQ(inventory.manufacturer(), QString("AMD"));
-    EXPECT_EQ(inventory.lowestVersion(), QString("1.0"));
-    EXPECT_EQ(inventory.state(), QString("Enabled"));
+    EXPECT_EQ(inventory.name(), std::string("TPM Firmware"));
+    EXPECT_EQ(inventory.version(), std::string("60020.6"));
+    EXPECT_EQ(inventory.versionFormat(), std::string("Major/Minor"));
+    EXPECT_EQ(inventory.id(), std::string("ID-1"));
+    EXPECT_EQ(inventory.idFormat(), std::string("UEFI GUID"));
+    EXPECT_EQ(inventory.releaseDate(), std::string("2021-05-15T00:00:00Z"));
+    EXPECT_EQ(inventory.manufacturer(), std::string("AMD"));
+    EXPECT_EQ(inventory.lowestVersion(), std::string("1.0"));
+    EXPECT_EQ(inventory.state(), std::string("Enabled"));
     EXPECT_TRUE(inventory.isUpdatable());
     EXPECT_TRUE(inventory.isWriteProtected());
     EXPECT_EQ(inventory.imageSize(), 1024ULL * 1024ULL);
@@ -2563,7 +2601,7 @@ TEST(SmbiosParserTest, FirmwareInventoryHandlesBehindTable)
     SmbiosFirmwareInventory inventory(enumerator.table());
     ASSERT_TRUE(inventory.isValid());
     EXPECT_EQ(inventory.imageSize(), 0ULL);
-    EXPECT_EQ(inventory.state(), QString("Unknown"));
+    EXPECT_EQ(inventory.state(), std::string("Unknown"));
     EXPECT_FALSE(inventory.isUpdatable());
     EXPECT_EQ(inventory.componentCount(), 2);
     EXPECT_EQ(inventory.componentHandle(0), 0x000D);
@@ -2599,7 +2637,7 @@ TEST(SmbiosParserTest, ProcessorInfoExtFields)
     SmbiosProcessorInfoExt info(enumerator.table());
     ASSERT_TRUE(info.isValid());
     EXPECT_EQ(info.processorHandle(), 0x000D);
-    EXPECT_EQ(info.architecture(), QString("x64 (x86-64, Intel64, AMD64)"));
+    EXPECT_EQ(info.architecture(), std::string("x64 (x86-64, Intel64, AMD64)"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2617,7 +2655,7 @@ TEST(SmbiosParserTest, ProcessorInfoExtWithoutBlock)
 
     SmbiosProcessorInfoExt info(enumerator.table());
     ASSERT_TRUE(info.isValid());
-    EXPECT_TRUE(info.architecture().isEmpty());
+    EXPECT_TRUE(info.architecture().empty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2643,10 +2681,10 @@ TEST(SmbiosParserTest, TpmDeviceFields)
 
     SmbiosTpmDevice tpm(enumerator.table());
     ASSERT_TRUE(tpm.isValid());
-    EXPECT_EQ(tpm.vendorId(), QString("MSFT"));
-    EXPECT_EQ(tpm.specVersion(), QString("2.0"));
-    EXPECT_EQ(tpm.firmwareVersion(), QString("7.2"));
-    EXPECT_EQ(tpm.description(), QString("INTC TPM 2.0"));
+    EXPECT_EQ(tpm.vendorId(), std::string("MSFT"));
+    EXPECT_EQ(tpm.specVersion(), std::string("2.0"));
+    EXPECT_EQ(tpm.firmwareVersion(), std::string("7.2"));
+    EXPECT_EQ(tpm.description(), std::string("INTC TPM 2.0"));
     EXPECT_TRUE(tpm.isFamilyConfigurableByFirmware());
     EXPECT_TRUE(tpm.isFamilyConfigurableBySoftware());
     EXPECT_FALSE(tpm.isFamilyConfigurableByOem());
@@ -2671,9 +2709,9 @@ TEST(SmbiosParserTest, TpmDeviceLegacySpecVersion)
     ASSERT_FALSE(enumerator.isAtEnd());
 
     SmbiosTpmDevice tpm(enumerator.table());
-    EXPECT_EQ(tpm.vendorId(), QString("IFX"));
-    EXPECT_EQ(tpm.specVersion(), QString("1.2"));
-    EXPECT_EQ(tpm.firmwareVersion(), QString("3.19"));
+    EXPECT_EQ(tpm.vendorId(), std::string("IFX"));
+    EXPECT_EQ(tpm.specVersion(), std::string("1.2"));
+    EXPECT_EQ(tpm.firmwareVersion(), std::string("3.19"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2694,9 +2732,9 @@ TEST(SmbiosParserTest, TpmDeviceUnsupportedCharacteristics)
     ASSERT_FALSE(enumerator.isAtEnd());
 
     SmbiosTpmDevice tpm(enumerator.table());
-    EXPECT_TRUE(tpm.vendorId().isEmpty());
-    EXPECT_TRUE(tpm.specVersion().isEmpty());
-    EXPECT_TRUE(tpm.firmwareVersion().isEmpty());
+    EXPECT_TRUE(tpm.vendorId().empty());
+    EXPECT_TRUE(tpm.specVersion().empty());
+    EXPECT_TRUE(tpm.firmwareVersion().empty());
     EXPECT_FALSE(tpm.isFamilyConfigurableByFirmware());
     EXPECT_FALSE(tpm.isFamilyConfigurableBySoftware());
     EXPECT_FALSE(tpm.isFamilyConfigurableByOem());

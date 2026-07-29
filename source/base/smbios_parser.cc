@@ -23,11 +23,13 @@
 #include <cstddef>
 #include <cstring>
 
+#include "base/string_util.h"
+
 namespace {
 
 //--------------------------------------------------------------------------------------------------
 // The boot-up, the power supply and the thermal state of the chassis share the same value list.
-QString chassisState(quint8 state)
+std::string chassisState(quint8 state)
 {
     static const char* kState[] =
     {
@@ -42,7 +44,7 @@ QString chassisState(quint8 state)
     if (state >= 0x01 && state <= 0x06)
         return kState[state - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -67,7 +69,7 @@ quint64 cacheSize2(quint32 size)
 
 //--------------------------------------------------------------------------------------------------
 // The internal and the external connector of a port share the same value list.
-QString connectorType(quint8 type)
+std::string connectorType(quint8 type)
 {
     static const char* kType[] =
     {
@@ -127,12 +129,12 @@ QString connectorType(quint8 type)
     if (type == 0xFF)
         return "Other";
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
 // The legacy and the extended on board devices tables share the same device type list.
-QString onBoardDeviceType(quint8 type)
+std::string onBoardDeviceType(quint8 type)
 {
     static const char* kType[] =
     {
@@ -160,14 +162,14 @@ QString onBoardDeviceType(quint8 type)
     if (device_type >= 0x01 && device_type <= 0x10)
         return kType[device_type - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
 // The probes share the same location list, of which only the temperature probe uses the last four
 // values: |last_site| tells where the list ends for the caller. The field also carries the status
 // of the probe in its upper bits.
-QString probeLocation(quint8 location, quint8 last_site)
+std::string probeLocation(quint8 location, quint8 last_site)
 {
     static const char* kLocation[] =
     {
@@ -193,14 +195,21 @@ QString probeLocation(quint8 location, quint8 last_site)
     if (site >= 0x01 && site <= last_site)
         return kLocation[site - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
 // A hexadecimal value of a fixed width, in the notation the specification itself uses.
-QString hexValue(quint32 value, int digits)
+std::string hexValue(quint32 value, int digits)
 {
-    return QString("0x%1").arg(QString("%1").arg(value, digits, 16, QChar('0')).toUpper());
+    return "0x" + strHex(value, digits);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A pair of numbers, the way the specification writes a version: "5.13".
+std::string versionString(quint32 major, quint32 minor)
+{
+    return strCat({ std::to_string(major), ".", std::to_string(minor) });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -219,7 +228,7 @@ qint32 probeValue(quint16 value)
 //--------------------------------------------------------------------------------------------------
 // The status of a probe and of a cooling device comes from the same list and sits in bits 7:5 of
 // the field the location or the type is in.
-QString probeStatus(quint8 location)
+std::string probeStatus(quint8 location)
 {
     static const char* kStatus[] =
     {
@@ -236,7 +245,7 @@ QString probeStatus(quint8 location)
     if (status >= 0x01 && status <= 0x06)
         return kStatus[status - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 } // namespace
@@ -355,10 +364,10 @@ void SmbiosTableEnumerator::validate()
 }
 
 //--------------------------------------------------------------------------------------------------
-QString smbiosString(const SmbiosTable* table, quint8 number)
+std::string smbiosString(const SmbiosTable* table, quint8 number)
 {
     if (!number)
-        return QString();
+        return std::string();
 
     const char* string = reinterpret_cast<const char*>(table) + table->length;
 
@@ -368,7 +377,30 @@ QString smbiosString(const SmbiosTable* table, quint8 number)
         --number;
     }
 
-    return QString::fromLatin1(string).trimmed();
+    // The specification allows only printable ASCII in the strings, but firmware does put bytes
+    // above it there. They are read as Latin-1 and re-encoded, so that what leaves the parser is
+    // always valid UTF-8 and can be handed on as it is.
+    const std::string_view trimmed = strTrimmed(string);
+    std::string result;
+
+    result.reserve(trimmed.size());
+
+    for (char symbol : trimmed)
+    {
+        const quint8 byte = static_cast<quint8>(symbol);
+
+        if (byte < 0x80)
+        {
+            result += symbol;
+        }
+        else
+        {
+            result += static_cast<char>(0xC0 | (byte >> 6));
+            result += static_cast<char>(0x80 | (byte & 0x3F));
+        }
+    }
+
+    return result;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -386,19 +418,19 @@ bool SmbiosBios::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosBios::vendor() const
+std::string SmbiosBios::vendor() const
 {
     return smbiosString(table_, table_->vendor);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosBios::version() const
+std::string SmbiosBios::version() const
 {
     return smbiosString(table_, table_->version);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosBios::releaseDate() const
+std::string SmbiosBios::releaseDate() const
 {
     return smbiosString(table_, table_->release_date);
 }
@@ -439,34 +471,34 @@ quint64 SmbiosBios::romSize() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosBios::revision() const
+std::string SmbiosBios::revision() const
 {
     // The pair of bytes appeared in SMBIOS 2.4, FFh in either of them means the release is not
     // reported.
     if (table_->length < 0x16 || table_->major_release == 0xFF ||
         table_->minor_release == 0xFF)
     {
-        return QString();
+        return std::string();
     }
 
-    return QString("%1.%2").arg(table_->major_release).arg(table_->minor_release);
+    return versionString(table_->major_release, table_->minor_release);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosBios::firmwareRevision() const
+std::string SmbiosBios::firmwareRevision() const
 {
     // FFh means the system has no embedded controller.
     if (table_->length < 0x18 || table_->ctrl_major_release == 0xFF ||
         table_->ctrl_minor_release == 0xFF)
     {
-        return QString();
+        return std::string();
     }
 
-    return QString("%1.%2").arg(table_->ctrl_major_release).arg(table_->ctrl_minor_release);
+    return versionString(table_->ctrl_major_release, table_->ctrl_minor_release);
 }
 
 //--------------------------------------------------------------------------------------------------
-QStringList SmbiosBios::characteristics() const
+std::vector<std::string> SmbiosBios::characteristics() const
 {
     // The names start at bit 4: the bits below it do not name a feature.
     static const char* kCharacteristics[] =
@@ -526,7 +558,7 @@ QStringList SmbiosBios::characteristics() const
         "Manufacturing mode is enabled" // Bit 6
     };
 
-    QStringList result;
+    std::vector<std::string> result;
 
     // Bit 3 tells that the firmware fills none of the bits above it.
     if (!(table_->characters & 0x08))
@@ -534,7 +566,7 @@ QStringList SmbiosBios::characteristics() const
         for (size_t i = 0; i < std::size(kCharacteristics); ++i)
         {
             if (table_->characters & (1ULL << (i + 4)))
-                result << kCharacteristics[i];
+                result.emplace_back(kCharacteristics[i]);
         }
     }
 
@@ -543,7 +575,7 @@ QStringList SmbiosBios::characteristics() const
         for (size_t i = 0; i < std::size(kExtCharacteristics1); ++i)
         {
             if (table_->ext_characters1 & (1 << i))
-                result << kExtCharacteristics1[i];
+                result.emplace_back(kExtCharacteristics1[i]);
         }
     }
 
@@ -552,7 +584,7 @@ QStringList SmbiosBios::characteristics() const
         for (size_t i = 0; i < std::size(kExtCharacteristics2); ++i)
         {
             if (table_->ext_characters2 & (1 << i))
-                result << kExtCharacteristics2[i];
+                result.emplace_back(kExtCharacteristics2[i]);
         }
     }
 
@@ -612,49 +644,49 @@ bool SmbiosBaseboard::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosBaseboard::manufacturer() const
+std::string SmbiosBaseboard::manufacturer() const
 {
     return smbiosString(table_, table_->manufacturer);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosBaseboard::product() const
+std::string SmbiosBaseboard::product() const
 {
     return smbiosString(table_, table_->product);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosBaseboard::version() const
+std::string SmbiosBaseboard::version() const
 {
     return smbiosString(table_, table_->version);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosBaseboard::serialNumber() const
+std::string SmbiosBaseboard::serialNumber() const
 {
     return smbiosString(table_, table_->serial_number);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosBaseboard::assetTag() const
+std::string SmbiosBaseboard::assetTag() const
 {
     if (table_->length < 0x09)
-        return QString();
+        return std::string();
 
     return smbiosString(table_, table_->asset_tag);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosBaseboard::location() const
+std::string SmbiosBaseboard::location() const
 {
     if (table_->length < 0x0B)
-        return QString();
+        return std::string();
 
     return smbiosString(table_, table_->location);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosBaseboard::type() const
+std::string SmbiosBaseboard::type() const
 {
     static const char* kType[] =
     {
@@ -674,12 +706,12 @@ QString SmbiosBaseboard::type() const
     };
 
     if (table_->length < 0x0E)
-        return QString();
+        return std::string();
 
     if (table_->board_type >= 0x01 && table_->board_type <= 0x0D)
         return kType[table_->board_type - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -736,47 +768,47 @@ bool SmbiosChassis::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosChassis::manufacturer() const
+std::string SmbiosChassis::manufacturer() const
 {
     return smbiosString(table_, table_->manufacturer);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosChassis::version() const
+std::string SmbiosChassis::version() const
 {
     return smbiosString(table_, table_->version);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosChassis::serialNumber() const
+std::string SmbiosChassis::serialNumber() const
 {
     return smbiosString(table_, table_->serial_number);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosChassis::assetTag() const
+std::string SmbiosChassis::assetTag() const
 {
     return smbiosString(table_, table_->asset_tag);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosChassis::skuNumber() const
+std::string SmbiosChassis::skuNumber() const
 {
     // The SKU number (2.7+) is stored behind the list of contained elements, so its offset
     // depends on the number and the size of the elements declared by the table.
     if (table_->length < 0x15)
-        return QString();
+        return std::string();
 
     const quint32 offset = 0x15 + static_cast<quint32>(table_->element_count) *
                                   static_cast<quint32>(table_->element_length);
     if (offset >= table_->length)
-        return QString();
+        return std::string();
 
     return smbiosString(table_, *(reinterpret_cast<const quint8*>(table_) + offset));
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosChassis::type() const
+std::string SmbiosChassis::type() const
 {
     static const char* kType[] =
     {
@@ -824,7 +856,7 @@ QString SmbiosChassis::type() const
     if (type >= 0x01 && type <= 0x24)
         return kType[type - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -834,34 +866,34 @@ bool SmbiosChassis::isLockPresent() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosChassis::bootUpState() const
+std::string SmbiosChassis::bootUpState() const
 {
     if (table_->length < 0x0A)
-        return QString();
+        return std::string();
 
     return chassisState(table_->boot_up_state);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosChassis::powerSupplyState() const
+std::string SmbiosChassis::powerSupplyState() const
 {
     if (table_->length < 0x0B)
-        return QString();
+        return std::string();
 
     return chassisState(table_->power_supply_state);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosChassis::thermalState() const
+std::string SmbiosChassis::thermalState() const
 {
     if (table_->length < 0x0C)
-        return QString();
+        return std::string();
 
     return chassisState(table_->thermal_state);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosChassis::securityStatus() const
+std::string SmbiosChassis::securityStatus() const
 {
     static const char* kStatus[] =
     {
@@ -873,12 +905,12 @@ QString SmbiosChassis::securityStatus() const
     };
 
     if (table_->length < 0x0D)
-        return QString();
+        return std::string();
 
     if (table_->security_status >= 0x01 && table_->security_status <= 0x05)
         return kStatus[table_->security_status - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -923,52 +955,52 @@ bool SmbiosProcessor::isPopulated() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosProcessor::manufacturer() const
+std::string SmbiosProcessor::manufacturer() const
 {
     return smbiosString(table_, table_->manufacturer);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosProcessor::version() const
+std::string SmbiosProcessor::version() const
 {
     return smbiosString(table_, table_->version);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosProcessor::serialNumber() const
+std::string SmbiosProcessor::serialNumber() const
 {
     if (table_->length < 0x21)
-        return QString();
+        return std::string();
 
     return smbiosString(table_, table_->serial_number);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosProcessor::assetTag() const
+std::string SmbiosProcessor::assetTag() const
 {
     if (table_->length < 0x22)
-        return QString();
+        return std::string();
 
     return smbiosString(table_, table_->asset_tag);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosProcessor::partNumber() const
+std::string SmbiosProcessor::partNumber() const
 {
     if (table_->length < 0x23)
-        return QString();
+        return std::string();
 
     return smbiosString(table_, table_->part_number);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosProcessor::socketDesignation() const
+std::string SmbiosProcessor::socketDesignation() const
 {
     return smbiosString(table_, table_->socket_designation);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosProcessor::type() const
+std::string SmbiosProcessor::type() const
 {
     static const char* kType[] =
     {
@@ -983,11 +1015,11 @@ QString SmbiosProcessor::type() const
     if (table_->type >= 0x01 && table_->type <= 0x06)
         return kType[table_->type - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosProcessor::family() const
+std::string SmbiosProcessor::family() const
 {
     static const struct
     {
@@ -1245,7 +1277,7 @@ QString SmbiosProcessor::family() const
     if (family == 0xFE)
     {
         if (table_->length < 0x2A)
-            return QString();
+            return std::string();
 
         family = table_->family2;
     }
@@ -1256,11 +1288,11 @@ QString SmbiosProcessor::family() const
             return kFamily[i].name;
     }
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosProcessor::status() const
+std::string SmbiosProcessor::status() const
 {
     static const char* kStatus[] =
     {
@@ -1279,11 +1311,11 @@ QString SmbiosProcessor::status() const
     if (status == 0x07)
         return "Other";
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosProcessor::upgrade() const
+std::string SmbiosProcessor::upgrade() const
 {
     static const char* kUpgrade[] =
     {
@@ -1379,16 +1411,16 @@ QString SmbiosProcessor::upgrade() const
     if (table_->upgrade >= 0x01 && table_->upgrade <= 0x57)
         return kUpgrade[table_->upgrade - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosProcessor::socketType() const
+std::string SmbiosProcessor::socketType() const
 {
     // The socket named as a string, for the sockets the enumerated upgrade value has no code
     // for. The field appeared in SMBIOS 3.8.
     if (table_->length < 0x33)
-        return QString();
+        return std::string();
 
     return smbiosString(table_, table_->socket_type);
 }
@@ -1598,13 +1630,13 @@ bool SmbiosCache::isSocketed() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosCache::designation() const
+std::string SmbiosCache::designation() const
 {
     return smbiosString(table_, table_->socket_designation);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosCache::location() const
+std::string SmbiosCache::location() const
 {
     static const char* kLocation[] =
     {
@@ -1619,7 +1651,7 @@ QString SmbiosCache::location() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosCache::mode() const
+std::string SmbiosCache::mode() const
 {
     static const char* kMode[] =
     {
@@ -1634,7 +1666,7 @@ QString SmbiosCache::mode() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosCache::type() const
+std::string SmbiosCache::type() const
 {
     static const char* kType[] =
     {
@@ -1647,16 +1679,16 @@ QString SmbiosCache::type() const
 
     // The field appeared in SMBIOS 2.1.
     if (table_->length < 0x12)
-        return QString();
+        return std::string();
 
     if (table_->type >= 0x01 && table_->type <= 0x05)
         return kType[table_->type - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosCache::errorCorrectionType() const
+std::string SmbiosCache::errorCorrectionType() const
 {
     static const char* kType[] =
     {
@@ -1670,16 +1702,16 @@ QString SmbiosCache::errorCorrectionType() const
 
     // The field appeared in SMBIOS 2.1.
     if (table_->length < 0x11)
-        return QString();
+        return std::string();
 
     if (table_->error_correction_type >= 0x01 && table_->error_correction_type <= 0x06)
         return kType[table_->error_correction_type - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosCache::associativity() const
+std::string SmbiosCache::associativity() const
 {
     static const char* kAssociativity[] =
     {
@@ -1701,16 +1733,16 @@ QString SmbiosCache::associativity() const
 
     // The field appeared in SMBIOS 2.1.
     if (table_->length < 0x13)
-        return QString();
+        return std::string();
 
     if (table_->associativity >= 0x01 && table_->associativity <= 0x0E)
         return kAssociativity[table_->associativity - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosCache::currentSramType() const
+std::string SmbiosCache::currentSramType() const
 {
     static const char* kType[] =
     {
@@ -1730,7 +1762,7 @@ QString SmbiosCache::currentSramType() const
             return kType[i];
     }
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1826,31 +1858,31 @@ bool SmbiosPortConnector::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosPortConnector::internalDesignator() const
+std::string SmbiosPortConnector::internalDesignator() const
 {
     return smbiosString(table_, table_->internal_designator);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosPortConnector::internalConnectorType() const
+std::string SmbiosPortConnector::internalConnectorType() const
 {
     return connectorType(table_->internal_connector);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosPortConnector::externalDesignator() const
+std::string SmbiosPortConnector::externalDesignator() const
 {
     return smbiosString(table_, table_->external_designator);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosPortConnector::externalConnectorType() const
+std::string SmbiosPortConnector::externalConnectorType() const
 {
     return connectorType(table_->external_connector);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosPortConnector::type() const
+std::string SmbiosPortConnector::type() const
 {
     static const char* kType[] =
     {
@@ -1907,7 +1939,7 @@ QString SmbiosPortConnector::type() const
     if (table_->type == 0xFF)
         return "Other";
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1925,13 +1957,13 @@ bool SmbiosSystemSlot::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosSystemSlot::designation() const
+std::string SmbiosSystemSlot::designation() const
 {
     return smbiosString(table_, table_->designation);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosSystemSlot::type() const
+std::string SmbiosSystemSlot::type() const
 {
     static const char* kType[] =
     {
@@ -2038,11 +2070,11 @@ QString SmbiosSystemSlot::type() const
     if (table_->type >= 0xB8 && table_->type <= 0xC6)
         return kExpressType[table_->type - 0xB8];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosSystemSlot::dataBusWidth() const
+std::string SmbiosSystemSlot::dataBusWidth() const
 {
     static const char* kWidth[] =
     {
@@ -2065,11 +2097,11 @@ QString SmbiosSystemSlot::dataBusWidth() const
     if (table_->data_bus_width >= 0x01 && table_->data_bus_width <= 0x0E)
         return kWidth[table_->data_bus_width - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosSystemSlot::usage() const
+std::string SmbiosSystemSlot::usage() const
 {
     static const char* kUsage[] =
     {
@@ -2083,11 +2115,11 @@ QString SmbiosSystemSlot::usage() const
     if (table_->usage >= 0x01 && table_->usage <= 0x05)
         return kUsage[table_->usage - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosSystemSlot::length() const
+std::string SmbiosSystemSlot::length() const
 {
     static const char* kLength[] =
     {
@@ -2102,7 +2134,7 @@ QString SmbiosSystemSlot::length() const
     if (table_->slot_length >= 0x01 && table_->slot_length <= 0x06)
         return kLength[table_->slot_length - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2247,21 +2279,21 @@ int SmbiosOnBoardDevices::count() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosOnBoardDevices::description(int index) const
+std::string SmbiosOnBoardDevices::description(int index) const
 {
     const quint8* device_data = device(index);
     if (!device_data)
-        return QString();
+        return std::string();
 
     return smbiosString(table_, device_data[1]);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosOnBoardDevices::type(int index) const
+std::string SmbiosOnBoardDevices::type(int index) const
 {
     const quint8* device_data = device(index);
     if (!device_data)
-        return QString();
+        return std::string();
 
     return onBoardDeviceType(device_data[0]);
 }
@@ -2306,10 +2338,10 @@ int SmbiosStringList::count() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosStringList::string(int index) const
+std::string SmbiosStringList::string(int index) const
 {
     if (index < 0 || index >= count())
-        return QString();
+        return std::string();
 
     // The string area numbers its strings starting at one. Firmware that declares more strings
     // than it stores leaves the last ones empty.
@@ -2331,7 +2363,7 @@ bool SmbiosMemoryArray::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosMemoryArray::location() const
+std::string SmbiosMemoryArray::location() const
 {
     static const char* kLocation[] =
     {
@@ -2362,11 +2394,11 @@ QString SmbiosMemoryArray::location() const
     if (table_->location >= 0xA0 && table_->location <= 0xA4)
         return kPc98Location[table_->location - 0xA0];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosMemoryArray::use() const
+std::string SmbiosMemoryArray::use() const
 {
     static const char* kUse[] =
     {
@@ -2382,11 +2414,11 @@ QString SmbiosMemoryArray::use() const
     if (table_->use >= 0x01 && table_->use <= 0x07)
         return kUse[table_->use - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosMemoryArray::errorCorrection() const
+std::string SmbiosMemoryArray::errorCorrection() const
 {
     static const char* kCorrection[] =
     {
@@ -2402,7 +2434,7 @@ QString SmbiosMemoryArray::errorCorrection() const
     if (table_->error_correction >= 0x01 && table_->error_correction <= 0x07)
         return kCorrection[table_->error_correction - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2449,50 +2481,50 @@ bool SmbiosMemoryDevice::isPresent() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosMemoryDevice::location() const
+std::string SmbiosMemoryDevice::location() const
 {
     return smbiosString(table_, table_->device_location);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosMemoryDevice::bankLocator() const
+std::string SmbiosMemoryDevice::bankLocator() const
 {
     return smbiosString(table_, table_->bank_locator);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosMemoryDevice::manufacturer() const
+std::string SmbiosMemoryDevice::manufacturer() const
 {
     if (table_->length < 0x18)
-        return QString();
+        return std::string();
 
     static const char* kBlackList[] = { "0000" };
 
-    QString result = smbiosString(table_, table_->manufacturer);
+    std::string result = smbiosString(table_, table_->manufacturer);
 
     for (size_t i = 0; i < std::size(kBlackList); ++i)
     {
         if (result == kBlackList[i])
-            return QString();
+            return std::string();
     }
 
     return result;
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosMemoryDevice::serialNumber() const
+std::string SmbiosMemoryDevice::serialNumber() const
 {
     if (table_->length < 0x19)
-        return QString();
+        return std::string();
 
     return smbiosString(table_, table_->serial_number);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosMemoryDevice::assetTag() const
+std::string SmbiosMemoryDevice::assetTag() const
 {
     if (table_->length < 0x1A)
-        return QString();
+        return std::string();
 
     return smbiosString(table_, table_->asset_tag);
 }
@@ -2527,7 +2559,7 @@ quint64 SmbiosMemoryDevice::size() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosMemoryDevice::type() const
+std::string SmbiosMemoryDevice::type() const
 {
     static const char* kType[] =
     {
@@ -2573,11 +2605,11 @@ QString SmbiosMemoryDevice::type() const
     if (table_->memory_type >= 0x01 && table_->memory_type <= 0x25)
         return kType[table_->memory_type - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosMemoryDevice::formFactor() const
+std::string SmbiosMemoryDevice::formFactor() const
 {
     static const char* kFormFactor[] =
     {
@@ -2605,11 +2637,11 @@ QString SmbiosMemoryDevice::formFactor() const
     if (table_->form_factor >= 0x01 && table_->form_factor <= 0x13)
         return kFormFactor[table_->form_factor - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosMemoryDevice::technology() const
+std::string SmbiosMemoryDevice::technology() const
 {
     static const char* kTechnology[] =
     {
@@ -2625,39 +2657,39 @@ QString SmbiosMemoryDevice::technology() const
 
     // The field appeared in SMBIOS 3.2.
     if (table_->length < 0x29)
-        return QString();
+        return std::string();
 
     if (table_->technology >= 0x01 && table_->technology <= 0x08)
         return kTechnology[table_->technology - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosMemoryDevice::partNumber() const
+std::string SmbiosMemoryDevice::partNumber() const
 {
     if (table_->length < 0x1B)
-        return QString();
+        return std::string();
 
     static const char* kBlackList[] = { "[Empty]" };
 
-    QString result = smbiosString(table_, table_->part_number);
+    std::string result = smbiosString(table_, table_->part_number);
 
     for (size_t i = 0; i < std::size(kBlackList); ++i)
     {
         if (result == kBlackList[i])
-            return QString();
+            return std::string();
     }
 
     return result;
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosMemoryDevice::firmwareVersion() const
+std::string SmbiosMemoryDevice::firmwareVersion() const
 {
     // The field appeared in SMBIOS 3.2.
     if (table_->length < 0x2C)
-        return QString();
+        return std::string();
 
     return smbiosString(table_, table_->firmware_version);
 }
@@ -2802,7 +2834,7 @@ quint64 SmbiosMemoryDevice::logicalSize() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QStringList SmbiosMemoryDevice::typeDetail() const
+std::vector<std::string> SmbiosMemoryDevice::typeDetail() const
 {
     // The names start at bit 1: bit 0 does not name a property.
     static const char* kDetail[] =
@@ -2824,12 +2856,12 @@ QStringList SmbiosMemoryDevice::typeDetail() const
         "LRDIMM" // Bit 15
     };
 
-    QStringList result;
+    std::vector<std::string> result;
 
     for (size_t i = 0; i < std::size(kDetail); ++i)
     {
         if (table_->type_detail & (1 << (i + 1)))
-            result << kDetail[i];
+            result.emplace_back(kDetail[i]);
     }
 
     return result;
@@ -2857,7 +2889,7 @@ bool SmbiosMemoryError::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosMemoryError::type() const
+std::string SmbiosMemoryError::type() const
 {
     static const char* kType[] =
     {
@@ -2880,11 +2912,11 @@ QString SmbiosMemoryError::type() const
     if (table_->error_type >= 0x01 && table_->error_type <= 0x0E)
         return kType[table_->error_type - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosMemoryError::granularity() const
+std::string SmbiosMemoryError::granularity() const
 {
     static const char* kGranularity[] =
     {
@@ -2897,11 +2929,11 @@ QString SmbiosMemoryError::granularity() const
     if (table_->granularity >= 0x01 && table_->granularity <= 0x04)
         return kGranularity[table_->granularity - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosMemoryError::operation() const
+std::string SmbiosMemoryError::operation() const
 {
     static const char* kOperation[] =
     {
@@ -2915,7 +2947,7 @@ QString SmbiosMemoryError::operation() const
     if (table_->operation >= 0x01 && table_->operation <= 0x05)
         return kOperation[table_->operation - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -3149,7 +3181,7 @@ bool SmbiosPointingDevice::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosPointingDevice::type() const
+std::string SmbiosPointingDevice::type() const
 {
     static const char* kType[] =
     {
@@ -3167,11 +3199,11 @@ QString SmbiosPointingDevice::type() const
     if (table_->type >= 0x01 && table_->type <= 0x09)
         return kType[table_->type - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosPointingDevice::interfaceType() const
+std::string SmbiosPointingDevice::interfaceType() const
 {
     static const char* kInterface[] =
     {
@@ -3200,7 +3232,7 @@ QString SmbiosPointingDevice::interfaceType() const
     if (table_->interface_type >= 0xA0 && table_->interface_type <= 0xA4)
         return kBusInterface[table_->interface_type - 0xA0];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -3224,60 +3256,62 @@ bool SmbiosPortableBattery::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosPortableBattery::location() const
+std::string SmbiosPortableBattery::location() const
 {
     return smbiosString(table_, table_->location);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosPortableBattery::manufacturer() const
+std::string SmbiosPortableBattery::manufacturer() const
 {
     return smbiosString(table_, table_->manufacturer);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosPortableBattery::manufactureDate() const
+std::string SmbiosPortableBattery::manufactureDate() const
 {
-    QString result = smbiosString(table_, table_->manufacture_date);
-    if (!result.isEmpty())
+    std::string result = smbiosString(table_, table_->manufacture_date);
+    if (!result.empty())
         return result;
 
     // Batteries following the Smart Battery Data Specification leave the string empty and pack
     // the date into a word (2.2+): bits 15:9 hold the year biased by 1980, bits 8:5 the month
     // and bits 4:0 the day.
     if (table_->length < 0x14 || !table_->sbds_manufacture_date)
-        return QString();
+        return std::string();
 
     const int year = 1980 + (table_->sbds_manufacture_date >> 9);
     const int month = (table_->sbds_manufacture_date >> 5) & 0x0F;
     const int day = table_->sbds_manufacture_date & 0x1F;
 
-    return QDate(year, month, day).toString(Qt::ISODate);
+    // A date the firmware packed wrong is rejected rather than written out as it is, which is
+    // what the calendar is asked for here.
+    return QDate(year, month, day).toString(Qt::ISODate).toStdString();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosPortableBattery::serialNumber() const
+std::string SmbiosPortableBattery::serialNumber() const
 {
-    QString result = smbiosString(table_, table_->serial_number);
-    if (!result.isEmpty())
+    std::string result = smbiosString(table_, table_->serial_number);
+    if (!result.empty())
         return result;
 
     // Batteries following the Smart Battery Data Specification report the serial number as a
     // word instead of a string (2.2+).
     if (table_->length < 0x12 || !table_->sbds_serial_number)
-        return QString();
+        return std::string();
 
-    return QString("%1").arg(table_->sbds_serial_number, 4, 16, QChar('0')).toUpper();
+    return strHex(table_->sbds_serial_number, 4);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosPortableBattery::deviceName() const
+std::string SmbiosPortableBattery::deviceName() const
 {
     return smbiosString(table_, table_->device_name);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosPortableBattery::chemistry() const
+std::string SmbiosPortableBattery::chemistry() const
 {
     static const char* kChemistry[] =
     {
@@ -3295,19 +3329,19 @@ QString SmbiosPortableBattery::chemistry() const
     // and leave the enumerated field unknown (2.2+).
     if (table_->device_chemistry == 0x02 && table_->length >= 0x15)
     {
-        QString result = smbiosString(table_, table_->sbds_device_chemistry);
-        if (!result.isEmpty())
+        std::string result = smbiosString(table_, table_->sbds_device_chemistry);
+        if (!result.empty())
             return result;
     }
 
     if (table_->device_chemistry >= 0x01 && table_->device_chemistry <= 0x08)
         return kChemistry[table_->device_chemistry - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosPortableBattery::sbdsVersion() const
+std::string SmbiosPortableBattery::sbdsVersion() const
 {
     return smbiosString(table_, table_->sbds_version);
 }
@@ -3357,13 +3391,13 @@ bool SmbiosProbe::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosProbe::description() const
+std::string SmbiosProbe::description() const
 {
     return smbiosString(table_, table_->description);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosProbe::location() const
+std::string SmbiosProbe::location() const
 {
     // Only the temperature probe knows the four locations behind 0Bh.
     const quint8 last_site =
@@ -3373,7 +3407,7 @@ QString SmbiosProbe::location() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosProbe::status() const
+std::string SmbiosProbe::status() const
 {
     return probeStatus(table_->location);
 }
@@ -3434,17 +3468,17 @@ bool SmbiosCoolingDevice::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosCoolingDevice::description() const
+std::string SmbiosCoolingDevice::description() const
 {
     // The description appeared in SMBIOS 2.7.
     if (table_->length < 0x0F)
-        return QString();
+        return std::string();
 
     return smbiosString(table_, table_->description);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosCoolingDevice::type() const
+std::string SmbiosCoolingDevice::type() const
 {
     static const char* kType[] =
     {
@@ -3474,11 +3508,11 @@ QString SmbiosCoolingDevice::type() const
     if (device_type >= 0x10 && device_type <= 0x11)
         return kCoolingType[device_type - 0x10];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosCoolingDevice::status() const
+std::string SmbiosCoolingDevice::status() const
 {
     return probeStatus(table_->device_type);
 }
@@ -3515,7 +3549,7 @@ bool SmbiosSystemBoot::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosSystemBoot::status() const
+std::string SmbiosSystemBoot::status() const
 {
     static const char* kStatus[] =
     {
@@ -3539,7 +3573,7 @@ QString SmbiosSystemBoot::status() const
     if (table_->status >= 0xC0)
         return "Product-specific";
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -3583,49 +3617,49 @@ quint8 SmbiosPowerSupply::unitGroup() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosPowerSupply::location() const
+std::string SmbiosPowerSupply::location() const
 {
     return smbiosString(table_, table_->location);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosPowerSupply::deviceName() const
+std::string SmbiosPowerSupply::deviceName() const
 {
     return smbiosString(table_, table_->device_name);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosPowerSupply::manufacturer() const
+std::string SmbiosPowerSupply::manufacturer() const
 {
     return smbiosString(table_, table_->manufacturer);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosPowerSupply::serialNumber() const
+std::string SmbiosPowerSupply::serialNumber() const
 {
     return smbiosString(table_, table_->serial_number);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosPowerSupply::assetTag() const
+std::string SmbiosPowerSupply::assetTag() const
 {
     return smbiosString(table_, table_->asset_tag);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosPowerSupply::modelPartNumber() const
+std::string SmbiosPowerSupply::modelPartNumber() const
 {
     return smbiosString(table_, table_->model_part_number);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosPowerSupply::revisionLevel() const
+std::string SmbiosPowerSupply::revisionLevel() const
 {
     return smbiosString(table_, table_->revision_level);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosPowerSupply::type() const
+std::string SmbiosPowerSupply::type() const
 {
     static const char* kType[] =
     {
@@ -3645,11 +3679,11 @@ QString SmbiosPowerSupply::type() const
     if (type >= 0x01 && type <= 0x08)
         return kType[type - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosPowerSupply::status() const
+std::string SmbiosPowerSupply::status() const
 {
     static const char* kStatus[] =
     {
@@ -3666,11 +3700,11 @@ QString SmbiosPowerSupply::status() const
     if (status >= 0x01 && status <= 0x05)
         return kStatus[status - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosPowerSupply::inputVoltageRangeSwitching() const
+std::string SmbiosPowerSupply::inputVoltageRangeSwitching() const
 {
     static const char* kSwitching[] =
     {
@@ -3688,7 +3722,7 @@ QString SmbiosPowerSupply::inputVoltageRangeSwitching() const
     if (switching >= 0x01 && switching <= 0x06)
         return kSwitching[switching - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -3743,27 +3777,27 @@ quint8 SmbiosAdditionalInfo::referencedOffset(int index) const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosAdditionalInfo::string(int index) const
+std::string SmbiosAdditionalInfo::string(int index) const
 {
     const quint8* data = entry(index);
     if (!data)
-        return QString();
+        return std::string();
 
     return smbiosString(table_, data[4]);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosAdditionalInfo::value(int index) const
+std::string SmbiosAdditionalInfo::value(int index) const
 {
     const quint8* data = entry(index);
     if (!data)
-        return QString();
+        return std::string();
 
     // Whatever the entry leaves behind its fixed part is the value. The specification gives it no
     // meaning of its own and only the widths below are defined for it.
     const quint32 width = data[0] - 0x05;
     if (width != 1 && width != 2 && width != 4)
-        return QString();
+        return std::string();
 
     quint32 value = 0;
 
@@ -3825,13 +3859,13 @@ bool SmbiosOnBoardDeviceExt::isEnabled() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosOnBoardDeviceExt::designation() const
+std::string SmbiosOnBoardDeviceExt::designation() const
 {
     return smbiosString(table_, table_->designation);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosOnBoardDeviceExt::type() const
+std::string SmbiosOnBoardDeviceExt::type() const
 {
     return onBoardDeviceType(table_->device_type);
 }
@@ -3904,12 +3938,12 @@ bool SmbiosTpmDevice::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosTpmDevice::vendorId() const
+std::string SmbiosTpmDevice::vendorId() const
 {
     // The vendor id assigned by the Trusted Computing Group is four bytes of ASCII padded with
     // zeros. Firmware sometimes puts a numeric id there instead, so unprintable bytes are
     // dropped rather than shown as garbage.
-    QString result;
+    std::string result;
 
     for (size_t i = 0; i < sizeof(table_->vendor_id); ++i)
     {
@@ -3918,44 +3952,44 @@ QString SmbiosTpmDevice::vendorId() const
             break;
 
         if (symbol >= 32 && symbol < 127)
-            result += QChar::fromLatin1(static_cast<char>(symbol));
+            result += static_cast<char>(symbol);
     }
 
-    return result.trimmed();
+    return std::string(strTrimmed(result));
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosTpmDevice::specVersion() const
+std::string SmbiosTpmDevice::specVersion() const
 {
     if (!table_->major_version)
-        return QString();
+        return std::string();
 
-    return QString("%1.%2").arg(table_->major_version).arg(table_->minor_version);
+    return versionString(table_->major_version, table_->minor_version);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosTpmDevice::firmwareVersion() const
+std::string SmbiosTpmDevice::firmwareVersion() const
 {
     // The layout of the field depends on the specification the device follows.
     if (table_->major_version == 0x01)
     {
         // TPM 1.2 keeps the numbers in the second and the third byte of the field.
-        return QString("%1.%2").arg((table_->firmware_version1 >> 8) & 0xFF)
-                               .arg((table_->firmware_version1 >> 16) & 0xFF);
+        return versionString((table_->firmware_version1 >> 8) & 0xFF,
+                             (table_->firmware_version1 >> 16) & 0xFF);
     }
 
     if (table_->major_version == 0x02)
     {
         // TPM 2.0 splits the field in halves.
-        return QString("%1.%2").arg(table_->firmware_version1 >> 16)
-                               .arg(table_->firmware_version1 & 0xFFFF);
+        return versionString(table_->firmware_version1 >> 16,
+                             table_->firmware_version1 & 0xFFFF);
     }
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosTpmDevice::description() const
+std::string SmbiosTpmDevice::description() const
 {
     return smbiosString(table_, table_->description);
 }
@@ -4004,19 +4038,19 @@ bool SmbiosFirmwareInventory::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosFirmwareInventory::name() const
+std::string SmbiosFirmwareInventory::name() const
 {
     return smbiosString(table_, table_->name);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosFirmwareInventory::version() const
+std::string SmbiosFirmwareInventory::version() const
 {
     return smbiosString(table_, table_->version);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosFirmwareInventory::versionFormat() const
+std::string SmbiosFirmwareInventory::versionFormat() const
 {
     static const char* kFormat[] =
     {
@@ -4032,17 +4066,17 @@ QString SmbiosFirmwareInventory::versionFormat() const
     if (table_->version_format >= 0x80)
         return "OEM-specific";
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosFirmwareInventory::id() const
+std::string SmbiosFirmwareInventory::id() const
 {
     return smbiosString(table_, table_->id);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosFirmwareInventory::idFormat() const
+std::string SmbiosFirmwareInventory::idFormat() const
 {
     static const char* kFormat[] =
     {
@@ -4056,29 +4090,29 @@ QString SmbiosFirmwareInventory::idFormat() const
     if (table_->id_format >= 0x80)
         return "OEM-specific";
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosFirmwareInventory::releaseDate() const
+std::string SmbiosFirmwareInventory::releaseDate() const
 {
     return smbiosString(table_, table_->release_date);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosFirmwareInventory::manufacturer() const
+std::string SmbiosFirmwareInventory::manufacturer() const
 {
     return smbiosString(table_, table_->manufacturer);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosFirmwareInventory::lowestVersion() const
+std::string SmbiosFirmwareInventory::lowestVersion() const
 {
     return smbiosString(table_, table_->lowest_version);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosFirmwareInventory::state() const
+std::string SmbiosFirmwareInventory::state() const
 {
     static const char* kState[] =
     {
@@ -4095,7 +4129,7 @@ QString SmbiosFirmwareInventory::state() const
     if (table_->state >= 0x01 && table_->state <= 0x08)
         return kState[table_->state - 0x01];
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -4163,7 +4197,7 @@ quint16 SmbiosProcessorInfoExt::processorHandle() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SmbiosProcessorInfoExt::architecture() const
+std::string SmbiosProcessorInfoExt::architecture() const
 {
     static const char* kArchitecture[] =
     {
@@ -4181,10 +4215,10 @@ QString SmbiosProcessorInfoExt::architecture() const
 
     // The type sits in the processor-specific block, behind the length of the data in it.
     if (table_->length < 0x08)
-        return QString();
+        return std::string();
 
     if (table_->processor_type >= 0x01 && table_->processor_type <= 0x0A)
         return kArchitecture[table_->processor_type - 0x01];
 
-    return QString();
+    return std::string();
 }

@@ -25,6 +25,9 @@
 #include <QStringList>
 
 #include <atomic>
+#include <string>
+#include <utility>
+#include <vector>
 
 #include "base/edid.h"
 #include "base/event_enumerator.h"
@@ -33,6 +36,7 @@
 #include "base/physical_drive_reader.h"
 #include "base/serialization.h"
 #include "base/smbios_parser.h"
+#include "base/string_util.h"
 #include "base/sys_info.h"
 #include "base/net/net_utils.h"
 #include "common/system_info_constants.h"
@@ -603,37 +607,37 @@ void fillOperatingSystem(proto::system_info::SystemInfo* system_info)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString cacheSupportedSram(const SmbiosCache& cache)
+std::string cacheSupportedSram(const SmbiosCache& cache)
 {
-    QStringList types;
+    std::vector<std::string> types;
 
     if (cache.supportsNonBurst())
-        types << "Non-Burst";
+        types.emplace_back("Non-Burst");
     if (cache.supportsBurst())
-        types << "Burst";
+        types.emplace_back("Burst");
     if (cache.supportsPipelineBurst())
-        types << "Pipeline Burst";
+        types.emplace_back("Pipeline Burst");
     if (cache.supportsSynchronous())
-        types << "Synchronous";
+        types.emplace_back("Synchronous");
     if (cache.supportsAsynchronous())
-        types << "Asynchronous";
+        types.emplace_back("Asynchronous");
 
-    return types.join(", ");
+    return strJoin(types, ", ");
 }
 
 //--------------------------------------------------------------------------------------------------
 // The address of a device on the PCI bus, in the notation the operating systems use. The system
 // slot and the on-board device report it the same way.
 template <class T>
-QString busAddress(const T& table)
+std::string busAddress(const T& table)
 {
     if (!table.hasBusAddress())
-        return QString();
+        return std::string();
 
-    return QString("%1:%2:%3.%4").arg(table.segmentGroupNumber(), 4, 16, QChar('0'))
-                                 .arg(table.busNumber(), 2, 16, QChar('0'))
-                                 .arg(table.deviceNumber(), 2, 16, QChar('0'))
-                                 .arg(table.functionNumber());
+    return strCat({ strHex(table.segmentGroupNumber(), 4, HexCase::LOWER), ":",
+                    strHex(table.busNumber(), 2, HexCase::LOWER), ":",
+                    strHex(table.deviceNumber(), 2, HexCase::LOWER), ".",
+                    std::to_string(table.functionNumber()) });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -641,9 +645,9 @@ QString busAddress(const T& table)
 // use of a memory array and the locator of a memory device. A table may come before the one it
 // points at, so the names are collected before the tables are read. Handles are unique within the
 // whole set of tables.
-QHash<quint16, QString> referencedTableNames(const QByteArray& dump)
+QHash<quint16, std::string> referencedTableNames(const QByteArray& dump)
 {
-    QHash<quint16, QString> result;
+    QHash<quint16, std::string> result;
 
     for (SmbiosTableEnumerator enumerator(dump); !enumerator.isAtEnd(); enumerator.advance())
     {
@@ -660,7 +664,7 @@ QHash<quint16, QString> referencedTableNames(const QByteArray& dump)
                 SmbiosProcessor processor(table);
                 if (processor.isValid())
                 {
-                    const QString name = processor.version().isEmpty() ?
+                    const std::string name = processor.version().empty() ?
                         processor.socketDesignation() : processor.version();
 
                     result.insert(table->handle, name);
@@ -697,7 +701,7 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
 {
     proto::system_info::Dmi* dmi = system_info->mutable_dmi();
     const QByteArray dump = SysInfo::smbiosDump();
-    const QHash<quint16, QString> table_names = referencedTableNames(dump);
+    const QHash<quint16, std::string> table_names = referencedTableNames(dump);
     SmbiosTableEnumerator enumerator(dump);
     quint32 structure_count = 0;
 
@@ -716,17 +720,17 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
 
                 proto::system_info::Dmi::Bios* bios = dmi->add_bios();
 
-                bios->set_vendor(bios_table.vendor().toStdString());
-                bios->set_version(bios_table.version().toStdString());
-                bios->set_release_date(bios_table.releaseDate().toStdString());
+                bios->set_vendor(bios_table.vendor());
+                bios->set_version(bios_table.version());
+                bios->set_release_date(bios_table.releaseDate());
                 bios->set_address(bios_table.address());
                 bios->set_rom_size(bios_table.romSize());
-                bios->set_revision(bios_table.revision().toStdString());
-                bios->set_firmware_revision(bios_table.firmwareRevision().toStdString());
+                bios->set_revision(bios_table.revision());
+                bios->set_firmware_revision(bios_table.firmwareRevision());
 
-                const QStringList characteristics = bios_table.characteristics();
-                for (const QString& characteristic : characteristics)
-                    bios->add_characteristic(characteristic.toStdString());
+                std::vector<std::string> characteristics = bios_table.characteristics();
+                for (std::string& characteristic : characteristics)
+                    bios->add_characteristic(std::move(characteristic));
             }
             break;
 
@@ -738,13 +742,13 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
 
                 proto::system_info::Dmi::Baseboard* baseboard = dmi->add_baseboard();
 
-                baseboard->set_manufacturer(baseboard_table.manufacturer().toStdString());
-                baseboard->set_product(baseboard_table.product().toStdString());
-                baseboard->set_version(baseboard_table.version().toStdString());
-                baseboard->set_serial_number(baseboard_table.serialNumber().toStdString());
-                baseboard->set_asset_tag(baseboard_table.assetTag().toStdString());
-                baseboard->set_location(baseboard_table.location().toStdString());
-                baseboard->set_type(baseboard_table.type().toStdString());
+                baseboard->set_manufacturer(baseboard_table.manufacturer());
+                baseboard->set_product(baseboard_table.product());
+                baseboard->set_version(baseboard_table.version());
+                baseboard->set_serial_number(baseboard_table.serialNumber());
+                baseboard->set_asset_tag(baseboard_table.assetTag());
+                baseboard->set_location(baseboard_table.location());
+                baseboard->set_type(baseboard_table.type());
                 baseboard->set_hosting_board(baseboard_table.isHostingBoard());
                 baseboard->set_requires_daughter_board(baseboard_table.requiresDaughterBoard());
                 baseboard->set_removable(baseboard_table.isRemovable());
@@ -761,16 +765,16 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
 
                 proto::system_info::Dmi::Chassis* chassis = dmi->add_chassis();
 
-                chassis->set_manufacturer(chassis_table.manufacturer().toStdString());
-                chassis->set_version(chassis_table.version().toStdString());
-                chassis->set_serial_number(chassis_table.serialNumber().toStdString());
-                chassis->set_asset_tag(chassis_table.assetTag().toStdString());
-                chassis->set_sku_number(chassis_table.skuNumber().toStdString());
-                chassis->set_type(chassis_table.type().toStdString());
-                chassis->set_boot_up_state(chassis_table.bootUpState().toStdString());
-                chassis->set_power_supply_state(chassis_table.powerSupplyState().toStdString());
-                chassis->set_thermal_state(chassis_table.thermalState().toStdString());
-                chassis->set_security_status(chassis_table.securityStatus().toStdString());
+                chassis->set_manufacturer(chassis_table.manufacturer());
+                chassis->set_version(chassis_table.version());
+                chassis->set_serial_number(chassis_table.serialNumber());
+                chassis->set_asset_tag(chassis_table.assetTag());
+                chassis->set_sku_number(chassis_table.skuNumber());
+                chassis->set_type(chassis_table.type());
+                chassis->set_boot_up_state(chassis_table.bootUpState());
+                chassis->set_power_supply_state(chassis_table.powerSupplyState());
+                chassis->set_thermal_state(chassis_table.thermalState());
+                chassis->set_security_status(chassis_table.securityStatus());
                 chassis->set_lock_present(chassis_table.isLockPresent());
                 chassis->set_height(chassis_table.height());
                 chassis->set_power_cords(chassis_table.powerCords());
@@ -786,18 +790,18 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
                 proto::system_info::Dmi::Processor* processor = dmi->add_processor();
 
                 processor->set_populated(processor_table.isPopulated());
-                processor->set_manufacturer(processor_table.manufacturer().toStdString());
-                processor->set_version(processor_table.version().toStdString());
-                processor->set_family(processor_table.family().toStdString());
-                processor->set_type(processor_table.type().toStdString());
-                processor->set_status(processor_table.status().toStdString());
+                processor->set_manufacturer(processor_table.manufacturer());
+                processor->set_version(processor_table.version());
+                processor->set_family(processor_table.family());
+                processor->set_type(processor_table.type());
+                processor->set_status(processor_table.status());
                 processor->set_socket_designation(
-                    processor_table.socketDesignation().toStdString());
-                processor->set_socket(processor_table.upgrade().toStdString());
-                processor->set_socket_type(processor_table.socketType().toStdString());
-                processor->set_serial_number(processor_table.serialNumber().toStdString());
-                processor->set_asset_tag(processor_table.assetTag().toStdString());
-                processor->set_part_number(processor_table.partNumber().toStdString());
+                    processor_table.socketDesignation());
+                processor->set_socket(processor_table.upgrade());
+                processor->set_socket_type(processor_table.socketType());
+                processor->set_serial_number(processor_table.serialNumber());
+                processor->set_asset_tag(processor_table.assetTag());
+                processor->set_part_number(processor_table.partNumber());
                 processor->set_id(processor_table.id());
                 processor->set_voltage(processor_table.voltage());
                 processor->set_external_clock(processor_table.externalClock());
@@ -826,15 +830,15 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
 
                 proto::system_info::Dmi::Cache* cache = dmi->add_cache();
 
-                cache->set_designation(cache_table.designation().toStdString());
-                cache->set_location(cache_table.location().toStdString());
-                cache->set_mode(cache_table.mode().toStdString());
-                cache->set_type(cache_table.type().toStdString());
-                cache->set_sram_type(cache_table.currentSramType().toStdString());
-                cache->set_supported_sram_type(cacheSupportedSram(cache_table).toStdString());
+                cache->set_designation(cache_table.designation());
+                cache->set_location(cache_table.location());
+                cache->set_mode(cache_table.mode());
+                cache->set_type(cache_table.type());
+                cache->set_sram_type(cache_table.currentSramType());
+                cache->set_supported_sram_type(cacheSupportedSram(cache_table));
                 cache->set_error_correction_type(
-                    cache_table.errorCorrectionType().toStdString());
-                cache->set_associativity(cache_table.associativity().toStdString());
+                    cache_table.errorCorrectionType());
+                cache->set_associativity(cache_table.associativity());
                 cache->set_level(cache_table.level());
                 cache->set_max_size(cache_table.maxSize());
                 cache->set_current_size(cache_table.currentSize());
@@ -852,13 +856,13 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
 
                 proto::system_info::Dmi::PortConnector* port = dmi->add_port_connector();
 
-                port->set_internal_designator(port_table.internalDesignator().toStdString());
+                port->set_internal_designator(port_table.internalDesignator());
                 port->set_internal_connector_type(
-                    port_table.internalConnectorType().toStdString());
-                port->set_external_designator(port_table.externalDesignator().toStdString());
+                    port_table.internalConnectorType());
+                port->set_external_designator(port_table.externalDesignator());
                 port->set_external_connector_type(
-                    port_table.externalConnectorType().toStdString());
-                port->set_type(port_table.type().toStdString());
+                    port_table.externalConnectorType());
+                port->set_type(port_table.type());
             }
             break;
 
@@ -870,12 +874,12 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
 
                 proto::system_info::Dmi::SystemSlot* slot = dmi->add_system_slot();
 
-                slot->set_designation(slot_table.designation().toStdString());
-                slot->set_type(slot_table.type().toStdString());
-                slot->set_data_bus_width(slot_table.dataBusWidth().toStdString());
-                slot->set_usage(slot_table.usage().toStdString());
-                slot->set_length(slot_table.length().toStdString());
-                slot->set_bus_address(busAddress(slot_table).toStdString());
+                slot->set_designation(slot_table.designation());
+                slot->set_type(slot_table.type());
+                slot->set_data_bus_width(slot_table.dataBusWidth());
+                slot->set_usage(slot_table.usage());
+                slot->set_length(slot_table.length());
+                slot->set_bus_address(busAddress(slot_table));
                 slot->set_id(slot_table.id());
                 slot->set_provides_5_volts(slot_table.provides5Volts());
                 slot->set_provides_3_volts(slot_table.provides3Volts());
@@ -898,8 +902,8 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
                 {
                     proto::system_info::Dmi::OnBoardDevice* device = dmi->add_on_board_device();
 
-                    device->set_description(devices_table.description(i).toStdString());
-                    device->set_type(devices_table.type(i).toStdString());
+                    device->set_description(devices_table.description(i));
+                    device->set_type(devices_table.type(i));
                     device->set_enabled(devices_table.isEnabled(i));
                 }
             }
@@ -913,9 +917,9 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
 
                 proto::system_info::Dmi::OnBoardDevice* device = dmi->add_on_board_device();
 
-                device->set_description(device_table.designation().toStdString());
-                device->set_type(device_table.type().toStdString());
-                device->set_bus_address(busAddress(device_table).toStdString());
+                device->set_description(device_table.designation());
+                device->set_type(device_table.type());
+                device->set_bus_address(busAddress(device_table));
                 device->set_instance(device_table.typeInstance());
                 device->set_enabled(device_table.isEnabled());
             }
@@ -932,14 +936,14 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
                 // dropped instead of showing up as blank rows.
                 for (int i = 0; i < strings_table.count(); ++i)
                 {
-                    const QString string = strings_table.string(i);
-                    if (string.isEmpty())
+                    std::string string = strings_table.string(i);
+                    if (string.empty())
                         continue;
 
                     if (table->type == SMBIOS_TABLE_TYPE_OEM_STRINGS)
-                        dmi->add_oem_string(string.toStdString());
+                        dmi->add_oem_string(std::move(string));
                     else
-                        dmi->add_configuration_option(string.toStdString());
+                        dmi->add_configuration_option(std::move(string));
                 }
             }
             break;
@@ -952,9 +956,9 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
 
                 proto::system_info::Dmi::MemoryError* error = dmi->add_memory_error();
 
-                error->set_type(error_table.type().toStdString());
-                error->set_granularity(error_table.granularity().toStdString());
-                error->set_operation(error_table.operation().toStdString());
+                error->set_type(error_table.type());
+                error->set_granularity(error_table.granularity());
+                error->set_operation(error_table.operation());
                 error->set_syndrome(error_table.vendorSyndrome());
                 error->set_array_address(error_table.arrayErrorAddress());
                 error->set_device_address(error_table.deviceErrorAddress());
@@ -972,7 +976,7 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
                     dmi->add_memory_array_address();
 
                 array_address->set_array(
-                    table_names.value(array_address_table.arrayHandle()).toStdString());
+                    table_names.value(array_address_table.arrayHandle()));
                 array_address->set_start_address(array_address_table.startAddress());
                 array_address->set_end_address(array_address_table.endAddress());
                 array_address->set_size(array_address_table.size());
@@ -990,7 +994,7 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
                     dmi->add_memory_device_address();
 
                 address->set_device(
-                    table_names.value(address_table.deviceHandle()).toStdString());
+                    table_names.value(address_table.deviceHandle()));
                 address->set_start_address(address_table.startAddress());
                 address->set_end_address(address_table.endAddress());
                 address->set_size(address_table.size());
@@ -1027,9 +1031,9 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
                         break;
                 }
 
-                probe->set_description(probe_table.description().toStdString());
-                probe->set_location(probe_table.location().toStdString());
-                probe->set_status(probe_table.status().toStdString());
+                probe->set_description(probe_table.description());
+                probe->set_location(probe_table.location());
+                probe->set_status(probe_table.status());
                 probe->set_max_value(probe_table.maxValue());
                 probe->set_min_value(probe_table.minValue());
                 probe->set_nominal_value(probe_table.nominalValue());
@@ -1047,9 +1051,9 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
 
                 proto::system_info::Dmi::CoolingDevice* cooling = dmi->add_cooling_device();
 
-                cooling->set_description(cooling_table.description().toStdString());
-                cooling->set_type(cooling_table.type().toStdString());
-                cooling->set_status(cooling_table.status().toStdString());
+                cooling->set_description(cooling_table.description());
+                cooling->set_type(cooling_table.type());
+                cooling->set_status(cooling_table.status());
                 cooling->set_unit_group(cooling_table.unitGroup());
                 cooling->set_nominal_speed(cooling_table.nominalSpeed());
             }
@@ -1061,7 +1065,7 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
                 if (!boot_table.isValid())
                     continue;
 
-                dmi->set_boot_status(boot_table.status().toStdString());
+                dmi->set_boot_status(boot_table.status());
             }
             break;
 
@@ -1073,10 +1077,10 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
 
                 proto::system_info::Dmi::MemoryArray* memory_array = dmi->add_memory_array();
 
-                memory_array->set_location(memory_array_table.location().toStdString());
-                memory_array->set_use(memory_array_table.use().toStdString());
+                memory_array->set_location(memory_array_table.location());
+                memory_array->set_use(memory_array_table.use());
                 memory_array->set_error_correction(
-                    memory_array_table.errorCorrection().toStdString());
+                    memory_array_table.errorCorrection());
                 memory_array->set_max_capacity(memory_array_table.maxCapacity());
                 memory_array->set_device_count(memory_array_table.deviceCount());
             }
@@ -1091,26 +1095,25 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
                 proto::system_info::Dmi::MemoryDevice* memory_device = dmi->add_memory_device();
 
                 memory_device->set_present(memory_device_table.isPresent());
-                memory_device->set_location(memory_device_table.location().toStdString());
+                memory_device->set_location(memory_device_table.location());
 
                 if (!memory_device_table.isPresent())
                     continue;
 
-                memory_device->set_bank(memory_device_table.bankLocator().toStdString());
+                memory_device->set_bank(memory_device_table.bankLocator());
                 memory_device->set_manufacturer(
-                    memory_device_table.manufacturer().toStdString());
+                    memory_device_table.manufacturer());
                 memory_device->set_serial_number(
-                    memory_device_table.serialNumber().toStdString());
-                memory_device->set_asset_tag(memory_device_table.assetTag().toStdString());
-                memory_device->set_part_number(memory_device_table.partNumber().toStdString());
+                    memory_device_table.serialNumber());
+                memory_device->set_asset_tag(memory_device_table.assetTag());
+                memory_device->set_part_number(memory_device_table.partNumber());
                 memory_device->set_firmware_version(
-                    memory_device_table.firmwareVersion().toStdString());
+                    memory_device_table.firmwareVersion());
                 memory_device->set_size(memory_device_table.size());
-                memory_device->set_type(memory_device_table.type().toStdString());
-                memory_device->set_type_detail(
-                    memory_device_table.typeDetail().join(", ").toStdString());
-                memory_device->set_form_factor(memory_device_table.formFactor().toStdString());
-                memory_device->set_technology(memory_device_table.technology().toStdString());
+                memory_device->set_type(memory_device_table.type());
+                memory_device->set_type_detail(strJoin(memory_device_table.typeDetail(), ", "));
+                memory_device->set_form_factor(memory_device_table.formFactor());
+                memory_device->set_technology(memory_device_table.technology());
                 memory_device->set_speed(memory_device_table.speed());
                 memory_device->set_configured_speed(memory_device_table.configuredSpeed());
                 memory_device->set_total_width(memory_device_table.totalWidth());
@@ -1136,8 +1139,8 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
                 {
                     proto::system_info::Dmi::AdditionalInfo* info = dmi->add_additional_info();
 
-                    info->set_text(info_table.string(i).toStdString());
-                    info->set_value(info_table.value(i).toStdString());
+                    info->set_text(info_table.string(i));
+                    info->set_value(info_table.value(i));
                     info->set_referenced_handle(info_table.referencedHandle(i));
                     info->set_referenced_offset(info_table.referencedOffset(i));
                 }
@@ -1153,8 +1156,8 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
                 proto::system_info::Dmi::ProcessorInfoExt* info = dmi->add_processor_info_ext();
 
                 info->set_processor(
-                    table_names.value(info_table.processorHandle()).toStdString());
-                info->set_architecture(info_table.architecture().toStdString());
+                    table_names.value(info_table.processorHandle()));
+                info->set_architecture(info_table.architecture());
             }
             break;
 
@@ -1167,15 +1170,15 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
                 proto::system_info::Dmi::FirmwareInventory* inventory =
                     dmi->add_firmware_inventory();
 
-                inventory->set_name(inventory_table.name().toStdString());
-                inventory->set_version(inventory_table.version().toStdString());
-                inventory->set_version_format(inventory_table.versionFormat().toStdString());
-                inventory->set_id(inventory_table.id().toStdString());
-                inventory->set_id_format(inventory_table.idFormat().toStdString());
-                inventory->set_release_date(inventory_table.releaseDate().toStdString());
-                inventory->set_manufacturer(inventory_table.manufacturer().toStdString());
-                inventory->set_lowest_version(inventory_table.lowestVersion().toStdString());
-                inventory->set_state(inventory_table.state().toStdString());
+                inventory->set_name(inventory_table.name());
+                inventory->set_version(inventory_table.version());
+                inventory->set_version_format(inventory_table.versionFormat());
+                inventory->set_id(inventory_table.id());
+                inventory->set_id_format(inventory_table.idFormat());
+                inventory->set_release_date(inventory_table.releaseDate());
+                inventory->set_manufacturer(inventory_table.manufacturer());
+                inventory->set_lowest_version(inventory_table.lowestVersion());
+                inventory->set_state(inventory_table.state());
                 inventory->set_image_size(inventory_table.imageSize());
                 inventory->set_updatable(inventory_table.isUpdatable());
                 inventory->set_write_protected(inventory_table.isWriteProtected());
@@ -1183,13 +1186,12 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
                 for (int i = 0; i < inventory_table.componentCount(); ++i)
                 {
                     const quint16 handle = inventory_table.componentHandle(i);
-                    const QString name = table_names.value(handle);
+                    std::string name = table_names.value(handle);
 
                     // A component of a table that has no name to give is left as the handle
                     // itself: it still tells the components apart.
-                    inventory->add_component(name.isEmpty() ?
-                        QString("0x%1").arg(handle, 4, 16, QChar('0')).toStdString() :
-                        name.toStdString());
+                    inventory->add_component(name.empty() ?
+                        "0x" + strHex(handle, 4, HexCase::LOWER) : std::move(name));
                 }
             }
             break;
@@ -1202,10 +1204,10 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
 
                 proto::system_info::Dmi::TpmDevice* tpm = dmi->add_tpm_device();
 
-                tpm->set_vendor_id(tpm_table.vendorId().toStdString());
-                tpm->set_spec_version(tpm_table.specVersion().toStdString());
-                tpm->set_firmware_version(tpm_table.firmwareVersion().toStdString());
-                tpm->set_description(tpm_table.description().toStdString());
+                tpm->set_vendor_id(tpm_table.vendorId());
+                tpm->set_spec_version(tpm_table.specVersion());
+                tpm->set_firmware_version(tpm_table.firmwareVersion());
+                tpm->set_description(tpm_table.description());
                 tpm->set_configurable_by_firmware(tpm_table.isFamilyConfigurableByFirmware());
                 tpm->set_configurable_by_software(tpm_table.isFamilyConfigurableBySoftware());
                 tpm->set_configurable_by_oem(tpm_table.isFamilyConfigurableByOem());
@@ -1223,8 +1225,8 @@ void fillDmi(proto::system_info::SystemInfo* system_info)
 
     proto::system_info::Dmi::Misc* misc = dmi->mutable_misc();
 
-    misc->set_smbios_version(QString("%1.%2").arg(enumerator.majorVersion())
-                                             .arg(enumerator.minorVersion()).toStdString());
+    misc->set_smbios_version(strCat({ std::to_string(enumerator.majorVersion()), ".",
+                                      std::to_string(enumerator.minorVersion()) }));
     misc->set_structure_count(structure_count);
     misc->set_structure_size(enumerator.length());
 }
