@@ -273,11 +273,13 @@ QSize SysInfoView::sizeHint() const
 //--------------------------------------------------------------------------------------------------
 void SysInfoView::onSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
+    SysInfoWidgetSummary* summary = findChild<SysInfoWidgetSummary*>();
+
     for (int i = 0; i < sys_info_widgets_.count(); ++i)
     {
         SysInfoWidget* widget = sys_info_widgets_[i];
 
-        if (widget->category() == system_info.header().category())
+        if (widget == summary || widget->category() == system_info.header().category())
             widget->setSystemInfo(system_info);
     }
 

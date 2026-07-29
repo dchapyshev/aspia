@@ -1548,8 +1548,6 @@ void fillSummaryInfo(proto::system_info::SystemInfo* system_info)
 {
     fillComputer(system_info);
     fillOperatingSystem(system_info);
-    fillProcessorInfo(system_info->mutable_processor());
-    fillDmi(system_info);
     fillDrives(system_info);
 }
 

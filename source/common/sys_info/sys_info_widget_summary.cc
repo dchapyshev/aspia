@@ -123,13 +123,48 @@ std::string SysInfoWidgetSummary::category() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& system_info)
+void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& report)
 {
+    bool changed = false;
+
+    if (report.has_computer())
+    {
+        computer_ = report.computer();
+        changed = true;
+    }
+
+    if (report.has_operating_system())
+    {
+        operating_system_ = report.operating_system();
+        changed = true;
+    }
+
+    if (report.has_processor())
+    {
+        processor_ = report.processor();
+        changed = true;
+    }
+
+    if (report.has_dmi())
+    {
+        dmi_ = report.dmi();
+        changed = true;
+    }
+
+    if (report.has_logical_drives())
+    {
+        logical_drives_ = report.logical_drives();
+        changed = true;
+    }
+
+    if (!changed)
+        return;
+
     ui->tree->clear();
 
-    if (system_info.has_computer())
+    if (computer_)
     {
-        const proto::system_info::Computer& computer = system_info.computer();
+        const proto::system_info::Computer& computer = *computer_;
         QList<QTreeWidgetItem*> items;
 
         if (!computer.name().empty())
@@ -168,9 +203,9 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
             ui->tree->addTopLevelItem(new Item(":/img/info.svg", tr("Aspia Information"), items));
     }
 
-    if (system_info.has_operating_system())
+    if (operating_system_)
     {
-        const proto::system_info::OperatingSystem& os = system_info.operating_system();
+        const proto::system_info::OperatingSystem& os = *operating_system_;
         QList<QTreeWidgetItem*> items;
 
         if (!os.name().empty())
@@ -195,11 +230,9 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
         }
     }
 
-    const proto::system_info::Dmi& dmi = system_info.dmi();
-
-    if (dmi.baseboard_size())
+    if (dmi_ && dmi_->baseboard_size())
     {
-        const proto::system_info::Dmi::Baseboard& baseboard = dmi.baseboard(0);
+        const proto::system_info::Dmi::Baseboard& baseboard = dmi_->baseboard(0);
         QList<QTreeWidgetItem*> items;
 
         if (!baseboard.manufacturer().empty())
@@ -215,9 +248,9 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
         }
     }
 
-    if (system_info.has_processor())
+    if (processor_)
     {
-        const proto::system_info::Processor& processor = system_info.processor();
+        const proto::system_info::Processor& processor = *processor_;
         QList<QTreeWidgetItem*> items;
 
         if (!processor.model().empty())
@@ -242,9 +275,9 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
         }
     }
 
-    if (dmi.bios_size())
+    if (dmi_ && dmi_->bios_size())
     {
-        const proto::system_info::Dmi::Bios& bios = dmi.bios(0);
+        const proto::system_info::Dmi::Bios& bios = dmi_->bios(0);
         QList<QTreeWidgetItem*> items;
 
         if (!bios.vendor().empty())
@@ -262,13 +295,13 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
         }
     }
 
-    if (dmi.memory_device_size())
+    if (dmi_ && dmi_->memory_device_size())
     {
         QList<QTreeWidgetItem*> items;
 
-        for (int i = 0; i < dmi.memory_device_size(); ++i)
+        for (int i = 0; i < dmi_->memory_device_size(); ++i)
         {
-            const proto::system_info::Dmi::MemoryDevice& module = dmi.memory_device(i);
+            const proto::system_info::Dmi::MemoryDevice& module = dmi_->memory_device(i);
             QList<QTreeWidgetItem*> group;
 
             // The summary names the module, the whole of what it reports is on the DMI page.
@@ -302,9 +335,9 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
         }
     }
 
-    if (system_info.has_logical_drives())
+    if (logical_drives_)
     {
-        const proto::system_info::LogicalDrives& drives = system_info.logical_drives();
+        const proto::system_info::LogicalDrives& drives = *logical_drives_;
         QList<QTreeWidgetItem*> items;
 
         for (int i = 0; i < drives.drive_size(); ++i)

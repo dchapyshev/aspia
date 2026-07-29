@@ -28,6 +28,9 @@ class SysInfoSummary;
 #include <QVersionNumber>
 
 #include <memory>
+#include <optional>
+
+#include "proto/system_info.h"
 
 class SysInfoWidgetSummary final : public SysInfoWidget
 {
@@ -51,6 +54,12 @@ private slots:
 
 private:
     std::unique_ptr<Ui::SysInfoSummary> ui;
+
+    std::optional<proto::system_info::Computer> computer_;
+    std::optional<proto::system_info::OperatingSystem> operating_system_;
+    std::optional<proto::system_info::Processor> processor_;
+    std::optional<proto::system_info::Dmi> dmi_;
+    std::optional<proto::system_info::LogicalDrives> logical_drives_;
 
     QString router_version_;
     QString host_version_;
