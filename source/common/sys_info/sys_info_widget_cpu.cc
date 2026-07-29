@@ -137,8 +137,7 @@ SysInfoWidgetCpu::~SysInfoWidgetCpu() = default;
 //--------------------------------------------------------------------------------------------------
 std::string SysInfoWidgetCpu::category() const
 {
-    // The processor arrives with the summary: the page shows the same report, only all of it.
-    return kSystemInfo_Summary;
+    return kSystemInfo_Processor;
 }
 
 //--------------------------------------------------------------------------------------------------

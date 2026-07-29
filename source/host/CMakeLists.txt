@@ -81,6 +81,8 @@ list(APPEND SOURCE_HOST
     chat_client.h
     client.cc
     client.h
+    cpu_info.cc
+    cpu_info.h
     database.cc
     database.h
     desktop_agent_client.cc
