@@ -164,7 +164,7 @@ void SysInfoWidgetLicenses::setSystemInfo(const proto::system_info::SystemInfo& 
         if (!group.isEmpty())
         {
             ui->tree->addTopLevelItem(
-                new Item(":/img/certificate.svg", QString::fromStdString(license.product_name()), group));
+                new Item(kCertificateIcon, QString::fromStdString(license.product_name()), group));
         }
     }
 

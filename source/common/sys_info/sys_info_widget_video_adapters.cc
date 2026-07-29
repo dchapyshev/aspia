@@ -27,8 +27,6 @@
 
 namespace {
 
-const char kAdapterIcon[] = ":/img/video-card.svg";
-
 class Item : public QTreeWidgetItem
 {
 public:
@@ -242,13 +240,14 @@ void SysInfoWidgetVideoAdapters::setSystemInfo(const proto::system_info::SystemI
         if (adapter.power() != 0)
         {
             group << mk(tr("Power Usage"),
-                        tr("%1%").arg(QString::number(adapter.power() / 10.0, 'f', 1)), kPowerIcon);
+                        tr("%1%").arg(QString::number(adapter.power() / 10.0, 'f', 1)),
+                        kElectricityIcon);
         }
 
         if (!group.isEmpty())
         {
             ui->tree->addTopLevelItem(
-                new Item(kAdapterIcon, QString::fromStdString(adapter.description()), group));
+                new Item(kVideoCardIcon, QString::fromStdString(adapter.description()), group));
         }
     }
 

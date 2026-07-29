@@ -188,7 +188,7 @@ void SysInfoWidgetNetAdapters::setSystemInfo(const proto::system_info::SystemInf
 
         if (!group.isEmpty())
         {
-            ui->tree->addTopLevelItem(new Item(":/img/network-card.svg",
+            ui->tree->addTopLevelItem(new Item(kNetworkCardIcon,
                                               QString::fromStdString(adapter.connection_name()),
                                               group));
         }

@@ -28,30 +28,6 @@
 
 namespace {
 
-const char kBiosIcon[] = ":/img/processor.svg";
-const char kBaseboardIcon[] = ":/img/motherboard.svg";
-const char kChassisIcon[] = ":/img/computer-case.svg";
-const char kProcessorIcon[] = ":/img/microchip.svg";
-const char kCacheIcon[] = ":/img/microchip.svg";
-const char kPortConnectorIcon[] = ":/img/ps-2-male.svg";
-const char kSystemSlotIcon[] = ":/img/ps-2-male.svg";
-const char kOnBoardDeviceIcon[] = ":/img/network-card.svg";
-const char kOemStringsIcon[] = ":/img/file-document.svg";
-const char kConfigurationOptionIcon[] = ":/img/gear.svg";
-const char kProbeIcon[] = ":/img/electrical.svg";
-const char kCoolingDeviceIcon[] = ":/img/heart-monitor.svg";
-const char kSystemBootIcon[] = ":/img/restart.svg";
-const char kMemoryArrayIcon[] = ":/img/memory-slot.svg";
-const char kMemoryDeviceIcon[] = ":/img/memory-slot.svg";
-const char kMemoryErrorIcon[] = ":/img/memory-slot.svg";
-const char kMemoryArrayAddressIcon[] = ":/img/memory-slot.svg";
-const char kMemoryDeviceAddressIcon[] = ":/img/memory-slot.svg";
-const char kAdditionalInfoIcon[] = ":/img/file-document.svg";
-const char kTpmDeviceIcon[] = ":/img/certificate.svg";
-const char kProcessorInfoExtIcon[] = ":/img/microchip.svg";
-const char kFirmwareInventoryIcon[] = ":/img/processor.svg";
-const char kMiscIcon[] = ":/img/info.svg";
-
 // Group of tables a item of the upper pane belongs to.
 constexpr int kGroupRole = Qt::UserRole;
 
@@ -239,35 +215,35 @@ void SysInfoWidgetDmi::setSystemInfo(const proto::system_info::SystemInfo& syste
         bios << biosTitle(i);
 
     if (!bios.isEmpty())
-        addGroup(GROUP_BIOS, kBiosIcon, tr("BIOS"), bios);
+        addGroup(GROUP_BIOS, kMicrochipIcon, tr("BIOS"), bios);
 
     QStringList baseboards;
     for (int i = 0; i < dmi_->baseboard_size(); ++i)
         baseboards << baseboardTitle(i);
 
     if (!baseboards.isEmpty())
-        addGroup(GROUP_BASEBOARD, kBaseboardIcon, tr("Motherboard"), baseboards);
+        addGroup(GROUP_BASEBOARD, kMotherboardIcon, tr("Motherboard"), baseboards);
 
     QStringList chassis;
     for (int i = 0; i < dmi_->chassis_size(); ++i)
         chassis << chassisTitle(i);
 
     if (!chassis.isEmpty())
-        addGroup(GROUP_CHASSIS, kChassisIcon, tr("Chassis"), chassis);
+        addGroup(GROUP_CHASSIS, kComputerCaseIcon, tr("Chassis"), chassis);
 
     QStringList processors;
     for (int i = 0; i < dmi_->processor_size(); ++i)
         processors << processorTitle(i);
 
     if (!processors.isEmpty())
-        addGroup(GROUP_PROCESSORS, kProcessorIcon, tr("Processors"), processors);
+        addGroup(GROUP_PROCESSORS, kMicrochipIcon, tr("Processors"), processors);
 
     QStringList caches;
     for (int i = 0; i < dmi_->cache_size(); ++i)
         caches << cacheTitle(i);
 
     if (!caches.isEmpty())
-        addGroup(GROUP_CACHES, kCacheIcon, tr("Caches"), caches);
+        addGroup(GROUP_CACHES, kMicrochipIcon, tr("Caches"), caches);
 
     QStringList port_connectors;
     for (int i = 0; i < dmi_->port_connector_size(); ++i)
@@ -275,7 +251,7 @@ void SysInfoWidgetDmi::setSystemInfo(const proto::system_info::SystemInfo& syste
 
     if (!port_connectors.isEmpty())
     {
-        addGroup(GROUP_PORT_CONNECTORS, kPortConnectorIcon, tr("Port Connectors"),
+        addGroup(GROUP_PORT_CONNECTORS, kPs2MaleIcon, tr("Port Connectors"),
                  port_connectors);
     }
 
@@ -284,7 +260,7 @@ void SysInfoWidgetDmi::setSystemInfo(const proto::system_info::SystemInfo& syste
         system_slots << systemSlotTitle(i);
 
     if (!system_slots.isEmpty())
-        addGroup(GROUP_SYSTEM_SLOTS, kSystemSlotIcon, tr("System Slots"), system_slots);
+        addGroup(GROUP_SYSTEM_SLOTS, kPs2MaleIcon, tr("System Slots"), system_slots);
 
     QStringList on_board_devices;
     for (int i = 0; i < dmi_->on_board_device_size(); ++i)
@@ -292,16 +268,16 @@ void SysInfoWidgetDmi::setSystemInfo(const proto::system_info::SystemInfo& syste
 
     if (!on_board_devices.isEmpty())
     {
-        addGroup(GROUP_ON_BOARD_DEVICES, kOnBoardDeviceIcon, tr("On-board Devices"),
+        addGroup(GROUP_ON_BOARD_DEVICES, kNetworkCardIcon, tr("On-board Devices"),
                  on_board_devices);
     }
 
     if (dmi_->oem_string_size())
-        addGroup(GROUP_OEM_STRINGS, kOemStringsIcon, tr("OEM Strings"), { tr("OEM Strings") });
+        addGroup(GROUP_OEM_STRINGS, kFileDocumentIcon, tr("OEM Strings"), { tr("OEM Strings") });
 
     if (dmi_->configuration_option_size())
     {
-        addGroup(GROUP_CONFIGURATION_OPTIONS, kConfigurationOptionIcon,
+        addGroup(GROUP_CONFIGURATION_OPTIONS, kGearIcon,
                  tr("Configuration Options"), { tr("Configuration Options") });
     }
 
@@ -310,7 +286,7 @@ void SysInfoWidgetDmi::setSystemInfo(const proto::system_info::SystemInfo& syste
         memory_arrays << memoryArrayTitle(i);
 
     if (!memory_arrays.isEmpty())
-        addGroup(GROUP_MEMORY_ARRAYS, kMemoryArrayIcon, tr("Memory Arrays"), memory_arrays);
+        addGroup(GROUP_MEMORY_ARRAYS, kMemorySlotIcon, tr("Memory Arrays"), memory_arrays);
 
     QStringList memory_devices;
     for (int i = 0; i < dmi_->memory_device_size(); ++i)
@@ -318,7 +294,7 @@ void SysInfoWidgetDmi::setSystemInfo(const proto::system_info::SystemInfo& syste
 
     if (!memory_devices.isEmpty())
     {
-        addGroup(GROUP_MEMORY_DEVICES, kMemoryDeviceIcon, tr("Memory Devices"),
+        addGroup(GROUP_MEMORY_DEVICES, kMemorySlotIcon, tr("Memory Devices"),
                  memory_devices);
     }
 
@@ -327,7 +303,7 @@ void SysInfoWidgetDmi::setSystemInfo(const proto::system_info::SystemInfo& syste
         memory_errors << memoryErrorTitle(i);
 
     if (!memory_errors.isEmpty())
-        addGroup(GROUP_MEMORY_ERRORS, kMemoryErrorIcon, tr("Memory Errors"), memory_errors);
+        addGroup(GROUP_MEMORY_ERRORS, kMemorySlotIcon, tr("Memory Errors"), memory_errors);
 
     QStringList memory_array_addresses;
     for (int i = 0; i < dmi_->memory_array_address_size(); ++i)
@@ -335,7 +311,7 @@ void SysInfoWidgetDmi::setSystemInfo(const proto::system_info::SystemInfo& syste
 
     if (!memory_array_addresses.isEmpty())
     {
-        addGroup(GROUP_MEMORY_ARRAY_ADDRESSES, kMemoryArrayAddressIcon,
+        addGroup(GROUP_MEMORY_ARRAY_ADDRESSES, kMemorySlotIcon,
                  tr("Memory Array Addresses"), memory_array_addresses);
     }
 
@@ -345,7 +321,7 @@ void SysInfoWidgetDmi::setSystemInfo(const proto::system_info::SystemInfo& syste
 
     if (!memory_device_addresses.isEmpty())
     {
-        addGroup(GROUP_MEMORY_DEVICE_ADDRESSES, kMemoryDeviceAddressIcon,
+        addGroup(GROUP_MEMORY_DEVICE_ADDRESSES, kMemorySlotIcon,
                  tr("Memory Device Addresses"), memory_device_addresses);
     }
 
@@ -354,7 +330,7 @@ void SysInfoWidgetDmi::setSystemInfo(const proto::system_info::SystemInfo& syste
         voltage_probes << probeTitle(GROUP_VOLTAGE_PROBES, i);
 
     if (!voltage_probes.isEmpty())
-        addGroup(GROUP_VOLTAGE_PROBES, kProbeIcon, tr("Voltage Probes"), voltage_probes);
+        addGroup(GROUP_VOLTAGE_PROBES, kElectricalIcon, tr("Voltage Probes"), voltage_probes);
 
     QStringList cooling_devices;
     for (int i = 0; i < dmi_->cooling_device_size(); ++i)
@@ -362,7 +338,7 @@ void SysInfoWidgetDmi::setSystemInfo(const proto::system_info::SystemInfo& syste
 
     if (!cooling_devices.isEmpty())
     {
-        addGroup(GROUP_COOLING_DEVICES, kCoolingDeviceIcon, tr("Cooling Devices"),
+        addGroup(GROUP_COOLING_DEVICES, kHeartMonitorIcon, tr("Cooling Devices"),
                  cooling_devices);
     }
 
@@ -372,7 +348,7 @@ void SysInfoWidgetDmi::setSystemInfo(const proto::system_info::SystemInfo& syste
 
     if (!temperature_probes.isEmpty())
     {
-        addGroup(GROUP_TEMPERATURE_PROBES, kProbeIcon, tr("Temperature Probes"),
+        addGroup(GROUP_TEMPERATURE_PROBES, kElectricalIcon, tr("Temperature Probes"),
                  temperature_probes);
     }
 
@@ -381,10 +357,10 @@ void SysInfoWidgetDmi::setSystemInfo(const proto::system_info::SystemInfo& syste
         current_probes << probeTitle(GROUP_CURRENT_PROBES, i);
 
     if (!current_probes.isEmpty())
-        addGroup(GROUP_CURRENT_PROBES, kProbeIcon, tr("Current Probes"), current_probes);
+        addGroup(GROUP_CURRENT_PROBES, kElectricalIcon, tr("Current Probes"), current_probes);
 
     if (!dmi_->boot_status().empty())
-        addGroup(GROUP_SYSTEM_BOOT, kSystemBootIcon, tr("System Boot"), { tr("System Boot") });
+        addGroup(GROUP_SYSTEM_BOOT, kRestartIcon, tr("System Boot"), { tr("System Boot") });
 
     QStringList additional_info;
     for (int i = 0; i < dmi_->additional_info_size(); ++i)
@@ -392,7 +368,7 @@ void SysInfoWidgetDmi::setSystemInfo(const proto::system_info::SystemInfo& syste
 
     if (!additional_info.isEmpty())
     {
-        addGroup(GROUP_ADDITIONAL_INFO, kAdditionalInfoIcon, tr("Additional Information"),
+        addGroup(GROUP_ADDITIONAL_INFO, kFileDocumentIcon, tr("Additional Information"),
                  additional_info);
     }
 
@@ -401,7 +377,7 @@ void SysInfoWidgetDmi::setSystemInfo(const proto::system_info::SystemInfo& syste
         tpm_devices << tpmDeviceTitle(i);
 
     if (!tpm_devices.isEmpty())
-        addGroup(GROUP_TPM_DEVICES, kTpmDeviceIcon, tr("TPM Device"), tpm_devices);
+        addGroup(GROUP_TPM_DEVICES, kCertificateIcon, tr("TPM Device"), tpm_devices);
 
     QStringList processor_info_ext;
     for (int i = 0; i < dmi_->processor_info_ext_size(); ++i)
@@ -409,7 +385,7 @@ void SysInfoWidgetDmi::setSystemInfo(const proto::system_info::SystemInfo& syste
 
     if (!processor_info_ext.isEmpty())
     {
-        addGroup(GROUP_PROCESSOR_INFO_EXT, kProcessorInfoExtIcon,
+        addGroup(GROUP_PROCESSOR_INFO_EXT, kMicrochipIcon,
                  tr("Processor Additional Information"), processor_info_ext);
     }
 
@@ -419,12 +395,12 @@ void SysInfoWidgetDmi::setSystemInfo(const proto::system_info::SystemInfo& syste
 
     if (!firmware_inventory.isEmpty())
     {
-        addGroup(GROUP_FIRMWARE_INVENTORY, kFirmwareInventoryIcon, tr("Firmware Inventory"),
+        addGroup(GROUP_FIRMWARE_INVENTORY, kProcessorIcon, tr("Firmware Inventory"),
                  firmware_inventory);
     }
 
     if (dmi_->has_misc())
-        addGroup(GROUP_MISC, kMiscIcon, tr("Misc"), { tr("DMI Properties") });
+        addGroup(GROUP_MISC, kInfoIcon, tr("Misc"), { tr("DMI Properties") });
 
     if (!isStateRestored())
         ui->tree->resizeColumnToContents(0);
@@ -509,7 +485,7 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::tableItems(int group, int index) const
             const int last = index < 0 ? dmi_->bios_size() - 1 : index;
 
             for (int i = first; i <= last && i < dmi_->bios_size(); ++i)
-                items << new Item(kBiosIcon, biosTitle(i), biosParameters(i));
+                items << new Item(kMicrochipIcon, biosTitle(i), biosParameters(i));
         }
         break;
 
@@ -519,7 +495,7 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::tableItems(int group, int index) const
             const int last = index < 0 ? dmi_->baseboard_size() - 1 : index;
 
             for (int i = first; i <= last && i < dmi_->baseboard_size(); ++i)
-                items << new Item(kBaseboardIcon, baseboardTitle(i), baseboardParameters(i));
+                items << new Item(kMotherboardIcon, baseboardTitle(i), baseboardParameters(i));
         }
         break;
 
@@ -529,7 +505,7 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::tableItems(int group, int index) const
             const int last = index < 0 ? dmi_->chassis_size() - 1 : index;
 
             for (int i = first; i <= last && i < dmi_->chassis_size(); ++i)
-                items << new Item(kChassisIcon, chassisTitle(i), chassisParameters(i));
+                items << new Item(kComputerCaseIcon, chassisTitle(i), chassisParameters(i));
         }
         break;
 
@@ -539,7 +515,7 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::tableItems(int group, int index) const
             const int last = index < 0 ? dmi_->processor_size() - 1 : index;
 
             for (int i = first; i <= last && i < dmi_->processor_size(); ++i)
-                items << new Item(kProcessorIcon, processorTitle(i), processorParameters(i));
+                items << new Item(kMicrochipIcon, processorTitle(i), processorParameters(i));
         }
         break;
 
@@ -549,7 +525,7 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::tableItems(int group, int index) const
             const int last = index < 0 ? dmi_->cache_size() - 1 : index;
 
             for (int i = first; i <= last && i < dmi_->cache_size(); ++i)
-                items << new Item(kCacheIcon, cacheTitle(i), cacheParameters(i));
+                items << new Item(kMicrochipIcon, cacheTitle(i), cacheParameters(i));
         }
         break;
 
@@ -560,7 +536,7 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::tableItems(int group, int index) const
 
             for (int i = first; i <= last && i < dmi_->port_connector_size(); ++i)
             {
-                items << new Item(kPortConnectorIcon, portConnectorTitle(i),
+                items << new Item(kPs2MaleIcon, portConnectorTitle(i),
                                   portConnectorParameters(i));
             }
         }
@@ -572,7 +548,7 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::tableItems(int group, int index) const
             const int last = index < 0 ? dmi_->system_slot_size() - 1 : index;
 
             for (int i = first; i <= last && i < dmi_->system_slot_size(); ++i)
-                items << new Item(kSystemSlotIcon, systemSlotTitle(i), systemSlotParameters(i));
+                items << new Item(kPs2MaleIcon, systemSlotTitle(i), systemSlotParameters(i));
         }
         break;
 
@@ -583,7 +559,7 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::tableItems(int group, int index) const
 
             for (int i = first; i <= last && i < dmi_->on_board_device_size(); ++i)
             {
-                items << new Item(kOnBoardDeviceIcon, onBoardDeviceTitle(i),
+                items << new Item(kNetworkCardIcon, onBoardDeviceTitle(i),
                                   onBoardDeviceParameters(i));
             }
         }
@@ -596,7 +572,7 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::tableItems(int group, int index) const
 
             for (int i = first; i <= last && i < dmi_->memory_array_size(); ++i)
             {
-                items << new Item(kMemoryArrayIcon, memoryArrayTitle(i),
+                items << new Item(kMemorySlotIcon, memoryArrayTitle(i),
                                   memoryArrayParameters(i));
             }
         }
@@ -609,7 +585,7 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::tableItems(int group, int index) const
 
             for (int i = first; i <= last && i < dmi_->memory_device_size(); ++i)
             {
-                items << new Item(kMemoryDeviceIcon, memoryDeviceTitle(i),
+                items << new Item(kMemorySlotIcon, memoryDeviceTitle(i),
                                   memoryDeviceParameters(i));
             }
         }
@@ -622,7 +598,7 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::tableItems(int group, int index) const
 
             for (int i = first; i <= last && i < dmi_->additional_info_size(); ++i)
             {
-                items << new Item(kAdditionalInfoIcon, additionalInfoTitle(i),
+                items << new Item(kFileDocumentIcon, additionalInfoTitle(i),
                                   additionalInfoParameters(i));
             }
         }
@@ -635,7 +611,7 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::tableItems(int group, int index) const
 
             for (int i = first; i <= last && i < dmi_->processor_info_ext_size(); ++i)
             {
-                items << new Item(kProcessorInfoExtIcon, processorInfoExtTitle(i),
+                items << new Item(kMicrochipIcon, processorInfoExtTitle(i),
                                   processorInfoExtParameters(i));
             }
         }
@@ -647,17 +623,17 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::tableItems(int group, int index) const
             const int last = index < 0 ? dmi_->tpm_device_size() - 1 : index;
 
             for (int i = first; i <= last && i < dmi_->tpm_device_size(); ++i)
-                items << new Item(kTpmDeviceIcon, tpmDeviceTitle(i), tpmDeviceParameters(i));
+                items << new Item(kCertificateIcon, tpmDeviceTitle(i), tpmDeviceParameters(i));
         }
         break;
 
         case GROUP_OEM_STRINGS:
-            items << new Item(kOemStringsIcon, tr("OEM Strings"), oemStringsParameters());
+            items << new Item(kFileDocumentIcon, tr("OEM Strings"), oemStringsParameters());
             break;
 
         case GROUP_CONFIGURATION_OPTIONS:
         {
-            items << new Item(kConfigurationOptionIcon, tr("Configuration Options"),
+            items << new Item(kGearIcon, tr("Configuration Options"),
                               configurationOptionParameters());
         }
         break;
@@ -668,7 +644,7 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::tableItems(int group, int index) const
             const int last = index < 0 ? dmi_->memory_error_size() - 1 : index;
 
             for (int i = first; i <= last && i < dmi_->memory_error_size(); ++i)
-                items << new Item(kMemoryErrorIcon, memoryErrorTitle(i), memoryErrorParameters(i));
+                items << new Item(kMemorySlotIcon, memoryErrorTitle(i), memoryErrorParameters(i));
         }
         break;
 
@@ -679,7 +655,7 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::tableItems(int group, int index) const
 
             for (int i = first; i <= last && i < dmi_->memory_array_address_size(); ++i)
             {
-                items << new Item(kMemoryArrayAddressIcon, memoryArrayAddressTitle(i),
+                items << new Item(kMemorySlotIcon, memoryArrayAddressTitle(i),
                                   memoryArrayAddressParameters(i));
             }
         }
@@ -692,7 +668,7 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::tableItems(int group, int index) const
 
             for (int i = first; i <= last && i < dmi_->memory_device_address_size(); ++i)
             {
-                items << new Item(kMemoryDeviceAddressIcon, memoryDeviceAddressTitle(i),
+                items << new Item(kMemorySlotIcon, memoryDeviceAddressTitle(i),
                                   memoryDeviceAddressParameters(i));
             }
         }
@@ -705,7 +681,7 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::tableItems(int group, int index) const
 
             for (int i = first; i <= last && i < dmi_->voltage_probe_size(); ++i)
             {
-                items << new Item(kProbeIcon, probeTitle(GROUP_VOLTAGE_PROBES, i),
+                items << new Item(kElectricalIcon, probeTitle(GROUP_VOLTAGE_PROBES, i),
                                   probeParameters(GROUP_VOLTAGE_PROBES, i));
             }
         }
@@ -718,7 +694,7 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::tableItems(int group, int index) const
 
             for (int i = first; i <= last && i < dmi_->cooling_device_size(); ++i)
             {
-                items << new Item(kCoolingDeviceIcon, coolingDeviceTitle(i),
+                items << new Item(kHeartMonitorIcon, coolingDeviceTitle(i),
                                   coolingDeviceParameters(i));
             }
         }
@@ -731,7 +707,7 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::tableItems(int group, int index) const
 
             for (int i = first; i <= last && i < dmi_->temperature_probe_size(); ++i)
             {
-                items << new Item(kProbeIcon, probeTitle(GROUP_TEMPERATURE_PROBES, i),
+                items << new Item(kElectricalIcon, probeTitle(GROUP_TEMPERATURE_PROBES, i),
                                   probeParameters(GROUP_TEMPERATURE_PROBES, i));
             }
         }
@@ -744,14 +720,14 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::tableItems(int group, int index) const
 
             for (int i = first; i <= last && i < dmi_->current_probe_size(); ++i)
             {
-                items << new Item(kProbeIcon, probeTitle(GROUP_CURRENT_PROBES, i),
+                items << new Item(kElectricalIcon, probeTitle(GROUP_CURRENT_PROBES, i),
                                   probeParameters(GROUP_CURRENT_PROBES, i));
             }
         }
         break;
 
         case GROUP_SYSTEM_BOOT:
-            items << new Item(kSystemBootIcon, tr("System Boot"), systemBootParameters());
+            items << new Item(kRestartIcon, tr("System Boot"), systemBootParameters());
             break;
 
         case GROUP_FIRMWARE_INVENTORY:
@@ -761,14 +737,14 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::tableItems(int group, int index) const
 
             for (int i = first; i <= last && i < dmi_->firmware_inventory_size(); ++i)
             {
-                items << new Item(kFirmwareInventoryIcon, firmwareInventoryTitle(i),
+                items << new Item(kProcessorIcon, firmwareInventoryTitle(i),
                                   firmwareInventoryParameters(i));
             }
         }
         break;
 
         case GROUP_MISC:
-            items << new Item(kMiscIcon, tr("DMI Properties"), miscParameters());
+            items << new Item(kInfoIcon, tr("DMI Properties"), miscParameters());
             break;
 
         default:

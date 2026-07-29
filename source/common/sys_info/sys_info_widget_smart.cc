@@ -32,8 +32,6 @@
 
 namespace {
 
-const char kDriveIcon[] = ":/img/hdd.svg";
-
 // Index of the drive an item of the upper pane stands for.
 constexpr int kDriveIndexRole = Qt::UserRole;
 
@@ -262,7 +260,7 @@ void SysInfoWidgetSmart::setSystemInfo(const proto::system_info::SystemInfo& sys
 
     drives_ = std::make_unique<proto::system_info::PhysicalDrives>(system_info.physical_drives());
 
-    const QIcon icon(kDriveIcon);
+    const QIcon icon(kHddIcon);
 
     for (int i = 0; i < drives_->drive_size(); ++i)
     {
@@ -338,7 +336,7 @@ void SysInfoWidgetSmart::onCurrentDriveChanged()
     ui->tree_health->setHeaderLabels(header);
     ui->tree_health->addTopLevelItems(healthItems(drive_index));
 
-    const QIcon icon(kDriveIcon);
+    const QIcon icon(kHddIcon);
 
     for (int i = 0; i < ui->tree_health->topLevelItemCount(); ++i)
         ui->tree_health->topLevelItem(i)->setIcon(0, icon);

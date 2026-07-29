@@ -98,7 +98,7 @@ void SysInfoWidgetApplications::setSystemInfo(const proto::system_info::SystemIn
     }
 
     const proto::system_info::Applications& applications = system_info.applications();
-    QIcon item_icon(":/img/software.svg");
+    QIcon item_icon(kSoftwareIcon);
 
     for (int i = 0; i < applications.application_size(); ++i)
     {

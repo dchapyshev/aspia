@@ -84,7 +84,7 @@ void SysInfoWidgetRoutes::setSystemInfo(const proto::system_info::SystemInfo& sy
     }
 
     const proto::system_info::Routes& routes = system_info.routes();
-    QIcon item_icon(":/img/flow-chart.svg");
+    QIcon item_icon(kFlowChartIcon);
 
     for (int i = 0; i < routes.route_size(); ++i)
     {

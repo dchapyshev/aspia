@@ -206,9 +206,9 @@ void SysInfoWidgetEventLogs::setSystemInfo(const proto::system_info::SystemInfo&
 
     LOG(INFO) << "Events count:" << event_logs.event_size();
 
-    QIcon error_icon(":/img/high-importance.svg");
-    QIcon warning_icon(":/img/box-important.svg");
-    QIcon info_icon(":/img/info.svg");
+    QIcon error_icon(kHighImportanceIcon);
+    QIcon warning_icon(kBoxImportantIcon);
+    QIcon info_icon(kInfoIcon);
 
     for (int i = 0; i < event_logs.event_size(); ++i)
     {

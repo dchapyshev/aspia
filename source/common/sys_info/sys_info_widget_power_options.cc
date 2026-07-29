@@ -150,7 +150,7 @@ void SysInfoWidgetPowerOptions::setSystemInfo(const proto::system_info::SystemIn
     }
 
     const proto::system_info::PowerOptions& power_options = system_info.power_options();
-    QIcon item_icon(":/img/electrical.svg");
+    QIcon item_icon(kElectricalIcon);
 
     ui->tree->addTopLevelItem(
         new Item(item_icon, tr("Power Source"), powerSourceToString(power_options.power_source())));
@@ -247,7 +247,7 @@ void SysInfoWidgetPowerOptions::setSystemInfo(const proto::system_info::SystemIn
         if (!group.isEmpty())
         {
             ui->tree->addTopLevelItem(
-                new Item(":/img/electrical.svg", tr("Battery #%1").arg(i + 1), group));
+                new Item(kElectricalIcon, tr("Battery #%1").arg(i + 1), group));
         }
     }
 

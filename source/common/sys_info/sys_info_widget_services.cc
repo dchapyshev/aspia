@@ -86,7 +86,7 @@ void SysInfoWidgetServices::setSystemInfo(const proto::system_info::SystemInfo& 
     }
 
     const proto::system_info::Services& services = system_info.services();
-    QIcon item_icon(":/img/gear.svg");
+    QIcon item_icon(kGearIcon);
 
     for (int i = 0; i < services.service_size(); ++i)
     {

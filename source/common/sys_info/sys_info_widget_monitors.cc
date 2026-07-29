@@ -249,7 +249,7 @@ void SysInfoWidgetMonitors::setSystemInfo(const proto::system_info::SystemInfo& 
         if (!group.isEmpty())
         {
             ui->tree->addTopLevelItem(
-                new Item(":/img/imac.svg", QString::fromStdString(monitor.system_name()), group));
+                new Item(kImacIcon, QString::fromStdString(monitor.system_name()), group));
         }
     }
 

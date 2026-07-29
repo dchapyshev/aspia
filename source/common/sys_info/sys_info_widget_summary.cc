@@ -209,7 +209,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& r
             items << mk(tr("Uptime"), Formatter::delayToString(Seconds(computer.uptime())));
 
         if (!items.isEmpty())
-            ui->tree->addTopLevelItem(new Item(":/img/computer.svg", tr("Computer"), items));
+            ui->tree->addTopLevelItem(new Item(kComputerIcon, tr("Computer"), items));
     }
 
     {
@@ -229,7 +229,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& r
             items << mk(tr("Router Version"), tr("No"));
 
         if (!items.isEmpty())
-            ui->tree->addTopLevelItem(new Item(":/img/info.svg", tr("Aspia Information"), items));
+            ui->tree->addTopLevelItem(new Item(kInfoIcon, tr("Aspia Information"), items));
     }
 
     if (operating_system_)
@@ -255,7 +255,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& r
         if (!items.isEmpty())
         {
             ui->tree->addTopLevelItem(
-                new Item(":/img/operating-system.svg", tr("Operating System"), items));
+                new Item(kOperatingSystemIcon, tr("Operating System"), items));
         }
     }
 
@@ -273,7 +273,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& r
         if (!items.isEmpty())
         {
             ui->tree->addTopLevelItem(
-                new Item(":/img/motherboard.svg", tr("Motherboard"), items));
+                new Item(kMotherboardIcon, tr("Motherboard"), items));
         }
     }
 
@@ -300,7 +300,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& r
         if (!items.isEmpty())
         {
             ui->tree->addTopLevelItem(
-                new Item(":/img/microchip.svg", tr("Processor"), items));
+                new Item(kMicrochipIcon, tr("Processor"), items));
         }
     }
 
@@ -320,7 +320,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& r
 
         if (!items.isEmpty())
         {
-            ui->tree->addTopLevelItem(new Item(":/img/processor.svg", "BIOS", items));
+            ui->tree->addTopLevelItem(new Item(kProcessorIcon, "BIOS", items));
         }
     }
 
@@ -360,7 +360,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& r
         if (!items.isEmpty())
         {
             ui->tree->addTopLevelItem(
-                new Item(":/img/memory-slot.svg", tr("Memory"), items));
+                new Item(kMemorySlotIcon, tr("Memory"), items));
         }
     }
 
@@ -399,7 +399,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& r
 
         if (!items.isEmpty())
         {
-            ui->tree->addTopLevelItem(new Item(":/img/hdd.svg", tr("Logical Drives"), items));
+            ui->tree->addTopLevelItem(new Item(kHddIcon, tr("Logical Drives"), items));
         }
     }
 

@@ -27,16 +27,6 @@
 
 namespace {
 
-const char kCpuIcon[] = ":/img/microchip.svg";
-const char kCacheIcon[] = ":/img/processor.svg";
-const char kInstructionSetIcon[] = ":/img/integrated-circuit.svg";
-const char kSecurityIcon[] = ":/img/lock.svg";
-const char kPowerManagementIcon[] = ":/img/electrical.svg";
-const char kVirtualizationIcon[] = ":/img/virtual-machine.svg";
-const char kFeatureIcon[] = ":/img/feature.svg";
-const char kSupportedIcon[] = ":/img/check.svg";
-const char kUnsupportedIcon[] = ":/img/cancel.svg";
-
 // The groups of features, in the order they are shown. The host fills a list of its own for each
 // of them, so the page only decides what to call them.
 enum FeatureGroup
@@ -169,11 +159,11 @@ void SysInfoWidgetCpu::setSystemInfo(const proto::system_info::SystemInfo& syste
 
     const QList<QTreeWidgetItem*> properties = identityParameters(cpu);
     if (!properties.isEmpty())
-        groups << new Item(kCpuIcon, tr("Processor Properties"), properties);
+        groups << new Item(kMicrochipIcon, tr("Processor Properties"), properties);
 
     const QList<QTreeWidgetItem*> caches = cacheParameters(cpu);
     if (!caches.isEmpty())
-        groups << new Item(kCacheIcon, tr("Caches"), caches);
+        groups << new Item(kProcessorIcon, tr("Caches"), caches);
 
     const QString group_names[GROUP_COUNT] =
     {
@@ -186,10 +176,10 @@ void SysInfoWidgetCpu::setSystemInfo(const proto::system_info::SystemInfo& syste
 
     const char* group_icons[GROUP_COUNT] =
     {
-        kInstructionSetIcon,
-        kSecurityIcon,
-        kPowerManagementIcon,
-        kVirtualizationIcon,
+        kIntegratedCircuitIcon,
+        kLockIcon,
+        kElectricalIcon,
+        kVirtualMachineIcon,
         kFeatureIcon
     };
 
@@ -331,8 +321,8 @@ QList<QTreeWidgetItem*> SysInfoWidgetCpu::cacheParameters(
 QList<QTreeWidgetItem*> SysInfoWidgetCpu::featureParameters(
     const proto::system_info::Processor& cpu, int group) const
 {
-    const QIcon supported_icon(kSupportedIcon);
-    const QIcon unsupported_icon(kUnsupportedIcon);
+    const QIcon supported_icon(kCheckIcon);
+    const QIcon unsupported_icon(kCancelIcon);
 
     QList<QTreeWidgetItem*> items;
 

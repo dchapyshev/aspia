@@ -38,11 +38,49 @@ class SysInfoWidget : public QWidget
     Q_OBJECT
 
 public:
-    static const char kTemperatureIcon[];
+    static const char kBoxImportantIcon[];
+    static const char kCancelIcon[];
+    static const char kCertificateIcon[];
+    static const char kCheckIcon[];
+    static const char kComputerIcon[];
+    static const char kComputerCaseIcon[];
+    static const char kConnectedIcon[];
+    static const char kDayViewIcon[];
+    static const char kElectricalIcon[];
+    static const char kElectricityIcon[];
     static const char kFanIcon[];
+    static const char kFeatureIcon[];
+    static const char kFileDocumentIcon[];
+    static const char kFlowChartIcon[];
+    static const char kFolderIcon[];
     static const char kFrequencyIcon[];
+    static const char kGearIcon[];
+    static const char kHddIcon[];
+    static const char kHeartMonitorIcon[];
+    static const char kHighImportanceIcon[];
+    static const char kImacIcon[];
+    static const char kInfoIcon[];
+    static const char kIntegratedCircuitIcon[];
+    static const char kLockIcon[];
+    static const char kLockedUserIcon[];
+    static const char kLogIcon[];
     static const char kMemoryIcon[];
-    static const char kPowerIcon[];
+    static const char kMemorySlotIcon[];
+    static const char kMicrochipIcon[];
+    static const char kMotherboardIcon[];
+    static const char kNasIcon[];
+    static const char kNetworkCardIcon[];
+    static const char kOperatingSystemIcon[];
+    static const char kPrinterIcon[];
+    static const char kProcessorIcon[];
+    static const char kPs2MaleIcon[];
+    static const char kRestartIcon[];
+    static const char kSoftwareIcon[];
+    static const char kTemperatureIcon[];
+    static const char kUserIcon[];
+    static const char kUserAccountIcon[];
+    static const char kVideoCardIcon[];
+    static const char kVirtualMachineIcon[];
 
     ~SysInfoWidget() override = default;
 

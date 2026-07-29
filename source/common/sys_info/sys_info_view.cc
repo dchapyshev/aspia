@@ -373,41 +373,41 @@ void SysInfoView::onPrint()
 void SysInfoView::buildCategoryTree()
 {
     CategoryItem* summary_category = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/computer.svg", tr("Summary"), findChild<SysInfoWidgetSummary*>());
+        SysInfoWidget::kComputerIcon, tr("Summary"), findChild<SysInfoWidgetSummary*>());
 
     //----------------------------------------------------------------------------------------------
     // HARDWARE
     //----------------------------------------------------------------------------------------------
 
     CategoryItem* hardware_category = new CategoryItem(
-        CategoryItem::Type::ROOT_ITEM, ":/img/folder.svg", tr("Hardware"));
+        CategoryItem::Type::ROOT_ITEM, SysInfoWidget::kFolderIcon, tr("Hardware"));
 
     CategoryItem* dmi = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/motherboard.svg", tr("DMI"), findChild<SysInfoWidgetDmi*>());
+        SysInfoWidget::kMotherboardIcon, tr("DMI"), findChild<SysInfoWidgetDmi*>());
 
     CategoryItem* cpu = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/microchip.svg", tr("Processor"), findChild<SysInfoWidgetCpu*>());
+        SysInfoWidget::kMicrochipIcon, tr("Processor"), findChild<SysInfoWidgetCpu*>());
 
     CategoryItem* devices = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/network-card.svg", tr("Devices"), findChild<SysInfoWidgetDevices*>());
+        SysInfoWidget::kNetworkCardIcon, tr("Devices"), findChild<SysInfoWidgetDevices*>());
 
     CategoryItem* drives = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/hdd.svg", tr("Drives"), findChild<SysInfoWidgetDrives*>());
+        SysInfoWidget::kHddIcon, tr("Drives"), findChild<SysInfoWidgetDrives*>());
 
     CategoryItem* smart = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/hdd.svg", tr("S.M.A.R.T."), findChild<SysInfoWidgetSmart*>());
+        SysInfoWidget::kHddIcon, tr("S.M.A.R.T."), findChild<SysInfoWidgetSmart*>());
 
     CategoryItem* video_adapters = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/video-card.svg", tr("Video Adapters"), findChild<SysInfoWidgetVideoAdapters*>());
+        SysInfoWidget::kVideoCardIcon, tr("Video Adapters"), findChild<SysInfoWidgetVideoAdapters*>());
 
     CategoryItem* monitors = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/imac.svg", tr("Monitors"), findChild<SysInfoWidgetMonitors*>());
+        SysInfoWidget::kImacIcon, tr("Monitors"), findChild<SysInfoWidgetMonitors*>());
 
     CategoryItem* printers = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/printer.svg", tr("Printers"), findChild<SysInfoWidgetPrinters*>());
+        SysInfoWidget::kPrinterIcon, tr("Printers"), findChild<SysInfoWidgetPrinters*>());
 
     CategoryItem* power_options = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/electrical.svg", tr("Power Options"), findChild<SysInfoWidgetPowerOptions*>());
+        SysInfoWidget::kElectricalIcon, tr("Power Options"), findChild<SysInfoWidgetPowerOptions*>());
 
     hardware_category->addChild(dmi);
     hardware_category->addChild(cpu);
@@ -424,22 +424,22 @@ void SysInfoView::buildCategoryTree()
     //----------------------------------------------------------------------------------------------
 
     CategoryItem* software_category = new CategoryItem(
-        CategoryItem::Type::ROOT_ITEM, ":/img/folder.svg", tr("Software"));
+        CategoryItem::Type::ROOT_ITEM, SysInfoWidget::kFolderIcon, tr("Software"));
 
     CategoryItem* applications = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/software.svg", tr("Applications"), findChild<SysInfoWidgetApplications*>());
+        SysInfoWidget::kSoftwareIcon, tr("Applications"), findChild<SysInfoWidgetApplications*>());
 
     CategoryItem* drivers = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/network-card.svg", tr("Drivers"), findChild<SysInfoWidgetDrivers*>());
+        SysInfoWidget::kNetworkCardIcon, tr("Drivers"), findChild<SysInfoWidgetDrivers*>());
 
     CategoryItem* services = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/gear.svg", tr("Services"), findChild<SysInfoWidgetServices*>());
+        SysInfoWidget::kGearIcon, tr("Services"), findChild<SysInfoWidgetServices*>());
 
     CategoryItem* processes = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/heart-monitor.svg", tr("Processes"), findChild<SysInfoWidgetProcesses*>());
+        SysInfoWidget::kHeartMonitorIcon, tr("Processes"), findChild<SysInfoWidgetProcesses*>());
 
     CategoryItem* licenses = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/certificate.svg", tr("Licenses"), findChild<SysInfoWidgetLicenses*>());
+        SysInfoWidget::kCertificateIcon, tr("Licenses"), findChild<SysInfoWidgetLicenses*>());
 
     software_category->addChild(applications);
     software_category->addChild(drivers);
@@ -452,22 +452,22 @@ void SysInfoView::buildCategoryTree()
     //----------------------------------------------------------------------------------------------
 
     CategoryItem* network_category = new CategoryItem(
-        CategoryItem::Type::ROOT_ITEM, ":/img/folder.svg", tr("Network"));
+        CategoryItem::Type::ROOT_ITEM, SysInfoWidget::kFolderIcon, tr("Network"));
 
     CategoryItem* network_adapters = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/network-card.svg", tr("Network Adapters"), findChild<SysInfoWidgetNetAdapters*>());
+        SysInfoWidget::kNetworkCardIcon, tr("Network Adapters"), findChild<SysInfoWidgetNetAdapters*>());
 
     CategoryItem* routes = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/flow-chart.svg", tr("Routes"), findChild<SysInfoWidgetRoutes*>());
+        SysInfoWidget::kFlowChartIcon, tr("Routes"), findChild<SysInfoWidgetRoutes*>());
 
     CategoryItem* connections = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/connected.svg", tr("Connections"), findChild<SysInfoWidgetConnections*>());
+        SysInfoWidget::kConnectedIcon, tr("Connections"), findChild<SysInfoWidgetConnections*>());
 
     CategoryItem* network_shares = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/nas.svg", tr("Network Shares"), findChild<SysInfoWidgetNetShares*>());
+        SysInfoWidget::kNasIcon, tr("Network Shares"), findChild<SysInfoWidgetNetShares*>());
 
     CategoryItem* open_files = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/nas.svg", tr("Open Files"), findChild<SysInfoWidgetOpenFiles*>());
+        SysInfoWidget::kNasIcon, tr("Open Files"), findChild<SysInfoWidgetOpenFiles*>());
 
     network_category->addChild(network_adapters);
     network_category->addChild(routes);
@@ -480,19 +480,19 @@ void SysInfoView::buildCategoryTree()
     //----------------------------------------------------------------------------------------------
 
     CategoryItem* os_category = new CategoryItem(
-        CategoryItem::Type::ROOT_ITEM, ":/img/folder.svg", tr("Operating System"));
+        CategoryItem::Type::ROOT_ITEM, SysInfoWidget::kFolderIcon, tr("Operating System"));
 
     CategoryItem* env_vars = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/day-view.svg", tr("Environment Variables"), findChild<SysInfoWidgetEnvVars*>());
+        SysInfoWidget::kDayViewIcon, tr("Environment Variables"), findChild<SysInfoWidgetEnvVars*>());
 
     CategoryItem* event_logs = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/log.svg", tr("Event Logs"), findChild<SysInfoWidgetEventLogs*>());
+        SysInfoWidget::kLogIcon, tr("Event Logs"), findChild<SysInfoWidgetEventLogs*>());
 
     CategoryItem* local_users = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/user.svg", tr("Users"), findChild<SysInfoWidgetLocalUsers*>());
+        SysInfoWidget::kUserIcon, tr("Users"), findChild<SysInfoWidgetLocalUsers*>());
 
     CategoryItem* local_user_groups = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/user-account.svg", tr("User Groups"), findChild<SysInfoWidgetLocalUserGroups*>());
+        SysInfoWidget::kUserAccountIcon, tr("User Groups"), findChild<SysInfoWidgetLocalUserGroups*>());
 
     os_category->addChild(env_vars);
     os_category->addChild(event_logs);

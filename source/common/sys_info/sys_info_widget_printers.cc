@@ -152,7 +152,7 @@ void SysInfoWidgetPrinters::setSystemInfo(const proto::system_info::SystemInfo& 
 
         if (!group.isEmpty())
         {
-            ui->tree->addTopLevelItem(new Item(":/img/printer.svg",
+            ui->tree->addTopLevelItem(new Item(kPrinterIcon,
                                               QString::fromStdString(printer.name()),
                                               group));
         }

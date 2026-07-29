@@ -95,7 +95,7 @@ void SysInfoWidgetDevices::setSystemInfo(const proto::system_info::SystemInfo& s
     }
 
     const proto::system_info::WindowsDevices& devices = system_info.windows_devices();
-    QIcon item_icon(":/img/network-card.svg");
+    QIcon item_icon(kNetworkCardIcon);
     QTreeWidget* tree = ui->tree;
 
     for (int i = 0; i < devices.device_size(); ++i)

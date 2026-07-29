@@ -48,11 +48,49 @@ void copyTextToClipboard(const QString& text)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-const char SysInfoWidget::kTemperatureIcon[] = ":/img/temperature.svg";
+const char SysInfoWidget::kBoxImportantIcon[] = ":/img/box-important.svg";
+const char SysInfoWidget::kCancelIcon[] = ":/img/cancel.svg";
+const char SysInfoWidget::kCertificateIcon[] = ":/img/certificate.svg";
+const char SysInfoWidget::kCheckIcon[] = ":/img/check.svg";
+const char SysInfoWidget::kComputerIcon[] = ":/img/computer.svg";
+const char SysInfoWidget::kComputerCaseIcon[] = ":/img/computer-case.svg";
+const char SysInfoWidget::kConnectedIcon[] = ":/img/connected.svg";
+const char SysInfoWidget::kDayViewIcon[] = ":/img/day-view.svg";
+const char SysInfoWidget::kElectricalIcon[] = ":/img/electrical.svg";
+const char SysInfoWidget::kElectricityIcon[] = ":/img/electricity.svg";
 const char SysInfoWidget::kFanIcon[] = ":/img/fan.svg";
+const char SysInfoWidget::kFeatureIcon[] = ":/img/feature.svg";
+const char SysInfoWidget::kFileDocumentIcon[] = ":/img/file-document.svg";
+const char SysInfoWidget::kFlowChartIcon[] = ":/img/flow-chart.svg";
+const char SysInfoWidget::kFolderIcon[] = ":/img/folder.svg";
 const char SysInfoWidget::kFrequencyIcon[] = ":/img/frequency.svg";
+const char SysInfoWidget::kGearIcon[] = ":/img/gear.svg";
+const char SysInfoWidget::kHddIcon[] = ":/img/hdd.svg";
+const char SysInfoWidget::kHeartMonitorIcon[] = ":/img/heart-monitor.svg";
+const char SysInfoWidget::kHighImportanceIcon[] = ":/img/high-importance.svg";
+const char SysInfoWidget::kImacIcon[] = ":/img/imac.svg";
+const char SysInfoWidget::kInfoIcon[] = ":/img/info.svg";
+const char SysInfoWidget::kIntegratedCircuitIcon[] = ":/img/integrated-circuit.svg";
+const char SysInfoWidget::kLockIcon[] = ":/img/lock.svg";
+const char SysInfoWidget::kLockedUserIcon[] = ":/img/locked-user.svg";
+const char SysInfoWidget::kLogIcon[] = ":/img/log.svg";
 const char SysInfoWidget::kMemoryIcon[] = ":/img/memory.svg";
-const char SysInfoWidget::kPowerIcon[] = ":/img/electricity.svg";
+const char SysInfoWidget::kMemorySlotIcon[] = ":/img/memory-slot.svg";
+const char SysInfoWidget::kMicrochipIcon[] = ":/img/microchip.svg";
+const char SysInfoWidget::kMotherboardIcon[] = ":/img/motherboard.svg";
+const char SysInfoWidget::kNasIcon[] = ":/img/nas.svg";
+const char SysInfoWidget::kNetworkCardIcon[] = ":/img/network-card.svg";
+const char SysInfoWidget::kOperatingSystemIcon[] = ":/img/operating-system.svg";
+const char SysInfoWidget::kPrinterIcon[] = ":/img/printer.svg";
+const char SysInfoWidget::kProcessorIcon[] = ":/img/processor.svg";
+const char SysInfoWidget::kPs2MaleIcon[] = ":/img/ps-2-male.svg";
+const char SysInfoWidget::kRestartIcon[] = ":/img/restart.svg";
+const char SysInfoWidget::kSoftwareIcon[] = ":/img/software.svg";
+const char SysInfoWidget::kTemperatureIcon[] = ":/img/temperature.svg";
+const char SysInfoWidget::kUserIcon[] = ":/img/user.svg";
+const char SysInfoWidget::kUserAccountIcon[] = ":/img/user-account.svg";
+const char SysInfoWidget::kVideoCardIcon[] = ":/img/video-card.svg";
+const char SysInfoWidget::kVirtualMachineIcon[] = ":/img/virtual-machine.svg";
 
 //--------------------------------------------------------------------------------------------------
 SysInfoWidget::SysInfoWidget(QWidget* parent)

@@ -27,8 +27,6 @@
 
 namespace {
 
-const char kDriveIcon[] = ":/img/hdd.svg";
-
 class Item : public QTreeWidgetItem
 {
 public:
@@ -199,7 +197,7 @@ void SysInfoWidgetDrives::setSystemInfo(const proto::system_info::SystemInfo& sy
             QString::fromStdString(drive.path()) :
             QString::fromStdString(drive.model());
 
-        QTreeWidgetItem* item = new Item(kDriveIcon, title, group);
+        QTreeWidgetItem* item = new Item(kHddIcon, title, group);
 
         ui->tree->addTopLevelItem(item);
         item->setExpanded(true);

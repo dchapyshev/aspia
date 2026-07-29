@@ -176,7 +176,7 @@ void SysInfoWidgetLocalUsers::setSystemInfo(const proto::system_info::SystemInfo
         if (!group.isEmpty())
         {
             ui->tree->addTopLevelItem(
-                new Item(user.disabled() ? ":/img/locked-user.svg" : ":/img/user.svg",
+                new Item(user.disabled() ? kLockedUserIcon : kUserIcon,
                          QString::fromStdString(user.name()), group));
         }
     }

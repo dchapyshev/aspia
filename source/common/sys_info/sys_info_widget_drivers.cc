@@ -81,7 +81,7 @@ void SysInfoWidgetDrivers::setSystemInfo(const proto::system_info::SystemInfo& s
     }
 
     const proto::system_info::Drivers& drivers = system_info.drivers();
-    QIcon item_icon(":/img/network-card.svg");
+    QIcon item_icon(kNetworkCardIcon);
 
     for (int i = 0; i < drivers.driver_size(); ++i)
     {

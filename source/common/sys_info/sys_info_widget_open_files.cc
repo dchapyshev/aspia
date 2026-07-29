@@ -83,7 +83,7 @@ void SysInfoWidgetOpenFiles::setSystemInfo(const proto::system_info::SystemInfo&
     }
 
     const proto::system_info::OpenFiles& open_files = system_info.open_files();
-    QIcon item_icon(":/img/nas.svg");
+    QIcon item_icon(kNasIcon);
 
     for (int i = 0; i < open_files.open_file_size(); ++i)
     {

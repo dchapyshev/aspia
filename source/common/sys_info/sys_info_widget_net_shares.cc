@@ -146,7 +146,7 @@ void SysInfoWidgetNetShares::setSystemInfo(const proto::system_info::SystemInfo&
 
         if (!group.isEmpty())
         {
-            ui->tree->addTopLevelItem(new Item(":/img/nas.svg",
+            ui->tree->addTopLevelItem(new Item(kNasIcon,
                                               QString::fromStdString(share.name()),
                                               group));
         }
