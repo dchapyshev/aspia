@@ -37,6 +37,8 @@
 #include "base/smbios.h"
 #include "base/crypto/generic_hash.h"
 
+#include <algorithm>
+
 #include <drm/drm.h>
 #include <fcntl.h>
 #include <grp.h>
@@ -326,6 +328,125 @@ QString readSysAttribute(const QString& path)
         return QString();
 
     return QString::fromLatin1(file.readAll()).trimmed();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Path of the monitoring node a driver registers for its device. The number the node is given
+// depends on the order the drivers loaded in, so the node is looked up and not built by name.
+QString hwmonPath(const QString& device_path)
+{
+    const QString root = device_path + "/hwmon";
+    const QStringList nodes = QDir(root).entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+
+    for (const QString& node : nodes)
+    {
+        if (node.startsWith("hwmon"))
+            return root + '/' + node;
+    }
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Highest of the temperatures a monitoring node reports, in tenths of a degree Celsius. A node has
+// one input per core plus one for the package, and the values are in thousandths of a degree.
+quint32 maxHwmonTemperature(const QString& node_path)
+{
+    const QStringList attributes =
+        QDir(node_path).entryList(QStringList("temp*_input"), QDir::Files);
+
+    quint32 result = 0;
+
+    for (const QString& attribute : attributes)
+    {
+        const quint64 temperature = readSysAttribute(node_path + '/' + attribute).toULongLong();
+        result = std::max(result, static_cast<quint32>(temperature / 100));
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Splits the slot a device sits in, "<domain>:<bus>:<device>.<function>" with hexadecimal parts.
+void fillAdapterLocation(const QString& slot, SysInfo::VideoAdapter* adapter)
+{
+    const QStringList slot_parts = slot.split(':');
+    if (slot_parts.count() != 3)
+        return;
+
+    const QStringList device_parts = slot_parts[2].split('.');
+    if (device_parts.count() != 2)
+        return;
+
+    bool bus_ok = false;
+    bool device_ok = false;
+    bool function_ok = false;
+
+    const uint bus = slot_parts[1].toUInt(&bus_ok, 16);
+    const uint device = device_parts[0].toUInt(&device_ok, 16);
+    const uint function = device_parts[1].toUInt(&function_ok, 16);
+
+    if (!bus_ok || !device_ok || !function_ok)
+        return;
+
+    adapter->bus_number = static_cast<qint32>(bus);
+    adapter->device_number = static_cast<qint32>(device);
+    adapter->function_number = static_cast<qint32>(function);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Reads the memory clock out of the list of states the driver publishes. The state in use is the
+// line marked with an asterisk, e.g. "3: 1500Mhz *".
+quint64 memoryFrequency(const QString& device_path)
+{
+    const QStringList states = readSysAttribute(device_path + "/pp_dpm_mclk").split('\n');
+
+    for (const QString& state : states)
+    {
+        if (!state.endsWith('*'))
+            continue;
+
+        const qsizetype value_pos = state.indexOf(':');
+        const qsizetype unit_pos = state.indexOf("Mhz", 0, Qt::CaseInsensitive);
+
+        if (value_pos < 0 || unit_pos < value_pos)
+            continue;
+
+        bool ok = false;
+        const quint64 value =
+            state.mid(value_pos + 1, unit_pos - value_pos - 1).trimmed().toULongLong(&ok);
+        if (ok)
+            return value * 1000000;
+    }
+
+    return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Fills in what the sensors of the adapter report. A driver registers only the ones its hardware
+// has, and an integrated adapter usually has neither a fan nor a power reading of its own.
+void fillAdapterSensors(const QString& device_path, SysInfo::VideoAdapter* adapter)
+{
+    const QString node_path = hwmonPath(device_path);
+    if (node_path.isEmpty())
+        return;
+
+    adapter->temperature = maxHwmonTemperature(node_path);
+
+    quint64 temperature_max = readSysAttribute(node_path + "/temp1_crit").toULongLong();
+    if (!temperature_max)
+        temperature_max = readSysAttribute(node_path + "/temp1_emergency").toULongLong();
+
+    adapter->temperature_max = static_cast<quint32>(temperature_max / 100);
+    adapter->fan_rpm = readSysAttribute(node_path + "/fan1_input").toUInt();
+    adapter->fan_rpm_max = readSysAttribute(node_path + "/fan1_max").toUInt();
+
+    // Both the draw and the cap are in microwatts, the field holds tenths of a percent of the cap.
+    const quint64 power = readSysAttribute(node_path + "/power1_average").toULongLong();
+    const quint64 power_cap = readSysAttribute(node_path + "/power1_cap").toULongLong();
+
+    if (power != 0 && power_cap != 0)
+        adapter->power = static_cast<quint32>((power * 1000) / power_cap);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -828,7 +949,31 @@ int SysInfo::processorThreads()
 // static
 quint32 SysInfo::processorTemperature()
 {
-    return 0;
+    // Drivers that read the sensors built into the processor package. The rest of the monitoring
+    // nodes measure boards, drives and radios, so what they report is not the processor.
+    static const char* kDriverNames[] = { "coretemp", "k10temp", "zenpower" };
+
+    const QString root = "/sys/class/hwmon";
+    const QStringList nodes = QDir(root).entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+
+    quint32 result = 0;
+
+    for (const QString& node : nodes)
+    {
+        const QString node_path = root + '/' + node;
+        const QString name = readSysAttribute(node_path + "/name");
+
+        for (const char* driver_name : kDriverNames)
+        {
+            if (name != driver_name)
+                continue;
+
+            result = std::max(result, maxHwmonTemperature(node_path));
+            break;
+        }
+    }
+
+    return result;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1270,9 +1415,20 @@ QList<SysInfo::VideoAdapter> SysInfo::videoAdapters()
         if (drm.date != "0")
             adapter.driver_date = drm.date;
 
-        // VBIOS version and total dedicated video memory (in bytes) are exposed by amdgpu.
+        // The VBIOS version and the memory counters (in bytes) are exposed by amdgpu. Its video
+        // memory is what the card owns, the translation table is the system memory it is allowed
+        // to work on.
         adapter.bios_string = readSysAttribute(device_path + "/vbios_version");
         adapter.memory_size = readSysAttribute(device_path + "/mem_info_vram_total").toULongLong();
+        adapter.memory_used = readSysAttribute(device_path + "/mem_info_vram_used").toULongLong();
+        adapter.shared_memory_size =
+            readSysAttribute(device_path + "/mem_info_gtt_total").toULongLong();
+        adapter.shared_memory_used =
+            readSysAttribute(device_path + "/mem_info_gtt_used").toULongLong();
+        adapter.memory_frequency = memoryFrequency(device_path);
+
+        fillAdapterLocation(slot, &adapter);
+        fillAdapterSensors(device_path, &adapter);
 
         result.append(std::move(adapter));
     }
