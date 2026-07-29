@@ -18,6 +18,9 @@
 
 #include "host/ui/system_info_window.h"
 
+#include <QCloseEvent>
+#include <QDataStream>
+#include <QIODevice>
 #include <QVBoxLayout>
 
 #include "base/gui_application.h"
@@ -25,6 +28,7 @@
 #include "base/serialization.h"
 #include "base/version_constants.h"
 #include "common/sys_info/sys_info_view.h"
+#include "host/user_settings.h"
 #include "host/workers/sys_info_worker.h"
 #include "proto/system_info.h"
 
@@ -54,6 +58,23 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
     connect(sys_info_worker, &SysInfoWorker::sig_systemInfo,
             this, &SystemInfoWindow::onSystemInfo, Qt::QueuedConnection);
 
+    QDataStream stream(UserSettings().systemInfoWindowState());
+    stream.setVersion(QDataStream::Qt_6_10);
+
+    QByteArray geometry;
+    QByteArray view_state;
+
+    stream >> geometry >> view_state;
+
+    if (stream.status() == QDataStream::Ok)
+    {
+        if (!geometry.isEmpty())
+            restoreGeometry(geometry);
+
+        if (!view_state.isEmpty())
+            view_->restoreState(view_state);
+    }
+
     // A report that never left the machine has no client and no router to name.
     view_->setVersions(QVersionNumber(), kCurrentVersion, QVersionNumber());
     view_->onRefresh();
@@ -63,6 +84,22 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
 SystemInfoWindow::~SystemInfoWindow()
 {
     LOG(INFO) << "Dtor";
+}
+
+//--------------------------------------------------------------------------------------------------
+void SystemInfoWindow::closeEvent(QCloseEvent* event)
+{
+    QByteArray state;
+
+    {
+        QDataStream stream(&state, QIODevice::WriteOnly);
+        stream.setVersion(QDataStream::Qt_6_10);
+        stream << saveGeometry() << view_->saveState();
+    }
+
+    UserSettings().setSystemInfoWindowState(state);
+
+    QWidget::closeEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------

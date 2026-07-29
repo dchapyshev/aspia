@@ -29,6 +29,7 @@ const QString kLocaleParam = "Locale";
 const QString kThemeParam = "Theme";
 const QString kOneTimeSessionsParam = "OneTimeSessions";
 const QString kSecurityLogDialogStateParam = "SecurityLogDialogState";
+const QString kSystemInfoWindowStateParam = "SystemInfoWindowState";
 
 } // namespace
 
@@ -106,4 +107,16 @@ QByteArray UserSettings::securityLogDialogState() const
 void UserSettings::setSecurityLogDialogState(const QByteArray& state)
 {
     settings_.setValue(kSecurityLogDialogStateParam, state);
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray UserSettings::systemInfoWindowState() const
+{
+    return settings_.value(kSystemInfoWindowStateParam).toByteArray();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSettings::setSystemInfoWindowState(const QByteArray& state)
+{
+    settings_.setValue(kSystemInfoWindowStateParam, state);
 }

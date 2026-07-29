@@ -40,6 +40,10 @@ public:
 signals:
     void sig_query(quint32 consumer_id, const QByteArray& buffer);
 
+protected:
+    // QWidget implementation.
+    void closeEvent(QCloseEvent* event) final;
+
 private slots:
     void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request);
     void onSystemInfo(quint32 consumer_id, const QByteArray& buffer);

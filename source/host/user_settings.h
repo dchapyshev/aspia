@@ -46,6 +46,9 @@ public:
     QByteArray securityLogDialogState() const;
     void setSecurityLogDialogState(const QByteArray& state);
 
+    QByteArray systemInfoWindowState() const;
+    void setSystemInfoWindowState(const QByteArray& state);
+
 private:
     QSettings settings_;
 
