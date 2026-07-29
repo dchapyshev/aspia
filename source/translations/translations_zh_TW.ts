@@ -2951,9 +2951,9 @@ Password: %2</source>
     <name>HostWindow</name>
     <message>
         <location filename="../host/ui/host_window.ui" line="26"/>
-        <location filename="../host/ui/host_window.cc" line="574"/>
-        <location filename="../host/ui/host_window.cc" line="794"/>
-        <location filename="../host/ui/host_window.cc" line="1063"/>
+        <location filename="../host/ui/host_window.cc" line="577"/>
+        <location filename="../host/ui/host_window.cc" line="818"/>
+        <location filename="../host/ui/host_window.cc" line="1087"/>
         <source>Aspia Host</source>
         <translation type="unfinished">Aspia Host</translation>
     </message>
@@ -2969,8 +2969,8 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="204"/>
-        <location filename="../host/ui/host_window.cc" line="512"/>
-        <location filename="../host/ui/host_window.cc" line="973"/>
+        <location filename="../host/ui/host_window.cc" line="515"/>
+        <location filename="../host/ui/host_window.cc" line="997"/>
         <source>Router is disabled</source>
         <translation type="unfinished">已停用路由器</translation>
     </message>
@@ -2980,164 +2980,169 @@ Password: %2</source>
         <translation type="unfinished">說明</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="260"/>
+        <location filename="../host/ui/host_window.ui" line="261"/>
         <source>Access</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="270"/>
+        <location filename="../host/ui/host_window.ui" line="271"/>
         <source>View</source>
         <translation type="unfinished">檢視</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="274"/>
+        <location filename="../host/ui/host_window.ui" line="275"/>
         <source>Language</source>
         <translation type="unfinished">語言</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="279"/>
+        <location filename="../host/ui/host_window.ui" line="280"/>
         <source>Theme</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="292"/>
+        <location filename="../host/ui/host_window.ui" line="293"/>
         <source>Exit</source>
         <translation type="unfinished">離開</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="297"/>
+        <location filename="../host/ui/host_window.ui" line="298"/>
         <source>Online Help...</source>
         <translation type="unfinished">線上說明...</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="300"/>
+        <location filename="../host/ui/host_window.ui" line="301"/>
         <source>F1</source>
         <translation type="unfinished">F1</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="305"/>
+        <location filename="../host/ui/host_window.ui" line="306"/>
+        <source>About System</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/host_window.ui" line="311"/>
         <source>About</source>
         <translation type="unfinished">關於</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="310"/>
+        <location filename="../host/ui/host_window.ui" line="316"/>
         <source>Security Log...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="315"/>
+        <location filename="../host/ui/host_window.ui" line="321"/>
         <source>Settings...</source>
         <translation type="unfinished">設定...</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="320"/>
-        <location filename="../host/ui/host_window.cc" line="778"/>
+        <location filename="../host/ui/host_window.ui" line="326"/>
+        <location filename="../host/ui/host_window.cc" line="781"/>
         <source>Hide</source>
         <translation type="unfinished">隱藏</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="331"/>
+        <location filename="../host/ui/host_window.ui" line="337"/>
         <source>Desktop</source>
         <translation type="unfinished">桌面</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="342"/>
+        <location filename="../host/ui/host_window.ui" line="348"/>
         <source>Terminal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="353"/>
+        <location filename="../host/ui/host_window.ui" line="359"/>
         <source>Desktop View</source>
         <translation type="unfinished">桌面檢視</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="364"/>
+        <location filename="../host/ui/host_window.ui" line="370"/>
         <source>File Transfer</source>
         <translation type="unfinished">檔案傳輸</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="375"/>
+        <location filename="../host/ui/host_window.ui" line="381"/>
         <source>System Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="386"/>
+        <location filename="../host/ui/host_window.ui" line="392"/>
         <source>Text Chat</source>
         <translation type="unfinished">文字聊天</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.ui" line="391"/>
+        <location filename="../host/ui/host_window.ui" line="397"/>
         <source>Show chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="279"/>
-        <location filename="../host/ui/host_window.cc" line="773"/>
+        <location filename="../host/ui/host_window.cc" line="282"/>
+        <location filename="../host/ui/host_window.cc" line="776"/>
         <source>Show</source>
         <translation type="unfinished">顯示</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="462"/>
+        <location filename="../host/ui/host_window.cc" line="465"/>
         <source>Not available</source>
         <translation type="unfinished">無法使用</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="516"/>
+        <location filename="../host/ui/host_window.cc" line="519"/>
         <source>Connecting to router %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="520"/>
+        <location filename="../host/ui/host_window.cc" line="523"/>
         <source>Connected to router %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="524"/>
+        <location filename="../host/ui/host_window.cc" line="527"/>
         <source>Failed to connect to router %1</source>
         <translation type="unfinished">無法連線到路由器 %1</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="569"/>
+        <location filename="../host/ui/host_window.cc" line="572"/>
         <source>Screen recording has started.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="571"/>
+        <location filename="../host/ui/host_window.cc" line="574"/>
         <source>Screen recording stopped.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="762"/>
+        <location filename="../host/ui/host_window.cc" line="765"/>
         <source>Settings storage is unavailable.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="811"/>
+        <location filename="../host/ui/host_window.cc" line="835"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation type="unfinished">如果您離開 Aspia，在您再次手動開啟電腦或 Aspia 之前，將無法連線到此電腦。您真的要離開應用程式嗎？</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="978"/>
+        <location filename="../host/ui/host_window.cc" line="1002"/>
         <source>Connecting to router...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="983"/>
+        <location filename="../host/ui/host_window.cc" line="1007"/>
         <source>Connected to router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="988"/>
+        <location filename="../host/ui/host_window.cc" line="1012"/>
         <source>Connection error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1060"/>
+        <location filename="../host/ui/host_window.cc" line="1084"/>
         <source>IP addresses:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1064"/>
+        <location filename="../host/ui/host_window.cc" line="1088"/>
         <source>ID: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7233,6 +7238,34 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>SysInfoCpu</name>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="39"/>
+        <source>Parameter</source>
+        <translation type="unfinished">參數</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="44"/>
+        <source>Value</source>
+        <translation type="unfinished">值</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="52"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">複製列</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="57"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">複製名稱</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="62"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">複製值</translation>
+    </message>
+</context>
+<context>
     <name>SysInfoDevices</name>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="48"/>
@@ -7271,6 +7304,39 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="76"/>
         <source>Search in Google</source>
         <translation>在 Google 搜尋</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoDmi</name>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="43"/>
+        <source>Table</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="56"/>
+        <source>Parameter</source>
+        <translation type="unfinished">參數</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="61"/>
+        <source>Value</source>
+        <translation type="unfinished">值</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="70"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">複製列</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="75"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">複製名稱</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="80"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">複製值</translation>
     </message>
 </context>
 <context>
@@ -7319,29 +7385,27 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoDrives</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.ui" line="43"/>
-        <location filename="../common/sys_info/sys_info_widget_drives.ui" line="64"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.ui" line="39"/>
         <source>Parameter</source>
         <translation type="unfinished">參數</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.ui" line="48"/>
-        <location filename="../common/sys_info/sys_info_widget_drives.ui" line="69"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.ui" line="44"/>
         <source>Value</source>
         <translation type="unfinished">值</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.ui" line="78"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.ui" line="52"/>
         <source>Copy Row</source>
         <translation type="unfinished">複製列</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.ui" line="83"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.ui" line="57"/>
         <source>Copy Name</source>
         <translation type="unfinished">複製名稱</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.ui" line="88"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.ui" line="62"/>
         <source>Copy Value</source>
         <translation type="unfinished">複製值</translation>
     </message>
@@ -7823,6 +7887,39 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>SysInfoSmart</name>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.ui" line="46"/>
+        <source>Drive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.ui" line="62"/>
+        <source>Parameter</source>
+        <translation type="unfinished">參數</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.ui" line="67"/>
+        <source>Value</source>
+        <translation type="unfinished">值</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.ui" line="76"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">複製列</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.ui" line="81"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">複製名稱</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.ui" line="86"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">複製值</translation>
+    </message>
+</context>
+<context>
     <name>SysInfoSummary</name>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.ui" line="39"/>
@@ -7926,143 +8023,1431 @@ Are you sure you want to continue?</source>
         <translation type="unfinished">F5</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="330"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="341"/>
         <source>HTML File</source>
         <translation type="unfinished">HTML 檔案</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="330"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="341"/>
         <source>HTML File (*.html)</source>
         <translation type="unfinished">HTML 檔案 (*.html)</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="337"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="351"/>
         <source>Failed to save file: %1</source>
         <translation type="unfinished">無法儲存檔案：%1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="361"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="376"/>
         <source>Summary</source>
         <translation type="unfinished">概要</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="368"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="383"/>
         <source>Hardware</source>
         <translation type="unfinished">硬體</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="371"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="386"/>
+        <source>DMI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="389"/>
+        <source>Processor</source>
+        <translation type="unfinished">處理器</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="392"/>
         <source>Devices</source>
         <translation type="unfinished">裝置</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="374"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="395"/>
         <source>Drives</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="377"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="398"/>
+        <source>S.M.A.R.T.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_view.cc" line="401"/>
         <source>Video Adapters</source>
         <translation type="unfinished">顯示卡</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="380"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="404"/>
         <source>Monitors</source>
         <translation type="unfinished">顯示器</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="383"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="407"/>
         <source>Printers</source>
         <translation type="unfinished">印表機</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="386"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="410"/>
         <source>Power Options</source>
         <translation type="unfinished">電源選項</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="400"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="427"/>
         <source>Software</source>
         <translation type="unfinished">軟體</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="403"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="430"/>
         <source>Applications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="406"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="433"/>
         <source>Drivers</source>
         <translation type="unfinished">驅動程式</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="409"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="436"/>
         <source>Services</source>
         <translation type="unfinished">服務</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="412"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="439"/>
         <source>Processes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="415"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="442"/>
         <source>Licenses</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="428"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="455"/>
         <source>Network</source>
         <translation type="unfinished">網路</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="431"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="458"/>
         <source>Network Adapters</source>
         <translation type="unfinished">網路卡</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="434"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="461"/>
         <source>Routes</source>
         <translation type="unfinished">路由</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="437"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="464"/>
         <source>Connections</source>
         <translation type="unfinished">連線</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="440"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="467"/>
         <source>Network Shares</source>
         <translation type="unfinished">網路分享</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="443"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="470"/>
         <source>Open Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="456"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="483"/>
         <source>Operating System</source>
         <translation type="unfinished">作業系統</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="459"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="486"/>
         <source>Environment Variables</source>
         <translation type="unfinished">環境變數</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="462"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="489"/>
         <source>Event Logs</source>
         <translation type="unfinished">事件紀錄</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="465"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="492"/>
         <source>Users</source>
         <translation type="unfinished">使用者</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="468"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="495"/>
         <source>User Groups</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoWidgetCpu</name>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="162"/>
+        <source>Processor Properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="166"/>
+        <source>Caches</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="170"/>
+        <source>Instruction Set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="171"/>
+        <source>Security Features</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="172"/>
+        <source>Power Management Features</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="173"/>
+        <source>Virtualization Features</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="174"/>
+        <source>Other Features</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="249"/>
+        <source>Packages</source>
+        <translation type="unfinished">個數</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="252"/>
+        <source>Physical Cores</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="255"/>
+        <source>Logical Cores</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="259"/>
+        <source>Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="260"/>
+        <source>%1 C</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="282"/>
+        <source>L%1 Data Cache</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="286"/>
+        <source>L%1 Instruction Cache</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="290"/>
+        <source>L%1 Cache</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="297"/>
+        <source>Size</source>
+        <translation type="unfinished">大小</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="301"/>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="303"/>
+        <source>Associativity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="301"/>
+        <source>Fully associative</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="303"/>
+        <source>%1-way</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="306"/>
+        <source>Line Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="306"/>
+        <source>%1 bytes</source>
+        <translation type="unfinished">%1 位元組</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="309"/>
+        <source>Sets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="312"/>
+        <source>Shared By</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="312"/>
+        <source>%1 threads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="336"/>
+        <source>Yes</source>
+        <translation type="unfinished">是</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="336"/>
+        <source>No</source>
+        <translation type="unfinished">否</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoWidgetDmi</name>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="218"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="832"/>
+        <source>BIOS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="225"/>
+        <source>Motherboard</source>
+        <translation type="unfinished">主機板</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="232"/>
+        <source>Chassis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="239"/>
+        <source>Processors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="246"/>
+        <source>Caches</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="254"/>
+        <source>Port Connectors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="263"/>
+        <source>System Slots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="271"/>
+        <source>On-board Devices</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="276"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="276"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="631"/>
+        <source>OEM Strings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="281"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="281"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="636"/>
+        <source>Configuration Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="289"/>
+        <source>Memory Arrays</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="297"/>
+        <source>Memory Devices</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="306"/>
+        <source>Memory Errors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="315"/>
+        <source>Memory Array Addresses</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="325"/>
+        <source>Memory Device Addresses</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="333"/>
+        <source>Voltage Probes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="341"/>
+        <source>Cooling Devices</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="351"/>
+        <source>Temperature Probes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="360"/>
+        <source>Current Probes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="363"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="363"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="730"/>
+        <source>System Boot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="371"/>
+        <source>Additional Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="380"/>
+        <source>TPM Device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="389"/>
+        <source>Processor Additional Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="398"/>
+        <source>Firmware Inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="403"/>
+        <source>Misc</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="403"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="747"/>
+        <source>DMI Properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="842"/>
+        <source>Vendor</source>
+        <translation type="unfinished">供應商</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="845"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="906"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="963"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1029"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1904"/>
+        <source>Version</source>
+        <translation type="unfinished">版本</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="848"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1916"/>
+        <source>Release Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="852"/>
+        <source>Address</source>
+        <translation type="unfinished">位址</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="857"/>
+        <source>ROM Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="860"/>
+        <source>Revision</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="864"/>
+        <source>Firmware Revision</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="874"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1276"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1875"/>
+        <source>Characteristics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="890"/>
+        <source>Board %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="900"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="955"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1026"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1553"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1901"/>
+        <source>Manufacturer</source>
+        <translation type="unfinished">製造商</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="903"/>
+        <source>Product</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="909"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="966"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1086"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1604"/>
+        <source>Serial Number</source>
+        <translation type="unfinished">序號</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="912"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="969"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1089"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1607"/>
+        <source>Asset Tag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="915"/>
+        <source>Location in Chassis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="918"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="958"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1035"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1131"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1250"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1305"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1451"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1559"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1651"/>
+        <source>Type</source>
+        <translation type="unfinished">類型</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
+        <source>Hosting Board</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="924"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="925"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="926"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="927"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="960"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1094"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1095"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1096"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1099"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1101"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1103"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1167"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1168"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1268"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1269"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1270"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1271"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1272"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1273"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1274"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1314"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1869"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1871"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1873"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
+        <source>Yes</source>
+        <translation type="unfinished">是</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="924"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="925"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="926"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="927"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="960"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1021"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1094"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1095"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1096"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1099"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1101"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1103"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1167"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1168"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1268"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1269"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1270"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1271"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1272"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1273"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1274"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1314"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1548"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1869"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1871"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1873"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
+        <source>No</source>
+        <translation type="unfinished">否</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="923"/>
+        <source>Requires Daughter Board</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="925"/>
+        <source>Removable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="926"/>
+        <source>Replaceable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="927"/>
+        <source>Hot Swappable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="929"/>
+        <source>Features</source>
+        <translation type="unfinished">功能</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="945"/>
+        <source>Chassis %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="960"/>
+        <source>Lock Present</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="972"/>
+        <source>SKU Number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="975"/>
+        <source>Boot-up State</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="979"/>
+        <source>Power Supply State</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="984"/>
+        <source>Thermal State</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="987"/>
+        <source>Security Status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="991"/>
+        <source>Height</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="991"/>
+        <source>%1 U</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="994"/>
+        <source>Power Cords</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1010"/>
+        <source>Processor %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1021"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1548"/>
+        <source>Installed</source>
+        <translation type="unfinished">已安裝</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1032"/>
+        <source>Family</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1038"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1402"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1454"/>
+        <source>Status</source>
+        <translation type="unfinished">狀態</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1042"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1126"/>
+        <source>Socket Designation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1047"/>
+        <source>Socket</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1050"/>
+        <source>Socket Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1053"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1264"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1919"/>
+        <source>ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1056"/>
+        <source>Voltage</source>
+        <translation type="unfinished">電壓</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1056"/>
+        <source>%1 V</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1060"/>
+        <source>External Clock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1060"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1065"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1069"/>
+        <source>%1 MHz</source>
+        <translation type="unfinished">%1 MHz</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1065"/>
+        <source>Max Speed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1069"/>
+        <source>Current Speed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1074"/>
+        <source>Core Count</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1077"/>
+        <source>Cores Enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1080"/>
+        <source>Thread Count</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1083"/>
+        <source>Threads Enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1092"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1601"/>
+        <source>Part Number</source>
+        <translation type="unfinished">型號</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1094"/>
+        <source>64-bit Capable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1095"/>
+        <source>Multi-Core</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1096"/>
+        <source>Hardware Thread</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1098"/>
+        <source>Execute Protection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1100"/>
+        <source>Enhanced Virtualization</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1102"/>
+        <source>Power/Performance Control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1116"/>
+        <source>L%1 Cache</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1128"/>
+        <source>Level</source>
+        <translation type="unfinished">等級</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1134"/>
+        <source>Installed Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1137"/>
+        <source>Maximum Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1140"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1399"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1497"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1540"/>
+        <source>Location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1143"/>
+        <source>Operational Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1146"/>
+        <source>SRAM Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1150"/>
+        <source>Supported SRAM Types</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1156"/>
+        <source>Error Correction Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1161"/>
+        <source>Associativity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1165"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1571"/>
+        <source>Speed</source>
+        <translation type="unfinished">速度</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1165"/>
+        <source>%1 ns</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1167"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1314"/>
+        <source>Enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1168"/>
+        <source>Socketed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1187"/>
+        <source>Port %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1197"/>
+        <source>Port Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1201"/>
+        <source>Internal Designator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1207"/>
+        <source>Internal Connector Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1213"/>
+        <source>External Designator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1219"/>
+        <source>External Connector Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1237"/>
+        <source>Slot %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1247"/>
+        <source>Designation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1253"/>
+        <source>Data Bus Width</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1256"/>
+        <source>Current Usage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1259"/>
+        <source>Length</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1262"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1312"/>
+        <source>Bus Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1268"/>
+        <source>5 V Provided</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1269"/>
+        <source>3.3 V Provided</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1270"/>
+        <source>Shared</source>
+        <translation type="unfinished">共用</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1271"/>
+        <source>PME Signal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1272"/>
+        <source>Hot Plug</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1273"/>
+        <source>SMBus Signal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1274"/>
+        <source>Bifurcation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1292"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1438"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1530"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1845"/>
+        <source>Device %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1302"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1396"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1448"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1855"/>
+        <source>Description</source>
+        <translation type="unfinished">描述</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1309"/>
+        <source>Type Instance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1326"/>
+        <source>String %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1340"/>
+        <source>Option %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1358"/>
+        <source>Probe %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1369"/>
+        <source>mV</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1371"/>
+        <source>C</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1373"/>
+        <source>mA</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1405"/>
+        <source>Nominal Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1408"/>
+        <source>Maximum Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1411"/>
+        <source>Minimum Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1414"/>
+        <source>Tolerance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1417"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1679"/>
+        <source>Resolution</source>
+        <translation type="unfinished">解析度</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1421"/>
+        <source>Accuracy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1458"/>
+        <source>Cooling Unit Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1461"/>
+        <source>Nominal Speed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1461"/>
+        <source>%1 rpm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1471"/>
+        <source>Boot Status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1487"/>
+        <source>Array %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1500"/>
+        <source>Use</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1504"/>
+        <source>Error Correction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1510"/>
+        <source>Maximum Capacity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1514"/>
+        <source>Number of Devices</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1543"/>
+        <source>Bank</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1556"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1711"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1750"/>
+        <source>Size</source>
+        <translation type="unfinished">大小</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1562"/>
+        <source>Type Detail</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1565"/>
+        <source>Form Factor</source>
+        <translation type="unfinished">尺寸</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1568"/>
+        <source>Technology</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1571"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1576"/>
+        <source>%1 MT/s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1575"/>
+        <source>Configured Speed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1580"/>
+        <source>Total Width</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1580"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1583"/>
+        <source>%1 bit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1583"/>
+        <source>Data Width</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1586"/>
+        <source>Rank</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1589"/>
+        <source>Minimum Voltage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1589"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1592"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1597"/>
+        <source>%1 mV</source>
+        <translation type="unfinished">%1 mV</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1592"/>
+        <source>Maximum Voltage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1596"/>
+        <source>Configured Voltage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1611"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1864"/>
+        <source>Firmware Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1617"/>
+        <source>Non-volatile Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1623"/>
+        <source>Volatile Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1628"/>
+        <source>Cache Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1631"/>
+        <source>Logical Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1641"/>
+        <source>Record %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1654"/>
+        <source>Granularity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1657"/>
+        <source>Operation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1662"/>
+        <source>Vendor Syndrome</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1668"/>
+        <source>Memory Array Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1674"/>
+        <source>Device Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1679"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1960"/>
+        <source>%1 bytes</source>
+        <translation type="unfinished">%1 位元組</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1692"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1730"/>
+        <source>Range %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1702"/>
+        <source>Array</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1707"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1746"/>
+        <source>Starting Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1709"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1748"/>
+        <source>Ending Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1716"/>
+        <source>Partition Width</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1741"/>
+        <source>Device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1754"/>
+        <source>Partition Row Position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1758"/>
+        <source>Interleave Position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1764"/>
+        <source>Interleaved Data Depth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1779"/>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1814"/>
+        <source>Entry %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1789"/>
+        <source>String</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1792"/>
+        <source>Value</source>
+        <translation type="unfinished">值</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1795"/>
+        <source>Referenced Handle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1797"/>
+        <source>Referenced Offset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1826"/>
+        <source>Processor</source>
+        <translation type="unfinished">處理器</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1829"/>
+        <source>Architecture</source>
+        <translation type="unfinished">架構</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1858"/>
+        <source>Vendor ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1861"/>
+        <source>Specification Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1868"/>
+        <source>Configurable by Firmware</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1870"/>
+        <source>Configurable by Software</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1872"/>
+        <source>Configurable by OEM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1888"/>
+        <source>Firmware %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1898"/>
+        <source>Name</source>
+        <translation type="unfinished">名稱</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1907"/>
+        <source>Version Format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1911"/>
+        <source>Lowest Supported Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1922"/>
+        <source>ID Format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1925"/>
+        <source>State</source>
+        <translation type="unfinished">狀態</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1928"/>
+        <source>Image Size</source>
+        <translation type="unfinished">影像大小</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
+        <source>Updatable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
+        <source>Write-protected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1937"/>
+        <source>Component %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1942"/>
+        <source>Associated Components</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1954"/>
+        <source>SMBIOS Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1957"/>
+        <source>Structures</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1960"/>
+        <source>Structures Size</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8138,291 +9523,95 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoWidgetDrives</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="318"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="159"/>
         <source>Path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="321"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="162"/>
         <source>Model</source>
         <translation type="unfinished">型號</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="324"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="165"/>
         <source>Serial Number</source>
         <translation type="unfinished">序號</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="327"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="168"/>
         <source>Firmware Revision</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="331"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="172"/>
         <source>Bus Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="334"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="175"/>
         <source>Size</source>
         <translation type="unfinished">大小</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="336"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="180"/>
         <source>Media Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="336"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="182"/>
         <source>Solid State</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="336"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="182"/>
         <source>Rotating</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="339"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="186"/>
         <source>Rotation Rate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="339"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="186"/>
         <source>%1 RPM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="343"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="190"/>
         <source>Cache Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="347"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="194"/>
         <source>Removable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="347"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="194"/>
         <source>Yes</source>
         <translation type="unfinished">是</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="347"/>
+        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="194"/>
         <source>No</source>
         <translation type="unfinished">否</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="416"/>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="491"/>
         <source>Parameter</source>
-        <translation type="unfinished">參數</translation>
+        <translation type="obsolete">參數</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="416"/>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="451"/>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="491"/>
         <source>Value</source>
-        <translation type="unfinished">值</translation>
+        <translation type="obsolete">值</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="417"/>
-        <source>Health Data</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="417"/>
         <source>Not available</source>
-        <translation type="unfinished">無法使用</translation>
+        <translation type="obsolete">無法使用</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="451"/>
-        <source>Attribute</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="451"/>
-        <source>Worst</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="451"/>
-        <source>Threshold</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="452"/>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="491"/>
-        <source>Raw</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="452"/>
         <source>Status</source>
-        <translation type="unfinished">狀態</translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="463"/>
-        <source>OK. Always passed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="465"/>
-        <source>OK. Value is normal</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="467"/>
-        <source>Warning. Value is pre-failure</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="469"/>
-        <source>Warning. Value is not normal</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="476"/>
-        <source>Unknown Attribute</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="500"/>
-        <source>Spare capacity is below the threshold</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="502"/>
-        <source>Temperature is outside of the operating range</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="504"/>
-        <source>Reliability is degraded</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="506"/>
-        <source>Media is in read-only mode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="508"/>
-        <source>Volatile memory backup device failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="510"/>
-        <source>Persistent memory region is unreliable</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="514"/>
-        <source>Critical Warning</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="515"/>
-        <source>None</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="520"/>
-        <source>Temperature</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="521"/>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="532"/>
-        <source>%1 C</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="531"/>
-        <source>Temperature Sensor %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="536"/>
-        <source>Available Spare</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="536"/>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="539"/>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="541"/>
-        <source>%1%</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="538"/>
-        <source>Available Spare Threshold</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="541"/>
-        <source>Percentage Used</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="544"/>
-        <source>Data Read</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="547"/>
-        <source>Data Written</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="551"/>
-        <source>Host Read Commands</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="553"/>
-        <source>Host Write Commands</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="555"/>
-        <source>Controller Busy Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="558"/>
-        <source>Power Cycles</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="560"/>
-        <source>Power-On Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="563"/>
-        <source>Unsafe Shutdowns</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="565"/>
-        <source>Media Errors</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="567"/>
-        <source>Error Log Entries</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="570"/>
-        <source>Warning Temperature Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/sys_info/sys_info_widget_drives.cc" line="573"/>
-        <source>Critical Temperature Time</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">狀態</translation>
     </message>
 </context>
 <context>
@@ -8447,32 +9636,32 @@ Are you sure you want to continue?</source>
         <translation type="obsolete">頁面 %1/%2</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="305"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="308"/>
         <source>Information</source>
         <translation type="unfinished">詳細資訊</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="307"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="310"/>
         <source>Warning</source>
         <translation type="unfinished">警告</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="309"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="312"/>
         <source>Error</source>
         <translation type="unfinished">錯誤</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="311"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="314"/>
         <source>Audit Success</source>
         <translation type="unfinished">稽核成功</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="313"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="316"/>
         <source>Audit Failure</source>
         <translation type="unfinished">稽核失敗</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="315"/>
+        <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="318"/>
         <source>Unknown</source>
         <translation type="unfinished">未知</translation>
     </message>
@@ -8834,170 +10023,174 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoWidgetPowerOptions</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="146"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="156"/>
         <source>Power Source</source>
         <translation type="unfinished">電力來源</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="148"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="158"/>
         <source>Battery Status</source>
         <translation type="unfinished">電池狀態</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="154"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="164"/>
         <source>Battery Life Percent</source>
         <translation type="unfinished">電池壽命百分比</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="160"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="170"/>
         <source>Full Battery Life Time</source>
         <translation type="unfinished">全滿電池壽命</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="167"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="177"/>
         <source>Remaining Battery Life Time</source>
         <translation type="unfinished">剩餘電池壽命</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="183"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="193"/>
         <source>Device Name</source>
         <translation type="unfinished">裝置名稱</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="186"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="196"/>
         <source>Manufacturer</source>
         <translation type="unfinished">製造商</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="189"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="199"/>
         <source>Manufacture Date</source>
         <translation type="unfinished">製造日期</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="192"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="202"/>
         <source>Unique Id</source>
         <translation type="unfinished">唯一 ID</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="195"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="205"/>
         <source>Serial Number</source>
         <translation type="unfinished">序號</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="198"/>
         <source>Tempareture</source>
-        <translation type="unfinished">溫度</translation>
+        <translation type="obsolete">溫度</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="201"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="208"/>
+        <source>Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="211"/>
         <source>Design Capacity</source>
         <translation type="unfinished">設計容量</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="201"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="207"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="213"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="211"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="217"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="223"/>
         <source>%1 mWh</source>
         <translation type="unfinished">%1 mWh</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="204"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="214"/>
         <source>Type</source>
         <translation type="unfinished">類型</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="207"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="217"/>
         <source>Full Charged Capacity</source>
         <translation type="unfinished">全滿容量</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="210"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="220"/>
         <source>Depreciation</source>
         <translation type="unfinished">衰減</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="213"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="223"/>
         <source>Current Capacity</source>
         <translation type="unfinished">目前容量</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="216"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="226"/>
         <source>Voltage</source>
         <translation type="unfinished">電壓</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="216"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="226"/>
         <source>%1 mV</source>
         <translation type="unfinished">%1 mV</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="222"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="306"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="232"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="316"/>
         <source>Charging</source>
         <translation type="unfinished">正在充電</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="222"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="225"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="228"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="231"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="232"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="235"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="238"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="241"/>
         <source>Yes</source>
         <translation type="unfinished">是</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="225"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="304"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="235"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="314"/>
         <source>Critical</source>
         <translation type="unfinished">電量不足</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="228"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="238"/>
         <source>Discharging</source>
         <translation type="unfinished">放電中</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="231"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="241"/>
         <source>Power OnLine</source>
         <translation type="unfinished">已接上 AC 電源</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="235"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="245"/>
         <source>State</source>
         <translation type="unfinished">狀態</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="240"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="250"/>
         <source>Battery #%1</source>
         <translation type="unfinished">電池 #%1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="282"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="292"/>
         <source>DC Battery</source>
         <translation type="unfinished">DC 電池</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="285"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="295"/>
         <source>AC Line</source>
         <translation type="unfinished">AC 電源</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="288"/>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="310"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="298"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="320"/>
         <source>Unknown</source>
         <translation type="unfinished">未知</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="300"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="310"/>
         <source>High</source>
         <translation type="unfinished">高</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="302"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="312"/>
         <source>Low</source>
         <translation type="unfinished">低</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="308"/>
+        <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="318"/>
         <source>No Battery</source>
         <translation type="unfinished">無電池</translation>
     </message>
@@ -9130,180 +10323,398 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>SysInfoWidgetSmart</name>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
+        <source>Attribute</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="392"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="394"/>
+        <source>Value</source>
+        <translation type="unfinished">值</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
+        <source>Worst</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
+        <source>Threshold</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="392"/>
+        <source>Raw</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="388"/>
+        <source>Status</source>
+        <translation type="unfinished">狀態</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="392"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="394"/>
+        <source>Parameter</source>
+        <translation type="unfinished">參數</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="408"/>
+        <source>Health Data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="408"/>
+        <source>Not available</source>
+        <translation type="unfinished">無法使用</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="425"/>
+        <source>OK. Always passed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="427"/>
+        <source>OK. Value is normal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="429"/>
+        <source>Warning. Value is pre-failure</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="431"/>
+        <source>Warning. Value is not normal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="438"/>
+        <source>Unknown Attribute</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="461"/>
+        <source>Spare capacity is below the threshold</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="463"/>
+        <source>Temperature is outside of the operating range</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="465"/>
+        <source>Reliability is degraded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="467"/>
+        <source>Media is in read-only mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="469"/>
+        <source>Volatile memory backup device failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="471"/>
+        <source>Persistent memory region is unreliable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="475"/>
+        <source>Critical Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="476"/>
+        <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="481"/>
+        <source>Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="482"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="498"/>
+        <source>%1 C</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="497"/>
+        <source>Temperature Sensor %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="502"/>
+        <source>Available Spare</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="502"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="505"/>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="507"/>
+        <source>%1%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="504"/>
+        <source>Available Spare Threshold</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="507"/>
+        <source>Percentage Used</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="510"/>
+        <source>Data Read</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="513"/>
+        <source>Data Written</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="517"/>
+        <source>Host Read Commands</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="519"/>
+        <source>Host Write Commands</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="521"/>
+        <source>Controller Busy Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="524"/>
+        <source>Power Cycles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="526"/>
+        <source>Power-On Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="529"/>
+        <source>Unsafe Shutdowns</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="531"/>
+        <source>Media Errors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="533"/>
+        <source>Error Log Entries</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="536"/>
+        <source>Warning Temperature Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_smart.cc" line="539"/>
+        <source>Critical Temperature Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SysInfoWidgetSummary</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="136"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="167"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="200"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="241"/>
         <source>Name</source>
         <translation type="unfinished">名稱</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="139"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="203"/>
         <source>Domain</source>
         <translation type="unfinished">網域</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="142"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="206"/>
         <source>Workgroup</source>
         <translation type="unfinished">工作群組</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="145"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="209"/>
         <source>Uptime</source>
         <translation type="unfinished">正常運作時間</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="148"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="212"/>
         <source>Computer</source>
         <translation type="unfinished">電腦</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="154"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="219"/>
         <source>Host Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="155"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="222"/>
         <source>Client Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="156"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="227"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="229"/>
         <source>Router Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="158"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="232"/>
         <source>Aspia Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="170"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="242"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="244"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="316"/>
         <source>Version</source>
         <translation type="unfinished">版本</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="173"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="247"/>
         <source>Architecture</source>
         <translation type="unfinished">架構</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="176"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="250"/>
         <source>License Key</source>
         <translation type="unfinished">產品金鑰</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="179"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="253"/>
         <source>Install Date</source>
         <translation type="unfinished">安裝日期</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="184"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="258"/>
         <source>Operating System</source>
         <translation type="unfinished">作業系統</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="194"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="266"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="268"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="340"/>
         <source>Manufacturer</source>
         <translation type="unfinished">製造商</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="197"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="212"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="271"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="286"/>
         <source>Model</source>
         <translation type="unfinished">型號</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="202"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="276"/>
         <source>Motherboard</source>
         <translation type="unfinished">主機板</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="215"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="239"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="289"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="313"/>
         <source>Vendor</source>
         <translation type="unfinished">供應商</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="218"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="292"/>
         <source>Packages</source>
         <translation type="unfinished">個數</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="221"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="295"/>
         <source>Cores</source>
         <translation type="unfinished">核心數</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="224"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="298"/>
         <source>Threads</source>
         <translation type="unfinished">執行緒數</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="229"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="303"/>
         <source>Processor</source>
         <translation type="unfinished">處理器</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="245"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="319"/>
         <source>Date</source>
         <translation type="unfinished">日期</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="269"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="343"/>
         <source>Size</source>
         <translation type="unfinished">大小</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="272"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="349"/>
         <source>Speed</source>
         <translation type="unfinished">速度</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="272"/>
         <source>%1 MHz</source>
-        <translation type="unfinished">%1 MHz</translation>
+        <translation type="obsolete">%1 MHz</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="275"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="346"/>
         <source>Type</source>
         <translation type="unfinished">類型</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="278"/>
         <source>Form Factor</source>
-        <translation type="unfinished">尺寸</translation>
+        <translation type="obsolete">尺寸</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="281"/>
         <source>Part Number</source>
-        <translation type="unfinished">型號</translation>
+        <translation type="obsolete">型號</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="285"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="353"/>
         <source>Installed</source>
         <translation type="unfinished">已安裝</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="285"/>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="357"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="229"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="353"/>
         <source>No</source>
         <translation type="unfinished">否</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="295"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="349"/>
+        <source>%1 MT/s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="363"/>
         <source>Memory</source>
         <translation type="unfinished">記憶體</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="324"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="392"/>
         <source>%1 (%2 free)</source>
         <translation type="unfinished">%1（%2 可用）</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="334"/>
+        <location filename="../common/sys_info/sys_info_widget_summary.cc" line="402"/>
         <source>Logical Drives</source>
         <translation type="unfinished">邏輯磁碟機</translation>
     </message>
@@ -9311,52 +10722,137 @@ Are you sure you want to continue?</source>
 <context>
     <name>SysInfoWidgetVideoAdapters</name>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="131"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="84"/>
+        <source>%1 C</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="150"/>
         <source>Description</source>
         <translation type="unfinished">描述</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="134"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="153"/>
         <source>Adapter String</source>
         <translation type="unfinished">介面卡字串</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="137"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="156"/>
         <source>BIOS String</source>
         <translation type="unfinished">BIOS 字串</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="140"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="159"/>
         <source>Chip Type</source>
         <translation type="unfinished">Chip 類型</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="143"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="162"/>
         <source>DAC Type</source>
         <translation type="unfinished">DAC 類型</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="146"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="167"/>
+        <source>Location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="167"/>
+        <source>Bus %1, device %2, function %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="175"/>
         <source>Memory Size</source>
         <translation type="unfinished">記憶體大小</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="146"/>
-        <source>%1 bytes</source>
-        <translation type="unfinished">%1 位元組</translation>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="181"/>
+        <source>Memory Used</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="149"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="187"/>
+        <source>Shared Memory Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="193"/>
+        <source>Shared Memory Used</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="199"/>
+        <source>Memory Frequency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="200"/>
+        <source>%1 MHz</source>
+        <translation type="unfinished">%1 MHz</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="214"/>
+        <source>Driver Model</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="214"/>
+        <source>WDDM %1.%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="221"/>
+        <source>Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="227"/>
+        <source>Maximum Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="232"/>
+        <source>Fan Speed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="232"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="236"/>
+        <source>%1 RPM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="236"/>
+        <source>Maximum Fan Speed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="242"/>
+        <source>Power Usage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="243"/>
+        <source>%1%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 bytes</source>
+        <translation type="obsolete">%1 位元組</translation>
+    </message>
+    <message>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="204"/>
         <source>Driver Date</source>
         <translation type="unfinished">驅動程式日期</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="152"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="207"/>
         <source>Driver Version</source>
         <translation type="unfinished">驅動程式版本</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="155"/>
+        <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="210"/>
         <source>Driver Provider</source>
         <translation type="unfinished">驅動程式提供者</translation>
     </message>
@@ -9365,7 +10861,7 @@ Are you sure you want to continue?</source>
     <name>SystemInfoWindow</name>
     <message>
         <location filename="../client/desktop/sys_info/system_info_window.cc" line="40"/>
-        <location filename="../host/ui/system_info_window.cc" line="40"/>
+        <location filename="../host/ui/system_info_window.cc" line="46"/>
         <source>System Information</source>
         <translation type="unfinished"></translation>
     </message>
