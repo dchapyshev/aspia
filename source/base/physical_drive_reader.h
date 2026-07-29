@@ -23,6 +23,7 @@
 #include <QStringList>
 
 #include <memory>
+#include <string>
 
 // Reads the identification and the raw S.M.A.R.T. data of a single physical drive. The data blocks
 // are returned exactly as the drive produced them and are meant to be handed to the platform
@@ -74,9 +75,9 @@ public:
     // opened or the operating system is not supported.
     static std::unique_ptr<PhysicalDriveReader> create(const QString& device_path);
 
-    virtual QString model() const = 0;
-    virtual QString serialNumber() const = 0;
-    virtual QString firmwareRevision() const = 0;
+    virtual std::string model() const = 0;
+    virtual std::string serialNumber() const = 0;
+    virtual std::string firmwareRevision() const = 0;
     virtual BusType busType() const = 0;
     virtual quint64 size() const = 0;
     virtual bool isRemovable() const = 0;

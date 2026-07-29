@@ -150,7 +150,7 @@ TEST(AtaIdentifyTest, EmptyBuffer)
     AtaIdentify identify(empty);
 
     EXPECT_FALSE(identify.isValid());
-    EXPECT_TRUE(identify.model().isEmpty());
+    EXPECT_TRUE(identify.model().empty());
 }
 
 TEST(AtaIdentifyTest, TruncatedBuffer)

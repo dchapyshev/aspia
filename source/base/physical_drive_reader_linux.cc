@@ -33,6 +33,7 @@
 
 #include "base/drive_smart.h"
 #include "base/logging.h"
+#include "base/string_util.h"
 
 namespace {
 
@@ -101,22 +102,26 @@ QByteArray readSysFileData(const QString& path)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString readSysFile(const QString& path)
+// The kernel writes ASCII into the attributes, but part of what it writes there is copied from the
+// drive, which is not held to it. Reading as Latin-1 keeps such a byte and leaves the result valid
+// UTF-8.
+std::string readSysFile(const QString& path)
 {
-    return QString::fromLatin1(readSysFileData(path)).trimmed();
+    const QByteArray data = readSysFileData(path);
+    return strFromLatin1(strTrimmed(std::string_view(data.constData(), data.size())));
 }
 
 //--------------------------------------------------------------------------------------------------
 // Serial number carried by the vital product |page| the SCSI stack read from the drive. The page
 // starts with a header the page code and the length of the number are taken from.
-QString serialNumberFromVpd(const QByteArray& page)
+std::string serialNumberFromVpd(const QByteArray& page)
 {
     if (page.size() < kVpdHeaderSize)
-        return QString();
+        return std::string();
 
     const auto* header = reinterpret_cast<const quint8*>(page.constData());
     if (header[1] != kUnitSerialNumberPage)
-        return QString();
+        return std::string();
 
     // A page that named more of the number than it carries is cut to what arrived.
     QByteArray serial = page.mid(kVpdHeaderSize, (header[2] << 8) | header[3]);
@@ -126,7 +131,7 @@ QString serialNumberFromVpd(const QByteArray& page)
     if (end >= 0)
         serial.truncate(end);
 
-    return QString::fromLatin1(serial).trimmed();
+    return strFromLatin1(strTrimmed(std::string_view(serial.constData(), serial.size())));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -153,9 +158,9 @@ bool isSataPort(const QString& port_path)
     for (const QString& link : links)
     {
         const QString path = QString("%1/%2/ata_link/%2/sata_spd").arg(port_path, link);
-        const QString speed = readSysFile(path);
+        const std::string speed = readSysFile(path);
 
-        if (!speed.isEmpty() && speed != "<unknown>")
+        if (!speed.empty() && speed != "<unknown>")
             return true;
     }
 
@@ -291,7 +296,7 @@ bool PhysicalDriveReaderLinux::open(const QString& device_path)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString PhysicalDriveReaderLinux::sysAttribute(const QString& name) const
+std::string PhysicalDriveReaderLinux::sysAttribute(const QString& name) const
 {
     return readSysFile(QString("%1/%2").arg(sysBlockPath(device_name_), name));
 }
@@ -305,36 +310,36 @@ QByteArray PhysicalDriveReaderLinux::sysAttributeData(const QString& name) const
 //--------------------------------------------------------------------------------------------------
 void PhysicalDriveReaderLinux::readIdentity()
 {
-    const QString vendor = sysAttribute("device/vendor");
-    const QString model = sysAttribute("device/model");
+    const std::string vendor = sysAttribute("device/vendor");
+    const std::string model = sysAttribute("device/model");
 
     // The SCSI stack, which serves ATA drives as well, puts the name of the protocol into the vendor
     // of a drive that has none of its own, which says nothing about the model.
-    if (vendor.isEmpty() || vendor == "ATA" || vendor == "NVMe")
+    if (vendor.empty() || vendor == "ATA" || vendor == "NVMe")
         model_ = model;
-    else if (model.isEmpty())
+    else if (model.empty())
         model_ = vendor;
     else
-        model_ = vendor + " " + model;
+        model_ = strCat({ vendor, " ", model });
 
     serial_number_ = sysAttribute("device/serial");
 
     // Only the NVMe stack keeps an attribute for the serial number. The SCSI stack, which serves ATA
     // drives as well, keeps the page it read the number from instead. It is the only source left for
     // a process not privileged enough to ask the drive itself.
-    if (serial_number_.isEmpty())
+    if (serial_number_.empty())
         serial_number_ = serialNumberFromVpd(sysAttributeData("device/vpd_pg80"));
 
     // The drivers name the same information differently: the SCSI stack has "rev", the NVMe stack
     // "firmware_rev".
     firmware_revision_ = sysAttribute("device/firmware_rev");
-    if (firmware_revision_.isEmpty())
+    if (firmware_revision_.empty())
         firmware_revision_ = sysAttribute("device/rev");
 
     removable_ = sysAttribute("removable") == "1";
 
     // A driver that knows nothing about the media leaves the attribute out.
-    const QString rotational = sysAttribute("queue/rotational");
+    const std::string rotational = sysAttribute("queue/rotational");
     if (rotational == "0")
         media_type_ = MediaType::SOLID_STATE;
     else if (rotational == "1")

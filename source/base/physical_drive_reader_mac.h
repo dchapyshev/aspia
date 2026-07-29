@@ -36,9 +36,9 @@ public:
     static QStringList devicePaths();
 
     // PhysicalDriveReader implementation.
-    QString model() const final { return model_; }
-    QString serialNumber() const final { return serial_number_; }
-    QString firmwareRevision() const final { return firmware_revision_; }
+    std::string model() const final { return model_; }
+    std::string serialNumber() const final { return serial_number_; }
+    std::string firmwareRevision() const final { return firmware_revision_; }
     BusType busType() const final { return bus_type_; }
     quint64 size() const final { return size_; }
     bool isRemovable() const final { return removable_; }
@@ -63,9 +63,9 @@ private:
     void openSmartInterface(io_service_t device);
     bool enableAtaSmart();
 
-    QString model_;
-    QString serial_number_;
-    QString firmware_revision_;
+    std::string model_;
+    std::string serial_number_;
+    std::string firmware_revision_;
     BusType bus_type_ = BusType::UNKNOWN;
     quint64 size_ = 0;
     bool removable_ = false;

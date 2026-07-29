@@ -26,6 +26,7 @@
 
 #include "base/drive_smart.h"
 #include "base/logging.h"
+#include "base/string_util.h"
 #include "base/win/scoped_device_info.h"
 
 namespace {
@@ -59,15 +60,17 @@ constexpr int kMaxDrives = 64;
 //--------------------------------------------------------------------------------------------------
 // Reads a string that |buffer| holds at |offset|. The offsets come from the storage driver, so they
 // are validated against the buffer instead of being trusted.
-QString stringFromDescriptor(const QByteArray& buffer, DWORD offset)
+// The driver declares the fields as ASCII, but what it puts there is copied from the drive, which
+// is not held to it. Reading as Latin-1 keeps such a byte and leaves the result valid UTF-8.
+std::string stringFromDescriptor(const QByteArray& buffer, DWORD offset)
 {
     if (!offset || offset >= static_cast<DWORD>(buffer.size()))
-        return QString();
+        return std::string();
 
     const char* start = buffer.constData() + offset;
     const qsizetype length = qstrnlen(start, buffer.size() - offset);
 
-    return QString::fromLatin1(start, length).trimmed();
+    return strFromLatin1(strTrimmed(std::string_view(start, length)));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -352,15 +355,15 @@ bool PhysicalDriveReaderWin::readDeviceDescriptor()
     bus_type_ = descriptor->BusType;
     removable_ = descriptor->RemovableMedia;
 
-    const QString vendor = stringFromDescriptor(buffer, descriptor->VendorIdOffset);
-    const QString product = stringFromDescriptor(buffer, descriptor->ProductIdOffset);
+    const std::string vendor = stringFromDescriptor(buffer, descriptor->VendorIdOffset);
+    const std::string product = stringFromDescriptor(buffer, descriptor->ProductIdOffset);
 
-    if (vendor.isEmpty())
+    if (vendor.empty())
         model_ = product;
-    else if (product.isEmpty())
+    else if (product.empty())
         model_ = vendor;
     else
-        model_ = vendor + " " + product;
+        model_ = strCat({ vendor, " ", product });
 
     firmware_revision_ = stringFromDescriptor(buffer, descriptor->ProductRevisionOffset);
     serial_number_ = stringFromDescriptor(buffer, descriptor->SerialNumberOffset);

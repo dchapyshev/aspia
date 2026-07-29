@@ -25,7 +25,8 @@
 
 #include <QByteArray>
 #include <QList>
-#include <QString>
+
+#include <string>
 
 // Identification data of an ATA drive.
 class AtaIdentify
@@ -41,9 +42,9 @@ public:
     // True when the block was long enough and the drive filled in its model.
     bool isValid() const { return valid_; }
 
-    QString model() const { return model_; }
-    QString serialNumber() const { return serial_number_; }
-    QString firmwareRevision() const { return firmware_revision_; }
+    const std::string& model() const { return model_; }
+    const std::string& serialNumber() const { return serial_number_; }
+    const std::string& firmwareRevision() const { return firmware_revision_; }
 
     // Nominal media rotation rate in RPM. 0 when the drive does not report a rate, which is also
     // the case for solid state drives.
@@ -60,9 +61,9 @@ public:
     bool isSmartEnabled() const { return smart_enabled_; }
 
 private:
-    QString model_;
-    QString serial_number_;
-    QString firmware_revision_;
+    std::string model_;
+    std::string serial_number_;
+    std::string firmware_revision_;
     quint32 rotation_rate_ = 0;
     quint32 buffer_size_ = 0;
     bool solid_state_ = false;

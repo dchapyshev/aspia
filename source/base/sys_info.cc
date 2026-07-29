@@ -171,10 +171,10 @@ QList<SysInfo::PhysicalDrive> SysInfo::physicalDrives()
             drive.buffer_size = identify.bufferSize();
 
             // Not every drive fills in all of the identification fields.
-            if (!identify.serialNumber().isEmpty())
+            if (!identify.serialNumber().empty())
                 drive.serial_number = identify.serialNumber();
 
-            if (!identify.firmwareRevision().isEmpty())
+            if (!identify.firmwareRevision().empty())
                 drive.firmware_revision = identify.firmwareRevision();
 
             if (identify.isSolidState())

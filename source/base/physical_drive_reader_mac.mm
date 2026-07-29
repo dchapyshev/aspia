@@ -33,6 +33,7 @@
 
 #include "base/drive_smart.h"
 #include "base/logging.h"
+#include "base/string_util.h"
 
 // The blocks the drive returns are handed to the parsers as they are, so their layout has to be the
 // one the parsers expect.
@@ -95,20 +96,22 @@ quint64 numberProperty(io_registry_entry_t entry, CFStringRef key)
 //--------------------------------------------------------------------------------------------------
 // Value of |key| inside the dictionary the driver publishes under |dictionary_key|. The driver
 // groups what it knows about the drive into such dictionaries.
-QString characteristic(io_registry_entry_t entry, CFStringRef dictionary_key, CFStringRef key)
+// CoreFoundation holds the value as UTF-16, which is what Qt is asked to read here: what leaves is
+// the UTF-8 the rest of the code works in.
+std::string characteristic(io_registry_entry_t entry, CFStringRef dictionary_key, CFStringRef key)
 {
     CFTypeRef dictionary =
         IORegistryEntryCreateCFProperty(entry, dictionary_key, kCFAllocatorDefault, 0);
     if (!dictionary)
-        return QString();
+        return std::string();
 
-    QString result;
+    std::string result;
 
     if (CFGetTypeID(dictionary) == CFDictionaryGetTypeID())
     {
         CFTypeRef value = CFDictionaryGetValue(static_cast<CFDictionaryRef>(dictionary), key);
         if (value && CFGetTypeID(value) == CFStringGetTypeID())
-            result = QString::fromCFString(static_cast<CFStringRef>(value)).trimmed();
+            result = QString::fromCFString(static_cast<CFStringRef>(value)).trimmed().toStdString();
     }
 
     CFRelease(dictionary);
@@ -145,7 +148,7 @@ io_service_t blockStorageDevice(io_service_t media)
 }
 
 //--------------------------------------------------------------------------------------------------
-PhysicalDriveReader::BusType busTypeFromInterconnect(const QString& interconnect)
+PhysicalDriveReader::BusType busTypeFromInterconnect(const std::string& interconnect)
 {
     using BusType = PhysicalDriveReader::BusType;
 
@@ -223,7 +226,7 @@ QStringList PhysicalDriveReaderMac::devicePaths()
             io_service_t device = blockStorageDevice(media);
             if (device)
             {
-                const QString interconnect =
+                const std::string interconnect =
                     characteristic(device, CFSTR(kIOPropertyProtocolCharacteristicsKey),
                                    CFSTR(kIOPropertyPhysicalInterconnectTypeKey));
 
@@ -374,17 +377,17 @@ void PhysicalDriveReaderMac::readMedia(io_service_t media)
 //--------------------------------------------------------------------------------------------------
 void PhysicalDriveReaderMac::readIdentity(io_service_t device)
 {
-    const QString vendor = characteristic(device, CFSTR(kIOPropertyDeviceCharacteristicsKey),
-                                          CFSTR(kIOPropertyVendorNameKey));
-    const QString product = characteristic(device, CFSTR(kIOPropertyDeviceCharacteristicsKey),
-                                           CFSTR(kIOPropertyProductNameKey));
+    const std::string vendor = characteristic(device, CFSTR(kIOPropertyDeviceCharacteristicsKey),
+                                              CFSTR(kIOPropertyVendorNameKey));
+    const std::string product = characteristic(device, CFSTR(kIOPropertyDeviceCharacteristicsKey),
+                                               CFSTR(kIOPropertyProductNameKey));
 
-    if (vendor.isEmpty())
+    if (vendor.empty())
         model_ = product;
-    else if (product.isEmpty())
+    else if (product.empty())
         model_ = vendor;
     else
-        model_ = vendor + " " + product;
+        model_ = strCat({ vendor, " ", product });
 
     serial_number_ = characteristic(device, CFSTR(kIOPropertyDeviceCharacteristicsKey),
                                     CFSTR(kIOPropertyProductSerialNumberKey));
@@ -392,8 +395,8 @@ void PhysicalDriveReaderMac::readIdentity(io_service_t device)
                                         CFSTR(kIOPropertyProductRevisionLevelKey));
 
     // A driver that knows nothing about the media leaves the characteristic out.
-    const QString medium = characteristic(device, CFSTR(kIOPropertyDeviceCharacteristicsKey),
-                                          CFSTR(kIOPropertyMediumTypeKey));
+    const std::string medium = characteristic(device, CFSTR(kIOPropertyDeviceCharacteristicsKey),
+                                              CFSTR(kIOPropertyMediumTypeKey));
     if (medium == kIOPropertyMediumTypeSolidStateKey)
         media_type_ = MediaType::SOLID_STATE;
     else if (medium == kIOPropertyMediumTypeRotationalKey)

@@ -20,6 +20,8 @@
 
 #include <QtEndian>
 
+#include "base/string_util.h"
+
 namespace {
 
 // Byte offsets of the fields inside the ATA IDENTIFY DEVICE block. The block is defined as an array
@@ -78,9 +80,9 @@ constexpr qsizetype kTemperatureSensor = 200;
 //--------------------------------------------------------------------------------------------------
 // Strings of the identification block are stored as 16-bit words with the characters of each word
 // in reverse order.
-QString readString(const quint8* data, qsizetype size)
+std::string readString(const quint8* data, qsizetype size)
 {
-    QByteArray result(size, 0);
+    std::string result(static_cast<size_t>(size), '\0');
 
     for (qsizetype i = 0; i < size; i += 2)
     {
@@ -88,11 +90,13 @@ QString readString(const quint8* data, qsizetype size)
         result[i + 1] = static_cast<char>(data[i]);
     }
 
-    const qsizetype end = result.indexOf('\0');
-    if (end >= 0)
-        result.truncate(end);
+    const size_t end = result.find('\0');
+    if (end != std::string::npos)
+        result.resize(end);
 
-    return QString::fromLatin1(result).trimmed();
+    // The field is declared as ASCII, so a byte above it means the drive filled it with something
+    // else. Reading it as Latin-1 keeps what is there and leaves the result valid UTF-8.
+    return strFromLatin1(strTrimmed(result));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -145,7 +149,7 @@ AtaIdentify::AtaIdentify(const QByteArray& buffer)
     const quint8* data = reinterpret_cast<const quint8*>(buffer.constData());
 
     model_ = readString(data + kModelNumber, kModelNumberSize);
-    if (model_.isEmpty())
+    if (model_.empty())
         return;
 
     serial_number_ = readString(data + kSerialNumber, kSerialNumberSize);

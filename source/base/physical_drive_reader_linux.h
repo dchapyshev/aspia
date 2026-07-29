@@ -31,9 +31,9 @@ public:
     static QStringList devicePaths();
 
     // PhysicalDriveReader implementation.
-    QString model() const final { return model_; }
-    QString serialNumber() const final { return serial_number_; }
-    QString firmwareRevision() const final { return firmware_revision_; }
+    std::string model() const final { return model_; }
+    std::string serialNumber() const final { return serial_number_; }
+    std::string firmwareRevision() const final { return firmware_revision_; }
     BusType busType() const final { return bus_type_; }
     quint64 size() const final { return size_; }
     bool isRemovable() const final { return removable_; }
@@ -50,7 +50,7 @@ protected:
 private:
     // Contents of the sysfs attribute |name| of the drive. Empty when the driver does not have the
     // attribute or refused to answer.
-    QString sysAttribute(const QString& name) const;
+    std::string sysAttribute(const QString& name) const;
     QByteArray sysAttributeData(const QString& name) const;
 
     void readIdentity();
@@ -72,9 +72,9 @@ private:
     int fd_ = -1;
     QString device_name_;
     BusType bus_type_ = BusType::UNKNOWN;
-    QString model_;
-    QString serial_number_;
-    QString firmware_revision_;
+    std::string model_;
+    std::string serial_number_;
+    std::string firmware_revision_;
     quint64 size_ = 0;
     bool removable_ = false;
     MediaType media_type_ = MediaType::UNKNOWN;

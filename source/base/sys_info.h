@@ -24,6 +24,7 @@
 #include <QString>
 
 #include <optional>
+#include <string>
 
 #include "base/drive_smart.h"
 #include "base/physical_drive_reader.h"
@@ -195,9 +196,9 @@ public:
         // Path the drive is addressed by. Its shape is specific to the operating system.
         QString path;
 
-        QString model;
-        QString serial_number;
-        QString firmware_revision;
+        std::string model;
+        std::string serial_number;
+        std::string firmware_revision;
         PhysicalDriveReader::BusType bus_type = PhysicalDriveReader::BusType::UNKNOWN;
         quint64 size = 0;
 

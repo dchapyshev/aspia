@@ -25,7 +25,6 @@
 #include <QStringList>
 
 #include <atomic>
-#include <string>
 #include <utility>
 #include <vector>
 
@@ -1308,9 +1307,9 @@ void fillPhysicalDrives(proto::system_info::SystemInfo* system_info)
             system_info->mutable_physical_drives()->add_drive();
 
         drive->set_path(item.path.toStdString());
-        drive->set_model(item.model.toStdString());
-        drive->set_serial_number(item.serial_number.toStdString());
-        drive->set_firmware_revision(item.firmware_revision.toStdString());
+        drive->set_model(item.model);
+        drive->set_serial_number(item.serial_number);
+        drive->set_firmware_revision(item.firmware_revision);
         drive->set_bus_type(busType(item.bus_type));
         drive->set_size(item.size);
         drive->set_rotation_rate(item.rotation_rate);

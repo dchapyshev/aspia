@@ -35,9 +35,9 @@ public:
     static QStringList devicePaths();
 
     // PhysicalDriveReader implementation.
-    QString model() const final { return model_; }
-    QString serialNumber() const final { return serial_number_; }
-    QString firmwareRevision() const final { return firmware_revision_; }
+    std::string model() const final { return model_; }
+    std::string serialNumber() const final { return serial_number_; }
+    std::string firmwareRevision() const final { return firmware_revision_; }
     BusType busType() const final;
     quint64 size() const final { return size_; }
     bool isRemovable() const final { return removable_; }
@@ -66,9 +66,9 @@ private:
     Device device_;
     quint8 device_number_ = 0;
     STORAGE_BUS_TYPE bus_type_ = BusTypeUnknown;
-    QString model_;
-    QString serial_number_;
-    QString firmware_revision_;
+    std::string model_;
+    std::string serial_number_;
+    std::string firmware_revision_;
     quint64 size_ = 0;
     bool removable_ = false;
     MediaType media_type_ = MediaType::UNKNOWN;
