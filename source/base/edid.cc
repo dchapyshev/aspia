@@ -22,6 +22,7 @@
 
 #include "base/bitset.h"
 #include "base/logging.h"
+#include "base/string_util.h"
 
 namespace {
 
@@ -245,7 +246,7 @@ static int getDataType(const quint8* descriptor)
 }
 
 //--------------------------------------------------------------------------------------------------
-static QString descriptorText(const Edid::MonitorDescriptor* descriptor)
+static std::string descriptorText(const Edid::MonitorDescriptor* descriptor)
 {
     // The string is terminated with 0x0A only when it is shorter than the field; a string of
     // exactly 13 characters occupies the whole field with no terminator.
@@ -255,8 +256,8 @@ static QString descriptorText(const Edid::MonitorDescriptor* descriptor)
     while (length < max_length && descriptor->descriptor_data[length] != 0x0A)
         ++length;
 
-    return QString::fromLatin1(reinterpret_cast<const char*>(descriptor->descriptor_data),
-                               static_cast<qsizetype>(length)).trimmed();
+    const std::string_view text(reinterpret_cast<const char*>(descriptor->descriptor_data), length);
+    return strFromLatin1(strTrimmed(text));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -392,7 +393,7 @@ quint8 Edid::featureSupport() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Edid::getManufacturerSignature() const
+std::string Edid::getManufacturerSignature() const
 {
     BitSet<quint16> id = qbswap(edid_->id_manufacturer_name);
 
@@ -407,7 +408,7 @@ QString Edid::getManufacturerSignature() const
     {
         // Letter codes run from 01h ('A') to 1Ah ('Z'); anything else is a corrupted field.
         if (letters[i] < 1 || letters[i] > 26)
-            return QString();
+            return std::string();
 
         signature[i] = static_cast<char>('A' + letters[i] - 1);
     }
@@ -417,21 +418,20 @@ QString Edid::getManufacturerSignature() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Edid::monitorId() const
+std::string Edid::monitorId() const
 {
-    return QString("%1%2")
-        .arg(getManufacturerSignature()).arg(edid_->id_product_code, 4, 16, QChar('0'));
+    return getManufacturerSignature() + strHex(edid_->id_product_code, 4, HexCase::LOWER);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Edid::serialNumber() const
+std::string Edid::serialNumber() const
 {
     const MonitorDescriptor* descriptor =
         reinterpret_cast<const MonitorDescriptor*>(
             getDescriptor(DATA_TYPE_TAG_MONITOR_SERIAL_NUMBER_ASCII));
 
     if (!descriptor)
-        return QString();
+        return std::string();
 
     return descriptorText(descriptor);
 }
@@ -454,9 +454,9 @@ const quint8* Edid::getDescriptor(int type) const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Edid::manufacturerName() const
+std::string Edid::manufacturerName() const
 {
-    QString signature = getManufacturerSignature();
+    const std::string signature = getManufacturerSignature();
 
     for (size_t i = 0; i < std::size(kManufacturers); ++i)
     {
@@ -464,17 +464,17 @@ QString Edid::manufacturerName() const
             return kManufacturers[i].name;
     }
 
-    return QString();
+    return std::string();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Edid::monitorName() const
+std::string Edid::monitorName() const
 {
     const MonitorDescriptor* descriptor =
         reinterpret_cast<const MonitorDescriptor*>(getDescriptor(DATA_TYPE_TAG_MONITOR_NAME_ASCII));
 
     if (!descriptor)
-        return QString();
+        return std::string();
 
     return descriptorText(descriptor);
 }

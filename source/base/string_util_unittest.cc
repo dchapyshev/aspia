@@ -121,3 +121,18 @@ TEST(StringUtilTest, JoinKeepsEmptyParts)
     const std::vector<std::string> parts = {"", "b", "", "d"};
     EXPECT_EQ(strJoin(parts, ","), std::string(",b,,d"));
 }
+
+//--------------------------------------------------------------------------------------------------
+TEST(StringUtilTest, FromLatin1)
+{
+    EXPECT_EQ(strFromLatin1(""), std::string());
+    EXPECT_EQ(strFromLatin1("plain ascii"), std::string("plain ascii"));
+
+    // E9h is 'e' with an acute accent, two bytes in UTF-8.
+    EXPECT_EQ(strFromLatin1("Caf\xE9"), std::string("Caf\xC3\xA9"));
+
+    // The whole upper half is two bytes: 80h is the first of them, FFh the last.
+    EXPECT_EQ(strFromLatin1("\x80"), std::string("\xC2\x80"));
+    EXPECT_EQ(strFromLatin1("\xFF"), std::string("\xC3\xBF"));
+    EXPECT_EQ(strFromLatin1("\xE9\xE9").size(), 4u);
+}

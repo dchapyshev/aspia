@@ -308,10 +308,10 @@ void fillMonitors(proto::system_info::SystemInfo* system_info)
             system_info->mutable_monitors()->add_monitor();
 
         monitor->set_system_name(item.system_name.toStdString());
-        monitor->set_monitor_name(edid.monitorName().toStdString());
-        monitor->set_manufacturer_name(edid.manufacturerName().toStdString());
-        monitor->set_monitor_id(edid.monitorId().toStdString());
-        monitor->set_serial_number(edid.serialNumber().toStdString());
+        monitor->set_monitor_name(edid.monitorName());
+        monitor->set_manufacturer_name(edid.manufacturerName());
+        monitor->set_monitor_id(edid.monitorId());
+        monitor->set_serial_number(edid.serialNumber());
         monitor->set_edid_version(edid.edidVersion());
         monitor->set_edid_revision(edid.edidRevision());
         monitor->set_week_of_manufacture(edid.weekOfManufacture());

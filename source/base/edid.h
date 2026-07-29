@@ -21,6 +21,8 @@
 
 #include <QByteArray>
 
+#include <string>
+
 class Edid
 {
 public:
@@ -202,10 +204,10 @@ public:
 
     bool isValid() const;
 
-    QString manufacturerName() const;
-    QString monitorName() const;
-    QString monitorId() const;
-    QString serialNumber() const;
+    std::string manufacturerName() const;
+    std::string monitorName() const;
+    std::string monitorId() const;
+    std::string serialNumber() const;
     int weekOfManufacture() const;
     int yearOfManufacture() const;
     int edidVersion() const;
@@ -231,7 +233,7 @@ public:
     bool standardTimings(int index, int* width, int* height, int* frequency);
 
 private:
-    QString getManufacturerSignature() const;
+    std::string getManufacturerSignature() const;
     const quint8* getDescriptor(int type) const;
 
     QByteArray buffer_;

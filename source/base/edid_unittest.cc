@@ -18,9 +18,9 @@
 
 #include "base/edid.h"
 
-#include <QString>
-
 #include <gtest/gtest.h>
+
+#include <iterator>
 
 namespace {
 
@@ -518,7 +518,7 @@ TEST(edid_test, manufacturer_unknown)
 
     Edid edid(data);
     ASSERT_TRUE(edid.isValid());
-    EXPECT_TRUE(edid.manufacturerName().isEmpty());
+    EXPECT_TRUE(edid.manufacturerName().empty());
 }
 
 TEST(edid_test, standard_timings_aspect_16_9)
@@ -598,6 +598,29 @@ TEST(edid_test, monitor_name_13_chars)
     EXPECT_EQ(edid.monitorName(), "ABCDEFGHIJKLM");
 }
 
+TEST(edid_test, monitor_name_with_byte_above_ascii)
+{
+    QByteArray data = createValidEdidBlock();
+    quint8* raw = reinterpret_cast<quint8*>(data.data());
+
+    // The field is declared as code page 437 and read as Latin-1: a byte above the ASCII half must
+    // not leave the parser as it is, or what it returns would not be UTF-8.
+    const quint8 name[] = { 'C', 'a', 'f', 0xE9 };
+    for (size_t i = 0; i < std::size(name); ++i)
+        raw[95 + i] = name[i];
+    raw[95 + std::size(name)] = 0x0A;
+
+    // Recompute checksum.
+    quint8 sum = 0;
+    for (int i = 0; i < 127; ++i)
+        sum += raw[i];
+    raw[127] = static_cast<quint8>(0x100 - sum);
+
+    Edid edid(data);
+    ASSERT_TRUE(edid.isValid());
+    EXPECT_EQ(edid.monitorName(), "Caf\xC3\xA9");
+}
+
 TEST(edid_test, week_of_manufacture_model_year_flag)
 {
     QByteArray data = createValidEdidBlock();
@@ -647,7 +670,7 @@ TEST(edid_test, manufacturer_invalid_letters)
 
     Edid edid(data);
     ASSERT_TRUE(edid.isValid());
-    EXPECT_TRUE(edid.manufacturerName().isEmpty());
+    EXPECT_TRUE(edid.manufacturerName().empty());
     EXPECT_EQ(edid.monitorId(), "1234");
 }
 

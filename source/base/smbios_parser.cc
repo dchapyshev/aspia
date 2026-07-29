@@ -378,29 +378,9 @@ std::string smbiosString(const SmbiosTable* table, quint8 number)
     }
 
     // The specification allows only printable ASCII in the strings, but firmware does put bytes
-    // above it there. They are read as Latin-1 and re-encoded, so that what leaves the parser is
-    // always valid UTF-8 and can be handed on as it is.
-    const std::string_view trimmed = strTrimmed(string);
-    std::string result;
-
-    result.reserve(trimmed.size());
-
-    for (char symbol : trimmed)
-    {
-        const quint8 byte = static_cast<quint8>(symbol);
-
-        if (byte < 0x80)
-        {
-            result += symbol;
-        }
-        else
-        {
-            result += static_cast<char>(0xC0 | (byte >> 6));
-            result += static_cast<char>(0x80 | (byte & 0x3F));
-        }
-    }
-
-    return result;
+    // above it there. They are read as Latin-1, the same as before, so that what leaves the parser
+    // is always valid UTF-8 and can be handed on as it is.
+    return strFromLatin1(strTrimmed(string));
 }
 
 //--------------------------------------------------------------------------------------------------

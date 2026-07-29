@@ -90,6 +90,38 @@ std::string_view strTrimmed(std::string_view str)
 }
 
 //--------------------------------------------------------------------------------------------------
+std::string strFromLatin1(std::string_view str)
+{
+    size_t extra = 0;
+    for (char symbol : str)
+    {
+        if (static_cast<unsigned char>(symbol) >= 0x80)
+            ++extra;
+    }
+
+    std::string result;
+    result.reserve(str.size() + extra);
+
+    for (char symbol : str)
+    {
+        const unsigned char byte = static_cast<unsigned char>(symbol);
+
+        if (byte < 0x80)
+        {
+            result += symbol;
+        }
+        else
+        {
+            // A byte of the upper half is a code point of two bytes in UTF-8.
+            result += static_cast<char>(0xC0 | (byte >> 6));
+            result += static_cast<char>(0x80 | (byte & 0x3F));
+        }
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
 std::string strHex(uint64_t value, int digits, HexCase hex_case)
 {
     const char* alphabet = hex_case == HexCase::UPPER ? "0123456789ABCDEF" : "0123456789abcdef";
