@@ -38,6 +38,12 @@ class SysInfoWidget : public QWidget
     Q_OBJECT
 
 public:
+    static const char kTemperatureIcon[];
+    static const char kFanIcon[];
+    static const char kFrequencyIcon[];
+    static const char kMemoryIcon[];
+    static const char kPowerIcon[];
+
     ~SysInfoWidget() override = default;
 
     virtual std::string category() const = 0;

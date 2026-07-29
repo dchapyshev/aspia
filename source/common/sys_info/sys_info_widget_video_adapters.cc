@@ -27,6 +27,8 @@
 
 namespace {
 
+const char kAdapterIcon[] = ":/img/video-card.svg";
+
 class Item : public QTreeWidgetItem
 {
 public:
@@ -37,14 +39,16 @@ public:
         setIcon(0, icon);
         setText(0, text);
 
+        // A child that came with an icon of its own keeps it.
         for (const auto& child : childs)
         {
-            child->setIcon(0, icon);
+            if (child->icon(0).isNull())
+                child->setIcon(0, icon);
 
             for (int i = 0; i < child->childCount(); ++i)
             {
                 QTreeWidgetItem* item = child->child(i);
-                if (item)
+                if (item && item->icon(0).isNull())
                     item->setIcon(0, icon);
             }
         }
@@ -63,6 +67,15 @@ QTreeWidgetItem* mk(const QString& param, const QString& value)
 
     item->setText(0, param);
     item->setText(1, value);
+
+    return item;
+}
+
+//--------------------------------------------------------------------------------------------------
+QTreeWidgetItem* mk(const QString& param, const QString& value, const QString& icon_path)
+{
+    QTreeWidgetItem* item = mk(param, value);
+    item->setIcon(0, QIcon(icon_path));
 
     return item;
 }
@@ -160,27 +173,33 @@ void SysInfoWidgetVideoAdapters::setSystemInfo(const proto::system_info::SystemI
         }
 
         if (adapter.memory_size() != 0)
-            group << mk(tr("Memory Size"), Formatter::sizeToString(adapter.memory_size()));
+        {
+            group << mk(tr("Memory Size"), Formatter::sizeToString(adapter.memory_size()),
+                        kMemoryIcon);
+        }
 
         if (adapter.memory_used() != 0)
-            group << mk(tr("Memory Used"), Formatter::sizeToString(adapter.memory_used()));
+        {
+            group << mk(tr("Memory Used"), Formatter::sizeToString(adapter.memory_used()),
+                        kMemoryIcon);
+        }
 
         if (adapter.shared_memory_size() != 0)
         {
             group << mk(tr("Shared Memory Size"),
-                        Formatter::sizeToString(adapter.shared_memory_size()));
+                        Formatter::sizeToString(adapter.shared_memory_size()), kMemoryIcon);
         }
 
         if (adapter.shared_memory_used() != 0)
         {
             group << mk(tr("Shared Memory Used"),
-                        Formatter::sizeToString(adapter.shared_memory_used()));
+                        Formatter::sizeToString(adapter.shared_memory_used()), kMemoryIcon);
         }
 
         if (adapter.memory_frequency() != 0)
         {
             group << mk(tr("Memory Frequency"),
-                        tr("%1 MHz").arg(adapter.memory_frequency() / 1000000));
+                        tr("%1 MHz").arg(adapter.memory_frequency() / 1000000), kFrequencyIcon);
         }
 
         if (!adapter.driver_date().empty())
@@ -200,30 +219,36 @@ void SysInfoWidgetVideoAdapters::setSystemInfo(const proto::system_info::SystemI
         }
 
         if (adapter.temperature() != 0)
-            group << mk(tr("Temperature"), temperatureToString(adapter.temperature()));
+        {
+            group << mk(tr("Temperature"), temperatureToString(adapter.temperature()),
+                        kTemperatureIcon);
+        }
 
         if (adapter.temperature_max() != 0)
         {
-            group << mk(tr("Maximum Temperature"),
-                        temperatureToString(adapter.temperature_max()));
+            group << mk(tr("Maximum Temperature"), temperatureToString(adapter.temperature_max()),
+                        kTemperatureIcon);
         }
 
         if (adapter.fan_rpm() != 0)
-            group << mk(tr("Fan Speed"), tr("%1 RPM").arg(adapter.fan_rpm()));
+            group << mk(tr("Fan Speed"), tr("%1 RPM").arg(adapter.fan_rpm()), kFanIcon);
 
         if (adapter.fan_rpm_max() != 0)
-            group << mk(tr("Maximum Fan Speed"), tr("%1 RPM").arg(adapter.fan_rpm_max()));
+        {
+            group << mk(tr("Maximum Fan Speed"), tr("%1 RPM").arg(adapter.fan_rpm_max()),
+                        kFanIcon);
+        }
 
         if (adapter.power() != 0)
         {
             group << mk(tr("Power Usage"),
-                        tr("%1%").arg(QString::number(adapter.power() / 10.0, 'f', 1)));
+                        tr("%1%").arg(QString::number(adapter.power() / 10.0, 'f', 1)), kPowerIcon);
         }
 
         if (!group.isEmpty())
         {
             ui->tree->addTopLevelItem(
-                new Item(":/img/video-card.svg", QString::fromStdString(adapter.description()), group));
+                new Item(kAdapterIcon, QString::fromStdString(adapter.description()), group));
         }
     }
 

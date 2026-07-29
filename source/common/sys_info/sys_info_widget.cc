@@ -48,6 +48,13 @@ void copyTextToClipboard(const QString& text)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
+const char SysInfoWidget::kTemperatureIcon[] = ":/img/temperature.svg";
+const char SysInfoWidget::kFanIcon[] = ":/img/fan.svg";
+const char SysInfoWidget::kFrequencyIcon[] = ":/img/frequency.svg";
+const char SysInfoWidget::kMemoryIcon[] = ":/img/memory.svg";
+const char SysInfoWidget::kPowerIcon[] = ":/img/electricity.svg";
+
+//--------------------------------------------------------------------------------------------------
 SysInfoWidget::SysInfoWidget(QWidget* parent)
     : QWidget(parent)
 {

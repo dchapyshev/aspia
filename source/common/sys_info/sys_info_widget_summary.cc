@@ -39,14 +39,16 @@ public:
         setIcon(0, icon);
         setText(0, text);
 
+        // A child that came with an icon of its own keeps it.
         for (const auto& child : childs)
         {
-            child->setIcon(0, icon);
+            if (child->icon(0).isNull())
+                child->setIcon(0, icon);
 
             for (int i = 0; i < child->childCount(); ++i)
             {
                 QTreeWidgetItem* item = child->child(i);
-                if (item)
+                if (item && item->icon(0).isNull())
                     item->setIcon(0, icon);
             }
         }
@@ -72,6 +74,14 @@ QTreeWidgetItem* mk(const QString& param, const QString& value)
     item->setText(0, param);
     item->setText(1, value);
 
+    return item;
+}
+
+//--------------------------------------------------------------------------------------------------
+QTreeWidgetItem* mk(const QString& param, const QString& value, const QString& icon_path)
+{
+    QTreeWidgetItem* item = mk(param, value);
+    item->setIcon(0, QIcon(icon_path));
     return item;
 }
 
@@ -336,7 +346,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& r
                     group << mk(tr("Type"), module.type());
 
                 if (module.speed())
-                    group << mk(tr("Speed"), tr("%1 MT/s").arg(module.speed()));
+                    group << mk(tr("Speed"), tr("%1 MT/s").arg(module.speed()), kFrequencyIcon);
             }
             else
             {

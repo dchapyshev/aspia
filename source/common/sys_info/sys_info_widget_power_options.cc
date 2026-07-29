@@ -36,14 +36,16 @@ public:
         setIcon(0, icon);
         setText(0, text);
 
+        // A child that came with an icon of its own keeps it.
         for (const auto& child : childs)
         {
-            child->setIcon(0, icon);
+            if (child->icon(0).isNull())
+                child->setIcon(0, icon);
 
             for (int i = 0; i < child->childCount(); ++i)
             {
                 QTreeWidgetItem* item = child->child(i);
-                if (item)
+                if (item && item->icon(0).isNull())
                     item->setIcon(0, icon);
             }
         }
@@ -83,6 +85,14 @@ QTreeWidgetItem* mk(const QString& param, const QString& value)
 QTreeWidgetItem* mk(const QString& param, const std::string& value)
 {
     return mk(param, QString::fromStdString(value));
+}
+
+//--------------------------------------------------------------------------------------------------
+QTreeWidgetItem* mk(const QString& param, const std::string& value, const QString& icon_path)
+{
+    QTreeWidgetItem* item = mk(param, value);
+    item->setIcon(0, QIcon(icon_path));
+    return item;
 }
 
 } // namespace
@@ -195,7 +205,7 @@ void SysInfoWidgetPowerOptions::setSystemInfo(const proto::system_info::SystemIn
             group << mk(tr("Serial Number"), battery.serial_number());
 
         if (!battery.temperature().empty())
-            group << mk(tr("Tempareture"), battery.temperature());
+            group << mk(tr("Temperature"), battery.temperature(), kTemperatureIcon);
 
         if (battery.design_capacity() != 0)
             group << mk(tr("Design Capacity"), tr("%1 mWh").arg(battery.design_capacity()));

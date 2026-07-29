@@ -97,12 +97,17 @@ public:
         setIcon(0, icon);
         setText(0, text);
 
+        // A child that came with an icon of its own keeps it.
         for (const auto& child : childs)
         {
-            child->setIcon(0, icon);
+            if (child->icon(0).isNull())
+                child->setIcon(0, icon);
 
             for (int i = 0; i < child->childCount(); ++i)
-                child->child(i)->setIcon(0, icon);
+            {
+                if (child->child(i)->icon(0).isNull())
+                    child->child(i)->setIcon(0, icon);
+            }
         }
 
         addChildren(childs);
@@ -142,6 +147,14 @@ QTreeWidgetItem* mk(const QString& param, const QString& value)
     item->setText(0, param);
     item->setText(1, value);
 
+    return item;
+}
+
+//--------------------------------------------------------------------------------------------------
+QTreeWidgetItem* mk(const QString& param, const QString& value, const QString& icon_path)
+{
+    QTreeWidgetItem* item = mk(param, value);
+    item->setIcon(0, QIcon(icon_path));
     return item;
 }
 
@@ -1067,13 +1080,19 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::processorParameters(int index) const
         items << mk(tr("Voltage"), tr("%1 V").arg(processor.voltage(), 0, 'f', 1));
 
     if (processor.external_clock())
-        items << mk(tr("External Clock"), tr("%1 MHz").arg(processor.external_clock()));
+    {
+        items << mk(tr("External Clock"), tr("%1 MHz").arg(processor.external_clock()),
+                    kFrequencyIcon);
+    }
 
     if (processor.max_speed())
-        items << mk(tr("Max Speed"), tr("%1 MHz").arg(processor.max_speed()));
+        items << mk(tr("Max Speed"), tr("%1 MHz").arg(processor.max_speed()), kFrequencyIcon);
 
     if (processor.current_speed())
-        items << mk(tr("Current Speed"), tr("%1 MHz").arg(processor.current_speed()));
+    {
+        items << mk(tr("Current Speed"), tr("%1 MHz").arg(processor.current_speed()),
+                    kFrequencyIcon);
+    }
 
     if (processor.core_count())
         items << mk(tr("Core Count"), QString::number(processor.core_count()));
@@ -1573,12 +1592,12 @@ QList<QTreeWidgetItem*> SysInfoWidgetDmi::memoryDeviceParameters(int index) cons
         items << mk(tr("Technology"), QString::fromStdString(memory_device.technology()));
 
     if (memory_device.speed())
-        items << mk(tr("Speed"), tr("%1 MT/s").arg(memory_device.speed()));
+        items << mk(tr("Speed"), tr("%1 MT/s").arg(memory_device.speed()), kFrequencyIcon);
 
     if (memory_device.configured_speed())
     {
         items << mk(tr("Configured Speed"),
-                    tr("%1 MT/s").arg(memory_device.configured_speed()));
+                    tr("%1 MT/s").arg(memory_device.configured_speed()), kFrequencyIcon);
     }
 
     if (memory_device.total_width())

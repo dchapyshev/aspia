@@ -186,6 +186,12 @@
         <file>computer-approve.svg</file>
         <file>computer-case.svg</file>
         <file>ps-2-male.svg</file>
+        <file>temperature.svg</file>
+        <file>temperature-sensitive.svg</file>
+        <file>fan.svg</file>
+        <file>frequency.svg</file>
+        <file>electricity.svg</file>
+        <file>memory.svg</file>
     </qresource>
     <qresource prefix="/fonts">
         <file alias="JetBrainsMono-Regular.ttf">fonts/JetBrainsMono-Regular.ttf</file>

@@ -31,7 +31,7 @@ const char kCpuIcon[] = ":/img/microchip.svg";
 const char kCacheIcon[] = ":/img/processor.svg";
 const char kInstructionSetIcon[] = ":/img/integrated-circuit.svg";
 const char kSecurityIcon[] = ":/img/lock.svg";
-const char kPowerIcon[] = ":/img/electrical.svg";
+const char kPowerManagementIcon[] = ":/img/electrical.svg";
 const char kVirtualizationIcon[] = ":/img/virtual-machine.svg";
 const char kFeatureIcon[] = ":/img/feature.svg";
 const char kSupportedIcon[] = ":/img/check.svg";
@@ -93,6 +93,15 @@ QTreeWidgetItem* mk(const QString& param, const QString& value)
 
     item->setText(0, param);
     item->setText(1, value);
+
+    return item;
+}
+
+//--------------------------------------------------------------------------------------------------
+QTreeWidgetItem* mk(const QString& param, const QString& value, const QString& icon_path)
+{
+    QTreeWidgetItem* item = mk(param, value);
+    item->setIcon(0, QIcon(icon_path));
 
     return item;
 }
@@ -179,7 +188,7 @@ void SysInfoWidgetCpu::setSystemInfo(const proto::system_info::SystemInfo& syste
     {
         kInstructionSetIcon,
         kSecurityIcon,
-        kPowerIcon,
+        kPowerManagementIcon,
         kVirtualizationIcon,
         kFeatureIcon
     };
@@ -258,7 +267,8 @@ QList<QTreeWidgetItem*> SysInfoWidgetCpu::identityParameters(
     if (cpu.temperature())
     {
         items << mk(tr("Temperature"),
-                    tr("%1 C").arg(QString::number(cpu.temperature() / 10.0, 'f', 1)));
+                    tr("%1 C").arg(QString::number(cpu.temperature() / 10.0, 'f', 1)),
+                    kTemperatureIcon);
     }
 
     return items;
