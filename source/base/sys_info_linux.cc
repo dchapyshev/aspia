@@ -826,6 +826,13 @@ int SysInfo::processorThreads()
 
 //--------------------------------------------------------------------------------------------------
 // static
+quint32 SysInfo::processorTemperature()
+{
+    return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
 QByteArray SysInfo::smbiosDump()
 {
     auto readBinary = [](const char* path) -> QByteArray

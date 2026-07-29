@@ -250,6 +250,7 @@ public:
     static int processorPackages();
     static int processorCores();
     static int processorThreads();
+    static quint32 processorTemperature();
 
     static QByteArray smbiosDump();
     static QByteArray hardwareId();

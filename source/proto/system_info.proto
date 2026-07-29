@@ -73,20 +73,21 @@ message Processor
         bool fully_associative = 8;
     }
 
-    string vendor   = 1;
-    string model    = 2;
-    uint32 packages = 3;
-    uint32 cores    = 4;
-    uint32 threads  = 5;
+    string vendor      = 1;
+    string model       = 2;
+    uint32 packages    = 3;
+    uint32 cores       = 4;
+    uint32 threads     = 5;
+    uint32 temperature = 6;
 
-    repeated Identity identity = 6;
-    repeated Cache cache       = 7;
+    repeated Identity identity = 7;
+    repeated Cache cache       = 8;
 
-    repeated Feature instruction_set  = 8;
-    repeated Feature security         = 9;
-    repeated Feature power_management = 10;
-    repeated Feature virtualization   = 11;
-    repeated Feature other            = 12;
+    repeated Feature instruction_set  = 9;
+    repeated Feature security         = 10;
+    repeated Feature power_management = 11;
+    repeated Feature virtualization   = 12;
+    repeated Feature other            = 13;
 }
 
 message LogicalDrives

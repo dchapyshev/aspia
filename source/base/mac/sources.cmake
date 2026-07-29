@@ -27,4 +27,6 @@ collect_sources(SOURCE_BASE_MAC
     permissions.h
     nsstring_conversions.mm
     nsstring_conversions.h
-    scoped_cftyperef.h)
+    scoped_cftyperef.h
+    smc_reader.mm
+    smc_reader.h)

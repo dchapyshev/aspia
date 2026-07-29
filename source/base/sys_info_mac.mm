@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/smbios.h"
 #include "base/crypto/generic_hash.h"
+#include "base/mac/smc_reader.h"
 
 #include <QHash>
 #include <QProcess>
@@ -40,6 +41,7 @@
 #import <Foundation/Foundation.h>
 #import <IOKit/IOKitKeys.h>
 #import <IOKit/IOKitLib.h>
+#import <Metal/Metal.h>
 #import <IOKit/ps/IOPSKeys.h>
 #import <IOKit/ps/IOPowerSources.h>
 
@@ -114,6 +116,76 @@ QString pciVendorName(quint32 vendor_id)
         case 0x106b: return "Apple";
         case 0x14e4: return "Broadcom";
         default:     return QString();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Reads a counter out of the dictionary of statistics a display driver publishes.
+quint64 performanceStatistic(io_service_t service, CFStringRef key)
+{
+    CFDictionaryRef statistics = static_cast<CFDictionaryRef>(IORegistryEntryCreateCFProperty(
+        service, CFSTR("PerformanceStatistics"), kCFAllocatorDefault, kNilOptions));
+    if (!statistics)
+        return 0;
+
+    quint64 result = 0;
+
+    if (CFGetTypeID(statistics) == CFDictionaryGetTypeID())
+    {
+        CFTypeRef value = CFDictionaryGetValue(statistics, key);
+        if (value && CFGetTypeID(value) == CFNumberGetTypeID())
+        {
+            long long number = 0;
+            if (CFNumberGetValue(static_cast<CFNumberRef>(value), kCFNumberLongLongType, &number) &&
+                number > 0)
+            {
+                result = static_cast<quint64>(number);
+            }
+        }
+    }
+
+    CFRelease(statistics);
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Fills in the memory the adapter can address and how much of it is taken. An Apple GPU works on
+// the memory of the system, so what it reports belongs to the shared fields; a discrete one has
+// memory of its own.
+void fillAdapterMemory(io_service_t service, NSArray<id<MTLDevice>>* metal_devices,
+                       SysInfo::VideoAdapter* adapter)
+{
+    quint64 entry_id = 0;
+    if (IORegistryEntryGetRegistryEntryID(service, &entry_id) != KERN_SUCCESS)
+        return;
+
+    id<MTLDevice> device = nil;
+    for (id<MTLDevice> candidate in metal_devices)
+    {
+        if ([candidate registryID] == entry_id)
+        {
+            device = candidate;
+            break;
+        }
+    }
+
+    if (!device)
+        return;
+
+    const bool unified_memory = [device hasUnifiedMemory];
+    const quint64 memory_size = [device recommendedMaxWorkingSetSize];
+    const quint64 memory_used = performanceStatistic(
+        service, unified_memory ? CFSTR("In use system memory") : CFSTR("vramUsedBytes"));
+
+    if (unified_memory)
+    {
+        adapter->shared_memory_size = memory_size;
+        adapter->shared_memory_used = memory_used;
+    }
+    else
+    {
+        adapter->memory_size = memory_size;
+        adapter->memory_used = memory_used;
     }
 }
 
@@ -269,6 +341,13 @@ int SysInfo::processorThreads()
         return 1;
 
     return threads;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+quint32 SysInfo::processorTemperature()
+{
+    return SmcReader::maxTemperature(SmcReader::kProcessorTemperatureKeys);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -673,17 +752,22 @@ QList<SysInfo::VideoAdapter> SysInfo::videoAdapters()
         return result;
     }
 
+    NSArray<id<MTLDevice>>* metal_devices = MTLCopyAllDevices();
+
     io_service_t service;
     while ((service = IOIteratorNext(iterator)) != IO_OBJECT_NULL)
     {
         const QString model = stringProperty(service, CFSTR("model"));
         if (!model.isEmpty())
         {
-            // The integrated Apple GPU shares unified system memory, so memory_size is left unset.
             VideoAdapter adapter;
             adapter.description = model;
             adapter.adapter_string = model;
+            adapter.chip_type = stringProperty(service, CFSTR("IONameMatched"));
+            adapter.driver_version = stringProperty(service, CFSTR("IOSourceVersion"));
             adapter.driver_provider = pciVendorName(numberProperty(service, CFSTR("vendor-id")));
+
+            fillAdapterMemory(service, metal_devices, &adapter);
 
             result.append(std::move(adapter));
         }

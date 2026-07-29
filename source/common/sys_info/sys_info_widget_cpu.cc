@@ -255,6 +255,12 @@ QList<QTreeWidgetItem*> SysInfoWidgetCpu::identityParameters(
     if (cpu.threads())
         items << mk(tr("Logical Cores"), QString::number(cpu.threads()));
 
+    if (cpu.temperature())
+    {
+        items << mk(tr("Temperature"),
+                    tr("%1 C").arg(QString::number(cpu.temperature() / 10.0, 'f', 1)));
+    }
+
     return items;
 }
 

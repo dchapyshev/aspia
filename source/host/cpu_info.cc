@@ -967,6 +967,7 @@ void fillProcessorInfo(proto::system_info::Processor* processor)
     processor->set_packages(static_cast<quint32>(SysInfo::processorPackages()));
     processor->set_cores(static_cast<quint32>(SysInfo::processorCores()));
     processor->set_threads(static_cast<quint32>(SysInfo::processorThreads()));
+    processor->set_temperature(SysInfo::processorTemperature());
 
 #if defined(Q_PROCESSOR_X86)
     const Leafs leafs(CpuidUtil::dump());

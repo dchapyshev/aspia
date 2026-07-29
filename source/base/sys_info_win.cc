@@ -1143,6 +1143,13 @@ int SysInfo::processorThreads()
 
 //--------------------------------------------------------------------------------------------------
 // static
+quint32 SysInfo::processorTemperature()
+{
+    return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
 QByteArray SysInfo::smbiosDump()
 {
     UINT buffer_size = GetSystemFirmwareTable('RSMB', 'PCAF', nullptr, 0);
